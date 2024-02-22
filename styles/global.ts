@@ -5,13 +5,21 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
   }
+  *,
+  *:before,
+  *:after {
+    box-sizing: border-box;
+  }
+  svg {
+    box-sizing: content-box;
+  }
   html,
   body {
     width: 100%;
   }
   body {
-    background: ${({ theme }) => theme.colors.background};
-    color: ${({ theme }) => theme.colors.text};
+    background: var(--lido-color-background);
+    color: var(--lido-color-text);
     position: relative;
     box-sizing: border-box;
     font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
@@ -19,16 +27,23 @@ const GlobalStyle = createGlobalStyle`
     font-weight: 500;
     text-size-adjust: none;
   }
+  main {
+    min-height: calc(100vh - 170px);
+  }
   a {
-    color: ${({ theme }) => theme.colors.primary};
-
-    &:hover {
-      color: ${({ theme }) => theme.colors.primaryHover};
-    }
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--lido-color-primary);
 
     &:visited {
-      color: ${({ theme }) => theme.colors.primaryVisited};
+      color: var(--lido-color-primaryVisited);
     }
+
+    &:hover {
+      color: var(--lido-color-primaryHover);
+    }
+
+
   }
 `;
 

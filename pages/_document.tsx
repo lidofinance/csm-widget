@@ -6,12 +6,19 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document';
-import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
+import { createHeadersObject } from 'next-secure-headers';
 import { ServerStyleSheet } from 'styled-components';
-import { dynamics } from '../config';
+import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 
-// for prod and dev use https and real domain
-let host = 'http://localhost';
+import { config } from 'config';
+import { contentSecurityPolicy } from 'config/csp';
+
+let host = 'https://stake.lido.fi';
+
+const secureHeaders = createHeadersObject({ contentSecurityPolicy });
+const cspMetaTagContent =
+  secureHeaders['Content-Security-Policy'] ??
+  secureHeaders['Content-Security-Policy-Report-Only'];
 
 export default class MyDocument extends Document {
   static async getInitialProps(
@@ -48,14 +55,14 @@ export default class MyDocument extends Document {
   }
 
   get metaTitle(): string {
-    return 'Lido Frontend Template | Lido';
+    return 'Stake with Lido | Lido';
   }
 
   get metaDescription(): string {
     return (
       'Liquid staking with Lido. ' +
-      'Stake {TOKEN} with Lido to earn daily rewards while keeping full control of your staked tokens. ' +
-      'Start earning rewards in just a few clicks.'
+      'Stake Ether with Lido to get daily rewards while keeping full control of your staked tokens. ' +
+      'Start receiving rewards in just a few clicks.'
     );
   }
 
@@ -67,31 +74,48 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link rel="manifest" href="/manifest.json" />
-          <link rel="icon" href="/favicon.ico" sizes="any" />
-          <link rel="icon" type="image/svg+xml" href="favicon-512x512.svg" />
+          {config.ipfsMode && (
+            <meta
+              httpEquiv="Content-Security-Policy"
+              content={cspMetaTagContent}
+            />
+          )}
+          <link
+            rel="manifest"
+            href={`${config.BASE_PATH_ASSET}/manifest.json`}
+          />
+          <link
+            rel="icon"
+            href={`${config.BASE_PATH_ASSET}/favicon.ico`}
+            sizes="any"
+          />
+          <link
+            rel="icon"
+            type="image/svg+xml"
+            href={`${config.BASE_PATH_ASSET}/favicon-1080x1080.svg`}
+          />
           <link
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/apple-touch-icon.png"
+            href={`${config.BASE_PATH_ASSET}/apple-touch-icon.png`}
           />
           <link
             rel="icon"
             type="image/png"
-            sizes="194x194"
-            href="/favicon-194x194.png"
+            sizes="192x192"
+            href={`${config.BASE_PATH_ASSET}/favicon-192x192.png`}
           />
           <link
             rel="icon"
             type="image/png"
             sizes="32x32"
-            href="/favicon-32x32.png"
+            href={`${config.BASE_PATH_ASSET}/favicon-32x32.png`}
           />
           <link
             rel="icon"
             type="image/png"
             sizes="16x16"
-            href="/favicon-16x16.png"
+            href={`${config.BASE_PATH_ASSET}/favicon-16x16.png`}
           />
           <meta property="og:type" content="website" />
           <meta property="og:title" content={this.metaTitle} />
@@ -102,12 +126,13 @@ export default class MyDocument extends Document {
           <meta name="twitter:description" content={this.metaDescription} />
           <meta name="twitter:image:src" content={this.metaPreviewImgUrl} />
           <meta name="twitter:site" content="@lidofinance" />
-          <meta name="twitter:creator" content="@lidofinance" />
+          <meta name="twitter:creator" content="@lomashuk" />
           <meta name="description" content={this.metaDescription} />
-          <meta name="currentChain" content={String(dynamics.defaultChain)} />
+          <meta name="currentChain" content={String(config.defaultChain)} />
           <Fonts />
           <LidoUIHead />
-          <script src="/runtime/window-env.js" />
+          {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+          <script src={`${config.BASE_PATH_ASSET}/runtime/window-env.js`} />
         </Head>
         <body>
           <Main />

@@ -4,6 +4,14 @@
 /node_modules
 /.pnp
 .pnp.js
+.yalc
+yalc.lock
+tsconfig.tsbuildinfo
+
+# playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
 
 # testing
 /coverage
@@ -20,7 +28,6 @@
 
 # misc
 .DS_Store
-tsconfig.tsbuildinfo
 
 # env
 .env.local

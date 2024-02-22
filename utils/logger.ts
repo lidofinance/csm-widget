@@ -10,7 +10,7 @@ class Logger {
 
   log(data: LoggerData) {
     if (isDev) {
-      console.log({ logger: this.name, ...data });
+      console.debug({ logger: this.name, ...data });
     }
   }
 
@@ -39,6 +39,7 @@ export const runWithLogger = async <T>(
     if (error instanceof Error) {
       logger.error({ event, state: 'error' }, error);
     } else {
+      // TODO: what to return?
       logger.error({ event, state: 'error' });
     }
     throw error;

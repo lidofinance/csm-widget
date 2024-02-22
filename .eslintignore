@@ -11,5 +11,7 @@
 
 # production
 /build
-
 /public
+
+# generated
+/generated
