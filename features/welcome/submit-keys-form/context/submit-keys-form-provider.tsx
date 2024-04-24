@@ -24,6 +24,7 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const formObject = useForm<SubmitKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
+      rawKeys: JSON.stringify(mockKeys),
       parsedKeys: mockKeys,
       referral: null,
     },

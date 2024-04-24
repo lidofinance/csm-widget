@@ -8,6 +8,7 @@ export type SubmitKeysFormDataContextValue = SubmitKeysFormNetworkData &
 
 export type SubmitKeysFormInputType = {
   token: TOKENS;
+  rawKeys: string;
   parsedKeys: NodeOperatorFileKey[];
   referral: Address | null;
 };
