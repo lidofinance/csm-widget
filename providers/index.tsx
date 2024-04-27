@@ -1,14 +1,14 @@
-import { FC, PropsWithChildren } from 'react';
 import { CookieThemeProvider } from '@lidofinance/lido-ui';
+import { FC, PropsWithChildren } from 'react';
 
-import { GlobalStyle } from 'styles';
 import { ConfigProvider } from 'config';
+import { GlobalStyle } from 'styles';
 
 import { AppFlagProvider } from './app-flag';
 import { InpageNavigationProvider } from './inpage-navigation';
 import { ModalProvider } from './modal-provider';
-import Web3Provider from './web3';
 import { NodeOperatorPrivider } from './node-operator-provider';
+import Web3Provider from './web3';
 
 export const Providers: FC<PropsWithChildren> = ({ children }) => (
   <ConfigProvider>
@@ -16,11 +16,11 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => (
       <CookieThemeProvider>
         <GlobalStyle />
         <Web3Provider>
-          <InpageNavigationProvider>
-            <ModalProvider>
-              <NodeOperatorPrivider>{children}</NodeOperatorPrivider>
-            </ModalProvider>
-          </InpageNavigationProvider>
+          <NodeOperatorPrivider>
+            <InpageNavigationProvider>
+              <ModalProvider>{children}</ModalProvider>
+            </InpageNavigationProvider>
+          </NodeOperatorPrivider>
         </Web3Provider>
       </CookieThemeProvider>
     </AppFlagProvider>

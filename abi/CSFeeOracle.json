@@ -17,6 +17,19 @@
   },
   {
     "type": "function",
+    "name": "CONTRACT_MANAGER_ROLE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "DEFAULT_ADMIN_ROLE",
     "inputs": [],
     "outputs": [
@@ -57,19 +70,6 @@
   {
     "type": "function",
     "name": "MANAGE_CONSENSUS_VERSION_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "MANAGE_FEE_DISTRIBUTOR_CONTRACT_ROLE",
     "inputs": [],
     "outputs": [
       {
@@ -409,6 +409,11 @@
         "name": "lastProcessingRefSlot",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "_perfThresholdBP",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -452,6 +457,19 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "perfThresholdBP",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -591,6 +609,19 @@
         "name": "feeDistributorContract",
         "type": "address",
         "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setPerformanceThreshold",
+    "inputs": [
+      {
+        "name": "valueBP",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -753,6 +784,19 @@
     "inputs": [
       {
         "name": "duration",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "PerformanceThresholdSet",
+    "inputs": [
+      {
+        "name": "valueBP",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
@@ -987,6 +1031,11 @@
   {
     "type": "error",
     "name": "InvalidContractVersionIncrement",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidPerfThreshold",
     "inputs": []
   },
   {

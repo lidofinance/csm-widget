@@ -14,7 +14,7 @@ import {
   GatherPermitSignatureResult,
   useERC20PermitSignature,
 } from 'shared/hooks';
-import { useCSModuleWeb3 } from 'shared/hooks/useCSM';
+import { useCSModuleWeb3 } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { Address, useChainId } from 'wagmi';
 import { SubmitKeysFormInputType } from './context';
@@ -22,6 +22,7 @@ import { NodeOperatorFileKey } from './context/operators.types';
 import { useTxModalStagesSubmitKeys } from './hooks/use-tx-modal-stages-submit-keys';
 import { useReadBondAmount } from './hooks/useReadBondAmount';
 import { applyGasLimitRatio, formatKeys, getAddedNodeOperator } from './utils';
+import { useNodeOperator } from 'providers/node-operator-provider';
 
 type SubmitKeysOptions = {
   token: TOKENS;
@@ -35,10 +36,14 @@ type MethodParams = {
   keysCount: BigNumberish;
   publicKeys: BytesLike;
   signatures: BytesLike;
+  managerAddress: Address;
+  rewardsAddress: Address;
   permit: GatherPermitSignatureResult | undefined;
   eaProof: BytesLike[];
   referral: Address;
 };
+
+// @todo: +10wei
 
 // this encapsulates eth/steth/wsteth flows
 const useSubmitKeysMethods = () => {
@@ -51,6 +56,8 @@ const useSubmitKeysMethods = () => {
       keysCount,
       publicKeys,
       signatures,
+      managerAddress,
+      rewardsAddress,
       eaProof,
       referral,
     }: MethodParams) => {
@@ -69,6 +76,8 @@ const useSubmitKeysMethods = () => {
         keysCount,
         publicKeys,
         signatures,
+        managerAddress,
+        rewardsAddress,
         eaProof,
         referral,
       ] as const;
@@ -92,6 +101,8 @@ const useSubmitKeysMethods = () => {
       keysCount,
       publicKeys,
       signatures,
+      managerAddress,
+      rewardsAddress,
       permit,
       eaProof,
       referral,
@@ -111,6 +122,8 @@ const useSubmitKeysMethods = () => {
         keysCount,
         publicKeys,
         signatures,
+        managerAddress,
+        rewardsAddress,
         permit,
         eaProof,
         referral,
@@ -138,6 +151,8 @@ const useSubmitKeysMethods = () => {
       keysCount,
       publicKeys,
       signatures,
+      managerAddress,
+      rewardsAddress,
       permit,
       eaProof,
       referral,
@@ -157,6 +172,8 @@ const useSubmitKeysMethods = () => {
         keysCount,
         publicKeys,
         signatures,
+        managerAddress,
+        rewardsAddress,
         permit,
         eaProof,
         referral,
@@ -204,6 +221,7 @@ export const useSubmitKeys = ({
 
   const { txModalStages } = useTxModalStagesSubmitKeys();
   const getSubmitKeysMethod = useSubmitKeysMethods();
+  const { append: appendNO } = useNodeOperator();
 
   const wstethContract = useWSTETHContractRPC();
   const stethContract = useSTETHContractRPC();
@@ -254,6 +272,8 @@ export const useSubmitKeys = ({
           signatures,
           permit,
           eaProof,
+          managerAddress: AddressZero,
+          rewardsAddress: AddressZero,
           referral: referral && isAddress(referral) ? referral : AddressZero,
         });
 
@@ -271,9 +291,11 @@ export const useSubmitKeys = ({
             () => tx.wait(),
           );
 
-          const id = getAddedNodeOperator(receipt);
-          // eslint-disable-next-line no-console
-          console.log(id?.toNumber()); // @todo remove
+          const id = getAddedNodeOperator(receipt)?.toString();
+
+          if (id) {
+            appendNO({ id, manager: true, rewards: true });
+          }
         }
 
         await onConfirm?.();
@@ -293,6 +315,7 @@ export const useSubmitKeys = ({
       txModalStages,
       onConfirm,
       gatherPermitSignature,
+      appendNO,
       onRetry,
     ],
   );

@@ -1,136 +1,107 @@
-import { useContractSWR } from '@lido-sdk/react';
-import { BigNumber } from 'ethers';
-import {
-  NodeOperatorAddedEvent,
-  NodeOperatorManagerAddressChangedEvent,
-  NodeOperatorRewardAddressChangedEvent,
-} from 'generated/CSModule';
 import {
   FC,
-  createContext,
-  useMemo,
-  useContext,
   PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
-import { useCSModuleRPC } from 'shared/hooks/useCSM';
-import { Address, useAccount } from 'wagmi';
+import { useNodeOperatorInvitesFromEvents } from 'shared/hooks/useNodeOperatorInvitesFromEvents';
+import { useNodeOperatorsFromEvents } from 'shared/hooks/useNodeOperatorsFromEvents';
+import { useReadNodeOperatorInfo } from 'shared/hooks/useReadNodeOperatorInfo';
+import { NodeOperatorId, NodeOperatorInvite, NodeOperatorRoles } from 'types';
+import { useAccount } from 'wagmi';
 
 export type NodeOperatorContextValue = {
-  list: NO[];
-  current?: NO;
-  initialLoading: boolean;
+  list: NodeOperatorRoles[];
+  isLoading: boolean;
+  append: (no: NodeOperatorRoles) => void;
+  active?: NodeOperatorRoles;
+  switchActive: (id: NodeOperatorId) => void;
+  details?: ReturnType<typeof useReadNodeOperatorInfo>['data'];
+  isDetailsLoading: boolean;
+  invites: NodeOperatorInvite[];
+  isInvitesLoading: boolean;
 };
 
 export const NodeOperatorContext = createContext<NodeOperatorContextValue>({
   list: [],
-  initialLoading: true,
+  invites: [],
+  isLoading: false,
+  isInvitesLoading: false,
+  isDetailsLoading: false,
+  append: () => {},
+  switchActive: () => {},
 });
 
-type NO = {
-  id: BigNumber;
-} & NOShape;
+export const useNodeOperator = () => useContext(NodeOperatorContext);
 
-type NOShape = Partial<{
-  manager: boolean;
-  rewards: boolean;
-}>;
+const useGetActiveNodeOperator = (roles: NodeOperatorRoles[]) => {
+  // @todo: cache in LocalStorage
+  const [active, setActive] = useState<NodeOperatorRoles | undefined>();
 
-const useNodeOperators = (address?: Address) => {
-  const contract = useCSModuleRPC();
+  useEffect(() => {
+    if (roles.length === 0 && !!active) {
+      setActive(undefined);
+    }
+    if (roles.length > 0 && !active) {
+      setActive(roles[0]);
+    }
+  }, [active, roles]);
 
-  type FilterEvents = Array<
-    | NodeOperatorAddedEvent
-    | NodeOperatorRewardAddressChangedEvent
-    | NodeOperatorManagerAddressChangedEvent
-  >;
-  const filters = useMemo(() => {
-    const createRewardsAddress = contract.filters.NodeOperatorAdded(
-      null,
-      null,
-      address,
-    );
-    // const createManagerAddress = contract.filters.NodeOperatorAdded(
-    //   null,
-    //   address,
-    //   null,
-    // );
-    // const grantRewardsAddress =
-    //   contract.filters.NodeOperatorRewardAddressChanged(null, null, address);
-    // const grantManagerAddress =
-    //   contract.filters.NodeOperatorManagerAddressChanged(null, null, address);
-    // const loseRewardsAddress =
-    //   contract.filters.NodeOperatorRewardAddressChanged(null, address, null);
-    // const loseManagerAddress =
-    //   contract.filters.NodeOperatorManagerAddressChanged(null, address, null);
-    return [
-      createRewardsAddress,
-      // createManagerAddress,
-      // grantRewardsAddress,
-      // grantManagerAddress,
-      // loseRewardsAddress,
-      // loseManagerAddress,
-    ];
-  }, [address, contract.filters]);
+  const switchActive = useCallback(
+    (id: NodeOperatorId) => {
+      const active = roles.find((roles) => roles.id === id);
+      if (active) setActive(active);
+    },
+    [roles],
+  );
 
-  const { data, initialLoading } = useContractSWR({
-    contract,
-    method: 'queryFilter',
-    params: filters,
-    shouldFetch: !!address,
-  });
-
-  const nos = useMemo(() => {
-    const nos: NO[] = [];
-
-    const getNo = (id: BigNumber) => nos.find((no) => no.id.eq(id));
-
-    const modifyNO = (id: BigNumber, shape: NOShape, append = false) => {
-      const no = getNo(id);
-      if (no) {
-        Object.assign(no, shape);
-      } else if (append) {
-        nos.push({ id, ...shape });
-      }
-    };
-
-    if (!data) return nos;
-    (data as FilterEvents)
-      .sort((a, b) => a.blockNumber - b.blockNumber)
-      .forEach((e) => {
-        const id = e.args.nodeOperatorId;
-        switch (e.event) {
-          case 'NodeOperatorAdded':
-            return modifyNO(id, { manager: true, rewards: true }, true);
-          case 'NodeOperatorRewardAddressChanged':
-            return e.args[2] === address
-              ? modifyNO(id, { rewards: true }, true)
-              : modifyNO(id, { rewards: false });
-          case 'NodeOperatorManagerAddressChanged':
-            return e.args[2] === address
-              ? modifyNO(id, { manager: true }, true)
-              : modifyNO(id, { manager: false });
-          default:
-            return;
-        }
-      });
-    return nos;
-  }, [address, data]);
-
-  return { data: nos, initialLoading };
+  return { active, switchActive };
 };
 
 export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
-  const { address } = useAccount();
+  const { address, isConnected } = useAccount();
 
-  const { data: list, initialLoading } = useNodeOperators(address);
+  const {
+    data: list,
+    initialLoading: isLoading,
+    append,
+  } = useNodeOperatorsFromEvents((isConnected && address) || undefined);
+
+  const { active, switchActive } = useGetActiveNodeOperator(list);
+
+  const { data: details, initialLoading: isDetailsLoading } =
+    useReadNodeOperatorInfo(active?.id);
+
+  const { data: invites, initialLoading: isInvitesLoading } =
+    useNodeOperatorInvitesFromEvents((isConnected && address) || undefined);
 
   const value = useMemo(
     () => ({
       list,
-      current: list[0] || undefined,
-      initialLoading,
+      active,
+      details,
+      invites,
+      isLoading,
+      isDetailsLoading,
+      isInvitesLoading,
+      append,
+      switchActive,
     }),
-    [list, initialLoading],
+    [
+      list,
+      active,
+      details,
+      invites,
+      isLoading,
+      isDetailsLoading,
+      isInvitesLoading,
+      append,
+      switchActive,
+    ],
   );
 
   return (
@@ -139,10 +110,3 @@ export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
     </NodeOperatorContext.Provider>
   );
 };
-
-export const useNodeOperatorIdList = () => useContext(NodeOperatorContext).list;
-
-export const useNodeOperatorId = () => useContext(NodeOperatorContext).current;
-
-export const useNodeOperatorLoaded = () =>
-  useContext(NodeOperatorContext).initialLoading;

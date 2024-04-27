@@ -1,22 +1,15 @@
 import { DashboardPage } from 'features/dashboard';
 import { WelcomePage } from 'features/welcome';
-import {
-  useNodeOperatorId,
-  useNodeOperatorLoaded,
-} from 'providers/node-operator-provider';
-// import { DashboardPage } from 'features/dashboard';
-
-// export default () => <DashboardPage fallback={WelcomePage} />;
+import { useNodeOperator } from 'providers/node-operator-provider';
 
 const Switch = () => {
-  const no = useNodeOperatorId();
-  const loading = useNodeOperatorLoaded();
+  const { active, isLoading: loading } = useNodeOperator();
 
   return (
     <>
       {loading && <div>...loading</div>}
-      {!loading && no && <DashboardPage />}
-      {!loading && !no && <WelcomePage />}
+      {!loading && active && <DashboardPage />}
+      {!loading && !active && <WelcomePage />}
     </>
   );
 };

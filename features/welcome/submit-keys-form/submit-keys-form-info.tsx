@@ -1,7 +1,7 @@
 import { useContractSWR } from '@lido-sdk/react';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { useWatch } from 'react-hook-form';
-import { useCSModuleRPC } from 'shared/hooks/useCSM';
+import { useCSModuleRPC } from 'shared/hooks';
 import { SubmitKeysFormInputType } from './context/types';
 import { useSubmitKeysFormData } from './context/submit-keys-form-context';
 import { FormatToken } from 'shared/formatters';

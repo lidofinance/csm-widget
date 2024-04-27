@@ -1,6 +1,6 @@
 import { useContractSWR } from '@lido-sdk/react';
 import { TOKENS } from 'shared/hook-form/controls/token-select-hook-form';
-import { useCSAccountingRPC } from 'shared/hooks/useCSM';
+import { useCSAccountingRPC } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 
 const METHOD_BY_TOKEN = {

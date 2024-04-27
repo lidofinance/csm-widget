@@ -1,9 +1,11 @@
-import { Container } from '@lidofinance/lido-ui';
+import { Container, ContainerProps, ThemeToggler } from '@lidofinance/lido-ui';
 import styled, { keyframes } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const HeaderStyle = styled((props) => <Container {...props} />)`
+export const HeaderStyle = styled((props: ContainerProps) => (
+  <Container {...props} />
+))`
   position: relative;
   padding-top: 18px;
   padding-bottom: 18px;
@@ -17,10 +19,15 @@ export const HeaderActionsStyle = styled.div`
   display: flex;
   align-items: center;
   flex-shrink: 1;
+  gap: ${({ theme }) => theme.spaceMap.sm}px;
+`;
+
+export const HeaderWalletChainWrapper = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export const HeaderWalletChainStyle = styled.span<{ $color: string }>`
-  margin-right: ${({ theme }) => theme.spaceMap.sm}px;
   color: ${({ $color }) => $color};
   line-height: 1.2em;
 `;
@@ -52,4 +59,8 @@ export const IPFSInfoBoxOnlyDesktopWrapper = styled.div`
   ${NAV_MOBILE_MEDIA} {
     display: none;
   }
+`;
+
+export const ThemeTogglerStyle = styled(ThemeToggler)`
+  margin: 0;
 `;
