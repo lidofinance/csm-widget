@@ -1,49 +1,121 @@
 import { FC, memo } from 'react';
-import { Wallet, Stake } from '@lidofinance/lido-ui';
+
+import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
+import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
+import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
+import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
+import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
+import { ReactComponent as StarIcon } from 'assets/icons/star.svg';
+import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 
 import {
+  BENEFITS_PATH,
+  BOND_ADD_PATH,
+  BOND_CLAIM_PATH,
+  BOND_LOCKED_PATH,
+  BOND_PATH,
+  BOND_REWARDS_PATH,
   HOME_PATH,
-  WITHDRAWALS_CLAIM_PATH,
-  WITHDRAWALS_REQUEST_PATH,
-  WRAP_PATH,
-  getPathWithoutFirstSlash,
+  KEYS_PATH,
+  KEYS_REMOVE_PATH,
+  KEYS_SUBMIT_PATH,
+  KEYS_VIEW_PATH,
+  ROLES_INVITES_PATH,
+  ROLES_MANAGER_PATH,
+  ROLES_PATH,
+  ROLES_REWARDS_PATH,
 } from 'consts/urls';
+import { useNodeOperator } from 'providers/node-operator-provider';
 import { LocalLink } from 'shared/components/local-link';
+import { useAccount } from 'shared/hooks/use-account';
 import { useRouterPath } from 'shared/hooks/use-router-path';
-
+import { getIsActivePath } from 'utils/path';
 import { Nav, NavLink } from './styles';
 
-const routes = [
+type Route = {
+  name: string;
+  path: string;
+  icon: JSX.Element;
+  subPaths?: string[];
+  skip?: boolean;
+};
+
+const routesDisconnected: Route[] = [
   {
     name: 'Main',
     path: HOME_PATH,
-    icon: <Stake data-testid="navMain" />,
-    exact: true,
+    icon: <HomeIcon />,
   },
   {
-    name: 'Dashboard',
-    path: WRAP_PATH,
-    icon: <Wallet data-testid="navWrap" />,
-    full_path: WITHDRAWALS_REQUEST_PATH,
-    subPaths: [WITHDRAWALS_CLAIM_PATH],
+    name: 'Benefits',
+    path: BENEFITS_PATH,
+    icon: <StarIcon />,
   },
 ];
+
+const routesConnected: Route[] = [
+  {
+    name: 'Keys',
+    path: HOME_PATH,
+    icon: <KeyIcon />,
+  },
+  {
+    name: 'Benefits',
+    path: BENEFITS_PATH,
+    icon: <StarIcon />,
+  },
+];
+
+const routesNodeOperator: Route[] = [
+  {
+    name: 'Dashboard',
+    path: HOME_PATH,
+    icon: <DashboardIcon />,
+  },
+  {
+    name: 'Keys',
+    path: KEYS_PATH,
+    icon: <KeyIcon />,
+    subPaths: [KEYS_SUBMIT_PATH, KEYS_REMOVE_PATH, KEYS_VIEW_PATH],
+  },
+  {
+    name: 'Bond & Rewards',
+    path: BOND_PATH,
+    icon: <WalletIcon />,
+    subPaths: [BOND_ADD_PATH, BOND_CLAIM_PATH, BOND_REWARDS_PATH],
+  },
+  {
+    name: 'Roles',
+    path: ROLES_PATH,
+    icon: <GearIcon />,
+    subPaths: [ROLES_MANAGER_PATH, ROLES_REWARDS_PATH, ROLES_INVITES_PATH],
+  },
+  {
+    name: 'Locked Bond',
+    path: BOND_LOCKED_PATH,
+    icon: <AlertIcon />,
+    skip: true,
+  },
+];
+
 export const Navigation: FC = memo(() => {
+  const { active } = useAccount();
+  const { active: roles } = useNodeOperator();
+
+  // @todo: add loading state ??
+  const routes = !active
+    ? routesDisconnected
+    : !roles
+      ? routesConnected
+      : routesNodeOperator;
+
   const pathname = useRouterPath();
-  let pathnameWithoutQuery = pathname.split('?')[0];
-  if (pathnameWithoutQuery[pathnameWithoutQuery.length - 1] === '/') {
-    // Remove last '/'
-    pathnameWithoutQuery = pathnameWithoutQuery.slice(0, -1);
-  }
 
   return (
     <Nav>
-      {routes.map(({ name, path, subPaths, icon }) => {
-        const isActive =
-          pathnameWithoutQuery === getPathWithoutFirstSlash(path) ||
-          (path.length > 1 && pathnameWithoutQuery.startsWith(path)) ||
-          (Array.isArray(subPaths) &&
-            subPaths?.indexOf(pathnameWithoutQuery) > -1);
+      {routes.map(({ name, path, subPaths, icon, skip }) => {
+        if (skip) return null;
+        const isActive = getIsActivePath(pathname, path, subPaths);
 
         return (
           <LocalLink key={path} href={path}>
