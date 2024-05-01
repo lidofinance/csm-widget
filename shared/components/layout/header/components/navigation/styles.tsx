@@ -8,6 +8,7 @@ export const desktopCss = css`
   gap: 32px;
 
   svg {
+    flex-shrink: 0;
     margin-right: 10px;
   }
 `;
@@ -39,6 +40,7 @@ export const Nav = styled.div`
   ${NAV_MOBILE_MEDIA} {
     ${mobileCss}
   }
+  align-items: center;
   z-index: 6;
 `;
 

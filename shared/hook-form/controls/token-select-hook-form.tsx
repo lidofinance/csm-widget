@@ -11,19 +11,18 @@ import {
 
 import { getTokenDisplayName } from 'utils/getTokenDisplayName';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
-import { TOKENS as TOKENS_SDK } from '@lido-sdk/constants';
-
-export const TOKENS = {
-  ETH: 'ETH',
-  [TOKENS_SDK.STETH]: TOKENS_SDK.STETH,
-  [TOKENS_SDK.WSTETH]: TOKENS_SDK.WSTETH,
-} as const;
-export type TOKENS = keyof typeof TOKENS;
+import { TOKENS } from 'consts/tokens';
 
 export type TokenOption = {
   label?: string;
   token: TOKENS;
 };
+
+const OPTIONS: TokenOption[] = [
+  { token: TOKENS.ETH },
+  { token: TOKENS.STETH },
+  { token: TOKENS.WSTETH },
+];
 
 const iconsMap = {
   [TOKENS.ETH]: <Eth />,
@@ -32,7 +31,7 @@ const iconsMap = {
 } as const;
 
 type TokenSelectHookFormProps = {
-  options: TokenOption[];
+  options?: TokenOption[];
   fieldName?: string;
   resetField?: string;
   errorField?: string;
@@ -41,7 +40,7 @@ type TokenSelectHookFormProps = {
 };
 
 export const TokenSelectHookForm = ({
-  options,
+  options = OPTIONS,
   fieldName = 'token',
   resetField = 'amount',
   errorField = 'amount',

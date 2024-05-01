@@ -1,0 +1,37 @@
+import { useContractSWR } from '@lido-sdk/react';
+import { TOKENS } from 'consts/tokens';
+import { useCSAccountingRPC } from 'shared/hooks';
+import invariant from 'tiny-invariant';
+import { NodeOperatorId } from 'types';
+
+const METHOD_BY_TOKEN = {
+  [TOKENS.ETH]: 'getRequiredBondForNextKeys',
+  [TOKENS.STETH]: 'getRequiredBondForNextKeys',
+  [TOKENS.WSTETH]: 'getRequiredBondForNextKeysWstETH',
+} as const;
+
+type UseReadAdditionalBondAmountParams = {
+  nodeOperatorId?: NodeOperatorId;
+  keysCount: number;
+  token: TOKENS;
+};
+
+export const useReadAdditionalBondAmount = ({
+  nodeOperatorId,
+  keysCount,
+  token,
+}: UseReadAdditionalBondAmountParams) => {
+  invariant(token, 'Token is required');
+  invariant(keysCount !== undefined, 'KeysCount is required');
+  invariant(nodeOperatorId, 'BodeOperatorId is required');
+
+  const contract = useCSAccountingRPC();
+  const result = useContractSWR({
+    contract,
+    method: METHOD_BY_TOKEN[token],
+    params: [nodeOperatorId, keysCount],
+    shouldFetch: keysCount > 0,
+  });
+
+  return result;
+};

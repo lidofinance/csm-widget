@@ -89,6 +89,7 @@ const routesNodeOperator: Route[] = [
     path: ROLES_PATH,
     icon: <GearIcon />,
     subPaths: [ROLES_MANAGER_PATH, ROLES_REWARDS_PATH, ROLES_INVITES_PATH],
+    skip: true,
   },
   {
     name: 'Locked Bond',
@@ -99,15 +100,15 @@ const routesNodeOperator: Route[] = [
 ];
 
 export const Navigation: FC = memo(() => {
-  const { active } = useAccount();
-  const { active: roles } = useNodeOperator();
+  const { active: isConnected } = useAccount();
+  const { active, isListLoading } = useNodeOperator();
 
-  // @todo: add loading state ??
-  const routes = !active
-    ? routesDisconnected
-    : !roles
-      ? routesConnected
-      : routesNodeOperator;
+  const routes =
+    !isConnected || isListLoading
+      ? routesDisconnected
+      : !active
+        ? routesConnected
+        : routesNodeOperator;
 
   const pathname = useRouterPath();
 

@@ -36,7 +36,7 @@ export const TxStageOperationSucceedBalanceShown = ({
       txHash={txHash}
       title={
         <>
-          Your new balance is <wbr />
+          Your Node Operator new balance is <wbr />
           {balance ? balanceEl : <SkeletonBalance />}
         </>
       }

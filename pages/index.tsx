@@ -1,17 +1,11 @@
+import { CreateNodeOperatorPage } from 'features/create-node-operator';
 import { DashboardPage } from 'features/dashboard';
-import { WelcomePage } from 'features/welcome';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { OnlyNodeOperator } from 'features/loader/only-node-operator';
 
-const Switch = () => {
-  const { active, isLoading: loading } = useNodeOperator();
-
-  return (
-    <>
-      {loading && <div>...loading</div>}
-      {!loading && active && <DashboardPage />}
-      {!loading && !active && <WelcomePage />}
-    </>
-  );
-};
+const Switch = () => (
+  <OnlyNodeOperator fallback={<CreateNodeOperatorPage />}>
+    <DashboardPage />
+  </OnlyNodeOperator>
+);
 
 export default Switch;

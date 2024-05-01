@@ -11,12 +11,13 @@ import {
 import { useNodeOperatorInvitesFromEvents } from 'shared/hooks/useNodeOperatorInvitesFromEvents';
 import { useNodeOperatorsFromEvents } from 'shared/hooks/useNodeOperatorsFromEvents';
 import { useReadNodeOperatorInfo } from 'shared/hooks/useReadNodeOperatorInfo';
+import invariant from 'tiny-invariant';
 import { NodeOperatorId, NodeOperatorInvite, NodeOperatorRoles } from 'types';
 import { useAccount } from 'wagmi';
 
 export type NodeOperatorContextValue = {
   list: NodeOperatorRoles[];
-  isLoading: boolean;
+  isListLoading: boolean;
   append: (no: NodeOperatorRoles) => void;
   active?: NodeOperatorRoles;
   switchActive: (id: NodeOperatorId) => void;
@@ -26,17 +27,26 @@ export type NodeOperatorContextValue = {
   isInvitesLoading: boolean;
 };
 
-export const NodeOperatorContext = createContext<NodeOperatorContextValue>({
-  list: [],
-  invites: [],
-  isLoading: false,
-  isInvitesLoading: false,
-  isDetailsLoading: false,
-  append: () => {},
-  switchActive: () => {},
-});
+export const NodeOperatorContext =
+  createContext<NodeOperatorContextValue | null>(null);
 
-export const useNodeOperator = () => useContext(NodeOperatorContext);
+export const useNodeOperator = () => {
+  const value = useContext(NodeOperatorContext);
+  invariant(
+    value,
+    'useNodeOperator was used outside the NodeOperatorContext provider',
+  );
+  return value;
+};
+
+export const useNodeOperatorId = () => {
+  const value = useContext(NodeOperatorContext);
+  invariant(
+    value,
+    'useNodeOperator was used outside the NodeOperatorContext provider',
+  );
+  return value.active?.id;
+};
 
 const useGetActiveNodeOperator = (roles: NodeOperatorRoles[]) => {
   // @todo: cache in LocalStorage
@@ -67,7 +77,7 @@ export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
 
   const {
     data: list,
-    initialLoading: isLoading,
+    initialLoading: isListLoading,
     append,
   } = useNodeOperatorsFromEvents((isConnected && address) || undefined);
 
@@ -85,7 +95,7 @@ export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
       active,
       details,
       invites,
-      isLoading,
+      isListLoading,
       isDetailsLoading,
       isInvitesLoading,
       append,
@@ -96,7 +106,7 @@ export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
       active,
       details,
       invites,
-      isLoading,
+      isListLoading,
       isDetailsLoading,
       isInvitesLoading,
       append,
