@@ -1,7 +1,3 @@
-import { Divider } from '@lidofinance/lido-ui';
-
-import { useAccount } from 'shared/hooks';
-
 import { TOKENS } from 'consts/tokens';
 import {
   BalanceRow,
@@ -9,18 +5,23 @@ import {
   HatAccount,
   HatBalance,
   HatComponent,
+  HatFloat,
   HatRow,
 } from 'shared/hat';
-import { useAddKeysFormData } from '../context';
+import { useAccount } from 'shared/hooks';
+import { useSubmitKeysFormData } from '../context';
 import { StyledHat } from './styles';
 
-export const AddKeysHat: HatComponent = (props) => {
+export const SubmitKeysHat: HatComponent = (props) => {
   const { address } = useAccount();
   const { etherBalance, stethBalance, wstethBalance, loading } =
-    useAddKeysFormData();
+    useSubmitKeysFormData();
 
   return (
     <StyledHat {...props}>
+      <HatFloat>
+        <HatAccount address={address} />
+      </HatFloat>
       <HatRow>
         <HatBalance
           title="Balance"
@@ -43,23 +44,6 @@ export const AddKeysHat: HatComponent = (props) => {
               />
             </BalanceRow>
           }
-        />
-        <HatAccount address={address} />
-      </HatRow>
-      <Divider />
-      <HatRow>
-        <HatBalance
-          small
-          title="Keys available to upload"
-          loading={false}
-          value="10"
-          extra="= 20 stETH"
-        />
-        <HatBalance
-          small
-          title={<>Shortage Bond</>}
-          loading={false}
-          value="0.5 stETH"
         />
       </HatRow>
     </StyledHat>

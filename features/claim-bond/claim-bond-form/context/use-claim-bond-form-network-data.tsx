@@ -9,7 +9,7 @@ export const useClaimBondFormNetworkData = (): ClaimBondFormNetworkData => {
   const nodeOperatorId = useNodeOperatorId();
 
   const {
-    data: bondBalance,
+    data: bond,
     update: updateBondBalance,
     initialLoading: isBondBalanceLoading,
   } = useNodeOperatorBalance(nodeOperatorId, STRATEGY_LAZY);
@@ -33,8 +33,8 @@ export const useClaimBondFormNetworkData = (): ClaimBondFormNetworkData => {
 
   return {
     nodeOperatorId,
-    bondBalance: bondBalance?.current,
-    bondRequired: bondBalance?.required,
+    bondBalance: bond?.current,
+    bondRequired: bond?.required,
     isMultisig: isMultisigLoading ? undefined : isMultisig,
     maxGasPrice,
     loading,

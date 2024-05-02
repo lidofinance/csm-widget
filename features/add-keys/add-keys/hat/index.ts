@@ -1,1 +1,1 @@
-export * from './hat';
+export * from './add-keys-hat';

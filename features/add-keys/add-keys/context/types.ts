@@ -15,6 +15,7 @@ export type AddKeysFormLoading = {
   isEtherBalanceLoading: boolean;
   isStethBalanceLoading: boolean;
   isWstethBalanceLoading: boolean;
+  isBondBalanceLoading: boolean;
   isMultisigLoading: boolean;
   isMaxGasPriceLoading: boolean;
 };
@@ -23,6 +24,9 @@ export type AddKeysFormNetworkData = {
   etherBalance?: BigNumber;
   stethBalance?: BigNumber;
   wstethBalance?: BigNumber;
+  nodeOperatorId?: NodeOperatorId;
+  bondBalance?: BigNumber;
+  bondRequired?: BigNumber;
   isMultisig?: boolean;
   gasLimit?: BigNumber;
   gasCost?: BigNumber;

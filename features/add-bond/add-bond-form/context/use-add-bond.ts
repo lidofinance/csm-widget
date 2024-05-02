@@ -15,7 +15,7 @@ import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
 import { AddBondFormInputType } from '../context';
-import { useTxModalStagesAddBond } from './use-tx-modal-stages-add-bond';
+import { useTxModalStagesAddBond } from '../hooks/use-tx-modal-stages-add-bond';
 
 type UseAddBondOptions = {
   onConfirm?: () => Promise<void> | void;

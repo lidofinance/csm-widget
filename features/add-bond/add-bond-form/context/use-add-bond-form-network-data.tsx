@@ -4,12 +4,14 @@ import {
   useSTETHBalance,
   useWSTETHBalance,
 } from '@lido-sdk/react';
-import { useMaxGasPrice } from 'shared/hooks';
+import { useMaxGasPrice, useNodeOperatorBalance } from 'shared/hooks';
 import { useIsMultisig } from 'shared/hooks/useIsMultisig';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { type AddBondFormNetworkData } from '../context/types';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
 
 export const useAddBondFormNetworkData = (): AddBondFormNetworkData => {
+  const nodeOperatorId = useNodeOperatorId();
   const {
     data: etherBalance,
     update: updateEtherBalance,
@@ -25,6 +27,11 @@ export const useAddBondFormNetworkData = (): AddBondFormNetworkData => {
     update: updateWstethBalance,
     initialLoading: isWstethBalanceLoading,
   } = useWSTETHBalance(STRATEGY_LAZY);
+  const {
+    data: bond,
+    update: updateBondBalance,
+    initialLoading: isBondBalanceLoading,
+  } = useNodeOperatorBalance(nodeOperatorId, STRATEGY_LAZY);
 
   const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
   const { maxGasPrice, initialLoading: isMaxGasPriceLoading } =
@@ -35,23 +42,31 @@ export const useAddBondFormNetworkData = (): AddBondFormNetworkData => {
       updateStethBalance,
       updateWstethBalance,
       updateEtherBalance,
+      updateBondBalance,
     ]);
-  }, [updateStethBalance, updateWstethBalance, updateEtherBalance]);
+  }, [
+    updateStethBalance,
+    updateWstethBalance,
+    updateEtherBalance,
+    updateBondBalance,
+  ]);
 
   const loading = useMemo(
     () => ({
+      isEtherBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
+      isBondBalanceLoading,
       isMultisigLoading,
       isMaxGasPriceLoading,
-      isEtherBalanceLoading,
     }),
     [
+      isEtherBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
+      isBondBalanceLoading,
       isMultisigLoading,
       isMaxGasPriceLoading,
-      isEtherBalanceLoading,
     ],
   );
 
@@ -59,6 +74,9 @@ export const useAddBondFormNetworkData = (): AddBondFormNetworkData => {
     etherBalance,
     stethBalance,
     wstethBalance,
+    bondBalance: bond?.current,
+    bondRequired: bond?.required,
+    nodeOperatorId,
     isMultisig: isMultisigLoading ? undefined : isMultisig,
     maxGasPrice,
     loading,

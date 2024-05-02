@@ -6,10 +6,8 @@ export const useGetActiveNodeOperator = (roles: NodeOperatorRoles[]) => {
   const [active, setActive] = useState<NodeOperatorRoles | undefined>();
 
   useEffect(() => {
-    if (roles.length === 0 && !!active) {
-      setActive(undefined);
-    }
-    if (roles.length > 0 && !active) {
+    const activeInList = !!active && roles.some((r) => r.id === active.id);
+    if (!activeInList) {
       setActive(roles[0]);
     }
   }, [active, roles]);

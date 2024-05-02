@@ -29,6 +29,10 @@ export const HatRowStyle = styled.div`
   }
 `;
 
+export const HatFloatStyle = styled.div`
+  float: right;
+`;
+
 export const HatBalanceStyle = styled.div`
   margin-right: 18px;
   flex-basis: 50%;
@@ -89,10 +93,18 @@ export const BalanceRowStyle = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  gap: ${({ theme }) => theme.spaceMap.xxl}px;
 `;
 
 export const BalanceValueStyle = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  align-items: center;
+  gap: ${({ theme }) => theme.spaceMap.sm}px;
+  min-width: 100px;
+`;
+
+export const BalanceIconStyle = styled.div`
+  display: flex;
+  flex-shrink: 0;
 `;

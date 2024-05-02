@@ -6,8 +6,8 @@ import {
   FormControllerContextValueType,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller';
-import { useAddBondFormNetworkData } from '../hooks/use-add-bond-form-network-data';
-import { useAddBond } from '../hooks/use-add-bond';
+import { useAddBondFormNetworkData } from './use-add-bond-form-network-data';
+import { useAddBond } from './use-add-bond';
 import { AddBondFormDataContext } from './add-bond-form-context';
 import { type AddBondFormInputType } from './types';
 
