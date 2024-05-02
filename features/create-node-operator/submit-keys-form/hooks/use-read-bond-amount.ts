@@ -27,9 +27,12 @@ export const useReadBondAmount = ({
   });
 
   /**
-   * TODO: only in ETH ?
-   * add 10 wei to prevent unbounded key because of round mistake
+   * add 10 wei for approve/permit request
    */
+  let { data } = result;
+  if (token !== TOKENS.ETH && data) {
+    data = data.add(10);
+  }
 
-  return result;
+  return { ...result, data };
 };

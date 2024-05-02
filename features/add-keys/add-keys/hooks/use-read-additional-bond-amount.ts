@@ -33,5 +33,13 @@ export const useReadAdditionalBondAmount = ({
     shouldFetch: keysCount > 0,
   });
 
-  return result;
+  /**
+   * add 10 wei for approve/permit request
+   */
+  let { data } = result;
+  if (token !== TOKENS.ETH && data) {
+    data = data.add(10);
+  }
+
+  return { ...result, data };
 };
