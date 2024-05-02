@@ -55,6 +55,6 @@ const getTxModalStagesAddBond = (
     ),
 });
 
-export const useTxModalStagesSubmitKeys = () => {
+export const useTxModalStagesAddBond = () => {
   return useTransactionModalStage(getTxModalStagesAddBond);
 };

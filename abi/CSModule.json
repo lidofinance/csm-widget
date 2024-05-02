@@ -997,25 +997,6 @@
   },
   {
     "type": "function",
-    "name": "getNodeOperatorActiveKeys",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "getNodeOperatorIds",
     "inputs": [
       {
@@ -1053,6 +1034,25 @@
         "name": "",
         "type": "bool",
         "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getNodeOperatorNonWithdrawnKeys",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -1383,6 +1383,11 @@
       },
       {
         "name": "_earlyAdoption",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "verifier",
         "type": "address",
         "internalType": "address"
       },
@@ -2421,7 +2426,7 @@
   },
   {
     "type": "event",
-    "name": "TargetValidatorsCountChanged",
+    "name": "TargetValidatorsCountChangedByRequest",
     "inputs": [
       {
         "name": "nodeOperatorId",
@@ -2650,7 +2655,7 @@
   },
   {
     "type": "error",
-    "name": "StuckKeysHigherThanTotalDeposited",
+    "name": "StuckKeysHigherThanNonWithdrawn",
     "inputs": []
   },
   {

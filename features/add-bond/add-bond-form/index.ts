@@ -1,1 +1,1 @@
-export { SubmitKeysForm } from './add-bond-form';
+export { AddBondForm } from './add-bond-form';

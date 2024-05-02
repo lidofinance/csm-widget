@@ -6,7 +6,7 @@ import { useEthUsd } from 'shared/hooks/use-eth-usd';
 import { useAddBondFormData } from './context/add-bond-form-context';
 import { AddBondFormInputType } from './context/types';
 
-export const SubmitKeysFormInfo = () => {
+export const AddBondFormInfo = () => {
   // const token = useWatch<AddBondFormInputType, 'token'>({
   //   name: 'token',
   // });

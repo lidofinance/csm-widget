@@ -44,7 +44,7 @@ export const TxStageSignOperationAmount = ({
             {willReceiveEl && (
               <>
                 <br />
-                You will receive {willReceiveEl}.
+                RewardAddress will receive {willReceiveEl}.
               </>
             )}
           </>

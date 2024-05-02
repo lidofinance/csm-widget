@@ -1,3 +1,4 @@
+import { BigNumber } from 'ethers';
 import {
   ChangeEvent,
   ComponentProps,
@@ -9,14 +10,14 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import { BigNumber } from 'ethers';
 
-import { formatEther, parseEther } from '@ethersproject/units';
 import { MaxUint256 } from '@ethersproject/constants';
+import { formatEther, parseEther } from '@ethersproject/units';
 import { Input } from '@lidofinance/lido-ui';
 
-import { InputDecoratorMaxButton } from './input-decorator-max-button';
 import { InputDecoratorLocked } from './input-decorator-locked';
+import { InputDecoratorMaxButton } from './input-decorator-max-button';
+import { StyledInput } from './styles';
 
 type InputAmountProps = {
   onChange?: (value: BigNumber | null) => void;
@@ -154,20 +155,23 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
         : undefined;
 
     return (
-      <Input
+      <StyledInput
         {...props}
         placeholder={placeholder}
         rightDecorator={
           rightDecorator ?? (
             <>
-              <InputDecoratorMaxButton
-                onClick={handleClickMax}
-                disabled={!handleClickMax}
-              />
+              {maxValue !== undefined ? (
+                <InputDecoratorMaxButton
+                  onClick={handleClickMax}
+                  disabled={!handleClickMax}
+                />
+              ) : undefined}
               {isLocked ? <InputDecoratorLocked /> : undefined}
             </>
           )
         }
+        disabled={props.disabled || isLocked}
         inputMode="decimal"
         defaultValue={defaultValue}
         onChange={handleChange}

@@ -1,17 +1,12 @@
 import { useController, useFormState, useFormContext } from 'react-hook-form';
-
-import {
-  SelectIcon,
-  Option,
-  Eth,
-  Steth,
-  Wsteth,
-  OptionValue,
-} from '@lidofinance/lido-ui';
-
+import { SelectIcon, Option, OptionValue } from '@lidofinance/lido-ui';
 import { getTokenDisplayName } from 'utils/getTokenDisplayName';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
 import { TOKENS } from 'consts/tokens';
+
+import { ReactComponent as EthIcon } from 'assets/icons/eth.svg';
+import { ReactComponent as StethIcon } from 'assets/icons/steth.svg';
+import { ReactComponent as WstethIcon } from 'assets/icons/wsteth.svg';
 
 export type TokenOption = {
   label?: string;
@@ -24,10 +19,11 @@ const OPTIONS: TokenOption[] = [
   { token: TOKENS.WSTETH },
 ];
 
+// TODO: 24px
 const iconsMap = {
-  [TOKENS.ETH]: <Eth />,
-  [TOKENS.STETH]: <Steth />,
-  [TOKENS.WSTETH]: <Wsteth />,
+  [TOKENS.ETH]: <EthIcon />,
+  [TOKENS.STETH]: <StethIcon />,
+  [TOKENS.WSTETH]: <WstethIcon />,
 } as const;
 
 type TokenSelectHookFormProps = {
@@ -59,7 +55,6 @@ export const TokenSelectHookForm = ({
       {...field}
       warning={warning}
       icon={iconsMap[field.value]}
-      data-testid="drop-down"
       error={isValidationErrorTypeValidate(errors[errorField]?.type)}
       onChange={(value: OptionValue) => {
         setValue(fieldName, value, {
@@ -77,12 +72,7 @@ export const TokenSelectHookForm = ({
       }}
     >
       {options.map(({ label, token }) => (
-        <Option
-          key={token}
-          leftDecorator={iconsMap[token]}
-          value={token}
-          data-testid={token}
-        >
+        <Option key={token} leftDecorator={iconsMap[token]} value={token}>
           {label || getTokenDisplayName(token)}
         </Option>
       ))}

@@ -11,7 +11,7 @@ import { useAddBond } from '../hooks/use-add-bond';
 import { AddBondFormDataContext } from './add-bond-form-context';
 import { type AddBondFormInputType } from './types';
 
-export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
+export const AddBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useAddBondFormNetworkData();
 
   const formObject = useForm<AddBondFormInputType>({

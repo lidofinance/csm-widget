@@ -2,7 +2,13 @@ import { Component } from 'types';
 
 export type SwitchItemComponent = Component<'a'>;
 
+export type SwitchRoutes = {
+  name: string;
+  path: string;
+}[];
+
+// TODO: generic type
 export type SwitchProps = {
-  checked: boolean;
-  routes: { name: string; path: string }[];
+  routes: SwitchRoutes;
+  active: number;
 };

@@ -35,7 +35,7 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { submitKeys, bondAmount, isBondAmountLoading } = useAddKeys({
+  const { addKeys, bondAmount, isBondAmountLoading } = useAddKeys({
     token,
     parsedKeys,
     onConfirm: networkData.revalidate,
@@ -54,10 +54,10 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const formControllerValue: FormControllerContextValueType<AddKeysFormInputType> =
     useMemo(
       () => ({
-        onSubmit: submitKeys,
+        onSubmit: addKeys,
         retryEvent,
       }),
-      [submitKeys, retryEvent],
+      [addKeys, retryEvent],
     );
 
   return (

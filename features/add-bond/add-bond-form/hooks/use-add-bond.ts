@@ -5,17 +5,17 @@ import invariant from 'tiny-invariant';
 import { TOKENS } from 'consts/tokens';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCSAccountingRPC, useCSModuleWeb3 } from 'shared/hooks';
+import {
+  GatherPermitSignatureResult,
+  useCsmPermitSignature,
+} from 'shared/hooks/use-csm-permit-signature';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import { SubmitKeysFormInputType } from '../context';
-import { useTxModalStagesSubmitKeys } from './use-tx-modal-stages-add-bond';
-import {
-  GatherPermitSignatureResult,
-  useCsmPermitSignature,
-} from 'shared/hooks/use-csm-permit-signature';
+import { AddBondFormInputType } from '../context';
+import { useTxModalStagesAddBond } from './use-tx-modal-stages-add-bond';
 
 type UseAddBondOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -33,7 +33,7 @@ const useAddBondMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();
   const CSModuleWeb3 = useCSModuleWeb3();
 
-  const submitETH = useCallback(
+  const methodETH = useCallback(
     async ({ amount, nodeOperatorId }: AddBondMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
@@ -64,7 +64,7 @@ const useAddBondMethods = () => {
     [CSModuleWeb3, staticRpcProvider],
   );
 
-  const submitSTETH = useCallback(
+  const methodSTETH = useCallback(
     async ({ amount, permit, nodeOperatorId }: AddBondMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
       invariant(permit, 'must have permit');
@@ -95,7 +95,7 @@ const useAddBondMethods = () => {
     [CSModuleWeb3, staticRpcProvider],
   );
 
-  const submitWSTETH = useCallback(
+  const methodWSTETH = useCallback(
     async ({ amount, permit, nodeOperatorId }: AddBondMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
       invariant(permit, 'must have permit');
@@ -130,27 +130,27 @@ const useAddBondMethods = () => {
     (token: TOKENS) => {
       switch (token) {
         case TOKENS.ETH:
-          return { method: submitETH, needsPermit: false };
+          return { method: methodETH, needsPermit: false };
         case TOKENS.STETH:
-          return { method: submitSTETH, needsPermit: true };
+          return { method: methodSTETH, needsPermit: true };
         case TOKENS.WSTETH:
-          return { method: submitWSTETH, needsPermit: true };
+          return { method: methodWSTETH, needsPermit: true };
       }
     },
-    [submitETH, submitSTETH, submitWSTETH],
+    [methodETH, methodSTETH, methodWSTETH],
   );
 };
 
 export const useAddBond = ({ onConfirm, onRetry }: UseAddBondOptions) => {
   const nodeOperatorId = useNodeOperatorId(); // TODO: move to context
-  const { txModalStages } = useTxModalStagesSubmitKeys();
+  const { txModalStages } = useTxModalStagesAddBond();
   const CSAccounting = useCSAccountingRPC();
 
   const getMethod = useAddBondMethods();
   const getPermitSignature = useCsmPermitSignature();
 
   const addBond = useCallback(
-    async ({ amount, token }: SubmitKeysFormInputType): Promise<boolean> => {
+    async ({ amount, token }: AddBondFormInputType): Promise<boolean> => {
       invariant(token, 'Token is not defined');
       invariant(amount, 'BondAmount is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');

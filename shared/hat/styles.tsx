@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Block } from '@lidofinance/lido-ui';
 
-export const WalletCardStyle = styled((props) => <Block {...props} />)`
+export const HatStyle = styled(Block)`
   margin-bottom: ${({ theme }) => -theme.borderRadiusesMap.xl}px;
 
   border-bottom-left-radius: 0;
@@ -16,7 +16,7 @@ export const WalletCardStyle = styled((props) => <Block {...props} />)`
   }
 `;
 
-export const WalletCardRowStyle = styled.div`
+export const HatRowStyle = styled.div`
   display: flex;
   margin: ${({ theme }) => theme.spaceMap.lg}px 0;
 
@@ -29,7 +29,7 @@ export const WalletCardRowStyle = styled.div`
   }
 `;
 
-export const WalletCardBalanceStyle = styled.div`
+export const HatBalanceStyle = styled.div`
   margin-right: 18px;
   flex-basis: 50%;
   flex-grow: 1;
@@ -41,7 +41,7 @@ export const WalletCardBalanceStyle = styled.div`
   }
 `;
 
-export const WalletCardTitleStyle = styled.div`
+export const HatTitleStyle = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -49,7 +49,7 @@ export const WalletCardTitleStyle = styled.div`
   line-height: 24px;
 `;
 
-export const WalletCardValueStyle = styled.div<{ $small: boolean }>`
+export const HatValueStyle = styled.div<{ $small: boolean }>`
   margin-top: 2px;
   font-size: ${({ theme, $small }) =>
     $small ? theme.fontSizesMap.sm : theme.fontSizesMap.md}px;
@@ -58,18 +58,18 @@ export const WalletCardValueStyle = styled.div<{ $small: boolean }>`
   white-space: nowrap;
 `;
 
-export const WalletCardExtraStyle = styled.div`
+export const HatExtraStyle = styled.div`
   margin-top: 2px;
   opacity: 0.5;
 `;
 
-export const WalletCardContentStyle = styled.div<{ $hidden: boolean }>`
+export const HatContentStyle = styled.div<{ $hidden: boolean }>`
   margin-top: 8px;
   opacity: ${({ $hidden }) => ($hidden ? 0 : 1)};
   pointer-events: ${({ $hidden }) => ($hidden ? 'none' : 'auto')};
 `;
 
-export const WalletCardAccountStyle = styled.div`
+export const HatAccountStyle = styled.div`
   align-self: stretch;
   display: flex;
   flex-basis: 50%;
@@ -83,4 +83,16 @@ export const WalletCardAccountStyle = styled.div`
   & > * {
     cursor: pointer;
   }
+`;
+
+export const BalanceRowStyle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+`;
+
+export const BalanceValueStyle = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 `;

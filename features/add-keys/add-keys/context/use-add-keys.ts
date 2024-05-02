@@ -44,7 +44,7 @@ const useAddKeysMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();
   const CSModuleWeb3 = useCSModuleWeb3();
 
-  const submitETH = useCallback(
+  const methodETH = useCallback(
     async ({
       nodeOperatorId,
       bondAmount,
@@ -87,7 +87,7 @@ const useAddKeysMethods = () => {
     [CSModuleWeb3, staticRpcProvider],
   );
 
-  const submitSTETH = useCallback(
+  const methodSTETH = useCallback(
     async ({
       nodeOperatorId,
       keysCount,
@@ -131,7 +131,7 @@ const useAddKeysMethods = () => {
     [CSModuleWeb3, staticRpcProvider],
   );
 
-  const submitWSTETH = useCallback(
+  const methodWSTETH = useCallback(
     async ({
       nodeOperatorId,
       keysCount,
@@ -179,14 +179,14 @@ const useAddKeysMethods = () => {
     (token: TOKENS) => {
       switch (token) {
         case TOKENS.ETH:
-          return { method: submitETH, needsPermit: false };
+          return { method: methodETH, needsPermit: false };
         case TOKENS.STETH:
-          return { method: submitSTETH, needsPermit: true };
+          return { method: methodSTETH, needsPermit: true };
         case TOKENS.WSTETH:
-          return { method: submitWSTETH, needsPermit: true };
+          return { method: methodWSTETH, needsPermit: true };
       }
     },
-    [submitETH, submitSTETH, submitWSTETH],
+    [methodETH, methodSTETH, methodWSTETH],
   );
 };
 
@@ -209,7 +209,7 @@ export const useAddKeys = ({
       token,
     });
 
-  const submitKeys = useCallback(
+  const addKeys = useCallback(
     async ({ parsedKeys, token }: AddKeysFormInputType): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(parsedKeys.length, 'Keys is not defined');
@@ -278,7 +278,7 @@ export const useAddKeys = ({
   );
 
   return {
-    submitKeys,
+    addKeys,
     bondAmount,
     isBondAmountLoading,
   };

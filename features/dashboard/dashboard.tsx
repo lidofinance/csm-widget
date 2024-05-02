@@ -1,21 +1,66 @@
-import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { Block, DataTable, DataTableRow, Divider } from '@lidofinance/lido-ui';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
+import { Section } from 'shared/components';
+import { useNodeOperatorBalance } from 'shared/hooks';
+import { useNodeOperatorInfo } from 'shared/hooks/useNodeOperatorInfo';
+import { useNodeOperatorSummary } from 'shared/hooks/useNodeOperatorSummary';
 
 export const Dashboard: FC = () => {
-  const { details } = useNodeOperator();
+  const id = useNodeOperatorId();
+  const { data: info } = useNodeOperatorInfo(id);
+  const { data: balance } = useNodeOperatorBalance(id);
+  const { data: summary } = useNodeOperatorSummary(id);
 
   return (
-    <DataTable>
-      {details &&
-        Object.entries(details).map(([key, value]) => {
-          if (key.match(/^[0-9]/)) return null;
-          return (
-            <DataTableRow key={key} title={key}>
-              {value?.toString()}
-            </DataTableRow>
-          );
-        })}
-    </DataTable>
+    <>
+      <Section title="Bond Balance">
+        <Block>
+          <DataTable>
+            {balance &&
+              Object.entries(balance).map(([key, value]) => {
+                if (key.match(/^[0-9]/)) return null;
+                return (
+                  <DataTableRow key={key} title={key}>
+                    {value?.toString()}
+                  </DataTableRow>
+                );
+              })}
+          </DataTable>
+        </Block>
+      </Section>
+      <Divider />
+      <Section title="Keys summary">
+        <Block>
+          <DataTable>
+            {summary &&
+              Object.entries(summary).map(([key, value]) => {
+                if (key.match(/^[0-9]/)) return null;
+                return (
+                  <DataTableRow key={key} title={key}>
+                    {value?.toString()}
+                  </DataTableRow>
+                );
+              })}
+          </DataTable>
+        </Block>
+      </Section>
+      <Divider />
+      <Section title="NodeOperator Info">
+        <Block>
+          <DataTable>
+            {info &&
+              Object.entries(info).map(([key, value]) => {
+                if (key.match(/^[0-9]/)) return null;
+                return (
+                  <DataTableRow key={key} title={key}>
+                    {value?.toString()}
+                  </DataTableRow>
+                );
+              })}
+          </DataTable>
+        </Block>
+      </Section>
+    </>
   );
 };

@@ -306,6 +306,11 @@
         "name": "admin",
         "type": "address",
         "internalType": "address"
+      },
+      {
+        "name": "oracle",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "outputs": [],
@@ -339,7 +344,7 @@
         "internalType": "string"
       },
       {
-        "name": "_distributedShares",
+        "name": "distributed",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -630,6 +635,16 @@
   {
     "type": "error",
     "name": "InvalidShares",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidTreeCID",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidTreeRoot",
     "inputs": []
   },
   {

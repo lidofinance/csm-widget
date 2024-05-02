@@ -26,5 +26,10 @@ export const useReadBondAmount = ({
     shouldFetch: keysCount > 0,
   });
 
+  /**
+   * TODO: only in ETH ?
+   * add 10 wei to prevent unbounded key because of round mistake
+   */
+
   return result;
 };

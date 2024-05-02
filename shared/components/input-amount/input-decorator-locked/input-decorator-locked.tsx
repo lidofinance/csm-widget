@@ -1,11 +1,11 @@
 import { FC } from 'react';
-import { Lock, Tooltip } from '@lidofinance/lido-ui';
+import { LockSmall, Tooltip } from '@lidofinance/lido-ui';
 import { LockWrapper } from './styles';
 
 export const InputDecoratorLocked: FC = (props) => (
-  <Tooltip title="Token locked" placement="top" {...props}>
+  <Tooltip title="Calculated automatically" placement="top" {...props}>
     <LockWrapper>
-      <Lock />
+      <LockSmall />
     </LockWrapper>
   </Tooltip>
 );

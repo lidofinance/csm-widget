@@ -406,11 +406,6 @@
         "internalType": "uint256"
       },
       {
-        "name": "lastProcessingRefSlot",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
         "name": "_perfThresholdBP",
         "type": "uint256",
         "internalType": "uint256"
@@ -542,7 +537,7 @@
         "internalType": "bytes32"
       },
       {
-        "name": "account",
+        "name": "callerConfirmation",
         "type": "address",
         "internalType": "address"
       }
@@ -780,6 +775,19 @@
   },
   {
     "type": "event",
+    "name": "Initialized",
+    "inputs": [
+      {
+        "name": "version",
+        "type": "uint64",
+        "indexed": false,
+        "internalType": "uint64"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "Paused",
     "inputs": [
       {
@@ -994,6 +1002,27 @@
   },
   {
     "type": "error",
+    "name": "AccessControlBadConfirmation",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "AccessControlUnauthorizedAccount",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "neededRole",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ]
+  },
+  {
+    "type": "error",
     "name": "AddressCannotBeSame",
     "inputs": []
   },
@@ -1035,6 +1064,11 @@
   },
   {
     "type": "error",
+    "name": "InvalidInitialization",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "InvalidPerfThreshold",
     "inputs": []
   },
@@ -1055,7 +1089,7 @@
   },
   {
     "type": "error",
-    "name": "NothingToDistribute",
+    "name": "NotInitializing",
     "inputs": []
   },
   {
@@ -1123,6 +1157,22 @@
   },
   {
     "type": "error",
+    "name": "SafeCastOverflowedUintDowncast",
+    "inputs": [
+      {
+        "name": "bits",
+        "type": "uint8",
+        "internalType": "uint8"
+      },
+      {
+        "name": "value",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ]
+  },
+  {
+    "type": "error",
     "name": "SecondsPerSlotCannotBeZero",
     "inputs": []
   },
@@ -1134,16 +1184,6 @@
   {
     "type": "error",
     "name": "SenderNotAllowed",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "TreeCidCannotBeEmpty",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "TreeRootCannotBeZero",
     "inputs": []
   },
   {

@@ -4,14 +4,15 @@ import { SwitchItem } from './switch-item';
 import { SwitchWrapper, Handle } from './styles';
 import { SwitchProps } from './types';
 
-export const Switch: FC<SwitchProps> = (props) => {
-  const { checked, routes } = props;
-
+export const Switch: FC<SwitchProps> = ({ active, routes }) => {
   return (
     <SwitchWrapper>
-      <Handle $checked={checked} />
-      <SwitchItem href={routes[0].path}>{routes[0].name}</SwitchItem>
-      <SwitchItem href={routes[1].path}>{routes[1].name}</SwitchItem>
+      <Handle $checked={active !== 0} />
+      {routes.map((route) => (
+        <SwitchItem key={route.name} href={route.path}>
+          {route.name}
+        </SwitchItem>
+      ))}
     </SwitchWrapper>
   );
 };

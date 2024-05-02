@@ -1,23 +1,23 @@
 import { FC, memo } from 'react';
 
-import { SubmitKeysFormProvider } from './context';
+import { AddBondFormProvider } from './context';
 
 import { SubmitButton } from './controls/submit-button';
-import { SubmitKeysFormInfo } from './add-bond-form-info';
+import { AddBondFormInfo } from './add-bond-form-info';
 import { FormControllerStyled } from './styles';
 import { AmountInput } from './controls/amount-input';
 import { Block } from '@lidofinance/lido-ui';
 
-export const SubmitKeysForm: FC = memo(() => {
+export const AddBondForm: FC = memo(() => {
   return (
-    <SubmitKeysFormProvider>
+    <AddBondFormProvider>
       <Block>
         <FormControllerStyled>
           <AmountInput />
           <SubmitButton />
         </FormControllerStyled>
-        <SubmitKeysFormInfo />
+        <AddBondFormInfo />
       </Block>
-    </SubmitKeysFormProvider>
+    </AddBondFormProvider>
   );
 });

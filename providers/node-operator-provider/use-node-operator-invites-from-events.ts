@@ -5,9 +5,9 @@ import {
   NodeOperatorRewardAddressChangeProposedEvent,
 } from 'generated/CSModule';
 import { useCallback, useMemo } from 'react';
+import { useCSModuleRPC } from 'shared/hooks';
 import { NodeOperatorInvite } from 'types';
 import { Address } from 'wagmi';
-import { useCSModuleRPC } from './useCsmContracts';
 
 type AddressChangeProposedEvents =
   | NodeOperatorManagerAddressChangeProposedEvent
