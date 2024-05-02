@@ -14,16 +14,13 @@ import {
   useCsmPermitSignature,
 } from 'shared/hooks/use-csm-permit-signature';
 import invariant from 'tiny-invariant';
-import { DepositData, NodeOperatorId } from 'types';
+import { NodeOperatorId } from 'types';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { formatKeys } from 'utils/formatKeys';
-import { AddKeysFormInputType } from './types';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
-import { useReadAdditionalBondAmount } from '../hooks/use-read-additional-bond-amount';
+import { AddKeysFormInputType } from './types';
 
 type AddKeysOptions = {
-  token: TOKENS;
-  parsedKeys: DepositData[];
   onConfirm?: () => Promise<void> | void;
   onRetry?: () => void;
 };
@@ -190,29 +187,21 @@ const useAddKeysMethods = () => {
   );
 };
 
-export const useAddKeys = ({
-  token,
-  parsedKeys,
-  onConfirm,
-  onRetry,
-}: AddKeysOptions) => {
+export const useAddKeys = ({ onConfirm, onRetry }: AddKeysOptions) => {
   const { txModalStages } = useTxModalStagesAddKeys();
   const getAddKeysMethod = useAddKeysMethods();
   const nodeOperatorId = useNodeOperatorId();
 
   const gatherPermitSignature = useCsmPermitSignature();
 
-  const { data: bondAmount, loading: isBondAmountLoading } =
-    useReadAdditionalBondAmount({
-      nodeOperatorId,
-      keysCount: parsedKeys.length,
-      token,
-    });
-
   const addKeys = useCallback(
-    async ({ parsedKeys, token }: AddKeysFormInputType): Promise<boolean> => {
+    async ({
+      depositData,
+      token,
+      bondAmount,
+    }: AddKeysFormInputType): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
-      invariant(parsedKeys.length, 'Keys is not defined');
+      invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(bondAmount, 'BondAmount is not defined');
 
@@ -220,7 +209,7 @@ export const useAddKeys = ({
         let permit: GatherPermitSignatureResult | undefined;
         const { method, needsPermit } = getAddKeysMethod(token);
 
-        const { keysCount, publicKeys, signatures } = formatKeys(parsedKeys);
+        const { keysCount, publicKeys, signatures } = formatKeys(depositData);
 
         if (needsPermit) {
           txModalStages.signPermit();
@@ -268,7 +257,6 @@ export const useAddKeys = ({
     },
     [
       nodeOperatorId,
-      bondAmount,
       getAddKeysMethod,
       txModalStages,
       onConfirm,
@@ -277,9 +265,5 @@ export const useAddKeys = ({
     ],
   );
 
-  return {
-    addKeys,
-    bondAmount,
-    isBondAmountLoading,
-  };
+  return addKeys;
 };

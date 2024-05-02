@@ -2,12 +2,13 @@ import { useWatch } from 'react-hook-form';
 
 import { InputAmount } from 'shared/components/input-amount';
 import { getTokenDisplayName } from 'utils/getTokenDisplayName';
-import { useSubmitKeysFormData } from '../context/submit-keys-form-context';
 import { SubmitKeysFormInputType } from '../context/types';
 
 export const TokenAmountInput = () => {
-  const token = useWatch<SubmitKeysFormInputType, 'token'>({ name: 'token' });
-  const { bondAmount } = useSubmitKeysFormData();
+  const [token, bondAmount] = useWatch<
+    SubmitKeysFormInputType,
+    ['token', 'bondAmount']
+  >({ name: ['token', 'bondAmount'] });
 
   return (
     <InputAmount

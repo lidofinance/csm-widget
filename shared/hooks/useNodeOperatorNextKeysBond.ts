@@ -16,7 +16,7 @@ type UseReadAdditionalBondAmountParams = {
   token: TOKENS;
 };
 
-export const useReadAdditionalBondAmount = ({
+export const useNodeOperatorNextKeysBond = ({
   nodeOperatorId,
   keysCount,
   token,

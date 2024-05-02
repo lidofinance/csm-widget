@@ -11,7 +11,7 @@ const METHOD_BY_TOKEN = {
 
 type UseReadBondAmountParams = { keysCount: number; token: TOKENS };
 
-export const useReadBondAmount = ({
+export const useNodeOperatorFirstKeysBond = ({
   keysCount,
   token,
 }: UseReadBondAmountParams) => {

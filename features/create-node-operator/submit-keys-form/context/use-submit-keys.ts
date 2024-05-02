@@ -11,20 +11,17 @@ import {
 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import invariant from 'tiny-invariant';
-import { DepositData } from 'types';
+import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { formatKeys } from 'utils/formatKeys';
 import { getFeeData } from 'utils/getFeeData';
 import { Address } from 'wagmi';
-import { SubmitKeysFormInputType } from './context';
-import { useTxModalStagesSubmitKeys } from './hooks/use-tx-modal-stages-submit-keys';
-import { useReadBondAmount } from './hooks/useReadBondAmount';
-import { getAddedNodeOperator } from './utils';
+import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
+import { getAddedNodeOperator } from '../utils';
+import { SubmitKeysFormInputType } from './types';
 
 type SubmitKeysOptions = {
-  token: TOKENS;
-  parsedKeys: DepositData[];
   onConfirm?: () => Promise<void> | void;
   onRetry?: () => void;
 };
@@ -209,35 +206,24 @@ const useSubmitKeysMethods = () => {
   );
 };
 
-export const useSubmitKeys = ({
-  token,
-  parsedKeys,
-  onConfirm,
-  onRetry,
-}: SubmitKeysOptions) => {
+export const useSubmitKeys = ({ onConfirm, onRetry }: SubmitKeysOptions) => {
   const { txModalStages } = useTxModalStagesSubmitKeys();
   const getSubmitKeysMethod = useSubmitKeysMethods();
   const { append: appendNO } = useNodeOperator();
 
   const gatherPermitSignature = useCsmPermitSignature();
 
-  const { data: bondAmount, loading: isBondAmountLoading } = useReadBondAmount({
-    keysCount: parsedKeys.length,
-    token,
-  });
-
   const submitKeys = useCallback(
     async ({
       referral,
-      parsedKeys,
+      depositData,
       token,
-      // eaProof,
+      bondAmount,
+      eaProof,
     }: SubmitKeysFormInputType): Promise<boolean> => {
-      invariant(parsedKeys.length, 'Keys is not defined');
+      invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(bondAmount, 'BondAmount is not defined');
-
-      const eaProof: BytesLike[] = []; // @todo: fix me
 
       try {
         let permit: GatherPermitSignatureResult | undefined;
@@ -248,9 +234,9 @@ export const useSubmitKeys = ({
           permit = await gatherPermitSignature(bondAmount, token);
         }
 
-        txModalStages.sign(bondAmount);
+        const { keysCount, publicKeys, signatures } = formatKeys(depositData);
 
-        const { keysCount, publicKeys, signatures } = formatKeys(parsedKeys);
+        txModalStages.sign(keysCount, bondAmount, token);
 
         const callback = await method({
           bondAmount,
@@ -258,7 +244,7 @@ export const useSubmitKeys = ({
           publicKeys,
           signatures,
           permit,
-          eaProof,
+          eaProof: eaProof || [],
           managerAddress: AddressZero,
           rewardsAddress: AddressZero,
           referral: referral && isAddress(referral) ? referral : AddressZero,
@@ -270,7 +256,9 @@ export const useSubmitKeys = ({
         );
         const txHash = typeof tx === 'string' ? tx : tx.hash;
 
-        txModalStages.pending(bondAmount, txHash);
+        txModalStages.pending(keysCount, bondAmount, token, txHash);
+
+        let nodeOperatorId: NodeOperatorId | undefined = undefined;
 
         if (typeof tx === 'object') {
           const receipt = await runWithTransactionLogger(
@@ -278,16 +266,16 @@ export const useSubmitKeys = ({
             () => tx.wait(),
           );
 
-          const id = getAddedNodeOperator(receipt)?.toString();
-
-          if (id) {
-            appendNO({ id, manager: true, rewards: true });
-          }
+          nodeOperatorId = getAddedNodeOperator(receipt)?.toString();
         }
 
         await onConfirm?.();
 
-        txModalStages.success(bondAmount, txHash);
+        txModalStages.success(nodeOperatorId, txHash);
+
+        if (nodeOperatorId) {
+          appendNO({ id: nodeOperatorId, manager: true, rewards: true });
+        }
 
         return true;
       } catch (error) {
@@ -297,7 +285,6 @@ export const useSubmitKeys = ({
       }
     },
     [
-      bondAmount,
       getSubmitKeysMethod,
       txModalStages,
       onConfirm,
@@ -307,9 +294,5 @@ export const useSubmitKeys = ({
     ],
   );
 
-  return {
-    submitKeys,
-    bondAmount,
-    isBondAmountLoading,
-  };
+  return submitKeys;
 };

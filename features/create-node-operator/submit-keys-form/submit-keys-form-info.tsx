@@ -1,11 +1,8 @@
 import { useContractSWR } from '@lido-sdk/react';
-import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
+import { DataTable, DataTableRow, Divider } from '@lidofinance/lido-ui';
 import { useWatch } from 'react-hook-form';
-import { useCSModuleRPC } from 'shared/hooks';
+import { useCSModuleRPC, useNodeOperatorQueue } from 'shared/hooks';
 import { SubmitKeysFormInputType } from './context/types';
-import { useSubmitKeysFormData } from './context/submit-keys-form-context';
-import { FormatToken } from 'shared/formatters';
-import { getTokenDisplayName } from 'utils/getTokenDisplayName';
 
 export const SubmitKeysFormInfo = () => {
   const contract = useCSModuleRPC();
@@ -13,27 +10,28 @@ export const SubmitKeysFormInfo = () => {
     contract,
     method: 'getActiveNodeOperatorsCount',
   });
-  const parsedKeys = useWatch<SubmitKeysFormInputType, 'parsedKeys'>({
-    name: 'parsedKeys',
+  const [depositData] = useWatch<SubmitKeysFormInputType, ['depositData']>({
+    name: ['depositData'],
   });
-  const token = useWatch<SubmitKeysFormInputType, 'token'>({
-    name: 'token',
-  });
-  const { bondAmount } = useSubmitKeysFormData();
+
+  const { data: queue } = useNodeOperatorQueue();
 
   return (
     <DataTable data-testid="submitKeysFormInfo">
-      <DataTableRow title="Number of keys">{parsedKeys.length}</DataTableRow>
-      <DataTableRow title="Bond">
-        <FormatToken
-          showAmountTip={false}
-          amount={bondAmount}
-          symbol={getTokenDisplayName(token)}
-        />
-      </DataTableRow>
-      <DataTableRow title="Number of NO">
+      <DataTableRow title="Number of keys">{depositData.length}</DataTableRow>
+      <Divider />
+      <DataTableRow title="NodeOperators count">
         {operatorsCount.loading ? '...' : operatorsCount.data?.toString()}
       </DataTableRow>
+      <DataTableRow title="Deposit queue">{queue?.[1].toString()}</DataTableRow>
+    </DataTable>
+  );
+
+  return (
+    <DataTable data-testid="submitKeysFormInfo">
+      <DataTableRow title="Number of keys">{depositData.length}</DataTableRow>
+      <Divider />
+      <DataTableRow title="Deposit queue">{queue?.length}</DataTableRow>
     </DataTable>
   );
 };

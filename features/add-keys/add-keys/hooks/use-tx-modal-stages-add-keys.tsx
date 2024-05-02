@@ -62,8 +62,7 @@ const getTxModalStagesAddKeys = (
       <TxStageSuccess
         txHash={txHash}
         title={<>Your keys are uploaded</>}
-        description={<SuccessText {...STAGE_OPERATION_ARGS} txHash={txHash} />}
-        showEtherscan={false}
+        description={<SuccessText {...STAGE_OPERATION_ARGS} />}
       />,
       {
         isClosableOnLedger: true,

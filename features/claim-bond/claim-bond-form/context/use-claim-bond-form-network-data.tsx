@@ -1,4 +1,3 @@
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import { useMaxGasPrice, useNodeOperatorBalance } from 'shared/hooks';
@@ -12,7 +11,7 @@ export const useClaimBondFormNetworkData = (): ClaimBondFormNetworkData => {
     data: bond,
     update: updateBondBalance,
     initialLoading: isBondBalanceLoading,
-  } = useNodeOperatorBalance(nodeOperatorId, STRATEGY_LAZY);
+  } = useNodeOperatorBalance(nodeOperatorId);
 
   const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
   const { maxGasPrice, initialLoading: isMaxGasPriceLoading } =

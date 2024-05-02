@@ -1,19 +1,20 @@
+import { getGeneralTransactionModalStages } from 'shared/transaction-modal/hooks/get-general-transaction-modal-stages';
 import {
   TransactionModalTransitStage,
   useTransactionModalStage,
 } from 'shared/transaction-modal/hooks/use-transaction-modal-stage';
-import { getGeneralTransactionModalStages } from 'shared/transaction-modal/hooks/get-general-transaction-modal-stages';
 
-import { TxStageSignOperationAmount } from 'shared/transaction-modal/tx-stages-composed/tx-stage-amount-operation';
-import { TxStageOperationSucceedBalanceShown } from 'shared/transaction-modal/tx-stages-composed/tx-stage-operation-succeed-balance-shown';
-
+import { TOKENS } from 'consts/tokens';
 import type { BigNumber } from 'ethers';
-import { TxStagePermit } from 'shared/transaction-modal/tx-stages-basic';
+import {
+  TxStagePermit,
+  TxStageSuccess,
+} from 'shared/transaction-modal/tx-stages-basic';
+import { TxStageSignOperationKeys } from 'shared/transaction-modal/tx-stages-composed/tx-stage-keys-operation';
+import { NodeOperatorId } from 'types';
 
 const STAGE_OPERATION_ARGS = {
-  token: 'ETH',
-  willReceiveToken: 'stETH',
-  operationText: 'Staking',
+  operationText: 'Uploading',
 };
 
 const getTxModalStagesSubmitKeys = (
@@ -23,33 +24,43 @@ const getTxModalStagesSubmitKeys = (
 
   signPermit: () => transitStage(<TxStagePermit />),
 
-  sign: (amount: BigNumber) =>
+  sign: (keysCount: number, amount: BigNumber, token: TOKENS) =>
     transitStage(
-      <TxStageSignOperationAmount
+      <TxStageSignOperationKeys
         {...STAGE_OPERATION_ARGS}
         amount={amount}
-        willReceive={amount}
+        token={token}
+        keysCount={keysCount}
       />,
     ),
 
-  pending: (amount: BigNumber, txHash?: string) =>
+  pending: (
+    keysCount: number,
+    amount: BigNumber,
+    token: TOKENS,
+    txHash?: string,
+  ) =>
     transitStage(
-      <TxStageSignOperationAmount
+      <TxStageSignOperationKeys
         {...STAGE_OPERATION_ARGS}
         amount={amount}
-        willReceive={amount}
+        token={token}
+        keysCount={keysCount}
         isPending
         txHash={txHash}
       />,
     ),
 
-  success: (balance: BigNumber, txHash?: string) =>
+  success: (nodeOperatorId?: NodeOperatorId, txHash?: string) =>
     transitStage(
-      <TxStageOperationSucceedBalanceShown
+      <TxStageSuccess
         txHash={txHash}
-        balance={balance}
-        balanceToken={'stETH'}
-        operationText={'Staking'}
+        title={<>Your keys are uploaded</>}
+        description={
+          nodeOperatorId ? (
+            <>Your NodeOperator ID is {nodeOperatorId}</>
+          ) : undefined
+        }
       />,
       {
         isClosableOnLedger: true,

@@ -32,7 +32,7 @@ export const useAddKeysFormNetworkData = (): AddKeysFormNetworkData => {
     data: bond,
     update: updateBondBalance,
     initialLoading: isBondBalanceLoading,
-  } = useNodeOperatorBalance(nodeOperatorId, STRATEGY_LAZY);
+  } = useNodeOperatorBalance(nodeOperatorId);
 
   const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
   const gasLimit = useStethSubmitGasLimit();

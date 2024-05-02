@@ -1,3 +1,4 @@
+import { TOKENS } from 'consts/tokens';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
@@ -5,53 +6,37 @@ import {
   FormControllerContextValueType,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
-import {
-  SubmitKeysFormDataContextValue,
-  type SubmitKeysFormInputType,
-} from './types';
-import { TOKENS } from 'consts/tokens';
-import { useSubmitKeys } from '../use-submit-keys';
 import { mockKeys } from './mock';
 import { SubmitKeysFormDataContext } from './submit-keys-form-context';
-import { useSubmitKeysFormNetworkData } from './useSubmitKeysFormNetworkData';
-import { useSubmitKeysFormValidationContext } from './validation';
+import { type SubmitKeysFormInputType } from './types';
+import { useSubmitKeys } from './use-submit-keys';
+import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
+import { useCalculateBondAmount } from './use-calculate-bond-amount';
+import { useCalculateDepositData } from './use-calculate-deposit-data';
 
 export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useSubmitKeysFormNetworkData();
-  const validationContextPromise =
-    useSubmitKeysFormValidationContext(networkData);
 
   const formObject = useForm<SubmitKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
-      rawKeys: JSON.stringify(mockKeys),
-      parsedKeys: mockKeys,
-      referral: null,
+      rawDepositData: JSON.stringify(mockKeys),
+      depositData: [],
     },
-    context: validationContextPromise,
     mode: 'onChange',
   });
 
-  const { watch } = formObject;
-  const [token, parsedKeys] = watch(['token', 'parsedKeys']);
+  useCalculateDepositData(formObject);
+  useCalculateBondAmount(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { submitKeys, bondAmount, isBondAmountLoading } = useSubmitKeys({
-    token,
-    parsedKeys,
+  const submitKeys = useSubmitKeys({
     onConfirm: networkData.revalidate,
     onRetry: retryFire,
   });
 
-  const value = useMemo(
-    (): SubmitKeysFormDataContextValue => ({
-      ...networkData,
-      bondAmount,
-      isBondAmountLoading,
-    }),
-    [networkData, bondAmount, isBondAmountLoading],
-  );
+  const value = networkData;
 
   const formControllerValue: FormControllerContextValueType<SubmitKeysFormInputType> =
     useMemo(

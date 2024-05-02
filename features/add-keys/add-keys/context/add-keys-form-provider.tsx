@@ -1,3 +1,4 @@
+import { TOKENS } from 'consts/tokens';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
@@ -5,16 +6,14 @@ import {
   FormControllerContextValueType,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
-import {
-  AddKeysFormDataContextValue,
-  type AddKeysFormInputType,
-} from './types';
-import { TOKENS } from 'consts/tokens';
-import { useAddKeys } from './use-add-keys';
-import { mockKeys } from './mock';
 import { AddKeysFormDataContext } from './add-keys-form-context';
+import { mockKeys } from './mock';
+import { type AddKeysFormInputType } from './types';
+import { useAddKeys } from './use-add-keys';
 import { useAddKeysFormNetworkData } from './use-add-keys-form-network-data';
 import { useAddKeysFormValidationContext } from './use-add-keys-form-validation-context';
+import { useCalculateBondAmount } from './use-calculate-bond-amount';
+import { useCalculateDepositData } from './use-calculate-deposit-data';
 
 export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useAddKeysFormNetworkData();
@@ -23,33 +22,24 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const formObject = useForm<AddKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
-      rawKeys: JSON.stringify(mockKeys),
-      parsedKeys: mockKeys,
+      rawDepositData: JSON.stringify(mockKeys),
+      depositData: [],
     },
     context: validationContextPromise,
     mode: 'onChange',
   });
 
-  const { watch } = formObject;
-  const [token, parsedKeys] = watch(['token', 'parsedKeys']);
+  useCalculateDepositData(formObject);
+  useCalculateBondAmount(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { addKeys, bondAmount, isBondAmountLoading } = useAddKeys({
-    token,
-    parsedKeys,
+  const addKeys = useAddKeys({
     onConfirm: networkData.revalidate,
     onRetry: retryFire,
   });
 
-  const value = useMemo(
-    (): AddKeysFormDataContextValue => ({
-      ...networkData,
-      bondAmount,
-      isBondAmountLoading,
-    }),
-    [networkData, bondAmount, isBondAmountLoading],
-  );
+  const value = networkData;
 
   const formControllerValue: FormControllerContextValueType<AddKeysFormInputType> =
     useMemo(

@@ -1,15 +1,14 @@
-import { useCallback, useMemo } from 'react';
 import {
   useEthereumBalance,
   useSTETHBalance,
   useWSTETHBalance,
 } from '@lido-sdk/react';
+import { STRATEGY_LAZY } from 'consts/swr-strategies';
+import { useCallback, useMemo } from 'react';
 import { useMaxGasPrice } from 'shared/hooks';
 import { useIsMultisig } from 'shared/hooks/useIsMultisig';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { type SubmitKeysFormNetworkData } from './types';
 import { useStethSubmitGasLimit } from '../hooks';
-import { BytesLike } from 'ethers';
+import { type SubmitKeysFormNetworkData } from './types';
 
 export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
   const {
@@ -39,8 +38,6 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
     initialLoading: isEtherBalanceLoading,
   } = useEthereumBalance(undefined, STRATEGY_LAZY);
 
-  const [eaProof, isEaProofLoading] = [[] as BytesLike[], false];
-
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance,
@@ -56,7 +53,6 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
       isMultisigLoading,
       isMaxGasPriceLoading,
       isEtherBalanceLoading,
-      isEaProofLoading,
     }),
     [
       isStethBalanceLoading,
@@ -64,7 +60,6 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
       isMultisigLoading,
       isMaxGasPriceLoading,
       isEtherBalanceLoading,
-      isEaProofLoading,
     ],
   );
 
@@ -73,7 +68,6 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
     wstethBalance,
     etherBalance,
     isMultisig: isMultisigLoading ? undefined : isMultisig,
-    eaProof,
     gasCost,
     gasLimit,
     loading,

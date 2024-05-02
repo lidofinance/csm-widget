@@ -2,13 +2,13 @@ import { type TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { DepositData, NodeOperatorId } from 'types';
 
-export type AddKeysFormDataContextValue = AddKeysFormNetworkData &
-  ExtraAddKeysFormDataType;
+export type AddKeysFormDataContextValue = AddKeysFormNetworkData;
 
 export type AddKeysFormInputType = {
   token: TOKENS;
-  rawKeys: string;
-  parsedKeys: DepositData[];
+  rawDepositData?: string;
+  depositData: DepositData[];
+  bondAmount?: BigNumber;
 };
 
 export type AddKeysFormLoading = {
@@ -40,9 +40,4 @@ export type AddKeysFormValidationContext = {
   gasCost: BigNumber;
   etherBalance: BigNumber;
   isMultisig: boolean;
-};
-
-export type ExtraAddKeysFormDataType = {
-  bondAmount?: BigNumber;
-  isBondAmountLoading: boolean;
 };
