@@ -6,13 +6,12 @@ import {
   FormControllerContextValueType,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
-import { mockKeys } from './mock';
 import { SubmitKeysFormDataContext } from './submit-keys-form-context';
 import { type SubmitKeysFormInputType } from './types';
-import { useSubmitKeys } from './use-submit-keys';
-import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
 import { useCalculateBondAmount } from './use-calculate-bond-amount';
 import { useCalculateDepositData } from './use-calculate-deposit-data';
+import { useSubmitKeys } from './use-submit-keys';
+import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
 
 export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useSubmitKeysFormNetworkData();
@@ -20,7 +19,6 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const formObject = useForm<SubmitKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
-      rawDepositData: JSON.stringify(mockKeys),
       depositData: [],
     },
     mode: 'onChange',

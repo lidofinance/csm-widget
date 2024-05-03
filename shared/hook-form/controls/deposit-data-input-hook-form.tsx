@@ -21,7 +21,7 @@ type DepositKeysInputHookFormProps = Partial<
   showErrorMessage?: boolean;
 };
 
-export const DepositKeysInputHookForm = ({
+export const DepositDataInputHookForm = ({
   fieldName = 'rawDepositData',
   label = 'Copy JSON with deposit data here',
   showErrorMessage = true,

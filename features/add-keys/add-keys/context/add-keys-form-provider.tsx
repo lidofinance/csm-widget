@@ -7,7 +7,6 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
 import { AddKeysFormDataContext } from './add-keys-form-context';
-import { mockKeys } from './mock';
 import { type AddKeysFormInputType } from './types';
 import { useAddKeys } from './use-add-keys';
 import { useAddKeysFormNetworkData } from './use-add-keys-form-network-data';
@@ -22,7 +21,6 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const formObject = useForm<AddKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
-      rawDepositData: JSON.stringify(mockKeys),
       depositData: [],
     },
     context: validationContextPromise,

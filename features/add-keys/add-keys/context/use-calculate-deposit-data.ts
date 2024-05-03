@@ -12,17 +12,17 @@ export const useCalculateDepositData = ({
 
   useEffect(() => {
     try {
-      const parsedData = JSON.parse(rawDepositData || '');
-      if (!Array.isArray(parsedData)) {
+      const parsedData = JSON.parse(rawDepositData || '[]');
+      if (Array.isArray(parsedData)) {
+        setValue('depositData', parsedData);
+        clearErrors('depositData');
+      } else {
         throw new Error('invalid json');
       }
-
       // TODO: validate parsed data
-      setValue('depositData', parsedData);
-      clearErrors('depositData');
     } catch (e) {
       setValue('depositData', []);
-      setError('rawDepositData', {
+      setError('depositData', {
         type: 'VALIDATE',
         message: 'invalid json',
       });
