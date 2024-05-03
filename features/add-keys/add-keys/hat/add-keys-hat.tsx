@@ -5,7 +5,6 @@ import {
   BalanceValue,
   HatAccount,
   HatBalance,
-  HatComponent,
   HatFloat,
   HatRow,
 } from 'shared/hat';
@@ -13,13 +12,13 @@ import { useAccount } from 'shared/hooks';
 import { useAddKeysFormData } from '../context';
 import { StyledHat } from './styles';
 
-export const AddKeysHat: HatComponent = (props) => {
+export const AddKeysHat = () => {
   const { address } = useAccount();
   const { etherBalance, stethBalance, wstethBalance, bondBalance, loading } =
     useAddKeysFormData();
 
   return (
-    <StyledHat {...props}>
+    <StyledHat>
       <HatFloat>
         <HatAccount address={address} />
       </HatFloat>

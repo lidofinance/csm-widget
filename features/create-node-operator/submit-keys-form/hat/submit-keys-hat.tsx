@@ -4,7 +4,6 @@ import {
   BalanceValue,
   HatAccount,
   HatBalance,
-  HatComponent,
   HatFloat,
   HatRow,
 } from 'shared/hat';
@@ -12,13 +11,13 @@ import { useAccount } from 'shared/hooks';
 import { useSubmitKeysFormData } from '../context';
 import { StyledHat } from './styles';
 
-export const SubmitKeysHat: HatComponent = (props) => {
+export const SubmitKeysHat = () => {
   const { address } = useAccount();
   const { etherBalance, stethBalance, wstethBalance, loading } =
     useSubmitKeysFormData();
 
   return (
-    <StyledHat {...props}>
+    <StyledHat>
       <HatFloat>
         <HatAccount address={address} />
       </HatFloat>

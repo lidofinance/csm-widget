@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { SubmitKeysFormInputType } from './types';
+import { AddKeysFormInputType } from './types';
 
 export const useCalculateDepositData = ({
   watch,
   setValue,
   setError,
   clearErrors,
-}: UseFormReturn<SubmitKeysFormInputType>) => {
+}: UseFormReturn<AddKeysFormInputType>) => {
   const rawDepositData = watch('rawDepositData');
 
   useEffect(() => {

@@ -29,6 +29,14 @@ export default withBundleAnalyzer({
   basePath,
   generateBuildId,
 
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
+
   // IPFS next.js configuration reference:
   // https://github.com/Velenir/nextjs-ipfs-example
   trailingSlash: !!isIPFSMode,

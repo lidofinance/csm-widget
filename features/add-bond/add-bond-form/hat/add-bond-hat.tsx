@@ -3,20 +3,19 @@ import { Divider } from '@lidofinance/lido-ui';
 import { useAccount } from 'shared/hooks';
 
 import { TOKENS } from 'consts/tokens';
+import { FormatToken } from 'shared/formatters';
 import {
   BalanceRow,
   BalanceValue,
   HatAccount,
   HatBalance,
-  HatComponent,
   HatFloat,
   HatRow,
 } from 'shared/hat';
 import { useAddBondFormData } from '../context';
 import { StyledHat } from './styles';
-import { FormatToken } from 'shared/formatters';
 
-export const AddBondHat: HatComponent = (props) => {
+export const AddBondHat = () => {
   const { address } = useAccount();
   const {
     etherBalance,
@@ -31,7 +30,7 @@ export const AddBondHat: HatComponent = (props) => {
     bondBalance && bondRequired ? bondBalance.sub(bondRequired) : undefined;
 
   return (
-    <StyledHat {...props}>
+    <StyledHat>
       <HatFloat>
         <HatAccount address={address} />
       </HatFloat>

@@ -4,11 +4,11 @@ import { useAccount } from 'shared/hooks';
 
 import { TOKENS } from 'consts/tokens';
 import { FormatToken } from 'shared/formatters';
-import { HatAccount, HatBalance, HatComponent, HatRow } from 'shared/hat';
+import { HatAccount, HatBalance, HatRow } from 'shared/hat';
 import { useClaimBondFormData } from '../context';
 import { StyledHat } from './styles';
 
-export const ClaimBondHat: HatComponent = (props) => {
+export const ClaimBondHat = () => {
   const { address } = useAccount();
   const { bondBalance, bondRequired, loading } = useClaimBondFormData();
 
@@ -16,7 +16,7 @@ export const ClaimBondHat: HatComponent = (props) => {
     bondBalance && bondRequired ? bondBalance.sub(bondRequired) : undefined;
 
   return (
-    <StyledHat {...props}>
+    <StyledHat>
       <HatRow>
         <HatBalance
           small

@@ -16,11 +16,18 @@ export const OnlyNodeOperator: FC<PropsWithChildren<Props>> = ({
   const { active: isConnected } = useAccount();
   const { active, isListLoading } = useNodeOperator();
 
-  if (isConnected && active) return children;
-  if (isListLoading) return <SplashPage />;
-  if (!isConnected) return <WelcomePage />;
-  if (fallback) return fallback;
-
   // TODO: redirect to correct page
-  return <Page404 />;
+  return (
+    <>
+      {isConnected && active ? (
+        children
+      ) : isListLoading ? (
+        <SplashPage />
+      ) : !isConnected ? (
+        <WelcomePage />
+      ) : (
+        fallback || <Page404 />
+      )}
+    </>
+  );
 };

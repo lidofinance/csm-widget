@@ -5,7 +5,6 @@ import { LogoLido } from 'shared/components/logos/logos';
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 import { ReactComponent as ExternalLinkIcon } from 'assets/icons/external-link-icon.svg';
-import React from 'react';
 
 export const FooterStyle = styled(Container)`
   position: relative;
@@ -107,13 +106,3 @@ export const ExternalLinkIconFooter = styled(ExternalLinkIcon).attrs({
     fill: var(--lido-color-textSecondary);
   }
 `;
-
-export const ExternalLink = ({
-  children,
-  ...props
-}: React.ComponentProps<typeof FooterLink>) => (
-  <FooterLink target="_blank" rel="noopener noreferrer" {...props}>
-    {children}
-    <ExternalLinkIconFooter />
-  </FooterLink>
-);

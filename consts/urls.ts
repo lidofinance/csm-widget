@@ -16,5 +16,4 @@ export const ROLES_MANAGER_PATH = '/roles/manager';
 export const ROLES_REWARDS_PATH = '/roles/rewards';
 export const ROLES_INVITES_PATH = '/roles/invites';
 
-// export const SETTINGS_PATH = '/settings';
-// export const REFERRAL_PATH = '/referral';
+export const SETTINGS_PATH = '/settings';
