@@ -1,33 +1,57 @@
 import { Zero } from '@ethersproject/constants';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { useWatch } from 'react-hook-form';
-import { FormatPrice, FormatToken } from 'shared/formatters';
-import { useEthUsd } from 'shared/hooks/use-eth-usd';
-import { useClaimBondFormData } from './context/claim-bond-form-context';
+import { FormatToken } from 'shared/formatters';
 import { ClaimBondFormInputType } from './context/types';
+import { TOKENS } from 'consts/tokens';
+import { parseEther } from '@ethersproject/units';
+import { useWstethBySteth } from 'shared/hooks';
+
+const OneSteth = parseEther('1');
 
 export const ClaimBondFormInfo = () => {
-  // const token = useWatch<ClaimBondFormInputType, 'token'>({
-  //   name: 'token',
-  // });
+  const [token, amount] = useWatch<ClaimBondFormInputType, ['token', 'amount']>(
+    {
+      name: ['token', 'amount'],
+    },
+  );
 
-  const gasCost = Zero.add(10); // FIXME: from network
-  const { loading } = useClaimBondFormData(); // TODO: gasCost
-  const amount = useWatch<ClaimBondFormInputType, 'amount'>({ name: 'amount' });
-  const { usdAmount, initialLoading: isEthUsdLoading } = useEthUsd(gasCost);
+  const { data: wsteth, loading: wstethLoadng } = useWstethBySteth(
+    (token === TOKENS.WSTETH && amount) || undefined,
+  );
+
+  const { data: rateWsteth, initialLoading: rateLoading } =
+    useWstethBySteth(OneSteth);
 
   return (
     <DataTable>
-      <DataTableRow title="Your NO balance will receive">
-        <FormatToken amount={amount ?? Zero} symbol="stETH" trimEllipsis />
-      </DataTableRow>
-      <DataTableRow title="Exchange rate">1 ETH = 1 stETH</DataTableRow>
-      <DataTableRow
-        title="Max transaction cost"
-        loading={loading.isMaxGasPriceLoading || isEthUsdLoading}
-      >
-        <FormatPrice amount={usdAmount} />
-      </DataTableRow>
+      {token === TOKENS.WSTETH ? (
+        <DataTableRow
+          title="Rewards address will receive"
+          loading={wstethLoadng}
+        >
+          <FormatToken amount={wsteth ?? Zero} symbol="wstETH" />
+        </DataTableRow>
+      ) : undefined}
+      {token === TOKENS.STETH ? (
+        <DataTableRow title="Rewards address will receive">
+          <FormatToken amount={amount ?? Zero} symbol="stETH" />
+        </DataTableRow>
+      ) : undefined}
+      {token === TOKENS.ETH ? (
+        <DataTableRow title="Rewards address will request">
+          <FormatToken amount={amount ?? Zero} symbol="ETH" />
+        </DataTableRow>
+      ) : undefined}
+      {token === TOKENS.WSTETH ? (
+        <DataTableRow title="Exchange rate" loading={rateLoading}>
+          1 stETH =
+          <FormatToken amount={rateWsteth} symbol="wstETH" />
+        </DataTableRow>
+      ) : undefined}
+      {token === TOKENS.ETH ? (
+        <DataTableRow title="Exchange rate">1 stETH = 1 ETH</DataTableRow>
+      ) : undefined}
     </DataTable>
   );
 };
