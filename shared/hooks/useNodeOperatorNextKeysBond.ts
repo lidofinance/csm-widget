@@ -37,7 +37,7 @@ export const useNodeOperatorNextKeysBond = ({
    * add 10 wei for approve/permit request
    */
   let { data } = result;
-  if (token !== TOKENS.ETH && data) {
+  if (token !== TOKENS.ETH && data?.gt(0)) {
     data = data.add(10);
   }
 

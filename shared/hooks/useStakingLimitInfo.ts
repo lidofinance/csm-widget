@@ -3,10 +3,11 @@ import { BigNumber } from 'ethers';
 import { parseEther } from '@ethersproject/units';
 import { CHAINS } from '@lido-sdk/constants';
 import { StethAbi } from '@lido-sdk/contracts';
-import { useLidoSWR, useSDK, useSTETHContractRPC } from '@lido-sdk/react';
+import { useLidoSWR, useSDK } from '@lido-sdk/react';
 
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { LIMIT_LEVEL } from 'types';
+import { useSTETHContractRPC } from './useLidoContracts';
 
 export type StakeLimitFullInfo = {
   isStakingPaused: boolean;

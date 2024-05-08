@@ -1,10 +1,11 @@
 import { BigNumber } from 'ethers';
 import { AddressZero } from '@ethersproject/constants';
-import { useLidoSWR, useSDK, useSTETHContractRPC } from '@lido-sdk/react';
+import { useLidoSWR, useSDK } from '@lido-sdk/react';
 
 import { config } from 'config';
 import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
+import { useSTETHContractRPC } from 'shared/hooks';
 
 type UseStethSubmitGasLimit = () => BigNumber;
 

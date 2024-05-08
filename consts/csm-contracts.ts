@@ -6,29 +6,28 @@ type CSMContract =
   | 'CSFeeDistributor'
   | 'CSFeeOracle'
   | 'CSModule'
-  | 'CSVerifier'
-  | 'HashConsensus';
+  | 'CSVerifier';
 
 export type ChainAddressMap = Partial<
   Record<CHAINS, Record<CSMContract, Address>>
 >;
 
 export const CONTRACTS_BY_NETWORK: ChainAddressMap = {
+  // @note local mainnetish
   [CHAINS.Mainnet]: {
-    CSAccounting: '0x59c7D03d2E9893FB7bAa89dA50a9452e1e9B8b90',
-    CSFeeDistributor: '0xFcCa971FE9Ee20C1Cf22596E700aA993D8fD19c5',
-    CSFeeOracle: '0x8D75F9F7f4F4C4eFAB9402261bC864f21DF0c649',
-    CSModule: '0x7A5EC257391817ef241ef8451642cC6b222d4f8C',
-    CSVerifier: '0xCC5Bc84C3FDbcF262AaDD9F76652D6784293dD9e',
-    HashConsensus: '0xfb6dAB6200b8958C2655C3747708F82243d3F32E',
+    CSAccounting: '0xfb6dAB6200b8958C2655C3747708F82243d3F32E',
+    CSFeeDistributor: '0xbc71F5687CFD36f64Ae6B4549186EE3A6eE259a4',
+    CSFeeOracle: '0xabebE9a2D62Af9a89E86EB208b51321e748640C3',
+    CSModule: '0x10537D7bD661C9c34F547b38EC662D6FD482Ae95',
+    CSVerifier: '0xD73bAb8F06DB28c87932571f87D0D2C0FDF13D94',
   },
+  // @note devnet.0
   [CHAINS.Holesky]: {
     CSAccounting: '0x9808a94167b30c2F71d2863dbdB8eD9B65ED1DBe',
     CSFeeDistributor: '0xFBb0158db5061343Cd130F04FDe71CA62DdBdE2D',
     CSFeeOracle: '0x0Ac2f7145200ce74eEb717C4e36076aC67f1D5E5',
     CSModule: '0xddB08564C699D5392a9E9a3C8E2Ab9D7C1949CB6',
     CSVerifier: '0x57A3807E89cfC10dA48e90D994b5dCa15d595ABb',
-    HashConsensus: '0x8e1249fA85dfe4d6ecdCD56230F9c81Ede6D354a',
   },
 };
 

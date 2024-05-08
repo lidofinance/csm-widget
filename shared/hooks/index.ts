@@ -20,6 +20,7 @@ export * from './useElementResize';
 export * from './useForceUpdate';
 export * from './useIsContract';
 export * from './useIsMultisig';
+export * from './useLidoContracts';
 export * from './useLidoSwr';
 export * from './useMatomoEventHandle';
 export * from './useMaxGasPrice';

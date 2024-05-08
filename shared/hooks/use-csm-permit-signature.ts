@@ -1,11 +1,7 @@
 import { hexValue, splitSignature } from '@ethersproject/bytes';
 import { MaxUint256 } from '@ethersproject/constants';
 import { StethAbi } from '@lido-sdk/contracts';
-import {
-  useSDK,
-  useSTETHContractRPC,
-  useWSTETHContractRPC,
-} from '@lido-sdk/react';
+import { useSDK } from '@lido-sdk/react';
 import { getCSMContractAddress } from 'consts/csm-contracts';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber, TypedDataDomain } from 'ethers';
@@ -13,6 +9,7 @@ import { useCallback } from 'react';
 import { useAccount } from 'shared/hooks/use-account';
 import invariant from 'tiny-invariant';
 import { useChainId } from 'wagmi';
+import { useSTETHContractRPC, useWSTETHContractRPC } from './useLidoContracts';
 
 export type GatherPermitSignatureResult = {
   v: number;

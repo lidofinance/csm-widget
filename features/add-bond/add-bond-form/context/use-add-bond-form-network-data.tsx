@@ -1,10 +1,11 @@
 import { useCallback, useMemo } from 'react';
+import { useEthereumBalance } from '@lido-sdk/react';
 import {
-  useEthereumBalance,
+  useMaxGasPrice,
+  useNodeOperatorBalance,
   useSTETHBalance,
   useWSTETHBalance,
-} from '@lido-sdk/react';
-import { useMaxGasPrice, useNodeOperatorBalance } from 'shared/hooks';
+} from 'shared/hooks';
 import { useIsMultisig } from 'shared/hooks/useIsMultisig';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { type AddBondFormNetworkData } from '../context/types';

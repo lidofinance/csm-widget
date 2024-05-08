@@ -9,10 +9,7 @@ export const InputDecoratorLocked: FC = (props) => (
     {...props}
   >
     <LockWrapper>
-      <LockSmall
-        onPointerEnterCapture={undefined}
-        onPointerLeaveCapture={undefined}
-      />
+      <LockSmall />
     </LockWrapper>
   </Tooltip>
 );

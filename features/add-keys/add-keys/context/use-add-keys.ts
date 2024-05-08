@@ -34,8 +34,6 @@ type MethodParams = {
   permit: GatherPermitSignatureResult | undefined;
 };
 
-// @todo: +10wei
-
 // this encapsulates eth/steth/wsteth flows
 const useAddKeysMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();

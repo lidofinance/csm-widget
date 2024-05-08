@@ -1,11 +1,11 @@
-import {
-  useEthereumBalance,
-  useSTETHBalance,
-  useWSTETHBalance,
-} from '@lido-sdk/react';
+import { useEthereumBalance } from '@lido-sdk/react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useCallback, useMemo } from 'react';
-import { useMaxGasPrice } from 'shared/hooks';
+import {
+  useMaxGasPrice,
+  useSTETHBalance,
+  useWSTETHBalance,
+} from 'shared/hooks';
 import { useIsMultisig } from 'shared/hooks/useIsMultisig';
 import { useStethSubmitGasLimit } from '../hooks';
 import { type SubmitKeysFormNetworkData } from './types';
