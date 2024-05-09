@@ -6,8 +6,8 @@ import { SwitchProps } from './types';
 
 export const Switch: FC<SwitchProps> = ({ active, routes }) => {
   return (
-    <SwitchWrapper>
-      <Handle $checked={active !== 0} />
+    <SwitchWrapper $count={routes.length}>
+      <Handle $active={active} />
       {routes.map((route) => (
         <SwitchItem key={route.name} href={route.path}>
           {route.name}

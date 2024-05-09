@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { Layout, Switch } from 'shared/components';
-import { ClaimBond } from './claim-bond';
+import { ClaimRewards } from './claim-rewards';
 import {
   BOND_CLAIM_PATH,
   BOND_CLAIM_REWARDS_PATH,
@@ -15,11 +15,11 @@ const BOND_ROUTES: SwitchRoutes = [
   { name: 'Claim Rewards', path: BOND_CLAIM_REWARDS_PATH },
 ];
 
-export const ClaimBondPage: FC = () => {
+export const ClaimRewardsPage: FC = () => {
   return (
     <Layout title="Community Staking Module" subtitle="Claim bond">
-      <Switch active={1} routes={BOND_ROUTES} />
-      <ClaimBond />
+      <Switch active={2} routes={BOND_ROUTES} />
+      <ClaimRewards />
     </Layout>
   );
 };

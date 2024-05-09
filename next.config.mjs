@@ -9,6 +9,7 @@ const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
 const isIPFSMode = process.env.IPFS_MODE;
+const isDevnet = process.env.DEVNET;
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
@@ -135,6 +136,7 @@ export default withBundleAnalyzer({
     // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
     basePath,
     developmentMode,
+    isDevnet,
 
     defaultChain: process.env.DEFAULT_CHAIN,
     rpcUrls_1: process.env.EL_RPC_URLS_1,
@@ -163,5 +165,6 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
+    isDevnet,
   },
 });

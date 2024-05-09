@@ -2,7 +2,6 @@ import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
-import { Zero } from '@ethersproject/constants';
 import { TOKENS } from 'consts/tokens';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCSAccountingRPC, useCSModuleWeb3 } from 'shared/hooks';
@@ -11,15 +10,15 @@ import { NodeOperatorId, Proof } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import { ClaimBondFormInputType } from '../context';
-import { useTxModalStagesClaimBond } from '../hooks/use-tx-modal-stages-claim-bond';
+import { ClaimRewardsFormInputType } from '.';
+import { useTxModalStagesClaimRewards } from '../hooks/use-tx-modal-stages-claim-rewards';
 
-type UseClaimBondOptions = {
+type UseClaimRewardsOptions = {
   onConfirm?: () => Promise<void> | void;
   onRetry?: () => void;
 };
 
-type ClaimBondMethodParams = {
+type ClaimRewardsMethodParams = {
   nodeOperatorId: NodeOperatorId;
   amount: BigNumber;
   cumulativeFeeShares: BigNumber;
@@ -27,7 +26,7 @@ type ClaimBondMethodParams = {
 };
 
 // encapsulates eth/steth/wsteth flows
-const useClaimBondMethods = () => {
+const useClaimRewardsMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();
   const CSModuleWeb3 = useCSModuleWeb3();
 
@@ -37,7 +36,7 @@ const useClaimBondMethods = () => {
       amount,
       cumulativeFeeShares,
       rewardsProof,
-    }: ClaimBondMethodParams) => {
+    }: ClaimRewardsMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
       const { maxFeePerGas, maxPriorityFeePerGas } =
@@ -77,7 +76,7 @@ const useClaimBondMethods = () => {
       amount,
       cumulativeFeeShares,
       rewardsProof,
-    }: ClaimBondMethodParams) => {
+    }: ClaimRewardsMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
       const { maxFeePerGas, maxPriorityFeePerGas } =
@@ -117,7 +116,7 @@ const useClaimBondMethods = () => {
       amount,
       cumulativeFeeShares,
       rewardsProof,
-    }: ClaimBondMethodParams) => {
+    }: ClaimRewardsMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
       const { maxFeePerGas, maxPriorityFeePerGas } =
@@ -164,35 +163,41 @@ const useClaimBondMethods = () => {
   );
 };
 
-export const useClaimBond = ({ onConfirm, onRetry }: UseClaimBondOptions) => {
+export const useClaimRewards = ({
+  onConfirm,
+  onRetry,
+}: UseClaimRewardsOptions) => {
   const nodeOperatorId = useNodeOperatorId(); // TODO: move to context
-  const { txModalStages } = useTxModalStagesClaimBond();
+  const { txModalStages } = useTxModalStagesClaimRewards();
   const CSAccounting = useCSAccountingRPC();
 
-  const getMethod = useClaimBondMethods();
+  const getMethod = useClaimRewardsMethods();
 
-  const claimBond = useCallback(
-    async ({ amount, token }: ClaimBondFormInputType): Promise<boolean> => {
+  const claimRewards = useCallback(
+    async ({
+      amount,
+      token,
+      reward,
+    }: ClaimRewardsFormInputType): Promise<boolean> => {
       invariant(token, 'Token is not defined');
       invariant(amount, 'BondAmount is not defined');
+      invariant(reward, 'RewardProof is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       try {
         const { method } = getMethod(token);
 
         txModalStages.sign(amount, token);
-        const cumulativeFeeShares = Zero;
-        const rewardsProof: Proof = [];
 
         const callback = await method({
           nodeOperatorId,
           amount,
-          cumulativeFeeShares,
-          rewardsProof,
+          cumulativeFeeShares: reward.shares,
+          rewardsProof: reward.proof,
         });
 
         const tx = await runWithTransactionLogger(
-          'ClaimBond signing',
+          'ClaimRewards signing',
           callback,
         );
         const txHash = typeof tx === 'string' ? tx : tx.hash;
@@ -200,8 +205,9 @@ export const useClaimBond = ({ onConfirm, onRetry }: UseClaimBondOptions) => {
         txModalStages.pending(amount, token, txHash);
 
         if (typeof tx === 'object') {
-          await runWithTransactionLogger('ClaimBond block confirmation', () =>
-            tx.wait(),
+          await runWithTransactionLogger(
+            'ClaimRewards block confirmation',
+            () => tx.wait(),
           );
         }
 
@@ -230,6 +236,6 @@ export const useClaimBond = ({ onConfirm, onRetry }: UseClaimBondOptions) => {
   );
 
   return {
-    claimBond,
+    claimRewards,
   };
 };

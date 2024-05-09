@@ -11,7 +11,7 @@ import {
 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import invariant from 'tiny-invariant';
-import { NodeOperatorId } from 'types';
+import { NodeOperatorId, Proof } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { formatKeys } from 'utils/formatKeys';
@@ -34,7 +34,7 @@ type MethodParams = {
   managerAddress: Address;
   rewardsAddress: Address;
   permit: GatherPermitSignatureResult | undefined;
-  eaProof: BytesLike[];
+  eaProof: Proof;
   referral: Address;
 };
 

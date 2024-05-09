@@ -7,6 +7,7 @@ import { Footer } from './footer/footer';
 import { Main } from './main/main';
 import { LayoutTitleStyle, LayoutSubTitleStyle } from './styles';
 import { WarningLine } from '../warning-line';
+import { config } from 'config';
 
 type Props = {
   title?: ReactNode;
@@ -20,7 +21,7 @@ export const Layout: FC<PropsWithChildren<Props>> = (props) => {
 
   return (
     <>
-      <WarningLine />
+      {config.isDevnet && <WarningLine />}
       <Header />
       <Main size={containerSize}>
         <LayoutTitleStyle>{title}</LayoutTitleStyle>

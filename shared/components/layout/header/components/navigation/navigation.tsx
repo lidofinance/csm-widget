@@ -14,7 +14,7 @@ import {
   BOND_CLAIM_PATH,
   BOND_LOCKED_PATH,
   BOND_PATH,
-  BOND_REWARDS_PATH,
+  BOND_CLAIM_REWARDS_PATH,
   HOME_PATH,
   KEYS_PATH,
   KEYS_REMOVE_PATH,
@@ -82,7 +82,7 @@ const routesNodeOperator: Route[] = [
     name: 'Bond & Rewards',
     path: BOND_PATH,
     icon: <WalletIcon />,
-    subPaths: [BOND_ADD_PATH, BOND_CLAIM_PATH, BOND_REWARDS_PATH],
+    subPaths: [BOND_ADD_PATH, BOND_CLAIM_PATH, BOND_CLAIM_REWARDS_PATH],
   },
   {
     name: 'Roles',

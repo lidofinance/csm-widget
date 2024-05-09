@@ -1,3 +1,5 @@
+import { BytesLike } from 'ethers';
+
 // BigNumber -> string
 export type NodeOperatorId = string;
 
@@ -21,3 +23,5 @@ type NodeOperatorRewardsInvite = {
   manager?: false;
   rewards: true;
 };
+
+export type Proof = BytesLike[];

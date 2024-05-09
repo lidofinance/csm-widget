@@ -1,6 +1,10 @@
 import { contractHooksFactory } from '@lido-sdk/react';
 import { getCSMContractAddressGetter } from 'consts/csm-contracts';
-import { CSAccounting__factory, CSModule__factory } from 'generated';
+import {
+  CSAccounting__factory,
+  CSFeeDistributor__factory,
+  CSModule__factory,
+} from 'generated';
 
 const CSModule = contractHooksFactory(
   CSModule__factory,
@@ -16,3 +20,10 @@ const CSAccounting = contractHooksFactory(
 );
 
 export const useCSAccountingRPC = CSAccounting.useContractRPC;
+
+const CSFeeDistributor = contractHooksFactory(
+  CSFeeDistributor__factory,
+  getCSMContractAddressGetter('CSFeeDistributor'),
+);
+
+export const useCSFeeDistributorRPC = CSFeeDistributor.useContractRPC;

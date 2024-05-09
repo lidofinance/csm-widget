@@ -1,6 +1,6 @@
-import { BigNumber, BytesLike } from 'ethers';
 import { type TOKENS } from 'consts/tokens';
-import { DepositData } from 'types';
+import { BigNumber } from 'ethers';
+import { DepositData, Proof } from 'types';
 import { Address } from 'wagmi';
 
 export type SubmitKeysFormDataContextValue = SubmitKeysFormNetworkData;
@@ -11,7 +11,7 @@ export type SubmitKeysFormInputType = {
   depositData: DepositData[];
   referral?: Address;
   bondAmount?: BigNumber;
-  eaProof?: BytesLike[];
+  eaProof?: Proof;
 };
 
 export type SubmitKeysFormLoading = {

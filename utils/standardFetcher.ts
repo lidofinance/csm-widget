@@ -8,7 +8,7 @@ const DEFAULT_PARAMS = {
   },
 };
 
-const extractError = async (response: Response) => {
+export const extractError = async (response: Response) => {
   try {
     const error = await response.json();
     return extractErrorMessage(error);
@@ -17,7 +17,10 @@ const extractError = async (response: Response) => {
   }
 };
 
-type StandardFetcher = <T>(url: string, params?: RequestInit) => Promise<T>;
+export type StandardFetcher = <T>(
+  url: string,
+  params?: RequestInit,
+) => Promise<T>;
 
 export const standardFetcher: StandardFetcher = async (url, params) => {
   const response = await fetch(url, {

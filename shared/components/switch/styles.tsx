@@ -2,8 +2,9 @@ import styled from 'styled-components';
 
 import { LocalLink } from 'shared/components/local-link';
 
-export const SwitchWrapper = styled.div`
+export const SwitchWrapper = styled.div<{ $count: number }>`
   width: 268px;
+  width: ${({ $count }) => `${$count * 134}px`};
   height: 44px;
   background-color: var(--lido-color-backgroundDarken);
   border-radius: 22px;
@@ -18,13 +19,13 @@ export const SwitchWrapper = styled.div`
   margin: 0 auto 24px auto;
 `;
 
-export const Handle = styled.div<{ $checked: boolean }>`
-  width: 132px;
+export const Handle = styled.div<{ $active: number }>`
+  width: 130px;
   height: 40px;
   background-color: var(--lido-color-foreground);
   border-radius: 20px;
   position: absolute;
-  left: ${({ $checked }) => ($checked ? 'calc(100% - 134px)' : '2px')};
+  left: ${({ $active }) => `calc(2px + ${$active * 134}px)`};
   transition: left 0.3s ease;
   top: 2px;
   z-index: 1;
