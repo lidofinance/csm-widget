@@ -1,6 +1,6 @@
 import { useContractSWR, useLidoSWR } from '@lido-sdk/react';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
+import { STRATEGY_CONSTANT, STRATEGY_LAZY } from 'consts/swr-strategies';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { NodeOperatorId, Proof } from 'types';
@@ -65,12 +65,14 @@ export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
 export const useFeeDistributorRewards = (
   nodeOperatorId?: NodeOperatorId,
   proofData?: RewardProof,
+  config = STRATEGY_LAZY,
 ) => {
   return useContractSWR({
     contract: useCSFeeDistributorRPC(),
     method: 'getFeesToDistribute',
     params: [nodeOperatorId, proofData?.shares, proofData?.proof],
     shouldFetch: !!nodeOperatorId && !!proofData?.shares.gt(0),
+    config,
   });
 };
 
