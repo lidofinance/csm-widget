@@ -10,7 +10,7 @@ const DEFAULT_PARAMS = {
 
 const prepare = (text: string) => {
   return text.replace(
-    /"value"\s*:\s*\[(\d+)\s*,\s*(\d+)\]/g,
+    /"value"\s*:\s*\[\s*(\d+)\s*,\s*(\d+)\s*\]/gm,
     '"value":["$1","$2"]',
   );
 };
