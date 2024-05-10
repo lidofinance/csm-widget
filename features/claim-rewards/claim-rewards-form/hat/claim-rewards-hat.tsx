@@ -7,6 +7,7 @@ import { FormatToken } from 'shared/formatters';
 import { HatAccount, HatBalance, HatRow } from 'shared/hat';
 import { useClaimRewardsFormData } from '../context';
 import { StyledHat } from './styles';
+import { Zero } from '@ethersproject/constants';
 
 export const ClaimRewardsHat = () => {
   const { address } = useAccount();
@@ -49,11 +50,18 @@ export const ClaimRewardsHat = () => {
           title="Available rewards"
           loading={loading.isRewardsLoading}
           value={
-            <FormatToken amount={availableRewards} symbol={TOKENS.STETH} />
+            <FormatToken
+              amount={availableRewards || Zero}
+              symbol={TOKENS.STETH}
+            />
           }
           extra={
             <>
-              Total: <FormatToken amount={totalRewards} symbol={TOKENS.STETH} />
+              Total:{' '}
+              <FormatToken
+                amount={totalRewards || Zero}
+                symbol={TOKENS.STETH}
+              />
             </>
           }
         />

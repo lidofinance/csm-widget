@@ -12,6 +12,7 @@ import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
 import { ClaimRewardsFormInputType } from '.';
 import { useTxModalStagesClaimRewards } from '../hooks/use-tx-modal-stages-claim-rewards';
+import { Zero } from '@ethersproject/constants';
 
 type UseClaimRewardsOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -181,7 +182,6 @@ export const useClaimRewards = ({
     }: ClaimRewardsFormInputType): Promise<boolean> => {
       invariant(token, 'Token is not defined');
       invariant(amount, 'BondAmount is not defined');
-      invariant(reward, 'RewardProof is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       try {
@@ -192,8 +192,8 @@ export const useClaimRewards = ({
         const callback = await method({
           nodeOperatorId,
           amount,
-          cumulativeFeeShares: reward.shares,
-          rewardsProof: reward.proof,
+          cumulativeFeeShares: reward?.shares || Zero,
+          rewardsProof: reward?.proof || [],
         });
 
         const tx = await runWithTransactionLogger(
