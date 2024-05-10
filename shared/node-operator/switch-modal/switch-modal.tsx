@@ -5,7 +5,15 @@ import type { ModalComponentType } from 'providers/modal-provider';
 import { useNodeOperator } from 'providers/node-operator-provider';
 import { NodeOperatorId } from 'types';
 import { Descriptor } from '../descriptor/descriptor';
-import { ActionsStyle, ContentStyle, ListStyle, RowStyle } from './styles';
+import { RoleBadge } from '../role-badge/role-badge';
+import {
+  ActionsStyle,
+  ContentStyle,
+  ListStyle,
+  RowStyle,
+  StyledStack,
+  StyledStackItem,
+} from './styles';
 
 export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
   const { active, list, switchActive } = useNodeOperator();
@@ -44,6 +52,14 @@ export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
           </RowStyle>
         ))}
       </ListStyle>
+      <StyledStack direction="row">
+        <StyledStackItem>
+          <RoleBadge roleName="rewards" /> Rewards Role
+        </StyledStackItem>
+        <StyledStackItem>
+          <RoleBadge roleName="manager" /> Manager Role
+        </StyledStackItem>
+      </StyledStack>
     </Modal>
   );
 };

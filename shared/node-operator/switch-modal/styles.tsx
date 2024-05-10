@@ -1,3 +1,4 @@
+import { Stack, StackItem } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
 export const ListStyle = styled.div`
@@ -34,4 +35,15 @@ export const ButtonWrapperStyle = styled.span`
   font-weight: normal;
   line-height: 20px;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
+`;
+
+export const StyledStack = styled(Stack)`
+  margin-top: ${({ theme }) => theme.spaceMap.lg}px;
+`;
+
+export const StyledStackItem = styled(StackItem)`
+  display: flex;
+  gap: ${({ theme }) => theme.spaceMap.sm}px;
+  align-items: center;
+  flex-grow: 1;
 `;
