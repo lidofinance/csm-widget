@@ -1,9 +1,9 @@
-import { ClaimRewardsPage } from 'features/claim-rewards';
 import { OnlyNodeOperator } from 'features/loader/only-node-operator';
+import { RemoveKeysPage } from 'features/remove-keys';
 
 const Page = () => (
   <OnlyNodeOperator>
-    <ClaimRewardsPage />
+    <RemoveKeysPage />
   </OnlyNodeOperator>
 );
 

@@ -1,0 +1,14 @@
+import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
+import { useWeb3Key } from 'shared/hooks/useWeb3Key';
+import { RemoveKeysForm } from './remove-keys/remove-keys-form';
+
+export const RemoveKeys = () => {
+  const key = useWeb3Key();
+  return (
+    <>
+      <NoSSRWrapper>
+        <RemoveKeysForm key={key} />
+      </NoSSRWrapper>
+    </>
+  );
+};

@@ -2,9 +2,11 @@ import { Block, DataTable, DataTableRow, Divider } from '@lidofinance/lido-ui';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { Section } from 'shared/components';
-import { useNodeOperatorBalance } from 'shared/hooks';
-import { useNodeOperatorInfo } from 'shared/hooks/useNodeOperatorInfo';
-import { useNodeOperatorSummary } from 'shared/hooks/useNodeOperatorSummary';
+import {
+  useNodeOperatorBalance,
+  useNodeOperatorInfo,
+  useNodeOperatorSummary,
+} from 'shared/hooks';
 
 export const Dashboard: FC = () => {
   const id = useNodeOperatorId();

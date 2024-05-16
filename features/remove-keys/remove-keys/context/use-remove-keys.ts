@@ -1,0 +1,125 @@
+import { BigNumber } from 'ethers';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { useCallback } from 'react';
+import { useCSModuleWeb3 } from 'shared/hooks';
+import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
+import invariant from 'tiny-invariant';
+import { NodeOperatorId } from 'types';
+import { runWithTransactionLogger } from 'utils';
+import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
+import { getFeeData } from 'utils/getFeeData';
+import { useTxModalStagesRemoveKeys } from '../hooks/use-tx-modal-stages-remove-keys';
+import { RemoveKeysFormInputType } from './types';
+
+type RemoveKeysOptions = {
+  onConfirm?: () => Promise<void> | void;
+  onRetry?: () => void;
+};
+
+type MethodParams = {
+  nodeOperatorId: NodeOperatorId;
+  startIndex: BigNumber;
+  keysCount: BigNumber;
+};
+
+// this encapsulates eth/steth/wsteth flows
+const useRemoveKeysMethods = () => {
+  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+  const CSModuleWeb3 = useCSModuleWeb3();
+
+  const method = useCallback(
+    async ({ nodeOperatorId, startIndex, keysCount }: MethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
+      const { maxFeePerGas, maxPriorityFeePerGas } =
+        await getFeeData(staticRpcProvider);
+
+      const overrides = {
+        maxPriorityFeePerGas,
+        maxFeePerGas,
+      };
+
+      const params = [nodeOperatorId, startIndex, keysCount] as const;
+
+      const originalGasLimit = await CSModuleWeb3.estimateGas.removeKeys(
+        ...params,
+        overrides,
+      );
+
+      const gasLimit = applyGasLimitRatio(originalGasLimit);
+
+      return () =>
+        CSModuleWeb3.removeKeys(...params, {
+          ...overrides,
+          gasLimit,
+        });
+    },
+    [CSModuleWeb3, staticRpcProvider],
+  );
+
+  return useCallback(
+    (params: MethodParams) => {
+      return () => method(params);
+    },
+    [method],
+  );
+};
+
+export const useRemoveKeys = ({ onConfirm, onRetry }: RemoveKeysOptions) => {
+  const { txModalStages } = useTxModalStagesRemoveKeys();
+  const getRemoveKeysMethod = useRemoveKeysMethods();
+  const nodeOperatorId = useNodeOperatorId();
+
+  const removeKeys = useCallback(
+    async ({
+      offset,
+      start,
+      count,
+    }: RemoveKeysFormInputType): Promise<boolean> => {
+      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(offset, 'Offset is not defined');
+
+      const startIndex = offset.add(start);
+      const keysCount = BigNumber.from(count);
+
+      try {
+        const method = getRemoveKeysMethod({
+          startIndex,
+          keysCount,
+          nodeOperatorId,
+        });
+
+        txModalStages.sign(keysCount.toNumber(), nodeOperatorId);
+
+        const callback = await method();
+
+        const tx = await runWithTransactionLogger(
+          'RemoveKeys signing',
+          callback,
+        );
+        const txHash = typeof tx === 'string' ? tx : tx.hash;
+
+        txModalStages.pending(keysCount.toNumber(), nodeOperatorId, txHash);
+
+        if (typeof tx === 'object') {
+          await runWithTransactionLogger('RemoveKeys block confirmation', () =>
+            tx.wait(),
+          );
+        }
+
+        await onConfirm?.();
+
+        txModalStages.success(txHash);
+
+        return true;
+      } catch (error) {
+        console.warn(error);
+        txModalStages.failed(error, onRetry);
+        return false;
+      }
+    },
+    [nodeOperatorId, getRemoveKeysMethod, txModalStages, onConfirm, onRetry],
+  );
+
+  return removeKeys;
+};
