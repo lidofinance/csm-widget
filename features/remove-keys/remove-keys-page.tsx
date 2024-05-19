@@ -12,7 +12,11 @@ const KEYS_ROUTES: SwitchRoutes = [
 
 export const RemoveKeysPage: FC = () => {
   return (
-    <Layout title="Community Staking Module" subtitle="Remove keys">
+    <Layout
+      title="Community Staking Module"
+      subtitle="Remove keys"
+      containerSize="content"
+    >
       <Switch active={1} routes={KEYS_ROUTES} />
       <RemoveKeys />
     </Layout>
