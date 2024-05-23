@@ -25,23 +25,29 @@ export const ChangeRoleHat = () => {
           loading={loading.isInfoLoading}
           value={isProposedAddress ? 'Pending change' : 'No change proposed'}
         />
-        <HatBalance
-          title={`Current ${roleTitle} address`}
-          small
-          loading={loading.isInfoLoading}
-          value={<AddressBadge address={currentAddress} />}
-        />
+        {!isProposedAddress && (
+          <HatBalance
+            title={`Current ${roleTitle} address`}
+            small
+            loading={loading.isInfoLoading}
+            value={<AddressBadge address={currentAddress} />}
+          />
+        )}
       </HatRow>
       {isProposedAddress && (
         <HatRow>
-          (
           <HatBalance
             title={`Proposed ${roleTitle} address`}
             small
             loading={loading.isInfoLoading}
             value={<AddressBadge address={proposedAddress} />}
           />
-          )
+          <HatBalance
+            title={`Current ${roleTitle} address`}
+            small
+            loading={loading.isInfoLoading}
+            value={<AddressBadge address={currentAddress} />}
+          />
         </HatRow>
       )}
     </ColoredHat>

@@ -7,11 +7,13 @@ type AddressInputHookFormProps = Partial<
 > & {
   fieldName: string;
   label?: string;
+  revoke?: boolean;
 };
 
 export const AddressInputHookForm = ({
   fieldName,
   label,
+  revoke,
   ...props
 }: AddressInputHookFormProps) => {
   const {
@@ -34,6 +36,7 @@ export const AddressInputHookForm = ({
       showCopyBtn={false}
       address={''}
       isAddressResolving={false}
+      revoke={revoke}
       fullwidth
     />
   );
