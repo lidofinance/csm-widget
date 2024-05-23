@@ -12,8 +12,8 @@ export const BOND_CLAIM_REWARDS_PATH = '/bond/claim-rewards';
 export const BOND_ADD_PATH = '/bond/add';
 export const BOND_LOCKED_PATH = '/bond/locked';
 export const ROLES_PATH = '/roles';
-export const ROLES_MANAGER_PATH = '/roles/manager';
-export const ROLES_REWARDS_PATH = '/roles/rewards';
+export const ROLES_MANAGER_PATH = '/roles/manager-address';
+export const ROLES_REWARDS_PATH = '/roles/reward-address';
 export const ROLES_INVITES_PATH = '/roles/invites';
 
 export const SETTINGS_PATH = '/settings';

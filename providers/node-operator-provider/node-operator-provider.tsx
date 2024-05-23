@@ -43,6 +43,15 @@ export const useNodeOperatorId = () => {
   return value.active?.id;
 };
 
+export const useNodeOperatorRoles = () => {
+  const value = useContext(NodeOperatorContext);
+  invariant(
+    value,
+    'useNodeOperator was used outside the NodeOperatorContext provider',
+  );
+  return { rewards: value.active?.rewards, manager: value.active?.manager };
+};
+
 export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { address } = useAccount();
 

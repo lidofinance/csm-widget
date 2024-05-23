@@ -12,9 +12,9 @@ import {
   BENEFITS_PATH,
   BOND_ADD_PATH,
   BOND_CLAIM_PATH,
+  BOND_CLAIM_REWARDS_PATH,
   BOND_LOCKED_PATH,
   BOND_PATH,
-  BOND_CLAIM_REWARDS_PATH,
   HOME_PATH,
   KEYS_PATH,
   KEYS_REMOVE_PATH,
@@ -22,7 +22,6 @@ import {
   KEYS_VIEW_PATH,
   ROLES_INVITES_PATH,
   ROLES_MANAGER_PATH,
-  ROLES_PATH,
   ROLES_REWARDS_PATH,
 } from 'consts/urls';
 import { useNodeOperator } from 'providers/node-operator-provider';
@@ -86,10 +85,9 @@ const routesNodeOperator: Route[] = [
   },
   {
     name: 'Roles',
-    path: ROLES_PATH,
+    path: ROLES_REWARDS_PATH,
     icon: <GearIcon />,
     subPaths: [ROLES_MANAGER_PATH, ROLES_REWARDS_PATH, ROLES_INVITES_PATH],
-    skip: true,
   },
   {
     name: 'Locked Bond',
