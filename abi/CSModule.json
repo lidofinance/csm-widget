@@ -8,7 +8,7 @@
         "internalType": "bytes32"
       },
       {
-        "name": "elStealingFine",
+        "name": "elRewardsStealingFine",
         "type": "uint256",
         "internalType": "uint256"
       },
@@ -34,19 +34,6 @@
         "name": "",
         "type": "bytes32",
         "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "DEPOSIT_SIZE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -715,17 +702,17 @@
   },
   {
     "type": "function",
-    "name": "decreaseOperatorVettedKeys",
+    "name": "decreaseVettedSigningKeysCount",
     "inputs": [
       {
         "name": "nodeOperatorIds",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
+        "type": "bytes",
+        "internalType": "bytes"
       },
       {
-        "name": "vettedKeysByOperator",
-        "type": "uint256[]",
-        "internalType": "uint256[]"
+        "name": "vettedSigningKeysCounts",
+        "type": "bytes",
+        "internalType": "bytes"
       }
     ],
     "outputs": [],
@@ -743,6 +730,24 @@
     ],
     "outputs": [],
     "stateMutability": "payable"
+  },
+  {
+    "type": "function",
+    "name": "depositQueue",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "head",
+        "type": "uint128",
+        "internalType": "uint128"
+      },
+      {
+        "name": "length",
+        "type": "uint128",
+        "internalType": "uint128"
+      }
+    ],
+    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -926,11 +931,6 @@
             "internalType": "address"
           },
           {
-            "name": "active",
-            "type": "bool",
-            "internalType": "bool"
-          },
-          {
             "name": "targetLimit",
             "type": "uint256",
             "internalType": "uint256"
@@ -1059,25 +1059,6 @@
   },
   {
     "type": "function",
-    "name": "getNodeOperatorRewardAddress",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "getNodeOperatorSummary",
     "inputs": [
       {
@@ -1089,8 +1070,8 @@
     "outputs": [
       {
         "name": "targetLimitMode",
-        "type": "uint8",
-        "internalType": "uint8"
+        "type": "uint256",
+        "internalType": "uint256"
       },
       {
         "name": "targetValidatorsCount",
@@ -1392,6 +1373,11 @@
         "internalType": "address"
       },
       {
+        "name": "_keyRemovalCharge",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
         "name": "admin",
         "type": "address",
         "internalType": "address"
@@ -1601,24 +1587,6 @@
         "name": "",
         "type": "bool",
         "internalType": "bool"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "queue",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "head",
-        "type": "uint128",
-        "internalType": "uint128"
-      },
-      {
-        "name": "length",
-        "type": "uint128",
-        "internalType": "uint128"
       }
     ],
     "stateMutability": "view"
@@ -1995,8 +1963,8 @@
       },
       {
         "name": "targetLimitMode",
-        "type": "uint8",
-        "internalType": "uint8"
+        "type": "uint256",
+        "internalType": "uint256"
       },
       {
         "name": "targetLimit",
@@ -2541,6 +2509,11 @@
   {
     "type": "error",
     "name": "AlreadySubmitted",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "AlreadyWithdrawn",
     "inputs": []
   },
   {

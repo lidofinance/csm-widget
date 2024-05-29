@@ -6,7 +6,7 @@ import {
   NodeOperatorRewardAddressChangedEvent,
 } from 'generated/CSModule';
 import { useCallback, useEffect, useState } from 'react';
-import { useCSModuleRPC } from 'shared/hooks';
+import { useAccount, useCSModuleRPC } from 'shared/hooks';
 import { NodeOperatorId, NodeOperatorRoles } from 'types';
 import { Address } from 'wagmi';
 
@@ -17,37 +17,35 @@ type NodeOperatorRoleEvent =
 
 export const useNodeOperatorsFromEvents = (address?: Address) => {
   const contract = useCSModuleRPC();
+  const { chainId } = useAccount();
   const [roles, setRoles] = useState<NodeOperatorRoles[]>([]);
 
-  const fetcher = useCallback(
-    async (address: Address) => {
-      const filters = [
-        contract.filters.NodeOperatorAdded(null, address),
-        contract.filters.NodeOperatorAdded(null, null, address),
-        contract.filters.NodeOperatorManagerAddressChanged(null, address),
-        contract.filters.NodeOperatorManagerAddressChanged(null, null, address),
-        contract.filters.NodeOperatorRewardAddressChanged(null, address),
-        contract.filters.NodeOperatorRewardAddressChanged(null, null, address),
-      ];
+  const fetcher = useCallback(async () => {
+    const filters = [
+      contract.filters.NodeOperatorAdded(null, address),
+      contract.filters.NodeOperatorAdded(null, null, address),
+      contract.filters.NodeOperatorManagerAddressChanged(null, address),
+      contract.filters.NodeOperatorManagerAddressChanged(null, null, address),
+      contract.filters.NodeOperatorRewardAddressChanged(null, address),
+      contract.filters.NodeOperatorRewardAddressChanged(null, null, address),
+    ];
 
-      // @todo: use SWR?
-      const filterResults = await Promise.allSettled(
-        filters.map((filter) => contract.queryFilter(filter)),
-      );
+    // @todo: use SWR?
+    const filterResults = await Promise.allSettled(
+      filters.map((filter) => contract.queryFilter(filter)),
+    );
 
-      return filterResults
-        .flatMap(
-          (result) =>
-            (result as any as PromiseFulfilledResult<NodeOperatorRoleEvent>)
-              .value,
-        )
-        .filter(Boolean);
-    },
-    [contract],
-  );
+    return filterResults
+      .flatMap(
+        (result) =>
+          (result as any as PromiseFulfilledResult<NodeOperatorRoleEvent>)
+            .value,
+      )
+      .filter(Boolean);
+  }, [address, contract]);
 
   const { data: events, initialLoading } = useLidoSWR(
-    address,
+    ['ids', address, chainId],
     fetcher,
     STRATEGY_LAZY,
   );

@@ -833,7 +833,26 @@
   },
   {
     "type": "event",
-    "name": "ReportConsolidated",
+    "name": "ReportDiscarded",
+    "inputs": [
+      {
+        "name": "refSlot",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "hash",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ReportSettled",
     "inputs": [
       {
         "name": "refSlot",
@@ -858,25 +877,6 @@
         "type": "string",
         "indexed": false,
         "internalType": "string"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ReportDiscarded",
-    "inputs": [
-      {
-        "name": "refSlot",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "hash",
-        "type": "bytes32",
-        "indexed": false,
-        "internalType": "bytes32"
       }
     ],
     "anonymous": false

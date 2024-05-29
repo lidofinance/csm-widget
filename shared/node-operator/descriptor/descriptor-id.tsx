@@ -9,7 +9,7 @@ type DescriptorIdProps = {
 export const DescriptorId: FC<DescriptorIdProps> = ({ id }) => {
   return (
     <DescriptorIdWrapperStyle>
-      NO#<span>{id}</span>
+      NO #<span>{id}</span>
     </DescriptorIdWrapperStyle>
   );
 };

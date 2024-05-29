@@ -1,5 +1,5 @@
-import { OnlyNodeOperator } from 'features/loader/only-node-operator';
+import { AcceptInvitePage } from 'features/accept-invite';
 
-const Page = () => <OnlyNodeOperator>...coming soon...</OnlyNodeOperator>;
+const Page = () => <AcceptInvitePage />;
 
 export default Page;

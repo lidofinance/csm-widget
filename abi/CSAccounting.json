@@ -43,6 +43,19 @@
   },
   {
     "type": "function",
+    "name": "CSM",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract ICSModule"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "DEFAULT_ADMIN_ROLE",
     "inputs": [],
     "outputs": [
@@ -236,6 +249,11 @@
         "internalType": "uint256"
       },
       {
+        "name": "rewardAddress",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
         "name": "cumulativeFeeShares",
         "type": "uint256",
         "internalType": "uint256"
@@ -262,6 +280,11 @@
         "name": "wstETHAmount",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "rewardAddress",
+        "type": "address",
+        "internalType": "address"
       },
       {
         "name": "cumulativeFeeShares",
@@ -349,7 +372,7 @@
       {
         "name": "permit",
         "type": "tuple",
-        "internalType": "struct CSAccounting.PermitInput",
+        "internalType": "struct ICSAccounting.PermitInput",
         "components": [
           {
             "name": "value",
@@ -410,7 +433,7 @@
       {
         "name": "permit",
         "type": "tuple",
-        "internalType": "struct CSAccounting.PermitInput",
+        "internalType": "struct ICSAccounting.PermitInput",
         "components": [
           {
             "name": "value",
@@ -512,7 +535,7 @@
       {
         "name": "curve",
         "type": "tuple",
-        "internalType": "struct CSBondCurve.BondCurve",
+        "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
           {
             "name": "id",
@@ -572,7 +595,7 @@
       {
         "name": "curve",
         "type": "tuple",
-        "internalType": "struct CSBondCurve.BondCurve",
+        "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
           {
             "name": "id",
@@ -634,7 +657,7 @@
       {
         "name": "",
         "type": "tuple",
-        "internalType": "struct CSBondCurve.BondCurve",
+        "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
           {
             "name": "id",
@@ -750,7 +773,7 @@
       {
         "name": "",
         "type": "tuple",
-        "internalType": "struct CSBondCurve.BondCurve",
+        "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
           {
             "name": "id",
@@ -803,7 +826,7 @@
       {
         "name": "curve",
         "type": "tuple",
-        "internalType": "struct CSBondCurve.BondCurve",
+        "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
           {
             "name": "id",
@@ -846,7 +869,7 @@
       {
         "name": "",
         "type": "tuple",
-        "internalType": "struct CSBondLock.BondLock",
+        "internalType": "struct ICSBondLock.BondLock",
         "components": [
           {
             "name": "amount",
@@ -1280,6 +1303,11 @@
         "internalType": "uint256"
       },
       {
+        "name": "rewardAddress",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
         "name": "cumulativeFeeShares",
         "type": "uint256",
         "internalType": "uint256"
@@ -1491,7 +1519,7 @@
   },
   {
     "type": "event",
-    "name": "BondClaimed",
+    "name": "BondClaimedStETH",
     "inputs": [
       {
         "name": "nodeOperatorId",
@@ -1507,6 +1535,37 @@
       },
       {
         "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BondClaimedUnstETH",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "to",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "requestId",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
@@ -1573,7 +1632,32 @@
   },
   {
     "type": "event",
-    "name": "BondDeposited",
+    "name": "BondDepositedETH",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "from",
+        "type": "address",
+        "indexed": false,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BondDepositedStETH",
     "inputs": [
       {
         "name": "nodeOperatorId",
@@ -1860,11 +1944,6 @@
   {
     "type": "error",
     "name": "InvalidBondLockRetentionPeriod",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "InvalidClaimableShares",
     "inputs": []
   },
   {

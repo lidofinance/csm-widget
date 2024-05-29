@@ -82,19 +82,6 @@
   },
   {
     "type": "function",
-    "name": "claimableShares",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "distributeFees",
     "inputs": [
       {
@@ -470,6 +457,19 @@
   },
   {
     "type": "function",
+    "name": "totalClaimableShares",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "treeCid",
     "inputs": [],
     "outputs": [
@@ -624,6 +624,11 @@
   },
   {
     "type": "error",
+    "name": "FeeSharesDecrease",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "InvalidInitialization",
     "inputs": []
   },
@@ -655,6 +660,11 @@
   {
     "type": "error",
     "name": "NotAllowedToRecover",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotEnoughShares",
     "inputs": []
   },
   {

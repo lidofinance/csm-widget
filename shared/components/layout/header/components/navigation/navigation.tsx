@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC, memo, useCallback } from 'react';
 
 import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
@@ -22,6 +22,7 @@ import {
   KEYS_VIEW_PATH,
   ROLES_INVITES_PATH,
   ROLES_MANAGER_PATH,
+  ROLES_PATH,
   ROLES_REWARDS_PATH,
 } from 'consts/urls';
 import { useNodeOperator } from 'providers/node-operator-provider';
@@ -31,12 +32,15 @@ import { useRouterPath } from 'shared/hooks/use-router-path';
 import { getIsActivePath } from 'utils/path';
 import { Nav, NavLink } from './styles';
 
+type ShowConditions = 'HAS_INVITES' | 'HAS_LOCKED_BOND';
+
 type Route = {
   name: string;
   path: string;
   icon: JSX.Element;
   subPaths?: string[];
   skip?: boolean;
+  show?: ShowConditions;
 };
 
 const routesDisconnected: Route[] = [
@@ -63,6 +67,13 @@ const routesConnected: Route[] = [
     path: BENEFITS_PATH,
     icon: <StarIcon />,
   },
+  {
+    name: 'Roles',
+    path: ROLES_PATH,
+    icon: <GearIcon />,
+    subPaths: [ROLES_INVITES_PATH],
+    show: 'HAS_INVITES',
+  },
 ];
 
 const routesNodeOperator: Route[] = [
@@ -85,7 +96,7 @@ const routesNodeOperator: Route[] = [
   },
   {
     name: 'Roles',
-    path: ROLES_REWARDS_PATH,
+    path: ROLES_PATH,
     icon: <GearIcon />,
     subPaths: [ROLES_MANAGER_PATH, ROLES_REWARDS_PATH, ROLES_INVITES_PATH],
   },
@@ -99,7 +110,21 @@ const routesNodeOperator: Route[] = [
 
 export const Navigation: FC = memo(() => {
   const { active: isConnected } = useAccount();
-  const { active, isListLoading } = useNodeOperator();
+  const { active, invites, isListLoading } = useNodeOperator();
+
+  const check = useCallback(
+    (condition: ShowConditions) => {
+      switch (condition) {
+        case 'HAS_INVITES':
+          return invites.length > 0;
+        case 'HAS_LOCKED_BOND':
+          return false;
+        default:
+          return false;
+      }
+    },
+    [invites.length],
+  );
 
   const routes =
     !isConnected || isListLoading
@@ -112,8 +137,9 @@ export const Navigation: FC = memo(() => {
 
   return (
     <Nav>
-      {routes.map(({ name, path, subPaths, icon, skip }) => {
+      {routes.map(({ name, path, subPaths, icon, skip, show }) => {
         if (skip) return null;
+        if (show && !check(show)) return null;
         const isActive = getIsActivePath(pathname, path, subPaths);
 
         return (

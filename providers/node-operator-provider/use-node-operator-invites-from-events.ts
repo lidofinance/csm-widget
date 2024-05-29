@@ -5,7 +5,7 @@ import {
   NodeOperatorRewardAddressChangeProposedEvent,
 } from 'generated/CSModule';
 import { useCallback, useMemo } from 'react';
-import { useCSModuleRPC } from 'shared/hooks';
+import { useAccount, useCSModuleRPC } from 'shared/hooks';
 import { NodeOperatorInvite } from 'types';
 import { Address } from 'wagmi';
 
@@ -16,36 +16,30 @@ type AddressChangeProposedEvents =
 // @todo: invalidate applied invites & double-invites
 export const useNodeOperatorInvitesFromEvents = (address?: Address) => {
   const contract = useCSModuleRPC();
+  const { chainId } = useAccount();
 
-  const fetcher = useCallback(
-    async (address: Address) => {
-      const filters = [
-        contract.filters.NodeOperatorManagerAddressChangeProposed(
-          null,
-          address,
-        ),
-        contract.filters.NodeOperatorRewardAddressChangeProposed(null, address),
-      ];
+  const fetcher = useCallback(async () => {
+    const filters = [
+      contract.filters.NodeOperatorManagerAddressChangeProposed(null, address),
+      contract.filters.NodeOperatorRewardAddressChangeProposed(null, address),
+    ];
 
-      // @todo: use SWR?
-      const filterResults = await Promise.allSettled(
-        filters.map((filter) => contract.queryFilter(filter)),
-      );
+    // @todo: use SWR?
+    const filterResults = await Promise.allSettled(
+      filters.map((filter) => contract.queryFilter(filter)),
+    );
 
-      return filterResults
-        .flatMap(
-          (result) =>
-            (
-              result as any as PromiseFulfilledResult<AddressChangeProposedEvents>
-            ).value,
-        )
-        .filter(Boolean);
-    },
-    [contract],
-  );
+    return filterResults
+      .flatMap(
+        (result) =>
+          (result as any as PromiseFulfilledResult<AddressChangeProposedEvents>)
+            .value,
+      )
+      .filter(Boolean);
+  }, [address, contract]);
 
   const { data: events, initialLoading } = useLidoSWR(
-    address,
+    ['invites', address, chainId],
     fetcher,
     STRATEGY_LAZY,
   );
@@ -59,7 +53,7 @@ export const useNodeOperatorInvitesFromEvents = (address?: Address) => {
         switch (e.event) {
           case 'NodeOperatorManagerAddressChangeProposed':
             return { id, manager: true };
-          case 'NodeOperatorRewardAddressChangePurposed':
+          case 'NodeOperatorRewardAddressChangeProposed':
             return { id, rewards: true };
           default:
             return;
