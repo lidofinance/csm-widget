@@ -7,6 +7,7 @@ import {
   useNodeOperatorInfo,
   useNodeOperatorSummary,
 } from 'shared/hooks';
+import { RolesSection } from './roles';
 
 export const Dashboard: FC = () => {
   const id = useNodeOperatorId();
@@ -16,6 +17,7 @@ export const Dashboard: FC = () => {
 
   return (
     <>
+      <RolesSection />
       <Section title="Bond Balance">
         <Block>
           <DataTable>
