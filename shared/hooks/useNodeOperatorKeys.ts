@@ -13,7 +13,7 @@ export const useNodeOperatorKeys = (
 
   const [startIndex, keysCount] = useMemo(() => {
     const startIndex = (nonDepositedOnly && data?.totalDepositedKeys) || 0;
-    return [startIndex, data?.totalAddedKeys.sub(startIndex)];
+    return [startIndex, (data?.totalAddedKeys ?? 0) - startIndex];
   }, [data?.totalAddedKeys, data?.totalDepositedKeys, nonDepositedOnly]);
 
   // TODO: split to chunks

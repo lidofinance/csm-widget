@@ -38,8 +38,6 @@ type MethodParams = {
   referral: Address;
 };
 
-// @todo: +10wei
-
 // this encapsulates eth/steth/wsteth flows
 const useSubmitKeysMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();

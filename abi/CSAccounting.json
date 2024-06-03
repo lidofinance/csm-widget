@@ -11,6 +11,21 @@
         "name": "communityStakingModule",
         "type": "address",
         "internalType": "address"
+      },
+      {
+        "name": "maxCurveLength",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "minBondLockRetentionPeriod",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "maxBondLockRetentionPeriod",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "nonpayable"
@@ -269,6 +284,39 @@
   },
   {
     "type": "function",
+    "name": "claimRewardsUnstETH",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "stEthAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "rewardAddress",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "cumulativeFeeShares",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "rewardsProof",
+        "type": "bytes32[]",
+        "internalType": "bytes32[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "claimRewardsWstETH",
     "inputs": [
       {
@@ -341,13 +389,7 @@
         "internalType": "uint256"
       }
     ],
-    "outputs": [
-      {
-        "name": "shares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "payable"
   },
   {
@@ -402,13 +444,7 @@
         ]
       }
     ],
-    "outputs": [
-      {
-        "name": "shares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "nonpayable"
   },
   {
@@ -463,13 +499,7 @@
         ]
       }
     ],
-    "outputs": [
-      {
-        "name": "shares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "nonpayable"
   },
   {
@@ -685,7 +715,7 @@
     "inputs": [],
     "outputs": [
       {
-        "name": "retention",
+        "name": "",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1290,39 +1320,6 @@
   },
   {
     "type": "function",
-    "name": "requestRewardsETH",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "ethAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "rewardAddress",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "rewardsProof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "resetBondCurve",
     "inputs": [
       {
@@ -1918,11 +1915,6 @@
   },
   {
     "type": "error",
-    "name": "AlreadyInitialized",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "InvalidBondCurveId",
     "inputs": []
   },
@@ -1988,14 +1980,28 @@
   },
   {
     "type": "error",
-    "name": "ZeroAddress",
-    "inputs": [
-      {
-        "name": "field",
-        "type": "string",
-        "internalType": "string"
-      }
-    ]
+    "name": "ZeroAdminAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroChargeRecipientAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroFeeDistributorAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroLocatorAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroModuleAddress",
+    "inputs": []
   },
   {
     "type": "error",

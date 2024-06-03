@@ -64,7 +64,7 @@
     "name": "consume",
     "inputs": [
       {
-        "name": "sender",
+        "name": "member",
         "type": "address",
         "internalType": "address"
       },
@@ -79,10 +79,10 @@
   },
   {
     "type": "function",
-    "name": "consumed",
+    "name": "isConsumed",
     "inputs": [
       {
-        "name": "sender",
+        "name": "member",
         "type": "address",
         "internalType": "address"
       }
@@ -98,10 +98,10 @@
   },
   {
     "type": "function",
-    "name": "isEligible",
+    "name": "verifyProof",
     "inputs": [
       {
-        "name": "sender",
+        "name": "member",
         "type": "address",
         "internalType": "address"
       },
@@ -125,7 +125,7 @@
     "name": "Consumed",
     "inputs": [
       {
-        "name": "sender",
+        "name": "member",
         "type": "address",
         "indexed": true,
         "internalType": "address"
@@ -140,17 +140,27 @@
   },
   {
     "type": "error",
+    "name": "InvalidCurveId",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "InvalidProof",
     "inputs": []
   },
   {
     "type": "error",
-    "name": "InvalidValue",
+    "name": "InvalidTreeRoot",
     "inputs": []
   },
   {
     "type": "error",
-    "name": "OnlyModule",
+    "name": "SenderIsNotModule",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroModuleAddress",
     "inputs": []
   }
 ]

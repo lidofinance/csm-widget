@@ -160,6 +160,19 @@
   },
   {
     "type": "function",
+    "name": "avgPerfLeewayBP",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "discardConsensusReport",
     "inputs": [
       {
@@ -406,7 +419,7 @@
         "internalType": "uint256"
       },
       {
-        "name": "_perfThresholdBP",
+        "name": "_avgPerfLeewayBP",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -452,19 +465,6 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "perfThresholdBP",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -611,7 +611,7 @@
   },
   {
     "type": "function",
-    "name": "setPerformanceThreshold",
+    "name": "setPerformanceLeeway",
     "inputs": [
       {
         "name": "valueBP",
@@ -801,7 +801,7 @@
   },
   {
     "type": "event",
-    "name": "PerformanceThresholdSet",
+    "name": "PerfLeewaySet",
     "inputs": [
       {
         "name": "valueBP",
@@ -867,7 +867,7 @@
         "internalType": "uint256"
       },
       {
-        "name": "newRoot",
+        "name": "treeRoot",
         "type": "bytes32",
         "indexed": false,
         "internalType": "bytes32"
@@ -1033,11 +1033,6 @@
   },
   {
     "type": "error",
-    "name": "AdminCannotBeZero",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "HashCannotBeZero",
     "inputs": []
   },
@@ -1065,6 +1060,11 @@
   {
     "type": "error",
     "name": "InvalidInitialization",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidPerfLeeway",
     "inputs": []
   },
   {
@@ -1258,6 +1258,16 @@
   {
     "type": "error",
     "name": "VersionCannotBeSame",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroAdminAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroFeeDistributorAddress",
     "inputs": []
   },
   {

@@ -3,6 +3,16 @@
     "type": "constructor",
     "inputs": [
       {
+        "name": "locator",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "module",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
         "name": "slotsPerEpoch",
         "type": "uint64",
         "internalType": "uint64"
@@ -97,38 +107,7 @@
   },
   {
     "type": "function",
-    "name": "SLOTS_PER_EPOCH",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint64",
-        "internalType": "uint64"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "initialize",
-    "inputs": [
-      {
-        "name": "_locator",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "_module",
-        "type": "address",
-        "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "locator",
+    "name": "LOCATOR",
     "inputs": [],
     "outputs": [
       {
@@ -141,13 +120,26 @@
   },
   {
     "type": "function",
-    "name": "module",
+    "name": "MODULE",
     "inputs": [],
     "outputs": [
       {
         "name": "",
         "type": "address",
         "internalType": "contract ICSModule"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "SLOTS_PER_EPOCH",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
       }
     ],
     "stateMutability": "view"
@@ -627,6 +619,16 @@
   {
     "type": "error",
     "name": "ValidatorNotWithdrawn",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroLocatorAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroModuleAddress",
     "inputs": []
   },
   {

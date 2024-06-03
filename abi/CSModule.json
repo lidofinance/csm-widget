@@ -8,6 +8,11 @@
         "internalType": "bytes32"
       },
       {
+        "name": "minSlashingPenaltyQuotient",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
         "name": "elRewardsStealingFine",
         "type": "uint256",
         "internalType": "uint256"
@@ -616,6 +621,34 @@
   },
   {
     "type": "function",
+    "name": "claimRewardsUnstETH",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "stEthAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "cumulativeFeeShares",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "rewardsProof",
+        "type": "bytes32[]",
+        "internalType": "bytes32[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "claimRewardsWstETH",
     "inputs": [
       {
@@ -911,6 +944,56 @@
         "internalType": "struct NodeOperator",
         "components": [
           {
+            "name": "totalAddedKeys",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "totalWithdrawnKeys",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "totalDepositedKeys",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "totalVettedKeys",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "stuckValidatorsCount",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "depositableValidatorsCount",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "targetLimit",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "targetLimitMode",
+            "type": "uint8",
+            "internalType": "uint8"
+          },
+          {
+            "name": "totalExitedKeys",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
+            "name": "enqueuedCount",
+            "type": "uint32",
+            "internalType": "uint32"
+          },
+          {
             "name": "managerAddress",
             "type": "address",
             "internalType": "address"
@@ -929,66 +1012,6 @@
             "name": "proposedRewardAddress",
             "type": "address",
             "internalType": "address"
-          },
-          {
-            "name": "targetLimit",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "targetLimitMode",
-            "type": "uint8",
-            "internalType": "uint8"
-          },
-          {
-            "name": "stuckPenaltyEndTimestamp",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "totalExitedKeys",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "totalAddedKeys",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "totalWithdrawnKeys",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "totalDepositedKeys",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "totalVettedKeys",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "stuckValidatorsCount",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "refundedValidatorsCount",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "depositableValidatorsCount",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
-            "name": "enqueuedCount",
-            "type": "uint256",
-            "internalType": "uint256"
           }
         ]
       }
@@ -1368,11 +1391,6 @@
         "internalType": "address"
       },
       {
-        "name": "verifier",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
         "name": "_keyRemovalCharge",
         "type": "uint256",
         "internalType": "uint256"
@@ -1725,34 +1743,6 @@
   },
   {
     "type": "function",
-    "name": "requestRewardsETH",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "ethAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "rewardsProof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "resetNodeOperatorManagerAddress",
     "inputs": [
       {
@@ -1921,12 +1911,12 @@
     "name": "updateRefundedValidatorsCount",
     "inputs": [
       {
-        "name": "nodeOperatorId",
+        "name": "",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "refundedValidatorsCount",
+        "name": "",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1974,25 +1964,6 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "event",
-    "name": "BatchEnqueued",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "count",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
   },
   {
     "type": "event",
@@ -2593,6 +2564,11 @@
   },
   {
     "type": "error",
+    "name": "NotSupported",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "PauseUntilMustBeInFuture",
     "inputs": []
   },
@@ -2604,11 +2580,6 @@
   {
     "type": "error",
     "name": "QueueIsEmpty",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "QueueLookupNoLimit",
     "inputs": []
   },
   {
@@ -2628,7 +2599,22 @@
   },
   {
     "type": "error",
-    "name": "StuckKeysHigherThanNonWithdrawn",
+    "name": "StuckKeysHigherThanExited",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroAccountingAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroAdminAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroLocatorAddress",
     "inputs": []
   },
   {
@@ -2637,8 +2623,32 @@
     "inputs": []
   },
   {
+    "type": "event",
+    "name": "BatchEnqueued",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "count",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
     "type": "error",
     "name": "InvalidIndex",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "QueueLookupNoLimit",
     "inputs": []
   },
   {
@@ -2652,7 +2662,13 @@
         "internalType": "uint256"
       },
       {
-        "name": "proposedAddress",
+        "name": "oldProposedAddress",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newProposedAddress",
         "type": "address",
         "indexed": true,
         "internalType": "address"
@@ -2696,7 +2712,13 @@
         "internalType": "uint256"
       },
       {
-        "name": "proposedAddress",
+        "name": "oldProposedAddress",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newProposedAddress",
         "type": "address",
         "indexed": true,
         "internalType": "address"

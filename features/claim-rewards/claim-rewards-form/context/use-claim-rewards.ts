@@ -55,15 +55,16 @@ const useClaimRewardsMethods = () => {
         rewardsProof,
       ] as const;
 
-      const originalGasLimit = await CSModuleWeb3.estimateGas.requestRewardsETH(
-        ...params,
-        overrides,
-      );
+      const originalGasLimit =
+        await CSModuleWeb3.estimateGas.claimRewardsUnstETH(
+          ...params,
+          overrides,
+        );
 
       const gasLimit = applyGasLimitRatio(originalGasLimit);
 
       return () =>
-        CSModuleWeb3.requestRewardsETH(...params, {
+        CSModuleWeb3.claimRewardsUnstETH(...params, {
           ...overrides,
           gasLimit,
         });

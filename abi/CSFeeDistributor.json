@@ -305,7 +305,7 @@
   },
   {
     "type": "function",
-    "name": "pendingToDistribute",
+    "name": "pendingSharesToDistribute",
     "inputs": [],
     "outputs": [
       {
@@ -496,6 +496,31 @@
   },
   {
     "type": "event",
+    "name": "DistributionDataUpdated",
+    "inputs": [
+      {
+        "name": "totalClaimableShares",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "treeRoot",
+        "type": "bytes32",
+        "indexed": false,
+        "internalType": "bytes32"
+      },
+      {
+        "name": "treeCid",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "FeeDistributed",
     "inputs": [
       {
@@ -674,14 +699,23 @@
   },
   {
     "type": "error",
-    "name": "ZeroAddress",
-    "inputs": [
-      {
-        "name": "field",
-        "type": "string",
-        "internalType": "string"
-      }
-    ]
+    "name": "ZeroAccountingAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroAdminAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroOracleAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroStEthAddress",
+    "inputs": []
   },
   {
     "type": "event",
