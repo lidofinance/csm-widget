@@ -15,7 +15,7 @@ const prepare = (text: string) => {
   );
 };
 
-export const jsonTreeFetcher: StandardFetcher = async (url, params) => {
+export const rewardsTreeFetcher: StandardFetcher = async (url, params) => {
   const response = await fetch(url, {
     ...DEFAULT_PARAMS,
     ...params,

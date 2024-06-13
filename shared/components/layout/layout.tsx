@@ -24,8 +24,8 @@ export const Layout: FC<PropsWithChildren<Props>> = (props) => {
       {config.isDevnet && <WarningLine />}
       <Header />
       <Main size={containerSize}>
-        <LayoutTitleStyle>{title}</LayoutTitleStyle>
-        <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>
+        {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}
+        {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}
         {children}
       </Main>
       <Footer />

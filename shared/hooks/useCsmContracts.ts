@@ -2,6 +2,7 @@ import { contractHooksFactory } from '@lido-sdk/react';
 import { getCSMContractAddressGetter } from 'consts/csm-contracts';
 import {
   CSAccounting__factory,
+  CSEarlyAdoption__factory,
   CSFeeDistributor__factory,
   CSModule__factory,
 } from 'generated';
@@ -27,3 +28,10 @@ const CSFeeDistributor = contractHooksFactory(
 );
 
 export const useCSFeeDistributorRPC = CSFeeDistributor.useContractRPC;
+
+const CSEarlyAdoption = contractHooksFactory(
+  CSEarlyAdoption__factory,
+  getCSMContractAddressGetter('CSEarlyAdoption'),
+);
+
+export const useCSEarlyAdoptionRPC = CSEarlyAdoption.useContractRPC;

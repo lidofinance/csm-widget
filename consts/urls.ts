@@ -1,6 +1,5 @@
 // TODO: path + basePath
 export const HOME_PATH = '/';
-export const BENEFITS_PATH = '/benefits';
 
 export const KEYS_PATH = '/keys';
 export const KEYS_SUBMIT_PATH = '/keys/submit';

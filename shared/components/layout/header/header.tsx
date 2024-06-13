@@ -9,6 +9,7 @@ import HeaderTheme from './components/header-theme';
 import HeaderWallet from './components/header-wallet';
 import { Navigation } from './components/navigation/navigation';
 import { HeaderActionsStyle, HeaderStyle } from './styles';
+import HeaderEaMember from './components/header-ea-member';
 
 export const Header: FC = () => (
   <HeaderStyle size="full" forwardedAs="header">
@@ -16,6 +17,7 @@ export const Header: FC = () => (
     <Navigation />
     <HeaderActionsStyle>
       <HeaderChain />
+      <HeaderEaMember />
       <HeaderNodeOperator />
       <HeaderWallet />
       {config.ipfsMode && <HeaderSettingsButton />}

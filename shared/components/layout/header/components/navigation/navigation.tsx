@@ -5,11 +5,9 @@ import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
-import { ReactComponent as StarIcon } from 'assets/icons/star.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 
 import {
-  BENEFITS_PATH,
   BOND_ADD_PATH,
   BOND_CLAIM_PATH,
   BOND_CLAIM_REWARDS_PATH,
@@ -49,11 +47,6 @@ const routesDisconnected: Route[] = [
     path: HOME_PATH,
     icon: <HomeIcon />,
   },
-  {
-    name: 'Benefits',
-    path: BENEFITS_PATH,
-    icon: <StarIcon />,
-  },
 ];
 
 const routesConnected: Route[] = [
@@ -61,11 +54,6 @@ const routesConnected: Route[] = [
     name: 'Keys',
     path: HOME_PATH,
     icon: <KeyIcon />,
-  },
-  {
-    name: 'Benefits',
-    path: BENEFITS_PATH,
-    icon: <StarIcon />,
   },
   {
     name: 'Roles',

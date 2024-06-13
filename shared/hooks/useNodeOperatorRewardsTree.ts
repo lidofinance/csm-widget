@@ -4,41 +4,34 @@ import { STRATEGY_CONSTANT, STRATEGY_LAZY } from 'consts/swr-strategies';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { NodeOperatorId, Proof } from 'types';
-import { jsonTreeFetcher } from 'utils';
+import {
+  StandardMerkleTreeData,
+  findIndexAndLeaf,
+  rewardsTreeFetcher,
+} from 'utils';
 import { useAccount } from './use-account';
 import { useCSFeeDistributorRPC } from './useCsmContracts';
 
-type RewardsTreeLeaf = [string, string];
-
-interface StandardMerkleTreeData<T extends any[]> {
-  format: 'standard-v1';
-  tree: string[];
-  values: {
-    value: T;
-    treeIndex: number;
-  }[];
-  leafEncoding: string[];
-}
+type RewardsTreeLeaf = [NodeOperatorId, string];
 
 type RewardProof = {
   shares: BigNumber;
   proof: Proof;
 };
 
-const findProofInTree = (
+const findProofAndAmount = (
   tree: StandardMerkleTree<RewardsTreeLeaf>,
   nodeOperatorId: NodeOperatorId,
-) => {
-  const entry = Array.from(tree.entries()).find(
-    ([, value]) => value[0] === nodeOperatorId,
+): RewardProof | undefined => {
+  const [index, leaf] = findIndexAndLeaf(
+    tree,
+    (leaf) => leaf[0] === nodeOperatorId,
   );
-
-  if (entry) {
-    const data: RewardProof = {
-      proof: tree.getProof(entry[0]),
-      shares: BigNumber.from(entry[1][1]),
+  if (index && leaf) {
+    return {
+      proof: tree.getProof(index),
+      shares: BigNumber.from(leaf[1]),
     };
-    return data;
   }
 
   return undefined;
@@ -54,7 +47,7 @@ export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
       const url = `https://ipfs.io/ipfs/${cid}`;
 
       const treeJson =
-        await jsonTreeFetcher<StandardMerkleTreeData<RewardsTreeLeaf>>(url);
+        await rewardsTreeFetcher<StandardMerkleTreeData<RewardsTreeLeaf>>(url);
 
       return StandardMerkleTree.load(treeJson);
     },
@@ -81,7 +74,7 @@ export const useNodeOperatorRewards = (nodeOperatorId?: NodeOperatorId) => {
 
   const proofData = useMemo(() => {
     return tree && nodeOperatorId
-      ? findProofInTree(tree, nodeOperatorId)
+      ? findProofAndAmount(tree, nodeOperatorId)
       : undefined;
   }, [nodeOperatorId, tree]);
 
