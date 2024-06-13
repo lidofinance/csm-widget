@@ -1,10 +1,13 @@
-import { AddKeysPage } from 'features/add-keys';
-import { OnlyNodeOperator } from 'features/loader/only-node-operator';
+import { HOME_PATH, KEYS_SUBMIT_PATH } from 'consts/urls';
+import { GateActiveUser, GateLoaded, Navigate } from 'features/gates';
+import { SplashPage } from 'features/welcome';
 
 const Page = () => (
-  <OnlyNodeOperator>
-    <AddKeysPage />
-  </OnlyNodeOperator>
+  <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
+    <GateLoaded fallback={<SplashPage />}>
+      <Navigate path={KEYS_SUBMIT_PATH} />
+    </GateLoaded>
+  </GateActiveUser>
 );
 
 export default Page;

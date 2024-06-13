@@ -1,4 +1,6 @@
-import { HOME_PATH, ROLES_INVITES_PATH, ROLES_REWARDS_PATH } from 'consts/urls';
+import { HOME_PATH } from 'consts/urls';
+import { AddKeysPage } from 'features/add-keys';
+import { CreateNodeOperatorPage } from 'features/create-node-operator';
 import {
   GateActiveUser,
   GateLoaded,
@@ -10,8 +12,8 @@ import { SplashPage } from 'features/welcome';
 const Page = () => (
   <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
     <GateLoaded fallback={<SplashPage />}>
-      <GateNodeOperator fallback={<Navigate path={ROLES_INVITES_PATH} />}>
-        <Navigate path={ROLES_REWARDS_PATH} />
+      <GateNodeOperator fallback={<CreateNodeOperatorPage />}>
+        <AddKeysPage />
       </GateNodeOperator>
     </GateLoaded>
   </GateActiveUser>

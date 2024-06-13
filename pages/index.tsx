@@ -1,11 +1,13 @@
-import { DashboardPage } from 'features/dashboard';
-import { OnlyNodeOperator } from 'features/loader/only-node-operator';
+import { GateActiveUser, GateLoaded } from 'features/gates';
 import { StarterPackPage } from 'features/starter-pack';
+import { SplashPage, WelcomePage } from 'features/welcome';
 
 const Page = () => (
-  <OnlyNodeOperator fallback={<StarterPackPage />}>
-    <DashboardPage />
-  </OnlyNodeOperator>
+  <GateActiveUser fallback={<WelcomePage />}>
+    <GateLoaded fallback={<SplashPage />}>
+      <StarterPackPage />
+    </GateLoaded>
+  </GateActiveUser>
 );
 
 export default Page;

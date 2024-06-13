@@ -51,9 +51,15 @@ const routesDisconnected: Route[] = [
 
 const routesConnected: Route[] = [
   {
-    name: 'Keys',
+    name: 'Main',
     path: HOME_PATH,
+    icon: <HomeIcon />,
+  },
+  {
+    name: 'Keys',
+    path: KEYS_PATH,
     icon: <KeyIcon />,
+    subPaths: [KEYS_SUBMIT_PATH],
   },
   {
     name: 'Roles',

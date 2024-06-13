@@ -1,12 +1,19 @@
 import { HOME_PATH } from 'consts/urls';
-import { AcceptInvitePage } from 'features/accept-invite';
-import { GateActiveUser, GateLoaded, Navigate } from 'features/gates';
+import { AddBondPage } from 'features/add-bond';
+import {
+  GateActiveUser,
+  GateLoaded,
+  GateNodeOperator,
+  Navigate,
+} from 'features/gates';
 import { SplashPage } from 'features/welcome';
 
 const Page = () => (
   <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
     <GateLoaded fallback={<SplashPage />}>
-      <AcceptInvitePage />
+      <GateNodeOperator fallback={<Navigate path={HOME_PATH} />}>
+        <AddBondPage />
+      </GateNodeOperator>
     </GateLoaded>
   </GateActiveUser>
 );

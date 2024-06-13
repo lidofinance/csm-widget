@@ -1,10 +1,21 @@
+import { HOME_PATH } from 'consts/urls';
 import { ClaimRewardsPage } from 'features/claim-rewards';
-import { OnlyNodeOperator } from 'features/loader/only-node-operator';
+import {
+  GateActiveUser,
+  GateLoaded,
+  GateNodeOperator,
+  Navigate,
+} from 'features/gates';
+import { SplashPage } from 'features/welcome';
 
 const Page = () => (
-  <OnlyNodeOperator>
-    <ClaimRewardsPage />
-  </OnlyNodeOperator>
+  <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
+    <GateLoaded fallback={<SplashPage />}>
+      <GateNodeOperator fallback={<Navigate path={HOME_PATH} />}>
+        <ClaimRewardsPage />
+      </GateNodeOperator>
+    </GateLoaded>
+  </GateActiveUser>
 );
 
 export default Page;
