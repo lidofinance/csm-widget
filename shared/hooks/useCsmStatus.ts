@@ -23,13 +23,16 @@ export const useCsmStatus = (config = STRATEGY_EAGER) => {
     ]);
     // TODO: `isReleased` to config
     // FIXME: `isReleased` = any CSM contract is not working
-    return {
+
+    const res = {
       isReleased: true,
       isPaused: getSettledValue(isPaused),
       isPublicRelease: getSettledValue(isPublicRelease),
       isEarlyAdoption:
         earlyAdoptionAddress && earlyAdoptionAddress !== AddressZero,
     };
+    console.log(res);
+    return res;
   }, [chainId, contract]);
 
   return useLidoSWR(['csm-status', chainId], fetcher, config);

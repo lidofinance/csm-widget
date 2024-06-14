@@ -11,7 +11,8 @@ import { Wrapper } from './welcome-section/styles';
 
 export const Welcome: FC = () => {
   const { active, isConnected } = useAccount();
-  const { data } = useCsmStatus();
+  const { data, error } = useCsmStatus();
+  console.log(data, error);
 
   const isWrongChain = isConnected && !active;
   const isNotReleased = data && !data?.isReleased;
