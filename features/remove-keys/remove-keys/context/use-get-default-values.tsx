@@ -7,7 +7,7 @@ export const useGetDefaultValues = ({
   totalDepositedKeys,
 }: RemoveKeysFormNetworkData) => {
   const values = useMemo(() => {
-    return keys && totalDepositedKeys
+    return keys && totalDepositedKeys !== undefined
       ? {
           start: 0,
           count: 0,
