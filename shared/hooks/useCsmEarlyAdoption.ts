@@ -75,7 +75,10 @@ export const useCsmEarlyAdoption = () => {
   const swrConsumed = useCsmEarlyAdoptionProofConsumed();
 
   return {
-    data: { proof: swrProof.data, consumed: swrConsumed.data },
+    data: {
+      proof: swrConsumed.data ? undefined : swrProof.data,
+      consumed: swrConsumed.data,
+    },
     loading: swrProof.loading || swrConsumed.loading,
     initialLoading: swrProof.initialLoading || swrConsumed.initialLoading,
     error: swrProof.error || swrConsumed.error,

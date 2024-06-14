@@ -1,29 +1,34 @@
 import { useContractSWR } from '@lido-sdk/react';
 import { TOKENS } from 'consts/tokens';
+import { BigNumber } from 'ethers';
 import { useCSAccountingRPC } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 
 const METHOD_BY_TOKEN = {
-  [TOKENS.ETH]: 'getBondAmountByKeysCount(uint256)',
-  [TOKENS.STETH]: 'getBondAmountByKeysCount(uint256)',
-  [TOKENS.WSTETH]: 'getBondAmountByKeysCountWstETH(uint256)',
+  [TOKENS.ETH]: 'getBondAmountByKeysCount(uint256,uint256)',
+  [TOKENS.STETH]: 'getBondAmountByKeysCount(uint256,uint256)',
+  [TOKENS.WSTETH]: 'getBondAmountByKeysCountWstETH(uint256,uint256)',
 } as const;
 
-type UseReadBondAmountParams = { keysCount: number; token: TOKENS };
+type UseReadBondAmountParams = {
+  keysCount: number;
+  token: TOKENS;
+  curveId?: BigNumber;
+};
 
 export const useNodeOperatorFirstKeysBond = ({
   keysCount,
   token,
+  curveId,
 }: UseReadBondAmountParams) => {
   invariant(token !== undefined, 'Token is required');
   invariant(keysCount !== undefined, 'KeysCount is required');
 
-  const contract = useCSAccountingRPC();
   const result = useContractSWR({
-    contract,
+    contract: useCSAccountingRPC(),
     method: METHOD_BY_TOKEN[token],
-    params: [keysCount],
-    shouldFetch: keysCount > 0,
+    params: [keysCount, curveId],
+    shouldFetch: keysCount > 0 && curveId !== undefined,
   });
 
   /**

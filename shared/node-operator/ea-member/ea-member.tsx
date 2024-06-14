@@ -10,6 +10,7 @@ export const EaMember: FC = () => {
   } = useCsmEarlyAdoption();
   const nodeOperatorId = useNodeOperatorId();
 
+  // TODO: consumed
   const isMember = !nodeOperatorId && !!proof;
 
   if (!isMember) return null;

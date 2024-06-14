@@ -14,7 +14,9 @@ export const AddKeysFormInfo = () => {
     <DataTable data-testid="submitKeysFormInfo">
       <DataTableRow title="Number of keys">{depositData.length}</DataTableRow>
       <Divider />
-      <DataTableRow title="Deposit queue">{queue?.[1].toString()}</DataTableRow>
+      <DataTableRow title="CSM deposit queue">
+        {queue?.toString()} validators
+      </DataTableRow>
     </DataTable>
   );
 };

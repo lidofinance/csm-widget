@@ -2,6 +2,7 @@ import { useEthereumBalance } from '@lido-sdk/react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useCallback, useMemo } from 'react';
 import {
+  useCsmEarlyAdoption,
   useMaxGasPrice,
   useSTETHBalance,
   useWSTETHBalance,
@@ -9,6 +10,7 @@ import {
 import { useIsMultisig } from 'shared/hooks/useIsMultisig';
 import { useStethSubmitGasLimit } from '../hooks';
 import { type SubmitKeysFormNetworkData } from './types';
+import { useCsmCurveId } from 'shared/hooks/useCsmCurveId';
 
 export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
   const {
@@ -21,6 +23,14 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
     update: updateWstethBalance,
     initialLoading: isWstethBalanceLoading,
   } = useWSTETHBalance(STRATEGY_LAZY);
+
+  const {
+    data: { proof },
+    initialLoading: isEaProofLoading,
+  } = useCsmEarlyAdoption();
+
+  const { data: curveId, initialLoading: isCurveLoading } =
+    useCsmCurveId(!!proof);
 
   const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
   const gasLimit = useStethSubmitGasLimit();
@@ -53,6 +63,8 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
       isMultisigLoading,
       isMaxGasPriceLoading,
       isEtherBalanceLoading,
+      isEaProofLoading,
+      isCurveLoading,
     }),
     [
       isStethBalanceLoading,
@@ -60,6 +72,8 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
       isMultisigLoading,
       isMaxGasPriceLoading,
       isEtherBalanceLoading,
+      isEaProofLoading,
+      isCurveLoading,
     ],
   );
 
@@ -67,6 +81,8 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
     stethBalance,
     wstethBalance,
     etherBalance,
+    eaProof: proof,
+    curveId,
     isMultisig: isMultisigLoading ? undefined : isMultisig,
     gasCost,
     gasLimit,
