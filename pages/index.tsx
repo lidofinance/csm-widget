@@ -1,11 +1,14 @@
-import { GateActiveUser, GateLoaded } from 'features/gates';
+import { DashboardPage } from 'features/dashboard';
+import { GateActiveUser, GateLoaded, GateNodeOperator } from 'features/gates';
 import { StarterPackPage } from 'features/starter-pack';
 import { SplashPage, WelcomePage } from 'features/welcome';
 
 const Page = () => (
   <GateActiveUser fallback={<WelcomePage />}>
     <GateLoaded fallback={<SplashPage />}>
-      <StarterPackPage />
+      <GateNodeOperator fallback={<StarterPackPage />}>
+        <DashboardPage />
+      </GateNodeOperator>
     </GateLoaded>
   </GateActiveUser>
 );

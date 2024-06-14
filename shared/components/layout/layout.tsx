@@ -5,7 +5,12 @@ import { ContainerProps } from '@lidofinance/lido-ui';
 import { Header } from './header/header';
 import { Footer } from './footer/footer';
 import { Main } from './main/main';
-import { LayoutTitleStyle, LayoutSubTitleStyle } from './styles';
+import {
+  LayoutTitleStyle,
+  LayoutSubTitleStyle,
+  Heading,
+  Content,
+} from './styles';
 import { WarningLine } from '../warning-line';
 import { config } from 'config';
 
@@ -18,15 +23,18 @@ type Props = {
 export const Layout: FC<PropsWithChildren<Props>> = (props) => {
   const { title, subtitle, containerSize } = props;
   const { children } = props;
+  const titlesCount = [title, subtitle].filter(Boolean).length;
 
   return (
     <>
       {config.isDevnet && <WarningLine />}
       <Header />
       <Main size={containerSize}>
-        {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}
-        {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}
-        {children}
+        <Heading $titlesCount={titlesCount}>
+          {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}
+          {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}
+        </Heading>
+        <Content>{children}</Content>
       </Main>
       <Footer />
     </>

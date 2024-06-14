@@ -7,7 +7,7 @@ export const Header = styled.h1`
   font-weight: 600;
 `;
 
-export const Heading = styled.div`
+export const Heading = styled.header`
   display: flex;
   flex-direction: column;
   gap: 2px;

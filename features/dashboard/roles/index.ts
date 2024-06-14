@@ -1,1 +1,1 @@
-export * from './RolesSection';
+export * from './roles-section';

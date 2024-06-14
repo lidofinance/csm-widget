@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { SectionBlock } from 'shared/components';
 import { useAccount, useNodeOperatorInfo } from 'shared/hooks';
 import { Wrapper } from './styles';
-import { RoleBlock } from './RoleBlock';
+import { RoleBlock } from './role-block';
 import { ROLES_PATH } from 'consts/urls';
 
 export const RolesSection: FC = () => {
