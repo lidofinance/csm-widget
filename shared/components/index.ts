@@ -10,3 +10,4 @@ export { MatomoLink } from './matomo-link/matomo-link';
 export { InfoBox } from './info-box/info-box';
 export { Switch } from './switch/switch';
 export { Banner } from './banner/banner';
+export { Stack } from './stack/stack';

@@ -7,12 +7,11 @@ import { Connect } from 'shared/wallet';
 import { EarlyAdoptionBanner } from './early-adoption-banner';
 import { NotReleasedBanner } from './not-released-banner';
 import { WelcomeSection } from './welcome-section';
-import { Wrapper } from './welcome-section/styles';
+import { Stack } from 'shared/components';
 
 export const Welcome: FC = () => {
   const { active, isConnected } = useAccount();
-  const { data, error } = useCsmStatus();
-  console.log(data, error);
+  const { data } = useCsmStatus();
 
   const isWrongChain = isConnected && !active;
   const isNotReleased = data && !data?.isReleased;
@@ -21,19 +20,20 @@ export const Welcome: FC = () => {
     isReleased && data.isEarlyAdoption && !data.isPublicRelease;
 
   return (
-    <Wrapper>
-      {isNotReleased && <NotReleasedBanner />}
+    <>
+      {isNotReleased || <NotReleasedBanner />}
       {isWrongChain && <Fallback />}
       <WelcomeSection>
-        {isEarlyAdoption ? (
-          <>
-            <EarlyAdoptionBanner />
-            <Connect fullwidth />
-          </>
-        ) : isReleased ? (
-          <Connect fullwidth />
-        ) : null}
+        {isReleased && (
+          <Stack>
+            <Connect fullwidth>I am a Node Operator</Connect>
+            <Connect fullwidth color="secondary">
+              Become a Node Operator
+            </Connect>
+          </Stack>
+        )}
       </WelcomeSection>
-    </Wrapper>
+      {isEarlyAdoption && <EarlyAdoptionBanner />}
+    </>
   );
 };

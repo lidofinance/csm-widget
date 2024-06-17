@@ -9,9 +9,14 @@ export const ButtonStyle = styled.div`
   align-items: center;
 
   border-radius: 20px;
-  background: linear-gradient(98deg, #befce2 5.91%, #cdefed 66.16%);
+  background: radial-gradient(
+      132.01% 229.66% at 51.78% 123.98%,
+      #ef81f9 0%,
+      rgba(249, 129, 183, 0) 100%
+    ),
+    linear-gradient(97deg, #00a3ff 36.36%, #2238ff 99.58%);
 
-  color: var(--lido-color-textDark);
+  color: var(--lido-color-primaryContrast);
   font-size: 12px;
   font-weight: 700;
 `;

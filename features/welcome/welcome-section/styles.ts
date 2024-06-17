@@ -51,12 +51,6 @@ export const BlockStyled = styled(Block)`
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
 `;
 
-export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spaceMap.xl}px;
-`;
-
 export const CSMLogo = styled.img.attrs({
   alt: '',
   src: LogoImg.src,

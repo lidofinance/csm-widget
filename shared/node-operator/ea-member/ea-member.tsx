@@ -15,5 +15,5 @@ export const EaMember: FC = () => {
 
   if (!isMember) return null;
 
-  return <ButtonStyle>EA member</ButtonStyle>;
+  return <ButtonStyle>Early Adoption</ButtonStyle>;
 };

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Block } from '@lidofinance/lido-ui';
 
 export const HatStyle = styled(Block)`
-  margin-bottom: -44px;
+  margin-bottom: -52px;
 
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
