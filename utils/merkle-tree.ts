@@ -27,7 +27,7 @@ export const findProofInTree = <T extends any[]>(
 ) => {
   const [index] = findIndexAndLeaf(tree, lookup);
 
-  if (index) {
+  if (index !== undefined) {
     return tree.getProof(index) as Proof;
   }
 

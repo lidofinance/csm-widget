@@ -4,13 +4,13 @@ import { StarterPackPage } from 'features/starter-pack';
 import { SplashPage, WelcomePage } from 'features/welcome';
 
 const Page = () => (
-  <GateActiveUser fallback={<WelcomePage />}>
-    <GateLoaded fallback={<SplashPage />}>
+  <GateLoaded fallback={<SplashPage />}>
+    <GateActiveUser fallback={<WelcomePage />}>
       <GateNodeOperator fallback={<StarterPackPage />}>
         <DashboardPage />
       </GateNodeOperator>
-    </GateLoaded>
-  </GateActiveUser>
+    </GateActiveUser>
+  </GateLoaded>
 );
 
 export default Page;
