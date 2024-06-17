@@ -47,7 +47,7 @@ export const Nav = styled.div`
 // Not wrapping <a> inside <a> in IPFS mode
 // Also avoid problems with migrate to Next v13
 // see: https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration#link-component
-export const NavLink = styled.span<{ active: boolean }>`
+export const NavLink = styled.span<{ $active: boolean }>`
   cursor: pointer;
   color: var(--lido-color-secondary);
   font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
@@ -60,7 +60,7 @@ export const NavLink = styled.span<{ active: boolean }>`
   text-transform: uppercase;
   text-decoration: none !important;
   letter-spacing: 0.04em;
-  opacity: ${(props) => (props.active ? 1 : 0.8)};
+  opacity: ${(props) => (props.$active ? 1 : 0.8)};
 
   :hover {
     opacity: 1;
@@ -73,8 +73,8 @@ export const NavLink = styled.span<{ active: boolean }>`
   }
 
   svg {
-    fill: ${({ active }) =>
-      active ? `var(--lido-color-primary)` : `var(--lido-color-secondary)`};
+    fill: ${({ $active }) =>
+      $active ? `var(--lido-color-primary)` : `var(--lido-color-secondary)`};
   }
 
   ${NAV_MOBILE_MEDIA} {

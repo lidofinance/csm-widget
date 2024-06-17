@@ -138,7 +138,7 @@ export const Navigation: FC = memo(() => {
 
         return (
           <LocalLink key={path} href={path}>
-            <NavLink active={isActive}>
+            <NavLink $active={isActive}>
               {icon}
               <span>{name}</span>
             </NavLink>
