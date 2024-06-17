@@ -13,7 +13,8 @@ import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 import { config } from 'config';
 import { contentSecurityPolicy } from 'config/csp';
 
-let host = 'https://stake.lido.fi';
+// let host = 'https://stake.lido.fi';
+let host = 'https://csm-devnet.vercel.app';
 
 const secureHeaders = createHeadersObject({ contentSecurityPolicy });
 const cspMetaTagContent =
@@ -55,19 +56,16 @@ export default class MyDocument extends Document {
   }
 
   get metaTitle(): string {
-    return 'Stake with Lido | Lido';
+    return 'Community Stacking Module | Lido';
   }
 
   get metaDescription(): string {
-    return (
-      'Liquid staking with Lido. ' +
-      'Stake Ether with Lido to get daily rewards while keeping full control of your staked tokens. ' +
-      'Start receiving rewards in just a few clicks.'
-    );
+    return 'The Community Staking Module is a permissionless staking module aimed at attracting community stakers to participate in the Lido on Ethereum protocol as Node Operators.';
   }
 
   get metaPreviewImgUrl(): string {
-    return `${host}/lido-preview.png`;
+    return `${host}/preview.png`;
+    // return `/preview.png`; // FIXME: host
   }
 
   render(): JSX.Element {
