@@ -10,6 +10,8 @@ import { useAccount, useCSModuleRPC } from 'shared/hooks';
 import { NodeOperatorId, NodeOperatorRoles } from 'types';
 import { Address } from 'wagmi';
 
+const FROM_BLOCK = undefined;
+
 type NodeOperatorRoleEvent =
   | NodeOperatorAddedEvent
   | NodeOperatorRewardAddressChangedEvent
@@ -32,7 +34,7 @@ export const useNodeOperatorsFromEvents = (address?: Address) => {
 
     // @todo: use SWR?
     const filterResults = await Promise.allSettled(
-      filters.map((filter) => contract.queryFilter(filter)),
+      filters.map((filter) => contract.queryFilter(filter, FROM_BLOCK)),
     );
 
     return filterResults

@@ -7,7 +7,7 @@ export const LINKS_BY_NETWORK: ChainTreeLinkMap = {
   [CHAINS.Mainnet]: '/artifacts/merkle-tree.json',
   // @note devnet.1
   [CHAINS.Holesky]:
-    'https://raw.githubusercontent.com/lidofinance/community-staking-module/main/artifacts/devnet-1/early-adoption/addresses.json',
+    'https://raw.githubusercontent.com/lidofinance/community-staking-module/main/artifacts/devnet-1/early-adoption/merkle-tree.json',
 };
 
 export const getCSMEarlyAdoptionTreeUrl = (chainId: CHAINS | undefined) => {
