@@ -9,13 +9,13 @@ import {
 import { SplashPage } from 'features/welcome';
 
 const Page = () => (
-  <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
-    <GateLoaded fallback={<SplashPage />}>
+  <GateLoaded fallback={<SplashPage />}>
+    <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
       <GateNodeOperator fallback={<Navigate path={HOME_PATH} />}>
         <AddBondPage />
       </GateNodeOperator>
-    </GateLoaded>
-  </GateActiveUser>
+    </GateActiveUser>
+  </GateLoaded>
 );
 
 export default Page;

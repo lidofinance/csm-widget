@@ -1,7 +1,7 @@
 import { useAccount as useWagmiAccount, useNetwork } from 'wagmi';
 
 export const useAccount = (_key?: string) => {
-  const { address, isConnected } = useWagmiAccount();
+  const { address, isConnected, isConnecting } = useWagmiAccount();
   const { chain } = useNetwork();
   const isUnsupported = !!chain?.unsupported;
 
@@ -11,5 +11,6 @@ export const useAccount = (_key?: string) => {
     active: !isUnsupported && isConnected,
     isConnected,
     isUnsupported,
+    isConnecting,
   };
 };

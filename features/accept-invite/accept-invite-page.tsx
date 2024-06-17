@@ -8,6 +8,7 @@ import {
 import { Layout, Switch } from 'shared/components';
 import { SwitchRoutes } from 'shared/components/switch/types';
 import { AcceptInvite } from './accept-invite';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
 
 const ROLE_ROUTES: SwitchRoutes = [
   { name: 'Reward Address', path: ROLES_REWARDS_PATH },
@@ -16,9 +17,12 @@ const ROLE_ROUTES: SwitchRoutes = [
 ];
 
 export const AcceptInvitePage: FC = () => {
+  const nodeOperatorId = useNodeOperatorId();
+  const showSwitcher = nodeOperatorId !== undefined;
+
   return (
-    <Layout title="Community Staking Module" subtitle="Change Reward Address">
-      <Switch active={0} routes={ROLE_ROUTES} />
+    <Layout title="Community Staking Module" subtitle="Accept invites">
+      {showSwitcher && <Switch active={2} routes={ROLE_ROUTES} />}
       <AcceptInvite />
     </Layout>
   );
