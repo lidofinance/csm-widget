@@ -10,7 +10,7 @@ import invariant from 'tiny-invariant';
 import { NodeOperatorId, NodeOperatorInvite, NodeOperatorRoles } from 'types';
 import { useGetActiveNodeOperator } from './use-get-active-node-operator';
 import { useNodeOperatorInvitesFromEvents } from './use-node-operator-invites-from-events';
-import { useNodeOperatorsFromEvents } from './use-node-operators-from-events';
+import { useNodeOperatorsList } from './use-node-operators-list';
 
 export type NodeOperatorContextValue = {
   list: NodeOperatorRoles[];
@@ -18,7 +18,7 @@ export type NodeOperatorContextValue = {
   append: (no: NodeOperatorRoles) => void;
   active?: NodeOperatorRoles;
   switchActive: (id: NodeOperatorId) => void;
-  invites: NodeOperatorInvite[];
+  invites?: NodeOperatorInvite[];
   isInvitesLoading: boolean;
 };
 
@@ -64,16 +64,16 @@ export const useNodeOperatorInvites = () => {
 export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { address } = useAccount();
 
-  const {
-    data: list,
-    initialLoading: isListLoading,
-    append,
-  } = useNodeOperatorsFromEvents(address || undefined);
+  const { list, isListLoading, append, setCached } =
+    useNodeOperatorsList(address);
 
-  const { active, switchActive } = useGetActiveNodeOperator(list);
+  const { active, switchActive } = useGetActiveNodeOperator(
+    isListLoading ? undefined : list,
+    setCached,
+  );
 
   const { data: invites, initialLoading: isInvitesLoading } =
-    useNodeOperatorInvitesFromEvents(address || undefined);
+    useNodeOperatorInvitesFromEvents(address);
 
   const value = useMemo(
     () => ({

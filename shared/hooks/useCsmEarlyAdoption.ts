@@ -3,7 +3,7 @@ import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { getCSMEarlyAdoptionTreeUrl } from 'consts/csm-early-adoption';
 import { STRATEGY_EAGER, STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { useMemo } from 'react';
-import { standardFetcher } from 'utils';
+import { addressCompare, standardFetcher } from 'utils';
 import { StandardMerkleTreeData, findProofInTree } from 'utils/merkle-tree';
 import { useAccount } from './use-account';
 import { useCSEarlyAdoptionRPC } from './useCsmContracts';
@@ -48,10 +48,7 @@ export const useCsmEarlyAdoptionProof = () => {
   const proofData = useMemo(() => {
     // TODO: check speed if get proof by leaf `[address.toLowerCase()]`
     return tree && address
-      ? findProofInTree(
-          tree,
-          (leaf) => leaf[0].toLowerCase() === address.toLowerCase(),
-        )
+      ? findProofInTree(tree, (leaf) => addressCompare(leaf[0], address))
       : undefined;
   }, [address, tree]);
 

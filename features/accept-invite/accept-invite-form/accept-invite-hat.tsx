@@ -13,7 +13,7 @@ export const AcceptInviteHat = () => {
           title="Invites count"
           small
           loading={isInvitesLoading}
-          value={invites.length}
+          value={invites?.length ?? 0}
         />
         <HatAccount address={address} />
       </HatRow>

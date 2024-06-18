@@ -1,5 +1,7 @@
 import { BigNumber } from 'ethers';
 
+// TODO: review
+
 export const WSTETH_APPROVE_GAS_LIMIT = BigNumber.from(78000);
 
 export const WRAP_FROM_ETH_GAS_LIMIT = BigNumber.from(100000);

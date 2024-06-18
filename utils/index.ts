@@ -1,3 +1,4 @@
+export * from './address-compare';
 export * from './appCookies';
 export * from './applyGasLimitRatio';
 export * from './await-with-timeout';

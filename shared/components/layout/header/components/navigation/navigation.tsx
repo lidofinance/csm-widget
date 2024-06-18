@@ -116,7 +116,7 @@ export const Navigation: FC = memo(() => {
     (condition: ShowConditions) => {
       switch (condition) {
         case 'HAS_INVITES':
-          return invites.length > 0;
+          return invites && invites.length > 0;
         case 'HAS_LOCKED_BOND':
           return false;
         case 'CAN_CREATE':
@@ -125,7 +125,7 @@ export const Navigation: FC = memo(() => {
           return false;
       }
     },
-    [invites.length, proof, status?.isPublicRelease],
+    [invites, proof, status?.isPublicRelease],
   );
 
   const routes =
