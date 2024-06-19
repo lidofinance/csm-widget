@@ -3,9 +3,9 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { SectionBlock } from 'shared/components';
 import { useNodeOperatorInfo } from 'shared/hooks';
-import { Row, Wrapper } from './styles';
-import { Item } from './item';
 import { useNodeOperatorUnbondedKeys } from 'shared/hooks/useNodeOperatorUnbondedKeys';
+import { Item } from './item';
+import { Row, Wrapper } from './styles';
 
 export const KeysSection: FC = () => {
   const id = useNodeOperatorId();
@@ -20,11 +20,7 @@ export const KeysSection: FC = () => {
             <Item title="Depositable" count={info.depositableValidatorsCount} />
             <Item
               title="Active"
-              count={
-                info.totalAddedKeys -
-                info.depositableValidatorsCount -
-                info.totalExitedKeys
-              }
+              count={info.totalDepositedKeys - info.totalExitedKeys}
             />
             <Item
               title="Limit"
@@ -38,7 +34,7 @@ export const KeysSection: FC = () => {
             <Item title="Duplicated" count={0} />
             <Item
               title="Invalid"
-              count={info.depositableValidatorsCount - info.totalVettedKeys}
+              count={info.totalAddedKeys - info.totalVettedKeys}
             />
           </Row>
         </Wrapper>
