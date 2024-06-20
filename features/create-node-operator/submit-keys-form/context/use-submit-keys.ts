@@ -264,7 +264,9 @@ export const useSubmitKeys = ({ onConfirm, onRetry }: SubmitKeysOptions) => {
             () => tx.wait(),
           );
 
-          nodeOperatorId = getAddedNodeOperator(receipt)?.toString();
+          nodeOperatorId = getAddedNodeOperator(
+            receipt,
+          )?.toString() as NodeOperatorId;
         }
 
         await onConfirm?.();

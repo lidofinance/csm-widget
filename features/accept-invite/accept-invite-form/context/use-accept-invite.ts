@@ -10,6 +10,7 @@ import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
 import { AcceptInviteFormInputType } from '.';
 import { useTxModalStagesAcceptInvite } from '../hooks/use-tx-modal-stages-accept-invite';
+import { useNodeOperator } from 'providers/node-operator-provider';
 
 type UseAcceptInviteOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -105,6 +106,7 @@ export const useAcceptInvite = ({
   onRetry,
 }: UseAcceptInviteOptions) => {
   const { txModalStages } = useTxModalStagesAcceptInvite();
+  const { append: appendNO } = useNodeOperator();
 
   const getMethod = useAcceptInviteMethods();
 
@@ -141,6 +143,12 @@ export const useAcceptInvite = ({
 
         txModalStages.success('0x0', role, txHash);
 
+        appendNO({
+          id: invite.id,
+          manager: true,
+          rewards: true,
+        });
+
         return true;
       } catch (error) {
         console.warn(error);
@@ -148,7 +156,7 @@ export const useAcceptInvite = ({
         return false;
       }
     },
-    [getMethod, txModalStages, onConfirm, onRetry],
+    [getMethod, txModalStages, onConfirm, appendNO, onRetry],
   );
 
   return {
