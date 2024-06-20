@@ -18,9 +18,7 @@ export const StarterPack: FC = () => {
     data: { proof, consumed },
   } = useCsmEarlyAdoption();
 
-  const isReleased = data && data.isReleased;
-  const isEarlyAdoption =
-    isReleased && data.isEarlyAdoption && !data.isPublicRelease;
+  const isEarlyAdoption = data?.isEarlyAdoption && !data?.isPublicRelease;
 
   if (data?.isPaused) {
     return <PausedBanner />;

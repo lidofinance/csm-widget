@@ -1,18 +1,21 @@
-import { HOME_PATH, KEYS_PATH } from 'consts/urls';
+import { HOME_PATH, KEYS_PATH, KEYS_VIEW_PATH } from 'consts/urls';
 import {
   GateActiveUser,
   GateLoaded,
   GateNodeOperator,
-  Navigate,
-} from 'features/gates';
+  GateRoleManager,
+} from 'shared/gates';
 import { RemoveKeysPage } from 'features/remove-keys';
 import { SplashPage } from 'features/welcome';
+import { Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded fallback={<SplashPage />}>
     <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
       <GateNodeOperator fallback={<Navigate path={KEYS_PATH} />}>
-        <RemoveKeysPage />
+        <GateRoleManager fallback={<Navigate path={KEYS_VIEW_PATH} />}>
+          <RemoveKeysPage />
+        </GateRoleManager>
       </GateNodeOperator>
     </GateActiveUser>
   </GateLoaded>

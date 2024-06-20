@@ -2,15 +2,15 @@ import { FC } from 'react';
 
 import { Layout } from 'shared/components';
 import { KeysPageSwitcher } from 'shared/navigate';
-import { RemoveKeys } from './remove-keys';
+import { ViewKeys } from './view-keys';
 
-export const RemoveKeysPage: FC = () => (
+export const ViewKeysPage: FC = () => (
   <Layout
-    title="Remove validator keys"
-    subtitle="Remove keys that has not been deposited yet"
+    title="View keys list"
+    subtitle="Check the list of your keys"
     containerSize="content"
   >
     <KeysPageSwitcher />
-    <RemoveKeys />
+    <ViewKeys />
   </Layout>
 );

@@ -18,7 +18,7 @@ import {
   KEYS_REMOVE_PATH,
   KEYS_SUBMIT_PATH,
   KEYS_VIEW_PATH,
-  ROLES_INVITES_PATH,
+  ROLES_INBOX_PATH,
   ROLES_MANAGER_PATH,
   ROLES_PATH,
   ROLES_REWARDS_PATH,
@@ -67,7 +67,7 @@ const routesConnected: Route[] = [
     name: 'Roles',
     path: ROLES_PATH,
     icon: <GearIcon />,
-    subPaths: [ROLES_INVITES_PATH],
+    subPaths: [ROLES_INBOX_PATH],
     showRule: 'HAS_INVITES',
   },
 ];
@@ -94,7 +94,7 @@ const routesNodeOperator: Route[] = [
     name: 'Roles',
     path: ROLES_PATH,
     icon: <GearIcon />,
-    subPaths: [ROLES_MANAGER_PATH, ROLES_REWARDS_PATH, ROLES_INVITES_PATH],
+    subPaths: [ROLES_MANAGER_PATH, ROLES_REWARDS_PATH, ROLES_INBOX_PATH],
   },
   {
     name: 'Locked Bond',

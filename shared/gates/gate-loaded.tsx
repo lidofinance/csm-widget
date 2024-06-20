@@ -11,13 +11,18 @@ export const GateLoaded: FC<PropsWithChildren<Props>> = ({
   fallback,
   children,
 }) => {
-  const { isConnecting } = useAccount();
-  const { isListLoading } = useNodeOperator();
-  const { initialLoading } = useCsmEarlyAdoption();
   const { initialLoading: isStatusLoading } = useCsmStatus();
+  const { isConnecting } = useAccount();
+  const { isListLoading, active } = useNodeOperator();
+  const { initialLoading: isEaLoading } = useCsmEarlyAdoption();
 
-  if (isConnecting || isListLoading || initialLoading || isStatusLoading)
-    return fallback;
+  const loading =
+    isStatusLoading ||
+    isConnecting ||
+    isListLoading ||
+    (!active && isEaLoading);
+
+  if (loading) return fallback;
 
   return children;
 };

@@ -1,5 +1,5 @@
 import { DashboardPage } from 'features/dashboard';
-import { GateActiveUser, GateLoaded, GateNodeOperator } from 'features/gates';
+import { GateActiveUser, GateLoaded, GateNodeOperator } from 'shared/gates';
 import { StarterPackPage } from 'features/starter-pack';
 import { SplashPage, WelcomePage } from 'features/welcome';
 

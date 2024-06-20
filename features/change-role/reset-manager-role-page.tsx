@@ -2,14 +2,14 @@ import { FC } from 'react';
 
 import { Layout } from 'shared/components';
 import { RolesPageSwitcher } from 'shared/navigate';
-import { ChangeRewardRole } from './change-reward-role';
+import { ResetManagerRole } from './reset-manager-role';
 
-export const ChangeRewardRolePage: FC = () => (
+export const ResetManagerRolePage: FC = () => (
   <Layout
-    title="Change Rewards address"
+    title="Change Manager address"
     subtitle="Propose new address for change"
   >
     <RolesPageSwitcher />
-    <ChangeRewardRole />
+    <ResetManagerRole />
   </Layout>
 );

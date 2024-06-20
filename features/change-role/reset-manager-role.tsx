@@ -1,15 +1,14 @@
-import { ROLES } from 'consts/roles';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks/useWeb3Key';
-import { ChangeRoleForm } from './change-role-form';
+import { ResetRoleForm } from './reset-role-form';
 
-export const ChangeManagerRole = () => {
+export const ResetManagerRole = () => {
   const key = useWeb3Key();
 
   return (
     <>
       <NoSSRWrapper>
-        <ChangeRoleForm key={key} role={ROLES.MANAGER} />
+        <ResetRoleForm key={key} />
       </NoSSRWrapper>
     </>
   );

@@ -1,11 +1,12 @@
-import { BOND_ADD_PATH, HOME_PATH } from 'consts/urls';
-import { GateActiveUser, GateLoaded, Navigate } from 'features/gates';
+import { BOND_CLAIM_PATH, HOME_PATH } from 'consts/urls';
 import { SplashPage } from 'features/welcome';
+import { GateActiveUser, GateLoaded } from 'shared/gates';
+import { Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded fallback={<SplashPage />}>
     <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
-      <Navigate path={BOND_ADD_PATH} />
+      <Navigate path={BOND_CLAIM_PATH} />
     </GateActiveUser>
   </GateLoaded>
 );

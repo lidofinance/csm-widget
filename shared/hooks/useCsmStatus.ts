@@ -21,11 +21,8 @@ export const useCsmStatus = (config = STRATEGY_EAGER) => {
       contract.isPaused(),
       contract.publicRelease(),
     ]);
-    // TODO: `isReleased` to config
-    // FIXME: `isReleased` = any CSM contract is not working
 
     return {
-      isReleased: true,
       isPaused: getSettledValue(isPaused),
       isPublicRelease: getSettledValue(isPublicRelease),
       isEarlyAdoption:
