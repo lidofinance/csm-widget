@@ -11,3 +11,4 @@ export { InfoBox } from './info-box/info-box';
 export { Switch } from './switch/switch';
 export { Banner } from './banner/banner';
 export { Stack } from './stack/stack';
+export { LinkButton } from './link-button/link-button';

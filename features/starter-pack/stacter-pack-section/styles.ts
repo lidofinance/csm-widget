@@ -19,7 +19,7 @@ export const Heading = styled.header`
   }
 
   p {
-    color: var(--lido-color-text-secondary);
+    color: var(--lido-color-textSecondary);
     font-size: 12px;
     line-height: 20px;
   }

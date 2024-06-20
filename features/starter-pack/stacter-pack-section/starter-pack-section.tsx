@@ -8,6 +8,7 @@ import {
   StepWrapper,
   Steps,
 } from './styles';
+import { Link } from '@lidofinance/lido-ui';
 
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -21,18 +22,24 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
       </Heading>
       <Steps>
         <Step number="1" title="Have tokens for Bond">
-          Minimum 2 stETH is required Learn more about the bond curve
+          2 Holesky stETH is required for the first validator
+          <br />
+          <Link href="https://hackmd.io/@lido/rJMcGj0Ap#Bond">Learn more</Link>
         </Step>
         <Step number="2" title="Prepare hardware">
-          Run your own hardware or use a cloud provider
+          Run{' '}
+          <Link href="https://ethereum.org/en/developers/docs/nodes-and-clients/run-a-node/#hardware">
+            your own hardware
+          </Link>{' '}
+          or use a cloud provider
         </Step>
         <Step number="3" title="Set up validation tools">
           Do it manually or use Plug&Play solutions
         </Step>
         <Step number="4" title="Generate keys">
-          Prepare deposit data .json file for submitting keys
+          Prepare deposit data (.json file) for submitting keys
           <br />
-          Follow the generation guide
+          Follow <Link>the generation guide</Link>
         </Step>
       </Steps>
       {children}
