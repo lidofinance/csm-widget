@@ -1,7 +1,7 @@
 import { BytesLike } from 'ethers';
 
 // BigNumber -> string
-export type NodeOperatorId = string;
+export type NodeOperatorId = `${number}`;
 
 export type NodeOperatorRoles = {
   id: NodeOperatorId;

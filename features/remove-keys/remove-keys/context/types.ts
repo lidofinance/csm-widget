@@ -7,7 +7,7 @@ export type RemoveKeysFormDataContextValue = RemoveKeysFormNetworkData;
 export type RemoveKeysFormInputType = {
   start: number; // 0..[keys.length]
   count: number; // 0..[keys.length]
-  offset?: BigNumber; // totalDepositedKeys
+  offset?: number; // totalDepositedKeys
 };
 
 export type RemoveKeysFormLoading = {
@@ -20,7 +20,7 @@ export type RemoveKeysFormLoading = {
 export type RemoveKeysFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
   keys?: HexString[];
-  totalDepositedKeys?: BigNumber;
+  totalDepositedKeys?: number;
   bondBalance?: BigNumber;
   bondRequired?: BigNumber;
   isMultisig?: boolean;

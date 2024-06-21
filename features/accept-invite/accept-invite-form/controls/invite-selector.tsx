@@ -17,7 +17,7 @@ export const InviteSelector = () => {
       const name = e.target.name;
       const m = name.match(/invite\.(\d+)\.checked/);
       const i = m?.[1] ? parseInt(m?.[1], 10) : 0;
-      const invite = invites[i];
+      const invite = invites?.[i];
 
       setValue('invite', invite);
     },

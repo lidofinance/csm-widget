@@ -5,11 +5,9 @@ import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
-import { ReactComponent as StarIcon } from 'assets/icons/star.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 
 import {
-  BENEFITS_PATH,
   BOND_ADD_PATH,
   BOND_CLAIM_PATH,
   BOND_CLAIM_REWARDS_PATH,
@@ -31,8 +29,9 @@ import { useAccount } from 'shared/hooks/use-account';
 import { useRouterPath } from 'shared/hooks/use-router-path';
 import { getIsActivePath } from 'utils/path';
 import { Nav, NavLink } from './styles';
+import { useCsmEarlyAdoption, useCsmStatus } from 'shared/hooks';
 
-type ShowConditions = 'HAS_INVITES' | 'HAS_LOCKED_BOND';
+type ShowConditions = 'HAS_INVITES' | 'HAS_LOCKED_BOND' | 'CAN_CREATE';
 
 type Route = {
   name: string;
@@ -40,7 +39,7 @@ type Route = {
   icon: JSX.Element;
   subPaths?: string[];
   skip?: boolean;
-  show?: ShowConditions;
+  showRule?: ShowConditions;
 };
 
 const routesDisconnected: Route[] = [
@@ -49,30 +48,27 @@ const routesDisconnected: Route[] = [
     path: HOME_PATH,
     icon: <HomeIcon />,
   },
-  {
-    name: 'Benefits',
-    path: BENEFITS_PATH,
-    icon: <StarIcon />,
-  },
 ];
 
 const routesConnected: Route[] = [
   {
-    name: 'Keys',
+    name: 'Main',
     path: HOME_PATH,
-    icon: <KeyIcon />,
+    icon: <HomeIcon />,
   },
   {
-    name: 'Benefits',
-    path: BENEFITS_PATH,
-    icon: <StarIcon />,
+    name: 'Keys',
+    path: KEYS_PATH,
+    icon: <KeyIcon />,
+    subPaths: [KEYS_SUBMIT_PATH],
+    showRule: 'CAN_CREATE',
   },
   {
     name: 'Roles',
     path: ROLES_PATH,
     icon: <GearIcon />,
     subPaths: [ROLES_INVITES_PATH],
-    show: 'HAS_INVITES',
+    showRule: 'HAS_INVITES',
   },
 ];
 
@@ -111,19 +107,25 @@ const routesNodeOperator: Route[] = [
 export const Navigation: FC = memo(() => {
   const { active: isConnected } = useAccount();
   const { active, invites, isListLoading } = useNodeOperator();
+  const {
+    data: { proof },
+  } = useCsmEarlyAdoption();
+  const { data: status } = useCsmStatus();
 
-  const check = useCallback(
+  const checkRules = useCallback(
     (condition: ShowConditions) => {
       switch (condition) {
         case 'HAS_INVITES':
-          return invites.length > 0;
+          return invites && invites.length > 0;
         case 'HAS_LOCKED_BOND':
           return false;
+        case 'CAN_CREATE':
+          return status?.isPublicRelease || !!proof;
         default:
           return false;
       }
     },
-    [invites.length],
+    [invites, proof, status?.isPublicRelease],
   );
 
   const routes =
@@ -137,20 +139,22 @@ export const Navigation: FC = memo(() => {
 
   return (
     <Nav>
-      {routes.map(({ name, path, subPaths, icon, skip, show }) => {
-        if (skip) return null;
-        if (show && !check(show)) return null;
-        const isActive = getIsActivePath(pathname, path, subPaths);
+      {routes.map(
+        ({ name, path, subPaths, icon, skip, showRule: showRule }) => {
+          if (skip) return null;
+          if (showRule && !checkRules(showRule)) return null;
+          const isActive = getIsActivePath(pathname, path, subPaths);
 
-        return (
-          <LocalLink key={path} href={path}>
-            <NavLink active={isActive}>
-              {icon}
-              <span>{name}</span>
-            </NavLink>
-          </LocalLink>
-        );
-      })}
+          return (
+            <LocalLink key={path} href={path}>
+              <NavLink $active={isActive}>
+                {icon}
+                <span>{name}</span>
+              </NavLink>
+            </LocalLink>
+          );
+        },
+      )}
     </Nav>
   );
 });

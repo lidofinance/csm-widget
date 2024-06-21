@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import { useCSModuleWeb3 } from 'shared/hooks';
@@ -18,8 +17,8 @@ type RemoveKeysOptions = {
 
 type MethodParams = {
   nodeOperatorId: NodeOperatorId;
-  startIndex: BigNumber;
-  keysCount: BigNumber;
+  startIndex: number;
+  keysCount: number;
 };
 
 // this encapsulates eth/steth/wsteth flows
@@ -77,10 +76,10 @@ export const useRemoveKeys = ({ onConfirm, onRetry }: RemoveKeysOptions) => {
       count,
     }: RemoveKeysFormInputType): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
-      invariant(offset, 'Offset is not defined');
+      invariant(offset !== undefined, 'Offset is not defined');
 
-      const startIndex = offset.add(start);
-      const keysCount = BigNumber.from(count);
+      const startIndex = offset + start;
+      const keysCount = count;
 
       try {
         const method = getRemoveKeysMethod({
@@ -89,7 +88,7 @@ export const useRemoveKeys = ({ onConfirm, onRetry }: RemoveKeysOptions) => {
           nodeOperatorId,
         });
 
-        txModalStages.sign(keysCount.toNumber(), nodeOperatorId);
+        txModalStages.sign(keysCount, nodeOperatorId);
 
         const callback = await method();
 
@@ -99,7 +98,7 @@ export const useRemoveKeys = ({ onConfirm, onRetry }: RemoveKeysOptions) => {
         );
         const txHash = typeof tx === 'string' ? tx : tx.hash;
 
-        txModalStages.pending(keysCount.toNumber(), nodeOperatorId, txHash);
+        txModalStages.pending(keysCount, nodeOperatorId, txHash);
 
         if (typeof tx === 'object') {
           await runWithTransactionLogger('RemoveKeys block confirmation', () =>

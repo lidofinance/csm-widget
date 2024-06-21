@@ -11,5 +11,5 @@ export const MainStyle = styled(Container)<ContainerProps>`
     size === 'tight' &&
     css`
       max-width: 590px;
-    `}
+    `};
 `;

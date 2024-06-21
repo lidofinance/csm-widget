@@ -7,7 +7,6 @@ import { GlobalStyle } from 'styles';
 import { AppFlagProvider } from './app-flag';
 import { InpageNavigationProvider } from './inpage-navigation';
 import { ModalProvider } from './modal-provider';
-import { NodeOperatorPrivider } from './node-operator-provider';
 import Web3Provider from './web3';
 
 export const Providers: FC<PropsWithChildren> = ({ children }) => (
@@ -16,11 +15,9 @@ export const Providers: FC<PropsWithChildren> = ({ children }) => (
       <CookieThemeProvider>
         <GlobalStyle />
         <Web3Provider>
-          <NodeOperatorPrivider>
-            <InpageNavigationProvider>
-              <ModalProvider>{children}</ModalProvider>
-            </InpageNavigationProvider>
-          </NodeOperatorPrivider>
+          <InpageNavigationProvider>
+            <ModalProvider>{children}</ModalProvider>
+          </InpageNavigationProvider>
         </Web3Provider>
       </CookieThemeProvider>
     </AppFlagProvider>

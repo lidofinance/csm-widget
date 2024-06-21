@@ -11,7 +11,18 @@ import { RevokeButton } from './revoke-button';
 import { InputAddressProps } from './types';
 
 export const InputAddress = forwardRef<HTMLInputElement, InputAddressProps>(
-  ({ isAddressResolving, address, revoke, onChange, value, ...props }, ref) => {
+  (
+    {
+      isAddressResolving,
+      address,
+      revoke,
+      onChange,
+      value,
+      showCopyBtn,
+      ...props
+    },
+    ref,
+  ) => {
     const inputRef = useRef<HTMLInputElement>(null);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     useImperativeHandle(ref, () => inputRef.current!, []);

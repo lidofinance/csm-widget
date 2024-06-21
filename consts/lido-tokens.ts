@@ -9,10 +9,10 @@ type ChainAddressMap = Partial<
 >;
 
 export const TOKENS_BY_NETWORK: ChainAddressMap = {
-  // @note devnet.0
+  // @note devnet.1
   [CHAINS.Holesky]: {
-    [TOKENS.WSTETH]: '0xF1e88F0E4258a46D5299f3D512e0fC9782Cca47d',
-    [TOKENS.STETH]: '0xFfC41725C09407E4713FB4d02bc814c40ed15FD1',
+    [TOKENS.WSTETH]: '0xF1e88F0E4258a46D5299f3D512e0fC9782Cca47d', // FIXME: devnet.1 addr
+    [TOKENS.STETH]: '0x4e97Cc8B850f3CE6E06899A09141e9C5EC5eFD3F',
   },
 };
 

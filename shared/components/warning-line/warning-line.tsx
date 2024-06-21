@@ -16,7 +16,7 @@ export const WarningLine = () => {
   return (
     <WarningBlock>
       <WarningText>
-        This is devnet version of the CSM widget. You should not use it.
+        This is devnet.1 version of the CSM widget. You should not use it.
       </WarningText>
     </WarningBlock>
   );

@@ -1,5 +1,7 @@
 import { MatomoEventType } from '@lidofinance/analytics-matomo';
 
+// TODO: review
+
 export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Global
   connectWallet = 'connectWallet',

@@ -20,12 +20,16 @@ export type SubmitKeysFormLoading = {
   isWstethBalanceLoading: boolean;
   isMultisigLoading: boolean;
   isMaxGasPriceLoading: boolean;
+  isEaProofLoading: boolean;
+  isCurveLoading: boolean;
 };
 
 export type SubmitKeysFormNetworkData = {
   etherBalance?: BigNumber;
   stethBalance?: BigNumber;
   wstethBalance?: BigNumber;
+  eaProof?: Proof;
+  curveId?: BigNumber;
   isMultisig?: boolean;
   gasLimit?: BigNumber;
   gasCost?: BigNumber;

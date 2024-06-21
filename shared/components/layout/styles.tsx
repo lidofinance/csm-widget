@@ -3,10 +3,18 @@ import styled from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const LayoutTitleStyle = styled((props) => <H1 {...props} />)`
+export const Heading = styled.header<{ $titlesCount: number }>`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spaceMap.xs}px;
+
+  margin-bottom: ${({ theme, $titlesCount }) =>
+    $titlesCount < 2 ? theme.spaceMap.xxl : theme.spaceMap.md}px;
+`;
+
+export const LayoutTitleStyle = styled(H1)`
   font-weight: 800;
   font-size: ${({ theme }) => theme.fontSizesMap.xl}px;
-  margin-bottom: 0.2em;
   line-height: 1.2em;
   text-align: center;
 
@@ -15,10 +23,9 @@ export const LayoutTitleStyle = styled((props) => <H1 {...props} />)`
   }
 `;
 
-export const LayoutSubTitleStyle = styled.h4`
+export const LayoutSubTitleStyle = styled.p`
   font-weight: 500;
   color: var(--lido-color-textSecondary);
-  margin-bottom: ${({ theme }) => theme.spaceMap.md}px;
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: 1.5em;
   text-align: center;
@@ -36,4 +43,10 @@ export const IPFSInfoBoxOnlyMobileAndPortableWrapper = styled.div`
     margin-top: -6px;
     margin-bottom: 40px;
   }
+`;
+
+export const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spaceMap.xl}px;
 `;

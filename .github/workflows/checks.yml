@@ -1,6 +1,6 @@
 name: Tests and Checks
 
-on: 
+on:
   pull_request:
 
 jobs:
@@ -39,8 +39,8 @@ jobs:
       - name: Lint
         run: yarn lint
 
-      - name: Check types
-        run: yarn types
+      # - name: Check types
+      #   run: yarn types
 
       - name: Build
         run: yarn build

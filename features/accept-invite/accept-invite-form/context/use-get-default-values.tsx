@@ -8,7 +8,7 @@ export const useGetDefaultValues = () => {
 
   const values: AcceptInviteFormInputType | undefined = useMemo(() => {
     if (isInvitesLoading) return undefined;
-    return { invite: invites[0] };
+    return { invite: invites?.[0] };
   }, [invites, isInvitesLoading]);
 
   const { awaiter } = useAwaiter(values);
