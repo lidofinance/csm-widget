@@ -27,7 +27,7 @@ const findProofAndAmount = (
     tree,
     (leaf) => leaf[0] === nodeOperatorId,
   );
-  if (index && leaf) {
+  if (index !== undefined && leaf) {
     return {
       proof: tree.getProof(index),
       shares: BigNumber.from(leaf[1]),
