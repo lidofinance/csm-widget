@@ -1,10 +1,13 @@
-import { useNodeOperator } from 'providers/node-operator-provider';
 import { ColoredHat, HatAccount, HatBalance, HatRow } from 'shared/hat';
 import { useAccount } from 'shared/hooks';
+import { useAcceptInviteFormData } from './context';
 
 export const AcceptInviteHat = () => {
   const { address } = useAccount();
-  const { invites, isInvitesLoading } = useNodeOperator();
+  const {
+    invites,
+    loading: { isInvitesLoading },
+  } = useAcceptInviteFormData();
 
   return (
     <ColoredHat>

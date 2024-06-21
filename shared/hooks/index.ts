@@ -5,6 +5,8 @@ export * from './use-compare-with-router-path';
 export * from './use-csm-permit-signature';
 export * from './use-current-static-rpc-provider';
 export * from './use-eth-usd';
+export * from './use-invites-events-fetcher';
+export * from './use-invites';
 export * from './use-mainnet-static-rpc-provider';
 export * from './use-prefixed-history';
 export * from './use-router-path';

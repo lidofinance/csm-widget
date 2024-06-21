@@ -1,13 +1,15 @@
-import { useNodeOperator } from 'providers/node-operator-provider';
 import { ChangeEventHandler, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import styled from 'styled-components';
+import { AcceptInviteFormInputType, useAcceptInviteFormData } from '../context';
 import { InviteItem } from './invite-item';
-import { AcceptInviteFormInputType } from '../context';
 
 export const InviteSelector = () => {
   const { setValue, watch } = useFormContext<AcceptInviteFormInputType>();
-  const { invites, isInvitesLoading } = useNodeOperator();
+  const {
+    invites,
+    loading: { isInvitesLoading },
+  } = useAcceptInviteFormData();
   const isLoading = isInvitesLoading;
 
   const selectedInvite = watch('invite');

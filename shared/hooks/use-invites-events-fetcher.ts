@@ -1,6 +1,4 @@
-import { useLidoSWR } from '@lido-sdk/react';
 import { getCSMDeplymentBlockNumber } from 'consts/csm-deployment-block-number';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import {
   NodeOperatorManagerAddressChangeProposedEvent,
   NodeOperatorManagerAddressChangedEvent,
@@ -8,7 +6,7 @@ import {
   NodeOperatorRewardAddressChangedEvent,
 } from 'generated/CSModule';
 import { useCallback } from 'react';
-import { useAccount, useCSModuleRPC } from 'shared/hooks';
+import { useCSModuleRPC } from 'shared/hooks';
 import { NodeOperatorId, NodeOperatorInvite } from 'types';
 import { addressCompare, getSettledValue } from 'utils';
 import { Address } from 'wagmi';
@@ -19,10 +17,11 @@ type AddressChangeProposedEvents =
   | NodeOperatorManagerAddressChangedEvent
   | NodeOperatorRewardAddressChangedEvent;
 
-// @todo: subscribe to upcoming events
-export const useNodeOperatorInvitesFromEvents = (address?: Address) => {
+export const useInvitesEventsFetcher = (
+  address?: Address,
+  chainId?: number,
+) => {
   const contract = useCSModuleRPC();
-  const { chainId } = useAccount();
 
   const restoreEvents = useCallback(
     (events: AddressChangeProposedEvents[]) => {
@@ -82,8 +81,7 @@ export const useNodeOperatorInvitesFromEvents = (address?: Address) => {
       contract.filters.NodeOperatorRewardAddressChanged(null, null, address),
     ];
 
-    // @todo: use SWR?
-
+    // TODO: errors handler
     const blockNumber = getCSMDeplymentBlockNumber(chainId);
     const filterResults = await Promise.allSettled(
       filters.map((filter) => contract.queryFilter(filter, blockNumber)),
@@ -94,5 +92,5 @@ export const useNodeOperatorInvitesFromEvents = (address?: Address) => {
     return restoreEvents(events as any as AddressChangeProposedEvents[]);
   }, [address, chainId, contract, restoreEvents]);
 
-  return useLidoSWR(['invites', address, chainId], fetcher, STRATEGY_LAZY);
+  return fetcher;
 };

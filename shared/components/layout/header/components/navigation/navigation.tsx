@@ -29,7 +29,7 @@ import { useAccount } from 'shared/hooks/use-account';
 import { useRouterPath } from 'shared/hooks/use-router-path';
 import { getIsActivePath } from 'utils/path';
 import { Nav, NavLink } from './styles';
-import { useCsmEarlyAdoption, useCsmStatus } from 'shared/hooks';
+import { useCsmEarlyAdoption, useCsmStatus, useInvites } from 'shared/hooks';
 
 type ShowConditions = 'HAS_INVITES' | 'HAS_LOCKED_BOND' | 'CAN_CREATE';
 
@@ -106,7 +106,9 @@ const routesNodeOperator: Route[] = [
 
 export const Navigation: FC = memo(() => {
   const { active: isConnected } = useAccount();
-  const { active, invites, isListLoading } = useNodeOperator();
+  const { active, isListLoading } = useNodeOperator();
+  const { data: invites } = useInvites();
+
   const {
     data: { proof },
   } = useCsmEarlyAdoption();

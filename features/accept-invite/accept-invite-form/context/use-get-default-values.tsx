@@ -1,11 +1,14 @@
-import { useNodeOperator } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import { useAwaiter } from 'shared/hooks';
-import { AcceptInviteFormInputType } from './types';
+import {
+  AcceptInviteFormInputType,
+  AcceptInviteFormNetworkData,
+} from './types';
 
-export const useGetDefaultValues = () => {
-  const { invites, isInvitesLoading } = useNodeOperator();
-
+export const useGetDefaultValues = ({
+  invites,
+  loading: { isInvitesLoading },
+}: AcceptInviteFormNetworkData) => {
   const values: AcceptInviteFormInputType | undefined = useMemo(() => {
     if (isInvitesLoading) return undefined;
     return { invite: invites?.[0] };

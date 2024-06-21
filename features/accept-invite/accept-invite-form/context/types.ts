@@ -10,11 +10,13 @@ export type AcceptInviteFormInputType = {
 export type AcceptInviteFormLoading = {
   isMultisigLoading: boolean;
   isMaxGasPriceLoading: boolean;
+  isInvitesLoading: boolean;
 };
 
 export type AcceptInviteFormNetworkData = {
   maxGasPrice?: BigNumber;
   isMultisig?: boolean;
+  invites?: NodeOperatorInvite[];
   loading: AcceptInviteFormLoading;
   revalidate: () => Promise<void>;
 };
