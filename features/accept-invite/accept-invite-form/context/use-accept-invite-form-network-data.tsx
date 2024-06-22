@@ -12,12 +12,12 @@ export const useAcceptInviteFormNetworkData =
     const {
       data: invites,
       initialLoading: isInvitesLoading,
-      update,
+      update: updateInvites,
     } = useInvites();
 
     const revalidate = useCallback(async () => {
-      await Promise.allSettled([update]);
-    }, [update]);
+      await Promise.allSettled([updateInvites()]);
+    }, [updateInvites]);
 
     const loading = useMemo(
       () => ({

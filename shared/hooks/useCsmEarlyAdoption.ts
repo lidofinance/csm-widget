@@ -1,13 +1,13 @@
 import { useContractSWR, useLidoSWR } from '@lido-sdk/react';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { getCSMEarlyAdoptionTreeUrl } from 'consts/csm-early-adoption';
-import { STRATEGY_EAGER, STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
+import { STRATEGY_IMMUTABLE, STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useMemo } from 'react';
 import { addressCompare, standardFetcher } from 'utils';
 import { StandardMerkleTreeData, findProofInTree } from 'utils/merkle-tree';
+import { Address } from 'wagmi';
 import { useAccount } from './use-account';
 import { useCSEarlyAdoptionRPC } from './useCsmContracts';
-import { Address } from 'wagmi';
 
 type EATreeLeaf = [Address];
 
@@ -55,7 +55,7 @@ export const useCsmEarlyAdoptionProof = () => {
   return { ...swr, data: proofData };
 };
 
-export const useCsmEarlyAdoptionProofConsumed = (config = STRATEGY_EAGER) => {
+export const useCsmEarlyAdoptionProofConsumed = (config = STRATEGY_LAZY) => {
   const { address } = useAccount();
 
   return useContractSWR({

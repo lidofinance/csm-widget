@@ -6,16 +6,34 @@ import { useNodeOperatorsFromEvents } from './use-node-operators-from-events';
 
 const EMPTY_LIST: NodeOperatorRoles[] = [];
 
+const mergeRoles = (
+  list: NodeOperatorRoles[] | undefined = [],
+  patch: NodeOperatorRoles,
+): NodeOperatorRoles[] => {
+  const copy = list.slice();
+  const index = list.findIndex(({ id }) => id === patch.id);
+  const item = { ...list[index], ...patch };
+
+  if (item.manager || item.rewards) {
+    copy.splice(index >= 0 ? index : list.length, 1, item);
+  } else {
+    copy.splice(index >= 0 ? index : list.length, 1);
+  }
+
+  return copy;
+};
+
 export const useNodeOperatorsList = (address?: Address) => {
   const { data, initialLoading, mutate } = useNodeOperatorsFromEvents(address);
 
   const [cached, setCached] = useCachedNodeOperator(address);
 
   const append = useCallback(
-    (nodeOperator: NodeOperatorRoles) => {
-      void mutate([...(data ?? []), nodeOperator], false);
+    (income: NodeOperatorRoles) => {
+      void mutate((prev) => mergeRoles(prev, income));
+      // void mutate([...(data ?? []), nodeOperator], false);
     },
-    [data, mutate],
+    [mutate],
   );
 
   useEffect(() => {

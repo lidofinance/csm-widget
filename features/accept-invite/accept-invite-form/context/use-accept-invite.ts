@@ -143,11 +143,7 @@ export const useAcceptInvite = ({
 
         txModalStages.success('0x0', role, txHash);
 
-        appendNO({
-          id: invite.id,
-          manager: true,
-          rewards: true,
-        });
+        appendNO(invite);
 
         return true;
       } catch (error) {
