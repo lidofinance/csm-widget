@@ -56,7 +56,7 @@ export default class MyDocument extends Document {
   }
 
   get metaTitle(): string {
-    return 'Community Stacking Module | Lido';
+    return 'Community Staking Module | Lido';
   }
 
   get metaDescription(): string {
