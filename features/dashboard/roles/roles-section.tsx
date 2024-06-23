@@ -22,7 +22,7 @@ export const RolesSection: FC = () => {
             isYou={isYou(info.managerAddress)}
           />
           <RoleBlock
-            title="Reward address"
+            title="Rewards address"
             address={info.rewardAddress}
             proposedAddress={info.proposedRewardAddress}
             isYou={isYou(info.rewardAddress)}

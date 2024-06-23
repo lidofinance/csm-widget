@@ -1,4 +1,4 @@
-import { Block } from '@lidofinance/lido-ui';
+import { Block, ThemeName } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
 export const BannerHeader = styled.h3`
@@ -18,5 +18,6 @@ export const BlockStyled = styled(Block)`
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
 
-  background: linear-gradient(97.63deg, #f3befc 5.91%, #cdefd0 66.16%);
+  background: ${({ theme }) =>
+    theme.name === ThemeName.light ? '#d8e0ea' : '#676772'};
 `;

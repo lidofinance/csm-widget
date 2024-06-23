@@ -27,7 +27,7 @@ export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
   );
 
   return (
-    <Modal title="Switch NodeOperator" onClose={onClose} {...props}>
+    <Modal title="Switch Node Operator" onClose={onClose} {...props}>
       <ListStyle>
         {list.map((item) => (
           <RowStyle key={item.id.toString()}>

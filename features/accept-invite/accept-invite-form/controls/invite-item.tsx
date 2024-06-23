@@ -23,7 +23,7 @@ export const InviteItem = forwardRef<HTMLInputElement, KeysItemProps>(
         <WrapperStyled>
           <DescriptorId id={invite.id} />
           <Chip variant="gray">
-            {invite.manager ? 'Manager' : 'Reward'} role
+            {invite.manager ? 'Manager' : 'Rewards'} role
           </Chip>
         </WrapperStyled>
       </RequestStyled>

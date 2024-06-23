@@ -32,7 +32,7 @@ export const AddBondFormInfo = () => {
           <FormatToken amount={wsteth ?? Zero} symbol="stETH" />
         </DataTableRow>
       ) : (
-        <DataTableRow title="NO Bond balance will receive">
+        <DataTableRow title="Node Operator Bond balance will receive">
           <FormatToken amount={amount ?? Zero} symbol="stETH" trimEllipsis />
         </DataTableRow>
       )}
