@@ -10,60 +10,44 @@ import { useCallback } from 'react';
 import { useAccount, useCSModuleRPC } from 'shared/hooks';
 import { NodeOperatorId, NodeOperatorRoles } from 'types';
 import { addressCompare, getSettledValue } from 'utils';
-import { Address } from 'wagmi';
+import { mergeRoles } from './mergeRoles';
 
 type NodeOperatorRoleEvent =
   | NodeOperatorAddedEvent
   | NodeOperatorRewardAddressChangedEvent
   | NodeOperatorManagerAddressChangedEvent;
 
-// @todo: subscribe to upcoming events
-export const useNodeOperatorsFromEvents = (address?: Address) => {
+export const useNodeOperatorsFromEvents = () => {
   const contract = useCSModuleRPC();
-  const { chainId } = useAccount();
+  const { chainId, address } = useAccount();
 
   const restoreEvents = useCallback(
-    (events: NodeOperatorRoleEvent[]) => {
-      const rolesMap: Map<NodeOperatorId, NodeOperatorRoles> = new Map();
-
-      const updateRoles = (patch: NodeOperatorRoles) => {
-        const oldRoles = rolesMap.get(patch.id);
-        const roles = { ...oldRoles, ...patch };
-        if (roles.manager || roles.rewards) {
-          rolesMap.set(roles.id, roles);
-        } else {
-          rolesMap.delete(roles.id);
-        }
-      };
-
+    (events: NodeOperatorRoleEvent[]) =>
       events
         .sort((a, b) => a.blockNumber - b.blockNumber)
-        .forEach((e) => {
+        .reduce((prev, e) => {
           const id = e.args.nodeOperatorId.toString() as NodeOperatorId;
           switch (e.event) {
             case 'NodeOperatorAdded':
-              return updateRoles({
+              return mergeRoles(prev, {
                 id,
                 manager: addressCompare(e.args[1], address),
                 rewards: addressCompare(e.args[2], address),
               });
             case 'NodeOperatorManagerAddressChanged':
-              return updateRoles({
+              return mergeRoles(prev, {
                 id,
                 manager: addressCompare(e.args[2], address),
               });
             case 'NodeOperatorRewardAddressChanged':
-              return updateRoles({
+              return mergeRoles(prev, {
                 id,
                 rewards: addressCompare(e.args[2], address),
               });
             default:
-              return;
           }
-        });
-
-      return Array.from(rolesMap.values());
-    },
+          return prev;
+        }, [] as NodeOperatorRoles[]),
     [address],
   );
 
@@ -77,7 +61,6 @@ export const useNodeOperatorsFromEvents = (address?: Address) => {
       contract.filters.NodeOperatorRewardAddressChanged(null, null, address),
     ];
 
-    // @todo: use SWR?
     const blockNumber = getCSMDeplymentBlockNumber(chainId);
     const filterResults = await Promise.allSettled(
       filters.map((filter) => contract.queryFilter(filter, blockNumber)),

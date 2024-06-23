@@ -5,7 +5,6 @@ import {
   useContext,
   useMemo,
 } from 'react';
-import { useAccount } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { NodeOperatorId, NodeOperatorRoles } from 'types';
 import { useGetActiveNodeOperator } from './use-get-active-node-operator';
@@ -50,15 +49,8 @@ export const useNodeOperatorRoles = () => {
 };
 
 export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
-  const { address } = useAccount();
-
-  const { list, isListLoading, append, setCached } =
-    useNodeOperatorsList(address);
-
-  const { active, switchActive } = useGetActiveNodeOperator(
-    isListLoading ? undefined : list,
-    setCached,
-  );
+  const { list, isListLoading, append } = useNodeOperatorsList();
+  const { active, switchActive } = useGetActiveNodeOperator(list);
 
   const value = useMemo(
     () => ({

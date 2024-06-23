@@ -1,28 +1,22 @@
-import { useLocalStorage } from '@lido-sdk/react';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { useCallback, useMemo } from 'react';
-import { useAccount, useNodeOperatorInfo } from 'shared/hooks';
-import { NodeOperatorId, NodeOperatorRoles } from 'types';
-import { addressCompare } from 'utils';
-import { Address } from 'wagmi';
+import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
+import { useMemo } from 'react';
+import { useAddressCompare, useNodeOperatorInfo } from 'shared/hooks';
+import { NodeOperatorRoles } from 'types';
+import { useCachedId } from './use-cached-id';
 
-export const useCachedNodeOperator = (address?: Address) => {
-  const { chainId } = useAccount();
+export const useCachedNodeOperator = () => {
+  const [cachedId, setCachedId] = useCachedId();
+  const addressCompare = useAddressCompare();
 
-  const [cachedId, setCachedId] = useLocalStorage<NodeOperatorId | undefined>(
-    `CSM-NO-${chainId}-${address}`,
-    undefined,
-  );
+  const { data } = useNodeOperatorInfo(cachedId, STRATEGY_CONSTANT);
 
-  const { data } = useNodeOperatorInfo(cachedId, STRATEGY_LAZY);
-
-  const cached = useMemo<NodeOperatorRoles | undefined>(() => {
-    if (!cachedId || !data || !address) {
+  return useMemo<NodeOperatorRoles | undefined>(() => {
+    if (!cachedId || !data) {
       return undefined;
     }
 
-    const rewards = addressCompare(address, data.rewardAddress);
-    const manager = addressCompare(address, data.managerAddress);
+    const rewards = addressCompare(data.rewardAddress);
+    const manager = addressCompare(data.managerAddress);
 
     if (!rewards && !manager) {
       setCachedId(undefined);
@@ -34,16 +28,5 @@ export const useCachedNodeOperator = (address?: Address) => {
       rewards,
       manager,
     };
-  }, [address, cachedId, data, setCachedId]);
-
-  const setCached = useCallback(
-    (value?: NodeOperatorRoles) => {
-      if (value) {
-        setCachedId(value?.id);
-      }
-    },
-    [setCachedId],
-  );
-
-  return useMemo(() => [cached, setCached] as const, [cached, setCached]);
+  }, [addressCompare, cachedId, data, setCachedId]);
 };
