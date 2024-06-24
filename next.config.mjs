@@ -8,8 +8,9 @@ buildDynamics();
 const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
-const isIPFSMode = process.env.IPFS_MODE;
-const isDevnet = process.env.DEVNET;
+const isIPFSMode = !!process.env.IPFS_MODE;
+const isDevnet = !!process.env.DEVNET;
+const notReleased = !!process.env.NOT_RELEASED;
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
@@ -40,7 +41,7 @@ export default withBundleAnalyzer({
 
   // IPFS next.js configuration reference:
   // https://github.com/Velenir/nextjs-ipfs-example
-  trailingSlash: !!isIPFSMode,
+  trailingSlash: isIPFSMode,
   assetPrefix: isIPFSMode ? './' : undefined,
 
   // IPFS version has hash-based routing,
@@ -137,6 +138,7 @@ export default withBundleAnalyzer({
     basePath,
     developmentMode,
     isDevnet,
+    notReleased,
 
     defaultChain: process.env.DEFAULT_CHAIN,
     rpcUrls_1: process.env.EL_RPC_URLS_1,

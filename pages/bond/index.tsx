@@ -1,5 +1,7 @@
+import { secretConfig } from 'config';
 import { BOND_CLAIM_PATH, HOME_PATH } from 'consts/urls';
 import { SplashPage } from 'features/welcome';
+import { GetStaticProps } from 'next';
 import { GateActiveUser, GateLoaded } from 'shared/gates';
 import { Navigate } from 'shared/navigate';
 
@@ -12,3 +14,10 @@ const Page = () => (
 );
 
 export default Page;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const { notReleased } = secretConfig;
+  if (notReleased) return { notFound: true };
+
+  return { props: {} };
+};

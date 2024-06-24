@@ -1,6 +1,8 @@
+import { secretConfig } from 'config';
 import { HOME_PATH, KEYS_SUBMIT_PATH } from 'consts/urls';
 import { ViewKeysPage } from 'features/view-keys';
 import { SplashPage } from 'features/welcome';
+import { GetStaticProps } from 'next';
 import { GateActiveUser, GateLoaded, GateNodeOperator } from 'shared/gates';
 import { Navigate } from 'shared/navigate';
 
@@ -15,3 +17,10 @@ const Page = () => (
 );
 
 export default Page;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const { notReleased } = secretConfig;
+  if (notReleased) return { notFound: true };
+
+  return { props: {} };
+};

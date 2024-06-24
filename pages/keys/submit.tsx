@@ -1,6 +1,9 @@
+import { secretConfig } from 'config';
 import { HOME_PATH, KEYS_VIEW_PATH } from 'consts/urls';
 import { AddKeysPage } from 'features/add-keys';
 import { CreateNodeOperatorPage } from 'features/create-node-operator';
+import { SplashPage } from 'features/welcome';
+import { GetStaticProps } from 'next';
 import {
   GateActiveUser,
   GateCanCreate,
@@ -8,7 +11,6 @@ import {
   GateNodeOperator,
   GateRoleManager,
 } from 'shared/gates';
-import { SplashPage } from 'features/welcome';
 import { Navigate } from 'shared/navigate';
 
 const Page = () => (
@@ -30,3 +32,10 @@ const Page = () => (
 );
 
 export default Page;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const { notReleased } = secretConfig;
+  if (notReleased) return { notFound: true };
+
+  return { props: {} };
+};

@@ -1,7 +1,9 @@
+import { secretConfig } from 'config';
 import { HOME_PATH } from 'consts/urls';
 import { AcceptInvitePage } from 'features/accept-invite';
-import { GateActiveUser, GateLoaded } from 'shared/gates';
 import { SplashPage } from 'features/welcome';
+import { GetStaticProps } from 'next';
+import { GateActiveUser, GateLoaded } from 'shared/gates';
 import { Navigate } from 'shared/navigate';
 
 const Page = () => (
@@ -13,3 +15,10 @@ const Page = () => (
 );
 
 export default Page;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const { notReleased } = secretConfig;
+  if (notReleased) return { notFound: true };
+
+  return { props: {} };
+};

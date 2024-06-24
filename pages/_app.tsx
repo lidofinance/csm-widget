@@ -33,11 +33,13 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
-const AppWrapper = (props: AppProps): JSX.Element => {
+const AppWrapper = (
+  props: AppProps<{ notReleased?: boolean }>,
+): JSX.Element => {
   const { ...rest } = props;
 
   return (
-    <Providers>
+    <Providers dummy={props.pageProps.notReleased}>
       {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
       <Head>
         <meta
