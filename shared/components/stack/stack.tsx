@@ -9,8 +9,8 @@ type Props = {
 
 export const Stack: FC<PropsWithChildren<Props>> = ({
   children,
-  gap,
-  direction,
+  gap = 'md',
+  direction = 'row',
 }) => (
   <StackStyle $gap={gap} $direction={direction}>
     {children}

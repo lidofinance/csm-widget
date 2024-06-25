@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
-import { useWeb3 } from 'reef-knot/web3-react';
 import { useFormContext } from 'react-hook-form';
+import { useAccount } from 'shared/hooks';
 import { useFormControllerContext } from './form-controller-context';
 
 type FormControllerProps = React.ComponentProps<'form'>;
@@ -9,7 +9,7 @@ export const FormController: FC<PropsWithChildren<FormControllerProps>> = ({
   children,
   ...props
 }) => {
-  const { active } = useWeb3();
+  const { active } = useAccount();
   const { handleSubmit, reset: resetDefault } = useFormContext();
   const {
     onSubmit,
