@@ -1,14 +1,9 @@
 import { FC, PropsWithChildren } from 'react';
 
-import {
-  BlockStyled,
-  Heading,
-  Number,
-  StepContent,
-  StepWrapper,
-  Steps,
-} from './styles';
 import { Link } from '@lidofinance/lido-ui';
+import { Partners } from './partners';
+import { Step } from './step';
+import { BlockStyled, Heading, Steps } from './styles';
 
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
   return (
@@ -35,30 +30,18 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
         </Step>
         <Step number="3" title="Set up validation tools">
           Do it manually or use Plug&Play solutions
+          <Partners />
         </Step>
         <Step number="4" title="Generate keys">
           Prepare deposit data (.json file) for submitting keys
           <br />
-          Follow <Link>the generation guide</Link>
+          Follow{' '}
+          <Link href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm-wip/generating-csm-keystores">
+            the generation guide
+          </Link>
         </Step>
       </Steps>
       {children}
     </BlockStyled>
-  );
-};
-
-export const Step: FC<PropsWithChildren<{ number: string; title: string }>> = ({
-  number,
-  title,
-  children,
-}) => {
-  return (
-    <StepWrapper>
-      <Number>{number}</Number>
-      <StepContent>
-        <h3>{title}</h3>
-        <p>{children}</p>
-      </StepContent>
-    </StepWrapper>
   );
 };

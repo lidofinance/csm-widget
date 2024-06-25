@@ -1,5 +1,11 @@
 import { Block, ThemeName } from '@lidofinance/lido-ui';
+import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
+
+import DappnodeImg from 'assets/partners/dappnode.png';
+import EthdockerImg from 'assets/partners/ethdocker.png';
+import SedgeImg from 'assets/partners/sedge.png';
+import StereumImg from 'assets/partners/stereum.png';
 
 export const Header = styled.h1`
   font-size: 48px; // @style
@@ -70,7 +76,7 @@ export const StepWrapper = styled.div`
 
   border-radius: 10px;
   background: ${({ theme }) =>
-    theme.name === ThemeName.light ? '#eff2f6' : '#6d6d6d'};
+    theme.name === ThemeName.light ? '#eff2f6' : '#3e3d46'};
 `;
 
 export const Number = styled.div`
@@ -83,9 +89,9 @@ export const Number = styled.div`
   align-items: center;
 
   border-radius: 99px;
-  background: #fff;
+  background: var(--lido-color-foreground);
 
-  color: #7a8aa0;
+  color: var(--lido-color-textSecondary);
   font-size: 18px;
   font-weight: 700;
   line-height: 24px;
@@ -112,3 +118,36 @@ export const StepContent = styled.div`
     line-height: 20px;
   }
 `;
+
+export const PartnersStyle = styled(StackStyle).attrs(() => ({
+  $gap: 'sm',
+  as: 'span',
+}))`
+  padding-top: ${({ theme }) => theme.spaceMap.sm}px;
+`;
+
+const Img = styled.img`
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+`;
+
+export const Dappnode = styled(Img).attrs({
+  alt: '',
+  src: DappnodeImg.src,
+})``;
+
+export const Sedge = styled(Img).attrs({
+  alt: '',
+  src: SedgeImg.src,
+})``;
+
+export const Stereum = styled(Img).attrs({
+  alt: '',
+  src: StereumImg.src,
+})``;
+
+export const Ethdocker = styled(Img).attrs({
+  alt: '',
+  src: EthdockerImg.src,
+})``;
