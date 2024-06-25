@@ -12,3 +12,6 @@ export { Switch } from './switch/switch';
 export { Banner } from './banner/banner';
 export { Stack } from './stack/stack';
 export { LinkButton } from './link-button/link-button';
+export { FormTitle } from './form-title/form-title';
+export { RadioButton } from './radio-button/radio-button';
+export { TokenAmount } from './token-amount/token-amount';

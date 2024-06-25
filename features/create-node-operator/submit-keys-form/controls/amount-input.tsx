@@ -1,12 +1,21 @@
-import { InputGroupHookForm } from 'shared/hook-form/controls/input-group-hook-form';
-import { TokenSelectHookForm } from 'shared/hook-form/controls/token-select-hook-form';
-import { TokenAmountInput } from './token-amount-input';
+import { useWatch } from 'react-hook-form';
 
-export const AmountInput: React.FC = () => {
+import { InputAmount } from 'shared/components/input-amount';
+import { getTokenDisplayName } from 'utils/getTokenDisplayName';
+import { SubmitKeysFormInputType } from '../context/types';
+
+export const AmountInput = () => {
+  const [token, bondAmount] = useWatch<
+    SubmitKeysFormInputType,
+    ['token', 'bondAmount']
+  >({ name: ['token', 'bondAmount'] });
+
   return (
-    <InputGroupHookForm errorField="amount">
-      <TokenSelectHookForm />
-      <TokenAmountInput />
-    </InputGroupHookForm>
+    <InputAmount
+      isLocked={true}
+      value={bondAmount}
+      label={`${getTokenDisplayName(token)} amount`}
+      fullwidth
+    />
   );
 };
