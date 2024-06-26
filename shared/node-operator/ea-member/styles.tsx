@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ButtonStyle = styled.div`
-  flex-shrink: 1;
+  flex-shrink: 0;
 
   display: flex;
   padding: 7px 16px;

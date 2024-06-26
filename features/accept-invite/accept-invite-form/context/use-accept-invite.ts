@@ -93,7 +93,7 @@ const useAcceptInviteMethods = () => {
       switch (role) {
         case ROLES.MANAGER:
           return methodManager;
-        case ROLES.REWARD:
+        case ROLES.REWARDS:
           return methodReward;
       }
     },
@@ -115,7 +115,7 @@ export const useAcceptInvite = ({
       invariant(invite, 'Invite is not defined');
 
       try {
-        const role = invite.manager ? ROLES.MANAGER : ROLES.REWARD;
+        const role = invite.manager ? ROLES.MANAGER : ROLES.REWARDS;
         const method = getMethod(role);
 
         txModalStages.sign('0x0', role);

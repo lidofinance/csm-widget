@@ -1,22 +1,14 @@
 import { FC } from 'react';
 
 import { BackgroundColorsType, BadgeStyle } from './styles';
+import { ShortRole } from 'consts/roles';
 
 export type RoleBadgeProps = {
-  roleName: 'manager' | 'rewards';
+  role: ShortRole;
   background?: BackgroundColorsType;
 };
 
-const TEXT = {
-  manager: 'M',
-  rewards: 'R',
-} as const;
-
 export const RoleBadge: FC<RoleBadgeProps> = ({
-  roleName,
+  role,
   background = 'normal',
-}) => {
-  const text = TEXT[roleName];
-
-  return <BadgeStyle $background={background}>{text}</BadgeStyle>;
-};
+}) => <BadgeStyle $background={background}>{role}</BadgeStyle>;

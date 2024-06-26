@@ -9,7 +9,7 @@ export const ChangeRewardRole = () => {
   return (
     <>
       <NoSSRWrapper>
-        <ChangeRoleForm key={key} role={ROLES.REWARD} />
+        <ChangeRoleForm key={key} role={ROLES.REWARDS} />
       </NoSSRWrapper>
     </>
   );

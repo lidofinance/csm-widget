@@ -2,7 +2,6 @@ import { TOKENS } from 'consts/tokens';
 import { FC, ReactNode } from 'react';
 import { useController } from 'react-hook-form';
 import { RadioButton, Stack } from 'shared/components';
-import styled from 'styled-components';
 
 type Props = {
   fieldName?: string;
@@ -34,9 +33,3 @@ export const TokenButtonsHookForm: FC<Props> = ({
     </Stack>
   );
 };
-
-export const RadioGroupStyle = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
-`;

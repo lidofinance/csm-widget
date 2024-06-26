@@ -13,3 +13,9 @@ export const FormControllerStyled = styled(FormController)`
   flex-direction: column;
   row-gap: ${({ theme }) => theme.spaceMap.md}px;
 `;
+
+export const WrapperStyle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

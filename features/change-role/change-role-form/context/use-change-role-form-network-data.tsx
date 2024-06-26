@@ -36,9 +36,9 @@ export const useChangeRoleFormNetworkData = ({
 
   return {
     currentAddress:
-      role === ROLES.REWARD ? info?.rewardAddress : info?.managerAddress,
+      role === ROLES.REWARDS ? info?.rewardAddress : info?.managerAddress,
     proposedAddress:
-      role === ROLES.REWARD
+      role === ROLES.REWARDS
         ? info?.proposedRewardAddress
         : info?.proposedManagerAddress,
     nodeOperatorId,

@@ -58,7 +58,11 @@ export const useInvitesEventsFetcher = (
         }
       });
 
-      return Array.from(invitesMap.values());
+      return Array.from(invitesMap.values()).sort(
+        (a, b) =>
+          parseInt(a.id, 10) - parseInt(b.id, 10) ||
+          -Number(b.rewards ?? false) - Number(a.rewards ?? false),
+      );
     },
     [address],
   );

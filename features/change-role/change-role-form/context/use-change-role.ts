@@ -95,7 +95,7 @@ const useChangeRoleMethods = () => {
       switch (role) {
         case ROLES.MANAGER:
           return methodManager;
-        case ROLES.REWARD:
+        case ROLES.REWARDS:
           return methodReward;
       }
     },
