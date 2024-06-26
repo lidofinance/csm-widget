@@ -47,10 +47,10 @@ export const useAddKeysFormNetworkData = (): AddKeysFormNetworkData => {
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
-      updateStethBalance,
-      updateWstethBalance,
-      updateEtherBalance,
-      updateBondBalance,
+      updateStethBalance(),
+      updateWstethBalance(),
+      updateEtherBalance(),
+      updateBondBalance(),
     ]);
   }, [
     updateStethBalance,

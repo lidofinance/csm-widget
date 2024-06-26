@@ -26,7 +26,7 @@ export const useClaimRewardsFormNetworkData =
       useMaxGasPrice();
 
     const revalidate = useCallback(async () => {
-      await Promise.allSettled([updateBondBalance, updateRewards]);
+      await Promise.allSettled([updateBondBalance(), updateRewards()]);
     }, [updateBondBalance, updateRewards]);
 
     const loading = useMemo(

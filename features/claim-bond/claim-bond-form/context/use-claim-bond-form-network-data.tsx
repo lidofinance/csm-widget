@@ -18,7 +18,7 @@ export const useClaimBondFormNetworkData = (): ClaimBondFormNetworkData => {
     useMaxGasPrice();
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateBondBalance]);
+    await Promise.allSettled([updateBondBalance()]);
   }, [updateBondBalance]);
 
   const loading = useMemo(
