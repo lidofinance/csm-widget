@@ -11,6 +11,7 @@ import {
 } from 'utils';
 import { useAccount } from './use-account';
 import { useCSFeeDistributorRPC } from './useCsmContracts';
+import { Zero } from '@ethersproject/constants';
 
 type RewardsTreeLeaf = [NodeOperatorId, string];
 
@@ -70,7 +71,11 @@ export const useFeeDistributorRewards = (
 };
 
 export const useNodeOperatorRewards = (nodeOperatorId?: NodeOperatorId) => {
-  const { data: tree, loading: isTreeLoading } = useFeeDistributorTree();
+  const {
+    data: tree,
+    loading: isTreeLoading,
+    initialLoading,
+  } = useFeeDistributorTree();
 
   const proofData = useMemo(() => {
     return tree && nodeOperatorId
@@ -86,7 +91,8 @@ export const useNodeOperatorRewards = (nodeOperatorId?: NodeOperatorId) => {
 
   return {
     ...swr,
-    data: { ...proofData, available },
+    data: { ...proofData, available: available ?? Zero },
+    initialLoading: initialLoading || swr.initialLoading,
     loading: isTreeLoading || isRewardsLoading,
   };
 };

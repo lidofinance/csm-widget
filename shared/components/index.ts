@@ -17,3 +17,4 @@ export { FormTitle } from './form-title/form-title';
 export { RadioButton, RadioIcon } from './radio-button/radio-button';
 export { TokenAmount } from './token-amount/token-amount';
 export { InviteContent } from './invite-content/invite-content';
+export { Sign } from './sign/sign';

@@ -23,11 +23,3 @@ export const RowHeader = styled(StackStyle)`
 `;
 
 export const RowBody = styled(StackStyle).attrs({ $gap: 'xl' })``;
-
-export const SignStyle = styled.div`
-  width: 22px;
-  align-content: center;
-  text-align: center;
-
-  color: var(--lido-color-textSecondary);
-`;

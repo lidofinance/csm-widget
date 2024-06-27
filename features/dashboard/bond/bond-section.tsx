@@ -1,59 +1,116 @@
+import { TOKENS } from 'consts/tokens';
 import { BOND_PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
-import { SectionBlock, Stack } from 'shared/components';
-import { useNodeOperatorBalance } from 'shared/hooks';
-import { Row, RowBody, RowHeader, RowTitle, SignStyle } from './styles';
-import { TOKENS } from 'consts/tokens';
-import { FormatToken } from 'shared/formatters';
+import { SectionBlock, Sign, Stack } from 'shared/components';
+import {
+  useNodeOperatorBalance,
+  useNodeOperatorLockAmount,
+  useNodeOperatorRewards,
+} from 'shared/hooks';
 import { Balance } from './balance';
-import { Text } from '@lidofinance/lido-ui';
+import { Row, RowBody, RowHeader, RowTitle } from './styles';
+import { useAvailableToClaim } from 'shared/hooks/useAvailableToClaim';
 
 export const BondSection: FC = () => {
   const id = useNodeOperatorId();
 
-  const { data: balance } = useNodeOperatorBalance(id);
+  const { data: balance, initialLoading: isLoading } =
+    useNodeOperatorBalance(id);
+
+  const {
+    data: { available: rewards },
+    initialLoading: isRewardsLoading,
+  } = useNodeOperatorRewards(id);
+
+  const { data: locked, initialLoading: isLockedLoading } =
+    useNodeOperatorLockAmount(id);
+
+  const availableToClaim = useAvailableToClaim({ balance, rewards, locked });
 
   return (
     <SectionBlock title="Bond & Rewards" href={BOND_PATH}>
       {balance && (
-        <Stack direction="column" gap="sm">
+        <Stack direction="column" gap="md">
+          <Row>
+            <RowHeader>
+              <RowTitle>Available to claim</RowTitle>
+              <Balance
+                big
+                loading={isLoading || isRewardsLoading}
+                amount={availableToClaim}
+              />
+            </RowHeader>
+            <RowBody>
+              <Balance
+                title="Rewards"
+                loading={isRewardsLoading}
+                amount={rewards}
+              />
+              {balance.isShortage ? (
+                <>
+                  <Sign minus />
+                  <Balance
+                    title="Shortage bond"
+                    loading={isLoading}
+                    amount={balance.shortage}
+                  />
+                </>
+              ) : (
+                <>
+                  <Sign />
+                  <Balance
+                    title="Excess bond"
+                    loading={isLoading}
+                    amount={balance.excess}
+                  />
+                </>
+              )}
+              <Sign minus />
+              <Balance
+                title="Locked bond"
+                loading={isLockedLoading}
+                amount={locked}
+                token={TOKENS.ETH}
+              />
+            </RowBody>
+          </Row>
           <Row>
             <RowHeader>
               <RowTitle>Bond balance</RowTitle>
-              <Balance big>
-                <FormatToken amount={balance.current} symbol={TOKENS.STETH} />
-                <Text size={'xxs'} color={'secondary'}>
-                  <FormatToken
-                    amount={balance.required}
-                    symbol={TOKENS.STETH}
-                    approx={true}
-                  />
-                </Text>
-              </Balance>
+              <Balance
+                big
+                loading={isLoading}
+                amount={balance.current}
+                token={TOKENS.STETH}
+              />
             </RowHeader>
             <RowBody>
-              <Balance title="Required bond">
-                <FormatToken amount={balance.current} symbol={TOKENS.STETH} />
-                <Text size={'xxs'} color={'secondary'}>
-                  <FormatToken
-                    amount={balance.required}
-                    symbol={TOKENS.STETH}
-                    approx={true}
+              <Balance
+                title="Required bond"
+                loading={isLoading}
+                amount={balance.required}
+              />
+
+              {balance.isShortage ? (
+                <>
+                  <Sign minus />
+                  <Balance
+                    title="Shortage bond"
+                    loading={isLoading}
+                    amount={balance.shortage}
                   />
-                </Text>
-              </Balance>
-              <Sign />
-              <Balance title="Excess bond">
-                <FormatToken amount={balance.current} symbol={TOKENS.STETH} />
-                <Text size={'xxs'} color={'secondary'}>
-                  <FormatToken
-                    amount={balance.required}
-                    symbol={TOKENS.STETH}
-                    approx={true}
+                </>
+              ) : (
+                <>
+                  <Sign />
+                  <Balance
+                    title="Excess bond"
+                    loading={isLoading}
+                    amount={balance.excess}
                   />
-                </Text>
-              </Balance>
+                </>
+              )}
             </RowBody>
           </Row>
         </Stack>
@@ -61,10 +118,3 @@ export const BondSection: FC = () => {
     </SectionBlock>
   );
 };
-
-import { ReactComponent as PlusIcon } from 'assets/icons/plus.svg';
-import { ReactComponent as MinusIcon } from 'assets/icons/minus.svg';
-
-export const Sign: FC<{ minus?: boolean }> = ({ minus }) => (
-  <SignStyle>{minus ? <MinusIcon /> : <PlusIcon />}</SignStyle>
-);

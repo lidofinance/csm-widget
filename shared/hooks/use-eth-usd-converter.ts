@@ -1,21 +1,21 @@
-import { BigNumber } from 'ethers';
-import { useMemo } from 'react';
-
 import { useEthPrice } from '@lido-sdk/react';
-import { weiToEth } from 'utils/weiToEth';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
+import { BigNumber } from 'ethers';
+import { useCallback } from 'react';
+import { weiToEth } from 'utils/weiToEth';
 
-export const useEthUsd = (amount?: BigNumber) => {
+export const useEthUsdConverter = () => {
   const { data: price, ...swr } = useEthPrice(STRATEGY_LAZY);
-  const usdAmount = useMemo(() => {
-    if (price && amount) {
-      const txCostInEth = weiToEth(amount);
-      return txCostInEth * price;
-    }
-    return undefined;
-  }, [amount, price]);
+
+  const ethToUsd = useCallback(
+    (amount?: BigNumber) => {
+      return price && amount ? weiToEth(amount) * price : undefined;
+    },
+    [price],
+  );
+
   return {
-    usdAmount,
+    ethToUsd,
     price,
     get initialLoading() {
       return swr.initialLoading;
