@@ -1,15 +1,9 @@
 import React from 'react';
 import { Component } from 'types';
-import {
-  SectionStyle,
-  SectionHeaderStyle,
-  SectionTitleStyle,
-  SectionHeaderLinkStyle,
-  SectionContentStyle,
-} from './styles';
+import { SectionStyle, SectionContentStyle } from './styles';
 import { Block } from '@lidofinance/lido-ui';
 
-import { ReactComponent as RoundedArrowIcon } from 'assets/icons/rounded-arrow.svg';
+import { SectionTitle } from '../section-title/section-title';
 
 type SectionComponent = Component<
   'section',
@@ -24,22 +18,11 @@ export const SectionBlock: SectionComponent = ({
   href,
   children,
   ...rest
-}) => {
-  const hasDecorator = !!href;
-
-  return (
-    <Block>
-      <SectionStyle {...rest}>
-        <SectionHeaderStyle>
-          <SectionTitleStyle>{title}</SectionTitleStyle>
-          {hasDecorator && (
-            <SectionHeaderLinkStyle href={href}>
-              <RoundedArrowIcon />
-            </SectionHeaderLinkStyle>
-          )}
-        </SectionHeaderStyle>
-        <SectionContentStyle>{children}</SectionContentStyle>
-      </SectionStyle>
-    </Block>
-  );
-};
+}) => (
+  <Block>
+    <SectionStyle {...rest}>
+      <SectionTitle href={href}>{title}</SectionTitle>
+      <SectionContentStyle>{children}</SectionContentStyle>
+    </SectionStyle>
+  </Block>
+);

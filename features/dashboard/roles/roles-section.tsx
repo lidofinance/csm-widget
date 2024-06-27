@@ -1,10 +1,9 @@
 import { ROLES_PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
-import { SectionBlock } from 'shared/components';
+import { SectionBlock, Stack } from 'shared/components';
 import { useAddressCompare, useNodeOperatorInfo } from 'shared/hooks';
 import { RoleBlock } from './role-block';
-import { Wrapper } from './styles';
 
 export const RolesSection: FC = () => {
   const isYou = useAddressCompare();
@@ -14,7 +13,7 @@ export const RolesSection: FC = () => {
   return (
     <SectionBlock title="Roles" href={ROLES_PATH}>
       {info && (
-        <Wrapper>
+        <Stack gap="md">
           <RoleBlock
             title="Manager address"
             address={info.managerAddress}
@@ -27,7 +26,7 @@ export const RolesSection: FC = () => {
             proposedAddress={info.proposedRewardAddress}
             isYou={isYou(info.rewardAddress)}
           />
-        </Wrapper>
+        </Stack>
       )}
     </SectionBlock>
   );

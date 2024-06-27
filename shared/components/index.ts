@@ -3,6 +3,7 @@ export { Faq } from './faq/faq';
 export { BackgroundGradient } from './background-gradient/background-gradient';
 export { Section } from './section/section';
 export { SectionBlock } from './section-block/section-block';
+export { SectionTitle } from './section-title/section-title';
 export { TokenToWallet } from './token-to-wallet/token-to-wallet';
 export { LogoLDO, LogoLDOPL } from './logos/logos';
 export { TooltipHoverable } from './tooltip-hoverable/tooltip-hoverable';

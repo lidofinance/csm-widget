@@ -15,7 +15,7 @@ export const Heading = styled.header<{ $titlesCount: number }>`
 export const LayoutTitleStyle = styled(H1)`
   font-weight: 800;
   font-size: ${({ theme }) => theme.fontSizesMap.xl}px;
-  line-height: 1.2em;
+  line-height: 1.46em;
   text-align: center;
 
   &:empty {
@@ -27,7 +27,7 @@ export const LayoutSubTitleStyle = styled.p`
   font-weight: 500;
   color: var(--lido-color-textSecondary);
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-  line-height: 1.5em;
+  line-height: 1.66em;
   text-align: center;
 
   &:empty {

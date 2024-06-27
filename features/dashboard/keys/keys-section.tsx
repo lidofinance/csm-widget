@@ -1,11 +1,11 @@
 import { KEYS_PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
-import { SectionBlock } from 'shared/components';
+import { SectionBlock, Stack } from 'shared/components';
 import { useNodeOperatorInfo } from 'shared/hooks';
 import { useNodeOperatorUnbondedKeys } from 'shared/hooks/useNodeOperatorUnbondedKeys';
 import { Item } from './item';
-import { Row, Wrapper } from './styles';
+import { Row } from './styles';
 
 export const KeysSection: FC = () => {
   const id = useNodeOperatorId();
@@ -15,7 +15,7 @@ export const KeysSection: FC = () => {
   return (
     <SectionBlock title="Keys" href={KEYS_PATH}>
       {info && (
-        <Wrapper>
+        <Stack direction="column" gap="sm">
           <Row>
             <Item title="Depositable" count={info.depositableValidatorsCount} />
             <Item
@@ -37,7 +37,7 @@ export const KeysSection: FC = () => {
               count={info.totalAddedKeys - info.totalVettedKeys}
             />
           </Row>
-        </Wrapper>
+        </Stack>
       )}
     </SectionBlock>
   );
