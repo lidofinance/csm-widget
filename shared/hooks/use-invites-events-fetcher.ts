@@ -6,10 +6,9 @@ import {
   NodeOperatorRewardAddressChangedEvent,
 } from 'generated/CSModule';
 import { useCallback } from 'react';
-import { useCSModuleRPC } from 'shared/hooks';
+import { useAccount, useAddressCompare, useCSModuleRPC } from 'shared/hooks';
 import { NodeOperatorId, NodeOperatorInvite } from 'types';
-import { addressCompare, getSettledValue } from 'utils';
-import { Address } from 'wagmi';
+import { getSettledValue } from 'utils';
 
 type AddressChangeProposedEvents =
   | NodeOperatorManagerAddressChangeProposedEvent
@@ -17,11 +16,10 @@ type AddressChangeProposedEvents =
   | NodeOperatorManagerAddressChangedEvent
   | NodeOperatorRewardAddressChangedEvent;
 
-export const useInvitesEventsFetcher = (
-  address?: Address,
-  chainId?: number,
-) => {
+export const useInvitesEventsFetcher = () => {
+  const { address, chainId } = useAccount();
   const contract = useCSModuleRPC();
+  const isUserAddress = useAddressCompare();
 
   const restoreEvents = useCallback(
     (events: AddressChangeProposedEvents[]) => {
@@ -42,11 +40,11 @@ export const useInvitesEventsFetcher = (
         const id = e.args.nodeOperatorId.toString() as NodeOperatorId;
         switch (e.event) {
           case 'NodeOperatorManagerAddressChangeProposed':
-            return addressCompare(e.args[2], address)
+            return isUserAddress(e.args[2])
               ? updateRoles({ id, manager: true })
               : updateRoles({ id, manager: true }, false);
           case 'NodeOperatorRewardAddressChangeProposed':
-            return addressCompare(e.args[2], address)
+            return isUserAddress(e.args[2])
               ? updateRoles({ id, rewards: true })
               : updateRoles({ id, rewards: true }, false);
           case 'NodeOperatorManagerAddressChanged':
@@ -64,7 +62,7 @@ export const useInvitesEventsFetcher = (
           -Number(b.rewards ?? false) - Number(a.rewards ?? false),
       );
     },
-    [address],
+    [isUserAddress],
   );
 
   const fetcher = useCallback(async () => {

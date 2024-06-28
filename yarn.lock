@@ -2301,6 +2301,14 @@
     tiny-invariant "^1.1.0"
     tiny-warning "^1.0.3"
 
+"@lidofinance/address@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/address/-/address-1.4.0.tgz#c5f5845b55d2f1eaff0fe2e9b67201e816342d1d"
+  integrity sha512-RZYNMQNxbXEsBQHZvq88GpgoEwlL+1qi/fJecxe4zLZCcVjhTXV7wLa9lHsCL8kLy8j/YcWkcBoaf1a/ef/jSA==
+  dependencies:
+    "@lidofinance/theme" "2.7.0"
+    "@lidofinance/utils" "1.3.2"
+
 "@lidofinance/analytics-matomo@^0.41.0":
   version "0.41.0"
   resolved "https://registry.yarnpkg.com/@lidofinance/analytics-matomo/-/analytics-matomo-0.41.0.tgz#2cc20edba20ce21e0d745e2b44a54cd7acfd424e"
@@ -2389,6 +2397,16 @@
   version "0.41.0"
   resolved "https://registry.yarnpkg.com/@lidofinance/satanizer/-/satanizer-0.41.0.tgz#005793a7d98c9a6cee97adcb4d6ff782ff5e8820"
   integrity sha512-AK43IDg/HZBgnsk88RIPGE0WzJ81KtBYKvsWPjEAs2etTGpY4j3swUmJl218LBT3LqzLM5BZ0UrdFQpSW/GlYw==
+
+"@lidofinance/theme@2.7.0":
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/theme/-/theme-2.7.0.tgz#b8af6238d305b63ba9c90b384475672f01c760a5"
+  integrity sha512-7imZkUjVQZnrQSiGysDpLu3M8YOu9yBInyoHDopMPpm7LTKcwMZvohy3LOASW/8hKaOjNcfataV28xlGy2w7bQ==
+
+"@lidofinance/utils@1.3.2":
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/@lidofinance/utils/-/utils-1.3.2.tgz#63ba5be298bc415c20edcd9d930319e496199068"
+  integrity sha512-sP1ZhAoWz9OpU1S5jzDzl0bnwKXZDBT1RLFFKDBW/+YkoxYAlFReyuA/w5R+I0iYjlBkdzkZZReNM/XzIO4YXg==
 
 "@lit-labs/ssr-dom-shim@^1.0.0", "@lit-labs/ssr-dom-shim@^1.1.0":
   version "1.1.2"

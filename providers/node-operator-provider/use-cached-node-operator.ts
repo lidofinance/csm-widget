@@ -6,7 +6,7 @@ import { useCachedId } from './use-cached-id';
 
 export const useCachedNodeOperator = () => {
   const [cachedId, setCachedId] = useCachedId();
-  const addressCompare = useAddressCompare();
+  const isUserAddress = useAddressCompare();
 
   const { data } = useNodeOperatorInfo(cachedId, STRATEGY_CONSTANT);
 
@@ -15,8 +15,8 @@ export const useCachedNodeOperator = () => {
       return undefined;
     }
 
-    const rewards = addressCompare(data.rewardAddress);
-    const manager = addressCompare(data.managerAddress);
+    const rewards = isUserAddress(data.rewardAddress);
+    const manager = isUserAddress(data.managerAddress);
 
     if (!rewards && !manager) {
       setCachedId(undefined);
@@ -28,5 +28,5 @@ export const useCachedNodeOperator = () => {
       rewards,
       manager,
     };
-  }, [addressCompare, cachedId, data, setCachedId]);
+  }, [isUserAddress, cachedId, data, setCachedId]);
 };

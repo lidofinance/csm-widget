@@ -3,10 +3,11 @@ import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { getCSMEarlyAdoptionTreeUrl } from 'consts/csm-early-adoption';
 import { STRATEGY_CONSTANT, STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { useMemo } from 'react';
-import { addressCompare, standardFetcher } from 'utils';
+import { standardFetcher } from 'utils';
 import { StandardMerkleTreeData, findProofInTree } from 'utils/merkle-tree';
 import { Address } from 'wagmi';
 import { useAccount } from './use-account';
+import { useAddressCompare } from './use-address-compare';
 import { useCSEarlyAdoptionRPC } from './useCsmContracts';
 
 type EATreeLeaf = [Address];
@@ -41,16 +42,16 @@ export const useCsmEarlyAdoptionTree = (config = STRATEGY_IMMUTABLE) => {
 };
 
 export const useCsmEarlyAdoptionProof = () => {
-  const { address } = useAccount();
+  const isUserAddress = useAddressCompare();
   const { data: tree, ...swr } = useCsmEarlyAdoptionTree();
 
   // TODO: async search
   const proofData = useMemo(() => {
     // TODO: check speed if get proof by leaf `[address.toLowerCase()]`
-    return tree && address
-      ? findProofInTree(tree, (leaf) => addressCompare(leaf[0], address))
+    return tree
+      ? findProofInTree(tree, (leaf) => isUserAddress(leaf[0]))
       : undefined;
-  }, [address, tree]);
+  }, [isUserAddress, tree]);
 
   return { ...swr, data: proofData };
 };

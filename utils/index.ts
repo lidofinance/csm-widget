@@ -1,4 +1,4 @@
-export * from './address-compare';
+export * from './compare-lowercase';
 export * from './appCookies';
 export * from './applyGasLimitRatio';
 export * from './await-with-timeout';

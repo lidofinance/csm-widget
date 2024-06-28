@@ -6,7 +6,7 @@ import { useAddressCompare, useNodeOperatorInfo } from 'shared/hooks';
 import { RoleBlock } from './role-block';
 
 export const RolesSection: FC = () => {
-  const isYou = useAddressCompare();
+  const isUserAddress = useAddressCompare();
   const id = useNodeOperatorId();
   const { data: info } = useNodeOperatorInfo(id);
 
@@ -18,13 +18,13 @@ export const RolesSection: FC = () => {
             title="Manager address"
             address={info.managerAddress}
             proposedAddress={info.proposedManagerAddress}
-            isYou={isYou(info.managerAddress)}
+            isYou={isUserAddress(info.managerAddress)}
           />
           <RoleBlock
             title="Rewards address"
             address={info.rewardAddress}
             proposedAddress={info.proposedRewardAddress}
-            isYou={isYou(info.rewardAddress)}
+            isYou={isUserAddress(info.rewardAddress)}
           />
         </Stack>
       )}

@@ -5,7 +5,7 @@ import { useInvitesEventsFetcher } from './use-invites-events-fetcher';
 
 export const useInvites = (config = STRATEGY_LAZY) => {
   const { chainId, address } = useAccount();
-  const fetcher = useInvitesEventsFetcher(address, chainId);
+  const fetcher = useInvitesEventsFetcher();
 
   return useLidoSWR(['invites', address, chainId], fetcher, config);
 };

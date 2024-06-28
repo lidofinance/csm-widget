@@ -7,9 +7,9 @@ import {
   NodeOperatorRewardAddressChangedEvent,
 } from 'generated/CSModule';
 import { useCallback } from 'react';
-import { useAccount, useCSModuleRPC } from 'shared/hooks';
+import { useAccount, useAddressCompare, useCSModuleRPC } from 'shared/hooks';
 import { NodeOperatorId, NodeOperatorRoles } from 'types';
-import { addressCompare, getSettledValue } from 'utils';
+import { getSettledValue } from 'utils';
 import { mergeRoles } from './mergeRoles';
 
 type NodeOperatorRoleEvent =
@@ -19,6 +19,7 @@ type NodeOperatorRoleEvent =
 
 export const useNodeOperatorsFromEvents = () => {
   const contract = useCSModuleRPC();
+  const isUserAddress = useAddressCompare();
   const { chainId, address } = useAccount();
 
   const restoreEvents = useCallback(
@@ -31,24 +32,24 @@ export const useNodeOperatorsFromEvents = () => {
             case 'NodeOperatorAdded':
               return mergeRoles(prev, {
                 id,
-                manager: addressCompare(e.args[1], address),
-                rewards: addressCompare(e.args[2], address),
+                manager: isUserAddress(e.args[1]),
+                rewards: isUserAddress(e.args[2]),
               });
             case 'NodeOperatorManagerAddressChanged':
               return mergeRoles(prev, {
                 id,
-                manager: addressCompare(e.args[2], address),
+                manager: isUserAddress(e.args[2]),
               });
             case 'NodeOperatorRewardAddressChanged':
               return mergeRoles(prev, {
                 id,
-                rewards: addressCompare(e.args[2], address),
+                rewards: isUserAddress(e.args[2]),
               });
             default:
           }
           return prev;
         }, [] as NodeOperatorRoles[]),
-    [address],
+    [isUserAddress],
   );
 
   const fetcher = useCallback(async () => {
