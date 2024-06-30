@@ -14,6 +14,7 @@ import {
 import { WarningLine } from '../warning-line';
 import { config } from 'config';
 import { DummyHeader } from './header/dummy-header';
+import { FeedbackLine } from '../feedback-line';
 
 type Props = {
   title?: ReactNode;
@@ -33,7 +34,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
 
   return (
     <>
-      {config.isDevnet && <WarningLine />}
+      {config.isDevnet ? <WarningLine /> : <FeedbackLine />}
       {dummy ? <DummyHeader /> : <Header />}
       <Main size={containerSize}>
         <Heading $titlesCount={titlesCount}>
