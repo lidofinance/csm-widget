@@ -3,10 +3,11 @@ import { Accordion } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 import { Section } from 'shared/components';
 import { replaceAll } from 'utils/replaceAll';
-import { FAQItem } from 'lib/faqList';
+import { useFaqList } from 'providers/faq-provider';
+// import { FAQItem } from 'lib/faqList';
 
 export interface FaqProps {
-  faqList: FAQItem[];
+  // faqList: FAQItem[];
   replacements?: {
     [key: string]: string;
   };
@@ -40,7 +41,11 @@ const FaqItem = styled.div`
   }
 `;
 
-export const Faq: FC<FaqProps> = memo(({ faqList, replacements }) => {
+export const Faq: FC<FaqProps> = memo(({ replacements }) => {
+  const faqList = useFaqList();
+
+  if (faqList.length === 0) return null;
+
   return (
     <Section title="FAQ">
       {faqList.map(({ id, title, content }, index) => {

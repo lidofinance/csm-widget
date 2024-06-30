@@ -1,7 +1,7 @@
 import { FC } from 'react';
+import { BondSection } from './bond';
 import { KeysSection } from './keys';
 import { RolesSection } from './roles';
-import { BondSection } from './bond';
 
 export const Dashboard: FC = () => {
   return (

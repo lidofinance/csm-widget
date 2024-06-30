@@ -2,6 +2,7 @@ import { Button } from '@lidofinance/lido-ui';
 import { KEYS_PATH } from 'consts/urls';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
+import { Faq } from 'shared/components';
 import { useCsmEarlyAdoption } from 'shared/hooks';
 import { useCsmStatus } from 'shared/hooks/useCsmStatus';
 import { ConsumedBanner } from './consumed-banner';
@@ -33,10 +34,13 @@ export const StarterPack: FC = () => {
   }
 
   return (
-    <StarterPackSection>
-      <Button onClick={() => router.push(KEYS_PATH)}>
-        Create Node Operator
-      </Button>
-    </StarterPackSection>
+    <>
+      <StarterPackSection>
+        <Button onClick={() => router.push(KEYS_PATH)}>
+          Create Node Operator
+        </Button>
+      </StarterPackSection>
+      <Faq />
+    </>
   );
 };
