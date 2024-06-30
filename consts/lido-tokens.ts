@@ -10,10 +10,12 @@ type ChainAddressMap = Partial<
 
 export const TOKENS_BY_NETWORK: ChainAddressMap = {
   // @note devnet.1
-  [CHAINS.Holesky]: {
-    [TOKENS.WSTETH]: '0x6106cba64006ffdd869e10fd0bdad33393e230fd',
-    [TOKENS.STETH]: '0x4e97Cc8B850f3CE6E06899A09141e9C5EC5eFD3F',
-  },
+  [CHAINS.Holesky]: process.env.DEVNET
+    ? {
+        [TOKENS.WSTETH]: '0x6106cba64006ffdd869e10fd0bdad33393e230fd',
+        [TOKENS.STETH]: '0x4e97Cc8B850f3CE6E06899A09141e9C5EC5eFD3F',
+      }
+    : undefined,
 };
 
 export const getTokenAddress = (chainId: CHAINS, token: TOKENS): string => {
