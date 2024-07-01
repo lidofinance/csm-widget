@@ -90,7 +90,7 @@ export default class MyDocument extends Document {
           <link
             rel="icon"
             type="image/svg+xml"
-            href={`${config.BASE_PATH_ASSET}/favicon-1080x1080.svg`}
+            href={`${config.BASE_PATH_ASSET}/favicon-512x512.svg`}
           />
           <link
             rel="apple-touch-icon"
