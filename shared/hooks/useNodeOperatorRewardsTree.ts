@@ -45,6 +45,7 @@ export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
     ['fee-distributor-tree', chainId],
     async () => {
       const cid = await feeDistributorRPC.treeCid();
+      if (!cid) return undefined;
       const url = `https://ipfs.io/ipfs/${cid}`;
 
       const treeJson =
