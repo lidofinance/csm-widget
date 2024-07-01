@@ -34,7 +34,8 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
 
   return (
     <>
-      {config.isDevnet ? <WarningLine /> : <FeedbackLine />}
+      {config.isDevnet && <WarningLine />}
+      <FeedbackLine />
       {dummy ? <DummyHeader /> : <Header />}
       <Main size={containerSize}>
         <Heading $titlesCount={titlesCount}>
