@@ -9,8 +9,8 @@ import { getFaqList } from 'lib/faqList';
 
 type PageProps = Pick<SecretConfigType, 'notReleased'>;
 
-const Page: FC<PageProps> = () => {
-  return <NotReleasedPage />;
+const Page: FC<PageProps> = ({ notReleased }) => {
+  if (notReleased) return <NotReleasedPage />;
 
   return (
     <GateLoaded fallback={<SplashPage />}>

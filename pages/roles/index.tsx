@@ -1,6 +1,6 @@
 import { secretConfig } from 'config';
 import {
-  HOME_temp,
+  HOME_PATH,
   ROLES_INBOX_PATH,
   ROLES_MANAGER_PATH,
   ROLES_REWARDS_PATH,
@@ -17,7 +17,7 @@ import { Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded fallback={<SplashPage />}>
-    <GateActiveUser fallback={<Navigate path={HOME_temp} />}>
+    <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
       <GateNodeOperator fallback={<Navigate path={ROLES_INBOX_PATH} />}>
         <GateRoleRewards fallback={<Navigate path={ROLES_MANAGER_PATH} />}>
           <Navigate path={ROLES_REWARDS_PATH} />

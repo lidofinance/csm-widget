@@ -1,12 +1,14 @@
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 
-import { useEthPrice } from '@lido-sdk/react';
+import { useEthPriceFallback } from './use-eth-price-fallback';
 import { weiToEth } from 'utils/weiToEth';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
+// import { STRATEGY_LAZY } from 'consts/swr-strategies';
+// import { useEthPrice } from '@lido-sdk/react';
 
 export const useEthUsd = (amount?: BigNumber) => {
-  const { data: price, ...swr } = useEthPrice(STRATEGY_LAZY);
+  // const { data: price, ...swr } = useEthPrice(STRATEGY_LAZY);
+  const { data: price, ...swr } = useEthPriceFallback();
   const usdAmount = useMemo(() => {
     if (price && amount) {
       const txCostInEth = weiToEth(amount);
