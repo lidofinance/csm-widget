@@ -14,6 +14,7 @@ import {
   BOND_LOCKED_PATH,
   BOND_PATH,
   HOME_PATH,
+  HOME_temp,
   KEYS_PATH,
   KEYS_REMOVE_PATH,
   KEYS_SUBMIT_PATH,
@@ -45,7 +46,7 @@ type Route = {
 const routesDisconnected: Route[] = [
   {
     name: 'Main',
-    path: HOME_PATH,
+    path: HOME_temp,
     icon: <HomeIcon />,
   },
 ];
