@@ -1,5 +1,6 @@
 import { useContractSWR } from '@lido-sdk/react';
 import { TOKENS } from 'consts/tokens';
+import { ROUNDING_TRESHOLD } from 'consts/treshhold';
 import { BigNumber } from 'ethers';
 import { useCSAccountingRPC } from 'shared/hooks';
 import invariant from 'tiny-invariant';
@@ -36,7 +37,7 @@ export const useNodeOperatorFirstKeysBond = ({
    */
   let { data } = result;
   if (token !== TOKENS.ETH && data?.gt(0)) {
-    data = data.add(10);
+    data = data.add(ROUNDING_TRESHOLD);
   }
 
   return { ...result, data };

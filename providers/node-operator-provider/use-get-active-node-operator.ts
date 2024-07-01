@@ -1,39 +1,31 @@
 import { useCallback, useEffect, useState } from 'react';
 import { NodeOperatorId, NodeOperatorRoles } from 'types';
+import { useCachedId } from './use-cached-id';
 
-export const useGetActiveNodeOperator = (
-  list?: NodeOperatorRoles[],
-  onChange?: (a?: NodeOperatorRoles) => void,
-) => {
+export const useGetActiveNodeOperator = (list?: NodeOperatorRoles[]) => {
   const [active, setActive] = useState<NodeOperatorRoles | undefined>();
+  const [cachedId, setCachedId] = useCachedId();
 
   useEffect(() => {
-    if (list)
+    if (list) {
       setActive((active) => {
-        const fromList = list.find((i) => i.id === active?.id);
-        if (fromList) {
-          if (
-            fromList.rewards === active?.rewards &&
-            fromList.manager === active?.manager
-          ) {
-            return active;
-          } else {
-            return fromList;
-          }
-        }
-        return list[0];
+        const id = cachedId ?? active?.id;
+        const fromList = list.find((roles) => roles.id === id);
+
+        return fromList ?? list[0];
       });
-  }, [list]);
+    }
+  }, [list, cachedId]);
 
   useEffect(() => {
-    onChange?.(active);
-  }, [active, onChange]);
+    active && setCachedId(active.id);
+  }, [active, setCachedId]);
 
   const switchActive = useCallback(
     (id: NodeOperatorId) => {
-      const active = list?.find((roles) => roles.id === id);
-      if (active) {
-        setActive(active);
+      const fromList = list?.find((roles) => roles.id === id);
+      if (fromList) {
+        setActive(fromList);
       }
     },
     [list],

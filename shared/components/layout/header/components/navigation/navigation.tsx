@@ -14,11 +14,12 @@ import {
   BOND_LOCKED_PATH,
   BOND_PATH,
   HOME_PATH,
+  HOME_temp,
   KEYS_PATH,
   KEYS_REMOVE_PATH,
   KEYS_SUBMIT_PATH,
   KEYS_VIEW_PATH,
-  ROLES_INVITES_PATH,
+  ROLES_INBOX_PATH,
   ROLES_MANAGER_PATH,
   ROLES_PATH,
   ROLES_REWARDS_PATH,
@@ -29,7 +30,7 @@ import { useAccount } from 'shared/hooks/use-account';
 import { useRouterPath } from 'shared/hooks/use-router-path';
 import { getIsActivePath } from 'utils/path';
 import { Nav, NavLink } from './styles';
-import { useCsmEarlyAdoption, useCsmStatus } from 'shared/hooks';
+import { useCsmEarlyAdoption, useCsmStatus, useInvites } from 'shared/hooks';
 
 type ShowConditions = 'HAS_INVITES' | 'HAS_LOCKED_BOND' | 'CAN_CREATE';
 
@@ -45,7 +46,7 @@ type Route = {
 const routesDisconnected: Route[] = [
   {
     name: 'Main',
-    path: HOME_PATH,
+    path: HOME_temp,
     icon: <HomeIcon />,
   },
 ];
@@ -67,7 +68,7 @@ const routesConnected: Route[] = [
     name: 'Roles',
     path: ROLES_PATH,
     icon: <GearIcon />,
-    subPaths: [ROLES_INVITES_PATH],
+    subPaths: [ROLES_INBOX_PATH],
     showRule: 'HAS_INVITES',
   },
 ];
@@ -94,7 +95,7 @@ const routesNodeOperator: Route[] = [
     name: 'Roles',
     path: ROLES_PATH,
     icon: <GearIcon />,
-    subPaths: [ROLES_MANAGER_PATH, ROLES_REWARDS_PATH, ROLES_INVITES_PATH],
+    subPaths: [ROLES_MANAGER_PATH, ROLES_REWARDS_PATH, ROLES_INBOX_PATH],
   },
   {
     name: 'Locked Bond',
@@ -106,7 +107,9 @@ const routesNodeOperator: Route[] = [
 
 export const Navigation: FC = memo(() => {
   const { active: isConnected } = useAccount();
-  const { active, invites, isListLoading } = useNodeOperator();
+  const { active, isListLoading } = useNodeOperator();
+  const { data: invites } = useInvites();
+
   const {
     data: { proof },
   } = useCsmEarlyAdoption();

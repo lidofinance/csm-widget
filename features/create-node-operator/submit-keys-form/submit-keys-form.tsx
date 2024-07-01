@@ -2,22 +2,22 @@ import { FC, memo } from 'react';
 
 import { SubmitKeysFormProvider } from './context';
 
-import { SubmitKeysButton } from './controls/submit-keys-button';
-import { SubmitKeysFormInfo } from './submit-keys-form-info';
-import { SubmitKeysBlock, FormControllerStyled } from './styles';
 import { AmountInput } from './controls/amount-input';
 import { KeysInput } from './controls/keys-input';
-import { SubmitKeysHat } from './hat';
+import { SubmitButton } from './controls/submit-button';
+import { TokenSelect } from './controls/token-select';
+import { FormControllerStyled, SubmitKeysBlock } from './styles';
+import { SubmitKeysFormInfo } from './submit-keys-form-info';
 
 export const SubmitKeysForm: FC = memo(() => {
   return (
     <SubmitKeysFormProvider>
-      <SubmitKeysHat />
       <SubmitKeysBlock data-testid="submitKeysForm">
         <FormControllerStyled>
+          <TokenSelect />
           <KeysInput />
           <AmountInput />
-          <SubmitKeysButton />
+          <SubmitButton />
         </FormControllerStyled>
         <SubmitKeysFormInfo />
       </SubmitKeysBlock>

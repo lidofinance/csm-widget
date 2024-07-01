@@ -1,14 +1,14 @@
-import { Component } from 'types';
+import { Component, NodeOperatorRolesProps } from 'types';
 
 export type SwitchItemComponent = Component<'a'>;
 
 export type SwitchRoutes = {
-  name: string;
+  title: string;
   path: string;
+  roles?: NodeOperatorRolesProps;
 }[];
 
-// TODO: generic type
 export type SwitchProps = {
   routes: SwitchRoutes;
-  active: number;
+  active?: number;
 };

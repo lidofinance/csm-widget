@@ -1,15 +1,9 @@
-import { useContractSWR } from '@lido-sdk/react';
 import { DataTable, DataTableRow, Divider } from '@lidofinance/lido-ui';
 import { useWatch } from 'react-hook-form';
-import { useCSModuleRPC, useNodeOperatorQueue } from 'shared/hooks';
+import { useNodeOperatorQueue } from 'shared/hooks';
 import { SubmitKeysFormInputType } from './context/types';
 
 export const SubmitKeysFormInfo = () => {
-  const contract = useCSModuleRPC();
-  const operatorsCount = useContractSWR({
-    contract,
-    method: 'getActiveNodeOperatorsCount',
-  });
   const [depositData] = useWatch<SubmitKeysFormInputType, ['depositData']>({
     name: ['depositData'],
   });
@@ -20,11 +14,11 @@ export const SubmitKeysFormInfo = () => {
     <DataTable data-testid="submitKeysFormInfo">
       <DataTableRow title="Number of keys">{depositData.length}</DataTableRow>
       <Divider />
-      <DataTableRow title="NodeOperators count">
-        {operatorsCount.loading ? '...' : operatorsCount.data?.toString()}
-      </DataTableRow>
-      <DataTableRow title="CSM deposit queue">
-        {queue?.toString()} validators
+      <DataTableRow
+        title="Deposit queue"
+        help="The number of validators in the CSM deposit queue at the moment"
+      >
+        {queue?.toString()}
       </DataTableRow>
     </DataTable>
   );

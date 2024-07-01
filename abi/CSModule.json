@@ -700,7 +700,7 @@
     ],
     "outputs": [
       {
-        "name": "toRemove",
+        "name": "",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -788,7 +788,7 @@
         "internalType": "uint128"
       },
       {
-        "name": "length",
+        "name": "tail",
         "type": "uint128",
         "internalType": "uint128"
       }
@@ -807,7 +807,7 @@
     ],
     "outputs": [
       {
-        "name": "item",
+        "name": "",
         "type": "uint256",
         "internalType": "Batch"
       }
@@ -1317,17 +1317,17 @@
     "inputs": [],
     "outputs": [
       {
-        "name": "",
+        "name": "totalExitedValidators",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "",
+        "name": "totalDepositedValidators",
         "type": "uint256",
         "internalType": "uint256"
       },
       {
-        "name": "",
+        "name": "depositableValidatorsCount",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1980,6 +1980,25 @@
   },
   {
     "type": "event",
+    "name": "DepositableSigningKeysCountChanged",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "depositableKeysCount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "DepositedSigningKeysCountChanged",
     "inputs": [
       {
@@ -2050,12 +2069,6 @@
         "type": "uint256",
         "indexed": true,
         "internalType": "uint256"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
       }
     ],
     "anonymous": false
@@ -2119,12 +2132,6 @@
         "name": "nodeOperatorId",
         "type": "uint256",
         "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
         "internalType": "uint256"
       }
     ],
@@ -2321,44 +2328,6 @@
   },
   {
     "type": "event",
-    "name": "SigningKeyAdded",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "pubkey",
-        "type": "bytes",
-        "indexed": false,
-        "internalType": "bytes"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "SigningKeyRemoved",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "pubkey",
-        "type": "bytes",
-        "indexed": false,
-        "internalType": "bytes"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
     "name": "SigningKeyRemoved",
     "inputs": [
       {
@@ -2397,7 +2366,7 @@
   },
   {
     "type": "event",
-    "name": "TargetValidatorsCountChangedByRequest",
+    "name": "TargetValidatorsCountChanged",
     "inputs": [
       {
         "name": "nodeOperatorId",
@@ -2407,9 +2376,9 @@
       },
       {
         "name": "targetLimitMode",
-        "type": "uint8",
+        "type": "uint256",
         "indexed": false,
-        "internalType": "uint8"
+        "internalType": "uint256"
       },
       {
         "name": "targetValidatorsCount",
@@ -2506,7 +2475,7 @@
   },
   {
     "type": "error",
-    "name": "AlreadySet",
+    "name": "AlreadyActivated",
     "inputs": []
   },
   {
@@ -2542,6 +2511,11 @@
   {
     "type": "error",
     "name": "InvalidInitialization",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidInput",
     "inputs": []
   },
   {
@@ -2631,7 +2605,7 @@
   },
   {
     "type": "error",
-    "name": "StuckKeysHigherThanExited",
+    "name": "StuckKeysHigherThanNonExited",
     "inputs": []
   },
   {
@@ -2672,11 +2646,6 @@
       }
     ],
     "anonymous": false
-  },
-  {
-    "type": "error",
-    "name": "InvalidIndex",
-    "inputs": []
   },
   {
     "type": "error",

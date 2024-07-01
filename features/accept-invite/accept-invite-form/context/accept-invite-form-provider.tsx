@@ -17,7 +17,7 @@ export const AcceptInviteFormProvider: FC<PropsWithChildren> = ({
   const networkData = useAcceptInviteFormNetworkData();
 
   // FIXME: not work
-  const getDefaultValues = useGetDefaultValues();
+  const getDefaultValues = useGetDefaultValues(networkData);
 
   const formObject = useForm<AcceptInviteFormInputType>({
     defaultValues: getDefaultValues,

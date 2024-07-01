@@ -40,10 +40,10 @@ export const useAddBondFormNetworkData = (): AddBondFormNetworkData => {
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
-      updateStethBalance,
-      updateWstethBalance,
-      updateEtherBalance,
-      updateBondBalance,
+      updateStethBalance(),
+      updateWstethBalance(),
+      updateEtherBalance(),
+      updateBondBalance(),
     ]);
   }, [
     updateStethBalance,

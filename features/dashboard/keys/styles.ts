@@ -1,26 +1,18 @@
+import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spaceMap.sm}px;
-`;
-
-export const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: ${({ theme }) => theme.spaceMap.sm}px;
+export const Row = styled(StackStyle).attrs({ $gap: 'sm' })`
   border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
   padding: 12px 16px;
 
   background: var(--lido-color-backgroundSecondary);
 `;
 
-export const ItemStyled = styled.div`
-  display: flex;
+export const ItemStyled = styled(StackStyle).attrs({
+  $direction: 'column',
+  $gap: 'xs',
+})`
   flex: 1 0 20%;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spaceMap.xs}px;
 
   font-size: 14px;
   line-height: 24px;

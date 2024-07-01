@@ -17,7 +17,7 @@ export const useResetRoleFormNetworkData = (): ResetRoleFormNetworkData => {
     useMaxGasPrice();
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateInfo]);
+    await Promise.allSettled([updateInfo()]);
   }, [updateInfo]);
 
   const loading = useMemo(

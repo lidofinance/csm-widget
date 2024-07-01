@@ -4,6 +4,7 @@ import { NodeOperatorRoles } from 'types';
 import { RoleBadge, RoleBadgeProps } from '../role-badge/role-badge';
 import { DescriptorId } from './descriptor-id';
 import { DescriptorRolesStyle, DescriptorStyle } from './styles';
+import { getShortRolesList } from '../utils';
 
 type DescriptorProps = {
   roles: NodeOperatorRoles;
@@ -15,12 +16,9 @@ export const Descriptor: FC<DescriptorProps> = ({ roles, roleBackground }) => {
     <DescriptorStyle>
       <DescriptorId id={roles.id} />
       <DescriptorRolesStyle>
-        {roles.rewards && (
-          <RoleBadge roleName="rewards" background={roleBackground} />
-        )}
-        {roles.manager && (
-          <RoleBadge roleName="manager" background={roleBackground} />
-        )}
+        {getShortRolesList(roles).map((role) => (
+          <RoleBadge key={role} role={role} background={roleBackground} />
+        ))}
       </DescriptorRolesStyle>
     </DescriptorStyle>
   );

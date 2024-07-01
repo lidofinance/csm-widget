@@ -289,7 +289,7 @@
     ],
     "outputs": [
       {
-        "name": "",
+        "name": "id",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -977,13 +977,13 @@
         "components": [
           {
             "name": "amount",
-            "type": "uint256",
-            "internalType": "uint256"
+            "type": "uint128",
+            "internalType": "uint128"
           },
           {
             "name": "retentionUntil",
-            "type": "uint256",
-            "internalType": "uint256"
+            "type": "uint128",
+            "internalType": "uint128"
           }
         ]
       }
@@ -1290,6 +1290,29 @@
   },
   {
     "type": "function",
+    "name": "pullFeeRewards",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "cumulativeFeeShares",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "rewardsProof",
+        "type": "bytes32[]",
+        "internalType": "bytes32[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "recoverERC1155",
     "inputs": [
       {
@@ -1371,6 +1394,13 @@
         "internalType": "uint256"
       }
     ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "renewBurnerAllowance",
+    "inputs": [],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
@@ -1486,7 +1516,7 @@
     ],
     "outputs": [
       {
-        "name": "lockedAmount",
+        "name": "settledAmount",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1846,6 +1876,19 @@
   },
   {
     "type": "event",
+    "name": "BondLockRemoved",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "BondLockRetentionPeriodChanged",
     "inputs": [
       {
@@ -2010,6 +2053,11 @@
   },
   {
     "type": "error",
+    "name": "InvalidBondCurveMaxLength",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "InvalidBondCurveValues",
     "inputs": []
   },
@@ -2035,17 +2083,17 @@
   },
   {
     "type": "error",
-    "name": "InvalidSender",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "NotAllowedToRecover",
     "inputs": []
   },
   {
     "type": "error",
     "name": "NotInitializing",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NothingToClaim",
     "inputs": []
   },
   {
@@ -2062,6 +2110,22 @@
     "type": "error",
     "name": "ResumedExpected",
     "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "SafeCastOverflowedUintDowncast",
+    "inputs": [
+      {
+        "name": "bits",
+        "type": "uint8",
+        "internalType": "uint8"
+      },
+      {
+        "name": "value",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ]
   },
   {
     "type": "error",

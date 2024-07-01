@@ -5,4 +5,5 @@ export const TOKENS = {
   [TOKENS_SDK.STETH]: TOKENS_SDK.STETH,
   [TOKENS_SDK.WSTETH]: TOKENS_SDK.WSTETH,
 } as const;
+
 export type TOKENS = keyof typeof TOKENS;

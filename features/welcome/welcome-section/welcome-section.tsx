@@ -21,10 +21,7 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => (
         aimed at attracting community stakers to participate in the Lido on
         Ethereum protocol as Node Operators. For a detailed description of the
         module, follow{' '}
-        <Link
-          href="https://operatorportal.lido.fi/modules/community-staking-module"
-          target="_blank"
-        >
+        <Link href="https://operatorportal.lido.fi/modules/community-staking-module">
           the link
         </Link>
         .

@@ -5,11 +5,9 @@ import {
   useContext,
   useMemo,
 } from 'react';
-import { useAccount } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { NodeOperatorId, NodeOperatorInvite, NodeOperatorRoles } from 'types';
+import { NodeOperatorId, NodeOperatorRoles } from 'types';
 import { useGetActiveNodeOperator } from './use-get-active-node-operator';
-import { useNodeOperatorInvitesFromEvents } from './use-node-operator-invites-from-events';
 import { useNodeOperatorsList } from './use-node-operators-list';
 
 export type NodeOperatorContextValue = {
@@ -18,8 +16,6 @@ export type NodeOperatorContextValue = {
   append: (no: NodeOperatorRoles) => void;
   active?: NodeOperatorRoles;
   switchActive: (id: NodeOperatorId) => void;
-  invites?: NodeOperatorInvite[];
-  isInvitesLoading: boolean;
 };
 
 export const NodeOperatorContext =
@@ -52,48 +48,19 @@ export const useNodeOperatorRoles = () => {
   return { rewards: value.active?.rewards, manager: value.active?.manager };
 };
 
-export const useNodeOperatorInvites = () => {
-  const value = useContext(NodeOperatorContext);
-  invariant(
-    value,
-    'useNodeOperator was used outside the NodeOperatorContext provider',
-  );
-  return value.invites;
-};
-
 export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
-  const { address } = useAccount();
-
-  const { list, isListLoading, append, setCached } =
-    useNodeOperatorsList(address);
-
-  const { active, switchActive } = useGetActiveNodeOperator(
-    isListLoading ? undefined : list,
-    setCached,
-  );
-
-  const { data: invites, initialLoading: isInvitesLoading } =
-    useNodeOperatorInvitesFromEvents(address);
+  const { list, isListLoading, append } = useNodeOperatorsList();
+  const { active, switchActive } = useGetActiveNodeOperator(list);
 
   const value = useMemo(
     () => ({
       list,
       active,
-      invites,
       isListLoading,
-      isInvitesLoading,
       append,
       switchActive,
     }),
-    [
-      list,
-      active,
-      invites,
-      isListLoading,
-      isInvitesLoading,
-      append,
-      switchActive,
-    ],
+    [list, active, isListLoading, append, switchActive],
   );
 
   return (

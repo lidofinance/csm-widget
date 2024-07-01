@@ -10,6 +10,7 @@ import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
 import { AcceptInviteFormInputType } from '.';
 import { useTxModalStagesAcceptInvite } from '../hooks/use-tx-modal-stages-accept-invite';
+import { useNodeOperator } from 'providers/node-operator-provider';
 
 type UseAcceptInviteOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -92,7 +93,7 @@ const useAcceptInviteMethods = () => {
       switch (role) {
         case ROLES.MANAGER:
           return methodManager;
-        case ROLES.REWARD:
+        case ROLES.REWARDS:
           return methodReward;
       }
     },
@@ -105,6 +106,7 @@ export const useAcceptInvite = ({
   onRetry,
 }: UseAcceptInviteOptions) => {
   const { txModalStages } = useTxModalStagesAcceptInvite();
+  const { append: appendNO } = useNodeOperator();
 
   const getMethod = useAcceptInviteMethods();
 
@@ -113,7 +115,7 @@ export const useAcceptInvite = ({
       invariant(invite, 'Invite is not defined');
 
       try {
-        const role = invite.manager ? ROLES.MANAGER : ROLES.REWARD;
+        const role = invite.manager ? ROLES.MANAGER : ROLES.REWARDS;
         const method = getMethod(role);
 
         txModalStages.sign('0x0', role);
@@ -141,6 +143,8 @@ export const useAcceptInvite = ({
 
         txModalStages.success('0x0', role, txHash);
 
+        appendNO(invite);
+
         return true;
       } catch (error) {
         console.warn(error);
@@ -148,7 +152,7 @@ export const useAcceptInvite = ({
         return false;
       }
     },
-    [getMethod, txModalStages, onConfirm, onRetry],
+    [getMethod, txModalStages, onConfirm, appendNO, onRetry],
   );
 
   return {

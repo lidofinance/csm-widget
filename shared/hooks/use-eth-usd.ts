@@ -6,9 +6,7 @@ import { weiToEth } from 'utils/weiToEth';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 
 export const useEthUsd = (amount?: BigNumber) => {
-  const { data: price, ...swr } = useEthPrice({
-    ...STRATEGY_LAZY,
-  });
+  const { data: price, ...swr } = useEthPrice(STRATEGY_LAZY);
   const usdAmount = useMemo(() => {
     if (price && amount) {
       const txCostInEth = weiToEth(amount);

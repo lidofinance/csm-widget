@@ -13,22 +13,30 @@ import {
 } from './styles';
 import { WarningLine } from '../warning-line';
 import { config } from 'config';
+import { DummyHeader } from './header/dummy-header';
+import { FeedbackLine } from '../feedback-line';
 
 type Props = {
   title?: ReactNode;
   subtitle?: ReactNode;
   containerSize?: ContainerProps['size'];
+  dummy?: boolean;
 };
 
-export const Layout: FC<PropsWithChildren<Props>> = (props) => {
-  const { title, subtitle, containerSize } = props;
-  const { children } = props;
+export const Layout: FC<PropsWithChildren<Props>> = ({
+  children,
+  dummy,
+  title,
+  subtitle,
+  containerSize,
+}) => {
   const titlesCount = [title, subtitle].filter(Boolean).length;
 
   return (
     <>
       {config.isDevnet && <WarningLine />}
-      <Header />
+      <FeedbackLine />
+      {dummy ? <DummyHeader /> : <Header />}
       <Main size={containerSize}>
         <Heading $titlesCount={titlesCount}>
           {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}

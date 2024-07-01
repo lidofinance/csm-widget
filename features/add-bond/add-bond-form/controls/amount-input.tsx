@@ -1,12 +1,20 @@
-import { InputGroupHookForm } from 'shared/hook-form/controls/input-group-hook-form';
-import { TokenSelectHookForm } from 'shared/hook-form/controls/token-select-hook-form';
-import { TokenAmountInput } from './token-amount-input';
+import { useWatch } from 'react-hook-form';
+import { FormTitle } from 'shared/components';
+import { TokenAmountInputHookForm } from 'shared/hook-form/controls/token-amount-input-hook-form';
+import { AddBondFormInputType } from '../context';
 
 export const AmountInput: React.FC = () => {
+  const token = useWatch<AddBondFormInputType, 'token'>({ name: 'token' });
+
+  // TODO: max amount
   return (
-    <InputGroupHookForm errorField="amount">
-      <TokenSelectHookForm />
-      <TokenAmountInput />
-    </InputGroupHookForm>
+    <>
+      <FormTitle>Enter token amount</FormTitle>
+      <TokenAmountInputHookForm
+        fieldName="amount"
+        token={token}
+        data-testid="stakeInput"
+      />
+    </>
   );
 };

@@ -2,6 +2,7 @@ import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks/useWeb3Key';
 
 import { ClaimRewardsForm } from './claim-rewards-form';
+import { Faq } from 'shared/components';
 
 export const ClaimRewards = () => {
   const key = useWeb3Key();
@@ -10,6 +11,7 @@ export const ClaimRewards = () => {
       <NoSSRWrapper>
         <ClaimRewardsForm key={key} />
       </NoSSRWrapper>
+      <Faq />
     </>
   );
 };

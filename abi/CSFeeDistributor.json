@@ -11,6 +11,11 @@
         "name": "accounting",
         "type": "address",
         "internalType": "address"
+      },
+      {
+        "name": "oracle",
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "nonpayable"
@@ -43,13 +48,13 @@
   },
   {
     "type": "function",
-    "name": "ORACLE_ROLE",
+    "name": "ORACLE",
     "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        "type": "address",
+        "internalType": "address"
       }
     ],
     "stateMutability": "view"
@@ -102,7 +107,7 @@
     ],
     "outputs": [
       {
-        "name": "",
+        "name": "sharesToDistribute",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -150,7 +155,7 @@
     ],
     "outputs": [
       {
-        "name": "",
+        "name": "sharesToDistribute",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -291,11 +296,6 @@
     "inputs": [
       {
         "name": "admin",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "oracle",
         "type": "address",
         "internalType": "address"
       }
@@ -695,6 +695,11 @@
   {
     "type": "error",
     "name": "NotInitializing",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NotOracle",
     "inputs": []
   },
   {

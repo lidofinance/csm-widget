@@ -1,7 +1,10 @@
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
-import { useNodeOperatorId } from 'providers/node-operator-provider';
+import {
+  useNodeOperator,
+  useNodeOperatorId,
+} from 'providers/node-operator-provider';
 import { useCSModuleWeb3 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import { NodeOperatorId } from 'types';
@@ -64,6 +67,7 @@ const useResetRoleMethods = () => {
 export const useResetRole = ({ onConfirm, onRetry }: UseResetRoleOptions) => {
   const nodeOperatorId = useNodeOperatorId(); // TODO: move to context
   const { txModalStages } = useTxModalStagesResetRole();
+  const { append: appendNO } = useNodeOperator();
 
   const getMethod = useResetRoleMethods();
 
@@ -94,13 +98,15 @@ export const useResetRole = ({ onConfirm, onRetry }: UseResetRoleOptions) => {
 
       txModalStages.success('0x0', ROLES.MANAGER, txHash);
 
+      appendNO({ id: nodeOperatorId, manager: true });
+
       return true;
     } catch (error) {
       console.warn(error);
       txModalStages.failed(error, onRetry);
       return false;
     }
-  }, [nodeOperatorId, getMethod, txModalStages, onConfirm, onRetry]);
+  }, [nodeOperatorId, getMethod, txModalStages, onConfirm, appendNO, onRetry]);
 
   return {
     resetRole,

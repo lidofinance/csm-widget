@@ -3,6 +3,7 @@ import { getTokenAddress as getBaseTokenAddress } from '@lido-sdk/constants';
 import invariant from 'tiny-invariant';
 import { Address } from 'wagmi';
 import { TOKENS } from '@lido-sdk/constants';
+import { config } from 'config';
 
 type ChainAddressMap = Partial<
   Record<CHAINS, Partial<Record<TOKENS, Address>>>
@@ -10,10 +11,13 @@ type ChainAddressMap = Partial<
 
 export const TOKENS_BY_NETWORK: ChainAddressMap = {
   // @note devnet.1
-  [CHAINS.Holesky]: {
-    [TOKENS.WSTETH]: '0xF1e88F0E4258a46D5299f3D512e0fC9782Cca47d', // FIXME: devnet.1 addr
-    [TOKENS.STETH]: '0x4e97Cc8B850f3CE6E06899A09141e9C5EC5eFD3F',
-  },
+  [CHAINS.Holesky]:
+    process.env.DEVNET || config.isDevnet
+      ? {
+          [TOKENS.WSTETH]: '0x6106cba64006ffdd869e10fd0bdad33393e230fd',
+          [TOKENS.STETH]: '0x4e97Cc8B850f3CE6E06899A09141e9C5EC5eFD3F',
+        }
+      : undefined,
 };
 
 export const getTokenAddress = (chainId: CHAINS, token: TOKENS): string => {

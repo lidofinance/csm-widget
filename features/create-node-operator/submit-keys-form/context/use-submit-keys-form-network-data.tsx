@@ -50,9 +50,9 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
-      updateStethBalance,
-      updateWstethBalance,
-      updateEtherBalance,
+      updateStethBalance(),
+      updateWstethBalance(),
+      updateEtherBalance(),
     ]);
   }, [updateStethBalance, updateWstethBalance, updateEtherBalance]);
 

@@ -15,6 +15,8 @@ import { withCsp } from 'config/csp';
 import { Providers } from 'providers';
 import { BackgroundGradient } from 'shared/components/background-gradient/background-gradient';
 import { nprogress, COOKIES_ALLOWED_FULL_KEY } from 'utils';
+import { FaqContext } from 'providers/faq-provider';
+import { FAQItem } from 'lib/faqList';
 
 // Migrations old theme cookies to new cross domain cookies
 migrationThemeCookiesToCrossDomainCookiesClientSide();
@@ -33,30 +35,34 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
-const AppWrapper = (props: AppProps): JSX.Element => {
+const AppWrapper = (
+  props: AppProps<{ notReleased?: boolean; faqList?: FAQItem[] }>,
+): JSX.Element => {
   const { ...rest } = props;
 
   return (
-    <Providers>
-      {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
-      <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    <FaqContext.Provider value={props.pageProps.faqList ?? []}>
+      <Providers dummy={props.pageProps.notReleased}>
+        {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
+        <Head>
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          />
+          <title>CSM | Lido</title>
+        </Head>
+        <BackgroundGradient
+          width={1560}
+          height={784}
+          style={{
+            opacity: 'var(--lido-color-darkThemeOpacity)',
+          }}
         />
-        <title>CSM | Lido</title>
-      </Head>
-      <BackgroundGradient
-        width={1560}
-        height={784}
-        style={{
-          opacity: 'var(--lido-color-darkThemeOpacity)',
-        }}
-      />
-      <ToastContainer />
-      <MemoApp {...rest} />
-      <CookiesTooltip />
-    </Providers>
+        <ToastContainer />
+        <MemoApp {...rest} />
+        <CookiesTooltip />
+      </Providers>
+    </FaqContext.Provider>
   );
 };
 

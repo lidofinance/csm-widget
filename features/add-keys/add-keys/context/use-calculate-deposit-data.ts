@@ -1,31 +1,38 @@
 import { useEffect } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { AddKeysFormInputType } from './types';
+import { parseDepositData } from 'shared/keys';
+import { useAccount } from 'shared/hooks';
+import { getCsmWc } from 'consts/csm-wc';
 
 export const useCalculateDepositData = ({
   watch,
   setValue,
   setError,
   clearErrors,
+  getFieldState,
 }: UseFormReturn<AddKeysFormInputType>) => {
+  const { chainId } = useAccount();
+  const wc = getCsmWc(chainId);
   const rawDepositData = watch('rawDepositData');
+  const { isTouched } = getFieldState('rawDepositData');
 
   useEffect(() => {
-    try {
-      const parsedData = JSON.parse(rawDepositData || '[]');
-      if (Array.isArray(parsedData)) {
-        setValue('depositData', parsedData);
-        clearErrors('depositData');
-      } else {
-        throw new Error('invalid json');
-      }
-      // TODO: validate parsed data
-    } catch (e) {
+    if (!rawDepositData && !isTouched) return;
+    const { error, depositData } = parseDepositData(
+      rawDepositData || '',
+      chainId,
+      wc,
+    );
+    if (depositData && !error) {
+      setValue('depositData', depositData);
+      clearErrors('depositData');
+    } else {
       setValue('depositData', []);
       setError('depositData', {
         type: 'VALIDATE',
-        message: 'invalid json',
+        message: error?.message,
       });
     }
-  }, [clearErrors, rawDepositData, setError, setValue]);
+  }, [chainId, clearErrors, isTouched, rawDepositData, setError, setValue, wc]);
 };

@@ -1,9 +1,9 @@
 import { CHAINS, getChainColor } from '@lido-sdk/constants';
 import { useSDK } from '@lido-sdk/react';
 import { FC } from 'react';
-import { useWeb3 } from 'reef-knot/web3-react';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 
+import { useAccount } from 'shared/hooks';
 import {
   DotStyle,
   HeaderWalletChainStyle,
@@ -11,7 +11,7 @@ import {
 } from '../styles';
 
 const HeaderChain: FC = () => {
-  const { active } = useWeb3();
+  const { active } = useAccount();
   const { chainId } = useSDK();
 
   const chainName = CHAINS[chainId];

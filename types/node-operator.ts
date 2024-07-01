@@ -1,7 +1,12 @@
-import { BytesLike } from 'ethers';
+import { BigNumber, BytesLike } from 'ethers';
 
 // BigNumber -> string
 export type NodeOperatorId = `${number}`;
+
+export type NodeOperatorRolesProps = {
+  manager?: boolean;
+  rewards?: boolean;
+};
 
 export type NodeOperatorRoles = {
   id: NodeOperatorId;
@@ -25,3 +30,8 @@ type NodeOperatorRewardsInvite = {
 };
 
 export type Proof = BytesLike[];
+
+export type BondBalance = {
+  current: BigNumber;
+  required: BigNumber;
+};

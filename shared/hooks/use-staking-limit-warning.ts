@@ -1,8 +1,8 @@
-import { useWeb3 } from 'reef-knot/web3-react';
 import { LIMIT_LEVEL } from 'types';
+import { useAccount } from './use-account';
 
 export const useStakingLimitWarning = (stakingLimitLevel?: LIMIT_LEVEL) => {
-  const { active } = useWeb3();
+  const { active } = useAccount();
   const limitWarning =
     stakingLimitLevel === LIMIT_LEVEL.WARN && active
       ? 'Stake limit is almost exhausted. Your transaction may not go through.'

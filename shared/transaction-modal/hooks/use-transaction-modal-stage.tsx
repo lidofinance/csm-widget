@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { useWeb3 } from 'reef-knot/web3-react';
 import { useModalActions } from 'providers/modal-provider';
-import { useTransactionModal, TransactionModal } from '../transaction-modal';
+import { useEffect, useMemo, useRef } from 'react';
+import { useAccount } from 'shared/hooks';
+import { TransactionModal, useTransactionModal } from '../transaction-modal';
 
 export type TransactionModalTransitStage = (
   TxStageEl: React.ReactNode,
@@ -12,7 +12,7 @@ export type TransactionModalTransitStage = (
 export const useTransactionModalStage = <S extends Record<string, Function>>(
   getStages: (transitStage: TransactionModalTransitStage) => S,
 ) => {
-  const { active } = useWeb3();
+  const { active } = useAccount();
   const { openModal } = useTransactionModal();
   const { closeModal } = useModalActions();
   const isMountedRef = useRef(true);

@@ -36,7 +36,7 @@ export const useRemoveKeysFormNetworkData = (): RemoveKeysFormNetworkData => {
   );
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateBondBalance, updateInfo, updateKeys]);
+    await Promise.allSettled([updateBondBalance(), updateInfo(), updateKeys()]);
   }, [updateBondBalance, updateInfo, updateKeys]);
 
   const loading = useMemo(

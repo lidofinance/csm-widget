@@ -2,10 +2,10 @@ import styled from 'styled-components';
 
 const WarningBlock = styled.div`
   display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--lido-color-warning);
-}`;
+  align-items: center;
+  justify-content: center;
+  background: var(--lido-color-warning);
+`;
 
 const WarningText = styled.span`
   line-height: 32px;

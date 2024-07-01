@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
-import { ButtonIcon, External } from '@lidofinance/lido-ui';
-import { Stack } from 'shared/components';
+import { LinkButton, Stack } from 'shared/components';
 import { BlockStyled, Header, Heading } from './styles';
+import { DarkThemeProvider, LightThemeProvider } from '@lidofinance/lido-ui';
 
 export const EarlyAdoptionBanner: FC = () => {
   return (
@@ -16,26 +16,24 @@ export const EarlyAdoptionBanner: FC = () => {
         </p>
       </Heading>
       <Stack>
-        <ButtonIcon
-          as="a"
-          icon={<External />}
-          size="sm"
-          variant="text"
-          color="secondary"
-          fullwidth
-        >
-          Learn more about Early Adoption
-        </ButtonIcon>
-        <ButtonIcon
-          as="a"
-          icon={<External />}
-          size="sm"
-          variant="translucent"
-          color="secondary"
-          fullwidth
-        >
-          See curated list
-        </ButtonIcon>
+        <LightThemeProvider>
+          <LinkButton
+            href="https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22"
+            variant="text"
+            fullwidth
+          >
+            Learn more about Early Adoption
+          </LinkButton>
+        </LightThemeProvider>
+        <DarkThemeProvider>
+          <LinkButton
+            href="https://github.com/lidofinance/community-staking-module/tree/main/artifacts/holesky/early-adoption/sources"
+            variant="translucent"
+            fullwidth
+          >
+            See curated list
+          </LinkButton>
+        </DarkThemeProvider>
       </Stack>
     </BlockStyled>
   );

@@ -17,7 +17,7 @@ export const ResetRoleHat = () => {
           value={<AddressBadge address={currentAddress} />}
         />
         <HatBalance
-          title="Current reward address"
+          title="Current rewards address"
           small
           loading={loading.isInfoLoading}
           value={<AddressBadge address={address} />}
