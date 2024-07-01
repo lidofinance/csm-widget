@@ -1069,11 +1069,6 @@
   },
   {
     "type": "error",
-    "name": "InvalidPerfThreshold",
-    "inputs": []
-  },
-  {
-    "type": "error",
     "name": "NoConsensusReportToProcess",
     "inputs": []
   },

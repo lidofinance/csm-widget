@@ -21,8 +21,10 @@ export const FeedbackLine = () => {
   return (
     <WarningBlock>
       <WarningText>
-        Please, if you have any bugs - fill this{' '}
-        <Link href="https://forms.gle/ZBUqbykaZokJLf4M7">feedback form</Link>
+        {/* This is a test version of the CSM Widget. Make sure to report any bugs{' '} */}
+        This is a test version of the CSM Widget. In case of any issues, please
+        submit the report using this{' '}
+        <Link href="https://forms.gle/ZBUqbykaZokJLf4M7">form</Link>
       </WarningText>
     </WarningBlock>
   );

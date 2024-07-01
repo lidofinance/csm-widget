@@ -1,11 +1,16 @@
-import { FC, PropsWithChildren } from 'react';
-
 import { Link } from '@lidofinance/lido-ui';
+import { FC, PropsWithChildren } from 'react';
+import { useCsmEarlyAdoption } from 'shared/hooks';
 import { Partners } from './partners';
 import { Step } from './step';
 import { BlockStyled, Heading, Steps } from './styles';
 
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
+  const {
+    data: { proof },
+  } = useCsmEarlyAdoption();
+  const bondAmount = proof ? '1.5' : '2';
+
   return (
     <BlockStyled>
       <Heading>
@@ -19,7 +24,8 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
       </Heading>
       <Steps>
         <Step number="1" title="Have tokens for Bond">
-          2 Holesky ETH (stETH/wstETH) is required for the first validator
+          {bondAmount} Holesky ETH (stETH/wstETH) is required for the first
+          validator
           <br />
           <Link href="https://operatorportal.lido.fi/modules/community-staking-module#block-e4a6daadca12480d955524247f03f380">
             Learn more
@@ -36,7 +42,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
           Do it{' '}
           <Link href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm">
             manually
-          </Link>
+          </Link>{' '}
           or use Plug&Play solutions
           <Partners />
         </Step>
