@@ -39,6 +39,7 @@ const faqList = getFaqList([
   'keys-how-much-bond-is-needed',
   'keys-what-is-the-bond-curve',
   'keys-difference-between-bond-types-eth-st-eth-wst-eth',
+  'keys-how-to-set-up-a-validator-for-csm-testnet',
   'keys-when-does-a-validator-become-active',
   'keys-why-pay-for-key-deletion',
   'keys-can-t-see-the-key-for-deletion',

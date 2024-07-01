@@ -18,7 +18,7 @@ export const EarlyAdoptionBanner: FC = () => {
       <Stack>
         <LightThemeProvider>
           <LinkButton
-            href="https://blog.lido.fi/introducing-early-adoption-for-community-staking-module/"
+            href="https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22"
             variant="text"
             fullwidth
           >
@@ -27,7 +27,7 @@ export const EarlyAdoptionBanner: FC = () => {
         </LightThemeProvider>
         <DarkThemeProvider>
           <LinkButton
-            href="https://github.com/lidofinance/community-staking-module/blob/main/artifacts/holesky/early-adoption/addresses.json"
+            href="https://github.com/lidofinance/community-staking-module/tree/main/artifacts/holesky/early-adoption/sources"
             variant="translucent"
             fullwidth
           >

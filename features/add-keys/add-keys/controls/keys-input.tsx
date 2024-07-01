@@ -14,7 +14,7 @@ export const KeysInput = () => {
     <>
       <FormTitle>
         Upload deposit data
-        <Link href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm-wip/generating-csm-keystores">
+        <Link href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm">
           Learn more
         </Link>
       </FormTitle>

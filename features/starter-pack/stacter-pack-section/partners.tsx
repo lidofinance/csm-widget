@@ -13,7 +13,7 @@ export const Partners: FC = () => (
     <Link href="https://stereum.net/" title="Stereum">
       <Stereum />
     </Link>
-    <Link href="https://eth-docker.net/" title="Eth Docker">
+    <Link href="https://github.com/lidofinance/eth-docker" title="Eth Docker">
       <Ethdocker />
     </Link>
   </PartnersStyle>

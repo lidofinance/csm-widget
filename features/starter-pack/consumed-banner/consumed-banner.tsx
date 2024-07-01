@@ -9,7 +9,9 @@ export const ConsumedBanner: FC = () => {
       <BannerHeader>
         You have already joined CSM testnet during Early Adoption period
       </BannerHeader>
-      <Link>Learn more about Early Adoption.</Link>
+      <Link href="https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22">
+        Learn more about Early Adoption.
+      </Link>
     </BlockStyled>
   );
 };

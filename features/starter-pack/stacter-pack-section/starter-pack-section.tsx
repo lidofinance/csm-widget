@@ -11,32 +11,40 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
       <Heading>
         <h2>CSM node operator starter pack</h2>
         <p>
-          Make sure you’ve completed all the basic steps before joining the
-          Community Staking Module
+          Make sure you’ve completed all the basic steps before joining{' '}
+          <Link href="https://operatorportal.lido.fi/modules/community-staking-module">
+            the Community Staking Module
+          </Link>
         </p>
       </Heading>
       <Steps>
         <Step number="1" title="Have tokens for Bond">
-          2 Holesky stETH is required for the first validator
+          2 Holesky ETH (stETH/wstETH) is required for the first validator
           <br />
-          <Link href="https://hackmd.io/@lido/rJMcGj0Ap#Bond">Learn more</Link>
+          <Link href="https://operatorportal.lido.fi/modules/community-staking-module#block-e4a6daadca12480d955524247f03f380">
+            Learn more
+          </Link>
         </Step>
         <Step number="2" title="Prepare hardware">
           Run{' '}
-          <Link href="https://ethereum.org/en/developers/docs/nodes-and-clients/run-a-node/#hardware">
+          <Link href="https://dvt-homestaker.stakesaurus.com/hardware-and-systems-setup/hardware-and-system-requirements">
             your own hardware
           </Link>{' '}
           or use a cloud provider
         </Step>
         <Step number="3" title="Set up validation tools">
-          Do it manually or use Plug&Play solutions
+          Do it{' '}
+          <Link href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm">
+            manually
+          </Link>
+          or use Plug&Play solutions
           <Partners />
         </Step>
         <Step number="4" title="Generate keys">
           Prepare deposit data (.json file) for submitting keys
           <br />
           Follow{' '}
-          <Link href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm-wip/generating-csm-keystores">
+          <Link href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm#key-settings-to-note">
             the generation guide
           </Link>
         </Step>
