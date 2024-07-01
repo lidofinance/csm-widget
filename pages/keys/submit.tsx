@@ -1,5 +1,5 @@
 import { secretConfig } from 'config';
-import { HOME_PATH, KEYS_VIEW_PATH } from 'consts/urls';
+import { HOME_PATH, HOME_temp, KEYS_VIEW_PATH } from 'consts/urls';
 import { AddKeysPage } from 'features/add-keys';
 import { CreateNodeOperatorPage } from 'features/create-node-operator';
 import { SplashPage } from 'features/welcome';
@@ -16,7 +16,7 @@ import { Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded fallback={<SplashPage />}>
-    <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
+    <GateActiveUser fallback={<Navigate path={HOME_temp} />}>
       <GateNodeOperator
         fallback={
           <GateCanCreate fallback={<Navigate path={HOME_PATH} />}>

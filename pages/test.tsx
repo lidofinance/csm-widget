@@ -1,17 +1,15 @@
-import { DashboardPage } from 'features/dashboard';
-import { GateActiveUser, GateLoaded, GateNodeOperator } from 'shared/gates';
-import { StarterPackPage } from 'features/starter-pack';
-import { NotReleasedPage, SplashPage, WelcomePage } from 'features/welcome';
-import { GetStaticProps } from 'next';
 import { SecretConfigType, secretConfig } from 'config';
-import { FC } from 'react';
+import { DashboardPage } from 'features/dashboard';
+import { StarterPackPage } from 'features/starter-pack';
+import { SplashPage, WelcomePage } from 'features/welcome';
 import { getFaqList } from 'lib/faqList';
+import { GetStaticProps } from 'next';
+import { FC } from 'react';
+import { GateActiveUser, GateLoaded, GateNodeOperator } from 'shared/gates';
 
 type PageProps = Pick<SecretConfigType, 'notReleased'>;
 
 const Page: FC<PageProps> = () => {
-  return <NotReleasedPage />;
-
   return (
     <GateLoaded fallback={<SplashPage />}>
       <GateActiveUser fallback={<WelcomePage />}>
