@@ -11,13 +11,20 @@ export const Row = styled(StackStyle).attrs({ $gap: 'sm' })`
 export const ItemStyled = styled(StackStyle).attrs({
   $direction: 'column',
   $gap: 'xs',
-})`
+})<{ $secondary?: boolean; $warning?: boolean }>`
   flex: 1 0 20%;
 
   font-size: 14px;
   line-height: 24px;
 
-  color: var(--lido-color-text);
+  color: var(
+    ${({ $secondary, $warning }) =>
+      $secondary
+        ? '--lido-color-textSecondary'
+        : $warning
+          ? '--lido-color-error'
+          : '--lido-color-text'}
+  );
   text-align: center;
 `;
 

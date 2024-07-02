@@ -1,4 +1,4 @@
-import { InlineLoader, Text } from '@lidofinance/lido-ui';
+import { InlineLoader } from '@lidofinance/lido-ui';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { FC } from 'react';
@@ -13,39 +13,54 @@ type Props = {
   token?: TOKENS;
   loading?: boolean;
   big?: boolean;
+  dangerous?: boolean;
 };
 
-export const Balance: FC<Props> = ({ title, amount, token, loading, big }) => {
+export const Balance: FC<Props> = ({
+  title,
+  amount,
+  token,
+  loading,
+  big,
+  dangerous,
+}) => {
   const { usdAmount } = useEthUsd(amount);
+  const warning = dangerous && amount?.gt(0);
 
   return (
-    <BalanceStyle $big={big}>
+    <BalanceStyle $big={big} $warning={warning}>
       {title && <BalanceTitle>{title}</BalanceTitle>}
       {loading ? (
         <InlineLoader />
       ) : (
         <BalanceValue>
           <FormatToken amount={amount} token={token ?? TOKENS.STETH} />
-          <Text size={'xxs'} color={'secondary'}>
+          <BalancePrice>
             <FormatPrice amount={usdAmount} />
-          </Text>
+          </BalancePrice>
         </BalanceValue>
       )}
     </BalanceStyle>
   );
 };
 
+// TODO: component or styles
 const BalanceStyle = styled(StackStyle).attrs({ $direction: 'column' })<{
   $big?: boolean;
+  $warning?: boolean;
 }>`
   gap: 2px;
   align-items: ${({ $big }) => ($big ? 'flex-end' : 'flex-start')};
-  min-width: 120px;
+  min-width: 100px;
 
   font-size: ${({ theme, $big }) =>
     $big ? theme.fontSizesMap.sm : theme.fontSizesMap.xs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.xl}px;
   font-weight: 700;
+
+  color: var(
+    ${({ $warning }) => ($warning ? '--lido-color-error' : '--lido-color-text')}
+  );
 `;
 
 const BalanceValue = styled(StackStyle).attrs({ $direction: 'column' })`
@@ -56,4 +71,11 @@ const BalanceTitle = styled.h5`
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
   font-weight: 400;
+`;
+
+const BalancePrice = styled.span`
+  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
+  line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
+  font-weight: 400;
+  opacity: 0.5;
 `;

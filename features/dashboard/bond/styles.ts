@@ -1,15 +1,6 @@
+import { Accordion } from '@lidofinance/lido-ui';
 import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
-
-export const Row = styled(StackStyle).attrs({
-  $direction: 'column',
-  $gap: 'lg',
-})`
-  color: var(--lido-color-text);
-  background: var(--lido-color-backgroundSecondary);
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.xl}px;
-  padding: 20px;
-`;
 
 export const RowTitle = styled.h4`
   font-size: ${({ theme }) => theme.fontSizesMap.sm}px;
@@ -23,3 +14,18 @@ export const RowHeader = styled(StackStyle)`
 `;
 
 export const RowBody = styled(StackStyle).attrs({ $gap: 'xl' })``;
+
+export const AccordionStyle = styled(Accordion)`
+  margin: 0;
+
+  background: var(--lido-color-backgroundSecondary);
+  /* padding: 20px; */
+
+  & > div:first-child {
+    padding: 20px;
+  }
+
+  & > div + div > div {
+    padding: 0 20px 20px 20px;
+  }
+`;

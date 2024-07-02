@@ -53,17 +53,20 @@ export const KeysSection: FC = () => {
           </Row>
           <Row>
             <Item
+              dangerous
               title="Unbonded"
               count={unbonded?.toNumber() ?? '...'}
               tooltip="Keys that have insufficient bond"
             />
             <Item
+              dangerous
               title="Stuck"
               count={info.stuckValidatorsCount}
               tooltip="Keys that have not been exited timely following an exit signal from the protocol"
             />
-            <Item title="Duplicated" count={0} />
+            <Item dangerous title="Duplicated" count={0} />
             <Item
+              dangerous
               title="Invalid"
               count={info.totalAddedKeys - info.totalVettedKeys}
               tooltip="Keys with invalid signature"
