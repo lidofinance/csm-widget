@@ -1,47 +1,38 @@
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
-import { useWatch } from 'react-hook-form';
-import { RemoveKeysFormInputType } from './context/types';
-import { FormatToken } from 'shared/formatters';
 import { TOKENS } from 'consts/tokens';
-import { useCsmKeyRemovalFee, useNodeOperatorBalance } from 'shared/hooks';
-import { useMemo } from 'react';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { useWatch } from 'react-hook-form';
+import { FormatToken } from 'shared/formatters';
+import { RemoveKeysFormInputType } from './context/types';
+import { useBondBalanceAfterRemoveKeys } from './hooks/useBondBalanceAfterRemoveKeys';
+import { useRemovalFeeByKeysCount } from './hooks/useRemovalFeeByKeysCount';
 
 export const RemoveKeysFormInfo = () => {
-  const nodeOperatorId = useNodeOperatorId();
-  const { data: removalFee, initialLoading: isFeeLoading } =
-    useCsmKeyRemovalFee();
-  const { data: balance, initialLoading: isBalanceLoading } =
-    useNodeOperatorBalance(nodeOperatorId);
-
   const { count } = useWatch<RemoveKeysFormInputType, 'selection'>({
     name: 'selection',
   });
-  const removalFeeTotal = useMemo(
-    () => removalFee?.mul(count || 0),
-    [count, removalFee],
-  );
-  const bondAfter = useMemo(
-    () => balance?.current.sub(removalFeeTotal || 0),
-    [balance, removalFeeTotal],
-  );
 
-  /**
-   * TODO: excess/shortage bond after execution
-   *
-   * get nodeOperator's curve id
-   * get nodeOperator's keysCount
-   * get required bond amount for curve & keysCount
-   * get bondDelta of (balance.current - fee, requiredByCurveAndKeys)
-   */
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: removalFee, initialLoading: isRemovalFeeLoading } =
+    useRemovalFeeByKeysCount(count);
+  const { data: balance, initialLoading: isBalanceLoading } =
+    useBondBalanceAfterRemoveKeys(nodeOperatorId, count);
+
   return (
     <DataTable>
       <DataTableRow title="Number of keys to remove">{count}</DataTableRow>
-      <DataTableRow title="Removal fee" loading={isFeeLoading}>
-        <FormatToken amount={removalFeeTotal} token={TOKENS.STETH} />
+      <DataTableRow
+        title="Removal fee"
+        loading={isRemovalFeeLoading}
+        help="Key deletion incurs a removal charge, deducted from the node operator's bond. This charge covers the maximum possible operational costs of queue processing."
+      >
+        <FormatToken amount={removalFee} token={TOKENS.STETH} />
       </DataTableRow>
-      <DataTableRow title="Bond after execution" loading={isBalanceLoading}>
-        <FormatToken amount={bondAfter} token={TOKENS.STETH} />
+      <DataTableRow
+        title={`${balance?.isShortage ? 'Shortage' : 'Excess'} bond after execution`}
+        loading={isBalanceLoading}
+      >
+        <FormatToken amount={balance?.delta.abs()} token={TOKENS.STETH} />
       </DataTableRow>
     </DataTable>
   );

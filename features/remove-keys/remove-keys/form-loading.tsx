@@ -11,7 +11,8 @@ export const FormLoading: FC<PropsWithChildren> = ({ children }) => {
   return (
     <WhenLoaded
       loading={isLoading || loading.isKeysLoading}
-      empty={isEmpty && 'You don’t have any keys to remove'}
+      empty={isEmpty && <>No keys available to remove</>}
+      emptyNote="Only keys that have not been deposited yet can be deleted. If a key has already been deposited, the only way to retrieve the bond is to exit the validator on the Consensus Layer (CL)."
     >
       {children}
     </WhenLoaded>
