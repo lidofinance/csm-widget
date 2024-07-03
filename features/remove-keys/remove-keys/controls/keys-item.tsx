@@ -20,7 +20,7 @@ export const KeysItem = forwardRef<HTMLInputElement, KeysItemProps>(
 
     const isDisabled = isSubmitting;
 
-    const label = <Address address={title} symbols={50} />;
+    const label = <Address address={title} symbols={20} />;
 
     return (
       <RequestStyled $disabled={isDisabled}>

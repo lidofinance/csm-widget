@@ -5,6 +5,9 @@ import { useNodeOperatorInfo } from './useNodeOperatorInfo';
 import { useMemo } from 'react';
 import { PUBKEY_LENGTH, splitHex } from 'shared/keys';
 
+// TODO: load by chuns
+// const MAX_KEYS_COUNT = 10;
+
 export const useNodeOperatorKeys = (
   nodeOperatorId?: NodeOperatorId,
   nonDepositedOnly = false,
@@ -16,7 +19,6 @@ export const useNodeOperatorKeys = (
     return [startIndex, (data?.totalAddedKeys ?? 0) - startIndex];
   }, [data?.totalAddedKeys, data?.totalDepositedKeys, nonDepositedOnly]);
 
-  // TODO: split to chunks
   const swr = useContractSWR({
     contract: useCSModuleRPC(),
     method: 'getSigningKeys',

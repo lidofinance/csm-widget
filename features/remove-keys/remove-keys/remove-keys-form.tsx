@@ -5,17 +5,20 @@ import { SubmitButton } from './controls/submit-button';
 import { RemoveKeysFormInfo } from './remove-keys-form-info';
 import { RemoveKeysHat } from './remove-keys-hat';
 import { FormControllerStyled, RemoveKeysBlock } from './styles';
+import { FormLoading } from './form-loading';
 
 export const RemoveKeysForm: FC = memo(() => {
   return (
     <RemoveKeysFormProvider>
       <RemoveKeysHat />
       <RemoveKeysBlock>
-        <FormControllerStyled>
-          <KeysSelector />
-          <SubmitButton />
-        </FormControllerStyled>
-        <RemoveKeysFormInfo />
+        <FormLoading>
+          <FormControllerStyled>
+            <KeysSelector />
+            <SubmitButton />
+          </FormControllerStyled>
+          <RemoveKeysFormInfo />
+        </FormLoading>
       </RemoveKeysBlock>
     </RemoveKeysFormProvider>
   );
