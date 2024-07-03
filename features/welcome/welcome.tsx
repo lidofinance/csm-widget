@@ -13,23 +13,20 @@ export const Welcome: FC = () => {
   const { data } = useCsmStatus();
 
   const isWrongChain = isConnected && !active;
-  const isReleased = data?.isEarlyAdoption || data?.isPublicRelease;
-  const isEarlyAdoption = data?.isEarlyAdoption && !data?.isPublicRelease;
 
+  // TODO: state for `status.isUnavailable` (RPC error)
   return (
     <>
       {isWrongChain && <Fallback />}
       <WelcomeSection>
-        {isReleased && (
-          <Stack>
-            <Connect fullwidth>I am a Node Operator</Connect>
-            <Connect fullwidth color="secondary">
-              Become a Node Operator
-            </Connect>
-          </Stack>
-        )}
+        <Stack>
+          <Connect fullwidth>I am a Node Operator</Connect>
+          <Connect fullwidth color="secondary">
+            Become a Node Operator
+          </Connect>
+        </Stack>
       </WelcomeSection>
-      {isEarlyAdoption && <EarlyAdoptionBanner />}
+      {data?.isEarlyAdoption && <EarlyAdoptionBanner />}
     </>
   );
 };

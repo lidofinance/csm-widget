@@ -1,9 +1,11 @@
+import { Zero } from '@ethersproject/constants';
 import { useContractSWR } from '@lido-sdk/react';
+import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { TOKENS } from 'consts/tokens';
-import { ROUNDING_TRESHOLD } from 'consts/treshhold';
 import { useCSAccountingRPC } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { NodeOperatorId } from 'types';
+import { addExtraWei } from 'utils';
 
 const METHOD_BY_TOKEN = {
   [TOKENS.ETH]: 'getRequiredBondForNextKeys',
@@ -13,18 +15,19 @@ const METHOD_BY_TOKEN = {
 
 type UseReadAdditionalBondAmountParams = {
   nodeOperatorId?: NodeOperatorId;
-  keysCount: number;
-  token: TOKENS;
+  keysCount?: number;
+  token?: TOKENS;
 };
 
-export const useNodeOperatorNextKeysBond = ({
-  nodeOperatorId,
-  keysCount,
-  token,
-}: UseReadAdditionalBondAmountParams) => {
-  invariant(token, 'Token is required');
-  invariant(keysCount !== undefined, 'KeysCount is required');
-  invariant(nodeOperatorId, 'BodeOperatorId is required');
+export const useNodeOperatorNextKeysBond = (
+  {
+    nodeOperatorId,
+    keysCount = 0,
+    token = TOKENS.STETH,
+  }: UseReadAdditionalBondAmountParams,
+  config = STRATEGY_LAZY,
+) => {
+  invariant(nodeOperatorId, 'NodeOperatorId is required');
 
   const contract = useCSAccountingRPC();
   const result = useContractSWR({
@@ -32,15 +35,10 @@ export const useNodeOperatorNextKeysBond = ({
     method: METHOD_BY_TOKEN[token],
     params: [nodeOperatorId, keysCount],
     shouldFetch: keysCount > 0,
+    config,
   });
 
-  /**
-   * add 10 wei for approve/permit request
-   */
-  let { data } = result;
-  if (token !== TOKENS.ETH && data?.gt(0)) {
-    data = data.add(ROUNDING_TRESHOLD);
-  }
+  const amount = addExtraWei(result.data, token);
 
-  return { ...result, data };
+  return { ...result, data: keysCount > 0 ? amount : Zero };
 };

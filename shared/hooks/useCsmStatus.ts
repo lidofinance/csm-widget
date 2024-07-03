@@ -1,34 +1,33 @@
 import { useLidoSWR } from '@lido-sdk/react';
-import { STRATEGY_EAGER } from 'consts/swr-strategies';
+import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 import { useCallback } from 'react';
+import { getSettledValue } from 'utils';
 import { useAccount } from './use-account';
 import { useCSModuleRPC } from './useCsmContracts';
-import { AddressZero } from '@ethersproject/constants';
-import { getCSMContractAddress } from 'consts/csm-contracts';
-import { getSettledValue } from 'utils';
 
-export const useCsmStatus = (config = STRATEGY_EAGER) => {
+export const useCsmStatus = (config = STRATEGY_CONSTANT) => {
   const { chainId } = useAccount();
   const contract = useCSModuleRPC();
 
   const fetcher = useCallback(async () => {
-    const earlyAdoptionAddress = getCSMContractAddress(
-      chainId,
-      'CSEarlyAdoption',
-    );
-
-    const [isPaused, isPublicRelease] = await Promise.allSettled([
+    const [isPausedResult, isPublicReleaseResult] = await Promise.allSettled([
       contract.isPaused(),
       contract.publicRelease(),
     ]);
 
+    const isPaused = getSettledValue(isPausedResult);
+    const isPublicRelease = getSettledValue(isPublicReleaseResult);
+    const isEarlyAdoption =
+      isPublicRelease !== undefined ? !isPublicRelease : undefined;
+    const isUnavailable = [isPaused, isPublicRelease].includes(undefined);
+
     return {
-      isPaused: getSettledValue(isPaused),
-      isPublicRelease: getSettledValue(isPublicRelease),
-      isEarlyAdoption:
-        earlyAdoptionAddress && earlyAdoptionAddress !== AddressZero,
+      isPaused,
+      isPublicRelease,
+      isEarlyAdoption,
+      isUnavailable,
     };
-  }, [chainId, contract]);
+  }, [contract]);
 
   return useLidoSWR(['csm-status', chainId], fetcher, config);
 };
