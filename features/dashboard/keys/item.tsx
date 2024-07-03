@@ -6,14 +6,15 @@ type ItemProps = {
   title: string;
   count?: number | string;
   tooltip?: string;
-  dangerous?: boolean;
+  variant?: 'warning' | 'secondary';
 };
 
-export const Item: FC<ItemProps> = ({ title, tooltip, count, dangerous }) => {
-  const isSecondary = typeof count === 'string' || !count;
-
+export const Item: FC<ItemProps> = ({ title, tooltip, count, variant }) => {
   const body = (
-    <ItemStyled $secondary={isSecondary} $warning={dangerous}>
+    <ItemStyled
+      $secondary={variant === 'secondary'}
+      $warning={variant === 'warning'}
+    >
       <CountStyled>{count}</CountStyled>
       {title}
     </ItemStyled>

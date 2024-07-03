@@ -29,6 +29,7 @@ export const KeysSection: FC = () => {
               title="Depositable"
               count={info.depositableValidatorsCount}
               tooltip="Keys awaiting the deposit from the Lido protocol"
+              variant="secondary"
             />
             <Item
               title="Active"
@@ -39,6 +40,7 @@ export const KeysSection: FC = () => {
               count={
                 info.targetLimitMode > 0 ? info.targetLimit : eaTarget ?? '—'
               }
+              variant="secondary"
               tooltip={
                 info.targetLimitMode === 1
                   ? 'The limit of keys for this Node Operator has been set by the DAO decision'
@@ -49,24 +51,28 @@ export const KeysSection: FC = () => {
                       : undefined
               }
             />
-            <Item title="Exited" count={info.totalExitedKeys} />
+            <Item
+              title="Exited"
+              count={info.totalExitedKeys}
+              variant="secondary"
+            />
           </Row>
           <Row>
             <Item
-              dangerous
+              variant="warning"
               title="Unbonded"
               count={unbonded?.toNumber() ?? '...'}
               tooltip="Keys that have insufficient bond"
             />
             <Item
-              dangerous
+              variant="warning"
               title="Stuck"
               count={info.stuckValidatorsCount}
               tooltip="Keys that have not been exited timely following an exit signal from the protocol"
             />
-            <Item dangerous title="Duplicated" count={0} />
+            <Item variant="secondary" title="Duplicated" count={0} />
             <Item
-              dangerous
+              variant="secondary"
               title="Invalid"
               count={info.totalAddedKeys - info.totalVettedKeys}
               tooltip="Keys with invalid signature"
