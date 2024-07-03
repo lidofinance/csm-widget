@@ -72,8 +72,7 @@ export const useRemoveKeys = ({ onConfirm, onRetry }: RemoveKeysOptions) => {
   const removeKeys = useCallback(
     async ({
       offset,
-      start,
-      count,
+      selection: { start, count },
     }: RemoveKeysFormInputType): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(offset !== undefined, 'Offset is not defined');

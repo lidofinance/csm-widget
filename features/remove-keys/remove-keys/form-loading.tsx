@@ -1,14 +1,16 @@
 import { FC, PropsWithChildren } from 'react';
+import { useFormState } from 'react-hook-form';
 import { WhenLoaded } from 'shared/components';
-import { useRemoveKeysFormData } from './context';
+import { RemoveKeysFormInputType, useRemoveKeysFormData } from './context';
 
 export const FormLoading: FC<PropsWithChildren> = ({ children }) => {
+  const { isLoading } = useFormState<RemoveKeysFormInputType>();
   const { loading, keys } = useRemoveKeysFormData();
   const isEmpty = !keys?.length;
 
   return (
     <WhenLoaded
-      loading={loading.isKeysLoading}
+      loading={isLoading || loading.isKeysLoading}
       empty={isEmpty && 'You don’t have any keys to remove'}
     >
       {children}

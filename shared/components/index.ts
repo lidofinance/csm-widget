@@ -22,3 +22,5 @@ export { ExternalIconLink } from './external-icon-link/external-icon-link';
 export { KeyLink } from './external-icon-link/key-link';
 export { WhenLoaded } from './when-loaded/when-loaded';
 export { StatusChip } from './status-chip/status-chip';
+export { Latice } from './latice/latice';
+export { Note } from './note/note';

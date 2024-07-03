@@ -3,15 +3,7 @@ import { InviteButtonsHookForm } from 'shared/hook-form/controls/invite-buttons-
 import { useAcceptInviteFormData } from '../context';
 
 export const InviteSelector = () => {
-  const {
-    invites,
-    loading: { isInvitesLoading },
-  } = useAcceptInviteFormData();
-  const isLoading = isInvitesLoading;
-
-  if (isLoading) {
-    return <div>...loading...</div>;
-  }
+  const { invites } = useAcceptInviteFormData();
 
   return (
     <>

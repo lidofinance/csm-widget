@@ -1,7 +1,10 @@
 import { FC } from 'react';
 import { ExternalIconLink } from './external-icon-link';
 import { useAccount } from 'shared/hooks';
-import { getKeyLingGetter } from 'consts/csm-key-link-getter';
+import {
+  VALIDATOR_LINK_NAME,
+  getValidatorLinkGetter,
+} from 'consts/validator-link-getter';
 
 type KeyLinkProps = {
   pubkey: string;
@@ -9,9 +12,14 @@ type KeyLinkProps = {
 
 export const KeyLink: FC<KeyLinkProps> = ({ pubkey }) => {
   const { chainId } = useAccount();
-  const getter = getKeyLingGetter(chainId);
+  const getValidatorLink = getValidatorLinkGetter(chainId);
 
-  if (!getter) return null;
+  if (!getValidatorLink) return null;
 
-  return <ExternalIconLink href={getter(pubkey)} />;
+  return (
+    <ExternalIconLink
+      href={getValidatorLink(pubkey)}
+      title={`View on ${VALIDATOR_LINK_NAME}`}
+    />
+  );
 };

@@ -5,14 +5,17 @@ import { NodeOperatorId } from 'types';
 export type RemoveKeysFormDataContextValue = RemoveKeysFormNetworkData;
 
 export type RemoveKeysFormInputType = {
-  start: number; // 0..[keys.length]
-  count: number; // 0..[keys.length]
+  selection: {
+    start: number; // 0..[keys.length]
+    count: number; // 0..[keys.length]
+  };
   offset?: number; // totalDepositedKeys
 };
 
 export type RemoveKeysFormLoading = {
   isKeysLoading: boolean;
   isBondBalanceLoading: boolean;
+  isInfoLoading: boolean;
   isMultisigLoading: boolean;
   isMaxGasPriceLoading: boolean;
 };
