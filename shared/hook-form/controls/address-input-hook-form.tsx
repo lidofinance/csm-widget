@@ -1,19 +1,18 @@
 import { useController } from 'react-hook-form';
 import { InputAddress } from 'shared/components/input-address';
-import { isValidAddress } from 'shared/components/input-address/address-validation';
+import { isValidationErrorTypeValidate } from '../validation/validation-error';
 
 type AddressInputHookFormProps = Partial<
   React.ComponentProps<typeof InputAddress>
 > & {
   fieldName: string;
   label?: string;
-  revoke?: boolean;
 };
 
 export const AddressInputHookForm = ({
   fieldName,
   label,
-  revoke,
+  error: errorProp,
   ...props
 }: AddressInputHookFormProps) => {
   const {
@@ -21,22 +20,21 @@ export const AddressInputHookForm = ({
     fieldState: { error },
   } = useController({
     name: fieldName,
-    rules: {
-      validate: isValidAddress,
-    },
+    defaultValue: '',
   });
+
+  const hasErrorHighlight = isValidationErrorTypeValidate(error?.type);
+  // allows to show error state without message
+  const errorMessage = hasErrorHighlight && (error?.message || true);
 
   return (
     <InputAddress
       {...props}
       {...field}
-      error={!!error}
+      error={errorProp ?? errorMessage}
       disabled={props.disabled ?? field.disabled}
       label={label ?? fieldName}
       showCopyBtn={false}
-      address={''}
-      isAddressResolving={false}
-      revoke={revoke}
       fullwidth
     />
   );

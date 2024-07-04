@@ -24,6 +24,7 @@ export const RoleBlock: FC<RoleBlockProps> = ({
   address,
   proposedAddress,
 }) => {
+  // TODO: shared method
   const hasProposedAddress =
     !!proposedAddress && proposedAddress !== AddressZero;
 

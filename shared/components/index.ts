@@ -24,3 +24,5 @@ export { WhenLoaded } from './when-loaded/when-loaded';
 export { StatusChip } from './status-chip/status-chip';
 export { Latice } from './latice/latice';
 export { Note } from './note/note';
+export { Warning } from './warning/warning';
+export { TitledAddress } from './titled-address/titled-address';

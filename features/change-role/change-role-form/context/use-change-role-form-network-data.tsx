@@ -4,6 +4,7 @@ import { useMaxGasPrice, useNodeOperatorInfo } from 'shared/hooks';
 import { useIsMultisig } from 'shared/hooks/useIsMultisig';
 import { type ChangeRoleFormNetworkData } from './types';
 import { ROLES } from 'consts/roles';
+import { AddressZero } from '@ethersproject/constants';
 
 export const useChangeRoleFormNetworkData = ({
   role,
@@ -34,13 +35,18 @@ export const useChangeRoleFormNetworkData = ({
     [isInfoLoading, isMultisigLoading, isMaxGasPriceLoading],
   );
 
+  const currentAddress =
+    role === ROLES.REWARDS ? info?.rewardAddress : info?.managerAddress;
+  const proposedAddressRaw =
+    role === ROLES.REWARDS
+      ? info?.proposedRewardAddress
+      : info?.proposedManagerAddress;
+  const proposedAddress =
+    proposedAddressRaw !== AddressZero ? proposedAddressRaw : undefined;
+
   return {
-    currentAddress:
-      role === ROLES.REWARDS ? info?.rewardAddress : info?.managerAddress,
-    proposedAddress:
-      role === ROLES.REWARDS
-        ? info?.proposedRewardAddress
-        : info?.proposedManagerAddress,
+    currentAddress,
+    proposedAddress,
     nodeOperatorId,
     isMultisig: isMultisigLoading ? undefined : isMultisig,
     maxGasPrice,

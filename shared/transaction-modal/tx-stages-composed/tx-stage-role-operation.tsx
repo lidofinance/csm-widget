@@ -1,9 +1,8 @@
-import { Address } from 'wagmi';
 import { TxStagePending } from '../tx-stages-basic/tx-stage-pending';
 import { TxStageSign } from '../tx-stages-basic/tx-stage-sign';
 
 type TxStageSignOperationAmountProps = {
-  address: Address;
+  address: string;
   role: string;
   operationText: string;
   isPending?: boolean;

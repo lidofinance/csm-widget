@@ -10,17 +10,24 @@ import { ChangeRoleFormDataContext } from './change-role-form-context';
 import { type ChangeRoleFormInputType } from './types';
 import { useChangeRole } from './use-change-role';
 import { useChangeRoleFormNetworkData } from './use-change-role-form-network-data';
+import { useChangeRoleFormValidationContext } from './use-change-role-form-validation-context';
+import { changeRoleFormValidationResolver } from './validation';
 
 export const ChangeRoleFormProvider: FC<PropsWithChildren<{ role: ROLES }>> = ({
   children,
   role,
 }) => {
   const networkData = useChangeRoleFormNetworkData({ role });
+  const validationContextPromise =
+    useChangeRoleFormValidationContext(networkData);
 
   const formObject = useForm<ChangeRoleFormInputType>({
     defaultValues: {
       role,
+      isRevoke: false,
     },
+    resolver: changeRoleFormValidationResolver,
+    context: validationContextPromise,
     mode: 'onChange',
   });
 

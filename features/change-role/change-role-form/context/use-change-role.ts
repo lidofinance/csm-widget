@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
-import { isAddress } from 'ethers/lib/utils.js';
+import { AddressZero } from '@ethersproject/constants';
+import { ROLES } from 'consts/roles';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCSModuleWeb3 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
@@ -9,10 +10,8 @@ import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import { Address } from 'wagmi';
 import { ChangeRoleFormInputType } from '.';
 import { useTxModalStagesChangeRole } from '../hooks/use-tx-modal-stages-change-role';
-import { ROLES } from 'consts/roles';
 
 type UseChangeRoleOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -20,7 +19,7 @@ type UseChangeRoleOptions = {
 };
 
 type ChangeRoleMethodParams = {
-  address: Address;
+  address: string;
   nodeOperatorId: NodeOperatorId;
 };
 
@@ -110,10 +109,14 @@ export const useChangeRole = ({ onConfirm, onRetry }: UseChangeRoleOptions) => {
   const getMethod = useChangeRoleMethods();
 
   const changeRole = useCallback(
-    async ({ role, address }: ChangeRoleFormInputType): Promise<boolean> => {
+    async ({
+      role,
+      address: addressRaw,
+      isRevoke,
+    }: ChangeRoleFormInputType): Promise<boolean> => {
+      const address = isRevoke ? AddressZero : addressRaw;
       invariant(role, 'Role is not defined');
       invariant(address, 'Addess is not defined');
-      invariant(isAddress(address), 'Addess should starts with "0x"');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       try {

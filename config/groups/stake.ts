@@ -9,6 +9,8 @@ import { IPFS_REFERRAL_ADDRESS } from './ipfs';
 // otherwise you will get something like a cyclic error!
 import { preConfig } from '../get-preconfig';
 
+// TODO: review this file
+
 export const PRECISION = 10 ** 6;
 
 // how much to leave out on user balance when max is pressed

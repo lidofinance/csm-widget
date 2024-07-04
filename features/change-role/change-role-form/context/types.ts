@@ -6,6 +6,7 @@ export type ChangeRoleFormDataContextValue = ChangeRoleFormNetworkData;
 
 export type ChangeRoleFormInputType = {
   address?: string;
+  isRevoke: boolean;
   role: ROLES;
 };
 
@@ -26,8 +27,6 @@ export type ChangeRoleFormNetworkData = {
 };
 
 export type ChangeRoleFormValidationContext = {
-  isWalletActive: boolean;
-  gasCost: BigNumber;
-  etherBalance: BigNumber;
-  isMultisig: boolean;
+  currentAddress?: string;
+  proposedAddress?: string;
 };
