@@ -3,14 +3,17 @@ import invariant from 'tiny-invariant';
 
 import { AddressZero } from '@ethersproject/constants';
 import { ROLES } from 'consts/roles';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCSModuleWeb3 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import { ChangeRoleFormInputType } from '.';
+import { ChangeRoleFormDataContextValue, ChangeRoleFormInputType } from '.';
+import {
+  useConfirmReproposeModal,
+  useConfirmRewardsRoleModal,
+} from '../hooks/use-confirm-modal';
 import { useTxModalStagesChangeRole } from '../hooks/use-tx-modal-stages-change-role';
 
 type UseChangeRoleOptions = {
@@ -103,21 +106,29 @@ const useChangeRoleMethods = () => {
 };
 
 export const useChangeRole = ({ onConfirm, onRetry }: UseChangeRoleOptions) => {
-  const nodeOperatorId = useNodeOperatorId(); // TODO: move to context
   const { txModalStages } = useTxModalStagesChangeRole();
 
   const getMethod = useChangeRoleMethods();
+  const confirmRepropose = useConfirmReproposeModal();
+  const confirmRewardsRole = useConfirmRewardsRoleModal();
 
   const changeRole = useCallback(
-    async ({
-      role,
-      address: addressRaw,
-      isRevoke,
-    }: ChangeRoleFormInputType): Promise<boolean> => {
+    async (
+      { role, address: addressRaw, isRevoke }: ChangeRoleFormInputType,
+      { nodeOperatorId, proposedAddress }: ChangeRoleFormDataContextValue,
+    ): Promise<boolean> => {
       const address = isRevoke ? AddressZero : addressRaw;
       invariant(role, 'Role is not defined');
       invariant(address, 'Addess is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+
+      if (role === 'REWARDS' && !(await confirmRewardsRole())) {
+        return false;
+      }
+
+      if (proposedAddress && !(await confirmRepropose())) {
+        return false;
+      }
 
       try {
         const method = getMethod(role);
@@ -154,7 +165,14 @@ export const useChangeRole = ({ onConfirm, onRetry }: UseChangeRoleOptions) => {
         return false;
       }
     },
-    [nodeOperatorId, getMethod, txModalStages, onConfirm, onRetry],
+    [
+      confirmRewardsRole,
+      confirmRepropose,
+      getMethod,
+      txModalStages,
+      onConfirm,
+      onRetry,
+    ],
   );
 
   return {

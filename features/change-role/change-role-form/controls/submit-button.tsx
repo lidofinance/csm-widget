@@ -1,9 +1,9 @@
-import { SubmitButtonHookForm } from 'shared/hook-form/controls/submit-button-hook-form';
-import { useRole } from '../hooks/useRole';
-import { Note } from 'shared/components';
 import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { Note } from 'shared/components';
+import { SubmitButtonHookForm } from 'shared/hook-form/controls/submit-button-hook-form';
 import { ChangeRoleFormInputType } from '../context';
+import { useRole } from '../hooks/use-role';
 
 export const SubmitButton = () => {
   const role = useRole();

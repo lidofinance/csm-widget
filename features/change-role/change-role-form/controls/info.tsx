@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { Latice, TitledAddress, Warning } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls/submit-button-hook-form';
 import { ChangeRoleFormInputType, useChangeRoleFormData } from '../context';
-import { useRole } from '../hooks/useRole';
+import { useRole } from '../hooks/use-role';
 
 export const Info: FC = () => {
   const role = useRole();
