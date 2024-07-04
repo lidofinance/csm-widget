@@ -16,7 +16,6 @@ export const SwitchWrapper = styled.div<{ $count: number }>`
   justify-content: space-around;
   align-items: center;
   user-select: none;
-  margin: 0 auto 24px auto;
 `;
 
 export const Handle = styled.div<{ $active: number }>`

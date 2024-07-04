@@ -17,8 +17,11 @@ export const useRemoveKeysFormNetworkData = (): RemoveKeysFormNetworkData => {
     update: updateBondBalance,
     initialLoading: isBondBalanceLoading,
   } = useNodeOperatorBalance(nodeOperatorId);
-  const { data: info, update: updateInfo } =
-    useNodeOperatorInfo(nodeOperatorId);
+  const {
+    data: info,
+    update: updateInfo,
+    initialLoading: isInfoLoading,
+  } = useNodeOperatorInfo(nodeOperatorId);
   const {
     data: keys,
     update: updateKeys,
@@ -43,12 +46,14 @@ export const useRemoveKeysFormNetworkData = (): RemoveKeysFormNetworkData => {
     () => ({
       isBondBalanceLoading,
       isKeysLoading,
+      isInfoLoading,
       isMultisigLoading,
       isMaxGasPriceLoading,
     }),
     [
       isBondBalanceLoading,
       isKeysLoading,
+      isInfoLoading,
       isMultisigLoading,
       isMaxGasPriceLoading,
     ],

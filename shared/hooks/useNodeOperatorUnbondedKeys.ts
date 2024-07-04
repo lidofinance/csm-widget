@@ -9,7 +9,7 @@ export const useNodeOperatorUnbondedKeys = (
 ) => {
   return useContractSWR({
     contract: useCSAccountingRPC(),
-    method: 'getUnbondedKeysCount',
+    method: 'getUnbondedKeysCountToEject',
     params: [nodeOperatorId],
     shouldFetch: !!nodeOperatorId,
     config,

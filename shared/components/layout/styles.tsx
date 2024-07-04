@@ -48,5 +48,10 @@ export const IPFSInfoBoxOnlyMobileAndPortableWrapper = styled.div`
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: ${({ theme }) => theme.spaceMap.xl}px;
+
+  > * {
+    width: 100%;
+  }
 `;

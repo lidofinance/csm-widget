@@ -13,8 +13,7 @@ import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 import { config } from 'config';
 import { contentSecurityPolicy } from 'config/csp';
 
-// let host = 'https://stake.lido.fi';
-let host = 'https://csm-devnet.vercel.app';
+let host = 'https://csm.testnet.fi';
 
 const secureHeaders = createHeadersObject({ contentSecurityPolicy });
 const cspMetaTagContent =
@@ -65,7 +64,6 @@ export default class MyDocument extends Document {
 
   get metaPreviewImgUrl(): string {
     return `${host}/preview.png`;
-    // return `/preview.png`; // FIXME: host
   }
 
   render(): JSX.Element {
@@ -89,8 +87,9 @@ export default class MyDocument extends Document {
           />
           <link
             rel="icon"
-            type="image/svg+xml"
-            href={`${config.BASE_PATH_ASSET}/favicon-512x512.svg`}
+            type="image/png"
+            sizes="512x512"
+            href={`${config.BASE_PATH_ASSET}/favicon-512x512.png`}
           />
           <link
             rel="apple-touch-icon"

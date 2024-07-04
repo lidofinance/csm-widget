@@ -23,6 +23,7 @@ export const InviteButtonsHookForm: FC<Props> = ({
     formState: { defaultValues },
   } = useController<Record<string, NodeOperatorInvite>>({ name: fieldName });
 
+  // FIXME: onChange{,1}
   return (
     <Stack direction="column">
       {options.map((invite) => (
