@@ -11,7 +11,7 @@ import {
 } from 'shared/hooks/use-csm-permit-signature';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import { NodeOperatorId } from 'types';
-import { runWithTransactionLogger } from 'utils';
+import { addExtraWei, runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
 import { AddBondFormInputType } from '../context';
@@ -150,10 +150,15 @@ export const useAddBond = ({ onConfirm, onRetry }: UseAddBondOptions) => {
   const getPermitSignature = useCsmPermitSignature();
 
   const addBond = useCallback(
-    async ({ amount, token }: AddBondFormInputType): Promise<boolean> => {
+    async ({
+      amount: amountRaw,
+      token,
+    }: AddBondFormInputType): Promise<boolean> => {
       invariant(token, 'Token is not defined');
-      invariant(amount, 'BondAmount is not defined');
+      invariant(amountRaw, 'BondAmount is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+
+      const amount = addExtraWei(amountRaw, token);
 
       try {
         let permit: GatherPermitSignatureResult | undefined;
