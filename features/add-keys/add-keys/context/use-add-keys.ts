@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
-import { runWithTransactionLogger } from 'utils';
+import { addExtraWei, runWithTransactionLogger } from 'utils';
 import { getFeeData } from 'utils/getFeeData';
 
 import { TOKENS } from 'consts/tokens';
@@ -196,12 +196,14 @@ export const useAddKeys = ({ onConfirm, onRetry }: AddKeysOptions) => {
     async ({
       depositData,
       token,
-      bondAmount,
+      bondAmount: bondAmountRaw,
     }: AddKeysFormInputType): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
-      invariant(bondAmount, 'BondAmount is not defined');
+      invariant(bondAmountRaw, 'BondAmount is not defined');
+
+      const bondAmount = addExtraWei(bondAmountRaw, token);
 
       try {
         let permit: GatherPermitSignatureResult | undefined;

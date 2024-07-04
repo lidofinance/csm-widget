@@ -4,7 +4,6 @@ import { STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { useCSAccountingRPC } from 'shared/hooks';
-import { addExtraWei } from 'utils';
 
 const METHOD_BY_TOKEN = {
   [TOKENS.ETH]: 'getBondAmountByKeysCount(uint256,uint256)',
@@ -30,7 +29,5 @@ export const useNodeOperatorFirstKeysBond = (
     config,
   });
 
-  const amount = addExtraWei(result.data, token);
-
-  return { ...result, data: keysCount > 0 ? amount : Zero };
+  return { ...result, data: keysCount > 0 ? result.data : Zero };
 };

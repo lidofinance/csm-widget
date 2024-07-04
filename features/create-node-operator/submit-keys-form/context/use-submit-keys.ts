@@ -12,7 +12,7 @@ import {
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import invariant from 'tiny-invariant';
 import { NodeOperatorId, Proof } from 'types';
-import { runWithTransactionLogger } from 'utils';
+import { addExtraWei, runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { formatKeys } from 'utils/formatKeys';
 import { getFeeData } from 'utils/getFeeData';
@@ -216,12 +216,14 @@ export const useSubmitKeys = ({ onConfirm, onRetry }: SubmitKeysOptions) => {
       referral,
       depositData,
       token,
-      bondAmount,
+      bondAmount: bondAmountRaw,
       eaProof,
     }: SubmitKeysFormInputType): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
-      invariant(bondAmount, 'BondAmount is not defined');
+      invariant(bondAmountRaw, 'BondAmount is not defined');
+
+      const bondAmount = addExtraWei(bondAmountRaw, token);
 
       try {
         let permit: GatherPermitSignatureResult | undefined;

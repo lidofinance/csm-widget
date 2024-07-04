@@ -5,7 +5,6 @@ import { TOKENS } from 'consts/tokens';
 import { useCSAccountingRPC } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { NodeOperatorId } from 'types';
-import { addExtraWei } from 'utils';
 
 const METHOD_BY_TOKEN = {
   [TOKENS.ETH]: 'getRequiredBondForNextKeys',
@@ -38,7 +37,5 @@ export const useNodeOperatorNextKeysBond = (
     config,
   });
 
-  const amount = addExtraWei(result.data, token);
-
-  return { ...result, data: keysCount > 0 ? amount : Zero };
+  return { ...result, data: keysCount > 0 ? result.data : Zero };
 };
