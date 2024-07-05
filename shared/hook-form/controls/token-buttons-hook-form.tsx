@@ -1,7 +1,9 @@
 import { TOKENS } from 'consts/tokens';
 import { FC, ReactNode } from 'react';
 import { useController } from 'react-hook-form';
-import { RadioButton, Stack } from 'shared/components';
+import { RadioButton } from 'shared/components';
+import { StackStyle } from 'shared/components/stack/style';
+import styled from 'styled-components';
 
 type Props = {
   fieldName?: string;
@@ -18,7 +20,7 @@ export const TokenButtonsHookForm: FC<Props> = ({
   } = useController<Record<string, TOKENS>>({ name: fieldName });
 
   return (
-    <Stack>
+    <StackWrap>
       {Object.keys(options).map((key) => (
         <RadioButton
           key={key}
@@ -30,6 +32,12 @@ export const TokenButtonsHookForm: FC<Props> = ({
           }}
         />
       ))}
-    </Stack>
+    </StackWrap>
   );
 };
+
+const StackWrap = styled(StackStyle)`
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: column;
+  }
+`;

@@ -8,4 +8,10 @@ export const SignStyle = styled.div`
 
   color: var(--lido-color-textSecondary);
   line-height: 0;
+
+  /* FIXME: need to fix this hack */
+  ${({ theme }) => theme.mediaQueries.lg} {
+    display: none;
+    visibility: hidden;
+  }
 `;
