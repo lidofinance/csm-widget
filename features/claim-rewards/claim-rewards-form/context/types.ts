@@ -10,7 +10,7 @@ export type ClaimRewardsFormInputType = {
   reward?: {
     proof: Proof;
     shares: BigNumber;
-  };
+  }; // TODO: move to form data
 };
 
 export type ClaimRewardsFormLoading = {

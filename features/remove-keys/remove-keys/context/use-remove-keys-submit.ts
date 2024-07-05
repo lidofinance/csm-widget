@@ -1,4 +1,3 @@
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import { useCSModuleWeb3 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
@@ -8,7 +7,10 @@ import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
 import { useTxModalStagesRemoveKeys } from '../hooks/use-tx-modal-stages-remove-keys';
-import { RemoveKeysFormInputType } from './types';
+import {
+  RemoveKeysFormDataContextValue,
+  RemoveKeysFormInputType,
+} from './types';
 
 type RemoveKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -64,16 +66,18 @@ const useRemoveKeysMethods = () => {
   );
 };
 
-export const useRemoveKeys = ({ onConfirm, onRetry }: RemoveKeysOptions) => {
+export const useRemoveKeysSubmit = ({
+  onConfirm,
+  onRetry,
+}: RemoveKeysOptions) => {
   const { txModalStages } = useTxModalStagesRemoveKeys();
   const getRemoveKeysMethod = useRemoveKeysMethods();
-  const nodeOperatorId = useNodeOperatorId();
 
   const removeKeys = useCallback(
-    async ({
-      offset,
-      selection: { start, count },
-    }: RemoveKeysFormInputType): Promise<boolean> => {
+    async (
+      { offset, selection: { start, count } }: RemoveKeysFormInputType,
+      { nodeOperatorId }: RemoveKeysFormDataContextValue,
+    ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(offset !== undefined, 'Offset is not defined');
 
@@ -116,7 +120,7 @@ export const useRemoveKeys = ({ onConfirm, onRetry }: RemoveKeysOptions) => {
         return false;
       }
     },
-    [nodeOperatorId, getRemoveKeysMethod, txModalStages, onConfirm, onRetry],
+    [getRemoveKeysMethod, txModalStages, onConfirm, onRetry],
   );
 
   return removeKeys;

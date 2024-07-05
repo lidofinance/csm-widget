@@ -79,6 +79,7 @@ export const useAddKeysFormNetworkData = (): AddKeysFormNetworkData => {
   );
 
   return {
+    nodeOperatorId,
     stethBalance,
     wstethBalance,
     etherBalance,

@@ -8,7 +8,7 @@ export type AddKeysFormInputType = {
   token: TOKENS;
   rawDepositData?: string;
   depositData: DepositData[];
-  bondAmount?: BigNumber;
+  bondAmount?: BigNumber; // TODO: move to form data
 };
 
 export type AddKeysFormLoading = {

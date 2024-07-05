@@ -4,13 +4,20 @@ import { TOKENS } from 'consts/tokens';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
+  useFormData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller';
 import { useClaimRewardsFormNetworkData } from './use-claim-rewards-form-network-data';
-import { useClaimRewards } from './use-claim-rewards';
-import { ClaimRewardsFormDataContext } from './claim-rewards-form-context';
-import { type ClaimRewardsFormInputType } from './types';
+import { useClaimRewardsSubmit } from './use-claim-rewards-submit';
+import {
+  ClaimRewardsFormDataContextValue,
+  type ClaimRewardsFormInputType,
+} from './types';
 import { useUpdateProof } from './use-update-proof';
+
+export const useClaimRewardsFormData =
+  useFormData<ClaimRewardsFormDataContextValue>;
 
 export const ClaimRewardsFormProvider: FC<PropsWithChildren> = ({
   children,
@@ -29,29 +36,31 @@ export const ClaimRewardsFormProvider: FC<PropsWithChildren> = ({
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { claimRewards } = useClaimRewards({
+  const { claimRewards } = useClaimRewardsSubmit({
     onConfirm: networkData.revalidate,
     onRetry: retryFire,
   });
 
   const value = networkData;
 
-  const formControllerValue: FormControllerContextValueType<ClaimRewardsFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: claimRewards,
-        retryEvent,
-      }),
-      [claimRewards, retryEvent],
-    );
+  const formControllerValue: FormControllerContextValueType<
+    ClaimRewardsFormInputType,
+    ClaimRewardsFormDataContextValue
+  > = useMemo(
+    () => ({
+      onSubmit: claimRewards,
+      retryEvent,
+    }),
+    [claimRewards, retryEvent],
+  );
 
   return (
     <FormProvider {...formObject}>
-      <ClaimRewardsFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={value}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </ClaimRewardsFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

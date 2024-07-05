@@ -2,17 +2,16 @@ import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
+import { Zero } from '@ethersproject/constants';
 import { TOKENS } from 'consts/tokens';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCSAccountingRPC, useCSModuleWeb3 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import { NodeOperatorId, Proof } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import { ClaimRewardsFormInputType } from '.';
+import { ClaimRewardsFormDataContextValue, ClaimRewardsFormInputType } from '.';
 import { useTxModalStagesClaimRewards } from '../hooks/use-tx-modal-stages-claim-rewards';
-import { Zero } from '@ethersproject/constants';
 
 type UseClaimRewardsOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -165,22 +164,20 @@ const useClaimRewardsMethods = () => {
   );
 };
 
-export const useClaimRewards = ({
+export const useClaimRewardsSubmit = ({
   onConfirm,
   onRetry,
 }: UseClaimRewardsOptions) => {
-  const nodeOperatorId = useNodeOperatorId(); // TODO: move to context
   const { txModalStages } = useTxModalStagesClaimRewards();
   const CSAccounting = useCSAccountingRPC();
 
   const getMethod = useClaimRewardsMethods();
 
   const claimRewards = useCallback(
-    async ({
-      amount,
-      token,
-      reward,
-    }: ClaimRewardsFormInputType): Promise<boolean> => {
+    async (
+      { amount, token, reward }: ClaimRewardsFormInputType,
+      { nodeOperatorId }: ClaimRewardsFormDataContextValue,
+    ): Promise<boolean> => {
       invariant(token, 'Token is not defined');
       invariant(amount, 'BondAmount is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
@@ -226,14 +223,7 @@ export const useClaimRewards = ({
         return false;
       }
     },
-    [
-      nodeOperatorId,
-      getMethod,
-      txModalStages,
-      CSAccounting,
-      onConfirm,
-      onRetry,
-    ],
+    [getMethod, txModalStages, CSAccounting, onConfirm, onRetry],
   );
 
   return {

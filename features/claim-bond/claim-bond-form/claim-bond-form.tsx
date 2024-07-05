@@ -6,19 +6,20 @@ import { ClaimBondFormInfo } from './claim-bond-form-info';
 import { AmountInput } from './controls/amount-input';
 import { SubmitButton } from './controls/submit-button';
 import { ClaimBondHat } from './hat';
-import { ClaimBondBlock, FormControllerStyled } from './styles';
+import { FormBlock } from 'shared/components';
+import { FormControllerStyled } from 'shared/hook-form/form-controller';
 
 export const ClaimBondForm: FC = memo(() => {
   return (
     <ClaimBondFormProvider>
       <ClaimBondHat />
-      <ClaimBondBlock>
+      <FormBlock>
         <FormControllerStyled>
           <AmountInput />
           <SubmitButton />
         </FormControllerStyled>
         <ClaimBondFormInfo />
-      </ClaimBondBlock>
+      </FormBlock>
     </ClaimBondFormProvider>
   );
 });

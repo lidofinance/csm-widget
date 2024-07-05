@@ -4,12 +4,18 @@ import { TOKENS } from 'consts/tokens';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
+  useFormData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller';
 import { useAddBondFormNetworkData } from './use-add-bond-form-network-data';
-import { useAddBond } from './use-add-bond';
-import { AddBondFormDataContext } from './add-bond-form-context';
-import { type AddBondFormInputType } from './types';
+import { useAddBondSubmit } from './use-add-bond-submit';
+import {
+  AddBondFormDataContextValue,
+  type AddBondFormInputType,
+} from './types';
+
+export const useAddBondFormData = useFormData<AddBondFormDataContextValue>;
 
 export const AddBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useAddBondFormNetworkData();
@@ -24,29 +30,31 @@ export const AddBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { addBond } = useAddBond({
+  const { addBond } = useAddBondSubmit({
     onConfirm: networkData.revalidate,
     onRetry: retryFire,
   });
 
   const value = networkData;
 
-  const formControllerValue: FormControllerContextValueType<AddBondFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: addBond,
-        retryEvent,
-      }),
-      [addBond, retryEvent],
-    );
+  const formControllerValue: FormControllerContextValueType<
+    AddBondFormInputType,
+    AddBondFormDataContextValue
+  > = useMemo(
+    () => ({
+      onSubmit: addBond,
+      retryEvent,
+    }),
+    [addBond, retryEvent],
+  );
 
   return (
     <FormProvider {...formObject}>
-      <AddBondFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={value}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </AddBondFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

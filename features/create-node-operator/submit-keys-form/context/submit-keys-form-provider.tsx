@@ -4,15 +4,22 @@ import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
+  useFormData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
-import { SubmitKeysFormDataContext } from './submit-keys-form-context';
-import { type SubmitKeysFormInputType } from './types';
+import {
+  SubmitKeysFormDataContextValue,
+  type SubmitKeysFormInputType,
+} from './types';
 import { useCalculateBondAmount } from './use-calculate-bond-amount';
 import { useCalculateDepositData } from './use-calculate-deposit-data';
-import { useSubmitKeys } from './use-submit-keys';
+import { useSubmitKeysSubmit } from './use-submit-keys-submit';
 import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
 import { useUpdateProof } from './use-update-proof';
+
+export const useSubmitKeysFormData =
+  useFormData<SubmitKeysFormDataContextValue>;
 
 export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useSubmitKeysFormNetworkData();
@@ -32,29 +39,31 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const submitKeys = useSubmitKeys({
+  const submitKeys = useSubmitKeysSubmit({
     onConfirm: networkData.revalidate,
     onRetry: retryFire,
   });
 
   const value = networkData;
 
-  const formControllerValue: FormControllerContextValueType<SubmitKeysFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: submitKeys,
-        retryEvent,
-      }),
-      [submitKeys, retryEvent],
-    );
+  const formControllerValue: FormControllerContextValueType<
+    SubmitKeysFormInputType,
+    SubmitKeysFormDataContextValue
+  > = useMemo(
+    () => ({
+      onSubmit: submitKeys,
+      retryEvent,
+    }),
+    [submitKeys, retryEvent],
+  );
 
   return (
     <FormProvider {...formObject}>
-      <SubmitKeysFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={value}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </SubmitKeysFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

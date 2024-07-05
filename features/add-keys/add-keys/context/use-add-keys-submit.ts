@@ -1,58 +1,50 @@
-import { AddressZero } from '@ethersproject/constants';
+import { useCallback } from 'react';
+
+import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
+import { addExtraWei, runWithTransactionLogger } from 'utils';
+import { getFeeData } from 'utils/getFeeData';
+
 import { TOKENS } from 'consts/tokens';
 import { BigNumberish } from 'ethers';
-import { BytesLike, isAddress } from 'ethers/lib/utils.js';
-import { useNodeOperator } from 'providers/node-operator-provider';
-import { useCallback } from 'react';
+import { BytesLike } from 'ethers/lib/utils.js';
+import { useCSModuleWeb3 } from 'shared/hooks';
 import {
   GatherPermitSignatureResult,
-  useCSModuleWeb3,
   useCsmPermitSignature,
-} from 'shared/hooks';
-import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
+} from 'shared/hooks/use-csm-permit-signature';
 import invariant from 'tiny-invariant';
-import { NodeOperatorId, Proof } from 'types';
-import { addExtraWei, runWithTransactionLogger } from 'utils';
+import { NodeOperatorId } from 'types';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { formatKeys } from 'utils/formatKeys';
-import { getFeeData } from 'utils/getFeeData';
-import { Address } from 'wagmi';
-import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
-import { getAddedNodeOperator } from '../utils';
-import { SubmitKeysFormInputType } from './types';
+import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
+import { AddKeysFormDataContextValue, AddKeysFormInputType } from './types';
 
-type SubmitKeysOptions = {
+type AddKeysOptions = {
   onConfirm?: () => Promise<void> | void;
   onRetry?: () => void;
 };
 
 type MethodParams = {
+  nodeOperatorId: NodeOperatorId;
   bondAmount: BigNumberish;
   keysCount: BigNumberish;
   publicKeys: BytesLike;
   signatures: BytesLike;
-  managerAddress: Address;
-  rewardsAddress: Address;
   permit: GatherPermitSignatureResult | undefined;
-  eaProof: Proof;
-  referral: Address;
 };
 
 // this encapsulates eth/steth/wsteth flows
-const useSubmitKeysMethods = () => {
+const useAddKeysMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();
   const CSModuleWeb3 = useCSModuleWeb3();
 
-  const submitETH = useCallback(
+  const methodETH = useCallback(
     async ({
+      nodeOperatorId,
       bondAmount,
       keysCount,
       publicKeys,
       signatures,
-      managerAddress,
-      rewardsAddress,
-      eaProof,
-      referral,
     }: MethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
@@ -66,22 +58,22 @@ const useSubmitKeysMethods = () => {
       };
 
       const params = [
+        nodeOperatorId,
         keysCount,
         publicKeys,
         signatures,
-        managerAddress,
-        rewardsAddress,
-        eaProof,
-        referral,
       ] as const;
 
       const originalGasLimit =
-        await CSModuleWeb3.estimateGas.addNodeOperatorETH(...params, overrides);
+        await CSModuleWeb3.estimateGas.addValidatorKeysETH(
+          ...params,
+          overrides,
+        );
 
       const gasLimit = applyGasLimitRatio(originalGasLimit);
 
       return () =>
-        CSModuleWeb3.addNodeOperatorETH(...params, {
+        CSModuleWeb3.addValidatorKeysETH(...params, {
           ...overrides,
           gasLimit,
         });
@@ -89,16 +81,13 @@ const useSubmitKeysMethods = () => {
     [CSModuleWeb3, staticRpcProvider],
   );
 
-  const submitSTETH = useCallback(
+  const methodSTETH = useCallback(
     async ({
+      nodeOperatorId,
       keysCount,
       publicKeys,
       signatures,
-      managerAddress,
-      rewardsAddress,
       permit,
-      eaProof,
-      referral,
     }: MethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
       invariant(permit, 'must have permit');
@@ -112,18 +101,15 @@ const useSubmitKeysMethods = () => {
       };
 
       const params = [
+        nodeOperatorId,
         keysCount,
         publicKeys,
         signatures,
-        managerAddress,
-        rewardsAddress,
         permit,
-        eaProof,
-        referral,
       ] as const;
 
       const originalGasLimit =
-        await CSModuleWeb3.estimateGas.addNodeOperatorStETH(
+        await CSModuleWeb3.estimateGas.addValidatorKeysStETH(
           ...params,
           overrides,
         );
@@ -131,7 +117,7 @@ const useSubmitKeysMethods = () => {
       const gasLimit = applyGasLimitRatio(originalGasLimit);
 
       return () =>
-        CSModuleWeb3.addNodeOperatorStETH(...params, {
+        CSModuleWeb3.addValidatorKeysStETH(...params, {
           ...overrides,
           gasLimit,
         });
@@ -139,16 +125,13 @@ const useSubmitKeysMethods = () => {
     [CSModuleWeb3, staticRpcProvider],
   );
 
-  const submitWSTETH = useCallback(
+  const methodWSTETH = useCallback(
     async ({
+      nodeOperatorId,
       keysCount,
       publicKeys,
       signatures,
-      managerAddress,
-      rewardsAddress,
       permit,
-      eaProof,
-      referral,
     }: MethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
       invariant(permit, 'must have permit');
@@ -162,18 +145,15 @@ const useSubmitKeysMethods = () => {
       };
 
       const params = [
+        nodeOperatorId,
         keysCount,
         publicKeys,
         signatures,
-        managerAddress,
-        rewardsAddress,
         permit,
-        eaProof,
-        referral,
       ] as const;
 
       const originalGasLimit =
-        await CSModuleWeb3.estimateGas.addNodeOperatorWstETH(
+        await CSModuleWeb3.estimateGas.addValidatorKeysWstETH(
           ...params,
           overrides,
         );
@@ -181,7 +161,7 @@ const useSubmitKeysMethods = () => {
       const gasLimit = applyGasLimitRatio(originalGasLimit);
 
       return () =>
-        CSModuleWeb3.addNodeOperatorWstETH(...params, {
+        CSModuleWeb3.addValidatorKeysWstETH(...params, {
           ...overrides,
           gasLimit,
         });
@@ -193,32 +173,29 @@ const useSubmitKeysMethods = () => {
     (token: TOKENS) => {
       switch (token) {
         case TOKENS.ETH:
-          return { method: submitETH, needsPermit: false };
+          return { method: methodETH, needsPermit: false };
         case TOKENS.STETH:
-          return { method: submitSTETH, needsPermit: true };
+          return { method: methodSTETH, needsPermit: true };
         case TOKENS.WSTETH:
-          return { method: submitWSTETH, needsPermit: true };
+          return { method: methodWSTETH, needsPermit: true };
       }
     },
-    [submitETH, submitSTETH, submitWSTETH],
+    [methodETH, methodSTETH, methodWSTETH],
   );
 };
 
-export const useSubmitKeys = ({ onConfirm, onRetry }: SubmitKeysOptions) => {
-  const { txModalStages } = useTxModalStagesSubmitKeys();
-  const getSubmitKeysMethod = useSubmitKeysMethods();
-  const { append: appendNO } = useNodeOperator();
+export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
+  const { txModalStages } = useTxModalStagesAddKeys();
+  const getAddKeysMethod = useAddKeysMethods();
 
   const gatherPermitSignature = useCsmPermitSignature();
 
-  const submitKeys = useCallback(
-    async ({
-      referral,
-      depositData,
-      token,
-      bondAmount: bondAmountRaw,
-      eaProof,
-    }: SubmitKeysFormInputType): Promise<boolean> => {
+  const addKeys = useCallback(
+    async (
+      { depositData, token, bondAmount: bondAmountRaw }: AddKeysFormInputType,
+      { nodeOperatorId }: AddKeysFormDataContextValue,
+    ): Promise<boolean> => {
+      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(bondAmountRaw, 'BondAmount is not defined');
@@ -227,57 +204,46 @@ export const useSubmitKeys = ({ onConfirm, onRetry }: SubmitKeysOptions) => {
 
       try {
         let permit: GatherPermitSignatureResult | undefined;
-        const { method, needsPermit } = getSubmitKeysMethod(token);
+        const { method, needsPermit } = getAddKeysMethod(token);
+
+        const { keysCount, publicKeys, signatures } = formatKeys(depositData);
 
         if (needsPermit) {
           txModalStages.signPermit();
           permit = await gatherPermitSignature(bondAmount, token);
         }
 
-        const { keysCount, publicKeys, signatures } = formatKeys(depositData);
-
-        txModalStages.sign(keysCount, bondAmount, token);
+        txModalStages.sign(keysCount, bondAmount, token, nodeOperatorId);
 
         const callback = await method({
+          nodeOperatorId,
           bondAmount,
           keysCount,
           publicKeys,
           signatures,
           permit,
-          eaProof: eaProof || [],
-          managerAddress: AddressZero,
-          rewardsAddress: AddressZero,
-          referral: referral && isAddress(referral) ? referral : AddressZero,
         });
 
-        const tx = await runWithTransactionLogger(
-          'AddNodeOperator signing',
-          callback,
-        );
+        const tx = await runWithTransactionLogger('AddKeys signing', callback);
         const txHash = typeof tx === 'string' ? tx : tx.hash;
 
-        txModalStages.pending(keysCount, bondAmount, token, txHash);
-
-        let nodeOperatorId: NodeOperatorId | undefined = undefined;
+        txModalStages.pending(
+          keysCount,
+          bondAmount,
+          token,
+          nodeOperatorId,
+          txHash,
+        );
 
         if (typeof tx === 'object') {
-          const receipt = await runWithTransactionLogger(
-            'Wrap block confirmation',
-            () => tx.wait(),
+          await runWithTransactionLogger('AddKeys block confirmation', () =>
+            tx.wait(),
           );
-
-          nodeOperatorId = getAddedNodeOperator(
-            receipt,
-          )?.toString() as NodeOperatorId;
         }
 
         await onConfirm?.();
 
-        txModalStages.success(nodeOperatorId, txHash);
-
-        if (nodeOperatorId) {
-          appendNO({ id: nodeOperatorId, manager: true, rewards: true });
-        }
+        txModalStages.success(txHash);
 
         return true;
       } catch (error) {
@@ -287,14 +253,13 @@ export const useSubmitKeys = ({ onConfirm, onRetry }: SubmitKeysOptions) => {
       }
     },
     [
-      getSubmitKeysMethod,
+      getAddKeysMethod,
       txModalStages,
       onConfirm,
       gatherPermitSignature,
-      appendNO,
       onRetry,
     ],
   );
 
-  return submitKeys;
+  return addKeys;
 };

@@ -4,12 +4,13 @@ import { KeysSelector } from './controls/keys-selector';
 import { SubmitButton } from './controls/submit-button';
 import { FormLoading } from './form-loading';
 import { RemoveKeysFormInfo } from './remove-keys-form-info';
-import { FormControllerStyled, RemoveKeysBlock } from './styles';
+import { FormBlock } from 'shared/components';
+import { FormControllerStyled } from 'shared/hook-form/form-controller';
 
 export const RemoveKeysForm: FC = memo(() => {
   return (
     <RemoveKeysFormProvider>
-      <RemoveKeysBlock>
+      <FormBlock>
         <FormLoading>
           <FormControllerStyled>
             <KeysSelector />
@@ -17,7 +18,7 @@ export const RemoveKeysForm: FC = memo(() => {
           </FormControllerStyled>
           <RemoveKeysFormInfo />
         </FormLoading>
-      </RemoveKeysBlock>
+      </FormBlock>
     </RemoveKeysFormProvider>
   );
 });
