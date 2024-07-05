@@ -11,5 +11,5 @@ export const StyledButton = styled(Button)`
 `;
 
 export const StyledLink = styled(Link)`
-  flex: 1 1 100%;
+  flex: 1 0 47%;
 `;

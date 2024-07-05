@@ -5,10 +5,13 @@ const WarningBlock = styled.div`
   align-items: center;
   justify-content: center;
   background: var(--lido-color-warning);
+
+  padding: ${({ theme }) => theme.spaceMap.xs}px 20px;
 `;
 
 const WarningText = styled.span`
-  line-height: 32px;
+  text-align: center;
+  line-height: 1.7;
   color: var(--lido-color-warningContrast);
 `;
 

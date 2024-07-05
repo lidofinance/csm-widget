@@ -70,7 +70,8 @@ export const StepWrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap: ${({ theme }) => theme.spaceMap.md}px;
-  flex: 1 0 40%;
+  flex: 1 0 47%;
+  min-width: 240px;
   align-items: center;
   padding: 16px 20px; // @style
 

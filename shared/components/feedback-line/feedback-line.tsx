@@ -9,10 +9,13 @@ const WarningBlock = styled.div`
     theme.name === ThemeName.light
       ? '#e9dcf5'
       : 'var(--lido-color-foreground)'};
+
+  padding: ${({ theme }) => theme.spaceMap.xs}px 20px;
 `;
 
 const WarningText = styled.span`
-  line-height: 32px;
+  text-align: center;
+  line-height: 1.7;
   color: var(--lido-color-text);
 `;
 

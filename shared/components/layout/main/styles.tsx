@@ -7,6 +7,10 @@ export const MainStyle = styled(Container)<ContainerProps>`
   margin-bottom: ${({ theme }) => theme.spaceMap.xxl}px;
   padding: 0;
 
+  ${({ theme }) => theme.mediaQueries.lg} {
+    padding: 0 20px;
+  }
+
   ${({ size }) =>
     size === 'tight' &&
     css`

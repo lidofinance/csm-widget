@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Stack } from 'shared/components';
+import { StackWrap } from 'shared/components';
 import { Fallback } from 'shared/hat/fallback/fallback';
 import { useAccount } from 'shared/hooks';
 import { useCsmStatus } from 'shared/hooks/useCsmStatus';
@@ -19,12 +19,12 @@ export const Welcome: FC = () => {
     <>
       {isWrongChain && <Fallback />}
       <WelcomeSection>
-        <Stack>
+        <StackWrap>
           <Connect fullwidth>I am a Node Operator</Connect>
           <Connect fullwidth color="secondary">
             Become a Node Operator
           </Connect>
-        </Stack>
+        </StackWrap>
       </WelcomeSection>
       {data?.isEarlyAdoption && <EarlyAdoptionBanner />}
     </>

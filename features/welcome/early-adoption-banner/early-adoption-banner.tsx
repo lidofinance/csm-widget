@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
-import { LinkButton, Stack } from 'shared/components';
-import { BlockStyled, Header, Heading } from './styles';
 import { DarkThemeProvider, LightThemeProvider } from '@lidofinance/lido-ui';
+import { LinkButton, StackWrap } from 'shared/components';
+import { BlockStyled, Header, Heading } from './styles';
 
 export const EarlyAdoptionBanner: FC = () => {
   return (
@@ -15,7 +15,7 @@ export const EarlyAdoptionBanner: FC = () => {
           permissionless.
         </p>
       </Heading>
-      <Stack>
+      <StackWrap>
         <LightThemeProvider>
           <LinkButton
             href="https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22"
@@ -34,7 +34,7 @@ export const EarlyAdoptionBanner: FC = () => {
             See curated list
           </LinkButton>
         </DarkThemeProvider>
-      </Stack>
+      </StackWrap>
     </BlockStyled>
   );
 };
