@@ -7,11 +7,13 @@ type AddressInputHookFormProps = Partial<
 > & {
   fieldName: string;
   label?: string;
+  isLocked?: boolean;
 };
 
 export const AddressInputHookForm = ({
   fieldName,
   label,
+  isLocked,
   error: errorProp,
   ...props
 }: AddressInputHookFormProps) => {
@@ -33,8 +35,8 @@ export const AddressInputHookForm = ({
       {...field}
       error={errorProp ?? errorMessage}
       disabled={props.disabled ?? field.disabled}
+      isLocked={isLocked}
       label={label ?? fieldName}
-      showCopyBtn={false}
       fullwidth
     />
   );

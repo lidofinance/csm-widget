@@ -8,9 +8,10 @@ import {
   useRef,
 } from 'react';
 import { InputAddressProps } from './types';
+import { InputDecoratorLocked } from '../input-amount/input-decorator-locked';
 
 export const InputAddress = forwardRef<HTMLInputElement, InputAddressProps>(
-  ({ onChange, value, showCopyBtn, ...props }, ref) => {
+  ({ onChange, value, isLocked, rightDecorator, ...props }, ref) => {
     const inputRef = useRef<HTMLInputElement>(null);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     useImperativeHandle(ref, () => inputRef.current!, []);
@@ -35,6 +36,12 @@ export const InputAddress = forwardRef<HTMLInputElement, InputAddressProps>(
         leftDecorator={
           value && isAddressValid ? <Identicon address={value} /> : null
         }
+        rightDecorator={
+          rightDecorator ?? (
+            <>{isLocked ? <InputDecoratorLocked /> : undefined}</>
+          )
+        }
+        disabled={props.disabled || isLocked}
         spellCheck="false"
       />
     );

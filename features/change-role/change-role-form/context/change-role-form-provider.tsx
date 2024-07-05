@@ -19,10 +19,11 @@ import { useFormData } from 'shared/hook-form/form-controller';
 export const useChangeRoleFormData =
   useFormData<ChangeRoleFormDataContextValue>;
 
-export const ChangeRoleFormProvider: FC<PropsWithChildren<{ role: ROLES }>> = ({
-  children,
-  role,
-}) => {
+export type ChangeRoleFormProviderProps = { role: ROLES };
+
+export const ChangeRoleFormProvider: FC<
+  PropsWithChildren<ChangeRoleFormProviderProps>
+> = ({ children, role }) => {
   const networkData = useChangeRoleFormNetworkData({ role });
   const validationContextPromise =
     useChangeRoleFormValidationContext(networkData);

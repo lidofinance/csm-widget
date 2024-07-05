@@ -2,17 +2,17 @@ import { FC, memo } from 'react';
 
 import { ChangeRoleFormProvider } from './context';
 
-import { ROLES } from 'consts/roles';
+import { FormBlock } from 'shared/components';
+import { FormControllerStyled } from 'shared/hook-form/form-controller';
 import { ChangeRoleFormInfo } from './change-role-form-info';
+import { ChangeRoleFormProviderProps } from './context/change-role-form-provider';
 import { AddressInput } from './controls/address-input';
 import { Info } from './controls/info';
 import { SubmitButton } from './controls/submit-button';
-import { FormBlock } from 'shared/components';
-import { FormControllerStyled } from 'shared/hook-form/form-controller';
 
-export const ChangeRoleForm: FC<{ role: ROLES }> = memo(({ role }) => {
+export const ChangeRoleForm: FC<ChangeRoleFormProviderProps> = memo((props) => {
   return (
-    <ChangeRoleFormProvider role={role}>
+    <ChangeRoleFormProvider {...props}>
       <FormBlock>
         <FormControllerStyled>
           <Info />

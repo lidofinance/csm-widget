@@ -125,11 +125,11 @@ export const useChangeRoleSubmit = ({
       invariant(address, 'Addess is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
-      if (role === 'REWARDS' && !(await confirmRewardsRole())) {
+      if (!isRevoke && role === 'REWARDS' && !(await confirmRewardsRole())) {
         return false;
       }
 
-      if (proposedAddress && !(await confirmRepropose())) {
+      if (!isRevoke && proposedAddress && !(await confirmRepropose())) {
         return false;
       }
 
