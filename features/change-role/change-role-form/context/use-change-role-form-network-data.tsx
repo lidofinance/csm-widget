@@ -1,9 +1,9 @@
+import { ROLES } from 'consts/roles';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import { useMaxGasPrice, useNodeOperatorInfo } from 'shared/hooks';
 import { useIsMultisig } from 'shared/hooks/useIsMultisig';
 import { type ChangeRoleFormNetworkData } from './types';
-import { ROLES } from 'consts/roles';
 
 export const useChangeRoleFormNetworkData = ({
   role,
@@ -34,13 +34,17 @@ export const useChangeRoleFormNetworkData = ({
     [isInfoLoading, isMultisigLoading, isMaxGasPriceLoading],
   );
 
+  const currentAddress =
+    role === ROLES.REWARDS ? info?.rewardAddress : info?.managerAddress;
+  const proposedAddress =
+    role === ROLES.REWARDS
+      ? info?.proposedRewardAddress
+      : info?.proposedManagerAddress;
+
   return {
-    currentAddress:
-      role === ROLES.REWARDS ? info?.rewardAddress : info?.managerAddress,
-    proposedAddress:
-      role === ROLES.REWARDS
-        ? info?.proposedRewardAddress
-        : info?.proposedManagerAddress,
+    role,
+    currentAddress,
+    proposedAddress,
     nodeOperatorId,
     isMultisig: isMultisigLoading ? undefined : isMultisig,
     maxGasPrice,

@@ -1,6 +1,11 @@
 import { FC, PropsWithChildren } from 'react';
-import { LaticeStyle } from './style';
+import { LaticeStyle, LaticeVariant } from './style';
 
-export const Latice: FC<PropsWithChildren> = ({ children }) => (
-  <LaticeStyle>{children}</LaticeStyle>
-);
+type LaticeProps = {
+  variant?: LaticeVariant;
+};
+
+export const Latice: FC<PropsWithChildren<LaticeProps>> = ({
+  children,
+  variant = 'default',
+}) => <LaticeStyle $variant={variant}>{children}</LaticeStyle>;

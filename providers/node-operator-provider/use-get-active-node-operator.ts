@@ -31,5 +31,5 @@ export const useGetActiveNodeOperator = (list?: NodeOperatorRoles[]) => {
     [list],
   );
 
-  return { active, switchActive };
+  return { active: active ?? list?.[0], switchActive };
 };

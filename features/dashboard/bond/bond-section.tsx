@@ -70,14 +70,18 @@ export const BondSection: FC = () => {
                   />
                 </>
               )}
-              <Sign minus />
-              <Balance
-                dangerous
-                title="Locked bond"
-                loading={isLockedLoading}
-                amount={locked}
-                token={TOKENS.ETH}
-              />
+              {locked?.gt(0) && (
+                <>
+                  <Sign minus />
+                  <Balance
+                    dangerous
+                    title="Locked bond"
+                    loading={isLockedLoading}
+                    amount={locked}
+                    token={TOKENS.ETH}
+                  />
+                </>
+              )}
             </RowBody>
           </AccordionStyle>
           <AccordionStyle

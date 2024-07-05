@@ -7,12 +7,13 @@ import { AmountInput } from './controls/amount-input';
 import { KeysInput } from './controls/keys-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
-import { AddKeysBlock, FormControllerStyled } from './styles';
+import { FormBlock } from 'shared/components';
+import { FormControllerStyled } from 'shared/hook-form/form-controller';
 
 export const AddKeysForm: FC = memo(() => {
   return (
     <AddKeysFormProvider>
-      <AddKeysBlock>
+      <FormBlock>
         <FormControllerStyled>
           <TokenSelect />
           <KeysInput />
@@ -20,7 +21,7 @@ export const AddKeysForm: FC = memo(() => {
           <SubmitButton />
         </FormControllerStyled>
         <AddKeysFormInfo />
-      </AddKeysBlock>
+      </FormBlock>
     </AddKeysFormProvider>
   );
 });

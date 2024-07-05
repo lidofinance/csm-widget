@@ -2,6 +2,7 @@ import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useAccount } from 'shared/hooks';
 import { useFormControllerContext } from './form-controller-context';
+import { useFormData } from './form-data-context';
 
 type FormControllerProps = React.ComponentProps<'form'>;
 
@@ -16,15 +17,16 @@ export const FormController: FC<PropsWithChildren<FormControllerProps>> = ({
     onReset: resetContext,
     retryEvent,
   } = useFormControllerContext();
+  const data = useFormData();
 
   // Bind submit action
   const doSubmit = useMemo(
     () =>
       handleSubmit(async (args) => {
-        const success = await onSubmit(args);
+        const success = await onSubmit(args, data);
         if (success) resetContext ? resetContext(args) : resetDefault();
       }),
-    [handleSubmit, onSubmit, resetDefault, resetContext],
+    [handleSubmit, onSubmit, data, resetContext, resetDefault],
   );
 
   // Bind retry callback

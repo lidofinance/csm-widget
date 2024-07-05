@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { useAccount as useWagmiAccount, useNetwork } from 'wagmi';
 
-// TODO: _key ???
-export const useAccount = (_key?: string) => {
+export const useAccount = () => {
   const { address, isConnected, isConnecting } = useWagmiAccount();
   const { chain } = useNetwork();
   const isUnsupported = !!chain?.unsupported;

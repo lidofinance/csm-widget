@@ -1,12 +1,14 @@
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { WrapperStyle } from './style';
 import { Loader } from '@lidofinance/lido-ui';
+import { Note } from '../note/note';
 
-type Props = { loading: boolean; empty?: ReactNode };
+type Props = { loading: boolean; empty?: ReactNode; emptyNote?: string };
 
 export const WhenLoaded: FC<PropsWithChildren<Props>> = ({
   loading,
   empty,
+  emptyNote,
   children,
 }) => (
   <>
@@ -15,7 +17,10 @@ export const WhenLoaded: FC<PropsWithChildren<Props>> = ({
         <Loader />
       </WrapperStyle>
     ) : empty ? (
-      <WrapperStyle>{empty}</WrapperStyle>
+      <>
+        <WrapperStyle>{empty}</WrapperStyle>
+        {emptyNote && <Note text={emptyNote} />}
+      </>
     ) : (
       children
     )}

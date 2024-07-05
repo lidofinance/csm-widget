@@ -11,6 +11,13 @@ export const HeaderStyle = styled((props: ContainerProps) => (
   padding-bottom: 18px;
   display: flex;
   align-items: center;
+
+  flex-wrap: wrap;
+  row-gap: 8px;
+
+  @media screen and (max-width: 880px) {
+    flex-wrap: nowrap;
+  }
 `;
 
 export const HeaderActionsStyle = styled.div`
@@ -20,6 +27,11 @@ export const HeaderActionsStyle = styled.div`
   align-items: center;
   flex-shrink: 1;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-wrap: wrap;
+    justify-content: end;
+  }
 `;
 
 export const HeaderWalletChainWrapper = styled.div`

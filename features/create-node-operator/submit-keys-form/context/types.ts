@@ -10,8 +10,8 @@ export type SubmitKeysFormInputType = {
   rawDepositData?: string;
   depositData: DepositData[];
   referral?: Address;
-  bondAmount?: BigNumber;
-  eaProof?: Proof;
+  bondAmount?: BigNumber; // TODO: move to form data
+  eaProof?: Proof; // TODO: move to form data
 };
 
 export type SubmitKeysFormLoading = {

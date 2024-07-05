@@ -2,21 +2,24 @@ import { FC, memo } from 'react';
 
 import { ResetRoleFormProvider } from './context';
 
-import { ResetRoleFormInfo } from './reset-role-form-info';
+import { FormBlock } from 'shared/components';
+import { FormControllerStyled } from 'shared/hook-form/form-controller';
+import { AddressInput } from './controls/address-input';
+import { Info } from './controls/info';
 import { SubmitButton } from './controls/submit-button';
-import { ResetRoleHat } from './reset-role-hat';
-import { ResetRoleBlock, FormControllerStyled } from './styles';
+import { ResetRoleFormInfo } from './reset-role-form-info';
 
 export const ResetRoleForm: FC = memo(() => {
   return (
     <ResetRoleFormProvider>
-      <ResetRoleHat />
-      <ResetRoleBlock>
+      <FormBlock>
         <FormControllerStyled>
+          <Info />
+          <AddressInput />
           <SubmitButton />
         </FormControllerStyled>
         <ResetRoleFormInfo />
-      </ResetRoleBlock>
+      </FormBlock>
     </ResetRoleFormProvider>
   );
 });

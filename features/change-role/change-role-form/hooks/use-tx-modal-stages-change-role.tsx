@@ -8,7 +8,6 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 import { TxStageSignOperationRole } from 'shared/transaction-modal/tx-stages-composed/tx-stage-role-operation';
-import { Address } from 'wagmi';
 
 const STAGE_OPERATION_ARGS = {
   operationText: 'Proposing role change',
@@ -21,7 +20,7 @@ const getTxModalStagesChangeRole = (
 
   signPermit: () => transitStage(<TxStagePermit />),
 
-  sign: (address: Address, role: ROLES) =>
+  sign: (address: string, role: ROLES) =>
     transitStage(
       <TxStageSignOperationRole
         {...STAGE_OPERATION_ARGS}
@@ -30,7 +29,7 @@ const getTxModalStagesChangeRole = (
       />,
     ),
 
-  pending: (address: Address, role: ROLES, txHash?: string) =>
+  pending: (address: string, role: ROLES, txHash?: string) =>
     transitStage(
       <TxStageSignOperationRole
         {...STAGE_OPERATION_ARGS}
@@ -41,7 +40,7 @@ const getTxModalStagesChangeRole = (
       />,
     ),
 
-  success: (address: Address, role: ROLES, txHash?: string) =>
+  success: (address: string, role: ROLES, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}

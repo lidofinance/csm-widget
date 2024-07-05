@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Stack } from 'shared/components';
+import { StackWrap } from 'shared/components';
 import { Fallback } from 'shared/hat/fallback/fallback';
 import { useAccount } from 'shared/hooks';
 import { useCsmStatus } from 'shared/hooks/useCsmStatus';
@@ -13,23 +13,20 @@ export const Welcome: FC = () => {
   const { data } = useCsmStatus();
 
   const isWrongChain = isConnected && !active;
-  const isReleased = data?.isEarlyAdoption || data?.isPublicRelease;
-  const isEarlyAdoption = data?.isEarlyAdoption && !data?.isPublicRelease;
 
+  // TODO: state for `status.isUnavailable` (RPC error)
   return (
     <>
       {isWrongChain && <Fallback />}
       <WelcomeSection>
-        {isReleased && (
-          <Stack>
-            <Connect fullwidth>I am a Node Operator</Connect>
-            <Connect fullwidth color="secondary">
-              Become a Node Operator
-            </Connect>
-          </Stack>
-        )}
+        <StackWrap>
+          <Connect fullwidth>I am a Node Operator</Connect>
+          <Connect fullwidth color="secondary">
+            Become a Node Operator
+          </Connect>
+        </StackWrap>
       </WelcomeSection>
-      {isEarlyAdoption && <EarlyAdoptionBanner />}
+      {data?.isEarlyAdoption && <EarlyAdoptionBanner />}
     </>
   );
 };

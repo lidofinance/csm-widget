@@ -70,9 +70,9 @@ export const KeysSection: FC = () => {
               count={info.stuckValidatorsCount}
               tooltip="Keys that have not been exited timely following an exit signal from the protocol"
             />
-            <Item variant="secondary" title="Duplicated" count={0} />
+            <Item variant="warning" title="Duplicated" count={0} />
             <Item
-              variant="secondary"
+              variant="warning"
               title="Invalid"
               count={info.totalAddedKeys - info.totalVettedKeys}
               tooltip="Keys with invalid signature"

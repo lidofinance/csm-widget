@@ -60,6 +60,7 @@ export const useRemoveKeysFormNetworkData = (): RemoveKeysFormNetworkData => {
   );
 
   return {
+    nodeOperatorId,
     bondBalance: bond?.current,
     bondRequired: bond?.required,
     keys,

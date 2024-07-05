@@ -72,5 +72,9 @@ export const useNodeOperatorsFromEvents = () => {
     return restoreEvents(events as any as NodeOperatorRoleEvent[]);
   }, [address, chainId, contract, restoreEvents]);
 
-  return useLidoSWR(['no-list', address, chainId], fetcher, STRATEGY_LAZY);
+  return useLidoSWR(
+    ['no-list', address, chainId],
+    address ? fetcher : null,
+    STRATEGY_LAZY,
+  );
 };

@@ -10,12 +10,10 @@ const ROLE_ROUTES: SwitchRoutes = [
   {
     title: 'Rewards address',
     path: ROLES_REWARDS_PATH,
-    roles: { rewards: true },
   },
   {
     title: 'Manager address',
     path: ROLES_MANAGER_PATH,
-    roles: { rewards: true, manager: true },
   },
   { title: 'Inbox requests', path: ROLES_INBOX_PATH },
 ];

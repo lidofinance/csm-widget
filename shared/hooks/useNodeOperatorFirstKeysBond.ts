@@ -1,9 +1,9 @@
+import { Zero } from '@ethersproject/constants';
 import { useContractSWR } from '@lido-sdk/react';
+import { STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { TOKENS } from 'consts/tokens';
-import { ROUNDING_TRESHOLD } from 'consts/treshhold';
 import { BigNumber } from 'ethers';
 import { useCSAccountingRPC } from 'shared/hooks';
-import invariant from 'tiny-invariant';
 
 const METHOD_BY_TOKEN = {
   [TOKENS.ETH]: 'getBondAmountByKeysCount(uint256,uint256)',
@@ -12,33 +12,22 @@ const METHOD_BY_TOKEN = {
 } as const;
 
 type UseReadBondAmountParams = {
-  keysCount: number;
-  token: TOKENS;
+  keysCount?: number;
+  token?: TOKENS;
   curveId?: BigNumber;
 };
 
-export const useNodeOperatorFirstKeysBond = ({
-  keysCount,
-  token,
-  curveId,
-}: UseReadBondAmountParams) => {
-  invariant(token !== undefined, 'Token is required');
-  invariant(keysCount !== undefined, 'KeysCount is required');
-
+export const useNodeOperatorFirstKeysBond = (
+  { keysCount = 0, token = TOKENS.STETH, curveId }: UseReadBondAmountParams,
+  config = STRATEGY_IMMUTABLE,
+) => {
   const result = useContractSWR({
     contract: useCSAccountingRPC(),
     method: METHOD_BY_TOKEN[token],
     params: [keysCount, curveId],
     shouldFetch: keysCount > 0 && curveId !== undefined,
+    config,
   });
 
-  /**
-   * add 10 wei for approve/permit request
-   */
-  let { data } = result;
-  if (token !== TOKENS.ETH && data?.gt(0)) {
-    data = data.add(ROUNDING_TRESHOLD);
-  }
-
-  return { ...result, data };
+  return { ...result, data: keysCount > 0 ? result.data : Zero };
 };

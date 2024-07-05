@@ -4,15 +4,21 @@ import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
+  useFormData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
-import { AddKeysFormDataContext } from './add-keys-form-context';
-import { type AddKeysFormInputType } from './types';
-import { useAddKeys } from './use-add-keys';
+import {
+  AddKeysFormDataContextValue,
+  type AddKeysFormInputType,
+} from './types';
+import { useAddKeysSubmit } from './use-add-keys-submit';
 import { useAddKeysFormNetworkData } from './use-add-keys-form-network-data';
 import { useAddKeysFormValidationContext } from './use-add-keys-form-validation-context';
 import { useCalculateBondAmount } from './use-calculate-bond-amount';
 import { useCalculateDepositData } from './use-calculate-deposit-data';
+
+export const useAddKeysFormData = useFormData<AddKeysFormDataContextValue>;
 
 export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useAddKeysFormNetworkData();
@@ -32,29 +38,31 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const addKeys = useAddKeys({
+  const addKeys = useAddKeysSubmit({
     onConfirm: networkData.revalidate,
     onRetry: retryFire,
   });
 
   const value = networkData;
 
-  const formControllerValue: FormControllerContextValueType<AddKeysFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: addKeys,
-        retryEvent,
-      }),
-      [addKeys, retryEvent],
-    );
+  const formControllerValue: FormControllerContextValueType<
+    AddKeysFormInputType,
+    AddKeysFormDataContextValue
+  > = useMemo(
+    () => ({
+      onSubmit: addKeys,
+      retryEvent,
+    }),
+    [addKeys, retryEvent],
+  );
 
   return (
     <FormProvider {...formObject}>
-      <AddKeysFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={value}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </AddKeysFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

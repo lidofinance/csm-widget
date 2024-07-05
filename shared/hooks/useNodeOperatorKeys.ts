@@ -8,6 +8,7 @@ import { PUBKEY_LENGTH, splitHex } from 'shared/keys';
 // TODO: load by chuns
 // const MAX_KEYS_COUNT = 10;
 
+// TODO: return keys with statuses
 export const useNodeOperatorKeys = (
   nodeOperatorId?: NodeOperatorId,
   nonDepositedOnly = false,

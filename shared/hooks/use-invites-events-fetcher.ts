@@ -36,25 +36,27 @@ export const useInvitesEventsFetcher = () => {
         }
       };
 
-      events.map((e) => {
-        const id = e.args.nodeOperatorId.toString() as NodeOperatorId;
-        switch (e.event) {
-          case 'NodeOperatorManagerAddressChangeProposed':
-            return isUserAddress(e.args[2])
-              ? updateRoles({ id, manager: true })
-              : updateRoles({ id, manager: true }, false);
-          case 'NodeOperatorRewardAddressChangeProposed':
-            return isUserAddress(e.args[2])
-              ? updateRoles({ id, rewards: true })
-              : updateRoles({ id, rewards: true }, false);
-          case 'NodeOperatorManagerAddressChanged':
-            return updateRoles({ id, manager: true }, false);
-          case 'NodeOperatorRewardAddressChanged':
-            return updateRoles({ id, rewards: true }, false);
-          default:
-            return;
-        }
-      });
+      events
+        .sort((a, b) => a.blockNumber - b.blockNumber)
+        .map((e) => {
+          const id = e.args.nodeOperatorId.toString() as NodeOperatorId;
+          switch (e.event) {
+            case 'NodeOperatorManagerAddressChangeProposed':
+              return isUserAddress(e.args[2])
+                ? updateRoles({ id, manager: true })
+                : updateRoles({ id, manager: true }, false);
+            case 'NodeOperatorRewardAddressChangeProposed':
+              return isUserAddress(e.args[2])
+                ? updateRoles({ id, rewards: true })
+                : updateRoles({ id, rewards: true }, false);
+            case 'NodeOperatorManagerAddressChanged':
+              return updateRoles({ id, manager: true }, false);
+            case 'NodeOperatorRewardAddressChanged':
+              return updateRoles({ id, rewards: true }, false);
+            default:
+              return;
+          }
+        });
 
       return Array.from(invitesMap.values()).sort(
         (a, b) =>

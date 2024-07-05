@@ -1,7 +1,6 @@
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
-import { useMaxGasPrice, useNodeOperatorInfo } from 'shared/hooks';
-import { useIsMultisig } from 'shared/hooks/useIsMultisig';
+import { useNodeOperatorInfo } from 'shared/hooks';
 import { type ResetRoleFormNetworkData } from './types';
 
 export const useResetRoleFormNetworkData = (): ResetRoleFormNetworkData => {
@@ -12,10 +11,6 @@ export const useResetRoleFormNetworkData = (): ResetRoleFormNetworkData => {
     initialLoading: isInfoLoading,
   } = useNodeOperatorInfo(nodeOperatorId);
 
-  const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
-  const { maxGasPrice, initialLoading: isMaxGasPriceLoading } =
-    useMaxGasPrice();
-
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateInfo()]);
   }, [updateInfo]);
@@ -23,17 +18,17 @@ export const useResetRoleFormNetworkData = (): ResetRoleFormNetworkData => {
   const loading = useMemo(
     () => ({
       isInfoLoading,
-      isMultisigLoading,
-      isMaxGasPriceLoading,
     }),
-    [isInfoLoading, isMultisigLoading, isMaxGasPriceLoading],
+    [isInfoLoading],
   );
 
+  const currentAddress = info?.managerAddress;
+  const proposedAddress = info?.proposedManagerAddress;
+
   return {
-    currentAddress: info?.managerAddress,
+    currentAddress,
+    proposedAddress,
     nodeOperatorId,
-    isMultisig: isMultisigLoading ? undefined : isMultisig,
-    maxGasPrice,
     loading,
     revalidate,
   };

@@ -4,12 +4,18 @@ import { TOKENS } from 'consts/tokens';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
+  useFormData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller';
 import { useClaimBondFormNetworkData } from './use-claim-bond-form-network-data';
-import { useClaimBond } from './use-claim-bond';
-import { ClaimBondFormDataContext } from './claim-bond-form-context';
-import { type ClaimBondFormInputType } from './types';
+import { useClaimBondSubmit } from './use-claim-bond-submit';
+import {
+  ClaimBondFormDataContextValue,
+  type ClaimBondFormInputType,
+} from './types';
+
+export const useClaimBondFormData = useFormData<ClaimBondFormDataContextValue>;
 
 export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useClaimBondFormNetworkData();
@@ -24,29 +30,31 @@ export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { claimBond } = useClaimBond({
+  const { claimBond } = useClaimBondSubmit({
     onConfirm: networkData.revalidate,
     onRetry: retryFire,
   });
 
   const value = networkData;
 
-  const formControllerValue: FormControllerContextValueType<ClaimBondFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: claimBond,
-        retryEvent,
-      }),
-      [claimBond, retryEvent],
-    );
+  const formControllerValue: FormControllerContextValueType<
+    ClaimBondFormInputType,
+    ClaimBondFormDataContextValue
+  > = useMemo(
+    () => ({
+      onSubmit: claimBond,
+      retryEvent,
+    }),
+    [claimBond, retryEvent],
+  );
 
   return (
     <FormProvider {...formObject}>
-      <ClaimBondFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={value}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </ClaimBondFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

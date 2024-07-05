@@ -9,7 +9,7 @@ export type RemoveKeysFormInputType = {
     start: number; // 0..[keys.length]
     count: number; // 0..[keys.length]
   };
-  offset?: number; // totalDepositedKeys
+  offset?: number; // totalDepositedKeys // TODO: move to form data
 };
 
 export type RemoveKeysFormLoading = {

@@ -6,6 +6,11 @@ export const Row = styled(StackStyle).attrs({ $gap: 'sm' })`
   padding: 12px 16px;
 
   background: var(--lido-color-backgroundSecondary);
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: column;
+    gap: 12px;
+  }
 `;
 
 export const ItemStyled = styled(StackStyle).attrs({
@@ -26,6 +31,11 @@ export const ItemStyled = styled(StackStyle).attrs({
           : '--lido-color-text'}
   );
   text-align: center;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
 `;
 
 export const CountStyled = styled.b`

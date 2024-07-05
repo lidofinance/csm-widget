@@ -68,7 +68,22 @@ export default withBundleAnalyzer({
       // Teach webpack to import svg and md files
       {
         test: /\.svg$/,
-        use: ['@svgr/webpack', 'url-loader'],
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              svgoConfig: {
+                plugins: [
+                  {
+                    name: 'removeViewBox',
+                    active: false,
+                  },
+                ],
+              },
+            },
+          },
+          'url-loader',
+        ],
       },
       {
         test: /\.md$/,

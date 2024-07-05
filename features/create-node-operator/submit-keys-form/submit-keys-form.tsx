@@ -6,13 +6,14 @@ import { AmountInput } from './controls/amount-input';
 import { KeysInput } from './controls/keys-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
-import { FormControllerStyled, SubmitKeysBlock } from './styles';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
+import { FormControllerStyled } from 'shared/hook-form/form-controller';
+import { FormBlock } from 'shared/components';
 
 export const SubmitKeysForm: FC = memo(() => {
   return (
     <SubmitKeysFormProvider>
-      <SubmitKeysBlock data-testid="submitKeysForm">
+      <FormBlock data-testid="submitKeysForm">
         <FormControllerStyled>
           <TokenSelect />
           <KeysInput />
@@ -20,7 +21,7 @@ export const SubmitKeysForm: FC = memo(() => {
           <SubmitButton />
         </FormControllerStyled>
         <SubmitKeysFormInfo />
-      </SubmitKeysBlock>
+      </FormBlock>
     </SubmitKeysFormProvider>
   );
 });

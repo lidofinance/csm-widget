@@ -11,9 +11,18 @@ export const RowTitle = styled.h4`
 export const RowHeader = styled(StackStyle)`
   justify-content: space-between;
   align-items: center;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    align-items: baseline;
+  }
 `;
 
-export const RowBody = styled(StackStyle).attrs({ $gap: 'xl' })``;
+export const RowBody = styled(StackStyle).attrs({ $gap: 'xl' })`
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: column;
+    gap: 12px;
+  }
+`;
 
 export const AccordionStyle = styled(Accordion)`
   margin: 0;

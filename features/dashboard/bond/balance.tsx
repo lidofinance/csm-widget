@@ -61,10 +61,20 @@ const BalanceStyle = styled(StackStyle).attrs({ $direction: 'column' })<{
   color: var(
     ${({ $warning }) => ($warning ? '--lido-color-error' : '--lido-color-text')}
   );
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
 `;
 
 const BalanceValue = styled(StackStyle).attrs({ $direction: 'column' })`
   gap: 0;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    align-items: end;
+  }
 `;
 
 const BalanceTitle = styled.h5`
