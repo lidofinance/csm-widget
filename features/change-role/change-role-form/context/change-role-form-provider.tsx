@@ -8,7 +8,7 @@ import {
   useFormControllerRetry,
 } from 'shared/hook-form/form-controller';
 import { type ChangeRoleFormInputType } from './types';
-import { useChangeRole } from './use-change-role';
+import { useChangeRoleSubmit } from './use-change-role-submit';
 import { useChangeRoleFormNetworkData } from './use-change-role-form-network-data';
 import { useChangeRoleFormValidationContext } from './use-change-role-form-validation-context';
 import { changeRoleFormValidationResolver } from './validation';
@@ -29,7 +29,6 @@ export const ChangeRoleFormProvider: FC<PropsWithChildren<{ role: ROLES }>> = ({
 
   const formObject = useForm<ChangeRoleFormInputType>({
     defaultValues: {
-      role,
       isRevoke: false,
     },
     resolver: changeRoleFormValidationResolver,
@@ -39,7 +38,7 @@ export const ChangeRoleFormProvider: FC<PropsWithChildren<{ role: ROLES }>> = ({
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { changeRole } = useChangeRole({
+  const { changeRole } = useChangeRoleSubmit({
     onConfirm: networkData.revalidate,
     onRetry: retryFire,
   });

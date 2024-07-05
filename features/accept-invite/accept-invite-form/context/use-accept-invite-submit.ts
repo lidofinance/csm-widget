@@ -40,18 +40,18 @@ const useAcceptInviteMethods = () => {
 
       const params = [nodeOperatorId] as const;
 
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.confirmNodeOperatorRewardAddressChange(
-          ...params,
-          overrides,
-        );
+      // const originalGasLimit =
+      //   await CSModuleWeb3.estimateGas.confirmNodeOperatorRewardAddressChange(
+      //     ...params,
+      //     overrides,
+      //   );
 
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
+      // const gasLimit = applyGasLimitRatio(originalGasLimit);
 
       return () =>
         CSModuleWeb3.confirmNodeOperatorRewardAddressChange(...params, {
           ...overrides,
-          gasLimit,
+          // gasLimit,
         });
     },
     [CSModuleWeb3, staticRpcProvider],
@@ -101,7 +101,7 @@ const useAcceptInviteMethods = () => {
   );
 };
 
-export const useAcceptInvite = ({
+export const useAcceptInviteSubmit = ({
   onConfirm,
   onRetry,
 }: UseAcceptInviteOptions) => {

@@ -7,19 +7,20 @@ import { ChangeRoleFormInfo } from './change-role-form-info';
 import { AddressInput } from './controls/address-input';
 import { Info } from './controls/info';
 import { SubmitButton } from './controls/submit-button';
-import { ChangeRoleBlock, FormControllerStyled } from './styles';
+import { FormBlock } from 'shared/components';
+import { FormControllerStyled } from 'shared/hook-form/form-controller';
 
 export const ChangeRoleForm: FC<{ role: ROLES }> = memo(({ role }) => {
   return (
     <ChangeRoleFormProvider role={role}>
-      <ChangeRoleBlock>
+      <FormBlock>
         <FormControllerStyled>
           <Info />
           <AddressInput />
           <SubmitButton />
         </FormControllerStyled>
         <ChangeRoleFormInfo />
-      </ChangeRoleBlock>
+      </FormBlock>
     </ChangeRoleFormProvider>
   );
 });

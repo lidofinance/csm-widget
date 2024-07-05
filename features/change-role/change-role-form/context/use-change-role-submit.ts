@@ -105,7 +105,10 @@ const useChangeRoleMethods = () => {
   );
 };
 
-export const useChangeRole = ({ onConfirm, onRetry }: UseChangeRoleOptions) => {
+export const useChangeRoleSubmit = ({
+  onConfirm,
+  onRetry,
+}: UseChangeRoleOptions) => {
   const { txModalStages } = useTxModalStagesChangeRole();
 
   const getMethod = useChangeRoleMethods();
@@ -114,8 +117,8 @@ export const useChangeRole = ({ onConfirm, onRetry }: UseChangeRoleOptions) => {
 
   const changeRole = useCallback(
     async (
-      { role, address: addressRaw, isRevoke }: ChangeRoleFormInputType,
-      { nodeOperatorId, proposedAddress }: ChangeRoleFormDataContextValue,
+      { address: addressRaw, isRevoke }: ChangeRoleFormInputType,
+      { nodeOperatorId, proposedAddress, role }: ChangeRoleFormDataContextValue,
     ): Promise<boolean> => {
       const address = isRevoke ? AddressZero : addressRaw;
       invariant(role, 'Role is not defined');

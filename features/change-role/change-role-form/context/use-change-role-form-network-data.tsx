@@ -45,6 +45,7 @@ export const useChangeRoleFormNetworkData = ({
     proposedAddressRaw !== AddressZero ? proposedAddressRaw : undefined;
 
   return {
+    role,
     currentAddress,
     proposedAddress,
     nodeOperatorId,

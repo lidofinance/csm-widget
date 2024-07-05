@@ -3,7 +3,7 @@ import { useFormState } from 'react-hook-form';
 import { WhenLoaded } from 'shared/components';
 import { AcceptInviteFormInputType, useAcceptInviteFormData } from './context';
 
-export const FormLoading: FC<PropsWithChildren> = ({ children }) => {
+export const AcceptInviteFormLoader: FC<PropsWithChildren> = ({ children }) => {
   const { isLoading } = useFormState<AcceptInviteFormInputType>();
   const { loading, invites } = useAcceptInviteFormData();
   const isEmpty = !invites?.length;

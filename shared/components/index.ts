@@ -26,3 +26,4 @@ export { Latice } from './latice/latice';
 export { Note } from './note/note';
 export { Warning } from './warning/warning';
 export { TitledAddress } from './titled-address/titled-address';
+export { FormBlock } from './form-block/form-block';

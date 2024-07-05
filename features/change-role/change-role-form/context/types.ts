@@ -7,7 +7,6 @@ export type ChangeRoleFormDataContextValue = ChangeRoleFormNetworkData;
 export type ChangeRoleFormInputType = {
   address?: string;
   isRevoke: boolean;
-  role: ROLES;
 };
 
 export type ChangeRoleFormLoading = {
@@ -17,6 +16,7 @@ export type ChangeRoleFormLoading = {
 };
 
 export type ChangeRoleFormNetworkData = {
+  role: ROLES;
   nodeOperatorId?: NodeOperatorId;
   currentAddress?: string;
   proposedAddress?: string;

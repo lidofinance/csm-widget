@@ -1,6 +1,5 @@
 import { ROLES } from 'consts/roles';
-import { useWatch } from 'react-hook-form';
-import { ChangeRoleFormInputType } from '../context';
+import { useChangeRoleFormData } from '../context';
 
 const ROLE_TITLES = {
   [ROLES.MANAGER]: 'manager',
@@ -8,6 +7,6 @@ const ROLE_TITLES = {
 } as const;
 
 export const useRole = () => {
-  const role = useWatch<ChangeRoleFormInputType, 'role'>({ name: 'role' });
+  const { role } = useChangeRoleFormData();
   return ROLE_TITLES[role];
 };
