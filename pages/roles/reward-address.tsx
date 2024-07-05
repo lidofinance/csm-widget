@@ -1,6 +1,7 @@
 import { secretConfig } from 'config';
-import { HOME_PATH, ROLES_INBOX_PATH, ROLES_MANAGER_PATH } from 'consts/urls';
+import { HOME_PATH, ROLES_INBOX_PATH } from 'consts/urls';
 import { ChangeRewardRolePage } from 'features/change-role';
+import { ViewRewardRolePage } from 'features/change-role/view-reward-role-page';
 import { SplashPage } from 'features/welcome';
 import { getFaqList } from 'lib/faqList';
 import { GetStaticProps } from 'next';
@@ -16,7 +17,7 @@ const Page = () => (
   <GateLoaded fallback={<SplashPage />}>
     <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
       <GateNodeOperator fallback={<Navigate path={ROLES_INBOX_PATH} />}>
-        <GateRoleRewards fallback={<Navigate path={ROLES_MANAGER_PATH} />}>
+        <GateRoleRewards fallback={<ViewRewardRolePage />}>
           <ChangeRewardRolePage />
         </GateRoleRewards>
       </GateNodeOperator>

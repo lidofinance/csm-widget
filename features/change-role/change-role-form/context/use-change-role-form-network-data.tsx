@@ -1,10 +1,9 @@
+import { ROLES } from 'consts/roles';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import { useMaxGasPrice, useNodeOperatorInfo } from 'shared/hooks';
 import { useIsMultisig } from 'shared/hooks/useIsMultisig';
 import { type ChangeRoleFormNetworkData } from './types';
-import { ROLES } from 'consts/roles';
-import { AddressZero } from '@ethersproject/constants';
 
 export const useChangeRoleFormNetworkData = ({
   role,
@@ -37,12 +36,10 @@ export const useChangeRoleFormNetworkData = ({
 
   const currentAddress =
     role === ROLES.REWARDS ? info?.rewardAddress : info?.managerAddress;
-  const proposedAddressRaw =
+  const proposedAddress =
     role === ROLES.REWARDS
       ? info?.proposedRewardAddress
       : info?.proposedManagerAddress;
-  const proposedAddress =
-    proposedAddressRaw !== AddressZero ? proposedAddressRaw : undefined;
 
   return {
     role,

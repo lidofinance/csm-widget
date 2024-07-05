@@ -1,4 +1,3 @@
-import { AddressZero } from '@ethersproject/constants';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import { useNodeOperatorInfo } from 'shared/hooks';
@@ -24,9 +23,7 @@ export const useResetRoleFormNetworkData = (): ResetRoleFormNetworkData => {
   );
 
   const currentAddress = info?.managerAddress;
-  const proposedAddressRaw = info?.proposedManagerAddress;
-  const proposedAddress =
-    proposedAddressRaw !== AddressZero ? proposedAddressRaw : undefined;
+  const proposedAddress = info?.proposedManagerAddress;
 
   return {
     currentAddress,
