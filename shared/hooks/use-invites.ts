@@ -7,5 +7,9 @@ export const useInvites = (config = STRATEGY_LAZY) => {
   const { chainId, address } = useAccount();
   const fetcher = useInvitesEventsFetcher();
 
-  return useLidoSWR(['invites', address, chainId], fetcher, config);
+  return useLidoSWR(
+    ['invites', address, chainId],
+    address ? fetcher : null,
+    config,
+  );
 };
