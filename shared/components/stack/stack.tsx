@@ -5,14 +5,16 @@ import { StackStyle } from './style';
 type Props = {
   direction?: 'row' | 'column';
   gap?: keyof Theme['spaceMap'];
+  center?: boolean;
 };
 
 export const Stack: FC<PropsWithChildren<Props>> = ({
   children,
   gap = 'md',
   direction = 'row',
+  center,
 }) => (
-  <StackStyle $gap={gap} $direction={direction}>
+  <StackStyle $gap={gap} $direction={direction} $center={center}>
     {children}
   </StackStyle>
 );
