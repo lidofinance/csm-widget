@@ -9,7 +9,9 @@ export const NotEligibleBanner: FC = () => {
       <BannerHeader>
         You are not eligible to join CSM during Early&nbsp;Adoption&nbsp;period
       </BannerHeader>
-      <p>Come back later when we’re</p>
+      <p>
+        You will be most welcome when the module is on the permissionless phase.
+      </p>
       <Link href="https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22">
         Learn more about Early Adoption.
       </Link>
