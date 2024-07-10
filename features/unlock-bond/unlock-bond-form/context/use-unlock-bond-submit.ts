@@ -2,11 +2,10 @@ import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
-import { Zero } from '@ethersproject/constants';
 import { TOKENS } from 'consts/tokens';
 import { useCSAccountingRPC, useCSModuleWeb3 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
-import { NodeOperatorId, Proof } from 'types';
+import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
@@ -24,8 +23,6 @@ type UseUnlockBondOptions = {
 type UnlockBondMethodParams = {
   nodeOperatorId: NodeOperatorId;
   amount: BigNumber;
-  cumulativeFeeShares: BigNumber;
-  rewardsProof: Proof;
 };
 
 // TODO: unlock bond method
@@ -35,31 +32,22 @@ const useUnlockBondMethods = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
 
   const methodETH = useCallback(
-    async ({
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-    }: UnlockBondMethodParams) => {
+    async ({ nodeOperatorId, amount }: UnlockBondMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
       const { maxFeePerGas, maxPriorityFeePerGas } =
         await getFeeData(staticRpcProvider);
 
       const overrides = {
+        value: amount,
         maxPriorityFeePerGas,
         maxFeePerGas,
       };
 
-      const params = [
-        nodeOperatorId,
-        amount,
-        cumulativeFeeShares,
-        rewardsProof,
-      ] as const;
+      const params = [nodeOperatorId] as const;
 
       const originalGasLimit =
-        await CSModuleWeb3.estimateGas.unlockRewardsUnstETH(
+        await CSModuleWeb3.estimateGas.compensateELRewardsStealingPenalty(
           ...params,
           overrides,
         );
@@ -67,7 +55,7 @@ const useUnlockBondMethods = () => {
       const gasLimit = applyGasLimitRatio(originalGasLimit);
 
       return () =>
-        CSModuleWeb3.unlockRewardsUnstETH(...params, {
+        CSModuleWeb3.compensateELRewardsStealingPenalty(...params, {
           ...overrides,
           gasLimit,
         });
@@ -75,98 +63,9 @@ const useUnlockBondMethods = () => {
     [CSModuleWeb3, staticRpcProvider],
   );
 
-  const methodSTETH = useCallback(
-    async ({
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-    }: UnlockBondMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [
-        nodeOperatorId,
-        amount,
-        cumulativeFeeShares,
-        rewardsProof,
-      ] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.unlockRewardsStETH(...params, overrides);
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.unlockRewardsStETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  const methodWSTETH = useCallback(
-    async ({
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-    }: UnlockBondMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [
-        nodeOperatorId,
-        amount,
-        cumulativeFeeShares,
-        rewardsProof,
-      ] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.unlockRewardsWstETH(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.unlockRewardsWstETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  return useCallback(
-    (token: TOKENS) => {
-      switch (token) {
-        case TOKENS.ETH:
-          return { method: methodETH };
-        case TOKENS.STETH:
-          return { method: methodSTETH };
-        case TOKENS.WSTETH:
-          return { method: methodWSTETH };
-      }
-    },
-    [methodETH, methodSTETH, methodWSTETH],
-  );
+  return useCallback(() => {
+    return { method: methodETH };
+  }, [methodETH]);
 };
 
 export const useUnlockBondSubmit = ({
@@ -180,25 +79,20 @@ export const useUnlockBondSubmit = ({
 
   const unlockBond = useCallback(
     async (
-      { amount, token }: UnlockBondFormInputType,
+      { amount }: UnlockBondFormInputType,
       { nodeOperatorId }: UnlockBondFormDataContextValue,
     ): Promise<boolean> => {
-      invariant(token, 'Token is not defined');
       invariant(amount, 'BondAmount is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       try {
-        const { method } = getMethod(token);
+        const { method } = getMethod();
 
-        txModalStages.sign(amount, token);
-        const cumulativeFeeShares = Zero;
-        const rewardsProof: Proof = [];
+        txModalStages.sign(amount, TOKENS.ETH);
 
         const callback = await method({
           nodeOperatorId,
           amount,
-          cumulativeFeeShares,
-          rewardsProof,
         });
 
         const tx = await runWithTransactionLogger(
@@ -207,7 +101,7 @@ export const useUnlockBondSubmit = ({
         );
         const txHash = typeof tx === 'string' ? tx : tx.hash;
 
-        txModalStages.pending(amount, token, txHash);
+        txModalStages.pending(amount, TOKENS.ETH, txHash);
 
         if (typeof tx === 'object') {
           await runWithTransactionLogger('UnlockBond block confirmation', () =>
@@ -215,12 +109,12 @@ export const useUnlockBondSubmit = ({
           );
         }
 
-        // TODO: revalidate in provider
-        const { current } = await CSAccounting.getBondSummary(nodeOperatorId);
-
         await onConfirm?.();
 
-        txModalStages.success(current, TOKENS.STETH, txHash);
+        // TODO: revalidate in provider
+        const current = await CSAccounting.getActualLockedBond(nodeOperatorId);
+
+        txModalStages.success(current, TOKENS.ETH, txHash);
 
         return true;
       } catch (error) {

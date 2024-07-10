@@ -25,7 +25,7 @@ export const TitledAmount: FC<TitledAddressProps> = ({
   warning,
 }) => {
   return (
-    <TitledAmountStyle $warning={warning}>
+    <TitledAmountStyle $warning={warning && amount?.gt(0)}>
       <Stack gap="xs" center>
         {title}
         <IconTooltip help={help} />

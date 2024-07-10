@@ -8,10 +8,12 @@ import styled from 'styled-components';
 type Props = {
   fieldName?: string;
   options: Record<string, ReactNode>;
+  disabled?: boolean;
 };
 
 export const TokenButtonsHookForm: FC<Props> = ({
   fieldName = 'token',
+  disabled,
   options,
 }) => {
   const {
@@ -29,6 +31,7 @@ export const TokenButtonsHookForm: FC<Props> = ({
             value: key,
             children: options[key],
             defaultChecked: key === defaultValues?.[fieldName],
+            disabled,
           }}
         />
       ))}

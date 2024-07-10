@@ -6,7 +6,7 @@ export type AddBondFormDataContextValue = AddBondFormNetworkData;
 
 export type AddBondFormInputType = {
   token: TOKENS;
-  amount: BigNumber | null;
+  amount?: BigNumber;
 };
 
 export type AddBondFormNetworkData = {

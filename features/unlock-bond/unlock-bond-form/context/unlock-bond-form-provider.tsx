@@ -23,7 +23,7 @@ export const UnlockBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
   // TODO: validate (max amount)
   const formObject = useForm<UnlockBondFormInputType>({
     defaultValues: {
-      amount: null,
+      amount: undefined,
     },
     mode: 'onChange',
   });

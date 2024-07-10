@@ -45,8 +45,6 @@ export const TokenAmount: FC<TokenAmountProps> = ({
     adaptiveDecimals,
   });
 
-  if (!amount) return;
-
   const icon = iconsMap[token];
   const symbol = getTokenDisplayName(token);
 
@@ -56,7 +54,7 @@ export const TokenAmount: FC<TokenAmountProps> = ({
       {loading ? (
         <InlineLoader color="text" />
       ) : !amount ? (
-        <span>{fallback}</span>
+        <SymbolStyle>{fallback}</SymbolStyle>
       ) : (
         <span>
           <Tooltip

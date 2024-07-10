@@ -4,7 +4,7 @@ import { LoadingRecord, NodeOperatorId } from 'types';
 export type UnlockBondFormDataContextValue = UnlockBondFormNetworkData;
 
 export type UnlockBondFormInputType = {
-  amount: BigNumber | null;
+  amount?: BigNumber;
 };
 
 export type UnlockBondFormNetworkData = {

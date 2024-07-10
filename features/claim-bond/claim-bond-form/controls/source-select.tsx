@@ -1,7 +1,7 @@
 import { Checkbox } from '@lidofinance/lido-ui';
 import { TOKENS } from 'consts/tokens';
-import { FC } from 'react';
-import { useController } from 'react-hook-form';
+import { FC, useEffect } from 'react';
+import { useController, useFormContext } from 'react-hook-form';
 import {
   AmountWithPrice,
   FormTitle,
@@ -14,21 +14,32 @@ import { useClaimBondFormNetworkData } from '../context/use-claim-bond-form-netw
 import { useMaxClaimValue } from '../hooks/use-max-claim-value';
 
 export const SourceSelect: FC = () => {
+  const { bond, rewards, lockedBond, loading } = useClaimBondFormNetworkData();
+
   const { field } = useController<ClaimBondFormInputType>({
     name: 'claimRewards',
+    disabled: bond?.isShortage,
   });
 
-  const { bond, rewards, lockedBond, loading } = useClaimBondFormNetworkData();
+  const { setValue } = useFormContext<ClaimBondFormInputType>();
+
+  useEffect(() => {
+    if (bond?.isShortage) {
+      setValue('claimRewards', true);
+    }
+  }, [bond?.isShortage, setValue]);
+
   const availableToClaim = useMaxClaimValue();
 
-  // TODO: loading
+  const showLockedBond = lockedBond?.gt(0);
+
   return (
     <>
       <Stack spaceBetween>
         <FormTitle>Available to claim</FormTitle>
         <AmountWithPrice
           big
-          amount={availableToClaim}
+          amount={availableToClaim[TOKENS.STETH]}
           token={TOKENS.STETH}
           loading={loading.isBondLoading || loading.isRewardsLoading}
         />
@@ -67,15 +78,17 @@ export const SourceSelect: FC = () => {
           amount={bond?.delta}
           token={TOKENS.STETH}
         />
-        <TitledSelectableAmount
-          warning
-          title={<Checkbox checked disabled label="Locked bond" />}
-          help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
-          loading={loading.isLockedBondLoading}
-          amount={lockedBond}
-          token={TOKENS.ETH}
-          sign="minus"
-        />
+        {showLockedBond && (
+          <TitledSelectableAmount
+            warning
+            title={<Checkbox checked disabled label="Locked bond" />}
+            help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
+            loading={loading.isLockedBondLoading}
+            amount={lockedBond}
+            token={TOKENS.ETH}
+            sign="minus"
+          />
+        )}
       </Latice>
     </>
   );

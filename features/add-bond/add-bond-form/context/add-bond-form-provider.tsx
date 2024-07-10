@@ -24,7 +24,7 @@ export const AddBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const formObject = useForm<AddBondFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
-      amount: null,
+      amount: undefined,
     },
     mode: 'onChange',
   });

@@ -41,7 +41,7 @@ export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
     ['fee-distributor-tree', chainId],
     async () => {
       const cid = await feeDistributorRPC.treeCid();
-      if (!cid) return undefined;
+      if (!cid) return null;
       const url = `https://ipfs.io/ipfs/${cid}`;
 
       const treeJson =
@@ -57,9 +57,14 @@ export const useRewardsProof = (nodeOperatorId?: NodeOperatorId) => {
   const treeSwr = useFeeDistributorTree();
 
   const proofData = useMemo(() => {
-    return treeSwr.data && nodeOperatorId
-      ? findProofAndAmount(treeSwr.data, nodeOperatorId)
-      : undefined;
+    if (!nodeOperatorId || treeSwr.data === undefined) return undefined;
+
+    return (
+      (treeSwr.data && findProofAndAmount(treeSwr.data, nodeOperatorId)) || {
+        proof: [],
+        shares: Zero,
+      }
+    );
   }, [nodeOperatorId, treeSwr.data]);
 
   return useMergeSwr([treeSwr], proofData);

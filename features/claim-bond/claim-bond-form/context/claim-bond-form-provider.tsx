@@ -24,7 +24,7 @@ export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const formObject = useForm<ClaimBondFormInputType>({
     defaultValues: {
       token: TOKENS.STETH,
-      amount: null,
+      amount: undefined,
       claimRewards: true,
     },
     mode: 'onChange',

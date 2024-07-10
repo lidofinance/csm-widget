@@ -21,6 +21,7 @@ const CSAccounting = contractHooksFactory(
 );
 
 export const useCSAccountingRPC = CSAccounting.useContractRPC;
+export const useCSAccountingWeb3 = CSAccounting.useContractWeb3;
 
 const CSFeeDistributor = contractHooksFactory(
   CSFeeDistributor__factory,

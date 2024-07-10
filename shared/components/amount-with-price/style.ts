@@ -25,7 +25,7 @@ export const AmountStyle = styled.div`
   min-width: 12ch;
 
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
-  line-height: ${({ theme }) => theme.fontSizesMap.xl}px;
+  line-height: 1.5;
 `;
 
 export const PriceStyle = styled.div`

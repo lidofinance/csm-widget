@@ -11,7 +11,7 @@ export type ClaimBondFormDataContextValue = ClaimBondFormNetworkData;
 
 export type ClaimBondFormInputType = {
   token: TOKENS;
-  amount: BigNumber | null;
+  amount?: BigNumber;
   claimRewards: boolean;
 };
 
