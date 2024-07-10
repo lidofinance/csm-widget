@@ -15,11 +15,7 @@ export const SubmitButton = () => {
 
   return (
     <>
-      <SubmitButtonHookForm
-        disabled={false}
-        errorField="address"
-        onClick={clickHandle}
-      >
+      <SubmitButtonHookForm errorField="address" onClick={clickHandle}>
         Propose a new {role} address
       </SubmitButtonHookForm>
       <Note text="To complete the address change, the owner of the new address must confirm the change" />

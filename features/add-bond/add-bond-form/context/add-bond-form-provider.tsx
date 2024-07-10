@@ -20,6 +20,7 @@ export const useAddBondFormData = useFormData<AddBondFormDataContextValue>;
 export const AddBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useAddBondFormNetworkData();
 
+  // TODO: default token = token_with_max_amount
   const formObject = useForm<AddBondFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,

@@ -1,13 +1,13 @@
+import { useMemo } from 'react';
 import {
   useExtendedBondBalance,
+  useMergeSwr,
   useNodeOperatorBalance,
   useNodeOperatorCurveId,
   useNodeOperatorFirstKeysBond,
   useNodeOperatorInfo,
 } from 'shared/hooks';
-import { useMemo } from 'react';
 import { NodeOperatorId } from 'types';
-import { mergeSwr } from 'utils';
 import { useRemovalFeeByKeysCount } from './useRemovalFeeByKeysCount';
 
 export const useBondBalanceAfterRemoveKeys = (
@@ -35,7 +35,7 @@ export const useBondBalanceAfterRemoveKeys = (
   );
   const bondBalance = useExtendedBondBalance(swrRequiredAfter.data, bondAfter);
 
-  return mergeSwr(
+  return useMergeSwr(
     [swrInfo, swrCurveId, swrRequiredAfter, swrRemovalFee],
     bondBalance,
   );

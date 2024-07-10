@@ -15,22 +15,24 @@ import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 export const BondSection: FC = () => {
   const id = useNodeOperatorId();
 
-  const { data: balance, initialLoading: isLoading } =
+  const { data: bond, initialLoading: isBondLoading } =
     useNodeOperatorBalance(id);
 
-  const {
-    data: { available: rewards },
-    initialLoading: isRewardsLoading,
-  } = useNodeOperatorRewards(id);
+  const { data: rewards, initialLoading: isRewardsLoading } =
+    useNodeOperatorRewards(id);
 
-  const { data: locked, initialLoading: isLockedLoading } =
+  const { data: lockedBond, initialLoading: isLockedLoading } =
     useNodeOperatorLockAmount(id);
 
-  const availableToClaim = useAvailableToClaim({ balance, rewards, locked });
+  const availableToClaim = useAvailableToClaim({
+    bond,
+    rewards,
+    lockedBond,
+  });
 
   return (
     <SectionBlock title="Bond & Rewards" href={BOND_PATH}>
-      {balance && (
+      {bond && (
         <Stack direction="column" gap="md">
           <AccordionStyle
             summary={
@@ -38,7 +40,7 @@ export const BondSection: FC = () => {
                 <RowTitle>Available to claim</RowTitle>
                 <Balance
                   big
-                  loading={isLoading || isRewardsLoading}
+                  loading={isBondLoading || isRewardsLoading}
                   amount={availableToClaim}
                 />
               </RowHeader>
@@ -48,16 +50,16 @@ export const BondSection: FC = () => {
               <Balance
                 title="Rewards"
                 loading={isRewardsLoading}
-                amount={rewards}
+                amount={rewards?.available}
               />
-              {balance.isShortage ? (
+              {bond.isShortage ? (
                 <>
                   <Sign minus />
                   <Balance
-                    dangerous={balance.isNoticiableShortage}
+                    dangerous={bond.isNoticiableShortage}
                     title="Shortage bond"
-                    loading={isLoading}
-                    amount={balance.shortage}
+                    loading={isBondLoading}
+                    amount={bond.delta}
                   />
                 </>
               ) : (
@@ -65,19 +67,19 @@ export const BondSection: FC = () => {
                   <Sign />
                   <Balance
                     title="Excess bond"
-                    loading={isLoading}
-                    amount={balance.excess}
+                    loading={isBondLoading}
+                    amount={bond.delta}
                   />
                 </>
               )}
-              {locked?.gt(0) && (
+              {lockedBond?.gt(0) && (
                 <>
                   <Sign minus />
                   <Balance
                     dangerous
                     title="Locked bond"
                     loading={isLockedLoading}
-                    amount={locked}
+                    amount={lockedBond}
                     token={TOKENS.ETH}
                   />
                 </>
@@ -90,8 +92,8 @@ export const BondSection: FC = () => {
                 <RowTitle>Bond balance</RowTitle>
                 <Balance
                   big
-                  loading={isLoading}
-                  amount={balance.current}
+                  loading={isBondLoading}
+                  amount={bond.current}
                   token={TOKENS.STETH}
                 />
               </RowHeader>
@@ -100,18 +102,18 @@ export const BondSection: FC = () => {
             <RowBody>
               <Balance
                 title="Required bond"
-                loading={isLoading}
-                amount={balance.required}
+                loading={isBondLoading}
+                amount={bond.required}
               />
 
-              {balance.isShortage ? (
+              {bond.isShortage ? (
                 <>
                   <Sign minus />
                   <Balance
-                    dangerous={balance.isNoticiableShortage}
+                    dangerous={bond.isNoticiableShortage}
                     title="Shortage bond"
-                    loading={isLoading}
-                    amount={balance.shortage}
+                    loading={isBondLoading}
+                    amount={bond.delta}
                   />
                 </>
               ) : (
@@ -119,8 +121,8 @@ export const BondSection: FC = () => {
                   <Sign />
                   <Balance
                     title="Excess bond"
-                    loading={isLoading}
-                    amount={balance.excess}
+                    loading={isBondLoading}
+                    amount={bond.delta}
                   />
                 </>
               )}

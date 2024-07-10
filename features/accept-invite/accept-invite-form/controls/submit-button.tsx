@@ -2,7 +2,7 @@ import { SubmitButtonHookForm } from 'shared/hook-form/controls/submit-button-ho
 
 export const SubmitButton = () => {
   return (
-    <SubmitButtonHookForm disabled={false} errorField="address">
+    <SubmitButtonHookForm errorField="invite">
       Accept request
     </SubmitButtonHookForm>
   );

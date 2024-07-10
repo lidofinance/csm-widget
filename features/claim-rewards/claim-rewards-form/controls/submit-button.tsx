@@ -7,7 +7,7 @@ export const SubmitButton = () => {
   const token = useWatch<ClaimRewardsFormInputType, 'token'>({ name: 'token' });
 
   return (
-    <SubmitButtonHookForm disabled={false} errorField="amount">
+    <SubmitButtonHookForm errorField="amount">
       {token === TOKENS.ETH ? 'Request claim' : 'Claim Bond'}
     </SubmitButtonHookForm>
   );

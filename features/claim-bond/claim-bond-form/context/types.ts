@@ -1,33 +1,29 @@
 import { BigNumber } from 'ethers';
 import { type TOKENS } from 'consts/tokens';
-import { NodeOperatorId } from 'types';
+import {
+  BondBalance,
+  LoadingRecord,
+  NodeOperatorId,
+  RewardsBalance,
+} from 'types';
 
 export type ClaimBondFormDataContextValue = ClaimBondFormNetworkData;
 
 export type ClaimBondFormInputType = {
   token: TOKENS;
   amount: BigNumber | null;
-};
-
-export type ClaimBondFormLoading = {
-  isBondBalanceLoading: boolean;
-  isMultisigLoading: boolean;
-  isMaxGasPriceLoading: boolean;
+  claimRewards: boolean;
 };
 
 export type ClaimBondFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
-  bondBalance?: BigNumber;
-  bondRequired?: BigNumber;
-  maxGasPrice?: BigNumber;
-  isMultisig?: boolean;
-  loading: ClaimBondFormLoading;
+  bond?: BondBalance;
+  rewards?: RewardsBalance;
+  lockedBond?: BigNumber;
+  loading: LoadingRecord<'bond' | 'rewards' | 'lockedBond'>;
   revalidate: () => Promise<void>;
 };
 
 export type ClaimBondFormValidationContext = {
-  isWalletActive: boolean;
-  gasCost: BigNumber;
   etherBalance: BigNumber;
-  isMultisig: boolean;
 };

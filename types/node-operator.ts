@@ -34,4 +34,17 @@ export type Proof = BytesLike[];
 export type BondBalance = {
   current: BigNumber;
   required: BigNumber;
+
+  delta: BigNumber;
+  isShortage: boolean;
+  isNoticiableShortage: boolean;
+};
+
+export type RewardProof = {
+  shares: BigNumber;
+  proof: Proof;
+};
+
+export type RewardsBalance = RewardProof & {
+  available: BigNumber;
 };

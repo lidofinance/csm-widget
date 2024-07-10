@@ -28,6 +28,8 @@ type ClaimBondMethodParams = {
   rewardsProof: Proof;
 };
 
+// TODO: pull rewards
+// TODO: claim rewards
 // encapsulates eth/steth/wsteth flows
 const useClaimBondMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();

@@ -5,6 +5,7 @@ type Props = {
   $direction?: 'row' | 'column';
   $gap?: keyof Theme['spaceMap'];
   $center?: boolean;
+  $spaceBetween?: boolean;
 };
 
 export const StackStyle = styled.div<Props>`
@@ -16,8 +17,14 @@ export const StackStyle = styled.div<Props>`
     css`
       align-items: center;
     `}
+  ${({ $spaceBetween }) =>
+    $spaceBetween &&
+    css`
+      justify-content: space-between;
+    `}
 `;
 
+// TODO: remove this
 export const StackWrapStyle = styled(StackStyle)`
   flex-wrap: wrap;
 

@@ -28,7 +28,7 @@ type UnlockBondMethodParams = {
   rewardsProof: Proof;
 };
 
-// TODO: correct method
+// TODO: unlock bond method
 // encapsulates eth/steth/wsteth flows
 const useUnlockBondMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();

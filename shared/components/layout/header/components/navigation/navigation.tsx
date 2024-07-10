@@ -1,6 +1,5 @@
 import { FC, memo, useCallback } from 'react';
 
-import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
@@ -10,8 +9,7 @@ import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import {
   BOND_ADD_PATH,
   BOND_CLAIM_PATH,
-  BOND_CLAIM_REWARDS_PATH,
-  BOND_LOCKED_PATH,
+  BOND_UNLOCK_PATH,
   BOND_PATH,
   HOME_PATH,
   KEYS_PATH,
@@ -88,19 +86,13 @@ const routesNodeOperator: Route[] = [
     name: 'Bond & Rewards',
     path: BOND_PATH,
     icon: <WalletIcon />,
-    subPaths: [BOND_ADD_PATH, BOND_CLAIM_PATH, BOND_CLAIM_REWARDS_PATH],
+    subPaths: [BOND_ADD_PATH, BOND_CLAIM_PATH, BOND_UNLOCK_PATH],
   },
   {
     name: 'Roles',
     path: ROLES_PATH,
     icon: <GearIcon />,
     subPaths: [ROLES_MANAGER_PATH, ROLES_REWARDS_PATH, ROLES_INBOX_PATH],
-  },
-  {
-    name: 'Locked Bond',
-    path: BOND_LOCKED_PATH,
-    icon: <AlertIcon />,
-    skip: true,
   },
 ];
 

@@ -1,9 +1,10 @@
+import { Zero } from '@ethersproject/constants';
 import { useContractSWR, useLidoSWR } from '@lido-sdk/react';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { STRATEGY_CONSTANT, STRATEGY_LAZY } from 'consts/swr-strategies';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
-import { NodeOperatorId, Proof } from 'types';
+import { NodeOperatorId, RewardProof, RewardsBalance } from 'types';
 import {
   StandardMerkleTreeData,
   findIndexAndLeaf,
@@ -11,14 +12,9 @@ import {
 } from 'utils';
 import { useAccount } from './use-account';
 import { useCSFeeDistributorRPC } from './useCsmContracts';
-import { Zero } from '@ethersproject/constants';
+import { useMergeSwr } from './useMergeSwr';
 
 type RewardsTreeLeaf = [NodeOperatorId, string];
-
-type RewardProof = {
-  shares: BigNumber;
-  proof: Proof;
-};
 
 const findProofAndAmount = (
   tree: StandardMerkleTree<RewardsTreeLeaf>,
@@ -57,6 +53,18 @@ export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
   );
 };
 
+export const useRewardsProof = (nodeOperatorId?: NodeOperatorId) => {
+  const treeSwr = useFeeDistributorTree();
+
+  const proofData = useMemo(() => {
+    return treeSwr.data && nodeOperatorId
+      ? findProofAndAmount(treeSwr.data, nodeOperatorId)
+      : undefined;
+  }, [nodeOperatorId, treeSwr.data]);
+
+  return useMergeSwr([treeSwr], proofData);
+};
+
 export const useFeeDistributorRewards = (
   nodeOperatorId?: NodeOperatorId,
   proofData?: RewardProof,
@@ -72,28 +80,15 @@ export const useFeeDistributorRewards = (
 };
 
 export const useNodeOperatorRewards = (nodeOperatorId?: NodeOperatorId) => {
-  const {
-    data: tree,
-    loading: isTreeLoading,
-    initialLoading,
-  } = useFeeDistributorTree();
+  const proofSwr = useRewardsProof(nodeOperatorId);
 
-  const proofData = useMemo(() => {
-    return tree && nodeOperatorId
-      ? findProofAndAmount(tree, nodeOperatorId)
+  const rewardsSwr = useFeeDistributorRewards(nodeOperatorId, proofSwr.data);
+
+  const data: RewardsBalance | undefined = useMemo(() => {
+    return proofSwr.data
+      ? { ...proofSwr.data, available: rewardsSwr.data ?? Zero }
       : undefined;
-  }, [nodeOperatorId, tree]);
+  }, [proofSwr.data, rewardsSwr.data]);
 
-  const {
-    data: available,
-    loading: isRewardsLoading,
-    ...swr
-  } = useFeeDistributorRewards(nodeOperatorId, proofData);
-
-  return {
-    ...swr,
-    data: { ...proofData, available: available ?? Zero },
-    initialLoading: initialLoading || swr.initialLoading,
-    loading: isTreeLoading || isRewardsLoading,
-  };
+  return useMergeSwr([proofSwr, rewardsSwr], data);
 };

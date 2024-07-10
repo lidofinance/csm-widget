@@ -2,8 +2,6 @@ import { SubmitButtonHookForm } from 'shared/hook-form/controls/submit-button-ho
 
 export const SubmitButton = () => {
   return (
-    <SubmitButtonHookForm disabled={false} errorField="amount">
-      Submit Bond
-    </SubmitButtonHookForm>
+    <SubmitButtonHookForm errorField="amount">Add Bond</SubmitButtonHookForm>
   );
 };

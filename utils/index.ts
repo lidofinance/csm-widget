@@ -25,7 +25,6 @@ export * from './is-url';
 export * from './isContract';
 export * from './logger';
 export * from './maxNumberValidation';
-export * from './mergeSwr';
 export * from './merkle-tree';
 export * from './nprogress';
 export * from './parallelizePromises';

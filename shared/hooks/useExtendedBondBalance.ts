@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
 import { ROUNDING_TRESHOLD } from 'consts/treshhold';
 import { BigNumber } from 'ethers';
+import { useMemo } from 'react';
+import { BondBalance } from 'types';
 
 export const useExtendedBondBalance = (
   required?: BigNumber,
@@ -12,17 +13,13 @@ export const useExtendedBondBalance = (
     const delta = current.sub(required);
     const isShortage = delta?.lt(0) ?? false;
     const isNoticiableShortage = delta?.lt(-ROUNDING_TRESHOLD) ?? false;
-    const shortage = isShortage ? delta?.abs() : undefined;
-    const excess = isShortage ? undefined : delta;
 
     return {
       required,
       current,
-      delta,
-      shortage,
-      excess,
+      delta: delta.abs(),
       isShortage,
       isNoticiableShortage,
-    };
+    } as BondBalance;
   }, [required, current]);
 };

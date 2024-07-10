@@ -1,8 +1,8 @@
-import { InlineLoader, Question, Tooltip } from '@lidofinance/lido-ui';
+import { InlineLoader } from '@lidofinance/lido-ui';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { FC, ReactNode } from 'react';
-import { Stack } from 'shared/components';
+import { IconTooltip, Stack } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { AmountStyle, TitledAmountStyle } from './style';
 
@@ -14,6 +14,8 @@ type TitledAddressProps = {
   token?: TOKENS;
   warning?: boolean;
 };
+
+// TODO: merge components
 export const TitledAmount: FC<TitledAddressProps> = ({
   amount,
   token,
@@ -26,11 +28,7 @@ export const TitledAmount: FC<TitledAddressProps> = ({
     <TitledAmountStyle $warning={warning}>
       <Stack gap="xs" center>
         {title}
-        {help && (
-          <Tooltip placement="bottomLeft" title={help}>
-            <Question />
-          </Tooltip>
-        )}
+        <IconTooltip help={help} />
       </Stack>
       {loading ? (
         <InlineLoader color="text" />

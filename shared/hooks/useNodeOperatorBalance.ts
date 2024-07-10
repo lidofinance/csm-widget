@@ -3,12 +3,13 @@ import { STRATEGY_EAGER } from 'consts/swr-strategies';
 import { NodeOperatorId } from 'types';
 import { useCSAccountingRPC } from './useCsmContracts';
 import { useExtendedBondBalance } from './useExtendedBondBalance';
+import { useMergeSwr } from './useMergeSwr';
 
 export const useNodeOperatorBalance = (
   nodeOperatorId?: NodeOperatorId,
   config = STRATEGY_EAGER,
 ) => {
-  const { data, ...swr } = useContractSWR({
+  const swr = useContractSWR({
     contract: useCSAccountingRPC(),
     method: 'getBondSummary',
     params: [nodeOperatorId],
@@ -16,10 +17,7 @@ export const useNodeOperatorBalance = (
     config,
   });
 
-  const balance = useExtendedBondBalance(data?.required, data?.current);
+  const balance = useExtendedBondBalance(swr.data?.required, swr.data?.current);
 
-  return {
-    ...swr,
-    data: balance,
-  };
+  return useMergeSwr([swr], balance);
 };

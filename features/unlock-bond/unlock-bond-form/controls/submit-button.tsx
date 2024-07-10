@@ -3,7 +3,7 @@ import { SubmitButtonHookForm } from 'shared/hook-form/controls/submit-button-ho
 export const SubmitButton = () => {
   // TODO: disable
   return (
-    <SubmitButtonHookForm disabled={false} errorField="amount">
+    <SubmitButtonHookForm errorField="amount">
       Compensate locked bond
     </SubmitButtonHookForm>
   );

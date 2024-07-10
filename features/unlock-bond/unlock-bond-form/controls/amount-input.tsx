@@ -4,8 +4,9 @@ import { TokenAmountInputHookForm } from 'shared/hook-form/controls/token-amount
 import { useMaxValue } from '../hooks/use-max-value';
 
 export const AmountInput: React.FC = () => {
-  // TODO: disable
   const max = useMaxValue();
+
+  // TODO: disable
   return (
     <>
       <FormTitle>Enter token amount</FormTitle>
