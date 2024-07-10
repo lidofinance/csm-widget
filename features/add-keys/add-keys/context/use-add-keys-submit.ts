@@ -192,15 +192,13 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
   const addKeys = useCallback(
     async (
-      { depositData, token, bondAmount: bondAmountRaw }: AddKeysFormInputType,
+      { depositData, token, bondAmount }: AddKeysFormInputType,
       { nodeOperatorId }: AddKeysFormDataContextValue,
     ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
-      invariant(bondAmountRaw, 'BondAmount is not defined');
-
-      const bondAmount = addExtraWei(bondAmountRaw, token);
+      invariant(bondAmount, 'BondAmount is not defined');
 
       try {
         let permit: GatherPermitSignatureResult | undefined;
@@ -210,7 +208,8 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
         if (needsPermit) {
           txModalStages.signPermit();
-          permit = await gatherPermitSignature(bondAmount, token);
+          const bondAmountRaw = addExtraWei(bondAmount, token);
+          permit = await gatherPermitSignature(bondAmountRaw, token);
         }
 
         txModalStages.sign(keysCount, bondAmount, token, nodeOperatorId);
