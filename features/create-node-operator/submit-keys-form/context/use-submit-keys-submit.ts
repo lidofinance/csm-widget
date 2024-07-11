@@ -219,14 +219,12 @@ export const useSubmitKeysSubmit = ({
       referral,
       depositData,
       token,
-      bondAmount: bondAmountRaw,
+      bondAmount,
       eaProof,
     }: SubmitKeysFormInputType): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
-      invariant(bondAmountRaw, 'BondAmount is not defined');
-
-      const bondAmount = addExtraWei(bondAmountRaw, token);
+      invariant(bondAmount, 'BondAmount is not defined');
 
       try {
         let permit: GatherPermitSignatureResult | undefined;
@@ -234,7 +232,8 @@ export const useSubmitKeysSubmit = ({
 
         if (needsPermit) {
           txModalStages.signPermit();
-          permit = await gatherPermitSignature(bondAmount, token);
+          const bondAmountRaw = addExtraWei(bondAmount, token);
+          permit = await gatherPermitSignature(bondAmountRaw, token);
         }
 
         const { keysCount, publicKeys, signatures } = formatKeys(depositData);

@@ -6,11 +6,15 @@ import { Component } from 'types';
 
 export type FormatPriceComponent = Component<
   'span',
-  { amount: number | null | undefined; currency?: string }
+  { amount: number | null | undefined; currency?: string; approx?: boolean }
 >;
 
-export const FormatPrice: FormatPriceComponent = (props) => {
-  const { amount, currency = 'USD', ...rest } = props;
+export const FormatPrice: FormatPriceComponent = ({
+  amount,
+  currency = 'USD',
+  approx,
+  ...rest
+}) => {
   const actual =
     amount == null
       ? DATA_UNAVAILABLE
@@ -18,6 +22,7 @@ export const FormatPrice: FormatPriceComponent = (props) => {
           style: 'currency',
           currency,
         });
+  const prefix = amount && approx ? '≈ ' : '';
 
   if (amount && amount < 0.01) {
     return (
@@ -33,10 +38,18 @@ export const FormatPrice: FormatPriceComponent = (props) => {
           </span>
         }
       >
-        <span {...rest}>{actual}</span>
+        <span {...rest}>
+          {prefix}
+          {actual}
+        </span>
       </Tooltip>
     );
   }
 
-  return <span {...rest}>{actual}</span>;
+  return (
+    <span {...rest}>
+      {prefix}
+      {actual}
+    </span>
+  );
 };

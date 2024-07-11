@@ -16,6 +16,7 @@ type Props = {
   dangerous?: boolean;
 };
 
+// TODO: merge components
 export const Balance: FC<Props> = ({
   title,
   amount,

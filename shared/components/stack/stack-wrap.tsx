@@ -6,6 +6,7 @@ type Props = {
   gap?: keyof Theme['spaceMap'];
 };
 
+// TODO: merge components
 export const StackWrap: FC<PropsWithChildren<Props>> = ({
   children,
   gap = 'md',

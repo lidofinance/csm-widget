@@ -1,20 +1,20 @@
 import { Zero } from '@ethersproject/constants';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
-import { BondBalance } from 'types';
+import { BondBalance, RewardsBalance } from 'types';
 
 type Props = {
-  balance?: BondBalance;
-  rewards?: BigNumber;
-  locked?: BigNumber;
+  bond?: BondBalance;
+  rewards?: RewardsBalance;
+  lockedBond?: BigNumber;
 };
 
-export const useAvailableToClaim = ({ balance, rewards, locked }: Props) => {
+export const useAvailableToClaim = ({ bond, rewards, lockedBond }: Props) => {
   return useMemo(() => {
-    const total = balance?.current
-      .add(rewards ?? Zero)
-      .sub(balance.required)
-      .sub(locked ?? Zero);
+    const total = bond?.current
+      .add(rewards?.available ?? Zero)
+      .sub(bond.required)
+      .sub(lockedBond ?? Zero);
     return total?.gt(0) ? total : Zero;
-  }, [balance, locked, rewards]);
+  }, [bond, lockedBond, rewards]);
 };

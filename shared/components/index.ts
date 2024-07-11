@@ -27,4 +27,8 @@ export { Latice } from './latice/latice';
 export { Note } from './note/note';
 export { Warning } from './warning/warning';
 export { TitledAddress } from './titled-address/titled-address';
+export { TitledAmount } from './titled-amount/titled-amount';
+export { TitledSelectableAmount } from './titled-selectable-amount/titled-selectable-amount';
+export { AmountWithPrice } from './amount-with-price/amount-with-price';
 export { FormBlock } from './form-block/form-block';
+export { IconTooltip } from './icon-tooltip/icon-tooltip';

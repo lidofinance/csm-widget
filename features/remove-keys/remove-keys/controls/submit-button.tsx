@@ -2,11 +2,7 @@ import { SubmitButtonHookForm } from 'shared/hook-form/controls/submit-button-ho
 
 export const SubmitButton = () => {
   return (
-    <SubmitButtonHookForm
-      disabled={false}
-      data-testid="submitKeysBtn"
-      errorField="amount"
-    >
+    <SubmitButtonHookForm errorField="selection">
       Remove Keys
     </SubmitButtonHookForm>
   );

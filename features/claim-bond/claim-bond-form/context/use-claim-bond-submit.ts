@@ -4,9 +4,13 @@ import invariant from 'tiny-invariant';
 
 import { Zero } from '@ethersproject/constants';
 import { TOKENS } from 'consts/tokens';
-import { useCSAccountingRPC, useCSModuleWeb3 } from 'shared/hooks';
+import {
+  useCSAccountingRPC,
+  useCSAccountingWeb3,
+  useCSModuleWeb3,
+} from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
-import { NodeOperatorId, Proof } from 'types';
+import { NodeOperatorId, RewardProof } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
@@ -24,22 +28,17 @@ type UseClaimBondOptions = {
 type ClaimBondMethodParams = {
   nodeOperatorId: NodeOperatorId;
   amount: BigNumber;
-  cumulativeFeeShares: BigNumber;
-  rewardsProof: Proof;
+  rewards: RewardProof;
 };
 
 // encapsulates eth/steth/wsteth flows
 const useClaimBondMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();
   const CSModuleWeb3 = useCSModuleWeb3();
+  const CSAccountingWeb3 = useCSAccountingWeb3();
 
   const methodETH = useCallback(
-    async ({
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-    }: ClaimBondMethodParams) => {
+    async ({ nodeOperatorId, amount, rewards }: ClaimBondMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
       const { maxFeePerGas, maxPriorityFeePerGas } =
@@ -53,8 +52,8 @@ const useClaimBondMethods = () => {
       const params = [
         nodeOperatorId,
         amount,
-        cumulativeFeeShares,
-        rewardsProof,
+        rewards.shares,
+        rewards.proof,
       ] as const;
 
       const originalGasLimit =
@@ -75,12 +74,7 @@ const useClaimBondMethods = () => {
   );
 
   const methodSTETH = useCallback(
-    async ({
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-    }: ClaimBondMethodParams) => {
+    async ({ nodeOperatorId, amount, rewards }: ClaimBondMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
       const { maxFeePerGas, maxPriorityFeePerGas } =
@@ -94,8 +88,8 @@ const useClaimBondMethods = () => {
       const params = [
         nodeOperatorId,
         amount,
-        cumulativeFeeShares,
-        rewardsProof,
+        rewards.shares,
+        rewards.proof,
       ] as const;
 
       const originalGasLimit = await CSModuleWeb3.estimateGas.claimRewardsStETH(
@@ -115,12 +109,7 @@ const useClaimBondMethods = () => {
   );
 
   const methodWSTETH = useCallback(
-    async ({
-      nodeOperatorId,
-      amount,
-      cumulativeFeeShares,
-      rewardsProof,
-    }: ClaimBondMethodParams) => {
+    async ({ nodeOperatorId, amount, rewards }: ClaimBondMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
       const { maxFeePerGas, maxPriorityFeePerGas } =
@@ -134,8 +123,8 @@ const useClaimBondMethods = () => {
       const params = [
         nodeOperatorId,
         amount,
-        cumulativeFeeShares,
-        rewardsProof,
+        rewards.shares,
+        rewards.proof,
       ] as const;
 
       const originalGasLimit =
@@ -152,8 +141,37 @@ const useClaimBondMethods = () => {
     [CSModuleWeb3, staticRpcProvider],
   );
 
+  const methodPullRewards = useCallback(
+    async ({ nodeOperatorId, rewards }: ClaimBondMethodParams) => {
+      invariant(CSAccountingWeb3, 'must have CSAccountingWeb3');
+
+      const { maxFeePerGas, maxPriorityFeePerGas } =
+        await getFeeData(staticRpcProvider);
+
+      const overrides = {
+        maxPriorityFeePerGas,
+        maxFeePerGas,
+      };
+
+      const params = [nodeOperatorId, rewards.shares, rewards.proof] as const;
+
+      const originalGasLimit =
+        await CSAccountingWeb3.estimateGas.pullFeeRewards(...params, overrides);
+
+      const gasLimit = applyGasLimitRatio(originalGasLimit);
+
+      return () =>
+        CSAccountingWeb3.pullFeeRewards(...params, {
+          ...overrides,
+          gasLimit,
+        });
+    },
+    [CSAccountingWeb3, staticRpcProvider],
+  );
+
   return useCallback(
-    (token: TOKENS) => {
+    (token: TOKENS, pullRewards: boolean) => {
+      if (pullRewards) return { method: methodPullRewards };
       switch (token) {
         case TOKENS.ETH:
           return { method: methodETH };
@@ -163,7 +181,7 @@ const useClaimBondMethods = () => {
           return { method: methodWSTETH };
       }
     },
-    [methodETH, methodSTETH, methodWSTETH],
+    [methodETH, methodPullRewards, methodSTETH, methodWSTETH],
   );
 };
 
@@ -178,25 +196,24 @@ export const useClaimBondSubmit = ({
 
   const claimBond = useCallback(
     async (
-      { amount, token }: ClaimBondFormInputType,
-      { nodeOperatorId }: ClaimBondFormDataContextValue,
+      { amount = Zero, token, claimRewards }: ClaimBondFormInputType,
+      { nodeOperatorId, rewards }: ClaimBondFormDataContextValue,
     ): Promise<boolean> => {
       invariant(token, 'Token is not defined');
-      invariant(amount, 'BondAmount is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      if (claimRewards) {
+        invariant(rewards, 'Rewards proof is not defined');
+      }
 
       try {
-        const { method } = getMethod(token);
+        const { method } = getMethod(token, amount.eq(0));
 
         txModalStages.sign(amount, token);
-        const cumulativeFeeShares = Zero;
-        const rewardsProof: Proof = [];
 
         const callback = await method({
           nodeOperatorId,
           amount,
-          cumulativeFeeShares,
-          rewardsProof,
+          rewards: (claimRewards && rewards) || { shares: Zero, proof: [] },
         });
 
         const tx = await runWithTransactionLogger(
@@ -213,10 +230,10 @@ export const useClaimBondSubmit = ({
           );
         }
 
+        await onConfirm?.();
+
         // TODO: revalidate in provider
         const { current } = await CSAccounting.getBondSummary(nodeOperatorId);
-
-        await onConfirm?.();
 
         txModalStages.success(current, TOKENS.STETH, txHash);
 

@@ -27,6 +27,7 @@ type TokenAmountProps = {
   fallback?: string;
 } & FormatBalanceArgs;
 
+// TODO: merge components
 export const TokenAmount: FC<TokenAmountProps> = ({
   token,
   loading,
@@ -34,9 +35,8 @@ export const TokenAmount: FC<TokenAmountProps> = ({
   maxDecimalDigits = 4,
   maxTotalLength = 15,
   trimEllipsis,
-  fallback = DATA_UNAVAILABLE,
   adaptiveDecimals,
-  ...rest
+  fallback = DATA_UNAVAILABLE,
 }) => {
   const { actual, trimmed } = useFormattedBalance(amount, {
     maxDecimalDigits,
@@ -45,8 +45,6 @@ export const TokenAmount: FC<TokenAmountProps> = ({
     adaptiveDecimals,
   });
 
-  if (!amount) return;
-
   const icon = iconsMap[token];
   const symbol = getTokenDisplayName(token);
 
@@ -54,9 +52,9 @@ export const TokenAmount: FC<TokenAmountProps> = ({
     <TokenAmountStyle>
       {icon}
       {loading ? (
-        <InlineLoader />
+        <InlineLoader color="text" />
       ) : !amount ? (
-        <span {...rest}>{fallback}</span>
+        <SymbolStyle>{fallback}</SymbolStyle>
       ) : (
         <span>
           <Tooltip

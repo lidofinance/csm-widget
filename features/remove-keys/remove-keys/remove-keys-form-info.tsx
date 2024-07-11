@@ -32,7 +32,7 @@ export const RemoveKeysFormInfo = () => {
         title={`${balance?.isShortage ? 'Shortage' : 'Excess'} bond after execution`}
         loading={isBalanceLoading}
       >
-        <FormatToken amount={balance?.delta.abs()} token={TOKENS.STETH} />
+        <FormatToken amount={balance?.delta} token={TOKENS.STETH} />
       </DataTableRow>
     </DataTable>
   );

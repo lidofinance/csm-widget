@@ -149,14 +149,12 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
 
   const addBond = useCallback(
     async (
-      { amount: amountRaw, token }: AddBondFormInputType,
+      { amount, token }: AddBondFormInputType,
       { nodeOperatorId }: AddBondFormDataContextValue,
     ): Promise<boolean> => {
       invariant(token, 'Token is not defined');
-      invariant(amountRaw, 'BondAmount is not defined');
+      invariant(amount, 'BondAmount is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
-
-      const amount = addExtraWei(amountRaw, token);
 
       try {
         let permit: GatherPermitSignatureResult | undefined;
@@ -164,7 +162,8 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
 
         if (needsPermit) {
           txModalStages.signPermit();
-          permit = await getPermitSignature(amount, token);
+          const amountRaw = addExtraWei(amount, token);
+          permit = await getPermitSignature(amountRaw, token);
         }
 
         txModalStages.sign(amount, token);

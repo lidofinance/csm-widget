@@ -20,10 +20,12 @@ export const useClaimBondFormData = useFormData<ClaimBondFormDataContextValue>;
 export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useClaimBondFormNetworkData();
 
+  // TODO: default claimRewards=true only if rewards > 0
   const formObject = useForm<ClaimBondFormInputType>({
     defaultValues: {
-      token: TOKENS.ETH,
-      amount: null,
+      token: TOKENS.STETH,
+      amount: undefined,
+      claimRewards: true,
     },
     mode: 'onChange',
   });
