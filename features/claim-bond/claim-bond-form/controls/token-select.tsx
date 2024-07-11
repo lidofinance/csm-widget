@@ -11,7 +11,7 @@ export const TokenSelect: React.FC = () => {
 
   return (
     <>
-      <FormTitle>Choose a token to add bond</FormTitle>
+      <FormTitle>Choose a token to claim</FormTitle>
       <TokenButtonsHookForm
         disabled={availableToClaim[TOKENS.ETH].eq(0)}
         options={{
