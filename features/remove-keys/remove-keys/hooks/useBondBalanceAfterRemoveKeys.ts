@@ -17,7 +17,7 @@ export const useBondBalanceAfterRemoveKeys = (
 
   const nextKeysCount = useMemo(() => {
     return info
-      ? info.totalAddedKeys - info.totalExitedKeys - count
+      ? info.totalAddedKeys - info.totalWithdrawnKeys - count
       : undefined;
   }, [count, info]);
 

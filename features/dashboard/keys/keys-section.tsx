@@ -33,7 +33,7 @@ export const KeysSection: FC = () => {
             />
             <Item
               title="Active"
-              count={info.totalDepositedKeys - info.totalExitedKeys}
+              count={info.totalDepositedKeys - info.totalWithdrawnKeys}
             />
             <Item
               title="Limit"
@@ -53,8 +53,9 @@ export const KeysSection: FC = () => {
             />
             <Item
               title="Exited"
-              count={info.totalExitedKeys}
+              count={info.totalWithdrawnKeys}
               variant="secondary"
+              tooltip="Keys that have already exited or are waiting to be exited"
             />
           </Row>
           <Row>
