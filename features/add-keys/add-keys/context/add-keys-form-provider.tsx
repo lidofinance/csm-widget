@@ -12,9 +12,8 @@ import {
   AddKeysFormDataContextValue,
   type AddKeysFormInputType,
 } from './types';
-import { useAddKeysSubmit } from './use-add-keys-submit';
 import { useAddKeysFormNetworkData } from './use-add-keys-form-network-data';
-import { useAddKeysFormValidationContext } from './use-add-keys-form-validation-context';
+import { useAddKeysSubmit } from './use-add-keys-submit';
 import { useCalculateBondAmount } from './use-calculate-bond-amount';
 import { useCalculateDepositData } from './use-calculate-deposit-data';
 
@@ -22,19 +21,17 @@ export const useAddKeysFormData = useFormData<AddKeysFormDataContextValue>;
 
 export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useAddKeysFormNetworkData();
-  const validationContextPromise = useAddKeysFormValidationContext(networkData);
 
   const formObject = useForm<AddKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
       depositData: [],
     },
-    context: validationContextPromise,
     mode: 'onChange',
   });
 
   useCalculateDepositData(formObject);
-  useCalculateBondAmount(formObject);
+  const bondAmount = useCalculateBondAmount(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
@@ -43,7 +40,7 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     onRetry: retryFire,
   });
 
-  const value = networkData;
+  const value = { ...networkData, bondAmount };
 
   const formControllerValue: FormControllerContextValueType<
     AddKeysFormInputType,

@@ -3,16 +3,19 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useCallback, useMemo } from 'react';
 import {
   useCsmEarlyAdoption,
-  useMaxGasPrice,
+  useCsmEarlyAdoptionProofConsumed,
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
-import { useIsMultisig } from 'shared/hooks/useIsMultisig';
-import { useStethSubmitGasLimit } from '../hooks';
-import { type SubmitKeysFormNetworkData } from './types';
 import { useCsmCurveId } from 'shared/hooks/useCsmCurveId';
+import { type SubmitKeysFormNetworkData } from './types';
 
 export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
+  const {
+    data: etherBalance,
+    update: updateEtherBalance,
+    initialLoading: isEtherBalanceLoading,
+  } = useEthereumBalance(undefined, STRATEGY_LAZY);
   const {
     data: stethBalance,
     update: updateStethBalance,
@@ -29,51 +32,39 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
     initialLoading: isEaProofLoading,
   } = useCsmEarlyAdoption();
 
-  const { data: curveId, initialLoading: isCurveLoading } =
+  const { data: curveId, initialLoading: isCurveIdLoading } =
     useCsmCurveId(!!proof);
 
-  const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
-  const gasLimit = useStethSubmitGasLimit();
-  const { maxGasPrice, initialLoading: isMaxGasPriceLoading } =
-    useMaxGasPrice();
-
-  const gasCost = useMemo(
-    () => (gasLimit && maxGasPrice ? gasLimit.mul(maxGasPrice) : undefined),
-    [gasLimit, maxGasPrice],
-  );
-
-  const {
-    data: etherBalance,
-    update: updateEtherBalance,
-    initialLoading: isEtherBalanceLoading,
-  } = useEthereumBalance(undefined, STRATEGY_LAZY);
+  const { update: updateConsumed } = useCsmEarlyAdoptionProofConsumed();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance(),
       updateWstethBalance(),
       updateEtherBalance(),
+      updateConsumed(),
     ]);
-  }, [updateStethBalance, updateWstethBalance, updateEtherBalance]);
+  }, [
+    updateStethBalance,
+    updateWstethBalance,
+    updateEtherBalance,
+    updateConsumed,
+  ]);
 
   const loading = useMemo(
     () => ({
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isMultisigLoading,
-      isMaxGasPriceLoading,
       isEtherBalanceLoading,
       isEaProofLoading,
-      isCurveLoading,
+      isCurveIdLoading,
     }),
     [
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isMultisigLoading,
-      isMaxGasPriceLoading,
       isEtherBalanceLoading,
       isEaProofLoading,
-      isCurveLoading,
+      isCurveIdLoading,
     ],
   );
 
@@ -83,9 +74,6 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
     etherBalance,
     eaProof: proof,
     curveId,
-    isMultisig: isMultisigLoading ? undefined : isMultisig,
-    gasCost,
-    gasLimit,
     loading,
     revalidate,
   };

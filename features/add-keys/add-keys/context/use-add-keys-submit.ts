@@ -192,8 +192,8 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
   const addKeys = useCallback(
     async (
-      { depositData, token, bondAmount }: AddKeysFormInputType,
-      { nodeOperatorId }: AddKeysFormDataContextValue,
+      { depositData, token }: AddKeysFormInputType,
+      { nodeOperatorId, bondAmount }: AddKeysFormDataContextValue,
     ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(depositData.length, 'Keys is not defined');

@@ -1,25 +1,28 @@
-import { AddressZero } from '@ethersproject/constants';
 import { TOKENS } from 'consts/tokens';
 import { BigNumberish } from 'ethers';
-import { BytesLike, isAddress } from 'ethers/lib/utils.js';
+import { BytesLike } from 'ethers/lib/utils.js';
 import { useNodeOperator } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import {
   GatherPermitSignatureResult,
+  useAddressCompare,
   useCSModuleWeb3,
   useCsmPermitSignature,
 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import invariant from 'tiny-invariant';
 import { NodeOperatorId, Proof } from 'types';
-import { addExtraWei, runWithTransactionLogger } from 'utils';
+import { addExtraWei, addressOrZero, runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { formatKeys } from 'utils/formatKeys';
 import { getFeeData } from 'utils/getFeeData';
 import { Address } from 'wagmi';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { getAddedNodeOperator } from '../utils';
-import { SubmitKeysFormInputType } from './types';
+import {
+  SubmitKeysFormDataContextValue,
+  SubmitKeysFormInputType,
+} from './types';
 
 type SubmitKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -31,8 +34,8 @@ type MethodParams = {
   keysCount: BigNumberish;
   publicKeys: BytesLike;
   signatures: BytesLike;
-  managerAddress: Address;
   rewardsAddress: Address;
+  managerAddress: Address;
   permit: GatherPermitSignatureResult | undefined;
   eaProof: Proof;
   referral: Address;
@@ -209,22 +212,28 @@ export const useSubmitKeysSubmit = ({
   onRetry,
 }: SubmitKeysOptions) => {
   const { txModalStages } = useTxModalStagesSubmitKeys();
-  const getSubmitKeysMethod = useSubmitKeysMethods();
   const { append: appendNO } = useNodeOperator();
-
+  const getSubmitKeysMethod = useSubmitKeysMethods();
   const gatherPermitSignature = useCsmPermitSignature();
+  const isYouOrZero = useAddressCompare(true);
 
   const submitKeys = useCallback(
-    async ({
-      referral,
-      depositData,
-      token,
-      bondAmount,
-      eaProof,
-    }: SubmitKeysFormInputType): Promise<boolean> => {
+    async (
+      {
+        referral,
+        depositData,
+        token,
+        rewardsAddress: rewardsAddressRaw,
+        managerAddress: managerAddressRaw,
+      }: SubmitKeysFormInputType,
+      { bondAmount, eaProof }: SubmitKeysFormDataContextValue,
+    ): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(bondAmount, 'BondAmount is not defined');
+
+      const rewardsAddress = addressOrZero(rewardsAddressRaw);
+      const managerAddress = addressOrZero(managerAddressRaw);
 
       try {
         let permit: GatherPermitSignatureResult | undefined;
@@ -247,9 +256,9 @@ export const useSubmitKeysSubmit = ({
           signatures,
           permit,
           eaProof: eaProof || [],
-          managerAddress: AddressZero,
-          rewardsAddress: AddressZero,
-          referral: referral && isAddress(referral) ? referral : AddressZero,
+          rewardsAddress,
+          managerAddress,
+          referral: addressOrZero(referral),
         });
 
         const tx = await runWithTransactionLogger(
@@ -278,7 +287,11 @@ export const useSubmitKeysSubmit = ({
         txModalStages.success(nodeOperatorId, txHash);
 
         if (nodeOperatorId) {
-          appendNO({ id: nodeOperatorId, manager: true, rewards: true });
+          appendNO({
+            id: nodeOperatorId,
+            manager: isYouOrZero(managerAddress),
+            rewards: isYouOrZero(rewardsAddress),
+          });
         }
 
         return true;
@@ -294,6 +307,7 @@ export const useSubmitKeysSubmit = ({
       onConfirm,
       gatherPermitSignature,
       appendNO,
+      isYouOrZero,
       onRetry,
     ],
   );

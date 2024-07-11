@@ -1,6 +1,5 @@
 import { ROLES } from 'consts/roles';
-import { BigNumber } from 'ethers';
-import { NodeOperatorId } from 'types';
+import { LoadingRecord, NodeOperatorId } from 'types';
 
 export type ChangeRoleFormDataContextValue = ChangeRoleFormNetworkData;
 
@@ -9,20 +8,12 @@ export type ChangeRoleFormInputType = {
   isRevoke: boolean;
 };
 
-export type ChangeRoleFormLoading = {
-  isInfoLoading: boolean;
-  isMultisigLoading: boolean;
-  isMaxGasPriceLoading: boolean;
-};
-
 export type ChangeRoleFormNetworkData = {
   role: ROLES;
   nodeOperatorId?: NodeOperatorId;
   currentAddress?: string;
   proposedAddress?: string;
-  maxGasPrice?: BigNumber;
-  isMultisig?: boolean;
-  loading: ChangeRoleFormLoading;
+  loading: LoadingRecord<'info'>;
   revalidate: () => Promise<void>;
 };
 

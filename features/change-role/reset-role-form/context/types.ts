@@ -1,18 +1,14 @@
-import { NodeOperatorId } from 'types';
+import { LoadingRecord, NodeOperatorId } from 'types';
 
 export type ResetRoleFormDataContextValue = ResetRoleFormNetworkData;
 
 export type ResetRoleFormInputType = { address?: string };
 
-export type ResetRoleFormLoading = {
-  isInfoLoading: boolean;
-};
-
 export type ResetRoleFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
   currentAddress?: string;
   proposedAddress?: string;
-  loading: ResetRoleFormLoading;
+  loading: LoadingRecord<'info'>;
   revalidate: () => Promise<void>;
 };
 

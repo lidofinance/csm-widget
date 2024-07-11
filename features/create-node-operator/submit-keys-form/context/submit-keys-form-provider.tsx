@@ -16,7 +16,6 @@ import { useCalculateBondAmount } from './use-calculate-bond-amount';
 import { useCalculateDepositData } from './use-calculate-deposit-data';
 import { useSubmitKeysSubmit } from './use-submit-keys-submit';
 import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
-import { useUpdateProof } from './use-update-proof';
 
 export const useSubmitKeysFormData =
   useFormData<SubmitKeysFormDataContextValue>;
@@ -32,10 +31,8 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  useUpdateProof(formObject, networkData);
-
   useCalculateDepositData(formObject);
-  useCalculateBondAmount(formObject, networkData);
+  const bondAmount = useCalculateBondAmount(formObject, networkData);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
@@ -44,7 +41,7 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     onRetry: retryFire,
   });
 
-  const value = networkData;
+  const value = { ...networkData, bondAmount };
 
   const formControllerValue: FormControllerContextValueType<
     SubmitKeysFormInputType,
