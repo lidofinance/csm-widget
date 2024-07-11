@@ -1,10 +1,9 @@
 import { UseFormReturn } from 'react-hook-form';
-import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
-import { useEffect } from 'react';
 import { useNodeOperatorFirstKeysBond } from 'shared/hooks';
+import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
 export const useCalculateBondAmount = (
-  { watch, setValue }: UseFormReturn<SubmitKeysFormInputType>,
+  { watch }: UseFormReturn<SubmitKeysFormInputType>,
   { curveId }: SubmitKeysFormNetworkData,
 ) => {
   const [token, depositData] = watch(['token', 'depositData']);
@@ -15,7 +14,5 @@ export const useCalculateBondAmount = (
     curveId,
   });
 
-  useEffect(() => {
-    setValue('bondAmount', loading ? undefined : data);
-  }, [data, loading, setValue]);
+  return loading ? undefined : data;
 };

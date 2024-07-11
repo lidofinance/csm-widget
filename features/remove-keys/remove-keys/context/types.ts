@@ -1,35 +1,24 @@
 import { BigNumber } from 'ethers';
+import { useNodeOperatorInfo } from 'shared/hooks';
 import { HexString } from 'shared/keys';
-import { NodeOperatorId } from 'types';
+import { BondBalance, LoadingRecord, NodeOperatorId } from 'types';
 
 export type RemoveKeysFormDataContextValue = RemoveKeysFormNetworkData;
 
 export type RemoveKeysFormInputType = {
   selection: {
-    start: number; // 0..[keys.length]
-    count: number; // 0..[keys.length]
+    start: number;
+    count: number;
   };
-  offset?: number; // totalDepositedKeys // TODO: move to form data
-};
-
-export type RemoveKeysFormLoading = {
-  isKeysLoading: boolean;
-  isBondBalanceLoading: boolean;
-  isInfoLoading: boolean;
-  isMultisigLoading: boolean;
-  isMaxGasPriceLoading: boolean;
 };
 
 export type RemoveKeysFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
+  offset?: number; // totalDepositedKeys // TODO: remove
   keys?: HexString[];
-  totalDepositedKeys?: number;
-  bondBalance?: BigNumber;
-  bondRequired?: BigNumber;
-  isMultisig?: boolean;
-  gasLimit?: BigNumber;
-  gasCost?: BigNumber;
-  loading: RemoveKeysFormLoading;
+  info?: ReturnType<typeof useNodeOperatorInfo>['data'];
+  bond?: BondBalance;
+  loading: LoadingRecord<'keys' | 'bond' | 'info'>;
   revalidate: () => Promise<void>;
 };
 

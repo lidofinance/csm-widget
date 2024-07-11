@@ -12,23 +12,19 @@ import {
   type RemoveKeysFormInputType,
 } from './types';
 import { useGetDefaultValues } from './use-get-default-values';
-import { useRemoveKeysSubmit } from './use-remove-keys-submit';
 import { useRemoveKeysFormNetworkData } from './use-remove-keys-form-network-data';
-import { useRemoveKeysFormValidationContext } from './use-remove-keys-form-validation-context';
+import { useRemoveKeysSubmit } from './use-remove-keys-submit';
 
 export const useRemoveKeysFormData =
   useFormData<RemoveKeysFormDataContextValue>;
 
 export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useRemoveKeysFormNetworkData();
-  const validationContextPromise =
-    useRemoveKeysFormValidationContext(networkData);
 
   const { getDefaultValues } = useGetDefaultValues(networkData);
 
   const formObject = useForm<RemoveKeysFormInputType>({
     defaultValues: getDefaultValues,
-    context: validationContextPromise,
     mode: 'onChange',
   });
 

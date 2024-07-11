@@ -2,24 +2,24 @@ import { useMemo } from 'react';
 import {
   useExtendedBondBalance,
   useMergeSwr,
-  useNodeOperatorBalance,
   useNodeOperatorCurveId,
   useNodeOperatorFirstKeysBond,
-  useNodeOperatorInfo,
 } from 'shared/hooks';
 import { NodeOperatorId } from 'types';
+import { useRemoveKeysFormData } from '../context';
 import { useRemovalFeeByKeysCount } from './useRemovalFeeByKeysCount';
 
 export const useBondBalanceAfterRemoveKeys = (
   nodeOperatorId?: NodeOperatorId,
   count = 0,
 ) => {
-  const swrInfo = useNodeOperatorInfo(nodeOperatorId);
+  const { info, bond } = useRemoveKeysFormData();
+
   const nextKeysCount = useMemo(() => {
-    return swrInfo.data
-      ? swrInfo.data.totalAddedKeys - swrInfo.data.totalExitedKeys - count
+    return info
+      ? info.totalAddedKeys - info.totalExitedKeys - count
       : undefined;
-  }, [count, swrInfo.data]);
+  }, [count, info]);
 
   const swrCurveId = useNodeOperatorCurveId(nodeOperatorId);
   const swrRequiredAfter = useNodeOperatorFirstKeysBond({
@@ -28,15 +28,14 @@ export const useBondBalanceAfterRemoveKeys = (
   });
 
   const swrRemovalFee = useRemovalFeeByKeysCount(count);
-  const swrBalance = useNodeOperatorBalance(nodeOperatorId);
   const bondAfter = useMemo(
-    () => swrBalance.data?.current.sub(swrRemovalFee.data || 0),
-    [swrBalance.data, swrRemovalFee.data],
+    () => bond?.current.sub(swrRemovalFee.data || 0),
+    [bond, swrRemovalFee.data],
   );
   const bondBalance = useExtendedBondBalance(swrRequiredAfter.data, bondAfter);
 
   return useMergeSwr(
-    [swrInfo, swrCurveId, swrRequiredAfter, swrRemovalFee],
+    [swrCurveId, swrRequiredAfter, swrRemovalFee],
     bondBalance,
   );
 };

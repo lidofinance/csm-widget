@@ -3,7 +3,6 @@ import { useAwaiter } from 'shared/hooks';
 import { RemoveKeysFormNetworkData } from './types';
 
 export const useGetDefaultValues = ({
-  totalDepositedKeys,
   loading: { isKeysLoading, isInfoLoading },
 }: RemoveKeysFormNetworkData) => {
   const values = useMemo(() => {
@@ -13,9 +12,8 @@ export const useGetDefaultValues = ({
         start: 0,
         count: 0,
       },
-      offset: totalDepositedKeys || 0,
     };
-  }, [isInfoLoading, isKeysLoading, totalDepositedKeys]);
+  }, [isInfoLoading, isKeysLoading]);
 
   const { awaiter } = useAwaiter(values);
 

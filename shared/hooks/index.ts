@@ -54,6 +54,7 @@ export * from './useNodeOperatorSummary';
 export * from './useNodeOperatorUnbondedKeys';
 export * from './usePrevious';
 export * from './useSafeQueryString';
+export * from './useSessionStorage';
 export * from './useSsrMode';
 export * from './useStakingLimitInfo';
 export * from './useStethByWsteth';

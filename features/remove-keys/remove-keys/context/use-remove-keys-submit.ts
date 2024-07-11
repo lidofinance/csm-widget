@@ -75,13 +75,16 @@ export const useRemoveKeysSubmit = ({
 
   const removeKeys = useCallback(
     async (
-      { offset, selection: { start, count } }: RemoveKeysFormInputType,
-      { nodeOperatorId }: RemoveKeysFormDataContextValue,
+      { selection: { start, count } }: RemoveKeysFormInputType,
+      { nodeOperatorId, info }: RemoveKeysFormDataContextValue,
     ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
-      invariant(offset !== undefined, 'Offset is not defined');
+      invariant(
+        info?.totalDepositedKeys !== undefined,
+        'Offset is not defined',
+      );
 
-      const startIndex = offset + start;
+      const startIndex = info.totalDepositedKeys + start;
       const keysCount = count;
 
       try {

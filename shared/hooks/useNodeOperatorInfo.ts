@@ -4,6 +4,7 @@ import { useContractSWR } from '@lido-sdk/react';
 import { STRATEGY_EAGER } from 'consts/swr-strategies';
 import { useMemo } from 'react';
 import { AddressZero } from '@ethersproject/constants';
+import { useMergeSwr } from './useMergeSwr';
 
 const clearEmptyAddress = (address?: string) => {
   return address !== AddressZero ? address : undefined;
@@ -21,7 +22,7 @@ export const useNodeOperatorInfo = (
     config,
   });
 
-  const fixedData = useMemo(() => {
+  const data = useMemo(() => {
     return swr.data
       ? {
           ...swr.data,
@@ -35,5 +36,5 @@ export const useNodeOperatorInfo = (
       : undefined;
   }, [swr.data]);
 
-  return { ...swr, data: swr.data ? fixedData : undefined };
+  return useMergeSwr([swr], data);
 };

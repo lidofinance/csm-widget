@@ -1,8 +1,7 @@
 import { ROLES } from 'consts/roles';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
-import { useMaxGasPrice, useNodeOperatorInfo } from 'shared/hooks';
-import { useIsMultisig } from 'shared/hooks/useIsMultisig';
+import { useNodeOperatorInfo } from 'shared/hooks';
 import { type ChangeRoleFormNetworkData } from './types';
 
 export const useChangeRoleFormNetworkData = ({
@@ -17,10 +16,6 @@ export const useChangeRoleFormNetworkData = ({
     initialLoading: isInfoLoading,
   } = useNodeOperatorInfo(nodeOperatorId);
 
-  const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
-  const { maxGasPrice, initialLoading: isMaxGasPriceLoading } =
-    useMaxGasPrice();
-
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateInfo()]);
   }, [updateInfo]);
@@ -28,10 +23,8 @@ export const useChangeRoleFormNetworkData = ({
   const loading = useMemo(
     () => ({
       isInfoLoading,
-      isMultisigLoading,
-      isMaxGasPriceLoading,
     }),
-    [isInfoLoading, isMultisigLoading, isMaxGasPriceLoading],
+    [isInfoLoading],
   );
 
   const currentAddress =
@@ -46,8 +39,6 @@ export const useChangeRoleFormNetworkData = ({
     currentAddress,
     proposedAddress,
     nodeOperatorId,
-    isMultisig: isMultisigLoading ? undefined : isMultisig,
-    maxGasPrice,
     loading,
     revalidate,
   };

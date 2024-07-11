@@ -3,13 +3,10 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
-  useMaxGasPrice,
   useNodeOperatorBalance,
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
-import { useIsMultisig } from 'shared/hooks/useIsMultisig';
-import { useStethSubmitGasLimit } from '../hooks/useStethSubmitGasLimit';
 import { type AddKeysFormNetworkData } from './types';
 
 export const useAddKeysFormNetworkData = (): AddKeysFormNetworkData => {
@@ -31,50 +28,31 @@ export const useAddKeysFormNetworkData = (): AddKeysFormNetworkData => {
   } = useWSTETHBalance(STRATEGY_LAZY);
   const {
     data: bond,
-    update: updateBondBalance,
-    initialLoading: isBondBalanceLoading,
+    update: updateBond,
+    initialLoading: isBondLoading,
   } = useNodeOperatorBalance(nodeOperatorId);
-
-  const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
-  const gasLimit = useStethSubmitGasLimit();
-  const { maxGasPrice, initialLoading: isMaxGasPriceLoading } =
-    useMaxGasPrice();
-
-  const gasCost = useMemo(
-    () => (gasLimit && maxGasPrice ? gasLimit.mul(maxGasPrice) : undefined),
-    [gasLimit, maxGasPrice],
-  );
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance(),
       updateWstethBalance(),
       updateEtherBalance(),
-      updateBondBalance(),
+      updateBond(),
     ]);
-  }, [
-    updateStethBalance,
-    updateWstethBalance,
-    updateEtherBalance,
-    updateBondBalance,
-  ]);
+  }, [updateStethBalance, updateWstethBalance, updateEtherBalance, updateBond]);
 
   const loading = useMemo(
     () => ({
       isEtherBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isBondBalanceLoading,
-      isMultisigLoading,
-      isMaxGasPriceLoading,
+      isBondLoading,
     }),
     [
       isEtherBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isBondBalanceLoading,
-      isMultisigLoading,
-      isMaxGasPriceLoading,
+      isBondLoading,
     ],
   );
 
@@ -83,11 +61,7 @@ export const useAddKeysFormNetworkData = (): AddKeysFormNetworkData => {
     stethBalance,
     wstethBalance,
     etherBalance,
-    bondBalance: bond?.current,
-    bondRequired: bond?.required,
-    isMultisig: isMultisigLoading ? undefined : isMultisig,
-    gasCost,
-    gasLimit,
+    bond,
     loading,
     revalidate,
   };
