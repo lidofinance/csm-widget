@@ -1,14 +1,12 @@
-import { ROLE_CODE, SHORT_ROLES } from 'consts/roles';
+import { ROLE_CODE, ROLES } from 'consts/roles';
 import { NodeOperatorInvite, NodeOperatorRoles } from 'types';
 
-export const getShortRolesList = (
-  no?: Partial<Omit<NodeOperatorRoles, 'id'>>,
-) => {
-  return [
-    no?.rewards ? SHORT_ROLES.REWARDS : undefined,
-    no?.manager ? SHORT_ROLES.MANAGER : undefined,
-  ].filter(Boolean) as SHORT_ROLES[];
-};
+const SHORT_ROLES = {
+  [ROLES.REWARDS]: 'R',
+  [ROLES.MANAGER]: 'M',
+} as const;
+
+export const getShortRole = (role: ROLES) => SHORT_ROLES[role];
 
 export const getRoleCode = ({
   rewards,
@@ -18,4 +16,4 @@ export const getRoleCode = ({
     ((manager && ROLE_CODE.MANAGER) || 0)) as ROLE_CODE;
 
 export const getInviteId = (no?: Partial<NodeOperatorInvite>) =>
-  no?.id ? [no.id, ...getShortRolesList(no)].join('-') : undefined;
+  no?.id ? [no.id, getRoleCode(no)].join('-') : undefined;

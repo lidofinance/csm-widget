@@ -1,7 +1,7 @@
 import { Button, Modal } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
-import { SHORT_ROLES } from 'consts/roles';
+import { ROLES } from 'consts/roles';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { useNodeOperator } from 'providers/node-operator-provider';
 import { NodeOperatorId } from 'types';
@@ -33,7 +33,7 @@ export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
         {list.map((item) => (
           <RowStyle key={item.id.toString()}>
             <ContentStyle>
-              <Descriptor roles={item} roleBackground="dark" />
+              <Descriptor roles={item} />
             </ContentStyle>
             <ActionsStyle>
               {active?.id === item.id ? (
@@ -55,10 +55,10 @@ export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
       </ListStyle>
       <StyledStack>
         <StyledStackItem>
-          <RoleBadge role={SHORT_ROLES.REWARDS} /> Rewards address role
+          <RoleBadge role={ROLES.REWARDS} /> Rewards address role
         </StyledStackItem>
         <StyledStackItem>
-          <RoleBadge role={SHORT_ROLES.MANAGER} /> Manager address role
+          <RoleBadge role={ROLES.MANAGER} /> Manager address role
         </StyledStackItem>
       </StyledStack>
     </Modal>

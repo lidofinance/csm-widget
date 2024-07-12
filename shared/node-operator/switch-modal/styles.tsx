@@ -1,5 +1,6 @@
 import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
+import { BadgeStyle } from '../role-badge/styles';
 
 export const ListStyle = styled.div`
   display: flex;
@@ -19,6 +20,10 @@ export const RowStyle = styled.div`
 export const ContentStyle = styled.div`
   display: flex;
   align-items: center;
+
+  ${BadgeStyle} {
+    background: var(--lido-color-shadowLight);
+  }
 `;
 
 export const IdStyle = styled.span``;

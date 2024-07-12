@@ -2,12 +2,7 @@ import styled from 'styled-components';
 
 export type BackgroundColorsType = 'normal' | 'dark';
 
-const backgroundMap = {
-  normal: 'var(--lido-color-background)',
-  dark: 'var(--lido-color-shadowLight)',
-};
-
-export const BadgeStyle = styled.div<{ $background: BackgroundColorsType }>`
+export const BadgeStyle = styled.div`
   border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
   padding: 2px 8px;
   min-width: 28px;
@@ -18,6 +13,7 @@ export const BadgeStyle = styled.div<{ $background: BackgroundColorsType }>`
   justify-content: center;
   align-items: center;
 
-  background: ${({ $background }) => backgroundMap[$background]};
+  background: var(--lido-color-background);
   color: var(--lido-color-textSecondary);
+  text-transform: capitalize;
 `;
