@@ -4,7 +4,10 @@ import { Link } from '@lidofinance/lido-ui';
 
 export const Partners: FC = () => (
   <PartnersStyle>
-    <Link href="https://dappnode.com/" title="Dappnode">
+    <Link
+      href="https://docs.dappnode.io/docs/user/staking/ethereum/lsd-pools/lido"
+      title="Dappnode"
+    >
       <Dappnode />
     </Link>
     <Link href="https://www.nethermind.io/sedge" title="Nethermind Sedge">
