@@ -1,5 +1,5 @@
 import { TOKENS } from 'consts/tokens';
-import { BOND_PATH } from 'consts/urls';
+import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { SectionBlock, Sign, Stack } from 'shared/components';
@@ -31,7 +31,7 @@ export const BondSection: FC = () => {
   });
 
   return (
-    <SectionBlock title="Bond & Rewards" href={BOND_PATH}>
+    <SectionBlock title="Bond & Rewards" href={PATH.BOND}>
       {bond && (
         <Stack direction="column" gap="md">
           <AccordionStyle

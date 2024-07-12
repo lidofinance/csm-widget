@@ -5,13 +5,10 @@ import { useCsmEarlyAdoption } from 'shared/hooks';
 import { ButtonStyle } from './styles';
 
 export const EaMember: FC = () => {
-  const {
-    data: { proof },
-  } = useCsmEarlyAdoption();
+  const { data: ea } = useCsmEarlyAdoption();
   const nodeOperatorId = useNodeOperatorId();
 
-  // TODO: consumed
-  const isMember = !nodeOperatorId && !!proof;
+  const isMember = !nodeOperatorId && !!ea?.proof;
 
   if (!isMember) return null;
 

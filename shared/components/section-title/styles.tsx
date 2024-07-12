@@ -1,5 +1,5 @@
-import { Link } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
+import { LocalLink } from '../local-link';
 
 export const SectionHeaderStyle = styled.div`
   display: flex;
@@ -14,7 +14,7 @@ export const SectionTitleStyle = styled.h2`
   color: var(--lido-color-text);
 `;
 
-export const SectionHeaderLinkStyle = styled(Link)`
+export const SectionHeaderLinkStyle = styled(LocalLink)`
   display: flex;
   align-items: center;
   width: fit-content;

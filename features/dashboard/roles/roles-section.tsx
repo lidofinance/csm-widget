@@ -1,4 +1,4 @@
-import { ROLES_PATH } from 'consts/urls';
+import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { SectionBlock, StackWrap } from 'shared/components';
@@ -11,7 +11,7 @@ export const RolesSection: FC = () => {
   const { data: info } = useNodeOperatorInfo(id);
 
   return (
-    <SectionBlock title="Roles" href={ROLES_PATH}>
+    <SectionBlock title="Roles" href={PATH.ROLES}>
       {info && (
         <StackWrap gap="md">
           <RoleBlock

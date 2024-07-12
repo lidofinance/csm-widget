@@ -1,4 +1,4 @@
-import { KEYS_PATH } from 'consts/urls';
+import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { SectionBlock, Stack } from 'shared/components';
@@ -21,7 +21,7 @@ export const KeysSection: FC = () => {
   const eaTarget = status?.isPublicRelease ? undefined : eaLimit?.toNumber();
 
   return (
-    <SectionBlock title="Keys" href={KEYS_PATH}>
+    <SectionBlock title="Keys" href={PATH.KEYS}>
       {info && (
         <Stack direction="column" gap="sm">
           <Row>

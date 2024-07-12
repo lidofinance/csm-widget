@@ -1,12 +1,13 @@
-import { useRouter } from 'next/router';
-import { FC, useEffect } from 'react';
+import { PATH } from 'consts/urls';
+import { FC, ReactNode, useEffect } from 'react';
+import { useNavigate } from './useNavigate';
 
-export const Navigate: FC<{ path: string }> = ({ path }) => {
-  const router = useRouter();
+type Props = { path: PATH; fallback?: ReactNode };
 
-  useEffect(() => {
-    void router.push(path);
-  }, [path, router]);
+export const Navigate: FC<Props> = ({ path, fallback }) => {
+  const navigate = useNavigate();
 
-  return null;
+  useEffect(() => void navigate(path), [navigate, path]);
+
+  return fallback || null;
 };

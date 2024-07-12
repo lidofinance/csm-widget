@@ -6,10 +6,8 @@ import { Step } from './step';
 import { BlockStyled, Heading, Steps } from './styles';
 
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
-  const {
-    data: { proof },
-  } = useCsmEarlyAdoption();
-  const bondAmount = proof ? '1.5' : '2';
+  const { data: ea } = useCsmEarlyAdoption();
+  const bondAmount = ea?.proof ? '1.5' : '2';
 
   return (
     <BlockStyled>

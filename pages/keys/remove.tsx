@@ -1,5 +1,5 @@
 import { secretConfig } from 'config';
-import { HOME_PATH, KEYS_PATH, KEYS_VIEW_PATH } from 'consts/urls';
+import { PATH } from 'consts/urls';
 import { RemoveKeysPage } from 'features/remove-keys';
 import { SplashPage } from 'features/welcome';
 import { getFaqList } from 'lib/faqList';
@@ -14,9 +14,15 @@ import { Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded fallback={<SplashPage />}>
-    <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
-      <GateNodeOperator fallback={<Navigate path={KEYS_PATH} />}>
-        <GateRoleManager fallback={<Navigate path={KEYS_VIEW_PATH} />}>
+    <GateActiveUser
+      fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
+    >
+      <GateNodeOperator
+        fallback={<Navigate path={PATH.KEYS} fallback={<SplashPage />} />}
+      >
+        <GateRoleManager
+          fallback={<Navigate path={PATH.KEYS} fallback={<SplashPage />} />}
+        >
           <RemoveKeysPage />
         </GateRoleManager>
       </GateNodeOperator>

@@ -1,10 +1,10 @@
 import { FC } from 'react';
 
 import { BackgroundColorsType, BadgeStyle } from './styles';
-import { ShortRole } from 'consts/roles';
+import { SHORT_ROLES } from 'consts/roles';
 
 export type RoleBadgeProps = {
-  role: ShortRole;
+  role: SHORT_ROLES;
   background?: BackgroundColorsType;
 };
 

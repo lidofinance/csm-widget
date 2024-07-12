@@ -27,13 +27,11 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
     initialLoading: isWstethBalanceLoading,
   } = useWSTETHBalance(STRATEGY_LAZY);
 
-  const {
-    data: { proof },
-    initialLoading: isEaProofLoading,
-  } = useCsmEarlyAdoption();
+  const { data: ea, initialLoading: isEaProofLoading } = useCsmEarlyAdoption();
 
-  const { data: curveId, initialLoading: isCurveIdLoading } =
-    useCsmCurveId(!!proof);
+  const { data: curveId, initialLoading: isCurveIdLoading } = useCsmCurveId(
+    !!ea?.proof,
+  );
 
   const { update: updateConsumed } = useCsmEarlyAdoptionProofConsumed();
 
@@ -72,7 +70,7 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
     stethBalance,
     wstethBalance,
     etherBalance,
-    eaProof: proof,
+    eaProof: ea?.proof,
     curveId,
     loading,
     revalidate,
