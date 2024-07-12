@@ -12,7 +12,6 @@ export { InfoBox } from './info-box/info-box';
 export { Switch } from './switch/switch';
 export { Banner } from './banner/banner';
 export { Stack } from './stack/stack';
-export { StackWrap } from './stack/stack-wrap';
 export { LinkButton } from './link-button/link-button';
 export { FormTitle } from './form-title/form-title';
 export { RadioButton, RadioIcon } from './radio-button/radio-button';

@@ -7,6 +7,7 @@ type Props = {
   gap?: keyof Theme['spaceMap'];
   center?: boolean;
   spaceBetween?: boolean;
+  wrap?: boolean;
 };
 
 export const Stack: FC<PropsWithChildren<Props>> = ({
@@ -15,12 +16,14 @@ export const Stack: FC<PropsWithChildren<Props>> = ({
   direction = 'row',
   center,
   spaceBetween,
+  wrap,
 }) => (
   <StackStyle
     $gap={gap}
     $direction={direction}
     $center={center}
     $spaceBetween={spaceBetween}
+    $wrap={wrap}
   >
     {children}
   </StackStyle>

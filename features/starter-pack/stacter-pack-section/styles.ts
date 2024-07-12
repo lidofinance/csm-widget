@@ -60,9 +60,8 @@ export const BlockStyled = styled(Block)`
 `;
 
 export const Steps = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: ${({ theme }) => theme.spaceMap.xl}px;
 `;
 
@@ -70,8 +69,6 @@ export const StepWrapper = styled.div`
   display: flex;
   flex-direction: row;
   gap: ${({ theme }) => theme.spaceMap.md}px;
-  flex: 1 0 47%;
-  min-width: 240px;
   align-items: center;
   padding: 16px 20px; // @style
 
