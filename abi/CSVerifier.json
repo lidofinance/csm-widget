@@ -18,22 +18,42 @@
         "internalType": "uint64"
       },
       {
-        "name": "gIHistoricalSummaries",
+        "name": "gIFirstWithdrawalPrev",
         "type": "bytes32",
         "internalType": "GIndex"
       },
       {
-        "name": "gIFirstWithdrawal",
+        "name": "gIFirstWithdrawalCurr",
         "type": "bytes32",
         "internalType": "GIndex"
       },
       {
-        "name": "gIFirstValidator",
+        "name": "gIFirstValidatorPrev",
+        "type": "bytes32",
+        "internalType": "GIndex"
+      },
+      {
+        "name": "gIFirstValidatorCurr",
+        "type": "bytes32",
+        "internalType": "GIndex"
+      },
+      {
+        "name": "gIHistoricalSummariesPrev",
+        "type": "bytes32",
+        "internalType": "GIndex"
+      },
+      {
+        "name": "gIHistoricalSummariesCurr",
         "type": "bytes32",
         "internalType": "GIndex"
       },
       {
         "name": "firstSupportedSlot",
+        "type": "uint64",
+        "internalType": "Slot"
+      },
+      {
+        "name": "pivotSlot",
         "type": "uint64",
         "internalType": "Slot"
       }
@@ -68,7 +88,7 @@
   },
   {
     "type": "function",
-    "name": "GI_FIRST_VALIDATOR",
+    "name": "GI_FIRST_VALIDATOR_CURR",
     "inputs": [],
     "outputs": [
       {
@@ -81,7 +101,7 @@
   },
   {
     "type": "function",
-    "name": "GI_FIRST_WITHDRAWAL",
+    "name": "GI_FIRST_VALIDATOR_PREV",
     "inputs": [],
     "outputs": [
       {
@@ -94,7 +114,46 @@
   },
   {
     "type": "function",
-    "name": "GI_HISTORICAL_SUMMARIES",
+    "name": "GI_FIRST_WITHDRAWAL_CURR",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "GIndex"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "GI_FIRST_WITHDRAWAL_PREV",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "GIndex"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "GI_HISTORICAL_SUMMARIES_CURR",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "GIndex"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "GI_HISTORICAL_SUMMARIES_PREV",
     "inputs": [],
     "outputs": [
       {
@@ -133,6 +192,19 @@
   },
   {
     "type": "function",
+    "name": "PIVOT_SLOT",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "Slot"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "SLOTS_PER_EPOCH",
     "inputs": [],
     "outputs": [
@@ -161,7 +233,7 @@
               {
                 "name": "slot",
                 "type": "uint64",
-                "internalType": "uint64"
+                "internalType": "Slot"
               },
               {
                 "name": "proposerIndex",
@@ -205,7 +277,7 @@
               {
                 "name": "slot",
                 "type": "uint64",
-                "internalType": "uint64"
+                "internalType": "Slot"
               },
               {
                 "name": "proposerIndex",
@@ -344,7 +416,7 @@
               {
                 "name": "slot",
                 "type": "uint64",
-                "internalType": "uint64"
+                "internalType": "Slot"
               },
               {
                 "name": "proposerIndex",
@@ -453,7 +525,7 @@
               {
                 "name": "slot",
                 "type": "uint64",
-                "internalType": "uint64"
+                "internalType": "Slot"
               },
               {
                 "name": "proposerIndex",
@@ -592,12 +664,17 @@
   },
   {
     "type": "error",
+    "name": "InvalidPivotSlot",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "InvalidWithdrawalAddress",
     "inputs": []
   },
   {
     "type": "error",
-    "name": "PartialWitdrawal",
+    "name": "PartialWithdrawal",
     "inputs": []
   },
   {
@@ -611,8 +688,8 @@
     "inputs": [
       {
         "name": "slot",
-        "type": "uint256",
-        "internalType": "uint256"
+        "type": "uint64",
+        "internalType": "Slot"
       }
     ]
   },
@@ -629,21 +706,6 @@
   {
     "type": "error",
     "name": "ZeroModuleAddress",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "BranchHasExtraItem",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "BranchHasMissingItem",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "InvalidProof",
     "inputs": []
   }
 ]

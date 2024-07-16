@@ -34,8 +34,9 @@ type MethodParams = {
   keysCount: BigNumberish;
   publicKeys: BytesLike;
   signatures: BytesLike;
-  rewardsAddress: Address;
+  rewardAddress: Address;
   managerAddress: Address;
+  extendedManagerPermissions: boolean;
   permit: GatherPermitSignatureResult | undefined;
   eaProof: Proof;
   referral: Address;
@@ -53,7 +54,8 @@ const useSubmitKeysMethods = () => {
       publicKeys,
       signatures,
       managerAddress,
-      rewardsAddress,
+      rewardAddress,
+      extendedManagerPermissions,
       eaProof,
       referral,
     }: MethodParams) => {
@@ -72,8 +74,11 @@ const useSubmitKeysMethods = () => {
         keysCount,
         publicKeys,
         signatures,
-        managerAddress,
-        rewardsAddress,
+        {
+          managerAddress,
+          rewardAddress,
+          extendedManagerPermissions,
+        },
         eaProof,
         referral,
       ] as const;
@@ -98,7 +103,8 @@ const useSubmitKeysMethods = () => {
       publicKeys,
       signatures,
       managerAddress,
-      rewardsAddress,
+      rewardAddress,
+      extendedManagerPermissions,
       permit,
       eaProof,
       referral,
@@ -118,8 +124,11 @@ const useSubmitKeysMethods = () => {
         keysCount,
         publicKeys,
         signatures,
-        managerAddress,
-        rewardsAddress,
+        {
+          managerAddress,
+          rewardAddress,
+          extendedManagerPermissions,
+        },
         permit,
         eaProof,
         referral,
@@ -148,7 +157,8 @@ const useSubmitKeysMethods = () => {
       publicKeys,
       signatures,
       managerAddress,
-      rewardsAddress,
+      rewardAddress,
+      extendedManagerPermissions,
       permit,
       eaProof,
       referral,
@@ -168,8 +178,11 @@ const useSubmitKeysMethods = () => {
         keysCount,
         publicKeys,
         signatures,
-        managerAddress,
-        rewardsAddress,
+        {
+          managerAddress,
+          rewardAddress,
+          extendedManagerPermissions,
+        },
         permit,
         eaProof,
         referral,
@@ -256,8 +269,9 @@ export const useSubmitKeysSubmit = ({
           signatures,
           permit,
           eaProof: eaProof || [],
-          rewardsAddress,
+          rewardAddress: rewardsAddress,
           managerAddress,
+          extendedManagerPermissions: false,
           referral: addressOrZero(referral),
         });
 
