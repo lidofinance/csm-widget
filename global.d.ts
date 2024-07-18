@@ -25,6 +25,7 @@ declare module 'next/config' {
       developmentMode: boolean;
       isDevnet: boolean;
       notReleased: boolean;
+      maintenance: boolean;
 
       defaultChain: string;
       rpcUrls_1: string | undefined;

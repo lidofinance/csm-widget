@@ -28,8 +28,8 @@ const faqList = getFaqList([
 ]);
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { notReleased } = secretConfig;
-  if (notReleased) return { notFound: true };
+  const { notReleased, maintenance } = secretConfig;
+  if (notReleased || maintenance) return { notFound: true };
 
   return { props: { faqList: await faqList } };
 };
