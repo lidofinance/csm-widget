@@ -10,7 +10,7 @@ import {
   migrationThemeCookiesToCrossDomainCookiesClientSide,
 } from '@lidofinance/lido-ui';
 
-import { config } from 'config';
+import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
 import { Providers } from 'providers';
 import { BackgroundGradient } from 'shared/components/background-gradient/background-gradient';
@@ -35,14 +35,20 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
-const AppWrapper = (
-  props: AppProps<{ notReleased?: boolean; faqList?: FAQItem[] }>,
-): JSX.Element => {
+type AppParams = Partial<
+  Pick<SecretConfigType, 'notReleased' | 'maintenance'>
+> & {
+  faqList?: FAQItem[];
+};
+
+const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const { ...rest } = props;
 
   return (
     <FaqContext.Provider value={props.pageProps.faqList ?? []}>
-      <Providers dummy={props.pageProps.notReleased}>
+      <Providers
+        dummy={props.pageProps.notReleased || props.pageProps.maintenance}
+      >
         {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
         <Head>
           <meta

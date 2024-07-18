@@ -6,11 +6,13 @@ import { GetStaticProps } from 'next';
 import { SecretConfigType, secretConfig } from 'config';
 import { FC } from 'react';
 import { getFaqList } from 'lib/faqList';
+import { MaintenancePage } from 'features/welcome/maintenance-page';
 
-type PageProps = Pick<SecretConfigType, 'notReleased'>;
+type PageProps = Pick<SecretConfigType, 'notReleased' | 'maintenance'>;
 
-const Page: FC<PageProps> = ({ notReleased }) => {
+const Page: FC<PageProps> = ({ notReleased, maintenance }) => {
   if (notReleased) return <NotReleasedPage />;
+  if (maintenance) return <MaintenancePage />;
 
   return (
     <GateLoaded fallback={<SplashPage />}>
@@ -37,11 +39,12 @@ const faqList = getFaqList([
 ]);
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { notReleased } = secretConfig;
+  const { notReleased, maintenance } = secretConfig;
 
   return {
     props: {
       notReleased,
+      maintenance,
       faqList: await faqList,
     },
   };

@@ -30,8 +30,8 @@ const Page = () => (
 export default Page;
 
 export const getStaticProps: GetStaticProps = async () => {
-  const { notReleased } = secretConfig;
-  if (notReleased) return { notFound: true };
+  const { notReleased, maintenance } = secretConfig;
+  if (notReleased || maintenance) return { notFound: true };
 
   return { props: {} };
 };
