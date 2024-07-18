@@ -11,7 +11,7 @@ const developmentMode = process.env.NODE_ENV === 'development';
 const isIPFSMode = !!process.env.IPFS_MODE;
 const isDevnet = !!process.env.DEVNET;
 const notReleased = !!process.env.NOT_RELEASED;
-const maintenance = !!process.env.MAINTENANCE || true; // @note force enabled
+const maintenance = !!process.env.MAINTENANCE;
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
