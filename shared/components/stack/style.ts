@@ -6,6 +6,7 @@ type Props = {
   $gap?: keyof Theme['spaceMap'];
   $center?: boolean;
   $spaceBetween?: boolean;
+  $wrap?: boolean;
 };
 
 export const StackStyle = styled.div<Props>`
@@ -22,14 +23,13 @@ export const StackStyle = styled.div<Props>`
     css`
       justify-content: space-between;
     `}
-`;
-
-// TODO: remove this
-export const StackWrapStyle = styled(StackStyle)`
-  flex-wrap: wrap;
-
-  > * {
-    flex: 1 1 47%;
-    min-width: 230px;
-  }
+  ${({ $wrap }) =>
+    $wrap &&
+    css`
+      flex-wrap: wrap;
+      & > * {
+        flex: 1;
+        min-width: fit-content;
+      }
+    `}
 `;

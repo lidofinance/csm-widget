@@ -1,5 +1,5 @@
 import { secretConfig } from 'config';
-import { BOND_CLAIM_PATH, HOME_PATH } from 'consts/urls';
+import { PATH } from 'consts/urls';
 import { SplashPage } from 'features/welcome';
 import { GetStaticProps } from 'next';
 import { GateActiveUser, GateLoaded } from 'shared/gates';
@@ -7,8 +7,10 @@ import { Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded fallback={<SplashPage />}>
-    <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
-      <Navigate path={BOND_CLAIM_PATH} />
+    <GateActiveUser
+      fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
+    >
+      <Navigate path={PATH.BOND} fallback={<SplashPage />} />
     </GateActiveUser>
   </GateLoaded>
 );

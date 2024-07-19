@@ -1,5 +1,5 @@
 import { secretConfig } from 'config';
-import { HOME_PATH, KEYS_SUBMIT_PATH } from 'consts/urls';
+import { PATH } from 'consts/urls';
 import { ViewKeysPage } from 'features/view-keys';
 import { SplashPage } from 'features/welcome';
 import { getFaqList } from 'lib/faqList';
@@ -9,8 +9,12 @@ import { Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded fallback={<SplashPage />}>
-    <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
-      <GateNodeOperator fallback={<Navigate path={KEYS_SUBMIT_PATH} />}>
+    <GateActiveUser
+      fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
+    >
+      <GateNodeOperator
+        fallback={<Navigate path={PATH.KEYS} fallback={<SplashPage />} />}
+      >
         <ViewKeysPage />
       </GateNodeOperator>
     </GateActiveUser>

@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { useCsmEarlyAdoption, useCsmStatus } from 'shared/hooks';
+import { useCanCreateNodeOperator } from 'shared/hooks';
 
 type Props = {
   fallback?: ReactNode;
@@ -9,14 +9,9 @@ export const GateCanCreate: FC<PropsWithChildren<Props>> = ({
   fallback,
   children,
 }) => {
-  const { data } = useCsmStatus();
-  const {
-    data: { proof, consumed },
-  } = useCsmEarlyAdoption();
+  const canCreate = useCanCreateNodeOperator();
 
-  const active = data?.isPublicRelease || (!!proof && !consumed);
-
-  if (!active) return fallback;
+  if (!canCreate) return fallback;
 
   return children;
 };

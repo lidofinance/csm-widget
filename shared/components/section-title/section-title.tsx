@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from 'react';
+import { ComponentProps, FC, PropsWithChildren } from 'react';
 import {
   SectionHeaderLinkStyle,
   SectionHeaderStyle,
@@ -6,9 +6,10 @@ import {
 } from './styles';
 
 import { ReactComponent as RoundedArrowIcon } from 'assets/icons/rounded-arrow.svg';
+import { LocalLink } from '../local-link';
 
 type Props = {
-  href?: string;
+  href?: ComponentProps<typeof LocalLink>['href'];
 };
 
 export const SectionTitle: FC<PropsWithChildren<Props>> = ({
@@ -21,7 +22,7 @@ export const SectionTitle: FC<PropsWithChildren<Props>> = ({
     <SectionHeaderStyle>
       <SectionTitleStyle>{children}</SectionTitleStyle>
       {hasDecorator && (
-        <SectionHeaderLinkStyle href={href} target="_self">
+        <SectionHeaderLinkStyle href={href}>
           <RoundedArrowIcon />
         </SectionHeaderLinkStyle>
       )}

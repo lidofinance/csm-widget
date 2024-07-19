@@ -4,11 +4,21 @@ import Link, { LinkProps } from 'next/link';
 
 import { config } from 'config';
 import { LinkIpfs } from 'shared/components/link-ipfs';
+import { PATH } from 'consts/urls';
+import { useCorrectPath } from 'shared/navigate';
 
-export const LocalLink: FC<PropsWithChildren<LinkProps>> = (props) => {
+type LocalLinkProps = Omit<LinkProps, 'href'> & {
+  href: PATH;
+};
+
+export const LocalLink: FC<PropsWithChildren<LocalLinkProps>> = ({
+  href: path,
+  ...restProps
+}) => {
   const router = useRouter();
   const { ref, embed, app, theme } = router.query;
-  const { href, ...restProps } = props;
+
+  const href = useCorrectPath(path);
 
   const extraQuery = {} as Record<string, string>;
   // Not support case: ?ref=01234&ref=56789

@@ -9,6 +9,7 @@ import { Address } from 'wagmi';
 import { useAccount } from './use-account';
 import { useAddressCompare } from './use-address-compare';
 import { useCSEarlyAdoptionRPC } from './useCsmContracts';
+import { useMergeSwr } from './useMergeSwr';
 
 type EATreeLeaf = [Address];
 
@@ -74,13 +75,13 @@ export const useCsmEarlyAdoption = () => {
   const swrProof = useCsmEarlyAdoptionProof();
   const swrConsumed = useCsmEarlyAdoptionProofConsumed();
 
-  return {
-    data: {
-      proof: swrConsumed.data ? undefined : swrProof.data,
+  const data = useMemo(
+    () => ({
+      proof: !swrConsumed.data ? swrProof.data : undefined,
       consumed: swrConsumed.data,
-    },
-    loading: swrProof.loading || swrConsumed.loading,
-    initialLoading: swrProof.initialLoading || swrConsumed.initialLoading,
-    error: swrProof.error || swrConsumed.error,
-  };
+    }),
+    [swrConsumed.data, swrProof.data],
+  );
+
+  return useMergeSwr([swrProof, swrConsumed], data);
 };

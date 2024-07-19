@@ -10,7 +10,7 @@ export const RoleBlockWrapper = styled.div`
   border: 1px solid var(--lido-color-border);
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
   padding: 12px;
-  min-width: 230px;
+  min-width: 240px;
 `;
 
 export const RoleBlockProposed = styled.div`

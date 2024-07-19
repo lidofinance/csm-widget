@@ -1,5 +1,5 @@
 import { secretConfig } from 'config';
-import { HOME_PATH, ROLES_INBOX_PATH } from 'consts/urls';
+import { PATH } from 'consts/urls';
 import {
   ChangeManagerRolePage,
   ResetManagerRolePage,
@@ -17,8 +17,12 @@ import { Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded fallback={<SplashPage />}>
-    <GateActiveUser fallback={<Navigate path={HOME_PATH} />}>
-      <GateNodeOperator fallback={<Navigate path={ROLES_INBOX_PATH} />}>
+    <GateActiveUser
+      fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
+    >
+      <GateNodeOperator
+        fallback={<Navigate path={PATH.ROLES} fallback={<SplashPage />} />}
+      >
         <GateRoleManager fallback={<ResetManagerRolePage />}>
           <ChangeManagerRolePage />
         </GateRoleManager>

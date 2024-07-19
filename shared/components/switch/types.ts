@@ -1,11 +1,13 @@
-import { Component, NodeOperatorRolesProps } from 'types';
+import { ROLE_CODE } from 'consts/roles';
+import { PATH } from 'consts/urls';
+import { Component } from 'types';
 
 export type SwitchItemComponent = Component<'a'>;
 
 export type SwitchRoutes = {
   title: string;
-  path: string;
-  roles?: NodeOperatorRolesProps;
+  path: PATH;
+  roles?: ROLE_CODE[];
 }[];
 
 export type SwitchProps = {
