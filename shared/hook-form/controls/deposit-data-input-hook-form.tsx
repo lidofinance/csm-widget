@@ -54,7 +54,11 @@ export const DepositDataInputHookForm = ({
       reader.onloadend = () => {
         const { result: resultAsText } = reader;
 
-        setValue(fieldName, resultAsText);
+        setValue(fieldName, resultAsText, {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        });
       };
       reader.readAsText(file);
     },

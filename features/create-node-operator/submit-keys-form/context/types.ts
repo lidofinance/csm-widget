@@ -3,12 +3,11 @@ import { BigNumber } from 'ethers';
 import { DepositData, LoadingRecord, Proof } from 'types';
 import { Address } from 'wagmi';
 
-export type SubmitKeysFormDataContextValue = SubmitKeysFormNetworkData & {
-  bondAmount?: BigNumber;
-};
+export type SubmitKeysFormDataContextValue = SubmitKeysFormNetworkData;
 
 export type SubmitKeysFormInputType = {
   token: TOKENS;
+  bondAmount?: BigNumber;
   rawDepositData?: string;
   depositData: DepositData[];
   referral?: Address;
@@ -22,13 +21,13 @@ export type SubmitKeysFormNetworkData = {
   wstethBalance?: BigNumber;
   eaProof?: Proof;
   curveId?: BigNumber;
+  maxStakeEther?: BigNumber | null;
   loading: LoadingRecord<
-    'etherBalance' | 'stethBalance' | 'wstethBalance' | 'eaProof' | 'curveId'
+    | 'etherBalance'
+    | 'stethBalance'
+    | 'wstethBalance'
+    | 'eaProof'
+    | 'curveId'
+    | 'maxStakeEther'
   >;
-  revalidate: () => Promise<void>;
-};
-
-export type SubmitKeysFormValidationContext = {
-  gasCost: BigNumber;
-  etherBalance: BigNumber;
 };

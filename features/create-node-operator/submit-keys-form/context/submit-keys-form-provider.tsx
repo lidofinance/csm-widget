@@ -12,36 +12,41 @@ import {
   SubmitKeysFormDataContextValue,
   type SubmitKeysFormInputType,
 } from './types';
-import { useCalculateBondAmount } from './use-calculate-bond-amount';
-import { useCalculateDepositData } from './use-calculate-deposit-data';
-import { useSubmitKeysSubmit } from './use-submit-keys-submit';
+import { useContextPromise } from './use-context-promise';
+import { useFormBondAmount } from './use-form-bond-amount';
+import { useFormDepositData } from './use-form-deposit-data';
 import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
+import { useSubmitKeysSubmit } from './use-submit-keys-submit';
+import { validationResolver } from './validation-resolver';
 
 export const useSubmitKeysFormData =
   useFormData<SubmitKeysFormDataContextValue>;
 
 export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useSubmitKeysFormNetworkData();
+  const [networkData, revalidate] = useSubmitKeysFormNetworkData();
+  const contextPromise = useContextPromise(networkData);
 
   const formObject = useForm<SubmitKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
       depositData: [],
     },
+    context: contextPromise,
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
-  useCalculateDepositData(formObject);
-  const bondAmount = useCalculateBondAmount(formObject, networkData);
+  useFormBondAmount(formObject, networkData);
+  useFormDepositData(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
   const submitKeys = useSubmitKeysSubmit({
-    onConfirm: networkData.revalidate,
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = { ...networkData, bondAmount };
+  const value = networkData;
 
   const formControllerValue: FormControllerContextValueType<
     SubmitKeysFormInputType,

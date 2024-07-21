@@ -5,7 +5,7 @@ import { useAccount } from 'shared/hooks';
 import { getCsmWc } from 'consts/csm-wc';
 import { parseDepositData } from 'shared/keys';
 
-export const useCalculateDepositData = ({
+export const useFormDepositData = ({
   watch,
   setValue,
   setError,
@@ -17,6 +17,7 @@ export const useCalculateDepositData = ({
   const rawDepositData = watch('rawDepositData');
   const { isTouched } = getFieldState('rawDepositData');
 
+  // TODO: move errors to validation
   useEffect(() => {
     if (!rawDepositData && !isTouched) return;
     const { error, depositData } = parseDepositData(
