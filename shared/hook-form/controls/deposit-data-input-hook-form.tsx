@@ -55,7 +55,7 @@ export const DepositDataInputHookForm = ({
         const { result: resultAsText } = reader;
 
         setValue(fieldName, resultAsText, {
-          shouldValidate: true,
+          shouldValidate: false,
           shouldDirty: true,
           shouldTouch: true,
         });

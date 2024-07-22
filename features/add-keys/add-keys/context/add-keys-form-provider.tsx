@@ -6,6 +6,7 @@ import {
   FormControllerContextValueType,
   FormDataContext,
   useFormData,
+  useFormDepositData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
 import {
@@ -15,7 +16,6 @@ import {
 import { useAddKeysFormNetworkData } from './use-add-keys-form-network-data';
 import { useAddKeysSubmit } from './use-add-keys-submit';
 import { useCalculateBondAmount } from './use-calculate-bond-amount';
-import { useCalculateDepositData } from './use-calculate-deposit-data';
 
 export const useAddKeysFormData = useFormData<AddKeysFormDataContextValue>;
 
@@ -30,7 +30,7 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  useCalculateDepositData(formObject);
+  useFormDepositData(formObject);
   const bondAmount = useCalculateBondAmount(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();

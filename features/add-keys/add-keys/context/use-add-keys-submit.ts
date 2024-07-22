@@ -7,7 +7,7 @@ import { getFeeData } from 'utils/getFeeData';
 import { TOKENS } from 'consts/tokens';
 import { BigNumberish } from 'ethers';
 import { BytesLike } from 'ethers/lib/utils.js';
-import { useCSModuleWeb3 } from 'shared/hooks';
+import { useCSModuleWeb3, useKeysCache } from 'shared/hooks';
 import {
   GatherPermitSignatureResult,
   useCsmPermitSignature,
@@ -189,6 +189,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
   const getAddKeysMethod = useAddKeysMethods();
 
   const gatherPermitSignature = useCsmPermitSignature();
+  const saveKeys = useKeysCache();
 
   const addKeys = useCallback(
     async (
@@ -244,6 +245,8 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
         txModalStages.success(txHash);
 
+        void saveKeys(depositData);
+
         return true;
       } catch (error) {
         console.warn(error);
@@ -255,6 +258,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
       getAddKeysMethod,
       txModalStages,
       onConfirm,
+      saveKeys,
       gatherPermitSignature,
       onRetry,
     ],

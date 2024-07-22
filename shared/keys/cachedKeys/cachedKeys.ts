@@ -1,0 +1,55 @@
+import { CHAINS } from '@lido-sdk/constants';
+import { getFromLocalStorage, saveToLocalStorage } from '../localStorage';
+
+const KEY_TTL_IN_BLOCKS = 93_000; // ~ 2 weeks: 60 * 60 * 24 * 7 * 2 / 13
+
+type KeysRecord = Record<string, number>; // pubkey, blockNumber
+
+const getStorageKey = (chainId: CHAINS) => `lido-csm-keys-${chainId}`;
+
+const getIsKeyToKeep = (keyBlock: number, currentBlock: number) => {
+  if (!keyBlock || !currentBlock) return 0;
+  const age = Math.max(currentBlock - keyBlock, 0);
+  const isOld = age >= KEY_TTL_IN_BLOCKS;
+  return isOld;
+};
+
+const cleanKeys = (keys: KeysRecord, blockNumber: number): KeysRecord => {
+  return Object.entries(keys).reduce(
+    (updatedKeys, [pubKey, keyBlockNumber]) => {
+      const keepKey = getIsKeyToKeep(keyBlockNumber, blockNumber);
+
+      if (keepKey) {
+        updatedKeys[pubKey] = keyBlockNumber;
+      }
+
+      return updatedKeys;
+    },
+    {} as KeysRecord,
+  );
+};
+
+export const saveKeys = (
+  pubKeys: string[],
+  chainId: CHAINS,
+  blockNumber: number,
+): void => {
+  const storedKeys = getKeys(chainId);
+
+  const updatedKeys = pubKeys.reduce(
+    (mergedKeys, pubKey) => {
+      mergedKeys[pubKey] = blockNumber;
+      return mergedKeys;
+    },
+    cleanKeys(storedKeys, blockNumber),
+  );
+
+  setKeys(chainId, updatedKeys);
+};
+
+export const setKeys = (chainId: CHAINS, keys: KeysRecord) => {
+  saveToLocalStorage(getStorageKey(chainId), keys);
+};
+
+export const getKeys = (chainId: CHAINS): KeysRecord =>
+  getFromLocalStorage(getStorageKey(chainId)) || {};

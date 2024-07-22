@@ -1,6 +1,7 @@
 import { type TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
-import { BondBalance, DepositData, LoadingRecord, NodeOperatorId } from 'types';
+import { DepositDataInputType } from 'shared/hook-form/form-controller';
+import { BondBalance, LoadingRecord, NodeOperatorId } from 'types';
 
 export type AddKeysFormDataContextValue = AddKeysFormNetworkData & {
   bondAmount?: BigNumber;
@@ -8,9 +9,7 @@ export type AddKeysFormDataContextValue = AddKeysFormNetworkData & {
 
 export type AddKeysFormInputType = {
   token: TOKENS;
-  rawDepositData?: string;
-  depositData: DepositData[];
-};
+} & DepositDataInputType;
 
 export type AddKeysFormNetworkData = {
   etherBalance?: BigNumber;

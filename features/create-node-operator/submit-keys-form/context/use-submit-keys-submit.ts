@@ -8,6 +8,7 @@ import {
   useAddressCompare,
   useCSModuleWeb3,
   useCsmPermitSignature,
+  useKeysCache,
 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import invariant from 'tiny-invariant';
@@ -229,6 +230,7 @@ export const useSubmitKeysSubmit = ({
   const getSubmitKeysMethod = useSubmitKeysMethods();
   const gatherPermitSignature = useCsmPermitSignature();
   const isYouOrZero = useAddressCompare(true);
+  const saveKeys = useKeysCache();
 
   const submitKeys = useCallback(
     async (
@@ -236,10 +238,11 @@ export const useSubmitKeysSubmit = ({
         referral,
         depositData,
         token,
+        bondAmount,
         rewardsAddress: rewardsAddressRaw,
         managerAddress: managerAddressRaw,
       }: SubmitKeysFormInputType,
-      { bondAmount, eaProof }: SubmitKeysFormDataContextValue,
+      { eaProof }: SubmitKeysFormDataContextValue,
     ): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
@@ -308,6 +311,8 @@ export const useSubmitKeysSubmit = ({
           });
         }
 
+        void saveKeys(depositData);
+
         return true;
       } catch (error) {
         console.warn(error);
@@ -319,6 +324,7 @@ export const useSubmitKeysSubmit = ({
       getSubmitKeysMethod,
       txModalStages,
       onConfirm,
+      saveKeys,
       gatherPermitSignature,
       appendNO,
       isYouOrZero,

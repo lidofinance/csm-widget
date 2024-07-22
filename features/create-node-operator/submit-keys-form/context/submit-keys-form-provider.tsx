@@ -6,6 +6,7 @@ import {
   FormControllerContextValueType,
   FormDataContext,
   useFormData,
+  useFormDepositData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
 import {
@@ -14,7 +15,6 @@ import {
 } from './types';
 import { useContextPromise } from './use-context-promise';
 import { useFormBondAmount } from './use-form-bond-amount';
-import { useFormDepositData } from './use-form-deposit-data';
 import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
 import { useSubmitKeysSubmit } from './use-submit-keys-submit';
 import { validationResolver } from './validation-resolver';

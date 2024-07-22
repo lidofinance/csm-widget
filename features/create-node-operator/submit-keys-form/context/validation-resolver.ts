@@ -52,6 +52,8 @@ export const validationResolver: Resolver<
       }
     }
 
+    // TODO: validate `targetLimit` and `eaLimit`
+
     return {
       values,
       errors: {},
