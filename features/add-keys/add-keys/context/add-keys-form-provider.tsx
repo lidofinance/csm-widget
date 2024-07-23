@@ -15,23 +15,28 @@ import {
 } from './types';
 import { useAddKeysFormNetworkData } from './use-add-keys-form-network-data';
 import { useAddKeysSubmit } from './use-add-keys-submit';
-import { useCalculateBondAmount } from './use-calculate-bond-amount';
+import { useContextPromise } from './use-context-promise';
+import { useFormBondAmount } from './use-form-bond-amount';
+import { validationResolver } from './validation-resolver';
 
 export const useAddKeysFormData = useFormData<AddKeysFormDataContextValue>;
 
 export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const networkData = useAddKeysFormNetworkData();
+  const contextPromise = useContextPromise(networkData);
 
   const formObject = useForm<AddKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
       depositData: [],
     },
+    context: contextPromise,
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
+  useFormBondAmount(formObject, networkData);
   useFormDepositData(formObject);
-  const bondAmount = useCalculateBondAmount(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
@@ -40,7 +45,7 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     onRetry: retryFire,
   });
 
-  const value = { ...networkData, bondAmount };
+  const value = networkData;
 
   const formControllerValue: FormControllerContextValueType<
     AddKeysFormInputType,

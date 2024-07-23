@@ -4,13 +4,14 @@ import { useLidoSWR } from '@lido-sdk/react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useAccount } from './use-account';
 import { useSTETHContractRPC } from './useLidoContracts';
+import { Zero } from '@ethersproject/constants';
 
 const getMaxStakeAmount = (limitInfo: {
   isStakingPaused: boolean;
   isStakingLimitSet: boolean;
   currentStakeLimit: BigNumber;
 }) => {
-  if (limitInfo.isStakingPaused) return BigNumber.from(0);
+  if (limitInfo.isStakingPaused) return Zero;
   if (limitInfo.isStakingLimitSet) return limitInfo.currentStakeLimit;
   return null;
 };

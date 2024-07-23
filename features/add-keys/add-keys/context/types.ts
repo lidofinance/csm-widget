@@ -3,12 +3,11 @@ import { BigNumber } from 'ethers';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { BondBalance, LoadingRecord, NodeOperatorId } from 'types';
 
-export type AddKeysFormDataContextValue = AddKeysFormNetworkData & {
-  bondAmount?: BigNumber;
-};
+export type AddKeysFormDataContextValue = AddKeysFormNetworkData;
 
 export type AddKeysFormInputType = {
   token: TOKENS;
+  bondAmount?: BigNumber;
 } & DepositDataInputType;
 
 export type AddKeysFormNetworkData = {
@@ -17,13 +16,9 @@ export type AddKeysFormNetworkData = {
   wstethBalance?: BigNumber;
   nodeOperatorId?: NodeOperatorId;
   bond?: BondBalance;
+  maxStakeEther?: BigNumber | null;
   loading: LoadingRecord<
-    'etherBalance' | 'stethBalance' | 'wstethBalance' | 'bond'
+    'etherBalance' | 'stethBalance' | 'wstethBalance' | 'bond' | 'maxStakeEther'
   >;
   revalidate: () => Promise<void>;
-};
-
-export type AddKeysFormValidationContext = {
-  gasCost: BigNumber;
-  etherBalance: BigNumber;
 };

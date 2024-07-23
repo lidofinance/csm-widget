@@ -41,7 +41,7 @@ export const useSubmitKeysFormNetworkData = (): [
 
   const {
     data: maxStakeEther,
-    update: maxStakeEtherUpdate,
+    update: updateMaxStakeEther,
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
@@ -51,14 +51,14 @@ export const useSubmitKeysFormNetworkData = (): [
       updateWstethBalance(),
       updateEtherBalance(),
       updateConsumed(),
-      maxStakeEtherUpdate(),
+      updateMaxStakeEther(),
     ]);
   }, [
     updateStethBalance,
     updateWstethBalance,
     updateEtherBalance,
     updateConsumed,
-    maxStakeEtherUpdate,
+    updateMaxStakeEther,
   ]);
 
   const loading = useMemo(

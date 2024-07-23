@@ -1,3 +1,4 @@
+import { trimAddress } from '@lidofinance/address';
 import { DepositData } from 'types';
 
 export const checkDuplicates = (signingKeys: DepositData[]) => {
@@ -16,7 +17,7 @@ export const checkDuplicates = (signingKeys: DepositData[]) => {
 
   duplicates.forEach((dupKeyIndexes, pubkey) => {
     if (dupKeyIndexes.length > 1) {
-      throw new Error(`Key ${pubkey} has duplicates`);
+      throw new Error(`Key ${trimAddress(pubkey, 16)} has duplicates`);
     }
   });
 };
