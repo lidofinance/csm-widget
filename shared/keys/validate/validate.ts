@@ -5,7 +5,7 @@ import { checkDuplicates } from './check-duplicates';
 import { checkPreviouslySubmittedDuplicates } from './check-previously-submitted-duplicates';
 import { checkItem } from './check-item';
 
-export const validateDepositData = (
+export const validate = (
   depositData: DepositData[],
   chainId: CHAINS,
   wc: string,

@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Note } from 'shared/components';
-import { SubmitButtonHookForm } from 'shared/hook-form/controls/submit-button-hook-form';
+import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { ChangeRoleFormInputType } from '../context';
 import { useRole } from '../hooks/use-role';
 

@@ -1,1 +1,1 @@
-export * from './validate-deposit-data';
+export * from './validate';

@@ -10,15 +10,15 @@ import {
 import { useFormControllerRetry } from 'shared/hook-form/form-controller';
 import { useClaimBondFormNetworkData } from './use-claim-bond-form-network-data';
 import { useClaimBondSubmit } from './use-claim-bond-submit';
-import {
-  ClaimBondFormDataContextValue,
-  type ClaimBondFormInputType,
-} from './types';
+import { ClaimBondFormNetworkData, type ClaimBondFormInputType } from './types';
+import { useFormRevalidate } from './use-form-revalidate';
+import { useClaimBondValidation } from './use-claim-bond-validation';
 
-export const useClaimBondFormData = useFormData<ClaimBondFormDataContextValue>;
+export const useClaimBondFormData = useFormData<ClaimBondFormNetworkData>;
 
 export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useClaimBondFormNetworkData();
+  const [networkData, revalidate] = useClaimBondFormNetworkData();
+  const validationResolver = useClaimBondValidation(networkData);
 
   // TODO: default claimRewards=true only if rewards > 0
   const formObject = useForm<ClaimBondFormInputType>({
@@ -27,21 +27,22 @@ export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
       amount: undefined,
       claimRewards: true,
     },
+    resolver: validationResolver,
     mode: 'onChange',
   });
+
+  useFormRevalidate(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
   const { claimBond } = useClaimBondSubmit({
-    onConfirm: networkData.revalidate,
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
   const formControllerValue: FormControllerContextValueType<
     ClaimBondFormInputType,
-    ClaimBondFormDataContextValue
+    ClaimBondFormNetworkData
   > = useMemo(
     () => ({
       onSubmit: claimBond,
@@ -52,7 +53,7 @@ export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>

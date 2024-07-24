@@ -8,18 +8,17 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
 import {
-  RemoveKeysFormDataContextValue,
+  RemoveKeysFormNetworkData,
   type RemoveKeysFormInputType,
 } from './types';
 import { useGetDefaultValues } from './use-get-default-values';
 import { useRemoveKeysFormNetworkData } from './use-remove-keys-form-network-data';
 import { useRemoveKeysSubmit } from './use-remove-keys-submit';
 
-export const useRemoveKeysFormData =
-  useFormData<RemoveKeysFormDataContextValue>;
+export const useRemoveKeysFormData = useFormData<RemoveKeysFormNetworkData>;
 
 export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useRemoveKeysFormNetworkData();
+  const [networkData, revalidate] = useRemoveKeysFormNetworkData();
 
   const { getDefaultValues } = useGetDefaultValues(networkData);
 
@@ -31,15 +30,13 @@ export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const { retryEvent, retryFire } = useFormControllerRetry();
 
   const removeKeys = useRemoveKeysSubmit({
-    onConfirm: networkData.revalidate,
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
   const formControllerValue: FormControllerContextValueType<
     RemoveKeysFormInputType,
-    RemoveKeysFormDataContextValue
+    RemoveKeysFormNetworkData
   > = useMemo(
     () => ({
       onSubmit: removeKeys,
@@ -50,7 +47,7 @@ export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>

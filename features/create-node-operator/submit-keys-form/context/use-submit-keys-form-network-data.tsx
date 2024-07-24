@@ -91,5 +91,5 @@ export const useSubmitKeysFormNetworkData = (): [
       loading,
     },
     revalidate,
-  ] as const;
+  ];
 };

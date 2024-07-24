@@ -9,9 +9,10 @@ import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import { ResetRoleFormDataContextValue, ResetRoleFormInputType } from '.';
+import { ResetRoleFormNetworkData, ResetRoleFormInputType } from '.';
 import { useTxModalStagesResetRole } from '../hooks/use-tx-modal-stages-reset-role';
 
+// TODO: move to hooks
 type UseResetRoleOptions = {
   onConfirm?: () => Promise<void> | void;
   onRetry?: () => void;
@@ -74,7 +75,7 @@ export const useResetRoleSubmit = ({
   const resetRole = useCallback(
     async (
       _: ResetRoleFormInputType,
-      { nodeOperatorId }: ResetRoleFormDataContextValue,
+      { nodeOperatorId }: ResetRoleFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 

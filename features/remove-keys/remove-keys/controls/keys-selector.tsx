@@ -1,6 +1,6 @@
 import { FormTitle, Note } from 'shared/components';
 import { useRemoveKeysFormData } from '../context';
-import { KeysSelectorHookForm } from 'shared/hook-form/controls/keys-selector-hook-form';
+import { KeysSelectorHookForm } from 'shared/hook-form/controls';
 
 export const KeysSelector = () => {
   const { keys } = useRemoveKeysFormData();

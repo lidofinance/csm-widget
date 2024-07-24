@@ -1,5 +1,5 @@
 import { FormTitle } from 'shared/components';
-import { InviteButtonsHookForm } from 'shared/hook-form/controls/invite-buttons-hook-form';
+import { InviteButtonsHookForm } from 'shared/hook-form/controls';
 import { useAcceptInviteFormData } from '../context';
 
 export const InviteSelector = () => {

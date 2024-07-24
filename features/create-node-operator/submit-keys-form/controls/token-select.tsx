@@ -1,6 +1,6 @@
 import { TOKENS } from 'consts/tokens';
 import { FormTitle, TokenAmount } from 'shared/components';
-import { TokenButtonsHookForm } from 'shared/hook-form/controls/token-buttons-hook-form';
+import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { useSubmitKeysFormData } from '../context';
 
 export const TokenSelect: React.FC = () => {

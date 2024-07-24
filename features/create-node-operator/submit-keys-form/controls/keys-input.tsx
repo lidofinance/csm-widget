@@ -1,5 +1,5 @@
 import { useFormState } from 'react-hook-form';
-import { DepositDataInputHookForm } from 'shared/hook-form/controls/deposit-data-input-hook-form';
+import { DepositDataInputHookForm } from 'shared/hook-form/controls';
 import { SubmitKeysFormInputType } from '../context';
 import { FormTitle } from 'shared/components';
 import { Link } from '@lidofinance/lido-ui';

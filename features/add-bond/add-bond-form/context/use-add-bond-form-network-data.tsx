@@ -4,12 +4,16 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
   useNodeOperatorBalance,
+  useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
 import { type AddBondFormNetworkData } from '../context/types';
 
-export const useAddBondFormNetworkData = (): AddBondFormNetworkData => {
+export const useAddBondFormNetworkData = (): [
+  AddBondFormNetworkData,
+  () => Promise<void>,
+] => {
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: etherBalance,
@@ -31,6 +35,11 @@ export const useAddBondFormNetworkData = (): AddBondFormNetworkData => {
     update: updateBond,
     initialLoading: isBondLoading,
   } = useNodeOperatorBalance(nodeOperatorId);
+  const {
+    data: maxStakeEther,
+    update: updateMaxStakeEther,
+    initialLoading: isMaxStakeEtherLoading,
+  } = useStakingLimitInfo();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
@@ -38,8 +47,15 @@ export const useAddBondFormNetworkData = (): AddBondFormNetworkData => {
       updateWstethBalance(),
       updateEtherBalance(),
       updateBond(),
+      updateMaxStakeEther(),
     ]);
-  }, [updateStethBalance, updateWstethBalance, updateEtherBalance, updateBond]);
+  }, [
+    updateStethBalance,
+    updateWstethBalance,
+    updateEtherBalance,
+    updateBond,
+    updateMaxStakeEther,
+  ]);
 
   const loading = useMemo(
     () => ({
@@ -47,22 +63,27 @@ export const useAddBondFormNetworkData = (): AddBondFormNetworkData => {
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isBondLoading,
+      isMaxStakeEtherLoading,
     }),
     [
       isEtherBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isBondLoading,
+      isMaxStakeEtherLoading,
     ],
   );
 
-  return {
-    etherBalance,
-    stethBalance,
-    wstethBalance,
-    bond,
-    nodeOperatorId,
-    loading,
+  return [
+    {
+      etherBalance,
+      stethBalance,
+      wstethBalance,
+      bond,
+      nodeOperatorId,
+      maxStakeEther,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

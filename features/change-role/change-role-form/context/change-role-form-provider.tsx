@@ -8,47 +8,41 @@ import {
   useFormControllerRetry,
 } from 'shared/hook-form/form-controller';
 import { type ChangeRoleFormInputType } from './types';
-import { useChangeRoleSubmit } from './use-change-role-submit';
 import { useChangeRoleFormNetworkData } from './use-change-role-form-network-data';
-import { useChangeRoleFormValidationContext } from './use-change-role-form-validation-context';
-import { changeRoleFormValidationResolver } from './validation';
+import { useChangeRoleSubmit } from './use-change-role-submit';
 
-import { type ChangeRoleFormDataContextValue } from './types';
 import { useFormData } from 'shared/hook-form/form-controller';
+import { type ChangeRoleFormNetworkData } from './types';
+import { useChangeRoleValidation } from './use-change-role-validation';
 
-export const useChangeRoleFormData =
-  useFormData<ChangeRoleFormDataContextValue>;
+export const useChangeRoleFormData = useFormData<ChangeRoleFormNetworkData>;
 
 export type ChangeRoleFormProviderProps = { role: ROLES };
 
 export const ChangeRoleFormProvider: FC<
   PropsWithChildren<ChangeRoleFormProviderProps>
 > = ({ children, role }) => {
-  const networkData = useChangeRoleFormNetworkData({ role });
-  const validationContextPromise =
-    useChangeRoleFormValidationContext(networkData);
+  const [networkData, revalidate] = useChangeRoleFormNetworkData({ role });
+  const validationResolver = useChangeRoleValidation(networkData);
 
   const formObject = useForm<ChangeRoleFormInputType>({
     defaultValues: {
       isRevoke: false,
     },
-    resolver: changeRoleFormValidationResolver,
-    context: validationContextPromise,
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
   const { changeRole } = useChangeRoleSubmit({
-    onConfirm: networkData.revalidate,
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
   const formControllerValue: FormControllerContextValueType<
     ChangeRoleFormInputType,
-    ChangeRoleFormDataContextValue
+    ChangeRoleFormNetworkData
   > = useMemo(
     () => ({
       onSubmit: changeRole,
@@ -59,7 +53,7 @@ export const ChangeRoleFormProvider: FC<
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>

@@ -3,7 +3,10 @@ import { useCallback, useMemo } from 'react';
 import { useNodeOperatorInfo } from 'shared/hooks';
 import { type ResetRoleFormNetworkData } from './types';
 
-export const useResetRoleFormNetworkData = (): ResetRoleFormNetworkData => {
+export const useResetRoleFormNetworkData = (): [
+  ResetRoleFormNetworkData,
+  () => Promise<void>,
+] => {
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: info,
@@ -25,11 +28,13 @@ export const useResetRoleFormNetworkData = (): ResetRoleFormNetworkData => {
   const currentAddress = info?.managerAddress;
   const proposedAddress = info?.proposedManagerAddress;
 
-  return {
-    currentAddress,
-    proposedAddress,
-    nodeOperatorId,
-    loading,
+  return [
+    {
+      currentAddress,
+      proposedAddress,
+      nodeOperatorId,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

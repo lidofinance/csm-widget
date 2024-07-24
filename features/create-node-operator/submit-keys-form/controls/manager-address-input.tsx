@@ -1,5 +1,5 @@
 import { FormTitle } from 'shared/components';
-import { AddressInputHookForm } from 'shared/hook-form/controls/address-input-hook-form';
+import { AddressInputHookForm } from 'shared/hook-form/controls';
 
 export const ManagerAddressInput: React.FC = () => {
   return (

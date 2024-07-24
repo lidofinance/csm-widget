@@ -2,16 +2,19 @@ import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { OneEther, TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
-import { AddBondFormInputType } from './context/types';
+import { AddBondFormInputType } from './context';
 import { useExchangeRate } from './hooks/use-exchange-rate';
 import { useReceiveAmount } from './hooks/use-receive-amount';
 
 export const AddBondFormInfo = () => {
-  const [token, amount] = useWatch<AddBondFormInputType, ['token', 'amount']>({
-    name: ['token', 'amount'],
+  const [token, bondAmount] = useWatch<
+    AddBondFormInputType,
+    ['token', 'bondAmount']
+  >({
+    name: ['token', 'bondAmount'],
   });
 
-  const receive = useReceiveAmount(amount, token);
+  const receive = useReceiveAmount(bondAmount, token);
   const exchange = useExchangeRate(token);
 
   return (

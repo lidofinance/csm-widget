@@ -2,7 +2,7 @@ import { useFormState, useWatch } from 'react-hook-form';
 
 import { InputAmount } from 'shared/components/input-amount';
 import { getTokenDisplayName } from 'utils/getTokenDisplayName';
-import { AddKeysFormInputType } from '../context/types';
+import { AddKeysFormInputType } from '../context';
 
 export const AmountInput = () => {
   const [token, bondAmount] = useWatch<

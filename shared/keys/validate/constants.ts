@@ -1,5 +1,7 @@
 import { CHAINS } from '@lido-sdk/constants';
 
+export const TRIM_LENGTH = 6;
+
 export const PUBKEY_LENGTH = 96;
 export const SIGNATURE_LENGTH = 192;
 

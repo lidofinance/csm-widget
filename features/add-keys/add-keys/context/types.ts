@@ -3,8 +3,6 @@ import { BigNumber } from 'ethers';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { BondBalance, LoadingRecord, NodeOperatorId } from 'types';
 
-export type AddKeysFormDataContextValue = AddKeysFormNetworkData;
-
 export type AddKeysFormInputType = {
   token: TOKENS;
   bondAmount?: BigNumber;
@@ -20,5 +18,4 @@ export type AddKeysFormNetworkData = {
   loading: LoadingRecord<
     'etherBalance' | 'stethBalance' | 'wstethBalance' | 'bond' | 'maxStakeEther'
   >;
-  revalidate: () => Promise<void>;
 };

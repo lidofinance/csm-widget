@@ -10,7 +10,10 @@ import {
 } from 'shared/hooks';
 import { type AddKeysFormNetworkData } from './types';
 
-export const useAddKeysFormNetworkData = (): AddKeysFormNetworkData => {
+export const useAddKeysFormNetworkData = (): [
+  AddKeysFormNetworkData,
+  () => Promise<void>,
+] => {
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: etherBalance,
@@ -71,14 +74,16 @@ export const useAddKeysFormNetworkData = (): AddKeysFormNetworkData => {
     ],
   );
 
-  return {
-    nodeOperatorId,
-    stethBalance,
-    wstethBalance,
-    etherBalance,
-    bond,
-    maxStakeEther,
-    loading,
+  return [
+    {
+      nodeOperatorId,
+      stethBalance,
+      wstethBalance,
+      etherBalance,
+      bond,
+      maxStakeEther,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

@@ -5,33 +5,30 @@ import {
   FormControllerContext,
   FormControllerContextValueType,
   FormDataContext,
+  useFormControllerRetry,
   useFormData,
   useFormDepositData,
 } from 'shared/hook-form/form-controller';
-import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
 import {
-  SubmitKeysFormDataContextValue,
+  SubmitKeysFormNetworkData,
   type SubmitKeysFormInputType,
 } from './types';
-import { useContextPromise } from './use-context-promise';
 import { useFormBondAmount } from './use-form-bond-amount';
 import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
 import { useSubmitKeysSubmit } from './use-submit-keys-submit';
-import { validationResolver } from './validation-resolver';
+import { useSubmitKeysValidation } from './use-submit-keys-validation';
 
-export const useSubmitKeysFormData =
-  useFormData<SubmitKeysFormDataContextValue>;
+export const useSubmitKeysFormData = useFormData<SubmitKeysFormNetworkData>;
 
 export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const [networkData, revalidate] = useSubmitKeysFormNetworkData();
-  const contextPromise = useContextPromise(networkData);
+  const validationResolver = useSubmitKeysValidation(networkData);
 
   const formObject = useForm<SubmitKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
       depositData: [],
     },
-    context: contextPromise,
     resolver: validationResolver,
     mode: 'onChange',
   });
@@ -46,11 +43,9 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
   const formControllerValue: FormControllerContextValueType<
     SubmitKeysFormInputType,
-    SubmitKeysFormDataContextValue
+    SubmitKeysFormNetworkData
   > = useMemo(
     () => ({
       onSubmit: submitKeys,
@@ -61,7 +56,7 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>

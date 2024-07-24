@@ -20,10 +20,7 @@ import { getFeeData } from 'utils/getFeeData';
 import { Address } from 'wagmi';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { getAddedNodeOperator } from '../utils';
-import {
-  SubmitKeysFormDataContextValue,
-  SubmitKeysFormInputType,
-} from './types';
+import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
 type SubmitKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -242,7 +239,7 @@ export const useSubmitKeysSubmit = ({
         rewardsAddress: rewardsAddressRaw,
         managerAddress: managerAddressRaw,
       }: SubmitKeysFormInputType,
-      { eaProof }: SubmitKeysFormDataContextValue,
+      { eaProof }: SubmitKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');

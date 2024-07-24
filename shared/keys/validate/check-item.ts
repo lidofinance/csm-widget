@@ -1,7 +1,8 @@
 import { CHAINS } from '@lido-sdk/constants';
 import { trimAddress } from '@lidofinance/address';
-import { DepositData, DepositDataV2, DepositDataV1 } from 'types';
+import { DepositData, DepositDataV1, DepositDataV2 } from 'types';
 import { compareLowercase } from 'utils';
+import { isHexadecimalString, trimOx } from '../utils';
 import {
   FIXED_AMOUNT,
   FIXED_FORK_VERSION,
@@ -9,10 +10,8 @@ import {
   FIXED_WC_PREFIX,
   PUBKEY_LENGTH,
   SIGNATURE_LENGTH,
-} from '../constants';
-import { isHexadecimalString, trimOx } from '../utils';
-
-const TRIM_LENGTH = 6;
+  TRIM_LENGTH,
+} from './constants';
 
 const assertPubkey = (pubkey: string): void => {
   if (typeof pubkey !== 'string') {
@@ -68,7 +67,7 @@ export const checkItem = (
   }
 
   if (depositData.amount !== FIXED_AMOUNT) {
-    throw new Error('amount is not equal to 32');
+    throw new Error('amount is not equal to 32 eth');
   }
 
   const networkNames = FIXED_NETWORK[chainId];

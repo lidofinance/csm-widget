@@ -17,7 +17,7 @@ import { NodeOperatorId } from 'types';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { formatKeys } from 'utils/formatKeys';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
-import { AddKeysFormDataContextValue, AddKeysFormInputType } from './types';
+import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
 type AddKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -194,7 +194,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
   const addKeys = useCallback(
     async (
       { depositData, token, bondAmount }: AddKeysFormInputType,
-      { nodeOperatorId }: AddKeysFormDataContextValue,
+      { nodeOperatorId }: AddKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(depositData.length, 'Keys is not defined');

@@ -9,27 +9,26 @@ import {
   Stack,
   TitledSelectableAmount,
 } from 'shared/components';
-import { ClaimBondFormInputType } from '../context';
-import { useClaimBondFormNetworkData } from '../context/use-claim-bond-form-network-data';
-import { useMaxClaimValue } from '../hooks/use-max-claim-value';
+import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
 
 export const SourceSelect: FC = () => {
-  const { bond, rewards, lockedBond, loading } = useClaimBondFormNetworkData();
+  const { bond, rewards, lockedBond, loading, maxValues } =
+    useClaimBondFormData();
 
-  const { field } = useController<ClaimBondFormInputType>({
+  const { field } = useController<ClaimBondFormInputType, 'claimRewards'>({
     name: 'claimRewards',
     disabled: bond?.isShortage,
   });
 
   const { setValue } = useFormContext<ClaimBondFormInputType>();
 
+  const availableToClaim = maxValues?.[TOKENS.STETH][Number(field.value)];
+
   useEffect(() => {
     if (bond?.isShortage) {
       setValue('claimRewards', true);
     }
   }, [bond?.isShortage, setValue]);
-
-  const availableToClaim = useMaxClaimValue();
 
   const showLockedBond = lockedBond?.gt(0);
 
@@ -39,7 +38,7 @@ export const SourceSelect: FC = () => {
         <FormTitle>Available to claim</FormTitle>
         <AmountWithPrice
           big
-          amount={availableToClaim[TOKENS.STETH]}
+          amount={availableToClaim}
           token={TOKENS.STETH}
           loading={loading.isBondLoading || loading.isRewardsLoading}
         />

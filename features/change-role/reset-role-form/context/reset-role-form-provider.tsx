@@ -11,14 +11,14 @@ import { useResetRoleFormNetworkData } from './use-reset-role-form-network-data'
 import { useResetRoleSubmit } from './use-reset-role-submit';
 
 import { useFormData } from 'shared/hook-form/form-controller';
-import { type ResetRoleFormDataContextValue } from './types';
+import { type ResetRoleFormNetworkData } from './types';
 import { useAccount } from 'shared/hooks';
 
-export const useResetRoleFormData = useFormData<ResetRoleFormDataContextValue>;
+export const useResetRoleFormData = useFormData<ResetRoleFormNetworkData>;
 
 export const ResetRoleFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const { address } = useAccount();
-  const networkData = useResetRoleFormNetworkData();
+  const [networkData, revalidate] = useResetRoleFormNetworkData();
 
   const formObject = useForm<ResetRoleFormInputType>({
     defaultValues: {
@@ -29,15 +29,13 @@ export const ResetRoleFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const { retryEvent, retryFire } = useFormControllerRetry();
 
   const { resetRole } = useResetRoleSubmit({
-    onConfirm: networkData.revalidate,
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
   const formControllerValue: FormControllerContextValueType<
     ResetRoleFormInputType,
-    ResetRoleFormDataContextValue
+    ResetRoleFormNetworkData
   > = useMemo(
     () => ({
       onSubmit: resetRole,
@@ -48,7 +46,7 @@ export const ResetRoleFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>

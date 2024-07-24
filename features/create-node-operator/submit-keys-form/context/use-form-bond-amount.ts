@@ -4,7 +4,7 @@ import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 import { useEffect } from 'react';
 
 export const useFormBondAmount = (
-  { watch, setValue }: UseFormReturn<SubmitKeysFormInputType>,
+  { watch, setValue, trigger }: UseFormReturn<SubmitKeysFormInputType>,
   { curveId }: SubmitKeysFormNetworkData,
 ) => {
   const [token, depositData] = watch(['token', 'depositData']);
@@ -14,6 +14,10 @@ export const useFormBondAmount = (
     token,
     curveId,
   });
+
+  useEffect(() => {
+    void trigger('bondAmount');
+  }, [token, trigger]);
 
   useEffect(() => {
     setValue('bondAmount', bondAmount, { shouldValidate: true });

@@ -9,7 +9,7 @@ import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import { ChangeRoleFormDataContextValue, ChangeRoleFormInputType } from '.';
+import { ChangeRoleFormNetworkData, ChangeRoleFormInputType } from '.';
 import {
   useConfirmReproposeModal,
   useConfirmRewardsRoleModal,
@@ -118,7 +118,7 @@ export const useChangeRoleSubmit = ({
   const changeRole = useCallback(
     async (
       { address: addressRaw, isRevoke }: ChangeRoleFormInputType,
-      { nodeOperatorId, proposedAddress, role }: ChangeRoleFormDataContextValue,
+      { nodeOperatorId, proposedAddress, role }: ChangeRoleFormNetworkData,
     ): Promise<boolean> => {
       const address = isRevoke ? AddressZero : addressRaw;
       invariant(role, 'Role is not defined');

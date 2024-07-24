@@ -2,6 +2,7 @@ import { DepositData } from 'types';
 import { getKeys } from '../cachedKeys';
 import { CHAINS } from '@lido-sdk/constants';
 import { trimAddress } from '@lidofinance/address';
+import { TRIM_LENGTH } from './constants';
 
 export const checkPreviouslySubmittedDuplicates = (
   depositData: DepositData[],
@@ -12,7 +13,9 @@ export const checkPreviouslySubmittedDuplicates = (
   depositData.forEach(({ pubkey }) => {
     const hasDuplicate = storedKeys[pubkey] !== undefined;
     if (hasDuplicate) {
-      throw new Error(`Key ${trimAddress(pubkey, 16)} was previosly submitted`);
+      throw new Error(
+        `pubkey ${trimAddress(pubkey, TRIM_LENGTH)} was previosly submitted`,
+      );
     }
   });
 };

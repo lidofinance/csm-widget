@@ -1,5 +1,6 @@
 export * from './use-account';
 export * from './use-address-compare';
+export * from './use-await-network-data';
 export * from './use-awaiter';
 export * from './use-can-create-node-operator';
 export * from './use-compare-with-router-path';

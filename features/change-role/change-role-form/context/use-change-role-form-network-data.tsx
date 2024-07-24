@@ -8,7 +8,7 @@ export const useChangeRoleFormNetworkData = ({
   role,
 }: {
   role: ROLES;
-}): ChangeRoleFormNetworkData => {
+}): [ChangeRoleFormNetworkData, () => Promise<void>] => {
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: info,
@@ -34,12 +34,14 @@ export const useChangeRoleFormNetworkData = ({
       ? info?.proposedRewardAddress
       : info?.proposedManagerAddress;
 
-  return {
-    role,
-    currentAddress,
-    proposedAddress,
-    nodeOperatorId,
-    loading,
+  return [
+    {
+      role,
+      currentAddress,
+      proposedAddress,
+      nodeOperatorId,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

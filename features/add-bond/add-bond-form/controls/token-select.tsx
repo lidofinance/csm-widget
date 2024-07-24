@@ -1,11 +1,11 @@
 import { TOKENS } from 'consts/tokens';
 import { FormTitle, TokenAmount } from 'shared/components';
-import { TokenButtonsHookForm } from 'shared/hook-form/controls/token-buttons-hook-form';
-import { useAddBondFormNetworkData } from '../context/use-add-bond-form-network-data';
+import { TokenButtonsHookForm } from 'shared/hook-form/controls';
+import { useAddBondFormData } from '../context';
 
 export const TokenSelect: React.FC = () => {
   const { etherBalance, stethBalance, wstethBalance, loading } =
-    useAddBondFormNetworkData();
+    useAddBondFormData();
 
   return (
     <>

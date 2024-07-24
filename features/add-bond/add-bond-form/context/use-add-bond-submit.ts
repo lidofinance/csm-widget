@@ -13,7 +13,7 @@ import { NodeOperatorId } from 'types';
 import { addExtraWei, runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import { AddBondFormDataContextValue, AddBondFormInputType } from '../context';
+import { AddBondFormNetworkData, AddBondFormInputType } from '../context';
 import { useTxModalStagesAddBond } from '../hooks/use-tx-modal-stages-add-bond';
 
 type UseAddBondOptions = {
@@ -149,8 +149,8 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
 
   const addBond = useCallback(
     async (
-      { amount, token }: AddBondFormInputType,
-      { nodeOperatorId }: AddBondFormDataContextValue,
+      { bondAmount: amount, token }: AddBondFormInputType,
+      { nodeOperatorId }: AddBondFormNetworkData,
     ): Promise<boolean> => {
       invariant(token, 'Token is not defined');
       invariant(amount, 'BondAmount is not defined');

@@ -7,7 +7,10 @@ import {
 } from 'shared/hooks';
 import { type RemoveKeysFormNetworkData } from './types';
 
-export const useRemoveKeysFormNetworkData = (): RemoveKeysFormNetworkData => {
+export const useRemoveKeysFormNetworkData = (): [
+  RemoveKeysFormNetworkData,
+  () => Promise<void>,
+] => {
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: bond,
@@ -38,12 +41,14 @@ export const useRemoveKeysFormNetworkData = (): RemoveKeysFormNetworkData => {
     [isBondLoading, isKeysLoading, isInfoLoading],
   );
 
-  return {
-    nodeOperatorId,
-    bond,
-    keys,
-    info,
-    loading,
+  return [
+    {
+      nodeOperatorId,
+      bond,
+      keys,
+      info,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

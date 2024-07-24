@@ -2,28 +2,32 @@ import { useCallback, useMemo } from 'react';
 import { useInvites } from 'shared/hooks';
 import { type AcceptInviteFormNetworkData } from './types';
 
-export const useAcceptInviteFormNetworkData =
-  (): AcceptInviteFormNetworkData => {
-    const {
-      data: invites,
-      initialLoading: isInvitesLoading,
-      update: updateInvites,
-    } = useInvites();
+export const useAcceptInviteFormNetworkData = (): [
+  AcceptInviteFormNetworkData,
+  () => Promise<void>,
+] => {
+  const {
+    data: invites,
+    initialLoading: isInvitesLoading,
+    update: updateInvites,
+  } = useInvites();
 
-    const revalidate = useCallback(async () => {
-      await Promise.allSettled([updateInvites()]);
-    }, [updateInvites]);
+  const revalidate = useCallback(async () => {
+    await Promise.allSettled([updateInvites()]);
+  }, [updateInvites]);
 
-    const loading = useMemo(
-      () => ({
-        isInvitesLoading,
-      }),
-      [isInvitesLoading],
-    );
+  const loading = useMemo(
+    () => ({
+      isInvitesLoading,
+    }),
+    [isInvitesLoading],
+  );
 
-    return {
+  return [
+    {
       invites,
       loading,
-      revalidate,
-    };
-  };
+    },
+    revalidate,
+  ];
+};

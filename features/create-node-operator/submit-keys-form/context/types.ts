@@ -4,8 +4,6 @@ import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { LoadingRecord, Proof } from 'types';
 import { Address } from 'wagmi';
 
-export type SubmitKeysFormDataContextValue = SubmitKeysFormNetworkData;
-
 export type SubmitKeysFormInputType = {
   token: TOKENS;
   bondAmount?: BigNumber;
