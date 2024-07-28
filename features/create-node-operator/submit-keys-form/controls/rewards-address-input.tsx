@@ -1,14 +1,14 @@
-import { FormTitle } from 'shared/components';
 import { AddressInputHookForm } from 'shared/hook-form/controls';
+import { useAccount } from 'shared/hooks';
 
 export const RewardsAddressInput: React.FC = () => {
+  const { address } = useAccount();
+
   return (
-    <>
-      <FormTitle>Insert rewards address</FormTitle>
-      <AddressInputHookForm
-        fieldName="rewardsAddress"
-        label={`Rewards address`}
-      />
-    </>
+    <AddressInputHookForm
+      fieldName="rewardsAddress"
+      label={`Rewards address`}
+      currentAddress={address}
+    />
   );
 };

@@ -28,6 +28,9 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     defaultValues: {
       token: TOKENS.ETH,
       depositData: [],
+      extendedManagerPermissions: false,
+      specifyCustomAddresses: false,
+      specifyReferrrer: false,
     },
     resolver: validationResolver,
     mode: 'onChange',

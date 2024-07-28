@@ -1,12 +1,17 @@
 import { FC, PropsWithChildren } from 'react';
-import { NoteStyle } from './style';
+import { NoteStyle, NoteTypeStyle } from './style';
 
-// TODO: only children
-export const Note: FC<PropsWithChildren<{ text: string }>> = ({
+type NoteProps = {
+  text?: string; // TODO: drop it
+  type?: 'note' | 'warning';
+};
+
+export const Note: FC<PropsWithChildren<NoteProps>> = ({
   text,
+  type = 'Note',
   children,
 }) => (
   <NoteStyle>
-    <b>Note:</b> {children} {text}
+    <NoteTypeStyle>{type}:</NoteTypeStyle> {children} {text}
   </NoteStyle>
 );

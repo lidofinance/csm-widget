@@ -5,8 +5,9 @@ export const NoteStyle = styled.div`
 
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
+`;
 
-  b {
-    color: var(--lido-color-text);
-  }
+export const NoteTypeStyle = styled.b`
+  text-transform: capitalize;
+  color: var(--lido-color-text);
 `;

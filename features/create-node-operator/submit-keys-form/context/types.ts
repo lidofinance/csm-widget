@@ -10,6 +10,9 @@ export type SubmitKeysFormInputType = {
   referral?: Address;
   rewardsAddress?: string;
   managerAddress?: string;
+  extendedManagerPermissions: boolean;
+  specifyCustomAddresses: boolean;
+  specifyReferrrer: boolean;
 } & DepositDataInputType;
 
 export type SubmitKeysFormNetworkData = {
