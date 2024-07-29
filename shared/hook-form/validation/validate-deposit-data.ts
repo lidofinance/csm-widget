@@ -9,14 +9,14 @@ type ValidateDepositDataProps = {
   depositData: DepositData[];
   chainId?: CHAINS;
 };
-export const validateDepositData = ({
+export const validateDepositData = async ({
   depositData,
   chainId,
 }: ValidateDepositDataProps) => {
   const wc = getCsmWc(chainId);
   invariant(chainId);
   invariant(wc);
-  const error = validate(depositData, chainId, wc);
+  const error = await validate(depositData, chainId, wc);
   if (error) {
     throw new ValidationError('depositData', error.message);
   }

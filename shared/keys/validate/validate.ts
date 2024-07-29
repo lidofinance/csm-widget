@@ -4,8 +4,9 @@ import { checkLength } from './check-length';
 import { checkDuplicates } from './check-duplicates';
 import { checkPreviouslySubmittedDuplicates } from './check-previously-submitted-duplicates';
 import { checkItem } from './check-item';
+import { checkNetworkDuplicates } from './check-network-duplicates';
 
-export const validate = (
+export const validate = async (
   depositData: DepositData[],
   chainId: CHAINS,
   wc: string,
@@ -15,8 +16,10 @@ export const validate = (
     checkLength(depositData);
     checkDuplicates(depositData);
     checkPreviouslySubmittedDuplicates(depositData, chainId);
+    await checkNetworkDuplicates(depositData);
+
+    return null;
   } catch (error) {
     return error as Error;
   }
-  return null;
 };

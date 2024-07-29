@@ -31,7 +31,7 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
           });
 
         if (options.names?.includes('depositData'))
-          validateDepositData({ depositData, chainId });
+          await validateDepositData({ depositData, chainId });
 
         return {
           values,

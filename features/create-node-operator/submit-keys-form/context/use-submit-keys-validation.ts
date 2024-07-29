@@ -45,7 +45,7 @@ export const useSubmitKeysValidation = (
           });
 
         if (options.names?.includes('depositData'))
-          validateDepositData({ depositData, chainId });
+          await validateDepositData({ depositData, chainId });
 
         if (specifyCustomAddresses) {
           if (
