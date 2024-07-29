@@ -11,6 +11,7 @@ const developmentMode = process.env.NODE_ENV === 'development';
 const isIPFSMode = !!process.env.IPFS_MODE;
 const isDevnet = !!process.env.DEVNET;
 const notReleased = !!process.env.NOT_RELEASED;
+const maintenance = !!process.env.MAINTENANCE;
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
@@ -154,6 +155,7 @@ export default withBundleAnalyzer({
     developmentMode,
     isDevnet,
     notReleased,
+    maintenance,
 
     defaultChain: process.env.DEFAULT_CHAIN,
     rpcUrls_1: process.env.EL_RPC_URLS_1,
