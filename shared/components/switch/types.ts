@@ -1,8 +1,5 @@
 import { ROLE_CODE } from 'consts/roles';
 import { PATH } from 'consts/urls';
-import { Component } from 'types';
-
-export type SwitchItemComponent = Component<'a'>;
 
 export type SwitchRoutes = {
   title: string;

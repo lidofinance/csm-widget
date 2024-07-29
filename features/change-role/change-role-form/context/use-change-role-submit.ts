@@ -31,7 +31,7 @@ const useChangeRoleMethods = () => {
   const { staticRpcProvider } = useCurrentStaticRpcProvider();
   const CSModuleWeb3 = useCSModuleWeb3();
 
-  const methodReward = useCallback(
+  const methodRewards = useCallback(
     async ({ address, nodeOperatorId }: ChangeRoleMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
@@ -91,17 +91,92 @@ const useChangeRoleMethods = () => {
     },
     [CSModuleWeb3, staticRpcProvider],
   );
+  const methodRewardsChange = useCallback(
+    async ({ nodeOperatorId, address }: ChangeRoleMethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
+      const { maxFeePerGas, maxPriorityFeePerGas } =
+        await getFeeData(staticRpcProvider);
+
+      const overrides = {
+        maxPriorityFeePerGas,
+        maxFeePerGas,
+      };
+
+      const params = [nodeOperatorId, address] as const;
+
+      const originalGasLimit =
+        await CSModuleWeb3.estimateGas.changeNodeOperatorRewardAddress(
+          ...params,
+          overrides,
+        );
+
+      const gasLimit = applyGasLimitRatio(originalGasLimit);
+
+      return () =>
+        CSModuleWeb3.changeNodeOperatorRewardAddress(...params, {
+          ...overrides,
+          gasLimit,
+        });
+    },
+    [CSModuleWeb3, staticRpcProvider],
+  );
+  const methodManagerReset = useCallback(
+    async ({ nodeOperatorId }: ChangeRoleMethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
+      const { maxFeePerGas, maxPriorityFeePerGas } =
+        await getFeeData(staticRpcProvider);
+
+      const overrides = {
+        maxPriorityFeePerGas,
+        maxFeePerGas,
+      };
+
+      const params = [nodeOperatorId] as const;
+
+      const originalGasLimit =
+        await CSModuleWeb3.estimateGas.resetNodeOperatorManagerAddress(
+          ...params,
+          overrides,
+        );
+
+      const gasLimit = applyGasLimitRatio(originalGasLimit);
+
+      return () =>
+        CSModuleWeb3.resetNodeOperatorManagerAddress(...params, {
+          ...overrides,
+          gasLimit,
+        });
+    },
+    [CSModuleWeb3, staticRpcProvider],
+  );
 
   return useCallback(
-    (role: ROLES) => {
-      switch (role) {
-        case ROLES.MANAGER:
+    ({
+      isRewardsChange,
+      isManagerReset,
+      role,
+    }: {
+      isRewardsChange: boolean;
+      isManagerReset: boolean;
+      role: ROLES;
+    }) => {
+      switch (true) {
+        case isRewardsChange:
+          return methodRewardsChange;
+        case isManagerReset:
+          return methodManagerReset;
+        case role === ROLES.REWARDS:
+          return methodRewards;
+        case role === ROLES.MANAGER:
           return methodManager;
-        case ROLES.REWARDS:
-          return methodReward;
+        default: {
+          throw new Error('Not implemented yet: true case');
+        }
       }
     },
-    [methodManager, methodReward],
+    [methodManager, methodManagerReset, methodRewards, methodRewardsChange],
   );
 };
 
@@ -118,23 +193,40 @@ export const useChangeRoleSubmit = ({
   const changeRole = useCallback(
     async (
       { address: addressRaw, isRevoke }: ChangeRoleFormInputType,
-      { nodeOperatorId, proposedAddress, role }: ChangeRoleFormNetworkData,
+      {
+        nodeOperatorId,
+        proposedAddress,
+        role,
+        isPropose,
+        isManagerReset,
+        isRewardsChange,
+      }: ChangeRoleFormNetworkData,
     ): Promise<boolean> => {
       const address = isRevoke ? AddressZero : addressRaw;
       invariant(role, 'Role is not defined');
       invariant(address, 'Addess is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
-      if (!isRevoke && role === 'REWARDS' && !(await confirmRewardsRole())) {
+      if (
+        !isRevoke &&
+        isPropose &&
+        role === ROLES.REWARDS &&
+        !(await confirmRewardsRole())
+      ) {
         return false;
       }
 
-      if (!isRevoke && proposedAddress && !(await confirmRepropose())) {
+      if (
+        !isRevoke &&
+        isPropose &&
+        proposedAddress &&
+        !(await confirmRepropose())
+      ) {
         return false;
       }
 
       try {
-        const method = getMethod(role);
+        const method = getMethod({ role, isManagerReset, isRewardsChange });
 
         txModalStages.sign(address, role);
 

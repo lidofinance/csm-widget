@@ -20,10 +20,10 @@ export const useRemoveKeysFormData = useFormData<RemoveKeysFormNetworkData>;
 export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const [networkData, revalidate] = useRemoveKeysFormNetworkData();
 
-  const { getDefaultValues } = useGetDefaultValues(networkData);
+  const asyncDefaultValues = useGetDefaultValues(networkData);
 
   const formObject = useForm<RemoveKeysFormInputType>({
-    defaultValues: getDefaultValues,
+    defaultValues: asyncDefaultValues,
     mode: 'onChange',
   });
 

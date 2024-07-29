@@ -22,7 +22,5 @@ export const GateLoaded: FC<PropsWithChildren<Props>> = ({
     isListLoading ||
     (!active && isEaLoading);
 
-  if (loading) return fallback;
-
-  return children;
+  return <>{loading ? fallback : children}</>;
 };

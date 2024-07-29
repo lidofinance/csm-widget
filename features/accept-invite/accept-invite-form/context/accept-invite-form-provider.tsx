@@ -22,11 +22,10 @@ export const AcceptInviteFormProvider: FC<PropsWithChildren> = ({
 }) => {
   const [networkData, revalidate] = useAcceptInviteFormNetworkData();
 
-  // FIXME: not work ??
-  const getDefaultValues = useGetDefaultValues(networkData);
+  const asyncDefaultValues = useGetDefaultValues(networkData);
 
   const formObject = useForm<AcceptInviteFormInputType>({
-    defaultValues: getDefaultValues,
+    defaultValues: asyncDefaultValues,
     mode: 'onChange',
   });
 

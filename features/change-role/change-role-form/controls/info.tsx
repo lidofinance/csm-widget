@@ -7,7 +7,8 @@ import { useRole } from '../hooks/use-role';
 
 export const Info: FC = () => {
   const role = useRole();
-  const { currentAddress, proposedAddress } = useChangeRoleFormData();
+  const { currentAddress, proposedAddress, isPropose } =
+    useChangeRoleFormData();
   const { setValue } = useFormContext<ChangeRoleFormInputType>();
 
   const revokeHandle = useCallback(() => {
@@ -25,14 +26,16 @@ export const Info: FC = () => {
           title={
             <>
               <Warning text="Pending change" />
-              <SubmitButtonHookForm
-                variant="outlined"
-                size="xs"
-                fullwidth={false}
-                onClick={revokeHandle}
-              >
-                Revoke
-              </SubmitButtonHookForm>
+              {isPropose && (
+                <SubmitButtonHookForm
+                  variant="outlined"
+                  size="xs"
+                  fullwidth={false}
+                  onClick={revokeHandle}
+                >
+                  Revoke
+                </SubmitButtonHookForm>
+              )}
             </>
           }
           address={proposedAddress}

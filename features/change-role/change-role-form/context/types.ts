@@ -7,9 +7,13 @@ export type ChangeRoleFormInputType = {
 };
 
 export type ChangeRoleFormNetworkData = {
+  address: string;
   role: ROLES;
   nodeOperatorId?: NodeOperatorId;
   currentAddress?: string;
   proposedAddress?: string;
+  isManagerReset: boolean;
+  isRewardsChange: boolean;
+  isPropose: boolean;
   loading: LoadingRecord<'info'>;
 };

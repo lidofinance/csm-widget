@@ -10,6 +10,7 @@ import type {
   ChangeRoleFormInputType,
   ChangeRoleFormNetworkData,
 } from './types';
+import { isAddress } from 'ethers/lib/utils.js';
 
 export const useChangeRoleValidation = (
   networkData: ChangeRoleFormNetworkData,
@@ -21,16 +22,29 @@ export const useChangeRoleValidation = (
       try {
         const { address, isRevoke } = values;
 
-        const { currentAddress, proposedAddress } = await dataPromise;
+        const { currentAddress, proposedAddress, isPropose } =
+          await dataPromise;
 
-        if (!isRevoke && compareLowercase(address, currentAddress)) {
+        if (!isRevoke && !isAddress(address ?? '')) {
+          throw new ValidationError('address', 'Specify a valid address');
+        }
+
+        if (
+          !isRevoke &&
+          isPropose &&
+          compareLowercase(address, currentAddress)
+        ) {
           throw new ValidationError(
             'address',
             'Should not be same as current address',
           );
         }
 
-        if (!isRevoke && compareLowercase(address, proposedAddress)) {
+        if (
+          !isRevoke &&
+          isPropose &&
+          compareLowercase(address, proposedAddress)
+        ) {
           throw new ValidationError(
             'address',
             'Should not be same as proposed address',

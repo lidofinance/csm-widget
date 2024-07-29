@@ -14,6 +14,7 @@ import { useChangeRoleSubmit } from './use-change-role-submit';
 import { useFormData } from 'shared/hook-form/form-controller';
 import { type ChangeRoleFormNetworkData } from './types';
 import { useChangeRoleValidation } from './use-change-role-validation';
+import { useGetDefaultValues } from './use-get-default-values';
 
 export const useChangeRoleFormData = useFormData<ChangeRoleFormNetworkData>;
 
@@ -25,10 +26,10 @@ export const ChangeRoleFormProvider: FC<
   const [networkData, revalidate] = useChangeRoleFormNetworkData({ role });
   const validationResolver = useChangeRoleValidation(networkData);
 
+  const asyncDefaultValues = useGetDefaultValues(networkData);
+
   const formObject = useForm<ChangeRoleFormInputType>({
-    defaultValues: {
-      isRevoke: false,
-    },
+    defaultValues: asyncDefaultValues,
     resolver: validationResolver,
     mode: 'onChange',
   });

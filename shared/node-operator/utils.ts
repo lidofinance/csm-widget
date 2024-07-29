@@ -6,7 +6,14 @@ const SHORT_ROLES = {
   [ROLES.MANAGER]: 'M',
 } as const;
 
+const ROLE_TITLES = {
+  [ROLES.MANAGER]: 'manager',
+  [ROLES.REWARDS]: 'rewards',
+} as const;
+
 export const getShortRole = (role: ROLES) => SHORT_ROLES[role];
+
+export const getRoleTitle = (role: ROLES) => ROLE_TITLES[role];
 
 export const getRoleCode = ({
   rewards,

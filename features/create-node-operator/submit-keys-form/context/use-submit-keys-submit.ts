@@ -257,6 +257,8 @@ export const useSubmitKeysSubmit = ({
         ? extendedManagerPermissionsRaw
         : false;
 
+      // TODO: show modals to confirm custom addresses
+
       try {
         let permit: GatherPermitSignatureResult | undefined;
         const { method, needsPermit } = getSubmitKeysMethod(token);
@@ -309,6 +311,7 @@ export const useSubmitKeysSubmit = ({
 
         txModalStages.success(nodeOperatorId, txHash);
 
+        // TODO: didn't updated modal
         if (nodeOperatorId) {
           appendNO({
             id: nodeOperatorId,

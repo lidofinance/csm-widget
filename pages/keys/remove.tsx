@@ -1,4 +1,5 @@
 import { secretConfig } from 'config';
+import { ROLES } from 'consts/roles';
 import { PATH } from 'consts/urls';
 import { RemoveKeysPage } from 'features/remove-keys';
 import { SplashPage } from 'features/welcome';
@@ -8,7 +9,7 @@ import {
   GateActiveUser,
   GateLoaded,
   GateNodeOperator,
-  GateRoleManager,
+  GateRole,
 } from 'shared/gates';
 import { Navigate } from 'shared/navigate';
 
@@ -20,11 +21,12 @@ const Page = () => (
       <GateNodeOperator
         fallback={<Navigate path={PATH.KEYS} fallback={<SplashPage />} />}
       >
-        <GateRoleManager
+        <GateRole
+          role={ROLES.MANAGER}
           fallback={<Navigate path={PATH.KEYS} fallback={<SplashPage />} />}
         >
           <RemoveKeysPage />
-        </GateRoleManager>
+        </GateRole>
       </GateNodeOperator>
     </GateActiveUser>
   </GateLoaded>

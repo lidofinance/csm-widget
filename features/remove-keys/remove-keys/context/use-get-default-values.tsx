@@ -17,10 +17,5 @@ export const useGetDefaultValues = ({
 
   const { awaiter } = useAwaiter(values);
 
-  const getDefaultValues = useCallback(
-    () => (values ? Promise.resolve(values) : awaiter),
-    [awaiter, values],
-  );
-
-  return { getDefaultValues };
+  return useCallback(() => awaiter, [awaiter]);
 };

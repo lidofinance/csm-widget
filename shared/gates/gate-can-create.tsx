@@ -11,7 +11,5 @@ export const GateCanCreate: FC<PropsWithChildren<Props>> = ({
 }) => {
   const canCreate = useCanCreateNodeOperator();
 
-  if (!canCreate) return fallback;
-
-  return children;
+  return <>{!canCreate ? fallback : children}</>;
 };

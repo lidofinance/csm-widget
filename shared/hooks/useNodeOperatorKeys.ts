@@ -3,7 +3,8 @@ import { useCSModuleRPC } from './useCsmContracts';
 import { useContractSWR } from '@lido-sdk/react';
 import { useNodeOperatorInfo } from './useNodeOperatorInfo';
 import { useMemo } from 'react';
-import { PUBKEY_LENGTH, splitHex } from 'shared/keys';
+import { splitHex } from 'shared/keys';
+import { PUBKEY_LENGTH } from 'shared/keys/validate/constants';
 
 // TODO: load by chuns
 // const MAX_KEYS_COUNT = 10;
