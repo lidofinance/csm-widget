@@ -47,6 +47,9 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     if (isReady && query[CUSTOM_ADDRESSES_QUERY] !== undefined) {
       setCustomAddresses(true);
     }
+    if (isReady && query['mode'] === 'extended') {
+      setCustomAddresses(true);
+    }
     if (isReady && query[REFERRER_QUERY]) {
       // TODO: validate referrer
       // TODO: do not rewrite referrer ?
