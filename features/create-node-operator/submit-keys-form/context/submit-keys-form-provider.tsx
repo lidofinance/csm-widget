@@ -5,47 +5,50 @@ import {
   FormControllerContext,
   FormControllerContextValueType,
   FormDataContext,
+  useFormControllerRetry,
   useFormData,
+  useFormDepositData,
 } from 'shared/hook-form/form-controller';
-import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
 import {
-  SubmitKeysFormDataContextValue,
+  SubmitKeysFormNetworkData,
   type SubmitKeysFormInputType,
 } from './types';
-import { useCalculateBondAmount } from './use-calculate-bond-amount';
-import { useCalculateDepositData } from './use-calculate-deposit-data';
-import { useSubmitKeysSubmit } from './use-submit-keys-submit';
+import { useFormBondAmount } from './use-form-bond-amount';
 import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
+import { useSubmitKeysSubmit } from './use-submit-keys-submit';
+import { useSubmitKeysValidation } from './use-submit-keys-validation';
 
-export const useSubmitKeysFormData =
-  useFormData<SubmitKeysFormDataContextValue>;
+export const useSubmitKeysFormData = useFormData<SubmitKeysFormNetworkData>;
 
 export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useSubmitKeysFormNetworkData();
+  const [networkData, revalidate] = useSubmitKeysFormNetworkData();
+  const validationResolver = useSubmitKeysValidation(networkData);
 
   const formObject = useForm<SubmitKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
       depositData: [],
+      extendedManagerPermissions: false,
+      specifyCustomAddresses: false,
+      specifyReferrrer: false,
     },
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
-  useCalculateDepositData(formObject);
-  const bondAmount = useCalculateBondAmount(formObject, networkData);
+  useFormBondAmount(formObject, networkData);
+  useFormDepositData(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
   const submitKeys = useSubmitKeysSubmit({
-    onConfirm: networkData.revalidate,
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = { ...networkData, bondAmount };
-
   const formControllerValue: FormControllerContextValueType<
     SubmitKeysFormInputType,
-    SubmitKeysFormDataContextValue
+    SubmitKeysFormNetworkData
   > = useMemo(
     () => ({
       onSubmit: submitKeys,
@@ -56,7 +59,7 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>

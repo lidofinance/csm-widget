@@ -21,14 +21,17 @@ export const RadioIconStyle = styled(Radio)`
   }
 `;
 
-export const RadioButtonStyle = styled.label`
-  position: relative;
-  padding: 16px 12px; // @style
-  flex: 1 0 0%;
+export const RadioButtonStyle = styled.label<{ $small?: boolean }>`
+  --padding-y: ${({ $small }) => ($small ? `12px` : `16px`)};
+  --padding-x: 12px;
 
   :has(${RadioIconStyle}) {
-    padding: 16px 20px;
+    --padding-x: 20px;
   }
+
+  position: relative;
+  padding: var(--padding-y) var(--padding-x);
+  flex: 1 0 0%;
 
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
   border: 1px solid var(--lido-color-border);
@@ -37,11 +40,7 @@ export const RadioButtonStyle = styled.label`
 
   :has(:checked) {
     border: 2px solid var(--lido-color-primary);
-    padding: 15px 11px;
-
-    :has(${RadioIconStyle}) {
-      padding: 15px 19px;
-    }
+    padding: calc(var(--padding-y) - 1px) calc(var(--padding-x) - 1px);
 
     ${RadioIconStyle} {
       background-color: var(--lido-color-primary);

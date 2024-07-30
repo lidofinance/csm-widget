@@ -1,94 +1,32 @@
 import { BigNumber } from 'ethers';
-
-import { parseEther } from '@ethersproject/units';
-import { CHAINS } from '@lido-sdk/constants';
-import { StethAbi } from '@lido-sdk/contracts';
-import { useLidoSWR, useSDK } from '@lido-sdk/react';
+import { useLidoSWR } from '@lido-sdk/react';
 
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { LIMIT_LEVEL } from 'types';
+import { useAccount } from './use-account';
 import { useSTETHContractRPC } from './useLidoContracts';
+import { Zero } from '@ethersproject/constants';
 
-export type StakeLimitFullInfo = {
+const getMaxStakeAmount = (limitInfo: {
   isStakingPaused: boolean;
   isStakingLimitSet: boolean;
   currentStakeLimit: BigNumber;
-  maxStakeLimit: BigNumber;
-  maxStakeLimitGrowthBlocks: BigNumber;
-  prevStakeLimit: BigNumber;
-  prevStakeBlockNumber: BigNumber;
-  stakeLimitLevel: LIMIT_LEVEL;
+}) => {
+  if (limitInfo.isStakingPaused) return Zero;
+  if (limitInfo.isStakingLimitSet) return limitInfo.currentStakeLimit;
+  return null;
 };
 
-const stakeLimitFullInfoTemplate: StakeLimitFullInfo = {
-  isStakingPaused: false,
-  isStakingLimitSet: true,
-  currentStakeLimit: parseEther('150000'),
-  maxStakeLimit: parseEther('150000'),
-  maxStakeLimitGrowthBlocks: BigNumber.from(6400),
-  prevStakeLimit: parseEther('149000'),
-  prevStakeBlockNumber: BigNumber.from(15145339),
-  stakeLimitLevel: LIMIT_LEVEL.REACHED,
-};
-
-// almost reached whenever current limit is ≤25% of max limit, i.e. 4 times lower
-const WARN_THRESHOLD_RATIO = BigNumber.from(4);
-
-const getLimitLevel = (maxLimit: BigNumber, currentLimit: BigNumber) => {
-  if (currentLimit.eq(0)) return LIMIT_LEVEL.REACHED;
-
-  if (maxLimit.div(currentLimit).gte(WARN_THRESHOLD_RATIO))
-    return LIMIT_LEVEL.WARN;
-
-  return LIMIT_LEVEL.SAFE;
-};
-
+// TODO: rename
 export const useStakingLimitInfo = () => {
-  const { chainId } = useSDK();
+  const { chainId } = useAccount();
   const steth = useSTETHContractRPC();
 
-  return useLidoSWR<StakeLimitFullInfo>(
+  return useLidoSWR(
     ['swr:getStakeLimitFullInfo', chainId, steth],
-    // @ts-expect-error broken lidoSWR typings
-    async (
-      _key: string,
-      _chainId: CHAINS,
-      steth: StethAbi,
-      shouldMock: boolean,
-    ) => {
-      const mockDataString = window.localStorage.getItem(
-        'getStakeLimitFullInfo',
-      );
-
-      if (shouldMock && mockDataString) {
-        try {
-          const mockData = JSON.parse(mockDataString);
-          return {
-            ...stakeLimitFullInfoTemplate,
-            ...mockData,
-            currentStakeLimit: parseEther(mockData.currentStakeLimit),
-            maxStakeLimit: parseEther(mockData.maxStakeLimit),
-            stakeLimitLevel: getLimitLevel(
-              parseEther(mockData.maxStakeLimit),
-              parseEther(mockData.currentStakeLimit),
-            ),
-          };
-        } catch (e) {
-          console.warn('Failed to load mock data');
-          console.warn(e);
-        }
-      }
-
+    async () => {
       const stakeLimitFullInfo = await steth.getStakeLimitFullInfo();
 
-      // destructuring to make hybrid array into an object,
-      return {
-        ...stakeLimitFullInfo,
-        stakeLimitLevel: getLimitLevel(
-          stakeLimitFullInfo.maxStakeLimit,
-          stakeLimitFullInfo.currentStakeLimit,
-        ),
-      };
+      return getMaxStakeAmount(stakeLimitFullInfo);
     },
     {
       ...STRATEGY_LAZY,

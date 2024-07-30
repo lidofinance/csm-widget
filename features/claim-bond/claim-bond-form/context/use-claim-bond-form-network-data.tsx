@@ -6,8 +6,12 @@ import {
   useNodeOperatorRewards,
 } from 'shared/hooks';
 import { type ClaimBondFormNetworkData } from './types';
+import { useMaxValues } from './use-max-values';
 
-export const useClaimBondFormNetworkData = (): ClaimBondFormNetworkData => {
+export const useClaimBondFormNetworkData = (): [
+  ClaimBondFormNetworkData,
+  () => Promise<void>,
+] => {
   const nodeOperatorId = useNodeOperatorId();
 
   const {
@@ -28,6 +32,12 @@ export const useClaimBondFormNetworkData = (): ClaimBondFormNetworkData => {
     initialLoading: isLockedBondLoading,
   } = useNodeOperatorLockAmount(nodeOperatorId);
 
+  const { data: maxValues, initialLoading: isMaxValuesLoading } = useMaxValues({
+    bond,
+    rewards,
+    lockedBond,
+  });
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateBond(),
@@ -41,16 +51,20 @@ export const useClaimBondFormNetworkData = (): ClaimBondFormNetworkData => {
       isBondLoading,
       isRewardsLoading,
       isLockedBondLoading,
+      isMaxValuesLoading,
     }),
-    [isBondLoading, isLockedBondLoading, isRewardsLoading],
+    [isBondLoading, isLockedBondLoading, isMaxValuesLoading, isRewardsLoading],
   );
 
-  return {
-    nodeOperatorId,
-    bond,
-    rewards,
-    lockedBond,
-    loading,
+  return [
+    {
+      nodeOperatorId,
+      bond,
+      rewards,
+      lockedBond,
+      maxValues,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

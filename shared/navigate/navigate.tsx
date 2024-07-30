@@ -9,5 +9,5 @@ export const Navigate: FC<Props> = ({ path, fallback }) => {
 
   useEffect(() => void navigate(path), [navigate, path]);
 
-  return fallback || null;
+  return fallback ? <>{fallback}</> : null;
 };

@@ -8,10 +8,11 @@ import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import { AcceptInviteFormInputType } from '.';
+import { AcceptInviteFormInputType } from './types';
 import { useTxModalStagesAcceptInvite } from '../hooks/use-tx-modal-stages-accept-invite';
 import { useNodeOperator } from 'providers/node-operator-provider';
 
+// TODO: move to hooks
 type UseAcceptInviteOptions = {
   onConfirm?: () => Promise<void> | void;
   onRetry?: () => void;

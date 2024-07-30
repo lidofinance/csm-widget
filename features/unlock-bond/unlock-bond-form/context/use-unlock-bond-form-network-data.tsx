@@ -5,7 +5,10 @@ import { type UnlockBondFormNetworkData } from './types';
 import { useEthereumBalance } from '@lido-sdk/react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 
-export const useUnlockBondFormNetworkData = (): UnlockBondFormNetworkData => {
+export const useUnlockBondFormNetworkData = (): [
+  UnlockBondFormNetworkData,
+  () => Promise<void>,
+] => {
   const nodeOperatorId = useNodeOperatorId();
 
   const {
@@ -32,11 +35,13 @@ export const useUnlockBondFormNetworkData = (): UnlockBondFormNetworkData => {
     [isEtherBalanceLoading, isLockedBondLoading],
   );
 
-  return {
-    nodeOperatorId,
-    lockedBond,
-    etherBalance,
-    loading,
+  return [
+    {
+      nodeOperatorId,
+      lockedBond,
+      etherBalance,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

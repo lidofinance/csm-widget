@@ -1,7 +1,6 @@
 import { Zero } from '@ethersproject/constants';
 import { useWatch } from 'react-hook-form';
-import { ClaimBondFormInputType } from '../context';
-import { useClaimBondFormNetworkData } from '../context/use-claim-bond-form-network-data';
+import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
 import { useStethAmount } from './use-steth-amount';
 
 export const useBondReceiveAmount = () => {
@@ -12,7 +11,7 @@ export const useBondReceiveAmount = () => {
     name: ['token', 'amount', 'claimRewards'],
   });
 
-  const { rewards } = useClaimBondFormNetworkData();
+  const { rewards } = useClaimBondFormData();
 
   const stethAmount = useStethAmount(token, amount ?? Zero);
   const bondReceive = rewards?.available.sub(stethAmount ?? Zero) ?? Zero;

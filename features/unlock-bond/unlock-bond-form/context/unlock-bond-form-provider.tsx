@@ -8,38 +8,38 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import {
-  UnlockBondFormDataContextValue,
+  UnlockBondFormNetworkData,
   type UnlockBondFormInputType,
 } from './types';
 import { useUnlockBondFormNetworkData } from './use-unlock-bond-form-network-data';
 import { useUnlockBondSubmit } from './use-unlock-bond-submit';
+import { useUnlockBondValidation } from './use-unlock-bond-validation';
 
-export const useUnlockBondFormData =
-  useFormData<UnlockBondFormDataContextValue>;
+export const useUnlockBondFormData = useFormData<UnlockBondFormNetworkData>;
 
 export const UnlockBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useUnlockBondFormNetworkData();
+  const [networkData, revalidate] = useUnlockBondFormNetworkData();
+  const validationResolver = useUnlockBondValidation(networkData);
 
   // TODO: validate (max amount)
   const formObject = useForm<UnlockBondFormInputType>({
     defaultValues: {
       amount: undefined,
     },
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
   const { unlockBond } = useUnlockBondSubmit({
-    onConfirm: networkData.revalidate,
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
   const formControllerValue: FormControllerContextValueType<
     UnlockBondFormInputType,
-    UnlockBondFormDataContextValue
+    UnlockBondFormNetworkData
   > = useMemo(
     () => ({
       onSubmit: unlockBond,
@@ -50,7 +50,7 @@ export const UnlockBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>

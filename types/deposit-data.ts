@@ -9,12 +9,12 @@ export type DepositDataCommon = {
   deposit_cli_version: string;
 };
 
-export type DepositDataNew = DepositDataCommon & {
+export type DepositDataV2 = DepositDataCommon & {
   network_name: string;
 };
 
-export type DepositDataOld = DepositDataCommon & {
+export type DepositDataV1 = DepositDataCommon & {
   eth2_network_name: string;
 };
 
-export type DepositData = DepositDataNew | DepositDataOld;
+export type DepositData = DepositDataV2 | DepositDataV1;

@@ -1,28 +1,19 @@
+import { ROLES } from 'consts/roles';
 import { useNodeOperatorRoles } from 'providers/node-operator-provider';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 
 type Props = {
   fallback?: ReactNode;
+  role: ROLES;
 };
 
-export const GateRoleRewards: FC<PropsWithChildren<Props>> = ({
+export const GateRole: FC<PropsWithChildren<Props>> = ({
+  role,
   fallback,
   children,
 }) => {
-  const { rewards } = useNodeOperatorRoles();
+  const { manager, rewards } = useNodeOperatorRoles();
+  const isRole = role === ROLES.MANAGER ? manager : rewards;
 
-  if (!rewards) return fallback;
-
-  return children;
-};
-
-export const GateRoleManager: FC<PropsWithChildren<Props>> = ({
-  fallback,
-  children,
-}) => {
-  const { manager } = useNodeOperatorRoles();
-
-  if (!manager) return fallback;
-
-  return children;
+  return <>{!isRole ? fallback : children}</>;
 };

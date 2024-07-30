@@ -3,7 +3,7 @@ import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
-import { ClaimBondFormInputType } from './context/types';
+import { ClaimBondFormInputType } from './context';
 import { useBondReceiveAmount } from './hooks/use-bond-receive-amount';
 
 export const ClaimBondFormInfo = () => {

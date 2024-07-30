@@ -6,45 +6,43 @@ import {
   FormControllerContextValueType,
   FormDataContext,
   useFormData,
+  useFormDepositData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
-import {
-  AddKeysFormDataContextValue,
-  type AddKeysFormInputType,
-} from './types';
+import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 import { useAddKeysFormNetworkData } from './use-add-keys-form-network-data';
 import { useAddKeysSubmit } from './use-add-keys-submit';
-import { useCalculateBondAmount } from './use-calculate-bond-amount';
-import { useCalculateDepositData } from './use-calculate-deposit-data';
+import { useAddKeysValidation } from './use-add-keys-validation';
+import { useFormBondAmount } from './use-form-bond-amount';
 
-export const useAddKeysFormData = useFormData<AddKeysFormDataContextValue>;
+export const useAddKeysFormData = useFormData<AddKeysFormNetworkData>;
 
 export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useAddKeysFormNetworkData();
+  const [networkData, revalidate] = useAddKeysFormNetworkData();
+  const validationResolver = useAddKeysValidation(networkData);
 
   const formObject = useForm<AddKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
       depositData: [],
     },
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
-  useCalculateDepositData(formObject);
-  const bondAmount = useCalculateBondAmount(formObject);
+  useFormBondAmount(formObject, networkData);
+  useFormDepositData(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
   const addKeys = useAddKeysSubmit({
-    onConfirm: networkData.revalidate,
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = { ...networkData, bondAmount };
-
   const formControllerValue: FormControllerContextValueType<
     AddKeysFormInputType,
-    AddKeysFormDataContextValue
+    AddKeysFormNetworkData
   > = useMemo(
     () => ({
       onSubmit: addKeys,
@@ -55,7 +53,7 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>

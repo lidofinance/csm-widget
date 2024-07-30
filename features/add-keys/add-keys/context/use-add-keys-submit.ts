@@ -7,7 +7,7 @@ import { getFeeData } from 'utils/getFeeData';
 import { TOKENS } from 'consts/tokens';
 import { BigNumberish } from 'ethers';
 import { BytesLike } from 'ethers/lib/utils.js';
-import { useCSModuleWeb3 } from 'shared/hooks';
+import { useCSModuleWeb3, useKeysCache } from 'shared/hooks';
 import {
   GatherPermitSignatureResult,
   useCsmPermitSignature,
@@ -17,7 +17,7 @@ import { NodeOperatorId } from 'types';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { formatKeys } from 'utils/formatKeys';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
-import { AddKeysFormDataContextValue, AddKeysFormInputType } from './types';
+import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
 type AddKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -189,11 +189,12 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
   const getAddKeysMethod = useAddKeysMethods();
 
   const gatherPermitSignature = useCsmPermitSignature();
+  const saveKeys = useKeysCache();
 
   const addKeys = useCallback(
     async (
-      { depositData, token }: AddKeysFormInputType,
-      { nodeOperatorId, bondAmount }: AddKeysFormDataContextValue,
+      { depositData, token, bondAmount }: AddKeysFormInputType,
+      { nodeOperatorId }: AddKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(depositData.length, 'Keys is not defined');
@@ -244,6 +245,8 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
         txModalStages.success(txHash);
 
+        void saveKeys(depositData);
+
         return true;
       } catch (error) {
         console.warn(error);
@@ -255,6 +258,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
       getAddKeysMethod,
       txModalStages,
       onConfirm,
+      saveKeys,
       gatherPermitSignature,
       onRetry,
     ],

@@ -8,6 +8,7 @@ import {
   useAddressCompare,
   useCSModuleWeb3,
   useCsmPermitSignature,
+  useKeysCache,
 } from 'shared/hooks';
 import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import invariant from 'tiny-invariant';
@@ -19,10 +20,7 @@ import { getFeeData } from 'utils/getFeeData';
 import { Address } from 'wagmi';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { getAddedNodeOperator } from '../utils';
-import {
-  SubmitKeysFormDataContextValue,
-  SubmitKeysFormInputType,
-} from './types';
+import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
 type SubmitKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -34,7 +32,7 @@ type MethodParams = {
   keysCount: BigNumberish;
   publicKeys: BytesLike;
   signatures: BytesLike;
-  rewardAddress: Address;
+  rewardsAddress: Address;
   managerAddress: Address;
   extendedManagerPermissions: boolean;
   permit: GatherPermitSignatureResult | undefined;
@@ -54,7 +52,7 @@ const useSubmitKeysMethods = () => {
       publicKeys,
       signatures,
       managerAddress,
-      rewardAddress,
+      rewardsAddress: rewardAddress,
       extendedManagerPermissions,
       eaProof,
       referral,
@@ -103,7 +101,7 @@ const useSubmitKeysMethods = () => {
       publicKeys,
       signatures,
       managerAddress,
-      rewardAddress,
+      rewardsAddress: rewardAddress,
       extendedManagerPermissions,
       permit,
       eaProof,
@@ -157,7 +155,7 @@ const useSubmitKeysMethods = () => {
       publicKeys,
       signatures,
       managerAddress,
-      rewardAddress,
+      rewardsAddress: rewardAddress,
       extendedManagerPermissions,
       permit,
       eaProof,
@@ -228,7 +226,8 @@ export const useSubmitKeysSubmit = ({
   const { append: appendNO } = useNodeOperator();
   const getSubmitKeysMethod = useSubmitKeysMethods();
   const gatherPermitSignature = useCsmPermitSignature();
-  const isYouOrZero = useAddressCompare(true);
+  const isUserOrZero = useAddressCompare(true);
+  const saveKeys = useKeysCache();
 
   const submitKeys = useCallback(
     async (
@@ -236,17 +235,29 @@ export const useSubmitKeysSubmit = ({
         referral,
         depositData,
         token,
+        bondAmount,
+        specifyCustomAddresses,
         rewardsAddress: rewardsAddressRaw,
         managerAddress: managerAddressRaw,
+        extendedManagerPermissions: extendedManagerPermissionsRaw,
       }: SubmitKeysFormInputType,
-      { bondAmount, eaProof }: SubmitKeysFormDataContextValue,
+      { eaProof }: SubmitKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(bondAmount, 'BondAmount is not defined');
 
-      const rewardsAddress = addressOrZero(rewardsAddressRaw);
-      const managerAddress = addressOrZero(managerAddressRaw);
+      const rewardsAddress = addressOrZero(
+        specifyCustomAddresses ? rewardsAddressRaw : undefined,
+      );
+      const managerAddress = addressOrZero(
+        specifyCustomAddresses ? managerAddressRaw : undefined,
+      );
+      const extendedManagerPermissions = specifyCustomAddresses
+        ? extendedManagerPermissionsRaw
+        : false;
+
+      // TODO: show modals to confirm custom addresses
 
       try {
         let permit: GatherPermitSignatureResult | undefined;
@@ -269,9 +280,9 @@ export const useSubmitKeysSubmit = ({
           signatures,
           permit,
           eaProof: eaProof || [],
-          rewardAddress: rewardsAddress,
+          rewardsAddress,
           managerAddress,
-          extendedManagerPermissions: false,
+          extendedManagerPermissions,
           referral: addressOrZero(referral),
         });
 
@@ -300,13 +311,16 @@ export const useSubmitKeysSubmit = ({
 
         txModalStages.success(nodeOperatorId, txHash);
 
+        // TODO: didn't updated modal
         if (nodeOperatorId) {
           appendNO({
             id: nodeOperatorId,
-            manager: isYouOrZero(managerAddress),
-            rewards: isYouOrZero(rewardsAddress),
+            manager: isUserOrZero(managerAddress),
+            rewards: isUserOrZero(rewardsAddress),
           });
         }
+
+        void saveKeys(depositData);
 
         return true;
       } catch (error) {
@@ -319,9 +333,10 @@ export const useSubmitKeysSubmit = ({
       getSubmitKeysMethod,
       txModalStages,
       onConfirm,
+      saveKeys,
       gatherPermitSignature,
       appendNO,
-      isYouOrZero,
+      isUserOrZero,
       onRetry,
     ],
   );

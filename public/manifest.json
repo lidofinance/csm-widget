@@ -1,7 +1,7 @@
 {
-  "name": "Lido Frontend Template",
-  "short_name": "Lido",
-  "description": "Lido is the liquid staking solution for Ethereum.",
+  "name": "Community Staking Module | Lido",
+  "short_name": "CSM | Lido",
+  "description": "The Community Staking Module is a permissionless staking module aimed at attracting community stakers to participate in the Lido on Ethereum protocol as Node Operators.",
   "iconPath": "favicon-512x512.png",
   "icons": [
     {

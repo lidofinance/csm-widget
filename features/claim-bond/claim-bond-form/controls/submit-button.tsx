@@ -1,4 +1,4 @@
-import { SubmitButtonHookForm } from 'shared/hook-form/controls/submit-button-hook-form';
+import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { ClaimBondFormInputType } from '../context';
 import { useWatch } from 'react-hook-form';
 

@@ -3,7 +3,10 @@ import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { useStethByWsteth } from 'shared/hooks';
 
-export const useReceiveAmount = (amount: BigNumber | null, token: TOKENS) => {
+export const useReceiveAmount = (
+  amount: BigNumber | undefined,
+  token: TOKENS,
+) => {
   const { data: wsteth, loading: wstethLoadng } = useStethByWsteth(
     (token === TOKENS.WSTETH && amount) || undefined,
   );

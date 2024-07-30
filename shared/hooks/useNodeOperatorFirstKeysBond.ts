@@ -29,5 +29,8 @@ export const useNodeOperatorFirstKeysBond = (
     config,
   });
 
-  return { ...result, data: keysCount > 0 ? result.data : Zero };
+  return {
+    ...result,
+    data: keysCount > 0 ? result.data : Zero,
+  } as typeof result;
 };

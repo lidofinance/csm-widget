@@ -1,6 +1,6 @@
 import { TOKENS } from 'consts/tokens';
 import { FormTitle, Note } from 'shared/components';
-import { TokenAmountInputHookForm } from 'shared/hook-form/controls/token-amount-input-hook-form';
+import { TokenAmountInputHookForm } from 'shared/hook-form/controls';
 import { useMaxValue } from '../hooks/use-max-value';
 
 export const AmountInput: React.FC = () => {

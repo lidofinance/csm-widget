@@ -1,8 +1,8 @@
 import { Zero } from '@ethersproject/constants';
-import { useClaimBondFormNetworkData } from '../context/use-claim-bond-form-network-data';
+import { useClaimBondFormData } from '../context';
 
 export const useShortageBondCoverAmount = () => {
-  const { bond, rewards } = useClaimBondFormNetworkData();
+  const { bond, rewards } = useClaimBondFormData();
 
   return bond?.isShortage
     ? bond.delta.gt(rewards?.available ?? Zero)

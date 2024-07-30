@@ -1,18 +1,10 @@
 import { secretConfig } from 'config';
 import { PATH } from 'consts/urls';
-import {
-  ChangeManagerRolePage,
-  ResetManagerRolePage,
-} from 'features/change-role';
+import { ChangeManagerRolePage } from 'features/change-role';
 import { SplashPage } from 'features/welcome';
 import { getFaqList } from 'lib/faqList';
 import { GetStaticProps } from 'next';
-import {
-  GateActiveUser,
-  GateLoaded,
-  GateNodeOperator,
-  GateRoleManager,
-} from 'shared/gates';
+import { GateActiveUser, GateLoaded, GateNodeOperator } from 'shared/gates';
 import { Navigate } from 'shared/navigate';
 
 const Page = () => (
@@ -23,9 +15,7 @@ const Page = () => (
       <GateNodeOperator
         fallback={<Navigate path={PATH.ROLES} fallback={<SplashPage />} />}
       >
-        <GateRoleManager fallback={<ResetManagerRolePage />}>
-          <ChangeManagerRolePage />
-        </GateRoleManager>
+        <ChangeManagerRolePage />
       </GateNodeOperator>
     </GateActiveUser>
   </GateLoaded>

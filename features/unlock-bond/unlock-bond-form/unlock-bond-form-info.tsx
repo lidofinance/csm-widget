@@ -2,8 +2,7 @@ import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
-import { useUnlockBondFormData } from './context';
-import { UnlockBondFormInputType } from './context/types';
+import { UnlockBondFormInputType, useUnlockBondFormData } from './context';
 
 export const UnlockBondFormInfo = () => {
   const {

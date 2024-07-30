@@ -7,10 +7,7 @@ import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
 import { useTxModalStagesRemoveKeys } from '../hooks/use-tx-modal-stages-remove-keys';
-import {
-  RemoveKeysFormDataContextValue,
-  RemoveKeysFormInputType,
-} from './types';
+import { RemoveKeysFormNetworkData, RemoveKeysFormInputType } from './types';
 
 type RemoveKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -76,7 +73,7 @@ export const useRemoveKeysSubmit = ({
   const removeKeys = useCallback(
     async (
       { selection: { start, count } }: RemoveKeysFormInputType,
-      { nodeOperatorId, info }: RemoveKeysFormDataContextValue,
+      { nodeOperatorId, info }: RemoveKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(

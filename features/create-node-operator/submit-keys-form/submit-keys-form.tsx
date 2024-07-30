@@ -5,8 +5,8 @@ import { SubmitKeysFormProvider } from './context';
 import { useModifyContext } from 'providers/modify-provider';
 import { FormBlock } from 'shared/components';
 import { FormControllerStyled } from 'shared/hook-form/form-controller';
-import { AddressesInputs } from './controls/addresses-inputs';
 import { AmountInput } from './controls/amount-input';
+import { CustomAddressesSection } from './controls/custom-addresses-section';
 import { KeysInput } from './controls/keys-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
@@ -22,7 +22,7 @@ export const SubmitKeysForm: FC = memo(() => {
           <TokenSelect />
           <KeysInput />
           <AmountInput />
-          {customAddresses && <AddressesInputs />}
+          {customAddresses && <CustomAddressesSection />}
           <SubmitButton />
         </FormControllerStyled>
         <SubmitKeysFormInfo />

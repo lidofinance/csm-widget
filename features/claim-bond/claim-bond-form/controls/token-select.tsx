@@ -1,39 +1,41 @@
 import { TOKENS } from 'consts/tokens';
 import { FormTitle, TokenAmount } from 'shared/components';
-import { TokenButtonsHookForm } from 'shared/hook-form/controls/token-buttons-hook-form';
-import { useClaimBondFormData } from '../context';
-import { useMaxClaimValue } from '../hooks/use-max-claim-value';
+import { TokenButtonsHookForm } from 'shared/hook-form/controls';
+import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import { useWatch } from 'react-hook-form';
 
 export const TokenSelect: React.FC = () => {
-  const { loading } = useClaimBondFormData();
+  const claimRewards = useWatch<ClaimBondFormInputType, 'claimRewards'>({
+    name: 'claimRewards',
+  });
+  const { loading, maxValues } = useClaimBondFormData();
   const isLoading = loading.isBondLoading || loading.isRewardsLoading;
-  const availableToClaim = useMaxClaimValue();
 
   return (
     <>
       <FormTitle>Choose a token to claim</FormTitle>
       <TokenButtonsHookForm
-        disabled={availableToClaim[TOKENS.ETH].eq(0)}
+        disabled={maxValues?.[TOKENS.ETH][Number(claimRewards)]?.eq(0)}
         options={{
           [TOKENS.ETH]: (
             <TokenAmount
               token={TOKENS.ETH}
-              amount={availableToClaim[TOKENS.ETH]}
+              amount={maxValues?.[TOKENS.ETH][Number(claimRewards)]}
               loading={isLoading}
             />
           ),
           [TOKENS.STETH]: (
             <TokenAmount
               token={TOKENS.STETH}
-              amount={availableToClaim[TOKENS.STETH]}
+              amount={maxValues?.[TOKENS.STETH][Number(claimRewards)]}
               loading={isLoading}
             />
           ),
           [TOKENS.WSTETH]: (
             <TokenAmount
               token={TOKENS.WSTETH}
-              amount={availableToClaim[TOKENS.WSTETH]}
-              loading={isLoading || !availableToClaim[TOKENS.WSTETH]}
+              amount={maxValues?.[TOKENS.WSTETH][Number(claimRewards)]}
+              loading={isLoading || loading.isMaxValuesLoading}
             />
           ),
         }}

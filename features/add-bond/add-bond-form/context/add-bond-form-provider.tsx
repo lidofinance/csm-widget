@@ -10,37 +10,38 @@ import {
 import { useFormControllerRetry } from 'shared/hook-form/form-controller';
 import { useAddBondFormNetworkData } from './use-add-bond-form-network-data';
 import { useAddBondSubmit } from './use-add-bond-submit';
-import {
-  AddBondFormDataContextValue,
-  type AddBondFormInputType,
-} from './types';
+import { AddBondFormNetworkData, type AddBondFormInputType } from './types';
+import { useAddBondValidation } from './use-add-bond-validation';
+import { useFormRevalidate } from './use-form-revalidate';
 
-export const useAddBondFormData = useFormData<AddBondFormDataContextValue>;
+export const useAddBondFormData = useFormData<AddBondFormNetworkData>;
 
 export const AddBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useAddBondFormNetworkData();
+  const [networkData, revalidate] = useAddBondFormNetworkData();
+  const validationResolver = useAddBondValidation(networkData);
 
   // TODO: default token = token_with_max_amount
   const formObject = useForm<AddBondFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
-      amount: undefined,
+      bondAmount: undefined,
     },
+    resolver: validationResolver,
     mode: 'onChange',
   });
+
+  useFormRevalidate(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
   const { addBond } = useAddBondSubmit({
-    onConfirm: networkData.revalidate,
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
   const formControllerValue: FormControllerContextValueType<
     AddBondFormInputType,
-    AddBondFormDataContextValue
+    AddBondFormNetworkData
   > = useMemo(
     () => ({
       onSubmit: addBond,
@@ -51,7 +52,7 @@ export const AddBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>

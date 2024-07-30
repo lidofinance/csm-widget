@@ -14,10 +14,7 @@ import { NodeOperatorId, RewardProof } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import {
-  ClaimBondFormDataContextValue,
-  ClaimBondFormInputType,
-} from '../context';
+import { ClaimBondFormNetworkData, ClaimBondFormInputType } from '../context';
 import { useTxModalStagesClaimBond } from '../hooks/use-tx-modal-stages-claim-bond';
 
 type UseClaimBondOptions = {
@@ -197,7 +194,7 @@ export const useClaimBondSubmit = ({
   const claimBond = useCallback(
     async (
       { amount = Zero, token, claimRewards }: ClaimBondFormInputType,
-      { nodeOperatorId, rewards }: ClaimBondFormDataContextValue,
+      { nodeOperatorId, rewards }: ClaimBondFormNetworkData,
     ): Promise<boolean> => {
       invariant(token, 'Token is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');

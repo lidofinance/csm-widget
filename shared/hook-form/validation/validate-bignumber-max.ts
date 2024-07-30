@@ -1,5 +1,5 @@
-import { ValidationError } from './validation-error';
 import type { BigNumber } from 'ethers';
+import { ValidationError } from './validation-error';
 
 export const validateBignumberMax = (
   field: string,

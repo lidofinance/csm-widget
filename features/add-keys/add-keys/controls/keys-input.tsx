@@ -1,14 +1,14 @@
 import { Link } from '@lidofinance/lido-ui';
-import { SubmitKeysFormInputType } from 'features/create-node-operator/submit-keys-form/context';
 import { useFormState } from 'react-hook-form';
 import { FormTitle } from 'shared/components';
-import { DepositDataInputHookForm } from 'shared/hook-form/controls/deposit-data-input-hook-form';
+import { DepositDataInputHookForm } from 'shared/hook-form/controls';
+import { AddKeysFormInputType } from '../context';
 
 export const KeysInput = () => {
-  const { errors } = useFormState<SubmitKeysFormInputType>({
-    name: 'depositData',
+  const { errors } = useFormState<AddKeysFormInputType>({
+    name: ['depositData', 'rawDepositData'],
   });
-  const error = errors.depositData?.message;
+  const error = errors.rawDepositData?.message || errors.depositData?.message;
 
   return (
     <>

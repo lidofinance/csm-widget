@@ -11,7 +11,5 @@ export const GateNodeOperator: FC<PropsWithChildren<Props>> = ({
 }) => {
   const { active } = useNodeOperator();
 
-  if (!active) return fallback;
-
-  return children;
+  return <>{!active ? fallback : children}</>;
 };

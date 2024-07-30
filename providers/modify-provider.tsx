@@ -12,7 +12,11 @@ import invariant from 'tiny-invariant';
 
 type ModifyContextValue = {
   customAddresses: boolean;
+  referrer?: string;
 };
+
+const CUSTOM_ADDRESSES_QUERY = 'addrs';
+const REFERRER_QUERY = 'ref';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -31,19 +35,31 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     'custom-address',
     false,
   );
+
+  // TODO: may be store Referrer in LocalStorage ?
+  const [referrer, setReferrer] = useSessionStorage<string | undefined>(
+    'referrer',
+    undefined,
+  );
   const { query, isReady } = useRouter();
 
   useEffect(() => {
-    if (isReady && query.addrs !== undefined) {
+    if (isReady && query[CUSTOM_ADDRESSES_QUERY] !== undefined) {
       setCustomAddresses(true);
     }
-  }, [isReady, query.addrs, setCustomAddresses]);
+    if (isReady && query[REFERRER_QUERY]) {
+      // TODO: validate referrer
+      // TODO: do not rewrite referrer ?
+      setReferrer(query[REFERRER_QUERY] as string);
+    }
+  }, [isReady, query, setCustomAddresses, setReferrer]);
 
   const value: ModifyContextValue = useMemo(
     () => ({
       customAddresses,
+      referrer,
     }),
-    [customAddresses],
+    [customAddresses, referrer],
   );
   return (
     <ModifyContext.Provider value={value}>{children}</ModifyContext.Provider>

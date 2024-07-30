@@ -1,7 +1,7 @@
 import { DataTable, DataTableRow, Divider } from '@lidofinance/lido-ui';
 import { useWatch } from 'react-hook-form';
 import { useNodeOperatorQueue } from 'shared/hooks';
-import { SubmitKeysFormInputType } from './context/types';
+import { SubmitKeysFormInputType } from './context';
 
 export const SubmitKeysFormInfo = () => {
   const [depositData] = useWatch<SubmitKeysFormInputType, ['depositData']>({

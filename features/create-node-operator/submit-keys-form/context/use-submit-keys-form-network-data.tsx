@@ -2,15 +2,19 @@ import { useEthereumBalance } from '@lido-sdk/react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useCallback, useMemo } from 'react';
 import {
+  useCsmCurveId,
   useCsmEarlyAdoption,
   useCsmEarlyAdoptionProofConsumed,
+  useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
-import { useCsmCurveId } from 'shared/hooks/useCsmCurveId';
 import { type SubmitKeysFormNetworkData } from './types';
 
-export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
+export const useSubmitKeysFormNetworkData = (): [
+  SubmitKeysFormNetworkData,
+  () => Promise<void>,
+] => {
   const {
     data: etherBalance,
     update: updateEtherBalance,
@@ -35,18 +39,26 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
 
   const { update: updateConsumed } = useCsmEarlyAdoptionProofConsumed();
 
+  const {
+    data: maxStakeEther,
+    update: updateMaxStakeEther,
+    initialLoading: isMaxStakeEtherLoading,
+  } = useStakingLimitInfo();
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance(),
       updateWstethBalance(),
       updateEtherBalance(),
       updateConsumed(),
+      updateMaxStakeEther(),
     ]);
   }, [
     updateStethBalance,
     updateWstethBalance,
     updateEtherBalance,
     updateConsumed,
+    updateMaxStakeEther,
   ]);
 
   const loading = useMemo(
@@ -56,6 +68,7 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
       isEtherBalanceLoading,
       isEaProofLoading,
       isCurveIdLoading,
+      isMaxStakeEtherLoading,
     }),
     [
       isStethBalanceLoading,
@@ -63,16 +76,20 @@ export const useSubmitKeysFormNetworkData = (): SubmitKeysFormNetworkData => {
       isEtherBalanceLoading,
       isEaProofLoading,
       isCurveIdLoading,
+      isMaxStakeEtherLoading,
     ],
   );
 
-  return {
-    stethBalance,
-    wstethBalance,
-    etherBalance,
-    eaProof: ea?.proof,
-    curveId,
-    loading,
+  return [
+    {
+      stethBalance,
+      wstethBalance,
+      etherBalance,
+      eaProof: ea?.proof,
+      curveId,
+      maxStakeEther,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

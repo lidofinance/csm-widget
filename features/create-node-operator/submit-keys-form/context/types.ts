@@ -1,20 +1,19 @@
 import { type TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
-import { DepositData, LoadingRecord, Proof } from 'types';
+import { DepositDataInputType } from 'shared/hook-form/form-controller';
+import { LoadingRecord, Proof } from 'types';
 import { Address } from 'wagmi';
-
-export type SubmitKeysFormDataContextValue = SubmitKeysFormNetworkData & {
-  bondAmount?: BigNumber;
-};
 
 export type SubmitKeysFormInputType = {
   token: TOKENS;
-  rawDepositData?: string;
-  depositData: DepositData[];
+  bondAmount?: BigNumber;
   referral?: Address;
   rewardsAddress?: string;
   managerAddress?: string;
-};
+  extendedManagerPermissions: boolean;
+  specifyCustomAddresses: boolean;
+  specifyReferrrer: boolean;
+} & DepositDataInputType;
 
 export type SubmitKeysFormNetworkData = {
   etherBalance?: BigNumber;
@@ -22,13 +21,13 @@ export type SubmitKeysFormNetworkData = {
   wstethBalance?: BigNumber;
   eaProof?: Proof;
   curveId?: BigNumber;
+  maxStakeEther?: BigNumber | null;
   loading: LoadingRecord<
-    'etherBalance' | 'stethBalance' | 'wstethBalance' | 'eaProof' | 'curveId'
+    | 'etherBalance'
+    | 'stethBalance'
+    | 'wstethBalance'
+    | 'eaProof'
+    | 'curveId'
+    | 'maxStakeEther'
   >;
-  revalidate: () => Promise<void>;
-};
-
-export type SubmitKeysFormValidationContext = {
-  gasCost: BigNumber;
-  etherBalance: BigNumber;
 };

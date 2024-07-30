@@ -9,10 +9,7 @@ import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { getFeeData } from 'utils/getFeeData';
-import {
-  UnlockBondFormDataContextValue,
-  UnlockBondFormInputType,
-} from '../context';
+import { UnlockBondFormNetworkData, UnlockBondFormInputType } from '../context';
 import { useTxModalStagesUnlockBond } from '../hooks/use-tx-modal-stages-unlock-bond';
 
 type UseUnlockBondOptions = {
@@ -80,7 +77,7 @@ export const useUnlockBondSubmit = ({
   const unlockBond = useCallback(
     async (
       { amount }: UnlockBondFormInputType,
-      { nodeOperatorId }: UnlockBondFormDataContextValue,
+      { nodeOperatorId }: UnlockBondFormNetworkData,
     ): Promise<boolean> => {
       invariant(amount, 'BondAmount is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');

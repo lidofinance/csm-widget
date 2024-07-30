@@ -3,7 +3,7 @@ import { TOKENS } from 'consts/tokens';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
-import { RemoveKeysFormInputType } from './context/types';
+import { RemoveKeysFormInputType } from './context';
 import { useBondBalanceAfterRemoveKeys } from './hooks/useBondBalanceAfterRemoveKeys';
 import { useRemovalFeeByKeysCount } from './hooks/useRemovalFeeByKeysCount';
 

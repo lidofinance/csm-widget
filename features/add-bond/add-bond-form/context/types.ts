@@ -2,11 +2,9 @@ import { BigNumber } from 'ethers';
 import { type TOKENS } from 'consts/tokens';
 import { BondBalance, LoadingRecord, NodeOperatorId } from 'types';
 
-export type AddBondFormDataContextValue = AddBondFormNetworkData;
-
 export type AddBondFormInputType = {
   token: TOKENS;
-  amount?: BigNumber;
+  bondAmount?: BigNumber;
 };
 
 export type AddBondFormNetworkData = {
@@ -15,12 +13,8 @@ export type AddBondFormNetworkData = {
   stethBalance?: BigNumber;
   wstethBalance?: BigNumber;
   bond?: BondBalance;
+  maxStakeEther?: BigNumber | null;
   loading: LoadingRecord<
-    'etherBalance' | 'stethBalance' | 'wstethBalance' | 'bond'
+    'etherBalance' | 'stethBalance' | 'wstethBalance' | 'bond' | 'maxStakeEther'
   >;
-  revalidate: () => Promise<void>;
-};
-
-export type AddBondFormValidationContext = {
-  etherBalance: BigNumber;
 };

@@ -11,7 +11,5 @@ export const GateActiveUser: FC<PropsWithChildren<Props>> = ({
 }) => {
   const { active } = useAccount();
 
-  if (!active) return fallback;
-
-  return children;
+  return <>{!active ? fallback : children}</>;
 };
