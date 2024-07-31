@@ -6,29 +6,33 @@ export type ConfirmModalProps = {
   onReject: () => void;
 };
 
-export const useConfirmModal = (
-  modal: ModalComponentType<ConfirmModalProps>,
+export const useConfirmModal = <T>(
+  modal: ModalComponentType<ConfirmModalProps & T>,
 ) => {
   const m = useModal(modal);
 
-  return useCallback(async () => {
-    return new Promise((resolve) => {
-      m.openModal({
-        onConfirm: () => {
-          resolve(true);
-          m.closeModal();
-        },
-        onReject: () => {
-          resolve(false);
-          m.closeModal();
-        },
+  return useCallback(
+    async (props: T) => {
+      return new Promise((resolve) => {
+        m.openModal({
+          ...props,
+          onConfirm: () => {
+            resolve(true);
+            m.closeModal();
+          },
+          onReject: () => {
+            resolve(false);
+            m.closeModal();
+          },
+        });
       });
-    });
-  }, [m]);
+    },
+    [m],
+  );
 };
 
-export const getUseConfirmModal = (
-  modal: ModalComponentType<ConfirmModalProps>,
+export const getUseConfirmModal = <T>(
+  modal: ModalComponentType<ConfirmModalProps & T>,
 ) => {
   return () => useConfirmModal(modal);
 };
