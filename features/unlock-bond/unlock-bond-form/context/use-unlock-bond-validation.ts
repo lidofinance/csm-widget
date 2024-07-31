@@ -14,6 +14,7 @@ import type {
   UnlockBondFormInputType,
   UnlockBondFormNetworkData,
 } from './types';
+import { Zero } from '@ethersproject/constants';
 
 export const useUnlockBondValidation = (
   networkData: UnlockBondFormNetworkData,
@@ -27,30 +28,28 @@ export const useUnlockBondValidation = (
 
         const { lockedBond, etherBalance } = await dataPromise;
 
-        if (amount?.gt(0)) {
-          invariant(etherBalance);
-          invariant(lockedBond);
+        invariant(etherBalance);
+        invariant(lockedBond);
 
-          validateEtherAmount('amount', amount, TOKENS.ETH);
+        validateEtherAmount('amount', amount, TOKENS.ETH);
 
-          validateBignumberMax(
-            'amount',
-            amount,
+        validateBignumberMax(
+          'amount',
+          amount ?? Zero,
+          etherBalance,
+          `Entered ${getTokenDisplayName(TOKENS.ETH)} amount exceeds your balance of ${formatEther(
             etherBalance,
-            `Entered ${getTokenDisplayName(TOKENS.ETH)} amount exceeds your balance of ${formatEther(
-              etherBalance,
-            )}`, // TODO: text
-          );
+          )}`, // TODO: text
+        );
 
-          validateBignumberMax(
-            'amount',
-            amount,
+        validateBignumberMax(
+          'amount',
+          amount ?? Zero,
+          lockedBond,
+          `Entered ${getTokenDisplayName(TOKENS.ETH)} amount exceeds locked bond of ${formatEther(
             lockedBond,
-            `Entered ${getTokenDisplayName(TOKENS.ETH)} amount exceeds locked bond of ${formatEther(
-              lockedBond,
-            )}`, // TODO: text
-          );
-        }
+          )}`, // TODO: text
+        );
 
         return {
           values,

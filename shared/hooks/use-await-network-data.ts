@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useAwaiter } from 'shared/hooks';
-import { awaitWithTimeout } from 'utils';
 
 // time that validation function waits for context data to resolve
 // should be enough to load token balances/tvl/max&min amounts and other contract data
@@ -19,7 +18,5 @@ export const useAwaitNetworkData = <T extends BaseNetworkData>(
     return allLoaded ? data : undefined;
   }, [loading, data]);
 
-  const promise = useAwaiter(loadedData).awaiter;
-
-  return useMemo(() => awaitWithTimeout(promise, timeout), [promise, timeout]);
+  return useAwaiter(loadedData, timeout).awaiter;
 };

@@ -12,24 +12,22 @@ export const useAddBondValidation = (networkData: AddBondFormNetworkData) => {
   const dataPromise = useAwaitNetworkData(networkData);
 
   return useCallback<Resolver<AddBondFormInputType>>(
-    async (values, _, options) => {
+    async (values) => {
       try {
         const { token, bondAmount } = values;
 
         const { stethBalance, wstethBalance, etherBalance, maxStakeEther } =
           await dataPromise;
 
-        if (options.names?.includes('bondAmount') && bondAmount?.gt(0)) {
-          validateBondAmount({
-            token,
-            bondAmount,
-            maxStakeEther,
-            etherBalance,
-            stethBalance,
-            wstethBalance,
-          });
-          validateEtherAmount('bondAmount', bondAmount, token);
-        }
+        validateBondAmount({
+          token,
+          bondAmount,
+          maxStakeEther,
+          etherBalance,
+          stethBalance,
+          wstethBalance,
+        });
+        validateEtherAmount('bondAmount', bondAmount, token);
 
         return {
           values,
