@@ -15,7 +15,6 @@ type ModifyContextValue = {
   referrer?: string;
 };
 
-const CUSTOM_ADDRESSES_QUERY = 'addrs';
 const REFERRER_QUERY = 'ref';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
@@ -44,9 +43,6 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
   const { query, isReady } = useRouter();
 
   useEffect(() => {
-    if (isReady && query[CUSTOM_ADDRESSES_QUERY] !== undefined) {
-      setCustomAddresses(true);
-    }
     if (isReady && query['mode'] === 'extended') {
       setCustomAddresses(true);
     }
