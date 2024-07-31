@@ -2,7 +2,6 @@ export * from './add-extra-wei';
 export * from './address-or-zero';
 export * from './appCookies';
 export * from './applyGasLimitRatio';
-export * from './await-with-timeout';
 export * from './check-rpc-url';
 export * from './compare-lowercase';
 export * from './compare-with-router-path';

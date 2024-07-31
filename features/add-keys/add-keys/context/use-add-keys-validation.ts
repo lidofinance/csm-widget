@@ -20,17 +20,19 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
         const { stethBalance, wstethBalance, etherBalance, maxStakeEther } =
           await dataPromise;
 
-        if (options.names?.includes('bondAmount'))
-          validateBondAmount({
-            token,
-            bondAmount,
-            maxStakeEther,
-            etherBalance,
-            stethBalance,
-            wstethBalance,
-          });
+        validateBondAmount({
+          token,
+          bondAmount,
+          maxStakeEther,
+          etherBalance,
+          stethBalance,
+          wstethBalance,
+        });
 
-        if (options.names?.includes('depositData'))
+        if (
+          options.names?.includes('depositData') ||
+          options.names?.includes('rawDepositData')
+        )
           await validateDepositData({ depositData, chainId });
 
         return {
@@ -40,8 +42,8 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
       } catch (error) {
         return handleResolverValidationError(
           error,
-          'SubmitKeysForm',
-          'referral',
+          'AddKeysForm',
+          'depositData',
         );
       }
     },

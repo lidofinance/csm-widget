@@ -34,17 +34,19 @@ export const useSubmitKeysValidation = (
         const { stethBalance, wstethBalance, etherBalance, maxStakeEther } =
           await dataPromise;
 
-        if (options.names?.includes('bondAmount'))
-          validateBondAmount({
-            token,
-            bondAmount,
-            maxStakeEther,
-            etherBalance,
-            stethBalance,
-            wstethBalance,
-          });
+        validateBondAmount({
+          token,
+          bondAmount,
+          maxStakeEther,
+          etherBalance,
+          stethBalance,
+          wstethBalance,
+        });
 
-        if (options.names?.includes('depositData'))
+        if (
+          options.names?.includes('depositData') ||
+          options.names?.includes('rawDepositData')
+        )
           await validateDepositData({ depositData, chainId });
 
         if (specifyCustomAddresses) {
@@ -74,7 +76,7 @@ export const useSubmitKeysValidation = (
           errors: {},
         };
       } catch (error) {
-        return handleResolverValidationError(error, 'AddKeysForm', 'token');
+        return handleResolverValidationError(error, 'SubmitKeysForm', 'token');
       }
     },
     [chainId, dataPromise],

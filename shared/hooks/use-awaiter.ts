@@ -31,7 +31,7 @@ const createAwaiter = <T>() => {
 
 // this return up-to-date promise that resolves if value is trueish
 // helps async functions to wait for stalled data
-export const useAwaiter = <T>(value: T | undefined, timeout = 10) => {
+export const useAwaiter = <T>(value: T | undefined, timeout = 0) => {
   const awaiterState = useRef(useMemo(() => createAwaiter<T>(), []));
 
   useEffect(() => {
@@ -44,5 +44,17 @@ export const useAwaiter = <T>(value: T | undefined, timeout = 10) => {
       awaiterState.current.resolver.resolve(value);
     }
   }, [timeout, value]);
+
+  useEffect(() => {
+    if (timeout) {
+      const timer = setTimeout(
+        () =>
+          awaiterState.current.resolver.reject(new Error('promise timeout')),
+        timeout,
+      );
+      return () => clearTimeout(timer);
+    }
+  }, [timeout]);
+
   return awaiterState.current;
 };

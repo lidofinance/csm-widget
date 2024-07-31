@@ -2,6 +2,7 @@ import { useCallback, useMemo } from 'react';
 import { useAwaiter } from 'shared/hooks';
 import { RemoveKeysFormNetworkData } from './types';
 
+// TODO: select invalid key
 export const useGetDefaultValues = ({
   loading: { isKeysLoading, isInfoLoading },
 }: RemoveKeysFormNetworkData) => {

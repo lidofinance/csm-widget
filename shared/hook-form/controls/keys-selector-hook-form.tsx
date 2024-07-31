@@ -1,5 +1,5 @@
 import { Address, Checkbox } from '@lidofinance/lido-ui';
-import { ChangeEventHandler, FC, useCallback } from 'react';
+import { ChangeEventHandler, FC, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Latice, Stack } from 'shared/components';
 
@@ -12,7 +12,7 @@ export const KeysSelectorHookForm: FC<Props> = ({
   options,
   fieldName = 'selection',
 }) => {
-  const { setValue, watch } =
+  const { setValue, watch, trigger } =
     useFormContext<Record<string, { start: number; count: number }>>();
   const { start, count } = watch(fieldName);
 
@@ -37,10 +37,18 @@ export const KeysSelectorHookForm: FC<Props> = ({
         newCount = i - start;
       }
 
-      setValue(fieldName, { start: newStart, count: newCount });
+      setValue(
+        fieldName,
+        { start: newStart, count: newCount },
+        { shouldValidate: true },
+      );
     },
     [count, fieldName, setValue, start],
   );
+
+  useEffect(() => {
+    void trigger(fieldName);
+  }, [fieldName, trigger]);
 
   // TODO: key status
   return (

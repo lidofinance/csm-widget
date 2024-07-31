@@ -211,7 +211,7 @@ export const useChangeRoleSubmit = ({
         !isRevoke &&
         isPropose &&
         role === ROLES.REWARDS &&
-        !(await confirmRewardsRole())
+        !(await confirmRewardsRole({}))
       ) {
         return false;
       }
@@ -220,7 +220,7 @@ export const useChangeRoleSubmit = ({
         !isRevoke &&
         isPropose &&
         proposedAddress &&
-        !(await confirmRepropose())
+        !(await confirmRepropose({}))
       ) {
         return false;
       }

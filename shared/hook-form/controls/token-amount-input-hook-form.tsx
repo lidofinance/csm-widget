@@ -27,11 +27,13 @@ export const TokenAmountInputHookForm = ({
 }: TokenAmountInputHookFormProps) => {
   const {
     field,
-    fieldState: { error },
+    fieldState: { error, isTouched },
   } = useController({ name: fieldName });
-  const hasErrorHighlight = isValidationErrorTypeValidate(error?.type);
+  const hasErrorHighlight =
+    isTouched && isValidationErrorTypeValidate(error?.type);
   // allows to show error state without message
   const errorMessage = hasErrorHighlight && (error?.message || true);
+
   return (
     <InputAmount
       {...props}

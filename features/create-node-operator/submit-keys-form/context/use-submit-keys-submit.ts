@@ -18,6 +18,7 @@ import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
 import { formatKeys } from 'utils/formatKeys';
 import { getFeeData } from 'utils/getFeeData';
 import { Address } from 'wagmi';
+import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { getAddedNodeOperator } from '../utils';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
@@ -229,6 +230,8 @@ export const useSubmitKeysSubmit = ({
   const isUserOrZero = useAddressCompare(true);
   const saveKeys = useKeysCache();
 
+  const confirmCustomAddresses = useConfirmCustomAddressesModal();
+
   const submitKeys = useCallback(
     async (
       {
@@ -257,7 +260,16 @@ export const useSubmitKeysSubmit = ({
         ? extendedManagerPermissionsRaw
         : false;
 
-      // TODO: show modals to confirm custom addresses
+      if (
+        specifyCustomAddresses &&
+        !(await confirmCustomAddresses({
+          managerAddress,
+          rewardsAddress,
+          extendedManagerPermissions,
+        }))
+      ) {
+        return false;
+      }
 
       try {
         let permit: GatherPermitSignatureResult | undefined;
@@ -330,6 +342,7 @@ export const useSubmitKeysSubmit = ({
       }
     },
     [
+      confirmCustomAddresses,
       getSubmitKeysMethod,
       txModalStages,
       onConfirm,

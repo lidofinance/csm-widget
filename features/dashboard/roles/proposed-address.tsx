@@ -13,7 +13,7 @@ export const ProposedAddress: FC<Props> = ({ address }) => {
       <Warning text="Pending change:" />
       <LightThemeProvider>
         <Text size="xxs">
-          <Address address={address} symbols={6} />
+          <Address as="span" address={address} symbols={6} />
         </Text>
       </LightThemeProvider>
     </RoleBlockProposed>
