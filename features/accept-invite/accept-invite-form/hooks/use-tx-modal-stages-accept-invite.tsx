@@ -1,48 +1,54 @@
 import { ROLES } from 'consts/roles';
+import { DescriptorId, getRoleTitle } from 'shared/node-operator';
 import {
   SuccessText,
   TransactionModalTransitStage,
+  TxStagePending,
+  TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { TxStageSignOperationRole } from 'shared/transaction-modal/tx-stages-composed/tx-stage-role-operation';
-import { Address } from 'wagmi';
+import { NodeOperatorId } from 'types';
 
+// TODO: not proposing
 const STAGE_OPERATION_ARGS = {
-  operationText: 'Proposing role change',
+  operationText: 'Accepting address change',
 };
+
+type Props = { id: NodeOperatorId; role: ROLES };
 
 const getTxModalStagesAcceptInvite = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: (address: Address, role: ROLES) =>
+  sign: ({ id, role }: Props) =>
     transitStage(
-      <TxStageSignOperationRole
-        {...STAGE_OPERATION_ARGS}
-        role={role}
-        address={address}
+      <TxStageSign
+        title={`You are accepting ${getRoleTitle(role)} address change`}
+        description={<DescriptorId id={id} />}
       />,
     ),
 
-  pending: (address: Address, role: ROLES, txHash?: string) =>
+  pending: ({ id, role }: Props, txHash?: string) =>
     transitStage(
-      <TxStageSignOperationRole
-        {...STAGE_OPERATION_ARGS}
-        role={role}
-        address={address}
-        isPending
+      <TxStagePending
+        title={`You are accepting ${getRoleTitle(role)} address change`}
+        description={<DescriptorId id={id} />} // TODO: remove description?
         txHash={txHash}
       />,
     ),
 
-  success: (address: Address, role: ROLES, txHash?: string) =>
+  success: ({ id, role }: Props, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title={<>Your Node Operator {role} address change proposed</>}
+        title={
+          <>
+            Accepted {role} address change of <DescriptorId id={id} />
+          </>
+        }
         description={
           <SuccessText
             operationText={STAGE_OPERATION_ARGS.operationText}

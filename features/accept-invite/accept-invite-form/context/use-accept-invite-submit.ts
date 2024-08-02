@@ -66,7 +66,7 @@ export const useAcceptInviteSubmit = ({
       try {
         const role = invite.role;
 
-        txModalStages.sign('0x0', role);
+        txModalStages.sign({ role, id: invite.id });
 
         const tx = await getTx(role, {
           nodeOperatorId: invite.id,
@@ -77,7 +77,7 @@ export const useAcceptInviteSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending('0x0', role, txHash);
+        txModalStages.pending({ role, id: invite.id }, txHash);
 
         if (typeof tx === 'object') {
           await runWithTransactionLogger(
@@ -88,7 +88,7 @@ export const useAcceptInviteSubmit = ({
 
         await onConfirm?.();
 
-        txModalStages.success('0x0', role, txHash);
+        txModalStages.success({ role, id: invite.id }, txHash);
 
         // TODO: move to onConfirm
         appendNO(invite);
