@@ -8,6 +8,7 @@ import { Accordion, Text } from '@lidofinance/lido-ui';
 import { ReactComponent as BeaconchaIcon } from 'assets/icons/beaconcha.svg';
 import { ReactComponent as LidoIcon } from 'assets/icons/lido.svg';
 import { useNodeOperatorKeys } from 'shared/hooks';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 const getFeesMonitoringLink = (id?: NodeOperatorId) =>
   `https://fees-monitoring-holesky.testnet.fi/operatorInfo?stakingModuleIndex=4&operatorIndex=${id}`;
@@ -37,6 +38,7 @@ export const ExternalSection: FC = () => {
           title="beaconcha.in v2"
           icon={<BeaconchaIcon />}
           href={getBeaconchaLink(keys)}
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink}
         >
           Dashboard displays statistics of your validators (up to 20 in free
           plan)
@@ -45,6 +47,9 @@ export const ExternalSection: FC = () => {
           title="Lido operators"
           icon={<LidoIcon />}
           href={getOperatorsPortalLink(id)}
+          matomoEvent={
+            MATOMO_CLICK_EVENTS_TYPES.dashboardExternalOperatorsPortalLink
+          }
         >
           Shows details about invalid keys
         </ExternalButtonLink>
@@ -52,6 +57,9 @@ export const ExternalSection: FC = () => {
           title="Lido MEV monitoring"
           icon={<LidoIcon />}
           href={getFeesMonitoringLink(id)}
+          matomoEvent={
+            MATOMO_CLICK_EVENTS_TYPES.dashboardExternalFeesMonitoringLink
+          }
         >
           Tracks missed slots and blocks with incorrect fee recipient/MEV relays
         </ExternalButtonLink>

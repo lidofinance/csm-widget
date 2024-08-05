@@ -1,8 +1,8 @@
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useFormState } from 'react-hook-form';
+import { FormTitle, MatomoLink } from 'shared/components';
 import { DepositDataInputHookForm } from 'shared/hook-form/controls';
 import { SubmitKeysFormInputType } from '../context';
-import { FormTitle } from 'shared/components';
-import { Link } from '@lidofinance/lido-ui';
 
 export const KeysInput = () => {
   const { errors } = useFormState<SubmitKeysFormInputType>({
@@ -14,9 +14,12 @@ export const KeysInput = () => {
     <>
       <FormTitle>
         Upload deposit data
-        <Link href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm">
+        <MatomoLink
+          href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm"
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
+        >
           Learn more
-        </Link>
+        </MatomoLink>
       </FormTitle>
       <DepositDataInputHookForm error={error} />
     </>

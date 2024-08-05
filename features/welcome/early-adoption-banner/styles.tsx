@@ -26,4 +26,8 @@ export const BlockStyled = styled(Block)`
       rgba(249, 129, 183, 0) 100%
     ),
     linear-gradient(97deg, #00a3ff 36.36%, #2238ff 99.58%);
+
+  a {
+    flex: 1 0 48%;
+  }
 `;

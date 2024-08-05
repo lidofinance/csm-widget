@@ -1,3 +1,4 @@
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
@@ -21,7 +22,11 @@ export const KeysSection: FC = () => {
   const eaTarget = status?.isPublicRelease ? undefined : eaLimit?.toNumber();
 
   return (
-    <SectionBlock title="Keys" href={PATH.KEYS}>
+    <SectionBlock
+      title="Keys"
+      href={PATH.KEYS}
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink}
+    >
       {info && (
         <Stack direction="column" gap="sm">
           <Row>
@@ -38,7 +43,7 @@ export const KeysSection: FC = () => {
             <Item
               title="Limit"
               count={
-                info.targetLimitMode > 0 ? info.targetLimit : eaTarget ?? '—'
+                info.targetLimitMode > 0 ? info.targetLimit : (eaTarget ?? '—')
               }
               variant="secondary"
               tooltip={

@@ -6,6 +6,7 @@ import { useCsmStatus } from 'shared/hooks/useCsmStatus';
 import { Connect, Fallback } from 'shared/wallet';
 import { EarlyAdoptionBanner } from './early-adoption-banner';
 import { WelcomeSection } from './welcome-section';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const Welcome: FC = () => {
   const { active, isConnected } = useAccount();
@@ -19,8 +20,17 @@ export const Welcome: FC = () => {
       {isWrongChain && <Fallback />}
       <WelcomeSection>
         <Stack wrap>
-          <Connect fullwidth>I am a Node Operator</Connect>
-          <Connect fullwidth color="secondary">
+          <Connect
+            fullwidth
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator}
+          >
+            I am a Node Operator
+          </Connect>
+          <Connect
+            fullwidth
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.connectToBecomeNodeOperator}
+            color="secondary"
+          >
             Become a Node Operator
           </Connect>
         </Stack>

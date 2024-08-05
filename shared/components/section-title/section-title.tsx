@@ -8,13 +8,14 @@ import {
 import { ReactComponent as RoundedArrowIcon } from 'assets/icons/rounded-arrow.svg';
 import { LocalLink } from '../local-link';
 
-type Props = {
-  href?: ComponentProps<typeof LocalLink>['href'];
-};
+type Props = Partial<
+  Pick<ComponentProps<typeof LocalLink>, 'href' | 'matomoEvent'>
+>;
 
 export const SectionTitle: FC<PropsWithChildren<Props>> = ({
-  href,
   children,
+  href,
+  ...props
 }) => {
   const hasDecorator = !!href;
 
@@ -22,7 +23,7 @@ export const SectionTitle: FC<PropsWithChildren<Props>> = ({
     <SectionHeaderStyle>
       <SectionTitleStyle>{children}</SectionTitleStyle>
       {hasDecorator && (
-        <SectionHeaderLinkStyle href={href}>
+        <SectionHeaderLinkStyle href={href} {...props}>
           <RoundedArrowIcon />
         </SectionHeaderLinkStyle>
       )}
