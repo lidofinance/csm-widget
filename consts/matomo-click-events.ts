@@ -44,6 +44,22 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
   // FAQ
   faqExpand = 'faqExpand',
+  // pages
+  pageWelcome = 'pageWelcome',
+  pageStarterPack = 'pageStarterPack',
+  pageNotReleased = 'pageNotReleased',
+  pageMaintenance = 'pageMaintenance',
+  pageCreateNodeOperator = 'pageCreateNodeOperator',
+  pageDashboard = 'pageDashboard',
+  pageAddKeys = 'pageAddKeys',
+  pageViewKeys = 'pageViewKeys',
+  pageRemoveKeys = 'pageRemoveKeys',
+  pageAddBond = 'pageAddBond',
+  pageClaimBond = 'pageClaimBond',
+  pageUnlockBond = 'pageUnlockBond',
+  pageInboxRequests = 'pageInboxRequests',
+  pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
+  pageChangeRewardsRole = 'pageChangeRewardsRole',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
@@ -205,5 +221,81 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Open faq item',
     prefixed`faq_item_open`,
+  ],
+  // pages
+  [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: [
+    MATOMO_APP_NAME,
+    'View page "Welcome"',
+    prefixed`view_welcome_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageStarterPack]: [
+    MATOMO_APP_NAME,
+    'View page "StarterPack"',
+    prefixed`view_starter_pack_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageNotReleased]: [
+    MATOMO_APP_NAME,
+    'View page "NotReleased"',
+    prefixed`view_not_released_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageMaintenance]: [
+    MATOMO_APP_NAME,
+    'View page "Maintenance"',
+    prefixed`view_maintenance_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageCreateNodeOperator]: [
+    MATOMO_APP_NAME,
+    'View page "CreateNodeOperator"',
+    prefixed`view_create_node_operator_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageDashboard]: [
+    MATOMO_APP_NAME,
+    'View page "Dashboard"',
+    prefixed`view_dashboard_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageAddKeys]: [
+    MATOMO_APP_NAME,
+    'View page "AddKeys"',
+    prefixed`view_add_keys_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageViewKeys]: [
+    MATOMO_APP_NAME,
+    'View page "ViewKeys"',
+    prefixed`view_view_keys_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageRemoveKeys]: [
+    MATOMO_APP_NAME,
+    'View page "RemoveKeys"',
+    prefixed`view_remove_keys_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageAddBond]: [
+    MATOMO_APP_NAME,
+    'View page "AddBond"',
+    prefixed`view_add_bond_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageClaimBond]: [
+    MATOMO_APP_NAME,
+    'View page "ClaimBond"',
+    prefixed`view_claim_bond_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageUnlockBond]: [
+    MATOMO_APP_NAME,
+    'View page "UnlockBond"',
+    prefixed`view_unlock_bond_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: [
+    MATOMO_APP_NAME,
+    'View page "InboxRequests"',
+    prefixed`view_inbox_requests_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageChangeManagerRole]: [
+    MATOMO_APP_NAME,
+    'View page "ChangeManagerRole"',
+    prefixed`view_change_manager_role_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageChangeRewardsRole]: [
+    MATOMO_APP_NAME,
+    'View page "ChangeRewardsRole"',
+    prefixed`view_change_rewards_role_page`,
   ],
 };

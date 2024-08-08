@@ -1,4 +1,4 @@
-import { ReactNode, FC, PropsWithChildren } from 'react';
+import { ReactNode, FC, PropsWithChildren, useEffect } from 'react';
 
 import { ContainerProps } from '@lidofinance/lido-ui';
 
@@ -15,6 +15,7 @@ import { WarningLine } from '../warning-line';
 import { config } from 'config';
 import { DummyHeader } from './header/dummy-header';
 import { FeedbackLine } from '../feedback-line';
+import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 
 type Props = {
   title?: ReactNode;
@@ -23,14 +24,19 @@ type Props = {
   dummy?: boolean;
 };
 
-export const Layout: FC<PropsWithChildren<Props>> = ({
+export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
   children,
   dummy,
   title,
   subtitle,
   containerSize,
+  matomoEvent,
 }) => {
   const titlesCount = [title, subtitle].filter(Boolean).length;
+
+  useEffect(() => {
+    trackMatomoEvent(matomoEvent);
+  }, [matomoEvent]);
 
   return (
     <>
