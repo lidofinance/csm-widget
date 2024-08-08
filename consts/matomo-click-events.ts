@@ -1,7 +1,5 @@
 import { MatomoEventType } from '@lidofinance/analytics-matomo';
 
-// TODO: review
-
 export const MATOMO_APP_NAME = 'CSM_Widget';
 export const MATOMO_APP_PREFIX = 'csm_widget';
 
@@ -32,6 +30,11 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
   // Create NO
   depositDataLearnMore = 'depositDataLearnMore',
+  customAddressDescription = 'customAddressDescription',
+  managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
+  // Common
+  etherscanTxLink = 'etherscanTxLink',
+  feedbackFormLink = 'feedbackFormLink',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -40,6 +43,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalFeesMonitoringLink = 'dashboardExternalFeesMonitoringLink',
   dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
   // FAQ
+  faqExpand = 'faqExpand',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
@@ -144,6 +148,27 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Upload Deposit Data learn more» link on Upload form',
     prefixed`deposti_data_learn_more_link`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.customAddressDescription]: [
+    MATOMO_APP_NAME,
+    'Click «Detailed description of custom addresses» link on Create NO form',
+    prefixed`cusstom_address_description_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription]: [
+    MATOMO_APP_NAME,
+    'Click «Detailed description of manager permission type» link on Create NO form',
+    prefixed`manager_address_permission_type_link`,
+  ],
+  // Common
+  [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: [
+    MATOMO_APP_NAME,
+    'Click «View on Etherscan» link on TX modal',
+    prefixed`etherscan_transaction_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: [
+    MATOMO_APP_NAME,
+    'Click «Submit report with form» link',
+    prefixed`feedback_form_link`,
+  ],
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: [
     MATOMO_APP_NAME,
@@ -174,5 +199,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «Lido operators» on Dashboard screen',
     prefixed`dashboard_external_operators_link`,
+  ],
+  // FAQ
+  [MATOMO_CLICK_EVENTS_TYPES.faqExpand]: [
+    MATOMO_APP_NAME,
+    'Open faq item',
+    prefixed`faq_item_open`,
   ],
 };
