@@ -5,18 +5,21 @@ import { useNodeOperator } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import {
   GatherPermitSignatureResult,
+  MultisigBreakError,
   useAddressCompare,
   useCSModuleWeb3,
-  useCsmPermitSignature,
   useKeysCache,
+  usePermitOrApprove,
+  useSendTx,
 } from 'shared/hooks';
-import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
 import invariant from 'tiny-invariant';
-import { NodeOperatorId, Proof } from 'types';
-import { addExtraWei, addressOrZero, runWithTransactionLogger } from 'utils';
-import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
-import { formatKeys } from 'utils/formatKeys';
-import { getFeeData } from 'utils/getFeeData';
+import { Proof } from 'types';
+import {
+  addExtraWei,
+  addressOrZero,
+  formatKeys,
+  runWithTransactionLogger,
+} from 'utils';
 import { Address } from 'wagmi';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
@@ -36,186 +39,66 @@ type MethodParams = {
   rewardsAddress: Address;
   managerAddress: Address;
   extendedManagerPermissions: boolean;
-  permit: GatherPermitSignatureResult | undefined;
+  permit: GatherPermitSignatureResult;
   eaProof: Proof;
   referral: Address;
 };
 
 // this encapsulates eth/steth/wsteth flows
-const useSubmitKeysMethods = () => {
-  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+const useSubmitKeysTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
-
-  const submitETH = useCallback(
-    async ({
-      bondAmount,
-      keysCount,
-      publicKeys,
-      signatures,
-      managerAddress,
-      rewardsAddress: rewardAddress,
-      extendedManagerPermissions,
-      eaProof,
-      referral,
-    }: MethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        value: bondAmount,
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [
-        keysCount,
-        publicKeys,
-        signatures,
-        {
-          managerAddress,
-          rewardAddress,
-          extendedManagerPermissions,
-        },
-        eaProof,
-        referral,
-      ] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.addNodeOperatorETH(...params, overrides);
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.addNodeOperatorETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  const submitSTETH = useCallback(
-    async ({
-      keysCount,
-      publicKeys,
-      signatures,
-      managerAddress,
-      rewardsAddress: rewardAddress,
-      extendedManagerPermissions,
-      permit,
-      eaProof,
-      referral,
-    }: MethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-      invariant(permit, 'must have permit');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [
-        keysCount,
-        publicKeys,
-        signatures,
-        {
-          managerAddress,
-          rewardAddress,
-          extendedManagerPermissions,
-        },
-        permit,
-        eaProof,
-        referral,
-      ] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.addNodeOperatorStETH(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.addNodeOperatorStETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  const submitWSTETH = useCallback(
-    async ({
-      keysCount,
-      publicKeys,
-      signatures,
-      managerAddress,
-      rewardsAddress: rewardAddress,
-      extendedManagerPermissions,
-      permit,
-      eaProof,
-      referral,
-    }: MethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-      invariant(permit, 'must have permit');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [
-        keysCount,
-        publicKeys,
-        signatures,
-        {
-          managerAddress,
-          rewardAddress,
-          extendedManagerPermissions,
-        },
-        permit,
-        eaProof,
-        referral,
-      ] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.addNodeOperatorWstETH(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.addNodeOperatorWstETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
+  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    (token: TOKENS) => {
+    (token: TOKENS, params: MethodParams) => {
       switch (token) {
         case TOKENS.ETH:
-          return { method: submitETH, needsPermit: false };
+          return CSModuleWeb3.populateTransaction.addNodeOperatorETH(
+            params.keysCount,
+            params.publicKeys,
+            params.signatures,
+            {
+              managerAddress: params.managerAddress,
+              rewardAddress: params.rewardsAddress,
+              extendedManagerPermissions: params.extendedManagerPermissions,
+            },
+            params.eaProof,
+            params.referral,
+            {
+              value: params.bondAmount,
+            },
+          );
         case TOKENS.STETH:
-          return { method: submitSTETH, needsPermit: true };
+          return CSModuleWeb3.populateTransaction.addNodeOperatorStETH(
+            params.keysCount,
+            params.publicKeys,
+            params.signatures,
+            {
+              managerAddress: params.managerAddress,
+              rewardAddress: params.rewardsAddress,
+              extendedManagerPermissions: params.extendedManagerPermissions,
+            },
+            params.permit,
+            params.eaProof,
+            params.referral,
+          );
         case TOKENS.WSTETH:
-          return { method: submitWSTETH, needsPermit: true };
+          return CSModuleWeb3.populateTransaction.addNodeOperatorWstETH(
+            params.keysCount,
+            params.publicKeys,
+            params.signatures,
+            {
+              managerAddress: params.managerAddress,
+              rewardAddress: params.rewardsAddress,
+              extendedManagerPermissions: params.extendedManagerPermissions,
+            },
+            params.permit,
+            params.eaProof,
+            params.referral,
+          );
       }
     },
-    [submitETH, submitSTETH, submitWSTETH],
+    [CSModuleWeb3],
   );
 };
 
@@ -225,8 +108,9 @@ export const useSubmitKeysSubmit = ({
 }: SubmitKeysOptions) => {
   const { txModalStages } = useTxModalStagesSubmitKeys();
   const { append: appendNO } = useNodeOperator();
-  const getSubmitKeysMethod = useSubmitKeysMethods();
-  const gatherPermitSignature = useCsmPermitSignature();
+  const getTx = useSubmitKeysTx();
+  const getPermitOrApprove = usePermitOrApprove();
+  const sendTx = useSendTx();
   const isUserOrZero = useAddressCompare(true);
   const saveKeys = useKeysCache();
 
@@ -272,20 +156,17 @@ export const useSubmitKeysSubmit = ({
       }
 
       try {
-        let permit: GatherPermitSignatureResult | undefined;
-        const { method, needsPermit } = getSubmitKeysMethod(token);
-
-        if (needsPermit) {
-          txModalStages.signPermit();
-          const bondAmountRaw = addExtraWei(bondAmount, token);
-          permit = await gatherPermitSignature(bondAmountRaw, token);
-        }
+        const { permit } = await getPermitOrApprove({
+          token,
+          amount: addExtraWei(bondAmount, token),
+          txModalStages,
+        });
 
         const { keysCount, publicKeys, signatures } = formatKeys(depositData);
 
         txModalStages.sign(keysCount, bondAmount, token);
 
-        const callback = await method({
+        const tx = await getTx(token, {
           bondAmount,
           keysCount,
           publicKeys,
@@ -298,32 +179,26 @@ export const useSubmitKeysSubmit = ({
           referral: addressOrZero(referral),
         });
 
-        const tx = await runWithTransactionLogger(
+        const [txHash, waitTx] = await runWithTransactionLogger(
           'AddNodeOperator signing',
-          callback,
+          () => sendTx({ tx }),
         );
-        const txHash = typeof tx === 'string' ? tx : tx.hash;
 
         txModalStages.pending(keysCount, bondAmount, token, txHash);
 
-        let nodeOperatorId: NodeOperatorId | undefined = undefined;
+        const receipt = await runWithTransactionLogger(
+          'AddNodeOperator block confirmation',
+          waitTx,
+        );
 
-        if (typeof tx === 'object') {
-          const receipt = await runWithTransactionLogger(
-            'Wrap block confirmation',
-            () => tx.wait(),
-          );
+        const nodeOperatorId = getAddedNodeOperator(receipt);
 
-          nodeOperatorId = getAddedNodeOperator(
-            receipt,
-          )?.toString() as NodeOperatorId;
-        }
-
+        // TODO: possible add timeout
         await onConfirm?.();
 
         txModalStages.success(nodeOperatorId, txHash);
 
-        // TODO: didn't updated modal
+        // TODO: move to onConfirm
         if (nodeOperatorId) {
           appendNO({
             id: nodeOperatorId,
@@ -332,10 +207,16 @@ export const useSubmitKeysSubmit = ({
           });
         }
 
+        // TODO: move to onConfirm
         void saveKeys(depositData);
 
         return true;
       } catch (error) {
+        if (error instanceof MultisigBreakError) {
+          txModalStages.successMultisig();
+          return true;
+        }
+
         console.warn(error);
         txModalStages.failed(error, onRetry);
         return false;
@@ -343,11 +224,12 @@ export const useSubmitKeysSubmit = ({
     },
     [
       confirmCustomAddresses,
-      getSubmitKeysMethod,
+      getPermitOrApprove,
       txModalStages,
+      getTx,
       onConfirm,
       saveKeys,
-      gatherPermitSignature,
+      sendTx,
       appendNO,
       isUserOrZero,
       onRetry,

@@ -6,21 +6,17 @@ import { getCSMContractAddress } from 'consts/csm-contracts';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber, TypedDataDomain } from 'ethers';
 import { useCallback } from 'react';
-import { useAccount } from 'shared/hooks/use-account';
+import { useAccount } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { useChainId } from 'wagmi';
 import { useSTETHContractRPC, useWSTETHContractRPC } from './useLidoContracts';
 
 export type GatherPermitSignatureResult = {
+  value: BigNumber;
+  deadline: BigNumber;
   v: number;
   r: string;
   s: string;
-  deadline: BigNumber;
-  value: BigNumber;
-  chainId: number;
-  nonce: string;
-  owner: string;
-  spender: string;
 };
 
 const INFINITY_DEADLINE_VALUE = MaxUint256;
@@ -69,7 +65,7 @@ export const useCsmPermitSignature = () => {
         }
       };
       const tokenProvider = getTokenProvider(token);
-      const deadline = INFINITY_DEADLINE_VALUE;
+      const deadline = INFINITY_DEADLINE_VALUE; // TODO: set finite deadline
 
       let domain: TypedDataDomain;
       if (isStethPermit(tokenProvider)) {
@@ -108,15 +104,11 @@ export const useCsmPermitSignature = () => {
         .then(splitSignature)
         .then((signature) => {
           return {
+            value: amount,
+            deadline,
             v: signature.v,
             r: signature.r,
             s: signature.s,
-            value: amount,
-            deadline,
-            chainId: chainId,
-            nonce: message.nonce,
-            owner,
-            spender,
           };
         });
     },

@@ -6,10 +6,7 @@ import {
 
 import { TOKENS } from 'consts/tokens';
 import type { BigNumber } from 'ethers';
-import {
-  TxStagePermit,
-  TxStageSuccess,
-} from 'shared/transaction-modal/tx-stages-basic';
+import { TxStageSuccess } from 'shared/transaction-modal/tx-stages-basic';
 import { TxStageSignOperationKeys } from 'shared/transaction-modal/tx-stages-composed/tx-stage-keys-operation';
 import { NodeOperatorId } from 'types';
 
@@ -21,8 +18,6 @@ const getTxModalStagesSubmitKeys = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
-
-  signPermit: () => transitStage(<TxStagePermit />),
 
   sign: (keysCount: number, amount: BigNumber, token: TOKENS) =>
     transitStage(

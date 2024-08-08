@@ -2,15 +2,12 @@ import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
 import { ROLES } from 'consts/roles';
-import { useCSModuleWeb3 } from 'shared/hooks';
-import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
+import { useNodeOperator } from 'providers/node-operator-provider';
+import { MultisigBreakError, useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
-import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
-import { getFeeData } from 'utils/getFeeData';
-import { AcceptInviteFormInputType } from './types';
 import { useTxModalStagesAcceptInvite } from '../hooks/use-tx-modal-stages-accept-invite';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { AcceptInviteFormInputType } from './types';
 
 // TODO: move to hooks
 type UseAcceptInviteOptions = {
@@ -23,82 +20,24 @@ type AcceptInviteMethodParams = {
 };
 
 // encapsulates eth/steth/wsteth flows
-const useAcceptInviteMethods = () => {
-  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+const useAcceptInviteTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
-
-  const methodReward = useCallback(
-    async ({ nodeOperatorId }: AcceptInviteMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId] as const;
-
-      // const originalGasLimit =
-      //   await CSModuleWeb3.estimateGas.confirmNodeOperatorRewardAddressChange(
-      //     ...params,
-      //     overrides,
-      //   );
-
-      // const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.confirmNodeOperatorRewardAddressChange(...params, {
-          ...overrides,
-          // gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  const methodManager = useCallback(
-    async ({ nodeOperatorId }: AcceptInviteMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.confirmNodeOperatorManagerAddressChange(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.confirmNodeOperatorManagerAddressChange(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
+  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    (role: ROLES) => {
+    (role: ROLES, params: AcceptInviteMethodParams) => {
       switch (role) {
         case ROLES.MANAGER:
-          return methodManager;
+          return CSModuleWeb3.populateTransaction.confirmNodeOperatorManagerAddressChange(
+            params.nodeOperatorId,
+          );
         case ROLES.REWARDS:
-          return methodReward;
+          return CSModuleWeb3.populateTransaction.confirmNodeOperatorRewardAddressChange(
+            params.nodeOperatorId,
+          );
       }
     },
-    [methodManager, methodReward],
+    [CSModuleWeb3],
   );
 };
 
@@ -109,7 +48,8 @@ export const useAcceptInviteSubmit = ({
   const { txModalStages } = useTxModalStagesAcceptInvite();
   const { append: appendNO } = useNodeOperator();
 
-  const getMethod = useAcceptInviteMethods();
+  const getTx = useAcceptInviteTx();
+  const sendTx = useSendTx();
 
   const acceptInvite = useCallback(
     async ({ invite }: AcceptInviteFormInputType): Promise<boolean> => {
@@ -117,26 +57,24 @@ export const useAcceptInviteSubmit = ({
 
       try {
         const role = invite.manager ? ROLES.MANAGER : ROLES.REWARDS;
-        const method = getMethod(role);
 
         txModalStages.sign('0x0', role);
 
-        const callback = await method({
+        const tx = await getTx(role, {
           nodeOperatorId: invite.id,
         });
 
-        const tx = await runWithTransactionLogger(
+        const [txHash, waitTx] = await runWithTransactionLogger(
           'AcceptInvite signing',
-          callback,
+          () => sendTx({ tx }),
         );
-        const txHash = typeof tx === 'string' ? tx : tx.hash;
 
         txModalStages.pending('0x0', role, txHash);
 
         if (typeof tx === 'object') {
           await runWithTransactionLogger(
             'AcceptInvite block confirmation',
-            () => tx.wait(),
+            waitTx,
           );
         }
 
@@ -144,16 +82,22 @@ export const useAcceptInviteSubmit = ({
 
         txModalStages.success('0x0', role, txHash);
 
+        // TODO: move to onConfirm
         appendNO(invite);
 
         return true;
       } catch (error) {
+        if (error instanceof MultisigBreakError) {
+          txModalStages.successMultisig();
+          return true;
+        }
+
         console.warn(error);
         txModalStages.failed(error, onRetry);
         return false;
       }
     },
-    [getMethod, txModalStages, onConfirm, appendNO, onRetry],
+    [getTx, txModalStages, onConfirm, appendNO, sendTx, onRetry],
   );
 
   return {

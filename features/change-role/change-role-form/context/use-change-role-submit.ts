@@ -3,13 +3,10 @@ import invariant from 'tiny-invariant';
 
 import { AddressZero } from '@ethersproject/constants';
 import { ROLES } from 'consts/roles';
-import { useCSModuleWeb3 } from 'shared/hooks';
-import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
+import { MultisigBreakError, useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
-import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
-import { getFeeData } from 'utils/getFeeData';
-import { ChangeRoleFormNetworkData, ChangeRoleFormInputType } from '.';
+import { ChangeRoleFormInputType, ChangeRoleFormNetworkData } from '.';
 import {
   useConfirmReproposeModal,
   useConfirmRewardsRoleModal,
@@ -27,156 +24,45 @@ type ChangeRoleMethodParams = {
 };
 
 // encapsulates eth/steth/wsteth flows
-const useChangeRoleMethods = () => {
-  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+const useChangeRoleTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
-
-  const methodRewards = useCallback(
-    async ({ address, nodeOperatorId }: ChangeRoleMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId, address] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.proposeNodeOperatorRewardAddressChange(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.proposeNodeOperatorRewardAddressChange(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-  const methodManager = useCallback(
-    async ({ address, nodeOperatorId }: ChangeRoleMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId, address] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.proposeNodeOperatorManagerAddressChange(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.proposeNodeOperatorManagerAddressChange(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-  const methodRewardsChange = useCallback(
-    async ({ nodeOperatorId, address }: ChangeRoleMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId, address] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.changeNodeOperatorRewardAddress(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.changeNodeOperatorRewardAddress(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-  const methodManagerReset = useCallback(
-    async ({ nodeOperatorId }: ChangeRoleMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.resetNodeOperatorManagerAddress(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.resetNodeOperatorManagerAddress(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
+  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    ({
-      isRewardsChange,
-      isManagerReset,
-      role,
-    }: {
-      isRewardsChange: boolean;
-      isManagerReset: boolean;
-      role: ROLES;
-    }) => {
+    (
+      {
+        role,
+        isManagerReset,
+        isRewardsChange,
+      }: { role: ROLES; isRewardsChange: boolean; isManagerReset: boolean },
+      params: ChangeRoleMethodParams,
+    ) => {
       switch (true) {
         case isRewardsChange:
-          return methodRewardsChange;
+          return CSModuleWeb3.populateTransaction.changeNodeOperatorRewardAddress(
+            params.nodeOperatorId,
+            params.address,
+          );
         case isManagerReset:
-          return methodManagerReset;
+          return CSModuleWeb3.populateTransaction.resetNodeOperatorManagerAddress(
+            params.nodeOperatorId,
+          );
         case role === ROLES.REWARDS:
-          return methodRewards;
+          return CSModuleWeb3.populateTransaction.proposeNodeOperatorRewardAddressChange(
+            params.nodeOperatorId,
+            params.address,
+          );
         case role === ROLES.MANAGER:
-          return methodManager;
+          return CSModuleWeb3.populateTransaction.proposeNodeOperatorManagerAddressChange(
+            params.nodeOperatorId,
+            params.address,
+          );
         default: {
           throw new Error('Not implemented yet: true case');
         }
       }
     },
-    [methodManager, methodManagerReset, methodRewards, methodRewardsChange],
+    [CSModuleWeb3],
   );
 };
 
@@ -186,7 +72,9 @@ export const useChangeRoleSubmit = ({
 }: UseChangeRoleOptions) => {
   const { txModalStages } = useTxModalStagesChangeRole();
 
-  const getMethod = useChangeRoleMethods();
+  const getTx = useChangeRoleTx();
+  const sendTx = useSendTx();
+
   const confirmRepropose = useConfirmReproposeModal();
   const confirmRewardsRole = useConfirmRewardsRoleModal();
 
@@ -226,28 +114,24 @@ export const useChangeRoleSubmit = ({
       }
 
       try {
-        const method = getMethod({ role, isManagerReset, isRewardsChange });
-
         txModalStages.sign(address, role);
 
-        const callback = await method({
-          nodeOperatorId,
-          address,
-        });
-
-        const tx = await runWithTransactionLogger(
-          'ChangeRole signing',
-          callback,
+        const tx = await getTx(
+          { role, isRewardsChange, isManagerReset },
+          {
+            nodeOperatorId,
+            address,
+          },
         );
-        const txHash = typeof tx === 'string' ? tx : tx.hash;
+
+        const [txHash, waitTx] = await runWithTransactionLogger(
+          'ChangeRole signing',
+          () => sendTx({ tx }),
+        );
 
         txModalStages.pending(address, role, txHash);
 
-        if (typeof tx === 'object') {
-          await runWithTransactionLogger('ChangeRole block confirmation', () =>
-            tx.wait(),
-          );
-        }
+        await runWithTransactionLogger('ChangeRole block confirmation', waitTx);
 
         await onConfirm?.();
 
@@ -255,6 +139,11 @@ export const useChangeRoleSubmit = ({
 
         return true;
       } catch (error) {
+        if (error instanceof MultisigBreakError) {
+          txModalStages.successMultisig();
+          return true;
+        }
+
         console.warn(error);
         txModalStages.failed(error, onRetry);
         return false;
@@ -263,9 +152,10 @@ export const useChangeRoleSubmit = ({
     [
       confirmRewardsRole,
       confirmRepropose,
-      getMethod,
+      getTx,
       txModalStages,
       onConfirm,
+      sendTx,
       onRetry,
     ],
   );

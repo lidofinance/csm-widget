@@ -3,13 +3,15 @@ import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
 import { TOKENS } from 'consts/tokens';
-import { useCSAccountingRPC, useCSModuleWeb3 } from 'shared/hooks';
-import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
+import {
+  MultisigBreakError,
+  useCSAccountingRPC,
+  useCSModuleWeb3,
+  useSendTx,
+} from 'shared/hooks';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
-import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
-import { getFeeData } from 'utils/getFeeData';
-import { UnlockBondFormNetworkData, UnlockBondFormInputType } from '../context';
+import { UnlockBondFormInputType, UnlockBondFormNetworkData } from '../context';
 import { useTxModalStagesUnlockBond } from '../hooks/use-tx-modal-stages-unlock-bond';
 
 type UseUnlockBondOptions = {
@@ -22,47 +24,20 @@ type UnlockBondMethodParams = {
   amount: BigNumber;
 };
 
-// TODO: unlock bond method
 // encapsulates eth/steth/wsteth flows
-const useUnlockBondMethods = () => {
-  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+const useUnlockBondTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
+  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
-  const methodETH = useCallback(
-    async ({ nodeOperatorId, amount }: UnlockBondMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        value: amount,
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.compensateELRewardsStealingPenalty(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.compensateELRewardsStealingPenalty(...params, {
-          ...overrides,
-          gasLimit,
-        });
+  return useCallback(
+    (params: UnlockBondMethodParams) => {
+      return CSModuleWeb3.populateTransaction.compensateELRewardsStealingPenalty(
+        params.nodeOperatorId,
+        { value: params.amount },
+      );
     },
-    [CSModuleWeb3, staticRpcProvider],
+    [CSModuleWeb3],
   );
-
-  return useCallback(() => {
-    return { method: methodETH };
-  }, [methodETH]);
 };
 
 export const useUnlockBondSubmit = ({
@@ -72,7 +47,8 @@ export const useUnlockBondSubmit = ({
   const { txModalStages } = useTxModalStagesUnlockBond();
   const CSAccounting = useCSAccountingRPC();
 
-  const getMethod = useUnlockBondMethods();
+  const getTx = useUnlockBondTx();
+  const sendTx = useSendTx();
 
   const unlockBond = useCallback(
     async (
@@ -83,44 +59,42 @@ export const useUnlockBondSubmit = ({
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       try {
-        const { method } = getMethod();
-
         txModalStages.sign(amount, TOKENS.ETH);
 
-        const callback = await method({
+        const tx = await getTx({
           nodeOperatorId,
           amount,
         });
 
-        const tx = await runWithTransactionLogger(
+        const [txHash, waitTx] = await runWithTransactionLogger(
           'UnlockBond signing',
-          callback,
+          () => sendTx({ tx }),
         );
-        const txHash = typeof tx === 'string' ? tx : tx.hash;
 
         txModalStages.pending(amount, TOKENS.ETH, txHash);
 
-        if (typeof tx === 'object') {
-          await runWithTransactionLogger('UnlockBond block confirmation', () =>
-            tx.wait(),
-          );
-        }
+        await runWithTransactionLogger('UnlockBond block confirmation', waitTx);
 
         await onConfirm?.();
 
-        // TODO: revalidate in provider
+        // TODO: move to onConfirm
         const current = await CSAccounting.getActualLockedBond(nodeOperatorId);
 
         txModalStages.success(current, TOKENS.ETH, txHash);
 
         return true;
       } catch (error) {
+        if (error instanceof MultisigBreakError) {
+          txModalStages.successMultisig();
+          return true;
+        }
+
         console.warn(error);
         txModalStages.failed(error, onRetry);
         return false;
       }
     },
-    [getMethod, txModalStages, CSAccounting, onConfirm, onRetry],
+    [getTx, txModalStages, onConfirm, CSAccounting, sendTx, onRetry],
   );
 
   return {

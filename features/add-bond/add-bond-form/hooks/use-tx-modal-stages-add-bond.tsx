@@ -4,7 +4,6 @@ import { TOKENS } from 'consts/tokens';
 import {
   TransactionModalTransitStage,
   TxStageOperationSucceedBalanceShown,
-  TxStagePermit,
   TxStageSignOperationAmount,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
@@ -18,8 +17,6 @@ const getTxModalStagesAddBond = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
-
-  signPermit: () => transitStage(<TxStagePermit />),
 
   sign: (amount: BigNumber, token: TOKENS) =>
     transitStage(

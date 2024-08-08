@@ -1,7 +1,6 @@
 import {
   SuccessText,
   TransactionModalTransitStage,
-  TxStagePermit,
   TxStageSuccess,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
@@ -17,8 +16,6 @@ const getTxModalStagesRemoveKeys = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
-
-  signPermit: () => transitStage(<TxStagePermit />),
 
   sign: (keysCount: number, nodeOperatorId: NodeOperatorId) =>
     transitStage(
