@@ -4,12 +4,12 @@ import { BytesLike } from 'ethers/lib/utils.js';
 import { useCallback } from 'react';
 import {
   GatherPermitSignatureResult,
-  MultisigBreakError,
   useCSModuleWeb3,
   useKeysCache,
   usePermitOrApprove,
   useSendTx,
 } from 'shared/hooks';
+import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { NodeOperatorId } from 'types';
 import { addExtraWei, formatKeys, runWithTransactionLogger } from 'utils';
@@ -36,32 +36,41 @@ const useAddKeysTx = () => {
   invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    (token: TOKENS, params: MethodParams) => {
+    async (token: TOKENS, params: MethodParams) => {
       switch (token) {
         case TOKENS.ETH:
-          return CSModuleWeb3.populateTransaction.addValidatorKeysETH(
-            params.nodeOperatorId,
-            params.keysCount,
-            params.publicKeys,
-            params.signatures,
-            { value: params.bondAmount },
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.addValidatorKeysETH(
+              params.nodeOperatorId,
+              params.keysCount,
+              params.publicKeys,
+              params.signatures,
+              { value: params.bondAmount },
+            ),
+            txName: 'addValidatorKeysETH',
+          };
         case TOKENS.STETH:
-          return CSModuleWeb3.populateTransaction.addValidatorKeysStETH(
-            params.nodeOperatorId,
-            params.keysCount,
-            params.publicKeys,
-            params.signatures,
-            params.permit,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.addValidatorKeysStETH(
+              params.nodeOperatorId,
+              params.keysCount,
+              params.publicKeys,
+              params.signatures,
+              params.permit,
+            ),
+            txName: 'addValidatorKeysStETH',
+          };
         case TOKENS.WSTETH:
-          return CSModuleWeb3.populateTransaction.addValidatorKeysWstETH(
-            params.nodeOperatorId,
-            params.keysCount,
-            params.publicKeys,
-            params.signatures,
-            params.permit,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.addValidatorKeysWstETH(
+              params.nodeOperatorId,
+              params.keysCount,
+              params.publicKeys,
+              params.signatures,
+              params.permit,
+            ),
+            txName: 'addValidatorKeysWstETH',
+          };
       }
     },
     [CSModuleWeb3],
@@ -108,7 +117,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
         const [txHash, waitTx] = await runWithTransactionLogger(
           'AddKeys signing',
-          () => sendTx({ tx }),
+          () => sendTx(tx),
         );
 
         txModalStages.pending(
@@ -130,14 +139,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
         return true;
       } catch (error) {
-        if (error instanceof MultisigBreakError) {
-          txModalStages.successMultisig();
-          return true;
-        }
-
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
     [

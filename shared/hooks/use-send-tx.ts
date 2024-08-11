@@ -1,17 +1,19 @@
-import { useCallback } from 'react';
-import { useCurrentStaticRpcProvider } from './use-current-static-rpc-provider';
-import { PopulatedTransaction } from 'ethers';
 import { useSDK } from '@lido-sdk/react';
-import invariant from 'tiny-invariant';
-import { applyGasLimitRatio, getFeeData } from 'utils';
-import { estimateGas } from 'utils/estimate-gas';
-import { useIsMultisig } from './useIsMultisig';
 import { config } from 'config';
+import { PopulatedTransaction } from 'ethers';
+import { useCallback } from 'react';
+import invariant from 'tiny-invariant';
+import { applyGasLimitRatio, getFeeData, trackMatomoTxEvent } from 'utils';
+import { estimateGas } from 'utils/estimate-gas';
+import { useCurrentStaticRpcProvider } from './use-current-static-rpc-provider';
+import { useIsMultisig } from './useIsMultisig';
+import { MULTISIG_BREAK } from 'shared/transaction-modal';
 
 type SendTxProps = {
   tx: PopulatedTransaction;
   shouldApplyGasLimitRatio?: boolean;
   shouldApplyCalldataSuffix?: boolean;
+  txName: string;
 };
 
 export const useSendTx = () => {
@@ -19,20 +21,36 @@ export const useSendTx = () => {
   const { providerWeb3 } = useSDK();
   const { staticRpcProvider } = useCurrentStaticRpcProvider();
 
+  const performTx = useCallback(
+    async (tx: PopulatedTransaction, txName: string) => {
+      invariant(providerWeb3, 'providerWeb3 not defined');
+      trackMatomoTxEvent(txName, 'prepare');
+
+      const txHash = await providerWeb3
+        .getSigner()
+        .sendUncheckedTransaction(tx);
+
+      trackMatomoTxEvent(txName, 'done');
+
+      return txHash;
+    },
+    [providerWeb3],
+  );
+
   return useCallback(
     async ({
       tx,
+      txName,
       shouldApplyGasLimitRatio = true,
       shouldApplyCalldataSuffix = false,
     }: SendTxProps) => {
-      invariant(providerWeb3, 'providerWeb3 not defined');
       invariant(isMultisigLoading === false, 'isMultisig in not loaded');
 
       if (shouldApplyCalldataSuffix) applyCalldataSuffix(tx);
 
       if (isMultisig) {
-        await providerWeb3.getSigner().sendUncheckedTransaction(tx);
-        throw multisigBreak;
+        await performTx(tx, txName);
+        throw MULTISIG_BREAK;
       }
 
       const { maxFeePerGas, maxPriorityFeePerGas } =
@@ -47,16 +65,14 @@ export const useSendTx = () => {
         ? applyGasLimitRatio(gasLimit)
         : gasLimit;
 
-      const txHash = await providerWeb3
-        .getSigner()
-        .sendUncheckedTransaction(tx);
+      const txHash = await performTx(tx, txName);
 
       return [
         txHash,
         () => staticRpcProvider.waitForTransaction(txHash),
       ] as const;
     },
-    [providerWeb3, isMultisigLoading, isMultisig, staticRpcProvider],
+    [isMultisigLoading, isMultisig, staticRpcProvider, performTx],
   );
 };
 
@@ -66,9 +82,3 @@ export const applyCalldataSuffix = (tx: PopulatedTransaction) => {
   tx.data = tx.data + config.STAKE_WIDGET_METRIC_SUFFIX;
   return tx;
 };
-
-export class MultisigBreakError extends Error {
-  isMultisigBreak = true;
-}
-
-const multisigBreak = new MultisigBreakError();

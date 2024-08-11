@@ -4,13 +4,13 @@ import invariant from 'tiny-invariant';
 
 import { TOKENS } from 'consts/tokens';
 import {
-  MultisigBreakError,
   useCSAccountingRPC,
   useCSModuleWeb3,
   usePermitOrApprove,
   useSendTx,
 } from 'shared/hooks';
 import { GatherPermitSignatureResult } from 'shared/hooks/use-csm-permit-signature';
+import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
 import { addExtraWei, runWithTransactionLogger } from 'utils';
 import { AddBondFormInputType, AddBondFormNetworkData } from '../context';
@@ -33,27 +33,36 @@ const useAddBondTx = () => {
   invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    (token: TOKENS, params: AddBondMethodParams) => {
+    async (token: TOKENS, params: AddBondMethodParams) => {
       switch (token) {
         case TOKENS.ETH:
-          return CSModuleWeb3.populateTransaction.depositETH(
-            params.nodeOperatorId,
-            {
-              value: params.amount,
-            },
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.depositETH(
+              params.nodeOperatorId,
+              {
+                value: params.amount,
+              },
+            ),
+            txName: 'depositETH',
+          };
         case TOKENS.STETH:
-          return CSModuleWeb3.populateTransaction.depositStETH(
-            params.nodeOperatorId,
-            params.amount,
-            params.permit,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.depositStETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.permit,
+            ),
+            txName: 'depositStETH',
+          };
         case TOKENS.WSTETH:
-          return CSModuleWeb3.populateTransaction.depositWstETH(
-            params.nodeOperatorId,
-            params.amount,
-            params.permit,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.depositWstETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.permit,
+            ),
+            txName: 'depositWstETH',
+          };
       }
     },
     [CSModuleWeb3],
@@ -94,7 +103,7 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
 
         const [txHash, waitTx] = await runWithTransactionLogger(
           'AddBond signing',
-          () => sendTx({ tx }),
+          () => sendTx(tx),
         );
 
         txModalStages.pending(amount, token, txHash);
@@ -110,14 +119,7 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
 
         return true;
       } catch (error) {
-        if (error instanceof MultisigBreakError) {
-          txModalStages.successMultisig();
-          return true;
-        }
-
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
     [

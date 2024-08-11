@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import { NodeOperatorId, NodeOperatorRoles } from 'types';
 import { useCachedId } from './use-cached-id';
+import { trackMatomoEvent } from 'utils';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const useGetActiveNodeOperator = (list?: NodeOperatorRoles[]) => {
   const [active, setActive] = useState<NodeOperatorRoles | undefined>();
@@ -25,6 +27,7 @@ export const useGetActiveNodeOperator = (list?: NodeOperatorRoles[]) => {
     (id: NodeOperatorId) => {
       const fromList = list?.find((roles) => roles.id === id);
       if (fromList) {
+        trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator);
         setActive(fromList);
       }
     },

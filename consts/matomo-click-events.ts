@@ -3,8 +3,8 @@ import { MatomoEventType } from '@lidofinance/analytics-matomo';
 export const MATOMO_APP_NAME = 'CSM_Widget';
 export const MATOMO_APP_PREFIX = 'csm_widget';
 
-export const prefixed = (template: TemplateStringsArray) => {
-  return `${MATOMO_APP_PREFIX}_${template.join('').toLowerCase()}`;
+export const prefixed = (template: TemplateStringsArray, ...args: string[]) => {
+  return `${MATOMO_APP_PREFIX}_${template.reduce((a, c, i) => a + c + (args[i] ?? ''), '').toLowerCase()}`;
 };
 
 export const enum MATOMO_CLICK_EVENTS_TYPES {
@@ -42,9 +42,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalBeaconchaLink = 'dashboardExternalBeaconchaLink',
   dashboardExternalFeesMonitoringLink = 'dashboardExternalFeesMonitoringLink',
   dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
-  // FAQ
-  faqExpand = 'faqExpand',
-  // pages
+  // Pages
   pageWelcome = 'pageWelcome',
   pageStarterPack = 'pageStarterPack',
   pageNotReleased = 'pageNotReleased',
@@ -60,6 +58,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageInboxRequests = 'pageInboxRequests',
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
+  // Actions
+  switchNodeOperator = 'switchNodeOperator',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
@@ -69,7 +69,7 @@ export const MATOMO_CLICK_EVENTS: Record<
   // Welcome
   [MATOMO_CLICK_EVENTS_TYPES.connectWallet]: [
     MATOMO_APP_NAME,
-    'Push "Connect wallet" button',
+    'Push «Connect wallet» button',
     prefixed`connect_wallet`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator]: [
@@ -216,86 +216,86 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Lido operators» on Dashboard screen',
     prefixed`dashboard_external_operators_link`,
   ],
-  // FAQ
-  [MATOMO_CLICK_EVENTS_TYPES.faqExpand]: [
-    MATOMO_APP_NAME,
-    'Open faq item',
-    prefixed`faq_item_open`,
-  ],
-  // pages
+  // Pages
   [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: [
     MATOMO_APP_NAME,
-    'View page "Welcome"',
+    'View page «Welcome»',
     prefixed`view_welcome_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageStarterPack]: [
     MATOMO_APP_NAME,
-    'View page "StarterPack"',
+    'View page «StarterPack»',
     prefixed`view_starter_pack_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageNotReleased]: [
     MATOMO_APP_NAME,
-    'View page "NotReleased"',
+    'View page «NotReleased»',
     prefixed`view_not_released_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageMaintenance]: [
     MATOMO_APP_NAME,
-    'View page "Maintenance"',
+    'View page «Maintenance»',
     prefixed`view_maintenance_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageCreateNodeOperator]: [
     MATOMO_APP_NAME,
-    'View page "CreateNodeOperator"',
+    'View page «CreateNodeOperator»',
     prefixed`view_create_node_operator_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageDashboard]: [
     MATOMO_APP_NAME,
-    'View page "Dashboard"',
+    'View page «Dashboard»',
     prefixed`view_dashboard_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageAddKeys]: [
     MATOMO_APP_NAME,
-    'View page "AddKeys"',
+    'View page «AddKeys»',
     prefixed`view_add_keys_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageViewKeys]: [
     MATOMO_APP_NAME,
-    'View page "ViewKeys"',
+    'View page «ViewKeys»',
     prefixed`view_view_keys_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageRemoveKeys]: [
     MATOMO_APP_NAME,
-    'View page "RemoveKeys"',
+    'View page «RemoveKeys»',
     prefixed`view_remove_keys_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageAddBond]: [
     MATOMO_APP_NAME,
-    'View page "AddBond"',
+    'View page «AddBond»',
     prefixed`view_add_bond_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageClaimBond]: [
     MATOMO_APP_NAME,
-    'View page "ClaimBond"',
+    'View page «ClaimBond»',
     prefixed`view_claim_bond_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageUnlockBond]: [
     MATOMO_APP_NAME,
-    'View page "UnlockBond"',
+    'View page «UnlockBond»',
     prefixed`view_unlock_bond_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: [
     MATOMO_APP_NAME,
-    'View page "InboxRequests"',
+    'View page «InboxRequests»',
     prefixed`view_inbox_requests_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageChangeManagerRole]: [
     MATOMO_APP_NAME,
-    'View page "ChangeManagerRole"',
+    'View page «ChangeManagerRole»',
     prefixed`view_change_manager_role_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageChangeRewardsRole]: [
     MATOMO_APP_NAME,
-    'View page "ChangeRewardsRole"',
+    'View page «ChangeRewardsRole»',
     prefixed`view_change_rewards_role_page`,
+  ],
+  // Actions
+  [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: [
+    MATOMO_APP_NAME,
+    'Switch Node Operator',
+    prefixed`switch_node_operator`,
   ],
 };

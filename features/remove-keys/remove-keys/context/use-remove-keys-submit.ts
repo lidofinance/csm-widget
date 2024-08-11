@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useCSModuleWeb3 } from 'shared/hooks';
-import { MultisigBreakError, useSendTx } from 'shared/hooks/use-send-tx';
+import { useSendTx } from 'shared/hooks/use-send-tx';
+import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
@@ -24,12 +25,15 @@ const useRemoveKeysTx = () => {
   invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    (params: MethodParams) => {
-      return CSModuleWeb3.populateTransaction.removeKeys(
-        params.nodeOperatorId,
-        params.startIndex,
-        params.keysCount,
-      );
+    async (params: MethodParams) => {
+      return {
+        tx: await CSModuleWeb3.populateTransaction.removeKeys(
+          params.nodeOperatorId,
+          params.startIndex,
+          params.keysCount,
+        ),
+        txName: 'removeKeys',
+      };
     },
     [CSModuleWeb3],
   );
@@ -68,7 +72,7 @@ export const useRemoveKeysSubmit = ({
 
         const [txHash, waitTx] = await runWithTransactionLogger(
           'RemoveKeys signing',
-          () => sendTx({ tx }),
+          () => sendTx(tx),
         );
 
         txModalStages.pending(keysCount, nodeOperatorId, txHash);
@@ -81,14 +85,7 @@ export const useRemoveKeysSubmit = ({
 
         return true;
       } catch (error) {
-        if (error instanceof MultisigBreakError) {
-          txModalStages.successMultisig();
-          return true;
-        }
-
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
     [getTx, txModalStages, onConfirm, sendTx, onRetry],

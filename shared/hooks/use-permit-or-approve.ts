@@ -11,6 +11,7 @@ import {
   useCsmPermitSignature,
 } from './use-csm-permit-signature';
 import { useIsMultisig } from './useIsMultisig';
+import { trackMatomoTxEvent } from 'utils';
 
 type PermitOrApprove = (props: {
   token: TOKENS;
@@ -19,7 +20,7 @@ type PermitOrApprove = (props: {
     signPermit: () => void;
     signApproval: (amount: BigNumber, token: TOKENS) => void;
     pendingApproval: (amount: BigNumber, token: TOKENS, txHash: string) => void;
-  }; // FIXME: type
+  };
 }) => Promise<{
   permit: GatherPermitSignatureResult;
   approveTxHash?: string;
@@ -87,8 +88,10 @@ export const usePermitOrApprove = () => {
         return { approveTxHash, permit: EMPTY_PERMIT };
       } else {
         // permit sign
+        trackMatomoTxEvent('signpermit', 'prepare');
         txModalStages.signPermit();
         const permit = await gatherPermitSignature(amount, token);
+        trackMatomoTxEvent('signpermit', 'done');
 
         return { permit };
       }

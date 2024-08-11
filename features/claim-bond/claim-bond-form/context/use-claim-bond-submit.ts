@@ -5,12 +5,12 @@ import invariant from 'tiny-invariant';
 import { Zero } from '@ethersproject/constants';
 import { TOKENS } from 'consts/tokens';
 import {
-  MultisigBreakError,
   useCSAccountingRPC,
   useCSAccountingWeb3,
   useCSModuleWeb3,
   useSendTx,
 } from 'shared/hooks';
+import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId, RewardProof } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { ClaimBondFormInputType, ClaimBondFormNetworkData } from '../context';
@@ -35,35 +35,47 @@ const useClaimBondTx = () => {
   invariant(CSAccountingWeb3, 'must have CSAccountingWeb3');
 
   return useCallback(
-    (token: TOKENS, params: ClaimBondMethodParams) => {
+    async (token: TOKENS, params: ClaimBondMethodParams) => {
       if (params.amount.isZero())
-        return CSAccountingWeb3.populateTransaction.pullFeeRewards(
-          params.nodeOperatorId,
-          params.rewards.shares,
-          params.rewards.proof,
-        );
+        return {
+          tx: await CSAccountingWeb3.populateTransaction.pullFeeRewards(
+            params.nodeOperatorId,
+            params.rewards.shares,
+            params.rewards.proof,
+          ),
+          txName: 'pullFeeRewards',
+        };
       switch (token) {
         case TOKENS.ETH:
-          return CSModuleWeb3.populateTransaction.claimRewardsUnstETH(
-            params.nodeOperatorId,
-            params.amount,
-            params.rewards.shares,
-            params.rewards.proof,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.claimRewardsUnstETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.rewards.shares,
+              params.rewards.proof,
+            ),
+            txName: 'claimRewardsUnstETH',
+          };
         case TOKENS.STETH:
-          return CSModuleWeb3.populateTransaction.claimRewardsStETH(
-            params.nodeOperatorId,
-            params.amount,
-            params.rewards.shares,
-            params.rewards.proof,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.claimRewardsStETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.rewards.shares,
+              params.rewards.proof,
+            ),
+            txName: 'claimRewardsStETH',
+          };
         case TOKENS.WSTETH:
-          return CSModuleWeb3.populateTransaction.claimRewardsWstETH(
-            params.nodeOperatorId,
-            params.amount,
-            params.rewards.shares,
-            params.rewards.proof,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.claimRewardsWstETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.rewards.shares,
+              params.rewards.proof,
+            ),
+            txName: 'claimRewardsWstETH',
+          };
       }
     },
     [CSAccountingWeb3, CSModuleWeb3],
@@ -102,7 +114,7 @@ export const useClaimBondSubmit = ({
 
         const [txHash, waitTx] = await runWithTransactionLogger(
           'ClaimBond signing',
-          () => sendTx({ tx }),
+          () => sendTx(tx),
         );
 
         txModalStages.pending(amount, token, txHash);
@@ -118,14 +130,7 @@ export const useClaimBondSubmit = ({
 
         return true;
       } catch (error) {
-        if (error instanceof MultisigBreakError) {
-          txModalStages.successMultisig();
-          return true;
-        }
-
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
     [getTx, txModalStages, onConfirm, CSAccounting, sendTx, onRetry],

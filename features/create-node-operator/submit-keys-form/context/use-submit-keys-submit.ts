@@ -5,13 +5,13 @@ import { useNodeOperator } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import {
   GatherPermitSignatureResult,
-  MultisigBreakError,
   useAddressCompare,
   useCSModuleWeb3,
   useKeysCache,
   usePermitOrApprove,
   useSendTx,
 } from 'shared/hooks';
+import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { Proof } from 'types';
 import {
@@ -50,52 +50,61 @@ const useSubmitKeysTx = () => {
   invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    (token: TOKENS, params: MethodParams) => {
+    async (token: TOKENS, params: MethodParams) => {
       switch (token) {
         case TOKENS.ETH:
-          return CSModuleWeb3.populateTransaction.addNodeOperatorETH(
-            params.keysCount,
-            params.publicKeys,
-            params.signatures,
-            {
-              managerAddress: params.managerAddress,
-              rewardAddress: params.rewardsAddress,
-              extendedManagerPermissions: params.extendedManagerPermissions,
-            },
-            params.eaProof,
-            params.referral,
-            {
-              value: params.bondAmount,
-            },
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.addNodeOperatorETH(
+              params.keysCount,
+              params.publicKeys,
+              params.signatures,
+              {
+                managerAddress: params.managerAddress,
+                rewardAddress: params.rewardsAddress,
+                extendedManagerPermissions: params.extendedManagerPermissions,
+              },
+              params.eaProof,
+              params.referral,
+              {
+                value: params.bondAmount,
+              },
+            ),
+            txName: 'addNodeOperatorETH',
+          };
         case TOKENS.STETH:
-          return CSModuleWeb3.populateTransaction.addNodeOperatorStETH(
-            params.keysCount,
-            params.publicKeys,
-            params.signatures,
-            {
-              managerAddress: params.managerAddress,
-              rewardAddress: params.rewardsAddress,
-              extendedManagerPermissions: params.extendedManagerPermissions,
-            },
-            params.permit,
-            params.eaProof,
-            params.referral,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.addNodeOperatorStETH(
+              params.keysCount,
+              params.publicKeys,
+              params.signatures,
+              {
+                managerAddress: params.managerAddress,
+                rewardAddress: params.rewardsAddress,
+                extendedManagerPermissions: params.extendedManagerPermissions,
+              },
+              params.permit,
+              params.eaProof,
+              params.referral,
+            ),
+            txName: 'addNodeOperatorStETH',
+          };
         case TOKENS.WSTETH:
-          return CSModuleWeb3.populateTransaction.addNodeOperatorWstETH(
-            params.keysCount,
-            params.publicKeys,
-            params.signatures,
-            {
-              managerAddress: params.managerAddress,
-              rewardAddress: params.rewardsAddress,
-              extendedManagerPermissions: params.extendedManagerPermissions,
-            },
-            params.permit,
-            params.eaProof,
-            params.referral,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.addNodeOperatorWstETH(
+              params.keysCount,
+              params.publicKeys,
+              params.signatures,
+              {
+                managerAddress: params.managerAddress,
+                rewardAddress: params.rewardsAddress,
+                extendedManagerPermissions: params.extendedManagerPermissions,
+              },
+              params.permit,
+              params.eaProof,
+              params.referral,
+            ),
+            txName: 'addNodeOperatorWstETH',
+          };
       }
     },
     [CSModuleWeb3],
@@ -181,7 +190,7 @@ export const useSubmitKeysSubmit = ({
 
         const [txHash, waitTx] = await runWithTransactionLogger(
           'AddNodeOperator signing',
-          () => sendTx({ tx }),
+          () => sendTx(tx),
         );
 
         txModalStages.pending(keysCount, bondAmount, token, txHash);
@@ -212,14 +221,7 @@ export const useSubmitKeysSubmit = ({
 
         return true;
       } catch (error) {
-        if (error instanceof MultisigBreakError) {
-          txModalStages.successMultisig();
-          return true;
-        }
-
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
     [

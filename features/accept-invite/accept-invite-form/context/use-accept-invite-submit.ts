@@ -3,7 +3,8 @@ import invariant from 'tiny-invariant';
 
 import { ROLES } from 'consts/roles';
 import { useNodeOperator } from 'providers/node-operator-provider';
-import { MultisigBreakError, useCSModuleWeb3, useSendTx } from 'shared/hooks';
+import { useCSModuleWeb3, useSendTx } from 'shared/hooks';
+import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { useTxModalStagesAcceptInvite } from '../hooks/use-tx-modal-stages-accept-invite';
@@ -25,16 +26,22 @@ const useAcceptInviteTx = () => {
   invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    (role: ROLES, params: AcceptInviteMethodParams) => {
+    async (role: ROLES, params: AcceptInviteMethodParams) => {
       switch (role) {
         case ROLES.MANAGER:
-          return CSModuleWeb3.populateTransaction.confirmNodeOperatorManagerAddressChange(
-            params.nodeOperatorId,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.confirmNodeOperatorManagerAddressChange(
+              params.nodeOperatorId,
+            ),
+            txName: 'confirmNodeOperatorManagerAddressChange',
+          };
         case ROLES.REWARDS:
-          return CSModuleWeb3.populateTransaction.confirmNodeOperatorRewardAddressChange(
-            params.nodeOperatorId,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.confirmNodeOperatorRewardAddressChange(
+              params.nodeOperatorId,
+            ),
+            txName: 'confirmNodeOperatorRewardAddressChange',
+          };
       }
     },
     [CSModuleWeb3],
@@ -66,7 +73,7 @@ export const useAcceptInviteSubmit = ({
 
         const [txHash, waitTx] = await runWithTransactionLogger(
           'AcceptInvite signing',
-          () => sendTx({ tx }),
+          () => sendTx(tx),
         );
 
         txModalStages.pending('0x0', role, txHash);
@@ -87,14 +94,7 @@ export const useAcceptInviteSubmit = ({
 
         return true;
       } catch (error) {
-        if (error instanceof MultisigBreakError) {
-          txModalStages.successMultisig();
-          return true;
-        }
-
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
     [getTx, txModalStages, onConfirm, appendNO, sendTx, onRetry],

@@ -3,12 +3,8 @@ import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
 import { TOKENS } from 'consts/tokens';
-import {
-  MultisigBreakError,
-  useCSAccountingRPC,
-  useCSModuleWeb3,
-  useSendTx,
-} from 'shared/hooks';
+import { useCSAccountingRPC, useCSModuleWeb3, useSendTx } from 'shared/hooks';
+import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { UnlockBondFormInputType, UnlockBondFormNetworkData } from '../context';
@@ -30,11 +26,14 @@ const useUnlockBondTx = () => {
   invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    (params: UnlockBondMethodParams) => {
-      return CSModuleWeb3.populateTransaction.compensateELRewardsStealingPenalty(
-        params.nodeOperatorId,
-        { value: params.amount },
-      );
+    async (params: UnlockBondMethodParams) => {
+      return {
+        tx: await CSModuleWeb3.populateTransaction.compensateELRewardsStealingPenalty(
+          params.nodeOperatorId,
+          { value: params.amount },
+        ),
+        txName: 'compensateELRewardsStealingPenalty',
+      };
     },
     [CSModuleWeb3],
   );
@@ -68,7 +67,7 @@ export const useUnlockBondSubmit = ({
 
         const [txHash, waitTx] = await runWithTransactionLogger(
           'UnlockBond signing',
-          () => sendTx({ tx }),
+          () => sendTx(tx),
         );
 
         txModalStages.pending(amount, TOKENS.ETH, txHash);
@@ -84,14 +83,7 @@ export const useUnlockBondSubmit = ({
 
         return true;
       } catch (error) {
-        if (error instanceof MultisigBreakError) {
-          txModalStages.successMultisig();
-          return true;
-        }
-
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
     [getTx, txModalStages, onConfirm, CSAccounting, sendTx, onRetry],

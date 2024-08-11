@@ -3,7 +3,8 @@ import invariant from 'tiny-invariant';
 
 import { AddressZero } from '@ethersproject/constants';
 import { ROLES } from 'consts/roles';
-import { MultisigBreakError, useCSModuleWeb3, useSendTx } from 'shared/hooks';
+import { useCSModuleWeb3, useSendTx } from 'shared/hooks';
+import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { ChangeRoleFormInputType, ChangeRoleFormNetworkData } from '.';
@@ -29,7 +30,7 @@ const useChangeRoleTx = () => {
   invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
-    (
+    async (
       {
         role,
         isManagerReset,
@@ -39,24 +40,36 @@ const useChangeRoleTx = () => {
     ) => {
       switch (true) {
         case isRewardsChange:
-          return CSModuleWeb3.populateTransaction.changeNodeOperatorRewardAddress(
-            params.nodeOperatorId,
-            params.address,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.changeNodeOperatorRewardAddress(
+              params.nodeOperatorId,
+              params.address,
+            ),
+            txName: 'changeNodeOperatorRewardAddress',
+          };
         case isManagerReset:
-          return CSModuleWeb3.populateTransaction.resetNodeOperatorManagerAddress(
-            params.nodeOperatorId,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.resetNodeOperatorManagerAddress(
+              params.nodeOperatorId,
+            ),
+            txName: 'resetNodeOperatorManagerAddress',
+          };
         case role === ROLES.REWARDS:
-          return CSModuleWeb3.populateTransaction.proposeNodeOperatorRewardAddressChange(
-            params.nodeOperatorId,
-            params.address,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.proposeNodeOperatorRewardAddressChange(
+              params.nodeOperatorId,
+              params.address,
+            ),
+            txName: 'proposeNodeOperatorRewardAddressChange',
+          };
         case role === ROLES.MANAGER:
-          return CSModuleWeb3.populateTransaction.proposeNodeOperatorManagerAddressChange(
-            params.nodeOperatorId,
-            params.address,
-          );
+          return {
+            tx: await CSModuleWeb3.populateTransaction.proposeNodeOperatorManagerAddressChange(
+              params.nodeOperatorId,
+              params.address,
+            ),
+            txName: 'proposeNodeOperatorManagerAddressChange',
+          };
         default: {
           throw new Error('Not implemented yet: true case');
         }
@@ -126,7 +139,7 @@ export const useChangeRoleSubmit = ({
 
         const [txHash, waitTx] = await runWithTransactionLogger(
           'ChangeRole signing',
-          () => sendTx({ tx }),
+          () => sendTx(tx),
         );
 
         txModalStages.pending(address, role, txHash);
@@ -139,14 +152,7 @@ export const useChangeRoleSubmit = ({
 
         return true;
       } catch (error) {
-        if (error instanceof MultisigBreakError) {
-          txModalStages.successMultisig();
-          return true;
-        }
-
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
     [

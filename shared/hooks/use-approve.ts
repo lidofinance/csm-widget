@@ -54,6 +54,7 @@ export const useApprove = (
         return sendTx({
           tx,
           shouldApplyGasLimitRatio: false,
+          txName: 'approve',
         });
       };
 
