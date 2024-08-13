@@ -47,10 +47,11 @@ type MethodParams = {
 // this encapsulates eth/steth/wsteth flows
 const useSubmitKeysTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
-  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
     async (token: TOKENS, params: MethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
       switch (token) {
         case TOKENS.ETH:
           return {

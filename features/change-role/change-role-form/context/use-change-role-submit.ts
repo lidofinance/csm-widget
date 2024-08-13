@@ -27,7 +27,6 @@ type ChangeRoleMethodParams = {
 // encapsulates eth/steth/wsteth flows
 const useChangeRoleTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
-  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
     async (
@@ -38,6 +37,8 @@ const useChangeRoleTx = () => {
       }: { role: ROLES; isRewardsChange: boolean; isManagerReset: boolean },
       params: ChangeRoleMethodParams,
     ) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
       switch (true) {
         case isRewardsChange:
           return {

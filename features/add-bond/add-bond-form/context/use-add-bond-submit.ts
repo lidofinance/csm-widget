@@ -30,10 +30,11 @@ type AddBondMethodParams = {
 // encapsulates eth/steth/wsteth flows
 const useAddBondTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
-  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
     async (token: TOKENS, params: AddBondMethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
       switch (token) {
         case TOKENS.ETH:
           return {

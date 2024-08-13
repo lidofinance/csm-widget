@@ -31,11 +31,12 @@ type ClaimBondMethodParams = {
 const useClaimBondTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
   const CSAccountingWeb3 = useCSAccountingWeb3();
-  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-  invariant(CSAccountingWeb3, 'must have CSAccountingWeb3');
 
   return useCallback(
     async (token: TOKENS, params: ClaimBondMethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+      invariant(CSAccountingWeb3, 'must have CSAccountingWeb3');
+
       if (params.amount.isZero())
         return {
           tx: await CSAccountingWeb3.populateTransaction.pullFeeRewards(

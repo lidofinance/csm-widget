@@ -23,10 +23,11 @@ type AcceptInviteMethodParams = {
 // encapsulates eth/steth/wsteth flows
 const useAcceptInviteTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
-  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
     async (role: ROLES, params: AcceptInviteMethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
       switch (role) {
         case ROLES.MANAGER:
           return {

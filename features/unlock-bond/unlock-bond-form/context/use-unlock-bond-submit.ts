@@ -23,10 +23,11 @@ type UnlockBondMethodParams = {
 // encapsulates eth/steth/wsteth flows
 const useUnlockBondTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
-  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
     async (params: UnlockBondMethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
       return {
         tx: await CSModuleWeb3.populateTransaction.compensateELRewardsStealingPenalty(
           params.nodeOperatorId,

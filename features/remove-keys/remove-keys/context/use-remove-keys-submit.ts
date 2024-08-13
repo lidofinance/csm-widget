@@ -22,10 +22,11 @@ type MethodParams = {
 // this encapsulates eth/steth/wsteth flows
 const useRemoveKeysTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
-  invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
   return useCallback(
     async (params: MethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
       return {
         tx: await CSModuleWeb3.populateTransaction.removeKeys(
           params.nodeOperatorId,
