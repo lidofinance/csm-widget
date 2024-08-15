@@ -23,6 +23,7 @@ type PermitOrApprove = (props: {
   };
 }) => Promise<{
   permit: GatherPermitSignatureResult;
+  allowance?: BigNumber;
   approveTxHash?: string;
 }>;
 
@@ -30,27 +31,25 @@ const EMPTY_PERMIT: GatherPermitSignatureResult = {
   value: Zero,
   deadline: Zero,
   v: 0,
-  r: '',
-  s: '',
+  r: '0x0000000000000000000000000000000000000000000000000000000000000000',
+  s: '0x0000000000000000000000000000000000000000000000000000000000000000',
 };
 
 export const usePermitOrApprove = () => {
   const chainId = useChainId();
-  const { address: owner, connector } = useAccount();
+  const { address: owner } = useAccount();
   const { isMultisig } = useIsMultisig();
 
   const gatherPermitSignature = useCsmPermitSignature();
 
-  const [stethTokenAddress, wstethTokenAddress, spender, isWalletConnect] =
-    useMemo(
-      () => [
-        getTokenAddress(chainId, TOKENS.STETH),
-        getTokenAddress(chainId, TOKENS.WSTETH),
-        getCSMContractAddress(chainId, 'CSAccounting'),
-        connector?.id === 'walletConnect',
-      ],
-      [chainId, connector?.id],
-    );
+  const [stethTokenAddress, wstethTokenAddress, spender] = useMemo(
+    () => [
+      getTokenAddress(chainId, TOKENS.STETH),
+      getTokenAddress(chainId, TOKENS.WSTETH),
+      getCSMContractAddress(chainId, 'CSAccounting'),
+    ],
+    [chainId],
+  );
 
   const stethApprove = useApprove(stethTokenAddress, spender, owner);
   const wstethApprove = useApprove(wstethTokenAddress, spender, owner);
@@ -68,11 +67,10 @@ export const usePermitOrApprove = () => {
       const isEnough = Boolean(allowance?.gte(amount));
 
       if (isEnough) {
-        return { permit: EMPTY_PERMIT };
+        return { permit: EMPTY_PERMIT, allowance };
       }
 
-      // TODO: check Approve is required by WalletConnect
-      const needsApprove = isMultisig || isWalletConnect;
+      const needsApprove = isMultisig;
 
       if (needsApprove) {
         // approve tx
@@ -96,12 +94,6 @@ export const usePermitOrApprove = () => {
         return { permit };
       }
     },
-    [
-      gatherPermitSignature,
-      isMultisig,
-      isWalletConnect,
-      stethApprove,
-      wstethApprove,
-    ],
+    [gatherPermitSignature, isMultisig, stethApprove, wstethApprove],
   );
 };

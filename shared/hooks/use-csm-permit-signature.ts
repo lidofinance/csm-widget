@@ -4,7 +4,7 @@ import { StethAbi } from '@lido-sdk/contracts';
 import { useSDK } from '@lido-sdk/react';
 import { getCSMContractAddress } from 'consts/csm-contracts';
 import { TOKENS } from 'consts/tokens';
-import { BigNumber, TypedDataDomain } from 'ethers';
+import { BigNumber, BytesLike, TypedDataDomain } from 'ethers';
 import { useCallback } from 'react';
 import { useAccount } from 'shared/hooks';
 import invariant from 'tiny-invariant';
@@ -15,8 +15,8 @@ export type GatherPermitSignatureResult = {
   value: BigNumber;
   deadline: BigNumber;
   v: number;
-  r: string;
-  s: string;
+  r: BytesLike;
+  s: BytesLike;
 };
 
 const INFINITY_DEADLINE_VALUE = MaxUint256;
