@@ -4,6 +4,7 @@ import { trimAddress } from '@lidofinance/address';
 import { trimOx } from '../utils';
 import { HexString } from '../types';
 
+// FIXME: mainnet
 const KAPI_URL = 'https://keys-api-holesky.testnet.fi';
 
 type ResponseData = {

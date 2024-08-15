@@ -10,12 +10,15 @@ import { ReactComponent as LidoIcon } from 'assets/icons/lido.svg';
 import { useNodeOperatorKeys } from 'shared/hooks';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
+// FIXME: mainnet
 const getFeesMonitoringLink = (id?: NodeOperatorId) =>
   `https://fees-monitoring-holesky.testnet.fi/operatorInfo?stakingModuleIndex=4&operatorIndex=${id}`;
 
+// FIXME: mainnet
 const getOperatorsPortalLink = (id?: NodeOperatorId) =>
   `https://operators-holesky.testnet.fi/module/4/${id}`;
 
+// FIXME: mainnet
 // TODO: cache prev link
 const getBeaconchaLink = (keys: string[] = []) =>
   `https://v2-beta-holesky.beaconcha.in/dashboard?validators=${keys.join(',')}`;
