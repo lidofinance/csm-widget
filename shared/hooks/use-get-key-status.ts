@@ -54,11 +54,15 @@ export const useGetKeyStatus = () => {
     (index: number, pubkey: HexString): KeyStatus | undefined => {
       if (!info) return undefined;
 
-      if (unbonded && info?.totalAddedKeys - index < unbonded) {
+      if (unbonded && info?.totalAddedKeys - index < unbonded)
         return 'unbonded';
-      }
       if (index < info.totalWithdrawnKeys) return 'exited';
-      if (index < info.totalDepositedKeys) return 'active';
+      if (index < info.totalDepositedKeys) {
+        if (index >= info.totalAddedKeys - info.stuckValidatorsCount) {
+          return 'stuck';
+        }
+        return 'active';
+      }
       if (index >= info.totalVettedKeys) {
         if (duplicates?.includes(pubkey)) return 'duplicated';
         if (index > info.totalVettedKeys) return 'unvetted';
@@ -66,7 +70,6 @@ export const useGetKeyStatus = () => {
       }
 
       return 'depositable';
-      // TODO: stuck
       // TODO: handle targetLimit
     },
     [duplicates, info, unbonded],
