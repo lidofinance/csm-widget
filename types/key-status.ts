@@ -5,4 +5,5 @@ export type KeyStatus =
   | 'duplicated'
   | 'stuck'
   | 'invalid'
+  | 'unvetted'
   | 'unbonded';

@@ -1,3 +1,4 @@
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
@@ -5,6 +6,7 @@ import { SectionBlock, Stack } from 'shared/components';
 import {
   useCsmEarlyAdoptionKeysLimit,
   useCsmStatus,
+  useNetworkDuplicates,
   useNodeOperatorInfo,
   useNodeOperatorUnbondedKeys,
 } from 'shared/hooks';
@@ -17,11 +19,16 @@ export const KeysSection: FC = () => {
   const { data: unbonded } = useNodeOperatorUnbondedKeys(id);
   const { data: eaLimit } = useCsmEarlyAdoptionKeysLimit();
   const { data: status } = useCsmStatus();
+  const { data: duplicates } = useNetworkDuplicates();
 
   const eaTarget = status?.isPublicRelease ? undefined : eaLimit?.toNumber();
 
   return (
-    <SectionBlock title="Keys" href={PATH.KEYS}>
+    <SectionBlock
+      title="Keys"
+      href={PATH.KEYS_VIEW}
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink}
+    >
       {info && (
         <Stack direction="column" gap="sm">
           <Row>
@@ -38,7 +45,7 @@ export const KeysSection: FC = () => {
             <Item
               title="Limit"
               count={
-                info.targetLimitMode > 0 ? info.targetLimit : eaTarget ?? '—'
+                info.targetLimitMode > 0 ? info.targetLimit : (eaTarget ?? '—')
               }
               variant="secondary"
               tooltip={
@@ -62,7 +69,7 @@ export const KeysSection: FC = () => {
             <Item
               variant="warning"
               title="Unbonded"
-              count={unbonded?.toNumber() ?? '...'}
+              count={unbonded ?? '...'}
               tooltip="Keys that have insufficient bond"
             />
             <Item
@@ -71,11 +78,19 @@ export const KeysSection: FC = () => {
               count={info.stuckValidatorsCount}
               tooltip="Keys that have not been exited timely following an exit signal from the protocol"
             />
-            <Item variant="warning" title="Duplicated" count={0} />
+            <Item
+              variant="warning"
+              title="Duplicated"
+              count={duplicates?.length ?? 0}
+            />
             <Item
               variant="warning"
               title="Invalid"
-              count={info.totalAddedKeys - info.totalVettedKeys}
+              count={
+                info.totalAddedKeys -
+                info.totalVettedKeys -
+                (duplicates?.length ?? 0)
+              }
               tooltip="Keys with invalid signature"
             />
           </Row>

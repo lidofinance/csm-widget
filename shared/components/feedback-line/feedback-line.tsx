@@ -1,5 +1,7 @@
-import { Link, ThemeName } from '@lidofinance/lido-ui';
+import { ThemeName } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
+import { MatomoLink } from '../matomo-link/matomo-link';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 const WarningBlock = styled.div`
   display: flex;
@@ -27,7 +29,12 @@ export const FeedbackLine = () => {
         {/* This is a test version of the CSM Widget. Make sure to report any bugs{' '} */}
         This is a test version of the CSM Widget. In case of any issues, please
         submit the report using this{' '}
-        <Link href="https://forms.gle/ZBUqbykaZokJLf4M7">form</Link>
+        <MatomoLink
+          href="https://forms.gle/ZBUqbykaZokJLf4M7"
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink}
+        >
+          form
+        </MatomoLink>
       </WarningText>
     </WarningBlock>
   );

@@ -3,7 +3,6 @@ import type { BigNumber } from 'ethers';
 import {
   SuccessText,
   TransactionModalTransitStage,
-  TxStagePermit,
   TxStageSuccess,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
@@ -19,8 +18,6 @@ const getTxModalStagesAddKeys = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
-
-  signPermit: () => transitStage(<TxStagePermit />),
 
   sign: (
     keysCount: number,

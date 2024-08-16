@@ -1,24 +1,36 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-// const VariantsMap: Record<KeyStatus, { color: string; background: string }> = {
-//   active: {
-//     color: 'var(--lido-color-success)',
-//     background: 'var(--)',
-//   },
-// };
+export type Variants = keyof typeof variants;
 
-export const StatusStyle = styled.div`
-  display: flex;
+const variants = {
+  default: css`
+    color: var(--lido-color-text);
+  `,
+  secondary: css`
+    color: var(--lido-color-textSecondary);
+  `,
+  success: css`
+    color: var(--lido-color-success);
+  `,
+  error: css`
+    color: var(--lido-color-error);
+  `,
+  warning: css`
+    color: var(--lido-color-warning);
+  `,
+};
+
+export const StatusStyle = styled.div<{ $variant?: Variants }>`
+  width: fit-content;
   padding: 4px 12px;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
 
   border-radius: ${({ theme }) => theme.borderRadiusesMap.xl}px;
-  background: rgba(39, 56, 82, 0.15);
-  color: var(--lido-color-text);
+  background: color-mix(in srgb, currentColor 15%, transparent);
 
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-  font-weight: 700;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
+  font-weight: 700;
   text-transform: capitalize;
+  ${(props) => variants[props.$variant || 'default']}
 `;

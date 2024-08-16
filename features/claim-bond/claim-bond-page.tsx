@@ -3,11 +3,13 @@ import { FC } from 'react';
 import { Layout } from 'shared/components';
 import { BondPageSwitcher } from 'shared/navigate';
 import { ClaimBond } from './claim-bond';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const ClaimBondPage: FC = () => (
   <Layout
     title="Manage Bond & Rewards"
     subtitle="Claim Bond to the Rewards address"
+    matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageClaimBond}
   >
     <BondPageSwitcher />
     <ClaimBond />

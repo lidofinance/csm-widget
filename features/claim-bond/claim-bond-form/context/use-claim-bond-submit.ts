@@ -8,13 +8,12 @@ import {
   useCSAccountingRPC,
   useCSAccountingWeb3,
   useCSModuleWeb3,
+  useSendTx,
 } from 'shared/hooks';
-import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
+import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId, RewardProof } from 'types';
 import { runWithTransactionLogger } from 'utils';
-import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
-import { getFeeData } from 'utils/getFeeData';
-import { ClaimBondFormNetworkData, ClaimBondFormInputType } from '../context';
+import { ClaimBondFormInputType, ClaimBondFormNetworkData } from '../context';
 import { useTxModalStagesClaimBond } from '../hooks/use-tx-modal-stages-claim-bond';
 
 type UseClaimBondOptions = {
@@ -29,156 +28,58 @@ type ClaimBondMethodParams = {
 };
 
 // encapsulates eth/steth/wsteth flows
-const useClaimBondMethods = () => {
-  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+const useClaimBondTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
   const CSAccountingWeb3 = useCSAccountingWeb3();
 
-  const methodETH = useCallback(
-    async ({ nodeOperatorId, amount, rewards }: ClaimBondMethodParams) => {
+  return useCallback(
+    async (token: TOKENS, params: ClaimBondMethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [
-        nodeOperatorId,
-        amount,
-        rewards.shares,
-        rewards.proof,
-      ] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.claimRewardsUnstETH(
-          ...params,
-          overrides,
-        );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.claimRewardsUnstETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  const methodSTETH = useCallback(
-    async ({ nodeOperatorId, amount, rewards }: ClaimBondMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [
-        nodeOperatorId,
-        amount,
-        rewards.shares,
-        rewards.proof,
-      ] as const;
-
-      const originalGasLimit = await CSModuleWeb3.estimateGas.claimRewardsStETH(
-        ...params,
-        overrides,
-      );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.claimRewardsStETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  const methodWSTETH = useCallback(
-    async ({ nodeOperatorId, amount, rewards }: ClaimBondMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [
-        nodeOperatorId,
-        amount,
-        rewards.shares,
-        rewards.proof,
-      ] as const;
-
-      const originalGasLimit =
-        await CSModuleWeb3.estimateGas.claimRewardsWstETH(...params, overrides);
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.claimRewardsWstETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  const methodPullRewards = useCallback(
-    async ({ nodeOperatorId, rewards }: ClaimBondMethodParams) => {
       invariant(CSAccountingWeb3, 'must have CSAccountingWeb3');
 
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId, rewards.shares, rewards.proof] as const;
-
-      const originalGasLimit =
-        await CSAccountingWeb3.estimateGas.pullFeeRewards(...params, overrides);
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSAccountingWeb3.pullFeeRewards(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSAccountingWeb3, staticRpcProvider],
-  );
-
-  return useCallback(
-    (token: TOKENS, pullRewards: boolean) => {
-      if (pullRewards) return { method: methodPullRewards };
+      if (params.amount.isZero())
+        return {
+          tx: await CSAccountingWeb3.populateTransaction.pullFeeRewards(
+            params.nodeOperatorId,
+            params.rewards.shares,
+            params.rewards.proof,
+          ),
+          txName: 'pullFeeRewards',
+        };
       switch (token) {
         case TOKENS.ETH:
-          return { method: methodETH };
+          return {
+            tx: await CSModuleWeb3.populateTransaction.claimRewardsUnstETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.rewards.shares,
+              params.rewards.proof,
+            ),
+            txName: 'claimRewardsUnstETH',
+          };
         case TOKENS.STETH:
-          return { method: methodSTETH };
+          return {
+            tx: await CSModuleWeb3.populateTransaction.claimRewardsStETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.rewards.shares,
+              params.rewards.proof,
+            ),
+            txName: 'claimRewardsStETH',
+          };
         case TOKENS.WSTETH:
-          return { method: methodWSTETH };
+          return {
+            tx: await CSModuleWeb3.populateTransaction.claimRewardsWstETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.rewards.shares,
+              params.rewards.proof,
+            ),
+            txName: 'claimRewardsWstETH',
+          };
       }
     },
-    [methodETH, methodPullRewards, methodSTETH, methodWSTETH],
+    [CSAccountingWeb3, CSModuleWeb3],
   );
 };
 
@@ -189,7 +90,8 @@ export const useClaimBondSubmit = ({
   const { txModalStages } = useTxModalStagesClaimBond();
   const CSAccounting = useCSAccountingRPC();
 
-  const getMethod = useClaimBondMethods();
+  const getTx = useClaimBondTx();
+  const sendTx = useSendTx();
 
   const claimBond = useCallback(
     async (
@@ -203,45 +105,36 @@ export const useClaimBondSubmit = ({
       }
 
       try {
-        const { method } = getMethod(token, amount.eq(0));
-
         txModalStages.sign(amount, token);
 
-        const callback = await method({
+        const tx = await getTx(token, {
           nodeOperatorId,
           amount,
           rewards: (claimRewards && rewards) || { shares: Zero, proof: [] },
         });
 
-        const tx = await runWithTransactionLogger(
+        const [txHash, waitTx] = await runWithTransactionLogger(
           'ClaimBond signing',
-          callback,
+          () => sendTx(tx),
         );
-        const txHash = typeof tx === 'string' ? tx : tx.hash;
 
         txModalStages.pending(amount, token, txHash);
 
-        if (typeof tx === 'object') {
-          await runWithTransactionLogger('ClaimBond block confirmation', () =>
-            tx.wait(),
-          );
-        }
+        await runWithTransactionLogger('ClaimBond block confirmation', waitTx);
 
         await onConfirm?.();
 
-        // TODO: revalidate in provider
+        // TODO: move to onConfirm
         const { current } = await CSAccounting.getBondSummary(nodeOperatorId);
 
         txModalStages.success(current, TOKENS.STETH, txHash);
 
         return true;
       } catch (error) {
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [getMethod, txModalStages, CSAccounting, onConfirm, onRetry],
+    [getTx, txModalStages, onConfirm, CSAccounting, sendTx, onRetry],
   );
 
   return {

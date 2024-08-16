@@ -1,7 +1,8 @@
-import { Link, ThemeName } from '@lidofinance/lido-ui';
+import { ThemeName } from '@lidofinance/lido-ui';
+import { MatomoLink } from 'shared/components';
 import styled from 'styled-components';
 
-export const StyledLink = styled(Link)`
+export const StyledLink = styled(MatomoLink)`
   display: flex;
   flex-direction: column;
   flex: 1 0 47%;

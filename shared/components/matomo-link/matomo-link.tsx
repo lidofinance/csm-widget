@@ -1,22 +1,23 @@
-import { FC } from 'react';
-import { Link, LinkProps } from '@lidofinance/lido-ui';
-import { trackEvent } from '@lidofinance/analytics-matomo';
+import { Link as ALink, LinkProps } from '@lidofinance/lido-ui';
+import Link from 'next/link';
+import { FC, useCallback } from 'react';
 
-import {
-  MATOMO_CLICK_EVENTS_TYPES,
-  MATOMO_CLICK_EVENTS,
-} from 'consts/matomo-click-events';
+import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 
-interface MatomoLinkProps extends LinkProps {
-  matomoEvent: MATOMO_CLICK_EVENTS_TYPES;
-}
+export const MatomoLink: FC<WithMatomoEvent<LinkProps>> = ({
+  matomoEvent,
+  ...props
+}) => {
+  const onClickHandler = useCallback(() => {
+    trackMatomoEvent(matomoEvent);
+  }, [matomoEvent]);
 
-export const MatomoLink: FC<MatomoLinkProps> = (props) => {
-  const { matomoEvent, ...rest } = props;
-
-  const onClickHandler = () => {
-    trackEvent(...MATOMO_CLICK_EVENTS[matomoEvent]);
-  };
-
-  return <Link {...rest} onClick={onClickHandler} />;
+  return (
+    <Link href={props.href || ''} passHref legacyBehavior>
+      {/* TODO: fix when go to Next v13+ */}
+      {/* see: https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration#link-component */}
+      {/* eslint-disable-next-line jsx-a11y/anchor-has-content,jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
+      <ALink {...props} onClick={onClickHandler} />
+    </Link>
+  );
 };

@@ -3,17 +3,17 @@ import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
 import { TOKENS } from 'consts/tokens';
-import { useCSAccountingRPC, useCSModuleWeb3 } from 'shared/hooks';
 import {
-  GatherPermitSignatureResult,
-  useCsmPermitSignature,
-} from 'shared/hooks/use-csm-permit-signature';
-import { useCurrentStaticRpcProvider } from 'shared/hooks/use-current-static-rpc-provider';
+  useCSAccountingRPC,
+  useCSModuleWeb3,
+  usePermitOrApprove,
+  useSendTx,
+} from 'shared/hooks';
+import { GatherPermitSignatureResult } from 'shared/hooks/use-csm-permit-signature';
+import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
 import { addExtraWei, runWithTransactionLogger } from 'utils';
-import { applyGasLimitRatio } from 'utils/applyGasLimitRatio';
-import { getFeeData } from 'utils/getFeeData';
-import { AddBondFormNetworkData, AddBondFormInputType } from '../context';
+import { AddBondFormInputType, AddBondFormNetworkData } from '../context';
 import { useTxModalStagesAddBond } from '../hooks/use-tx-modal-stages-add-bond';
 
 type UseAddBondOptions = {
@@ -23,120 +23,50 @@ type UseAddBondOptions = {
 
 type AddBondMethodParams = {
   amount: BigNumber;
-  permit: GatherPermitSignatureResult | undefined;
+  permit: GatherPermitSignatureResult;
   nodeOperatorId: NodeOperatorId;
 };
 
 // encapsulates eth/steth/wsteth flows
-const useAddBondMethods = () => {
-  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+const useAddBondTx = () => {
   const CSModuleWeb3 = useCSModuleWeb3();
 
-  const methodETH = useCallback(
-    async ({ amount, nodeOperatorId }: AddBondMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        value: amount,
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId] as const;
-
-      const originalGasLimit = await CSModuleWeb3.estimateGas.depositETH(
-        ...params,
-        overrides,
-      );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.depositETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  const methodSTETH = useCallback(
-    async ({ amount, permit, nodeOperatorId }: AddBondMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-      invariant(permit, 'must have permit');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId, amount, permit] as const;
-
-      const originalGasLimit = await CSModuleWeb3.estimateGas.depositStETH(
-        ...params,
-        overrides,
-      );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.depositStETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
-  const methodWSTETH = useCallback(
-    async ({ amount, permit, nodeOperatorId }: AddBondMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-      invariant(permit, 'must have permit');
-
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
-
-      const overrides = {
-        maxPriorityFeePerGas,
-        maxFeePerGas,
-      };
-
-      const params = [nodeOperatorId, amount, permit] as const;
-
-      const originalGasLimit = await CSModuleWeb3.estimateGas.depositWstETH(
-        ...params,
-        overrides,
-      );
-
-      const gasLimit = applyGasLimitRatio(originalGasLimit);
-
-      return () =>
-        CSModuleWeb3.depositWstETH(...params, {
-          ...overrides,
-          gasLimit,
-        });
-    },
-    [CSModuleWeb3, staticRpcProvider],
-  );
-
   return useCallback(
-    (token: TOKENS) => {
+    async (token: TOKENS, params: AddBondMethodParams) => {
+      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
+
       switch (token) {
         case TOKENS.ETH:
-          return { method: methodETH, needsPermit: false };
+          return {
+            tx: await CSModuleWeb3.populateTransaction.depositETH(
+              params.nodeOperatorId,
+              {
+                value: params.amount,
+              },
+            ),
+            txName: 'depositETH',
+          };
         case TOKENS.STETH:
-          return { method: methodSTETH, needsPermit: true };
+          return {
+            tx: await CSModuleWeb3.populateTransaction.depositStETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.permit,
+            ),
+            txName: 'depositStETH',
+          };
         case TOKENS.WSTETH:
-          return { method: methodWSTETH, needsPermit: true };
+          return {
+            tx: await CSModuleWeb3.populateTransaction.depositWstETH(
+              params.nodeOperatorId,
+              params.amount,
+              params.permit,
+            ),
+            txName: 'depositWstETH',
+          };
       }
     },
-    [methodETH, methodSTETH, methodWSTETH],
+    [CSModuleWeb3],
   );
 };
 
@@ -144,8 +74,9 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
   const { txModalStages } = useTxModalStagesAddBond();
   const CSAccounting = useCSAccountingRPC();
 
-  const getMethod = useAddBondMethods();
-  const getPermitSignature = useCsmPermitSignature();
+  const getTx = useAddBondTx();
+  const sendTx = useSendTx();
+  const getPermitOrApprove = usePermitOrApprove();
 
   const addBond = useCallback(
     async (
@@ -157,34 +88,30 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       try {
-        let permit: GatherPermitSignatureResult | undefined;
-        const { method, needsPermit } = getMethod(token);
-
-        if (needsPermit) {
-          txModalStages.signPermit();
-          const amountRaw = addExtraWei(amount, token);
-          permit = await getPermitSignature(amountRaw, token);
-        }
+        const { permit } = await getPermitOrApprove({
+          token,
+          amount: addExtraWei(amount, token),
+          txModalStages,
+        });
 
         txModalStages.sign(amount, token);
 
-        const callback = await method({
+        const tx = await getTx(token, {
           nodeOperatorId,
           amount,
           permit,
         });
 
-        const tx = await runWithTransactionLogger('AddBond signing', callback);
-        const txHash = typeof tx === 'string' ? tx : tx.hash;
+        const [txHash, waitTx] = await runWithTransactionLogger(
+          'AddBond signing',
+          () => sendTx(tx),
+        );
 
         txModalStages.pending(amount, token, txHash);
 
-        if (typeof tx === 'object') {
-          await runWithTransactionLogger('AddBond block confirmation', () =>
-            tx.wait(),
-          );
-        }
+        await runWithTransactionLogger('AddBond block confirmation', waitTx);
 
+        // TODO: move to onConfirm
         const { current } = await CSAccounting.getBondSummary(nodeOperatorId);
 
         await onConfirm?.();
@@ -193,17 +120,16 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
 
         return true;
       } catch (error) {
-        console.warn(error);
-        txModalStages.failed(error, onRetry);
-        return false;
+        return handleTxError(error, txModalStages, onRetry);
       }
     },
     [
-      getMethod,
+      getTx,
+      getPermitOrApprove,
       txModalStages,
       CSAccounting,
       onConfirm,
-      getPermitSignature,
+      sendTx,
       onRetry,
     ],
   );

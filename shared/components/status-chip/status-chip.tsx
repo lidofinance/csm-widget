@@ -1,11 +1,21 @@
 import { FC } from 'react';
-import { StatusStyle } from './style';
+import { StatusStyle, Variants } from './style';
 import { KeyStatus } from 'types';
 
 type Props = {
-  status: KeyStatus;
+  status?: KeyStatus;
 };
 
-export const StatusChip: FC<Props> = ({ status }) => (
-  <StatusStyle>{status}</StatusStyle>
-);
+const variants: Partial<Record<KeyStatus, Variants>> = {
+  depositable: 'default',
+  active: 'success',
+  exited: 'secondary',
+  duplicated: 'error',
+  stuck: 'error',
+  invalid: 'error',
+  unvetted: 'error',
+  unbonded: 'warning',
+};
+
+export const StatusChip: FC<Props> = ({ status }) =>
+  status && <StatusStyle $variant={variants[status]}>{status}</StatusStyle>;

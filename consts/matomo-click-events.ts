@@ -1,334 +1,301 @@
 import { MatomoEventType } from '@lidofinance/analytics-matomo';
 
-// TODO: review
+export const MATOMO_APP_NAME = 'CSM_Widget';
+export const MATOMO_APP_PREFIX = 'csm_widget';
+
+export const prefixed = (template: TemplateStringsArray, ...args: string[]) => {
+  return `${MATOMO_APP_PREFIX}_${template.reduce((a, c, i) => a + c + (args[i] ?? ''), '').toLowerCase()}`;
+};
 
 export const enum MATOMO_CLICK_EVENTS_TYPES {
-  // Global
+  // Welcome
   connectWallet = 'connectWallet',
-  clickCurvePool = 'clickCurvePool',
-  clickBalancerPool = 'clickBalancerPool',
-  clickExploreDeFi = 'clickExploreDeFi',
-  // / page
-  openOceanDiscount = 'openOceanDiscount',
-  oneInchDiscount = 'oneInchDiscount',
-  viewEtherscanOnStakePage = 'viewEtherscanOnStakePage',
-  l2BannerStake = 'l2BannerStake',
-  l2LowFeeStake = 'l2LowFeeStake',
-  l2LowFeeWrap = 'l2LowFeeWrap',
-  l2swap = 'l2swap',
-  // FAQ
-  faqSafeWorkWithLidoAudits = 'faqSafeWorkWithLidoAudits',
-  faqLidoEthAprEthLandingPage = 'faqLidoEthAprEthLandingPage',
-  faqLidoEthAprDocs = 'faqLidoEthAprDocs',
-  faqHowCanIGetStEthWidget = 'faqHowCanIGetStEthWidget',
-  faqHowCanIGetStEthIntegrations = 'faqHowCanIGetStEthIntegrations',
-  faqHowCanIUseSteth = 'faqHowCanIUseSteth',
-  faqWhereCanICoverIdleFinance = 'faqWhereCanICoverIdleFinance',
-  faqWhereCanICoverNexusMutual = 'faqWhereCanICoverNexusMutual',
-  faqWhereCanICoverRibbonFinance = 'faqWhereCanICoverRibbonFinance',
-  faqWhereCanICoverChainproof = 'faqWhereCanICoverChainproof',
-  faqRisksOfStakingReports = 'faqRisksOfStakingReports',
-  faqRisksOfStakingImmunefiBugBounty = 'faqRisksOfStakingImmunefiBugBounty',
-  faqHowCanIUnstakeStEthWithdrawals = 'faqHowCanIUnstakeStEthWithdrawals',
-  faqHowCanIUnstakeStEthIntegrations = 'faqHowCanIUnstakeStEthIntegrations',
-  faqHowCanIGetWstethWrapLink = 'faqHowCanIGetWstethWrapLink',
-  faqHowCanIGetWstethIntegrationsLink = 'faqHowCanIGetWstethIntegrationsLink',
-  faqHowDoIUnwrapWstethUnwrapLink = 'faqHowDoIUnwrapWstethUnwrapLink',
-  faqHowCanIUseWstethL2 = 'faqHowCanIUseWstethL2',
-  faqHowCanIUseWstethDefiProtocols = 'faqHowCanIUseWstethDefiProtocols',
-  faqDoINeedToUnwrapMyWstethWithdrawalsTabs = 'faqDoINeedToUnwrapMyWstethWithdrawalsTabs',
-  // /wrap page
-  l2BannerWrap = 'l2BannerWrap',
-  wrapTokenSelectSTETH = 'wrapTokenSelectSteth',
-  wrapTokenSelectETH = 'wrapTokenSelectEth',
-  // Unwrap tab
-  l2BannerUnwrap = 'l2BannerUnwrap',
-
-  // /withdrawal page
-  withdrawalUseLido = 'withdrawalUseLido',
-  withdrawalUseAggregators = 'withdrawalUseAggregators',
-  withdrawalMaxInput = 'withdrawalMaxInput',
-  withdrawalOtherFactorsTooltipMode = 'withdrawalOtherFactorsTooltipMode',
-  withdrawalFAQtooltipEthAmount = 'withdrawalFAQtooltipEthAmount',
-  withdrawalGoTo1inch = 'withdrawalGoTo1inch',
-  withdrawalGoToBebop = 'withdrawalGoToBebop',
-  withdrawalGoToCowSwap = 'withdrawalGoToCowSwap',
-  withdrawalGoToParaswap = 'withdrawalGoToParaswap',
-  withdrawalGoToOpenOcean = 'withdrawalGoToOpenOcean',
-  withdrawalEtherscanSuccessTemplate = 'withdrawalEtherscanSuccessTemplate',
-  withdrawalGuideSuccessTemplate = 'withdrawalGuideSuccessTemplate',
-
-  // /withdrawal/claim page
-  claimViewOnEtherscanSuccessTemplate = 'claimViewOnEtherscanSuccessTemplate',
-
-  // /withdrawal/request and /withdrawal/claim shared events
-  withdrawalWhatAreStakingPenaltiesFAQ = 'withdrawalWhatAreStakingPenaltiesFAQ',
-  withdrawalNFTGuideFAQ = 'withdrawalNFTGuideFAQ',
+  connectAsNodeOperator = 'connectAsNodeOperator',
+  connectToBecomeNodeOperator = 'connectToBecomeNodeOperator',
+  welcomeDetailedLink = 'welcomeDetailedLink',
+  earlyAdoptionLearnMore = 'earlyAdoptionLearnMore',
+  earlyAdoptionCuratedList = 'earlyAdoptionCuratedList',
+  // Starter Pack
+  starterPackCreateNodeOperator = 'starterPackCreateNodeOperator',
+  consumedEarlyAdoptionLearnMore = 'consumedEarlyAdoptionLearnMore',
+  notEligibleEarlyAdoptionLearnMore = 'notEligibleEarlyAdoptionLearnMore',
+  partnerDappnode = 'partnerDappnode',
+  partnerSedge = 'partnerSedge',
+  partnerStereum = 'partnerStereum',
+  partnerEthdocker = 'partnerEthdocker',
+  starterPackCSMLink = 'starterPackCSMLink',
+  starterPackBondLink = 'starterPackBondLink',
+  starterPackHadwareLink = 'starterPackHadwareLink',
+  starterPackSetupValidatorLink = 'starterPackSetupValidatorLink',
+  starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
+  // Create NO
+  depositDataLearnMore = 'depositDataLearnMore',
+  customAddressDescription = 'customAddressDescription',
+  managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
+  // Common
+  etherscanTxLink = 'etherscanTxLink',
+  feedbackFormLink = 'feedbackFormLink',
+  // Dashboard
+  dashboardKeysLink = 'dashboardKeysLink',
+  dashboardBondLink = 'dashboardBondLink',
+  dashboardRolesLink = 'dashboardRolesLink',
+  dashboardExternalBeaconchaLink = 'dashboardExternalBeaconchaLink',
+  dashboardExternalFeesMonitoringLink = 'dashboardExternalFeesMonitoringLink',
+  dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
+  // Pages
+  pageWelcome = 'pageWelcome',
+  pageStarterPack = 'pageStarterPack',
+  pageNotReleased = 'pageNotReleased',
+  pageMaintenance = 'pageMaintenance',
+  pageCreateNodeOperator = 'pageCreateNodeOperator',
+  pageDashboard = 'pageDashboard',
+  pageAddKeys = 'pageAddKeys',
+  pageViewKeys = 'pageViewKeys',
+  pageRemoveKeys = 'pageRemoveKeys',
+  pageAddBond = 'pageAddBond',
+  pageClaimBond = 'pageClaimBond',
+  pageUnlockBond = 'pageUnlockBond',
+  pageInboxRequests = 'pageInboxRequests',
+  pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
+  pageChangeRewardsRole = 'pageChangeRewardsRole',
+  // Actions
+  switchNodeOperator = 'switchNodeOperator',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
   MATOMO_CLICK_EVENTS_TYPES,
   MatomoEventType
 > = {
-  // Global
+  // Welcome
   [MATOMO_CLICK_EVENTS_TYPES.connectWallet]: [
-    'Ethereum_Staking_Widget',
-    'Push "Connect wallet" button',
-    'eth_widget_connect_wallet',
+    MATOMO_APP_NAME,
+    'Push «Connect wallet» button',
+    prefixed`connect_wallet`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.clickCurvePool]: [
-    'Ethereum_Staking_Widget',
-    'Push «Explore» in Curve section on Transaction success banner',
-    'eth_widget_banner_curve_explore',
+  [MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator]: [
+    MATOMO_APP_NAME,
+    'Push «I am a Node Operator» on Welcome screen',
+    prefixed`connect_wallet_as_no`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.clickBalancerPool]: [
-    'Ethereum_Staking_Widget',
-    'Push «Explore» in Balancer section on Transaction success banner',
-    'eth_widget_banner_balancer_explore',
+  [MATOMO_CLICK_EVENTS_TYPES.connectToBecomeNodeOperator]: [
+    MATOMO_APP_NAME,
+    'Push «Become a Node Operator» on Welcome screen',
+    prefixed`connect_wallet_to_become_no`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.clickExploreDeFi]: [
-    'Ethereum_Staking_Widget',
-    'Push «Explore more DeFi options» on Transaction success banner',
-    'eth_widget_banner_defi_explore',
+  [MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink]: [
+    MATOMO_APP_NAME,
+    'Click on Deailed description about CSM link',
+    prefixed`welcome_csm_detailed_link`,
   ],
-  // / page
-  [MATOMO_CLICK_EVENTS_TYPES.openOceanDiscount]: [
-    'Ethereum_Staking_Widget',
-    'Push "Get discount" on OpenOcean banner on widget',
-    'eth_widget_openocean_discount',
+  [MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionLearnMore]: [
+    MATOMO_APP_NAME,
+    'Click «Learn more about EA» link on Welcome screen',
+    prefixed`welcome_ea_learn_more_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.oneInchDiscount]: [
-    'Ethereum_Staking_Widget',
-    'Push "Get discount" on 1inch banner on widget',
-    'eth_widget_oneinch_discount',
+  [MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionCuratedList]: [
+    MATOMO_APP_NAME,
+    'Click «EA curated list» link on Welcome screen',
+    prefixed`welcome_ea_curated_list`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.viewEtherscanOnStakePage]: [
-    'Ethereum_Staking_Widget',
-    'Push «View on Etherscan» on the right side of Lido Statistics',
-    'eth_widget_etherscan_stakePage',
+  // Starter Pack
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator]: [
+    MATOMO_APP_NAME,
+    'Push «Create a Node Operator» on StarterPack screen',
+    prefixed`starterpack_create_node_operator`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.l2BannerStake]: [
-    'Ethereum_Staking_Widget',
-    'Push "Learn more" at the L2 banner on "Stake" tab',
-    'eth_widget_banner_l2_stake',
+  [MATOMO_CLICK_EVENTS_TYPES.consumedEarlyAdoptionLearnMore]: [
+    MATOMO_APP_NAME,
+    'Click «Learn more about EA» link on Consumed banner',
+    prefixed`consumed_ea_lear_more_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.l2LowFeeStake]: [
-    'Ethereum_Staking_Widget',
-    'Push «Learn more» in Unlock Low-Fee transactions on L2 on Transaction success banner on "Stake" tab',
-    'eth_widget_banner_learn_more_L2_stake',
+  [MATOMO_CLICK_EVENTS_TYPES.notEligibleEarlyAdoptionLearnMore]: [
+    MATOMO_APP_NAME,
+    'Click «Learn more about EA» link on NotEligible banner',
+    prefixed`not_eligible_ea_lear_more_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.l2LowFeeWrap]: [
-    'Ethereum_Staking_Widget',
-    'Push «Learn more» in Unlock Low-Fee transactions on L2 on Transaction success banner on "Wrap" tab',
-    'eth_widget_banner_learn_more_L2_wrap',
+  [MATOMO_CLICK_EVENTS_TYPES.partnerDappnode]: [
+    MATOMO_APP_NAME,
+    'Click partner «Dappnode» link on StarterPack screen',
+    prefixed`starterpack_partner_dappnode_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.l2swap]: [
-    'Ethereum_Staking_Widget',
-    'Push «Swap» in Swap ETH to wstETH on L2 banner on staking widget',
-    'eth_widget_banner_swap_ETH_on_L2',
+  [MATOMO_CLICK_EVENTS_TYPES.partnerSedge]: [
+    MATOMO_APP_NAME,
+    'Click partner «Sedge» link on StarterPack screen',
+    prefixed`starterpack_partner_sedge_link`,
   ],
-  // FAQ
-  [MATOMO_CLICK_EVENTS_TYPES.faqSafeWorkWithLidoAudits]: [
-    'Ethereum_Staking_Widget',
-    'Push «here» in FAQ Is it safe to work with Lido',
-    'eth_widget_faq_safeWorkWithLido_here',
+  [MATOMO_CLICK_EVENTS_TYPES.partnerStereum]: [
+    MATOMO_APP_NAME,
+    'Click partner «Stereum» link on StarterPack screen',
+    prefixed`starterpack_partner_stereu_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqLidoEthAprEthLandingPage]: [
-    'Ethereum_Staking_Widget',
-    'Push «Ethereum landing page» in FAQ What is Lido staking APR for Ethereum? on stake widget',
-    'eth_widget_faq_lidoEthApr_ethereumLandingPage',
+  [MATOMO_CLICK_EVENTS_TYPES.partnerEthdocker]: [
+    MATOMO_APP_NAME,
+    'Click partner «Eth Docker» link on StarterPack screen',
+    prefixed`starterpack_partner_ethdocker_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqLidoEthAprDocs]: [
-    'Ethereum_Staking_Widget',
-    'Push «Docs» in FAQ What is Lido staking APR for Ethereum? on stake widget',
-    'eth_widget_faq_lidoEthApr_docs',
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackCSMLink]: [
+    MATOMO_APP_NAME,
+    'Click «About CSM» link on StarterPack screen',
+    prefixed`starterpack_csm_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowCanIGetStEthWidget]: [
-    'Ethereum_Staking_Widget',
-    'Push «Lido Ethereum staking widget» in FAQ How can I get stETH? on stake widget',
-    'eth_widget_faq_howCanIGetStEth_lidoEthereumStakingWidget',
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackBondLink]: [
+    MATOMO_APP_NAME,
+    'Click «Lear about Bond» link on StarterPack screen',
+    prefixed`starterpack_bond_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowCanIGetStEthIntegrations]: [
-    'Ethereum_Staking_Widget',
-    'Push «DEX Lido integrations» in FAQ How can I get stETH? on stake widget',
-    'eth_widget_faq_howCanIGetStEth_dexLidoIntegrations',
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackHadwareLink]: [
+    MATOMO_APP_NAME,
+    'Click «Run hardware» link on StarterPack screen',
+    prefixed`starterpack_hardware_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowCanIUseSteth]: [
-    'Ethereum_Staking_Widget',
-    'Push «more» in FAQ How can I use stETH? on stake widget',
-    'eth_widget_faq_howCanIUseSteth_more',
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackSetupValidatorLink]: [
+    MATOMO_APP_NAME,
+    'Click «Setup validator» link on StarterPack screen',
+    prefixed`starterpack_setup_validator_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqWhereCanICoverIdleFinance]: [
-    'Ethereum_Staking_Widget',
-    'Push «Idle Finance» in FAQ Where can I cover my stETH? on stake widget',
-    'eth_widget_faq_wherecanicover_idlefinance',
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackGenerateKeysLink]: [
+    MATOMO_APP_NAME,
+    'Click «Generation Keys guide» link on StarterPack screen',
+    prefixed`starterpack_generate_keys_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqWhereCanICoverNexusMutual]: [
-    'Ethereum_Staking_Widget',
-    'Push «Nexus Mutual» in FAQ Where can I cover my stETH? on stake widget',
-    'eth_widget_faq_wherecanicover_nexusmutual',
+  // Create NO
+  [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: [
+    MATOMO_APP_NAME,
+    'Click «Upload Deposit Data learn more» link on Upload form',
+    prefixed`deposti_data_learn_more_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqWhereCanICoverRibbonFinance]: [
-    'Ethereum_Staking_Widget',
-    'Push «Ribbon Finance» in FAQ Where can I cover my stETH? on stake widget',
-    'eth_widget_faq_wherecanicover_ribbonfinance',
+  [MATOMO_CLICK_EVENTS_TYPES.customAddressDescription]: [
+    MATOMO_APP_NAME,
+    'Click «Detailed description of custom addresses» link on Create NO form',
+    prefixed`cusstom_address_description_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqWhereCanICoverChainproof]: [
-    'Ethereum_Staking_Widget',
-    'Push «Chainproof» in FAQ Where can I cover my stETH? on stake widget',
-    'eth_widget_faq_wherecanicover_сhainproof',
+  [MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription]: [
+    MATOMO_APP_NAME,
+    'Click «Detailed description of manager permission type» link on Create NO form',
+    prefixed`manager_address_permission_type_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqRisksOfStakingReports]: [
-    'Ethereum_Staking_Widget',
-    'Push "here" in FAQ  What are the risks of staking with Lido? on stake widget',
-    'eth_widget_faq_risksofstaking_reports',
+  // Common
+  [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: [
+    MATOMO_APP_NAME,
+    'Click «View on Etherscan» link on TX modal',
+    prefixed`etherscan_transaction_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqRisksOfStakingImmunefiBugBounty]: [
-    'Ethereum_Staking_Widget',
-    'Push "Immunefi bug bounty program" in FAQ  What are the risks of staking with Lido? on stake widget',
-    'eth_widget_faq_risksofstaking_immunefibugbounty',
+  [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: [
+    MATOMO_APP_NAME,
+    'Click «Submit report with form» link',
+    prefixed`feedback_form_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowCanIUnstakeStEthWithdrawals]: [
-    'Ethereum_Staking_Widget',
-    'Push «Withdrawals Request and Claim tabs» in FAQ How can I unstake stETH? on stake widget',
-    'eth_widget_faq_howCanIUnstakeStEth_withdrawalsRequestAndClaimTabs',
+  // Dashboard
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: [
+    MATOMO_APP_NAME,
+    'Push «Keys section» arrow on Dashboard screen',
+    prefixed`dashboard_keys_section`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowCanIUnstakeStEthIntegrations]: [
-    'Ethereum_Staking_Widget',
-    'Push «DEX Lido integrations» in FAQ How can I unstake stETH? on stake widget',
-    'eth_widget_faq_howCanIUnstakeStEth_dexLidoIntegrations',
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardBondLink]: [
+    MATOMO_APP_NAME,
+    'Push «Bond section» arrow on Dashboard screen',
+    prefixed`dashboard_bond_section`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowCanIGetWstethWrapLink]: [
-    'Ethereum_Staking_Widget',
-    'Push «Wrap & Unwrap staking widget» in FAQ How can I get wstETH',
-    'eth_widget_faq_howgetwsteth_wrap',
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink]: [
+    MATOMO_APP_NAME,
+    'Push «Roles section» arrow on Dashboard screen',
+    prefixed`dashboard_roles_section`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowCanIGetWstethIntegrationsLink]: [
-    'Ethereum_Staking_Widget',
-    'Push «DEX Lido integrations» in FAQ How can I get wstETH',
-    'eth_widget_faq_howgetwsteth_dexLidoIntegrations',
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink]: [
+    MATOMO_APP_NAME,
+    'Click «Beaconcha.in» on Dashboard screen',
+    prefixed`dashboard_external_beaconcha_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowDoIUnwrapWstethUnwrapLink]: [
-    'Ethereum_Staking_Widget',
-    'Push «stake.lido.fi/wrap/unwrap» How do I unwrap wstETH back to stETH?',
-    'eth_widget_faq_howunwrapwsteth_unwrap',
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalFeesMonitoringLink]: [
+    MATOMO_APP_NAME,
+    'Click «MEV monitoring» on Dashboard screen',
+    prefixed`dashboard_external_mev_monitoring_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowCanIUseWstethL2]: [
-    'Ethereum_Staking_Widget',
-    'Push «L2» How can I use wstETH?',
-    'eth_widget_faq_howCanIUseWstETH_l2',
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalOperatorsPortalLink]: [
+    MATOMO_APP_NAME,
+    'Click «Lido operators» on Dashboard screen',
+    prefixed`dashboard_external_operators_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqHowCanIUseWstethDefiProtocols]: [
-    'Ethereum_Staking_Widget',
-    'Push «DeFi protocols» How can I use wstETH?',
-    'eth_widget_faq_howCanIUseWstETH_defiProtocols',
+  // Pages
+  [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: [
+    MATOMO_APP_NAME,
+    'View page «Welcome»',
+    prefixed`view_welcome_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqDoINeedToUnwrapMyWstethWithdrawalsTabs]: [
-    'Ethereum_Staking_Widget',
-    'Push «Withdrawals Request and Claim tabs» Do I need to unwrap my wstETH before requesting withdrawals?',
-    'eth_widget_faq_doINeedToUnwrapMyWsteth_withdrawalsRequestAndClaimTabs',
+  [MATOMO_CLICK_EVENTS_TYPES.pageStarterPack]: [
+    MATOMO_APP_NAME,
+    'View page «StarterPack»',
+    prefixed`view_starter_pack_page`,
   ],
-  // /wrap page
-  [MATOMO_CLICK_EVENTS_TYPES.l2BannerWrap]: [
-    'Ethereum_Staking_Widget',
-    'Push "Learn more" at the L2 banner on "Wrap" tab',
-    'eth_widget_banner_l2_wrap',
+  [MATOMO_CLICK_EVENTS_TYPES.pageNotReleased]: [
+    MATOMO_APP_NAME,
+    'View page «NotReleased»',
+    prefixed`view_not_released_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.wrapTokenSelectETH]: [
-    'Ethereum_Staking_Widget',
-    'Select ETH to wrap to wsteth on wrap page',
-    'eth_widget_wrap_select_token_eth',
+  [MATOMO_CLICK_EVENTS_TYPES.pageMaintenance]: [
+    MATOMO_APP_NAME,
+    'View page «Maintenance»',
+    prefixed`view_maintenance_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.wrapTokenSelectSTETH]: [
-    'Ethereum_Staking_Widget',
-    'Select STETH to wrap to wsteth on wrap page',
-    'eth_widget_wrap_select_token_steth',
+  [MATOMO_CLICK_EVENTS_TYPES.pageCreateNodeOperator]: [
+    MATOMO_APP_NAME,
+    'View page «CreateNodeOperator»',
+    prefixed`view_create_node_operator_page`,
   ],
-  // Unwrap tab
-  [MATOMO_CLICK_EVENTS_TYPES.l2BannerUnwrap]: [
-    'Ethereum_Staking_Widget',
-    'Push "Learn more" at the L2 banner on "Unwrap" tab',
-    'eth_widget_banner_l2_unwrap',
+  [MATOMO_CLICK_EVENTS_TYPES.pageDashboard]: [
+    MATOMO_APP_NAME,
+    'View page «Dashboard»',
+    prefixed`view_dashboard_page`,
   ],
-
-  // /withdrawal page
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalUseLido]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on «Use Lido» on Request tab',
-    'eth_withdrawals_request_use_lido',
+  [MATOMO_CLICK_EVENTS_TYPES.pageAddKeys]: [
+    MATOMO_APP_NAME,
+    'View page «AddKeys»',
+    prefixed`view_add_keys_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalUseAggregators]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on «Use aggregators» on Request tab',
-    'eth_withdrawals_request_use_aggregators',
+  [MATOMO_CLICK_EVENTS_TYPES.pageViewKeys]: [
+    MATOMO_APP_NAME,
+    'View page «ViewKeys»',
+    prefixed`view_view_keys_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalMaxInput]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on "Max" in input on Request tab',
-    'eth_withdrawals_request_max_input',
+  [MATOMO_CLICK_EVENTS_TYPES.pageRemoveKeys]: [
+    MATOMO_APP_NAME,
+    'View page «RemoveKeys»',
+    prefixed`view_remove_keys_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalOtherFactorsTooltipMode]: [
-    'Ethereum_Withdrawals_Widget',
-    'Push «other factors in tooltip near Withdrawals mode on Request tab',
-    'eth_withdrawals_request_other_reasons_tooltip_mode',
+  [MATOMO_CLICK_EVENTS_TYPES.pageAddBond]: [
+    MATOMO_APP_NAME,
+    'View page «AddBond»',
+    prefixed`view_add_bond_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalFAQtooltipEthAmount]: [
-    'Ethereum_Withdrawals_Widget',
-    'Push «FAQ» in tooltip near ETH amount on Request tab',
-    'eth_withdrawals_request_FAQ_tooltip_eth_amount',
+  [MATOMO_CLICK_EVENTS_TYPES.pageClaimBond]: [
+    MATOMO_APP_NAME,
+    'View page «ClaimBond»',
+    prefixed`view_claim_bond_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalGoTo1inch]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on «Go to 1inch» in aggregators list on Request tab',
-    'eth_withdrawals_request_go_to_1inch',
+  [MATOMO_CLICK_EVENTS_TYPES.pageUnlockBond]: [
+    MATOMO_APP_NAME,
+    'View page «UnlockBond»',
+    prefixed`view_unlock_bond_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalGoToBebop]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on «Go to Bebop» in aggregators list on Request tab',
-    'eth_withdrawals_request_go_to_1inch',
+  [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: [
+    MATOMO_APP_NAME,
+    'View page «InboxRequests»',
+    prefixed`view_inbox_requests_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalGoToCowSwap]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on «Go to CowSwap» in aggregators list on Request tab',
-    'eth_withdrawals_request_go_to_CowSwap',
+  [MATOMO_CLICK_EVENTS_TYPES.pageChangeManagerRole]: [
+    MATOMO_APP_NAME,
+    'View page «ChangeManagerRole»',
+    prefixed`view_change_manager_role_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalGoToParaswap]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on «Go to Paraswap» in aggregators list on Request tab',
-    'eth_withdrawals_request_go_to_Paraswap',
+  [MATOMO_CLICK_EVENTS_TYPES.pageChangeRewardsRole]: [
+    MATOMO_APP_NAME,
+    'View page «ChangeRewardsRole»',
+    prefixed`view_change_rewards_role_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalGoToOpenOcean]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on «Go to OpenOcean in aggregators list on Request tab',
-    'eth_withdrawals_request_go_to_OpenOcean',
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalEtherscanSuccessTemplate]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on "Etherscan" on success template after withdrawal request',
-    'eth_withdrawals_request_etherscan_success_template',
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalGuideSuccessTemplate]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on "This guide will help you to do this" on success template after withdrawal request',
-    'eth_withdrawals_request_guide_success_template',
-  ],
-
-  // /withdrawal?tab=claim page
-  [MATOMO_CLICK_EVENTS_TYPES.claimViewOnEtherscanSuccessTemplate]: [
-    'Ethereum_Withdrawals_Widget',
-    'Click on "View on Etherscan" on success template after claim',
-    'eth_withdrawals_claim_view_on_etherscan_success_template',
-  ],
-
-  // /withdrawal and /withdrawal?tab=claim shared events
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalWhatAreStakingPenaltiesFAQ]: [
-    'Ethereum_Withdrawals_Widget',
-    'Push on "What Are Staking/Validator Penalties" in FAQ',
-    'eth_withdrawals_what_are_staking_penalties_FAQ',
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.withdrawalNFTGuideFAQ]: [
-    'Ethereum_Withdrawals_Widget',
-    'Push on "How do I add the Lido NFT to my wallet" guide link in FAQ',
-    'eth_withdrawals_how_to_add_nft_guide_FAQ',
+  // Actions
+  [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: [
+    MATOMO_APP_NAME,
+    'Switch Node Operator',
+    prefixed`switch_node_operator`,
   ],
 };

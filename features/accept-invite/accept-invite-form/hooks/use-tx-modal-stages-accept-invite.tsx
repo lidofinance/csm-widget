@@ -2,7 +2,6 @@ import { ROLES } from 'consts/roles';
 import {
   SuccessText,
   TransactionModalTransitStage,
-  TxStagePermit,
   TxStageSuccess,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
@@ -18,8 +17,6 @@ const getTxModalStagesAcceptInvite = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
-
-  signPermit: () => transitStage(<TxStagePermit />),
 
   sign: (address: Address, role: ROLES) =>
     transitStage(

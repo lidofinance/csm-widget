@@ -1,3 +1,4 @@
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
@@ -11,7 +12,11 @@ export const RolesSection: FC = () => {
   const { data: info } = useNodeOperatorInfo(id);
 
   return (
-    <SectionBlock title="Roles" href={PATH.ROLES}>
+    <SectionBlock
+      title="Roles"
+      href={PATH.ROLES}
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink}
+    >
       {info && (
         <Stack wrap>
           <RoleBlock

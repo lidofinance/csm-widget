@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 
-import { Link } from '@lidofinance/lido-ui';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { MatomoLink } from 'shared/components';
 import {
   BlockStyled,
   CSMLogo,
@@ -21,9 +22,12 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => (
         aimed at attracting community stakers to participate in the Lido on
         Ethereum protocol as Node Operators. For a detailed description of the
         module, follow{' '}
-        <Link href="https://operatorportal.lido.fi/modules/community-staking-module">
+        <MatomoLink
+          href="https://operatorportal.lido.fi/modules/community-staking-module"
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
+        >
           the link
-        </Link>
+        </MatomoLink>
         .
       </p>
     </ContentWrapper>

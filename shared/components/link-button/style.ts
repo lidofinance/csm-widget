@@ -1,4 +1,4 @@
-import { Button, Link } from '@lidofinance/lido-ui';
+import { Button } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
 export const StyledButton = styled(Button)`
@@ -8,8 +8,4 @@ export const StyledButton = styled(Button)`
     justify-content: center;
     gap: 6px; // @style
   }
-`;
-
-export const StyledLink = styled(Link)`
-  flex: 1 0 47%;
 `;

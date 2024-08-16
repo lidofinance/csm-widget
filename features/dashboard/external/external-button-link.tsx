@@ -1,21 +1,21 @@
 import { External, Text } from '@lidofinance/lido-ui';
-import { FC, PropsWithChildren, ReactNode } from 'react';
-import { Stack } from 'shared/components';
+import { ComponentProps, FC, PropsWithChildren, ReactNode } from 'react';
+import { MatomoLink, Stack } from 'shared/components';
 import { StyledLink } from './styles';
 
 type Props = {
-  href: string;
   title: string;
   icon?: ReactNode;
-};
+} & Pick<ComponentProps<typeof MatomoLink>, 'href' | 'matomoEvent'>;
 
 export const ExternalButtonLink: FC<PropsWithChildren<Props>> = ({
   href,
+  matomoEvent,
   title,
   icon,
   children,
 }) => (
-  <StyledLink href={href}>
+  <StyledLink {...{ href, matomoEvent }}>
     <Stack gap="sm" center>
       {icon}
       <Stack gap="xs" center>
