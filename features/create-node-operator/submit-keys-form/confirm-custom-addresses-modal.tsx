@@ -1,13 +1,13 @@
 import { Address, Block, Box, Button, Modal, Text } from '@lidofinance/lido-ui';
-
 import type { ModalComponentType } from 'providers/modal-provider';
 import { FC, useCallback, useState } from 'react';
 import { Stack, StepIndicator, Ul } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
+import invariant from 'tiny-invariant';
 
 type Props = {
-  rewardsAddress: string;
-  managerAddress: string;
+  rewardsAddress?: string;
+  managerAddress?: string;
   extendedManagerPermissions: boolean;
 };
 
@@ -30,6 +30,9 @@ export const ConfirmCustomAddressesModal: ModalComponentType<
       onConfirm();
     }
   }, [extendedManagerPermissions, onConfirm, step]);
+
+  invariant(rewardsAddress);
+  invariant(managerAddress);
 
   return (
     <Modal
@@ -63,7 +66,7 @@ export const ConfirmCustomAddressesModal: ModalComponentType<
   );
 };
 
-const CustomAddresses: FC<Props> = ({
+const CustomAddresses: FC<Required<Props>> = ({
   rewardsAddress,
   managerAddress,
   extendedManagerPermissions,

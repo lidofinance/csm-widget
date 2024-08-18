@@ -1,3 +1,5 @@
+import { useLocalStorage } from '@lido-sdk/react';
+import { isAddress } from 'ethers/lib/utils.js';
 import { useRouter } from 'next/router';
 import {
   createContext,
@@ -9,13 +11,17 @@ import {
 } from 'react';
 import { useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
+import { getFirstParam } from 'utils';
+import { Address } from 'wagmi';
 
 type ModifyContextValue = {
   customAddresses: boolean;
-  referrer?: string;
+  referrer?: Address;
 };
 
-const REFERRER_QUERY = 'ref';
+const QUERY_REFERRER = 'ref';
+const QUERY_MODE = 'ref';
+const MODE_EXTENDED = 'extended';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -35,21 +41,25 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     false,
   );
 
-  // TODO: may be store Referrer in LocalStorage ?
-  const [referrer, setReferrer] = useSessionStorage<string | undefined>(
+  const [referrer, setReferrer] = useLocalStorage<Address | undefined>(
     'referrer',
     undefined,
   );
+
   const { query, isReady } = useRouter();
 
   useEffect(() => {
-    if (isReady && query['mode'] === 'extended') {
+    if (!isReady) return;
+
+    const mode = getFirstParam(query[QUERY_MODE]);
+    const ref = getFirstParam(query[QUERY_REFERRER]);
+
+    if (mode === MODE_EXTENDED) {
       setCustomAddresses(true);
     }
-    if (isReady && query[REFERRER_QUERY]) {
-      // TODO: validate referrer
-      // TODO: do not rewrite referrer ?
-      setReferrer(query[REFERRER_QUERY] as string);
+
+    if (ref && isAddress(ref)) {
+      setReferrer(ref);
     }
   }, [isReady, query, setCustomAddresses, setReferrer]);
 

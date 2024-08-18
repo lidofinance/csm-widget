@@ -7,7 +7,7 @@ export const ManagerAddressInput: React.FC = () => {
   return (
     <AddressInputHookForm
       fieldName="managerAddress"
-      label={`Manager address`}
+      label="Manager address"
       currentAddress={address}
     />
   );

@@ -41,7 +41,7 @@ type MethodParams = {
   extendedManagerPermissions: boolean;
   permit: GatherPermitSignatureResult;
   eaProof: Proof;
-  referral: Address;
+  referrer: Address;
 };
 
 // this encapsulates eth/steth/wsteth flows
@@ -65,7 +65,7 @@ const useSubmitKeysTx = () => {
                 extendedManagerPermissions: params.extendedManagerPermissions,
               },
               params.eaProof,
-              params.referral,
+              params.referrer,
               {
                 value: params.bondAmount,
               },
@@ -85,7 +85,7 @@ const useSubmitKeysTx = () => {
               },
               params.permit,
               params.eaProof,
-              params.referral,
+              params.referrer,
             ),
             txName: 'addNodeOperatorStETH',
           };
@@ -102,7 +102,7 @@ const useSubmitKeysTx = () => {
               },
               params.permit,
               params.eaProof,
-              params.referral,
+              params.referrer,
             ),
             txName: 'addNodeOperatorWstETH',
           };
@@ -129,30 +129,20 @@ export const useSubmitKeysSubmit = ({
   const submitKeys = useCallback(
     async (
       {
-        referral,
+        referrer,
         depositData,
         token,
         bondAmount,
         specifyCustomAddresses,
-        rewardsAddress: rewardsAddressRaw,
-        managerAddress: managerAddressRaw,
-        extendedManagerPermissions: extendedManagerPermissionsRaw,
+        rewardsAddress,
+        managerAddress,
+        extendedManagerPermissions,
       }: SubmitKeysFormInputType,
       { eaProof }: SubmitKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(bondAmount, 'BondAmount is not defined');
-
-      const rewardsAddress = addressOrZero(
-        specifyCustomAddresses ? rewardsAddressRaw : undefined,
-      );
-      const managerAddress = addressOrZero(
-        specifyCustomAddresses ? managerAddressRaw : undefined,
-      );
-      const extendedManagerPermissions = specifyCustomAddresses
-        ? extendedManagerPermissionsRaw
-        : false;
 
       if (
         specifyCustomAddresses &&
@@ -183,10 +173,15 @@ export const useSubmitKeysSubmit = ({
           signatures,
           permit,
           eaProof: eaProof || [],
-          rewardsAddress,
-          managerAddress,
-          extendedManagerPermissions,
-          referral: addressOrZero(referral),
+          rewardsAddress: addressOrZero(
+            specifyCustomAddresses && rewardsAddress,
+          ),
+          managerAddress: addressOrZero(
+            specifyCustomAddresses && managerAddress,
+          ),
+          extendedManagerPermissions:
+            specifyCustomAddresses && extendedManagerPermissions,
+          referrer: addressOrZero(referrer),
         });
 
         const [txHash, waitTx] = await runWithTransactionLogger(
