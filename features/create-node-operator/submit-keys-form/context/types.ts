@@ -7,7 +7,7 @@ import { Address } from 'wagmi';
 export type SubmitKeysFormInputType = {
   token: TOKENS;
   bondAmount?: BigNumber;
-  referral?: Address;
+  referrer?: Address;
   rewardsAddress?: string;
   managerAddress?: string;
   extendedManagerPermissions: boolean;

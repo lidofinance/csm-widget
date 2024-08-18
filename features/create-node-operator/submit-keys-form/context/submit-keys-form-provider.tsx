@@ -17,12 +17,15 @@ import { useFormBondAmount } from './use-form-bond-amount';
 import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
 import { useSubmitKeysSubmit } from './use-submit-keys-submit';
 import { useSubmitKeysValidation } from './use-submit-keys-validation';
+import { useModifyContext } from 'providers/modify-provider';
 
 export const useSubmitKeysFormData = useFormData<SubmitKeysFormNetworkData>;
 
 export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const [networkData, revalidate] = useSubmitKeysFormNetworkData();
   const validationResolver = useSubmitKeysValidation(networkData);
+
+  const { referrer } = useModifyContext();
 
   const formObject = useForm<SubmitKeysFormInputType>({
     defaultValues: {
@@ -31,6 +34,7 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
       extendedManagerPermissions: false,
       specifyCustomAddresses: false,
       specifyReferrrer: false,
+      referrer,
     },
     resolver: validationResolver,
     mode: 'onChange',
