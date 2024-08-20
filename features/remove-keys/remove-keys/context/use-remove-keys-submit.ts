@@ -63,7 +63,7 @@ export const useRemoveKeysSubmit = ({
       const keysCount = count;
 
       try {
-        txModalStages.sign(keysCount, nodeOperatorId);
+        txModalStages.sign({ keysCount });
 
         const tx = await getTx({
           startIndex,
@@ -76,13 +76,13 @@ export const useRemoveKeysSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending(keysCount, nodeOperatorId, txHash);
+        txModalStages.pending({ keysCount }, txHash);
 
         await runWithTransactionLogger('RemoveKeys block confirmation', waitTx);
 
         await onConfirm?.();
 
-        txModalStages.success(txHash);
+        txModalStages.success({ keysCount }, txHash);
 
         return true;
       } catch (error) {

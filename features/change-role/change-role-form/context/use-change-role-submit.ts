@@ -128,7 +128,13 @@ export const useChangeRoleSubmit = ({
       }
 
       try {
-        txModalStages.sign({ address, role });
+        txModalStages.sign({
+          address,
+          role,
+          isPropose,
+          isRewardsChange,
+          isManagerReset,
+        });
 
         const tx = await getTx(
           { role, isRewardsChange, isManagerReset },
@@ -143,13 +149,19 @@ export const useChangeRoleSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending({ address, role }, txHash);
+        txModalStages.pending(
+          { address, role, isPropose, isRewardsChange, isManagerReset },
+          txHash,
+        );
 
         await runWithTransactionLogger('ChangeRole block confirmation', waitTx);
 
         await onConfirm?.();
 
-        txModalStages.success({ address, role }, txHash);
+        txModalStages.success(
+          { address, role, isPropose, isRewardsChange, isManagerReset },
+          txHash,
+        );
 
         return true;
       } catch (error) {
