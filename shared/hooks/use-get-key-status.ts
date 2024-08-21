@@ -2,7 +2,9 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import { HexString } from 'shared/keys';
 import { KeyStatus } from 'types';
+import { useExitRequestedKeysFromEvents } from './use-exit-requested-keys-from-events';
 import { useNetworkDuplicates } from './use-network-duplicates';
+import { useWithdrawnKeyIndexesFromEvents } from './use-withdrawn-key-indexes-from-events';
 import { useNodeOperatorInfo } from './useNodeOperatorInfo';
 import { useNodeOperatorUnbondedKeys } from './useNodeOperatorUnbondedKeys';
 
@@ -49,20 +51,32 @@ export const useGetKeyStatus = () => {
   const { data: info } = useNodeOperatorInfo(nodeOperatorId);
   const { data: unbonded } = useNodeOperatorUnbondedKeys(nodeOperatorId);
   const { data: duplicates } = useNetworkDuplicates();
+  const { data: withdrawnIndexes } = useWithdrawnKeyIndexesFromEvents();
+  const { data: exitRequestedKeys } = useExitRequestedKeysFromEvents();
 
   return useCallback(
     (index: number, pubkey: HexString): KeyStatus | undefined => {
       if (!info) return undefined;
 
+      if (withdrawnIndexes?.includes(index)) {
+        return 'withdrawn';
+      }
+
+      const exitRequestIndex = exitRequestedKeys?.findIndex(
+        (key) => key === pubkey.toLowerCase(),
+      );
+      if (exitRequestIndex !== undefined && exitRequestIndex >= 0) {
+        if (info.stuckValidatorsCount > exitRequestIndex) return 'stuck';
+        return 'requested to exit';
+      }
+
       if (unbonded && info?.totalAddedKeys - index < unbonded)
         return 'unbonded';
-      if (index < info.totalWithdrawnKeys) return 'exited';
+
       if (index < info.totalDepositedKeys) {
-        if (index >= info.totalAddedKeys - info.stuckValidatorsCount) {
-          return 'stuck';
-        }
         return 'active';
       }
+
       if (index >= info.totalVettedKeys) {
         if (duplicates?.includes(pubkey)) return 'duplicated';
         if (index > info.totalVettedKeys) return 'unvetted';
@@ -72,6 +86,6 @@ export const useGetKeyStatus = () => {
       return 'depositable';
       // TODO: handle targetLimit
     },
-    [duplicates, info, unbonded],
+    [duplicates, exitRequestedKeys, info, unbonded, withdrawnIndexes],
   );
 };

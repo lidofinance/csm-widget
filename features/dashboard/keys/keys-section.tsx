@@ -59,10 +59,10 @@ export const KeysSection: FC = () => {
               }
             />
             <Item
-              title="Exited"
+              title="Withdrawn"
               count={info.totalWithdrawnKeys}
               variant="secondary"
-              tooltip="Keys that have already exited or are waiting to be exited"
+              tooltip="Keys that have already exited"
             />
           </Row>
           <Row>
