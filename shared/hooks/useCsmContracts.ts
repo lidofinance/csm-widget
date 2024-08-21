@@ -1,15 +1,16 @@
 import { contractHooksFactory } from '@lido-sdk/react';
-import { getCSMContractAddressGetter } from 'consts/csm-contracts';
+import { getCsmContractAddressGetter } from 'consts/csm-constants';
 import {
   CSAccounting__factory,
   CSEarlyAdoption__factory,
   CSFeeDistributor__factory,
   CSModule__factory,
+  ExitBusOracle__factory,
 } from 'generated';
 
 const CSModule = contractHooksFactory(
   CSModule__factory,
-  getCSMContractAddressGetter('CSModule'),
+  getCsmContractAddressGetter('CSModule'),
 );
 
 export const useCSModuleRPC = CSModule.useContractRPC;
@@ -17,7 +18,7 @@ export const useCSModuleWeb3 = CSModule.useContractWeb3;
 
 const CSAccounting = contractHooksFactory(
   CSAccounting__factory,
-  getCSMContractAddressGetter('CSAccounting'),
+  getCsmContractAddressGetter('CSAccounting'),
 );
 
 export const useCSAccountingRPC = CSAccounting.useContractRPC;
@@ -25,14 +26,21 @@ export const useCSAccountingWeb3 = CSAccounting.useContractWeb3;
 
 const CSFeeDistributor = contractHooksFactory(
   CSFeeDistributor__factory,
-  getCSMContractAddressGetter('CSFeeDistributor'),
+  getCsmContractAddressGetter('CSFeeDistributor'),
 );
 
 export const useCSFeeDistributorRPC = CSFeeDistributor.useContractRPC;
 
 const CSEarlyAdoption = contractHooksFactory(
   CSEarlyAdoption__factory,
-  getCSMContractAddressGetter('CSEarlyAdoption'),
+  getCsmContractAddressGetter('CSEarlyAdoption'),
 );
 
 export const useCSEarlyAdoptionRPC = CSEarlyAdoption.useContractRPC;
+
+const ExitBusOracle = contractHooksFactory(
+  ExitBusOracle__factory,
+  getCsmContractAddressGetter('ExitBusOracle'),
+);
+
+export const useExitBusOracleRPC = ExitBusOracle.useContractRPC;

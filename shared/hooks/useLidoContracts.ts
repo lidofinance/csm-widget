@@ -1,6 +1,6 @@
+import { getTokenAddress } from '@lido-sdk/constants';
 import { StethAbiFactory, WstethAbiFactory } from '@lido-sdk/contracts';
 import { contractHooksFactory, hooksFactory } from '@lido-sdk/react';
-import { getTokenAddress } from 'consts/lido-tokens';
 import { TOKENS } from 'consts/tokens';
 
 const wsteth = hooksFactory((chainId) =>

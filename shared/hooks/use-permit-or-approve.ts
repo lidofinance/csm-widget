@@ -1,6 +1,5 @@
 import { Zero } from '@ethersproject/constants';
-import { getCSMContractAddress } from 'consts/csm-contracts';
-import { getTokenAddress } from 'consts/lido-tokens';
+import { getCsmContractAddress } from 'consts/csm-constants';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { useCallback, useMemo } from 'react';
@@ -8,10 +7,11 @@ import { useAccount, useChainId } from 'wagmi';
 import { useApprove } from './use-approve';
 import {
   GatherPermitSignatureResult,
-  useCsmPermitSignature,
-} from './use-csm-permit-signature';
+  usePermitSignature,
+} from './use-permit-signature';
 import { useIsMultisig } from './useIsMultisig';
 import { trackMatomoTxEvent } from 'utils';
+import { getTokenAddress } from '@lido-sdk/constants';
 
 type PermitOrApprove = (props: {
   token: TOKENS;
@@ -40,19 +40,19 @@ export const usePermitOrApprove = () => {
   const { address: owner } = useAccount();
   const { isMultisig } = useIsMultisig();
 
-  const gatherPermitSignature = useCsmPermitSignature();
-
   const [stethTokenAddress, wstethTokenAddress, spender] = useMemo(
     () => [
       getTokenAddress(chainId, TOKENS.STETH),
       getTokenAddress(chainId, TOKENS.WSTETH),
-      getCSMContractAddress(chainId, 'CSAccounting'),
+      getCsmContractAddress(chainId, 'CSAccounting'),
     ],
     [chainId],
   );
 
   const stethApprove = useApprove(stethTokenAddress, spender, owner);
   const wstethApprove = useApprove(wstethTokenAddress, spender, owner);
+
+  const gatherPermitSignature = usePermitSignature(spender);
 
   return useCallback<PermitOrApprove>(
     async ({ token, amount, txModalStages }) => {

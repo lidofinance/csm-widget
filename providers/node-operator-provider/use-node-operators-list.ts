@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { NodeOperatorRoles } from 'types';
-import { mergeRoles } from './mergeRoles';
+import { mergeRoles } from 'utils';
 import { useCachedNodeOperator } from './use-cached-node-operator';
-import { useNodeOperatorsFromEvents } from './use-node-operators-from-events';
+import { useCsmNodeOperators } from 'shared/hooks';
 
 export const useNodeOperatorsList = () => {
-  const { data, initialLoading, mutate } = useNodeOperatorsFromEvents();
+  const { data, initialLoading, mutate } = useCsmNodeOperators();
 
   const cached = useCachedNodeOperator();
 

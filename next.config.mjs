@@ -9,7 +9,6 @@ const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
 const isIPFSMode = !!process.env.IPFS_MODE;
-const isDevnet = !!process.env.DEVNET;
 const notReleased = !!process.env.NOT_RELEASED;
 const maintenance = !!process.env.MAINTENANCE;
 
@@ -153,7 +152,6 @@ export default withBundleAnalyzer({
     // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
     basePath,
     developmentMode,
-    isDevnet,
     notReleased,
     maintenance,
 
@@ -184,6 +182,5 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
-    isDevnet,
   },
 });

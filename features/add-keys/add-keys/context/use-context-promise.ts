@@ -1,4 +1,4 @@
-import { getCsmWc } from 'consts/csm-wc';
+import { getCsmConstants } from 'consts/csm-constants';
 import { useMemo } from 'react';
 import { useAccount, useAwaiter } from 'shared/hooks';
 
@@ -18,7 +18,7 @@ export const useContextPromise = <T extends BaseNetworkData>({
   ...data
 }: T) => {
   const { chainId } = useAccount();
-  const wc = getCsmWc(chainId);
+  const wc = getCsmConstants(chainId).withdrawalCredentials;
 
   const validationContextAwaited = useMemo(() => {
     const allLoaded = Object.values(loading).every((v) => !v);

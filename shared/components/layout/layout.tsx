@@ -11,8 +11,6 @@ import {
   Heading,
   Content,
 } from './styles';
-import { WarningLine } from '../warning-line';
-import { config } from 'config';
 import { DummyHeader } from './header/dummy-header';
 import { FeedbackLine } from '../feedback-line';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
@@ -40,7 +38,6 @@ export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
 
   return (
     <>
-      {config.isDevnet && <WarningLine />}
       {!dummy && <FeedbackLine />}
       {dummy ? <DummyHeader /> : <Header />}
       <Main size={containerSize}>
