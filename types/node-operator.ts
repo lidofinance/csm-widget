@@ -34,6 +34,7 @@ export type Proof = BytesLike[];
 export type BondBalance = {
   current: BigNumber;
   required: BigNumber;
+  locked: BigNumber;
 
   delta: BigNumber;
   isShortage: boolean;

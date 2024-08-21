@@ -18,16 +18,14 @@ export type MaxValues = Record<
   [BigNumber | undefined, BigNumber | undefined]
 >;
 
-export const useMaxValues = ({ bond, rewards, lockedBond }: Props) => {
+export const useMaxValues = ({ bond, rewards }: Props) => {
   const maxBond = useAvailableToClaim({
     bond,
     rewards: undefined,
-    lockedBond,
   });
   const maxBondAndRewards = useAvailableToClaim({
     bond,
     rewards,
-    lockedBond,
   });
 
   const bondSwr = useWstethBySteth(maxBond);

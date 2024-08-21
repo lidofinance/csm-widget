@@ -4,11 +4,7 @@ import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { SectionBlock, Sign, Stack } from 'shared/components';
-import {
-  useNodeOperatorBalance,
-  useNodeOperatorLockAmount,
-  useNodeOperatorRewards,
-} from 'shared/hooks';
+import { useNodeOperatorBalance, useNodeOperatorRewards } from 'shared/hooks';
 import { useAvailableToClaim } from 'shared/hooks/useAvailableToClaim';
 import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
@@ -22,13 +18,9 @@ export const BondSection: FC = () => {
   const { data: rewards, initialLoading: isRewardsLoading } =
     useNodeOperatorRewards(id);
 
-  const { data: lockedBond, initialLoading: isLockedLoading } =
-    useNodeOperatorLockAmount(id);
-
   const availableToClaim = useAvailableToClaim({
     bond,
     rewards,
-    lockedBond,
   });
 
   return (
@@ -77,14 +69,14 @@ export const BondSection: FC = () => {
                   />
                 </>
               )}
-              {lockedBond?.gt(0) && (
+              {bond.locked.gt(0) && (
                 <>
                   <Sign minus />
                   <Balance
                     dangerous
                     title="Locked bond"
-                    loading={isLockedLoading}
-                    amount={lockedBond}
+                    loading={isBondLoading}
+                    amount={bond.locked}
                     token={TOKENS.ETH}
                   />
                 </>

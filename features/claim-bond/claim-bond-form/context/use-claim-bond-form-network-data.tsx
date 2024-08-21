@@ -1,10 +1,6 @@
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
-import {
-  useNodeOperatorBalance,
-  useNodeOperatorLockAmount,
-  useNodeOperatorRewards,
-} from 'shared/hooks';
+import { useNodeOperatorBalance, useNodeOperatorRewards } from 'shared/hooks';
 import { type ClaimBondFormNetworkData } from './types';
 import { useMaxValues } from './use-max-values';
 
@@ -26,34 +22,22 @@ export const useClaimBondFormNetworkData = (): [
     initialLoading: isRewardsLoading,
   } = useNodeOperatorRewards(nodeOperatorId);
 
-  const {
-    data: lockedBond,
-    update: updateLockedBond,
-    initialLoading: isLockedBondLoading,
-  } = useNodeOperatorLockAmount(nodeOperatorId);
-
   const { data: maxValues, initialLoading: isMaxValuesLoading } = useMaxValues({
     bond,
     rewards,
-    lockedBond,
   });
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([
-      updateBond(),
-      updateRewards(),
-      updateLockedBond(),
-    ]);
-  }, [updateBond, updateLockedBond, updateRewards]);
+    await Promise.allSettled([updateBond(), updateRewards()]);
+  }, [updateBond, updateRewards]);
 
   const loading = useMemo(
     () => ({
       isBondLoading,
       isRewardsLoading,
-      isLockedBondLoading,
       isMaxValuesLoading,
     }),
-    [isBondLoading, isLockedBondLoading, isMaxValuesLoading, isRewardsLoading],
+    [isBondLoading, isMaxValuesLoading, isRewardsLoading],
   );
 
   return [
@@ -61,7 +45,6 @@ export const useClaimBondFormNetworkData = (): [
       nodeOperatorId,
       bond,
       rewards,
-      lockedBond,
       maxValues,
       loading,
     },

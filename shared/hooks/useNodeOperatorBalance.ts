@@ -9,7 +9,7 @@ export const useNodeOperatorBalance = (
   nodeOperatorId?: NodeOperatorId,
   config = STRATEGY_EAGER,
 ) => {
-  const swr = useContractSWR({
+  const swrBalance = useContractSWR({
     contract: useCSAccountingRPC(),
     method: 'getBondSummary',
     params: [nodeOperatorId],
@@ -17,7 +17,19 @@ export const useNodeOperatorBalance = (
     config,
   });
 
-  const balance = useExtendedBondBalance(swr.data?.required, swr.data?.current);
+  const swrLocked = useContractSWR({
+    contract: useCSAccountingRPC(),
+    method: 'getActualLockedBond',
+    params: [nodeOperatorId],
+    shouldFetch: !!nodeOperatorId,
+    config,
+  });
 
-  return useMergeSwr([swr], balance);
+  const balance = useExtendedBondBalance(
+    swrBalance.data?.required,
+    swrBalance.data?.current,
+    swrLocked.data,
+  );
+
+  return useMergeSwr([swrBalance, swrLocked], balance);
 };
