@@ -1,5 +1,5 @@
 import { CHAINS } from '@lido-sdk/constants';
-import { getCsmWc } from 'consts/csm-wc';
+import { getCsmConstants } from 'consts/csm-constants';
 import { validate } from 'shared/keys';
 import invariant from 'tiny-invariant';
 import type { DepositData } from 'types';
@@ -13,7 +13,7 @@ export const validateDepositData = async ({
   depositData,
   chainId,
 }: ValidateDepositDataProps) => {
-  const wc = getCsmWc(chainId);
+  const wc = getCsmConstants(chainId).withdrawalCredentials;
   invariant(chainId);
   invariant(wc);
   const error = await validate(depositData, chainId, wc);

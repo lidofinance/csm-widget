@@ -1,14 +1,11 @@
 import { useLidoSWR } from '@lido-sdk/react';
+import { getCsmConstants, getCsmContractAddress } from 'consts/csm-constants';
+import { getExternalLinks } from 'consts/external-links';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { HexString } from 'shared/keys';
-import { useAccount } from './use-account';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { HexString } from 'shared/keys';
 import invariant from 'tiny-invariant';
-import { getCSMContractAddress } from 'consts/csm-contracts';
-
-// FIXME: mainnet
-const KAPI_URL = 'https://keys-api-holesky.testnet.fi';
-const MODULE_ID = 4;
+import { useAccount } from './use-account';
 
 type NetworkKey = {
   index: number;
@@ -32,14 +29,13 @@ type FoundedKeys = {
   meta: any;
 };
 
-const getKeys = async (id: string) => {
+const getKeys = async (keysApiUrl: string, moduleId: number, id: string) => {
   const response = await fetch(
-    `${KAPI_URL}/v1/modules/${MODULE_ID}/keys?operatorIndex=${id}`,
+    `${keysApiUrl}/v1/modules/${moduleId}/keys?operatorIndex=${id}`,
     {
       method: 'get',
       headers: {
         'Content-Type': 'application/json',
-        origin: 'csm.testnet.fi', // TODO: remove
       },
     },
   );
@@ -49,13 +45,12 @@ const getKeys = async (id: string) => {
   return json.data.keys;
 };
 
-const findKeys = async (pubkeys: HexString[]) => {
-  const response = await fetch(`${KAPI_URL}/v1/keys/find`, {
+const findKeys = async (keysApiUrl: string, pubkeys: HexString[]) => {
+  const response = await fetch(`${keysApiUrl}/v1/keys/find`, {
     method: 'post',
     body: JSON.stringify({ pubkeys }),
     headers: {
       'Content-Type': 'application/json',
-      origin: 'csm.testnet.fi', // TODO: remove
     },
   });
 
@@ -88,14 +83,19 @@ export const useNetworkDuplicates = (config = STRATEGY_LAZY) => {
   const { chainId } = useAccount();
   const nodeOperatorId = useNodeOperatorId();
 
+  const keysApiUrl = getExternalLinks(chainId)?.keysApi;
+
   invariant(nodeOperatorId);
+  invariant(keysApiUrl);
 
   return useLidoSWR(
     ['no-keys', nodeOperatorId, chainId],
     async () => {
-      const csmAddress = getCSMContractAddress(chainId, 'CSModule');
-      const keys = await getKeys(nodeOperatorId);
+      const csmAddress = getCsmContractAddress(chainId, 'CSModule');
+      const moduleId = getCsmConstants(chainId).stakingModuleId;
+      const keys = await getKeys(keysApiUrl, moduleId, nodeOperatorId);
       const rawKeys = await findKeys(
+        keysApiUrl,
         keys.map(({ key }) => key).filter(onlyUnique),
       );
       return getDuplicates(rawKeys, nodeOperatorId, csmAddress);

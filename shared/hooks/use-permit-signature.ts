@@ -2,13 +2,12 @@ import { hexValue, splitSignature } from '@ethersproject/bytes';
 import { MaxUint256 } from '@ethersproject/constants';
 import { StethAbi } from '@lido-sdk/contracts';
 import { useSDK } from '@lido-sdk/react';
-import { getCSMContractAddress } from 'consts/csm-contracts';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber, BytesLike, TypedDataDomain } from 'ethers';
 import { useCallback } from 'react';
 import { useAccount } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { useChainId } from 'wagmi';
+import { Address, useChainId } from 'wagmi';
 import { useSTETHContractRPC, useWSTETHContractRPC } from './useLidoContracts';
 
 export type GatherPermitSignatureResult = {
@@ -35,11 +34,10 @@ const EIP2612_TYPE = [
   { name: 'deadline', type: 'uint256' },
 ];
 
-export const useCsmPermitSignature = () => {
+export const usePermitSignature = (spender: Address) => {
   const chainId = useChainId();
   const { providerWeb3 } = useSDK();
   const { address: owner } = useAccount();
-  const spender = getCSMContractAddress(chainId, 'CSAccounting');
 
   const wstethContract = useWSTETHContractRPC();
   const stethContract = useSTETHContractRPC();

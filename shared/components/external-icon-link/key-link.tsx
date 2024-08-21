@@ -1,10 +1,7 @@
+import { getExternalLinks } from 'consts/external-links';
 import { FC } from 'react';
-import { ExternalIconLink } from './external-icon-link';
 import { useAccount } from 'shared/hooks';
-import {
-  VALIDATOR_LINK_NAME,
-  getValidatorLinkGetter,
-} from 'consts/validator-link-getter';
+import { ExternalIconLink } from './external-icon-link';
 
 type KeyLinkProps = {
   pubkey: string;
@@ -12,14 +9,12 @@ type KeyLinkProps = {
 
 export const KeyLink: FC<KeyLinkProps> = ({ pubkey }) => {
   const { chainId } = useAccount();
-  const getValidatorLink = getValidatorLinkGetter(chainId);
-
-  if (!getValidatorLink) return null;
+  const { beaconchain } = getExternalLinks(chainId);
 
   return (
     <ExternalIconLink
-      href={getValidatorLink(pubkey)}
-      title={`View on ${VALIDATOR_LINK_NAME}`}
+      href={`${beaconchain}/validator/${pubkey}`}
+      title="View on beaconcha.in"
     />
   );
 };

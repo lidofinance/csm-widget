@@ -1,31 +1,26 @@
+import { Accordion, Text } from '@lidofinance/lido-ui';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { NodeOperatorId } from 'types';
 import { ExternalButtonLink } from './external-button-link';
-import { Accordion, Text } from '@lidofinance/lido-ui';
 
 import { ReactComponent as BeaconchaIcon } from 'assets/icons/beaconcha.svg';
 import { ReactComponent as LidoIcon } from 'assets/icons/lido.svg';
-import { useNodeOperatorKeys } from 'shared/hooks';
+import { getCsmConstants } from 'consts/csm-constants';
+import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-
-// FIXME: mainnet
-const getFeesMonitoringLink = (id?: NodeOperatorId) =>
-  `https://fees-monitoring-holesky.testnet.fi/operatorInfo?stakingModuleIndex=4&operatorIndex=${id}`;
-
-// FIXME: mainnet
-const getOperatorsPortalLink = (id?: NodeOperatorId) =>
-  `https://operators-holesky.testnet.fi/module/4/${id}`;
-
-// FIXME: mainnet
-// TODO: cache prev link
-const getBeaconchaLink = (keys: string[] = []) =>
-  `https://v2-beta-holesky.beaconcha.in/dashboard?validators=${keys.join(',')}`;
+import { useAccount, useNodeOperatorKeys } from 'shared/hooks';
+import invariant from 'tiny-invariant';
 
 export const ExternalSection: FC = () => {
-  const id = useNodeOperatorId();
-  const { data: keys } = useNodeOperatorKeys(id, false, 20);
+  const { chainId } = useAccount();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: keys } = useNodeOperatorKeys(nodeOperatorId, false, 20);
+
+  const links = getExternalLinks(chainId);
+  const moduleId = getCsmConstants(chainId).stakingModuleId;
+
+  invariant(nodeOperatorId);
 
   return (
     <Accordion
@@ -40,7 +35,8 @@ export const ExternalSection: FC = () => {
         <ExternalButtonLink
           title="beaconcha.in v2"
           icon={<BeaconchaIcon />}
-          href={getBeaconchaLink(keys)}
+          // TODO: cache dashboard link (for long-fetched keys)
+          href={`${links.beaconchainDashboard}/dashboard?validators=${keys?.join(',') ?? ''}`}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink}
         >
           Dashboard displays statistics of your validators (up to 20 in free
@@ -49,7 +45,7 @@ export const ExternalSection: FC = () => {
         <ExternalButtonLink
           title="Lido operators"
           icon={<LidoIcon />}
-          href={getOperatorsPortalLink(id)}
+          href={`${links.operatorsWidget}/module/${moduleId}/${nodeOperatorId}`}
           matomoEvent={
             MATOMO_CLICK_EVENTS_TYPES.dashboardExternalOperatorsPortalLink
           }
@@ -59,7 +55,7 @@ export const ExternalSection: FC = () => {
         <ExternalButtonLink
           title="Lido MEV monitoring"
           icon={<LidoIcon />}
-          href={getFeesMonitoringLink(id)}
+          href={`${links.feesMonitoring}/operatorInfo?stakingModuleIndex=${moduleId}&operatorIndex=${nodeOperatorId}`}
           matomoEvent={
             MATOMO_CLICK_EVENTS_TYPES.dashboardExternalFeesMonitoringLink
           }

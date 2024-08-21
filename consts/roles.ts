@@ -5,6 +5,7 @@ export const ROLES = {
 
 export type ROLES = keyof typeof ROLES;
 
+// TODO: spectacular
 export const ROLE_CODE = {
   NONE: 0,
   REWARDS: 1,

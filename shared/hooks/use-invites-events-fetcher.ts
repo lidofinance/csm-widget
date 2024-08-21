@@ -1,4 +1,4 @@
-import { getCSMDeplymentBlockNumber } from 'consts/csm-deployment-block-number';
+import { getCsmConstants } from 'consts/csm-constants';
 import {
   NodeOperatorManagerAddressChangeProposedEvent,
   NodeOperatorManagerAddressChangedEvent,
@@ -86,7 +86,7 @@ export const useInvitesEventsFetcher = () => {
     ];
 
     // TODO: errors handler
-    const blockNumber = getCSMDeplymentBlockNumber(chainId);
+    const blockNumber = getCsmConstants(chainId).deploymentBlockNumber;
     const filterResults = await Promise.allSettled(
       filters.map((filter) => contract.queryFilter(filter, blockNumber)),
     );
