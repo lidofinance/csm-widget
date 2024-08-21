@@ -1,4 +1,5 @@
 import { getCsmConstants } from 'consts/csm-constants';
+import { ROLES } from 'consts/roles';
 import {
   NodeOperatorManagerAddressChangeProposedEvent,
   NodeOperatorManagerAddressChangedEvent,
@@ -7,6 +8,7 @@ import {
 } from 'generated/CSModule';
 import { useCallback } from 'react';
 import { useAccount, useAddressCompare, useCSModuleRPC } from 'shared/hooks';
+import { getInviteId } from 'shared/node-operator';
 import { NodeOperatorId, NodeOperatorInvite } from 'types';
 import { getSettledValue } from 'utils';
 
@@ -23,12 +25,13 @@ export const useInvitesEventsFetcher = () => {
 
   const restoreEvents = useCallback(
     (events: AddressChangeProposedEvents[]) => {
-      type InviteRole = 'r' | 'm';
-      type InviteId = `${InviteRole}-${NodeOperatorId}`;
-      const invitesMap: Map<InviteId, NodeOperatorInvite> = new Map();
+      const invitesMap: Map<
+        ReturnType<typeof getInviteId>,
+        NodeOperatorInvite
+      > = new Map();
 
       const updateRoles = (invite: NodeOperatorInvite, add = true) => {
-        const id: InviteId = `${invite.manager ? 'r' : 'm'}-${invite.id}`;
+        const id = getInviteId(invite);
         if (add) {
           invitesMap.set(id, invite);
         } else {
@@ -43,16 +46,16 @@ export const useInvitesEventsFetcher = () => {
           switch (e.event) {
             case 'NodeOperatorManagerAddressChangeProposed':
               return isUserAddress(e.args[2])
-                ? updateRoles({ id, manager: true })
-                : updateRoles({ id, manager: true }, false);
+                ? updateRoles({ id, role: ROLES.MANAGER })
+                : updateRoles({ id, role: ROLES.MANAGER }, false);
             case 'NodeOperatorRewardAddressChangeProposed':
               return isUserAddress(e.args[2])
-                ? updateRoles({ id, rewards: true })
-                : updateRoles({ id, rewards: true }, false);
+                ? updateRoles({ id, role: ROLES.REWARDS })
+                : updateRoles({ id, role: ROLES.REWARDS }, false);
             case 'NodeOperatorManagerAddressChanged':
-              return updateRoles({ id, manager: true }, false);
+              return updateRoles({ id, role: ROLES.MANAGER }, false);
             case 'NodeOperatorRewardAddressChanged':
-              return updateRoles({ id, rewards: true }, false);
+              return updateRoles({ id, role: ROLES.REWARDS }, false);
             default:
               return;
           }
@@ -61,7 +64,7 @@ export const useInvitesEventsFetcher = () => {
       return Array.from(invitesMap.values()).sort(
         (a, b) =>
           parseInt(a.id, 10) - parseInt(b.id, 10) ||
-          -Number(b.rewards ?? false) - Number(a.rewards ?? false),
+          -Number(b.role === ROLES.REWARDS) - Number(a.role === ROLES.REWARDS),
       );
     },
     [isUserAddress],

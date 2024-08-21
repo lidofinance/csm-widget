@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import {
   InviteContent,
@@ -22,6 +22,12 @@ export const InviteButtonsHookForm: FC<Props> = ({
     field,
     formState: { defaultValues },
   } = useController<Record<string, NodeOperatorInvite>>({ name: fieldName });
+  const defaultInvite = useMemo(() => {
+    const value = defaultValues?.[fieldName];
+    return value?.id && value.role
+      ? getInviteId({ id: value.id, role: value.role })
+      : undefined;
+  }, [defaultValues, fieldName]);
 
   return (
     <Stack direction="column">
@@ -35,8 +41,7 @@ export const InviteButtonsHookForm: FC<Props> = ({
               field.onChange(
                 options.find((i) => getInviteId(i) === e.target.value),
               ),
-            defaultChecked:
-              getInviteId(invite) === getInviteId(defaultValues?.[fieldName]),
+            defaultChecked: getInviteId(invite) === defaultInvite,
           }}
         >
           <Stack>
