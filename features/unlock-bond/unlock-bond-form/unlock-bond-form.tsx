@@ -8,17 +8,20 @@ import { SubmitButton } from './controls/submit-button';
 import { FormBlock } from 'shared/components';
 import { FormControllerStyled } from 'shared/hook-form/form-controller';
 import { Info } from './controls/info';
+import { UnlockBondFormLoader } from './unlock-bond-form-loader';
 
 export const UnlockBondForm: FC = memo(() => {
   return (
     <UnlockBondFormProvider>
       <FormBlock>
-        <FormControllerStyled>
-          <Info />
-          <AmountInput />
-          <SubmitButton />
-        </FormControllerStyled>
-        <UnlockBondFormInfo />
+        <UnlockBondFormLoader>
+          <FormControllerStyled>
+            <Info />
+            <AmountInput />
+            <SubmitButton />
+          </FormControllerStyled>
+          <UnlockBondFormInfo />
+        </UnlockBondFormLoader>
       </FormBlock>
     </UnlockBondFormProvider>
   );
