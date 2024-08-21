@@ -18,7 +18,6 @@ export type ClaimBondFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
   bond?: BondBalance;
   rewards?: RewardsBalance;
-  lockedBond?: BigNumber;
   maxValues?: MaxValues;
-  loading: LoadingRecord<'bond' | 'rewards' | 'lockedBond' | 'maxValues'>;
+  loading: LoadingRecord<'bond' | 'rewards' | 'maxValues'>;
 };

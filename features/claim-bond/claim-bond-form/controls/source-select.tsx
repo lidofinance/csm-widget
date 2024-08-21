@@ -12,8 +12,7 @@ import {
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
 
 export const SourceSelect: FC = () => {
-  const { bond, rewards, lockedBond, loading, maxValues } =
-    useClaimBondFormData();
+  const { bond, rewards, loading, maxValues } = useClaimBondFormData();
 
   const { field } = useController<ClaimBondFormInputType, 'claimRewards'>({
     name: 'claimRewards',
@@ -30,7 +29,7 @@ export const SourceSelect: FC = () => {
     }
   }, [bond?.isShortage, setValue]);
 
-  const showLockedBond = lockedBond?.gt(0);
+  const showLockedBond = bond?.locked.gt(0);
 
   return (
     <>
@@ -82,8 +81,8 @@ export const SourceSelect: FC = () => {
             warning
             title={<Checkbox checked disabled label="Locked bond" />}
             help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
-            loading={loading.isLockedBondLoading}
-            amount={lockedBond}
+            loading={loading.isBondLoading}
+            amount={bond?.locked}
             token={TOKENS.ETH}
             sign="minus"
           />
