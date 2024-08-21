@@ -1,6 +1,6 @@
 import { DepositData } from 'types';
-import { assertIsArrayOfDepositData } from './assert-is-array-of-deposit-data';
 import { normalizeHexInJson } from '../utils';
+import { ensureIsArray } from './ensure-is-array';
 
 const MAX_JSON_LENGTH = 1048576; // 1MB
 
@@ -24,9 +24,9 @@ export const parseDepositData = (
 ): { error: null | Error; depositData: DepositData[] } => {
   try {
     const parsed = parseJson(normalizeHexInJson(rawDepositData));
-    assertIsArrayOfDepositData(parsed);
+    const depositData = ensureIsArray(parsed);
 
-    return { error: null, depositData: parsed };
+    return { error: null, depositData };
   } catch (error) {
     return { error: error as Error, depositData: [] };
   }
