@@ -1,7 +1,8 @@
 export type KeyStatus =
   | 'active'
   | 'depositable'
-  | 'exited'
+  | 'requested to exit'
+  | 'withdrawn'
   | 'duplicated'
   | 'stuck'
   | 'invalid'

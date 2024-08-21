@@ -9,12 +9,13 @@ type Props = {
 const variants: Partial<Record<KeyStatus, Variants>> = {
   depositable: 'default',
   active: 'success',
-  exited: 'secondary',
+  withdrawn: 'secondary',
   duplicated: 'error',
   stuck: 'error',
   invalid: 'error',
   unvetted: 'error',
   unbonded: 'warning',
+  'requested to exit': 'error',
 };
 
 export const StatusChip: FC<Props> = ({ status }) =>
