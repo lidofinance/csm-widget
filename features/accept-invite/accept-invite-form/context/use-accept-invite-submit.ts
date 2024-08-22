@@ -8,7 +8,10 @@ import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { useTxModalStagesAcceptInvite } from '../hooks/use-tx-modal-stages-accept-invite';
-import { AcceptInviteFormInputType } from './types';
+import {
+  AcceptInviteFormInputType,
+  AcceptInviteFormNetworkData,
+} from './types';
 
 // TODO: move to hooks
 type UseAcceptInviteOptions = {
@@ -60,15 +63,16 @@ export const useAcceptInviteSubmit = ({
   const sendTx = useSendTx();
 
   const acceptInvite = useCallback(
-    async ({ invite }: AcceptInviteFormInputType): Promise<boolean> => {
+    async (
+      { invite }: AcceptInviteFormInputType,
+      { address }: AcceptInviteFormNetworkData,
+    ): Promise<boolean> => {
       invariant(invite, 'Invite is not defined');
 
       try {
-        const role = invite.role;
+        txModalStages.sign(invite);
 
-        txModalStages.sign({ role, id: invite.id });
-
-        const tx = await getTx(role, {
+        const tx = await getTx(invite.role, {
           nodeOperatorId: invite.id,
         });
 
@@ -77,7 +81,7 @@ export const useAcceptInviteSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending({ role, id: invite.id }, txHash);
+        txModalStages.pending(invite, txHash);
 
         if (typeof tx === 'object') {
           await runWithTransactionLogger(
@@ -88,7 +92,7 @@ export const useAcceptInviteSubmit = ({
 
         await onConfirm?.();
 
-        txModalStages.success({ role, id: invite.id }, txHash);
+        txModalStages.success({ ...invite, address }, txHash);
 
         // TODO: move to onConfirm
         appendNO(invite);

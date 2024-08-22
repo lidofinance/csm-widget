@@ -1,11 +1,13 @@
 import { useCallback, useMemo } from 'react';
-import { useInvites } from 'shared/hooks';
+import { useAccount, useInvites } from 'shared/hooks';
 import { type AcceptInviteFormNetworkData } from './types';
+import invariant from 'tiny-invariant';
 
 export const useAcceptInviteFormNetworkData = (): [
   AcceptInviteFormNetworkData,
   () => Promise<void>,
 ] => {
+  const { address } = useAccount();
   const {
     data: invites,
     initialLoading: isInvitesLoading,
@@ -23,9 +25,12 @@ export const useAcceptInviteFormNetworkData = (): [
     [isInvitesLoading],
   );
 
+  invariant(address);
+
   return [
     {
       invites,
+      address,
       loading,
     },
     revalidate,

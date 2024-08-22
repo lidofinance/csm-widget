@@ -1,7 +1,7 @@
+import { Address } from '@lidofinance/lido-ui';
 import { ROLES } from 'consts/roles';
 import { DescriptorId, getRoleTitle } from 'shared/node-operator';
 import {
-  SuccessText,
   TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
@@ -10,11 +10,6 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
-
-// TODO: not proposing
-const STAGE_OPERATION_ARGS = {
-  operationText: 'Accepting address change',
-};
 
 type Props = { id: NodeOperatorId; role: ROLES };
 
@@ -26,36 +21,44 @@ const getTxModalStagesAcceptInvite = (
   sign: ({ id, role }: Props) =>
     transitStage(
       <TxStageSign
-        title={`You are accepting ${getRoleTitle(role)} address change`}
-        description={<DescriptorId id={id} />}
+        title={`You are accepting address change`}
+        description={
+          <>
+            <DescriptorId id={id} /> &mdash; <b>{getRoleTitle(role)}</b> address
+          </>
+        }
       />,
     ),
 
   pending: ({ id, role }: Props, txHash?: string) =>
     transitStage(
       <TxStagePending
-        title={`You are accepting ${getRoleTitle(role)} address change`}
-        description={<DescriptorId id={id} />} // TODO: remove description?
+        title={`You are accepting address change`}
+        description={
+          <>
+            <DescriptorId id={id} /> &mdash; <b>{getRoleTitle(role)}</b> address
+          </>
+        }
         txHash={txHash}
       />,
     ),
 
-  success: ({ id, role }: Props, txHash?: string) =>
+  // TODO: "go to dashboard" button
+  success: (
+    { id, role, address }: Props & { address: string },
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title={
+        title={<>Address change is accepted</>}
+        description={
           <>
-            Accepted {role} address change of <DescriptorId id={id} />
+            {getRoleTitle(role, true)} address of <DescriptorId id={id} /> is
+            <br />
+            <Address address={address} symbols={90} />
           </>
         }
-        description={
-          <SuccessText
-            operationText={STAGE_OPERATION_ARGS.operationText}
-            txHash={txHash}
-          />
-        }
-        showEtherscan={false}
       />,
       {
         isClosableOnLedger: true,
