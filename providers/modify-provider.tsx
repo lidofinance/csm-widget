@@ -1,4 +1,3 @@
-import { useLocalStorage } from '@lido-sdk/react';
 import { isAddress } from 'ethers/lib/utils.js';
 import { useRouter } from 'next/router';
 import {
@@ -41,7 +40,7 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     false,
   );
 
-  const [referrer, setReferrer] = useLocalStorage<Address | undefined>(
+  const [referrer, setReferrer] = useSessionStorage<Address | undefined>(
     'referrer',
     undefined,
   );
