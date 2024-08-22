@@ -9,7 +9,7 @@ import {
   usePermitOrApprove,
   useSendTx,
 } from 'shared/hooks';
-import { GatherPermitSignatureResult } from 'shared/hooks/use-csm-permit-signature';
+import { GatherPermitSignatureResult } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
 import { addExtraWei, runWithTransactionLogger } from 'utils';
