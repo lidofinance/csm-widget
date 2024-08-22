@@ -4,10 +4,12 @@ import { TxAmount } from '../tx-stages-parts/tx-amount';
 
 import type { BigNumber } from 'ethers';
 import { NodeOperatorId } from 'types';
+import { DescriptorId } from 'shared/node-operator';
+import { TOKENS } from 'consts/tokens';
 
 type TxStageSignOperationAmountProps = {
   amount?: BigNumber;
-  token?: string;
+  token?: TOKENS;
   keysCount: number;
   operationText: string;
   nodeOperatorId?: NodeOperatorId;
@@ -25,7 +27,7 @@ export const TxStageSignOperationKeys = ({
   txHash,
 }: TxStageSignOperationAmountProps) => {
   const amountEl = amount && token && (
-    <TxAmount amount={amount} symbol={token} />
+    <TxAmount amount={amount} token={token} />
   );
   const Component = isPending ? TxStagePending : TxStageSign;
 
@@ -41,7 +43,7 @@ export const TxStageSignOperationKeys = ({
             {nodeOperatorId && (
               <>
                 <br />
-                NO#{nodeOperatorId}.
+                <DescriptorId id={nodeOperatorId} />
               </>
             )}
           </>

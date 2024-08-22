@@ -105,7 +105,12 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
         const { keysCount, publicKeys, signatures } = formatKeys(depositData);
 
-        txModalStages.sign(keysCount, bondAmount, token, nodeOperatorId);
+        txModalStages.sign({
+          keysCount,
+          amount: bondAmount,
+          token,
+          nodeOperatorId,
+        });
 
         const tx = await getTx(token, {
           nodeOperatorId,
@@ -122,10 +127,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
         );
 
         txModalStages.pending(
-          keysCount,
-          bondAmount,
-          token,
-          nodeOperatorId,
+          { keysCount, amount: bondAmount, token, nodeOperatorId },
           txHash,
         );
 
@@ -133,7 +135,10 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
         await onConfirm?.();
 
-        txModalStages.success(txHash);
+        txModalStages.success(
+          { keysCount, amount: bondAmount, token, nodeOperatorId },
+          txHash,
+        );
 
         // TODO: move to onConfirm
         void saveKeys(depositData);

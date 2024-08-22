@@ -105,7 +105,7 @@ export const useClaimBondSubmit = ({
       }
 
       try {
-        txModalStages.sign(amount, token);
+        txModalStages.sign({ amount, token });
 
         const tx = await getTx(token, {
           nodeOperatorId,
@@ -118,7 +118,7 @@ export const useClaimBondSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending(amount, token, txHash);
+        txModalStages.pending({ amount, token }, txHash);
 
         await runWithTransactionLogger('ClaimBond block confirmation', waitTx);
 
@@ -127,7 +127,7 @@ export const useClaimBondSubmit = ({
         // TODO: move to onConfirm
         const { current } = await CSAccounting.getBondSummary(nodeOperatorId);
 
-        txModalStages.success(current, TOKENS.STETH, txHash);
+        txModalStages.success({ balance: current }, txHash);
 
         return true;
       } catch (error) {

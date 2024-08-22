@@ -6,6 +6,7 @@ import { SuccessText } from '../tx-stages-parts/success-text';
 import { TxStageSuccess } from '../tx-stages-basic';
 
 import type { BigNumber } from 'ethers';
+import { TOKENS } from 'consts/tokens';
 
 export const SkeletonBalance = styled(InlineLoader).attrs({
   color: 'text',
@@ -16,7 +17,7 @@ export const SkeletonBalance = styled(InlineLoader).attrs({
 
 type TxStageOperationSucceedBalanceShownProps = {
   balance?: BigNumber;
-  balanceToken: string;
+  balanceToken: TOKENS;
   operationText: string;
   txHash?: string;
 };
@@ -28,7 +29,7 @@ export const TxStageOperationSucceedBalanceShown = ({
   txHash,
 }: TxStageOperationSucceedBalanceShownProps) => {
   const balanceEl = balance && (
-    <TxAmount amount={balance} symbol={balanceToken} />
+    <TxAmount amount={balance} token={balanceToken} />
   );
 
   return (

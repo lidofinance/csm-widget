@@ -2,7 +2,6 @@ import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
-import { TOKENS } from 'consts/tokens';
 import { useCSAccountingRPC, useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
@@ -59,7 +58,7 @@ export const useUnlockBondSubmit = ({
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       try {
-        txModalStages.sign(amount, TOKENS.ETH);
+        txModalStages.sign({ amount });
 
         const tx = await getTx({
           nodeOperatorId,
@@ -71,7 +70,7 @@ export const useUnlockBondSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending(amount, TOKENS.ETH, txHash);
+        txModalStages.pending({ amount }, txHash);
 
         await runWithTransactionLogger('UnlockBond block confirmation', waitTx);
 
@@ -80,7 +79,7 @@ export const useUnlockBondSubmit = ({
         // TODO: move to onConfirm
         const current = await CSAccounting.getActualLockedBond(nodeOperatorId);
 
-        txModalStages.success(current, TOKENS.ETH, txHash);
+        txModalStages.success({ lockedBond: current }, txHash);
 
         return true;
       } catch (error) {

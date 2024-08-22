@@ -164,7 +164,7 @@ export const useSubmitKeysSubmit = ({
 
         const { keysCount, publicKeys, signatures } = formatKeys(depositData);
 
-        txModalStages.sign(keysCount, bondAmount, token);
+        txModalStages.sign({ keysCount, amount: bondAmount, token });
 
         const tx = await getTx(token, {
           bondAmount,
@@ -189,7 +189,7 @@ export const useSubmitKeysSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending(keysCount, bondAmount, token, txHash);
+        txModalStages.pending({ keysCount, amount: bondAmount, token }, txHash);
 
         const receipt = await runWithTransactionLogger(
           'AddNodeOperator block confirmation',
@@ -201,7 +201,7 @@ export const useSubmitKeysSubmit = ({
         // TODO: possible add timeout
         await onConfirm?.();
 
-        txModalStages.success(nodeOperatorId, txHash);
+        txModalStages.success({ nodeOperatorId }, txHash);
 
         // TODO: move to onConfirm
         if (nodeOperatorId) {
