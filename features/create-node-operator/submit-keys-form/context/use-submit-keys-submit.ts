@@ -23,7 +23,7 @@ import {
 import { Address } from 'wagmi';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
-import { getAddedNodeOperator } from '../utils';
+import { getAddedNodeOperator } from 'utils';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
 type SubmitKeysOptions = {

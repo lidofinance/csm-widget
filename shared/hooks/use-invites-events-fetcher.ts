@@ -9,8 +9,8 @@ import {
 import { useCallback } from 'react';
 import { useAccount, useAddressCompare, useCSModuleRPC } from 'shared/hooks';
 import { getInviteId } from 'shared/node-operator';
-import { NodeOperatorId, NodeOperatorInvite } from 'types';
-import { getSettledValue } from 'utils';
+import { NodeOperatorInvite } from 'types';
+import { getNodeOperatorIdFromEvent, getSettledValue } from 'utils';
 
 type AddressChangeProposedEvents =
   | NodeOperatorManagerAddressChangeProposedEvent
@@ -42,7 +42,7 @@ export const useInvitesEventsFetcher = () => {
       events
         .sort((a, b) => a.blockNumber - b.blockNumber)
         .map((e) => {
-          const id = e.args.nodeOperatorId.toString() as NodeOperatorId;
+          const id = getNodeOperatorIdFromEvent(e);
           switch (e.event) {
             case 'NodeOperatorManagerAddressChangeProposed':
               return isUserAddress(e.args[2])

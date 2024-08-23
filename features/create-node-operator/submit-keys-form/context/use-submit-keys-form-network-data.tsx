@@ -37,7 +37,7 @@ export const useSubmitKeysFormNetworkData = (): [
     !!ea?.proof,
   );
 
-  const { update: updateConsumed } = useCsmEarlyAdoptionProofConsumed();
+  const { mutate: mutateConsumed } = useCsmEarlyAdoptionProofConsumed();
 
   const {
     data: maxStakeEther,
@@ -50,14 +50,14 @@ export const useSubmitKeysFormNetworkData = (): [
       updateStethBalance(),
       updateWstethBalance(),
       updateEtherBalance(),
-      updateConsumed(),
+      mutateConsumed(true), // @note hack to revalidate without loading state
       updateMaxStakeEther(),
     ]);
   }, [
     updateStethBalance,
     updateWstethBalance,
     updateEtherBalance,
-    updateConsumed,
+    mutateConsumed,
     updateMaxStakeEther,
   ]);
 
