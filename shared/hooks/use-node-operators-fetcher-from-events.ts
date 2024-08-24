@@ -6,7 +6,7 @@ import {
 } from 'generated/CSModule';
 import { useCallback } from 'react';
 import { useCSModuleRPC } from 'shared/hooks';
-import { NodeOperatorRoles } from 'types';
+import { NodeOperator } from 'types';
 import {
   compareLowercase,
   getNodeOperatorIdFromEvent,
@@ -47,7 +47,7 @@ const restoreEvents = (events: NodeOperatorRoleEvent[], address?: Address) => {
         default:
       }
       return prev;
-    }, [] as NodeOperatorRoles[]);
+    }, [] as NodeOperator[]);
 };
 
 export const useNodeOperatorsFetcherFromEvents = (

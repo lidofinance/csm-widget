@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
 import { ROLES } from 'consts/roles';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
@@ -54,7 +54,7 @@ export const useAcceptInviteSubmit = ({
   onRetry,
 }: UseAcceptInviteOptions) => {
   const { txModalStages } = useTxModalStagesAcceptInvite();
-  const { append: appendNO } = useNodeOperator();
+  const { append: appendNO } = useNodeOperatorContext();
 
   const getTx = useAcceptInviteTx();
   const sendTx = useSendTx();
@@ -64,7 +64,7 @@ export const useAcceptInviteSubmit = ({
       invariant(invite, 'Invite is not defined');
 
       try {
-        const role = invite.manager ? ROLES.MANAGER : ROLES.REWARDS;
+        const role = invite.role;
 
         txModalStages.sign('0x0', role);
 

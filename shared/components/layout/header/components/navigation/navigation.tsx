@@ -7,7 +7,7 @@ import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 
 import { PATH } from 'consts/urls';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { LocalLink } from 'shared/components/local-link';
 import { useCanCreateNodeOperator, useInvites } from 'shared/hooks';
 import { useAccount } from 'shared/hooks/use-account';
@@ -83,7 +83,7 @@ const routesNodeOperator: Route[] = [
 
 export const Navigation: FC = memo(() => {
   const { active: isConnected } = useAccount();
-  const { active, isListLoading } = useNodeOperator();
+  const { active, isListLoading } = useNodeOperatorContext();
   const { data: invites } = useInvites();
 
   const canCreateNO = useCanCreateNodeOperator();

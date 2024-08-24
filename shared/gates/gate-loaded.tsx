@@ -1,4 +1,4 @@
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useAccount, useCsmStatus } from 'shared/hooks';
 import { useCsmEarlyAdoption } from 'shared/hooks/useCsmEarlyAdoption';
@@ -13,7 +13,7 @@ export const GateLoaded: FC<PropsWithChildren<Props>> = ({
 }) => {
   const { initialLoading: isStatusLoading } = useCsmStatus();
   const { isConnecting } = useAccount();
-  const { isListLoading, active } = useNodeOperator();
+  const { isListLoading, active } = useNodeOperatorContext();
   const { initialLoading: isEaLoading } = useCsmEarlyAdoption();
 
   const loading =

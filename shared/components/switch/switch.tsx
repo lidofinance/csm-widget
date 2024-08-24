@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { useNodeOperatorRoles } from 'providers/node-operator-provider';
+import { useActiveNodeOperator } from 'providers/node-operator-provider';
 import { useRouterPath } from 'shared/hooks';
 import { getRoleCode } from 'shared/node-operator';
 import { getIsActivePath } from 'utils';
@@ -9,14 +9,15 @@ import { SwitchItem } from './switch-item';
 import { SwitchProps } from './types';
 
 export const Switch: FC<SwitchProps> = ({ active, routes }) => {
-  const roles = useNodeOperatorRoles();
-  const role = useMemo(() => getRoleCode(roles), [roles]);
+  const nodeOperator = useActiveNodeOperator();
 
   const pathname = useRouterPath();
 
   const filteredRoutes = useMemo(() => {
-    return routes.filter(({ roles }) => !roles || roles.includes(role));
-  }, [role, routes]);
+    return routes.filter(
+      ({ roles }) => !roles || roles.includes(getRoleCode(nodeOperator)),
+    );
+  }, [nodeOperator, routes]);
 
   const activePathIndex = useMemo(
     () =>

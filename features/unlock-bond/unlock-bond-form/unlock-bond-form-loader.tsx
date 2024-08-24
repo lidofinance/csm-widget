@@ -3,13 +3,14 @@ import { useFormState } from 'react-hook-form';
 import { WhenLoaded } from 'shared/components';
 import { UnlockBondFormInputType } from './context';
 import { Info } from './controls/info';
-import { useNodeOperatorRoles } from 'providers/node-operator-provider';
+import { useActiveNodeOperator } from 'providers/node-operator-provider';
+import { ROLES } from 'consts/roles';
 
 export const UnlockBondFormLoader: FC<PropsWithChildren> = ({ children }) => {
-  const { manager } = useNodeOperatorRoles();
+  const nodeOperator = useActiveNodeOperator();
   const { isLoading } = useFormState<UnlockBondFormInputType>();
 
-  const isView = !manager;
+  const isView = !nodeOperator?.roles.includes(ROLES.MANAGER);
 
   return (
     <WhenLoaded loading={isLoading}>{isView ? <Info /> : children}</WhenLoaded>

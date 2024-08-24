@@ -1,7 +1,7 @@
 import { TOKENS } from 'consts/tokens';
 import { BigNumberish } from 'ethers';
 import { BytesLike } from 'ethers/lib/utils.js';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import {
   GatherPermitSignatureResult,
@@ -117,7 +117,7 @@ export const useSubmitKeysSubmit = ({
   onRetry,
 }: SubmitKeysOptions) => {
   const { txModalStages } = useTxModalStagesSubmitKeys();
-  const { append: appendNO } = useNodeOperator();
+  const { append: appendNO } = useNodeOperatorContext();
   const getTx = useSubmitKeysTx();
   const getPermitOrApprove = usePermitOrApprove();
   const sendTx = useSendTx();
