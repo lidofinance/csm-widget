@@ -196,19 +196,19 @@ export const useSubmitKeysSubmit = ({
           waitTx,
         );
 
-        const nodeOperatorId = getAddedNodeOperator(receipt);
+        const nodeOperator = getAddedNodeOperator(receipt);
 
         // TODO: possible add timeout
         await onConfirm?.();
 
-        txModalStages.success({ nodeOperatorId }, txHash);
+        txModalStages.success({ nodeOperatorId: nodeOperator?.id }, txHash);
 
         // TODO: move to onConfirm
-        if (nodeOperatorId) {
+        if (nodeOperator) {
           appendNO({
-            id: nodeOperatorId,
-            manager: isUserOrZero(managerAddress),
-            rewards: isUserOrZero(rewardsAddress),
+            id: nodeOperator.id,
+            manager: isUserOrZero(nodeOperator.managerAddress),
+            rewards: isUserOrZero(nodeOperator.rewardsAddress),
           });
         }
 

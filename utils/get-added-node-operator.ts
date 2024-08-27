@@ -17,7 +17,11 @@ export const getAddedNodeOperator = (receipt: ContractReceipt) => {
   const log = receipt.logs.find((log) => log.topics[0] === eventTopic);
   if (log) {
     const event = int.parseLog(log) as any as NodeOperatorAddedEvent;
-    return getNodeOperatorIdFromEvent(event);
+    return {
+      id: getNodeOperatorIdFromEvent(event),
+      managerAddress: event.args.managerAddress,
+      rewardsAddress: event.args.rewardAddress,
+    };
   }
   return undefined;
 };
