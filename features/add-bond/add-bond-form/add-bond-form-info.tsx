@@ -1,5 +1,5 @@
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
-import { OneEther, TOKENS } from 'consts/tokens';
+import { ONE_ETH, TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
 import { AddBondFormInputType } from './context';
@@ -28,7 +28,7 @@ export const AddBondFormInfo = () => {
       </DataTableRow>
       {token !== TOKENS.STETH && (
         <DataTableRow title="Exchange rate" loading={exchange.loading}>
-          <FormatToken amount={OneEther} token={token} /> ={' '}
+          <FormatToken amount={ONE_ETH} token={token} /> ={' '}
           <FormatToken amount={exchange.rate} token={TOKENS.STETH} />
         </DataTableRow>
       )}
