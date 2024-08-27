@@ -84,9 +84,9 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
   const getTx = useAddKeysTx();
   const sendTx = useSendTx();
 
-  const saveKeys = useKeysCache();
+  const { addCacheKeys } = useKeysCache();
 
-  const addKeys = useCallback(
+  return useCallback(
     async (
       { depositData, token, bondAmount }: AddKeysFormInputType,
       { nodeOperatorId }: AddKeysFormNetworkData,
@@ -141,7 +141,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
         );
 
         // TODO: move to onConfirm
-        void saveKeys(depositData);
+        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
 
         return true;
       } catch (error) {
@@ -149,15 +149,13 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
       }
     },
     [
-      getTx,
       getPermitOrApprove,
       txModalStages,
+      getTx,
       onConfirm,
-      saveKeys,
+      addCacheKeys,
       sendTx,
       onRetry,
     ],
   );
-
-  return addKeys;
 };

@@ -47,6 +47,24 @@ export const saveKeys = (
   setKeys(chainId, updatedKeys);
 };
 
+export const removeKeys = (
+  pubKeys: string[],
+  chainId: CHAINS,
+  blockNumber: number,
+) => {
+  const storedKeys = getKeys(chainId);
+
+  const updatedKeys = pubKeys.reduce(
+    (mergedKeys, pubKey) => {
+      delete mergedKeys[pubKey];
+      return mergedKeys;
+    },
+    cleanKeys(storedKeys, blockNumber),
+  );
+
+  setKeys(chainId, updatedKeys);
+};
+
 export const setKeys = (chainId: CHAINS, keys: KeysRecord) => {
   saveToLocalStorage(getStorageKey(chainId), keys);
 };

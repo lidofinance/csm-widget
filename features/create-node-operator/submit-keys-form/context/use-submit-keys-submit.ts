@@ -122,11 +122,11 @@ export const useSubmitKeysSubmit = ({
   const getPermitOrApprove = usePermitOrApprove();
   const sendTx = useSendTx();
   const isUserOrZero = useAddressCompare(true);
-  const saveKeys = useKeysCache();
+  const { addCacheKeys } = useKeysCache();
 
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
 
-  const submitKeys = useCallback(
+  return useCallback(
     async (
       {
         referrer,
@@ -213,7 +213,7 @@ export const useSubmitKeysSubmit = ({
         }
 
         // TODO: move to onConfirm
-        void saveKeys(depositData);
+        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
 
         return true;
       } catch (error) {
@@ -226,13 +226,11 @@ export const useSubmitKeysSubmit = ({
       txModalStages,
       getTx,
       onConfirm,
-      saveKeys,
+      addCacheKeys,
       sendTx,
       appendNO,
       isUserOrZero,
       onRetry,
     ],
   );
-
-  return submitKeys;
 };
