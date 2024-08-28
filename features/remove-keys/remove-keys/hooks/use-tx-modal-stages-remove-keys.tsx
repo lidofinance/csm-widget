@@ -1,3 +1,4 @@
+import { Plural } from 'shared/components';
 import {
   TransactionModalTransitStage,
   TxStagePending,
@@ -38,7 +39,13 @@ const getTxModalStagesRemoveKeys = (
     transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title={`${props.keysCount} key(s) are removed`}
+        title={
+          <>
+            {props.keysCount}{' '}
+            <Plural variants={['key', 'keys']} value={props.keysCount} /> are
+            removed
+          </>
+        }
         description=""
       />,
       {

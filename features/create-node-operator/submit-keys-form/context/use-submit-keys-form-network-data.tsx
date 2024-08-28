@@ -5,11 +5,13 @@ import {
   useCsmCurveId,
   useCsmEarlyAdoption,
   useCsmEarlyAdoptionProofConsumed,
+  useKeysUploadLimit,
   useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
 import { type SubmitKeysFormNetworkData } from './types';
+import { useKeysAvailable } from 'shared/hooks';
 
 export const useSubmitKeysFormNetworkData = (): [
   SubmitKeysFormNetworkData,
@@ -45,6 +47,20 @@ export const useSubmitKeysFormNetworkData = (): [
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
+  const {
+    data: keysCountLimit,
+    update: updateKeysCountLimit,
+    initialLoading: isKeysCountLimitLoading,
+  } = useKeysUploadLimit();
+
+  const { data: keysAvailable } = useKeysAvailable({
+    curveId,
+    keysCountLimit,
+    etherBalance,
+    stethBalance,
+    wstethBalance,
+  });
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance(),
@@ -52,6 +68,7 @@ export const useSubmitKeysFormNetworkData = (): [
       updateEtherBalance(),
       mutateConsumed(true), // @note hack to revalidate without loading state
       updateMaxStakeEther(),
+      updateKeysCountLimit(),
     ]);
   }, [
     updateStethBalance,
@@ -59,6 +76,7 @@ export const useSubmitKeysFormNetworkData = (): [
     updateEtherBalance,
     mutateConsumed,
     updateMaxStakeEther,
+    updateKeysCountLimit,
   ]);
 
   const loading = useMemo(
@@ -68,6 +86,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isEtherBalanceLoading,
       isEaProofLoading,
       isCurveIdLoading,
+      isKeysCountLimitLoading,
       isMaxStakeEtherLoading,
     }),
     [
@@ -76,6 +95,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isEtherBalanceLoading,
       isEaProofLoading,
       isCurveIdLoading,
+      isKeysCountLimitLoading,
       isMaxStakeEtherLoading,
     ],
   );
@@ -87,6 +107,8 @@ export const useSubmitKeysFormNetworkData = (): [
       etherBalance,
       eaProof: ea?.proof,
       curveId,
+      keysCountLimit,
+      keysAvailable,
       maxStakeEther,
       loading,
     },

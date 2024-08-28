@@ -6,6 +6,7 @@ import type { BigNumber } from 'ethers';
 import { NodeOperatorId } from 'types';
 import { DescriptorId } from 'shared/node-operator';
 import { TOKENS } from 'consts/tokens';
+import { Plural } from 'shared/components';
 
 type TxStageSignOperationAmountProps = {
   amount?: BigNumber;
@@ -38,7 +39,8 @@ export const TxStageSignOperationKeys = ({
       description={
         !isPending && (
           <>
-            {operationText} {keysCount} key(s){' '}
+            {operationText} {keysCount}{' '}
+            <Plural variants={['key', 'keys']} value={keysCount} />{' '}
             {amount && <>and depositing {amountEl}</>}.{' '}
             {nodeOperatorId && (
               <>

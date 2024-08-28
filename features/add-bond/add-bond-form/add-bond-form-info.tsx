@@ -3,8 +3,8 @@ import { ONE_ETH, TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
 import { AddBondFormInputType } from './context';
-import { useExchangeRate } from './hooks/use-exchange-rate';
 import { useReceiveAmount } from './hooks/use-receive-amount';
+import { useExchangeRate } from 'shared/hooks';
 
 export const AddBondFormInfo = () => {
   const [token, bondAmount] = useWatch<
