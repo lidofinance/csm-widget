@@ -13,12 +13,14 @@ const STAGE_OPERATION_ARGS = {
   operationText: 'Claiming Bond',
 };
 
+type Props = { amount: BigNumber; token: TOKENS };
+
 const getTxModalStagesClaimBond = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: (amount: BigNumber, token: TOKENS) =>
+  sign: ({ amount, token }: Props) =>
     transitStage(
       <TxStageSignOperationAmount
         {...STAGE_OPERATION_ARGS}
@@ -30,7 +32,7 @@ const getTxModalStagesClaimBond = (
       />,
     ),
 
-  pending: (amount: BigNumber, token: TOKENS, txHash?: string) =>
+  pending: ({ amount, token }: Props, txHash?: string) =>
     transitStage(
       <TxStageSignOperationAmount
         {...STAGE_OPERATION_ARGS}
@@ -44,13 +46,13 @@ const getTxModalStagesClaimBond = (
       />,
     ),
 
-  success: (balance: BigNumber, token: TOKENS, txHash?: string) =>
+  success: ({ balance }: { balance: BigNumber }, txHash?: string) =>
     transitStage(
       <TxStageOperationSucceedBalanceShown
         {...STAGE_OPERATION_ARGS}
         txHash={txHash}
         balance={balance}
-        balanceToken={token}
+        balanceToken={TOKENS.STETH}
       />,
       {
         isClosableOnLedger: true,

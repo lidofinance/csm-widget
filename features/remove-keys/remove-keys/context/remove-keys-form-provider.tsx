@@ -3,53 +3,58 @@ import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
+  useFormData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
-import { RemoveKeysFormDataContext } from './remove-keys-form-context';
-import { type RemoveKeysFormInputType } from './types';
+import {
+  RemoveKeysFormNetworkData,
+  type RemoveKeysFormInputType,
+} from './types';
 import { useGetDefaultValues } from './use-get-default-values';
-import { useRemoveKeys } from './use-remove-keys';
 import { useRemoveKeysFormNetworkData } from './use-remove-keys-form-network-data';
-import { useRemoveKeysFormValidationContext } from './use-remove-keys-form-validation-context';
+import { useRemoveKeysSubmit } from './use-remove-keys-submit';
+import { useRemoveKeysValidation } from './use-remove-keys-validation';
+
+export const useRemoveKeysFormData = useFormData<RemoveKeysFormNetworkData>;
 
 export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useRemoveKeysFormNetworkData();
-  const validationContextPromise =
-    useRemoveKeysFormValidationContext(networkData);
+  const [networkData, revalidate] = useRemoveKeysFormNetworkData();
+  const validationResolver = useRemoveKeysValidation();
 
-  const { getDefaultValues } = useGetDefaultValues(networkData);
+  const asyncDefaultValues = useGetDefaultValues(networkData);
 
   const formObject = useForm<RemoveKeysFormInputType>({
-    defaultValues: getDefaultValues,
-    context: validationContextPromise,
+    defaultValues: asyncDefaultValues,
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const removeKeys = useRemoveKeys({
-    onConfirm: networkData.revalidate,
+  const removeKeys = useRemoveKeysSubmit({
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
-  const formControllerValue: FormControllerContextValueType<RemoveKeysFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: removeKeys,
-        retryEvent,
-      }),
-      [removeKeys, retryEvent],
-    );
+  const formControllerValue: FormControllerContextValueType<
+    RemoveKeysFormInputType,
+    RemoveKeysFormNetworkData
+  > = useMemo(
+    () => ({
+      onSubmit: removeKeys,
+      retryEvent,
+    }),
+    [removeKeys, retryEvent],
+  );
 
   return (
     <FormProvider {...formObject}>
-      <RemoveKeysFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </RemoveKeysFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

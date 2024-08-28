@@ -8,8 +8,9 @@ buildDynamics();
 const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
-const isIPFSMode = process.env.IPFS_MODE;
-const isDevnet = process.env.DEVNET;
+const isIPFSMode = !!process.env.IPFS_MODE;
+const notReleased = !!process.env.NOT_RELEASED;
+const maintenance = !!process.env.MAINTENANCE;
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
@@ -40,7 +41,7 @@ export default withBundleAnalyzer({
 
   // IPFS next.js configuration reference:
   // https://github.com/Velenir/nextjs-ipfs-example
-  trailingSlash: !!isIPFSMode,
+  trailingSlash: isIPFSMode,
   assetPrefix: isIPFSMode ? './' : undefined,
 
   // IPFS version has hash-based routing,
@@ -67,7 +68,26 @@ export default withBundleAnalyzer({
       // Teach webpack to import svg and md files
       {
         test: /\.svg$/,
-        use: ['@svgr/webpack', 'url-loader'],
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              svgoConfig: {
+                plugins: [
+                  {
+                    name: 'preset-default',
+                    params: {
+                      overrides: {
+                        removeViewBox: false,
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          'url-loader',
+        ],
       },
       {
         test: /\.md$/,
@@ -136,7 +156,8 @@ export default withBundleAnalyzer({
     // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
     basePath,
     developmentMode,
-    isDevnet,
+    notReleased,
+    maintenance,
 
     defaultChain: process.env.DEFAULT_CHAIN,
     rpcUrls_1: process.env.EL_RPC_URLS_1,
@@ -165,6 +186,5 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
-    isDevnet,
   },
 });

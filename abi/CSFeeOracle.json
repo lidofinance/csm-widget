@@ -160,6 +160,19 @@
   },
   {
     "type": "function",
+    "name": "avgPerfLeewayBP",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "discardConsensusReport",
     "inputs": [
       {
@@ -406,7 +419,7 @@
         "internalType": "uint256"
       },
       {
-        "name": "_perfThresholdBP",
+        "name": "_avgPerfLeewayBP",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -452,19 +465,6 @@
     ],
     "outputs": [],
     "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "perfThresholdBP",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
   },
   {
     "type": "function",
@@ -611,7 +611,7 @@
   },
   {
     "type": "function",
-    "name": "setPerformanceThreshold",
+    "name": "setPerformanceLeeway",
     "inputs": [
       {
         "name": "valueBP",
@@ -762,6 +762,106 @@
   },
   {
     "type": "event",
+    "name": "ERC1155Recovered",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ERC20Recovered",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ERC721Recovered",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "EtherRecovered",
+    "inputs": [
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "FeeDistributorContractSet",
     "inputs": [
       {
@@ -801,7 +901,7 @@
   },
   {
     "type": "event",
-    "name": "PerformanceThresholdSet",
+    "name": "PerfLeewaySet",
     "inputs": [
       {
         "name": "valueBP",
@@ -867,7 +967,7 @@
         "internalType": "uint256"
       },
       {
-        "name": "newRoot",
+        "name": "treeRoot",
         "type": "bytes32",
         "indexed": false,
         "internalType": "bytes32"
@@ -989,6 +1089,25 @@
   },
   {
     "type": "event",
+    "name": "StETHSharesRecovered",
+    "inputs": [
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "shares",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "WarnProcessingMissed",
     "inputs": [
       {
@@ -1033,7 +1152,7 @@
   },
   {
     "type": "error",
-    "name": "AdminCannotBeZero",
+    "name": "FailedToSendEther",
     "inputs": []
   },
   {
@@ -1069,7 +1188,7 @@
   },
   {
     "type": "error",
-    "name": "InvalidPerfThreshold",
+    "name": "InvalidPerfLeeway",
     "inputs": []
   },
   {
@@ -1258,6 +1377,16 @@
   {
     "type": "error",
     "name": "VersionCannotBeSame",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroAdminAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroFeeDistributorAddress",
     "inputs": []
   },
   {

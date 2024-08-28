@@ -2,31 +2,36 @@ import { BigNumber } from '@ethersproject/bignumber';
 import { Tooltip } from '@lidofinance/lido-ui';
 
 import { DATA_UNAVAILABLE } from 'consts/text';
+import { TOKENS } from 'consts/tokens';
 import { Component } from 'types';
-import { FormatBalanceArgs, useFormattedBalance } from 'utils';
+import {
+  FormatBalanceArgs,
+  getTokenDisplayName,
+  useFormattedBalance,
+} from 'utils';
 
 export type FormatTokenProps = FormatBalanceArgs & {
-  symbol: string;
+  symbol?: string;
+  token?: TOKENS;
   amount?: BigNumber;
   approx?: boolean;
-  showAmountTip?: boolean;
   fallback?: string;
 };
 export type FormatTokenComponent = Component<'span', FormatTokenProps>;
 
 export const FormatToken: FormatTokenComponent = ({
   amount,
-  symbol,
+  token,
+  symbol: _symbol,
   approx,
   maxDecimalDigits = 4,
   maxTotalLength = 15,
-  showAmountTip = true,
   trimEllipsis,
   fallback = DATA_UNAVAILABLE,
   adaptiveDecimals,
   ...rest
 }) => {
-  const { actual, isTrimmed, trimmed } = useFormattedBalance(amount, {
+  const { actual, trimmed } = useFormattedBalance(amount, {
     maxDecimalDigits,
     maxTotalLength,
     trimEllipsis,
@@ -35,7 +40,7 @@ export const FormatToken: FormatTokenComponent = ({
 
   if (!amount) return <span {...rest}>{fallback}</span>;
 
-  const showTooltip = showAmountTip && isTrimmed;
+  const symbol = _symbol ?? (token ? getTokenDisplayName(token) : '');
 
   // we show prefix for non zero amount and if we need to show Tooltip Amount
   // overridden by explicitly set approx
@@ -48,20 +53,16 @@ export const FormatToken: FormatTokenComponent = ({
     </span>
   );
 
-  if (showTooltip) {
-    return (
-      <Tooltip
-        placement="topRight"
-        title={
-          <span>
-            {actual}&nbsp;{symbol}
-          </span>
-        }
-      >
-        {body}
-      </Tooltip>
-    );
-  }
-
-  return body;
+  return (
+    <Tooltip
+      placement="topRight"
+      title={
+        <span>
+          {actual}&nbsp;{symbol}
+        </span>
+      }
+    >
+      {body}
+    </Tooltip>
+  );
 };

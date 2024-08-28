@@ -1,26 +1,22 @@
 import { FC } from 'react';
 
-import { NodeOperatorRoles } from 'types';
-import { RoleBadge, RoleBadgeProps } from '../role-badge/role-badge';
+import { NodeOperator } from 'types';
+import { RoleBadge } from '../role-badge/role-badge';
 import { DescriptorId } from './descriptor-id';
 import { DescriptorRolesStyle, DescriptorStyle } from './styles';
 
 type DescriptorProps = {
-  roles: NodeOperatorRoles;
-  roleBackground?: RoleBadgeProps['background'];
+  nodeOperator: NodeOperator;
 };
 
-export const Descriptor: FC<DescriptorProps> = ({ roles, roleBackground }) => {
+export const Descriptor: FC<DescriptorProps> = ({ nodeOperator }) => {
   return (
     <DescriptorStyle>
-      <DescriptorId id={roles.id} />
+      <DescriptorId id={nodeOperator.id} />
       <DescriptorRolesStyle>
-        {roles.rewards && (
-          <RoleBadge roleName="rewards" background={roleBackground} />
-        )}
-        {roles.manager && (
-          <RoleBadge roleName="manager" background={roleBackground} />
-        )}
+        {nodeOperator.roles.map((role) => (
+          <RoleBadge role={role} key={role} />
+        ))}
       </DescriptorRolesStyle>
     </DescriptorStyle>
   );

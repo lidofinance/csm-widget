@@ -1,30 +1,38 @@
 import { useCallback, useMemo } from 'react';
-import { useMaxGasPrice } from 'shared/hooks';
-import { useIsMultisig } from 'shared/hooks/useIsMultisig';
+import { useAccount, useInvites } from 'shared/hooks';
 import { type AcceptInviteFormNetworkData } from './types';
+import invariant from 'tiny-invariant';
 
-export const useAcceptInviteFormNetworkData =
-  (): AcceptInviteFormNetworkData => {
-    const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
-    const { maxGasPrice, initialLoading: isMaxGasPriceLoading } =
-      useMaxGasPrice();
+export const useAcceptInviteFormNetworkData = (): [
+  AcceptInviteFormNetworkData,
+  () => Promise<void>,
+] => {
+  const { address } = useAccount();
+  const {
+    data: invites,
+    initialLoading: isInvitesLoading,
+    update: updateInvites,
+  } = useInvites();
 
-    const revalidate = useCallback(async () => {
-      await Promise.allSettled([]);
-    }, []);
+  const revalidate = useCallback(async () => {
+    await Promise.allSettled([updateInvites()]);
+  }, [updateInvites]);
 
-    const loading = useMemo(
-      () => ({
-        isMultisigLoading,
-        isMaxGasPriceLoading,
-      }),
-      [isMultisigLoading, isMaxGasPriceLoading],
-    );
+  const loading = useMemo(
+    () => ({
+      isInvitesLoading,
+    }),
+    [isInvitesLoading],
+  );
 
-    return {
-      isMultisig: isMultisigLoading ? undefined : isMultisig,
-      maxGasPrice,
+  invariant(address);
+
+  return [
+    {
+      invites,
+      address,
       loading,
-      revalidate,
-    };
-  };
+    },
+    revalidate,
+  ];
+};

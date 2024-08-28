@@ -3,9 +3,12 @@ import { createContext, useContext } from 'react';
 import type { FieldValues } from 'react-hook-form';
 import type { EventSubsciption } from 'utils/event-subsciption';
 
-export type FormControllerContextValueType<F extends FieldValues = any> = {
+export type FormControllerContextValueType<
+  F extends FieldValues = any,
+  C extends object = any,
+> = {
   isLocked?: boolean;
-  onSubmit: (args: F) => Promise<boolean>;
+  onSubmit: (args: F, ctx: C) => Promise<boolean>;
   onReset?: (args: F) => void;
   retryEvent: EventSubsciption;
 };

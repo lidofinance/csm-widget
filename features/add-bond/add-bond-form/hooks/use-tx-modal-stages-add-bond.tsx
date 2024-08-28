@@ -4,7 +4,6 @@ import { TOKENS } from 'consts/tokens';
 import {
   TransactionModalTransitStage,
   TxStageOperationSucceedBalanceShown,
-  TxStagePermit,
   TxStageSignOperationAmount,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
@@ -14,14 +13,17 @@ const STAGE_OPERATION_ARGS = {
   operationText: 'Adding Bond',
 };
 
+type Props = {
+  amount: BigNumber;
+  token: TOKENS;
+};
+
 const getTxModalStagesAddBond = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  signPermit: () => transitStage(<TxStagePermit />),
-
-  sign: (amount: BigNumber, token: TOKENS) =>
+  sign: ({ amount, token }: Props) =>
     transitStage(
       <TxStageSignOperationAmount
         {...STAGE_OPERATION_ARGS}
@@ -30,7 +32,7 @@ const getTxModalStagesAddBond = (
       />,
     ),
 
-  pending: (amount: BigNumber, token: TOKENS, txHash?: string) =>
+  pending: ({ amount, token }: Props, txHash?: string) =>
     transitStage(
       <TxStageSignOperationAmount
         {...STAGE_OPERATION_ARGS}
@@ -41,13 +43,13 @@ const getTxModalStagesAddBond = (
       />,
     ),
 
-  success: (balance: BigNumber, token: TOKENS, txHash?: string) =>
+  success: ({ balance }: { balance: BigNumber }, txHash?: string) =>
     transitStage(
       <TxStageOperationSucceedBalanceShown
         {...STAGE_OPERATION_ARGS}
         txHash={txHash}
         balance={balance}
-        balanceToken={'stETH'}
+        balanceToken={TOKENS.STETH}
       />,
       {
         isClosableOnLedger: true,

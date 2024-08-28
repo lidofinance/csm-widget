@@ -8,7 +8,6 @@ type TxStageSuccessProps = {
   title: React.ReactNode;
   footer?: React.ReactNode;
   showEtherscan?: boolean;
-  onClickEtherscan?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
 export const TxStageSuccess = ({
@@ -17,7 +16,6 @@ export const TxStageSuccess = ({
   title,
   footer,
   showEtherscan = true,
-  onClickEtherscan,
 }: TxStageSuccessProps) => {
   return (
     <TransactionModalContent
@@ -25,8 +23,7 @@ export const TxStageSuccess = ({
       title={title}
       description={description}
       footerHint={
-        showEtherscan &&
-        txHash && <TxLinkEtherscan txHash={txHash} onClick={onClickEtherscan} />
+        showEtherscan && txHash && <TxLinkEtherscan txHash={txHash} />
       }
       footer={footer}
     />

@@ -3,35 +3,38 @@ import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
   useFormControllerRetry,
+  useFormData,
 } from 'shared/hook-form/form-controller';
-import { AcceptInviteFormDataContext } from './accept-invite-form-context';
-import { type AcceptInviteFormInputType } from './types';
-import { useAcceptInvite } from './use-accept-invite';
+import {
+  AcceptInviteFormNetworkData,
+  type AcceptInviteFormInputType,
+} from './types';
 import { useAcceptInviteFormNetworkData } from './use-accept-invite-form-network-data';
+import { useAcceptInviteSubmit } from './use-accept-invite-submit';
 import { useGetDefaultValues } from './use-get-default-values';
+
+export const useAcceptInviteFormData = useFormData<AcceptInviteFormNetworkData>;
 
 export const AcceptInviteFormProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
-  const networkData = useAcceptInviteFormNetworkData();
+  const [networkData, revalidate] = useAcceptInviteFormNetworkData();
 
-  // FIXME: not work
-  const getDefaultValues = useGetDefaultValues();
+  const asyncDefaultValues = useGetDefaultValues(networkData);
 
   const formObject = useForm<AcceptInviteFormInputType>({
-    defaultValues: getDefaultValues,
+    defaultValues: asyncDefaultValues,
     mode: 'onChange',
   });
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { acceptInvite } = useAcceptInvite({
-    onConfirm: networkData.revalidate,
+  const { acceptInvite } = useAcceptInviteSubmit({
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
-
-  const value = networkData;
 
   const formControllerValue: FormControllerContextValueType<AcceptInviteFormInputType> =
     useMemo(
@@ -44,11 +47,11 @@ export const AcceptInviteFormProvider: FC<PropsWithChildren> = ({
 
   return (
     <FormProvider {...formObject}>
-      <AcceptInviteFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </AcceptInviteFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

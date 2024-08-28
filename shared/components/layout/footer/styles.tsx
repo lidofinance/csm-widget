@@ -1,10 +1,8 @@
-import styled from 'styled-components';
 import { Container, Link } from '@lidofinance/lido-ui';
+import styled from 'styled-components';
 
 import { LogoLido } from 'shared/components/logos/logos';
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
-
-import { ReactComponent as ExternalLinkIcon } from 'assets/icons/external-link-icon.svg';
 
 export const FooterStyle = styled(Container)`
   position: relative;
@@ -91,18 +89,4 @@ export const Version = styled(FooterLink)`
   padding: 2px 5px;
   border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;
   background: rgba(122, 138, 160, 0.1);
-`;
-
-export const ExternalLinkIconFooter = styled(ExternalLinkIcon).attrs({
-  width: 10,
-  height: 10,
-  viewBox: '0 0 12 12',
-})`
-  padding: 5px;
-  width: 20px;
-  height: 20px;
-  box-sizing: border-box;
-  path {
-    fill: var(--lido-color-textSecondary);
-  }
 `;

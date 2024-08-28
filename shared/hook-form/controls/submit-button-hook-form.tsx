@@ -1,7 +1,7 @@
-import { useWeb3 } from 'reef-knot/web3-react';
 import { useFormState } from 'react-hook-form';
 
 import { ButtonIcon, Lock } from '@lidofinance/lido-ui';
+import { useAccount } from 'shared/hooks';
 import { Connect } from 'shared/wallet';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
 
@@ -19,7 +19,7 @@ export const SubmitButtonHookForm: React.FC<SubmitButtonHookFormProps> = ({
   disabled: disabledProp,
   ...props
 }) => {
-  const { active } = useWeb3();
+  const { active } = useAccount();
   const { isValidating, isSubmitting } = useFormState();
   const { errors } = useFormState<Record<string, unknown>>();
   const disabled =

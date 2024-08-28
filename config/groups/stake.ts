@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
-import { AddressZero } from '@ethersproject/constants';
 import { parseEther } from '@ethersproject/units';
+import { AddressZero } from '@ethersproject/constants';
 
 import { IPFS_REFERRAL_ADDRESS } from './ipfs';
 
@@ -8,6 +8,8 @@ import { IPFS_REFERRAL_ADDRESS } from './ipfs';
 // import { config } from '../get-config';
 // otherwise you will get something like a cyclic error!
 import { preConfig } from '../get-preconfig';
+
+// TODO: review this file
 
 export const PRECISION = 10 ** 6;
 
@@ -23,6 +25,8 @@ export const STAKE_GASLIMIT_FALLBACK = BigNumber.from(
     STETH_SUBMIT_GAS_LIMIT_DEFAULT * SUBMIT_EXTRA_GAS_TRANSACTION_RATIO,
   ),
 );
+
+export const STAKE_WIDGET_METRIC_SUFFIX = '01';
 
 export const STAKE_FALLBACK_REFERRAL_ADDRESS = preConfig.ipfsMode
   ? IPFS_REFERRAL_ADDRESS

@@ -1,12 +1,27 @@
-import { SubmitKeysFormInputType } from 'features/create-node-operator/submit-keys-form/context';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useFormState } from 'react-hook-form';
-import { DepositDataInputHookForm } from 'shared/hook-form/controls/deposit-data-input-hook-form';
+import { FormTitle, MatomoLink } from 'shared/components';
+import { DepositDataInputHookForm } from 'shared/hook-form/controls';
+import { AddKeysFormInputType } from '../context';
 
 export const KeysInput = () => {
-  const { errors } = useFormState<SubmitKeysFormInputType>({
-    name: 'depositData',
+  const { errors } = useFormState<AddKeysFormInputType>({
+    name: ['depositData', 'rawDepositData'],
   });
-  const error = errors.depositData?.message;
+  const error = errors.rawDepositData?.message || errors.depositData?.message;
 
-  return <DepositDataInputHookForm error={error} />;
+  return (
+    <>
+      <FormTitle>
+        Upload deposit data
+        <MatomoLink
+          href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm"
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
+        >
+          Learn more
+        </MatomoLink>
+      </FormTitle>
+      <DepositDataInputHookForm error={error} />
+    </>
+  );
 };

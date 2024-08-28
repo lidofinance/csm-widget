@@ -4,57 +4,60 @@ import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
+  useFormData,
+  useFormDepositData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller/use-form-controller-retry-delegate';
-import { AddKeysFormDataContext } from './add-keys-form-context';
-import { type AddKeysFormInputType } from './types';
-import { useAddKeys } from './use-add-keys';
+import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 import { useAddKeysFormNetworkData } from './use-add-keys-form-network-data';
-import { useAddKeysFormValidationContext } from './use-add-keys-form-validation-context';
-import { useCalculateBondAmount } from './use-calculate-bond-amount';
-import { useCalculateDepositData } from './use-calculate-deposit-data';
+import { useAddKeysSubmit } from './use-add-keys-submit';
+import { useAddKeysValidation } from './use-add-keys-validation';
+import { useFormBondAmount } from './use-form-bond-amount';
+
+export const useAddKeysFormData = useFormData<AddKeysFormNetworkData>;
 
 export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useAddKeysFormNetworkData();
-  const validationContextPromise = useAddKeysFormValidationContext(networkData);
+  const [networkData, revalidate] = useAddKeysFormNetworkData();
+  const validationResolver = useAddKeysValidation(networkData);
 
   const formObject = useForm<AddKeysFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
       depositData: [],
     },
-    context: validationContextPromise,
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
-  useCalculateDepositData(formObject);
-  useCalculateBondAmount(formObject);
+  useFormBondAmount(formObject, networkData);
+  useFormDepositData(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const addKeys = useAddKeys({
-    onConfirm: networkData.revalidate,
+  const addKeys = useAddKeysSubmit({
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
-  const formControllerValue: FormControllerContextValueType<AddKeysFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: addKeys,
-        retryEvent,
-      }),
-      [addKeys, retryEvent],
-    );
+  const formControllerValue: FormControllerContextValueType<
+    AddKeysFormInputType,
+    AddKeysFormNetworkData
+  > = useMemo(
+    () => ({
+      onSubmit: addKeys,
+      retryEvent,
+    }),
+    [addKeys, retryEvent],
+  );
 
   return (
     <FormProvider {...formObject}>
-      <AddKeysFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </AddKeysFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

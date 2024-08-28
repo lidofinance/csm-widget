@@ -1,58 +1,64 @@
+import { Address } from '@lidofinance/lido-ui';
 import { ROLES } from 'consts/roles';
+import { DescriptorId, getRoleTitle } from 'shared/node-operator';
 import {
-  SuccessText,
   TransactionModalTransitStage,
-  TxStagePermit,
+  TxStagePending,
+  TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { TxStageSignOperationRole } from 'shared/transaction-modal/tx-stages-composed/tx-stage-role-operation';
-import { Address } from 'wagmi';
+import { NodeOperatorId } from 'types';
 
-const STAGE_OPERATION_ARGS = {
-  operationText: 'Proposing role change',
-};
+type Props = { id: NodeOperatorId; role: ROLES };
 
 const getTxModalStagesAcceptInvite = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  signPermit: () => transitStage(<TxStagePermit />),
-
-  sign: (address: Address, role: ROLES) =>
+  sign: ({ id, role }: Props) =>
     transitStage(
-      <TxStageSignOperationRole
-        {...STAGE_OPERATION_ARGS}
-        role={role}
-        address={address}
+      <TxStageSign
+        title={`You are accepting address change`}
+        description={
+          <>
+            <DescriptorId id={id} /> &mdash; <b>{getRoleTitle(role)}</b> address
+          </>
+        }
       />,
     ),
 
-  pending: (address: Address, role: ROLES, txHash?: string) =>
+  pending: ({ id, role }: Props, txHash?: string) =>
     transitStage(
-      <TxStageSignOperationRole
-        {...STAGE_OPERATION_ARGS}
-        role={role}
-        address={address}
-        isPending
+      <TxStagePending
+        title={`You are accepting address change`}
+        description={
+          <>
+            <DescriptorId id={id} /> &mdash; <b>{getRoleTitle(role)}</b> address
+          </>
+        }
         txHash={txHash}
       />,
     ),
 
-  success: (address: Address, role: ROLES, txHash?: string) =>
+  // TODO: "go to dashboard" button
+  success: (
+    { id, role, address }: Props & { address: string },
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title={<>Your Node Operator {role} address change proposed</>}
+        title={<>Address change is accepted</>}
         description={
-          <SuccessText
-            operationText={STAGE_OPERATION_ARGS.operationText}
-            txHash={txHash}
-          />
+          <>
+            {getRoleTitle(role, true)} address of <DescriptorId id={id} /> is
+            <br />
+            <Address address={address} symbols={90} />
+          </>
         }
-        showEtherscan={false}
       />,
       {
         isClosableOnLedger: true,

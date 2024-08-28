@@ -1,27 +1,12 @@
-import { BigNumber } from 'ethers';
-import { NodeOperatorInvite } from 'types';
-
-export type AcceptInviteFormDataContextValue = AcceptInviteFormNetworkData;
+import { Address } from 'wagmi';
+import { LoadingRecord, NodeOperatorInvite } from 'types';
 
 export type AcceptInviteFormInputType = {
   invite?: NodeOperatorInvite;
 };
 
-export type AcceptInviteFormLoading = {
-  isMultisigLoading: boolean;
-  isMaxGasPriceLoading: boolean;
-};
-
 export type AcceptInviteFormNetworkData = {
-  maxGasPrice?: BigNumber;
-  isMultisig?: boolean;
-  loading: AcceptInviteFormLoading;
-  revalidate: () => Promise<void>;
-};
-
-export type AcceptInviteFormValidationContext = {
-  isWalletActive: boolean;
-  gasCost: BigNumber;
-  etherBalance: BigNumber;
-  isMultisig: boolean;
+  invites?: NodeOperatorInvite[];
+  address: Address;
+  loading: LoadingRecord<'invites'>;
 };

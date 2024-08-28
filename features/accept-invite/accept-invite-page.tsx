@@ -1,24 +1,18 @@
 import { FC } from 'react';
 
-import {
-  ROLES_INVITES_PATH,
-  ROLES_MANAGER_PATH,
-  ROLES_REWARDS_PATH,
-} from 'consts/urls';
-import { Layout, Switch } from 'shared/components';
-import { SwitchRoutes } from 'shared/components/switch/types';
+import { Layout } from 'shared/components';
+import { RolesPageSwitcher } from 'shared/navigate';
 import { AcceptInvite } from './accept-invite';
-
-const ROLE_ROUTES: SwitchRoutes = [
-  { name: 'Reward Address', path: ROLES_REWARDS_PATH },
-  { name: 'Manager Address', path: ROLES_MANAGER_PATH },
-  { name: 'Invites', path: ROLES_INVITES_PATH },
-];
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const AcceptInvitePage: FC = () => {
   return (
-    <Layout title="Community Staking Module" subtitle="Change Reward Address">
-      <Switch active={0} routes={ROLE_ROUTES} />
+    <Layout
+      title="Inbox requests"
+      subtitle="Accept incoming requests for addresses changes"
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests}
+    >
+      <RolesPageSwitcher />
       <AcceptInvite />
     </Layout>
   );

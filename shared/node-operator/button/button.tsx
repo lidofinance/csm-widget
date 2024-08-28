@@ -1,7 +1,7 @@
 import { ButtonProps } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useActiveNodeOperator } from 'providers/node-operator-provider';
 import { Descriptor } from '../descriptor/descriptor';
 import { useSwitchModal } from '../switch-modal';
 import { ButtonStyle, ButtonWrapperStyle } from './styles';
@@ -9,9 +9,9 @@ import { ButtonStyle, ButtonWrapperStyle } from './styles';
 export const Button: FC<ButtonProps> = (props) => {
   const { onClick, ...rest } = props;
   const { openModal } = useSwitchModal();
-  const { active } = useNodeOperator();
+  const nodeOperator = useActiveNodeOperator();
 
-  if (!active) return null;
+  if (!nodeOperator) return null;
 
   return (
     <ButtonStyle
@@ -22,7 +22,7 @@ export const Button: FC<ButtonProps> = (props) => {
       {...rest}
     >
       <ButtonWrapperStyle>
-        <Descriptor roles={active} />
+        <Descriptor nodeOperator={nodeOperator} />
       </ButtonWrapperStyle>
     </ButtonStyle>
   );

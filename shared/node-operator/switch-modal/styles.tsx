@@ -1,5 +1,6 @@
-import { Stack, StackItem } from '@lidofinance/lido-ui';
+import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
+import { BadgeStyle } from '../role-badge/styles';
 
 export const ListStyle = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ export const RowStyle = styled.div`
   display: flex;
   justify-content: space-between;
 
-  background-color: var(--lido-color-background);
+  background-color: var(--lido-color-backgroundSecondary);
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
   padding: ${({ theme }) => theme.spaceMap.md}px;
 `;
@@ -19,6 +20,10 @@ export const RowStyle = styled.div`
 export const ContentStyle = styled.div`
   display: flex;
   align-items: center;
+
+  ${BadgeStyle} {
+    background: var(--lido-color-shadowLight);
+  }
 `;
 
 export const IdStyle = styled.span``;
@@ -37,13 +42,11 @@ export const ButtonWrapperStyle = styled.span`
   gap: ${({ theme }) => theme.spaceMap.sm}px;
 `;
 
-export const StyledStack = styled(Stack)`
+export const StyledStack = styled(StackStyle)`
   margin-top: ${({ theme }) => theme.spaceMap.lg}px;
 `;
 
-export const StyledStackItem = styled(StackItem)`
-  display: flex;
-  gap: ${({ theme }) => theme.spaceMap.sm}px;
+export const StyledStackItem = styled(StackStyle).attrs({ $gap: 'sm' })`
   align-items: center;
   flex-grow: 1;
 `;

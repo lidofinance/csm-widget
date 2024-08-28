@@ -1,15 +1,19 @@
+import { ROLES } from 'consts/roles';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
-import { useMaxGasPrice, useNodeOperatorInfo } from 'shared/hooks';
-import { useIsMultisig } from 'shared/hooks/useIsMultisig';
+import { useAccount, useNodeOperatorInfo } from 'shared/hooks';
+import invariant from 'tiny-invariant';
+import { compareLowercase } from 'utils';
 import { type ChangeRoleFormNetworkData } from './types';
-import { ROLES } from 'consts/roles';
 
 export const useChangeRoleFormNetworkData = ({
   role,
 }: {
   role: ROLES;
-}): ChangeRoleFormNetworkData => {
+}): [ChangeRoleFormNetworkData, () => Promise<void>] => {
+  const { address } = useAccount();
+  invariant(address);
+
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: info,
@@ -17,34 +21,53 @@ export const useChangeRoleFormNetworkData = ({
     initialLoading: isInfoLoading,
   } = useNodeOperatorInfo(nodeOperatorId);
 
-  const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
-  const { maxGasPrice, initialLoading: isMaxGasPriceLoading } =
-    useMaxGasPrice();
-
+  // TODO: force udpate info
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateInfo]);
+    await Promise.allSettled([updateInfo()]);
   }, [updateInfo]);
 
   const loading = useMemo(
     () => ({
       isInfoLoading,
-      isMultisigLoading,
-      isMaxGasPriceLoading,
     }),
-    [isInfoLoading, isMultisigLoading, isMaxGasPriceLoading],
+    [isInfoLoading],
   );
 
-  return {
-    currentAddress:
-      role === ROLES.REWARD ? info?.rewardAddress : info?.managerAddress,
-    proposedAddress:
-      role === ROLES.REWARD
-        ? info?.proposedRewardAddress
-        : info?.proposedManagerAddress,
-    nodeOperatorId,
-    isMultisig: isMultisigLoading ? undefined : isMultisig,
-    maxGasPrice,
-    loading,
+  const currentAddress =
+    role === ROLES.REWARDS ? info?.rewardAddress : info?.managerAddress;
+  const proposedAddress =
+    role === ROLES.REWARDS
+      ? info?.proposedRewardAddress
+      : info?.proposedManagerAddress;
+
+  const isManagerReset =
+    role === ROLES.MANAGER &&
+    !info?.extendedManagerPermissions &&
+    compareLowercase(info?.rewardAddress, address) &&
+    !compareLowercase(info?.managerAddress, address);
+
+  const isRewardsChange =
+    role === ROLES.REWARDS &&
+    !!info?.extendedManagerPermissions &&
+    compareLowercase(info.managerAddress, address);
+
+  const isPropose =
+    !isManagerReset &&
+    !isRewardsChange &&
+    compareLowercase(currentAddress, address);
+
+  return [
+    {
+      address,
+      role,
+      currentAddress,
+      proposedAddress,
+      nodeOperatorId,
+      isManagerReset,
+      isRewardsChange,
+      isPropose,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

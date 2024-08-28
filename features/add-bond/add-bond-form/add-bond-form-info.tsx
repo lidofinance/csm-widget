@@ -1,50 +1,37 @@
-import { Zero } from '@ethersproject/constants';
-import { parseEther } from '@ethersproject/units';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
-import { TOKENS } from 'consts/tokens';
+import { OneEther, TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
-import { useStethByWsteth } from 'shared/hooks';
-import { AddBondFormInputType } from './context/types';
-
-const OneWsteth = parseEther('1');
+import { AddBondFormInputType } from './context';
+import { useExchangeRate } from './hooks/use-exchange-rate';
+import { useReceiveAmount } from './hooks/use-receive-amount';
 
 export const AddBondFormInfo = () => {
-  const [token, amount] = useWatch<AddBondFormInputType, ['token', 'amount']>({
-    name: ['token', 'amount'],
+  const [token, bondAmount] = useWatch<
+    AddBondFormInputType,
+    ['token', 'bondAmount']
+  >({
+    name: ['token', 'bondAmount'],
   });
 
-  const { data: wsteth, loading: wstethLoadng } = useStethByWsteth(
-    (token === TOKENS.WSTETH && amount) || undefined,
-  );
-
-  const { data: rateWsteth, initialLoading: rateLoading } =
-    useStethByWsteth(OneWsteth);
-  // const { usdAmount, initialLoading: isEthUsdLoading } = useEthUsd(gasCost);
+  const receive = useReceiveAmount(bondAmount, token);
+  const exchange = useExchangeRate(token);
 
   return (
     <DataTable>
-      {token === TOKENS.WSTETH ? (
-        <DataTableRow
-          title="NO Bond balance will receive"
-          loading={wstethLoadng}
-        >
-          <FormatToken amount={wsteth ?? Zero} symbol="stETH" />
-        </DataTableRow>
-      ) : (
-        <DataTableRow title="NO Bond balance will receive">
-          <FormatToken amount={amount ?? Zero} symbol="stETH" trimEllipsis />
+      <DataTableRow title="Bond balance will receive" loading={receive.loading}>
+        <FormatToken
+          amount={receive.amount}
+          token={TOKENS.STETH}
+          trimEllipsis
+        />
+      </DataTableRow>
+      {token !== TOKENS.STETH && (
+        <DataTableRow title="Exchange rate" loading={exchange.loading}>
+          <FormatToken amount={OneEther} token={token} /> ={' '}
+          <FormatToken amount={exchange.rate} token={TOKENS.STETH} />
         </DataTableRow>
       )}
-      {token === TOKENS.WSTETH ? (
-        <DataTableRow title="Exchange rate" loading={rateLoading}>
-          1 wstETH =
-          <FormatToken amount={rateWsteth} symbol="stETH" />
-        </DataTableRow>
-      ) : undefined}
-      {token === TOKENS.ETH ? (
-        <DataTableRow title="Exchange rate">1 ETH = 1 stETH</DataTableRow>
-      ) : undefined}
     </DataTable>
   );
 };

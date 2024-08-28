@@ -1,5 +1,5 @@
-import { AddressZero } from '@ethersproject/constants';
-import { Identicon, Input, Loader } from '@lidofinance/lido-ui';
+import { Identicon, Input } from '@lidofinance/lido-ui';
+import { isAddress } from 'ethers/lib/utils.js';
 import {
   ChangeEvent,
   forwardRef,
@@ -7,11 +7,11 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { RevokeButton } from './revoke-button';
 import { InputAddressProps } from './types';
+import { InputDecoratorLocked } from '../input-amount/input-decorator-locked';
 
 export const InputAddress = forwardRef<HTMLInputElement, InputAddressProps>(
-  ({ isAddressResolving, address, revoke, onChange, value, ...props }, ref) => {
+  ({ onChange, value, isLocked, rightDecorator, ...props }, ref) => {
     const inputRef = useRef<HTMLInputElement>(null);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     useImperativeHandle(ref, () => inputRef.current!, []);
@@ -24,11 +24,7 @@ export const InputAddress = forwardRef<HTMLInputElement, InputAddressProps>(
       [onChange],
     );
 
-    const handleClickRevoke = onChange
-      ? () => {
-          onChange(AddressZero);
-        }
-      : undefined;
+    const isAddressValid = isAddress(value || '');
 
     return (
       <Input
@@ -38,19 +34,15 @@ export const InputAddress = forwardRef<HTMLInputElement, InputAddressProps>(
         onChange={handleChange}
         placeholder="Ethereum address"
         leftDecorator={
-          isAddressResolving ? (
-            <Loader size="small" />
-          ) : address ? (
-            <Identicon data-testid="addressIcon" address={address} />
-          ) : value && !props.error ? (
-            <Identicon data-testid="addressIcon" address={value} />
-          ) : null
+          value && isAddressValid ? <Identicon address={value} /> : null
         }
         rightDecorator={
-          revoke ? <RevokeButton onClick={handleClickRevoke} /> : null
+          rightDecorator ?? (
+            <>{isLocked ? <InputDecoratorLocked /> : undefined}</>
+          )
         }
+        disabled={props.disabled || isLocked}
         spellCheck="false"
-        // error={inputValue.length > 0 && !isValidAnyAddress(inputValue)}
       />
     );
   },

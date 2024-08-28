@@ -1,42 +1,53 @@
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
-import { useMaxGasPrice, useNodeOperatorBalance } from 'shared/hooks';
-import { useIsMultisig } from 'shared/hooks/useIsMultisig';
+import { useNodeOperatorBalance, useNodeOperatorRewards } from 'shared/hooks';
 import { type ClaimBondFormNetworkData } from './types';
+import { useMaxValues } from './use-max-values';
 
-export const useClaimBondFormNetworkData = (): ClaimBondFormNetworkData => {
+export const useClaimBondFormNetworkData = (): [
+  ClaimBondFormNetworkData,
+  () => Promise<void>,
+] => {
   const nodeOperatorId = useNodeOperatorId();
 
   const {
     data: bond,
-    update: updateBondBalance,
-    initialLoading: isBondBalanceLoading,
+    update: updateBond,
+    initialLoading: isBondLoading,
   } = useNodeOperatorBalance(nodeOperatorId);
 
-  const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
-  const { maxGasPrice, initialLoading: isMaxGasPriceLoading } =
-    useMaxGasPrice();
+  const {
+    data: rewards,
+    update: updateRewards,
+    initialLoading: isRewardsLoading,
+  } = useNodeOperatorRewards(nodeOperatorId);
+
+  const { data: maxValues, initialLoading: isMaxValuesLoading } = useMaxValues({
+    bond,
+    rewards,
+  });
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateBondBalance]);
-  }, [updateBondBalance]);
+    await Promise.allSettled([updateBond(), updateRewards()]);
+  }, [updateBond, updateRewards]);
 
   const loading = useMemo(
     () => ({
-      isBondBalanceLoading,
-      isMultisigLoading,
-      isMaxGasPriceLoading,
+      isBondLoading,
+      isRewardsLoading,
+      isMaxValuesLoading,
     }),
-    [isBondBalanceLoading, isMultisigLoading, isMaxGasPriceLoading],
+    [isBondLoading, isMaxValuesLoading, isRewardsLoading],
   );
 
-  return {
-    nodeOperatorId,
-    bondBalance: bond?.current,
-    bondRequired: bond?.required,
-    isMultisig: isMultisigLoading ? undefined : isMultisig,
-    maxGasPrice,
-    loading,
+  return [
+    {
+      nodeOperatorId,
+      bond,
+      rewards,
+      maxValues,
+      loading,
+    },
     revalidate,
-  };
+  ];
 };

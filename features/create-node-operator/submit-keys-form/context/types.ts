@@ -1,41 +1,33 @@
 import { type TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
-import { DepositData, Proof } from 'types';
+import { DepositDataInputType } from 'shared/hook-form/form-controller';
+import { LoadingRecord, Proof } from 'types';
 import { Address } from 'wagmi';
-
-export type SubmitKeysFormDataContextValue = SubmitKeysFormNetworkData;
 
 export type SubmitKeysFormInputType = {
   token: TOKENS;
-  rawDepositData?: string;
-  depositData: DepositData[];
-  referral?: Address;
   bondAmount?: BigNumber;
-  eaProof?: Proof;
-};
-
-export type SubmitKeysFormLoading = {
-  isEtherBalanceLoading: boolean;
-  isStethBalanceLoading: boolean;
-  isWstethBalanceLoading: boolean;
-  isMultisigLoading: boolean;
-  isMaxGasPriceLoading: boolean;
-};
+  referrer?: Address;
+  rewardsAddress?: string;
+  managerAddress?: string;
+  extendedManagerPermissions: boolean;
+  specifyCustomAddresses: boolean;
+  specifyReferrrer: boolean;
+} & DepositDataInputType;
 
 export type SubmitKeysFormNetworkData = {
   etherBalance?: BigNumber;
   stethBalance?: BigNumber;
   wstethBalance?: BigNumber;
-  isMultisig?: boolean;
-  gasLimit?: BigNumber;
-  gasCost?: BigNumber;
-  loading: SubmitKeysFormLoading;
-  revalidate: () => Promise<void>;
-};
-
-export type SubmitKeysFormValidationContext = {
-  isWalletActive: boolean;
-  gasCost: BigNumber;
-  etherBalance: BigNumber;
-  isMultisig: boolean;
+  eaProof?: Proof;
+  curveId?: BigNumber;
+  maxStakeEther?: BigNumber | null;
+  loading: LoadingRecord<
+    | 'etherBalance'
+    | 'stethBalance'
+    | 'wstethBalance'
+    | 'eaProof'
+    | 'curveId'
+    | 'maxStakeEther'
+  >;
 };

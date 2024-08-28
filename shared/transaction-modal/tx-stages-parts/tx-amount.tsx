@@ -1,15 +1,16 @@
+import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { FormatToken } from 'shared/formatters';
 
 type TxAmountProps = {
   amount: BigNumber;
-  symbol: string;
+  token: TOKENS;
 };
 
-export const TxAmount = ({ amount, symbol }: TxAmountProps) => (
+export const TxAmount = ({ amount, token }: TxAmountProps) => (
   <FormatToken
     amount={amount}
-    symbol={symbol}
+    token={token}
     maxTotalLength={Infinity}
     adaptiveDecimals
     trimEllipsis

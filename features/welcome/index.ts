@@ -1,2 +1,4 @@
+export * from './splash-page';
 export * from './welcome-page';
-export * from './banner';
+export * from './not-released-page';
+export * from './welcome';

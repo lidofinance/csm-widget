@@ -4,51 +4,61 @@ import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
   useFormControllerRetry,
 } from 'shared/hook-form/form-controller';
-import { ChangeRoleFormDataContext } from './change-role-form-context';
 import { type ChangeRoleFormInputType } from './types';
-import { useChangeRole } from './use-change-role';
 import { useChangeRoleFormNetworkData } from './use-change-role-form-network-data';
+import { useChangeRoleSubmit } from './use-change-role-submit';
 
-export const ChangeRoleFormProvider: FC<PropsWithChildren<{ role: ROLES }>> = ({
-  children,
-  role,
-}) => {
-  const networkData = useChangeRoleFormNetworkData({ role });
+import { useFormData } from 'shared/hook-form/form-controller';
+import { type ChangeRoleFormNetworkData } from './types';
+import { useChangeRoleValidation } from './use-change-role-validation';
+import { useGetDefaultValues } from './use-get-default-values';
+
+export const useChangeRoleFormData = useFormData<ChangeRoleFormNetworkData>;
+
+export type ChangeRoleFormProviderProps = { role: ROLES };
+
+export const ChangeRoleFormProvider: FC<
+  PropsWithChildren<ChangeRoleFormProviderProps>
+> = ({ children, role }) => {
+  const [networkData, revalidate] = useChangeRoleFormNetworkData({ role });
+  const validationResolver = useChangeRoleValidation(networkData);
+
+  const asyncDefaultValues = useGetDefaultValues(networkData);
 
   const formObject = useForm<ChangeRoleFormInputType>({
-    defaultValues: {
-      role,
-    },
+    defaultValues: asyncDefaultValues,
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { changeRole } = useChangeRole({
-    onConfirm: networkData.revalidate,
+  const { changeRole } = useChangeRoleSubmit({
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
-  const formControllerValue: FormControllerContextValueType<ChangeRoleFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: changeRole,
-        retryEvent,
-      }),
-      [changeRole, retryEvent],
-    );
+  const formControllerValue: FormControllerContextValueType<
+    ChangeRoleFormInputType,
+    ChangeRoleFormNetworkData
+  > = useMemo(
+    () => ({
+      onSubmit: changeRole,
+      retryEvent,
+    }),
+    [changeRole, retryEvent],
+  );
 
   return (
     <FormProvider {...formObject}>
-      <ChangeRoleFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </ChangeRoleFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

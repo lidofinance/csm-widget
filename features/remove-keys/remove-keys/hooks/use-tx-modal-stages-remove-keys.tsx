@@ -1,16 +1,15 @@
 import {
-  SuccessText,
   TransactionModalTransitStage,
-  TxStagePermit,
+  TxStagePending,
+  TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { TxStageSignOperationKeys } from 'shared/transaction-modal/tx-stages-composed/tx-stage-keys-operation';
-import { NodeOperatorId } from 'types';
 
-const STAGE_OPERATION_ARGS = {
-  operationText: 'Removing',
+// TODO: finishshow
+type Props = {
+  keysCount: number;
 };
 
 const getTxModalStagesRemoveKeys = (
@@ -18,38 +17,29 @@ const getTxModalStagesRemoveKeys = (
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  signPermit: () => transitStage(<TxStagePermit />),
-
-  sign: (keysCount: number, nodeOperatorId: NodeOperatorId) =>
+  sign: (props: Props) =>
     transitStage(
-      <TxStageSignOperationKeys
-        {...STAGE_OPERATION_ARGS}
-        keysCount={keysCount}
-        nodeOperatorId={nodeOperatorId}
+      <TxStageSign
+        title={`Removing ${props.keysCount} key(s)`}
+        description=""
       />,
     ),
 
-  pending: (
-    keysCount: number,
-    nodeOperatorId: NodeOperatorId,
-    txHash?: string,
-  ) =>
+  pending: (props: Props, txHash?: string) =>
     transitStage(
-      <TxStageSignOperationKeys
-        {...STAGE_OPERATION_ARGS}
-        keysCount={keysCount}
-        nodeOperatorId={nodeOperatorId}
-        isPending
+      <TxStagePending
+        title={`Removing ${props.keysCount} key(s)`}
+        description=""
         txHash={txHash}
       />,
     ),
 
-  success: (txHash?: string) =>
+  success: (props: Props, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title={<>Your keys are removed</>}
-        description={<SuccessText {...STAGE_OPERATION_ARGS} />}
+        title={`${props.keysCount} key(s) are removed`}
+        description=""
       />,
       {
         isClosableOnLedger: true,

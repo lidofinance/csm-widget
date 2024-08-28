@@ -1,10 +1,25 @@
-import { AddBondPage } from 'features/add-bond';
-import { OnlyNodeOperator } from 'features/loader/only-node-operator';
+import { secretConfig } from 'config';
+import { PATH } from 'consts/urls';
+import { SplashPage } from 'features/welcome';
+import { GetStaticProps } from 'next';
+import { GateActiveUser, GateLoaded } from 'shared/gates';
+import { Navigate } from 'shared/navigate';
 
 const Page = () => (
-  <OnlyNodeOperator>
-    <AddBondPage />
-  </OnlyNodeOperator>
+  <GateLoaded fallback={<SplashPage />}>
+    <GateActiveUser
+      fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
+    >
+      <Navigate path={PATH.BOND} fallback={<SplashPage />} />
+    </GateActiveUser>
+  </GateLoaded>
 );
 
 export default Page;
+
+export const getStaticProps: GetStaticProps = async () => {
+  const { notReleased, maintenance } = secretConfig;
+  if (notReleased || maintenance) return { notFound: true };
+
+  return { props: {} };
+};

@@ -11,6 +11,21 @@
         "name": "communityStakingModule",
         "type": "address",
         "internalType": "address"
+      },
+      {
+        "name": "maxCurveLength",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "minBondLockRetentionPeriod",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "maxBondLockRetentionPeriod",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "nonpayable"
@@ -18,19 +33,6 @@
   {
     "type": "function",
     "name": "ACCOUNTING_MANAGER_ROLE",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "ADD_BOND_CURVE_ROLE",
     "inputs": [],
     "outputs": [
       {
@@ -69,6 +71,58 @@
   },
   {
     "type": "function",
+    "name": "DEFAULT_BOND_CURVE_ID",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "LIDO",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract ILido"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "LIDO_LOCATOR",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract ILidoLocator"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "MANAGE_BOND_CURVES_ROLE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "bytes32"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "MAX_BOND_LOCK_RETENTION_PERIOD",
     "inputs": [],
     "outputs": [
@@ -82,7 +136,33 @@
   },
   {
     "type": "function",
+    "name": "MAX_CURVE_LENGTH",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "MIN_BOND_LOCK_RETENTION_PERIOD",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "MIN_CURVE_LENGTH",
     "inputs": [],
     "outputs": [
       {
@@ -173,13 +253,26 @@
   },
   {
     "type": "function",
-    "name": "SET_DEFAULT_BOND_CURVE_ROLE",
+    "name": "WITHDRAWAL_QUEUE",
     "inputs": [],
     "outputs": [
       {
         "name": "",
-        "type": "bytes32",
-        "internalType": "bytes32"
+        "type": "address",
+        "internalType": "contract IWithdrawalQueue"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "WSTETH",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract IWstETH"
       }
     ],
     "stateMutability": "view"
@@ -196,7 +289,7 @@
     ],
     "outputs": [
       {
-        "name": "",
+        "name": "id",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -223,7 +316,7 @@
   },
   {
     "type": "function",
-    "name": "chargeRecipient",
+    "name": "chargePenaltyRecipient",
     "inputs": [],
     "outputs": [
       {
@@ -245,6 +338,39 @@
       },
       {
         "name": "stETHAmount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "rewardAddress",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "cumulativeFeeShares",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "rewardsProof",
+        "type": "bytes32[]",
+        "internalType": "bytes32[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "claimRewardsUnstETH",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "stEthAmount",
         "type": "uint256",
         "internalType": "uint256"
       },
@@ -315,19 +441,6 @@
   },
   {
     "type": "function",
-    "name": "defaultBondCurveId",
-    "inputs": [],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
     "name": "depositETH",
     "inputs": [
       {
@@ -341,13 +454,7 @@
         "internalType": "uint256"
       }
     ],
-    "outputs": [
-      {
-        "name": "shares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "payable"
   },
   {
@@ -402,13 +509,7 @@
         ]
       }
     ],
-    "outputs": [
-      {
-        "name": "shares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "nonpayable"
   },
   {
@@ -463,13 +564,7 @@
         ]
       }
     ],
-    "outputs": [
-      {
-        "name": "shares",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "nonpayable"
   },
   {
@@ -538,11 +633,6 @@
         "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
           {
-            "name": "id",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
             "name": "points",
             "type": "uint256[]",
             "internalType": "uint256[]"
@@ -572,6 +662,35 @@
         "name": "keys",
         "type": "uint256",
         "internalType": "uint256"
+      },
+      {
+        "name": "curveId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getBondAmountByKeysCountWstETH",
+    "inputs": [
+      {
+        "name": "keysCount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "curveId",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "outputs": [
@@ -598,11 +717,6 @@
         "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
           {
-            "name": "id",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
             "name": "points",
             "type": "uint256[]",
             "internalType": "uint256[]"
@@ -613,25 +727,6 @@
             "internalType": "uint256"
           }
         ]
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getBondAmountByKeysCountWstETH",
-    "inputs": [
-      {
-        "name": "keysCount",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "outputs": [
@@ -660,11 +755,6 @@
         "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
           {
-            "name": "id",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
             "name": "points",
             "type": "uint256[]",
             "internalType": "uint256[]"
@@ -681,11 +771,30 @@
   },
   {
     "type": "function",
+    "name": "getBondCurveId",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "getBondLockRetentionPeriod",
     "inputs": [],
     "outputs": [
       {
-        "name": "retention",
+        "name": "",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -776,11 +885,6 @@
         "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
           {
-            "name": "id",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
-          {
             "name": "points",
             "type": "uint256[]",
             "internalType": "uint256[]"
@@ -803,36 +907,12 @@
         "name": "amount",
         "type": "uint256",
         "internalType": "uint256"
-      }
-    ],
-    "outputs": [
-      {
-        "name": "",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
-    "stateMutability": "view"
-  },
-  {
-    "type": "function",
-    "name": "getKeysCountByBondAmount",
-    "inputs": [
-      {
-        "name": "amount",
-        "type": "uint256",
-        "internalType": "uint256"
       },
       {
         "name": "curve",
         "type": "tuple",
         "internalType": "struct ICSBondCurve.BondCurve",
         "components": [
-          {
-            "name": "id",
-            "type": "uint256",
-            "internalType": "uint256"
-          },
           {
             "name": "points",
             "type": "uint256[]",
@@ -857,6 +937,30 @@
   },
   {
     "type": "function",
+    "name": "getKeysCountByBondAmount",
+    "inputs": [
+      {
+        "name": "amount",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "curveId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
     "name": "getLockedBondInfo",
     "inputs": [
       {
@@ -873,13 +977,13 @@
         "components": [
           {
             "name": "amount",
-            "type": "uint256",
-            "internalType": "uint256"
+            "type": "uint128",
+            "internalType": "uint128"
           },
           {
             "name": "retentionUntil",
-            "type": "uint256",
-            "internalType": "uint256"
+            "type": "uint128",
+            "internalType": "uint128"
           }
         ]
       }
@@ -1114,7 +1218,7 @@
         "internalType": "uint256"
       },
       {
-        "name": "_chargeRecipient",
+        "name": "_chargePenaltyRecipient",
         "type": "address",
         "internalType": "address"
       }
@@ -1179,6 +1283,29 @@
         "name": "amount",
         "type": "uint256",
         "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "pullFeeRewards",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "cumulativeFeeShares",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "rewardsProof",
+        "type": "bytes32[]",
+        "internalType": "bytes32[]"
       }
     ],
     "outputs": [],
@@ -1272,6 +1399,13 @@
   },
   {
     "type": "function",
+    "name": "renewBurnerAllowance",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "renounceRole",
     "inputs": [
       {
@@ -1283,39 +1417,6 @@
         "name": "callerConfirmation",
         "type": "address",
         "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "requestRewardsETH",
-    "inputs": [
-      {
-        "name": "nodeOperatorId",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "ethAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "rewardAddress",
-        "type": "address",
-        "internalType": "address"
-      },
-      {
-        "name": "cumulativeFeeShares",
-        "type": "uint256",
-        "internalType": "uint256"
-      },
-      {
-        "name": "rewardsProof",
-        "type": "bytes32[]",
-        "internalType": "bytes32[]"
       }
     ],
     "outputs": [],
@@ -1379,25 +1480,12 @@
   },
   {
     "type": "function",
-    "name": "setChargeRecipient",
+    "name": "setChargePenaltyRecipient",
     "inputs": [
       {
-        "name": "_chargeRecipient",
+        "name": "_chargePenaltyRecipient",
         "type": "address",
         "internalType": "address"
-      }
-    ],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
-    "name": "setDefaultBondCurve",
-    "inputs": [
-      {
-        "name": "curveId",
-        "type": "uint256",
-        "internalType": "uint256"
       }
     ],
     "outputs": [],
@@ -1428,7 +1516,7 @@
     ],
     "outputs": [
       {
-        "name": "lockedAmount",
+        "name": "settledAmount",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1466,6 +1554,24 @@
       }
     ],
     "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "updateBondCurve",
+    "inputs": [
+      {
+        "name": "curveId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "bondCurve",
+        "type": "uint256[]",
+        "internalType": "uint256[]"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
   },
   {
     "type": "event",
@@ -1613,7 +1719,7 @@
   },
   {
     "type": "event",
-    "name": "BondCurveChanged",
+    "name": "BondCurveSet",
     "inputs": [
       {
         "name": "nodeOperatorId",
@@ -1626,6 +1732,25 @@
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "BondCurveUpdated",
+    "inputs": [
+      {
+        "name": "curveId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "bondCurve",
+        "type": "uint256[]",
+        "indexed": false,
+        "internalType": "uint256[]"
       }
     ],
     "anonymous": false
@@ -1751,6 +1876,19 @@
   },
   {
     "type": "event",
+    "name": "BondLockRemoved",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "BondLockRetentionPeriodChanged",
     "inputs": [
       {
@@ -1764,10 +1902,10 @@
   },
   {
     "type": "event",
-    "name": "ChargeRecipientSet",
+    "name": "ChargePenaltyRecipientSet",
     "inputs": [
       {
-        "name": "chargeRecipient",
+        "name": "chargePenaltyRecipient",
         "type": "address",
         "indexed": false,
         "internalType": "address"
@@ -1777,10 +1915,97 @@
   },
   {
     "type": "event",
-    "name": "DefaultBondCurveChanged",
+    "name": "ERC1155Recovered",
     "inputs": [
       {
-        "name": "curveId",
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ERC20Recovered",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ERC721Recovered",
+    "inputs": [
+      {
+        "name": "token",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "EtherRecovered",
+    "inputs": [
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
@@ -1896,6 +2121,25 @@
     "anonymous": false
   },
   {
+    "type": "event",
+    "name": "StETHSharesRecovered",
+    "inputs": [
+      {
+        "name": "recipient",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "shares",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
     "type": "error",
     "name": "AccessControlBadConfirmation",
     "inputs": []
@@ -1918,7 +2162,12 @@
   },
   {
     "type": "error",
-    "name": "AlreadyInitialized",
+    "name": "ElRewardsVaultReceiveFailed",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "FailedToSendEther",
     "inputs": []
   },
   {
@@ -1929,6 +2178,11 @@
   {
     "type": "error",
     "name": "InvalidBondCurveLength",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "InvalidBondCurveMaxLength",
     "inputs": []
   },
   {
@@ -1948,12 +2202,17 @@
   },
   {
     "type": "error",
+    "name": "InvalidInitialisationCurveId",
+    "inputs": []
+  },
+  {
+    "type": "error",
     "name": "InvalidInitialization",
     "inputs": []
   },
   {
     "type": "error",
-    "name": "InvalidSender",
+    "name": "NodeOperatorDoesNotExist",
     "inputs": []
   },
   {
@@ -1964,6 +2223,11 @@
   {
     "type": "error",
     "name": "NotInitializing",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "NothingToClaim",
     "inputs": []
   },
   {
@@ -1983,185 +2247,53 @@
   },
   {
     "type": "error",
+    "name": "SafeCastOverflowedUintDowncast",
+    "inputs": [
+      {
+        "name": "bits",
+        "type": "uint8",
+        "internalType": "uint8"
+      },
+      {
+        "name": "value",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ]
+  },
+  {
+    "type": "error",
     "name": "SenderIsNotCSM",
     "inputs": []
   },
   {
     "type": "error",
-    "name": "ZeroAddress",
-    "inputs": [
-      {
-        "name": "field",
-        "type": "string",
-        "internalType": "string"
-      }
-    ]
+    "name": "ZeroAdminAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroChargePenaltyRecipientAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroFeeDistributorAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroLocatorAddress",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroModuleAddress",
+    "inputs": []
   },
   {
     "type": "error",
     "name": "ZeroPauseDuration",
     "inputs": []
-  },
-  {
-    "type": "event",
-    "name": "ERC1155Recovered",
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ERC20Recovered",
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "ERC721Recovered",
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "tokenId",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "EtherRecovered",
-    "inputs": [
-      {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "amount",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
-    "name": "StETHSharesRecovered",
-    "inputs": [
-      {
-        "name": "recipient",
-        "type": "address",
-        "indexed": true,
-        "internalType": "address"
-      },
-      {
-        "name": "shares",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "error",
-    "name": "AddressEmptyCode",
-    "inputs": [
-      {
-        "name": "target",
-        "type": "address",
-        "internalType": "address"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "AddressInsufficientBalance",
-    "inputs": [
-      {
-        "name": "account",
-        "type": "address",
-        "internalType": "address"
-      }
-    ]
-  },
-  {
-    "type": "error",
-    "name": "FailedInnerCall",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "FailedToSendEther",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "SafeERC20FailedOperation",
-    "inputs": [
-      {
-        "name": "token",
-        "type": "address",
-        "internalType": "address"
-      }
-    ]
   }
 ]

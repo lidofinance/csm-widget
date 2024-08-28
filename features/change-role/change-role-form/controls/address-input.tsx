@@ -1,20 +1,20 @@
-import { AddressZero } from '@ethersproject/constants';
-import { useMemo } from 'react';
-import { AddressInputHookForm } from 'shared/hook-form/controls/address-input-hook-form';
+import { FormTitle } from 'shared/components';
+import { AddressInputHookForm } from 'shared/hook-form/controls';
+import { useRole } from '../hooks/use-role';
 import { useChangeRoleFormData } from '../context';
 
 export const AddressInput: React.FC = () => {
-  const { proposedAddress } = useChangeRoleFormData();
-  const isProposedAddress = useMemo(
-    () => proposedAddress !== AddressZero,
-    [proposedAddress],
-  );
+  const { isManagerReset } = useChangeRoleFormData();
+  const role = useRole();
 
   return (
-    <AddressInputHookForm
-      fieldName="address"
-      label="New Address"
-      revoke={isProposedAddress}
-    />
+    <>
+      <FormTitle>Insert a new {role} address</FormTitle>
+      <AddressInputHookForm
+        fieldName="address"
+        label={`New ${role} address`}
+        isLocked={isManagerReset}
+      />
+    </>
   );
 };

@@ -1,19 +1,13 @@
 import { FC } from 'react';
 
 import { Layout } from 'shared/components';
-import { Banner } from './banner';
-import { useAccount } from 'shared/hooks';
-import { Fallback } from 'shared/hat/fallback/fallback';
+import { Welcome } from './welcome';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const WelcomePage: FC = () => {
-  const { active, isConnected } = useAccount();
   return (
-    <Layout
-      title="Community Staking Module"
-      subtitle="Your way to solo staking"
-    >
-      {!active && isConnected ? <Fallback /> : undefined}
-      <Banner />
+    <Layout matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageWelcome}>
+      <Welcome />
     </Layout>
   );
 };

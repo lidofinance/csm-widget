@@ -1,5 +1,33 @@
-export const LINK_ADD_NFT_GUIDE =
-  'https://help.lido.fi/en/articles/7858367-how-do-i-add-the-lido-nft-to-metamask';
+import { CHAINS } from '@lido-sdk/constants';
+import { config } from 'config';
 
-export const OPEN_OCEAN_REFERRAL_ADDRESS =
-  '0xbb1263222b2c020f155d409dba05c4a3861f18f8';
+type ExternalLinksConstants = {
+  beaconchain: string;
+  feesMonitoring: string;
+  operatorsWidget: string;
+  beaconchainDashboard: string;
+  keysApi: string;
+};
+
+export const EXTERNAL_LINKS_BY_NETWORK: Partial<
+  Record<CHAINS, ExternalLinksConstants>
+> = {
+  [CHAINS.Mainnet]: undefined,
+  [CHAINS.Holesky]: {
+    feesMonitoring: 'https://fees-monitoring-holesky.testnet.fi',
+    operatorsWidget: 'https://operators-holesky.testnet.fi',
+    beaconchain: 'https://holesky.beaconcha.in',
+    beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in',
+    keysApi: 'https://keys-api-holesky.testnet.fi',
+  },
+};
+
+export const getExternalLinks = (
+  chainId: CHAINS | undefined = config.defaultChain,
+) => {
+  const links = EXTERNAL_LINKS_BY_NETWORK[chainId];
+  if (!links) {
+    throw new Error(`ExternalLinks for chain [${chainId}] are not specified`);
+  }
+  return links;
+};

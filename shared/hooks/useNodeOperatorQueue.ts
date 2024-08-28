@@ -1,12 +1,8 @@
-import { useContractSWR } from '@lido-sdk/react';
 import { STRATEGY_EAGER } from 'consts/swr-strategies';
-import { useCSModuleRPC } from './useCsmContracts';
+import { useCsmKeysSummary } from './useCsmKeysSummary';
 
 export const useNodeOperatorQueue = (config = STRATEGY_EAGER) => {
-  return useContractSWR({
-    contract: useCSModuleRPC(),
-    method: 'queue',
-    params: [],
-    config,
-  });
+  const swr = useCsmKeysSummary(config);
+
+  return { ...swr, data: swr.data?.[2] };
 };

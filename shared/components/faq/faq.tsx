@@ -1,12 +1,13 @@
-import { FC, memo } from 'react';
 import { Accordion } from '@lidofinance/lido-ui';
-import styled from 'styled-components';
+import { useFaqList } from 'providers/faq-provider';
+import { FC, memo, useCallback } from 'react';
 import { Section } from 'shared/components';
+import styled from 'styled-components';
+import { trackMatomoFaqEvent } from 'utils';
 import { replaceAll } from 'utils/replaceAll';
-import { FAQItem } from 'lib/faqList';
 
 export interface FaqProps {
-  faqList: FAQItem[];
+  // faqList: FAQItem[];
   replacements?: {
     [key: string]: string;
   };
@@ -40,7 +41,17 @@ const FaqItem = styled.div`
   }
 `;
 
-export const Faq: FC<FaqProps> = memo(({ faqList, replacements }) => {
+export const Faq: FC<FaqProps> = memo(({ replacements }) => {
+  const faqList = useFaqList();
+
+  // TODO: track link click inside faq
+  const handleExpand = useCallback(
+    (id: string) => () => trackMatomoFaqEvent(id),
+    [],
+  );
+
+  if (faqList.length === 0) return null;
+
   return (
     <Section title="FAQ">
       {faqList.map(({ id, title, content }, index) => {
@@ -51,6 +62,7 @@ export const Faq: FC<FaqProps> = memo(({ faqList, replacements }) => {
             key={id}
             defaultExpanded={index === 0}
             summary={String(title)}
+            onExpand={handleExpand(id)}
           >
             <FaqItem
               dangerouslySetInnerHTML={{

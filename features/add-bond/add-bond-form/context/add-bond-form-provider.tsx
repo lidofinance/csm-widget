@@ -4,49 +4,59 @@ import { TOKENS } from 'consts/tokens';
 import {
   FormControllerContext,
   FormControllerContextValueType,
+  FormDataContext,
+  useFormData,
 } from 'shared/hook-form/form-controller';
 import { useFormControllerRetry } from 'shared/hook-form/form-controller';
 import { useAddBondFormNetworkData } from './use-add-bond-form-network-data';
-import { useAddBond } from './use-add-bond';
-import { AddBondFormDataContext } from './add-bond-form-context';
-import { type AddBondFormInputType } from './types';
+import { useAddBondSubmit } from './use-add-bond-submit';
+import { AddBondFormNetworkData, type AddBondFormInputType } from './types';
+import { useAddBondValidation } from './use-add-bond-validation';
+import { useFormRevalidate } from './use-form-revalidate';
+
+export const useAddBondFormData = useFormData<AddBondFormNetworkData>;
 
 export const AddBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useAddBondFormNetworkData();
+  const [networkData, revalidate] = useAddBondFormNetworkData();
+  const validationResolver = useAddBondValidation(networkData);
 
+  // TODO: default token = token_with_max_amount
   const formObject = useForm<AddBondFormInputType>({
     defaultValues: {
       token: TOKENS.ETH,
-      amount: null,
+      bondAmount: undefined,
     },
+    resolver: validationResolver,
     mode: 'onChange',
   });
 
+  useFormRevalidate(formObject);
+
   const { retryEvent, retryFire } = useFormControllerRetry();
 
-  const { addBond } = useAddBond({
-    onConfirm: networkData.revalidate,
+  const { addBond } = useAddBondSubmit({
+    onConfirm: revalidate,
     onRetry: retryFire,
   });
 
-  const value = networkData;
-
-  const formControllerValue: FormControllerContextValueType<AddBondFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: addBond,
-        retryEvent,
-      }),
-      [addBond, retryEvent],
-    );
+  const formControllerValue: FormControllerContextValueType<
+    AddBondFormInputType,
+    AddBondFormNetworkData
+  > = useMemo(
+    () => ({
+      onSubmit: addBond,
+      retryEvent,
+    }),
+    [addBond, retryEvent],
+  );
 
   return (
     <FormProvider {...formObject}>
-      <AddBondFormDataContext.Provider value={value}>
+      <FormDataContext.Provider value={networkData}>
         <FormControllerContext.Provider value={formControllerValue}>
           {children}
         </FormControllerContext.Provider>
-      </AddBondFormDataContext.Provider>
+      </FormDataContext.Provider>
     </FormProvider>
   );
 };

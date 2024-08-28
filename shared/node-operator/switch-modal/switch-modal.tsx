@@ -1,8 +1,9 @@
 import { Button, Modal } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
+import { ROLES } from 'consts/roles';
 import type { ModalComponentType } from 'providers/modal-provider';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { NodeOperatorId } from 'types';
 import { Descriptor } from '../descriptor/descriptor';
 import { RoleBadge } from '../role-badge/role-badge';
@@ -16,7 +17,7 @@ import {
 } from './styles';
 
 export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
-  const { active, list, switchActive } = useNodeOperator();
+  const { active, list, switchActive } = useNodeOperatorContext();
 
   const handleSwitch = useCallback(
     (id: NodeOperatorId) => {
@@ -27,12 +28,12 @@ export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
   );
 
   return (
-    <Modal title="Switch NodeOperator" onClose={onClose} {...props}>
+    <Modal title="Switch Node Operator" onClose={onClose} {...props}>
       <ListStyle>
         {list.map((item) => (
           <RowStyle key={item.id.toString()}>
             <ContentStyle>
-              <Descriptor roles={item} roleBackground="dark" />
+              <Descriptor nodeOperator={item} />
             </ContentStyle>
             <ActionsStyle>
               {active?.id === item.id ? (
@@ -52,12 +53,12 @@ export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
           </RowStyle>
         ))}
       </ListStyle>
-      <StyledStack direction="row">
+      <StyledStack>
         <StyledStackItem>
-          <RoleBadge roleName="rewards" /> Rewards Role
+          <RoleBadge role={ROLES.REWARDS} /> Rewards address role
         </StyledStackItem>
         <StyledStackItem>
-          <RoleBadge roleName="manager" /> Manager Role
+          <RoleBadge role={ROLES.MANAGER} /> Manager address role
         </StyledStackItem>
       </StyledStack>
     </Modal>

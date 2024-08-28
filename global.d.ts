@@ -23,7 +23,8 @@ declare module 'next/config' {
     serverRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
-      isDevnet: string | undefined;
+      notReleased: boolean;
+      maintenance: boolean;
 
       defaultChain: string;
       rpcUrls_1: string | undefined;
@@ -50,7 +51,6 @@ declare module 'next/config' {
     publicRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
-      isDevnet: string | undefined;
     };
   };
 

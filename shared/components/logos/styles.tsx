@@ -23,4 +23,9 @@ export const LogoLidoStyle = styled.div`
     width: 14px;
     justify-content: flex-start;
   }
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    align-self: start;
+    padding-top: 12px;
+  }
 `;

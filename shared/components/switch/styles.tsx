@@ -16,7 +16,6 @@ export const SwitchWrapper = styled.div<{ $count: number }>`
   justify-content: space-around;
   align-items: center;
   user-select: none;
-  margin: 0 auto 24px auto;
 `;
 
 export const Handle = styled.div<{ $active: number }>`
@@ -39,15 +38,19 @@ export const SwitchItemStyled = styled(LocalLink)<{ $active: boolean }>`
   margin: 0;
   opacity: ${({ $active }) => ($active ? 1 : 0.5)};
   transition: opacity 0.3s ease;
-  line-height: 1.6em;
-  text-decoration: none;
   flex: 1;
-  text-align: center;
   display: flex;
   align-items: center;
+  text-decoration: none;
   justify-content: center;
   height: 100%;
 
+  font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
+  line-height: 2.4em;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
   color: var(--lido-color-text);
 
   &:hover {

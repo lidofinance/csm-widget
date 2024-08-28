@@ -28,6 +28,7 @@ type InputAmountProps = {
   ) => void;
   maxValue?: BigNumber;
   isLocked?: boolean;
+  isLoading?: boolean;
 } & Omit<ComponentProps<typeof Input>, 'onChange' | 'value'>;
 
 const parseEtherSafe = (value: string) => {
@@ -46,6 +47,7 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
       onMaxClick,
       rightDecorator,
       isLocked,
+      isLoading,
       maxValue,
       placeholder = '0',
       ...props

@@ -3,7 +3,6 @@ import type { BigNumber } from 'ethers';
 import {
   SuccessText,
   TransactionModalTransitStage,
-  TxStagePermit,
   TxStageSuccess,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
@@ -15,49 +14,43 @@ const STAGE_OPERATION_ARGS = {
   operationText: 'Uploading',
 };
 
+type Props = {
+  keysCount: number;
+  amount: BigNumber;
+  token: TOKENS;
+  nodeOperatorId: NodeOperatorId;
+};
+
 const getTxModalStagesAddKeys = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  signPermit: () => transitStage(<TxStagePermit />),
-
-  sign: (
-    keysCount: number,
-    amount: BigNumber,
-    token: TOKENS,
-    nodeOperatorId: NodeOperatorId,
-  ) =>
+  sign: (props: Props) =>
     transitStage(
       <TxStageSignOperationKeys
         {...STAGE_OPERATION_ARGS}
-        amount={amount}
-        token={token}
-        keysCount={keysCount}
-        nodeOperatorId={nodeOperatorId}
+        amount={props.amount}
+        token={props.token}
+        keysCount={props.keysCount}
+        nodeOperatorId={props.nodeOperatorId}
       />,
     ),
 
-  pending: (
-    keysCount: number,
-    amount: BigNumber,
-    token: TOKENS,
-    nodeOperatorId: NodeOperatorId,
-    txHash?: string,
-  ) =>
+  pending: (props: Props, txHash?: string) =>
     transitStage(
       <TxStageSignOperationKeys
         {...STAGE_OPERATION_ARGS}
-        amount={amount}
-        token={token}
-        keysCount={keysCount}
-        nodeOperatorId={nodeOperatorId}
+        amount={props.amount}
+        token={props.token}
+        keysCount={props.keysCount}
+        nodeOperatorId={props.nodeOperatorId}
         isPending
         txHash={txHash}
       />,
     ),
 
-  success: (txHash?: string) =>
+  success: (props: Props, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
