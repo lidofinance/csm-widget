@@ -1,8 +1,9 @@
 import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 import { useMemo } from 'react';
 import { useAddressCompare, useNodeOperatorInfo } from 'shared/hooks';
-import { NodeOperatorRoles } from 'types';
+import { NodeOperator } from 'types';
 import { useCachedId } from './use-cached-id';
+import { packRoles } from 'utils';
 
 export const useCachedNodeOperator = () => {
   const [cachedId, setCachedId] = useCachedId();
@@ -10,7 +11,7 @@ export const useCachedNodeOperator = () => {
 
   const { data } = useNodeOperatorInfo(cachedId, STRATEGY_CONSTANT);
 
-  return useMemo<NodeOperatorRoles | undefined>(() => {
+  return useMemo<NodeOperator | undefined>(() => {
     if (!cachedId || !data) {
       return undefined;
     }
@@ -18,6 +19,7 @@ export const useCachedNodeOperator = () => {
     const rewards = isUserAddress(data.rewardAddress);
     const manager = isUserAddress(data.managerAddress);
 
+    // @note fix for spectacular
     if (!rewards && !manager) {
       setCachedId(undefined);
       return undefined;
@@ -25,8 +27,7 @@ export const useCachedNodeOperator = () => {
 
     return {
       id: cachedId,
-      rewards,
-      manager,
+      roles: packRoles({ rewards, manager }),
     };
   }, [isUserAddress, cachedId, data, setCachedId]);
 };

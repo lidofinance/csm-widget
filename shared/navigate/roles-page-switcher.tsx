@@ -7,12 +7,20 @@ const ROLE_ROUTES: SwitchRoutes = [
   {
     title: 'Rewards address',
     path: PATH.ROLES_REWARDS,
-    roles: [ROLE_CODE.MANAGER, ROLE_CODE.REWARDS, ROLE_CODE.BOTH],
+    roles: [
+      ROLE_CODE.MANAGER,
+      ROLE_CODE.REWARDS,
+      ROLE_CODE.REWARDS_AND_MANAGER,
+    ],
   },
   {
     title: 'Manager address',
     path: PATH.ROLES_MANAGER,
-    roles: [ROLE_CODE.MANAGER, ROLE_CODE.REWARDS, ROLE_CODE.BOTH],
+    roles: [
+      ROLE_CODE.MANAGER,
+      ROLE_CODE.REWARDS,
+      ROLE_CODE.REWARDS_AND_MANAGER,
+    ],
   },
   { title: 'Inbox requests', path: PATH.ROLES_INBOX },
 ];

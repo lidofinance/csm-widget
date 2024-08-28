@@ -3,16 +3,15 @@ import type { BigNumber } from 'ethers';
 import { TOKENS } from 'consts/tokens';
 import {
   TransactionModalTransitStage,
-  TxStageOperationSucceedBalanceShown,
+  TxAmount,
   TxStageSignOperationAmount,
+  TxStageSuccess,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 
-// TODO: review
-
-const STAGE_OPERATION_ARGS = {
-  operationText: 'Unlocking Bond',
+type Props = {
+  amount: BigNumber;
 };
 
 const getTxModalStagesUnlockBond = (
@@ -20,39 +19,43 @@ const getTxModalStagesUnlockBond = (
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: (amount: BigNumber, token: TOKENS) =>
+  sign: ({ amount }: Props) =>
     transitStage(
       <TxStageSignOperationAmount
-        {...STAGE_OPERATION_ARGS}
         operationText="Unlocking"
-        willReceive={amount}
-        willReceiveToken={token}
         amount={amount}
-        token={token}
+        token={TOKENS.ETH}
       />,
     ),
 
-  pending: (amount: BigNumber, token: TOKENS, txHash?: string) =>
+  pending: ({ amount }: Props, txHash?: string) =>
     transitStage(
       <TxStageSignOperationAmount
-        {...STAGE_OPERATION_ARGS}
         operationText="Unlocking"
-        willReceive={amount}
-        willReceiveToken={token}
         amount={amount}
-        token={token}
+        token={TOKENS.ETH}
         isPending
         txHash={txHash}
       />,
     ),
 
-  success: (balance: BigNumber, token: TOKENS, txHash?: string) =>
+  success: ({ lockedBond }: { lockedBond: BigNumber }, txHash?: string) =>
     transitStage(
-      <TxStageOperationSucceedBalanceShown
-        {...STAGE_OPERATION_ARGS}
+      <TxStageSuccess
         txHash={txHash}
-        balance={balance}
-        balanceToken={token}
+        title={
+          lockedBond.gt(0)
+            ? 'Bond are partially unlocked'
+            : 'Bond are completely unlocked'
+        }
+        description={
+          lockedBond.gt(0) && (
+            <>
+              Remaining locked bond{' '}
+              <TxAmount amount={lockedBond} token={TOKENS.ETH} />
+            </>
+          )
+        }
       />,
       {
         isClosableOnLedger: true,

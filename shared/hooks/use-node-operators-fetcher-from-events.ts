@@ -6,8 +6,13 @@ import {
 } from 'generated/CSModule';
 import { useCallback } from 'react';
 import { useCSModuleRPC } from 'shared/hooks';
-import { NodeOperatorId, NodeOperatorRoles } from 'types';
-import { compareLowercase, getSettledValue, mergeRoles } from 'utils';
+import { NodeOperator } from 'types';
+import {
+  compareLowercase,
+  getNodeOperatorIdFromEvent,
+  getSettledValue,
+  mergeRoles,
+} from 'utils';
 import { Address } from 'wagmi';
 
 type NodeOperatorRoleEvent =
@@ -21,7 +26,7 @@ const restoreEvents = (events: NodeOperatorRoleEvent[], address?: Address) => {
   return events
     .sort((a, b) => a.blockNumber - b.blockNumber)
     .reduce((prev, e) => {
-      const id = e.args.nodeOperatorId.toString() as NodeOperatorId;
+      const id = getNodeOperatorIdFromEvent(e);
       switch (e.event) {
         case 'NodeOperatorAdded':
           return mergeRoles(prev, {
@@ -42,7 +47,7 @@ const restoreEvents = (events: NodeOperatorRoleEvent[], address?: Address) => {
         default:
       }
       return prev;
-    }, [] as NodeOperatorRoles[]);
+    }, [] as NodeOperator[]);
 };
 
 export const useNodeOperatorsFetcherFromEvents = (

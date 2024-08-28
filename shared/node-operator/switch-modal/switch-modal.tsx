@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 
 import { ROLES } from 'consts/roles';
 import type { ModalComponentType } from 'providers/modal-provider';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { NodeOperatorId } from 'types';
 import { Descriptor } from '../descriptor/descriptor';
 import { RoleBadge } from '../role-badge/role-badge';
@@ -17,7 +17,7 @@ import {
 } from './styles';
 
 export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
-  const { active, list, switchActive } = useNodeOperator();
+  const { active, list, switchActive } = useNodeOperatorContext();
 
   const handleSwitch = useCallback(
     (id: NodeOperatorId) => {
@@ -33,7 +33,7 @@ export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
         {list.map((item) => (
           <RowStyle key={item.id.toString()}>
             <ContentStyle>
-              <Descriptor roles={item} />
+              <Descriptor nodeOperator={item} />
             </ContentStyle>
             <ActionsStyle>
               {active?.id === item.id ? (

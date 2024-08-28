@@ -1,5 +1,6 @@
 import { ROLE_CODE, ROLES } from 'consts/roles';
-import { NodeOperatorInvite, NodeOperatorRoles } from 'types';
+import { capitalize } from 'lodash';
+import { NodeOperator, NodeOperatorInvite } from 'types';
 
 const SHORT_ROLES = {
   [ROLES.REWARDS]: 'R',
@@ -13,14 +14,17 @@ const ROLE_TITLES = {
 
 export const getShortRole = (role: ROLES) => SHORT_ROLES[role];
 
-export const getRoleTitle = (role: ROLES) => ROLE_TITLES[role];
+export const getRoleTitle = (role: ROLES, capitalized = false) => {
+  const text = ROLE_TITLES[role];
+  return capitalized ? capitalize(text) : text;
+};
 
-export const getRoleCode = ({
-  rewards,
-  manager,
-}: Omit<NodeOperatorRoles, 'id'>) =>
-  (((rewards && ROLE_CODE.REWARDS) || 0) +
-    ((manager && ROLE_CODE.MANAGER) || 0)) as ROLE_CODE;
+export const getRoleCode = (nodeOperator?: NodeOperator) => {
+  const getRoleCode = (role: ROLES, code: ROLE_CODE) =>
+    (Number(nodeOperator?.roles.includes(role)) * code) as ROLE_CODE;
+  return (getRoleCode(ROLES.REWARDS, ROLE_CODE.REWARDS) +
+    getRoleCode(ROLES.MANAGER, ROLE_CODE.MANAGER)) as ROLE_CODE;
+};
 
-export const getInviteId = (no?: Partial<NodeOperatorInvite>) =>
-  no?.id ? [no.id, getRoleCode(no)].join('-') : undefined;
+export const getInviteId = (invite: NodeOperatorInvite) =>
+  `${getShortRole(invite.role)}-${invite.id}` as const;

@@ -6,22 +6,22 @@ import {
   useMemo,
 } from 'react';
 import invariant from 'tiny-invariant';
-import { NodeOperatorId, NodeOperatorRoles } from 'types';
+import { NodeOperator, NodeOperatorId, NodeOperatorRoles } from 'types';
 import { useGetActiveNodeOperator } from './use-get-active-node-operator';
 import { useNodeOperatorsList } from './use-node-operators-list';
 
 export type NodeOperatorContextValue = {
-  list: NodeOperatorRoles[];
+  list: NodeOperator[];
   isListLoading: boolean;
-  append: (no: NodeOperatorRoles) => void;
-  active?: NodeOperatorRoles;
+  append: (nodeOperator: NodeOperatorRoles) => void;
+  active?: NodeOperator;
   switchActive: (id: NodeOperatorId) => void;
 };
 
 export const NodeOperatorContext =
   createContext<NodeOperatorContextValue | null>(null);
 
-export const useNodeOperator = () => {
+export const useNodeOperatorContext = () => {
   const value = useContext(NodeOperatorContext);
   invariant(
     value,
@@ -40,13 +40,13 @@ export const useNodeOperatorId = () => {
   return value.active?.id;
 };
 
-export const useNodeOperatorRoles = () => {
+export const useActiveNodeOperator = () => {
   const value = useContext(NodeOperatorContext);
   invariant(
     value,
     'useNodeOperator was used outside the NodeOperatorContext provider',
   );
-  return { rewards: value.active?.rewards, manager: value.active?.manager };
+  return value.active;
 };
 
 export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {

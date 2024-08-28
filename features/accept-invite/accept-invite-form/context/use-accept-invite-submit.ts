@@ -2,13 +2,16 @@ import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
 import { ROLES } from 'consts/roles';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { useTxModalStagesAcceptInvite } from '../hooks/use-tx-modal-stages-accept-invite';
-import { AcceptInviteFormInputType } from './types';
+import {
+  AcceptInviteFormInputType,
+  AcceptInviteFormNetworkData,
+} from './types';
 
 // TODO: move to hooks
 type UseAcceptInviteOptions = {
@@ -54,21 +57,22 @@ export const useAcceptInviteSubmit = ({
   onRetry,
 }: UseAcceptInviteOptions) => {
   const { txModalStages } = useTxModalStagesAcceptInvite();
-  const { append: appendNO } = useNodeOperator();
+  const { append: appendNO } = useNodeOperatorContext();
 
   const getTx = useAcceptInviteTx();
   const sendTx = useSendTx();
 
   const acceptInvite = useCallback(
-    async ({ invite }: AcceptInviteFormInputType): Promise<boolean> => {
+    async (
+      { invite }: AcceptInviteFormInputType,
+      { address }: AcceptInviteFormNetworkData,
+    ): Promise<boolean> => {
       invariant(invite, 'Invite is not defined');
 
       try {
-        const role = invite.manager ? ROLES.MANAGER : ROLES.REWARDS;
+        txModalStages.sign(invite);
 
-        txModalStages.sign('0x0', role);
-
-        const tx = await getTx(role, {
+        const tx = await getTx(invite.role, {
           nodeOperatorId: invite.id,
         });
 
@@ -77,7 +81,7 @@ export const useAcceptInviteSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending('0x0', role, txHash);
+        txModalStages.pending(invite, txHash);
 
         if (typeof tx === 'object') {
           await runWithTransactionLogger(
@@ -88,7 +92,7 @@ export const useAcceptInviteSubmit = ({
 
         await onConfirm?.();
 
-        txModalStages.success('0x0', role, txHash);
+        txModalStages.success({ ...invite, address }, txHash);
 
         // TODO: move to onConfirm
         appendNO(invite);

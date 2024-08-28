@@ -94,7 +94,7 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
           txModalStages,
         });
 
-        txModalStages.sign(amount, token);
+        txModalStages.sign({ amount, token });
 
         const tx = await getTx(token, {
           nodeOperatorId,
@@ -107,7 +107,7 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
           () => sendTx(tx),
         );
 
-        txModalStages.pending(amount, token, txHash);
+        txModalStages.pending({ amount, token }, txHash);
 
         await runWithTransactionLogger('AddBond block confirmation', waitTx);
 
@@ -116,7 +116,7 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
 
         await onConfirm?.();
 
-        txModalStages.success(current, TOKENS.STETH, txHash);
+        txModalStages.success({ balance: current }, txHash);
 
         return true;
       } catch (error) {

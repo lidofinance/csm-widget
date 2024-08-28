@@ -26,7 +26,7 @@ export const useMergeSwr = <T, E = Error>(
       async update() {
         const list = swrResponses.map((r) => r.update());
         await Promise.allSettled(list);
-        return this.data;
+        return data;
       },
 
       async mutate() {

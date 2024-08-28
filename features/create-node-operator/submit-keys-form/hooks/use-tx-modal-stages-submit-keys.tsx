@@ -14,12 +14,18 @@ const STAGE_OPERATION_ARGS = {
   operationText: 'Uploading',
 };
 
+type Props = {
+  keysCount: number;
+  amount: BigNumber;
+  token: TOKENS;
+};
+
 const getTxModalStagesSubmitKeys = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: (keysCount: number, amount: BigNumber, token: TOKENS) =>
+  sign: ({ keysCount, amount, token }: Props) =>
     transitStage(
       <TxStageSignOperationKeys
         {...STAGE_OPERATION_ARGS}
@@ -29,12 +35,7 @@ const getTxModalStagesSubmitKeys = (
       />,
     ),
 
-  pending: (
-    keysCount: number,
-    amount: BigNumber,
-    token: TOKENS,
-    txHash?: string,
-  ) =>
+  pending: ({ keysCount, amount, token }: Props, txHash?: string) =>
     transitStage(
       <TxStageSignOperationKeys
         {...STAGE_OPERATION_ARGS}
@@ -46,7 +47,10 @@ const getTxModalStagesSubmitKeys = (
       />,
     ),
 
-  success: (nodeOperatorId?: NodeOperatorId, txHash?: string) =>
+  success: (
+    { nodeOperatorId }: { nodeOperatorId?: NodeOperatorId },
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}

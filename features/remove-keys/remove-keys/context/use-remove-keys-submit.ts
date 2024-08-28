@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useCSModuleWeb3 } from 'shared/hooks';
+import { useCSModuleWeb3, useKeysCache } from 'shared/hooks';
 import { useSendTx } from 'shared/hooks/use-send-tx';
 import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
@@ -47,13 +47,15 @@ export const useRemoveKeysSubmit = ({
   const { txModalStages } = useTxModalStagesRemoveKeys();
   const getTx = useRemoveKeysTx();
   const sendTx = useSendTx();
+  const { removeCacheKeys } = useKeysCache();
 
-  const removeKeys = useCallback(
+  return useCallback(
     async (
       { selection: { start, count } }: RemoveKeysFormInputType,
-      { nodeOperatorId, info }: RemoveKeysFormNetworkData,
+      { nodeOperatorId, info, keys }: RemoveKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(keys, 'Keys are not defined');
       invariant(
         info?.totalDepositedKeys !== undefined,
         'Offset is not defined',
@@ -63,7 +65,7 @@ export const useRemoveKeysSubmit = ({
       const keysCount = count;
 
       try {
-        txModalStages.sign(keysCount, nodeOperatorId);
+        txModalStages.sign({ keysCount });
 
         const tx = await getTx({
           startIndex,
@@ -76,21 +78,21 @@ export const useRemoveKeysSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending(keysCount, nodeOperatorId, txHash);
+        txModalStages.pending({ keysCount }, txHash);
 
         await runWithTransactionLogger('RemoveKeys block confirmation', waitTx);
 
         await onConfirm?.();
 
-        txModalStages.success(txHash);
+        txModalStages.success({ keysCount }, txHash);
+
+        void removeCacheKeys(keys.slice(start, start + count));
 
         return true;
       } catch (error) {
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [getTx, txModalStages, onConfirm, sendTx, onRetry],
+    [txModalStages, getTx, onConfirm, removeCacheKeys, sendTx, onRetry],
   );
-
-  return removeKeys;
 };

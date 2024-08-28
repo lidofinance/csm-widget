@@ -9,6 +9,8 @@ type ValidateDepositDataProps = {
   depositData: DepositData[];
   chainId?: CHAINS;
 };
+
+// TODO: pass currentBlock
 export const validateDepositData = async ({
   depositData,
   chainId,

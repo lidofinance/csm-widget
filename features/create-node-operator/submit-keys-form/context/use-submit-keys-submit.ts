@@ -1,7 +1,7 @@
 import { TOKENS } from 'consts/tokens';
 import { BigNumberish } from 'ethers';
 import { BytesLike } from 'ethers/lib/utils.js';
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import {
   GatherPermitSignatureResult,
@@ -23,7 +23,7 @@ import {
 import { Address } from 'wagmi';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
-import { getAddedNodeOperator } from '../utils';
+import { getAddedNodeOperator } from 'utils';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
 type SubmitKeysOptions = {
@@ -117,16 +117,16 @@ export const useSubmitKeysSubmit = ({
   onRetry,
 }: SubmitKeysOptions) => {
   const { txModalStages } = useTxModalStagesSubmitKeys();
-  const { append: appendNO } = useNodeOperator();
+  const { append: appendNO } = useNodeOperatorContext();
   const getTx = useSubmitKeysTx();
   const getPermitOrApprove = usePermitOrApprove();
   const sendTx = useSendTx();
   const isUserOrZero = useAddressCompare(true);
-  const saveKeys = useKeysCache();
+  const { addCacheKeys } = useKeysCache();
 
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
 
-  const submitKeys = useCallback(
+  return useCallback(
     async (
       {
         referrer,
@@ -164,7 +164,7 @@ export const useSubmitKeysSubmit = ({
 
         const { keysCount, publicKeys, signatures } = formatKeys(depositData);
 
-        txModalStages.sign(keysCount, bondAmount, token);
+        txModalStages.sign({ keysCount, amount: bondAmount, token });
 
         const tx = await getTx(token, {
           bondAmount,
@@ -189,31 +189,31 @@ export const useSubmitKeysSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending(keysCount, bondAmount, token, txHash);
+        txModalStages.pending({ keysCount, amount: bondAmount, token }, txHash);
 
         const receipt = await runWithTransactionLogger(
           'AddNodeOperator block confirmation',
           waitTx,
         );
 
-        const nodeOperatorId = getAddedNodeOperator(receipt);
+        const nodeOperator = getAddedNodeOperator(receipt);
 
         // TODO: possible add timeout
         await onConfirm?.();
 
-        txModalStages.success(nodeOperatorId, txHash);
+        txModalStages.success({ nodeOperatorId: nodeOperator?.id }, txHash);
 
         // TODO: move to onConfirm
-        if (nodeOperatorId) {
+        if (nodeOperator) {
           appendNO({
-            id: nodeOperatorId,
-            manager: isUserOrZero(managerAddress),
-            rewards: isUserOrZero(rewardsAddress),
+            id: nodeOperator.id,
+            manager: isUserOrZero(nodeOperator.managerAddress),
+            rewards: isUserOrZero(nodeOperator.rewardsAddress),
           });
         }
 
         // TODO: move to onConfirm
-        void saveKeys(depositData);
+        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
 
         return true;
       } catch (error) {
@@ -226,13 +226,11 @@ export const useSubmitKeysSubmit = ({
       txModalStages,
       getTx,
       onConfirm,
-      saveKeys,
+      addCacheKeys,
       sendTx,
       appendNO,
       isUserOrZero,
       onRetry,
     ],
   );
-
-  return submitKeys;
 };

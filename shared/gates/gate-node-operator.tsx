@@ -1,4 +1,4 @@
-import { useNodeOperator } from 'providers/node-operator-provider';
+import { useActiveNodeOperator } from 'providers/node-operator-provider';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 
 type Props = {
@@ -9,7 +9,7 @@ export const GateNodeOperator: FC<PropsWithChildren<Props>> = ({
   fallback,
   children,
 }) => {
-  const { active } = useNodeOperator();
+  const nodeOperator = useActiveNodeOperator();
 
-  return <>{!active ? fallback : children}</>;
+  return <>{!nodeOperator ? fallback : children}</>;
 };

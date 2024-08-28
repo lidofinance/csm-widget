@@ -22,7 +22,7 @@ export const ClaimBondFormInfo = () => {
         <FormatToken amount={amount ?? Zero} token={token} />
       </DataTableRow>
       {claimRewards && (
-        <DataTableRow title="Bond balance will receive">
+        <DataTableRow title="Bond balance will increase by">
           <FormatToken amount={bondReceive} token={TOKENS.STETH} />
         </DataTableRow>
       )}

@@ -11,4 +11,6 @@ export const InviteContentStyle = styled.div`
   color: var(--lido-color-text);
 `;
 
-export const Badge = styled(BadgeStyle).attrs({ $background: 'dark' })``;
+export const Badge = styled(BadgeStyle).attrs({ $background: 'dark' })`
+  text-transform: unset;
+`;

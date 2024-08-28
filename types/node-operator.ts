@@ -1,11 +1,12 @@
+import { ROLES } from 'consts/roles';
 import { BigNumber, BytesLike } from 'ethers';
 
 // BigNumber -> string
 export type NodeOperatorId = `${number}`;
 
-export type NodeOperatorRolesProps = {
-  manager?: boolean;
-  rewards?: boolean;
+export type NodeOperator = {
+  id: NodeOperatorId;
+  roles: ROLES[];
 };
 
 export type NodeOperatorRoles = {
@@ -14,19 +15,9 @@ export type NodeOperatorRoles = {
   rewards?: boolean;
 };
 
-export type NodeOperatorInvite =
-  | NodeOperatorManagerInvite
-  | NodeOperatorRewardsInvite;
-
-type NodeOperatorManagerInvite = {
+export type NodeOperatorInvite = {
   id: NodeOperatorId;
-  manager: true;
-  rewards?: false;
-};
-type NodeOperatorRewardsInvite = {
-  id: NodeOperatorId;
-  manager?: false;
-  rewards: true;
+  role: ROLES;
 };
 
 export type Proof = BytesLike[];
