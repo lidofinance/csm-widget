@@ -19,7 +19,7 @@ type ModifyContextValue = {
 };
 
 const QUERY_REFERRER = 'ref';
-const QUERY_MODE = 'ref';
+const QUERY_MODE = 'mode';
 const MODE_EXTENDED = 'extended';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
