@@ -1,4 +1,4 @@
-import { InlineLoader } from '@lidofinance/lido-ui';
+import { InlineLoader, Text } from '@lidofinance/lido-ui';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { FC, ReactNode } from 'react';
@@ -8,6 +8,7 @@ import { AmountStyle, TitledAmountStyle } from './style';
 
 type TitledAddressProps = {
   title?: ReactNode;
+  description?: ReactNode;
   help?: string;
   loading?: boolean;
   amount?: BigNumber;
@@ -20,6 +21,7 @@ export const TitledAmount: FC<TitledAddressProps> = ({
   amount,
   token,
   title,
+  description,
   help,
   loading,
   warning,
@@ -27,7 +29,14 @@ export const TitledAmount: FC<TitledAddressProps> = ({
   return (
     <TitledAmountStyle $warning={warning && amount?.gt(0)}>
       <Stack gap="xs" center>
-        {title}
+        <Stack gap="md" center>
+          {title}
+          {description && (
+            <Text color="secondary" size="xxs">
+              {description}
+            </Text>
+          )}
+        </Stack>
         <IconTooltip help={help} />
       </Stack>
       {loading ? (

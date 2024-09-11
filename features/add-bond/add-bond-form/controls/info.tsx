@@ -1,3 +1,4 @@
+import { BOND_EXCESS, BOND_SHORTAGE } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { FC } from 'react';
 import { Latice, TitledAmount } from 'shared/components';
@@ -18,7 +19,7 @@ export const Info: FC = () => {
         />
         <TitledAmount
           warning={bond?.isNoticiableShortage}
-          title={bond?.isShortage ? 'Shortage bond' : 'Excess bond'}
+          title={bond?.isShortage ? BOND_SHORTAGE : BOND_EXCESS}
           help={
             bond?.isShortage
               ? '' // FIXME: text

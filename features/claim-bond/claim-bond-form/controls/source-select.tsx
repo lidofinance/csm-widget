@@ -1,4 +1,5 @@
 import { Checkbox } from '@lidofinance/lido-ui';
+import { BOND_EXCESS, BOND_SHORTAGE } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { FC, useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
@@ -63,7 +64,7 @@ export const SourceSelect: FC = () => {
             <Checkbox
               checked
               disabled
-              label={bond?.isShortage ? 'Shortage bond' : 'Excess bond'}
+              label={bond?.isShortage ? BOND_SHORTAGE : BOND_EXCESS}
             />
           }
           help={
