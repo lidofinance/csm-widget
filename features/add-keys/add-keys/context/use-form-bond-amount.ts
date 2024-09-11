@@ -11,7 +11,7 @@ export const useFormBondAmount = (
 
   const { data: bondAmount } = useNodeOperatorNextKeysBond({
     nodeOperatorId,
-    keysCount: depositData.length,
+    keysCount: depositData?.length,
     token,
   });
 

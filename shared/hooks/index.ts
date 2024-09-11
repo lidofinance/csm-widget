@@ -8,6 +8,7 @@ export * from './use-compare-with-router-path';
 export * from './use-confirm-modal';
 export * from './use-csm-node-operators';
 export * from './use-current-static-rpc-provider';
+export * from './use-default-values';
 export * from './use-eth-price-fallback';
 export * from './use-eth-usd-converter';
 export * from './use-eth-usd';
