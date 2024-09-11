@@ -23,7 +23,7 @@ export type SubmitKeysFormNetworkData = {
   eaProof?: Proof;
   curveId?: BigNumber;
   maxStakeEther?: BigNumber | null;
-  keysCountLimit?: number;
+  keysUploadLimit?: number;
   keysAvailable?: KeysAvailable;
   loading: LoadingRecord<
     | 'etherBalance'
@@ -31,7 +31,7 @@ export type SubmitKeysFormNetworkData = {
     | 'wstethBalance'
     | 'eaProof'
     | 'curveId'
-    | 'keysCountLimit'
+    | 'keysUploadLimit'
     | 'maxStakeEther'
   >;
 };

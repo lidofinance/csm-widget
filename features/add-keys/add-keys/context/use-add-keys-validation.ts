@@ -17,8 +17,13 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
       try {
         const { token, bondAmount, depositData } = values;
 
-        const { stethBalance, wstethBalance, etherBalance, maxStakeEther } =
-          await dataPromise;
+        const {
+          stethBalance,
+          wstethBalance,
+          etherBalance,
+          maxStakeEther,
+          keysUploadLimit,
+        } = await dataPromise;
 
         validateBondAmount({
           token,
@@ -33,7 +38,7 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
           options.names?.includes('depositData') ||
           options.names?.includes('rawDepositData')
         )
-          await validateDepositData({ depositData, chainId });
+          await validateDepositData({ depositData, chainId, keysUploadLimit });
 
         return {
           values,

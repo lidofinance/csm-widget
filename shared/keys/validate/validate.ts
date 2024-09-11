@@ -10,10 +10,11 @@ export const validate = async (
   depositData: DepositData[],
   chainId: CHAINS,
   wc: string,
+  keysUploadLimit: number,
 ) => {
   try {
     depositData.forEach((data) => checkItem(data, chainId, wc));
-    checkLength(depositData);
+    checkLength(depositData, keysUploadLimit);
     checkDuplicates(depositData);
     checkPreviouslySubmittedDuplicates(depositData, chainId);
     await checkNetworkDuplicates(depositData);

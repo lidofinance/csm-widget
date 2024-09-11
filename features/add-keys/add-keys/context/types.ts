@@ -14,7 +14,7 @@ export type AddKeysFormNetworkData = {
   stethBalance?: BigNumber;
   wstethBalance?: BigNumber;
   nodeOperatorId?: NodeOperatorId;
-  keysCountLimit?: number;
+  keysUploadLimit?: number;
   keysAvailable?: KeysAvailable;
   bond?: BondBalance;
   maxStakeEther?: BigNumber | null;
@@ -24,6 +24,6 @@ export type AddKeysFormNetworkData = {
     | 'wstethBalance'
     | 'bond'
     | 'maxStakeEther'
-    | 'keysCountLimit'
+    | 'keysUploadLimit'
   >;
 };

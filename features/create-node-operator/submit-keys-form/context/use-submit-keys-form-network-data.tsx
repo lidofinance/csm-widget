@@ -34,10 +34,10 @@ export const useSubmitKeysFormNetworkData = (): [
   } = useWSTETHBalance(STRATEGY_LAZY);
 
   const { data: ea, initialLoading: isEaProofLoading } = useCsmEarlyAdoption();
+  const eaProof = ea?.proof;
 
-  const { data: curveId, initialLoading: isCurveIdLoading } = useCsmCurveId(
-    !!ea?.proof,
-  );
+  const { data: curveId, initialLoading: isCurveIdLoading } =
+    useCsmCurveId(!!eaProof);
 
   const { mutate: mutateConsumed } = useCsmEarlyAdoptionProofConsumed();
 
@@ -48,14 +48,14 @@ export const useSubmitKeysFormNetworkData = (): [
   } = useStakingLimitInfo();
 
   const {
-    data: keysCountLimit,
-    update: updateKeysCountLimit,
-    initialLoading: isKeysCountLimitLoading,
+    data: keysUploadLimit,
+    update: updateKeysUploadLimit,
+    initialLoading: isKeysUploadLimitLoading,
   } = useKeysUploadLimit();
 
   const { data: keysAvailable } = useKeysAvailable({
     curveId,
-    keysCountLimit,
+    keysUploadLimit,
     etherBalance,
     stethBalance,
     wstethBalance,
@@ -68,7 +68,7 @@ export const useSubmitKeysFormNetworkData = (): [
       updateEtherBalance(),
       mutateConsumed(true), // @note hack to revalidate without loading state
       updateMaxStakeEther(),
-      updateKeysCountLimit(),
+      updateKeysUploadLimit(),
     ]);
   }, [
     updateStethBalance,
@@ -76,7 +76,7 @@ export const useSubmitKeysFormNetworkData = (): [
     updateEtherBalance,
     mutateConsumed,
     updateMaxStakeEther,
-    updateKeysCountLimit,
+    updateKeysUploadLimit,
   ]);
 
   const loading = useMemo(
@@ -86,7 +86,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isEtherBalanceLoading,
       isEaProofLoading,
       isCurveIdLoading,
-      isKeysCountLimitLoading,
+      isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
     }),
     [
@@ -95,7 +95,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isEtherBalanceLoading,
       isEaProofLoading,
       isCurveIdLoading,
-      isKeysCountLimitLoading,
+      isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
     ],
   );
@@ -105,9 +105,9 @@ export const useSubmitKeysFormNetworkData = (): [
       stethBalance,
       wstethBalance,
       etherBalance,
-      eaProof: ea?.proof,
+      eaProof,
       curveId,
-      keysCountLimit,
+      keysUploadLimit,
       keysAvailable,
       maxStakeEther,
       loading,

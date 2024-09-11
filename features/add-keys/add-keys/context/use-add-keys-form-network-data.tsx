@@ -3,6 +3,7 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
+  useKeysUploaded,
   useKeysUploadLimit,
   useNodeOperatorBalance,
   useNodeOperatorCurveId,
@@ -45,16 +46,19 @@ export const useAddKeysFormNetworkData = (): [
   } = useStakingLimitInfo();
 
   const {
-    data: keysCountLimit,
-    update: updateKeysCountLimit,
-    initialLoading: isKeysCountLimitLoading,
+    data: keysUploadLimit,
+    update: updateKeysUploadLimit,
+    initialLoading: isKeysUploadLimitLoading,
   } = useKeysUploadLimit();
 
   const { data: curveId } = useNodeOperatorCurveId(nodeOperatorId);
 
+  const { data: totalAddedKeys } = useKeysUploaded();
+
   const { data: keysAvailable } = useKeysAvailable({
     curveId,
-    keysCountLimit,
+    keysUploadLimit,
+    totalAddedKeys,
     bond,
     etherBalance,
     stethBalance,
@@ -67,7 +71,7 @@ export const useAddKeysFormNetworkData = (): [
       updateWstethBalance(),
       updateEtherBalance(),
       updateBond(),
-      updateKeysCountLimit(),
+      updateKeysUploadLimit(),
       updateMaxStakeEther(),
     ]);
   }, [
@@ -75,7 +79,7 @@ export const useAddKeysFormNetworkData = (): [
     updateWstethBalance,
     updateEtherBalance,
     updateBond,
-    updateKeysCountLimit,
+    updateKeysUploadLimit,
     updateMaxStakeEther,
   ]);
 
@@ -86,7 +90,7 @@ export const useAddKeysFormNetworkData = (): [
       isWstethBalanceLoading,
       isMaxStakeEtherLoading,
       isBondLoading,
-      isKeysCountLimitLoading,
+      isKeysUploadLimitLoading,
     }),
     [
       isEtherBalanceLoading,
@@ -94,14 +98,14 @@ export const useAddKeysFormNetworkData = (): [
       isWstethBalanceLoading,
       isMaxStakeEtherLoading,
       isBondLoading,
-      isKeysCountLimitLoading,
+      isKeysUploadLimitLoading,
     ],
   );
 
   return [
     {
       nodeOperatorId,
-      keysCountLimit,
+      keysUploadLimit,
       keysAvailable,
       stethBalance,
       wstethBalance,

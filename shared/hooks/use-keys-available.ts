@@ -1,15 +1,16 @@
+import { Zero } from '@ethersproject/constants';
 import { ONE_ETH, TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { ICSBondCurve } from 'generated/CSAccounting';
 import { useExchangeTokensRate, useMergeSwr } from 'shared/hooks';
 import { BondBalance } from 'types';
 import { useCurveInfo } from './useCurveInfo';
-import { Zero } from '@ethersproject/constants';
 
 type Props = {
   curveId?: BigNumber;
   bond?: BondBalance;
-  keysCountLimit?: number;
+  keysUploadLimit?: number;
+  totalAddedKeys?: number;
   etherBalance?: BigNumber;
   stethBalance?: BigNumber;
   wstethBalance?: BigNumber;
@@ -19,7 +20,8 @@ export type KeysAvailable = Record<TOKENS, ReturnType<typeof calc>>;
 
 export const useKeysAvailable = ({
   curveId,
-  keysCountLimit,
+  keysUploadLimit,
+  totalAddedKeys,
   bond,
   etherBalance,
   stethBalance,
@@ -34,21 +36,24 @@ export const useKeysAvailable = ({
       etherBalance,
       swrRates.data?.ETH,
       bond?.current,
-      keysCountLimit,
+      keysUploadLimit,
+      totalAddedKeys,
       swrCurve.data,
     ),
     [TOKENS.STETH]: calc(
       stethBalance,
       swrRates.data?.STETH,
       bond?.current,
-      keysCountLimit,
+      keysUploadLimit,
+      totalAddedKeys,
       swrCurve.data,
     ),
     [TOKENS.WSTETH]: calc(
       wstethBalance,
       swrRates.data?.WSTETH,
       bond?.current,
-      keysCountLimit,
+      keysUploadLimit,
+      totalAddedKeys,
       swrCurve.data,
     ),
   } as KeysAvailable);
@@ -58,23 +63,22 @@ const calc = (
   balance?: BigNumber,
   rate?: BigNumber,
   bond: BigNumber = Zero,
-  keysCountLimit?: number,
+  keysUploadLimit?: number,
+  totalAddedKeys = 0,
   curve?: ICSBondCurve.BondCurveStruct,
 ) => {
-  if (keysCountLimit === undefined || !curve || !balance || !rate) return;
+  if (keysUploadLimit === undefined || !curve || !balance || !rate) return;
 
-  const totalAmount = convert(balance, rate, ONE_ETH).add(bond);
+  const amountInSTETH = convert(balance, rate, ONE_ETH);
 
-  const maxCount = getMaxKeys(curve, totalAmount);
+  const maxCount = getMaxKeys(curve, amountInSTETH.add(bond));
 
-  const count = maxCount.lt(keysCountLimit)
-    ? maxCount.toNumber()
-    : keysCountLimit;
-  const keysAmount = getAmountByKeys(curve, count);
+  const limitedMaxCount = Math.min(maxCount, totalAddedKeys + keysUploadLimit);
 
-  const amount = keysAmount.gt(0)
-    ? convert(keysAmount.sub(bond), ONE_ETH, rate)
-    : keysAmount;
+  const keysAmount = getAmountByKeys(curve, limitedMaxCount).sub(bond);
+  const count = limitedMaxCount - totalAddedKeys;
+
+  const amount = keysAmount.gt(0) ? convert(keysAmount, ONE_ETH, rate) : Zero;
 
   return {
     count,
@@ -88,12 +92,13 @@ const convert = (value: BigNumber, rate: BigNumber, base: BigNumber) => {
 
 const getMaxKeys = (curve: ICSBondCurve.BondCurveStruct, amount: BigNumber) => {
   if (amount.lte(curve.points[curve.points.length - 1])) {
-    return BigNumber.from(curve.points.findIndex((p) => amount.lt(p)));
+    return curve.points.findIndex((p) => amount.lt(p));
   }
   return amount
     .sub(curve.points[curve.points.length - 1])
     .div(curve.trend)
-    .add(curve.points.length);
+    .add(curve.points.length)
+    .toNumber();
 };
 
 const getAmountByKeys = (

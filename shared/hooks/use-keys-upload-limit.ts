@@ -1,22 +1,46 @@
+import { getCsmConstants } from 'consts/csm-constants';
+import { MAX_KEYS_TO_UPLOAD } from 'consts/treshhold';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { useMemo } from 'react';
-import { useNodeOperatorInfo, useCsmStatus, useMergeSwr } from 'shared/hooks';
+import {
+  useAccount,
+  useCsmStatus,
+  useMergeSwr,
+  useNodeOperatorInfo,
+} from 'shared/hooks';
 
-const MAX_KEYS_TO_UPLOAD = 10;
-
-export const useKeysUploadLimit = () => {
-  const nodeOperatorId = useNodeOperatorId();
-  const swrInfo = useNodeOperatorInfo(nodeOperatorId);
+/**
+ * 0 = no limits
+ */
+export const useKeysLimit = () => {
   const swrStatus = useCsmStatus();
+  const { chainId } = useAccount();
 
   return useMergeSwr(
-    [swrInfo, swrStatus],
-    useMemo(
-      () =>
-        MAX_KEYS_TO_UPLOAD -
-        ((swrStatus.data?.isEarlyAdoption && swrInfo.data?.totalAddedKeys) ||
-          0),
-      [swrInfo.data?.totalAddedKeys, swrStatus.data?.isEarlyAdoption],
-    ),
+    [swrStatus],
+    swrStatus.data?.isEarlyAdoption
+      ? getCsmConstants(chainId).earlyAdoptionMaxKeys
+      : 0,
+  );
+};
+
+export const useKeysUploaded = () => {
+  const nodeOperatorId = useNodeOperatorId();
+  const swrInfo = useNodeOperatorInfo(nodeOperatorId);
+
+  return useMergeSwr([swrInfo], swrInfo.data?.totalAddedKeys ?? 0);
+};
+
+export const useKeysUploadLimit = () => {
+  const swrUploaded = useKeysUploaded();
+  const swrLimit = useKeysLimit();
+
+  return useMergeSwr(
+    [swrUploaded, swrLimit],
+    swrLimit.data
+      ? Math.min(
+          Math.max(swrLimit.data - (swrUploaded.data ?? 0), 0),
+          MAX_KEYS_TO_UPLOAD,
+        )
+      : MAX_KEYS_TO_UPLOAD,
   );
 };
