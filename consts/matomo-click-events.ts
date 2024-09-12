@@ -60,6 +60,9 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageChangeRewardsRole = 'pageChangeRewardsRole',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
+  // modifiers
+  visitWithModeExtended = 'visitWithModeExtended',
+  visitWithReferrer = 'visitWithReferrer',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
@@ -297,5 +300,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Switch Node Operator',
     prefixed`switch_node_operator`,
+  ],
+  // Modifiers
+  [MATOMO_CLICK_EVENTS_TYPES.visitWithModeExtended]: [
+    MATOMO_APP_NAME,
+    'Visit with mode extended',
+    prefixed`visit_mode_extended`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer]: [
+    MATOMO_APP_NAME,
+    'Visite with referrer',
+    prefixed`visit_referrer`,
   ],
 };
