@@ -1,5 +1,5 @@
 import { TOKENS } from 'consts/tokens';
-import { BigNumberish } from 'ethers';
+import { BigNumber } from 'ethers';
 import { BytesLike } from 'ethers/lib/utils.js';
 import { useCallback } from 'react';
 import {
@@ -23,8 +23,8 @@ type AddKeysOptions = {
 
 type MethodParams = {
   nodeOperatorId: NodeOperatorId;
-  bondAmount: BigNumberish;
-  keysCount: BigNumberish;
+  bondAmount: BigNumber;
+  keysCount: number;
   publicKeys: BytesLike;
   signatures: BytesLike;
   permit: GatherPermitSignatureResult;
@@ -38,19 +38,8 @@ const useAddKeysTx = () => {
     async (token: TOKENS, params: MethodParams) => {
       invariant(CSModuleWeb3, 'must have CSModuleWeb3');
 
-      switch (token) {
-        case TOKENS.ETH:
-          return {
-            tx: await CSModuleWeb3.populateTransaction.addValidatorKeysETH(
-              params.nodeOperatorId,
-              params.keysCount,
-              params.publicKeys,
-              params.signatures,
-              { value: params.bondAmount },
-            ),
-            txName: 'addValidatorKeysETH',
-          };
-        case TOKENS.STETH:
+      switch (true) {
+        case token === TOKENS.STETH || params.bondAmount.isZero():
           return {
             tx: await CSModuleWeb3.populateTransaction.addValidatorKeysStETH(
               params.nodeOperatorId,
@@ -61,7 +50,18 @@ const useAddKeysTx = () => {
             ),
             txName: 'addValidatorKeysStETH',
           };
-        case TOKENS.WSTETH:
+        case token === TOKENS.ETH:
+          return {
+            tx: await CSModuleWeb3.populateTransaction.addValidatorKeysETH(
+              params.nodeOperatorId,
+              params.keysCount,
+              params.publicKeys,
+              params.signatures,
+              { value: params.bondAmount },
+            ),
+            txName: 'addValidatorKeysETH',
+          };
+        case token === TOKENS.WSTETH:
           return {
             tx: await CSModuleWeb3.populateTransaction.addValidatorKeysWstETH(
               params.nodeOperatorId,
@@ -72,6 +72,9 @@ const useAddKeysTx = () => {
             ),
             txName: 'addValidatorKeysWstETH',
           };
+        default: {
+          throw new Error('Not implemented yet: true case');
+        }
       }
     },
     [CSModuleWeb3],

@@ -1,5 +1,5 @@
 import { TOKENS } from 'consts/tokens';
-import { BigNumberish } from 'ethers';
+import { BigNumber } from 'ethers';
 import { BytesLike } from 'ethers/lib/utils.js';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
@@ -18,12 +18,12 @@ import {
   addExtraWei,
   addressOrZero,
   formatKeys,
+  getAddedNodeOperator,
   runWithTransactionLogger,
 } from 'utils';
 import { Address } from 'wagmi';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
-import { getAddedNodeOperator } from 'utils';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
 type SubmitKeysOptions = {
@@ -32,8 +32,8 @@ type SubmitKeysOptions = {
 };
 
 type MethodParams = {
-  bondAmount: BigNumberish;
-  keysCount: BigNumberish;
+  bondAmount: BigNumber;
+  keysCount: number;
   publicKeys: BytesLike;
   signatures: BytesLike;
   rewardsAddress: Address;
