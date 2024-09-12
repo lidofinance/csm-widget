@@ -2,6 +2,8 @@ import { CHAINS } from '@lido-sdk/constants';
 import { config } from 'config';
 
 type ExternalLinksConstants = {
+  earlyAdoptionTree: string;
+  rewardsTree: string;
   beaconchain: string;
   feesMonitoring: string;
   operatorsWidget: string;
@@ -14,6 +16,10 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
 > = {
   [CHAINS.Mainnet]: undefined,
   [CHAINS.Holesky]: {
+    earlyAdoptionTree:
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/main/artifacts/holesky/early-adoption/merkle-tree.json',
+    rewardsTree:
+      'https://raw.githubusercontent.com/lidofinance/csm-rewards/holesky/tree.json',
     feesMonitoring: 'https://fees-monitoring-holesky.testnet.fi',
     operatorsWidget: 'https://operators-holesky.testnet.fi',
     beaconchain: 'https://holesky.beaconcha.in',

@@ -17,7 +17,7 @@ export const validate = async (
     checkLength(depositData, keysUploadLimit);
     checkDuplicates(depositData);
     checkPreviouslySubmittedDuplicates(depositData, chainId);
-    await checkNetworkDuplicates(depositData);
+    await checkNetworkDuplicates(depositData, chainId);
 
     return null;
   } catch (error) {

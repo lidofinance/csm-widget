@@ -23,6 +23,10 @@ export const trackMatomoFaqEvent = (faqId?: string) => {
     );
 };
 
+export const trackMatomoError = (description: string, tag: string) => {
+  trackEvent(MATOMO_APP_NAME, `ERROR: ${description}`, prefixed`error_${tag}`);
+};
+
 export const trackMatomoTxEvent = (
   txName?: string,
   stage: 'prepare' | 'done' = 'done',

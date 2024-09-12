@@ -1,6 +1,6 @@
 import { useContractSWR, useLidoSWR } from '@lido-sdk/react';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import { getCsmEarlyAdoptionTreeUrl } from 'consts/csm-early-adoption';
+import { getExternalLinks } from 'consts/external-links';
 import { STRATEGY_CONSTANT, STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { useMemo } from 'react';
 import { standardFetcher } from 'utils';
@@ -15,7 +15,7 @@ type EATreeLeaf = [Address];
 
 export const useCsmEarlyAdoptionTree = (config = STRATEGY_IMMUTABLE) => {
   const { chainId } = useAccount();
-  const url = getCsmEarlyAdoptionTreeUrl(chainId);
+  const url = getExternalLinks(chainId).earlyAdoptionTree;
   const contract = useCSEarlyAdoptionRPC();
 
   return useLidoSWR(

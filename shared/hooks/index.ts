@@ -49,6 +49,7 @@ export * from './useENSAddress';
 export * from './useEarlyAdoptionMember';
 export * from './useElementResize';
 export * from './useExtendedBondBalance';
+export * from './useFeeDistributorTree';
 export * from './useForceUpdate';
 export * from './useIsContract';
 export * from './useIsMultisig';
