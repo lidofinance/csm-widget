@@ -1,12 +1,12 @@
+import { SecretConfigType } from 'config';
 import { DashboardPage } from 'features/dashboard';
-import { GateActiveUser, GateLoaded, GateNodeOperator } from 'shared/gates';
 import { StarterPackPage } from 'features/starter-pack';
 import { NotReleasedPage, SplashPage, WelcomePage } from 'features/welcome';
-import { GetStaticProps } from 'next';
-import { SecretConfigType, secretConfig } from 'config';
-import { FC } from 'react';
-import { getFaqList } from 'lib/faqList';
 import { MaintenancePage } from 'features/welcome/maintenance-page';
+import { getFaqMain } from 'lib/getFaq';
+import { getProps } from 'lib/getProps';
+import { FC } from 'react';
+import { GateActiveUser, GateLoaded, GateNodeOperator } from 'shared/gates';
 
 type PageProps = Pick<SecretConfigType, 'notReleased' | 'maintenance'>;
 
@@ -27,25 +27,4 @@ const Page: FC<PageProps> = ({ notReleased, maintenance }) => {
 
 export default Page;
 
-const faqList = getFaqList([
-  'main-why-run-an-ethereum-validator',
-  'main-what-is-required-as-a-node-operator-in-csm',
-  'main-what-do-node-operators-receive-in-csm',
-  'main-what-are-the-risks-of-running-a-validator',
-  'main-how-does-csm-work',
-  'main-what-makes-csm-unique',
-  'main-how-much-bond-is-needed',
-  'main-how-can-i-get-help',
-]);
-
-export const getStaticProps: GetStaticProps = async () => {
-  const { notReleased, maintenance } = secretConfig;
-
-  return {
-    props: {
-      notReleased,
-      maintenance,
-      faqList: await faqList,
-    },
-  };
-};
+export const getStaticProps = getProps(getFaqMain, { continueAnyway: true });

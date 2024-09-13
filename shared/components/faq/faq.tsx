@@ -1,50 +1,20 @@
 import { Accordion } from '@lidofinance/lido-ui';
 import { useFaqList } from 'providers/faq-provider';
-import { FC, memo, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import { Section } from 'shared/components';
-import styled from 'styled-components';
 import { trackMatomoFaqEvent } from 'utils';
-import { replaceAll } from 'utils/replaceAll';
+import { FaqElement } from './styles';
+import type { FaqItem } from 'lib/getFaq';
+import { useEarlyAdoptionMember } from 'shared/hooks';
+import { useModifyContext } from 'providers/modify-provider';
 
-export interface FaqProps {
-  // faqList: FAQItem[];
-  replacements?: {
-    [key: string]: string;
-  };
-}
-
-const FaqItem = styled.div`
-  p {
-    margin: 0 0 1.6em;
-  }
-
-  p + ul,
-  p + ol,
-  ul + p,
-  ol + p {
-    margin-top: -1.6em;
-  }
-
-  ul > li,
-  ol > li {
-    margin-top: 0;
-    margin-bottom: 0;
-
-    & > p {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  a {
-    text-decoration: none;
-  }
-`;
-
-export const Faq: FC<FaqProps> = memo(({ replacements }) => {
+// TODO: link to Faq item
+export const Faq: FC = () => {
   const faqList = useFaqList();
+  const { data: isEaMember } = useEarlyAdoptionMember();
+  const hasReferrer = !!useModifyContext().referrer;
 
-  // TODO: track link click inside faq
+  // FIXME: track link click inside faq
   const handleExpand = useCallback(
     (id: string) => () => trackMatomoFaqEvent(id),
     [],
@@ -52,11 +22,20 @@ export const Faq: FC<FaqProps> = memo(({ replacements }) => {
 
   if (faqList.length === 0) return null;
 
+  const faqFilter = (faq: FaqItem): boolean => {
+    return (
+      Boolean(
+        faq.earlyAdoptionMember === null ||
+          (faq.earlyAdoptionMember && isEaMember) ||
+          (!faq.earlyAdoptionMember && !isEaMember),
+      ) &&
+      (!faq.onlyWithReferrer || hasReferrer)
+    );
+  };
+
   return (
     <Section title="FAQ">
-      {faqList.map(({ id, title, content }, index) => {
-        const html = replaceAll(content, replacements);
-
+      {faqList.filter(faqFilter).map(({ id, title, content }, index) => {
         return (
           <Accordion
             key={id}
@@ -64,9 +43,9 @@ export const Faq: FC<FaqProps> = memo(({ replacements }) => {
             summary={String(title)}
             onExpand={handleExpand(id)}
           >
-            <FaqItem
+            <FaqElement
               dangerouslySetInnerHTML={{
-                __html: html,
+                __html: content,
               }}
             />
           </Accordion>
@@ -74,4 +53,4 @@ export const Faq: FC<FaqProps> = memo(({ replacements }) => {
       })}
     </Section>
   );
-});
+};

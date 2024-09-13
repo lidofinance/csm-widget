@@ -1,8 +1,8 @@
-import { FAQItem } from 'lib/faqList';
+import { FaqItem } from 'lib/getFaq';
 import { createContext, useContext } from 'react';
 import invariant from 'tiny-invariant';
 
-export const FaqContext = createContext<FAQItem[]>([]);
+export const FaqContext = createContext<FaqItem[]>([]);
 FaqContext.displayName = 'FaqContext';
 
 export const useFaqList = () => {
