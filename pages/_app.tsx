@@ -7,7 +7,7 @@ import { CookiesTooltip, ToastContainer } from '@lidofinance/lido-ui';
 
 import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
-import { FAQItem } from 'lib/faqList';
+import { FaqItem } from 'lib/getFaq';
 import { Providers } from 'providers';
 import { FaqContext } from 'providers/faq-provider';
 import { BackgroundGradient } from 'shared/components/background-gradient/background-gradient';
@@ -27,7 +27,7 @@ const MemoApp = memo(App);
 type AppParams = Partial<
   Pick<SecretConfigType, 'notReleased' | 'maintenance'>
 > & {
-  faqList?: FAQItem[];
+  faqList?: FaqItem[];
 };
 
 const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {

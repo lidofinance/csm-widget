@@ -12,11 +12,9 @@ export const getProps =
     if (!options?.continueAnyway && (notReleased || maintenance))
       return { notFound: true };
 
+    const props = { notReleased, maintenance };
+
     return {
-      props: {
-        notReleased,
-        maintenance,
-        faqList: faqGetter && (await faqGetter()),
-      },
+      props: faqGetter ? { ...props, faqList: await faqGetter() } : props,
     };
   };
