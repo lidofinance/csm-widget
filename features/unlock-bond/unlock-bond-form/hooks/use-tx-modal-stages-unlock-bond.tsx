@@ -45,8 +45,8 @@ const getTxModalStagesUnlockBond = (
         txHash={txHash}
         title={
           lockedBond.gt(0)
-            ? 'Bond are partially unlocked'
-            : 'Bond are completely unlocked'
+            ? 'Bond is partially unlocked'
+            : 'Bond is completely unlocked'
         }
         description={
           lockedBond.gt(0) && (
