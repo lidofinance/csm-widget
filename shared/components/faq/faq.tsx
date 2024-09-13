@@ -1,18 +1,14 @@
-import { Accordion } from '@lidofinance/lido-ui';
 import { useFaqList } from 'providers/faq-provider';
 import { FC, useCallback } from 'react';
 import { Section } from 'shared/components';
 import { trackMatomoFaqEvent } from 'utils';
+import { AccordionNavigatable } from '../accordion-navigatable';
 import { FaqElement } from './styles';
-import type { FaqItem } from 'lib/getFaq';
-import { useEarlyAdoptionMember } from 'shared/hooks';
-import { useModifyContext } from 'providers/modify-provider';
+import { useFaqFilter } from './use-faq-filter';
 
-// TODO: link to Faq item
 export const Faq: FC = () => {
   const faqList = useFaqList();
-  const { data: isEaMember } = useEarlyAdoptionMember();
-  const hasReferrer = !!useModifyContext().referrer;
+  const faqFilter = useFaqFilter();
 
   // FIXME: track link click inside faq
   const handleExpand = useCallback(
@@ -20,25 +16,17 @@ export const Faq: FC = () => {
     [],
   );
 
-  if (faqList.length === 0) return null;
+  const filteredFaqList = faqList.filter(faqFilter);
 
-  const faqFilter = (faq: FaqItem): boolean => {
-    return (
-      Boolean(
-        faq.earlyAdoptionMember === null ||
-          (faq.earlyAdoptionMember && isEaMember) ||
-          (!faq.earlyAdoptionMember && !isEaMember),
-      ) &&
-      (!faq.onlyWithReferrer || hasReferrer)
-    );
-  };
+  if (filteredFaqList.length === 0) return null;
 
   return (
     <Section title="FAQ">
-      {faqList.filter(faqFilter).map(({ id, title, content }, index) => {
+      {filteredFaqList.map(({ id, title, content, anchor }, index) => {
         return (
-          <Accordion
+          <AccordionNavigatable
             key={id}
+            id={anchor ?? undefined}
             defaultExpanded={index === 0}
             summary={String(title)}
             onExpand={handleExpand(id)}
@@ -48,7 +36,7 @@ export const Faq: FC = () => {
                 __html: content,
               }}
             />
-          </Accordion>
+          </AccordionNavigatable>
         );
       })}
     </Section>

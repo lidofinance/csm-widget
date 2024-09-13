@@ -1,5 +1,6 @@
 ---
 title: How to claim ETH using a withdrawal NFT
+anchor: how-to-claim-eth
 ---
 
 Claiming bond and rewards in a form of ETH constitutes an stETH withdrawal process (unstake).

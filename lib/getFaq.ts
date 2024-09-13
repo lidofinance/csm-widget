@@ -9,6 +9,7 @@ export type FaqItem = {
   title: string;
   earlyAdoptionMember: boolean | null;
   onlyWithReferrer: boolean | null;
+  anchor: string | null;
 };
 
 export type FaqGetter = () => Promise<FaqItem[]>;
@@ -26,6 +27,7 @@ const readFaqFile = async (id: string): Promise<FaqItem> => {
     id,
     content: processedContent.toString(),
     title: String(matterResult.data.title || id),
+    anchor: matterResult.data.anchor ?? null,
     earlyAdoptionMember: matterResult.data.earlyAdoption ?? null,
     onlyWithReferrer: matterResult.data.onlyWithReferrer ?? null,
   };

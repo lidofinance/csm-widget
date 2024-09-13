@@ -2,6 +2,7 @@ import { TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import {
   FormTitle,
+  MatomoLink,
   Note,
   Stack,
   TokenAmount,
@@ -10,6 +11,7 @@ import {
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { getTokenDisplayName } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const TokenSelect: React.FC = () => {
   const [token, claimRewards] = useWatch<
@@ -67,9 +69,14 @@ export const TokenSelect: React.FC = () => {
         }}
       />
       {token === TOKENS.ETH && (
-        // TODO: add link to FAQ
         <Note>
-          After receiving NFT you will need to claim ETH manually. Follow FAQ
+          After receiving NFT you will need to claim ETH manually. Follow{' '}
+          <MatomoLink
+            href="#how-to-claim-eth"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToClaimEth}
+          >
+            FAQ
+          </MatomoLink>{' '}
           for more details.
         </Note>
       )}

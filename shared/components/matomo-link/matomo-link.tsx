@@ -1,16 +1,25 @@
 import { Link as ALink, LinkProps } from '@lidofinance/lido-ui';
 import Link from 'next/link';
+import { useInpageNavigation } from 'providers/inpage-navigation';
 import { FC, useCallback } from 'react';
 
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 
 export const MatomoLink: FC<WithMatomoEvent<LinkProps>> = ({
   matomoEvent,
+  onClick,
   ...props
 }) => {
-  const onClickHandler = useCallback(() => {
-    trackMatomoEvent(matomoEvent);
-  }, [matomoEvent]);
+  const { navigateInpageAnchor } = useInpageNavigation();
+
+  const onClickHandler = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      trackMatomoEvent(matomoEvent);
+      props.href?.startsWith('#') && navigateInpageAnchor(e);
+      onClick?.(e);
+    },
+    [matomoEvent, navigateInpageAnchor, onClick, props.href],
+  );
 
   return (
     <Link href={props.href || ''} passHref legacyBehavior>

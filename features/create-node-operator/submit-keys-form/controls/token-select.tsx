@@ -1,7 +1,9 @@
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { TOKENS } from 'consts/tokens';
 import {
   FormTitle,
   KeysAvailable,
+  MatomoLink,
   Stack,
   TokenAmount,
 } from 'shared/components';
@@ -14,7 +16,18 @@ export const TokenSelect: React.FC = () => {
 
   return (
     <>
-      <FormTitle>Choose a token to upload a bond</FormTitle>
+      <FormTitle
+        extra={
+          <MatomoLink
+            href="#how-bond-is-calculated"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
+          >
+            How bond is calculated
+          </MatomoLink>
+        }
+      >
+        Choose a token to upload a bond
+      </FormTitle>
       <TokenButtonsHookForm
         options={{
           [TOKENS.ETH]: (

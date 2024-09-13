@@ -28,8 +28,10 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   starterPackHadwareLink = 'starterPackHadwareLink',
   starterPackSetupValidatorLink = 'starterPackSetupValidatorLink',
   starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
-  // Create NO
+  // Forms
+  howBondIsCalculated = 'howBondIsCalculated',
   depositDataLearnMore = 'depositDataLearnMore',
+  howToClaimEth = 'howToClaimEth',
   customAddressDescription = 'customAddressDescription',
   managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
   // Common
@@ -161,11 +163,21 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Generation Keys guide» link on StarterPack screen',
     prefixed`starterpack_generate_keys_link`,
   ],
-  // Create NO
+  // Forms
+  [MATOMO_CLICK_EVENTS_TYPES.howBondIsCalculated]: [
+    MATOMO_APP_NAME,
+    'Click «How bond is calculated» link on Upload form',
+    prefixed`how_bond_is_calculated_link`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: [
     MATOMO_APP_NAME,
     'Click «Upload Deposit Data learn more» link on Upload form',
     prefixed`deposti_data_learn_more_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.howToClaimEth]: [
+    MATOMO_APP_NAME,
+    'Click «Follow FAQ (ETH)» link on Claim form',
+    prefixed`how_to_claim_eth`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.customAddressDescription]: [
     MATOMO_APP_NAME,
