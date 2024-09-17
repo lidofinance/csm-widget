@@ -7,6 +7,7 @@ import {
   useMergeSwr,
   useNodeOperatorInfo,
 } from 'shared/hooks';
+import { NodeOperatorId } from 'types';
 
 /**
  * 0 = no limits
@@ -23,15 +24,19 @@ export const useKeysLimit = () => {
   );
 };
 
-export const useKeysUploaded = () => {
-  const nodeOperatorId = useNodeOperatorId();
+export const useNonWithdrawnKeysCount = (nodeOperatorId?: NodeOperatorId) => {
   const swrInfo = useNodeOperatorInfo(nodeOperatorId);
 
-  return useMergeSwr([swrInfo], swrInfo.data?.totalAddedKeys ?? 0);
+  return useMergeSwr(
+    [swrInfo],
+    (swrInfo.data?.totalAddedKeys ?? 0) -
+      (swrInfo.data?.totalWithdrawnKeys ?? 0),
+  );
 };
 
 export const useKeysUploadLimit = () => {
-  const swrUploaded = useKeysUploaded();
+  const nodeOperatorId = useNodeOperatorId();
+  const swrUploaded = useNonWithdrawnKeysCount(nodeOperatorId);
   const swrLimit = useKeysLimit();
 
   return useMergeSwr(
