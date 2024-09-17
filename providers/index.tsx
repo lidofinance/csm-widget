@@ -20,19 +20,17 @@ export const Providers: FC<PropsWithChildren<{ dummy?: boolean }>> = ({
       <ModifyProvider>
         <CookieThemeProvider>
           <GlobalStyle />
-          {dummy ? (
-            <InpageNavigationProvider>
-              <ModalProvider>{children}</ModalProvider>
-            </InpageNavigationProvider>
-          ) : (
-            <Web3Provider>
-              <NodeOperatorPrivider>
-                <InpageNavigationProvider>
-                  <ModalProvider>{children}</ModalProvider>
-                </InpageNavigationProvider>
-              </NodeOperatorPrivider>
-            </Web3Provider>
-          )}
+          <InpageNavigationProvider>
+            <ModalProvider>
+              {dummy ? (
+                children
+              ) : (
+                <Web3Provider>
+                  <NodeOperatorPrivider>{children}</NodeOperatorPrivider>
+                </Web3Provider>
+              )}
+            </ModalProvider>
+          </InpageNavigationProvider>
         </CookieThemeProvider>
       </ModifyProvider>
     </AppFlagProvider>
