@@ -10,7 +10,7 @@ type Props = {
   curveId?: BigNumber;
   bond?: BondBalance;
   keysUploadLimit?: number;
-  totalAddedKeys?: number;
+  nonWithdrawnKeys?: number;
   etherBalance?: BigNumber;
   stethBalance?: BigNumber;
   wstethBalance?: BigNumber;
@@ -21,7 +21,7 @@ export type KeysAvailable = Record<TOKENS, ReturnType<typeof calc>>;
 export const useKeysAvailable = ({
   curveId,
   keysUploadLimit,
-  totalAddedKeys,
+  nonWithdrawnKeys,
   bond,
   etherBalance,
   stethBalance,
@@ -37,7 +37,7 @@ export const useKeysAvailable = ({
       swrRates.data?.ETH,
       bond?.current,
       keysUploadLimit,
-      totalAddedKeys,
+      nonWithdrawnKeys,
       swrCurve.data,
     ),
     [TOKENS.STETH]: calc(
@@ -45,7 +45,7 @@ export const useKeysAvailable = ({
       swrRates.data?.STETH,
       bond?.current,
       keysUploadLimit,
-      totalAddedKeys,
+      nonWithdrawnKeys,
       swrCurve.data,
     ),
     [TOKENS.WSTETH]: calc(
@@ -53,7 +53,7 @@ export const useKeysAvailable = ({
       swrRates.data?.WSTETH,
       bond?.current,
       keysUploadLimit,
-      totalAddedKeys,
+      nonWithdrawnKeys,
       swrCurve.data,
     ),
   } as KeysAvailable);
@@ -64,20 +64,23 @@ const calc = (
   rate?: BigNumber,
   bond: BigNumber = Zero,
   keysUploadLimit?: number,
-  totalAddedKeys = 0,
+  nonWithdrawnKeys = 0,
   curve?: ICSBondCurve.BondCurveStruct,
 ) => {
   if (keysUploadLimit === undefined || !curve || !balance || !rate) return;
 
   const amountInSTETH = convert(balance, rate, ONE_ETH);
+  const totalAmount = amountInSTETH.add(bond);
 
-  const maxCount = getMaxKeys(curve, amountInSTETH.add(bond));
+  const maxCount = getMaxKeys(curve, totalAmount);
 
-  const limitedMaxCount = Math.min(maxCount, totalAddedKeys + keysUploadLimit);
+  const limitedMaxCount = Math.min(
+    maxCount,
+    nonWithdrawnKeys + keysUploadLimit,
+  );
 
   const keysAmount = getAmountByKeys(curve, limitedMaxCount).sub(bond);
-  const count = limitedMaxCount - totalAddedKeys;
-
+  const count = Math.max(limitedMaxCount - nonWithdrawnKeys, 0);
   const amount = keysAmount.gt(0) ? convert(keysAmount, ONE_ETH, rate) : Zero;
 
   return {

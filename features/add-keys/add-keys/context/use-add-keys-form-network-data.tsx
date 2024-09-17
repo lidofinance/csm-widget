@@ -3,7 +3,7 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
-  useKeysUploaded,
+  useNonWithdrawnKeysCount,
   useKeysUploadLimit,
   useNodeOperatorBalance,
   useNodeOperatorCurveId,
@@ -53,12 +53,12 @@ export const useAddKeysFormNetworkData = (): [
 
   const { data: curveId } = useNodeOperatorCurveId(nodeOperatorId);
 
-  const { data: totalAddedKeys } = useKeysUploaded();
+  const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(nodeOperatorId);
 
   const { data: keysAvailable } = useKeysAvailable({
     curveId,
     keysUploadLimit,
-    totalAddedKeys,
+    nonWithdrawnKeys,
     bond,
     etherBalance,
     stethBalance,
