@@ -12,14 +12,17 @@ export const KeysInput = () => {
 
   return (
     <>
-      <FormTitle>
+      <FormTitle
+        extra={
+          <MatomoLink
+            href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
+          >
+            Learn more
+          </MatomoLink>
+        }
+      >
         Upload deposit data
-        <MatomoLink
-          href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm"
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
-        >
-          Learn more
-        </MatomoLink>
       </FormTitle>
       <DepositDataInputHookForm error={error} />
     </>

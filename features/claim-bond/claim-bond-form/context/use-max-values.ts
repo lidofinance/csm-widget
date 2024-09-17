@@ -1,4 +1,4 @@
-import { TOKENS } from 'consts/tokens';
+import { MAX_ETH_AMOUNT, TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import {
   useAvailableToClaim,
@@ -6,6 +6,9 @@ import {
   useWstethBySteth,
 } from 'shared/hooks';
 import { BondBalance, RewardsBalance } from 'types';
+
+const limitMaxEth = (values: BigNumber[]) =>
+  values.map((value) => (value.gt(MAX_ETH_AMOUNT) ? MAX_ETH_AMOUNT : value));
 
 type Props = {
   bond?: BondBalance;
@@ -32,7 +35,7 @@ export const useMaxValues = ({ bond, rewards }: Props) => {
   const bondAndRewardsSwr = useWstethBySteth(maxBondAndRewards);
 
   return useMergeSwr([bondSwr, bondAndRewardsSwr], {
-    [TOKENS.ETH]: [maxBond, maxBondAndRewards],
+    [TOKENS.ETH]: limitMaxEth([maxBond, maxBondAndRewards]),
     [TOKENS.STETH]: [maxBond, maxBondAndRewards],
     [TOKENS.WSTETH]: [bondSwr.data, bondAndRewardsSwr.data],
   } as MaxValues);

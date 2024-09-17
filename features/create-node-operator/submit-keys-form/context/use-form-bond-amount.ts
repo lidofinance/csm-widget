@@ -10,7 +10,7 @@ export const useFormBondAmount = (
   const [token, depositData] = watch(['token', 'depositData']);
 
   const { data: bondAmount } = useNodeOperatorFirstKeysBond({
-    keysCount: depositData.length,
+    keysCount: depositData?.length,
     token,
     curveId,
   });

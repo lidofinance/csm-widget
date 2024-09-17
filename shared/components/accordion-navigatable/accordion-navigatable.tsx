@@ -3,7 +3,7 @@ import { useInpageNavigation } from 'providers/inpage-navigation';
 import { useCallback } from 'react';
 
 type AccordionNavigatableProps = React.ComponentProps<typeof Accordion> & {
-  id: string;
+  id?: string;
 };
 
 export const AccordionNavigatable = (props: AccordionNavigatableProps) => {
@@ -11,14 +11,14 @@ export const AccordionNavigatable = (props: AccordionNavigatableProps) => {
   const { hashNav, resetSpecificAnchor } = useInpageNavigation();
 
   const handleCollapse = useCallback(() => {
-    resetSpecificAnchor(id);
+    id && resetSpecificAnchor(id);
     onCollapse?.();
   }, [resetSpecificAnchor, id, onCollapse]);
 
   return (
     <Accordion
-      defaultExpanded={hashNav === id}
       {...props}
+      defaultExpanded={(id && hashNav === id) || props.defaultExpanded}
       onCollapse={handleCollapse}
     />
   );

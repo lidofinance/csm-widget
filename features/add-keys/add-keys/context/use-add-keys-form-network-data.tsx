@@ -3,12 +3,16 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
+  useKeysUploaded,
+  useKeysUploadLimit,
   useNodeOperatorBalance,
+  useNodeOperatorCurveId,
   useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
 import { type AddKeysFormNetworkData } from './types';
+import { useKeysAvailable } from 'shared/hooks';
 
 export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
@@ -41,12 +45,33 @@ export const useAddKeysFormNetworkData = (): [
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
+  const {
+    data: keysUploadLimit,
+    update: updateKeysUploadLimit,
+    initialLoading: isKeysUploadLimitLoading,
+  } = useKeysUploadLimit();
+
+  const { data: curveId } = useNodeOperatorCurveId(nodeOperatorId);
+
+  const { data: totalAddedKeys } = useKeysUploaded();
+
+  const { data: keysAvailable } = useKeysAvailable({
+    curveId,
+    keysUploadLimit,
+    totalAddedKeys,
+    bond,
+    etherBalance,
+    stethBalance,
+    wstethBalance,
+  });
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance(),
       updateWstethBalance(),
       updateEtherBalance(),
       updateBond(),
+      updateKeysUploadLimit(),
       updateMaxStakeEther(),
     ]);
   }, [
@@ -54,6 +79,7 @@ export const useAddKeysFormNetworkData = (): [
     updateWstethBalance,
     updateEtherBalance,
     updateBond,
+    updateKeysUploadLimit,
     updateMaxStakeEther,
   ]);
 
@@ -64,6 +90,7 @@ export const useAddKeysFormNetworkData = (): [
       isWstethBalanceLoading,
       isMaxStakeEtherLoading,
       isBondLoading,
+      isKeysUploadLimitLoading,
     }),
     [
       isEtherBalanceLoading,
@@ -71,12 +98,15 @@ export const useAddKeysFormNetworkData = (): [
       isWstethBalanceLoading,
       isMaxStakeEtherLoading,
       isBondLoading,
+      isKeysUploadLimitLoading,
     ],
   );
 
   return [
     {
       nodeOperatorId,
+      keysUploadLimit,
+      keysAvailable,
       stethBalance,
       wstethBalance,
       etherBalance,

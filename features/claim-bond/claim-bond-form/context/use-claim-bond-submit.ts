@@ -127,7 +127,7 @@ export const useClaimBondSubmit = ({
         // TODO: move to onConfirm
         const { current } = await CSAccounting.getBondSummary(nodeOperatorId);
 
-        txModalStages.success({ balance: current }, txHash);
+        txModalStages.success({ balance: current, amount, token }, txHash);
 
         return true;
       } catch (error) {

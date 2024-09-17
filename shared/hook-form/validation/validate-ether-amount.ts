@@ -1,5 +1,5 @@
 import { MaxUint256, Zero } from '@ethersproject/constants';
-import { TOKENS } from 'consts/tokens';
+import { MIN_ETH_AMOUNT, TOKENS } from 'consts/tokens';
 import type { BigNumber } from 'ethers';
 import { getTokenDisplayName } from 'utils/getTokenDisplayName';
 import { ValidationError } from './validation-error';
@@ -15,6 +15,13 @@ export const validateEtherAmount = (
     throw new ValidationError(
       field,
       `Enter ${getTokenDisplayName(token)} ${field} greater than 0`,
+    );
+
+  // TODO: lt or lte
+  if (token === TOKENS.ETH && amount.lt(MIN_ETH_AMOUNT))
+    throw new ValidationError(
+      field,
+      `Enter ${getTokenDisplayName(token)} ${field} greater than 100 wei`,
     );
 
   if (amount.gt(MaxUint256))

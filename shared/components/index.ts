@@ -34,3 +34,6 @@ export { FormBlock } from './form-block/form-block';
 export { IconTooltip } from './icon-tooltip/icon-tooltip';
 export { Ul } from './ul/ul';
 export { StepIndicator } from './step-indicator/step-indicator';
+export { KeysAvailable } from './keys-available/keys-available';
+export { YouWillReceive } from './you-will-receive/you-will-receive';
+export { Plural } from './plurals/plural';

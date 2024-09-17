@@ -5,6 +5,7 @@ import { LinkButton, Stack } from 'shared/components';
 import { BlockStyled, Header, Heading } from './styles';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
+// FIXME: mainnet links
 export const EarlyAdoptionBanner: FC = () => {
   return (
     <BlockStyled>

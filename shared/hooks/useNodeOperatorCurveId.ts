@@ -1,11 +1,11 @@
 import { useContractSWR } from '@lido-sdk/react';
-import { STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
+import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 import { NodeOperatorId } from 'types';
 import { useCSAccountingRPC } from './useCsmContracts';
 
 export const useNodeOperatorCurveId = (
   nodeOperatorId?: NodeOperatorId,
-  config = STRATEGY_IMMUTABLE,
+  config = STRATEGY_CONSTANT,
 ) => {
   return useContractSWR({
     contract: useCSAccountingRPC(),

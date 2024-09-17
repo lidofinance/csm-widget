@@ -1,9 +1,8 @@
-import { secretConfig } from 'config';
 import { PATH } from 'consts/urls';
 import { AcceptInvitePage } from 'features/accept-invite';
 import { SplashPage } from 'features/welcome';
-import { getFaqList } from 'lib/faqList';
-import { GetStaticProps } from 'next';
+import { getFaqRoles } from 'lib/getFaq';
+import { getProps } from 'lib/getProps';
 import { GateActiveUser, GateLoaded } from 'shared/gates';
 import { Navigate } from 'shared/navigate';
 
@@ -19,17 +18,4 @@ const Page = () => (
 
 export default Page;
 
-const faqList = getFaqList([
-  'roles-what-are-rewards-and-manager-addresses',
-  'roles-why-should-these-addresses-be-different',
-  'roles-how-to-accept-a-new-address-request',
-  'roles-what-to-do-if-the-change-is-submitted-to-a-wrong-address',
-  'roles-what-happens-to-rewards-after-changing-the-address',
-]);
-
-export const getStaticProps: GetStaticProps = async () => {
-  const { notReleased, maintenance } = secretConfig;
-  if (notReleased || maintenance) return { notFound: true };
-
-  return { props: { faqList: await faqList } };
-};
+export const getStaticProps = getProps(getFaqRoles);
