@@ -34,6 +34,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   howToClaimEth = 'howToClaimEth',
   customAddressDescription = 'customAddressDescription',
   managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
+  createSuccessKeysTab = 'createSuccessKeysTab',
+  createSuccessBeaconchainDashboard = 'createSuccessBeaconchainDashboard',
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
@@ -188,6 +190,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «Detailed description of manager permission type» link on Create NO form',
     prefixed`manager_address_permission_type_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessKeysTab]: [
+    MATOMO_APP_NAME,
+    'Click «check status on keys tab» link after Create NO',
+    prefixed`create_success_keys_tab_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard]: [
+    MATOMO_APP_NAME,
+    'Click «beaconcha.in bashboard» link after Create NO',
+    prefixed`create_success_beaconchain_dashboard_link`,
   ],
   // Common
   [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: [

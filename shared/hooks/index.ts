@@ -14,6 +14,7 @@ export * from './use-eth-usd-converter';
 export * from './use-eth-usd';
 export * from './use-exchange-rate';
 export * from './use-exit-requested-keys-from-events';
+export * from './use-external-links';
 export * from './use-get-key-status';
 export * from './use-invites-events-fetcher';
 export * from './use-invites';

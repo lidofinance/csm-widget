@@ -201,7 +201,13 @@ export const useSubmitKeysSubmit = ({
         // TODO: possible add timeout
         await onConfirm?.();
 
-        txModalStages.success({ nodeOperatorId: nodeOperator?.id }, txHash);
+        txModalStages.success(
+          {
+            nodeOperatorId: nodeOperator?.id,
+            keys: depositData.map((key) => key.pubkey),
+          },
+          txHash,
+        );
 
         // TODO: move to onConfirm
         if (nodeOperator) {
