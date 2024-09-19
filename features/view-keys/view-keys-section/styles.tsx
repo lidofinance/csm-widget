@@ -3,7 +3,6 @@ import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
 
 export const ViewKeysBlock = styled(Block)`
-  width: 940px;
   display: flex;
   gap: ${({ theme }) => theme.spaceMap.md}px;
   flex-direction: column;

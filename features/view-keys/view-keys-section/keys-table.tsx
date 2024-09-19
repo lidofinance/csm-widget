@@ -1,6 +1,6 @@
-import { Tbody, Td, Text, Th, Thead, Tr } from '@lidofinance/lido-ui';
+import { Address, Tbody, Td, Text, Th, Thead, Tr } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { KeyLink, StatusChip } from 'shared/components';
+import { KeyLink, Stack, StatusChip } from 'shared/components';
 import { HexString } from 'shared/keys';
 import { AddressRow, TableStyle } from './styles';
 import { useGetKeyStatus } from 'shared/hooks';
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export const KeysTable: FC<Props> = ({ keys, offset = 0 }) => {
-  const getStatus = useGetKeyStatus();
+  const { data: getStatus } = useGetKeyStatus();
 
   return (
     <TableStyle>
@@ -33,12 +33,16 @@ export const KeysTable: FC<Props> = ({ keys, offset = 0 }) => {
             </Td>
             <Td>
               <AddressRow>
-                {key}
+                <Address address={key} symbols={16} />
                 <KeyLink pubkey={key} />
               </AddressRow>
             </Td>
             <Td>
-              <StatusChip status={getStatus(offset + index, key)} />
+              <Stack direction="column" gap="xs">
+                {getStatus?.(key, offset + index).map((status) => (
+                  <StatusChip status={status} key={status} />
+                ))}
+              </Stack>
             </Td>
           </Tr>
         ))}

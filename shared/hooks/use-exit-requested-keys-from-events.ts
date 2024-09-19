@@ -7,7 +7,6 @@ import { useCallback } from 'react';
 import { useAccount, useExitBusOracleRPC } from 'shared/hooks';
 import { getSettledValue } from 'utils';
 
-// TODO: calc keyIndex from validatorIndex
 const restoreEvents = (events: ValidatorExitRequestEvent[]) =>
   events
     .sort((a, b) => a.blockNumber - b.blockNumber)
