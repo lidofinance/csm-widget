@@ -84,7 +84,7 @@ export const useTxModalStagesSubmitKeys = () => {
 };
 
 export const AfterCreationInstructions: FC<{ keys: string[] }> = ({ keys }) => {
-  const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
+  const beaconchainDashboardLink = useBeaconchainDashboardLink(undefined, keys);
   return (
     <BlockStyled color="background">
       <b>What is next: </b>
