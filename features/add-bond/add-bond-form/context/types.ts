@@ -14,7 +14,13 @@ export type AddBondFormNetworkData = {
   wstethBalance?: BigNumber;
   bond?: BondBalance;
   maxStakeEther?: BigNumber | null;
+  isPaused?: boolean;
   loading: LoadingRecord<
-    'etherBalance' | 'stethBalance' | 'wstethBalance' | 'bond' | 'maxStakeEther'
+    | 'etherBalance'
+    | 'stethBalance'
+    | 'wstethBalance'
+    | 'bond'
+    | 'maxStakeEther'
+    | 'status'
   >;
 };

@@ -10,6 +10,7 @@ import {
   useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
+  useCsmStatus,
 } from 'shared/hooks';
 import { type AddKeysFormNetworkData } from './types';
 import { useKeysAvailable } from 'shared/hooks';
@@ -18,6 +19,7 @@ export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
   () => Promise<void>,
 ] => {
+  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: etherBalance,
@@ -91,6 +93,7 @@ export const useAddKeysFormNetworkData = (): [
       isMaxStakeEtherLoading,
       isBondLoading,
       isKeysUploadLimitLoading,
+      isStatusLoading,
     }),
     [
       isEtherBalanceLoading,
@@ -99,6 +102,7 @@ export const useAddKeysFormNetworkData = (): [
       isMaxStakeEtherLoading,
       isBondLoading,
       isKeysUploadLimitLoading,
+      isStatusLoading,
     ],
   );
 
@@ -113,6 +117,7 @@ export const useAddKeysFormNetworkData = (): [
       bond,
       maxStakeEther,
       loading,
+      isPaused: status?.isPaused || status?.isAccountingPaused,
     },
     revalidate,
   ];

@@ -15,7 +15,7 @@ export const AmountInput: React.FC = () => {
         token={TOKENS.ETH}
         maxValue={max}
       />
-      <Note text="Locked bond can be compensated only in ETH" />
+      <Note>Locked bond can be compensated only in ETH</Note>
     </>
   );
 };
