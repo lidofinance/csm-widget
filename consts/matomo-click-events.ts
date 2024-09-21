@@ -39,6 +39,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
+  // Alerts
+  howToExitAlertLink = 'howToExitAlertLink',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -211,6 +213,12 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «Submit report with form» link',
     prefixed`feedback_form_link`,
+  ],
+  // Alerts
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitAlertLink]: [
+    MATOMO_APP_NAME,
+    'Click «How to exit» alert link',
+    prefixed`how_to_exit_alert_link`,
   ],
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: [

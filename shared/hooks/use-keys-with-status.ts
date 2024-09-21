@@ -25,7 +25,10 @@ export const useKeysWithStatus = () => {
         return undefined;
       }
 
-      return keys.map((key, index) => [key, getStatus(key, index)] as const);
+      return keys.map((key, index) => ({
+        key,
+        statuses: getStatus(key, index),
+      }));
     }, [getStatus, keys, swrGetStatus.initialLoading, swrKeys.initialLoading]),
   );
 };
