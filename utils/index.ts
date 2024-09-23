@@ -20,7 +20,7 @@ export * from './get-first-param';
 export * from './get-ipfs-base-path';
 export * from './get-max-balance-token';
 export * from './get-node-operator-id-from-event';
-export * from './getErrorMessage';
+export * from './getErrorCode';
 export * from './getFeeData';
 export * from './getNFTUrl';
 export * from './getScreenSize';
