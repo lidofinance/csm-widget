@@ -1,9 +1,7 @@
 ---
-title: Why didn’t I get rewards?
+title: How often do I get rewards?
 ---
 
-There are two main reasons of you getting no reward within a frame:
+**Node Operator rewards** on testnet are calculated and made claimable by the CSM Oracle **every 7 days**. Rewards do not have to be claimed during every reporting frame, and can be left to accumulate to be claimed later.
 
-1. If your validator’s performance was below the threshold within the CSM Performance Oracle frame (7 days for testnet) the validator does not receive rewards for the given frame. Read more about [the CSM Performance Oracle](https://operatorportal.lido.fi/modules/community-staking-module#block-c6dc8d00f13243fcb17de3fa07ecc52c).
-2. [Your Node Operator has stuck keys](https://operatorportal.lido.fi/modules/community-staking-module#block-0ed61a4c0a5a439bbb4be20e814b4e38) due to not exiting a validator requested for exit timely.
-3. The Oracle report has been delayed.
+**Bond rebase part** of the rewards come from stETH being a rebasing token and the bond being stored in stETH. After each Accounting Oracle report that happens on testnet **every 12 epochs (1hr 20min)**, the share rate changes. Hence, the same amount of stETH shares will now be equal to a bigger stETH token balance.

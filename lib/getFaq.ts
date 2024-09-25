@@ -67,7 +67,7 @@ export const getFaqKeys = () =>
   ]);
 
 export const getFaqBond = () =>
-  readFaqFiles(['bond-1', 'bond-2', 'bond-3', 'bond-4']);
+  readFaqFiles(['bond-1', 'bond-2', 'bond-3', 'bond-4', 'bond-5']);
 
 export const getFaqLocked = () =>
   readFaqFiles(['locked-1', 'locked-2', 'locked-3']);
