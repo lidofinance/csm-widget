@@ -3,4 +3,7 @@ export * from './validate-bignumber-min';
 export * from './validate-bond-amount';
 export * from './validate-deposit-data';
 export * from './validate-ether-amount';
+export * from './validate-hash';
+export * from './validate-max-amount';
+export * from './validate-node-operator-id';
 export * from './validation-error';
