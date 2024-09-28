@@ -13,7 +13,7 @@ export const AlertRequestToExit: FC = () => (
       measures
     </p>
     <MatomoLink
-      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToExitAlertLink}
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert}
       href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm/exiting-csm-validators"
     >
       How to exit?

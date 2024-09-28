@@ -40,7 +40,10 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
   // Alerts
-  howToExitAlertLink = 'howToExitAlertLink',
+  howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
+  howToExitLinkStuckKeysAlert = 'howToExitLinkStuckKeysAlert',
+  normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
+  unlockBondLinkAlert = 'unlockBondLinkAlert',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -215,10 +218,25 @@ export const MATOMO_CLICK_EVENTS: Record<
     prefixed`feedback_form_link`,
   ],
   // Alerts
-  [MATOMO_CLICK_EVENTS_TYPES.howToExitAlertLink]: [
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: [
     MATOMO_APP_NAME,
-    'Click «How to exit» alert link',
-    prefixed`how_to_exit_alert_link`,
+    'Click «How to exit» link on Request To Exit alert',
+    prefixed`how_to_exit_link_requset_to_exit_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkStuckKeysAlert]: [
+    MATOMO_APP_NAME,
+    'Click «How to exit» link on Stuck Keys alert',
+    prefixed`how_to_exit_link_stuck_keys_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Normalize queue» link on Normalize Queue alert',
+    prefixed`normalize_queue_link_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Unlock bond» link on Locked Bond alert',
+    prefixed`unlock_bond_link_alert`,
   ],
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: [
