@@ -67,6 +67,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageInboxRequests = 'pageInboxRequests',
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
+  pageNormalizeQueue = 'pageNormalizeQueue',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
   // modifiers
@@ -344,6 +345,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «ChangeRewardsRole»',
     prefixed`view_change_rewards_role_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageNormalizeQueue]: [
+    MATOMO_APP_NAME,
+    'View page «NormalizeQueue»',
+    prefixed`view_normalize_queue_page`,
   ],
   // Actions
   [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: [
