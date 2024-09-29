@@ -6,7 +6,7 @@ export const validateNodeOperatorId = (
   value?: string,
   max?: BigNumber,
 ) => {
-  if (!value) throw new ValidationError(field, 'Is required');
+  if (!value) throw new ValidationError(field, '');
 
   const val = Number.parseInt(value);
 

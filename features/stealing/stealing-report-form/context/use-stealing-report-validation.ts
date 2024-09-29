@@ -29,15 +29,15 @@ export const useStealingReportValidation = (
         invariant(etherBalance);
         invariant(nodeOperatorsCount);
 
-        if (options.names?.includes('amount'))
-          validateEtherAmount('amount', amount, TOKENS.ETH);
-
         if (options.names?.includes('nodeOperatorId'))
           validateNodeOperatorId(
             'nodeOperatorId',
             nodeOperatorId,
             nodeOperatorsCount,
           );
+
+        if (options.names?.includes('amount'))
+          validateEtherAmount('amount', amount, TOKENS.ETH);
 
         if (options.names?.includes('blockhash'))
           validateHash('blockhash', blockhash);

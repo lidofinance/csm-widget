@@ -14,6 +14,7 @@ import {
 import { useStealingCancelFormNetworkData } from './use-stealing-cancel-form-network-data';
 import { useStealingCancelSubmit } from './use-stealing-cancel-submit';
 import { useStealingCancelValidation } from './use-stealing-cancel-validation';
+import { useFormMaxAmount } from './use-form-max-amount';
 
 export const useStealingCancelFormData =
   useFormData<StealingCancelFormNetworkData>;
@@ -32,6 +33,8 @@ export const StealingCancelFormProvider: FC<PropsWithChildren> = ({
     resolver: validationResolver,
     mode: 'onChange',
   });
+
+  useFormMaxAmount(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 

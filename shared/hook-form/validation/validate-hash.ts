@@ -4,7 +4,7 @@ import { ValidationError } from './validation-error';
 const HASH_LENGTH = 66;
 
 export const validateHash = (field: string, value?: string) => {
-  if (!value) throw new ValidationError(field, 'Is required');
+  if (!value) throw new ValidationError(field, '');
 
   const val = value.toLowerCase();
 

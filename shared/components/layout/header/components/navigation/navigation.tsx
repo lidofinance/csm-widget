@@ -1,20 +1,19 @@
 import { FC, memo, useCallback } from 'react';
 
+import { Eth as EthIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
-import { Eth as EthIcon } from '@lidofinance/lido-ui';
 
 import { PATH } from 'consts/urls';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { LocalLink } from 'shared/components/local-link';
 import {
-  useAddressCompare,
   useCanCreateNodeOperator,
   useInvites,
-  useReportStealingRoleAddress,
+  useIsReportStealingRole,
 } from 'shared/hooks';
 import { useAccount } from 'shared/hooks/use-account';
 import { useRouterPath } from 'shared/hooks/use-router-path';
@@ -105,8 +104,7 @@ export const Navigation: FC = memo(() => {
   const { active: isConnected } = useAccount();
   const { active, isListLoading } = useNodeOperatorContext();
   const { data: invites } = useInvites();
-  const { data: reportingAddress } = useReportStealingRoleAddress();
-  const isUserAddress = useAddressCompare();
+  const { data: isReportingRole } = useIsReportStealingRole();
   const canCreateNO = useCanCreateNodeOperator();
 
   const checkRules = useCallback(
@@ -118,12 +116,12 @@ export const Navigation: FC = memo(() => {
           return canCreateNO;
 
         case 'EL_STEALING_REPORTER':
-          return isUserAddress(reportingAddress);
+          return isReportingRole;
         default:
           return false;
       }
     },
-    [canCreateNO, invites?.length, isUserAddress, reportingAddress],
+    [canCreateNO, invites?.length, isReportingRole],
   );
 
   const routes =

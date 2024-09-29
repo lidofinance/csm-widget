@@ -29,6 +29,7 @@ const getTxModalStagesStealingCancel = (
         description={
           <>
             Node Operator ID: <b>{nodeOperatorId}</b>
+            <br />
             Amount: <TxAmount amount={amount} token={TOKENS.ETH} />
           </>
         }
@@ -43,6 +44,7 @@ const getTxModalStagesStealingCancel = (
         description={
           <>
             Node Operator ID: <b>{nodeOperatorId}</b>
+            <br />
             Amount: <TxAmount amount={amount} token={TOKENS.ETH} />
           </>
         }
@@ -57,6 +59,7 @@ const getTxModalStagesStealingCancel = (
         description={
           <>
             Node Operator ID: <b>{nodeOperatorId}</b>
+            <br />
             Amount: <TxAmount amount={amount} token={TOKENS.ETH} />
           </>
         }

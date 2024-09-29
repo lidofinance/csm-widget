@@ -3,13 +3,11 @@ import { StealingReportPage } from 'features/stealing';
 import { SplashPage } from 'features/welcome';
 import { getProps } from 'lib/getProps';
 import { GateActiveUser, GateLoaded } from 'shared/gates';
-import { useAddressCompare, useReportStealingRoleAddress } from 'shared/hooks';
+import { useIsReportStealingRole } from 'shared/hooks';
 import { Navigate } from 'shared/navigate';
 
 const Page = () => {
-  const isUserAddress = useAddressCompare();
-  const { data: reportingAddress, initialLoading } =
-    useReportStealingRoleAddress();
+  const { data: isReportingRole, initialLoading } = useIsReportStealingRole();
 
   return (
     <GateLoaded fallback={<SplashPage />}>
@@ -18,7 +16,7 @@ const Page = () => {
       >
         {initialLoading ? (
           <SplashPage />
-        ) : isUserAddress(reportingAddress) ? (
+        ) : isReportingRole ? (
           <StealingReportPage />
         ) : (
           <Navigate path={PATH.HOME} fallback={<SplashPage />} />
