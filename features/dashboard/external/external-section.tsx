@@ -10,16 +10,14 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   useBeaconchainDashboardLink,
   useFeesMonitoningLink,
-  useNodeOperatorKeys,
   useOperatorPortalLink,
 } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 
 export const ExternalSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: keys } = useNodeOperatorKeys(nodeOperatorId, false, 20);
 
-  const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
+  const beaconchainDashboardLink = useBeaconchainDashboardLink(nodeOperatorId);
   const feesMonitoningLink = useFeesMonitoningLink(nodeOperatorId);
   const operatorPortalLink = useOperatorPortalLink(nodeOperatorId);
 

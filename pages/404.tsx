@@ -1,6 +1,7 @@
-import { FC } from 'react';
-import Head from 'next/head';
 import { ServicePage } from '@lidofinance/lido-ui';
+import { GetStaticProps } from 'next';
+import Head from 'next/head';
+import { FC } from 'react';
 import { Layout } from 'shared/components';
 import styled from 'styled-components';
 
@@ -21,3 +22,7 @@ const Page404: FC = () => (
 );
 
 export default Page404;
+
+export const getStaticProps: GetStaticProps = () => {
+  return { props: { isError: true } };
+};

@@ -1,6 +1,7 @@
-import { FC } from 'react';
-import Head from 'next/head';
 import { ServicePage } from '@lidofinance/lido-ui';
+import { GetStaticProps } from 'next';
+import Head from 'next/head';
+import { FC } from 'react';
 
 const Page500: FC = () => (
   <ServicePage title="500">
@@ -12,3 +13,7 @@ const Page500: FC = () => (
 );
 
 export default Page500;
+
+export const getStaticProps: GetStaticProps = () => {
+  return { props: { isError: true } };
+};

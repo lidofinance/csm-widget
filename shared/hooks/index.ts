@@ -20,6 +20,7 @@ export * from './use-invites-events-fetcher';
 export * from './use-invites';
 export * from './use-keys-available';
 export * from './use-keys-upload-limit';
+export * from './use-keys-with-status';
 export * from './use-mainnet-static-rpc-provider';
 export * from './use-network-duplicates';
 export * from './use-node-operators-fetcher-from-events';

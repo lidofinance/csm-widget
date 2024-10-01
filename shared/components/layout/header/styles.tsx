@@ -3,12 +3,7 @@ import styled, { keyframes } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const HeaderStyle = styled((props: ContainerProps) => (
-  <Container {...props} />
-))`
-  position: relative;
-  padding-top: 18px;
-  padding-bottom: 18px;
+export const HeaderContentStyle = styled.div`
   display: flex;
   align-items: center;
 
@@ -18,6 +13,14 @@ export const HeaderStyle = styled((props: ContainerProps) => (
   @media screen and (max-width: 880px) {
     flex-wrap: nowrap;
   }
+`;
+
+export const HeaderStyle = styled((props: ContainerProps) => (
+  <Container {...props} />
+))`
+  position: relative;
+  padding-top: 18px;
+  padding-bottom: 18px;
 `;
 
 export const HeaderActionsStyle = styled.div`

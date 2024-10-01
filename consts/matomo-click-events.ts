@@ -39,6 +39,11 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
+  // Alerts
+  howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
+  howToExitLinkStuckKeysAlert = 'howToExitLinkStuckKeysAlert',
+  normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
+  unlockBondLinkAlert = 'unlockBondLinkAlert',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -62,6 +67,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageInboxRequests = 'pageInboxRequests',
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
+  pageNormalizeQueue = 'pageNormalizeQueue',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
   // modifiers
@@ -212,6 +218,27 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Submit report with form» link',
     prefixed`feedback_form_link`,
   ],
+  // Alerts
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: [
+    MATOMO_APP_NAME,
+    'Click «How to exit» link on Request To Exit alert',
+    prefixed`how_to_exit_link_requset_to_exit_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkStuckKeysAlert]: [
+    MATOMO_APP_NAME,
+    'Click «How to exit» link on Stuck Keys alert',
+    prefixed`how_to_exit_link_stuck_keys_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Normalize queue» link on Normalize Queue alert',
+    prefixed`normalize_queue_link_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Unlock bond» link on Locked Bond alert',
+    prefixed`unlock_bond_link_alert`,
+  ],
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: [
     MATOMO_APP_NAME,
@@ -318,6 +345,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «ChangeRewardsRole»',
     prefixed`view_change_rewards_role_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageNormalizeQueue]: [
+    MATOMO_APP_NAME,
+    'View page «NormalizeQueue»',
+    prefixed`view_normalize_queue_page`,
   ],
   // Actions
   [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: [
