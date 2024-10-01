@@ -29,6 +29,7 @@ export { WarningBlock } from './warning-block/warning-block';
 export { TitledAddress } from './titled-address/titled-address';
 export { TitledAmount } from './titled-amount/titled-amount';
 export { TitledSelectableAmount } from './titled-selectable-amount/titled-selectable-amount';
+export { TitledValue } from './titled-value/titled-value';
 export { AmountWithPrice } from './amount-with-price/amount-with-price';
 export { FormBlock } from './form-block/form-block';
 export { IconTooltip } from './icon-tooltip/icon-tooltip';

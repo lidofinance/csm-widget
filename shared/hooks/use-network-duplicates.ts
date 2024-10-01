@@ -90,7 +90,7 @@ export const useNetworkDuplicates = (config = STRATEGY_LAZY) => {
   return useLidoSWR(
     ['no-keys', nodeOperatorId, chainId],
     async () => {
-      invariant(nodeOperatorId);
+      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       const csmAddress = getCsmContractAddress(chainId, 'CSModule');
       const moduleId = getCsmConstants(chainId).stakingModuleId;
       const keys = await getKeys(keysApiUrl, moduleId, nodeOperatorId);
