@@ -10,7 +10,7 @@ export const StealingCancel = () => {
     <>
       <NoSSRWrapper>
         <StealingCancelForm key={key} />
-        <LockedSection key={key} />
+        <LockedSection key={`${key}_table`} />
       </NoSSRWrapper>
     </>
   );

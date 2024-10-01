@@ -52,10 +52,7 @@ const getTxModalStagesStealingReport = (
       />,
     ),
 
-  success: (
-    { amount, nodeOperatorId, blockhash: blockHash }: Props,
-    txHash?: string,
-  ) =>
+  success: ({ amount, nodeOperatorId }: Props, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
@@ -65,8 +62,6 @@ const getTxModalStagesStealingReport = (
             Node Operator ID: <b>{nodeOperatorId}</b>
             <br />
             Amount: <TxAmount amount={amount} token={TOKENS.ETH} />
-            <br />
-            BlockHash: {blockHash}
           </>
         }
       />,
