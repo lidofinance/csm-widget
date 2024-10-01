@@ -19,7 +19,7 @@ export const WhenLoaded: FC<PropsWithChildren<Props>> = ({
     ) : empty ? (
       <>
         <WrapperStyle>{empty}</WrapperStyle>
-        {emptyNote && <Note text={emptyNote} />}
+        {emptyNote && <Note>{emptyNote}</Note>}
       </>
     ) : (
       children

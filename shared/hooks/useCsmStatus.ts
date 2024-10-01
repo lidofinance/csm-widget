@@ -18,11 +18,8 @@ export const useCsmStatus = (config = STRATEGY_CONSTANT) => {
         CSModule.publicRelease(),
       ]);
 
-    // TODO: handle paused for NO
-    // TODO: handle paused contracts separately
-    const isPaused =
-      getSettledValue(isPausedResult) ||
-      getSettledValue(isAccountingPausedResult);
+    const isPaused = getSettledValue(isPausedResult);
+    const isAccountingPaused = getSettledValue(isAccountingPausedResult);
     const isPublicRelease = getSettledValue(isPublicReleaseResult);
     const isEarlyAdoption =
       isPublicRelease !== undefined ? !isPublicRelease : undefined;
@@ -30,6 +27,7 @@ export const useCsmStatus = (config = STRATEGY_CONSTANT) => {
 
     return {
       isPaused,
+      isAccountingPaused,
       isPublicRelease,
       isEarlyAdoption,
       isUnavailable,

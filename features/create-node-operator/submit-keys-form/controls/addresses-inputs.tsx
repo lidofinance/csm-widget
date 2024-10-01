@@ -7,6 +7,9 @@ export const AddressesInputs: FC = () => (
   <>
     <RewardsAddressInput />
     <ManagerAddressInput />
-    <Note text="Keep these addresses inputs  empty to use connected wallet as rewards/manager address" />
+    <Note>
+      Keep these addresses inputs empty to use connected wallet as
+      rewards/manager address
+    </Note>
   </>
 );

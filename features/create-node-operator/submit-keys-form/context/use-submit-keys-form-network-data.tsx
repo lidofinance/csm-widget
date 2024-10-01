@@ -5,6 +5,7 @@ import {
   useCsmCurveId,
   useCsmEarlyAdoption,
   useCsmEarlyAdoptionProofConsumed,
+  useCsmStatus,
   useKeysUploadLimit,
   useStakingLimitInfo,
   useSTETHBalance,
@@ -61,6 +62,8 @@ export const useSubmitKeysFormNetworkData = (): [
     wstethBalance,
   });
 
+  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance(),
@@ -88,6 +91,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isCurveIdLoading,
       isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
+      isStatusLoading,
     }),
     [
       isStethBalanceLoading,
@@ -97,6 +101,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isCurveIdLoading,
       isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
+      isStatusLoading,
     ],
   );
 
@@ -110,6 +115,7 @@ export const useSubmitKeysFormNetworkData = (): [
       keysUploadLimit,
       keysAvailable,
       maxStakeEther,
+      isPaused: status?.isPaused || status?.isAccountingPaused,
       loading,
     },
     revalidate,

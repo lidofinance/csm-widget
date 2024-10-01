@@ -17,6 +17,7 @@ export type AddKeysFormNetworkData = {
   keysUploadLimit?: number;
   keysAvailable?: KeysAvailable;
   bond?: BondBalance;
+  isPaused?: boolean;
   maxStakeEther?: BigNumber | null;
   loading: LoadingRecord<
     | 'etherBalance'
@@ -25,5 +26,6 @@ export type AddKeysFormNetworkData = {
     | 'bond'
     | 'maxStakeEther'
     | 'keysUploadLimit'
+    | 'status'
   >;
 };

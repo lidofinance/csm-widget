@@ -1,6 +1,10 @@
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
-import { useNodeOperatorBalance, useNodeOperatorRewards } from 'shared/hooks';
+import {
+  useCsmStatus,
+  useNodeOperatorBalance,
+  useNodeOperatorRewards,
+} from 'shared/hooks';
 import { type ClaimBondFormNetworkData } from './types';
 import { useMaxValues } from './use-max-values';
 
@@ -27,6 +31,8 @@ export const useClaimBondFormNetworkData = (): [
     rewards,
   });
 
+  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateBond(), updateRewards()]);
   }, [updateBond, updateRewards]);
@@ -36,8 +42,9 @@ export const useClaimBondFormNetworkData = (): [
       isBondLoading,
       isRewardsLoading,
       isMaxValuesLoading,
+      isStatusLoading,
     }),
-    [isBondLoading, isMaxValuesLoading, isRewardsLoading],
+    [isBondLoading, isMaxValuesLoading, isRewardsLoading, isStatusLoading],
   );
 
   return [
@@ -46,6 +53,7 @@ export const useClaimBondFormNetworkData = (): [
       bond,
       rewards,
       maxValues,
+      isPaused: status?.isAccountingPaused,
       loading,
     },
     revalidate,
