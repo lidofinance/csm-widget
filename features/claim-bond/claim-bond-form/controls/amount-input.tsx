@@ -27,8 +27,9 @@ export const AmountInput: React.FC = () => {
         disabled={maxAmount?.eq(0)}
       />
       {coverShortageAmount && (
-        <Note text="of Rewards will compensate for the Shortage bond">
-          <FormatToken amount={coverShortageAmount} token={TOKENS.STETH} />
+        <Note>
+          <FormatToken amount={coverShortageAmount} token={TOKENS.STETH} /> of
+          Rewards will compensate for the Shortage bond
         </Note>
       )}
     </>

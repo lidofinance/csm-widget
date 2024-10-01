@@ -3,6 +3,7 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
+  useCsmStatus,
   useNodeOperatorBalance,
   useStakingLimitInfo,
   useSTETHBalance,
@@ -41,6 +42,8 @@ export const useAddBondFormNetworkData = (): [
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
+  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance(),
@@ -64,6 +67,7 @@ export const useAddBondFormNetworkData = (): [
       isWstethBalanceLoading,
       isBondLoading,
       isMaxStakeEtherLoading,
+      isStatusLoading,
     }),
     [
       isEtherBalanceLoading,
@@ -71,6 +75,7 @@ export const useAddBondFormNetworkData = (): [
       isWstethBalanceLoading,
       isBondLoading,
       isMaxStakeEtherLoading,
+      isStatusLoading,
     ],
   );
 
@@ -82,6 +87,7 @@ export const useAddBondFormNetworkData = (): [
       bond,
       nodeOperatorId,
       maxStakeEther,
+      isPaused: status?.isAccountingPaused,
       loading,
     },
     revalidate,

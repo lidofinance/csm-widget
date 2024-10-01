@@ -91,7 +91,6 @@ export const useNetworkDuplicates = (config = STRATEGY_LAZY) => {
     ['no-keys', nodeOperatorId, chainId],
     async () => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
-
       const csmAddress = getCsmContractAddress(chainId, 'CSModule');
       const moduleId = getCsmConstants(chainId).stakingModuleId;
       const keys = await getKeys(keysApiUrl, moduleId, nodeOperatorId);

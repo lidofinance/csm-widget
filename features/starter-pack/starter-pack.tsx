@@ -20,7 +20,7 @@ export const StarterPack: FC = () => {
     trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator);
   }, []);
 
-  if (status?.isPaused) {
+  if (status?.isPaused || status?.isAccountingPaused) {
     return <PausedBanner />;
   }
 

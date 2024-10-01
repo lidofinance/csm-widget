@@ -1,11 +1,15 @@
 import { Note } from 'shared/components';
-import { SubmitButtonHookForm } from 'shared/hook-form/controls';
+import { PausedButton, SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { useAddKeysFormData } from '../context';
 
 export const SubmitButton = () => {
-  const { keysUploadLimit } = useAddKeysFormData();
+  const { keysUploadLimit, isPaused } = useAddKeysFormData();
 
   const keysLimitReached = keysUploadLimit === 0;
+
+  if (isPaused) {
+    return <PausedButton type="Module" />;
+  }
 
   return (
     <>

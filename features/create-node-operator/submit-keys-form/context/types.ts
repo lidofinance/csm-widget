@@ -25,6 +25,7 @@ export type SubmitKeysFormNetworkData = {
   maxStakeEther?: BigNumber | null;
   keysUploadLimit?: number;
   keysAvailable?: KeysAvailable;
+  isPaused?: boolean;
   loading: LoadingRecord<
     | 'etherBalance'
     | 'stethBalance'
@@ -33,5 +34,6 @@ export type SubmitKeysFormNetworkData = {
     | 'curveId'
     | 'keysUploadLimit'
     | 'maxStakeEther'
+    | 'status'
   >;
 };
