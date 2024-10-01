@@ -1,15 +1,22 @@
-export enum ErrorMessage {
-  NOT_ENOUGH_ETHER = 'Not enough ether for gas.',
-  DENIED_SIG = 'User denied the transaction signature.',
-  SOMETHING_WRONG = 'Something went wrong.',
-  ENABLE_BLIND_SIGNING = 'Please enable blind signing on your Ledger hardware wallet.',
-  LIMIT_REACHED = 'Transaction could not be completed because stake limit is exhausted. Please wait until the stake limit restores and try again. Otherwise, you can swap your Ethereum on 1inch platform instantly.',
-  DEVICE_LOCKED = 'Please unlock your Ledger hardware wallet',
-  INVALID_REFERRAL = 'Invalid referral address or ENS',
-  INVALID_SIGNATURE = 'Invalid Permit signature. Perhaps it has expired or already been used. Try submitting a withdrawal request again.',
+import { trackMatomoError } from './track-matomo-event';
+
+export enum ErrorCode {
+  NOT_ENOUGH_ETHER = 'NOT_ENOUGH_ETHER',
+  DENIED_SIG = 'DENIED_SIG',
+  SOMETHING_WRONG = 'SOMETHING_WRONG',
+  TRANSACTION_REVERTED = 'TRANSACTION_REVERTED',
+  ENABLE_BLIND_SIGNING = 'ENABLE_BLIND_SIGNING',
+  LIMIT_REACHED = 'LIMIT_REACHED',
+  DEVICE_LOCKED = 'DEVICE_LOCKED',
+  INVALID_REFERRAL = 'INVALID_REFERRAL',
+  INVALID_SIGNATURE = 'INVALID_SIGNATURE',
+  BALANCE_EXCEEDED = 'BALANCE_EXCEEDED',
+  WALLET_RPC = 'WALLET_RPC',
 }
 
-export const getErrorMessage = (error: unknown): ErrorMessage => {
+export const getErrorCode = (error: unknown): ErrorCode => {
+  trackMatomoError(`${error}`, 'tx_error');
+
   try {
     console.error('TX_ERROR:', { error, error_string: JSON.stringify(error) });
   } catch (e) {
@@ -18,26 +25,40 @@ export const getErrorMessage = (error: unknown): ErrorMessage => {
 
   const code = extractCodeFromError(error);
   switch (code) {
-    case -32000:
+    case -32000: {
+      // Handling user-canceled transaction from a safe-app
+      if ((error as any)?.message === 'User rejected transaction') {
+        return ErrorCode.DENIED_SIG;
+      }
+      return ErrorCode.SOMETHING_WRONG;
+    }
+    case -32603:
+      return ErrorCode.WALLET_RPC;
+    // intentional fallthrough
     case 3:
     case 'UNPREDICTABLE_GAS_LIMIT':
     case 'INSUFFICIENT_FUNDS':
-      return ErrorMessage.NOT_ENOUGH_ETHER;
+      return ErrorCode.NOT_ENOUGH_ETHER;
     case 'INVALID_SIGNATURE':
-      return ErrorMessage.INVALID_SIGNATURE;
+      return ErrorCode.INVALID_SIGNATURE;
     case 'ACTION_REJECTED':
     case 4001:
-      return ErrorMessage.DENIED_SIG;
+    case 200001:
+      return ErrorCode.DENIED_SIG;
     case 'LIMIT_REACHED':
-      return ErrorMessage.LIMIT_REACHED;
+      return ErrorCode.LIMIT_REACHED;
     case 'INVALID_REFERRAL':
-      return ErrorMessage.INVALID_REFERRAL;
+      return ErrorCode.INVALID_REFERRAL;
+    case 'TRANSACTION_REVERTED':
+      return ErrorCode.TRANSACTION_REVERTED;
     case 'ENABLE_BLIND_SIGNING':
-      return ErrorMessage.ENABLE_BLIND_SIGNING;
+      return ErrorCode.ENABLE_BLIND_SIGNING;
     case 'DEVICE_LOCKED':
-      return ErrorMessage.DEVICE_LOCKED;
+      return ErrorCode.DEVICE_LOCKED;
+    case 'BALANCE_EXCEEDED':
+      return ErrorCode.BALANCE_EXCEEDED;
     default:
-      return ErrorMessage.SOMETHING_WRONG;
+      return ErrorCode.SOMETHING_WRONG;
   }
 };
 
@@ -49,10 +70,20 @@ export const extractCodeFromError = (
   // early exit on non object error
   if (!error || typeof error != 'object') return 0;
 
+  if (
+    'code' in error &&
+    error.code === 'CALL_EXCEPTION' &&
+    'receipt' in error
+  ) {
+    const receipt = error.receipt as { blockHash?: string };
+    if (receipt.blockHash?.startsWith('0x')) return 'TRANSACTION_REVERTED';
+  }
+
   if ('reason' in error && typeof error.reason == 'string') {
     if (error.reason.includes('STAKE_LIMIT')) return 'LIMIT_REACHED';
     if (error.reason.includes('INVALID_REFERRAL')) return 'INVALID_REFERRAL';
     if (error.reason.includes('INVALID_SIGNATURE')) return 'INVALID_SIGNATURE';
+    if (error.reason.includes('BALANCE_EXCEEDED')) return 'BALANCE_EXCEEDED';
   }
 
   // sometimes we have error message but bad error code

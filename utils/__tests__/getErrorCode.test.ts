@@ -1,40 +1,36 @@
-import {
-  getErrorMessage,
-  ErrorMessage,
-  extractCodeFromError,
-} from '../getErrorMessage';
+import { getErrorCode, ErrorCode, extractCodeFromError } from '../getErrorCode';
 
 console.error = jest.fn();
 
-describe('getErrorMessage', () => {
+describe('getErrorCode', () => {
   it('should return NOT_ENOUGH_ETHER error message when error code is -32000', () => {
     const error = { code: -32000 };
-    expect(getErrorMessage(error)).toBe(ErrorMessage.NOT_ENOUGH_ETHER);
+    expect(getErrorCode(error)).toBe(ErrorCode.NOT_ENOUGH_ETHER);
   });
 
   it('should return DENIED_SIG error message when error code is 4001', () => {
     const error = { code: 4001 };
-    expect(getErrorMessage(error)).toBe(ErrorMessage.DENIED_SIG);
+    expect(getErrorCode(error)).toBe(ErrorCode.DENIED_SIG);
   });
 
   it('should return LIMIT_REACHED error message when error reason includes STAKE_LIMIT', () => {
     const error = { reason: 'STAKE_LIMIT' };
-    expect(getErrorMessage(error)).toBe(ErrorMessage.LIMIT_REACHED);
+    expect(getErrorCode(error)).toBe(ErrorCode.LIMIT_REACHED);
   });
 
   it('should return ACTION_REJECTED error message when error message includes "denied message signature"', () => {
     const error = { message: 'denied message signature' };
-    expect(getErrorMessage(error)).toBe(ErrorMessage.DENIED_SIG);
+    expect(getErrorCode(error)).toBe(ErrorCode.DENIED_SIG);
   });
 
   it('should return ENABLE_BLIND_SIGNING error message when error name is "EthAppPleaseEnableContractData"', () => {
     const error = { name: 'EthAppPleaseEnableContractData' };
-    expect(getErrorMessage(error)).toBe(ErrorMessage.ENABLE_BLIND_SIGNING);
+    expect(getErrorCode(error)).toBe(ErrorCode.ENABLE_BLIND_SIGNING);
   });
 
   it('should return SOMETHING_WRONG error message when error is undefined', () => {
     const error = undefined;
-    expect(getErrorMessage(error)).toBe(ErrorMessage.SOMETHING_WRONG);
+    expect(getErrorCode(error)).toBe(ErrorCode.SOMETHING_WRONG);
   });
 });
 
