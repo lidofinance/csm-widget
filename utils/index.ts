@@ -26,6 +26,7 @@ export * from './getNFTUrl';
 export * from './getScreenSize';
 export * from './getSettledValue';
 export * from './getTokenDisplayName';
+export * from './is-hexadecimal-string';
 export * from './is-url';
 export * from './isContract';
 export * from './logger';

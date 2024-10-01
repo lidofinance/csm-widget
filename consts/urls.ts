@@ -16,6 +16,9 @@ export const PATH = <const>{
   ROLES_REWARDS: '/roles/reward-address',
   ROLES_MANAGER: '/roles/manager-address',
   ROLES_INBOX: '/roles/inbox',
+  STEALING: '/stealing',
+  STEALING_REPORT: '/stealing/report',
+  STEALING_CANCEL: '/stealing/cancel',
 };
 
 export type PATH = (typeof PATH)[keyof typeof PATH];
