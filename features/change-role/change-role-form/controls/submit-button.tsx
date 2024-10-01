@@ -20,7 +20,10 @@ export const SubmitButton = () => {
         {isPropose ? 'Propose a new' : 'Change'} {role} address
       </SubmitButtonHookForm>
       {isPropose && (
-        <Note text="To complete the address change, the owner of the new address must confirm the change" />
+        <Note>
+          To complete the address change, the owner of the new address must
+          confirm the change
+        </Note>
       )}
     </>
   );

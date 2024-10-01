@@ -19,5 +19,6 @@ export type ClaimBondFormNetworkData = {
   bond?: BondBalance;
   rewards?: RewardsBalance;
   maxValues?: MaxValues;
-  loading: LoadingRecord<'bond' | 'rewards' | 'maxValues'>;
+  isPaused?: boolean;
+  loading: LoadingRecord<'bond' | 'rewards' | 'maxValues' | 'status'>;
 };
