@@ -25,13 +25,13 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
         <CookieThemeProvider>
           <GlobalStyle />
           <InpageNavigationProvider>
-            <ModalProvider>
-              <AlertProvider>
-                {dummy ? (
-                  children
-                ) : (
-                  <Web3Provider>
-                    <NodeOperatorPrivider>
+            <AlertProvider>
+              {dummy ? (
+                <ModalProvider>{children}</ModalProvider>
+              ) : (
+                <Web3Provider>
+                  <NodeOperatorPrivider>
+                    <ModalProvider>
                       {skipWatcher ? (
                         children
                       ) : (
@@ -39,11 +39,11 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                           {children}
                         </AlertsWatcherPrivider>
                       )}
-                    </NodeOperatorPrivider>
-                  </Web3Provider>
-                )}
-              </AlertProvider>
-            </ModalProvider>
+                    </ModalProvider>
+                  </NodeOperatorPrivider>
+                </Web3Provider>
+              )}
+            </AlertProvider>
           </InpageNavigationProvider>
         </CookieThemeProvider>
       </ModifyProvider>
