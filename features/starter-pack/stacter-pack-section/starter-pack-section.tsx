@@ -11,6 +11,7 @@ const { firstKeyBond } = getCsmConstants();
 
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
   const { data: ea } = useCsmEarlyAdoption();
+  // TODO: retrive values from contracts
   const bondAmount = firstKeyBond[Number(Boolean(ea?.proof))];
 
   return (

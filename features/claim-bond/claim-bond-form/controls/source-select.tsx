@@ -69,7 +69,7 @@ export const SourceSelect: FC = () => {
           }
           help={
             bond?.isShortage
-              ? 'Shortage bond is the missing amount of stETH required to cover all operator’s keys.'
+              ? 'Shortage bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond shortage, "unbonded" validators are requested for exit by the protocol'
               : 'The bond amount available to claim without having to exit validators'
           }
           sign={bond?.isShortage ? 'minus' : 'plus'}
