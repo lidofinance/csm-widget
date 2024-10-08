@@ -20,4 +20,8 @@ export const BlockStyled = styled(Block)`
 
   background: ${({ theme }) =>
     theme.name === ThemeName.light ? '#d8e0ea' : '#676772'};
+
+  a {
+    align-self: center;
+  }
 `;

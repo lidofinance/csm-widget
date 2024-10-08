@@ -33,15 +33,19 @@ export const ExternalSection: FC = () => {
       }
     >
       <Stack wrap>
-        <ExternalButtonLink
-          title="beaconcha.in v2"
-          icon={<BeaconchaIcon />}
-          href={beaconchainDashboardLink}
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink}
-        >
-          Dashboard displays statistics of your validators (up to 20 in free
-          plan)
-        </ExternalButtonLink>
+        {beaconchainDashboardLink && (
+          <ExternalButtonLink
+            title="beaconcha.in v2"
+            icon={<BeaconchaIcon />}
+            href={beaconchainDashboardLink}
+            matomoEvent={
+              MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink
+            }
+          >
+            Dashboard displays statistics of your validators (up to 20 in free
+            plan)
+          </ExternalButtonLink>
+        )}
         <ExternalButtonLink
           title="Lido operators"
           icon={<LidoIcon />}

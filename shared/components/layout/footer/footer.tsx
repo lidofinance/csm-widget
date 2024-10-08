@@ -9,6 +9,7 @@ import {
   Version,
   LinkDivider,
 } from './styles';
+import { getExternalLinks } from 'consts/external-links';
 
 const getVersionInfo = () => {
   const { version, branch } = buildInfo;
@@ -36,25 +37,25 @@ const getVersionInfo = () => {
 };
 
 const { label, link } = getVersionInfo();
+const { feedbackForm } = getExternalLinks();
 
+// matomoEvent={MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink}
+
+// TODO: matomo events
 export const Footer: FC = () => {
   return (
     <FooterStyle size="full" forwardedAs="footer">
       <LogoLidoStyle />
-      <FooterLink data-testid="termsOfUse" href="https://lido.fi/terms-of-use">
-        Terms of Use
-      </FooterLink>
+      <FooterLink href="https://lido.fi/terms-of-use">Terms of Use</FooterLink>
       <LinkDivider />
-      <FooterLink
-        data-testid="privacyNotice"
-        href="https://lido.fi/privacy-notice"
-        $marginRight="auto"
-      >
+      <FooterLink href="https://lido.fi/privacy-notice">
         Privacy Notice
       </FooterLink>
-      <Version data-testid="appVersion" href={link}>
-        {label}
-      </Version>
+      <LinkDivider />
+      <FooterLink href={feedbackForm} $marginRight="auto">
+        Feedback form
+      </FooterLink>
+      <Version href={link}>{label}</Version>
       <FooterDivider />
     </FooterStyle>
   );

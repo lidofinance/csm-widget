@@ -78,7 +78,7 @@ const getDuplicates = (
   return dups.filter(onlyUnique);
 };
 
-// TODO: refactor check-network-duplicates.ts
+// FIXME: refactor check-network-duplicates.ts
 export const useNetworkDuplicates = (config = STRATEGY_LAZY) => {
   const { chainId } = useAccount();
   const nodeOperatorId = useNodeOperatorId();

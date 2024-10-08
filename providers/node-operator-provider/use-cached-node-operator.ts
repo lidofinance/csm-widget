@@ -19,7 +19,7 @@ export const useCachedNodeOperator = () => {
     const rewards = isUserAddress(data.rewardAddress);
     const manager = isUserAddress(data.managerAddress);
 
-    // @note fix for spectacular
+    // TODO: fix for spectacular
     if (!rewards && !manager) {
       setCachedId(undefined);
       return undefined;

@@ -8,7 +8,6 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 
-// TODO: finishshow
 type Props = {
   keysCount: number;
 };

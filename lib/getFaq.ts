@@ -2,6 +2,8 @@ import matter from 'gray-matter';
 import remark from 'remark';
 import html from 'remark-html';
 import externalLinks from 'remark-external-links';
+import { getConfig } from 'config';
+import { CHAINS } from 'consts/chains';
 
 export type FaqItem = {
   id: string;
@@ -33,7 +35,14 @@ const readFaqFile = async (id: string): Promise<FaqItem> => {
   };
 };
 
-export const readFaqFiles = async (ids: string[]) => {
+const { defaultChain } = getConfig();
+const isMainnet = defaultChain === CHAINS.Mainnet;
+
+export const readFaqFiles = async (fileNames: string[]) => {
+  const ids = isMainnet
+    ? fileNames
+    : fileNames.map((name) => `testnet-${name}`);
+
   return Promise.all(ids.map(readFaqFile));
 };
 
@@ -64,6 +73,7 @@ export const getFaqKeys = () =>
     'keys-8',
     'keys-9',
     'keys-10',
+    'keys-11',
   ]);
 
 export const getFaqBond = () =>

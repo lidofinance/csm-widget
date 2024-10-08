@@ -4,6 +4,7 @@ import { Layout } from 'shared/components';
 import { MaintenanceBanenr } from './maintenance-banner';
 import { WelcomeSection } from './welcome-section';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { TryCSM } from './try-csm';
 
 export const MaintenancePage: FC = () => {
   return (
@@ -13,6 +14,7 @@ export const MaintenancePage: FC = () => {
     >
       <MaintenanceBanenr />
       <WelcomeSection />
+      <TryCSM />
     </Layout>
   );
 };
