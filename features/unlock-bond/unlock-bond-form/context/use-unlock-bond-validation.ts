@@ -39,7 +39,7 @@ export const useUnlockBondValidation = (
           etherBalance,
           `Entered ${getTokenDisplayName(TOKENS.ETH)} amount exceeds your balance of ${formatEther(
             etherBalance,
-          )}`, // TODO: text
+          )}`,
         );
 
         validateBignumberMax(
@@ -48,7 +48,7 @@ export const useUnlockBondValidation = (
           lockedBond,
           `Entered ${getTokenDisplayName(TOKENS.ETH)} amount exceeds locked bond of ${formatEther(
             lockedBond,
-          )}`, // TODO: text
+          )}`,
         );
 
         return {

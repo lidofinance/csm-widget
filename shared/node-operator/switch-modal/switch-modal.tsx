@@ -3,8 +3,7 @@ import { useCallback } from 'react';
 
 import { ROLES } from 'consts/roles';
 import type { ModalComponentType } from 'providers/modal-provider';
-import { useNodeOperatorContext } from 'providers/node-operator-provider';
-import { NodeOperatorId } from 'types';
+import { NodeOperator, NodeOperatorId } from 'types';
 import { Descriptor } from '../descriptor/descriptor';
 import { RoleBadge } from '../role-badge/role-badge';
 import {
@@ -16,9 +15,11 @@ import {
   StyledStackItem,
 } from './styles';
 
-export const SwitchModal: ModalComponentType = ({ onClose, ...props }) => {
-  const { active, list, switchActive } = useNodeOperatorContext();
-
+export const SwitchModal: ModalComponentType<{
+  active: NodeOperator;
+  list: NodeOperator[];
+  switchActive: (id: NodeOperatorId) => void;
+}> = ({ onClose, active, list, switchActive, ...props }) => {
   const handleSwitch = useCallback(
     (id: NodeOperatorId) => {
       switchActive(id);

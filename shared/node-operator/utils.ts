@@ -21,7 +21,7 @@ export const getRoleTitle = (role: ROLES, capitalized = false) => {
 
 export const getRoleCode = (nodeOperator?: NodeOperator) => {
   const getRoleCode = (role: ROLES, code: ROLE_CODE) =>
-    (Number(nodeOperator?.roles.includes(role)) * code) as ROLE_CODE;
+    (Number(nodeOperator?.roles.includes(role) ?? 0) * code) as ROLE_CODE;
   return (getRoleCode(ROLES.REWARDS, ROLE_CODE.REWARDS) +
     getRoleCode(ROLES.MANAGER, ROLE_CODE.MANAGER)) as ROLE_CODE;
 };

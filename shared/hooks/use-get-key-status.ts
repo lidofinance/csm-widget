@@ -1,10 +1,12 @@
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import { HexString } from 'shared/keys';
+import invariant from 'tiny-invariant';
 import { KeyStatus } from 'types';
 import { useExitRequestedKeysFromEvents } from './use-exit-requested-keys-from-events';
 import { useNetworkDuplicates } from './use-network-duplicates';
 import { useWithdrawnKeyIndexesFromEvents } from './use-withdrawn-key-indexes-from-events';
+import { useMergeSwr } from './useMergeSwr';
 import { useNodeOperatorInfo } from './useNodeOperatorInfo';
 import { useNodeOperatorUnbondedKeys } from './useNodeOperatorUnbondedKeys';
 
@@ -48,44 +50,61 @@ import { useNodeOperatorUnbondedKeys } from './useNodeOperatorUnbondedKeys';
 export const useGetKeyStatus = () => {
   const nodeOperatorId = useNodeOperatorId();
 
-  const { data: info } = useNodeOperatorInfo(nodeOperatorId);
-  const { data: unbonded } = useNodeOperatorUnbondedKeys(nodeOperatorId);
-  const { data: duplicates } = useNetworkDuplicates();
-  const { data: withdrawnIndexes } = useWithdrawnKeyIndexesFromEvents();
-  const { data: exitRequestedKeys } = useExitRequestedKeysFromEvents();
+  const swrInfo = useNodeOperatorInfo(nodeOperatorId);
+  const swrUnbonded = useNodeOperatorUnbondedKeys(nodeOperatorId);
+  const swrWithdrawn = useWithdrawnKeyIndexesFromEvents();
+  const swrExitRequested = useExitRequestedKeysFromEvents();
 
-  return useCallback(
-    (index: number, pubkey: HexString): KeyStatus | undefined => {
-      if (!info) return undefined;
+  const { data: info } = swrInfo;
+  const { data: unbonded } = swrUnbonded;
+  const { data: withdrawnIndexes } = swrWithdrawn;
+  const { data: exitRequestedKeys } = swrExitRequested;
+
+  const { data: duplicates } = useNetworkDuplicates();
+
+  const getStatus = useCallback(
+    (pubkey: HexString, index: number): KeyStatus[] => {
+      invariant(info, 'Info is not defined');
+      const statuses: KeyStatus[] = [];
 
       if (withdrawnIndexes?.includes(index)) {
-        return 'withdrawn';
+        return ['withdrawn'];
       }
 
       const exitRequestIndex = exitRequestedKeys?.findIndex(
         (key) => key === pubkey.toLowerCase(),
       );
       if (exitRequestIndex !== undefined && exitRequestIndex >= 0) {
-        if (info.stuckValidatorsCount > exitRequestIndex) return 'stuck';
-        return 'requested to exit';
+        if (info.stuckValidatorsCount > exitRequestIndex)
+          statuses.push('stuck');
+        statuses.push('requested to exit');
       }
 
-      if (unbonded && info?.totalAddedKeys - index < unbonded)
-        return 'unbonded';
+      if (unbonded && info?.totalAddedKeys - index < unbonded) {
+        statuses.push('unbonded');
+      }
 
       if (index < info.totalDepositedKeys) {
-        return 'active';
+        statuses.push('active');
       }
 
       if (index >= info.totalVettedKeys) {
-        if (duplicates?.includes(pubkey)) return 'duplicated';
-        if (index > info.totalVettedKeys) return 'unvetted';
-        return 'invalid';
+        if (duplicates?.includes(pubkey)) statuses.push('duplicated');
+        else if (index > info.totalVettedKeys) statuses.push('unvetted');
+        else statuses.push('invalid');
       }
 
-      return 'depositable';
-      // TODO: handle targetLimit
+      if (statuses.length > 0) {
+        return statuses;
+      }
+
+      return ['depositable'];
     },
     [duplicates, exitRequestedKeys, info, unbonded, withdrawnIndexes],
+  );
+
+  return useMergeSwr(
+    [swrInfo, swrUnbonded, swrWithdrawn, swrExitRequested],
+    swrInfo ? getStatus : undefined,
   );
 };

@@ -1,13 +1,11 @@
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
-import { useNodeOperatorKeys } from 'shared/hooks';
-import { ViewKeysBlock } from './styles';
-import { KeysTable } from './keys-table';
 import { WhenLoaded } from 'shared/components';
+import { useKeysWithStatus } from 'shared/hooks';
+import { KeysTable } from './keys-table';
+import { ViewKeysBlock } from './styles';
 
 export const ViewKeysSection: FC = () => {
-  const id = useNodeOperatorId();
-  const { data: keys, initialLoading: loading } = useNodeOperatorKeys(id);
+  const { data: keys, initialLoading: loading } = useKeysWithStatus();
 
   return (
     <ViewKeysBlock>
@@ -15,7 +13,7 @@ export const ViewKeysSection: FC = () => {
         loading={loading}
         empty={!keys?.length && 'There are no keys to display'}
       >
-        <KeysTable keys={keys} />
+        <KeysTable data={keys} />
       </WhenLoaded>
     </ViewKeysBlock>
   );

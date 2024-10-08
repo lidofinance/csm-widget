@@ -10,29 +10,41 @@ import { ModalProvider } from './modal-provider';
 import { ModifyProvider } from './modify-provider';
 import { NodeOperatorPrivider } from './node-operator-provider';
 import Web3Provider from './web3';
+import { AlertProvider, AlertsWatcherPrivider } from 'shared/alerts';
 
-export const Providers: FC<PropsWithChildren<{ dummy?: boolean }>> = ({
+type Props = { dummy?: boolean; skipWatcher?: boolean };
+
+export const Providers: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
+  skipWatcher,
 }) => (
   <ConfigProvider>
     <AppFlagProvider>
       <ModifyProvider>
         <CookieThemeProvider>
           <GlobalStyle />
-          {dummy ? (
-            <InpageNavigationProvider>
-              <ModalProvider>{children}</ModalProvider>
-            </InpageNavigationProvider>
-          ) : (
-            <Web3Provider>
-              <NodeOperatorPrivider>
-                <InpageNavigationProvider>
-                  <ModalProvider>{children}</ModalProvider>
-                </InpageNavigationProvider>
-              </NodeOperatorPrivider>
-            </Web3Provider>
-          )}
+          <InpageNavigationProvider>
+            <AlertProvider>
+              {dummy ? (
+                <ModalProvider>{children}</ModalProvider>
+              ) : (
+                <Web3Provider>
+                  <NodeOperatorPrivider>
+                    <ModalProvider>
+                      {skipWatcher ? (
+                        children
+                      ) : (
+                        <AlertsWatcherPrivider>
+                          {children}
+                        </AlertsWatcherPrivider>
+                      )}
+                    </ModalProvider>
+                  </NodeOperatorPrivider>
+                </Web3Provider>
+              )}
+            </AlertProvider>
+          </InpageNavigationProvider>
         </CookieThemeProvider>
       </ModifyProvider>
     </AppFlagProvider>

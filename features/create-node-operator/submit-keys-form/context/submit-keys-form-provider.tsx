@@ -1,4 +1,4 @@
-import { TOKENS } from 'consts/tokens';
+import { useModifyContext } from 'providers/modify-provider';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
@@ -14,10 +14,10 @@ import {
   type SubmitKeysFormInputType,
 } from './types';
 import { useFormBondAmount } from './use-form-bond-amount';
+import { useGetDefaultValues } from './use-get-default-values';
 import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
 import { useSubmitKeysSubmit } from './use-submit-keys-submit';
 import { useSubmitKeysValidation } from './use-submit-keys-validation';
-import { useModifyContext } from 'providers/modify-provider';
 
 export const useSubmitKeysFormData = useFormData<SubmitKeysFormNetworkData>;
 
@@ -27,15 +27,10 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { referrer } = useModifyContext();
 
+  const asyncDefaultValues = useGetDefaultValues(networkData, referrer);
+
   const formObject = useForm<SubmitKeysFormInputType>({
-    defaultValues: {
-      token: TOKENS.ETH,
-      depositData: [],
-      extendedManagerPermissions: false,
-      specifyCustomAddresses: false,
-      specifyReferrrer: false,
-      referrer,
-    },
+    defaultValues: asyncDefaultValues,
     resolver: validationResolver,
     mode: 'onChange',
   });

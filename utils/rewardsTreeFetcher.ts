@@ -3,9 +3,6 @@ import { StandardFetcher, extractError } from './standardFetcher';
 
 const DEFAULT_PARAMS = {
   method: 'GET',
-  headers: {
-    'Content-type': 'application/json',
-  },
 };
 
 const prepare = (text: string) => {

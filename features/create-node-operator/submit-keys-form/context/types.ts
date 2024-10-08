@@ -1,6 +1,7 @@
 import { type TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
+import { KeysAvailable } from 'shared/hooks';
 import { LoadingRecord, Proof } from 'types';
 import { Address } from 'wagmi';
 
@@ -22,12 +23,17 @@ export type SubmitKeysFormNetworkData = {
   eaProof?: Proof;
   curveId?: BigNumber;
   maxStakeEther?: BigNumber | null;
+  keysUploadLimit?: number;
+  keysAvailable?: KeysAvailable;
+  isPaused?: boolean;
   loading: LoadingRecord<
     | 'etherBalance'
     | 'stethBalance'
     | 'wstethBalance'
     | 'eaProof'
     | 'curveId'
+    | 'keysUploadLimit'
     | 'maxStakeEther'
+    | 'status'
   >;
 };

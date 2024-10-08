@@ -1,11 +1,14 @@
 import { FC } from 'react';
 
 import { DarkThemeProvider, LightThemeProvider } from '@lidofinance/lido-ui';
+import { getExternalLinks } from 'consts/external-links';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { LinkButton, Stack } from 'shared/components';
 import { BlockStyled, Header, Heading } from './styles';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const EarlyAdoptionBanner: FC = () => {
+  const links = getExternalLinks();
+
   return (
     <BlockStyled>
       <Heading>
@@ -16,28 +19,30 @@ export const EarlyAdoptionBanner: FC = () => {
           permissionless.
         </p>
       </Heading>
-      <Stack wrap>
-        <LightThemeProvider>
-          <LinkButton
-            href="https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionLearnMore}
-            variant="text"
-            fullwidth
-          >
-            Learn more about Early Adoption
-          </LinkButton>
-        </LightThemeProvider>
-        <DarkThemeProvider>
-          <LinkButton
-            href="https://github.com/lidofinance/community-staking-module/tree/main/artifacts/holesky/early-adoption/sources"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionCuratedList}
-            variant="translucent"
-            fullwidth
-          >
-            See curated list
-          </LinkButton>
-        </DarkThemeProvider>
-      </Stack>
+      {links && (
+        <Stack wrap>
+          <LightThemeProvider>
+            <LinkButton
+              href={links.earlyAdoptionAbout}
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionLearnMore}
+              variant="text"
+              fullwidth
+            >
+              Learn more about Early Adoption
+            </LinkButton>
+          </LightThemeProvider>
+          <DarkThemeProvider>
+            <LinkButton
+              href={links.earlyAdoptionSources}
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionCuratedList}
+              variant="translucent"
+              fullwidth
+            >
+              See Early Adoption members list
+            </LinkButton>
+          </DarkThemeProvider>
+        </Stack>
+      )}
     </BlockStyled>
   );
 };

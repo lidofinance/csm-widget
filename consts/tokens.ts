@@ -9,4 +9,11 @@ export const TOKENS = {
 
 export type TOKENS = keyof typeof TOKENS;
 
-export const OneEther = parseEther('1');
+// one eth
+export const ONE_ETH = parseEther('1');
+
+// max 1000 eth to claim (unstETH);
+export const MAX_ETH_AMOUNT = parseEther('1000');
+
+// min 100 wei to claim (unstETH);
+export const MIN_ETH_AMOUNT = 100;

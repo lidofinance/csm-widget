@@ -25,7 +25,7 @@ export const validateBondAmount = ({
       throw new ValidationError(
         'bondAmount',
         `Lido is reach staking limit - use another token or try later`,
-      ); // TODO: text
+      );
     }
 
     const balances = {

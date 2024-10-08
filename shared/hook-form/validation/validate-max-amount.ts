@@ -18,6 +18,6 @@ export const validateMaxAmount = (
     max.ETH,
     `Entered ${getTokenDisplayName(token)} ${fieldName} exceeds available to claim of ${formatEther(
       maxAmount,
-    )}`, // TODO: text
+    )}`,
   );
 };

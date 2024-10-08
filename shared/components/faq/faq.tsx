@@ -1,77 +1,44 @@
-import { Accordion } from '@lidofinance/lido-ui';
 import { useFaqList } from 'providers/faq-provider';
-import { FC, memo, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import { Section } from 'shared/components';
-import styled from 'styled-components';
 import { trackMatomoFaqEvent } from 'utils';
-import { replaceAll } from 'utils/replaceAll';
+import { AccordionNavigatable } from '../accordion-navigatable';
+import { FaqElement } from './styles';
+import { useFaqFilter } from './use-faq-filter';
 
-export interface FaqProps {
-  // faqList: FAQItem[];
-  replacements?: {
-    [key: string]: string;
-  };
-}
-
-const FaqItem = styled.div`
-  p {
-    margin: 0 0 1.6em;
-  }
-
-  p + ul,
-  p + ol,
-  ul + p,
-  ol + p {
-    margin-top: -1.6em;
-  }
-
-  ul > li,
-  ol > li {
-    margin-top: 0;
-    margin-bottom: 0;
-
-    & > p {
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-  }
-
-  a {
-    text-decoration: none;
-  }
-`;
-
-export const Faq: FC<FaqProps> = memo(({ replacements }) => {
+export const Faq: FC = () => {
   const faqList = useFaqList();
+  const faqFilter = useFaqFilter();
 
-  // TODO: track link click inside faq
+  // FIXME: matomo events for link click inside faq
   const handleExpand = useCallback(
     (id: string) => () => trackMatomoFaqEvent(id),
     [],
   );
 
-  if (faqList.length === 0) return null;
+  const filteredFaqList = faqList.filter(faqFilter);
+
+  if (filteredFaqList.length === 0) return null;
 
   return (
     <Section title="FAQ">
-      {faqList.map(({ id, title, content }, index) => {
-        const html = replaceAll(content, replacements);
-
+      {filteredFaqList.map(({ id, title, content, anchor }, index) => {
         return (
-          <Accordion
+          <AccordionNavigatable
             key={id}
+            id={anchor ?? undefined}
             defaultExpanded={index === 0}
             summary={String(title)}
             onExpand={handleExpand(id)}
           >
-            <FaqItem
+            <FaqElement
               dangerouslySetInnerHTML={{
-                __html: html,
+                __html: content,
               }}
             />
-          </Accordion>
+          </AccordionNavigatable>
         );
       })}
     </Section>
   );
-});
+};

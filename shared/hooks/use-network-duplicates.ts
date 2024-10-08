@@ -78,19 +78,19 @@ const getDuplicates = (
   return dups.filter(onlyUnique);
 };
 
-// TODO: refactor check-network-duplicates.ts
+// FIXME: refactor check-network-duplicates.ts
 export const useNetworkDuplicates = (config = STRATEGY_LAZY) => {
   const { chainId } = useAccount();
   const nodeOperatorId = useNodeOperatorId();
 
   const keysApiUrl = getExternalLinks(chainId)?.keysApi;
 
-  invariant(nodeOperatorId);
   invariant(keysApiUrl);
 
   return useLidoSWR(
     ['no-keys', nodeOperatorId, chainId],
     async () => {
+      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       const csmAddress = getCsmContractAddress(chainId, 'CSModule');
       const moduleId = getCsmConstants(chainId).stakingModuleId;
       const keys = await getKeys(keysApiUrl, moduleId, nodeOperatorId);

@@ -1,20 +1,16 @@
 import { Zero } from '@ethersproject/constants';
-import { useContractSWR, useLidoSWR } from '@lido-sdk/react';
+import { useContractSWR } from '@lido-sdk/react';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import { STRATEGY_CONSTANT, STRATEGY_LAZY } from 'consts/swr-strategies';
+import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { NodeOperatorId, RewardProof, RewardsBalance } from 'types';
-import {
-  StandardMerkleTreeData,
-  findIndexAndLeaf,
-  rewardsTreeFetcher,
-} from 'utils';
-import { useAccount } from './use-account';
+import { findIndexAndLeaf } from 'utils';
 import { useCSFeeDistributorRPC } from './useCsmContracts';
 import { useMergeSwr } from './useMergeSwr';
+import { useFeeDistributorTree } from './useFeeDistributorTree';
 
-type RewardsTreeLeaf = [NodeOperatorId, string];
+export type RewardsTreeLeaf = [NodeOperatorId, string];
 
 const findProofAndAmount = (
   tree: StandardMerkleTree<RewardsTreeLeaf>,
@@ -32,25 +28,6 @@ const findProofAndAmount = (
   }
 
   return undefined;
-};
-
-export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
-  const feeDistributorRPC = useCSFeeDistributorRPC();
-  const { chainId } = useAccount();
-  return useLidoSWR(
-    ['fee-distributor-tree', chainId],
-    async () => {
-      const cid = await feeDistributorRPC.treeCid();
-      if (!cid) return null;
-      const url = `https://ipfs.io/ipfs/${cid}`;
-
-      const treeJson =
-        await rewardsTreeFetcher<StandardMerkleTreeData<RewardsTreeLeaf>>(url);
-
-      return StandardMerkleTree.load(treeJson);
-    },
-    config,
-  );
 };
 
 export const useRewardsProof = (nodeOperatorId?: NodeOperatorId) => {

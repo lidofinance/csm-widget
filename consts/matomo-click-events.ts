@@ -28,13 +28,22 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   starterPackHadwareLink = 'starterPackHadwareLink',
   starterPackSetupValidatorLink = 'starterPackSetupValidatorLink',
   starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
-  // Create NO
+  // Forms
+  howBondIsCalculated = 'howBondIsCalculated',
   depositDataLearnMore = 'depositDataLearnMore',
+  howToClaimEth = 'howToClaimEth',
   customAddressDescription = 'customAddressDescription',
   managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
+  createSuccessKeysTab = 'createSuccessKeysTab',
+  createSuccessBeaconchainDashboard = 'createSuccessBeaconchainDashboard',
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
+  // Alerts
+  howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
+  howToExitLinkStuckKeysAlert = 'howToExitLinkStuckKeysAlert',
+  normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
+  unlockBondLinkAlert = 'unlockBondLinkAlert',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -58,8 +67,12 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageInboxRequests = 'pageInboxRequests',
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
+  pageNormalizeQueue = 'pageNormalizeQueue',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
+  // modifiers
+  visitWithModeExtended = 'visitWithModeExtended',
+  visitWithReferrer = 'visitWithReferrer',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
@@ -158,11 +171,21 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Generation Keys guide» link on StarterPack screen',
     prefixed`starterpack_generate_keys_link`,
   ],
-  // Create NO
+  // Forms
+  [MATOMO_CLICK_EVENTS_TYPES.howBondIsCalculated]: [
+    MATOMO_APP_NAME,
+    'Click «How bond is calculated» link on Upload form',
+    prefixed`how_bond_is_calculated_link`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: [
     MATOMO_APP_NAME,
     'Click «Upload Deposit Data learn more» link on Upload form',
     prefixed`deposti_data_learn_more_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.howToClaimEth]: [
+    MATOMO_APP_NAME,
+    'Click «Follow FAQ (ETH)» link on Claim form',
+    prefixed`how_to_claim_eth`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.customAddressDescription]: [
     MATOMO_APP_NAME,
@@ -174,6 +197,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Detailed description of manager permission type» link on Create NO form',
     prefixed`manager_address_permission_type_link`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessKeysTab]: [
+    MATOMO_APP_NAME,
+    'Click «check status on keys tab» link after Create NO',
+    prefixed`create_success_keys_tab_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard]: [
+    MATOMO_APP_NAME,
+    'Click «beaconcha.in bashboard» link after Create NO',
+    prefixed`create_success_beaconchain_dashboard_link`,
+  ],
   // Common
   [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: [
     MATOMO_APP_NAME,
@@ -184,6 +217,27 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «Submit report with form» link',
     prefixed`feedback_form_link`,
+  ],
+  // Alerts
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: [
+    MATOMO_APP_NAME,
+    'Click «How to exit» link on Request To Exit alert',
+    prefixed`how_to_exit_link_requset_to_exit_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkStuckKeysAlert]: [
+    MATOMO_APP_NAME,
+    'Click «How to exit» link on Stuck Keys alert',
+    prefixed`how_to_exit_link_stuck_keys_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Normalize queue» link on Normalize Queue alert',
+    prefixed`normalize_queue_link_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Unlock bond» link on Locked Bond alert',
+    prefixed`unlock_bond_link_alert`,
   ],
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: [
@@ -292,10 +346,26 @@ export const MATOMO_CLICK_EVENTS: Record<
     'View page «ChangeRewardsRole»',
     prefixed`view_change_rewards_role_page`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageNormalizeQueue]: [
+    MATOMO_APP_NAME,
+    'View page «NormalizeQueue»',
+    prefixed`view_normalize_queue_page`,
+  ],
   // Actions
   [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: [
     MATOMO_APP_NAME,
     'Switch Node Operator',
     prefixed`switch_node_operator`,
+  ],
+  // Modifiers
+  [MATOMO_CLICK_EVENTS_TYPES.visitWithModeExtended]: [
+    MATOMO_APP_NAME,
+    'Visit with mode extended',
+    prefixed`visit_mode_extended`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer]: [
+    MATOMO_APP_NAME,
+    'Visite with referrer',
+    prefixed`visit_referrer`,
   ],
 };

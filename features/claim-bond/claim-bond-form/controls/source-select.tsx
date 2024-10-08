@@ -1,4 +1,5 @@
 import { Checkbox } from '@lidofinance/lido-ui';
+import { BOND_EXCESS, BOND_SHORTAGE } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { FC, useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
@@ -63,12 +64,12 @@ export const SourceSelect: FC = () => {
             <Checkbox
               checked
               disabled
-              label={bond?.isShortage ? 'Shortage bond' : 'Excess bond'}
+              label={bond?.isShortage ? BOND_SHORTAGE : BOND_EXCESS}
             />
           }
           help={
             bond?.isShortage
-              ? '' // FIXME: text
+              ? 'Shortage bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond shortage, "unbonded" validators are requested for exit by the protocol'
               : 'The bond amount available to claim without having to exit validators'
           }
           sign={bond?.isShortage ? 'minus' : 'plus'}

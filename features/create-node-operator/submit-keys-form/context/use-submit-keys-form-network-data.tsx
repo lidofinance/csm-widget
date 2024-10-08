@@ -5,11 +5,14 @@ import {
   useCsmCurveId,
   useCsmEarlyAdoption,
   useCsmEarlyAdoptionProofConsumed,
+  useCsmStatus,
+  useKeysUploadLimit,
   useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
 import { type SubmitKeysFormNetworkData } from './types';
+import { useKeysAvailable } from 'shared/hooks';
 
 export const useSubmitKeysFormNetworkData = (): [
   SubmitKeysFormNetworkData,
@@ -32,10 +35,10 @@ export const useSubmitKeysFormNetworkData = (): [
   } = useWSTETHBalance(STRATEGY_LAZY);
 
   const { data: ea, initialLoading: isEaProofLoading } = useCsmEarlyAdoption();
+  const eaProof = ea?.proof;
 
-  const { data: curveId, initialLoading: isCurveIdLoading } = useCsmCurveId(
-    !!ea?.proof,
-  );
+  const { data: curveId, initialLoading: isCurveIdLoading } =
+    useCsmCurveId(!!eaProof);
 
   const { mutate: mutateConsumed } = useCsmEarlyAdoptionProofConsumed();
 
@@ -45,6 +48,22 @@ export const useSubmitKeysFormNetworkData = (): [
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
+  const {
+    data: keysUploadLimit,
+    update: updateKeysUploadLimit,
+    initialLoading: isKeysUploadLimitLoading,
+  } = useKeysUploadLimit();
+
+  const { data: keysAvailable } = useKeysAvailable({
+    curveId,
+    keysUploadLimit,
+    etherBalance,
+    stethBalance,
+    wstethBalance,
+  });
+
+  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance(),
@@ -52,6 +71,7 @@ export const useSubmitKeysFormNetworkData = (): [
       updateEtherBalance(),
       mutateConsumed(true), // @note hack to revalidate without loading state
       updateMaxStakeEther(),
+      updateKeysUploadLimit(),
     ]);
   }, [
     updateStethBalance,
@@ -59,6 +79,7 @@ export const useSubmitKeysFormNetworkData = (): [
     updateEtherBalance,
     mutateConsumed,
     updateMaxStakeEther,
+    updateKeysUploadLimit,
   ]);
 
   const loading = useMemo(
@@ -68,7 +89,9 @@ export const useSubmitKeysFormNetworkData = (): [
       isEtherBalanceLoading,
       isEaProofLoading,
       isCurveIdLoading,
+      isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
+      isStatusLoading,
     }),
     [
       isStethBalanceLoading,
@@ -76,7 +99,9 @@ export const useSubmitKeysFormNetworkData = (): [
       isEtherBalanceLoading,
       isEaProofLoading,
       isCurveIdLoading,
+      isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
+      isStatusLoading,
     ],
   );
 
@@ -85,9 +110,12 @@ export const useSubmitKeysFormNetworkData = (): [
       stethBalance,
       wstethBalance,
       etherBalance,
-      eaProof: ea?.proof,
+      eaProof,
       curveId,
+      keysUploadLimit,
+      keysAvailable,
       maxStakeEther,
+      isPaused: status?.isPaused || status?.isAccountingPaused,
       loading,
     },
     revalidate,

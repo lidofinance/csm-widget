@@ -31,8 +31,13 @@ export const useSubmitKeysValidation = (
           managerAddress,
         } = values;
 
-        const { stethBalance, wstethBalance, etherBalance, maxStakeEther } =
-          await dataPromise;
+        const {
+          stethBalance,
+          wstethBalance,
+          etherBalance,
+          maxStakeEther,
+          keysUploadLimit,
+        } = await dataPromise;
 
         validateBondAmount({
           token,
@@ -47,7 +52,7 @@ export const useSubmitKeysValidation = (
           options.names?.includes('depositData') ||
           options.names?.includes('rawDepositData')
         )
-          await validateDepositData({ depositData, chainId });
+          await validateDepositData({ depositData, chainId, keysUploadLimit });
 
         if (specifyCustomAddresses) {
           if (

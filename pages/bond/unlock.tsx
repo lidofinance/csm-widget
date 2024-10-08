@@ -1,8 +1,8 @@
-import { secretConfig } from 'config';
 import { PATH } from 'consts/urls';
 import { UnlockBondPage } from 'features/unlock-bond/unlock-bond-page';
 import { SplashPage } from 'features/welcome';
-import { GetStaticProps } from 'next';
+import { getFaqLocked } from 'lib/getFaq';
+import { getProps } from 'lib/getProps';
 import { GateActiveUser, GateLoaded, GateNodeOperator } from 'shared/gates';
 import { Navigate } from 'shared/navigate';
 
@@ -22,9 +22,4 @@ const Page = () => (
 
 export default Page;
 
-export const getStaticProps: GetStaticProps = async () => {
-  const { notReleased, maintenance } = secretConfig;
-  if (notReleased || maintenance) return { notFound: true };
-
-  return { props: {} };
-};
+export const getStaticProps = getProps(getFaqLocked);

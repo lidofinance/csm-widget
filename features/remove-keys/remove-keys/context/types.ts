@@ -11,7 +11,6 @@ export type RemoveKeysFormInputType = {
 
 export type RemoveKeysFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
-  offset?: number; // totalDepositedKeys // TODO: remove
   keys?: HexString[];
   info?: ReturnType<typeof useNodeOperatorInfo>['data'];
   bond?: BondBalance;

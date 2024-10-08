@@ -1,8 +1,8 @@
 import { CHAINS } from '@lido-sdk/constants';
 import { trimAddress } from '@lidofinance/address';
 import { DepositData, DepositDataV1, DepositDataV2 } from 'types';
-import { compareLowercase } from 'utils';
-import { isHexadecimalString, trimOx } from '../utils';
+import { compareLowercase, isHexadecimalString } from 'utils';
+import { trimOx } from '../utils';
 import {
   FIXED_AMOUNT,
   FIXED_FORK_VERSION,

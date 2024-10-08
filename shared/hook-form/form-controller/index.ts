@@ -1,3 +1,4 @@
+export * from './base-form-loader';
 export * from './form-controller-context';
 export * from './form-controller';
 export * from './form-data-context';

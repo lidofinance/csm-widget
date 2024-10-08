@@ -1,13 +1,13 @@
+import { TOKENS } from 'consts/tokens';
+import { BigNumber } from 'ethers';
 import {
   TxStageFail,
   TxStagePermit,
   TxStageSuccessMultisig,
 } from 'shared/transaction-modal/tx-stages-basic';
-import { getErrorMessage, getTokenDisplayName } from 'utils';
-import type { TransactionModalTransitStage } from './use-transaction-modal-stage';
-import { TOKENS } from 'consts/tokens';
+import { getErrorCode } from 'utils';
 import { TxStageSignOperationAmount } from '../tx-stages-composed';
-import { BigNumber } from 'ethers';
+import type { TransactionModalTransitStage } from './use-transaction-modal-stage';
 
 export const getGeneralTransactionModalStages = (
   transitStage: TransactionModalTransitStage,
@@ -18,7 +18,7 @@ export const getGeneralTransactionModalStages = (
       <TxStageSignOperationAmount
         operationText="Unlocking"
         amount={amount}
-        token={getTokenDisplayName(token)}
+        token={token}
       />,
     ),
   pendingApproval: (amount: BigNumber, token: TOKENS, txHash?: string) =>
@@ -26,7 +26,7 @@ export const getGeneralTransactionModalStages = (
       <TxStageSignOperationAmount
         operationText="Unlocking"
         amount={amount}
-        token={getTokenDisplayName(token)}
+        token={token}
         isPending
         txHash={txHash}
       />,
@@ -36,10 +36,7 @@ export const getGeneralTransactionModalStages = (
       isClosableOnLedger: true,
     }),
   failed: (error: unknown, onRetry?: () => void) =>
-    transitStage(
-      <TxStageFail failedText={getErrorMessage(error)} onRetry={onRetry} />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
+    transitStage(<TxStageFail code={getErrorCode(error)} onRetry={onRetry} />, {
+      isClosableOnLedger: true,
+    }),
 });

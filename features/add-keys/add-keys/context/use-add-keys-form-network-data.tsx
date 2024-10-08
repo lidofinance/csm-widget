@@ -3,17 +3,23 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
+  useNonWithdrawnKeysCount,
+  useKeysUploadLimit,
   useNodeOperatorBalance,
+  useNodeOperatorCurveId,
   useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
+  useCsmStatus,
 } from 'shared/hooks';
 import { type AddKeysFormNetworkData } from './types';
+import { useKeysAvailable } from 'shared/hooks';
 
 export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
   () => Promise<void>,
 ] => {
+  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: etherBalance,
@@ -41,12 +47,33 @@ export const useAddKeysFormNetworkData = (): [
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
+  const {
+    data: keysUploadLimit,
+    update: updateKeysUploadLimit,
+    initialLoading: isKeysUploadLimitLoading,
+  } = useKeysUploadLimit();
+
+  const { data: curveId } = useNodeOperatorCurveId(nodeOperatorId);
+
+  const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(nodeOperatorId);
+
+  const { data: keysAvailable } = useKeysAvailable({
+    curveId,
+    keysUploadLimit,
+    nonWithdrawnKeys,
+    bond,
+    etherBalance,
+    stethBalance,
+    wstethBalance,
+  });
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateStethBalance(),
       updateWstethBalance(),
       updateEtherBalance(),
       updateBond(),
+      updateKeysUploadLimit(),
       updateMaxStakeEther(),
     ]);
   }, [
@@ -54,6 +81,7 @@ export const useAddKeysFormNetworkData = (): [
     updateWstethBalance,
     updateEtherBalance,
     updateBond,
+    updateKeysUploadLimit,
     updateMaxStakeEther,
   ]);
 
@@ -64,6 +92,8 @@ export const useAddKeysFormNetworkData = (): [
       isWstethBalanceLoading,
       isMaxStakeEtherLoading,
       isBondLoading,
+      isKeysUploadLimitLoading,
+      isStatusLoading,
     }),
     [
       isEtherBalanceLoading,
@@ -71,18 +101,23 @@ export const useAddKeysFormNetworkData = (): [
       isWstethBalanceLoading,
       isMaxStakeEtherLoading,
       isBondLoading,
+      isKeysUploadLimitLoading,
+      isStatusLoading,
     ],
   );
 
   return [
     {
       nodeOperatorId,
+      keysUploadLimit,
+      keysAvailable,
       stethBalance,
       wstethBalance,
       etherBalance,
       bond,
       maxStakeEther,
       loading,
+      isPaused: status?.isPaused || status?.isAccountingPaused,
     },
     revalidate,
   ];

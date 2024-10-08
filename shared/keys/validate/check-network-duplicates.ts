@@ -3,9 +3,8 @@ import { TRIM_LENGTH } from './constants';
 import { trimAddress } from '@lidofinance/address';
 import { trimOx } from '../utils';
 import { HexString } from '../types';
-
-// FIXME: mainnet
-const KAPI_URL = 'https://keys-api-holesky.testnet.fi';
+import { CHAINS } from '@lido-sdk/constants';
+import { getExternalLinks } from 'consts/external-links';
 
 type ResponseData = {
   data: {
@@ -19,14 +18,15 @@ type ResponseData = {
   meta: any;
 };
 
-const findDuplicate = async (pubkeys: HexString[]) => {
+const findDuplicate = async (pubkeys: HexString[], chainId: CHAINS) => {
   try {
     // TODO: timeout
     // TODO: cache
-    const response = await fetch(`${KAPI_URL}/v1/keys/find`, {
+    const url = getExternalLinks(chainId).keysApi;
+    const response = await fetch(`${url}/v1/keys/find`, {
       method: 'post',
       body: JSON.stringify({ pubkeys }),
-      headers: { 'Content-Type': 'application/json', origin: 'csm.testnet.fi' },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const json: ResponseData = await response.json();
@@ -41,11 +41,14 @@ const toHexString = (data: string): HexString => {
   return `0x${data}`;
 };
 
-export const checkNetworkDuplicates = async (depositData: DepositData[]) => {
+export const checkNetworkDuplicates = async (
+  depositData: DepositData[],
+  chainId: CHAINS,
+) => {
   const pubkeys = depositData.map((data) =>
     toHexString(data.pubkey.toLowerCase()),
   );
-  const duplicateKey = await findDuplicate(pubkeys);
+  const duplicateKey = await findDuplicate(pubkeys, chainId);
 
   if (duplicateKey) {
     throw new Error(

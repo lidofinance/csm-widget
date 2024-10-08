@@ -8,6 +8,7 @@ import { useNodeOperatorBalance, useNodeOperatorRewards } from 'shared/hooks';
 import { useAvailableToClaim } from 'shared/hooks/useAvailableToClaim';
 import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
+import { BOND_EXCESS, BOND_SHORTAGE } from 'consts/text';
 
 export const BondSection: FC = () => {
   const id = useNodeOperatorId();
@@ -54,7 +55,7 @@ export const BondSection: FC = () => {
                   <Sign minus />
                   <Balance
                     dangerous={bond.isNoticiableShortage}
-                    title="Shortage bond"
+                    title={BOND_SHORTAGE}
                     loading={isBondLoading}
                     amount={bond.delta}
                   />
@@ -63,7 +64,7 @@ export const BondSection: FC = () => {
                 <>
                   <Sign />
                   <Balance
-                    title="Excess bond"
+                    title={BOND_EXCESS}
                     loading={isBondLoading}
                     amount={bond.delta}
                   />
@@ -108,7 +109,7 @@ export const BondSection: FC = () => {
                   <Sign minus />
                   <Balance
                     dangerous={bond.isNoticiableShortage}
-                    title="Shortage bond"
+                    title={BOND_SHORTAGE}
                     loading={isBondLoading}
                     amount={bond.delta}
                   />
@@ -117,7 +118,7 @@ export const BondSection: FC = () => {
                 <>
                   <Sign />
                   <Balance
-                    title="Excess bond"
+                    title={BOND_EXCESS}
                     loading={isBondLoading}
                     amount={bond.delta}
                   />

@@ -1,3 +1,4 @@
+import { Plural } from 'shared/components';
 import {
   TransactionModalTransitStage,
   TxStagePending,
@@ -7,7 +8,6 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 
-// TODO: finishshow
 type Props = {
   keysCount: number;
 };
@@ -38,7 +38,13 @@ const getTxModalStagesRemoveKeys = (
     transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title={`${props.keysCount} key(s) are removed`}
+        title={
+          <>
+            {props.keysCount}{' '}
+            <Plural variants={['key', 'keys']} value={props.keysCount} /> are
+            removed
+          </>
+        }
         description=""
       />,
       {
