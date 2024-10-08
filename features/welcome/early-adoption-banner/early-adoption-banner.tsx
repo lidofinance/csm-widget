@@ -38,7 +38,7 @@ export const EarlyAdoptionBanner: FC = () => {
               variant="translucent"
               fullwidth
             >
-              See curated list
+              See Early Adoption members list
             </LinkButton>
           </DarkThemeProvider>
         </Stack>

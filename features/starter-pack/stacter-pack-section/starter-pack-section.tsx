@@ -29,7 +29,8 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
       </Heading>
       <Steps>
         <Step number="1" title="Have tokens for Bond">
-          {bondAmount} ETH (stETH/wstETH) is required for the first validator
+          {bondAmount} ETH (stETH / wstETH equivalent) is required for the first
+          validator
           <br />
           <MatomoLink
             href="https://operatorportal.lido.fi/modules/community-staking-module#block-e4a6daadca12480d955524247f03f380"
