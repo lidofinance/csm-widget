@@ -12,6 +12,7 @@ import {
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
+import { getExternalLinks } from 'consts/external-links';
 
 const STAGE_OPERATION_ARGS = {
   operationText: 'Claiming Bond',
@@ -19,6 +20,8 @@ const STAGE_OPERATION_ARGS = {
 
 type Props = { amount: BigNumber; token: TOKENS };
 type SuccessProps = { amount: BigNumber; balance: BigNumber; token: TOKENS };
+
+const { stakeWidget } = getExternalLinks();
 
 const getTxModalStagesClaimBond = (
   transitStage: TransactionModalTransitStage,
@@ -54,6 +57,7 @@ const getTxModalStagesClaimBond = (
   success: ({ amount, balance, token }: SuccessProps, txHash?: string) =>
     transitStage(
       token === TOKENS.ETH ? (
+        // TODO: matomo events
         <TxStageSuccess
           title="Withdrawal request has been sent"
           description={
@@ -61,7 +65,7 @@ const getTxModalStagesClaimBond = (
               Request withdrawal of{' '}
               <TxAmount amount={amount} token={TOKENS.STETH} /> has been sent.
               Check{' '}
-              <MatomoLink href="https://stake.lido.fi/claim">
+              <MatomoLink href={`${stakeWidget}/claim`}>
                 Claim tab on the Lido Staking Widget
               </MatomoLink>{' '}
               to view your withdrawal requests or view your transaction on{' '}
@@ -69,8 +73,8 @@ const getTxModalStagesClaimBond = (
               <br />
               <br />
               Add NFT to your wallet to monitor the status of your request.
-              <MatomoLink href="">This guide</MatomoLink> will help you to do
-              this.
+              <MatomoLink href="#how-to-claim-eth">This guide</MatomoLink> will
+              help you to do this.
             </>
           }
         />

@@ -63,7 +63,7 @@ export const usePermitSignature = (spender: Address) => {
         }
       };
       const tokenProvider = getTokenProvider(token);
-      const deadline = INFINITY_DEADLINE_VALUE; // TODO: set finite deadline
+      const deadline = INFINITY_DEADLINE_VALUE; // FIXME: set finite deadline
 
       let domain: TypedDataDomain;
       if (isStethPermit(tokenProvider)) {

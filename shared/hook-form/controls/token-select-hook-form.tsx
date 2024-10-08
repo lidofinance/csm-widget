@@ -19,7 +19,6 @@ const OPTIONS: TokenOption[] = [
   { token: TOKENS.WSTETH },
 ];
 
-// TODO: 24px
 const iconsMap = {
   [TOKENS.ETH]: <EthIcon />,
   [TOKENS.STETH]: <StethIcon />,

@@ -31,7 +31,7 @@ export const useClaimBondValidation = (
               maxAmount,
               `Entered ${getTokenDisplayName(token)} amount exceeds available to claim of ${formatEther(
                 maxAmount,
-              )}`, // TODO: text
+              )}`,
             );
         }
 

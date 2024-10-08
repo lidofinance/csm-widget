@@ -22,7 +22,7 @@ export const Info: FC = () => {
           title={bond?.isShortage ? BOND_SHORTAGE : BOND_EXCESS}
           help={
             bond?.isShortage
-              ? '' // FIXME: text
+              ? 'Shortage bond is the missing amount of stETH required to cover all operator’s keys. To avoid exit requests for unbonded validators, this amount must be compensated.'
               : 'The bond amount available to claim without having to exit validators'
           }
           loading={loading.isBondLoading}

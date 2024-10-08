@@ -13,7 +13,7 @@ import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 import { config } from 'config';
 import { contentSecurityPolicy } from 'config/csp';
 
-// FIXME: mainnet
+// FIXME: after deploy csm.lido.fi
 let host = 'https://csm.testnet.fi';
 
 const secureHeaders = createHeadersObject({ contentSecurityPolicy });

@@ -11,6 +11,7 @@ import { ConsumedBanner } from './consumed-banner';
 import { NotEligibleBanner } from './not-eligible-banner/not-eligible-banner';
 import { PausedBanner } from './paused-banner';
 import { StarterPackSection } from './stacter-pack-section';
+import { TryCSM } from 'features/welcome/try-csm';
 
 export const StarterPack: FC = () => {
   const { data: status } = useCsmStatus();
@@ -20,25 +21,30 @@ export const StarterPack: FC = () => {
     trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator);
   }, []);
 
+  let content = (
+    <StarterPackSection>
+      <Link href={PATH.KEYS_SUBMIT} passHref legacyBehavior>
+        <Button onClick={handleClick}>Create Node Operator</Button>
+      </Link>
+    </StarterPackSection>
+  );
+
   if (status?.isPaused || status?.isAccountingPaused) {
-    return <PausedBanner />;
+    content = <PausedBanner />;
   }
 
   if (status?.isEarlyAdoption && ea?.consumed) {
-    return <ConsumedBanner />;
+    content = <ConsumedBanner />;
   }
 
   if (status?.isEarlyAdoption && !ea?.proof) {
-    return <NotEligibleBanner />;
+    content = <NotEligibleBanner />;
   }
 
   return (
     <>
-      <StarterPackSection>
-        <Link href={PATH.KEYS_SUBMIT} passHref legacyBehavior>
-          <Button onClick={handleClick}>Create Node Operator</Button>
-        </Link>
-      </StarterPackSection>
+      {content}
+      <TryCSM />
       <Faq />
     </>
   );

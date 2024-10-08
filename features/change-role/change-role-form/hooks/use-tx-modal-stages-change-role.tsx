@@ -1,7 +1,6 @@
 import { ROLES } from 'consts/roles';
 import { getRoleTitle } from 'shared/node-operator';
 import {
-  SuccessText,
   TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
@@ -68,25 +67,6 @@ const getTxModalStagesChangeRole = (
   success: (props: Props, txHash?: string) =>
     transitStage(
       <TxStageSuccess txHash={txHash} {...getTexts(props).success} />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-
-  // FIXME: drop this after verify
-  success1: (props: Props, txHash?: string) =>
-    transitStage(
-      <TxStageSuccess
-        txHash={txHash}
-        title={<>New ${getRoleTitle(props.role)} address has been proposed</>}
-        description={
-          <SuccessText
-            operationText="Proposing address change"
-            txHash={txHash}
-          />
-        }
-        showEtherscan={false}
-      />,
       {
         isClosableOnLedger: true,
       },

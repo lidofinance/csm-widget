@@ -99,7 +99,6 @@ export const useGetKeyStatus = () => {
       }
 
       return ['depositable'];
-      // TODO: handle targetLimit
     },
     [duplicates, exitRequestedKeys, info, unbonded, withdrawnIndexes],
   );

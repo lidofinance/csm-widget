@@ -11,7 +11,7 @@ export const useNodeOperatorsList = () => {
 
   const append = useCallback(
     (income: NodeOperatorRoles) => {
-      // @note fix for spectacular
+      // TODO: fix for spectacular
       if (income.manager || income.rewards) {
         void mutate((prev = []) => [...mergeRoles(prev, income)]);
       }

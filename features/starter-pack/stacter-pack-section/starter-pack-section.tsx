@@ -1,3 +1,4 @@
+import { getCsmConstants } from 'consts/csm-constants';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, PropsWithChildren } from 'react';
 import { MatomoLink } from 'shared/components';
@@ -6,9 +7,11 @@ import { Partners } from './partners';
 import { Step } from './step';
 import { BlockStyled, Heading, Steps } from './styles';
 
+const { firstKeyBond } = getCsmConstants();
+
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
   const { data: ea } = useCsmEarlyAdoption();
-  const bondAmount = ea?.proof ? '1.5' : '2';
+  const bondAmount = firstKeyBond[Number(Boolean(ea?.proof))];
 
   return (
     <BlockStyled>
@@ -26,8 +29,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
       </Heading>
       <Steps>
         <Step number="1" title="Have tokens for Bond">
-          {bondAmount} Holesky ETH (stETH/wstETH) is required for the first
-          validator
+          {bondAmount} ETH (stETH/wstETH) is required for the first validator
           <br />
           <MatomoLink
             href="https://operatorportal.lido.fi/modules/community-staking-module#block-e4a6daadca12480d955524247f03f380"

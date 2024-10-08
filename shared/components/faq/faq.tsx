@@ -10,7 +10,7 @@ export const Faq: FC = () => {
   const faqList = useFaqList();
   const faqFilter = useFaqFilter();
 
-  // FIXME: track link click inside faq
+  // FIXME: matomo events for link click inside faq
   const handleExpand = useCallback(
     (id: string) => () => trackMatomoFaqEvent(id),
     [],

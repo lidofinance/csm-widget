@@ -69,7 +69,7 @@ export const SourceSelect: FC = () => {
           }
           help={
             bond?.isShortage
-              ? '' // FIXME: text
+              ? 'Shortage bond is the missing amount of stETH required to cover all operator’s keys. To avoid exit requests for unbonded validators, this amount must be compensated on the “Add bond” tab.'
               : 'The bond amount available to claim without having to exit validators'
           }
           sign={bond?.isShortage ? 'minus' : 'plus'}

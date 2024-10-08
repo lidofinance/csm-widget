@@ -17,7 +17,6 @@ export const validateEtherAmount = (
       `Enter ${getTokenDisplayName(token)} ${field} greater than 0`,
     );
 
-  // TODO: lt or lte
   if (token === TOKENS.ETH && amount.lt(MIN_ETH_AMOUNT))
     throw new ValidationError(
       field,

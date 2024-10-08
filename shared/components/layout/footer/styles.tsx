@@ -41,11 +41,11 @@ export const FooterLink = styled(Link)<FooterLinkProps>`
   &:visited {
     color: var(--lido-color-textSecondary);
     &:hover {
-      color: var(--lido-color-text);
+      color: var(--lido-color-primaryHover);
       opacity: 1;
       svg {
         path {
-          fill: var(--lido-color-text);
+          fill: var(--lido-color-primaryHover);
         }
       }
     }

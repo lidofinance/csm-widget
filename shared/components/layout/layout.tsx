@@ -1,19 +1,18 @@
-import { ReactNode, FC, PropsWithChildren, useEffect } from 'react';
+import { FC, PropsWithChildren, ReactNode, useEffect } from 'react';
 
 import { ContainerProps } from '@lidofinance/lido-ui';
 
-import { Header } from './header/header';
+import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 import { Footer } from './footer/footer';
+import { DummyHeader } from './header/dummy-header';
+import { Header } from './header/header';
 import { Main } from './main/main';
 import {
-  LayoutTitleStyle,
-  LayoutSubTitleStyle,
-  Heading,
   Content,
+  Heading,
+  LayoutSubTitleStyle,
+  LayoutTitleStyle,
 } from './styles';
-import { DummyHeader } from './header/dummy-header';
-import { FeedbackLine } from '../feedback-line';
-import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 
 type Props = {
   title?: ReactNode;
@@ -38,7 +37,6 @@ export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
 
   return (
     <>
-      {!dummy && <FeedbackLine />}
       {dummy ? <DummyHeader /> : <Header />}
       <Main size={containerSize}>
         <Heading $titlesCount={titlesCount}>

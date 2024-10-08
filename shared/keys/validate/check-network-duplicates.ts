@@ -26,7 +26,7 @@ const findDuplicate = async (pubkeys: HexString[], chainId: CHAINS) => {
     const response = await fetch(`${url}/v1/keys/find`, {
       method: 'post',
       body: JSON.stringify({ pubkeys }),
-      headers: { 'Content-Type': 'application/json', origin: 'csm.testnet.fi' },
+      headers: { 'Content-Type': 'application/json' },
     });
 
     const json: ResponseData = await response.json();

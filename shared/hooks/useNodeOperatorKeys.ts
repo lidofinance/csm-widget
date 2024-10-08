@@ -7,10 +7,9 @@ import { useCSModuleRPC } from './useCsmContracts';
 import { useNodeOperatorInfo } from './useNodeOperatorInfo';
 import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 
-// TODO: load by chuns
+// TODO: load by chunks
 // const MAX_KEYS_COUNT = 10;
 
-// TODO: return keys with statuses
 export const useNodeOperatorKeys = (
   nodeOperatorId?: NodeOperatorId,
   nonDepositedOnly = false,

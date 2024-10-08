@@ -19,6 +19,7 @@ type CsmConstants = {
   withdrawalCredentials: Address;
   earlyAdoptionMaxKeys: number;
   retentionPeriodMins: number;
+  firstKeyBond: [string, string]; // [default, ea]
 };
 
 export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
@@ -38,6 +39,7 @@ export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
     withdrawalCredentials: '0xF0179dEC45a37423EAD4FaD5fCb136197872EAd9',
     earlyAdoptionMaxKeys: 10,
     retentionPeriodMins: 80_640, // 8 weeks
+    firstKeyBond: ['2 Holesky', '1.5 Holesky'],
   },
 };
 

@@ -12,7 +12,7 @@ import { useAccount } from './use-account';
 import { useCSFeeDistributorRPC } from './useCsmContracts';
 import { RewardsTreeLeaf } from './useNodeOperatorRewards';
 
-// TODO: mainnet - use paid IPFS key
+// FIXME: mainnet - use paid IPFS key
 export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
   const feeDistributorRPC = useCSFeeDistributorRPC();
   const { chainId } = useAccount();
