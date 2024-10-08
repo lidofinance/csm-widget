@@ -7,11 +7,10 @@ import { Partners } from './partners';
 import { Step } from './step';
 import { BlockStyled, Heading, Steps } from './styles';
 
-const { firstKeyBond } = getCsmConstants();
-
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => {
   const { data: ea } = useCsmEarlyAdoption();
   // TODO: retrive values from contracts
+  const { firstKeyBond } = getCsmConstants();
   const bondAmount = firstKeyBond[Number(Boolean(ea?.proof))];
 
   return (

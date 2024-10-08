@@ -4,7 +4,6 @@ import { NodeOperatorId } from 'types';
 import { useNodeOperatorKeys } from './useNodeOperatorKeys';
 
 const links = getExternalLinks();
-const { stakingModuleId } = getCsmConstants();
 
 // TODO: cache dashboard link (for long-fetched keys)
 export const useBeaconchainDashboardLink = (
@@ -18,9 +17,11 @@ export const useBeaconchainDashboardLink = (
 };
 
 export const useFeesMonitoningLink = (nodeOperatorId?: NodeOperatorId) => {
+  const { stakingModuleId } = getCsmConstants();
   return `${links.feesMonitoring}/operatorInfo?stakingModuleIndex=${stakingModuleId}&operatorIndex=${nodeOperatorId}`;
 };
 
 export const useOperatorPortalLink = (nodeOperatorId?: NodeOperatorId) => {
+  const { stakingModuleId } = getCsmConstants();
   return `${links.operatorsWidget}/module/${stakingModuleId}/${nodeOperatorId}`;
 };
