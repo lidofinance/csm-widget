@@ -68,6 +68,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
   pageNormalizeQueue = 'pageNormalizeQueue',
+  page404 = 'page404',
+  page500 = 'page500',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
   // modifiers
@@ -350,6 +352,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «NormalizeQueue»',
     prefixed`view_normalize_queue_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.page404]: [
+    MATOMO_APP_NAME,
+    'View page «404»',
+    prefixed`view_404_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.page500]: [
+    MATOMO_APP_NAME,
+    'View page «500»',
+    prefixed`view_500_page`,
   ],
   // Actions
   [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: [
