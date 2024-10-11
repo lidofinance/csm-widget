@@ -198,8 +198,6 @@ export const useSubmitKeysSubmit = ({
 
         const nodeOperator = getAddedNodeOperator(receipt);
 
-        await onConfirm?.();
-
         txModalStages.success(
           {
             nodeOperatorId: nodeOperator?.id,
@@ -219,6 +217,8 @@ export const useSubmitKeysSubmit = ({
 
         // TODO: move to onConfirm
         void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
+
+        await onConfirm?.();
 
         return true;
       } catch (error) {
