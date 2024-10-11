@@ -3,6 +3,7 @@ export const SETTINGS_PATH = '/settings';
 
 export const PATH = <const>{
   HOME: '/',
+  CREATE: '/create',
   KEYS: '/keys',
   KEYS_SUBMIT: '/keys/submit',
   KEYS_REMOVE: '/keys/remove',

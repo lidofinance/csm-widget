@@ -198,7 +198,6 @@ export const useSubmitKeysSubmit = ({
 
         const nodeOperator = getAddedNodeOperator(receipt);
 
-        // TODO: possible add timeout
         await onConfirm?.();
 
         txModalStages.success(

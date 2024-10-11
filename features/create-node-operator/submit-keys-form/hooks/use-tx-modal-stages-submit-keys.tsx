@@ -9,17 +9,17 @@ import { TOKENS } from 'consts/tokens';
 import { PATH } from 'consts/urls';
 import type { BigNumber } from 'ethers';
 import { FC } from 'react';
-import { MatomoLink } from 'shared/components';
+import { MatomoLink, Plural } from 'shared/components';
 import { LocalLink } from 'shared/components/local-link';
 import { useBeaconchainDashboardLink } from 'shared/hooks';
-import { TxStageSuccess } from 'shared/transaction-modal/tx-stages-basic';
-import { TxStageSignOperationKeys } from 'shared/transaction-modal/tx-stages-composed/tx-stage-keys-operation';
+import { TxAmount } from 'shared/transaction-modal';
+import {
+  TxStagePending,
+  TxStageSign,
+  TxStageSuccess,
+} from 'shared/transaction-modal/tx-stages-basic';
 import styled from 'styled-components';
 import { NodeOperatorId } from 'types';
-
-const STAGE_OPERATION_ARGS = {
-  operationText: 'Submitting',
-};
 
 type Props = {
   keysCount: number;
@@ -36,23 +36,40 @@ const getTxModalStagesSubmitKeys = (
 
   sign: ({ keysCount, amount, token }: Props) =>
     transitStage(
-      <TxStageSignOperationKeys
-        {...STAGE_OPERATION_ARGS}
-        amount={amount}
-        token={token}
-        keysCount={keysCount}
+      <TxStageSign
+        title="Creating Node Operator"
+        description={
+          <>
+            Uploading {keysCount}{' '}
+            <Plural variants={['key', 'keys']} value={keysCount} />{' '}
+            {amount && (
+              <>
+                and depositing <TxAmount amount={amount} token={token} />
+              </>
+            )}
+            .
+          </>
+        }
       />,
     ),
 
   pending: ({ keysCount, amount, token }: Props, txHash?: string) =>
     transitStage(
-      <TxStageSignOperationKeys
-        {...STAGE_OPERATION_ARGS}
-        amount={amount}
-        token={token}
-        keysCount={keysCount}
-        isPending
+      <TxStagePending
         txHash={txHash}
+        title="Creating Node Operator"
+        description={
+          <>
+            Uploading {keysCount}{' '}
+            <Plural variants={['key', 'keys']} value={keysCount} />{' '}
+            {amount && (
+              <>
+                and depositing <TxAmount amount={amount} token={token} />
+              </>
+            )}
+            .
+          </>
+        }
       />,
     ),
 
@@ -60,7 +77,7 @@ const getTxModalStagesSubmitKeys = (
     return transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title={<>Your keys are submitted</>}
+        title="Node Operator is created"
         description={
           nodeOperatorId ? (
             <>
