@@ -9,6 +9,7 @@ import invariant from 'tiny-invariant';
 import { NodeOperator, NodeOperatorId, NodeOperatorRoles } from 'types';
 import { useGetActiveNodeOperator } from './use-get-active-node-operator';
 import { useNodeOperatorsList } from './use-node-operators-list';
+import { useAppendAndSwitch } from './use-appen-and-switch';
 
 export type NodeOperatorContextValue = {
   list: NodeOperator[];
@@ -16,6 +17,7 @@ export type NodeOperatorContextValue = {
   append: (nodeOperator: NodeOperatorRoles) => void;
   active?: NodeOperator;
   switchActive: (id: NodeOperatorId) => void;
+  appendAndSwitch: ReturnType<typeof useAppendAndSwitch>;
 };
 
 export const NodeOperatorContext =
@@ -51,7 +53,8 @@ export const useActiveNodeOperator = () => {
 
 export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { list, isListLoading, append } = useNodeOperatorsList();
-  const { active, switchActive } = useGetActiveNodeOperator(list);
+  const { active, setActive, switchActive } = useGetActiveNodeOperator(list);
+  const appendAndSwitch = useAppendAndSwitch(append, setActive);
 
   const value = useMemo(
     () => ({
@@ -60,8 +63,9 @@ export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
       isListLoading,
       append,
       switchActive,
+      appendAndSwitch,
     }),
-    [list, active, isListLoading, append, switchActive],
+    [list, active, isListLoading, append, switchActive, appendAndSwitch],
   );
 
   return (
