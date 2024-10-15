@@ -4,8 +4,7 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { SectionBlock, Stack } from 'shared/components';
 import {
-  useCsmEarlyAdoptionKeysLimit,
-  useCsmStatus,
+  useKeysLimit,
   useNetworkDuplicates,
   useNodeOperatorInfo,
   useNodeOperatorUnbondedKeys,
@@ -17,11 +16,8 @@ export const KeysSection: FC = () => {
   const id = useNodeOperatorId();
   const { data: info } = useNodeOperatorInfo(id);
   const { data: unbonded } = useNodeOperatorUnbondedKeys(id);
-  const { data: eaLimit } = useCsmEarlyAdoptionKeysLimit();
-  const { data: status } = useCsmStatus();
   const { data: duplicates } = useNetworkDuplicates();
-
-  const eaTarget = status?.isPublicRelease ? undefined : eaLimit?.toNumber();
+  const { data: eaTarget } = useKeysLimit();
 
   return (
     <SectionBlock
@@ -45,7 +41,7 @@ export const KeysSection: FC = () => {
             <Item
               title="Limit"
               count={
-                info.targetLimitMode > 0 ? info.targetLimit : (eaTarget ?? '—')
+                info.targetLimitMode > 0 ? info.targetLimit : eaTarget || '—'
               }
               variant="secondary"
               tooltip={

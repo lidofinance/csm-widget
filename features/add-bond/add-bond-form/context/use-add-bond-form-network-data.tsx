@@ -3,7 +3,7 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
-  useCsmStatus,
+  useCsmPaused,
   useNodeOperatorBalance,
   useStakingLimitInfo,
   useSTETHBalance,
@@ -42,7 +42,7 @@ export const useAddBondFormNetworkData = (): [
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
-  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
+  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
