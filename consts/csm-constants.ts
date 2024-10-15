@@ -17,7 +17,7 @@ type CsmConstants = {
   deploymentBlockNumber: HexString;
   stakingModuleId: number;
   withdrawalCredentials: Address;
-  earlyAdoptionMaxKeys: number;
+  earlyAdoptionMaxKeys: number; // TODO: drop this const
   retentionPeriodMins: number;
   firstKeyBond: [string, string]; // [default, ea]
 };

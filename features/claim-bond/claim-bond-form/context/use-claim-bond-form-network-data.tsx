@@ -1,7 +1,7 @@
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
-  useCsmStatus,
+  useCsmPaused,
   useNodeOperatorBalance,
   useNodeOperatorRewards,
 } from 'shared/hooks';
@@ -31,7 +31,7 @@ export const useClaimBondFormNetworkData = (): [
     rewards,
   });
 
-  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
+  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateBond(), updateRewards()]);

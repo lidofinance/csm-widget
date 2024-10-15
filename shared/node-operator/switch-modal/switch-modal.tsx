@@ -18,14 +18,14 @@ import {
 export const SwitchModal: ModalComponentType<{
   active: NodeOperator;
   list: NodeOperator[];
-  switchActive: (id: NodeOperatorId) => void;
-}> = ({ onClose, active, list, switchActive, ...props }) => {
+  onChange: (id: NodeOperatorId) => void;
+}> = ({ onClose, active, list, onChange, ...props }) => {
   const handleSwitch = useCallback(
     (id: NodeOperatorId) => {
-      switchActive(id);
+      onChange(id);
       onClose?.();
     },
-    [switchActive, onClose],
+    [onChange, onClose],
   );
 
   return (

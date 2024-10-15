@@ -4,11 +4,8 @@ import { useCallback } from 'react';
 import { useCorrectPath } from './use-correct-path';
 
 export const useNavigate = () => {
-  const router = useRouter();
+  const { push } = useRouter();
   const correct = useCorrectPath();
 
-  return useCallback(
-    (path: PATH) => router.push(correct(path)),
-    [correct, router],
-  );
+  return useCallback((path: PATH) => push(correct(path)), [correct, push]);
 };

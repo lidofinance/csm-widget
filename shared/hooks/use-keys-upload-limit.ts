@@ -1,26 +1,24 @@
-import { getCsmConstants } from 'consts/csm-constants';
 import { MAX_KEYS_TO_UPLOAD } from 'consts/treshhold';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import {
-  useAccount,
-  useCsmStatus,
+  useCsmEarlyAdoptionKeysLimit,
+  useCsmPublicRelease,
   useMergeSwr,
   useNodeOperatorInfo,
 } from 'shared/hooks';
 import { NodeOperatorId } from 'types';
 
 /**
- * 0 = no limits
+ * @note 0 = no limits
  */
 export const useKeysLimit = () => {
-  const swrStatus = useCsmStatus();
-  const { chainId } = useAccount();
+  const swrPublicRelease = useCsmPublicRelease();
+  const swrEAKeysLimit = useCsmEarlyAdoptionKeysLimit();
 
   return useMergeSwr(
-    [swrStatus],
-    swrStatus.data?.isEarlyAdoption
-      ? getCsmConstants(chainId).earlyAdoptionMaxKeys
-      : 0,
+    [swrPublicRelease, swrEAKeysLimit],
+    swrPublicRelease.data ? 0 : swrEAKeysLimit.data?.toNumber(),
+    { immutable: true },
   );
 };
 

@@ -1,7 +1,5 @@
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useCallback, useEffect, useState } from 'react';
 import { NodeOperator, NodeOperatorId } from 'types';
-import { trackMatomoEvent } from 'utils';
 import { useCachedId } from './use-cached-id';
 
 export const useGetActiveNodeOperator = (list?: NodeOperator[]) => {
@@ -27,12 +25,11 @@ export const useGetActiveNodeOperator = (list?: NodeOperator[]) => {
     (id: NodeOperatorId) => {
       const fromList = list?.find((item) => item.id === id);
       if (fromList) {
-        trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator);
         setActive(fromList);
       }
     },
     [list],
   );
 
-  return { active: active ?? list?.[0], switchActive };
+  return { active: active ?? list?.[0], switchActive, setActive };
 };
