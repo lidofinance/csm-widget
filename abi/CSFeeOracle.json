@@ -675,6 +675,11 @@
             "internalType": "string"
           },
           {
+            "name": "logCid",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
             "name": "distributed",
             "type": "uint256",
             "internalType": "uint256"
@@ -952,37 +957,6 @@
   },
   {
     "type": "event",
-    "name": "ReportSettled",
-    "inputs": [
-      {
-        "name": "refSlot",
-        "type": "uint256",
-        "indexed": true,
-        "internalType": "uint256"
-      },
-      {
-        "name": "distributed",
-        "type": "uint256",
-        "indexed": false,
-        "internalType": "uint256"
-      },
-      {
-        "name": "treeRoot",
-        "type": "bytes32",
-        "indexed": false,
-        "internalType": "bytes32"
-      },
-      {
-        "name": "treeCid",
-        "type": "string",
-        "indexed": false,
-        "internalType": "string"
-      }
-    ],
-    "anonymous": false
-  },
-  {
-    "type": "event",
     "name": "ReportSubmitted",
     "inputs": [
       {
@@ -1175,6 +1149,11 @@
         "internalType": "uint256"
       }
     ]
+  },
+  {
+    "type": "error",
+    "name": "InvalidContractVersion",
+    "inputs": []
   },
   {
     "type": "error",
@@ -1377,6 +1356,11 @@
   {
     "type": "error",
     "name": "VersionCannotBeSame",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "VersionCannotBeZero",
     "inputs": []
   },
   {
