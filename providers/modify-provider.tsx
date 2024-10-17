@@ -1,4 +1,5 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { REF_MAPPING } from 'consts/ref-mapping';
 import { isAddress } from 'ethers/lib/utils.js';
 import { useRouter } from 'next/router';
 import {
@@ -11,7 +12,7 @@ import {
 } from 'react';
 import { useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { getFirstParam, trackMatomoEvent } from 'utils';
+import { compareLowercase, getFirstParam, trackMatomoEvent } from 'utils';
 import { Address } from 'wagmi';
 
 type ModifyContextValue = {
@@ -63,7 +64,10 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     if (!isReady) return;
 
-    const ref = getFirstParam(query[QUERY_REFERRER]);
+    const refParam = getFirstParam(query[QUERY_REFERRER]);
+    const ref =
+      REF_MAPPING.find(({ ref }) => compareLowercase(ref, refParam))?.address ||
+      refParam;
 
     if (ref && ref !== referrer && isAddress(ref)) {
       setReferrer(ref);
