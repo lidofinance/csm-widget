@@ -5,6 +5,7 @@ import {
   CSEarlyAdoption__factory,
   CSFeeDistributor__factory,
   CSModule__factory,
+  CSModuleOld__factory,
   ExitBusOracle__factory,
 } from 'generated';
 
@@ -15,6 +16,13 @@ const CSModule = contractHooksFactory(
 
 export const useCSModuleRPC = CSModule.useContractRPC;
 export const useCSModuleWeb3 = CSModule.useContractWeb3;
+
+const CSModuleOld = contractHooksFactory(
+  CSModuleOld__factory,
+  getCsmContractAddressGetter('CSModule'),
+);
+
+export const useCSModuleOldRPC = CSModuleOld.useContractRPC;
 
 const CSAccounting = contractHooksFactory(
   CSAccounting__factory,
