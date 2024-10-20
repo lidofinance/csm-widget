@@ -1,4 +1,4 @@
-export const METRICS_PREFIX = 'eth_stake_widget_ui_';
+export const METRICS_PREFIX = 'csm_widget_ui_';
 
 // TODO: review
 
