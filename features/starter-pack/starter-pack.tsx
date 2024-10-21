@@ -30,16 +30,16 @@ export const StarterPack: FC = () => {
     </StarterPackSection>
   );
 
-  if (paused?.isPaused || paused?.isAccountingPaused) {
-    content = <PausedBanner />;
-  }
-
   if (!isPublicRelease && ea?.consumed) {
     content = <ConsumedBanner />;
   }
 
   if (!isPublicRelease && !ea?.proof) {
     content = <NotEligibleBanner />;
+  }
+
+  if (paused?.isPaused || paused?.isAccountingPaused) {
+    content = <PausedBanner />;
   }
 
   return (
