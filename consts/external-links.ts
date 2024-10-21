@@ -17,6 +17,7 @@ type ExternalLinksConstants = {
   feesMonitoring: string;
   operatorsWidget: string;
   beaconchainDashboard: string;
+  subscribeEvents: string;
   keysApi: string;
 };
 
@@ -27,7 +28,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     earlyAdoptionTree:
       'https://raw.githubusercontent.com/lidofinance/community-staking-module/main/artifacts/mainnet/early-adoption/merkle-tree.json',
     rewardsTree:
-      'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json', // FIXME: link
+      'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
     earlyAdoptionSources:
       'https://github.com/lidofinance/community-staking-module/tree/main/artifacts/mainnet/early-adoption/sources',
     earlyAdoptionAbout:
@@ -39,6 +40,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     operatorsWidget: 'https://operators.lido.fi',
     beaconchain: 'https://beaconcha.in',
     beaconchainDashboard: '', // FIXME: link
+    subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
     keysApi: 'https://keys-api.lido.fi',
   },
   [CHAINS.Holesky]: {
@@ -57,6 +59,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     operatorsWidget: 'https://operators-holesky.testnet.fi',
     beaconchain: 'https://holesky.beaconcha.in',
     beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in',
+    subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
     keysApi: 'https://keys-api-holesky.testnet.fi',
   },
 };
