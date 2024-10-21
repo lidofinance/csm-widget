@@ -55,6 +55,9 @@ export default withBundleAnalyzer({
   compiler: {
     styledComponents: true,
   },
+  images: {
+    unoptimized: true,
+  },
   experimental: {
     // Fixes a build error with importing Pure ESM modules, e.g. reef-knot
     // Some docs are here:
