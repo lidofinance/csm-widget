@@ -61,7 +61,7 @@ export const useSubmitKeysValidation = (
           ) {
             throw new ValidationError(
               'rewardsAddress',
-              'Specify valid rewards address',
+              'Specify valid Rewards Address',
             );
           }
 
@@ -71,7 +71,7 @@ export const useSubmitKeysValidation = (
           ) {
             throw new ValidationError(
               'managerAddress',
-              'Specify valid manager address',
+              'Specify valid Manager Address',
             );
           }
         }

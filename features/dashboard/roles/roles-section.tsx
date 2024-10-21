@@ -20,13 +20,13 @@ export const RolesSection: FC = () => {
       {info && (
         <Stack wrap>
           <RoleBlock
-            title="Manager address"
+            title="Manager Address"
             address={info.managerAddress}
             proposedAddress={info.proposedManagerAddress}
             isYou={isUserAddress(info.managerAddress)}
           />
           <RoleBlock
-            title="Rewards address"
+            title="Rewards Address"
             address={info.rewardAddress}
             proposedAddress={info.proposedRewardAddress}
             isYou={isUserAddress(info.rewardAddress)}
