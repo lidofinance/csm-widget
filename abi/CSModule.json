@@ -23,6 +23,11 @@
         "internalType": "uint256"
       },
       {
+        "name": "maxKeyRemovalCharge",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
         "name": "lidoLocator",
         "type": "address",
         "internalType": "address"
@@ -78,6 +83,19 @@
         "name": "",
         "type": "address",
         "internalType": "contract ILidoLocator"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "MAX_KEY_REMOVAL_CHARGE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
       }
     ],
     "stateMutability": "view"
@@ -754,7 +772,12 @@
     ],
     "outputs": [
       {
-        "name": "",
+        "name": "removed",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "lastRemovedAtDepth",
         "type": "uint256",
         "internalType": "uint256"
       }
@@ -1744,13 +1767,6 @@
   },
   {
     "type": "function",
-    "name": "recoverStETHShares",
-    "inputs": [],
-    "outputs": [],
-    "stateMutability": "nonpayable"
-  },
-  {
-    "type": "function",
     "name": "removeKeys",
     "inputs": [
       {
@@ -2120,6 +2136,25 @@
   },
   {
     "type": "event",
+    "name": "ELRewardsStealingPenaltyCompensated",
+    "inputs": [
+      {
+        "name": "nodeOperatorId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "ELRewardsStealingPenaltyReported",
     "inputs": [
       {
@@ -2290,6 +2325,12 @@
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
+      },
+      {
+        "name": "pubkey",
+        "type": "bytes",
+        "indexed": false,
+        "internalType": "bytes"
       }
     ],
     "anonymous": false
@@ -2763,6 +2804,12 @@
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
+      },
+      {
+        "name": "pubkey",
+        "type": "bytes",
+        "indexed": false,
+        "internalType": "bytes"
       }
     ],
     "anonymous": false
@@ -2801,11 +2848,6 @@
   {
     "type": "error",
     "name": "AlreadySubmitted",
-    "inputs": []
-  },
-  {
-    "type": "error",
-    "name": "AlreadyWithdrawn",
     "inputs": []
   },
   {
@@ -2981,6 +3023,11 @@
   {
     "type": "error",
     "name": "ZeroPauseDuration",
+    "inputs": []
+  },
+  {
+    "type": "error",
+    "name": "ZeroRewardAddress",
     "inputs": []
   }
 ]

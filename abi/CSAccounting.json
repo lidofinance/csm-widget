@@ -1514,13 +1514,7 @@
         "internalType": "uint256"
       }
     ],
-    "outputs": [
-      {
-        "name": "settledAmount",
-        "type": "uint256",
-        "internalType": "uint256"
-      }
-    ],
+    "outputs": [],
     "stateMutability": "nonpayable"
   },
   {

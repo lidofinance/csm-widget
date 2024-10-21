@@ -5,14 +5,14 @@ import {
   useCsmCurveId,
   useCsmEarlyAdoption,
   useCsmEarlyAdoptionProofConsumed,
-  useCsmStatus,
+  useCsmPaused,
+  useKeysAvailable,
   useKeysUploadLimit,
   useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
 import { type SubmitKeysFormNetworkData } from './types';
-import { useKeysAvailable } from 'shared/hooks';
 
 export const useSubmitKeysFormNetworkData = (): [
   SubmitKeysFormNetworkData,
@@ -48,11 +48,8 @@ export const useSubmitKeysFormNetworkData = (): [
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
-  const {
-    data: keysUploadLimit,
-    update: updateKeysUploadLimit,
-    initialLoading: isKeysUploadLimitLoading,
-  } = useKeysUploadLimit();
+  const { data: keysUploadLimit, initialLoading: isKeysUploadLimitLoading } =
+    useKeysUploadLimit();
 
   const { data: keysAvailable } = useKeysAvailable({
     curveId,
@@ -62,7 +59,7 @@ export const useSubmitKeysFormNetworkData = (): [
     wstethBalance,
   });
 
-  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
+  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
@@ -71,7 +68,6 @@ export const useSubmitKeysFormNetworkData = (): [
       updateEtherBalance(),
       mutateConsumed(true), // @note hack to revalidate without loading state
       updateMaxStakeEther(),
-      updateKeysUploadLimit(),
     ]);
   }, [
     updateStethBalance,
@@ -79,7 +75,6 @@ export const useSubmitKeysFormNetworkData = (): [
     updateEtherBalance,
     mutateConsumed,
     updateMaxStakeEther,
-    updateKeysUploadLimit,
   ]);
 
   const loading = useMemo(

@@ -17,13 +17,29 @@ type CsmConstants = {
   deploymentBlockNumber: HexString;
   stakingModuleId: number;
   withdrawalCredentials: Address;
-  earlyAdoptionMaxKeys: number;
+  earlyAdoptionMaxKeys: number; // TODO: drop this const
   retentionPeriodMins: number;
   firstKeyBond: [string, string]; // [default, ea]
 };
 
 export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
-  [CHAINS.Mainnet]: undefined,
+  [CHAINS.Mainnet]: {
+    contracts: {
+      CSAccounting: '0x4d72BFF1BeaC69925F8Bd12526a39BAAb069e5Da',
+      CSEarlyAdoption: '0x3D5148ad93e2ae5DedD1f7A8B3C19E7F67F90c0E',
+      CSFeeDistributor: '0xD99CC66fEC647E68294C6477B40fC7E0F6F618D0',
+      CSFeeOracle: '0x4D4074628678Bd302921c20573EEa1ed38DdF7FB',
+      CSModule: '0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F',
+      CSVerifier: '0x3Dfc50f22aCA652a0a6F28a0F892ab62074b5583',
+      ExitBusOracle: '0x0De4Ea0184c2ad0BacA7183356Aea5B8d5Bf5c6e',
+    },
+    deploymentBlockNumber: '0x13f7326',
+    stakingModuleId: 3,
+    withdrawalCredentials: '0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f',
+    earlyAdoptionMaxKeys: 12,
+    retentionPeriodMins: 80_640, // 8 weeks
+    firstKeyBond: ['2.4', '1.3'],
+  },
   [CHAINS.Holesky]: {
     contracts: {
       CSAccounting: '0xc093e53e8F4b55A223c18A2Da6fA00e60DD5EFE1',

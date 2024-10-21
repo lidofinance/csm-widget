@@ -46,9 +46,8 @@ const routesConnected: Route[] = [
   },
   {
     name: 'Keys',
-    path: PATH.KEYS,
+    path: PATH.CREATE,
     icon: <KeyIcon />,
-    subPaths: [PATH.KEYS_SUBMIT],
     showRule: 'CAN_CREATE',
   },
   {

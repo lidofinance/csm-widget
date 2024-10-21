@@ -3,23 +3,23 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
-  useNonWithdrawnKeysCount,
+  useCsmPaused,
+  useKeysAvailable,
   useKeysUploadLimit,
   useNodeOperatorBalance,
   useNodeOperatorCurveId,
+  useNonWithdrawnKeysCount,
   useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
-  useCsmStatus,
 } from 'shared/hooks';
 import { type AddKeysFormNetworkData } from './types';
-import { useKeysAvailable } from 'shared/hooks';
 
 export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
   () => Promise<void>,
 ] => {
-  const { data: status, initialLoading: isStatusLoading } = useCsmStatus();
+  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: etherBalance,

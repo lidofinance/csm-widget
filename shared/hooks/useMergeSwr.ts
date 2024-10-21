@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 export const useMergeSwr = <T, E = Error>(
   swrResponses: SWRResponse<any, E>[],
   data: T | undefined,
+  options?: { immutable?: boolean },
 ): SWRResponse<T, E> =>
   useMemo(
     () => ({
@@ -24,8 +25,10 @@ export const useMergeSwr = <T, E = Error>(
       },
 
       async update() {
-        const list = swrResponses.map((r) => r.update());
-        await Promise.allSettled(list);
+        if (!options?.immutable) {
+          const list = swrResponses.map((r) => r.update());
+          await Promise.allSettled(list);
+        }
         return data;
       },
 
@@ -33,5 +36,5 @@ export const useMergeSwr = <T, E = Error>(
         throw new Error('mutate is not supported here');
       },
     }),
-    [data, swrResponses],
+    [data, options?.immutable, swrResponses],
   );

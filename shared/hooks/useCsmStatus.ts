@@ -1,38 +1,37 @@
-import { useLidoSWR } from '@lido-sdk/react';
+import { useContractSWR } from '@lido-sdk/react';
 import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
-import { useCallback } from 'react';
-import { getSettledValue } from 'utils';
-import { useAccount } from './use-account';
+import { useMemo } from 'react';
 import { useCSAccountingRPC, useCSModuleRPC } from './useCsmContracts';
+import { useMergeSwr } from './useMergeSwr';
 
-export const useCsmStatus = (config = STRATEGY_CONSTANT) => {
-  const { chainId } = useAccount();
-  const CSModule = useCSModuleRPC();
-  const CSAccounting = useCSAccountingRPC();
+export const useCsmPaused = (config = STRATEGY_CONSTANT) => {
+  const swrModulePaused = useContractSWR({
+    contract: useCSModuleRPC(),
+    method: 'isPaused',
+    config,
+  });
 
-  const fetcher = useCallback(async () => {
-    const [isPausedResult, isAccountingPausedResult, isPublicReleaseResult] =
-      await Promise.allSettled([
-        CSModule.isPaused(),
-        CSAccounting.isPaused(),
-        CSModule.publicRelease(),
-      ]);
+  const swrAccountingPaused = useContractSWR({
+    contract: useCSAccountingRPC(),
+    method: 'isPaused',
+    config,
+  });
 
-    const isPaused = getSettledValue(isPausedResult);
-    const isAccountingPaused = getSettledValue(isAccountingPausedResult);
-    const isPublicRelease = getSettledValue(isPublicReleaseResult);
-    const isEarlyAdoption =
-      isPublicRelease !== undefined ? !isPublicRelease : undefined;
-    const isUnavailable = [isPaused, isPublicRelease].includes(undefined);
+  const result = useMemo(
+    () => ({
+      isPaused: swrModulePaused.data,
+      isAccountingPaused: swrAccountingPaused.data,
+    }),
+    [swrAccountingPaused.data, swrModulePaused.data],
+  );
 
-    return {
-      isPaused,
-      isAccountingPaused,
-      isPublicRelease,
-      isEarlyAdoption,
-      isUnavailable,
-    };
-  }, [CSAccounting, CSModule]);
+  return useMergeSwr([swrModulePaused, swrAccountingPaused], result);
+};
 
-  return useLidoSWR(['csm-status', chainId], fetcher, config);
+export const useCsmPublicRelease = (config = STRATEGY_CONSTANT) => {
+  return useContractSWR({
+    contract: useCSModuleRPC(),
+    method: 'publicRelease',
+    config,
+  });
 };
