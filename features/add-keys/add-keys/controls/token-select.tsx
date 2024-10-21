@@ -26,7 +26,7 @@ export const TokenSelect: React.FC = () => {
           </MatomoLink>
         }
       >
-        Choose a token to upload a bond
+        Choose bond token
       </FormTitle>
       <TokenButtonsHookForm
         options={{
