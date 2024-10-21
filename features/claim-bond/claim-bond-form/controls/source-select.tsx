@@ -1,5 +1,5 @@
 import { Checkbox } from '@lidofinance/lido-ui';
-import { BOND_EXCESS, BOND_SHORTAGE } from 'consts/text';
+import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { FC, useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
@@ -17,7 +17,7 @@ export const SourceSelect: FC = () => {
 
   const { field } = useController<ClaimBondFormInputType, 'claimRewards'>({
     name: 'claimRewards',
-    disabled: bond?.isShortage,
+    disabled: bond?.isInsufficient,
   });
 
   const { setValue } = useFormContext<ClaimBondFormInputType>();
@@ -25,10 +25,10 @@ export const SourceSelect: FC = () => {
   const availableToClaim = maxValues?.[TOKENS.STETH][Number(field.value)];
 
   useEffect(() => {
-    if (bond?.isShortage) {
+    if (bond?.isInsufficient) {
       setValue('claimRewards', true);
     }
-  }, [bond?.isShortage, setValue]);
+  }, [bond?.isInsufficient, setValue]);
 
   const showLockedBond = bond?.locked.gt(0);
 
@@ -59,20 +59,20 @@ export const SourceSelect: FC = () => {
           token={TOKENS.STETH}
         />
         <TitledSelectableAmount
-          warning={bond?.isNoticiableShortage}
+          warning={bond?.isNoticiableInsufficient}
           title={
             <Checkbox
               checked
               disabled
-              label={bond?.isShortage ? BOND_SHORTAGE : BOND_EXCESS}
+              label={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
             />
           }
           help={
-            bond?.isShortage
-              ? 'Shortage bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond shortage, "unbonded" validators are requested for exit by the protocol'
+            bond?.isInsufficient
+              ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol'
               : 'The bond amount available to claim without having to exit validators'
           }
-          sign={bond?.isShortage ? 'minus' : 'plus'}
+          sign={bond?.isInsufficient ? 'minus' : 'plus'}
           loading={loading.isBondLoading}
           amount={bond?.delta}
           token={TOKENS.STETH}
