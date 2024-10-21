@@ -41,8 +41,8 @@ const getTxModalStagesRemoveKeys = (
         title={
           <>
             {props.keysCount}{' '}
-            <Plural variants={['key', 'keys']} value={props.keysCount} /> are
-            removed
+            <Plural variants={['key', 'keys']} value={props.keysCount} /> has
+            been removed
           </>
         }
         description=""

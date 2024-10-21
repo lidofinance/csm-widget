@@ -37,7 +37,7 @@ const getTxModalStagesNormalizeQueue = (
     transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title="Queue is noramlized"
+        title="Queue has been noramlized"
         description={`You have ${keysCount} keys(s) in depositing queue`}
       />,
       {

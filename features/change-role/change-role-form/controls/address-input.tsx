@@ -9,7 +9,7 @@ export const AddressInput: React.FC = () => {
 
   return (
     <>
-      <FormTitle>Insert a new {role} address</FormTitle>
+      <FormTitle>Specify a new {role} address</FormTitle>
       <AddressInputHookForm
         fieldName="address"
         label={`New ${role} address`}
