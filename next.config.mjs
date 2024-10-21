@@ -12,13 +12,6 @@ const isIPFSMode = !!process.env.IPFS_MODE;
 const notReleased = !!process.env.NOT_RELEASED;
 const maintenance = !!process.env.MAINTENANCE;
 
-// eslint-disable-next-line no-console
-console.log(
-  'debug',
-  JSON.stringify(process.env.NOT_RELEASED),
-  JSON.stringify(process.env.DEFAULT_CHAIN),
-);
-
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [

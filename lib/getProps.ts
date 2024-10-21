@@ -1,6 +1,9 @@
 import { GetStaticProps } from 'next';
 import { FaqGetter } from './getFaq';
-import { secretConfig } from 'config';
+import { getConfig, secretConfig } from 'config';
+import { CHAINS } from 'consts/chains';
+
+const { defaultChain } = getConfig();
 
 export const getProps =
   (
@@ -8,7 +11,10 @@ export const getProps =
     options?: { continueAnyway?: boolean; extraProps?: Record<string, any> },
   ): GetStaticProps =>
   async () => {
-    const { notReleased, maintenance } = secretConfig;
+    const config = secretConfig;
+    const notReleased = config.notReleased || defaultChain === CHAINS.Mainnet;
+    const { maintenance } = config;
+
     if (!options?.continueAnyway && (notReleased || maintenance))
       return { notFound: true };
 
