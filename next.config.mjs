@@ -9,9 +9,10 @@ const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
 const isIPFSMode = !!process.env.IPFS_MODE;
-const notReleased =
-  !!process.env.NOT_RELEASED || parseInt(process.env.DEFAULT_CHAIN, 10) === 1; // TODO: drop before mainnet
+const notReleased = !!process.env.NOT_RELEASED;
 const maintenance = !!process.env.MAINTENANCE;
+
+console.log(JSON.stringify(process.env));
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
