@@ -9,7 +9,7 @@ export const AlertStuckKeys: FC = () => (
   <Alert title="You have Stuck keys">
     <p>
       Your validator was marked as “stuck” because it has not been exited timely
-      after the exit request by the protocol. All your keys are excluded from
+      after the Exit Request by the protocol. All your keys are excluded from
       the deposit queue and you don’t receive rewards while having a stuck key.
       To avoid the continuation of the restrictive measures you should exit all
       the stuck validators from CL
