@@ -12,7 +12,8 @@ export const getProps =
   ): GetStaticProps =>
   async () => {
     const config = secretConfig;
-    const notReleased = config.notReleased || defaultChain === CHAINS.Mainnet;
+    const notReleased =
+      config.notReleased || defaultChain === CHAINS.Mainnet || true; // FIXME: this
     const { maintenance } = config;
 
     if (!options?.continueAnyway && (notReleased || maintenance))
