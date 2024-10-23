@@ -1,4 +1,13 @@
-# 1.1.0 (2024-10-23)
+## [1.1.1](https://github.com/lidofinance/csm-widget/compare/1.1.0...1.1.1) (2024-10-23)
+
+
+### Bug Fixes
+
+* release workflow ([#73](https://github.com/lidofinance/csm-widget/issues/73)) ([a5e8318](https://github.com/lidofinance/csm-widget/commit/a5e8318d9da18880bf3f588ec943d023892893da))
+
+
+
+# [1.1.0](https://github.com/lidofinance/csm-widget/compare/a484c2a5584d32dcc69606ae6d823923f0b67d76...1.1.0) (2024-10-23)
 
 
 ### Bug Fixes
