@@ -1,4 +1,4 @@
-import { Identicon, Input } from '@lidofinance/lido-ui';
+import { Identicon } from '@lidofinance/lido-ui';
 import { isAddress } from 'ethers/lib/utils.js';
 import {
   ChangeEvent,
@@ -7,11 +7,19 @@ import {
   useImperativeHandle,
   useRef,
 } from 'react';
-import { InputAddressProps } from './types';
 import { InputDecoratorLocked } from '../input-amount/input-decorator-locked';
+import { StyledInput } from './styles';
+import { InputAddressProps } from './types';
+import { VerifiedChip } from './verified-chip';
 
-export const InputAddress = forwardRef<HTMLInputElement, InputAddressProps>(
-  ({ onChange, value, isLocked, rightDecorator, ...props }, ref) => {
+export const InputAddress = forwardRef<
+  HTMLInputElement,
+  InputAddressProps & { addressName?: string }
+>(
+  (
+    { onChange, value, isLocked, rightDecorator, label, addressName, ...props },
+    ref,
+  ) => {
     const inputRef = useRef<HTMLInputElement>(null);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     useImperativeHandle(ref, () => inputRef.current!, []);
@@ -27,8 +35,14 @@ export const InputAddress = forwardRef<HTMLInputElement, InputAddressProps>(
     const isAddressValid = isAddress(value || '');
 
     return (
-      <Input
+      <StyledInput
         {...props}
+        label={
+          <>
+            {label}
+            {addressName && <VerifiedChip>{addressName}</VerifiedChip>}
+          </>
+        }
         ref={inputRef}
         value={value}
         onChange={handleChange}
