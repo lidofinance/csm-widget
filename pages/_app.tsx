@@ -24,9 +24,7 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
-type AppParams = Partial<
-  Pick<SecretConfigType, 'notReleased' | 'maintenance'>
-> & {
+type AppParams = Partial<Pick<SecretConfigType, 'maintenance'>> & {
   isError?: boolean;
   faqList?: FaqItem[];
 };
@@ -37,7 +35,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   return (
     <FaqContext.Provider value={props.pageProps?.faqList ?? []}>
       <Providers
-        dummy={props.pageProps?.notReleased || props.pageProps?.maintenance}
+        dummy={props.pageProps?.maintenance}
         skipWatcher={props.pageProps?.isError}
       >
         {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
