@@ -1,6 +1,6 @@
 import { useFormState, useWatch } from 'react-hook-form';
 
-import { BOND_EXCESS, BOND_SHORTAGE } from 'consts/text';
+import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { TitledAmount } from 'shared/components';
 import { InputAmount } from 'shared/components/input-amount';
@@ -25,9 +25,9 @@ export const AmountInput = () => {
         fullwidth
       />
       <TitledAmount
-        title={bond?.isShortage ? BOND_SHORTAGE : BOND_EXCESS}
+        title={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
         description={
-          bond?.isShortage
+          bond?.isInsufficient
             ? 'Will be added to the transaction amount'
             : 'Will be subtracted from the transaction amount'
         }

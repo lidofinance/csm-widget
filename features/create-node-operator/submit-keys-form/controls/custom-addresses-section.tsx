@@ -29,7 +29,7 @@ export const CustomAddressesSection: FC = () => {
       </WarningBlock>
       <RewardsAddressInput />
       <ManagerAddressInput />
-      <FormTitle>Select the manager address permissions type</FormTitle>
+      <FormTitle>Select the Manager Address permissions type</FormTitle>
       <WarningBlock>
         This permissions option can only be set once during Node Operator
         creation.

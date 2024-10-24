@@ -85,14 +85,14 @@ const CustomAddresses: FC<Required<Props>> = ({
 
     <Stack direction="column">
       <Stack direction="column" gap="xs">
-        <Text size="xs">Rewards address</Text>
+        <Text size="xs">Rewards Address</Text>
         <Text size="xs" weight={700}>
           <Address as="span" address={rewardsAddress} symbols={21} />
         </Text>
       </Stack>
 
       <Stack direction="column" gap="xs">
-        <Text size="xs">Manager address</Text>
+        <Text size="xs">Manager Address</Text>
         <Text size="xs" weight={700}>
           <Address as="span" address={managerAddress} symbols={21} />
         </Text>
@@ -119,10 +119,10 @@ const ExtendedManagerPermissions: FC = () => (
       <Box color="text" fontSize={2} lineHeight={1.5} padding={12}>
         <Ul>
           <li>
-            Rewards address <b>cannot</b> reset the manager address
+            Rewards Address <b>cannot</b> reset the Manager Address
           </li>
           <li>
-            Manager address <b>can</b> change the rewards address
+            Manager Address <b>can</b> change the Rewards Address
           </li>
         </Ul>
       </Box>

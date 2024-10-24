@@ -9,7 +9,7 @@ export const TokenSelect: React.FC = () => {
 
   return (
     <>
-      <FormTitle>Choose a token to add bond</FormTitle>
+      <FormTitle>Choose bond token</FormTitle>
       <TokenButtonsHookForm
         options={{
           [TOKENS.ETH]: (

@@ -7,7 +7,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const ChangeManagerRolePage: FC = () => (
   <Layout
-    title="Change Manager address"
+    title="Change Manager Address"
     subtitle="Propose new address for change"
     matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageChangeManagerRole}
   >

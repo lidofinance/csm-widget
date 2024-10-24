@@ -21,7 +21,8 @@ export const SubmitButton = () => {
       </SubmitButtonHookForm>
       {keysLimitReached && (
         <Note>
-          You have reached the upload limit of 10 keys. You cannot upload more.
+          You have reached the Early Access upload limit of 10 keys. You cannot
+          upload more.
         </Note>
       )}
     </>

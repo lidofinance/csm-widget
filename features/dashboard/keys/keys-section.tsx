@@ -31,7 +31,7 @@ export const KeysSection: FC = () => {
             <Item
               title="Depositable"
               count={info.depositableValidatorsCount}
-              tooltip="Keys awaiting the deposit from the Lido protocol"
+              tooltip="Keys awaiting deposit from the Lido protocol"
               variant="secondary"
             />
             <Item
@@ -46,7 +46,7 @@ export const KeysSection: FC = () => {
               variant="secondary"
               tooltip={
                 info.targetLimitMode === 1
-                  ? 'The limit of keys for this Node Operator has been set by the DAO decision'
+                  ? 'The limit of keys for this Node Operator has been set by the protocol'
                   : info.targetLimitMode === 2
                     ? 'The limit of keys for this Node Operator has been set due to the existence of stuck keys'
                     : eaTarget
@@ -66,7 +66,7 @@ export const KeysSection: FC = () => {
               variant="warning"
               title="Unbonded"
               count={unbonded ?? '...'}
-              tooltip="Keys that have insufficient bond"
+              tooltip="Keys not sufficiently covered by current bond amount"
             />
             <Item
               variant="warning"
