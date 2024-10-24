@@ -40,6 +40,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
   // Alerts
+  howLearnCsmClose = 'howLearnCsmClose',
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
   howToExitLinkStuckKeysAlert = 'howToExitLinkStuckKeysAlert',
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
@@ -221,6 +222,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     prefixed`feedback_form_link`,
   ],
   // Alerts
+  [MATOMO_CLICK_EVENTS_TYPES.howLearnCsmClose]: [
+    MATOMO_APP_NAME,
+    `Close alert «How did I learn about CSM»`,
+    prefixed`_close_how_learn_csm`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: [
     MATOMO_APP_NAME,
     'Click «How to exit» link on Request To Exit alert',

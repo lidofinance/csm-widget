@@ -12,7 +12,7 @@ const Page = () => (
       fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
     >
       <GateNodeOperator
-        fallback={<Navigate path={PATH.KEYS} fallback={<SplashPage />} />}
+        fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
       >
         <ViewKeysPage />
       </GateNodeOperator>
