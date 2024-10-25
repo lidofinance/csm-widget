@@ -9,4 +9,4 @@ The amount for the second and subsequent validators is 1.3 stETH
 
 For the mainnet, the values for the bond curve are the following:
 
-![curve.png](/assets/curve-common.png)
+![curve.png](/assets/mainnet-curve-common.png)
