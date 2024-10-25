@@ -10,4 +10,4 @@ export const ROUNDING_TRESHOLD = 10;
  *
  * max 10 keys per transaction
  */
-export const MAX_KEYS_TO_UPLOAD = 10;
+export const MAX_KEYS_TO_UPLOAD = 12;
