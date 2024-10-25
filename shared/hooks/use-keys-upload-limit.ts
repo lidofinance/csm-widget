@@ -1,4 +1,4 @@
-import { MAX_KEYS_TO_UPLOAD } from 'consts/treshhold';
+import { getCsmConstants } from 'consts/csm-constants';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import {
   useCsmEarlyAdoptionKeysLimit,
@@ -36,6 +36,8 @@ export const useKeysUploadLimit = () => {
   const nodeOperatorId = useNodeOperatorId();
   const swrUploaded = useNonWithdrawnKeysCount(nodeOperatorId);
   const swrLimit = useKeysLimit();
+
+  const MAX_KEYS_TO_UPLOAD = getCsmConstants().earlyAdoptionMaxKeys;
 
   return useMergeSwr(
     [swrUploaded, swrLimit],
