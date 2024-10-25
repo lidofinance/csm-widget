@@ -8,11 +8,11 @@ export const getProps =
     options?: { continueAnyway?: boolean; extraProps?: Record<string, any> },
   ): GetStaticProps =>
   async () => {
-    const { notReleased, maintenance } = secretConfig;
-    if (!options?.continueAnyway && (notReleased || maintenance))
-      return { notFound: true };
+    const { maintenance } = secretConfig;
 
-    const props = { ...options?.extraProps, notReleased, maintenance };
+    if (!options?.continueAnyway && maintenance) return { notFound: true };
+
+    const props = { ...options?.extraProps, maintenance };
 
     return {
       props: faqGetter ? { ...props, faqList: await faqGetter() } : props,
