@@ -9,7 +9,6 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 type Option = {
   title: string;
-  value: string;
   raw?: string;
 };
 
@@ -21,61 +20,56 @@ type OptionReason = Option & {
 const OPTIONS: OptionReason[] = [
   {
     title: 'Lido Community Lifeguard',
-    value: 'lifeguard',
     subtitle: 'Who was it?',
     options: [
-      { title: 'Sam (Stakesaurus)', value: 'stakesaurus' },
-      { title: 'Isaac (enti)', value: 'enti' },
-      { title: 'StakeCat', value: 'stakecat' },
+      { title: 'Sam (Stakesaurus)' },
+      { title: 'Isaac (enti)' },
+      { title: 'StakeCat' },
     ],
   },
   {
     title: 'Crypto Community',
-    value: 'community',
     subtitle: 'Specify the community',
     options: [
-      { title: 'Lido', value: 'lido' },
-      { title: 'EthStaker', value: 'ethstaker' },
-      { title: 'SEEDLatam', value: 'seedlatam' },
-      { title: 'Bitskwela', value: 'bitskwela' },
-      { title: 'ETH Mexico', value: 'eth_mexico' },
-      { title: 'Next Finance Tech', value: 'next_finance_tech' },
-      { title: 'SSV', value: 'ssv' },
-      { title: 'Obol', value: 'obol' },
-      { title: 'Other', value: 'other', raw: 'What was the community?' },
+      { title: 'Lido' },
+      { title: 'EthStaker' },
+      { title: 'SEEDLatam' },
+      { title: 'Bitskwela' },
+      { title: 'ETH Mexico' },
+      { title: 'Next Finance Tech' },
+      { title: 'SSV' },
+      { title: 'Obol' },
+      { title: 'Other', raw: 'What was the community?' },
     ],
   },
   {
     title: 'Live Event',
-    value: 'live',
     subtitle: 'Specify the event',
     options: [
-      { title: 'EthCC', value: 'ethcc' },
-      { title: 'KBW', value: 'kbw' },
-      { title: 'Token 2049', value: 'token_2049' },
-      { title: 'ETH Sofia', value: 'eth_sofia' },
-      { title: 'Merge Madrid', value: 'merge_madrid' },
+      { title: 'EthCC' },
+      { title: 'KBW' },
+      { title: 'Token 2049' },
+      { title: 'ETH Sofia' },
+      { title: 'Merge Madrid' },
       {
         title: 'Lido gathering (Singapore)',
-        value: 'lido_gathering_singapore',
       },
-      { title: 'Stakers Guild (Brussels)', value: 'stakers_guild_brussels' },
-      { title: 'Other', value: 'other', raw: 'What was the event?' },
+      { title: 'Stakers Guild (Brussels)' },
+      { title: 'Other', raw: 'What was the event?' },
     ],
   },
   {
     title: 'Online Event',
-    value: 'online',
     subtitle: 'What was the event?',
     options: [
-      { title: 'Lido NOCCs', value: 'noccs' },
-      { title: 'Lido CS Roundtables', value: 'cs_rountables' },
-      { title: 'EthStaker Community Call - CSM', value: 'ethstaker_cc_csm' },
-      { title: 'Other', value: 'other', raw: 'What was the event?' },
+      { title: 'Lido NOCCs' },
+      { title: 'Lido CS Roundtables' },
+      { title: 'EthStaker Community Call - CSM' },
+      { title: 'Other', raw: 'What was the event?' },
     ],
   },
-  { title: 'Friend or Colleague', value: 'friend_or_colleague' },
-  { title: 'Other', value: 'other', raw: 'Please, specify the source' },
+  { title: 'Friend or Colleague' },
+  { title: 'Other', raw: 'Please, specify the source' },
 ];
 
 type FormInput = {
@@ -100,7 +94,10 @@ export const AlertHowDidYouLearCsm: FC<{
 
   const onSubmit = useCallback(
     (data: FormInput) => {
-      trackMatomoHowLearnCsm(data.reason1, data.reason2, data.raw);
+      const answer = [data.reason1, data.reason2, data.raw]
+        .filter(Boolean)
+        .join(' > ');
+      trackMatomoHowLearnCsm(answer);
       setSubmitted(true);
       onAnswer();
     },
@@ -118,11 +115,11 @@ export const AlertHowDidYouLearCsm: FC<{
   }, [resetField, reason1, reason2]);
 
   const selected1 = useMemo(
-    () => OPTIONS.find((item) => item.value === reason1),
+    () => OPTIONS.find((item) => item.title === reason1),
     [reason1],
   );
   const selected2 = useMemo(
-    () => selected1?.options?.find((item) => item.value === reason2),
+    () => selected1?.options?.find((item) => item.title === reason2),
     [reason2, selected1?.options],
   );
 
@@ -163,7 +160,7 @@ export const AlertHowDidYouLearCsm: FC<{
                   {...field}
                 >
                   {OPTIONS.map((item) => (
-                    <Option key={item.value} value={item.value}>
+                    <Option key={item.title} value={item.title}>
                       {item.title}
                     </Option>
                   ))}
@@ -184,7 +181,7 @@ export const AlertHowDidYouLearCsm: FC<{
                     {...field}
                   >
                     {selected1?.options?.map((item) => (
-                      <Option key={item.value} value={item.value}>
+                      <Option key={item.title} value={item.title}>
                         {item.title}
                       </Option>
                     ))}
