@@ -28,4 +28,4 @@ const Page = () => {
 
 export default Page;
 
-export const getStaticProps = getProps();
+export const getServerSideProps = getProps();

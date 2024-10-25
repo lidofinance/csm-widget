@@ -22,4 +22,4 @@ const Page = () => (
 
 export default Page;
 
-export const getStaticProps = getProps(getFaqBond);
+export const getServerSideProps = getProps(getFaqBond);
