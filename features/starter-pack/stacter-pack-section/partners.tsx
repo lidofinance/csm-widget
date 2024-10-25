@@ -27,7 +27,7 @@ export const Partners: FC = () => (
       <Stereum />
     </MatomoLink>
     <MatomoLink
-      href="https://github.com/lidofinance/eth-docker"
+      href="https://ethdocker.com/"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.partnerEthdocker}
       title="Eth Docker"
     >
