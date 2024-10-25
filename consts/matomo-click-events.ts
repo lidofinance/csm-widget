@@ -54,7 +54,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Pages
   pageWelcome = 'pageWelcome',
   pageStarterPack = 'pageStarterPack',
-  pageNotReleased = 'pageNotReleased',
   pageMaintenance = 'pageMaintenance',
   pageCreateNodeOperator = 'pageCreateNodeOperator',
   pageDashboard = 'pageDashboard',
@@ -282,11 +281,6 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «StarterPack»',
     prefixed`view_starter_pack_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageNotReleased]: [
-    MATOMO_APP_NAME,
-    'View page «NotReleased»',
-    prefixed`view_not_released_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageMaintenance]: [
     MATOMO_APP_NAME,
