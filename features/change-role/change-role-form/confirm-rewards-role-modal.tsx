@@ -17,7 +17,7 @@ export const ConfirmRewardsRoleModal: ModalComponentType<ConfirmModalProps> = ({
             All rewards will be claimable to the proposed address
           </Text>
           <Text size="xs" color="secondary">
-            After changing the Rewards address, all rewards and excess bond
+            After changing the Rewards Address, all rewards and excess bond
             accumulated on the bond balance can be claimed to the new Rewards
             address. In the event of validator withdrawal, the whole bond is
             also returned to the new address.

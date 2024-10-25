@@ -77,7 +77,7 @@ const getTxModalStagesSubmitKeys = (
     return transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title="Node Operator is created"
+        title="Node Operator has been created"
         description={
           nodeOperatorId ? (
             <>
@@ -107,7 +107,7 @@ export const AfterCreationInstructions: FC<{ keys: string[] }> = ({ keys }) => {
       <b>What is next: </b>
       <br />
       <ol>
-        <li>Wait for your keys to be deposited through the protocol.</li>
+        <li>Wait for your keys to be deposited to through the protocol.</li>
         <li>
           Once your keys become active (check the status on{' '}
           <LocalLink
@@ -116,7 +116,7 @@ export const AfterCreationInstructions: FC<{ keys: string[] }> = ({ keys }) => {
           >
             the Keys tab
           </LocalLink>
-          ) make sure your validators are attesting blocks{' '}
+          ) make sure your validators are producing attestations{' '}
           {beaconchainDashboardLink && (
             <>
               (you can use{' '}

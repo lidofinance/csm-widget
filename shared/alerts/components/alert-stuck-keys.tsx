@@ -8,11 +8,11 @@ import { ReactComponent as Arrow } from 'assets/icons/arrow-right.svg';
 export const AlertStuckKeys: FC = () => (
   <Alert title="You have Stuck keys">
     <p>
-      Your validator was marked as “stuck” because it has not been exited timely
-      after the exit request by the protocol. All your keys are excluded from
-      the deposit queue and you don’t receive rewards while having a stuck key.
-      To avoid the continuation of the restrictive measures you should exit all
-      the stuck validators from CL
+      Your validator has been marked as “stuck” due to a delay in exiting after
+      the protocol’s exit request. As a result, all associated keys have been
+      excluded from the deposit queue, and no rewards are earned while a key
+      remains stuck. To lift these restrictions, please exit all stuck
+      validators from the CL promptly
     </p>
     <MatomoLink
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToExitLinkStuckKeysAlert}

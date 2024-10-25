@@ -9,8 +9,7 @@ const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
 const isIPFSMode = !!process.env.IPFS_MODE;
-const notReleased = !!process.env.NOT_RELEASED;
-const maintenance = !!process.env.MAINTENANCE;
+const maintenance = !!process.env.MAINTENANCE; // TODO: load from runtime config
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
@@ -159,7 +158,6 @@ export default withBundleAnalyzer({
     // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
     basePath,
     developmentMode,
-    notReleased,
     maintenance,
 
     defaultChain: process.env.DEFAULT_CHAIN,

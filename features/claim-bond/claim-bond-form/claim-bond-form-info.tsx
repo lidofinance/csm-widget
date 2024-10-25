@@ -18,7 +18,7 @@ export const ClaimBondFormInfo = () => {
 
   return (
     <DataTable>
-      <DataTableRow title="Rewards address will receive">
+      <DataTableRow title="Rewards Address will receive">
         <FormatToken amount={amount ?? Zero} token={token} />
       </DataTableRow>
       {claimRewards && (

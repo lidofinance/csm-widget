@@ -38,3 +38,11 @@ export const trackMatomoTxEvent = (
       prefixed`perform_tx_${stage}`,
     );
 };
+
+export const trackMatomoHowLearnCsm = (answer: string) => {
+  trackEvent(
+    MATOMO_APP_NAME,
+    `How did I learn about CSM: «${answer}»`,
+    prefixed`_how_learn_csm`,
+  );
+};

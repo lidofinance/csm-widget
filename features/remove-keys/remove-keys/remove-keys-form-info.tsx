@@ -29,7 +29,7 @@ export const RemoveKeysFormInfo = () => {
         <FormatToken amount={removalFee} token={TOKENS.STETH} />
       </DataTableRow>
       <DataTableRow
-        title={`${balance?.isShortage ? 'Shortage' : 'Excess'} bond after execution`}
+        title={`${balance?.isInsufficient ? 'Insufficient' : 'Excess'} bond after execution`}
         loading={isBalanceLoading}
       >
         <FormatToken amount={balance?.delta} token={TOKENS.STETH} />

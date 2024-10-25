@@ -54,7 +54,7 @@ const getTxModalStagesAddKeys = (
     transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title={<>Your keys are uploaded</>}
+        title={<>Your keys has been uploaded</>}
         description={<SuccessText {...STAGE_OPERATION_ARGS} />}
       />,
       {

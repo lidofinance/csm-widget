@@ -1,9 +1,6 @@
 import { GetStaticProps } from 'next';
 import { FaqGetter } from './getFaq';
-import { getConfig, secretConfig } from 'config';
-import { CHAINS } from 'consts/chains';
-
-const { defaultChain } = getConfig();
+import { secretConfig } from 'config';
 
 export const getProps =
   (
@@ -11,15 +8,11 @@ export const getProps =
     options?: { continueAnyway?: boolean; extraProps?: Record<string, any> },
   ): GetStaticProps =>
   async () => {
-    const config = secretConfig;
-    const notReleased =
-      config.notReleased || defaultChain === CHAINS.Mainnet || true; // FIXME: this
-    const { maintenance } = config;
+    const { maintenance } = secretConfig;
 
-    if (!options?.continueAnyway && (notReleased || maintenance))
-      return { notFound: true };
+    if (!options?.continueAnyway && maintenance) return { notFound: true };
 
-    const props = { ...options?.extraProps, notReleased, maintenance };
+    const props = { ...options?.extraProps, maintenance };
 
     return {
       props: faqGetter ? { ...props, faqList: await faqGetter() } : props,

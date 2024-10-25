@@ -12,14 +12,10 @@ const StyledServicePage = styled(ServicePage)`
   min-height: 70vh;
 `;
 
-const Page404: FC<Pick<SecretConfigType, 'notReleased' | 'maintenance'>> = ({
-  notReleased,
+const Page404: FC<Pick<SecretConfigType, 'maintenance'>> = ({
   maintenance,
 }) => (
-  <Layout
-    dummy={notReleased || maintenance}
-    matomoEvent={MATOMO_CLICK_EVENTS_TYPES.page404}
-  >
+  <Layout dummy={maintenance} matomoEvent={MATOMO_CLICK_EVENTS_TYPES.page404}>
     <StyledServicePage title="404">
       <Head>
         <title>Lido | Page Not Found</title>

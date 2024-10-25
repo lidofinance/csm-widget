@@ -6,7 +6,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { ReactComponent as Arrow } from 'assets/icons/arrow-right.svg';
 
 export const AlertRequestToExit: FC = () => (
-  <Alert title="You have an Exit request">
+  <Alert title="You have an Exit Request">
     <p>
       Your validator has been requested to exit by the Lido protocol. You need
       to exit the validator from the CL as soon as possible to avoid the penalty
