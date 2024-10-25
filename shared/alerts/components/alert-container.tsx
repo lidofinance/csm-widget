@@ -6,7 +6,7 @@ const AlertContainerStyled = styled.div`
   position: absolute;
   top: 100%;
   right: 32px;
-  max-width: 300px;
+  width: 300px;
 
   display: flex;
   flex-direction: column;
@@ -14,6 +14,7 @@ const AlertContainerStyled = styled.div`
 
   @media screen and (max-width: 1286px) {
     position: static;
+    width: initial;
     max-width: 590px; /* like Main */
     margin: 0 auto;
     padding: 0 20px;

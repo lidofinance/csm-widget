@@ -25,7 +25,7 @@ const Page = () => (
           </GateCanCreate>
         }
       >
-        <Navigate path={PATH.HOME} fallback={<SplashPage />} />
+        <Navigate path={PATH.KEYS_VIEW} fallback={<SplashPage />} />
       </GateNodeOperator>
     </GateActiveUser>
   </GateLoaded>

@@ -6,6 +6,7 @@ import { useCallback } from 'react';
 import {
   GatherPermitSignatureResult,
   useAddressCompare,
+  useAskHowDidYouLearnCsm,
   useCSModuleWeb3,
   useKeysCache,
   usePermitOrApprove,
@@ -125,6 +126,7 @@ export const useSubmitKeysSubmit = ({
   const { addCacheKeys } = useKeysCache();
 
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
+  const { ask } = useAskHowDidYouLearnCsm();
 
   return useCallback(
     async (
@@ -205,6 +207,10 @@ export const useSubmitKeysSubmit = ({
           },
           txHash,
         );
+        ask();
+
+        // TODO: move to onConfirm
+        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
 
         // TODO: move to onConfirm
         if (nodeOperator) {
@@ -214,9 +220,6 @@ export const useSubmitKeysSubmit = ({
             rewards: isUserOrZero(nodeOperator.rewardsAddress),
           });
         }
-
-        // TODO: move to onConfirm
-        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
 
         await onConfirm?.();
 
@@ -236,6 +239,7 @@ export const useSubmitKeysSubmit = ({
       appendNO,
       isUserOrZero,
       onRetry,
+      ask,
     ],
   );
 };
