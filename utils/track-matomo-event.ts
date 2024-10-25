@@ -40,6 +40,8 @@ export const trackMatomoTxEvent = (
 };
 
 export const trackMatomoHowLearnCsm = (answer: string) => {
+  // eslint-disable-next-line no-console
+  console.log(`How did I learn about CSM: «${answer}»`);
   trackEvent(
     MATOMO_APP_NAME,
     `How did I learn about CSM: «${answer}»`,

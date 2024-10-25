@@ -1,4 +1,3 @@
-import { checkCookieAllowed } from '@lidofinance/analytics-matomo';
 import { ROLES } from 'consts/roles';
 import { useActiveNodeOperator } from 'providers/node-operator-provider';
 import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
@@ -76,22 +75,19 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   }, [closeAlert, lockedBond, showAlert]);
 
   useEffect(() => {
-    const allowed = checkCookieAllowed();
-    if (allowed && canAsk) {
-      showAlert(AlertHowDidYouLearCsm, {
-        onClose: () => {
-          rejectAnswer();
-          closeAlert(AlertHowDidYouLearCsm);
-        },
-        onAnswer() {
-          answer();
+    showAlert(AlertHowDidYouLearCsm, {
+      onClose: () => {
+        rejectAnswer();
+        closeAlert(AlertHowDidYouLearCsm);
+      },
+      onAnswer() {
+        answer();
 
-          setTimeout(() => {
-            closeAlert(AlertHowDidYouLearCsm);
-          }, 3000);
-        },
-      });
-    }
+        setTimeout(() => {
+          closeAlert(AlertHowDidYouLearCsm);
+        }, 3000);
+      },
+    });
   }, [answer, canAsk, closeAlert, rejectAnswer, showAlert]);
 
   return children;
