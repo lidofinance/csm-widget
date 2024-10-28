@@ -1,3 +1,14 @@
+## [1.2.2](https://github.com/lidofinance/csm-widget/compare/1.2.1...1.2.2) (2024-10-28)
+
+
+### Bug Fixes
+
+* changelog ([ef3a4e3](https://github.com/lidofinance/csm-widget/commit/ef3a4e37f5f2b69610569f58bcaafbeea5bdec77))
+* claim bond with no available rewards ([d47689c](https://github.com/lidofinance/csm-widget/commit/d47689ce223326fdaf581cd5931e762d3d3d865c))
+* read query params for ref & mode ([ae92af3](https://github.com/lidofinance/csm-widget/commit/ae92af39bb346082e0be09f2e433748d0807be1e))
+
+
+
 ## [1.2.1](https://github.com/lidofinance/csm-widget/compare/1.2.0...1.2.1) (2024-10-28)
 
 
@@ -13,7 +24,7 @@
 ### Bug Fixes
 
 * faq images ([1b7ddba](https://github.com/lidofinance/csm-widget/commit/1b7ddbac0ad60991927c24eae3e16bd6c7b0be47))
-* todos in changelog ([6fc66c9](https://github.com/lidofinance/csm-widget/commit/6fc66c94ab66254b9802a4b24408d150101f1b6f))
+* todo in changelog ([6fc66c9](https://github.com/lidofinance/csm-widget/commit/6fc66c94ab66254b9802a4b24408d150101f1b6f))
 * upload limit ([6374ba6](https://github.com/lidofinance/csm-widget/commit/6374ba646dd29aa27190569bfea523b3b4c978b5))
 
 
@@ -98,7 +109,7 @@
 * skip load rewards tree if there is no treeCid ([45f4f04](https://github.com/lidofinance/csm-widget/commit/45f4f049ac342442a665e79b5c5e6264eb518674))
 * svgo keep viewBox ([79e749a](https://github.com/lidofinance/csm-widget/commit/79e749aae5475961b90f3b8018144f3dcb511aa3))
 * testnet ([b9b565f](https://github.com/lidofinance/csm-widget/commit/b9b565f05a295c6d6ea930062db6ec2ba4043038))
-* todos & link ([1e42450](https://github.com/lidofinance/csm-widget/commit/1e424500bd5305a8fd082c927087880c90cd0043))
+* todo & link ([1e42450](https://github.com/lidofinance/csm-widget/commit/1e424500bd5305a8fd082c927087880c90cd0043))
 * tree link ([a71a226](https://github.com/lidofinance/csm-widget/commit/a71a226d7c5bb6bc8b9fdd5face0b610eb8c83ef))
 * turn on unoptimized images - we didn't use this module at all ([b7ef7ea](https://github.com/lidofinance/csm-widget/commit/b7ef7ea47b267ad89eb3cf4b1a4f7ba41599ac40))
 * typo fix ([fe2c471](https://github.com/lidofinance/csm-widget/commit/fe2c4712496f36eb443d68604d8f14da6672f703))
