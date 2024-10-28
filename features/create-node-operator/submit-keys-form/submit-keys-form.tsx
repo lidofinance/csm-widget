@@ -17,7 +17,7 @@ import { TokenSelect } from './controls/token-select';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
 
 export const SubmitKeysForm: FC = memo(() => {
-  const { customAddresses, referrer } = useModifyContext();
+  const { referrer } = useModifyContext();
 
   return (
     <SubmitKeysFormProvider>
@@ -27,7 +27,7 @@ export const SubmitKeysForm: FC = memo(() => {
             <TokenSelect />
             <KeysInput />
             <AmountInput />
-            {customAddresses && <CustomAddressesSection />}
+            <CustomAddressesSection />
             {referrer && <ReferrerInput />}
             <SubmitButton />
           </FormControllerStyled>
