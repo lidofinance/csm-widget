@@ -1,3 +1,12 @@
+## [1.2.1](https://github.com/lidofinance/csm-widget/compare/1.2.0...1.2.1) (2024-10-28)
+
+
+### Bug Fixes
+
+* always extended mode ([5982511](https://github.com/lidofinance/csm-widget/commit/5982511f27dffc77e01d11d6efd0971d69cf0ef3))
+
+
+
 # [1.2.0](https://github.com/lidofinance/csm-widget/compare/1.1.1...1.2.0) (2024-10-25)
 
 
