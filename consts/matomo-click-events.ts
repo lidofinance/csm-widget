@@ -39,6 +39,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
+  tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   // Alerts
   howLearnCsmClose = 'howLearnCsmClose',
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
@@ -219,6 +220,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «Submit report with form» link',
     prefixed`feedback_form_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink]: [
+    MATOMO_APP_NAME,
+    'Click «Join CSM» in other network link',
+    prefixed`try_csm_link`,
   ],
   // Alerts
   [MATOMO_CLICK_EVENTS_TYPES.howLearnCsmClose]: [
