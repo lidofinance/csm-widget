@@ -51,6 +51,7 @@ export const SourceSelect: FC = () => {
               {...field}
               value=""
               checked={!!field.value}
+              disabled={!rewards?.available.gt(0)}
             />
           }
           help="The rewards amount available to claim, obtained from all active validators of the Node Operator"
