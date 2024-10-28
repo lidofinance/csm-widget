@@ -78,6 +78,7 @@ export * from './useNodeOperatorUnbondedKeys';
 export * from './useNodeOperatorsCount';
 export * from './usePrevious';
 export * from './useSafeQueryString';
+export * from './useSearchParams';
 export * from './useSessionStorage';
 export * from './useSsrMode';
 export * from './useStakingLimitInfo';

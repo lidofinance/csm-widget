@@ -1,7 +1,6 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
 import { isAddress } from 'ethers/lib/utils.js';
-import { useRouter } from 'next/router';
 import {
   createContext,
   FC,
@@ -10,19 +9,16 @@ import {
   useEffect,
   useMemo,
 } from 'react';
-import { useSessionStorage } from 'shared/hooks';
+import { useSearchParams, useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { compareLowercase, getFirstParam, trackMatomoEvent } from 'utils';
+import { compareLowercase, trackMatomoEvent } from 'utils';
 import { Address } from 'wagmi';
 
 type ModifyContextValue = {
-  customAddresses: boolean;
   referrer?: Address;
 };
 
 const QUERY_REFERRER = 'ref';
-const QUERY_MODE = 'mode';
-const MODE_EXTENDED = 'extended';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -37,34 +33,18 @@ export const useModifyContext = () => {
 };
 
 export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [customAddresses, setCustomAddresses] = useSessionStorage(
-    'custom-address',
-    false,
-  );
-
   const [referrer, setReferrer] = useSessionStorage<Address | undefined>(
     'referrer',
     undefined,
   );
 
-  const { query, isReady } = useRouter();
+  const query = useSearchParams();
 
   useEffect(() => {
-    if (!isReady || customAddresses) return;
+    if (!query) return;
 
-    const mode = getFirstParam(query[QUERY_MODE]);
+    const refParam = query?.get(QUERY_REFERRER) ?? undefined;
 
-    if (mode === MODE_EXTENDED) {
-      setCustomAddresses(true);
-
-      trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.visitWithModeExtended);
-    }
-  }, [customAddresses, isReady, query, setCustomAddresses]);
-
-  useEffect(() => {
-    if (!isReady) return;
-
-    const refParam = getFirstParam(query[QUERY_REFERRER]);
     const ref =
       REF_MAPPING.find(({ ref }) => compareLowercase(ref, refParam))?.address ||
       refParam;
@@ -74,14 +54,13 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
 
       trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer);
     }
-  }, [isReady, query, referrer, setReferrer]);
+  }, [query, referrer, setReferrer]);
 
   const value: ModifyContextValue = useMemo(
     () => ({
-      customAddresses,
       referrer,
     }),
-    [customAddresses, referrer],
+    [referrer],
   );
   return (
     <ModifyContext.Provider value={value}>{children}</ModifyContext.Provider>
