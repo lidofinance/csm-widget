@@ -1,5 +1,5 @@
 ---
-title: What is required to use CSM as a to be a Node Operator?
+title: What is required to be a Node Operator is CSM?
 ---
 
 Node operation in CSM involves a long-term commitment to Ethereum's decentralization. Responsibilities include:
