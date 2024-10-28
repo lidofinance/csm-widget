@@ -1,4 +1,4 @@
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import { FaqGetter } from './getFaq';
 import { secretConfig } from 'config';
 
@@ -6,7 +6,7 @@ export const getProps =
   (
     faqGetter?: FaqGetter,
     options?: { continueAnyway?: boolean; extraProps?: Record<string, any> },
-  ): GetStaticProps =>
+  ): GetServerSideProps =>
   async () => {
     const { maintenance } = secretConfig;
 

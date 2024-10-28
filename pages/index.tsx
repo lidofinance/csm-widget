@@ -26,4 +26,6 @@ const Page: FC<PageProps> = ({ maintenance }) => {
 
 export default Page;
 
-export const getStaticProps = getProps(getFaqMain, { continueAnyway: true });
+export const getServerSideProps = getProps(getFaqMain, {
+  continueAnyway: true,
+});

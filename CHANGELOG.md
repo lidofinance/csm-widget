@@ -1,3 +1,20 @@
+# [1.2.0](https://github.com/lidofinance/csm-widget/compare/1.1.1...1.2.0) (2024-10-25)
+
+
+### Bug Fixes
+
+* faq images ([1b7ddba](https://github.com/lidofinance/csm-widget/commit/1b7ddbac0ad60991927c24eae3e16bd6c7b0be47))
+* todos in changelog ([6fc66c9](https://github.com/lidofinance/csm-widget/commit/6fc66c94ab66254b9802a4b24408d150101f1b6f))
+* upload limit ([6374ba6](https://github.com/lidofinance/csm-widget/commit/6374ba646dd29aa27190569bfea523b3b4c978b5))
+
+
+### Features
+
+* get first-key bond amount ([13425ad](https://github.com/lidofinance/csm-widget/commit/13425ad992db404f516f531c895acb3898913dc9))
+* how did i learn csm ([01aa109](https://github.com/lidofinance/csm-widget/commit/01aa109043de561ccce8b06a1a90c8d64deea6c0))
+
+
+
 ## [1.1.1](https://github.com/lidofinance/csm-widget/compare/1.1.0...1.1.1) (2024-10-23)
 
 
