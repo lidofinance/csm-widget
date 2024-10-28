@@ -100,9 +100,6 @@ export const useClaimBondSubmit = ({
     ): Promise<boolean> => {
       invariant(token, 'Token is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
-      if (claimRewards) {
-        invariant(rewards, 'Rewards proof is not defined');
-      }
 
       try {
         txModalStages.sign({ amount, token });

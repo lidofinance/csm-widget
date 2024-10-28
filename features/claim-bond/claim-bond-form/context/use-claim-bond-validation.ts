@@ -18,10 +18,15 @@ export const useClaimBondValidation = (
     async (values, _, options) => {
       try {
         const { token, amount, claimRewards } = values;
-        const { maxValues } = await contextPromise;
+        const { maxValues, rewards } = await contextPromise;
 
-        if (options.names?.includes('amount') && amount?.gt(0)) {
-          validateEtherAmount('amount', amount, token);
+        if (options.names?.includes('amount')) {
+          validateEtherAmount(
+            'amount',
+            amount,
+            token,
+            claimRewards && rewards?.available.gt(0),
+          );
 
           const maxAmount = maxValues?.[token][Number(claimRewards)];
           if (amount && maxAmount)
