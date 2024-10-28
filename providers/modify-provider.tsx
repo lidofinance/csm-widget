@@ -1,7 +1,6 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
 import { isAddress } from 'ethers/lib/utils.js';
-import { useRouter } from 'next/router';
 import {
   createContext,
   FC,
@@ -10,9 +9,9 @@ import {
   useEffect,
   useMemo,
 } from 'react';
-import { useSessionStorage } from 'shared/hooks';
+import { useSearchParams, useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { compareLowercase, getFirstParam, trackMatomoEvent } from 'utils';
+import { compareLowercase, trackMatomoEvent } from 'utils';
 import { Address } from 'wagmi';
 
 type ModifyContextValue = {
@@ -47,24 +46,25 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     undefined,
   );
 
-  const { query, isReady } = useRouter();
+  const query = useSearchParams();
 
   useEffect(() => {
-    if (!isReady || customAddresses) return;
+    if (!query || customAddresses) return;
 
-    const mode = getFirstParam(query[QUERY_MODE]);
+    const mode = query.get(QUERY_MODE) ?? undefined;
 
     if (mode === MODE_EXTENDED) {
       setCustomAddresses(true);
 
       trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.visitWithModeExtended);
     }
-  }, [customAddresses, isReady, query, setCustomAddresses]);
+  }, [customAddresses, query, setCustomAddresses]);
 
   useEffect(() => {
-    if (!isReady) return;
+    if (!query) return;
 
-    const refParam = getFirstParam(query[QUERY_REFERRER]);
+    const refParam = query?.get(QUERY_REFERRER) ?? undefined;
+
     const ref =
       REF_MAPPING.find(({ ref }) => compareLowercase(ref, refParam))?.address ||
       refParam;
@@ -74,7 +74,7 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
 
       trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer);
     }
-  }, [isReady, query, referrer, setReferrer]);
+  }, [query, referrer, setReferrer]);
 
   const value: ModifyContextValue = useMemo(
     () => ({
