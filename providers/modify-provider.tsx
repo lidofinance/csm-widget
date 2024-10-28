@@ -15,13 +15,10 @@ import { compareLowercase, trackMatomoEvent } from 'utils';
 import { Address } from 'wagmi';
 
 type ModifyContextValue = {
-  customAddresses: boolean;
   referrer?: Address;
 };
 
 const QUERY_REFERRER = 'ref';
-const QUERY_MODE = 'mode';
-const MODE_EXTENDED = 'extended';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -36,29 +33,12 @@ export const useModifyContext = () => {
 };
 
 export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [customAddresses, setCustomAddresses] = useSessionStorage(
-    'custom-address',
-    false,
-  );
-
   const [referrer, setReferrer] = useSessionStorage<Address | undefined>(
     'referrer',
     undefined,
   );
 
   const query = useSearchParams();
-
-  useEffect(() => {
-    if (!query || customAddresses) return;
-
-    const mode = query.get(QUERY_MODE) ?? undefined;
-
-    if (mode === MODE_EXTENDED) {
-      setCustomAddresses(true);
-
-      trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.visitWithModeExtended);
-    }
-  }, [customAddresses, query, setCustomAddresses]);
 
   useEffect(() => {
     if (!query) return;
@@ -78,10 +58,9 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const value: ModifyContextValue = useMemo(
     () => ({
-      customAddresses,
       referrer,
     }),
-    [customAddresses, referrer],
+    [referrer],
   );
   return (
     <ModifyContext.Provider value={value}>{children}</ModifyContext.Provider>
