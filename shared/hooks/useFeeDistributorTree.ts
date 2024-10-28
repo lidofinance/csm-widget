@@ -19,6 +19,8 @@ export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
   return useLidoSWR(
     ['fee-distributor-tree', chainId],
     async () => {
+      return null;
+
       const [cid, root] = await Promise.all([
         feeDistributorRPC.treeCid(),
         feeDistributorRPC.treeRoot(),
