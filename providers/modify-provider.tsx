@@ -1,6 +1,7 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
 import { isAddress } from 'ethers/lib/utils.js';
+import { useRouter } from 'next/router';
 import {
   createContext,
   FC,
@@ -40,8 +41,16 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const query = useSearchParams();
 
+  const router = useRouter();
+
   useEffect(() => {
     if (!query) return;
+
+    if (!router.isReady) return;
+
+    const aaa = router.query.ref;
+    // eslint-disable-next-line no-console
+    console.log(aaa);
 
     const refParam = query?.get(QUERY_REFERRER) ?? undefined;
 
@@ -54,7 +63,7 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
 
       trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer);
     }
-  }, [query, referrer, setReferrer]);
+  }, [query, referrer, router.isReady, router.query.ref, setReferrer]);
 
   const value: ModifyContextValue = useMemo(
     () => ({
