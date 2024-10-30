@@ -8,14 +8,23 @@ export const validateEtherAmount = (
   field: string,
   amount: BigNumber | undefined,
   token: TOKENS,
+  allowZero = false,
 ) => {
   if (!amount) throw new ValidationError(field, '');
 
-  if (amount.lte(Zero))
-    throw new ValidationError(
-      field,
-      `Enter ${getTokenDisplayName(token)} ${field} greater than 0`,
-    );
+  if (allowZero) {
+    if (amount.lt(Zero))
+      throw new ValidationError(
+        field,
+        `Enter ${getTokenDisplayName(token)} ${field}`,
+      );
+  } else {
+    if (amount.lte(Zero))
+      throw new ValidationError(
+        field,
+        `Enter ${getTokenDisplayName(token)} ${field} greater than 0`,
+      );
+  }
 
   if (token === TOKENS.ETH && amount.lt(MIN_ETH_AMOUNT))
     throw new ValidationError(
