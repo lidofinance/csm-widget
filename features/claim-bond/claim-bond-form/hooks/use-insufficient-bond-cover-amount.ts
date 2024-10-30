@@ -1,10 +1,10 @@
 import { Zero } from '@ethersproject/constants';
 import { useClaimBondFormData } from '../context';
 
-export const useShortageBondCoverAmount = () => {
+export const useInsufficientBondCoverAmount = () => {
   const { bond, rewards } = useClaimBondFormData();
 
-  return bond?.isShortage
+  return bond?.isInsufficient
     ? bond.delta.gt(rewards?.available ?? Zero)
       ? rewards?.available
       : bond.delta

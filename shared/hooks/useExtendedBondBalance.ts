@@ -15,16 +15,16 @@ export const useExtendedBondBalance = (
     const requiredWithoutLocked = required.sub(locked);
 
     const delta = current.sub(requiredWithoutLocked);
-    const isShortage = delta?.lt(0) ?? false;
-    const isNoticiableShortage = delta?.lt(-ROUNDING_TRESHOLD) ?? false;
+    const isInsufficient = delta?.lt(0) ?? false;
+    const isNoticiableInsufficient = delta?.lt(-ROUNDING_TRESHOLD) ?? false;
 
     return {
       required: requiredWithoutLocked,
       current,
       locked,
       delta: delta.abs(),
-      isShortage,
-      isNoticiableShortage,
+      isInsufficient,
+      isNoticiableInsufficient,
     } as BondBalance;
   }, [required, current, locked]);
 };

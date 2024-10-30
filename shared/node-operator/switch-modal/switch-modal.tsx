@@ -56,10 +56,10 @@ export const SwitchModal: ModalComponentType<{
       </ListStyle>
       <StyledStack>
         <StyledStackItem>
-          <RoleBadge role={ROLES.REWARDS} /> Rewards address role
+          <RoleBadge role={ROLES.REWARDS} /> Rewards Address role
         </StyledStackItem>
         <StyledStackItem>
-          <RoleBadge role={ROLES.MANAGER} /> Manager address role
+          <RoleBadge role={ROLES.MANAGER} /> Manager Address role
         </StyledStackItem>
       </StyledStack>
     </Modal>

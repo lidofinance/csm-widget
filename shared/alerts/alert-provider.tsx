@@ -62,7 +62,12 @@ const AlertProviderRaw: FC<PropsWithChildren> = ({ children }) => {
     (component) => {
       setAlertsState((prev) => {
         const index = prev.findIndex((alert) => alert.component === component);
-        return index >= 0 ? prev.splice(index, 1) : prev;
+        if (index >= 0) {
+          const next = Array.from(prev);
+          next.splice(index, 1);
+          return next;
+        }
+        return prev;
       });
     },
     [],

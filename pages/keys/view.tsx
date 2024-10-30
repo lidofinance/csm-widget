@@ -12,7 +12,7 @@ const Page = () => (
       fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
     >
       <GateNodeOperator
-        fallback={<Navigate path={PATH.KEYS} fallback={<SplashPage />} />}
+        fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
       >
         <ViewKeysPage />
       </GateNodeOperator>
@@ -22,4 +22,4 @@ const Page = () => (
 
 export default Page;
 
-export const getStaticProps = getProps(getFaqKeys);
+export const getServerSideProps = getProps(getFaqKeys);

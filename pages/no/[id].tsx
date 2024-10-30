@@ -3,18 +3,19 @@ import { SplashPage } from 'features/welcome';
 import { useRouter } from 'next/router';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useEffect } from 'react';
+import { useSearchParams } from 'shared/hooks';
 import { NodeOperatorId } from 'types';
-import { getFirstParam } from 'utils';
 
 const Page = () => {
-  const { query, isReady, push } = useRouter();
+  const { push } = useRouter();
+  const query = useSearchParams();
   const { appendAndSwitch } = useNodeOperatorContext();
 
   useEffect(() => {
-    if (!isReady) return;
+    if (!query) return;
 
     const apply = async () => {
-      const queryId = getFirstParam(query['id']) as NodeOperatorId;
+      const queryId = query.get('id') ?? '';
       const numberId = parseInt(queryId);
       if (!Number.isNaN(numberId)) {
         const id: NodeOperatorId = `${numberId}`;
@@ -24,7 +25,7 @@ const Page = () => {
     };
 
     void apply();
-  }, [appendAndSwitch, isReady, push, query]);
+  }, [appendAndSwitch, push, query]);
 
   return <SplashPage />;
 };

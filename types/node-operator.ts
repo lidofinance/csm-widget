@@ -28,8 +28,8 @@ export type BondBalance = {
   locked: BigNumber;
 
   delta: BigNumber;
-  isShortage: boolean;
-  isNoticiableShortage: boolean;
+  isInsufficient: boolean;
+  isNoticiableInsufficient: boolean;
 };
 
 export type RewardProof = {

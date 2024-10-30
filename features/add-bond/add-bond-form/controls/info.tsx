@@ -1,4 +1,4 @@
-import { BOND_EXCESS, BOND_SHORTAGE } from 'consts/text';
+import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { FC } from 'react';
 import { Latice, TitledAmount } from 'shared/components';
@@ -18,11 +18,11 @@ export const Info: FC = () => {
           token={TOKENS.STETH}
         />
         <TitledAmount
-          warning={bond?.isNoticiableShortage}
-          title={bond?.isShortage ? BOND_SHORTAGE : BOND_EXCESS}
+          warning={bond?.isNoticiableInsufficient}
+          title={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
           help={
-            bond?.isShortage
-              ? 'Shortage bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond shortage, "unbonded" validators are requested for exit by the protocol'
+            bond?.isInsufficient
+              ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol'
               : 'The bond amount available to claim without having to exit validators'
           }
           loading={loading.isBondLoading}

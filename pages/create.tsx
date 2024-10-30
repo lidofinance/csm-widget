@@ -25,7 +25,7 @@ const Page = () => (
           </GateCanCreate>
         }
       >
-        <Navigate path={PATH.HOME} fallback={<SplashPage />} />
+        <Navigate path={PATH.KEYS_VIEW} fallback={<SplashPage />} />
       </GateNodeOperator>
     </GateActiveUser>
   </GateLoaded>
@@ -33,4 +33,4 @@ const Page = () => (
 
 export default Page;
 
-export const getStaticProps = getProps(getFaqKeys);
+export const getServerSideProps = getProps(getFaqKeys);

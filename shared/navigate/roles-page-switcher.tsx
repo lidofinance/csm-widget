@@ -5,7 +5,7 @@ import { SwitchRoutes } from 'shared/components/switch/types';
 
 const ROLE_ROUTES: SwitchRoutes = [
   {
-    title: 'Rewards address',
+    title: 'Rewards Address',
     path: PATH.ROLES_REWARDS,
     roles: [
       ROLE_CODE.MANAGER,
@@ -14,7 +14,7 @@ const ROLE_ROUTES: SwitchRoutes = [
     ],
   },
   {
-    title: 'Manager address',
+    title: 'Manager Address',
     path: PATH.ROLES_MANAGER,
     roles: [
       ROLE_CODE.MANAGER,

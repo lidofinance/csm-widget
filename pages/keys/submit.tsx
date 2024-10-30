@@ -33,4 +33,4 @@ const Page = () => (
 
 export default Page;
 
-export const getStaticProps = getProps(getFaqKeys);
+export const getServerSideProps = getProps(getFaqKeys);

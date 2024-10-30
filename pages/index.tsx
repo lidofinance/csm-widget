@@ -1,17 +1,16 @@
 import { SecretConfigType } from 'config';
 import { DashboardPage } from 'features/dashboard';
 import { StarterPackPage } from 'features/starter-pack';
-import { NotReleasedPage, SplashPage, WelcomePage } from 'features/welcome';
+import { SplashPage, WelcomePage } from 'features/welcome';
 import { MaintenancePage } from 'features/welcome/maintenance-page';
 import { getFaqMain } from 'lib/getFaq';
 import { getProps } from 'lib/getProps';
 import { FC } from 'react';
 import { GateActiveUser, GateLoaded, GateNodeOperator } from 'shared/gates';
 
-type PageProps = Pick<SecretConfigType, 'notReleased' | 'maintenance'>;
+type PageProps = Pick<SecretConfigType, 'maintenance'>;
 
-const Page: FC<PageProps> = ({ notReleased, maintenance }) => {
-  if (notReleased) return <NotReleasedPage />;
+const Page: FC<PageProps> = ({ maintenance }) => {
   if (maintenance) return <MaintenancePage />;
 
   return (
@@ -27,4 +26,6 @@ const Page: FC<PageProps> = ({ notReleased, maintenance }) => {
 
 export default Page;
 
-export const getStaticProps = getProps(getFaqMain, { continueAnyway: true });
+export const getServerSideProps = getProps(getFaqMain, {
+  continueAnyway: true,
+});

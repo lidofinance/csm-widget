@@ -51,7 +51,7 @@ const getTxModalStagesAcceptInvite = (
     transitStage(
       <TxStageSuccess
         txHash={txHash}
-        title={<>Address change is accepted</>}
+        title={<>Address change has been accepted</>}
         description={
           <>
             {getRoleTitle(role, true)} address of <DescriptorId id={id} /> is

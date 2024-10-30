@@ -39,7 +39,9 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
+  tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   // Alerts
+  howLearnCsmClose = 'howLearnCsmClose',
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
   howToExitLinkStuckKeysAlert = 'howToExitLinkStuckKeysAlert',
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
@@ -54,7 +56,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Pages
   pageWelcome = 'pageWelcome',
   pageStarterPack = 'pageStarterPack',
-  pageNotReleased = 'pageNotReleased',
   pageMaintenance = 'pageMaintenance',
   pageCreateNodeOperator = 'pageCreateNodeOperator',
   pageDashboard = 'pageDashboard',
@@ -220,7 +221,17 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Submit report with form» link',
     prefixed`feedback_form_link`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink]: [
+    MATOMO_APP_NAME,
+    'Click «Join CSM» in other network link',
+    prefixed`try_csm_link`,
+  ],
   // Alerts
+  [MATOMO_CLICK_EVENTS_TYPES.howLearnCsmClose]: [
+    MATOMO_APP_NAME,
+    `Close alert «How did I learn about CSM»`,
+    prefixed`_close_how_learn_csm`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: [
     MATOMO_APP_NAME,
     'Click «How to exit» link on Request To Exit alert',
@@ -282,11 +293,6 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «StarterPack»',
     prefixed`view_starter_pack_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageNotReleased]: [
-    MATOMO_APP_NAME,
-    'View page «NotReleased»',
-    prefixed`view_not_released_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageMaintenance]: [
     MATOMO_APP_NAME,
