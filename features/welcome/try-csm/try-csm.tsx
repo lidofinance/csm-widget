@@ -1,14 +1,14 @@
 import { Button, Text } from '@lidofinance/lido-ui';
 import { getConfig } from 'config';
 import { CHAINS } from 'consts/chains';
-import { CSM_TESTNET_LINK } from 'consts/external-links';
+import { CSM_MAINNET_LINK, CSM_TESTNET_LINK } from 'consts/external-links';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 import { StyledBlock, StyledStack } from './styles';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 const { defaultChain } = getConfig();
 
-// TODO: matomo events
 export const TryCSM: FC = () => {
   const isMainnet = defaultChain === CHAINS.Mainnet;
 
@@ -19,7 +19,10 @@ export const TryCSM: FC = () => {
           <Text weight={700} size="lg">
             Try CSM on Holesky
           </Text>
-          <MatomoLink href={CSM_TESTNET_LINK}>
+          <MatomoLink
+            href={CSM_TESTNET_LINK}
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink}
+          >
             <Button size="xs" variant="outlined">
               Join CSM testnet
             </Button>
@@ -32,19 +35,21 @@ export const TryCSM: FC = () => {
       </StyledBlock>
     );
 
-  return null; // TODO: remove after deploy csm.lido.fi
-  // return (
-  //   <StyledBlock>
-  //     <StyledStack>
-  //       <Text weight={700} size="lg">
-  //         Try CSM on Mainnet
-  //       </Text>
-  //       <MatomoLink href={CSM_MAINNET_LINK}>
-  //         <Button size="xs" variant="outlined">
-  //           Join CSM Mainnet
-  //         </Button>
-  //       </MatomoLink>
-  //     </StyledStack>
-  //   </StyledBlock>
-  // );
+  return (
+    <StyledBlock>
+      <StyledStack>
+        <Text weight={700} size="lg">
+          Try CSM on Mainnet
+        </Text>
+        <MatomoLink
+          href={CSM_MAINNET_LINK}
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink}
+        >
+          <Button size="xs" variant="outlined">
+            Join CSM Mainnet
+          </Button>
+        </MatomoLink>
+      </StyledStack>
+    </StyledBlock>
+  );
 };
