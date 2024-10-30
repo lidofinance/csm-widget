@@ -20,7 +20,7 @@ export const SubmitButton = () => {
         errorField="rawDepositData"
         disabled={keysLimitReached}
       >
-        {keysLimitReached ? 'Keys limit has reached' : 'Submit keys'}
+        {keysLimitReached ? 'Keys limit has been reached' : 'Submit keys'}
       </SubmitButtonHookForm>
       {keysLimitReached && (
         <Note>
