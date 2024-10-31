@@ -77,7 +77,7 @@ const CustomAddresses: FC<Required<Props>> = ({
         Are you sure you want to set the following custom addresses?
       </Text>
       <Text size="xs" color="secondary">
-        Please doublecheck the new addresses for the Node Operator. Keep in mind
+        Please double-check the new addresses for the Node Operator. Keep in mind
         that in case of wrong addresses specified, you can lose the access to
         your Node Operator and your bond submitted and rewards acquired.
       </Text>

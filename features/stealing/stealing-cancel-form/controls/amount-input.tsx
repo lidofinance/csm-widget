@@ -11,7 +11,7 @@ export const AmountInput: React.FC = () => {
 
   return (
     <>
-      <FormTitle>Enter cancelation amount</FormTitle>
+      <FormTitle>Enter cancellation amount</FormTitle>
       <TokenAmountInputHookForm
         fieldName="amount"
         token={TOKENS.ETH}
