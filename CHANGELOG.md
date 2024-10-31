@@ -1,6 +1,25 @@
 # This file is no longer used by semantic-release
 For the latest release notes, please see the [GitHub releases page](https://github.com/lidofinance/csm-widget/releases).
 
+## [1.2.2](https://github.com/lidofinance/csm-widget/compare/1.2.1...1.2.2) (2024-10-28)
+
+
+### Bug Fixes
+
+* changelog ([ef3a4e3](https://github.com/lidofinance/csm-widget/commit/ef3a4e37f5f2b69610569f58bcaafbeea5bdec77))
+* claim bond with no available rewards ([d47689c](https://github.com/lidofinance/csm-widget/commit/d47689ce223326fdaf581cd5931e762d3d3d865c))
+* read query params for ref & mode ([ae92af3](https://github.com/lidofinance/csm-widget/commit/ae92af39bb346082e0be09f2e433748d0807be1e))
+
+
+
+## [1.2.1](https://github.com/lidofinance/csm-widget/compare/1.2.0...1.2.1) (2024-10-28)
+
+
+### Bug Fixes
+
+* always extended mode ([5982511](https://github.com/lidofinance/csm-widget/commit/5982511f27dffc77e01d11d6efd0971d69cf0ef3))
+
+
 # [1.2.0](https://github.com/lidofinance/csm-widget/compare/1.1.1...1.2.0) (2024-10-25)
 
 
