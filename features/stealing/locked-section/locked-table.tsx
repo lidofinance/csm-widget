@@ -16,7 +16,7 @@ export const LockedTable: FC<Props> = ({ data, offset = 0 }) => (
     <TableStyle>
       <Thead>
         <Tr>
-          <Th>Node Operarod ID</Th>
+          <Th>Node Operator ID</Th>
           <Th>Locked bond amount</Th>
         </Tr>
       </Thead>

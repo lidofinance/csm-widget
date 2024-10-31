@@ -14,7 +14,7 @@ export const checkPreviouslySubmittedDuplicates = (
     const hasDuplicate = storedKeys[pubkey] !== undefined;
     if (hasDuplicate) {
       throw new Error(
-        `pubkey ${trimAddress(pubkey, TRIM_LENGTH)} was previosly submitted`,
+        `pubkey ${trimAddress(pubkey, TRIM_LENGTH)} was previously submitted`,
       );
     }
   });
