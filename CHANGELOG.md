@@ -1,3 +1,6 @@
+# This file is no longer used by semantic-release
+For the latest release notes, please see the [GitHub releases page](https://github.com/lidofinance/csm-widget/releases).
+
 # [1.2.0](https://github.com/lidofinance/csm-widget/compare/1.1.1...1.2.0) (2024-10-25)
 
 
