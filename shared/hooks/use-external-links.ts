@@ -12,8 +12,7 @@ export const useBeaconchainDashboardLink = (
 ) => {
   const { data: keys } = useNodeOperatorKeys(nodeOperatorId, false, 20);
 
-  if (!links.beaconchainDashboard) return null;
-  return `${links.beaconchainDashboard}/dashboard?validators=${(keys || directKeys)?.join(',') ?? ''}`;
+  return `${links.beaconchainDashboard}?validators=${(keys || directKeys)?.join(',') ?? ''}`;
 };
 
 export const useFeesMonitoningLink = (nodeOperatorId?: NodeOperatorId) => {

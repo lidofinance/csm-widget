@@ -116,21 +116,16 @@ export const AfterCreationInstructions: FC<{ keys: string[] }> = ({ keys }) => {
           >
             the Keys tab
           </LocalLink>
-          ) make sure your validators are producing attestations{' '}
-          {beaconchainDashboardLink && (
-            <>
-              (you can use{' '}
-              <MatomoLink
-                matomoEvent={
-                  MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
-                }
-                href={beaconchainDashboardLink}
-              >
-                beaconcha.in
-              </MatomoLink>{' '}
-              dashboard to check)
-            </>
-          )}
+          ) make sure your validators are producing attestations (you can use{' '}
+          <MatomoLink
+            matomoEvent={
+              MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
+            }
+            href={beaconchainDashboardLink}
+          >
+            beaconcha.in
+          </MatomoLink>{' '}
+          dashboard to check)
         </li>
       </ol>
     </BlockStyled>
