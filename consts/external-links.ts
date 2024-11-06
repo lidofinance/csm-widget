@@ -39,7 +39,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     feesMonitoring: 'https://fees-monitoring.lido.fi',
     operatorsWidget: 'https://operators.lido.fi',
     beaconchain: 'https://beaconcha.in',
-    beaconchainDashboard: '', // FIXME: link
+    beaconchainDashboard: 'https://v2-beta-mainnet.beaconcha.in/dashboard',
     subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
     keysApi: 'https://keys-api.lido.fi',
   },
@@ -58,7 +58,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     feesMonitoring: 'https://fees-monitoring-holesky.testnet.fi',
     operatorsWidget: 'https://operators-holesky.testnet.fi',
     beaconchain: 'https://holesky.beaconcha.in',
-    beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in',
+    beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
     subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
     keysApi: 'https://keys-api-holesky.testnet.fi',
   },
