@@ -222,6 +222,7 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «subscribe events» link after Create NO',
     prefixed`create_success_subscribe_events_link`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.otherModuleLink]: [
     MATOMO_APP_NAME,
     'Click «operators.lido.fi» link for other module',
