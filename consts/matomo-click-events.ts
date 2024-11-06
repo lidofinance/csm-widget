@@ -36,6 +36,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
   createSuccessKeysTab = 'createSuccessKeysTab',
   createSuccessBeaconchainDashboard = 'createSuccessBeaconchainDashboard',
+  otherModuleLink = 'otherModuleLink',
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
@@ -209,6 +210,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «beaconcha.in bashboard» link after Create NO',
     prefixed`create_success_beaconchain_dashboard_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.otherModuleLink]: [
+    MATOMO_APP_NAME,
+    'Click «operators.lido.fi» link for other module',
+    prefixed`operator_in_other_module_link`,
   ],
   // Common
   [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: [
