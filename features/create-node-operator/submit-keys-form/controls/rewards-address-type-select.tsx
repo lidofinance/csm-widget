@@ -1,18 +1,25 @@
-import { FC } from 'react';
+import { Text } from '@lidofinance/lido-ui';
+import { ChangeEvent, FC, useCallback } from 'react';
 import { useController } from 'react-hook-form';
 import { RadioButton, Stack, Ul } from 'shared/components';
-import { SubmitKeysFormInputType } from '../context';
-import { Text } from '@lidofinance/lido-ui';
-import styled from 'styled-components';
 import { StackStyle } from 'shared/components/stack/style';
+import styled from 'styled-components';
+import { SubmitKeysFormInputType } from '../context';
 
 export const RewardsAddressTypeSelect: FC = () => {
-  const {
-    field,
-    formState: { defaultValues },
-  } = useController<SubmitKeysFormInputType, 'extendedManagerPermissions'>({
+  const { field } = useController<
+    SubmitKeysFormInputType,
+    'extendedManagerPermissions'
+  >({
     name: 'extendedManagerPermissions',
   });
+
+  const onChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      field.onChange(e.target.value === 'on');
+    },
+    [field],
+  );
 
   return (
     <StackWrap>
@@ -20,8 +27,9 @@ export const RewardsAddressTypeSelect: FC = () => {
         small
         {...field}
         {...{
-          value: false,
-          defaultChecked: !defaultValues?.extendedManagerPermissions,
+          value: 'off',
+          checked: !field.value,
+          onChange,
         }}
       >
         <Stack direction="column" gap="sm">
@@ -43,8 +51,9 @@ export const RewardsAddressTypeSelect: FC = () => {
         small
         {...field}
         {...{
-          value: true,
-          defaultChecked: defaultValues?.extendedManagerPermissions,
+          value: 'on',
+          checked: field.value,
+          onChange,
         }}
       >
         <Stack direction="column" gap="sm">
