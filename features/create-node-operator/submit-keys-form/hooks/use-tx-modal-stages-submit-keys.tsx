@@ -20,6 +20,7 @@ import {
 } from 'shared/transaction-modal/tx-stages-basic';
 import styled from 'styled-components';
 import { NodeOperatorId } from 'types';
+import { getExternalLinks } from 'consts/external-links';
 
 type Props = {
   keysCount: number;
@@ -102,6 +103,7 @@ export const useTxModalStagesSubmitKeys = () => {
 
 export const AfterCreationInstructions: FC<{ keys: string[] }> = ({ keys }) => {
   const beaconchainDashboardLink = useBeaconchainDashboardLink(undefined, keys);
+  const { subscribeEvents, beaconchain } = getExternalLinks();
   return (
     <BlockStyled color="background">
       <b>What is next: </b>
@@ -116,16 +118,35 @@ export const AfterCreationInstructions: FC<{ keys: string[] }> = ({ keys }) => {
           >
             the Keys tab
           </LocalLink>
-          ) make sure your validators are producing attestations (you can use{' '}
+          , on{' '}
           <MatomoLink
-            matomoEvent={
-              MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
-            }
-            href={beaconchainDashboardLink}
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain}
+            href={beaconchain}
           >
             beaconcha.in
           </MatomoLink>{' '}
-          dashboard to check)
+          or subscribe to{' '}
+          <MatomoLink
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents}
+            href={subscribeEvents}
+          >
+            the CSM events notifications
+          </MatomoLink>
+          ) make sure your validators are producing attestations{' '}
+          {beaconchainDashboardLink && (
+            <>
+              (you can use{' '}
+              <MatomoLink
+                matomoEvent={
+                  MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
+                }
+                href={beaconchainDashboardLink}
+              >
+                beaconcha.in dashboard
+              </MatomoLink>{' '}
+              to check)
+            </>
+          )}
         </li>
       </ol>
     </BlockStyled>

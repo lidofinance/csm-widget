@@ -36,6 +36,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
   createSuccessKeysTab = 'createSuccessKeysTab',
   createSuccessBeaconchainDashboard = 'createSuccessBeaconchainDashboard',
+  createSuccessBeaconchain = 'createSuccessBeaconchain',
+  createSuccessSubscribeEvents = 'createSuccessSubscribeEvents',
   otherModuleLink = 'otherModuleLink',
   splitsOrgDocumentation = 'splitsOrgDocumentation',
   // Common
@@ -211,6 +213,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «beaconcha.in bashboard» link after Create NO',
     prefixed`create_success_beaconchain_dashboard_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain]: [
+    MATOMO_APP_NAME,
+    'Click «beaconcha.in» link after Create NO',
+    prefixed`create_success_beaconchain_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents]: [
+    MATOMO_APP_NAME,
+    'Click «subscribe events» link after Create NO',
+    prefixed`create_success_subscribe_events_link`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.otherModuleLink]: [
     MATOMO_APP_NAME,
