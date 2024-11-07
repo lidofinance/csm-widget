@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
+import { NoSSRWrapper } from 'shared/components';
 import { Button } from 'shared/node-operator';
 
 const HeaderNodeOperator: FC = () => {

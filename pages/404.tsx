@@ -1,10 +1,9 @@
 import { ServicePage } from '@lidofinance/lido-ui';
-import { SecretConfigType } from 'config';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { getProps } from 'lib/getProps';
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import { FC } from 'react';
-import { Layout } from 'shared/components';
+import { Layout } from 'shared/layout';
 import styled from 'styled-components';
 
 const StyledServicePage = styled(ServicePage)`
@@ -12,10 +11,8 @@ const StyledServicePage = styled(ServicePage)`
   min-height: 70vh;
 `;
 
-const Page404: FC<Pick<SecretConfigType, 'maintenance'>> = ({
-  maintenance,
-}) => (
-  <Layout dummy={maintenance} matomoEvent={MATOMO_CLICK_EVENTS_TYPES.page404}>
+const Page404: FC = () => (
+  <Layout dummy={true} matomoEvent={MATOMO_CLICK_EVENTS_TYPES.page404}>
     <StyledServicePage title="404">
       <Head>
         <title>Lido | Page Not Found</title>
@@ -27,7 +24,6 @@ const Page404: FC<Pick<SecretConfigType, 'maintenance'>> = ({
 
 export default Page404;
 
-export const getStaticProps = getProps(undefined, {
-  continueAnyway: true,
-  extraProps: { isError: true },
+export const getStaticProps: GetStaticProps = () => ({
+  props: { isError: true },
 });

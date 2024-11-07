@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
+import { NoSSRWrapper } from 'shared/components';
 import { useAccount } from 'shared/hooks';
 import { Button, Connect } from 'shared/wallet';
 

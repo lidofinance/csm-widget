@@ -1,3 +1,4 @@
+import { Counter } from 'shared/components';
 import styled, { css } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA, NAV_MOBILE_HEIGHT } from 'styles/constants';
@@ -9,7 +10,6 @@ export const desktopCss = css`
 
   svg {
     flex-shrink: 0;
-    margin-right: 10px;
   }
 `;
 
@@ -27,11 +27,6 @@ const mobileCss = css`
   align-items: center;
   border-top: 1px solid var(--lido-color-border);
   height: ${NAV_MOBILE_HEIGHT}px;
-
-  svg {
-    margin-right: 0;
-    margin-bottom: 7px;
-  }
 `;
 
 export const Nav = styled.div`
@@ -47,7 +42,7 @@ export const Nav = styled.div`
 // Not wrapping <a> inside <a> in IPFS mode
 // Also avoid problems with migrate to Next v13
 // see: https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration#link-component
-export const NavLink = styled.span<{ $active: boolean }>`
+export const NavLink = styled.span<{ $active?: boolean }>`
   cursor: pointer;
   color: var(--lido-color-secondary);
   font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
@@ -60,7 +55,12 @@ export const NavLink = styled.span<{ $active: boolean }>`
   text-transform: uppercase;
   text-decoration: none !important;
   letter-spacing: 0.04em;
-  opacity: ${(props) => (props.$active ? 1 : 0.8)};
+  opacity: ${(props) => (props.$active ? 1 : 0.7)};
+
+  gap: 10px;
+  ${NAV_MOBILE_MEDIA} {
+    gap: 7px;
+  }
 
   :hover {
     opacity: 1;
@@ -84,5 +84,9 @@ export const NavLink = styled.span<{ $active: boolean }>`
     font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
     line-height: 1.2em;
     letter-spacing: 0;
+  }
+
+  ${Counter} {
+    opacity: ${(props) => (props.$active ? 1 : 0.8)};
   }
 `;

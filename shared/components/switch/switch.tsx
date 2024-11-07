@@ -1,23 +1,22 @@
 import { FC, useMemo } from 'react';
 
-import { useActiveNodeOperator } from 'providers/node-operator-provider';
 import { useRouterPath } from 'shared/hooks';
-import { getRoleCode } from 'shared/node-operator';
 import { getIsActivePath } from 'utils';
+import { Stack } from '../stack/stack';
 import { Handle, SwitchWrapper } from './styles';
 import { SwitchItem } from './switch-item';
 import { SwitchProps } from './types';
+import { useShowSwitchRules } from './use-show-switch-rules';
 
-export const Switch: FC<SwitchProps> = ({ active, routes }) => {
-  const nodeOperator = useActiveNodeOperator();
-
+export const Switch: FC<SwitchProps> = ({ routes }) => {
+  const check = useShowSwitchRules();
   const pathname = useRouterPath();
 
   const filteredRoutes = useMemo(() => {
     return routes.filter(
-      ({ roles }) => !roles || roles.includes(getRoleCode(nodeOperator)),
+      ({ showRules }) => !showRules || showRules.some(check),
     );
-  }, [nodeOperator, routes]);
+  }, [check, routes]);
 
   const activePathIndex = useMemo(
     () =>
@@ -29,11 +28,14 @@ export const Switch: FC<SwitchProps> = ({ active, routes }) => {
 
   return (
     <SwitchWrapper $count={filteredRoutes.length}>
-      <Handle $active={active ?? activePathIndex} />
+      {activePathIndex >= 0 && <Handle $active={activePathIndex} />}
       {filteredRoutes.map((route) => {
         return (
           <SwitchItem key={route.title} href={route.path}>
-            {route.title}
+            <Stack gap="sm" center>
+              {route.title}
+              {route.suffix}
+            </Stack>
           </SwitchItem>
         );
       })}
