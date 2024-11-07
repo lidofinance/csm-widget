@@ -1,12 +1,19 @@
 import { Address, Checkbox } from '@lidofinance/lido-ui';
 import { ChangeEventHandler, FC, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Latice, Stack } from 'shared/components';
+import { Latice, Stack, StatusChip } from 'shared/components';
+import { StatusStyle } from 'shared/components/status-chip/style';
+import { KeyWithStatus } from 'shared/hooks';
+import styled from 'styled-components';
+import { KeyStatus } from 'types';
 
 type Props = {
-  options: string[];
+  options: KeyWithStatus[];
+  offset?: number;
   fieldName?: string;
 };
+
+const BAD_STATUSES: KeyStatus[] = ['duplicated', 'invalid'];
 
 export const KeysSelectorHookForm: FC<Props> = ({
   options,
@@ -53,16 +60,35 @@ export const KeysSelectorHookForm: FC<Props> = ({
   // TODO: key status
   return (
     <Latice>
-      {options.map((key, index) => (
-        <Stack key={key}>
-          <Checkbox
-            label={<Address as="span" address={key} symbols={20} />}
-            name={`keys.${index}.checked`}
-            checked={index >= start && index < start + count}
-            onChange={onChange}
-          />
-        </Stack>
+      {options.map(({ key, statuses }, index) => (
+        <CheckboxStyled
+          key={key}
+          label={
+            <Stack center spaceBetween>
+              <Address as="span" address={key} symbols={16} />
+
+              {statuses
+                .filter((status) => BAD_STATUSES.includes(status))
+                .map((status) => (
+                  <StatusChip status={status} key={status} />
+                ))}
+            </Stack>
+          }
+          name={`keys.${index}.checked`}
+          checked={index >= start && index < start + count}
+          onChange={onChange}
+        />
       ))}
     </Latice>
   );
 };
+
+const CheckboxStyled = styled(Checkbox)`
+  svg + div {
+    width: 100%;
+  }
+
+  ${StatusStyle} {
+    margin-block: -4px;
+  }
+`;
