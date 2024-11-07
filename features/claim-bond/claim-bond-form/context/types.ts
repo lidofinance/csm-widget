@@ -12,6 +12,7 @@ export type ClaimBondFormInputType = {
   token: TOKENS;
   amount?: BigNumber;
   claimRewards: boolean;
+  unlockClaimTokens: boolean;
 };
 
 export type ClaimBondFormNetworkData = {
@@ -19,6 +20,11 @@ export type ClaimBondFormNetworkData = {
   bond?: BondBalance;
   rewards?: RewardsBalance;
   maxValues?: MaxValues;
+  rewardsAddress?: string;
+  isContract?: boolean;
+  isSplitter?: boolean;
   isPaused?: boolean;
-  loading: LoadingRecord<'bond' | 'rewards' | 'maxValues' | 'status'>;
+  loading: LoadingRecord<
+    'bond' | 'rewards' | 'maxValues' | 'info' | 'contract' | 'status'
+  >;
 };

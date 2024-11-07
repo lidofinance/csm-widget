@@ -1,31 +1,51 @@
+import { Checkbox } from '@lidofinance/lido-ui';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { TOKENS } from 'consts/tokens';
-import { useWatch } from 'react-hook-form';
+import { useController, useWatch } from 'react-hook-form';
 import {
   FormTitle,
   MatomoLink,
   Note,
   Stack,
   TokenAmount,
+  WarningBlock,
   YouWillReceive,
 } from 'shared/components';
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { getTokenDisplayName } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const TokenSelect: React.FC = () => {
   const [token, claimRewards] = useWatch<
     ClaimBondFormInputType,
     ['token', 'claimRewards']
   >({ name: ['token', 'claimRewards'] });
-  const { loading, maxValues } = useClaimBondFormData();
+  const { loading, maxValues, isContract, isSplitter } = useClaimBondFormData();
   const isLoading = loading.isBondLoading || loading.isRewardsLoading;
+
+  const { field: unlockField } = useController<
+    ClaimBondFormInputType,
+    'unlockClaimTokens'
+  >({
+    name: 'unlockClaimTokens',
+  });
 
   return (
     <>
       <FormTitle>Choose a token to claim</FormTitle>
+      {isContract && !isSplitter && (
+        <WarningBlock>
+          The Rewards Address of your Node Operator seems to be a smart
+          contract. Please ensure the smart contract you use for the Reward
+          Address is compatible with the chosen token for claiming of your
+          bond/rewards.
+        </WarningBlock>
+      )}
       <TokenButtonsHookForm
-        disabled={maxValues?.[TOKENS.ETH][Number(claimRewards)]?.eq(0)}
+        disabled={
+          maxValues?.[TOKENS.ETH][Number(claimRewards)]?.eq(0) ||
+          (isSplitter && !unlockField.value)
+        }
         options={{
           [TOKENS.ETH]: (
             <Stack direction="column">
@@ -79,6 +99,30 @@ export const TokenSelect: React.FC = () => {
           </MatomoLink>{' '}
           for more details.
         </Note>
+      )}
+      {isSplitter && (
+        <>
+          <Note>
+            The Rewards Address of your Node Operator is a splitter contract. It
+            is strongly recommended to claim bond and rewards in wstETH only.
+            ETH withdrawal NFT is not compatible with the splitter, while a
+            rebasing token like stETH may not receive incremental rewards. More
+            information can be found in the{' '}
+            <MatomoLink
+              href="https://docs.splits.org/core/split#how-it-works"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.splitsOrgDocumentation}
+            >
+              splits.org documentation
+            </MatomoLink>
+            .
+          </Note>
+          <Checkbox
+            label="I am fully aware of the risks and want to claim rewards in ETH/stETH anyway"
+            {...unlockField}
+            value=""
+            checked={!!unlockField.value}
+          />
+        </>
       )}
     </>
   );

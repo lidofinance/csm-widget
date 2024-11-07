@@ -39,6 +39,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   createSuccessBeaconchain = 'createSuccessBeaconchain',
   createSuccessSubscribeEvents = 'createSuccessSubscribeEvents',
   otherModuleLink = 'otherModuleLink',
+  splitsOrgDocumentation = 'splitsOrgDocumentation',
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
@@ -227,6 +228,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «operators.lido.fi» link for other module',
     prefixed`operator_in_other_module_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.splitsOrgDocumentation]: [
+    MATOMO_APP_NAME,
+    'Click «splits.org documentation» link',
+    prefixed`spilt_org_documentation_link`,
   ],
   // Common
   [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: [
