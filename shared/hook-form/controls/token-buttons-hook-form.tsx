@@ -16,10 +16,7 @@ export const TokenButtonsHookForm: FC<Props> = ({
   disabled,
   options,
 }) => {
-  const {
-    field,
-    formState: { defaultValues },
-  } = useController<Record<string, TOKENS>>({ name: fieldName });
+  const { field } = useController<Record<string, TOKENS>>({ name: fieldName });
 
   return (
     <StackWrap>
@@ -30,7 +27,7 @@ export const TokenButtonsHookForm: FC<Props> = ({
           {...{
             value: key,
             children: options[key],
-            defaultChecked: key === defaultValues?.[fieldName],
+            checked: key === field.value,
             disabled,
           }}
         />

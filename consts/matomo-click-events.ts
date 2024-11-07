@@ -36,6 +36,10 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
   createSuccessKeysTab = 'createSuccessKeysTab',
   createSuccessBeaconchainDashboard = 'createSuccessBeaconchainDashboard',
+  createSuccessBeaconchain = 'createSuccessBeaconchain',
+  createSuccessSubscribeEvents = 'createSuccessSubscribeEvents',
+  otherModuleLink = 'otherModuleLink',
+  splitsOrgDocumentation = 'splitsOrgDocumentation',
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
@@ -209,6 +213,26 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «beaconcha.in bashboard» link after Create NO',
     prefixed`create_success_beaconchain_dashboard_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain]: [
+    MATOMO_APP_NAME,
+    'Click «beaconcha.in» link after Create NO',
+    prefixed`create_success_beaconchain_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents]: [
+    MATOMO_APP_NAME,
+    'Click «subscribe events» link after Create NO',
+    prefixed`create_success_subscribe_events_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.otherModuleLink]: [
+    MATOMO_APP_NAME,
+    'Click «operators.lido.fi» link for other module',
+    prefixed`operator_in_other_module_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.splitsOrgDocumentation]: [
+    MATOMO_APP_NAME,
+    'Click «splits.org documentation» link',
+    prefixed`spilt_org_documentation_link`,
   ],
   // Common
   [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: [

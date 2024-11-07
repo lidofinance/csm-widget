@@ -1,12 +1,14 @@
 import { Zero } from '@ethersproject/constants';
-import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
+import { Address, DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
-import { ClaimBondFormInputType } from './context';
+import styled from 'styled-components';
+import { ClaimBondFormInputType, useClaimBondFormData } from './context';
 import { useBondReceiveAmount } from './hooks/use-bond-receive-amount';
 
 export const ClaimBondFormInfo = () => {
+  const { rewardsAddress } = useClaimBondFormData();
   const [token, amount, claimRewards] = useWatch<
     ClaimBondFormInputType,
     ['token', 'amount', 'claimRewards']
@@ -18,7 +20,15 @@ export const ClaimBondFormInfo = () => {
 
   return (
     <DataTable>
-      <DataTableRow title="Rewards Address will receive">
+      <DataTableRow
+        title={
+          <>
+            Rewards Address (
+            <StyledAddress address={rewardsAddress || ''} symbols={4} />) will
+            receive
+          </>
+        }
+      >
         <FormatToken amount={amount ?? Zero} token={token} />
       </DataTableRow>
       {claimRewards && (
@@ -29,3 +39,7 @@ export const ClaimBondFormInfo = () => {
     </DataTable>
   );
 };
+
+const StyledAddress = styled(Address)`
+  font-weight: bold;
+`;
