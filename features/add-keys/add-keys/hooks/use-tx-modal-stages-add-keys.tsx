@@ -1,7 +1,7 @@
 import { TOKENS } from 'consts/tokens';
 import type { BigNumber } from 'ethers';
 import {
-  SuccessText,
+  AfterKeysUpload,
   TransactionModalTransitStage,
   TxStageSuccess,
   getGeneralTransactionModalStages,
@@ -19,6 +19,10 @@ type Props = {
   amount: BigNumber;
   token: TOKENS;
   nodeOperatorId: NodeOperatorId;
+};
+
+type SuccessProps = {
+  keys: string[];
 };
 
 const getTxModalStagesAddKeys = (
@@ -50,12 +54,19 @@ const getTxModalStagesAddKeys = (
       />,
     ),
 
-  success: (props: Props, txHash?: string) =>
+  success: ({ keys }: SuccessProps, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
         title={<>Your keys has been uploaded</>}
-        description={<SuccessText {...STAGE_OPERATION_ARGS} />}
+        description={
+          <>
+            Uploading operation was successful.
+            <br />
+            <br />
+            <AfterKeysUpload keys={keys} />
+          </>
+        }
       />,
       {
         isClosableOnLedger: true,
