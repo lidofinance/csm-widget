@@ -6,6 +6,7 @@ export type SwitchRoutes = {
   path: PATH;
   showRules?: ShowSiwtchRules[];
   suffix?: ReactNode;
+  warning?: boolean;
 }[];
 
 export type SwitchProps = {

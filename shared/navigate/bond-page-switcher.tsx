@@ -10,6 +10,7 @@ const BOND_ROUTES: SwitchRoutes = [
     title: 'Unlock Bond',
     path: PATH.BOND_UNLOCK,
     showRules: ['HAS_LOCKED_BOND'],
+    warning: true,
     suffix: <CounterLockedBond />,
   },
 ];

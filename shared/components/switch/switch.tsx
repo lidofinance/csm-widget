@@ -31,7 +31,11 @@ export const Switch: FC<SwitchProps> = ({ routes }) => {
       {activePathIndex >= 0 && <Handle $active={activePathIndex} />}
       {filteredRoutes.map((route) => {
         return (
-          <SwitchItem key={route.title} href={route.path}>
+          <SwitchItem
+            key={route.title}
+            href={route.path}
+            warning={route.warning}
+          >
             <Stack gap="sm" center>
               {route.title}
               {route.suffix}
