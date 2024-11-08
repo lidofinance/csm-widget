@@ -5,6 +5,8 @@ import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
 
 export const useGetDefaultValues = ({
   rewards,
+  isSplitter,
+  isContract,
   loading,
 }: ClaimBondFormNetworkData) => {
   return useDefaultValues<ClaimBondFormInputType>(
@@ -14,9 +16,10 @@ export const useGetDefaultValues = ({
       }
 
       return {
-        token: TOKENS.STETH,
+        token: isContract ? TOKENS.WSTETH : TOKENS.STETH,
         claimRewards: rewards?.available.gt(0) ?? false,
+        unlockClaimTokens: !isSplitter,
       };
-    }, [loading, rewards?.available]),
+    }, [isContract, isSplitter, loading, rewards?.available]),
   );
 };
