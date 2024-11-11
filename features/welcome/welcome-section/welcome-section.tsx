@@ -21,12 +21,12 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => (
         The Community Staking Module (CSM) is a permissionless staking module
         aimed at attracting community stakers to participate in the Lido on
         Ethereum protocol as Node Operators. For a detailed description of the
-        module, follow{' '}
+        module, follow the{' '}
         <MatomoLink
           href="https://operatorportal.lido.fi/modules/community-staking-module"
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
         >
-          the link
+          link
         </MatomoLink>
         .
       </p>

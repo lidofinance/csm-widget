@@ -17,12 +17,12 @@ export const AfterKeysUpload: FC<{ keys: string[] }> = ({ keys }) => {
       <ol>
         <li>Wait for your keys to be deposited to through the protocol.</li>
         <li>
-          Once your keys become active (check the status on{' '}
+          Once your keys become active (check the status on the{' '}
           <LocalLink
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessKeysTab}
             href={PATH.KEYS_VIEW}
           >
-            the Keys tab
+            Keys tab
           </LocalLink>
           , on{' '}
           <MatomoLink
@@ -31,12 +31,12 @@ export const AfterKeysUpload: FC<{ keys: string[] }> = ({ keys }) => {
           >
             beaconcha.in
           </MatomoLink>{' '}
-          or subscribe to{' '}
+          or subscribe to the{' '}
           <MatomoLink
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents}
             href={subscribeEvents}
           >
-            the CSM events notifications
+            CSM events notifications
           </MatomoLink>
           ) make sure your validators are producing attestations{' '}
           {beaconchainDashboardLink && (

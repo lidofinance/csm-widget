@@ -34,14 +34,14 @@ export const CustomAddressesSection: FC = () => {
         This permissions option can only be set once during Node Operator
         creation.
         <br />
-        It can not be changed later on. Please check{' '}
+        It can not be changed later on. Please check the{' '}
         <MatomoLink
           href="https://docs.lido.fi/staking-modules/csm/guides/addresses/#extended-manager-address-permissions"
           matomoEvent={
             MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription
           }
         >
-          the detailed explanation of the options
+          detailed explanation of the options
         </MatomoLink>{' '}
         to understand which option works best for your purposes.
       </WarningBlock>
