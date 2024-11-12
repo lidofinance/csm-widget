@@ -12,4 +12,4 @@ After key submission, and if keys have been successfully validated, two actions 
 
 2. **Activation on Ethereum Network**: Once deposited, the validator enters the Beacon Chain activation queue. The time to activation depends on the total number of validators in the queue awaiting activation and the rate of queue processing, which varies based on the total number of active Ethereum validators.
 
-   You can check if the keys are activated on the Keys tab or on [beaconcha.in](http://beaconcha.in/)
+   You can check if the keys are activated on the [Keys tab](https://csm.lido.fi/keys) or on [beaconcha.in](http://beaconcha.in/)

@@ -11,12 +11,12 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
     <Heading>
       <h2>CSM node operator starter pack</h2>
       <p>
-        Make sure you’ve completed all the basic steps before joining{' '}
+        Make sure you’ve completed all the basic steps before joining the{' '}
         <MatomoLink
           href="https://operatorportal.lido.fi/modules/community-staking-module"
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackCSMLink}
         >
-          the Community Staking Module
+          Community Staking Module
         </MatomoLink>
       </p>
     </Heading>
@@ -56,12 +56,12 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
       <Step number="4" title="Generate keys">
         Prepare deposit data (.json file) for submitting keys
         <br />
-        Follow{' '}
+        Follow the{' '}
         <MatomoLink
           href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm#key-settings-to-note"
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackGenerateKeysLink}
         >
-          the generation guide
+          generation guide
         </MatomoLink>
       </Step>
     </Steps>
