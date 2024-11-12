@@ -3,6 +3,8 @@ import { getExternalLinks } from 'consts/external-links';
 import { NodeOperatorId } from 'types';
 import { useNodeOperatorKeys } from './useNodeOperatorKeys';
 
+const DASHBOARD_KEYS_LIMIT = 20;
+
 const links = getExternalLinks();
 
 // TODO: cache dashboard link (for long-fetched keys)
@@ -10,9 +12,18 @@ export const useBeaconchainDashboardLink = (
   nodeOperatorId?: NodeOperatorId,
   directKeys?: string[],
 ) => {
-  const { data: keys } = useNodeOperatorKeys(nodeOperatorId, false, 20);
+  // TODO: sort keys: active, withdrawn, depositable(valid or invalid)
+  const { data: keys } = useNodeOperatorKeys(
+    nodeOperatorId,
+    false,
+    DASHBOARD_KEYS_LIMIT,
+  );
 
-  return `${links.beaconchainDashboard}?validators=${(keys || directKeys)?.join(',') ?? ''}`;
+  const keysToShow = (directKeys || keys)
+    ?.slice(0, DASHBOARD_KEYS_LIMIT)
+    .join(',');
+
+  return `${links.beaconchainDashboard}?validators=${keysToShow ?? ''}`;
 };
 
 export const useFeesMonitoningLink = (nodeOperatorId?: NodeOperatorId) => {
