@@ -26,11 +26,11 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
 > = {
   [CHAINS.Mainnet]: {
     earlyAdoptionTree:
-      'https://raw.githubusercontent.com/lidofinance/community-staking-module/main/artifacts/mainnet/early-adoption/merkle-tree.json',
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/v1.0/artifacts/mainnet/early-adoption/merkle-tree.json',
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
     earlyAdoptionSources:
-      'https://github.com/lidofinance/community-staking-module/tree/main/artifacts/mainnet/early-adoption/sources',
+      'https://github.com/lidofinance/community-staking-module/blob/v1.0/artifacts/mainnet/early-adoption/addresses.json',
     earlyAdoptionAbout:
       'https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22',
     feedbackForm: 'https://forms.gle/GL9RYeV2g4px58Sv8',
@@ -45,11 +45,11 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
   },
   [CHAINS.Holesky]: {
     earlyAdoptionTree:
-      'https://raw.githubusercontent.com/lidofinance/community-staking-module/main/artifacts/holesky/early-adoption/merkle-tree.json',
+      'https://raw.githubusercontent.com/lidofinance/community-staking-module/v1.0/artifacts/holesky/early-adoption/merkle-tree.json',
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/holesky/tree.json',
     earlyAdoptionSources:
-      'https://github.com/lidofinance/community-staking-module/tree/main/artifacts/holesky/early-adoption/sources',
+      'https://github.com/lidofinance/community-staking-module/blob/v1.0/artifacts/holesky/early-adoption/addresses.json',
     earlyAdoptionAbout:
       'https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22',
     feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
