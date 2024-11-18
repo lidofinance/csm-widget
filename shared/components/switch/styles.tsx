@@ -33,7 +33,10 @@ export const Handle = styled.div<{ $active: number }>`
 // Not wrapping <a> inside <a> in IPFS mode
 // Also avoid problems with migrate to Next v13
 // see: https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration#link-component
-export const SwitchItemStyled = styled(LocalLink)<{ $active: boolean }>`
+export const SwitchItemStyled = styled(LocalLink)<{
+  $active: boolean;
+  $warning?: boolean;
+}>`
   z-index: 2;
   margin: 0;
   opacity: ${({ $active }) => ($active ? 1 : 0.5)};
@@ -51,14 +54,18 @@ export const SwitchItemStyled = styled(LocalLink)<{ $active: boolean }>`
   text-align: center;
   letter-spacing: 0.3px;
   text-transform: uppercase;
-  color: var(--lido-color-text);
+
+  color: ${({ $warning }) =>
+    $warning ? `var(--lido-color-error)` : `var(--lido-color-text)`};
 
   &:hover {
-    color: var(--lido-color-text);
+    color: ${({ $warning }) =>
+      $warning ? `var(--lido-color-error)` : `var(--lido-color-text)`};
     opacity: 1;
   }
 
   &:visited {
-    color: var(--lido-color-text);
+    color: ${({ $warning }) =>
+      $warning ? `var(--lido-color-error)` : `var(--lido-color-text)`};
   }
 `;

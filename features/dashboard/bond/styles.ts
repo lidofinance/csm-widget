@@ -6,6 +6,9 @@ export const RowTitle = styled.h4`
   font-size: ${({ theme }) => theme.fontSizesMap.sm}px;
   line-height: ${({ theme }) => theme.fontSizesMap.xl}px;
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spaceMap.sm}px;
 `;
 
 export const RowHeader = styled(StackStyle)`

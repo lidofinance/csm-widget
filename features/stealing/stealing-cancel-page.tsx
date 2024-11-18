@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Layout } from 'shared/components';
+import { Layout } from 'shared/layout';
 import { StealingPageSwitcher } from 'shared/navigate';
 import { StealingCancel } from './stealing-cancel';
 

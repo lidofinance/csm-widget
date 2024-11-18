@@ -1,7 +1,7 @@
 import { Container, Link } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
-import { LogoLido } from 'shared/components/logos/logos';
+import { LogoLido } from 'shared/components';
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const FooterStyle = styled(Container)`

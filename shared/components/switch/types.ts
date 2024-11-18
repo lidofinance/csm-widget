@@ -1,13 +1,16 @@
-import { ROLE_CODE } from 'consts/roles';
 import { PATH } from 'consts/urls';
+import { ReactNode } from 'react';
 
 export type SwitchRoutes = {
   title: string;
   path: PATH;
-  roles?: ROLE_CODE[];
+  showRules?: ShowSiwtchRules[];
+  suffix?: ReactNode;
+  warning?: boolean;
 }[];
 
 export type SwitchProps = {
   routes: SwitchRoutes;
-  active?: number;
 };
+
+export type ShowSiwtchRules = 'HAS_MANAGER' | 'HAS_REWARDS' | 'HAS_LOCKED_BOND';

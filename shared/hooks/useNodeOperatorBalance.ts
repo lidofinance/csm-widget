@@ -4,6 +4,7 @@ import { NodeOperatorId } from 'types';
 import { useCSAccountingRPC } from './useCsmContracts';
 import { useExtendedBondBalance } from './useExtendedBondBalance';
 import { useMergeSwr } from './useMergeSwr';
+import { useNodeOperatorLockAmount } from './useNodeOperatorLockAmount';
 
 export const useNodeOperatorBalance = (
   nodeOperatorId?: NodeOperatorId,
@@ -17,13 +18,7 @@ export const useNodeOperatorBalance = (
     config,
   });
 
-  const swrLocked = useContractSWR({
-    contract: useCSAccountingRPC(),
-    method: 'getActualLockedBond',
-    params: [nodeOperatorId],
-    shouldFetch: !!nodeOperatorId,
-    config,
-  });
+  const swrLocked = useNodeOperatorLockAmount(nodeOperatorId);
 
   const balance = useExtendedBondBalance(
     swrBalance.data?.required,

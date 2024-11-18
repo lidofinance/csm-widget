@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Layout } from 'shared/components';
+import { Layout } from 'shared/layout';
 import { KeysPageSwitcher } from 'shared/navigate';
 import { RemoveKeys } from './remove-keys';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
