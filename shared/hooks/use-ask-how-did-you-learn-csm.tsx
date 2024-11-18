@@ -9,10 +9,9 @@ export const useAskHowDidYouLearnCsm = () => {
   return useMemo(
     () => ({
       canAsk: state === 'ask',
-      ask: () => setState((prev) => (!prev ? 'ask' : prev)),
+      ask: () => !state && setState('ask'),
       answer: () => setState('answered'),
-      rejectAnswer: () =>
-        setState((prev) => (prev === 'answered' ? 'answered' : 'closed')),
+      rejectAnswer: () => state !== 'answered' && setState('closed'),
     }),
     [setState, state],
   );
