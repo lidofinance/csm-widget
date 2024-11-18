@@ -51,10 +51,10 @@ export const SourceSelect: FC = () => {
               {...field}
               value=""
               checked={!!field.value}
-              disabled={!rewards?.available.gt(0)}
+              disabled={true}
             />
           }
-          help="The rewards amount available to claim, obtained from all active validators of the Node Operator"
+          help="The rewards amount available to claim, obtained from all active validators of the Node Operator. Temporarily disabled"
           loading={loading.isRewardsLoading}
           amount={rewards?.available}
           token={TOKENS.STETH}

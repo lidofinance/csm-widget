@@ -4,7 +4,6 @@ import { useDefaultValues } from 'shared/hooks';
 import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
 
 export const useGetDefaultValues = ({
-  rewards,
   isSplitter,
   isContract,
   loading,
@@ -17,9 +16,9 @@ export const useGetDefaultValues = ({
 
       return {
         token: isContract ? TOKENS.WSTETH : TOKENS.STETH,
-        claimRewards: rewards?.available.gt(0) ?? false,
+        claimRewards: false,
         unlockClaimTokens: !isSplitter,
       };
-    }, [isContract, isSplitter, loading, rewards?.available]),
+    }, [isContract, isSplitter, loading]),
   );
 };
