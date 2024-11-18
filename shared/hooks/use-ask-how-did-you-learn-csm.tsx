@@ -8,7 +8,7 @@ export const useAskHowDidYouLearnCsm = () => {
 
   return useMemo(
     () => ({
-      canAsk: state === 'ask',
+      canAsk: !state || state === 'ask',
       ask: () => !state && setState('ask'),
       answer: () => setState('answered'),
       rejectAnswer: () => state !== 'answered' && setState('closed'),

@@ -77,7 +77,7 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
 
   useEffect(() => {
     const allowed = checkCookieAllowed();
-    if (allowed && canAsk) {
+    if (allowed && canAsk && nodeOperator) {
       showAlert(AlertHowDidYouLearCsm, {
         onClose: () => {
           rejectAnswer();
@@ -92,7 +92,7 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
         },
       });
     }
-  }, [answer, canAsk, closeAlert, rejectAnswer, showAlert]);
+  }, [answer, canAsk, closeAlert, nodeOperator, rejectAnswer, showAlert]);
 
   return children;
 };
