@@ -23,6 +23,7 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
           etherBalance,
           maxStakeEther,
           keysUploadLimit,
+          blockNumber,
         } = await dataPromise;
 
         validateBondAmount({
@@ -38,7 +39,12 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
           options.names?.includes('depositData') ||
           options.names?.includes('rawDepositData')
         )
-          await validateDepositData({ depositData, chainId, keysUploadLimit });
+          await validateDepositData({
+            depositData,
+            chainId,
+            keysUploadLimit,
+            blockNumber,
+          });
 
         return {
           values,

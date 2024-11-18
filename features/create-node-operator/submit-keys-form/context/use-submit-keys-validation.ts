@@ -1,3 +1,4 @@
+import { isAddress } from 'ethers/lib/utils.js';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
@@ -11,7 +12,6 @@ import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
-import { isAddress } from 'ethers/lib/utils.js';
 
 export const useSubmitKeysValidation = (
   networkData: SubmitKeysFormNetworkData,
@@ -37,6 +37,7 @@ export const useSubmitKeysValidation = (
           etherBalance,
           maxStakeEther,
           keysUploadLimit,
+          blockNumber,
         } = await dataPromise;
 
         validateBondAmount({
@@ -52,7 +53,12 @@ export const useSubmitKeysValidation = (
           options.names?.includes('depositData') ||
           options.names?.includes('rawDepositData')
         )
-          await validateDepositData({ depositData, chainId, keysUploadLimit });
+          await validateDepositData({
+            depositData,
+            chainId,
+            keysUploadLimit,
+            blockNumber,
+          });
 
         if (specifyCustomAddresses) {
           if (

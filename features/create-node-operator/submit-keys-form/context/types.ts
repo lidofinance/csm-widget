@@ -26,6 +26,7 @@ export type SubmitKeysFormNetworkData = {
   keysUploadLimit?: number;
   keysAvailable?: KeysAvailable;
   isPaused?: boolean;
+  blockNumber?: number;
   loading: LoadingRecord<
     | 'etherBalance'
     | 'stethBalance'
@@ -35,5 +36,6 @@ export type SubmitKeysFormNetworkData = {
     | 'keysUploadLimit'
     | 'maxStakeEther'
     | 'status'
+    | 'blockNumber'
   >;
 };

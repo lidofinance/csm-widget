@@ -13,11 +13,15 @@ import {
   useWSTETHBalance,
 } from 'shared/hooks';
 import { type SubmitKeysFormNetworkData } from './types';
+import { useBlockNumber } from 'wagmi';
 
 export const useSubmitKeysFormNetworkData = (): [
   SubmitKeysFormNetworkData,
   () => Promise<void>,
 ] => {
+  const { data: blockNumber, isLoading: isBlockNumberLoading } =
+    useBlockNumber();
+
   const {
     data: etherBalance,
     update: updateEtherBalance,
@@ -86,6 +90,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isCurveIdLoading,
       isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
+      isBlockNumberLoading,
       isStatusLoading,
     }),
     [
@@ -96,12 +101,14 @@ export const useSubmitKeysFormNetworkData = (): [
       isCurveIdLoading,
       isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
+      isBlockNumberLoading,
       isStatusLoading,
     ],
   );
 
   return [
     {
+      blockNumber,
       stethBalance,
       wstethBalance,
       etherBalance,
