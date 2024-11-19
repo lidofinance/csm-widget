@@ -1,7 +1,7 @@
 import { CHAINS, getChainColor } from '@lido-sdk/constants';
 import { useSDK } from '@lido-sdk/react';
 import { FC } from 'react';
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
+import { NoSSRWrapper } from 'shared/components';
 
 import { useAccount } from 'shared/hooks';
 import {

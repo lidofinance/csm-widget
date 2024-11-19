@@ -6,10 +6,22 @@ import { SwitchItemStyled } from './styles';
 
 type Props = {
   href: PATH;
+  warning?: boolean;
 };
 
-export const SwitchItem: FC<PropsWithChildren<Props>> = ({ href, ...rest }) => {
+export const SwitchItem: FC<PropsWithChildren<Props>> = ({
+  href,
+  warning,
+  ...rest
+}) => {
   const active = useCompareWithRouterPath(href);
 
-  return <SwitchItemStyled href={href} $active={active} {...rest} />;
+  return (
+    <SwitchItemStyled
+      href={href}
+      $active={active}
+      $warning={warning}
+      {...rest}
+    />
+  );
 };

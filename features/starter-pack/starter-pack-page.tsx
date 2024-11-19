@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Layout } from 'shared/components';
+import { Layout } from 'shared/layout';
 import { StarterPack } from './starter-pack';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 

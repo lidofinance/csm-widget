@@ -1,6 +1,8 @@
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
+  KeyWithStatus,
+  useGetKeyStatus,
   useNodeOperatorBalance,
   useNodeOperatorInfo,
   useNodeOperatorKeys,
@@ -28,6 +30,21 @@ export const useRemoveKeysFormNetworkData = (): [
     initialLoading: isKeysLoading,
   } = useNodeOperatorKeys(nodeOperatorId, true);
 
+  const { data: getStatus, initialLoading: isStatusLoading } =
+    useGetKeyStatus();
+
+  const keysWithStatus = useMemo(() => {
+    if (!keys || !getStatus || !info) return undefined;
+
+    return keys.map(
+      (key, index) =>
+        ({
+          key,
+          statuses: getStatus(key, index + info?.totalDepositedKeys),
+        }) as KeyWithStatus,
+    );
+  }, [getStatus, info, keys]);
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateBond(), updateInfo(), updateKeys()]);
   }, [updateBond, updateInfo, updateKeys]);
@@ -37,8 +54,9 @@ export const useRemoveKeysFormNetworkData = (): [
       isBondLoading,
       isKeysLoading,
       isInfoLoading,
+      isStatusLoading,
     }),
-    [isBondLoading, isKeysLoading, isInfoLoading],
+    [isBondLoading, isKeysLoading, isInfoLoading, isStatusLoading],
   );
 
   return [
@@ -46,6 +64,7 @@ export const useRemoveKeysFormNetworkData = (): [
       nodeOperatorId,
       bond,
       keys,
+      keysWithStatus,
       info,
       loading,
     },

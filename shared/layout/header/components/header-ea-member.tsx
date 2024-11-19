@@ -1,6 +1,6 @@
 import { FC } from 'react';
-import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
-import { EaMember } from 'shared/node-operator/ea-member/ea-member';
+import { NoSSRWrapper } from 'shared/components';
+import { EaMember } from 'shared/node-operator';
 
 const HeaderEaMember: FC = () => {
   return (

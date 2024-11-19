@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { InverseThemeProvider } from 'shared/components';
 import styled from 'styled-components';
 import { useAlertActions } from '../alert-provider';
 
@@ -27,11 +28,14 @@ const AlertContainerStyled = styled.div`
 
 export const AlertContainer: FC = () => {
   const { alerts } = useAlertActions();
+
   return (
-    <AlertContainerStyled>
-      {alerts.map((alert) => (
-        <alert.component {...alert.props} key={alert.session} />
-      ))}
-    </AlertContainerStyled>
+    <InverseThemeProvider>
+      <AlertContainerStyled>
+        {alerts.map((alert) => (
+          <alert.component {...alert.props} key={alert.session} />
+        ))}
+      </AlertContainerStyled>
+    </InverseThemeProvider>
   );
 };
