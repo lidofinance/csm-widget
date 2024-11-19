@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Layout } from 'shared/components';
+import { Layout } from 'shared/layout';
 import { WelcomeSection } from './welcome-section';
 import { LoaderBanner } from './loader-banner';
 

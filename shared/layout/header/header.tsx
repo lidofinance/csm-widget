@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { LogoLido } from 'shared/components/logos/logos';
+import { LogoLido } from 'shared/components';
 
 import { config } from 'config';
 import { AlertContainer } from 'shared/alerts';

@@ -1,42 +1,56 @@
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { FC } from 'react';
-import { Latice, TitledAmount } from 'shared/components';
+import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
 import { useAddBondFormData } from '../context';
 
 export const Info: FC = () => {
   const { bond, loading } = useAddBondFormData();
 
-  // TODO: covered/unbounded/available keys
   return (
     <>
       <Latice variant="secondary">
-        <TitledAmount
-          title="Bond balance"
-          loading={loading.isBondLoading}
-          amount={bond?.current}
-          token={TOKENS.STETH}
-        />
-        <TitledAmount
-          warning={bond?.isNoticiableInsufficient}
-          title={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
-          help={
-            bond?.isInsufficient
-              ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol'
-              : 'The bond amount available to claim without having to exit validators'
-          }
-          loading={loading.isBondLoading}
-          amount={bond?.delta}
-          token={TOKENS.STETH}
-        />
-        {/* <TitledAmount
-          warning
-          title="Locked bond"
-          help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
-          loading={loading.isBondLoading}
-          amount={bond?.locked}
-          token={TOKENS.ETH}
-        /> */}
+        <Stack direction="column" gap="sm">
+          <TitledAmount
+            warning={bond?.isNoticiableInsufficient}
+            title={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
+            help={
+              bond?.isInsufficient
+                ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol'
+                : 'The bond amount available to claim without having to exit validators'
+            }
+            loading={loading.isBondLoading}
+            amount={bond?.delta}
+            token={TOKENS.STETH}
+          />
+          {bond?.isNoticiableInsufficient ? (
+            <p>
+              Your Node Operator has an Insufficient bond because of the penalty
+              applied. Now your Node Operator’s bond is less than required to
+              cover the Node Operator’s current validators.
+              <br />
+              <b>Action required:</b>
+              <br />
+              Top up the bond by submitting the required difference to be able
+              to claim new rewards and to prevent your validator becoming
+              unbonded and being requested to exit.
+            </p>
+          ) : (
+            <p>
+              <b>Why you might need to add bond:</b>
+              <br />
+              Adding a bond serves as a voluntary security measure for your Node
+              Operator to prevent your validators from becoming{' '}
+              <MatomoLink href="https://docs.lido.fi/staking-modules/csm/guides/unbonded-validators">
+                unbonded
+              </MatomoLink>{' '}
+              and being requested to exit in case of applied penalties.
+              <br />
+              Supplied bond will be stored as stETH, which also garners staking
+              rewards.
+            </p>
+          )}
+        </Stack>
       </Latice>
     </>
   );

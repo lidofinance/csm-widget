@@ -42,8 +42,10 @@ const GlobalStyle = createGlobalStyle`
     &:hover {
       color: var(--lido-color-primaryHover);
     }
+  }
 
-
+  ul {
+    padding-inline-start: 22px;
   }
 `;
 
