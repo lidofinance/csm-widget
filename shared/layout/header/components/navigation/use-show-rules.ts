@@ -27,7 +27,7 @@ export const useShowRules = () => {
         case 'IS_NODE_OPERATOR':
           return !!active;
         case 'CAN_CREATE':
-          return !canCreateNO;
+          return !!canCreateNO;
         case 'HAS_INVITES':
           return !!invites?.length;
         case 'EL_STEALING_REPORTER':
