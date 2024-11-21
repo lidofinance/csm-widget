@@ -13,12 +13,15 @@ import {
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
+import { useBlockNumber } from 'wagmi';
 import { type AddKeysFormNetworkData } from './types';
 
 export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
   () => Promise<void>,
 ] => {
+  const { data: blockNumber, isLoading: isBlockNumberLoading } =
+    useBlockNumber();
   const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
   const nodeOperatorId = useNodeOperatorId();
   const {
@@ -94,6 +97,7 @@ export const useAddKeysFormNetworkData = (): [
       isBondLoading,
       isKeysUploadLimitLoading,
       isStatusLoading,
+      isBlockNumberLoading,
     }),
     [
       isEtherBalanceLoading,
@@ -103,11 +107,13 @@ export const useAddKeysFormNetworkData = (): [
       isBondLoading,
       isKeysUploadLimitLoading,
       isStatusLoading,
+      isBlockNumberLoading,
     ],
   );
 
   return [
     {
+      blockNumber,
       nodeOperatorId,
       keysUploadLimit,
       keysAvailable,

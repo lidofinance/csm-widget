@@ -1,9 +1,9 @@
 import { ServicePage } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { getProps } from 'lib/getProps';
+import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import { FC } from 'react';
-import { Layout } from 'shared/components';
+import { Layout } from 'shared/layout';
 
 const Page500: FC = () => (
   <Layout dummy={true} matomoEvent={MATOMO_CLICK_EVENTS_TYPES.page500}>
@@ -18,7 +18,6 @@ const Page500: FC = () => (
 
 export default Page500;
 
-export const getStaticProps = getProps(undefined, {
-  continueAnyway: true,
-  extraProps: { isError: true },
+export const getStaticProps: GetStaticProps = () => ({
+  props: { isError: true },
 });

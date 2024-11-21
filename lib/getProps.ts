@@ -5,14 +5,14 @@ import { secretConfig } from 'config';
 export const getProps =
   (
     faqGetter?: FaqGetter,
-    options?: { continueAnyway?: boolean; extraProps?: Record<string, any> },
+    options?: { continueAnyway?: boolean },
   ): GetServerSideProps =>
   async () => {
     const { maintenance } = secretConfig;
 
     if (!options?.continueAnyway && maintenance) return { notFound: true };
 
-    const props = { ...options?.extraProps, maintenance };
+    const props = { maintenance };
 
     return {
       props: faqGetter ? { ...props, faqList: await faqGetter() } : props,

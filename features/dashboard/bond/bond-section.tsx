@@ -3,7 +3,7 @@ import { TOKENS } from 'consts/tokens';
 import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
-import { SectionBlock, Sign, Stack } from 'shared/components';
+import { Counter, SectionBlock, Sign, Stack } from 'shared/components';
 import { useNodeOperatorBalance, useNodeOperatorRewards } from 'shared/hooks';
 import { useAvailableToClaim } from 'shared/hooks/useAvailableToClaim';
 import { Balance } from './balance';
@@ -35,7 +35,12 @@ export const BondSection: FC = () => {
           <AccordionStyle
             summary={
               <RowHeader>
-                <RowTitle>Available to claim</RowTitle>
+                <RowTitle>
+                  Available to claim
+                  {(bond.isNoticiableInsufficient || bond.locked.gt(0)) && (
+                    <Counter warning count={1} />
+                  )}
+                </RowTitle>
                 <Balance
                   big
                   loading={isBondLoading || isRewardsLoading}
@@ -87,7 +92,12 @@ export const BondSection: FC = () => {
           <AccordionStyle
             summary={
               <RowHeader>
-                <RowTitle>Bond balance</RowTitle>
+                <RowTitle>
+                  Bond balance
+                  {bond.isNoticiableInsufficient && (
+                    <Counter warning count={1} />
+                  )}
+                </RowTitle>
                 <Balance
                   big
                   loading={isBondLoading}

@@ -10,7 +10,7 @@ import { withCsp } from 'config/csp';
 import { FaqItem } from 'lib/getFaq';
 import { Providers } from 'providers';
 import { FaqContext } from 'providers/faq-provider';
-import { BackgroundGradient } from 'shared/components/background-gradient/background-gradient';
+import { BackgroundGradient } from 'shared/components';
 import { nprogress } from 'utils';
 
 // Visualize route changes
@@ -35,7 +35,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   return (
     <FaqContext.Provider value={props.pageProps?.faqList ?? []}>
       <Providers
-        dummy={props.pageProps?.maintenance}
+        dummy={props.pageProps?.maintenance || props.pageProps.isError}
         skipWatcher={props.pageProps?.isError}
       >
         {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}

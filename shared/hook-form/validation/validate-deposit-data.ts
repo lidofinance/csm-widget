@@ -9,19 +9,26 @@ type ValidateDepositDataProps = {
   depositData: DepositData[];
   chainId?: CHAINS;
   keysUploadLimit?: number;
+  blockNumber?: number;
 };
 
-// TODO: pass currentBlock
 export const validateDepositData = async ({
   depositData,
   chainId,
   keysUploadLimit,
+  blockNumber,
 }: ValidateDepositDataProps) => {
   const wc = getCsmConstants(chainId).withdrawalCredentials;
   invariant(chainId, 'chainId is not specified');
   invariant(wc, 'WC is not specified');
   invariant(keysUploadLimit !== undefined, 'keysUploadLimit is not specified');
-  const error = await validate(depositData, chainId, wc, keysUploadLimit);
+  const error = await validate(
+    depositData,
+    chainId,
+    wc,
+    keysUploadLimit,
+    blockNumber,
+  );
   if (error) {
     throw new ValidationError('depositData', error.message);
   }

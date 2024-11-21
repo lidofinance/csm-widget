@@ -1,28 +1,24 @@
-import { ROLE_CODE } from 'consts/roles';
 import { PATH } from 'consts/urls';
 import { Switch } from 'shared/components';
 import { SwitchRoutes } from 'shared/components/switch/types';
+import { CounterInvites } from 'shared/counters';
 
 const ROLE_ROUTES: SwitchRoutes = [
   {
     title: 'Rewards Address',
     path: PATH.ROLES_REWARDS,
-    roles: [
-      ROLE_CODE.MANAGER,
-      ROLE_CODE.REWARDS,
-      ROLE_CODE.REWARDS_AND_MANAGER,
-    ],
+    showRules: ['HAS_MANAGER', 'HAS_REWARDS'],
   },
   {
     title: 'Manager Address',
     path: PATH.ROLES_MANAGER,
-    roles: [
-      ROLE_CODE.MANAGER,
-      ROLE_CODE.REWARDS,
-      ROLE_CODE.REWARDS_AND_MANAGER,
-    ],
+    showRules: ['HAS_MANAGER', 'HAS_REWARDS'],
   },
-  { title: 'Inbox requests', path: PATH.ROLES_INBOX },
+  {
+    title: 'Inbox requests',
+    path: PATH.ROLES_INBOX,
+    suffix: <CounterInvites />,
+  },
 ];
 
 export const RolesPageSwitcher = () => <Switch routes={ROLE_ROUTES} />;

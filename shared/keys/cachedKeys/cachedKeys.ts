@@ -7,11 +7,17 @@ type KeysRecord = Record<string, number>; // pubkey, blockNumber
 
 const getStorageKey = (chainId: CHAINS) => `lido-csm-keys-${chainId}`;
 
-const getIsKeyToKeep = (keyBlock: number, currentBlock: number) => {
-  if (!keyBlock || !currentBlock) return 0;
+const setKeys = (chainId: CHAINS, keys: KeysRecord) =>
+  saveToLocalStorage(getStorageKey(chainId), keys);
+
+const getKeys = (chainId: CHAINS): KeysRecord =>
+  getFromLocalStorage(getStorageKey(chainId)) || {};
+
+const getIsKeyToKeep = (keyBlock: number, currentBlock?: number) => {
+  if (!keyBlock || !currentBlock) return true;
   const age = Math.max(currentBlock - keyBlock, 0);
   const isOld = age >= KEY_TTL_IN_BLOCKS;
-  return isOld;
+  return !isOld;
 };
 
 const cleanKeys = (keys: KeysRecord, blockNumber: number): KeysRecord => {
@@ -65,9 +71,15 @@ export const removeKeys = (
   setKeys(chainId, updatedKeys);
 };
 
-export const setKeys = (chainId: CHAINS, keys: KeysRecord) => {
-  saveToLocalStorage(getStorageKey(chainId), keys);
-};
+export const checkKeys = (
+  pubKeys: string[],
+  chainId: CHAINS,
+  blockNumber?: number,
+) => {
+  const storedKeys = getKeys(chainId);
 
-export const getKeys = (chainId: CHAINS): KeysRecord =>
-  getFromLocalStorage(getStorageKey(chainId)) || {};
+  return pubKeys.filter((pubKey) => {
+    const keyBlockNumber = storedKeys[pubKey];
+    return keyBlockNumber ? getIsKeyToKeep(keyBlockNumber, blockNumber) : false;
+  });
+};
