@@ -5,9 +5,9 @@ import Link, { LinkProps } from 'next/link';
 import { config } from 'config';
 import { LinkIpfs } from 'shared/components/link-ipfs';
 import { PATH } from 'consts/urls';
-import { useCorrectPath } from 'shared/navigate';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 import { useModalActions } from 'providers/modal-provider';
+import { useCorrectPath } from './use-correct-path';
 
 type LocalLinkProps = Omit<LinkProps, 'href'> & {
   href: PATH;

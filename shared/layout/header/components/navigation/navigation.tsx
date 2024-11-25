@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
-import { LocalLink, Stack } from 'shared/components';
+import { Stack } from 'shared/components';
 import { useRouterPath } from 'shared/hooks';
+import { LocalLink } from 'shared/navigate';
 import { getIsActivePath } from 'utils/path';
 import { Nav, NavLink } from './styles';
 import { useNavItems } from './use-nav-items';

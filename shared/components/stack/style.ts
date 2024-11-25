@@ -3,7 +3,7 @@ import styled, { css } from 'styled-components';
 
 type Props = {
   $direction?: 'row' | 'column';
-  $gap?: keyof Theme['spaceMap'];
+  $gap?: keyof Theme['spaceMap'] | 'none';
   $center?: boolean;
   $spaceBetween?: boolean;
   $wrap?: boolean;
@@ -12,7 +12,8 @@ type Props = {
 export const StackStyle = styled.div<Props>`
   display: flex;
   flex-direction: ${({ $direction = 'row' }) => $direction};
-  gap: ${({ $gap = 'md', theme }) => theme.spaceMap[$gap]}px;
+  gap: ${({ $gap = 'md', theme }) =>
+    $gap === 'none' ? 0 : theme.spaceMap[$gap]}px;
   ${({ $center }) =>
     $center &&
     css`

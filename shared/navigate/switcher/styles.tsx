@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import { LocalLink } from 'shared/components/local-link';
+import { LocalLink } from '../local-link';
 
 export const SwitchWrapper = styled.div<{ $count: number }>`
   width: 268px;

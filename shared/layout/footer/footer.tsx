@@ -1,15 +1,15 @@
-import { FC } from 'react';
 import buildInfo from 'build-info.json';
+import { FC } from 'react';
 
-import {
-  FooterStyle,
-  FooterLink,
-  LogoLidoStyle,
-  FooterDivider,
-  Version,
-  LinkDivider,
-} from './styles';
 import { getExternalLinks } from 'consts/external-links';
+import { LogoLido, Stack } from 'shared/components';
+import {
+  FooterDivider,
+  FooterLink,
+  FooterStyle,
+  LinkDivider,
+  Version,
+} from './styles';
 
 const getVersionInfo = () => {
   const { version, branch } = buildInfo;
@@ -45,16 +45,18 @@ const { feedbackForm } = getExternalLinks();
 export const Footer: FC = () => {
   return (
     <FooterStyle size="full" forwardedAs="footer">
-      <LogoLidoStyle />
-      <FooterLink href="https://lido.fi/terms-of-use">Terms of Use</FooterLink>
-      <LinkDivider />
-      <FooterLink href="https://lido.fi/privacy-notice">
-        Privacy Notice
-      </FooterLink>
-      <LinkDivider />
-      <FooterLink href={feedbackForm} $marginRight="auto">
-        Feedback form
-      </FooterLink>
+      <LogoLido />
+      <Stack gap="none">
+        <FooterLink href="https://lido.fi/terms-of-use">
+          Terms of Use
+        </FooterLink>
+        <LinkDivider />
+        <FooterLink href="https://lido.fi/privacy-notice">
+          Privacy Notice
+        </FooterLink>
+        <LinkDivider />
+        <FooterLink href={feedbackForm}>Feedback form</FooterLink>
+      </Stack>
       <Version href={link}>{label}</Version>
       <FooterDivider />
     </FooterStyle>

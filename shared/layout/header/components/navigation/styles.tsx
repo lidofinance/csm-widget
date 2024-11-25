@@ -1,7 +1,7 @@
-import { Counter } from 'shared/components';
+import { CounterStyle } from 'shared/components/counter/styles';
 import styled, { css } from 'styled-components';
 
-import { NAV_MOBILE_MEDIA, NAV_MOBILE_HEIGHT } from 'styles/constants';
+import { NAV_MOBILE_HEIGHT, NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const desktopCss = css`
   margin: 0 46px;
@@ -86,7 +86,7 @@ export const NavLink = styled.span<{ $active?: boolean }>`
     letter-spacing: 0;
   }
 
-  ${Counter} {
+  ${CounterStyle} {
     opacity: ${(props) => (props.$active ? 1 : 0.8)};
   }
 `;

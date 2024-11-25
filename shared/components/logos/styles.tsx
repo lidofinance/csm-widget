@@ -15,6 +15,5 @@ export const LogoLidoStyle = styled.div`
 
   ${({ theme }) => theme.mediaQueries.lg} {
     align-self: start;
-    padding-top: 12px;
   }
 `;

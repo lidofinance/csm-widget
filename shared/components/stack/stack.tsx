@@ -4,7 +4,7 @@ import { StackStyle } from './style';
 
 type Props = {
   direction?: 'row' | 'column';
-  gap?: keyof Theme['spaceMap'];
+  gap?: keyof Theme['spaceMap'] | 'none';
   center?: boolean;
   spaceBetween?: boolean;
   wrap?: boolean;

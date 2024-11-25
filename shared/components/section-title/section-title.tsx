@@ -6,7 +6,7 @@ import {
 } from './styles';
 
 import { ReactComponent as RoundedArrowIcon } from 'assets/icons/rounded-arrow.svg';
-import { LocalLink } from '../local-link';
+import { LocalLink } from 'shared/navigate';
 
 type Props = Partial<
   Pick<ComponentProps<typeof LocalLink>, 'href' | 'matomoEvent'>
