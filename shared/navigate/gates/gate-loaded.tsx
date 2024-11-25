@@ -2,13 +2,16 @@ import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useAccount, useCsmPaused, useCsmPublicRelease } from 'shared/hooks';
 import { useCsmEarlyAdoption } from 'shared/hooks/useCsmEarlyAdoption';
+import { SplashPage } from '../splash';
 
 type Props = {
   fallback?: ReactNode;
+  additional?: boolean;
 };
 
 export const GateLoaded: FC<PropsWithChildren<Props>> = ({
-  fallback,
+  fallback = <SplashPage />,
+  additional,
   children,
 }) => {
   const { initialLoading: isPublicReleaseLoading } = useCsmPublicRelease();
@@ -24,5 +27,5 @@ export const GateLoaded: FC<PropsWithChildren<Props>> = ({
     isListLoading ||
     (!active && isEaLoading);
 
-  return <>{loading ? fallback : children}</>;
+  return <>{loading || additional ? fallback : children}</>;
 };

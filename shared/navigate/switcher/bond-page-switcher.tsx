@@ -1,9 +1,9 @@
 import { PATH } from 'consts/urls';
-import { Switch } from 'shared/components';
-import { SwitchRoutes } from 'shared/components/switch/types';
 import { CounterLockedBond } from 'shared/counters';
+import { Switcher } from './switcher';
+import { SwitcherRoutes } from './types';
 
-const BOND_ROUTES: SwitchRoutes = [
+const BOND_ROUTES: SwitcherRoutes = [
   { title: 'Claim', path: PATH.BOND_CLAIM },
   { title: 'Add Bond', path: PATH.BOND_ADD },
   {
@@ -15,4 +15,4 @@ const BOND_ROUTES: SwitchRoutes = [
   },
 ];
 
-export const BondPageSwitcher = () => <Switch routes={BOND_ROUTES} />;
+export const BondPageSwitcher = () => <Switcher routes={BOND_ROUTES} />;

@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
-import { WelcomeSection } from './welcome-section';
 import { LoaderBanner } from './loader-banner';
+import { WelcomeSection } from './welcome-section';
 
 export const SplashPage: FC = () => {
   return (

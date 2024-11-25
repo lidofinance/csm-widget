@@ -5,7 +5,7 @@ import { useCallback } from 'react';
 import { getRoleCode } from 'shared/node-operator';
 import { redirectionMap } from './redirection-map';
 
-export const getCorrectPath = (path: PATH, role: ROLE_CODE) =>
+const getCorrectPath = (path: PATH, role: ROLE_CODE) =>
   redirectionMap[path]?.[role] ?? path;
 
 export function useCorrectPath(): (path: PATH) => PATH;

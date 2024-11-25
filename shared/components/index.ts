@@ -6,8 +6,6 @@ export { SectionBlock } from './section-block/section-block';
 export { SectionTitle } from './section-title/section-title';
 export { LogoLido } from './logos/logos';
 export { MatomoLink } from './matomo-link/matomo-link';
-export { Switch } from './switch/switch';
-export type { SwitchRoutes } from './switch/types';
 export { TxLinkEtherscan } from './tx-link-etherscan';
 export { Stack } from './stack/stack';
 export { StackStyle } from './stack/style';

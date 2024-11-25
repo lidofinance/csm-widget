@@ -1,21 +1,21 @@
 import { PATH } from 'consts/urls';
-import { Switch } from 'shared/components';
-import { SwitchRoutes } from 'shared/components/switch/types';
 import { CounterInvalidKeys } from 'shared/counters';
+import { Switcher } from './switcher';
+import { SwitcherRoutes } from './types';
 
-const KEYS_ROUTES: SwitchRoutes = [
+const KEYS_ROUTES: SwitcherRoutes = [
   {
     title: 'Submit',
     path: PATH.KEYS_SUBMIT,
-    showRules: ['HAS_MANAGER'],
+    showRules: ['HAS_MANAGER_ROLE'],
   },
   {
     title: 'Remove',
     path: PATH.KEYS_REMOVE,
-    showRules: ['HAS_MANAGER'],
+    showRules: ['HAS_MANAGER_ROLE'],
     suffix: <CounterInvalidKeys />,
   },
   { title: 'View keys', path: PATH.KEYS_VIEW },
 ];
 
-export const KeysPageSwitcher = () => <Switch routes={KEYS_ROUTES} />;
+export const KeysPageSwitcher = () => <Switcher routes={KEYS_ROUTES} />;

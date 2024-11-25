@@ -9,7 +9,7 @@ type Props = {
   warning?: boolean;
 };
 
-export const SwitchItem: FC<PropsWithChildren<Props>> = ({
+export const SwitcherItem: FC<PropsWithChildren<Props>> = ({
   href,
   warning,
   ...rest

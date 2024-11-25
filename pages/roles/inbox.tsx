@@ -1,18 +1,14 @@
 import { PATH } from 'consts/urls';
 import { AcceptInvitePage } from 'features/accept-invite';
-import { SplashPage } from 'features/welcome';
 import { getFaqRoles } from 'lib/getFaq';
 import { getProps } from 'lib/getProps';
-import { GateActiveUser, GateLoaded } from 'shared/gates';
-import { Navigate } from 'shared/navigate';
+import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
-  <GateLoaded fallback={<SplashPage />}>
-    <GateActiveUser
-      fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
-    >
+  <GateLoaded>
+    <Gate rule="IS_CONNECTED_WALLET" fallback={<Navigate path={PATH.HOME} />}>
       <AcceptInvitePage />
-    </GateActiveUser>
+    </Gate>
   </GateLoaded>
 );
 

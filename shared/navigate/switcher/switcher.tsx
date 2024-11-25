@@ -1,15 +1,18 @@
 import { FC, useMemo } from 'react';
 
-import { useRouterPath } from 'shared/hooks';
+import { Stack } from 'shared/components';
+import { useRouterPath, useShowRule } from 'shared/hooks';
 import { getIsActivePath } from 'utils';
-import { Stack } from '../stack/stack';
 import { Handle, SwitchWrapper } from './styles';
-import { SwitchItem } from './switch-item';
-import { SwitchProps } from './types';
-import { useShowSwitchRules } from './use-show-switch-rules';
+import { SwitcherItem } from './switcher-item';
+import { SwitcherRoutes } from './types';
 
-export const Switch: FC<SwitchProps> = ({ routes }) => {
-  const check = useShowSwitchRules();
+export type SwitchProps = {
+  routes: SwitcherRoutes;
+};
+
+export const Switcher: FC<SwitchProps> = ({ routes }) => {
+  const check = useShowRule();
   const pathname = useRouterPath();
 
   const filteredRoutes = useMemo(() => {
@@ -31,7 +34,7 @@ export const Switch: FC<SwitchProps> = ({ routes }) => {
       {activePathIndex >= 0 && <Handle $active={activePathIndex} />}
       {filteredRoutes.map((route) => {
         return (
-          <SwitchItem
+          <SwitcherItem
             key={route.title}
             href={route.path}
             warning={route.warning}
@@ -40,7 +43,7 @@ export const Switch: FC<SwitchProps> = ({ routes }) => {
               {route.title}
               {route.suffix}
             </Stack>
-          </SwitchItem>
+          </SwitcherItem>
         );
       })}
     </SwitchWrapper>
