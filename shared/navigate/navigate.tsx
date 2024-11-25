@@ -10,5 +10,5 @@ export const Navigate: FC<Props> = ({ path, fallback = <SplashPage /> }) => {
 
   useEffect(() => void navigate(path), [navigate, path]);
 
-  return fallback;
+  return <>{fallback}</>;
 };
