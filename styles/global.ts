@@ -47,6 +47,10 @@ const GlobalStyle = createGlobalStyle`
   ul {
     padding-inline-start: 22px;
   }
+
+  ol {
+    padding-inline-start: 18px;
+  }
 `;
 
 export default GlobalStyle;

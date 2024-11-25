@@ -33,11 +33,6 @@ export const ContentWrapper = styled.div`
   color: var(--lido-color-text);
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.xl}px;
-
-  ul {
-    color: var(--lido-color-primary);
-    padding-inline-start: 22px;
-  }
 `;
 
 export const BlockStyled = styled(Block)`

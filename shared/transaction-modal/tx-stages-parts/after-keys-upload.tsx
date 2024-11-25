@@ -66,8 +66,4 @@ const BlockStyled = styled.div`
   background-color: var(--lido-color-backgroundSecondary);
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
   padding: ${({ theme }) => theme.spaceMap.md}px;
-
-  ol {
-    padding-inline-start: 18px;
-  }
 `;
