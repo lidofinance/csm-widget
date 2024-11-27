@@ -1,5 +1,5 @@
 import { Zero } from '@ethersproject/constants';
-import { useContractSWR } from '@lido-sdk/react';
+import { useContractSWR, useSTETHContractRPC } from '@lido-sdk/react';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { BigNumber } from 'ethers';
@@ -7,8 +7,8 @@ import { useMemo } from 'react';
 import { NodeOperatorId, RewardProof, RewardsBalance } from 'types';
 import { findIndexAndLeaf } from 'utils';
 import { useCSFeeDistributorRPC } from './useCsmContracts';
-import { useMergeSwr } from './useMergeSwr';
 import { useFeeDistributorTree } from './useFeeDistributorTree';
+import { useMergeSwr } from './useMergeSwr';
 
 export type RewardsTreeLeaf = [NodeOperatorId, string];
 
@@ -61,16 +61,31 @@ export const useFeeDistributorRewards = (
   });
 };
 
+export const useSharesToSteth = (
+  shares?: BigNumber,
+  config = STRATEGY_LAZY,
+) => {
+  return useContractSWR({
+    contract: useSTETHContractRPC(),
+    method: 'getPooledEthByShares',
+    params: [shares],
+    shouldFetch: !!shares && shares.gt(0),
+    config,
+  });
+};
+
 export const useNodeOperatorRewards = (nodeOperatorId?: NodeOperatorId) => {
   const proofSwr = useRewardsProof(nodeOperatorId);
 
   const rewardsSwr = useFeeDistributorRewards(nodeOperatorId, proofSwr.data);
 
+  const shethSwr = useSharesToSteth(rewardsSwr.data);
+
   const data: RewardsBalance | undefined = useMemo(() => {
     return proofSwr.data
-      ? { ...proofSwr.data, available: rewardsSwr.data ?? Zero }
+      ? { ...proofSwr.data, available: shethSwr.data ?? Zero }
       : undefined;
-  }, [proofSwr.data, rewardsSwr.data]);
+  }, [proofSwr.data, shethSwr.data]);
 
   return useMergeSwr([proofSwr, rewardsSwr], data);
 };
