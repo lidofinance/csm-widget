@@ -1,10 +1,7 @@
 import { useEthereumSWR } from '@lido-sdk/react';
+import { SPLITTER_CONTRACT_CODES } from 'consts/splitter';
 import { STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { useMemo } from 'react';
-
-const SPLITTER_CONTRACT_CODES = [
-  '0x36602c57343d527f9e4ac34f21c619cefc926c8bd93b54bf5a39c7ab2127a895af1cc0691d7e3dff593da1005b3d3d3d3d363d3d37363d736291497d1206618fc810900d2e7e9af6aa1f1b995af43d3d93803e605757fd5bf3',
-];
 
 export const useAccountCode = (account?: string | null) => {
   return useEthereumSWR({
