@@ -1,14 +1,17 @@
 import { hexValue, splitSignature } from '@ethersproject/bytes';
 import { MaxUint256 } from '@ethersproject/constants';
 import { StethAbi } from '@lido-sdk/contracts';
-import { useSDK } from '@lido-sdk/react';
+import {
+  useSDK,
+  useSTETHContractRPC,
+  useWSTETHContractRPC,
+} from '@lido-sdk/react';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber, BytesLike, TypedDataDomain } from 'ethers';
 import { useCallback } from 'react';
 import { useAccount } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { Address, useChainId } from 'wagmi';
-import { useSTETHContractRPC, useWSTETHContractRPC } from './useLidoContracts';
 
 export type GatherPermitSignatureResult = {
   value: BigNumber;
