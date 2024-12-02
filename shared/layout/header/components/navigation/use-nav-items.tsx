@@ -1,6 +1,5 @@
 import { PATH } from 'consts/urls';
 import { ReactNode, useMemo } from 'react';
-import { ShowRules, useShowRules } from './use-show-rules';
 
 import { Eth as EthIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
@@ -13,13 +12,14 @@ import {
   CounterInvites,
   CounterLockedBond,
 } from 'shared/counters';
+import { ShowRule, useShowRule } from 'shared/hooks';
 
 export type Route = {
   name: string;
   path: PATH;
   icon: JSX.Element;
   subPaths?: PATH[];
-  showRules: ShowRules[];
+  showRules: ShowRule[];
   suffix?: ReactNode;
 };
 
@@ -70,11 +70,10 @@ const routes: Route[] = [
 ];
 
 export const useNavItems = () => {
-  const check = useShowRules();
+  const check = useShowRule();
 
   return useMemo(
-    () =>
-      routes.filter(({ showRules }) => showRules.some((rule) => check(rule))),
+    () => routes.filter(({ showRules }) => showRules.some(check)),
     [check],
   );
 };

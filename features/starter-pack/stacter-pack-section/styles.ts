@@ -7,12 +7,6 @@ import EthdockerImg from 'assets/partners/ethdocker.png';
 import SedgeImg from 'assets/partners/sedge.png';
 import StereumImg from 'assets/partners/stereum.png';
 
-export const Header = styled.h1`
-  font-size: 48px; // @style
-  line-height: 52px; // @style
-  font-weight: 600;
-`;
-
 export const Heading = styled.header`
   display: flex;
   flex-direction: column;
@@ -28,22 +22,6 @@ export const Heading = styled.header`
     color: var(--lido-color-textSecondary);
     font-size: 12px;
     line-height: 20px;
-  }
-`;
-
-export const ContentWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
-
-  text-align: left;
-  color: var(--lido-color-text);
-  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
-  line-height: ${({ theme }) => theme.fontSizesMap.xl}px;
-
-  ul {
-    color: var(--lido-color-primary);
-    padding-inline-start: 22px;
   }
 `;
 

@@ -94,5 +94,5 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [answer, canAsk, closeAlert, nodeOperator, rejectAnswer, showAlert]);
 
-  return children;
+  return <>{children}</>;
 };

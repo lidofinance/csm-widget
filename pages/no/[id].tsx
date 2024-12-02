@@ -1,9 +1,9 @@
 import { PATH } from 'consts/urls';
-import { SplashPage } from 'features/welcome';
 import { useRouter } from 'next/router';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useEffect } from 'react';
 import { useSearchParams } from 'shared/hooks';
+import { SplashPage } from 'shared/navigate';
 import { NodeOperatorId } from 'types';
 
 const Page = () => {

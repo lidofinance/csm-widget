@@ -3,8 +3,8 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
-import { LocalLink } from 'shared/components/local-link';
 import { useBeaconchainDashboardLink } from 'shared/hooks';
+import { LocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 
 export const AfterKeysUpload: FC<{ keys: string[] }> = ({ keys }) => {
@@ -66,8 +66,4 @@ const BlockStyled = styled.div`
   background-color: var(--lido-color-backgroundSecondary);
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
   padding: ${({ theme }) => theme.spaceMap.md}px;
-
-  ol {
-    padding-inline-start: 18px;
-  }
 `;

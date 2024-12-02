@@ -1,5 +1,5 @@
+import { DarkThemeProvider } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { InverseThemeProvider } from 'shared/components';
 import styled from 'styled-components';
 import { useAlertActions } from '../alert-provider';
 
@@ -30,12 +30,12 @@ export const AlertContainer: FC = () => {
   const { alerts } = useAlertActions();
 
   return (
-    <InverseThemeProvider>
+    <DarkThemeProvider>
       <AlertContainerStyled>
         {alerts.map((alert) => (
           <alert.component {...alert.props} key={alert.session} />
         ))}
       </AlertContainerStyled>
-    </InverseThemeProvider>
+    </DarkThemeProvider>
   );
 };

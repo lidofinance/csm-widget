@@ -1,7 +1,7 @@
 import { Address, Block, Box, Button, Modal, Text } from '@lidofinance/lido-ui';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { FC, useCallback, useState } from 'react';
-import { Stack, StepIndicator, Ul } from 'shared/components';
+import { Stack, StepIndicator } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 
@@ -77,9 +77,9 @@ const CustomAddresses: FC<Required<Props>> = ({
         Are you sure you want to set the following custom addresses?
       </Text>
       <Text size="xs" color="secondary">
-        Please double-check the new addresses for the Node Operator. Keep in mind
-        that in case of wrong addresses specified, you can lose the access to
-        your Node Operator and your bond submitted and rewards acquired.
+        Please double-check the new addresses for the Node Operator. Keep in
+        mind that in case of wrong addresses specified, you can lose the access
+        to your Node Operator and your bond submitted and rewards acquired.
       </Text>
     </Stack>
 
@@ -117,14 +117,14 @@ const ExtendedManagerPermissions: FC = () => (
 
     <Block color="background" paddingLess>
       <Box color="text" fontSize={2} lineHeight={1.5} padding={12}>
-        <Ul>
+        <ul>
           <li>
             Rewards Address <b>cannot</b> reset the Manager Address
           </li>
           <li>
             Manager Address <b>can</b> change the Rewards Address
           </li>
-        </Ul>
+        </ul>
       </Box>
     </Block>
     <StepIndicator length={2} current={1} />

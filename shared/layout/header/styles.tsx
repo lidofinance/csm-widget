@@ -1,4 +1,5 @@
 import { Container, ContainerProps, ThemeToggler } from '@lidofinance/lido-ui';
+import { LogoLidoStyle } from 'shared/components/logos/styles';
 import styled, { keyframes } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
@@ -12,6 +13,10 @@ export const HeaderContentStyle = styled.div`
 
   @media screen and (max-width: 880px) {
     flex-wrap: nowrap;
+  }
+
+  ${LogoLidoStyle} {
+    height: 44px;
   }
 `;
 

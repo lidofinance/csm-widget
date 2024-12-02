@@ -18,5 +18,8 @@ const variants: Partial<Record<KeyStatus, Variants>> = {
   'requested to exit': 'error',
 };
 
-export const StatusChip: FC<Props> = ({ status }) =>
-  status && <StatusStyle $variant={variants[status]}>{status}</StatusStyle>;
+export const StatusChip: FC<Props> = ({ status }) => (
+  <>
+    {status && <StatusStyle $variant={variants[status]}>{status}</StatusStyle>}
+  </>
+);

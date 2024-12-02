@@ -3,7 +3,7 @@ import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
-import { useOperatorInOtherModule } from 'shared/hooks/use-operator-in-other-module';
+import { useOperatorInOtherModule } from 'shared/hooks';
 import { StyledAccordion } from './styles';
 
 export const OtherModuleBanner: FC = () => {
