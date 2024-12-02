@@ -1,17 +1,19 @@
 import { PATH } from 'consts/urls';
-import { SplashPage } from 'features/welcome';
 import { getProps } from 'lib/getProps';
-import { GateActiveUser, GateLoaded } from 'shared/gates';
-import { Navigate } from 'shared/navigate';
+import { useIsReportStealingRole } from 'shared/hooks';
+import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => {
+  const { initialLoading } = useIsReportStealingRole();
+
   return (
-    <GateLoaded fallback={<SplashPage />}>
-      <GateActiveUser
-        fallback={<Navigate path={PATH.HOME} fallback={<SplashPage />} />}
+    <GateLoaded additional={initialLoading}>
+      <Gate
+        rule="EL_STEALING_REPORTER"
+        fallback={<Navigate path={PATH.HOME} />}
       >
-        <Navigate path={PATH.STEALING_REPORT} fallback={<SplashPage />} />
-      </GateActiveUser>
+        <Navigate path={PATH.STEALING_REPORT} />
+      </Gate>
     </GateLoaded>
   );
 };

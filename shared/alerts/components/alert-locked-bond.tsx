@@ -2,7 +2,7 @@ import { Button } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { LocalLink } from 'shared/components/local-link';
+import { LocalLink } from 'shared/navigate';
 import { Alert } from './alert';
 
 export const AlertLockedBond: FC = () => (

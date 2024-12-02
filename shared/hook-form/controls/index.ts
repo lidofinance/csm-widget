@@ -8,4 +8,3 @@ export * from './submit-button-hook-form';
 export * from './text-input-hook-form';
 export * from './token-amount-input-hook-form';
 export * from './token-buttons-hook-form';
-export * from './token-select-hook-form';

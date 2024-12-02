@@ -1,7 +1,7 @@
 import { Text } from '@lidofinance/lido-ui';
 import { ChangeEvent, FC, useCallback } from 'react';
 import { useController } from 'react-hook-form';
-import { RadioButton, Stack, Ul } from 'shared/components';
+import { RadioButton, Stack } from 'shared/components';
 import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
 import { SubmitKeysFormInputType } from '../context';
@@ -41,10 +41,10 @@ export const RewardsAddressTypeSelect: FC = () => {
             ultimate control over the Node Operator. Further changes of
             addresses will be two-phased (proposal and confirmation)
           </Text>
-          <Ul>
+          <ul>
             <li>Rewards Address can reset the Manager Address</li>
             <li>Manager Address cannot change the Rewards Address</li>
-          </Ul>
+          </ul>
         </Stack>
       </RadioButton>
       <RadioButton
@@ -65,10 +65,10 @@ export const RewardsAddressTypeSelect: FC = () => {
             ultimate control over the Node Operator, while rewards&nbsp;address
             is only used to receive rewards.
           </Text>
-          <Ul>
+          <ul>
             <li>Rewards Address cannot reset the Manager Address</li>
             <li>Manager Address can change the Rewards Address</li>
-          </Ul>
+          </ul>
         </Stack>
       </RadioButton>
     </StackWrap>
