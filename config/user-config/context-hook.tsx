@@ -11,6 +11,7 @@ const STORAGE_USER_CONFIG = 'lido-user-config';
 
 type SavedUserConfig = {
   rpcUrls: Partial<Record<CHAINS, string>>;
+  clApiUrls: Partial<Record<CHAINS, string>>;
 };
 
 export type UserConfigContextType = UserConfigDefaultType & {
@@ -22,6 +23,7 @@ export type UserConfigContextType = UserConfigDefaultType & {
 
 const DEFAULT_STATE: SavedUserConfig = {
   rpcUrls: {},
+  clApiUrls: {},
 };
 
 export const useUserConfigContext = () => {

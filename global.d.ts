@@ -29,6 +29,8 @@ declare module 'next/config' {
       rpcUrls_1: string | undefined;
       rpcUrls_17000: string | undefined;
       ethplorerApiKey: string | undefined;
+      clApiUrls_1: string | undefined;
+      clApiUrls_17000: string | undefined;
 
       oneInchApiKey: string | undefined;
 

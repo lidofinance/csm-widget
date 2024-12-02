@@ -14,40 +14,35 @@ import { config } from '../get-config';
 
 import { useUserConfig } from '../user-config';
 
-export const getBackendRPCPath = (chainId: string | number): string => {
+export const getBackendApiPath = (chainId: string | number): string => {
   const BASE_URL = typeof window === 'undefined' ? '' : window.location.origin;
-  return `${BASE_URL}/${API_ROUTES.RPC}?chainId=${chainId}`;
+  return `${BASE_URL}/${API_ROUTES.CL}/${chainId}`;
 };
 
-export const useGetRpcUrlByChainId = () => {
+export const useGetClApiUrlByChainId = () => {
   const userConfig = useUserConfig();
 
   return useCallback(
     (chainId: CHAINS) => {
       // This condition is needed because in 'providers/web3.tsx' we add `wagmiChains.polygonMumbai` to supportedChains as a workaround.
       // polygonMumbai (80001) may cause an invariant throwing.
-      // And we always need Mainnet RPC for some requests, e.g. ETH to USD price, ENS lookup.
-      if (
-        chainId !== CHAINS.Mainnet &&
-        !userConfig.supportedChainIds.includes(chainId)
-      ) {
+      if (!userConfig.supportedChainIds.includes(chainId)) {
         // Has no effect on functionality. Just a fix.
         // Return empty string as a stub
         // (see: 'providers/web3.tsx' --> jsonRpcBatchProvider --> getStaticRpcBatchProvider)
+        // TODO: check this
         return '';
       }
 
       if (config.ipfsMode) {
-        const rpc =
-          userConfig.savedUserConfig.rpcUrls[chainId] ||
-          userConfig.prefillUnsafeElRpcUrls[chainId]?.[0];
+        const apiUrl = userConfig.savedUserConfig.clApiUrls[chainId];
 
-        invariant(rpc, '[useGetRpcUrlByChainId] RPC is required!');
-        return rpc;
+        invariant(apiUrl, '[useGetClApiUrlByChainId] ApiUrl is required!');
+        return apiUrl;
       } else {
         return (
-          userConfig.savedUserConfig.rpcUrls[chainId] ||
-          getBackendRPCPath(chainId)
+          userConfig.savedUserConfig.clApiUrls[chainId] ||
+          getBackendApiPath(chainId)
         );
       }
     },
@@ -55,7 +50,7 @@ export const useGetRpcUrlByChainId = () => {
   );
 };
 
-export const useRpcUrl = () => {
+export const useClApiUrl = () => {
   const { chainId } = useSDK();
-  return useGetRpcUrlByChainId()(chainId as number);
+  return useGetClApiUrlByChainId()(chainId as number);
 };

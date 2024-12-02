@@ -164,6 +164,8 @@ export default withBundleAnalyzer({
     rpcUrls_1: process.env.EL_RPC_URLS_1,
     rpcUrls_17000: process.env.EL_RPC_URLS_17000,
     ethplorerApiKey: process.env.ETHPLORER_API_KEY,
+    clApiUrls_1: process.env.CL_API_URLS_1,
+    clApiUrls_17000: process.env.CL_API_URLS_17000,
 
     oneInchApiKey: process.env.ONE_INCH_API_KEY,
 

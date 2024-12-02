@@ -79,13 +79,13 @@ export const useNodeOperatorRewards = (nodeOperatorId?: NodeOperatorId) => {
 
   const rewardsSwr = useFeeDistributorRewards(nodeOperatorId, proofSwr.data);
 
-  const shethSwr = useSharesToSteth(rewardsSwr.data);
+  const stethSwr = useSharesToSteth(rewardsSwr.data);
 
   const data: RewardsBalance | undefined = useMemo(() => {
     return proofSwr.data
-      ? { ...proofSwr.data, available: shethSwr.data ?? Zero }
+      ? { ...proofSwr.data, available: stethSwr.data ?? Zero }
       : undefined;
-  }, [proofSwr.data, shethSwr.data]);
+  }, [proofSwr.data, stethSwr.data]);
 
   return useMergeSwr([proofSwr, rewardsSwr], data);
 };
