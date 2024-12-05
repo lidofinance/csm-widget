@@ -139,7 +139,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
         await onConfirm?.();
 
         txModalStages.success(
-          { keys: depositData.map((key) => key.pubkey) },
+          { nodeOperatorId, keys: depositData.map((key) => key.pubkey) },
           txHash,
         );
 

@@ -2,51 +2,26 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import { HexString } from 'shared/keys';
 import invariant from 'tiny-invariant';
-import { KeyStatus } from 'types';
+import { KEY_STATUS } from 'types';
+import { compareLowercase } from 'utils';
 import { useExitRequestedKeysFromEvents } from './use-exit-requested-keys-from-events';
+import { ClKeyStatus } from './use-keys-cl-status';
 import { useNetworkDuplicates } from './use-network-duplicates';
 import { useWithdrawnKeyIndexesFromEvents } from './use-withdrawn-key-indexes-from-events';
 import { useMergeSwr } from './useMergeSwr';
 import { useNodeOperatorInfo } from './useNodeOperatorInfo';
 import { useNodeOperatorUnbondedKeys } from './useNodeOperatorUnbondedKeys';
 
-/**
- * uint32 totalAddedKeys; // @dev increased and decreased when removed
- * uint32 totalWithdrawnKeys; // @dev only increased
- * uint32 totalDepositedKeys; // @dev only increased
- * uint32 totalVettedKeys; // @dev both increased and decreased
- * uint32 stuckValidatorsCount; // @dev both increased and decreased
- * uint32 depositableValidatorsCount; // @dev any value
- * uint32 totalExitedKeys; // @dev only increased
- * uint32 enqueuedCount; // Tracks how many places are occupied by the node operator's keys in the queue.
- * uint32 targetLimit;
- * uint8 targetLimitMode;
- */
-/// @notice depositableValidatorsCount depends on:
-///      - totalVettedKeys
-///      - totalDepositedKeys
-///      - totalExitedKeys
-///      - targetLimitMode
-///      - targetValidatorsCount
-///      - totalUnbondedKeys
-///      - totalStuckKeys
+type GetStatusFn = (
+  pubkey: HexString,
+  index: number,
+  prefilled?: ClKeyStatus,
+) => KEY_STATUS[];
 
-/**
- * added -> deposited -> withdrawn -> exited
- * added -> vetted -> deposited -> withdrawn
- */
+const filterOut = <T>(input: T[], filter: T[]) =>
+  input.every((st) => !filter.includes(st));
 
-/**
- * dashboard calc
- * depositable: info.depositableValidatorsCount
- * active: info.totalDepositedKeys - info.totalWithdrawnKeys
- * limit: info.targetLimitMode > 0 ? info.targetLimit : (eaTarget ?? '—')
- * exited: info.totalWithdrawnKeys
- * unbounded: unbonded?.toNumber() ?? '...'
- * stuck: info.stuckValidatorsCount
- * invalid: info.totalAddedKeys - info.totalVettedKeys
- */
-
+// TODO: merge with getKeys & clStatus
 export const useGetKeyStatus = () => {
   const nodeOperatorId = useNodeOperatorId();
 
@@ -62,43 +37,78 @@ export const useGetKeyStatus = () => {
 
   const { data: duplicates } = useNetworkDuplicates();
 
-  const getStatus = useCallback(
-    (pubkey: HexString, index: number): KeyStatus[] => {
+  const getStatus: GetStatusFn = useCallback(
+    (pubkey, nodeOperatorKeyIndex, prefilled) => {
       invariant(info, 'Info is not defined');
-      const statuses: KeyStatus[] = [];
 
-      if (withdrawnIndexes?.includes(index)) {
-        return ['withdrawn'];
+      const statuses: KEY_STATUS[] = [];
+
+      if (nodeOperatorKeyIndex >= info.totalVettedKeys) {
+        if (duplicates?.includes(pubkey)) {
+          return [KEY_STATUS.DUPLICATED];
+        } else if (nodeOperatorKeyIndex === info.totalVettedKeys) {
+          return [KEY_STATUS.INVALID];
+        } else {
+          statuses.push(KEY_STATUS.UNCHECKED);
+        }
       }
 
-      const exitRequestIndex = exitRequestedKeys?.findIndex(
-        (key) => key === pubkey.toLowerCase(),
-      );
-      if (exitRequestIndex !== undefined && exitRequestIndex >= 0) {
-        if (info.stuckValidatorsCount > exitRequestIndex)
-          statuses.push('stuck');
-        statuses.push('requested to exit');
+      if (prefilled?.slashed) {
+        statuses.push(KEY_STATUS.SLASHED);
       }
 
-      if (unbonded && info?.totalAddedKeys - index < unbonded) {
-        statuses.push('unbonded');
-      }
-
-      if (index < info.totalDepositedKeys) {
-        statuses.push('active');
-      }
-
-      if (index >= info.totalVettedKeys) {
-        if (duplicates?.includes(pubkey)) statuses.push('duplicated');
-        else if (index > info.totalVettedKeys) statuses.push('unvetted');
-        else statuses.push('invalid');
-      }
-
-      if (statuses.length > 0) {
+      if (withdrawnIndexes?.includes(nodeOperatorKeyIndex)) {
+        statuses.push(KEY_STATUS.WITHDRAWN);
         return statuses;
       }
 
-      return ['depositable'];
+      if (
+        filterOut(statuses, [
+          KEY_STATUS.SLASHED,
+          KEY_STATUS.WITHDRAWAL_PENDING,
+          KEY_STATUS.EXITING,
+        ]) &&
+        exitRequestedKeys
+      ) {
+        const exitRequestIndex = exitRequestedKeys.findIndex((key) =>
+          compareLowercase(pubkey, key),
+        );
+
+        if (exitRequestIndex >= 0) {
+          if (info.stuckValidatorsCount > exitRequestIndex) {
+            statuses.push(KEY_STATUS.STUCK);
+          } else {
+            statuses.push(KEY_STATUS.EXIT_REQUESTED);
+          }
+        }
+      }
+
+      if (
+        filterOut(statuses, [
+          KEY_STATUS.STUCK,
+          KEY_STATUS.SLASHED,
+          KEY_STATUS.WITHDRAWN,
+        ]) &&
+        unbonded &&
+        info.totalAddedKeys - nodeOperatorKeyIndex < unbonded
+      ) {
+        statuses.push(KEY_STATUS.UNBONDED);
+      }
+
+      if (nodeOperatorKeyIndex < info.totalDepositedKeys || prefilled?.status) {
+        statuses.push(prefilled?.status || KEY_STATUS.ACTIVE);
+      } else if (
+        info.stuckValidatorsCount > 0 ||
+        info.enqueuedCount < info.depositableValidatorsCount
+      ) {
+        statuses.push(KEY_STATUS.NON_QUEUED);
+      }
+
+      if (statuses.length === 0) {
+        statuses.push(KEY_STATUS.DEPOSITABLE);
+      }
+
+      return statuses;
     },
     [duplicates, exitRequestedKeys, info, unbonded, withdrawnIndexes],
   );

@@ -14,6 +14,7 @@ import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
 import { AlertStuckKeys } from './components/alert-stuck-keys';
+import { KEY_STATUS } from 'types';
 
 export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { showAlert, closeAlert } = useAlertActions();
@@ -38,7 +39,7 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const requestedToExit = useMemo(
     () =>
       keysWithStatus?.filter(({ statuses }) =>
-        statuses.includes('requested to exit'),
+        statuses.includes(KEY_STATUS.EXIT_REQUESTED),
       ),
     [keysWithStatus],
   );

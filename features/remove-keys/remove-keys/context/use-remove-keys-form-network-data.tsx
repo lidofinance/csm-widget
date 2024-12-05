@@ -33,6 +33,7 @@ export const useRemoveKeysFormNetworkData = (): [
   const { data: getStatus, initialLoading: isStatusLoading } =
     useGetKeyStatus();
 
+  // FIXME: move out to keys with status
   const keysWithStatus = useMemo(() => {
     if (!keys || !getStatus || !info) return undefined;
 

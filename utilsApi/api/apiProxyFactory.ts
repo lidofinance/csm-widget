@@ -13,7 +13,7 @@ import { ReadableStream } from 'node:stream/web';
 import { Counter, Registry } from 'prom-client';
 import type { TrackedFetchApi } from './trackedFetchApiFactory';
 
-export type RPCFactoryParams = {
+export type ApiFactoryParams = {
   metrics: {
     prefix: string;
     registry: Registry;
@@ -38,7 +38,7 @@ export const apiFactory = ({
   fetchApi,
   serverLogger = console,
   allowedMethods,
-}: RPCFactoryParams) => {
+}: ApiFactoryParams) => {
   const apiRequestBlocked = new Counter({
     name: prefix + 'api_service_request_blocked',
     help: 'Api service request blocked',

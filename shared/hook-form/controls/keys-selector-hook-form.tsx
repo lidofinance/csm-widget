@@ -5,7 +5,7 @@ import { Latice, Stack, StatusChip } from 'shared/components';
 import { StatusStyle } from 'shared/components/status-chip/style';
 import { KeyWithStatus } from 'shared/hooks';
 import styled from 'styled-components';
-import { KeyStatus } from 'types';
+import { KEY_STATUS } from 'types';
 
 type Props = {
   options: KeyWithStatus[];
@@ -13,7 +13,7 @@ type Props = {
   fieldName?: string;
 };
 
-const BAD_STATUSES: KeyStatus[] = ['duplicated', 'invalid'];
+const BAD_STATUSES: KEY_STATUS[] = [KEY_STATUS.DUPLICATED, KEY_STATUS.INVALID];
 
 export const KeysSelectorHookForm: FC<Props> = ({
   options,

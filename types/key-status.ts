@@ -1,10 +1,20 @@
-export type KeyStatus =
-  | 'active'
-  | 'depositable'
-  | 'requested to exit'
-  | 'withdrawn'
-  | 'duplicated'
-  | 'stuck'
-  | 'invalid'
-  | 'unvetted'
-  | 'unbonded';
+export const KEY_STATUS = {
+  NON_QUEUED: 'NON_QUEUED',
+  DEPOSITABLE: 'DEPOSITABLE',
+  ACTIVATION_PENDING: 'ACTIVATION_PENDING',
+  ACTIVE: 'ACTIVE',
+  EXITING: 'EXITING',
+  WITHDRAWAL_PENDING: 'WITHDRAWAL_PENDING',
+  WITHDRAWN: 'WITHDRAWN',
+
+  UNCHECKED: 'UNCHECKED',
+  DUPLICATED: 'DUPLICATED',
+  INVALID: 'INVALID',
+
+  UNBONDED: 'UNBONDED',
+  EXIT_REQUESTED: 'EXIT_REQUESTED',
+  STUCK: 'STUCK',
+  SLASHED: 'SLASHED',
+} as const;
+
+export type KEY_STATUS = keyof typeof KEY_STATUS;

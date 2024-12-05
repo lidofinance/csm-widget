@@ -19,7 +19,7 @@ export const useBeaconchainDashboardLink = (
     DASHBOARD_KEYS_LIMIT,
   );
 
-  const keysToShow = (directKeys || keys)
+  const keysToShow = (keys?.length ? keys : directKeys)
     ?.slice(0, DASHBOARD_KEYS_LIMIT)
     .join(',');
 

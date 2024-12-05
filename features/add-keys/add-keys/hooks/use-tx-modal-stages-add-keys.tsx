@@ -23,6 +23,7 @@ type Props = {
 
 type SuccessProps = {
   keys: string[];
+  nodeOperatorId: NodeOperatorId;
 };
 
 const getTxModalStagesAddKeys = (
@@ -54,7 +55,7 @@ const getTxModalStagesAddKeys = (
       />,
     ),
 
-  success: ({ keys }: SuccessProps, txHash?: string) =>
+  success: ({ keys, nodeOperatorId }: SuccessProps, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
@@ -64,7 +65,7 @@ const getTxModalStagesAddKeys = (
             Uploading operation was successful.
             <br />
             <br />
-            <AfterKeysUpload keys={keys} />
+            <AfterKeysUpload nodeOperatorId={nodeOperatorId} keys={keys} />
           </>
         }
       />,
