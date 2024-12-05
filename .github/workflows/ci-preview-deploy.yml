@@ -30,6 +30,7 @@ jobs:
     outputs:
       stand_url: ${{ steps.stand.outputs.url }}
     steps:
+      - run: exit 1
       - uses: lidofinance/gh-find-current-pr@v1
         id: pr
 
