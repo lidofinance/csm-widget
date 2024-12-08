@@ -38,3 +38,4 @@ export { YouWillReceive } from './you-will-receive/you-will-receive';
 export { Plural } from './plurals/plural';
 export { Counter } from './counter/counter';
 export { InverseThemeProvider } from './inverse-theme-provider/inverse-theme-provider';
+export { StatusComment } from './status-comment/status-comment';

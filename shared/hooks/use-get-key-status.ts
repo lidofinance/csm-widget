@@ -62,6 +62,10 @@ export const useGetKeyStatus = () => {
         return statuses;
       }
 
+      if (prefilled?.status && prefilled.status !== KEY_STATUS.ACTIVE) {
+        statuses.push(prefilled.status);
+      }
+
       if (
         filterOut(statuses, [
           KEY_STATUS.SLASHED,
@@ -95,8 +99,17 @@ export const useGetKeyStatus = () => {
         statuses.push(KEY_STATUS.UNBONDED);
       }
 
-      if (nodeOperatorKeyIndex < info.totalDepositedKeys || prefilled?.status) {
-        statuses.push(prefilled?.status || KEY_STATUS.ACTIVE);
+      if (nodeOperatorKeyIndex < info.totalDepositedKeys) {
+        if (
+          filterOut(statuses, [
+            KEY_STATUS.ACTIVATION_PENDING,
+            KEY_STATUS.WITHDRAWAL_PENDING,
+            KEY_STATUS.EXITING,
+            KEY_STATUS.ACTIVE,
+          ])
+        ) {
+          statuses.push(KEY_STATUS.ACTIVE);
+        }
       } else if (
         info.stuckValidatorsCount > 0 ||
         info.enqueuedCount < info.depositableValidatorsCount

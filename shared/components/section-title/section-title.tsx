@@ -1,4 +1,4 @@
-import { ComponentProps, FC, PropsWithChildren } from 'react';
+import { ComponentProps, FC, PropsWithChildren, ReactNode } from 'react';
 import {
   SectionHeaderLinkStyle,
   SectionHeaderStyle,
@@ -10,11 +10,14 @@ import { LocalLink } from 'shared/navigate';
 
 type Props = Partial<
   Pick<ComponentProps<typeof LocalLink>, 'href' | 'matomoEvent'>
->;
+> & {
+  middle?: ReactNode;
+};
 
 export const SectionTitle: FC<PropsWithChildren<Props>> = ({
   children,
   href,
+  middle,
   ...props
 }) => {
   const hasDecorator = !!href;
@@ -22,6 +25,7 @@ export const SectionTitle: FC<PropsWithChildren<Props>> = ({
   return (
     <SectionHeaderStyle>
       <SectionTitleStyle>{children}</SectionTitleStyle>
+      {middle}
       {hasDecorator && (
         <SectionHeaderLinkStyle href={href} {...props}>
           <RoundedArrowIcon />

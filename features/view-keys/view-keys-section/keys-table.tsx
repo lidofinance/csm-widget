@@ -1,6 +1,6 @@
 import { Address, Tbody, Td, Text, Th, Thead, Tr } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { KeyLink, Stack, StatusChip } from 'shared/components';
+import { KeyLink, Stack, StatusChip, StatusComment } from 'shared/components';
 import { KeyWithStatus } from 'shared/hooks';
 import { AddressRow, TableStyle } from './styles';
 
@@ -16,6 +16,7 @@ export const KeysTable: FC<Props> = ({ data, offset = 0 }) => (
         <Th>#</Th>
         <Th>Key</Th>
         <Th>Status</Th>
+        <Th>Comment</Th>
       </Tr>
     </Thead>
 
@@ -29,7 +30,7 @@ export const KeysTable: FC<Props> = ({ data, offset = 0 }) => (
           </Td>
           <Td>
             <AddressRow>
-              <Address address={key} symbols={16} />
+              <Address address={key} symbols={8} />
               <KeyLink pubkey={key} />
             </AddressRow>
           </Td>
@@ -39,6 +40,9 @@ export const KeysTable: FC<Props> = ({ data, offset = 0 }) => (
                 <StatusChip status={status} key={status} />
               ))}
             </Stack>
+          </Td>
+          <Td>
+            <StatusComment statuses={statuses} />
           </Td>
         </Tr>
       ))}

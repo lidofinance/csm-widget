@@ -25,13 +25,13 @@ const variants: Record<KEY_STATUS, Variants> = {
   [KEY_STATUS.SLASHED]: 'secondary',
 };
 
-export const titles: Record<KEY_STATUS, string> = {
+export const StatusTitle: Record<KEY_STATUS, string> = {
   [KEY_STATUS.NON_QUEUED]: 'Non queued',
   [KEY_STATUS.DEPOSITABLE]: 'Depositable',
   [KEY_STATUS.ACTIVATION_PENDING]: 'Activation pending',
   [KEY_STATUS.ACTIVE]: 'Active',
   [KEY_STATUS.EXITING]: 'Exiting',
-  [KEY_STATUS.WITHDRAWAL_PENDING]: 'Withdrawal pending',
+  [KEY_STATUS.WITHDRAWAL_PENDING]: 'Exited (withdrawal pending)',
   [KEY_STATUS.WITHDRAWN]: 'Withdrawn',
 
   [KEY_STATUS.UNCHECKED]: 'Unchecked',
@@ -47,7 +47,9 @@ export const titles: Record<KEY_STATUS, string> = {
 export const StatusChip: FC<Props> = ({ status }) => (
   <>
     {status && (
-      <StatusStyle $variant={variants[status]}>{titles[status]}</StatusStyle>
+      <StatusStyle $variant={variants[status]}>
+        {StatusTitle[status]}
+      </StatusStyle>
     )}
   </>
 );

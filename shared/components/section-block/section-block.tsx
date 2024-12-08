@@ -14,12 +14,13 @@ export const SectionBlock: SectionComponent = ({
   title,
   href,
   matomoEvent,
+  middle,
   children,
   ...rest
 }) => (
   <Block>
     <SectionStyle {...rest}>
-      <SectionTitle {...{ href, matomoEvent }}>{title}</SectionTitle>
+      <SectionTitle {...{ href, matomoEvent, middle }}>{title}</SectionTitle>
       <SectionContentStyle>{children}</SectionContentStyle>
     </SectionStyle>
   </Block>
