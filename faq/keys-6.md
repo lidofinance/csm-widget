@@ -1,5 +1,6 @@
 ---
 title: When does a validator become active?
+anchor: when-validator-become-active
 ---
 
 After key submission, and if keys have been successfully validated, two actions are required for a validator to be activated:
