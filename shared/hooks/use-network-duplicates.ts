@@ -1,7 +1,7 @@
 import { useLidoSWR } from '@lido-sdk/react';
 import { getCsmConstants, getCsmContractAddress } from 'consts/csm-constants';
 import { getExternalLinks } from 'consts/external-links';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
+import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import { HexString } from 'shared/keys';
@@ -80,7 +80,7 @@ const getDuplicates = (
 };
 
 // FIXME: refactor check-network-duplicates.ts
-export const useNetworkDuplicates = (config = STRATEGY_LAZY) => {
+export const useNetworkDuplicates = (config = STRATEGY_CONSTANT) => {
   const { chainId } = useAccount();
   const nodeOperatorId = useNodeOperatorId();
 

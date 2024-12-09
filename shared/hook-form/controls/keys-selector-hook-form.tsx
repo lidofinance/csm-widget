@@ -13,7 +13,13 @@ type Props = {
   fieldName?: string;
 };
 
-const BAD_STATUSES: KEY_STATUS[] = [KEY_STATUS.DUPLICATED, KEY_STATUS.INVALID];
+const BAD_STATUSES: KEY_STATUS[] = [
+  KEY_STATUS.UNBONDED,
+  KEY_STATUS.DUPLICATED,
+  KEY_STATUS.INVALID,
+  KEY_STATUS.NON_QUEUED,
+  KEY_STATUS.UNCHECKED,
+];
 
 export const KeysSelectorHookForm: FC<Props> = ({
   options,

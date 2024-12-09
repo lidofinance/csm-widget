@@ -5,6 +5,7 @@ import { useCallback } from 'react';
 import { HexString } from 'shared/keys';
 import { KEY_STATUS } from 'types';
 import { getSettledValue, standardFetcher } from 'utils';
+import type { useNodeOperatorKeys } from './useNodeOperatorKeys';
 
 const CL_METHOD = '/eth/v1/beacon/states/head/validators';
 const MAX_URL_LENGTH = 2048;
@@ -59,13 +60,17 @@ export type ClKeyStatus = {
   slashed: boolean;
 };
 
-export const useKeysCLStatus = (keys?: HexString[]) => {
+export const useKeysCLStatus = (
+  keys?: ReturnType<typeof useNodeOperatorKeys>['data'],
+  config = STRATEGY_CONSTANT,
+) => {
   const apiUrl = useClApiUrl();
   const url = `${apiUrl}${CL_METHOD}`;
 
   const fetcher = useCallback(async (): Promise<ClKeyStatus[]> => {
-    const countKeysPerChunk = getKeysPerChunk(url, keys);
-    const keysChunks = getChunks(keys, countKeysPerChunk);
+    const flatKeys = keys?.map(({ key }) => key);
+    const countKeysPerChunk = getKeysPerChunk(url, flatKeys?.[0]?.length);
+    const keysChunks = getChunks(flatKeys, countKeysPerChunk);
 
     const responses = await Promise.allSettled(
       keysChunks.map(async (keys) => {
@@ -89,12 +94,11 @@ export const useKeysCLStatus = (keys?: HexString[]) => {
   return useLidoSWR(
     ['csm-cl-keys', apiUrl, keys],
     keys?.length ? fetcher : null,
-    STRATEGY_CONSTANT,
+    config,
   );
 };
 
-const getKeysPerChunk = (url: string, keys: string[] = []) => {
-  const keyLength = keys[0].length;
+const getKeysPerChunk = (url: string, keyLength = 0) => {
   const maxKeysQueryLength = MAX_URL_LENGTH - url.length - 4; // '?id='.length
   return Math.floor(
     (maxKeysQueryLength + 3) / (keyLength + 3), // 3 = encodeURIComponent(',').length

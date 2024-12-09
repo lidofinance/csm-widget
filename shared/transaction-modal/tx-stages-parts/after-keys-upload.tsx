@@ -13,11 +13,8 @@ type Props = {
   keys: string[];
 };
 
-export const AfterKeysUpload: FC<Props> = ({ keys, nodeOperatorId }) => {
-  const beaconchainDashboardLink = useBeaconchainDashboardLink(
-    nodeOperatorId,
-    keys,
-  );
+export const AfterKeysUpload: FC<Props> = ({ keys }) => {
+  const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
   const { subscribeEvents, beaconchain } = getExternalLinks();
   return (
     <BlockStyled color="background">

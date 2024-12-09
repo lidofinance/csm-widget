@@ -5,6 +5,11 @@ import { Partners } from './partners';
 import { Step } from './step';
 import { BlockStyled, Heading, Steps } from './styles';
 import { RequiredBondAmount } from './required-bond-amount';
+import {
+  ABOUT_DEPOSIT_DATA_LINK,
+  HOW_TO_GENERATE_DEPOSIT_DATA_LINK,
+  PREPARE_HARDWARE_LINK,
+} from 'consts/external-links';
 
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
   <BlockStyled>
@@ -35,7 +40,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
       <Step number="2" title="Prepare hardware">
         Run{' '}
         <MatomoLink
-          href="https://dvt-homestaker.stakesaurus.com/hardware-and-systems-setup/hardware-and-system-requirements"
+          href={PREPARE_HARDWARE_LINK}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackHadwareLink}
         >
           your own hardware
@@ -45,7 +50,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
       <Step number="3" title="Set up validation tools">
         Do it{' '}
         <MatomoLink
-          href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm"
+          href={ABOUT_DEPOSIT_DATA_LINK}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackSetupValidatorLink}
         >
           manually
@@ -58,7 +63,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
         <br />
         Follow the{' '}
         <MatomoLink
-          href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm#key-settings-to-note"
+          href={HOW_TO_GENERATE_DEPOSIT_DATA_LINK}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackGenerateKeysLink}
         >
           generation guide

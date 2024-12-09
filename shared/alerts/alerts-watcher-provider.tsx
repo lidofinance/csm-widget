@@ -35,22 +35,25 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
 
   const { data: lockedBond } = useNodeOperatorLockAmount(nodeOperator?.id);
 
-  const { data: keysWithStatus } = useKeysWithStatus();
-  const requestedToExit = useMemo(
+  const { data: keysWithStatus, initialLoading: isKeysLoading } =
+    useKeysWithStatus();
+  const hasRequestsToExit = useMemo(
     () =>
       keysWithStatus?.filter(({ statuses }) =>
         statuses.includes(KEY_STATUS.EXIT_REQUESTED),
-      ),
+      ).length,
     [keysWithStatus],
   );
 
   useEffect(() => {
-    if (requestedToExit?.length) {
-      showAlert(AlertRequestToExit);
-    } else {
-      closeAlert(AlertRequestToExit);
+    if (!isKeysLoading) {
+      if (hasRequestsToExit) {
+        showAlert(AlertRequestToExit);
+      } else {
+        closeAlert(AlertRequestToExit);
+      }
     }
-  }, [closeAlert, requestedToExit?.length, showAlert]);
+  }, [closeAlert, hasRequestsToExit, isKeysLoading, showAlert]);
 
   useEffect(() => {
     if (info?.stuckValidatorsCount) {
