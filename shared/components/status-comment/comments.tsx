@@ -34,8 +34,7 @@ export const CommentInvalid: FC = () => (
 
 export const CommentUnchecked: FC = () => (
   <>
-    Resolve the issues with all keys in <b>Duplicated</b> and{' '}
-    <b>Invalid signature</b>
+    Resolve the issues with all keys in <b>Duplicated</b> and <b>Invalid</b>{' '}
     statuses
   </>
 );
