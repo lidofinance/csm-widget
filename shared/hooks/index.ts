@@ -70,7 +70,6 @@ export * from './useNodeOperatorInfo';
 export * from './useNodeOperatorKeys';
 export * from './useNodeOperatorLockAmount';
 export * from './useNodeOperatorNextKeysBond';
-export * from './useNodeOperatorQueue';
 export * from './useNodeOperatorRewards';
 export * from './useNodeOperatorSummary';
 export * from './useNodeOperatorUnbondedKeys';

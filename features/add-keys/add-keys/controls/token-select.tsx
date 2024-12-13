@@ -1,10 +1,12 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { PATH } from 'consts/urls';
 import {
   FormTitle,
   KeysAvailable,
   Stack,
+  TitledAmount,
   TokenAmount,
 } from 'shared/components';
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
@@ -12,8 +14,14 @@ import { LocalLink } from 'shared/navigate';
 import { useAddKeysFormData } from '../context';
 
 export const TokenSelect: React.FC = () => {
-  const { etherBalance, stethBalance, wstethBalance, keysAvailable, loading } =
-    useAddKeysFormData();
+  const {
+    etherBalance,
+    stethBalance,
+    wstethBalance,
+    keysAvailable,
+    bond,
+    loading,
+  } = useAddKeysFormData();
 
   return (
     <>
@@ -63,7 +71,18 @@ export const TokenSelect: React.FC = () => {
             </Stack>
           ),
         }}
-      ></TokenButtonsHookForm>
+      />
+      <TitledAmount
+        title={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
+        description={
+          bond?.isInsufficient
+            ? 'Will be added to the transaction amount'
+            : 'Will be subtracted from the transaction amount'
+        }
+        loading={loading.isBondLoading}
+        amount={bond?.delta}
+        token={TOKENS.STETH}
+      />
     </>
   );
 };

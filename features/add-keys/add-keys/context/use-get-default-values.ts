@@ -35,6 +35,7 @@ export const useGetDefaultValues = ({
         token,
         depositData: [],
         rawDepositData: '',
+        confirmKeysReady: false,
       };
     }, [
       etherBalance,

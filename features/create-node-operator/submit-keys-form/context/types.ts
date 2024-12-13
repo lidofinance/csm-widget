@@ -1,7 +1,7 @@
 import { type TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
-import { KeysAvailable } from 'shared/hooks';
+import { KeysAvailable, ShareLimitInfo } from 'shared/hooks';
 import { LoadingRecord, Proof } from 'types';
 import { Address } from 'wagmi';
 
@@ -26,6 +26,7 @@ export type SubmitKeysFormNetworkData = {
   keysUploadLimit?: number;
   keysAvailable?: KeysAvailable;
   isPaused?: boolean;
+  shareLimit?: ShareLimitInfo;
   blockNumber?: number;
   loading: LoadingRecord<
     | 'etherBalance'
@@ -36,6 +37,7 @@ export type SubmitKeysFormNetworkData = {
     | 'keysUploadLimit'
     | 'maxStakeEther'
     | 'status'
+    | 'shareLimit'
     | 'blockNumber'
   >;
 };

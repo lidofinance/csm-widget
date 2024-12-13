@@ -39,6 +39,7 @@ export const useGetDefaultValues = (
         token,
         depositData: [],
         rawDepositData: '',
+        confirmKeysReady: false,
         extendedManagerPermissions: false,
         specifyCustomAddresses: false,
         specifyReferrrer: false,
