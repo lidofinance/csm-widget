@@ -39,6 +39,7 @@ export * from './use-tx-cost-in-usd';
 export * from './use-withdrawn-key-indexes-from-events';
 export * from './useAsyncMemo';
 export * from './useAvailableToClaim';
+export * from './useCSMShareLimitInfo';
 export * from './useCopyToClipboard';
 export * from './useCsmContracts';
 export * from './useCsmCurveId';

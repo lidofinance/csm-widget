@@ -10,7 +10,8 @@ type CsmContract =
   | 'CSFeeOracle'
   | 'CSModule'
   | 'CSVerifier'
-  | 'ExitBusOracle';
+  | 'ExitBusOracle'
+  | 'StakingRouter';
 
 type CsmConstants = {
   contracts: Record<CsmContract, Address>;
@@ -31,6 +32,7 @@ export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
       CSModule: '0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F',
       CSVerifier: '0x3Dfc50f22aCA652a0a6F28a0F892ab62074b5583',
       ExitBusOracle: '0x0De4Ea0184c2ad0BacA7183356Aea5B8d5Bf5c6e',
+      StakingRouter: '0xFdDf38947aFB03C621C71b06C9C70bce73f12999',
     },
     deploymentBlockNumber: '0x13f7326',
     stakingModuleId: 3,
@@ -47,6 +49,7 @@ export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
       CSModule: '0x4562c3e63c2e586cD1651B958C22F88135aCAd4f',
       CSVerifier: '0x6DcA479178E6Ae41CCEB72a88FfDaa3e10E83CB7',
       ExitBusOracle: '0xffDDF7025410412deaa05E3E1cE68FE53208afcb',
+      StakingRouter: '0xd6EbF043D30A7fe46D1Db32BA90a0A51207FE229',
     },
     deploymentBlockNumber: '0x1b143a',
     stakingModuleId: 4,
