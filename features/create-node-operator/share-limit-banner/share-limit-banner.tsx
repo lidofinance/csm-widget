@@ -6,15 +6,13 @@ import { LocalLink } from 'shared/navigate';
 
 type Props = { activeLeft: string; queue: string };
 
-const ReachedBanner: FC<Props> = ({ activeLeft, queue }) => (
+const ReachedBanner: FC = () => (
   <Banner
     variant="wary-dangerous"
     title="CSM has reached its stake share limit"
   >
-    Currently, <b>{activeLeft}</b> more keys can be activated in CSM before it
-    hits its stake share limit. Since thre are already <b>{queue}</b> keys in
-    the queue, this means that newly uploaded keys are very unlikely to receive
-    deposits in the near future (possibly for months).
+    You still can upload keys, but they are very unlikely to receive deposits in
+    the near future (possibly for months).
     <br />
     <LocalLink
       anchor="#stake-share-limit"
@@ -52,7 +50,7 @@ export const ShareLimitBanner: FC = () => {
   return (
     <>
       {data?.status === SHARE_LIMIT_STATUS.REACHED ? (
-        <ReachedBanner activeLeft={'0'} queue={data.queue.toString()} />
+        <ReachedBanner />
       ) : data?.status === SHARE_LIMIT_STATUS.APPROACHING ? (
         <ApproachingBanner
           activeLeft={data.activeLeft.toString()}
