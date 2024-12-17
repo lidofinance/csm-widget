@@ -73,7 +73,9 @@ export const getFaqKeys = () =>
     'keys-8',
     'keys-9',
     'keys-10',
+    'keys-13',
     'keys-11',
+    'keys-12',
   ]);
 
 export const getFaqBond = () =>

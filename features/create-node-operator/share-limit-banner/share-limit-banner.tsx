@@ -1,3 +1,4 @@
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
 import { Banner } from 'shared/components';
 import { SHARE_LIMIT_STATUS, useCSMShareLimitInfo } from 'shared/hooks';
@@ -5,7 +6,6 @@ import { LocalLink } from 'shared/navigate';
 
 type Props = { activeLeft: string; queue: string };
 
-// TODO: link to FAQ
 const ReachedBanner: FC<Props> = ({ activeLeft, queue }) => (
   <Banner
     variant="wary-dangerous"
@@ -16,7 +16,13 @@ const ReachedBanner: FC<Props> = ({ activeLeft, queue }) => (
     the queue, this means that newly uploaded keys are very unlikely to receive
     deposits in the near future (possibly for months).
     <br />
-    <LocalLink href="/">Read more in the FAQ section</LocalLink>.
+    <LocalLink
+      anchor="#stake-share-limit"
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner}
+    >
+      Read more in the FAQ section
+    </LocalLink>
+    .
   </Banner>
 );
 
@@ -30,7 +36,13 @@ const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
     be months or longer. Please note that the exact number of validators that
     can be active for CSM is constantly changing due to protocol dynamics.
     <br />
-    <LocalLink href="/">Read more in the FAQ section</LocalLink>.
+    <LocalLink
+      anchor="#stake-share-limit"
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner}
+    >
+      Read more in the FAQ section
+    </LocalLink>
+    .
   </Banner>
 );
 

@@ -10,7 +10,7 @@ import { useModalActions } from 'providers/modal-provider';
 import { useCorrectPath } from './use-correct-path';
 
 type LocalLinkProps = Omit<LinkProps, 'href'> & {
-  href: PATH;
+  href?: PATH;
   anchor?: `#${string}`;
 };
 
@@ -20,7 +20,7 @@ export const LocalLink: FC<
   const router = useRouter();
   const { ref, embed, app, theme } = router.query;
 
-  const href = useCorrectPath(path);
+  const href = useCorrectPath(path ?? (router.pathname as PATH));
   const { closeModal } = useModalActions();
 
   const onClickHandler = useCallback(() => {
