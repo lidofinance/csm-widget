@@ -43,10 +43,12 @@ const getInfo = (
     BigNumber.from(0),
   );
 
-  const activeLeft = totalActive
-    .mul(moduleDigest.state.stakeShareLimit)
-    .div(PERCENT_BASIS)
-    .sub(active);
+  const activeLeft =
+    BigNumber.from(-10) ??
+    totalActive
+      .mul(moduleDigest.state.stakeShareLimit)
+      .div(PERCENT_BASIS)
+      .sub(active);
 
   const status: SHARE_LIMIT_STATUS = activeLeft.lte(0)
     ? SHARE_LIMIT_STATUS.REACHED
