@@ -63,7 +63,7 @@ export const KeysSection: FC = () => {
           <Item
             reverse
             title="Total keys"
-            count={info?.totalAddedKeys}
+            count={27}
             tooltip="Total added keys"
           />
           <Item

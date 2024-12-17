@@ -31,6 +31,43 @@ export const useKeysIndexes = (
   }, [info?.totalAddedKeys, info?.totalDepositedKeys, maxCount, onlyRemovable]);
 };
 
+const key =
+  '0x0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
+const sts: KEY_STATUS[][] = [
+  [KEY_STATUS.INVALID],
+  [KEY_STATUS.DUPLICATED],
+  [KEY_STATUS.STUCK],
+  [KEY_STATUS.UNBONDED],
+  [KEY_STATUS.EXIT_REQUESTED],
+  [KEY_STATUS.NON_QUEUED],
+  [KEY_STATUS.UNCHECKED],
+  [KEY_STATUS.DEPOSITABLE],
+  [KEY_STATUS.ACTIVATION_PENDING],
+  [KEY_STATUS.ACTIVE],
+  [KEY_STATUS.EXITING],
+  [KEY_STATUS.WITHDRAWAL_PENDING],
+  [KEY_STATUS.WITHDRAWN],
+  [KEY_STATUS.SLASHED],
+  [KEY_STATUS.WITHDRAWN, KEY_STATUS.SLASHED],
+  [KEY_STATUS.WITHDRAWAL_PENDING, KEY_STATUS.SLASHED],
+  [KEY_STATUS.EXITING, KEY_STATUS.SLASHED],
+  [KEY_STATUS.UNBONDED, KEY_STATUS.SLASHED],
+  [KEY_STATUS.ACTIVE, KEY_STATUS.UNBONDED, KEY_STATUS.EXIT_REQUESTED],
+  [KEY_STATUS.ACTIVE, KEY_STATUS.UNBONDED],
+  [KEY_STATUS.ACTIVE, KEY_STATUS.EXIT_REQUESTED],
+  [KEY_STATUS.ACTIVE, KEY_STATUS.STUCK],
+  [KEY_STATUS.ACTIVATION_PENDING, KEY_STATUS.UNBONDED],
+  [KEY_STATUS.EXITING, KEY_STATUS.UNBONDED],
+  [KEY_STATUS.WITHDRAWAL_PENDING, KEY_STATUS.UNBONDED],
+  [KEY_STATUS.NON_QUEUED, KEY_STATUS.UNBONDED],
+];
+
+const keysWithStatus: KeyWithStatus[] = sts.map((statuses, index) => ({
+  key,
+  index,
+  statuses,
+}));
+
 // FIXME: cache keys with status
 export const useKeysWithStatus = (onlyRemovable = false) => {
   const nodeOperatorId = useNodeOperatorId();
@@ -143,7 +180,7 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
     [clStatus, duplicates, exitRequestedKeys, info, unbonded, withdrawnIndexes],
   );
 
-  const keysWithStatus: KeyWithStatus[] | undefined = useMemo(
+  const _keysWithStatus: KeyWithStatus[] | undefined = useMemo(
     () =>
       keys?.map(({ key, index }) => {
         return {
@@ -165,6 +202,6 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
       // swrDuplicates,
       swrClStatus,
     ],
-    info && keys ? keysWithStatus : undefined,
+    info && keys ? (keysWithStatus ?? _keysWithStatus) : undefined,
   );
 };
