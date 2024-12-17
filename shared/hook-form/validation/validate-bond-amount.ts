@@ -24,7 +24,7 @@ export const validateBondAmount = ({
     if (token === TOKENS.ETH && maxStakeEther?.lt(bondAmount)) {
       throw new ValidationError(
         'bondAmount',
-        `Lido is reach staking limit - use another token or try later`,
+        `Lido has reached its stake limit for ETH deposits — use another token or try later`,
       );
     }
 
