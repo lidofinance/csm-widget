@@ -165,6 +165,6 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
       // swrDuplicates,
       swrClStatus,
     ],
-    swrInfo && swrKeys ? keysWithStatus : undefined,
+    info && keys ? keysWithStatus : undefined,
   );
 };
