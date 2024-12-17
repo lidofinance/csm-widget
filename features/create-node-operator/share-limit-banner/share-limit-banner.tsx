@@ -52,10 +52,7 @@ export const ShareLimitBanner: FC = () => {
   return (
     <>
       {data?.status === SHARE_LIMIT_STATUS.REACHED ? (
-        <ReachedBanner
-          activeLeft={data.activeLeft.toString()}
-          queue={data.queue.toString()}
-        />
+        <ReachedBanner activeLeft={'0'} queue={data.queue.toString()} />
       ) : data?.status === SHARE_LIMIT_STATUS.APPROACHING ? (
         <ApproachingBanner
           activeLeft={data.activeLeft.toString()}
