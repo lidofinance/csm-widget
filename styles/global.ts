@@ -2,6 +2,18 @@ import { createGlobalStyle } from 'styled-components';
 import { NAV_MOBILE_MEDIA } from './constants';
 
 const GlobalStyle = createGlobalStyle`
+  @property --santa-hover-offset {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+  }
+
+  @property --santa-visible-offset {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+  }
+
   * {
     margin: 0;
     padding: 0;

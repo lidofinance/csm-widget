@@ -1,7 +1,9 @@
 import { FC, PropsWithChildren, ReactNode, useEffect } from 'react';
 
 import { AlertContainer } from 'shared/alerts';
+import { LegalDisclaimer } from 'shared/components';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
+import { Santa } from './decor';
 import { Footer } from './footer';
 import { DummyHeader, Header, SemiDummyHeader } from './header';
 import { Navigation } from './navigation';
@@ -13,7 +15,6 @@ import {
   LayoutTitleStyle,
   Main,
 } from './styles';
-import { LegalDisclaimer } from 'shared/components';
 
 type Props = {
   title?: ReactNode;
@@ -57,6 +58,7 @@ export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
         {!dummy && <LegalDisclaimer />}
       </Main>
       <Footer />
+      <Santa />
     </LayoutStyle>
   );
 };
