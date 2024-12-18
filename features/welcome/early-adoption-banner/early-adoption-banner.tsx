@@ -1,10 +1,14 @@
 import { FC } from 'react';
 
-import { DarkThemeProvider, LightThemeProvider } from '@lidofinance/lido-ui';
+import {
+  DarkThemeProvider,
+  External,
+  LightThemeProvider,
+} from '@lidofinance/lido-ui';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { LinkButton, Stack } from 'shared/components';
-import { BlockStyled, Header, Heading } from './styles';
+import { MatomoLink, Stack } from 'shared/components';
+import { BlockStyled, Header, Heading, StyledButton } from './styles';
 
 export const EarlyAdoptionBanner: FC = () => {
   const links = getExternalLinks();
@@ -21,26 +25,36 @@ export const EarlyAdoptionBanner: FC = () => {
       </Heading>
       {links && (
         <Stack wrap>
-          <LightThemeProvider>
-            <LinkButton
-              href={links.earlyAdoptionAbout}
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionLearnMore}
-              variant="text"
-              fullwidth
-            >
-              Learn more about Early Adoption
-            </LinkButton>
-          </LightThemeProvider>
-          <DarkThemeProvider>
-            <LinkButton
-              href={links.earlyAdoptionSources}
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionCuratedList}
-              variant="translucent"
-              fullwidth
-            >
-              See Early Adoption members list
-            </LinkButton>
-          </DarkThemeProvider>
+          <MatomoLink
+            href={links.earlyAdoptionAbout}
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionLearnMore}
+          >
+            <LightThemeProvider>
+              <StyledButton
+                size="xs"
+                color="secondary"
+                fullwidth
+                variant="text"
+              >
+                Learn more about Early Adoption <External />
+              </StyledButton>
+            </LightThemeProvider>
+          </MatomoLink>
+          <MatomoLink
+            href={links.earlyAdoptionSources}
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionCuratedList}
+          >
+            <DarkThemeProvider>
+              <StyledButton
+                size="xs"
+                color="secondary"
+                fullwidth
+                variant="translucent"
+              >
+                See Early Adoption members list <External />
+              </StyledButton>
+            </DarkThemeProvider>
+          </MatomoLink>
         </Stack>
       )}
     </BlockStyled>
