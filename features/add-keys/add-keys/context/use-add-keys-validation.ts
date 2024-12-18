@@ -50,7 +50,7 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
         if (options.names?.includes('confirmKeysReady') && !confirmKeysReady) {
           throw new ValidationError(
             'confirmKeysReady',
-            'Confirm that keys are ready',
+            'Please confirm that the keys are ready',
           );
         }
 

@@ -31,7 +31,7 @@ export const KeysConfirm: FC = () => {
               </li>
             )}
             <li>
-              I understand that deleting them from the deposit queue will incur
+              I understand that deleting keys from the deposit queue will incur
               a removal fee
             </li>
           </ul>
