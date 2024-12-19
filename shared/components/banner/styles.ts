@@ -41,5 +41,4 @@ export const BannerContent = styled.div`
   color: var(--lido-color-text);
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
-  text-align: justify;
 `;
