@@ -4,6 +4,18 @@ import { config } from 'config';
 export const CSM_MAINNET_LINK = 'https://csm.lido.fi/';
 export const CSM_TESTNET_LINK = 'https://csm.testnet.fi/';
 
+export const HOW_TO_EXIT_VALIDATOR_LINK =
+  'https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm/exiting-csm-validators';
+
+export const ABOUT_DEPOSIT_DATA_LINK =
+  'https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm';
+
+export const HOW_TO_GENERATE_DEPOSIT_DATA_LINK =
+  'https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm#key-settings-to-note';
+
+export const PREPARE_HARDWARE_LINK =
+  'https://dvt-homestaker.stakesaurus.com/hardware-and-systems-setup/hardware-and-system-requirements';
+
 type ExternalLinksConstants = {
   earlyAdoptionTree: string;
   rewardsTree: string;

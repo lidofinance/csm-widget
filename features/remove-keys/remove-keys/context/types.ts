@@ -1,5 +1,4 @@
 import { KeyWithStatus, useNodeOperatorInfo } from 'shared/hooks';
-import { HexString } from 'shared/keys';
 import { BondBalance, LoadingRecord, NodeOperatorId } from 'types';
 
 export type RemoveKeysFormInputType = {
@@ -11,9 +10,8 @@ export type RemoveKeysFormInputType = {
 
 export type RemoveKeysFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
-  keys?: HexString[];
-  keysWithStatus?: KeyWithStatus[];
+  keys?: KeyWithStatus[];
   info?: ReturnType<typeof useNodeOperatorInfo>['data'];
   bond?: BondBalance;
-  loading: LoadingRecord<'keys' | 'bond' | 'info' | 'status'>;
+  loading: LoadingRecord<'keys' | 'bond' | 'info'>;
 };

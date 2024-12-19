@@ -6,9 +6,15 @@ import { MatomoLink } from 'shared/components';
 import { useBeaconchainDashboardLink } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import styled from 'styled-components';
+import { NodeOperatorId } from 'types';
 
-export const AfterKeysUpload: FC<{ keys: string[] }> = ({ keys }) => {
-  const beaconchainDashboardLink = useBeaconchainDashboardLink(undefined, keys);
+type Props = {
+  nodeOperatorId?: NodeOperatorId;
+  keys: string[];
+};
+
+export const AfterKeysUpload: FC<Props> = ({ keys }) => {
+  const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
   const { subscribeEvents, beaconchain } = getExternalLinks();
   return (
     <BlockStyled color="background">

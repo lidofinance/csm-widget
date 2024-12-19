@@ -31,6 +31,5 @@ export const StatusStyle = styled.div<{ $variant?: Variants }>`
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
   font-weight: 700;
-  text-transform: capitalize;
   ${(props) => variants[props.$variant || 'default']}
 `;

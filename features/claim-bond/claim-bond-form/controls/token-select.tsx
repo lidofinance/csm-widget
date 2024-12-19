@@ -1,6 +1,7 @@
 import { Checkbox } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { TOKENS } from 'consts/tokens';
+import { PATH } from 'consts/urls';
 import { useController, useWatch } from 'react-hook-form';
 import {
   FormTitle,
@@ -12,6 +13,7 @@ import {
   YouWillReceive,
 } from 'shared/components';
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
+import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
 
@@ -91,12 +93,13 @@ export const TokenSelect: React.FC = () => {
       {token === TOKENS.ETH && (
         <Note>
           After receiving NFT you will need to claim ETH manually. Follow{' '}
-          <MatomoLink
-            href="#how-to-claim-eth"
+          <LocalLink
+            href={PATH.BOND_CLAIM}
+            anchor="#how-to-claim-eth"
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToClaimEth}
           >
             FAQ
-          </MatomoLink>{' '}
+          </LocalLink>{' '}
           for more details.
         </Note>
       )}

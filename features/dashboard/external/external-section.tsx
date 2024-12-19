@@ -1,5 +1,4 @@
 import { Accordion, Text } from '@lidofinance/lido-ui';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { ExternalButtonLink } from './external-button-link';
@@ -12,16 +11,11 @@ import {
   useFeesMonitoningLink,
   useOperatorPortalLink,
 } from 'shared/hooks';
-import invariant from 'tiny-invariant';
 
 export const ExternalSection: FC = () => {
-  const nodeOperatorId = useNodeOperatorId();
-
-  const beaconchainDashboardLink = useBeaconchainDashboardLink(nodeOperatorId);
-  const feesMonitoningLink = useFeesMonitoningLink(nodeOperatorId);
-  const operatorPortalLink = useOperatorPortalLink(nodeOperatorId);
-
-  invariant(nodeOperatorId);
+  const beaconchainDashboardLink = useBeaconchainDashboardLink();
+  const feesMonitoningLink = useFeesMonitoningLink();
+  const operatorPortalLink = useOperatorPortalLink();
 
   return (
     <Accordion

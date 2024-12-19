@@ -53,6 +53,7 @@ const fetchRewardsTree = async (url: string, treeRoot: string) => {
   return null;
 };
 
+// TODO: check `iterateUrls`
 const fetchRewardsTreeWithFallback = async (
   urls: Array<string | null>,
   treeRoot: string,

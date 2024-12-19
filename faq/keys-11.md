@@ -1,5 +1,6 @@
 ---
-title: What to do in case of technical issues?
+title: What is a referrer?
+onlyWithReferrer: true
 ---
 
-For community assistance, join the "CSM-mainnet" channel on the [Lido Discord server](https://discord.com/invite/lido) to seek advice and guidance.
+A referrer is a software provider specializing in node/validator setup that integrated CSM into their tools. When a referrer directs solo stakers to join CSM via its tool, these Node Operators are marked as being referred from this provider. It doesn’t affect the Node Operators rewards in any way and is used just for the funnel-tracking purposes.

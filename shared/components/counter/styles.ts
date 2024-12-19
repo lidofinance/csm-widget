@@ -11,6 +11,7 @@ export const CounterStyle = styled.span<{ $warning?: boolean }>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  align-self: center;
 
   background: ${({ $warning }) =>
     $warning

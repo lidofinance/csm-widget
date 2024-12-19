@@ -1,9 +1,10 @@
-import { FC } from 'react';
-import { Alert } from './alert';
-import { MatomoLink } from 'shared/components';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { FC } from 'react';
+import { MatomoLink } from 'shared/components';
+import { Alert } from './alert';
 
 import { ReactComponent as Arrow } from 'assets/icons/arrow-right.svg';
+import { HOW_TO_EXIT_VALIDATOR_LINK } from 'consts/external-links';
 
 export const AlertStuckKeys: FC = () => (
   <Alert title="You have Stuck keys">
@@ -16,7 +17,7 @@ export const AlertStuckKeys: FC = () => (
     </p>
     <MatomoLink
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToExitLinkStuckKeysAlert}
-      href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm/exiting-csm-validators"
+      href={HOW_TO_EXIT_VALIDATOR_LINK}
     >
       How to exit?
       <Arrow />

@@ -1,3 +1,4 @@
+import { ABOUT_DEPOSIT_DATA_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useFormState } from 'react-hook-form';
 import { FormTitle, MatomoLink } from 'shared/components';
@@ -15,7 +16,7 @@ export const KeysInput = () => {
       <FormTitle
         extra={
           <MatomoLink
-            href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm"
+            href={ABOUT_DEPOSIT_DATA_LINK}
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
           >
             Learn more

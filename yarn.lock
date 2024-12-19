@@ -2616,6 +2616,13 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/analytics-matomo/-/analytics-matomo-0.47.0.tgz#3c0c608048b1b41eadfff08daac5ea454ddd3616"
   integrity sha512-/cn5y0R85EzVDZI1ShUizsToWnpMXs7jMGRu8yRrX4iN3pMLgYJzqawKbZf2rwDyyNfHZpUOs4ZYyTRZUMslIg==
 
+"@lidofinance/api-logger@^0.47.0":
+  version "0.47.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/api-logger/-/api-logger-0.47.0.tgz#949adda58c2adb65c31697b002fb16f937cf2134"
+  integrity sha512-lxBtPM0oTNZlFoiQFZTI8/IQOeZwWIeWoLLaqLDdrYt9AloRxOC9O1KkYnKcX8n+taSJvlLDnWzTS5vpIwVONw==
+  dependencies:
+    "@lidofinance/satanizer" "~0.47.0"
+
 "@lidofinance/api-metrics@^0.47.0":
   version "0.47.0"
   resolved "https://registry.yarnpkg.com/@lidofinance/api-metrics/-/api-metrics-0.47.0.tgz#285b941e588ad33cc1032ed7e7080977b7444dec"
@@ -2697,7 +2704,7 @@
   dependencies:
     isomorphic-fetch "^3.0.0"
 
-"@lidofinance/satanizer@^0.47.0":
+"@lidofinance/satanizer@^0.47.0", "@lidofinance/satanizer@~0.47.0":
   version "0.47.0"
   resolved "https://registry.yarnpkg.com/@lidofinance/satanizer/-/satanizer-0.47.0.tgz#e6d6af704a7a111bca1bdea70e89f1089b646bff"
   integrity sha512-oB62ld2W0XKxC3YFvRd2ZzAh5MY28ZLs01Jo9Cp8HOFvWvxnF5GrThm8Op3D/urq+cCmZODiUiMI9BMZuymDog==

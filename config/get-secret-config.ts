@@ -11,6 +11,9 @@ export type SecretConfigType = Modify<
     rpcUrls_1: [string, ...string[]];
     rpcUrls_17000: [string, ...string[]];
 
+    clApiUrls_1: [string, ...string[]];
+    clApiUrls_17000: [string, ...string[]];
+
     cspReportOnly: boolean;
 
     subgraphRequestTimeout: number;
@@ -41,6 +44,13 @@ export const getSecretConfig = (): SecretConfigType => {
       string,
       ...string[],
     ],
+
+    clApiUrls_1: (serverRuntimeConfig.clApiUrls_1?.split(',') ?? []) as [
+      string,
+      ...string[],
+    ],
+    clApiUrls_17000: (serverRuntimeConfig.clApiUrls_17000?.split(',') ??
+      []) as [string, ...string[]],
 
     cspReportOnly: toBoolean(serverRuntimeConfig.cspReportOnly),
 

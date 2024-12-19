@@ -3,6 +3,7 @@ import invariant from 'tiny-invariant';
 import { useSDK } from '@lido-sdk/react';
 
 import { CHAINS } from 'consts/chains';
+import { API_ROUTES } from 'consts/api';
 
 // Don't use absolute import here!
 // code'''
@@ -15,7 +16,7 @@ import { useUserConfig } from '../user-config';
 
 export const getBackendRPCPath = (chainId: string | number): string => {
   const BASE_URL = typeof window === 'undefined' ? '' : window.location.origin;
-  return `${BASE_URL}/api/rpc?chainId=${chainId}`;
+  return `${BASE_URL}/${API_ROUTES.RPC}?chainId=${chainId}`;
 };
 
 export const useGetRpcUrlByChainId = () => {

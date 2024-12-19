@@ -86,7 +86,9 @@ export const useRemoveKeysSubmit = ({
 
         txModalStages.success({ keysCount }, txHash);
 
-        void removeCacheKeys(keys.slice(start, start + count));
+        void removeCacheKeys(
+          keys.map(({ key }) => key).slice(start, start + count),
+        );
 
         return true;
       } catch (error) {
