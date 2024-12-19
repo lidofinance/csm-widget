@@ -58,7 +58,6 @@ export * from './useIsContract';
 export * from './useIsMultisig';
 export * from './useIsReportStealingRole';
 export * from './useKeysCache';
-export * from './useLidoContracts';
 export * from './useMaxGasPrice';
 export * from './useMergeSwr';
 export * from './useNodeOperatorBalance';

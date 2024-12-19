@@ -1,14 +1,17 @@
 import { hexValue, splitSignature } from '@ethersproject/bytes';
-import { MaxUint256 } from '@ethersproject/constants';
 import { StethAbi } from '@lido-sdk/contracts';
-import { useSDK } from '@lido-sdk/react';
+import {
+  useSDK,
+  useSTETHContractRPC,
+  useWSTETHContractRPC,
+} from '@lido-sdk/react';
 import { TOKENS } from 'consts/tokens';
+import { getUnixTime, hoursToSeconds } from 'date-fns/fp';
 import { BigNumber, BytesLike, TypedDataDomain } from 'ethers';
 import { useCallback } from 'react';
 import { useAccount } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { Address, useChainId } from 'wagmi';
-import { useSTETHContractRPC, useWSTETHContractRPC } from './useLidoContracts';
 
 export type GatherPermitSignatureResult = {
   value: BigNumber;
@@ -17,8 +20,6 @@ export type GatherPermitSignatureResult = {
   r: BytesLike;
   s: BytesLike;
 };
-
-const INFINITY_DEADLINE_VALUE = MaxUint256;
 
 const isStethPermit = (provider: unknown): provider is StethAbi => {
   return Boolean(
@@ -63,7 +64,9 @@ export const usePermitSignature = (spender: Address) => {
         }
       };
       const tokenProvider = getTokenProvider(token);
-      const deadline = INFINITY_DEADLINE_VALUE; // FIXME: set finite deadline
+      const deadline = BigNumber.from(
+        getUnixTime(new Date()) + hoursToSeconds(1),
+      );
 
       let domain: TypedDataDomain;
       if (isStethPermit(tokenProvider)) {
