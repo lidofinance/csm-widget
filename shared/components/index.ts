@@ -9,7 +9,6 @@ export { MatomoLink } from './matomo-link/matomo-link';
 export { TxLinkEtherscan } from './tx-link-etherscan';
 export { Stack } from './stack/stack';
 export { StackStyle } from './stack/style';
-export { LinkButton } from './link-button/link-button';
 export { FormTitle } from './form-title/form-title';
 export { RadioButton, RadioIcon } from './radio-button/radio-button';
 export { TokenAmount } from './token-amount/token-amount';

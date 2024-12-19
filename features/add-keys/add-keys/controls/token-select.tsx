@@ -32,7 +32,7 @@ export const TokenSelect: React.FC = () => {
             anchor="#how-bond-is-calculated"
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
           >
-            How bond are calculated
+            How bond is calculated
           </LocalLink>
         }
       >
