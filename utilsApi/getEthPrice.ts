@@ -3,10 +3,10 @@ import { getAggregatorContract } from '@lido-sdk/contracts';
 import { CHAINS, getAggregatorAddress } from '@lido-sdk/constants';
 
 import { getStaticRpcBatchProvider } from './rpcProviders';
-import { rpcUrls } from './rpcUrls';
+import { secretConfig } from 'config';
 
 export const getEthPrice = async (): Promise<number> => {
-  const urls = rpcUrls[CHAINS.Mainnet];
+  const urls = secretConfig.rpcUrls_1;
   return iterateUrls(urls, (url) => getEthPriceWithFallbacks(url));
 };
 
