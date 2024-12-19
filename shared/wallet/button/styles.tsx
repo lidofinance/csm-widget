@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import {
+  AddressBadge,
   Button,
   ButtonProps,
   InlineLoader,
@@ -35,4 +36,8 @@ export const WalledButtonLoaderStyle = styled((props: InlineLoaderProps) => (
   <InlineLoader {...props} />
 ))`
   width: 60px;
+`;
+
+export const AddressBadgeStyle = styled(AddressBadge)`
+  margin: 0;
 `;

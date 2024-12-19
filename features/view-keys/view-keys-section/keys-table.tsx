@@ -1,6 +1,12 @@
-import { Address, Tbody, Td, Text, Th, Thead, Tr } from '@lidofinance/lido-ui';
+import { Tbody, Td, Text, Th, Thead, Tr } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { KeyLink, Stack, StatusChip, StatusComment } from 'shared/components';
+import {
+  Address,
+  BeaconchainPubkeyLink,
+  Stack,
+  StatusChip,
+  StatusComment,
+} from 'shared/components';
 import { KeyWithStatus, useSortedKeys } from 'shared/hooks';
 import { AddressRow, TableStyle } from './styles';
 
@@ -31,8 +37,11 @@ export const KeysTable: FC<Props> = ({ keys }) => {
             </Td>
             <Td>
               <AddressRow>
-                <Address address={key} symbols={8} />
-                <KeyLink pubkey={key} />
+                <Address
+                  address={key}
+                  symbols={8}
+                  link={<BeaconchainPubkeyLink pubkey={key} />}
+                />
               </AddressRow>
             </Td>
             <Td>

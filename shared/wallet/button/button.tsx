@@ -4,9 +4,9 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { useAccount } from 'shared/hooks';
-import { AddressBadge } from '../components/address-badge/address-badge';
 import { useWalletModal } from '../wallet-modal/use-wallet-modal';
 import {
+  AddressBadgeStyle,
   WalledButtonBalanceStyle,
   WalledButtonLoaderStyle,
   WalledButtonStyle,
@@ -38,7 +38,7 @@ export const Button: FC<ButtonProps> = (props) => {
             <FormatToken amount={balance} symbol="ETH" />
           )}
         </WalledButtonBalanceStyle>
-        <AddressBadge address={address} />
+        <AddressBadgeStyle address={address} />
       </WalledButtonWrapperStyle>
     </WalledButtonStyle>
   );

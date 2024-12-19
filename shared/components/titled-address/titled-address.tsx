@@ -1,6 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { Stack } from 'shared/components';
-import { AddressBadge } from 'shared/wallet';
+import { Address, Stack } from 'shared/components';
 import { TitledAddressStyle } from './style';
 
 // TODO: merge components
@@ -13,7 +12,7 @@ export const TitledAddress: FC<TitledAddressProps> = ({ address, title }) => {
   return (
     <TitledAddressStyle>
       <Stack gap="lg">{title}</Stack>
-      <AddressBadge address={address} />
+      <Address address={address} showIcon />
     </TitledAddressStyle>
   );
 };

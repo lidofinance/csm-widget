@@ -1,7 +1,7 @@
-import { Address, Checkbox } from '@lidofinance/lido-ui';
+import { Checkbox } from '@lidofinance/lido-ui';
 import { ChangeEventHandler, FC, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Latice, Stack, StatusChip } from 'shared/components';
+import { Address, Latice, Stack, StatusChip } from 'shared/components';
 import { StatusStyle } from 'shared/components/status-chip/style';
 import { KeyWithStatus } from 'shared/hooks';
 import styled from 'styled-components';
@@ -71,7 +71,7 @@ export const KeysSelectorHookForm: FC<Props> = ({
           key={key}
           label={
             <Stack center spaceBetween>
-              <Address as="span" address={key} symbols={16} />
+              <Address address={key} symbols={16} link={false} />
 
               {statuses
                 .filter((status) => BAD_STATUSES.includes(status))
