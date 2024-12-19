@@ -30,6 +30,12 @@ export const StatusComment: FC<{ statuses: KEY_STATUS[] }> = ({ statuses }) => {
   )
     return <CommentUnbondedNonQueued />;
 
+  if (
+    statuses.includes(KEY_STATUS.UNBONDED) &&
+    statuses.includes(KEY_STATUS.WITHDRAWAL_PENDING)
+  )
+    return <CommentExiting />;
+
   if (statuses.includes(KEY_STATUS.UNBONDED)) return <CommentUnbonded />;
 
   if (statuses.includes(KEY_STATUS.UNCHECKED)) return <CommentUnchecked />;
