@@ -11,7 +11,7 @@ const ReachedBanner: FC = () => (
     variant="wary-dangerous"
     title="CSM has reached its stake share limit"
   >
-    You still can upload keys, but they are very unlikely to receive deposits in
+    You can still upload keys, but they are very unlikely to receive deposits in
     the near future (possibly for months).
     <br />
     <LocalLink
@@ -20,7 +20,6 @@ const ReachedBanner: FC = () => (
     >
       Read more in the FAQ section
     </LocalLink>
-    .
   </Banner>
 );
 
@@ -29,7 +28,7 @@ const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
     Currently, <b>{activeLeft}</b> more keys can be activated in CSM before it
     hits its stake share limit. Since there are already <b>{queue}</b> keys in
     the queue, this means that newly uploaded keys may not receive deposits in
-    the near future. You still can upload keys, but in case CSM reaches the
+    the near future. You can still upload keys, but in case CSM reaches the
     limit before your keys get deposited to, the deposit time for your keys can
     be months or longer. Please note that the exact number of validators that
     can be active for CSM is constantly changing due to protocol dynamics.
@@ -40,7 +39,6 @@ const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
     >
       Read more in the FAQ section
     </LocalLink>
-    .
   </Banner>
 );
 
