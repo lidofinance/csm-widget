@@ -15,6 +15,7 @@ import { ReferrerInput } from './controls/referrer-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
+import { KeysConfirm } from './controls/keys-confirm';
 
 export const SubmitKeysForm: FC = memo(() => {
   const { referrer } = useModifyContext();
@@ -27,6 +28,7 @@ export const SubmitKeysForm: FC = memo(() => {
             <TokenSelect />
             <KeysInput />
             <AmountInput />
+            <KeysConfirm />
             <CustomAddressesSection />
             {referrer && <ReferrerInput />}
             <SubmitButton />

@@ -1,4 +1,5 @@
 export * from './address-input-hook-form';
+export * from './checkbox-hook-form';
 export * from './deposit-data-input-hook-form';
 export * from './invite-buttons-hook-form';
 export * from './keys-selector-hook-form';

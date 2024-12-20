@@ -10,6 +10,7 @@ import {
   useCsmEarlyAdoption,
   useCsmEarlyAdoptionProofConsumed,
   useCsmPaused,
+  useCSMShareLimitInfo,
   useKeysAvailable,
   useKeysUploadLimit,
   useStakingLimitInfo,
@@ -49,6 +50,12 @@ export const useSubmitKeysFormNetworkData = (): [
   const { mutate: mutateConsumed } = useCsmEarlyAdoptionProofConsumed();
 
   const {
+    data: shareLimit,
+    initialLoading: isShareLimitLoading,
+    update: updateShareLimit,
+  } = useCSMShareLimitInfo();
+
+  const {
     data: maxStakeEther,
     update: updateMaxStakeEther,
     initialLoading: isMaxStakeEtherLoading,
@@ -73,6 +80,7 @@ export const useSubmitKeysFormNetworkData = (): [
       updateWstethBalance(),
       updateEtherBalance(),
       mutateConsumed(true), // @note hack to revalidate without loading state
+      updateShareLimit(),
       updateMaxStakeEther(),
     ]);
   }, [
@@ -80,6 +88,7 @@ export const useSubmitKeysFormNetworkData = (): [
     updateWstethBalance,
     updateEtherBalance,
     mutateConsumed,
+    updateShareLimit,
     updateMaxStakeEther,
   ]);
 
@@ -94,6 +103,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
       isStatusLoading,
+      isShareLimitLoading,
     }),
     [
       isStethBalanceLoading,
@@ -105,6 +115,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
       isStatusLoading,
+      isShareLimitLoading,
     ],
   );
 
@@ -119,6 +130,7 @@ export const useSubmitKeysFormNetworkData = (): [
       keysUploadLimit,
       keysAvailable,
       maxStakeEther,
+      shareLimit,
       isPaused: status?.isPaused || status?.isAccountingPaused,
       loading,
     },

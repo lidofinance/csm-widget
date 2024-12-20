@@ -7,6 +7,7 @@ import { DepositData } from 'types';
 export type DepositDataInputType = {
   rawDepositData: string | undefined;
   depositData: DepositData[];
+  confirmKeysReady: boolean;
 };
 
 // FIXME: types

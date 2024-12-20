@@ -1,7 +1,7 @@
 import { type TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
-import { KeysAvailable } from 'shared/hooks';
+import { KeysAvailable, ShareLimitInfo } from 'shared/hooks';
 import { BondBalance, LoadingRecord, NodeOperatorId } from 'types';
 
 export type AddKeysFormInputType = {
@@ -19,6 +19,7 @@ export type AddKeysFormNetworkData = {
   bond?: BondBalance;
   isPaused?: boolean;
   maxStakeEther?: BigNumber | null;
+  shareLimit?: ShareLimitInfo;
   blockNumber?: number;
   loading: LoadingRecord<
     | 'etherBalance'
@@ -28,6 +29,7 @@ export type AddKeysFormNetworkData = {
     | 'maxStakeEther'
     | 'keysUploadLimit'
     | 'status'
+    | 'shareLimit'
     | 'blockNumber'
   >;
 };

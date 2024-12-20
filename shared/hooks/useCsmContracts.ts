@@ -7,6 +7,7 @@ import {
   CSModule__factory,
   CSModuleOld__factory,
   ExitBusOracle__factory,
+  StakingRouter__factory,
 } from 'generated';
 
 const CSModule = contractHooksFactory(
@@ -52,3 +53,10 @@ const ExitBusOracle = contractHooksFactory(
 );
 
 export const useExitBusOracleRPC = ExitBusOracle.useContractRPC;
+
+const StakingRouter = contractHooksFactory(
+  StakingRouter__factory,
+  getCsmContractAddressGetter('StakingRouter'),
+);
+
+export const useStakingRouterRPC = StakingRouter.useContractRPC;
