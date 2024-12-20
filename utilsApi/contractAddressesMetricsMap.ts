@@ -22,6 +22,7 @@ import {
   CSFeeDistributor__factory,
   CSModule__factory,
   ExitBusOracle__factory,
+  StakingRouter__factory,
 } from 'generated';
 import { HexString } from 'shared/keys';
 
@@ -54,6 +55,7 @@ export const CONTRACT_NAMES = {
   CSFeeDistributor: 'CSFeeDistributor',
   CSEarlyAdoption: 'CSEarlyAdoption',
   ExitBusOracle: 'ExitBusOracle',
+  StakingRouter: 'StakingRouter',
 } as const;
 export type CONTRACT_NAMES = keyof typeof CONTRACT_NAMES;
 
@@ -67,6 +69,7 @@ const CONTRACT_LIST_CALL: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.CSEarlyAdoption,
   CONTRACT_NAMES.CSFeeDistributor,
   CONTRACT_NAMES.ExitBusOracle,
+  CONTRACT_NAMES.StakingRouter,
 ];
 
 const CONTRACT_LIST_LOGS: CONTRACT_NAMES[] = [
@@ -84,6 +87,7 @@ export const METRIC_CONTRACT_ABIS = {
   [CONTRACT_NAMES.CSFeeDistributor]: CSFeeDistributor__factory.abi,
   [CONTRACT_NAMES.CSEarlyAdoption]: CSEarlyAdoption__factory.abi,
   [CONTRACT_NAMES.ExitBusOracle]: ExitBusOracle__factory.abi,
+  [CONTRACT_NAMES.StakingRouter]: StakingRouter__factory.abi,
 } as const;
 
 const METRIC_CONTRACT_ADDRESS_GETTERS = {
@@ -111,6 +115,10 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
   [CONTRACT_NAMES.ExitBusOracle]: getAddressGetter(
     getCsmContractAddress,
     'ExitBusOracle',
+  ),
+  [CONTRACT_NAMES.StakingRouter]: getAddressGetter(
+    getCsmContractAddress,
+    'StakingRouter',
   ),
 };
 
