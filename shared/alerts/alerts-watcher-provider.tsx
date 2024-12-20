@@ -14,7 +14,7 @@ import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
 import { AlertStuckKeys } from './components/alert-stuck-keys';
-import { KEY_STATUS } from 'types';
+import { KEY_STATUS } from 'consts/key-status';
 
 export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { showAlert, closeAlert } = useAlertActions();

@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { KeyWithStatus } from 'shared/hooks';
-import { KEY_STATUS } from 'types';
+import { KEY_STATUS } from 'consts/key-status';
 
 export const DEFAULT_STATUS_ORDER: KEY_STATUS[] = [
   KEY_STATUS.INVALID,
