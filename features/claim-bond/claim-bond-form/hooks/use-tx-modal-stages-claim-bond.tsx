@@ -13,6 +13,8 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 import { getExternalLinks } from 'consts/external-links';
+import { LocalLink } from 'shared/navigate';
+import { PATH } from 'consts/urls';
 
 const STAGE_OPERATION_ARGS = {
   operationText: 'Claiming Bond',
@@ -73,8 +75,10 @@ const getTxModalStagesClaimBond = (
               <br />
               <br />
               Add NFT to your wallet to monitor the status of your request.
-              <MatomoLink href="#how-to-claim-eth">This guide</MatomoLink> will
-              help you to do this.
+              <LocalLink href={PATH.BOND_CLAIM} anchor="#how-to-claim-eth">
+                This guide
+              </LocalLink>{' '}
+              will help you to do this.
             </>
           }
         />

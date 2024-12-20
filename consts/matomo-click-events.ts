@@ -44,6 +44,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
+  // Key status comment
+  howToExitLinkComment = 'howToExitLinkComment',
   // Alerts
   howLearnCsmClose = 'howLearnCsmClose',
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
@@ -249,6 +251,12 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «Join CSM» in other network link',
     prefixed`try_csm_link`,
+  ],
+  // Key status comment
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkComment]: [
+    MATOMO_APP_NAME,
+    'Click «Exit key from CL» link on key status comment',
+    prefixed`exit_key_from_cl_link_comment`,
   ],
   // Alerts
   [MATOMO_CLICK_EVENTS_TYPES.howLearnCsmClose]: [

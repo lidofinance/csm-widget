@@ -1,14 +1,15 @@
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { TOKENS } from 'consts/tokens';
+import { PATH } from 'consts/urls';
 import {
   FormTitle,
   KeysAvailable,
-  MatomoLink,
   Stack,
   TokenAmount,
 } from 'shared/components';
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
+import { LocalLink } from 'shared/navigate';
 import { useAddKeysFormData } from '../context';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const TokenSelect: React.FC = () => {
   const { etherBalance, stethBalance, wstethBalance, keysAvailable, loading } =
@@ -18,12 +19,13 @@ export const TokenSelect: React.FC = () => {
     <>
       <FormTitle
         extra={
-          <MatomoLink
-            href="#how-bond-is-calculated"
+          <LocalLink
+            href={PATH.KEYS_SUBMIT}
+            anchor="#how-bond-is-calculated"
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
           >
-            How bond are calculated
-          </MatomoLink>
+            How bond is calculated
+          </LocalLink>
         }
       >
         Choose bond token

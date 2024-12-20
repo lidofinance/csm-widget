@@ -13,7 +13,7 @@ export const ViewKeysSection: FC = () => {
         loading={loading}
         empty={!keys?.length && 'There are no keys to display'}
       >
-        <KeysTable data={keys} />
+        <KeysTable keys={keys} />
       </WhenLoaded>
     </ViewKeysBlock>
   );

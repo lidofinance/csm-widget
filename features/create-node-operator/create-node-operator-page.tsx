@@ -7,7 +7,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 export const CreateNodeOperatorPage: FC = () => (
   <Layout
     title="Create a Node Operator"
-    subtitle="Upload your first keys"
+    subtitle="Upload your first key(s)"
     matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageCreateNodeOperator}
   >
     <CreateNodeOperator />

@@ -1,8 +1,9 @@
 import { useLidoSWR } from '@lido-sdk/react';
 import { getCsmConstants, getCsmContractAddress } from 'consts/csm-constants';
 import { getExternalLinks } from 'consts/external-links';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
+import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { useCallback } from 'react';
 import { HexString } from 'shared/keys';
 import invariant from 'tiny-invariant';
 import { useAccount } from './use-account';
@@ -79,27 +80,25 @@ const getDuplicates = (
 };
 
 // FIXME: refactor check-network-duplicates.ts
-export const useNetworkDuplicates = (config = STRATEGY_LAZY) => {
+export const useNetworkDuplicates = (config = STRATEGY_CONSTANT) => {
   const { chainId } = useAccount();
   const nodeOperatorId = useNodeOperatorId();
 
-  const keysApiUrl = getExternalLinks(chainId)?.keysApi;
-
-  invariant(keysApiUrl);
+  const { keysApi } = getExternalLinks(chainId);
+  const csmAddress = getCsmContractAddress(chainId, 'CSModule');
 
   return useLidoSWR(
     ['no-keys', nodeOperatorId, chainId],
-    async () => {
+    useCallback(async () => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
-      const csmAddress = getCsmContractAddress(chainId, 'CSModule');
       const moduleId = getCsmConstants(chainId).stakingModuleId;
-      const keys = await getKeys(keysApiUrl, moduleId, nodeOperatorId);
+      const keys = await getKeys(keysApi, moduleId, nodeOperatorId);
       const rawKeys = await findKeys(
-        keysApiUrl,
+        keysApi,
         keys.map(({ key }) => key).filter(onlyUnique),
       );
       return getDuplicates(rawKeys, nodeOperatorId, csmAddress);
-    },
+    }, [chainId, csmAddress, keysApi, nodeOperatorId]),
     config,
   );
 };

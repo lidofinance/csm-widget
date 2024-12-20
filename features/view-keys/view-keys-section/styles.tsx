@@ -6,6 +6,8 @@ export const ViewKeysBlock = styled(Block)`
   display: flex;
   gap: ${({ theme }) => theme.spaceMap.md}px;
   flex-direction: column;
+
+  width: 130%;
 `;
 
 export const TableStyle = styled(Table)`
@@ -38,6 +40,14 @@ export const TableStyle = styled(Table)`
 
   td {
     border-bottom: none;
+  }
+
+  td:last-child {
+    max-width: 200px;
+  }
+
+  td:nth-child(2) {
+    min-width: max-content;
   }
 
   tbody tr:nth-child(odd) {

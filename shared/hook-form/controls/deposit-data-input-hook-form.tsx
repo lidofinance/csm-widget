@@ -24,7 +24,7 @@ type DepositKeysInputHookFormProps = Partial<
 
 export const DepositDataInputHookForm = ({
   fieldName = 'rawDepositData',
-  label = 'Copy JSON with deposit data here',
+  label = 'Paste JSON with deposit data or drag and drop the file',
   showErrorMessage = true,
   error: errorProp,
   ...props
