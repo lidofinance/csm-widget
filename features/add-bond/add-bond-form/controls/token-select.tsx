@@ -34,7 +34,7 @@ export const TokenSelect: React.FC = () => {
             />
           ),
         }}
-      ></TokenButtonsHookForm>
+      />
     </>
   );
 };

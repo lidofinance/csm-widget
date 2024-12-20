@@ -1,23 +1,23 @@
 import { Theme } from '@lidofinance/lido-ui';
-import styled, { css } from 'styled-components';
+import styled, { css, CSSProperties } from 'styled-components';
 
-type Props = {
+export type StackStyleProps = {
   $direction?: 'row' | 'column';
   $gap?: keyof Theme['spaceMap'] | 'none';
-  $center?: boolean;
+  $align?: CSSProperties['alignItems'];
   $spaceBetween?: boolean;
   $wrap?: boolean;
 };
 
-export const StackStyle = styled.div<Props>`
+export const StackStyle = styled.div<StackStyleProps>`
   display: flex;
   flex-direction: ${({ $direction = 'row' }) => $direction};
   gap: ${({ $gap = 'md', theme }) =>
     $gap === 'none' ? 0 : theme.spaceMap[$gap]}px;
-  ${({ $center }) =>
-    $center &&
+  ${({ $align }) =>
+    $align &&
     css`
-      align-items: center;
+      align-items: ${$align};
     `}
   ${({ $spaceBetween }) =>
     $spaceBetween &&

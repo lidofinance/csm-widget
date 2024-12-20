@@ -4,8 +4,8 @@ import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { MatomoLink } from '../matomo-link/matomo-link';
+import { SHARE_LIMIT_STATUS, useCSMShareLimitInfo } from 'shared/hooks';
 
-// TODO: add matomo events
 // TODO: check role
 export const CommentExitRequested: FC = () => (
   <MatomoLink
@@ -57,13 +57,41 @@ export const CommentNonQueued: FC = () => (
 );
 
 export const CommentExiting: FC = () => (
-  <LocalLink href={PATH.KEYS_VIEW} anchor="#when-validator-become-withdrawn">
+  <LocalLink
+    href={PATH.KEYS_VIEW}
+    anchor="#when-validator-become-withdrawn"
+    matomoEvent={
+      MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeWithdrawnLinkComment
+    }
+  >
     When does the validator become withdrawn?
   </LocalLink>
 );
 
-export const CommentDepositable: FC = () => (
-  <LocalLink href={PATH.KEYS_VIEW} anchor="#when-validator-become-active">
-    When does the validator become active?
-  </LocalLink>
-);
+export const CommentDepositable: FC = () => {
+  const { data } = useCSMShareLimitInfo();
+
+  return data?.status === SHARE_LIMIT_STATUS.REACHED ? (
+    <>
+      The key may not receive deposits in the near future because CSM has
+      reached its{' '}
+      <LocalLink
+        href={PATH.KEYS_VIEW}
+        anchor="#stake-share-limit"
+        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment}
+      >
+        stake share limit
+      </LocalLink>
+    </>
+  ) : (
+    <LocalLink
+      href={PATH.KEYS_VIEW}
+      anchor="#when-validator-become-active"
+      matomoEvent={
+        MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
+      }
+    >
+      When does the validator become active?
+    </LocalLink>
+  );
+};

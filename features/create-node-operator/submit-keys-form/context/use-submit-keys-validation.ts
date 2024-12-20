@@ -29,6 +29,7 @@ export const useSubmitKeysValidation = (
           specifyCustomAddresses,
           rewardsAddress,
           managerAddress,
+          confirmKeysReady,
         } = values;
 
         const {
@@ -59,6 +60,13 @@ export const useSubmitKeysValidation = (
             keysUploadLimit,
             blockNumber,
           });
+
+        if (options.names?.includes('confirmKeysReady') && !confirmKeysReady) {
+          throw new ValidationError(
+            'confirmKeysReady',
+            'Please confirm that the keys are ready',
+          );
+        }
 
         if (specifyCustomAddresses) {
           if (

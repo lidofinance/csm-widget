@@ -4,6 +4,7 @@ import {
   handleResolverValidationError,
   validateBondAmount,
   validateDepositData,
+  ValidationError,
 } from 'shared/hook-form/validation';
 import { useAccount, useAwaitNetworkData } from 'shared/hooks';
 import type { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
@@ -15,7 +16,7 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
   return useCallback<Resolver<AddKeysFormInputType>>(
     async (values, _, options) => {
       try {
-        const { token, bondAmount, depositData } = values;
+        const { token, bondAmount, depositData, confirmKeysReady } = values;
 
         const {
           stethBalance,
@@ -45,6 +46,13 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
             keysUploadLimit,
             blockNumber,
           });
+
+        if (options.names?.includes('confirmKeysReady') && !confirmKeysReady) {
+          throw new ValidationError(
+            'confirmKeysReady',
+            'Please confirm that the keys are ready',
+          );
+        }
 
         return {
           values,

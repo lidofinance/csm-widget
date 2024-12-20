@@ -40,12 +40,17 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   createSuccessSubscribeEvents = 'createSuccessSubscribeEvents',
   otherModuleLink = 'otherModuleLink',
   splitsOrgDocumentation = 'splitsOrgDocumentation',
+  howToClaimEthSuccessLink = 'howToClaimEthSuccessLink',
   // Common
   etherscanTxLink = 'etherscanTxLink',
   feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
+  stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
   // Key status comment
   howToExitLinkComment = 'howToExitLinkComment',
+  whenValidatorBecomeActiveLinkComment = 'whenValidatorBecomeActiveLinkComment',
+  whenValidatorBecomeWithdrawnLinkComment = 'whenValidatorBecomeWithdrawnLinkComment',
+  stakeShareLimitLinkComment = 'stakeShareLimitLinkComment',
   // Alerts
   howLearnCsmClose = 'howLearnCsmClose',
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
@@ -236,6 +241,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «splits.org documentation» link',
     prefixed`spilt_org_documentation_link`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.howToClaimEthSuccessLink]: [
+    MATOMO_APP_NAME,
+    'Click «How to claim ETH» link in success modal',
+    prefixed`how_to_claim_eth_success_link`,
+  ],
   // Common
   [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: [
     MATOMO_APP_NAME,
@@ -252,11 +262,31 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Join CSM» in other network link',
     prefixed`try_csm_link`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner]: [
+    MATOMO_APP_NAME,
+    'Click «stake share limit» link on banner',
+    prefixed`stake_share_limit_link_banner`,
+  ],
   // Key status comment
   [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkComment]: [
     MATOMO_APP_NAME,
     'Click «Exit key from CL» link on key status comment',
     prefixed`exit_key_from_cl_link_comment`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment]: [
+    MATOMO_APP_NAME,
+    'Click «When validator become active» link on key status comment',
+    prefixed`when_validator_become_active_link_comment`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeWithdrawnLinkComment]: [
+    MATOMO_APP_NAME,
+    'Click «When validator become withdrawn» link on key status comment',
+    prefixed`when_validator_become_withdrawn_link_comment`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment]: [
+    MATOMO_APP_NAME,
+    'Click «stake share limit» link on key status comment',
+    prefixed`stake_share_limit_link_comment`,
   ],
   // Alerts
   [MATOMO_CLICK_EVENTS_TYPES.howLearnCsmClose]: [

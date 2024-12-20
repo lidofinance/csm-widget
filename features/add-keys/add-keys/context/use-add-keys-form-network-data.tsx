@@ -8,6 +8,7 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
   useCsmPaused,
+  useCSMShareLimitInfo,
   useKeysAvailable,
   useKeysUploadLimit,
   useNodeOperatorBalance,
@@ -53,6 +54,12 @@ export const useAddKeysFormNetworkData = (): [
   } = useStakingLimitInfo();
 
   const {
+    data: shareLimit,
+    initialLoading: isShareLimitLoading,
+    update: updateShareLimit,
+  } = useCSMShareLimitInfo();
+
+  const {
     data: keysUploadLimit,
     update: updateKeysUploadLimit,
     initialLoading: isKeysUploadLimitLoading,
@@ -79,6 +86,7 @@ export const useAddKeysFormNetworkData = (): [
       updateEtherBalance(),
       updateBond(),
       updateKeysUploadLimit(),
+      updateShareLimit(),
       updateMaxStakeEther(),
     ]);
   }, [
@@ -87,6 +95,7 @@ export const useAddKeysFormNetworkData = (): [
     updateEtherBalance,
     updateBond,
     updateKeysUploadLimit,
+    updateShareLimit,
     updateMaxStakeEther,
   ]);
 
@@ -100,6 +109,7 @@ export const useAddKeysFormNetworkData = (): [
       isKeysUploadLimitLoading,
       isStatusLoading,
       isBlockNumberLoading,
+      isShareLimitLoading,
     }),
     [
       isEtherBalanceLoading,
@@ -110,6 +120,7 @@ export const useAddKeysFormNetworkData = (): [
       isKeysUploadLimitLoading,
       isStatusLoading,
       isBlockNumberLoading,
+      isShareLimitLoading,
     ],
   );
 
@@ -125,6 +136,7 @@ export const useAddKeysFormNetworkData = (): [
       bond,
       maxStakeEther,
       loading,
+      shareLimit,
       isPaused: status?.isPaused || status?.isAccountingPaused,
     },
     revalidate,

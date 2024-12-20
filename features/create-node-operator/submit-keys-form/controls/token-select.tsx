@@ -63,7 +63,7 @@ export const TokenSelect: React.FC = () => {
             </Stack>
           ),
         }}
-      ></TokenButtonsHookForm>
+      />
     </>
   );
 };

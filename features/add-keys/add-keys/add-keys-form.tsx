@@ -12,6 +12,7 @@ import { AmountInput } from './controls/amount-input';
 import { KeysInput } from './controls/keys-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
+import { KeysConfirm } from './controls/keys-confirm';
 
 export const AddKeysForm: FC = memo(() => {
   return (
@@ -22,6 +23,7 @@ export const AddKeysForm: FC = memo(() => {
             <TokenSelect />
             <KeysInput />
             <AmountInput />
+            <KeysConfirm />
             <SubmitButton />
           </FormControllerStyled>
           <AddKeysFormInfo />
