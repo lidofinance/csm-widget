@@ -21,7 +21,8 @@ type CLStatus =
   | 'withdrawal_possible'
   | 'withdrawal_done';
 
-const StatusMap: Partial<Record<CLStatus, KEY_STATUS>> = {
+const StatusMap: Record<CLStatus, KEY_STATUS> = {
+  pending_initialized: KEY_STATUS.DEPOSITABLE,
   pending_queued: KEY_STATUS.ACTIVATION_PENDING,
   active_ongoing: KEY_STATUS.ACTIVE,
   active_exiting: KEY_STATUS.EXITING,
@@ -74,18 +75,15 @@ export const useKeysCLStatus = (
 
     const responses = await Promise.allSettled(
       keysChunks.map(async (keys) => {
+        // TODO: ensure all chunks are fetched successfully
         const resp = await standardFetcher<Response>(
           `${url}?id=${keys.join(encodeURIComponent(','))}`,
         );
-        return resp.data.map(
-          (key) =>
-            StatusMap[key.status] &&
-            ({
-              pubkey: key.validator.pubkey,
-              slashed: key.validator.slashed,
-              status: StatusMap[key.status],
-            } as ClKeyStatus),
-        );
+        return resp.data.map((key) => ({
+          pubkey: key.validator.pubkey,
+          slashed: key.validator.slashed,
+          status: StatusMap[key.status],
+        }));
       }),
     );
     return responses.flatMap(getSettledValue).filter((i) => !!i);
@@ -93,7 +91,7 @@ export const useKeysCLStatus = (
 
   return useLidoSWR(
     ['csm-cl-keys', apiUrl, keys],
-    keys?.length ? fetcher : null,
+    keys?.length && apiUrl ? fetcher : null,
     config,
   );
 };

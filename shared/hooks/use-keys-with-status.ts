@@ -1,9 +1,9 @@
+import { KEY_STATUS } from 'consts/key-status';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import { HexString } from 'shared/keys';
 import invariant from 'tiny-invariant';
-import { KEY_STATUS } from 'consts/key-status';
-import { compareLowercase, filterOut } from 'utils';
+import { compareLowercase, hasNoInterception } from 'utils';
 import { useExitRequestedKeysFromEvents } from './use-exit-requested-keys-from-events';
 import { useKeysCLStatus } from './use-keys-cl-status';
 import { useNetworkDuplicates } from './use-network-duplicates';
@@ -60,32 +60,45 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
       const statuses: KEY_STATUS[] = [];
       const prefilled = clStatus?.find((st) => st.pubkey === pubkey);
 
-      if (nodeOperatorKeyIndex >= info.totalVettedKeys) {
-        if (duplicates?.includes(pubkey)) {
-          return [KEY_STATUS.DUPLICATED];
-        } else if (nodeOperatorKeyIndex === info.totalVettedKeys) {
-          return [KEY_STATUS.INVALID];
-        } else {
-          statuses.push(KEY_STATUS.UNCHECKED);
-        }
-      }
-
       if (prefilled?.slashed) {
         statuses.push(KEY_STATUS.SLASHED);
       }
 
-      if (withdrawnIndexes?.includes(nodeOperatorKeyIndex)) {
-        statuses.push(KEY_STATUS.WITHDRAWN);
-        return statuses;
+      if (nodeOperatorKeyIndex >= info.totalVettedKeys) {
+        if (duplicates?.includes(pubkey)) {
+          return [...statuses, KEY_STATUS.DUPLICATED];
+        } else if (nodeOperatorKeyIndex === info.totalVettedKeys) {
+          return [...statuses, KEY_STATUS.INVALID];
+        }
       }
 
-      if (prefilled?.status && prefilled.status !== KEY_STATUS.ACTIVE) {
-        statuses.push(prefilled.status);
+      if (withdrawnIndexes?.includes(nodeOperatorKeyIndex)) {
+        return [...statuses, KEY_STATUS.WITHDRAWN];
       }
 
       if (
-        filterOut(statuses, [
+        nodeOperatorKeyIndex >= info.totalDepositedKeys &&
+        (info.stuckValidatorsCount > 0 ||
+          info.enqueuedCount < info.depositableValidatorsCount)
+      ) {
+        statuses.push(KEY_STATUS.NON_QUEUED);
+      } else if (nodeOperatorKeyIndex >= info.totalVettedKeys) {
+        statuses.push(KEY_STATUS.UNCHECKED);
+      } else if (prefilled?.status) {
+        statuses.push(prefilled.status);
+      } else if (nodeOperatorKeyIndex >= info.totalDepositedKeys) {
+        statuses.push(KEY_STATUS.DEPOSITABLE);
+      } else {
+        // @note CL api don't know about "DEPOSITED" keys
+        statuses.push(
+          clStatus ? KEY_STATUS.ACTIVATION_PENDING : KEY_STATUS.ACTIVE,
+        );
+      }
+
+      if (
+        hasNoInterception(statuses, [
           KEY_STATUS.SLASHED,
+          KEY_STATUS.WITHDRAWN,
           KEY_STATUS.WITHDRAWAL_PENDING,
           KEY_STATUS.EXITING,
         ]) &&
@@ -105,37 +118,16 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
       }
 
       if (
-        filterOut(statuses, [
+        hasNoInterception(statuses, [
           KEY_STATUS.STUCK,
           KEY_STATUS.SLASHED,
           KEY_STATUS.WITHDRAWN,
+          KEY_STATUS.EXIT_REQUESTED,
         ]) &&
         unbonded &&
         info.totalAddedKeys - nodeOperatorKeyIndex < unbonded
       ) {
         statuses.push(KEY_STATUS.UNBONDED);
-      }
-
-      if (nodeOperatorKeyIndex < info.totalDepositedKeys) {
-        if (
-          filterOut(statuses, [
-            KEY_STATUS.ACTIVATION_PENDING,
-            KEY_STATUS.WITHDRAWAL_PENDING,
-            KEY_STATUS.EXITING,
-            KEY_STATUS.ACTIVE,
-          ])
-        ) {
-          statuses.push(KEY_STATUS.ACTIVE);
-        }
-      } else if (
-        info.stuckValidatorsCount > 0 ||
-        info.enqueuedCount < info.depositableValidatorsCount
-      ) {
-        statuses.push(KEY_STATUS.NON_QUEUED);
-      }
-
-      if (statuses.length === 0) {
-        statuses.push(KEY_STATUS.DEPOSITABLE);
       }
 
       return statuses;
