@@ -137,14 +137,16 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
 
   const keysWithStatus: KeyWithStatus[] | undefined = useMemo(
     () =>
-      keys?.map(({ key, index }) => {
-        return {
-          key,
-          index,
-          statuses: getKeyStatus(key, index),
-        };
-      }),
-    [getKeyStatus, keys],
+      swrClStatus.initialLoading
+        ? undefined
+        : keys?.map(({ key, index }) => {
+            return {
+              key,
+              index,
+              statuses: getKeyStatus(key, index),
+            };
+          }),
+    [getKeyStatus, keys, swrClStatus.initialLoading],
   );
 
   return useMergeSwr(
