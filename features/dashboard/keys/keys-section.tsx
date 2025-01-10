@@ -8,7 +8,7 @@ import {
   useKeysWithStatus,
   useNodeOperatorInfo,
 } from 'shared/hooks';
-import { KEY_STATUS } from 'types';
+import { KEY_STATUS } from 'consts/key-status';
 import { Item, ItemAction } from './item';
 import { AccordionStyle, Row, RowTitle } from './styles';
 import { StatusTitle } from 'shared/components/status-chip/status-chip';
