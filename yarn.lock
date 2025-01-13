@@ -2611,10 +2611,10 @@
     "@lidofinance/theme" "2.7.0"
     "@lidofinance/utils" "1.3.2"
 
-"@lidofinance/analytics-matomo@^0.47.0":
-  version "0.47.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/analytics-matomo/-/analytics-matomo-0.47.0.tgz#3c0c608048b1b41eadfff08daac5ea454ddd3616"
-  integrity sha512-/cn5y0R85EzVDZI1ShUizsToWnpMXs7jMGRu8yRrX4iN3pMLgYJzqawKbZf2rwDyyNfHZpUOs4ZYyTRZUMslIg==
+"@lidofinance/analytics-matomo@^0.48.0":
+  version "0.48.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/analytics-matomo/-/analytics-matomo-0.48.0.tgz#0a4ad9dd4af1d49cdf5f9206b1dde9c08216fff0"
+  integrity sha512-HJBmnXFeQp2PuE8/rghhXy6PbykdSd7g5qqDKuPg5l97rbqbtdFJU2lZuwmPs+PMNquhcdn+yUyEXC4gRSC2Hw==
 
 "@lidofinance/api-logger@^0.47.0":
   version "0.47.0"
