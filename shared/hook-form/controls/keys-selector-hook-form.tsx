@@ -5,7 +5,7 @@ import { Address, Latice, Stack, StatusChip } from 'shared/components';
 import { StatusStyle } from 'shared/components/status-chip/style';
 import { KeyWithStatus } from 'shared/hooks';
 import styled from 'styled-components';
-import { KEY_STATUS } from 'types';
+import { KEY_STATUS } from 'consts/key-status';
 
 type Props = {
   options: KeyWithStatus[];

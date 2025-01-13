@@ -2,7 +2,7 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import { HexString } from 'shared/keys';
 import invariant from 'tiny-invariant';
-import { KEY_STATUS } from 'types';
+import { KEY_STATUS } from 'consts/key-status';
 import { compareLowercase, filterOut } from 'utils';
 import { useExitRequestedKeysFromEvents } from './use-exit-requested-keys-from-events';
 import { useKeysCLStatus } from './use-keys-cl-status';

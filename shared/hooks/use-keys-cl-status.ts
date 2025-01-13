@@ -3,7 +3,7 @@ import { useClApiUrl } from 'config/rpc/cl';
 import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 import { useCallback } from 'react';
 import { HexString } from 'shared/keys';
-import { KEY_STATUS } from 'types';
+import { KEY_STATUS } from 'consts/key-status';
 import { getSettledValue, standardFetcher } from 'utils';
 import type { useNodeOperatorKeys } from './useNodeOperatorKeys';
 
