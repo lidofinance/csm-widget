@@ -4,12 +4,7 @@ import { FC } from 'react';
 import { LogoLido } from 'shared/components';
 import HeaderTheme from './components/header-theme';
 import { Nav, NavLink } from './components/navigation/styles';
-import {
-  DecorationsStyle,
-  HeaderActionsStyle,
-  HeaderContentStyle,
-  HeaderStyle,
-} from './styles';
+import { HeaderActionsStyle, HeaderContentStyle, HeaderStyle } from './styles';
 
 export const DummyHeader: FC = () => (
   <HeaderStyle size="full" forwardedAs="header">
@@ -27,6 +22,5 @@ export const DummyHeader: FC = () => (
         <HeaderTheme />
       </HeaderActionsStyle>
     </HeaderContentStyle>
-    <DecorationsStyle />
   </HeaderStyle>
 );

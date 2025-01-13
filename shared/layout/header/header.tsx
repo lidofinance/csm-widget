@@ -10,12 +10,7 @@ import { HeaderSettingsButton } from './components/header-settings-button';
 import HeaderTheme from './components/header-theme';
 import HeaderWallet from './components/header-wallet';
 import { Navigation } from './components/navigation/navigation';
-import {
-  DecorationsStyle,
-  HeaderActionsStyle,
-  HeaderContentStyle,
-  HeaderStyle,
-} from './styles';
+import { HeaderActionsStyle, HeaderContentStyle, HeaderStyle } from './styles';
 
 export const Header: FC = () => (
   <HeaderStyle size="full" forwardedAs="header">
@@ -31,7 +26,6 @@ export const Header: FC = () => (
         <HeaderTheme />
       </HeaderActionsStyle>
     </HeaderContentStyle>
-    <DecorationsStyle />
     <AlertContainer />
   </HeaderStyle>
 );
