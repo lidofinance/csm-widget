@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { KEY_STATUS } from 'types';
+import { KEY_STATUS } from 'consts/key-status';
 import {
   CommentDepositable,
   CommentExiting,

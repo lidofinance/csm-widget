@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { StatusStyle, Variants } from './style';
-import { KEY_STATUS } from 'types';
+import { KEY_STATUS } from 'consts/key-status';
 
 type Props = {
   status?: KEY_STATUS;
