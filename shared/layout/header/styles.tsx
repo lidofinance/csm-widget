@@ -1,9 +1,4 @@
-import {
-  Container,
-  ContainerProps,
-  ThemeName,
-  ThemeToggler,
-} from '@lidofinance/lido-ui';
+import { Container, ContainerProps, ThemeToggler } from '@lidofinance/lido-ui';
 import { LogoLidoStyle } from 'shared/components/logos/styles';
 import styled, { keyframes } from 'styled-components';
 
@@ -22,56 +17,6 @@ export const HeaderContentStyle = styled.div`
 
   ${LogoLidoStyle} {
     height: 44px;
-  }
-`;
-
-export const DecorationsStyle = styled.div`
-  ${({ theme }) => theme.mediaQueries.lg} {
-    margin-bottom: 80px;
-    position: relative;
-  }
-
-  &:before,
-  &:after {
-    content: '';
-    display: block;
-    position: absolute;
-    background-repeat: no-repeat;
-    background-size: 100%;
-    aspect-ratio: 2;
-    z-index: -1;
-    width: 25%;
-    margin-top: -3%;
-  }
-
-  &:before {
-    background-image: ${({ theme }) =>
-      theme.name === ThemeName.light
-        ? `url('/assets/decor-1.png')`
-        : `url('/assets/decor-1-dark.png')`};
-    left: -16px;
-    top: 58px;
-  }
-  &:after {
-    background-image: ${({ theme }) =>
-      theme.name === ThemeName.light
-        ? `url('/assets/decor-2.png')`
-        : `url('/assets/decor-2-dark.png')`};
-    right: -10px;
-    margin-top: calc(8px - 3%);
-  }
-  ${({ theme }) => theme.mediaQueries.lg} {
-    &:before,
-    &:after {
-      width: 67%;
-      top: -20px;
-    }
-    &:before {
-      left: -17%;
-    }
-    &:after {
-      right: -17%;
-    }
   }
 `;
 
