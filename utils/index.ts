@@ -8,7 +8,7 @@ export * from './estimate-gas';
 export * from './event-subsciption';
 export * from './extractErrorMessage';
 export * from './fetcherError';
-export * from './filter-out';
+export * from './has-no-interception';
 export * from './formatBalance';
 export * from './formatBalanceString';
 export * from './formatHex';
