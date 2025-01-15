@@ -40,6 +40,14 @@ export const ExternalSection: FC = () => {
           plan)
         </ExternalButtonLink>
         <ExternalButtonLink
+          title="Rated explorer"
+          icon={<RatedIcon />}
+          href={ratedLink}
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardExternalRatedLink}
+        >
+          Provides effectiveness ratings, APRs and other useful metrics
+        </ExternalButtonLink>
+        <ExternalButtonLink
           title="Lido operators"
           icon={<LidoIcon />}
           href={operatorPortalLink}
@@ -58,14 +66,6 @@ export const ExternalSection: FC = () => {
           }
         >
           Tracks missed slots and blocks with incorrect fee recipient/MEV relays
-        </ExternalButtonLink>
-        <ExternalButtonLink
-          title="Rated explorer"
-          icon={<RatedIcon />}
-          href={ratedLink}
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardExternalRatedLink}
-        >
-          Provides effectiveness ratings, APRs and other useful metrics
         </ExternalButtonLink>
       </Stack>
     </Accordion>
