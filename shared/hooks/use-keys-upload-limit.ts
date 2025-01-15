@@ -1,4 +1,4 @@
-import { getCsmConstants } from 'consts/csm-constants';
+import { KEYS_UPLOAD_TX_LIMIT } from 'consts/csm-constants';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import {
   useCsmEarlyAdoptionKeysLimit,
@@ -11,7 +11,7 @@ import { NodeOperatorId } from 'types';
 /**
  * @note 0 = no limits
  */
-export const useKeysLimit = () => {
+export const useKeysTotalLimit = () => {
   const swrPublicRelease = useCsmPublicRelease();
   const swrEAKeysLimit = useCsmEarlyAdoptionKeysLimit();
 
@@ -35,17 +35,15 @@ export const useNonWithdrawnKeysCount = (nodeOperatorId?: NodeOperatorId) => {
 export const useKeysUploadLimit = () => {
   const nodeOperatorId = useNodeOperatorId();
   const swrUploaded = useNonWithdrawnKeysCount(nodeOperatorId);
-  const swrLimit = useKeysLimit();
-
-  const MAX_KEYS_TO_UPLOAD = getCsmConstants().earlyAdoptionMaxKeys;
+  const swrLimit = useKeysTotalLimit();
 
   return useMergeSwr(
     [swrUploaded, swrLimit],
     swrLimit.data
       ? Math.min(
           Math.max(swrLimit.data - (swrUploaded.data ?? 0), 0),
-          MAX_KEYS_TO_UPLOAD,
+          KEYS_UPLOAD_TX_LIMIT,
         )
-      : MAX_KEYS_TO_UPLOAD,
+      : KEYS_UPLOAD_TX_LIMIT,
   );
 };

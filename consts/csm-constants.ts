@@ -3,6 +3,8 @@ import { config } from 'config';
 import { HexString } from 'shared/keys';
 import { Address } from 'wagmi';
 
+export const KEYS_UPLOAD_TX_LIMIT = 25;
+
 type CsmContract =
   | 'CSAccounting'
   | 'CSEarlyAdoption'
@@ -18,7 +20,6 @@ type CsmConstants = {
   deploymentBlockNumber: HexString;
   stakingModuleId: number;
   withdrawalCredentials: Address;
-  earlyAdoptionMaxKeys: number; // TODO: drop this const
   retentionPeriodMins: number;
 };
 
@@ -37,7 +38,6 @@ export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
     deploymentBlockNumber: '0x13f7326',
     stakingModuleId: 3,
     withdrawalCredentials: '0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f',
-    earlyAdoptionMaxKeys: 12,
     retentionPeriodMins: 80_640, // 8 weeks
   },
   [CHAINS.Holesky]: {
@@ -54,7 +54,6 @@ export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
     deploymentBlockNumber: '0x1b143a',
     stakingModuleId: 4,
     withdrawalCredentials: '0xF0179dEC45a37423EAD4FaD5fCb136197872EAd9',
-    earlyAdoptionMaxKeys: 10,
     retentionPeriodMins: 80_640, // 8 weeks
   },
 };
