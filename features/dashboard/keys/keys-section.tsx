@@ -4,7 +4,7 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC, useCallback } from 'react';
 import { SectionBlock, Stack, StatusComment } from 'shared/components';
 import {
-  useKeysLimit,
+  useKeysTotalLimit,
   useKeysWithStatus,
   useNodeOperatorInfo,
 } from 'shared/hooks';
@@ -26,7 +26,7 @@ const BAD_STATUSES: KEY_STATUS[] = [
 export const KeysSection: FC = () => {
   const id = useNodeOperatorId();
   const { data: info } = useNodeOperatorInfo(id);
-  const { data: eaTarget } = useKeysLimit();
+  const { data: eaTarget } = useKeysTotalLimit();
 
   const { data: keys } = useKeysWithStatus();
 

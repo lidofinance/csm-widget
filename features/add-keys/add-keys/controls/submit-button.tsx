@@ -1,18 +1,17 @@
 import { Note } from 'shared/components';
 import { PausedButton, SubmitButtonHookForm } from 'shared/hook-form/controls';
+import { useKeysTotalLimit } from 'shared/hooks';
 import { useAddKeysFormData } from '../context';
-import { getCsmConstants } from 'consts/csm-constants';
 
 export const SubmitButton = () => {
   const { keysUploadLimit, isPaused } = useAddKeysFormData();
+  const { data: keysTotalLimit } = useKeysTotalLimit();
 
   const keysLimitReached = keysUploadLimit === 0;
 
   if (isPaused) {
     return <PausedButton type="Module" />;
   }
-
-  const MAX_KEYS_TO_UPLOAD = getCsmConstants().earlyAdoptionMaxKeys;
 
   return (
     <>
@@ -22,9 +21,9 @@ export const SubmitButton = () => {
       >
         {keysLimitReached ? 'Keys limit has been reached' : 'Submit keys'}
       </SubmitButtonHookForm>
-      {keysLimitReached && (
+      {keysLimitReached && keysTotalLimit && (
         <Note>
-          You have reached the Early Access upload limit of {MAX_KEYS_TO_UPLOAD}{' '}
+          You have reached the Early Access upload limit of {keysTotalLimit}{' '}
           keys. You cannot upload more.
         </Note>
       )}
