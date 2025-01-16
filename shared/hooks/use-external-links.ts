@@ -3,10 +3,13 @@ import { getExternalLinks } from 'consts/external-links';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useKeysWithStatus } from './use-keys-with-status';
 import { ACTIVE_STATUS_ORDER, useSortedKeys } from './use-sorted-keys';
+import { getConfig } from 'config';
+import { CHAINS } from 'consts/chains';
 
 const DASHBOARD_KEYS_LIMIT = 20;
 
 const links = getExternalLinks();
+const { defaultChain } = getConfig();
 
 export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   const { data: keys } = useKeysWithStatus();
@@ -31,4 +34,10 @@ export const useOperatorPortalLink = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { stakingModuleId } = getCsmConstants();
   return `${links.operatorsWidget}/module/${stakingModuleId}/${nodeOperatorId}`;
+};
+
+export const useRatedLink = () => {
+  const nodeOperatorId = useNodeOperatorId();
+  const network = defaultChain === CHAINS.Mainnet ? 'mainnet' : 'holesky';
+  return `${links.ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${network}`;
 };

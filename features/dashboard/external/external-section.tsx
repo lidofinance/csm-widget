@@ -4,18 +4,21 @@ import { Stack } from 'shared/components';
 import { ExternalButtonLink } from './external-button-link';
 
 import { ReactComponent as BeaconchaIcon } from 'assets/icons/beaconcha.svg';
+import { ReactComponent as RatedIcon } from 'assets/icons/rated.svg';
 import { ReactComponent as LidoIcon } from 'assets/icons/lido.svg';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   useBeaconchainDashboardLink,
   useFeesMonitoningLink,
   useOperatorPortalLink,
+  useRatedLink,
 } from 'shared/hooks';
 
 export const ExternalSection: FC = () => {
   const beaconchainDashboardLink = useBeaconchainDashboardLink();
   const feesMonitoningLink = useFeesMonitoningLink();
   const operatorPortalLink = useOperatorPortalLink();
+  const ratedLink = useRatedLink();
 
   return (
     <Accordion
@@ -35,6 +38,14 @@ export const ExternalSection: FC = () => {
         >
           Dashboard displays statistics of your validators (up to 20 in free
           plan)
+        </ExternalButtonLink>
+        <ExternalButtonLink
+          title="Rated explorer"
+          icon={<RatedIcon />}
+          href={ratedLink}
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardExternalRatedLink}
+        >
+          Provides effectiveness ratings, APRs and other useful metrics
         </ExternalButtonLink>
         <ExternalButtonLink
           title="Lido operators"
