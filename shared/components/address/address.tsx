@@ -23,7 +23,11 @@ export const Address: FC<Props> = ({
         {symbols === 0 ? (
           <AddressStyle address={address} symbols={90} $bold={bold} />
         ) : (
-          <Tooltip placement="top" title={address}>
+          <Tooltip
+            placement="top"
+            title={address}
+            style={{ wordWrap: 'break-word', maxWidth: '300px' }}
+          >
             <AddressStyle address={address} symbols={symbols} $bold={bold} />
           </Tooltip>
         )}
