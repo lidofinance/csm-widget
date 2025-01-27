@@ -66,6 +66,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalBeaconchaLink = 'dashboardExternalBeaconchaLink',
   dashboardExternalFeesMonitoringLink = 'dashboardExternalFeesMonitoringLink',
   dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
+  dashboardExternalRatedLink = 'dashboardExternalRatedLink',
   // Pages
   pageWelcome = 'pageWelcome',
   pageStarterPack = 'pageStarterPack',
@@ -356,6 +357,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «Lido operators» on Dashboard screen',
     prefixed`dashboard_external_operators_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalRatedLink]: [
+    MATOMO_APP_NAME,
+    'Click «Rated» on Dashboard screen',
+    prefixed`dashboard_external_rated_link`,
   ],
   // Pages
   [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: [

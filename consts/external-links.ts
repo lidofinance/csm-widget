@@ -29,6 +29,7 @@ type ExternalLinksConstants = {
   feesMonitoring: string;
   operatorsWidget: string;
   beaconchainDashboard: string;
+  ratedExplorer: string;
   subscribeEvents: string;
   keysApi: string;
 };
@@ -52,6 +53,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     operatorsWidget: 'https://operators.lido.fi',
     beaconchain: 'https://beaconcha.in',
     beaconchainDashboard: 'https://v2-beta-mainnet.beaconcha.in/dashboard',
+    ratedExplorer: 'https://explorer.rated.network',
     subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
     keysApi: 'https://keys-api.lido.fi',
   },
@@ -71,6 +73,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     operatorsWidget: 'https://operators-holesky.testnet.fi',
     beaconchain: 'https://holesky.beaconcha.in',
     beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
+    ratedExplorer: 'https://explorer.rated.network',
     subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
     keysApi: 'https://keys-api-holesky.testnet.fi',
   },
