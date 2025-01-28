@@ -1,15 +1,12 @@
-import { LinkProps } from '@lidofinance/lido-ui';
 import Link from 'next/link';
 import { useInpageNavigation } from 'providers/inpage-navigation';
-import { FC, useCallback } from 'react';
+import { ComponentProps, FC, useCallback } from 'react';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 import { LinkStyled } from './styles';
 
-export const MatomoLink: FC<WithMatomoEvent<LinkProps>> = ({
-  matomoEvent,
-  onClick,
-  ...props
-}) => {
+export const MatomoLink: FC<
+  WithMatomoEvent<ComponentProps<typeof LinkStyled>>
+> = ({ matomoEvent, onClick, ...props }) => {
   const { navigateInpageAnchor } = useInpageNavigation();
 
   const onClickHandler = useCallback(

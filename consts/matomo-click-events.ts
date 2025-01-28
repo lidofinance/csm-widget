@@ -43,6 +43,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   howToClaimEthSuccessLink = 'howToClaimEthSuccessLink',
   // Common
   etherscanTxLink = 'etherscanTxLink',
+  etherscanAddressLink = 'etherscanAddressLink',
+  beaconchainPubkeyLink = 'beaconchainPubkeyLink',
   feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
@@ -252,6 +254,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «View on Etherscan» link on TX modal',
     prefixed`etherscan_transaction_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink]: [
+    MATOMO_APP_NAME,
+    'Click «View on Etherscan» link on address',
+    prefixed`etherscan_address_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.beaconchainPubkeyLink]: [
+    MATOMO_APP_NAME,
+    'Click «View on beaconcha.in» link on pubkey',
+    prefixed`beaconchain_pubkey_link`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: [
     MATOMO_APP_NAME,

@@ -1,7 +1,7 @@
-import { Address, Block, Box, Button, Modal, Text } from '@lidofinance/lido-ui';
+import { Block, Box, Button, Modal, Text } from '@lidofinance/lido-ui';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { FC, useCallback, useState } from 'react';
-import { Stack, StepIndicator } from 'shared/components';
+import { Address, Stack, StepIndicator } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 
@@ -87,14 +87,14 @@ const CustomAddresses: FC<Required<Props>> = ({
       <Stack direction="column" gap="xs">
         <Text size="xs">Rewards Address</Text>
         <Text size="xs" weight={700}>
-          <Address as="span" address={rewardsAddress} symbols={21} />
+          <Address address={rewardsAddress} symbols={0} bold />
         </Text>
       </Stack>
 
       <Stack direction="column" gap="xs">
         <Text size="xs">Manager Address</Text>
         <Text size="xs" weight={700}>
-          <Address as="span" address={managerAddress} symbols={21} />
+          <Address address={managerAddress} symbols={0} bold />
         </Text>
       </Stack>
     </Stack>
