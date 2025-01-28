@@ -60,7 +60,7 @@ export const SourceSelect: FC = () => {
           token={TOKENS.STETH}
         />
         <TitledSelectableAmount
-          warning={bond?.isNoticiableInsufficient}
+          warning={bond?.isInsufficient}
           title={
             <Checkbox
               checked

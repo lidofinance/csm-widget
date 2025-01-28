@@ -12,7 +12,7 @@ export const Info: FC = () => {
       <Latice variant="secondary">
         <Stack direction="column" gap="sm">
           <TitledAmount
-            warning={bond?.isNoticiableInsufficient}
+            warning={bond?.isInsufficient}
             title={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
             help={
               bond?.isInsufficient
@@ -23,7 +23,7 @@ export const Info: FC = () => {
             amount={bond?.delta}
             token={TOKENS.STETH}
           />
-          {bond?.isNoticiableInsufficient ? (
+          {bond?.isInsufficient ? (
             <p>
               Your Node Operator has an Insufficient bond because of the penalty
               applied. Now your Node Operator’s bond is less than required to

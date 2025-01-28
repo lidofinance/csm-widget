@@ -29,7 +29,6 @@ export type BondBalance = {
 
   delta: BigNumber;
   isInsufficient: boolean;
-  isNoticiableInsufficient: boolean;
 };
 
 export type RewardProof = {
