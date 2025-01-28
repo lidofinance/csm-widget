@@ -18,7 +18,7 @@ export const RoleBlockProposed = styled.div`
   align-self: stretch;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--lido-color-warningBackground);
+  background-color: rgba(var(--lido-rgb-warning), 0.1);
   border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;
   padding: ${({ theme }) => theme.spaceMap.xs}px
     ${({ theme }) => theme.spaceMap.sm}px;
