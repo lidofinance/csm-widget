@@ -32,9 +32,15 @@ export const useNonWithdrawnKeysCount = (nodeOperatorId?: NodeOperatorId) => {
   );
 };
 
+export const useTotalAddedKeysCount = (nodeOperatorId?: NodeOperatorId) => {
+  const swrInfo = useNodeOperatorInfo(nodeOperatorId);
+
+  return useMergeSwr([swrInfo], swrInfo.data?.totalAddedKeys ?? 0);
+};
+
 export const useKeysUploadLimit = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const swrUploaded = useNonWithdrawnKeysCount(nodeOperatorId);
+  const swrUploaded = useTotalAddedKeysCount(nodeOperatorId);
   const swrLimit = useKeysTotalLimit();
 
   return useMergeSwr(
