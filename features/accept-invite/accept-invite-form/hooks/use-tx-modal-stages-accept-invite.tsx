@@ -1,5 +1,5 @@
-import { Address } from '@lidofinance/lido-ui';
 import { ROLES } from 'consts/roles';
+import { Address } from 'shared/components';
 import { DescriptorId, getRoleTitle } from 'shared/node-operator';
 import {
   TransactionModalTransitStage,
@@ -56,7 +56,7 @@ const getTxModalStagesAcceptInvite = (
           <>
             {getRoleTitle(role, true)} address of <DescriptorId id={id} /> is
             <br />
-            <Address address={address} symbols={90} />
+            <Address address={address} symbols={0} />
           </>
         }
       />,
