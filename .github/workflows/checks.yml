@@ -19,28 +19,3 @@ jobs:
 
   actions:
     uses: lidofinance/linters/.github/workflows/actions.yml@master
-
-  lint_and_build:
-    runs-on: ubuntu-latest
-    name: Lint and build
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          persist-credentials: false
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: Lint
-        run: yarn lint
-
-      # - name: Check types
-      #   run: yarn types
-
-      - name: Build
-        run: yarn build
