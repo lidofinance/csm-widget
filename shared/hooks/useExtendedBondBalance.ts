@@ -8,15 +8,18 @@ export const useExtendedBondBalance = (
   required?: BigNumber,
   current?: BigNumber,
   locked: BigNumber = Zero,
-) => {
-  return useMemo(() => {
+): BondBalance | undefined =>
+  useMemo(() => {
     if (!current || !required) return undefined;
 
     const requiredWithoutLocked = required.sub(locked);
 
-    const delta = current.sub(requiredWithoutLocked);
+    let delta = current.sub(requiredWithoutLocked);
+    if (delta?.lt(0) && delta?.abs().lt(ROUNDING_TRESHOLD)) {
+      delta = Zero;
+    }
+
     const isInsufficient = delta?.lt(0) ?? false;
-    const isNoticiableInsufficient = delta?.lt(-ROUNDING_TRESHOLD) ?? false;
 
     return {
       required: requiredWithoutLocked,
@@ -24,7 +27,5 @@ export const useExtendedBondBalance = (
       locked,
       delta: delta.abs(),
       isInsufficient,
-      isNoticiableInsufficient,
-    } as BondBalance;
+    };
   }, [required, current, locked]);
-};

@@ -37,7 +37,7 @@ export const BondSection: FC = () => {
               <RowHeader>
                 <RowTitle>
                   Available to claim
-                  {(bond.isNoticiableInsufficient || bond.locked.gt(0)) && (
+                  {(bond.isInsufficient || bond.locked.gt(0)) && (
                     <Counter warning count={1} />
                   )}
                 </RowTitle>
@@ -59,7 +59,7 @@ export const BondSection: FC = () => {
                 <>
                   <Sign minus />
                   <Balance
-                    dangerous={bond.isNoticiableInsufficient}
+                    dangerous
                     title={BOND_INSUFFICIENT}
                     loading={isBondLoading}
                     amount={bond.delta}
@@ -94,9 +94,7 @@ export const BondSection: FC = () => {
               <RowHeader>
                 <RowTitle>
                   Bond balance
-                  {bond.isNoticiableInsufficient && (
-                    <Counter warning count={1} />
-                  )}
+                  {bond.isInsufficient && <Counter warning count={1} />}
                 </RowTitle>
                 <Balance
                   big
@@ -118,7 +116,7 @@ export const BondSection: FC = () => {
                 <>
                   <Sign minus />
                   <Balance
-                    dangerous={bond.isNoticiableInsufficient}
+                    dangerous
                     title={BOND_INSUFFICIENT}
                     loading={isBondLoading}
                     amount={bond.delta}
