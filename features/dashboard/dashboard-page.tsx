@@ -6,7 +6,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 export const DashboardPage: FC = () => {
   return (
     <Layout
-      title="Community Staking Module"
+      title="Community Staking Module 1"
       subtitle="Dashboard"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageDashboard}
     >
