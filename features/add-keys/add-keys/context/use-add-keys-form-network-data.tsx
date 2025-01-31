@@ -59,8 +59,8 @@ export const useAddKeysFormNetworkData = (): [
     update: updateShareLimit,
   } = useCSMShareLimitInfo();
 
+  const keysUploadLimit = 999_999;
   const {
-    data: keysUploadLimit,
     update: updateKeysUploadLimit,
     initialLoading: isKeysUploadLimitLoading,
   } = useKeysUploadLimit();
