@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { KeysAvailable, ShareLimitInfo } from 'shared/hooks';
 import { LoadingRecord, Proof } from 'types';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 
 export type SubmitKeysFormInputType = {
   token: TOKENS;

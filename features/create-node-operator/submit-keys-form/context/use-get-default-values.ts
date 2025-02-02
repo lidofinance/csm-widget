@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { getMaxBalanceToken } from 'utils';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 import { useDefaultValues } from 'shared/hooks';
 

@@ -5,7 +5,7 @@ import { STRATEGY_CONSTANT, STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { useMemo } from 'react';
 import { standardFetcher } from 'utils';
 import { StandardMerkleTreeData, findProofInTree } from 'utils/merkle-tree';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 import { useAccount } from './use-account';
 import { useAddressCompare } from './use-address-compare';
 import { useCSEarlyAdoptionRPC } from './useCsmContracts';

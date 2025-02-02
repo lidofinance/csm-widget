@@ -60,6 +60,7 @@ export const CONTRACT_NAMES = {
   CSEarlyAdoption: 'CSEarlyAdoption',
   ExitBusOracle: 'ExitBusOracle',
   StakingRouter: 'StakingRouter',
+  Multicall3: 'Multicall3',
 } as const;
 export type CONTRACT_NAMES = keyof typeof CONTRACT_NAMES;
 
@@ -76,6 +77,7 @@ const CONTRACT_LIST_CALL: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.HashConsensus,
   CONTRACT_NAMES.ExitBusOracle,
   CONTRACT_NAMES.StakingRouter,
+  CONTRACT_NAMES.Multicall3,
 ];
 
 const CONTRACT_LIST_LOGS: CONTRACT_NAMES[] = [
@@ -97,6 +99,7 @@ export const METRIC_CONTRACT_ABIS = {
   [CONTRACT_NAMES.CSEarlyAdoption]: CSEarlyAdoption__factory.abi,
   [CONTRACT_NAMES.ExitBusOracle]: ExitBusOracle__factory.abi,
   [CONTRACT_NAMES.StakingRouter]: StakingRouter__factory.abi,
+  [CONTRACT_NAMES.Multicall3]: [],
 } as const;
 
 const METRIC_CONTRACT_ADDRESS_GETTERS = {
@@ -137,6 +140,8 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
     getCsmContractAddress,
     'StakingRouter',
   ),
+  [CONTRACT_NAMES.Multicall3]: () =>
+    '0xcA11bde05977b3631167028862bE2a173976CA11',
 };
 
 const aggregatorMainnetAddress = METRIC_CONTRACT_ADDRESS_GETTERS[
