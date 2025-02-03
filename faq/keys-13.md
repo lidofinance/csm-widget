@@ -3,7 +3,7 @@ title: What is the CSM Stake Share Limit?
 anchor: stake-share-limit
 ---
 
-The stake share limit is a parameter defined for each Staking Module based on its risk profile. It determines the percentage of the total stake in the Lido Protocol that can be allocated to the module. Currently, the stake share limit for CSM is set at 1%, with [discussions underway to potentially increase this limit to 2%](https://research.lido.fi/t/community-staking-module/5917/75?u=aleksandra_g). Once CSM reaches its stake share limit, new keys can still be uploaded, but deposits to these keys may take a very long time (e.g. months), if they are deposited to at all. These factors affect the possibility of new deposits to your uploaded keys:
+The stake share limit is a parameter defined for each Staking Module based on its risk profile. It determines the percentage of the total stake in the Lido Protocol that can be allocated to the module. Currently, the stake share limit for CSM is set at 2%. Once CSM reaches its stake share limit, new keys can still be uploaded, but deposits to these keys may take a very long time (e.g. months), if they are deposited to at all. These factors affect the possibility of new deposits to your uploaded keys:
 
 - The number of keys already in the deposit queue, and the position of your keys in this queue
 - The number of keys that will exit from CSM
