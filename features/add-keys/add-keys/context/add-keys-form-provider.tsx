@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, PropsWithChildren, useCallback, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerContext,
@@ -14,6 +14,8 @@ import { useAddKeysSubmit } from './use-add-keys-submit';
 import { useAddKeysValidation } from './use-add-keys-validation';
 import { useFormBondAmount } from './use-form-bond-amount';
 import { useGetDefaultValues } from './use-get-default-values';
+// DAPPNODE
+import useBrainLaunchpadApi from 'dappnode/hooks/use-brain-launchpad-api';
 
 export const useAddKeysFormData = useFormData<AddKeysFormNetworkData>;
 
@@ -22,6 +24,9 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const validationResolver = useAddKeysValidation(networkData);
 
   const asyncDefaultValues = useGetDefaultValues(networkData);
+
+  // DAPPNODE
+  const { submitKeystores: submitKeysToBrain } = useBrainLaunchpadApi();
 
   const formObject = useForm<AddKeysFormInputType>({
     defaultValues: asyncDefaultValues,
@@ -39,15 +44,29 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     onRetry: retryFire,
   });
 
+  // DAPPNODE
+  const handleSubmit = useCallback(
+    async (
+      input: AddKeysFormInputType,
+      networkData: AddKeysFormNetworkData,
+    ) => {
+      const { keystores, password } = formObject.getValues();
+      if (keystores && password)
+        await submitKeysToBrain({ keystores, password });
+      return await addKeys(input, networkData);
+    },
+    [addKeys, formObject, submitKeysToBrain], // dependencies
+  );
+
   const formControllerValue: FormControllerContextValueType<
     AddKeysFormInputType,
     AddKeysFormNetworkData
   > = useMemo(
     () => ({
-      onSubmit: addKeys,
+      onSubmit: handleSubmit,
       retryEvent,
     }),
-    [addKeys, retryEvent],
+    [handleSubmit, retryEvent],
   );
 
   return (

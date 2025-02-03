@@ -1,5 +1,6 @@
 import { type TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
+import { KeysFile } from 'features/add-keys/add-keys/context/types';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { KeysAvailable, ShareLimitInfo } from 'shared/hooks';
 import { LoadingRecord, Proof } from 'types';
@@ -14,6 +15,8 @@ export type SubmitKeysFormInputType = {
   extendedManagerPermissions: boolean;
   specifyCustomAddresses: boolean;
   specifyReferrrer: boolean;
+  keystores?: KeysFile[]; // DAPPNODE
+  password?: string; // DAPPNODE
 } & DepositDataInputType;
 
 export type SubmitKeysFormNetworkData = {

@@ -1,5 +1,4 @@
 import { FC, PropsWithChildren } from 'react';
-
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { MatomoLink } from 'shared/components';
 import {

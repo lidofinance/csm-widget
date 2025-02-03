@@ -13,10 +13,12 @@ export const PATH = <const>{
   BOND_CLAIM: '/bond/claim',
   BOND_ADD: '/bond/add',
   BOND_UNLOCK: '/bond/unlock',
+  PERFORMANCE: '/performance', // DAPPNODE
   ROLES: '/roles',
   ROLES_REWARDS: '/roles/reward-address',
   ROLES_MANAGER: '/roles/manager-address',
   ROLES_INBOX: '/roles/inbox',
+  NOTIFICATIONS: '/notifications', // DAPPNODE
   STEALING: '/stealing',
   STEALING_REPORT: '/stealing/report',
   STEALING_CANCEL: '/stealing/cancel',
