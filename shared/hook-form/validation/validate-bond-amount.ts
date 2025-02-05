@@ -38,7 +38,7 @@ export const validateBondAmount = ({
     if (tokenBalance?.lt(bondAmount))
       throw new ValidationError(
         'bondAmount',
-        `Not enought balance of ${getTokenDisplayName(token)}`,
+        `Not enough balance of ${getTokenDisplayName(token)}`,
       );
   }
 };
