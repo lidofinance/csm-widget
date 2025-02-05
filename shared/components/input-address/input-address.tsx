@@ -52,7 +52,11 @@ export const InputAddress = forwardRef<
         }
         rightDecorator={
           rightDecorator ?? (
-            <>{isLocked ? <InputDecoratorLocked /> : undefined}</>
+            <>
+              {isLocked ? (
+                <InputDecoratorLocked title="Allows reset to the current address only" />
+              ) : undefined}
+            </>
           )
         }
         disabled={props.disabled || isLocked}

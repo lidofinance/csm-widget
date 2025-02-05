@@ -7,17 +7,23 @@ import { useRole } from '../hooks/use-role';
 
 export const SubmitButton = () => {
   const role = useRole();
-  const { isPropose } = useChangeRoleFormData();
+  const { isPropose, isManagerReset } = useChangeRoleFormData();
   const { setValue } = useFormContext<ChangeRoleFormInputType>();
 
   const clickHandle = useCallback(() => {
     setValue('isRevoke', false);
   }, [setValue]);
 
+  const title = isManagerReset
+    ? `Reset ${role} address`
+    : isPropose
+      ? `Propose a new ${role} address`
+      : `Change ${role} address`;
+
   return (
     <>
       <SubmitButtonHookForm errorField="address" onClick={clickHandle}>
-        {isPropose ? 'Propose a new' : 'Change'} {role} address
+        {title}
       </SubmitButtonHookForm>
       {isPropose && (
         <Note>
