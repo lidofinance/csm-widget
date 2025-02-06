@@ -68,7 +68,7 @@ const getTxModalStagesClaimBond = (
               Request withdrawal of{' '}
               <TxAmount amount={amount} token={TOKENS.STETH} /> has been sent.
               Check{' '}
-              <MatomoLink href={`${stakeWidget}/claim`}>
+              <MatomoLink href={`${stakeWidget}/withdrawals/claim`}>
                 Claim tab on the Lido Staking Widget
               </MatomoLink>{' '}
               to view your withdrawal requests or view your transaction on{' '}
