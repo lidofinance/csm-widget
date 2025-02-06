@@ -16,6 +16,7 @@ const SHARE_LIMIT_THRESHOLD = 200;
 export const SHARE_LIMIT_STATUS = {
   FAR: 'FAR',
   APPROACHING: 'APPROACHING',
+  EXHAUSTED: 'EXHAUSTED',
   REACHED: 'REACHED',
 } as const;
 export type SHARE_LIMIT_STATUS = keyof typeof SHARE_LIMIT_STATUS;
@@ -50,9 +51,11 @@ const getInfo = (
 
   const status: SHARE_LIMIT_STATUS = activeLeft.lte(0)
     ? SHARE_LIMIT_STATUS.REACHED
-    : activeLeft.sub(queue).lt(SHARE_LIMIT_THRESHOLD)
-      ? SHARE_LIMIT_STATUS.APPROACHING
-      : SHARE_LIMIT_STATUS.FAR;
+    : activeLeft.sub(queue).lt(0)
+      ? SHARE_LIMIT_STATUS.EXHAUSTED
+      : activeLeft.sub(queue).lt(SHARE_LIMIT_THRESHOLD)
+        ? SHARE_LIMIT_STATUS.APPROACHING
+        : SHARE_LIMIT_STATUS.FAR;
 
   return {
     totalActive,
