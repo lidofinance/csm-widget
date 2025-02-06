@@ -98,6 +98,7 @@ export const useChangeRoleSubmit = ({
       {
         nodeOperatorId,
         proposedAddress,
+        currentAddress,
         role,
         isPropose,
         isManagerReset,
@@ -107,6 +108,7 @@ export const useChangeRoleSubmit = ({
       const address = isRevoke ? AddressZero : addressRaw;
       invariant(role, 'Role is not defined');
       invariant(address, 'Addess is not defined');
+      invariant(currentAddress, 'CurrentAddess is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       if (
@@ -130,8 +132,10 @@ export const useChangeRoleSubmit = ({
       try {
         txModalStages.sign({
           address,
+          currentAddress,
           role,
           isPropose,
+          isRevoke,
           isRewardsChange,
           isManagerReset,
         });
@@ -150,7 +154,15 @@ export const useChangeRoleSubmit = ({
         );
 
         txModalStages.pending(
-          { address, role, isPropose, isRewardsChange, isManagerReset },
+          {
+            address,
+            currentAddress,
+            role,
+            isPropose,
+            isRevoke,
+            isRewardsChange,
+            isManagerReset,
+          },
           txHash,
         );
 
@@ -159,7 +171,15 @@ export const useChangeRoleSubmit = ({
         await onConfirm?.();
 
         txModalStages.success(
-          { address, role, isPropose, isRewardsChange, isManagerReset },
+          {
+            address,
+            currentAddress,
+            role,
+            isPropose,
+            isRevoke,
+            isRewardsChange,
+            isManagerReset,
+          },
           txHash,
         );
 

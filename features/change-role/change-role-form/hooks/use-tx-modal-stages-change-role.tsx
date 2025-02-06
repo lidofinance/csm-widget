@@ -1,4 +1,5 @@
 import { ROLES } from 'consts/roles';
+import { capitalize } from 'lodash';
 import { getRoleTitle } from 'shared/node-operator';
 import {
   TransactionModalTransitStage,
@@ -11,10 +12,12 @@ import {
 
 type Props = {
   address: string;
+  currentAddress: string;
   role: ROLES;
   isManagerReset: boolean;
   isRewardsChange: boolean;
   isPropose: boolean;
+  isRevoke: boolean;
 };
 
 // TODO: show address with <Address> component
@@ -26,12 +29,22 @@ const getTexts = (props: Props) => {
           description: `New address ${props.address}`,
         },
         success: {
-          title: `${getRoleTitle(props.role)} address has been changed`,
+          title: `${capitalize(getRoleTitle(props.role))} address has been changed`,
           description: `New address ${props.address}`,
         },
       }
-    : props.isPropose
+    : props.isRevoke
       ? {
+          sign: {
+            title: `You are revoking request for ${getRoleTitle(props.role)} address change`,
+            description: `Address stays ${props.currentAddress}`,
+          },
+          success: {
+            title: `Proposed request for ${getRoleTitle(props.role)} address has been revoked`,
+            description: `Address stays ${props.currentAddress}`,
+          },
+        }
+      : {
           sign: {
             title: `You are proposing ${getRoleTitle(props.role)} address change`,
             description: `Proposed address ${props.address}`,
@@ -39,16 +52,6 @@ const getTexts = (props: Props) => {
           success: {
             title: `New ${getRoleTitle(props.role)} address has been proposed`,
             description: `To complete the address change, the owner of the new address must confirm the change`,
-          },
-        }
-      : {
-          sign: {
-            title: `You are revoking request for ${getRoleTitle(props.role)} address change`,
-            description: `Address stays ${props.address}`,
-          },
-          success: {
-            title: `Proposed request for ${getRoleTitle(props.role)} address has been revoked`,
-            description: ``,
           },
         };
 };
