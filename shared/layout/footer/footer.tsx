@@ -32,7 +32,7 @@ const getVersionInfo = () => {
   }
   return {
     label: `v${version}`,
-    // link: `${repoBaseUrl}/releases/tag/${version}`,  // TODO: uncomment after make this repo public
+    link: `${repoBaseUrl}/releases/tag/${version}`,
   };
 };
 
