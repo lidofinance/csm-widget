@@ -2,7 +2,7 @@ import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
-import { Counter, Sign } from 'shared/components';
+import { Counter } from 'shared/components';
 import { useNodeOperatorBalance } from 'shared/hooks';
 import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
@@ -40,9 +40,9 @@ export const BondBalance: FC = () => {
 
         {bond?.isInsufficient ? (
           <>
-            <Sign minus />
             <Balance
               warning
+              sign="minus"
               title={BOND_INSUFFICIENT}
               loading={isBondLoading}
               amount={bond?.delta}
@@ -51,8 +51,8 @@ export const BondBalance: FC = () => {
           </>
         ) : (
           <>
-            <Sign />
             <Balance
+              sign="plus"
               title={BOND_EXCESS}
               loading={isBondLoading}
               amount={bond?.delta}

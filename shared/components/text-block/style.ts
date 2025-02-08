@@ -8,8 +8,8 @@ export type TextBlockStyleProps = {
 
 export const TextBlockStyle = styled(StackStyle).attrs({
   $direction: 'column',
+  $gap: 'xxs',
 })<TextBlockStyleProps>`
-  gap: 2px;
   min-width: 100px;
   align-items: ${({ $align }) => $align ?? 'flex-start'};
 
@@ -21,6 +21,17 @@ export const TextBlockStyle = styled(StackStyle).attrs({
     flex-direction: row;
     align-items: baseline;
     justify-content: space-between;
+  }
+`;
+
+export const TextBlockValue = styled(StackStyle).attrs({
+  $direction: 'column',
+  $gap: 'xxs',
+})`
+  align-items: inherit;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    align-items: end;
   }
 `;
 

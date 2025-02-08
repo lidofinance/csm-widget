@@ -69,7 +69,7 @@ export const LastRewards: FC = () => {
           <Stack direction="column" gap="xxs">
             <RowTitle>Last rewards frame</RowTitle>
             {prevRewardsFrame && lastRewardsFrame && (
-              <Stack center gap="sm">
+              <Stack center gap="sm" wrap>
                 <GrayText>
                   {prevRewardsFrame} — {lastRewardsFrame}
                 </GrayText>
@@ -112,10 +112,14 @@ export const LastRewards: FC = () => {
         </RowBody>
         <Divider />
         <Stack spaceBetween center>
-          <TextBlock
-            title={<b>Next rewards frame</b>}
-            description={`${lastRewardsFrame} — ${nextRewardsFrame}`}
-          />
+          <Stack direction="column" gap="xxs">
+            <Text size="xs" weight={700}>
+              Next rewards frame
+            </Text>
+            <GrayText>
+              {lastRewardsFrame} — {nextRewardsFrame}
+            </GrayText>
+          </Stack>
           {daysLeft !== null &&
             (daysLeft < 0 ? (
               <BadgeStyle $variant="warning">

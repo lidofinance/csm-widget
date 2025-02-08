@@ -2,7 +2,7 @@ import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
-import { Counter, IconTooltip, Sign } from 'shared/components';
+import { Counter, IconTooltip } from 'shared/components';
 import { useNodeOperatorBalance, useNodeOperatorRewards } from 'shared/hooks';
 import { useAvailableToClaim } from 'shared/hooks/useAvailableToClaim';
 import { Balance } from './balance';
@@ -56,9 +56,9 @@ export const AvailableToClaim: FC = () => {
         />
         {bond?.isInsufficient ? (
           <>
-            <Sign minus />
             <Balance
               warning
+              sign="minus"
               title={BOND_INSUFFICIENT}
               help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys."
               loading={isBondLoading}
@@ -67,8 +67,8 @@ export const AvailableToClaim: FC = () => {
           </>
         ) : (
           <>
-            <Sign />
             <Balance
+              sign="plus"
               title={
                 <>
                   {BOND_EXCESS}
@@ -82,9 +82,9 @@ export const AvailableToClaim: FC = () => {
         )}
         {bond?.locked.gt(0) && (
           <>
-            <Sign minus />
             <Balance
               warning
+              sign="minus"
               title="Locked bond"
               loading={isBondLoading}
               amount={bond.locked}

@@ -7,6 +7,7 @@ import {
   TextBlockStyle,
   TextBlockStyleProps,
   TextBlockTitle,
+  TextBlockValue,
 } from './style';
 
 type Props = {
@@ -41,12 +42,12 @@ export const TextBlock: FC<PropsWithChildren<Props>> = ({
       {loading ? (
         <InlineLoader />
       ) : (
-        <>
+        <TextBlockValue>
           {children && (
             <TextBlockContent $size={size}>{children}</TextBlockContent>
           )}
           {description && <GrayText>{description}</GrayText>}
-        </>
+        </TextBlockValue>
       )}
     </TextBlockStyle>
   );

@@ -20,10 +20,14 @@ export const RowHeader = styled(StackStyle)`
   }
 `;
 
-export const RowBody = styled(StackStyle).attrs({ $gap: 'xl' })`
+export const RowBody = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 24px;
+
   ${({ theme }) => theme.mediaQueries.lg} {
-    flex-direction: column;
-    gap: 12px;
+    grid-auto-flow: row;
+    grid-template: none;
   }
 `;
 

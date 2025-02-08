@@ -1,37 +1,32 @@
 import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { FC, ReactNode } from 'react';
+import { Sign, SignType, TextBlock } from 'shared/components';
 import { FormatPrice, FormatToken } from 'shared/formatters';
 import { useEthUsd } from 'shared/hooks';
-import { TextBlock } from 'shared/components';
 
 type Props = {
   title?: ReactNode;
   help?: string;
   amount?: BigNumber;
   token?: TOKENS;
+  sign?: SignType;
   loading?: boolean;
   big?: boolean;
   warning?: boolean;
 };
 
-export const Balance: FC<Props> = ({
-  amount,
-  token,
-  big,
-  warning,
-  ...props
-}) => {
+export const Balance: FC<Props> = ({ amount, token, big, sign, ...props }) => {
   const { usdAmount } = useEthUsd(amount);
 
   return (
     <TextBlock
       {...props}
       description={<FormatPrice amount={usdAmount} />}
-      warning={warning && amount?.gt(0)}
       align={big ? 'flex-end' : undefined}
       size={big ? 'sm' : undefined}
     >
+      {sign && <Sign type={sign} />}
       <FormatToken amount={amount} token={token ?? TOKENS.STETH} />
     </TextBlock>
   );

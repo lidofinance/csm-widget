@@ -15,7 +15,7 @@ export { TokenAmount } from './token-amount/token-amount';
 export { InputAmount } from './input-amount/input-amount';
 export { InputAddress } from './input-address/input-address';
 export { InviteContent } from './invite-content/invite-content';
-export { Sign } from './sign/sign';
+export { Sign, type SignType } from './sign/sign';
 export { WhenLoaded } from './when-loaded/when-loaded';
 export { StatusChip } from './status-chip/status-chip';
 export { Latice } from './latice/latice';
