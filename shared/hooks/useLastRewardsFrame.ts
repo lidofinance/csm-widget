@@ -8,6 +8,7 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useMergeSwr } from './useMergeSwr';
 import { useMemo } from 'react';
 import { BigNumber } from 'ethers';
+import { Zero } from '@ethersproject/constants';
 
 const SECONDS_PER_SLOT = 12;
 
@@ -113,7 +114,14 @@ export const useLastOperatorRewards = () => {
       const threshold = swrRewards.data.threshold;
       const operator = swrRewards.data.operators[nodeOperatorId];
 
-      if (!operator) return null;
+      if (!operator)
+        return {
+          distributed: Zero,
+          stuck: false,
+          validatorsCount: 0,
+          validatorsOverTresholdCount: 0,
+          threshold,
+        };
 
       const validators = Object.values(operator.validators);
 

@@ -54,9 +54,10 @@ export const LastRewards: FC = () => {
       )
     : null;
 
-  const overThresholdRate =
-    (lastRewards?.validatorsOverTresholdCount ?? 0) /
-    (lastRewards?.validatorsCount ?? 1);
+  const overThresholdRate = lastRewards?.validatorsCount
+    ? (lastRewards?.validatorsOverTresholdCount ?? 0) /
+      lastRewards?.validatorsCount
+    : 0;
 
   const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
 
