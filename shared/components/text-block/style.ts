@@ -20,7 +20,8 @@ export const TextBlockStyle = styled(StackStyle).attrs({
   ${({ theme }) => theme.mediaQueries.lg} {
     flex-direction: row;
     align-items: baseline;
-    justify-content: space-between;
+    justify-content: ${({ $align }) =>
+      $align === 'flex-end' ? 'flex-end' : 'space-between'};
   }
 `;
 
