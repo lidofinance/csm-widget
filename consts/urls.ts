@@ -20,6 +20,7 @@ export const PATH = <const>{
   STEALING: '/stealing',
   STEALING_REPORT: '/stealing/report',
   STEALING_CANCEL: '/stealing/cancel',
+  SURVEYS: '/surveys',
 };
 
 export type PATH = (typeof PATH)[keyof typeof PATH];

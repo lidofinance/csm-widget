@@ -41,3 +41,6 @@ export const prefillUnsafeElRpcUrls17000 =
 /** @type string */
 export const widgetApiBasePathForIpfs =
   process.env.WIDGET_API_BASE_PATH_FOR_IPFS;
+
+/** @type string */
+export const surveyApi = process.env.SURVEY_API;
