@@ -24,7 +24,7 @@ export const TitledSelectableAmount: FC<Props> = ({
     <TitledAmountStyle $warning={warning}>
       <Stack gap="xs" center>
         {title}
-        <IconTooltip help={help} />
+        <IconTooltip tooltip={help} />
       </Stack>
       <AmountWithPrice {...props} />
     </TitledAmountStyle>

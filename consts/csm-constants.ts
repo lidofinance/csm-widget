@@ -21,6 +21,7 @@ type CsmConstants = {
   stakingModuleId: number;
   withdrawalCredentials: Address;
   retentionPeriodMins: number;
+  slotsPerFrame: number;
 };
 
 export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
@@ -39,6 +40,7 @@ export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
     stakingModuleId: 3,
     withdrawalCredentials: '0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f',
     retentionPeriodMins: 80_640, // 8 weeks
+    slotsPerFrame: 32 * 225 * 28, // 28 days
   },
   [CHAINS.Holesky]: {
     contracts: {
@@ -55,6 +57,7 @@ export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
     stakingModuleId: 4,
     withdrawalCredentials: '0xF0179dEC45a37423EAD4FaD5fCb136197872EAd9',
     retentionPeriodMins: 80_640, // 8 weeks
+    slotsPerFrame: 32 * 225 * 7, // 7 days
   },
 };
 

@@ -4,6 +4,7 @@ import { getExternalLinks } from 'consts/external-links';
 import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 import {
   compareLowercase,
+  fetchWithFallback,
   rewardsTreeFetcher,
   StandardMerkleTreeData,
   trackMatomoError,
@@ -12,7 +13,6 @@ import { useAccount } from './use-account';
 import { useCSFeeDistributorRPC } from './useCsmContracts';
 import { RewardsTreeLeaf } from './useNodeOperatorRewards';
 
-// FIXME: mainnet - use paid IPFS key
 export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
   const feeDistributorRPC = useCSFeeDistributorRPC();
   const { chainId } = useAccount();
@@ -31,7 +31,9 @@ export const useFeeDistributorTree = (config = STRATEGY_CONSTANT) => {
       const githubUrl = getExternalLinks(chainId).rewardsTree;
       const ipfsUrl = cid ? `https://ipfs.io/ipfs/${cid}` : null;
 
-      return fetchRewardsTreeWithFallback([githubUrl, ipfsUrl], root);
+      return fetchWithFallback([githubUrl, ipfsUrl], (url) =>
+        fetchRewardsTree(url, root),
+      );
     },
     config,
   );
@@ -51,20 +53,4 @@ const fetchRewardsTree = async (url: string, treeRoot: string) => {
   );
 
   return null;
-};
-
-// TODO: check `iterateUrls`
-const fetchRewardsTreeWithFallback = async (
-  urls: Array<string | null>,
-  treeRoot: string,
-) => {
-  for (const url of urls) {
-    if (!url) continue;
-    try {
-      const tree = await fetchRewardsTree(url, treeRoot);
-      if (tree) return tree;
-    } catch {
-      /* noop */
-    }
-  }
 };

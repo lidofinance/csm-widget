@@ -1,6 +1,6 @@
 import { Accordion } from '@lidofinance/lido-ui';
 import { StackStyle } from 'shared/components/stack/style';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const RowTitle = styled.h4`
   font-size: ${({ theme }) => theme.fontSizesMap.sm}px;
@@ -20,10 +20,14 @@ export const RowHeader = styled(StackStyle)`
   }
 `;
 
-export const RowBody = styled(StackStyle).attrs({ $gap: 'xl' })`
+export const RowBody = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px 24px;
+
   ${({ theme }) => theme.mediaQueries.lg} {
-    flex-direction: column;
-    gap: 12px;
+    grid-auto-flow: row;
+    grid-template: none;
   }
 `;
 
@@ -40,4 +44,33 @@ export const AccordionStyle = styled(Accordion)`
   & > div + div > div {
     padding: 0 20px 20px 20px;
   }
+
+  p,
+  ul,
+  ol {
+    margin: 0;
+  }
+`;
+
+const badgeVariants = {
+  default: css`
+    color: var(--lido-color-text);
+  `,
+  warning: css`
+    color: var(--lido-color-warning);
+  `,
+};
+
+export const BadgeStyle = styled.div<{ $variant?: keyof typeof badgeVariants }>`
+  width: fit-content;
+  padding: 4px 8px;
+  text-align: center;
+
+  border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
+  background: color-mix(in srgb, currentColor 15%, transparent);
+
+  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
+  line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
+  font-weight: 700;
+  ${(props) => badgeVariants[props.$variant || 'default']}
 `;

@@ -1,15 +1,22 @@
-import { Question, Tooltip } from '@lidofinance/lido-ui';
+import { Tooltip } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 
+import { ReactComponent as InfoIcon } from 'assets/icons/info.svg';
+import { ReactComponent as CalendarIcon } from 'assets/icons/info-calendar.svg';
+import { IconStyle } from './style';
+
 type Props = {
-  help?: string;
+  tooltip?: string;
+  type?: 'info' | 'calendar';
 };
 
-export const IconTooltip: FC<Props> = ({ help }) => (
+export const IconTooltip: FC<Props> = ({ tooltip, type = 'info' }) => (
   <>
-    {help && (
-      <Tooltip placement="bottomLeft" title={help}>
-        <Question />
+    {tooltip && (
+      <Tooltip placement="bottomLeft" title={tooltip}>
+        <IconStyle>
+          {type === 'calendar' ? <CalendarIcon /> : <InfoIcon />}
+        </IconStyle>
       </Tooltip>
     )}
   </>

@@ -32,7 +32,7 @@ export const TitledValue: FC<TitledAddressProps> = ({
             </Text>
           )}
         </Stack>
-        <IconTooltip help={help} />
+        <IconTooltip tooltip={help} />
       </Stack>
       {loading ? (
         <InlineLoader color="text" />
