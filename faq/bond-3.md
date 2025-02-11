@@ -1,5 +1,6 @@
 ---
 title: Why didn’t I get rewards?
+anchor: why-did-not-i-get-rewards
 ---
 
 There are two main reasons of you getting no reward within a frame:

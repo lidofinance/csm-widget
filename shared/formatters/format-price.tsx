@@ -3,6 +3,7 @@ import { DATA_UNAVAILABLE } from 'consts/text';
 
 import { config } from 'config';
 import { Component } from 'types';
+import styled from 'styled-components';
 
 export type FormatPriceComponent = Component<
   'span',
@@ -38,18 +39,22 @@ export const FormatPrice: FormatPriceComponent = ({
           </span>
         }
       >
-        <span {...rest}>
+        <Price {...rest}>
           {prefix}
           {actual}
-        </span>
+        </Price>
       </Tooltip>
     );
   }
 
   return (
-    <span {...rest}>
+    <Price {...rest}>
       {prefix}
       {actual}
-    </span>
+    </Price>
   );
 };
+
+const Price = styled.span`
+  white-space: nowrap;
+`;

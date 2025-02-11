@@ -10,10 +10,11 @@ export const MatomoLink: FC<
   const { navigateInpageAnchor } = useInpageNavigation();
 
   const onClickHandler = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>) => {
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
       trackMatomoEvent(matomoEvent);
-      props.href?.startsWith('#') && navigateInpageAnchor(e);
-      onClick?.(e);
+      props.href?.startsWith('#') && navigateInpageAnchor(event);
+      event?.stopPropagation();
+      onClick?.(event);
     },
     [matomoEvent, navigateInpageAnchor, onClick, props.href],
   );

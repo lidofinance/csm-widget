@@ -19,13 +19,12 @@ import {
 } from './styles';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useNodeOperatorInfo } from 'shared/hooks';
+import { LocalLink } from 'shared/navigate';
+import { PATH } from 'consts/urls';
 
 export const percent = (value?: number) => Math.round((value ?? 0) * 1000) / 10;
 export const formatDate = (timestamp?: number) =>
   timestamp ? format(fromUnixTime(timestamp), 'MMM dd') : null;
-
-// TODO: "why?"
-// TODO: tooltips
 
 export const LastRewards: FC = () => {
   const { data: lastRewards, initialLoading: isLoading } =
@@ -61,6 +60,8 @@ export const LastRewards: FC = () => {
 
   const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
 
+  const showWhy = lastRewards && lastRewards.distributed.isZero();
+
   if (!showThisSection) return null;
 
   return (
@@ -75,14 +76,28 @@ export const LastRewards: FC = () => {
                   {prevRewardsFrame} — {lastRewardsFrame}
                 </GrayText>
                 {txHash && (
-                  <Text size="xxs">
+                  <GrayText>
                     <TxLinkEtherscan txHash={txHash} />
-                  </Text>
+                  </GrayText>
                 )}
               </Stack>
             )}
           </Stack>
-          <Balance big loading={isLoading} amount={lastRewards?.distributed} />
+          <Balance
+            big
+            loading={isLoading}
+            amount={lastRewards?.distributed}
+            description={
+              showWhy ? (
+                <LocalLink
+                  href={PATH.BOND_ADD}
+                  anchor="#why-did-not-i-get-rewards"
+                >
+                  Why?
+                </LocalLink>
+              ) : undefined
+            }
+          />
         </RowHeader>
       }
     >
@@ -92,6 +107,7 @@ export const LastRewards: FC = () => {
             title="Keys over threshold"
             loading={isLoading}
             description={`Threshold: ${percent(lastRewards?.threshold)}%`}
+            help="The number of your keys that were above the performance threshold in the last report frame"
           >
             {lastRewards?.validatorsOverTresholdCount}{' '}
             <i>/{lastRewards?.validatorsCount}</i>
@@ -100,6 +116,7 @@ export const LastRewards: FC = () => {
             title="Stuck keys found"
             loading={false}
             warning={lastRewards?.stuck}
+            help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the last report frame. Stuck keys prevent the Node Operator from receiving rewards for all keys in that frame"
           >
             {lastRewards?.stuck ? 'YES' : 'NO'}
           </TextBlock>
@@ -107,6 +124,7 @@ export const LastRewards: FC = () => {
             title="You received"
             loading={isLoading}
             description="of potential rewards"
+            help="The percentage of the rewards you could potentially get based on the number of the active keys you had during the last report frame"
           >
             {percent(overThresholdRate)}%
           </TextBlock>

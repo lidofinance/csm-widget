@@ -61,5 +61,5 @@ export const GrayText = styled.div`
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
   font-weight: 400;
-  opacity: 0.5;
+  color: var(--lido-color-borderActive);
 `;
