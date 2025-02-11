@@ -54,7 +54,7 @@ export const LastRewards: FC = () => {
     : null;
 
   const overThresholdRate = lastRewards?.validatorsCount
-    ? (lastRewards?.validatorsOverTresholdCount ?? 0) /
+    ? (lastRewards?.validatorsOverThresholdCount ?? 0) /
       lastRewards?.validatorsCount
     : 0;
 
@@ -109,7 +109,7 @@ export const LastRewards: FC = () => {
             description={`Threshold: ${percent(lastRewards?.threshold)}%`}
             help="The number of your keys that were above the performance threshold in the last report frame"
           >
-            {lastRewards?.validatorsOverTresholdCount}{' '}
+            {lastRewards?.validatorsOverThresholdCount}{' '}
             <i>/{lastRewards?.validatorsCount}</i>
           </TextBlock>
           <TextBlock

@@ -119,13 +119,13 @@ export const useLastOperatorRewards = () => {
           distributed: Zero,
           stuck: false,
           validatorsCount: 0,
-          validatorsOverTresholdCount: 0,
+          validatorsOverThresholdCount: 0,
           threshold,
         };
 
       const validators = Object.values(operator.validators);
 
-      const overTreshold = validators.filter(
+      const overThreshold = validators.filter(
         ({ perf, slashed }) =>
           !slashed &&
           perf.assigned &&
@@ -136,7 +136,7 @@ export const useLastOperatorRewards = () => {
         distributed: BigNumber.from(operator.distributed.toString()),
         stuck: operator.stuck,
         validatorsCount: validators.length,
-        validatorsOverTresholdCount: overTreshold.length,
+        validatorsOverThresholdCount: overThreshold.length,
         threshold,
       };
     }, [nodeOperatorId, swrRewards.data]),
