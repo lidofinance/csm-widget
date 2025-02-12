@@ -6,8 +6,6 @@ export const ViewKeysBlock = styled(Block)`
   display: flex;
   gap: ${({ theme }) => theme.spaceMap.md}px;
   flex-direction: column;
-
-  width: 130%;
 `;
 
 export const TableStyle = styled(Table)`
