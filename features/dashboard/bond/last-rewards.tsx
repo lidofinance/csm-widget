@@ -1,18 +1,26 @@
-import { Box, Divider, Modal, Text, Tooltip } from '@lidofinance/lido-ui';
-import { differenceInCalendarDays, format, fromUnixTime } from 'date-fns';
+import {
+  Box,
+  Divider,
+  InlineLoader,
+  Modal,
+  Text,
+  Tooltip,
+} from '@lidofinance/lido-ui';
+import { differenceInCalendarDays, fromUnixTime } from 'date-fns';
 import { ModalComponentType, useModal } from 'providers/modal-provider';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC, useCallback } from 'react';
 import { GrayText, Stack, TextBlock, TxLinkEtherscan } from 'shared/components';
 import { FaqElement } from 'shared/components/faq/styles';
-import { useNodeOperatorInfo } from 'shared/hooks';
 import {
   getNextRewardsFrame,
   getPrevRewardsFrame,
   useLastOperatorRewards,
   useLastRewardsSlot,
   useLastRewrdsTx,
-} from 'shared/hooks/useLastRewardsFrame';
+  useNodeOperatorInfo,
+} from 'shared/hooks';
+import { formatDate, formatPercent } from 'utils';
 import { Balance } from './balance';
 import {
   AccordionStyle,
@@ -21,10 +29,6 @@ import {
   RowHeader,
   RowTitle,
 } from './styles';
-
-export const percent = (value?: number) => Math.round((value ?? 0) * 1000) / 10;
-export const formatDate = (timestamp?: number) =>
-  timestamp ? format(fromUnixTime(timestamp), 'MMM dd') : null;
 
 export const LastRewards: FC = () => {
   const { data: lastRewards, initialLoading: isLoading } =
@@ -87,7 +91,7 @@ export const LastRewards: FC = () => {
             loading={isLoading}
             description={
               <Tooltip title={lastRewards?.threshold} placement="bottomLeft">
-                <span>Threshold: {percent(lastRewards?.threshold)}%</span>
+                <span>Threshold: {formatPercent(lastRewards?.threshold)}%</span>
               </Tooltip>
             }
             help="Number of your keys above the performance threshold in the latest report frame"
@@ -97,7 +101,7 @@ export const LastRewards: FC = () => {
           </TextBlock>
           <TextBlock
             title="Stuck keys found"
-            loading={false}
+            loading={isLoading}
             warning={lastRewards?.stuck}
             help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the latest report frame. Stuck keys prevent the Node Operator from receiving rewards for any key(s) in that frame."
           >
@@ -115,9 +119,13 @@ export const LastRewards: FC = () => {
             <Text size="xs" weight={700}>
               Next rewards distribution
             </Text>
-            <GrayText>
-              Report frame: {lastRewardsDate} — {nextRewardsDate}
-            </GrayText>
+            {rewardsSlot?.timestamp ? (
+              <GrayText>
+                Report frame: {lastRewardsDate} — {nextRewardsDate}
+              </GrayText>
+            ) : (
+              <InlineLoader />
+            )}
           </Stack>
           {daysLeft !== null &&
             (daysLeft < 0 ? (

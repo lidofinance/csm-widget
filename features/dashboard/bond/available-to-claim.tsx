@@ -3,8 +3,14 @@ import { TOKENS } from 'consts/tokens';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { Counter, IconTooltip } from 'shared/components';
-import { useNodeOperatorBalance, useNodeOperatorRewards } from 'shared/hooks';
+import {
+  getNextRewardsFrame,
+  useLastRewardsSlot,
+  useNodeOperatorBalance,
+  useNodeOperatorRewards,
+} from 'shared/hooks';
 import { useAvailableToClaim } from 'shared/hooks/useAvailableToClaim';
+import { formatDate } from 'utils';
 import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 
@@ -16,6 +22,11 @@ export const AvailableToClaim: FC = () => {
 
   const { data: rewards, initialLoading: isRewardsLoading } =
     useNodeOperatorRewards(id);
+
+  const { data: rewardsSlot } = useLastRewardsSlot();
+  const nextRewardsDate = rewardsSlot?.timestamp
+    ? formatDate(getNextRewardsFrame(rewardsSlot.timestamp))
+    : null;
 
   const availableToClaim = useAvailableToClaim({
     bond,
@@ -46,7 +57,7 @@ export const AvailableToClaim: FC = () => {
             <>
               Rewards
               <IconTooltip
-                tooltip="Next rewards distribution is expected on 17.10.2024"
+                tooltip={`Next rewards distribution is expected on ${nextRewardsDate}`}
                 type="calendar"
               />
             </>

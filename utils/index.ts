@@ -9,6 +9,8 @@ export * from './event-subsciption';
 export * from './extractErrorMessage';
 export * from './fetch-with-fallback';
 export * from './fetcherError';
+export * from './format-date';
+export * from './format-percent';
 export * from './formatBalance';
 export * from './formatBalanceString';
 export * from './formatHex';
