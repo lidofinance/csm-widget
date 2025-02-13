@@ -1,10 +1,9 @@
-import { type Theme } from '@lidofinance/lido-ui';
 import { FC, PropsWithChildren } from 'react';
 import { StackStyle, StackStyleProps } from './style';
 
 type Props = {
   direction?: 'row' | 'column';
-  gap?: keyof Theme['spaceMap'] | 'none';
+  gap?: StackStyleProps['$gap'];
   center?: boolean;
   align?: StackStyleProps['$align'];
   spaceBetween?: boolean;

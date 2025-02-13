@@ -1,92 +1,41 @@
-import { InlineLoader } from '@lidofinance/lido-ui';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
-import { FC } from 'react';
-import { StackStyle } from 'shared/components/stack/style';
+import { FC, ReactNode } from 'react';
+import { Sign, SignType, TextBlock } from 'shared/components';
 import { FormatPrice, FormatToken } from 'shared/formatters';
 import { useEthUsd } from 'shared/hooks';
-import styled from 'styled-components';
 
 type Props = {
-  title?: string;
+  title?: ReactNode;
+  help?: string;
   amount?: BigNumber;
   token?: TOKENS;
+  description?: ReactNode;
+  sign?: SignType;
   loading?: boolean;
   big?: boolean;
-  dangerous?: boolean;
+  warning?: boolean;
 };
 
-// TODO: merge components
 export const Balance: FC<Props> = ({
-  title,
   amount,
   token,
-  loading,
   big,
-  dangerous,
+  sign,
+  description,
+  ...props
 }) => {
   const { usdAmount } = useEthUsd(amount);
-  const warning = dangerous && amount?.gt(0);
 
   return (
-    <BalanceStyle $big={big} $warning={warning}>
-      {title && <BalanceTitle>{title}</BalanceTitle>}
-      {loading ? (
-        <InlineLoader />
-      ) : (
-        <BalanceValue>
-          <FormatToken amount={amount} token={token ?? TOKENS.STETH} />
-          <BalancePrice>
-            <FormatPrice amount={usdAmount} />
-          </BalancePrice>
-        </BalanceValue>
-      )}
-    </BalanceStyle>
+    <TextBlock
+      {...props}
+      description={description ?? <FormatPrice amount={usdAmount} />}
+      align={big ? 'flex-end' : undefined}
+      size={big ? 'sm' : undefined}
+    >
+      {sign && <Sign type={sign} />}
+      <FormatToken amount={amount} token={token ?? TOKENS.STETH} />
+    </TextBlock>
   );
 };
-
-// TODO: component or styles
-const BalanceStyle = styled(StackStyle).attrs({ $direction: 'column' })<{
-  $big?: boolean;
-  $warning?: boolean;
-}>`
-  gap: 2px;
-  align-items: ${({ $big }) => ($big ? 'flex-end' : 'flex-start')};
-  min-width: 100px;
-
-  font-size: ${({ theme, $big }) =>
-    $big ? theme.fontSizesMap.sm : theme.fontSizesMap.xs}px;
-  line-height: ${({ theme }) => theme.fontSizesMap.xl}px;
-  font-weight: 700;
-
-  color: var(
-    ${({ $warning }) => ($warning ? '--lido-color-error' : '--lido-color-text')}
-  );
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: space-between;
-  }
-`;
-
-const BalanceValue = styled(StackStyle).attrs({ $direction: 'column' })`
-  gap: 0;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    align-items: end;
-  }
-`;
-
-const BalanceTitle = styled.h5`
-  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-  line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
-  font-weight: 400;
-`;
-
-const BalancePrice = styled.span`
-  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-  line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
-  font-weight: 400;
-  opacity: 0.5;
-`;

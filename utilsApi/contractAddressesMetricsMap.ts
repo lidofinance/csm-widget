@@ -20,6 +20,7 @@ import {
   CSAccounting__factory,
   CSEarlyAdoption__factory,
   CSFeeDistributor__factory,
+  CSFeeOracle__factory,
   CSModule__factory,
   ExitBusOracle__factory,
   StakingRouter__factory,
@@ -53,6 +54,7 @@ export const CONTRACT_NAMES = {
   CSModule: 'CSModule',
   CSAccounting: 'CSAccounting',
   CSFeeDistributor: 'CSFeeDistributor',
+  CSFeeOracle: 'CSFeeOracle',
   CSEarlyAdoption: 'CSEarlyAdoption',
   ExitBusOracle: 'ExitBusOracle',
   StakingRouter: 'StakingRouter',
@@ -68,12 +70,14 @@ const CONTRACT_LIST_CALL: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.CSAccounting,
   CONTRACT_NAMES.CSEarlyAdoption,
   CONTRACT_NAMES.CSFeeDistributor,
+  CONTRACT_NAMES.CSFeeOracle,
   CONTRACT_NAMES.ExitBusOracle,
   CONTRACT_NAMES.StakingRouter,
 ];
 
 const CONTRACT_LIST_LOGS: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.CSModule,
+  CONTRACT_NAMES.CSFeeOracle,
   CONTRACT_NAMES.ExitBusOracle,
 ];
 
@@ -85,6 +89,7 @@ export const METRIC_CONTRACT_ABIS = {
   [CONTRACT_NAMES.CSModule]: CSModule__factory.abi,
   [CONTRACT_NAMES.CSAccounting]: CSAccounting__factory.abi,
   [CONTRACT_NAMES.CSFeeDistributor]: CSFeeDistributor__factory.abi,
+  [CONTRACT_NAMES.CSFeeOracle]: CSFeeOracle__factory.abi,
   [CONTRACT_NAMES.CSEarlyAdoption]: CSEarlyAdoption__factory.abi,
   [CONTRACT_NAMES.ExitBusOracle]: ExitBusOracle__factory.abi,
   [CONTRACT_NAMES.StakingRouter]: StakingRouter__factory.abi,
@@ -107,6 +112,10 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
   [CONTRACT_NAMES.CSFeeDistributor]: getAddressGetter(
     getCsmContractAddress,
     'CSFeeDistributor',
+  ),
+  [CONTRACT_NAMES.CSFeeOracle]: getAddressGetter(
+    getCsmContractAddress,
+    'CSFeeOracle',
   ),
   [CONTRACT_NAMES.CSEarlyAdoption]: getAddressGetter(
     getCsmContractAddress,

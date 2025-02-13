@@ -33,15 +33,13 @@ export const TokenAmount: FC<TokenAmountProps> = ({
   loading,
   amount,
   maxDecimalDigits = 4,
-  maxTotalLength = 15,
-  trimEllipsis,
+  maxTotalLength = 7,
   adaptiveDecimals,
   fallback = DATA_UNAVAILABLE,
 }) => {
   const { actual, trimmed } = useFormattedBalance(amount, {
     maxDecimalDigits,
     maxTotalLength,
-    trimEllipsis,
     adaptiveDecimals,
   });
 

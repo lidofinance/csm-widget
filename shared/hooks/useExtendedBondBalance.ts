@@ -1,5 +1,5 @@
 import { Zero } from '@ethersproject/constants';
-import { ROUNDING_TRESHOLD } from 'consts/treshhold';
+import { ROUNDING_THRESHOLD } from 'consts/treshhold';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { BondBalance } from 'types';
@@ -15,7 +15,7 @@ export const useExtendedBondBalance = (
     const requiredWithoutLocked = required.sub(locked);
 
     let delta = current.sub(requiredWithoutLocked);
-    if (delta?.lt(0) && delta?.abs().lt(ROUNDING_TRESHOLD)) {
+    if (delta?.lt(0) && delta?.abs().lt(ROUNDING_THRESHOLD)) {
       delta = Zero;
     }
 
