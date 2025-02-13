@@ -10,19 +10,27 @@ type Props = {
   help?: string;
   amount?: BigNumber;
   token?: TOKENS;
+  description?: ReactNode;
   sign?: SignType;
   loading?: boolean;
   big?: boolean;
   warning?: boolean;
 };
 
-export const Balance: FC<Props> = ({ amount, token, big, sign, ...props }) => {
+export const Balance: FC<Props> = ({
+  amount,
+  token,
+  big,
+  sign,
+  description,
+  ...props
+}) => {
   const { usdAmount } = useEthUsd(amount);
 
   return (
     <TextBlock
       {...props}
-      description={<FormatPrice amount={usdAmount} />}
+      description={description ?? <FormatPrice amount={usdAmount} />}
       align={big ? 'flex-end' : undefined}
       size={big ? 'sm' : undefined}
     >

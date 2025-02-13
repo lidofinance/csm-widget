@@ -1,12 +1,12 @@
-import React, { FC, PropsWithChildren, useCallback } from 'react';
-import { useRouter } from 'next/router';
 import Link, { LinkProps } from 'next/link';
+import { useRouter } from 'next/router';
+import React, { FC, PropsWithChildren, useCallback } from 'react';
 
 import { config } from 'config';
-import { LinkIpfs } from 'shared/components/link-ipfs';
 import { PATH } from 'consts/urls';
-import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 import { useModalActions } from 'providers/modal-provider';
+import { LinkIpfs } from 'shared/components/link-ipfs';
+import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 import { useCorrectPath } from './use-correct-path';
 
 type LocalLinkProps = Omit<LinkProps, 'href'> & {
@@ -23,10 +23,14 @@ export const LocalLink: FC<
   const href = useCorrectPath(path ?? (router.pathname as PATH));
   const { closeModal } = useModalActions();
 
-  const onClickHandler = useCallback(() => {
-    trackMatomoEvent(matomoEvent);
-    closeModal();
-  }, [closeModal, matomoEvent]);
+  const onClickHandler = useCallback(
+    (event: React.MouseEvent<HTMLAnchorElement>) => {
+      trackMatomoEvent(matomoEvent);
+      closeModal();
+      event.stopPropagation();
+    },
+    [closeModal, matomoEvent],
+  );
 
   const extraQuery = {} as Record<string, string>;
   // Not support case: ?ref=01234&ref=56789

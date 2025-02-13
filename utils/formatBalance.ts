@@ -7,7 +7,6 @@ export type FormatBalanceArgs = {
   maxDecimalDigits?: number;
   adaptiveDecimals?: boolean;
   maxTotalLength?: number;
-  trimEllipsis?: boolean;
 };
 
 export const formatBalance = (
@@ -16,43 +15,38 @@ export const formatBalance = (
     maxDecimalDigits = 4,
     maxTotalLength,
     adaptiveDecimals,
-    trimEllipsis,
   }: FormatBalanceArgs = {},
 ) => {
   const actual = formatEther(balance);
   let trimmed = actual;
   let isTrimmed = false;
 
-  if (actual.includes('.')) {
-    const parts = actual.split('.');
-    const integer = parts[0];
-    let decimal = parts[1];
+  const [integer, decimal] = actual.split('.');
 
-    if (maxDecimalDigits > 0) {
-      if (adaptiveDecimals) {
-        const nonZeroIdx = decimal.split('').findIndex((v) => v !== '0');
-        const sliceAt = Math.max(maxDecimalDigits, nonZeroIdx + 1);
-        decimal = decimal.slice(0, sliceAt);
-      } else {
-        decimal = decimal.slice(0, maxDecimalDigits);
-      }
-
-      trimmed = `${integer}.${decimal}`;
-      if (decimal.length < parts[1].length) {
-        isTrimmed = true;
-        if (trimEllipsis) trimmed += '...';
-      }
-    } else {
-      trimmed = integer;
-    }
+  let trimmedDecimal = decimal.slice(0, maxDecimalDigits);
+  if (adaptiveDecimals) {
+    const nonZeroIdx = decimal.split('').findIndex((v) => v !== '0');
+    const sliceAt = Math.max(maxDecimalDigits, nonZeroIdx + 1);
+    trimmedDecimal = decimal.slice(0, sliceAt);
   }
 
-  if (maxTotalLength && trimmed.length > maxTotalLength - 3) {
-    if (trimmed[maxTotalLength - 4] === '.') {
-      trimmed = trimmed.slice(0, maxTotalLength - 4);
-    } else {
+  if (maxTotalLength && integer.length >= maxTotalLength - 1) {
+    trimmed = integer;
+    if (decimal.length > 0 && decimal !== '0') {
+      isTrimmed = true;
+    }
+    if (trimmed.length > maxTotalLength) {
       isTrimmed = true;
       trimmed = trimmed.slice(0, maxTotalLength - 3) + '...';
+    }
+  } else {
+    trimmed = trimmedDecimal ? `${integer}.${trimmedDecimal}` : integer;
+    if (trimmedDecimal.length < decimal.length) {
+      isTrimmed = true;
+    }
+    if (maxTotalLength && trimmed.length > maxTotalLength) {
+      isTrimmed = true;
+      trimmed = trimmed.slice(0, maxTotalLength);
     }
   }
 
@@ -65,7 +59,7 @@ export const formatBalance = (
 
 export const useFormattedBalance: typeof formatBalance = (
   balance = Zero,
-  { maxDecimalDigits = 4, maxTotalLength, adaptiveDecimals, trimEllipsis } = {},
+  { maxDecimalDigits = 4, maxTotalLength, adaptiveDecimals } = {},
 ) => {
   return useMemo(
     () =>
@@ -73,8 +67,7 @@ export const useFormattedBalance: typeof formatBalance = (
         maxDecimalDigits,
         maxTotalLength,
         adaptiveDecimals,
-        trimEllipsis,
       }),
-    [adaptiveDecimals, balance, trimEllipsis, maxDecimalDigits, maxTotalLength],
+    [adaptiveDecimals, balance, maxDecimalDigits, maxTotalLength],
   );
 };

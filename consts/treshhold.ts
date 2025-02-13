@@ -3,4 +3,4 @@
  *
  * 10 wei
  */
-export const ROUNDING_TRESHOLD = 10;
+export const ROUNDING_THRESHOLD = 10;

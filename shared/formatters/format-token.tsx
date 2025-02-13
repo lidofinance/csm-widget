@@ -26,7 +26,6 @@ export const FormatToken: FormatTokenComponent = ({
   approx,
   maxDecimalDigits = 4,
   maxTotalLength = 15,
-  trimEllipsis,
   fallback = DATA_UNAVAILABLE,
   adaptiveDecimals,
   ...rest
@@ -34,7 +33,6 @@ export const FormatToken: FormatTokenComponent = ({
   const { actual, trimmed } = useFormattedBalance(amount, {
     maxDecimalDigits,
     maxTotalLength,
-    trimEllipsis,
     adaptiveDecimals,
   });
 

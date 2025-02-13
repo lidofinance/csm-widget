@@ -1,5 +1,5 @@
 import { TOKENS } from 'consts/tokens';
-import { ROUNDING_TRESHOLD } from 'consts/treshhold';
+import { ROUNDING_THRESHOLD } from 'consts/treshhold';
 import { BigNumber } from 'ethers';
 
 /**
@@ -12,7 +12,7 @@ export const addExtraWei = <T extends BigNumber | undefined>(
   token: TOKENS,
 ) => {
   if (token === TOKENS.STETH && amount?.gt(0)) {
-    return amount.add(ROUNDING_TRESHOLD);
+    return amount.add(ROUNDING_THRESHOLD);
   }
   return amount;
 };

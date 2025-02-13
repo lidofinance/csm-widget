@@ -13,6 +13,5 @@ export const TxAmount = ({ amount, token }: TxAmountProps) => (
     token={token}
     maxTotalLength={Infinity}
     adaptiveDecimals
-    trimEllipsis
   />
 );
