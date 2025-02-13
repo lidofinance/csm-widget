@@ -6,7 +6,7 @@ export const DescriptorIdWrapperStyle = styled.span`
   }
 `;
 
-export const DescriptorStyle = styled.div`
+export const DescriptorStyle = styled.span`
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -16,7 +16,7 @@ export const DescriptorStyle = styled.div`
   gap: ${({ theme }) => theme.spaceMap.sm}px;
 `;
 
-export const DescriptorRolesStyle = styled.div`
+export const DescriptorRolesStyle = styled.span`
   display: flex;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
 `;
