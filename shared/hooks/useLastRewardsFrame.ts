@@ -80,7 +80,6 @@ export type RewardsReport = {
   >;
 };
 
-// TODO: check blocks in between report started and submitted (21644846, 21644860)
 export const useLastRewardsReport = (config = STRATEGY_CONSTANT) => {
   const feeDistributor = useCSFeeDistributorRPC();
 
