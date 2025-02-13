@@ -11,10 +11,11 @@ import {
 } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
-import { NodeOperatorId } from 'types';
+import { DepositData, NodeOperatorId } from 'types';
 import { addExtraWei, formatKeys, runWithTransactionLogger } from 'utils';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
 import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
+import { KEYS_UPLOAD_TX_LIMIT } from 'consts/csm-constants';
 
 type AddKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -28,6 +29,15 @@ type MethodParams = {
   publicKeys: BytesLike;
   signatures: BytesLike;
   permit: GatherPermitSignatureResult;
+};
+
+const getChunks = (data: DepositData[]): DepositData[][] => {
+  const chunkSize = KEYS_UPLOAD_TX_LIMIT;
+  const chunks: DepositData[][] = [];
+  for (let i = 0; i < data.length; i += chunkSize) {
+    chunks.push(data.slice(i, i + chunkSize));
+  }
+  return chunks;
 };
 
 // this encapsulates eth/steth/wsteth flows
@@ -106,42 +116,43 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
           txModalStages,
         });
 
-        const { keysCount, publicKeys, signatures } = formatKeys(depositData);
+        const chunks = getChunks(depositData);
+        for (const depositDataChunk of chunks) {
+          const { keysCount, publicKeys, signatures } =
+            formatKeys(depositDataChunk);
 
-        txModalStages.sign({
-          keysCount,
-          amount: bondAmount,
-          token,
-          nodeOperatorId,
-        });
+          txModalStages.sign({
+            keysCount,
+            amount: bondAmount,
+            token,
+            nodeOperatorId,
+          });
 
-        const tx = await getTx(token, {
-          nodeOperatorId,
-          bondAmount,
-          keysCount,
-          publicKeys,
-          signatures,
-          permit,
-        });
+          const tx = await getTx(token, {
+            nodeOperatorId,
+            bondAmount,
+            keysCount,
+            publicKeys,
+            signatures,
+            permit,
+          });
 
-        const [txHash, waitTx] = await runWithTransactionLogger(
-          'AddKeys signing',
-          () => sendTx(tx),
-        );
+          const [txHash, waitTx] = await runWithTransactionLogger(
+            'AddKeys signing',
+            () => sendTx(tx),
+          );
 
-        txModalStages.pending(
-          { keysCount, amount: bondAmount, token, nodeOperatorId },
-          txHash,
-        );
+          txModalStages.pending(
+            { keysCount, amount: bondAmount, token, nodeOperatorId },
+            txHash,
+          );
 
-        await runWithTransactionLogger('AddKeys block confirmation', waitTx);
+          await runWithTransactionLogger('AddKeys block confirmation', waitTx);
+        }
 
         await onConfirm?.();
 
-        txModalStages.success(
-          { keys: depositData.map((key) => key.pubkey) },
-          txHash,
-        );
+        txModalStages.success({ keys: depositData.map((key) => key.pubkey) });
 
         // TODO: move to onConfirm
         void addCacheKeys(depositData.map(({ pubkey }) => pubkey));

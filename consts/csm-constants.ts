@@ -3,7 +3,7 @@ import { config } from 'config';
 import { HexString } from 'shared/keys';
 import { Address } from 'wagmi';
 
-export const KEYS_UPLOAD_TX_LIMIT = 25;
+export const KEYS_UPLOAD_TX_LIMIT = 50;
 
 type CsmContract =
   | 'CSAccounting'
