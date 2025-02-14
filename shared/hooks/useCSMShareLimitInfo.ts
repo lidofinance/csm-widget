@@ -1,6 +1,5 @@
 import { useContractSWR } from '@lido-sdk/react';
 import { BigNumber } from 'ethers';
-import { useMemo } from 'react';
 import invariant from 'tiny-invariant';
 
 import { getCsmConstants } from 'consts/csm-constants';
@@ -44,10 +43,11 @@ const getInfo = (
     BigNumber.from(0),
   );
 
-  const activeLeft = totalActive
+  const capacity = totalActive
     .mul(moduleDigest.state.stakeShareLimit)
-    .div(PERCENT_BASIS)
-    .sub(active);
+    .div(PERCENT_BASIS);
+
+  const activeLeft = capacity.sub(active);
 
   const status: SHARE_LIMIT_STATUS = activeLeft.lte(0)
     ? SHARE_LIMIT_STATUS.REACHED
@@ -58,8 +58,9 @@ const getInfo = (
         : SHARE_LIMIT_STATUS.FAR;
 
   return {
-    totalActive,
+    active,
     activeLeft,
+    capacity,
     queue,
     status,
   };
@@ -74,11 +75,5 @@ export const useCSMShareLimitInfo = (config = STRATEGY_CONSTANT) => {
     config,
   });
 
-  return useMergeSwr(
-    [modulesSwr],
-    useMemo(
-      () => getInfo(modulesSwr.data, stakingModuleId),
-      [modulesSwr.data, stakingModuleId],
-    ),
-  );
+  return useMergeSwr([modulesSwr], getInfo(modulesSwr.data, stakingModuleId));
 };

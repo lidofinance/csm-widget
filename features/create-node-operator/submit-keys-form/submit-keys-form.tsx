@@ -16,6 +16,7 @@ import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
 import { KeysConfirm } from './controls/keys-confirm';
+import { DepositQueue } from 'features/view-keys/deposit-queue';
 
 export const SubmitKeysForm: FC = memo(() => {
   const { referrer } = useModifyContext();
@@ -36,6 +37,7 @@ export const SubmitKeysForm: FC = memo(() => {
           <SubmitKeysFormInfo />
         </BaseFormLoader>
       </FormBlock>
+      <DepositQueue />
     </SubmitKeysFormProvider>
   );
 });

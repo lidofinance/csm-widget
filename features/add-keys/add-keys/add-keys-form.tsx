@@ -13,6 +13,7 @@ import { KeysInput } from './controls/keys-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 import { KeysConfirm } from './controls/keys-confirm';
+import { DepositQueue } from 'features/view-keys/deposit-queue';
 
 export const AddKeysForm: FC = memo(() => {
   return (
@@ -29,6 +30,7 @@ export const AddKeysForm: FC = memo(() => {
           <AddKeysFormInfo />
         </BaseFormLoader>
       </FormBlock>
+      <DepositQueue />
     </AddKeysFormProvider>
   );
 });
