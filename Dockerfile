@@ -8,7 +8,7 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts && yarn cache clean
 COPY . .
-RUN NODE_NO_BUILD_DYNAMICS=true yarn typechain && yarn build
+RUN NODE_NO_BUILD_DYNAMICS=true NODE_ENV=production yarn typechain && yarn build
 # public/runtime is used to inject runtime vars; it should exist and user node should have write access there for it
 RUN rm -rf /app/public/runtime && mkdir /app/public/runtime && chown node /app/public/runtime
 
@@ -20,7 +20,9 @@ ARG BASE_PATH=""
 #ARG DEFAULT_CHAIN="1"
 
 ENV NEXT_TELEMETRY_DISABLED=1 \
-  BASE_PATH=$BASE_PATH 
+  BASE_PATH=$BASE_PATH \
+  PORT=80 \
+  NODE_ENV=production 
 #SUPPORTED_CHAINS=$SUPPORTED_CHAINS \
 #DEFAULT_CHAIN=$DEFAULT_CHAIN
 
