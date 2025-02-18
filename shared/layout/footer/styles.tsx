@@ -12,7 +12,7 @@ export const FooterStyle = styled(Container)`
   flex-wrap: wrap;
   column-gap: 32px;
 
-  width: 100%;
+  min-width: 100%; // DAPPNODE
   max-width: 1424px;
   padding: 24px 32px;
 

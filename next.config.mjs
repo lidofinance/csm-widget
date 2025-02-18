@@ -115,6 +115,70 @@ export default withBundleAnalyzer({
 
     return config;
   },
+
+  // DAPPNODE Rewrites to proxy the request
+  async rewrites() {
+    return [
+      {
+        source: '/api/consensus-version-mainnet',
+        destination:
+          'http://beacon-chain.mainnet.dncore.dappnode:3500/eth/v1/node/version',
+      },
+      {
+        source: '/api/consensus-status-mainnet',
+        destination:
+          'http://beacon-chain.mainnet.dncore.dappnode:3500/eth/v1/node/syncing',
+      },
+      {
+        source: '/api/consensus-version-holesky',
+        destination:
+          'http://beacon-chain.holesky.dncore.dappnode:3500/eth/v1/node/version',
+      },
+      {
+        source: '/api/consensus-status-holesky',
+        destination:
+          'http://beacon-chain.holesky.dncore.dappnode:3500/eth/v1/node/syncing',
+      },
+      {
+        source: '/api/keys-status-mainnet',
+        destination:
+          'http://beacon-chain.mainnet.dncore.dappnode:3500/eth/v1/beacon/states/head/validators',
+      },
+      {
+        source: '/api/keys-status-holesky',
+        destination:
+          'http://beacon-chain.holesky.dncore.dappnode:3500/eth/v1/beacon/states/head/validators',
+      },
+      {
+        source: '/api/brain-keys-mainnet',
+        destination:
+          'http://brain.web3signer.dappnode:5000/api/v0/brain/validators?tag=lido&format=pubkey',
+      },
+      {
+        source: '/api/brain-keys-holesky',
+        destination:
+          'http://brain.web3signer-holesky.dappnode:5000/api/v0/brain/validators?tag=lido&format=pubkey',
+      },
+      {
+        source: '/api/brain-launchpad-mainnet',
+        destination: 'http://brain.web3signer.dappnode:3000/eth/v1/keystores',
+      },
+      {
+        source: '/api/brain-launchpad-holesky',
+        destination:
+          'http://brain.web3signer-holesky.dappnode:3000/eth/v1/keystores',
+      },
+      {
+        source: '/api/mev-status-mainnet',
+        destination: 'http://mev-boost.dappnode:18550/',
+      },
+      {
+        source: '/api/mev-status-holesky',
+        destination: 'http://mev-boost-holesky.dappnode:18550/',
+      },
+    ];
+  },
+
   async headers() {
     return [
       {
@@ -189,5 +253,12 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
+    // DAPPNODE
+    rpcUrls_1: process.env.EL_RPC_URLS_1,
+    rpcUrls_17000: process.env.EL_RPC_URLS_17000,
+    defaultChain: parseInt(process.env.DEFAULT_CHAIN),
+    supportedChains: process.env?.SUPPORTED_CHAINS?.split(',').map((chainId) =>
+      parseInt(chainId, 10),
+    ),
   },
 });

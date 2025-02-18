@@ -14,6 +14,10 @@ import {
 } from 'shared/counters';
 import { ShowRule, useShowRule } from 'shared/hooks';
 
+//DAPPNODE
+import { ReactComponent as AlertIcon } from 'assets/icons/bell.svg';
+import { ReactComponent as StarIcon } from 'assets/icons/star.svg';
+
 export type Route = {
   name: string;
   path: PATH;
@@ -41,7 +45,8 @@ const routes: Route[] = [
     path: PATH.KEYS,
     icon: <KeyIcon />,
     subPaths: [PATH.KEYS_SUBMIT, PATH.KEYS_REMOVE, PATH.KEYS_VIEW, PATH.CREATE],
-    showRules: ['IS_NODE_OPERATOR', 'CAN_CREATE'],
+    //DAPPNODE: remove 'CAN_CREATE' from showRules,
+    showRules: ['IS_NODE_OPERATOR'],
     suffix: <CounterInvalidKeys />,
   },
   {
@@ -66,6 +71,21 @@ const routes: Route[] = [
     icon: <EthIcon />,
     subPaths: [PATH.STEALING_REPORT, PATH.STEALING_CANCEL],
     showRules: ['EL_STEALING_REPORTER'],
+  },
+
+  // DAPPNODE
+  {
+    name: 'Performance',
+    path: PATH.PERFORMANCE,
+    icon: <StarIcon />,
+    showRules: ['IS_NODE_OPERATOR'],
+  },
+  {
+    name: 'Notifications',
+    path: PATH.NOTIFICATIONS,
+    icon: <AlertIcon />,
+    showRules: ['IS_NODE_OPERATOR'],
+    suffix: <CounterInvites />,
   },
 ];
 

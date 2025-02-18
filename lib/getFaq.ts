@@ -73,9 +73,7 @@ export const getFaqKeys = () =>
     'keys-8',
     'keys-9',
     'keys-10',
-    'keys-13',
     'keys-11',
-    'keys-12',
   ]);
 
 export const getFaqBond = () =>
@@ -86,3 +84,15 @@ export const getFaqLocked = () =>
 
 export const getFaqRoles = () =>
   readFaqFiles(['roles-1', 'roles-2', 'roles-3', 'roles-4', 'roles-5']);
+
+export const getFaqNotifications = () =>
+  readFaqFiles(['notifications-1', 'notifications-2', 'notifications-3']);
+
+export const getFaqPerformance = () =>
+  readFaqFiles([
+    'performance-1',
+    'performance-2',
+    'performance-3',
+    'performance-4',
+    'performance-5',
+  ]);

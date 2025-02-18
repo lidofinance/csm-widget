@@ -23,6 +23,7 @@ export const HeaderContentStyle = styled.div`
 export const HeaderStyle = styled((props: ContainerProps) => (
   <Container {...props} />
 ))`
+  min-width: 100%; // DAPPNODE
   position: relative;
   padding-top: 18px;
   padding-bottom: 18px;

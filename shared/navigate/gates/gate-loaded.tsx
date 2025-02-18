@@ -3,6 +3,7 @@ import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useAccount, useCsmPaused, useCsmPublicRelease } from 'shared/hooks';
 import { useCsmEarlyAdoption } from 'shared/hooks/useCsmEarlyAdoption';
 import { SplashPage } from '../splash';
+import { ECScanningPage } from 'dappnode/fallbacks/ec-scanning-events';
 
 type Props = {
   fallback?: ReactNode;
@@ -10,7 +11,6 @@ type Props = {
 };
 
 export const GateLoaded: FC<PropsWithChildren<Props>> = ({
-  fallback = <SplashPage />,
   additional,
   children,
 }) => {
@@ -19,6 +19,9 @@ export const GateLoaded: FC<PropsWithChildren<Props>> = ({
   const { isConnecting } = useAccount();
   const { isListLoading, active } = useNodeOperatorContext();
   const { initialLoading: isEaLoading } = useCsmEarlyAdoption();
+
+  // DAPPNODE
+  const fallback = isListLoading ? <ECScanningPage /> : <SplashPage />;
 
   const loading =
     isPublicReleaseLoading ||

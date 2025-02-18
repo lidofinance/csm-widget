@@ -52,6 +52,11 @@ declare module 'next/config' {
     publicRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
+      // DAPPNODE
+      rpcUrls_1: string | undefined;
+      rpcUrls_17000: string | undefined;
+      defaultChain: number | undefined;
+      supportedChains: number[] | undefined;
     };
   };
 

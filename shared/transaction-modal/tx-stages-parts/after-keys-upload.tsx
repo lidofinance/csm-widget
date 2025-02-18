@@ -3,25 +3,24 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
-import { useBeaconchainDashboardLink } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 import { NodeOperatorId } from 'types';
+import Link from 'next/link';
 
 type Props = {
   nodeOperatorId?: NodeOperatorId;
   keys: string[];
 };
 
-export const AfterKeysUpload: FC<Props> = ({ keys }) => {
-  const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
-  const { subscribeEvents, beaconchain } = getExternalLinks();
+export const AfterKeysUpload: FC<Props> = () => {
+  const { beaconchain } = getExternalLinks();
   return (
     <BlockStyled color="background">
       <b>What is next: </b>
       <br />
       <ol>
-        <li>Wait for your keys to be deposited to through the protocol.</li>
+        <li>Wait for your keys to be deposited through the protocol. </li>
         <li>
           Once your keys become active (check the status on the{' '}
           <LocalLink
@@ -37,28 +36,10 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
           >
             beaconcha.in
           </MatomoLink>{' '}
-          or subscribe to the{' '}
-          <MatomoLink
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents}
-            href={subscribeEvents}
-          >
-            CSM events notifications
-          </MatomoLink>
-          ) make sure your validators are producing attestations{' '}
-          {beaconchainDashboardLink && (
-            <>
-              (you can use{' '}
-              <MatomoLink
-                matomoEvent={
-                  MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
-                }
-                href={beaconchainDashboardLink}
-              >
-                beaconcha.in dashboard
-              </MatomoLink>{' '}
-              to check)
-            </>
-          )}
+          or subscribe to the
+          {/* DAPPNODE */}
+          <Link href={PATH.NOTIFICATIONS}>CSM Telegram notifications</Link>)
+          make sure your validators are producing attestations.
         </li>
       </ol>
     </BlockStyled>

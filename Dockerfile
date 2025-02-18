@@ -16,22 +16,25 @@ RUN rm -rf /app/public/runtime && mkdir /app/public/runtime && chown node /app/p
 FROM node:20-alpine as base
 
 ARG BASE_PATH=""
-ARG SUPPORTED_CHAINS="1"
-ARG DEFAULT_CHAIN="1"
+# SUPPORTED_CHAINS and DEFAULT_CHAIN will be set in dappnode Lido CSM generic repository
+#ARG DEFAULT_CHAIN="1"
 
 ENV NEXT_TELEMETRY_DISABLED=1 \
-  BASE_PATH=$BASE_PATH \
-  SUPPORTED_CHAINS=$SUPPORTED_CHAINS \
-  DEFAULT_CHAIN=$DEFAULT_CHAIN
+  BASE_PATH=$BASE_PATH 
+#SUPPORTED_CHAINS=$SUPPORTED_CHAINS \
+#DEFAULT_CHAIN=$DEFAULT_CHAIN
 
 WORKDIR /app
 RUN apk add --no-cache curl=~8
 COPY --from=build /app /app
 
 USER node
-EXPOSE 3000
+#EXPOSE 3000
+# DAPPNODE
+EXPOSE 80
 
 HEALTHCHECK --interval=10s --timeout=3s \
-  CMD curl -f http://localhost:3000/api/health || exit 1
+  CMD curl -f http://localhost/api/health || exit 1
+#CMD curl -f http://localhost:3000/api/health || exit 1
 
 CMD ["yarn", "start"]

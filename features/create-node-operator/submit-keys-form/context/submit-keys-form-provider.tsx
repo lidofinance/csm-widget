@@ -1,5 +1,5 @@
 import { useModifyContext } from 'providers/modify-provider';
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, PropsWithChildren, useCallback, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerContext,
@@ -18,6 +18,8 @@ import { useGetDefaultValues } from './use-get-default-values';
 import { useSubmitKeysFormNetworkData } from './use-submit-keys-form-network-data';
 import { useSubmitKeysSubmit } from './use-submit-keys-submit';
 import { useSubmitKeysValidation } from './use-submit-keys-validation';
+// DAPPNODE
+import useBrainLaunchpadApi from 'dappnode/hooks/use-brain-launchpad-api';
 
 export const useSubmitKeysFormData = useFormData<SubmitKeysFormNetworkData>;
 
@@ -39,21 +41,37 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   useFormDepositData(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
+  // DAPPNODE
+  const { submitKeystores: submitKeysToBrain } = useBrainLaunchpadApi();
 
   const submitKeys = useSubmitKeysSubmit({
     onConfirm: revalidate,
     onRetry: retryFire,
   });
 
+  // DAPPNODE
+  const handleSubmit = useCallback(
+    async (
+      input: SubmitKeysFormInputType,
+      networkData: SubmitKeysFormNetworkData,
+    ) => {
+      const { keystores, password } = formObject.getValues();
+      if (keystores && password)
+        await submitKeysToBrain({ keystores, password });
+      return await submitKeys(input, networkData);
+    },
+    [formObject, submitKeys, submitKeysToBrain], // dependencies
+  );
+
   const formControllerValue: FormControllerContextValueType<
     SubmitKeysFormInputType,
     SubmitKeysFormNetworkData
   > = useMemo(
     () => ({
-      onSubmit: submitKeys,
+      onSubmit: handleSubmit,
       retryEvent,
     }),
-    [submitKeys, retryEvent],
+    [handleSubmit, retryEvent],
   );
 
   return (

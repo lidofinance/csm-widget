@@ -14,6 +14,8 @@ import {
   TxStageSuccess,
 } from 'shared/transaction-modal/tx-stages-basic';
 import { NodeOperatorId } from 'types';
+import { Button } from '@lidofinance/lido-ui';
+import { PATH } from 'consts/urls';
 
 type Props = {
   keysCount: number;
@@ -79,6 +81,16 @@ const getTxModalStagesSubmitKeys = (
               <br />
               <br />
               <AfterKeysUpload keys={keys} />
+              <br />
+              <Button
+                size="sm"
+                variant="outlined"
+                onClick={() => {
+                  window.location.href = PATH.HOME;
+                }}
+              >
+                Go to Dashboard
+              </Button>
             </>
           ) : undefined
         }

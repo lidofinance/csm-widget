@@ -1,3 +1,4 @@
+import { useECSanityCheck } from 'dappnode/hooks/use-ec-sanity-check';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import {
@@ -17,7 +18,13 @@ export type ShowRule =
   | 'HAS_REWARDS_ROLE'
   | 'HAS_LOCKED_BOND'
   | 'CAN_CREATE'
-  | 'EL_STEALING_REPORTER';
+  | 'EL_STEALING_REPORTER'
+
+  // DAPPNODE
+  | 'IS_EXECUTION_LOADING'
+  | 'IS_EXECUTION_INSTALLED'
+  | 'IS_EXECUTION_SYNCED'
+  | 'EXECUTION_HAS_LOGS';
 
 export const useShowRule = () => {
   const { active: isConnectedWallet } = useAccount();
@@ -26,6 +33,9 @@ export const useShowRule = () => {
   const { data: isReportingRole } = useIsReportStealingRole();
   const { data: lockedBond } = useNodeOperatorLockAmount(nodeOperator?.id);
   const canCreateNO = useCanCreateNodeOperator();
+
+  // DAPPNODE
+  const { isInstalled, isSynced, hasLogs } = useECSanityCheck();
 
   return useCallback(
     (condition: ShowRule): boolean => {
@@ -48,6 +58,14 @@ export const useShowRule = () => {
           return !!lockedBond?.gt(0);
         case 'EL_STEALING_REPORTER':
           return !!isReportingRole;
+
+        // DAPPNODE
+        case 'IS_EXECUTION_INSTALLED':
+          return isInstalled;
+        case 'IS_EXECUTION_SYNCED':
+          return isSynced;
+        case 'EXECUTION_HAS_LOGS':
+          return hasLogs;
         default:
           return false;
       }
@@ -59,6 +77,9 @@ export const useShowRule = () => {
       invites?.length,
       lockedBond,
       isReportingRole,
+      isInstalled,
+      isSynced,
+      hasLogs,
     ],
   );
 };

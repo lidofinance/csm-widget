@@ -9,16 +9,14 @@ import {
   useEffect,
   useMemo,
 } from 'react';
-import { useSearchParams, useSessionStorage } from 'shared/hooks';
+import { useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { compareLowercase, trackMatomoEvent } from 'utils';
+import { trackMatomoEvent } from 'utils';
 import { Address } from 'wagmi';
 
 type ModifyContextValue = {
   referrer?: Address;
 };
-
-const QUERY_REFERRER = 'ref';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -38,23 +36,14 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     undefined,
   );
 
-  const query = useSearchParams();
-
   useEffect(() => {
-    if (!query) return;
-
-    const refParam = query?.get(QUERY_REFERRER) ?? undefined;
-
-    const ref =
-      REF_MAPPING.find(({ ref }) => compareLowercase(ref, refParam))?.address ||
-      refParam;
+    const ref = REF_MAPPING.find(({ ref }) => ref === 'dappnode')?.address; // DAPPNODE
 
     if (ref && ref !== referrer && isAddress(ref)) {
       setReferrer(ref);
-
       trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer);
     }
-  }, [query, referrer, setReferrer]);
+  }, [referrer, setReferrer]);
 
   const value: ModifyContextValue = useMemo(
     () => ({

@@ -4,14 +4,17 @@ import { useCallback, useMemo } from 'react';
 import { HexString } from 'shared/keys';
 import invariant from 'tiny-invariant';
 import { compareLowercase, hasNoInterception } from 'utils';
-import { useExitRequestedKeysFromEvents } from './use-exit-requested-keys-from-events';
+//import { useExitRequestedKeysFromEvents } from './use-exit-requested-keys-from-events';
 import { useKeysCLStatus } from './use-keys-cl-status';
 import { useNetworkDuplicates } from './use-network-duplicates';
-import { useWithdrawnKeyIndexesFromEvents } from './use-withdrawn-key-indexes-from-events';
+//import { useWithdrawnKeyIndexesFromEvents } from './use-withdrawn-key-indexes-from-events';
 import { useMergeSwr } from './useMergeSwr';
 import { useNodeOperatorInfo } from './useNodeOperatorInfo';
 import { useNodeOperatorKeys } from './useNodeOperatorKeys';
 import { useNodeOperatorUnbondedKeys } from './useNodeOperatorUnbondedKeys';
+// DAPPNODE
+import { useWithdrawnKeyIndexesFromEvents } from 'dappnode/hooks/use-withdrawn-key-indexes-from-events-api';
+import { useExitRequestedKeysFromEvents } from 'dappnode/hooks/use-exit-requested-keys-from-events-api';
 
 export type KeyWithStatus = {
   key: HexString;

@@ -6,11 +6,15 @@ import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 import { StyledBlock, StyledStack } from './styles';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+// DAPPNODE
+import useDappnodeUrls from 'dappnode/hooks/use-dappnode-urls';
 
 const { defaultChain } = getConfig();
 
 export const TryCSM: FC = () => {
   const isMainnet = defaultChain === CHAINS.Mainnet;
+  // DAPPNODE
+  const { installerTabUrl } = useDappnodeUrls();
 
   if (isMainnet)
     return (
@@ -19,6 +23,16 @@ export const TryCSM: FC = () => {
           <Text weight={700} size="lg">
             Try CSM on Holesky
           </Text>
+          {/* DAPPNODE */}
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href={installerTabUrl(isMainnet) || ''}
+          >
+            <Button size="xs" variant="outlined">
+              Join CSM Testnet
+            </Button>
+          </a>
           <MatomoLink
             href={CSM_TESTNET_LINK}
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink}

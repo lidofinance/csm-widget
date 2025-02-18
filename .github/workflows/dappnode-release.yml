@@ -1,0 +1,85 @@
+name: Release and Publish Docker Image
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (optional, defaults to patch increment)'
+        required: false
+        default: ''
+
+jobs:
+  release:
+    name: Release and Publish Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Fetch all tags
+      - name: Fetch tags
+        run: git fetch --tags
+
+      # Determine the next version
+      - name: Determine release version
+        id: determine_version
+        run: |
+          # Get the input version
+          INPUT_VERSION="${{ github.event.inputs.version }}"
+
+          # Find the latest tag
+          LATEST_TAG=$(git tag --sort=-v:refname | head -n 1)
+
+          # If an input version is provided, use it
+          if [[ -n "$INPUT_VERSION" ]]; then
+            NEW_VERSION="$INPUT_VERSION"
+          else
+            # Increment the patch version by default
+            IFS='.' read -r MAJOR MINOR PATCH <<< "$LATEST_TAG"
+            NEW_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
+          fi
+
+          # If no releases exist, default to 0.1.0
+          if [[ "$LATEST_TAG" == "0.0.0" ]]; then
+            NEW_VERSION="0.1.0"
+          fi
+
+          echo "New version: $NEW_VERSION"
+          echo "::set-output name=version::$NEW_VERSION"
+
+      # Create a GitHub release
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.determine_version.outputs.version }}
+          name: Release ${{ steps.determine_version.outputs.version }}
+          body: |
+            Automatically generated release ${{ steps.determine_version.outputs.version }}.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Push the new tag to the repository
+      - name: Push new tag
+        run: |
+          git tag ${{ steps.determine_version.outputs.version }}
+          git push origin ${{ steps.determine_version.outputs.version }}
+
+      # Log in to GitHub Docker Registry
+      - name: Log in to GitHub Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Build and push Docker image
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ steps.determine_version.outputs.version }}

@@ -19,10 +19,10 @@ const mobileCss = css`
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 8px;
+  padding: 2px; // DAPPNODE
   background-color: var(--lido-color-foreground);
   display: flex;
-  gap: 32px;
+  gap: 10px; // DAPPNODE
   justify-content: space-around;
   align-items: center;
   border-top: 1px solid var(--lido-color-border);

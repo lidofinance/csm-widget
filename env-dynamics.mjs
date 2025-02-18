@@ -25,7 +25,7 @@ export const supportedChains = process.env?.SUPPORTED_CHAINS?.split(',').map(
   (chainId) => parseInt(chainId, 10),
 ) ?? [17000];
 /** @type string */
-export const walletconnectProjectId = process.env.WALLETCONNECT_PROJECT_ID;
+export const walletconnectProjectId = 'd3f589c93f2a2de300741fcd71ed226b'; // DAPPNOPDE: process.env.WALLETCONNECT_PROJECT_ID
 
 /** @type boolean */
 export const ipfsMode = toBoolean(process.env.IPFS_MODE);
