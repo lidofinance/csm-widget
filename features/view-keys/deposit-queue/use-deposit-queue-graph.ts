@@ -79,7 +79,7 @@ export const useDepositQueueGraph = () => {
     const depositable: string = hasDepositable
       ? isBatchesLoading
         ? '...'
-        : (batches?.your || hasDepositable).toString()
+        : hasDepositable.toString()
       : '0';
 
     return {
@@ -111,7 +111,6 @@ export const useDepositQueueGraph = () => {
     };
   }, [
     batches?.list,
-    batches?.your,
     data,
     hasDepositable,
     initialLoading,
