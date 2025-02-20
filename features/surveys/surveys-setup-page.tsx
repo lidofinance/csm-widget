@@ -2,14 +2,14 @@ import { FC } from 'react';
 
 import { NoSSRWrapper } from 'shared/components';
 import { Layout } from 'shared/layout';
-import { SurveyContacts } from './survey-contact';
 import { BackButton } from './shared';
+import { SurveySetup } from './survey-setup';
 
-export const SurveysContactsPage: FC = () => (
+export const SurveysSetupPage: FC<{ id?: string }> = ({ id }) => (
   <Layout>
     <BackButton />
     <NoSSRWrapper>
-      <SurveyContacts />
+      <SurveySetup id={id} />
     </NoSSRWrapper>
   </Layout>
 );

@@ -1,20 +1,22 @@
-import { Input } from '@lidofinance/lido-ui';
+import { Option, Select } from '@lidofinance/lido-ui';
 import { useController, UseControllerProps } from 'react-hook-form';
-import { InputAddress } from 'shared/components/input-address';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
 
 type BlockhashInputHookFormProps = Partial<
-  React.ComponentProps<typeof InputAddress>
+  React.ComponentProps<typeof Select>
 > & {
   fieldName: string;
   label?: string;
+  placeholder?: string;
+  options: string[];
   rules?: UseControllerProps['rules'];
 };
 
-export const TextInputHookForm = ({
+export const SelectHookForm = ({
   fieldName,
-  label,
+  options,
   rules,
+  placeholder = 'Select',
   error: errorProp,
   ...props
 }: BlockhashInputHookFormProps) => {
@@ -33,14 +35,19 @@ export const TextInputHookForm = ({
   const errorMessage = hasErrorHighlight && (error?.message || true);
 
   return (
-    <Input
-      {...props}
-      {...field}
+    <Select
+      fullwidth
+      placeholder={placeholder}
       disabled={props.disabled || field.disabled}
       error={errorProp ?? errorMessage}
-      label={label ?? fieldName}
-      spellCheck="false"
-      fullwidth
-    />
+      {...props}
+      {...field}
+    >
+      {options.map((item) => (
+        <Option key={item} value={item}>
+          {item}
+        </Option>
+      ))}
+    </Select>
   );
 };
