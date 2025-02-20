@@ -137,7 +137,7 @@ const CHIP_VARIANTS = {
   limit: css``,
 };
 
-export const ChipStyle = styled.div<{ $type?: GraphPart }>`
+export const ChipStyle = styled.div<{ $type?: GraphPart; $loading?: boolean }>`
   width: fit-content;
   padding: 0px 4px;
   text-align: center;
@@ -149,4 +149,23 @@ export const ChipStyle = styled.div<{ $type?: GraphPart }>`
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
   font-weight: 700;
   ${(props) => CHIP_VARIANTS[props.$type || 'active']}
+
+  ${({ $loading }) =>
+    $loading
+      ? css`
+          --loader-color: color-mix(in srgb, currentColor 15%, transparent);
+          animation: cLMtGC 2s infinite;
+          background-size: 300% 100%;
+          background-position: 100% 0;
+          background-image: linear-gradient(
+            90deg,
+            var(--loader-color) 0,
+            var(--loader-color) 33.33%,
+            transparent 44.44%,
+            transparent 55.55%,
+            var(--loader-color) 66.66%,
+            var(--loader-color) 100%
+          );
+        `
+      : ''}
 `;

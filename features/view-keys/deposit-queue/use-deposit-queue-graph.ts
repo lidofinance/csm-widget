@@ -1,9 +1,10 @@
 import { Zero } from '@ethersproject/constants';
 import { BigNumber } from 'ethers';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
-import { useCSMShareLimitInfo } from 'shared/hooks';
+import { useCSMShareLimitInfo, useNodeOperatorInfo } from 'shared/hooks';
 import { useCSMQueueBatches } from 'shared/hooks/useCSMQueueBatches';
 
 const POTENTIAL_ADDED = BigNumber.from(100);
@@ -20,8 +21,13 @@ const mergeBatches = (list?: Pos[]) =>
   }, [] as Pos[]);
 
 export const useDepositQueueGraph = () => {
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: info } = useNodeOperatorInfo(nodeOperatorId);
+  const hasDepositable = info?.depositableValidatorsCount;
+
   const { data, initialLoading } = useCSMShareLimitInfo();
-  const { data: batches } = useCSMQueueBatches();
+  const { data: batches, initialLoading: isBatchesLoading } =
+    useCSMQueueBatches(hasDepositable ? nodeOperatorId : undefined);
 
   const form = useFormContext<DepositDataInputType>();
   const submitting: number | undefined = form?.getValues('depositData')?.length;
@@ -70,6 +76,12 @@ export const useDepositQueueGraph = () => {
       })),
     );
 
+    const depositable: string = hasDepositable
+      ? isBatchesLoading
+        ? '...'
+        : (batches?.your || hasDepositable).toString()
+      : '0';
+
     return {
       isLoading: false,
       graph: {
@@ -90,12 +102,20 @@ export const useDepositQueueGraph = () => {
         isSubmitting,
       },
       values: {
-        active: active.toNumber(),
-        queue: queue.toNumber(),
-        added: added.toNumber(),
-        limit: capacity.toNumber(),
-        your: batches ? batches.your.toNumber() : undefined,
+        active: active.toString(),
+        queue: queue.toString(),
+        added: added.toString(),
+        limit: capacity.toString(),
+        your: depositable,
       },
     };
-  }, [batches, data, initialLoading, submitting]);
+  }, [
+    batches?.list,
+    batches?.your,
+    data,
+    hasDepositable,
+    initialLoading,
+    isBatchesLoading,
+    submitting,
+  ]);
 };

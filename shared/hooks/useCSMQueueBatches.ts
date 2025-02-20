@@ -3,7 +3,6 @@ import { useLidoSWR } from '@lido-sdk/react';
 import { STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { BigNumber, BigNumberish } from 'ethers';
 import { chunk, range } from 'lodash';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 import { NodeOperatorId } from 'types';
@@ -25,9 +24,11 @@ const unwrap = (batch: BigNumber, id: BigNumberish) => ({
 });
 
 type BatchItem = [BigNumber, BigNumber];
-export const useCSMQueueBatches = (config = STRATEGY_IMMUTABLE) => {
+export const useCSMQueueBatches = (
+  nodeOperatorId?: NodeOperatorId,
+  config = STRATEGY_IMMUTABLE,
+) => {
   const contract = useCSModuleRPC();
-  const nodeOperatorId = useNodeOperatorId();
 
   const fetcher = useCallback(async () => {
     invariant(nodeOperatorId);
@@ -47,7 +48,7 @@ export const useCSMQueueBatches = (config = STRATEGY_IMMUTABLE) => {
 
     return batches.reduce(
       (acc, c) => {
-        return !(acc.next.isZero() || acc.next.eq(c.id))
+        return !(acc.next.isZero() || acc.next.gte(c.id))
           ? acc
           : {
               summ: acc.summ.add(c.keysCount),

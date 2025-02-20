@@ -7,9 +7,8 @@ import { GraphPart } from './types';
 export const Legend: FC<{
   type: GraphPart;
   title: string;
-  count?: number;
-  approx?: boolean;
-}> = ({ type, title, count, approx }) => {
+  count?: string;
+}> = ({ type, title, count }) => {
   const { setHover } = useHover();
 
   const handleHover = useCallback(() => {
@@ -27,8 +26,7 @@ export const Legend: FC<{
         </CircleStyle>
         <span>{title}</span>
         {(count !== undefined && (
-          <ChipStyle $type={type}>
-            {count && approx ? '~' : ''}
+          <ChipStyle $type={type} $loading={count === '...'}>
             {count}
           </ChipStyle>
         )) ||

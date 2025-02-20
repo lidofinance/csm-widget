@@ -39,7 +39,6 @@ export const DepositQueueGraph: FC = () => {
           <Legend
             title="Your queued keys"
             count={values.your}
-            approx
             type="yourQueued"
           />
           {graph.isSubmitting && (
