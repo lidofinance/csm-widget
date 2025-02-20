@@ -1,32 +1,29 @@
 import { useController, UseControllerProps } from 'react-hook-form';
 
-import { InputAmount } from 'shared/components/input-amount';
-
-import { getTokenDisplayName } from 'utils/getTokenDisplayName';
+import { InputNumber } from 'shared/components/input-amount/input-number';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
-import type { BigNumber } from 'ethers';
 
-type TokenAmountInputHookFormProps = Partial<
-  React.ComponentProps<typeof InputAmount>
+type NumberInputHookFormProps = Partial<
+  React.ComponentProps<typeof InputNumber>
 > & {
   isLocked?: boolean;
-  maxValue?: BigNumber;
-  token: Parameters<typeof getTokenDisplayName>[0];
+  maxValue?: number;
   fieldName: string;
+  label?: string;
   showErrorMessage?: boolean;
   rules?: UseControllerProps['rules'];
 };
 
-export const TokenAmountInputHookForm = ({
+export const NumberInputHookForm = ({
   isLocked,
   maxValue,
-  token,
   fieldName,
-  rules,
+  label,
   showErrorMessage = true,
+  rules,
   error: errorProp,
   ...props
-}: TokenAmountInputHookFormProps) => {
+}: NumberInputHookFormProps) => {
   const {
     field,
     fieldState: { error, isTouched },
@@ -38,14 +35,14 @@ export const TokenAmountInputHookForm = ({
   const errorMessage = hasErrorHighlight && (error?.message || true);
 
   return (
-    <InputAmount
+    <InputNumber
       {...props}
       {...field}
       disabled={props.disabled ?? field.disabled}
       error={errorProp ?? (showErrorMessage ? errorMessage : hasErrorHighlight)}
       isLocked={isLocked}
       maxValue={maxValue}
-      label={`${getTokenDisplayName(token)} amount`}
+      label={label ?? fieldName}
       fullwidth
     />
   );

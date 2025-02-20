@@ -2,12 +2,12 @@ import { FC } from 'react';
 
 import { NoSSRWrapper } from 'shared/components';
 import { Layout } from 'shared/layout';
-import { SurveysHome } from './surveys-home/surverys-home';
+import { SiweSignIn } from './siwe-sign-in';
 
-export const SurveysHomePage: FC = () => (
+export const SurveysSignInPage: FC = () => (
   <Layout title="Surveys" subtitle="Voluntary report form">
     <NoSSRWrapper>
-      <SurveysHome />
+      <SiweSignIn />
     </NoSSRWrapper>
   </Layout>
 );
