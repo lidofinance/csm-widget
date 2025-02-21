@@ -9,11 +9,13 @@ import { ErrorMessages } from './error-messages';
 
 type TxStageFailProps = {
   code?: ErrorCode;
+  title?: string;
   onRetry?: React.MouseEventHandler<HTMLSpanElement>;
 };
 
 export const TxStageFail: FC<TxStageFailProps> = ({
   code = ErrorCode.SOMETHING_WRONG,
+  title = 'Transaction Failed',
   onRetry,
 }) => {
   const [isLoading, setLoading] = useState(false);
@@ -26,7 +28,7 @@ export const TxStageFail: FC<TxStageFailProps> = ({
   );
   return (
     <TransactionModalContent
-      title="Transaction Failed"
+      title={title}
       icon={<StageIconFail />}
       description={ErrorMessages[code]}
       footerHint={
