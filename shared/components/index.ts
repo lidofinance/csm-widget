@@ -38,5 +38,6 @@ export { InverseThemeProvider } from './inverse-theme-provider/inverse-theme-pro
 export { StatusComment } from './status-comment/status-comment';
 export { Banner } from './banner/banner';
 export { Address } from './address/address';
+export * from './extra-width';
 export * from './external-icon-link';
 export * from './text-block';
