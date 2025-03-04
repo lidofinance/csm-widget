@@ -72,7 +72,7 @@ const routes: Route[] = [
     name: 'Surveys',
     path: PATH.SURVEYS,
     icon: <FileIcon />,
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['IS_NODE_OPERATOR', 'IS_SURVEYS_ACTIVE'],
   },
 ];
 
