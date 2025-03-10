@@ -2,6 +2,7 @@ import { FC, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormTitle, SectionBlock, Stack, WhenLoaded } from 'shared/components';
 import {
+  CheckboxHookForm,
   NumberInputHookForm,
   SelectHookForm,
   SubmitButtonHookForm,
@@ -52,6 +53,8 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
       clAsValidator: false,
     },
   });
+
+  const clAsValidator = formObject.watch('clAsValidator');
 
   const handleSubmit = useCallback(
     async (data: SetupData) => {
@@ -147,31 +150,38 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                 />
 
                 <FormTitle>Which Validator Client are you running?</FormTitle>
-                {/* My Consensus Layer and Validator Client are the same */}
-                {/* clAsValidator */}
-                <SelectHookForm
-                  fieldName="validatorClient"
-                  options={VALIDATOR_CLIENT_OPTIONS}
-                  rules={required}
+                <CheckboxHookForm
+                  fieldName="clAsValidator"
+                  label="My Consensus Layer Client and Validator Client are the same"
                 />
+                {!clAsValidator && (
+                  <>
+                    <SelectHookForm
+                      fieldName="validatorClient"
+                      options={VALIDATOR_CLIENT_OPTIONS}
+                      rules={required}
+                    />
 
-                <FormTitle>
-                  What type of servers are your Validator Clients running on?
-                </FormTitle>
-                <SelectHookForm
-                  fieldName="validatorServerType"
-                  options={SERVER_TYPE_OPTIONS}
-                  rules={required}
-                />
+                    <FormTitle>
+                      What type of servers are your Validator Clients running
+                      on?
+                    </FormTitle>
+                    <SelectHookForm
+                      fieldName="validatorServerType"
+                      options={SERVER_TYPE_OPTIONS}
+                      rules={required}
+                    />
 
-                <FormTitle>
-                  Which country are your Validator Clients in?
-                </FormTitle>
-                <SelectHookForm
-                  fieldName="validatorCountry"
-                  options={COUNTRY_OPTIONS}
-                  rules={required}
-                />
+                    <FormTitle>
+                      Which country are your Validator Clients in?
+                    </FormTitle>
+                    <SelectHookForm
+                      fieldName="validatorCountry"
+                      options={COUNTRY_OPTIONS}
+                      rules={required}
+                    />
+                  </>
+                )}
 
                 <FormTitle>
                   Do you use a remote signer for your validator keys?
