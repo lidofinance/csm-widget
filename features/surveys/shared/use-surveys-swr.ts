@@ -4,12 +4,28 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 
-export const useSurveysSWR = <T>(path: string) => {
+type Options<T, R> = {
+  skipFetching?: boolean;
+  transformIncoming?: (d: R) => T;
+  transformOutcoming?: (d: T) => R;
+};
+
+export const useSurveysSWR = <T, R = T>(
+  path: string,
+  options?: Options<T, R>,
+) => {
   const nodeOperatorId = useNodeOperatorId();
   const url = `${nodeOperatorId}/${path}`;
 
-  const [fetcher, updater] = useSurveysFetcher();
-  const swr = useSWR<T>(url, fetcher, STRATEGY_LAZY);
+  const [fetcher, updater] = useSurveysFetcher<T, R>(
+    options?.transformIncoming,
+    options?.transformOutcoming,
+  );
+  const swr = useSWR<T>(
+    url,
+    options?.skipFetching ? null : fetcher,
+    STRATEGY_LAZY,
+  );
 
   const mutate = useCallback(
     (data: T) => {
@@ -22,7 +38,7 @@ export const useSurveysSWR = <T>(path: string) => {
   );
 
   const remove = useCallback(() => {
-    return swr.mutate(updater<T>(url, null), {
+    return swr.mutate(updater(url, null), {
       rollbackOnError: true,
       revalidate: false,
     });

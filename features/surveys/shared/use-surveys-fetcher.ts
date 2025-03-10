@@ -6,13 +6,16 @@ import { useAuth } from './survey-auth-provider';
 
 const { surveyApi } = getConfig();
 
-export const useSurveysFetcher = () => {
+export const useSurveysFetcher = <T, R = T>(
+  transformIncoming?: (d: R) => T,
+  transformOutcoming?: (d: T) => R,
+) => {
   const { token, logout } = useAuth();
 
   const handleError = useCallback(
     (err: unknown) => {
       const error = err as FetcherError;
-      if (error?.status === 401) {
+      if (error?.status === 401 || error.status === 403) {
         logout();
       }
     },
@@ -20,42 +23,45 @@ export const useSurveysFetcher = () => {
   );
 
   const fetcher = useCallback(
-    async <T>(url: string) => {
+    async (url: string) => {
       invariant(token, 'Token is not available');
       try {
-        return standardFetcher<T>(`${surveyApi}/${url}`, {
+        const res = await standardFetcher<R>(`${surveyApi}/${url}`, {
           headers: {
             'Content-type': 'application/json',
             Authorization: token,
           },
         });
+        return res && transformIncoming ? transformIncoming(res) : (res as T);
       } catch (err) {
         handleError(err);
         throw err;
       }
     },
-    [handleError, token],
+    [handleError, token, transformIncoming],
   );
 
   const updater = useCallback(
-    <T>(url: string, data: T | null) =>
-      async () => {
-        invariant(token, 'Token is not available');
-        try {
-          return standardFetcher<T>(`${surveyApi}/${url}`, {
-            method: data === null ? 'DELETE' : 'POST',
-            body: JSON.stringify(data),
-            headers: {
-              'Content-type': 'application/json',
-              Authorization: token,
-            },
-          });
-        } catch (err) {
-          handleError(err);
-          throw err;
-        }
-      },
-    [handleError, token],
+    (url: string, data: T | null) => async () => {
+      invariant(token, 'Token is not available');
+      try {
+        const res = await standardFetcher<R>(`${surveyApi}/${url}`, {
+          method: data === null ? 'DELETE' : 'POST',
+          body: JSON.stringify(
+            data && transformOutcoming ? transformOutcoming(data) : data,
+          ),
+          headers: {
+            'Content-type': 'application/json',
+            Authorization: token,
+          },
+        });
+        return res && transformIncoming ? transformIncoming(res) : (res as T);
+      } catch (err) {
+        handleError(err);
+        throw err;
+      }
+    },
+    [handleError, token, transformIncoming, transformOutcoming],
   );
 
   return [fetcher, updater] as const;

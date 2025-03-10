@@ -3,7 +3,7 @@ export * from './surveys-home-page';
 export * from './surveys-setup-page';
 export * from './surveys-signin-page';
 export * from './components';
-export * from './survey-contact';
+export * from './survey-contacts';
 export * from './survey-setup';
 export * from './surveys-home';
 export * from './siwe-sign-in';

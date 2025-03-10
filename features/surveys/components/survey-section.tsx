@@ -24,7 +24,7 @@ export const SurveySection: FC<PropsWithChildren<SurveySectionProps>> = ({
             <Text size="xxs" color="secondary">
               {subtitle}
             </Text>
-            {help && <IconTooltip help={help} />}
+            {help && <IconTooltip tooltip={help} />}
           </Stack>
         )}
       </Stack>

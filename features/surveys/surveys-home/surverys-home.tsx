@@ -8,9 +8,10 @@ import {
   SurveyButton,
 } from '../components';
 import { useSurveysSWR } from '../shared/use-surveys-swr';
-import { ContactData } from '../survey-contact';
+import { ContactData } from '../survey-contacts';
 import { SetupRawData } from '../survey-setup';
 import { useConfirmEraseModal } from './confirm-erase-modal';
+import { Divider } from '@lidofinance/lido-ui';
 
 type Summary = {
   contacts: ContactData | null;
@@ -53,16 +54,11 @@ export const SurveysHome: FC = () => {
         help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
       >
         {data?.setups.map((setup) => (
-          <SurveyItem key={setup.id} title="Setup #1">
+          <SurveyItem key={setup.id} title={`Setup #${setup.id}`}>
             <SurveyLink
               title="Edit"
               path={`${PATH.SURVEYS_SETUP}/${setup.id}`}
             />
-            {/* <SurveyButton
-              title="Delete"
-              color="error"
-              path={PATH.SURVEYS_SETUP}
-            /> */}
           </SurveyItem>
         ))}
 
@@ -70,12 +66,17 @@ export const SurveysHome: FC = () => {
       </SurveySection>
 
       {(data?.contacts || (data?.setups && data.setups.length > 0)) && (
-        <SurveyButton
-          title="Erase all data from the database"
-          fullwidth
-          color="error"
-          onClick={handleErase}
-        />
+        <>
+          <Divider />
+          <SurveySection title="Erase your data">
+            <SurveyButton
+              title="Erase all data from the database"
+              fullwidth
+              color="error"
+              onClick={handleErase}
+            />
+          </SurveySection>
+        </>
       )}
     </WhenLoaded>
   );
