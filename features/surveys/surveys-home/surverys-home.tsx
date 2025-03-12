@@ -49,7 +49,7 @@ export const SurveysHome: FC = () => {
       </SurveySection>
 
       <SurveySection
-        title="Your setups"
+        title="Your setup"
         subtitle="How this information will be used"
         help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
       >

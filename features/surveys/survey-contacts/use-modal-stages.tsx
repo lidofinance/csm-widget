@@ -12,7 +12,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
     transitStage(
       <TxStagePending
         title="Submitting contact info"
-        description="sendign to server"
+        description="sending to server"
       />,
     ),
 
@@ -27,7 +27,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
     transitStage(
       <TxStagePending
         title="Deleting contact info"
-        description="sendign to server"
+        description="sending to server"
       />,
     ),
 

@@ -54,7 +54,7 @@ export const useShowRule = () => {
         case 'EL_STEALING_REPORTER':
           return !!isReportingRole;
         case 'IS_SURVEYS_ACTIVE':
-          return !!surveyApi;
+          return !!nodeOperator && !!surveyApi;
         default:
           return false;
       }

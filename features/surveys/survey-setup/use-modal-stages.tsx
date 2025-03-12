@@ -12,7 +12,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
     transitStage(
       <TxStagePending
         title="Submitting Setup"
-        description="sendign to server"
+        description="sending to server"
       />,
     ),
 
@@ -23,7 +23,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
 
   pendingRemove: () =>
     transitStage(
-      <TxStagePending title="Deleting Setup" description="sendign to server" />,
+      <TxStagePending title="Deleting Setup" description="sending to server" />,
     ),
 
   successRemove: () =>

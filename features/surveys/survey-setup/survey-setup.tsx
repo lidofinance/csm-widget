@@ -50,7 +50,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
   const formObject = useForm<SetupData>({
     values: id ? data : undefined,
     defaultValues: {
-      clAsValidator: false,
+      clAsValidator: true,
     },
   });
 
@@ -86,82 +86,100 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
               autoComplete="off"
               onSubmit={formObject.handleSubmit(handleSubmit)}
             >
-              <Stack direction="column">
-                <FormTitle>Number of keys in this setup</FormTitle>
-                <NumberInputHookForm
-                  fieldName="keysCount"
-                  label="Number"
-                  rules={required}
-                />
+              <Stack direction="column" gap="xxl">
+                <Stack direction="column">
+                  <FormTitle>Number of keys in this setup</FormTitle>
+                  <NumberInputHookForm
+                    fieldName="keysCount"
+                    label="Number"
+                    rules={required}
+                  />
+                </Stack>
 
-                <FormTitle>
-                  Are you using Distributed Validator Technology to run these
-                  validators?
-                </FormTitle>
-                <SelectHookForm
-                  fieldName="dvt"
-                  options={DVT_OPTIONS}
-                  rules={required}
-                />
+                <Stack direction="column">
+                  <FormTitle>
+                    Are you using Distributed Validator Technology to run these
+                    validators?
+                  </FormTitle>
+                  <SelectHookForm
+                    fieldName="dvt"
+                    options={DVT_OPTIONS}
+                    rules={required}
+                  />
+                </Stack>
 
-                <FormTitle>
-                  Which tool do you use to run your nodes/keys?
-                </FormTitle>
-                <SelectHookForm
-                  fieldName="installationTool"
-                  options={TOOL_OPTIONS}
-                  rules={required}
-                />
+                <Stack direction="column">
+                  <FormTitle>
+                    Which tool do you use to run your nodes/keys?
+                  </FormTitle>
+                  <SelectHookForm
+                    fieldName="installationTool"
+                    options={TOOL_OPTIONS}
+                    rules={required}
+                  />
+                </Stack>
 
-                <FormTitle>
-                  Which Execution Layer Client are you running?
-                </FormTitle>
-                <SelectHookForm
-                  fieldName="elClient"
-                  options={EL_CLIENT_OPTIONS}
-                  rules={required}
-                />
+                <Stack direction="column">
+                  <FormTitle>
+                    Which Execution Layer Client are you running?
+                  </FormTitle>
+                  <SelectHookForm
+                    fieldName="elClient"
+                    options={EL_CLIENT_OPTIONS}
+                    rules={required}
+                  />
+                </Stack>
 
-                <FormTitle>
-                  Which Consensus Layer Client are you running?
-                </FormTitle>
-                <SelectHookForm
-                  fieldName="clClient"
-                  options={CL_CLIENT_OPTIONS}
-                  rules={required}
-                />
+                <Stack direction="column">
+                  <FormTitle>
+                    Which Consensus Layer Client are you running?
+                  </FormTitle>
+                  <SelectHookForm
+                    fieldName="clClient"
+                    options={CL_CLIENT_OPTIONS}
+                    rules={required}
+                  />
+                </Stack>
 
-                <FormTitle>
-                  What type of servers are your EL and CL nodes running on?
-                </FormTitle>
-                <SelectHookForm
-                  fieldName="clinetsServerType"
-                  options={SERVER_TYPE_OPTIONS}
-                  rules={required}
-                />
+                <Stack direction="column">
+                  <FormTitle>
+                    What type of servers are your EL and CL nodes running on?
+                  </FormTitle>
+                  <SelectHookForm
+                    fieldName="clinetsServerType"
+                    options={SERVER_TYPE_OPTIONS}
+                    rules={required}
+                  />
+                </Stack>
 
-                <FormTitle>
-                  Which country are your EL and CL nodes in?
-                </FormTitle>
-                <SelectHookForm
-                  fieldName="clientsCountry"
-                  options={COUNTRY_OPTIONS}
-                  rules={required}
-                />
+                <Stack direction="column">
+                  <FormTitle>
+                    Which country are your EL and CL nodes in?
+                  </FormTitle>
+                  <SelectHookForm
+                    fieldName="clientsCountry"
+                    options={COUNTRY_OPTIONS}
+                    rules={required}
+                  />
+                </Stack>
 
-                <FormTitle>Which Validator Client are you running?</FormTitle>
-                <CheckboxHookForm
-                  fieldName="clAsValidator"
-                  label="My Consensus Layer Client and Validator Client are the same"
-                />
-                {!clAsValidator && (
-                  <>
+                <Stack direction="column">
+                  <FormTitle>Which Validator Client are you running?</FormTitle>
+                  <CheckboxHookForm
+                    fieldName="clAsValidator"
+                    label="My Consensus Layer Client and Validator Client are the same"
+                  />
+                  {!clAsValidator && (
                     <SelectHookForm
                       fieldName="validatorClient"
                       options={VALIDATOR_CLIENT_OPTIONS}
                       rules={required}
                     />
+                  )}
+                </Stack>
 
+                {!clAsValidator && (
+                  <Stack direction="column">
                     <FormTitle>
                       What type of servers are your Validator Clients running
                       on?
@@ -171,7 +189,11 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                       options={SERVER_TYPE_OPTIONS}
                       rules={required}
                     />
+                  </Stack>
+                )}
 
+                {!clAsValidator && (
+                  <Stack direction="column">
                     <FormTitle>
                       Which country are your Validator Clients in?
                     </FormTitle>
@@ -180,26 +202,29 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                       options={COUNTRY_OPTIONS}
                       rules={required}
                     />
-                  </>
+                  </Stack>
                 )}
 
-                <FormTitle>
-                  Do you use a remote signer for your validator keys?
-                </FormTitle>
-                <SelectHookForm
-                  fieldName="remoteSigner"
-                  options={REMOTE_SIGNER_OPTIONS}
-                  rules={required}
-                />
+                <Stack direction="column">
+                  <FormTitle>
+                    Do you use a remote signer for your validator keys?
+                  </FormTitle>
+                  <SelectHookForm
+                    fieldName="remoteSigner"
+                    options={REMOTE_SIGNER_OPTIONS}
+                    rules={required}
+                  />
+                </Stack>
 
-                <FormTitle>What is your MEV-boost min-bid value?</FormTitle>
-                <TokenAmountInputHookForm
-                  fieldName="mevMinBid"
-                  label="Min bid"
-                  token="ETH"
-                  rules={required}
-                />
-
+                <Stack direction="column">
+                  <FormTitle>What is your MEV-boost min-bid value?</FormTitle>
+                  <TokenAmountInputHookForm
+                    fieldName="mevMinBid"
+                    label="Min bid"
+                    token="ETH"
+                    rules={required}
+                  />
+                </Stack>
                 <SubmitButtonHookForm>Submit</SubmitButtonHookForm>
               </Stack>
             </form>
