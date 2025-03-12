@@ -76,23 +76,23 @@ const PART_VARIANTS = {
   `,
   limit: css<PartProps>`
     position: absolute;
-    width: 1px;
-    left: ${({ $offset = 50 }) => $offset}%;
+    width: 2px;
+    left: calc(${({ $offset = 50 }) => $offset}% - 1px);
 
-    top: -25%;
-    height: 150%;
+    top: -40%;
+    height: 180%;
 
-    --stripe-color-one: #7a8aa0;
+    --stripe-color-one: var(--lido-color-text);
     --stripe-color-two: transparent;
 
     background: repeating-linear-gradient(
       0deg,
       var(--stripe-color-one),
-      var(--stripe-color-one) 2px,
-      var(--stripe-color-two) 2px,
-      var(--stripe-color-two) 4px
+      var(--stripe-color-one) 5px,
+      var(--stripe-color-two) 5px,
+      var(--stripe-color-two) 8px
     );
-    background-position-y: 1px;
+    background-position-y: 0px;
     mix-blend-mode: ${({ theme }) =>
       theme.name === ThemeName.light ? 'multiply' : 'plus-lighter'};
   `,

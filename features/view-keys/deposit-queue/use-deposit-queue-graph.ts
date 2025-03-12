@@ -9,7 +9,7 @@ import { useCSMQueueBatches } from 'shared/hooks/useCSMQueueBatches';
 
 const POTENTIAL_ADDED = BigNumber.from(100);
 const BACK = BigNumber.from(30);
-const MIN_SIZE = 2;
+const MIN_SIZE = 1; // percentage
 
 type Pos = { size: number; offset: number };
 const mergeBatches = (list?: Pos[]) =>
