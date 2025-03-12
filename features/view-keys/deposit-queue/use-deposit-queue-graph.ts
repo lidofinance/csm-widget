@@ -1,4 +1,4 @@
-import { Zero } from '@ethersproject/constants';
+import { One, Zero } from '@ethersproject/constants';
 import { BigNumber } from 'ethers';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useMemo } from 'react';
@@ -68,12 +68,22 @@ export const useDepositQueueGraph = () => {
     const addedSize = ccc(added, queue.add(active));
     const limitOffset = extraLow ? 8 : extraHigh ? 95 : cc(capacity);
 
-    // TODO: koef to fix (batches.summ <-> queue)
+    const koef = queue
+      .mul(100)
+      .div(batches?.summ || queue)
+      .toNumber();
+
     const yourBatches = mergeBatches(
-      batches?.list.map(([offset, size]) => ({
-        size: ccc(size, active.add(offset)),
-        offset: cc(offset.add(active)),
-      })),
+      batches?.list.map((batch) => {
+        const offset = batch[0].mul(koef).div(100);
+        let size = batch[1].mul(koef).div(100);
+        if (size.isZero() && !batch[1].isZero()) size = One;
+
+        return {
+          size: ccc(size, active.add(offset)),
+          offset: cc(offset.add(active)),
+        };
+      }),
     );
 
     const depositable: string = hasDepositable
@@ -111,6 +121,7 @@ export const useDepositQueueGraph = () => {
     };
   }, [
     batches?.list,
+    batches?.summ,
     data,
     hasDepositable,
     initialLoading,
