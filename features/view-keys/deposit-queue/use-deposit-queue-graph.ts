@@ -9,7 +9,6 @@ import { useCSMQueueBatches } from 'shared/hooks/useCSMQueueBatches';
 
 const POTENTIAL_ADDED = BigNumber.from(100);
 const BACK = BigNumber.from(30);
-const MIN_SIZE = 1; // percentage
 
 type Pos = { size: number; offset: number };
 const mergeBatches = (list?: Pos[]) =>
@@ -20,7 +19,7 @@ const mergeBatches = (list?: Pos[]) =>
     return acc;
   }, [] as Pos[]);
 
-export const useDepositQueueGraph = () => {
+export const useDepositQueueGraph = (fullView = false) => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: info } = useNodeOperatorInfo(nodeOperatorId);
   const hasDepositable = info?.depositableValidatorsCount;
@@ -31,6 +30,8 @@ export const useDepositQueueGraph = () => {
 
   const form = useFormContext<DepositDataInputType>();
   const submitting: number | undefined = form?.getValues('depositData')?.length;
+
+  const minSize = fullView ? 0.5 : 1; // percentage
 
   return useMemo(() => {
     if (!data || initialLoading) return { isLoading: true };
@@ -45,22 +46,28 @@ export const useDepositQueueGraph = () => {
     const m2 = active.add(queue).add(potential);
     const md = m2.sub(m1);
 
-    const extraLow = capacity.lt(m1.sub(md));
-    const extraHigh = capacity.gt(m2.add(md));
+    const extraLow = !fullView && capacity.lt(m1.sub(md));
+    const extraHigh = !fullView && capacity.gt(m2.add(md));
 
-    const l1 = m1.lt(capacity) ? m1 : extraLow ? m1 : capacity;
+    const l1 = fullView
+      ? Zero
+      : m1.lt(capacity)
+        ? m1
+        : extraLow
+          ? m1
+          : capacity;
     const l2 = m2.gt(capacity) ? m2 : extraHigh ? m2 : capacity;
     const ld = l2.sub(l1);
 
-    const g1 = extraLow ? 15 : l1.gt(potential) ? 15 : 0;
-    const g2 = extraHigh ? 85 : 95;
+    const g1 = fullView ? 0 : extraLow ? 15 : l1.gt(potential) ? 15 : 0;
+    const g2 = fullView ? 95 : extraHigh ? 85 : 95;
     const gd = g2 - g1;
     const farAway = g1 > 0;
 
     const cc = (v: BigNumber) => v.sub(l1).mul(gd).div(ld).add(g1).toNumber();
     const ccc = (value: BigNumber, prev = Zero) => {
-      const p = prev.isZero() ? 0 : Math.max(MIN_SIZE, cc(prev));
-      return value.isZero() ? 0 : Math.max(MIN_SIZE, cc(value.add(prev)) - p);
+      const p = prev.isZero() ? 0 : Math.max(minSize, cc(prev));
+      return value.isZero() ? 0 : Math.max(minSize, cc(value.add(prev)) - p);
     };
 
     const queueUnderLimit = queue.lt(activeLeft) ? queue : activeLeft;
@@ -128,9 +135,11 @@ export const useDepositQueueGraph = () => {
       },
     };
   }, [
+    minSize,
     batches?.list,
     batches?.summ,
     data,
+    fullView,
     hasDepositable,
     initialLoading,
     isBatchesLoading,
