@@ -5,10 +5,12 @@ import { ExternalButtonLink } from './external-button-link';
 
 import { ReactComponent as BeaconchaIcon } from 'assets/icons/beaconcha.svg';
 import { ReactComponent as RatedIcon } from 'assets/icons/rated.svg';
+import { ReactComponent as EthseerIcon } from 'assets/icons/ethseer.svg';
 import { ReactComponent as LidoIcon } from 'assets/icons/lido.svg';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   useBeaconchainDashboardLink,
+  useEthSeerLink,
   useFeesMonitoningLink,
   useOperatorPortalLink,
   useRatedLink,
@@ -19,6 +21,7 @@ export const ExternalSection: FC = () => {
   const feesMonitoningLink = useFeesMonitoningLink();
   const operatorPortalLink = useOperatorPortalLink();
   const ratedLink = useRatedLink();
+  const ethSeerLink = useEthSeerLink();
 
   return (
     <Accordion
@@ -47,8 +50,18 @@ export const ExternalSection: FC = () => {
         >
           Provides effectiveness ratings, APRs and other useful metrics
         </ExternalButtonLink>
+        {ethSeerLink && (
+          <ExternalButtonLink
+            title="EthSeer"
+            icon={<EthseerIcon />}
+            href={ethSeerLink}
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardExternalEthSeerLink}
+          >
+            Provides real-time statistics of your validators’ performance
+          </ExternalButtonLink>
+        )}
         <ExternalButtonLink
-          title="Lido operators"
+          title="Lido Operators"
           icon={<LidoIcon />}
           href={operatorPortalLink}
           matomoEvent={
@@ -58,7 +71,7 @@ export const ExternalSection: FC = () => {
           Shows details about invalid keys
         </ExternalButtonLink>
         <ExternalButtonLink
-          title="Lido MEV monitoring"
+          title="Lido Fees monitoring"
           icon={<LidoIcon />}
           href={feesMonitoningLink}
           matomoEvent={

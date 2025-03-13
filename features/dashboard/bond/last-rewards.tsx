@@ -31,6 +31,7 @@ import { Balance } from './balance';
 import {
   AccordionStyle,
   BadgeStyle,
+  DoubleColumnStyle,
   RowBody,
   RowHeader,
   RowTitle,
@@ -44,7 +45,6 @@ export const LastRewards: FC = () => {
   const { data: info } = useNodeOperatorInfo(id);
 
   const { data: rewardsSlot } = useLastRewardsSlot();
-  const { data: txHash, initialLoading: isTxLoading } = useLastRewrdsTx();
 
   const lastRewardsDate = rewardsSlot?.timestamp
     ? formatDate(rewardsSlot.timestamp)
@@ -91,34 +91,7 @@ export const LastRewards: FC = () => {
       }
     >
       <Stack direction="column" gap="lg">
-        <RowBody>
-          <TextBlock
-            title="Keys over threshold"
-            loading={isLoading}
-            description={
-              <Tooltip title={lastRewards?.threshold} placement="bottomLeft">
-                <span>Threshold: {formatPercent(lastRewards?.threshold)}%</span>
-              </Tooltip>
-            }
-            help="Number of your keys above the performance threshold in the latest report frame"
-          >
-            {lastRewards?.validatorsOverThresholdCount}{' '}
-            <i>/{lastRewards?.validatorsCount}</i>
-          </TextBlock>
-          <TextBlock
-            title="Stuck keys found"
-            loading={isLoading}
-            warning={lastRewards?.stuck}
-            help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the latest report frame. Stuck keys prevent the Node Operator from receiving rewards for any key(s) in that frame."
-          >
-            {lastRewards?.stuck ? 'YES' : 'NO'}
-          </TextBlock>
-          <TextBlock title="Distribution transaction" loading={isTxLoading}>
-            <Box as="span" fontWeight={400}>
-              <TxLinkEtherscan txHash={txHash} />
-            </Box>
-          </TextBlock>
-        </RowBody>
+        <LastReportStats />
         <Divider />
         <Stack spaceBetween center>
           <Stack direction="column" gap="xxs">
@@ -156,6 +129,53 @@ export const LastRewards: FC = () => {
         </Stack>
       </Stack>
     </AccordionStyle>
+  );
+};
+
+const LastReportStats: FC = () => {
+  const { data: lastRewards, initialLoading: isLoading } =
+    useLastOperatorRewards();
+  const { data: txHash, initialLoading: isTxLoading } = useLastRewrdsTx();
+
+  return (
+    <RowBody>
+      {!lastRewards || lastRewards.validatorsCount ? (
+        <>
+          {' '}
+          <TextBlock
+            title="Keys over threshold"
+            loading={isLoading}
+            description={
+              <Tooltip title={lastRewards?.threshold} placement="bottomLeft">
+                <span>Threshold: {formatPercent(lastRewards?.threshold)}%</span>
+              </Tooltip>
+            }
+            help="Number of your keys above the performance threshold in the latest report frame"
+          >
+            {lastRewards?.validatorsOverThresholdCount}{' '}
+            <i>/{lastRewards?.validatorsCount}</i>
+          </TextBlock>
+          <TextBlock
+            title="Stuck keys found"
+            loading={isLoading}
+            warning={lastRewards?.stuck}
+            help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the latest report frame. Stuck keys prevent the Node Operator from receiving rewards for any key(s) in that frame."
+          >
+            {lastRewards?.stuck ? 'YES' : 'NO'}
+          </TextBlock>
+        </>
+      ) : (
+        <DoubleColumnStyle>
+          <TextBlock title="You had no active keys during the latest rewards frame" />
+        </DoubleColumnStyle>
+      )}
+
+      <TextBlock title="Distribution transaction" loading={isTxLoading}>
+        <Box as="span" fontWeight={400}>
+          <TxLinkEtherscan txHash={txHash} />
+        </Box>
+      </TextBlock>
+    </RowBody>
   );
 };
 

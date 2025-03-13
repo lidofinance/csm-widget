@@ -30,6 +30,13 @@ export const RowBody = styled.div`
     grid-template: none;
   }
 `;
+export const DoubleColumnStyle = styled.div`
+  grid-column: span 2;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    grid-column: initial;
+  }
+`;
 
 export const AccordionStyle = styled(Accordion)`
   margin: 0;

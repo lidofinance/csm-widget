@@ -57,7 +57,7 @@ export const useCSMQueueBatches = (
                 c.nodeOperatorId === nodeOperatorId ? c.keysCount : 0,
               ),
               list:
-                c.nodeOperatorId === nodeOperatorId
+                c.nodeOperatorId === nodeOperatorId && c.keysCount.gt(Zero)
                   ? [...acc.list, [acc.summ, c.keysCount] as BatchItem]
                   : acc.list,
             };

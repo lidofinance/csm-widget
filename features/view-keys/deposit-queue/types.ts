@@ -1,1 +1,7 @@
-export type GraphPart = 'active' | 'queued' | 'yourQueued' | 'added' | 'limit';
+export type GraphPart =
+  | 'active'
+  | 'queued'
+  | 'queuedOverLimit'
+  | 'yourQueued'
+  | 'added'
+  | 'limit';
