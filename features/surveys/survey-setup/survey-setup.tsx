@@ -68,7 +68,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
 
   const validatorSameAsCl = formObject.watch('validatorSameAsCl');
   const keysCount = formObject.watch('keysCount');
-  const keysRemain = keysLeft - (keysCount ?? 0);
+  const keysRemain = Math.max(0, keysLeft - (keysCount ?? 0));
 
   const handleSubmit = useCallback(
     async (data: SetupData) => {
