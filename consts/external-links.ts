@@ -30,6 +30,7 @@ type ExternalLinksConstants = {
   operatorsWidget: string;
   beaconchainDashboard: string;
   ratedExplorer: string;
+  ethseerDashboard?: string;
   subscribeEvents: string;
   keysApi: string;
 };
@@ -54,6 +55,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     beaconchain: 'https://beaconcha.in',
     beaconchainDashboard: 'https://v2-beta-mainnet.beaconcha.in/dashboard',
     ratedExplorer: 'https://explorer.rated.network',
+    ethseerDashboard: 'https://ethseer.io',
     subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
     keysApi: 'https://keys-api.lido.fi',
   },
