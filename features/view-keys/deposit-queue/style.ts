@@ -7,13 +7,15 @@ export const WrapperStyle = styled.div`
   position: relative;
 `;
 
-export const FarStyle = styled.div`
+export const FarStyle = styled.div<{ hidden?: boolean }>`
   position: absolute;
   display: block;
   z-index: 1;
   width: 10%;
   top: 0%;
   bottom: 0%;
+  opacity: ${({ hidden }) => (hidden ? 0 : 1)};
+  transition: opacity 0.25s ease-in-out;
   background: linear-gradient(
     90deg,
     var(--lido-color-foreground) 15%,
@@ -84,6 +86,7 @@ const PART_VARIANTS = {
     height: 180%;
 
     ${linearGradient('var(--lido-color-text)', 'transparent', 0, 5, 3)}
+    background-attachment: initial;
 
     mix-blend-mode: ${({ theme }) =>
       theme.name === ThemeName.light ? 'multiply' : 'plus-lighter'};
@@ -95,7 +98,10 @@ export const PartStyle = styled.div<PartProps>`
   height: 100%;
   width: ${({ $size = 100 }) => $size}%;
   opacity: ${({ $fade }) => ($fade ? '0.2' : '1')};
-  transition: opacity 0.25s ease-in-out;
+  transition:
+    opacity 0.25s ease-in-out,
+    left 0.25s ease-in-out,
+    width 0.25s ease-in-out;
 
   ${(props) => PART_VARIANTS[props.$type]}
 `;

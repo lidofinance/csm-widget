@@ -1,5 +1,5 @@
 import { InlineLoader } from '@lidofinance/lido-ui';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Stack } from 'shared/components';
 import { HoverProvider } from './hover-provider';
 import { Legend } from './legend';
@@ -8,7 +8,8 @@ import { FarStyle, LegendsStyle, LineStyle, WrapperStyle } from './style';
 import { useDepositQueueGraph } from './use-deposit-queue-graph';
 
 export const DepositQueueGraph: FC = () => {
-  const { graph, values, isLoading } = useDepositQueueGraph();
+  const [fullView, setFullView] = useState(false);
+  const { graph, values, isLoading } = useDepositQueueGraph(fullView);
 
   if (isLoading || !graph) {
     return <InlineLoader />;
@@ -17,18 +18,21 @@ export const DepositQueueGraph: FC = () => {
   return (
     <HoverProvider>
       <Stack direction="column">
-        <WrapperStyle>
-          {graph.farAway && <FarStyle />}
+        <WrapperStyle onMouseLeave={() => setFullView(false)}>
+          <FarStyle
+            hidden={!graph.farAway}
+            onMouseEnter={() => setFullView(true)}
+          />
           <LineStyle>
-            <Part type="active" {...graph.active} />
+            <Part
+              type="active"
+              {...graph.active}
+              onMouseEnter={() => setFullView(true)}
+            />
             <Part type="queued" {...graph.queue} />
             <Part type="queuedOverLimit" {...graph.queueOverLimit} />
-            {graph.your?.map((batch) => (
-              <Part
-                key={`${batch.offset}-${batch.size}`}
-                type="yourQueued"
-                {...batch}
-              />
+            {graph.your?.map((batch, index) => (
+              <Part key={index} type="yourQueued" {...batch} />
             ))}
             <Part type="added" {...graph.added} />
           </LineStyle>
