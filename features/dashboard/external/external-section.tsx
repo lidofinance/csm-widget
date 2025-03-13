@@ -61,7 +61,7 @@ export const ExternalSection: FC = () => {
           </ExternalButtonLink>
         )}
         <ExternalButtonLink
-          title="Lido operators"
+          title="Lido Operators"
           icon={<LidoIcon />}
           href={operatorPortalLink}
           matomoEvent={
@@ -71,7 +71,7 @@ export const ExternalSection: FC = () => {
           Shows details about invalid keys
         </ExternalButtonLink>
         <ExternalButtonLink
-          title="Lido MEV monitoring"
+          title="Lido Fees monitoring"
           icon={<LidoIcon />}
           href={feesMonitoningLink}
           matomoEvent={
