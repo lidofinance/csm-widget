@@ -1,4 +1,4 @@
-import { Zero } from '@ethersproject/constants';
+import { One, Zero } from '@ethersproject/constants';
 import { BigNumber } from 'ethers';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useMemo } from 'react';
@@ -9,7 +9,7 @@ import { useCSMQueueBatches } from 'shared/hooks/useCSMQueueBatches';
 
 const POTENTIAL_ADDED = BigNumber.from(100);
 const BACK = BigNumber.from(30);
-const MIN_SIZE = 2;
+const MIN_SIZE = 1; // percentage
 
 type Pos = { size: number; offset: number };
 const mergeBatches = (list?: Pos[]) =>
@@ -35,7 +35,7 @@ export const useDepositQueueGraph = () => {
   return useMemo(() => {
     if (!data || initialLoading) return { isLoading: true };
 
-    const { active, queue, capacity } = data;
+    const { active, queue, capacity, activeLeft } = data;
     const added = submitting ? BigNumber.from(submitting) : Zero;
     const isSubmitting = submitting !== undefined;
     const potential = added.lt(POTENTIAL_ADDED) ? POTENTIAL_ADDED : added;
@@ -63,17 +63,31 @@ export const useDepositQueueGraph = () => {
       return value.isZero() ? 0 : Math.max(MIN_SIZE, cc(value.add(prev)) - p);
     };
 
+    const queueUnderLimit = queue.lt(activeLeft) ? queue : activeLeft;
+    const queueOverLimit = queue.sub(queueUnderLimit);
+
     const activeSize = ccc(active);
-    const queueSize = ccc(queue, active);
+    const queueSize = ccc(queueUnderLimit, active);
+    const queueOverLimitSize = ccc(queueOverLimit, queueUnderLimit.add(active));
     const addedSize = ccc(added, queue.add(active));
     const limitOffset = extraLow ? 8 : extraHigh ? 95 : cc(capacity);
 
-    // TODO: koef to fix (batches.summ <-> queue)
+    const koef = queue
+      .mul(100)
+      .div(batches?.summ || queue)
+      .toNumber();
+
     const yourBatches = mergeBatches(
-      batches?.list.map(([offset, size]) => ({
-        size: ccc(size, active.add(offset)),
-        offset: cc(offset.add(active)),
-      })),
+      batches?.list.map((batch) => {
+        const offset = batch[0].mul(koef).div(100);
+        let size = batch[1].mul(koef).div(100);
+        if (size.isZero() && !batch[1].isZero()) size = One;
+
+        return {
+          size: ccc(size, active.add(offset)),
+          offset: cc(offset.add(active)),
+        };
+      }),
     );
 
     const depositable: string = hasDepositable
@@ -91,6 +105,9 @@ export const useDepositQueueGraph = () => {
         queue: {
           size: queueSize,
         },
+        queueOverLimit: {
+          size: queueOverLimitSize,
+        },
         added: {
           size: addedSize,
         },
@@ -103,7 +120,8 @@ export const useDepositQueueGraph = () => {
       },
       values: {
         active: active.toString(),
-        queue: queue.toString(),
+        queue: queueUnderLimit.toString(),
+        queueOverLimit: queueOverLimit.toString(),
         added: added.toString(),
         limit: capacity.toString(),
         your: depositable,
@@ -111,6 +129,7 @@ export const useDepositQueueGraph = () => {
     };
   }, [
     batches?.list,
+    batches?.summ,
     data,
     hasDepositable,
     initialLoading,
