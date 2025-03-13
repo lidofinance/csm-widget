@@ -90,10 +90,20 @@ export const useDepositQueueGraph = (fullView = false) => {
         let size = batch[1].mul(koef).div(100);
         if (size.isZero() && !batch[1].isZero()) size = One;
 
-        return {
+        const batchProps = {
           size: ccc(size, active.add(offset)),
           offset: cc(offset.add(active)),
         };
+
+        if (
+          batchProps.offset + batchProps.size >
+          activeSize + queueSize + queueOverLimitSize
+        ) {
+          batchProps.offset =
+            activeSize + queueSize + queueOverLimitSize - batchProps.size;
+        }
+
+        return batchProps;
       }),
     );
 
