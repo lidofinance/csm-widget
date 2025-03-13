@@ -38,38 +38,39 @@ type PartProps = {
   $fade?: boolean;
 };
 
+const linearGradient = (
+  color1: string,
+  color2: string,
+  angle = 120,
+  w1 = 4,
+  w2 = 4,
+) => css`
+  background: repeating-linear-gradient(
+    ${angle}deg,
+    ${color1},
+    ${color1} ${w1}px,
+    ${color2} ${w1}px,
+    ${color2} ${w1 + w2}px
+  );
+  background-attachment: fixed;
+  background-position-x: 0px;
+`;
+
 const PART_VARIANTS = {
   active: css`
     background: #53ba95;
   `,
   queued: css`
-    --stripe-color-one: #00a3ff;
-    --stripe-color-two: #26b1ff;
-
-    background: repeating-linear-gradient(
-      120deg,
-      var(--stripe-color-one),
-      var(--stripe-color-one) 4px,
-      var(--stripe-color-two) 4px,
-      var(--stripe-color-two) 8px
-    );
+    ${linearGradient('#00a3ff', '#26b1ff')}
+  `,
+  queuedOverLimit: css`
+    ${linearGradient('#81d1ff', '#94d8ff')}
   `,
   yourQueued: css<PartProps>`
     position: absolute;
     left: ${({ $offset }) => $offset}%;
 
-    --stripe-color-one: #ffa276;
-    --stripe-color-two: #ffb695;
-
-    background: repeating-linear-gradient(
-      120deg,
-      var(--stripe-color-one),
-      var(--stripe-color-one) 4px,
-      var(--stripe-color-two) 4px,
-      var(--stripe-color-two) 8px
-    );
-    background-attachment: fixed;
-    background-position-x: 1px;
+    ${linearGradient('#ffa276', '#ffb695')}
   `,
   added: css`
     background: #f17ecb;
@@ -82,17 +83,8 @@ const PART_VARIANTS = {
     top: -40%;
     height: 180%;
 
-    --stripe-color-one: var(--lido-color-text);
-    --stripe-color-two: transparent;
+    ${linearGradient('var(--lido-color-text)', 'transparent', 0, 5, 3)}
 
-    background: repeating-linear-gradient(
-      0deg,
-      var(--stripe-color-one),
-      var(--stripe-color-one) 5px,
-      var(--stripe-color-two) 5px,
-      var(--stripe-color-two) 8px
-    );
-    background-position-y: 0px;
     mix-blend-mode: ${({ theme }) =>
       theme.name === ThemeName.light ? 'multiply' : 'plus-lighter'};
   `,
@@ -127,6 +119,9 @@ const CHIP_VARIANTS = {
   `,
   queued: css`
     color: #00a3ff;
+  `,
+  queuedOverLimit: css`
+    color: #81d1ff;
   `,
   yourQueued: css`
     color: #ffa276;

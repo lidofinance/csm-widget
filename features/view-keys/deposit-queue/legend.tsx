@@ -4,11 +4,19 @@ import { useHover } from './hover-provider';
 import { ChipStyle, CircleStyle, LegendStyle, PartStyle } from './style';
 import { GraphPart } from './types';
 
-export const Legend: FC<{
+type LegendProps = {
   type: GraphPart;
   title: string;
   count?: string;
-}> = ({ type, title, count }) => {
+  hide?: boolean;
+};
+
+export const Legend: FC<LegendProps> = ({
+  type,
+  title,
+  count,
+  hide = false,
+}) => {
   const { setHover } = useHover();
 
   const handleHover = useCallback(() => {
@@ -17,6 +25,10 @@ export const Legend: FC<{
   const handleLeave = useCallback(() => {
     setHover(undefined);
   }, [setHover]);
+
+  if (hide) {
+    return null;
+  }
 
   return (
     <LegendStyle onMouseEnter={handleHover} onMouseLeave={handleLeave}>

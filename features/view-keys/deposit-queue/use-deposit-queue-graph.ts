@@ -35,7 +35,7 @@ export const useDepositQueueGraph = () => {
   return useMemo(() => {
     if (!data || initialLoading) return { isLoading: true };
 
-    const { active, queue, capacity } = data;
+    const { active, queue, capacity, activeLeft } = data;
     const added = submitting ? BigNumber.from(submitting) : Zero;
     const isSubmitting = submitting !== undefined;
     const potential = added.lt(POTENTIAL_ADDED) ? POTENTIAL_ADDED : added;
@@ -63,8 +63,12 @@ export const useDepositQueueGraph = () => {
       return value.isZero() ? 0 : Math.max(MIN_SIZE, cc(value.add(prev)) - p);
     };
 
+    const queueUnderLimit = queue.lt(activeLeft) ? queue : activeLeft;
+    const queueOverLimit = queue.sub(queueUnderLimit);
+
     const activeSize = ccc(active);
-    const queueSize = ccc(queue, active);
+    const queueSize = ccc(queueUnderLimit, active);
+    const queueOverLimitSize = ccc(queueOverLimit, queueUnderLimit.add(active));
     const addedSize = ccc(added, queue.add(active));
     const limitOffset = extraLow ? 8 : extraHigh ? 95 : cc(capacity);
 
@@ -101,6 +105,9 @@ export const useDepositQueueGraph = () => {
         queue: {
           size: queueSize,
         },
+        queueOverLimit: {
+          size: queueOverLimitSize,
+        },
         added: {
           size: addedSize,
         },
@@ -113,7 +120,8 @@ export const useDepositQueueGraph = () => {
       },
       values: {
         active: active.toString(),
-        queue: queue.toString(),
+        queue: queueUnderLimit.toString(),
+        queueOverLimit: queueOverLimit.toString(),
         added: added.toString(),
         limit: capacity.toString(),
         your: depositable,
