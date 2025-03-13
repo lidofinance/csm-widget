@@ -1,9 +1,9 @@
 import { Block, Text } from '@lidofinance/lido-ui';
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, ReactNode } from 'react';
 import { Stack } from 'shared/components';
 
 type SurveyItemProps = {
-  title: string;
+  title: ReactNode;
 };
 
 export const SurveyItem: FC<PropsWithChildren<SurveyItemProps>> = ({

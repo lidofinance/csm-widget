@@ -3,6 +3,7 @@ import { FC, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormTitle, SectionBlock, Stack, WhenLoaded } from 'shared/components';
 import {
+  BooleanButtonsHookForm,
   SubmitButtonHookForm,
   TextInputHookForm,
 } from 'shared/hook-form/controls';
@@ -11,6 +12,7 @@ import { SurveyButton } from '../components';
 import { useSurveysSWR } from '../shared/use-surveys-swr';
 import { useConfirmRemoveModal } from './confirm-remove-modal';
 import { useModalStages } from './use-modal-stages';
+import { Text } from '@lidofinance/lido-ui';
 
 export type ContactData = {
   name?: string;
@@ -28,13 +30,20 @@ export const SurveyContacts: FC = () => {
 
   const formObject = useForm<ContactData>({
     values: data,
+    defaultValues: {
+      allowShare: true,
+    },
   });
 
   const handleSubmit = useCallback(
     async (data: ContactData) => {
       modals.pending();
-      await mutate(data);
-      modals.success();
+      try {
+        await mutate(data);
+        modals.success();
+      } catch (e) {
+        modals.failed(e);
+      }
     },
     [modals, mutate],
   );
@@ -42,9 +51,13 @@ export const SurveyContacts: FC = () => {
   const handleRemove = useCallback(async () => {
     if (await confirmRemove({})) {
       modals.pendingRemove();
-      await remove();
-      void navigate(PATH.SURVEYS);
-      modals.successRemove();
+      try {
+        await remove();
+        void navigate(PATH.SURVEYS);
+        modals.successRemove();
+      } catch (e) {
+        modals.failed(e);
+      }
     }
   }, [confirmRemove, modals, navigate, remove]);
 
@@ -57,25 +70,44 @@ export const SurveyContacts: FC = () => {
               autoComplete="off"
               onSubmit={formObject.handleSubmit(handleSubmit)}
             >
-              <Stack direction="column">
-                <FormTitle>Name or pseudonym</FormTitle>
-                <TextInputHookForm
-                  fieldName="name"
-                  label="Your name"
-                  rules={{ required: true }}
-                />
+              <Stack direction="column" gap="xxl">
+                <Stack direction="column">
+                  <FormTitle>Name or pseudonym</FormTitle>
+                  <TextInputHookForm
+                    fieldName="name"
+                    label="Your name"
+                    rules={{ required: true }}
+                  />
+                </Stack>
 
-                <FormTitle>Discord Handle</FormTitle>
-                <TextInputHookForm fieldName="discord" label="Discord" />
+                <Stack direction="column">
+                  <FormTitle>Discord Handle</FormTitle>
+                  <TextInputHookForm fieldName="discord" label="Discord" />
+                </Stack>
 
-                <FormTitle>Telegram Handle</FormTitle>
-                <TextInputHookForm fieldName="telegram" label="Telegram" />
+                <Stack direction="column">
+                  <FormTitle>Telegram Handle</FormTitle>
+                  <TextInputHookForm fieldName="telegram" label="Telegram" />
+                </Stack>
 
-                <FormTitle>Twitter or Farcaster or both:</FormTitle>
-                <TextInputHookForm
-                  fieldName="twitter"
-                  label="Social media account"
-                />
+                <Stack direction="column">
+                  <FormTitle>Twitter or Farcaster or both:</FormTitle>
+                  <TextInputHookForm
+                    fieldName="twitter"
+                    label="Social media account"
+                  />
+                </Stack>
+
+                <Stack direction="column">
+                  <FormTitle>
+                    Do you allow your ID and name to be shared with others?
+                    <Text size="xs" color="secondary">
+                      (e.g. create a public directory for Node Opeators in our
+                      community)
+                    </Text>
+                  </FormTitle>
+                  <BooleanButtonsHookForm fieldName="allowShare" />
+                </Stack>
 
                 <SubmitButtonHookForm>Submit</SubmitButtonHookForm>
               </Stack>

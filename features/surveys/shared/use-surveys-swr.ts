@@ -15,7 +15,7 @@ export const useSurveysSWR = <T, R = T>(
   options?: Options<T, R>,
 ) => {
   const nodeOperatorId = useNodeOperatorId();
-  const url = `${nodeOperatorId}/${path}`;
+  const url = `csm-${nodeOperatorId}/${path}`;
 
   const [fetcher, updater] = useSurveysFetcher<T, R>(
     options?.transformIncoming,
@@ -28,7 +28,10 @@ export const useSurveysSWR = <T, R = T>(
   );
 
   const mutate = useCallback(
-    (data: T) => {
+    (data?: T) => {
+      if (data === undefined) {
+        return swr.mutate();
+      }
       return swr.mutate(updater(url, data), {
         rollbackOnError: true,
         revalidate: false,
