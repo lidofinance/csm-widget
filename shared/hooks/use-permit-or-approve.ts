@@ -55,9 +55,8 @@ export const usePermitOrApprove = () => {
         return { permit: EMPTY_PERMIT };
       }
 
-      const { allowance, approve } = TOKENS.STETH
-        ? stethApprove
-        : wstethApprove;
+      const { allowance, approve } =
+        token === TOKENS.STETH ? stethApprove : wstethApprove;
 
       const isEnough = Boolean(allowance?.gte(amount));
 
