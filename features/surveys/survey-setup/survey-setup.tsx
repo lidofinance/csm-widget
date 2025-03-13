@@ -1,6 +1,12 @@
 import { FC, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormTitle, SectionBlock, Stack, WhenLoaded } from 'shared/components';
+import {
+  FormTitle,
+  Plural,
+  SectionBlock,
+  Stack,
+  WhenLoaded,
+} from 'shared/components';
 import {
   CheckboxHookForm,
   NumberInputHookForm,
@@ -24,12 +30,14 @@ import {
   transformFromRaw,
   SetupData,
   transformToRaw,
+  SetupsKeys,
 } from './data';
 import { useModalStages } from './use-modal-stages';
 import { useConfirmRemoveModal } from './confirm-remove-modal';
 import { useNavigate } from 'shared/navigate';
 import { PATH } from 'consts/urls';
 import { SurveyButton } from '../components';
+import { Button } from '@lidofinance/lido-ui';
 
 const required = { required: true };
 
@@ -43,6 +51,10 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
     transformOutcoming: transformToRaw,
   });
 
+  const { data: keys, mutate: mutateKeys } =
+    useSurveysSWR<SetupsKeys>('setups/keys');
+  const keysLeft = (keys?.left ?? 0) + ((!!id && data?.keysCount) || 0);
+
   const { txModalStages: modals } = useModalStages();
   const confirmRemove = useConfirmRemoveModal();
   const navigate = useNavigate();
@@ -50,35 +62,51 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
   const formObject = useForm<SetupData>({
     values: id ? data : undefined,
     defaultValues: {
-      clAsValidator: true,
+      validatorSameAsCl: true,
     },
   });
 
-  const clAsValidator = formObject.watch('clAsValidator');
+  const validatorSameAsCl = formObject.watch('validatorSameAsCl');
+  const keysCount = formObject.watch('keysCount');
+  const keysRemain = keysLeft - (keysCount ?? 0);
 
   const handleSubmit = useCallback(
     async (data: SetupData) => {
       modals.pending();
-      const res = await mutate(data);
-      if (!id && res?.id) {
-        void navigate(`${PATH.SURVEYS_SETUP}/${res.id}` as PATH);
+      try {
+        const res = await mutate(data);
+        void mutateKeys();
+        if (!id && res?.id) {
+          void navigate(`${PATH.SURVEYS_SETUP}/${res.id}` as PATH);
+        }
+        modals.success();
+      } catch (e) {
+        modals.failed(e);
       }
-      modals.success();
     },
-    [modals, mutate, navigate, id],
+    [modals, mutate, id, mutateKeys, navigate],
   );
 
   const handleRemove = useCallback(async () => {
     if (await confirmRemove({})) {
       modals.pendingRemove();
-      await remove();
-      void navigate(PATH.SURVEYS);
-      modals.successRemove();
+      try {
+        await remove();
+        void mutateKeys();
+        void navigate(PATH.SURVEYS);
+        modals.successRemove();
+      } catch (e) {
+        modals.failed(e);
+      }
     }
-  }, [confirmRemove, modals, navigate, remove]);
+  }, [confirmRemove, modals, mutateKeys, navigate, remove]);
+
+  const onKeysClick = useCallback(() => {
+    formObject.setValue('keysCount', keysLeft);
+  }, [formObject, keysLeft]);
 
   return (
-    <SectionBlock title={id ? `Setup #${id}` : 'Add Setup'}>
+    <SectionBlock title={id ? `Setup #${data?.index}` : 'Add Setup'}>
       <FormProvider {...formObject}>
         <WhenLoaded loading={formObject.formState.isLoading} error={error}>
           <Stack direction="column">
@@ -92,7 +120,23 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                   <NumberInputHookForm
                     fieldName="keysCount"
                     label="Number"
-                    rules={required}
+                    rules={{ ...required, min: 1 }}
+                    rightDecorator={
+                      keys && (
+                        <Button
+                          size="xs"
+                          variant="translucent"
+                          onClick={onKeysClick}
+                        >
+                          {keysRemain}{' '}
+                          <Plural
+                            value={keysRemain}
+                            variants={['key', 'keys']}
+                          />{' '}
+                          left
+                        </Button>
+                      )
+                    }
                   />
                 </Stack>
 
@@ -166,10 +210,10 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                 <Stack direction="column">
                   <FormTitle>Which Validator Client are you running?</FormTitle>
                   <CheckboxHookForm
-                    fieldName="clAsValidator"
+                    fieldName="validatorSameAsCl"
                     label="My Consensus Layer Client and Validator Client are the same"
                   />
-                  {!clAsValidator && (
+                  {!validatorSameAsCl && (
                     <SelectHookForm
                       fieldName="validatorClient"
                       options={VALIDATOR_CLIENT_OPTIONS}
@@ -178,7 +222,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                   )}
                 </Stack>
 
-                {!clAsValidator && (
+                {!validatorSameAsCl && (
                   <Stack direction="column">
                     <FormTitle>
                       What type of servers are your Validator Clients running
@@ -192,7 +236,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                   </Stack>
                 )}
 
-                {!clAsValidator && (
+                {!validatorSameAsCl && (
                   <Stack direction="column">
                     <FormTitle>
                       Which country are your Validator Clients in?

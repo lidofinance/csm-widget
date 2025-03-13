@@ -2,6 +2,7 @@ import { BigNumber } from 'ethers';
 
 export type SetupData = {
   id?: number;
+  index?: number;
   keysCount: number;
   dvt: string;
   installationTool: string;
@@ -12,7 +13,7 @@ export type SetupData = {
   validatorClient: string;
   validatorServerType: string;
   validatorCountry: string;
-  clAsValidator?: boolean;
+  validatorSameAsCl?: boolean;
   remoteSigner: string;
   mevMinBid?: BigNumber;
 };
@@ -27,5 +28,11 @@ export const transformToRaw = (data: SetupData): SetupRawData => ({
 export const transformFromRaw = (data: SetupRawData): SetupData => ({
   ...data,
   mevMinBid: BigNumber.from(data.mevMinBid),
-  clAsValidator: data.clAsValidator ?? false,
+  validatorSameAsCl: data.validatorSameAsCl ?? false,
 });
+
+export type SetupsKeys = {
+  total: number;
+  filled: number;
+  left: number;
+};

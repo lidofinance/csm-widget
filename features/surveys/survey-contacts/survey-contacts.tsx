@@ -38,8 +38,12 @@ export const SurveyContacts: FC = () => {
   const handleSubmit = useCallback(
     async (data: ContactData) => {
       modals.pending();
-      await mutate(data);
-      modals.success();
+      try {
+        await mutate(data);
+        modals.success();
+      } catch (e) {
+        modals.failed(e);
+      }
     },
     [modals, mutate],
   );
@@ -47,9 +51,13 @@ export const SurveyContacts: FC = () => {
   const handleRemove = useCallback(async () => {
     if (await confirmRemove({})) {
       modals.pendingRemove();
-      await remove();
-      void navigate(PATH.SURVEYS);
-      modals.successRemove();
+      try {
+        await remove();
+        void navigate(PATH.SURVEYS);
+        modals.successRemove();
+      } catch (e) {
+        modals.failed(e);
+      }
     }
   }, [confirmRemove, modals, navigate, remove]);
 

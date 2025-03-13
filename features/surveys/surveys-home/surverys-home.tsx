@@ -1,6 +1,6 @@
 import { PATH } from 'consts/urls';
 import { FC, useCallback } from 'react';
-import { WhenLoaded } from 'shared/components';
+import { Plural, Stack, WhenLoaded } from 'shared/components';
 import {
   SurveyLink,
   SurveyItem,
@@ -9,28 +9,28 @@ import {
 } from '../components';
 import { useSurveysSWR } from '../shared/use-surveys-swr';
 import { ContactData } from '../survey-contacts';
-import { SetupRawData } from '../survey-setup';
+import { SetupRawData, SetupsKeys } from '../survey-setup';
 import { useConfirmEraseModal } from './confirm-erase-modal';
-import { Divider } from '@lidofinance/lido-ui';
+import { Divider, Plus, Text } from '@lidofinance/lido-ui';
 
 type Summary = {
   contacts: ContactData | null;
   setups: SetupRawData[];
-  meta: {
-    keysCount: number;
-  };
 };
 
 export const SurveysHome: FC = () => {
   const { data, isLoading, remove } = useSurveysSWR<Summary>('summary');
+  const { data: keys, mutate: mutateKeys } =
+    useSurveysSWR<SetupsKeys>('setups/keys');
 
   const confirmModal = useConfirmEraseModal();
 
   const handleErase = useCallback(async () => {
     if (await confirmModal({})) {
       await remove();
+      void mutateKeys();
     }
-  }, [confirmModal, remove]);
+  }, [confirmModal, mutateKeys, remove]);
 
   return (
     <WhenLoaded loading={!data && isLoading}>
@@ -41,10 +41,11 @@ export const SurveysHome: FC = () => {
       >
         <SurveyItem title="Contact information">
           <SurveyLink
-            title={data?.contacts ? 'Filled' : 'Fill in'}
             color={data?.contacts ? 'secondary' : 'primary'}
             path={PATH.SURVEYS_CONTACTS}
-          />
+          >
+            {data?.contacts ? 'Filled' : 'Fill in'}
+          </SurveyLink>
         </SurveyItem>
       </SurveySection>
 
@@ -54,15 +55,42 @@ export const SurveysHome: FC = () => {
         help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
       >
         {data?.setups.map((setup) => (
-          <SurveyItem key={setup.id} title={`Setup #${setup.id}`}>
-            <SurveyLink
-              title="Edit"
-              path={`${PATH.SURVEYS_SETUP}/${setup.id}`}
-            />
+          <SurveyItem
+            key={setup.id}
+            title={
+              <Stack>
+                Setup #{setup.index}{' '}
+                <Text as="span" size="sm" color="secondary">
+                  {setup.keysCount}{' '}
+                  <Plural value={setup.keysCount} variants={['key', 'keys']} />
+                </Text>
+              </Stack>
+            }
+          >
+            <SurveyLink path={`${PATH.SURVEYS_SETUP}/${setup.id}`}>
+              Edit
+            </SurveyLink>
           </SurveyItem>
         ))}
 
-        <SurveyLink title="Add new setup" fullwidth path={PATH.SURVEYS_SETUP} />
+        <SurveyLink
+          icon={<Plus />}
+          color={keys?.left ? 'primary' : 'secondary'}
+          variant="translucent"
+          fullwidth
+          path={PATH.SURVEYS_SETUP}
+        >
+          <>
+            Add new setup
+            {keys && (
+              <>
+                {' '}
+                ({keys.left}{' '}
+                <Plural value={keys.left} variants={['key', 'keys']} /> left)
+              </>
+            )}
+          </>
+        </SurveyLink>
       </SurveySection>
 
       {(data?.contacts || (data?.setups && data.setups.length > 0)) && (
@@ -73,6 +101,7 @@ export const SurveysHome: FC = () => {
               title="Erase all data from the database"
               fullwidth
               color="error"
+              variant="translucent"
               onClick={handleErase}
             />
           </SurveySection>
