@@ -1,10 +1,11 @@
+import { DarkThemeProvider } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 
-import { Banner, InverseThemeProvider } from 'shared/components';
+import { Banner } from 'shared/components';
 
 export const HoleskyBanner: FC = () => {
   return (
-    <InverseThemeProvider>
+    <DarkThemeProvider>
       <Banner title="CSM is paused on Holesky" variant="sunset">
         <p>
           CSM is transitioning from the Holesky testnet to the Hoodi testnet,
@@ -15,6 +16,6 @@ export const HoleskyBanner: FC = () => {
         <br />
         <p>Stay tuned for more details on the Hoodi testnet launch!</p>
       </Banner>
-    </InverseThemeProvider>
+    </DarkThemeProvider>
   );
 };
