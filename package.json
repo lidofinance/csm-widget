@@ -73,6 +73,7 @@
     "remark": "^13.0.0",
     "remark-external-links": "^8.0.0",
     "remark-html": "^13.0.1",
+    "siwe": "^3.0.0",
     "styled-components": "^5.3.5",
     "swr": "^2.2.5",
     "tiny-async-pool": "^2.1.0",

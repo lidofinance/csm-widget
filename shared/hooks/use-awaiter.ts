@@ -40,7 +40,7 @@ export const useAwaiter = <T>(value: T | undefined, timeout = 0) => {
       awaiter = createAwaiter();
       awaiterState.current = awaiter;
     }
-    if (value) {
+    if (value !== undefined) {
       awaiterState.current.resolver.resolve(value);
     }
   }, [timeout, value]);

@@ -51,6 +51,11 @@ const GlobalStyle = createGlobalStyle`
   ol {
     padding-inline-start: 18px;
   }
+
+  #lido-ui-modal-root [role='listbox'] {
+    max-height: 334px;
+    overflow-y: scroll;
+  }
 `;
 
 export default GlobalStyle;
