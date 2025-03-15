@@ -56,7 +56,7 @@ export const SurveysHome: FC = () => {
       >
         {data?.setups.map((setup) => (
           <SurveyItem
-            key={setup.id}
+            key={setup.index}
             title={
               <Stack>
                 Setup #{setup.index}{' '}
@@ -67,7 +67,7 @@ export const SurveysHome: FC = () => {
               </Stack>
             }
           >
-            <SurveyLink path={`${PATH.SURVEYS_SETUP}/${setup.id}`}>
+            <SurveyLink path={`${PATH.SURVEYS_SETUP}/${setup.index}`}>
               Edit
             </SurveyLink>
           </SurveyItem>

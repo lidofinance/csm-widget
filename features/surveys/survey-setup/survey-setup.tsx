@@ -76,8 +76,8 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
       try {
         const res = await mutate(data);
         void mutateKeys();
-        if (!id && res?.id) {
-          void navigate(`${PATH.SURVEYS_SETUP}/${res.id}` as PATH);
+        if (!id && res?.index) {
+          void navigate(`${PATH.SURVEYS_SETUP}/${res.index}` as PATH);
         }
         modals.success();
       } catch (e) {

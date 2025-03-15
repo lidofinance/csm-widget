@@ -1,8 +1,7 @@
 import { BigNumber } from 'ethers';
 
 export type SetupData = {
-  id?: number;
-  index?: number;
+  index: number;
   keysCount: number;
   dvt: string;
   installationTool: string;
