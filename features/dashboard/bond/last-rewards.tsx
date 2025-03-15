@@ -16,6 +16,7 @@ import {
   useLastRewrdsTx,
   useNodeOperatorInfo,
   useRewardsFrame,
+  useSharesToSteth,
 } from 'shared/hooks';
 import { countDaysLeft, formatDate, formatPercent } from 'utils';
 import { Balance } from './balance';
@@ -31,6 +32,8 @@ import {
 export const LastRewards: FC = () => {
   const { data: lastRewards, initialLoading: isLoading } =
     useLastOperatorRewards();
+  const { data: distributed, initialLoading: isDistributedLoading } =
+    useSharesToSteth(lastRewards?.distributed);
 
   const id = useNodeOperatorId();
   const { data: info } = useNodeOperatorInfo(id);
@@ -62,8 +65,8 @@ export const LastRewards: FC = () => {
           </Stack>
           <Balance
             big
-            loading={isLoading}
-            amount={lastRewards?.distributed}
+            loading={isLoading || isDistributedLoading}
+            amount={distributed}
             description={showWhy ? <Why /> : undefined}
           />
         </RowHeader>
