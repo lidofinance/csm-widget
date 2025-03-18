@@ -23,6 +23,8 @@ export const PATH = <const>{
 
   SURVEYS: '/surveys',
   SURVEYS_CONTACTS: '/surveys/contacts',
+  SURVEYS_EXPERIENCE: '/surveys/experience',
+  SURVEYS_HOW_DID_YOU_LEARN_CSM: '/surveys/learn-csm',
   SURVEYS_SETUP: '/surveys/setup',
 };
 

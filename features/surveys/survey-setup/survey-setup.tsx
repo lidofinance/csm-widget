@@ -25,41 +25,41 @@ import {
   TOOL_OPTIONS,
   VALIDATOR_CLIENT_OPTIONS,
 } from './options';
-import {
-  SetupRawData,
-  transformFromRaw,
-  SetupData,
-  transformToRaw,
-  SetupsKeys,
-} from './data';
+import { transformIncoming, transformOutcoming } from './transform';
 import { useModalStages } from './use-modal-stages';
 import { useConfirmRemoveModal } from './confirm-remove-modal';
 import { useNavigate } from 'shared/navigate';
 import { PATH } from 'consts/urls';
 import { SurveyButton } from '../components';
 import { Button } from '@lidofinance/lido-ui';
+import { Setup, SetupRaw, SetupsKeys } from '../types';
 
 const required = { required: true };
 
 export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
-  const { data, error, mutate, remove } = useSurveysSWR<
-    SetupData,
-    SetupRawData
-  >(`setups${id ? '/' + id : ''}`, {
-    skipFetching: !id,
-    transformIncoming: transformFromRaw,
-    transformOutcoming: transformToRaw,
-  });
+  const { data, error, mutate, remove } = useSurveysSWR<Setup, SetupRaw>(
+    `setups${id ? '/' + id : ''}`,
+    {
+      skipFetching: !id,
+      transformIncoming,
+      transformOutcoming,
+    },
+  );
 
   const { data: keys, mutate: mutateKeys } =
     useSurveysSWR<SetupsKeys>('setups/keys');
-  const keysLeft = (keys?.left ?? 0) + ((!!id && data?.keysCount) || 0);
+
+  const filledWitoutCurrent = Math.max(
+    0,
+    (keys?.filled ?? 0) - (data?.keysCount ?? 0),
+  );
+  const keysLeft = Math.max(0, (keys?.total ?? 0) - filledWitoutCurrent);
 
   const { txModalStages: modals } = useModalStages();
   const confirmRemove = useConfirmRemoveModal();
   const navigate = useNavigate();
 
-  const formObject = useForm<SetupData>({
+  const formObject = useForm<Setup>({
     values: id ? data : undefined,
     defaultValues: {
       validatorSameAsCl: true,
@@ -71,7 +71,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
   const keysRemain = Math.max(0, keysLeft - (keysCount ?? 0));
 
   const handleSubmit = useCallback(
-    async (data: SetupData) => {
+    async (data: Setup) => {
       modals.pending();
       try {
         const res = await mutate(data);
