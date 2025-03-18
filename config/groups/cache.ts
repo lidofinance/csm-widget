@@ -15,10 +15,6 @@ export const CACHE_LIDO_STATS_TTL = ms('1h');
 export const CACHE_LIDO_SHORT_STATS_KEY = 'cache-short-lido-stats';
 export const CACHE_LIDO_SHORT_STATS_TTL = ms('1h');
 
-export const CACHE_LIDO_HOLDERS_VIA_SUBGRAPHS_KEY =
-  'cache-lido-holders-via-subgraphs';
-export const CACHE_LIDO_HOLDERS_VIA_SUBGRAPHS_TTL = ms('7d');
-
 export const CACHE_LDO_STATS_KEY = 'cache-ldo-stats';
 export const CACHE_LDO_STATS_TTL = ms('1h');
 
