@@ -10,26 +10,25 @@ type Props = {
   address: string;
 };
 
+const getExplorerAddressLink = (chainId: number, address: string) => {
+  if (chainId === CHAINS.Hoodi) {
+    return `https://hoodi.cloud.blockscout.com/address/${address}`;
+  }
+  return getEtherscanAddressLink(chainId, address);
+};
+
 export const EtherscanAddressLink: FC<Props> = ({ address }) => {
   const { chainId } = useAccount();
 
-  if (chainId === CHAINS.Hoodi) {
-    return null;
-  }
-
-  const href = getEtherscanAddressLink(chainId ?? 0, address);
+  if (!address) return null;
 
   return (
-    <>
-      {href && (
-        <MatomoLink
-          href={href}
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink}
-          title="View on etherscan"
-        >
-          <External />
-        </MatomoLink>
-      )}
-    </>
+    <MatomoLink
+      href={getExplorerAddressLink(chainId ?? 0, address)}
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink}
+      title="View on etherscan"
+    >
+      <External />
+    </MatomoLink>
   );
 };

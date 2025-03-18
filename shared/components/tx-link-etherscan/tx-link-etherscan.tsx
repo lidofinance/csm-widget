@@ -10,6 +10,13 @@ type TxLinkEtherscanProps = {
   txHash?: string | null;
 };
 
+const getExplorerTxLink = (chainId: number, hash: string) => {
+  if (chainId === CHAINS.Hoodi) {
+    return `https://hoodi.cloud.blockscout.com/tx/${hash}`;
+  }
+  return getEtherscanTxLink(chainId, hash);
+};
+
 export const TxLinkEtherscan: FC<TxLinkEtherscanProps> = ({
   txHash,
   text = 'View on Etherscan',
@@ -18,13 +25,9 @@ export const TxLinkEtherscan: FC<TxLinkEtherscanProps> = ({
 
   if (!txHash) return null;
 
-  if (chainId === CHAINS.Hoodi) {
-    return null;
-  }
-
   return (
     <MatomoLink
-      href={getEtherscanTxLink(chainId, txHash)}
+      href={getExplorerTxLink(chainId, txHash)}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink}
     >
       {text}
