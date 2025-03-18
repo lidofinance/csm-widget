@@ -22,6 +22,7 @@ export * from './use-keys-available';
 export * from './use-keys-cl-status';
 export * from './use-keys-upload-limit';
 export * from './use-keys-with-status';
+export * from './use-lido-contracts';
 export * from './use-mainnet-static-rpc-provider';
 export * from './use-network-duplicates';
 export * from './use-node-operators-fetcher-from-events';

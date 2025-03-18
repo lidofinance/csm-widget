@@ -1,8 +1,4 @@
-import {
-  useEthereumBalance,
-  useSTETHBalance,
-  useWSTETHBalance,
-} from '@lido-sdk/react';
+import { useEthereumBalance } from '@lido-sdk/react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useCallback, useMemo } from 'react';
 import {
@@ -14,6 +10,8 @@ import {
   useKeysAvailable,
   useKeysUploadLimit,
   useStakingLimitInfo,
+  useSTETHBalance,
+  useWSTETHBalance,
 } from 'shared/hooks';
 import { useBlockNumber } from 'wagmi';
 import { type SubmitKeysFormNetworkData } from './types';
