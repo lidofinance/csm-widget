@@ -1,0 +1,26 @@
+import { BigNumber } from '@ethersproject/bignumber';
+import { CHAINS } from '@lido-sdk/constants';
+import { SWRResponse, UseApproveResponse, UseApproveWrapper, useAllowance, useDecimals, useTokenBalance, useTotalSupply, useApprove } from '../hooks';
+import { SWRConfiguration } from 'swr';
+export declare const hooksFactory: (getTokenAddress: (chainId: CHAINS) => string) => {
+    useTokenBalance: (config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+    useTotalSupply: (config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+    useDecimals: (config?: Partial<import("swr/dist/types").PublicConfiguration<number, any, import("swr").Fetcher<number>>> | undefined) => SWRResponse<number>;
+    useAllowance: (spender: string, config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+    useApprove: (amount: BigNumber, spender: string, wrapper: UseApproveWrapper) => UseApproveResponse;
+};
+export declare const useWSTETHBalance: (config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+export declare const useWSTETHTotalSupply: (config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+export declare const useWSTETHDecimals: (config?: Partial<import("swr/dist/types").PublicConfiguration<number, any, import("swr").Fetcher<number>>> | undefined) => SWRResponse<number>;
+export declare const useWSTETHAllowance: (spender: string, config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+export declare const useWSTETHApprove: (amount: BigNumber, spender: string, wrapper: UseApproveWrapper) => UseApproveResponse;
+export declare const useSTETHBalance: (config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+export declare const useSTETHTotalSupply: (config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+export declare const useSTETHDecimals: (config?: Partial<import("swr/dist/types").PublicConfiguration<number, any, import("swr").Fetcher<number>>> | undefined) => SWRResponse<number>;
+export declare const useSTETHAllowance: (spender: string, config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+export declare const useSTETHApprove: (amount: BigNumber, spender: string, wrapper: UseApproveWrapper) => UseApproveResponse;
+export declare const useLDOBalance: (config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+export declare const useLDOTotalSupply: (config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+export declare const useLDODecimals: (config?: Partial<import("swr/dist/types").PublicConfiguration<number, any, import("swr").Fetcher<number>>> | undefined) => SWRResponse<number>;
+export declare const useLDOAllowance: (spender: string, config?: Partial<import("swr/dist/types").PublicConfiguration<BigNumber, any, import("swr").Fetcher<BigNumber>>> | undefined) => SWRResponse<BigNumber>;
+export declare const useLDOApprove: (amount: BigNumber, spender: string, wrapper: UseApproveWrapper) => UseApproveResponse;
