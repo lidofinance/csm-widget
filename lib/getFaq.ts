@@ -1,9 +1,10 @@
+/* eslint-disable no-console */
 import matter from 'gray-matter';
 import remark from 'remark';
 import html from 'remark-html';
 import externalLinks from 'remark-external-links';
 import { getConfig } from 'config';
-import { CHAINS } from 'consts/chains';
+import { CHAINS } from '@lido-sdk/constants';
 
 export type FaqItem = {
   id: string;
@@ -16,8 +17,8 @@ export type FaqItem = {
 
 export type FaqGetter = () => Promise<FaqItem[]>;
 
-const readFaqFile = async (id: string): Promise<FaqItem> => {
-  const fileContents = await import(`faq/${id}.md`);
+const readFaqFile = async ([scope, id]: string[]): Promise<FaqItem> => {
+  const fileContents = await import(`faq/${scope}/${id}.md`);
   const matterResult = matter(fileContents.default);
 
   const processedContent = await remark()
@@ -36,13 +37,10 @@ const readFaqFile = async (id: string): Promise<FaqItem> => {
 };
 
 const { defaultChain } = getConfig();
-const isMainnet = defaultChain === CHAINS.Mainnet;
+const chainName = CHAINS[defaultChain].toLowerCase();
 
 export const readFaqFiles = async (fileNames: string[]) => {
-  const ids = isMainnet
-    ? fileNames
-    : fileNames.map((name) => `testnet-${name}`);
-
+  const ids = fileNames.map((name) => [chainName, name]);
   return Promise.all(ids.map(readFaqFile));
 };
 
