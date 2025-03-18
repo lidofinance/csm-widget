@@ -18,12 +18,12 @@ type ResponseData = {
   meta: any;
 };
 
-const findDuplicate = async (pubkeys: HexString[], chainId: CHAINS) => {
+const findDuplicate = async (pubkeys: HexString[]) => {
   try {
     // TODO: timeout
     // TODO: cache
-    const url = getExternalLinks(chainId).keysApi;
-    const response = await fetch(`${url}/v1/keys/find`, {
+    const { keysApi } = getExternalLinks();
+    const response = await fetch(`${keysApi}/v1/keys/find`, {
       method: 'post',
       body: JSON.stringify({ pubkeys }),
       headers: { 'Content-Type': 'application/json' },
@@ -41,14 +41,11 @@ const toHexString = (data: string): HexString => {
   return `0x${data}`;
 };
 
-export const checkNetworkDuplicates = async (
-  depositData: DepositData[],
-  chainId: CHAINS,
-) => {
+export const checkNetworkDuplicates = async (depositData: DepositData[]) => {
   const pubkeys = depositData.map((data) =>
     toHexString(data.pubkey.toLowerCase()),
   );
-  const duplicateKey = await findDuplicate(pubkeys, chainId);
+  const duplicateKey = await findDuplicate(pubkeys);
 
   if (duplicateKey) {
     throw new Error(
