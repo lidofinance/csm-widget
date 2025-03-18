@@ -3,6 +3,7 @@ import { getEtherscanTxLink } from '@lido-sdk/helpers';
 import { MatomoLink } from '../matomo-link/matomo-link';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
+import { CHAINS } from '@lido-sdk/constants';
 
 type TxLinkEtherscanProps = {
   text?: string;
@@ -16,6 +17,10 @@ export const TxLinkEtherscan: FC<TxLinkEtherscanProps> = ({
   const { chainId } = useSDK();
 
   if (!txHash) return null;
+
+  if (chainId === CHAINS.Hoodi) {
+    return null;
+  }
 
   return (
     <MatomoLink
