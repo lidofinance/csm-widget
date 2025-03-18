@@ -1,10 +1,9 @@
-import { DepositData } from 'types';
-import { TRIM_LENGTH } from './constants';
 import { trimAddress } from '@lidofinance/address';
-import { trimOx } from '../utils';
-import { HexString } from '../types';
-import { CHAINS } from '@lido-sdk/constants';
 import { getExternalLinks } from 'consts/external-links';
+import { DepositData } from 'types';
+import { HexString } from '../types';
+import { trimOx } from '../utils';
+import { TRIM_LENGTH } from './constants';
 
 type ResponseData = {
   data: {
@@ -23,6 +22,8 @@ const findDuplicate = async (pubkeys: HexString[]) => {
     // TODO: timeout
     // TODO: cache
     const { keysApi } = getExternalLinks();
+    if (!keysApi) return;
+
     const response = await fetch(`${keysApi}/v1/keys/find`, {
       method: 'post',
       body: JSON.stringify({ pubkeys }),
