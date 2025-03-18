@@ -95,7 +95,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
       ratedExplorer: 'https://explorer.rated.network',
       subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
-      keysApi: 'http://hr6vb81d1ndsx-hoodi-keys-api.valset-01.testnet.fi',
+      keysApi: '',
     },
   };
 

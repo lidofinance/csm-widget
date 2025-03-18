@@ -73,7 +73,11 @@ const useSROperators = () => {
     return { operators, modules };
   };
 
-  return useLidoSWR(['sr-operators', keysApi], fetcher, STRATEGY_IMMUTABLE);
+  return useLidoSWR(
+    ['sr-operators', keysApi],
+    keysApi ? fetcher : null,
+    STRATEGY_IMMUTABLE,
+  );
 };
 
 export const useOperatorInOtherModule = () => {
