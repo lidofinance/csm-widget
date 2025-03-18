@@ -136,7 +136,7 @@ const aggregatorMainnetAddress = METRIC_CONTRACT_ADDRESS_GETTERS[
 ](CHAINS.Mainnet) as HexString;
 
 const prefilledAddresses =
-  config.defaultChain === CHAINS.Holesky &&
+  config.defaultChain === CHAINS.Hoodi &&
   !config.supportedChains.includes(CHAINS.Mainnet)
     ? ({
         [CHAINS.Mainnet]: [aggregatorMainnetAddress],
@@ -146,7 +146,7 @@ const prefilledAddresses =
 const prefilledMetricAddresses: Partial<
   Record<CHAINS, Record<HexString, CONTRACT_NAMES>>
 > =
-  config.defaultChain === CHAINS.Holesky &&
+  config.defaultChain === CHAINS.Hoodi &&
   !config.supportedChains.includes(CHAINS.Mainnet)
     ? {
         [CHAINS.Mainnet]: {

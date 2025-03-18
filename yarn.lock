@@ -2545,10 +2545,17 @@
     bignumber.js "^9.1.2"
     rxjs "^7.8.1"
 
-"@lido-sdk/constants@3.3.0", "@lido-sdk/constants@^3.2.1":
+"@lido-sdk/constants@3.3.0":
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/@lido-sdk/constants/-/constants-3.3.0.tgz#044b652a000a067b9ee0ae9f58814434779bb108"
   integrity sha512-R5XINgj/EQvyBfPF+Zv9B/ycFCqARD8rbWDp3J4luAMDbSUP3ncGw0x7Aj836k96eVnrh+jfd2tz/c99Dm6IaA==
+  dependencies:
+    tiny-invariant "^1.1.0"
+
+"@lido-sdk/constants@3.5.0", "@lido-sdk/constants@^3.5.0":
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/@lido-sdk/constants/-/constants-3.5.0.tgz#74d7e21a36cba3abce83cc63db0e50a03b92492e"
+  integrity sha512-Br5md5TP5g2uka3wTtpoUy92wYzTdA+y8U8p+EbZsnm/aMQyrvu0gA7b0pC4l/xODNEEIAGwThCGDb1sP9W39A==
   dependencies:
     tiny-invariant "^1.1.0"
 
@@ -2560,12 +2567,12 @@
     "@lido-sdk/constants" "3.3.0"
     tiny-invariant "^1.1.0"
 
-"@lido-sdk/fetch@^2.1.12":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@lido-sdk/fetch/-/fetch-2.2.0.tgz#e0034083edaed471f29163ebfdccc9b10cd58ea7"
-  integrity sha512-Jwi2W5azP4uuhmsWexkk4al0Y+pMx5PpB74klIBzgX/eoVnK+NOTxLemJa6GDq4KTIlriAM79jscY0TJvJJWQA==
+"@lido-sdk/fetch@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@lido-sdk/fetch/-/fetch-2.3.1.tgz#f9fb3359dc76a8922083b3ec91a7112939a4b266"
+  integrity sha512-ylfyqo1EyB5oykUMBNUx1mumVG2trx/ZrWNOIPBDJVSuDs0GBk9cFPil9dRj8QJh/gQyQdIPUsjv+HlwtdJqjQ==
   dependencies:
-    "@lido-sdk/constants" "3.3.0"
+    "@lido-sdk/constants" "3.5.0"
     node-fetch "^2.6.7"
     tiny-invariant "^1.1.0"
 
