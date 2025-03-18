@@ -79,10 +79,13 @@ export const useDepositQueueGraph = (fullView = false) => {
     const addedSize = ccc(added, queue.add(active));
     const limitOffset = extraLow ? 8 : extraHigh ? 95 : cc(capacity);
 
-    const koef = queue
-      .mul(100)
-      .div(batches?.summ || queue)
-      .toNumber();
+    const koef =
+      batches?.summ.isZero() || queue.isZero()
+        ? One.mul(100)
+        : queue
+            .mul(100)
+            .div(batches?.summ || queue)
+            .toNumber();
 
     const yourBatches = mergeBatches(
       batches?.list.map((batch) => {
