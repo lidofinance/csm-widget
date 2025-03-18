@@ -4,4 +4,5 @@ import { CHAINS } from 'consts/chains';
 export const clApiUrls: Record<CHAINS, [string, ...string[]]> = {
   [CHAINS.Mainnet]: secretConfig.clApiUrls_1,
   [CHAINS.Holesky]: secretConfig.clApiUrls_17000,
+  [CHAINS.Hoodi]: secretConfig.clApiUrls_560048,
 };

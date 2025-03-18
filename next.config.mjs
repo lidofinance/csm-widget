@@ -161,10 +161,14 @@ export default withBundleAnalyzer({
     maintenance,
 
     defaultChain: process.env.DEFAULT_CHAIN,
+
     rpcUrls_1: process.env.EL_RPC_URLS_1,
     rpcUrls_17000: process.env.EL_RPC_URLS_17000,
+    rpcUrls_560048: process.env.EL_RPC_URLS_560048,
+
     clApiUrls_1: process.env.CL_API_URLS_1,
     clApiUrls_17000: process.env.CL_API_URLS_17000,
+    clApiUrls_560048: process.env.CL_API_URLS_560048,
 
     cspTrustedHosts: process.env.CSP_TRUSTED_HOSTS,
     cspReportUri: process.env.CSP_REPORT_URI,
