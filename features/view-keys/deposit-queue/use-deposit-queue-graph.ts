@@ -7,7 +7,7 @@ import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { useCSMShareLimitInfo, useNodeOperatorInfo } from 'shared/hooks';
 import { useCSMQueueBatches } from 'shared/hooks/useCSMQueueBatches';
 
-const POTENTIAL_ADDED = BigNumber.from(100);
+const POTENTIAL_ADDED = BigNumber.from(25);
 const BACK = BigNumber.from(30);
 
 type Pos = { size: number; offset: number };
@@ -41,7 +41,7 @@ export const useDepositQueueGraph = (fullView = false) => {
     const isSubmitting = submitting !== undefined;
     const potential = added.lt(POTENTIAL_ADDED) ? POTENTIAL_ADDED : added;
 
-    const m0 = active.isZero() ? queue : active;
+    const m0 = active.lt(BACK) ? Zero : active;
     const m1 = m0.sub(BACK).isNegative() ? m0 : m0.sub(BACK);
     const m2 = active.add(queue).add(potential);
     const md = m2.sub(m1);
@@ -70,7 +70,11 @@ export const useDepositQueueGraph = (fullView = false) => {
       return value.isZero() ? 0 : Math.max(minSize, cc(value.add(prev)) - p);
     };
 
-    const queueUnderLimit = queue.lt(activeLeft) ? queue : activeLeft;
+    const queueUnderLimit = activeLeft.gt(Zero)
+      ? queue.lt(activeLeft)
+        ? queue
+        : activeLeft
+      : Zero;
     const queueOverLimit = queue.sub(queueUnderLimit);
 
     const activeSize = ccc(active);
