@@ -85,15 +85,13 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
     [CHAINS.Hoodi]: {
       earlyAdoptionTree: '',
       rewardsTree: '',
-      earlyAdoptionSources:
-        'https://github.com/lidofinance/community-staking-module/blob/v1.0/artifacts/holesky/early-adoption/addresses.json',
-      earlyAdoptionAbout:
-        'https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22',
+      earlyAdoptionSources: '',
+      earlyAdoptionAbout: '',
       feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
-      stakeWidget: 'https://stake-holesky.testnet.fi',
+      stakeWidget: 'https://stake-hoodi.testnet.fi',
 
-      feesMonitoring: 'https://fees-monitoring-holesky.testnet.fi',
-      operatorsWidget: 'https://operators-holesky.testnet.fi',
+      feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
+      operatorsWidget: 'https://operators-hoodi.testnet.fi',
       beaconchain: 'https://holesky.beaconcha.in',
       beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
       ratedExplorer: 'https://explorer.rated.network',
