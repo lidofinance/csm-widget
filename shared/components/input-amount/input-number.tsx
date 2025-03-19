@@ -78,7 +78,7 @@ export const InputNumber = forwardRef<HTMLInputElement, InputAmountProps>(
         } else {
           const value = parseNumber(currentValue);
           // invalid value, so we rollback to last valid value
-          if (!value) {
+          if (value === null || value === undefined || Number.isNaN(value)) {
             const rollbackCaretPosition =
               caretPosition -
               Math.min(
@@ -122,7 +122,7 @@ export const InputNumber = forwardRef<HTMLInputElement, InputAmountProps>(
     useEffect(() => {
       const input = inputRef.current;
       if (!input) return;
-      if (!value) {
+      if (value === undefined || value === null) {
         input.value = '';
       } else {
         const parsedValue = parseNumber(input.value);

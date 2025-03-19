@@ -32,7 +32,7 @@ export const NumberInputHookForm = ({
     (isTouched || rules?.required) &&
     (isValidationErrorTypeValidate(error?.type) || error?.type === 'required');
   // allows to show error state without message
-  const errorMessage = hasErrorHighlight && (error?.message || true);
+  const errorMessage = hasErrorHighlight || error?.message;
 
   return (
     <InputNumber

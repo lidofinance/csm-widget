@@ -31,7 +31,7 @@ export const SurveysHome: FC = () => {
       <SurveySection
         title="Your contact information"
         subtitle="How this information will be used"
-        help="Lido contributors will attempt to contact you in case you are offline or unresponsive to important matters on the mainnet. However, we cannot guarantee that you will be notified."
+        help="Lido contributors will attempt to contact you in case you are offline or unresponsive to important matters on the Mainnet. However, we cannot guarantee that you will be notified."
       >
         <SurveyItem title="Contact information">
           <SurveyLink
