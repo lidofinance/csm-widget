@@ -10,8 +10,14 @@ export const HoleskyBanner: FC = () => {
         <p>
           CSM is transitioning from the Holesky testnet to the Hoodi testnet,
           and its operations on Holesky have been paused.
-          <br /> This update affects only CSM on Holesky testnet — CSM on
-          Mainnet remains fully operational.
+        </p>
+        <p>
+          This means that uploading new keys is currently not possible, but Node
+          Operator stats can be viewed.
+        </p>
+        <p>
+          This update affects only CSM on Holesky testnet — CSM on Mainnet
+          remains fully operational.
         </p>
         <br />
         <p>Stay tuned for more details on the Hoodi testnet launch!</p>
