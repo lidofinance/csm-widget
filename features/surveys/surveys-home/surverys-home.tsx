@@ -110,7 +110,10 @@ export const SurveysHome: FC = () => {
         </SurveyLink>
       </SurveySection>
 
-      {(data?.contacts || (data?.setups && data.setups.length > 0)) && (
+      {(data?.contacts ||
+        data?.experience ||
+        data?.howDidYouLearnCsm ||
+        (data?.setups && data.setups.length > 0)) && (
         <>
           <Divider />
           <SurveySection title="Erase your data">

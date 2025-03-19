@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormTitle,
@@ -37,14 +37,18 @@ import { Setup, SetupRaw, SetupsKeys } from '../types';
 const required = { required: true };
 
 export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
-  const { data, error, mutate, remove } = useSurveysSWR<Setup, SetupRaw>(
-    `setups${id ? '/' + id : ''}`,
-    {
-      skipFetching: !id,
-      transformIncoming,
-      transformOutcoming,
-    },
-  );
+  const {
+    data: filled,
+    error,
+    mutate,
+    remove,
+  } = useSurveysSWR<Setup, SetupRaw>(`setups${id ? '/' + id : ''}`, {
+    skipFetching: !id,
+    transformIncoming,
+    transformOutcoming,
+  });
+
+  const data = useMemo(() => (id ? filled : undefined), [id, filled]);
 
   const { data: keys, mutate: mutateKeys } =
     useSurveysSWR<SetupsKeys>('setups/keys');
