@@ -8,6 +8,11 @@ import { Connect, Fallback } from 'shared/wallet';
 import { EarlyAdoptionBanner } from './early-adoption-banner';
 import { WelcomeSection } from './welcome-section';
 import styled from 'styled-components';
+import { HoleskyBanner } from './holesky-banner';
+import { getConfig } from 'config';
+import { CHAINS } from 'consts/chains';
+
+const { defaultChain } = getConfig();
 
 export const Welcome: FC = () => {
   const { active, isConnected } = useAccount();
@@ -36,6 +41,7 @@ export const Welcome: FC = () => {
           </ConnectStyle>
         </Stack>
       </WelcomeSection>
+      {defaultChain === CHAINS.Holesky && <HoleskyBanner />}
       {!isPublicRelease && !paused && <EarlyAdoptionBanner />}
     </>
   );
