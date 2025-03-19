@@ -127,12 +127,19 @@ export const SurveyExperience: FC = () => {
 
                 <Stack direction="column">
                   <FormTitle>
-                    How many other mainnet validators do you run outside of Lido
+                    How many other Mainnet validators do you run outside of Lido
                     CSM?
                   </FormTitle>
                   <NumberInputHookForm
                     fieldName="otherValidatorsCount"
                     label="Keys number"
+                    rules={{
+                      min: { value: 0, message: 'Minimum keys amount is 0' },
+                      max: {
+                        value: 999999999,
+                        message: 'Maximum keys amount is 999 999 999',
+                      },
+                    }}
                   />
                 </Stack>
 

@@ -123,8 +123,15 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                   <FormTitle>Number of keys in this setup</FormTitle>
                   <NumberInputHookForm
                     fieldName="keysCount"
-                    label="Number"
-                    rules={{ ...required, min: 1 }}
+                    label="Number of keys"
+                    rules={{
+                      ...required,
+                      min: { value: 1, message: 'Minimum keys amount is 1' },
+                      max: {
+                        value: 999999999,
+                        message: 'Maximum keys amount is 999 999 999',
+                      },
+                    }}
                     rightDecorator={
                       keys && (
                         <Button
