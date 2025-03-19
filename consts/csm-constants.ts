@@ -51,7 +51,7 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
       CSFeeOracle: '0xe7314f561B2e72f9543F1004e741bab6Fc51028B',
       CSModule: '0x79CEf36D84743222f37765204Bec41E92a93E59d',
       CSVerifier: '0x16D0f6068D211608e3703323314aa976a6492D09',
-      ExitBusOracle: '0x30308CD8844fb2DB3ec4D056F1d475a802DCA07c',
+      ExitBusOracle: '0x8664d394C2B3278F26A1B44B967aEf99707eeAB2',
       StakingRouter: '0xCc820558B39ee15C7C45B59390B503b83fb499A8',
     },
     deploymentBlockNumber: undefined,
