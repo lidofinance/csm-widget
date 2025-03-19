@@ -8,15 +8,9 @@ import {
   SurveyButton,
 } from '../components';
 import { useSurveysSWR } from '../shared/use-surveys-swr';
-import { ContactData } from '../survey-contacts';
-import { SetupRawData, SetupsKeys } from '../survey-setup';
 import { useConfirmEraseModal } from './confirm-erase-modal';
 import { Divider, Plus, Text } from '@lidofinance/lido-ui';
-
-type Summary = {
-  contacts: ContactData | null;
-  setups: SetupRawData[];
-};
+import { SetupsKeys, Summary } from '../types';
 
 export const SurveysHome: FC = () => {
   const { data, isLoading, remove } = useSurveysSWR<Summary>('summary');
@@ -50,13 +44,36 @@ export const SurveysHome: FC = () => {
       </SurveySection>
 
       <SurveySection
+        title="Your experience"
+        subtitle="How this information will be used"
+        help="Information is voluntarily submitted and only retained for report building, UI/UX improvement, or feedback purposes. Information is aggregated. Information about your experience is utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
+      >
+        <SurveyItem title="How did you learn about CSM?">
+          <SurveyLink
+            color={data?.howDidYouLearnCsm ? 'secondary' : 'primary'}
+            path={PATH.SURVEYS_HOW_DID_YOU_LEARN_CSM}
+          >
+            {data?.howDidYouLearnCsm ? 'Filled' : 'Fill in'}
+          </SurveyLink>
+        </SurveyItem>
+        <SurveyItem title="Your validation experience">
+          <SurveyLink
+            color={data?.experience ? 'secondary' : 'primary'}
+            path={PATH.SURVEYS_EXPERIENCE}
+          >
+            {data?.experience ? 'Filled' : 'Fill in'}
+          </SurveyLink>
+        </SurveyItem>
+      </SurveySection>
+
+      <SurveySection
         title="Your setup"
         subtitle="How this information will be used"
         help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
       >
         {data?.setups.map((setup) => (
           <SurveyItem
-            key={setup.id}
+            key={setup.index}
             title={
               <Stack>
                 Setup #{setup.index}{' '}
@@ -67,7 +84,7 @@ export const SurveysHome: FC = () => {
               </Stack>
             }
           >
-            <SurveyLink path={`${PATH.SURVEYS_SETUP}/${setup.id}`}>
+            <SurveyLink path={`${PATH.SURVEYS_SETUP}/${setup.index}`}>
               Edit
             </SurveyLink>
           </SurveyItem>

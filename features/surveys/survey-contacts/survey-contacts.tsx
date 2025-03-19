@@ -13,22 +13,15 @@ import { useSurveysSWR } from '../shared/use-surveys-swr';
 import { useConfirmRemoveModal } from './confirm-remove-modal';
 import { useModalStages } from './use-modal-stages';
 import { Text } from '@lidofinance/lido-ui';
-
-export type ContactData = {
-  name?: string;
-  discord?: string;
-  telegram?: string;
-  twitter?: string;
-  allowShare: boolean;
-};
+import { Contact } from '../types';
 
 export const SurveyContacts: FC = () => {
-  const { data, mutate, remove } = useSurveysSWR<ContactData>('contacts');
+  const { data, mutate, remove } = useSurveysSWR<Contact>('contacts');
   const { txModalStages: modals } = useModalStages();
   const confirmRemove = useConfirmRemoveModal();
   const navigate = useNavigate();
 
-  const formObject = useForm<ContactData>({
+  const formObject = useForm<Contact>({
     values: data,
     defaultValues: {
       allowShare: true,
@@ -36,7 +29,7 @@ export const SurveyContacts: FC = () => {
   });
 
   const handleSubmit = useCallback(
-    async (data: ContactData) => {
+    async (data: Contact) => {
       modals.pending();
       try {
         await mutate(data);

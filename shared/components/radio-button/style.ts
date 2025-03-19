@@ -21,7 +21,10 @@ export const RadioIconStyle = styled(Radio)`
   }
 `;
 
-export const RadioButtonStyle = styled.label<{ $small?: boolean }>`
+export const RadioButtonStyle = styled.label<{
+  $small?: boolean;
+  $error?: boolean;
+}>`
   --padding-y: ${({ $small }) => ($small ? `12px` : `16px`)};
   --padding-x: 12px;
 
@@ -34,7 +37,10 @@ export const RadioButtonStyle = styled.label<{ $small?: boolean }>`
   flex: 1 0 0%;
 
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
-  border: 1px solid var(--lido-color-border);
+  border: 1px solid
+    ${({ $error }) =>
+      $error ? 'var(--lido-color-error)' : 'var(--lido-color-border)'};
+
   background-color: ${({ theme }) =>
     theme.name === ThemeName.light ? '#F6F8FA' : '#252a2e'};
 

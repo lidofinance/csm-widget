@@ -3,33 +3,47 @@ import {
   GateSurveyAuth,
   SurveyAuthProvider,
   SurveysContactsPage,
+  SurveysExperiencePage,
   SurveysHomePage,
+  SurveysHowDidYouLearnCsmPage,
   SurveysSetupPage,
   SurveysSignInPage,
 } from 'features/surveys';
 import { getProps } from 'lib/getProps';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => {
   const router = useRouter();
   const slug = router.query.slug;
 
-  const page = slug?.[0];
-  const id = slug?.[1];
+  const page = useMemo(() => {
+    const page = slug?.[0];
+    const id = slug?.[1];
+    const path = `/surveys/${page}`;
+
+    switch (path) {
+      case PATH.SURVEYS_CONTACTS:
+        return <SurveysContactsPage />;
+      case PATH.SURVEYS_EXPERIENCE:
+        return <SurveysExperiencePage />;
+      case PATH.SURVEYS_HOW_DID_YOU_LEARN_CSM:
+        return <SurveysHowDidYouLearnCsmPage />;
+      case PATH.SURVEYS_SETUP:
+        return <SurveysSetupPage id={id} />;
+
+      default:
+        return <SurveysHomePage />;
+    }
+  }, [slug]);
 
   return (
     <GateLoaded>
       <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
         <SurveyAuthProvider>
           <GateSurveyAuth fallback={<SurveysSignInPage />}>
-            {page === 'contacts' ? (
-              <SurveysContactsPage />
-            ) : page === 'setup' ? (
-              <SurveysSetupPage id={id} />
-            ) : (
-              <SurveysHomePage />
-            )}
+            {page}
           </GateSurveyAuth>
         </SurveyAuthProvider>
       </Gate>

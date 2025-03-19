@@ -1,14 +1,24 @@
-import { ChangeEvent, FC, useCallback } from 'react';
-import { useController } from 'react-hook-form';
+import { ChangeEvent, FC, ReactNode, useCallback } from 'react';
+import { useController, UseControllerProps } from 'react-hook-form';
 import { RadioButton, Stack } from 'shared/components';
 
 type Props = {
   fieldName: string;
+  options?: [ReactNode, ReactNode];
   disabled?: boolean;
+  rules?: UseControllerProps['rules'];
 };
 
-export const BooleanButtonsHookForm: FC<Props> = ({ fieldName, disabled }) => {
-  const { field } = useController<Record<string, boolean>>({ name: fieldName });
+export const BooleanButtonsHookForm: FC<Props> = ({
+  fieldName,
+  options = ['Yes', 'No'],
+  disabled,
+  rules,
+}) => {
+  const { field } = useController<Record<string, boolean>>({
+    name: fieldName,
+    rules,
+  });
 
   const onChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,9 +32,9 @@ export const BooleanButtonsHookForm: FC<Props> = ({ fieldName, disabled }) => {
       <RadioButton
         {...field}
         {...{
-          value: 'off',
-          children: 'No',
-          checked: !field.value,
+          value: 'on',
+          children: options[0],
+          checked: field.value === true,
           onChange,
           disabled,
         }}
@@ -32,9 +42,9 @@ export const BooleanButtonsHookForm: FC<Props> = ({ fieldName, disabled }) => {
       <RadioButton
         {...field}
         {...{
-          value: 'on',
-          children: 'Yes',
-          checked: !!field.value,
+          value: 'off',
+          children: options[1],
+          checked: field.value === false,
           onChange,
           disabled,
         }}
