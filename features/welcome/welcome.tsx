@@ -3,20 +3,27 @@ import { FC } from 'react';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { Stack } from 'shared/components';
 import { useAccount } from 'shared/hooks';
-import { useCsmPublicRelease } from 'shared/hooks/useCsmStatus';
+import { useCsmPaused, useCsmPublicRelease } from 'shared/hooks/useCsmStatus';
 import { Connect, Fallback } from 'shared/wallet';
 import { EarlyAdoptionBanner } from './early-adoption-banner';
 import { WelcomeSection } from './welcome-section';
 import styled from 'styled-components';
+import { HoleskyBanner } from './holesky-banner';
+import { getConfig } from 'config';
+import { CHAINS } from 'consts/chains';
+
+const { defaultChain } = getConfig();
 
 export const Welcome: FC = () => {
   const { active, isConnected } = useAccount();
   const { data: isPublicRelease } = useCsmPublicRelease();
+  const { data: paused } = useCsmPaused();
 
   const isWrongChain = isConnected && !active;
 
   return (
     <>
+      {defaultChain === CHAINS.Holesky && paused && <HoleskyBanner />}
       {isWrongChain && <Fallback />}
       <WelcomeSection>
         <Stack wrap>
@@ -35,7 +42,7 @@ export const Welcome: FC = () => {
           </ConnectStyle>
         </Stack>
       </WelcomeSection>
-      {!isPublicRelease && <EarlyAdoptionBanner />}
+      {!isPublicRelease && !paused && <EarlyAdoptionBanner />}
     </>
   );
 };
