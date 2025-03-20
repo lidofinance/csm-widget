@@ -1,27 +1,39 @@
-import { DarkThemeProvider } from '@lidofinance/lido-ui';
+import { DarkThemeProvider, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
+import { Stack } from 'shared/components';
+import { StyledAccordion } from './style';
 
-import { Banner } from 'shared/components';
-
-export const HoleskyBanner: FC = () => {
+export const HoleskyBanner: FC<{ open?: boolean }> = ({ open }) => {
   return (
     <DarkThemeProvider>
-      <Banner title="CSM is paused on Holesky" variant="sunset">
-        <p>
-          CSM is transitioning from the Holesky testnet to the Hoodi testnet,
-          and its operations on Holesky have been paused.
-        </p>
-        <p>
-          This means that uploading new keys is currently not possible, but Node
-          Operator stats can be viewed.
-        </p>
-        <p>
-          This update affects only CSM on Holesky testnet — CSM on Mainnet
-          remains fully operational.
-        </p>
-        <br />
-        <p>Stay tuned for more details on the Hoodi testnet launch!</p>
-      </Banner>
+      <StyledAccordion
+        defaultExpanded={open}
+        summary={
+          <Stack direction="column" gap="sm">
+            <Text as="h3" size="lg" weight={700}>
+              CSM is paused on Holesky
+            </Text>
+            <Text size="xxs">
+              CSM is transitioning from the Holesky testnet to the Hoodi
+              testnet, and its operations on Holesky have been paused.
+            </Text>
+          </Stack>
+        }
+      >
+        <>
+          <Text size="xxs">
+            This means that uploading new keys is currently not possible, but
+            Node Operator stats can be viewed.
+          </Text>
+          <Text size="xxs">
+            This update affects only CSM on Holesky testnet — CSM on Mainnet
+            remains fully operational.
+          </Text>
+          <Text size="xxs">
+            Stay tuned for more details on the Hoodi testnet launch!
+          </Text>
+        </>
+      </StyledAccordion>
     </DarkThemeProvider>
   );
 };

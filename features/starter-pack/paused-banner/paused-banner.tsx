@@ -9,7 +9,7 @@ const { defaultChain } = getConfig();
 
 export const PausedBanner: FC = () => {
   if (defaultChain === CHAINS.Holesky) {
-    return <HoleskyBanner />;
+    return <HoleskyBanner open />;
   }
 
   return (

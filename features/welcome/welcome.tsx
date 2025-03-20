@@ -23,6 +23,7 @@ export const Welcome: FC = () => {
 
   return (
     <>
+      {defaultChain === CHAINS.Holesky && paused && <HoleskyBanner />}
       {isWrongChain && <Fallback />}
       <WelcomeSection>
         <Stack wrap>
@@ -41,7 +42,6 @@ export const Welcome: FC = () => {
           </ConnectStyle>
         </Stack>
       </WelcomeSection>
-      {defaultChain === CHAINS.Holesky && <HoleskyBanner />}
       {!isPublicRelease && !paused && <EarlyAdoptionBanner />}
     </>
   );
