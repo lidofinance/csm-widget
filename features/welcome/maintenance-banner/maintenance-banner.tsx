@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { BannerHeader, BlockStyled } from './styles';
 
-export const MaintenanceBanenr: FC = () => {
+export const MaintenanceBanner: FC = () => {
   return (
     <BlockStyled>
       <BannerHeader>CSM is under maintenance</BannerHeader>

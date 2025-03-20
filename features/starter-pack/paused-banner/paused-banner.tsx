@@ -1,8 +1,17 @@
 import { FC } from 'react';
 
 import { BannerHeader, BlockStyled } from './styles';
+import { getConfig } from 'config';
+import { CHAINS } from 'consts/chains';
+import { HoleskyBanner } from 'features/welcome/holesky-banner';
+
+const { defaultChain } = getConfig();
 
 export const PausedBanner: FC = () => {
+  if (defaultChain === CHAINS.Holesky) {
+    return <HoleskyBanner open />;
+  }
+
   return (
     <BlockStyled>
       <BannerHeader>CSM is paused</BannerHeader>

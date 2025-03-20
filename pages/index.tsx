@@ -8,7 +8,7 @@ import { getProps } from 'lib/getProps';
 import { FC } from 'react';
 import { Gate, GateLoaded } from 'shared/navigate';
 
-type PageProps = Pick<SecretConfigType, 'maintenance'>;
+type PageProps = Pick<SecretConfigType, 'maintenance' | 'defaultChain'>;
 
 const Page: FC<PageProps> = ({ maintenance }) => {
   if (maintenance) return <MaintenancePage />;

@@ -1,25 +1,20 @@
-import { checkCookieAllowed } from '@lidofinance/analytics-matomo';
+import { KEY_STATUS } from 'consts/key-status';
 import { ROLES } from 'consts/roles';
 import { useActiveNodeOperator } from 'providers/node-operator-provider';
 import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import {
-  useAskHowDidYouLearnCsm,
   useKeysWithStatus,
   useNodeOperatorInfo,
   useNodeOperatorLockAmount,
 } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
-import { AlertHowDidYouLearCsm } from './components/alert-how-did-you-learn-csm';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
 import { AlertStuckKeys } from './components/alert-stuck-keys';
-import { KEY_STATUS } from 'consts/key-status';
 
 export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { showAlert, closeAlert } = useAlertActions();
-
-  const { canAsk, answer, rejectAnswer } = useAskHowDidYouLearnCsm();
 
   const nodeOperator = useActiveNodeOperator();
   const { data: info } = useNodeOperatorInfo(nodeOperator?.id);
@@ -78,25 +73,6 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
       closeAlert(AlertLockedBond);
     }
   }, [closeAlert, lockedBond, showAlert]);
-
-  useEffect(() => {
-    const allowed = checkCookieAllowed();
-    if (allowed && canAsk) {
-      showAlert(AlertHowDidYouLearCsm, {
-        onClose: () => {
-          rejectAnswer();
-          closeAlert(AlertHowDidYouLearCsm);
-        },
-        onAnswer() {
-          answer();
-
-          setTimeout(() => {
-            closeAlert(AlertHowDidYouLearCsm);
-          }, 3000);
-        },
-      });
-    }
-  }, [answer, canAsk, closeAlert, rejectAnswer, showAlert]);
 
   return <>{children}</>;
 };
