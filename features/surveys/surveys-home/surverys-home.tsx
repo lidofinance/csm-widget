@@ -67,54 +67,59 @@ export const SurveysHome: FC = () => {
         </SurveyItem>
       </SurveySection>
 
-      <SurveySection
-        title="Your setup"
-        subtitle="How this information will be used"
-        help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
-      >
-        {keys && keys.filled > keys.total && (
-          <Warning>
-            The number of your keys has decreased. Please update the data
-          </Warning>
-        )}
-        {data?.setups.map((setup) => (
-          <SurveyItem
-            key={setup.index}
-            title={
-              <Stack>
-                Setup #{setup.index}{' '}
-                <Text as="span" size="sm" color="secondary">
-                  {setup.keysCount}{' '}
-                  <Plural value={setup.keysCount} variants={['key', 'keys']} />
-                </Text>
-              </Stack>
-            }
-          >
-            <SurveyLink path={`${PATH.SURVEYS_SETUP}/${setup.index}`}>
-              Edit
-            </SurveyLink>
-          </SurveyItem>
-        ))}
+      {keys && (keys.total > 0 || keys.filled > 0) && (
+        <SurveySection
+          title="Your setup"
+          subtitle="How this information will be used"
+          help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
+        >
+          {keys && keys.filled > keys.total && (
+            <Warning>
+              The number of your keys has decreased. Please update the data
+            </Warning>
+          )}
+          {data?.setups.map((setup) => (
+            <SurveyItem
+              key={setup.index}
+              title={
+                <Stack>
+                  Setup #{setup.index}{' '}
+                  <Text as="span" size="sm" color="secondary">
+                    {setup.keysCount}{' '}
+                    <Plural
+                      value={setup.keysCount}
+                      variants={['key', 'keys']}
+                    />
+                  </Text>
+                </Stack>
+              }
+            >
+              <SurveyLink path={`${PATH.SURVEYS_SETUP}/${setup.index}`}>
+                Edit
+              </SurveyLink>
+            </SurveyItem>
+          ))}
 
-        {keys && keys.left > 0 && (
-          <SurveyLink
-            icon={<Plus />}
-            color="primary"
-            variant="translucent"
-            fullwidth
-            path={PATH.SURVEYS_SETUP}
-          >
-            <>
-              Add new setup
+          {keys && keys.left > 0 && (
+            <SurveyLink
+              icon={<Plus />}
+              color="primary"
+              variant="translucent"
+              fullwidth
+              path={PATH.SURVEYS_SETUP}
+            >
               <>
-                {' '}
-                ({keys.left}{' '}
-                <Plural value={keys.left} variants={['key', 'keys']} /> left)
+                Add new setup
+                <>
+                  {' '}
+                  ({keys.left}{' '}
+                  <Plural value={keys.left} variants={['key', 'keys']} /> left)
+                </>
               </>
-            </>
-          </SurveyLink>
-        )}
-      </SurveySection>
+            </SurveyLink>
+          )}
+        </SurveySection>
+      )}
 
       {(data?.contacts ||
         data?.experience ||
