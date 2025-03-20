@@ -1,4 +1,4 @@
-import { useConfig } from 'config';
+import { getExternalLinks } from 'consts/external-links';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import {
@@ -21,6 +21,8 @@ export type ShowRule =
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE';
 
+const { surveyApi } = getExternalLinks();
+
 export const useShowRule = () => {
   const { active: isConnectedWallet } = useAccount();
   const { active: nodeOperator } = useNodeOperatorContext();
@@ -28,9 +30,6 @@ export const useShowRule = () => {
   const { data: isReportingRole } = useIsReportStealingRole();
   const { data: lockedBond } = useNodeOperatorLockAmount(nodeOperator?.id);
   const canCreateNO = useCanCreateNodeOperator();
-  const {
-    config: { surveyApi },
-  } = useConfig();
 
   return useCallback(
     (condition: ShowRule): boolean => {
@@ -66,7 +65,6 @@ export const useShowRule = () => {
       invites?.length,
       lockedBond,
       isReportingRole,
-      surveyApi,
     ],
   );
 };

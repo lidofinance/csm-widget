@@ -1,10 +1,10 @@
-import { getConfig } from 'config';
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 import { FetcherError, standardFetcher } from 'utils';
 import { useAuth } from './survey-auth-provider';
+import { getExternalLinks } from 'consts/external-links';
 
-const { surveyApi } = getConfig();
+const { surveyApi } = getExternalLinks();
 
 export const useSurveysFetcher = <T, R = T>(
   transformIncoming?: (d: R) => T,
