@@ -59,6 +59,8 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
   );
   const keysLeft = Math.max(0, (keys?.total ?? 0) - filledWitoutCurrent);
 
+  const maxKeys = Math.max(keysLeft, data?.keysCount ?? 0);
+
   const { txModalStages: modals } = useModalStages();
   const confirmRemove = useConfirmRemoveModal();
   const navigate = useNavigate();
@@ -128,8 +130,8 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                       ...required,
                       min: { value: 1, message: 'Minimum keys amount is 1' },
                       max: {
-                        value: 999999999,
-                        message: 'Maximum keys amount is 999 999 999',
+                        value: maxKeys,
+                        message: `Maximum keys amount is ${maxKeys}`,
                       },
                     }}
                     rightDecorator={
