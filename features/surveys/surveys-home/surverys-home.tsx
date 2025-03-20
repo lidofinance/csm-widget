@@ -6,6 +6,7 @@ import {
   SurveyItem,
   SurveySection,
   SurveyButton,
+  Warning,
 } from '../components';
 import { useSurveysSWR } from '../shared/use-surveys-swr';
 import { useConfirmEraseModal } from './confirm-erase-modal';
@@ -71,6 +72,11 @@ export const SurveysHome: FC = () => {
         subtitle="How this information will be used"
         help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
       >
+        {keys && keys.filled > keys.total && (
+          <Warning>
+            The number of your keys has decreased. Please update the data
+          </Warning>
+        )}
         {data?.setups.map((setup) => (
           <SurveyItem
             key={setup.index}
@@ -90,24 +96,24 @@ export const SurveysHome: FC = () => {
           </SurveyItem>
         ))}
 
-        <SurveyLink
-          icon={<Plus />}
-          color={keys?.left ? 'primary' : 'secondary'}
-          variant="translucent"
-          fullwidth
-          path={PATH.SURVEYS_SETUP}
-        >
-          <>
-            Add new setup
-            {keys && (
+        {keys && keys.left > 0 && (
+          <SurveyLink
+            icon={<Plus />}
+            color="primary"
+            variant="translucent"
+            fullwidth
+            path={PATH.SURVEYS_SETUP}
+          >
+            <>
+              Add new setup
               <>
                 {' '}
                 ({keys.left}{' '}
                 <Plural value={keys.left} variants={['key', 'keys']} /> left)
               </>
-            )}
-          </>
-        </SurveyLink>
+            </>
+          </SurveyLink>
+        )}
       </SurveySection>
 
       {(data?.contacts ||
