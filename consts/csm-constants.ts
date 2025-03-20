@@ -1,4 +1,5 @@
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts/chains';
+import { CHAINS as ALL_CHAINS } from '@lido-sdk/constants';
 import { config } from 'config';
 import { HexString } from 'shared/keys';
 import { Address } from 'wagmi';
@@ -17,14 +18,14 @@ type CsmContract =
 
 type CsmConstants = {
   contracts: Record<CsmContract, Address>;
-  deploymentBlockNumber: HexString;
+  deploymentBlockNumber?: HexString;
   stakingModuleId: number;
   withdrawalCredentials: Address;
   retentionPeriodMins: number;
   slotsPerFrame: number;
 };
 
-export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
+export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
   [CHAINS.Mainnet]: {
     contracts: {
       CSAccounting: '0x4d72BFF1BeaC69925F8Bd12526a39BAAb069e5Da',
@@ -41,6 +42,23 @@ export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
     withdrawalCredentials: '0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f',
     retentionPeriodMins: 80_640, // 8 weeks
     slotsPerFrame: 32 * 225 * 28, // 28 days
+  },
+  [CHAINS.Hoodi]: {
+    contracts: {
+      CSAccounting: '0xA54b90BA34C5f326BC1485054080994e38FB4C60',
+      CSEarlyAdoption: '0x3281b9E45518F462E594697f8fba1896a8B43939',
+      CSFeeDistributor: '0xaCd9820b0A2229a82dc1A0770307ce5522FF3582',
+      CSFeeOracle: '0xe7314f561B2e72f9543F1004e741bab6Fc51028B',
+      CSModule: '0x79CEf36D84743222f37765204Bec41E92a93E59d',
+      CSVerifier: '0x16D0f6068D211608e3703323314aa976a6492D09',
+      ExitBusOracle: '0x8664d394C2B3278F26A1B44B967aEf99707eeAB2',
+      StakingRouter: '0xCc820558B39ee15C7C45B59390B503b83fb499A8',
+    },
+    deploymentBlockNumber: undefined,
+    stakingModuleId: 4,
+    withdrawalCredentials: '0x4473dCDDbf77679A643BdB654dbd86D67F8d32f2',
+    retentionPeriodMins: 80_640, // 8 weeks
+    slotsPerFrame: 32 * 225 * 7, // 7 days
   },
   [CHAINS.Holesky]: {
     contracts: {
@@ -62,9 +80,9 @@ export const CONSTANTS_BY_NETWORK: Partial<Record<CHAINS, CsmConstants>> = {
 };
 
 export const getCsmConstants = (
-  chainId: CHAINS | undefined = config.defaultChain,
+  chainId: ALL_CHAINS | undefined = config.defaultChain,
 ) => {
-  const constants = CONSTANTS_BY_NETWORK[chainId];
+  const constants = CONSTANTS_BY_NETWORK[chainId as unknown as CHAINS];
   if (!constants) {
     throw new Error(`CSM constants for chain [${chainId}] are not specified`);
   }
@@ -72,10 +90,10 @@ export const getCsmConstants = (
 };
 
 export const getCsmContractAddress = (
-  chainId: CHAINS | undefined,
+  chainId: ALL_CHAINS | undefined,
   contract: CsmContract,
 ): Address => getCsmConstants(chainId).contracts[contract];
 
 export const getCsmContractAddressGetter =
-  (contract: CsmContract) => (chainId: CHAINS | undefined) =>
+  (contract: CsmContract) => (chainId: ALL_CHAINS) =>
     getCsmContractAddress(chainId, contract);

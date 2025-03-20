@@ -1,17 +1,17 @@
 import type { ServerLogger } from '@lidofinance/api-logger';
-import {
-  DEFAULT_API_ERROR_MESSAGE,
-  HEALTHY_RPC_SERVICES_ARE_OVER,
-  RpcProviders,
-  UnsupportedChainIdError,
-  UnsupportedHTTPMethodError,
-} from '@lidofinance/next-pages';
+import { RpcProviders } from '@lidofinance/next-pages';
 import { iterateUrls } from '@lidofinance/rpc';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Readable } from 'node:stream';
 import { ReadableStream } from 'node:stream/web';
 import { Counter, Registry } from 'prom-client';
 import type { TrackedFetchApi } from './trackedFetchApiFactory';
+import {
+  HEALTHY_RPC_SERVICES_ARE_OVER,
+  UnsupportedChainIdError,
+  UnsupportedHTTPMethodError,
+} from './errors';
+import { DEFAULT_API_ERROR_MESSAGE } from '@lidofinance/next-api-wrapper';
 
 export type ApiFactoryParams = {
   metrics: {
