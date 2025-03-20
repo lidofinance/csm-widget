@@ -32,6 +32,7 @@ type ExternalLinksConstants = {
   ratedExplorer: string;
   subscribeEvents: string;
   keysApi: string;
+  surveyApi: string;
 };
 
 export const EXTERNAL_LINKS_BY_NETWORK: Partial<
@@ -56,6 +57,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     ratedExplorer: 'https://explorer.rated.network',
     subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
     keysApi: 'https://keys-api.lido.fi',
+    surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
   },
   [CHAINS.Holesky]: {
     earlyAdoptionTree:
@@ -76,6 +78,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Partial<
     ratedExplorer: 'https://explorer.rated.network',
     subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
     keysApi: 'https://keys-api-holesky.testnet.fi',
+    surveyApi: 'https://csm-surveys-api-testnet.up.railway.app',
   },
 };
 

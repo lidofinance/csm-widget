@@ -1,4 +1,3 @@
-import { getConfig } from 'config';
 import { useModalActions } from 'providers/modal-provider';
 import {
   createContext,
@@ -13,6 +12,7 @@ import invariant from 'tiny-invariant';
 import { extractError } from 'utils';
 import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
+import { getExternalLinks } from 'consts/external-links';
 
 type AuthContextType = {
   token?: string;
@@ -28,7 +28,7 @@ export const useAuth = () => {
   return context;
 };
 
-const { surveyApi } = getConfig();
+const { surveyApi } = getExternalLinks();
 
 export const SurveyAuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const siwe = useSiwe();
