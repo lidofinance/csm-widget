@@ -1,4 +1,4 @@
-import { useController } from 'react-hook-form';
+import { useController, UseControllerProps } from 'react-hook-form';
 
 import { InputAmount } from 'shared/components/input-amount';
 
@@ -14,6 +14,7 @@ type TokenAmountInputHookFormProps = Partial<
   token: Parameters<typeof getTokenDisplayName>[0];
   fieldName: string;
   showErrorMessage?: boolean;
+  rules?: UseControllerProps['rules'];
 };
 
 export const TokenAmountInputHookForm = ({
@@ -21,6 +22,7 @@ export const TokenAmountInputHookForm = ({
   maxValue,
   token,
   fieldName,
+  rules,
   showErrorMessage = true,
   error: errorProp,
   ...props
@@ -28,9 +30,10 @@ export const TokenAmountInputHookForm = ({
   const {
     field,
     fieldState: { error, isTouched },
-  } = useController({ name: fieldName });
+  } = useController({ name: fieldName, rules });
   const hasErrorHighlight =
-    isTouched && isValidationErrorTypeValidate(error?.type);
+    (isTouched || rules?.required) &&
+    (isValidationErrorTypeValidate(error?.type) || error?.type === 'required');
   // allows to show error state without message
   const errorMessage = hasErrorHighlight && (error?.message || true);
 

@@ -1,3 +1,4 @@
+import { getExternalLinks } from 'consts/external-links';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import {
@@ -17,7 +18,10 @@ export type ShowRule =
   | 'HAS_REWARDS_ROLE'
   | 'HAS_LOCKED_BOND'
   | 'CAN_CREATE'
-  | 'EL_STEALING_REPORTER';
+  | 'EL_STEALING_REPORTER'
+  | 'IS_SURVEYS_ACTIVE';
+
+const { surveyApi } = getExternalLinks();
 
 export const useShowRule = () => {
   const { active: isConnectedWallet } = useAccount();
@@ -48,6 +52,8 @@ export const useShowRule = () => {
           return !!lockedBond?.gt(0);
         case 'EL_STEALING_REPORTER':
           return !!isReportingRole;
+        case 'IS_SURVEYS_ACTIVE':
+          return !!nodeOperator && !!surveyApi;
         default:
           return false;
       }

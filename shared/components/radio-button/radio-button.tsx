@@ -1,11 +1,16 @@
 import { PropsWithChildren, forwardRef } from 'react';
 import { CheckboxInputStyle, RadioButtonStyle, RadioIconStyle } from './style';
 
+type RadioButtonProps = {
+  small?: boolean;
+  error?: boolean;
+};
+
 export const RadioButton = forwardRef<
   HTMLInputElement,
-  PropsWithChildren<{ small?: boolean }>
->(({ children, small, ...props }, ref) => (
-  <RadioButtonStyle $small={small}>
+  PropsWithChildren<RadioButtonProps>
+>(({ children, small, error, ...props }, ref) => (
+  <RadioButtonStyle $small={small} $error={error}>
     <CheckboxInputStyle type="radio" {...props} ref={ref} />
     {children}
   </RadioButtonStyle>

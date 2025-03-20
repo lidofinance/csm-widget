@@ -20,6 +20,12 @@ export const PATH = <const>{
   STEALING: '/stealing',
   STEALING_REPORT: '/stealing/report',
   STEALING_CANCEL: '/stealing/cancel',
+
+  SURVEYS: '/surveys',
+  SURVEYS_CONTACTS: '/surveys/contacts',
+  SURVEYS_EXPERIENCE: '/surveys/experience',
+  SURVEYS_HOW_DID_YOU_LEARN_CSM: '/surveys/learn-csm',
+  SURVEYS_SETUP: '/surveys/setup',
 };
 
 export type PATH = (typeof PATH)[keyof typeof PATH];
