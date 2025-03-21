@@ -58,7 +58,7 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
     stakingModuleId: 4,
     withdrawalCredentials: '0x4473dCDDbf77679A643BdB654dbd86D67F8d32f2',
     retentionPeriodMins: 80_640, // 8 weeks
-    slotsPerFrame: 32 * 225 * 7, // 7 days
+    slotsPerFrame: 32 * 225 * 1, // 1 days
   },
   [CHAINS.Holesky]: {
     contracts: {
