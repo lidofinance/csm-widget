@@ -1,9 +1,9 @@
-import { useLidoSWR, useSTETHContractRPC } from '@lido-sdk/react';
+import { useLidoSWR } from '@lido-sdk/react';
 import { BigNumber } from 'ethers';
 
 import { Zero } from '@ethersproject/constants';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { useAccount } from './use-account';
+import { useAccount, useSTETHContractRPC } from 'shared/hooks';
 
 const getMaxStakeAmount = (limitInfo: {
   isStakingPaused: boolean;

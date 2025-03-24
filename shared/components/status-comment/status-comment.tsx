@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { KEY_STATUS } from 'consts/key-status';
 import {
+  CommentActivationPending,
   CommentDepositable,
   CommentExiting,
   CommentExitRequested,
@@ -48,11 +49,10 @@ export const StatusComment: FC<{ statuses: KEY_STATUS[] }> = ({ statuses }) => {
   )
     return <CommentExiting />;
 
-  if (
-    statuses.includes(KEY_STATUS.DEPOSITABLE) ||
-    statuses.includes(KEY_STATUS.ACTIVATION_PENDING)
-  )
-    return <CommentDepositable />;
+  if (statuses.includes(KEY_STATUS.ACTIVATION_PENDING))
+    return <CommentActivationPending />;
+
+  if (statuses.includes(KEY_STATUS.DEPOSITABLE)) return <CommentDepositable />;
 
   return null;
 };

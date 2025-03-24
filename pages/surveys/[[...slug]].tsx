@@ -40,7 +40,7 @@ const Page = () => {
 
   return (
     <GateLoaded>
-      <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
+      <Gate rule="IS_SURVEYS_ACTIVE" fallback={<Navigate path={PATH.HOME} />}>
         <SurveyAuthProvider>
           <GateSurveyAuth fallback={<SurveysSignInPage />}>
             {page}

@@ -3,6 +3,10 @@ import { BondSection } from './bond';
 import { KeysSection } from './keys';
 import { RolesSection } from './roles';
 import { ExternalSection } from './external';
+import { getConfig } from 'config';
+import { CHAINS } from 'consts/chains';
+
+const { defaultChain } = getConfig();
 
 export const Dashboard: FC = () => {
   return (
@@ -10,7 +14,7 @@ export const Dashboard: FC = () => {
       <KeysSection />
       <BondSection />
       <RolesSection />
-      <ExternalSection />
+      {defaultChain !== CHAINS.Hoodi && <ExternalSection />}
     </>
   );
 };

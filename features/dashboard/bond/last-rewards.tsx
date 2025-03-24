@@ -6,21 +6,19 @@ import {
   Text,
   Tooltip,
 } from '@lidofinance/lido-ui';
-import { differenceInCalendarDays, fromUnixTime } from 'date-fns';
 import { ModalComponentType, useModal } from 'providers/modal-provider';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC, useCallback } from 'react';
 import { GrayText, Stack, TextBlock, TxLinkEtherscan } from 'shared/components';
 import { FaqElement } from 'shared/components/faq/styles';
 import {
-  getNextRewardsFrame,
-  getPrevRewardsFrame,
   useLastOperatorRewards,
-  useLastRewardsSlot,
   useLastRewrdsTx,
   useNodeOperatorInfo,
+  useRewardsFrame,
+  useSharesToSteth,
 } from 'shared/hooks';
-import { formatDate, formatPercent } from 'utils';
+import { countDaysLeft, formatDate, formatPercent } from 'utils';
 import { Balance } from './balance';
 import {
   AccordionStyle,
@@ -34,28 +32,18 @@ import {
 export const LastRewards: FC = () => {
   const { data: lastRewards, initialLoading: isLoading } =
     useLastOperatorRewards();
+  const { data: distributed, initialLoading: isDistributedLoading } =
+    useSharesToSteth(lastRewards?.distributed);
 
   const id = useNodeOperatorId();
   const { data: info } = useNodeOperatorInfo(id);
 
-  const { data: rewardsSlot } = useLastRewardsSlot();
+  const { data: rewardsFrame } = useRewardsFrame();
 
-  const lastRewardsDate = rewardsSlot?.timestamp
-    ? formatDate(rewardsSlot.timestamp)
-    : null;
-  const prevRewardsDate = rewardsSlot?.timestamp
-    ? formatDate(getPrevRewardsFrame(rewardsSlot.timestamp))
-    : null;
-  const nextRewardsDate = rewardsSlot?.timestamp
-    ? formatDate(getNextRewardsFrame(rewardsSlot.timestamp))
-    : null;
-
-  const daysLeft = rewardsSlot?.timestamp
-    ? differenceInCalendarDays(
-        fromUnixTime(getNextRewardsFrame(rewardsSlot.timestamp)),
-        new Date(),
-      )
-    : null;
+  const lastRewardsDate = formatDate(rewardsFrame?.lastRewards);
+  const prevRewardsDate = formatDate(rewardsFrame?.prevRewards);
+  const nextRewardsDate = formatDate(rewardsFrame?.nextRewards);
+  const daysLeft = countDaysLeft(rewardsFrame?.nextRewards);
 
   const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
 
@@ -77,8 +65,8 @@ export const LastRewards: FC = () => {
           </Stack>
           <Balance
             big
-            loading={isLoading}
-            amount={lastRewards?.distributed}
+            loading={isLoading || isDistributedLoading}
+            amount={distributed}
             description={showWhy ? <Why /> : undefined}
           />
         </RowHeader>
@@ -92,7 +80,7 @@ export const LastRewards: FC = () => {
             <Text size="xs" weight={700}>
               Next rewards distribution
             </Text>
-            {rewardsSlot?.timestamp ? (
+            {lastRewardsDate && nextRewardsDate ? (
               <GrayText>
                 Report frame: {lastRewardsDate} — {nextRewardsDate}
               </GrayText>
