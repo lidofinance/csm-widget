@@ -9,5 +9,5 @@ export * from './use-is-metamask';
 export * from './use-is-smart-account';
 export * from './use-max-gas-price';
 export * from './use-stETH-by-wstETH';
-export * from './use-tx-conformation';
+export * from './use-tx-confirmation';
 export * from './use-wstETH-by-stETH';
