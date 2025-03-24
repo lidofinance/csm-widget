@@ -4,10 +4,9 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { Counter, IconTooltip } from 'shared/components';
 import {
-  getNextRewardsFrame,
-  useLastRewardsSlot,
   useNodeOperatorBalance,
   useNodeOperatorRewards,
+  useRewardsFrame,
 } from 'shared/hooks';
 import { useAvailableToClaim } from 'shared/hooks/useAvailableToClaim';
 import { formatDate } from 'utils';
@@ -23,10 +22,8 @@ export const AvailableToClaim: FC = () => {
   const { data: rewards, initialLoading: isRewardsLoading } =
     useNodeOperatorRewards(id);
 
-  const { data: rewardsSlot } = useLastRewardsSlot();
-  const nextRewardsDate = rewardsSlot?.timestamp
-    ? formatDate(getNextRewardsFrame(rewardsSlot.timestamp))
-    : null;
+  const { data: rewardsFrame } = useRewardsFrame();
+  const nextRewardsDate = formatDate(rewardsFrame?.nextRewards);
 
   const availableToClaim = useAvailableToClaim({
     bond,

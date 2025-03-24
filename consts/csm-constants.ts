@@ -13,6 +13,7 @@ type CsmContract =
   | 'CSFeeOracle'
   | 'CSModule'
   | 'CSVerifier'
+  | 'HashConsensus'
   | 'ExitBusOracle'
   | 'StakingRouter';
 
@@ -34,6 +35,7 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
       CSFeeOracle: '0x4D4074628678Bd302921c20573EEa1ed38DdF7FB',
       CSModule: '0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F',
       CSVerifier: '0x3Dfc50f22aCA652a0a6F28a0F892ab62074b5583',
+      HashConsensus: '0x71093efF8D8599b5fA340D665Ad60fA7C80688e4',
       ExitBusOracle: '0x0De4Ea0184c2ad0BacA7183356Aea5B8d5Bf5c6e',
       StakingRouter: '0xFdDf38947aFB03C621C71b06C9C70bce73f12999',
     },
@@ -51,6 +53,7 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
       CSFeeOracle: '0xe7314f561B2e72f9543F1004e741bab6Fc51028B',
       CSModule: '0x79CEf36D84743222f37765204Bec41E92a93E59d',
       CSVerifier: '0x16D0f6068D211608e3703323314aa976a6492D09',
+      HashConsensus: '0x54f74a10e4397dDeF85C4854d9dfcA129D72C637',
       ExitBusOracle: '0x8664d394C2B3278F26A1B44B967aEf99707eeAB2',
       StakingRouter: '0xCc820558B39ee15C7C45B59390B503b83fb499A8',
     },
@@ -68,6 +71,7 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
       CSFeeOracle: '0xaF57326C7d513085051b50912D51809ECC5d98Ee',
       CSModule: '0x4562c3e63c2e586cD1651B958C22F88135aCAd4f',
       CSVerifier: '0x6DcA479178E6Ae41CCEB72a88FfDaa3e10E83CB7',
+      HashConsensus: '0xbF38618Ea09B503c1dED867156A0ea276Ca1AE37',
       ExitBusOracle: '0xffDDF7025410412deaa05E3E1cE68FE53208afcb',
       StakingRouter: '0xd6EbF043D30A7fe46D1Db32BA90a0A51207FE229',
     },

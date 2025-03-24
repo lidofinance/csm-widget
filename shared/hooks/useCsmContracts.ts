@@ -8,6 +8,7 @@ import {
   CSModule__factory,
   CSModuleOld__factory,
   ExitBusOracle__factory,
+  HashConsensus__factory,
   StakingRouter__factory,
 } from 'generated';
 
@@ -48,6 +49,13 @@ const CSFeeOracle = contractHooksFactory(
 );
 
 export const useCSFeeOracleRPC = CSFeeOracle.useContractRPC;
+
+const HashConsesus = contractHooksFactory(
+  HashConsensus__factory,
+  getCsmContractAddressGetter('HashConsensus'),
+);
+
+export const useHashConsesusRPC = HashConsesus.useContractRPC;
 
 const CSEarlyAdoption = contractHooksFactory(
   CSEarlyAdoption__factory,

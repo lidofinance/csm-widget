@@ -23,6 +23,7 @@ import {
   CSFeeOracle__factory,
   CSModule__factory,
   ExitBusOracle__factory,
+  HashConsensus__factory,
   StakingRouter__factory,
 } from 'generated';
 import { HexString } from 'shared/keys';
@@ -55,6 +56,7 @@ export const CONTRACT_NAMES = {
   CSAccounting: 'CSAccounting',
   CSFeeDistributor: 'CSFeeDistributor',
   CSFeeOracle: 'CSFeeOracle',
+  HashConsensus: 'HashConsensus',
   CSEarlyAdoption: 'CSEarlyAdoption',
   ExitBusOracle: 'ExitBusOracle',
   StakingRouter: 'StakingRouter',
@@ -71,6 +73,7 @@ const CONTRACT_LIST_CALL: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.CSEarlyAdoption,
   CONTRACT_NAMES.CSFeeDistributor,
   CONTRACT_NAMES.CSFeeOracle,
+  CONTRACT_NAMES.HashConsensus,
   CONTRACT_NAMES.ExitBusOracle,
   CONTRACT_NAMES.StakingRouter,
 ];
@@ -90,6 +93,7 @@ export const METRIC_CONTRACT_ABIS = {
   [CONTRACT_NAMES.CSAccounting]: CSAccounting__factory.abi,
   [CONTRACT_NAMES.CSFeeDistributor]: CSFeeDistributor__factory.abi,
   [CONTRACT_NAMES.CSFeeOracle]: CSFeeOracle__factory.abi,
+  [CONTRACT_NAMES.HashConsensus]: HashConsensus__factory.abi,
   [CONTRACT_NAMES.CSEarlyAdoption]: CSEarlyAdoption__factory.abi,
   [CONTRACT_NAMES.ExitBusOracle]: ExitBusOracle__factory.abi,
   [CONTRACT_NAMES.StakingRouter]: StakingRouter__factory.abi,
@@ -116,6 +120,10 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
   [CONTRACT_NAMES.CSFeeOracle]: getAddressGetter(
     getCsmContractAddress,
     'CSFeeOracle',
+  ),
+  [CONTRACT_NAMES.HashConsensus]: getAddressGetter(
+    getCsmContractAddress,
+    'HashConsensus',
   ),
   [CONTRACT_NAMES.CSEarlyAdoption]: getAddressGetter(
     getCsmContractAddress,
