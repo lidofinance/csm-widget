@@ -1,6 +1,6 @@
 import { MulticallResponse } from 'viem';
 import { useReadContracts } from 'wagmi';
-import { csAccountingConfig, csModuleConfig } from '../generated';
+import { csAccountingConfig, csModuleConfig } from 'modules/web3/generated';
 
 const select = ([isPaused, isAccountingPaused, isPublicRelease]: [
   MulticallResponse<boolean>,
