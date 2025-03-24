@@ -103,8 +103,8 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
   [CONTRACT_NAMES.stETH]: getAddressGetter(getTokenAddress, TOKENS.STETH),
   [CONTRACT_NAMES.wstETH]: getAddressGetter(getTokenAddress, TOKENS.WSTETH),
   [CONTRACT_NAMES.WithdrawalQueue]: getAddressGetter(getWithdrawalQueueAddress),
-  [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]:
-    getAddressGetter(getAggregatorAddress),
+  [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]: () =>
+    getAddressGetter(getAggregatorAddress)(CHAINS.Mainnet),
   [CONTRACT_NAMES.CSModule]: getAddressGetter(
     getCsmContractAddress,
     'CSModule',
@@ -141,11 +141,10 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
 
 const aggregatorMainnetAddress = METRIC_CONTRACT_ADDRESS_GETTERS[
   CONTRACT_NAMES.aggregatorStEthUsdPriceFeed
-](CHAINS.Mainnet) as HexString;
+]() as HexString;
 
 const prefilledAddresses =
-  config.defaultChain === CHAINS.Hoodi &&
-  !config.supportedChains.includes(CHAINS.Mainnet)
+  config.defaultChain !== CHAINS.Mainnet
     ? ({
         [CHAINS.Mainnet]: [aggregatorMainnetAddress],
       } as Record<CHAINS, HexString[]>)
@@ -154,8 +153,7 @@ const prefilledAddresses =
 const prefilledMetricAddresses: Partial<
   Record<CHAINS, Record<HexString, CONTRACT_NAMES>>
 > =
-  config.defaultChain === CHAINS.Hoodi &&
-  !config.supportedChains.includes(CHAINS.Mainnet)
+  config.defaultChain !== CHAINS.Mainnet
     ? {
         [CHAINS.Mainnet]: {
           [aggregatorMainnetAddress]:
