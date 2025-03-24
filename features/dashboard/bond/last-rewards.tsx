@@ -34,6 +34,7 @@ import {
   RowHeader,
   RowTitle,
 } from './styles';
+import { Zero } from '@ethersproject/constants';
 
 export const LastRewards: FC = () => {
   const { data: lastRewards, initialLoading: isLoading } =
@@ -72,7 +73,7 @@ export const LastRewards: FC = () => {
           <Balance
             big
             loading={isLoading || isDistributedLoading}
-            amount={distributed}
+            amount={distributed ?? Zero}
             description={showWhy ? <Why /> : undefined}
           />
         </RowHeader>
