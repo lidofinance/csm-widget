@@ -24,7 +24,7 @@ export const Welcome: FC = () => {
 
   return (
     <>
-      {defaultChain === CHAINS.Holesky && paused && <HoleskyBanner />}
+      {defaultChain === CHAINS.Holesky && <HoleskyBanner />}
       {defaultChain === CHAINS.Hoodi && <HoodiBanner />}
       {isWrongChain && <Fallback />}
       <WelcomeSection>
