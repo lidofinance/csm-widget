@@ -1,15 +1,15 @@
 import { hexValue, splitSignature } from '@ethersproject/bytes';
 import { StethAbi } from '@lido-sdk/contracts';
-import {
-  useSDK,
-  useSTETHContractRPC,
-  useWSTETHContractRPC,
-} from '@lido-sdk/react';
+import { useSDK } from '@lido-sdk/react';
 import { TOKENS } from 'consts/tokens';
 import { getUnixTime, hoursToSeconds } from 'date-fns/fp';
 import { BigNumber, BytesLike, TypedDataDomain } from 'ethers';
 import { useCallback } from 'react';
-import { useAccount } from 'shared/hooks';
+import {
+  useAccount,
+  useSTETHContractRPC,
+  useWSTETHContractRPC,
+} from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { Address, useChainId } from 'wagmi';
 

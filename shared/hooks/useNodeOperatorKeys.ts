@@ -17,7 +17,7 @@ export const useNodeOperatorKeys = (
     contract: useCSModuleRPC(),
     method: 'getSigningKeys',
     params: [nodeOperatorId, startIndex, count],
-    shouldFetch: Boolean(nodeOperatorId && count),
+    shouldFetch: Boolean(nodeOperatorId),
     config,
   });
 

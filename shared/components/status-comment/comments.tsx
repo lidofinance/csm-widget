@@ -68,6 +68,20 @@ export const CommentExiting: FC = () => (
   </LocalLink>
 );
 
+export const CommentActivationPending: FC = () => {
+  return (
+    <LocalLink
+      href={PATH.KEYS_VIEW}
+      anchor="#when-validator-become-active"
+      matomoEvent={
+        MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
+      }
+    >
+      When does the validator become active?
+    </LocalLink>
+  );
+};
+
 export const CommentDepositable: FC = () => {
   const { data } = useCSMShareLimitInfo();
 
