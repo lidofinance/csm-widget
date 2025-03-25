@@ -9,7 +9,13 @@ import {
 import { ModalComponentType, useModal } from 'providers/modal-provider';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC, useCallback } from 'react';
-import { GrayText, Stack, TextBlock, TxLinkEtherscan } from 'shared/components';
+import {
+  GrayText,
+  Plural,
+  Stack,
+  TextBlock,
+  TxLinkEtherscan,
+} from 'shared/components';
 import { FaqElement } from 'shared/components/faq/styles';
 import {
   useLastOperatorRewards,
@@ -96,7 +102,16 @@ export const LastRewards: FC = () => {
             ) : (
               <Stack center gap="xs">
                 <GrayText>Expected</GrayText>
-                <BadgeStyle>in {daysLeft} days</BadgeStyle>
+                <BadgeStyle>
+                  {daysLeft === 0 ? (
+                    'Today'
+                  ) : (
+                    <>
+                      in {daysLeft}{' '}
+                      <Plural variants={['day', 'days']} value={daysLeft} />
+                    </>
+                  )}
+                </BadgeStyle>
               </Stack>
             ))}
         </Stack>
