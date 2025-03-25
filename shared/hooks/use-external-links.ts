@@ -15,6 +15,8 @@ export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   const { data: keys } = useKeysWithStatus();
   const sortedKeys = useSortedKeys(keys, ACTIVE_STATUS_ORDER);
 
+  if (!links.beaconchainDashboard) return null;
+
   const keysToShow = (
     sortedKeys?.length ? sortedKeys.map(({ key }) => key) : directKeys
   )
@@ -38,13 +40,13 @@ export const useOperatorPortalLink = () => {
 
 export const useRatedLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const network = defaultChain === CHAINS.Mainnet ? 'mainnet' : 'holesky';
+  const network = defaultChain === CHAINS.Mainnet ? 'mainnet' : 'hoodi';
   return `${links.ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${network}`;
 };
 
 export const useEthSeerLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const network = defaultChain === CHAINS.Mainnet ? 'mainnet' : 'holesky';
+  const network = defaultChain === CHAINS.Mainnet ? 'mainnet' : 'hoodi';
   if (links.ethseerDashboard) {
     return `${links.ethseerDashboard}/entity/csm_operator${nodeOperatorId}_lido?network=${network}`;
   }

@@ -10,44 +10,6 @@ import { useMemo } from 'react';
 import { BigNumber } from 'ethers';
 import { Zero } from '@ethersproject/constants';
 
-const SECONDS_PER_SLOT = 12;
-
-const getRewardsFrameDuration = () => {
-  const { slotsPerFrame } = getCsmConstants();
-  return slotsPerFrame * SECONDS_PER_SLOT;
-};
-
-export const getNextRewardsFrame = (timestamp: number) =>
-  timestamp + getRewardsFrameDuration();
-
-export const getPrevRewardsFrame = (timestamp: number) =>
-  timestamp - getRewardsFrameDuration();
-
-export const useLastRewardsSlot = (config = STRATEGY_CONSTANT) => {
-  const feeOracle = useCSFeeOracleRPC();
-
-  return useLidoSWR(
-    ['fee-oracle-slot'],
-    async () => {
-      const [refSlot, genesisTime] = await Promise.all([
-        feeOracle.getLastProcessingRefSlot(),
-        feeOracle.GENESIS_TIME(),
-      ]);
-
-      if (!refSlot || !genesisTime) {
-        return null;
-      }
-
-      const timestamp = genesisTime
-        .add(refSlot.mul(SECONDS_PER_SLOT))
-        .toNumber();
-
-      return { refSlot, timestamp };
-    },
-    config,
-  );
-};
-
 export type RewardsReport = {
   blockstamp: {
     block_hash: HexString;

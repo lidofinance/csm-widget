@@ -1,4 +1,4 @@
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts/chains';
 import { config } from 'config';
 
 export const CSM_MAINNET_LINK = 'https://csm.lido.fi/';
@@ -36,53 +36,70 @@ type ExternalLinksConstants = {
   surveyApi: string;
 };
 
-export const EXTERNAL_LINKS_BY_NETWORK: Partial<
-  Record<CHAINS, ExternalLinksConstants>
-> = {
-  [CHAINS.Mainnet]: {
-    earlyAdoptionTree:
-      'https://raw.githubusercontent.com/lidofinance/community-staking-module/v1.0/artifacts/mainnet/early-adoption/merkle-tree.json',
-    rewardsTree:
-      'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
-    earlyAdoptionSources:
-      'https://github.com/lidofinance/community-staking-module/blob/v1.0/artifacts/mainnet/early-adoption/addresses.json',
-    earlyAdoptionAbout:
-      'https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22',
-    feedbackForm: 'https://forms.gle/GL9RYeV2g4px58Sv8',
-    stakeWidget: 'https://stake.lido.fi',
+export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
+  {
+    [CHAINS.Mainnet]: {
+      earlyAdoptionTree:
+        'https://raw.githubusercontent.com/lidofinance/community-staking-module/v1.0/artifacts/mainnet/early-adoption/merkle-tree.json',
+      rewardsTree:
+        'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
+      earlyAdoptionSources:
+        'https://github.com/lidofinance/community-staking-module/blob/v1.0/artifacts/mainnet/early-adoption/addresses.json',
+      earlyAdoptionAbout:
+        'https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22',
+      feedbackForm: 'https://forms.gle/GL9RYeV2g4px58Sv8',
+      stakeWidget: 'https://stake.lido.fi',
 
-    feesMonitoring: 'https://fees-monitoring.lido.fi',
-    operatorsWidget: 'https://operators.lido.fi',
-    beaconchain: 'https://beaconcha.in',
-    beaconchainDashboard: 'https://v2-beta-mainnet.beaconcha.in/dashboard',
-    ratedExplorer: 'https://explorer.rated.network',
-    ethseerDashboard: 'https://ethseer.io',
-    subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
-    keysApi: 'https://keys-api.lido.fi',
-    surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
-  },
-  [CHAINS.Holesky]: {
-    earlyAdoptionTree:
-      'https://raw.githubusercontent.com/lidofinance/community-staking-module/v1.0/artifacts/holesky/early-adoption/merkle-tree.json',
-    rewardsTree:
-      'https://raw.githubusercontent.com/lidofinance/csm-rewards/holesky/tree.json',
-    earlyAdoptionSources:
-      'https://github.com/lidofinance/community-staking-module/blob/v1.0/artifacts/holesky/early-adoption/addresses.json',
-    earlyAdoptionAbout:
-      'https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22',
-    feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
-    stakeWidget: 'https://stake-holesky.testnet.fi',
+      feesMonitoring: 'https://fees-monitoring.lido.fi',
+      operatorsWidget: 'https://operators.lido.fi',
+      beaconchain: 'https://beaconcha.in',
+      beaconchainDashboard: 'https://v2-beta-mainnet.beaconcha.in/dashboard',
+      ratedExplorer: 'https://explorer.rated.network',
+      ethseerDashboard: 'https://ethseer.io',
+      subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
+      keysApi: 'https://keys-api.lido.fi',
+      surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
+    },
+    [CHAINS.Holesky]: {
+      earlyAdoptionTree:
+        'https://raw.githubusercontent.com/lidofinance/community-staking-module/v1.0/artifacts/holesky/early-adoption/merkle-tree.json',
+      rewardsTree:
+        'https://raw.githubusercontent.com/lidofinance/csm-rewards/holesky/tree.json',
+      earlyAdoptionSources:
+        'https://github.com/lidofinance/community-staking-module/blob/v1.0/artifacts/holesky/early-adoption/addresses.json',
+      earlyAdoptionAbout:
+        'https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22',
+      feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
+      stakeWidget: 'https://stake-holesky.testnet.fi',
 
-    feesMonitoring: 'https://fees-monitoring-holesky.testnet.fi',
-    operatorsWidget: 'https://operators-holesky.testnet.fi',
-    beaconchain: 'https://holesky.beaconcha.in',
-    beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
-    ratedExplorer: 'https://explorer.rated.network',
-    subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
-    keysApi: 'https://keys-api-holesky.testnet.fi',
-    surveyApi: 'https://csm-surveys-api-testnet.up.railway.app',
-  },
-};
+      feesMonitoring: 'https://fees-monitoring-holesky.testnet.fi',
+      operatorsWidget: 'https://operators-holesky.testnet.fi',
+      beaconchain: 'https://holesky.beaconcha.in',
+      beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
+      ratedExplorer: 'https://explorer.rated.network',
+      subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
+      keysApi: 'https://keys-api-holesky.testnet.fi',
+      surveyApi: '',
+    },
+    // FIXME: links
+    [CHAINS.Hoodi]: {
+      earlyAdoptionTree: '',
+      rewardsTree: '',
+      earlyAdoptionSources: '',
+      earlyAdoptionAbout: '',
+      feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
+      stakeWidget: 'https://stake-hoodi.testnet.fi',
+
+      feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
+      operatorsWidget: 'https://operators-hoodi.testnet.fi',
+      beaconchain: '',
+      beaconchainDashboard: '',
+      ratedExplorer: 'https://explorer.rated.network',
+      subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
+      keysApi: 'http://hr6vb81d1ndsx-hoodi-keys-api.valset-01.testnet.fi',
+      surveyApi: 'https://csm-surveys-api-testnet.up.railway.app',
+    },
+  };
 
 export const getExternalLinks = (
   chainId: CHAINS | undefined = config.defaultChain,

@@ -91,6 +91,8 @@ export const useNetworkDuplicates = (config = STRATEGY_CONSTANT) => {
     ['no-keys', nodeOperatorId, chainId],
     useCallback(async () => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      if (!keysApi) return [];
+
       const moduleId = getCsmConstants(chainId).stakingModuleId;
       const keys = await getKeys(keysApi, moduleId, nodeOperatorId);
       const rawKeys = await findKeys(

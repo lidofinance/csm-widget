@@ -26,7 +26,7 @@ export const RequiredBondAmount: FC = () => {
       ) : (
         <FormatToken
           amount={amount}
-          symbol={isMainnet ? 'ETH' : 'Holesky ETH'}
+          symbol={isMainnet ? 'ETH' : 'Hoodi ETH'}
           maxDecimalDigits={2}
         />
       )}

@@ -32,6 +32,8 @@ const Page = () => {
         return <SurveysHowDidYouLearnCsmPage />;
       case PATH.SURVEYS_SETUP:
         return <SurveysSetupPage id={id} />;
+      case PATH.SURVEYS_ALL:
+        return <SurveysHomePage all />;
 
       default:
         return <SurveysHomePage />;
@@ -40,7 +42,7 @@ const Page = () => {
 
   return (
     <GateLoaded>
-      <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
+      <Gate rule="IS_SURVEYS_ACTIVE" fallback={<Navigate path={PATH.HOME} />}>
         <SurveyAuthProvider>
           <GateSurveyAuth fallback={<SurveysSignInPage />}>
             {page}

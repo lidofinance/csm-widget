@@ -30,13 +30,17 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
           >
             Keys tab
           </LocalLink>
-          , on{' '}
-          <MatomoLink
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain}
-            href={beaconchain}
-          >
-            beaconcha.in
-          </MatomoLink>{' '}
+          {beaconchain && (
+            <>
+              , on{' '}
+              <MatomoLink
+                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain}
+                href={beaconchain}
+              >
+                beaconcha.in
+              </MatomoLink>
+            </>
+          )}{' '}
           or subscribe to the{' '}
           <MatomoLink
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents}

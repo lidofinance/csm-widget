@@ -1,14 +1,17 @@
 import { Zero } from '@ethersproject/constants';
-import { useContractSWR, useSTETHContractRPC } from '@lido-sdk/react';
+import { useContractSWR } from '@lido-sdk/react';
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 import { NodeOperatorId, RewardProof, RewardsBalance } from 'types';
 import { findIndexAndLeaf } from 'utils';
-import { useCSFeeDistributorRPC } from './useCsmContracts';
-import { useFeeDistributorTree } from './useFeeDistributorTree';
-import { useMergeSwr } from './useMergeSwr';
+import {
+  useCSFeeDistributorRPC,
+  useFeeDistributorTree,
+  useMergeSwr,
+  useSTETHContractRPC,
+} from 'shared/hooks';
 
 export type RewardsTreeLeaf = [NodeOperatorId, string];
 

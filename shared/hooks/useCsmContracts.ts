@@ -8,6 +8,7 @@ import {
   CSModule__factory,
   CSModuleOld__factory,
   ExitBusOracle__factory,
+  HashConsensus__factory,
   StakingRouter__factory,
 } from 'generated';
 
@@ -19,6 +20,7 @@ const CSModule = contractHooksFactory(
 export const useCSModuleRPC = CSModule.useContractRPC;
 export const useCSModuleWeb3 = CSModule.useContractWeb3;
 
+// TODO: drop after removing Holesky
 const CSModuleOld = contractHooksFactory(
   CSModuleOld__factory,
   getCsmContractAddressGetter('CSModule'),
@@ -47,6 +49,13 @@ const CSFeeOracle = contractHooksFactory(
 );
 
 export const useCSFeeOracleRPC = CSFeeOracle.useContractRPC;
+
+const HashConsesus = contractHooksFactory(
+  HashConsensus__factory,
+  getCsmContractAddressGetter('HashConsensus'),
+);
+
+export const useHashConsesusRPC = HashConsesus.useContractRPC;
 
 const CSEarlyAdoption = contractHooksFactory(
   CSEarlyAdoption__factory,

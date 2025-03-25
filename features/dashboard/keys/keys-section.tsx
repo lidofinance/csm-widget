@@ -103,7 +103,7 @@ export const KeysSection: FC = () => {
             tooltip="Keys that have already exited and withdrawn"
           />
         </Row>
-        {keys?.length && (
+        {!!keys?.length && (
           <AccordionStyle
             $warning={hasWarnings}
             defaultExpanded={hasWarnings}
