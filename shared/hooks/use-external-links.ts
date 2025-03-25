@@ -15,6 +15,8 @@ export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   const { data: keys } = useKeysWithStatus();
   const sortedKeys = useSortedKeys(keys, ACTIVE_STATUS_ORDER);
 
+  if (!links.beaconchainDashboard) return null;
+
   const keysToShow = (
     sortedKeys?.length ? sortedKeys.map(({ key }) => key) : directKeys
   )
