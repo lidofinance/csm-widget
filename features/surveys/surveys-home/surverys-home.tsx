@@ -12,8 +12,12 @@ import { useSurveysSWR } from '../shared/use-surveys-swr';
 import { useConfirmEraseModal } from './confirm-erase-modal';
 import { Divider, Plus, Text } from '@lidofinance/lido-ui';
 import { SetupsKeys, Summary } from '../types';
+import { CHAINS } from 'consts/chains';
+import { getConfig } from 'config';
 
-export const SurveysHome: FC = () => {
+const { defaultChain } = getConfig();
+
+export const SurveysHome: FC<{ all?: boolean }> = ({ all }) => {
   const { data, isLoading, remove } = useSurveysSWR<Summary>('summary');
   const { data: keys, mutate: mutateKeys } =
     useSurveysSWR<SetupsKeys>('setups/keys');
@@ -26,6 +30,18 @@ export const SurveysHome: FC = () => {
       void mutateKeys();
     }
   }, [confirmModal, mutateKeys, remove]);
+
+  const showErase = !!(
+    data?.contacts ||
+    data?.experience ||
+    data?.howDidYouLearnCsm ||
+    (data?.setups && data.setups.length > 0)
+  );
+  const showSetups = !!(
+    (all || defaultChain === CHAINS.Mainnet) &&
+    keys &&
+    (keys.total > 0 || keys.filled > 0)
+  );
 
   return (
     <WhenLoaded loading={!data && isLoading}>
@@ -67,7 +83,7 @@ export const SurveysHome: FC = () => {
         </SurveyItem>
       </SurveySection>
 
-      {keys && (keys.total > 0 || keys.filled > 0) && (
+      {showSetups && (
         <SurveySection
           title="Your setup"
           subtitle="How this information will be used"
@@ -121,10 +137,7 @@ export const SurveysHome: FC = () => {
         </SurveySection>
       )}
 
-      {(data?.contacts ||
-        data?.experience ||
-        data?.howDidYouLearnCsm ||
-        (data?.setups && data.setups.length > 0)) && (
+      {showErase && (
         <>
           <Divider />
           <SurveySection title="Erase your data">
