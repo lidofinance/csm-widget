@@ -35,6 +35,7 @@ export * from './use-router-path';
 export * from './use-send-tx';
 export * from './use-show-rule';
 export * from './use-sorted-keys';
+export * from './use-surveys-call';
 export * from './use-token-max-amount';
 export * from './use-tx-cost-in-usd';
 export * from './use-withdrawn-key-indexes-from-events';
