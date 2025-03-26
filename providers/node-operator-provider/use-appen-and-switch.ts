@@ -1,11 +1,11 @@
 import { NodeOperatorStructOutput } from 'generated/CSModule';
 import { useCallback } from 'react';
 import { useAddressCompare, useCSModuleRPC } from 'shared/hooks';
-import { NodeOperator, NodeOperatorId, NodeOperatorRoles } from 'types';
+import { NodeOperator, NodeOperatorId } from 'types';
 import { packRoles } from 'utils';
 
 export const useAppendAndSwitch = (
-  append: (nodeOperator: NodeOperatorRoles) => void,
+  append: (nodeOperator: NodeOperator) => void,
   setActive: (no: NodeOperator) => void,
 ) => {
   const contract = useCSModuleRPC();
@@ -21,7 +21,7 @@ export const useAppendAndSwitch = (
 
       // TODO: fix for spectacular
       if (rewards || manager) {
-        append({ id, manager, rewards });
+        append({ id, roles: packRoles({ rewards, manager }) });
         setActive({ id, roles: packRoles({ rewards, manager }) });
       }
     },

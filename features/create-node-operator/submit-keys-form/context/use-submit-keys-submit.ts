@@ -20,6 +20,7 @@ import {
   addressOrZero,
   formatKeys,
   getAddedNodeOperator,
+  packRoles,
   runWithTransactionLogger,
 } from 'utils';
 import { Address } from 'wagmi';
@@ -216,8 +217,10 @@ export const useSubmitKeysSubmit = ({
         if (nodeOperator) {
           appendNO({
             id: nodeOperator.id,
-            manager: isUserOrZero(nodeOperator.managerAddress),
-            rewards: isUserOrZero(nodeOperator.rewardsAddress),
+            roles: packRoles({
+              rewards: isUserOrZero(nodeOperator.rewardsAddress),
+              manager: isUserOrZero(nodeOperator.managerAddress),
+            }),
           });
         }
 

@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from 'react';
-import { NodeOperatorRoles } from 'types';
+import { useCsmNodeOperators } from 'shared/hooks';
+import { NodeOperator } from 'types';
 import { mergeRoles } from 'utils';
 import { useCachedNodeOperator } from './use-cached-node-operator';
-import { useCsmNodeOperators } from 'shared/hooks';
 
 export const useNodeOperatorsList = () => {
   const { data, initialLoading, mutate } = useCsmNodeOperators();
@@ -10,9 +10,9 @@ export const useNodeOperatorsList = () => {
   const cached = useCachedNodeOperator();
 
   const append = useCallback(
-    (income: NodeOperatorRoles) => {
+    (income: NodeOperator) => {
       // TODO: fix for spectacular
-      if (income.manager || income.rewards) {
+      if (income.roles.length > 0) {
         void mutate((prev = []) => [...mergeRoles(prev, income)]);
       }
     },

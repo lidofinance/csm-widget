@@ -95,7 +95,7 @@ export const useAcceptInviteSubmit = ({
         txModalStages.success({ ...invite, address }, txHash);
 
         // TODO: move to onConfirm
-        appendNO(invite);
+        appendNO({ id: invite.id, roles: [invite.role] });
 
         return true;
       } catch (error) {
