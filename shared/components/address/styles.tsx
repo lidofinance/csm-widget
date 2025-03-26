@@ -15,6 +15,8 @@ export const AddressContainerStyle = styled(StackStyle).attrs({
   $gap: 'xs',
   $align: 'center',
 })<{ $bold?: boolean }>`
+  display: inline-flex;
+
   ${LinkStyled} {
     svg {
       display: inline-flex;
