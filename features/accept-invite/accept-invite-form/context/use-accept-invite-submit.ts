@@ -12,6 +12,8 @@ import {
   AcceptInviteFormInputType,
   AcceptInviteFormNetworkData,
 } from './types';
+import { useNavigate } from 'shared/navigate';
+import { PATH } from 'consts/urls';
 
 // TODO: move to hooks
 type UseAcceptInviteOptions = {
@@ -58,6 +60,7 @@ export const useAcceptInviteSubmit = ({
 }: UseAcceptInviteOptions) => {
   const { txModalStages } = useTxModalStagesAcceptInvite();
   const { append: appendNO } = useNodeOperatorContext();
+  const n = useNavigate();
 
   const getTx = useAcceptInviteTx();
   const sendTx = useSendTx();
@@ -65,7 +68,7 @@ export const useAcceptInviteSubmit = ({
   const acceptInvite = useCallback(
     async (
       { invite }: AcceptInviteFormInputType,
-      { address }: AcceptInviteFormNetworkData,
+      { address, invites }: AcceptInviteFormNetworkData,
     ): Promise<boolean> => {
       invariant(invite, 'Invite is not defined');
 
@@ -92,17 +95,20 @@ export const useAcceptInviteSubmit = ({
 
         await onConfirm?.();
 
-        txModalStages.success({ ...invite, address }, txHash);
-
         // TODO: move to onConfirm
         appendNO({ id: invite.id, roles: [invite.role] });
+        if (invites && invites.length <= 1) {
+          void n(PATH.HOME);
+        }
+
+        txModalStages.success({ ...invite, address }, txHash);
 
         return true;
       } catch (error) {
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [getTx, txModalStages, onConfirm, appendNO, sendTx, onRetry],
+    [txModalStages, getTx, onConfirm, appendNO, n, sendTx, onRetry],
   );
 
   return {
