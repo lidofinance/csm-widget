@@ -32,6 +32,7 @@ export const ClaimBondFormInfo = () => {
             <Address address={rewardsAddress} />) will receive
           </AddressStyled>
         }
+        help="The recipient of the claim is the Rewards address. You can change the Rewards address on the Roles tab"
       >
         <FormatToken amount={amount ?? Zero} token={token} />
       </DataTableRow>
@@ -45,6 +46,8 @@ export const ClaimBondFormInfo = () => {
 };
 
 const AddressStyled = styled.div`
+  display: inline;
+
   ${AddressContainerStyle} {
     display: inline-flex;
   }
