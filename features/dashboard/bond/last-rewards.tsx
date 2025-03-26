@@ -147,7 +147,7 @@ const LastReportStats: FC = () => {
             title="Stuck keys found"
             loading={isLoading}
             warning={lastRewards?.stuck}
-            help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the latest report frame. Stuck keys prevent the Node Operator from receiving rewards for any key(s) in that frame."
+            help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the latest report frame. Stuck keys prevent the Node Operator from receiving rewards for any key(s) in that frame"
           >
             {lastRewards?.stuck ? 'YES' : 'NO'}
           </TextBlock>

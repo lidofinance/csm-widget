@@ -68,7 +68,7 @@ export const AvailableToClaim: FC = () => {
               warning
               sign="minus"
               title={BOND_INSUFFICIENT}
-              help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys."
+              help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys"
               loading={isBondLoading}
               amount={bond.delta}
             />
@@ -97,7 +97,7 @@ export const AvailableToClaim: FC = () => {
               loading={isBondLoading}
               amount={bond.locked}
               token={TOKENS.ETH}
-              help="Bond is locked because of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
+              help="Bond is locked because of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
             />
           </>
         )}

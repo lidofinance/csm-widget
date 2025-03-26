@@ -12,7 +12,7 @@ export const Info: FC = () => {
           <TitledAmount
             warning
             title="Locked bond"
-            help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
+            help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
             loading={loading.isLockedBondLoading}
             amount={lockedBond}
             token={TOKENS.ETH}
