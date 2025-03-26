@@ -90,13 +90,13 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
       stakeWidget: 'https://stake-hoodi.testnet.fi',
 
-      feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
+      feesMonitoring: '',
       operatorsWidget: 'https://operators-hoodi.testnet.fi',
       beaconchain: 'https://hoodi.beaconcha.in',
-      beaconchainDashboard: '',
-      ratedExplorer: 'https://explorer.rated.network',
+      beaconchainDashboard: 'https://v2-beta-hoodi.beaconcha.in/dashboard',
+      ratedExplorer: '',
       subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
-      keysApi: 'http://hr6vb81d1ndsx-hoodi-keys-api.valset-01.testnet.fi',
+      keysApi: 'https://keys-api-hoodi.testnet.fi',
       surveyApi: 'https://csm-surveys-api-testnet.up.railway.app',
     },
   };
