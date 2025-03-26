@@ -92,7 +92,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
 
       feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
       operatorsWidget: 'https://operators-hoodi.testnet.fi',
-      beaconchain: '',
+      beaconchain: 'https://hoodi.beaconcha.in',
       beaconchainDashboard: '',
       ratedExplorer: 'https://explorer.rated.network',
       subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
