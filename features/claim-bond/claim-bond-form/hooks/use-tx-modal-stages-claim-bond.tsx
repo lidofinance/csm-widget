@@ -1,28 +1,28 @@
 import type { BigNumber } from 'ethers';
 
+import { getExternalLinks } from 'consts/external-links';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { TOKENS } from 'consts/tokens';
+import { PATH } from 'consts/urls';
 import { MatomoLink } from 'shared/components';
 import { TxLinkEtherscan } from 'shared/components/tx-link-etherscan';
+import { LocalLink } from 'shared/navigate';
 import {
   TransactionModalTransitStage,
   TxAmount,
-  TxStageOperationSucceedBalanceShown,
-  TxStageSignOperationAmount,
+  TxStageClaim,
   TxStageSuccess,
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { getExternalLinks } from 'consts/external-links';
-import { LocalLink } from 'shared/navigate';
-import { PATH } from 'consts/urls';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
-const STAGE_OPERATION_ARGS = {
-  operationText: 'Claiming Bond',
+type Props = {
+  amount: BigNumber;
+  token: TOKENS;
+  claimRewards: boolean;
+  rewards?: BigNumber;
 };
-
-type Props = { amount: BigNumber; token: TOKENS };
-type SuccessProps = { amount: BigNumber; balance: BigNumber; token: TOKENS };
+type SuccessProps = { amount: BigNumber; token: TOKENS };
 
 const { stakeWidget } = getExternalLinks();
 
@@ -31,33 +31,12 @@ const getTxModalStagesClaimBond = (
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: ({ amount, token }: Props) =>
-    transitStage(
-      <TxStageSignOperationAmount
-        {...STAGE_OPERATION_ARGS}
-        operationText="Claiming"
-        willReceive={amount}
-        willReceiveToken={token}
-        amount={amount}
-        token={token}
-      />,
-    ),
+  sign: (props: Props) => transitStage(<TxStageClaim {...props} />),
 
-  pending: ({ amount, token }: Props, txHash?: string) =>
-    transitStage(
-      <TxStageSignOperationAmount
-        {...STAGE_OPERATION_ARGS}
-        operationText="Claiming"
-        willReceive={amount}
-        willReceiveToken={token}
-        amount={amount}
-        token={token}
-        isPending
-        txHash={txHash}
-      />,
-    ),
+  pending: (props: Props, txHash?: string) =>
+    transitStage(<TxStageClaim {...props} isPending txHash={txHash} />),
 
-  success: ({ amount, balance, token }: SuccessProps, txHash?: string) =>
+  success: ({ amount, token }: SuccessProps, txHash?: string) =>
     transitStage(
       token === TOKENS.ETH ? (
         // TODO: matomo events
@@ -88,11 +67,14 @@ const getTxModalStagesClaimBond = (
           }
         />
       ) : (
-        <TxStageOperationSucceedBalanceShown
-          {...STAGE_OPERATION_ARGS}
-          txHash={txHash}
-          balance={balance}
-          balanceToken={TOKENS.STETH}
+        <TxStageSuccess
+          title="Requested amount has been successfully claimed"
+          description={
+            <>
+              Transaction can be viewed on{' '}
+              <TxLinkEtherscan txHash={txHash} text="Etherscan" />.
+            </>
+          }
         />
       ),
       {
