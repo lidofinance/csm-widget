@@ -15,6 +15,8 @@ import { NodeOperatorId } from 'types';
 import { addExtraWei, formatKeys, runWithTransactionLogger } from 'utils';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
 import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
+import { useNavigate } from 'shared/navigate';
+import { PATH } from 'consts/urls';
 
 type AddKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -86,6 +88,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
   const getPermitOrApprove = usePermitOrApprove();
   const getTx = useAddKeysTx();
   const sendTx = useSendTx();
+  const n = useNavigate();
 
   const { addCacheKeys } = useKeysCache();
 
@@ -138,13 +141,15 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
         await onConfirm?.();
 
+        // TODO: move to onConfirm
+        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
+
+        void n(PATH.KEYS_VIEW);
+
         txModalStages.success(
           { keys: depositData.map((key) => key.pubkey) },
           txHash,
         );
-
-        // TODO: move to onConfirm
-        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
 
         return true;
       } catch (error) {
@@ -157,6 +162,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
       getTx,
       onConfirm,
       addCacheKeys,
+      n,
       sendTx,
       onRetry,
     ],
