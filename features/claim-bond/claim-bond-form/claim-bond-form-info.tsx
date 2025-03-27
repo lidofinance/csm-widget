@@ -5,15 +5,15 @@ import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
 import styled from 'styled-components';
 import { ClaimBondFormInputType, useClaimBondFormData } from './context';
-import { useBondReceiveAmount } from './hooks/use-bond-receive-amount';
 import { Address } from 'shared/components';
 import {
   AddressContainerStyle,
   AddressStyle,
 } from 'shared/components/address/styles';
+import { useBondWillReceive } from 'shared/hooks';
 
 export const ClaimBondFormInfo = () => {
-  const { rewardsAddress } = useClaimBondFormData();
+  const { rewardsAddress, rewards } = useClaimBondFormData();
   const [token, amount, claimRewards] = useWatch<
     ClaimBondFormInputType,
     ['token', 'amount', 'claimRewards']
@@ -21,7 +21,11 @@ export const ClaimBondFormInfo = () => {
     name: ['token', 'amount', 'claimRewards'],
   });
 
-  const bondReceive = useBondReceiveAmount();
+  const [bondReceive] = useBondWillReceive(
+    token,
+    amount,
+    claimRewards ? rewards?.available : undefined,
+  );
 
   return (
     <DataTable>

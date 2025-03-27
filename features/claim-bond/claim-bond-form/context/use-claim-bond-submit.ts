@@ -4,12 +4,7 @@ import invariant from 'tiny-invariant';
 
 import { Zero } from '@ethersproject/constants';
 import { TOKENS } from 'consts/tokens';
-import {
-  useCSAccountingRPC,
-  useCSAccountingWeb3,
-  useCSModuleWeb3,
-  useSendTx,
-} from 'shared/hooks';
+import { useCSAccountingWeb3, useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId, RewardProof } from 'types';
 import { runWithTransactionLogger } from 'utils';
@@ -88,7 +83,6 @@ export const useClaimBondSubmit = ({
   onRetry,
 }: UseClaimBondOptions) => {
   const { txModalStages } = useTxModalStagesClaimBond();
-  const CSAccounting = useCSAccountingRPC();
 
   const getTx = useClaimBondTx();
   const sendTx = useSendTx();
@@ -102,7 +96,12 @@ export const useClaimBondSubmit = ({
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       try {
-        txModalStages.sign({ amount, token });
+        txModalStages.sign({
+          amount,
+          token,
+          claimRewards,
+          rewards: rewards?.available,
+        });
 
         const tx = await getTx(token, {
           nodeOperatorId,
@@ -115,23 +114,23 @@ export const useClaimBondSubmit = ({
           () => sendTx(tx),
         );
 
-        txModalStages.pending({ amount, token }, txHash);
+        txModalStages.pending(
+          { amount, token, claimRewards, rewards: rewards?.available },
+          txHash,
+        );
 
         await runWithTransactionLogger('ClaimBond block confirmation', waitTx);
 
         await onConfirm?.();
 
-        // TODO: move to onConfirm
-        const { current } = await CSAccounting.getBondSummary(nodeOperatorId);
-
-        txModalStages.success({ balance: current, amount, token }, txHash);
+        txModalStages.success({ amount, token }, txHash);
 
         return true;
       } catch (error) {
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [getTx, txModalStages, onConfirm, CSAccounting, sendTx, onRetry],
+    [getTx, txModalStages, onConfirm, sendTx, onRetry],
   );
 
   return {
