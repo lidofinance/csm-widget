@@ -28,6 +28,7 @@ import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 import { PATH } from 'consts/urls';
 import { useNavigate } from 'shared/navigate';
+import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 
 type SubmitKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -127,6 +128,7 @@ export const useSubmitKeysSubmit = ({
   const isUserOrZero = useAddressCompare(true);
   const { addCacheKeys } = useKeysCache();
   const n = useNavigate();
+  const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
 
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
 
@@ -211,16 +213,16 @@ export const useSubmitKeysSubmit = ({
         // TODO: move to onConfirm
         void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
 
-        // TODO: move to onConfirm
         if (nodeOperator?.id) {
-          appendNO({
-            id: nodeOperator.id,
-            roles,
-          });
-        }
-
-        if (roles.length === 0) {
-          void n(PATH.HOME);
+          if (roles.length === 0) {
+            setOperatorCustomAddresses(nodeOperator.id);
+            void n(PATH.HOME);
+          } else {
+            appendNO({
+              id: nodeOperator.id,
+              roles,
+            });
+          }
         }
 
         txModalStages.success(
@@ -243,11 +245,12 @@ export const useSubmitKeysSubmit = ({
       txModalStages,
       getTx,
       isUserOrZero,
-      addCacheKeys,
       onConfirm,
+      addCacheKeys,
       sendTx,
-      appendNO,
+      setOperatorCustomAddresses,
       n,
+      appendNO,
       onRetry,
     ],
   );
