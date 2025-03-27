@@ -28,9 +28,8 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
   const { disconnect } = useDisconnect();
 
   const handleDisconnect = useCallback(() => {
-    disconnect?.();
     onClose?.();
-  }, [disconnect, onClose]);
+  }, [onClose]);
 
   const handleCopy = useCopyToClipboard(address ?? '');
   const handleEtherscan = useEtherscanOpen(address ?? '', 'address');
@@ -50,7 +49,6 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
               size="xs"
               variant="outlined"
               onClick={handleDisconnect}
-              data-testid="disconnectBtn"
             >
               Disconnect
             </WalletModalDisconnectStyle>

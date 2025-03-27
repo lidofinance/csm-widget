@@ -23,7 +23,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
       <ol>
         <li>Wait for your keys to be deposited to through the protocol.</li>
         <li>
-          Once your keys become active (check the status on the{' '}
+          Once your keys become active (you can check their statuses on the{' '}
           <LocalLink
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessKeysTab}
             href={PATH.KEYS_VIEW}
@@ -51,7 +51,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
           ) make sure your validators are producing attestations{' '}
           {beaconchainDashboardLink && (
             <>
-              (you can use{' '}
+              (you can use the{' '}
               <MatomoLink
                 matomoEvent={
                   MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard

@@ -1,5 +1,5 @@
-import { Button } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
+import { Disconnect } from '../disconnect/disconnect';
 
 export const WalletModalContentStyle = styled.div`
   background-color: var(--lido-color-background);
@@ -22,9 +22,7 @@ export const WalletModalConnectorStyle = styled.div`
   margin-right: auto;
 `;
 
-export const WalletModalDisconnectStyle = styled((props) => (
-  <Button {...props} />
-))`
+export const WalletModalDisconnectStyle = styled(Disconnect)`
   flex-shrink: 0;
 `;
 
