@@ -205,6 +205,10 @@ export const useSubmitKeysSubmit = ({
           {
             nodeOperatorId: nodeOperator?.id,
             keys: depositData.map((key) => key.pubkey),
+            roles: packRoles({
+              manager: isUserOrZero(nodeOperator?.managerAddress),
+              rewards: isUserOrZero(nodeOperator?.rewardsAddress),
+            }),
           },
           txHash,
         );
