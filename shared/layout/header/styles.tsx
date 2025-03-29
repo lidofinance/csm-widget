@@ -1,10 +1,14 @@
-import { Container, ContainerProps, ThemeToggler } from '@lidofinance/lido-ui';
+import { Divider, ThemeToggler } from '@lidofinance/lido-ui';
 import { LogoLidoStyle } from 'shared/components/logos/styles';
 import styled, { keyframes } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const HeaderContentStyle = styled.div`
+export const HeaderStyle = styled.header`
+  grid-area: header;
+  position: relative;
+  align-self: center;
+
   display: flex;
   align-items: center;
 
@@ -18,14 +22,6 @@ export const HeaderContentStyle = styled.div`
   ${LogoLidoStyle} {
     height: 44px;
   }
-`;
-
-export const HeaderStyle = styled((props: ContainerProps) => (
-  <Container {...props} />
-))`
-  position: relative;
-  padding-top: 18px;
-  padding-bottom: 18px;
 `;
 
 export const HeaderActionsStyle = styled.div`
@@ -83,4 +79,14 @@ export const IPFSInfoBoxOnlyDesktopWrapper = styled.div`
 
 export const ThemeTogglerStyle = styled(ThemeToggler)`
   margin: 0;
+`;
+
+export const LogosStyle = styled.div`
+  display: flex;
+  gap: 12px;
+  align-items: center;
+`;
+
+export const LogoDivider = styled(Divider).attrs({ type: 'vertical' })`
+  opacity: 0.6;
 `;

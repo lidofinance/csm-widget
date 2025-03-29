@@ -16,4 +16,8 @@ export const LogoLidoStyle = styled.div`
   ${({ theme }) => theme.mediaQueries.lg} {
     align-self: start;
   }
+
+  span {
+    display: block;
+  }
 `;

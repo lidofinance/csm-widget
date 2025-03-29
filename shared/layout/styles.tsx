@@ -1,7 +1,18 @@
-import { H1 } from '@lidofinance/lido-ui';
+import { Container, H1 } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
+
+export const LayoutStyle = styled(Container)`
+  display: grid;
+  grid-template-columns: 180px auto 180px;
+  grid-template-rows: 80px auto 72px;
+  grid-gap: 1em;
+  grid-template-areas:
+    'header header header'
+    'sidebar main alerts'
+    'footer footer footer';
+`;
 
 export const Heading = styled.header<{ $titlesCount: number }>`
   display: flex;
@@ -54,4 +65,20 @@ export const Content = styled.div`
   > * {
     width: 100%;
   }
+`;
+
+export const Main = styled.main`
+  grid-area: main;
+  position: relative;
+  margin-inline: auto;
+  margin-top: ${({ theme }) => theme.spaceMap.sm}px;
+  margin-bottom: ${({ theme }) => theme.spaceMap.xxl}px;
+  padding: 0;
+  width: 100%;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    padding: 0 20px;
+  }
+
+  max-width: 590px;
 `;

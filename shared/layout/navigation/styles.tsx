@@ -4,7 +4,11 @@ import styled, { css } from 'styled-components';
 import { NAV_MOBILE_HEIGHT, NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const desktopCss = css`
-  margin: 0 46px;
+  grid-area: sidebar;
+  flex-direction: column;
+  align-items: start;
+
+  margin-top: 4rem;
   display: flex;
   gap: 32px;
 
@@ -29,13 +33,12 @@ const mobileCss = css`
   height: ${NAV_MOBILE_HEIGHT}px;
 `;
 
-export const Nav = styled.div`
+export const Nav = styled.nav`
   ${desktopCss}
   // mobile kicks in on a bit higher width for nav
   ${NAV_MOBILE_MEDIA} {
     ${mobileCss}
   }
-  align-items: center;
   z-index: 6;
 `;
 
