@@ -20,7 +20,11 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
 
   failed: (error: unknown) =>
     transitStage(
-      <TxStageFail title="Sign in failed" code={getErrorCode(error)} />,
+      <TxStageFail
+        title="Sign in failed"
+        error={typeof error === 'string' ? error : undefined}
+        code={getErrorCode(error)}
+      />,
     ),
 
   rejected: () =>
