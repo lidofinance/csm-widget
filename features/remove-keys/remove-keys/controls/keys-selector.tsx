@@ -9,7 +9,9 @@ export const KeysSelector = () => {
     <>
       <FormTitle>Choose keys to remove</FormTitle>
       <KeysSelectorHookForm options={keys || []} />
-      <Note>Your choice has to be a sequential array</Note>
+      {keys && keys?.length > 2 && (
+        <Note>Your choice has to be a sequential array</Note>
+      )}
     </>
   );
 };
