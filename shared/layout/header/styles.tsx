@@ -1,5 +1,4 @@
 import { Divider, ThemeToggler } from '@lidofinance/lido-ui';
-import { LogoLidoStyle } from 'shared/components/logos/styles';
 import styled, { keyframes } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
@@ -11,17 +10,10 @@ export const HeaderStyle = styled.header`
 
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
 
-  flex-wrap: wrap;
   row-gap: 8px;
-
-  @media screen and (max-width: 880px) {
-    flex-wrap: nowrap;
-  }
-
-  ${LogoLidoStyle} {
-    height: 44px;
-  }
+  margin-block: 18px;
 `;
 
 export const HeaderActionsStyle = styled.div`
@@ -85,6 +77,10 @@ export const LogosStyle = styled.div`
   display: flex;
   gap: 12px;
   align-items: center;
+
+  height: 28px;
+  margin-block: 8px;
+  align-self: start;
 `;
 
 export const LogoDivider = styled(Divider).attrs({ type: 'vertical' })`

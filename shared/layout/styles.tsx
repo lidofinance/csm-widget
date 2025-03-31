@@ -4,14 +4,62 @@ import styled from 'styled-components';
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const LayoutStyle = styled(Container)`
+  --layout-main-width: 590px;
+  --layout-side-width: 170px;
+
+  position: relative;
+  min-height: 100%;
   display: grid;
-  grid-template-columns: 180px auto 180px;
-  grid-template-rows: 80px auto 72px;
-  grid-gap: 1em;
+  grid-template-columns: var(--layout-side-width) 1fr var(--layout-side-width);
+  grid-template-rows: auto 1fr auto;
+  grid-column-gap: 14px;
   grid-template-areas:
     'header header header'
-    'sidebar main alerts'
+    'nav main alerts'
     'footer footer footer';
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    grid-template-columns: var(--layout-side-width) 1fr;
+    grid-template-rows:
+      auto auto 1fr
+      auto;
+    grid-template-areas:
+      'header header'
+      'nav alerts'
+      'nav main'
+      'footer footer';
+
+    &:has(nav:empty),
+    &:not(:has(nav)) {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'header'
+        'alerts'
+        'main'
+        'footer';
+    }
+  }
+
+  ${NAV_MOBILE_MEDIA} {
+    grid-template-rows: auto auto 1fr auto 60px;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'header'
+      'alerts'
+      'main'
+      'footer'
+      'nav';
+
+    &:has(nav:empty),
+    &:not(:has(nav)) {
+      grid-template-rows: auto auto 1fr auto;
+      grid-template-areas:
+        'header'
+        'alerts'
+        'main'
+        'footer';
+    }
+  }
 `;
 
 export const Heading = styled.header<{ $titlesCount: number }>`
@@ -76,9 +124,5 @@ export const Main = styled.main`
   padding: 0;
   width: 100%;
 
-  ${({ theme }) => theme.mediaQueries.lg} {
-    padding: 0 20px;
-  }
-
-  max-width: 590px;
+  max-width: var(--layout-main-width);
 `;

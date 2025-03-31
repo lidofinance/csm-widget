@@ -13,13 +13,9 @@ export const FooterStyle = styled.footer`
   flex-wrap: wrap;
   column-gap: 32px;
 
+  justify-content: center;
   align-self: center;
-
-  ${NAV_MOBILE_MEDIA} {
-    margin-bottom: 60px;
-    padding: 20px 18px;
-    justify-content: center;
-  }
+  margin-block: 24px;
 
   &::before {
     content: '';

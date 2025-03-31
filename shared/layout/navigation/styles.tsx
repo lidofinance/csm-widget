@@ -1,10 +1,14 @@
 import { CounterStyle } from 'shared/components/counter/styles';
 import styled, { css } from 'styled-components';
 
-import { NAV_MOBILE_HEIGHT, NAV_MOBILE_MEDIA } from 'styles/constants';
+import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const desktopCss = css`
-  grid-area: sidebar;
+  grid-area: nav;
+  position: sticky;
+  top: 3rem;
+  align-self: start;
+
   flex-direction: column;
   align-items: start;
 
@@ -18,19 +22,22 @@ export const desktopCss = css`
 `;
 
 const mobileCss = css`
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  grid-gap: 16px;
+
   margin: 0;
   position: fixed;
+  top: auto;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 8px;
+
   background-color: var(--lido-color-foreground);
-  display: flex;
-  gap: 32px;
-  justify-content: space-around;
-  align-items: center;
   border-top: 1px solid var(--lido-color-border);
-  height: ${NAV_MOBILE_HEIGHT}px;
+  min-height: 60px;
 `;
 
 export const Nav = styled.nav`
@@ -38,6 +45,9 @@ export const Nav = styled.nav`
   // mobile kicks in on a bit higher width for nav
   ${NAV_MOBILE_MEDIA} {
     ${mobileCss}
+  }
+  &:empty {
+    display: none;
   }
   z-index: 6;
 `;
@@ -83,6 +93,7 @@ export const NavLink = styled.span<{ $active?: boolean }>`
   ${NAV_MOBILE_MEDIA} {
     flex-direction: column;
     text-transform: none;
+    text-align: center;
     font-weight: 500;
     font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
     line-height: 1.2em;
