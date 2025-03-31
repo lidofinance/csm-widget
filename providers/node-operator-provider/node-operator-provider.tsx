@@ -6,17 +6,17 @@ import {
   useMemo,
 } from 'react';
 import invariant from 'tiny-invariant';
-import { NodeOperator, NodeOperatorId, NodeOperatorRoles } from 'types';
+import { NodeOperator } from 'types';
+import { useAppendAndSwitch } from './use-appen-and-switch';
 import { useGetActiveNodeOperator } from './use-get-active-node-operator';
 import { useNodeOperatorsList } from './use-node-operators-list';
-import { useAppendAndSwitch } from './use-appen-and-switch';
 
 export type NodeOperatorContextValue = {
   list: NodeOperator[];
   isListLoading: boolean;
-  append: (nodeOperator: NodeOperatorRoles) => void;
   active?: NodeOperator;
-  switchActive: (id: NodeOperatorId) => void;
+  append: ReturnType<typeof useNodeOperatorsList>['append'];
+  switchActive: ReturnType<typeof useGetActiveNodeOperator>['switchActive'];
   appendAndSwitch: ReturnType<typeof useAppendAndSwitch>;
 };
 
