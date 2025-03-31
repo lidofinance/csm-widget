@@ -24,10 +24,8 @@ export const HeaderActionsStyle = styled.div`
   flex-shrink: 1;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
 
-  ${({ theme }) => theme.mediaQueries.lg} {
-    flex-wrap: wrap;
-    justify-content: end;
-  }
+  flex-wrap: wrap;
+  justify-content: end;
 `;
 
 export const HeaderWalletChainWrapper = styled.div`
