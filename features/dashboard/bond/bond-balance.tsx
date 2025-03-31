@@ -46,7 +46,7 @@ export const BondBalance: FC = () => {
               title={BOND_INSUFFICIENT}
               loading={isBondLoading}
               amount={bond?.delta}
-              help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys."
+              help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys"
             />
           </>
         ) : (
@@ -56,7 +56,7 @@ export const BondBalance: FC = () => {
               title={BOND_EXCESS}
               loading={isBondLoading}
               amount={bond?.delta}
-              help="The bond amount available to claim without having to exit validators. Increases daily."
+              help="The bond amount available to claim without having to exit validators. Increases daily"
             />
           </>
         )}
