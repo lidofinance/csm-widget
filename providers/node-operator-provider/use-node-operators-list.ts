@@ -19,7 +19,10 @@ export const useNodeOperatorsList = () => {
     [mutate],
   );
 
-  const list = useMemo(() => data ?? (cached ? [cached] : []), [cached, data]);
+  const list = useMemo(
+    () => (data?.length ? data : cached ? [cached] : []),
+    [cached, data],
+  );
 
   return {
     list,
