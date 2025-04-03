@@ -2,7 +2,6 @@ import { FC, PropsWithChildren, useMemo } from 'react';
 import { ReefKnot, getConnectors, holesky } from 'reef-knot/core-react';
 import { WagmiConfig, createClient, configureChains, Chain } from 'wagmi';
 import * as wagmiChains from 'wagmi/chains';
-import { getStaticRpcBatchProvider } from '@lido-sdk/providers';
 
 import { hoodi } from 'consts/hoodi';
 import { useUserConfig } from 'config/user-config';
@@ -11,6 +10,7 @@ import { CHAINS } from 'consts/chains';
 import { ConnectWalletModal } from 'shared/wallet/connect-wallet-modal';
 
 import { SDKLegacyProvider } from './sdk-legacy';
+import { getStaticRpcBatchProvider } from 'utils/getStaticRpcBatchProvider';
 
 const wagmiChainsArray = Object.values({ ...wagmiChains, hoodi, holesky });
 
