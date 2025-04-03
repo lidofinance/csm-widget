@@ -35,7 +35,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   return (
     <FaqContext.Provider value={props.pageProps?.faqList ?? []}>
       <Providers
-        dummy={props.pageProps?.maintenance || props.pageProps.isError}
+        dummy={props.pageProps?.maintenance || props.pageProps?.isError}
         skipWatcher={props.pageProps?.isError}
       >
         {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
