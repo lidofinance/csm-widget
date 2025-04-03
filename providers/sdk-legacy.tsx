@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ProviderSDK } from '@lido-sdk/react';
-import { getStaticRpcBatchProvider } from '@lido-sdk/providers';
 import { Web3Provider } from '@ethersproject/providers';
 import { Chain, useAccount as useWagmiAccount } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
 import { useAccount } from 'shared/hooks';
+import { getStaticRpcBatchProvider } from 'utils/getStaticRpcBatchProvider';
 
 const POLLING_INTERVAL = 12_000;
 
