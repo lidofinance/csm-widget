@@ -11,8 +11,8 @@ export type NodeOperator = {
 
 export type NodeOperatorRoles = {
   id: NodeOperatorId;
-  manager?: boolean;
-  rewards?: boolean;
+  manager: boolean | null;
+  rewards: boolean | null;
 };
 
 export type NodeOperatorInvite = {

@@ -57,7 +57,7 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
       ExitBusOracle: '0x8664d394C2B3278F26A1B44B967aEf99707eeAB2',
       StakingRouter: '0xCc820558B39ee15C7C45B59390B503b83fb499A8',
     },
-    deploymentBlockNumber: undefined,
+    deploymentBlockNumber: '0x1374',
     stakingModuleId: 4,
     withdrawalCredentials: '0x4473dCDDbf77679A643BdB654dbd86D67F8d32f2',
     retentionPeriodMins: 80_640, // 8 weeks
