@@ -1,29 +1,30 @@
-import { useCallback } from 'react';
 import {
-  ButtonIcon,
-  Modal,
-  Identicon,
-  External,
-  Copy,
   Address,
+  ButtonIcon,
+  Copy,
+  External,
+  Identicon,
+  Modal,
 } from '@lidofinance/lido-ui';
-import { useEtherscanOpen } from '@lido-sdk/react';
+import { useCallback } from 'react';
 import { useConnectorInfo, useDisconnect } from 'reef-knot/core-react';
 
+import { getEtherscanAddressLink } from '@lido-sdk/helpers';
+import Link from 'next/link';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { useAccount, useCopyToClipboard } from 'shared/hooks';
 import {
-  WalletModalContentStyle,
+  WalletModalAccountStyle,
+  WalletModalActionsStyle,
+  WalletModalAddressStyle,
   WalletModalConnectedStyle,
   WalletModalConnectorStyle,
+  WalletModalContentStyle,
   WalletModalDisconnectStyle,
-  WalletModalAccountStyle,
-  WalletModalAddressStyle,
-  WalletModalActionsStyle,
 } from './styles';
 
 export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
   const { connectorName } = useConnectorInfo();
   const { disconnect } = useDisconnect();
 
@@ -32,7 +33,6 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
   }, [onClose]);
 
   const handleCopy = useCopyToClipboard(address ?? '');
-  const handleEtherscan = useEtherscanOpen(address ?? '', 'address');
 
   return (
     <Modal title="Account" onClose={onClose} {...props}>
@@ -76,15 +76,16 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
           >
             Copy address
           </ButtonIcon>
-          <ButtonIcon
-            data-testid="etherscanBtn"
-            onClick={handleEtherscan}
-            icon={<External />}
-            size="xs"
-            variant="ghost"
-          >
-            View on Etherscan
-          </ButtonIcon>
+          <Link href={getEtherscanAddressLink(chainId ?? 0, address ?? '')}>
+            <ButtonIcon
+              data-testid="etherscanBtn"
+              icon={<External />}
+              size="xs"
+              variant="ghost"
+            >
+              View on Etherscan
+            </ButtonIcon>
+          </Link>
         </WalletModalActionsStyle>
       </WalletModalContentStyle>
     </Modal>

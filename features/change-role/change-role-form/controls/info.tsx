@@ -24,41 +24,37 @@ export const Info: FC = () => {
           address={currentAddress}
         />
 
-        <Stack direction="column" gap="sm">
-          <TitledAddress
-            title={
-              <>
-                <Warning text="Pending change" />
-                {isPropose && (
-                  <SubmitButtonHookForm
-                    variant="outlined"
-                    size="xs"
-                    fullwidth={false}
-                    onClick={revokeHandle}
-                  >
-                    Revoke
-                  </SubmitButtonHookForm>
-                )}
-              </>
-            }
-            address={proposedAddress}
-          />
-          {proposedAddress && (
-            <>
-              <Text size="xxs" weight={700}>
-                Action required
-              </Text>
-              <Text size="xxs">
-                <ol>
-                  <li>Connect to CSM UI with the proposed address</li>
-                  <li>
-                    Go to Roles tab → Inbox requests to confirm the change
-                  </li>
-                </ol>
-              </Text>
-            </>
-          )}
-        </Stack>
+        {proposedAddress && (
+          <Stack direction="column" gap="sm">
+            <TitledAddress
+              title={
+                <>
+                  <Warning text="Pending change" />
+                  {isPropose && (
+                    <SubmitButtonHookForm
+                      variant="outlined"
+                      size="xs"
+                      fullwidth={false}
+                      onClick={revokeHandle}
+                    >
+                      Revoke
+                    </SubmitButtonHookForm>
+                  )}
+                </>
+              }
+              address={proposedAddress}
+            />
+            <Text size="xxs" weight={700}>
+              Action required
+            </Text>
+            <Text size="xxs">
+              <ol>
+                <li>Connect to CSM UI with the proposed address</li>
+                <li>Go to Roles tab → Inbox requests to confirm the change</li>
+              </ol>
+            </Text>
+          </Stack>
+        )}
       </Latice>
     </>
   );
