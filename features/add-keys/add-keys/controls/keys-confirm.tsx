@@ -11,7 +11,7 @@ export const KeysConfirm: FC = () => {
   return (
     <Stack align="start">
       <CheckboxHookForm fieldName="confirmKeysReady" />
-      <Text size="xxs" color="secondary">
+      <Text size="xxs" color="secondary" as="div">
         I confirm that:
         <ul>
           <li>

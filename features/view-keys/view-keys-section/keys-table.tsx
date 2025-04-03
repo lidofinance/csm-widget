@@ -1,4 +1,4 @@
-import { Tbody, Td, Text, Th, Thead, Tr } from '@lidofinance/lido-ui';
+import { Tbody, Td, Th, Thead, Tr } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import {
   Address,
@@ -21,7 +21,6 @@ export const KeysTable: FC<Props> = ({ keys }) => {
     <TableStyle>
       <Thead>
         <Tr>
-          <Th>#</Th>
           <Th>Key</Th>
           <Th>Status</Th>
           <Th>Comment</Th>
@@ -30,11 +29,6 @@ export const KeysTable: FC<Props> = ({ keys }) => {
       <Tbody>
         {sortedKeys?.map(({ key, index, statuses }) => (
           <Tr key={index}>
-            <Td>
-              <Text size="xxs" color="secondary">
-                {index + 1}
-              </Text>
-            </Td>
             <Td>
               <AddressRow>
                 <Address

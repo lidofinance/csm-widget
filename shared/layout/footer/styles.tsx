@@ -1,9 +1,10 @@
-import { Container, Link } from '@lidofinance/lido-ui';
+import { Link } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const FooterStyle = styled(Container)`
+export const FooterStyle = styled.footer`
+  grid-area: footer;
   position: relative;
   box-sizing: border-box;
   color: var(--lido-color-text);
@@ -12,14 +13,23 @@ export const FooterStyle = styled(Container)`
   flex-wrap: wrap;
   column-gap: 32px;
 
-  width: 100%;
-  max-width: 1424px;
-  padding: 24px 32px;
+  justify-content: center;
+  align-self: center;
+  margin-block: 24px;
 
-  ${NAV_MOBILE_MEDIA} {
-    margin-bottom: 60px;
-    padding: 20px 18px;
-    justify-content: center;
+  &::before {
+    content: '';
+    position: absolute;
+    top: -23px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--lido-color-popupMenuItemBgActiveHover);
+    opacity: 0.12;
+
+    ${NAV_MOBILE_MEDIA} {
+      display: none;
+    }
   }
 `;
 
@@ -58,20 +68,6 @@ export const LinkDivider = styled.div`
   background: var(--lido-color-border);
   width: 1px;
   margin: 2px 16px;
-`;
-
-export const FooterDivider = styled.div`
-  position: absolute;
-  top: 0;
-  left: 32px;
-  width: calc(100% - 64px);
-  height: 1px;
-  background: var(--lido-color-popupMenuItemBgActiveHover);
-  opacity: 0.12;
-
-  ${NAV_MOBILE_MEDIA} {
-    display: none;
-  }
 `;
 
 export const Version = styled(FooterLink)`

@@ -1,21 +1,16 @@
-import { Address } from '@lidofinance/lido-ui';
 import styled, { css } from 'styled-components';
 import { LinkStyled } from '../matomo-link/styles';
 import { StackStyle } from '../stack/style';
 
-export const AddressStyle = styled(Address)<{ $bold?: boolean }>`
-  ${({ $bold }) =>
-    $bold &&
-    css`
-      font-weight: bold;
-    `}
-`;
-
 export const AddressContainerStyle = styled(StackStyle).attrs({
   $gap: 'xs',
   $align: 'center',
-})<{ $bold?: boolean }>`
+})<{ $big?: boolean }>`
   display: inline-flex;
+
+  > span > span {
+    font-weight: inherit;
+  }
 
   ${LinkStyled} {
     svg {
@@ -23,8 +18,8 @@ export const AddressContainerStyle = styled(StackStyle).attrs({
       flex-shrink: 0;
     }
 
-    ${({ $bold }) =>
-      !$bold &&
+    ${({ $big }) =>
+      !$big &&
       css`
         &,
         &:visited {
