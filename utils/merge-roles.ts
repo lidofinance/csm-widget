@@ -8,11 +8,13 @@ const applyPatch = (
   id: patch.id,
   roles: packRoles({
     manager:
-      patch.manager !== false &&
-      (patch.manager || item?.roles.includes(ROLES.MANAGER)),
+      (patch.manager !== null &&
+        (patch.manager || item?.roles.includes(ROLES.MANAGER))) ||
+      false,
     rewards:
-      patch.rewards !== false &&
-      (patch.rewards || item?.roles.includes(ROLES.REWARDS)),
+      (patch.rewards !== null &&
+        (patch.rewards || item?.roles.includes(ROLES.REWARDS))) ||
+      false,
   }),
 });
 

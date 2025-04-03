@@ -21,7 +21,8 @@ type NodeOperatorRoleEvent =
   | NodeOperatorManagerAddressChangedEvent;
 
 const restoreEvents = (events: NodeOperatorRoleEvent[], address?: Address) => {
-  const isUserAddress = (value: string) => compareLowercase(address, value);
+  const isUserAddress = (value: string) =>
+    compareLowercase(address, value) || null;
 
   return events
     .sort((a, b) => a.blockNumber - b.blockNumber)
@@ -38,10 +39,12 @@ const restoreEvents = (events: NodeOperatorRoleEvent[], address?: Address) => {
           return mergeRoles(prev, {
             id,
             manager: isUserAddress(e.args[2]),
+            rewards: false,
           });
         case 'NodeOperatorRewardAddressChanged':
           return mergeRoles(prev, {
             id,
+            manager: false,
             rewards: isUserAddress(e.args[2]),
           });
         default:
