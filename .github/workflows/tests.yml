@@ -1,0 +1,117 @@
+name: Test CSM-widget
+run-name: CSM-widget. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
+
+on:
+  workflow_dispatch:
+    inputs:
+      stand_type:
+        description: 'Stand type'
+        required: true
+        type: choice
+        default: testnet
+        options:
+          - prod
+          - staging
+          - testnet
+          - preview
+      tags:
+        description: 'Tags for running test suite'
+        required: false
+        type: choice
+        default: '-'
+        options:
+          - '-'
+          - smoke
+      preview_stand_url:
+        description: 'Preview stand url (only if "Stand type" is "preview")'
+        required: false
+        type: string
+      preview_stand_env:
+        description: 'Preview stand env (only if "Stand type" is "preview")'
+        required: false
+        type: choice
+        default: testnet
+        options:
+          - testnet
+          - infra
+
+  pull_request:
+    paths:
+      - 'tests/widget/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    env:
+      # Required envs
+      RPC_URL_TOKEN: ${{ secrets.RPC_URL_TOKEN }}
+      WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
+      WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
+      STAND_TYPE: ${{ github.event.inputs.STAND_TYPE || 'testnet' }}
+
+      # Common envs
+      QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
+      QASE_PROJECT_ID: 'CSM'
+      GH_ACTION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      GH_BRANCH_REF_NAME: ${{ github.ref_name }}
+      GH_EVENT_NAME: ${{ github.event_name }}
+      NODE_OPTIONS: --max-old-space-size=4096
+      TEST_TAGS: ${{ github.event.inputs.tags }}
+      TEST_BRANCH: ${{ github.event.inputs.branch }}
+
+      # Optional envs
+      REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
+      REFUSE_CF_BLOCK_VALUE: ${{ secrets.REFUSE_CF_BLOCK_VALUE }}
+      PUSHGATEWAY_URL: ${{ secrets.PUSHGATEWAY_URL }}
+      PUSHGATEWAY_USERNAME: ${{ secrets.PUSHGATEWAY_USERNAME }}
+      PUSHGATEWAY_PASSWORD: ${{ secrets.PUSHGATEWAY_PASSWORD }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Install Playwright Browsers
+        run: yarn playwright install chromium --with-deps
+
+      - name: Set up preview-stand credentials
+        if: ${{ github.event.inputs.stand_type == 'preview' }}
+        run: |
+          if [ -n "${{ github.event.inputs.preview_stand_url }}" ]; then
+            echo "Setting login and password for preview stand"
+            echo "PREVIEW_STAND_LOGIN=${{ secrets.PREVIEW_STAND_LOGIN }}" >> $GITHUB_ENV
+            echo "PREVIEW_STAND_PASSWORD=${{ secrets.PREVIEW_STAND_PASSWORD }}" >> $GITHUB_ENV
+            echo "PREVIEW_STAND_URL=${{ github.event.inputs.preview_stand_url }}" >> $GITHUB_ENV
+            echo "PREVIEW_STAND_ENV=${{ github.event.inputs.preview_stand_env }}" >> $GITHUB_ENV
+          else
+            echo "PREVIEW_STAND_URL not provided for preview environment"
+            exit 1
+          fi
+
+      - name: Run tests based on suite input
+        run: |
+          echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+          echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
+          echo -e "🧪 Test Tags: \033[1;34m$TEST_TAGS\033[0m"
+          echo -e "🌱 Branch: \033[1;34m${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\033[0m"
+          echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+
+          xvfb-run --auto-servernum -- yarn test
+
+      # - name: Fix test results when job is cancelled
+      #   if: cancelled()
+      #   run: yarn metrics:fix
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 5
