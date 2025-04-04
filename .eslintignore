@@ -15,3 +15,5 @@
 
 # generated
 /generated
+
+**/.browser_context**
