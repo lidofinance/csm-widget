@@ -10,6 +10,7 @@ export const prefixed = (template: TemplateStringsArray, ...args: string[]) => {
 export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Welcome
   connectWallet = 'connectWallet',
+  disconnectWallet = 'disconnectWallet',
   connectAsNodeOperator = 'connectAsNodeOperator',
   connectToBecomeNodeOperator = 'connectToBecomeNodeOperator',
   welcomeDetailedLink = 'welcomeDetailedLink',
@@ -102,6 +103,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Push «Connect wallet» button',
     prefixed`connect_wallet`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.disconnectWallet]: [
+    MATOMO_APP_NAME,
+    'Push «Disonnect» button',
+    prefixed`disconnect_wallet`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator]: [
     MATOMO_APP_NAME,

@@ -4,10 +4,9 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { Counter, IconTooltip } from 'shared/components';
 import {
-  getNextRewardsFrame,
-  useLastRewardsSlot,
   useNodeOperatorBalance,
   useNodeOperatorRewards,
+  useRewardsFrame,
 } from 'shared/hooks';
 import { useAvailableToClaim } from 'shared/hooks/useAvailableToClaim';
 import { formatDate } from 'utils';
@@ -23,10 +22,8 @@ export const AvailableToClaim: FC = () => {
   const { data: rewards, initialLoading: isRewardsLoading } =
     useNodeOperatorRewards(id);
 
-  const { data: rewardsSlot } = useLastRewardsSlot();
-  const nextRewardsDate = rewardsSlot?.timestamp
-    ? formatDate(getNextRewardsFrame(rewardsSlot.timestamp))
-    : null;
+  const { data: rewardsFrame } = useRewardsFrame();
+  const nextRewardsDate = formatDate(rewardsFrame?.nextRewards);
 
   const availableToClaim = useAvailableToClaim({
     bond,
@@ -71,7 +68,7 @@ export const AvailableToClaim: FC = () => {
               warning
               sign="minus"
               title={BOND_INSUFFICIENT}
-              help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys."
+              help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys"
               loading={isBondLoading}
               amount={bond.delta}
             />
@@ -100,7 +97,7 @@ export const AvailableToClaim: FC = () => {
               loading={isBondLoading}
               amount={bond.locked}
               token={TOKENS.ETH}
-              help="Bond is locked because of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
+              help="Bond is locked because of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
             />
           </>
         )}

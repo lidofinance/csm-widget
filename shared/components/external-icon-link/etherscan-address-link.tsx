@@ -11,19 +11,16 @@ type Props = {
 
 export const EtherscanAddressLink: FC<Props> = ({ address }) => {
   const { chainId } = useAccount();
-  const href = getEtherscanAddressLink(chainId ?? 0, address);
+
+  if (!address) return null;
 
   return (
-    <>
-      {href && (
-        <MatomoLink
-          href={href}
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink}
-          title="View on etherscan"
-        >
-          <External />
-        </MatomoLink>
-      )}
-    </>
+    <MatomoLink
+      href={getEtherscanAddressLink(chainId ?? 0, address)}
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink}
+      title="View on etherscan"
+    >
+      <External />
+    </MatomoLink>
   );
 };

@@ -216,7 +216,6 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                   <SelectHookForm
                     fieldName="clientsCountry"
                     options={COUNTRY_OPTIONS}
-                    rules={required}
                   />
                 </Stack>
 
@@ -257,7 +256,6 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                     <SelectHookForm
                       fieldName="validatorCountry"
                       options={COUNTRY_OPTIONS}
-                      rules={required}
                     />
                   </Stack>
                 )}
@@ -279,7 +277,6 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                     fieldName="mevMinBid"
                     label="Min bid"
                     token="ETH"
-                    rules={required}
                   />
                 </Stack>
                 <SubmitButtonHookForm>Submit</SubmitButtonHookForm>

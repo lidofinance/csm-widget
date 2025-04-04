@@ -52,6 +52,7 @@ export const BannerStyled = styled(Block)<{ $variant?: BannerVariant }>`
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spaceMap.md}px;
+  width: 100%;
 
   ${({ $variant }) => ($variant ? VARIANTS[$variant] : '')}
 `;

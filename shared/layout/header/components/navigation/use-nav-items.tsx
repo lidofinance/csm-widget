@@ -12,6 +12,7 @@ import {
   CounterInvalidKeys,
   CounterInvites,
   CounterLockedBond,
+  CounterSurveys,
 } from 'shared/counters';
 import { ShowRule, useShowRule } from 'shared/hooks';
 
@@ -73,6 +74,7 @@ const routes: Route[] = [
     path: PATH.SURVEYS,
     icon: <FileIcon />,
     showRules: ['IS_SURVEYS_ACTIVE'],
+    suffix: <CounterSurveys />,
   },
 ];
 

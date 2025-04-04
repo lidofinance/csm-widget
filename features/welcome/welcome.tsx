@@ -11,6 +11,7 @@ import styled from 'styled-components';
 import { HoleskyBanner } from './holesky-banner';
 import { getConfig } from 'config';
 import { CHAINS } from 'consts/chains';
+import { HoodiBanner } from './hoodi-banner';
 
 const { defaultChain } = getConfig();
 
@@ -23,7 +24,8 @@ export const Welcome: FC = () => {
 
   return (
     <>
-      {defaultChain === CHAINS.Holesky && paused && <HoleskyBanner />}
+      {defaultChain === CHAINS.Holesky && <HoleskyBanner />}
+      {defaultChain === CHAINS.Hoodi && <HoodiBanner />}
       {isWrongChain && <Fallback />}
       <WelcomeSection>
         <Stack wrap>

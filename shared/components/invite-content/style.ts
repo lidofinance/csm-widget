@@ -1,4 +1,3 @@
-import { BadgeStyle } from 'shared/node-operator/role-badge/styles';
 import styled from 'styled-components';
 
 export const InviteContentStyle = styled.div`
@@ -11,6 +10,16 @@ export const InviteContentStyle = styled.div`
   color: var(--lido-color-text);
 `;
 
-export const Badge = styled(BadgeStyle).attrs({ $background: 'dark' })`
-  text-transform: unset;
+export const Badge = styled.span`
+  border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
+  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 8px;
+
+  background: var(--lido-color-background);
+  background: var(--lido-color-shadowLight);
+  color: var(--lido-color-textSecondary);
 `;

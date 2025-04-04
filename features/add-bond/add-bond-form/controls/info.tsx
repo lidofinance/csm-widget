@@ -1,4 +1,4 @@
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
+import { BOND_INSUFFICIENT } from 'consts/text';
 import { TOKENS } from 'consts/tokens';
 import { FC } from 'react';
 import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
@@ -13,11 +13,11 @@ export const Info: FC = () => {
         <Stack direction="column" gap="sm">
           <TitledAmount
             warning={bond?.isInsufficient}
-            title={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
+            title={bond?.isInsufficient ? BOND_INSUFFICIENT : 'Bond balance'}
             help={
               bond?.isInsufficient
                 ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol'
-                : 'The bond amount available to claim without having to exit validators'
+                : undefined
             }
             loading={loading.isBondLoading}
             amount={bond?.delta}
@@ -26,8 +26,8 @@ export const Info: FC = () => {
           {bond?.isInsufficient ? (
             <p>
               Your Node Operator has an Insufficient bond because of the penalty
-              applied. Now your Node Operator’s bond is less than required to
-              cover the Node Operator’s current validators.
+              applied. Now your Node Operator&apos;s bond is less than required
+              to cover the Node Operator&apos;s current validators.
               <br />
               <b>Action required:</b>
               <br />

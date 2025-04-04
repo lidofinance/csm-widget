@@ -24,7 +24,7 @@ export const RemoveKeysFormInfo = () => {
       <DataTableRow
         title="Removal fee"
         loading={isRemovalFeeLoading}
-        help="Key deletion incurs a removal charge, deducted from the node operator's bond. This charge covers the maximum possible operational costs of queue processing."
+        help="Key deletion incurs a removal charge, deducted from the node operator's bond. This charge covers the maximum possible operational costs of queue processing"
       >
         <FormatToken amount={removalFee} token={TOKENS.STETH} />
       </DataTableRow>
