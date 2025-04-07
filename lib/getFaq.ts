@@ -84,3 +84,6 @@ export const getFaqLocked = () =>
 
 export const getFaqRoles = () =>
   readFaqFiles(['roles-1', 'roles-2', 'roles-3', 'roles-4', 'roles-5']);
+
+export const getFaqMonitoring = () =>
+  readFaqFiles(['monitoring-1', 'monitoring-2']);

@@ -1,5 +1,6 @@
 import { PATH } from 'consts/urls';
 import { MonitoringPage } from 'features/monitoring';
+import { getFaqMonitoring } from 'lib/getFaq';
 import { getProps } from 'lib/getProps';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
@@ -13,4 +14,4 @@ const Page = () => (
 
 export default Page;
 
-export const getServerSideProps = getProps();
+export const getServerSideProps = getProps(getFaqMonitoring);
