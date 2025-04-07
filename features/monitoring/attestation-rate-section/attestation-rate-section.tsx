@@ -6,9 +6,17 @@ import { formatDate, formatPercent } from 'utils';
 import { DiffBadge } from './diff-badge';
 import { Tip } from './tip';
 import { useEthseerApi } from './use-ethseer-api';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { useNodeOperatorInfo } from 'shared/hooks';
 
 export const AttestationRateSection: FC = () => {
+  const id = useNodeOperatorId();
+  const { data: info } = useNodeOperatorInfo(id);
   const { data, error } = useEthseerApi();
+
+  const showThisSection = data || (info?.totalDepositedKeys ?? 0) > 0;
+
+  if (!showThisSection) return null;
 
   return (
     <Block>
@@ -58,7 +66,7 @@ export const AttestationRateSection: FC = () => {
             {data.status !== 'good' && <Tip danger={data.status === 'bad'} />}
           </>
         ) : error ? (
-          <Text weight={700} size="lg">
+          <Text size="sm" color="secondary">
             {DATA_UNAVAILABLE}
           </Text>
         ) : (
