@@ -1,11 +1,11 @@
-import { HomePage } from 'tests/pages/home.page';
+import { WelcomePage } from 'tests/pages/welcome.page';
 import { test } from './test.fixture';
 
 test.describe('Welcome page without connected wallet', async () => {
   test('Should open connect modal after click to "I am a Node Operator"', async ({
     page,
   }) => {
-    const homePage = new HomePage(page);
+    const homePage = new WelcomePage(page);
     await homePage.goto();
 
     await homePage.welcomeSection.iAmANodeOperatorBtn.click();
@@ -16,7 +16,7 @@ test.describe('Welcome page without connected wallet', async () => {
   test('Should open connect modal after click to "Become a Node Operator"', async ({
     page,
   }) => {
-    const homePage = new HomePage(page);
+    const homePage = new WelcomePage(page);
     await homePage.goto();
 
     await homePage.welcomeSection.becomeANodeOperatorBtn.click();

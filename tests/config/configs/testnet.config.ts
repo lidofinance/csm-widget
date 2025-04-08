@@ -5,7 +5,7 @@ export class TestnetConfig extends BaseConfig {
     super();
     this.standConfig = {
       standType: 'testnet',
-      standUrl: 'https://csm-hoodi.vercel.app/create',
+      standUrl: 'https://csm.testnet.fi/',
       networkConfig: {
         chainId: 560048,
         tokenSymbol: 'ETH',

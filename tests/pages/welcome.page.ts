@@ -2,7 +2,7 @@ import { Page, test } from '@playwright/test';
 import { BasePage } from './base.page';
 import { WelcomeSection } from './elements/common/element.welcomeSection';
 
-export class HomePage extends BasePage {
+export class WelcomePage extends BasePage {
   welcomeSection: WelcomeSection;
   constructor(page: Page) {
     super(page);
@@ -10,7 +10,7 @@ export class HomePage extends BasePage {
   }
 
   async goto(param = '') {
-    await test.step('Open the Stake page', async () => {
+    await test.step('Open the Welcome page', async () => {
       await this.page.goto(param);
     });
   }
