@@ -1,13 +1,14 @@
 import { Block, InlineLoader, Text } from '@lidofinance/lido-ui';
 import { DATA_UNAVAILABLE } from 'consts/text';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { IconTooltip, MatomoLink, Stack } from 'shared/components';
+import { useNodeOperatorInfo } from 'shared/hooks';
 import { formatDate, formatPercent } from 'utils';
 import { DiffBadge } from './diff-badge';
+import { Rate } from './styles';
 import { Tip } from './tip';
 import { useEthseerApi } from './use-ethseer-api';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { useNodeOperatorInfo } from 'shared/hooks';
 
 export const AttestationRateSection: FC = () => {
   const id = useNodeOperatorId();
@@ -46,11 +47,9 @@ export const AttestationRateSection: FC = () => {
         </Stack>
         {data ? (
           <>
-            <Stack center gap="sm">
-              <Text weight={700} size="lg">
-                {formatPercent(data.operatorAttestationRate)}%
-              </Text>
-              <Stack center gap="xs">
+            <Stack center gap="sm" wrap>
+              <Rate>{formatPercent(data.operatorAttestationRate)}%</Rate>
+              <Stack center gap="xs" wrap>
                 <DiffBadge
                   values={[data.operatorAttestationRate, data.threshold]}
                   status={data.status}
@@ -60,7 +59,10 @@ export const AttestationRateSection: FC = () => {
                     ? 'higher than Performance Threshold'
                     : 'lower than Performance Threshold'}
                 </Text>
-                <IconTooltip tooltip="Performance threshold is utilized to determine the allocation of the actual Node Operator rewards. Validators with performance above the threshold are included in the allocation pool, while the rest are not. Read more in the FAQ section." />
+                <IconTooltip
+                  placement="bottomRight"
+                  tooltip="Performance threshold is utilized to determine the allocation of the actual Node Operator rewards. Validators with performance above the threshold are included in the allocation pool, while the rest are not. Read more in the FAQ section."
+                />
               </Stack>
             </Stack>
             {data.status !== 'good' && <Tip danger={data.status === 'bad'} />}

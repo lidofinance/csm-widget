@@ -1,5 +1,10 @@
 import styled, { css } from 'styled-components';
 import { RateStatus } from './use-ethseer-api';
+import { Text } from '@lidofinance/lido-ui';
+
+export const Rate = styled(Text).attrs({ size: 'lg', weight: 700 })`
+  flex: 0 0 auto;
+`;
 
 export const TipWrapper = styled.div<{ $danger: boolean }>`
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
@@ -29,6 +34,7 @@ const variants = {
 };
 
 export const BadgeStyle = styled.div<{ $variant: RateStatus }>`
+  flex: 0 0 auto;
   font-weight: 700;
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;

@@ -6,8 +6,8 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 export const MonitoringPage: FC = () => {
   return (
     <Layout
-      title="Community Staking Module"
-      subtitle="Monitoring"
+      title="Monitoring"
+      subtitle="Check performance of your keys"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageMonitoring}
     >
       <Monitoring />
