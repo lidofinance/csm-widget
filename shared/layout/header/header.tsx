@@ -9,6 +9,7 @@ import HeaderTheme from './components/header-theme';
 import HeaderWallet from './components/header-wallet';
 import { Logos } from './components/logos';
 import { HeaderActionsStyle, HeaderStyle } from './styles';
+import { HeaderBurger } from './components/header-burger';
 
 export const Header: FC = () => (
   <HeaderStyle>
@@ -20,6 +21,7 @@ export const Header: FC = () => (
       <HeaderWallet />
       {config.ipfsMode && <HeaderSettingsButton />}
       <HeaderTheme />
+      <HeaderBurger />
     </HeaderActionsStyle>
   </HeaderStyle>
 );
