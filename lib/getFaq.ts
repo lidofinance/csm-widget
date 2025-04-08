@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import matter from 'gray-matter';
 import remark from 'remark';
 import html from 'remark-html';
