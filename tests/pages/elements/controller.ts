@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { Header } from '../header.page';
+import { Header } from './common/element.header';
 import { TermAndPrivacy } from './common/element.termAndPrivacy';
 import { ConnectWalletModal } from './common/element.connectWalletModal';
 

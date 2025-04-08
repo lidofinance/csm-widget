@@ -3041,20 +3041,20 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.47.0.tgz#2367eec1c8363516bde48b632a6fbe32aec33a1e"
   integrity sha512-6xx2O89OhWAxaob+SqXEX2xtrumG4MCUrclooCIvAhz64Lp3Wa0Hzt2lgJyFMhJxpDPMj3LmYNbuB15lwEQKwg==
 
-"@lidofinance/browser-service@1.0.0-alpha-move-br.3":
-  version "1.0.0-alpha-move-br.3"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.0.0-alpha-move-br.3.tgz#634e792f320e6288fe9c3b4da6752cb9b93d72b5"
-  integrity sha512-OVtXhEFQJJyHwj6O6xjUJ3pSOyLNZyp8pac0qwmFH7OWe+Y0Oy06xexLgJr89mN/9p1MLQiTSGmRRqNhnl0FAg==
+"@lidofinance/browser-service@1.0.0-alpha-move-br.4":
+  version "1.0.0-alpha-move-br.4"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.0.0-alpha-move-br.4.tgz#3c22eae45478e56e097d45f2de3bf277fbeac738"
+  integrity sha512-a4M/ndacCic4AeZz+0ntLDVNSJ6DF5okdgf18sSEnW8kv4jPy6jo0nfoIa5qJtxnpQT7VJBXOn4FFxYzJKcQ2w==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.1.1-alpha-move-br.1"
     "@lidofinance/wallets-testing-nodes" "1.1.5-alpha-move-br.1"
-    "@lidofinance/wallets-testing-wallets" "1.30.0-alpha-move-br.1"
+    "@lidofinance/wallets-testing-wallets" "1.31.0-alpha-move-br.1"
     "@playwright/test" "^1.51.1"
 
-"@lidofinance/discord-reporter@1.3.1-alpha-move-br.1":
-  version "1.3.1-alpha-move-br.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/discord-reporter/-/discord-reporter-1.3.1-alpha-move-br.1.tgz#31c4196438e29fa76991a786d8594838b76b0a32"
-  integrity sha512-68YrgtjibCneGk62mS08YXcRYVdVy9wY4kMi47YOgiUoCtY5YozDO6FnZ44/vTcQALZ2uT+6R43wZMuS0GM2mA==
+"@lidofinance/discord-reporter@1.3.2-alpha-move-br.1":
+  version "1.3.2-alpha-move-br.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/discord-reporter/-/discord-reporter-1.3.2-alpha-move-br.1.tgz#a1fa0e1d36d40cc3edaa8309669ac026ce2fa9c3"
+  integrity sha512-0vo+cL6VqlrRrj+YGapI0q4K3LXt5XBTmcHv2LqrAKa8J8gedoTguwbfe4c4Pnjn4O+qZ2ZPfivdIed5G/ul9A==
   dependencies:
     "@playwright/test" "^1.51.1"
     axios "^0.27.2"
@@ -3170,10 +3170,10 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.30.0-alpha-move-br.1":
-  version "1.30.0-alpha-move-br.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.30.0-alpha-move-br.1.tgz#e3851ab2ff327da79ad7463e761e4ce1d0f88553"
-  integrity sha512-cdo5dX2PBD1gN7QggpN6tdNSTERg3yfKj3TePfv1ca+G7aY/odAYlyI6QawpQHryGq4SnhIIMlbETvftUpGtlg==
+"@lidofinance/wallets-testing-wallets@1.31.0-alpha-move-br.1":
+  version "1.31.0-alpha-move-br.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.31.0-alpha-move-br.1.tgz#d22d994066b252e09c47a919657bf900c677c383"
+  integrity sha512-4l/y9Cpi1ESrLEkkJJbG2DYJWVR9y737SHj+f6Rhy8I6wg1e04wRQD99rXsVrGAsul3D8P9OoExvpggXr8GeAQ==
   dependencies:
     "@playwright/test" "^1.51.1"
     expect "^28.1.3"
