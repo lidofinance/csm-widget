@@ -13,10 +13,6 @@ export const LogoLidoStyle = styled.div`
     justify-content: flex-start;
   }
 
-  ${({ theme }) => theme.mediaQueries.lg} {
-    /* align-self: start; */
-  }
-
   span {
     display: block;
   }

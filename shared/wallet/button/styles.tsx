@@ -6,6 +6,7 @@ import {
   InlineLoader,
   InlineLoaderProps,
 } from '@lidofinance/lido-ui';
+import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const WalledButtonStyle = styled((props: ButtonProps) => (
   <Button {...props} />
@@ -27,7 +28,7 @@ export const WalledButtonBalanceStyle = styled.span`
   margin-left: 4px;
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
 
-  ${({ theme }) => theme.mediaQueries.md} {
+  ${NAV_MOBILE_MEDIA} {
     display: none;
   }
 `;

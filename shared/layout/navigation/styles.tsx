@@ -1,7 +1,49 @@
 import { CounterStyle } from 'shared/components/counter/styles';
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
+
+export const NavItems = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 20px;
+`;
+
+export const NavTitle = styled.div`
+  display: none;
+  color: var(--lido-color-textSecondary);
+  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
+  line-height: 2em;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.5;
+
+  ${NAV_MOBILE_MEDIA} {
+    display: flex;
+  }
+`;
+
+export const NavBlockStyle = styled.div<{ $onlyMobile?: boolean }>`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &:has(${NavItems}:empty) {
+    display: none;
+  }
+
+  ${({ $onlyMobile }) =>
+    $onlyMobile
+      ? css`
+          display: none;
+
+          ${NAV_MOBILE_MEDIA} {
+            display: flex;
+          }
+        `
+      : ''}
+`;
 
 export const desktopCss = css`
   grid-area: nav;
@@ -14,41 +56,61 @@ export const desktopCss = css`
 
   margin-top: 4rem;
   display: flex;
-  gap: 32px;
+  gap: 40px;
 
   svg {
     flex-shrink: 0;
   }
+
+  &[hidden] {
+    display: none;
+  }
+`;
+
+const menuAppearing = keyframes`
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 `;
 
 const mobileCss = css`
-  display: grid;
-  grid-auto-columns: 1fr;
-  grid-auto-flow: column;
-  grid-gap: 16px;
-
-  margin: 0;
   position: fixed;
-  top: auto;
-  bottom: 0;
   left: 0;
   right: 0;
-  padding: 8px;
+  top: 0;
+  height: 100vh;
+  padding: 145px 45px 40px;
+  margin: 0;
 
-  background-color: var(--lido-color-foreground);
-  border-top: 1px solid var(--lido-color-border);
-  min-height: 60px;
+  background: rgba(var(--lido-rgb-background), 0.5);
+  backdrop-filter: blur(12px);
+  z-index: 98;
+  animation: ${menuAppearing} ${({ theme }) => theme.duration.norm} ease 0s 1;
+
+  &[hidden] {
+    display: flex;
+  }
+
+  &[aria-expanded='false'] {
+    display: none;
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 145px 20px 40px;
+  }
 `;
 
 export const Nav = styled.nav`
   ${desktopCss}
+
   // mobile kicks in on a bit higher width for nav
   ${NAV_MOBILE_MEDIA} {
     ${mobileCss}
   }
-  &:empty {
-    display: none;
-  }
+
   z-index: 6;
 `;
 
@@ -88,16 +150,6 @@ export const NavLink = styled.span<{ $active?: boolean }>`
   svg {
     fill: ${({ $active }) =>
       $active ? `var(--lido-color-primary)` : `var(--lido-color-secondary)`};
-  }
-
-  ${NAV_MOBILE_MEDIA} {
-    flex-direction: column;
-    text-transform: none;
-    text-align: center;
-    font-weight: 500;
-    font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
-    line-height: 1.2em;
-    letter-spacing: 0;
   }
 
   ${CounterStyle} {

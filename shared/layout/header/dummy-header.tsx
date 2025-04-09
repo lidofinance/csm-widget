@@ -7,7 +7,7 @@ export const DummyHeader: FC = () => (
   <HeaderStyle>
     <Logos />
     <HeaderActionsStyle>
-      <HeaderTheme />
+      <HeaderTheme showAlways />
     </HeaderActionsStyle>
   </HeaderStyle>
 );

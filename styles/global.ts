@@ -56,6 +56,16 @@ const GlobalStyle = createGlobalStyle`
     max-height: 334px;
     overflow-y: scroll;
   }
+
+  html.html-scroll-lock {
+    overflow-y: scroll;
+  }
+
+  body.body-scroll-lock {
+    overflow: hidden;
+    position: fixed;
+    height: auto;
+  }
 `;
 
 export default GlobalStyle;

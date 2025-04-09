@@ -40,8 +40,8 @@ export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
         <DummyHeader />
       ) : (
         <>
-          <Header />
           <Navigation />
+          <Header />
           <AlertContainer />
         </>
       )}

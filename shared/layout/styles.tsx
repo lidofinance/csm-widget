@@ -29,7 +29,7 @@ export const LayoutStyle = styled(Container)`
       'nav main'
       'footer footer';
 
-    &:has(nav:empty),
+    &:has(nav[hidden]),
     &:not(:has(nav)) {
       grid-template-columns: 1fr;
       grid-template-areas:
@@ -41,24 +41,15 @@ export const LayoutStyle = styled(Container)`
   }
 
   ${NAV_MOBILE_MEDIA} {
-    grid-template-rows: auto auto 1fr auto 60px;
+    grid-template-rows: auto auto 1fr auto;
     grid-template-columns: 1fr;
     grid-template-areas:
       'header'
       'alerts'
       'main'
-      'footer'
-      'nav';
+      'footer';
 
-    &:has(nav:empty),
-    &:not(:has(nav)) {
-      grid-template-rows: auto auto 1fr auto;
-      grid-template-areas:
-        'header'
-        'alerts'
-        'main'
-        'footer';
-    }
+    padding-top: 80px;
   }
 `;
 

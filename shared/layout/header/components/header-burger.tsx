@@ -1,18 +1,16 @@
 import { Button } from '@lidofinance/lido-ui';
-import { FC, useState } from 'react';
+import { useInpageNavigation } from 'providers/inpage-navigation';
+import { FC } from 'react';
 import styled from 'styled-components';
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const HeaderBurger: FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { expanded, toggleExpanded } = useInpageNavigation();
   return (
     <BurgerButtonStyle
-      isOpen={isOpen}
-      aria-expanded={isOpen}
-      aria-label={isOpen ? 'Close menu' : 'Open menu'}
-      onClick={() => {
-        setIsOpen((prev) => !prev);
-      }}
+      aria-expanded={expanded}
+      aria-label={expanded ? 'Close menu' : 'Open menu'}
+      onClick={toggleExpanded}
     >
       <BurgerLine />
       <BurgerLine />
@@ -34,22 +32,19 @@ export const BurgerLine = styled.div`
 `;
 
 export const BurgerButtonStyle = styled(Button).attrs({
-  size: 'sm',
+  size: 'xs',
   variant: 'text',
   color: 'secondary',
-})<{ isOpen: boolean }>`
+})`
   display: none;
-  position: relative;
-  z-index: 99;
 
-  padding: 0;
   width: 44px;
   height: 44px;
+  min-width: unset;
   align-items: center;
   justify-content: center;
   flex-shrink: 1;
-  min-width: unset;
-  overflow: hidden;
+  padding: 0;
 
   ${NAV_MOBILE_MEDIA} {
     display: flex;

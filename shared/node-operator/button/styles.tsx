@@ -1,6 +1,7 @@
 import { Button, ButtonProps } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 import { DescriptorText } from '../descriptor/styles';
+import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const ButtonStyle = styled((props: ButtonProps) => (
   <Button {...props} />
@@ -15,7 +16,7 @@ export const ButtonWrapperStyle = styled.span`
   margin: -8px -16px;
 
   ${DescriptorText} {
-    ${({ theme }) => theme.mediaQueries.md} {
+    ${NAV_MOBILE_MEDIA} {
       display: none;
     }
   }
