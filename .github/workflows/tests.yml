@@ -58,6 +58,7 @@ jobs:
       NODE_OPTIONS: --max-old-space-size=4096
       TEST_TAGS: ${{ github.event.inputs.tags }}
       TEST_BRANCH: ${{ github.event.inputs.branch }}
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
 
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}

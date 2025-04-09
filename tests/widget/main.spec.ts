@@ -1,7 +1,7 @@
 import { test } from './test.fixture';
 
 test.describe('Main page', async () => {
-  test('Should open keys tab after click to "Create Node Operator"', async ({
+  test('Should open keys page after click to "Create Node Operator"', async ({
     widgetService,
   }) => {
     await widgetService.page.goto('/');
