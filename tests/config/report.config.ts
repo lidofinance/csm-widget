@@ -60,6 +60,10 @@ const reporters: {
     '@lidofinance/discord-reporter',
     {
       enabled: process.env.DISCORD_REPORT_ENABLED,
+      discordDutyTag: process.env.DISCORD_DUTY_TAG,
+      discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
+      customDescription: `- Stand type: \`${process.env.STAND_TYPE}\``,
+      ciRunUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
     },
   ],
   qaseReporter: [
