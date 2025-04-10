@@ -37,6 +37,6 @@ const ethseerRate: API = async (req, res) => {
 export default wrapNextRequest([
   rateLimit,
   responseTimeMetric(Metrics.request.apiTimings, API_ROUTES.ETHSEER_RATE),
-  cacheControl({ headers: config.CACHE_ETH_PRICE_HEADERS }),
+  cacheControl({ headers: config.CACHE_ETHSEER_RATE_HEADERS }),
   defaultErrorHandler,
 ])(ethseerRate);
