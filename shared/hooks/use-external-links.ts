@@ -1,10 +1,10 @@
+import { CHAINS } from '@lido-sdk/constants';
+import { getConfig } from 'config';
 import { getCsmConstants } from 'consts/csm-constants';
 import { getExternalLinks } from 'consts/external-links';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useKeysWithStatus } from './use-keys-with-status';
-import { ACTIVE_STATUS_ORDER, useSortedKeys } from './use-sorted-keys';
-import { getConfig } from 'config';
-import { CHAINS } from '@lido-sdk/constants';
+import { sortByActiveStatus, useSortedKeys } from './use-sorted-keys';
 
 const DASHBOARD_KEYS_LIMIT = 20;
 
@@ -13,7 +13,7 @@ const { defaultChain } = getConfig();
 
 export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   const { data: keys } = useKeysWithStatus();
-  const sortedKeys = useSortedKeys(keys, ACTIVE_STATUS_ORDER);
+  const sortedKeys = useSortedKeys(keys, sortByActiveStatus);
 
   if (!links.beaconchainDashboard) return null;
 

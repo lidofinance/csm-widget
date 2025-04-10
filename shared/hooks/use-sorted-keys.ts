@@ -1,6 +1,6 @@
-import { useCallback, useMemo } from 'react';
-import { KeyWithStatus } from 'shared/hooks';
 import { KEY_STATUS } from 'consts/key-status';
+import { useMemo } from 'react';
+import { KeyWithStatus } from 'shared/hooks';
 
 export const DEFAULT_STATUS_ORDER: KEY_STATUS[] = [
   KEY_STATUS.INVALID,
@@ -39,18 +39,25 @@ export const ACTIVE_STATUS_ORDER: KEY_STATUS[] = [
   KEY_STATUS.SLASHED,
 ];
 
+type SortKeysFn = (a: KeyWithStatus, b: KeyWithStatus) => number;
+
+const sortByStatusOrder = (statusOrder: KEY_STATUS[]): SortKeysFn => {
+  const getStatusOrder = (statuses: KEY_STATUS[]): number =>
+    statusOrder.findIndex((st) => statuses.includes(st));
+  return (a, b) => getStatusOrder(a.statuses) - getStatusOrder(b.statuses);
+};
+
+export const sortByActiveStatus = sortByStatusOrder(ACTIVE_STATUS_ORDER);
+export const sortByStatus = sortByStatusOrder(DEFAULT_STATUS_ORDER);
+export const sortByStatusDesc = sortByStatusOrder(
+  Array.from(DEFAULT_STATUS_ORDER).reverse(),
+);
+
+export const sortByPubkey: SortKeysFn = (a, b) => a.key.localeCompare(b.key);
+export const sortByPubkeyDesc: SortKeysFn = (a, b) =>
+  b.key.localeCompare(a.key);
+
 export const useSortedKeys = (
   keys?: KeyWithStatus[],
-  statusOrder = DEFAULT_STATUS_ORDER,
-) => {
-  const getOrder = useCallback(
-    (statuses: KEY_STATUS[]): number =>
-      statusOrder.findIndex((st) => statuses.includes(st)),
-    [statusOrder],
-  );
-
-  return useMemo(
-    () => keys?.sort((a, b) => getOrder(a.statuses) - getOrder(b.statuses)),
-    [getOrder, keys],
-  );
-};
+  sortFn: SortKeysFn = sortByStatus,
+) => useMemo(() => keys?.sort(sortFn), [keys, sortFn]);

@@ -1,4 +1,4 @@
-import { Block } from '@lidofinance/lido-ui';
+import { Block, Button } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 import { MEDIA_QUERY_XXL } from 'styles/constants';
 
@@ -62,17 +62,28 @@ export const TableStyle = styled.table`
     }
   }
 
-  th > div {
+  tbody tr:nth-child(odd) {
+    background-color: var(--lido-color-accentControlBg);
+  }
+`;
+
+export const SortButton = styled(Button).attrs({
+  variant: 'text',
+  color: 'secondary',
+  size: 'xs',
+})`
+  padding: 6px 12px;
+  min-width: auto;
+
+  > span {
     display: flex;
     gap: ${({ theme }) => theme.spaceMap.xs}px;
     align-items: center;
-
-    svg {
-      width: 16px;
-    }
   }
 
-  tbody tr:nth-child(odd) {
-    background-color: var(--lido-color-accentControlBg);
+  svg {
+    width: 16px;
+    height: 16px;
+    margin-block: -2px;
   }
 `;
