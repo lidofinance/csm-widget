@@ -39,7 +39,7 @@ export const useShowRule = () => {
         case 'NOT_NODE_OPERATOR':
           return isConnectedWallet && !nodeOperator;
         case 'IS_NODE_OPERATOR':
-          return !!nodeOperator;
+          return !!nodeOperator && isConnectedWallet;
         case 'CAN_CREATE':
           return !!canCreateNO;
         case 'HAS_MANAGER_ROLE':
