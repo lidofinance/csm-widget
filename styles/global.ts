@@ -16,6 +16,9 @@ const GlobalStyle = createGlobalStyle`
   html,
   body {
     width: 100%;
+    min-height: 100%;
+    display: grid;
+    grid-template-rows: 1fr;
   }
   body {
     background: var(--lido-color-background);
@@ -26,9 +29,6 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.5em;
     font-weight: 500;
     text-size-adjust: none;
-  }
-  main {
-    min-height: calc(100vh - 224px);
   }
   a {
     cursor: pointer;
@@ -55,6 +55,16 @@ const GlobalStyle = createGlobalStyle`
   #lido-ui-modal-root [role='listbox'] {
     max-height: 334px;
     overflow-y: scroll;
+  }
+
+  html.html-scroll-lock {
+    overflow-y: scroll;
+  }
+
+  body.body-scroll-lock {
+    overflow: hidden;
+    position: fixed;
+    height: auto;
   }
 `;
 

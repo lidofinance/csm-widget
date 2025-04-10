@@ -7,17 +7,22 @@ import {
   useMemo,
   useCallback,
   useEffect,
+  useLayoutEffect,
 } from 'react';
 import invariant from 'tiny-invariant';
 import { useRouter } from 'next/router';
 
 import { config } from 'config';
+import { lockScroll, saveScrollPosition, unlockScroll } from 'utils';
+import { debounce } from 'lodash';
 
 export type InpageNavigationContextValue = {
   hashNav: string;
   navigateInpageAnchor: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   resetInpageAnchor: () => void;
   resetSpecificAnchor: (hash: string) => void;
+  expanded: boolean;
+  toggleExpanded: () => void;
 };
 
 const InpageNavigationContext =
@@ -77,14 +82,40 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
     [resetInpageAnchor, hashNav],
   );
 
+  const [expanded, setExpanded] = useState(false);
+  const toggleExpanded = useCallback(() => setExpanded((prev) => !prev), []);
+
+  useLayoutEffect(() => {
+    if (!expanded) return;
+    lockScroll();
+    return unlockScroll;
+  }, [expanded]);
+
+  useEffect(() => {
+    const handleScroll = debounce(saveScrollPosition, 10);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const value = useMemo(
     () => ({
       hashNav,
       navigateInpageAnchor,
       resetInpageAnchor,
       resetSpecificAnchor,
+      expanded,
+      toggleExpanded,
     }),
-    [hashNav, navigateInpageAnchor, resetInpageAnchor, resetSpecificAnchor],
+    [
+      expanded,
+      hashNav,
+      navigateInpageAnchor,
+      resetInpageAnchor,
+      resetSpecificAnchor,
+      toggleExpanded,
+    ],
   );
 
   return (
