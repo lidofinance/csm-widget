@@ -1,6 +1,6 @@
-import { Block, Table } from '@lidofinance/lido-ui';
-import { StackStyle } from 'shared/components/stack/style';
+import { Block } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
+import { MEDIA_QUERY_XXL } from 'styles/constants';
 
 export const ViewKeysBlock = styled(Block)`
   display: flex;
@@ -8,22 +8,58 @@ export const ViewKeysBlock = styled(Block)`
   flex-direction: column;
 `;
 
-export const TableStyle = styled(Table)`
-  margin: -32px -32px;
+export const TableStyle = styled.table`
+  margin: -${({ theme }) => theme.spaceMap.xxl}px;
+  border-collapse: collapse;
 
-  thead tr::before,
-  thead tr::after,
-  th {
-    border-top: none;
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin: -${({ theme }) => theme.spaceMap.lg}px;
   }
 
   th {
-    padding: 24px 8px 16px 8px;
-    min-width: 40px;
+    text-align: left;
+    color: var(--lido-color-text);
   }
 
-  td {
-    padding: 12px 8px;
+  tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: auto;
+    grid-column-gap: 1rem;
+    align-items: center;
+    gap: 12px 32px;
+
+    padding: 12px 32px;
+
+    ${MEDIA_QUERY_XXL} {
+      grid-template-columns: 1fr 1fr;
+
+      td:nth-child(3) {
+        grid-column: 1 / -1;
+
+        &:empty {
+          display: none;
+        }
+      }
+
+      th:nth-child(3) {
+        display: none;
+      }
+    }
+
+    ${({ theme }) => theme.mediaQueries.md} {
+      grid-template-columns: 1fr;
+
+      padding: 20px 32px;
+    }
+  }
+
+  thead tr {
+    padding: 24px 32px 16px;
+
+    ${({ theme }) => theme.mediaQueries.md} {
+      display: none;
+    }
   }
 
   th > div {
@@ -36,23 +72,7 @@ export const TableStyle = styled(Table)`
     }
   }
 
-  td {
-    border-bottom: none;
-  }
-
-  td:last-child {
-    max-width: 200px;
-  }
-
-  td:nth-child(2) {
-    min-width: max-content;
-  }
-
   tbody tr:nth-child(odd) {
     background-color: var(--lido-color-accentControlBg);
   }
-`;
-
-export const AddressRow = styled(StackStyle).attrs({ $gap: 'xs' })`
-  align-items: center;
 `;

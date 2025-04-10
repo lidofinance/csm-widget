@@ -1,4 +1,3 @@
-import { Tbody, Td, Th, Thead, Tr } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import {
   Address,
@@ -8,7 +7,7 @@ import {
   StatusComment,
 } from 'shared/components';
 import { KeyWithStatus, useSortedKeys } from 'shared/hooks';
-import { AddressRow, TableStyle } from './styles';
+import { TableStyle } from './styles';
 
 type Props = {
   keys?: KeyWithStatus[];
@@ -19,38 +18,37 @@ export const KeysTable: FC<Props> = ({ keys }) => {
 
   return (
     <TableStyle>
-      <Thead>
-        <Tr>
-          <Th>Key</Th>
-          <Th>Status</Th>
-          <Th>Comment</Th>
-        </Tr>
-      </Thead>
-      <Tbody>
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Status</th>
+          <th>Comment</th>
+        </tr>
+      </thead>
+      <tbody>
         {sortedKeys?.map(({ key, index, statuses }) => (
-          <Tr key={index}>
-            <Td>
-              <AddressRow>
-                <Address
-                  address={key}
-                  symbols={8}
-                  link={<BeaconchainPubkeyLink pubkey={key} />}
-                />
-              </AddressRow>
-            </Td>
-            <Td>
+          <tr key={index}>
+            <td>
+              <Address
+                address={key}
+                symbols={8}
+                size="xxs"
+                link={<BeaconchainPubkeyLink pubkey={key} />}
+              />
+            </td>
+            <td>
               <Stack direction="column" gap="xs">
                 {statuses.map((status) => (
                   <StatusChip status={status} key={status} />
                 ))}
               </Stack>
-            </Td>
-            <Td>
+            </td>
+            <td>
               <StatusComment statuses={statuses} />
-            </Td>
-          </Tr>
+            </td>
+          </tr>
         ))}
-      </Tbody>
+      </tbody>
     </TableStyle>
   );
 };
