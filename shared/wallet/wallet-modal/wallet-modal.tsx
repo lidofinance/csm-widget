@@ -34,6 +34,8 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
 
   const handleCopy = useCopyToClipboard(address ?? '');
 
+  if (!address) return null;
+
   return (
     <Modal title="Account" onClose={onClose} {...props}>
       <WalletModalContentStyle>
