@@ -63,21 +63,15 @@ export const KeysTable: FC<Props> = ({ keys }) => {
           <th>
             <SortButton onClick={() => handleSort('key')}>
               Key
-              {sortBy.column === 'key' && sortBy.asc ? (
-                <ArrowTop />
-              ) : (
-                <ArrowBottom />
-              )}
+              {sortBy.column === 'key' &&
+                (sortBy.asc ? <ArrowTop /> : <ArrowBottom />)}
             </SortButton>
           </th>
           <th>
             <SortButton onClick={() => handleSort('status')}>
               Status
-              {sortBy.column === 'status' && sortBy.asc ? (
-                <ArrowTop />
-              ) : (
-                <ArrowBottom />
-              )}
+              {sortBy.column === 'status' &&
+                (sortBy.asc ? <ArrowTop /> : <ArrowBottom />)}
             </SortButton>
           </th>
           <th>Comment</th>
@@ -94,7 +88,7 @@ export const KeysTable: FC<Props> = ({ keys }) => {
                 link={
                   <>
                     <CopyLink text={key} />
-                    <BeaconchainPubkeyLink pubkey={key} />
+                    <BeaconchainPubkeyLink pubkey={key} statuses={statuses} />
                     <EthseerPubkeyLink validator={validatorIndex} />
                   </>
                 }
