@@ -170,6 +170,9 @@ export default withBundleAnalyzer({
     clApiUrls_17000: process.env.CL_API_URLS_17000,
     clApiUrls_560048: process.env.CL_API_URLS_560048,
 
+    ethseerApiUrl: process.env.ETHSEER_API_URL,
+    ethseerApiToken: process.env.ETHSEER_API_TOKEN,
+
     cspTrustedHosts: process.env.CSP_TRUSTED_HOSTS,
     cspReportUri: process.env.CSP_REPORT_URI,
     cspReportOnly: process.env.CSP_REPORT_ONLY,
