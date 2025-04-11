@@ -30,7 +30,7 @@ type ExternalLinksConstants = {
   operatorsWidget: string;
   beaconchainDashboard: string;
   ratedExplorer: string;
-  ethseerDashboard: string;
+  ethseerDashboard?: string;
   subscribeEvents: string;
   keysApi: string;
   surveyApi: string;
@@ -76,12 +76,12 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       operatorsWidget: 'https://operators-holesky.testnet.fi',
       beaconchain: 'https://holesky.beaconcha.in',
       beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
-      ratedExplorer: '',
-      ethseerDashboard: 'https://ethseer.io',
+      ratedExplorer: 'https://explorer.rated.network',
       subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
       keysApi: 'https://keys-api-holesky.testnet.fi',
       surveyApi: '',
     },
+    // FIXME: links
     [CHAINS.Hoodi]: {
       earlyAdoptionTree: '',
       rewardsTree: '',
@@ -95,7 +95,6 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       beaconchain: 'https://hoodi.beaconcha.in',
       beaconchainDashboard: 'https://v2-beta-hoodi.beaconcha.in/dashboard',
       ratedExplorer: '',
-      ethseerDashboard: '',
       subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
       keysApi: 'https://keys-api-hoodi.testnet.fi',
       surveyApi: 'https://csm-surveys-api-testnet.up.railway.app',

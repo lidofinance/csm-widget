@@ -2,10 +2,15 @@ import { Zero } from '@ethersproject/constants';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
-import { Address } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
-import { useBondWillReceive } from 'shared/hooks';
+import styled from 'styled-components';
 import { ClaimBondFormInputType, useClaimBondFormData } from './context';
+import { Address } from 'shared/components';
+import {
+  AddressContainerStyle,
+  AddressStyle,
+} from 'shared/components/address/styles';
+import { useBondWillReceive } from 'shared/hooks';
 
 export const ClaimBondFormInfo = () => {
   const { rewardsAddress, rewards } = useClaimBondFormData();
@@ -26,16 +31,10 @@ export const ClaimBondFormInfo = () => {
     <DataTable>
       <DataTableRow
         title={
-          <>
+          <AddressStyled>
             Rewards Address (
-            <Address
-              address={rewardsAddress}
-              size="xxs"
-              weight={700}
-              color="secondary"
-            />
-            ) will receive
-          </>
+            <Address address={rewardsAddress} />) will receive
+          </AddressStyled>
         }
         help="The recipient of the claim is the Rewards address. You can change the Rewards address on the Roles tab"
       >
@@ -49,3 +48,14 @@ export const ClaimBondFormInfo = () => {
     </DataTable>
   );
 };
+
+const AddressStyled = styled.div`
+  display: inline;
+
+  ${AddressContainerStyle} {
+    display: inline-flex;
+  }
+  ${AddressStyle} {
+    font-weight: bold;
+  }
+`;

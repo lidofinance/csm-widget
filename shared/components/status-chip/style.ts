@@ -24,7 +24,6 @@ export const StatusStyle = styled.div<{ $variant?: Variants }>`
   width: fit-content;
   padding: 4px 12px;
   text-align: center;
-  white-space: nowrap;
 
   border-radius: ${({ theme }) => theme.borderRadiusesMap.xl}px;
   background: color-mix(in srgb, currentColor 15%, transparent);

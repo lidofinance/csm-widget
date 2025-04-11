@@ -1,7 +1,7 @@
 import { useContractSWR } from '@lido-sdk/react';
 import { STRATEGY_CONSTANT, STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { useMemo } from 'react';
-import { useHashConsesusRPC } from './useCsmContracts';
+import { useCSFeeOracleRPC, useHashConsesusRPC } from './useCsmContracts';
 import { useMergeSwr } from './useMergeSwr';
 
 export const useChainConfig = (config = STRATEGY_IMMUTABLE) => {
@@ -24,8 +24,8 @@ export const useFrameConfig = (config = STRATEGY_IMMUTABLE) => {
 
 export const useCurrentFrame = (config = STRATEGY_CONSTANT) => {
   return useContractSWR({
-    contract: useHashConsesusRPC(),
-    method: 'getCurrentFrame',
+    contract: useCSFeeOracleRPC(),
+    method: 'getLastProcessingRefSlot',
     params: [],
     config,
   });
@@ -37,12 +37,12 @@ export const useRewardsFrame = () => {
   const currentFrame = useCurrentFrame();
 
   return useMergeSwr(
-    [chainConfig, frameConfig, currentFrame],
+    [chainConfig, currentFrame],
     useMemo(() => {
       if (!chainConfig.data || !frameConfig.data || !currentFrame.data)
         return undefined;
 
-      const timestamp = currentFrame.data.refSlot
+      const timestamp = currentFrame.data
         .mul(chainConfig.data.secondsPerSlot)
         .add(chainConfig.data.genesisTime)
         .toNumber();

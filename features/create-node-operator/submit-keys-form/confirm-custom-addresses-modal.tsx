@@ -86,12 +86,16 @@ const CustomAddresses: FC<Required<Props>> = ({
     <Stack direction="column">
       <Stack direction="column" gap="xs">
         <Text size="xs">Rewards Address</Text>
-        <Address address={rewardsAddress} symbols={0} big />
+        <Text size="xs" weight={700}>
+          <Address address={rewardsAddress} symbols={0} bold />
+        </Text>
       </Stack>
 
       <Stack direction="column" gap="xs">
         <Text size="xs">Manager Address</Text>
-        <Address address={managerAddress} symbols={0} big />
+        <Text size="xs" weight={700}>
+          <Address address={managerAddress} symbols={0} bold />
+        </Text>
       </Stack>
     </Stack>
     {extendedManagerPermissions && <StepIndicator length={2} current={0} />}

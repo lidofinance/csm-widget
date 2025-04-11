@@ -1,5 +1,6 @@
+import { Accordion, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { SectionBlock, Stack } from 'shared/components';
+import { Stack } from 'shared/components';
 import { ExternalButtonLink } from './external-button-link';
 import { useExternalButtons } from './use-external-button';
 
@@ -9,12 +10,19 @@ export const ExternalSection: FC = () => {
   if (buttons.length === 0) return null;
 
   return (
-    <SectionBlock title="External dashboards">
+    <Accordion
+      defaultExpanded={false}
+      summary={
+        <Text as="h2" size="md" weight={800}>
+          External dashboards
+        </Text>
+      }
+    >
       <Stack wrap>
         {buttons.map((button) => (
           <ExternalButtonLink key={button.title} {...button} />
         ))}
       </Stack>
-    </SectionBlock>
+    </Accordion>
   );
 };

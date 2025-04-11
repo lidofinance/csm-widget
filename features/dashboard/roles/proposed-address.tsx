@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Address, Warning } from 'shared/components';
 import { RoleBlockProposed } from './styles';
+import { Text } from '@lidofinance/lido-ui';
 
 type Props = { address?: string };
 
@@ -10,7 +11,9 @@ export const ProposedAddress: FC<Props> = ({ address }) => {
   return (
     <RoleBlockProposed>
       <Warning text="Pending change:" />
-      <Address address={address} size="xxs" />
+      <Text size="xxs">
+        <Address address={address} />
+      </Text>
     </RoleBlockProposed>
   );
 };
