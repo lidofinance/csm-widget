@@ -3,6 +3,7 @@ import { FC, useCallback, useMemo, useState } from 'react';
 import {
   Address,
   BeaconchainPubkeyLink,
+  CopyLink,
   EthseerPubkeyLink,
   Stack,
   StatusChip,
@@ -92,6 +93,7 @@ export const KeysTable: FC<Props> = ({ keys }) => {
                 size="xxs"
                 link={
                   <>
+                    <CopyLink text={key} />
                     <BeaconchainPubkeyLink pubkey={key} />
                     <EthseerPubkeyLink validator={validatorIndex} />
                   </>
