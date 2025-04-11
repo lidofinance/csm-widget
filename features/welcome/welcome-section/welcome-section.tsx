@@ -11,7 +11,7 @@ import {
 } from './styles';
 
 export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => (
-  <BlockStyled>
+  <BlockStyled data-testid="welcomeSection">
     <Heading>
       <CSMLogo />
       <Header>Community Staking Module</Header>
