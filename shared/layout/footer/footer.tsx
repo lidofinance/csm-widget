@@ -3,7 +3,13 @@ import { FC } from 'react';
 
 import { getExternalLinks } from 'consts/external-links';
 import { LogoLido, Stack } from 'shared/components';
-import { FooterLink, FooterStyle, LinkDivider, Version } from './styles';
+import {
+  FooterDivider,
+  FooterLink,
+  FooterStyle,
+  LinkDivider,
+  Version,
+} from './styles';
 
 const getVersionInfo = () => {
   const { version, branch } = buildInfo;
@@ -38,7 +44,7 @@ const { feedbackForm } = getExternalLinks();
 // TODO: matomo events
 export const Footer: FC = () => {
   return (
-    <FooterStyle>
+    <FooterStyle size="full" forwardedAs="footer">
       <LogoLido />
       <Stack gap="none">
         <FooterLink href="https://lido.fi/terms-of-use">
@@ -52,6 +58,7 @@ export const Footer: FC = () => {
         <FooterLink href={feedbackForm}>Feedback form</FooterLink>
       </Stack>
       <Version href={link}>{label}</Version>
+      <FooterDivider />
     </FooterStyle>
   );
 };

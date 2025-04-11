@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { LocalLink } from '../local-link';
 
 export const SwitchWrapper = styled.div<{ $count: number }>`
-  width: ${({ $count }) => `${$count * 134}px`} !important;
+  width: 268px;
+  width: ${({ $count }) => `${$count * 134}px`};
   height: 44px;
   background-color: var(--lido-color-backgroundDarken);
   border-radius: 22px;

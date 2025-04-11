@@ -16,7 +16,7 @@ type LocalLinkProps = Omit<LinkProps, 'href'> & {
 
 export const LocalLink: FC<
   PropsWithChildren<WithMatomoEvent<LocalLinkProps>>
-> = ({ matomoEvent, href: path, anchor, onClick, ...restProps }) => {
+> = ({ matomoEvent, href: path, anchor, ...restProps }) => {
   const router = useRouter();
   const { ref, embed, app, theme } = router.query;
 
@@ -28,9 +28,8 @@ export const LocalLink: FC<
       trackMatomoEvent(matomoEvent);
       closeModal();
       event.stopPropagation();
-      onClick?.(event);
     },
-    [closeModal, matomoEvent, onClick],
+    [closeModal, matomoEvent],
   );
 
   const extraQuery = {} as Record<string, string>;

@@ -1,13 +1,26 @@
+import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
+import Link from 'next/link';
 import { FC } from 'react';
+import { LogoLido } from 'shared/components';
 import HeaderTheme from './components/header-theme';
-import { Logos } from './components/logos';
-import { HeaderActionsStyle, HeaderStyle } from './styles';
+import { Nav, NavLink } from './components/navigation/styles';
+import { HeaderActionsStyle, HeaderContentStyle, HeaderStyle } from './styles';
 
 export const DummyHeader: FC = () => (
-  <HeaderStyle>
-    <Logos />
-    <HeaderActionsStyle>
-      <HeaderTheme showAlways />
-    </HeaderActionsStyle>
+  <HeaderStyle size="full" forwardedAs="header">
+    <HeaderContentStyle>
+      <LogoLido />
+      <Nav>
+        <Link href="/">
+          <NavLink>
+            <HomeIcon />
+            <span>Main</span>
+          </NavLink>
+        </Link>
+      </Nav>
+      <HeaderActionsStyle>
+        <HeaderTheme />
+      </HeaderActionsStyle>
+    </HeaderContentStyle>
   </HeaderStyle>
 );

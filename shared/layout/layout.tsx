@@ -1,23 +1,23 @@
 import { FC, PropsWithChildren, ReactNode, useEffect } from 'react';
 
-import { AlertContainer } from 'shared/alerts';
+import { ContainerProps } from '@lidofinance/lido-ui';
+
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 import { Footer } from './footer/footer';
 import { DummyHeader } from './header/dummy-header';
 import { Header } from './header/header';
-import { Navigation } from './navigation/navigation';
+import { Main } from './main/main';
 import {
   Content,
   Heading,
-  LayoutStyle,
   LayoutSubTitleStyle,
   LayoutTitleStyle,
-  Main,
 } from './styles';
 
 type Props = {
   title?: ReactNode;
   subtitle?: ReactNode;
+  containerSize?: ContainerProps['size'];
   dummy?: boolean;
 };
 
@@ -26,6 +26,7 @@ export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
   dummy,
   title,
   subtitle,
+  containerSize,
   matomoEvent,
 }) => {
   const titlesCount = [title, subtitle].filter(Boolean).length;
@@ -35,18 +36,9 @@ export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
   }, [matomoEvent]);
 
   return (
-    <LayoutStyle>
-      {dummy ? (
-        <DummyHeader />
-      ) : (
-        <>
-          <Navigation />
-          <Header />
-          <AlertContainer />
-        </>
-      )}
-
-      <Main>
+    <>
+      {dummy ? <DummyHeader /> : <Header />}
+      <Main size={containerSize}>
         <Heading $titlesCount={titlesCount}>
           {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}
           {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}
@@ -54,6 +46,6 @@ export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
         <Content>{children}</Content>
       </Main>
       <Footer />
-    </LayoutStyle>
+    </>
   );
 };

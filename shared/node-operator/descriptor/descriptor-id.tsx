@@ -1,10 +1,6 @@
 import { FC } from 'react';
 import { NodeOperatorId } from 'types';
-import {
-  DescriptorIdWrapperStyle,
-  DescriptorNumber,
-  DescriptorText,
-} from './styles';
+import { DescriptorIdWrapperStyle } from './styles';
 
 type DescriptorIdProps = {
   id: NodeOperatorId;
@@ -13,8 +9,7 @@ type DescriptorIdProps = {
 export const DescriptorId: FC<DescriptorIdProps> = ({ id }) => {
   return (
     <DescriptorIdWrapperStyle>
-      <DescriptorText>Node Operator</DescriptorText> #
-      <DescriptorNumber>{id}</DescriptorNumber>
+      Node Operator #<span>{id}</span>
     </DescriptorIdWrapperStyle>
   );
 };

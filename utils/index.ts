@@ -35,7 +35,6 @@ export * from './merkle-tree';
 export * from './nprogress';
 export * from './path';
 export * from './rewardsTreeFetcher';
-export * from './scroll';
 export * from './standardFetcher';
 export * from './track-matomo-event';
 export * from './weiToEth';

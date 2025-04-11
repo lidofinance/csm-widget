@@ -1,43 +1,31 @@
-import { Divider, ThemeToggler } from '@lidofinance/lido-ui';
+import { Container, ContainerProps, ThemeToggler } from '@lidofinance/lido-ui';
+import { LogoLidoStyle } from 'shared/components/logos/styles';
 import styled, { keyframes } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const HeaderStyle = styled.header`
-  grid-area: header;
-  position: relative;
-  align-self: center;
-
+export const HeaderContentStyle = styled.div`
   display: flex;
   align-items: center;
-  flex-wrap: nowrap;
 
+  flex-wrap: wrap;
   row-gap: 8px;
-  margin-block: 18px;
 
-  ${NAV_MOBILE_MEDIA} {
-    position: fixed;
-    z-index: 99;
-    top: 0;
-    left: 0;
-    right: 0;
-    padding: 18px 20px;
-    margin: 0;
-    background: var(--lido-color-background);
-    transition: box-shadow 0.3s ease;
-
-    html:is([data-scroll]):not([data-scroll='0']) & {
-      box-shadow: 0px -1px 4px var(--lido-color-shadowDark);
-    }
-
-    nav[aria-expanded='true'] + & {
-      background: none;
-      box-shadow: none;
-      transition:
-        box-shadow 0.3s ease,
-        background 0.3s ease-in-out;
-    }
+  @media screen and (max-width: 880px) {
+    flex-wrap: nowrap;
   }
+
+  ${LogoLidoStyle} {
+    height: 44px;
+  }
+`;
+
+export const HeaderStyle = styled((props: ContainerProps) => (
+  <Container {...props} />
+))`
+  position: relative;
+  padding-top: 18px;
+  padding-bottom: 18px;
 `;
 
 export const HeaderActionsStyle = styled.div`
@@ -48,8 +36,10 @@ export const HeaderActionsStyle = styled.div`
   flex-shrink: 1;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
 
-  flex-wrap: nowrap;
-  justify-content: end;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-wrap: wrap;
+    justify-content: end;
+  }
 `;
 
 export const HeaderWalletChainWrapper = styled.div`
@@ -91,30 +81,6 @@ export const IPFSInfoBoxOnlyDesktopWrapper = styled.div`
   }
 `;
 
-export const ThemeTogglerStyle = styled(ThemeToggler)<{ $always?: boolean }>`
+export const ThemeTogglerStyle = styled(ThemeToggler)`
   margin: 0;
-
-  ${NAV_MOBILE_MEDIA} {
-    display: ${({ $always }) => ($always ? 'inline-grid' : 'none')};
-  }
-`;
-
-export const LogosStyle = styled.div`
-  display: flex;
-  gap: 12px;
-  align-items: center;
-
-  height: 28px;
-  margin-block: 8px;
-  align-self: start;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    > :not(:nth-child(1)) {
-      display: none;
-    }
-  }
-`;
-
-export const LogoDivider = styled(Divider).attrs({ type: 'vertical' })`
-  opacity: 0.6;
 `;

@@ -4,29 +4,25 @@ import styled from 'styled-components';
 import { useAlertActions } from '../alert-provider';
 
 const AlertContainerStyled = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 32px;
+  width: 300px;
+
   display: flex;
   flex-direction: column;
   gap: ${({ theme }) => theme.spaceMap.md}px;
 
-  margin: 0 auto;
+  @media screen and (max-width: 1286px) {
+    position: static;
+    width: initial;
+    max-width: 590px; /* like Main */
+    margin: 0 auto;
+    padding: 0 20px;
+  }
 
   :not(:empty) {
     margin-top: 20px;
-  }
-
-  grid-area: none;
-  position: absolute;
-  right: 32px;
-  top: 80px;
-  width: calc(50% - 350px);
-  max-width: 300px;
-  grid-area: none;
-
-  ${({ theme }) => theme.mediaQueries.xl} {
-    grid-area: alerts;
-    position: static;
-    width: 100%;
-    max-width: var(--layout-main-width);
   }
 `;
 

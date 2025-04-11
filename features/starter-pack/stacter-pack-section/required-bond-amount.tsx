@@ -20,7 +20,7 @@ export const RequiredBondAmount: FC = () => {
   return (
     <>
       {curveLoading || curveInfoLoading ? (
-        <Box width={50} display="inline-block" as="span">
+        <Box width={50} display="inline-block">
           <InlineLoader color="text" />
         </Box>
       ) : (
