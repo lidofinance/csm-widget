@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { NAV_MOBILE_MEDIA } from './constants';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -16,9 +17,7 @@ const GlobalStyle = createGlobalStyle`
   html,
   body {
     width: 100%;
-    min-height: 100%;
-    display: grid;
-    grid-template-rows: 1fr;
+    min-height: 100vh;
   }
   body {
     background: var(--lido-color-background);
@@ -57,14 +56,10 @@ const GlobalStyle = createGlobalStyle`
     overflow-y: scroll;
   }
 
-  html.html-scroll-lock {
-    overflow-y: scroll;
-  }
-
-  body.body-scroll-lock {
-    overflow: hidden;
-    position: fixed;
-    height: auto;
+  ${NAV_MOBILE_MEDIA} {
+    body:has(nav[aria-expanded=true]){
+      overflow: hidden;
+    }
   }
 `;
 

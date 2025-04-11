@@ -8,7 +8,7 @@ export const LayoutStyle = styled(Container)`
   --layout-side-width: 170px;
 
   position: relative;
-  min-height: 100%;
+  min-height: 100vh;
   display: grid;
   grid-template-columns: var(--layout-side-width) 1fr var(--layout-side-width);
   grid-template-rows: auto 1fr auto;
@@ -48,8 +48,6 @@ export const LayoutStyle = styled(Container)`
       'alerts'
       'main'
       'footer';
-
-    padding-top: 80px;
   }
 `;
 

@@ -1,20 +1,19 @@
+import { useRouter } from 'next/router';
 import {
   FC,
   PropsWithChildren,
   createContext,
-  useContext,
-  useState,
-  useMemo,
   useCallback,
+  useContext,
   useEffect,
-  useLayoutEffect,
+  useMemo,
+  useState,
 } from 'react';
 import invariant from 'tiny-invariant';
-import { useRouter } from 'next/router';
 
 import { config } from 'config';
-import { lockScroll, saveScrollPosition, unlockScroll } from 'utils';
 import { debounce } from 'lodash';
+import { saveScrollPosition } from 'utils';
 
 export type InpageNavigationContextValue = {
   hashNav: string;
@@ -84,12 +83,6 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
 
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = useCallback(() => setExpanded((prev) => !prev), []);
-
-  useLayoutEffect(() => {
-    if (!expanded) return;
-    lockScroll();
-    return unlockScroll;
-  }, [expanded]);
 
   useEffect(() => {
     const handleScroll = debounce(saveScrollPosition, 10);
