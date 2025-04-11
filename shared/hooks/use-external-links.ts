@@ -4,7 +4,7 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useKeysWithStatus } from './use-keys-with-status';
 import { ACTIVE_STATUS_ORDER, useSortedKeys } from './use-sorted-keys';
 import { getConfig } from 'config';
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts/chains';
 
 const DASHBOARD_KEYS_LIMIT = 20;
 
@@ -42,14 +42,14 @@ export const useOperatorPortalLink = () => {
 
 export const useRatedLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const network = CHAINS[defaultChain].toLowerCase();
+  const network = defaultChain === CHAINS.Mainnet ? 'mainnet' : 'hoodi';
   if (!links.ratedExplorer) return null;
   return `${links.ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${network}`;
 };
 
 export const useEthSeerLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const network = CHAINS[defaultChain].toLowerCase();
+  const network = defaultChain === CHAINS.Mainnet ? 'mainnet' : 'hoodi';
   if (!links.ethseerDashboard) return null;
   return `${links.ethseerDashboard}/entity/csm_operator${nodeOperatorId}_lido?network=${network}`;
 };

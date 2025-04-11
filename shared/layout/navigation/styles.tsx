@@ -148,7 +148,7 @@ export const NavLink = styled.span<{ $active?: boolean }>`
   }
 
   svg {
-    color: ${({ $active }) =>
+    fill: ${({ $active }) =>
       $active ? `var(--lido-color-primary)` : `var(--lido-color-secondary)`};
   }
 

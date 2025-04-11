@@ -1,6 +1,6 @@
-import { CHAINS } from '@lido-sdk/constants';
 import { Box, InlineLoader } from '@lidofinance/lido-ui';
 import { getConfig } from 'config';
+import { CHAINS } from 'consts/chains';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { useCsmCurveId, useCsmEarlyAdoption, useCurveInfo } from 'shared/hooks';
@@ -8,6 +8,7 @@ import { useCsmCurveId, useCsmEarlyAdoption, useCurveInfo } from 'shared/hooks';
 const { defaultChain } = getConfig();
 
 export const RequiredBondAmount: FC = () => {
+  const isMainnet = defaultChain === CHAINS.Mainnet;
   const { data: ea } = useCsmEarlyAdoption();
   const { data: curveId, initialLoading: curveLoading } = useCsmCurveId(
     !!ea?.proof || true,
@@ -16,12 +17,6 @@ export const RequiredBondAmount: FC = () => {
     useCurveInfo(curveId);
   const amount = curveInfo?.points[0];
 
-  const chainName = CHAINS[defaultChain];
-  const isTestnet = defaultChain !== CHAINS.Mainnet;
-  const symbol = [isTestnet ? chainName : null, 'ETH']
-    .filter(Boolean)
-    .join(' ');
-
   return (
     <>
       {curveLoading || curveInfoLoading ? (
@@ -29,7 +24,11 @@ export const RequiredBondAmount: FC = () => {
           <InlineLoader color="text" />
         </Box>
       ) : (
-        <FormatToken amount={amount} symbol={symbol} maxDecimalDigits={2} />
+        <FormatToken
+          amount={amount}
+          symbol={isMainnet ? 'ETH' : 'Hoodi ETH'}
+          maxDecimalDigits={2}
+        />
       )}
     </>
   );
