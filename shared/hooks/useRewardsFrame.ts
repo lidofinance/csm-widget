@@ -37,7 +37,7 @@ export const useRewardsFrame = () => {
   const currentFrame = useCurrentFrame();
 
   return useMergeSwr(
-    [chainConfig, frameConfig, currentFrame],
+    [chainConfig, currentFrame],
     useMemo(() => {
       if (!chainConfig.data || !frameConfig.data || !currentFrame.data)
         return undefined;
