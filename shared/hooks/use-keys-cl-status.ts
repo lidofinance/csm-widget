@@ -56,6 +56,7 @@ type Response = {
 };
 
 export type ClKeyStatus = {
+  validatorIndex: string;
   pubkey: HexString;
   status: KEY_STATUS;
   slashed: boolean;
@@ -80,6 +81,7 @@ export const useKeysCLStatus = (
           `${url}?id=${keys.join(encodeURIComponent(','))}`,
         );
         return resp.data.map((key) => ({
+          validatorIndex: key.index,
           pubkey: key.validator.pubkey,
           slashed: key.validator.slashed,
           status: StatusMap[key.status],

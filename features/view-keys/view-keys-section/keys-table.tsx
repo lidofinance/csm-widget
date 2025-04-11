@@ -3,6 +3,7 @@ import { FC, useCallback, useMemo, useState } from 'react';
 import {
   Address,
   BeaconchainPubkeyLink,
+  EthseerPubkeyLink,
   Stack,
   StatusChip,
   StatusComment,
@@ -82,14 +83,19 @@ export const KeysTable: FC<Props> = ({ keys }) => {
         </tr>
       </thead>
       <tbody>
-        {sortedKeys?.map(({ key, index, statuses }) => (
+        {sortedKeys?.map(({ key, index, statuses, validatorIndex }) => (
           <tr key={index}>
             <td>
               <Address
                 address={key}
                 symbols={8}
                 size="xxs"
-                link={<BeaconchainPubkeyLink pubkey={key} />}
+                link={
+                  <>
+                    <BeaconchainPubkeyLink pubkey={key} />
+                    <EthseerPubkeyLink validator={validatorIndex} />
+                  </>
+                }
               />
             </td>
             <td>

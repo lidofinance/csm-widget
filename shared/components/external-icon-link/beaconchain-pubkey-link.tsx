@@ -1,29 +1,28 @@
-import { External } from '@lidofinance/lido-ui';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
-import { useAccount } from 'shared/hooks';
 import { MatomoLink } from '../matomo-link/matomo-link';
+
+import { ReactComponent as BeaconchaLink } from 'assets/icons/beaconcha-link.svg';
 
 type KeyLinkProps = {
   pubkey: string;
 };
 
+const { beaconchain } = getExternalLinks();
+
 export const BeaconchainPubkeyLink: FC<KeyLinkProps> = ({ pubkey }) => {
-  const { chainId } = useAccount();
-  const { beaconchain } = getExternalLinks(chainId);
   const href = beaconchain ? `${beaconchain}/validator/${pubkey}` : '';
 
   return (
     <>
       {href && (
         <MatomoLink
-          $secondary
           href={href}
           title="View on beaconcha.in"
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink}
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.beaconchainPubkeyLink}
         >
-          <External />
+          <BeaconchaLink />
         </MatomoLink>
       )}
     </>
