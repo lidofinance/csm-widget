@@ -34,7 +34,6 @@ export const test = base.extend<
         networkConfig: widgetFullConfig.standConfig.networkConfig,
         walletConfig: widgetFullConfig.walletConfig,
         nodeConfig: { rpcUrlToMock: '**/api/rpc?chainId=1' },
-        enableBrowserContext: true,
       });
       await browserService.initWalletSetup();
 
@@ -48,7 +47,7 @@ export const test = base.extend<
     async ({ browserWithWallet }, use) => {
       await use(
         new WidgetService(
-          await browserWithWallet.getBrowserContextPage(),
+          browserWithWallet.getBrowserContextPage(),
           browserWithWallet.getWalletPage(),
         ),
       );
