@@ -2,6 +2,7 @@ import { DarkThemeProvider } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { useAlertActions } from '../alert-provider';
+import { MEDIA_QUERY_XXL } from 'styles/constants';
 
 const AlertContainerStyled = styled.div`
   display: flex;
@@ -18,9 +19,13 @@ const AlertContainerStyled = styled.div`
   position: absolute;
   right: 32px;
   top: 80px;
-  width: calc(50% - 350px);
+  width: calc(50% - 400px);
   max-width: 300px;
   grid-area: none;
+
+  ${MEDIA_QUERY_XXL} {
+    width: calc(50% - 350px);
+  }
 
   ${({ theme }) => theme.mediaQueries.xl} {
     grid-area: alerts;

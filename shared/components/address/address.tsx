@@ -56,7 +56,7 @@ export const Address: FC<Props> = ({
               {component}
             </Tooltip>
           )}
-          {link ?? <EtherscanAddressLink address={address} />}
+          {link ?? <EtherscanAddressLink $secondary={!big} address={address} />}
         </AddressContainerStyle>
       )}
     </>

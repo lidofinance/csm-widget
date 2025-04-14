@@ -1,9 +1,8 @@
 import matter from 'gray-matter';
 import remark from 'remark';
-import html from 'remark-html';
 import externalLinks from 'remark-external-links';
-import { getConfig } from 'config';
-import { CHAINS } from '@lido-sdk/constants';
+import html from 'remark-html';
+import { getChainName } from 'utils';
 
 export type FaqItem = {
   id: string;
@@ -35,8 +34,7 @@ const readFaqFile = async ([scope, id]: string[]): Promise<FaqItem> => {
   };
 };
 
-const { defaultChain } = getConfig();
-const chainName = CHAINS[defaultChain].toLowerCase();
+const chainName = getChainName();
 
 export const readFaqFiles = async (fileNames: string[]) => {
   const ids = fileNames.map((name) => [chainName, name]);

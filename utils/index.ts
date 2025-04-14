@@ -17,6 +17,7 @@ export * from './formatHex';
 export * from './formatKeys';
 export * from './get-added-node-operator';
 export * from './get-based-hash-href';
+export * from './get-chain-name';
 export * from './get-first-param';
 export * from './get-ipfs-base-path';
 export * from './get-max-balance-token';

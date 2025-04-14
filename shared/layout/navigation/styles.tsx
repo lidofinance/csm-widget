@@ -45,25 +45,17 @@ export const NavBlockStyle = styled.div<{ $onlyMobile?: boolean }>`
       : ''}
 `;
 
-export const desktopCss = css`
-  grid-area: nav;
+export const NavContainer = styled.div`
   position: sticky;
-  top: 3rem;
-  align-self: start;
+  top: 145px;
+  margin-top: 4em;
 
-  flex-direction: column;
-  align-items: start;
-
-  margin-top: 4rem;
   display: flex;
   gap: 40px;
+  flex-direction: column;
 
-  svg {
-    flex-shrink: 0;
-  }
-
-  &[hidden] {
-    display: none;
+  ${NAV_MOBILE_MEDIA} {
+    margin: 0;
   }
 `;
 
@@ -76,39 +68,38 @@ const menuAppearing = keyframes`
   }
 `;
 
-const mobileCss = css`
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 100vh;
-  padding: 145px 45px 40px;
-  margin: 0;
-
-  background: rgba(var(--lido-rgb-background), 0.5);
-  backdrop-filter: blur(12px);
-  z-index: 98;
-  animation: ${menuAppearing} ${({ theme }) => theme.duration.norm} ease 0s 1;
+export const Nav = styled.nav`
+  grid-area: nav;
+  position: relative;
 
   &[hidden] {
-    display: flex;
-  }
-
-  &[aria-expanded='false'] {
     display: none;
   }
 
-  ${({ theme }) => theme.mediaQueries.md} {
-    padding: 145px 20px 40px;
-  }
-`;
-
-export const Nav = styled.nav`
-  ${desktopCss}
-
-  // mobile kicks in on a bit higher width for nav
   ${NAV_MOBILE_MEDIA} {
-    ${mobileCss}
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 100%;
+    padding: 145px 45px 40px;
+
+    background: rgba(var(--lido-rgb-background), 0.5);
+    backdrop-filter: blur(12px);
+    z-index: 98;
+    animation: ${menuAppearing} ${({ theme }) => theme.duration.norm} ease 0s 1;
+
+    &[hidden] {
+      display: block;
+    }
+
+    &[aria-expanded='false'] {
+      display: none;
+    }
+
+    ${({ theme }) => theme.mediaQueries.md} {
+      padding: 145px 20px 40px;
+    }
   }
 
   z-index: 6;
@@ -148,6 +139,7 @@ export const NavLink = styled.span<{ $active?: boolean }>`
   }
 
   svg {
+    flex-shrink: 0;
     color: ${({ $active }) =>
       $active ? `var(--lido-color-primary)` : `var(--lido-color-secondary)`};
   }

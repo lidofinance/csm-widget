@@ -58,11 +58,11 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
         </WalletModalConnectedStyle>
 
         <WalletModalAccountStyle>
-          <Identicon address={address ?? ''} />
+          <Identicon address={address} />
           <WalletModalAddressStyle>
             <Address
               data-testid="connectedAddress"
-              address={address ?? ''}
+              address={address}
               symbols={6}
             />
           </WalletModalAddressStyle>
@@ -78,7 +78,7 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
           >
             Copy address
           </ButtonIcon>
-          <Link href={getEtherscanAddressLink(chainId ?? 0, address ?? '')}>
+          <Link href={getEtherscanAddressLink(chainId ?? 1, address)}>
             <ButtonIcon
               data-testid="etherscanBtn"
               icon={<External />}

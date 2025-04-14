@@ -1,6 +1,6 @@
-import { Block, Table } from '@lidofinance/lido-ui';
-import { StackStyle } from 'shared/components/stack/style';
+import { Block, Button } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
+import { MEDIA_QUERY_XXL } from 'styles/constants';
 
 export const ViewKeysBlock = styled(Block)`
   display: flex;
@@ -8,44 +8,58 @@ export const ViewKeysBlock = styled(Block)`
   flex-direction: column;
 `;
 
-export const TableStyle = styled(Table)`
-  margin: -32px -32px;
+export const TableStyle = styled.table`
+  margin: -${({ theme }) => theme.spaceMap.xxl}px;
+  border-collapse: collapse;
 
-  thead tr::before,
-  thead tr::after,
-  th {
-    border-top: none;
+  ${({ theme }) => theme.mediaQueries.md} {
+    margin: -${({ theme }) => theme.spaceMap.lg}px;
   }
 
   th {
-    padding: 24px 8px 16px 8px;
-    min-width: 40px;
+    text-align: left;
+    color: var(--lido-color-text);
   }
 
-  td {
-    padding: 12px 8px;
-  }
-
-  th > div {
-    display: flex;
-    gap: ${({ theme }) => theme.spaceMap.xs}px;
+  tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: auto;
+    grid-column-gap: 1rem;
     align-items: center;
+    gap: 12px 32px;
 
-    svg {
-      width: 16px;
+    padding: 12px 32px;
+
+    ${MEDIA_QUERY_XXL} {
+      grid-template-columns: 1fr 1fr;
+
+      td:nth-child(3) {
+        grid-column: 1 / -1;
+
+        &:empty {
+          display: none;
+        }
+      }
+
+      th:nth-child(3) {
+        display: none;
+      }
+    }
+
+    ${({ theme }) => theme.mediaQueries.md} {
+      grid-template-columns: 1fr;
+
+      padding: 20px 32px;
     }
   }
 
-  td {
-    border-bottom: none;
-  }
+  thead tr {
+    padding: 24px 32px 16px;
 
-  td:last-child {
-    max-width: 200px;
-  }
-
-  td:nth-child(2) {
-    min-width: max-content;
+    ${({ theme }) => theme.mediaQueries.md} {
+      display: none;
+    }
   }
 
   tbody tr:nth-child(odd) {
@@ -53,6 +67,23 @@ export const TableStyle = styled(Table)`
   }
 `;
 
-export const AddressRow = styled(StackStyle).attrs({ $gap: 'xs' })`
-  align-items: center;
+export const SortButton = styled(Button).attrs({
+  variant: 'text',
+  color: 'secondary',
+  size: 'xs',
+})`
+  padding: 6px 12px;
+  min-width: auto;
+
+  > span {
+    display: flex;
+    gap: ${({ theme }) => theme.spaceMap.xs}px;
+    align-items: center;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    margin-block: -2px;
+  }
 `;
