@@ -1,7 +1,7 @@
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks/useWeb3Key';
 import { ViewKeysSection } from './view-keys-section';
-import { ExtraWidth, Faq } from 'shared/components';
+import { Faq } from 'shared/components';
 import { DepositQueue } from './deposit-queue';
 
 export const ViewKeys = () => {
@@ -9,10 +9,8 @@ export const ViewKeys = () => {
   return (
     <>
       <NoSSRWrapper>
-        <ExtraWidth>
-          <DepositQueue />
-          <ViewKeysSection key={key} />
-        </ExtraWidth>
+        <DepositQueue />
+        <ViewKeysSection key={key} />
       </NoSSRWrapper>
       <Faq />
     </>
