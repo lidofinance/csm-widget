@@ -1,7 +1,57 @@
-import { H1 } from '@lidofinance/lido-ui';
+import { Container, H1 } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
+
+export const LayoutStyle = styled(Container)`
+  --layout-main-width: 590px;
+  --layout-side-width: 170px;
+
+  position: relative;
+  min-height: 100%;
+  display: grid;
+  grid-template-columns: var(--layout-side-width) 1fr var(--layout-side-width);
+  grid-template-rows: auto 1fr auto;
+  grid-column-gap: 14px;
+  grid-template-areas:
+    'header header header'
+    'nav main alerts'
+    'footer footer footer';
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    grid-template-columns: var(--layout-side-width) 1fr;
+    grid-template-rows:
+      auto auto 1fr
+      auto;
+    grid-template-areas:
+      'header header'
+      'nav alerts'
+      'nav main'
+      'footer footer';
+
+    &:has(nav[hidden]),
+    &:not(:has(nav)) {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'header'
+        'alerts'
+        'main'
+        'footer';
+    }
+  }
+
+  ${NAV_MOBILE_MEDIA} {
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'header'
+      'alerts'
+      'main'
+      'footer';
+
+    padding-top: 80px;
+  }
+`;
 
 export const Heading = styled.header<{ $titlesCount: number }>`
   display: flex;
@@ -54,4 +104,16 @@ export const Content = styled.div`
   > * {
     width: 100%;
   }
+`;
+
+export const Main = styled.main`
+  grid-area: main;
+  position: relative;
+  margin-inline: auto;
+  margin-top: ${({ theme }) => theme.spaceMap.sm}px;
+  margin-bottom: ${({ theme }) => theme.spaceMap.xxl}px;
+  padding: 0;
+  width: 100%;
+
+  max-width: var(--layout-main-width);
 `;
