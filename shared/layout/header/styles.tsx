@@ -16,26 +16,31 @@ export const HeaderStyle = styled.header`
   margin-block: 18px;
 
   ${NAV_MOBILE_MEDIA} {
-    position: fixed;
-    z-index: 99;
+    position: sticky;
+    z-index: 999;
     top: 0;
     left: 0;
     right: 0;
-    padding: 18px 20px;
-    margin: 0;
-    background: var(--lido-color-background);
-    transition: box-shadow 0.3s ease;
+
+    padding: 18px 32px;
+    margin: 0 -32px;
+    ${({ theme }) => theme.mediaQueries.lg} {
+      padding: 18px 20px;
+      margin: 0 -20px;
+    }
+
+    transition:
+      box-shadow 0.3s ease,
+      background 0.3s ease-in-out;
 
     html:is([data-scroll]):not([data-scroll='0']) & {
-      box-shadow: 0px -1px 4px var(--lido-color-shadowDark);
+      background: var(--lido-color-background);
+      box-shadow: 0px 3px 3px -3px var(--lido-color-shadowDark);
     }
 
     nav[aria-expanded='true'] + & {
-      background: none;
-      box-shadow: none;
-      transition:
-        box-shadow 0.3s ease,
-        background 0.3s ease-in-out;
+      background: none !important;
+      box-shadow: none !important;
     }
   }
 `;

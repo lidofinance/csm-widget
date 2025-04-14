@@ -4,6 +4,7 @@ import { getConfig } from 'config';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { useCsmCurveId, useCsmEarlyAdoption, useCurveInfo } from 'shared/hooks';
+import { getChainName } from 'utils';
 
 const { defaultChain } = getConfig();
 
@@ -16,7 +17,7 @@ export const RequiredBondAmount: FC = () => {
     useCurveInfo(curveId);
   const amount = curveInfo?.points[0];
 
-  const chainName = CHAINS[defaultChain];
+  const chainName = getChainName();
   const isTestnet = defaultChain !== CHAINS.Mainnet;
   const symbol = [isTestnet ? chainName : null, 'ETH']
     .filter(Boolean)

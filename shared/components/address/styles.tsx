@@ -21,14 +21,6 @@ export const AddressContainerStyle = styled(StackStyle).attrs({
     ${({ $big }) =>
       !$big &&
       css`
-        &,
-        &:visited {
-          color: var(--lido-color-textSecondary);
-        }
-        &:hover {
-          color: var(--lido-color-primaryHover);
-        }
-
         svg {
           width: 20px;
         }

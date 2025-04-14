@@ -46,6 +46,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanTxLink = 'etherscanTxLink',
   etherscanAddressLink = 'etherscanAddressLink',
   beaconchainPubkeyLink = 'beaconchainPubkeyLink',
+  ethseerPubkeyLink = 'ethseerPubkeyLink',
   feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
@@ -272,6 +273,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «View on beaconcha.in» link on pubkey',
     prefixed`beaconchain_pubkey_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.ethseerPubkeyLink]: [
+    MATOMO_APP_NAME,
+    'Click «View on ethseer.io» link on pubkey',
+    prefixed`ethseer_pubkey_link`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: [
     MATOMO_APP_NAME,
