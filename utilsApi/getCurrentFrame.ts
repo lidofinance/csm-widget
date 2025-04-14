@@ -3,7 +3,7 @@ import { iterateUrls } from '@lidofinance/rpc';
 import { config, secretConfig } from 'config';
 import { getCsmContractAddress } from 'consts/csm-constants';
 import { BigNumber } from 'ethers';
-import { HashConsensus__factory } from 'generated';
+import { CSFeeOracle__factory, HashConsensus__factory } from 'generated';
 import { Cache } from 'memory-cache';
 import { CurrentFrame } from 'types/ethseer';
 import { getStaticRpcBatchProvider } from 'utils/getStaticRpcBatchProvider';
@@ -42,17 +42,26 @@ export const _getCurentFrame = async (
 ): Promise<CurrentFrame> => {
   const staticProvider = getStaticRpcBatchProvider(chainId, url);
 
-  const { timestamp: latestBlockTimestamp } =
-    await staticProvider.getBlock('latest');
-
   const hashConsensus = HashConsensus__factory.connect(
     getCsmContractAddress(chainId, 'HashConsensus'),
     staticProvider,
   );
+  const feeOracle = CSFeeOracle__factory.connect(
+    getCsmContractAddress(chainId, 'CSFeeOracle'),
+    staticProvider,
+  );
 
-  const chainConfig = await hashConsensus.getChainConfig();
-  const frameConfig = await hashConsensus.getFrameConfig();
-  const currentFrame = await hashConsensus.getCurrentFrame();
+  const [
+    chainConfig,
+    frameConfig,
+    refSlot,
+    { timestamp: latestBlockTimestamp },
+  ] = await Promise.all([
+    hashConsensus.getChainConfig(),
+    hashConsensus.getFrameConfig(),
+    feeOracle.getLastProcessingRefSlot(),
+    staticProvider.getBlock('latest'),
+  ]);
 
   const latestSlot = BigNumber.from(latestBlockTimestamp)
     .sub(chainConfig.genesisTime)
@@ -63,10 +72,10 @@ export const _getCurentFrame = async (
   );
 
   const startSlot = latestSlot
-    .sub(currentFrame.refSlot)
+    .sub(refSlot)
     .div(slotsPerFrame)
     .mul(slotsPerFrame)
-    .add(currentFrame.refSlot);
+    .add(refSlot);
   const startTimestamp = startSlot
     .mul(chainConfig.secondsPerSlot)
     .add(chainConfig.genesisTime)

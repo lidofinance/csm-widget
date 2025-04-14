@@ -1,5 +1,5 @@
 import { useSDK } from '@lido-sdk/react';
-import { addHours } from 'date-fns';
+import { addDays } from 'date-fns';
 import { useCallback } from 'react';
 import { SiweMessage } from 'siwe';
 import invariant from 'tiny-invariant';
@@ -18,7 +18,7 @@ const createSiweMessage = (address: string, chainId?: number) => {
     uri,
     version: '1',
     chainId,
-    expirationTime: addHours(new Date(), 1).toISOString(),
+    expirationTime: addDays(new Date(), 1).toISOString(),
   });
   return message.prepareMessage();
 };
