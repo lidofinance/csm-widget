@@ -8,6 +8,7 @@ import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
+import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
 import {
   CounterInvalidKeys,
   CounterInvites,
@@ -45,6 +46,13 @@ const routes: Route[] = [
     subPaths: [PATH.KEYS_SUBMIT, PATH.KEYS_REMOVE, PATH.KEYS_VIEW, PATH.CREATE],
     showRules: ['IS_NODE_OPERATOR', 'CAN_CREATE'],
     suffix: <CounterInvalidKeys />,
+  },
+  {
+    name: 'Monitoring',
+    path: PATH.MONITORING,
+    icon: <MeterIcon />,
+    showRules: ['IS_NODE_OPERATOR'],
+    // TODO: suffix for bad attestation rate
   },
   {
     name: 'Bond & Rewards',
