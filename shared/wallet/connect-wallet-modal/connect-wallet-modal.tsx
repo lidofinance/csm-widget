@@ -1,5 +1,5 @@
 import { WalletsModalForEth } from 'reef-knot/connect-wallet-modal';
-import { useThemeToggle } from '@lidofinance/lido-ui';
+import { ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
 
 import { walletsMetrics } from 'consts/matomo-wallets-events';
 
@@ -8,7 +8,7 @@ export const ConnectWalletModal = () => {
 
   return (
     <WalletsModalForEth
-      shouldInvertWalletIcon={themeName === 'dark'}
+      shouldInvertWalletIcon={themeName === ThemeName.dark}
       metrics={walletsMetrics}
     />
   );

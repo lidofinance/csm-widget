@@ -1,9 +1,10 @@
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Latice, TitledAddress, Warning } from 'shared/components';
+import { Latice, Stack, TitledAddress, Warning } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { ChangeRoleFormInputType, useChangeRoleFormData } from '../context';
 import { useRole } from '../hooks/use-role';
+import { Text } from '@lidofinance/lido-ui';
 
 export const Info: FC = () => {
   const role = useRole();
@@ -22,24 +23,38 @@ export const Info: FC = () => {
           title={`Current ${role} address`}
           address={currentAddress}
         />
-        <TitledAddress
-          title={
-            <>
-              <Warning text="Pending change" />
-              {isPropose && (
-                <SubmitButtonHookForm
-                  variant="outlined"
-                  size="xs"
-                  fullwidth={false}
-                  onClick={revokeHandle}
-                >
-                  Revoke
-                </SubmitButtonHookForm>
-              )}
-            </>
-          }
-          address={proposedAddress}
-        />
+
+        {proposedAddress && (
+          <Stack direction="column" gap="sm">
+            <TitledAddress
+              title={
+                <>
+                  <Warning text="Pending change" />
+                  {isPropose && (
+                    <SubmitButtonHookForm
+                      variant="outlined"
+                      size="xs"
+                      fullwidth={false}
+                      onClick={revokeHandle}
+                    >
+                      Revoke
+                    </SubmitButtonHookForm>
+                  )}
+                </>
+              }
+              address={proposedAddress}
+            />
+            <Text size="xxs" weight={700}>
+              Action required
+            </Text>
+            <Text size="xxs">
+              <ol>
+                <li>Connect to CSM UI with the proposed address</li>
+                <li>Go to Roles tab → Inbox requests to confirm the change</li>
+              </ol>
+            </Text>
+          </Stack>
+        )}
       </Latice>
     </>
   );

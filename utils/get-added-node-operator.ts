@@ -19,8 +19,8 @@ export const getAddedNodeOperator = (receipt: ContractReceipt) => {
     const event = int.parseLog(log) as any as NodeOperatorAddedEvent;
     return {
       id: getNodeOperatorIdFromEvent(event),
-      managerAddress: event.args.managerAddress,
-      rewardsAddress: event.args.rewardAddress,
+      manager: event.args.managerAddress,
+      rewards: event.args.rewardAddress,
     };
   }
   return undefined;

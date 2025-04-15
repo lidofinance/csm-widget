@@ -1,4 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
+import { NAV_MOBILE_MEDIA } from './constants';
 
 const GlobalStyle = createGlobalStyle`
   * {
@@ -16,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
   html,
   body {
     width: 100%;
+    min-height: 100vh;
   }
   body {
     background: var(--lido-color-background);
@@ -26,9 +28,6 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.5em;
     font-weight: 500;
     text-size-adjust: none;
-  }
-  main {
-    min-height: calc(100vh - 224px);
   }
   a {
     cursor: pointer;
@@ -45,7 +44,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ul {
-    padding-inline-start: 22px;
+    padding-inline-start: 1.8em;
   }
 
   ol {
@@ -55,6 +54,12 @@ const GlobalStyle = createGlobalStyle`
   #lido-ui-modal-root [role='listbox'] {
     max-height: 334px;
     overflow-y: scroll;
+  }
+
+  ${NAV_MOBILE_MEDIA} {
+    body:has(nav[aria-expanded=true]){
+      overflow: hidden;
+    }
   }
 `;
 

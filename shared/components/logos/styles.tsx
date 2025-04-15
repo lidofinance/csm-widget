@@ -8,12 +8,12 @@ export const LogoLidoStyle = styled.div`
   flex-shrink: 0;
   cursor: pointer;
 
-  ${({ theme }) => theme.mediaQueries.md} {
+  ${({ theme }) => theme.mediaQueries.lg} {
     width: 14px;
     justify-content: flex-start;
   }
 
-  ${({ theme }) => theme.mediaQueries.lg} {
-    align-self: start;
+  span {
+    display: block;
   }
 `;

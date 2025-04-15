@@ -8,10 +8,12 @@ import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
+import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
 import {
   CounterInvalidKeys,
   CounterInvites,
   CounterLockedBond,
+  CounterSurveys,
 } from 'shared/counters';
 import { ShowRule, useShowRule } from 'shared/hooks';
 
@@ -46,6 +48,13 @@ const routes: Route[] = [
     suffix: <CounterInvalidKeys />,
   },
   {
+    name: 'Monitoring',
+    path: PATH.MONITORING,
+    icon: <MeterIcon />,
+    showRules: ['IS_NODE_OPERATOR'],
+    // TODO: suffix for bad attestation rate
+  },
+  {
     name: 'Bond & Rewards',
     path: PATH.BOND,
     icon: <WalletIcon />,
@@ -73,6 +82,7 @@ const routes: Route[] = [
     path: PATH.SURVEYS,
     icon: <FileIcon />,
     showRules: ['IS_SURVEYS_ACTIVE'],
+    suffix: <CounterSurveys />,
   },
 ];
 

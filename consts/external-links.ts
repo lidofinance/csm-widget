@@ -30,7 +30,8 @@ type ExternalLinksConstants = {
   operatorsWidget: string;
   beaconchainDashboard: string;
   ratedExplorer: string;
-  ethseerDashboard?: string;
+  ethseerDashboard: string;
+  ethseer: string;
   subscribeEvents: string;
   keysApi: string;
   surveyApi: string;
@@ -55,7 +56,8 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       beaconchain: 'https://beaconcha.in',
       beaconchainDashboard: 'https://v2-beta-mainnet.beaconcha.in/dashboard',
       ratedExplorer: 'https://explorer.rated.network',
-      ethseerDashboard: 'https://ethseer.io',
+      ethseerDashboard: 'https://ethseer.io/entity',
+      ethseer: 'https://ethseer.io',
       subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
       keysApi: 'https://keys-api.lido.fi',
       surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
@@ -76,12 +78,13 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       operatorsWidget: 'https://operators-holesky.testnet.fi',
       beaconchain: 'https://holesky.beaconcha.in',
       beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
-      ratedExplorer: 'https://explorer.rated.network',
+      ratedExplorer: '',
+      ethseerDashboard: '',
+      ethseer: '',
       subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
       keysApi: 'https://keys-api-holesky.testnet.fi',
       surveyApi: '',
     },
-    // FIXME: links
     [CHAINS.Hoodi]: {
       earlyAdoptionTree: '',
       rewardsTree: '',
@@ -90,13 +93,15 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
       stakeWidget: 'https://stake-hoodi.testnet.fi',
 
-      feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
+      feesMonitoring: '',
       operatorsWidget: 'https://operators-hoodi.testnet.fi',
-      beaconchain: 'https://holesky.beaconcha.in',
-      beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
-      ratedExplorer: 'https://explorer.rated.network',
+      beaconchain: 'https://hoodi.beaconcha.in',
+      beaconchainDashboard: 'https://v2-beta-hoodi.beaconcha.in/dashboard',
+      ratedExplorer: '',
+      ethseerDashboard: '',
+      ethseer: 'https://ethseer.io',
       subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
-      keysApi: 'http://hr6vb81d1ndsx-hoodi-keys-api.valset-01.testnet.fi',
+      keysApi: 'https://keys-api-hoodi.testnet.fi',
       surveyApi: 'https://csm-surveys-api-testnet.up.railway.app',
     },
   };

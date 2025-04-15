@@ -9,7 +9,13 @@ import {
 import { ModalComponentType, useModal } from 'providers/modal-provider';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC, useCallback } from 'react';
-import { GrayText, Stack, TextBlock, TxLinkEtherscan } from 'shared/components';
+import {
+  GrayText,
+  Plural,
+  Stack,
+  TextBlock,
+  TxLinkEtherscan,
+} from 'shared/components';
 import { FaqElement } from 'shared/components/faq/styles';
 import {
   useLastOperatorRewards,
@@ -28,6 +34,7 @@ import {
   RowHeader,
   RowTitle,
 } from './styles';
+import { Zero } from '@ethersproject/constants';
 
 export const LastRewards: FC = () => {
   const { data: lastRewards, initialLoading: isLoading } =
@@ -66,7 +73,7 @@ export const LastRewards: FC = () => {
           <Balance
             big
             loading={isLoading || isDistributedLoading}
-            amount={distributed}
+            amount={distributed ?? Zero}
             description={showWhy ? <Why /> : undefined}
           />
         </RowHeader>
@@ -96,7 +103,16 @@ export const LastRewards: FC = () => {
             ) : (
               <Stack center gap="xs">
                 <GrayText>Expected</GrayText>
-                <BadgeStyle>in {daysLeft} days</BadgeStyle>
+                <BadgeStyle>
+                  {daysLeft === 0 ? (
+                    'Today'
+                  ) : (
+                    <>
+                      in {daysLeft}{' '}
+                      <Plural variants={['day', 'days']} value={daysLeft} />
+                    </>
+                  )}
+                </BadgeStyle>
               </Stack>
             ))}
         </Stack>
@@ -132,7 +148,7 @@ const LastReportStats: FC = () => {
             title="Stuck keys found"
             loading={isLoading}
             warning={lastRewards?.stuck}
-            help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the latest report frame. Stuck keys prevent the Node Operator from receiving rewards for any key(s) in that frame."
+            help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the latest report frame. Stuck keys prevent the Node Operator from receiving rewards for any key(s) in that frame"
           >
             {lastRewards?.stuck ? 'YES' : 'NO'}
           </TextBlock>

@@ -37,17 +37,17 @@ export type Setup = {
   elClient: string;
   clClient: string;
   clinetsServerType: string;
-  clientsCountry: string;
+  clientsCountry?: string;
   validatorClient: string;
   validatorServerType: string;
-  validatorCountry: string;
+  validatorCountry?: string;
   validatorSameAsCl?: boolean;
   remoteSigner: string;
   mevMinBid?: BigNumber;
 };
 
 export type SetupRaw = Omit<Setup, 'mevMinBid'> & {
-  mevMinBid?: string;
+  mevMinBid?: string | null;
 };
 
 export type Summary = {
