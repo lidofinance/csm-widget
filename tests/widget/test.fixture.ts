@@ -1,16 +1,8 @@
 import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
+import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
 import { WidgetService } from 'tests/pages/widget.service';
-
-export const REFUSE_CF_BLOCK_COOKIE = [
-  {
-    name: process.env.REFUSE_CF_BLOCK_NAME || '',
-    value: process.env.REFUSE_CF_BLOCK_VALUE || '',
-    path: '/',
-    domain: '.testnet.fi', // @TODO: must to changing to hoodi
-  },
-];
 
 type Fixtures = object;
 
@@ -21,12 +13,6 @@ export const test = base.extend<
     widgetService: WidgetService;
   }
 >({
-  page: async ({ page }, use) => {
-    if (process.env.REFUSE_CF_BLOCK_NAME && process.env.REFUSE_CF_BLOCK_VALUE) {
-      await page.context().addCookies(REFUSE_CF_BLOCK_COOKIE);
-    }
-    await use(page);
-  },
   browserWithWallet: [
     // eslint-disable-next-line
     async ({}, use) => {
@@ -34,7 +20,11 @@ export const test = base.extend<
         networkConfig: widgetFullConfig.standConfig.networkConfig,
         walletConfig: widgetFullConfig.walletConfig,
         nodeConfig: { rpcUrlToMock: '**/api/rpc?chainId=1' },
+        browserOptions: {
+          cookies: REFUSE_CF_BLOCK_COOKIE,
+        },
       });
+
       await browserService.initWalletSetup();
 
       await use(browserService);

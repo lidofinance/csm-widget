@@ -1,6 +1,7 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
 import { getReportConfig } from 'tests/config/report.config';
+import { storageState } from 'tests/config/storageState';
 
 // TODO: move it pls
 export const httpCredentials =
@@ -22,6 +23,7 @@ const config: PlaywrightTestConfig = {
   workers: 1,
   reporter: getReportConfig(),
   use: {
+    storageState,
     headless: false,
     actionTimeout: 15000,
     screenshot: { fullPage: true, mode: 'only-on-failure' },

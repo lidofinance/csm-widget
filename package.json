@@ -111,7 +111,6 @@
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
-    "dotenv": "^16.4.7",
     "eslint": "^8.46.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.5.5",
