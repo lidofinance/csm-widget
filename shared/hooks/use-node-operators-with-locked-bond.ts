@@ -57,6 +57,7 @@ const useLockedNodeOperatorsFromEvents = () => {
     getCsmConstants(chainId).retentionPeriodMins,
   );
 
+  // TODO: use BondLockChanged events starting from max retention period
   const fetcher = useCallback(async () => {
     const filters = [
       contract.filters.ELRewardsStealingPenaltyReported(null, null, null),

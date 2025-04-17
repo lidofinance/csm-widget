@@ -1,27 +1,30 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { useQuery } from '@tanstack/react-query';
-import { getExternalLinks } from 'consts/external-links';
+import { useExternalLinks } from 'shared/hooks';
 import {
   fetchWithFallback,
   standardFetcher,
   StandardMerkleTreeData,
 } from 'utils';
 import { Address } from 'viem';
-import { useConfig } from 'wagmi';
-import { readCsEarlyAdoptionTreeRoot } from '../generated';
+import { useReadContract } from 'wagmi';
+import { useCSEarlyAdoption } from './use-contracts';
 
 type EATreeLeaf = [Address];
 
 export const useEarlyAdoptionTree = () => {
-  const config = useConfig();
-  const url = getExternalLinks().earlyAdoptionTree;
+  const { earlyAdoptionTree: url } = useExternalLinks();
+
+  const { data: treeRoot } = useReadContract({
+    ...useCSEarlyAdoption(),
+    functionName: 'TREE_ROOT',
+  });
 
   return useQuery({
-    queryKey: ['early-adoption-tree', url],
+    queryKey: ['early-adoption-tree', treeRoot],
+    enabled: !!treeRoot,
     staleTime: Infinity,
     queryFn: async () => {
-      const treeRoot = await readCsEarlyAdoptionTreeRoot(config, {});
-
       const treeJson = await fetchWithFallback([url], (url) =>
         standardFetcher<StandardMerkleTreeData<EATreeLeaf>>(url, {
           headers: {},

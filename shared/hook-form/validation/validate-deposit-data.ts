@@ -1,4 +1,4 @@
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts';
 import { getCsmConstants } from 'consts/csm-constants';
 import { validate } from 'shared/keys';
 import invariant from 'tiny-invariant';

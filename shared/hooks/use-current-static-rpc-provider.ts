@@ -1,13 +1,12 @@
 import { useMemo } from 'react';
 import { useSDK } from '@lido-sdk/react';
 import { CHAINS } from '@lido-sdk/constants';
-import { getStaticRpcBatchProvider } from '@lido-sdk/providers';
-import { StaticJsonRpcBatchProvider } from '@lidofinance/eth-providers';
 
 import { useRpcUrl } from 'config/rpc';
+import { getStaticRpcBatchProvider } from 'utils/getStaticRpcBatchProvider';
 
 export const useCurrentStaticRpcProvider = (): {
-  staticRpcProvider: StaticJsonRpcBatchProvider;
+  staticRpcProvider: ReturnType<typeof getStaticRpcBatchProvider>;
   chainId: CHAINS;
 } => {
   const { chainId } = useSDK();

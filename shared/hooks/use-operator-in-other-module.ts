@@ -1,10 +1,10 @@
 import { useLidoSWR } from '@lido-sdk/react';
-import { getCsmConstants } from 'consts/csm-constants';
 import { getExternalLinks } from 'consts/external-links';
 import { STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { useMemo } from 'react';
 import { standardFetcher } from 'utils';
 import { useAccount } from './use-account';
+import { useCsmConstants } from './use-csm-constants';
 import { useMergeSwr } from './useMergeSwr';
 
 type ModulesResponse = {
@@ -51,7 +51,7 @@ const REPLACEMENTS: Record<string, string> = {
 // TODO: move to api
 const useSROperators = () => {
   const { keysApi } = getExternalLinks();
-  const { stakingModuleId: csmId } = getCsmConstants();
+  const { stakingModuleId: csmId } = useCsmConstants();
 
   const fetcher = async () => {
     const { data: modules } = await standardFetcher<ModulesResponse>(

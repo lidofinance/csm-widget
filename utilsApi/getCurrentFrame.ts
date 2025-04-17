@@ -1,6 +1,6 @@
-import { CHAINS } from '@lido-sdk/constants';
 import { iterateUrls } from '@lidofinance/rpc';
 import { config, secretConfig } from 'config';
+import { CHAINS } from 'consts';
 import { getCsmContractAddress } from 'consts/csm-constants';
 import { BigNumber } from 'ethers';
 import { CSFeeOracle__factory, HashConsensus__factory } from 'generated';
@@ -29,7 +29,7 @@ export const getCurrentFrame = async () => {
     throw new Error(`Error: RPC is not configured for chain ${chainId}`);
   }
   const currentFrame = await iterateUrls(urls, (url) =>
-    _getCurentFrame(url, chainId),
+    _getCurentFrame(url, chainId as CHAINS),
   );
 
   cache.put(cacheKey, currentFrame, config.CACHE_ETHSEER_RATE_TTL);

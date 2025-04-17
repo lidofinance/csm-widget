@@ -107,7 +107,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
   };
 
 export const getExternalLinks = (
-  chainId: CHAINS | undefined = config.defaultChain,
+  chainId: CHAINS = config.defaultChain as CHAINS,
 ) => {
   const links = EXTERNAL_LINKS_BY_NETWORK[chainId];
   if (!links) {
