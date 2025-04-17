@@ -1,6 +1,7 @@
 export * from './use-aa';
 export * from './use-allowance';
 export * from './use-balance';
+export * from './use-contracts';
 export * from './use-csm-status';
 export * from './use-dapp-status';
 export * from './use-early-adoption-account-proof';

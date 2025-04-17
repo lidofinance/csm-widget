@@ -1,6 +1,4 @@
-import { Abi } from 'viem';
-
-export const CSEarlyAdoptionAbi: Abi = [
+export const CSEarlyAdoptionAbi = [
   {
     type: 'constructor',
     inputs: [
@@ -184,4 +182,4 @@ export const CSEarlyAdoptionAbi: Abi = [
     name: 'ZeroModuleAddress',
     inputs: [],
   },
-];
+] as const;

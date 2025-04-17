@@ -1,6 +1,4 @@
-import { Abi } from 'viem';
-
-export const CSModuleAbi: Abi = [
+export const CSModuleAbi = [
   {
     type: 'constructor',
     inputs: [
@@ -3032,4 +3030,4 @@ export const CSModuleAbi: Abi = [
     name: 'ZeroRewardAddress',
     inputs: [],
   },
-];
+] as const;

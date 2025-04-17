@@ -2,9 +2,9 @@ import { useContractSWR } from '@lido-sdk/react';
 import { BigNumber } from 'ethers';
 import invariant from 'tiny-invariant';
 
-import { getCsmConstants } from 'consts/csm-constants';
 import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
 import { StakingRouter } from 'generated';
+import { useCsmConstants } from './use-csm-constants';
 import { useStakingRouterRPC } from './useCsmContracts';
 import { useMergeSwr } from './useMergeSwr';
 
@@ -67,7 +67,7 @@ const getInfo = (
 };
 
 export const useCSMShareLimitInfo = (config = STRATEGY_CONSTANT) => {
-  const { stakingModuleId } = getCsmConstants();
+  const { stakingModuleId } = useCsmConstants();
 
   const modulesSwr = useContractSWR({
     contract: useStakingRouterRPC(),

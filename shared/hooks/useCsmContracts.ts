@@ -1,5 +1,5 @@
 import { contractHooksFactory } from '@lido-sdk/react';
-import { getCsmContractAddressGetter } from 'consts/csm-constants';
+import { CHAINS, CsmContract, getCsmContractAddress } from 'consts';
 import {
   CSAccounting__factory,
   CSEarlyAdoption__factory,
@@ -12,6 +12,13 @@ import {
   StakingRouter__factory,
   Versioned__factory,
 } from 'generated';
+
+// TODO: remove this file after migrate to wagmi
+
+export const getCsmContractAddressGetter =
+  (contract: CsmContract) =>
+  (chainId: number): string =>
+    getCsmContractAddress(chainId as CHAINS, contract);
 
 const CSModule = contractHooksFactory(
   CSModule__factory,

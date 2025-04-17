@@ -1,11 +1,10 @@
-import { getCsmConstants } from 'consts/csm-constants';
 import {
   NodeOperatorAddedEvent,
   NodeOperatorManagerAddressChangedEvent,
   NodeOperatorRewardAddressChangedEvent,
 } from 'generated/CSModule';
 import { useCallback } from 'react';
-import { useCSModuleRPC } from 'shared/hooks';
+import { useCsmConstants, useCSModuleRPC } from 'shared/hooks';
 import { NodeOperator } from 'types';
 import {
   compareLowercase,
@@ -53,11 +52,9 @@ const restoreEvents = (events: NodeOperatorRoleEvent[], address?: Address) => {
     }, [] as NodeOperator[]);
 };
 
-export const useNodeOperatorsFetcherFromEvents = (
-  address?: Address,
-  chainId?: number,
-) => {
+export const useNodeOperatorsFetcherFromEvents = (address?: Address) => {
   const contract = useCSModuleRPC();
+  const { deploymentBlockNumber: blockNumber } = useCsmConstants();
 
   return useCallback(async () => {
     const filters = [
@@ -69,7 +66,6 @@ export const useNodeOperatorsFetcherFromEvents = (
       contract.filters.NodeOperatorRewardAddressChanged(null, null, address),
     ];
 
-    const blockNumber = getCsmConstants(chainId).deploymentBlockNumber;
     const filterResults = await Promise.allSettled(
       filters.map((filter) => contract.queryFilter(filter, blockNumber)),
     );
@@ -77,5 +73,5 @@ export const useNodeOperatorsFetcherFromEvents = (
     const events = filterResults.flatMap(getSettledValue).filter(Boolean);
 
     return restoreEvents(events as any as NodeOperatorRoleEvent[], address);
-  }, [address, chainId, contract]);
+  }, [address, blockNumber, contract]);
 };

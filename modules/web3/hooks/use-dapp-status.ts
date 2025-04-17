@@ -1,4 +1,5 @@
 import { useUserConfig } from 'config/user-config';
+import { CHAINS } from 'consts';
 import { useAccount } from 'wagmi';
 
 export const useDappStatus = () => {
@@ -10,10 +11,11 @@ export const useDappStatus = () => {
 
   const { supportedChainIds, defaultChain: defaultChainId } = useUserConfig();
 
-  const chainId =
+  const chainId = (
     walletChainId && supportedChainIds.includes(walletChainId)
       ? walletChainId
-      : defaultChainId;
+      : defaultChainId
+  ) as CHAINS;
 
   const isSupportedChain = walletChainId
     ? supportedChainIds.includes(walletChainId)

@@ -1,6 +1,4 @@
-import { Abi } from 'viem';
-
-export const CSAccountingAbi: Abi = [
+export const CSAccountingAbi = [
   {
     type: 'constructor',
     inputs: [
@@ -2292,4 +2290,4 @@ export const CSAccountingAbi: Abi = [
     name: 'ZeroPauseDuration',
     inputs: [],
   },
-];
+] as const;

@@ -2,7 +2,6 @@ import { utils } from 'ethers';
 import { memoize } from 'lodash';
 
 import {
-  CHAINS,
   TOKENS,
   getAggregatorAddress,
   getTokenAddress,
@@ -27,9 +26,10 @@ import {
   StakingRouter__factory,
 } from 'generated';
 import { HexString } from 'shared/keys';
+import { CHAINS } from 'consts';
 
 const getAddressGetter = <
-  C extends number,
+  C extends CHAINS,
   N extends string,
   G extends (chainId: C, name: N) => string,
 >(
