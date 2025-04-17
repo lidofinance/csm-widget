@@ -32,6 +32,7 @@ export const Welcome: FC = () => {
           <ConnectStyle
             fullwidth
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator}
+            data-testid="iAmANodeOperatorBtn"
           >
             I am a Node Operator
           </ConnectStyle>
@@ -39,6 +40,7 @@ export const Welcome: FC = () => {
             fullwidth
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.connectToBecomeNodeOperator}
             color="secondary"
+            data-testid="becomeANodeOperatorBtn"
           >
             Become a Node Operator
           </ConnectStyle>
