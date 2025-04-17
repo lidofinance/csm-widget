@@ -13,6 +13,7 @@ type Props = {
   showIcon?: boolean;
   big?: boolean;
   link?: ReactNode;
+  monospace?: boolean;
 } & Pick<ComponentProps<typeof Text>, 'weight' | 'size' | 'color'> &
   Partial<AddressProps>;
 
@@ -25,6 +26,7 @@ export const Address: FC<Props> = ({
   size = 'xs',
   color,
   link,
+  monospace = false,
 }) => {
   const component = (
     <Text
@@ -43,7 +45,7 @@ export const Address: FC<Props> = ({
   return (
     <>
       {address && (
-        <AddressContainerStyle $big={big}>
+        <AddressContainerStyle $big={big} $monospace={monospace}>
           {showIcon && <Identicon address={address} diameter={big ? 24 : 20} />}
           {symbols === 0 ? (
             component
