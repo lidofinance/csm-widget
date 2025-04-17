@@ -111,7 +111,7 @@ export const Nav = styled.nav`
 export const NavLink = styled.span<{ $active?: boolean }>`
   cursor: pointer;
   color: var(--lido-color-secondary);
-  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: 1.75em;
   font-weight: 700;
   display: flex;
