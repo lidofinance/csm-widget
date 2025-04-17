@@ -84,7 +84,8 @@ export const KeysTable: FC<Props> = ({ keys }) => {
               <Address
                 address={key}
                 symbols={8}
-                size="xxs"
+                size="xs"
+                monospace
                 link={
                   <>
                     <CopyLink text={key} />

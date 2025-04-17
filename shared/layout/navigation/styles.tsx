@@ -111,17 +111,17 @@ export const Nav = styled.nav`
 export const NavLink = styled.span<{ $active?: boolean }>`
   cursor: pointer;
   color: var(--lido-color-secondary);
-  font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
-  line-height: 1.7em;
-  font-weight: 800;
+  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+  line-height: 1.75em;
+  font-weight: 700;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   text-transform: uppercase;
   text-decoration: none !important;
-  letter-spacing: 0.04em;
-  opacity: ${(props) => (props.$active ? 1 : 0.7)};
+  letter-spacing: 0.3px;
+  opacity: ${(props) => (props.$active ? 1 : 0.5)};
 
   gap: 10px;
   ${NAV_MOBILE_MEDIA} {
