@@ -12,6 +12,7 @@ import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 
 import { config } from 'config';
 import { contentSecurityPolicy } from 'config/csp';
+import { FiraCodeFont } from 'styles';
 
 let host = 'https://csm.lido.fi';
 
@@ -127,6 +128,7 @@ export default class MyDocument extends Document {
           <meta name="description" content={this.metaDescription} />
           <meta name="currentChain" content={String(config.defaultChain)} />
           <Fonts />
+          <FiraCodeFont />
           <LidoUIHead />
           {/* eslint-disable-next-line @next/next/no-sync-scripts */}
           <script src={`${config.BASE_PATH_ASSET}/runtime/window-env.js`} />
