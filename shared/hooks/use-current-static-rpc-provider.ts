@@ -1,23 +1,21 @@
 import { useMemo } from 'react';
-import { useSDK } from '@lido-sdk/react';
-import { CHAINS } from '@lido-sdk/constants';
+import { Config, useClient } from 'wagmi';
 
-import { useRpcUrl } from 'config/rpc';
+import invariant from 'tiny-invariant';
 import { getStaticRpcBatchProvider } from 'utils/getStaticRpcBatchProvider';
 
-export const useCurrentStaticRpcProvider = (): {
-  staticRpcProvider: ReturnType<typeof getStaticRpcBatchProvider>;
-  chainId: CHAINS;
-} => {
-  const { chainId } = useSDK();
-  const rpcUrl = useRpcUrl();
+export const useCurrentStaticRpcProvider = () => {
+  const client = useClient<Config>();
+  return useMemo(() => {
+    invariant(client, 'client not defined');
 
-  const staticRpcProvider = useMemo(() => {
-    return getStaticRpcBatchProvider(chainId, rpcUrl);
-  }, [chainId, rpcUrl]);
+    const { chain, transport } = client;
 
-  return {
-    staticRpcProvider,
-    chainId,
-  };
+    if (transport.type === 'fallback')
+      return getStaticRpcBatchProvider(
+        chain.id,
+        transport.transports[0].value.url,
+      );
+    return getStaticRpcBatchProvider(chain.id, transport.url);
+  }, [client]);
 };

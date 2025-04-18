@@ -57,7 +57,7 @@ const getTexts = (props: Props) => {
               <>
                 Address stays{' '}
                 <Text size="xxs">
-                  <Address address={props.address} showIcon />
+                  <Address address={props.currentAddress} showIcon />
                 </Text>
               </>
             ),
@@ -68,7 +68,7 @@ const getTexts = (props: Props) => {
               <>
                 Address stays{' '}
                 <Text size="xxs">
-                  <Address address={props.address} showIcon />
+                  <Address address={props.currentAddress} showIcon />
                 </Text>
               </>
             ),

@@ -38,7 +38,7 @@ const createProviderGetter = <P extends typeof JsonRpcProvider>(
 
 const logger = new Logger('StaticJsonRpcBatchProvider/1.0');
 
-class StaticJsonRpcBatchProvider extends JsonRpcProvider {
+export class StaticJsonRpcBatchProvider extends JsonRpcProvider {
   async detectNetwork(): Promise<Network> {
     let network = this.network;
 
