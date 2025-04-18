@@ -19,7 +19,7 @@ const BLOCKS_PER_MIN = 5; // every 12 sec
 const useMinsAgoBlockNumber = (min: number) => {
   const [result, setResult] = useState<number>();
 
-  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+  const staticRpcProvider = useCurrentStaticRpcProvider();
 
   useEffect(() => {
     let active = true;

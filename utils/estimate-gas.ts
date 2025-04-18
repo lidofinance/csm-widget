@@ -1,6 +1,6 @@
-import { StaticJsonRpcBatchProvider } from '@lidofinance/eth-providers';
 import { PopulatedTransaction } from 'ethers';
 import { trackMatomoError } from './track-matomo-event';
+import { StaticJsonRpcBatchProvider } from './getStaticRpcBatchProvider';
 
 export class EstimateGasError extends Error {
   reason?: string;

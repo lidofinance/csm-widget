@@ -19,7 +19,7 @@ type SendTxProps = {
 export const useSendTx = () => {
   const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
   const { providerWeb3 } = useSDK();
-  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+  const staticRpcProvider = useCurrentStaticRpcProvider();
 
   const performTx = useCallback(
     async (tx: PopulatedTransaction, txName: string) => {
