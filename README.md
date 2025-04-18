@@ -60,6 +60,32 @@ git commit -m "feat: dark theme"
 yarn build && yarn start
 ```
 
+## Running Tests
+
+Before running the test suite, create a file named `.env.local` in the project root and populate it with the following variables:
+
+```dotenv
+# Choose one: testnet, prod, staging, preview
+STAND_TYPE=testnet
+
+# Wallet environment
+WALLET_SECRET_PHRASE=
+WALLET_PASSWORD=
+
+# RPC token
+RPC_URL_TOKEN=
+```
+
+Replace each value as needed for your environment.
+
+To execute the tests, simply run:
+
+```sh
+yarn test
+```
+
+This will load your .env.local file and run all configured test scripts.
+
 ## Release flow
 
 To create a new release:
