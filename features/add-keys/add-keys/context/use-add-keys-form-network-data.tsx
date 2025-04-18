@@ -124,7 +124,7 @@ export const useAddKeysFormNetworkData = (): [
 
   return [
     {
-      blockNumber,
+      blockNumber: blockNumber ? Number(blockNumber) : undefined,
       nodeOperatorId,
       keysUploadLimit,
       keysAvailable,
