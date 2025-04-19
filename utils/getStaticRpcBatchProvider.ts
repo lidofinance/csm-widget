@@ -1,5 +1,5 @@
 import { JsonRpcProvider, Network } from '@ethersproject/providers';
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts';
 import {
   deepCopy,
   defineReadOnly,

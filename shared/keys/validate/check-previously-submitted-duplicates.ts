@@ -1,4 +1,4 @@
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts';
 import { trimAddress } from '@lidofinance/address';
 import { DepositData } from 'types';
 import { checkKeys } from '../cachedKeys';
