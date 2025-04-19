@@ -1,4 +1,5 @@
 import { useLidoSWR } from '@lido-sdk/react';
+import { getBlockNumber } from '@wagmi/core';
 import { getCsmConstants } from 'consts/csm-constants';
 import { STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
 import { BigNumber } from 'ethers';
@@ -8,29 +9,28 @@ import {
   useAccount,
   useCSAccountingRPC,
   useCSModuleRPC,
-  useCurrentStaticRpcProvider,
   useMergeSwr,
 } from 'shared/hooks';
 import { NodeOperatorId } from 'types';
 import { getSettledValue } from 'utils';
+import { useConfig } from 'wagmi';
 
 const BLOCKS_PER_MIN = 5; // every 12 sec
 
 const useMinsAgoBlockNumber = (min: number) => {
   const [result, setResult] = useState<number>();
-
-  const staticRpcProvider = useCurrentStaticRpcProvider();
+  const config = useConfig();
 
   useEffect(() => {
     let active = true;
 
     const load = async () => {
       setResult(undefined);
-      const currentBlockNumber = await staticRpcProvider.getBlockNumber();
+      const currentBlockNumber = await getBlockNumber(config);
       if (!active) {
         return;
       }
-      const blockNumber = currentBlockNumber - min * BLOCKS_PER_MIN;
+      const blockNumber = Number(currentBlockNumber) - min * BLOCKS_PER_MIN;
       setResult(blockNumber);
     };
     void load();
@@ -38,7 +38,7 @@ const useMinsAgoBlockNumber = (min: number) => {
     return () => {
       active = false;
     };
-  }, [min, staticRpcProvider]);
+  }, [config, min]);
 
   return result;
 };

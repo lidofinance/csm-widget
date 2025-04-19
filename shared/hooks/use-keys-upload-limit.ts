@@ -1,4 +1,4 @@
-import { KEYS_UPLOAD_TX_LIMIT } from 'consts/csm-constants';
+import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import {
   useCsmEarlyAdoptionKeysLimit,

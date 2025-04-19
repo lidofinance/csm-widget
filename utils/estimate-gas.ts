@@ -1,6 +1,6 @@
+import { BaseProvider } from '@ethersproject/providers';
 import { PopulatedTransaction } from 'ethers';
 import { trackMatomoError } from './track-matomo-event';
-import { StaticJsonRpcBatchProvider } from './getStaticRpcBatchProvider';
 
 export class EstimateGasError extends Error {
   reason?: string;
@@ -12,7 +12,7 @@ export class EstimateGasError extends Error {
 
 export const estimateGas = async (
   tx: PopulatedTransaction,
-  provider: StaticJsonRpcBatchProvider,
+  provider: BaseProvider,
 ) => {
   try {
     return await provider.estimateGas(tx);

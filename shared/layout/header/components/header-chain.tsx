@@ -1,5 +1,4 @@
 import { CHAINS, getChainColor } from '@lido-sdk/constants';
-import { useSDK } from '@lido-sdk/react';
 import { FC } from 'react';
 import { NoSSRWrapper } from 'shared/components';
 
@@ -11,8 +10,7 @@ import {
 } from '../styles';
 
 const HeaderChain: FC = () => {
-  const { active } = useAccount();
-  const { chainId } = useSDK();
+  const { active, chainId } = useAccount();
 
   const chainName = CHAINS[chainId];
   const testNet = chainId !== CHAINS.Mainnet;

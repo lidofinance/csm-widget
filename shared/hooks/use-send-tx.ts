@@ -5,9 +5,9 @@ import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 import { applyGasLimitRatio, getFeeData, trackMatomoTxEvent } from 'utils';
 import { estimateGas } from 'utils/estimate-gas';
-import { useCurrentStaticRpcProvider } from './use-current-static-rpc-provider';
 import { useIsMultisig } from './useIsMultisig';
 import { MULTISIG_BREAK } from 'shared/transaction-modal';
+import { useConfig } from 'wagmi';
 
 type SendTxProps = {
   tx: PopulatedTransaction;
@@ -18,8 +18,8 @@ type SendTxProps = {
 
 export const useSendTx = () => {
   const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
-  const { providerWeb3 } = useSDK();
-  const staticRpcProvider = useCurrentStaticRpcProvider();
+  const config = useConfig();
+  const { providerWeb3, providerRpc } = useSDK();
 
   const performTx = useCallback(
     async (tx: PopulatedTransaction, txName: string) => {
@@ -53,13 +53,12 @@ export const useSendTx = () => {
         throw MULTISIG_BREAK;
       }
 
-      const { maxFeePerGas, maxPriorityFeePerGas } =
-        await getFeeData(staticRpcProvider);
+      const { maxFeePerGas, maxPriorityFeePerGas } = await getFeeData(config);
 
       tx.maxFeePerGas = maxFeePerGas;
       tx.maxPriorityFeePerGas = maxPriorityFeePerGas;
 
-      const gasLimit = await estimateGas(tx, staticRpcProvider);
+      const gasLimit = await estimateGas(tx, providerRpc);
 
       tx.gasLimit = shouldApplyGasLimitRatio
         ? applyGasLimitRatio(gasLimit)
@@ -67,12 +66,9 @@ export const useSendTx = () => {
 
       const txHash = await performTx(tx, txName);
 
-      return [
-        txHash,
-        () => staticRpcProvider.waitForTransaction(txHash),
-      ] as const;
+      return [txHash, () => providerRpc.waitForTransaction(txHash)] as const;
     },
-    [isMultisigLoading, isMultisig, staticRpcProvider, performTx],
+    [isMultisigLoading, isMultisig, config, providerRpc, performTx],
   );
 };
 

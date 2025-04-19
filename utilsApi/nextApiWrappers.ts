@@ -1,17 +1,17 @@
-import type { Histogram, Counter } from 'prom-client';
-import { utils } from 'ethers';
 import { getStatusLabel } from '@lidofinance/api-metrics';
 import {
+  cacheControl,
+  DEFAULT_API_ERROR_MESSAGE,
+  DefaultErrorHandlerArgs,
   RequestWrapper,
   wrapRequest as wrapNextRequest,
-  cacheControl,
-  DefaultErrorHandlerArgs,
-  DEFAULT_API_ERROR_MESSAGE,
 } from '@lidofinance/next-api-wrapper';
 import { rateLimitWrapper } from '@lidofinance/next-ip-rate-limit';
-import { CHAINS } from '@lido-sdk/constants';
+import type { Counter, Histogram } from 'prom-client';
+import { getAddress } from 'viem';
 
 import { config, secretConfig } from 'config';
+import { CHAINS } from 'consts';
 
 import {
   getMetricContractInterface,
@@ -135,7 +135,7 @@ const collectRequestAddressMetric = async ({
       call.params[0].to
     ) {
       const { to, data } = call.params[0];
-      const address = utils.getAddress(to);
+      const address = getAddress(to);
       const contractName = METRIC_CONTRACT_ADDRESSES[chainId]?.[address];
       const methodEncoded = data?.slice(0, 10); // `0x` and 8 next symbols
       const methodDecoded = contractName

@@ -10,7 +10,6 @@ export * from './use-confirm-modal';
 export * from './use-csm-constants';
 export * from './use-csm-node-operators';
 export * from './use-csm-version-supported';
-export * from './use-current-static-rpc-provider';
 export * from './use-default-values';
 export * from './use-ens-name';
 export * from './use-eth-price-fallback';
