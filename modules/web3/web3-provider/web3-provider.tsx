@@ -19,6 +19,7 @@ import { walletMetricProps } from 'consts/matomo-wallets-events';
 import { useWeb3Transport } from './use-web3-transport';
 import { SDKLegacyProvider } from './sdk-legacy';
 import { LidoSDKProvider } from './lido-sdk';
+import { CHAINS } from 'consts';
 
 type ChainsList = [wagmiChains.Chain, ...wagmiChains.Chain[]];
 
@@ -59,7 +60,7 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
   const backendRPC: Record<number, string> = useMemo(
     () =>
       supportedChainIds.reduce(
-        (res, curr) => ({ ...res, [curr]: getRpcUrlByChainId(curr) }),
+        (res, curr) => ({ ...res, [curr]: getRpcUrlByChainId(curr as CHAINS) }),
         {},
       ),
     [supportedChainIds, getRpcUrlByChainId],

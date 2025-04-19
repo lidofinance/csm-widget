@@ -1,4 +1,3 @@
-import { isAddress } from 'ethers/lib/utils.js';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
@@ -12,6 +11,7 @@ import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
+import { isAddress } from 'viem';
 
 export const useSubmitKeysValidation = (
   networkData: SubmitKeysFormNetworkData,

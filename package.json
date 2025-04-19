@@ -47,6 +47,7 @@
     "@lidofinance/satanizer": "^0.47.0",
     "@openzeppelin/merkle-tree": "^1.0.7",
     "@tanstack/react-query": "^5.66.0",
+    "@wagmi/core": "^2.16.7",
     "bignumber.js": "9.1.2",
     "copy-to-clipboard": "^3.3.1",
     "cors": "^2.8.5",

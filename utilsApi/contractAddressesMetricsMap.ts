@@ -27,6 +27,7 @@ import {
 } from 'generated';
 import { HexString } from 'shared/keys';
 import { CHAINS } from 'consts';
+import { getAddress } from 'viem';
 
 const getAddressGetter = <
   C extends CHAINS,
@@ -40,7 +41,7 @@ const getAddressGetter = <
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const address = getter(chainId, name!);
-      return address ? utils.getAddress(address) : null;
+      return address ? getAddress(address) : null;
     } catch (error) {
       return null;
     }

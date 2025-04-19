@@ -10,7 +10,7 @@ import type {
   ChangeRoleFormInputType,
   ChangeRoleFormNetworkData,
 } from './types';
-import { isAddress } from 'ethers/lib/utils.js';
+import { isAddress } from 'viem';
 
 export const useChangeRoleValidation = (
   networkData: ChangeRoleFormNetworkData,
