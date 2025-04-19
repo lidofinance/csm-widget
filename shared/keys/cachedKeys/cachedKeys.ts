@@ -1,4 +1,4 @@
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts';
 import { getFromLocalStorage, saveToLocalStorage } from '../localStorage';
 
 const KEY_TTL_IN_BLOCKS = 93_000; // ~ 2 weeks: 60 * 60 * 24 * 7 * 2 / 13

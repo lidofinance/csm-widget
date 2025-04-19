@@ -1,4 +1,4 @@
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts';
 
 export const TRIM_LENGTH = 6;
 

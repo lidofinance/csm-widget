@@ -1,12 +1,10 @@
 import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { getChainName } from 'utils';
+import { useChainName } from './use-chain-name';
 import { useCsmConstants, useExternalLinks } from './use-csm-constants';
 import { useKeysWithStatus } from './use-keys-with-status';
 import { sortByActiveStatus, useSortedKeys } from './use-sorted-keys';
 
 const DASHBOARD_KEYS_LIMIT = 20;
-
-const network = getChainName();
 
 export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   const { data: keys } = useKeysWithStatus();
@@ -43,13 +41,15 @@ export const useOperatorPortalLink = () => {
 export const useRatedLink = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { ratedExplorer } = useExternalLinks();
+  const chaiName = useChainName();
   if (!ratedExplorer) return null;
-  return `${ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${network}`;
+  return `${ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${chaiName}`;
 };
 
 export const useEthSeerLink = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { ethseerDashboard } = useExternalLinks();
+  const chaiName = useChainName();
   if (!ethseerDashboard) return null;
-  return `${ethseerDashboard}/csm_operator${nodeOperatorId}_lido?network=${network}`;
+  return `${ethseerDashboard}/csm_operator${nodeOperatorId}_lido?network=${chaiName}`;
 };

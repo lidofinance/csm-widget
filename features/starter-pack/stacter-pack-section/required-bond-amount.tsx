@@ -1,10 +1,14 @@
-import { CHAINS } from '@lido-sdk/constants';
 import { Box, InlineLoader } from '@lidofinance/lido-ui';
 import { getConfig } from 'config';
+import { CHAINS } from 'consts';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
-import { useCsmCurveId, useCsmEarlyAdoption, useCurveInfo } from 'shared/hooks';
-import { getChainName } from 'utils';
+import {
+  useChainName,
+  useCsmCurveId,
+  useCsmEarlyAdoption,
+  useCurveInfo,
+} from 'shared/hooks';
 
 const { defaultChain } = getConfig();
 
@@ -17,7 +21,7 @@ export const RequiredBondAmount: FC = () => {
     useCurveInfo(curveId);
   const amount = curveInfo?.points[0];
 
-  const chainName = getChainName();
+  const chainName = useChainName(true);
   const isTestnet = defaultChain !== CHAINS.Mainnet;
   const symbol = [isTestnet ? chainName : null, 'ETH']
     .filter(Boolean)

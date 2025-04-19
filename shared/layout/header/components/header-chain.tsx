@@ -1,8 +1,8 @@
-import { CHAINS, getChainColor } from '@lido-sdk/constants';
+import { CHAINS } from 'consts';
+import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
 import { NoSSRWrapper } from 'shared/components';
-
-import { useAccount } from 'shared/hooks';
+import { useChainColor, useChainName } from 'shared/hooks';
 import {
   DotStyle,
   HeaderWalletChainStyle,
@@ -10,18 +10,18 @@ import {
 } from '../styles';
 
 const HeaderChain: FC = () => {
-  const { active, chainId } = useAccount();
+  const { isAccountActive, chainId } = useDappStatus();
+  const chainColor = useChainColor();
+  const chainName = useChainName(true);
 
-  const chainName = CHAINS[chainId];
-  const testNet = chainId !== CHAINS.Mainnet;
-  const showNet = testNet && active;
+  const showNet = chainId !== CHAINS.Mainnet && isAccountActive;
 
   return (
     <NoSSRWrapper>
       {showNet && (
         <HeaderWalletChainWrapper>
           <DotStyle />
-          <HeaderWalletChainStyle $color={getChainColor(chainId)}>
+          <HeaderWalletChainStyle $color={chainColor}>
             {chainName}
           </HeaderWalletChainStyle>
         </HeaderWalletChainWrapper>

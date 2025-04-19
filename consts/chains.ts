@@ -5,5 +5,11 @@ export const CHAINS = {
   Hoodi: 560048,
 } as const;
 
-type CHAINS_NAME = keyof typeof CHAINS;
-export type CHAINS = (typeof CHAINS)[CHAINS_NAME];
+export type ChainNames = keyof typeof CHAINS;
+export type CHAINS = (typeof CHAINS)[ChainNames];
+
+export const CHAIN_NAMES: Record<CHAINS, Capitalize<ChainNames>> = {
+  [CHAINS.Mainnet]: 'Mainnet',
+  [CHAINS.Holesky]: 'Holesky',
+  [CHAINS.Hoodi]: 'Hoodi',
+};
