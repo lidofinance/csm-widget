@@ -1,20 +1,20 @@
 import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 
-import { useEthPriceFallback } from './use-eth-price-fallback';
-import { weiToEth } from 'utils/weiToEth';
+import { useEthPrice } from '@lido-sdk/react';
 import { getConfig } from 'config';
 import { CHAINS } from 'consts/chains';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { useEthPrice } from '@lido-sdk/react';
+import { STRATEGY_CONSTANT, STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
+import { weiToEth } from 'utils/weiToEth';
+import { useEthPriceFallback } from './use-eth-price-fallback';
 
 const { defaultChain } = getConfig();
 const isMainnet = defaultChain === CHAINS.Mainnet;
 
-// TODO: remove fallback after deploy csm.lido.fi
+// TODO: use eth-api.lido.fi
 export const useEthUsd = (amount?: BigNumber) => {
-  const mainnetPriceSwr = useEthPrice(STRATEGY_LAZY);
-  const testnetPriceSwr = useEthPriceFallback();
+  const mainnetPriceSwr = useEthPrice(STRATEGY_CONSTANT);
+  const testnetPriceSwr = useEthPriceFallback(STRATEGY_IMMUTABLE);
 
   const { data: price, ...swr } = isMainnet ? mainnetPriceSwr : testnetPriceSwr;
 
