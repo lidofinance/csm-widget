@@ -118,7 +118,6 @@ export const NavLink = styled.span<{ $active?: boolean }>`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  text-transform: uppercase;
   text-decoration: none !important;
   letter-spacing: 0.3px;
   opacity: ${(props) => (props.$active ? 1 : 0.5)};
