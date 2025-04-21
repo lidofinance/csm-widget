@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 
-export const DescriptorIdWrapperStyle = styled.span`
-  span {
-    font-weight: bold;
-  }
+export const DescriptorIdWrapperStyle = styled.span``;
+
+export const DescriptorNumber = styled.span`
+  font-weight: bold;
 `;
+
+export const DescriptorText = styled.span``;
 
 export const DescriptorStyle = styled.span`
   display: flex;

@@ -18,7 +18,7 @@ export const Info: FC = () => {
             token={TOKENS.ETH}
           />
           {lockedBond?.gt(0) && (
-            <p>
+            <div>
               <MatomoLink href="https://docs.lido.fi/staking-modules/csm/guides/mev-stealing">
                 EL reward stealing
               </MatomoLink>{' '}
@@ -46,7 +46,7 @@ export const Info: FC = () => {
                   to avoid the further penalties.
                 </li>
               </ul>
-            </p>
+            </div>
           )}
         </Stack>
       </Latice>

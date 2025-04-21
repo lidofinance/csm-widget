@@ -57,6 +57,7 @@ export const SurveyAuthProvider: FC<PropsWithChildren> = ({ children }) => {
       });
       if (!response.ok) {
         modalStages.failed(await extractError(response));
+        return;
       }
       const data: { access_token: string; token_type: string } =
         await response.json();

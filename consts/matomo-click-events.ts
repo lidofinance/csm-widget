@@ -46,6 +46,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanTxLink = 'etherscanTxLink',
   etherscanAddressLink = 'etherscanAddressLink',
   beaconchainPubkeyLink = 'beaconchainPubkeyLink',
+  ethseerPubkeyLink = 'ethseerPubkeyLink',
   feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
@@ -78,6 +79,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageAddKeys = 'pageAddKeys',
   pageViewKeys = 'pageViewKeys',
   pageRemoveKeys = 'pageRemoveKeys',
+  pageMonitoring = 'pageMonitoring',
   pageAddBond = 'pageAddBond',
   pageClaimBond = 'pageClaimBond',
   pageUnlockBond = 'pageUnlockBond',
@@ -272,6 +274,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «View on beaconcha.in» link on pubkey',
     prefixed`beaconchain_pubkey_link`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.ethseerPubkeyLink]: [
+    MATOMO_APP_NAME,
+    'Click «View on ethseer.io» link on pubkey',
+    prefixed`ethseer_pubkey_link`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: [
     MATOMO_APP_NAME,
     'Click «Submit report with form» link',
@@ -415,6 +422,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «RemoveKeys»',
     prefixed`view_remove_keys_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageMonitoring]: [
+    MATOMO_APP_NAME,
+    'View page «Monitoring»',
+    prefixed`view_monitoring_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageAddBond]: [
     MATOMO_APP_NAME,

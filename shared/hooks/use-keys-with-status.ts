@@ -16,6 +16,7 @@ import { useNodeOperatorUnbondedKeys } from './useNodeOperatorUnbondedKeys';
 export type KeyWithStatus = {
   key: HexString;
   index: number;
+  validatorIndex?: string;
   statuses: KEY_STATUS[];
 };
 
@@ -52,6 +53,14 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
   const { data: exitRequestedKeys } = swrExitRequested;
   const { data: duplicates } = swrDuplicates;
   const { data: clStatus } = swrClStatus;
+
+  const getValidatorIndex = useCallback(
+    (pubkey: HexString): string | undefined => {
+      const prefilled = clStatus?.find((st) => st.pubkey === pubkey);
+      return prefilled?.validatorIndex;
+    },
+    [clStatus],
+  );
 
   const getKeyStatus = useCallback(
     (pubkey: HexString, nodeOperatorKeyIndex: number): KEY_STATUS[] => {
@@ -143,10 +152,11 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
             return {
               key,
               index,
+              validatorIndex: getValidatorIndex(key),
               statuses: getKeyStatus(key, index),
             };
           }),
-    [getKeyStatus, keys, swrClStatus.initialLoading],
+    [getKeyStatus, getValidatorIndex, keys, swrClStatus.initialLoading],
   );
 
   return useMergeSwr(

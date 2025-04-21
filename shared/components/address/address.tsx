@@ -1,38 +1,66 @@
-import { AddressProps, Identicon, Tooltip } from '@lidofinance/lido-ui';
-import { FC, ReactNode } from 'react';
+import {
+  AddressProps,
+  Address as AddressComponent,
+  Identicon,
+  Text,
+  Tooltip,
+} from '@lidofinance/lido-ui';
+import { ComponentProps, FC, ReactNode } from 'react';
 import { EtherscanAddressLink } from '../external-icon-link';
-import { AddressStyle, AddressContainerStyle } from './styles';
+import { AddressContainerStyle } from './styles';
 
 type Props = {
   showIcon?: boolean;
-  bold?: boolean;
+  big?: boolean;
   link?: ReactNode;
-} & Partial<AddressProps>;
+  monospace?: boolean;
+} & Pick<ComponentProps<typeof Text>, 'weight' | 'size' | 'color'> &
+  Partial<AddressProps>;
 
 export const Address: FC<Props> = ({
   address = '',
   symbols = 6,
   showIcon = false,
-  bold = false,
+  big = false,
+  weight,
+  size = 'xs',
+  color,
   link,
-}) => (
-  <>
-    {address && (
-      <AddressContainerStyle $bold={bold}>
-        {showIcon && <Identicon address={address} diameter={bold ? 24 : 20} />}
-        {symbols === 0 ? (
-          <AddressStyle address={address} symbols={90} $bold={bold} />
-        ) : (
-          <Tooltip
-            placement="top"
-            title={address}
-            style={{ wordWrap: 'break-word', maxWidth: '300px' }}
-          >
-            <AddressStyle address={address} symbols={symbols} $bold={bold} />
-          </Tooltip>
-        )}
-        {link ?? <EtherscanAddressLink address={address} />}
-      </AddressContainerStyle>
-    )}
-  </>
-);
+  monospace = false,
+}) => {
+  const component = (
+    <Text
+      as="span"
+      weight={weight || big ? 700 : 400}
+      size={size}
+      color={color}
+    >
+      <AddressComponent
+        address={address}
+        symbols={!symbols ? 90 : symbols}
+        as="span"
+      />
+    </Text>
+  );
+  return (
+    <>
+      {address && (
+        <AddressContainerStyle $big={big} $monospace={monospace}>
+          {showIcon && <Identicon address={address} diameter={big ? 24 : 20} />}
+          {symbols === 0 ? (
+            component
+          ) : (
+            <Tooltip
+              placement="top"
+              title={address}
+              style={{ wordWrap: 'break-word', maxWidth: '300px' }}
+            >
+              {component}
+            </Tooltip>
+          )}
+          {link ?? <EtherscanAddressLink $secondary={!big} address={address} />}
+        </AddressContainerStyle>
+      )}
+    </>
+  );
+};
