@@ -78,6 +78,12 @@ RPC_URL_TOKEN=
 
 Replace each value as needed for your environment.
 
+Install browser:
+
+```sh
+yarn playwright install chromium --with-deps
+```
+
 To execute the tests, simply run:
 
 ```sh

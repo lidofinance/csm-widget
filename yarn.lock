@@ -3291,15 +3291,6 @@
     iterare "1.2.1"
     tslib "2.8.1"
 
-"@nestjs/common@^11.0.12":
-  version "11.0.13"
-  resolved "https://registry.yarnpkg.com/@nestjs/common/-/common-11.0.13.tgz#532cd172d5b5fa4e7da471c83e6945e0a1ebd80b"
-  integrity sha512-cXqXJPQTcJIYqT8GtBYqjYY9sklCBqp/rh9z1R40E60gWnsU598YIQWkojSFRI9G7lT/+uF+jqSrg/CMPBk7QQ==
-  dependencies:
-    uid "2.0.2"
-    iterare "1.2.1"
-    tslib "2.8.1"
-
 "@next/bundle-analyzer@^13.2.4":
   version "13.5.6"
   resolved "https://registry.yarnpkg.com/@next/bundle-analyzer/-/bundle-analyzer-13.5.6.tgz#3c73f2e15ff5507317b37b87ce984bac5a5d7ad0"
