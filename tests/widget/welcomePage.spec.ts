@@ -1,7 +1,7 @@
 import { WelcomePage } from 'tests/pages/welcome.page';
 import { test } from './test.fixture';
 
-test.describe.skip('Welcome page without connected wallet', async () => {
+test.describe('Welcome page without connected wallet', async () => {
   test('Should open connect modal after click to "I am a Node Operator"', async ({
     page,
   }) => {

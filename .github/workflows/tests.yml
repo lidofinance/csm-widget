@@ -35,10 +35,6 @@ on:
           - testnet
           - infra
 
-  pull_request:
-    paths:
-      - 'tests/widget/**'
-
 jobs:
   test:
     runs-on: ubuntu-22.04
