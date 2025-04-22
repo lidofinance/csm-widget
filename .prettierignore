@@ -13,3 +13,5 @@
 /build
 
 CHANGELOG.md
+
+/.browser_context**
