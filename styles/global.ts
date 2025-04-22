@@ -57,11 +57,11 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ${NAV_MOBILE_MEDIA} {
-    body:has(nav[aria-expanded=true]){
-      overflow: hidden;
-    }
     body {
      overflow-x: inherit;
+    }
+    body:has(nav[aria-expanded=true]){
+      overflow: hidden;
     }
   }
 `;
