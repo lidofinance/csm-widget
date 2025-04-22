@@ -2,6 +2,8 @@ name: Test CSM-widget
 run-name: CSM-widget. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
+  schedule:
+    - cron: '0 6 * * *' # Every day at 6 AM UTC
   workflow_dispatch:
     inputs:
       stand_type:
@@ -35,10 +37,6 @@ on:
           - testnet
           - infra
 
-  pull_request:
-    paths:
-      - 'tests/widget/**'
-
 jobs:
   test:
     runs-on: ubuntu-22.04
@@ -58,7 +56,7 @@ jobs:
       NODE_OPTIONS: --max-old-space-size=4096
       TEST_TAGS: ${{ github.event.inputs.tags }}
       TEST_BRANCH: ${{ github.event.inputs.branch }}
-      DISCORD_REPORT_ENABLED: true
+      DISCORD_REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
       DISCORD_DUTY_TAG: '1227193074044637286'
 
