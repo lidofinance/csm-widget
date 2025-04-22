@@ -2,6 +2,7 @@ name: Test CSM-widget
 run-name: CSM-widget. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
+  pull_request:
   workflow_dispatch:
     inputs:
       stand_type:
