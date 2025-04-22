@@ -93,7 +93,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
       stakeWidget: 'https://stake-hoodi.testnet.fi',
 
-      feesMonitoring: '',
+      feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
       operatorsWidget: 'https://operators-hoodi.testnet.fi',
       beaconchain: 'https://hoodi.beaconcha.in',
       beaconchainDashboard: 'https://v2-beta-hoodi.beaconcha.in/dashboard',
