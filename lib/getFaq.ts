@@ -9,7 +9,6 @@ export type FaqItem = {
   id: string;
   content: string;
   title: string;
-  earlyAdoptionMember: boolean | null;
   onlyWithReferrer: boolean | null;
   anchor: string | null;
 };
@@ -30,7 +29,6 @@ const readFaqFile = async ([scope, id]: string[]): Promise<FaqItem> => {
     content: processedContent.toString(),
     title: String(matterResult.data.title || id),
     anchor: matterResult.data.anchor ?? null,
-    earlyAdoptionMember: matterResult.data.earlyAdoption ?? null,
     onlyWithReferrer: matterResult.data.onlyWithReferrer ?? null,
   };
 };
@@ -52,7 +50,6 @@ export const getFaqMain = () =>
     'main-5',
     'main-6',
     'main-7',
-    'main-7a',
     'main-8',
   ]);
 
@@ -61,9 +58,7 @@ export const getFaqKeys = () =>
     'keys-1',
     'keys-2',
     'keys-3',
-    'keys-3a',
     'keys-4',
-    'keys-4a',
     'keys-5',
     'keys-6',
     'keys-7',

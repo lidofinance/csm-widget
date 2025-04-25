@@ -2,7 +2,7 @@ import { type TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { KeysAvailable, ShareLimitInfo } from 'shared/hooks';
-import { LoadingRecord, Proof } from 'types';
+import { LoadingRecord } from 'types';
 import { Address } from 'viem';
 
 export type SubmitKeysFormInputType = {
@@ -20,10 +20,8 @@ export type SubmitKeysFormNetworkData = {
   etherBalance?: BigNumber;
   stethBalance?: BigNumber;
   wstethBalance?: BigNumber;
-  eaProof?: Proof;
   curveId?: BigNumber;
   maxStakeEther?: BigNumber | null;
-  keysUploadLimit?: number;
   keysAvailable?: KeysAvailable;
   isPaused?: boolean;
   shareLimit?: ShareLimitInfo;
@@ -32,9 +30,7 @@ export type SubmitKeysFormNetworkData = {
     | 'etherBalance'
     | 'stethBalance'
     | 'wstethBalance'
-    | 'eaProof'
     | 'curveId'
-    | 'keysUploadLimit'
     | 'maxStakeEther'
     | 'status'
     | 'shareLimit'

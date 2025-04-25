@@ -1,5 +1,4 @@
 export * from './CSAccounting';
-export * from './CSEarlyAdoption';
 export * from './CSFeeDistributor';
 export * from './CSFeeOracle';
 export * from './CSModule';

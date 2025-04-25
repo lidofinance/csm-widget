@@ -27,11 +27,3 @@ export const useCsmPaused = (config = STRATEGY_CONSTANT) => {
 
   return useMergeSwr([swrModulePaused, swrAccountingPaused], result);
 };
-
-export const useCsmPublicRelease = (config = STRATEGY_CONSTANT) => {
-  return useContractSWR({
-    contract: useCSModuleRPC(),
-    method: 'publicRelease',
-    config,
-  });
-};

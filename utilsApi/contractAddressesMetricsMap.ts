@@ -17,7 +17,6 @@ import { config } from 'config';
 import { getCsmContractAddress } from 'consts/csm-constants';
 import {
   CSAccounting__factory,
-  CSEarlyAdoption__factory,
   CSFeeDistributor__factory,
   CSFeeOracle__factory,
   CSModule__factory,
@@ -28,6 +27,7 @@ import {
 import { HexString } from 'shared/keys';
 import { CHAINS } from 'consts';
 import { getAddress } from 'viem';
+import { CSM_CONTRACT_ADDRESSES } from '@lidofinance/lido-csm-sdk/common';
 
 const getAddressGetter = <
   C extends CHAINS,
@@ -58,7 +58,6 @@ export const CONTRACT_NAMES = {
   CSFeeDistributor: 'CSFeeDistributor',
   CSFeeOracle: 'CSFeeOracle',
   HashConsensus: 'HashConsensus',
-  CSEarlyAdoption: 'CSEarlyAdoption',
   ExitBusOracle: 'ExitBusOracle',
   StakingRouter: 'StakingRouter',
   Multicall3: 'Multicall3',
@@ -72,7 +71,6 @@ const CONTRACT_LIST_CALL: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.aggregatorStEthUsdPriceFeed,
   CONTRACT_NAMES.CSModule,
   CONTRACT_NAMES.CSAccounting,
-  CONTRACT_NAMES.CSEarlyAdoption,
   CONTRACT_NAMES.CSFeeDistributor,
   CONTRACT_NAMES.CSFeeOracle,
   CONTRACT_NAMES.HashConsensus,
@@ -97,7 +95,6 @@ export const METRIC_CONTRACT_ABIS = {
   [CONTRACT_NAMES.CSFeeDistributor]: CSFeeDistributor__factory.abi,
   [CONTRACT_NAMES.CSFeeOracle]: CSFeeOracle__factory.abi,
   [CONTRACT_NAMES.HashConsensus]: HashConsensus__factory.abi,
-  [CONTRACT_NAMES.CSEarlyAdoption]: CSEarlyAdoption__factory.abi,
   [CONTRACT_NAMES.ExitBusOracle]: ExitBusOracle__factory.abi,
   [CONTRACT_NAMES.StakingRouter]: StakingRouter__factory.abi,
   [CONTRACT_NAMES.Multicall3]: [],
@@ -128,10 +125,6 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
   [CONTRACT_NAMES.HashConsensus]: getAddressGetter(
     getCsmContractAddress,
     'HashConsensus',
-  ),
-  [CONTRACT_NAMES.CSEarlyAdoption]: getAddressGetter(
-    getCsmContractAddress,
-    'CSEarlyAdoption',
   ),
   [CONTRACT_NAMES.ExitBusOracle]: getAddressGetter(
     getCsmContractAddress,
@@ -204,9 +197,12 @@ export const CONTRACT_LOGS_ADDRESSES = (
   const list = CONTRACT_LIST_LOGS.map((name) =>
     METRIC_CONTRACT_ADDRESS_GETTERS[name](chainId),
   ).filter((address) => !!address);
+
+  const csmV2addresses = Object.values(CSM_CONTRACT_ADDRESSES[chainId] || {});
+
   return {
     ...mapped,
-    [chainId]: list,
+    [chainId]: [...list, ...csmV2addresses],
   };
 }, prefilledAddresses);
 
@@ -216,8 +212,11 @@ export const CONTRACT_CALL_ADDRESSES = (
   const list = CONTRACT_LIST_CALL.map((name) =>
     METRIC_CONTRACT_ADDRESS_GETTERS[name](chainId),
   ).filter((address) => !!address);
+
+  const csmV2addresses = Object.values(CSM_CONTRACT_ADDRESSES[chainId] || {});
+
   return {
     ...mapped,
-    [chainId]: [...(mapped?.[chainId] ?? []), ...list],
+    [chainId]: [...(mapped?.[chainId] ?? []), ...list, ...csmV2addresses],
   };
 }, prefilledAddresses);

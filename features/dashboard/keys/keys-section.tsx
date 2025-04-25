@@ -3,11 +3,7 @@ import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC, useCallback } from 'react';
 import { SectionBlock, Stack, StatusComment } from 'shared/components';
-import {
-  useKeysTotalLimit,
-  useKeysWithStatus,
-  useNodeOperatorInfo,
-} from 'shared/hooks';
+import { useKeysWithStatus, useNodeOperatorInfo } from 'shared/hooks';
 import { KEY_STATUS } from 'consts/key-status';
 import { Item, ItemAction } from './item';
 import { AccordionStyle, Row, RowTitle } from './styles';
@@ -26,7 +22,6 @@ const BAD_STATUSES: KEY_STATUS[] = [
 export const KeysSection: FC = () => {
   const id = useNodeOperatorId();
   const { data: info } = useNodeOperatorInfo(id);
-  const { data: eaTarget } = useKeysTotalLimit();
 
   const { data: keys } = useKeysWithStatus();
 
@@ -42,16 +37,13 @@ export const KeysSection: FC = () => {
 
   const hasWarnings = !!keysWithStatus(BAD_STATUSES);
 
-  const limit =
-    info && info.targetLimitMode > 0 ? info.targetLimit : eaTarget || '—';
+  const limit = info && info.targetLimitMode > 0 ? info.targetLimit : '—';
   const limitTooltip =
     info?.targetLimitMode === 1
       ? 'The limit of keys for this Node Operator has been set by the protocol'
       : info?.targetLimitMode === 2
         ? 'The limit of keys for this Node Operator has been set due to the existence of stuck keys'
-        : eaTarget
-          ? 'Early Adoption period implies the limit for the number of keys per a Node Operator to prevent a quick filling of the module by large operators from Day 1'
-          : undefined;
+        : undefined;
 
   return (
     <SectionBlock

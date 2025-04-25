@@ -3,20 +3,12 @@ import { getConfig } from 'config';
 import { CHAINS } from 'consts';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
-import {
-  useChainName,
-  useCsmCurveId,
-  useCsmEarlyAdoption,
-  useCurveInfo,
-} from 'shared/hooks';
+import { useChainName, useCsmCurveId, useCurveInfo } from 'shared/hooks';
 
 const { defaultChain } = getConfig();
 
 export const RequiredBondAmount: FC = () => {
-  const { data: ea } = useCsmEarlyAdoption();
-  const { data: curveId, initialLoading: curveLoading } = useCsmCurveId(
-    !!ea?.proof || true,
-  );
+  const { data: curveId, initialLoading: curveLoading } = useCsmCurveId();
   const { data: curveInfo, initialLoading: curveInfoLoading } =
     useCurveInfo(curveId);
   const amount = curveInfo?.points[0];

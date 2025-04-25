@@ -23,7 +23,6 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
           wstethBalance,
           etherBalance,
           maxStakeEther,
-          keysUploadLimit,
           blockNumber,
         } = await dataPromise;
 
@@ -43,7 +42,6 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
           await validateDepositData({
             depositData,
             chainId,
-            keysUploadLimit,
             blockNumber,
           });
 

@@ -25,7 +25,7 @@ import {
 import { Address } from 'viem';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
-import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
+import { SubmitKeysFormInputType } from './types';
 import { PATH } from 'consts/urls';
 import { useNavigate } from 'shared/navigate';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
@@ -133,19 +133,16 @@ export const useSubmitKeysSubmit = ({
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
 
   return useCallback(
-    async (
-      {
-        referrer,
-        depositData,
-        token,
-        bondAmount,
-        specifyCustomAddresses,
-        rewardsAddress,
-        managerAddress,
-        extendedManagerPermissions,
-      }: SubmitKeysFormInputType,
-      { eaProof }: SubmitKeysFormNetworkData,
-    ): Promise<boolean> => {
+    async ({
+      referrer,
+      depositData,
+      token,
+      bondAmount,
+      specifyCustomAddresses,
+      rewardsAddress,
+      managerAddress,
+      extendedManagerPermissions,
+    }: SubmitKeysFormInputType): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(bondAmount, 'BondAmount is not defined');
@@ -178,7 +175,7 @@ export const useSubmitKeysSubmit = ({
           publicKeys,
           signatures,
           permit,
-          eaProof: eaProof || [],
+          eaProof: [],
           rewardsAddress: addressOrZero(
             specifyCustomAddresses && rewardsAddress,
           ),

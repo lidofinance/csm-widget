@@ -5,11 +5,11 @@ import { ICSBondCurve } from 'generated/CSAccounting';
 import { useExchangeTokensRate, useMergeSwr } from 'shared/hooks';
 import { BondBalance } from 'types';
 import { useCurveInfo } from './useCurveInfo';
+import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
 
 type Props = {
   curveId?: BigNumber;
   bond?: BondBalance;
-  keysUploadLimit?: number;
   nonWithdrawnKeys?: number;
   etherBalance?: BigNumber;
   stethBalance?: BigNumber;
@@ -20,7 +20,6 @@ export type KeysAvailable = Record<TOKENS, ReturnType<typeof calc>>;
 
 export const useKeysAvailable = ({
   curveId,
-  keysUploadLimit,
   nonWithdrawnKeys,
   bond,
   etherBalance,
@@ -36,7 +35,7 @@ export const useKeysAvailable = ({
       etherBalance,
       swrRates.data?.ETH,
       bond?.current,
-      keysUploadLimit,
+      KEYS_UPLOAD_TX_LIMIT,
       nonWithdrawnKeys,
       swrCurve.data,
     ),
@@ -44,7 +43,7 @@ export const useKeysAvailable = ({
       stethBalance,
       swrRates.data?.STETH,
       bond?.current,
-      keysUploadLimit,
+      KEYS_UPLOAD_TX_LIMIT,
       nonWithdrawnKeys,
       swrCurve.data,
     ),
@@ -52,7 +51,7 @@ export const useKeysAvailable = ({
       wstethBalance,
       swrRates.data?.WSTETH,
       bond?.current,
-      keysUploadLimit,
+      KEYS_UPLOAD_TX_LIMIT,
       nonWithdrawnKeys,
       swrCurve.data,
     ),

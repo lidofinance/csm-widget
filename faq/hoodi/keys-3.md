@@ -1,6 +1,5 @@
 ---
 title: How much bond is needed?
-earlyAdoption: false
 anchor: how-bond-is-calculated
 ---
 

@@ -3,12 +3,9 @@ import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useCallback, useMemo } from 'react';
 import {
   useCsmCurveId,
-  useCsmEarlyAdoption,
-  useCsmEarlyAdoptionProofConsumed,
   useCsmPaused,
   useCSMShareLimitInfo,
   useKeysAvailable,
-  useKeysUploadLimit,
   useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
@@ -39,13 +36,7 @@ export const useSubmitKeysFormNetworkData = (): [
     initialLoading: isWstethBalanceLoading,
   } = useWSTETHBalance(STRATEGY_LAZY);
 
-  const { data: ea, initialLoading: isEaProofLoading } = useCsmEarlyAdoption();
-  const eaProof = ea?.proof;
-
-  const { data: curveId, initialLoading: isCurveIdLoading } =
-    useCsmCurveId(!!eaProof);
-
-  const { mutate: mutateConsumed } = useCsmEarlyAdoptionProofConsumed();
+  const { data: curveId, initialLoading: isCurveIdLoading } = useCsmCurveId();
 
   const {
     data: shareLimit,
@@ -59,12 +50,8 @@ export const useSubmitKeysFormNetworkData = (): [
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
-  const { data: keysUploadLimit, initialLoading: isKeysUploadLimitLoading } =
-    useKeysUploadLimit();
-
   const { data: keysAvailable } = useKeysAvailable({
     curveId,
-    keysUploadLimit,
     etherBalance,
     stethBalance,
     wstethBalance,
@@ -77,7 +64,6 @@ export const useSubmitKeysFormNetworkData = (): [
       updateStethBalance(),
       updateWstethBalance(),
       updateEtherBalance(),
-      mutateConsumed(true), // @note hack to revalidate without loading state
       updateShareLimit(),
       updateMaxStakeEther(),
     ]);
@@ -85,7 +71,6 @@ export const useSubmitKeysFormNetworkData = (): [
     updateStethBalance,
     updateWstethBalance,
     updateEtherBalance,
-    mutateConsumed,
     updateShareLimit,
     updateMaxStakeEther,
   ]);
@@ -95,9 +80,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isEtherBalanceLoading,
-      isEaProofLoading,
       isCurveIdLoading,
-      isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
       isStatusLoading,
@@ -107,9 +90,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isEtherBalanceLoading,
-      isEaProofLoading,
       isCurveIdLoading,
-      isKeysUploadLimitLoading,
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
       isStatusLoading,
@@ -123,9 +104,7 @@ export const useSubmitKeysFormNetworkData = (): [
       stethBalance,
       wstethBalance,
       etherBalance,
-      eaProof,
       curveId,
-      keysUploadLimit,
       keysAvailable,
       maxStakeEther,
       shareLimit,

@@ -1,9 +1,7 @@
 import { useCsmCurveIdDefault } from './useCsmCurveIdDefault';
-import { useCsmCurveIdEarlyAdoption } from './useCsmCurveIdEarlyAdoption';
 
-export const useCsmCurveId = (ea?: boolean) => {
+export const useCsmCurveId = () => {
   const defaultSwr = useCsmCurveIdDefault();
-  const eaSwr = useCsmCurveIdEarlyAdoption();
 
-  return ea ? eaSwr : defaultSwr;
+  return defaultSwr;
 };

@@ -3,7 +3,6 @@ import { Address, Hex } from 'viem';
 
 export type CsmContract =
   | 'CSAccounting'
-  | 'CSEarlyAdoption'
   | 'CSFeeDistributor'
   | 'CSFeeOracle'
   | 'CSModule'
@@ -24,7 +23,6 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
   [CHAINS.Mainnet]: {
     contracts: {
       CSAccounting: '0x4d72BFF1BeaC69925F8Bd12526a39BAAb069e5Da',
-      CSEarlyAdoption: '0x3D5148ad93e2ae5DedD1f7A8B3C19E7F67F90c0E',
       CSFeeDistributor: '0xD99CC66fEC647E68294C6477B40fC7E0F6F618D0',
       CSFeeOracle: '0x4D4074628678Bd302921c20573EEa1ed38DdF7FB',
       CSModule: '0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F',
@@ -41,7 +39,6 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
   [CHAINS.Hoodi]: {
     contracts: {
       CSAccounting: '0xA54b90BA34C5f326BC1485054080994e38FB4C60',
-      CSEarlyAdoption: '0x3281b9E45518F462E594697f8fba1896a8B43939',
       CSFeeDistributor: '0xaCd9820b0A2229a82dc1A0770307ce5522FF3582',
       CSFeeOracle: '0xe7314f561B2e72f9543F1004e741bab6Fc51028B',
       CSModule: '0x79CEf36D84743222f37765204Bec41E92a93E59d',
@@ -58,7 +55,6 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
   [CHAINS.Holesky]: {
     contracts: {
       CSAccounting: '0xc093e53e8F4b55A223c18A2Da6fA00e60DD5EFE1',
-      CSEarlyAdoption: '0x71E92eA77C198a770d9f33A03277DbeB99989660',
       CSFeeDistributor: '0xD7ba648C8F72669C6aE649648B516ec03D07c8ED',
       CSFeeOracle: '0xaF57326C7d513085051b50912D51809ECC5d98Ee',
       CSModule: '0x4562c3e63c2e586cD1651B958C22F88135aCAd4f',

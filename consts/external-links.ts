@@ -17,11 +17,7 @@ export const PREPARE_HARDWARE_LINK =
   'https://dvt-homestaker.stakesaurus.com/hardware-and-systems-setup/hardware-and-system-requirements';
 
 type ExternalLinksConstants = {
-  earlyAdoptionTree: string;
   rewardsTree: string;
-
-  earlyAdoptionSources: string;
-  earlyAdoptionAbout: string;
   feedbackForm: string;
   stakeWidget: string;
 
@@ -40,14 +36,8 @@ type ExternalLinksConstants = {
 export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
   {
     [CHAINS.Mainnet]: {
-      earlyAdoptionTree:
-        'https://raw.githubusercontent.com/lidofinance/community-staking-module/v1.0/artifacts/mainnet/early-adoption/merkle-tree.json',
       rewardsTree:
         'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
-      earlyAdoptionSources:
-        'https://github.com/lidofinance/community-staking-module/blob/v1.0/artifacts/mainnet/early-adoption/addresses.json',
-      earlyAdoptionAbout:
-        'https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22',
       feedbackForm: 'https://forms.gle/GL9RYeV2g4px58Sv8',
       stakeWidget: 'https://stake.lido.fi',
 
@@ -63,14 +53,8 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
     },
     [CHAINS.Holesky]: {
-      earlyAdoptionTree:
-        'https://raw.githubusercontent.com/lidofinance/community-staking-module/v1.0/artifacts/holesky/early-adoption/merkle-tree.json',
       rewardsTree:
         'https://raw.githubusercontent.com/lidofinance/csm-rewards/holesky/tree.json',
-      earlyAdoptionSources:
-        'https://github.com/lidofinance/community-staking-module/blob/v1.0/artifacts/holesky/early-adoption/addresses.json',
-      earlyAdoptionAbout:
-        'https://operatorportal.lido.fi/modules/community-staking-module#block-ef60a1fa96ae4c7995dd7794de2a3e22',
       feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
       stakeWidget: 'https://stake-holesky.testnet.fi',
 
@@ -86,11 +70,8 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       surveyApi: '',
     },
     [CHAINS.Hoodi]: {
-      earlyAdoptionTree: '',
       rewardsTree:
         'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
-      earlyAdoptionSources: '',
-      earlyAdoptionAbout: '',
       feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
       stakeWidget: 'https://stake-hoodi.testnet.fi',
 

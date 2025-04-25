@@ -6,7 +6,6 @@ import {
   useCsmPaused,
   useCSMShareLimitInfo,
   useKeysAvailable,
-  useKeysUploadLimit,
   useNodeOperatorBalance,
   useNodeOperatorCurveId,
   useNonWithdrawnKeysCount,
@@ -57,19 +56,12 @@ export const useAddKeysFormNetworkData = (): [
     update: updateShareLimit,
   } = useCSMShareLimitInfo();
 
-  const {
-    data: keysUploadLimit,
-    update: updateKeysUploadLimit,
-    initialLoading: isKeysUploadLimitLoading,
-  } = useKeysUploadLimit();
-
   const { data: curveId } = useNodeOperatorCurveId(nodeOperatorId);
 
   const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(nodeOperatorId);
 
   const { data: keysAvailable } = useKeysAvailable({
     curveId,
-    keysUploadLimit,
     nonWithdrawnKeys,
     bond,
     etherBalance,
@@ -83,7 +75,6 @@ export const useAddKeysFormNetworkData = (): [
       updateWstethBalance(),
       updateEtherBalance(),
       updateBond(),
-      updateKeysUploadLimit(),
       updateShareLimit(),
       updateMaxStakeEther(),
     ]);
@@ -92,7 +83,6 @@ export const useAddKeysFormNetworkData = (): [
     updateWstethBalance,
     updateEtherBalance,
     updateBond,
-    updateKeysUploadLimit,
     updateShareLimit,
     updateMaxStakeEther,
   ]);
@@ -104,7 +94,6 @@ export const useAddKeysFormNetworkData = (): [
       isWstethBalanceLoading,
       isMaxStakeEtherLoading,
       isBondLoading,
-      isKeysUploadLimitLoading,
       isStatusLoading,
       isBlockNumberLoading,
       isShareLimitLoading,
@@ -115,7 +104,6 @@ export const useAddKeysFormNetworkData = (): [
       isWstethBalanceLoading,
       isMaxStakeEtherLoading,
       isBondLoading,
-      isKeysUploadLimitLoading,
       isStatusLoading,
       isBlockNumberLoading,
       isShareLimitLoading,
@@ -126,7 +114,6 @@ export const useAddKeysFormNetworkData = (): [
     {
       blockNumber: blockNumber ? Number(blockNumber) : undefined,
       nodeOperatorId,
-      keysUploadLimit,
       keysAvailable,
       stethBalance,
       wstethBalance,

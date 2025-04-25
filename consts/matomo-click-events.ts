@@ -16,12 +16,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   connectAsNodeOperator = 'connectAsNodeOperator',
   connectToBecomeNodeOperator = 'connectToBecomeNodeOperator',
   welcomeDetailedLink = 'welcomeDetailedLink',
-  earlyAdoptionLearnMore = 'earlyAdoptionLearnMore',
-  earlyAdoptionCuratedList = 'earlyAdoptionCuratedList',
   // Starter Pack
   starterPackCreateNodeOperator = 'starterPackCreateNodeOperator',
-  consumedEarlyAdoptionLearnMore = 'consumedEarlyAdoptionLearnMore',
-  notEligibleEarlyAdoptionLearnMore = 'notEligibleEarlyAdoptionLearnMore',
   partnerDappnode = 'partnerDappnode',
   partnerSedge = 'partnerSedge',
   partnerStereum = 'partnerStereum',
@@ -138,31 +134,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click on Deailed description about CSM link',
     prefixed`welcome_csm_detailed_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionLearnMore]: [
-    MATOMO_APP_NAME,
-    'Click «Learn more about EA» link on Welcome screen',
-    prefixed`welcome_ea_learn_more_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionCuratedList]: [
-    MATOMO_APP_NAME,
-    'Click «EA curated list» link on Welcome screen',
-    prefixed`welcome_ea_curated_list`,
-  ],
   // Starter Pack
   [MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator]: [
     MATOMO_APP_NAME,
     'Push «Create a Node Operator» on StarterPack screen',
     prefixed`starterpack_create_node_operator`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.consumedEarlyAdoptionLearnMore]: [
-    MATOMO_APP_NAME,
-    'Click «Learn more about EA» link on Consumed banner',
-    prefixed`consumed_ea_lear_more_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.notEligibleEarlyAdoptionLearnMore]: [
-    MATOMO_APP_NAME,
-    'Click «Learn more about EA» link on NotEligible banner',
-    prefixed`not_eligible_ea_lear_more_link`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.partnerDappnode]: [
     MATOMO_APP_NAME,

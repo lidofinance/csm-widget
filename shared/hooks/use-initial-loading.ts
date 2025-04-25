@@ -20,6 +20,10 @@ export const useInitialLoading = (externalLoading?: boolean) => {
     isSupported: true,
   });
 
+  // TODO: handle loading errors
+  // TODO: check version
+  // TODO: handle status.isError || list.isError
+
   useEffect(() => {
     const isLoading = isStatusLoading || isConnecting || isListLoading;
 

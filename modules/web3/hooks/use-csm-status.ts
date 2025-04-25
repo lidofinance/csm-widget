@@ -1,38 +1,13 @@
-import { MulticallResponse } from 'viem';
-import { useReadContracts } from 'wagmi';
-import { useCSAccounting, useCSModule } from './use-contracts';
-
-const select = ([isPaused, isAccountingPaused, isPublicRelease]: [
-  MulticallResponse<boolean>,
-  MulticallResponse<boolean>,
-  MulticallResponse<boolean>,
-]) =>
-  isPaused.error || isAccountingPaused.error || isPublicRelease.error
-    ? undefined
-    : {
-        isPaused: isPaused.result,
-        isAccountingPaused: isAccountingPaused.result,
-        isPublicRelease: isPublicRelease.result,
-      };
+import { useQuery } from '@tanstack/react-query';
+import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
+import { useLidoSDK } from '../web3-provider';
 
 export const useCsmStatus = () => {
-  return useReadContracts({
-    contracts: [
-      {
-        ...useCSModule(),
-        functionName: 'isPaused',
-      },
-      {
-        ...useCSAccounting(),
-        functionName: 'isPaused',
-      },
-      {
-        ...useCSModule(),
-        functionName: 'publicRelease',
-      },
-    ],
-    query: {
-      select,
-    },
+  const { csm } = useLidoSDK();
+
+  return useQuery({
+    queryKey: ['csm-status'],
+    ...STRATEGY_CONSTANT,
+    queryFn: () => csm.common.getStatus(),
   });
 };

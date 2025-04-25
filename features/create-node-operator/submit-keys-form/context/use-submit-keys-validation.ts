@@ -37,7 +37,6 @@ export const useSubmitKeysValidation = (
           wstethBalance,
           etherBalance,
           maxStakeEther,
-          keysUploadLimit,
           blockNumber,
         } = await dataPromise;
 
@@ -57,7 +56,6 @@ export const useSubmitKeysValidation = (
           await validateDepositData({
             depositData,
             chainId,
-            keysUploadLimit,
             blockNumber,
           });
 

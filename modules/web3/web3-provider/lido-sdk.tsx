@@ -18,6 +18,7 @@ import { config } from 'config';
 import { useTokenTransferSubscription } from 'modules/web3/hooks/use-balance';
 import { CHAINS } from '../consts';
 import { LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk';
+import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
 
 type LidoSDKContextValue = {
   chainId: CHAINS;
@@ -25,6 +26,7 @@ type LidoSDKContextValue = {
   stETH: LidoSDKstETH;
   wstETH: LidoSDKwstETH;
   wrap: LidoSDKWrap;
+  csm: LidoSDKCsm;
   subscribeToTokenUpdates: ReturnType<typeof useTokenTransferSubscription>;
 };
 
@@ -82,6 +84,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     const stETH = new LidoSDKstETH({ core });
     const wstETH = new LidoSDKwstETH({ core });
     const wrap = new LidoSDKWrap({ core });
+    const csm = new LidoSDKCsm({ core });
 
     return {
       chainId: core.chainId as unknown as CHAINS,
@@ -89,6 +92,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       stETH,
       wstETH,
       wrap,
+      csm,
       subscribeToTokenUpdates: subscribe,
     };
   }, [chainId, publicClient, subscribe, walletClient]);

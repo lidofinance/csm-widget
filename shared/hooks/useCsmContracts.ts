@@ -2,7 +2,6 @@ import { contractHooksFactory } from '@lido-sdk/react';
 import { CHAINS, CsmContract, getCsmContractAddress } from 'consts';
 import {
   CSAccounting__factory,
-  CSEarlyAdoption__factory,
   CSFeeDistributor__factory,
   CSFeeOracle__factory,
   CSModule__factory,
@@ -64,13 +63,6 @@ const HashConsesus = contractHooksFactory(
 );
 
 export const useHashConsesusRPC = HashConsesus.useContractRPC;
-
-const CSEarlyAdoption = contractHooksFactory(
-  CSEarlyAdoption__factory,
-  getCsmContractAddressGetter('CSEarlyAdoption'),
-);
-
-export const useCSEarlyAdoptionRPC = CSEarlyAdoption.useContractRPC;
 
 const ExitBusOracle = contractHooksFactory(
   ExitBusOracle__factory,
