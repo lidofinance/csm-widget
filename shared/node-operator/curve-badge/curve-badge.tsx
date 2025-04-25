@@ -3,8 +3,7 @@ import { CURVE_TYPE } from 'shared/hooks';
 import { DescriptorCurveStyle } from './styles';
 
 export const CurveBadge: FC<{ type?: CURVE_TYPE | null }> = ({ type }) => {
-  const title =
-    type === CURVE_TYPE.EA ? 'EA' : type === CURVE_TYPE.CUSTOM ? 'CC' : null;
+  const title = type === CURVE_TYPE.CUSTOM ? 'CC' : null;
 
   return (
     <>

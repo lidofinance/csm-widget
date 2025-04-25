@@ -19,10 +19,7 @@ export const StatusComment: FC<{ statuses: KEY_STATUS[] }> = ({ statuses }) => {
   )
     return <CommentInvalid />;
 
-  if (
-    statuses.includes(KEY_STATUS.EXIT_REQUESTED) ||
-    statuses.includes(KEY_STATUS.STUCK)
-  )
+  if (statuses.includes(KEY_STATUS.EXIT_REQUESTED))
     return <CommentExitRequested />;
 
   if (

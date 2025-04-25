@@ -87,8 +87,7 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
 
       if (
         nodeOperatorKeyIndex >= info.totalDepositedKeys &&
-        (info.stuckValidatorsCount > 0 ||
-          info.enqueuedCount < info.depositableValidatorsCount)
+        info.enqueuedCount < info.depositableValidatorsCount
       ) {
         statuses.push(KEY_STATUS.NON_QUEUED);
       } else if (nodeOperatorKeyIndex >= info.totalVettedKeys) {
@@ -118,17 +117,12 @@ export const useKeysWithStatus = (onlyRemovable = false) => {
         );
 
         if (exitRequestIndex >= 0) {
-          if (info.stuckValidatorsCount > exitRequestIndex) {
-            statuses.push(KEY_STATUS.STUCK);
-          } else {
-            statuses.push(KEY_STATUS.EXIT_REQUESTED);
-          }
+          statuses.push(KEY_STATUS.EXIT_REQUESTED);
         }
       }
 
       if (
         hasNoInterception(statuses, [
-          KEY_STATUS.STUCK,
           KEY_STATUS.SLASHED,
           KEY_STATUS.WITHDRAWN,
           KEY_STATUS.EXIT_REQUESTED,

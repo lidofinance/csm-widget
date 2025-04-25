@@ -56,7 +56,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Alerts
   howLearnCsmClose = 'howLearnCsmClose',
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
-  howToExitLinkStuckKeysAlert = 'howToExitLinkStuckKeysAlert',
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
   unlockBondLinkAlert = 'unlockBondLinkAlert',
   // Dashboard
@@ -313,11 +312,6 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «How to exit» link on Request To Exit alert',
     prefixed`how_to_exit_link_requset_to_exit_alert`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkStuckKeysAlert]: [
-    MATOMO_APP_NAME,
-    'Click «How to exit» link on Stuck Keys alert',
-    prefixed`how_to_exit_link_stuck_keys_alert`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: [
     MATOMO_APP_NAME,

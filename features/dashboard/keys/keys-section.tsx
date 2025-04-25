@@ -11,7 +11,6 @@ import { StatusTitle } from 'shared/components/status-chip/status-chip';
 
 const BAD_STATUSES: KEY_STATUS[] = [
   KEY_STATUS.UNBONDED,
-  KEY_STATUS.STUCK,
   KEY_STATUS.DUPLICATED,
   KEY_STATUS.INVALID,
   KEY_STATUS.NON_QUEUED,
@@ -42,7 +41,7 @@ export const KeysSection: FC = () => {
     info?.targetLimitMode === 1
       ? 'The limit of keys for this Node Operator has been set by the protocol'
       : info?.targetLimitMode === 2
-        ? 'The limit of keys for this Node Operator has been set due to the existence of stuck keys'
+        ? 'The limit of keys for this Node Operator has been set due to the existence of unbonded keys'
         : undefined;
 
   return (
@@ -129,12 +128,6 @@ export const KeysSection: FC = () => {
                     title="Unbonded"
                     count={keysWithStatus(KEY_STATUS.UNBONDED)}
                     tooltip="Keys not sufficiently covered by current bond amount"
-                  />
-                  <Item
-                    variant="warning"
-                    title="Stuck"
-                    count={keysWithStatus(KEY_STATUS.STUCK)}
-                    tooltip="Keys that have not been exited timely following an exit signal from the protocol"
                   />
                   <Item
                     variant="warning"

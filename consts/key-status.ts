@@ -13,7 +13,6 @@ export const KEY_STATUS = {
 
   UNBONDED: 'UNBONDED',
   EXIT_REQUESTED: 'EXIT_REQUESTED',
-  STUCK: 'STUCK',
   SLASHED: 'SLASHED',
 } as const;
 

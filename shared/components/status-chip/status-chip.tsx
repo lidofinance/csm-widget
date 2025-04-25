@@ -21,7 +21,6 @@ const variants: Record<KEY_STATUS, Variants> = {
 
   [KEY_STATUS.UNBONDED]: 'error',
   [KEY_STATUS.EXIT_REQUESTED]: 'warning',
-  [KEY_STATUS.STUCK]: 'error',
   [KEY_STATUS.SLASHED]: 'secondary',
 };
 
@@ -40,7 +39,6 @@ export const StatusTitle: Record<KEY_STATUS, string> = {
 
   [KEY_STATUS.UNBONDED]: 'Unbonded',
   [KEY_STATUS.EXIT_REQUESTED]: 'Exit requested',
-  [KEY_STATUS.STUCK]: 'Stuck',
   [KEY_STATUS.SLASHED]: 'Slashed',
 };
 

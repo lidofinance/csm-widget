@@ -3,9 +3,7 @@ import { useCallback } from 'react';
 
 import { ROLES } from 'consts/roles';
 import type { ModalComponentType } from 'providers/modal-provider';
-import { CURVE_TYPE } from 'shared/hooks';
 import { NodeOperator, NodeOperatorId } from 'types';
-import { CurveBadge } from '../curve-badge/curve-badge';
 import { Descriptor } from '../descriptor/descriptor';
 import { RoleBadge } from '../role-badge/role-badge';
 import {
@@ -62,9 +60,6 @@ export const SwitchModal: ModalComponentType<{
         </StyledStackItem>
         <StyledStackItem>
           <RoleBadge role={ROLES.MANAGER} /> Manager Address role
-        </StyledStackItem>
-        <StyledStackItem>
-          <CurveBadge type={CURVE_TYPE.EA} /> Early Adopter
         </StyledStackItem>
         {/* <StyledStackItem>
           <CurveBadge type={CURVE_TYPE.CUSTOM} /> Custom Curve

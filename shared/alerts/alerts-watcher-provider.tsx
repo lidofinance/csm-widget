@@ -11,7 +11,6 @@ import { useAlertActions } from './alert-provider';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
-import { AlertStuckKeys } from './components/alert-stuck-keys';
 
 export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { showAlert, closeAlert } = useAlertActions();
@@ -23,7 +22,6 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
     return (
       info &&
       info.enqueuedCount < info.depositableValidatorsCount &&
-      info.stuckValidatorsCount === 0 &&
       nodeOperator?.roles.includes(ROLES.MANAGER)
     );
   }, [info, nodeOperator?.roles]);
@@ -49,14 +47,6 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
       }
     }
   }, [closeAlert, hasRequestsToExit, isKeysLoading, showAlert]);
-
-  useEffect(() => {
-    if (info?.stuckValidatorsCount) {
-      showAlert(AlertStuckKeys);
-    } else {
-      closeAlert(AlertStuckKeys);
-    }
-  }, [closeAlert, info?.stuckValidatorsCount, showAlert]);
 
   useEffect(() => {
     if (normalizeQueue) {

@@ -48,11 +48,9 @@ export const CommentUnbondedNonQueued: FC = () => (
 
 export const CommentNonQueued: FC = () => (
   <>
-    If you have <b>Stuck</b> or <b>Unbonded</b> keys — resolve the issues with
-    them <br />
-    If there are no <b>Stuck</b> or <b>Unbonded</b> keys — put this key back to
-    the queue (<LocalLink href={PATH.KEYS_NORMALIZE}>Normalize queue</LocalLink>
-    )
+    If you have <b>Unbonded</b> keys — resolve the issues with them <br />
+    If there are no <b>Unbonded</b> keys — put this key back to the queue (
+    <LocalLink href={PATH.KEYS_NORMALIZE}>Normalize queue</LocalLink>)
   </>
 );
 

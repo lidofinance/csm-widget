@@ -27,7 +27,6 @@ export type RewardsReport = {
     `${number}`,
     {
       distributed: number;
-      stuck: boolean;
       validators: Record<
         `${number}`,
         {
@@ -78,7 +77,6 @@ export const useLastOperatorRewards = () => {
       if (!operator)
         return {
           distributed: Zero,
-          stuck: false,
           validatorsCount: 0,
           validatorsOverThresholdCount: 0,
           threshold,
@@ -95,7 +93,6 @@ export const useLastOperatorRewards = () => {
 
       return {
         distributed: BigNumber.from(operator.distributed.toString()),
-        stuck: operator.stuck,
         validatorsCount: validators.length,
         validatorsOverThresholdCount: overThreshold.length,
         threshold,

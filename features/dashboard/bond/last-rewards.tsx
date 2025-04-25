@@ -144,14 +144,6 @@ const LastReportStats: FC = () => {
             {lastRewards?.validatorsOverThresholdCount}{' '}
             <i>/{lastRewards?.validatorsCount}</i>
           </TextBlock>
-          <TextBlock
-            title="Stuck keys found"
-            loading={isLoading}
-            warning={lastRewards?.stuck}
-            help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the latest report frame. Stuck keys prevent the Node Operator from receiving rewards for any key(s) in that frame"
-          >
-            {lastRewards?.stuck ? 'YES' : 'NO'}
-          </TextBlock>
         </>
       ) : (
         <DoubleColumnStyle>
@@ -201,16 +193,6 @@ export const WhyModal: ModalComponentType = ({ ...props }) => (
             the CSM Performance Oracle
           </a>
           .
-        </li>
-        <li>
-          <a
-            href="https://operatorportal.lido.fi/modules/community-staking-module#block-0ed61a4c0a5a439bbb4be20e814b4e38"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-          >
-            Your Node Operator has stuck keys
-          </a>{' '}
-          due to not exiting a validator requested for exit timely.
         </li>
       </ol>
     </FaqElement>

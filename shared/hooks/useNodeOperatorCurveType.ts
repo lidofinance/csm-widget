@@ -5,7 +5,6 @@ import { useNodeOperatorCurveId } from './useNodeOperatorCurveId';
 
 export const CURVE_TYPE = {
   DEFAULT: 'DEFAULT',
-  EA: 'EA',
   CUSTOM: 'CUSTOM',
 } as const;
 
