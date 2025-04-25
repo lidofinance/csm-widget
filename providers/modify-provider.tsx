@@ -12,7 +12,7 @@ import {
 import { useSearchParams, useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { compareLowercase, trackMatomoEvent } from 'utils';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 
 type ModifyContextValue = {
   referrer?: Address;

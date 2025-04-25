@@ -1,20 +1,32 @@
+import { useDappStatus } from 'modules/web3';
 import { useMemo } from 'react';
-import { useAccount as useWagmiAccount, useNetwork } from 'wagmi';
+import { useAccount as useWagmiAccount } from 'wagmi';
 
+// TODO: remove this hook when all usages are replaced with useDappStatus
 export const useAccount = () => {
-  const { address, isConnected, isConnecting } = useWagmiAccount();
-  const { chain } = useNetwork();
-  const isUnsupported = !!chain?.unsupported;
+  const { isConnected, isConnecting } = useWagmiAccount();
+
+  const { address, chainId, isSupportedChain, isAccountActive } =
+    useDappStatus();
+
+  const isUnsupported = !isSupportedChain;
 
   return useMemo(
     () => ({
-      chainId: isUnsupported ? undefined : chain?.id,
-      address: !isUnsupported && isConnected ? address : undefined,
-      active: !isUnsupported && isConnected,
+      chainId,
+      address,
+      active: isAccountActive,
       isConnected,
       isUnsupported,
       isConnecting,
     }),
-    [address, chain?.id, isConnected, isConnecting, isUnsupported],
+    [
+      address,
+      chainId,
+      isAccountActive,
+      isConnected,
+      isConnecting,
+      isUnsupported,
+    ],
   );
 };

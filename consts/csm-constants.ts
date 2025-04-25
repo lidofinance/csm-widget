@@ -2,7 +2,7 @@ import { CHAINS } from 'consts/chains';
 import { CHAINS as ALL_CHAINS } from '@lido-sdk/constants';
 import { config } from 'config';
 import { HexString } from 'shared/keys';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 
 export const KEYS_UPLOAD_TX_LIMIT = 25;
 

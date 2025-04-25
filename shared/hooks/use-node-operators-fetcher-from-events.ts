@@ -13,7 +13,7 @@ import {
   getSettledValue,
   mergeRoles,
 } from 'utils';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 
 type NodeOperatorRoleEvent =
   | NodeOperatorAddedEvent
