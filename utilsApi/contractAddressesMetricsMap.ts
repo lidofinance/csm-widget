@@ -139,6 +139,11 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
   ),
 };
 
+const ENS_ADDRESSES: string[] = [
+  '0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e',
+  '0x231b0ee14048e9dccd1d247744d114a4eb5e8e63',
+];
+
 const aggregatorMainnetAddress = METRIC_CONTRACT_ADDRESS_GETTERS[
   CONTRACT_NAMES.aggregatorStEthUsdPriceFeed
 ]() as HexString;
@@ -148,7 +153,9 @@ const prefilledAddresses =
     ? ({
         [CHAINS.Mainnet]: [aggregatorMainnetAddress],
       } as Record<CHAINS, HexString[]>)
-    : ({} as Record<CHAINS, HexString[]>);
+    : ({
+        [CHAINS.Mainnet]: [...ENS_ADDRESSES],
+      } as Record<CHAINS, HexString[]>);
 
 const prefilledMetricAddresses: Partial<
   Record<CHAINS, Record<HexString, CONTRACT_NAMES>>
@@ -201,6 +208,6 @@ export const CONTRACT_CALL_ADDRESSES = (
   ).filter((address) => !!address);
   return {
     ...mapped,
-    [chainId]: list,
+    [chainId]: [...(mapped?.[chainId] ?? []), ...list],
   };
 }, prefilledAddresses);
