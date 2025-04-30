@@ -1,5 +1,7 @@
+import { useSDK } from '@lido-sdk/react';
 import { Address, Identicon, Loader } from '@lidofinance/lido-ui';
 import { isAddress } from 'ethers/lib/utils.js';
+import { debounce } from 'lodash';
 import {
   ChangeEvent,
   forwardRef,
@@ -11,11 +13,9 @@ import {
   useState,
 } from 'react';
 import { InputDecoratorLocked } from '../input-amount/input-decorator-locked';
-import { StyledChip, StyledInput } from './styles';
+import { AddressChip, StyledInput } from './styles';
 import { InputAddressProps } from './types';
 import { VerifiedChip } from './verified-chip';
-import { debounce } from 'lodash';
-import { useSDK } from '@lido-sdk/react';
 
 const ENS_REGEX = new RegExp('^[-a-zA-Z0-9@._]{1,256}.eth$');
 const isValidEns = (ens: string) => ENS_REGEX.test(ens);
@@ -90,9 +90,9 @@ export const InputAddress = forwardRef<
           <>
             {label}
             {address.ens && address.value && (
-              <StyledChip>
+              <AddressChip>
                 <Address address={address.value} symbols={32} />
-              </StyledChip>
+              </AddressChip>
             )}
             {addressName && <VerifiedChip>{addressName}</VerifiedChip>}
           </>
