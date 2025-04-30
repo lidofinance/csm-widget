@@ -142,6 +142,9 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
 const ENS_ADDRESSES: string[] = [
   '0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e',
   '0x231b0ee14048e9dccd1d247744d114a4eb5e8e63',
+  '0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41',
+  '0xa2c122be93b0074270ebee7f6b7292c7deb45047',
+  '0x1da022710df5002339274aadee8d58218e9d6ab5',
 ];
 
 const aggregatorMainnetAddress = METRIC_CONTRACT_ADDRESS_GETTERS[
