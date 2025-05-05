@@ -87,7 +87,8 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
     },
     [CHAINS.Hoodi]: {
       earlyAdoptionTree: '',
-      rewardsTree: '',
+      rewardsTree:
+        'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
       earlyAdoptionSources: '',
       earlyAdoptionAbout: '',
       feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
