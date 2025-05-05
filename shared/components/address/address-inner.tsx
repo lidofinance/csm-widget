@@ -33,12 +33,7 @@ export const AddressInner: FC<AddressProps> = ({
   name,
 }) => {
   const component = (
-    <Text
-      as="span"
-      weight={weight || big ? 700 : 400}
-      size={size}
-      color={color}
-    >
+    <Text as="span" weight={weight} size={size} color={color}>
       {name ?? (
         <AddressComponent
           address={address}

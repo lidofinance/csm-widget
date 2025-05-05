@@ -22,7 +22,7 @@ export const RoleBlock: FC<RoleBlockProps> = ({
         <RoleTitle>{title}</RoleTitle>
         {isYou && <Chip>You</Chip>}
       </Stack>
-      <Address address={address} showIcon big size="sm" />
+      <Address address={address} showIcon big weight={700} size="sm" />
       <ProposedAddress address={proposedAddress} />
     </RoleBlockWrapper>
   );

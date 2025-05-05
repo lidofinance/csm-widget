@@ -12,7 +12,7 @@ export const HeaderStyle = styled.header`
   align-items: center;
   flex-wrap: nowrap;
 
-  row-gap: 8px;
+  gap: 8px;
   margin-block: 18px;
 
   ${NAV_MOBILE_MEDIA} {

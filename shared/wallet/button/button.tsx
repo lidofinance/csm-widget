@@ -1,5 +1,5 @@
 import { useEthereumBalance } from '@lido-sdk/react';
-import { ButtonProps } from '@lidofinance/lido-ui';
+import { ButtonProps, useBreakpoint } from '@lidofinance/lido-ui';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
@@ -7,6 +7,7 @@ import { useAccount } from 'shared/hooks';
 import { useWalletModal } from '../wallet-modal/use-wallet-modal';
 import {
   AddressBadgeStyle,
+  AddressStyle,
   WalledButtonBalanceStyle,
   WalledButtonLoaderStyle,
   WalledButtonStyle,
@@ -21,6 +22,7 @@ export const Button: FC<ButtonProps> = (props) => {
     undefined,
     STRATEGY_LAZY,
   );
+  const isMobile = useBreakpoint('md');
 
   return (
     <WalledButtonStyle
@@ -38,7 +40,9 @@ export const Button: FC<ButtonProps> = (props) => {
             <FormatToken amount={balance} symbol="ETH" />
           )}
         </WalledButtonBalanceStyle>
-        <AddressBadgeStyle address={address} />
+        <AddressBadgeStyle>
+          <AddressStyle address={address} symbols={isMobile ? 3 : 6} />
+        </AddressBadgeStyle>
       </WalledButtonWrapperStyle>
     </WalledButtonStyle>
   );
