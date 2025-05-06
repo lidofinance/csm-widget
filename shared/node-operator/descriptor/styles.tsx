@@ -16,9 +16,17 @@ export const DescriptorStyle = styled.span`
   font-weight: normal;
   line-height: 20px;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    gap: ${({ theme }) => theme.spaceMap.xs}px;
+  }
 `;
 
 export const DescriptorRolesStyle = styled.span`
   display: flex;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    gap: ${({ theme }) => theme.spaceMap.xs}px;
+  }
 `;

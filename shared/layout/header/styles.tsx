@@ -5,39 +5,35 @@ import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const HeaderStyle = styled.header`
   grid-area: header;
-  position: relative;
   align-self: center;
-
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
+  gap: 8px;
 
-  row-gap: 8px;
-  margin-block: 18px;
+  position: sticky;
+  z-index: 250;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 18px 32px;
+  margin: 0 -32px;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    padding: 18px 20px;
+    margin: 0 -20px;
+  }
+
+  transition:
+    box-shadow 0.3s ease,
+    background 0.3s ease-out;
+
+  html:is([data-scrolldown='true']) & {
+    background: var(--lido-color-background);
+    box-shadow: 0px 3px 3px -3px var(--lido-color-shadowDark);
+  }
 
   ${NAV_MOBILE_MEDIA} {
-    position: sticky;
-    z-index: 999;
-    top: 0;
-    left: 0;
-    right: 0;
-
-    padding: 18px 32px;
-    margin: 0 -32px;
-    ${({ theme }) => theme.mediaQueries.lg} {
-      padding: 18px 20px;
-      margin: 0 -20px;
-    }
-
-    transition:
-      box-shadow 0.3s ease,
-      background 0.3s ease-in-out;
-
-    html:is([data-scroll]):not([data-scroll='0']) & {
-      background: var(--lido-color-background);
-      box-shadow: 0px 3px 3px -3px var(--lido-color-shadowDark);
-    }
-
     nav[aria-expanded='true'] + & {
       background: none !important;
       box-shadow: none !important;

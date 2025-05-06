@@ -37,7 +37,7 @@ export { Counter } from './counter/counter';
 export { InverseThemeProvider } from './inverse-theme-provider/inverse-theme-provider';
 export { StatusComment } from './status-comment/status-comment';
 export { Banner } from './banner/banner';
-export { Address } from './address/address';
+export * from './address';
 export * from './extra-width';
 export * from './external-icon-link';
 export * from './text-block';

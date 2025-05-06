@@ -16,9 +16,22 @@ export const StyledChip = styled.span`
   margin: -2px 8px;
 
   border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;
-  background: rgba(83, 186, 149, 0.2);
   background: var(--lido-color-success);
   background: color-mix(in srgb, var(--lido-color-success) 20%, transparent);
+`;
+
+export const AddressChip = styled.span`
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  margin: -2px 8px;
+
+  color: var(--lido-color-textSecondary);
+  border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;
+  background: var(--lido-color-secondary);
+  background: color-mix(in srgb, var(--lido-color-secondary) 10%, transparent);
 `;
 
 export const Icon = styled(Check).attrs({ width: 12, height: 12 })`
