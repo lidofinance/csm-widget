@@ -13,7 +13,7 @@ import invariant from 'tiny-invariant';
 
 import { config } from 'config';
 import { debounce } from 'lodash';
-import { saveScrollPosition } from 'utils';
+import { saveScrollDown } from 'utils';
 
 export type InpageNavigationContextValue = {
   hashNav: string;
@@ -85,8 +85,8 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
   const toggleExpanded = useCallback(() => setExpanded((prev) => !prev), []);
 
   useEffect(() => {
-    const handleScroll = debounce(saveScrollPosition, 10);
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const handleScroll = debounce(saveScrollDown, 100, { leading: true });
+    window.addEventListener('scroll', saveScrollDown, false);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };

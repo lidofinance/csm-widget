@@ -14,11 +14,6 @@ const GlobalStyle = createGlobalStyle`
   svg {
     box-sizing: content-box;
   }
-  html,
-  body {
-    width: 100%;
-    min-height: 100vh;
-  }
   body {
     background: var(--lido-color-background);
     color: var(--lido-color-text);
@@ -28,6 +23,11 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.5em;
     font-weight: 500;
     text-size-adjust: none;
+
+    width: 100vw;
+    min-height: 100vh;
+    overflow-x: hidden;
+    padding-right: 0 !important;
   }
   a {
     cursor: pointer;
@@ -57,6 +57,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   ${NAV_MOBILE_MEDIA} {
+    body {
+     overflow-x: inherit;
+    }
     body:has(nav[aria-expanded=true]){
       overflow: hidden;
     }
