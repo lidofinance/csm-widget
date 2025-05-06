@@ -9,7 +9,7 @@ export const HeaderStyle = styled.header`
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  row-gap: 8px;
+  gap: 8px;
 
   position: sticky;
   z-index: 250;

@@ -26,14 +26,18 @@ export const AddressContainerStyle = styled(StackStyle).attrs({
         }
       `}
   }
+`;
 
-  ${({ $monospace }) =>
-    $monospace &&
-    css`
-      font-family: 'Fira Code', monospace;
-      font-optical-sizing: auto;
-      font-feature-settings:
-        'liga' off,
-        'clig' off;
-    `}
+export const PubkeyContainerStyle = styled(AddressContainerStyle)`
+  font-family: 'Fira Code', monospace;
+  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+  color: var(--lido-color-text);
+`;
+
+export const Avatar = styled.img<{
+  diameter: number;
+}>`
+  border-radius: 50%;
+  width: ${({ diameter }) => diameter}px;
+  height: ${({ diameter }) => diameter}px;
 `;
