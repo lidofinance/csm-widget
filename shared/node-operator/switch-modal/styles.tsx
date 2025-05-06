@@ -29,7 +29,9 @@ export const ContentStyle = styled.div`
 export const IdStyle = styled.span``;
 export const RolesStyle = styled.div``;
 
-export const ActionsStyle = styled.div``;
+export const ActionsStyle = styled.div`
+  align-self: center;
+`;
 
 export const ButtonWrapperStyle = styled.span`
   display: flex;
