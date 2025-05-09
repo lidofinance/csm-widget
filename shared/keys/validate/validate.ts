@@ -1,5 +1,5 @@
 import { DepositData } from 'types';
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts';
 import { checkLength } from './check-length';
 import { checkDuplicates } from './check-duplicates';
 import { checkPreviouslySubmittedDuplicates } from './check-previously-submitted-duplicates';

@@ -1,5 +1,5 @@
 import { JsonRpcProvider, Network } from '@ethersproject/providers';
-import { CHAINS } from '@lido-sdk/constants';
+import { CHAINS } from 'consts';
 import {
   deepCopy,
   defineReadOnly,
@@ -38,7 +38,7 @@ const createProviderGetter = <P extends typeof JsonRpcProvider>(
 
 const logger = new Logger('StaticJsonRpcBatchProvider/1.0');
 
-class StaticJsonRpcBatchProvider extends JsonRpcProvider {
+export class StaticJsonRpcBatchProvider extends JsonRpcProvider {
   async detectNetwork(): Promise<Network> {
     let network = this.network;
 

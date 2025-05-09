@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
-import { useSDK } from '@lido-sdk/react';
 
 import { CHAINS } from 'consts/chains';
 import { API_ROUTES } from 'consts/api';
@@ -24,16 +23,13 @@ export const useGetRpcUrlByChainId = () => {
 
   return useCallback(
     (chainId: CHAINS) => {
-      // This condition is needed because in 'providers/web3.tsx' we add `wagmiChains.polygonMumbai` to supportedChains as a workaround.
-      // polygonMumbai (80001) may cause an invariant throwing.
-      // And we always need Mainnet RPC for some requests, e.g. ETH to USD price, ENS lookup.
+      // We always need Mainnet RPC for some requests, e.g. ETH to USD price, ENS lookup.
       if (
         chainId !== CHAINS.Mainnet &&
         !userConfig.supportedChainIds.includes(chainId)
       ) {
         // Has no effect on functionality. Just a fix.
         // Return empty string as a stub
-        // (see: 'providers/web3.tsx' --> jsonRpcBatchProvider --> getStaticRpcBatchProvider)
         return '';
       }
 
@@ -53,9 +49,4 @@ export const useGetRpcUrlByChainId = () => {
     },
     [userConfig],
   );
-};
-
-export const useRpcUrl = () => {
-  const { chainId } = useSDK();
-  return useGetRpcUrlByChainId()(chainId as number);
 };

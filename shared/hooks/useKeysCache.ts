@@ -1,24 +1,27 @@
-import { useSDK } from '@lido-sdk/react';
+import { getBlockNumber } from '@wagmi/core';
+import { useDappStatus } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
 import { removeKeys, saveKeys } from 'shared/keys/cachedKeys';
+import { useConfig } from 'wagmi';
 
 export const useKeysCache = () => {
-  const { chainId, providerRpc } = useSDK(); // FIXME: drop sdk
+  const { chainId } = useDappStatus();
+  const config = useConfig();
 
   const addCacheKeys = useCallback(
     async (publicKeys: string[]) => {
-      const currentBlock = await providerRpc.getBlockNumber();
-      saveKeys(publicKeys, chainId, currentBlock);
+      const currentBlock = await getBlockNumber(config);
+      saveKeys(publicKeys, chainId, Number(currentBlock));
     },
-    [chainId, providerRpc],
+    [chainId, config],
   );
 
   const removeCacheKeys = useCallback(
     async (publicKeys: string[]) => {
-      const currentBlock = await providerRpc.getBlockNumber();
-      removeKeys(publicKeys, chainId, currentBlock);
+      const currentBlock = await getBlockNumber(config);
+      removeKeys(publicKeys, chainId, Number(currentBlock));
     },
-    [chainId, providerRpc],
+    [chainId, config],
   );
 
   return useMemo(

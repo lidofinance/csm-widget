@@ -1,21 +1,20 @@
+import { useCsmStatus, useEarlyAdoptionAccountProof } from 'modules/web3';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useAccount } from './use-account';
-import { useCsmEarlyAdoption } from './useCsmEarlyAdoption';
-import { useCsmPaused, useCsmPublicRelease } from './useCsmStatus';
 
 export const useInitialLoading = (externalLoading?: boolean) => {
-  const { initialLoading: isPublicReleaseLoading } = useCsmPublicRelease();
-  const { initialLoading: isPausedLoading } = useCsmPaused();
   const { isConnecting } = useAccount();
+  const { isLoading: isStatusLoading } = useCsmStatus();
+  const { isLoading: isEALoading } = useEarlyAdoptionAccountProof();
   const { isListLoading, active } = useNodeOperatorContext();
-  const { initialLoading: isEaLoading } = useCsmEarlyAdoption();
+
+  // TODO: handle status.isError || eaProof.isError || list.isError
 
   const loading =
-    isPublicReleaseLoading ||
-    isPausedLoading ||
+    isStatusLoading ||
     isConnecting ||
     isListLoading ||
-    (!active && isEaLoading);
+    (!active && isEALoading);
 
   return loading || externalLoading;
 };

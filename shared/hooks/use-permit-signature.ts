@@ -11,7 +11,8 @@ import {
   useWSTETHContractRPC,
 } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { Address, useChainId } from 'wagmi';
+import { Address } from 'viem';
+import { useChainId } from 'wagmi';
 
 export type GatherPermitSignatureResult = {
   value: BigNumber;

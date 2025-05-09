@@ -147,3 +147,39 @@ export const NavLink = styled.span<{ $active?: boolean }>`
     opacity: ${(props) => (props.$active ? 1 : 0.8)};
   }
 `;
+
+// Button specifically for theme toggle to avoid prop forwarding issues
+export const ThemeToggleButton = styled.button`
+  /* Reset button styles */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit; /* Inherit font from parent */
+  color: inherit; /* Inherit color from parent */
+  cursor: pointer;
+  outline: inherit; /* Inherit outline from parent */
+
+  /* Apply NavLink styles */
+  color: var(--lido-color-secondary);
+  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+  line-height: 1.75em;
+  font-weight: 700;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  opacity: 0.5; /* Default opacity */
+  gap: 8px; /* Adjusted gap from NavLink's 10px/7px */
+
+  &:hover {
+    opacity: 1;
+    color: var(--lido-color-secondary);
+  }
+
+  svg {
+    flex-shrink: 0;
+    color: var(--lido-color-secondary); /* Keep icon color consistent */
+  }
+`;

@@ -22,7 +22,7 @@ import {
   packRoles,
   runWithTransactionLogger,
 } from 'utils';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';

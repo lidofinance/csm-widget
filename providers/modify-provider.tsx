@@ -1,6 +1,5 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
-import { isAddress } from 'ethers/lib/utils.js';
 import {
   createContext,
   FC,
@@ -12,7 +11,7 @@ import {
 import { useSearchParams, useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { compareLowercase, trackMatomoEvent } from 'utils';
-import { Address } from 'wagmi';
+import { Address, isAddress } from 'viem';
 
 type ModifyContextValue = {
   referrer?: Address;
