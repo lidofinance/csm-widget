@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
-import { useSDK } from '@lido-sdk/react';
 
 import { CHAINS } from 'consts/chains';
 import { API_ROUTES } from 'consts/api';
@@ -13,6 +12,7 @@ import { API_ROUTES } from 'consts/api';
 import { config } from '../get-config';
 
 import { useUserConfig } from '../user-config';
+import { useDappStatus } from 'modules/web3';
 
 export const getBackendApiPath = (chainId: string | number): string => {
   const BASE_URL = typeof window === 'undefined' ? '' : window.location.origin;
@@ -24,13 +24,9 @@ export const useGetClApiUrlByChainId = () => {
 
   return useCallback(
     (chainId: CHAINS) => {
-      // This condition is needed because in 'providers/web3.tsx' we add `wagmiChains.polygonMumbai` to supportedChains as a workaround.
-      // polygonMumbai (80001) may cause an invariant throwing.
       if (!userConfig.supportedChainIds.includes(chainId)) {
         // Has no effect on functionality. Just a fix.
         // Return empty string as a stub
-        // (see: 'providers/web3.tsx' --> jsonRpcBatchProvider --> getStaticRpcBatchProvider)
-        // TODO: check this
         return '';
       }
 
@@ -51,6 +47,6 @@ export const useGetClApiUrlByChainId = () => {
 };
 
 export const useClApiUrl = () => {
-  const { chainId } = useSDK();
-  return useGetClApiUrlByChainId()(chainId as number);
+  const { chainId } = useDappStatus();
+  return useGetClApiUrlByChainId()(chainId);
 };

@@ -1,14 +1,14 @@
+import { Zero } from '@ethersproject/constants';
 import { useLidoSWR } from '@lido-sdk/react';
 import { STRATEGY_CONSTANT } from 'consts/swr-strategies';
-import { useCSFeeDistributorRPC, useCSFeeOracleRPC } from './useCsmContracts';
-import { getCsmConstants } from 'consts/csm-constants';
-import { standardFetcher } from 'utils';
-import { HexString } from 'shared/keys';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { useMergeSwr } from './useMergeSwr';
-import { useMemo } from 'react';
 import { BigNumber } from 'ethers';
-import { Zero } from '@ethersproject/constants';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { useMemo } from 'react';
+import { HexString } from 'shared/keys';
+import { standardFetcher } from 'utils';
+import { useCsmConstants } from './use-csm-constants';
+import { useCSFeeDistributorRPC, useCSFeeOracleRPC } from './useCsmContracts';
+import { useMergeSwr } from './useMergeSwr';
 
 export type RewardsReport = {
   blockstamp: {
@@ -106,7 +106,7 @@ export const useLastOperatorRewards = () => {
 
 export const useLastRewrdsTx = (config = STRATEGY_CONSTANT) => {
   const feeOracle = useCSFeeOracleRPC();
-  const { deploymentBlockNumber } = getCsmConstants();
+  const { deploymentBlockNumber } = useCsmConstants();
 
   return useLidoSWR(
     ['fee-oracle-report-tx'],

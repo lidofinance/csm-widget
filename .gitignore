@@ -18,6 +18,7 @@ tsconfig.tsbuildinfo
 
 # generated
 /generated
+/modules/web3/generated.ts
 
 # next.js
 /.next/

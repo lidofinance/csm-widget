@@ -10,8 +10,9 @@ import {
   NavBlockStyle,
   NavContainer,
   NavItems,
-  NavLink,
+  NavLink, // Keep NavLink for other links
   NavTitle,
+  ThemeToggleButton, // Import the new button
 } from './styles';
 import { useNavItems } from './use-nav-items';
 
@@ -45,12 +46,14 @@ export const Navigation: FC = memo(() => {
           })}
         </NavBlock>
         <NavBlock title="Settings" onlyMobile>
-          <NavLink onClick={toggleTheme}>
-            {themeName === ThemeName.light ? <Dark /> : <Light />}
+          {/* Use ThemeToggleButton instead of NavLink */}
+          <ThemeToggleButton onClick={toggleTheme}>
+            {/* Wrap icon in a span to prevent prop forwarding */}
+            <span>{themeName === ThemeName.light ? <Dark /> : <Light />}</span>
             <span>
               {themeName === ThemeName.light ? 'Dark' : 'Light'} theme
             </span>
-          </NavLink>
+          </ThemeToggleButton>
         </NavBlock>
       </NavContainer>
     </Nav>

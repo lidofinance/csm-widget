@@ -6,13 +6,14 @@ import {
   Identicon,
   Modal,
 } from '@lidofinance/lido-ui';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useConnectorInfo, useDisconnect } from 'reef-knot/core-react';
 
 import { getEtherscanAddressLink } from '@lido-sdk/helpers';
+import { useDappStatus } from 'modules/web3';
 import Link from 'next/link';
 import type { ModalComponentType } from 'providers/modal-provider';
-import { useAccount, useCopyToClipboard } from 'shared/hooks';
+import { useCopyToClipboard } from 'shared/hooks';
 import {
   WalletModalAccountStyle,
   WalletModalActionsStyle,
@@ -24,7 +25,7 @@ import {
 } from './styles';
 
 export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
-  const { address, chainId } = useAccount();
+  const { address, chainId } = useDappStatus();
   const { connectorName } = useConnectorInfo();
   const { disconnect } = useDisconnect();
 
@@ -33,6 +34,13 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
   }, [onClose]);
 
   const handleCopy = useCopyToClipboard(address ?? '');
+
+  useEffect(() => {
+    // Close the modal if a wallet was somehow disconnected while the modal was open
+    if (address == null || address.length === 0) {
+      onClose?.();
+    }
+  }, [address, onClose]);
 
   if (!address) return null;
 

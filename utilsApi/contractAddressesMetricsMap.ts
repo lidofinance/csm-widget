@@ -2,7 +2,6 @@ import { utils } from 'ethers';
 import { memoize } from 'lodash';
 
 import {
-  CHAINS,
   TOKENS,
   getAggregatorAddress,
   getTokenAddress,
@@ -27,9 +26,11 @@ import {
   StakingRouter__factory,
 } from 'generated';
 import { HexString } from 'shared/keys';
+import { CHAINS } from 'consts';
+import { getAddress } from 'viem';
 
 const getAddressGetter = <
-  C extends number,
+  C extends CHAINS,
   N extends string,
   G extends (chainId: C, name: N) => string,
 >(
@@ -40,7 +41,7 @@ const getAddressGetter = <
     try {
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const address = getter(chainId, name!);
-      return address ? utils.getAddress(address) : null;
+      return address ? getAddress(address) : null;
     } catch (error) {
       return null;
     }
@@ -60,6 +61,7 @@ export const CONTRACT_NAMES = {
   CSEarlyAdoption: 'CSEarlyAdoption',
   ExitBusOracle: 'ExitBusOracle',
   StakingRouter: 'StakingRouter',
+  Multicall3: 'Multicall3',
 } as const;
 export type CONTRACT_NAMES = keyof typeof CONTRACT_NAMES;
 
@@ -76,6 +78,7 @@ const CONTRACT_LIST_CALL: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.HashConsensus,
   CONTRACT_NAMES.ExitBusOracle,
   CONTRACT_NAMES.StakingRouter,
+  CONTRACT_NAMES.Multicall3,
 ];
 
 const CONTRACT_LIST_LOGS: CONTRACT_NAMES[] = [
@@ -97,6 +100,7 @@ export const METRIC_CONTRACT_ABIS = {
   [CONTRACT_NAMES.CSEarlyAdoption]: CSEarlyAdoption__factory.abi,
   [CONTRACT_NAMES.ExitBusOracle]: ExitBusOracle__factory.abi,
   [CONTRACT_NAMES.StakingRouter]: StakingRouter__factory.abi,
+  [CONTRACT_NAMES.Multicall3]: [],
 } as const;
 
 const METRIC_CONTRACT_ADDRESS_GETTERS = {
@@ -137,6 +141,8 @@ const METRIC_CONTRACT_ADDRESS_GETTERS = {
     getCsmContractAddress,
     'StakingRouter',
   ),
+  [CONTRACT_NAMES.Multicall3]: () =>
+    '0xcA11bde05977b3631167028862bE2a173976CA11',
 };
 
 const ENS_ADDRESSES: string[] = [

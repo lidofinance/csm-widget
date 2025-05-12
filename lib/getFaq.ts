@@ -1,8 +1,9 @@
+import { getConfig } from 'config';
+import { CHAIN_NAMES, CHAINS } from 'consts';
 import matter from 'gray-matter';
 import remark from 'remark';
 import externalLinks from 'remark-external-links';
 import html from 'remark-html';
-import { getChainName } from 'utils';
 
 export type FaqItem = {
   id: string;
@@ -34,7 +35,8 @@ const readFaqFile = async ([scope, id]: string[]): Promise<FaqItem> => {
   };
 };
 
-const chainName = getChainName();
+const { defaultChain } = getConfig();
+const chainName = CHAIN_NAMES[defaultChain as CHAINS].toLowerCase();
 
 export const readFaqFiles = async (fileNames: string[]) => {
   const ids = fileNames.map((name) => [chainName, name]);

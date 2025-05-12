@@ -1,6 +1,5 @@
-import { AddressZero } from '@ethersproject/constants';
-import { isAddress } from 'ethers/lib/utils.js';
+import { isAddress, zeroAddress } from 'viem';
 
 export const addressOrZero = (address?: string | false) => {
-  return address && isAddress(address) ? address : AddressZero;
+  return address && isAddress(address) ? address : zeroAddress;
 };

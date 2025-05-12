@@ -119,7 +119,7 @@ export const useSubmitKeysFormNetworkData = (): [
 
   return [
     {
-      blockNumber,
+      blockNumber: blockNumber ? Number(blockNumber) : undefined,
       stethBalance,
       wstethBalance,
       etherBalance,

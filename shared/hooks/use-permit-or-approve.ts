@@ -1,12 +1,12 @@
 import { Zero } from '@ethersproject/constants';
 import { getTokenAddress } from '@lido-sdk/constants';
-import { getCsmContractAddress } from 'consts/csm-constants';
 import { TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { trackMatomoTxEvent } from 'utils';
 import { useAccount, useChainId } from 'wagmi';
 import { useApprove } from './use-approve';
+import { useCsmConstants } from './use-csm-constants';
 import {
   GatherPermitSignatureResult,
   usePermitSignature,
@@ -40,7 +40,9 @@ export const usePermitOrApprove = () => {
   const { address: owner } = useAccount();
   const { isMultisig } = useIsMultisig();
 
-  const spender = getCsmContractAddress(chainId, 'CSAccounting');
+  const {
+    contracts: { CSAccounting: spender },
+  } = useCsmConstants();
   const stethTokenAddress = getTokenAddress(chainId, TOKENS.STETH);
   const wstethTokenAddress = getTokenAddress(chainId, TOKENS.WSTETH);
 

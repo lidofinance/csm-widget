@@ -4,12 +4,12 @@ import { useNodeOperatorsFetcherFromEvents } from './use-node-operators-fetcher-
 import { useAccount } from './use-account';
 
 export const useCsmNodeOperators = () => {
-  const { chainId, address } = useAccount();
-  const fetcher = useNodeOperatorsFetcherFromEvents(address, chainId);
+  const { address } = useAccount();
+  const fetcher = useNodeOperatorsFetcherFromEvents(address);
 
   return useLidoSWR(
-    ['no-list', address, chainId],
-    address && chainId ? fetcher : null,
+    ['no-list', address],
+    address ? fetcher : null,
     STRATEGY_LAZY,
   );
 };

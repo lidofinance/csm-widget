@@ -11,6 +11,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Welcome
   connectWallet = 'connectWallet',
   disconnectWallet = 'disconnectWallet',
+  clickShowMoreWallets = 'clickShowMoreWallets',
+  clickShowLessWallets = 'clickShowLessWallets',
   connectAsNodeOperator = 'connectAsNodeOperator',
   connectToBecomeNodeOperator = 'connectToBecomeNodeOperator',
   welcomeDetailedLink = 'welcomeDetailedLink',
@@ -110,6 +112,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Push «Disonnect» button',
     prefixed`disconnect_wallet`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.clickShowMoreWallets]: [
+    MATOMO_APP_NAME,
+    'Push "More wallets" on wallet modal',
+    prefixed`more_wallets`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.clickShowLessWallets]: [
+    MATOMO_APP_NAME,
+    'Push "Less wallets" on wallet modal',
+    prefixed`less_wallets`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator]: [
     MATOMO_APP_NAME,
