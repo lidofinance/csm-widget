@@ -47,7 +47,7 @@ export const CONSTANTS_BY_NETWORK: Record<CHAINS, CsmConstants> = {
   },
   [CHAINS.Hoodi]: {
     contracts: {
-      CSAccounting: '0xA54b90BA34C5f326BC1485054080994e38FB4C60',
+      CSAccounting: '0x28fF0b9FdA22c0ec8a7A39AdB2702CC895979904',
       CSEarlyAdoption: '0x3281b9E45518F462E594697f8fba1896a8B43939',
       CSFeeDistributor: '0xaCd9820b0A2229a82dc1A0770307ce5522FF3582',
       CSFeeOracle: '0xe7314f561B2e72f9543F1004e741bab6Fc51028B',
