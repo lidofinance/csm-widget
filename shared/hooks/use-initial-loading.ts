@@ -2,6 +2,7 @@ import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useAccount } from './use-account';
 import { useCsmEarlyAdoption } from './useCsmEarlyAdoption';
 import { useCsmPaused, useCsmPublicRelease } from './useCsmStatus';
+import { useEffect, useState } from 'react';
 
 export const useInitialLoading = (externalLoading?: boolean) => {
   const { initialLoading: isPublicReleaseLoading } = useCsmPublicRelease();
@@ -10,12 +11,27 @@ export const useInitialLoading = (externalLoading?: boolean) => {
   const { isListLoading, active } = useNodeOperatorContext();
   const { initialLoading: isEaLoading } = useCsmEarlyAdoption();
 
-  const loading =
-    isPublicReleaseLoading ||
-    isPausedLoading ||
-    isConnecting ||
-    isListLoading ||
-    (!active && isEaLoading);
+  const [state, setState] = useState(true);
 
-  return loading || externalLoading;
+  useEffect(() => {
+    const loading =
+      isPublicReleaseLoading ||
+      isPausedLoading ||
+      isConnecting ||
+      isListLoading ||
+      (!active && isEaLoading);
+
+    const result = Boolean(loading || externalLoading);
+    setState(result);
+  }, [
+    active,
+    externalLoading,
+    isConnecting,
+    isEaLoading,
+    isListLoading,
+    isPausedLoading,
+    isPublicReleaseLoading,
+  ]);
+
+  return state;
 };
