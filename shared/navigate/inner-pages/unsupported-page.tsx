@@ -1,21 +1,22 @@
 import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 
-import { WelcomeSection } from 'shared/components';
-import { Block } from 'shared/components';
+import { Banner, WelcomeSection } from 'shared/components';
 import { Layout } from 'shared/layout';
 
 export const UnsupportedPage: FC = () => {
   return (
     <Layout>
-      <WelcomeSection>
-        <Block accent="error">
-          <Text color="error" size="sm">
-            This widget is not yet compatible with the current smart contract
-            version. We are working on an update and it will be available soon.
-          </Text>
-        </Block>
-      </WelcomeSection>
+      <Banner
+        title="CSM is currently undergoing an upgrade"
+        variant="secondary"
+      >
+        <Text size="sm">
+          CSM v2 is on the way, packed with new benefits! A new version of the
+          widget will be available shortly to enhance your experience
+        </Text>
+      </Banner>
+      <WelcomeSection></WelcomeSection>
     </Layout>
   );
 };
