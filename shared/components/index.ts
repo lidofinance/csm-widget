@@ -42,3 +42,5 @@ export * from './extra-width';
 export * from './external-icon-link';
 export * from './text-block';
 export * from './copy-button';
+export * from './block';
+export * from './welcome-section';

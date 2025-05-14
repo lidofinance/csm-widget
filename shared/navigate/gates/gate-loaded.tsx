@@ -1,18 +1,20 @@
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useInitialLoading } from 'shared/hooks';
-import { SplashPage } from '../splash';
+import { SplashPage, UnsupportedPage } from '../inner-pages';
 
 type Props = {
   fallback?: ReactNode;
+  unsupported?: ReactNode;
   additional?: boolean;
 };
 
 export const GateLoaded: FC<PropsWithChildren<Props>> = ({
   fallback = <SplashPage />,
+  unsupported = <UnsupportedPage />,
   additional,
   children,
 }) => {
-  const isLoading = useInitialLoading(additional);
+  const { isLoading, isSupported } = useInitialLoading(additional);
 
-  return <>{isLoading ? fallback : children}</>;
+  return <>{isLoading ? fallback : isSupported ? children : unsupported}</>;
 };

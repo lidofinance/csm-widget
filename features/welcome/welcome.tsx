@@ -1,12 +1,11 @@
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { Stack } from 'shared/components';
+import { Stack, WelcomeSection } from 'shared/components';
 import { useAccount } from 'shared/hooks';
 import { useCsmPaused, useCsmPublicRelease } from 'shared/hooks/useCsmStatus';
 import { Connect, Fallback } from 'shared/wallet';
 import { EarlyAdoptionBanner } from './early-adoption-banner';
-import { WelcomeSection } from './welcome-section';
 import styled from 'styled-components';
 import { HoleskyBanner } from './holesky-banner';
 import { getConfig } from 'config';

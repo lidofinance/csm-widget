@@ -3,6 +3,9 @@ import { useAccount } from './use-account';
 import { useCsmEarlyAdoption } from './useCsmEarlyAdoption';
 import { useCsmPaused, useCsmPublicRelease } from './useCsmStatus';
 import { useEffect, useState } from 'react';
+import { useCsmVersionSupported } from './use-csm-version-supported';
+
+type ReturnProps = { isLoading: boolean; isSupported: boolean };
 
 export const useInitialLoading = (externalLoading?: boolean) => {
   const { initialLoading: isPublicReleaseLoading } = useCsmPublicRelease();
@@ -10,19 +13,26 @@ export const useInitialLoading = (externalLoading?: boolean) => {
   const { isConnecting } = useAccount();
   const { isListLoading, active } = useNodeOperatorContext();
   const { initialLoading: isEaLoading } = useCsmEarlyAdoption();
+  const { initialLoading: isSupporetdLoading, data: isSupported } =
+    useCsmVersionSupported();
 
-  const [state, setState] = useState(true);
+  const [state, setState] = useState<ReturnProps>({
+    isLoading: true,
+    isSupported: true,
+  });
 
   useEffect(() => {
-    const loading =
-      isPublicReleaseLoading ||
-      isPausedLoading ||
-      isConnecting ||
-      isListLoading ||
-      (!active && isEaLoading);
+    const isLoading = Boolean(
+      isSupporetdLoading ||
+        isPublicReleaseLoading ||
+        isPausedLoading ||
+        isConnecting ||
+        isListLoading ||
+        (!active && isEaLoading) ||
+        externalLoading,
+    );
 
-    const result = Boolean(loading || externalLoading);
-    setState(result);
+    setState({ isLoading, isSupported: isSupported ?? true });
   }, [
     active,
     externalLoading,
@@ -31,6 +41,8 @@ export const useInitialLoading = (externalLoading?: boolean) => {
     isListLoading,
     isPausedLoading,
     isPublicReleaseLoading,
+    isSupporetdLoading,
+    isSupported,
   ]);
 
   return state;
