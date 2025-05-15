@@ -18,6 +18,7 @@ export const AmountInput = () => {
       label={`${getTokenDisplayName(token)} amount`}
       error={errors.bondAmount?.message}
       fullwidth
+      data-testid={'amountInput'}
     />
   );
 };
