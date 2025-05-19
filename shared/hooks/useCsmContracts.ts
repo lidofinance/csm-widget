@@ -10,6 +10,7 @@ import {
   ExitBusOracle__factory,
   HashConsensus__factory,
   StakingRouter__factory,
+  Versioned__factory,
 } from 'generated';
 
 const CSModule = contractHooksFactory(
@@ -77,3 +78,17 @@ const StakingRouter = contractHooksFactory(
 );
 
 export const useStakingRouterRPC = StakingRouter.useContractRPC;
+
+const CSModuleVersioned = contractHooksFactory(
+  Versioned__factory,
+  getCsmContractAddressGetter('CSModule'),
+);
+
+export const useCSModuleVersionedRPC = CSModuleVersioned.useContractRPC;
+
+const CSAccountingVersioned = contractHooksFactory(
+  Versioned__factory,
+  getCsmContractAddressGetter('CSAccounting'),
+);
+
+export const useCSAccountingVersionedRPC = CSAccountingVersioned.useContractRPC;

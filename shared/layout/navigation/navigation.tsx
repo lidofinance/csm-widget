@@ -16,13 +16,13 @@ import {
 import { useNavItems } from './use-nav-items';
 
 export const Navigation: FC = memo(() => {
-  const isLoading = useInitialLoading();
+  const { isLoading, isSupported } = useInitialLoading();
   const { themeName, toggleTheme } = useThemeToggle();
   const { expanded, toggleExpanded } = useInpageNavigation();
   const routes = useNavItems();
   const pathname = useRouterPath();
 
-  const hidden = isLoading || routes.length === 0;
+  const hidden = isLoading || !isSupported || routes.length === 0;
 
   return (
     <Nav aria-expanded={expanded} hidden={hidden}>
