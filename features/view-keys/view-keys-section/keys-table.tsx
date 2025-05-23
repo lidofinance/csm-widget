@@ -80,26 +80,26 @@ export const KeysTable: FC<Props> = ({ keys }) => {
       <tbody>
         {sortedKeys?.map(({ key, index, statuses, validatorIndex }) => (
           <tr key={index}>
-            <td>
+            <td data-testid="pubkeyCell">
               <Pubkey
                 address={key}
                 link={
                   <>
-                    <CopyLink text={key} />
+                    <CopyLink text={key} data-testid="pubkeyLink" />
                     <BeaconchainPubkeyLink pubkey={key} statuses={statuses} />
                     <EthseerPubkeyLink validator={validatorIndex} />
                   </>
                 }
               />
             </td>
-            <td>
+            <td data-testid="statusCell">
               <Stack direction="column" gap="xs">
                 {statuses.map((status) => (
                   <StatusChip status={status} key={status} />
                 ))}
               </Stack>
             </td>
-            <td>
+            <td data-testid="statusCommentCell">
               <StatusComment statuses={statuses} />
             </td>
           </tr>
