@@ -4,21 +4,29 @@ import { widgetFullConfig } from 'tests/config';
 import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
 import { WidgetService } from 'tests/pages/widget.service';
 
-type Fixtures = object;
+type WorkerFixtures = {
+  secretPhrase: string | undefined;
+  browserWithWallet: BrowserService;
+  widgetService: WidgetService;
+};
 
-export const test = base.extend<
-  Fixtures,
-  {
-    browserWithWallet: BrowserService;
-    widgetService: WidgetService;
-  }
->({
-  browserWithWallet: [
-    // eslint-disable-next-line
+export const test = base.extend<object, WorkerFixtures>({
+  secretPhrase: [
+    // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
+      await use(undefined);
+    },
+    { scope: 'worker' },
+  ],
+  browserWithWallet: [
+    async ({ secretPhrase }, use) => {
       const browserService = new BrowserService({
         networkConfig: widgetFullConfig.standConfig.networkConfig,
-        walletConfig: widgetFullConfig.walletConfig,
+        walletConfig: {
+          ...widgetFullConfig.walletConfig,
+          SECRET_PHRASE:
+            secretPhrase || widgetFullConfig.walletConfig.SECRET_PHRASE,
+        },
         nodeConfig: { rpcUrlToMock: '**/api/rpc?chainId=1' },
         browserOptions: {
           cookies: REFUSE_CF_BLOCK_COOKIE,
@@ -28,7 +36,7 @@ export const test = base.extend<
       await browserService.initWalletSetup();
 
       await use(browserService);
-      // Teardown will be call only when all tests done or when test failed.
+
       await browserService.teardown();
     },
     { scope: 'worker' },

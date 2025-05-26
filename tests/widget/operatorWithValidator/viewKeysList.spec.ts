@@ -1,0 +1,27 @@
+import { qase } from 'playwright-qase-reporter/playwright';
+import { expect } from '@playwright/test';
+import { test } from '../test.fixture';
+import { KeysPage } from 'tests/pages/keys.page';
+
+test.describe('View keys list. Common', async () => {
+  let keysPage: KeysPage;
+
+  test.beforeEach(async ({ widgetService }) => {
+    keysPage = new KeysPage(widgetService.page);
+    await keysPage.keysView.open();
+    await keysPage.page.waitForTimeout(1000);
+    await widgetService.connectWallet();
+  });
+
+  test(qase(148, 'Verification of displayed key statuses'), async () => {
+    const keysList = await keysPage.keysView.getAllTableRaws();
+
+    await test.step('Check each column for all keys', async () => {
+      for (const key of keysList) {
+        await expect(key.pubkeyCell).not.toBeEmpty();
+        await expect(key.statusCell).not.toBeEmpty();
+        await expect(key.statusCommentCell).not.toBeEmpty();
+      }
+    });
+  });
+});

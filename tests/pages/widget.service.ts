@@ -1,12 +1,23 @@
 import { expect, Page, test } from '@playwright/test';
 import { ElementController } from './elements/controller';
 import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
+import { MainPage } from './main.page';
+import { KeysPage } from './keys.page';
+import { DepositKey } from 'tests/widget/operatorWithValidator/keys.const';
+import { TokenSymbol } from 'tests/consts/common.const';
+import { AssertionError } from 'assert';
+import { STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
 export class WidgetService {
+  public mainPage: MainPage;
+  public keysPage: KeysPage;
   constructor(
     public page: Page,
     public walletPage: WalletPage<WalletTypes.EOA>,
-  ) {}
+  ) {
+    this.mainPage = new MainPage(this.page);
+    this.keysPage = new KeysPage(this.page);
+  }
 
   async connectWallet(expectConnectionState = true) {
     await test.step('Connect wallet to widget', async () => {
@@ -39,6 +50,61 @@ export class WidgetService {
           ? 'Wallet should be connected'
           : 'Wallet should be disconnected',
       ).toBe(expectConnectionState);
+
+      const starterPackSection = new ElementController(this.page)
+        .starterPackSection.section;
+
+      try {
+        await starterPackSection.waitFor({ state: 'visible' });
+      } catch {
+        await this.page.reload();
+        await starterPackSection.waitFor({ state: 'visible' });
+      }
+    });
+  }
+
+  async submitKeys(keys: DepositKey[], tokenSymbol = TokenSymbol.STETH) {
+    const isNewOperator = await this.keysPage.isNewOperator();
+    let txPage;
+    if (isNewOperator) {
+      txPage = await this.keysPage.createNodeOperatorForm.addNewKeys(
+        keys,
+        tokenSymbol,
+      );
+    } else {
+      txPage = await this.keysPage.submitPage.submitKeys(keys, tokenSymbol);
+    }
+
+    if (!txPage) {
+      throw new AssertionError({
+        message: 'Wallet page for submit transaction has not opened.',
+      });
+    }
+
+    await this.walletPage.confirmTx(txPage);
+    await this.page.waitForSelector(
+      `text=Uploading operation was successful.`,
+      STAGE_WAIT_TIMEOUT,
+    );
+  }
+
+  async removeKeys(keysToRemove: string[]) {
+    await test.step(`Remove ${keysToRemove.length} keys`, async () => {
+      for (const key of keysToRemove) {
+        await this.keysPage.removePage.getCheckboxByAddress(key).click();
+      }
+
+      const [walletSignPage] = await Promise.all([
+        this.keysPage.base.waitForPage(10000),
+        this.page.getByRole('button', { name: 'Remove Keys' }).click(),
+      ]);
+
+      await this.walletPage.confirmTx(walletSignPage);
+      await this.keysPage.page.waitForSelector(
+        `text=${keysToRemove.length} key has been removed`,
+        STAGE_WAIT_TIMEOUT,
+      );
+      await this.keysPage.base.closeModalWindow();
     });
   }
 

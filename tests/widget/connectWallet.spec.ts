@@ -1,5 +1,7 @@
 import { test } from './test.fixture';
 
+test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+
 test.describe('Connect wallet', async () => {
   test('Should open main page after connect wallet', async ({
     widgetService,
