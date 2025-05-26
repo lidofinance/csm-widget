@@ -1,7 +1,7 @@
-import { UseFormReturn } from 'react-hook-form';
-import { useNodeOperatorFirstKeysBond } from 'shared/hooks';
-import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
+import { useBondByKeysCount } from 'modules/web3';
 import { useEffect } from 'react';
+import { UseFormReturn } from 'react-hook-form';
+import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
 export const useFormBondAmount = (
   { watch, setValue, trigger }: UseFormReturn<SubmitKeysFormInputType>,
@@ -9,8 +9,8 @@ export const useFormBondAmount = (
 ) => {
   const [token, depositData] = watch(['token', 'depositData']);
 
-  const { data: bondAmount } = useNodeOperatorFirstKeysBond({
-    keysCount: depositData?.length,
+  const { data: bondAmount } = useBondByKeysCount({
+    keysCount: BigInt(depositData?.length ?? 0),
     token,
     curveId,
   });

@@ -22,8 +22,8 @@ export const useAddBondValidation = (networkData: AddBondFormNetworkData) => {
         validateBondAmount({
           token,
           bondAmount,
-          maxStakeEther,
-          etherBalance,
+          maxStakeEth: maxStakeEther,
+          ethBalance: etherBalance,
           stethBalance,
           wstethBalance,
         });

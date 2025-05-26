@@ -25,15 +25,12 @@ export const useDappStatus = () => {
     ? isWalletConnected && isSupportedChain
     : false;
 
-  const isDappActive = isAccountActive;
-
   // no useMemo because memoisation is more expensive than boolean flags
   // hook is used in many places and every usage would create separate memoisation
   return {
     chainId,
     isSupportedChain,
     isAccountActive,
-    isDappActive,
     isWalletConnected,
     walletChainId,
     address,

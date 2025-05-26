@@ -6,7 +6,7 @@ export const useWstethBySteth = (steth?: bigint | null) => {
   const { wrap, chainId } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['use-wsteth-by-steth', steth?.toString(), chainId],
+    queryKey: ['use-wsteth-by-steth', steth, chainId],
     enabled: steth != null && !!wrap,
     staleTime: Infinity,
     queryFn: () => {

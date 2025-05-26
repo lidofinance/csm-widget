@@ -1,222 +1,168 @@
-import { utils } from 'ethers';
-import { memoize } from 'lodash';
-
 import {
-  TOKENS,
-  getAggregatorAddress,
-  getTokenAddress,
-  getWithdrawalQueueAddress,
-} from '@lido-sdk/constants';
+  CSM_CONTRACT_ADDRESSES,
+  CSM_CONTRACT_NAMES,
+} from '@lidofinance/lido-csm-sdk/common';
+import { CHAINS, StethAbi, WstethABI } from '@lidofinance/lido-ethereum-sdk';
 import {
-  StethAbiFactory,
-  WithdrawalQueueAbiFactory,
-  WstethAbiFactory,
-} from '@lido-sdk/contracts';
+  fromPairs,
+  invert,
+  isUndefined,
+  keys,
+  mapValues,
+  memoize,
+  omitBy,
+  pickBy,
+} from 'lodash';
+import { Abi, Address } from 'viem';
 
 import { config } from 'config';
-import { getCsmContractAddress } from 'consts/csm-constants';
 import {
-  CSAccounting__factory,
-  CSFeeDistributor__factory,
-  CSFeeOracle__factory,
-  CSModule__factory,
-  ExitBusOracle__factory,
-  HashConsensus__factory,
-  StakingRouter__factory,
-} from 'generated';
-import { HexString } from 'shared/keys';
-import { CHAINS } from 'consts';
-import { getAddress } from 'viem';
-import { CSM_CONTRACT_ADDRESSES } from '@lidofinance/lido-csm-sdk/common';
+  CSAccountingAbi,
+  CSEjectorAbi,
+  CSFeeDistributorAbi,
+  CSFeeOracleAbi,
+  CSModuleAbi,
+  CSParametersRegistryAbi,
+  CSStrikesAbi,
+  CSVerifierAbi,
+  HashConsensusAbi,
+  PermissionlessGateAbi,
+  StakingRouterAbi,
+  ValidatorsExitBusOracleAbi,
+  VettedGateAbi,
+} from '@lidofinance/lido-csm-sdk/abi';
 
-const getAddressGetter = <
-  C extends CHAINS,
-  N extends string,
-  G extends (chainId: C, name: N) => string,
->(
-  getter: G,
-  name?: N,
-) => {
-  return (chainId: C) => {
-    try {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const address = getter(chainId, name!);
-      return address ? getAddress(address) : null;
-    } catch (error) {
-      return null;
-    }
-  };
+const CONTRACT_NAMES = {
+  ...CSM_CONTRACT_NAMES,
+  aggregatorStEthUsdPriceFeed: 'aggregatorStEthUsdPriceFeed',
+
+  ens1: 'ens1',
+  ens2: 'ens2',
+  ens3: 'ens3',
+  ens4: 'ens4',
+  ens5: 'ens5',
+  ens6: 'ens6',
+
+  // TODO: remove this
+  CSAccounting_v1: 'CSAccounting_v1',
+  CSFeeDistributor_v1: 'CSFeeDistributor_v1',
+  CSFeeOracle_v1: 'CSFeeOracle_v1',
+  CSModule_v1: 'CSModule_v1',
+  CSVerifier_v1: 'CSVerifier_v1',
+  HashConsensus_v1: 'HashConsensus_v1',
+} as const;
+type CONTRACT_NAMES = keyof typeof CONTRACT_NAMES;
+
+const supportedChainsWithMainnet = (
+  config.supportedChains.includes(CHAINS.Mainnet)
+    ? config.supportedChains
+    : [...config.supportedChains, CHAINS.Mainnet]
+) as CHAINS[];
+
+const STATIC_ADDRESSES: {
+  [key in CHAINS]?: { [key in CONTRACT_NAMES]?: Address };
+} = {
+  [CHAINS.Mainnet]: {
+    [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]:
+      '0xcfe54b5cd566ab89272946f602d76ea879cab4a8',
+    [CONTRACT_NAMES.ens1]: '0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e',
+    [CONTRACT_NAMES.ens2]: '0x231b0ee14048e9dccd1d247744d114a4eb5e8e63',
+    [CONTRACT_NAMES.ens3]: '0x64969fb44091A7E5fA1213D30D7A7e8488edf693',
+    [CONTRACT_NAMES.ens4]: '0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41',
+    [CONTRACT_NAMES.ens5]: '0xa2c122be93b0074270ebee7f6b7292c7deb45047',
+    [CONTRACT_NAMES.ens6]: '0x1da022710df5002339274aadee8d58218e9d6ab5',
+
+    [CONTRACT_NAMES.CSAccounting_v1]:
+      '0x4d72BFF1BeaC69925F8Bd12526a39BAAb069e5Da',
+    [CONTRACT_NAMES.CSFeeDistributor_v1]:
+      '0xD99CC66fEC647E68294C6477B40fC7E0F6F618D0',
+    [CONTRACT_NAMES.CSFeeOracle_v1]:
+      '0x4D4074628678Bd302921c20573EEa1ed38DdF7FB',
+    [CONTRACT_NAMES.CSModule_v1]: '0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F',
+    [CONTRACT_NAMES.CSVerifier_v1]:
+      '0x3Dfc50f22aCA652a0a6F28a0F892ab62074b5583',
+    [CONTRACT_NAMES.HashConsensus_v1]:
+      '0x71093efF8D8599b5fA340D665Ad60fA7C80688e4',
+  },
+  [CHAINS.Hoodi]: {
+    [CONTRACT_NAMES.CSAccounting_v1]:
+      '0xA54b90BA34C5f326BC1485054080994e38FB4C60',
+    [CONTRACT_NAMES.CSFeeDistributor_v1]:
+      '0xaCd9820b0A2229a82dc1A0770307ce5522FF3582',
+    [CONTRACT_NAMES.CSFeeOracle_v1]:
+      '0xe7314f561B2e72f9543F1004e741bab6Fc51028B',
+    [CONTRACT_NAMES.CSModule_v1]: '0x79CEf36D84743222f37765204Bec41E92a93E59d',
+    [CONTRACT_NAMES.CSVerifier_v1]:
+      '0x16D0f6068D211608e3703323314aa976a6492D09',
+    [CONTRACT_NAMES.HashConsensus_v1]:
+      '0x54f74a10e4397dDeF85C4854d9dfcA129D72C637',
+  },
 };
 
-export const CONTRACT_NAMES = {
-  stETH: 'stETH',
-  wstETH: 'wstETH',
-  WithdrawalQueue: 'WithdrawalQueue',
-  aggregatorStEthUsdPriceFeed: 'aggregatorStEthUsdPriceFeed',
-  CSModule: 'CSModule',
-  CSAccounting: 'CSAccounting',
-  CSFeeDistributor: 'CSFeeDistributor',
-  CSFeeOracle: 'CSFeeOracle',
-  HashConsensus: 'HashConsensus',
-  ExitBusOracle: 'ExitBusOracle',
-  StakingRouter: 'StakingRouter',
-  Multicall3: 'Multicall3',
-} as const;
-export type CONTRACT_NAMES = keyof typeof CONTRACT_NAMES;
+const getContractAddress = (name: CONTRACT_NAMES, chainId: CHAINS) =>
+  CSM_CONTRACT_ADDRESSES[chainId]?.[name as CSM_CONTRACT_NAMES] ??
+  STATIC_ADDRESSES[chainId]?.[name];
 
-const CONTRACT_LIST_CALL: CONTRACT_NAMES[] = [
-  CONTRACT_NAMES.stETH,
-  CONTRACT_NAMES.wstETH,
-  CONTRACT_NAMES.WithdrawalQueue,
-  CONTRACT_NAMES.aggregatorStEthUsdPriceFeed,
-  CONTRACT_NAMES.CSModule,
-  CONTRACT_NAMES.CSAccounting,
-  CONTRACT_NAMES.CSFeeDistributor,
-  CONTRACT_NAMES.CSFeeOracle,
-  CONTRACT_NAMES.HashConsensus,
-  CONTRACT_NAMES.ExitBusOracle,
-  CONTRACT_NAMES.StakingRouter,
-  CONTRACT_NAMES.Multicall3,
-];
+export const METRIC_CONTRACT_ADDRESSES = fromPairs(
+  supportedChainsWithMainnet.map((chainId) => [
+    chainId,
+    invert(
+      omitBy(
+        mapValues(CONTRACT_NAMES, (name) => getContractAddress(name, chainId)),
+        isUndefined,
+      ),
+    ),
+  ]),
+) as Record<CHAINS, Record<Address, CONTRACT_NAMES>>;
 
 const CONTRACT_LIST_LOGS: CONTRACT_NAMES[] = [
-  CONTRACT_NAMES.CSModule,
-  CONTRACT_NAMES.CSFeeOracle,
-  CONTRACT_NAMES.ExitBusOracle,
+  CONTRACT_NAMES.csModule,
+  CONTRACT_NAMES.csFeeOracle,
+  CONTRACT_NAMES.validatorsExitBusOracle,
+
+  CONTRACT_NAMES.CSModule_v1,
+  CONTRACT_NAMES.CSFeeOracle_v1,
 ];
 
-export const METRIC_CONTRACT_ABIS = {
-  [CONTRACT_NAMES.stETH]: StethAbiFactory.abi,
-  [CONTRACT_NAMES.wstETH]: WstethAbiFactory.abi,
-  [CONTRACT_NAMES.WithdrawalQueue]: WithdrawalQueueAbiFactory.abi,
-  [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]: [{}],
-  [CONTRACT_NAMES.CSModule]: CSModule__factory.abi,
-  [CONTRACT_NAMES.CSAccounting]: CSAccounting__factory.abi,
-  [CONTRACT_NAMES.CSFeeDistributor]: CSFeeDistributor__factory.abi,
-  [CONTRACT_NAMES.CSFeeOracle]: CSFeeOracle__factory.abi,
-  [CONTRACT_NAMES.HashConsensus]: HashConsensus__factory.abi,
-  [CONTRACT_NAMES.ExitBusOracle]: ExitBusOracle__factory.abi,
-  [CONTRACT_NAMES.StakingRouter]: StakingRouter__factory.abi,
-  [CONTRACT_NAMES.Multicall3]: [],
-} as const;
+export const allowedCallAddresses = mapValues(METRIC_CONTRACT_ADDRESSES, keys);
 
-const METRIC_CONTRACT_ADDRESS_GETTERS = {
-  [CONTRACT_NAMES.stETH]: getAddressGetter(getTokenAddress, TOKENS.STETH),
-  [CONTRACT_NAMES.wstETH]: getAddressGetter(getTokenAddress, TOKENS.WSTETH),
-  [CONTRACT_NAMES.WithdrawalQueue]: getAddressGetter(getWithdrawalQueueAddress),
-  [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]: () =>
-    getAddressGetter(getAggregatorAddress)(CHAINS.Mainnet),
-  [CONTRACT_NAMES.CSModule]: getAddressGetter(
-    getCsmContractAddress,
-    'CSModule',
-  ),
-  [CONTRACT_NAMES.CSAccounting]: getAddressGetter(
-    getCsmContractAddress,
-    'CSAccounting',
-  ),
-  [CONTRACT_NAMES.CSFeeDistributor]: getAddressGetter(
-    getCsmContractAddress,
-    'CSFeeDistributor',
-  ),
-  [CONTRACT_NAMES.CSFeeOracle]: getAddressGetter(
-    getCsmContractAddress,
-    'CSFeeOracle',
-  ),
-  [CONTRACT_NAMES.HashConsensus]: getAddressGetter(
-    getCsmContractAddress,
-    'HashConsensus',
-  ),
-  [CONTRACT_NAMES.ExitBusOracle]: getAddressGetter(
-    getCsmContractAddress,
-    'ExitBusOracle',
-  ),
-  [CONTRACT_NAMES.StakingRouter]: getAddressGetter(
-    getCsmContractAddress,
-    'StakingRouter',
-  ),
-  [CONTRACT_NAMES.Multicall3]: () =>
-    '0xcA11bde05977b3631167028862bE2a173976CA11',
-};
-
-const ENS_ADDRESSES: string[] = [
-  '0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e',
-  '0x231b0ee14048e9dccd1d247744d114a4eb5e8e63',
-  '0x64969fb44091A7E5fA1213D30D7A7e8488edf693',
-  '0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41',
-  '0xa2c122be93b0074270ebee7f6b7292c7deb45047',
-  '0x1da022710df5002339274aadee8d58218e9d6ab5',
-];
-
-const aggregatorMainnetAddress = METRIC_CONTRACT_ADDRESS_GETTERS[
-  CONTRACT_NAMES.aggregatorStEthUsdPriceFeed
-]() as HexString;
-
-const prefilledAddresses =
-  config.defaultChain !== CHAINS.Mainnet
-    ? ({
-        [CHAINS.Mainnet]: [aggregatorMainnetAddress],
-      } as Record<CHAINS, HexString[]>)
-    : ({
-        [CHAINS.Mainnet]: [...ENS_ADDRESSES],
-      } as Record<CHAINS, HexString[]>);
-
-const prefilledMetricAddresses: Partial<
-  Record<CHAINS, Record<HexString, CONTRACT_NAMES>>
-> =
-  config.defaultChain !== CHAINS.Mainnet
-    ? {
-        [CHAINS.Mainnet]: {
-          [aggregatorMainnetAddress]:
-            CONTRACT_NAMES.aggregatorStEthUsdPriceFeed,
-        },
-      }
-    : {};
-
-export const getMetricContractInterface = memoize(
-  (contractName: CONTRACT_NAMES) =>
-    new utils.Interface(METRIC_CONTRACT_ABIS[contractName]),
+export const allowedLogsAddresses = mapValues(METRIC_CONTRACT_ADDRESSES, (o) =>
+  keys(pickBy(o, (v) => CONTRACT_LIST_LOGS.includes(v))),
 );
 
-export const METRIC_CONTRACT_ADDRESSES = (
-  config.supportedChains as CHAINS[]
-).reduce((mapped, chainId) => {
-  const map = Object.fromEntries(
-    Object.entries(METRIC_CONTRACT_ADDRESS_GETTERS)
-      .map(([name, getter]) => [getter(chainId), name])
-      .filter(([, address]) => address !== null),
-  );
-  return {
-    ...mapped,
-    [chainId]: map,
-  };
-}, prefilledMetricAddresses);
+const METRIC_CONTRACT_ABIS: Record<CONTRACT_NAMES, Abi> = {
+  [CONTRACT_NAMES.stETH]: StethAbi,
+  [CONTRACT_NAMES.wstETH]: WstethABI,
+  [CONTRACT_NAMES.withdrawalVault]: [],
+  [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]: [],
+  [CONTRACT_NAMES.ens1]: [],
+  [CONTRACT_NAMES.ens2]: [],
+  [CONTRACT_NAMES.ens3]: [],
+  [CONTRACT_NAMES.ens4]: [],
+  [CONTRACT_NAMES.ens5]: [],
+  [CONTRACT_NAMES.ens6]: [],
+  [CONTRACT_NAMES.validatorsExitBusOracle]: ValidatorsExitBusOracleAbi,
+  [CONTRACT_NAMES.stakingRouter]: StakingRouterAbi,
+  [CONTRACT_NAMES.csModule]: CSModuleAbi,
+  [CONTRACT_NAMES.csAccounting]: CSAccountingAbi,
+  [CONTRACT_NAMES.csFeeDistributor]: CSFeeDistributorAbi,
+  [CONTRACT_NAMES.csFeeOracle]: CSFeeOracleAbi,
+  [CONTRACT_NAMES.hashConsensus]: HashConsensusAbi,
+  [CONTRACT_NAMES.csEjector]: CSEjectorAbi,
+  [CONTRACT_NAMES.csParametersRegistry]: CSParametersRegistryAbi,
+  [CONTRACT_NAMES.csStrikes]: CSStrikesAbi,
+  [CONTRACT_NAMES.csVerifier]: CSVerifierAbi,
+  [CONTRACT_NAMES.permissionlessGate]: PermissionlessGateAbi,
+  [CONTRACT_NAMES.vettedGate]: VettedGateAbi,
 
-export const CONTRACT_LOGS_ADDRESSES = (
-  config.supportedChains as CHAINS[]
-).reduce((mapped, chainId) => {
-  const list = CONTRACT_LIST_LOGS.map((name) =>
-    METRIC_CONTRACT_ADDRESS_GETTERS[name](chainId),
-  ).filter((address) => !!address);
+  [CONTRACT_NAMES.CSAccounting_v1]: [],
+  [CONTRACT_NAMES.CSFeeDistributor_v1]: [],
+  [CONTRACT_NAMES.CSFeeOracle_v1]: [],
+  [CONTRACT_NAMES.CSModule_v1]: [],
+  [CONTRACT_NAMES.CSVerifier_v1]: [],
+  [CONTRACT_NAMES.HashConsensus_v1]: [],
+};
 
-  const csmV2addresses = Object.values(CSM_CONTRACT_ADDRESSES[chainId] || {});
-
-  return {
-    ...mapped,
-    [chainId]: [...list, ...csmV2addresses],
-  };
-}, prefilledAddresses);
-
-export const CONTRACT_CALL_ADDRESSES = (
-  config.supportedChains as CHAINS[]
-).reduce((mapped, chainId) => {
-  const list = CONTRACT_LIST_CALL.map((name) =>
-    METRIC_CONTRACT_ADDRESS_GETTERS[name](chainId),
-  ).filter((address) => !!address);
-
-  const csmV2addresses = Object.values(CSM_CONTRACT_ADDRESSES[chainId] || {});
-
-  return {
-    ...mapped,
-    [chainId]: [...(mapped?.[chainId] ?? []), ...list, ...csmV2addresses],
-  };
-}, prefilledAddresses);
+export const getMetricContractAbi = memoize((contractName: CONTRACT_NAMES) => {
+  return METRIC_CONTRACT_ABIS[contractName];
+});

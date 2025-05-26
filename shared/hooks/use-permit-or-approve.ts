@@ -27,7 +27,7 @@ type PermitOrApprove = (props: {
   approveTxHash?: string;
 }>;
 
-const EMPTY_PERMIT: GatherPermitSignatureResult = {
+export const EMPTY_PERMIT: GatherPermitSignatureResult = {
   value: Zero,
   deadline: Zero,
   v: 0,

@@ -1,128 +1,38 @@
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
-import { BytesLike } from 'ethers/lib/utils.js';
+import {
+  AddNodeOperatorResult,
+  TransactionCallback,
+} from '@lidofinance/lido-csm-sdk';
+import { TransactionCallbackStage } from '@lidofinance/lido-ethereum-sdk';
+import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
+import { useLidoSDK } from 'modules/web3';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import {
-  GatherPermitSignatureResult,
   useAddressCompare,
-  useCSModuleWeb3,
   useKeysCache,
   usePermitOrApprove,
   useSendTx,
 } from 'shared/hooks';
-import { handleTxError } from 'shared/transaction-modal';
+import { useNavigate } from 'shared/navigate';
 import invariant from 'tiny-invariant';
-import { Proof } from 'types';
-import {
-  addExtraWei,
-  addressOrZero,
-  formatKeys,
-  getAddedNodeOperator,
-  packRoles,
-  runWithTransactionLogger,
-} from 'utils';
-import { Address } from 'viem';
+import { packRoles } from 'utils';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { SubmitKeysFormInputType } from './types';
-import { PATH } from 'consts/urls';
-import { useNavigate } from 'shared/navigate';
-import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 
 type SubmitKeysOptions = {
   onConfirm?: () => Promise<void> | void;
   onRetry?: () => void;
 };
 
-type MethodParams = {
-  bondAmount: BigNumber;
-  keysCount: number;
-  publicKeys: BytesLike;
-  signatures: BytesLike;
-  rewardsAddress: Address;
-  managerAddress: Address;
-  extendedManagerPermissions: boolean;
-  permit: GatherPermitSignatureResult;
-  eaProof: Proof;
-  referrer: Address;
-};
-
-// this encapsulates eth/steth/wsteth flows
-const useSubmitKeysTx = () => {
-  const CSModuleWeb3 = useCSModuleWeb3();
-
-  return useCallback(
-    async (token: TOKENS, params: MethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      switch (token) {
-        case TOKENS.ETH:
-          return {
-            tx: await CSModuleWeb3.populateTransaction.addNodeOperatorETH(
-              params.keysCount,
-              params.publicKeys,
-              params.signatures,
-              {
-                managerAddress: params.managerAddress,
-                rewardAddress: params.rewardsAddress,
-                extendedManagerPermissions: params.extendedManagerPermissions,
-              },
-              params.eaProof,
-              params.referrer,
-              {
-                value: params.bondAmount,
-              },
-            ),
-            txName: 'addNodeOperatorETH',
-          };
-        case TOKENS.STETH:
-          return {
-            tx: await CSModuleWeb3.populateTransaction.addNodeOperatorStETH(
-              params.keysCount,
-              params.publicKeys,
-              params.signatures,
-              {
-                managerAddress: params.managerAddress,
-                rewardAddress: params.rewardsAddress,
-                extendedManagerPermissions: params.extendedManagerPermissions,
-              },
-              params.permit,
-              params.eaProof,
-              params.referrer,
-            ),
-            txName: 'addNodeOperatorStETH',
-          };
-        case TOKENS.WSTETH:
-          return {
-            tx: await CSModuleWeb3.populateTransaction.addNodeOperatorWstETH(
-              params.keysCount,
-              params.publicKeys,
-              params.signatures,
-              {
-                managerAddress: params.managerAddress,
-                rewardAddress: params.rewardsAddress,
-                extendedManagerPermissions: params.extendedManagerPermissions,
-              },
-              params.permit,
-              params.eaProof,
-              params.referrer,
-            ),
-            txName: 'addNodeOperatorWstETH',
-          };
-      }
-    },
-    [CSModuleWeb3],
-  );
-};
-
 export const useSubmitKeysSubmit = ({
   onConfirm,
   onRetry,
 }: SubmitKeysOptions) => {
+  const { csm } = useLidoSDK();
+
   const { txModalStages } = useTxModalStagesSubmitKeys();
   const { append: appendNO } = useNodeOperatorContext();
-  const getTx = useSubmitKeysTx();
   const getPermitOrApprove = usePermitOrApprove();
   const sendTx = useSendTx();
   const isUserOrZero = useAddressCompare(true);
@@ -137,7 +47,7 @@ export const useSubmitKeysSubmit = ({
       referrer,
       depositData,
       token,
-      bondAmount,
+      bondAmount: amount,
       specifyCustomAddresses,
       rewardsAddress,
       managerAddress,
@@ -145,7 +55,7 @@ export const useSubmitKeysSubmit = ({
     }: SubmitKeysFormInputType): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
-      invariant(bondAmount, 'BondAmount is not defined');
+      invariant(amount, 'BondAmount is not defined');
 
       if (
         specifyCustomAddresses &&
@@ -159,88 +69,94 @@ export const useSubmitKeysSubmit = ({
       }
 
       try {
-        const { permit } = await getPermitOrApprove({
-          token,
-          amount: addExtraWei(bondAmount, token),
-          txModalStages,
-        });
+        // const { permit } = await getPermitOrApprove({
+        //   token,
+        //   amount: addExtraWei(bondAmount, token),
+        //   txModalStages,
+        // });
 
-        const { keysCount, publicKeys, signatures } = formatKeys(depositData);
+        const callback: TransactionCallback<AddNodeOperatorResult> = async ({
+          stage,
+          payload,
+        }) => {
+          switch (stage) {
+            case TransactionCallbackStage.SIGN:
+              txModalStages.sign({ keysCount, amount, token });
+              break;
+            case TransactionCallbackStage.RECEIPT:
+              txModalStages.pending({ keysCount, amount, token }, payload.hash);
+              break;
+            case TransactionCallbackStage.DONE: {
+              payload;
+              txModalStages.success(
+                {
+                  keys: depositData.map((key) => key.pubkey),
+                  nodeOperatorId: payload.result?.nodeOperatorId,
+                  roles: packRoles({
+                    rewards: isUserOrZero(payload.result?.rewardsAddress),
+                    manager: isUserOrZero(payload.result?.managerAddress),
+                  }),
+                },
+                payload.hash,
+              );
+              break;
+            }
+            case TransactionCallbackStage.MULTISIG_DONE:
+              txModalStages.successMultisig();
+              break;
+            case TransactionCallbackStage.ERROR:
+              txModalStages.failed(payload.error, onRetry);
+              break;
+            default:
+          }
+        };
 
-        txModalStages.sign({ keysCount, amount: bondAmount, token });
+        const keysCount = depositData.length;
 
-        const tx = await getTx(token, {
-          bondAmount,
-          keysCount,
-          publicKeys,
-          signatures,
-          permit,
-          eaProof: [],
-          rewardsAddress: addressOrZero(
-            specifyCustomAddresses && rewardsAddress,
-          ),
-          managerAddress: addressOrZero(
-            specifyCustomAddresses && managerAddress,
-          ),
-          extendedManagerPermissions:
-            specifyCustomAddresses && extendedManagerPermissions,
-          referrer: addressOrZero(referrer),
-        });
+        const { result: nodeOperator } =
+          await csm.permissionlessGate.addNodeOperator({
+            token,
+            amount,
+            depositData,
+            rewardsAddress: (specifyCustomAddresses && rewardsAddress) || '',
+            managerAddress: (specifyCustomAddresses && managerAddress) || '',
+            extendedManagerPermissions:
+              specifyCustomAddresses && extendedManagerPermissions,
+            referrer,
+            permit: undefined,
+            callback,
+          });
 
-        const [txHash, waitTx] = await runWithTransactionLogger(
-          'AddNodeOperator signing',
-          () => sendTx(tx),
-        );
-
-        txModalStages.pending({ keysCount, amount: bondAmount, token }, txHash);
-
-        const receipt = await runWithTransactionLogger(
-          'AddNodeOperator block confirmation',
-          waitTx,
-        );
-
-        const nodeOperator = getAddedNodeOperator(receipt);
-        const roles = packRoles({
-          rewards: isUserOrZero(nodeOperator?.rewards),
-          manager: isUserOrZero(nodeOperator?.manager),
-        });
+        console.log('result', nodeOperator);
 
         void onConfirm?.();
 
         // TODO: move to onConfirm
         void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
 
-        if (nodeOperator?.id) {
-          if (roles.length === 0) {
-            setOperatorCustomAddresses(nodeOperator.id);
-            void n(PATH.HOME);
-          } else {
-            appendNO({
-              id: nodeOperator.id,
-              roles,
-            });
-          }
-        }
-
-        txModalStages.success(
-          {
-            nodeOperatorId: nodeOperator?.id,
-            keys: depositData.map((key) => key.pubkey),
-            roles,
-          },
-          txHash,
-        );
+        // if (nodeOperator?.id) {
+        //   if (roles.length === 0) {
+        //     setOperatorCustomAddresses(nodeOperator.id);
+        //     void n(PATH.HOME);
+        //   } else {
+        //     appendNO({
+        //       id: nodeOperator.id,
+        //       roles,
+        //     });
+        //   }
+        // }
 
         return true;
       } catch (error) {
-        return handleTxError(error, txModalStages, onRetry);
+        console.warn(error);
+        txModalStages.failed(error, onRetry);
+        return false;
       }
     },
     [
       confirmCustomAddresses,
       getPermitOrApprove,
       txModalStages,
-      getTx,
       isUserOrZero,
       onConfirm,
       addCacheKeys,

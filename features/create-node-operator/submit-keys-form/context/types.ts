@@ -1,33 +1,34 @@
-import { type TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
+import { ShareLimitInfo, ShareLimitStatus } from '@lidofinance/lido-csm-sdk';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
-import { KeysAvailable, ShareLimitInfo } from 'shared/hooks';
+import { KeysAvailable } from 'shared/hooks';
 import { LoadingRecord } from 'types';
 import { Address } from 'viem';
 
 export type SubmitKeysFormInputType = {
   token: TOKENS;
-  bondAmount?: BigNumber;
+  bondAmount?: bigint;
   referrer?: Address;
-  rewardsAddress?: string;
-  managerAddress?: string;
+  rewardsAddress?: Address;
+  managerAddress?: Address;
   extendedManagerPermissions: boolean;
   specifyCustomAddresses: boolean;
   specifyReferrrer: boolean;
 } & DepositDataInputType;
 
 export type SubmitKeysFormNetworkData = {
-  etherBalance?: BigNumber;
-  stethBalance?: BigNumber;
-  wstethBalance?: BigNumber;
-  curveId?: BigNumber;
-  maxStakeEther?: BigNumber | null;
+  ethBalance?: bigint;
+  stethBalance?: bigint;
+  wstethBalance?: bigint;
+  curveId?: bigint;
+  maxStakeEth?: bigint;
   keysAvailable?: KeysAvailable;
   isPaused?: boolean;
   shareLimit?: ShareLimitInfo;
+  shareLimitStatus?: ShareLimitStatus;
   blockNumber?: number;
   loading: LoadingRecord<
-    | 'etherBalance'
+    | 'ethBalance'
     | 'stethBalance'
     | 'wstethBalance'
     | 'curveId'

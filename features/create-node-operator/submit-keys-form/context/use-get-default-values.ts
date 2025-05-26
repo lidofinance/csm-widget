@@ -1,39 +1,38 @@
 import { useMemo } from 'react';
-import { getMaxBalanceToken } from 'utils';
 import { Address } from 'viem';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 import { useDefaultValues } from 'shared/hooks';
 
 export const useGetDefaultValues = (
   {
-    etherBalance,
+    ethBalance,
     stethBalance,
     wstethBalance,
     loading: {
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
     },
   }: SubmitKeysFormNetworkData,
   referrer?: Address,
 ) => {
+  const token = getMaxBalanceToken({
+    ETH: ethBalance,
+    stETH: stethBalance,
+    wstETH: wstethBalance,
+  });
+
   return useDefaultValues<SubmitKeysFormInputType>(
     useMemo(() => {
       if (
         [
-          isEtherBalanceLoading,
+          isEthBalanceLoading,
           isStethBalanceLoading,
           isWstethBalanceLoading,
         ].some(Boolean)
       ) {
         return undefined;
       }
-
-      const token = getMaxBalanceToken({
-        etherBalance,
-        stethBalance,
-        wstethBalance,
-      });
 
       return {
         token,
@@ -46,13 +45,27 @@ export const useGetDefaultValues = (
         referrer,
       };
     }, [
-      etherBalance,
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
       referrer,
-      stethBalance,
-      wstethBalance,
+      token,
     ]),
   );
+};
+
+import { PerToken, TOKENS } from '@lidofinance/lido-csm-sdk/common';
+
+type Props = Partial<PerToken<bigint>>;
+
+const tokensOrder = [TOKENS.steth, TOKENS.wsteth, TOKENS.eth];
+// TODO: convert wsteth amount
+export const getMaxBalanceToken = (props: Props): TOKENS => {
+  const balances = [props.stETH ?? 0n, props.wstETH ?? 0n, props.ETH ?? 0n];
+
+  return tokensOrder[
+    balances.indexOf(
+      balances.reduce((max, val) => (max >= val ? max : val), 0n),
+    )
+  ];
 };

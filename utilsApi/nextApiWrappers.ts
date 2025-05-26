@@ -1,21 +1,22 @@
+import type { Histogram, Counter } from 'prom-client';
+import { type Abi, getAddress, toFunctionSelector } from 'viem';
+
 import { getStatusLabel } from '@lidofinance/api-metrics';
 import {
-  cacheControl,
-  DEFAULT_API_ERROR_MESSAGE,
-  DefaultErrorHandlerArgs,
   RequestWrapper,
   wrapRequest as wrapNextRequest,
+  cacheControl,
+  DefaultErrorHandlerArgs,
+  DEFAULT_API_ERROR_MESSAGE,
 } from '@lidofinance/next-api-wrapper';
 import { rateLimitWrapper } from '@lidofinance/next-ip-rate-limit';
-import type { Counter, Histogram } from 'prom-client';
-import { getAddress } from 'viem';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk/common';
 
 import { config, secretConfig } from 'config';
-import { CHAINS } from 'consts';
 
 import {
-  getMetricContractInterface,
   METRIC_CONTRACT_ADDRESSES,
+  getMetricContractAbi,
 } from './contractAddressesMetricsMap';
 
 export enum HttpMethod {
@@ -29,6 +30,23 @@ export enum HttpMethod {
   TRACE = 'TRACE',
   PATCH = 'PATCH',
 }
+
+export const getFunctionNameFromAbi = (
+  abi: Abi,
+  methodEncoded: string,
+): string | null => {
+  for (const item of abi) {
+    if (item.type === 'function') {
+      const selector = toFunctionSelector(
+        `${item.name}(${item.inputs.map((i: any) => i.type).join(',')})`,
+      );
+      if (selector === methodEncoded) {
+        return item.name;
+      }
+    }
+  }
+  return null;
+};
 
 export const extractErrorMessage = (
   error: unknown,
@@ -61,8 +79,8 @@ export const cors =
 
     res.setHeader('Access-Control-Allow-Credentials', String(credentials));
     res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Methods', methods.toString());
-    res.setHeader('Access-Control-Allow-Headers', allowedHeaders.toString());
+    res.setHeader('Access-Control-Allow-Methods', methods.join(', '));
+    res.setHeader('Access-Control-Allow-Headers', allowedHeaders.join(', '));
 
     if (req.method === HttpMethod.OPTIONS) {
       // In preflight just need return a CORS headers
@@ -81,8 +99,12 @@ export const httpMethodGuard =
       !req.method ||
       !Object.values(methodAllowList).includes(req.method as HttpMethod)
     ) {
-      res.status(405);
-      throw new Error(`You can use only: ${methodAllowList.toString()}`);
+      // allow OPTIONS to pass trough but still add Allow header
+      res.setHeader('Allow', methodAllowList.join(', '));
+      if (req.method !== HttpMethod.OPTIONS) {
+        res.status(405);
+        throw new Error(`You can use only: ${methodAllowList.toString()}`);
+      }
     }
 
     await next?.(req, res, next);
@@ -136,12 +158,29 @@ const collectRequestAddressMetric = async ({
     ) {
       const { to, data } = call.params[0];
       const address = getAddress(to);
-      const contractName = METRIC_CONTRACT_ADDRESSES[chainId]?.[address];
+      const contractName = METRIC_CONTRACT_ADDRESSES?.[chainId]?.[address];
       const methodEncoded = data?.slice(0, 10); // `0x` and 8 next symbols
-      const methodDecoded = contractName
-        ? getMetricContractInterface(contractName)?.getFunction(methodEncoded)
-            ?.name
-        : null;
+
+      let methodDecoded = 'N/A';
+      if (!methodEncoded || methodEncoded.length !== 10) {
+        console.warn(`Invalid methodEncoded: ${methodEncoded}`);
+      } else {
+        try {
+          if (contractName) {
+            const abi = getMetricContractAbi(contractName);
+            if (!abi) {
+              console.warn(`ABI not found for contract: ${contractName}`);
+            } else {
+              const functionName = getFunctionNameFromAbi(abi, methodEncoded);
+              methodDecoded = functionName || 'Unknown Function';
+            }
+          }
+        } catch (error) {
+          console.warn(
+            `[collectRequestAddressMetric] failed to decode ${methodEncoded} method for ${contractName}: ${error}`,
+          );
+        }
+      }
 
       metrics
         .labels({
@@ -182,11 +221,18 @@ export const rateLimit = rateLimitWrapper({
 export const nextDefaultErrorHandler =
   (args?: DefaultErrorHandlerArgs): RequestWrapper =>
   async (req, res, next) => {
-    const { errorMessage = DEFAULT_API_ERROR_MESSAGE, serverLogger: console } =
-      args || {};
+    const { errorMessage = DEFAULT_API_ERROR_MESSAGE } = args || {};
     try {
       await next?.(req, res, next);
     } catch (error) {
+      if (res.headersSent) {
+        console?.error(
+          '[nextDefaultErrorHandler] error after headers sent:',
+          extractErrorMessage(error, errorMessage),
+        );
+        return;
+      }
+
       const isInnerError = res.statusCode === 200;
       const status = isInnerError ? 500 : res.statusCode || 500;
 
@@ -196,15 +242,14 @@ export const nextDefaultErrorHandler =
         res
           .status(serverError || status)
           .json({ message: extractErrorMessage(error, errorMessage) });
-      } else {
-        res.status(status).json({ message: errorMessage });
+        return;
       }
+
+      res.status(status).json({ message: errorMessage });
     }
   };
 
-export const defaultErrorHandler = nextDefaultErrorHandler({
-  serverLogger: console,
-});
+export const defaultErrorHandler = nextDefaultErrorHandler();
 
 // ready wrapper types
 

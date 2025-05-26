@@ -2,16 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
 import { useLidoSDK } from '../web3-provider';
 
-export const useCsmStatus = () => {
+export const useCurveId = () => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['csm-status'],
+    queryKey: ['getCurveId'],
     ...STRATEGY_CONSTANT,
-    queryFn: () => csm.module.getStatus(),
-    select: (data) => ({
-      ...data,
-      isPaused: data.isPausedAccounting || data.isPausedModule,
-    }),
+    queryFn: () => csm.permissionlessGate.getCurveId(),
   });
 };

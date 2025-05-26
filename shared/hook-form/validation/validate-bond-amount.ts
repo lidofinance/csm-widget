@@ -1,41 +1,38 @@
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 import { ValidationError } from 'shared/hook-form/validation/validation-error';
-import { getTokenDisplayName } from 'utils';
+import { getTokenBalance, getTokenDisplayName } from 'utils';
 
 type ValidateBondAmountProps = {
   token: TOKENS;
-  bondAmount?: BigNumber;
-  maxStakeEther?: BigNumber | null;
-  etherBalance?: BigNumber;
-  stethBalance?: BigNumber;
-  wstethBalance?: BigNumber;
+  bondAmount?: bigint;
+  maxStakeEth?: bigint;
+  ethBalance?: bigint;
+  stethBalance?: bigint;
+  wstethBalance?: bigint;
 };
 
 export const validateBondAmount = ({
   token,
   bondAmount,
-  maxStakeEther,
-  etherBalance,
+  maxStakeEth,
+  ethBalance,
   stethBalance,
   wstethBalance,
 }: ValidateBondAmountProps) => {
-  if (bondAmount?.gt(0)) {
-    if (token === TOKENS.ETH && maxStakeEther?.lt(bondAmount)) {
+  if (bondAmount && bondAmount > 0) {
+    if (token === TOKENS.eth && maxStakeEth && maxStakeEth < bondAmount) {
       throw new ValidationError(
         'bondAmount',
         `Lido protocol has reached its stake limit for ETH deposits — use another token or try later`,
       );
     }
 
-    const balances = {
-      [TOKENS.ETH]: etherBalance,
-      [TOKENS.STETH]: stethBalance,
-      [TOKENS.WSTETH]: wstethBalance,
-    };
-    const tokenBalance = balances[token];
+    const tokenBalance = getTokenBalance(
+      { eth: ethBalance, steth: stethBalance, wsteth: wstethBalance },
+      token,
+    );
 
-    if (tokenBalance?.lt(bondAmount))
+    if (tokenBalance && tokenBalance < bondAmount)
       throw new ValidationError(
         'bondAmount',
         `Not enough balance of ${getTokenDisplayName(token)}`,

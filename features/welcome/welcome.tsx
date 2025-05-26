@@ -1,21 +1,21 @@
 import { FC } from 'react';
 
+import { getConfig } from 'config';
+import { CHAINS } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { useDappStatus } from 'modules/web3';
 import { Stack, WelcomeSection } from 'shared/components';
-import { useAccount } from 'shared/hooks';
 import { Connect, Fallback } from 'shared/wallet';
 import styled from 'styled-components';
 import { HoleskyBanner } from './holesky-banner';
-import { getConfig } from 'config';
-import { CHAINS } from 'consts/chains';
 import { HoodiBanner } from './hoodi-banner';
 
 const { defaultChain } = getConfig();
 
 export const Welcome: FC = () => {
-  const { active, isConnected } = useAccount();
+  const { isSupportedChain, isWalletConnected } = useDappStatus();
 
-  const isWrongChain = isConnected && !active;
+  const isWrongChain = isWalletConnected && !isSupportedChain;
 
   return (
     <>

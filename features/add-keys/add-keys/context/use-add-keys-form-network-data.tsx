@@ -4,17 +4,16 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
   useCsmPaused,
-  useCSMShareLimitInfo,
   useKeysAvailable,
   useNodeOperatorBalance,
   useNodeOperatorCurveId,
   useNonWithdrawnKeysCount,
-  useStakingLimitInfo,
   useSTETHBalance,
   useWSTETHBalance,
 } from 'shared/hooks';
 import { useBlockNumber } from 'wagmi';
 import { type AddKeysFormNetworkData } from './types';
+import { useShareLimit, useStakeLimit } from 'modules/web3';
 
 export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
@@ -44,17 +43,11 @@ export const useAddKeysFormNetworkData = (): [
     update: updateBond,
     initialLoading: isBondLoading,
   } = useNodeOperatorBalance(nodeOperatorId);
-  const {
-    data: maxStakeEther,
-    update: updateMaxStakeEther,
-    initialLoading: isMaxStakeEtherLoading,
-  } = useStakingLimitInfo();
 
-  const {
-    data: shareLimit,
-    initialLoading: isShareLimitLoading,
-    update: updateShareLimit,
-  } = useCSMShareLimitInfo();
+  const { data: maxStakeEther, isPending: isMaxStakeEtherLoading } =
+    useStakeLimit();
+
+  const { data: shareLimit, isPending: isShareLimitLoading } = useShareLimit();
 
   const { data: curveId } = useNodeOperatorCurveId(nodeOperatorId);
 

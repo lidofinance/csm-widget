@@ -4,14 +4,14 @@ import { PATH } from 'consts/urls';
 import { TryCSM } from 'features/welcome/try-csm';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
-import { useCsmPaused } from 'shared/hooks/useCsmStatus';
 import { LocalLink } from 'shared/navigate';
 import { BannerOperatorCustomAddresses } from './banner-operator-custom-addresses';
 import { PausedBanner } from './paused-banner';
 import { StarterPackSection } from './stacter-pack-section';
+import { useCsmStatus } from 'modules/web3';
 
 export const StarterPack: FC = () => {
-  const { data: paused } = useCsmPaused();
+  const { data: status } = useCsmStatus();
 
   let content = (
     <StarterPackSection>
@@ -24,7 +24,7 @@ export const StarterPack: FC = () => {
     </StarterPackSection>
   );
 
-  if (paused?.isPaused || paused?.isAccountingPaused) {
+  if (status?.isPaused) {
     content = <PausedBanner />;
   }
 

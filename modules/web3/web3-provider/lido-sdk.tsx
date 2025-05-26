@@ -16,13 +16,15 @@ import {
 
 import { config } from 'config';
 import { useTokenTransferSubscription } from 'modules/web3/hooks/use-balance';
-import { CHAINS } from '../consts';
-import { LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk';
+// import { CHAINS } from '../consts';
+import { LidoSDKStake, LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk';
 import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
+import { DEVNET } from './devnet';
 
 type LidoSDKContextValue = {
-  chainId: CHAINS;
+  chainId: CHAINs;
   core: LidoSDKCore;
+  stake: LidoSDKStake;
   stETH: LidoSDKstETH;
   wstETH: LidoSDKwstETH;
   wrap: LidoSDKWrap;
@@ -76,19 +78,36 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     // @ts-expect-error: typing (viem + LidoSDK)
     const core = new LidoSDKCore({
       chainId,
-      logMode: 'none',
+      logMode: 'info',
       rpcProvider: publicClient,
       web3Provider: walletClient,
     });
 
+    const stake = new LidoSDKStake({ core });
     const stETH = new LidoSDKstETH({ core });
     const wstETH = new LidoSDKwstETH({ core });
     const wrap = new LidoSDKWrap({ core });
-    const csm = new LidoSDKCsm({ core });
+    const csm = new LidoSDKCsm({
+      core,
+      // overridedAddresses: {
+      //   csAccounting: DEVNET.CSAccounting,
+      //   csModule: DEVNET.CSModule,
+      //   csFeeDistributor: DEVNET.CSFeeDistributor,
+      //   csFeeOracle: DEVNET.CSFeeOracle,
+      //   csVerifier: DEVNET.CSVerifier,
+      //   hashConsensus: DEVNET.HashConsensus,
+      //   csEjector: DEVNET.CSEjector,
+      //   csParametersRegistry: DEVNET.CSParametersRegistry,
+      //   csStrikes: DEVNET.CSStrikes,
+      //   permissionlessGate: DEVNET.PermissionlessGate,
+      //   vettedGate: DEVNET.VettedGate,
+      // },
+    });
 
     return {
       chainId: core.chainId as unknown as CHAINS,
       core,
+      stake,
       stETH,
       wstETH,
       wrap,

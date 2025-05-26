@@ -4,8 +4,6 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal/hooks/use-transaction-modal-stage';
 
-import { TOKENS } from 'consts/tokens';
-import type { BigNumber } from 'ethers';
 import { Plural } from 'shared/components';
 import {
   AfterCreateCustomNodeOperator,
@@ -17,12 +15,12 @@ import {
   TxStageSign,
   TxStageSuccess,
 } from 'shared/transaction-modal/tx-stages-basic';
-import { NodeOperatorId } from 'types';
 import { ROLES } from 'consts/roles';
+import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 type Props = {
   keysCount: number;
-  amount: BigNumber;
+  amount: bigint;
   token: TOKENS;
 };
 
@@ -84,7 +82,7 @@ const getTxModalStagesSubmitKeys = (
         description={
           nodeOperatorId ? (
             <>
-              Your Node Operator ID is <b>{nodeOperatorId}</b>
+              Your Node Operator ID is <b>{nodeOperatorId.toString()}</b>
               <br />
               <br />
               {roles.length > 0 ? (

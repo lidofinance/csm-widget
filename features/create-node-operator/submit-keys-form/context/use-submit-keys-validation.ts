@@ -35,16 +35,16 @@ export const useSubmitKeysValidation = (
         const {
           stethBalance,
           wstethBalance,
-          etherBalance,
-          maxStakeEther,
+          ethBalance,
+          maxStakeEth: maxStakeEther,
           blockNumber,
         } = await dataPromise;
 
         validateBondAmount({
           token,
           bondAmount,
-          maxStakeEther,
-          etherBalance,
+          maxStakeEth: maxStakeEther,
+          ethBalance,
           stethBalance,
           wstethBalance,
         });

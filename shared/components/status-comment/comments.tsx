@@ -4,7 +4,7 @@ import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { MatomoLink } from '../matomo-link/matomo-link';
-import { SHARE_LIMIT_STATUS, useCSMShareLimitInfo } from 'shared/hooks';
+import { SHARE_LIMIT_STATUS, useShareLimitStatus } from 'modules/web3';
 
 // TODO: check role
 export const CommentExitRequested: FC = () => (
@@ -81,9 +81,9 @@ export const CommentActivationPending: FC = () => {
 };
 
 export const CommentDepositable: FC = () => {
-  const { data } = useCSMShareLimitInfo();
+  const { data: status } = useShareLimitStatus();
 
-  return data?.status === SHARE_LIMIT_STATUS.REACHED ? (
+  return status === SHARE_LIMIT_STATUS.REACHED ? (
     <>
       The key may not receive deposits in the near future because CSM has
       reached its{' '}

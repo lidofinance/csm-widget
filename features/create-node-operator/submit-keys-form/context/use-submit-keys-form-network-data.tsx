@@ -1,17 +1,16 @@
-import { useEthereumBalance } from '@lido-sdk/react';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useCallback, useMemo } from 'react';
-import {
-  useCsmCurveId,
-  useCsmPaused,
-  useCSMShareLimitInfo,
-  useKeysAvailable,
-  useStakingLimitInfo,
-  useSTETHBalance,
-  useWSTETHBalance,
-} from 'shared/hooks';
 import { useBlockNumber } from 'wagmi';
 import { type SubmitKeysFormNetworkData } from './types';
+import {
+  useCsmStatus,
+  useCurveId,
+  useEthereumBalance,
+  useShareLimit,
+  useShareLimitStatus,
+  useStakeLimit,
+  useStethBalance,
+  useWstethBalance,
+} from 'modules/web3';
 
 export const useSubmitKeysFormNetworkData = (): [
   SubmitKeysFormNetworkData,
@@ -19,67 +18,66 @@ export const useSubmitKeysFormNetworkData = (): [
 ] => {
   const { data: blockNumber, isLoading: isBlockNumberLoading } =
     useBlockNumber();
+  const { data: status, isPending: isStatusLoading } = useCsmStatus();
 
   const {
-    data: etherBalance,
-    update: updateEtherBalance,
-    initialLoading: isEtherBalanceLoading,
-  } = useEthereumBalance(undefined, STRATEGY_LAZY);
+    data: ethBalance,
+    isPending: isEthBalanceLoading,
+    refetch: ethBalanceUpdate,
+  } = useEthereumBalance();
   const {
     data: stethBalance,
-    update: updateStethBalance,
-    initialLoading: isStethBalanceLoading,
-  } = useSTETHBalance(STRATEGY_LAZY);
+    isPending: isStethBalanceLoading,
+    refetch: stethBalanceUpdate,
+  } = useStethBalance();
   const {
     data: wstethBalance,
-    update: updateWstethBalance,
-    initialLoading: isWstethBalanceLoading,
-  } = useWSTETHBalance(STRATEGY_LAZY);
+    isPending: isWstethBalanceLoading,
+    refetch: wstethBalanceUpdate,
+  } = useWstethBalance();
 
-  const { data: curveId, initialLoading: isCurveIdLoading } = useCsmCurveId();
-
+  const { data: curveId, isPending: isCurveIdLoading } = useCurveId();
   const {
     data: shareLimit,
-    initialLoading: isShareLimitLoading,
-    update: updateShareLimit,
-  } = useCSMShareLimitInfo();
-
+    isPending: isShareLimitLoading,
+    refetch: shareLimitUpdate,
+  } = useShareLimit();
+  const { data: shareLimitStatus } = useShareLimitStatus();
   const {
-    data: maxStakeEther,
-    update: updateMaxStakeEther,
-    initialLoading: isMaxStakeEtherLoading,
-  } = useStakingLimitInfo();
+    data: maxStakeEth,
+    isPending: isMaxStakeEtherLoading,
+    refetch: maxStakeEthUpdate,
+  } = useStakeLimit();
 
-  const { data: keysAvailable } = useKeysAvailable({
-    curveId,
-    etherBalance,
-    stethBalance,
-    wstethBalance,
-  });
-
-  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
+  // const { data: keysAvailable } = useKeysAvailable({
+  //   curveId,
+  //   etherBalance,
+  //   stethBalance,
+  //   wstethBalance,
+  // });
+  const keysAvailable = undefined;
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
-      updateStethBalance(),
-      updateWstethBalance(),
-      updateEtherBalance(),
-      updateShareLimit(),
-      updateMaxStakeEther(),
+      ethBalanceUpdate(),
+      stethBalanceUpdate(),
+      wstethBalanceUpdate(),
+      shareLimitUpdate(),
+      maxStakeEthUpdate(),
     ]);
   }, [
-    updateStethBalance,
-    updateWstethBalance,
-    updateEtherBalance,
-    updateShareLimit,
-    updateMaxStakeEther,
+    ethBalanceUpdate,
+    stethBalanceUpdate,
+    wstethBalanceUpdate,
+    shareLimitUpdate,
+    maxStakeEthUpdate,
   ]);
 
   const loading = useMemo(
     () => ({
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isCurveIdLoading,
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
@@ -89,7 +87,7 @@ export const useSubmitKeysFormNetworkData = (): [
     [
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isCurveIdLoading,
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
@@ -101,14 +99,15 @@ export const useSubmitKeysFormNetworkData = (): [
   return [
     {
       blockNumber: blockNumber ? Number(blockNumber) : undefined,
+      isPaused: status?.isPaused,
       stethBalance,
       wstethBalance,
-      etherBalance,
+      ethBalance,
       curveId,
       keysAvailable,
-      maxStakeEther,
+      maxStakeEth,
       shareLimit,
-      isPaused: status?.isPaused || status?.isAccountingPaused,
+      shareLimitStatus,
       loading,
     },
     revalidate,

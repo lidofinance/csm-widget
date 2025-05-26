@@ -1,7 +1,5 @@
 import { InlineLoader, Tooltip } from '@lidofinance/lido-ui';
 import { DATA_UNAVAILABLE } from 'consts/text';
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
 import { FC } from 'react';
 import {
   FormatBalanceArgs,
@@ -13,16 +11,17 @@ import { SymbolStyle, TokenAmountStyle } from './style';
 import { ReactComponent as EthIcon } from 'assets/icons/eth.svg';
 import { ReactComponent as StethIcon } from 'assets/icons/steth.svg';
 import { ReactComponent as WstethIcon } from 'assets/icons/wsteth.svg';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 const iconsMap = {
-  [TOKENS.ETH]: <EthIcon />,
-  [TOKENS.STETH]: <StethIcon />,
-  [TOKENS.WSTETH]: <WstethIcon />,
+  [TOKENS.eth]: <EthIcon />,
+  [TOKENS.steth]: <StethIcon />,
+  [TOKENS.wsteth]: <WstethIcon />,
 } as const;
 
 type TokenAmountProps = {
   token: TOKENS;
-  amount?: BigNumber;
+  amount?: bigint;
   loading?: boolean;
   fallback?: string;
 } & FormatBalanceArgs;
@@ -51,7 +50,7 @@ export const TokenAmount: FC<TokenAmountProps> = ({
       {icon}
       {loading ? (
         <InlineLoader color="text" />
-      ) : !amount ? (
+      ) : amount === undefined ? (
         <SymbolStyle>{fallback}</SymbolStyle>
       ) : (
         <span>
