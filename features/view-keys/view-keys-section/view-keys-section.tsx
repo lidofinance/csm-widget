@@ -8,7 +8,7 @@ export const ViewKeysSection: FC = () => {
   const { data: keys, initialLoading: loading } = useKeysWithStatus();
 
   return (
-    <ViewKeysBlock data-testis="viewKeysBlock">
+    <ViewKeysBlock data-testid="viewKeysBlock">
       <WhenLoaded
         loading={loading}
         empty={!keys?.length && 'There are no keys to display'}
