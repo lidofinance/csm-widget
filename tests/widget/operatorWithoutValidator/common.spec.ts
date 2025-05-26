@@ -14,7 +14,6 @@ test.describe('Operator without keys. Common suite.', async () => {
   let createKeysPage: KeysPage;
 
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.page.goto('/');
     await widgetService.connectWallet();
     mainPage = new MainPage(widgetService.page);
     createKeysPage = new KeysPage(widgetService.page);

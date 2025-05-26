@@ -10,8 +10,9 @@ test.describe('Removal page. Empty wallet.', async () => {
 
   test.beforeEach(async ({ widgetService }) => {
     keysPage = new KeysPage(widgetService.page);
-    await keysPage.removePage.open();
     await widgetService.connectWallet();
+    await keysPage.removePage.open();
+    await keysPage.page.waitForTimeout(1000);
   });
 
   test(qase(151, 'Should present empty view for empty wallet'), async () => {

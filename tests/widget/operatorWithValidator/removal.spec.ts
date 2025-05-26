@@ -8,8 +8,8 @@ test.describe('Validator keys removal', async () => {
 
   test.beforeEach(async ({ widgetService }) => {
     keysPage = new KeysPage(widgetService.page);
-    await keysPage.removePage.open();
     await widgetService.connectWallet();
+    await keysPage.removePage.open();
     await keysPage.page.waitForTimeout(1000);
   });
 

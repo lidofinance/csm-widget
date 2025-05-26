@@ -8,9 +8,9 @@ test.describe('View keys list. Common', async () => {
 
   test.beforeEach(async ({ widgetService }) => {
     keysPage = new KeysPage(widgetService.page);
+    await widgetService.connectWallet();
     await keysPage.keysView.open();
     await keysPage.page.waitForTimeout(1000);
-    await widgetService.connectWallet();
   });
 
   test(qase(148, 'Verification of displayed key statuses'), async () => {
