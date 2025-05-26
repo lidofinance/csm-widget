@@ -10,7 +10,7 @@ test.describe('View keys list. Common', async () => {
     keysPage = new KeysPage(widgetService.page);
     await widgetService.connectWallet();
     await keysPage.keysView.open();
-    await keysPage.page.waitForTimeout(1000);
+    await keysPage.keysView.table.waitFor({ state: 'visible' });
   });
 
   test(qase(148, 'Verification of displayed key statuses'), async () => {

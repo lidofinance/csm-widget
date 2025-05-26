@@ -16,13 +16,14 @@ export class KeysViewPage {
   page: Page;
   base: BasePage;
   viewKeysBlock: Locator;
+  table: Locator;
   tableRaws: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.base = new BasePage(page);
     this.viewKeysBlock = this.page.locator('[data-testid="viewKeysBlock"]');
-
+    this.table = this.viewKeysBlock.locator('tbody');
     this.tableRaws = this.viewKeysBlock.locator('tbody >> tr');
   }
 

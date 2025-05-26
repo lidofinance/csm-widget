@@ -10,7 +10,6 @@ test.describe('Validator keys removal', async () => {
     keysPage = new KeysPage(widgetService.page);
     await widgetService.connectWallet();
     await keysPage.removePage.open();
-    await keysPage.page.waitForTimeout(1000);
   });
 
   [1, 3].forEach((keyLength: number) => {
@@ -21,10 +20,11 @@ test.describe('Validator keys removal', async () => {
       ),
       async () => {
         qase.parameters({ keyLength: keyLength.toString() });
+        await keysPage.removePage.page
+          .getByText('Choose keys to remove')
+          .waitFor({ state: 'visible' });
 
-        const keysCheckboxes = await keysPage.removePage.removeKeysForm
-          .locator('label >> svg')
-          .all();
+        const keysCheckboxes = await keysPage.removePage.keyCheckbox.all();
 
         await test.step(`Select ${keyLength} key(s) to remove`, async () => {
           for (const key of keysCheckboxes.slice(0, keyLength)) {

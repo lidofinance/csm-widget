@@ -6,6 +6,7 @@ export class RemovePage {
   page: Page;
   base: BasePage;
   removeKeysForm: Locator;
+  keyCheckbox: Locator;
   numberOfKeysToRemove: Locator;
   numberOfKeysToRemoveValue: Locator;
   removalFee: Locator;
@@ -19,6 +20,7 @@ export class RemovePage {
     this.page = page;
     this.base = new BasePage(page);
     this.removeKeysForm = this.page.getByTestId('removeKeysForm');
+    this.keyCheckbox = this.removeKeysForm.locator('label >> svg');
     this.numberOfKeysToRemove = this.removeKeysForm.getByTestId(
       'numbersOfKeysToRemove',
     );
