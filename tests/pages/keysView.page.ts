@@ -21,7 +21,7 @@ export class KeysViewPage {
   constructor(page: Page) {
     this.page = page;
     this.base = new BasePage(page);
-    this.viewKeysBlock = this.page.locator('[data-testis="viewKeysBlock"]');
+    this.viewKeysBlock = this.page.locator('[data-testid="viewKeysBlock"]');
 
     this.tableRaws = this.viewKeysBlock.locator('tbody >> tr');
   }

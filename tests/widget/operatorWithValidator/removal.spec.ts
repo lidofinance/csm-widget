@@ -21,11 +21,14 @@ test.describe('Validator keys removal', async () => {
       ),
       async () => {
         qase.parameters({ keyLength: keyLength.toString() });
-        const randomKeys = await keysPage.removePage.getRandomKeys(keyLength);
+
+        const keysCheckboxes = await keysPage.removePage.removeKeysForm
+          .locator('label >> svg')
+          .all();
 
         await test.step(`Select ${keyLength} key(s) to remove`, async () => {
-          for (const key of randomKeys) {
-            await key.click({ delay: 500 });
+          for (const key of keysCheckboxes.slice(0, keyLength)) {
+            await key.click();
           }
         });
 
