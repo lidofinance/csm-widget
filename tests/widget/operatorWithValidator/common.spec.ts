@@ -6,10 +6,10 @@ import { expect } from '@playwright/test';
 import { trimAddress } from '@lidofinance/address';
 import { qase } from 'playwright-qase-reporter/playwright';
 
-test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
-
 test.describe('Operator with keys. Common suite.', async () => {
   let keysPage: KeysPage;
+
+  test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
   test.beforeEach(async ({ widgetService }) => {
     keysPage = new KeysPage(widgetService.page);
