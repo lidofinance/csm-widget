@@ -5,7 +5,7 @@ import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
 import { WidgetService } from 'tests/pages/widget.service';
 
 type WorkerFixtures = {
-  secretPhrase: string | undefined;
+  secretPhrase: string;
   browserWithWallet: BrowserService;
   widgetService: WidgetService;
 };
@@ -14,7 +14,7 @@ export const test = base.extend<object, WorkerFixtures>({
   secretPhrase: [
     // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
-      await use(undefined);
+      await use(widgetFullConfig.walletConfig.SECRET_PHRASE);
     },
     { scope: 'worker' },
   ],
@@ -24,8 +24,7 @@ export const test = base.extend<object, WorkerFixtures>({
         networkConfig: widgetFullConfig.standConfig.networkConfig,
         walletConfig: {
           ...widgetFullConfig.walletConfig,
-          SECRET_PHRASE:
-            secretPhrase || widgetFullConfig.walletConfig.SECRET_PHRASE,
+          SECRET_PHRASE: secretPhrase,
         },
         nodeConfig: { rpcUrlToMock: '**/api/rpc?chainId=1' },
         browserOptions: {

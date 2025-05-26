@@ -3,10 +3,10 @@ import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
 import { KeysPage } from 'tests/pages/keys.page';
 
+test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
+
 test.describe('Removal page. Empty wallet.', async () => {
   let keysPage: KeysPage;
-
-  test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
   test.beforeEach(async ({ widgetService }) => {
     keysPage = new KeysPage(widgetService.page);

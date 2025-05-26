@@ -7,11 +7,11 @@ import { expect } from '@playwright/test';
 import { trimAddress } from '@lidofinance/address';
 import { qase } from 'playwright-qase-reporter/playwright';
 
+test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+
 test.describe('Operator without keys. Common suite.', async () => {
   let mainPage: MainPage;
   let createKeysPage: KeysPage;
-
-  test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.page.goto('/');
