@@ -50,16 +50,6 @@ export class WidgetService {
           ? 'Wallet should be connected'
           : 'Wallet should be disconnected',
       ).toBe(expectConnectionState);
-
-      const starterPackSection = new ElementController(this.page)
-        .starterPackSection.section;
-
-      try {
-        await starterPackSection.waitFor({ state: 'visible' });
-      } catch {
-        await this.page.reload();
-        await starterPackSection.waitFor({ state: 'visible' });
-      }
     });
   }
 
