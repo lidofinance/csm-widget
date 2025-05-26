@@ -4,10 +4,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe('Welcome page without connected wallet', async () => {
   test(
-    qase(
-      161,
-      'Should open connect modal after click to "I am a Node Operator"',
-    ),
+    qase(57, 'Should open connect modal after click to "I am a Node Operator"'),
     async ({ page }) => {
       const homePage = new WelcomePage(page);
       await homePage.goto();
@@ -20,7 +17,7 @@ test.describe('Welcome page without connected wallet', async () => {
 
   test(
     qase(
-      162,
+      58,
       'Should open connect modal after click to "Become a Node Operator"',
     ),
     async ({ page }) => {
