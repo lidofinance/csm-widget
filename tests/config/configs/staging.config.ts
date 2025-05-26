@@ -11,7 +11,9 @@ export class StagingConfig extends BaseConfig {
         chainId: 1,
         tokenSymbol: 'ETH',
         chainName: 'Ethereum Mainnet',
-        rpcUrl: `https://lb.drpc.org/ogrpc?network=ethereum&dkey=${process.env.RPC_URL_TOKEN}`,
+        rpcUrl:
+          process.env.RPC_URL ||
+          `https://lb.drpc.org/ogrpc?network=ethereum&dkey=${process.env.RPC_URL_TOKEN}`,
         scan: 'https://etherscan.io/',
       },
     };

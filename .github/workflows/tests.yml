@@ -45,6 +45,9 @@ jobs:
       RPC_URL_TOKEN: ${{ secrets.RPC_URL_TOKEN }}
       WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
       WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
+      EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
+      EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
+      
       STAND_TYPE: ${{ github.event.inputs.STAND_TYPE || 'testnet' }}
 
       # Common envs
@@ -58,7 +61,7 @@ jobs:
       TEST_BRANCH: ${{ github.event.inputs.branch }}
       DISCORD_REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
-      DISCORD_DUTY_TAG: '1227193074044637286'
+      DISCORD_DUTY_TAG: '&1227193074044637286'
 
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}

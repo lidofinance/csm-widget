@@ -100,6 +100,10 @@ export class BasePage {
     return this.page.locator('main >> h4').textContent();
   }
 
+  async closeModalWindow() {
+    await this.page.mouse.click(32, 32);
+  }
+
   async getHoveredContent(timeout = 10000) {
     const start = Date.now();
     while (Date.now() - start < timeout) {
