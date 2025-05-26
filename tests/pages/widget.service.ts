@@ -3,7 +3,7 @@ import { ElementController } from './elements/controller';
 import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
 import { MainPage } from './main.page';
 import { KeysPage } from './keys.page';
-import { DepositKey } from 'tests/widget/operatorWithValidator/keys.const';
+import { DepositKey } from 'tests/consts/keys.const';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { AssertionError } from 'assert';
 import { STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';

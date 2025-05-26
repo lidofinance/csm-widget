@@ -1,7 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { BasePage } from 'tests/pages/base.page';
-import { DepositKey } from 'tests/widget/operatorWithValidator/keys.const';
+import { DepositKey } from 'tests/consts/keys.const';
 
 export class SubmitPage {
   page: Page;
