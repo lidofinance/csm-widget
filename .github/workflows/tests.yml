@@ -44,8 +44,10 @@ jobs:
       # Required envs
       RPC_URL_TOKEN: ${{ secrets.RPC_URL_TOKEN }}
       WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
-      EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
       WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
+      EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
+      EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
+      
       STAND_TYPE: ${{ github.event.inputs.STAND_TYPE || 'testnet' }}
 
       # Common envs
