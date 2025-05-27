@@ -4,8 +4,7 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { TransactionCallbackStage } from '@lidofinance/lido-ethereum-sdk';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
-import { useLidoSDK } from 'modules/web3';
-import { useNodeOperatorContext } from 'providers/node-operator-provider';
+import { useAppendOperator, useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   useAddressCompare,
@@ -32,7 +31,7 @@ export const useSubmitKeysSubmit = ({
   const { csm } = useLidoSDK();
 
   const { txModalStages } = useTxModalStagesSubmitKeys();
-  const { append: appendNO } = useNodeOperatorContext();
+  const appendNO = useAppendOperator();
   const getPermitOrApprove = usePermitOrApprove();
   const sendTx = useSendTx();
   const isUserOrZero = useAddressCompare(true);
@@ -155,16 +154,12 @@ export const useSubmitKeysSubmit = ({
     },
     [
       confirmCustomAddresses,
-      getPermitOrApprove,
-      txModalStages,
-      isUserOrZero,
+      csm.permissionlessGate,
       onConfirm,
       addCacheKeys,
-      sendTx,
-      setOperatorCustomAddresses,
-      n,
-      appendNO,
+      txModalStages,
       onRetry,
+      isUserOrZero,
     ],
   );
 };

@@ -19,7 +19,6 @@ import {
   allowedLogsAddresses,
 } from 'utilsApi';
 import Metrics from 'utilsApi/metrics';
-import { mapValues } from 'lodash';
 
 const allowedRPCMethods = [
   'test',

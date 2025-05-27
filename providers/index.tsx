@@ -10,8 +10,7 @@ import { AppFlagProvider } from './app-flag';
 import { InpageNavigationProvider } from './inpage-navigation';
 import { ModalProvider } from './modal-provider';
 import { ModifyProvider } from './modify-provider';
-import { NodeOperatorPrivider } from './node-operator-provider';
-import { Web3Provider } from 'modules/web3';
+import { NodeOperatorPrivider, Web3Provider } from 'modules/web3';
 import { hashKey } from 'utils';
 
 type Props = { dummy?: boolean; skipWatcher?: boolean };

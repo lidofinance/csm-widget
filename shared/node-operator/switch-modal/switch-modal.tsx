@@ -1,9 +1,7 @@
 import { Button, Modal } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
-import { ROLES } from 'consts/roles';
 import type { ModalComponentType } from 'providers/modal-provider';
-import { NodeOperator, NodeOperatorId } from 'types';
 import { Descriptor } from '../descriptor/descriptor';
 import { RoleBadge } from '../role-badge/role-badge';
 import {
@@ -14,6 +12,11 @@ import {
   StyledStack,
   StyledStackItem,
 } from './styles';
+import {
+  NodeOperator,
+  NodeOperatorId,
+  ROLES,
+} from '@lidofinance/lido-csm-sdk/common';
 
 export const SwitchModal: ModalComponentType<{
   active: NodeOperator;

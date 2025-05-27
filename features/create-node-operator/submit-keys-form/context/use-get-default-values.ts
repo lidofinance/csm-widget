@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { Address } from 'viem';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 import { useDefaultValues } from 'shared/hooks';
+import { getMaxBalanceToken } from 'modules/web3';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 export const useGetDefaultValues = (
   {
@@ -17,9 +19,9 @@ export const useGetDefaultValues = (
   referrer?: Address,
 ) => {
   const token = getMaxBalanceToken({
-    ETH: ethBalance,
-    stETH: stethBalance,
-    wstETH: wstethBalance,
+    [TOKENS.eth]: ethBalance,
+    [TOKENS.steth]: stethBalance,
+    [TOKENS.wsteth]: wstethBalance,
   });
 
   return useDefaultValues<SubmitKeysFormInputType>(
@@ -52,20 +54,4 @@ export const useGetDefaultValues = (
       token,
     ]),
   );
-};
-
-import { PerToken, TOKENS } from '@lidofinance/lido-csm-sdk/common';
-
-type Props = Partial<PerToken<bigint>>;
-
-const tokensOrder = [TOKENS.steth, TOKENS.wsteth, TOKENS.eth];
-// TODO: convert wsteth amount
-export const getMaxBalanceToken = (props: Props): TOKENS => {
-  const balances = [props.stETH ?? 0n, props.wstETH ?? 0n, props.ETH ?? 0n];
-
-  return tokensOrder[
-    balances.indexOf(
-      balances.reduce((max, val) => (max >= val ? max : val), 0n),
-    )
-  ];
 };

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { useNodeOperatorCurveType } from 'shared/hooks';
-import { NodeOperator } from 'types';
+import { NodeOperator } from '@lidofinance/lido-csm-sdk/common';
+import { useOperatorType } from 'modules/web3';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { RoleBadge } from '../role-badge/role-badge';
 import { DescriptorId } from './descriptor-id';
@@ -12,7 +12,7 @@ type DescriptorProps = {
 };
 
 export const Descriptor: FC<DescriptorProps> = ({ nodeOperator }) => {
-  const { data: type } = useNodeOperatorCurveType(nodeOperator.id);
+  const { data: type } = useOperatorType(nodeOperator.id);
 
   return (
     <DescriptorStyle>

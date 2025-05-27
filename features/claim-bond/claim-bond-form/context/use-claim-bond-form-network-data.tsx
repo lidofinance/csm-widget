@@ -1,7 +1,7 @@
+import { useCsmStatus } from 'modules/web3';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
-  useCsmPaused,
   useIsContract,
   useNodeOperatorBalance,
   useNodeOperatorInfo,
@@ -44,7 +44,7 @@ export const useClaimBondFormNetworkData = (): [
     isLoading: isContractLoading,
   } = useIsContract(rewardsAddress);
 
-  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
+  const { data: status, isPending: isStatusLoading } = useCsmStatus();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateBond(), updateRewards()]);
@@ -78,7 +78,7 @@ export const useClaimBondFormNetworkData = (): [
       rewardsAddress,
       isContract,
       isSplitter,
-      isPaused: status?.isAccountingPaused,
+      isPaused: status?.isPausedAccounting,
       loading,
     },
     revalidate,

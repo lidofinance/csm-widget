@@ -1,11 +1,11 @@
+import { useCsmStatus } from 'modules/web3';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useAccount } from './use-account';
-import { useCsmPaused } from './useCsmStatus';
 
 export const useCanCreateNodeOperator = () => {
   const { address } = useAccount();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: paused } = useCsmPaused();
+  const { data: status } = useCsmStatus();
 
-  return Boolean(address && !nodeOperatorId && !paused?.isPaused);
+  return Boolean(address && !nodeOperatorId && !status?.isPaused);
 };

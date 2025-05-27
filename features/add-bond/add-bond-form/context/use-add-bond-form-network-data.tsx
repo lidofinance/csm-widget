@@ -1,9 +1,9 @@
 import { useEthereumBalance } from '@lido-sdk/react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
+import { useCsmStatus } from 'modules/web3';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
-  useCsmPaused,
   useNodeOperatorBalance,
   useStakingLimitInfo,
   useSTETHBalance,
@@ -42,7 +42,7 @@ export const useAddBondFormNetworkData = (): [
     initialLoading: isMaxStakeEtherLoading,
   } = useStakingLimitInfo();
 
-  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
+  const { data: status, isPending: isStatusLoading } = useCsmStatus();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
@@ -87,7 +87,7 @@ export const useAddBondFormNetworkData = (): [
       bond,
       nodeOperatorId,
       maxStakeEther,
-      isPaused: status?.isAccountingPaused,
+      isPaused: status?.isPausedAccounting,
       loading,
     },
     revalidate,

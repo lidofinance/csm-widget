@@ -15,3 +15,13 @@ export const useCsmStatus = () => {
     }),
   });
 };
+
+export const useCsmVersionSupported = () => {
+  const { csm } = useLidoSDK();
+
+  return useQuery({
+    queryKey: ['csm-version'],
+    ...STRATEGY_CONSTANT,
+    queryFn: async () => csm.module.isVersionsSupported(),
+  });
+};

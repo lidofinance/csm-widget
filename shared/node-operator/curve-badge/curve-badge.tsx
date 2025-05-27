@@ -1,9 +1,9 @@
 import { FC } from 'react';
-import { CURVE_TYPE } from 'shared/hooks';
 import { DescriptorCurveStyle } from './styles';
+import { OPERATOR_TYPE } from 'consts';
 
-export const CurveBadge: FC<{ type?: CURVE_TYPE | null }> = ({ type }) => {
-  const title = type === CURVE_TYPE.CUSTOM ? 'CC' : null;
+export const CurveBadge: FC<{ type?: OPERATOR_TYPE }> = ({ type }) => {
+  const title = type === OPERATOR_TYPE.CUSTOM ? 'CC' : null;
 
   return (
     <>

@@ -1,9 +1,9 @@
 import { useEthereumBalance } from '@lido-sdk/react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
+import { useCsmStatus, useShareLimit, useStakeLimit } from 'modules/web3';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
 import {
-  useCsmPaused,
   useKeysAvailable,
   useNodeOperatorBalance,
   useNodeOperatorCurveId,
@@ -13,7 +13,6 @@ import {
 } from 'shared/hooks';
 import { useBlockNumber } from 'wagmi';
 import { type AddKeysFormNetworkData } from './types';
-import { useShareLimit, useStakeLimit } from 'modules/web3';
 
 export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
@@ -21,7 +20,7 @@ export const useAddKeysFormNetworkData = (): [
 ] => {
   const { data: blockNumber, isLoading: isBlockNumberLoading } =
     useBlockNumber();
-  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
+  const { data: status, isPending: isStatusLoading } = useCsmStatus();
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: etherBalance,
@@ -115,7 +114,7 @@ export const useAddKeysFormNetworkData = (): [
       maxStakeEther,
       loading,
       shareLimit,
-      isPaused: status?.isPaused || status?.isAccountingPaused,
+      isPaused: status?.isPaused,
     },
     revalidate,
   ];

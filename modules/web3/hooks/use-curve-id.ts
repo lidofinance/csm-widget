@@ -6,7 +6,7 @@ export const useCurveId = () => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['getCurveId'],
+    queryKey: ['permissionless:getCurveId'],
     ...STRATEGY_CONSTANT,
     queryFn: () => csm.permissionlessGate.getCurveId(),
   });

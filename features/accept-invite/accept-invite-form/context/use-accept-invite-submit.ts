@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
 import { ROLES } from 'consts/roles';
-import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
 import { NodeOperatorId } from 'types';
@@ -14,6 +13,7 @@ import {
 } from './types';
 import { useNavigate } from 'shared/navigate';
 import { PATH } from 'consts/urls';
+import { useAppendOperator } from 'modules/web3';
 
 // TODO: move to hooks
 type UseAcceptInviteOptions = {
@@ -59,7 +59,7 @@ export const useAcceptInviteSubmit = ({
   onRetry,
 }: UseAcceptInviteOptions) => {
   const { txModalStages } = useTxModalStagesAcceptInvite();
-  const { append: appendNO } = useNodeOperatorContext();
+  const appendNO = useAppendOperator();
   const n = useNavigate();
 
   const getTx = useAcceptInviteTx();
@@ -96,7 +96,7 @@ export const useAcceptInviteSubmit = ({
         await onConfirm?.();
 
         // TODO: move to onConfirm
-        appendNO({ id: invite.id, roles: [invite.role] });
+        // appendNO({ id: invite.id, roles: [invite.role] });
         if (invites && invites.length <= 1) {
           void n(PATH.HOME);
         }
@@ -108,7 +108,7 @@ export const useAcceptInviteSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [txModalStages, getTx, onConfirm, appendNO, n, sendTx, onRetry],
+    [txModalStages, getTx, onConfirm, n, sendTx, onRetry],
   );
 
   return {

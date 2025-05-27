@@ -1,12 +1,12 @@
+import { ROLES } from '@lidofinance/lido-csm-sdk/common';
 import { KEY_STATUS } from 'consts/key-status';
-import { ROLES } from 'consts/roles';
-import { useActiveNodeOperator } from 'providers/node-operator-provider';
-import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import {
-  useKeysWithStatus,
-  useNodeOperatorInfo,
-  useNodeOperatorLockAmount,
-} from 'shared/hooks';
+  useNodeOperator,
+  useOperatorBalance,
+  useOperatorInfo,
+} from 'modules/web3';
+import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
+import { useKeysWithStatus } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
@@ -15,8 +15,8 @@ import { AlertRequestToExit } from './components/alert-request-to-exit';
 export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { showAlert, closeAlert } = useAlertActions();
 
-  const nodeOperator = useActiveNodeOperator();
-  const { data: info } = useNodeOperatorInfo(nodeOperator?.id);
+  const { nodeOperator } = useNodeOperator();
+  const { data: info } = useOperatorInfo(nodeOperator?.id);
 
   const normalizeQueue = useMemo(() => {
     return (
@@ -26,7 +26,7 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
     );
   }, [info, nodeOperator?.roles]);
 
-  const { data: lockedBond } = useNodeOperatorLockAmount(nodeOperator?.id);
+  const { data: balance } = useOperatorBalance(nodeOperator?.id);
 
   const { data: keysWithStatus, initialLoading: isKeysLoading } =
     useKeysWithStatus();
@@ -57,12 +57,12 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   }, [closeAlert, normalizeQueue, showAlert]);
 
   useEffect(() => {
-    if (lockedBond?.gt(0)) {
+    if (balance?.locked) {
       showAlert(AlertLockedBond);
     } else {
       closeAlert(AlertLockedBond);
     }
-  }, [closeAlert, lockedBond, showAlert]);
+  }, [balance?.locked, closeAlert, showAlert]);
 
   return <>{children}</>;
 };

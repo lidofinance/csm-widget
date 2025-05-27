@@ -1,12 +1,12 @@
+import { ROLES } from '@lidofinance/lido-csm-sdk/common';
 import { getExternalLinks } from 'consts/external-links';
-import { useNodeOperatorContext } from 'providers/node-operator-provider';
+import { useNodeOperator, useOperatorBalance } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   useAccount,
   useCanCreateNodeOperator,
   useInvites,
   useIsReportStealingRole,
-  useNodeOperatorLockAmount,
 } from 'shared/hooks';
 
 export type ShowRule =
@@ -25,10 +25,10 @@ const { surveyApi } = getExternalLinks();
 
 export const useShowRule = () => {
   const { active: isConnectedWallet } = useAccount();
-  const { active: nodeOperator } = useNodeOperatorContext();
+  const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
   const { data: isReportingRole } = useIsReportStealingRole();
-  const { data: lockedBond } = useNodeOperatorLockAmount(nodeOperator?.id);
+  const { data: balance } = useOperatorBalance(nodeOperator?.id);
   const canCreateNO = useCanCreateNodeOperator();
 
   return useCallback(
@@ -43,13 +43,13 @@ export const useShowRule = () => {
         case 'CAN_CREATE':
           return !!canCreateNO;
         case 'HAS_MANAGER_ROLE':
-          return !!nodeOperator?.roles.includes('MANAGER');
+          return !!nodeOperator?.roles.includes(ROLES.MANAGER);
         case 'HAS_REWARDS_ROLE':
-          return !!nodeOperator?.roles.includes('REWARDS');
+          return !!nodeOperator?.roles.includes(ROLES.REWARDS);
         case 'HAS_INVITES':
           return !!invites?.length;
         case 'HAS_LOCKED_BOND':
-          return !!lockedBond?.gt(0);
+          return !!balance?.locked;
         case 'EL_STEALING_REPORTER':
           return !!isReportingRole;
         case 'IS_SURVEYS_ACTIVE':
@@ -63,7 +63,7 @@ export const useShowRule = () => {
       nodeOperator,
       canCreateNO,
       invites?.length,
-      lockedBond,
+      balance?.locked,
       isReportingRole,
     ],
   );

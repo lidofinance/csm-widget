@@ -2,7 +2,12 @@ import {
   CSM_CONTRACT_ADDRESSES,
   CSM_CONTRACT_NAMES,
 } from '@lidofinance/lido-csm-sdk/common';
-import { CHAINS, StethAbi, WstethABI } from '@lidofinance/lido-ethereum-sdk';
+import {
+  CHAINS,
+  LidoLocatorAbi,
+  StethAbi,
+  WstethABI,
+} from '@lidofinance/lido-ethereum-sdk';
 import {
   fromPairs,
   invert,
@@ -31,10 +36,13 @@ import {
   ValidatorsExitBusOracleAbi,
   VettedGateAbi,
 } from '@lidofinance/lido-csm-sdk/abi';
+import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 
 const CONTRACT_NAMES = {
   ...CSM_CONTRACT_NAMES,
   aggregatorStEthUsdPriceFeed: 'aggregatorStEthUsdPriceFeed',
+  aggregatorEthUsdPrice: 'aggregatorEthUsdPrice',
+  lidoLocator: 'lidoLocator',
 
   ens1: 'ens1',
   ens2: 'ens2',
@@ -65,6 +73,8 @@ const STATIC_ADDRESSES: {
   [CHAINS.Mainnet]: {
     [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]:
       '0xcfe54b5cd566ab89272946f602d76ea879cab4a8',
+    [CONTRACT_NAMES.aggregatorEthUsdPrice]:
+      '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
     [CONTRACT_NAMES.ens1]: '0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e',
     [CONTRACT_NAMES.ens2]: '0x231b0ee14048e9dccd1d247744d114a4eb5e8e63',
     [CONTRACT_NAMES.ens3]: '0x64969fb44091A7E5fA1213D30D7A7e8488edf693',
@@ -85,6 +95,7 @@ const STATIC_ADDRESSES: {
       '0x71093efF8D8599b5fA340D665Ad60fA7C80688e4',
   },
   [CHAINS.Hoodi]: {
+    [CONTRACT_NAMES.lidoLocator]: '0xe2EF9536DAAAEBFf5b1c130957AB3E80056b06D8',
     [CONTRACT_NAMES.CSAccounting_v1]:
       '0xA54b90BA34C5f326BC1485054080994e38FB4C60',
     [CONTRACT_NAMES.CSFeeDistributor_v1]:
@@ -96,13 +107,14 @@ const STATIC_ADDRESSES: {
       '0x16D0f6068D211608e3703323314aa976a6492D09',
     [CONTRACT_NAMES.HashConsensus_v1]:
       '0x54f74a10e4397dDeF85C4854d9dfcA129D72C637',
+
+    ...overridedAddresses,
   },
 };
 
 const getContractAddress = (name: CONTRACT_NAMES, chainId: CHAINS) =>
-  CSM_CONTRACT_ADDRESSES[chainId]?.[name as CSM_CONTRACT_NAMES] ??
-  STATIC_ADDRESSES[chainId]?.[name];
-
+  STATIC_ADDRESSES[chainId]?.[name] ??
+  CSM_CONTRACT_ADDRESSES[chainId]?.[name as CSM_CONTRACT_NAMES];
 export const METRIC_CONTRACT_ADDRESSES = fromPairs(
   supportedChainsWithMainnet.map((chainId) => [
     chainId,
@@ -134,7 +146,9 @@ const METRIC_CONTRACT_ABIS: Record<CONTRACT_NAMES, Abi> = {
   [CONTRACT_NAMES.stETH]: StethAbi,
   [CONTRACT_NAMES.wstETH]: WstethABI,
   [CONTRACT_NAMES.withdrawalVault]: [],
+  [CONTRACT_NAMES.lidoLocator]: LidoLocatorAbi,
   [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]: [],
+  [CONTRACT_NAMES.aggregatorEthUsdPrice]: [],
   [CONTRACT_NAMES.ens1]: [],
   [CONTRACT_NAMES.ens2]: [],
   [CONTRACT_NAMES.ens3]: [],

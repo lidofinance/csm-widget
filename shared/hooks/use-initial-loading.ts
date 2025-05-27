@@ -1,19 +1,16 @@
-import { useCsmStatus } from 'modules/web3';
-import { useNodeOperatorContext } from 'providers/node-operator-provider';
-import { useAccount } from './use-account';
+import { useCsmStatus, useCsmVersionSupported } from 'modules/web3';
+import { useAvailableOperators } from 'modules/web3/operator-provider';
 import { useEffect, useState } from 'react';
-import { useCsmVersionSupported } from './use-csm-version-supported';
+import { useAccount } from 'wagmi';
 
 type ReturnProps = { isLoading: boolean; isSupported: boolean };
 
 export const useInitialLoading = (externalLoading?: boolean) => {
   const { isConnecting } = useAccount();
   const { isLoading: isStatusLoading } = useCsmStatus();
-  const { isListLoading, active } = useNodeOperatorContext();
-  const { initialLoading: isSupporetdLoading, data: isSupported } =
+  const { isPending: isOperatorsLoading } = useAvailableOperators();
+  const { isPending: isSupportedLoading, data: isSupported } =
     useCsmVersionSupported();
-
-  // TODO: handle status.isError || list.isError
 
   const [state, setState] = useState<ReturnProps>({
     isLoading: true,
@@ -21,15 +18,28 @@ export const useInitialLoading = (externalLoading?: boolean) => {
   });
 
   // TODO: handle loading errors
-  // TODO: check version
   // TODO: handle status.isError || list.isError
 
   useEffect(() => {
-    const isLoading = isStatusLoading || isConnecting || isListLoading;
+    const loaders = [
+      isStatusLoading,
+      isSupportedLoading,
+      isConnecting,
+      isOperatorsLoading,
+      externalLoading,
+    ];
 
-    const result = Boolean(isLoading || externalLoading);
+    const isLoading = loaders.every((i) => i === false);
+
     setState({ isLoading, isSupported: isSupported ?? true });
-  }, [active, externalLoading, isConnecting, isListLoading, isStatusLoading]);
+  }, [
+    externalLoading,
+    isConnecting,
+    isOperatorsLoading,
+    isStatusLoading,
+    isSupported,
+    isSupportedLoading,
+  ]);
 
   return state;
 };
