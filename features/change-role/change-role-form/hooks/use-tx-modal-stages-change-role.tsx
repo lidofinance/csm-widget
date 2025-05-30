@@ -1,7 +1,7 @@
+import { ROLES } from '@lidofinance/lido-csm-sdk/common';
 import { Text } from '@lidofinance/lido-ui';
-import { ROLES } from 'consts/roles';
 import { capitalize } from 'lodash';
-import { Address } from 'shared/components';
+import { Address as AddressComponent } from 'shared/components';
 import { getRoleTitle } from 'shared/node-operator';
 import {
   AfterAddressProposed,
@@ -12,10 +12,11 @@ import {
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
+import { Address } from 'viem';
 
 type Props = {
-  address: string;
-  currentAddress: string;
+  address: Address;
+  currentAddress: Address;
   role: ROLES;
   isManagerReset: boolean;
   isRewardsChange: boolean;
@@ -32,7 +33,7 @@ const getTexts = (props: Props) => {
             <>
               New ${getRoleTitle(props.role)} address is{' '}
               <Text size="xxs">
-                <Address address={props.address} showIcon />
+                <AddressComponent address={props.address} showIcon />
               </Text>
             </>
           ),
@@ -43,7 +44,7 @@ const getTexts = (props: Props) => {
             <>
               New ${getRoleTitle(props.role)} address is{' '}
               <Text size="xxs">
-                <Address address={props.address} showIcon />
+                <AddressComponent address={props.address} showIcon />
               </Text>
             </>
           ),
@@ -57,7 +58,7 @@ const getTexts = (props: Props) => {
               <>
                 Address stays{' '}
                 <Text size="xxs">
-                  <Address address={props.currentAddress} showIcon />
+                  <AddressComponent address={props.currentAddress} showIcon />
                 </Text>
               </>
             ),
@@ -68,7 +69,7 @@ const getTexts = (props: Props) => {
               <>
                 Address stays{' '}
                 <Text size="xxs">
-                  <Address address={props.currentAddress} showIcon />
+                  <AddressComponent address={props.currentAddress} showIcon />
                 </Text>
               </>
             ),
@@ -81,7 +82,7 @@ const getTexts = (props: Props) => {
               <>
                 Proposed address{' '}
                 <Text size="xxs">
-                  <Address address={props.address} showIcon />
+                  <AddressComponent address={props.address} showIcon />
                 </Text>
               </>
             ),

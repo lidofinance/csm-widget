@@ -4,6 +4,7 @@ import { isValidationErrorTypeValidate } from '../validation/validation-error';
 import { Button } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
+// TODO: type Address
 type AddressInputHookFormProps = Partial<
   React.ComponentProps<typeof InputAddress>
 > & {

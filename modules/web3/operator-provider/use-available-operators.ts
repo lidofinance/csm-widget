@@ -1,9 +1,9 @@
-import { useLidoSDK } from '../web3-provider';
-import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
-import { useDappStatus } from '../hooks';
-import { useCachedNodeOperator } from './use-cached-node-operator';
-import { useEffect, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
+import { useMemo } from 'react';
+import { useDappStatus } from '../hooks';
+import { useLidoSDK } from '../web3-provider';
+import { useCachedNodeOperator } from './use-cached-node-operator';
 
 export const useAvailableOperators = () => {
   const { csm } = useLidoSDK();

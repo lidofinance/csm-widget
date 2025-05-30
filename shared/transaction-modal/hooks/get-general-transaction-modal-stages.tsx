@@ -1,5 +1,3 @@
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
 import {
   TxStageFail,
   TxStagePermit,
@@ -8,12 +6,13 @@ import {
 import { getErrorCode } from 'utils';
 import { TxStageSignOperationAmount } from '../tx-stages-composed';
 import type { TransactionModalTransitStage } from './use-transaction-modal-stage';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 export const getGeneralTransactionModalStages = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   signPermit: () => transitStage(<TxStagePermit />), // TODO: show token & amount
-  signApproval: (amount: BigNumber, token: TOKENS) =>
+  signApproval: (amount: bigint, token: TOKENS) =>
     transitStage(
       <TxStageSignOperationAmount
         operationText="Unlocking"
@@ -21,7 +20,7 @@ export const getGeneralTransactionModalStages = (
         token={token}
       />,
     ),
-  pendingApproval: (amount: BigNumber, token: TOKENS, txHash?: string) =>
+  pendingApproval: (amount: bigint, token: TOKENS, txHash?: string) =>
     transitStage(
       <TxStageSignOperationAmount
         operationText="Unlocking"

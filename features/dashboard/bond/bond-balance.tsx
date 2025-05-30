@@ -1,17 +1,15 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
-import { TOKENS } from 'consts/tokens';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { useNodeOperatorId, useOperatorBalance } from 'modules/web3';
 import { FC } from 'react';
 import { Counter } from 'shared/components';
-import { useNodeOperatorBalance } from 'shared/hooks';
 import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 
 export const BondBalance: FC = () => {
   const id = useNodeOperatorId();
 
-  const { data: bond, initialLoading: isBondLoading } =
-    useNodeOperatorBalance(id);
+  const { data: bond, isPending: isBondLoading } = useOperatorBalance(id);
 
   return (
     <AccordionStyle
@@ -25,7 +23,7 @@ export const BondBalance: FC = () => {
             big
             loading={isBondLoading}
             amount={bond?.current}
-            token={TOKENS.STETH}
+            token={TOKENS.steth}
           />
         </RowHeader>
       }

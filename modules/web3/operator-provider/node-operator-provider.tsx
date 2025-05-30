@@ -5,10 +5,11 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useMemo,
 } from 'react';
 import invariant from 'tiny-invariant';
-import { useAvailableOperators } from './use-available-operators';
 import { useActiveNodeOperator } from './use-active-node-operator';
+import { useAvailableOperators } from './use-available-operators';
 
 export type NodeOperatorContextValue = {
   nodeOperator: NodeOperator | undefined;
@@ -60,7 +61,10 @@ export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
     [list, setActive],
   );
 
-  const value = { nodeOperator: active, switchNodeOperator };
+  const value = useMemo(
+    () => ({ nodeOperator: active, switchNodeOperator }),
+    [active, switchNodeOperator],
+  );
 
   return (
     <NodeOperatorContext.Provider value={value}>

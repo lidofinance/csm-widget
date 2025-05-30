@@ -1,13 +1,13 @@
-import { BigNumber } from 'ethers';
-import { LoadingRecord, NodeOperatorId } from 'types';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { LoadingRecord } from 'types';
 
 export type UnlockBondFormInputType = {
-  amount?: BigNumber;
+  amount?: bigint;
 };
 
 export type UnlockBondFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
-  lockedBond?: BigNumber;
-  etherBalance?: BigNumber;
-  loading: LoadingRecord<'lockedBond' | 'etherBalance'>;
+  lockedBond?: bigint;
+  ethBalance?: bigint;
+  loading: LoadingRecord<'lockedBond' | 'ethBalance'>;
 };

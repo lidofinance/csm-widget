@@ -1,8 +1,6 @@
-import type { BigNumber } from 'ethers';
-
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { TOKENS } from 'consts/tokens';
 import { PATH } from 'consts/urls';
 import { MatomoLink } from 'shared/components';
 import { TxLinkEtherscan } from 'shared/components/tx-link-etherscan';
@@ -17,12 +15,12 @@ import {
 } from 'shared/transaction-modal';
 
 type Props = {
-  amount: BigNumber;
+  amount: bigint;
   token: TOKENS;
   claimRewards: boolean;
-  rewards?: BigNumber;
+  rewards?: bigint;
 };
-type SuccessProps = { amount: BigNumber; token: TOKENS };
+type SuccessProps = { amount: bigint; token: TOKENS };
 
 const { stakeWidget } = getExternalLinks();
 
@@ -38,14 +36,14 @@ const getTxModalStagesClaimBond = (
 
   success: ({ amount, token }: SuccessProps, txHash?: string) =>
     transitStage(
-      token === TOKENS.ETH ? (
+      token === TOKENS.eth ? (
         // TODO: matomo events
         <TxStageSuccess
           title="Withdrawal request has been sent"
           description={
             <>
               Request withdrawal of{' '}
-              <TxAmount amount={amount} token={TOKENS.STETH} /> has been sent.
+              <TxAmount amount={amount} token={TOKENS.steth} /> has been sent.
               Check{' '}
               <MatomoLink href={`${stakeWidget}/withdrawals/claim`}>
                 Claim tab on the Lido Staking Widget

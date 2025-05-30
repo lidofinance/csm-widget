@@ -1,13 +1,13 @@
+import { KEY_STATUS } from 'consts/key-status';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { useNodeOperatorId, useOperatorInfo } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { SectionBlock, Stack, StatusComment } from 'shared/components';
-import { useKeysWithStatus, useNodeOperatorInfo } from 'shared/hooks';
-import { KEY_STATUS } from 'consts/key-status';
+import { StatusTitle } from 'shared/components/status-chip/status-chip';
+import { useKeysWithStatus } from 'shared/hooks';
 import { Item, ItemAction } from './item';
 import { AccordionStyle, Row, RowTitle } from './styles';
-import { StatusTitle } from 'shared/components/status-chip/status-chip';
 
 const BAD_STATUSES: KEY_STATUS[] = [
   KEY_STATUS.UNBONDED,
@@ -20,7 +20,7 @@ const BAD_STATUSES: KEY_STATUS[] = [
 
 export const KeysSection: FC = () => {
   const id = useNodeOperatorId();
-  const { data: info } = useNodeOperatorInfo(id);
+  const { data: info } = useOperatorInfo(id);
 
   const { data: keys } = useKeysWithStatus();
 

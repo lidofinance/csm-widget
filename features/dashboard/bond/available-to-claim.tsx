@@ -1,13 +1,13 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
-import { TOKENS } from 'consts/tokens';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
+import {
+  useNodeOperatorId,
+  useOperatorBalance,
+  useOperatorRewards,
+} from 'modules/web3';
 import { FC } from 'react';
 import { Counter, IconTooltip } from 'shared/components';
-import {
-  useNodeOperatorBalance,
-  useNodeOperatorRewards,
-  useRewardsFrame,
-} from 'shared/hooks';
+import { useRewardsFrame } from 'shared/hooks';
 import { useAvailableToClaim } from 'shared/hooks/useAvailableToClaim';
 import { formatDate } from 'utils';
 import { Balance } from './balance';
@@ -16,11 +16,9 @@ import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 export const AvailableToClaim: FC = () => {
   const id = useNodeOperatorId();
 
-  const { data: bond, initialLoading: isBondLoading } =
-    useNodeOperatorBalance(id);
+  const { data: bond, isPending: isBondLoading } = useOperatorBalance(id);
 
-  const { data: rewards, initialLoading: isRewardsLoading } =
-    useNodeOperatorRewards(id);
+  const { data: rewards, isPending: isRewardsLoading } = useOperatorRewards(id);
 
   const { data: rewardsFrame } = useRewardsFrame();
   const nextRewardsDate = formatDate(rewardsFrame?.nextRewards);
@@ -36,7 +34,7 @@ export const AvailableToClaim: FC = () => {
         <RowHeader>
           <RowTitle>
             Available to claim
-            {(bond?.isInsufficient || bond?.locked.gt(0)) && (
+            {(bond?.isInsufficient || !!bond?.locked) && (
               <Counter warning count={1} />
             )}
           </RowTitle>
@@ -88,7 +86,7 @@ export const AvailableToClaim: FC = () => {
             />
           </>
         )}
-        {bond?.locked.gt(0) && (
+        {!!bond?.locked && (
           <>
             <Balance
               warning
@@ -96,7 +94,7 @@ export const AvailableToClaim: FC = () => {
               title="Locked bond"
               loading={isBondLoading}
               amount={bond.locked}
-              token={TOKENS.ETH}
+              token={TOKENS.eth}
               help="Bond is locked because of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
             />
           </>

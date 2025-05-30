@@ -33,6 +33,7 @@ import { PATH } from 'consts/urls';
 import { SurveyButton } from '../components';
 import { Button } from '@lidofinance/lido-ui';
 import { Setup, SetupRaw, SetupsKeys } from '../types';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 const required = { required: true };
 
@@ -276,7 +277,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                   <TokenAmountInputHookForm
                     fieldName="mevMinBid"
                     label="Min bid"
-                    token="ETH"
+                    token={TOKENS.eth}
                   />
                 </Stack>
                 <SubmitButtonHookForm>Submit</SubmitButtonHookForm>

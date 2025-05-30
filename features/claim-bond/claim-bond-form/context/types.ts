@@ -1,16 +1,15 @@
-import { type TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
+import { LoadingRecord } from 'types';
+import { MaxValues } from './use-max-values';
 import {
   BondBalance,
-  LoadingRecord,
   NodeOperatorId,
-  RewardsBalance,
-} from 'types';
-import { MaxValues } from './use-max-values';
+  Rewards,
+  TOKENS,
+} from '@lidofinance/lido-csm-sdk/common';
 
 export type ClaimBondFormInputType = {
   token: TOKENS;
-  amount?: BigNumber;
+  amount?: bigint;
   claimRewards: boolean;
   unlockClaimTokens: boolean;
 };
@@ -18,7 +17,7 @@ export type ClaimBondFormInputType = {
 export type ClaimBondFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
   bond?: BondBalance;
-  rewards?: RewardsBalance;
+  rewards?: Rewards;
   maxValues?: MaxValues;
   rewardsAddress?: string;
   isContract?: boolean;

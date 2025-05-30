@@ -1,16 +1,15 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 import { TxStagePending } from '../tx-stages-basic/tx-stage-pending';
 import { TxStageSign } from '../tx-stages-basic/tx-stage-sign';
 import { TxAmount } from '../tx-stages-parts/tx-amount';
 
-import { TOKENS } from 'consts/tokens';
-import type { BigNumber } from 'ethers';
 import { useBondWillReceive } from 'shared/hooks';
 
 type TxStageClaimProps = {
   claimRewards: boolean;
-  amount: BigNumber;
+  amount: bigint;
   token: TOKENS;
-  rewards?: BigNumber;
+  rewards?: bigint;
   isPending?: boolean;
   txHash?: string;
 };
@@ -53,10 +52,10 @@ export const TxStageClaim = ({
             <TxAmount amount={amount} token={token} />.
           </p>
 
-          {bondReceive.gt(0) && (
+          {bondReceive > 0 && (
             <p>
               Bond balance will increase by{' '}
-              <TxAmount amount={bondReceive} token={TOKENS.STETH} />.
+              <TxAmount amount={bondReceive} token={TOKENS.steth} />.
             </p>
           )}
         </>

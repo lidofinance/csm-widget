@@ -2,12 +2,10 @@ import { useSDK } from '@lido-sdk/react';
 import { config } from 'config';
 import { PopulatedTransaction } from 'ethers';
 import { useCallback } from 'react';
-import invariant from 'tiny-invariant';
-import { applyGasLimitRatio, getFeeData, trackMatomoTxEvent } from 'utils';
-import { estimateGas } from 'utils/estimate-gas';
-import { useIsMultisig } from './useIsMultisig';
 import { MULTISIG_BREAK } from 'shared/transaction-modal';
-import { useConfig } from 'wagmi';
+import invariant from 'tiny-invariant';
+import { trackMatomoTxEvent } from 'utils';
+import { useIsMultisig } from './useIsMultisig';
 
 type SendTxProps = {
   tx: PopulatedTransaction;
@@ -18,7 +16,6 @@ type SendTxProps = {
 
 export const useSendTx = () => {
   const { isMultisig, isLoading: isMultisigLoading } = useIsMultisig();
-  const config = useConfig();
   const { providerWeb3, providerRpc } = useSDK();
 
   const performTx = useCallback(
@@ -38,12 +35,7 @@ export const useSendTx = () => {
   );
 
   return useCallback(
-    async ({
-      tx,
-      txName,
-      shouldApplyGasLimitRatio = true,
-      shouldApplyCalldataSuffix = false,
-    }: SendTxProps) => {
+    async ({ tx, txName, shouldApplyCalldataSuffix = false }: SendTxProps) => {
       invariant(isMultisigLoading === false, 'isMultisig in not loaded');
 
       if (shouldApplyCalldataSuffix) applyCalldataSuffix(tx);
@@ -53,28 +45,22 @@ export const useSendTx = () => {
         throw MULTISIG_BREAK;
       }
 
-      const { maxFeePerGas, maxPriorityFeePerGas } = await getFeeData(config);
+      // const { maxFeePerGas, maxPriorityFeePerGas } = await getFeeData(config);
 
-      tx.maxFeePerGas = maxFeePerGas;
-      tx.maxPriorityFeePerGas = maxPriorityFeePerGas;
-
-      const gasLimit = await estimateGas(tx, providerRpc);
-
-      tx.gasLimit = shouldApplyGasLimitRatio
-        ? applyGasLimitRatio(gasLimit)
-        : gasLimit;
+      // tx.maxFeePerGas = maxFeePerGas;
+      // tx.maxPriorityFeePerGas = maxPriorityFeePerGas;
 
       const txHash = await performTx(tx, txName);
 
       return [txHash, () => providerRpc.waitForTransaction(txHash)] as const;
     },
-    [isMultisigLoading, isMultisig, config, providerRpc, performTx],
+    [isMultisigLoading, isMultisig, providerRpc, performTx],
   );
 };
 
 // adds metrics indicator for widget tx
 export const applyCalldataSuffix = (tx: PopulatedTransaction) => {
   invariant(tx.data, 'transaction must have calldata');
-  tx.data = tx.data + config.STAKE_WIDGET_METRIC_SUFFIX;
+  tx.data = tx.data + config.CSM_WIDGET_METRIC_SUFFIX;
   return tx;
 };

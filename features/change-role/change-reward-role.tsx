@@ -1,9 +1,8 @@
+import { ROLES } from '@lidofinance/lido-csm-sdk/common';
+import { Faq } from 'shared/components';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks/useWeb3Key';
-
 import { ChangeRoleForm } from './change-role-form';
-import { ROLES } from 'consts/roles';
-import { Faq } from 'shared/components';
 
 export const ChangeRewardRole = () => {
   const key = useWeb3Key();

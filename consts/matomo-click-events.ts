@@ -57,6 +57,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   howLearnCsmClose = 'howLearnCsmClose',
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
+  transferKeysLinkAlert = 'transferKeysLinkAlert',
   unlockBondLinkAlert = 'unlockBondLinkAlert',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
@@ -76,6 +77,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageAddKeys = 'pageAddKeys',
   pageViewKeys = 'pageViewKeys',
   pageRemoveKeys = 'pageRemoveKeys',
+  pageTransferKeys = 'pageTransferKeys',
   pageMonitoring = 'pageMonitoring',
   pageAddBond = 'pageAddBond',
   pageClaimBond = 'pageClaimBond',
@@ -318,6 +320,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Normalize queue» link on Normalize Queue alert',
     prefixed`normalize_queue_link_alert`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.transferKeysLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Transfer keys» link on Transfer Keys alert',
+    prefixed`transfer_keys_link_alert`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: [
     MATOMO_APP_NAME,
     'Click «Unlock bond» link on Locked Bond alert',
@@ -404,6 +411,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «RemoveKeys»',
     prefixed`view_remove_keys_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageTransferKeys]: [
+    MATOMO_APP_NAME,
+    'View page «TransferKeys»',
+    prefixed`view_transfer_keys_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageMonitoring]: [
     MATOMO_APP_NAME,

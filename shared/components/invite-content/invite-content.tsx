@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { DescriptorId, getRoleTitle } from 'shared/node-operator';
-import { NodeOperatorInvite } from 'types';
 import { Badge, InviteContentStyle } from './style';
 import { Tooltip } from '@lidofinance/lido-ui';
 import { ROLES } from 'consts/roles';
+import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk/common';
 
 export const InviteContent: FC<{ invite: NodeOperatorInvite }> = ({
   invite,

@@ -6,6 +6,11 @@ import {
   SetStateAction,
 } from 'react';
 
+// FIXME: duplicate
+const serialize = (_key: string, value: unknown) => {
+  return typeof value === 'bigint' ? value.toString() : value;
+};
+
 export const useSessionStorage = <T>(
   key: string,
   initialValue: T,
@@ -24,7 +29,7 @@ export const useSessionStorage = <T>(
   const saveToStorage = useCallback(
     (newValue: T) => {
       try {
-        window.sessionStorage.setItem(key, JSON.stringify(newValue));
+        window.sessionStorage.setItem(key, JSON.stringify(newValue, serialize));
         window.dispatchEvent(new Event('session-storage'));
       } catch {
         void 0;

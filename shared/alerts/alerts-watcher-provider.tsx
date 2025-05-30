@@ -11,12 +11,15 @@ import { useAlertActions } from './alert-provider';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
+import { AlertTransferKeys } from './components/alert-transfer-keys';
+import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
 
 export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { showAlert, closeAlert } = useAlertActions();
 
   const { nodeOperator } = useNodeOperator();
   const { data: info } = useOperatorInfo(nodeOperator?.id);
+  const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
 
   const normalizeQueue = useMemo(() => {
     return (
@@ -55,6 +58,14 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
       closeAlert(AlertNomalizeQueue);
     }
   }, [closeAlert, normalizeQueue, showAlert]);
+
+  useEffect(() => {
+    if (keysToTransfer) {
+      showAlert(AlertTransferKeys);
+    } else {
+      closeAlert(AlertTransferKeys);
+    }
+  }, [closeAlert, keysToTransfer, showAlert]);
 
   useEffect(() => {
     if (balance?.locked) {

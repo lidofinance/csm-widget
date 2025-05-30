@@ -1,10 +1,10 @@
-import { TOKENS } from 'consts/tokens';
 import { FormTitle, TokenAmount } from 'shared/components';
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { useAddBondFormData } from '../context';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 export const TokenSelect: React.FC = () => {
-  const { etherBalance, stethBalance, wstethBalance, loading } =
+  const { ethBalance, stethBalance, wstethBalance, loading } =
     useAddBondFormData();
 
   return (
@@ -12,23 +12,23 @@ export const TokenSelect: React.FC = () => {
       <FormTitle>Choose bond token</FormTitle>
       <TokenButtonsHookForm
         options={{
-          [TOKENS.ETH]: (
+          [TOKENS.eth]: (
             <TokenAmount
-              token={TOKENS.ETH}
-              amount={etherBalance}
-              loading={loading.isEtherBalanceLoading}
+              token={TOKENS.eth}
+              amount={ethBalance}
+              loading={loading.isEthBalanceLoading}
             />
           ),
-          [TOKENS.STETH]: (
+          [TOKENS.steth]: (
             <TokenAmount
-              token={TOKENS.STETH}
+              token={TOKENS.steth}
               amount={stethBalance}
               loading={loading.isStethBalanceLoading}
             />
           ),
-          [TOKENS.WSTETH]: (
+          [TOKENS.wsteth]: (
             <TokenAmount
-              token={TOKENS.WSTETH}
+              token={TOKENS.steth}
               amount={wstethBalance}
               loading={loading.isWstethBalanceLoading}
             />

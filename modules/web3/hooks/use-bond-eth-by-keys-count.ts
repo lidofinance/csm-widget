@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_IMMUTABLE } from 'consts/react-query-strategies';
 import { useLidoSDK } from '../web3-provider';
 import { useCurveId } from './use-curve-id';
+import invariant from 'tiny-invariant';
 
 export const useBondEthByKeysCount = (keysCount = 1n) => {
   const { csm } = useLidoSDK();
@@ -12,8 +13,10 @@ export const useBondEthByKeysCount = (keysCount = 1n) => {
   return useQuery({
     queryKey: ['getBondAmountByKeysCountETH', { keysCount, curveId }],
     ...STRATEGY_IMMUTABLE,
-    queryFn: () =>
-      csm.accounting.getBondAmountByKeysCountETH(keysCount, curveId!),
+    queryFn: () => {
+      invariant(curveId);
+      return csm.accounting.getBondAmountByKeysCountETH({ keysCount, curveId });
+    },
     enabled: keysCount > 0n && curveId !== undefined,
   });
 };

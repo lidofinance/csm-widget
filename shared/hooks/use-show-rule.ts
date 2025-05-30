@@ -1,19 +1,22 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk/common';
 import { getExternalLinks } from 'consts/external-links';
-import { useNodeOperator, useOperatorBalance } from 'modules/web3';
-import { useCallback } from 'react';
 import {
-  useAccount,
-  useCanCreateNodeOperator,
+  useDappStatus,
+  useHasReportStealingRole,
   useInvites,
-  useIsReportStealingRole,
-} from 'shared/hooks';
+  useNodeOperator,
+  useOperatorBalance,
+} from 'modules/web3';
+import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
+import { useCallback } from 'react';
+import { useCanCreateNodeOperator } from 'shared/hooks';
 
 export type ShowRule =
   | 'IS_CONNECTED_WALLET'
   | 'NOT_NODE_OPERATOR'
   | 'IS_NODE_OPERATOR'
   | 'HAS_INVITES'
+  | 'HAS_KEYS_TO_TRANSFER'
   | 'HAS_MANAGER_ROLE'
   | 'HAS_REWARDS_ROLE'
   | 'HAS_LOCKED_BOND'
@@ -24,22 +27,23 @@ export type ShowRule =
 const { surveyApi } = getExternalLinks();
 
 export const useShowRule = () => {
-  const { active: isConnectedWallet } = useAccount();
+  const { isAccountActive } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
-  const { data: isReportingRole } = useIsReportStealingRole();
+  const { data: isReportingRole } = useHasReportStealingRole();
   const { data: balance } = useOperatorBalance(nodeOperator?.id);
+  const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
   const canCreateNO = useCanCreateNodeOperator();
 
   return useCallback(
     (condition: ShowRule): boolean => {
       switch (condition) {
         case 'IS_CONNECTED_WALLET':
-          return isConnectedWallet;
+          return isAccountActive;
         case 'NOT_NODE_OPERATOR':
-          return isConnectedWallet && !nodeOperator;
+          return isAccountActive && !nodeOperator;
         case 'IS_NODE_OPERATOR':
-          return !!nodeOperator && isConnectedWallet;
+          return !!nodeOperator && isAccountActive;
         case 'CAN_CREATE':
           return !!canCreateNO;
         case 'HAS_MANAGER_ROLE':
@@ -48,6 +52,8 @@ export const useShowRule = () => {
           return !!nodeOperator?.roles.includes(ROLES.REWARDS);
         case 'HAS_INVITES':
           return !!invites?.length;
+        case 'HAS_KEYS_TO_TRANSFER':
+          return !!keysToTransfer;
         case 'HAS_LOCKED_BOND':
           return !!balance?.locked;
         case 'EL_STEALING_REPORTER':
@@ -59,10 +65,11 @@ export const useShowRule = () => {
       }
     },
     [
-      isConnectedWallet,
+      isAccountActive,
       nodeOperator,
       canCreateNO,
       invites?.length,
+      keysToTransfer,
       balance?.locked,
       isReportingRole,
     ],

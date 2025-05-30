@@ -2,7 +2,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import {
   FormTitle,
-  KeysAvailable,
+  // KeysAvailable,
   Stack,
   TokenAmount,
 } from 'shared/components';
@@ -12,7 +12,7 @@ import { useSubmitKeysFormData } from '../context';
 import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 export const TokenSelect: React.FC = () => {
-  const { ethBalance, stethBalance, wstethBalance, keysAvailable, loading } =
+  const { ethBalance, stethBalance, wstethBalance, loading } =
     useSubmitKeysFormData();
 
   return (

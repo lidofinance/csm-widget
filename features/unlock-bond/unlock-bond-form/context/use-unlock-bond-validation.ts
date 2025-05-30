@@ -1,10 +1,9 @@
 import { formatEther } from '@ethersproject/units';
-import { TOKENS } from 'consts/tokens';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
   handleResolverValidationError,
-  validateBignumberMax,
+  validateBigintMax,
   validateEtherAmount,
 } from 'shared/hook-form/validation';
 import { useAwaitNetworkData } from 'shared/hooks';
@@ -14,7 +13,7 @@ import type {
   UnlockBondFormInputType,
   UnlockBondFormNetworkData,
 } from './types';
-import { Zero } from '@ethersproject/constants';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 export const useUnlockBondValidation = (
   networkData: UnlockBondFormNetworkData,
@@ -26,27 +25,27 @@ export const useUnlockBondValidation = (
       try {
         const { amount } = values;
 
-        const { lockedBond, etherBalance } = await dataPromise;
+        const { lockedBond, ethBalance } = await dataPromise;
 
-        invariant(etherBalance);
+        invariant(ethBalance);
         invariant(lockedBond);
 
-        validateEtherAmount('amount', amount, TOKENS.ETH);
+        validateEtherAmount('amount', amount, TOKENS.eth);
 
-        validateBignumberMax(
+        validateBigintMax(
           'amount',
-          amount ?? Zero,
-          etherBalance,
-          `Entered ${getTokenDisplayName(TOKENS.ETH)} amount exceeds your balance of ${formatEther(
-            etherBalance,
+          amount ?? 0n,
+          ethBalance,
+          `Entered ${getTokenDisplayName(TOKENS.eth)} amount exceeds your balance of ${formatEther(
+            ethBalance,
           )}`,
         );
 
-        validateBignumberMax(
+        validateBigintMax(
           'amount',
-          amount ?? Zero,
+          amount ?? 0n,
           lockedBond,
-          `Entered ${getTokenDisplayName(TOKENS.ETH)} amount exceeds locked bond of ${formatEther(
+          `Entered ${getTokenDisplayName(TOKENS.eth)} amount exceeds locked bond of ${formatEther(
             lockedBond,
           )}`,
         );

@@ -1,6 +1,5 @@
-import { useEthereumBalance } from '@lido-sdk/react';
 import { ButtonProps, useBreakpoint } from '@lidofinance/lido-ui';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
+import { useEthereumBalance } from 'modules/web3';
 import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { useAccount } from 'shared/hooks';
@@ -18,10 +17,7 @@ export const Button: FC<ButtonProps> = (props) => {
   const { onClick, ...rest } = props;
   const { openModal } = useWalletModal();
   const { address } = useAccount();
-  const { data: balance, initialLoading } = useEthereumBalance(
-    undefined,
-    STRATEGY_LAZY,
-  );
+  const { data: balance, isPending } = useEthereumBalance();
   const isMobile = useBreakpoint('md');
 
   return (
@@ -34,7 +30,7 @@ export const Button: FC<ButtonProps> = (props) => {
     >
       <WalledButtonWrapperStyle>
         <WalledButtonBalanceStyle>
-          {initialLoading ? (
+          {isPending ? (
             <WalledButtonLoaderStyle />
           ) : (
             <FormatToken amount={balance} symbol="ETH" />

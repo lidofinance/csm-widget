@@ -1,3 +1,4 @@
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useModalActions } from 'providers/modal-provider';
@@ -6,7 +7,6 @@ import { MatomoLink } from 'shared/components';
 import { useBeaconchainDashboardLink } from 'shared/hooks';
 import { Disconnect } from 'shared/wallet';
 import styled from 'styled-components';
-import { NodeOperatorId } from 'types';
 
 type Props = {
   nodeOperatorId?: NodeOperatorId;

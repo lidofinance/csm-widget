@@ -1,16 +1,16 @@
-import { useEthereumBalance } from '@lido-sdk/react';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { useCsmStatus, useShareLimit, useStakeLimit } from 'modules/web3';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { useCallback, useMemo } from 'react';
 import {
-  useKeysAvailable,
-  useNodeOperatorBalance,
-  useNodeOperatorCurveId,
-  useNonWithdrawnKeysCount,
-  useSTETHBalance,
-  useWSTETHBalance,
-} from 'shared/hooks';
+  useCsmStatus,
+  useEthereumBalance,
+  useNodeOperatorId,
+  useOperatorBalance,
+  // useOperatorCurveId,
+  useShareLimit,
+  useStakeLimit,
+  useStethBalance,
+  useWstethBalance,
+} from 'modules/web3';
+import { useCallback, useMemo } from 'react';
+// import { useNonWithdrawnKeysCount } from 'shared/hooks';
 import { useBlockNumber } from 'wagmi';
 import { type AddKeysFormNetworkData } from './types';
 
@@ -22,79 +22,60 @@ export const useAddKeysFormNetworkData = (): [
     useBlockNumber();
   const { data: status, isPending: isStatusLoading } = useCsmStatus();
   const nodeOperatorId = useNodeOperatorId();
-  const {
-    data: etherBalance,
-    update: updateEtherBalance,
-    initialLoading: isEtherBalanceLoading,
-  } = useEthereumBalance(undefined, STRATEGY_LAZY);
-  const {
-    data: stethBalance,
-    update: updateStethBalance,
-    initialLoading: isStethBalanceLoading,
-  } = useSTETHBalance(STRATEGY_LAZY);
-  const {
-    data: wstethBalance,
-    update: updateWstethBalance,
-    initialLoading: isWstethBalanceLoading,
-  } = useWSTETHBalance(STRATEGY_LAZY);
-  const {
-    data: bond,
-    update: updateBond,
-    initialLoading: isBondLoading,
-  } = useNodeOperatorBalance(nodeOperatorId);
+  const { data: ethBalance, isPending: isEthBalanceLoading } =
+    useEthereumBalance();
+  const { data: stethBalance, isPending: isStethBalanceLoading } =
+    useStethBalance();
+  const { data: wstethBalance, isPending: isWstethBalanceLoading } =
+    useWstethBalance();
+  const { data: bond, isPending: isBondLoading } =
+    useOperatorBalance(nodeOperatorId);
 
-  const { data: maxStakeEther, isPending: isMaxStakeEtherLoading } =
+  const { data: maxStakeEth, isPending: isMaxStakeEthLoading } =
     useStakeLimit();
 
   const { data: shareLimit, isPending: isShareLimitLoading } = useShareLimit();
 
-  const { data: curveId } = useNodeOperatorCurveId(nodeOperatorId);
+  // const { data: curveId } = useOperatorCurveId(nodeOperatorId);
 
-  const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(nodeOperatorId);
+  // const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(`${nodeOperatorId}`);
 
-  const { data: keysAvailable } = useKeysAvailable({
-    curveId,
-    nonWithdrawnKeys,
-    bond,
-    etherBalance,
-    stethBalance,
-    wstethBalance,
-  });
+  // const { data: keysAvailable } = useKeysAvailable({
+  //   curveId,
+  //   nonWithdrawnKeys,
+  //   bond,
+  //   ethBalance,
+  //   stethBalance,
+  //   wstethBalance,
+  // });
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([
-      updateStethBalance(),
-      updateWstethBalance(),
-      updateEtherBalance(),
-      updateBond(),
-      updateShareLimit(),
-      updateMaxStakeEther(),
-    ]);
-  }, [
-    updateStethBalance,
-    updateWstethBalance,
-    updateEtherBalance,
-    updateBond,
-    updateShareLimit,
-    updateMaxStakeEther,
-  ]);
+    // await Promise.allSettled([
+    //   updateStethBalance(),
+    //   updateWstethBalance(),
+    //   updateEthBalance(),
+    //   updateBond(),
+    //   updateShareLimit(),
+    //   updateMaxStakeEth(),
+    // ]);
+  }, []);
 
   const loading = useMemo(
     () => ({
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isMaxStakeEtherLoading,
+      isMaxStakeEthLoading,
       isBondLoading,
       isStatusLoading,
       isBlockNumberLoading,
       isShareLimitLoading,
     }),
     [
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isMaxStakeEtherLoading,
+      isMaxStakeEthLoading,
       isBondLoading,
       isStatusLoading,
       isBlockNumberLoading,
@@ -106,12 +87,12 @@ export const useAddKeysFormNetworkData = (): [
     {
       blockNumber: blockNumber ? Number(blockNumber) : undefined,
       nodeOperatorId,
-      keysAvailable,
+      // keysAvailable,
       stethBalance,
       wstethBalance,
-      etherBalance,
+      ethBalance,
       bond,
-      maxStakeEther,
+      maxStakeEth,
       loading,
       shareLimit,
       isPaused: status?.isPaused,

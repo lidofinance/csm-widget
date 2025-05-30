@@ -1,50 +1,57 @@
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback, useMemo } from 'react';
-import {
-  useKeysWithStatus,
-  useNodeOperatorBalance,
-  useNodeOperatorInfo,
-} from 'shared/hooks';
+import { useKeysWithStatus } from 'shared/hooks';
 import { type RemoveKeysFormNetworkData } from './types';
+import {
+  useKeyRemovalFee,
+  useNodeOperatorId,
+  useOperatorBalance,
+  useOperatorCurveId,
+  useOperatorInfo,
+} from 'modules/web3';
 
 export const useRemoveKeysFormNetworkData = (): [
   RemoveKeysFormNetworkData,
   () => Promise<void>,
 ] => {
   const nodeOperatorId = useNodeOperatorId();
-  const {
-    data: bond,
-    update: updateBond,
-    initialLoading: isBondLoading,
-  } = useNodeOperatorBalance(nodeOperatorId);
-  const {
-    data: info,
-    update: updateInfo,
-    initialLoading: isInfoLoading,
-  } = useNodeOperatorInfo(nodeOperatorId);
+  const { data: bond, isPending: isBondLoading } =
+    useOperatorBalance(nodeOperatorId);
+  const { data: info, isPending: isInfoLoading } =
+    useOperatorInfo(nodeOperatorId);
 
-  const {
-    data: keys,
-    update: updateKeys,
-    initialLoading: isKeysLoading,
-  } = useKeysWithStatus(true);
+  const { data: curveId, isPending: isCurveIdLoading } =
+    useOperatorCurveId(nodeOperatorId);
+  const { data: removalFee, isPending: isRemovalFeeLoading } =
+    useKeyRemovalFee(curveId);
+
+  const { data: keys, initialLoading: isKeysLoading } = useKeysWithStatus(true);
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateBond(), updateInfo(), updateKeys()]);
-  }, [updateBond, updateInfo, updateKeys]);
+    // await Promise.allSettled([updateBond(), updateInfo(), updateKeys()]);
+  }, []);
 
   const loading = useMemo(
     () => ({
       isBondLoading,
       isInfoLoading,
+      isCurveIdLoading,
       isKeysLoading,
+      isRemovalFeeLoading,
     }),
-    [isBondLoading, isInfoLoading, isKeysLoading],
+    [
+      isBondLoading,
+      isCurveIdLoading,
+      isInfoLoading,
+      isKeysLoading,
+      isRemovalFeeLoading,
+    ],
   );
 
   return [
     {
       nodeOperatorId,
+      curveId,
+      removalFee,
       bond,
       keys,
       info,

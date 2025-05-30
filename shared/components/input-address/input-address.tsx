@@ -20,6 +20,7 @@ import { VerifiedChip } from './verified-chip';
 const ENS_REGEX = new RegExp('^[-a-zA-Z0-9@._]{1,256}.eth$');
 const isValidEns = (ens: string) => ENS_REGEX.test(ens);
 
+// TODO: type of value = viem.Address
 export const InputAddress = forwardRef<
   HTMLInputElement,
   InputAddressProps & { addressName?: string }

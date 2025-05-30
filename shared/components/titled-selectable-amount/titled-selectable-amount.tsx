@@ -1,8 +1,7 @@
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { AmountWithPrice, IconTooltip, Stack } from 'shared/components';
 import { TitledAmountStyle } from './style';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 type Props = {
   title?: ReactNode;
@@ -10,7 +9,7 @@ type Props = {
   helpIcon?: ComponentProps<typeof IconTooltip>['type'];
   warning?: boolean;
   loading?: boolean;
-  amount?: BigNumber;
+  amount?: bigint;
   token?: TOKENS;
   sign?: 'minus' | 'plus';
 };

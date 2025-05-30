@@ -28,7 +28,11 @@ export const validateBondAmount = ({
     }
 
     const tokenBalance = getTokenBalance(
-      { eth: ethBalance, steth: stethBalance, wsteth: wstethBalance },
+      {
+        [TOKENS.eth]: ethBalance,
+        [TOKENS.steth]: stethBalance,
+        [TOKENS.wsteth]: wstethBalance,
+      },
       token,
     );
 

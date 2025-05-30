@@ -5,11 +5,11 @@ import { OPERATOR_TYPE } from 'consts';
 const getOperatorType = (curveId: bigint) => {
   switch (curveId) {
     case 0n:
-      return OPERATOR_TYPE.DEFAULT;
+      return OPERATOR_TYPE.DEFAULT as OPERATOR_TYPE;
     case 1n:
-      return OPERATOR_TYPE.VETTED;
+      return OPERATOR_TYPE.VETTED as OPERATOR_TYPE;
     default:
-      return OPERATOR_TYPE.CUSTOM;
+      return OPERATOR_TYPE.CUSTOM as OPERATOR_TYPE;
   }
 };
 

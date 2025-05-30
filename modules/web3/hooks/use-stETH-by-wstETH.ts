@@ -1,13 +1,12 @@
-import invariant from 'tiny-invariant';
 import { useQuery } from '@tanstack/react-query';
-import { useDappStatus, useLidoSDK } from 'modules/web3';
+import { useLidoSDK } from 'modules/web3';
+import invariant from 'tiny-invariant';
 
 export const useStETHByWstETH = (wsteth?: bigint | null) => {
-  const { chainId } = useDappStatus();
   const { wrap } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['use-steth-by-wsteth', wsteth, chainId],
+    queryKey: ['use-steth-by-wsteth', wsteth],
     enabled: wsteth != null && !!wrap,
     staleTime: Infinity,
     queryFn: () => {

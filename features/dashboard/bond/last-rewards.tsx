@@ -6,8 +6,8 @@ import {
   Text,
   Tooltip,
 } from '@lidofinance/lido-ui';
+import { useNodeOperatorId, useOperatorInfo } from 'modules/web3';
 import { ModalComponentType, useModal } from 'providers/modal-provider';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC, useCallback } from 'react';
 import {
   GrayText,
@@ -20,7 +20,6 @@ import { FaqElement } from 'shared/components/faq/styles';
 import {
   useLastOperatorRewards,
   useLastRewrdsTx,
-  useNodeOperatorInfo,
   useRewardsFrame,
   useSharesToSteth,
 } from 'shared/hooks';
@@ -34,7 +33,6 @@ import {
   RowHeader,
   RowTitle,
 } from './styles';
-import { Zero } from '@ethersproject/constants';
 
 export const LastRewards: FC = () => {
   const { data: lastRewards, initialLoading: isLoading } =
@@ -43,7 +41,7 @@ export const LastRewards: FC = () => {
     useSharesToSteth(lastRewards?.distributed);
 
   const id = useNodeOperatorId();
-  const { data: info } = useNodeOperatorInfo(id);
+  const { data: info } = useOperatorInfo(id);
 
   const { data: rewardsFrame } = useRewardsFrame();
 
@@ -73,7 +71,7 @@ export const LastRewards: FC = () => {
           <Balance
             big
             loading={isLoading || isDistributedLoading}
-            amount={distributed ?? Zero}
+            amount={BigInt(distributed?.toString() ?? 0n)}
             description={showWhy ? <Why /> : undefined}
           />
         </RowHeader>

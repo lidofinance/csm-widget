@@ -1,25 +1,24 @@
-import { MAX_ETH_AMOUNT, TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
 import {
-  useAvailableToClaim,
-  useMergeSwr,
-  useWstethBySteth,
-} from 'shared/hooks';
-import { BondBalance, RewardsBalance } from 'types';
+  BondBalance,
+  PerToken,
+  Rewards,
+  TOKENS,
+} from '@lidofinance/lido-csm-sdk/common';
+import { useQuery } from '@tanstack/react-query';
+import { MAX_ETH_AMOUNT } from 'consts/tokens';
+import { useWstethBySteth } from 'modules/web3';
+import { useAvailableToClaim } from 'shared/hooks';
 
-const limitMaxEth = (values: BigNumber[]) =>
-  values.map((value) => (value.gt(MAX_ETH_AMOUNT) ? MAX_ETH_AMOUNT : value));
+const limitMaxEth = (value: bigint) =>
+  value > MAX_ETH_AMOUNT ? MAX_ETH_AMOUNT : value;
 
 type Props = {
   bond?: BondBalance;
-  rewards?: RewardsBalance;
-  lockedBond?: BigNumber;
+  rewards?: Rewards;
+  lockedBond?: bigint;
 };
 
-export type MaxValues = Record<
-  TOKENS,
-  [BigNumber | undefined, BigNumber | undefined]
->;
+export type MaxValues = PerToken<[bigint, bigint]>;
 
 export const useMaxValues = ({ bond, rewards }: Props) => {
   const maxBond = useAvailableToClaim({
@@ -31,12 +30,19 @@ export const useMaxValues = ({ bond, rewards }: Props) => {
     rewards,
   });
 
-  const bondSwr = useWstethBySteth(maxBond);
-  const bondAndRewardsSwr = useWstethBySteth(maxBondAndRewards);
+  const { data: maxBondWsteth } = useWstethBySteth(maxBond);
+  const { data: maxBondAndRewardsWsteth } = useWstethBySteth(maxBondAndRewards);
 
-  return useMergeSwr([bondSwr, bondAndRewardsSwr], {
-    [TOKENS.ETH]: limitMaxEth([maxBond, maxBondAndRewards]),
-    [TOKENS.STETH]: [maxBond, maxBondAndRewards],
-    [TOKENS.WSTETH]: [bondSwr.data, bondAndRewardsSwr.data],
-  } as MaxValues);
+  return useQuery({
+    enabled:
+      maxBondWsteth !== undefined && maxBondAndRewardsWsteth !== undefined,
+    queryKey: ['use-max-values', { bond, rewards: rewards?.available }],
+    queryFn: () =>
+      ({
+        [TOKENS.eth]: [limitMaxEth(maxBond), limitMaxEth(maxBondAndRewards)],
+        [TOKENS.steth]: [maxBond, maxBondAndRewards],
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        [TOKENS.wsteth]: [maxBondWsteth!, maxBondAndRewardsWsteth!],
+      }) as MaxValues,
+  });
 };

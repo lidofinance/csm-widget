@@ -1,11 +1,10 @@
-import { Zero } from '@ethersproject/constants';
-import { TOKENS } from 'consts/tokens';
-import { useStethByWsteth } from 'shared/hooks';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { useStETHByWstETH } from 'modules/web3';
 
-export const useStethAmount = (token: TOKENS, amount = Zero) => {
-  const { data: wstethToSteth } = useStethByWsteth(
-    (token === TOKENS.WSTETH && amount) || undefined,
+export const useStethAmount = (token: TOKENS, amount = 0n) => {
+  const { data: wstethToSteth } = useStETHByWstETH(
+    (token === TOKENS.wsteth && amount) || undefined,
   );
 
-  return token === TOKENS.WSTETH ? wstethToSteth : amount;
+  return token === TOKENS.wsteth ? wstethToSteth : amount;
 };

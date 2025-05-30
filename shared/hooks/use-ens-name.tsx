@@ -1,6 +1,6 @@
 import { useLidoSWR, useLocalStorage, useSDK } from '@lido-sdk/react';
 import { STRATEGY_IMMUTABLE } from 'consts/swr-strategies';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 import { useMergeSwr } from './useMergeSwr';
 import { useEffect } from 'react';
 

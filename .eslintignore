@@ -1,6 +1,7 @@
 # dependencies
 /node_modules
 /.pnp
+/lido-csm-sdk
 
 # testing
 /coverage

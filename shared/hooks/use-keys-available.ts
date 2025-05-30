@@ -3,9 +3,8 @@ import { ONE_ETH, TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { ICSBondCurve } from 'generated/CSAccounting';
 import { useExchangeTokensRate, useMergeSwr } from 'shared/hooks';
-import { BondBalance } from 'types';
-import { useCurveInfo } from './useCurveInfo';
 import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
+import { BondBalance } from '@lidofinance/lido-csm-sdk/common';
 
 type Props = {
   curveId?: BigNumber;

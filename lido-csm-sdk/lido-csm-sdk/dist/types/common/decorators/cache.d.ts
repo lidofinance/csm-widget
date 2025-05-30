@@ -1,0 +1,12 @@
+import { CsmSDKCacheable } from '../class-primitives/csm-sdk-cacheable.js';
+export declare const Cache: (
+  timeMs?: number,
+  cacheArgs?: string[],
+) => <This extends CsmSDKCacheable, Args extends any[], Return>(
+  originalMethod: (this: This, ...args: Args) => Return,
+  context: ClassMethodDecoratorContext<
+    This,
+    (this: This, ...args: Args) => Return
+  >,
+) => (this: This, ...args: Args) => Return;
+//# sourceMappingURL=cache.d.ts.map

@@ -1,45 +1,43 @@
-import { useNodeOperatorId } from 'providers/node-operator-provider';
+import {
+  useEthereumBalance,
+  useNodeOperatorId,
+  useOperatorBalance,
+} from 'modules/web3';
 import { useCallback, useMemo } from 'react';
-import { useNodeOperatorLockAmount } from 'shared/hooks';
 import { type UnlockBondFormNetworkData } from './types';
-import { useEthereumBalance } from '@lido-sdk/react';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
 
 export const useUnlockBondFormNetworkData = (): [
   UnlockBondFormNetworkData,
   () => Promise<void>,
 ] => {
-  const nodeOperatorId = useNodeOperatorId();
+  const nodeOperatorId = useNodeOperatorId<true>();
+
+  const { data: balance, isPending: isLockedBondLoading } =
+    useOperatorBalance(nodeOperatorId);
 
   const {
-    data: lockedBond,
-    update: updateLockedBond,
-    initialLoading: isLockedBondLoading,
-  } = useNodeOperatorLockAmount(nodeOperatorId);
-
-  const {
-    data: etherBalance,
-    update: updateEtherBalance,
-    initialLoading: isEtherBalanceLoading,
-  } = useEthereumBalance(undefined, STRATEGY_LAZY);
+    data: ethBalance,
+    isPending: isEthBalanceLoading,
+    // refetch: ethBalanceUpdate,
+  } = useEthereumBalance();
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateLockedBond(), updateEtherBalance()]);
-  }, [updateEtherBalance, updateLockedBond]);
+    // await Promise.allSettled([updateLockedBond(), updateEtherBalance()]);
+  }, []);
 
   const loading = useMemo(
     () => ({
       isLockedBondLoading,
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
     }),
-    [isEtherBalanceLoading, isLockedBondLoading],
+    [isEthBalanceLoading, isLockedBondLoading],
   );
 
   return [
     {
       nodeOperatorId,
-      lockedBond,
-      etherBalance,
+      lockedBond: balance?.locked,
+      ethBalance,
       loading,
     },
     revalidate,

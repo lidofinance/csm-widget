@@ -1,7 +1,7 @@
-import { TOKENS } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { PausedButton, SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 export const SubmitButton = () => {
   const [claimRewards, token, amount] = useWatch<
@@ -16,11 +16,12 @@ export const SubmitButton = () => {
     return <PausedButton type="Accounting" />;
   }
 
-  const isNothingToClaim = !!maxValues?.STETH[1]?.isZero();
-  const isPullRewards = !!amount?.isZero() && claimRewards;
+  const maxWithRewards = maxValues?.[TOKENS.steth][1];
+  const isNothingToClaim = !maxWithRewards;
+  const isPullRewards = amount !== undefined && amount === 0n && claimRewards;
   const text = isNothingToClaim
     ? 'Nothing to claim'
-    : token === TOKENS.ETH
+    : token === TOKENS.eth
       ? 'Request withdrawal to the Rewards Address'
       : isPullRewards
         ? 'Claim rewards to the Bond balance'

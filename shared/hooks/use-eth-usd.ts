@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { useMemo } from 'react';
 
 import { useEthPrice } from '@lido-sdk/react';
@@ -12,7 +11,7 @@ const { defaultChain } = getConfig();
 const isMainnet = defaultChain === CHAINS.Mainnet;
 
 // TODO: use eth-api.lido.fi
-export const useEthUsd = (amount?: BigNumber) => {
+export const useEthUsd = (amount?: bigint) => {
   const mainnetPriceSwr = useEthPrice(STRATEGY_CONSTANT);
   const testnetPriceSwr = useEthPriceFallback(STRATEGY_IMMUTABLE);
 

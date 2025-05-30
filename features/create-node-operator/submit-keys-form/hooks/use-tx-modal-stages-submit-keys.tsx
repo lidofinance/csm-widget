@@ -43,7 +43,7 @@ const getTxModalStagesSubmitKeys = (
           <>
             Uploading {keysCount}{' '}
             <Plural variants={['key', 'keys']} value={keysCount} />{' '}
-            {amount && (
+            {!!amount && (
               <>
                 and depositing <TxAmount amount={amount} token={token} />
               </>
@@ -63,7 +63,7 @@ const getTxModalStagesSubmitKeys = (
           <>
             Uploading {keysCount}{' '}
             <Plural variants={['key', 'keys']} value={keysCount} />{' '}
-            {amount && (
+            {!!amount && (
               <>
                 and depositing <TxAmount amount={amount} token={token} />
               </>

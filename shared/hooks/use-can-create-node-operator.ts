@@ -1,11 +1,19 @@
-import { useCsmStatus } from 'modules/web3';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { useAccount } from './use-account';
+import { useCsmStatus, useDappStatus, useNodeOperatorId } from 'modules/web3';
+import { useEffect, useState } from 'react';
 
 export const useCanCreateNodeOperator = () => {
-  const { address } = useAccount();
+  const { isAccountActive } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
   const { data: status } = useCsmStatus();
 
-  return Boolean(address && !nodeOperatorId && !status?.isPaused);
+  const [value, setValue] = useState(false);
+
+  useEffect(() => {
+    const value = Boolean(
+      isAccountActive && !nodeOperatorId && !status?.isPaused,
+    );
+    setValue(value);
+  }, [isAccountActive, nodeOperatorId, status?.isPaused]);
+
+  return value;
 };

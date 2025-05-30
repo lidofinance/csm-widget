@@ -1,15 +1,14 @@
 import { InlineLoader } from '@lidofinance/lido-ui';
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
 import { FC } from 'react';
 import { Sign, SignType } from 'shared/components';
 import { FormatPrice, FormatToken } from 'shared/formatters';
 import { useEthUsd } from 'shared/hooks';
 import { AmountStyle, PriceStyle, Wrapper } from './style';
+import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 
 type TitledAddressProps = {
   loading?: boolean;
-  amount?: BigNumber;
+  amount?: bigint;
   token?: TOKENS;
   sign?: SignType;
   big?: boolean;

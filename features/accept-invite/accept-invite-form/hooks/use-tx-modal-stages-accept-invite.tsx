@@ -1,4 +1,4 @@
-import { ROLES } from 'consts/roles';
+import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk/common';
 import { Address } from 'shared/components';
 import { DescriptorId, getRoleTitle } from 'shared/node-operator';
 import {
@@ -9,16 +9,13 @@ import {
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { NodeOperatorId } from 'types';
-
-type Props = { id: NodeOperatorId; role: ROLES };
 
 const getTxModalStagesAcceptInvite = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: ({ id, role }: Props) =>
+  sign: ({ id, role }: NodeOperatorInvite) =>
     transitStage(
       <TxStageSign
         title={`You are accepting address change`}
@@ -30,7 +27,7 @@ const getTxModalStagesAcceptInvite = (
       />,
     ),
 
-  pending: ({ id, role }: Props, txHash?: string) =>
+  pending: ({ id, role }: NodeOperatorInvite, txHash?: string) =>
     transitStage(
       <TxStagePending
         title={`You are accepting address change`}
@@ -45,7 +42,7 @@ const getTxModalStagesAcceptInvite = (
 
   // TODO: "go to dashboard" button
   success: (
-    { id, role, address }: Props & { address: string },
+    { id, role, address }: NodeOperatorInvite & { address: string },
     txHash?: string,
   ) =>
     transitStage(

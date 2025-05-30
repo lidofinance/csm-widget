@@ -1,21 +1,23 @@
-import type { BigNumber } from 'ethers';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
 import { ValidationError } from './validation-error';
 
 export const validateNodeOperatorId = (
   field: string,
   value?: string,
-  max?: BigNumber,
+  max?: NodeOperatorId,
 ) => {
   if (!value) throw new ValidationError(field, '');
 
-  const val = Number.parseInt(value);
+  try {
+    const val = BigInt(value);
+    if (val < 0) {
+      throw new ValidationError(field, 'Invalid ID');
+    }
 
-  if (Number.isNaN(val) || val < 0)
+    if (max !== undefined && max <= val)
+      throw new ValidationError(field, `Max Node Operator ID is ${max - 1n}`);
+  } catch (e) {
+    if (e instanceof ValidationError) return e;
     throw new ValidationError(field, 'Invalid ID');
-
-  if (max?.lte(val))
-    throw new ValidationError(
-      field,
-      `Max Node Operator ID is ${max.toNumber() - 1}`,
-    );
+  }
 };

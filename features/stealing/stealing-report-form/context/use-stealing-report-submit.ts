@@ -1,13 +1,12 @@
-import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
 import { useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
-import { NodeOperatorId } from 'types';
 import { runWithTransactionLogger } from 'utils';
 import { StealingReportFormInputType } from '.';
 import { useTxModalStagesStealingReport } from '../hooks/use-tx-modal-stages-stealing-report';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
 
 type UseStealingReportOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -16,7 +15,7 @@ type UseStealingReportOptions = {
 
 type StealingReportMethodParams = {
   nodeOperatorId: NodeOperatorId;
-  amount: BigNumber;
+  amount: bigint;
   blockhash: string;
 };
 

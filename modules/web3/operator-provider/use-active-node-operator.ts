@@ -19,5 +19,5 @@ export const useActiveNodeOperator = (list?: NodeOperator[]) => {
     active && setCachedId(active.id);
   }, [active, setCachedId]);
 
-  return [active, setActive] as const;
+  return [active ?? list?.[0], setActive] as const;
 };

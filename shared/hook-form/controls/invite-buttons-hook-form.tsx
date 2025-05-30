@@ -1,3 +1,4 @@
+import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk/common';
 import { FC, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import {
@@ -7,7 +8,6 @@ import {
   Stack,
 } from 'shared/components';
 import { getInviteId } from 'shared/node-operator/utils';
-import { NodeOperatorInvite } from 'types';
 
 type Props = {
   fieldName?: string;

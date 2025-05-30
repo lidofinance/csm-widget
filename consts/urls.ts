@@ -8,6 +8,7 @@ export const PATH = <const>{
   KEYS_SUBMIT: '/keys/submit',
   KEYS_REMOVE: '/keys/remove',
   KEYS_VIEW: '/keys/view',
+  KEYS_TRANSFER: '/keys/transfer',
   KEYS_NORMALIZE: '/keys/normalize',
   MONITORING: '/monitoring',
   BOND: '/bond',

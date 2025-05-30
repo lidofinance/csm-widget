@@ -1,13 +1,4 @@
-import { BigNumber } from 'ethers';
-import { parseEther } from '@ethersproject/units';
-import { AddressZero } from '@ethersproject/constants';
-
-import { IPFS_REFERRAL_ADDRESS } from './ipfs';
-
-// Don't use here:
-// import { config } from '../get-config';
-// otherwise you will get something like a cyclic error!
-import { preConfig } from '../get-preconfig';
+import { parseEther } from 'viem';
 
 // TODO: review this file
 
@@ -20,14 +11,10 @@ export const SUBMIT_EXTRA_GAS_TRANSACTION_RATIO = 1.05;
 
 export const STETH_SUBMIT_GAS_LIMIT_DEFAULT = 90000;
 
-export const STAKE_GASLIMIT_FALLBACK = BigNumber.from(
+export const STAKE_GASLIMIT_FALLBACK = BigInt(
   Math.floor(
     STETH_SUBMIT_GAS_LIMIT_DEFAULT * SUBMIT_EXTRA_GAS_TRANSACTION_RATIO,
   ),
 );
 
-export const STAKE_WIDGET_METRIC_SUFFIX = '01';
-
-export const STAKE_FALLBACK_REFERRAL_ADDRESS = preConfig.ipfsMode
-  ? IPFS_REFERRAL_ADDRESS
-  : AddressZero;
+export const CSM_WIDGET_METRIC_SUFFIX = '01';

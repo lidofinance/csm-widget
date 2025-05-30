@@ -1,5 +1,5 @@
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
 import { useSessionStorage } from 'shared/hooks';
-import { NodeOperatorId } from 'types';
 
 export const useOperatorCustomAddresses = () => {
   return useSessionStorage<NodeOperatorId | undefined>(

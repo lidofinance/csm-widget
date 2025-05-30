@@ -1,7 +1,7 @@
-import { isAddress } from 'ethers/lib/utils.js';
 import { FC } from 'react';
 import { useEnsName } from 'shared/hooks';
 import { AddressInner, AddressProps } from './address-inner';
+import { isAddress } from 'viem';
 
 export const Address: FC<AddressProps> = (props) => {
   const address =

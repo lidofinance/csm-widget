@@ -1,6 +1,5 @@
 import { useEthPrice } from '@lido-sdk/react';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { BigNumber } from 'ethers';
 import { useCallback } from 'react';
 import { weiToEth } from 'utils/weiToEth';
 
@@ -8,7 +7,7 @@ export const useEthUsdConverter = () => {
   const { data: price, ...swr } = useEthPrice(STRATEGY_LAZY);
 
   const ethToUsd = useCallback(
-    (amount?: BigNumber) => {
+    (amount?: bigint) => {
       return price && amount ? weiToEth(amount) * price : undefined;
     },
     [price],

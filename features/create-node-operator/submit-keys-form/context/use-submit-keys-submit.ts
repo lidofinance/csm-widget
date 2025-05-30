@@ -1,23 +1,20 @@
 import {
   AddNodeOperatorResult,
+  packRoles,
   TransactionCallback,
 } from '@lidofinance/lido-csm-sdk';
 import { TransactionCallbackStage } from '@lidofinance/lido-ethereum-sdk';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 import { useAppendOperator, useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
-import {
-  useAddressCompare,
-  useKeysCache,
-  usePermitOrApprove,
-  useSendTx,
-} from 'shared/hooks';
+import { useAddressCompare, useKeysCache } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import invariant from 'tiny-invariant';
-import { packRoles } from 'utils';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { SubmitKeysFormInputType } from './types';
+import { PATH } from 'consts';
+import { ROLES } from '@lidofinance/lido-csm-sdk/common';
 
 type SubmitKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -32,8 +29,6 @@ export const useSubmitKeysSubmit = ({
 
   const { txModalStages } = useTxModalStagesSubmitKeys();
   const appendNO = useAppendOperator();
-  const getPermitOrApprove = usePermitOrApprove();
-  const sendTx = useSendTx();
   const isUserOrZero = useAddressCompare(true);
   const { addCacheKeys } = useKeysCache();
   const n = useNavigate();
@@ -68,12 +63,6 @@ export const useSubmitKeysSubmit = ({
       }
 
       try {
-        // const { permit } = await getPermitOrApprove({
-        //   token,
-        //   amount: addExtraWei(bondAmount, token),
-        //   txModalStages,
-        // });
-
         const callback: TransactionCallback<AddNodeOperatorResult> = async ({
           stage,
           payload,
@@ -86,14 +75,17 @@ export const useSubmitKeysSubmit = ({
               txModalStages.pending({ keysCount, amount, token }, payload.hash);
               break;
             case TransactionCallbackStage.DONE: {
-              payload;
               txModalStages.success(
                 {
                   keys: depositData.map((key) => key.pubkey),
-                  nodeOperatorId: payload.result?.nodeOperatorId,
+                  nodeOperatorId: payload.result.nodeOperatorId,
                   roles: packRoles({
-                    rewards: isUserOrZero(payload.result?.rewardsAddress),
-                    manager: isUserOrZero(payload.result?.managerAddress),
+                    [ROLES.REWARDS]: isUserOrZero(
+                      payload.result.rewardsAddress,
+                    ),
+                    [ROLES.MANAGER]: isUserOrZero(
+                      payload.result.managerAddress,
+                    ),
                   }),
                 },
                 payload.hash,
@@ -126,24 +118,27 @@ export const useSubmitKeysSubmit = ({
             callback,
           });
 
-        console.log('result', nodeOperator);
-
         void onConfirm?.();
 
         // TODO: move to onConfirm
         void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
 
-        // if (nodeOperator?.id) {
-        //   if (roles.length === 0) {
-        //     setOperatorCustomAddresses(nodeOperator.id);
-        //     void n(PATH.HOME);
-        //   } else {
-        //     appendNO({
-        //       id: nodeOperator.id,
-        //       roles,
-        //     });
-        //   }
-        // }
+        if (nodeOperator?.nodeOperatorId) {
+          // TODO: pack roles in decoreResult in sdk
+          const roles = packRoles({
+            [ROLES.REWARDS]: isUserOrZero(nodeOperator.rewardsAddress),
+            [ROLES.MANAGER]: isUserOrZero(nodeOperator.managerAddress),
+          });
+          if (roles.length === 0) {
+            setOperatorCustomAddresses(nodeOperator.nodeOperatorId);
+            void n(PATH.HOME);
+          } else {
+            appendNO({
+              id: nodeOperator.nodeOperatorId,
+              roles,
+            });
+          }
+        }
 
         return true;
       } catch (error) {
@@ -160,6 +155,9 @@ export const useSubmitKeysSubmit = ({
       txModalStages,
       onRetry,
       isUserOrZero,
+      setOperatorCustomAddresses,
+      n,
+      appendNO,
     ],
   );
 };

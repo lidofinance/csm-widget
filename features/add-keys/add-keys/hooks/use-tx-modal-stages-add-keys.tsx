@@ -1,5 +1,4 @@
-import { TOKENS } from 'consts/tokens';
-import type { BigNumber } from 'ethers';
+import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk/common';
 import {
   AfterKeysUpload,
   TransactionModalTransitStage,
@@ -8,7 +7,6 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 import { TxStageSignOperationKeys } from 'shared/transaction-modal/tx-stages-composed/tx-stage-keys-operation';
-import { NodeOperatorId } from 'types';
 
 const STAGE_OPERATION_ARGS = {
   operationText: 'Uploading',
@@ -16,7 +14,7 @@ const STAGE_OPERATION_ARGS = {
 
 type Props = {
   keysCount: number;
-  amount: BigNumber;
+  amount: bigint;
   token: TOKENS;
   nodeOperatorId: NodeOperatorId;
 };

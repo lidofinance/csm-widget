@@ -1,7 +1,10 @@
-import { NodeOperator, ROLES } from '@lidofinance/lido-csm-sdk/common';
+import {
+  NodeOperator,
+  NodeOperatorInvite,
+  ROLES,
+} from '@lidofinance/lido-csm-sdk/common';
 import { ROLE_CODE, ROLES as LOCAL_ROLES } from 'consts/roles';
 import { capitalize } from 'lodash';
-import { NodeOperatorInvite } from 'types';
 
 const SHORT_ROLES = {
   [LOCAL_ROLES.REWARDS]: 'R',

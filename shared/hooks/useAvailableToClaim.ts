@@ -1,18 +1,14 @@
-import { Zero } from '@ethersproject/constants';
-import { useMemo } from 'react';
-import { BondBalance, RewardsBalance } from 'types';
+import { BondBalance, Rewards } from '@lidofinance/lido-csm-sdk/common';
 
 type Props = {
   bond?: BondBalance;
-  rewards?: RewardsBalance;
+  rewards?: Rewards;
 };
 
 export const useAvailableToClaim = ({ bond, rewards }: Props) => {
-  return useMemo(() => {
-    const total = bond?.current
-      .add(rewards?.available ?? Zero)
-      .sub(bond.required)
-      .sub(bond.locked);
-    return total?.gt(0) ? total : Zero;
-  }, [bond, rewards]);
+  if (!bond) return 0n;
+
+  const total =
+    bond.current + (rewards?.available ?? 0n) - bond.required - bond.locked;
+  return total > 0n ? total : 0n;
 };

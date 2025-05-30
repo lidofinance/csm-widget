@@ -4,7 +4,7 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { NodeOperator, NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useDappStatus, useOperatorInfo } from '../hooks';
+import { useDappStatus } from '../hooks';
 import { useLidoSDK } from '../web3-provider';
 
 export const useAppendOperator = () => {
