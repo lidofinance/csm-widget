@@ -2,6 +2,7 @@ import { Locator, Page, test } from '@playwright/test';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { BasePage } from 'tests/pages/base.page';
 import { DepositKey } from 'tests/consts/keys.const';
+import { WALLET_PAGE_TIMEOUT_WAITER } from 'tests/consts/timeouts';
 
 export class SubmitPage {
   page: Page;
@@ -51,7 +52,7 @@ export class SubmitPage {
     await this.confirmKeysReady.click();
 
     const [walletSignPage] = await Promise.all([
-      this.base.waitForPage(10000),
+      this.base.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
       this.submitKeysButton.click(),
     ]);
 

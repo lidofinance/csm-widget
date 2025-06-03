@@ -6,7 +6,10 @@ import { KeysPage } from './keys.page';
 import { DepositKey } from 'tests/consts/keys.const';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { AssertionError } from 'assert';
-import { STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
+import {
+  STAGE_WAIT_TIMEOUT,
+  WALLET_PAGE_TIMEOUT_WAITER,
+} from 'tests/consts/timeouts';
 
 export class WidgetService {
   public mainPage: MainPage;
@@ -88,7 +91,7 @@ export class WidgetService {
       }
 
       const [walletSignPage] = await Promise.all([
-        this.keysPage.base.waitForPage(10000),
+        this.keysPage.base.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
         this.page.getByRole('button', { name: 'Remove Keys' }).click(),
       ]);
 

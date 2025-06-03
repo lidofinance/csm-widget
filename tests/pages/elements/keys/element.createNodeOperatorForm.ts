@@ -6,6 +6,7 @@ import {
 } from 'tests/consts/common.const';
 import { BasePage } from 'tests/pages/base.page';
 import { DepositKey } from 'tests/consts/keys.const';
+import { WALLET_PAGE_TIMEOUT_WAITER } from 'tests/consts/timeouts';
 
 export class CreateNodeOperatorForm {
   page: Page;
@@ -45,12 +46,15 @@ export class CreateNodeOperatorForm {
     const bondTokenElement = this.getBondTokenElement(tokenSymbol);
     await bondTokenElement.click();
     await this.fillKeys(keys);
+    // This formula follows the Bond Curve model:
+    // https://operatorportal.lido.fi/modules/community-staking-module#block-2d1c307d95fc4f8ab7c32b7584f795cf
+    // The bond for the first key should cost 2.4 ETH, and each subsequent key should cost 1.3 ETH.
     const expectedBond = FIRST_BOND + (keys.length - 1) * EXTRA_PER_KEY;
     await expect(this.amountInput).toHaveValue(expectedBond.toFixed(1));
     await this.confirmKeysReady.click();
 
     const [walletSignPage] = await Promise.all([
-      this.base.waitForPage(10000),
+      this.base.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
       this.submitKeysButton.click(),
     ]);
 
