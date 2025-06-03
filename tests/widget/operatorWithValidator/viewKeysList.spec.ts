@@ -18,9 +18,18 @@ test.describe('View keys list. Common', async () => {
 
     await test.step('Check each column for all keys', async () => {
       for (const key of keysList) {
-        await expect(key.pubkeyCell).not.toBeEmpty();
-        await expect(key.statusCell).not.toBeEmpty();
-        await expect(key.statusCommentCell).not.toBeEmpty();
+        await expect(
+          key.pubkeyCell,
+          'Expected that value of pubkley cell wont be empty.',
+        ).not.toBeEmpty();
+        await expect(
+          key.statusCell,
+          'Expected that value of status cell wont be empty.',
+        ).not.toBeEmpty();
+        await expect(
+          key.statusCommentCell,
+          'Expected that value of comment wont be empty.',
+        ).not.toBeEmpty();
       }
     });
   });

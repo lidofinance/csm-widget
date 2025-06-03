@@ -23,7 +23,10 @@ test.describe('Operator with validator and without keys.', async () => {
       await expect(keysPage.removePage.removeKeysForm).toContainText(
         'note: Only keys that have not been deposited yet can be deleted. If a key has already been deposited, the only way to retrieve the bond is to exit the validator on the Consensus Layer (CL).',
       );
-      await expect(keysPage.removePage.removeKeysButton).toBeHidden();
+      await expect(
+        keysPage.removePage.removeKeysButton,
+        'Expected that remove button wont be visible',
+      ).toBeHidden();
     },
   );
 
@@ -32,6 +35,9 @@ test.describe('Operator with validator and without keys.', async () => {
     await expect(keysPage.keysView.viewKeysBlock).toContainText(
       'There are no keys to display',
     );
-    await expect(keysPage.keysView.table).toBeHidden();
+    await expect(
+      keysPage.keysView.table,
+      'Expected that table with view keys wont be visible',
+    ).toBeHidden();
   });
 });
