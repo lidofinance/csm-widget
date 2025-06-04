@@ -6,6 +6,7 @@ type Props = {
   gap?: StackStyleProps['$gap'];
   center?: boolean;
   align?: StackStyleProps['$align'];
+  justify?: StackStyleProps['$justify'];
   spaceBetween?: boolean;
   wrap?: boolean;
 };
@@ -16,6 +17,7 @@ export const Stack: FC<PropsWithChildren<Props>> = ({
   direction = 'row',
   center,
   align,
+  justify,
   spaceBetween,
   wrap,
 }) => (
@@ -23,7 +25,7 @@ export const Stack: FC<PropsWithChildren<Props>> = ({
     $gap={gap}
     $direction={direction}
     $align={center ? 'center' : align}
-    $spaceBetween={spaceBetween}
+    $justify={spaceBetween ? 'space-between' : justify}
     $wrap={wrap}
   >
     {children}

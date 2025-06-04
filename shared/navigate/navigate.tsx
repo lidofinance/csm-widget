@@ -1,7 +1,7 @@
 import { PATH } from 'consts/urls';
 import { FC, ReactNode, useEffect } from 'react';
 import { useNavigate } from './use-navigate';
-import { SplashPage } from './splash';
+import { SplashPage } from './inner-pages';
 
 type Props = { path: PATH; fallback?: ReactNode };
 
