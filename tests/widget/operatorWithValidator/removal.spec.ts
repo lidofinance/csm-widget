@@ -41,7 +41,7 @@ test.describe('Validator keys removal', async () => {
         await test.step('Check removal fee', async () => {
           await test.step('Check removal fee value', async () => {
             await expect(keysPage.removePage.removalFeeValue).toContainText(
-              `${(0.05 * keyLength).toFixed(2)} stETH`,
+              `${(0.02 * keyLength).toFixed(2)} stETH`,
             );
           });
 
