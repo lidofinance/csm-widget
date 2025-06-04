@@ -5,7 +5,7 @@ export type StackStyleProps = {
   $direction?: 'row' | 'column';
   $gap?: keyof Theme['spaceMap'] | 'xxs' | 'none';
   $align?: CSSProperties['alignItems'];
-  $spaceBetween?: boolean;
+  $justify?: CSSProperties['justifyContent'];
   $wrap?: boolean;
 };
 
@@ -19,10 +19,10 @@ export const StackStyle = styled.div<StackStyleProps>`
     css`
       align-items: ${$align};
     `}
-  ${({ $spaceBetween }) =>
-    $spaceBetween &&
+  ${({ $justify }) =>
+    $justify &&
     css`
-      justify-content: space-between;
+      justify-content: ${$justify};
     `}
   ${({ $wrap }) =>
     $wrap &&
