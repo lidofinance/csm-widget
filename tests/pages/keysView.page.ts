@@ -18,6 +18,7 @@ export class KeysViewPage {
   viewKeysBlock: Locator;
   table: Locator;
   tableRaws: Locator;
+  loader: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -25,6 +26,7 @@ export class KeysViewPage {
     this.viewKeysBlock = this.page.locator('[data-testid="viewKeysBlock"]');
     this.table = this.viewKeysBlock.locator('tbody');
     this.tableRaws = this.viewKeysBlock.locator('tbody >> tr');
+    this.loader = this.viewKeysBlock.getByTestId('loader');
   }
 
   async getAllTableRaws() {
