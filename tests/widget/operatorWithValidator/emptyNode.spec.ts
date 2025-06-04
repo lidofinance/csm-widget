@@ -17,7 +17,6 @@ test.describe('Operator with validator and without keys.', async () => {
     qase(151, 'Remove page. Should present empty view for empty wallet'),
     async () => {
       await keysPage.removePage.open();
-      await keysPage.keysView.loader.waitFor({ state: 'hidden' });
       await expect(keysPage.removePage.removeKeysForm).toContainText(
         'No keys available to remove',
       );
@@ -33,6 +32,9 @@ test.describe('Operator with validator and without keys.', async () => {
 
   test('View keys page. Should present empty view for empty wallet', async () => {
     await keysPage.keysView.open();
+    await keysPage.keysView.page
+      .getByText('View keys list')
+      .waitFor({ state: 'visible' });
     await keysPage.keysView.loader.waitFor({ state: 'hidden' });
     await expect(keysPage.keysView.viewKeysBlock).toContainText(
       'There are no keys to display',
