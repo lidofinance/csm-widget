@@ -12,7 +12,7 @@ import {
 } from 'consts/external-links';
 
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
-  <BlockStyled>
+  <BlockStyled data-testid="starterPackSection">
     <Heading>
       <h2>CSM node operator starter pack</h2>
       <p>

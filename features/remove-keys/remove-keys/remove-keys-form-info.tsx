@@ -20,17 +20,24 @@ export const RemoveKeysFormInfo = () => {
 
   return (
     <DataTable>
-      <DataTableRow title="Number of keys to remove">{count}</DataTableRow>
+      <DataTableRow
+        title="Number of keys to remove"
+        data-testid="numbersOfKeysToRemove"
+      >
+        {count}
+      </DataTableRow>
       <DataTableRow
         title="Removal fee"
         loading={isRemovalFeeLoading}
         help="Key deletion incurs a removal charge, deducted from the node operator's bond. This charge covers the maximum possible operational costs of queue processing"
+        data-testid="removalFee"
       >
         <FormatToken amount={removalFee} token={TOKENS.STETH} />
       </DataTableRow>
       <DataTableRow
         title={`${balance?.isInsufficient ? 'Insufficient' : 'Excess'} bond after execution`}
         loading={isBalanceLoading}
+        data-testid="excessBondAfterExecution"
       >
         <FormatToken amount={balance?.delta} token={TOKENS.STETH} />
       </DataTableRow>

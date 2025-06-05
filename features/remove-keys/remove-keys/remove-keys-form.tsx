@@ -10,7 +10,7 @@ import { FormControllerStyled } from 'shared/hook-form/form-controller';
 export const RemoveKeysForm: FC = memo(() => {
   return (
     <RemoveKeysFormProvider>
-      <FormBlock>
+      <FormBlock data-testid="removeKeysForm">
         <FormLoading>
           <FormControllerStyled>
             <KeysSelector />
