@@ -36,6 +36,21 @@ on:
         options:
           - testnet
           - infra
+  workflow_call:
+    inputs:
+      stand_url:
+        required: true
+        type: string
+        description: Stand url
+      stand_type:
+        description: 'Stand type'
+        required: true
+        type: string
+      tag:
+        required: false
+        type: string
+        default: '-'
+        description: 'Test tags'
 
 jobs:
   test:
@@ -47,7 +62,7 @@ jobs:
       WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
       EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
       EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
-      
+
       STAND_TYPE: ${{ github.event.inputs.STAND_TYPE || 'testnet' }}
 
       # Common envs
