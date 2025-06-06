@@ -75,4 +75,4 @@ jobs:
     with:
       stand_url: ${{ needs.deploy.outputs.stand_url }}
       stand_type: 'preview'
-      tag: 'smoke'
+      tags: 'smoke'

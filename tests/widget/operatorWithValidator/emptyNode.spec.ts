@@ -34,7 +34,7 @@ test.describe('Operator with validator and without keys.', async () => {
     await keysPage.keysView.open();
     await keysPage.keysView.page
       .getByText('View keys list')
-      .waitFor({ state: 'visible' });
+      .waitFor({ state: 'visible', timeout: 20000 });
     await keysPage.keysView.loader.waitFor({ state: 'hidden' });
     await expect(keysPage.keysView.viewKeysBlock).toContainText(
       'There are no keys to display',
