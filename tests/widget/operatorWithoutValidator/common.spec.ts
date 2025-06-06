@@ -2,7 +2,7 @@ import { MainPage } from 'tests/pages/main.page';
 import { test } from '../test.fixture';
 import { KeysPage } from 'tests/pages/keys.page';
 import { getRandomKeys } from '../../consts/keys.const';
-import { TokenSymbol } from 'tests/consts/common.const';
+import { Tags, TokenSymbol } from 'tests/consts/common.const';
 import { expect } from '@playwright/test';
 import { trimAddress } from '@lidofinance/address';
 import { qase } from 'playwright-qase-reporter/playwright';
@@ -21,6 +21,7 @@ test.describe('Operator without keys. Common suite.', async () => {
 
   test(
     qase(47, 'Should open transaction page after added 1 key'),
+    { tag: Tags.smoke },
     async ({ widgetService }) => {
       await mainPage.starterPackSection.createNodeOperatorBtn.click();
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({

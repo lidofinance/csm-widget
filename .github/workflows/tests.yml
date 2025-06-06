@@ -1,5 +1,5 @@
 name: Test CSM-widget
-run-name: CSM-widget. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
+run-name: ${{ github.event.action }}. CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
   schedule:
@@ -133,4 +133,4 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 5
+          retention-days: 1
