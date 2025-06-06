@@ -73,6 +73,6 @@ jobs:
     uses: ./.github/workflows/tests.yml
     secrets: inherit
     with:
-      stand_url: ${{ needs.deploy.outputs.stand_url }}
+      preview_stand_url: ${{ needs.deploy.outputs.stand_url }}
       stand_type: 'preview'
       tags: 'smoke'
