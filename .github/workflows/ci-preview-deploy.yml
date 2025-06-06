@@ -68,10 +68,11 @@ jobs:
           BRANCH_HASH: ${{ steps.branch.outputs.hash }}
 
   tests:
-      needs: deploy
-      if: ${{ github.event.pull_request.draft == false }}
-      uses: ./.github/workflows/tests.yml
-      secrets: inherit
-      with:
-        stand_url: ${{ needs.deploy.outputs.stand_url }}
-        stand_type: "preview"
+    needs: deploy
+    if: ${{ github.event.pull_request.draft == false }}
+    uses: ./.github/workflows/tests.yml
+    secrets: inherit
+    with:
+      stand_url: ${{ needs.deploy.outputs.stand_url }}
+      stand_type: 'preview'
+      tag: 'smoke'
