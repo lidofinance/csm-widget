@@ -1,5 +1,5 @@
 name: Test CSM-widget
-run-name: ${{ github.event.action }}. CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
+run-name: ${{ github.event_name }}. CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
   schedule:
@@ -93,6 +93,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install --immutable
