@@ -1,5 +1,5 @@
 name: Test CSM-widget
-run-name: ${{ github.event_name }}. CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
+run-name: CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
   schedule:
