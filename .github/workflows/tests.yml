@@ -101,9 +101,9 @@ jobs:
         run: yarn playwright install chromium --with-deps
 
       - name: Set up preview-stand credentials
-        if: ${{ inputs.stand_type || github.event.inputs.stand_type == 'preview' }}
+        if: ${{ inputs.stand_type  == 'preview' || github.event.inputs.stand_type == 'preview' }}
         run: |
-          if [ -n "${{ github.event.inputs.preview_stand_url }}" ]; then
+          if [ -n "${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" ]; then
             echo "Setting login and password for preview stand"
             echo "PREVIEW_STAND_LOGIN=${{ secrets.PREVIEW_STAND_LOGIN }}" >> $GITHUB_ENV
             echo "PREVIEW_STAND_PASSWORD=${{ secrets.PREVIEW_STAND_PASSWORD }}" >> $GITHUB_ENV
