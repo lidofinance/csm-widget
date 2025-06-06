@@ -12,7 +12,7 @@ export const useBondBalanceAfterRemoveKeys = (count = 0) => {
     : undefined;
 
   const { data: bondRequiredAfter } = useBondByKeysCount({
-    keysCount: BigInt(nextKeysCount ?? 0),
+    keysCount: nextKeysCount ?? 0,
     curveId: curveId,
   });
 

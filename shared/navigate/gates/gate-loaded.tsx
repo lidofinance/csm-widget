@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useInitialLoading } from 'shared/hooks';
 import { SplashPage, UnsupportedPage } from '../inner-pages';
+import { useCsmVersionSupported } from 'modules/web3';
 
 type Props = {
   fallback?: ReactNode;
@@ -14,7 +15,8 @@ export const GateLoaded: FC<PropsWithChildren<Props>> = ({
   additional,
   children,
 }) => {
-  const { isLoading, isSupported } = useInitialLoading(additional);
+  const isLoading = useInitialLoading(additional);
+  const { data: isSupported } = useCsmVersionSupported();
 
   return <>{isLoading ? fallback : isSupported ? children : unsupported}</>;
 };

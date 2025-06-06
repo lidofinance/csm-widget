@@ -2,19 +2,20 @@ import {
   AddNodeOperatorResult,
   packRoles,
   TransactionCallback,
+  TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { TransactionCallbackStage } from '@lidofinance/lido-ethereum-sdk';
+import { ROLES } from '@lidofinance/lido-csm-sdk/common';
+import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
-import { useAppendOperator, useLidoSDK } from 'modules/web3';
+import { useAppendOperator, useDappStatus, useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
-import { useAddressCompare, useKeysCache } from 'shared/hooks';
+import { useKeysCache } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import invariant from 'tiny-invariant';
+import { isAddressEqual, zeroAddress } from 'viem';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { SubmitKeysFormInputType } from './types';
-import { PATH } from 'consts';
-import { ROLES } from '@lidofinance/lido-csm-sdk/common';
 
 type SubmitKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -26,10 +27,10 @@ export const useSubmitKeysSubmit = ({
   onRetry,
 }: SubmitKeysOptions) => {
   const { csm } = useLidoSDK();
+  const { address } = useDappStatus();
 
   const { txModalStages } = useTxModalStagesSubmitKeys();
   const appendNO = useAppendOperator();
-  const isUserOrZero = useAddressCompare(true);
   const { addCacheKeys } = useKeysCache();
   const n = useNavigate();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
@@ -50,6 +51,7 @@ export const useSubmitKeysSubmit = ({
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(amount, 'BondAmount is not defined');
+      invariant(address, 'Address is not deinfed');
 
       if (
         specifyCustomAddresses &&
@@ -74,19 +76,46 @@ export const useSubmitKeysSubmit = ({
             case TransactionCallbackStage.RECEIPT:
               txModalStages.pending({ keysCount, amount, token }, payload.hash);
               break;
+            case TransactionCallbackStage.PERMIT_SIGN:
+              txModalStages.signPermit();
+              break;
+            case TransactionCallbackStage.APPROVE_SIGN:
+              txModalStages.signApproval(payload.amount, payload.token);
+              break;
+            case TransactionCallbackStage.APPROVE_RECEIPT:
+              txModalStages.pendingApproval(
+                payload.amount,
+                payload.token,
+                payload.hash,
+              );
+              break;
             case TransactionCallbackStage.DONE: {
+              const roles = packRoles({
+                [ROLES.REWARDS]:
+                  isAddressEqual(payload.result.rewardsAddress, address) ||
+                  zeroAddress === payload.result.rewardsAddress,
+                [ROLES.MANAGER]:
+                  isAddressEqual(payload.result.managerAddress, address) ||
+                  zeroAddress === payload.result.managerAddress,
+              });
+
+              void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
+
+              if (roles.length === 0) {
+                setOperatorCustomAddresses(payload.result.nodeOperatorId);
+                void n(PATH.HOME);
+              } else {
+                appendNO({
+                  id: payload.result.nodeOperatorId,
+                  roles,
+                });
+              }
+
               txModalStages.success(
                 {
                   keys: depositData.map((key) => key.pubkey),
                   nodeOperatorId: payload.result.nodeOperatorId,
-                  roles: packRoles({
-                    [ROLES.REWARDS]: isUserOrZero(
-                      payload.result.rewardsAddress,
-                    ),
-                    [ROLES.MANAGER]: isUserOrZero(
-                      payload.result.managerAddress,
-                    ),
-                  }),
+                  roles,
                 },
                 payload.hash,
               );
@@ -104,41 +133,22 @@ export const useSubmitKeysSubmit = ({
 
         const keysCount = depositData.length;
 
-        const { result: nodeOperator } =
-          await csm.permissionlessGate.addNodeOperator({
-            token,
-            amount,
-            depositData,
-            rewardsAddress: (specifyCustomAddresses && rewardsAddress) || '',
-            managerAddress: (specifyCustomAddresses && managerAddress) || '',
-            extendedManagerPermissions:
-              specifyCustomAddresses && extendedManagerPermissions,
-            referrer,
-            permit: undefined,
-            callback,
-          });
+        await csm.permissionlessGate.addNodeOperator({
+          token,
+          amount,
+          depositData,
+          rewardsAddress: (specifyCustomAddresses && rewardsAddress) || '',
+          managerAddress: (specifyCustomAddresses && managerAddress) || '',
+          extendedManagerPermissions:
+            specifyCustomAddresses && extendedManagerPermissions,
+          referrer,
+          permit: undefined,
+          callback,
+        });
 
         void onConfirm?.();
 
         // TODO: move to onConfirm
-        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
-
-        if (nodeOperator?.nodeOperatorId) {
-          // TODO: pack roles in decoreResult in sdk
-          const roles = packRoles({
-            [ROLES.REWARDS]: isUserOrZero(nodeOperator.rewardsAddress),
-            [ROLES.MANAGER]: isUserOrZero(nodeOperator.managerAddress),
-          });
-          if (roles.length === 0) {
-            setOperatorCustomAddresses(nodeOperator.nodeOperatorId);
-            void n(PATH.HOME);
-          } else {
-            appendNO({
-              id: nodeOperator.nodeOperatorId,
-              roles,
-            });
-          }
-        }
 
         return true;
       } catch (error) {
@@ -148,13 +158,13 @@ export const useSubmitKeysSubmit = ({
       }
     },
     [
+      address,
       confirmCustomAddresses,
       csm.permissionlessGate,
       onConfirm,
       addCacheKeys,
       txModalStages,
       onRetry,
-      isUserOrZero,
       setOperatorCustomAddresses,
       n,
       appendNO,

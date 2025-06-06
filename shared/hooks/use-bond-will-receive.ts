@@ -6,7 +6,8 @@ export const useBondWillReceive = (
   amount?: bigint,
   rewards?: bigint,
 ) => {
-  const stethAmount = useStethAmount(token, amount);
+  // FIXME: exchange tokens rate
+  const { data: stethAmount } = useStethAmount(token, amount ?? 0n);
 
   return [
     (amount &&

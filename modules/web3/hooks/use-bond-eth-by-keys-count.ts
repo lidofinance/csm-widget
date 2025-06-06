@@ -5,7 +5,7 @@ import { useLidoSDK } from '../web3-provider';
 import { useCurveId } from './use-curve-id';
 import invariant from 'tiny-invariant';
 
-export const useBondEthByKeysCount = (keysCount = 1n) => {
+export const useBondEthByKeysCount = (keysCount = 1) => {
   const { csm } = useLidoSDK();
 
   const { data: curveId } = useCurveId();
@@ -14,9 +14,12 @@ export const useBondEthByKeysCount = (keysCount = 1n) => {
     queryKey: ['getBondAmountByKeysCountETH', { keysCount, curveId }],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
-      invariant(curveId);
-      return csm.accounting.getBondAmountByKeysCountETH({ keysCount, curveId });
+      invariant(curveId !== undefined);
+      return csm.accounting.getBondAmountByKeysCountETH({
+        keysCount: BigInt(keysCount),
+        curveId,
+      });
     },
-    enabled: keysCount > 0n && curveId !== undefined,
+    enabled: keysCount > 0 && curveId !== undefined,
   });
 };

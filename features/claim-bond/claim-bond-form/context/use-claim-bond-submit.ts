@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
-import { TransactionCallback } from '@lidofinance/lido-csm-sdk';
-import { TransactionCallbackStage } from '@lidofinance/lido-ethereum-sdk';
+import {
+  TransactionCallback,
+  TransactionCallbackStage,
+} from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
 import { handleTxError } from 'shared/transaction-modal';
 import { ClaimBondFormInputType, ClaimBondFormNetworkData } from '../context';
@@ -70,12 +72,6 @@ export const useClaimBondSubmit = ({
           callback,
         });
 
-        txModalStages.sign({
-          amount,
-          token,
-          claimRewards,
-          rewards: rewards?.available,
-        });
         await onConfirm?.();
 
         return true;

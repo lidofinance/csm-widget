@@ -102,5 +102,58 @@ const getTxModalStagesSubmitKeys = (
 });
 
 export const useTxModalStagesSubmitKeys = () => {
+
+  const callback: TransactionCallback<AddNodeOperatorResult> = async ({
+    stage,
+    payload,
+  }) => {
+    switch (stage) {
+      case TransactionCallbackStage.SIGN:
+        txModalStages.sign({ keysCount, amount, token });
+        break;
+      case TransactionCallbackStage.RECEIPT:
+        txModalStages.pending({ keysCount, amount, token }, payload.hash);
+        break;
+      case TransactionCallbackStage.DONE: {
+        const roles = packRoles({
+          [ROLES.REWARDS]:
+            isAddressEqual(payload.result.rewardsAddress, address) ||
+            zeroAddress === payload.result.rewardsAddress,
+          [ROLES.MANAGER]:
+            isAddressEqual(payload.result.managerAddress, address) ||
+            zeroAddress === payload.result.managerAddress,
+        });
+
+        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
+
+        if (roles.length === 0) {
+          setOperatorCustomAddresses(payload.result.nodeOperatorId);
+          void n(PATH.HOME);
+        } else {
+          appendNO({
+            id: payload.result.nodeOperatorId,
+            roles,
+          });
+        }
+
+        txModalStages.success(
+          {
+            keys: depositData.map((key) => key.pubkey),
+            nodeOperatorId: payload.result.nodeOperatorId,
+            roles,
+          },
+          payload.hash,
+        );
+        break;
+      }
+      case TransactionCallbackStage.MULTISIG_DONE:
+        txModalStages.successMultisig();
+        break;
+      case TransactionCallbackStage.ERROR:
+        txModalStages.failed(payload.error, onRetry);
+        break;
+      default:
+    }
+  };
   return useTransactionModalStage(getTxModalStagesSubmitKeys);
 };

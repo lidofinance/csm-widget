@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { LocalLink } from 'shared/navigate';
+import { LocalLink } from 'shared/navigate/local-link';
 
 export const SectionHeaderStyle = styled.div`
   display: flex;

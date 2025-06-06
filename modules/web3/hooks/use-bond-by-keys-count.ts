@@ -5,13 +5,13 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
 import invariant from 'tiny-invariant';
 
 type Props = {
-  keysCount: bigint;
+  keysCount?: number;
   curveId?: bigint;
   token?: TOKENS;
 };
 
 export const useBondByKeysCount = ({
-  keysCount = 0n,
+  keysCount = 0,
   curveId,
   token = TOKENS.steth,
 }: Props) => {
@@ -21,13 +21,13 @@ export const useBondByKeysCount = ({
     queryKey: ['getBondAmountByKeysCountPerToken', { keysCount, curveId }],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
-      invariant(curveId);
+      invariant(curveId !== undefined);
       return csm.accounting.getBondAmountByKeysCountPerToken({
-        keysCount,
+        keysCount: BigInt(keysCount),
         curveId,
       });
     },
-    enabled: keysCount > 0n && curveId !== undefined,
+    enabled: keysCount > 0 && curveId !== undefined,
     select: (data) => data[token],
   });
 };

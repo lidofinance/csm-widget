@@ -85,7 +85,7 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
         } else {
           const value = parseEtherSafe(currentValue);
           // invalid value, so we rollback to last valid value
-          if (!value) {
+          if (value === null || value === undefined) {
             const rollbackCaretPosition =
               caretPosition -
               Math.min(

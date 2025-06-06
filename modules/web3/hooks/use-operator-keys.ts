@@ -5,20 +5,20 @@ import invariant from 'tiny-invariant';
 import { Hex } from 'viem';
 import { useLidoSDK } from '../web3-provider';
 
-export const useOperatorInfo = <TData = Hex[]>(
-  id?: NodeOperatorId,
+export const useOperatorKeys = <TData = Hex[]>(
+  nodeOperatorId?: NodeOperatorId,
   select?: (data: Hex[]) => TData,
 ) => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['node-operator-keys', { id }],
+    queryKey: ['node-operator-keys', { nodeOperatorId }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
-      invariant(id);
-      return csm.operator.getKeys(id);
+      invariant(nodeOperatorId !== undefined);
+      return csm.operator.getKeys(nodeOperatorId);
     },
-    enabled: id !== undefined,
+    enabled: nodeOperatorId !== undefined,
     select,
   });
 };

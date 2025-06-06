@@ -15,9 +15,11 @@ import {
   ThemeToggleButton, // Import the new button
 } from './styles';
 import { useNavItems } from './use-nav-items';
+import { useCsmVersionSupported } from 'modules/web3';
 
 export const Navigation: FC = memo(() => {
-  const { isLoading, isSupported } = useInitialLoading();
+  const isLoading = useInitialLoading();
+  const isSupported = useCsmVersionSupported();
   const { themeName, toggleTheme } = useThemeToggle();
   const { expanded, toggleExpanded } = useInpageNavigation();
   const routes = useNavItems();

@@ -9,10 +9,10 @@ import {
   Stack,
   TitledSelectableAmount,
 } from 'shared/components';
-import { useRewardsFrame } from 'shared/hooks';
 import { formatDate } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
 import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { useRewardsFrame } from 'modules/web3';
 
 export const SourceSelect: FC = () => {
   const { bond, rewards, loading, maxValues } = useClaimBondFormData();
@@ -26,7 +26,7 @@ export const SourceSelect: FC = () => {
   const { setValue } = useFormContext<ClaimBondFormInputType>();
 
   const availableToClaim = maxValues?.[TOKENS.steth][Number(field.value)];
-  const nextRewardsDate = formatDate(rewardsFrame?.nextRewards);
+  const nextRewardsDate = formatDate(rewardsFrame?.nextDistribution);
 
   useEffect(() => {
     if (bond?.isInsufficient) {

@@ -1,5 +1,7 @@
-import { TransactionCallback } from '@lidofinance/lido-csm-sdk';
-import { TransactionCallbackStage } from '@lidofinance/lido-ethereum-sdk';
+import {
+  TransactionCallback,
+  TransactionCallbackStage,
+} from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
@@ -44,6 +46,19 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
             case TransactionCallbackStage.RECEIPT:
               txModalStages.pending(
                 { keysCount, amount, token, nodeOperatorId },
+                payload.hash,
+              );
+              break;
+            case TransactionCallbackStage.PERMIT_SIGN:
+              txModalStages.signPermit();
+              break;
+            case TransactionCallbackStage.APPROVE_SIGN:
+              txModalStages.signApproval(payload.amount, payload.token);
+              break;
+            case TransactionCallbackStage.APPROVE_RECEIPT:
+              txModalStages.pendingApproval(
+                payload.amount,
+                payload.token,
                 payload.hash,
               );
               break;

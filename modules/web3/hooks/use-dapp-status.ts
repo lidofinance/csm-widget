@@ -1,8 +1,17 @@
 import { useUserConfig } from 'config/user-config';
 import { CHAINS } from 'consts';
+import { Address } from 'viem';
 import { useAccount } from 'wagmi';
 
-export const useDappStatus = () => {
+type Result = {
+  chainId: CHAINS;
+  isSupportedChain: boolean;
+  isAccountActive: boolean;
+  isWalletConnected: boolean;
+  address?: Address;
+};
+
+export const useDappStatus = (): Result => {
   const {
     address,
     chainId: walletChainId,
@@ -32,7 +41,6 @@ export const useDappStatus = () => {
     isSupportedChain,
     isAccountActive,
     isWalletConnected,
-    walletChainId,
     address,
   };
 };

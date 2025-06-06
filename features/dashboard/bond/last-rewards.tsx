@@ -6,7 +6,13 @@ import {
   Text,
   Tooltip,
 } from '@lidofinance/lido-ui';
-import { useNodeOperatorId, useOperatorInfo } from 'modules/web3';
+import {
+  useNodeOperatorId,
+  useOperatorInfo,
+  useOperatorLastRewards,
+  useRewardsFrame,
+  useRewardsLastReportTxHash,
+} from 'modules/web3';
 import { ModalComponentType, useModal } from 'providers/modal-provider';
 import { FC, useCallback } from 'react';
 import {
@@ -17,12 +23,6 @@ import {
   TxLinkEtherscan,
 } from 'shared/components';
 import { FaqElement } from 'shared/components/faq/styles';
-import {
-  useLastOperatorRewards,
-  useLastRewrdsTx,
-  useRewardsFrame,
-  useSharesToSteth,
-} from 'shared/hooks';
 import { countDaysLeft, formatDate, formatPercent } from 'utils';
 import { Balance } from './balance';
 import {
@@ -35,24 +35,21 @@ import {
 } from './styles';
 
 export const LastRewards: FC = () => {
-  const { data: lastRewards, initialLoading: isLoading } =
-    useLastOperatorRewards();
-  const { data: distributed, initialLoading: isDistributedLoading } =
-    useSharesToSteth(lastRewards?.distributed);
-
   const id = useNodeOperatorId();
-  const { data: info } = useOperatorInfo(id);
 
+  const { data: info } = useOperatorInfo(id);
+  const { data: lastRewards, isPending: isLoading } =
+    useOperatorLastRewards(id);
   const { data: rewardsFrame } = useRewardsFrame();
 
-  const lastRewardsDate = formatDate(rewardsFrame?.lastRewards);
-  const prevRewardsDate = formatDate(rewardsFrame?.prevRewards);
-  const nextRewardsDate = formatDate(rewardsFrame?.nextRewards);
-  const daysLeft = countDaysLeft(rewardsFrame?.nextRewards);
+  const lastRewardsDate = formatDate(rewardsFrame?.lastDistribution);
+  const prevRewardsDate = formatDate(rewardsFrame?.prevDistribution);
+  const nextRewardsDate = formatDate(rewardsFrame?.nextDistribution);
+  const daysLeft = countDaysLeft(rewardsFrame?.nextDistribution);
 
   const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
 
-  const showWhy = lastRewards && lastRewards.distributed.isZero();
+  const showWhy = lastRewards && lastRewards.distributed === 0n;
 
   if (!showThisSection) return null;
 
@@ -70,8 +67,8 @@ export const LastRewards: FC = () => {
           </Stack>
           <Balance
             big
-            loading={isLoading || isDistributedLoading}
-            amount={BigInt(distributed?.toString() ?? 0n)}
+            loading={isLoading}
+            amount={lastRewards?.distributed}
             description={showWhy ? <Why /> : undefined}
           />
         </RowHeader>
@@ -120,9 +117,8 @@ export const LastRewards: FC = () => {
 };
 
 const LastReportStats: FC = () => {
-  const { data: lastRewards, initialLoading: isLoading } =
-    useLastOperatorRewards();
-  const { data: txHash, initialLoading: isTxLoading } = useLastRewrdsTx();
+  const { data: lastRewards, isPending: isLoading } = useOperatorLastRewards();
+  const { data: txHash, isPending: isTxLoading } = useRewardsLastReportTxHash();
 
   return (
     <RowBody>

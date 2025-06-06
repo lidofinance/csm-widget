@@ -6,8 +6,8 @@ import {
   useInvites,
   useNodeOperator,
   useOperatorBalance,
+  useOperatorKeysToMigrate,
 } from 'modules/web3';
-import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
 import { useCallback } from 'react';
 import { useCanCreateNodeOperator } from 'shared/hooks';
 
@@ -43,7 +43,7 @@ export const useShowRule = () => {
         case 'NOT_NODE_OPERATOR':
           return isAccountActive && !nodeOperator;
         case 'IS_NODE_OPERATOR':
-          return !!nodeOperator && isAccountActive;
+          return isAccountActive && !!nodeOperator;
         case 'CAN_CREATE':
           return !!canCreateNO;
         case 'HAS_MANAGER_ROLE':

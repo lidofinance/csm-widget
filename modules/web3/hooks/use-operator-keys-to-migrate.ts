@@ -1,19 +1,19 @@
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
-import { useLidoSDK } from '../web3-provider';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
 import invariant from 'tiny-invariant';
+import { useLidoSDK } from '../web3-provider';
 
-export const useOperatorKeysToMigrate = (id?: NodeOperatorId) => {
+export const useOperatorKeysToMigrate = (nodeOperatorId?: NodeOperatorId) => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['node-operator-keys-to-migrate', { id }],
+    queryKey: ['node-operator-keys-to-migrate', { nodeOperatorId }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
-      invariant(id);
-      return csm.operator.getKeysCountToMigrate(id);
+      invariant(nodeOperatorId !== undefined);
+      return csm.operator.getKeysCountToMigrate(nodeOperatorId);
     },
-    enabled: id !== undefined,
+    enabled: nodeOperatorId !== undefined,
   });
 };

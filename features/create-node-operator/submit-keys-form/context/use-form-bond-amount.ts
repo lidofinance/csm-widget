@@ -10,7 +10,7 @@ export const useFormBondAmount = (
   const [token, depositData] = watch(['token', 'depositData']);
 
   const { data: bondAmount } = useBondByKeysCount({
-    keysCount: BigInt(depositData?.length ?? 0),
+    keysCount: depositData?.length ?? 0,
     token,
     curveId,
   });

@@ -1,6 +1,3 @@
-import { useCallback, useMemo } from 'react';
-import { useBlockNumber } from 'wagmi';
-import { type SubmitKeysFormNetworkData } from './types';
 import {
   useCsmStatus,
   useCurveId,
@@ -11,6 +8,9 @@ import {
   useStethBalance,
   useWstethBalance,
 } from 'modules/web3';
+import { useCallback, useMemo } from 'react';
+import { useBlockNumber } from 'wagmi';
+import { type SubmitKeysFormNetworkData } from './types';
 
 export const useSubmitKeysFormNetworkData = (): [
   SubmitKeysFormNetworkData,

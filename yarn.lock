@@ -3195,12 +3195,14 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.47.0.tgz#186d6e2695c9470cc171d111dac352da5106e681"
   integrity sha512-dF8eUUnK35CNCVa3Z++INtlxlRlYKGx2//eLz7nyFkqwPoOGI0PmVW0qgGiGY9TrGAqkJuXlERszclH8eunYCw==
 
-"@lidofinance/lido-csm-sdk@file:lido-csm-sdk/lido-csm-sdk":
+"@lidofinance/lido-csm-sdk@file:lido-csm-sdk":
   version "0.0.0"
   dependencies:
     "@lidofinance/lido-ethereum-sdk" "^4.4.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
+    json-with-bigint "^3.4.4"
     viem "^2.26.0"
+    zod "^3.25.49"
 
 "@lidofinance/lido-ethereum-sdk@^4.4.0":
   version "4.4.0"
@@ -9644,6 +9646,11 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "https://registry.yarnpkg.com/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==
 
+json-with-bigint@^3.4.4:
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/json-with-bigint/-/json-with-bigint-3.4.4.tgz#ef798afee4c4203feffa44f5238cd77c93e8f72a"
+  integrity sha512-AhpYAAaZsPjU7smaBomDt1SOQshi9rEm6BlTbfVwsG1vNmeHKtEedJi62sHZzJTyKNtwzmNnrsd55kjwJ7054A==
+
 json5@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/json5/-/json5-1.0.2.tgz#63d98d60f21b313b77c4d6da18bfa69d80e1d593"
@@ -13629,6 +13636,11 @@ zod@^3.24.2:
   version "3.24.2"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.2.tgz#8efa74126287c675e92f46871cfc8d15c34372b3"
   integrity sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==
+
+zod@^3.25.49:
+  version "3.25.51"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.51.tgz#aa2cf648e54f6f060f139cf77b694819f63c9f3a"
+  integrity sha512-TQSnBldh+XSGL+opiSIq0575wvDPqu09AqWe1F7JhUMKY+M91/aGlK4MhpVNO7MgYfHcVCB1ffwAUTJzllKJqg==
 
 zustand@5.0.0:
   version "5.0.0"

@@ -1,8 +1,10 @@
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
-import { TransactionCallback } from '@lidofinance/lido-csm-sdk';
-import { TransactionCallbackStage } from '@lidofinance/lido-ethereum-sdk';
+import {
+  TransactionCallback,
+  TransactionCallbackStage,
+} from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
 import { useAppendOperator, useLidoSDK } from 'modules/web3';
 import { useNavigate } from 'shared/navigate';

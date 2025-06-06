@@ -1,8 +1,11 @@
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
-import { AddBondResult, TransactionCallback } from '@lidofinance/lido-csm-sdk';
-import { TransactionCallbackStage } from '@lidofinance/lido-ethereum-sdk';
+import {
+  AddBondResult,
+  TransactionCallback,
+  TransactionCallbackStage,
+} from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
 import { handleTxError } from 'shared/transaction-modal';
 import { AddBondFormInputType, AddBondFormNetworkData } from '../context';
@@ -37,6 +40,19 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
               break;
             case TransactionCallbackStage.RECEIPT:
               txModalStages.pending({ amount, token }, payload.hash);
+              break;
+            case TransactionCallbackStage.PERMIT_SIGN:
+              txModalStages.signPermit();
+              break;
+            case TransactionCallbackStage.APPROVE_SIGN:
+              txModalStages.signApproval(payload.amount, payload.token);
+              break;
+            case TransactionCallbackStage.APPROVE_RECEIPT:
+              txModalStages.pendingApproval(
+                payload.amount,
+                payload.token,
+                payload.hash,
+              );
               break;
             case TransactionCallbackStage.DONE: {
               txModalStages.success(

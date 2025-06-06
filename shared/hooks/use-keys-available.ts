@@ -2,7 +2,7 @@ import { Zero } from '@ethersproject/constants';
 import { ONE_ETH, TOKENS } from 'consts/tokens';
 import { BigNumber } from 'ethers';
 import { ICSBondCurve } from 'generated/CSAccounting';
-import { useExchangeTokensRate, useMergeSwr } from 'shared/hooks';
+import { useExchangeRate, useMergeSwr } from 'shared/hooks';
 import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
 import { BondBalance } from '@lidofinance/lido-csm-sdk/common';
 
@@ -27,7 +27,7 @@ export const useKeysAvailable = ({
 }: Props) => {
   const swrCurve = useCurveInfo(curveId);
 
-  const swrRates = useExchangeTokensRate();
+  const swrRates = useExchangeRate();
 
   return useMergeSwr([swrCurve, swrRates], {
     [TOKENS.ETH]: calc(
