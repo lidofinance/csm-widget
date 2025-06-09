@@ -10,9 +10,7 @@ export class TestnetConfig extends BaseConfig {
         chainId: 560048,
         tokenSymbol: 'ETH',
         chainName: 'Hoodi',
-        rpcUrl:
-          process.env.RPC_URL ||
-          `https://lb.drpc.org/ogrpc?network=hoodi&dkey=${process.env.RPC_URL_TOKEN}`,
+        rpcUrl: process.env.RPC_URL as string,
         scan: 'https://hoodi.etherscan.io/',
       },
     };
