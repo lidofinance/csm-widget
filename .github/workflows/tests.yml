@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       # Required envs
-      RPC_URL_TOKEN: ${{ secrets.RPC_URL_TOKEN }}
+      RPC_URL: ${{ secrets.RPC_URL }}
       WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
       WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
       EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
