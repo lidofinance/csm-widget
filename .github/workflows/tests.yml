@@ -75,7 +75,7 @@ jobs:
       TEST_BRANCH: ${{ github.event.inputs.branch }}
       DISCORD_REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
-      DISCORD_DUTY_TAG: '&1227193074044637286'
+      DISCORD_DUTY_TAG: '&1372906915667116032'
 
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
