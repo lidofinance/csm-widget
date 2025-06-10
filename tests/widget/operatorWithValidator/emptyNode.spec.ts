@@ -2,6 +2,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
 import { KeysPage } from 'tests/pages/keys.page';
+import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
 test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
@@ -34,7 +35,7 @@ test.describe('Operator with validator and without keys.', async () => {
     await keysPage.keysView.open();
     await keysPage.keysView.page
       .getByText('View keys list')
-      .waitFor({ state: 'visible' });
+      .waitFor({ state: 'visible', timeout: PAGE_WAIT_TIMEOUT });
     await keysPage.keysView.loader.waitFor({ state: 'hidden' });
     await expect(keysPage.keysView.viewKeysBlock).toContainText(
       'There are no keys to display',
