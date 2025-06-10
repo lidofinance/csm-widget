@@ -27,7 +27,7 @@ export const useCsmVersionSupported = () => {
       csModule.getInitializedVersion().then(onSuccess, onError),
       csAccounting.getInitializedVersion().then(onSuccess, onError),
     ]);
-    return result.every(Boolean);
+    return !result.every(Boolean);
   }, [csAccounting, csModule]);
 
   return useLidoSWR(['csm-version'], fetcher, STRATEGY_CONSTANT);
