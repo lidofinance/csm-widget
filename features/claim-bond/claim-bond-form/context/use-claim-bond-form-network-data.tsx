@@ -16,11 +16,17 @@ export const useClaimBondFormNetworkData = (): [
 ] => {
   const nodeOperatorId = useNodeOperatorId();
 
-  const { data: bond, isPending: isBondLoading } =
-    useOperatorBalance(nodeOperatorId);
+  const {
+    data: bond,
+    isPending: isBondLoading,
+    refetch: updateBond,
+  } = useOperatorBalance(nodeOperatorId);
 
-  const { data: rewards, isPending: isRewardsLoading } =
-    useOperatorRewards(nodeOperatorId);
+  const {
+    data: rewards,
+    isPending: isRewardsLoading,
+    refetch: updateRewards,
+  } = useOperatorRewards(nodeOperatorId);
 
   const { data: maxValues, isPending: isMaxValuesLoading } = useMaxValues({
     bond,
@@ -38,8 +44,8 @@ export const useClaimBondFormNetworkData = (): [
   const { data: status, isPending: isStatusLoading } = useCsmStatus();
 
   const revalidate = useCallback(async () => {
-    // await Promise.allSettled([updateBond(), updateRewards()]);
-  }, []);
+    await Promise.allSettled([updateBond(), updateRewards()]);
+  }, [updateBond, updateRewards]);
 
   const loading = useMemo(
     () => ({

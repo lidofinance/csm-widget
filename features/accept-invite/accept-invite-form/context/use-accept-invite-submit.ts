@@ -15,7 +15,6 @@ import {
   AcceptInviteFormNetworkData,
 } from './types';
 
-// TODO: move to hooks
 type UseAcceptInviteOptions = {
   onConfirm?: () => Promise<void> | void;
   onRetry?: () => void;
@@ -46,11 +45,15 @@ export const useAcceptInviteSubmit = ({
             case TransactionCallbackStage.RECEIPT:
               txModalStages.pending(invite, payload.hash);
               break;
-            case TransactionCallbackStage.DONE: {
-              payload;
+            case TransactionCallbackStage.DONE:
+              // TODO: move to onConfirm
+              appendNO({ id: invite.id, roles: [invite.role] });
+              if (invites && invites.length <= 1) {
+                void n(PATH.HOME);
+              }
+
               txModalStages.success({ ...invite, address }, payload.hash);
               break;
-            }
             case TransactionCallbackStage.MULTISIG_DONE:
               txModalStages.successMultisig();
               break;
@@ -68,12 +71,6 @@ export const useAcceptInviteSubmit = ({
         });
 
         await onConfirm?.();
-
-        // TODO: move to onConfirm
-        appendNO({ id: invite.id, roles: [invite.role] });
-        if (invites && invites.length <= 1) {
-          void n(PATH.HOME);
-        }
 
         return true;
       } catch (error) {

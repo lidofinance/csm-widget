@@ -14,21 +14,31 @@ export const useRemoveKeysFormNetworkData = (): [
   () => Promise<void>,
 ] => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: bond, isPending: isBondLoading } =
-    useOperatorBalance(nodeOperatorId);
-  const { data: info, isPending: isInfoLoading } =
-    useOperatorInfo(nodeOperatorId);
+  const {
+    data: bond,
+    isPending: isBondLoading,
+    refetch: updateBond,
+  } = useOperatorBalance(nodeOperatorId);
+  const {
+    data: info,
+    isPending: isInfoLoading,
+    refetch: updateInfo,
+  } = useOperatorInfo(nodeOperatorId);
 
   const { data: curveId, isPending: isCurveIdLoading } =
     useOperatorCurveId(nodeOperatorId);
   const { data: removalFee, isPending: isRemovalFeeLoading } =
     useKeyRemovalFee(curveId);
 
-  const { data: keys, initialLoading: isKeysLoading } = useKeysWithStatus(true);
+  const {
+    data: keys,
+    initialLoading: isKeysLoading,
+    update: updateKeys,
+  } = useKeysWithStatus(true);
 
   const revalidate = useCallback(async () => {
-    // await Promise.allSettled([updateBond(), updateInfo(), updateKeys()]);
-  }, []);
+    await Promise.allSettled([updateBond(), updateInfo(), updateKeys()]);
+  }, [updateBond, updateInfo, updateKeys]);
 
   const loading = useMemo(
     () => ({

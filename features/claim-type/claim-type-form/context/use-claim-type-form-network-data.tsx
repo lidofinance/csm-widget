@@ -16,17 +16,25 @@ export const useClaimTypeFormNetworkData = (): [
   const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId<true>();
 
-  const { data: currentCurveId, isPending: isCurrentCurveIdLoading } =
-    useOperatorCurveId(nodeOperatorId);
+  const {
+    data: currentCurveId,
+    isPending: isCurrentCurveIdLoading,
+    refetch: updateCurrentCurveId,
+  } = useOperatorCurveId(nodeOperatorId);
   const { data: curveId, isPending: isCurveIdLoading } = useIcsCurveId();
 
-  const { data: proof, isPending: isProofLoading } = useIcsProof(address);
+  const {
+    data: proof,
+    isPending: isProofLoading,
+    refetch: updateProof,
+  } = useIcsProof(address);
   const { data: canClaimCurve, isPending: isCanClaimCurveLoading } =
     useIcsCanClaim({ address, nodeOperatorId });
 
+  // FIXME: invalidate every Parameters (based on type)
   const revalidate = useCallback(async () => {
-    // await Promise.allSettled([updateLockedBond(), updateEtherBalance()]);
-  }, []);
+    await Promise.allSettled([updateCurrentCurveId(), updateProof()]);
+  }, [updateCurrentCurveId, updateProof]);
 
   const loading = useMemo(
     () => ({

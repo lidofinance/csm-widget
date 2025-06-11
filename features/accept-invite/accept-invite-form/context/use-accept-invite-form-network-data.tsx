@@ -9,11 +9,15 @@ export const useAcceptInviteFormNetworkData = (): [
   () => Promise<void>,
 ] => {
   const { address } = useAccount();
-  const { data: invites, isPending: isInvitesLoading } = useInvites();
+  const {
+    data: invites,
+    isPending: isInvitesLoading,
+    refetch: updateInvites,
+  } = useInvites();
 
   const revalidate = useCallback(async () => {
-    // await Promise.allSettled([updateInvites()]);
-  }, []);
+    await Promise.allSettled([updateInvites()]);
+  }, [updateInvites]);
 
   const loading = useMemo(
     () => ({

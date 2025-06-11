@@ -18,23 +18,45 @@ export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
   () => Promise<void>,
 ] => {
-  const { data: blockNumber, isLoading: isBlockNumberLoading } =
-    useBlockNumber();
+  const {
+    data: blockNumber,
+    isLoading: isBlockNumberLoading,
+    refetch: updateBlockNumber,
+  } = useBlockNumber();
   const { data: status, isPending: isStatusLoading } = useCsmStatus();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: ethBalance, isPending: isEthBalanceLoading } =
-    useEthereumBalance();
-  const { data: stethBalance, isPending: isStethBalanceLoading } =
-    useStethBalance();
-  const { data: wstethBalance, isPending: isWstethBalanceLoading } =
-    useWstethBalance();
-  const { data: bond, isPending: isBondLoading } =
-    useOperatorBalance(nodeOperatorId);
+  const {
+    data: ethBalance,
+    isPending: isEthBalanceLoading,
+    refetch: updateEthBalance,
+  } = useEthereumBalance();
+  const {
+    data: stethBalance,
+    isPending: isStethBalanceLoading,
+    refetch: updateStethBalance,
+  } = useStethBalance();
+  const {
+    data: wstethBalance,
+    isPending: isWstethBalanceLoading,
+    refetch: updateWstethBalance,
+  } = useWstethBalance();
+  const {
+    data: bond,
+    isPending: isBondLoading,
+    refetch: updateBond,
+  } = useOperatorBalance(nodeOperatorId);
 
-  const { data: maxStakeEth, isPending: isMaxStakeEthLoading } =
-    useStakeLimit();
+  const {
+    data: maxStakeEth,
+    isPending: isMaxStakeEthLoading,
+    refetch: updateMaxStakeEth,
+  } = useStakeLimit();
 
-  const { data: shareLimit, isPending: isShareLimitLoading } = useShareLimit();
+  const {
+    data: shareLimit,
+    isPending: isShareLimitLoading,
+    refetch: updateShareLimit,
+  } = useShareLimit();
 
   // const { data: curveId } = useOperatorCurveId(nodeOperatorId);
 
@@ -50,15 +72,24 @@ export const useAddKeysFormNetworkData = (): [
   // });
 
   const revalidate = useCallback(async () => {
-    // await Promise.allSettled([
-    //   updateStethBalance(),
-    //   updateWstethBalance(),
-    //   updateEthBalance(),
-    //   updateBond(),
-    //   updateShareLimit(),
-    //   updateMaxStakeEth(),
-    // ]);
-  }, []);
+    await Promise.allSettled([
+      updateBlockNumber(),
+      updateStethBalance(),
+      updateWstethBalance(),
+      updateEthBalance(),
+      updateBond(),
+      updateShareLimit(),
+      updateMaxStakeEth(),
+    ]);
+  }, [
+    updateBlockNumber,
+    updateBond,
+    updateEthBalance,
+    updateMaxStakeEth,
+    updateShareLimit,
+    updateStethBalance,
+    updateWstethBalance,
+  ]);
 
   const loading = useMemo(
     () => ({

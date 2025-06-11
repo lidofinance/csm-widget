@@ -12,18 +12,21 @@ export const useUnlockBondFormNetworkData = (): [
 ] => {
   const nodeOperatorId = useNodeOperatorId<true>();
 
-  const { data: balance, isPending: isLockedBondLoading } =
-    useOperatorBalance(nodeOperatorId);
+  const {
+    data: balance,
+    isPending: isLockedBondLoading,
+    refetch: updateBalance,
+  } = useOperatorBalance(nodeOperatorId);
 
   const {
     data: ethBalance,
     isPending: isEthBalanceLoading,
-    // refetch: ethBalanceUpdate,
+    refetch: updateEthBalance,
   } = useEthereumBalance();
 
   const revalidate = useCallback(async () => {
-    // await Promise.allSettled([updateLockedBond(), updateEtherBalance()]);
-  }, []);
+    await Promise.allSettled([updateEthBalance(), updateBalance()]);
+  }, [updateBalance, updateEthBalance]);
 
   const loading = useMemo(
     () => ({

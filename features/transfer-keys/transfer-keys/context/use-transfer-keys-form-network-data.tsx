@@ -11,18 +11,24 @@ export const useTransferKeysFormNetworkData = (): [
 ] => {
   const nodeOperatorId = useNodeOperatorId();
 
-  const { data: info, isPending: isInfoLoading } =
-    useOperatorInfo(nodeOperatorId);
+  const {
+    data: info,
+    isPending: isInfoLoading,
+    refetch: updateInfo,
+  } = useOperatorInfo(nodeOperatorId);
 
-  const { data: keysToMigrate, isPending: isKeysToMigrateLoading } =
-    useOperatorKeysToMigrate(nodeOperatorId);
+  const {
+    data: keysToMigrate,
+    isPending: isKeysToMigrateLoading,
+    refetch: updateKeysToMigrate,
+  } = useOperatorKeysToMigrate(nodeOperatorId);
 
   const { data: _keys, initialLoading: isKeysLoading } =
     useKeysWithStatus(true);
 
   const revalidate = useCallback(async () => {
-    // await Promise.allSettled([updateBond(), updateInfo(), updateKeys()]);
-  }, []);
+    await Promise.allSettled([updateInfo(), updateKeysToMigrate()]);
+  }, [updateInfo, updateKeysToMigrate]);
 
   const loading = useMemo(
     () => ({

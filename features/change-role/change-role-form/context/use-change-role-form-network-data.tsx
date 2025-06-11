@@ -18,13 +18,15 @@ export const useChangeRoleFormNetworkData = ({
   invariant(address);
 
   const nodeOperatorId = useNodeOperatorId();
-  const { data: info, isPending: isInfoLoading } =
-    useOperatorInfo(nodeOperatorId);
+  const {
+    data: info,
+    isPending: isInfoLoading,
+    refetch: updateInfo,
+  } = useOperatorInfo(nodeOperatorId);
 
-  // TODO: force udpate info
   const revalidate = useCallback(async () => {
-    // await Promise.allSettled([updateInfo()]);
-  }, []);
+    await Promise.allSettled([updateInfo()]);
+  }, [updateInfo]);
 
   const loading = useMemo(
     () => ({
