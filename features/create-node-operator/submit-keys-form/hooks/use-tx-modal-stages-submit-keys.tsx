@@ -17,6 +17,20 @@ import {
 } from 'shared/transaction-modal/tx-stages-basic';
 import { ROLES } from 'consts/roles';
 import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { useCallback } from 'react';
+import {
+  AddNodeOperatorResult,
+  packRoles,
+  TransactionCallback,
+  TransactionCallbackStage,
+} from '@lidofinance/lido-csm-sdk';
+import { Address, isAddressEqual, zeroAddress } from 'viem';
+import { DepositData } from 'types';
+import { useAppendOperator } from 'modules/web3';
+import { useKeysCache } from 'shared/hooks';
+import { useNavigate } from 'shared/navigate';
+import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
+import { PATH } from 'consts';
 
 type Props = {
   keysCount: number;
@@ -102,58 +116,85 @@ const getTxModalStagesSubmitKeys = (
 });
 
 export const useTxModalStagesSubmitKeys = () => {
-
-  const callback: TransactionCallback<AddNodeOperatorResult> = async ({
-    stage,
-    payload,
-  }) => {
-    switch (stage) {
-      case TransactionCallbackStage.SIGN:
-        txModalStages.sign({ keysCount, amount, token });
-        break;
-      case TransactionCallbackStage.RECEIPT:
-        txModalStages.pending({ keysCount, amount, token }, payload.hash);
-        break;
-      case TransactionCallbackStage.DONE: {
-        const roles = packRoles({
-          [ROLES.REWARDS]:
-            isAddressEqual(payload.result.rewardsAddress, address) ||
-            zeroAddress === payload.result.rewardsAddress,
-          [ROLES.MANAGER]:
-            isAddressEqual(payload.result.managerAddress, address) ||
-            zeroAddress === payload.result.managerAddress,
-        });
-
-        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
-
-        if (roles.length === 0) {
-          setOperatorCustomAddresses(payload.result.nodeOperatorId);
-          void n(PATH.HOME);
-        } else {
-          appendNO({
-            id: payload.result.nodeOperatorId,
-            roles,
-          });
-        }
-
-        txModalStages.success(
-          {
-            keys: depositData.map((key) => key.pubkey),
-            nodeOperatorId: payload.result.nodeOperatorId,
-            roles,
-          },
-          payload.hash,
-        );
-        break;
-      }
-      case TransactionCallbackStage.MULTISIG_DONE:
-        txModalStages.successMultisig();
-        break;
-      case TransactionCallbackStage.ERROR:
-        txModalStages.failed(payload.error, onRetry);
-        break;
-      default:
-    }
-  };
   return useTransactionModalStage(getTxModalStagesSubmitKeys);
+};
+
+type TxProps = {
+  address: Address;
+  amount: bigint;
+  token: TOKENS;
+  depositData: DepositData[];
+} & SubmitOptions;
+
+type SubmitOptions = {
+  onConfirm?: () => Promise<void> | void;
+  onRetry?: () => void;
+};
+
+export const useTxCallback = () => {
+  const { txModalStages } = useTxModalStagesSubmitKeys();
+  const appendNO = useAppendOperator();
+  const { addCacheKeys } = useKeysCache();
+  const n = useNavigate();
+  const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
+
+  return useCallback(
+    ({ amount, token, address, depositData, onRetry }: TxProps) => {
+      const keysCount = depositData.length;
+      const callback: TransactionCallback<AddNodeOperatorResult> = async ({
+        stage,
+        payload,
+      }) => {
+        switch (stage) {
+          case TransactionCallbackStage.SIGN:
+            txModalStages.sign({ keysCount, amount, token });
+            break;
+          case TransactionCallbackStage.RECEIPT:
+            txModalStages.pending({ keysCount, amount, token }, payload.hash);
+            break;
+          case TransactionCallbackStage.DONE: {
+            const roles = packRoles({
+              [ROLES.REWARDS]:
+                isAddressEqual(payload.result.rewardsAddress, address) ||
+                zeroAddress === payload.result.rewardsAddress,
+              [ROLES.MANAGER]:
+                isAddressEqual(payload.result.managerAddress, address) ||
+                zeroAddress === payload.result.managerAddress,
+            });
+
+            void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
+
+            if (roles.length === 0) {
+              setOperatorCustomAddresses(payload.result.nodeOperatorId);
+              void n(PATH.HOME);
+            } else {
+              appendNO({
+                id: payload.result.nodeOperatorId,
+                roles,
+              });
+            }
+
+            txModalStages.success(
+              {
+                keys: depositData.map((key) => key.pubkey),
+                nodeOperatorId: payload.result.nodeOperatorId,
+                roles,
+              },
+              payload.hash,
+            );
+            break;
+          }
+          case TransactionCallbackStage.MULTISIG_DONE:
+            txModalStages.successMultisig();
+            break;
+          case TransactionCallbackStage.ERROR:
+            txModalStages.failed(payload.error, onRetry);
+            break;
+          default:
+        }
+      };
+      return callback;
+    },
+    [addCacheKeys, appendNO, n, setOperatorCustomAddresses, txModalStages],
+  );
 };

@@ -1,6 +1,6 @@
 import {
   useCsmStatus,
-  useCurveId,
+  usePermissionlessCurveId,
   useEthereumBalance,
   useShareLimit,
   useShareLimitStatus,
@@ -36,7 +36,8 @@ export const useSubmitKeysFormNetworkData = (): [
     refetch: wstethBalanceUpdate,
   } = useWstethBalance();
 
-  const { data: curveId, isPending: isCurveIdLoading } = useCurveId();
+  const { data: curveId, isPending: isCurveIdLoading } =
+    usePermissionlessCurveId();
   const {
     data: shareLimit,
     isPending: isShareLimitLoading,

@@ -59,6 +59,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
   transferKeysLinkAlert = 'transferKeysLinkAlert',
   unlockBondLinkAlert = 'unlockBondLinkAlert',
+  claimIcsLinkAlert = 'claimIcsLinkAlert',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -82,6 +83,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageAddBond = 'pageAddBond',
   pageClaimBond = 'pageClaimBond',
   pageUnlockBond = 'pageUnlockBond',
+  pageClaimType = 'pageClaimType',
   pageInboxRequests = 'pageInboxRequests',
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
@@ -330,6 +332,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Unlock bond» link on Locked Bond alert',
     prefixed`unlock_bond_link_alert`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Claim ICS» link on Claim ICS alert',
+    prefixed`claim_ics_link_alert`,
+  ],
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: [
     MATOMO_APP_NAME,
@@ -436,6 +443,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «UnlockBond»',
     prefixed`view_unlock_bond_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageClaimType]: [
+    MATOMO_APP_NAME,
+    'View page «ClaimType»',
+    prefixed`view_claim_type_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: [
     MATOMO_APP_NAME,

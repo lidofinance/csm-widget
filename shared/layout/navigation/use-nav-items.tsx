@@ -9,6 +9,7 @@ import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
+import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import {
   CounterInvalidKeys,
   CounterInvites,
@@ -89,6 +90,14 @@ const routes: Route[] = [
     icon: <FileIcon />,
     showRules: ['IS_SURVEYS_ACTIVE'],
     suffix: <CounterSurveys />,
+  },
+  {
+    name: 'Operator Type',
+    path: PATH.TYPE,
+    icon: <UserIcon />,
+    subPaths: [PATH.TYPE_CLAIM],
+    showRules: ['IS_NODE_OPERATOR'],
+    // showRules: ['CAN_CLAIM_ICS'],
   },
 ];
 

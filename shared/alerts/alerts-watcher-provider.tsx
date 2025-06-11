@@ -6,13 +6,14 @@ import {
   useOperatorInfo,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
-import { useKeysWithStatus } from 'shared/hooks';
+import { useCanClaimICS, useKeysWithStatus } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
 import { AlertTransferKeys } from './components/alert-transfer-keys';
 import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
+import { AlertClaimIcs } from './components/alert-claim-ics';
 
 export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { showAlert, closeAlert } = useAlertActions();
@@ -20,6 +21,7 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { nodeOperator } = useNodeOperator();
   const { data: info } = useOperatorInfo(nodeOperator?.id);
   const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
+  const canClaimICS = useCanClaimICS();
 
   const normalizeQueue = useMemo(() => {
     return (
@@ -74,6 +76,14 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
       closeAlert(AlertLockedBond);
     }
   }, [balance?.locked, closeAlert, showAlert]);
+
+  useEffect(() => {
+    if (canClaimICS) {
+      showAlert(AlertClaimIcs);
+    } else {
+      closeAlert(AlertClaimIcs);
+    }
+  }, [canClaimICS, closeAlert, showAlert]);
 
   return <>{children}</>;
 };

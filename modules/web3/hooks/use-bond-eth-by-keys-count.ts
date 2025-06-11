@@ -2,13 +2,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_IMMUTABLE } from 'consts/react-query-strategies';
 import { useLidoSDK } from '../web3-provider';
-import { useCurveId } from './use-curve-id';
+import { usePermissionlessCurveId } from './use-permissionless-curve-id';
 import invariant from 'tiny-invariant';
 
 export const useBondEthByKeysCount = (keysCount = 1) => {
   const { csm } = useLidoSDK();
 
-  const { data: curveId } = useCurveId();
+  const { data: curveId } = usePermissionlessCurveId();
 
   return useQuery({
     queryKey: ['getBondAmountByKeysCountETH', { keysCount, curveId }],

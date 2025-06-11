@@ -9,7 +9,7 @@ import {
   useOperatorKeysToMigrate,
 } from 'modules/web3';
 import { useCallback } from 'react';
-import { useCanCreateNodeOperator } from 'shared/hooks';
+import { useCanClaimICS, useCanCreateNodeOperator } from 'shared/hooks';
 
 export type ShowRule =
   | 'IS_CONNECTED_WALLET'
@@ -21,6 +21,7 @@ export type ShowRule =
   | 'HAS_REWARDS_ROLE'
   | 'HAS_LOCKED_BOND'
   | 'CAN_CREATE'
+  | 'CAN_CLAIM_ICS'
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE';
 
@@ -33,6 +34,7 @@ export const useShowRule = () => {
   const { data: isReportingRole } = useHasReportStealingRole();
   const { data: balance } = useOperatorBalance(nodeOperator?.id);
   const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
+  const canClaimICS = useCanClaimICS();
   const canCreateNO = useCanCreateNodeOperator();
 
   return useCallback(
@@ -56,6 +58,8 @@ export const useShowRule = () => {
           return !!keysToTransfer;
         case 'HAS_LOCKED_BOND':
           return !!balance?.locked;
+        case 'CAN_CLAIM_ICS':
+          return !!canClaimICS;
         case 'EL_STEALING_REPORTER':
           return !!isReportingRole;
         case 'IS_SURVEYS_ACTIVE':
@@ -71,6 +75,7 @@ export const useShowRule = () => {
       invites?.length,
       keysToTransfer,
       balance?.locked,
+      canClaimICS,
       isReportingRole,
     ],
   );

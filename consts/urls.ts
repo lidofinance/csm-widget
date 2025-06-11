@@ -22,6 +22,8 @@ export const PATH = <const>{
   STEALING: '/stealing',
   STEALING_REPORT: '/stealing/report',
   STEALING_CANCEL: '/stealing/cancel',
+  TYPE: '/type',
+  TYPE_CLAIM: '/type/claim',
 
   SURVEYS: '/surveys',
   SURVEYS_CONTACTS: '/surveys/contacts',
