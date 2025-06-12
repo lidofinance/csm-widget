@@ -2,14 +2,16 @@ import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
 import { useOperatorCurveId } from './use-operator-curve-id';
 import { OPERATOR_TYPE } from 'consts';
 
-const getOperatorType = (curveId: bigint) => {
+const getOperatorType = (curveId: bigint): OPERATOR_TYPE => {
   switch (curveId) {
     case 0n:
-      return OPERATOR_TYPE.DEFAULT as OPERATOR_TYPE;
+      return OPERATOR_TYPE.PERMISSIONLESS;
     case 1n:
-      return OPERATOR_TYPE.VETTED as OPERATOR_TYPE;
+      return OPERATOR_TYPE.EARLYADOPTER;
+    case 2n:
+      return OPERATOR_TYPE.ICS;
     default:
-      return OPERATOR_TYPE.CUSTOM as OPERATOR_TYPE;
+      return OPERATOR_TYPE.CUSTOM;
   }
 };
 

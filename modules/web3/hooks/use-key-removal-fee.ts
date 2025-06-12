@@ -11,7 +11,7 @@ export const useKeyRemovalFee = (curveId?: bigint) => {
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(curveId !== undefined);
-      return csm.accounting.getKeysRemovalFee(curveId);
+      return csm.parameters.getKeysRemovalFee(curveId);
     },
     enabled: curveId !== undefined,
   });

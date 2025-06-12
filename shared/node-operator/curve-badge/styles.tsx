@@ -8,7 +8,11 @@ type InjectedProps = {
 };
 
 const CURVE_VARIANTS = {
-  [OPERATOR_TYPE.VETTED]: css<InjectedProps>`
+  [OPERATOR_TYPE.PERMISSIONLESS]: css`
+    background: linear-gradient(78deg, #304352 -49.42%, #d7d2cc 157.87%),
+      linear-gradient(79deg, #00a3ff -9.53%, #2238ff 202.88%);
+  `,
+  [OPERATOR_TYPE.EARLYADOPTER]: css<InjectedProps>`
     background: radial-gradient(
         132.01% 229.66% at 51.78% 123.98%,
         #ef81f9 0%,
@@ -17,19 +21,26 @@ const CURVE_VARIANTS = {
       linear-gradient(97deg, #00a3ff 36.36%, #2238ff 99.58%),
       rgba(215, 220, 227, 0.56);
   `,
+  [OPERATOR_TYPE.ICS]: css`
+    background: linear-gradient(69deg, #08d1ff 7.1%, #88f493 127.77%),
+      radial-gradient(
+        132.01% 229.66% at 51.78% 123.98%,
+        #ef81f9 0%,
+        rgba(249, 129, 183, 0) 100%
+      ),
+      linear-gradient(97deg, #00a3ff 36.36%, #2238ff 99.58%);
+  `,
   [OPERATOR_TYPE.CUSTOM]: css<InjectedProps>`
     background: linear-gradient(93deg, #08d1ff -23.5%, #88f493 121.99%);
-  `,
-  [OPERATOR_TYPE.DEFAULT]: css`
-    display: none;
   `,
 } as const;
 
 export const DescriptorCurveStyle = styled(BadgeStyle)<{
-  $variant: OPERATOR_TYPE;
+  $variant?: OPERATOR_TYPE;
 }>`
   font-weight: 700;
   color: var(--lido-color-foreground);
+  padding-inline: 6px;
 
   ${({ $variant }) => ($variant ? CURVE_VARIANTS[$variant] : '')}
 `;

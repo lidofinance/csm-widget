@@ -3,6 +3,7 @@ export * from './use-bond-by-keys-count';
 export * from './use-bond-eth-by-keys-count';
 export * from './use-bond-next-keys-count';
 export * from './use-csm-status';
+export * from './use-curve-parameters';
 export * from './use-dapp-status';
 export * from './use-has-report-stealing-role';
 export * from './use-ics-curve-id';

@@ -16,9 +16,9 @@ export const ROLE_CODE = {
 
 export type ROLE_CODE = (typeof ROLE_CODE)[keyof typeof ROLE_CODE];
 
-export const OPERATOR_TYPE = {
-  DEFAULT: 'DEFAULT',
-  VETTED: 'VETTED',
-  CUSTOM: 'CUSTOM',
-};
-export type OPERATOR_TYPE = keyof typeof OPERATOR_TYPE;
+export enum OPERATOR_TYPE {
+  PERMISSIONLESS = 'PERMISSIONLESS',
+  EARLYADOPTER = 'EARLYADOPTER',
+  ICS = 'ICS',
+  CUSTOM = 'CUSTOM',
+}
