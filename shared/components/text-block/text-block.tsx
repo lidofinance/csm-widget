@@ -30,9 +30,10 @@ export const TextBlock: FC<PropsWithChildren<Props>> = ({
   warning,
   align,
   size,
+  ...props
 }) => {
   return (
-    <TextBlockStyle $align={align} $warning={warning}>
+    <TextBlockStyle {...props} $align={align} $warning={warning}>
       {title && (
         <Stack gap="xs" center>
           <TextBlockTitle>{title}</TextBlockTitle>
