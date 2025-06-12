@@ -4,9 +4,9 @@ import { useAccount } from 'wagmi';
 
 export const useInitialLoading = (externalLoading?: boolean) => {
   const { isConnecting } = useAccount();
-  const { isLoading: isStatusLoading } = useCsmStatus();
-  const { isPending: isOperatorsLoading } = useAvailableOperators();
+  const { isPending: isStatusLoading } = useCsmStatus();
   const { isPending: isSupportedLoading } = useCsmVersionSupported();
+  const { isPending: isOperatorsLoading } = useAvailableOperators();
 
   // TODO: handle loading errors
   // TODO: handle status.isError || list.isError
@@ -14,10 +14,10 @@ export const useInitialLoading = (externalLoading?: boolean) => {
   // FIXME: useEffect ??
 
   return [
+    isConnecting,
     isStatusLoading,
     isSupportedLoading,
-    isConnecting,
     isOperatorsLoading,
     externalLoading,
-  ].every((i) => i === false);
+  ].some((i) => i === true);
 };

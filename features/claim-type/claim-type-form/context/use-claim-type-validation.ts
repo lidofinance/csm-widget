@@ -31,7 +31,7 @@ export const useClaimTypeValidation = (
           );
 
         // TODO: or ICS is paused
-        if (canClaimCurve)
+        if (!canClaimCurve)
           throw new ValidationError('curveId', 'only owner can claim type');
 
         return {

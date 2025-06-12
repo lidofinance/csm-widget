@@ -96,8 +96,7 @@ const routes: Route[] = [
     path: PATH.TYPE,
     icon: <UserIcon />,
     subPaths: [PATH.TYPE_CLAIM],
-    showRules: ['IS_NODE_OPERATOR'],
-    // showRules: ['CAN_CLAIM_ICS'],
+    showRules: ['CAN_CLAIM_ICS'],
   },
 ];
 
