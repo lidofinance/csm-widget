@@ -60,6 +60,7 @@ export const LastRewards: FC = () => {
 
   return (
     <AccordionStyle
+      data-testid="lastRewardsBlock"
       summary={
         <RowHeader>
           <Stack direction="column" gap="xxs">
