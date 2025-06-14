@@ -12,7 +12,7 @@ export const BondSection: FC = () => {
       title="Bond & Rewards"
       href={PATH.BOND}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardBondLink}
-      data-testid="dashboardSection"
+      data-testid="bondRewardsSection"
     >
       <Stack direction="column" gap="md">
         <AvailableToClaim />
