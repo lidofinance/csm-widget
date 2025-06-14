@@ -23,11 +23,15 @@ export const SectionTitle: FC<PropsWithChildren<Props>> = ({
   const hasDecorator = !!href;
 
   return (
-    <SectionHeaderStyle>
+    <SectionHeaderStyle data-testid="sectionHeader">
       <SectionTitleStyle>{children}</SectionTitleStyle>
       {middle}
       {hasDecorator && (
-        <SectionHeaderLinkStyle href={href} {...props}>
+        <SectionHeaderLinkStyle
+          data-testid="sectionHeaderLink"
+          href={href}
+          {...props}
+        >
           <RoundedArrowIcon />
         </SectionHeaderLinkStyle>
       )}
