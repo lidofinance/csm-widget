@@ -1,7 +1,11 @@
 import {
   useCsmStatus,
-  usePermissionlessCurveId,
+  useDappStatus,
   useEthereumBalance,
+  useIcsCurveId,
+  useIcsPaused,
+  useIcsProof,
+  usePermissionlessCurveId,
   useShareLimit,
   useShareLimitStatus,
   useStakeLimit,
@@ -36,8 +40,20 @@ export const useSubmitKeysFormNetworkData = (): [
     refetch: wstethBalanceUpdate,
   } = useWstethBalance();
 
-  const { data: curveId, isPending: isCurveIdLoading } =
+  const { address } = useDappStatus();
+  const {
+    data: proof,
+    isPending: isProofLoading,
+    refetch: updateProof,
+  } = useIcsProof(address);
+  const { data: isIcsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
+  const { data: plsCurveId, isPending: isPlsCurveIdLoading } =
     usePermissionlessCurveId();
+  const { data: icsCurveId, isPending: isIcsCurveIdLoading } = useIcsCurveId();
+
+  const isIcs = !isIcsPaused && proof?.proof && !proof.isConsumed;
+  const curveId = isIcs ? icsCurveId : plsCurveId;
+
   const {
     data: shareLimit,
     isPending: isShareLimitLoading,
@@ -65,6 +81,7 @@ export const useSubmitKeysFormNetworkData = (): [
       wstethBalanceUpdate(),
       shareLimitUpdate(),
       maxStakeEthUpdate(),
+      updateProof(),
     ]);
   }, [
     ethBalanceUpdate,
@@ -72,6 +89,7 @@ export const useSubmitKeysFormNetworkData = (): [
     wstethBalanceUpdate,
     shareLimitUpdate,
     maxStakeEthUpdate,
+    updateProof,
   ]);
 
   const loading = useMemo(
@@ -79,28 +97,36 @@ export const useSubmitKeysFormNetworkData = (): [
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isEthBalanceLoading,
-      isCurveIdLoading,
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
       isStatusLoading,
       isShareLimitLoading,
+      isProofLoading,
+      isIcsPausedLoading,
+      isPlsCurveIdLoading,
+      isIcsCurveIdLoading,
     }),
     [
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isEthBalanceLoading,
-      isCurveIdLoading,
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
       isStatusLoading,
       isShareLimitLoading,
+      isProofLoading,
+      isIcsPausedLoading,
+      isPlsCurveIdLoading,
+      isIcsCurveIdLoading,
     ],
   );
 
   return [
     {
+      address,
       blockNumber: blockNumber ? Number(blockNumber) : undefined,
       isPaused: status?.isPaused,
+      proof: (isIcs && proof.proof) || undefined,
       stethBalance,
       wstethBalance,
       ethBalance,

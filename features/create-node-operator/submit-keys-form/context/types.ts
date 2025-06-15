@@ -1,4 +1,8 @@
-import { ShareLimitInfo, ShareLimitStatus } from '@lidofinance/lido-csm-sdk';
+import {
+  Proof,
+  ShareLimitInfo,
+  ShareLimitStatus,
+} from '@lidofinance/lido-csm-sdk';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { KeysAvailable } from 'shared/hooks';
@@ -17,6 +21,7 @@ export type SubmitKeysFormInputType = {
 } & DepositDataInputType;
 
 export type SubmitKeysFormNetworkData = {
+  address?: Address;
   ethBalance?: bigint;
   stethBalance?: bigint;
   wstethBalance?: bigint;
@@ -24,6 +29,7 @@ export type SubmitKeysFormNetworkData = {
   maxStakeEth?: bigint;
   keysAvailable?: KeysAvailable;
   isPaused?: boolean;
+  proof?: Proof;
   shareLimit?: ShareLimitInfo;
   shareLimitStatus?: ShareLimitStatus;
   blockNumber?: number;
@@ -31,10 +37,13 @@ export type SubmitKeysFormNetworkData = {
     | 'ethBalance'
     | 'stethBalance'
     | 'wstethBalance'
-    | 'curveId'
     | 'maxStakeEther'
     | 'status'
     | 'shareLimit'
     | 'blockNumber'
+    | 'proof'
+    | 'icsPaused'
+    | 'plsCurveId'
+    | 'icsCurveId'
   >;
 };
