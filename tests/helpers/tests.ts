@@ -1,3 +1,22 @@
+declare global {
+  interface String {
+    toCut(decimalPlaces: number): string;
+  }
+}
+
+String.prototype.toCut = function (decimalPlaces: number) {
+  const result = this.split(/\./);
+  let respLength: number | undefined;
+  if (result.length === 2) {
+    respLength = result[0].length + 1 + decimalPlaces;
+  }
+  let response = this.slice(0, respLength);
+  const responseParts = response.split(/\./);
+  if (responseParts.length === 1) response = `${response}.0`;
+
+  return response;
+};
+
 export const prepareGrep = (testTag: string | undefined) => {
   if (!testTag || testTag.trim() === '' || testTag === '-') {
     return undefined;

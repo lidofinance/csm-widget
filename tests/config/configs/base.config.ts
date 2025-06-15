@@ -3,6 +3,7 @@ import {
   NetworkConfig,
   WalletConfig,
 } from '@lidofinance/wallets-testing-wallets';
+import { CSAccounting__factory } from 'generated';
 import { z } from 'zod';
 
 export type StandConfig = {
@@ -11,9 +12,15 @@ export type StandConfig = {
   networkConfig: NetworkConfig;
 };
 
+export type ContractInfo = {
+  address: string;
+  abi: typeof CSAccounting__factory.abi;
+};
+
 export interface IConfig {
   standConfig: StandConfig;
   walletConfig: WalletConfig;
+  contracts: Record<string, ContractInfo>;
   getFullInfo(): string;
 }
 
@@ -25,6 +32,7 @@ export const ConfigSchema = z.object({
 export class BaseConfig implements IConfig {
   public standConfig!: StandConfig;
   public walletConfig: WalletConfig;
+  public contracts!: Record<string, ContractInfo>;
 
   constructor() {
     this.walletConfig = {

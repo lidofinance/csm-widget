@@ -1,15 +1,19 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from './base.page';
 import { CreateNodeOperatorForm } from './elements/keys/element.createNodeOperatorForm';
-import { RemovePage } from './remove.page';
-import { SubmitPage } from './submit.page';
-import { KeysViewPage } from './keysView.page';
+import { RemovePage } from './tabs/keys/remove.page';
+import { SubmitPage } from './tabs/keys/submit.page';
+import { KeysViewPage } from './tabs/keys/keysView.page';
 
 export class KeysPage extends BasePage {
   base: BasePage;
+
+  // Own elements
   createNodeOperatorForm: CreateNodeOperatorForm;
   headerTitle: Locator;
   headerSubTitle: Locator;
+
+  // Tabs
   removePage: RemovePage;
   submitPage: SubmitPage;
   keysView: KeysViewPage;
