@@ -6,15 +6,9 @@ import { CSAccountingContract } from 'tests/services/csmContracts.service';
 import { formatEther } from '@ethersproject/units';
 
 test.describe('Dashboard. Bond & Rewards.', async () => {
-  let nodeOperatorId: number;
-
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.connectWallet();
     await widgetService.dashboardPage.open();
-    nodeOperatorId = (await widgetService.extractNodeOperatorId()) as number;
-    if (!nodeOperatorId) {
-      throw new Error('Node operator ID not found');
-    }
   });
 
   test(
@@ -29,6 +23,12 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
           COMMON_ACTION_TIMEOUT,
         );
       });
+
+      const nodeOperatorId =
+        (await widgetService.extractNodeOperatorId()) as number;
+      if (!nodeOperatorId) {
+        throw new Error('Node operator ID not found');
+      }
 
       let bondSummary: any;
       await test.step('Try to get bond blanace from contract directly', async () => {
@@ -98,6 +98,12 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
       );
     });
 
+    const nodeOperatorId =
+      (await widgetService.extractNodeOperatorId()) as number;
+    if (!nodeOperatorId) {
+      throw new Error('Node operator ID not found');
+    }
+
     let bondSummary: any;
     await test.step('Try to get bond blanace from contract directly', async () => {
       bondSummary = await new CSAccountingContract().getBondSummary(
@@ -152,27 +158,30 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
       expect(commonUSDBalance).toContain('$'); // @todo: add more better check
     });
   });
-  test(
+  test.skip(
     qase(141, 'Tooltip verification for "Required bond" field'),
     async () => {},
   );
-  test(
+  test.skip(
     qase(142, 'Tooltip verification for "Excess bond" field'),
     async () => {},
   );
-  test(
+  test.skip(
     qase(136, 'Latest Rewards Distribution Information Verification'),
     async () => {},
   );
-  test(
+  test.skip(
     qase(143, 'Tooltip verification for "Keys over threshold" field'),
     async () => {},
   );
-  test(
+  test.skip(
     qase(144, 'Tooltip verification for "Stuck keys found" field'),
     async () => {},
   );
-  test(qase(137, 'Upcoming Rewards Distribution Verification'), async () => {});
+  test.skip(
+    qase(137, 'Upcoming Rewards Distribution Verification'),
+    async () => {},
+  );
 
   test(
     qase(138, 'Navigation from Bond & Rewards Section'),
