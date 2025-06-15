@@ -6,7 +6,7 @@ import {
 import { getErrorCode } from 'utils';
 import { TxStageSignOperationAmount } from '../tx-stages-composed';
 import type { TransactionModalTransitStage } from './use-transaction-modal-stage';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const getGeneralTransactionModalStages = (
   transitStage: TransactionModalTransitStage,

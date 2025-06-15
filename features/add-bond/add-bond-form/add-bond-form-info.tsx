@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { ONE_ETH } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';

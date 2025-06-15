@@ -1,4 +1,4 @@
-import { PerToken, TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { PerToken, TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TOKEN_DISPLAY_NAMES: PerToken<string> = {
   [TOKENS.eth]: 'ETH',

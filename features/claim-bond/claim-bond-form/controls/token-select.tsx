@@ -15,7 +15,7 @@ import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TokenSelect: React.FC = () => {
   const [token, claimRewards] = useWatch<

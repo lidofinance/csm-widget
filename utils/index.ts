@@ -27,6 +27,7 @@ export * from './is-url';
 export * from './logger';
 export * from './nprogress';
 export * from './path';
+export * from './plural';
 export * from './rewardsTreeFetcher';
 export * from './scroll';
 export * from './standardFetcher';

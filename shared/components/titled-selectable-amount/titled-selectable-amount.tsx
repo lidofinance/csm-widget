@@ -1,7 +1,7 @@
 import { ComponentProps, FC, ReactNode } from 'react';
 import { AmountWithPrice, IconTooltip, Stack } from 'shared/components';
 import { TitledAmountStyle } from './style';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 type Props = {
   title?: ReactNode;

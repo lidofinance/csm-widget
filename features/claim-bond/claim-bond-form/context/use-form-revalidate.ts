@@ -1,7 +1,7 @@
 import { UseFormReturn } from 'react-hook-form';
 import { ClaimBondFormInputType } from './types';
 import { useEffect } from 'react';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useFormRevalidate = ({
   watch,

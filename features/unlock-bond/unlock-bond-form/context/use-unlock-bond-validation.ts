@@ -13,7 +13,7 @@ import type {
   UnlockBondFormInputType,
   UnlockBondFormNetworkData,
 } from './types';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useUnlockBondValidation = (
   networkData: UnlockBondFormNetworkData,

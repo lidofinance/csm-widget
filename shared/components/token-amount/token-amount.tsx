@@ -11,7 +11,7 @@ import { SymbolStyle, TokenAmountStyle } from './style';
 import { ReactComponent as EthIcon } from 'assets/icons/eth.svg';
 import { ReactComponent as StethIcon } from 'assets/icons/steth.svg';
 import { ReactComponent as WstethIcon } from 'assets/icons/wsteth.svg';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 const iconsMap = {
   [TOKENS.eth]: <EthIcon />,

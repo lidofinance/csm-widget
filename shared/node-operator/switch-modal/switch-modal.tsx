@@ -12,11 +12,7 @@ import {
   StyledStack,
   StyledStackItem,
 } from './styles';
-import {
-  NodeOperator,
-  NodeOperatorId,
-  ROLES,
-} from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperator, NodeOperatorId, ROLES } from '@lidofinance/lido-csm-sdk';
 
 export const SwitchModal: ModalComponentType<{
   active: NodeOperator;

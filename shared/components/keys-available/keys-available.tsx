@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Plural, Stack } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { StyledText } from './style';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const KeysAvailable: FC<{
   count?: number;

@@ -4,7 +4,7 @@ import { WhenLoaded } from 'shared/components';
 import { UnlockBondFormInputType } from './context';
 import { Info } from './controls/info';
 import { useNodeOperator } from 'modules/web3';
-import { ROLES } from '@lidofinance/lido-csm-sdk/common';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 
 export const UnlockBondFormLoader: FC<PropsWithChildren> = ({ children }) => {
   const { nodeOperator } = useNodeOperator<true>();

@@ -33,7 +33,7 @@ import { PATH } from 'consts/urls';
 import { SurveyButton } from '../components';
 import { Button } from '@lidofinance/lido-ui';
 import { Setup, SetupRaw, SetupsKeys } from '../types';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 const required = { required: true };
 

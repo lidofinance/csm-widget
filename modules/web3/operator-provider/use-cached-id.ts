@@ -1,6 +1,6 @@
 import { useLocalStorage } from 'shared/hooks';
 import { useDappStatus } from '../hooks';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
 export const useCachedId = () => {
   const { address } = useDappStatus();

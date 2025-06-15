@@ -1,4 +1,4 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
 import { useLidoSDK } from '../web3-provider';

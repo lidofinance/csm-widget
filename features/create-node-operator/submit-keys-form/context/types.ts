@@ -1,5 +1,5 @@
 import { ShareLimitInfo, ShareLimitStatus } from '@lidofinance/lido-csm-sdk';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { KeysAvailable } from 'shared/hooks';
 import { LoadingRecord } from 'types';

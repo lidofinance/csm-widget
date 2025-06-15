@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useExchangeRate } from './use-exchange-rate';
 
 export const useStethAmount = (token: TOKENS, amount: bigint) => {

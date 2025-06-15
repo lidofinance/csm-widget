@@ -1,4 +1,4 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk/common';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { Faq } from 'shared/components';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks';

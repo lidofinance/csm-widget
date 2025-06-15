@@ -1,5 +1,5 @@
-import { AddressProof } from '@lidofinance/lido-csm-sdk';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { AddressProof, CurveParameters } from '@lidofinance/lido-csm-sdk';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { LoadingRecord } from 'types';
 import { Address } from 'viem';
 
@@ -11,10 +11,17 @@ export type ClaimTypeFormNetworkData = {
   address?: Address;
   nodeOperatorId?: NodeOperatorId;
   canClaimCurve?: boolean;
-  curveId?: bigint;
   currentCurveId?: bigint;
+  currentParameters?: CurveParameters;
+  newCurveId?: bigint;
+  newParameters?: CurveParameters;
   proof?: AddressProof;
   loading: LoadingRecord<
-    'proof' | 'curveId' | 'currentCurveId' | 'canClaimCurve'
+    | 'newCurveId'
+    | 'newParameters'
+    | 'currentCurveId'
+    | 'currentParameters'
+    | 'proof'
+    | 'canClaimCurve'
   >;
 };

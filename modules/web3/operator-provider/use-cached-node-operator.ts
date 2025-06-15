@@ -2,7 +2,7 @@ import {
   getNodeOperatorRoles,
   NodeOperatorInfo,
 } from '@lidofinance/lido-csm-sdk';
-import { NodeOperator } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperator } from '@lidofinance/lido-csm-sdk';
 import { useCallback } from 'react';
 import { useDappStatus, useOperatorInfo } from '../hooks';
 import { useCachedId } from './use-cached-id';

@@ -4,7 +4,7 @@ import { Sign, SignType } from 'shared/components';
 import { FormatPrice, FormatToken } from 'shared/formatters';
 import { useEthUsd } from 'shared/hooks';
 import { AmountStyle, PriceStyle, Wrapper } from './style';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 type TitledAddressProps = {
   loading?: boolean;

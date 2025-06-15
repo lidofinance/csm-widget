@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useStethAmount } from './use-steth-amount';
 
 export const useBondWillReceive = (

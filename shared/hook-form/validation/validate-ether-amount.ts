@@ -1,7 +1,7 @@
 import { MIN_ETH_AMOUNT } from 'consts/tokens';
 import { getTokenDisplayName } from 'utils/getTokenDisplayName';
 import { ValidationError } from './validation-error';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { maxUint256 } from 'viem';
 
 export const validateEtherAmount = (

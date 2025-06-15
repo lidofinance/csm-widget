@@ -1,8 +1,4 @@
-import {
-  BondBalance,
-  NodeOperatorId,
-  TOKENS,
-} from '@lidofinance/lido-csm-sdk/common';
+import { BondBalance, NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { LoadingRecord } from 'types';
 
 export type AddBondFormInputType = {

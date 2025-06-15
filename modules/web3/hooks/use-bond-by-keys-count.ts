@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_IMMUTABLE } from 'consts/react-query-strategies';
 import { useLidoSDK } from '../web3-provider';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import invariant from 'tiny-invariant';
 
 type Props = {

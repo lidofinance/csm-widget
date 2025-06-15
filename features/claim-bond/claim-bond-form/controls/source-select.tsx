@@ -11,7 +11,7 @@ import {
 } from 'shared/components';
 import { formatDate } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useRewardsFrame } from 'modules/web3';
 
 export const SourceSelect: FC = () => {

@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { ValidationError } from 'shared/hook-form/validation/validation-error';
 import { getTokenBalance, getTokenDisplayName } from 'utils';
 

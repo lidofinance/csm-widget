@@ -3,7 +3,7 @@ import { Address } from 'viem';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 import { useDefaultValues } from 'shared/hooks';
 import { getMaxBalanceToken } from 'modules/web3';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useGetDefaultValues = (
   {

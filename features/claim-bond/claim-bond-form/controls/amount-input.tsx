@@ -4,7 +4,7 @@ import { FormatToken } from 'shared/formatters';
 import { TokenAmountInputHookForm } from 'shared/hook-form/controls';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
 import { useInsufficientBondCoverAmount } from '../hooks/use-insufficient-bond-cover-amount';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const AmountInput: React.FC = () => {
   const [token, claimRewards] = useWatch<

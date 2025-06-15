@@ -1,4 +1,4 @@
-import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk';
 import { Address } from 'shared/components';
 import { DescriptorId, getRoleTitle } from 'shared/node-operator';
 import {

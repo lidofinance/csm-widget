@@ -1,4 +1,4 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';

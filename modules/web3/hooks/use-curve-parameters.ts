@@ -1,14 +1,12 @@
-import { ParametersSDK } from '@lidofinance/lido-csm-sdk';
+import { CurveParameters } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
 import invariant from 'tiny-invariant';
 import { useLidoSDK } from '../web3-provider';
 
-type Result = Awaited<ReturnType<InstanceType<typeof ParametersSDK>['getAll']>>;
-
-export const useCurveParameters = <TData = Result>(
+export const useCurveParameters = <TData = CurveParameters>(
   curveId?: bigint,
-  select?: (data: Result) => TData,
+  select?: (data: CurveParameters) => TData,
 ) => {
   const { csm } = useLidoSDK();
 

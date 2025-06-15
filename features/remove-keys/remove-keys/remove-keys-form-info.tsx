@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';

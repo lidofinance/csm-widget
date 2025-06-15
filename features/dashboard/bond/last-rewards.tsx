@@ -130,7 +130,7 @@ const LastReportStats: FC = () => {
             loading={isLoading}
             description={
               <Tooltip title={lastRewards?.threshold} placement="bottomLeft">
-                <span>Threshold: {formatPercent(lastRewards?.threshold)}%</span>
+                <span>Threshold: {formatPercent(lastRewards?.threshold)}</span>
               </Tooltip>
             }
             help="Number of your keys above the performance threshold in the latest report frame"

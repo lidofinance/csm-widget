@@ -1,7 +1,7 @@
 import {
   CSM_CONTRACT_ADDRESSES,
   CSM_CONTRACT_NAMES,
-} from '@lidofinance/lido-csm-sdk/common';
+} from '@lidofinance/lido-csm-sdk';
 import {
   CHAINS,
   LidoLocatorAbi,

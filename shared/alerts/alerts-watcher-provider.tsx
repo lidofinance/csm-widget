@@ -1,4 +1,4 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk/common';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { KEY_STATUS } from 'consts/key-status';
 import {
   useNodeOperator,

@@ -1,4 +1,4 @@
-import { NodeOperatorId, ROLES } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId, ROLES } from '@lidofinance/lido-csm-sdk';
 import { LoadingRecord } from 'types';
 import { Address } from 'viem';
 

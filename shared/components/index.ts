@@ -44,3 +44,4 @@ export * from './text-block';
 export * from './copy-button';
 export * from './block';
 export * from './welcome-section';
+export * from './parameters-list';

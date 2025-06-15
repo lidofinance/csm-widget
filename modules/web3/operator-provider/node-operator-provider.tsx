@@ -1,4 +1,4 @@
-import { NodeOperator, NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperator, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import {
   createContext,
   FC,

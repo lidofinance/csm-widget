@@ -1,4 +1,4 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk/common';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { capitalize } from 'lodash';
 import { Address as AddressComponent } from 'shared/components';

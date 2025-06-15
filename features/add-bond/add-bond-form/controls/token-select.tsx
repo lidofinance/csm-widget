@@ -1,7 +1,7 @@
 import { FormTitle, TokenAmount } from 'shared/components';
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { useAddBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TokenSelect: React.FC = () => {
   const { ethBalance, stethBalance, wstethBalance, loading } =

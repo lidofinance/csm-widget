@@ -1,7 +1,7 @@
 import { TxStageSign } from '../tx-stages-basic/tx-stage-sign';
 import { TxStagePending } from '../tx-stages-basic/tx-stage-pending';
 import { TxAmount } from '../tx-stages-parts/tx-amount';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 type TxStageSignOperationAmountProps = {
   amount: bigint;

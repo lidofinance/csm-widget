@@ -25,24 +25,23 @@ export const useClaimTypeSubmit = ({
   const claimType = useCallback(
     async (
       _: ClaimTypeFormInputType,
-      { nodeOperatorId, proof, curveId }: ClaimTypeFormNetworkData,
+      { nodeOperatorId, proof }: ClaimTypeFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
       invariant(proof?.proof, 'proof is not defined');
-      invariant(curveId, 'curveId is not defined');
 
       try {
         const callback: TransactionCallback = async ({ stage, payload }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:
-              txModalStages.sign({ curveId });
+              txModalStages.sign({});
               break;
             case TransactionCallbackStage.RECEIPT:
-              txModalStages.pending({ curveId }, payload.hash);
+              txModalStages.pending({}, payload.hash);
               break;
             case TransactionCallbackStage.DONE: {
               payload;
-              txModalStages.success({ curveId }, payload.hash);
+              txModalStages.success({}, payload.hash);
               break;
             }
             case TransactionCallbackStage.MULTISIG_DONE:

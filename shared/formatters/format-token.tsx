@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Tooltip } from '@lidofinance/lido-ui';
 
 import { DATA_UNAVAILABLE } from 'consts/text';

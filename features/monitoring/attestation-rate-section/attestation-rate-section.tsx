@@ -48,7 +48,7 @@ export const AttestationRateSection: FC = () => {
         {data ? (
           <>
             <Stack center gap="sm" wrap>
-              <Rate>{formatPercent(data.operatorAttestationRate)}%</Rate>
+              <Rate>{formatPercent(data.operatorAttestationRate)}</Rate>
               <Stack center gap="xs" wrap>
                 <DiffBadge
                   values={[data.operatorAttestationRate, data.threshold]}

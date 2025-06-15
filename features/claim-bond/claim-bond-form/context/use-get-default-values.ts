@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useDefaultValues } from 'shared/hooks';
 import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useGetDefaultValues = ({
   rewards,

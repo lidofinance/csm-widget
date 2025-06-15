@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { InlineLoader, Text } from '@lidofinance/lido-ui';
 import { FC, ReactNode } from 'react';
 import { IconTooltip, Stack } from 'shared/components';

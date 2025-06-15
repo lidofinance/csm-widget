@@ -2,7 +2,7 @@ import {
   NodeOperator,
   NodeOperatorInvite,
   ROLES,
-} from '@lidofinance/lido-csm-sdk/common';
+} from '@lidofinance/lido-csm-sdk';
 import { ROLE_CODE, ROLES as LOCAL_ROLES } from 'consts/roles';
 import { capitalize } from 'lodash';
 

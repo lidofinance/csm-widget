@@ -7,7 +7,7 @@ import { ButtonStyle, ButtonWrapperStyle } from './styles';
 import { trackMatomoEvent } from 'utils';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useAvailableOperators, useNodeOperator } from 'modules/web3';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
 export const Button: FC<ButtonProps> = (props) => {
   const { onClick, ...rest } = props;
@@ -36,7 +36,7 @@ export const Button: FC<ButtonProps> = (props) => {
       {...rest}
     >
       <ButtonWrapperStyle>
-        <Descriptor nodeOperator={nodeOperator} />
+        <Descriptor nodeOperator={nodeOperator} hideType />
       </ButtonWrapperStyle>
     </ButtonStyle>
   );

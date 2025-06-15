@@ -1,5 +1,5 @@
 import { NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { KeyWithStatus } from 'shared/hooks';
 import { LoadingRecord } from 'types';
 

@@ -6,7 +6,7 @@ import { handleTxError } from 'shared/transaction-modal';
 import { runWithTransactionLogger } from 'utils';
 import { StealingReportFormInputType } from '.';
 import { useTxModalStagesStealingReport } from '../hooks/use-tx-modal-stages-stealing-report';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
 type UseStealingReportOptions = {
   onConfirm?: () => Promise<void> | void;

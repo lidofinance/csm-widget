@@ -4,7 +4,7 @@ import {
   DescriptorNumber,
   DescriptorText,
 } from './styles';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
 type DescriptorIdProps = {
   id: NodeOperatorId;

@@ -7,7 +7,7 @@ type InjectedProps = {
   theme: Theme;
 };
 
-const CURVE_VARIANTS = {
+export const CURVE_VARIANTS = {
   [OPERATOR_TYPE.PERMISSIONLESS]: css`
     background: linear-gradient(78deg, #304352 -49.42%, #d7d2cc 157.87%),
       linear-gradient(79deg, #00a3ff -9.53%, #2238ff 202.88%);

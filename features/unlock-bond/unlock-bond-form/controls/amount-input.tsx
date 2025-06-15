@@ -1,7 +1,7 @@
 import { FormTitle, Note } from 'shared/components';
 import { TokenAmountInputHookForm } from 'shared/hook-form/controls';
 import { useMaxValue } from '../hooks/use-max-value';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const AmountInput: React.FC = () => {
   const max = useMaxValue();

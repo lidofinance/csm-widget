@@ -2,7 +2,7 @@ import { BOND_INSUFFICIENT } from 'consts/text';
 import { FC } from 'react';
 import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
 import { useAddBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const Info: FC = () => {
   const { bond, loading } = useAddBondFormData();

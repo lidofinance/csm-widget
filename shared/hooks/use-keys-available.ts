@@ -4,7 +4,7 @@ import { BigNumber } from 'ethers';
 import { ICSBondCurve } from 'generated/CSAccounting';
 import { useExchangeRate, useMergeSwr } from 'shared/hooks';
 import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
-import { BondBalance } from '@lidofinance/lido-csm-sdk/common';
+import { BondBalance } from '@lidofinance/lido-csm-sdk';
 
 type Props = {
   curveId?: BigNumber;

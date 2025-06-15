@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { NodeOperator } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperator } from '@lidofinance/lido-csm-sdk';
 import { useOperatorType } from 'modules/web3';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { RoleBadge } from '../role-badge/role-badge';

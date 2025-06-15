@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { FC, ReactNode } from 'react';
 import { Sign, SignType, TextBlock } from 'shared/components';
 import { FormatPrice, FormatToken } from 'shared/formatters';

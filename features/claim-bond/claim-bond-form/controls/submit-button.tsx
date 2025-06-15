@@ -1,7 +1,7 @@
 import { useWatch } from 'react-hook-form';
 import { PausedButton, SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const SubmitButton = () => {
   const [claimRewards, token, amount] = useWatch<

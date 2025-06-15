@@ -1,4 +1,4 @@
-import { PerToken, TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { PerToken, TOKENS } from '@lidofinance/lido-csm-sdk';
 
 type Props = Partial<PerToken<bigint>>;
 

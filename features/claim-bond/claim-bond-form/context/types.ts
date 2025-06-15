@@ -5,7 +5,7 @@ import {
   NodeOperatorId,
   Rewards,
   TOKENS,
-} from '@lidofinance/lido-csm-sdk/common';
+} from '@lidofinance/lido-csm-sdk';
 
 export type ClaimBondFormInputType = {
   token: TOKENS;

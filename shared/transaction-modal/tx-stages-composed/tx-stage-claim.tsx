@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { TxStagePending } from '../tx-stages-basic/tx-stage-pending';
 import { TxStageSign } from '../tx-stages-basic/tx-stage-sign';
 import { TxAmount } from '../tx-stages-parts/tx-amount';

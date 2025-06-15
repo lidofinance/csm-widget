@@ -4,7 +4,7 @@ import { Address } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { useBondWillReceive } from 'shared/hooks';
 import { ClaimBondFormInputType, useClaimBondFormData } from './context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const ClaimBondFormInfo = () => {
   const { rewardsAddress, rewards } = useClaimBondFormData();

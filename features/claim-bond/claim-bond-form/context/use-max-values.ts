@@ -3,7 +3,7 @@ import {
   PerToken,
   Rewards,
   TOKENS,
-} from '@lidofinance/lido-csm-sdk/common';
+} from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { MAX_ETH_AMOUNT } from 'consts/tokens';
 import { useWstethBySteth } from 'modules/web3';

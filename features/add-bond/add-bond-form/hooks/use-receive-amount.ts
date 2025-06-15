@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useStETHByWstETH } from 'modules/web3';
 
 export const useReceiveAmount = (amount: bigint | undefined, token: TOKENS) => {

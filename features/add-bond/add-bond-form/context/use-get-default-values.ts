@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useDefaultValues } from 'shared/hooks';
 import { AddBondFormInputType, AddBondFormNetworkData } from './types';
 import { getMaxBalanceToken } from 'modules/web3';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useGetDefaultValues = ({
   ethBalance,

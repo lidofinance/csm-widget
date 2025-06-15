@@ -8,21 +8,23 @@ import { IconStyle } from './style';
 type Props = Omit<ComponentProps<typeof Tooltip>, 'title' | 'children'> & {
   tooltip?: string;
   type?: 'info' | 'calendar';
+  inline?: boolean;
 };
 
 export const IconTooltip: FC<Props> = ({
   tooltip,
   type = 'info',
   placement = 'bottomLeft',
+  inline,
   ...rest
-}) => (
-  <>
-    {tooltip && (
+}) =>
+  tooltip ? (
+    <>
+      {inline && <>&nbsp;</>}
       <Tooltip placement={placement} title={tooltip} {...rest}>
-        <IconStyle>
+        <IconStyle inline={inline}>
           {type === 'calendar' ? <CalendarIcon /> : <InfoIcon />}
         </IconStyle>
       </Tooltip>
-    )}
-  </>
-);
+    </>
+  ) : null;

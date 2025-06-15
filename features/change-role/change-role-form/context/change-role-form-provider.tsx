@@ -1,4 +1,4 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk/common';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {

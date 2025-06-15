@@ -1,4 +1,4 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useOperatorCurveId } from './use-operator-curve-id';
 import { OPERATOR_TYPE } from 'consts';
 

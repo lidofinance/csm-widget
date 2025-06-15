@@ -1,4 +1,4 @@
-import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk';
 import { FC, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import {

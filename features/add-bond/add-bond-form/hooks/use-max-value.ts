@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useAddBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useMaxValue = (token: TOKENS) => {
   const { ethBalance, stethBalance, wstethBalance } = useAddBondFormData();

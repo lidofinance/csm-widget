@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import {
   useNodeOperatorId,

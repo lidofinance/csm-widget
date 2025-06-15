@@ -1,4 +1,4 @@
-import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   AfterKeysUpload,
   TransactionModalTransitStage,

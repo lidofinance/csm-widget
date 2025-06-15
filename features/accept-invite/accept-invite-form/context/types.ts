@@ -1,4 +1,4 @@
-import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk';
 import { LoadingRecord } from 'types';
 import { Address } from 'viem';
 

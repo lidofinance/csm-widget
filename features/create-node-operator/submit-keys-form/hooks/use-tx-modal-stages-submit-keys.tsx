@@ -16,7 +16,7 @@ import {
   TxStageSuccess,
 } from 'shared/transaction-modal/tx-stages-basic';
 import { ROLES } from 'consts/roles';
-import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useCallback } from 'react';
 import {
   AddNodeOperatorResult,

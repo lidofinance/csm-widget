@@ -1,4 +1,5 @@
 import {
+  useCurveParameters,
   useDappStatus,
   useIcsCanClaim,
   useIcsCurveId,
@@ -20,8 +21,12 @@ export const useClaimTypeFormNetworkData = (): [
     data: currentCurveId,
     isPending: isCurrentCurveIdLoading,
     refetch: updateCurrentCurveId,
-  } = useOperatorCurveId(nodeOperatorId);
-  const { data: curveId, isPending: isCurveIdLoading } = useIcsCurveId();
+  } = useOperatorCurveId(nodeOperatorId, () => 1n);
+  const { data: newCurveId, isPending: isNewCurveIdLoading } = useIcsCurveId();
+  const { data: currentParameters, isPending: isCurrentParametersLoading } =
+    useCurveParameters(currentCurveId);
+  const { data: newParameters, isPending: isNewParametersLoading } =
+    useCurveParameters(newCurveId);
 
   const {
     data: proof,
@@ -38,15 +43,19 @@ export const useClaimTypeFormNetworkData = (): [
 
   const loading = useMemo(
     () => ({
-      isCurveIdLoading,
+      isNewCurveIdLoading,
       isCurrentCurveIdLoading,
+      isCurrentParametersLoading,
+      isNewParametersLoading,
       isProofLoading,
       isCanClaimCurveLoading,
     }),
     [
       isCanClaimCurveLoading,
       isCurrentCurveIdLoading,
-      isCurveIdLoading,
+      isCurrentParametersLoading,
+      isNewCurveIdLoading,
+      isNewParametersLoading,
       isProofLoading,
     ],
   );
@@ -55,8 +64,10 @@ export const useClaimTypeFormNetworkData = (): [
     {
       nodeOperatorId,
       address,
-      curveId,
       currentCurveId,
+      currentParameters,
+      newCurveId,
+      newParameters,
       proof,
       canClaimCurve,
       loading,

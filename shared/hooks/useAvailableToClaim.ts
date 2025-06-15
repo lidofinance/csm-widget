@@ -1,4 +1,4 @@
-import { BondBalance, Rewards } from '@lidofinance/lido-csm-sdk/common';
+import { BondBalance, Rewards } from '@lidofinance/lido-csm-sdk';
 
 type Props = {
   bond?: BondBalance;

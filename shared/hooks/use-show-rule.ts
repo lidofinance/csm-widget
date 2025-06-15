@@ -1,4 +1,4 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk/common';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { getExternalLinks } from 'consts/external-links';
 import {
   useDappStatus,

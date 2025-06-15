@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useCachedId } from './use-cached-id';
-import { NodeOperator } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperator } from '@lidofinance/lido-csm-sdk';
 
 export const useActiveNodeOperator = (list?: NodeOperator[]) => {
   const [active, setActive] = useState<NodeOperator | undefined>();

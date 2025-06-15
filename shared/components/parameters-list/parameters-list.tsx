@@ -1,0 +1,175 @@
+import { CurveParameters, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { Text } from '@lidofinance/lido-ui';
+import { FC, ReactNode } from 'react';
+import { FormatToken } from 'shared/formatters';
+import { plural } from 'utils';
+import { IconTooltip } from '../icon-tooltip/icon-tooltip';
+import { Stack } from '../stack/stack';
+import {
+  formatEthKeyIntervals,
+  formatKeysLimit,
+  formatPercentKeyIntervals,
+  formatQueues,
+  formatSecondsDuration,
+} from './format';
+import { ParametersValue } from './parameters-value';
+import { CompareRowStyle, CompareTitleStyle, RowStyle } from './styles';
+
+const PARAMETERS_LIST: {
+  title: string;
+  help: string;
+  render: (parameters?: CurveParameters) => ReactNode[];
+}[] = [
+  {
+    title: 'Node Operator reward',
+    help: 'A share of the Consensus and Execution layers rewards',
+    render: (parameters) =>
+      formatPercentKeyIntervals(parameters?.rewardsConfig),
+  },
+  {
+    title: 'Bond',
+    help: 'A security collateral that Node Operators must submit before uploading validator keys into CSM',
+    render: (parameters) => formatEthKeyIntervals(parameters?.bondConfig),
+  },
+  {
+    title: 'Priority queue',
+    help: 'A queue that stays ahead of the general queue',
+    render: (parameters) => formatQueues(parameters?.queueConfig),
+  },
+  {
+    title: 'Removal fee',
+    help: "An amount deducted from the Node Operator's bond per each deleted key to cover the maximal possible operational costs associated with the queue processing",
+    render: (parameters) => [
+      <>
+        <FormatToken amount={parameters?.keysRemovalFee} token={TOKENS.eth} />{' '}
+        for all keys
+      </>,
+    ],
+  },
+  {
+    title: 'Performance leeway',
+    help: 'A value that is deducted from the network average performance to determine the threshold for the key',
+    render: (parameters) =>
+      formatPercentKeyIntervals(parameters?.performanceLeewayConfig),
+  },
+  {
+    title: 'EL stealing penalty',
+    help: 'A fine charged in case of EL rewards stealing event settled',
+    render: (parameters) => [
+      <>
+        <FormatToken
+          amount={parameters?.elStealingPenalty}
+          token={TOKENS.eth}
+        />
+      </>,
+    ],
+  },
+  {
+    title: 'Strikes parameters',
+    help: 'A number of strikes requires for a key to be exited and a time period of strike validity ',
+    render: (parameters) => [
+      <>
+        {plural({
+          value: Number(parameters?.strikesConfig?.threshold ?? 0n),
+          variants: ['strike', 'strikes'],
+          showValue: true,
+        })}{' '}
+        till key exit
+      </>,
+      <>
+        strike lifetime:{' '}
+        {plural({
+          value: Number(parameters?.strikesConfig?.lifetime ?? 0n),
+          variants: ['month', 'months'],
+          showValue: true,
+        })}
+      </>,
+    ],
+  },
+  {
+    title: 'Keys limit',
+    help: 'A maximum number of keys a node operator can have during its lifetime',
+    render: (parameters) => formatKeysLimit(parameters?.keysLimit),
+  },
+  {
+    title: 'Performance coefficients',
+    help: 'Parameter weights accounted for in the calculation of the aggregated performance metric',
+    render: (parameters) => [
+      <>
+        {parameters?.performanceCoefficients?.attestationsWeight?.toString()}{' '}
+        for attestations
+      </>,
+      <>
+        {parameters?.performanceCoefficients?.blocksWeight?.toString()} for
+        block proposals
+      </>,
+      <>
+        {parameters?.performanceCoefficients?.syncWeight?.toString()} for sync
+        committee
+      </>,
+    ],
+  },
+  {
+    title: 'Allowed exit delay',
+    help: 'A timeframe for a key to be exited voluntary before it gets ejected from the protocol using triggerable withdrawals',
+    render: (parameters) => [
+      <>{formatSecondsDuration(parameters?.allowedExitDelay ?? 0n)}</>,
+    ],
+  },
+  {
+    title: 'Exit delay penalty',
+    help: 'A fine charged in case of the key exit delay',
+    render: (parameters) => [
+      <>
+        <FormatToken amount={parameters?.exitDelayPenalty} token={TOKENS.eth} />
+      </>,
+    ],
+  },
+];
+
+export const ParametersList: FC<{
+  parameters?: CurveParameters;
+}> = ({ parameters }) => {
+  return (
+    <Stack direction="column" gap="xl">
+      {PARAMETERS_LIST.map(({ title, help, render }) => (
+        <RowStyle key={title}>
+          <Text size="xs" weight={700}>
+            {title}
+            <IconTooltip tooltip={help} placement="bottomRight" inline />
+          </Text>
+          <ParametersValue loading={!parameters} values={render(parameters)} />
+        </RowStyle>
+      ))}
+    </Stack>
+  );
+};
+
+export const CompareParametersList: FC<{
+  current?: CurveParameters;
+  new?: CurveParameters;
+}> = ({ current, new: next }) => {
+  return (
+    <Stack direction="column" gap="xl">
+      <CompareTitleStyle>
+        <p></p>
+        <Text size="xs" weight={700}>
+          Current
+        </Text>
+        <Text size="xs" weight={700}>
+          New
+        </Text>
+      </CompareTitleStyle>
+      {PARAMETERS_LIST.map(({ title, help, render }) => (
+        <CompareRowStyle key={title}>
+          <Text size="xs" weight={700}>
+            {title}
+            <IconTooltip tooltip={help} placement="bottomRight" inline />
+          </Text>
+          <ParametersValue loading={!current} values={render(current)} />
+          <ParametersValue loading={!next} values={render(next)} />
+        </CompareRowStyle>
+      ))}
+    </Stack>
+  );
+};

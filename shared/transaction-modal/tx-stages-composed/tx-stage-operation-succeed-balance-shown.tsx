@@ -4,7 +4,7 @@ import { InlineLoader } from '@lidofinance/lido-ui';
 import { TxAmount } from '../tx-stages-parts/tx-amount';
 import { SuccessText } from '../tx-stages-parts/success-text';
 import { TxStageSuccess } from '../tx-stages-basic';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const SkeletonBalance = styled(InlineLoader).attrs({
   color: 'text',

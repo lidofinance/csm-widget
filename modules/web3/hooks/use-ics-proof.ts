@@ -3,7 +3,7 @@ import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
 import invariant from 'tiny-invariant';
 import { Address } from 'viem';
 import { useLidoSDK } from '../web3-provider';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
 export const useIcsProof = (address?: Address) => {
   const { csm } = useLidoSDK();

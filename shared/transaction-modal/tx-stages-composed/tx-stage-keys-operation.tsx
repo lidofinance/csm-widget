@@ -4,7 +4,7 @@ import { TxAmount } from '../tx-stages-parts/tx-amount';
 
 import { DescriptorId } from 'shared/node-operator';
 import { Plural } from 'shared/components';
-import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 
 type TxStageSignOperationAmountProps = {
   amount?: bigint;

@@ -9,7 +9,7 @@ import {
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { useSubmitKeysFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk/common';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TokenSelect: React.FC = () => {
   const { ethBalance, stethBalance, wstethBalance, loading } =

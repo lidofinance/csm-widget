@@ -2,7 +2,7 @@ import {
   appendNodeOperator,
   getNodeOperatorRoles,
 } from '@lidofinance/lido-csm-sdk';
-import { NodeOperator, NodeOperatorId } from '@lidofinance/lido-csm-sdk/common';
+import { NodeOperator, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDappStatus } from '../hooks';
 import { useLidoSDK } from '../web3-provider';

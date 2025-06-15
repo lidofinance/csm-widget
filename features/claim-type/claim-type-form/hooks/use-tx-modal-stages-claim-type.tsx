@@ -7,9 +7,7 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 
-type Props = {
-  curveId: bigint;
-};
+type Props = unknown;
 
 const getTxModalStagesClaimType = (
   transitStage: TransactionModalTransitStage,

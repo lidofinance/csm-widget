@@ -3,19 +3,23 @@ import { DescriptorCurveStyle } from './styles';
 import { OPERATOR_TYPE } from 'consts';
 
 const TITLES: Record<OPERATOR_TYPE, string> = {
-  [OPERATOR_TYPE.PERMISSIONLESS]: 'PL',
-  [OPERATOR_TYPE.EARLYADOPTER]: 'EA',
+  [OPERATOR_TYPE.PERMISSIONLESS]: 'PLS',
+  [OPERATOR_TYPE.EARLYADOPTER]: 'LEA',
   [OPERATOR_TYPE.ICS]: 'ICS',
   [OPERATOR_TYPE.CUSTOM]: 'CC',
 };
 
-export const CurveBadge: FC<{ type?: OPERATOR_TYPE }> = ({ type }) => {
+type Props = { type?: OPERATOR_TYPE; noStyle?: boolean };
+
+export const CurveBadge: FC<Props> = ({ type, noStyle }) => {
   const title = type ? TITLES[type] : null;
 
   return (
     <>
       {title && (
-        <DescriptorCurveStyle $variant={type}>{title}</DescriptorCurveStyle>
+        <DescriptorCurveStyle $variant={noStyle ? undefined : type}>
+          {title}
+        </DescriptorCurveStyle>
       )}
     </>
   );
