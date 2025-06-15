@@ -2,7 +2,7 @@ import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
 import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
-import { WidgetService } from 'tests/pages/widget.service';
+import { WidgetService } from 'tests/services/widget.service';
 
 type WorkerFixtures = {
   secretPhrase: string;

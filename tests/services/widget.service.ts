@@ -1,8 +1,8 @@
 import { expect, Page, test } from '@playwright/test';
-import { ElementController } from './elements/controller';
+import { ElementController } from '../pages/elements/controller';
 import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
-import { MainPage } from './main.page';
-import { KeysPage } from './keys.page';
+import { MainPage } from '../pages/main.page';
+import { KeysPage } from '../pages/keys.page';
 import { DepositKey } from 'tests/consts/keys.const';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { AssertionError } from 'assert';
@@ -10,16 +10,20 @@ import {
   STAGE_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
+import { DashboardPage } from 'tests/pages/dashboard.page';
 
 export class WidgetService {
   public mainPage: MainPage;
   public keysPage: KeysPage;
+  public dashboardPage: DashboardPage;
+
   constructor(
     public page: Page,
     public walletPage: WalletPage<WalletTypes.EOA>,
   ) {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
+    this.dashboardPage = new DashboardPage(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {
@@ -108,5 +112,16 @@ export class WidgetService {
     return test.step('Check wallet connection', async () => {
       return new ElementController(this.page).header.isAccountSectionVisible();
     });
+  }
+
+  async extractNodeOperatorId(): Promise<number | null> {
+    const rawHeader = await this.page
+      .getByTestId('nodeOperatorHeader')
+      .textContent();
+
+    if (!rawHeader) return null;
+
+    const match = rawHeader.match(/#(\d+)/);
+    return match ? Number(match[1]) : null;
   }
 }
