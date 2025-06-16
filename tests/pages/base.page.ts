@@ -122,7 +122,7 @@ export class BasePage {
 
   async hoverElement(element: Locator) {
     await element.hover();
-    await this.waitForTextContent(await this.getHoveredContent());
+    return this.waitForTextContent(await this.getHoveredContent());
   }
 
   /**

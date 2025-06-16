@@ -97,12 +97,17 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
     await availableToClaim.expand();
 
     await test.step('Check tooltip for "Rewards"', async () => {
-      await availableToClaim.rewardsBalance_TitleIcon.hover();
-      const tooltipContent =
-        await widgetService.dashboardPage.bondRewards.getHoveredContent();
-      await expect(tooltipContent).toContainText(
-        'Next rewards distribution is expected on ',
+      const tooltip = await widgetService.dashboardPage.hoverElement(
+        availableToClaim.rewardsBalance_TitleIcon,
       );
+      expect(tooltip).toContain('Next rewards distribution is expected on ');
+    });
+
+    await test.step('Check to hidden tooltip after unhover', async () => {
+      await widgetService.page.mouse.move(0, 0);
+      const tooltip =
+        await widgetService.dashboardPage.bondRewards.getHoveredContent();
+      await expect(tooltip).toBeHidden();
     });
   });
 
@@ -115,10 +120,18 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
     await availableToClaim.expand();
 
     await test.step('Check tooltip for "Excess bond"', async () => {
-      await availableToClaim.excessBondBalance_TitleIcon.hover();
-      const tooltipContent =
+      const tooltip = await widgetService.dashboardPage.hoverElement(
+        availableToClaim.excessBondBalance_TitleIcon,
+      );
+
+      expect(tooltip).toContain('Increases daily');
+    });
+
+    await test.step('Check to hidden tooltip after unhover', async () => {
+      await widgetService.page.mouse.move(0, 0);
+      const tooltip =
         await widgetService.dashboardPage.bondRewards.getHoveredContent();
-      await expect(tooltipContent).toContainText('Increases daily');
+      await expect(tooltip).toBeHidden();
     });
   });
 
@@ -202,12 +215,20 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
       await bondBalance.expand();
 
       await test.step('Check tooltip for "Required bond"', async () => {
-        await bondBalance.requiredBondBalance_TitleIcon.hover();
-        const tooltipContent =
-          await widgetService.dashboardPage.bondRewards.getHoveredContent();
-        await expect(tooltipContent).toContainText(
+        const tooltip = await widgetService.dashboardPage.hoverElement(
+          bondBalance.requiredBondBalance_TitleIcon,
+        );
+
+        expect(tooltip).toContain(
           'The amount of bond required for all submitted keys of the Node Operator',
         );
+      });
+
+      await test.step('Check to hidden tooltip after unhover', async () => {
+        await widgetService.page.mouse.move(0, 0);
+        const tooltip =
+          await widgetService.dashboardPage.bondRewards.getHoveredContent();
+        await expect(tooltip).toBeHidden();
       });
     },
   );
@@ -223,12 +244,20 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
       await bondBalance.expand();
 
       await test.step('Check tooltip for "Excess bond"', async () => {
-        await bondBalance.excessBondBalance_TitleIcon.hover();
-        const tooltipContent =
-          await widgetService.dashboardPage.bondRewards.getHoveredContent();
-        await expect(tooltipContent).toContainText(
+        const tooltip = await widgetService.dashboardPage.hoverElement(
+          bondBalance.excessBondBalance_TitleIcon,
+        );
+
+        expect(tooltip).toContain(
           'The bond amount available to claim without having to exit validators. Increases daily',
         );
+      });
+
+      await test.step('Check to hidden tooltip after unhover', async () => {
+        await widgetService.page.mouse.move(0, 0);
+        const tooltip =
+          await widgetService.dashboardPage.bondRewards.getHoveredContent();
+        await expect(tooltip).toBeHidden();
       });
     },
   );
