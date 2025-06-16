@@ -9,6 +9,7 @@ import { useLidoSDK } from 'modules/web3';
 import { handleTxError } from 'shared/transaction-modal';
 import { ClaimTypeFormInputType, ClaimTypeFormNetworkData } from '.';
 import { useTxModalStagesClaimType } from '../hooks/use-tx-modal-stages-claim-type';
+import { useConfirmClaimTypeModal } from '../hooks/use-confirm-modal';
 
 type UseClaimTypeOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -21,6 +22,7 @@ export const useClaimTypeSubmit = ({
 }: UseClaimTypeOptions) => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesClaimType();
+  const confirmClaimtype = useConfirmClaimTypeModal();
 
   const claimType = useCallback(
     async (
@@ -31,6 +33,10 @@ export const useClaimTypeSubmit = ({
       invariant(proof?.proof, 'proof is not defined');
 
       try {
+        if (!(await confirmClaimtype({}))) {
+          return false;
+        }
+
         const callback: TransactionCallback = async ({ stage, payload }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:
@@ -67,7 +73,7 @@ export const useClaimTypeSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [csm.icsGate, onConfirm, txModalStages, onRetry],
+    [confirmClaimtype, csm.icsGate, onConfirm, txModalStages, onRetry],
   );
 
   return {

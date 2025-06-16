@@ -78,7 +78,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     // @ts-expect-error: typing (viem + LidoSDK)
     const core = new LidoSDKCore({
       chainId,
-      logMode: 'debug',
+      // logMode: 'debug',
       rpcProvider: publicClient,
       web3Provider: walletClient,
     });
