@@ -1,3 +1,4 @@
+export * from './counter-ics';
 export * from './counter-invalid-keys';
 export * from './counter-invites';
 export * from './counter-keys-to-transfer';

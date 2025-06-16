@@ -14,6 +14,8 @@ import { AlertRequestToExit } from './components/alert-request-to-exit';
 import { AlertTransferKeys } from './components/alert-transfer-keys';
 import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
 import { AlertClaimIcs } from './components/alert-claim-ics';
+import { useRouter } from 'next/router';
+import { PATH } from 'consts';
 
 export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { showAlert, closeAlert } = useAlertActions();
@@ -22,6 +24,7 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { data: info } = useOperatorInfo(nodeOperator?.id);
   const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
   const canClaimICS = useCanClaimICS();
+  const { route } = useRouter();
 
   const normalizeQueue = useMemo(() => {
     return (
@@ -78,12 +81,12 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   }, [balance?.locked, closeAlert, showAlert]);
 
   useEffect(() => {
-    if (canClaimICS) {
+    if (canClaimICS && route !== PATH.TYPE_CLAIM) {
       showAlert(AlertClaimIcs);
     } else {
       closeAlert(AlertClaimIcs);
     }
-  }, [canClaimICS, closeAlert, showAlert]);
+  }, [canClaimICS, closeAlert, route, showAlert]);
 
   return <>{children}</>;
 };

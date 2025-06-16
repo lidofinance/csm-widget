@@ -6,8 +6,8 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const ClaimTypePage: FC = () => (
   <Layout
-    title="Manage Bond & Rewards"
-    subtitle="Cover locked bond"
+    title="Change Node Operator type"
+    subtitle="Identified Community Stakers"
     matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageClaimType}
   >
     <ClaimType />

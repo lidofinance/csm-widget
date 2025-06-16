@@ -11,6 +11,7 @@ import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import {
+  CounterIcs,
   CounterInvalidKeys,
   CounterInvites,
   CounterLockedBond,
@@ -97,6 +98,7 @@ const routes: Route[] = [
     icon: <UserIcon />,
     subPaths: [PATH.TYPE_CLAIM],
     showRules: ['CAN_CLAIM_ICS'],
+    suffix: <CounterIcs />,
   },
 ];
 
