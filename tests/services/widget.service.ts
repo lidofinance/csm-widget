@@ -84,7 +84,7 @@ export class WidgetService {
     await this.walletPage.confirmTx(txPage);
     await this.page.waitForSelector(
       `text=Uploading operation was successful.`,
-      STAGE_WAIT_TIMEOUT,
+      { timeout: STAGE_WAIT_TIMEOUT },
     );
   }
 
@@ -102,7 +102,7 @@ export class WidgetService {
       await this.walletPage.confirmTx(walletSignPage);
       await this.keysPage.page.waitForSelector(
         `text=${keysToRemove.length} key has been removed`,
-        STAGE_WAIT_TIMEOUT,
+        { timeout: STAGE_WAIT_TIMEOUT },
       );
       await this.keysPage.base.closeModalWindow();
     });

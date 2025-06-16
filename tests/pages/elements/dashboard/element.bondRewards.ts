@@ -1,6 +1,7 @@
 import { Locator, Page } from '@playwright/test';
 import { BasePage } from 'tests/pages/base.page';
 import { test } from '@playwright/test';
+import { LOW_TIMEOUT } from 'tests/consts/timeouts';
 
 class AvailableToClaimBlock {
   expandedBlock: Locator;
@@ -54,10 +55,36 @@ class AvailableToClaimBlock {
   }
 
   async expand() {
-    await test.step('Expand the "Available to claim" section', async () => {
-      await this.button.click();
-      await this.rewardsBalance.waitFor({ state: 'visible' });
-    });
+    let isExpanded =
+      (await this.button.getAttribute('aria-expanded')) === 'true';
+
+    if (isExpanded) {
+      console.info(`Section already expanded`);
+      return;
+    }
+
+    const attempts = 5;
+
+    for (let attempt = 1; attempt <= attempts && !isExpanded; attempt++) {
+      await test.step(`Try to expand the "Available to claim" section. (Attempt: ${attempt})`, async () => {
+        try {
+          await this.button.click();
+          await this.rewardsBalance_Text.waitFor({
+            state: 'visible',
+            timeout: LOW_TIMEOUT,
+          });
+          isExpanded = true;
+          return;
+        } catch {
+          console.warn(`Waiting for expanded failed.`);
+          if (attempt === attempts) {
+            throw new Error(
+              'Failed to expand "Available to claim" section after 5 attempts',
+            );
+          }
+        }
+      });
+    }
   }
 }
 
@@ -116,10 +143,36 @@ class BondBalanceBlock {
   }
 
   async expand() {
-    await test.step('Expand the "Bond balance" section', async () => {
-      await this.button.click();
-      await this.requiredBondBalance.waitFor({ state: 'visible' });
-    });
+    let isExpanded =
+      (await this.button.getAttribute('aria-expanded')) === 'true';
+
+    if (isExpanded) {
+      console.info(`Section already expanded`);
+      return;
+    }
+
+    const attempts = 5;
+
+    for (let attempt = 1; attempt <= attempts && !isExpanded; attempt++) {
+      await test.step(`Try to expand the "Bond balance" section. (Attempt: ${attempt})`, async () => {
+        try {
+          await this.button.click();
+          await this.requiredBondBalance.waitFor({
+            state: 'visible',
+            timeout: LOW_TIMEOUT,
+          });
+          isExpanded = true;
+          return;
+        } catch {
+          console.warn(`Waiting for expanded failed.`);
+          if (attempt === attempts) {
+            throw new Error(
+              'Failed to expand "Available to claim" section after 5 attempts',
+            );
+          }
+        }
+      });
+    }
   }
 }
 
