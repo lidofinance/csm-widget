@@ -1,5 +1,4 @@
 export { default as NoSSRWrapper } from './no-ssr-wrapper';
-export { Faq } from './faq/faq';
 export { BackgroundGradient } from './background-gradient/background-gradient';
 export { Section } from './section/section';
 export { SectionBlock } from './section-block/section-block';
@@ -45,3 +44,4 @@ export * from './copy-button';
 export * from './block';
 export * from './welcome-section';
 export * from './parameters-list';
+export * from './faq';

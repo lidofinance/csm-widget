@@ -1,7 +1,7 @@
 import { useFormState, useWatch } from 'react-hook-form';
 
 import { InputAmount } from 'shared/components/input-amount';
-import { getTokenDisplayName } from 'utils/getTokenDisplayName';
+import { getTokenDisplayName } from 'utils';
 import { AddKeysFormInputType } from '../context';
 
 export const AmountInput = () => {

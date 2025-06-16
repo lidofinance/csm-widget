@@ -4,7 +4,7 @@ import { FC, memo, PropsWithChildren } from 'react';
 import { Stack } from 'shared/components';
 import { useInitialLoading, useRouterPath } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
-import { getIsActivePath } from 'utils/path';
+import { getIsActivePath } from 'utils';
 import {
   Nav,
   NavBlockStyle,

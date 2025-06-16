@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { useGetRpcUrlByChainId } from 'config/rpc';
 import { CHAINS } from 'consts/chains';
-import { getStaticRpcBatchProvider } from 'utils/getStaticRpcBatchProvider';
+import { getStaticRpcBatchProvider } from 'utils';
 
 // @note unused
 export const useMainnetStaticRpcProvider = () => {

@@ -4,7 +4,7 @@ import { Loader } from '@lidofinance/lido-ui';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import { StageIconFail } from './icons';
 import { LoaderWrapper, RetryButtonStyled } from './styles';
-import { ErrorCode } from 'utils/getErrorCode';
+import { ErrorCode } from 'utils';
 import { ErrorMessages } from './error-messages';
 
 type TxStageFailProps = {

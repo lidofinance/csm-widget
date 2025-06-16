@@ -2,13 +2,12 @@ import { Button } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { TryCSM } from 'features/welcome/try-csm';
+import { useCsmStatus } from 'modules/web3';
 import { FC } from 'react';
-import { Faq } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
 import { BannerOperatorCustomAddresses } from './banner-operator-custom-addresses';
 import { PausedBanner } from './paused-banner';
 import { StarterPackSection } from './stacter-pack-section';
-import { useCsmStatus } from 'modules/web3';
 
 export const StarterPack: FC = () => {
   const { data: status } = useCsmStatus();
@@ -33,7 +32,6 @@ export const StarterPack: FC = () => {
       <BannerOperatorCustomAddresses />
       {content}
       <TryCSM />
-      <Faq />
     </>
   );
 };

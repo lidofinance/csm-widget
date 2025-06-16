@@ -16,6 +16,7 @@ import {
 import { ModalComponentType, useModal } from 'providers/modal-provider';
 import { FC, useCallback } from 'react';
 import {
+  FaqLink,
   GrayText,
   Plural,
   Stack,
@@ -179,13 +180,9 @@ export const WhyModal: ModalComponentType = ({ ...props }) => (
           If your validator’s performance was below the threshold within the CSM
           Performance Oracle frame (7 days for testnet) the validator does not
           receive rewards for the given frame. Read more about{' '}
-          <a
-            href="https://operatorportal.lido.fi/modules/community-staking-module#block-c6dc8d00f13243fcb17de3fa07ecc52c"
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-          >
+          <FaqLink href="https://operatorportal.lido.fi/modules/community-staking-module#block-c6dc8d00f13243fcb17de3fa07ecc52c">
             the CSM Performance Oracle
-          </a>
+          </FaqLink>
           .
         </li>
       </ol>

@@ -1,5 +1,5 @@
 import { PATH } from 'consts/urls';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utils';
 import { useIsReportStealingRole } from 'shared/hooks';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 

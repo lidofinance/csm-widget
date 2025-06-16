@@ -2,7 +2,7 @@ import { useController, UseControllerProps } from 'react-hook-form';
 
 import { InputAmount } from 'shared/components/input-amount';
 
-import { getTokenDisplayName } from 'utils/getTokenDisplayName';
+import { getTokenDisplayName } from 'utils';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
 
 type TokenAmountInputHookFormProps = Partial<

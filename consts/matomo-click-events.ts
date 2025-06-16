@@ -48,6 +48,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
+  faqItemLink = 'faqItemLink',
   // Key status comment
   howToExitLinkComment = 'howToExitLinkComment',
   whenValidatorBecomeActiveLinkComment = 'whenValidatorBecomeActiveLinkComment',
@@ -284,6 +285,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «stake share limit» link on banner',
     prefixed`stake_share_limit_link_banner`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.faqItemLink]: [
+    MATOMO_APP_NAME,
+    'Click link in FAQ',
+    prefixed`faq_item_link`,
   ],
   // Key status comment
   [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkComment]: [

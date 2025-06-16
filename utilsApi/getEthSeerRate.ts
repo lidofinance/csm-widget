@@ -3,7 +3,7 @@ import ms from 'ms';
 import { config, secretConfig } from 'config';
 import { CHAINS } from 'consts';
 import { RateReponse } from 'types/ethseer';
-import { standardFetcher } from 'utils/standardFetcher';
+import { standardFetcher } from 'utils';
 import { getCurrentFrame } from './getCurrentFrame';
 
 const MIN_NUMBER_EPOCHS = 9; // one hour

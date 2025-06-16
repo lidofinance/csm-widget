@@ -1,6 +1,6 @@
 import { PATH } from 'consts/urls';
 import { StealingCancelPage } from 'features/stealing';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utils';
 import { useIsReportStealingRole } from 'shared/hooks';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 

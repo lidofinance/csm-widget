@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ErrorCode } from 'utils/getErrorCode';
+import { ErrorCode } from 'utils';
 
 export const ErrorMessages: Record<ErrorCode, ReactNode> = {
   [ErrorCode.NOT_ENOUGH_ETHER]: 'Not enough ether for gas.',
