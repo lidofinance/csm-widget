@@ -1,5 +1,6 @@
 import { ArrowBottom, Link } from '@lidofinance/lido-ui';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { StackStyle } from '../stack/style';
 
 export const ArrowStyle = styled(ArrowBottom)<{ $expanded: boolean }>`
   vertical-align: middle;
@@ -8,19 +9,28 @@ export const ArrowStyle = styled(ArrowBottom)<{ $expanded: boolean }>`
   transition: transform ${({ theme }) => theme.duration.norm} ease;
 `;
 
-export const ButtonStyle = styled(Link)`
+export const MoreStyle = styled(Link)`
   text-align: center;
   font-weight: 700;
   font-size: 14px;
 `;
 
-export const ListStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spaceMap.xl}px;
+export const ListStyle = styled(StackStyle).attrs({
+  $direction: 'column',
+  $gap: 'xl',
+})``;
+
+export const FoldableListStyle = styled(ListStyle)<{ $folded?: boolean }>`
+  overflow: hidden;
+  transition:
+    max-height ${({ theme }) => theme.duration.norm} ease,
+    height ${({ theme }) => theme.duration.norm} ease;
+  max-height: ${({ $folded }) => ($folded ? '0' : '1000px')};
+  margin-top: ${({ $folded, theme }) =>
+    $folded ? `-${theme.spaceMap.xl}px` : '0'};
 `;
 
-export const RowStyle = styled.div`
+export const RowStyle = styled.div<{ $bordered?: boolean }>`
   position: relative;
   display: grid;
   grid-template-columns: 1fr minmax(auto, 300px);
@@ -37,6 +47,22 @@ export const RowStyle = styled.div`
     background: var(--lido-color-popupMenuItemBgActiveHover);
     opacity: 0.12;
   }
+
+  ${({ $bordered }) =>
+    $bordered
+      ? css`
+          &:is(:last-child)::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--lido-color-popupMenuItemBgActiveHover);
+            opacity: 0.12;
+          }
+        `
+      : ''}
 `;
 
 export const CompareRowStyle = styled(RowStyle)`
