@@ -88,6 +88,40 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
     },
   );
 
+  test('Tooltip verification for "Rewards" field for "Available to claim" section', async ({
+    widgetService,
+  }) => {
+    const availableToClaim =
+      widgetService.dashboardPage.bondRewards.availableToClaim;
+
+    await availableToClaim.expand();
+
+    await test.step('Check tooltip for "Rewards"', async () => {
+      await availableToClaim.rewardsBalance_TitleIcon.hover();
+      const tooltipContent =
+        await widgetService.dashboardPage.bondRewards.getHoveredContent();
+      await expect(tooltipContent).toContainText(
+        'Next rewards distribution is expected on ',
+      );
+    });
+  });
+
+  test('Tooltip verification for "Excess bond" field for "Available to claim" section', async ({
+    widgetService,
+  }) => {
+    const availableToClaim =
+      widgetService.dashboardPage.bondRewards.availableToClaim;
+
+    await availableToClaim.expand();
+
+    await test.step('Check tooltip for "Excess bond"', async () => {
+      await availableToClaim.excessBondBalance_TitleIcon.hover();
+      const tooltipContent =
+        await widgetService.dashboardPage.bondRewards.getHoveredContent();
+      await expect(tooltipContent).toContainText('Increases daily');
+    });
+  });
+
   test(qase(135, 'Bond Balance Verification'), async ({ widgetService }) => {
     const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
 
@@ -156,14 +190,49 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
       expect(commonUSDBalance).toMatch(USD_AMOUNT_REGEX);
     });
   });
-  test.skip(
-    qase(141, 'Tooltip verification for "Required bond" field'),
-    async () => {},
+
+  test(
+    qase(
+      141,
+      'Tooltip verification for "Required bond" field for "Bond balance" section',
+    ),
+    async ({ widgetService }) => {
+      const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
+
+      await bondBalance.expand();
+
+      await test.step('Check tooltip for "Required bond"', async () => {
+        await bondBalance.requiredBondBalance_TitleIcon.hover();
+        const tooltipContent =
+          await widgetService.dashboardPage.bondRewards.getHoveredContent();
+        await expect(tooltipContent).toContainText(
+          'The amount of bond required for all submitted keys of the Node Operator',
+        );
+      });
+    },
   );
-  test.skip(
-    qase(142, 'Tooltip verification for "Excess bond" field'),
-    async () => {},
+
+  test(
+    qase(
+      142,
+      'Tooltip verification for "Excess bond" field for "Bond balance" section',
+    ),
+    async ({ widgetService }) => {
+      const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
+
+      await bondBalance.expand();
+
+      await test.step('Check tooltip for "Excess bond"', async () => {
+        await bondBalance.excessBondBalance_TitleIcon.hover();
+        const tooltipContent =
+          await widgetService.dashboardPage.bondRewards.getHoveredContent();
+        await expect(tooltipContent).toContainText(
+          'The bond amount available to claim without having to exit validators. Increases daily',
+        );
+      });
+    },
   );
+
   test.skip(
     qase(136, 'Latest Rewards Distribution Information Verification'),
     async () => {},
