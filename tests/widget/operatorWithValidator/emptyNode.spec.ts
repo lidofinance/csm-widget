@@ -31,7 +31,8 @@ test.describe('Operator with validator and without keys.', async () => {
     },
   );
 
-  test('View keys page. Should present empty view for empty wallet', async () => {
+  test.skip('View keys page. Should present empty view for empty wallet', async () => {
+    // !!! SKIPPED, BECAUSE RPC NOT STABLE FOR THIS CASE, SEE TICKET - CS-762
     await keysPage.keysView.open();
     await keysPage.keysView.page
       .getByText('View keys list')

@@ -1,9 +1,11 @@
+/* eslint-disable no-irregular-whitespace */
 import { COMMON_ACTION_TIMEOUT } from 'tests/consts/timeouts';
 import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { CSAccountingContract } from 'tests/services/csmContracts.service';
 import { formatEther } from '@ethersproject/units';
+import { USD_AMOUNT_REGEX } from 'tests/consts/regexp.const';
 
 test.describe('Dashboard. Bond & Rewards.', async () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -51,11 +53,11 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
       await test.step('Verify "Rewards" stETH value', async () => {
         const rewardsBalance =
           await availableToClaim.rewardsBalance_Text.textContent();
-        expect(rewardsBalance?.replace(/\u00A0/g, ' ')).toEqual('0.0 stETH');
+        expect(rewardsBalance).toEqual('0.0 stETH');
 
         const rewardsUSDBalance =
           await availableToClaim.rewardsBalance_SubText.textContent();
-        expect(rewardsUSDBalance?.replace(/\u00A0/g, ' ')).toEqual('$0.00');
+        expect(rewardsUSDBalance).toEqual('$0.00');
       });
 
       const expectedExcessBond = formatEther(
@@ -65,25 +67,23 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
       await test.step('Verify "Excess bond" stETH value', async () => {
         const excessBondBalance =
           await availableToClaim.excessBondBalance_Text.textContent();
-        expect(excessBondBalance?.replace(/\u00A0/g, ' ')).toEqual(
-          `${expectedExcessBond.toCut(4)} stETH`,
+        expect(excessBondBalance).toEqual(
+          `${expectedExcessBond.toCut(4)} stETH`,
         );
 
         const excessBondUSDBalance =
           await availableToClaim.excessBondBalance_SubText.textContent();
-        expect(excessBondUSDBalance).toContain('$'); // @todo: add more better check
+        expect(excessBondUSDBalance).toMatch(USD_AMOUNT_REGEX);
       });
 
       await test.step('Verify total claimable amount', async () => {
         const commonBalance =
           await availableToClaim.commonBalance_Text.textContent();
-        expect(commonBalance?.replace(/\u00A0/g, ' ')).toEqual(
-          `${expectedExcessBond.toCut(4)} stETH`,
-        );
+        expect(commonBalance).toEqual(`${expectedExcessBond.toCut(4)} stETH`);
 
         const commonUSDBalance =
           await availableToClaim.commonBalance_SubText.textContent();
-        expect(commonUSDBalance).toContain('$'); // @todo: add more better check
+        expect(commonUSDBalance).toMatch(USD_AMOUNT_REGEX);
       });
     },
   );
@@ -122,13 +122,13 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
     await test.step('Verify "Required bond" stETH value', async () => {
       const rewardsBalance =
         await bondBalance.requiredBondBalance_Text.textContent();
-      expect(rewardsBalance?.replace(/\u00A0/g, ' ')).toEqual(
-        `${formatEther(bondSummary.required)} stETH`,
+      expect(rewardsBalance).toEqual(
+        `${formatEther(bondSummary.required)} stETH`,
       );
 
       const rewardsUSDBalance =
         await bondBalance.requiredBondBalance_SubText.textContent();
-      expect(rewardsUSDBalance?.replace(/\u00A0/g, ' ')).toContain('$'); // @todo: add more better check
+      expect(rewardsUSDBalance).toMatch(USD_AMOUNT_REGEX);
     });
 
     await test.step('Verify "Excess bond" stETH value', async () => {
@@ -138,24 +138,22 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
 
       const excessBondBalance =
         await bondBalance.excessBondBalance_Text.textContent();
-      expect(excessBondBalance?.replace(/\u00A0/g, ' ')).toEqual(
-        `${expectedExcessBond.toCut(4)} stETH`,
-      );
+      expect(excessBondBalance).toEqual(`${expectedExcessBond.toCut(4)} stETH`);
 
       const excessBondUSDBalance =
         await bondBalance.excessBondBalance_SubText.textContent();
-      expect(excessBondUSDBalance).toContain('$'); // @todo: add more better check
+      expect(excessBondUSDBalance).toMatch(USD_AMOUNT_REGEX);
     });
 
     await test.step('Verify total claimable amount', async () => {
       const commonBalance = await bondBalance.commonBalance_Text.textContent();
-      expect(commonBalance?.replace(/\u00A0/g, ' ')).toEqual(
-        `${formatEther(bondSummary.current).toCut(4)} stETH`,
+      expect(commonBalance).toEqual(
+        `${formatEther(bondSummary.current).toCut(4)} stETH`,
       );
 
       const commonUSDBalance =
         await bondBalance.commonBalance_SubText.textContent();
-      expect(commonUSDBalance).toContain('$'); // @todo: add more better check
+      expect(commonUSDBalance).toMatch(USD_AMOUNT_REGEX);
     });
   });
   test.skip(
