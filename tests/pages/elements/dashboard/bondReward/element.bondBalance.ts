@@ -44,7 +44,7 @@ export class BondBalanceBlock extends BaseSection {
       this.excessBondBalance.getByTestId('subtextContent');
   }
 
-  protected async waitForExpanded(): Promise<void> {
+  async waitForExpanded(): Promise<void> {
     await this.requiredBondBalance.waitFor({
       state: 'visible',
       timeout: LOW_TIMEOUT,

@@ -7,7 +7,7 @@ export abstract class BaseSection {
   commonBalance_Text: Locator;
   commonBalance_SubText: Locator;
 
-  protected abstract waitForExpanded(): Promise<void>;
+  public abstract waitForExpanded(): Promise<void>;
 
   constructor(section: Locator, sectionTestId: string) {
     this.expandedBlock = section.getByTestId(sectionTestId);

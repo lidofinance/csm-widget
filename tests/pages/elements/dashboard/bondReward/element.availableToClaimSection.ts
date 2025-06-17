@@ -41,7 +41,7 @@ export class AvailableToClaimBlock extends BaseSection {
       this.excessBondBalance.getByTestId('subtextContent');
   }
 
-  protected async waitForExpanded(): Promise<void> {
+  async waitForExpanded(): Promise<void> {
     await this.rewardsBalance.waitFor({
       state: 'visible',
       timeout: LOW_TIMEOUT,
