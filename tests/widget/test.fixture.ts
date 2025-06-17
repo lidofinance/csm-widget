@@ -29,6 +29,7 @@ export const test = base.extend<object, WorkerFixtures>({
         walletConfig: widgetFullConfig.walletConfig,
         nodeConfig: { rpcUrlToMock: '**/api/rpc?chainId=1' },
         browserOptions: {
+          reducedMotion: 'reduce',
           cookies: REFUSE_CF_BLOCK_COOKIE,
         },
       });
