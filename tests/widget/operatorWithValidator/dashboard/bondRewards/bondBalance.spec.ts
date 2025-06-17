@@ -30,9 +30,9 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
       await test.step('Check "Bond balance" section', async () => {
         await expect(bondBalance.requiredBondBalance).toBeHidden();
 
-        await bondBalance.button.click();
+        await bondBalance.expandedButton.click();
         await expect(bondBalance.requiredBondBalance).toBeVisible();
-        await expect(bondBalance.button).toHaveAttribute(
+        await expect(bondBalance.expandedButton).toHaveAttribute(
           'aria-expanded',
           'true',
         );

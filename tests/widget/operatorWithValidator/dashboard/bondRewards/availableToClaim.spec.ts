@@ -34,9 +34,9 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', async ()
       await test.step('Check "Available to claim" section', async () => {
         await expect(availableToClaim.rewardsBalance).toBeHidden();
 
-        await availableToClaim.button.click();
+        await availableToClaim.expandedButton.click();
         await expect(availableToClaim.rewardsBalance).toBeVisible();
-        await expect(availableToClaim.button).toHaveAttribute(
+        await expect(availableToClaim.expandedButton).toHaveAttribute(
           'aria-expanded',
           'true',
         );
