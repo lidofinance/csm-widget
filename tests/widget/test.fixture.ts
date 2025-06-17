@@ -14,7 +14,7 @@ export const test = base.extend<object, WorkerFixtures>({
   secretPhrase: [
     // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
-      await use(widgetFullConfig.walletConfig.SECRET_PHRASE);
+      await use(widgetFullConfig.accountConfig.SECRET_PHRASE);
     },
     { scope: 'worker' },
   ],
@@ -22,10 +22,11 @@ export const test = base.extend<object, WorkerFixtures>({
     async ({ secretPhrase }, use) => {
       const browserService = new BrowserService({
         networkConfig: widgetFullConfig.standConfig.networkConfig,
-        walletConfig: {
-          ...widgetFullConfig.walletConfig,
+        accountConfig: {
+          ...widgetFullConfig.accountConfig,
           SECRET_PHRASE: secretPhrase,
         },
+        walletConfig: widgetFullConfig.walletConfig,
         nodeConfig: { rpcUrlToMock: '**/api/rpc?chainId=1' },
         browserOptions: {
           cookies: REFUSE_CF_BLOCK_COOKIE,

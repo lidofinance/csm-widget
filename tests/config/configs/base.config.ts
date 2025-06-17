@@ -1,7 +1,8 @@
 import {
   METAMASK_COMMON_CONFIG,
   NetworkConfig,
-  WalletConfig,
+  CommonWalletConfig,
+  AccountConfig,
 } from '@lidofinance/wallets-testing-wallets';
 import { CSAccounting__factory } from 'generated';
 import { z } from 'zod';
@@ -19,7 +20,8 @@ export type ContractInfo = {
 
 export interface IConfig {
   standConfig: StandConfig;
-  walletConfig: WalletConfig;
+  walletConfig: CommonWalletConfig;
+  accountConfig: AccountConfig;
   contracts: Record<string, ContractInfo>;
   getFullInfo(): string;
 }
@@ -31,15 +33,16 @@ export const ConfigSchema = z.object({
 
 export class BaseConfig implements IConfig {
   public standConfig!: StandConfig;
-  public walletConfig: WalletConfig;
+  public walletConfig: CommonWalletConfig;
+  public accountConfig: AccountConfig;
   public contracts!: Record<string, ContractInfo>;
 
   constructor() {
-    this.walletConfig = {
+    this.accountConfig = {
       SECRET_PHRASE: process.env.WALLET_SECRET_PHRASE || '',
       PASSWORD: process.env.WALLET_PASSWORD || '',
-      COMMON: METAMASK_COMMON_CONFIG,
     };
+    this.walletConfig = METAMASK_COMMON_CONFIG;
   }
 
   getFullInfo(): string {

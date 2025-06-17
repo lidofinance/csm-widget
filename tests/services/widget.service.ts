@@ -36,11 +36,11 @@ export class WidgetService {
       await element.header.connectWalletBtn.click();
       await element.termAndPrivacy.confirmConditionWalletModal();
       const walletIcon = element.connectWalletModal.getWalletInModal(
-        this.walletPage.config.COMMON.CONNECT_BUTTON_NAME,
+        this.walletPage.walletConfig.CONNECT_BUTTON_NAME,
       );
       if (
         (await walletIcon.isEnabled({ timeout: 500 })) &&
-        this.walletPage.config.COMMON.WALLET_TYPE === WalletTypes.EOA
+        this.walletPage.walletConfig.WALLET_TYPE === WalletTypes.EOA
       ) {
         try {
           const [connectWalletPage] = await Promise.all([
