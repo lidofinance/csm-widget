@@ -1,7 +1,7 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
-import { KeysPage } from 'tests/pages/keys.page';
+import { KeysPage } from 'tests/pages';
 import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
 test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });

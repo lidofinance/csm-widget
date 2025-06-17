@@ -1,6 +1,5 @@
-import { MainPage } from 'tests/pages/main.page';
+import { MainPage, KeysPage } from 'tests/pages';
 import { test } from '../test.fixture';
-import { KeysPage } from 'tests/pages/keys.page';
 import { getRandomKeys } from '../../consts/keys.const';
 import { Tags, TokenSymbol } from 'tests/consts/common.const';
 import { expect } from '@playwright/test';

@@ -116,6 +116,14 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
 
       await bondBalance.expand();
 
+      /**
+       * Тут бывают ошибки из-за того, что в один блок влизает + между required и excess bond)))
+       *
+       *  1) <svg width="16" height="16" fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">…</svg> aka getByTestId('bondBalanceBlock').getByTestId('excessBondBalance').locator('div').filter({ hasText: 'Excess bond' }).getByRole('img')
+       *  2) <svg width="14" height="14" fill="currentColor" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">…</svg> aka getByTestId('bondBalanceBlock').getByTestId('excessBondBalance').getByTestId('textContent').getByRole('img')
+       *
+       *  Call log:
+       */
       await test.step('Check tooltip for "Excess bond"', async () => {
         const tooltip = await widgetService.dashboardPage.hoverElement(
           bondBalance.excessBondBalance_TitleIcon,

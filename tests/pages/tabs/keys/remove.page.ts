@@ -1,6 +1,6 @@
 import { trimAddress } from '@lidofinance/address';
 import { Locator, Page, test } from '@playwright/test';
-import { BasePage } from 'tests/pages/base.page';
+import { BasePage } from 'tests/pages';
 
 export class RemovePage {
   page: Page;

@@ -1,8 +1,7 @@
 import { expect, Page, test } from '@playwright/test';
 import { ElementController } from '../pages/elements/controller';
 import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
-import { MainPage } from '../pages/main.page';
-import { KeysPage } from '../pages/keys.page';
+import { MainPage, KeysPage, DashboardPage } from '../pages';
 import { DepositKey } from 'tests/consts/keys.const';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { AssertionError } from 'assert';
@@ -10,7 +9,6 @@ import {
   STAGE_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
-import { DashboardPage } from 'tests/pages/dashboard.page';
 
 export class WidgetService {
   public mainPage: MainPage;

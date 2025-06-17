@@ -4,7 +4,7 @@ import {
   FIRST_BOND,
   TokenSymbol,
 } from 'tests/consts/common.const';
-import { BasePage } from 'tests/pages/base.page';
+import { BasePage } from 'tests/pages';
 import { DepositKey } from 'tests/consts/keys.const';
 import { WALLET_PAGE_TIMEOUT_WAITER } from 'tests/consts/timeouts';
 

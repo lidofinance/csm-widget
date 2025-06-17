@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-import { BasePage } from 'tests/pages/base.page';
+import { BasePage } from 'tests/pages';
 import { test } from '@playwright/test';
 import { LOW_TIMEOUT } from 'tests/consts/timeouts';
 

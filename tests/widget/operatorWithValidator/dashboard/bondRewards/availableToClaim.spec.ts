@@ -115,7 +115,7 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', async ()
       const tooltip = await widgetService.dashboardPage.hoverElement(
         availableToClaim.excessBondBalance_TitleIcon,
       );
-
+      // Предыдущий метод иногда может по дороге захватить другой тултип https://app.qase.io/run/CSM/dashboard/118/cc3796f85f0de1b5c60f0e6d14fa3659adff9c3b
       expect(tooltip).toContain('Increases daily');
     });
 

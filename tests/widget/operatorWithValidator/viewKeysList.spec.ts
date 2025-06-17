@@ -1,7 +1,7 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
-import { KeysPage } from 'tests/pages/keys.page';
+import { KeysPage } from 'tests/pages';
 
 test.describe('View keys list. Common', async () => {
   let keysPage: KeysPage;

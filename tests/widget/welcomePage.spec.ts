@@ -1,4 +1,4 @@
-import { WelcomePage } from 'tests/pages/welcome.page';
+import { WelcomePage } from 'tests/pages';
 import { test } from './test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
 
