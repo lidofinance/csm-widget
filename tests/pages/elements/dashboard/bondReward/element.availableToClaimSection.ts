@@ -22,7 +22,8 @@ export class AvailableToClaimBlock extends BaseSection {
     this.rewardsBalance = this.expandedBlock.getByTestId('rewardsBalance');
     this.rewardsBalance_Title =
       this.rewardsBalance.getByTestId('textTitleContent');
-    this.rewardsBalance_TitleIcon = this.rewardsBalance_Title.locator('svg');
+    this.rewardsBalance_TitleIcon =
+      this.rewardsBalance_Title.getByTestId('iconTooltip');
     this.rewardsBalance_Text = this.rewardsBalance.getByTestId('textContent');
     this.rewardsBalance_SubText =
       this.rewardsBalance.getByTestId('subtextContent');
@@ -33,7 +34,7 @@ export class AvailableToClaimBlock extends BaseSection {
     this.excessBondBalance_Title =
       this.excessBondBalance.getByTestId('textTitleContent');
     this.excessBondBalance_TitleIcon =
-      this.excessBondBalance_Title.locator('svg');
+      this.excessBondBalance_Title.getByTestId('iconTooltip');
     this.excessBondBalance_Text =
       this.excessBondBalance.getByTestId('textContent');
     this.excessBondBalance_SubText =

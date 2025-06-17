@@ -25,7 +25,7 @@ export class BondBalanceBlock extends BaseSection {
     this.requiredBondBalance_Title =
       this.requiredBondBalance.getByTestId('textTitleContent');
     this.requiredBondBalance_TitleIcon =
-      this.requiredBondBalance.locator('svg');
+      this.requiredBondBalance.getByTestId('iconTooltip');
     this.requiredBondBalance_Text =
       this.requiredBondBalance.getByTestId('textContent');
     this.requiredBondBalance_SubText =
@@ -36,7 +36,8 @@ export class BondBalanceBlock extends BaseSection {
       this.expandedBlock.getByTestId('excessBondBalance');
     this.excessBondBalance_Title =
       this.excessBondBalance.getByTestId('textTitleContent');
-    this.excessBondBalance_TitleIcon = this.excessBondBalance.locator('svg');
+    this.excessBondBalance_TitleIcon =
+      this.excessBondBalance.getByTestId('iconTooltip');
     this.excessBondBalance_Text =
       this.excessBondBalance.getByTestId('textContent');
     this.excessBondBalance_SubText =
