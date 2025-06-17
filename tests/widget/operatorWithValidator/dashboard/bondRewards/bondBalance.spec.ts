@@ -98,7 +98,7 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
       });
 
       await test.step('Check to hidden tooltip after unhover', async () => {
-        await widgetService.page.mouse.move(0, 0);
+        await widgetService.dashboardPage.closeTooltip();
         const tooltip =
           await widgetService.dashboardPage.bondRewards.getHoveredContent();
         await expect(tooltip).toBeHidden();
@@ -124,7 +124,7 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
       });
 
       await test.step('Check to hidden tooltip after unhover', async () => {
-        await widgetService.page.mouse.move(0, 0);
+        await widgetService.dashboardPage.closeTooltip();
         const tooltip =
           await widgetService.dashboardPage.bondRewards.getHoveredContent();
         await expect(tooltip).toBeHidden();

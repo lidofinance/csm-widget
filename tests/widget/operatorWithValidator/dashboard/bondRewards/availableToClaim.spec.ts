@@ -96,7 +96,7 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', async ()
     });
 
     await test.step('Check to hidden tooltip after unhover', async () => {
-      await widgetService.page.mouse.move(0, 0);
+      await widgetService.dashboardPage.closeTooltip();
       const tooltip =
         await widgetService.dashboardPage.bondRewards.getHoveredContent();
       await expect(tooltip).toBeHidden();
@@ -120,7 +120,7 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', async ()
     });
 
     await test.step('Check to hidden tooltip after unhover', async () => {
-      await widgetService.page.mouse.move(0, 0);
+      await widgetService.dashboardPage.closeTooltip();
       const tooltip =
         await widgetService.dashboardPage.bondRewards.getHoveredContent();
       await expect(tooltip).toBeHidden();
