@@ -80,50 +80,52 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', async ()
     },
   );
 
-  test('Tooltip verification for "Rewards" field', async ({
-    widgetService,
-  }) => {
-    const availableToClaim =
-      widgetService.dashboardPage.bondRewards.availableToClaim;
+  test(
+    qase(183, 'Tooltip verification for "Rewards" field'),
+    async ({ widgetService }) => {
+      const availableToClaim =
+        widgetService.dashboardPage.bondRewards.availableToClaim;
 
-    await availableToClaim.expand();
+      await availableToClaim.expand();
 
-    await test.step('Check tooltip for "Rewards"', async () => {
-      const tooltip = await widgetService.dashboardPage.hoverElement(
-        availableToClaim.rewardsBalance_TitleIcon,
-      );
-      expect(tooltip).toContain('Next rewards distribution is expected on ');
-    });
+      await test.step('Check tooltip for "Rewards"', async () => {
+        const tooltip = await widgetService.dashboardPage.hoverElement(
+          availableToClaim.rewardsBalance_TitleIcon,
+        );
+        expect(tooltip).toContain('Next rewards distribution is expected on ');
+      });
 
-    await test.step('Check to hidden tooltip after unhover', async () => {
-      await widgetService.dashboardPage.closeTooltip();
-      const tooltip =
-        await widgetService.dashboardPage.bondRewards.getHoveredContent();
-      await expect(tooltip).toBeHidden();
-    });
-  });
+      await test.step('Check to hidden tooltip after unhover', async () => {
+        await widgetService.dashboardPage.closeTooltip();
+        const tooltip =
+          await widgetService.dashboardPage.bondRewards.getHoveredContent();
+        await expect(tooltip).toBeHidden();
+      });
+    },
+  );
 
-  test('Tooltip verification for "Excess bond" field', async ({
-    widgetService,
-  }) => {
-    const availableToClaim =
-      widgetService.dashboardPage.bondRewards.availableToClaim;
+  test(
+    qase(184, 'Tooltip verification for "Excess bond" field'),
+    async ({ widgetService }) => {
+      const availableToClaim =
+        widgetService.dashboardPage.bondRewards.availableToClaim;
 
-    await availableToClaim.expand();
+      await availableToClaim.expand();
 
-    await test.step('Check tooltip for "Excess bond"', async () => {
-      const tooltip = await widgetService.dashboardPage.hoverElement(
-        availableToClaim.excessBondBalance_TitleIcon,
-      );
+      await test.step('Check tooltip for "Excess bond"', async () => {
+        const tooltip = await widgetService.dashboardPage.hoverElement(
+          availableToClaim.excessBondBalance_TitleIcon,
+        );
+        // Предыдущий метод иногда может по дороге захватить другой тултип https://app.qase.io/run/CSM/dashboard/118/cc3796f85f0de1b5c60f0e6d14fa3659adff9c3b
+        expect(tooltip).toContain('Increases daily');
+      });
 
-      expect(tooltip).toContain('Increases daily');
-    });
-
-    await test.step('Check to hidden tooltip after unhover', async () => {
-      await widgetService.dashboardPage.closeTooltip();
-      const tooltip =
-        await widgetService.dashboardPage.bondRewards.getHoveredContent();
-      await expect(tooltip).toBeHidden();
-    });
-  });
+      await test.step('Check to hidden tooltip after unhover', async () => {
+        await widgetService.dashboardPage.closeTooltip();
+        const tooltip =
+          await widgetService.dashboardPage.bondRewards.getHoveredContent();
+        await expect(tooltip).toBeHidden();
+      });
+    },
+  );
 });
