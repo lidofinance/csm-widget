@@ -3048,14 +3048,14 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.47.0.tgz#2367eec1c8363516bde48b632a6fbe32aec33a1e"
   integrity sha512-6xx2O89OhWAxaob+SqXEX2xtrumG4MCUrclooCIvAhz64Lp3Wa0Hzt2lgJyFMhJxpDPMj3LmYNbuB15lwEQKwg==
 
-"@lidofinance/browser-service@1.2.0-alpha-reduceMotion.2":
-  version "1.2.0-alpha-reduceMotion.2"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.2.0-alpha-reduceMotion.2.tgz#ad2aa700a472ab019476cede13060155269bf8b6"
-  integrity sha512-DUGQHCE0Kq4gpyzu7lzuESfUAqVuQynZCy82NcS9hQn+vhB8hUozlNOvuQmpqj2Sku3ld2CcgTRDGlzSpC4Hhg==
+"@lidofinance/browser-service@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.2.0.tgz#795f57eafd5fe75ff525fcb58f4676ffe515a4aa"
+  integrity sha512-sywJosKyx+XJOSWr4Cjjo+szD7HQ0+X6xUgC5QZf3CA0ZditJpZ5yYqUoClHFREynR0JT9IKJDCG33carH+myA==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.2.2"
     "@lidofinance/wallets-testing-nodes" "1.2.1"
-    "@lidofinance/wallets-testing-wallets" "1.34.0-alpha-reduceMotion.2"
+    "@lidofinance/wallets-testing-wallets" "1.34.0"
     "@playwright/test" "^1.51.1"
 
 "@lidofinance/discord-reporter@1.4.2":
@@ -3177,10 +3177,10 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.34.0-alpha-reduceMotion.2":
-  version "1.34.0-alpha-reduceMotion.2"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.34.0-alpha-reduceMotion.2.tgz#3c5345f671c628c287d0d952793959002c6d8aae"
-  integrity sha512-WfiRt9M2cvYJqnsmcVx0k8KR1R8qQloWvFgv4MLU0Ybe8S4JoiSgaqjjuTdPatxDdtnS/9cNdU/qn+Pfdh5jFQ==
+"@lidofinance/wallets-testing-wallets@1.34.0":
+  version "1.34.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.34.0.tgz#da049588b62468845d16f05b1b61d45fac8f56fa"
+  integrity sha512-99Msz38+iq2WVX37OHM2qm5pzgCQ6yJGFC0c2vhVOmyHj+qjeHC9HigWYCZ+KdGBywQK7zRnj03HYRni0Xmg0w==
   dependencies:
     "@playwright/test" "^1.51.1"
     expect "^28.1.3"
