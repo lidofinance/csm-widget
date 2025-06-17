@@ -23,12 +23,9 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
         throw new Error('Node operator ID not found');
       }
 
-      let bondSummary: any;
-      await test.step('Try to get bond blanace from contract directly', async () => {
-        bondSummary = await new CSAccountingContract().getBondSummary(
-          nodeOperatorId,
-        );
-      });
+      const bondSummary = await new CSAccountingContract().getBondSummary(
+        nodeOperatorId,
+      );
 
       await test.step('Check "Bond balance" section', async () => {
         await expect(bondBalance.requiredBondBalance).toBeHidden();

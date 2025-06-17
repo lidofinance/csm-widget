@@ -1,6 +1,7 @@
 import { widgetFullConfig } from 'tests/config';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { Contract } from '@ethersproject/contracts';
+import { test } from '@playwright/test';
 
 export class CSAccountingContract {
   private contractName = 'CSAccounting';
@@ -21,6 +22,8 @@ export class CSAccountingContract {
   }
 
   async getBondSummary(nodeOperatorNumber: number) {
-    return this.contract.getBondSummary(nodeOperatorNumber);
+    await test.step(`Get bond summary from ${this.contractName} contract`, async () => {
+      return this.contract.getBondSummary(nodeOperatorNumber);
+    });
   }
 }
