@@ -22,7 +22,7 @@ export class CSAccountingContract {
   }
 
   async getBondSummary(nodeOperatorNumber: number) {
-    await test.step(`Get bond summary from ${this.contractName} contract`, async () => {
+    return test.step(`Get bond summary from ${this.contractName} contract`, async () => {
       return this.contract.getBondSummary(nodeOperatorNumber);
     });
   }
