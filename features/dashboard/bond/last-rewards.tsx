@@ -128,7 +128,7 @@ const LastReportStats: FC = () => {
   const { data: txHash, initialLoading: isTxLoading } = useLastRewrdsTx();
 
   return (
-    <RowBody>
+    <RowBody data-testid="lastRewardsInfo">
       {!lastRewards || lastRewards.validatorsCount ? (
         <>
           {' '}
