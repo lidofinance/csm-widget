@@ -1,6 +1,6 @@
 import { Locator, test } from '@playwright/test';
 
-export abstract class BaseSection {
+export abstract class BaseExpandedBlock {
   expandedBlock: Locator;
   expandedButton: Locator;
   commonBalance: Locator;

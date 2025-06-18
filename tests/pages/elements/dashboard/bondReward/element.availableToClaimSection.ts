@@ -1,8 +1,8 @@
 import { Locator } from '@playwright/test';
-import { BaseSection } from './element.baseSection';
+import { BaseExpandedBlock } from './element.baseSection';
 import { LOW_TIMEOUT } from 'tests/consts/timeouts';
 
-export class AvailableToClaimBlock extends BaseSection {
+export class AvailableToClaimBlock extends BaseExpandedBlock {
   rewardsBalance: Locator;
   rewardsBalance_Title: Locator;
   rewardsBalance_TitleIcon: Locator;

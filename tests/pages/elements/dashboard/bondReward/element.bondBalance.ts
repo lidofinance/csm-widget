@@ -1,8 +1,8 @@
 import { Locator } from '@playwright/test';
 import { LOW_TIMEOUT } from 'tests/consts/timeouts';
-import { BaseSection } from './element.baseSection';
+import { BaseExpandedBlock } from './element.baseSection';
 
-export class BondBalanceBlock extends BaseSection {
+export class BondBalanceBlock extends BaseExpandedBlock {
   requiredBondBalance: Locator;
   requiredBondBalance_Title: Locator;
   requiredBondBalance_TitleIcon: Locator;
