@@ -8,7 +8,7 @@ export const Roles3: Faq = {
     <div>
       <p>
         To accept a change in address request, connect to the CSM widget with
-        the new address, navigate to the &quot;Roles&quot; → &quot;Inbox
+        the new address, navigate to the &quot;Roles&quot; &rarr; &quot;Inbox
         requests&quot; tab, select and accept the request, and confirm the
         transaction in your wallet. Changes are made once the transaction is
         processed.

@@ -1,8 +1,5 @@
-import React from 'react';
+import { FaqCurveImage, FaqLink } from 'shared/components';
 import { Faq } from 'types';
-import { FaqLink } from 'shared/components';
-import Image from 'next/image';
-import curve from 'public/assets/mainnet-curve-common.png';
 
 export const Keys4: Faq = {
   title: 'What is the bond curve?',
@@ -14,10 +11,12 @@ export const Keys4: Faq = {
           The bond curve
         </FaqLink>{' '}
         is a function that determines the amount of bond required for each
-        subsequent validator operated by the node operator.
+        subsequent validator operated by the node operator. For Identified
+        Community Stakers (ICS), a unique bond curve function is applied to
+        independent stakers participation.
       </p>
       <p>For the mainnet, the values for the bond curve are the following:</p>
-      <Image src={curve} alt="curve.png" />
+      <FaqCurveImage />
     </div>
   ),
 };

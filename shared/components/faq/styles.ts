@@ -1,3 +1,4 @@
+import { InlineLoader } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
 export const FaqElement = styled.div`
@@ -30,4 +31,8 @@ export const FaqElement = styled.div`
   img {
     width: 100%;
   }
+`;
+
+export const ShortInlineLoader = styled(InlineLoader)`
+  max-width: 50px;
 `;

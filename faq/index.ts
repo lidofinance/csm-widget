@@ -1,6 +1,16 @@
-import { Bond1, Bond2, Bond3, Bond4, Bond5 } from './items';
 import {
+  BondRewards1,
+  BondRewards2,
+  BondRewards3,
+  BondRewards4,
+  BondRewards5,
   Keys1,
+  Keys10,
+  Keys11,
+  Keys12,
+  Keys13,
+  Keys14,
+  Keys15,
   Keys2,
   Keys3,
   Keys4,
@@ -9,13 +19,9 @@ import {
   Keys7,
   Keys8,
   Keys9,
-  Keys10,
-  Keys11,
-  Keys12,
-  Keys13,
-} from './items';
-import { Locked1, Locked2, Locked3 } from './items';
-import {
+  LockedBond1,
+  LockedBond2,
+  LockedBond3,
   Main1,
   Main2,
   Main3,
@@ -24,13 +30,30 @@ import {
   Main6,
   Main7,
   Main8,
+  Monitoring1,
+  Monitoring2,
+  Monitoring3,
+  Monitoring4,
+  Monitoring5,
+  OperatorType1,
+  OperatorType2,
+  Roles1,
+  Roles2,
+  Roles3,
+  Roles4,
+  Roles5,
 } from './items';
-import { Monitoring1, Monitoring2 } from './items';
-import { Roles1, Roles2, Roles3, Roles4, Roles5 } from './items';
 
+export const FAQ_OPERATOR_TYPE = [OperatorType1, OperatorType2];
 export const FAQ_ROLES = [Roles1, Roles2, Roles3, Roles4, Roles5];
-export const FAQ_BOND = [Bond1, Bond2, Bond3, Bond4, Bond5];
-export const FAQ_LOCKED = [Locked1, Locked2, Locked3];
+export const FAQ_BOND = [
+  BondRewards1,
+  BondRewards2,
+  BondRewards3,
+  BondRewards4,
+  BondRewards5,
+];
+export const FAQ_LOCKED = [LockedBond1, LockedBond2, LockedBond3];
 export const FAQ_MAIN = [
   Main1,
   Main2,
@@ -41,7 +64,13 @@ export const FAQ_MAIN = [
   Main7,
   Main8,
 ];
-export const FAQ_MONITORING = [Monitoring1, Monitoring2];
+export const FAQ_MONITORING = [
+  Monitoring1,
+  Monitoring2,
+  Monitoring3,
+  Monitoring4,
+  Monitoring5,
+];
 export const FAQ_KEYS = [
   Keys1,
   Keys2,
@@ -56,4 +85,6 @@ export const FAQ_KEYS = [
   Keys11,
   Keys12,
   Keys13,
+  Keys14,
+  Keys15,
 ];

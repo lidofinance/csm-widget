@@ -36,7 +36,6 @@ export const useClaimTypeFormNetworkData = (): [
   const { data: canClaimCurve, isPending: isCanClaimCurveLoading } =
     useIcsCanClaim({ address, nodeOperatorId });
 
-  // FIXME: invalidate every Parameters (based on type)
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateCurrentCurveId(), updateProof()]);
   }, [updateCurrentCurveId, updateProof]);

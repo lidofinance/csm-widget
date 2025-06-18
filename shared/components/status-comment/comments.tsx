@@ -57,7 +57,7 @@ export const CommentNonQueued: FC = () => (
 export const CommentExiting: FC = () => (
   <LocalLink
     href={PATH.KEYS_VIEW}
-    anchor="#when-validator-become-withdrawn"
+    anchor="#when-does-a-validator-become-withdrawn"
     matomoEvent={
       MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeWithdrawnLinkComment
     }
@@ -70,7 +70,7 @@ export const CommentActivationPending: FC = () => {
   return (
     <LocalLink
       href={PATH.KEYS_VIEW}
-      anchor="#when-validator-become-active"
+      anchor="#when-does-a-validator-become-active"
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
       }
@@ -89,7 +89,7 @@ export const CommentDepositable: FC = () => {
       reached its{' '}
       <LocalLink
         href={PATH.KEYS_VIEW}
-        anchor="#stake-share-limit"
+        anchor="#what-is-the-csm-stake-share-limit"
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment}
       >
         stake share limit
@@ -98,7 +98,7 @@ export const CommentDepositable: FC = () => {
   ) : (
     <LocalLink
       href={PATH.KEYS_VIEW}
-      anchor="#when-validator-become-active"
+      anchor="#wwhen-does-a-validator-become-active"
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
       }

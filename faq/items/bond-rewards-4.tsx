@@ -2,9 +2,9 @@ import React from 'react';
 import { Faq } from 'types';
 import { FaqLink } from 'shared/components';
 
-export const Keys2: Faq = {
-  title: 'Why upload a bond?',
-  anchor: 'why-upload-a-bond',
+export const BondRewards4: Faq = {
+  title: 'Why add a bond?',
+  anchor: 'why-add-a-bond',
   content: (
     <div>
       <p>

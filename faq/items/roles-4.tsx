@@ -8,10 +8,10 @@ export const Roles4: Faq = {
     <div>
       <p>
         If a role change was submitted to the wrong address, the change can be
-        revoked. For Rewards Address changes, navigate to &quot;Roles&quot; →
-        &quot;Rewards Address&quot; → &quot;Revoke&quot;. For Manager Address
-        changes, go to &quot;Roles&quot; → &quot;Manager Address&quot; →
-        &quot;Revoke&quot;
+        revoked. For Rewards Address changes, navigate to &quot;Roles&quot;
+        &rarr; &quot;Rewards Address&quot; &rarr; &quot;Revoke&quot;. For
+        Manager Address changes, go to &quot;Roles&quot; &rarr; &quot;Manager
+        address&quot; &rarr; &quot;Revoke&quot;
       </p>
     </div>
   ),

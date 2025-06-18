@@ -7,7 +7,7 @@ export const Main2: Faq = {
   content: (
     <div>
       <p>
-        Node operation in CSM involves a long-term commitment to Ethereum&#39;s
+        Node operation in CSM involves a long-term commitment to Ethereum&apos;s
         decentralization. Responsibilities include:
       </p>
       <ul>
@@ -27,7 +27,7 @@ export const Main2: Faq = {
         </li>
         <li>
           <strong>Maintenance</strong>: Sustaining ongoing maintenance
-          throughout the validator&#39;s lifespan, which involves monitoring
+          throughout the validator&apos;s lifespan, which involves monitoring
           performance, troubleshooting issues, and applying necessary updates.
         </li>
       </ul>

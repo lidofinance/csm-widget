@@ -2,7 +2,7 @@ import React from 'react';
 import { Faq } from 'types';
 import { FaqLink } from 'shared/components';
 
-export const Bond1: Faq = {
+export const BondRewards1: Faq = {
   title: 'What rewards do I get in CSM?',
   anchor: 'what-rewards-do-i-get-in-csm',
   content: (

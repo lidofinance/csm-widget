@@ -19,7 +19,7 @@ const ReachedBanner: FC = () => (
     the near future (possibly for months).
     <br />
     <LocalLink
-      anchor="#stake-share-limit"
+      anchor="#what-is-the-csm-stake-share-limit"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner}
     >
       Read more in the FAQ section
@@ -41,7 +41,7 @@ const ExhaustedBanner: FC<Props> = ({ activeLeft, queue }) => (
     can be active for CSM is constantly changing due to protocol dynamics.
     <br />
     <LocalLink
-      anchor="#stake-share-limit"
+      anchor="#what-is-the-csm-stake-share-limit"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner}
     >
       Read more in the FAQ section
@@ -60,7 +60,7 @@ const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
     can be active for CSM is constantly changing due to protocol dynamics.
     <br />
     <LocalLink
-      anchor="#stake-share-limit"
+      anchor="#what-is-the-csm-stake-share-limit"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner}
     >
       Read more in the FAQ section

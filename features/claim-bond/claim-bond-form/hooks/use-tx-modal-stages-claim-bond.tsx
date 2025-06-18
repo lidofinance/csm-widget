@@ -55,7 +55,7 @@ const getTxModalStagesClaimBond = (
               Add NFT to your wallet to monitor the status of your request.
               <LocalLink
                 href={PATH.BOND_CLAIM}
-                anchor="#how-to-claim-eth"
+                anchor="#how-to-claim-eth-using-a-withdrawal-nft"
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToClaimEthSuccessLink}
               >
                 This guide

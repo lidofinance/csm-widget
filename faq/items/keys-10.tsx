@@ -1,44 +1,52 @@
 import React from 'react';
 import { Faq } from 'types';
+import { FaqLink } from 'shared/components';
 
 export const Keys10: Faq = {
-  title: 'When does a validator become withdrawn?',
-  anchor: 'when-validator-become-withdrawn',
+  title:
+    'What is the difference between removing, exiting, and ejecting a key?',
+  anchor: 'what-is-the-difference-between-removing-exiting-and-ejecting-a-key',
   content: (
     <div>
       <p>
-        On the Ethereum network, a validator can be withdrawn after successfully
-        exiting from the consensus layer, but the exact timing of withdrawal
-        depends on several factors related to Ethereum protocol mechanics:
+        Removing a key is an operation when the validator key is removed from
+        the Node Operator on-chain keys storage in CSM. Only non-deposited keys
+        can be removed. Due to associated queue maintenance costs{' '}
+        <code>keyRemovalCharge</code> is charged from the Node Operator&apos;s
+        bond for each removed key.
       </p>
-      <ol>
+      <p>
+        Exiting a key (validator) is an operation when the Node Operator
+        publishes a voluntary exit message associated with the corresponding
+        active validator to the Beacon chain. Once published, the exit process
+        will be started for the validator. Note that only activated validators
+        might be exited. Also, a period of <code>256 epochs</code> (approx. 27
+        hours) should pass since the validator activation before the voluntary
+        exit message can be published.
+      </p>
+      <p>
+        Ejecting the key (validator) is an operation when the validator exit is
+        initiated from the validator&apos;s withdrawal credentials on Execution
+        layer. Since all validators in CSM have their withdrawal credentials set
+        to Lido Withdrawal Vault, the process can only be initiated from this
+        smart contract. CSM provides a proxy method for the Node Operators to
+        voluntary eject their validators if they decide to do so. In this case,
+        the Node Operator is responsible for attaching a corresponding payment
+        to cover{' '}
+        <FaqLink href="https://eips.ethereum.org/EIPS/eip-7002">TW fee</FaqLink>
+        . Also, ejection can be invoked from the Lido protocol side in the
+        following cases:
+      </p>
+      <ul>
         <li>
-          <strong>Exit Queue</strong>: When a validator initiates an exit, it
-          enters an exit queue. The time required to exit depends on the number
-          of validators exiting and the churn limit (the number of validators
-          allowed to exit or enter per epoch).
+          The validator has excessive number of performance strikes assigned;
         </li>
         <li>
-          <strong>Withdrawal Process</strong>: After exiting the active
-          validator set, the validator enters a withdrawable state. This state
-          is determined by the withdrawable epoch, which is set to the exit
-          epoch + a minimum delay of 256 epochs (~27 hours).
+          The validator was requested to exit by VEBO but have not exited in
+          time;
         </li>
-        <li>
-          <strong>Finalization of Withdrawal</strong>: Once the withdrawable
-          epoch is reached, the validator balance will be transferred to the
-          validator&#39;s withdrawal credentials (in the case of the Lido
-          protocol, the Lido Withdrawal Vault) within the next iteration of the
-          Consensus Layer withdrawal sweep cycle. How long this takes depends on
-          the validator&#39;s position in the overall sweep cycle, and time
-          difference between the withdrawable epoch and when its turn will come
-          to be swept. Once the withdrawal has occurred, the fact of the
-          withdrawal can be reported to CSM permissionlessly. Once that occurs,
-          the part of the Node Operator&#39;s bond used for this validator is
-          released. At this point, the Node Operator can claim the bond on the
-          Bond & Rewards Claim tab.
-        </li>
-      </ol>
+        <li>Based on the Lido DAO decision;</li>
+      </ul>
     </div>
   ),
 };

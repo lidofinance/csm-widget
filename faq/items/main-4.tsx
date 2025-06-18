@@ -20,7 +20,7 @@ export const Main4: Faq = {
         </li>
         <li>
           <strong>Market Risk</strong>: The value of ETH can fluctuate
-          significantly, impacting the value of the validator&#39;s staked ETH.
+          significantly, impacting the value of the validator&apos;s staked ETH.
         </li>
         <li>
           <strong>Network Risk</strong>: Validators are part of a decentralized

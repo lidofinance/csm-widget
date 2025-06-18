@@ -3,13 +3,13 @@ import { Faq } from 'types';
 import { FaqLink } from 'shared/components';
 
 export const Roles1: Faq = {
-  title: 'What are rewards and Manager Addresses?',
+  title: 'What are rewards and manager addresses?',
   anchor: 'what-are-rewards-and-manager-addresses',
   content: (
     <div>
       <p>
         There are two addresses associated with your Node Operator that have
-        different scope of responsibilities for managing your Node Operator.
+        different scope of responsibilities for managing your Node Operator.{' '}
       </p>
       <p>The Rewards Address is used for:</p>
       <ul>

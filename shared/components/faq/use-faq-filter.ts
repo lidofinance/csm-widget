@@ -1,12 +1,12 @@
-import { FaqItem } from 'lib/getFaq';
 import { useModifyContext } from 'providers/modify-provider';
 import { useCallback } from 'react';
 
+// TODO: remove or fix
 export const useFaqFilter = () => {
   const hasReferrer = !!useModifyContext().referrer;
 
   return useCallback(
-    (faq: FaqItem) => {
+    (faq: any) => {
       return !faq.onlyWithReferrer || hasReferrer;
     },
     [hasReferrer],

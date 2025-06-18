@@ -36,7 +36,7 @@ export const PARAMETERS: {
     help: "An amount deducted from the Node Operator's bond per each deleted key to cover the maximal possible operational costs associated with the queue processing",
     render: (parameters) => [
       <>
-        <FormatToken amount={parameters?.keysRemovalFee} token={TOKENS.eth} />{' '}
+        <FormatToken amount={parameters?.keyRemovalFee} token={TOKENS.eth} />{' '}
         for all keys
       </>,
     ],
@@ -78,6 +78,18 @@ export const PARAMETERS: {
           variants: ['month', 'months'],
           showValue: true,
         })}
+      </>,
+    ],
+  },
+  {
+    title: 'Bad performance penalty',
+    help: 'A penalty for the validator that was ejected due to strikes accumulated for bad performance',
+    render: (parameters) => [
+      <>
+        <FormatToken
+          amount={parameters?.badPerformancePenalty}
+          token={TOKENS.eth}
+        />
       </>,
     ],
   },

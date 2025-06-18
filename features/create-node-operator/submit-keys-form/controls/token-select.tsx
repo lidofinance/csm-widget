@@ -21,7 +21,7 @@ export const TokenSelect: React.FC = () => {
         extra={
           <LocalLink
             href={PATH.CREATE}
-            anchor="#how-bond-is-calculated"
+            anchor="#how-much-bond-is-needed"
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
           >
             How bond is calculated

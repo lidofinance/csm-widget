@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaqKeyRemovalFee } from 'shared/components';
 import { Faq } from 'types';
 
 export const Keys7: Faq = {
@@ -7,15 +8,15 @@ export const Keys7: Faq = {
   content: (
     <div>
       <p>
-        Key deletion incurs a removal fee of 0.05 ETH, which is deducted from
-        the Node Operator&#39;s bond per each deleted key to cover the maximal
-        possible operational costs associated with the queue processing. This
-        fee is intended to protect the module from potential DoS attacks by
-        malicious actors who could clog the queue with empty slots by adding and
-        removing keys, and covers the maximal possible operational costs
-        associated with the queue processing. The fee discourages misuse,
-        keeping the system clear of invalid keys or keys that don&#39;t end up
-        being deposited to.
+        Key deletion incurs a removal fee of <FaqKeyRemovalFee />, which is
+        deducted from the Node Operator&apos;s bond per each deleted key to
+        cover the maximal possible operational costs associated with the queue
+        processing. This fee is intended to protect the module from potential
+        DoS attacks by malicious actors who could clog the queue with empty
+        slots by adding and removing keys, and covers the maximal possible
+        operational costs associated with the queue processing. The fee
+        discourages misuse, keeping the system clear of invalid keys or keys
+        that don&apos;t end up being deposited to.
       </p>
     </div>
   ),

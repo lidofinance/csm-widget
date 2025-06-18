@@ -5,7 +5,7 @@ import invariant from 'tiny-invariant';
 import { useLidoSDK } from '../web3-provider';
 
 export const useCurveParameters = <TData = CurveParameters>(
-  curveId?: bigint,
+  curveId: bigint | undefined,
   select?: (data: CurveParameters) => TData,
 ) => {
   const { csm } = useLidoSDK();

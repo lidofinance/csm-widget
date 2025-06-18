@@ -13,9 +13,9 @@ export const Main3: Faq = {
           <strong>Daily Bond Rebase</strong>: The collateral for CSM NOs is
           eligible for{' '}
           <FaqLink href="https://help.lido.fi/en/articles/5230610-what-is-steth">
-            rewards through stETH&#39;s rebase
+            rewards through stETH&apos;s rebase
           </FaqLink>
-          , even before validator activation.
+          , even before validator activation.{' '}
         </li>
         <li>
           <strong>Socialized Rewards</strong>: Rewards are smoothed across the

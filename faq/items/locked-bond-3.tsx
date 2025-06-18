@@ -1,7 +1,7 @@
 import React from 'react';
 import { Faq } from 'types';
 
-export const Locked3: Faq = {
+export const LockedBond3: Faq = {
   title: 'Consequences of not compensating?',
   anchor: 'consequences-of-not-compensating',
   content: (

@@ -5,6 +5,7 @@ import { useLidoSDK } from '../web3-provider';
 import { usePermissionlessCurveId } from './use-permissionless-curve-id';
 import invariant from 'tiny-invariant';
 
+// TODO: refactor
 export const useBondEthByKeysCount = (keysCount = 1) => {
   const { csm } = useLidoSDK();
 

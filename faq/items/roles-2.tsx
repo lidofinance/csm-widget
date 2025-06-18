@@ -1,5 +1,6 @@
-import { FaqLink } from 'shared/components';
+import React from 'react';
 import { Faq } from 'types';
+import { FaqLink } from 'shared/components';
 
 export const Roles2: Faq = {
   title: 'Why should these addresses be different?',
@@ -7,10 +8,10 @@ export const Roles2: Faq = {
   content: (
     <div>
       <p>
-        It&#39;s recommended to use different addresses for security reasons.
+        It&apos;s recommended to use different addresses for security reasons.
         For example, a hot wallet may be used for the Manager Address to
         simplify daily operations, while a cold wallet (or something like a
-        Safe) is preferable for the Rewards Address to enhance security.
+        Safe) is preferable for the Rewards Address to enhance security.{' '}
       </p>
       <p>
         Read more about addresses management{' '}

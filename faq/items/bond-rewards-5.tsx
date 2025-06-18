@@ -2,21 +2,21 @@ import React from 'react';
 import { Faq } from 'types';
 import { FaqLink } from 'shared/components';
 
-export const Bond5: Faq = {
+export const BondRewards5: Faq = {
   title: 'How to claim ETH using a withdrawal NFT',
-  anchor: 'how-to-claim-eth',
+  anchor: 'how-to-claim-eth-using-a-withdrawal-nft',
   content: (
     <div>
       <p>
         Claiming bond and rewards in a form of ETH constitutes an stETH
-        withdrawal process (unstake).
+        withdrawal process (unstake).{' '}
       </p>
       <p>The withdrawal process consists of several steps you need to do:</p>
       <ul>
         <li>
           <strong>Submit a withdrawal request</strong> by choosing ETH as a
           token for bond/rewards claim. As a result of this step, you will
-          receive a withdrawal NFT.
+          receive a withdrawal NFT.{' '}
         </li>
         <li>
           <strong>Claim your ETH</strong> after request fulfilment. The
@@ -29,8 +29,8 @@ export const Bond5: Faq = {
           <FaqLink href="https://stake.lido.fi/withdrawals/claim">
             Claim page
           </FaqLink>
-          . If your request is marked as “<strong>Ready to claim</strong>”, it
-          is time for you to get your ETH back.
+          . If your request is marked as &quot;<strong>Ready to claim</strong>
+          &quot;, it is time for you to get your ETH back.
         </li>
       </ul>
       <p>

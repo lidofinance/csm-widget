@@ -3,7 +3,7 @@ import { Faq } from 'types';
 
 export const Keys5: Faq = {
   title: 'Difference between bond types (ETH, stETH, wstETH)?',
-  anchor: 'difference-between-bond-types',
+  anchor: 'difference-between-bond-types-eth-steth-wsteth',
   content: (
     <div>
       <p>

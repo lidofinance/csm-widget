@@ -1,7 +1,7 @@
 import React from 'react';
 import { Faq } from 'types';
 
-export const Locked1: Faq = {
+export const LockedBond1: Faq = {
   title: 'Why is the bond locked?',
   anchor: 'why-is-the-bond-locked',
   content: (

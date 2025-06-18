@@ -24,6 +24,7 @@ export * from './use-operator-type';
 export * from './use-permissionless-curve-id';
 export * from './use-rewards-frame';
 export * from './use-rewards-last-report-tx-hash';
+export * from './use-share-limit-percentage';
 export * from './use-share-limit-status';
 export * from './use-share-limit';
 export * from './use-stETH-by-wstETH';

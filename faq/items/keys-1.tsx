@@ -17,7 +17,7 @@ export const Keys1: Faq = {
       </p>
       <p>
         A shorter flow of setting up a CSM validator for mainnet looks as
-        follows:
+        follows:{' '}
       </p>
       <ol>
         <li>
@@ -26,8 +26,11 @@ export const Keys1: Faq = {
           </FaqLink>{' '}
           setting the <code>withdrawal_address</code> to the Lido Withdrawal
           Vault on <strong>mainnet:</strong>{' '}
-          <code>0xb9d7934878b5fb9610b3fe8a5e441e8fad7e293f</code> and specify
-          the deposit amount of 32 ETH (do <strong>NOT</strong> make a deposit)
+          <FaqLink href="https://etherscan.io/address/0xb9d7934878b5fb9610b3fe8a5e441e8fad7e293f">
+            <code>0xb9d7934878b5fb9610b3fe8a5e441e8fad7e293f</code>
+          </FaqLink>
+          , specify the deposit amount of 32 ETH, and set WC type to{' '}
+          <code>0x01</code> (do <strong>NOT</strong> make a deposit)
         </li>
         <li>
           <FaqLink href="https://dvt-homestaker.stakesaurus.com/native-solo-staking-setup/validator-client-setup">
@@ -36,8 +39,10 @@ export const Keys1: Faq = {
           (and/or beacon node) setting the <code>fee_recipient</code> flag to
           the designated fee recipient address (Lido Execution Layer Rewards
           Vault) on <strong>mainnet:</strong>{' '}
-          <code>0x388C818CA8B9251b393131C08a736A67ccB19297</code> and import the
-          newly generated CSM keystores
+          <FaqLink href="https://etherscan.io/address/0x388C818CA8B9251b393131C08a736A67ccB19297">
+            <code>0x388C818CA8B9251b393131C08a736A67ccB19297</code>
+          </FaqLink>{' '}
+          and import the newly generated CSM keystores
         </li>
         <li>
           <FaqLink href="https://dvt-homestaker.stakesaurus.com/keystore-generation-and-mev-boost/set-up-and-configure-mev-boost">
@@ -56,7 +61,8 @@ export const Keys1: Faq = {
           <FaqLink href="https://enchanted-direction-844.notion.site/6d369eb33f664487800b0dedfe32171e?v=8e5d1f1276b0493caea8a2aa1517ed65">
             the list of Vetted MEV-Boost Relays for Lido CSM
           </FaqLink>
-          .
+          . Note that at least one “must use” relay should be used. Relays not
+          mentioned in the list are not allowed for use
         </li>
         <li>
           <FaqLink href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm/upload-remove-view-validator-keys">
@@ -65,8 +71,9 @@ export const Keys1: Faq = {
           file pertaining to your CSM keystores onto{' '}
           <FaqLink href="https://csm.lido.fi/">the Lido CSM Widget</FaqLink> and
           provide the required bond amount in ETH/stETH/wstETH. Before
-          uploading, make sure that nodes are synced, running, and ready for the
-          validator activation.
+          uploading, make sure that nodes are synced, running, and corresponding
+          keystores are imported. Hence, your setup is ready for the validator
+          activation
         </li>
         <li>
           Wait for your CSM validator keys to be deposited through the protocol
