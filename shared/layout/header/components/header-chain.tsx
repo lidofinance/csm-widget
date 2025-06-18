@@ -10,11 +10,11 @@ import {
 } from '../styles';
 
 const HeaderChain: FC = () => {
-  const { isAccountActive, chainId } = useDappStatus();
+  const { chainId } = useDappStatus();
   const chainColor = useChainColor();
   const chainName = useChainName(true);
 
-  const showNet = chainId !== CHAINS.Mainnet && isAccountActive;
+  const showNet = chainId !== CHAINS.Mainnet;
 
   return (
     <NoSSRWrapper>

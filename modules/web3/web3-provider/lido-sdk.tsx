@@ -14,11 +14,9 @@ import {
   LidoSDKwstETH,
 } from '@lidofinance/lido-ethereum-sdk/erc20';
 
-import { config } from 'config';
-import { useTokenTransferSubscription } from 'modules/web3/hooks/use-balance';
-// import { CHAINS } from '../consts';
-import { LidoSDKStake, LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk';
 import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
+import { LidoSDKStake, LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk';
+import { config } from 'config';
 import { overridedAddresses } from './devnet';
 
 type LidoSDKContextValue = {
@@ -29,8 +27,9 @@ type LidoSDKContextValue = {
   wstETH: LidoSDKwstETH;
   wrap: LidoSDKWrap;
   csm: LidoSDKCsm;
-  subscribeToTokenUpdates: ReturnType<typeof useTokenTransferSubscription>;
 };
+
+const chainId = config.defaultChain;
 
 const LidoSDKContext = createContext<LidoSDKContextValue | null>(null);
 LidoSDKContext.displayName = 'LidoSDKContext';
@@ -42,17 +41,6 @@ export const useLidoSDK = () => {
 };
 
 export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
-  const subscribe = useTokenTransferSubscription();
-
-  // will only have
-  const { chainId: walletChain } = useAccount();
-  const chainId = useMemo(
-    () =>
-      walletChain && config.supportedChains.includes(walletChain)
-        ? walletChain
-        : config.defaultChain,
-    [walletChain],
-  );
   const { data: walletClient } = useWalletClient({ chainId });
   const publicClient = usePublicClient({ chainId });
   // reset internal wagmi state after disconnect
@@ -75,13 +63,16 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
   }, [isConnected]);
 
   const contextValue = useMemo(() => {
-    // @ts-expect-error: typing (viem + LidoSDK)
-    const core = new LidoSDKCore({
-      chainId,
-      // logMode: 'debug',
-      rpcProvider: publicClient,
-      web3Provider: walletClient,
-    });
+    const core = new LidoSDKCore(
+      // @ts-expect-error: typing (viem + LidoSDK)
+      {
+        chainId,
+        // logMode: 'debug',
+        rpcProvider: publicClient,
+        web3Provider: walletClient,
+      },
+      'CSM',
+    );
 
     const stake = new LidoSDKStake({ core });
     const stETH = new LidoSDKstETH({ core });
@@ -93,16 +84,15 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     });
 
     return {
-      chainId: core.chainId as unknown as CHAINS,
+      chainId: core.chainId,
       core,
       stake,
       stETH,
       wstETH,
       wrap,
       csm,
-      subscribeToTokenUpdates: subscribe,
     };
-  }, [chainId, publicClient, subscribe, walletClient]);
+  }, [publicClient, walletClient]);
   return (
     <LidoSDKContext.Provider value={contextValue}>
       {children}
