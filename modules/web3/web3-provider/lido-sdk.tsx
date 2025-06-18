@@ -17,7 +17,6 @@ import {
 import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
 import { LidoSDKStake, LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
-import { overridedAddresses } from './devnet';
 
 type LidoSDKContextValue = {
   chainId: CHAINS;
@@ -80,7 +79,6 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     const wrap = new LidoSDKWrap({ core });
     const csm = new LidoSDKCsm({
       core,
-      overridedAddresses,
     });
 
     return {
