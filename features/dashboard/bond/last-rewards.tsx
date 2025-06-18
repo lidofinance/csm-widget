@@ -83,13 +83,13 @@ export const LastRewards: FC = () => {
       <Stack direction="column" gap="lg">
         <LastReportStats />
         <Divider />
-        <Stack spaceBetween center>
+        <Stack spaceBetween center data-testid="nextRewardsInfo">
           <Stack direction="column" gap="xxs">
             <Text size="xs" weight={700}>
               Next rewards distribution
             </Text>
             {lastRewardsDate && nextRewardsDate ? (
-              <GrayText>
+              <GrayText data-testid="reportFrame">
                 Report frame: {lastRewardsDate} — {nextRewardsDate}
               </GrayText>
             ) : (
@@ -102,7 +102,7 @@ export const LastRewards: FC = () => {
                 Oracle report is delayed
               </BadgeStyle>
             ) : (
-              <Stack center gap="xs">
+              <Stack center gap="xs" data-testid="expectedDays">
                 <GrayText>Expected</GrayText>
                 <BadgeStyle>
                   {daysLeft === 0 ? (
