@@ -10,8 +10,8 @@ import curvePlsDark from 'faq/images/curve-pls-dark.png';
 import { OPERATOR_TYPE } from 'consts';
 import { ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
 
-const isIcs = (type: OPERATOR_TYPE) =>
-  [OPERATOR_TYPE.ICS, OPERATOR_TYPE.EARLYADOPTER].includes(type);
+const isIcs = (type?: OPERATOR_TYPE) =>
+  !!type && [OPERATOR_TYPE.ICS, OPERATOR_TYPE.EARLYADOPTER].includes(type);
 
 export const FaqCurveImage: FC<{ type?: OPERATOR_TYPE }> = ({
   type: _type,

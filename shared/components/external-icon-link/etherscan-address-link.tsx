@@ -6,7 +6,7 @@ import { useAccount } from 'shared/hooks';
 import { MatomoLink } from '../matomo-link/matomo-link';
 
 type Props = ComponentProps<typeof MatomoLink> & {
-  address: string;
+  address?: string;
 };
 
 export const EtherscanAddressLink: FC<Props> = ({ address, ...rest }) => {

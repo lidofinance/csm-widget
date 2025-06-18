@@ -1,4 +1,5 @@
 export * from './faq-bond-amount';
+export * from './faq-chain-name';
 export * from './faq-curve-image';
 export * from './faq-frame-duration';
 export * from './faq-key-removal-fee';
@@ -7,4 +8,3 @@ export * from './faq-performance-leeway';
 export * from './faq-share-limit';
 export * from './faq';
 export * from './styles';
-export * from './use-faq-filter';

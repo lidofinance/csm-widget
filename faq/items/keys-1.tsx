@@ -1,10 +1,16 @@
 import React from 'react';
 import { Faq } from 'types';
-import { FaqLink } from 'shared/components';
+import {
+  FaqChainName,
+  FaqLidoRewardsVault,
+  FaqLink,
+  FaqWithdrawalVault,
+} from 'shared/components';
 
+// FIXME: link to ".lido.fi"
 export const Keys1: Faq = {
   title: 'How to set up a validator for CSM mainnet?',
-  anchor: 'how-to-set-up-a-validator-for-csm-mainnet',
+  anchor: 'how-to-set-up-a-validator',
   content: (
     <div>
       <p>
@@ -16,8 +22,8 @@ export const Keys1: Faq = {
         .
       </p>
       <p>
-        A shorter flow of setting up a CSM validator for mainnet looks as
-        follows:{' '}
+        A shorter flow of setting up a CSM validator for <FaqChainName /> looks
+        as follows:{' '}
       </p>
       <ol>
         <li>
@@ -25,12 +31,12 @@ export const Keys1: Faq = {
             Generate new validator keys
           </FaqLink>{' '}
           setting the <code>withdrawal_address</code> to the Lido Withdrawal
-          Vault on <strong>mainnet:</strong>{' '}
-          <FaqLink href="https://etherscan.io/address/0xb9d7934878b5fb9610b3fe8a5e441e8fad7e293f">
-            <code>0xb9d7934878b5fb9610b3fe8a5e441e8fad7e293f</code>
-          </FaqLink>
-          , specify the deposit amount of 32 ETH, and set WC type to{' '}
-          <code>0x01</code> (do <strong>NOT</strong> make a deposit)
+          Vault on{' '}
+          <strong>
+            <FaqChainName />:
+          </strong>{' '}
+          <FaqWithdrawalVault />, specify the deposit amount of 32 ETH, and set
+          WC type to <code>0x01</code> (do <strong>NOT</strong> make a deposit)
         </li>
         <li>
           <FaqLink href="https://dvt-homestaker.stakesaurus.com/native-solo-staking-setup/validator-client-setup">
@@ -38,11 +44,11 @@ export const Keys1: Faq = {
           </FaqLink>{' '}
           (and/or beacon node) setting the <code>fee_recipient</code> flag to
           the designated fee recipient address (Lido Execution Layer Rewards
-          Vault) on <strong>mainnet:</strong>{' '}
-          <FaqLink href="https://etherscan.io/address/0x388C818CA8B9251b393131C08a736A67ccB19297">
-            <code>0x388C818CA8B9251b393131C08a736A67ccB19297</code>
-          </FaqLink>{' '}
-          and import the newly generated CSM keystores
+          Vault) on{' '}
+          <strong>
+            <FaqChainName />:
+          </strong>{' '}
+          <FaqLidoRewardsVault /> and import the newly generated CSM keystores
         </li>
         <li>
           <FaqLink href="https://dvt-homestaker.stakesaurus.com/keystore-generation-and-mev-boost/set-up-and-configure-mev-boost">

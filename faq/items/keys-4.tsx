@@ -1,4 +1,4 @@
-import { FaqCurveImage, FaqLink } from 'shared/components';
+import { FaqChainName, FaqCurveImage, FaqLink } from 'shared/components';
 import { Faq } from 'types';
 
 export const Keys4: Faq = {
@@ -15,7 +15,10 @@ export const Keys4: Faq = {
         Community Stakers (ICS), a unique bond curve function is applied to
         independent stakers participation.
       </p>
-      <p>For the mainnet, the values for the bond curve are the following:</p>
+      <p>
+        For the <FaqChainName />, the values for the bond curve are the
+        following:
+      </p>
       <FaqCurveImage />
     </div>
   ),
