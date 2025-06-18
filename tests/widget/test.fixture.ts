@@ -2,7 +2,7 @@ import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
 import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
-import { WidgetService } from 'tests/pages/widget.service';
+import { WidgetService } from 'tests/services/widget.service';
 
 type WorkerFixtures = {
   secretPhrase: string;
@@ -14,7 +14,7 @@ export const test = base.extend<object, WorkerFixtures>({
   secretPhrase: [
     // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
-      await use(widgetFullConfig.walletConfig.SECRET_PHRASE);
+      await use(widgetFullConfig.accountConfig.SECRET_PHRASE);
     },
     { scope: 'worker' },
   ],
@@ -22,12 +22,14 @@ export const test = base.extend<object, WorkerFixtures>({
     async ({ secretPhrase }, use) => {
       const browserService = new BrowserService({
         networkConfig: widgetFullConfig.standConfig.networkConfig,
-        walletConfig: {
-          ...widgetFullConfig.walletConfig,
+        accountConfig: {
+          ...widgetFullConfig.accountConfig,
           SECRET_PHRASE: secretPhrase,
         },
+        walletConfig: widgetFullConfig.walletConfig,
         nodeConfig: { rpcUrlToMock: '**/api/rpc?chainId=1' },
         browserOptions: {
+          reducedMotion: 'reduce',
           cookies: REFUSE_CF_BLOCK_COOKIE,
         },
       });

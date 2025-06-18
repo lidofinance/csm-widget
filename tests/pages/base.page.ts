@@ -104,6 +104,10 @@ export class BasePage {
     await this.page.mouse.click(32, 32);
   }
 
+  async closeTooltip() {
+    await this.page.mouse.move(0, 0);
+  }
+
   async getHoveredContent(timeout = 10000) {
     const start = Date.now();
     while (Date.now() - start < timeout) {
@@ -122,7 +126,7 @@ export class BasePage {
 
   async hoverElement(element: Locator) {
     await element.hover();
-    await this.waitForTextContent(await this.getHoveredContent());
+    return this.waitForTextContent(await this.getHoveredContent());
   }
 
   /**

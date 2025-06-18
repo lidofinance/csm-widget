@@ -1,8 +1,7 @@
 import { expect, Page, test } from '@playwright/test';
-import { ElementController } from './elements/controller';
+import { ElementController } from '../pages/elements/controller';
 import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
-import { MainPage } from './main.page';
-import { KeysPage } from './keys.page';
+import { MainPage, KeysPage, DashboardPage } from '../pages';
 import { DepositKey } from 'tests/consts/keys.const';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { AssertionError } from 'assert';
@@ -14,12 +13,15 @@ import {
 export class WidgetService {
   public mainPage: MainPage;
   public keysPage: KeysPage;
+  public dashboardPage: DashboardPage;
+
   constructor(
     public page: Page,
     public walletPage: WalletPage<WalletTypes.EOA>,
   ) {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
+    this.dashboardPage = new DashboardPage(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {
@@ -32,11 +34,11 @@ export class WidgetService {
       await element.header.connectWalletBtn.click();
       await element.termAndPrivacy.confirmConditionWalletModal();
       const walletIcon = element.connectWalletModal.getWalletInModal(
-        this.walletPage.config.COMMON.CONNECT_BUTTON_NAME,
+        this.walletPage.walletConfig.CONNECT_BUTTON_NAME,
       );
       if (
         (await walletIcon.isEnabled({ timeout: 500 })) &&
-        this.walletPage.config.COMMON.WALLET_TYPE === WalletTypes.EOA
+        this.walletPage.walletConfig.WALLET_TYPE === WalletTypes.EOA
       ) {
         try {
           const [connectWalletPage] = await Promise.all([
@@ -80,7 +82,7 @@ export class WidgetService {
     await this.walletPage.confirmTx(txPage);
     await this.page.waitForSelector(
       `text=Uploading operation was successful.`,
-      STAGE_WAIT_TIMEOUT,
+      { timeout: STAGE_WAIT_TIMEOUT },
     );
   }
 
@@ -98,7 +100,7 @@ export class WidgetService {
       await this.walletPage.confirmTx(walletSignPage);
       await this.keysPage.page.waitForSelector(
         `text=${keysToRemove.length} key has been removed`,
-        STAGE_WAIT_TIMEOUT,
+        { timeout: STAGE_WAIT_TIMEOUT },
       );
       await this.keysPage.base.closeModalWindow();
     });
@@ -108,5 +110,16 @@ export class WidgetService {
     return test.step('Check wallet connection', async () => {
       return new ElementController(this.page).header.isAccountSectionVisible();
     });
+  }
+
+  async extractNodeOperatorId(): Promise<number | null> {
+    const rawHeader = await this.page
+      .getByTestId('nodeOperatorHeader')
+      .textContent();
+
+    if (!rawHeader) return null;
+
+    const match = rawHeader.match(/#(\d+)/);
+    return match ? Number(match[1]) : null;
   }
 }

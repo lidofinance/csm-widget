@@ -1,8 +1,8 @@
 import { Locator, Page, test } from '@playwright/test';
 import { TokenSymbol } from 'tests/consts/common.const';
-import { BasePage } from 'tests/pages/base.page';
+import { BasePage } from 'tests/pages';
 import { DepositKey } from 'tests/consts/keys.const';
-import { WALLET_PAGE_TIMEOUT_WAITER } from 'tests/consts/timeouts';
+import { LOW_TIMEOUT, WALLET_PAGE_TIMEOUT_WAITER } from 'tests/consts/timeouts';
 
 export class SubmitPage {
   page: Page;
@@ -40,22 +40,26 @@ export class SubmitPage {
   }
 
   async fillKeys(keys: DepositKey[]) {
-    const value = JSON.stringify(keys);
-    await this.rawDepositData.fill(value);
+    await test.step('Fill deposit key data', async () => {
+      const value = JSON.stringify(keys);
+      await this.rawDepositData.fill(value);
+    });
   }
 
   async submitKeys(keys: DepositKey[], tokenSymbol = TokenSymbol.STETH) {
-    const bondTokenElement = this.getBondTokenElement(tokenSymbol);
-    await bondTokenElement.click();
-    await this.fillKeys(keys);
+    return test.step('Submit keys', async () => {
+      const bondTokenElement = this.getBondTokenElement(tokenSymbol);
+      await bondTokenElement.click();
+      await this.fillKeys(keys);
+      await this.page.waitForTimeout(LOW_TIMEOUT);
+      await this.confirmKeysReady.click();
 
-    await this.confirmKeysReady.click();
+      const [walletSignPage] = await Promise.all([
+        this.base.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+        this.submitKeysButton.click(),
+      ]);
 
-    const [walletSignPage] = await Promise.all([
-      this.base.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-      this.submitKeysButton.click(),
-    ]);
-
-    return walletSignPage;
+      return walletSignPage;
+    });
   }
 }
