@@ -20,8 +20,10 @@ export const Stack: FC<PropsWithChildren<Props>> = ({
   justify,
   spaceBetween,
   wrap,
+  ...props
 }) => (
   <StackStyle
+    {...props}
     $gap={gap}
     $direction={direction}
     $align={center ? 'center' : align}

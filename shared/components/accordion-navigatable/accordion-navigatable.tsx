@@ -21,17 +21,15 @@ export const AccordionNavigatable = ({
     onCollapse?.();
   }, [resetSpecificAnchor, id, onCollapse]);
 
-  const handleExpand = useCallback(
-    (id: string) => () => trackMatomoFaqEvent(id),
-    [],
-  );
+  const handleExpand = useCallback(() => trackMatomoFaqEvent(id), [id]);
 
   return (
     <Accordion
       {...rest}
+      id={id}
       defaultExpanded={(id && hashNav === id) || isFirst}
       onCollapse={handleCollapse}
-      onExpand={handleExpand(id)}
+      onExpand={handleExpand}
     />
   );
 };
