@@ -8,7 +8,8 @@ import {
   useOperatorBalance,
   useOperatorKeysToMigrate,
 } from 'modules/web3';
-import { useCallback } from 'react';
+import { useModifyContext } from 'providers/modify-provider';
+import { useCallback, useMemo } from 'react';
 import { useCanClaimICS, useCanCreateNodeOperator } from 'shared/hooks';
 
 export type ShowRule =
@@ -20,6 +21,7 @@ export type ShowRule =
   | 'HAS_MANAGER_ROLE'
   | 'HAS_REWARDS_ROLE'
   | 'HAS_LOCKED_BOND'
+  | 'HAS_REFERRER'
   | 'CAN_CREATE'
   | 'CAN_CLAIM_ICS'
   | 'EL_STEALING_REPORTER'
@@ -36,6 +38,7 @@ export const useShowRule = () => {
   const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
   const canClaimICS = useCanClaimICS();
   const canCreateNO = useCanCreateNodeOperator();
+  const { referrer } = useModifyContext();
 
   return useCallback(
     (condition: ShowRule): boolean => {
@@ -58,6 +61,8 @@ export const useShowRule = () => {
           return !!keysToTransfer;
         case 'HAS_LOCKED_BOND':
           return !!balance?.locked;
+        case 'HAS_REFERRER':
+          return !!referrer;
         case 'CAN_CLAIM_ICS':
           return !!canClaimICS;
         case 'EL_STEALING_REPORTER':
@@ -75,8 +80,23 @@ export const useShowRule = () => {
       invites?.length,
       keysToTransfer,
       balance?.locked,
+      referrer,
       canClaimICS,
       isReportingRole,
     ],
+  );
+};
+
+export const useFilterShowRules = <T extends { showRules?: ShowRule[] }>(
+  items: T[],
+) => {
+  const check = useShowRule();
+
+  return useMemo(
+    () =>
+      items.filter(
+        ({ showRules }) => !showRules?.length || showRules.some(check),
+      ),
+    [check, items],
   );
 };

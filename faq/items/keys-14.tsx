@@ -1,10 +1,10 @@
 import React from 'react';
 import { Faq } from 'types';
 
-// TODO: referrer in url
 export const Keys14: Faq = {
   title: 'What is a referrer?',
   anchor: 'what-is-a-referrer',
+  showRules: ['HAS_REFERRER'],
   content: (
     <div>
       <p>

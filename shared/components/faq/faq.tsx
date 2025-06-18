@@ -1,9 +1,12 @@
 import { FC } from 'react';
 import { Section } from 'shared/components';
+import { useFilterShowRules } from 'shared/hooks';
 import { Faq as FaqItem } from 'types';
 import { AccordionNavigatable } from '../accordion-navigatable';
 
-export const Faq: FC<{ items: FaqItem[] }> = ({ items }) => {
+export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
+  const items = useFilterShowRules(_items);
+
   return (
     <Section title="FAQ">
       {items.map(({ title, anchor, content }, index) => {

@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 
 import { Stack } from 'shared/components';
-import { useRouterPath, useShowRule } from 'shared/hooks';
+import { useFilterShowRules, useRouterPath } from 'shared/hooks';
 import { getIsActivePath } from 'utils';
 import { Handle, SwitchWrapper } from './styles';
 import { SwitcherItem } from './switcher-item';
@@ -12,14 +12,9 @@ export type SwitchProps = {
 };
 
 export const Switcher: FC<SwitchProps> = ({ routes }) => {
-  const check = useShowRule();
   const pathname = useRouterPath();
 
-  const filteredRoutes = useMemo(() => {
-    return routes.filter(
-      ({ showRules }) => !showRules || showRules.some(check),
-    );
-  }, [check, routes]);
+  const filteredRoutes = useFilterShowRules(routes);
 
   const activePathIndex = useMemo(
     () =>

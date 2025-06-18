@@ -1,15 +1,15 @@
 import { PATH } from 'consts/urls';
-import { ReactNode, useMemo } from 'react';
+import { ReactNode } from 'react';
 
 import { Eth as EthIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
+import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
-import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
-import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
+import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import {
   CounterIcs,
   CounterInvalidKeys,
@@ -17,7 +17,7 @@ import {
   CounterLockedBond,
   CounterSurveys,
 } from 'shared/counters';
-import { ShowRule, useShowRule } from 'shared/hooks';
+import { ShowRule, useFilterShowRules } from 'shared/hooks';
 
 export type Route = {
   name: string;
@@ -102,11 +102,4 @@ const routes: Route[] = [
   },
 ];
 
-export const useNavItems = () => {
-  const check = useShowRule();
-
-  return useMemo(
-    () => routes.filter(({ showRules }) => showRules.some(check)),
-    [check],
-  );
-};
+export const useNavItems = () => useFilterShowRules(routes);
