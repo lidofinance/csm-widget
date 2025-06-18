@@ -80,17 +80,15 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
     async (data: Setup) => {
       modals.pending();
       try {
-        const res = await mutate(data);
+        await mutate(data);
         void mutateKeys();
-        if (!id && res?.index) {
-          void navigate(`${PATH.SURVEYS_SETUP}/${res.index}` as PATH);
-        }
+        void navigate(PATH.SURVEYS);
         modals.success();
       } catch (e) {
         modals.failed(e);
       }
     },
-    [modals, mutate, id, mutateKeys, navigate],
+    [modals, mutate, mutateKeys, navigate],
   );
 
   const handleRemove = useCallback(async () => {
