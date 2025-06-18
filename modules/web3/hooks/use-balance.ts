@@ -1,27 +1,27 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
+import { useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { type QueryKey, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  useAccount,
   useBalance,
   useReadContract,
   useWatchContractEvent,
-  useAccount,
 } from 'wagmi';
 
-import { useDappStatus, useLidoSDK } from 'modules/web3';
 import { config } from 'config';
+import { useDappStatus, useLidoSDK } from 'modules/web3';
 
+import {
+  erc20abi,
+  type AbstractLidoSDKErc20,
+} from '@lidofinance/lido-ethereum-sdk/erc20';
+import { STRATEGY_IMMUTABLE } from 'consts/react-query-strategies';
 import {
   getAbiItem,
   type Address,
   type WatchContractEventOnLogsFn,
 } from 'viem';
 import type { GetBalanceData } from 'wagmi/query';
-import {
-  erc20abi,
-  type AbstractLidoSDKErc20,
-} from '@lidofinance/lido-ethereum-sdk/erc20';
-import { STRATEGY_IMMUTABLE } from 'consts/react-query-strategies';
 
 const selectBalance = (data: GetBalanceData) => data.value;
 
@@ -189,7 +189,7 @@ export const useTokenTransferSubscription = () => {
 // NB: contract can be undefined but for better wagmi typings is casted as NoNNullable
 const useTokenBalance = (contract: TokenContract, shouldSubscribe = true) => {
   const { isAccountActive, address } = useDappStatus();
-  const { subscribeToTokenUpdates } = useLidoSDK();
+  const subscribe = useTokenTransferSubscription();
 
   const balanceQuery = useReadContract({
     abi: contract?.abi,
@@ -208,7 +208,7 @@ const useTokenBalance = (contract: TokenContract, shouldSubscribe = true) => {
 
   useEffect(() => {
     if (shouldSubscribe && isAccountActive && contract?.address) {
-      return subscribeToTokenUpdates({
+      return subscribe({
         tokenAddress: contract.address,
         queryKey: balanceQuery.queryKey,
       });

@@ -5,13 +5,14 @@ import { FC, PropsWithChildren } from 'react';
 import { ConfigProvider } from 'config';
 import { GlobalStyle } from 'styles';
 
+import { NodeOperatorPrivider, Web3Provider } from 'modules/web3';
 import { AlertProvider, AlertsWatcherPrivider } from 'shared/alerts';
+import { GateSupported } from 'shared/navigate';
+import { hashKey } from 'utils';
 import { AppFlagProvider } from './app-flag';
 import { InpageNavigationProvider } from './inpage-navigation';
 import { ModalProvider } from './modal-provider';
 import { ModifyProvider } from './modify-provider';
-import { NodeOperatorPrivider, Web3Provider } from 'modules/web3';
-import { hashKey } from 'utils';
 
 type Props = { dummy?: boolean; skipWatcher?: boolean };
 
@@ -41,17 +42,19 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                   <ModalProvider>{children}</ModalProvider>
                 ) : (
                   <Web3Provider>
-                    <NodeOperatorPrivider>
-                      <ModalProvider>
-                        {skipWatcher ? (
-                          children
-                        ) : (
-                          <AlertsWatcherPrivider>
-                            {children}
-                          </AlertsWatcherPrivider>
-                        )}
-                      </ModalProvider>
-                    </NodeOperatorPrivider>
+                    <GateSupported>
+                      <NodeOperatorPrivider>
+                        <ModalProvider>
+                          {skipWatcher ? (
+                            children
+                          ) : (
+                            <AlertsWatcherPrivider>
+                              {children}
+                            </AlertsWatcherPrivider>
+                          )}
+                        </ModalProvider>
+                      </NodeOperatorPrivider>
+                    </GateSupported>
                   </Web3Provider>
                 )}
               </AlertProvider>

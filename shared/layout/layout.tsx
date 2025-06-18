@@ -2,10 +2,9 @@ import { FC, PropsWithChildren, ReactNode, useEffect } from 'react';
 
 import { AlertContainer } from 'shared/alerts';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
-import { Footer } from './footer/footer';
-import { DummyHeader } from './header/dummy-header';
-import { Header } from './header/header';
-import { Navigation } from './navigation/navigation';
+import { Footer } from './footer';
+import { DummyHeader, Header, SemiDummyHeader } from './header';
+import { Navigation } from './navigation';
 import {
   Content,
   Heading,
@@ -18,7 +17,7 @@ import {
 type Props = {
   title?: ReactNode;
   subtitle?: ReactNode;
-  dummy?: boolean;
+  dummy?: boolean | 'semi';
 };
 
 export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
@@ -36,7 +35,9 @@ export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
 
   return (
     <LayoutStyle>
-      {dummy ? (
+      {dummy === 'semi' ? (
+        <SemiDummyHeader />
+      ) : dummy ? (
         <DummyHeader />
       ) : (
         <>

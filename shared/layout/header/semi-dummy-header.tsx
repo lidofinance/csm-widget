@@ -1,22 +1,15 @@
 import { FC } from 'react';
-
 import HeaderChain from './components/header-chain';
-import HeaderNodeOperator from './components/header-node-operator';
 import HeaderTheme from './components/header-theme';
-import HeaderWallet from './components/header-wallet';
 import { Logos } from './components/logos';
 import { HeaderActionsStyle, HeaderStyle } from './styles';
-import { HeaderBurger } from './components/header-burger';
 
-export const Header: FC = () => (
+export const SemiDummyHeader: FC = () => (
   <HeaderStyle>
     <Logos />
     <HeaderActionsStyle>
       <HeaderChain />
-      <HeaderNodeOperator />
-      <HeaderWallet />
-      <HeaderTheme />
-      <HeaderBurger />
+      <HeaderTheme showAlways />
     </HeaderActionsStyle>
   </HeaderStyle>
 );

@@ -6,7 +6,7 @@ import { Layout } from 'shared/layout';
 
 export const SplashPage: FC = () => {
   return (
-    <Layout>
+    <Layout dummy="semi">
       <WelcomeSection>
         <Stack align="center" justify="center">
           <Loader size="large" />
