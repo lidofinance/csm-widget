@@ -1,4 +1,4 @@
-import { Page, test } from '@playwright/test';
+import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from './base.page';
 import { BondRewards } from './elements/dashboard/element.bondRewards';
 import { COMMON_ACTION_TIMEOUT } from 'tests/consts/timeouts';
@@ -6,9 +6,13 @@ import { COMMON_ACTION_TIMEOUT } from 'tests/consts/timeouts';
 export class DashboardPage extends BasePage {
   bondRewards: BondRewards;
 
+  whyModal: Locator;
+
   constructor(page: Page) {
     super(page);
     this.bondRewards = new BondRewards(this.page);
+
+    this.whyModal = this.page.getByTestId('whyModal');
   }
 
   async open() {
@@ -18,7 +22,7 @@ export class DashboardPage extends BasePage {
 
     await test.step('Wait for balance loaded', async () => {
       await this.waitForTextContent(
-        this.bondRewards.availableToClaim.commonBalance_Text,
+        this.bondRewards.latestRewardsDistribution.commonBalance_Text,
         COMMON_ACTION_TIMEOUT,
       );
     });

@@ -63,15 +63,16 @@ export const LastRewards: FC = () => {
       data-testid="lastRewardsBlock"
       summary={
         <RowHeader>
-          <Stack direction="column" gap="xxs">
+          <Stack direction="column" gap="xxs" data-testid="rowHeader">
             <RowTitle>Latest rewards distribution</RowTitle>
             {prevRewardsDate && lastRewardsDate && (
-              <GrayText>
+              <GrayText data-testid="reportFrame">
                 Report frame: {prevRewardsDate} — {lastRewardsDate}
               </GrayText>
             )}
           </Stack>
           <Balance
+            data-testid="commonBalance"
             big
             loading={isLoading || isDistributedLoading}
             amount={distributed ?? Zero}
@@ -83,13 +84,13 @@ export const LastRewards: FC = () => {
       <Stack direction="column" gap="lg">
         <LastReportStats />
         <Divider />
-        <Stack spaceBetween center>
+        <Stack spaceBetween center data-testid="nextRewardsInfo">
           <Stack direction="column" gap="xxs">
             <Text size="xs" weight={700}>
               Next rewards distribution
             </Text>
             {lastRewardsDate && nextRewardsDate ? (
-              <GrayText>
+              <GrayText data-testid="reportFrame">
                 Report frame: {lastRewardsDate} — {nextRewardsDate}
               </GrayText>
             ) : (
@@ -102,7 +103,7 @@ export const LastRewards: FC = () => {
                 Oracle report is delayed
               </BadgeStyle>
             ) : (
-              <Stack center gap="xs">
+              <Stack center gap="xs" data-testid="expectedDays">
                 <GrayText>Expected</GrayText>
                 <BadgeStyle>
                   {daysLeft === 0 ? (
@@ -128,7 +129,7 @@ const LastReportStats: FC = () => {
   const { data: txHash, initialLoading: isTxLoading } = useLastRewrdsTx();
 
   return (
-    <RowBody>
+    <RowBody data-testid="lastRewardsInfo">
       {!lastRewards || lastRewards.validatorsCount ? (
         <>
           {' '}
@@ -186,7 +187,7 @@ const Why: FC = () => {
 };
 
 export const WhyModal: ModalComponentType = ({ ...props }) => (
-  <Modal {...props} title="Why didn’t I get rewards?">
+  <Modal {...props} title="Why didn’t I get rewards?" data-testid="whyModal">
     <FaqElement>
       <p>There are two main reasons of you getting no reward within a frame:</p>
       <ol>

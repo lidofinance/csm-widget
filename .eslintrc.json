@@ -44,7 +44,7 @@
       }
     ],
     "import/no-extraneous-dependencies": [
-      "error",
+      "off",
       {
         "devDependencies": ["tests/**"]
       }

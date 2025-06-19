@@ -93,7 +93,6 @@
     "@nestjs/common": "^10.4.16",
     "@next/bundle-analyzer": "^13.2.4",
     "@next/eslint-plugin-next": "^13.4.13",
-    "@playwright/test": "^1.51.1",
     "@svgr/webpack": "8.1.0",
     "@typechain/ethers-v5": "^11.1.2",
     "@types/jest": "28.1.6",
@@ -140,7 +139,8 @@
   },
   "resolutions": {
     "postcss": "^8.4.31",
-    "crypto-js": "^4.2.0"
+    "crypto-js": "^4.2.0",
+    "@playwright/test": "1.53.1"
   },
   "lint-staged": {
     "./**/*.{ts,tsx}": [

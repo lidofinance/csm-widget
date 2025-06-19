@@ -4,7 +4,11 @@ import {
   CommonWalletConfig,
   AccountConfig,
 } from '@lidofinance/wallets-testing-wallets';
-import { CSAccounting__factory } from 'generated';
+import {
+  CSAccounting__factory,
+  CSFeeOracle__factory,
+  HashConsensus__factory,
+} from 'generated';
 import { z } from 'zod';
 
 export type StandConfig = {
@@ -15,7 +19,10 @@ export type StandConfig = {
 
 export type ContractInfo = {
   address: string;
-  abi: typeof CSAccounting__factory.abi;
+  abi:
+    | typeof CSAccounting__factory.abi
+    | typeof CSFeeOracle__factory.abi
+    | typeof HashConsensus__factory.abi;
 };
 
 export interface IConfig {

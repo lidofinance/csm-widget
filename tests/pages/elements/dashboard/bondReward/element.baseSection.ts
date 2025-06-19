@@ -35,6 +35,8 @@ export abstract class BaseExpandedBlock {
     await test.step(`Expand the "${this.sectionTestId}" section.`, async () => {
       for (let attempt = 1; attempt <= attempts && !isExpanded; attempt++) {
         try {
+          await this.commonBalance_Text.waitFor({ state: 'visible' });
+          await this.expandedButton.scrollIntoViewIfNeeded();
           await this.expandedButton.click();
           await this.waitForExpanded();
           isExpanded = true;

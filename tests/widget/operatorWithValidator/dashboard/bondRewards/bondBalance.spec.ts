@@ -2,7 +2,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { CSAccountingContract } from 'tests/services/csmContracts.service';
 import { formatEther } from '@ethersproject/units';
 import { USD_AMOUNT_REGEX } from 'tests/consts/regexp.const';
 
@@ -14,7 +13,7 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
 
   test(
     qase(135, 'Should correctly expand and display the balance'),
-    async ({ widgetService }) => {
+    async ({ widgetService, contractClients }) => {
       const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
 
       const nodeOperatorId =
@@ -23,9 +22,8 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
         throw new Error('Node operator ID not found');
       }
 
-      const bondSummary = await new CSAccountingContract().getBondSummary(
-        nodeOperatorId,
-      );
+      const bondSummary =
+        await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
 
       await test.step('Check "Bond balance" section', async () => {
         await expect(bondBalance.requiredBondBalance).toBeHidden();

@@ -34,7 +34,7 @@ test.describe('Operator without keys. Common suite.', async () => {
     },
   );
 
-  test('Should failed if uploaded duplicate keys', async () => {
+  test(qase(177, 'Should failed if uploaded duplicate keys'), async () => {
     await mainPage.starterPackSection.createNodeOperatorBtn.click();
     await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
       state: 'visible',
