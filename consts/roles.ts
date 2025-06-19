@@ -17,8 +17,8 @@ export const ROLE_CODE = {
 export type ROLE_CODE = (typeof ROLE_CODE)[keyof typeof ROLE_CODE];
 
 export enum OPERATOR_TYPE {
-  PERMISSIONLESS = 'PERMISSIONLESS',
-  EARLYADOPTER = 'EARLYADOPTER',
+  PLS = 'PLS',
+  LEA = 'LEA',
   ICS = 'ICS',
-  CUSTOM = 'CUSTOM',
+  CC = 'CC',
 }

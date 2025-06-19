@@ -3,10 +3,10 @@ import { DescriptorCurveStyle } from './styles';
 import { OPERATOR_TYPE } from 'consts';
 
 const TITLES: Record<OPERATOR_TYPE, string> = {
-  [OPERATOR_TYPE.PERMISSIONLESS]: 'PLS',
-  [OPERATOR_TYPE.EARLYADOPTER]: 'LEA',
+  [OPERATOR_TYPE.PLS]: 'PLS',
+  [OPERATOR_TYPE.LEA]: 'LEA',
   [OPERATOR_TYPE.ICS]: 'ICS',
-  [OPERATOR_TYPE.CUSTOM]: 'CC',
+  [OPERATOR_TYPE.CC]: 'CC',
 };
 
 type Props = { type?: OPERATOR_TYPE; noStyle?: boolean };

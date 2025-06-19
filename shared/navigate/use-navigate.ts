@@ -12,7 +12,7 @@ export const useNavigate = (keepHash?: boolean) => {
   return useCallback(
     (path: PATH) => {
       const newPath = correct(path);
-      return push(newPath + (keepHash ? `#${hashNav}` : ''));
+      return push(newPath + (keepHash && hashNav ? `#${hashNav}` : ''));
     },
     [correct, hashNav, keepHash, push],
   );

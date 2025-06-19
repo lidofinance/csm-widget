@@ -8,11 +8,11 @@ type InjectedProps = {
 };
 
 export const CURVE_VARIANTS = {
-  [OPERATOR_TYPE.PERMISSIONLESS]: css`
+  [OPERATOR_TYPE.PLS]: css`
     background: linear-gradient(78deg, #304352 -49.42%, #d7d2cc 157.87%),
       linear-gradient(79deg, #00a3ff -9.53%, #2238ff 202.88%);
   `,
-  [OPERATOR_TYPE.EARLYADOPTER]: css<InjectedProps>`
+  [OPERATOR_TYPE.LEA]: css<InjectedProps>`
     background: radial-gradient(
         132.01% 229.66% at 51.78% 123.98%,
         #ef81f9 0%,
@@ -30,7 +30,7 @@ export const CURVE_VARIANTS = {
       ),
       linear-gradient(97deg, #00a3ff 36.36%, #2238ff 99.58%);
   `,
-  [OPERATOR_TYPE.CUSTOM]: css<InjectedProps>`
+  [OPERATOR_TYPE.CC]: css<InjectedProps>`
     background: linear-gradient(93deg, #08d1ff -23.5%, #88f493 121.99%);
   `,
 } as const;

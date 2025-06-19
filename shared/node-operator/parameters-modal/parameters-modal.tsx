@@ -6,10 +6,10 @@ import { StyledModal } from './styles';
 import { ParametersList } from 'shared/components';
 
 const TITLES: Record<OPERATOR_TYPE, string> = {
-  [OPERATOR_TYPE.PERMISSIONLESS]: 'Permissionless Staker (PLS)',
-  [OPERATOR_TYPE.EARLYADOPTER]: 'Legacy Early Adopter (LEA)',
+  [OPERATOR_TYPE.PLS]: 'Permissionless Staker (PLS)',
+  [OPERATOR_TYPE.LEA]: 'Legacy Early Adopter (LEA)',
   [OPERATOR_TYPE.ICS]: 'Identified Community Staker (ICS)',
-  [OPERATOR_TYPE.CUSTOM]: 'Custom type (CC)',
+  [OPERATOR_TYPE.CC]: 'Custom curve (CC)',
 };
 
 export const ParametersModal: ModalComponentType<{

@@ -11,7 +11,7 @@ import { OPERATOR_TYPE } from 'consts';
 import { ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
 
 const isIcs = (type?: OPERATOR_TYPE) =>
-  !!type && [OPERATOR_TYPE.ICS, OPERATOR_TYPE.EARLYADOPTER].includes(type);
+  !!type && [OPERATOR_TYPE.ICS, OPERATOR_TYPE.LEA].includes(type);
 
 export const FaqCurveImage: FC<{ type?: OPERATOR_TYPE }> = ({
   type: _type,
