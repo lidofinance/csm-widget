@@ -23,7 +23,7 @@ export const SubmitKeysForm: FC = memo(() => {
 
   return (
     <SubmitKeysFormProvider>
-      <FormBlock>
+      <FormBlock data-testid="submitKeysForm">
         <BaseFormLoader>
           <FormControllerStyled>
             <TokenSelect />
