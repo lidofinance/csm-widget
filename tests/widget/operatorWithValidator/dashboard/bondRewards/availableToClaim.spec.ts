@@ -2,7 +2,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { CSAccountingContract } from 'tests/services/csmContracts.service';
+import { CSAccountingContract } from 'tests/services/contractClients/CSAccounting.contract';
 import { formatEther } from '@ethersproject/units';
 import { USD_AMOUNT_REGEX } from 'tests/consts/regexp.const';
 
