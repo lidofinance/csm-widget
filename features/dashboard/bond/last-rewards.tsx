@@ -63,10 +63,10 @@ export const LastRewards: FC = () => {
       data-testid="lastRewardsBlock"
       summary={
         <RowHeader>
-          <Stack direction="column" gap="xxs">
+          <Stack direction="column" gap="xxs" data-testid="blockTitle">
             <RowTitle>Latest rewards distribution</RowTitle>
             {prevRewardsDate && lastRewardsDate && (
-              <GrayText>
+              <GrayText data-testid="reportFrame">
                 Report frame: {prevRewardsDate} — {lastRewardsDate}
               </GrayText>
             )}
