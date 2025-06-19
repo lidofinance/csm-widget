@@ -1,14 +1,13 @@
 import { test } from '@playwright/test';
-import { CSFeeOracleContract } from 'tests/services/contractClients/CSFeeOracle.contract';
-import { HashConsensusContract } from 'tests/services/contractClients/HashConsensus.contract';
+import { contractClients } from 'tests/services/clients.contract';
 
 export const getReportFrameForLastRewards = async () => {
   return test.step('Get timestamps by rewards info from contract', async () => {
     const currentFrame =
-      await new CSFeeOracleContract().getLastProcessingRefSlot();
-    const hashConsensusContract = new HashConsensusContract();
-    const chainConfig = await hashConsensusContract.getChainConfig();
-    const frameConfig = await hashConsensusContract.getFrameConfig();
+      await contractClients.CSFeeOracle.getLastProcessingRefSlot();
+
+    const chainConfig = await contractClients.HashConsensus.getChainConfig();
+    const frameConfig = await contractClients.HashConsensus.getFrameConfig();
 
     if (!chainConfig || !frameConfig || !currentFrame) return undefined;
 
