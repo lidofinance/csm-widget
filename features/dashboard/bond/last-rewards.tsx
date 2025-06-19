@@ -187,7 +187,7 @@ const Why: FC = () => {
 };
 
 export const WhyModal: ModalComponentType = ({ ...props }) => (
-  <Modal {...props} title="Why didn’t I get rewards?">
+  <Modal {...props} title="Why didn’t I get rewards?" data-testid="whyModal">
     <FaqElement>
       <p>There are two main reasons of you getting no reward within a frame:</p>
       <ol>
