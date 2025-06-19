@@ -72,6 +72,7 @@ export const LastRewards: FC = () => {
             )}
           </Stack>
           <Balance
+            data-testid="commonBalance"
             big
             loading={isLoading || isDistributedLoading}
             amount={distributed ?? Zero}
