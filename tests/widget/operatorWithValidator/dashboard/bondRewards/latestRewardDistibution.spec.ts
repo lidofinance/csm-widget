@@ -49,19 +49,22 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
     },
   );
 
-  test('Should correctly open etherscan by link', async ({ widgetService }) => {
-    const latestRewardsDistribution =
-      widgetService.dashboardPage.bondRewards.latestRewardsDistribution;
+  test(
+    qase(188, 'Should correctly open etherscan by link'),
+    async ({ widgetService }) => {
+      const latestRewardsDistribution =
+        widgetService.dashboardPage.bondRewards.latestRewardsDistribution;
 
-    await latestRewardsDistribution.expand();
-    const [etherscanPage] = await Promise.all([
-      widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
-      latestRewardsDistribution.lastRewardsInfo
-        .getByText('View on Etherscan')
-        .click(),
-    ]);
-    expect(etherscanPage.url()).toContain(`.etherscan.io`);
-  });
+      await latestRewardsDistribution.expand();
+      const [etherscanPage] = await Promise.all([
+        widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
+        latestRewardsDistribution.lastRewardsInfo
+          .getByText('View on Etherscan')
+          .click(),
+      ]);
+      expect(etherscanPage.url()).toContain(`.etherscan.io`);
+    },
+  );
 
   test.skip(
     qase(143, 'Tooltip verification for "Keys over threshold" field'),
