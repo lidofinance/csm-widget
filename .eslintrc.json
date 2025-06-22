@@ -21,7 +21,12 @@
     "jsx-a11y/no-autofocus": "off",
     "jsx-a11y/anchor-is-valid": "off",
     "@next/next/no-img-element": "off",
-    "no-console": ["warn", { "allow": ["warn", "error", "info", "debug"] }],
+    "no-console": [
+      "warn",
+      {
+        "allow": ["warn", "error", "info", "debug"]
+      }
+    ],
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
@@ -41,12 +46,6 @@
       "error",
       {
         "checksVoidReturn": false
-      }
-    ],
-    "import/no-extraneous-dependencies": [
-      "off",
-      {
-        "devDependencies": ["tests/**"]
       }
     ]
   },
