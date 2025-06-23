@@ -10,7 +10,7 @@ export const Info: FC = () => {
   return (
     <>
       <Latice variant="secondary">
-        <Stack direction="column" gap="sm">
+        <Stack direction="column" gap="sm" data-testid="formInfo">
           <TitledAmount
             warning={bond?.isInsufficient}
             title={bond?.isInsufficient ? BOND_INSUFFICIENT : 'Bond balance'}
