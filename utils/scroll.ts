@@ -5,7 +5,7 @@ const { isClientSide: isClient } = getConfig();
 const body = isClient ? document.body : null;
 const html = isClient ? document.documentElement : null;
 
-export const saveScrollPosition = () => {
+export const saveScrollDown = () => {
   if (!html || !body) return;
-  html.dataset['scroll'] = window.scrollY.toString();
+  html.dataset['scrolldown'] = `${window.scrollY > 0}`;
 };

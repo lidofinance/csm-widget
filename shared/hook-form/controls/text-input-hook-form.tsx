@@ -1,10 +1,9 @@
 import { Input } from '@lidofinance/lido-ui';
 import { useController, UseControllerProps } from 'react-hook-form';
-import { InputAddress } from 'shared/components/input-address';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
 
 type BlockhashInputHookFormProps = Partial<
-  React.ComponentProps<typeof InputAddress>
+  React.ComponentProps<typeof Input>
 > & {
   fieldName: string;
   label?: string;

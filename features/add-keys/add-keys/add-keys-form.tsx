@@ -18,7 +18,7 @@ import { DepositQueue } from 'features/view-keys/deposit-queue';
 export const AddKeysForm: FC = memo(() => {
   return (
     <AddKeysFormProvider>
-      <FormBlock>
+      <FormBlock data-testid="submitKeysForm">
         <BaseFormLoader>
           <FormControllerStyled>
             <TokenSelect />

@@ -1,10 +1,10 @@
 import { ArrowBottom, ArrowTop } from '@lidofinance/lido-ui';
 import { FC, useCallback, useMemo, useState } from 'react';
 import {
-  Address,
   BeaconchainPubkeyLink,
   CopyLink,
   EthseerPubkeyLink,
+  Pubkey,
   Stack,
   StatusChip,
   StatusComment,
@@ -80,28 +80,26 @@ export const KeysTable: FC<Props> = ({ keys }) => {
       <tbody>
         {sortedKeys?.map(({ key, index, statuses, validatorIndex }) => (
           <tr key={index}>
-            <td>
-              <Address
+            <td data-testid="pubkeyCell">
+              <Pubkey
                 address={key}
-                symbols={8}
-                size="xxs"
                 link={
                   <>
-                    <CopyLink text={key} />
+                    <CopyLink text={key} data-testid="pubkeyLink" />
                     <BeaconchainPubkeyLink pubkey={key} statuses={statuses} />
                     <EthseerPubkeyLink validator={validatorIndex} />
                   </>
                 }
               />
             </td>
-            <td>
+            <td data-testid="statusCell">
               <Stack direction="column" gap="xs">
                 {statuses.map((status) => (
                   <StatusChip status={status} key={status} />
                 ))}
               </Stack>
             </td>
-            <td>
+            <td data-testid="statusCommentCell">
               <StatusComment statuses={statuses} />
             </td>
           </tr>

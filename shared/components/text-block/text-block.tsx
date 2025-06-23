@@ -30,12 +30,15 @@ export const TextBlock: FC<PropsWithChildren<Props>> = ({
   warning,
   align,
   size,
+  ...props
 }) => {
   return (
-    <TextBlockStyle $align={align} $warning={warning}>
+    <TextBlockStyle {...props} $align={align} $warning={warning}>
       {title && (
         <Stack gap="xs" center>
-          <TextBlockTitle>{title}</TextBlockTitle>
+          <TextBlockTitle data-testid="textTitleContent">
+            {title}
+          </TextBlockTitle>
           <IconTooltip tooltip={help} />
         </Stack>
       )}
@@ -44,9 +47,13 @@ export const TextBlock: FC<PropsWithChildren<Props>> = ({
       ) : (
         <TextBlockValue>
           {children && (
-            <TextBlockContent $size={size}>{children}</TextBlockContent>
+            <TextBlockContent data-testid="textContent" $size={size}>
+              {children}
+            </TextBlockContent>
           )}
-          {description && <GrayText>{description}</GrayText>}
+          {description && (
+            <GrayText data-testid="subtextContent">{description}</GrayText>
+          )}
         </TextBlockValue>
       )}
     </TextBlockStyle>
