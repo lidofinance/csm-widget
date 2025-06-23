@@ -1,6 +1,6 @@
 import React from 'react';
 import { Faq } from 'types';
-import { FaqLink } from 'shared/components';
+import { FaqDiscordChannel, FaqLink } from 'shared/components';
 
 export const Main8: Faq = {
   title: 'How can I get help?',
@@ -8,8 +8,9 @@ export const Main8: Faq = {
   content: (
     <div>
       <p>
-        For community assistance, join the &quot;CSM-mainnet&quot; channel on
-        the{' '}
+        For community assistance, join the &quot;
+        <FaqDiscordChannel />
+        &quot; channel on the{' '}
         <FaqLink href="https://discord.com/invite/lido">
           Lido Discord server
         </FaqLink>{' '}

@@ -4,12 +4,18 @@ import {
   FaqChainName,
   FaqLidoRewardsVault,
   FaqLink,
+  FaqOnlyMainnet,
+  FaqOnlyTestnet,
   FaqWithdrawalVault,
 } from 'shared/components';
 
 // FIXME: link to ".lido.fi"
 export const Keys1: Faq = {
-  title: 'How to set up a validator for CSM mainnet?',
+  title: (
+    <>
+      How to set up a validator for CSM <FaqChainName />?
+    </>
+  ),
   anchor: 'how-to-set-up-a-validator',
   content: (
     <div>
@@ -50,26 +56,40 @@ export const Keys1: Faq = {
           </strong>{' '}
           <FaqLidoRewardsVault /> and import the newly generated CSM keystores
         </li>
-        <li>
-          <FaqLink href="https://dvt-homestaker.stakesaurus.com/keystore-generation-and-mev-boost/set-up-and-configure-mev-boost">
-            Configure your MEV-Boost service
-          </FaqLink>
-          . <code>Min-bid</code> may be configured either at MEV-Boost level or
-          at the CL client, the current acceptable maximum value for min-bid is{' '}
-          <code>0.07</code>{' '}
-          <FaqLink href="https://research.lido.fi/t/lido-node-operator-mev-boost-min-bid-guidance/3347">
-            based on community consensus
-          </FaqLink>{' '}
-          and may change. <code>Builder-boost-factor</code> should be set to
-          100%, i.e. local and builder payloads should be treated with equal
-          weights. The <code>relay</code> flags should be set to a list of
-          values only using relays from{' '}
-          <FaqLink href="https://enchanted-direction-844.notion.site/6d369eb33f664487800b0dedfe32171e?v=8e5d1f1276b0493caea8a2aa1517ed65">
-            the list of Vetted MEV-Boost Relays for Lido CSM
-          </FaqLink>
-          . Note that at least one “must use” relay should be used. Relays not
-          mentioned in the list are not allowed for use
-        </li>
+        <FaqOnlyTestnet>
+          <li>
+            <FaqLink href="https://dvt-homestaker.stakesaurus.com/keystore-generation-and-mev-boost/set-up-and-configure-mev-boost">
+              Configure your MEV-Boost service
+            </FaqLink>
+            . Do not set the `min-bid` flag (or set 0) and set the `relay` flags
+            only to{' '}
+            <FaqLink href="https://www.notion.so/6d369eb33f664487800b0dedfe32171e?pvs=21">
+              the list of designated MEV relays for Lido CSM on <FaqChainName />
+            </FaqLink>
+          </li>
+        </FaqOnlyTestnet>
+        <FaqOnlyMainnet>
+          <li>
+            <FaqLink href="https://dvt-homestaker.stakesaurus.com/keystore-generation-and-mev-boost/set-up-and-configure-mev-boost">
+              Configure your MEV-Boost service
+            </FaqLink>
+            . <code>Min-bid</code> may be configured either at MEV-Boost level
+            or at the CL client, the current acceptable maximum value for
+            min-bid is <code>0.07</code>{' '}
+            <FaqLink href="https://research.lido.fi/t/lido-node-operator-mev-boost-min-bid-guidance/3347">
+              based on community consensus
+            </FaqLink>{' '}
+            and may change. <code>Builder-boost-factor</code> should be set to
+            100%, i.e. local and builder payloads should be treated with equal
+            weights. The <code>relay</code> flags should be set to a list of
+            values only using relays from{' '}
+            <FaqLink href="https://enchanted-direction-844.notion.site/6d369eb33f664487800b0dedfe32171e?v=8e5d1f1276b0493caea8a2aa1517ed65">
+              the list of Vetted MEV-Boost Relays for Lido CSM
+            </FaqLink>
+            . Note that at least one “must use” relay should be used. Relays not
+            mentioned in the list are not allowed for use
+          </li>
+        </FaqOnlyMainnet>
         <li>
           <FaqLink href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm/upload-remove-view-validator-keys">
             Upload the newly generated deposit data

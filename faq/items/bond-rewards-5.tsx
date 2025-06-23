@@ -2,6 +2,7 @@ import React from 'react';
 import { Faq } from 'types';
 import { FaqLink } from 'shared/components';
 
+// FIXME: links to .lido.fi
 export const BondRewards5: Faq = {
   title: 'How to claim ETH using a withdrawal NFT',
   anchor: 'how-to-claim-eth-using-a-withdrawal-nft',
