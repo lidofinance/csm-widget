@@ -1,18 +1,27 @@
+/* eslint-disable no-empty-pattern */
 import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
+import { IConfig } from 'tests/config/configs/base.config';
 import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
+import {
+  contractClients,
+  ContractClients,
+} from 'tests/services/clients.contract';
 import { WidgetService } from 'tests/services/widget.service';
 
 type WorkerFixtures = {
   secretPhrase: string;
   browserWithWallet: BrowserService;
   widgetService: WidgetService;
+  contractClients: ContractClients;
 };
 
-export const test = base.extend<object, WorkerFixtures>({
+export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
+  widgetConfig: async ({}, use) => {
+    await use(widgetFullConfig);
+  },
   secretPhrase: [
-    // eslint-disable-next-line no-empty-pattern
     async ({}, use) => {
       await use(widgetFullConfig.accountConfig.SECRET_PHRASE);
     },
@@ -50,6 +59,12 @@ export const test = base.extend<object, WorkerFixtures>({
           browserWithWallet.getWalletPage(),
         ),
       );
+    },
+    { scope: 'worker' },
+  ],
+  contractClients: [
+    async ({}, use) => {
+      await use(contractClients);
     },
     { scope: 'worker' },
   ],

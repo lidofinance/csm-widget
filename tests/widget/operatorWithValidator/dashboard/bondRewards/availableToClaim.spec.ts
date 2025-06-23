@@ -2,7 +2,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { CSAccountingContract } from 'tests/services/csmContracts.service';
 import { formatEther } from '@ethersproject/units';
 import { USD_AMOUNT_REGEX } from 'tests/consts/regexp.const';
 
@@ -14,7 +13,7 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', async ()
 
   test(
     qase(134, 'Should correctly expand and display the balance'),
-    async ({ widgetService }) => {
+    async ({ widgetService, contractClients }) => {
       const availableToClaim =
         widgetService.dashboardPage.bondRewards.availableToClaim;
 
@@ -24,9 +23,8 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', async ()
         throw new Error('Node operator ID not found');
       }
 
-      const bondSummary = await new CSAccountingContract().getBondSummary(
-        nodeOperatorId,
-      );
+      const bondSummary =
+        await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
 
       await test.step('Check "Available to claim" section', async () => {
         await expect(availableToClaim.rewardsBalance).toBeHidden();
