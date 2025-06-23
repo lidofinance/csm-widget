@@ -51,7 +51,7 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
 
   test(
     qase(188, 'Should correctly open etherscan by link'),
-    async ({ widgetService }) => {
+    async ({ widgetService, widgetConfig }) => {
       const latestRewardsDistribution =
         widgetService.dashboardPage.bondRewards.latestRewardsDistribution;
 
@@ -62,7 +62,9 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
           .getByText('View on Etherscan')
           .click(),
       ]);
-      expect(etherscanPage.url()).toContain(`.etherscan.io`);
+      expect(etherscanPage.url()).toContain(
+        `${widgetConfig.standConfig.networkConfig.scan}tx/`,
+      );
     },
   );
 
@@ -105,9 +107,15 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
         await expect(latestRewardsDistribution.expectedDays).toContainText(
           `Expected`,
         );
-        await expect(latestRewardsDistribution.expectedDays).toContainText(
-          `in ${expectedDays} day`,
-        );
+        if (expectedDays === 0) {
+          await expect(latestRewardsDistribution.expectedDays).toContainText(
+            `Today`,
+          );
+        } else {
+          await expect(latestRewardsDistribution.expectedDays).toContainText(
+            `in ${expectedDays} day`,
+          );
+        }
       });
     },
   );

@@ -2,6 +2,7 @@
 import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
+import { IConfig } from 'tests/config/configs/base.config';
 import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
 import {
   contractClients,
@@ -16,7 +17,10 @@ type WorkerFixtures = {
   contractClients: ContractClients;
 };
 
-export const test = base.extend<object, WorkerFixtures>({
+export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
+  widgetConfig: async ({}, use) => {
+    await use(widgetFullConfig);
+  },
   secretPhrase: [
     async ({}, use) => {
       await use(widgetFullConfig.accountConfig.SECRET_PHRASE);
