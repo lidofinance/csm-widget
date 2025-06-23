@@ -35,7 +35,7 @@ export const overridedAddresses = {
   csModule: DEVNET.CSModule,
   csFeeDistributor: DEVNET.CSFeeDistributor,
   csFeeOracle: DEVNET.CSFeeOracle,
-  csVerifier: DEVNET.CSVerifier,
+  csExitPenalties: DEVNET.CSExitPenalties,
   hashConsensus: DEVNET.HashConsensus,
   csEjector: DEVNET.CSEjector,
   csParametersRegistry: DEVNET.CSParametersRegistry,

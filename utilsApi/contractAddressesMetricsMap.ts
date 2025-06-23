@@ -1,6 +1,7 @@
 import {
   CSM_CONTRACT_ADDRESSES,
   CSM_CONTRACT_NAMES,
+  CSM_SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
 import {
   CHAINS,
@@ -17,6 +18,7 @@ import {
   memoize,
   omitBy,
   pickBy,
+  uniq,
 } from 'lodash';
 import { Abi, Address } from 'viem';
 
@@ -29,7 +31,6 @@ import {
   CSModuleAbi,
   CSParametersRegistryAbi,
   CSStrikesAbi,
-  CSVerifierAbi,
   HashConsensusAbi,
   PermissionlessGateAbi,
   StakingRouterAbi,
@@ -56,19 +57,17 @@ const CONTRACT_NAMES = {
   CSFeeDistributor_v1: 'CSFeeDistributor_v1',
   CSFeeOracle_v1: 'CSFeeOracle_v1',
   CSModule_v1: 'CSModule_v1',
-  CSVerifier_v1: 'CSVerifier_v1',
   HashConsensus_v1: 'HashConsensus_v1',
 } as const;
 type CONTRACT_NAMES = keyof typeof CONTRACT_NAMES;
 
-const supportedChainsWithMainnet = (
-  config.supportedChains.includes(CHAINS.Mainnet)
-    ? config.supportedChains
-    : [...config.supportedChains, CHAINS.Mainnet]
-) as CHAINS[];
+const supportedChainsWithMainnet: CSM_SUPPORTED_CHAINS[] = uniq([
+  ...config.supportedChains,
+  CHAINS.Mainnet,
+]);
 
 const STATIC_ADDRESSES: {
-  [key in CHAINS]?: { [key in CONTRACT_NAMES]?: Address };
+  [key in CSM_SUPPORTED_CHAINS]?: { [key in CONTRACT_NAMES]?: Address };
 } = {
   [CHAINS.Mainnet]: {
     [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]:
@@ -89,8 +88,6 @@ const STATIC_ADDRESSES: {
     [CONTRACT_NAMES.CSFeeOracle_v1]:
       '0x4D4074628678Bd302921c20573EEa1ed38DdF7FB',
     [CONTRACT_NAMES.CSModule_v1]: '0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F',
-    [CONTRACT_NAMES.CSVerifier_v1]:
-      '0x3Dfc50f22aCA652a0a6F28a0F892ab62074b5583',
     [CONTRACT_NAMES.HashConsensus_v1]:
       '0x71093efF8D8599b5fA340D665Ad60fA7C80688e4',
   },
@@ -103,8 +100,6 @@ const STATIC_ADDRESSES: {
     [CONTRACT_NAMES.CSFeeOracle_v1]:
       '0xe7314f561B2e72f9543F1004e741bab6Fc51028B',
     [CONTRACT_NAMES.CSModule_v1]: '0x79CEf36D84743222f37765204Bec41E92a93E59d',
-    [CONTRACT_NAMES.CSVerifier_v1]:
-      '0x16D0f6068D211608e3703323314aa976a6492D09',
     [CONTRACT_NAMES.HashConsensus_v1]:
       '0x54f74a10e4397dDeF85C4854d9dfcA129D72C637',
 
@@ -112,7 +107,10 @@ const STATIC_ADDRESSES: {
   },
 };
 
-const getContractAddress = (name: CONTRACT_NAMES, chainId: CHAINS) =>
+const getContractAddress = (
+  name: CONTRACT_NAMES,
+  chainId: CSM_SUPPORTED_CHAINS,
+) =>
   STATIC_ADDRESSES[chainId]?.[name] ??
   CSM_CONTRACT_ADDRESSES[chainId]?.[name as CSM_CONTRACT_NAMES];
 export const METRIC_CONTRACT_ADDRESSES = fromPairs(
@@ -125,7 +123,7 @@ export const METRIC_CONTRACT_ADDRESSES = fromPairs(
       ),
     ),
   ]),
-) as Record<CHAINS, Record<Address, CONTRACT_NAMES>>;
+) as Record<CSM_SUPPORTED_CHAINS, Record<Address, CONTRACT_NAMES>>;
 
 const CONTRACT_LIST_LOGS: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.csModule,
@@ -146,6 +144,7 @@ const METRIC_CONTRACT_ABIS: Record<CONTRACT_NAMES, Abi> = {
   [CONTRACT_NAMES.stETH]: StethAbi,
   [CONTRACT_NAMES.wstETH]: WstethABI,
   [CONTRACT_NAMES.withdrawalVault]: [],
+  [CONTRACT_NAMES.lidoRewardsVault]: [],
   [CONTRACT_NAMES.lidoLocator]: LidoLocatorAbi,
   [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]: [],
   [CONTRACT_NAMES.aggregatorEthUsdPrice]: [],
@@ -165,15 +164,14 @@ const METRIC_CONTRACT_ABIS: Record<CONTRACT_NAMES, Abi> = {
   [CONTRACT_NAMES.csEjector]: CSEjectorAbi,
   [CONTRACT_NAMES.csParametersRegistry]: CSParametersRegistryAbi,
   [CONTRACT_NAMES.csStrikes]: CSStrikesAbi,
-  [CONTRACT_NAMES.csVerifier]: CSVerifierAbi,
   [CONTRACT_NAMES.permissionlessGate]: PermissionlessGateAbi,
   [CONTRACT_NAMES.vettedGate]: VettedGateAbi,
+  [CONTRACT_NAMES.csExitPenalties]: [],
 
   [CONTRACT_NAMES.CSAccounting_v1]: [],
   [CONTRACT_NAMES.CSFeeDistributor_v1]: [],
   [CONTRACT_NAMES.CSFeeOracle_v1]: [],
   [CONTRACT_NAMES.CSModule_v1]: [],
-  [CONTRACT_NAMES.CSVerifier_v1]: [],
   [CONTRACT_NAMES.HashConsensus_v1]: [],
 };
 
