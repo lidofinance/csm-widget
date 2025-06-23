@@ -30,6 +30,12 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
         );
       });
 
+      await test.step('Verify latest reward amount', async () => {
+        const commonBalance =
+          await latestRewardsDistribution.commonBalance_Text.textContent();
+        expect(commonBalance).toEqual('0.0 stETH');
+      });
+
       await test.step('Verify "Why" link', async () => {
         await latestRewardsDistribution.commonBalance_SubText.click();
 
