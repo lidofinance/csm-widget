@@ -22,6 +22,7 @@ export const Info: FC = () => {
             loading={loading.isBondLoading}
             amount={bond?.delta}
             token={TOKENS.STETH}
+            data-testid="titledAmount"
           />
           {bond?.isInsufficient ? (
             <p>
