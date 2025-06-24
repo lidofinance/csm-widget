@@ -9,11 +9,13 @@ import {
   STAGE_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
+import { BondRewardsPage } from 'tests/pages/bondRewards.page';
 
 export class WidgetService {
   public mainPage: MainPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
+  public bondRewardsPage: BondRewardsPage;
 
   constructor(
     public page: Page,
@@ -22,6 +24,7 @@ export class WidgetService {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
+    this.bondRewardsPage = new BondRewardsPage(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {
@@ -120,6 +123,7 @@ export class WidgetService {
     if (!rawHeader) return null;
 
     const match = rawHeader.match(/#(\d+)/);
+
     return match ? Number(match[1]) : null;
   }
 }
