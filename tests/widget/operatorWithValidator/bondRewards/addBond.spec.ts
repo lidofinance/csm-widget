@@ -2,6 +2,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { Tags } from 'tests/consts/common.const';
 
 test.describe('Bond & Rewards. Add bond.', async () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -52,31 +53,35 @@ test.describe('Bond & Rewards. Add bond.', async () => {
   });
 
   (['ETH', 'STETH', 'WSTETH'] as const).forEach((tokenName) => {
-    test(`Should adds bond using ${tokenName} as bond token`, async ({
-      widgetService,
-      contractClients,
-    }) => {
-      qase.parameters({ tokenName });
-      const bondRewardsPage = widgetService.bondRewardsPage;
+    const tag = [Tags.performTX];
+    if (tokenName === 'STETH') tag.push(Tags.smoke);
 
-      const nodeOperatorId = await widgetService.extractNodeOperatorId();
+    test(
+      `Should add bond using ${tokenName} as bond token`,
+      { tag },
+      async ({ widgetService, contractClients }) => {
+        qase.parameters({ tokenName });
+        const bondRewardsPage = widgetService.bondRewardsPage;
 
-      const expectedAmount = '0.0003';
-      const bondSummary =
-        await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+        const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-      await widgetService.addBond(tokenName, expectedAmount);
+        const expectedAmount = '0.0003';
+        const bondSummary =
+          await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
 
-      await test.step('Verify new balance after bond added', async () => {
-        const expectedBalance =
-          parseFloat(bondSummary.excess) + parseFloat(expectedAmount);
-        const actualBalance =
-          await bondRewardsPage.titledAmountBalance.textContent();
+        await widgetService.addBond(tokenName, expectedAmount);
 
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        expect(parseFloat(actualBalance!)).toBeCloseTo(expectedBalance);
-      });
-    });
+        await test.step('Verify new balance after bond added', async () => {
+          const expectedBalance =
+            parseFloat(bondSummary.excess) + parseFloat(expectedAmount);
+          const actualBalance =
+            await bondRewardsPage.titledAmountBalance.textContent();
+
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          expect(parseFloat(actualBalance!)).toBeCloseTo(expectedBalance);
+        });
+      },
+    );
   });
 
   test.skip(

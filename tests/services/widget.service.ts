@@ -166,7 +166,8 @@ export class WidgetService {
         .getByTestId('nodeOperatorHeader')
         .textContent();
 
-      if (!rawHeader) throw new Error('Cannot text content from header');
+      if (!rawHeader)
+        throw new Error('Failed to get text content from node operator header');
 
       const match = rawHeader.match(/#(\d+)/);
       if (!match) throw new Error('Cannot extract ID from header');
