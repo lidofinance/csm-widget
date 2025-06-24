@@ -10,54 +10,56 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     await widgetService.bondRewardsPage.open();
   });
 
-  test('Should displays balance and explanatory text for stETH bond', async ({
-    widgetService,
-    contractClients,
-  }) => {
-    const bondRewardsPage = widgetService.bondRewardsPage;
+  test(
+    qase(189, 'Should displays balance and explanatory text for stETH bond'),
+    async ({ widgetService, contractClients }) => {
+      const bondRewardsPage = widgetService.bondRewardsPage;
 
-    await test.step('Verify information about bond', async () => {
-      const nodeOperatorId = await widgetService.extractNodeOperatorId();
+      await test.step('Verify information about bond', async () => {
+        const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-      if (!nodeOperatorId) {
-        throw new Error('Node operator ID not found');
-      }
+        if (!nodeOperatorId) {
+          throw new Error('Node operator ID not found');
+        }
 
-      await test.step('Verify bond balance', async () => {
-        await expect(
-          bondRewardsPage.titledAmount.locator('div').first(),
-        ).toContainText('Bond balance');
-        const bondSummary =
-          await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+        await test.step('Verify bond balance', async () => {
+          await expect(
+            bondRewardsPage.titledAmount.locator('div').first(),
+          ).toContainText('Bond balance');
+          const bondSummary =
+            await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
 
-        await expect(bondRewardsPage.titledAmountBalance).toHaveText(
-          `${bondSummary.excess.toCut(4)} stETH`,
-        );
+          await expect(bondRewardsPage.titledAmountBalance).toHaveText(
+            `${bondSummary.excess.toCut(4)} stETH`,
+          );
+        });
+
+        await test.step('Verify text', async () => {
+          const expectedText =
+            'Why you might need to add bond:Adding a bond serves as a voluntary security measure for your Node Operator to prevent your validators from becoming unbonded and being requested to exit in case of applied penalties.Supplied bond will be stored as stETH, which also garners staking rewards.';
+          await expect(bondRewardsPage.formInfoText).toContainText(
+            expectedText,
+          );
+
+          const expectedLinkHref =
+            'https://docs.lido.fi/staking-modules/csm/guides/unbonded-validators';
+          const linkUnbondedElement = bondRewardsPage.formInfoText.locator('a');
+          // @todo: check to click on the link
+          await expect(linkUnbondedElement).toHaveAttribute(
+            'href',
+            expectedLinkHref,
+          );
+        });
       });
-
-      await test.step('Verify text', async () => {
-        const expectedText =
-          'Why you might need to add bond:Adding a bond serves as a voluntary security measure for your Node Operator to prevent your validators from becoming unbonded and being requested to exit in case of applied penalties.Supplied bond will be stored as stETH, which also garners staking rewards.';
-        await expect(bondRewardsPage.formInfoText).toContainText(expectedText);
-
-        const expectedLinkHref =
-          'https://docs.lido.fi/staking-modules/csm/guides/unbonded-validators';
-        const linkUnbondedElement = bondRewardsPage.formInfoText.locator('a');
-        // @todo: check to click on the link
-        await expect(linkUnbondedElement).toHaveAttribute(
-          'href',
-          expectedLinkHref,
-        );
-      });
-    });
-  });
+    },
+  );
 
   (['ETH', 'STETH', 'WSTETH'] as const).forEach((tokenName) => {
     const tag = [Tags.performTX];
     if (tokenName === 'STETH') tag.push(Tags.smoke);
 
     test(
-      `Should add bond using ${tokenName} as bond token`,
+      qase(193, `Should add bond using ${tokenName} as bond token`),
       { tag },
       async ({ widgetService, contractClients }) => {
         qase.parameters({ tokenName });
