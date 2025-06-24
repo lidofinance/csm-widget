@@ -4,18 +4,18 @@ import { useSurveysCall } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 
 export const SurveysCta: FC = () => {
-  const required = useSurveysCall();
-  if (!required) return null;
+  const enabled = useSurveysCall();
+  if (!enabled) return null;
 
   return (
     <Banner
-      title="Surveys tab is here"
+      title="Submit Your Validator Setup"
       href="/surveys"
       variant="wary-dangerous"
     >
-      You&apos;re invited to voluntarily submit your validator setup data by
-      March 31st to help enhance the transparency of the Lido Protocol! Go to
-      the <LocalLink href="/surveys">Surveys</LocalLink> tab and fill out the
+      Please submit your validator setup data by July 6th to help enhance the
+      transparency of the Lido Protocol! Go to the{' '}
+      <LocalLink href="/surveys">Surveys</LocalLink> tab and fill out the
       &quot;Your Setup&quot; form.
     </Banner>
   );
