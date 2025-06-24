@@ -92,6 +92,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     test(
       qase(65, `Add bond using maximum available ${tokenName} amount`),
       async ({ widgetService }) => {
+        qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
         await test.step(`Choose ${tokenName} symbol for bond`, async () => {
