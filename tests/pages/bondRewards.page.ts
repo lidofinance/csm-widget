@@ -16,6 +16,10 @@ export class BondRewardsPage extends BasePage {
   amountInput: Locator;
   amountLabel: Locator;
   validationInputTooltip: Locator;
+  maxBtn: Locator;
+
+  // Button
+  addBondButton: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -33,6 +37,10 @@ export class BondRewardsPage extends BasePage {
       'xpath=//input[@name="bondAmount"]/ancestor::label',
     );
     this.validationInputTooltip = this.amountLabel.locator('> span').nth(1);
+    this.maxBtn = this.amountLabel.getByTestId('maxBtn');
+
+    // Button
+    this.addBondButton = this.form.getByRole('button', { name: 'Add Bond' });
   }
 
   async open() {
@@ -50,5 +58,13 @@ export class BondRewardsPage extends BasePage {
 
   selectBondToken(symbol: TOKENS) {
     return this.form.locator(`input[value="${symbol}"]`).locator('..');
+  }
+
+  async getBalanceByToken(symbol: TOKENS) {
+    return parseFloat(
+      await this.waitForTextContent(
+        this.form.locator(`input[value="${symbol}"]`).locator('..'),
+      ),
+    );
   }
 }

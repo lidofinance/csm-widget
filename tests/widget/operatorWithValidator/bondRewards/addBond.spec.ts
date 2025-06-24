@@ -88,12 +88,37 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     );
   });
 
-  test.skip(
-    qase(65, 'Add bond using maximum available ETH amount'),
-    async () => {},
-  );
-
   [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+    test(
+      qase(65, `Add bond using maximum available ${tokenName} amount`),
+      async ({ widgetService }) => {
+        const bondRewardsPage = widgetService.bondRewardsPage;
+
+        await test.step(`Choose ${tokenName} symbol for bond`, async () => {
+          const bondToken = bondRewardsPage.selectBondToken(tokenName);
+          await bondToken.click();
+        });
+
+        const expectedBalance =
+          await bondRewardsPage.getBalanceByToken(tokenName);
+
+        await test.step('Click the Max button', async () => {
+          await bondRewardsPage.maxBtn.click();
+        });
+
+        await test.step('Check the input value and submit button', async () => {
+          const inputValue = parseFloat(
+            await bondRewardsPage.amountInput.inputValue(),
+          );
+
+          expect(inputValue).toBeCloseTo(expectedBalance);
+          await expect(bondRewardsPage.addBondButton).toBeEnabled();
+        });
+      },
+    );
+  });
+
+  [(TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH)].forEach((tokenName) => {
     test(
       qase(
         67,

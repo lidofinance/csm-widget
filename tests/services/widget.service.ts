@@ -10,6 +10,7 @@ import {
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
 import { BondRewardsPage } from 'tests/pages/bondRewards.page';
+import { TOKENS } from 'consts/tokens';
 
 export class WidgetService {
   public mainPage: MainPage;
@@ -109,7 +110,7 @@ export class WidgetService {
     });
   }
 
-  async addBond(tokenName: 'ETH' | 'STETH' | 'WSTETH', amount: string) {
+  async addBond(tokenName: TOKENS, amount: string) {
     await test.step(`Add ${amount} ${tokenName} as bond`, async () => {
       await test.step(`Choose ${tokenName} symbol for bond`, async () => {
         const bondToken = this.bondRewardsPage.selectBondToken(tokenName);
@@ -120,12 +121,10 @@ export class WidgetService {
 
       let [txPage] = await Promise.all([
         this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        this.bondRewardsPage.form
-          .getByRole('button', { name: 'Add Bond' })
-          .click(),
+        this.bondRewardsPage.addBondButton.click(),
       ]);
 
-      if (tokenName !== 'ETH') {
+      if (tokenName !== TOKENS.ETH) {
         await this.bondRewardsPage.page.waitForSelector(
           `text=Confirm request in your wallet`,
           { timeout: STAGE_WAIT_TIMEOUT },
