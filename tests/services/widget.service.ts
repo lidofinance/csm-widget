@@ -109,21 +109,68 @@ export class WidgetService {
     });
   }
 
+  async addBond(tokenName: 'ETH' | 'STETH' | 'WSTETH', amount: string) {
+    await test.step(`Add ${amount} ${tokenName} as bond`, async () => {
+      await test.step(`Choose ${tokenName} symbol for bond`, async () => {
+        const bondToken = this.bondRewardsPage.selectBondToken(tokenName);
+        await bondToken.click();
+      });
+
+      await this.bondRewardsPage.amountInput.fill(amount);
+
+      let [txPage] = await Promise.all([
+        this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+        this.bondRewardsPage.form
+          .getByRole('button', { name: 'Add Bond' })
+          .click(),
+      ]);
+
+      if (tokenName !== 'ETH') {
+        await this.bondRewardsPage.page.waitForSelector(
+          `text=Confirm request in your wallet`,
+          { timeout: STAGE_WAIT_TIMEOUT },
+        );
+
+        [txPage] = await Promise.all([
+          this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+          this.walletPage.confirmTx(txPage),
+        ]);
+      }
+
+      await this.page.waitForSelector(
+        `text=Confirm this transaction in your wallet`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+      await this.walletPage.confirmTx(txPage);
+      await this.page.waitForSelector(`text=Awaiting block confirmation`, {
+        timeout: STAGE_WAIT_TIMEOUT,
+      });
+      await this.page.waitForSelector(
+        `text=Adding Bond operation was successful`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+
+      await this.bondRewardsPage.closeModalWindow();
+    });
+  }
+
   async isConnectedWallet() {
     return test.step('Check wallet connection', async () => {
       return new ElementController(this.page).header.isAccountSectionVisible();
     });
   }
 
-  async extractNodeOperatorId(): Promise<number | null> {
-    const rawHeader = await this.page
-      .getByTestId('nodeOperatorHeader')
-      .textContent();
+  async extractNodeOperatorId(): Promise<number> {
+    return test.step('Extract node operator id from header', async () => {
+      const rawHeader = await this.page
+        .getByTestId('nodeOperatorHeader')
+        .textContent();
 
-    if (!rawHeader) return null;
+      if (!rawHeader) throw new Error('Cannot text content from header');
 
-    const match = rawHeader.match(/#(\d+)/);
-
-    return match ? Number(match[1]) : null;
+      const match = rawHeader.match(/#(\d+)/);
+      if (!match) throw new Error('Cannot extract ID from header');
+      return Number(match[1]);
+    });
   }
 }

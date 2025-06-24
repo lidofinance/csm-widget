@@ -102,7 +102,9 @@ export class BasePage {
   }
 
   async closeModalWindow() {
-    await this.page.mouse.click(32, 32);
+    await test.step('Close modal window', async () => {
+      await this.page.mouse.click(32, 32);
+    });
   }
 
   async closeTooltip() {

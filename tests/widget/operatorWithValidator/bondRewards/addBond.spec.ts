@@ -2,13 +2,8 @@
 import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import {
-  STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from 'tests/consts/timeouts';
 
 test.describe('Bond & Rewards. Add bond.', async () => {
-  test.setTimeout(60_000);
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.connectWallet();
     await widgetService.bondRewardsPage.open();
@@ -56,80 +51,31 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     });
   });
 
-  test(`Should adds bond using ETH as bond token`, async ({
-    widgetService,
-  }) => {
-    const tokenName = 'ETH';
-
-    const expectedAmount = '0.0003';
-
-    const bondRewardsPage = widgetService.bondRewardsPage;
-    const bondToken = bondRewardsPage.selectBondToken(tokenName);
-    await bondToken.click();
-    await bondRewardsPage.amountInput.fill(expectedAmount);
-
-    const [txPage] = await Promise.all([
-      bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-      bondRewardsPage.form.getByRole('button', { name: 'Add Bond' }).click(),
-    ]);
-
-    await bondRewardsPage.page.waitForSelector(
-      `text=Confirm this transaction in your wallet`,
-      { timeout: STAGE_WAIT_TIMEOUT },
-    );
-    await widgetService.walletPage.confirmTx(txPage);
-    await bondRewardsPage.page.waitForSelector(
-      `text=Awaiting block confirmation`,
-      { timeout: STAGE_WAIT_TIMEOUT },
-    );
-    await bondRewardsPage.page.waitForSelector(
-      `text=Adding Bond operation was successful`,
-      { timeout: STAGE_WAIT_TIMEOUT },
-    );
-    // @todo: check balance
-  });
-
-  (['STETH', 'WSTETH'] as const).forEach((tokenName) => {
+  (['ETH', 'STETH', 'WSTETH'] as const).forEach((tokenName) => {
     test(`Should adds bond using ${tokenName} as bond token`, async ({
       widgetService,
+      contractClients,
     }) => {
       qase.parameters({ tokenName });
+      const bondRewardsPage = widgetService.bondRewardsPage;
+
+      const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
       const expectedAmount = '0.0003';
+      const bondSummary =
+        await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
 
-      const bondRewardsPage = widgetService.bondRewardsPage;
-      const bondToken = bondRewardsPage.selectBondToken(tokenName);
-      await bondToken.click();
-      await bondRewardsPage.amountInput.fill(expectedAmount);
+      await widgetService.addBond(tokenName, expectedAmount);
 
-      const [requestTxPage] = await Promise.all([
-        bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        bondRewardsPage.form.getByRole('button', { name: 'Add Bond' }).click(),
-      ]);
-      await bondRewardsPage.page.waitForSelector(
-        `text=Confirm request in your wallet`,
-        { timeout: STAGE_WAIT_TIMEOUT },
-      );
+      await test.step('Verify new balance after bond added', async () => {
+        const expectedBalance =
+          parseFloat(bondSummary.excess) + parseFloat(expectedAmount);
+        const actualBalance =
+          await bondRewardsPage.titledAmountBalance.textContent();
 
-      const [txPage] = await Promise.all([
-        bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        widgetService.walletPage.confirmTx(requestTxPage),
-      ]);
-
-      await bondRewardsPage.page.waitForSelector(
-        `text=Confirm this transaction in your wallet`,
-        { timeout: STAGE_WAIT_TIMEOUT },
-      );
-      await widgetService.walletPage.confirmTx(txPage);
-      await bondRewardsPage.page.waitForSelector(
-        `text=Awaiting block confirmation`,
-        { timeout: STAGE_WAIT_TIMEOUT },
-      );
-      await bondRewardsPage.page.waitForSelector(
-        `text=Adding Bond operation was successful`,
-        { timeout: STAGE_WAIT_TIMEOUT },
-      );
-      // @todo: check balance
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        expect(parseFloat(actualBalance!)).toBeCloseTo(expectedBalance);
+      });
     });
   });
 
