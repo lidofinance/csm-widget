@@ -3,6 +3,8 @@ import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/consts/common.const';
+import { TOKEN_DISPLAY_NAMES } from 'utils/getTokenDisplayName';
+import { TOKENS } from 'consts/tokens';
 
 test.describe('Bond & Rewards. Add bond.', async () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -54,7 +56,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     },
   );
 
-  (['ETH', 'STETH', 'WSTETH'] as const).forEach((tokenName) => {
+  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
     const tag = [Tags.performTX];
     if (tokenName === 'STETH') tag.push(Tags.smoke);
 
@@ -91,13 +93,27 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     async () => {},
   );
 
-  test.skip(
-    qase(66, 'Add bond with manual token amount entry'),
-    async () => {},
-  );
+  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+    test(
+      qase(
+        67,
+        `Attempt to add bond exceeding available balance for ${tokenName} token`,
+      ),
+      async ({ widgetService }) => {
+        qase.parameters({ tokenName });
+        const bondRewardsPage = widgetService.bondRewardsPage;
 
-  test.skip(
-    qase(67, 'Attempt to add bond exceeding available balance'),
-    async () => {},
-  );
+        await test.step(`Choose ${tokenName} symbol for bond`, async () => {
+          const bondToken = bondRewardsPage.selectBondToken(tokenName);
+          await bondToken.click();
+        });
+
+        await bondRewardsPage.amountInput.fill('1000');
+        await bondRewardsPage.page.mouse.click(0, 0);
+        await expect(bondRewardsPage.validationInputTooltip).toContainText(
+          `Not enough balance of ${TOKEN_DISPLAY_NAMES[tokenName]}`,
+        );
+      },
+    );
+  });
 });

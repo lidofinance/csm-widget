@@ -1,6 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from './base.page';
 import { COMMON_ACTION_TIMEOUT } from 'tests/consts/timeouts';
+import { TOKENS } from 'consts/tokens';
 
 export class BondRewardsPage extends BasePage {
   form: Locator;
@@ -13,6 +14,8 @@ export class BondRewardsPage extends BasePage {
 
   // Enter token amount
   amountInput: Locator;
+  amountLabel: Locator;
+  validationInputTooltip: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -26,6 +29,10 @@ export class BondRewardsPage extends BasePage {
 
     // Enter token amount
     this.amountInput = this.form.locator('input[name="bondAmount"]');
+    this.amountLabel = this.form.locator(
+      'xpath=//input[@name="bondAmount"]/ancestor::label',
+    );
+    this.validationInputTooltip = this.amountLabel.locator('> span').nth(1);
   }
 
   async open() {
@@ -41,7 +48,7 @@ export class BondRewardsPage extends BasePage {
     });
   }
 
-  selectBondToken(symbol: 'ETH' | 'STETH' | 'WSTETH') {
+  selectBondToken(symbol: TOKENS) {
     return this.form.locator(`input[value="${symbol}"]`).locator('..');
   }
 }
