@@ -150,34 +150,40 @@ test.describe('Bond & Rewards. Add bond.', async () => {
   });
 
   [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
-    test(`Chaeck bond token information for ${tokenName}`, async ({
-      widgetService,
-    }) => {
-      qase.parameters({ tokenName });
-      const bondRewardsPage = widgetService.bondRewardsPage;
+    test(
+      qase(
+        196,
+        `Should display correct bond token information for ${tokenName}`,
+      ),
+      async ({ widgetService }) => {
+        qase.parameters({ tokenName });
+        const bondRewardsPage = widgetService.bondRewardsPage;
 
-      await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-        const bondToken = bondRewardsPage.addBond.selectBondToken(tokenName);
-        await bondToken.click();
-      });
+        await test.step(`Choose ${tokenName} symbol for bond`, async () => {
+          const bondToken = bondRewardsPage.addBond.selectBondToken(tokenName);
+          await bondToken.click();
+        });
 
-      await test.step('Verify "Balance will receive"', async () => {
-        await expect(bondRewardsPage.addBond.balanceWillReceive).toBeVisible();
-        await expect(bondRewardsPage.addBond.balanceWillReceive).toContainText(
-          'Bond balance will receive',
-        );
-      });
+        await test.step('Verify "Balance will receive"', async () => {
+          await expect(
+            bondRewardsPage.addBond.balanceWillReceive,
+          ).toBeVisible();
+          await expect(
+            bondRewardsPage.addBond.balanceWillReceive,
+          ).toContainText('Bond balance will receive');
+        });
 
-      await test.step('Verify "Exchange rate"', async () => {
-        if (tokenName == TOKENS.STETH.valueOf()) {
-          await expect(bondRewardsPage.addBond.exchangeRate).toBeHidden();
-        } else {
-          await expect(bondRewardsPage.addBond.exchangeRate).toBeVisible();
-          await expect(bondRewardsPage.addBond.exchangeRate).toContainText(
-            'Exchange rate',
-          );
-        }
-      });
-    });
+        await test.step('Verify "Exchange rate"', async () => {
+          if (tokenName == TOKENS.STETH.valueOf()) {
+            await expect(bondRewardsPage.addBond.exchangeRate).toBeHidden();
+          } else {
+            await expect(bondRewardsPage.addBond.exchangeRate).toBeVisible();
+            await expect(bondRewardsPage.addBond.exchangeRate).toContainText(
+              'Exchange rate',
+            );
+          }
+        });
+      },
+    );
   });
 });
