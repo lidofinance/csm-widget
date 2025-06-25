@@ -5,8 +5,11 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { USD_AMOUNT_REGEX } from 'tests/consts/regexp.const';
 
 test.describe('Dashboard. Bond & Rewards. Available to claim section.', async () => {
-  test.beforeEach(async ({ widgetService }) => {
+  test.beforeAll(async ({ widgetService }) => {
     await widgetService.connectWallet();
+  });
+
+  test.beforeEach(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
   });
 
@@ -16,11 +19,7 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', async ()
       const availableToClaim =
         widgetService.dashboardPage.bondRewards.availableToClaim;
 
-      const nodeOperatorId =
-        (await widgetService.extractNodeOperatorId()) as number;
-      if (!nodeOperatorId) {
-        throw new Error('Node operator ID not found');
-      }
+      const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
       const bondSummary =
         await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
