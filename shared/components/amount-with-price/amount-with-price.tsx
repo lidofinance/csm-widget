@@ -25,7 +25,7 @@ export const AmountWithPrice: FC<TitledAddressProps> = ({
   const { usdAmount } = useEthUsd(amount);
 
   return (
-    <Wrapper $big={big}>
+    <Wrapper $big={big} data-testid="amountPrice">
       {loading ? (
         <InlineLoader color="text" />
       ) : (

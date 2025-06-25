@@ -23,7 +23,7 @@ export const ClaimBondFormInfo = () => {
   );
 
   return (
-    <DataTable>
+    <DataTable data-testid="claimBondFormInfo">
       <DataTableRow
         title={
           <>
