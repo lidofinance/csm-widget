@@ -21,7 +21,7 @@ export const AmountInput: React.FC = () => {
     <>
       <FormTitle>Enter token amount</FormTitle>
       <TokenAmountInputHookForm
-        fieldName="tokenAmount"
+        fieldName="amount"
         token={token}
         maxValue={maxAmount}
         disabled={maxAmount?.eq(0)}
