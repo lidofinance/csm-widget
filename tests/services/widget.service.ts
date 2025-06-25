@@ -113,15 +113,16 @@ export class WidgetService {
   async addBond(tokenName: TOKENS, amount: string) {
     await test.step(`Add ${amount} ${tokenName} as bond`, async () => {
       await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-        const bondToken = this.bondRewardsPage.selectBondToken(tokenName);
+        const bondToken =
+          this.bondRewardsPage.addBond.selectBondToken(tokenName);
         await bondToken.click();
       });
 
-      await this.bondRewardsPage.amountInput.fill(amount);
+      await this.bondRewardsPage.addBond.amountInput.fill(amount);
 
       let [txPage] = await Promise.all([
         this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        this.bondRewardsPage.addBondButton.click(),
+        this.bondRewardsPage.addBond.addBondButton.click(),
       ]);
 
       if (tokenName !== TOKENS.ETH) {

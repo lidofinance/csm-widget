@@ -1,70 +1,12 @@
-import { Locator, Page, test } from '@playwright/test';
+import { Page } from '@playwright/test';
 import { BasePage } from './base.page';
-import { COMMON_ACTION_TIMEOUT } from 'tests/consts/timeouts';
-import { TOKENS } from 'consts/tokens';
+import { AddBondPage } from './tabs/bondRewards/addBond.page';
 
 export class BondRewardsPage extends BasePage {
-  form: Locator;
+  addBond: AddBondPage;
 
-  // Form info
-  formInfo: Locator;
-  titledAmount: Locator;
-  titledAmountBalance: Locator;
-  formInfoText: Locator;
-
-  // Enter token amount
-  amountInput: Locator;
-  amountLabel: Locator;
-  validationInputTooltip: Locator;
-  maxBtn: Locator;
-
-  // Button
-  addBondButton: Locator;
-
-  constructor(page: Page) {
+  constructor(public page: Page) {
     super(page);
-    this.form = this.page.getByTestId('addBondForm');
-
-    // Form info
-    this.formInfo = this.form.getByTestId('formInfo');
-    this.titledAmount = this.formInfo.getByTestId('titledAmount');
-    this.titledAmountBalance = this.titledAmount.locator('div > span');
-    this.formInfoText = this.formInfo.locator('p');
-
-    // Enter token amount
-    this.amountInput = this.form.locator('input[name="bondAmount"]');
-    this.amountLabel = this.form.locator(
-      'xpath=//input[@name="bondAmount"]/ancestor::label',
-    );
-    this.validationInputTooltip = this.amountLabel.locator('> span').nth(1);
-    this.maxBtn = this.amountLabel.getByTestId('maxBtn');
-
-    // Button
-    this.addBondButton = this.form.getByRole('button', { name: 'Add Bond' });
-  }
-
-  async open() {
-    await test.step('Open the Bond & Rewards page', async () => {
-      await this.page.goto('/bond/add');
-    });
-
-    await test.step('Wait for balance loaded', async () => {
-      await this.waitForTextContent(
-        this.titledAmountBalance,
-        COMMON_ACTION_TIMEOUT,
-      );
-    });
-  }
-
-  selectBondToken(symbol: TOKENS) {
-    return this.form.locator(`input[value="${symbol}"]`).locator('..');
-  }
-
-  async getBalanceByToken(symbol: TOKENS) {
-    return parseFloat(
-      await this.waitForTextContent(
-        this.form.locator(`input[value="${symbol}"]`).locator('..'),
-      ),
-    );
+    this.addBond = new AddBondPage(page);
   }
 }

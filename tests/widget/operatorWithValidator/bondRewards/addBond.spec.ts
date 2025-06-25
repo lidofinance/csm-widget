@@ -9,7 +9,7 @@ import { TOKENS } from 'consts/tokens';
 test.describe('Bond & Rewards. Add bond.', async () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.connectWallet();
-    await widgetService.bondRewardsPage.open();
+    await widgetService.bondRewardsPage.addBond.open();
   });
 
   test(
@@ -26,12 +26,12 @@ test.describe('Bond & Rewards. Add bond.', async () => {
 
         await test.step('Verify bond balance', async () => {
           await expect(
-            bondRewardsPage.titledAmount.locator('div').first(),
+            bondRewardsPage.addBond.titledAmount.locator('div').first(),
           ).toContainText('Bond balance');
           const bondSummary =
             await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
 
-          await expect(bondRewardsPage.titledAmountBalance).toHaveText(
+          await expect(bondRewardsPage.addBond.titledAmountBalance).toHaveText(
             `${bondSummary.excess.toCut(4)} stETH`,
           );
         });
@@ -39,13 +39,14 @@ test.describe('Bond & Rewards. Add bond.', async () => {
         await test.step('Verify text', async () => {
           const expectedText =
             'Why you might need to add bond:Adding a bond serves as a voluntary security measure for your Node Operator to prevent your validators from becoming unbonded and being requested to exit in case of applied penalties.Supplied bond will be stored as stETH, which also garners staking rewards.';
-          await expect(bondRewardsPage.formInfoText).toContainText(
+          await expect(bondRewardsPage.addBond.formInfoText).toContainText(
             expectedText,
           );
 
           const expectedLinkHref =
             'https://docs.lido.fi/staking-modules/csm/guides/unbonded-validators';
-          const linkUnbondedElement = bondRewardsPage.formInfoText.locator('a');
+          const linkUnbondedElement =
+            bondRewardsPage.addBond.formInfoText.locator('a');
           // @todo: check to click on the link
           await expect(linkUnbondedElement).toHaveAttribute(
             'href',
@@ -79,7 +80,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
           const expectedBalance =
             parseFloat(bondSummary.excess) + parseFloat(expectedAmount);
           const actualBalance =
-            await bondRewardsPage.titledAmountBalance.textContent();
+            await bondRewardsPage.addBond.titledAmountBalance.textContent();
 
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           expect(parseFloat(actualBalance!)).toBeCloseTo(expectedBalance);
@@ -96,24 +97,24 @@ test.describe('Bond & Rewards. Add bond.', async () => {
         const bondRewardsPage = widgetService.bondRewardsPage;
 
         await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-          const bondToken = bondRewardsPage.selectBondToken(tokenName);
+          const bondToken = bondRewardsPage.addBond.selectBondToken(tokenName);
           await bondToken.click();
         });
 
         const expectedBalance =
-          await bondRewardsPage.getBalanceByToken(tokenName);
+          await bondRewardsPage.addBond.getBalanceByToken(tokenName);
 
         await test.step('Click the Max button', async () => {
-          await bondRewardsPage.maxBtn.click();
+          await bondRewardsPage.addBond.maxBtn.click();
         });
 
         await test.step('Check the input value and submit button', async () => {
           const inputValue = parseFloat(
-            await bondRewardsPage.amountInput.inputValue(),
+            await bondRewardsPage.addBond.amountInput.inputValue(),
           );
 
           expect(inputValue).toBeCloseTo(expectedBalance);
-          await expect(bondRewardsPage.addBondButton).toBeEnabled();
+          await expect(bondRewardsPage.addBond.addBondButton).toBeEnabled();
         });
       },
     );
@@ -130,13 +131,15 @@ test.describe('Bond & Rewards. Add bond.', async () => {
         const bondRewardsPage = widgetService.bondRewardsPage;
 
         await test.step(`Choose ${tokenName} symbol for bond`, async () => {
-          const bondToken = bondRewardsPage.selectBondToken(tokenName);
+          const bondToken = bondRewardsPage.addBond.selectBondToken(tokenName);
           await bondToken.click();
         });
 
-        await bondRewardsPage.amountInput.fill('1000');
+        await bondRewardsPage.addBond.amountInput.fill('1000');
         await bondRewardsPage.page.mouse.click(0, 0);
-        await expect(bondRewardsPage.validationInputTooltip).toContainText(
+        await expect(
+          bondRewardsPage.addBond.validationInputTooltip,
+        ).toContainText(
           `Not enough balance of ${TOKEN_DISPLAY_NAMES[tokenName]}`,
         );
       },
