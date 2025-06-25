@@ -53,12 +53,12 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   ],
   widgetService: [
     async ({ browserWithWallet }, use) => {
-      await use(
-        new WidgetService(
-          browserWithWallet.getBrowserContextPage(),
-          browserWithWallet.getWalletPage(),
-        ),
+      const ws = new WidgetService(
+        browserWithWallet.getBrowserContextPage(),
+        browserWithWallet.getWalletPage(),
       );
+      await ws.connectWallet();
+      await use(ws);
     },
     { scope: 'worker' },
   ],

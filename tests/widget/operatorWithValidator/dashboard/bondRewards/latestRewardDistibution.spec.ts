@@ -7,10 +7,6 @@ import { countDaysLeft, formatDate } from 'utils/format-date';
 import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
 test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', async () => {
-  test.beforeAll(async ({ widgetService }) => {
-    await widgetService.connectWallet();
-  });
-
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
   });

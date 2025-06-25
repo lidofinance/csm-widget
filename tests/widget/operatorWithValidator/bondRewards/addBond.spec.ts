@@ -7,10 +7,6 @@ import { TOKEN_DISPLAY_NAMES } from 'utils/getTokenDisplayName';
 import { TOKENS } from 'consts/tokens';
 
 test.describe('Bond & Rewards. Add bond.', async () => {
-  test.beforeAll(async ({ widgetService }) => {
-    await widgetService.connectWallet();
-  });
-
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.bondRewardsPage.addBond.open();
   });

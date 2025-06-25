@@ -5,10 +5,6 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { USD_AMOUNT_REGEX } from 'tests/consts/regexp.const';
 
 test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
-  test.beforeAll(async ({ widgetService }) => {
-    await widgetService.connectWallet();
-  });
-
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
   });
