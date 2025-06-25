@@ -21,6 +21,11 @@ export class AddBondPage extends BasePage {
   // Button
   addBondButton: Locator;
 
+  // Bond token information
+  addBondTokenInfo: Locator;
+  balanceWillReceive: Locator;
+  exchangeRate: Locator;
+
   constructor(public page: Page) {
     super(page);
     this.form = this.page.getByTestId('addBondForm');
@@ -41,6 +46,12 @@ export class AddBondPage extends BasePage {
 
     // Button
     this.addBondButton = this.form.getByRole('button', { name: 'Add Bond' });
+
+    // Bond token information
+    this.addBondTokenInfo = this.form.getByTestId('addBondTokenInfo');
+    this.balanceWillReceive =
+      this.addBondTokenInfo.getByTestId('balanceWillReceive');
+    this.exchangeRate = this.addBondTokenInfo.getByTestId('exchangeRate');
   }
 
   async open() {
