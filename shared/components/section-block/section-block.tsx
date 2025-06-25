@@ -4,10 +4,12 @@ import { Component } from 'types';
 import { SectionContentStyle, SectionStyle } from './styles';
 
 import { SectionTitle } from '../section-title/section-title';
+import { SectionHeaderLink } from '../section-header-link';
 
 type SectionComponent = Component<
   'section',
-  Omit<ComponentProps<typeof SectionTitle>, 'children'>
+  Omit<ComponentProps<typeof SectionTitle>, 'children'> &
+    Pick<ComponentProps<typeof SectionHeaderLink>, 'href' | 'matomoEvent'>
 >;
 
 export const SectionBlock: SectionComponent = ({
@@ -20,7 +22,12 @@ export const SectionBlock: SectionComponent = ({
 }) => (
   <Block>
     <SectionStyle {...rest}>
-      <SectionTitle {...{ href, matomoEvent, middle }}>{title}</SectionTitle>
+      <SectionTitle
+        middle={middle}
+        extra={href && <SectionHeaderLink {...{ href, matomoEvent }} />}
+      >
+        {title}
+      </SectionTitle>
       <SectionContentStyle>{children}</SectionContentStyle>
     </SectionStyle>
   </Block>
