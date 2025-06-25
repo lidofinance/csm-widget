@@ -1,6 +1,5 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../base.page';
-import { COMMON_ACTION_TIMEOUT } from 'tests/consts/timeouts';
 import { TOKENS } from 'consts/tokens';
 
 export class AddBondPage extends BasePage {
@@ -56,14 +55,7 @@ export class AddBondPage extends BasePage {
 
   async open() {
     await test.step('Open the Bond & Rewards page', async () => {
-      await this.page.goto('/bond/add');
-    });
-
-    await test.step('Wait for balance loaded', async () => {
-      await this.waitForTextContent(
-        this.titledAmountBalance,
-        COMMON_ACTION_TIMEOUT,
-      );
+      await this.openWithRetry('/bond/add', this.titledAmountBalance);
     });
   }
 
