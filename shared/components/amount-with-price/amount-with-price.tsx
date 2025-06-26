@@ -34,7 +34,7 @@ export const AmountWithPrice: FC<TitledAddressProps> = ({
           <AmountStyle>
             <FormatToken amount={amount} token={token} />
           </AmountStyle>
-          <PriceStyle>
+          <PriceStyle data-testid="usdPrice">
             <FormatPrice amount={usdAmount} approx />
           </PriceStyle>
         </>
