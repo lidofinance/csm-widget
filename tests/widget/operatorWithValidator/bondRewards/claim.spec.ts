@@ -4,6 +4,7 @@ import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { TOKEN_DISPLAY_NAMES } from 'utils/getTokenDisplayName';
 import { TOKENS } from 'consts/tokens';
+import { Tags } from 'tests/consts/common.const';
 
 test.describe('Bond & Rewards. Claim.', async () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -13,8 +14,12 @@ test.describe('Bond & Rewards. Claim.', async () => {
   test.skip(qase(61, 'Verify UI elements in "Claim" tab'), async () => {});
 
   [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+    const tag = [Tags.performTX];
+    if (tokenName === TOKENS.STETH) tag.push(Tags.smoke);
+
     test(
       qase(62, `Should correct claim by ${tokenName}`),
+      { tag },
       async ({ widgetService, contractClients }) => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
