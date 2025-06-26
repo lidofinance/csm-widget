@@ -91,7 +91,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
   [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
     test(
       qase(65, `Check max button for ${tokenName} token`),
-      async ({ widgetService }) => {
+      async ({ widgetService, sdkService }) => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
@@ -100,9 +100,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
           await bondToken.click();
         });
 
-        const expectedBalance =
-          await bondRewardsPage.addBond.getBalanceByToken(tokenName);
-
+        const expectedBalance = await sdkService.getBalanceByToken(tokenName);
         await test.step('Click the Max button', async () => {
           await bondRewardsPage.addBond.maxBtn.click();
         });
@@ -112,7 +110,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
             await bondRewardsPage.addBond.amountInput.inputValue(),
           );
 
-          expect(inputValue).toBeCloseTo(expectedBalance);
+          expect(inputValue).toBeCloseTo(parseFloat(expectedBalance));
           await expect(bondRewardsPage.addBond.addBondButton).toBeEnabled();
         });
       },
