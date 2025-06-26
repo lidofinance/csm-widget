@@ -8,13 +8,16 @@ import {
   contractClients,
   ContractClients,
 } from 'tests/services/clients.contract';
+import { SdkService } from 'tests/services/sdk.client';
 import { WidgetService } from 'tests/services/widget.service';
+import { mnemonicToAccount } from 'viem/accounts';
 
 type WorkerFixtures = {
   secretPhrase: string;
   browserWithWallet: BrowserService;
   widgetService: WidgetService;
   contractClients: ContractClients;
+  sdkService: SdkService;
 };
 
 export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
@@ -65,6 +68,17 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   contractClients: [
     async ({}, use) => {
       await use(contractClients);
+    },
+    { scope: 'worker' },
+  ],
+  sdkService: [
+    async ({ secretPhrase }, use) => {
+      await use(
+        new SdkService(
+          mnemonicToAccount(secretPhrase),
+          widgetFullConfig.standConfig.networkConfig,
+        ),
+      );
     },
     { scope: 'worker' },
   ],
