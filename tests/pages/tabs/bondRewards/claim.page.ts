@@ -7,7 +7,9 @@ export class ClaimPage extends BasePage {
 
   // Source select
   availableToClaimBalance: Locator;
-  amountPrice: Locator;
+  titledAmountPrice: Locator;
+  titledTokenBalance: Locator;
+  titledTokenPrice: Locator;
   sourceSelect: Locator;
   rewardsSource: Locator;
   excessBondSource: Locator;
@@ -33,7 +35,10 @@ export class ClaimPage extends BasePage {
     this.availableToClaimBalance = this.form.getByTestId(
       'availableToClaimBalance',
     );
-    this.amountPrice = this.availableToClaimBalance.getByTestId('amountPrice');
+    this.titledAmountPrice =
+      this.availableToClaimBalance.getByTestId('amountPrice');
+    this.titledTokenBalance = this.titledAmountPrice.locator('> div').nth(0);
+    this.titledTokenPrice = this.titledAmountPrice.locator('> div').nth(1);
     this.sourceSelect = this.form.getByTestId('sourceSelect');
     this.rewardsSource = this.sourceSelect.getByTestId('rewardsSource');
     this.excessBondSource = this.sourceSelect.getByTestId('excessBondSource');
@@ -60,7 +65,7 @@ export class ClaimPage extends BasePage {
 
   async open() {
     await test.step('Open the Bond & Rewards page', async () => {
-      await this.openWithRetry('/bond/claim', this.amountPrice);
+      await this.openWithRetry('/bond/claim', this.titledAmountPrice);
     });
   }
 
