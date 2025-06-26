@@ -5,13 +5,81 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { TOKEN_DISPLAY_NAMES } from 'utils/getTokenDisplayName';
 import { TOKENS } from 'consts/tokens';
 import { Tags } from 'tests/consts/common.const';
+import {
+  USD_AMOUNT_REGEX,
+  USD_AMOUNT_WITH_APPROX_REGEX,
+} from 'tests/consts/regexp.const';
 
 test.describe('Bond & Rewards. Claim.', async () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.bondRewardsPage.claim.open();
   });
 
-  test.skip(qase(61, 'Verify UI elements in "Claim" tab'), async () => {});
+  test(
+    qase(61, 'Verify UI elements for source select'),
+    async ({ widgetService, contractClients }) => {
+      const bondRewardsPage = widgetService.bondRewardsPage;
+
+      const nodeOperatorId = await widgetService.extractNodeOperatorId();
+
+      const bondSummary =
+        await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+
+      await test.step('Check title', async () => {
+        await expect(
+          bondRewardsPage.claim.availableToClaimBalance.locator('div').nth(0),
+        ).toContainText('Available to claim');
+        await expect(bondRewardsPage.claim.titledTokenBalance).toContainText(
+          `${bondSummary.excess.toCut(4)} stETH`,
+        );
+        await expect(bondRewardsPage.claim.titledTokenPrice).toContainText(
+          USD_AMOUNT_WITH_APPROX_REGEX,
+        );
+      });
+
+      await test.step('Check "Rewards" source', async () => {
+        await test.step('Check checkbox', async () => {
+          await expect(
+            bondRewardsPage.claim.sourceSelect.rewards.getByRole('checkbox'),
+          ).toBeDisabled();
+          await expect(
+            bondRewardsPage.claim.sourceSelect.rewards.getByRole('checkbox'),
+          ).not.toBeChecked();
+        });
+
+        await test.step('Check balances', async () => {
+          await expect(
+            bondRewardsPage.claim.sourceSelect.rewardsTokenAmount,
+          ).toContainText(`0.0 stETH`);
+
+          await expect(
+            bondRewardsPage.claim.sourceSelect.rewardsUSDPrice,
+          ).toContainText(USD_AMOUNT_REGEX);
+        });
+      });
+
+      await test.step('Check "Excess bond" source', async () => {
+        await test.step('Check checkbox', async () => {
+          await expect(
+            bondRewardsPage.claim.sourceSelect.excessBond.getByRole('checkbox'),
+          ).toBeDisabled();
+          await expect(
+            bondRewardsPage.claim.sourceSelect.excessBond.getByRole('checkbox'),
+          ).toBeChecked();
+        });
+
+        await test.step('Check balances', async () => {
+          await expect(
+            bondRewardsPage.claim.sourceSelect.excessBondTokenAmount,
+          ).toContainText(`${bondSummary.excess.toCut(4)} stETH`);
+
+          await expect(
+            bondRewardsPage.claim.sourceSelect.excessBondUSDPrice,
+          ).toContainText(USD_AMOUNT_WITH_APPROX_REGEX);
+        });
+      });
+    },
+  );
 
   [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
     const tag = [Tags.performTX];
@@ -26,15 +94,15 @@ test.describe('Bond & Rewards. Claim.', async () => {
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-        const expectedAmount = '0.0003';
+        const claimAmount = '0.0003';
         const bondSummary =
           await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
 
-        await widgetService.claim(tokenName, expectedAmount);
+        await widgetService.claim(tokenName, claimAmount);
 
         await test.step('Verify new balance after bond added', async () => {
           const expectedBalance =
-            parseFloat(bondSummary.excess) - parseFloat(expectedAmount);
+            parseFloat(bondSummary.excess) - parseFloat(claimAmount);
           const actualBalance =
             await bondRewardsPage.claim.titledTokenBalance.textContent();
 

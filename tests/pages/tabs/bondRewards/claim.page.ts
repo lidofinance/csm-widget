@@ -1,6 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../base.page';
 import { TOKENS } from 'consts/tokens';
+import { SourceSelect } from 'tests/pages/elements/bondRewards/claim/sourceSelect.element';
 
 export class ClaimPage extends BasePage {
   form: Locator;
@@ -10,9 +11,7 @@ export class ClaimPage extends BasePage {
   titledAmountPrice: Locator;
   titledTokenBalance: Locator;
   titledTokenPrice: Locator;
-  sourceSelect: Locator;
-  rewardsSource: Locator;
-  excessBondSource: Locator;
+  sourceSelect: SourceSelect;
 
   // Token buttons
   tokenButtons: Locator;
@@ -38,10 +37,9 @@ export class ClaimPage extends BasePage {
     this.titledAmountPrice =
       this.availableToClaimBalance.getByTestId('amountPrice');
     this.titledTokenBalance = this.titledAmountPrice.locator('> div').nth(0);
-    this.titledTokenPrice = this.titledAmountPrice.locator('> div').nth(1);
-    this.sourceSelect = this.form.getByTestId('sourceSelect');
-    this.rewardsSource = this.sourceSelect.getByTestId('rewardsSource');
-    this.excessBondSource = this.sourceSelect.getByTestId('excessBondSource');
+    this.titledTokenPrice = this.titledAmountPrice.getByTestId('usdPrice');
+
+    this.sourceSelect = new SourceSelect(this.form);
 
     // Token buttons
     this.tokenButtons = this.form.getByTestId('tokenButtons');
@@ -65,7 +63,7 @@ export class ClaimPage extends BasePage {
 
   async open() {
     await test.step('Open the Bond & Rewards page', async () => {
-      await this.openWithRetry('/bond/claim', this.titledAmountPrice);
+      await this.openWithRetry('/bond/claim', this.titledTokenBalance);
     });
   }
 
