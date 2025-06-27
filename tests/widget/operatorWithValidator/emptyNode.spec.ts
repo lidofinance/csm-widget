@@ -11,7 +11,6 @@ test.describe('Operator with validator and without keys.', async () => {
 
   test.beforeEach(async ({ widgetService }) => {
     keysPage = new KeysPage(widgetService.page);
-    await widgetService.connectWallet();
   });
 
   test(

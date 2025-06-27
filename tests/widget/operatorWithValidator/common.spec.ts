@@ -13,7 +13,6 @@ test.describe('Operator with keys. Common suite.', async () => {
 
   test.beforeEach(async ({ widgetService }) => {
     keysPage = new KeysPage(widgetService.page);
-    await widgetService.connectWallet();
     await keysPage.submitPage.open();
   });
 

@@ -7,7 +7,6 @@ test.describe('Main page', async () => {
   test(
     qase(5, 'Should open keys page after click to "Create Node Operator"'),
     async ({ widgetService }) => {
-      await widgetService.connectWallet();
       await widgetService.page
         .getByText('CSM node operator starter pack')
         .waitFor({ state: 'visible' });

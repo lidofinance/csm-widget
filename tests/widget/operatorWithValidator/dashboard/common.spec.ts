@@ -3,7 +3,6 @@ import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe('Dashboard. Bond & Rewards.', async () => {
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.connectWallet();
     await widgetService.dashboardPage.open();
   });
 
