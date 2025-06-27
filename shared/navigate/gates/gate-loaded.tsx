@@ -16,5 +16,9 @@ export const GateLoaded: FC<PropsWithChildren<Props>> = ({
 }) => {
   const { isLoading, isSupported } = useInitialLoading(additional);
 
-  return <>{isLoading ? fallback : isSupported ? children : unsupported}</>;
+  if (!isSupported) {
+    return <>{unsupported}</>;
+  }
+
+  return <>{isLoading ? fallback : children}</>;
 };
