@@ -28,6 +28,7 @@ export class ClaimPage extends BasePage {
 
   // Claim info
   claimBondFormInfo: Locator;
+  claimBondFormInfoTitle: Locator;
   willReceiveAmount: Locator;
 
   constructor(public page: Page) {
@@ -66,6 +67,9 @@ export class ClaimPage extends BasePage {
 
     // Claim info
     this.claimBondFormInfo = this.form.getByTestId('claimBondFormInfo');
+    this.claimBondFormInfoTitle = this.claimBondFormInfo.getByTestId(
+      'claimBondFormInfoTitle',
+    );
     this.willReceiveAmount = this.claimBondFormInfo.getByTestId('tokenAmount');
   }
 

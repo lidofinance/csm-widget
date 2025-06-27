@@ -9,6 +9,8 @@ import {
   USD_AMOUNT_REGEX,
   USD_AMOUNT_WITH_APPROX_REGEX,
 } from 'tests/consts/regexp.const';
+import { trimAddress } from '@lidofinance/address';
+import { mnemonicToAccount } from 'viem/accounts';
 
 test.describe('Bond & Rewards. Claim.', async () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -146,6 +148,27 @@ test.describe('Bond & Rewards. Claim.', async () => {
       },
     );
   });
+
+  test(
+    qase(201, 'Verify UI elements for Rewards Address information'),
+    async ({ widgetService, secretPhrase }) => {
+      const bondRewardsPage = widgetService.bondRewardsPage;
+      const address = mnemonicToAccount(secretPhrase).address;
+
+      await test.step('Verify text of rewards information', async () => {
+        const textContentRewardInfo =
+          await bondRewardsPage.claim.claimBondFormInfoTitle
+            .locator('> div')
+            .nth(0)
+            .textContent();
+        const expectedText = `Rewards Address (${trimAddress(address, 6)}) will receive`;
+
+        expect(textContentRewardInfo?.replace(address, '')).toEqual(
+          expectedText,
+        );
+      });
+    },
+  );
 
   [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
     const tag = [Tags.performTX];
