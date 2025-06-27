@@ -25,6 +25,7 @@ export const ClaimBondFormInfo = () => {
   return (
     <DataTable data-testid="claimBondFormInfo">
       <DataTableRow
+        data-testid="claimBondFormInfoTitle"
         title={
           <>
             Rewards Address (
