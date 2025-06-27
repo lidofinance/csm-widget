@@ -212,6 +212,12 @@ test.describe('Bond & Rewards. Claim.', async () => {
             await expect(bondRewardsPage.claim.claimButton).toBeEnabled();
           }
         });
+
+        await test.step('Verify "will receive" value', async () => {
+          await expect(bondRewardsPage.claim.willReceiveAmount).toContainText(
+            `${expectedBalance.toString().toCut(4)} ${TOKEN_DISPLAY_NAMES[tokenName]}`,
+          );
+        });
       },
     );
   });

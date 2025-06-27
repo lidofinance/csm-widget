@@ -26,6 +26,10 @@ export class ClaimPage extends BasePage {
   claimButton: Locator;
   requestWithdrawalButton: Locator;
 
+  // Claim info
+  claimBondFormInfo: Locator;
+  willReceiveAmount: Locator;
+
   constructor(public page: Page) {
     super(page);
     this.form = this.page.getByTestId('claimBondForm');
@@ -59,6 +63,10 @@ export class ClaimPage extends BasePage {
     this.requestWithdrawalButton = this.form.getByRole('button', {
       name: 'Request withdrawal to the Rewards Address',
     });
+
+    // Claim info
+    this.claimBondFormInfo = this.form.getByTestId('claimBondFormInfo');
+    this.willReceiveAmount = this.claimBondFormInfo.getByTestId('tokenAmount');
   }
 
   async open() {
