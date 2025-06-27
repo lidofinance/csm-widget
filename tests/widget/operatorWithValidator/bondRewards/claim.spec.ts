@@ -82,6 +82,72 @@ test.describe('Bond & Rewards. Claim.', async () => {
   );
 
   [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+    test(
+      qase(200, `Verify UI elements for ${tokenName} buttons`),
+      async ({ widgetService, contractClients, sdkService }) => {
+        qase.parameters({ tokenName });
+        const bondRewardsPage = widgetService.bondRewardsPage;
+
+        const token = bondRewardsPage.claim.selectBondToken(tokenName);
+
+        const nodeOperatorId = await widgetService.extractNodeOperatorId();
+
+        const bondSummary =
+          await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+
+        const rateToStETH =
+          tokenName === TOKENS.WSTETH
+            ? parseFloat(await sdkService.getWstETHRate())
+            : parseFloat('1.0');
+
+        const expectedTokenAmount =
+          `${parseFloat(bondSummary.excess) / rateToStETH}`.toCut(4);
+
+        await test.step(`Verify UI of ${tokenName} button`, async () => {
+          await test.step('Verify checked state', async () => {
+            if (tokenName === TOKENS.STETH) {
+              await expect(token.getByRole('radio')).toBeChecked();
+            } else {
+              await expect(token.getByRole('radio')).not.toBeChecked();
+            }
+          });
+
+          await token.click();
+          await expect(token.getByRole('radio')).toBeChecked();
+
+          await test.step('Verify token amount', async () => {
+            await expect(token.getByTestId('tokenAmount')).toContainText(
+              `${expectedTokenAmount} ${TOKEN_DISPLAY_NAMES[tokenName]}`,
+            );
+          });
+
+          await test.step('Verify waiting time and receive data', async () => {
+            if (tokenName === TOKENS.ETH) {
+              await expect(token.getByTestId('waitingTime')).toContainText(
+                'Waiting time:~ 1-5 days',
+              );
+              await expect(token.getByTestId('receive')).toContainText(
+                'Receive:withdrawal NFT',
+              );
+              // await expect(bondRewardsPage.claim.form).toContainText('After receiving NFT you will need to claim ETH manually. FollowFAQfor more details.')
+            } else {
+              await expect(token.getByTestId('tokenAmount')).toContainText(
+                `${expectedTokenAmount} ${TOKEN_DISPLAY_NAMES[tokenName]}`,
+              );
+              await expect(token.getByTestId('waitingTime')).toContainText(
+                'Waiting time:~ 1 min',
+              );
+              await expect(token.getByTestId('receive')).toContainText(
+                `Receive:${TOKEN_DISPLAY_NAMES[tokenName]}`,
+              );
+            }
+          });
+        });
+      },
+    );
+  });
+
+  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
     const tag = [Tags.performTX];
     if (tokenName === TOKENS.STETH) tag.push(Tags.smoke);
 
