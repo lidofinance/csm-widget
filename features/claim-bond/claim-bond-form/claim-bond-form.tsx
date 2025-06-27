@@ -16,7 +16,7 @@ import { TokenSelect } from './controls/token-select';
 export const ClaimBondForm: FC = memo(() => {
   return (
     <ClaimBondFormProvider>
-      <FormBlock>
+      <FormBlock data-testid="claimBondForm">
         <BaseFormLoader>
           <FormControllerStyled>
             <SourceSelect />
