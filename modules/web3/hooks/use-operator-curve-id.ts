@@ -5,7 +5,7 @@ import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import invariant from 'tiny-invariant';
 
 export const useOperatorCurveId = <TData = bigint>(
-  id?: NodeOperatorId,
+  id: NodeOperatorId | undefined,
   select?: (data: bigint) => TData,
 ) => {
   const { csm } = useLidoSDK();

@@ -6,6 +6,7 @@ import {
   useIcsProof,
   useNodeOperatorId,
   useOperatorCurveId,
+  useOperatorKeysToMigrate,
 } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
 import { type ClaimTypeFormNetworkData } from './types';
@@ -28,6 +29,9 @@ export const useClaimTypeFormNetworkData = (): [
   const { data: newParameters, isPending: isNewParametersLoading } =
     useCurveParameters(newCurveId);
 
+  const { refetch: updateKeysToMigrate } =
+    useOperatorKeysToMigrate(nodeOperatorId);
+
   const {
     data: proof,
     isPending: isProofLoading,
@@ -37,8 +41,12 @@ export const useClaimTypeFormNetworkData = (): [
     useIcsCanClaim({ address, nodeOperatorId });
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateCurrentCurveId(), updateProof()]);
-  }, [updateCurrentCurveId, updateProof]);
+    await Promise.allSettled([
+      updateCurrentCurveId(),
+      updateProof(),
+      updateKeysToMigrate(),
+    ]);
+  }, [updateCurrentCurveId, updateKeysToMigrate, updateProof]);
 
   const loading = useMemo(
     () => ({

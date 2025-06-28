@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLidoSDK } from 'modules/web3';
 import invariant from 'tiny-invariant';
 
-export const useStETHByWstETH = (wsteth?: bigint | null) => {
+export const useStETHByWstETH = (wsteth: bigint | undefined | null) => {
   const { wrap } = useLidoSDK();
 
   return useQuery({

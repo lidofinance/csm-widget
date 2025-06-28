@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLidoSDK } from 'modules/web3';
 import { Address } from 'viem';
 
-export const useIsContract = (address?: Address) => {
+export const useIsContract = (address: Address | undefined) => {
   const { core } = useLidoSDK();
 
   return useQuery({

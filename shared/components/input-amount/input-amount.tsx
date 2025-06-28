@@ -21,7 +21,7 @@ type InputAmountProps = {
   value?: bigint | null;
   onMaxClick?: (event: MouseEvent<HTMLButtonElement>, maxValue: bigint) => void;
   maxValue?: bigint;
-  isLocked?: boolean;
+  isLocked?: boolean | string;
   isLoading?: boolean;
 } & Omit<ComponentProps<typeof Input>, 'onChange' | 'value'>;
 
@@ -163,7 +163,11 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
                   disabled={!handleClickMax}
                 />
               ) : undefined}
-              {isLocked ? <InputDecoratorLocked /> : undefined}
+              {isLocked ? (
+                <InputDecoratorLocked
+                  title={typeof isLocked === 'string' ? isLocked : undefined}
+                />
+              ) : undefined}
             </>
           )
         }

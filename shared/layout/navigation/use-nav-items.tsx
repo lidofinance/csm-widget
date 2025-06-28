@@ -48,6 +48,8 @@ const routes: Route[] = [
     subPaths: [
       PATH.KEYS_SUBMIT,
       PATH.KEYS_REMOVE,
+      PATH.KEYS_EJECT,
+      PATH.KEYS_EXIT,
       PATH.KEYS_VIEW,
       PATH.KEYS_TRANSFER,
       PATH.CREATE,

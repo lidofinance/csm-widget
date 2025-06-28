@@ -33,6 +33,9 @@ export const redirectionMap: Partial<
   [PATH.KEYS_REMOVE]: {
     [ROLE_CODE.REWARDS]: PATH.KEYS_VIEW,
   },
+  [PATH.KEYS_EJECT]: {
+    [ROLE_CODE.REWARDS]: PATH.KEYS_VIEW,
+  },
   [PATH.KEYS_VIEW]: {
     [ROLE_CODE.NONE]: PATH.HOME,
   },

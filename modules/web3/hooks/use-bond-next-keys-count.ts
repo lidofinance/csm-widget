@@ -5,15 +5,15 @@ import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 import invariant from 'tiny-invariant';
 
 type Props = {
-  keysCount?: number;
-  nodeOperatorId?: NodeOperatorId;
+  nodeOperatorId: NodeOperatorId | undefined;
   token: TOKENS;
+  keysCount?: number;
 };
 
 export const useBondNextKeysCount = ({
-  keysCount = 0,
   nodeOperatorId,
   token,
+  keysCount = 0,
 }: Props) => {
   const { csm } = useLidoSDK();
 

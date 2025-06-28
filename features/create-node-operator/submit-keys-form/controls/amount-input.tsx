@@ -13,7 +13,7 @@ export const AmountInput = () => {
 
   return (
     <InputAmount
-      isLocked={true}
+      isLocked="This field is calculated automatically based on the number of keys and the bond curve.  Follow the FAQ section to learn more"
       value={bondAmount}
       label={`${getTokenDisplayName(token)} amount`}
       error={errors.bondAmount?.message}

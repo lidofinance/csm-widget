@@ -2,10 +2,10 @@ import { ButtonProps } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 
 import {
+  getOperatorType,
   useCurveParameters,
   useNodeOperatorId,
   useOperatorCurveId,
-  useOperatorType,
 } from 'modules/web3';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { useParametersModal } from '../parameters-modal';
@@ -15,9 +15,9 @@ export const TypeButton: FC<ButtonProps> = (props) => {
   const { onClick, ...rest } = props;
   const { openModal } = useParametersModal();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: type } = useOperatorType(nodeOperatorId);
   const { data: curveId } = useOperatorCurveId(nodeOperatorId);
   useCurveParameters(curveId); // pre-fetching
+  const type = getOperatorType(curveId);
 
   if (!type || curveId === undefined) return null;
 
@@ -26,7 +26,7 @@ export const TypeButton: FC<ButtonProps> = (props) => {
       size="sm"
       variant="text"
       color="secondary"
-      onClick={() => openModal({ type, curveId })}
+      onClick={() => openModal({ curveId })}
       $variant={type}
       {...rest}
     >

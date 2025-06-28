@@ -18,7 +18,9 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
 
   const activePathIndex = useMemo(
     () =>
-      filteredRoutes.findIndex(({ path }) => getIsActivePath(pathname, path)),
+      filteredRoutes.findIndex(({ path, subpaths }) =>
+        getIsActivePath(pathname, path, subpaths),
+      ),
     [pathname, filteredRoutes],
   );
 
@@ -27,12 +29,13 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
   return (
     <SwitchWrapper $count={filteredRoutes.length}>
       {activePathIndex >= 0 && <Handle $active={activePathIndex} />}
-      {filteredRoutes.map((route) => {
+      {filteredRoutes.map((route, index) => {
         return (
           <SwitcherItem
             key={route.title}
             href={route.path}
             warning={route.warning}
+            active={activePathIndex === index}
           >
             <Stack gap="sm" center>
               {route.title}

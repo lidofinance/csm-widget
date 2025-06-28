@@ -1,4 +1,4 @@
-import { useCurveParameters } from 'modules/web3';
+import { getOperatorType, useCurveParameters } from 'modules/web3';
 import type { ModalComponentType } from 'providers/modal-provider';
 
 import { OPERATOR_TYPE } from 'consts';
@@ -13,10 +13,14 @@ const TITLES: Record<OPERATOR_TYPE, string> = {
 };
 
 export const ParametersModal: ModalComponentType<{
-  type: OPERATOR_TYPE;
   curveId: bigint;
-}> = ({ open, onClose, type, curveId }) => {
+}> = ({ open, onClose, curveId }) => {
   const { data: parameters } = useCurveParameters(curveId);
+  const type = getOperatorType(curveId);
+
+  if (!type) {
+    return null;
+  }
 
   return (
     <StyledModal

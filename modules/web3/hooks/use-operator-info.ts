@@ -5,7 +5,7 @@ import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
 
 export const useOperatorInfo = <TData = NodeOperatorInfo>(
-  id?: NodeOperatorId,
+  id: NodeOperatorId | undefined,
   select?: (data: NodeOperatorInfo) => TData,
 ) => {
   const { csm } = useLidoSDK();

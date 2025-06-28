@@ -4,7 +4,9 @@ import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
 import invariant from 'tiny-invariant';
 import { useLidoSDK } from '../web3-provider';
 
-export const useOperatorKeysToMigrate = (nodeOperatorId?: NodeOperatorId) => {
+export const useOperatorKeysToMigrate = (
+  nodeOperatorId: NodeOperatorId | undefined,
+) => {
   const { csm } = useLidoSDK();
 
   return useQuery({

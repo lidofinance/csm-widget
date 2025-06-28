@@ -5,8 +5,8 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import invariant from 'tiny-invariant';
 
 type Props = {
+  curveId: bigint | undefined;
   keysCount?: number;
-  curveId?: bigint;
   token?: TOKENS;
 };
 

@@ -5,7 +5,7 @@ import { Address } from 'viem';
 import { useLidoSDK } from '../web3-provider';
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
-export const useIcsProof = (address?: Address) => {
+export const useIcsProof = (address: Address | undefined) => {
   const { csm } = useLidoSDK();
 
   return useQuery({
@@ -23,8 +23,8 @@ export const useIcsCanClaim = ({
   address,
   nodeOperatorId,
 }: {
-  address?: Address;
-  nodeOperatorId?: NodeOperatorId;
+  address: Address | undefined;
+  nodeOperatorId: NodeOperatorId | undefined;
 }) => {
   const { csm } = useLidoSDK();
 
@@ -54,8 +54,8 @@ export const useOperatorIsOwner = ({
   address,
   nodeOperatorId,
 }: {
-  address?: Address;
-  nodeOperatorId?: NodeOperatorId;
+  address: Address | undefined;
+  nodeOperatorId: NodeOperatorId | undefined;
 }) => {
   const { csm } = useLidoSDK();
 

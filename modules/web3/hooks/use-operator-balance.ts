@@ -3,7 +3,7 @@ import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
 import { useLidoSDK } from '../web3-provider';
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
-export const useOperatorBalance = (id?: NodeOperatorId) => {
+export const useOperatorBalance = (id: NodeOperatorId | undefined) => {
   const { csm } = useLidoSDK();
 
   return useQuery({

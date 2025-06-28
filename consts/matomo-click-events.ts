@@ -79,6 +79,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageAddKeys = 'pageAddKeys',
   pageViewKeys = 'pageViewKeys',
   pageRemoveKeys = 'pageRemoveKeys',
+  pageExitKeys = 'pageExitKeys',
+  pageEjectKeys = 'pageEjectKeys',
   pageTransferKeys = 'pageTransferKeys',
   pageMonitoring = 'pageMonitoring',
   pageAddBond = 'pageAddBond',
@@ -424,6 +426,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «RemoveKeys»',
     prefixed`view_remove_keys_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageExitKeys]: [
+    MATOMO_APP_NAME,
+    'View page «ExitKeys»',
+    prefixed`view_exit_keys_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageEjectKeys]: [
+    MATOMO_APP_NAME,
+    'View page «EjectKeys»',
+    prefixed`view_eject_keys_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageTransferKeys]: [
     MATOMO_APP_NAME,

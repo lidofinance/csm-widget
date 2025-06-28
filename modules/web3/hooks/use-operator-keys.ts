@@ -6,7 +6,7 @@ import { Hex } from 'viem';
 import { useLidoSDK } from '../web3-provider';
 
 export const useOperatorKeys = <TData = Hex[]>(
-  nodeOperatorId?: NodeOperatorId,
+  nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: Hex[]) => TData,
 ) => {
   const { csm } = useLidoSDK();

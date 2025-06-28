@@ -10,7 +10,7 @@ export const KNOWN_TYPES: { [key in OPERATOR_TYPE]?: bigint } = {
 };
 
 export const getOperatorType = (
-  curveId?: bigint,
+  curveId: bigint | undefined,
 ): OPERATOR_TYPE | undefined => {
   if (curveId === undefined) {
     return undefined;
@@ -21,6 +21,6 @@ export const getOperatorType = (
   );
 };
 
-export const useOperatorType = (id?: NodeOperatorId) => {
+export const useOperatorType = (id: NodeOperatorId | undefined) => {
   return useOperatorCurveId(id, getOperatorType);
 };

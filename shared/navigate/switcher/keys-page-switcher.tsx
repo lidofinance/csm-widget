@@ -10,8 +10,9 @@ const KEYS_ROUTES: SwitcherRoutes = [
     showRules: ['HAS_MANAGER_ROLE'],
   },
   {
-    title: 'Remove',
+    title: 'Delete',
     path: PATH.KEYS_REMOVE,
+    subpaths: [PATH.KEYS_EJECT, PATH.KEYS_EXIT],
     showRules: ['HAS_MANAGER_ROLE'],
     suffix: <CounterInvalidKeys />,
   },

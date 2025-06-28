@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
 import { useLidoSDK } from '../web3-provider';
 
-export const useOperatorRewards = (id?: NodeOperatorId) => {
+export const useOperatorRewards = (id: NodeOperatorId | undefined) => {
   const { csm } = useLidoSDK();
 
   return useQuery({
