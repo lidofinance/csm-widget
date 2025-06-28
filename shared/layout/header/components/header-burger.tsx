@@ -1,8 +1,8 @@
-import { Button } from '@lidofinance/lido-ui';
 import { useInpageNavigation } from 'providers/inpage-navigation';
 import { FC } from 'react';
 import styled from 'styled-components';
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
+import { HeaderButton } from '../styles';
 
 export const HeaderBurger: FC = () => {
   const { expanded, toggleExpanded } = useInpageNavigation();
@@ -31,19 +31,15 @@ export const BurgerLine = styled.div`
     opacity ease ${({ theme }) => theme.duration.norm};
 `;
 
-export const BurgerButtonStyle = styled(Button).attrs({
-  size: 'xs',
-  variant: 'text',
-  color: 'secondary',
-})`
+export const BurgerButtonStyle = styled(HeaderButton)`
   display: none;
 
-  width: 44px;
-  height: 44px;
-  min-width: unset;
-  align-items: center;
+  > span:first-of-type {
+    flex-direction: column;
+  }
+
+  width: 44px; // as header height
   justify-content: center;
-  flex-shrink: 1;
   padding: 0;
 
   ${NAV_MOBILE_MEDIA} {
@@ -52,13 +48,13 @@ export const BurgerButtonStyle = styled(Button).attrs({
 
   &[aria-expanded='true'] ${BurgerLine} {
     :nth-child(1) {
-      transform: translateY(6px) rotate(-45deg);
+      transform: translateY(10px) rotate(-45deg);
     }
     :nth-child(2) {
       opacity: 0;
     }
     :nth-child(3) {
-      transform: translateY(-6px) rotate(45deg);
+      transform: translateY(-10px) rotate(45deg);
     }
   }
 `;

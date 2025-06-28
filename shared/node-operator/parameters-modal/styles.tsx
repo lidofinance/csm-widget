@@ -9,11 +9,11 @@ export const StyledModal = styled((props: ComponentProps<typeof Modal>) => (
 ))<{
   $variant?: OPERATOR_TYPE;
 }>`
-  & > div {
+  > div {
     width: 544px;
     --border-width: 8px;
 
-    & > div {
+    > div {
       border: var(--border-width) solid transparent;
       background-clip: padding-box;
       z-index: initial;
@@ -31,7 +31,7 @@ export const StyledModal = styled((props: ComponentProps<typeof Modal>) => (
         ${({ $variant }) => ($variant ? CURVE_VARIANTS[$variant] : '')}
       }
 
-      & > div {
+      > div {
         padding-inline: calc(32px - 8px);
 
         &:nth-child(1) {

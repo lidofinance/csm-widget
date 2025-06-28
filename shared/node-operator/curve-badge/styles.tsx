@@ -40,7 +40,7 @@ export const DescriptorCurveStyle = styled(BadgeStyle)<{
 }>`
   font-weight: 700;
   color: var(--lido-color-foreground);
-  padding-inline: 6px;
+  padding-inline: 0px;
 
   ${({ $variant }) => ($variant ? CURVE_VARIANTS[$variant] : '')}
 `;

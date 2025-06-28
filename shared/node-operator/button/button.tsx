@@ -1,13 +1,13 @@
 import { ButtonProps } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
 
-import { Descriptor } from '../descriptor/descriptor';
-import { useSwitchModal } from '../switch-modal';
-import { ButtonStyle, ButtonWrapperStyle } from './styles';
-import { trackMatomoEvent } from 'utils';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useAvailableOperators, useNodeOperator } from 'modules/web3';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { trackMatomoEvent } from 'utils';
+import { Descriptor } from '../descriptor/descriptor';
+import { useSwitchModal } from '../switch-modal';
+import { ButtonStyle } from './styles';
 
 export const Button: FC<ButtonProps> = (props) => {
   const { onClick, ...rest } = props;
@@ -27,17 +27,12 @@ export const Button: FC<ButtonProps> = (props) => {
 
   return (
     <ButtonStyle
-      size="sm"
-      variant="text"
-      color="secondary"
       onClick={() =>
         openModal({ active: nodeOperator, list, onChange: handleClick })
       }
       {...rest}
     >
-      <ButtonWrapperStyle>
-        <Descriptor nodeOperator={nodeOperator} hideType />
-      </ButtonWrapperStyle>
+      <Descriptor nodeOperator={nodeOperator} hideType />
     </ButtonStyle>
   );
 };

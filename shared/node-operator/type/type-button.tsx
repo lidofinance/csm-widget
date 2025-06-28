@@ -9,7 +9,7 @@ import {
 } from 'modules/web3';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { useParametersModal } from '../parameters-modal';
-import { ButtonStyle, ButtonWrapperStyle } from './styles';
+import { ButtonStyle } from './styles';
 
 export const TypeButton: FC<ButtonProps> = (props) => {
   const { onClick, ...rest } = props;
@@ -23,16 +23,11 @@ export const TypeButton: FC<ButtonProps> = (props) => {
 
   return (
     <ButtonStyle
-      size="sm"
-      variant="text"
-      color="secondary"
       onClick={() => openModal({ curveId })}
       $variant={type}
       {...rest}
     >
-      <ButtonWrapperStyle>
-        <CurveBadge type={type} noStyle />
-      </ButtonWrapperStyle>
+      <CurveBadge type={type} noStyle />
     </ButtonStyle>
   );
 };

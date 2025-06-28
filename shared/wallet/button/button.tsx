@@ -10,7 +10,6 @@ import {
   WalledButtonBalanceStyle,
   WalledButtonLoaderStyle,
   WalledButtonStyle,
-  WalledButtonWrapperStyle,
 } from './styles';
 
 export const Button: FC<ButtonProps> = (props) => {
@@ -21,25 +20,17 @@ export const Button: FC<ButtonProps> = (props) => {
   const isMobile = useBreakpoint('md');
 
   return (
-    <WalledButtonStyle
-      size="sm"
-      variant="text"
-      color="secondary"
-      onClick={() => openModal({})}
-      {...rest}
-    >
-      <WalledButtonWrapperStyle>
-        <WalledButtonBalanceStyle>
-          {isPending ? (
-            <WalledButtonLoaderStyle />
-          ) : (
-            <FormatToken amount={balance} symbol="ETH" />
-          )}
-        </WalledButtonBalanceStyle>
-        <AddressBadgeStyle>
-          <AddressStyle address={address} symbols={isMobile ? 3 : 6} />
-        </AddressBadgeStyle>
-      </WalledButtonWrapperStyle>
+    <WalledButtonStyle onClick={() => openModal({})} {...rest}>
+      <WalledButtonBalanceStyle>
+        {isPending ? (
+          <WalledButtonLoaderStyle />
+        ) : (
+          <FormatToken amount={balance} symbol="ETH" />
+        )}
+      </WalledButtonBalanceStyle>
+      <AddressBadgeStyle>
+        <AddressStyle address={address} symbols={isMobile ? 3 : 6} />
+      </AddressBadgeStyle>
     </WalledButtonStyle>
   );
 };
