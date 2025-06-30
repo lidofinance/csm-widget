@@ -10,7 +10,7 @@ type TitledAddressProps = {
 export const TitledAddress: FC<TitledAddressProps> = ({ address, title }) => {
   if (!address) return null;
   return (
-    <TitledAddressStyle>
+    <TitledAddressStyle data-testid="titledAddress">
       <Stack gap="lg">{title}</Stack>
       <Address address={address} showIcon />
     </TitledAddressStyle>
