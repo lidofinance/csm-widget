@@ -1,4 +1,4 @@
-import { useDappStatus, useRewardsFrame } from 'modules/web3';
+import { useDappStatus, useFrameInfo } from 'modules/web3';
 import { FC } from 'react';
 import { formatPercent } from 'utils';
 import { ShortInlineLoader } from './styles';
@@ -6,14 +6,10 @@ import { formatSecondsDuration } from '../parameters-list/format';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 export const FaqFrameDuration: FC = () => {
-  const { data, isPending } = useRewardsFrame();
+  const { data, isPending } = useFrameInfo((data) => data.frameDuration);
 
   formatPercent;
-  return isPending ? (
-    <ShortInlineLoader />
-  ) : (
-    <>{formatSecondsDuration(data?.frameDuration ?? 0n)}</>
-  );
+  return isPending ? <ShortInlineLoader /> : <>{formatSecondsDuration(data)}</>;
 };
 
 export const FaqRebaseDuration: FC = () => {

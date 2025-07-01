@@ -17,6 +17,7 @@ type Props = {
 
 export type KeysAvailable = Record<TOKENS, ReturnType<typeof calc>>;
 
+// FIXME: fix types
 export const useKeysAvailable = ({
   curveId,
   nonWithdrawnKeys,

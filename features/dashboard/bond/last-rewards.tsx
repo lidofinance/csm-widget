@@ -10,7 +10,7 @@ import {
   useNodeOperatorId,
   useOperatorInfo,
   useOperatorLastRewards,
-  useRewardsFrame,
+  useFrameInfo,
   useRewardsLastReportTxHash,
 } from 'modules/web3';
 import { ModalComponentType, useModal } from 'providers/modal-provider';
@@ -41,7 +41,11 @@ export const LastRewards: FC = () => {
   const { data: info } = useOperatorInfo(id);
   const { data: lastRewards, isPending: isLoading } =
     useOperatorLastRewards(id);
-  const { data: rewardsFrame } = useRewardsFrame();
+  const { data: rewardsFrame } = useFrameInfo((data) => ({
+    lastDistribution: data.lastReport,
+    prevDistribution: data.lastReport - data.frameDuration,
+    nextDistribution: data.lastReport + data.frameDuration,
+  }));
 
   const lastRewardsDate = formatDate(rewardsFrame?.lastDistribution);
   const prevRewardsDate = formatDate(rewardsFrame?.prevDistribution);
@@ -118,7 +122,9 @@ export const LastRewards: FC = () => {
 };
 
 const LastReportStats: FC = () => {
-  const { data: lastRewards, isPending: isLoading } = useOperatorLastRewards();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: lastRewards, isPending: isLoading } =
+    useOperatorLastRewards(nodeOperatorId);
   const { data: txHash, isPending: isTxLoading } = useRewardsLastReportTxHash();
 
   return (

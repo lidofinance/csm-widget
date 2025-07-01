@@ -32,8 +32,8 @@ export const KeysSelector = () => {
         </Box>
       </Block>
       <Latice>
-        {keys?.map(({ key }) => (
-          <Pubkey key={key} address={key} symbols={16} />
+        {keys?.map(({ pubkey }) => (
+          <Pubkey key={pubkey} pubkey={pubkey} symbols={16} />
         ))}
       </Latice>
     </>

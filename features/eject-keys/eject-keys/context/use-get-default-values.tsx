@@ -9,10 +9,7 @@ export const useGetDefaultValues = ({
   const values = useMemo(() => {
     if (isKeysLoading || isInfoLoading) return undefined;
     return {
-      selection: {
-        start: 0,
-        count: 0,
-      },
+      selection: [],
     };
   }, [isInfoLoading, isKeysLoading]);
 

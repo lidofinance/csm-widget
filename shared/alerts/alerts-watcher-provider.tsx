@@ -1,12 +1,12 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk';
-import { KEY_STATUS } from 'consts/key-status';
+import { KEY_STATUS, ROLES } from '@lidofinance/lido-csm-sdk';
 import {
   useNodeOperator,
   useOperatorBalance,
   useOperatorInfo,
+  useOperatorKeysWithStatus,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
-import { useCanClaimICS, useKeysWithStatus } from 'shared/hooks';
+import { useCanClaimICS } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
@@ -36,8 +36,8 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
 
   const { data: balance } = useOperatorBalance(nodeOperator?.id);
 
-  const { data: keysWithStatus, initialLoading: isKeysLoading } =
-    useKeysWithStatus();
+  const { data: keysWithStatus, isPending: isKeysLoading } =
+    useOperatorKeysWithStatus(nodeOperator?.id);
   const hasRequestsToExit = useMemo(
     () =>
       keysWithStatus?.filter(({ statuses }) =>

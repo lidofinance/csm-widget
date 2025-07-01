@@ -66,7 +66,5 @@ export const formatKeysLimit = (keysLimit?: bigint): ReactNode[] => {
     : [pluralKeys({ value: Number(keysLimit), showValue: true })];
 };
 
-export const formatSecondsDuration = (duration: bigint): string =>
-  formatDuration(
-    intervalToDuration({ start: 0, end: Number(duration) * 1000 }),
-  );
+export const formatSecondsDuration = (duration = 0): string =>
+  formatDuration(intervalToDuration({ start: 0, end: duration * 1000 }));

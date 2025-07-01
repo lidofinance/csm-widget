@@ -18,6 +18,7 @@ import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
 import { LidoSDKStake, LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
 import { overridedAddresses } from './devnet';
+import { useClApiUrl } from 'config/rpc/cl';
 
 type LidoSDKContextValue = {
   chainId: CHAINS;
@@ -45,6 +46,8 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
   const publicClient = usePublicClient({ chainId });
   // reset internal wagmi state after disconnect
   const { isConnected } = useAccount();
+
+  const clApiUrl = useClApiUrl();
 
   const wagmiConfig = useConfig();
   const { switchChain } = useSwitchChain();
@@ -80,6 +83,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     const wrap = new LidoSDKWrap({ core });
     const csm = new LidoSDKCsm({
       core,
+      clApiUrl,
       overridedAddresses,
     });
 
@@ -92,7 +96,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       wrap,
       csm,
     };
-  }, [publicClient, walletClient]);
+  }, [clApiUrl, publicClient, walletClient]);
   return (
     <LidoSDKContext.Provider value={contextValue}>
       {children}

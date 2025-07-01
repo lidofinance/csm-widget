@@ -4,7 +4,7 @@ import {
   useNodeOperatorId,
   useOperatorBalance,
   useOperatorRewards,
-  useRewardsFrame,
+  useFrameInfo,
 } from 'modules/web3';
 import { FC } from 'react';
 import { Counter, IconTooltip } from 'shared/components';
@@ -20,8 +20,10 @@ export const AvailableToClaim: FC = () => {
 
   const { data: rewards, isPending: isRewardsLoading } = useOperatorRewards(id);
 
-  const { data: rewardsFrame } = useRewardsFrame();
-  const nextRewardsDate = formatDate(rewardsFrame?.nextDistribution);
+  const { data: nextDistribution } = useFrameInfo(
+    (data) => data.lastReport + data.frameDuration,
+  );
+  const nextRewardsDate = formatDate(nextDistribution);
 
   const availableToClaim = useAvailableToClaim({
     bond,

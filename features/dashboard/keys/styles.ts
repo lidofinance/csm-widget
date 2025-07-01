@@ -3,7 +3,7 @@ import { StackStyle } from 'shared/components/stack/style';
 import styled, { css } from 'styled-components';
 
 export const Row = styled.div`
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
+  border-radius: ${({ theme }) => theme.borderRadiusesMap.xl}px;
   padding: 12px 16px;
 
   display: grid;

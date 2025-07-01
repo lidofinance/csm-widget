@@ -12,11 +12,13 @@ import {
 import { formatDate } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { useRewardsFrame } from 'modules/web3';
+import { useFrameInfo } from 'modules/web3';
 
 export const SourceSelect: FC = () => {
   const { bond, rewards, loading, maxValues } = useClaimBondFormData();
-  const { data: rewardsFrame } = useRewardsFrame();
+  const { data: nextDistribution } = useFrameInfo(
+    (data) => data.lastReport + data.frameDuration,
+  );
 
   const { field } = useController<ClaimBondFormInputType, 'claimRewards'>({
     name: 'claimRewards',
@@ -26,7 +28,7 @@ export const SourceSelect: FC = () => {
   const { setValue } = useFormContext<ClaimBondFormInputType>();
 
   const availableToClaim = maxValues?.[TOKENS.steth][Number(field.value)];
-  const nextRewardsDate = formatDate(rewardsFrame?.nextDistribution);
+  const nextRewardsDate = formatDate(nextDistribution);
 
   useEffect(() => {
     if (bond?.isInsufficient) {

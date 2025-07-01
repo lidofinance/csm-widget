@@ -74,8 +74,8 @@ export const PARAMETERS: {
       <>
         strike lifetime:{' '}
         {plural({
-          value: Number(parameters?.strikesConfig?.lifetime ?? 0n),
-          variants: ['month', 'months'],
+          value: parameters?.strikesConfig?.lifetime ?? 0, // FIXME: frames to days
+          variants: ['frame', 'frames'],
           showValue: true,
         })}
       </>,
@@ -120,7 +120,7 @@ export const PARAMETERS: {
     title: 'Allowed exit delay',
     help: 'A timeframe for a key to be exited voluntary before it gets ejected from the protocol using triggerable withdrawals',
     render: (parameters) => [
-      <>{formatSecondsDuration(parameters?.allowedExitDelay ?? 0n)}</>,
+      <>{formatSecondsDuration(parameters?.allowedExitDelay)}</>,
     ],
   },
   {

@@ -49,12 +49,12 @@ export const Item: FC<ItemProps> = ({
 
 type ItemActionProps = {
   action: ReactNode;
-  title: string;
+  title?: string;
   count: number;
 };
 
-export const ItemAction: FC<ItemActionProps> = ({ count, title, action }) => {
-  return (
+export const ItemAction: FC<ItemActionProps> = ({ count, title, action }) =>
+  title ? (
     <ActionStyled>
       <Stack>
         <Counter warning count={count} />
@@ -62,5 +62,4 @@ export const ItemAction: FC<ItemActionProps> = ({ count, title, action }) => {
       </Stack>
       <BoxStyled>{action}</BoxStyled>
     </ActionStyled>
-  );
-};
+  ) : null;

@@ -49,6 +49,7 @@ const REPLACEMENTS: Record<string, string> = {
 };
 
 // TODO: move to api
+// FIXME: move to sdk
 const useSROperators = () => {
   const { keysApi } = getExternalLinks();
   const { stakingModuleId: csmId } = useCsmConstants();

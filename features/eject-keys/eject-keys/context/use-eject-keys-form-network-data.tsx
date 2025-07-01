@@ -1,12 +1,14 @@
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import {
   useEthereumBalance,
   useNodeOperatorId,
   useOperatorCurveId,
   useOperatorInfo,
+  useOperatorKeysWithStatus,
   useWithdrawalRequestFee,
 } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
-import { useKeysWithStatus } from 'shared/hooks';
+import { hasStatus } from 'utils';
 import { type EjectKeysFormNetworkData } from './types';
 
 export const useEjectKeysFormNetworkData = (): [
@@ -35,9 +37,11 @@ export const useEjectKeysFormNetworkData = (): [
   // FIXME: filter keys by status & activaion time
   const {
     data: keys,
-    initialLoading: isKeysLoading,
-    update: updateKeys,
-  } = useKeysWithStatus(true);
+    isPending: isKeysLoading,
+    refetch: updateKeys,
+  } = useOperatorKeysWithStatus(nodeOperatorId, (keys) =>
+    keys.filter(hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING])),
+  );
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateInfo(), updateKeys(), updateEthBalance()]);

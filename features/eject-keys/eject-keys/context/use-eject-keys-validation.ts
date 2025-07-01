@@ -11,7 +11,7 @@ export const useEjectKeysValidation = () => {
     try {
       const { selection } = values;
 
-      if (selection.count === 0) {
+      if (selection.length === 0) {
         throw new ValidationError('selection', 'No keys selected');
       }
 

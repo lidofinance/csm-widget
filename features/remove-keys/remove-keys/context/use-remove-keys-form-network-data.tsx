@@ -1,13 +1,15 @@
-import { useCallback, useMemo } from 'react';
-import { useKeysWithStatus } from 'shared/hooks';
-import { type RemoveKeysFormNetworkData } from './types';
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import {
   useKeyRemovalFee,
   useNodeOperatorId,
   useOperatorBalance,
   useOperatorCurveId,
   useOperatorInfo,
+  useOperatorKeysWithStatus,
 } from 'modules/web3';
+import { useCallback, useMemo } from 'react';
+import { hasStatus } from 'utils';
+import { type RemoveKeysFormNetworkData } from './types';
 
 export const useRemoveKeysFormNetworkData = (): [
   RemoveKeysFormNetworkData,
@@ -32,9 +34,17 @@ export const useRemoveKeysFormNetworkData = (): [
 
   const {
     data: keys,
-    initialLoading: isKeysLoading,
-    update: updateKeys,
-  } = useKeysWithStatus(true);
+    isPending: isKeysLoading,
+    refetch: updateKeys,
+  } = useOperatorKeysWithStatus(nodeOperatorId, (keys) =>
+    keys.filter(
+      hasStatus([
+        KEY_STATUS.DEPOSITABLE,
+        KEY_STATUS.DUPLICATED, // TODO: check active duplicated key is here?
+        KEY_STATUS.INVALID,
+      ]),
+    ),
+  );
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateBond(), updateInfo(), updateKeys()]);

@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react';
 import { removeKeys, saveKeys } from 'shared/keys/cachedKeys';
 import { useConfig } from 'wagmi';
 
+// FIXME: refactor
 export const useKeysCache = () => {
   const { chainId } = useDappStatus();
   const config = useConfig();

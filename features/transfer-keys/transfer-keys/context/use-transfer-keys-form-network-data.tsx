@@ -1,9 +1,12 @@
-import { useNodeOperatorId, useOperatorInfo } from 'modules/web3';
+import {
+  useNodeOperatorId,
+  useOperatorInfo,
+  useOperatorKeysWithStatus,
+} from 'modules/web3';
 import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
 import { useCallback, useMemo } from 'react';
-import { useKeysWithStatus } from 'shared/hooks';
 import { type TransferKeysFormNetworkData } from './types';
-import { KEY_STATUS } from 'consts';
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 
 export const useTransferKeysFormNetworkData = (): [
   TransferKeysFormNetworkData,
@@ -23,8 +26,8 @@ export const useTransferKeysFormNetworkData = (): [
     refetch: updateKeysToMigrate,
   } = useOperatorKeysToMigrate(nodeOperatorId);
 
-  const { data: _keys, initialLoading: isKeysLoading } =
-    useKeysWithStatus(true);
+  const { data: _keys, isPending: isKeysLoading } =
+    useOperatorKeysWithStatus(nodeOperatorId);
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateInfo(), updateKeysToMigrate()]);
@@ -42,8 +45,6 @@ export const useTransferKeysFormNetworkData = (): [
   const keys = _keys
     ?.filter((key) => key.statuses.includes(KEY_STATUS.DEPOSITABLE))
     .slice(0, keysToMigrate ?? 0);
-
-  // console.log('keys', keysToMigrate, keys);
 
   return [
     {

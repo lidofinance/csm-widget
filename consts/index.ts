@@ -2,7 +2,6 @@ export * from './api';
 export * from './chains';
 export * from './csm-constants';
 export * from './external-links';
-export * from './key-status';
 export * from './keys';
 export * from './matomo-click-events';
 export * from './matomo-wallets-events';

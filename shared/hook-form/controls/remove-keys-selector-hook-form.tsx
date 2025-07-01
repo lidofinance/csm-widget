@@ -1,15 +1,13 @@
+import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 import { Checkbox } from '@lidofinance/lido-ui';
-import { KEY_STATUS } from 'consts/key-status';
 import { ChangeEventHandler, FC, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Latice, Pubkey, Stack, StatusChip } from 'shared/components';
 import { StatusStyle } from 'shared/components/status-chip/style';
-import { KeyWithStatus } from 'shared/hooks';
 import styled from 'styled-components';
 
 type Props = {
   options: KeyWithStatus[];
-  offset?: number;
   fieldName?: string;
 };
 
@@ -21,7 +19,7 @@ const BAD_STATUSES: KEY_STATUS[] = [
   KEY_STATUS.UNCHECKED,
 ];
 
-export const KeysSelectorHookForm: FC<Props> = ({
+export const RemoveKeysSelectorHookForm: FC<Props> = ({
   options,
   fieldName = 'selection',
 }) => {
@@ -63,28 +61,32 @@ export const KeysSelectorHookForm: FC<Props> = ({
     void trigger(fieldName);
   }, [fieldName, trigger]);
 
-  // TODO: key status
   return (
     <Latice>
-      {options.map(({ key, statuses }, index) => (
-        <CheckboxStyled
-          key={key}
-          label={
-            <Stack center spaceBetween>
-              <Pubkey address={key} symbols={16} />
+      {options.map(
+        (
+          { pubkey, statuses },
+          index, // FIXME: index of key
+        ) => (
+          <CheckboxStyled
+            key={pubkey}
+            label={
+              <Stack center spaceBetween>
+                <Pubkey pubkey={pubkey} symbols={16} />
 
-              {statuses
-                .filter((status) => BAD_STATUSES.includes(status))
-                .map((status) => (
-                  <StatusChip status={status} key={status} />
-                ))}
-            </Stack>
-          }
-          name={`keys.${index}.checked`}
-          checked={index >= start && index < start + count}
-          onChange={onChange}
-        />
-      ))}
+                {statuses
+                  .filter((status) => BAD_STATUSES.includes(status))
+                  .map((status) => (
+                    <StatusChip status={status} key={status} />
+                  ))}
+              </Stack>
+            }
+            name={`keys.${index}.checked`}
+            checked={index >= start && index < start + count}
+            onChange={onChange}
+          />
+        ),
+      )}
     </Latice>
   );
 };

@@ -22,6 +22,7 @@ export * from './get-settled-value';
 export * from './get-static-rpc-batch-provider';
 export * from './get-token-display-name';
 export * from './has-no-interception';
+export * from './has-status';
 export * from './hash-key';
 export * from './is-hexadecimal-string';
 export * from './is-url';

@@ -1,20 +1,20 @@
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useChainName } from './use-chain-name';
 import { useCsmConstants, useExternalLinks } from './use-csm-constants';
-import { useKeysWithStatus } from './use-keys-with-status';
 import { sortByActiveStatus, useSortedKeys } from './use-sorted-keys';
+import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
 
 const DASHBOARD_KEYS_LIMIT = 20;
 
 export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
-  const { data: keys } = useKeysWithStatus();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: keys } = useOperatorKeysWithStatus(nodeOperatorId);
   const { beaconchainDashboard } = useExternalLinks();
   const sortedKeys = useSortedKeys(keys, sortByActiveStatus);
 
   if (!beaconchainDashboard) return null;
 
   const keysToShow = (
-    sortedKeys?.length ? sortedKeys.map(({ key }) => key) : directKeys
+    sortedKeys?.length ? sortedKeys.map(({ pubkey }) => pubkey) : directKeys
   )
     ?.slice(0, DASHBOARD_KEYS_LIMIT)
     .join(',');

@@ -37,7 +37,7 @@ export const RowStyle = styled.div<{ $bordered?: boolean }>`
   align-items: start;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
 
-  &:not(:last-child)::after {
+  &:not(:last-child):after {
     content: '';
     position: absolute;
     bottom: -12px;
@@ -51,7 +51,7 @@ export const RowStyle = styled.div<{ $bordered?: boolean }>`
   ${({ $bordered }) =>
     $bordered
       ? css`
-          &:is(:last-child)::after {
+          &:is(:last-child):after {
             content: '';
             position: absolute;
             bottom: -12px;
@@ -70,7 +70,7 @@ export const CompareRowStyle = styled(RowStyle)`
 `;
 
 export const CompareTitleStyle = styled(CompareRowStyle)`
-  &:not(:last-child)::after {
+  &:not(:last-child):after {
     content: none;
   }
 

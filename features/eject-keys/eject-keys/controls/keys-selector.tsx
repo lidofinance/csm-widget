@@ -1,8 +1,8 @@
-import { FormTitle, Note, WarningBlock } from 'shared/components';
-import { useEjectKeysFormData } from '../context';
-import { KeysSelectorHookForm } from 'shared/hook-form/controls';
-import { LocalLink } from 'shared/navigate';
 import { PATH } from 'consts';
+import { FormTitle, Note, WarningBlock } from 'shared/components';
+import { EjectKeysSelectorHookForm } from 'shared/hook-form/controls';
+import { LocalLink } from 'shared/navigate';
+import { useEjectKeysFormData } from '../context';
 
 export const KeysSelector = () => {
   const { keys } = useEjectKeysFormData();
@@ -19,7 +19,7 @@ export const KeysSelector = () => {
         <LocalLink href={PATH.KEYS_EXIT}>the regular exit flow</LocalLink>.
       </WarningBlock>
       <FormTitle>Choose keys to eject</FormTitle>
-      <KeysSelectorHookForm options={keys || []} />
+      <EjectKeysSelectorHookForm options={keys || []} />
       {keys && keys?.length > 2 && (
         <Note>Your choice has to be a sequential array</Note>
       )}

@@ -25,7 +25,7 @@ export const useEjectKeysSubmit = ({
 
   return useCallback(
     async (
-      { selection: { start, count } }: EjectKeysFormInputType,
+      { selection }: EjectKeysFormInputType,
       {
         nodeOperatorId,
         info,
@@ -41,9 +41,6 @@ export const useEjectKeysSubmit = ({
         'Offset is not defined',
       );
 
-      const startIndex = info.totalDepositedKeys + start; // FIXME: offset? ??
-      const keysCount = count;
-
       if (!(await confirm({}))) {
         return false;
       }
@@ -52,13 +49,19 @@ export const useEjectKeysSubmit = ({
         const callback: TransactionCallback = async ({ stage, payload }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:
-              txModalStages.sign({ keysCount });
+              txModalStages.sign({ keysCount: selection.length });
               break;
             case TransactionCallbackStage.RECEIPT:
-              txModalStages.pending({ keysCount }, payload.hash);
+              txModalStages.pending(
+                { keysCount: selection.length },
+                payload.hash,
+              );
               break;
             case TransactionCallbackStage.DONE: {
-              txModalStages.success({ keysCount }, payload.hash);
+              txModalStages.success(
+                { keysCount: selection.length },
+                payload.hash,
+              );
               break;
             }
             case TransactionCallbackStage.MULTISIG_DONE:
@@ -71,10 +74,9 @@ export const useEjectKeysSubmit = ({
           }
         };
 
-        await csm.keys.ejectKeys({
+        await csm.keys.ejectKeysByArray({
           nodeOperatorId,
-          startIndex: BigInt(startIndex),
-          keysCount: BigInt(keysCount),
+          keyIndices: selection.map((v) => BigInt(v)),
           amount,
           callback,
         });

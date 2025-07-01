@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { KEY_STATUS } from 'consts/key-status';
 import {
   CommentActivationPending,
   CommentDepositable,
@@ -11,6 +10,7 @@ import {
   CommentUnbondedNonQueued,
   CommentUnchecked,
 } from './comments';
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 
 export const StatusComment: FC<{ statuses: KEY_STATUS[] }> = ({ statuses }) => {
   if (

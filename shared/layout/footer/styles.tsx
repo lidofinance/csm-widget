@@ -17,7 +17,7 @@ export const FooterStyle = styled.footer`
   align-self: center;
   margin-block: 24px;
 
-  &::before {
+  &:before {
     content: '';
     position: absolute;
     top: -23px;

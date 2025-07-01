@@ -1,12 +1,12 @@
-import { NodeOperatorId, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
-import { KeyWithStatus } from 'shared/hooks';
+import {
+  KeyWithStatus,
+  NodeOperatorId,
+  NodeOperatorInfo,
+} from '@lidofinance/lido-csm-sdk';
 import { LoadingRecord } from 'types';
 
 export type EjectKeysFormInputType = {
-  selection: {
-    start: number;
-    count: number;
-  };
+  selection: number[];
 };
 
 export type EjectKeysFormNetworkData = {

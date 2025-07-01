@@ -23,7 +23,7 @@ export const TableStyle = styled.table`
 
   tr {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 5fr 3fr 1fr 3fr;
     grid-auto-rows: auto;
     grid-column-gap: 1rem;
     align-items: center;
@@ -32,9 +32,9 @@ export const TableStyle = styled.table`
     padding: 12px 32px;
 
     ${MEDIA_QUERY_XXL} {
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 5fr 4fr 1fr;
 
-      td:nth-child(3) {
+      td:nth-child(4) {
         grid-column: 1 / -1;
 
         &:empty {
@@ -42,7 +42,7 @@ export const TableStyle = styled.table`
         }
       }
 
-      th:nth-child(3) {
+      th:nth-child(4) {
         display: none;
       }
     }

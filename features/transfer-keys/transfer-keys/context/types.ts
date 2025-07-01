@@ -1,6 +1,5 @@
-import { NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
+import { KeyWithStatus, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { KeyWithStatus } from 'shared/hooks';
 import { LoadingRecord } from 'types';
 
 export type TransferKeysFormInputType = {
