@@ -1,7 +1,7 @@
 import { expect, Page, test } from '@playwright/test';
 import { ElementController } from '../pages/elements/controller';
 import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
-import { MainPage, KeysPage, DashboardPage } from '../pages';
+import { MainPage, KeysPage, DashboardPage, RolesPage } from '../pages';
 import { DepositKey } from 'tests/consts/keys.const';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { AssertionError } from 'assert';
@@ -14,6 +14,7 @@ export class WidgetService {
   public mainPage: MainPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
+  public rolesPage: RolesPage;
 
   constructor(
     public page: Page,
@@ -22,6 +23,7 @@ export class WidgetService {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
+    this.rolesPage = new RolesPage(this.page, this.walletPage);
   }
 
   async connectWallet(expectConnectionState = true) {
