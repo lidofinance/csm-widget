@@ -111,110 +111,115 @@ test.describe('Roles. Rewards Address. Transactions.', () => {
     },
   );
 
-  test('Repropose a new Rewards Address', async ({ widgetService }) => {
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+  test(
+    qase(209, 'Repropose a new Rewards Address'),
+    async ({ widgetService }) => {
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
 
-    await rewardsAddressPage.proposeNewAddress(accountForRolesChanged);
+      await rewardsAddressPage.proposeNewAddress(accountForRolesChanged);
 
-    const rolesPage = widgetService.rolesPage;
+      const rolesPage = widgetService.rolesPage;
 
-    await test.step('Repropose a new rewards address', async () => {
-      await rewardsAddressPage.addressInput.fill(accountForSecondRolesChanged);
-      await rewardsAddressPage.addressValidIcon.waitFor({ state: 'visible' });
-      await rewardsAddressPage.proposeButton.click();
+      await test.step('Repropose a new rewards address', async () => {
+        await rewardsAddressPage.addressInput.fill(
+          accountForSecondRolesChanged,
+        );
+        await rewardsAddressPage.addressValidIcon.waitFor({ state: 'visible' });
+        await rewardsAddressPage.proposeButton.click();
 
-      await test.step('Wait for modal continue button to be visible', async () => {
-        await rolesPage.modalRoot.modal.waitFor({
-          state: 'visible',
+        await test.step('Wait for modal continue button to be visible', async () => {
+          await rolesPage.modalRoot.modal.waitFor({
+            state: 'visible',
+          });
+
+          await expect(rolesPage.modalRoot.headings).toContainText(
+            'All rewards will be claimable to the proposed address',
+          );
+
+          await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
+            'After changing the Rewards Address, all rewards and excess bond accumulated on the bond balance can be claimed to the new Rewards address. In the event of validator withdrawal, the whole bond is also returned to the new address.',
+          );
+
+          await expect(rolesPage.modalRoot.continueButton).toBeVisible();
+          await expect(rolesPage.modalRoot.paragraphs.nth(1)).toContainText(
+            'The change doesn’t apply immediately. To complete the address change, the owner of the new address must confirm the change',
+          );
         });
 
-        await expect(rolesPage.modalRoot.headings).toContainText(
-          'All rewards will be claimable to the proposed address',
-        );
+        await rolesPage.modalRoot.continueButton.click();
 
-        await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
-          'After changing the Rewards Address, all rewards and excess bond accumulated on the bond balance can be claimed to the new Rewards address. In the event of validator withdrawal, the whole bond is also returned to the new address.',
-        );
+        await test.step('Verify modal for repropose', async () => {
+          await rolesPage.modalRoot.modal.waitFor({
+            state: 'visible',
+          });
 
-        await expect(rolesPage.modalRoot.continueButton).toBeVisible();
-        await expect(rolesPage.modalRoot.paragraphs.nth(1)).toContainText(
-          'The change doesn’t apply immediately. To complete the address change, the owner of the new address must confirm the change',
-        );
-      });
+          await expect(rolesPage.modalRoot.headings).toContainText(
+            'Only most recent proposed address change is valid',
+          );
 
-      await rolesPage.modalRoot.continueButton.click();
+          await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
+            'When you propose a new address for change - the previous change proposal is voided.',
+          );
 
-      await test.step('Verify modal for repropose', async () => {
-        await rolesPage.modalRoot.modal.waitFor({
-          state: 'visible',
+          await expect(rolesPage.modalRoot.continueButton).toBeVisible();
         });
 
-        await expect(rolesPage.modalRoot.headings).toContainText(
-          'Only most recent proposed address change is valid',
-        );
+        const [txPage] = await Promise.all([
+          rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+          rolesPage.modalRoot.continueButton.click(),
+        ]);
 
-        await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
-          'When you propose a new address for change - the previous change proposal is voided.',
-        );
+        await test.step('Continue proposal', async () => {
+          await rewardsAddressPage.page.waitForSelector(
+            `text=You are proposing rewards address change`,
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
 
-        await expect(rolesPage.modalRoot.continueButton).toBeVisible();
-      });
+          await test.step('Verify transaction modal', async () => {
+            const { txModal } = widgetService.rolesPage;
 
-      const [txPage] = await Promise.all([
-        rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        rolesPage.modalRoot.continueButton.click(),
-      ]);
+            await expect(txModal.description).toContainText('Proposed address');
 
-      await test.step('Continue proposal', async () => {
-        await rewardsAddressPage.page.waitForSelector(
-          `text=You are proposing rewards address change`,
-          { timeout: STAGE_WAIT_TIMEOUT },
-        );
+            await expect(txModal.description).toContainText(
+              trimAddress(accountForSecondRolesChanged, 6),
+            );
+            await expect(txModal.footerHint).toHaveText(
+              'Confirm this transaction in your wallet',
+            );
+          });
+        });
 
-        await test.step('Verify transaction modal', async () => {
+        await test.step('Verify confirm transaction', async () => {
+          await rewardsAddressPage.walletPage.confirmTx(txPage);
+
+          await rewardsAddressPage.page.waitForSelector(
+            `text=New rewards address has been proposed`,
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
+
           const { txModal } = widgetService.rolesPage;
 
-          await expect(txModal.description).toContainText('Proposed address');
+          await expect(txModal.description).toContainText('What is next:');
+          await expect(txModal.description).toContainText(
+            'Connect to CSM UI with the proposed address',
+          );
+          await expect(txModal.description).toContainText(
+            'Go to Roles tab → Inbox requests to confirm the change',
+          );
 
           await expect(txModal.description).toContainText(
             trimAddress(accountForSecondRolesChanged, 6),
           );
-          await expect(txModal.footerHint).toHaveText(
-            'Confirm this transaction in your wallet',
-          );
+
+          await expect(txModal.footerHint).toContainText('View on Etherscan');
         });
-      });
-
-      await test.step('Verify confirm transaction', async () => {
-        await rewardsAddressPage.walletPage.confirmTx(txPage);
-
-        await rewardsAddressPage.page.waitForSelector(
-          `text=New rewards address has been proposed`,
-          { timeout: STAGE_WAIT_TIMEOUT },
-        );
 
         const { txModal } = widgetService.rolesPage;
 
-        await expect(txModal.description).toContainText('What is next:');
-        await expect(txModal.description).toContainText(
-          'Connect to CSM UI with the proposed address',
-        );
-        await expect(txModal.description).toContainText(
-          'Go to Roles tab → Inbox requests to confirm the change',
-        );
-
-        await expect(txModal.description).toContainText(
-          trimAddress(accountForSecondRolesChanged, 6),
-        );
-
-        await expect(txModal.footerHint).toContainText('View on Etherscan');
+        await txModal.closeModal();
       });
-
-      const { txModal } = widgetService.rolesPage;
-
-      await txModal.closeModal();
-    });
-  });
+    },
+  );
 
   test(qase(156, 'Revoke Reward role change'), async ({ widgetService }) => {
     const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
