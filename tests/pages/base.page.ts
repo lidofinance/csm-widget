@@ -1,6 +1,6 @@
 import { Locator, Page, test } from '@playwright/test';
 import { Header } from './elements/common/element.header';
-import { RPC_WAIT_TIMEOUT } from 'tests/consts/timeouts';
+import { COMMON_ACTION_TIMEOUT, RPC_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 import { ConnectWalletModal } from './elements/common/element.connectWalletModal';
 import { waitForCallback } from 'tests/helpers/tests';
 
@@ -17,6 +17,27 @@ export class BasePage {
 
   async getClipboardText() {
     return String(await this.page.evaluate('navigator.clipboard.readText()'));
+  }
+
+  async openWithRetry(
+    url: string,
+    textLocatorForWaiting: Locator,
+    attempt = 1,
+  ): Promise<void> {
+    try {
+      await this.page.goto(url);
+
+      await test.step('Wait for balance to load', async () => {
+        await this.waitForTextContent(
+          textLocatorForWaiting,
+          COMMON_ACTION_TIMEOUT,
+        );
+      });
+    } catch (e) {
+      if (attempt >= 2) throw e;
+      console.warn(`Open attempt ${attempt} failed. Retrying...`);
+      return this.openWithRetry(url, textLocatorForWaiting, attempt + 1);
+    }
   }
 
   async getCookie(name: string) {
@@ -102,7 +123,9 @@ export class BasePage {
   }
 
   async closeModalWindow() {
-    await this.page.mouse.click(32, 32);
+    await test.step('Close modal window', async () => {
+      await this.page.mouse.click(32, 32);
+    });
   }
 
   async closeTooltip() {

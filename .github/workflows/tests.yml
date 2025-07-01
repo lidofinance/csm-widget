@@ -24,6 +24,7 @@ on:
         options:
           - '-'
           - smoke
+          - performTX
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
         required: false
