@@ -19,10 +19,6 @@ test.describe('Bond & Rewards. Add bond.', async () => {
       await test.step('Verify information about bond', async () => {
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-        if (!nodeOperatorId) {
-          throw new Error('Node operator ID not found');
-        }
-
         await test.step('Verify bond balance', async () => {
           await expect(
             bondRewardsPage.addBond.titledAmount.locator('div').first(),

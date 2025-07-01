@@ -11,6 +11,8 @@ import {
 } from 'tests/consts/timeouts';
 import { BondRewardsPage } from 'tests/pages/bondRewards.page';
 import { TOKENS } from 'consts/tokens';
+import { BondRewardsPage } from 'tests/pages/bondRewards.page';
+import { TOKENS } from 'consts/tokens';
 
 export class WidgetService {
   public mainPage: MainPage;
