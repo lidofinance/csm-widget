@@ -9,12 +9,15 @@ import {
   STAGE_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
+import { BondRewardsPage } from 'tests/pages/bondRewards.page';
+import { TOKENS } from 'consts/tokens';
 
 export class WidgetService {
   public mainPage: MainPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
   public rolesPage: RolesPage;
+  public bondRewardsPage: BondRewardsPage;
 
   constructor(
     public page: Page,
@@ -24,6 +27,7 @@ export class WidgetService {
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
     this.rolesPage = new RolesPage(this.page, this.walletPage);
+    this.bondRewardsPage = new BondRewardsPage(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {
@@ -108,20 +112,68 @@ export class WidgetService {
     });
   }
 
+  async addBond(tokenName: TOKENS, amount: string) {
+    await test.step(`Add ${amount} ${tokenName} as bond`, async () => {
+      await test.step(`Choose ${tokenName} symbol for bond`, async () => {
+        const bondToken =
+          this.bondRewardsPage.addBond.selectBondToken(tokenName);
+        await bondToken.click();
+      });
+
+      await this.bondRewardsPage.addBond.amountInput.fill(amount);
+
+      let [txPage] = await Promise.all([
+        this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+        this.bondRewardsPage.addBond.addBondButton.click(),
+      ]);
+
+      if (tokenName !== TOKENS.ETH) {
+        await this.bondRewardsPage.page.waitForSelector(
+          `text=Confirm request in your wallet`,
+          { timeout: STAGE_WAIT_TIMEOUT },
+        );
+
+        [txPage] = await Promise.all([
+          this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+          this.walletPage.confirmTx(txPage),
+        ]);
+      }
+
+      await this.page.waitForSelector(
+        `text=Confirm this transaction in your wallet`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+      await this.walletPage.confirmTx(txPage);
+      await this.page.waitForSelector(`text=Awaiting block confirmation`, {
+        timeout: STAGE_WAIT_TIMEOUT,
+      });
+      await this.page.waitForSelector(
+        `text=Adding Bond operation was successful`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+
+      await this.bondRewardsPage.closeModalWindow();
+    });
+  }
+
   async isConnectedWallet() {
     return test.step('Check wallet connection', async () => {
       return new ElementController(this.page).header.isAccountSectionVisible();
     });
   }
 
-  async extractNodeOperatorId(): Promise<number | null> {
-    const rawHeader = await this.page
-      .getByTestId('nodeOperatorHeader')
-      .textContent();
+  async extractNodeOperatorId(): Promise<number> {
+    return test.step('Extract node operator id from header', async () => {
+      const rawHeader = await this.page
+        .getByTestId('nodeOperatorHeader')
+        .textContent();
 
-    if (!rawHeader) return null;
+      if (!rawHeader)
+        throw new Error('Failed to get text content from node operator header');
 
-    const match = rawHeader.match(/#(\d+)/);
-    return match ? Number(match[1]) : null;
+      const match = rawHeader.match(/#(\d+)/);
+      if (!match) throw new Error('Cannot extract ID from header');
+      return Number(match[1]);
+    });
   }
 }

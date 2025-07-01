@@ -7,7 +7,6 @@ test.describe('Connect wallet', async () => {
   test(
     qase(158, 'Should open main page after connect wallet'),
     async ({ widgetService }) => {
-      await widgetService.connectWallet();
       await widgetService.page
         .getByText('CSM node operator starter pack')
         .waitFor({ state: 'visible' });

@@ -8,7 +8,6 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
 test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', async () => {
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.connectWallet();
     await widgetService.dashboardPage.open();
   });
 

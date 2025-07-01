@@ -2,12 +2,10 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { formatEther } from '@ethersproject/units';
 import { USD_AMOUNT_REGEX } from 'tests/consts/regexp.const';
 
 test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.connectWallet();
     await widgetService.dashboardPage.open();
   });
 
@@ -16,11 +14,7 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
     async ({ widgetService, contractClients }) => {
       const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
 
-      const nodeOperatorId =
-        (await widgetService.extractNodeOperatorId()) as number;
-      if (!nodeOperatorId) {
-        throw new Error('Node operator ID not found');
-      }
+      const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
       const bondSummary =
         await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
@@ -39,9 +33,7 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
       await test.step('Verify "Required bond" stETH value', async () => {
         const rewardsBalance =
           await bondBalance.requiredBondBalance_Text.textContent();
-        expect(rewardsBalance).toEqual(
-          `${formatEther(bondSummary.required)} stETH`,
-        );
+        expect(rewardsBalance).toEqual(`${bondSummary.required} stETH`);
 
         const rewardsUSDBalance =
           await bondBalance.requiredBondBalance_SubText.textContent();
@@ -49,14 +41,10 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
       });
 
       await test.step('Verify "Excess bond" stETH value', async () => {
-        const expectedExcessBond = formatEther(
-          BigInt(bondSummary.current - bondSummary.required),
-        );
-
         const excessBondBalance =
           await bondBalance.excessBondBalance_Text.textContent();
         expect(excessBondBalance).toEqual(
-          `${expectedExcessBond.toCut(4)} stETH`,
+          `${bondSummary.excess.toCut(4)} stETH`,
         );
 
         const excessBondUSDBalance =
@@ -67,9 +55,7 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
       await test.step('Verify total claimable amount', async () => {
         const commonBalance =
           await bondBalance.commonBalance_Text.textContent();
-        expect(commonBalance).toEqual(
-          `${formatEther(bondSummary.current).toCut(4)} stETH`,
-        );
+        expect(commonBalance).toEqual(`${bondSummary.current.toCut(4)} stETH`);
 
         const commonUSDBalance =
           await bondBalance.commonBalance_SubText.textContent();

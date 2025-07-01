@@ -8,7 +8,6 @@ test.describe('View keys list. Common', async () => {
 
   test.beforeEach(async ({ widgetService }) => {
     keysPage = new KeysPage(widgetService.page);
-    await widgetService.connectWallet();
     await keysPage.keysView.open();
     await keysPage.keysView.table.waitFor({ state: 'visible' });
   });
