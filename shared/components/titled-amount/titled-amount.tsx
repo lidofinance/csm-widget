@@ -25,9 +25,10 @@ export const TitledAmount: FC<TitledAddressProps> = ({
   help,
   loading,
   warning,
+  ...props
 }) => {
   return (
-    <TitledAmountStyle $warning={warning && amount?.gt(0)}>
+    <TitledAmountStyle $warning={warning && amount?.gt(0)} {...props}>
       <Stack gap="xs" center>
         <Stack gap="md" center>
           {title}

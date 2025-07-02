@@ -1,0 +1,15 @@
+[
+  {
+    "type": "function",
+    "name": "getInitializedVersion",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint64",
+        "internalType": "uint64"
+      }
+    ],
+    "stateMutability": "view"
+  }
+]

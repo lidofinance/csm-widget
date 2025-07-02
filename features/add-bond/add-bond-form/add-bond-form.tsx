@@ -16,7 +16,7 @@ import { TokenSelect } from './controls/token-select';
 export const AddBondForm: FC = memo(() => {
   return (
     <AddBondFormProvider>
-      <FormBlock>
+      <FormBlock data-testid="addBondForm">
         <BaseFormLoader>
           <FormControllerStyled>
             <Info />

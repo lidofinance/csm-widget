@@ -47,7 +47,7 @@ export const TokenAmount: FC<TokenAmountProps> = ({
   const symbol = getTokenDisplayName(token);
 
   return (
-    <TokenAmountStyle>
+    <TokenAmountStyle data-testid="tokenAmount">
       {icon}
       {loading ? (
         <InlineLoader color="text" />

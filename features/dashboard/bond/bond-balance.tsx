@@ -15,6 +15,7 @@ export const BondBalance: FC = () => {
 
   return (
     <AccordionStyle
+      data-testid="bondBalanceBlock"
       summary={
         <RowHeader>
           <RowTitle>
@@ -22,6 +23,7 @@ export const BondBalance: FC = () => {
             {bond?.isInsufficient && <Counter warning count={1} />}
           </RowTitle>
           <Balance
+            data-testid="commonBalance"
             big
             loading={isBondLoading}
             amount={bond?.current}
@@ -32,6 +34,7 @@ export const BondBalance: FC = () => {
     >
       <RowBody>
         <Balance
+          data-testid="requiredBondBalance"
           title="Required bond"
           loading={isBondLoading}
           amount={bond?.required}
@@ -52,6 +55,7 @@ export const BondBalance: FC = () => {
         ) : (
           <>
             <Balance
+              data-testid="excessBondBalance"
               sign="plus"
               title={BOND_EXCESS}
               loading={isBondLoading}

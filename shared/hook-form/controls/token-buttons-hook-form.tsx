@@ -19,7 +19,7 @@ export const TokenButtonsHookForm: FC<Props> = ({
   const { field } = useController<Record<string, TOKENS>>({ name: fieldName });
 
   return (
-    <StackWrap>
+    <StackWrap data-testid="tokenButtons">
       {Object.keys(options).map((key) => (
         <RadioButton
           key={key}

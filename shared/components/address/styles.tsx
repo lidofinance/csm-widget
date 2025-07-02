@@ -5,7 +5,7 @@ import { StackStyle } from '../stack/style';
 export const AddressContainerStyle = styled(StackStyle).attrs({
   $gap: 'xs',
   $align: 'center',
-})<{ $big?: boolean }>`
+})<{ $big?: boolean; $monospace?: boolean }>`
   display: inline-flex;
 
   > span > span {
@@ -26,4 +26,18 @@ export const AddressContainerStyle = styled(StackStyle).attrs({
         }
       `}
   }
+`;
+
+export const PubkeyContainerStyle = styled(AddressContainerStyle)`
+  font-family: 'Fira Code', monospace;
+  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+  color: var(--lido-color-text);
+`;
+
+export const Avatar = styled.img<{
+  diameter: number;
+}>`
+  border-radius: 50%;
+  width: ${({ diameter }) => diameter}px;
+  height: ${({ diameter }) => diameter}px;
 `;
