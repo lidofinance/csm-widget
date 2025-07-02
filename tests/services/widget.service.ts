@@ -154,6 +154,44 @@ export class WidgetService {
     });
   }
 
+  async claim(tokenName: TOKENS, amount: string) {
+    await test.step(`Claim ${amount} ${tokenName}`, async () => {
+      await test.step(`Choose ${tokenName} symbol for claim`, async () => {
+        const token = this.bondRewardsPage.claim.selectBondToken(tokenName);
+        await token.click();
+      });
+
+      await this.bondRewardsPage.claim.amountInput.fill(amount);
+
+      const actionButton =
+        tokenName === TOKENS.ETH
+          ? this.bondRewardsPage.claim.requestWithdrawalButton
+          : this.bondRewardsPage.claim.claimButton;
+
+      const [txPage] = await Promise.all([
+        this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+        actionButton.click(),
+      ]);
+
+      await this.page.waitForSelector(
+        `text=Confirm this transaction in your wallet`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+      await this.walletPage.confirmTx(txPage);
+
+      const successText =
+        tokenName === TOKENS.ETH
+          ? 'Withdrawal request has been sent'
+          : 'Requested amount has been successfully claimed';
+
+      await this.page.waitForSelector(`text=${successText}`, {
+        timeout: STAGE_WAIT_TIMEOUT,
+      });
+
+      await this.bondRewardsPage.closeModalWindow();
+    });
+  }
+
   async isConnectedWallet() {
     return test.step('Check wallet connection', async () => {
       return new ElementController(this.page).header.isAccountSectionVisible();
