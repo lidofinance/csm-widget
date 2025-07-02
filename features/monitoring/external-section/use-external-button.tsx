@@ -1,5 +1,5 @@
 import { ComponentProps, useMemo } from 'react';
-import { ExternalButtonLink } from './external-button-link';
+import { type ExternalButtonLink } from 'shared/components';
 
 import { ReactComponent as BeaconchaIcon } from 'assets/icons/beaconcha.svg';
 import { ReactComponent as EthseerIcon } from 'assets/icons/ethseer.svg';

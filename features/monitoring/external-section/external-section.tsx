@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { SectionBlock, Stack } from 'shared/components';
-import { ExternalButtonLink } from './external-button-link';
+import { SectionBlock, Stack, ExternalButtonLink } from 'shared/components';
 import { useExternalButtons } from './use-external-button';
 
 export const ExternalSection: FC = () => {

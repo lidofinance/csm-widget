@@ -70,6 +70,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
   dashboardExternalRatedLink = 'dashboardExternalRatedLink',
   dashboardExternalEthSeerLink = 'dashboardExternalEthSeerLink',
+  dashboardNotificationSentinelLink = 'dashboardNotificationSentinelLink',
   // Pages
   pageWelcome = 'pageWelcome',
   pageStarterPack = 'pageStarterPack',
@@ -385,6 +386,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «EthSeer» on Dashboard screen',
     prefixed`dashboard_external_ethseer_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardNotificationSentinelLink]: [
+    MATOMO_APP_NAME,
+    'Click «Notification Sentinel» on Dashboard screen',
+    prefixed`dashboard_notification_sentinel_link`,
   ],
   // Pages
   [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: [

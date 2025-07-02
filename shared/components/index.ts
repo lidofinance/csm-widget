@@ -44,3 +44,4 @@ export * from './input-amount';
 export * from './matomo-link';
 export * from './radio-button';
 export * from './stack';
+export * from './external-button-link';
