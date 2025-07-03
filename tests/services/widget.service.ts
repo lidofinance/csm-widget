@@ -1,6 +1,10 @@
 import { expect, Page, test } from '@playwright/test';
 import { ElementController } from '../pages/elements/controller';
-import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
+import {
+  WalletPage,
+  WalletConnectType,
+  WalletConnectTypes,
+} from '@lidofinance/wallets-testing-wallets';
 import { MainPage, KeysPage, DashboardPage, RolesPage } from '../pages';
 import { DepositKey } from 'tests/consts/keys.const';
 import { TokenSymbol } from 'tests/consts/common.const';
@@ -21,7 +25,7 @@ export class WidgetService {
 
   constructor(
     public page: Page,
-    public walletPage: WalletPage<WalletTypes.EOA>,
+    public walletPage: WalletPage<WalletConnectType>,
   ) {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
@@ -40,11 +44,12 @@ export class WidgetService {
       await element.header.connectWalletBtn.click();
       await element.termAndPrivacy.confirmConditionWalletModal();
       const walletIcon = element.connectWalletModal.getWalletInModal(
-        this.walletPage.walletConfig.CONNECT_BUTTON_NAME,
+        this.walletPage.options.walletConfig.CONNECT_BUTTON_NAME,
       );
       if (
         (await walletIcon.isEnabled({ timeout: 500 })) &&
-        this.walletPage.walletConfig.WALLET_TYPE === WalletTypes.EOA
+        this.walletPage.options.walletConfig.WALLET_TYPE ===
+          WalletConnectTypes.EOA
       ) {
         try {
           const [connectWalletPage] = await Promise.all([

@@ -1,4 +1,7 @@
-import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
+import {
+  WalletConnectType,
+  WalletPage,
+} from '@lidofinance/wallets-testing-wallets';
 import { Locator, Page, test } from '@playwright/test';
 import {
   STAGE_WAIT_TIMEOUT,
@@ -29,7 +32,7 @@ export class ManagerAddressPage extends BasePage {
 
   constructor(
     public page: Page,
-    public walletPage: WalletPage<WalletTypes>,
+    public walletPage: WalletPage<WalletConnectType>,
   ) {
     super(page);
     this.form = this.page.getByTestId('changeRoleForm');

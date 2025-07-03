@@ -1,4 +1,7 @@
-import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
+import {
+  WalletPage,
+  WalletConnectType,
+} from '@lidofinance/wallets-testing-wallets';
 import { Locator, Page, test } from '@playwright/test';
 import {
   STAGE_WAIT_TIMEOUT,
@@ -17,6 +20,7 @@ export class RewardsAddressPage extends BasePage {
   proposedAddress: Locator;
   pendingTitledAddress: Locator;
   pendingAddress: Locator;
+  pendingAddressEtherscanLink: Locator;
   revokeButton: Locator;
 
   addressInput: Locator;
@@ -29,7 +33,7 @@ export class RewardsAddressPage extends BasePage {
 
   constructor(
     public page: Page,
-    public walletPage: WalletPage<WalletTypes>,
+    public walletPage: WalletPage<WalletConnectType>,
   ) {
     super(page);
     this.form = this.page.getByTestId('changeRoleForm');
@@ -42,6 +46,7 @@ export class RewardsAddressPage extends BasePage {
     this.pendingTitledAddress =
       this.proposedAddress.getByTestId('titledAddress');
     this.pendingAddress = this.pendingTitledAddress.locator('> div').nth(1);
+    this.pendingAddressEtherscanLink = this.pendingAddress.locator('a');
 
     this.revokeButton = this.proposedAddress.getByRole('button', {
       name: 'Revoke',

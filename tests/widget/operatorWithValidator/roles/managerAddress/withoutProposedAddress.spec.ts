@@ -7,7 +7,7 @@ import { mnemonicToAccount } from 'viem/accounts';
 import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 import { generateAddress } from 'tests/helpers/accountData';
 
-test.describe('Roles. Manager Address.', () => {
+test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.rolesPage.managerAddressPage.open();
     await widgetService.rolesPage.managerAddressPage.revokePendingRole();
@@ -72,8 +72,8 @@ test.describe('Roles. Manager Address.', () => {
       widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
       managerAddressPage.currentAddressEtherscanLink.click(),
     ]);
-    expect(etherscanPage.url()).toContain(
-      `${widgetConfig.standConfig.networkConfig.scan}address/${mnemonicToAccount(secretPhrase).address}`,
+    expect(etherscanPage.url().toLowerCase()).toContain(
+      `${widgetConfig.standConfig.networkConfig.scan}address/${mnemonicToAccount(secretPhrase).address.toLowerCase()}`,
     );
   });
 
