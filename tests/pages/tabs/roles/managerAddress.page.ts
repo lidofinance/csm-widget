@@ -11,15 +11,18 @@ export class ManagerAddressPage extends BasePage {
 
   currentTitledAddress: Locator;
   currentAddress: Locator;
+  currentAddressEtherscanLink: Locator;
 
   // Proposed address elements
   proposedAddress: Locator;
   pendingTitledAddress: Locator;
   pendingAddress: Locator;
+  pendingAddressEtherscanLink: Locator;
   revokeButton: Locator;
 
   addressInput: Locator;
   inputLabel: Locator;
+  validationInputTooltip: Locator;
   addressValidIcon: Locator;
   proposeButton: Locator;
   note: Locator;
@@ -32,12 +35,14 @@ export class ManagerAddressPage extends BasePage {
     this.form = this.page.getByTestId('changeRoleForm');
     this.currentTitledAddress = this.form.getByTestId('titledAddress');
     this.currentAddress = this.currentTitledAddress.locator('> div').nth(1);
+    this.currentAddressEtherscanLink = this.currentAddress.locator('a');
 
     // Proposed address elements
     this.proposedAddress = this.form.getByTestId('proposedAddress');
     this.pendingTitledAddress =
       this.proposedAddress.getByTestId('titledAddress');
     this.pendingAddress = this.pendingTitledAddress.locator('> div').nth(1);
+    this.pendingAddressEtherscanLink = this.currentAddress.locator('a');
     this.revokeButton = this.proposedAddress.getByRole('button', {
       name: 'Revoke',
     });
@@ -46,6 +51,7 @@ export class ManagerAddressPage extends BasePage {
     this.inputLabel = this.form.locator(
       'xpath=//input[@name="address"]/ancestor::label',
     );
+    this.validationInputTooltip = this.inputLabel.locator('> span').nth(1);
     this.addressValidIcon = this.inputLabel.locator('svg');
     this.proposeButton = this.form.getByRole('button', {
       name: 'Propose a new manager address',

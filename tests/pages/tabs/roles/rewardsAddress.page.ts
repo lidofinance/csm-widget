@@ -11,6 +11,7 @@ export class RewardsAddressPage extends BasePage {
 
   currentTitledAddress: Locator;
   currentAddress: Locator;
+  currentAddressEtherscanLink: Locator;
 
   // Proposed address elements
   proposedAddress: Locator;
@@ -19,6 +20,7 @@ export class RewardsAddressPage extends BasePage {
   revokeButton: Locator;
 
   addressInput: Locator;
+  validationInputTooltip: Locator;
   addressValidIcon: Locator;
   inputLabel: Locator;
   proposeButton: Locator;
@@ -33,6 +35,7 @@ export class RewardsAddressPage extends BasePage {
     this.form = this.page.getByTestId('changeRoleForm');
     this.currentTitledAddress = this.form.getByTestId('titledAddress').nth(0);
     this.currentAddress = this.currentTitledAddress.locator('> div').nth(1);
+    this.currentAddressEtherscanLink = this.currentAddress.locator('a');
 
     // Proposed address elements
     this.proposedAddress = this.form.getByTestId('proposedAddress');
@@ -44,9 +47,11 @@ export class RewardsAddressPage extends BasePage {
       name: 'Revoke',
     });
     this.addressInput = this.form.locator('input[name="address"]');
+
     this.inputLabel = this.form.locator(
       'xpath=//input[@name="address"]/ancestor::label',
     );
+    this.validationInputTooltip = this.inputLabel.locator('> span').nth(1);
     this.addressValidIcon = this.inputLabel.locator('svg');
 
     this.proposeButton = this.form.getByRole('button', {
