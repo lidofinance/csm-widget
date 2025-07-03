@@ -1,27 +1,16 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { mnemonicToAccount } from 'viem/accounts';
 import { trimAddress } from '@lidofinance/address';
 import {
   STAGE_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
+import { generateAddress } from 'tests/helpers/accountData';
 
 test.describe('Roles. Rewards Address. Transactions.', () => {
-  let accountForRolesChanged: string;
-  let accountForSecondRolesChanged: string;
-
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.rolesPage.rewardsAddressPage.open();
-    accountForRolesChanged = mnemonicToAccount(
-      process.env.EMPTY_NODE_SECRET_PHRASE || '',
-    ).address;
-
-    accountForSecondRolesChanged = mnemonicToAccount(
-      process.env.EMPTY_SECRET_PHRASE || '',
-    ).address;
   });
 
   test(
@@ -29,6 +18,7 @@ test.describe('Roles. Rewards Address. Transactions.', () => {
     async ({ widgetService }) => {
       const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
       const rolesPage = widgetService.rolesPage;
+      const accountForRolesChanged = generateAddress();
 
       await test.step('Propose a new rewards address', async () => {
         await rewardsAddressPage.addressInput.fill(accountForRolesChanged);
@@ -115,6 +105,8 @@ test.describe('Roles. Rewards Address. Transactions.', () => {
     qase(209, 'Repropose a new Rewards Address'),
     async ({ widgetService }) => {
       const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const accountForRolesChanged = generateAddress();
+      const accountForSecondRolesChanged = generateAddress();
 
       await rewardsAddressPage.proposeNewAddress(accountForRolesChanged);
 
@@ -223,6 +215,7 @@ test.describe('Roles. Rewards Address. Transactions.', () => {
 
   test(qase(156, 'Revoke Reward role change'), async ({ widgetService }) => {
     const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+    const accountForRolesChanged = generateAddress();
 
     await rewardsAddressPage.proposeNewAddress(accountForRolesChanged);
 

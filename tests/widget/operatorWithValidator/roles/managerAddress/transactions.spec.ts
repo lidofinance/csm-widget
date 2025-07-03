@@ -1,27 +1,16 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { mnemonicToAccount } from 'viem/accounts';
 import { trimAddress } from '@lidofinance/address';
 import {
   STAGE_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { generateAddress } from 'tests/helpers/accountData';
 
 test.describe('Roles. Manager Address. Transactions.', () => {
-  let accountForRolesChanged: string;
-  let accountForSecondRolesChanged: string;
-
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.rolesPage.managerAddressPage.open();
-    accountForRolesChanged = mnemonicToAccount(
-      process.env.EMPTY_NODE_SECRET_PHRASE || '',
-    ).address;
-
-    accountForSecondRolesChanged = mnemonicToAccount(
-      process.env.EMPTY_SECRET_PHRASE || '',
-    ).address;
   });
 
   test(
@@ -30,6 +19,8 @@ test.describe('Roles. Manager Address. Transactions.', () => {
       const managerAddressPage = widgetService.rolesPage.managerAddressPage;
 
       await test.step('Propose a new manager address', async () => {
+        const accountForRolesChanged = generateAddress();
+
         await managerAddressPage.addressInput.fill(accountForRolesChanged);
         await managerAddressPage.addressValidIcon.waitFor({ state: 'visible' });
 
@@ -92,6 +83,8 @@ test.describe('Roles. Manager Address. Transactions.', () => {
     qase(207, 'Repropose a new Manager Address'),
     async ({ widgetService }) => {
       const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const accountForRolesChanged = generateAddress();
+      const accountForSecondRolesChanged = generateAddress();
 
       await managerAddressPage.proposeNewAddress(accountForRolesChanged);
 
@@ -176,6 +169,7 @@ test.describe('Roles. Manager Address. Transactions.', () => {
 
   test(qase(208, 'Revoke Manager role change'), async ({ widgetService }) => {
     const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+    const accountForRolesChanged = generateAddress();
 
     await managerAddressPage.proposeNewAddress(accountForRolesChanged);
 
