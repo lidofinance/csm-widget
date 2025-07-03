@@ -83,6 +83,13 @@ export const InputAddress = forwardRef<
       [resolveInputValue],
     );
 
+    useEffect(() => {
+      if (inputRef.current) {
+        inputRef.current.value = value ?? '';
+      }
+      void resolveInputValue(value ?? '');
+    }, [resolveInputValue, value]);
+
     return (
       <StyledInput
         {...props}
