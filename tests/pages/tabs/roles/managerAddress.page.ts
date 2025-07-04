@@ -36,7 +36,7 @@ export class ManagerAddressPage extends BasePage {
   ) {
     super(page);
     this.form = this.page.getByTestId('changeRoleForm');
-    this.currentTitledAddress = this.form.getByTestId('titledAddress');
+    this.currentTitledAddress = this.form.getByTestId('titledAddress').nth(0);
     this.currentAddress = this.currentTitledAddress.locator('> div').nth(1);
     this.currentAddressEtherscanLink = this.currentAddress.locator('a');
 
@@ -45,7 +45,7 @@ export class ManagerAddressPage extends BasePage {
     this.pendingTitledAddress =
       this.proposedAddress.getByTestId('titledAddress');
     this.pendingAddress = this.pendingTitledAddress.locator('> div').nth(1);
-    this.pendingAddressEtherscanLink = this.currentAddress.locator('a');
+    this.pendingAddressEtherscanLink = this.pendingAddress.locator('a');
     this.revokeButton = this.proposedAddress.getByRole('button', {
       name: 'Revoke',
     });

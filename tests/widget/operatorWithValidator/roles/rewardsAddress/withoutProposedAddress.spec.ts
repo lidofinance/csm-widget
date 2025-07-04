@@ -62,7 +62,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
   });
 
   test(
-    qase(78, 'Should open etherscan for current rewards address'),
+    qase(79, 'Should open etherscan for current rewards address'),
     async ({ widgetService, widgetConfig, secretPhrase }) => {
       const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
 
