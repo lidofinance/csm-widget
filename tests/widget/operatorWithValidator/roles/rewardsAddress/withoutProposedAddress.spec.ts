@@ -13,56 +13,56 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
     await widgetService.rolesPage.rewardsAddressPage.revokePendingRole();
   });
 
-  test('Verify UI elements in the "Rewards Address" tab', async ({
-    widgetService,
-    secretPhrase,
-  }) => {
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
-    const address = mnemonicToAccount(secretPhrase).address;
+  test(
+    qase(79, 'Verify UI elements in the "Rewards Address" tab'),
+    async ({ widgetService, secretPhrase }) => {
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const address = mnemonicToAccount(secretPhrase).address;
 
-    await test.step('Verify the "Current rewards address" field', async () => {
-      await expect(rewardsAddressPage.currentTitledAddress).toBeVisible();
-      await expect(rewardsAddressPage.currentTitledAddress).toContainText(
-        'Current rewards address',
-      );
+      await test.step('Verify the "Current rewards address" field', async () => {
+        await expect(rewardsAddressPage.currentTitledAddress).toBeVisible();
+        await expect(rewardsAddressPage.currentTitledAddress).toContainText(
+          'Current rewards address',
+        );
 
-      await expect(rewardsAddressPage.currentAddress).toContainText(
-        trimAddress(address, 6),
-      );
-    });
+        await expect(rewardsAddressPage.currentAddress).toContainText(
+          trimAddress(address, 6),
+        );
+      });
 
-    await test.step('Verify that proposal address is hidden', async () => {
-      await expect(rewardsAddressPage.proposedAddress).toBeHidden();
-    });
+      await test.step('Verify that proposal address is hidden', async () => {
+        await expect(rewardsAddressPage.proposedAddress).toBeHidden();
+      });
 
-    await test.step('Verify input', async () => {
-      await expect(rewardsAddressPage.addressInput).toBeVisible();
-      await expect(rewardsAddressPage.addressInput).toHaveAttribute(
-        'placeholder',
-        'Ethereum address',
-      );
-      await expect(rewardsAddressPage.inputLabel).toContainText(
-        'New rewards address',
-      );
-    });
+      await test.step('Verify input', async () => {
+        await expect(rewardsAddressPage.addressInput).toBeVisible();
+        await expect(rewardsAddressPage.addressInput).toHaveAttribute(
+          'placeholder',
+          'Ethereum address',
+        );
+        await expect(rewardsAddressPage.inputLabel).toContainText(
+          'New rewards address',
+        );
+      });
 
-    await test.step('Verify button', async () => {
-      await expect(rewardsAddressPage.proposeButton).toBeVisible();
-      await expect(rewardsAddressPage.proposeButton).toContainText(
-        'Propose a new rewards address',
-      );
-    });
+      await test.step('Verify button', async () => {
+        await expect(rewardsAddressPage.proposeButton).toBeVisible();
+        await expect(rewardsAddressPage.proposeButton).toContainText(
+          'Propose a new rewards address',
+        );
+      });
 
-    await test.step('Verify explanatory note below the button', async () => {
-      await expect(rewardsAddressPage.note).toBeVisible();
-      await expect(rewardsAddressPage.note).toContainText(
-        'To complete the address change, the owner of the new address must confirm the change',
-      );
-    });
-  });
+      await test.step('Verify explanatory note below the button', async () => {
+        await expect(rewardsAddressPage.note).toBeVisible();
+        await expect(rewardsAddressPage.note).toContainText(
+          'To complete the address change, the owner of the new address must confirm the change',
+        );
+      });
+    },
+  );
 
   test(
-    qase(79, 'Should open etherscan for current rewards address'),
+    qase(78, 'Should open etherscan for current rewards address'),
     async ({ widgetService, widgetConfig, secretPhrase }) => {
       const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
 
@@ -91,20 +91,20 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
     },
   );
 
-  test('Propose a new Rewards Address with same address', async ({
-    widgetService,
-    secretPhrase,
-  }) => {
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+  test(
+    qase(218, 'Propose a new Rewards Address with same address'),
+    async ({ widgetService, secretPhrase }) => {
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
 
-    await rewardsAddressPage.addressInput.fill(
-      mnemonicToAccount(secretPhrase).address,
-    );
+      await rewardsAddressPage.addressInput.fill(
+        mnemonicToAccount(secretPhrase).address,
+      );
 
-    const expectedTooltipError = 'Should not be same as current address';
-    await expect(rewardsAddressPage.validationInputTooltip).toContainText(
-      expectedTooltipError,
-    );
-    await expect(rewardsAddressPage.proposeButton).toBeDisabled();
-  });
+      const expectedTooltipError = 'Should not be same as current address';
+      await expect(rewardsAddressPage.validationInputTooltip).toContainText(
+        expectedTooltipError,
+      );
+      await expect(rewardsAddressPage.proposeButton).toBeDisabled();
+    },
+  );
 });

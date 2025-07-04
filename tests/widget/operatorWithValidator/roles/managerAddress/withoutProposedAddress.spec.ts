@@ -61,50 +61,50 @@ test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () =
     },
   );
 
-  test('Should open etherscan for current manager address', async ({
-    widgetService,
-    widgetConfig,
-    secretPhrase,
-  }) => {
-    const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+  test(
+    qase(210, 'Should open etherscan for current manager address'),
+    async ({ widgetService, widgetConfig, secretPhrase }) => {
+      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
 
-    const [etherscanPage] = await Promise.all([
-      widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
-      managerAddressPage.currentAddressEtherscanLink.click(),
-    ]);
-    expect(etherscanPage.url().toLowerCase()).toContain(
-      `${widgetConfig.standConfig.networkConfig.scan}address/${mnemonicToAccount(secretPhrase).address.toLowerCase()}`,
-    );
-  });
+      const [etherscanPage] = await Promise.all([
+        widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
+        managerAddressPage.currentAddressEtherscanLink.click(),
+      ]);
+      expect(etherscanPage.url().toLowerCase()).toContain(
+        `${widgetConfig.standConfig.networkConfig.scan}address/${mnemonicToAccount(secretPhrase).address.toLowerCase()}`,
+      );
+    },
+  );
 
-  test('Propose a new Manager Address with invalid input', async ({
-    widgetService,
-  }) => {
-    const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+  test(
+    qase(211, 'Propose a new Manager Address with invalid input'),
+    async ({ widgetService }) => {
+      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
 
-    await managerAddressPage.addressInput.fill(`${generateAddress()}1`);
+      await managerAddressPage.addressInput.fill(`${generateAddress()}1`);
 
-    const expectedTooltipError = 'Specify a valid address';
-    await expect(managerAddressPage.validationInputTooltip).toContainText(
-      expectedTooltipError,
-    );
-    await expect(managerAddressPage.proposeButton).toBeDisabled();
-  });
+      const expectedTooltipError = 'Specify a valid address';
+      await expect(managerAddressPage.validationInputTooltip).toContainText(
+        expectedTooltipError,
+      );
+      await expect(managerAddressPage.proposeButton).toBeDisabled();
+    },
+  );
 
-  test('Propose a new Manager Address with same address', async ({
-    widgetService,
-    secretPhrase,
-  }) => {
-    const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+  test(
+    qase(212, 'Propose a new Manager Address with same address'),
+    async ({ widgetService, secretPhrase }) => {
+      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
 
-    await managerAddressPage.addressInput.fill(
-      mnemonicToAccount(secretPhrase).address,
-    );
+      await managerAddressPage.addressInput.fill(
+        mnemonicToAccount(secretPhrase).address,
+      );
 
-    const expectedTooltipError = 'Should not be same as current address';
-    await expect(managerAddressPage.validationInputTooltip).toContainText(
-      expectedTooltipError,
-    );
-    await expect(managerAddressPage.proposeButton).toBeDisabled();
-  });
+      const expectedTooltipError = 'Should not be same as current address';
+      await expect(managerAddressPage.validationInputTooltip).toContainText(
+        expectedTooltipError,
+      );
+      await expect(managerAddressPage.proposeButton).toBeDisabled();
+    },
+  );
 });
