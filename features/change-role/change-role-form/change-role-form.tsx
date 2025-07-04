@@ -15,7 +15,7 @@ import { ChangeRoleFormLoader } from './change-role-form-loader';
 export const ChangeRoleForm: FC<ChangeRoleFormProviderProps> = memo((props) => {
   return (
     <ChangeRoleFormProvider {...props}>
-      <FormBlock>
+      <FormBlock data-testid="changeRoleForm">
         <ChangeRoleFormLoader>
           <FormControllerStyled>
             <Info />

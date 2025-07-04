@@ -1,6 +1,6 @@
-import { test } from '../test.fixture';
+import { test } from '../../test.fixture';
 import { KeysPage } from 'tests/pages';
-import { getRandomKeys } from '../../consts/keys.const';
+import { getRandomKeys } from '../../../consts/keys.const';
 import { Tags, TokenSymbol } from 'tests/consts/common.const';
 import { expect } from '@playwright/test';
 import { trimAddress } from '@lidofinance/address';
