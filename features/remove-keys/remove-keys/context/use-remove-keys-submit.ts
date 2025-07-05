@@ -71,7 +71,7 @@ export const useRemoveKeysSubmit = ({
         await onConfirm?.();
 
         void removeCacheKeys(
-          keys.map(({ key }) => key).slice(start, start + count),
+          keys.map(({ pubkey }) => pubkey).slice(start, start + count),
         );
 
         return true;

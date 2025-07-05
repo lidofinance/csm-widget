@@ -10,7 +10,6 @@ import {
   DEFAULT_API_ERROR_MESSAGE,
 } from '@lidofinance/next-api-wrapper';
 import { rateLimitWrapper } from '@lidofinance/next-ip-rate-limit';
-import { CHAINS } from '@lidofinance/lido-ethereum-sdk/common';
 
 import { config, secretConfig } from 'config';
 
@@ -18,6 +17,7 @@ import {
   METRIC_CONTRACT_ADDRESSES,
   getMetricContractAbi,
 } from './contractAddressesMetricsMap';
+import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 export enum HttpMethod {
   GET = 'GET',
@@ -146,7 +146,7 @@ const collectRequestAddressMetric = async ({
 }: {
   calls: any[];
   referer: string;
-  chainId: CHAINS;
+  chainId: CSM_SUPPORTED_CHAINS;
   metrics: Counter<string>;
 }) => {
   const refererUrlParsed = parseRefererUrl(referer);
@@ -199,7 +199,7 @@ export const requestAddressMetric =
   (metrics: Counter<string>): RequestWrapper =>
   async (req, res, next) => {
     const referer = req.headers.referer as string;
-    const chainId = req.query.chainId as unknown as CHAINS;
+    const chainId = req.query.chainId as unknown as CSM_SUPPORTED_CHAINS;
 
     if (req.body) {
       void collectRequestAddressMetric({
