@@ -40,7 +40,7 @@ export * from './use-send-tx';
 export * from './use-show-rule';
 export * from './use-sorted-keys';
 export * from './use-steth-amount';
-export * from './use-surveys-call';
+export * from './use-survey-enabled';
 export * from './use-surveys-filled';
 export * from './use-token-max-amount';
 export * from './use-tx-cost-in-usd';
