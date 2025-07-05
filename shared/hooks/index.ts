@@ -23,7 +23,6 @@ export * from './use-keys-cache';
 export * from './use-lido-contracts';
 export * from './use-local-storage';
 export * from './use-mainnet-static-rpc-provider';
-export * from './use-operator-in-other-module';
 export * from './use-prefixed-history';
 export * from './use-router-path';
 export * from './use-search-params';

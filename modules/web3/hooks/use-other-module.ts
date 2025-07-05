@@ -1,17 +1,19 @@
-import { ShareLimitInfo } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
 import { useLidoSDK } from 'modules/web3';
+import invariant from 'tiny-invariant';
+import { Address } from 'viem';
 
-export const useShareLimit = <TData = ShareLimitInfo>(
-  select?: (data: ShareLimitInfo) => TData,
-) => {
+export const useOtherModule = (address: Address | undefined) => {
   const { csm } = useLidoSDK();
 
   return useQuery({
     queryKey: ['getShareLimit'],
     ...STRATEGY_CONSTANT,
-    queryFn: () => csm.module.getShareLimit(),
-    select,
+    queryFn: () => {
+      invariant(address);
+      return csm.module.getUsedOtherModule(address);
+    },
+    enabled: !!address,
   });
 };
