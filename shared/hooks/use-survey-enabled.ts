@@ -17,7 +17,7 @@ import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
 import { useSurveysFilled } from './use-surveys-filled';
 
-export const useSurveyEnabled = () => {
+export const useSurveyEnabled = (skipClosed = false) => {
   const today = new Date();
   const { start, end } = getSurveyDates();
   const isActive = isAfter(today, start) && isBefore(today, end);
@@ -35,7 +35,7 @@ export const useSurveyEnabled = () => {
   }, [setClosedAt]);
 
   const { data: filled } = useSurveysFilled(
-    isActive && !isClosed ? nodeOperatorId : undefined,
+    isActive && (!isClosed || skipClosed) ? nodeOperatorId : undefined,
   );
 
   return {
