@@ -3,18 +3,17 @@ import { ValidationError } from './validation-error';
 
 export const validateNodeOperatorId = (
   field: string,
-  value?: string,
+  value?: NodeOperatorId,
   max?: NodeOperatorId,
 ) => {
-  if (!value) throw new ValidationError(field, '');
+  if (value === undefined) throw new ValidationError(field, '');
 
   try {
-    const val = BigInt(value);
-    if (val < 0) {
+    if (value < 0n) {
       throw new ValidationError(field, 'Invalid ID');
     }
 
-    if (max !== undefined && max <= val)
+    if (max !== undefined && max <= value)
       throw new ValidationError(field, `Max Node Operator ID is ${max - 1n}`);
   } catch (e) {
     if (e instanceof ValidationError) return e;

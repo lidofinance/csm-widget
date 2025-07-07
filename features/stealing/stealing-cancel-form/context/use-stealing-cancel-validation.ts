@@ -1,21 +1,20 @@
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
   handleResolverValidationError,
-  validateBignumberMax,
+  validateBigintMax,
   validateEtherAmount,
   validateNodeOperatorId,
 } from 'shared/hook-form/validation';
 import { useAwaitNetworkData } from 'shared/hooks';
 import invariant from 'tiny-invariant';
+import { getTokenDisplayName } from 'utils';
+import { formatEther } from 'viem';
 import type {
   StealingCancelFormInputType,
   StealingCancelFormNetworkData,
 } from './types';
-import { getTokenDisplayName } from 'utils';
-import { formatEther } from '@ethersproject/units';
-import { FormatToken } from 'shared/formatters';
 
 export const useStealingCancelValidation = (
   networkData: StealingCancelFormNetworkData,
@@ -27,9 +26,9 @@ export const useStealingCancelValidation = (
       try {
         const { amount, nodeOperatorId, maxAmount } = values;
 
-        const { nodeOperatorsCount, etherBalance } = await dataPromise;
+        const { nodeOperatorsCount, ethBalance } = await dataPromise;
 
-        invariant(etherBalance);
+        invariant(ethBalance);
         invariant(nodeOperatorsCount);
 
         if (options.names?.includes('nodeOperatorId'))
@@ -40,16 +39,15 @@ export const useStealingCancelValidation = (
           );
 
         if (options.names?.includes('amount')) {
-          validateEtherAmount('amount', amount, TOKENS.ETH);
+          validateEtherAmount('amount', amount, TOKENS.eth);
 
           if (amount && maxAmount)
-            validateBignumberMax(
+            validateBigintMax(
               'amount',
               amount,
               maxAmount,
-              `Entered amount exceeds locked bond of ${formatEther(maxAmount)} ${getTokenDisplayName(TOKENS.ETH)}`,
+              `Entered amount exceeds locked bond of ${formatEther(maxAmount)} ${getTokenDisplayName(TOKENS.eth)}`,
             );
-          FormatToken;
         }
 
         return {

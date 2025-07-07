@@ -68,7 +68,7 @@ export const useSubmitKeysFormNetworkData = (): [
 
   // const { data: keysAvailable } = useKeysAvailable({
   //   curveId,
-  //   etherBalance,
+  //   ethBalance,
   //   stethBalance,
   //   wstethBalance,
   // });

@@ -25,6 +25,8 @@ export * from './use-operator-keys';
 export * from './use-operator-last-rewards';
 export * from './use-operator-reward';
 export * from './use-operator-type';
+export * from './use-operators-count';
+export * from './use-operators-with-locked-bond';
 export * from './use-other-module';
 export * from './use-permissionless-curve-id';
 export * from './use-rewards-last-report-tx-hash';

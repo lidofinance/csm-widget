@@ -1,8 +1,9 @@
-import { useEthereumBalance } from '@lido-sdk/react';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
+import {
+  useEthereumBalance,
+  useNodeOperatorId,
+  useOperatorInfo,
+} from 'modules/web3';
 import { useCallback, useMemo } from 'react';
-import { useNodeOperatorInfo } from 'shared/hooks';
 import { type NormalizeQueueFormNetworkData } from './types';
 
 export const useNormalizeQueueFormNetworkData = (): [
@@ -13,30 +14,30 @@ export const useNormalizeQueueFormNetworkData = (): [
 
   const {
     data: info,
-    update: updateInfo,
-    initialLoading: isInfoLoading,
-  } = useNodeOperatorInfo(nodeOperatorId);
+    isPending: isInfoLoading,
+    refetch: updateInfo,
+  } = useOperatorInfo(nodeOperatorId);
+
+  const {
+    data: ethBalance,
+    isPending: isEthBalanceLoading,
+    refetch: updateEthBalance,
+  } = useEthereumBalance();
 
   const unqueuedCount = info
     ? info.depositableValidatorsCount - info.enqueuedCount
     : undefined;
 
-  const {
-    data: etherBalance,
-    update: updateEtherBalance,
-    initialLoading: isEtherBalanceLoading,
-  } = useEthereumBalance(undefined, STRATEGY_LAZY);
-
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateInfo(), updateEtherBalance()]);
-  }, [updateEtherBalance, updateInfo]);
+    await Promise.allSettled([updateInfo(), updateEthBalance()]);
+  }, [updateEthBalance, updateInfo]);
 
   const loading = useMemo(
     () => ({
       isInfoLoading,
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
     }),
-    [isEtherBalanceLoading, isInfoLoading],
+    [isEthBalanceLoading, isInfoLoading],
   );
 
   return [
@@ -44,7 +45,7 @@ export const useNormalizeQueueFormNetworkData = (): [
       nodeOperatorId,
       info,
       unqueuedCount,
-      etherBalance,
+      ethBalance,
       loading,
     },
     revalidate,

@@ -3,7 +3,7 @@ import { API_ROUTES } from 'consts/api';
 import { STRATEGY_LAZY } from 'consts/swr-strategies';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useMemo } from 'react';
-import { useMergeSwr, usePerfLeeway } from 'shared/hooks';
+import { useMergeSwr } from 'shared/hooks';
 import { NodeOperatorId } from 'types';
 import { RateReponse } from 'types/ethseer';
 import { standardFetcher } from 'utils';
@@ -29,16 +29,16 @@ const useEthSeerRate = (
 export const useEthseerApi = () => {
   const nodeOperatorId = useNodeOperatorId();
   const swrRateApi = useEthSeerRate(nodeOperatorId);
-  const swrPerfLeeway = usePerfLeeway();
+  // const swrPerfLeeway = usePerfLeeway();
 
   const data = swrRateApi.data;
-  const leeway = swrPerfLeeway.data;
+  const leeway = 500; // swrPerfLeeway.data;
 
   return useMergeSwr(
-    [swrRateApi, swrPerfLeeway],
+    [swrRateApi],
     useMemo(() => {
       if (!data || !leeway) return undefined;
-      const offset = leeway.toNumber() / BP;
+      const offset = leeway / BP;
       const threshold = data.overallAttestationRate - offset;
       return {
         ...data,
