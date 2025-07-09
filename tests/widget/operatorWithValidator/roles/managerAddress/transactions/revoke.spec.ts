@@ -29,41 +29,42 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
     });
   });
 
-  test('Should display tx modal after revoke Manafer role changes', async ({
-    widgetService,
-  }) => {
-    const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+  test(
+    qase(226, 'Should display tx modal after revoke Manager role changes'),
+    async ({ widgetService }) => {
+      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
 
-    await test.step('Revoke pending manager address role', async () => {
-      const [txPage] = await Promise.all([
-        managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        managerAddressPage.revokeButton.click(),
-      ]);
+      await test.step('Revoke pending manager address role', async () => {
+        const [txPage] = await Promise.all([
+          managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+          managerAddressPage.revokeButton.click(),
+        ]);
 
-      await managerAddressPage.page.waitForSelector(
-        `text=You are revoking request for manager address change`,
-        { timeout: STAGE_WAIT_TIMEOUT },
-      );
-
-      await test.step('Verify transaction modal', async () => {
-        const { txModal } = widgetService.rolesPage;
-
-        await expect(txModal.description).toContainText('Address stays');
-
-        await expect(txModal.description).toContainText(
-          trimAddress(
-            '0x0000000000000000000000000000000000000000000000000000000000000000',
-            6,
-          ),
+        await managerAddressPage.page.waitForSelector(
+          `text=You are revoking request for manager address change`,
+          { timeout: STAGE_WAIT_TIMEOUT },
         );
-        await expect(txModal.footerHint).toHaveText(
-          'Confirm this transaction in your wallet',
-        );
+
+        await test.step('Verify transaction modal', async () => {
+          const { txModal } = widgetService.rolesPage;
+
+          await expect(txModal.description).toContainText('Address stays');
+
+          await expect(txModal.description).toContainText(
+            trimAddress(
+              '0x0000000000000000000000000000000000000000000000000000000000000000',
+              6,
+            ),
+          );
+          await expect(txModal.footerHint).toHaveText(
+            'Confirm this transaction in your wallet',
+          );
+        });
+
+        await widgetService.walletPage.cancelTx(txPage);
       });
-
-      await widgetService.walletPage.cancelTx(txPage);
-    });
-  });
+    },
+  );
 
   test(
     qase(208, 'Should success complete transacrion revoke Manager role change'),

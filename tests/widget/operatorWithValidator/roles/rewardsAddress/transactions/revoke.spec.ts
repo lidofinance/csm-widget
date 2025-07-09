@@ -28,40 +28,41 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
     });
   });
 
-  test('Should display tx modal after revoke Reward role changes', async ({
-    widgetService,
-  }) => {
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+  test(
+    qase(231, 'Should display tx modal after revoke Reward role changes'),
+    async ({ widgetService }) => {
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
 
-    await test.step('Revoke pending rewards address role', async () => {
-      const [txPage] = await Promise.all([
-        rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        rewardsAddressPage.revokeButton.click(),
-      ]);
+      await test.step('Revoke pending rewards address role', async () => {
+        const [txPage] = await Promise.all([
+          rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+          rewardsAddressPage.revokeButton.click(),
+        ]);
 
-      await rewardsAddressPage.page.waitForSelector(
-        `text=You are revoking request for rewards address change`,
-        { timeout: STAGE_WAIT_TIMEOUT },
-      );
-
-      await test.step('Verify transaction modal', async () => {
-        const { txModal } = widgetService.rolesPage;
-
-        await expect(txModal.description).toContainText('Address stays');
-
-        await expect(txModal.description).toContainText(
-          trimAddress(
-            '0x0000000000000000000000000000000000000000000000000000000000000000',
-            6,
-          ),
+        await rewardsAddressPage.page.waitForSelector(
+          `text=You are revoking request for rewards address change`,
+          { timeout: STAGE_WAIT_TIMEOUT },
         );
-        await expect(txModal.footerHint).toHaveText(
-          'Confirm this transaction in your wallet',
-        );
+
+        await test.step('Verify transaction modal', async () => {
+          const { txModal } = widgetService.rolesPage;
+
+          await expect(txModal.description).toContainText('Address stays');
+
+          await expect(txModal.description).toContainText(
+            trimAddress(
+              '0x0000000000000000000000000000000000000000000000000000000000000000',
+              6,
+            ),
+          );
+          await expect(txModal.footerHint).toHaveText(
+            'Confirm this transaction in your wallet',
+          );
+        });
+        await widgetService.walletPage.cancelTx(txPage);
       });
-      await widgetService.walletPage.cancelTx(txPage);
-    });
-  });
+    },
+  );
 
   test(
     qase(156, 'Should success complete revoke Reward role changes'),

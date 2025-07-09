@@ -24,83 +24,88 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
     });
   });
 
-  test('Should display warning modal after click to propose button', async ({
-    widgetService,
-  }) => {
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
-    const rolesPage = widgetService.rolesPage;
-    const accountForRolesChanged = generateAddress();
+  test(
+    qase(227, 'Should display warning modal after click to propose button'),
+    async ({ widgetService }) => {
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rolesPage = widgetService.rolesPage;
+      const accountForRolesChanged = generateAddress();
 
-    await rewardsAddressPage.addressInput.fill(accountForRolesChanged);
-    await widgetService.page.waitForTimeout(LOW_TIMEOUT);
-    await rewardsAddressPage.addressValidIcon.waitFor({
-      state: 'visible',
-    });
-    await rewardsAddressPage.proposeButton.click();
+      await rewardsAddressPage.addressInput.fill(accountForRolesChanged);
+      await widgetService.page.waitForTimeout(LOW_TIMEOUT);
+      await rewardsAddressPage.addressValidIcon.waitFor({
+        state: 'visible',
+      });
+      await rewardsAddressPage.proposeButton.click();
 
-    await test.step('Verify first warning modal', async () => {
+      await test.step('Verify first warning modal', async () => {
+        await rolesPage.modalRoot.modal.waitFor({
+          state: 'visible',
+        });
+
+        await expect(rolesPage.modalRoot.headings).toContainText(
+          'All rewards will be claimable to the proposed address',
+        );
+
+        await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
+          'After changing the Rewards Address, all rewards and excess bond accumulated on the bond balance can be claimed to the new Rewards address. In the event of validator withdrawal, the whole bond is also returned to the new address.',
+        );
+
+        await expect(rolesPage.modalRoot.continueButton).toBeVisible();
+        await expect(rolesPage.modalRoot.paragraphs.nth(1)).toContainText(
+          'The change doesn’t apply immediately. To complete the address change, the owner of the new address must confirm the change',
+        );
+      });
+    },
+  );
+
+  test(
+    qase(
+      228,
+      'Should display tx modal after approve warning after propose button',
+    ),
+    async ({ widgetService }) => {
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rolesPage = widgetService.rolesPage;
+      const accountForRolesChanged = generateAddress();
+
+      await rewardsAddressPage.addressInput.fill(accountForRolesChanged);
+      await widgetService.page.waitForTimeout(LOW_TIMEOUT);
+      await rewardsAddressPage.addressValidIcon.waitFor({
+        state: 'visible',
+      });
+
+      await rewardsAddressPage.proposeButton.click();
       await rolesPage.modalRoot.modal.waitFor({
         state: 'visible',
       });
 
-      await expect(rolesPage.modalRoot.headings).toContainText(
-        'All rewards will be claimable to the proposed address',
+      const [txPage] = await Promise.all([
+        rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+        rolesPage.modalRoot.continueButton.click(),
+      ]);
+
+      await rewardsAddressPage.page.waitForSelector(
+        `text=You are proposing rewards address change`,
+        { timeout: STAGE_WAIT_TIMEOUT },
       );
 
-      await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
-        'After changing the Rewards Address, all rewards and excess bond accumulated on the bond balance can be claimed to the new Rewards address. In the event of validator withdrawal, the whole bond is also returned to the new address.',
-      );
+      await test.step('Verify transaction modal', async () => {
+        const { txModal } = widgetService.rolesPage;
 
-      await expect(rolesPage.modalRoot.continueButton).toBeVisible();
-      await expect(rolesPage.modalRoot.paragraphs.nth(1)).toContainText(
-        'The change doesn’t apply immediately. To complete the address change, the owner of the new address must confirm the change',
-      );
-    });
-  });
+        await expect(txModal.description).toContainText('Proposed address');
 
-  test('Should display tx modal after approve warning after propose button', async ({
-    widgetService,
-  }) => {
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
-    const rolesPage = widgetService.rolesPage;
-    const accountForRolesChanged = generateAddress();
+        await expect(txModal.description).toContainText(
+          trimAddress(accountForRolesChanged, 6),
+        );
+        await expect(txModal.footerHint).toHaveText(
+          'Confirm this transaction in your wallet',
+        );
+      });
 
-    await rewardsAddressPage.addressInput.fill(accountForRolesChanged);
-    await widgetService.page.waitForTimeout(LOW_TIMEOUT);
-    await rewardsAddressPage.addressValidIcon.waitFor({
-      state: 'visible',
-    });
-
-    await rewardsAddressPage.proposeButton.click();
-    await rolesPage.modalRoot.modal.waitFor({
-      state: 'visible',
-    });
-
-    const [txPage] = await Promise.all([
-      rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-      rolesPage.modalRoot.continueButton.click(),
-    ]);
-
-    await rewardsAddressPage.page.waitForSelector(
-      `text=You are proposing rewards address change`,
-      { timeout: STAGE_WAIT_TIMEOUT },
-    );
-
-    await test.step('Verify transaction modal', async () => {
-      const { txModal } = widgetService.rolesPage;
-
-      await expect(txModal.description).toContainText('Proposed address');
-
-      await expect(txModal.description).toContainText(
-        trimAddress(accountForRolesChanged, 6),
-      );
-      await expect(txModal.footerHint).toHaveText(
-        'Confirm this transaction in your wallet',
-      );
-    });
-
-    await rewardsAddressPage.walletPage.cancelTx(txPage);
-  });
+      await rewardsAddressPage.walletPage.cancelTx(txPage);
+    },
+  );
 
   test(
     qase(

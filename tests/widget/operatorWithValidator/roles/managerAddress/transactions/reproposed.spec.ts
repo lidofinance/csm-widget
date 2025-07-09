@@ -31,46 +31,14 @@ test.describe(
       });
     });
 
-    test('Should display warning modal after click to repropose button', async ({
-      widgetService,
-    }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
-      const accountForSecondRolesChanged = generateAddress();
+    test(
+      qase(224, 'Should display warning modal after click to repropose button'),
+      async ({ widgetService }) => {
+        const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+        const accountForSecondRolesChanged = generateAddress();
 
-      const rolesPage = widgetService.rolesPage;
+        const rolesPage = widgetService.rolesPage;
 
-      await managerAddressPage.addressInput.fill(accountForSecondRolesChanged);
-      await managerAddressPage.addressValidIcon.waitFor({
-        state: 'visible',
-      });
-      await managerAddressPage.proposeButton.click();
-
-      await test.step('Verify modal for repropose', async () => {
-        await rolesPage.modalRoot.modal.waitFor({
-          state: 'visible',
-        });
-
-        await expect(rolesPage.modalRoot.headings).toContainText(
-          'Only most recent proposed address change is valid',
-        );
-
-        await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
-          'When you propose a new address for change - the previous change proposal is voided.',
-        );
-
-        await expect(rolesPage.modalRoot.continueButton).toBeVisible();
-      });
-    });
-
-    test('Should display tx modal after approve warning after repropose button', async ({
-      widgetService,
-    }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
-      const accountForSecondRolesChanged = generateAddress();
-
-      const rolesPage = widgetService.rolesPage;
-
-      await test.step('Repropose a new manager address', async () => {
         await managerAddressPage.addressInput.fill(
           accountForSecondRolesChanged,
         );
@@ -78,37 +46,78 @@ test.describe(
           state: 'visible',
         });
         await managerAddressPage.proposeButton.click();
-        await rolesPage.modalRoot.modal.waitFor({
-          state: 'visible',
-        });
 
-        const [txPage] = await Promise.all([
-          managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          rolesPage.modalRoot.continueButton.click(),
-        ]);
+        await test.step('Verify modal for repropose', async () => {
+          await rolesPage.modalRoot.modal.waitFor({
+            state: 'visible',
+          });
 
-        await test.step('Continue proposal', async () => {
-          await managerAddressPage.page.waitForSelector(
-            `text=You are proposing manager address change`,
-            { timeout: STAGE_WAIT_TIMEOUT },
+          await expect(rolesPage.modalRoot.headings).toContainText(
+            'Only most recent proposed address change is valid',
           );
 
-          await test.step('Verify transaction modal', async () => {
-            const { txModal } = widgetService.rolesPage;
+          await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
+            'When you propose a new address for change - the previous change proposal is voided.',
+          );
 
-            await expect(txModal.description).toContainText('Proposed address');
-
-            await expect(txModal.description).toContainText(
-              trimAddress(accountForSecondRolesChanged, 6),
-            );
-            await expect(txModal.footerHint).toHaveText(
-              'Confirm this transaction in your wallet',
-            );
-          });
+          await expect(rolesPage.modalRoot.continueButton).toBeVisible();
         });
-        await managerAddressPage.walletPage.cancelTx(txPage);
-      });
-    });
+      },
+    );
+
+    test(
+      qase(
+        225,
+        'Should display tx modal after approve warning after repropose button',
+      ),
+      async ({ widgetService }) => {
+        const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+        const accountForSecondRolesChanged = generateAddress();
+
+        const rolesPage = widgetService.rolesPage;
+
+        await test.step('Repropose a new manager address', async () => {
+          await managerAddressPage.addressInput.fill(
+            accountForSecondRolesChanged,
+          );
+          await managerAddressPage.addressValidIcon.waitFor({
+            state: 'visible',
+          });
+          await managerAddressPage.proposeButton.click();
+          await rolesPage.modalRoot.modal.waitFor({
+            state: 'visible',
+          });
+
+          const [txPage] = await Promise.all([
+            managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+            rolesPage.modalRoot.continueButton.click(),
+          ]);
+
+          await test.step('Continue proposal', async () => {
+            await managerAddressPage.page.waitForSelector(
+              `text=You are proposing manager address change`,
+              { timeout: STAGE_WAIT_TIMEOUT },
+            );
+
+            await test.step('Verify transaction modal', async () => {
+              const { txModal } = widgetService.rolesPage;
+
+              await expect(txModal.description).toContainText(
+                'Proposed address',
+              );
+
+              await expect(txModal.description).toContainText(
+                trimAddress(accountForSecondRolesChanged, 6),
+              );
+              await expect(txModal.footerHint).toHaveText(
+                'Confirm this transaction in your wallet',
+              );
+            });
+          });
+          await managerAddressPage.walletPage.cancelTx(txPage);
+        });
+      },
+    );
 
     test(
       qase(207, 'Repropose a new Manager Address'),
