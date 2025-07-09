@@ -26,9 +26,11 @@ import { config } from 'config';
 import {
   CSAccountingAbi,
   CSEjectorAbi,
+  CSExitPenaltiesAbi,
   CSFeeDistributorAbi,
   CSFeeOracleAbi,
   CSModuleAbi,
+  CSMSatelliteAbi,
   CSParametersRegistryAbi,
   CSStrikesAbi,
   HashConsensusAbi,
@@ -166,7 +168,8 @@ const METRIC_CONTRACT_ABIS: Record<CONTRACT_NAMES, Abi> = {
   [CONTRACT_NAMES.csStrikes]: CSStrikesAbi,
   [CONTRACT_NAMES.permissionlessGate]: PermissionlessGateAbi,
   [CONTRACT_NAMES.vettedGate]: VettedGateAbi,
-  [CONTRACT_NAMES.csExitPenalties]: [],
+  [CONTRACT_NAMES.csExitPenalties]: CSExitPenaltiesAbi,
+  [CONTRACT_NAMES.CSMSatellite]: CSMSatelliteAbi,
 
   [CONTRACT_NAMES.CSAccounting_v1]: [],
   [CONTRACT_NAMES.CSFeeDistributor_v1]: [],

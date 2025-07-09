@@ -85,6 +85,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       core,
       clApiUrl,
       overridedAddresses,
+      maxEventBlocksRange: config.MAX_BLOCK_RANGE_FOR_EVENTS,
     });
 
     return {

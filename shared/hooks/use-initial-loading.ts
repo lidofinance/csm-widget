@@ -1,9 +1,10 @@
-import { useCsmStatus } from 'modules/web3';
+import { useCsmStatus, useDappStatus } from 'modules/web3';
 import { useAvailableOperators } from 'modules/web3/operator-provider';
 import { useAccount } from 'wagmi';
 
 export const useInitialLoading = (externalLoading?: boolean) => {
   const { isConnecting } = useAccount();
+  const { isAccountActive } = useDappStatus();
   const { isPending: isStatusLoading } = useCsmStatus();
   const { isPending: isOperatorsLoading } = useAvailableOperators();
 
@@ -15,7 +16,7 @@ export const useInitialLoading = (externalLoading?: boolean) => {
   return [
     isConnecting,
     isStatusLoading,
-    isOperatorsLoading,
+    isAccountActive && isOperatorsLoading,
     externalLoading,
   ].some((i) => i === true);
 };

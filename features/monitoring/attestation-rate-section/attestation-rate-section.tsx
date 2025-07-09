@@ -1,9 +1,7 @@
 import { Block, InlineLoader, Text } from '@lidofinance/lido-ui';
 import { DATA_UNAVAILABLE } from 'consts/text';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { IconTooltip, MatomoLink, Stack } from 'shared/components';
-import { useNodeOperatorInfo } from 'shared/hooks';
 import { formatDate, formatPercent } from 'utils';
 import { DiffBadge } from './diff-badge';
 import { Rate } from './styles';
@@ -11,13 +9,13 @@ import { Tip } from './tip';
 import { useEthseerApi } from './use-ethseer-api';
 
 export const AttestationRateSection: FC = () => {
-  const id = useNodeOperatorId();
-  const { data: info } = useNodeOperatorInfo(id);
+  // const id = useNodeOperatorId();
+  // const { data: info } = useNodeOperatorInfo(id);
   const { data, error } = useEthseerApi();
 
-  const showThisSection = data || (info?.totalDepositedKeys ?? 0) > 0;
+  // const showThisSection = data || (info?.totalDepositedKeys ?? 0) > 0;
 
-  if (!showThisSection) return null;
+  // if (!showThisSection) return null;
 
   return (
     <Block>

@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import { useDappStatus } from '../hooks';
 import { useLidoSDK } from '../web3-provider';
 import { useCachedNodeOperator } from './use-cached-node-operator';
+import invariant from 'tiny-invariant';
 
 export const useAvailableOperators = () => {
   const { csm } = useLidoSDK();
@@ -18,8 +19,11 @@ export const useAvailableOperators = () => {
   return useQuery({
     queryKey: ['node-operators', { address }],
     ...STRATEGY_CONSTANT,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    queryFn: async () => csm.events.getNodeOperatorsByAddress(address!),
+    queryFn: async () => {
+      invariant(address);
+      return csm.satellite.getNodeOperatorsByAddress({ address });
+      // return csm.events.getNodeOperatorsByAddress(address);
+    },
     enabled: !!address,
     placeholderData,
   });
