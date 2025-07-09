@@ -4,6 +4,7 @@ import {
 } from '@lidofinance/wallets-testing-wallets';
 import { Locator, Page, test } from '@playwright/test';
 import {
+  LOW_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
@@ -109,13 +110,14 @@ export class RewardsAddressPage extends BasePage {
   }
 
   async proposeNewAddress(address: string) {
-    if (await this.isPendingRole()) {
-      console.warn('There is already a pending rewards address role');
-      return;
-    }
-
     await test.step('Propose a new rewards address', async () => {
+      if (await this.isPendingRole()) {
+        console.warn('There is already a pending rewards address role');
+        return;
+      }
+
       await this.addressInput.fill(address);
+      await this.page.waitForTimeout(LOW_TIMEOUT);
       await this.addressValidIcon.waitFor({ state: 'visible' });
       await this.proposeButton.click();
 

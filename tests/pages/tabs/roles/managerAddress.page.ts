@@ -106,13 +106,14 @@ export class ManagerAddressPage extends BasePage {
   }
 
   async proposeNewAddress(address: string) {
-    if (await this.isPendingRole()) {
-      console.warn('There is already a pending rewards address role');
-      return;
-    }
-
     await test.step('Propose a new manager address', async () => {
+      if (await this.isPendingRole()) {
+        console.warn('There is already a pending rewards address role');
+        return;
+      }
+
       await this.addressInput.fill(address);
+      await this.page.waitForTimeout(1000);
       await this.addressValidIcon.waitFor({ state: 'visible' });
 
       await test.step('Do proposal', async () => {
