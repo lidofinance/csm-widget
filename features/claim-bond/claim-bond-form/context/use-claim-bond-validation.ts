@@ -1,4 +1,3 @@
-import { formatEther } from '@ethersproject/units';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
@@ -9,6 +8,7 @@ import {
 import { useAwaitNetworkData } from 'shared/hooks';
 import { getTokenDisplayName } from 'utils';
 import type { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
+import { formatEther } from 'viem';
 
 export const useClaimBondValidation = (
   networkData: ClaimBondFormNetworkData,

@@ -1,5 +1,19 @@
-import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
-import { WagmiProvider, useConnections } from 'wagmi';
+import {
+  createContext,
+  FC,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react';
+import {
+  Config,
+  WagmiProvider,
+  createConfig,
+  fallback,
+  useConnections,
+  usePublicClient,
+} from 'wagmi';
 import * as wagmiChains from 'wagmi/chains';
 
 import {
@@ -17,9 +31,11 @@ import { useUserConfig } from 'config/user-config';
 import { walletMetricProps } from 'consts/matomo-wallets-events';
 
 import { useWeb3Transport } from './use-web3-transport';
-import { SDKLegacyProvider } from './sdk-legacy';
 import { LidoSDKProvider } from './lido-sdk';
-import { CHAINS } from 'consts';
+import { http, PublicClient } from 'viem';
+import invariant from 'tiny-invariant';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
+import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 type ChainsList = [wagmiChains.Chain, ...wagmiChains.Chain[]];
 
@@ -32,6 +48,22 @@ export const wagmiChainMap = Object.values(wagmiChains).reduce(
   },
   {} as Record<number, wagmiChains.Chain>,
 );
+
+type Web3ProviderContextValue = {
+  mainnetConfig: Config;
+  publicClientMainnet: PublicClient;
+};
+
+const Web3ProviderContext = createContext<Web3ProviderContextValue | null>(
+  null,
+);
+Web3ProviderContext.displayName = 'Web3ProviderContext';
+
+export const useMainnetOnlyWagmi = () => {
+  const value = useContext(Web3ProviderContext);
+  invariant(value, 'useMainnetOnlyWagmi was used outside of Web3Provider');
+  return value;
+};
 
 export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
   const {
@@ -60,7 +92,10 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
   const backendRPC: Record<number, string> = useMemo(
     () =>
       supportedChainIds.reduce(
-        (res, curr) => ({ ...res, [curr]: getRpcUrlByChainId(curr as CHAINS) }),
+        (res, curr) => ({
+          ...res,
+          [curr]: getRpcUrlByChainId(curr as CSM_SUPPORTED_CHAINS),
+        }),
         {},
       ),
     [supportedChainIds, getRpcUrlByChainId],
@@ -69,6 +104,43 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
     supportedChains,
     backendRPC,
   );
+
+  const mainnetConfig = useMemo(() => {
+    const batchConfig = {
+      wait: config.PROVIDER_BATCH_TIME,
+      batchSize: config.PROVIDER_MAX_BATCH,
+    };
+
+    const rpcUrlMainnet = getRpcUrlByChainId(CHAINS.Mainnet);
+
+    return createConfig({
+      chains: [wagmiChains.mainnet],
+      ssr: true,
+      connectors: [],
+      batch: {
+        multicall: false,
+      },
+      pollingInterval: config.PROVIDER_POLLING_INTERVAL,
+      transports: {
+        [wagmiChains.mainnet.id]: fallback([
+          // api/rpc
+          http(rpcUrlMainnet, {
+            batch: batchConfig,
+            name: rpcUrlMainnet,
+          }),
+          // fallback rpc from wagmi.chains like cloudfare-eth
+          http(undefined, {
+            batch: batchConfig,
+            name: 'default public RPC URL',
+          }),
+        ]),
+      },
+    });
+  }, [getRpcUrlByChainId]);
+
+  const publicClientMainnet = usePublicClient({
+    config: mainnetConfig,
+  });
 
   const { wagmiConfig, reefKnotConfig, walletsModalConfig } = useMemo(() => {
     return getDefaultConfig({
@@ -109,18 +181,20 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
   }, [activeConnection, onActiveConnection]);
 
   return (
-    // default wagmi autoConnect, MUST be false in our case, because we use custom autoConnect from Reef Knot
-    <WagmiProvider config={wagmiConfig} reconnectOnMount={false}>
-      <ReefKnotProvider config={reefKnotConfig}>
-        <ReefKnotWalletsModal
-          config={walletsModalConfig}
-          darkThemeEnabled={themeName === 'dark'}
-        />
+    <Web3ProviderContext.Provider
+      value={{ mainnetConfig, publicClientMainnet }}
+    >
+      {/* default wagmi autoConnect, MUST be false in our case, because we use custom autoConnect from Reef Knot */}
+      <WagmiProvider config={wagmiConfig} reconnectOnMount={false}>
+        <ReefKnotProvider config={reefKnotConfig}>
+          <ReefKnotWalletsModal
+            config={walletsModalConfig}
+            darkThemeEnabled={themeName === 'dark'}
+          />
 
-        <LidoSDKProvider>
-          <SDKLegacyProvider>{children}</SDKLegacyProvider>
-        </LidoSDKProvider>
-      </ReefKnotProvider>
-    </WagmiProvider>
+          <LidoSDKProvider>{children}</LidoSDKProvider>
+        </ReefKnotProvider>
+      </WagmiProvider>
+    </Web3ProviderContext.Provider>
   );
 };

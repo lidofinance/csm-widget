@@ -3,22 +3,22 @@ import {
   NodeOperatorInvite,
   ROLES,
 } from '@lidofinance/lido-csm-sdk';
-import { ROLE_CODE, ROLES as LOCAL_ROLES } from 'consts/roles';
+import { ROLE_CODE } from 'consts/roles';
 import { capitalize } from 'lodash';
 
 const SHORT_ROLES = {
-  [LOCAL_ROLES.REWARDS]: 'R',
-  [LOCAL_ROLES.MANAGER]: 'M',
+  [ROLES.REWARDS]: 'R',
+  [ROLES.MANAGER]: 'M',
 } as const;
 
 const ROLE_TITLES = {
-  [LOCAL_ROLES.MANAGER]: 'manager',
-  [LOCAL_ROLES.REWARDS]: 'rewards',
+  [ROLES.MANAGER]: 'manager',
+  [ROLES.REWARDS]: 'rewards',
 } as const;
 
-export const getShortRole = (role: LOCAL_ROLES) => SHORT_ROLES[role];
+export const getShortRole = (role: ROLES) => SHORT_ROLES[role];
 
-export const getRoleTitle = (role: LOCAL_ROLES, capitalized = false) => {
+export const getRoleTitle = (role: ROLES, capitalized = false) => {
   const text = ROLE_TITLES[role];
   return capitalized ? capitalize(text) : text;
 };

@@ -15,7 +15,7 @@ import {
   erc20abi,
   type AbstractLidoSDKErc20,
 } from '@lidofinance/lido-ethereum-sdk/erc20';
-import { STRATEGY_IMMUTABLE } from 'consts/react-query-strategies';
+import { STRATEGY_IMMUTABLE } from 'consts';
 import {
   getAbiItem,
   type Address,

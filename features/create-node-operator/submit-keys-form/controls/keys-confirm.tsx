@@ -2,8 +2,8 @@ import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { CheckboxHookForm } from 'shared/hook-form/controls';
-import { SHARE_LIMIT_STATUS } from 'shared/hooks';
 import { useSubmitKeysFormData } from '../context';
+import { SHARE_LIMIT_STATUS } from 'modules/web3';
 
 export const KeysConfirm: FC = () => {
   const { shareLimitStatus } = useSubmitKeysFormData();

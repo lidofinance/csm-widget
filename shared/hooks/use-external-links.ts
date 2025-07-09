@@ -1,7 +1,11 @@
 import { useChainName } from './use-chain-name';
-import { useCsmConstants, useExternalLinks } from './use-csm-constants';
+import { useExternalLinks } from './use-csm-constants';
 import { sortByActiveStatus, useSortedKeys } from './use-sorted-keys';
-import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
+import {
+  useLidoSDK,
+  useNodeOperatorId,
+  useOperatorKeysWithStatus,
+} from 'modules/web3';
 
 const DASHBOARD_KEYS_LIMIT = 20;
 
@@ -25,17 +29,17 @@ export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
 export const useFeesMonitoningLink = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { feesMonitoring } = useExternalLinks();
-  const { stakingModuleId } = useCsmConstants();
+  const { moduleId } = useLidoSDK().csm.core;
   if (!feesMonitoring) return null;
-  return `${feesMonitoring}/operatorInfo?stakingModuleIndex=${stakingModuleId}&operatorIndex=${nodeOperatorId}`;
+  return `${feesMonitoring}/operatorInfo?stakingModuleIndex=${moduleId}&operatorIndex=${nodeOperatorId}`;
 };
 
 export const useOperatorPortalLink = () => {
   const nodeOperatorId = useNodeOperatorId();
+  const { moduleId } = useLidoSDK().csm.core;
   const { operatorsWidget } = useExternalLinks();
-  const { stakingModuleId } = useCsmConstants();
   if (!operatorsWidget) return null;
-  return `${operatorsWidget}/module/${stakingModuleId}/${nodeOperatorId}`;
+  return `${operatorsWidget}/module/${moduleId}/${nodeOperatorId}`;
 };
 
 export const useRatedLink = () => {

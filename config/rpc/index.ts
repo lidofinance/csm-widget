@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 
-import { CHAINS } from 'consts/chains';
 import { API_ROUTES } from 'consts/api';
 
 // Don't use absolute import here!
@@ -11,6 +10,8 @@ import { API_ROUTES } from 'consts/api';
 // otherwise you will get something like a cyclic error!
 import { config } from '../get-config';
 
+import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { useUserConfig } from '../user-config';
 
 export const getBackendRPCPath = (chainId: string | number): string => {
@@ -22,7 +23,7 @@ export const useGetRpcUrlByChainId = () => {
   const userConfig = useUserConfig();
 
   return useCallback(
-    (chainId: CHAINS) => {
+    (chainId: CSM_SUPPORTED_CHAINS) => {
       // We always need Mainnet RPC for some requests, e.g. ETH to USD price, ENS lookup.
       if (
         chainId !== CHAINS.Mainnet &&

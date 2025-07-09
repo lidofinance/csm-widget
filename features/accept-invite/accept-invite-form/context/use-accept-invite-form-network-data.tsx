@@ -1,14 +1,13 @@
+import { useDappStatus, useInvites } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
-import { useAccount } from 'shared/hooks';
-import { type AcceptInviteFormNetworkData } from './types';
 import invariant from 'tiny-invariant';
-import { useInvites } from 'modules/web3';
+import { type AcceptInviteFormNetworkData } from './types';
 
 export const useAcceptInviteFormNetworkData = (): [
   AcceptInviteFormNetworkData,
   () => Promise<void>,
 ] => {
-  const { address } = useAccount();
+  const { address } = useDappStatus();
   const {
     data: invites,
     isPending: isInvitesLoading,

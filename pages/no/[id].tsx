@@ -1,15 +1,15 @@
 import { PATH } from 'consts/urls';
-import { useApplyOperator } from 'modules/web3';
+import { useApplyOperator, useDappStatus } from 'modules/web3';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { useAccount } from 'shared/hooks';
+import { Layout } from 'shared/layout';
 import { SplashPage } from 'shared/navigate';
 import { getFirstParam } from 'utils';
 
 const Page = () => {
-  const { push, query, ...all } = useRouter();
+  const { push, query } = useRouter();
   const appendAndSwitch = useApplyOperator();
-  const { address } = useAccount();
+  const { address } = useDappStatus();
 
   useEffect(() => {
     if (!query || !address) return;
@@ -26,9 +26,9 @@ const Page = () => {
     };
 
     setTimeout(() => void apply(), 100);
-  }, [address, all, appendAndSwitch, push, query]);
+  }, [address, appendAndSwitch, push, query]);
 
-  return <SplashPage />;
+  return <>{!address ? <Layout>login</Layout> : <SplashPage />}</>;
 };
 
 export default Page;

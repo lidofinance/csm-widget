@@ -1,3 +1,4 @@
+import { useDappStatus } from 'modules/web3';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
@@ -6,18 +7,18 @@ import {
   validateDepositData,
   ValidationError,
 } from 'shared/hook-form/validation';
-import { useAccount, useAwaitNetworkData } from 'shared/hooks';
+import { useAwaitNetworkData } from 'shared/hooks';
+import { isAddress } from 'viem';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
-import { isAddress } from 'viem';
 
 export const useSubmitKeysValidation = (
   networkData: SubmitKeysFormNetworkData,
 ) => {
   const dataPromise = useAwaitNetworkData(networkData);
-  const { chainId } = useAccount();
+  const { chainId } = useDappStatus();
 
   return useCallback<Resolver<SubmitKeysFormInputType>>(
     async (values, _, options) => {

@@ -1,15 +1,7 @@
-import { CsmContract, getCsmConstants, getExternalLinks } from 'consts';
-import { useAccount } from './use-account';
-
-export const useCsmConstants = () => {
-  const { chainId } = useAccount();
-  return getCsmConstants(chainId);
-};
-
-export const useCsmAddress = (contractName: CsmContract) =>
-  useCsmConstants().contracts[contractName];
+import { getExternalLinks } from 'consts';
+import { useDappStatus } from 'modules/web3';
 
 export const useExternalLinks = () => {
-  const { chainId } = useAccount();
+  const { chainId } = useDappStatus();
   return getExternalLinks(chainId);
 };

@@ -53,13 +53,6 @@ const CONTRACT_NAMES = {
   ens4: 'ens4',
   ens5: 'ens5',
   ens6: 'ens6',
-
-  // TODO: remove this
-  CSAccounting_v1: 'CSAccounting_v1',
-  CSFeeDistributor_v1: 'CSFeeDistributor_v1',
-  CSFeeOracle_v1: 'CSFeeOracle_v1',
-  CSModule_v1: 'CSModule_v1',
-  HashConsensus_v1: 'HashConsensus_v1',
 } as const;
 type CONTRACT_NAMES = keyof typeof CONTRACT_NAMES;
 
@@ -68,6 +61,7 @@ const supportedChainsWithMainnet: CSM_SUPPORTED_CHAINS[] = uniq([
   CHAINS.Mainnet,
 ]);
 
+// FIXME: addresses
 const STATIC_ADDRESSES: {
   [key in CSM_SUPPORTED_CHAINS]?: { [key in CONTRACT_NAMES]?: Address };
 } = {
@@ -82,29 +76,9 @@ const STATIC_ADDRESSES: {
     [CONTRACT_NAMES.ens4]: '0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41',
     [CONTRACT_NAMES.ens5]: '0xa2c122be93b0074270ebee7f6b7292c7deb45047',
     [CONTRACT_NAMES.ens6]: '0x1da022710df5002339274aadee8d58218e9d6ab5',
-
-    [CONTRACT_NAMES.CSAccounting_v1]:
-      '0x4d72BFF1BeaC69925F8Bd12526a39BAAb069e5Da',
-    [CONTRACT_NAMES.CSFeeDistributor_v1]:
-      '0xD99CC66fEC647E68294C6477B40fC7E0F6F618D0',
-    [CONTRACT_NAMES.CSFeeOracle_v1]:
-      '0x4D4074628678Bd302921c20573EEa1ed38DdF7FB',
-    [CONTRACT_NAMES.CSModule_v1]: '0xdA7dE2ECdDfccC6c3AF10108Db212ACBBf9EA83F',
-    [CONTRACT_NAMES.HashConsensus_v1]:
-      '0x71093efF8D8599b5fA340D665Ad60fA7C80688e4',
   },
   [CHAINS.Hoodi]: {
     [CONTRACT_NAMES.lidoLocator]: '0xe2EF9536DAAAEBFf5b1c130957AB3E80056b06D8',
-    [CONTRACT_NAMES.CSAccounting_v1]:
-      '0xA54b90BA34C5f326BC1485054080994e38FB4C60',
-    [CONTRACT_NAMES.CSFeeDistributor_v1]:
-      '0xaCd9820b0A2229a82dc1A0770307ce5522FF3582',
-    [CONTRACT_NAMES.CSFeeOracle_v1]:
-      '0xe7314f561B2e72f9543F1004e741bab6Fc51028B',
-    [CONTRACT_NAMES.CSModule_v1]: '0x79CEf36D84743222f37765204Bec41E92a93E59d',
-    [CONTRACT_NAMES.HashConsensus_v1]:
-      '0x54f74a10e4397dDeF85C4854d9dfcA129D72C637',
-
     ...overridedAddresses,
   },
 };
@@ -131,9 +105,6 @@ const CONTRACT_LIST_LOGS: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.csModule,
   CONTRACT_NAMES.csFeeOracle,
   CONTRACT_NAMES.validatorsExitBusOracle,
-
-  CONTRACT_NAMES.CSModule_v1,
-  CONTRACT_NAMES.CSFeeOracle_v1,
 ];
 
 export const allowedCallAddresses = mapValues(METRIC_CONTRACT_ADDRESSES, keys);
@@ -170,12 +141,6 @@ const METRIC_CONTRACT_ABIS: Record<CONTRACT_NAMES, Abi> = {
   [CONTRACT_NAMES.vettedGate]: VettedGateAbi,
   [CONTRACT_NAMES.csExitPenalties]: CSExitPenaltiesAbi,
   [CONTRACT_NAMES.CSMSatellite]: CSMSatelliteAbi,
-
-  [CONTRACT_NAMES.CSAccounting_v1]: [],
-  [CONTRACT_NAMES.CSFeeDistributor_v1]: [],
-  [CONTRACT_NAMES.CSFeeOracle_v1]: [],
-  [CONTRACT_NAMES.CSModule_v1]: [],
-  [CONTRACT_NAMES.HashConsensus_v1]: [],
 };
 
 export const getMetricContractAbi = memoize((contractName: CONTRACT_NAMES) => {

@@ -9,7 +9,6 @@ import {
 import { useCallback, useEffect } from 'react';
 import { useConnectorInfo, useDisconnect } from 'reef-knot/core-react';
 
-import { getEtherscanAddressLink } from '@lido-sdk/helpers';
 import { useDappStatus } from 'modules/web3';
 import Link from 'next/link';
 import type { ModalComponentType } from 'providers/modal-provider';
@@ -23,6 +22,7 @@ import {
   WalletModalContentStyle,
   WalletModalDisconnectStyle,
 } from './styles';
+import { getEtherscanAddressLink } from 'utils';
 
 export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
   const { address, chainId } = useDappStatus();

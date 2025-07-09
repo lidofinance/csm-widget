@@ -1,8 +1,8 @@
-import useSWR from 'swr';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useSurveysFetcher } from './use-surveys-fetcher';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
+import { STRATEGY_LAZY } from 'consts';
+import { useNodeOperatorId } from 'modules/web3';
 
 type Options<T, R> = {
   skipFetching?: boolean;
@@ -15,41 +15,67 @@ export const useSurveysSWR = <T, R = T>(
   options?: Options<T, R>,
 ) => {
   const nodeOperatorId = useNodeOperatorId();
-  const url = `csm-${nodeOperatorId}/${path}`;
+  const url = `csm-${String(nodeOperatorId)}/${path}`;
+  const queryClient = useQueryClient();
 
   const [fetcher, updater] = useSurveysFetcher<T, R>(
     options?.transformIncoming,
     options?.transformOutcoming,
   );
-  const swr = useSWR<T>(
-    url,
-    options?.skipFetching ? null : fetcher,
-    STRATEGY_LAZY,
-  );
+
+  const query = useQuery<T>({
+    queryKey: ['surveys', url],
+    queryFn: () => fetcher(url),
+    enabled: !options?.skipFetching && !!nodeOperatorId,
+    ...STRATEGY_LAZY,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: (data: T) => updater(url, data)(),
+    onSuccess: (result) => {
+      queryClient.setQueryData(['surveys', url], result);
+    },
+    onError: () => {
+      void queryClient.invalidateQueries({ queryKey: ['surveys', url] });
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: () => updater(url, null)(),
+    onSuccess: () => {
+      queryClient.setQueryData(['surveys', url], null);
+    },
+    onError: () => {
+      void queryClient.invalidateQueries({ queryKey: ['surveys', url] });
+    },
+  });
 
   const mutate = useCallback(
     (data?: T) => {
       if (data === undefined) {
-        return swr.mutate();
+        void queryClient.invalidateQueries({ queryKey: ['surveys', url] });
+        return Promise.resolve();
       }
-      return swr.mutate(updater(url, data), {
-        rollbackOnError: true,
-        revalidate: false,
-      });
+      return updateMutation.mutateAsync(data);
     },
-    [swr, updater, url],
+    [queryClient, updateMutation, url],
   );
 
   const remove = useCallback(() => {
-    return swr.mutate(updater(url, null), {
-      rollbackOnError: true,
-      revalidate: false,
-    });
-  }, [swr, updater, url]);
+    return deleteMutation.mutateAsync();
+  }, [deleteMutation]);
 
   return {
-    ...swr,
+    data: query.data,
+    error: query.error,
+    isLoading: query.isLoading,
+    loading: query.isLoading,
+    initialLoading: query.isLoading && query.isFetching,
     mutate,
     remove,
+    update: () => {
+      void queryClient.invalidateQueries({ queryKey: ['surveys', url] });
+      return Promise.resolve();
+    },
   };
 };

@@ -1,14 +1,14 @@
 import { PATH } from 'consts/urls';
 import { StealingCancelPage } from 'features/stealing';
-import { getProps } from 'utils';
-import { useIsReportStealingRole } from 'shared/hooks';
+import { useHasReportStealingRole } from 'modules/web3';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { getProps } from 'utils';
 
 const Page = () => {
-  const { initialLoading } = useIsReportStealingRole();
+  const { isPending } = useHasReportStealingRole();
 
   return (
-    <GateLoaded additional={initialLoading}>
+    <GateLoaded additional={isPending}>
       <Gate
         rule="EL_STEALING_REPORTER"
         fallback={<Navigate path={PATH.HOME} />}

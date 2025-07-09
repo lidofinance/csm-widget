@@ -1,28 +1,27 @@
-import { getBlockNumber } from '@wagmi/core';
 import { useDappStatus } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
 import { removeKeys, saveKeys } from 'shared/keys/cachedKeys';
-import { useConfig } from 'wagmi';
+import { usePublicClient } from 'wagmi';
 
 // FIXME: refactor
 export const useKeysCache = () => {
   const { chainId } = useDappStatus();
-  const config = useConfig();
+  const client = usePublicClient();
 
   const addCacheKeys = useCallback(
     async (publicKeys: string[]) => {
-      const currentBlock = await getBlockNumber(config);
+      const currentBlock = await client?.getBlockNumber();
       saveKeys(publicKeys, chainId, Number(currentBlock));
     },
-    [chainId, config],
+    [chainId, client],
   );
 
   const removeCacheKeys = useCallback(
     async (publicKeys: string[]) => {
-      const currentBlock = await getBlockNumber(config);
+      const currentBlock = await client?.getBlockNumber();
       removeKeys(publicKeys, chainId, Number(currentBlock));
     },
-    [chainId, config],
+    [chainId, client],
   );
 
   return useMemo(

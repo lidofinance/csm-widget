@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_IMMUTABLE } from 'consts/react-query-strategies';
+import { STRATEGY_IMMUTABLE } from 'consts';
 import { useLidoSDK } from '../web3-provider';
 import { usePermissionlessCurveId } from './use-permissionless-curve-id';
 import invariant from 'tiny-invariant';

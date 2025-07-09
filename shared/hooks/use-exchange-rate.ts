@@ -1,7 +1,6 @@
 import { PerToken, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
-import { ONE_ETH } from 'consts';
-import { STRATEGY_IMMUTABLE } from 'consts/react-query-strategies';
+import { ONE_ETH, STRATEGY_IMMUTABLE } from 'consts';
 import { useStETHByWstETH } from 'modules/web3';
 import invariant from 'tiny-invariant';
 

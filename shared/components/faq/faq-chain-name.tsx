@@ -1,10 +1,10 @@
-import { getEtherscanAddressLink } from '@lido-sdk/helpers';
 import { CSM_CONTRACT_ADDRESSES } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { useDappStatus } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
 import { useChainName } from 'shared/hooks';
 import { FaqLink } from './faq-link';
+import { getEtherscanAddressLink } from 'utils';
 
 export const FaqChainName: FC = () => {
   const chainName = useChainName(false);

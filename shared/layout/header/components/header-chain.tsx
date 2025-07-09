@@ -1,4 +1,3 @@
-import { CHAINS } from 'consts';
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
 import { NoSSRWrapper } from 'shared/components';
@@ -8,6 +7,7 @@ import {
   HeaderWalletChainStyle,
   HeaderWalletChainWrapper,
 } from '../styles';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 const HeaderChain: FC = () => {
   const { chainId } = useDappStatus();

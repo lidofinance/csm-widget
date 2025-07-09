@@ -5,6 +5,7 @@ type Props = {
   rewards?: Rewards;
 };
 
+// TODO: convert to util
 export const useAvailableToClaim = ({ bond, rewards }: Props) => {
   if (!bond) return 0n;
 

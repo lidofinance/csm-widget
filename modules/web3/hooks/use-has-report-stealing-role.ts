@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_IMMUTABLE } from 'consts/react-query-strategies';
+import { STRATEGY_IMMUTABLE } from 'consts';
 import { useLidoSDK } from '../web3-provider';
 import { useDappStatus } from './use-dapp-status';
 import invariant from 'tiny-invariant';

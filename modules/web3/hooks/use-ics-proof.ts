@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
+import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { Address } from 'viem';
 import { useLidoSDK } from '../web3-provider';

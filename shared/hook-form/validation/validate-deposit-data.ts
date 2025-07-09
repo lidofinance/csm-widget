@@ -1,13 +1,16 @@
-import { CHAINS, KEYS_UPLOAD_TX_LIMIT } from 'consts';
-import { getCsmConstants } from 'consts/csm-constants';
+import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
 import { validate } from 'shared/keys';
 import invariant from 'tiny-invariant';
 import type { DepositData } from 'types';
 import { ValidationError } from './validation-error';
+import {
+  CSM_CONTRACT_ADDRESSES,
+  CSM_SUPPORTED_CHAINS,
+} from '@lidofinance/lido-csm-sdk';
 
 type ValidateDepositDataProps = {
   depositData: DepositData[];
-  chainId?: CHAINS;
+  chainId?: CSM_SUPPORTED_CHAINS;
   blockNumber?: number;
 };
 
@@ -16,8 +19,8 @@ export const validateDepositData = async ({
   chainId,
   blockNumber,
 }: ValidateDepositDataProps) => {
-  const wc = getCsmConstants(chainId).withdrawalCredentials;
   invariant(chainId, 'chainId is not specified');
+  const wc = CSM_CONTRACT_ADDRESSES[chainId]?.withdrawalVault;
   invariant(wc, 'WC is not specified');
   const error = await validate(
     depositData,

@@ -1,11 +1,11 @@
 import { Button, Text } from '@lidofinance/lido-ui';
 import { getConfig } from 'config';
-import { CHAINS } from 'consts/chains';
 import { CSM_MAINNET_LINK, CSM_TESTNET_LINK } from 'consts/external-links';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 import { StyledBlock, StyledStack } from './styles';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 const { defaultChain } = getConfig();
 

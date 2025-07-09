@@ -1,7 +1,7 @@
 import { config } from 'config';
 import { Cache } from 'memory-cache';
 import { CurrentFrame } from 'types/ethseer';
-import { getClient, getCsmContract } from './getClient';
+import { getClient } from './getClient';
 
 const cache = new Cache<string, CurrentFrame>();
 
@@ -19,34 +19,12 @@ export const getCurrentFrame = async () => {
 };
 
 export const _getCurentFrame = async (): Promise<CurrentFrame> => {
-  const client = getClient();
-
-  const hashConsensus = getCsmContract(client, 'HashConsensus');
-  const csFeeOracle = getCsmContract(client, 'CSFeeOracle');
-
-  const [
-    [slotsPerEpoch, secondsPerSlot, genesisTime],
-    [, epochsPerFrame],
-    refSlot,
-    { timestamp: latestBlockTimestamp },
-  ] = await Promise.all([
-    hashConsensus.read.getChainConfig(),
-    hashConsensus.read.getFrameConfig(),
-    csFeeOracle.read.getLastProcessingRefSlot(),
-    client.getBlock({ blockTag: 'latest' }),
-  ]);
-
-  const latestSlot = (latestBlockTimestamp - genesisTime) / secondsPerSlot;
-  const slotsPerFrame = epochsPerFrame * slotsPerEpoch;
-
-  const startSlot =
-    ((latestSlot - refSlot) / slotsPerFrame) * slotsPerFrame + refSlot;
-  const startTimestamp = startSlot * secondsPerSlot + genesisTime;
-  const numberEpochs = (latestSlot - startSlot) / slotsPerEpoch;
+  const csm = getClient();
+  const frame = await csm.frame.getCurentFrame();
 
   return {
-    endTimestamp: Number(latestBlockTimestamp),
-    startTimestamp: Number(startTimestamp),
-    numberEpochs: Number(numberEpochs),
+    endTimestamp: frame.now,
+    startTimestamp: frame.start,
+    numberEpochs: frame.passEpochs,
   };
 };

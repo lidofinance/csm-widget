@@ -9,7 +9,6 @@ import { useKeysCache } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
-import { formatKeys } from 'utils';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
 import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
@@ -36,8 +35,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
       invariant(amount, 'BondAmount is not defined');
 
       try {
-        const { keysCount } = formatKeys(depositData);
-
+        const keysCount = depositData.length;
         const callback: TransactionCallback = async ({ stage, payload }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:

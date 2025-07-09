@@ -1,4 +1,3 @@
-import { CHAINS } from 'consts';
 import { trimAddress } from '@lidofinance/address';
 import { DepositData, DepositDataV1, DepositDataV2 } from 'types';
 import { compareLowercase, isHexadecimalString } from 'utils';
@@ -12,6 +11,7 @@ import {
   SIGNATURE_LENGTH,
   TRIM_LENGTH,
 } from './constants';
+import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 const assertPubkey = (pubkey: string): void => {
   if (typeof pubkey !== 'string') {
@@ -47,7 +47,7 @@ const assertSignature = (signature: string): void => {
 
 export const checkItem = (
   depositData: DepositData,
-  chainId: CHAINS,
+  chainId: CSM_SUPPORTED_CHAINS,
   wc: string,
 ) => {
   assertPubkey(depositData.pubkey);

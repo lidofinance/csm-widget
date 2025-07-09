@@ -4,7 +4,6 @@ import { rpcFactory } from '@lidofinance/next-pages';
 import { trackedFetchRpcFactory } from '@lidofinance/api-rpc';
 import { config, secretConfig } from 'config';
 import { API_ROUTES } from 'consts/api';
-import { CHAINS } from 'consts/chains';
 import { METRICS_PREFIX } from 'consts/metrics';
 import {
   defaultErrorHandler,
@@ -19,6 +18,7 @@ import {
   allowedLogsAddresses,
 } from 'utilsApi';
 import Metrics from 'utilsApi/metrics';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 const allowedRPCMethods = [
   'test',

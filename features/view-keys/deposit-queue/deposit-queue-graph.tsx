@@ -31,9 +31,9 @@ export const DepositQueueGraph: FC = () => {
             />
             <Part type="queued" {...graph.queue} />
             <Part type="queuedOverLimit" {...graph.queueOverLimit} />
-            {graph.your?.map((batch, index) => (
+            {/* {graph.your?.map((batch, index) => (
               <Part key={index} type="yourQueued" {...batch} />
-            ))}
+            ))} */}
             <Part type="added" {...graph.added} />
           </LineStyle>
           <Part type="limit" {...graph.limit} />

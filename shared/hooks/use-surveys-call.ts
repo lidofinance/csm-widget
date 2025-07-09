@@ -1,5 +1,5 @@
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { getConfig } from 'config';
-import { CHAINS } from 'consts/chains';
 import { isBefore, parseISO } from 'date-fns';
 
 const { defaultChain } = getConfig();

@@ -3,10 +3,9 @@
 //    import { config } from 'config';
 // '''
 // otherwise you will get something like a cyclic error!
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from '../get-config';
 import { UserConfigDefaultType } from './types';
-
-import { CHAINS } from 'consts/chains';
 
 export const getUserConfigDefault = (): UserConfigDefaultType => {
   return {

@@ -7,6 +7,7 @@ import { DiffBadge } from './diff-badge';
 import { Rate } from './styles';
 import { Tip } from './tip';
 import { useEthseerApi } from './use-ethseer-api';
+// import { useNodeOperatorId } from 'modules/web3';
 
 export const AttestationRateSection: FC = () => {
   // const id = useNodeOperatorId();

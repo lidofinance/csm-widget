@@ -1,4 +1,5 @@
-import { CHAINS } from 'consts';
+import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 export const TRIM_LENGTH = 6;
 
@@ -10,7 +11,7 @@ export const FIXED_AMOUNT = 32000000000;
 export const FIXED_WC_PREFIX = '010000000000000000000000';
 
 export const FIXED_NETWORK: {
-  [key in CHAINS]?: string[];
+  [key in CSM_SUPPORTED_CHAINS]?: string[];
 } = {
   [CHAINS.Mainnet]: ['mainnet'],
   [CHAINS.Holesky]: ['holesky'],
@@ -18,7 +19,7 @@ export const FIXED_NETWORK: {
 };
 
 export const FIXED_FORK_VERSION: {
-  [key in CHAINS]?: string;
+  [key in CSM_SUPPORTED_CHAINS]?: string;
 } = {
   [CHAINS.Mainnet]: '00000000',
   [CHAINS.Holesky]: '01017000',

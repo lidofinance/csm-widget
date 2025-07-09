@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_CONSTANT } from 'consts/react-query-strategies';
+import { STRATEGY_CONSTANT } from 'consts';
 import { useMemo } from 'react';
+import invariant from 'tiny-invariant';
 import { useDappStatus } from '../hooks';
 import { useLidoSDK } from '../web3-provider';
 import { useCachedNodeOperator } from './use-cached-node-operator';
-import invariant from 'tiny-invariant';
 
 export const useAvailableOperators = () => {
   const { csm } = useLidoSDK();

@@ -1,4 +1,3 @@
-import { formatEther } from '@ethersproject/units';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
@@ -14,6 +13,7 @@ import type {
   UnlockBondFormNetworkData,
 } from './types';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { formatEther } from 'viem';
 
 export const useUnlockBondValidation = (
   networkData: UnlockBondFormNetworkData,

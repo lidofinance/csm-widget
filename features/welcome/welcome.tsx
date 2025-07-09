@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import { getConfig } from 'config';
-import { CHAINS } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useDappStatus } from 'modules/web3';
 import { Stack, WelcomeSection } from 'shared/components';
@@ -9,6 +8,7 @@ import { Connect, Fallback } from 'shared/wallet';
 import styled from 'styled-components';
 import { HoleskyBanner } from './holesky-banner';
 import { HoodiBanner } from './hoodi-banner';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 const { defaultChain } = getConfig();
 

@@ -83,9 +83,6 @@ This is a Next.js React application for Lido's Community Staking Module (CSM) wi
 - Includes bundle analysis with `ANALYZE_BUNDLE=true yarn build`
 - Has automatic versioning using conventional commits
 - Uses Playwright for e2e testing with wallet extensions
-- Project in process of migration from using `ethers.js` and `swr` to use `viem` and `react-query`. Also migrate from BigNumber to native BigInt
-- Project in process of migration from `@lido-sdk/*` packages to `@lidofinance/lido-ethereum-sdk` and `@lidofinance/lido-csm-sdk`
-- Project in process of migration of type/enum 'TOKENS' from local 'consts' to imported from `@lidofinance/lido-csm-sdk`
 
 ## Code Formatting
 

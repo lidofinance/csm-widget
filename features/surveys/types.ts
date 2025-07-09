@@ -1,5 +1,3 @@
-import { BigNumber } from 'ethers';
-
 export type Contact = {
   name?: string;
   discord?: string;
@@ -43,7 +41,7 @@ export type Setup = {
   validatorCountry?: string;
   validatorSameAsCl?: boolean;
   remoteSigner: string;
-  mevMinBid?: BigNumber;
+  mevMinBid?: bigint;
 };
 
 export type SetupRaw = Omit<Setup, 'mevMinBid'> & {

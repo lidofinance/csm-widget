@@ -1,10 +1,7 @@
-import { useLidoSWR } from '@lido-sdk/react';
-import { API_ROUTES } from 'consts/api';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { useMemo } from 'react';
-import { useMergeSwr } from 'shared/hooks';
-import { NodeOperatorId } from 'types';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { useQuery } from '@tanstack/react-query';
+import { API_ROUTES, STRATEGY_LAZY } from 'consts';
+import { useNodeOperatorId } from 'modules/web3';
 import { RateReponse } from 'types/ethseer';
 import { standardFetcher } from 'utils';
 
@@ -12,31 +9,31 @@ const BP = 10_000;
 
 export type RateStatus = 'good' | 'semi' | 'bad';
 
-const useEthSeerRate = (
-  nodeOperatorId?: NodeOperatorId,
-  config = STRATEGY_LAZY,
-) => {
+const useEthSeerRate = (nodeOperatorId?: NodeOperatorId) => {
   const BASE_URL = typeof window === 'undefined' ? '' : window.location.origin;
   const url = `${BASE_URL}/${API_ROUTES.ETHSEER_RATE}?node-operator-id=${nodeOperatorId}`;
 
-  return useLidoSWR(
-    ['ethseer', nodeOperatorId],
-    nodeOperatorId ? async () => standardFetcher<RateReponse>(url) : null,
-    config,
-  );
+  return useQuery({
+    queryKey: ['ethseer', { nodeOperatorId }],
+    queryFn: async () => standardFetcher<RateReponse>(url),
+    enabled: nodeOperatorId !== undefined,
+    ...STRATEGY_LAZY,
+  });
 };
 
 export const useEthseerApi = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const swrRateApi = useEthSeerRate(nodeOperatorId);
-  // const swrPerfLeeway = usePerfLeeway();
+  const queryRateApi = useEthSeerRate(nodeOperatorId);
+  // const queryPerfLeeway = usePerfLeeway(); // FIXME: use perf leeway
 
-  const data = swrRateApi.data;
-  const leeway = 500; // swrPerfLeeway.data;
+  const data = queryRateApi.data;
+  const leeway = 500; // queryPerfLeeway.data;
 
-  return useMergeSwr(
-    [swrRateApi],
-    useMemo(() => {
+  return useQuery({
+    queryKey: ['ethseer-api', nodeOperatorId, data, leeway],
+    queryFn: ():
+      | (RateReponse & { threshold: number; status: RateStatus })
+      | undefined => {
       if (!data || !leeway) return undefined;
       const offset = leeway / BP;
       const threshold = data.overallAttestationRate - offset;
@@ -51,6 +48,8 @@ export const useEthseerApi = () => {
               ? 'good'
               : ('semi' as RateStatus),
       };
-    }, [data, leeway]),
-  );
+    },
+    enabled: !!data && !!leeway,
+    ...STRATEGY_LAZY,
+  });
 };
