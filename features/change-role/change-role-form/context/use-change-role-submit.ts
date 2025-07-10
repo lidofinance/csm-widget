@@ -1,9 +1,9 @@
 import {
+  ROLES,
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { ROLES } from 'consts/roles';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { handleTxError } from 'shared/transaction-modal';

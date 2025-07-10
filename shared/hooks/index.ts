@@ -12,7 +12,6 @@ export * from './use-copy-to-clipboard';
 export * from './use-csm-constants';
 export * from './use-current-curve-id';
 export * from './use-default-values';
-export * from './use-ens-name';
 export * from './use-eth-price-fallback';
 export * from './use-eth-usd';
 export * from './use-exchange-rate';
