@@ -25,7 +25,7 @@ export const Info: FC = () => {
         />
 
         {proposedAddress && (
-          <Stack direction="column" gap="sm">
+          <Stack direction="column" gap="sm" data-testid="proposedAddress">
             <TitledAddress
               title={
                 <>

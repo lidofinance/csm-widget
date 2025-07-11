@@ -1,6 +1,6 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
-import { test } from '../test.fixture';
+import { test } from '../../test.fixture';
 import { KeysPage } from 'tests/pages';
 import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
