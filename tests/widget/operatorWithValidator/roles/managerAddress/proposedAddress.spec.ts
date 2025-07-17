@@ -67,7 +67,7 @@ test.describe(
       },
     );
 
-    test('Verify input appearence', async ({ widgetService }) => {
+    test(qase(232, 'Verify input appearence'), async ({ widgetService }) => {
       const managerAddressPage = widgetService.rolesPage.managerAddressPage;
 
       await test.step('Verify input', async () => {
@@ -82,7 +82,7 @@ test.describe(
       });
     });
 
-    test('Verify button appearence', async ({ widgetService }) => {
+    test(qase(233, 'Verify button appearence'), async ({ widgetService }) => {
       const managerAddressPage = widgetService.rolesPage.managerAddressPage;
 
       await test.step('Verify button', async () => {

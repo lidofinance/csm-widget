@@ -66,7 +66,7 @@ test.describe(
       },
     );
 
-    test('Verify input appearence', async ({ widgetService }) => {
+    test(qase(236, 'Verify input appearence'), async ({ widgetService }) => {
       const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
 
       await test.step('Verify input', async () => {
@@ -81,7 +81,7 @@ test.describe(
       });
     });
 
-    test('Verify button appearence', async ({ widgetService }) => {
+    test(qase(237, 'Verify button appearence'), async ({ widgetService }) => {
       const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
 
       await test.step('Verify button', async () => {

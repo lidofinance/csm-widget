@@ -36,7 +36,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
     },
   );
 
-  test('Verify input appearence', async ({ widgetService }) => {
+  test(qase(238, 'Verify input appearence'), async ({ widgetService }) => {
     const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
 
     await test.step('Verify input', async () => {
@@ -51,7 +51,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
     });
   });
 
-  test('Verify button appearence', async ({ widgetService }) => {
+  test(qase(239, 'Verify button appearence'), async ({ widgetService }) => {
     const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
 
     await test.step('Verify button', async () => {

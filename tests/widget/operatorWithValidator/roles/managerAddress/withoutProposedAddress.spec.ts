@@ -36,7 +36,7 @@ test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () =
     },
   );
 
-  test('Verify input appearence', async ({ widgetService }) => {
+  test(qase(234, 'Verify input appearence'), async ({ widgetService }) => {
     const managerAddressPage = widgetService.rolesPage.managerAddressPage;
 
     await test.step('Verify input', async () => {
@@ -51,7 +51,7 @@ test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () =
     });
   });
 
-  test('Verify button appearence', async ({ widgetService }) => {
+  test(qase(235, 'Verify button appearence'), async ({ widgetService }) => {
     const managerAddressPage = widgetService.rolesPage.managerAddressPage;
 
     await test.step('Verify button', async () => {
