@@ -12,6 +12,7 @@ import { useCorrectPath } from './use-correct-path';
 type LocalLinkProps = Omit<LinkProps, 'href'> & {
   href?: PATH;
   anchor?: `#${string}`;
+  'data-testid'?: string;
 };
 
 export const LocalLink: FC<
