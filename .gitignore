@@ -43,7 +43,9 @@ yarn-error.log*
 #ide
 .vscode
 .idea
-
-/public/runtime/
+.claude
+.mcp.json
 .qodo
 **/.browser_context**
+
+/public/runtime/
