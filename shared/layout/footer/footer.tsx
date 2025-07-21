@@ -50,6 +50,8 @@ export const Footer: FC = () => {
         </FooterLink>
         <LinkDivider />
         <FooterLink href={feedbackForm}>Feedback form</FooterLink>
+        <LinkDivider />
+        <FooterLink href="https://discord.com/invite/lido">Discord</FooterLink>
       </Stack>
       <Version href={link}>{label}</Version>
     </FooterStyle>
