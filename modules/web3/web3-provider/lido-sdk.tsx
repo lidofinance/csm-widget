@@ -17,7 +17,6 @@ import {
 import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
 import { LidoSDKStake, LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
-import { overridedAddresses } from './devnet';
 import { useClApiUrl } from 'config/rpc/cl';
 
 type LidoSDKContextValue = {
@@ -84,7 +83,6 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     const csm = new LidoSDKCsm({
       core,
       clApiUrl,
-      overridedAddresses,
       // maxEventBlocksRange: config.MAX_BLOCK_RANGE_FOR_EVENTS,
     });
 

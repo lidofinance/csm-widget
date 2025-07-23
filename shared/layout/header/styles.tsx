@@ -22,10 +22,12 @@ export const HeaderStyle = styled.header`
   left: 0;
   right: 0;
   padding: 18px 32px;
+  padding-top: 50px;
   margin: 0 -32px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
     padding: 18px 20px;
+    padding-top: 50px;
     margin: 0 -20px;
   }
 

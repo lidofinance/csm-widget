@@ -39,7 +39,7 @@ import {
   ValidatorsExitBusOracleAbi,
   VettedGateAbi,
 } from '@lidofinance/lido-csm-sdk/abi';
-import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
+// import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 
 const CONTRACT_NAMES = {
   ...CSM_CONTRACT_NAMES,
@@ -79,7 +79,6 @@ const STATIC_ADDRESSES: {
   },
   [CHAINS.Hoodi]: {
     [CONTRACT_NAMES.lidoLocator]: '0xe2EF9536DAAAEBFf5b1c130957AB3E80056b06D8',
-    ...overridedAddresses,
   },
 };
 
