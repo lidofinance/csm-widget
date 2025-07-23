@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { config } from 'config';
 import { useMemo, useCallback } from 'react';
 import {
@@ -139,10 +140,10 @@ export const useWeb3Transport = (
             name: backendRpcMap[chain.id],
           }),
           // fallback rpc from wagmi.chains like cloudfare-eth
-          http(undefined, {
-            batch: batchConfig,
-            name: 'default HTTP RPC',
-          }),
+          // http(undefined, {
+          //   batch: batchConfig,
+          //   name: 'default HTTP RPC',
+          // }),
         ]);
         return {
           transportMap: {
@@ -164,21 +165,21 @@ export const useWeb3Transport = (
 
   const onActiveConnection = useCallback(
     async (activeConnection: Connection | null) => {
-      for (const chain of supportedChains) {
-        const setTransport = setTransportMap[chain.id];
-        if (
-          activeConnection &&
-          chain.id === activeConnection.chainId &&
-          activeConnection.connector.type === 'injected'
-        ) {
-          const provider = (await activeConnection.connector?.getProvider?.({
-            chainId: chain.id,
-          })) as EIP1193Provider | undefined;
-
-          setTransport(provider ? custom(provider) : null);
-        } else setTransport(null);
-      }
+      // for (const chain of supportedChains) {
+      // const setTransport = setTransportMap[chain.id];
+      // if (
+      //   activeConnection &&
+      //   chain.id === activeConnection.chainId &&
+      //   activeConnection.connector.type === 'injected'
+      // ) {
+      //   const provider = (await activeConnection.connector?.getProvider?.({
+      //     chainId: chain.id,
+      //   })) as EIP1193Provider | undefined;
+      //   setTransport(provider ? custom(provider) : null);
+      // } else setTransport(null);
+      // }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [setTransportMap, supportedChains],
   );
 
