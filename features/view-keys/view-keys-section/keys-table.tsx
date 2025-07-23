@@ -95,7 +95,7 @@ export const KeysTable: FC<Props> = ({ keys }) => {
         {sortedKeys?.map(
           ({ pubkey, index, statuses, strikes, validatorIndex }) => (
             <tr key={index}>
-              <td>
+              <td data-testid="pubkeyCell">
                 <Pubkey
                   pubkey={pubkey}
                   link={
@@ -110,7 +110,7 @@ export const KeysTable: FC<Props> = ({ keys }) => {
                   }
                 />
               </td>
-              <td>
+              <td data-testid="statusCell">
                 <Stack direction="column" gap="xs">
                   {statuses.map((status) => (
                     <StatusChip status={status} key={status} />
@@ -120,7 +120,7 @@ export const KeysTable: FC<Props> = ({ keys }) => {
               <td>
                 <StrikesCount strikes={strikes} />
               </td>
-              <td>
+              <td data-testid="statusCommentCell">
                 <StatusComment statuses={statuses} />
               </td>
             </tr>

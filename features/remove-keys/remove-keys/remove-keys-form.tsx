@@ -11,7 +11,7 @@ import { AmountInput } from './controls/amount-input';
 export const RemoveKeysForm: FC = memo(() => {
   return (
     <RemoveKeysFormProvider>
-      <FormBlock>
+      <FormBlock data-testid="removeKeysForm">
         <FormLoading>
           <FormControllerStyled>
             <KeysSelector />

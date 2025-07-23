@@ -2,6 +2,7 @@ import type { PlaywrightTestConfig } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
 import { getReportConfig } from 'tests/config/report.config';
 import { storageState } from 'tests/config/storageState';
+import { prepareGrep } from 'tests/helpers/tests';
 
 // TODO: move it pls
 export const httpCredentials =
@@ -20,6 +21,7 @@ const config: PlaywrightTestConfig = {
   },
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
+  retries: process.env.CI ? 1 : 0,
   workers: 1,
   reporter: getReportConfig(),
   use: {
@@ -39,6 +41,7 @@ const config: PlaywrightTestConfig = {
     {
       name: 'widget',
       testDir: './tests',
+      grep: prepareGrep(process.env.TEST_TAGS),
     },
   ],
 };

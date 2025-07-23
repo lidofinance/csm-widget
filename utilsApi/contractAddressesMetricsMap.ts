@@ -53,6 +53,7 @@ const CONTRACT_NAMES = {
   ens4: 'ens4',
   ens5: 'ens5',
   ens6: 'ens6',
+  some1: 'some1',
 } as const;
 type CONTRACT_NAMES = keyof typeof CONTRACT_NAMES;
 
@@ -79,6 +80,7 @@ const STATIC_ADDRESSES: {
   },
   [CHAINS.Hoodi]: {
     [CONTRACT_NAMES.lidoLocator]: '0xe2EF9536DAAAEBFf5b1c130957AB3E80056b06D8',
+    [CONTRACT_NAMES.some1]: '0xfe56573178f1bcdf53F01A6E9977670dcBBD9186', // FIXME: fix
   },
 };
 
@@ -126,6 +128,7 @@ const METRIC_CONTRACT_ABIS: Record<CONTRACT_NAMES, Abi> = {
   [CONTRACT_NAMES.ens4]: [],
   [CONTRACT_NAMES.ens5]: [],
   [CONTRACT_NAMES.ens6]: [],
+  [CONTRACT_NAMES.some1]: [],
   [CONTRACT_NAMES.validatorsExitBusOracle]: ValidatorsExitBusOracleAbi,
   [CONTRACT_NAMES.stakingRouter]: StakingRouterAbi,
   [CONTRACT_NAMES.csModule]: CSModuleAbi,

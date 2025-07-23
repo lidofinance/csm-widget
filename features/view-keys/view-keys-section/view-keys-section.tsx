@@ -10,7 +10,7 @@ export const ViewKeysSection: FC = () => {
     useOperatorKeysWithStatus(nodeOperatorId);
 
   return (
-    <ViewKeysBlock>
+    <ViewKeysBlock data-testid="viewKeysBlock">
       <WhenLoaded
         loading={loading}
         empty={!keys?.length && 'There are no keys to display'}

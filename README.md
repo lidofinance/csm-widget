@@ -71,9 +71,6 @@ STAND_TYPE=testnet
 # Wallet environment
 WALLET_SECRET_PHRASE=
 WALLET_PASSWORD=
-
-# RPC token
-RPC_URL_TOKEN=
 ```
 
 Replace each value as needed for your environment.

@@ -40,7 +40,7 @@ export const SourceSelect: FC = () => {
 
   return (
     <>
-      <Stack spaceBetween>
+      <Stack spaceBetween data-testid="availableToClaimBalance">
         <FormTitle>Available to claim</FormTitle>
         <AmountWithPrice
           big
@@ -49,7 +49,7 @@ export const SourceSelect: FC = () => {
           loading={loading.isBondLoading || loading.isRewardsLoading}
         />
       </Stack>
-      <Latice>
+      <Latice data-testid="sourceSelect">
         <TitledSelectableAmount
           title={
             <Checkbox
@@ -65,6 +65,7 @@ export const SourceSelect: FC = () => {
           loading={loading.isRewardsLoading}
           amount={rewards?.available}
           token={TOKENS.steth}
+          data-testid="rewardsSource"
         />
         <TitledSelectableAmount
           warning={bond?.isInsufficient}
@@ -85,6 +86,7 @@ export const SourceSelect: FC = () => {
           loading={loading.isBondLoading}
           amount={bond?.delta}
           token={TOKENS.steth}
+          data-testid="excessBondSource"
         />
         {showLockedBond && (
           <TitledSelectableAmount

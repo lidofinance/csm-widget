@@ -24,10 +24,12 @@ export const TitledAmount: FC<TitledAddressProps> = ({
   help,
   loading,
   warning,
+  ...props
 }) => {
   return (
     <TitledAmountStyle
       $warning={warning && amount !== undefined && amount > 0n}
+      {...props}
     >
       <Stack gap="xs" center>
         <Stack gap="md" center>

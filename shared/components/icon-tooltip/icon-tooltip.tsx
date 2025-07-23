@@ -22,7 +22,7 @@ export const IconTooltip: FC<Props> = ({
     <>
       {inline && <>&nbsp;</>}
       <Tooltip placement={placement} title={tooltip} {...rest}>
-        <IconStyle inline={inline}>
+        <IconStyle inline={inline} data-testid="iconTooltip">
           {type === 'calendar' ? <CalendarIcon /> : <InfoIcon />}
         </IconStyle>
       </Tooltip>

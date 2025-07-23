@@ -24,7 +24,7 @@ export const AmountWithPrice: FC<TitledAddressProps> = ({
   const { usdAmount } = useEthUsd(amount);
 
   return (
-    <Wrapper $big={big}>
+    <Wrapper $big={big} data-testid="amountPrice">
       {loading ? (
         <InlineLoader color="text" />
       ) : (
@@ -33,7 +33,7 @@ export const AmountWithPrice: FC<TitledAddressProps> = ({
           <AmountStyle>
             <FormatToken amount={amount} token={token} />
           </AmountStyle>
-          <PriceStyle>
+          <PriceStyle data-testid="usdPrice">
             <FormatPrice amount={usdAmount} approx />
           </PriceStyle>
         </>

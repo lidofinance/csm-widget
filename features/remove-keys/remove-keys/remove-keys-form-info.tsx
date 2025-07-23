@@ -15,10 +15,16 @@ export const RemoveKeysFormInfo = () => {
 
   return (
     <DataTable>
-      <DataTableRow title="Number of keys to remove">{count}</DataTableRow>
+      <DataTableRow
+        title="Number of keys to remove"
+        data-testid="numbersOfKeysToRemove"
+      >
+        {count}
+      </DataTableRow>
       <DataTableRow
         title={`${balance?.isInsufficient ? 'Insufficient' : 'Excess'} bond after execution`}
         loading={isBalanceLoading}
+        data-testid="excessBondAfterExecution"
       >
         <FormatToken amount={balance?.delta} token={TOKENS.steth} />
       </DataTableRow>

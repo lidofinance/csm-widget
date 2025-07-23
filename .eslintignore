@@ -18,3 +18,5 @@
 /generated
 
 **/.browser_context**
+
+/tests

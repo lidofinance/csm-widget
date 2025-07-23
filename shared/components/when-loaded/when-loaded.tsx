@@ -24,7 +24,7 @@ export const WhenLoaded: FC<PropsWithChildren<Props>> = ({
       </>
     ) : loading ? (
       <WrapperStyle>
-        <Loader />
+        <Loader data-testid="loader" />
       </WrapperStyle>
     ) : empty ? (
       <>

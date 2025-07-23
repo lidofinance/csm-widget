@@ -20,11 +20,19 @@ export const AddBondFormInfo = () => {
 
   return (
     <DataTable>
-      <DataTableRow title="Bond balance will receive" loading={receive.loading}>
+      <DataTableRow
+        title="Bond balance will receive"
+        loading={receive.loading}
+        data-testid="balanceWillReceive"
+      >
         <FormatToken amount={receive.amount} token={TOKENS.steth} />
       </DataTableRow>
       {token !== TOKENS.steth && (
-        <DataTableRow title="Exchange rate" loading={isExchangeLoading}>
+        <DataTableRow
+          title="Exchange rate"
+          loading={isExchangeLoading}
+          data-testid="exchangeRate"
+        >
           <FormatToken amount={ONE_ETH} token={token} /> ={' '}
           <FormatToken amount={exchange?.[token]} token={TOKENS.steth} />
         </DataTableRow>

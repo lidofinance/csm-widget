@@ -8,4 +8,9 @@ type LaticeProps = {
 export const Latice: FC<PropsWithChildren<LaticeProps>> = ({
   children,
   variant = 'default',
-}) => <LaticeStyle $variant={variant}>{children}</LaticeStyle>;
+  ...props
+}) => (
+  <LaticeStyle $variant={variant} {...props}>
+    {children}
+  </LaticeStyle>
+);

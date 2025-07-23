@@ -44,7 +44,7 @@ export const FormatToken: FormatTokenComponent = ({
   const prefix = amount && approx ? '≈ ' : '';
 
   const body = (
-    <span {...rest}>
+    <span {...rest} data-testid="tokenAmount">
       {prefix}
       {trimmed}&nbsp;{symbol}
     </span>

@@ -12,7 +12,7 @@ type DescriptorIdProps = {
 
 export const DescriptorId: FC<DescriptorIdProps> = ({ id }) => {
   return (
-    <DescriptorIdWrapperStyle>
+    <DescriptorIdWrapperStyle data-testid="descriptorId">
       <DescriptorText>Node Operator</DescriptorText> #
       <DescriptorNumber>{id.toString()}</DescriptorNumber>
     </DescriptorIdWrapperStyle>
