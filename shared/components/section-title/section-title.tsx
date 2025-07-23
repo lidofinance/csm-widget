@@ -12,7 +12,7 @@ export const SectionTitle: FC<PropsWithChildren<Props>> = ({
   extra,
 }) => {
   return (
-    <SectionHeaderStyle>
+    <SectionHeaderStyle data-testid="sectionHeader">
       <SectionTitleStyle>{children}</SectionTitleStyle>
       {middle}
       {extra}

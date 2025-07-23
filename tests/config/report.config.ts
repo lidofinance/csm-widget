@@ -54,7 +54,7 @@ const reporters: {
   qaseReporter: ReporterDescription;
 } = {
   htmlReporter: ['html', { open: 'never' }],
-  consoleReporter: ['list', { printSteps: !process.env.CI }],
+  consoleReporter: ['list'],
   githubReporter: ['github'],
   discordReport: [
     '@lidofinance/discord-reporter',

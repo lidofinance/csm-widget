@@ -9,7 +9,7 @@ export const Note: FC<PropsWithChildren<NoteProps>> = ({
   type = 'note',
   children,
 }) => (
-  <NoteStyle>
+  <NoteStyle data-testid="noteText">
     <NoteTypeStyle>{type}:</NoteTypeStyle> {children}
   </NoteStyle>
 );

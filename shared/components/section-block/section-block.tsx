@@ -24,7 +24,14 @@ export const SectionBlock: SectionComponent = ({
     <SectionStyle {...rest}>
       <SectionTitle
         middle={middle}
-        extra={href && <SectionHeaderLink {...{ href, matomoEvent }} />}
+        extra={
+          href && (
+            <SectionHeaderLink
+              data-testid="sectionHeaderLink"
+              {...{ href, matomoEvent }}
+            />
+          )
+        }
       >
         {title}
       </SectionTitle>

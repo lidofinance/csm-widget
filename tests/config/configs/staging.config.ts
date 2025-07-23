@@ -1,19 +1,13 @@
 // StagingConfig.ts
-import { BaseConfig } from './base.config';
+import { ProdConfig } from './prod.config';
 
-export class StagingConfig extends BaseConfig {
+export class StagingConfig extends ProdConfig {
   constructor() {
     super();
     this.standConfig = {
+      ...this.standConfig,
       standType: 'staging',
       standUrl: 'https://csm.infra-staging.org',
-      networkConfig: {
-        chainId: 1,
-        tokenSymbol: 'ETH',
-        chainName: 'Ethereum Mainnet',
-        rpcUrl: `https://lb.drpc.org/ogrpc?network=ethereum&dkey=${process.env.RPC_URL_TOKEN}`,
-        scan: 'https://etherscan.io/',
-      },
     };
   }
 }

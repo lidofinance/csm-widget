@@ -1,26 +1,47 @@
+/* eslint-disable no-empty-pattern */
 import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
+import { IConfig } from 'tests/config/configs/base.config';
 import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
-import { WidgetService } from 'tests/pages/widget.service';
+import {
+  contractClients,
+  ContractClients,
+} from 'tests/services/clients.contract';
+import { SdkService } from 'tests/services/sdk.client';
+import { WidgetService } from 'tests/services/widget.service';
+import { mnemonicToAccount } from 'viem/accounts';
 
-type Fixtures = object;
+type WorkerFixtures = {
+  secretPhrase: string;
+  browserWithWallet: BrowserService;
+  widgetService: WidgetService;
+  contractClients: ContractClients;
+  sdkService: SdkService;
+};
 
-export const test = base.extend<
-  Fixtures,
-  {
-    browserWithWallet: BrowserService;
-    widgetService: WidgetService;
-  }
->({
-  browserWithWallet: [
-    // eslint-disable-next-line
+export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
+  widgetConfig: async ({}, use) => {
+    await use(widgetFullConfig);
+  },
+  secretPhrase: [
     async ({}, use) => {
+      await use(widgetFullConfig.accountConfig.SECRET_PHRASE);
+    },
+    { scope: 'worker' },
+  ],
+  browserWithWallet: [
+    async ({ secretPhrase }, use) => {
       const browserService = new BrowserService({
         networkConfig: widgetFullConfig.standConfig.networkConfig,
+        accountConfig: {
+          ...widgetFullConfig.accountConfig,
+          SECRET_PHRASE: secretPhrase,
+        },
         walletConfig: widgetFullConfig.walletConfig,
         nodeConfig: { rpcUrlToMock: '**/api/rpc?chainId=1' },
         browserOptions: {
+          reducedMotion: 'reduce',
           cookies: REFUSE_CF_BLOCK_COOKIE,
         },
       });
@@ -28,17 +49,34 @@ export const test = base.extend<
       await browserService.initWalletSetup();
 
       await use(browserService);
-      // Teardown will be call only when all tests done or when test failed.
+
       await browserService.teardown();
     },
     { scope: 'worker' },
   ],
   widgetService: [
     async ({ browserWithWallet }, use) => {
+      const ws = new WidgetService(
+        browserWithWallet.getBrowserContextPage(),
+        browserWithWallet.getWalletPage(),
+      );
+      await ws.connectWallet();
+      await use(ws);
+    },
+    { scope: 'worker' },
+  ],
+  contractClients: [
+    async ({}, use) => {
+      await use(contractClients);
+    },
+    { scope: 'worker' },
+  ],
+  sdkService: [
+    async ({ secretPhrase }, use) => {
       await use(
-        new WidgetService(
-          browserWithWallet.getBrowserContextPage(),
-          browserWithWallet.getWalletPage(),
+        new SdkService(
+          mnemonicToAccount(secretPhrase),
+          widgetFullConfig.standConfig.networkConfig,
         ),
       );
     },

@@ -32,6 +32,7 @@ export const AvailableToClaim: FC = () => {
 
   return (
     <AccordionStyle
+      data-testid="availableToClaimBlock"
       summary={
         <RowHeader>
           <RowTitle>
@@ -41,6 +42,7 @@ export const AvailableToClaim: FC = () => {
             )}
           </RowTitle>
           <Balance
+            data-testid="commonBalance"
             big
             loading={isBondLoading || isRewardsLoading}
             amount={availableToClaim}
@@ -50,6 +52,7 @@ export const AvailableToClaim: FC = () => {
     >
       <RowBody>
         <Balance
+          data-testid="rewardsBalance"
           title={
             <>
               Rewards
@@ -76,6 +79,7 @@ export const AvailableToClaim: FC = () => {
         ) : (
           <>
             <Balance
+              data-testid="excessBondBalance"
               sign="plus"
               title={
                 <>

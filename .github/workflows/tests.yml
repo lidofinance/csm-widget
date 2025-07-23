@@ -1,5 +1,5 @@
 name: Test CSM-widget
-run-name: CSM-widget. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
+run-name: CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
   schedule:
@@ -24,6 +24,7 @@ on:
         options:
           - '-'
           - smoke
+          - performTX
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
         required: false
@@ -36,16 +37,33 @@ on:
         options:
           - testnet
           - infra
+  workflow_call:
+    inputs:
+      preview_stand_url:
+        required: true
+        type: string
+        description: Stand url
+      stand_type:
+        description: 'Stand type'
+        required: true
+        type: string
+      tags:
+        required: false
+        type: string
+        default: '-'
+        description: 'Test tags'
 
 jobs:
   test:
     runs-on: ubuntu-22.04
     env:
       # Required envs
-      RPC_URL_TOKEN: ${{ secrets.RPC_URL_TOKEN }}
+      RPC_URL: ${{ secrets.RPC_URL }}
       WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
       WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
-      STAND_TYPE: ${{ github.event.inputs.STAND_TYPE || 'testnet' }}
+      EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
+      EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
+      STAND_TYPE: ${{ inputs.stand_type || github.event.inputs.STAND_TYPE || 'testnet' }}
 
       # Common envs
       QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
@@ -54,11 +72,11 @@ jobs:
       GH_BRANCH_REF_NAME: ${{ github.ref_name }}
       GH_EVENT_NAME: ${{ github.event_name }}
       NODE_OPTIONS: --max-old-space-size=4096
-      TEST_TAGS: ${{ github.event.inputs.tags }}
+      TEST_TAGS: ${{ inputs.tags || github.event.inputs.tags }}
       TEST_BRANCH: ${{ github.event.inputs.branch }}
       DISCORD_REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
-      DISCORD_DUTY_TAG: '1227193074044637286'
+      DISCORD_DUTY_TAG: '&1372906915667116032'
 
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
@@ -71,10 +89,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'yarn'
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -83,13 +103,13 @@ jobs:
         run: yarn playwright install chromium --with-deps
 
       - name: Set up preview-stand credentials
-        if: ${{ github.event.inputs.stand_type == 'preview' }}
+        if: ${{ inputs.stand_type  == 'preview' || github.event.inputs.stand_type == 'preview' }}
         run: |
-          if [ -n "${{ github.event.inputs.preview_stand_url }}" ]; then
+          if [ -n "${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" ]; then
             echo "Setting login and password for preview stand"
             echo "PREVIEW_STAND_LOGIN=${{ secrets.PREVIEW_STAND_LOGIN }}" >> $GITHUB_ENV
             echo "PREVIEW_STAND_PASSWORD=${{ secrets.PREVIEW_STAND_PASSWORD }}" >> $GITHUB_ENV
-            echo "PREVIEW_STAND_URL=${{ github.event.inputs.preview_stand_url }}" >> $GITHUB_ENV
+            echo "PREVIEW_STAND_URL=${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" >> $GITHUB_ENV
             echo "PREVIEW_STAND_ENV=${{ github.event.inputs.preview_stand_env }}" >> $GITHUB_ENV
           else
             echo "PREVIEW_STAND_URL not provided for preview environment"
@@ -115,4 +135,4 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 5
+          retention-days: 1
