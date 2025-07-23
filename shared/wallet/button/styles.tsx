@@ -1,26 +1,11 @@
-import styled from 'styled-components';
-import {
-  Button,
-  ButtonProps,
-  InlineLoader,
-  InlineLoaderProps,
-} from '@lidofinance/lido-ui';
-import { NAV_MOBILE_MEDIA } from 'styles/constants';
+import { InlineLoader, InlineLoaderProps } from '@lidofinance/lido-ui';
 import { Address } from 'shared/components';
+import { HeaderButton } from 'shared/layout/header/styles';
+import styled from 'styled-components';
+import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const WalledButtonStyle = styled((props: ButtonProps) => (
-  <Button {...props} />
-))`
-  flex-shrink: 1;
-  min-width: unset;
-  overflow: hidden;
-`;
-
-export const WalledButtonWrapperStyle = styled.span`
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  margin: -10px -18px;
+export const WalledButtonStyle = styled(HeaderButton)`
+  --padding: 6px;
 `;
 
 export const WalledButtonBalanceStyle = styled.span`

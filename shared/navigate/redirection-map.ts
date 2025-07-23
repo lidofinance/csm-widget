@@ -33,6 +33,9 @@ export const redirectionMap: Partial<
   [PATH.KEYS_REMOVE]: {
     [ROLE_CODE.REWARDS]: PATH.KEYS_VIEW,
   },
+  [PATH.KEYS_EJECT]: {
+    [ROLE_CODE.REWARDS]: PATH.KEYS_VIEW,
+  },
   [PATH.KEYS_VIEW]: {
     [ROLE_CODE.NONE]: PATH.HOME,
   },
@@ -49,6 +52,15 @@ export const redirectionMap: Partial<
     [ROLE_CODE.NONE]: PATH.HOME,
   },
   [PATH.BOND_UNLOCK]: {
+    [ROLE_CODE.NONE]: PATH.HOME,
+  },
+  [PATH.TYPE]: {
+    [ROLE_CODE.NONE]: PATH.HOME,
+    [ROLE_CODE.REWARDS]: PATH.TYPE_CLAIM,
+    [ROLE_CODE.MANAGER]: PATH.TYPE_CLAIM,
+    [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_CLAIM,
+  },
+  [PATH.TYPE_CLAIM]: {
     [ROLE_CODE.NONE]: PATH.HOME,
   },
 };

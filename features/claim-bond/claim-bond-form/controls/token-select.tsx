@@ -1,6 +1,5 @@
 import { Checkbox } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { TOKENS } from 'consts/tokens';
 import { PATH } from 'consts/urls';
 import { useController, useWatch } from 'react-hook-form';
 import {
@@ -16,6 +15,7 @@ import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TokenSelect: React.FC = () => {
   const [token, claimRewards] = useWatch<
@@ -45,15 +45,15 @@ export const TokenSelect: React.FC = () => {
       )}
       <TokenButtonsHookForm
         disabled={
-          maxValues?.[TOKENS.ETH][Number(claimRewards)]?.eq(0) ||
+          !maxValues?.[TOKENS.eth][Number(claimRewards)] ||
           (isSplitter && !unlockField.value)
         }
         options={{
-          [TOKENS.ETH]: (
+          [TOKENS.eth]: (
             <Stack direction="column">
               <TokenAmount
-                token={TOKENS.ETH}
-                amount={maxValues?.[TOKENS.ETH][Number(claimRewards)]}
+                token={TOKENS.eth}
+                amount={maxValues?.[TOKENS.eth][Number(claimRewards)]}
                 loading={isLoading}
               />
               <YouWillReceive
@@ -62,40 +62,40 @@ export const TokenSelect: React.FC = () => {
               />
             </Stack>
           ),
-          [TOKENS.STETH]: (
+          [TOKENS.steth]: (
             <Stack direction="column">
               <TokenAmount
-                token={TOKENS.STETH}
-                amount={maxValues?.[TOKENS.STETH][Number(claimRewards)]}
+                token={TOKENS.steth}
+                amount={maxValues?.[TOKENS.steth][Number(claimRewards)]}
                 loading={isLoading}
               />
               <YouWillReceive
                 waitingTime="~ 1 min"
-                receive={getTokenDisplayName(TOKENS.STETH)}
+                receive={getTokenDisplayName(TOKENS.steth)}
               />
             </Stack>
           ),
-          [TOKENS.WSTETH]: (
+          [TOKENS.wsteth]: (
             <Stack direction="column">
               <TokenAmount
-                token={TOKENS.WSTETH}
-                amount={maxValues?.[TOKENS.WSTETH][Number(claimRewards)]}
+                token={TOKENS.wsteth}
+                amount={maxValues?.[TOKENS.wsteth][Number(claimRewards)]}
                 loading={isLoading || loading.isMaxValuesLoading}
               />
               <YouWillReceive
                 waitingTime="~ 1 min"
-                receive={getTokenDisplayName(TOKENS.WSTETH)}
+                receive={getTokenDisplayName(TOKENS.wsteth)}
               />
             </Stack>
           ),
         }}
       />
-      {token === TOKENS.ETH && (
+      {token === TOKENS.eth && (
         <Note>
           After receiving NFT you will need to claim ETH manually. Follow{' '}
           <LocalLink
             href={PATH.BOND_CLAIM}
-            anchor="#how-to-claim-eth"
+            anchor="#how-to-claim-eth-using-a-withdrawal-nft"
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToClaimEth}
           >
             FAQ

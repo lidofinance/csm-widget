@@ -1,6 +1,6 @@
+import { useOperatorBalance } from 'modules/web3';
 import { useEffect } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { useNodeOperatorLockAmount } from 'shared/hooks';
 import { StealingCancelFormInputType } from './types';
 
 export const useFormMaxAmount = ({
@@ -10,7 +10,10 @@ export const useFormMaxAmount = ({
 }: UseFormReturn<StealingCancelFormInputType>) => {
   const nodeOperatorId = watch('nodeOperatorId');
 
-  const { data: maxAmount } = useNodeOperatorLockAmount(nodeOperatorId);
+  const { data: maxAmount } = useOperatorBalance(
+    nodeOperatorId,
+    (data) => data.locked,
+  );
 
   useEffect(() => {
     void trigger('maxAmount');

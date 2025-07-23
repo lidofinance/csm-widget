@@ -1,3 +1,4 @@
+import { KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 import { ArrowBottom, ArrowTop } from '@lidofinance/lido-ui';
 import { FC, useCallback, useMemo, useState } from 'react';
 import {
@@ -10,13 +11,15 @@ import {
   StatusComment,
 } from 'shared/components';
 import {
-  KeyWithStatus,
   sortByPubkey,
   sortByPubkeyDesc,
   sortByStatus,
   sortByStatusDesc,
+  sortByStrikes,
+  sortByStrikesDesc,
   useSortedKeys,
 } from 'shared/hooks';
+import { StrikesCount } from './strikes-counts';
 import { SortButton, TableStyle } from './styles';
 
 type Props = {
@@ -24,7 +27,7 @@ type Props = {
 };
 
 type SortProps = {
-  column: 'key' | 'status';
+  column: 'key' | 'status' | 'strikes';
   asc: boolean;
 };
 
@@ -43,6 +46,10 @@ export const KeysTable: FC<Props> = ({ keys }) => {
         return sortByStatus;
       case sortBy.column === 'status' && !sortBy.asc:
         return sortByStatusDesc;
+      case sortBy.column === 'strikes' && sortBy.asc:
+        return sortByStrikes;
+      case sortBy.column === 'strikes' && !sortBy.asc:
+        return sortByStrikesDesc;
       default:
         return sortByStatus;
     }
@@ -74,36 +81,51 @@ export const KeysTable: FC<Props> = ({ keys }) => {
                 (sortBy.asc ? <ArrowTop /> : <ArrowBottom />)}
             </SortButton>
           </th>
+          <th>
+            <SortButton onClick={() => handleSort('strikes')}>
+              Strikes
+              {sortBy.column === 'strikes' &&
+                (sortBy.asc ? <ArrowTop /> : <ArrowBottom />)}
+            </SortButton>
+          </th>
           <th>Comment</th>
         </tr>
       </thead>
       <tbody>
-        {sortedKeys?.map(({ key, index, statuses, validatorIndex }) => (
-          <tr key={index}>
-            <td data-testid="pubkeyCell">
-              <Pubkey
-                address={key}
-                link={
-                  <>
-                    <CopyLink text={key} data-testid="pubkeyLink" />
-                    <BeaconchainPubkeyLink pubkey={key} statuses={statuses} />
-                    <EthseerPubkeyLink validator={validatorIndex} />
-                  </>
-                }
-              />
-            </td>
-            <td data-testid="statusCell">
-              <Stack direction="column" gap="xs">
-                {statuses.map((status) => (
-                  <StatusChip status={status} key={status} />
-                ))}
-              </Stack>
-            </td>
-            <td data-testid="statusCommentCell">
-              <StatusComment statuses={statuses} />
-            </td>
-          </tr>
-        ))}
+        {sortedKeys?.map(
+          ({ pubkey, index, statuses, strikes, validatorIndex }) => (
+            <tr key={index}>
+              <td data-testid="pubkeyCell">
+                <Pubkey
+                  pubkey={pubkey}
+                  link={
+                    <>
+                      <CopyLink text={pubkey} />
+                      <BeaconchainPubkeyLink
+                        pubkey={pubkey}
+                        statuses={statuses}
+                      />
+                      <EthseerPubkeyLink validator={validatorIndex} />
+                    </>
+                  }
+                />
+              </td>
+              <td data-testid="statusCell">
+                <Stack direction="column" gap="xs">
+                  {statuses.map((status) => (
+                    <StatusChip status={status} key={status} />
+                  ))}
+                </Stack>
+              </td>
+              <td>
+                <StrikesCount strikes={strikes} />
+              </td>
+              <td data-testid="statusCommentCell">
+                <StatusComment statuses={statuses} />
+              </td>
+            </tr>
+          ),
+        )}
       </tbody>
     </TableStyle>
   );

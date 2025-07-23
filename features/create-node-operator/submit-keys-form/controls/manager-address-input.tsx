@@ -1,8 +1,8 @@
+import { useDappStatus } from 'modules/web3';
 import { AddressInputHookForm } from 'shared/hook-form/controls';
-import { useAccount } from 'shared/hooks';
 
 export const ManagerAddressInput: React.FC = () => {
-  const { address } = useAccount();
+  const { address } = useDappStatus();
 
   return (
     <AddressInputHookForm

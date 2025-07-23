@@ -4,6 +4,8 @@ import { Layout } from 'shared/layout';
 import { KeysPageSwitcher } from 'shared/navigate';
 import { ViewKeys } from './view-keys';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { Faq } from 'shared/components';
+import { FAQ_KEYS } from 'faq';
 
 export const ViewKeysPage: FC = () => (
   <Layout
@@ -13,5 +15,6 @@ export const ViewKeysPage: FC = () => (
   >
     <KeysPageSwitcher />
     <ViewKeys />
+    <Faq items={FAQ_KEYS} />
   </Layout>
 );

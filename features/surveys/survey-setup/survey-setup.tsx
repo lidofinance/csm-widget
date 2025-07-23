@@ -33,6 +33,7 @@ import { PATH } from 'consts/urls';
 import { SurveyButton } from '../components';
 import { Button } from '@lidofinance/lido-ui';
 import { Setup, SetupRaw, SetupsKeys } from '../types';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useSurveysFilled } from 'shared/hooks';
 
 const required = { required: true };
@@ -54,7 +55,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
   const { data: keys, mutate: mutateKeys } =
     useSurveysSWR<SetupsKeys>('setups/keys');
 
-  const { mutate: mutateFilled } = useSurveysFilled();
+  const { refetch } = useSurveysFilled();
 
   const filledWitoutCurrent = Math.max(
     0,
@@ -85,7 +86,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
       try {
         const res = await mutate(data);
         void mutateKeys();
-        void mutateFilled();
+        void refetch();
         if (!id && res?.index) {
           void navigate(`${PATH.SURVEYS_SETUP}/${res.index}` as PATH);
         }
@@ -94,7 +95,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
         modals.failed(e);
       }
     },
-    [modals, mutate, mutateKeys, mutateFilled, id, navigate],
+    [modals, mutate, mutateKeys, refetch, id, navigate],
   );
 
   const handleRemove = useCallback(async () => {
@@ -280,7 +281,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                   <TokenAmountInputHookForm
                     fieldName="mevMinBid"
                     label="Min bid"
-                    token="ETH"
+                    token={TOKENS.eth}
                   />
                 </Stack>
                 <SubmitButtonHookForm>Submit</SubmitButtonHookForm>

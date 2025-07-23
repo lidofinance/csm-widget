@@ -1,22 +1,21 @@
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useStethAmount } from './use-steth-amount';
-import { Zero } from '@ethersproject/constants';
 
 export const useBondWillReceive = (
   token: TOKENS,
-  amount?: BigNumber,
-  rewards?: BigNumber,
+  amount?: bigint,
+  rewards?: bigint,
 ) => {
-  const stethAmount = useStethAmount(token, amount);
+  // FIXME: exchange tokens rate
+  const { data: stethAmount } = useStethAmount(token, amount ?? 0n);
 
   return [
     (amount &&
       stethAmount &&
       rewards &&
-      rewards.gt(stethAmount) &&
-      rewards.sub(stethAmount)) ||
-      Zero,
-    !!(amount && stethAmount && rewards && stethAmount.gt(rewards)),
+      rewards > stethAmount &&
+      rewards - stethAmount) ||
+      0n,
+    !!(amount && stethAmount && rewards && stethAmount > rewards),
   ] as const;
 };

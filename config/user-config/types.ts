@@ -1,4 +1,4 @@
-import { CHAINS } from 'consts/chains';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 export type UserConfigDefaultType = {
   defaultChain: number;

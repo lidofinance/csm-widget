@@ -1,6 +1,5 @@
 import { Checkbox } from '@lidofinance/lido-ui';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
-import { TOKENS } from 'consts/tokens';
 import { FC, useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 import {
@@ -10,13 +9,16 @@ import {
   Stack,
   TitledSelectableAmount,
 } from 'shared/components';
-import { useRewardsFrame } from 'shared/hooks';
 import { formatDate } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { useFrameInfo } from 'modules/web3';
 
 export const SourceSelect: FC = () => {
   const { bond, rewards, loading, maxValues } = useClaimBondFormData();
-  const { data: rewardsFrame } = useRewardsFrame();
+  const { data: nextDistribution } = useFrameInfo(
+    (data) => data.lastReport + data.frameDuration,
+  );
 
   const { field } = useController<ClaimBondFormInputType, 'claimRewards'>({
     name: 'claimRewards',
@@ -25,8 +27,8 @@ export const SourceSelect: FC = () => {
 
   const { setValue } = useFormContext<ClaimBondFormInputType>();
 
-  const availableToClaim = maxValues?.[TOKENS.STETH][Number(field.value)];
-  const nextRewardsDate = formatDate(rewardsFrame?.nextRewards);
+  const availableToClaim = maxValues?.[TOKENS.steth][Number(field.value)];
+  const nextRewardsDate = formatDate(nextDistribution);
 
   useEffect(() => {
     if (bond?.isInsufficient) {
@@ -34,7 +36,7 @@ export const SourceSelect: FC = () => {
     }
   }, [bond?.isInsufficient, setValue]);
 
-  const showLockedBond = bond?.locked.gt(0);
+  const showLockedBond = !!bond?.locked;
 
   return (
     <>
@@ -43,7 +45,7 @@ export const SourceSelect: FC = () => {
         <AmountWithPrice
           big
           amount={availableToClaim}
-          token={TOKENS.STETH}
+          token={TOKENS.steth}
           loading={loading.isBondLoading || loading.isRewardsLoading}
         />
       </Stack>
@@ -55,14 +57,14 @@ export const SourceSelect: FC = () => {
               {...field}
               value=""
               checked={!!field.value}
-              disabled={!rewards?.available.gt(0)}
+              disabled={!rewards?.available}
             />
           }
           help={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected on ${nextRewardsDate}`}
           helpIcon="calendar"
           loading={loading.isRewardsLoading}
           amount={rewards?.available}
-          token={TOKENS.STETH}
+          token={TOKENS.steth}
           data-testid="rewardsSource"
         />
         <TitledSelectableAmount
@@ -83,7 +85,7 @@ export const SourceSelect: FC = () => {
           sign={bond?.isInsufficient ? 'minus' : 'plus'}
           loading={loading.isBondLoading}
           amount={bond?.delta}
-          token={TOKENS.STETH}
+          token={TOKENS.steth}
           data-testid="excessBondSource"
         />
         {showLockedBond && (
@@ -93,7 +95,7 @@ export const SourceSelect: FC = () => {
             help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
             loading={loading.isBondLoading}
             amount={bond?.locked}
-            token={TOKENS.ETH}
+            token={TOKENS.eth}
             sign="minus"
           />
         )}

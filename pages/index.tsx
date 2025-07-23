@@ -3,8 +3,7 @@ import { DashboardPage } from 'features/dashboard';
 import { StarterPackPage } from 'features/starter-pack';
 import { WelcomePage } from 'features/welcome';
 import { MaintenancePage } from 'features/welcome/maintenance-page';
-import { getFaqMain } from 'lib/getFaq';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utils';
 import { FC } from 'react';
 import { Gate, GateLoaded } from 'shared/navigate';
 
@@ -26,6 +25,6 @@ const Page: FC<PageProps> = ({ maintenance }) => {
 
 export default Page;
 
-export const getServerSideProps = getProps(getFaqMain, {
+export const getServerSideProps = getProps({
   continueAnyway: true,
 });

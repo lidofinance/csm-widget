@@ -1,6 +1,6 @@
+import { useDappStatus } from 'modules/web3';
 import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useAccount } from 'shared/hooks';
 import { useFormControllerContext } from './form-controller-context';
 import { useFormData } from './form-data-context';
 
@@ -10,7 +10,7 @@ export const FormController: FC<PropsWithChildren<FormControllerProps>> = ({
   children,
   ...props
 }) => {
-  const { active } = useAccount();
+  const { isAccountActive } = useDappStatus();
   const { handleSubmit, reset: resetDefault } = useFormContext();
   const {
     onSubmit,
@@ -36,11 +36,11 @@ export const FormController: FC<PropsWithChildren<FormControllerProps>> = ({
 
   // Reset form amount after disconnect wallet
   useEffect(() => {
-    if (!active) resetDefault();
+    if (!isAccountActive) resetDefault();
     // reset will be captured when active changes
     // so we don't need it in deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active]);
+  }, [isAccountActive]);
 
   return (
     <form autoComplete="off" onSubmit={doSubmit} {...props}>

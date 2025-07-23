@@ -1,9 +1,7 @@
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
-import { useWeb3Key } from 'shared/hooks/useWeb3Key';
-
+import { useWeb3Key } from 'shared/hooks';
 import { ChangeRoleForm } from './change-role-form';
-import { ROLES } from 'consts/roles';
-import { Faq } from 'shared/components';
 
 export const ChangeRewardRole = () => {
   const key = useWeb3Key();
@@ -12,7 +10,6 @@ export const ChangeRewardRole = () => {
       <NoSSRWrapper>
         <ChangeRoleForm key={key} role={ROLES.REWARDS} />
       </NoSSRWrapper>
-      <Faq />
     </>
   );
 };

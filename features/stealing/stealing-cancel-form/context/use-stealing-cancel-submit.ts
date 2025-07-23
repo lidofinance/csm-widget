@@ -1,90 +1,71 @@
-import { BigNumber } from 'ethers';
+import {
+  TransactionCallback,
+  TransactionCallbackStage,
+} from '@lidofinance/lido-csm-sdk';
+import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
-import invariant from 'tiny-invariant';
-
-import { useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
-import { NodeOperatorId } from 'types';
-import { runWithTransactionLogger } from 'utils';
-import { StealingCancelFormInputType } from '.';
+import invariant from 'tiny-invariant';
 import { useTxModalStagesStealingCancel } from '../hooks/use-tx-modal-stages-stealing-cancel';
+import { StealingCancelFormInputType } from './types';
 
 type UseStealingCancelOptions = {
   onConfirm?: () => Promise<void> | void;
   onRetry?: () => void;
 };
 
-type StealingCancelMethodParams = {
-  nodeOperatorId: NodeOperatorId;
-  amount: BigNumber;
-};
-
-const useStealingCancelTx = () => {
-  const CSModuleWeb3 = useCSModuleWeb3();
-
-  return useCallback(
-    async (params: StealingCancelMethodParams) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
-      return {
-        tx: await CSModuleWeb3.populateTransaction.cancelELRewardsStealingPenalty(
-          params.nodeOperatorId,
-          params.amount,
-        ),
-        txName: 'cancelELRewardsStealingPenalty',
-      };
-    },
-    [CSModuleWeb3],
-  );
-};
-
 export const useStealingCancelSubmit = ({
   onConfirm,
   onRetry,
 }: UseStealingCancelOptions) => {
+  const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesStealingCancel();
-
-  const getTx = useStealingCancelTx();
-  const sendTx = useSendTx();
 
   const stealingCancel = useCallback(
     async ({
       amount,
       nodeOperatorId,
     }: StealingCancelFormInputType): Promise<boolean> => {
-      invariant(amount, 'BondAmount is not defined');
+      invariant(amount, 'Amount is not defined');
       invariant(nodeOperatorId, 'NodeOperatorId is not defined');
 
       try {
-        txModalStages.sign({ amount, nodeOperatorId });
+        const callback: TransactionCallback = async ({ stage, payload }) => {
+          switch (stage) {
+            case TransactionCallbackStage.SIGN:
+              txModalStages.sign({ amount, nodeOperatorId });
+              break;
+            case TransactionCallbackStage.RECEIPT:
+              txModalStages.pending({ amount, nodeOperatorId }, payload.hash);
+              break;
+            case TransactionCallbackStage.DONE: {
+              txModalStages.success({ amount, nodeOperatorId }, payload.hash);
+              break;
+            }
+            case TransactionCallbackStage.MULTISIG_DONE:
+              txModalStages.successMultisig();
+              break;
+            case TransactionCallbackStage.ERROR:
+              txModalStages.failed(payload.error, onRetry);
+              break;
+            default:
+          }
+        };
 
-        const tx = await getTx({
+        await csm.stealing.cancel({
           nodeOperatorId,
           amount,
+          callback,
         });
 
-        const [txHash, waitTx] = await runWithTransactionLogger(
-          'StealingCancel signing',
-          () => sendTx(tx),
-        );
-
-        txModalStages.pending({ amount, nodeOperatorId }, txHash);
-
-        await runWithTransactionLogger(
-          'StealingCancel block confirmation',
-          waitTx,
-        );
-
         await onConfirm?.();
-
-        txModalStages.success({ amount, nodeOperatorId }, txHash);
 
         return true;
       } catch (error) {
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [getTx, txModalStages, onConfirm, sendTx, onRetry],
+    [csm.stealing, onConfirm, txModalStages, onRetry],
   );
 
   return {

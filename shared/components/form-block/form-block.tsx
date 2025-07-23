@@ -1,8 +1,15 @@
 import { Block } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
-export const FormBlock = styled(Block)`
+const BlockStyled = styled(Block)`
   display: flex;
   gap: ${({ theme }) => theme.spaceMap.md}px;
   flex-direction: column;
+`;
+
+export const FormBlock = styled(BlockStyled)`
+  ${BlockStyled} {
+    padding: 0;
+    border-radius: initial;
+  }
 `;

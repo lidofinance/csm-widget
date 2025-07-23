@@ -1,4 +1,3 @@
-import { TOKENS } from 'consts/tokens';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
@@ -13,6 +12,7 @@ import type {
   StealingReportFormInputType,
   StealingReportFormNetworkData,
 } from './types';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useStealingReportValidation = (
   networkData: StealingReportFormNetworkData,
@@ -24,9 +24,9 @@ export const useStealingReportValidation = (
       try {
         const { amount, nodeOperatorId, blockhash } = values;
 
-        const { nodeOperatorsCount, etherBalance } = await dataPromise;
+        const { nodeOperatorsCount, ethBalance } = await dataPromise;
 
-        invariant(etherBalance);
+        invariant(ethBalance);
         invariant(nodeOperatorsCount);
 
         if (options.names?.includes('nodeOperatorId'))
@@ -37,7 +37,7 @@ export const useStealingReportValidation = (
           );
 
         if (options.names?.includes('amount'))
-          validateEtherAmount('amount', amount, TOKENS.ETH);
+          validateEtherAmount('amount', amount, TOKENS.eth);
 
         if (options.names?.includes('blockhash'))
           validateHash('blockhash', blockhash);

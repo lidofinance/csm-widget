@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
 import { BaseContractClient } from './baseClient.contract';
-import { formatEther } from '@ethersproject/units';
+import { formatEther } from 'viem';
 
 export class CSAccountingContract extends BaseContractClient {
   constructor() {

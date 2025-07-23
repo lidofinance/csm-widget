@@ -1,49 +1,22 @@
-import { useNodeOperatorContext } from 'providers/node-operator-provider';
-import { useAccount } from './use-account';
-import { useCsmEarlyAdoption } from './useCsmEarlyAdoption';
-import { useCsmPaused, useCsmPublicRelease } from './useCsmStatus';
-import { useEffect, useState } from 'react';
-import { useCsmVersionSupported } from './use-csm-version-supported';
-
-type ReturnProps = { isLoading: boolean; isSupported: boolean };
+import { useCsmStatus, useDappStatus } from 'modules/web3';
+import { useAvailableOperators } from 'modules/web3/operator-provider';
+import { useAccount } from 'wagmi';
 
 export const useInitialLoading = (externalLoading?: boolean) => {
-  const { initialLoading: isPublicReleaseLoading } = useCsmPublicRelease();
-  const { initialLoading: isPausedLoading } = useCsmPaused();
   const { isConnecting } = useAccount();
-  const { isListLoading, active } = useNodeOperatorContext();
-  const { initialLoading: isEaLoading } = useCsmEarlyAdoption();
-  const { initialLoading: isSupporetdLoading, data: isSupported } =
-    useCsmVersionSupported();
+  const { isAccountActive } = useDappStatus();
+  const { isPending: isStatusLoading } = useCsmStatus();
+  const { isPending: isOperatorsLoading } = useAvailableOperators();
 
-  const [state, setState] = useState<ReturnProps>({
-    isLoading: true,
-    isSupported: true,
-  });
+  // TODO: handle loading errors
+  // TODO: handle status.isError || list.isError
 
-  useEffect(() => {
-    const isLoading = Boolean(
-      isSupporetdLoading ||
-        isPublicReleaseLoading ||
-        isPausedLoading ||
-        isConnecting ||
-        isListLoading ||
-        (!active && isEaLoading) ||
-        externalLoading,
-    );
+  // FIXME: useEffect ??
 
-    setState({ isLoading, isSupported: isSupported ?? true });
-  }, [
-    active,
-    externalLoading,
+  return [
     isConnecting,
-    isEaLoading,
-    isListLoading,
-    isPausedLoading,
-    isPublicReleaseLoading,
-    isSupporetdLoading,
-    isSupported,
-  ]);
-
-  return state;
+    isStatusLoading,
+    isAccountActive && isOperatorsLoading,
+    externalLoading,
+  ].some((i) => i === true);
 };

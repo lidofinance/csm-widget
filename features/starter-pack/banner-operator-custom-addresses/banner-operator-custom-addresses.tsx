@@ -6,7 +6,7 @@ import { useOperatorCustomAddresses } from './use-operator-custom-addresses';
 export const BannerOperatorCustomAddresses: FC = () => {
   const [nodeOperatorId] = useOperatorCustomAddresses();
 
-  if (!nodeOperatorId) {
+  if (nodeOperatorId === undefined) {
     return null;
   }
 

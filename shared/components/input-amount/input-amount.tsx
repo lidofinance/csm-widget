@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import {
   ChangeEvent,
   ComponentProps,
@@ -10,24 +9,19 @@ import {
   useMemo,
   useRef,
 } from 'react';
-
-import { MaxUint256 } from '@ethersproject/constants';
-import { formatEther, parseEther } from '@ethersproject/units';
 import { Input } from '@lidofinance/lido-ui';
 
 import { InputDecoratorLocked } from './input-decorator-locked';
 import { InputDecoratorMaxButton } from './input-decorator-max-button';
 import { StyledInput } from './styles';
+import { formatEther, maxUint256, parseEther } from 'viem';
 
 type InputAmountProps = {
-  onChange?: (value: BigNumber | null) => void;
-  value?: BigNumber | null;
-  onMaxClick?: (
-    event: MouseEvent<HTMLButtonElement>,
-    maxValue: BigNumber,
-  ) => void;
-  maxValue?: BigNumber;
-  isLocked?: boolean;
+  onChange?: (value: bigint | null) => void;
+  value?: bigint | null;
+  onMaxClick?: (event: MouseEvent<HTMLButtonElement>, maxValue: bigint) => void;
+  maxValue?: bigint;
+  isLocked?: boolean | string;
   isLoading?: boolean;
 } & Omit<ComponentProps<typeof Input>, 'onChange' | 'value'>;
 
@@ -91,7 +85,7 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
         } else {
           const value = parseEtherSafe(currentValue);
           // invalid value, so we rollback to last valid value
-          if (!value) {
+          if (value === null || value === undefined) {
             const rollbackCaretPosition =
               caretPosition -
               Math.min(
@@ -107,9 +101,9 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
             return;
           }
 
-          const cappedValue = value.gt(MaxUint256) ? MaxUint256 : value;
-          if (value.gt(MaxUint256)) {
-            currentValue = formatEther(MaxUint256);
+          const cappedValue = value > maxUint256 ? maxUint256 : value;
+          if (value > maxUint256) {
+            currentValue = formatEther(maxUint256);
           }
           onChange?.(cappedValue);
         }
@@ -140,7 +134,7 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
         const parsedValue = parseEtherSafe(input.value);
         // only change string state if casted values differ
         // this allows user to enter 0.100 without immediate change to 0.1
-        if (!parsedValue || !parsedValue.eq(value)) {
+        if (!parsedValue || parsedValue !== value) {
           input.value = formatEther(value);
           // prevents rollback to incorrect value in onChange
           lastInputValue.current = input.value;
@@ -149,7 +143,7 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
     }, [value]);
 
     const handleClickMax =
-      onChange && maxValue?.gt(0)
+      onChange && maxValue && maxValue > 0n
         ? (event: MouseEvent<HTMLButtonElement>) => {
             onChange(maxValue);
             onMaxClick?.(event, maxValue);
@@ -169,7 +163,11 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
                   disabled={!handleClickMax}
                 />
               ) : undefined}
-              {isLocked ? <InputDecoratorLocked /> : undefined}
+              {isLocked ? (
+                <InputDecoratorLocked
+                  title={typeof isLocked === 'string' ? isLocked : undefined}
+                />
+              ) : undefined}
             </>
           )
         }

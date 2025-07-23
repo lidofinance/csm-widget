@@ -6,7 +6,7 @@ import { LocalLink } from 'shared/navigate';
 
 export const SurveysCta: FC = () => {
   const { enabled, closed, onClose } = useSurveysCall();
-  const { data, initialLoading } = useSurveysFilled();
+  const { data, isPending: initialLoading } = useSurveysFilled();
 
   if (!enabled || closed || data?.isFilled || initialLoading) return null;
 

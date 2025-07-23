@@ -1,12 +1,14 @@
+import {
+  ROLES,
+  TransactionCallback,
+  TransactionCallbackStage,
+} from '@lidofinance/lido-csm-sdk';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
-import invariant from 'tiny-invariant';
-
-import { AddressZero } from '@ethersproject/constants';
-import { ROLES } from 'consts/roles';
-import { useCSModuleWeb3, useSendTx } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
-import { NodeOperatorId } from 'types';
-import { runWithTransactionLogger } from 'utils';
+import invariant from 'tiny-invariant';
+import { Address, zeroAddress } from 'viem';
 import { ChangeRoleFormInputType, ChangeRoleFormNetworkData } from '.';
 import {
   useConfirmReproposeModal,
@@ -20,13 +22,13 @@ type UseChangeRoleOptions = {
 };
 
 type ChangeRoleMethodParams = {
-  address: string;
+  address: Address;
   nodeOperatorId: NodeOperatorId;
+  callback: TransactionCallback;
 };
 
-// encapsulates eth/steth/wsteth flows
 const useChangeRoleTx = () => {
-  const CSModuleWeb3 = useCSModuleWeb3();
+  const { csm } = useLidoSDK();
 
   return useCallback(
     async (
@@ -37,46 +39,21 @@ const useChangeRoleTx = () => {
       }: { role: ROLES; isRewardsChange: boolean; isManagerReset: boolean },
       params: ChangeRoleMethodParams,
     ) => {
-      invariant(CSModuleWeb3, 'must have CSModuleWeb3');
-
       switch (true) {
         case isRewardsChange:
-          return {
-            tx: await CSModuleWeb3.populateTransaction.changeNodeOperatorRewardAddress(
-              params.nodeOperatorId,
-              params.address,
-            ),
-            txName: 'changeNodeOperatorRewardAddress',
-          };
+          return csm.roles.changeRewardsRole(params);
         case isManagerReset:
-          return {
-            tx: await CSModuleWeb3.populateTransaction.resetNodeOperatorManagerAddress(
-              params.nodeOperatorId,
-            ),
-            txName: 'resetNodeOperatorManagerAddress',
-          };
+          return csm.roles.resetManagerRole(params);
         case role === ROLES.REWARDS:
-          return {
-            tx: await CSModuleWeb3.populateTransaction.proposeNodeOperatorRewardAddressChange(
-              params.nodeOperatorId,
-              params.address,
-            ),
-            txName: 'proposeNodeOperatorRewardAddressChange',
-          };
+          return csm.roles.proposeRewardsRole(params);
         case role === ROLES.MANAGER:
-          return {
-            tx: await CSModuleWeb3.populateTransaction.proposeNodeOperatorManagerAddressChange(
-              params.nodeOperatorId,
-              params.address,
-            ),
-            txName: 'proposeNodeOperatorManagerAddressChange',
-          };
+          return csm.roles.proposeManagerRole(params);
         default: {
           throw new Error('Not implemented yet: true case');
         }
       }
     },
-    [CSModuleWeb3],
+    [csm],
   );
 };
 
@@ -86,8 +63,7 @@ export const useChangeRoleSubmit = ({
 }: UseChangeRoleOptions) => {
   const { txModalStages } = useTxModalStagesChangeRole();
 
-  const getTx = useChangeRoleTx();
-  const sendTx = useSendTx();
+  const changeRoleMethod = useChangeRoleTx();
 
   const confirmRepropose = useConfirmReproposeModal();
   const confirmRewardsRole = useConfirmRewardsRoleModal();
@@ -105,7 +81,7 @@ export const useChangeRoleSubmit = ({
         isRewardsChange,
       }: ChangeRoleFormNetworkData,
     ): Promise<boolean> => {
-      const address = isRevoke ? AddressZero : addressRaw;
+      const address = isRevoke ? zeroAddress : (addressRaw ?? zeroAddress);
       invariant(role, 'Role is not defined');
       invariant(address, 'Addess is not defined');
       invariant(currentAddress, 'CurrentAddess is not defined');
@@ -130,7 +106,7 @@ export const useChangeRoleSubmit = ({
       }
 
       try {
-        txModalStages.sign({
+        const props = {
           address,
           currentAddress,
           role,
@@ -138,50 +114,41 @@ export const useChangeRoleSubmit = ({
           isRevoke,
           isRewardsChange,
           isManagerReset,
-        });
+        };
 
-        const tx = await getTx(
+        const callback: TransactionCallback = async ({ stage, payload }) => {
+          switch (stage) {
+            case TransactionCallbackStage.SIGN:
+              txModalStages.sign(props);
+              break;
+            case TransactionCallbackStage.RECEIPT:
+              txModalStages.pending(props, payload.hash);
+              break;
+            case TransactionCallbackStage.DONE: {
+              payload;
+              txModalStages.success(props, payload.hash);
+              break;
+            }
+            case TransactionCallbackStage.MULTISIG_DONE:
+              txModalStages.successMultisig();
+              break;
+            case TransactionCallbackStage.ERROR:
+              txModalStages.failed(payload.error, onRetry);
+              break;
+            default:
+          }
+        };
+
+        await changeRoleMethod(
           { role, isRewardsChange, isManagerReset },
           {
             nodeOperatorId,
             address,
+            callback,
           },
         );
-
-        const [txHash, waitTx] = await runWithTransactionLogger(
-          'ChangeRole signing',
-          () => sendTx(tx),
-        );
-
-        txModalStages.pending(
-          {
-            address,
-            currentAddress,
-            role,
-            isPropose,
-            isRevoke,
-            isRewardsChange,
-            isManagerReset,
-          },
-          txHash,
-        );
-
-        await runWithTransactionLogger('ChangeRole block confirmation', waitTx);
 
         await onConfirm?.();
-
-        txModalStages.success(
-          {
-            address,
-            currentAddress,
-            role,
-            isPropose,
-            isRevoke,
-            isRewardsChange,
-            isManagerReset,
-          },
-          txHash,
-        );
 
         return true;
       } catch (error) {
@@ -191,10 +158,9 @@ export const useChangeRoleSubmit = ({
     [
       confirmRewardsRole,
       confirmRepropose,
-      getTx,
-      txModalStages,
+      changeRoleMethod,
       onConfirm,
-      sendTx,
+      txModalStages,
       onRetry,
     ],
   );

@@ -1,4 +1,3 @@
-import { BigNumber } from 'ethers';
 import { Setup, SetupRaw } from '../types';
 
 export const transformOutcoming = (data: Setup): SetupRaw => ({
@@ -10,6 +9,6 @@ export const transformOutcoming = (data: Setup): SetupRaw => ({
 });
 export const transformIncoming = (data: SetupRaw): Setup => ({
   ...data,
-  mevMinBid: data.mevMinBid ? BigNumber.from(data.mevMinBid) : undefined,
+  mevMinBid: data.mevMinBid ? BigInt(data.mevMinBid) : undefined,
   validatorSameAsCl: data.validatorSameAsCl ?? false,
 });

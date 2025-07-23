@@ -16,14 +16,14 @@ export const useAddBondValidation = (networkData: AddBondFormNetworkData) => {
       try {
         const { token, bondAmount } = values;
 
-        const { stethBalance, wstethBalance, etherBalance, maxStakeEther } =
+        const { stethBalance, wstethBalance, ethBalance, maxStakeEth } =
           await dataPromise;
 
         validateBondAmount({
           token,
           bondAmount,
-          maxStakeEther,
-          etherBalance,
+          maxStakeEth,
+          ethBalance,
           stethBalance,
           wstethBalance,
         });

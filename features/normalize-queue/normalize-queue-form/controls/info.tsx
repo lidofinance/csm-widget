@@ -3,7 +3,7 @@ import { Latice, TitledValue } from 'shared/components';
 import { useNormalizeQueueFormData } from '../context';
 
 export const Info: FC = () => {
-  const { info, unqueuedCount, loading } = useNormalizeQueueFormData();
+  const { unqueuedCount, loading } = useNormalizeQueueFormData();
   return (
     <>
       <Latice variant="secondary">
@@ -12,9 +12,6 @@ export const Info: FC = () => {
           loading={loading.isInfoLoading}
           value={unqueuedCount}
         />
-        {info?.stuckValidatorsCount ? (
-          <TitledValue warning title="Have stuck keys" />
-        ) : null}
       </Latice>
     </>
   );

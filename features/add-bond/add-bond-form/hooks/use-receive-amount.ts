@@ -1,18 +1,13 @@
-import { Zero } from '@ethersproject/constants';
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
-import { useStethByWsteth } from 'shared/hooks';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { useStETHByWstETH } from 'modules/web3';
 
-export const useReceiveAmount = (
-  amount: BigNumber | undefined,
-  token: TOKENS,
-) => {
-  const { data: wsteth, loading: wstethLoadng } = useStethByWsteth(
-    (token === TOKENS.WSTETH && amount) || undefined,
+export const useReceiveAmount = (amount: bigint | undefined, token: TOKENS) => {
+  const { data: wsteth, isPending: wstethLoadng } = useStETHByWstETH(
+    (token === TOKENS.wsteth && amount) || undefined,
   );
 
   return {
-    amount: (token === TOKENS.WSTETH ? wsteth : amount) ?? Zero,
-    loading: token === TOKENS.WSTETH ? wstethLoadng : false,
+    amount: (token === TOKENS.wsteth ? wsteth : amount) ?? 0n,
+    loading: token === TOKENS.wsteth ? wstethLoadng : false,
   };
 };

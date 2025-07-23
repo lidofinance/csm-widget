@@ -1,4 +1,4 @@
-import { LocalLink } from 'shared/navigate';
+import { LocalLink } from 'shared/navigate/local-link';
 import styled from 'styled-components';
 
 export const SectionHeaderLinkStyle = styled(LocalLink)`

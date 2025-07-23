@@ -3,12 +3,18 @@ import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
-import { useOperatorInOtherModule } from 'shared/hooks';
 import { StyledAccordion } from './styles';
+import { useDappStatus, useOtherModule } from 'modules/web3';
+
+const REPLACEMENTS: Record<string, string> = {
+  'curated-onchain-v1': 'Lido Curated',
+};
 
 export const OtherModuleBanner: FC = () => {
   const { operatorsWidget } = getExternalLinks();
-  const { data: moduleName } = useOperatorInOtherModule();
+  const { address } = useDappStatus();
+  const { data } = useOtherModule(address);
+  const moduleName = (data && REPLACEMENTS[data]) ?? data;
 
   if (!moduleName) return null;
 

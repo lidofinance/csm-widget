@@ -1,25 +1,21 @@
 import { FC } from 'react';
 
+import { getConfig } from 'config';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { useDappStatus } from 'modules/web3';
 import { Stack, WelcomeSection } from 'shared/components';
-import { useAccount } from 'shared/hooks';
-import { useCsmPaused, useCsmPublicRelease } from 'shared/hooks/useCsmStatus';
 import { Connect, Fallback } from 'shared/wallet';
-import { EarlyAdoptionBanner } from './early-adoption-banner';
 import styled from 'styled-components';
 import { HoleskyBanner } from './holesky-banner';
-import { getConfig } from 'config';
-import { CHAINS } from 'consts/chains';
 import { HoodiBanner } from './hoodi-banner';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 const { defaultChain } = getConfig();
 
 export const Welcome: FC = () => {
-  const { active, isConnected } = useAccount();
-  const { data: isPublicRelease } = useCsmPublicRelease();
-  const { data: paused } = useCsmPaused();
+  const { isSupportedChain, isWalletConnected } = useDappStatus();
 
-  const isWrongChain = isConnected && !active;
+  const isWrongChain = isWalletConnected && !isSupportedChain;
 
   return (
     <>
@@ -45,7 +41,6 @@ export const Welcome: FC = () => {
           </ConnectStyle>
         </Stack>
       </WelcomeSection>
-      {!isPublicRelease && !paused && <EarlyAdoptionBanner />}
     </>
   );
 };

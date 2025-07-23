@@ -1,6 +1,5 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { InlineLoader, Text } from '@lidofinance/lido-ui';
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
 import { FC, ReactNode } from 'react';
 import { IconTooltip, Stack } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
@@ -11,7 +10,7 @@ type TitledAddressProps = {
   description?: ReactNode;
   help?: string;
   loading?: boolean;
-  amount?: BigNumber;
+  amount?: bigint;
   token?: TOKENS;
   warning?: boolean;
 };
@@ -28,7 +27,10 @@ export const TitledAmount: FC<TitledAddressProps> = ({
   ...props
 }) => {
   return (
-    <TitledAmountStyle $warning={warning && amount?.gt(0)} {...props}>
+    <TitledAmountStyle
+      $warning={warning && amount !== undefined && amount > 0n}
+      {...props}
+    >
       <Stack gap="xs" center>
         <Stack gap="md" center>
           {title}

@@ -1,7 +1,6 @@
 import { PATH } from 'consts/urls';
 import { AddBondPage } from 'features/add-bond';
-import { getFaqBond } from 'lib/getFaq';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utils';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
@@ -14,4 +13,4 @@ const Page = () => (
 
 export default Page;
 
-export const getServerSideProps = getProps(getFaqBond);
+export const getServerSideProps = getProps();

@@ -1,4 +1,4 @@
-export * from './validate-bignumber-max';
+export * from './validate-bigint-max';
 export * from './validate-bond-amount';
 export * from './validate-deposit-data';
 export * from './validate-ether-amount';

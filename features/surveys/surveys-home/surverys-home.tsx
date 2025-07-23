@@ -12,8 +12,8 @@ import { useSurveysSWR } from '../shared/use-surveys-swr';
 import { useConfirmEraseModal } from './confirm-erase-modal';
 import { Divider, Plus, Text } from '@lidofinance/lido-ui';
 import { SetupsKeys, Summary } from '../types';
-import { CHAINS } from 'consts/chains';
 import { getConfig } from 'config';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 const { defaultChain } = getConfig();
 

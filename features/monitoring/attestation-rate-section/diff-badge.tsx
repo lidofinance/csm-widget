@@ -14,7 +14,7 @@ export const DiffBadge: FC<{
   return (
     <BadgeStyle $variant={status}>
       {diff > 0 ? <UpIcon /> : <DownIcon />}
-      {formatPercent(Math.abs(diff))}%
+      {formatPercent(Math.abs(diff))}
     </BadgeStyle>
   );
 };

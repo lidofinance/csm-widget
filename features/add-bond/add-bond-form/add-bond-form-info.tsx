@@ -1,10 +1,11 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
-import { ONE_ETH, TOKENS } from 'consts/tokens';
+import { ONE_ETH } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
+import { useExchangeRate } from 'shared/hooks';
 import { AddBondFormInputType } from './context';
 import { useReceiveAmount } from './hooks/use-receive-amount';
-import { useExchangeRate } from 'shared/hooks';
 
 export const AddBondFormInfo = () => {
   const [token, bondAmount] = useWatch<
@@ -15,25 +16,25 @@ export const AddBondFormInfo = () => {
   });
 
   const receive = useReceiveAmount(bondAmount, token);
-  const exchange = useExchangeRate(token);
+  const { data: exchange, isPending: isExchangeLoading } = useExchangeRate();
 
   return (
-    <DataTable data-testid="addBondTokenInfo">
+    <DataTable>
       <DataTableRow
         title="Bond balance will receive"
         loading={receive.loading}
         data-testid="balanceWillReceive"
       >
-        <FormatToken amount={receive.amount} token={TOKENS.STETH} />
+        <FormatToken amount={receive.amount} token={TOKENS.steth} />
       </DataTableRow>
-      {token !== TOKENS.STETH && (
+      {token !== TOKENS.steth && (
         <DataTableRow
           title="Exchange rate"
-          loading={exchange.loading}
+          loading={isExchangeLoading}
           data-testid="exchangeRate"
         >
           <FormatToken amount={ONE_ETH} token={token} /> ={' '}
-          <FormatToken amount={exchange.rate} token={TOKENS.STETH} />
+          <FormatToken amount={exchange?.[token]} token={TOKENS.steth} />
         </DataTableRow>
       )}
     </DataTable>

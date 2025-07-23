@@ -1,7 +1,7 @@
 import { useModalActions } from 'providers/modal-provider';
 import { useEffect, useMemo, useRef } from 'react';
-import { useAccount } from 'shared/hooks';
 import { TransactionModal, useTransactionModal } from '../transaction-modal';
+import { useDappStatus } from 'modules/web3';
 
 export type TransactionModalTransitStage = (
   TxStageEl: React.ReactNode,
@@ -12,7 +12,7 @@ export type TransactionModalTransitStage = (
 export const useTransactionModalStage = <S extends Record<string, Function>>(
   getStages: (transitStage: TransactionModalTransitStage) => S,
 ) => {
-  const { active } = useAccount();
+  const { isAccountActive } = useDappStatus();
   const { openModal } = useTransactionModal();
   const { closeModal } = useModalActions();
   const isMountedRef = useRef(true);
@@ -39,10 +39,10 @@ export const useTransactionModalStage = <S extends Record<string, Function>>(
   }, []);
 
   useEffect(() => {
-    if (!active) {
+    if (!isAccountActive) {
       closeModal(TransactionModal);
     }
-  }, [active, closeModal]);
+  }, [isAccountActive, closeModal]);
 
   return {
     txModalStages,

@@ -1,11 +1,11 @@
 import { Block } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { WhenLoaded } from 'shared/components';
-import { useNodeOperatorsWithLockedBond } from 'shared/hooks';
 import { LockedTable } from './locked-table';
+import { useOperatorsWithLockedBond } from 'modules/web3';
 
 export const LockedSection: FC = () => {
-  const { data, initialLoading: loading } = useNodeOperatorsWithLockedBond();
+  const { data, isPending: loading } = useOperatorsWithLockedBond();
 
   return (
     <Block>

@@ -1,6 +1,6 @@
 import {
   Address as AddressComponent,
-  AddressProps as BaseAddressProps,
+  AddressProps,
   Text,
   Tooltip,
 } from '@lidofinance/lido-ui';
@@ -9,31 +9,28 @@ import { PubkeyContainerStyle } from './styles';
 
 export type PubkeyProps = {
   link?: ReactNode;
+  pubkey?: string;
 } & Pick<ComponentProps<typeof Text>, 'size' | 'color'> &
-  Partial<BaseAddressProps>;
+  Partial<Omit<AddressProps, 'address'>>;
 
-export const Pubkey: FC<PubkeyProps> = ({
-  address = '',
-  symbols = 8,
-  link,
-}) => {
+export const Pubkey: FC<PubkeyProps> = ({ pubkey = '', symbols = 8, link }) => {
   const component = (
     <AddressComponent
-      address={address}
+      address={pubkey}
       symbols={!symbols ? 90 : symbols}
       as="span"
     />
   );
   return (
     <>
-      {address && (
+      {pubkey && (
         <PubkeyContainerStyle>
           {symbols === 0 ? (
             component
           ) : (
             <Tooltip
               placement="top"
-              title={address}
+              title={pubkey}
               style={{ wordWrap: 'break-word', maxWidth: '300px' }}
             >
               {component}
