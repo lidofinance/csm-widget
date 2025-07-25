@@ -6,6 +6,7 @@ import {
   useInvites,
   useNodeOperator,
   useOperatorBalance,
+  useOperatorIsOwner,
   useOperatorKeysToMigrate,
 } from 'modules/web3';
 import { useModifyContext } from 'providers/modify-provider';
@@ -20,6 +21,7 @@ export type ShowRule =
   | 'HAS_KEYS_TO_TRANSFER'
   | 'HAS_MANAGER_ROLE'
   | 'HAS_REWARDS_ROLE'
+  | 'HAS_OWNER_ROLE'
   | 'HAS_LOCKED_BOND'
   | 'HAS_REFERRER'
   | 'CAN_CREATE'
@@ -30,7 +32,7 @@ export type ShowRule =
 const { surveyApi } = getExternalLinks();
 
 export const useShowRule = () => {
-  const { isAccountActive } = useDappStatus();
+  const { isAccountActive, address } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
   const { data: isReportingRole } = useHasReportStealingRole();
@@ -39,6 +41,10 @@ export const useShowRule = () => {
   const canClaimICS = useCanClaimICS();
   const canCreateNO = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
+  const { data: isOwner } = useOperatorIsOwner({
+    address,
+    nodeOperatorId: nodeOperator?.id,
+  });
 
   return useCallback(
     (condition: ShowRule): boolean => {
@@ -55,6 +61,8 @@ export const useShowRule = () => {
           return !!nodeOperator?.roles.includes(ROLES.MANAGER);
         case 'HAS_REWARDS_ROLE':
           return !!nodeOperator?.roles.includes(ROLES.REWARDS);
+        case 'HAS_OWNER_ROLE':
+          return isAccountActive && !!isOwner;
         case 'HAS_INVITES':
           return !!invites?.length;
         case 'HAS_KEYS_TO_TRANSFER':
@@ -64,11 +72,11 @@ export const useShowRule = () => {
         case 'HAS_REFERRER':
           return !!referrer;
         case 'CAN_CLAIM_ICS':
-          return !!canClaimICS;
+          return !!canClaimICS && isAccountActive;
         case 'EL_STEALING_REPORTER':
           return !!isReportingRole;
         case 'IS_SURVEYS_ACTIVE':
-          return !!nodeOperator && !!surveyApi;
+          return !!nodeOperator && !!surveyApi && isAccountActive;
         default:
           return false;
       }
@@ -77,6 +85,7 @@ export const useShowRule = () => {
       isAccountActive,
       nodeOperator,
       canCreateNO,
+      isOwner,
       invites?.length,
       keysToTransfer,
       balance?.locked,

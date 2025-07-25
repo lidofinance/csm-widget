@@ -4,8 +4,8 @@ import { OPERATOR_TYPE } from 'consts';
 import { findKey } from 'lodash';
 
 export const KNOWN_TYPES: { [key in OPERATOR_TYPE]?: bigint } = {
-  [OPERATOR_TYPE.PLS]: 0n,
-  [OPERATOR_TYPE.LEA]: 1n,
+  [OPERATOR_TYPE.PLS]: 1n,
+  [OPERATOR_TYPE.LEA]: 0n,
   [OPERATOR_TYPE.ICS]: 2n,
 };
 

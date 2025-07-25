@@ -128,7 +128,7 @@ export const InputAmount = forwardRef<HTMLInputElement, InputAmountProps>(
     useEffect(() => {
       const input = inputRef.current;
       if (!input) return;
-      if (!value) {
+      if (value === undefined || value === null) {
         input.value = '';
       } else {
         const parsedValue = parseEtherSafe(input.value);

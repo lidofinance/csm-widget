@@ -4,6 +4,7 @@ import { FC } from 'react';
 import {
   getOperatorType,
   useCurveParameters,
+  useDappStatus,
   useNodeOperatorId,
   useOperatorCurveId,
 } from 'modules/web3';
@@ -13,13 +14,15 @@ import { ButtonStyle } from './styles';
 
 export const TypeButton: FC<ButtonProps> = (props) => {
   const { onClick, ...rest } = props;
+  const { isSupportedChain, address } = useDappStatus();
   const { openModal } = useParametersModal();
   const nodeOperatorId = useNodeOperatorId();
   const { data: curveId } = useOperatorCurveId(nodeOperatorId);
   useCurveParameters(curveId); // pre-fetching
   const type = getOperatorType(curveId);
 
-  if (!type || curveId === undefined) return null;
+  if (!isSupportedChain || !address || !type || curveId === undefined)
+    return null;
 
   return (
     <ButtonStyle
