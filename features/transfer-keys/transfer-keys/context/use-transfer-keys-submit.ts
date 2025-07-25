@@ -29,7 +29,7 @@ export const useTransferKeysSubmit = ({
       _: TransferKeysFormInputType,
       { nodeOperatorId, keysToMigrate: keysCount }: TransferKeysFormNetworkData,
     ): Promise<boolean> => {
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(keysCount, 'No keys to transfer');
 
       try {

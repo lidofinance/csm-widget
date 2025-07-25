@@ -29,7 +29,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
       { depositData, token, bondAmount: amount }: AddKeysFormInputType,
       { nodeOperatorId }: AddKeysFormNetworkData,
     ): Promise<boolean> => {
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(amount, 'BondAmount is not defined');

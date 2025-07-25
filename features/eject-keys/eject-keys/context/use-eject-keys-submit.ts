@@ -33,7 +33,7 @@ export const useEjectKeysSubmit = ({
         withdrawalRequestFee: amount,
       }: EjectKeysFormNetworkData,
     ): Promise<boolean> => {
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(keys, 'Keys are not defined');
       invariant(amount, 'Amount is not defined');
       invariant(
