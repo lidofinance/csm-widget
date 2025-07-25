@@ -8,7 +8,7 @@ export const useOtherModule = (address: Address | undefined) => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['getShareLimit'],
+    queryKey: ['useOtherModule', { address }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(address);

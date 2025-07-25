@@ -35,7 +35,7 @@ export const FormatToken: FormatTokenComponent = ({
     adaptiveDecimals,
   });
 
-  if (!amount) return <span {...rest}>{fallback}</span>;
+  if (amount === undefined) return <span {...rest}>{fallback}</span>;
 
   const symbol = _symbol ?? (token ? getTokenDisplayName(token) : '');
 

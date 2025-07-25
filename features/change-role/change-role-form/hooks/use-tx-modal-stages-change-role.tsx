@@ -31,7 +31,7 @@ const getTexts = (props: Props) => {
           title: `You are changing ${getRoleTitle(props.role)} address`,
           description: (
             <>
-              New ${getRoleTitle(props.role)} address is{' '}
+              New {getRoleTitle(props.role)} address is{' '}
               <Text size="xxs">
                 <AddressComponent address={props.address} showIcon />
               </Text>
@@ -42,7 +42,7 @@ const getTexts = (props: Props) => {
           title: `${capitalize(getRoleTitle(props.role))} address has been changed`,
           description: (
             <>
-              New ${getRoleTitle(props.role)} address is{' '}
+              New {getRoleTitle(props.role)} address is{' '}
               <Text size="xxs">
                 <AddressComponent address={props.address} showIcon />
               </Text>
