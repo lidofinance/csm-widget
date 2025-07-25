@@ -12,6 +12,7 @@ import { useActiveNodeOperator } from './use-active-node-operator';
 import { useAvailableOperators } from './use-available-operators';
 
 export type NodeOperatorContextValue = {
+  isPending: boolean;
   nodeOperator: NodeOperator | undefined;
   switchNodeOperator: (id: NodeOperatorId) => void;
 };
@@ -48,7 +49,7 @@ export const useNodeOperatorId = <
 };
 
 export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
-  const { data: list } = useAvailableOperators();
+  const { data: list, isPending } = useAvailableOperators();
   const [active, setActive] = useActiveNodeOperator(list);
 
   const switchNodeOperator = useCallback(
@@ -62,8 +63,8 @@ export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
   );
 
   const value = useMemo(
-    () => ({ nodeOperator: active, switchNodeOperator }),
-    [active, switchNodeOperator],
+    () => ({ isPending, nodeOperator: active, switchNodeOperator }),
+    [active, isPending, switchNodeOperator],
   );
 
   return (
