@@ -22,7 +22,7 @@ export const useClaimTypeFormNetworkData = (): [
     data: currentCurveId,
     isPending: isCurrentCurveIdLoading,
     refetch: updateCurrentCurveId,
-  } = useOperatorCurveId(nodeOperatorId, () => 1n);
+  } = useOperatorCurveId(nodeOperatorId);
   const { data: newCurveId, isPending: isNewCurveIdLoading } = useIcsCurveId();
   const { data: currentParameters, isPending: isCurrentParametersLoading } =
     useCurveParameters(currentCurveId);
