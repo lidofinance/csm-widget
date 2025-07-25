@@ -18,7 +18,7 @@ import {
 const Title: FC<{ title: string; help?: string }> = ({ title, help }) => (
   <Text size="xs" weight={700}>
     {title}
-    <IconTooltip tooltip={help} placement="bottomRight" inline />
+    <IconTooltip tooltip={help} placement="bottomLeft" inline />
   </Text>
 );
 

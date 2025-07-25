@@ -37,14 +37,14 @@ export const OperatorType1: Faq = {
         </li>
         <li>
           <code>performanceLeeway</code>&nbsp;- a leeway for the Node
-          Operator&apos;s validator&apos;sperformance, which is used to define a
-          performance threshold. Can be customized depending on the key index in
-          the Node Operator&apos;s keys storage;
+          Operator&apos;s validator&apos;s performance, which is used to define
+          a performance threshold. Can be customized depending on the key index
+          in the Node Operator&apos;s keys storage;
         </li>
         <li>
           <code>strikesParams</code>&nbsp;- parameters defining the Node
           Operator&apos;s strikes system, which is used to decide on the Node
-          Operator&apos;s validator&apos;sejection due to systematic bad
+          Operator&apos;s validator&apos;s ejection due to systematic bad
           performance;
         </li>
         <li>
@@ -54,7 +54,7 @@ export const OperatorType1: Faq = {
         <li>
           <code>performanceCoefficients</code>&nbsp;- coefficients used to
           calculate the Node Operator&apos;s performance based on the
-          validator&apos;seffectiveness in performing duties like attestation,
+          validator&apos;s effectiveness in performing duties like attestation,
           proposing blocks, and sync committee participation;
         </li>
         <li>
