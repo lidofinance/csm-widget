@@ -5,7 +5,7 @@ import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded>
-    <Gate rule="HAS_MANAGER_ROLE" fallback={<Navigate path={PATH.KEYS} />}>
+    <Gate rule="HAS_OWNER_ROLE" fallback={<Navigate path={PATH.KEYS} />}>
       <EjectKeysPage />
     </Gate>
   </GateLoaded>
