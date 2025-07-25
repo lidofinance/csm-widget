@@ -11,9 +11,8 @@ const KEYS_ROUTES: SwitcherRoutes = [
   },
   {
     title: 'Delete',
-    path: PATH.KEYS_REMOVE,
-    subpaths: [PATH.KEYS_EJECT, PATH.KEYS_EXIT],
-    showRules: ['HAS_MANAGER_ROLE'],
+    path: PATH.KEYS_EXIT,
+    subpaths: [PATH.KEYS_EJECT, PATH.KEYS_REMOVE],
     suffix: <CounterInvalidKeys />,
   },
   { title: 'View keys', path: PATH.KEYS_VIEW },
