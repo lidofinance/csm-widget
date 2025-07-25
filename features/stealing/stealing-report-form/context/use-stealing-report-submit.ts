@@ -29,7 +29,7 @@ export const useStealingReportSubmit = ({
       blockhash,
     }: StealingReportFormInputType): Promise<boolean> => {
       invariant(amount, 'Amount is not defined');
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(isHex(blockhash), 'BlockHash is not valid');
 
       try {

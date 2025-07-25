@@ -85,7 +85,7 @@ export const useChangeRoleSubmit = ({
       invariant(role, 'Role is not defined');
       invariant(address, 'Addess is not defined');
       invariant(currentAddress, 'CurrentAddess is not defined');
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
 
       if (
         !isRevoke &&

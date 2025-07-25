@@ -29,7 +29,7 @@ export const useClaimTypeSubmit = ({
       _: ClaimTypeFormInputType,
       { nodeOperatorId, proof }: ClaimTypeFormNetworkData,
     ): Promise<boolean> => {
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(proof?.proof, 'proof is not defined');
 
       try {

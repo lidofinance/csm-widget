@@ -28,7 +28,7 @@ export const useClaimBondSubmit = ({
       { nodeOperatorId, rewards }: ClaimBondFormNetworkData,
     ): Promise<boolean> => {
       invariant(token, 'Token is not defined');
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(
         (claimRewards && rewards) || !claimRewards,
         'Rewards is not defined',

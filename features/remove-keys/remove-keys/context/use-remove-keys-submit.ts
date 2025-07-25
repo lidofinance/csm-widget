@@ -28,7 +28,7 @@ export const useRemoveKeysSubmit = ({
       { selection: { start, count } }: RemoveKeysFormInputType,
       { nodeOperatorId, info, keys }: RemoveKeysFormNetworkData,
     ): Promise<boolean> => {
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(keys, 'Keys are not defined');
       invariant(
         info?.totalDepositedKeys !== undefined,

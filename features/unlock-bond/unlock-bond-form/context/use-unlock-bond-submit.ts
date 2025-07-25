@@ -28,7 +28,7 @@ export const useUnlockBondSubmit = ({
       { nodeOperatorId }: UnlockBondFormNetworkData,
     ): Promise<boolean> => {
       invariant(amount, 'BondAmount is not defined');
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
 
       try {
         const callback: TransactionCallback<bigint> = async ({

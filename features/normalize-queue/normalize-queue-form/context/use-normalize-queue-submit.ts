@@ -29,7 +29,7 @@ export const useNormalizeQueueSubmit = ({
       _: NormalizeQueueFormInputType,
       { nodeOperatorId, info }: NormalizeQueueFormNetworkData,
     ): Promise<boolean> => {
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(info, 'Info is not defined');
 
       try {

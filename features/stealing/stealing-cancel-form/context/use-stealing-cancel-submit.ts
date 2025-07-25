@@ -27,7 +27,7 @@ export const useStealingCancelSubmit = ({
       nodeOperatorId,
     }: StealingCancelFormInputType): Promise<boolean> => {
       invariant(amount, 'Amount is not defined');
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
 
       try {
         const callback: TransactionCallback = async ({ stage, payload }) => {

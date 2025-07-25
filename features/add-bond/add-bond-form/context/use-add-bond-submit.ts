@@ -27,7 +27,7 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
     ): Promise<boolean> => {
       invariant(token, 'Token is not defined');
       invariant(amount, 'BondAmount is not defined');
-      invariant(nodeOperatorId, 'NodeOperatorId is not defined');
+      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
 
       try {
         const callback: TransactionCallback<AddBondResult> = async ({
