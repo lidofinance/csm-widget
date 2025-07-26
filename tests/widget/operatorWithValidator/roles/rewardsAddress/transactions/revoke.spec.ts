@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { trimAddress } from '@lidofinance/address';
 import {
   LOW_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
@@ -49,12 +48,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
 
           await expect(txModal.description).toContainText('Address stays');
 
-          await expect(txModal.description).toContainText(
-            trimAddress(
-              '0x0000000000000000000000000000000000000000000000000000000000000000',
-              6,
-            ),
-          );
+          await expect(txModal.description).toContainText('0x0000...000000');
           await expect(txModal.footerHint).toHaveText(
             'Confirm this transaction in your wallet',
           );
@@ -90,14 +84,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
 
         const { txModal } = widgetService.rolesPage;
         await expect(txModal.description).toContainText('Address stays');
-
-        await expect(txModal.description).toContainText(
-          trimAddress(
-            '0x0000000000000000000000000000000000000000000000000000000000000000',
-            6,
-          ),
-        );
-
+        await expect(txModal.description).toContainText('0x0000...000000');
         await expect(txModal.footerHint).toContainText('View on Etherscan');
       });
     },
