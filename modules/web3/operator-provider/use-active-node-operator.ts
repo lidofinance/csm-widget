@@ -7,11 +7,10 @@ export const useActiveNodeOperator = (list?: NodeOperator[]) => {
   const [, setCachedId] = useCachedId();
 
   useEffect(() => {
-    if (!list) return;
     setActive((prev) => {
-      const updated = list.find((item) => item.id === prev?.id);
+      const updated = list?.find((item) => item.id === prev?.id);
 
-      return updated ?? list[0];
+      return updated ?? list?.[0];
     });
   }, [list]);
 

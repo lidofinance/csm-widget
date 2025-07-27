@@ -25,7 +25,7 @@ export const FormatPrice: FormatPriceComponent = ({
         });
   const prefix = amount && approx ? '≈ ' : '';
 
-  if (amount && amount < 0.01) {
+  if (amount !== null && amount !== undefined && amount < 0.01) {
     return (
       <Tooltip
         placement="topRight"
