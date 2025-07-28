@@ -15,6 +15,20 @@ export const HeaderWrapper = styled.div`
   flex-direction: column;
   gap: 0;
   align-items: center;
+
+  position: sticky;
+  z-index: 250;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  padding: 0 32px;
+  margin: 0 -32px;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    padding: 18px 20px;
+    margin: 0 -20px;
+  }
 `;
 
 export const HeaderStyle = styled.header`
@@ -23,19 +37,8 @@ export const HeaderStyle = styled.header`
   align-items: center;
   flex-wrap: nowrap;
   gap: 8px;
-
-  position: sticky;
-  z-index: 250;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: 18px 32px;
-  margin: 0 -32px;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    padding: 18px 20px;
-    margin: 0 -20px;
-  }
+  width: 100%;
+  padding: 18px 0;
 
   transition:
     box-shadow 0.3s ease,
