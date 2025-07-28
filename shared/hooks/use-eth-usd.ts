@@ -50,7 +50,7 @@ export const useEthUsd = (amount?: bigint) => {
   });
 
   const usdAmount = useMemo(() => {
-    if (price && amount) {
+    if (price && amount !== undefined) {
       return weiToEth(amount) * Number(price);
     }
     return undefined;
