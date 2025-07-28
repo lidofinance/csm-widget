@@ -2,11 +2,11 @@ import { Link, ThemeName } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
 const WarningBlock = styled.div`
-  position: fixed;
-  left: 0;
-  right: 0%;
-  top: 0;
-  margin: 0 -32000px;
+  text-align: center;
+
+  padding-inline: 20px;
+  width: auto;
+  min-width: 110%;
 
   display: flex;
   align-items: center;

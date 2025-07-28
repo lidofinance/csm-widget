@@ -8,8 +8,16 @@ import styled, { keyframes } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const HeaderStyle = styled.header`
+export const HeaderWrapper = styled.div`
   grid-area: header;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+`;
+
+export const HeaderStyle = styled.header`
   align-self: center;
   display: flex;
   align-items: center;
@@ -22,12 +30,10 @@ export const HeaderStyle = styled.header`
   left: 0;
   right: 0;
   padding: 18px 32px;
-  padding-top: 50px;
   margin: 0 -32px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
     padding: 18px 20px;
-    padding-top: 50px;
     margin: 0 -20px;
   }
 
