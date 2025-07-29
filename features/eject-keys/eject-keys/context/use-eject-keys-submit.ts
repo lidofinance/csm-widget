@@ -35,7 +35,7 @@ export const useEjectKeysSubmit = ({
     ): Promise<boolean> => {
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(keys, 'Keys are not defined');
-      invariant(amount, 'Amount is not defined');
+      invariant(amount !== undefined, 'Amount is not defined');
       invariant(
         info?.totalDepositedKeys !== undefined,
         'Offset is not defined',

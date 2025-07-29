@@ -40,7 +40,7 @@ export const useSubmitKeysSubmit = ({
     ): Promise<boolean> => {
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
-      invariant(amount, 'BondAmount is not defined');
+      invariant(amount !== undefined, 'BondAmount is not defined');
       invariant(address, 'Address is not deinfed');
 
       if (

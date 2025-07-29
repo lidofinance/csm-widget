@@ -17,13 +17,18 @@ export const StrikesCount: FC<{ strikes?: KeyStrikes }> = ({ strikes }) => {
   );
 
   const count = getSum(strikes);
+  const warning = max && count >= max;
 
   return (
     <Box minWidth="fit-content">
-      <Text as="span" size="xs" color={count > 0 ? 'default' : 'secondary'}>
+      <Text
+        as="span"
+        size="xs"
+        color={warning ? 'error' : count > 0 ? 'default' : 'secondary'}
+      >
         {count}
       </Text>
-      <Text as="span" size="xs" color="secondary">
+      <Text as="span" size="xs" color={warning ? 'error' : 'secondary'}>
         /{max?.toString() ?? 0}
       </Text>
     </Box>
