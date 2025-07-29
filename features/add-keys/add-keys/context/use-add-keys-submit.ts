@@ -32,7 +32,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(depositData.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
-      invariant(amount, 'BondAmount is not defined');
+      invariant(amount !== undefined, 'BondAmount is not defined');
 
       try {
         const keysCount = depositData.length;

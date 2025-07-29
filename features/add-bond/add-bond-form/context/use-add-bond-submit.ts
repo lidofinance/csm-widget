@@ -26,7 +26,7 @@ export const useAddBondSubmit = ({ onConfirm, onRetry }: UseAddBondOptions) => {
       { nodeOperatorId }: AddBondFormNetworkData,
     ): Promise<boolean> => {
       invariant(token, 'Token is not defined');
-      invariant(amount, 'BondAmount is not defined');
+      invariant(amount !== undefined, 'BondAmount is not defined');
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
 
       try {

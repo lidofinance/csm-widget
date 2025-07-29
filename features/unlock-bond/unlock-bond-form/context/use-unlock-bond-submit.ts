@@ -27,7 +27,7 @@ export const useUnlockBondSubmit = ({
       { amount }: UnlockBondFormInputType,
       { nodeOperatorId }: UnlockBondFormNetworkData,
     ): Promise<boolean> => {
-      invariant(amount, 'BondAmount is not defined');
+      invariant(amount !== undefined, 'BondAmount is not defined');
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
 
       try {

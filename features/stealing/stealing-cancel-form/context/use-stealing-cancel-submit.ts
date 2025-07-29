@@ -26,7 +26,7 @@ export const useStealingCancelSubmit = ({
       amount,
       nodeOperatorId,
     }: StealingCancelFormInputType): Promise<boolean> => {
-      invariant(amount, 'Amount is not defined');
+      invariant(amount !== undefined, 'Amount is not defined');
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
 
       try {

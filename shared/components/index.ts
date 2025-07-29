@@ -46,3 +46,4 @@ export * from './stack';
 export * from './external-button-link';
 export * from './section-header-link';
 export * from './banner';
+export * from './key-strikes';

@@ -1,23 +1,19 @@
 import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
-import { Text, Tooltip } from '@lidofinance/lido-ui';
-import {
-  useCurveParameters,
-  useFrameInfo,
-  useNodeOperatorId,
-  useOperatorCurveId,
-  useOperatorKeysWithStatus,
-} from 'modules/web3';
-import { FC, useCallback } from 'react';
+import { Text } from '@lidofinance/lido-ui';
+import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
+import { FC } from 'react';
 import {
   BeaconchainPubkeyLink,
   CopyLink,
   EthseerPubkeyLink,
+  KeyStrikes,
   Pubkey,
   SectionBlock,
   Stack,
 } from 'shared/components';
-import { formatDate, hasStatus } from 'utils';
-import { Circle, List, Row } from './styles';
+import { hasStatus } from 'utils';
+import { List, Row } from './styles';
+import { LastStrike } from './last-strike';
 
 type WithStrikes = KeyWithStatus & Required<Pick<KeyWithStatus, 'strikes'>>;
 
@@ -51,72 +47,12 @@ export const StrikesSection: FC = () => {
                   </>
                 }
               />
-              <Strikes strikes={strikes} />
+              <KeyStrikes strikes={strikes} />
               <LastStrike strikes={strikes} />
             </Row>
           ))}
         </List>
       </Stack>
     </SectionBlock>
-  );
-};
-
-export const LastStrike: FC<{ strikes: number[] }> = ({ strikes }) => {
-  const nodeOperatorId = useNodeOperatorId();
-  const { data: curveId } = useOperatorCurveId(nodeOperatorId);
-  const { data: params } = useCurveParameters(curveId);
-  const { data: info } = useFrameInfo();
-
-  if (!info || !params) return null;
-
-  const n = strikes.findLastIndex((v) => !!v);
-  const strikeTimestamp =
-    info.lastReport - info.frameDuration * (strikes.length - n - 1);
-
-  return (
-    <Text size="xs" color="secondary">
-      Last Strike: {formatDate(strikeTimestamp, 'dd.MM.yyyy')}
-    </Text>
-  );
-};
-
-export const Strikes: FC<{ strikes: number[] }> = ({ strikes }) => {
-  const nodeOperatorId = useNodeOperatorId();
-  const { data: curveId } = useOperatorCurveId(nodeOperatorId);
-  const { data: params } = useCurveParameters(curveId);
-  const { data: info } = useFrameInfo();
-
-  const getTooltip = useCallback(
-    (n: number) => {
-      if (!info || !params) return null;
-      const strikeTimestamp =
-        info.lastReport - info.frameDuration * (strikes.length - n - 1);
-      const expireTimestamp =
-        strikeTimestamp + params.strikesConfig.lifetime * info.frameDuration;
-      return info ? (
-        <>
-          Received: {formatDate(strikeTimestamp, 'dd.MM.yyyy')}
-          <br />
-          Expires: {formatDate(expireTimestamp, 'dd.MM.yyyy')}
-        </>
-      ) : null;
-    },
-    [info, params, strikes.length],
-  );
-
-  return (
-    <Stack gap="xs">
-      {strikes.map((s, i) => (
-        <span key={i}>
-          {s ? (
-            <Tooltip placement="top" title={getTooltip(i)}>
-              <Circle $red />
-            </Tooltip>
-          ) : (
-            <Circle />
-          )}
-        </span>
-      ))}
-    </Stack>
   );
 };

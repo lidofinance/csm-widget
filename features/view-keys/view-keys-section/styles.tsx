@@ -31,21 +31,21 @@ export const TableStyle = styled.table`
 
     padding: 12px 32px;
 
-    ${MEDIA_QUERY_XXL} {
-      grid-template-columns: 5fr 4fr 1fr;
+    /* ${MEDIA_QUERY_XXL} { */
+    grid-template-columns: 5fr 4fr 1fr;
 
-      td:nth-child(4) {
-        grid-column: 1 / -1;
+    td:nth-child(4) {
+      grid-column: 1 / -1;
 
-        &:empty {
-          display: none;
-        }
-      }
-
-      th:nth-child(4) {
+      &:empty {
         display: none;
       }
     }
+
+    th:nth-child(4) {
+      display: none;
+    }
+    /* } */
 
     ${({ theme }) => theme.mediaQueries.md} {
       grid-template-columns: 1fr;
