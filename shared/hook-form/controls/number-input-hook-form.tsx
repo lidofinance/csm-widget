@@ -1,6 +1,6 @@
 import { useController, UseControllerProps } from 'react-hook-form';
 
-import { InputNumber } from 'shared/components/input-amount/input-number';
+import { InputNumber } from 'shared/components';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
 
 type NumberInputHookFormProps = Partial<

@@ -28,7 +28,7 @@ const ethseerRate: API = async (req, res) => {
     res.json(cached);
   } else {
     const response = await getEthSeerRate(id);
-    cache.put(cacheKey, response, config.CACHE_ETH_PRICE_TTL);
+    cache.put(cacheKey, response, config.CACHE_ETHSEER_RATE_TTL);
 
     res.json(response);
   }

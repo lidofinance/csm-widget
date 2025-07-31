@@ -1,13 +1,12 @@
-import { BigNumber } from 'ethers';
-import { useNodeOperatorInfo } from 'shared/hooks';
-import { LoadingRecord, NodeOperatorId } from 'types';
+import { NodeOperatorId, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
+import { LoadingRecord } from 'types';
 
 export type NormalizeQueueFormInputType = Record<string, never>;
 
 export type NormalizeQueueFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
-  info?: ReturnType<typeof useNodeOperatorInfo>['data'];
+  info?: NodeOperatorInfo;
   unqueuedCount?: number;
-  etherBalance?: BigNumber;
-  loading: LoadingRecord<'info' | 'etherBalance'>;
+  ethBalance?: bigint;
+  loading: LoadingRecord<'info' | 'ethBalance'>;
 };

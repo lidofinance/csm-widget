@@ -1,12 +1,12 @@
-import { FC } from 'react';
-import { CheckboxHookForm } from 'shared/hook-form/controls';
-import { SHARE_LIMIT_STATUS } from 'shared/hooks';
-import { useSubmitKeysFormData } from '../context';
-import { Stack } from 'shared/components';
 import { Text } from '@lidofinance/lido-ui';
+import { FC } from 'react';
+import { Stack } from 'shared/components';
+import { CheckboxHookForm } from 'shared/hook-form/controls';
+import { useSubmitKeysFormData } from '../context';
+import { SHARE_LIMIT_STATUS } from 'modules/web3';
 
 export const KeysConfirm: FC = () => {
-  const { shareLimit } = useSubmitKeysFormData();
+  const { shareLimitStatus } = useSubmitKeysFormData();
 
   return (
     <Stack align="start">
@@ -17,13 +17,13 @@ export const KeysConfirm: FC = () => {
           <li>
             My nodes are synced, running, and ready for the validator activation
           </li>
-          {shareLimit?.status === SHARE_LIMIT_STATUS.APPROACHING && (
+          {shareLimitStatus === SHARE_LIMIT_STATUS.APPROACHING && (
             <li>
               I understand that the deposit time for my keys can be months or
               longer because CSM is approaching its stake share limit
             </li>
           )}
-          {shareLimit?.status === SHARE_LIMIT_STATUS.REACHED && (
+          {shareLimitStatus === SHARE_LIMIT_STATUS.REACHED && (
             <li>
               I understand that my newly uploaded keys are very unlikely to
               receive deposits in the near future because CSM has reached its

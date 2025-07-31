@@ -1,9 +1,11 @@
 import { FC } from 'react';
 
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { FAQ_ROLES } from 'faq';
+import { Faq } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { RolesPageSwitcher } from 'shared/navigate';
 import { ChangeRewardRole } from './change-reward-role';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 
 export const ChangeRewardRolePage: FC = () => (
   <Layout
@@ -13,5 +15,6 @@ export const ChangeRewardRolePage: FC = () => (
   >
     <RolesPageSwitcher />
     <ChangeRewardRole />
+    <Faq items={FAQ_ROLES} />
   </Layout>
 );

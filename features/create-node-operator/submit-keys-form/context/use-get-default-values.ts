@@ -1,39 +1,40 @@
 import { useMemo } from 'react';
-import { getMaxBalanceToken } from 'utils';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 import { useDefaultValues } from 'shared/hooks';
+import { getMaxBalanceToken } from 'modules/web3';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useGetDefaultValues = (
   {
-    etherBalance,
+    ethBalance,
     stethBalance,
     wstethBalance,
     loading: {
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
     },
   }: SubmitKeysFormNetworkData,
   referrer?: Address,
 ) => {
+  const token = getMaxBalanceToken({
+    [TOKENS.eth]: ethBalance,
+    [TOKENS.steth]: stethBalance,
+    [TOKENS.wsteth]: wstethBalance,
+  });
+
   return useDefaultValues<SubmitKeysFormInputType>(
     useMemo(() => {
       if (
         [
-          isEtherBalanceLoading,
+          isEthBalanceLoading,
           isStethBalanceLoading,
           isWstethBalanceLoading,
         ].some(Boolean)
       ) {
         return undefined;
       }
-
-      const token = getMaxBalanceToken({
-        etherBalance,
-        stethBalance,
-        wstethBalance,
-      });
 
       return {
         token,
@@ -46,13 +47,11 @@ export const useGetDefaultValues = (
         referrer,
       };
     }, [
-      etherBalance,
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
       referrer,
-      stethBalance,
-      wstethBalance,
+      token,
     ]),
   );
 };

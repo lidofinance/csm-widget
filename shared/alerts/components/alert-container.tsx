@@ -3,6 +3,7 @@ import { FC } from 'react';
 import styled from 'styled-components';
 import { useAlertActions } from '../alert-provider';
 import { MEDIA_QUERY_XXL } from 'styles/constants';
+import { useDappStatus } from 'modules/web3';
 
 const AlertContainerStyled = styled.div`
   display: flex;
@@ -37,6 +38,8 @@ const AlertContainerStyled = styled.div`
 
 export const AlertContainer: FC = () => {
   const { alerts } = useAlertActions();
+  const { isSupportedChain } = useDappStatus();
+  if (!isSupportedChain) return null;
 
   return (
     <DarkThemeProvider>

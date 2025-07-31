@@ -2,7 +2,7 @@ import memoize from 'lodash/memoize';
 
 import { config } from 'config';
 
-import { encodeURLQuery } from './encodeURLQuery';
+import { encodeURLQuery } from './encode-url-query';
 
 export const getIpfsBasePath = memoize(() => {
   let basePath = document.querySelector('base')?.href || '/';

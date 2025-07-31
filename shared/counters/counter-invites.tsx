@@ -1,6 +1,6 @@
+import { useInvites } from 'modules/web3';
 import { FC } from 'react';
 import { Counter } from 'shared/components';
-import { useInvites } from 'shared/hooks';
 
 export const CounterInvites: FC = () => {
   const { data: invites } = useInvites();

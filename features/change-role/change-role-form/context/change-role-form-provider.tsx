@@ -1,4 +1,4 @@
-import { ROLES } from 'consts/roles';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
@@ -6,13 +6,14 @@ import {
   FormControllerContextValueType,
   FormDataContext,
   useFormControllerRetry,
+  useFormData,
 } from 'shared/hook-form/form-controller';
-import { type ChangeRoleFormInputType } from './types';
+import {
+  type ChangeRoleFormInputType,
+  type ChangeRoleFormNetworkData,
+} from './types';
 import { useChangeRoleFormNetworkData } from './use-change-role-form-network-data';
 import { useChangeRoleSubmit } from './use-change-role-submit';
-
-import { useFormData } from 'shared/hook-form/form-controller';
-import { type ChangeRoleFormNetworkData } from './types';
 import { useChangeRoleValidation } from './use-change-role-validation';
 import { useGetDefaultValues } from './use-get-default-values';
 

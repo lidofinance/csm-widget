@@ -1,41 +1,23 @@
-import { useFaqList } from 'providers/faq-provider';
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { Section } from 'shared/components';
-import { trackMatomoFaqEvent } from 'utils';
+import { useFilterShowRules } from 'shared/hooks';
+import { Faq as FaqItem } from 'types';
 import { AccordionNavigatable } from '../accordion-navigatable';
-import { FaqElement } from './styles';
-import { useFaqFilter } from './use-faq-filter';
 
-export const Faq: FC = () => {
-  const faqList = useFaqList();
-  const faqFilter = useFaqFilter();
-
-  // FIXME: matomo events for link click inside faq
-  const handleExpand = useCallback(
-    (id: string) => () => trackMatomoFaqEvent(id),
-    [],
-  );
-
-  const filteredFaqList = faqList.filter(faqFilter);
-
-  if (filteredFaqList.length === 0) return null;
+export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
+  const items = useFilterShowRules(_items);
 
   return (
     <Section title="FAQ">
-      {filteredFaqList.map(({ id, title, content, anchor }, index) => {
+      {items.map(({ title, anchor, content }, index) => {
         return (
           <AccordionNavigatable
-            key={id}
-            id={anchor ?? undefined}
-            defaultExpanded={index === 0}
-            summary={String(title)}
-            onExpand={handleExpand(id)}
+            key={anchor}
+            id={anchor}
+            summary={title}
+            isFirst={index === 0}
           >
-            <FaqElement
-              dangerouslySetInnerHTML={{
-                __html: content,
-              }}
-            />
+            {content}
           </AccordionNavigatable>
         );
       })}

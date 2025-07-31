@@ -1,3 +1,5 @@
+import { getExternalLinks } from 'consts/external-links';
+import { useDappStatus } from 'modules/web3';
 import { useModalActions } from 'providers/modal-provider';
 import {
   createContext,
@@ -7,12 +9,11 @@ import {
   useContext,
   useMemo,
 } from 'react';
-import { useAccount, useSessionStorage } from 'shared/hooks';
+import { useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { extractError } from 'utils';
 import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
-import { getExternalLinks } from 'consts/external-links';
 
 type AuthContextType = {
   token?: string;
@@ -32,7 +33,7 @@ const { surveyApi } = getExternalLinks();
 
 export const SurveyAuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const siwe = useSiwe();
-  const { address } = useAccount();
+  const { address } = useDappStatus();
   const [token, setToken] = useSessionStorage<string | undefined>(
     `surveys-token-${address}`,
     undefined,

@@ -1,7 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../base.page';
-import { TOKENS } from 'consts/tokens';
 import { SourceSelect } from 'tests/pages/elements/bondRewards/claim/sourceSelect.element';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export class ClaimPage extends BasePage {
   form: Locator;

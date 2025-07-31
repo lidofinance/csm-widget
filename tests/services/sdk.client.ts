@@ -3,7 +3,7 @@ import { LidoSDK, VIEM_CHAINS, CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { NetworkConfig } from '@lidofinance/wallets-testing-wallets';
 import { createWalletClient, formatEther, http, PrivateKeyAccount } from 'viem';
 import { HDAccount } from 'viem/accounts';
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export class SdkService extends LidoSDK {
   constructor(
@@ -34,13 +34,13 @@ export class SdkService extends LidoSDK {
   async getBalanceByToken(tokenName: TOKENS) {
     let formatBalance;
     switch (tokenName) {
-      case TOKENS.ETH:
+      case TOKENS.eth:
         formatBalance = await this.core.balanceETH(this.account.address);
         break;
-      case TOKENS.STETH:
+      case TOKENS.steth:
         formatBalance = await this.steth.balance(this.account.address);
         break;
-      case TOKENS.WSTETH:
+      case TOKENS.wsteth:
         formatBalance = await this.wsteth.balance(this.account.address);
         break;
       default:

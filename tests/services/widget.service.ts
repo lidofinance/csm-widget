@@ -14,7 +14,7 @@ import {
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
 import { BondRewardsPage } from 'tests/pages/bondRewards.page';
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export class WidgetService {
   public mainPage: MainPage;
@@ -132,7 +132,7 @@ export class WidgetService {
         this.bondRewardsPage.addBond.addBondButton.click(),
       ]);
 
-      if (tokenName !== TOKENS.ETH) {
+      if (tokenName !== TOKENS.eth) {
         await this.bondRewardsPage.page.waitForSelector(
           `text=Confirm request in your wallet`,
           { timeout: STAGE_WAIT_TIMEOUT },
@@ -171,7 +171,7 @@ export class WidgetService {
       await this.bondRewardsPage.claim.amountInput.fill(amount);
 
       const actionButton =
-        tokenName === TOKENS.ETH
+        tokenName === TOKENS.eth
           ? this.bondRewardsPage.claim.requestWithdrawalButton
           : this.bondRewardsPage.claim.claimButton;
 
@@ -187,7 +187,7 @@ export class WidgetService {
       await this.walletPage.confirmTx(txPage);
 
       const successText =
-        tokenName === TOKENS.ETH
+        tokenName === TOKENS.eth
           ? 'Withdrawal request has been sent'
           : 'Requested amount has been successfully claimed';
 

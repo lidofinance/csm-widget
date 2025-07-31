@@ -1,10 +1,10 @@
 import { getExternalLinks } from 'consts/external-links';
-import { KEY_STATUS } from 'consts/key-status';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
 import { MatomoLink } from '../matomo-link/matomo-link';
 
 import { ReactComponent as BeaconchaLink } from 'assets/icons/beaconcha-link.svg';
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 
 type KeyLinkProps = {
   pubkey: string;

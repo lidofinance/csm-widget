@@ -1,23 +1,22 @@
 import { Block, InlineLoader, Text } from '@lidofinance/lido-ui';
 import { DATA_UNAVAILABLE } from 'consts/text';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { IconTooltip, MatomoLink, Stack } from 'shared/components';
-import { useNodeOperatorInfo } from 'shared/hooks';
 import { formatDate, formatPercent } from 'utils';
 import { DiffBadge } from './diff-badge';
 import { Rate } from './styles';
 import { Tip } from './tip';
 import { useEthseerApi } from './use-ethseer-api';
+// import { useNodeOperatorId } from 'modules/web3';
 
 export const AttestationRateSection: FC = () => {
-  const id = useNodeOperatorId();
-  const { data: info } = useNodeOperatorInfo(id);
+  // const id = useNodeOperatorId();
+  // const { data: info } = useNodeOperatorInfo(id);
   const { data, error } = useEthseerApi();
 
-  const showThisSection = data || (info?.totalDepositedKeys ?? 0) > 0;
+  // const showThisSection = data || (info?.totalDepositedKeys ?? 0) > 0;
 
-  if (!showThisSection) return null;
+  // if (!showThisSection) return null;
 
   return (
     <Block>
@@ -48,7 +47,7 @@ export const AttestationRateSection: FC = () => {
         {data ? (
           <>
             <Stack center gap="sm" wrap>
-              <Rate>{formatPercent(data.operatorAttestationRate)}%</Rate>
+              <Rate>{formatPercent(data.operatorAttestationRate)}</Rate>
               <Stack center gap="xs" wrap>
                 <DiffBadge
                   values={[data.operatorAttestationRate, data.threshold]}

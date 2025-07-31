@@ -6,6 +6,7 @@ import { FormLoading } from './form-loading';
 import { RemoveKeysFormInfo } from './remove-keys-form-info';
 import { FormBlock } from 'shared/components';
 import { FormControllerStyled } from 'shared/hook-form/form-controller';
+import { AmountInput } from './controls/amount-input';
 
 export const RemoveKeysForm: FC = memo(() => {
   return (
@@ -14,6 +15,7 @@ export const RemoveKeysForm: FC = memo(() => {
         <FormLoading>
           <FormControllerStyled>
             <KeysSelector />
+            <AmountInput />
             <SubmitButton />
           </FormControllerStyled>
           <RemoveKeysFormInfo />

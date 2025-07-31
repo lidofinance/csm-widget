@@ -1,33 +1,31 @@
-import { type TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
+import { ShareLimitInfo } from '@lidofinance/lido-csm-sdk';
+import { BondBalance, NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
-import { KeysAvailable, ShareLimitInfo } from 'shared/hooks';
-import { BondBalance, LoadingRecord, NodeOperatorId } from 'types';
+// import { KeysAvailable } from 'shared/hooks';
+import { LoadingRecord } from 'types';
 
 export type AddKeysFormInputType = {
   token: TOKENS;
-  bondAmount?: BigNumber;
+  bondAmount?: bigint;
 } & DepositDataInputType;
 
 export type AddKeysFormNetworkData = {
-  etherBalance?: BigNumber;
-  stethBalance?: BigNumber;
-  wstethBalance?: BigNumber;
+  ethBalance?: bigint;
+  stethBalance?: bigint;
+  wstethBalance?: bigint;
   nodeOperatorId?: NodeOperatorId;
-  keysUploadLimit?: number;
-  keysAvailable?: KeysAvailable;
+  // keysAvailable?: KeysAvailable;
   bond?: BondBalance;
   isPaused?: boolean;
-  maxStakeEther?: BigNumber | null;
+  maxStakeEth?: bigint;
   shareLimit?: ShareLimitInfo;
   blockNumber?: number;
   loading: LoadingRecord<
-    | 'etherBalance'
+    | 'ethBalance'
     | 'stethBalance'
     | 'wstethBalance'
     | 'bond'
-    | 'maxStakeEther'
-    | 'keysUploadLimit'
+    | 'maxStakeEth'
     | 'status'
     | 'shareLimit'
     | 'blockNumber'

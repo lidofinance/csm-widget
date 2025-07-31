@@ -1,11 +1,6 @@
-import { Zero } from '@ethersproject/constants';
-import { TOKENS } from 'consts/tokens';
-import { useStethByWsteth } from 'shared/hooks';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { useExchangeRate } from './use-exchange-rate';
 
-export const useStethAmount = (token: TOKENS, amount = Zero) => {
-  const { data: wstethToSteth } = useStethByWsteth(
-    (token === TOKENS.WSTETH && amount) || undefined,
-  );
-
-  return token === TOKENS.WSTETH ? wstethToSteth : amount;
+export const useStethAmount = (token: TOKENS, amount: bigint) => {
+  return useExchangeRate((amounts) => amounts[token] * amount);
 };

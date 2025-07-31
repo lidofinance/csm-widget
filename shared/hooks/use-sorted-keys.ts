@@ -1,11 +1,9 @@
-import { KEY_STATUS } from 'consts/key-status';
+import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 import { useMemo } from 'react';
-import { KeyWithStatus } from 'shared/hooks';
 
 export const DEFAULT_STATUS_ORDER: KEY_STATUS[] = [
   KEY_STATUS.INVALID,
   KEY_STATUS.DUPLICATED,
-  KEY_STATUS.STUCK,
   KEY_STATUS.UNBONDED,
   KEY_STATUS.EXIT_REQUESTED,
   KEY_STATUS.NON_QUEUED,
@@ -31,7 +29,6 @@ export const ACTIVE_STATUS_ORDER: KEY_STATUS[] = [
 
   KEY_STATUS.INVALID,
   KEY_STATUS.DUPLICATED,
-  KEY_STATUS.STUCK,
   KEY_STATUS.UNBONDED,
   KEY_STATUS.EXIT_REQUESTED,
   KEY_STATUS.NON_QUEUED,
@@ -53,9 +50,20 @@ export const sortByStatusDesc = sortByStatusOrder(
   Array.from(DEFAULT_STATUS_ORDER).reverse(),
 );
 
-export const sortByPubkey: SortKeysFn = (a, b) => a.key.localeCompare(b.key);
+export const getSum = (values?: number[]): number =>
+  values?.reduce((a, b) => a + b, 0) ?? 0;
+
+export const sortByStrikes: SortKeysFn = (a, b) =>
+  getSum(a.strikes) - getSum(b.strikes);
+export const sortByStrikesDesc: SortKeysFn = (a, b) =>
+  getSum(b.strikes) - getSum(a.strikes);
+
+export const sortByIndex: SortKeysFn = (a, b) => a.index - b.index;
+
+export const sortByPubkey: SortKeysFn = (a, b) =>
+  a.pubkey.localeCompare(b.pubkey);
 export const sortByPubkeyDesc: SortKeysFn = (a, b) =>
-  b.key.localeCompare(a.key);
+  b.pubkey.localeCompare(a.pubkey);
 
 export const useSortedKeys = (
   keys?: KeyWithStatus[],

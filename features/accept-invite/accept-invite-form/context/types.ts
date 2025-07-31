@@ -1,5 +1,6 @@
-import { Address } from 'wagmi';
-import { LoadingRecord, NodeOperatorInvite } from 'types';
+import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk';
+import { LoadingRecord } from 'types';
+import { Address } from 'viem';
 
 export type AcceptInviteFormInputType = {
   invite?: NodeOperatorInvite;

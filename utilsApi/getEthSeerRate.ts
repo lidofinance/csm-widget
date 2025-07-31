@@ -1,10 +1,10 @@
-import { CHAINS } from '@lido-sdk/constants';
 import ms from 'ms';
 
 import { config, secretConfig } from 'config';
-import { standardFetcher } from 'utils/standardFetcher';
-import { getCurrentFrame } from './getCurrentFrame';
 import { RateReponse } from 'types/ethseer';
+import { standardFetcher } from 'utils';
+import { getCurrentFrame } from './getCurrentFrame';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 const MIN_NUMBER_EPOCHS = 9; // one hour
 const MAX_NUMBER_EPOCHS = 6750; // one month

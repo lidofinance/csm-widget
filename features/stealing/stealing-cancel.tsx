@@ -1,5 +1,5 @@
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
-import { useWeb3Key } from 'shared/hooks/useWeb3Key';
+import { useWeb3Key } from 'shared/hooks';
 
 import { StealingCancelForm } from './stealing-cancel-form';
 import { LockedSection } from './locked-section';

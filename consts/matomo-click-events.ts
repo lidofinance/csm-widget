@@ -11,15 +11,13 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Welcome
   connectWallet = 'connectWallet',
   disconnectWallet = 'disconnectWallet',
+  clickShowMoreWallets = 'clickShowMoreWallets',
+  clickShowLessWallets = 'clickShowLessWallets',
   connectAsNodeOperator = 'connectAsNodeOperator',
   connectToBecomeNodeOperator = 'connectToBecomeNodeOperator',
   welcomeDetailedLink = 'welcomeDetailedLink',
-  earlyAdoptionLearnMore = 'earlyAdoptionLearnMore',
-  earlyAdoptionCuratedList = 'earlyAdoptionCuratedList',
   // Starter Pack
   starterPackCreateNodeOperator = 'starterPackCreateNodeOperator',
-  consumedEarlyAdoptionLearnMore = 'consumedEarlyAdoptionLearnMore',
-  notEligibleEarlyAdoptionLearnMore = 'notEligibleEarlyAdoptionLearnMore',
   partnerDappnode = 'partnerDappnode',
   partnerSedge = 'partnerSedge',
   partnerStereum = 'partnerStereum',
@@ -50,6 +48,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
+  faqItemLink = 'faqItemLink',
   // Key status comment
   howToExitLinkComment = 'howToExitLinkComment',
   whenValidatorBecomeActiveLinkComment = 'whenValidatorBecomeActiveLinkComment',
@@ -58,9 +57,10 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Alerts
   howLearnCsmClose = 'howLearnCsmClose',
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
-  howToExitLinkStuckKeysAlert = 'howToExitLinkStuckKeysAlert',
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
+  transferKeysLinkAlert = 'transferKeysLinkAlert',
   unlockBondLinkAlert = 'unlockBondLinkAlert',
+  claimIcsLinkAlert = 'claimIcsLinkAlert',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -70,6 +70,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
   dashboardExternalRatedLink = 'dashboardExternalRatedLink',
   dashboardExternalEthSeerLink = 'dashboardExternalEthSeerLink',
+  dashboardNotificationSentinelLink = 'dashboardNotificationSentinelLink',
   // Pages
   pageWelcome = 'pageWelcome',
   pageStarterPack = 'pageStarterPack',
@@ -79,10 +80,14 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageAddKeys = 'pageAddKeys',
   pageViewKeys = 'pageViewKeys',
   pageRemoveKeys = 'pageRemoveKeys',
+  pageExitKeys = 'pageExitKeys',
+  pageEjectKeys = 'pageEjectKeys',
+  pageTransferKeys = 'pageTransferKeys',
   pageMonitoring = 'pageMonitoring',
   pageAddBond = 'pageAddBond',
   pageClaimBond = 'pageClaimBond',
   pageUnlockBond = 'pageUnlockBond',
+  pageClaimType = 'pageClaimType',
   pageInboxRequests = 'pageInboxRequests',
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
@@ -111,6 +116,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Push «Disonnect» button',
     prefixed`disconnect_wallet`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.clickShowMoreWallets]: [
+    MATOMO_APP_NAME,
+    'Push "More wallets" on wallet modal',
+    prefixed`more_wallets`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.clickShowLessWallets]: [
+    MATOMO_APP_NAME,
+    'Push "Less wallets" on wallet modal',
+    prefixed`less_wallets`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator]: [
     MATOMO_APP_NAME,
     'Push «I am a Node Operator» on Welcome screen',
@@ -126,31 +141,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click on Deailed description about CSM link',
     prefixed`welcome_csm_detailed_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionLearnMore]: [
-    MATOMO_APP_NAME,
-    'Click «Learn more about EA» link on Welcome screen',
-    prefixed`welcome_ea_learn_more_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.earlyAdoptionCuratedList]: [
-    MATOMO_APP_NAME,
-    'Click «EA curated list» link on Welcome screen',
-    prefixed`welcome_ea_curated_list`,
-  ],
   // Starter Pack
   [MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator]: [
     MATOMO_APP_NAME,
     'Push «Create a Node Operator» on StarterPack screen',
     prefixed`starterpack_create_node_operator`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.consumedEarlyAdoptionLearnMore]: [
-    MATOMO_APP_NAME,
-    'Click «Learn more about EA» link on Consumed banner',
-    prefixed`consumed_ea_lear_more_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.notEligibleEarlyAdoptionLearnMore]: [
-    MATOMO_APP_NAME,
-    'Click «Learn more about EA» link on NotEligible banner',
-    prefixed`not_eligible_ea_lear_more_link`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.partnerDappnode]: [
     MATOMO_APP_NAME,
@@ -294,6 +289,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «stake share limit» link on banner',
     prefixed`stake_share_limit_link_banner`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.faqItemLink]: [
+    MATOMO_APP_NAME,
+    'Click link in FAQ',
+    prefixed`faq_item_link`,
+  ],
   // Key status comment
   [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkComment]: [
     MATOMO_APP_NAME,
@@ -326,20 +326,25 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «How to exit» link on Request To Exit alert',
     prefixed`how_to_exit_link_requset_to_exit_alert`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkStuckKeysAlert]: [
-    MATOMO_APP_NAME,
-    'Click «How to exit» link on Stuck Keys alert',
-    prefixed`how_to_exit_link_stuck_keys_alert`,
-  ],
   [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: [
     MATOMO_APP_NAME,
     'Click «Normalize queue» link on Normalize Queue alert',
     prefixed`normalize_queue_link_alert`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.transferKeysLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Transfer keys» link on Transfer Keys alert',
+    prefixed`transfer_keys_link_alert`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: [
     MATOMO_APP_NAME,
     'Click «Unlock bond» link on Locked Bond alert',
     prefixed`unlock_bond_link_alert`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert]: [
+    MATOMO_APP_NAME,
+    'Click «Claim ICS» link on Claim ICS alert',
+    prefixed`claim_ics_link_alert`,
   ],
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: [
@@ -382,6 +387,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «EthSeer» on Dashboard screen',
     prefixed`dashboard_external_ethseer_link`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardNotificationSentinelLink]: [
+    MATOMO_APP_NAME,
+    'Click «Notification Sentinel» on Dashboard screen',
+    prefixed`dashboard_notification_sentinel_link`,
+  ],
   // Pages
   [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: [
     MATOMO_APP_NAME,
@@ -423,6 +433,21 @@ export const MATOMO_CLICK_EVENTS: Record<
     'View page «RemoveKeys»',
     prefixed`view_remove_keys_page`,
   ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageExitKeys]: [
+    MATOMO_APP_NAME,
+    'View page «ExitKeys»',
+    prefixed`view_exit_keys_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageEjectKeys]: [
+    MATOMO_APP_NAME,
+    'View page «EjectKeys»',
+    prefixed`view_eject_keys_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageTransferKeys]: [
+    MATOMO_APP_NAME,
+    'View page «TransferKeys»',
+    prefixed`view_transfer_keys_page`,
+  ],
   [MATOMO_CLICK_EVENTS_TYPES.pageMonitoring]: [
     MATOMO_APP_NAME,
     'View page «Monitoring»',
@@ -442,6 +467,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «UnlockBond»',
     prefixed`view_unlock_bond_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageClaimType]: [
+    MATOMO_APP_NAME,
+    'View page «ClaimType»',
+    prefixed`view_claim_type_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: [
     MATOMO_APP_NAME,

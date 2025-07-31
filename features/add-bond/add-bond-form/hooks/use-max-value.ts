@@ -1,21 +1,20 @@
-import { Zero } from '@ethersproject/constants';
-import { TOKENS } from 'consts/tokens';
 import { useMemo } from 'react';
 import { useAddBondFormData } from '../context';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useMaxValue = (token: TOKENS) => {
-  const { etherBalance, stethBalance, wstethBalance } = useAddBondFormData();
+  const { ethBalance, stethBalance, wstethBalance } = useAddBondFormData();
 
   const max = useMemo(() => {
     switch (token) {
-      case TOKENS.ETH:
-        return etherBalance; // TODO: minus gas cost
-      case TOKENS.STETH:
+      case TOKENS.eth:
+        return ethBalance; // TODO: minus gas cost
+      case TOKENS.steth:
         return stethBalance;
-      case TOKENS.WSTETH:
+      case TOKENS.wsteth:
         return wstethBalance;
     }
-  }, [etherBalance, stethBalance, token, wstethBalance]);
+  }, [ethBalance, stethBalance, token, wstethBalance]);
 
-  return max ?? Zero;
+  return max ?? 0n;
 };

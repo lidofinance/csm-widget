@@ -47,7 +47,7 @@ export const Info: FC = () => {
             <Text size="xxs" weight={700}>
               Action required
             </Text>
-            <Text size="xxs">
+            <Text as="div" size="xxs">
               <ol>
                 <li>Connect to CSM UI with the proposed address</li>
                 <li>Go to Roles tab → Inbox requests to confirm the change</li>

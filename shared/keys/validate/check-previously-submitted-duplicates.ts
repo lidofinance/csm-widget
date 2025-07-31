@@ -1,12 +1,12 @@
-import { CHAINS } from '@lido-sdk/constants';
 import { trimAddress } from '@lidofinance/address';
 import { DepositData } from 'types';
 import { checkKeys } from '../cachedKeys';
 import { TRIM_LENGTH } from './constants';
+import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 export const checkPreviouslySubmittedDuplicates = (
   depositData: DepositData[],
-  chainId: CHAINS,
+  chainId: CSM_SUPPORTED_CHAINS,
   blockNumber?: number,
 ) => {
   const keys = depositData.map(({ pubkey }) => pubkey);

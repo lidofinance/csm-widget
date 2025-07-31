@@ -6,7 +6,7 @@ import { SplashPage } from './inner-pages';
 type Props = { path: PATH; fallback?: ReactNode };
 
 export const Navigate: FC<Props> = ({ path, fallback = <SplashPage /> }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(true);
 
   useEffect(() => void navigate(path), [navigate, path]);
 

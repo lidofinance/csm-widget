@@ -1,14 +1,15 @@
 import { useMemo } from 'react';
 import { useDefaultValues } from 'shared/hooks';
-import { getMaxBalanceToken } from 'utils';
 import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
+import { getMaxBalanceToken } from 'modules/web3';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useGetDefaultValues = ({
-  etherBalance,
+  ethBalance,
   stethBalance,
   wstethBalance,
   loading: {
-    isEtherBalanceLoading,
+    isEthBalanceLoading,
     isStethBalanceLoading,
     isWstethBalanceLoading,
   },
@@ -17,7 +18,7 @@ export const useGetDefaultValues = ({
     useMemo(() => {
       if (
         [
-          isEtherBalanceLoading,
+          isEthBalanceLoading,
           isStethBalanceLoading,
           isWstethBalanceLoading,
         ].some(Boolean)
@@ -26,9 +27,9 @@ export const useGetDefaultValues = ({
       }
 
       const token = getMaxBalanceToken({
-        etherBalance,
-        stethBalance,
-        wstethBalance,
+        [TOKENS.eth]: ethBalance,
+        [TOKENS.steth]: stethBalance,
+        [TOKENS.wsteth]: wstethBalance,
       });
 
       return {
@@ -38,8 +39,8 @@ export const useGetDefaultValues = ({
         confirmKeysReady: false,
       };
     }, [
-      etherBalance,
-      isEtherBalanceLoading,
+      ethBalance,
+      isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
       stethBalance,

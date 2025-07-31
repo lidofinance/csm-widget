@@ -1,6 +1,4 @@
-import type { BigNumber } from 'ethers';
-
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   TransactionModalTransitStage,
   TxAmount,
@@ -10,10 +8,10 @@ import {
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { NodeOperatorId } from 'types';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
 type Props = {
-  amount: BigNumber;
+  amount: bigint;
   nodeOperatorId: NodeOperatorId;
 };
 
@@ -28,9 +26,9 @@ const getTxModalStagesStealingCancel = (
         title="You are canceling stealing"
         description={
           <>
-            Node Operator ID: <b>{nodeOperatorId}</b>
+            Node Operator ID: <b>{nodeOperatorId.toString()}</b>
             <br />
-            Amount: <TxAmount amount={amount} token={TOKENS.ETH} />
+            Amount: <TxAmount amount={amount} token={TOKENS.eth} />
           </>
         }
       />,
@@ -43,9 +41,9 @@ const getTxModalStagesStealingCancel = (
         title="You are canceling stealing"
         description={
           <>
-            Node Operator ID: <b>{nodeOperatorId}</b>
+            Node Operator ID: <b>{nodeOperatorId.toString()}</b>
             <br />
-            Amount: <TxAmount amount={amount} token={TOKENS.ETH} />
+            Amount: <TxAmount amount={amount} token={TOKENS.eth} />
           </>
         }
       />,
@@ -58,9 +56,9 @@ const getTxModalStagesStealingCancel = (
         title="Stealing is canceled"
         description={
           <>
-            Node Operator ID: <b>{nodeOperatorId}</b>
+            Node Operator ID: <b>{nodeOperatorId.toString()}</b>
             <br />
-            Amount: <TxAmount amount={amount} token={TOKENS.ETH} />
+            Amount: <TxAmount amount={amount} token={TOKENS.eth} />
           </>
         }
       />,

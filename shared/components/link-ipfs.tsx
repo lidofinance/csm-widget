@@ -1,7 +1,7 @@
 import React, { MouseEventHandler, useCallback, useMemo } from 'react';
 
-import { usePrefixedPush } from 'shared/hooks/use-prefixed-history';
-import { getBasedHashHref } from 'utils/get-based-hash-href';
+import { usePrefixedPush } from 'shared/hooks';
+import { getBasedHashHref } from 'utils';
 
 type LinkIpfsProps = React.ComponentProps<'a'> & {
   href: string;

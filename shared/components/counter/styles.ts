@@ -1,6 +1,13 @@
+import { OPERATOR_TYPE } from 'consts';
+import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
 import styled from 'styled-components';
 
-export const CounterStyle = styled.span<{ $warning?: boolean }>`
+type Props = {
+  $warning?: boolean;
+  $variant?: OPERATOR_TYPE;
+};
+
+export const CounterStyle = styled.span<Props>`
   border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;
   padding: 4px 5px;
   margin-block: -4px;
@@ -19,4 +26,6 @@ export const CounterStyle = styled.span<{ $warning?: boolean }>`
       : `var(--lido-color-backgroundSecondary)`};
   color: var(--lido-color-text);
   text-transform: capitalize;
+
+  ${({ $variant }) => ($variant ? CURVE_VARIANTS[$variant] : '')}
 `;

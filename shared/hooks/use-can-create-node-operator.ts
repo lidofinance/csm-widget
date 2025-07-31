@@ -1,19 +1,11 @@
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { useCsmEarlyAdoption } from './useCsmEarlyAdoption';
-import { useCsmPaused, useCsmPublicRelease } from './useCsmStatus';
-import { useAccount } from './use-account';
+import { useCsmStatus, useDappStatus, useNodeOperatorId } from 'modules/web3';
 
 export const useCanCreateNodeOperator = () => {
-  const { address } = useAccount();
+  const { isAccountActive } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: paused } = useCsmPaused();
-  const { data: ea } = useCsmEarlyAdoption();
-  const { data: isPublicRelease } = useCsmPublicRelease();
+  const { data: status } = useCsmStatus();
 
   return Boolean(
-    address &&
-      !nodeOperatorId &&
-      !paused?.isPaused &&
-      (isPublicRelease || !!ea?.proof),
+    isAccountActive && nodeOperatorId === undefined && !status?.isPaused,
   );
 };

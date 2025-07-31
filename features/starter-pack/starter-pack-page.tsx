@@ -4,6 +4,8 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { Layout } from 'shared/layout';
 import { InvitesRedirect } from './invites-redirect';
 import { StarterPack } from './starter-pack';
+import { Faq } from 'shared/components';
+import { FAQ_MAIN } from 'faq';
 
 export const StarterPackPage: FC = () => {
   return (
@@ -13,6 +15,7 @@ export const StarterPackPage: FC = () => {
     >
       <InvitesRedirect />
       <StarterPack />
+      <Faq items={FAQ_MAIN} />
     </Layout>
   );
 };

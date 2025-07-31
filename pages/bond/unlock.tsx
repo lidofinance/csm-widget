@@ -1,7 +1,6 @@
 import { PATH } from 'consts/urls';
 import { UnlockBondPage } from 'features/unlock-bond/unlock-bond-page';
-import { getFaqLocked } from 'lib/getFaq';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utils';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
@@ -14,4 +13,4 @@ const Page = () => (
 
 export default Page;
 
-export const getServerSideProps = getProps(getFaqLocked);
+export const getServerSideProps = getProps();

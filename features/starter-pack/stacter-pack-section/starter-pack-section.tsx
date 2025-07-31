@@ -1,10 +1,9 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC, PropsWithChildren } from 'react';
-import { MatomoLink } from 'shared/components';
+import { FaqBondAmount, MatomoLink } from 'shared/components';
 import { Partners } from './partners';
 import { Step } from './step';
 import { BlockStyled, Heading, Steps } from './styles';
-import { RequiredBondAmount } from './required-bond-amount';
 import {
   ABOUT_DEPOSIT_DATA_LINK,
   HOW_TO_GENERATE_DEPOSIT_DATA_LINK,
@@ -27,8 +26,8 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
     </Heading>
     <Steps>
       <Step number="1" title="Have tokens for Bond">
-        <RequiredBondAmount /> (stETH / wstETH equivalent) is required for the
-        first validator
+        <FaqBondAmount /> (stETH / wstETH equivalent) is required for the first
+        validator
         <br />
         <MatomoLink
           href="https://operatorportal.lido.fi/modules/community-staking-module#block-e4a6daadca12480d955524247f03f380"

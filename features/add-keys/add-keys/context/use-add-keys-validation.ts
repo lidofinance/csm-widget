@@ -6,12 +6,13 @@ import {
   validateDepositData,
   ValidationError,
 } from 'shared/hook-form/validation';
-import { useAccount, useAwaitNetworkData } from 'shared/hooks';
+import { useAwaitNetworkData } from 'shared/hooks';
 import type { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
+import { useDappStatus } from 'modules/web3';
 
 export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
   const dataPromise = useAwaitNetworkData(networkData);
-  const { chainId } = useAccount();
+  const { chainId } = useDappStatus();
 
   return useCallback<Resolver<AddKeysFormInputType>>(
     async (values, _, options) => {
@@ -21,17 +22,16 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
         const {
           stethBalance,
           wstethBalance,
-          etherBalance,
-          maxStakeEther,
-          keysUploadLimit,
+          ethBalance,
+          maxStakeEth,
           blockNumber,
         } = await dataPromise;
 
         validateBondAmount({
           token,
           bondAmount,
-          maxStakeEther,
-          etherBalance,
+          maxStakeEth,
+          ethBalance,
           stethBalance,
           wstethBalance,
         });
@@ -43,7 +43,6 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
           await validateDepositData({
             depositData,
             chainId,
-            keysUploadLimit,
             blockNumber,
           });
 

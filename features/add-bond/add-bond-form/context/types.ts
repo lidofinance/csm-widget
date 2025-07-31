@@ -1,26 +1,25 @@
-import { BigNumber } from 'ethers';
-import { type TOKENS } from 'consts/tokens';
-import { BondBalance, LoadingRecord, NodeOperatorId } from 'types';
+import { BondBalance, NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { LoadingRecord } from 'types';
 
 export type AddBondFormInputType = {
   token: TOKENS;
-  bondAmount?: BigNumber;
+  bondAmount?: bigint;
 };
 
 export type AddBondFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
-  etherBalance?: BigNumber;
-  stethBalance?: BigNumber;
-  wstethBalance?: BigNumber;
+  ethBalance?: bigint;
+  stethBalance?: bigint;
+  wstethBalance?: bigint;
   bond?: BondBalance;
-  maxStakeEther?: BigNumber | null;
+  maxStakeEth?: bigint;
   isPaused?: boolean;
   loading: LoadingRecord<
-    | 'etherBalance'
+    | 'ethBalance'
     | 'stethBalance'
     | 'wstethBalance'
     | 'bond'
-    | 'maxStakeEther'
+    | 'maxStakeEth'
     | 'status'
   >;
 };

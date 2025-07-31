@@ -1,6 +1,7 @@
 import { PATH } from 'consts/urls';
+import { useInvites } from 'modules/web3';
 import { FC, useEffect } from 'react';
-import { useInvites, useSessionStorage } from 'shared/hooks';
+import { useSessionStorage } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 
 export const InvitesRedirect: FC = () => {

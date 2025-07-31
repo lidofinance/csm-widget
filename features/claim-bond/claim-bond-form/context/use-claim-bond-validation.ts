@@ -1,14 +1,14 @@
-import { formatEther } from '@ethersproject/units';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
   handleResolverValidationError,
-  validateBignumberMax,
+  validateBigintMax,
   validateEtherAmount,
 } from 'shared/hook-form/validation';
 import { useAwaitNetworkData } from 'shared/hooks';
 import { getTokenDisplayName } from 'utils';
 import type { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
+import { formatEther } from 'viem';
 
 export const useClaimBondValidation = (
   networkData: ClaimBondFormNetworkData,
@@ -25,12 +25,14 @@ export const useClaimBondValidation = (
             'amount',
             amount,
             token,
-            claimRewards && rewards?.available.gt(0),
+            Boolean(
+              claimRewards && rewards?.available && rewards?.available > 0,
+            ),
           );
 
           const maxAmount = maxValues?.[token][Number(claimRewards)];
           if (amount && maxAmount)
-            validateBignumberMax(
+            validateBigintMax(
               'amount',
               amount,
               maxAmount,

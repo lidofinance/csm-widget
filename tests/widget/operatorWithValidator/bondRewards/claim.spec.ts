@@ -2,8 +2,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { TOKEN_DISPLAY_NAMES } from 'utils/getTokenDisplayName';
-import { TOKENS } from 'consts/tokens';
 import { Tags } from 'tests/consts/common.const';
 import {
   USD_AMOUNT_REGEX,
@@ -11,6 +9,8 @@ import {
 } from 'tests/consts/regexp.const';
 import { trimAddress } from '@lidofinance/address';
 import { mnemonicToAccount } from 'viem/accounts';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { TOKEN_DISPLAY_NAMES } from 'utils';
 
 test.describe('Bond & Rewards. Claim.', async () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -83,7 +83,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
     },
   );
 
-  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+  [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     test(
       qase(200, `Verify UI elements for ${tokenName} buttons`),
       async ({ widgetService, contractClients, sdkService }) => {
@@ -98,7 +98,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
           await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
 
         const rateToStETH =
-          tokenName === TOKENS.WSTETH
+          tokenName === TOKENS.wsteth
             ? parseFloat(await sdkService.getWstETHRate())
             : parseFloat('1.0');
 
@@ -107,7 +107,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
 
         await test.step(`Verify UI of ${tokenName} button`, async () => {
           await test.step('Verify checked state', async () => {
-            if (tokenName === TOKENS.STETH) {
+            if (tokenName === TOKENS.steth) {
               await expect(token.getByRole('radio')).toBeChecked();
             } else {
               await expect(token.getByRole('radio')).not.toBeChecked();
@@ -124,7 +124,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
           });
 
           await test.step('Verify waiting time and receive data', async () => {
-            if (tokenName === TOKENS.ETH) {
+            if (tokenName === TOKENS.eth) {
               await expect(token.getByTestId('waitingTime')).toContainText(
                 'Waiting time:~ 1-5 days',
               );
@@ -170,9 +170,9 @@ test.describe('Bond & Rewards. Claim.', async () => {
     },
   );
 
-  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+  [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     const tag = [Tags.performTX];
-    if (tokenName === TOKENS.STETH) tag.push(Tags.smoke);
+    if (tokenName === TOKENS.steth) tag.push(Tags.smoke);
 
     test(
       qase(62, `Should correct claim by ${tokenName}`),
@@ -202,7 +202,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
     );
   });
 
-  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+  [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     test(
       qase(199, `Should claim amount using maximum available ${tokenName}`),
       async ({ widgetService }) => {
@@ -227,7 +227,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
           );
 
           expect(inputValue).toBeCloseTo(expectedBalance);
-          if (tokenName === TOKENS.ETH.valueOf()) {
+          if (tokenName === TOKENS.eth.valueOf()) {
             await expect(
               bondRewardsPage.claim.requestWithdrawalButton,
             ).toBeEnabled();
@@ -245,7 +245,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
     );
   });
 
-  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+  [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     test(
       qase(
         63,

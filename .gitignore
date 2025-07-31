@@ -18,6 +18,7 @@ tsconfig.tsbuildinfo
 
 # generated
 /generated
+/modules/web3/generated.ts
 
 # next.js
 /.next/
@@ -42,7 +43,9 @@ yarn-error.log*
 #ide
 .vscode
 .idea
-
-/public/runtime/
+.claude
+.mcp.json
 .qodo
 **/.browser_context**
+
+/public/runtime/

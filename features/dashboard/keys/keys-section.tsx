@@ -1,21 +1,21 @@
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
+import {
+  useNodeOperatorId,
+  useOperatorInfo,
+  useOperatorKeysWithStatus,
+} from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { SectionBlock, Stack, StatusComment } from 'shared/components';
-import {
-  useKeysTotalLimit,
-  useKeysWithStatus,
-  useNodeOperatorInfo,
-} from 'shared/hooks';
-import { KEY_STATUS } from 'consts/key-status';
+import { StatusTitle } from 'shared/components/status-chip/status-chip';
+import { hasStatus, StatusFilter } from 'utils';
 import { Item, ItemAction } from './item';
 import { AccordionStyle, Row, RowTitle } from './styles';
-import { StatusTitle } from 'shared/components/status-chip/status-chip';
 
 const BAD_STATUSES: KEY_STATUS[] = [
+  // KEY_STATUS.WITH_STRIKES,
   KEY_STATUS.UNBONDED,
-  KEY_STATUS.STUCK,
   KEY_STATUS.DUPLICATED,
   KEY_STATUS.INVALID,
   KEY_STATUS.NON_QUEUED,
@@ -25,33 +25,37 @@ const BAD_STATUSES: KEY_STATUS[] = [
 
 export const KeysSection: FC = () => {
   const id = useNodeOperatorId();
-  const { data: info } = useNodeOperatorInfo(id);
-  const { data: eaTarget } = useKeysTotalLimit();
+  const { data: info } = useOperatorInfo(id);
 
-  const { data: keys } = useKeysWithStatus();
+  const { data: keys } = useOperatorKeysWithStatus(id);
 
-  const keysWithStatus = useCallback(
-    (filter: KEY_STATUS | KEY_STATUS[]) =>
-      keys?.filter(({ statuses }) =>
-        (Array.isArray(filter) ? filter : [filter]).some((st) =>
-          statuses.includes(st),
-        ),
-      ).length,
+  const keysCountWithStatus = useCallback(
+    (filter: StatusFilter) => keys?.filter(hasStatus(filter)).length,
     [keys],
   );
 
-  const hasWarnings = !!keysWithStatus(BAD_STATUSES);
+  const hasWarnings =
+    !!keysCountWithStatus(BAD_STATUSES) ||
+    !!keysCountWithStatus(KEY_STATUS.WITH_STRIKES);
 
-  const limit =
-    info && info.targetLimitMode > 0 ? info.targetLimit : eaTarget || '—';
+  const actions = BAD_STATUSES.map((badStatus) =>
+    keysCountWithStatus(badStatus) ? (
+      <ItemAction
+        key={badStatus}
+        count={1}
+        title={StatusTitle[badStatus]}
+        action={<StatusComment statuses={[badStatus]} />}
+      />
+    ) : null,
+  ).filter((v) => !!v);
+
+  const limit = info && info.targetLimitMode > 0 ? info.targetLimit : '—';
   const limitTooltip =
     info?.targetLimitMode === 1
       ? 'The limit of keys for this Node Operator has been set by the protocol'
       : info?.targetLimitMode === 2
-        ? 'The limit of keys for this Node Operator has been set due to the existence of stuck keys'
-        : eaTarget
-          ? 'Early Adoption period implies the limit for the number of keys per a Node Operator to prevent a quick filling of the module by large operators from Day 1'
-          : undefined;
+        ? 'The limit of keys for this Node Operator has been set due to the existence of unbonded keys'
+        : undefined;
 
   return (
     <SectionBlock
@@ -79,27 +83,27 @@ export const KeysSection: FC = () => {
         <Row>
           <Item
             title="Depositable"
-            count={keysWithStatus(KEY_STATUS.DEPOSITABLE)}
+            count={keysCountWithStatus(KEY_STATUS.DEPOSITABLE)}
             tooltip="Keys awaiting deposit from the Lido protocol"
           />
           <Item
             title="Pending activation"
-            count={keysWithStatus(KEY_STATUS.ACTIVATION_PENDING)}
+            count={keysCountWithStatus(KEY_STATUS.ACTIVATION_PENDING)}
             tooltip="Keys have already got deposit from the Lido protocol and waiting to become active"
           />
           <Item
             title="Active"
-            count={keysWithStatus([KEY_STATUS.ACTIVE, KEY_STATUS.EXITING])}
+            count={keysCountWithStatus([KEY_STATUS.ACTIVE, KEY_STATUS.EXITING])}
             tooltip="Keys that active"
           />
           <Item
             title="Exited"
-            count={keysWithStatus(KEY_STATUS.WITHDRAWAL_PENDING)}
+            count={keysCountWithStatus(KEY_STATUS.WITHDRAWAL_PENDING)}
             tooltip="Keys that have already exited but not withdrawn yet"
           />
           <Item
             title="Withdrawn"
-            count={keysWithStatus(KEY_STATUS.WITHDRAWN)}
+            count={keysCountWithStatus(KEY_STATUS.WITHDRAWN)}
             tooltip="Keys that have already exited and withdrawn"
           />
         </Row>
@@ -109,51 +113,45 @@ export const KeysSection: FC = () => {
             defaultExpanded={hasWarnings}
             summary={
               hasWarnings ? (
-                <RowTitle>Issues with keys found, action required</RowTitle>
+                <RowTitle>
+                  Issues with keys found
+                  {actions.length > 0 && ', action required'}
+                </RowTitle>
               ) : (
                 <RowTitle>No issues with keys found</RowTitle>
               )
             }
           >
             <Stack direction="column" gap="md">
-              {hasWarnings && (
+              {actions.length > 0 && (
                 <Stack direction="column" gap="sm">
-                  {BAD_STATUSES.map((badStatus) =>
-                    keysWithStatus(badStatus) ? (
-                      <ItemAction
-                        key={badStatus}
-                        count={1}
-                        title={StatusTitle[badStatus]}
-                        action={<StatusComment statuses={[badStatus]} />}
-                      />
-                    ) : null,
-                  )}
+                  {actions}
                 </Stack>
               )}
               <Stack direction="column" gap="md">
                 <Row>
                   <Item
                     variant="warning"
+                    title="With strikes"
+                    count={keysCountWithStatus(KEY_STATUS.WITH_STRIKES)}
+                    tooltip="Keys that reported with bad performance"
+                  />
+                  <Item
+                    variant="warning"
                     title="Unbonded"
-                    count={keysWithStatus(KEY_STATUS.UNBONDED)}
+                    count={keysCountWithStatus(KEY_STATUS.UNBONDED)}
                     tooltip="Keys not sufficiently covered by current bond amount"
                   />
                   <Item
                     variant="warning"
-                    title="Stuck"
-                    count={keysWithStatus(KEY_STATUS.STUCK)}
-                    tooltip="Keys that have not been exited timely following an exit signal from the protocol"
-                  />
-                  <Item
-                    variant="warning"
                     title="Exit requested"
-                    count={keysWithStatus(KEY_STATUS.EXIT_REQUESTED)}
+                    count={keysCountWithStatus(KEY_STATUS.EXIT_REQUESTED)}
                     tooltip="Keys requested to exit"
                   />
                   <Item
                     variant="warning"
                     title="Non queued"
-                    count={keysWithStatus(KEY_STATUS.NON_QUEUED)}
+                    count={keysCountWithStatus(KEY_STATUS.NON_QUEUED)}
                     tooltip="Keys not in deposit queue"
                   />
                 </Row>
@@ -161,19 +159,19 @@ export const KeysSection: FC = () => {
                   <Item
                     variant="warning"
                     title="Duplicated"
-                    count={keysWithStatus(KEY_STATUS.DUPLICATED)}
+                    count={keysCountWithStatus(KEY_STATUS.DUPLICATED)}
                     tooltip="Keys that uploaded twice"
                   />
                   <Item
                     variant="warning"
                     title="Invalid"
-                    count={keysWithStatus(KEY_STATUS.INVALID)}
+                    count={keysCountWithStatus(KEY_STATUS.INVALID)}
                     tooltip="Keys with invalid signature"
                   />
                   <Item
                     variant="warning"
                     title="Unchecked"
-                    count={keysWithStatus(KEY_STATUS.UNCHECKED)}
+                    count={keysCountWithStatus(KEY_STATUS.UNCHECKED)}
                     tooltip="Keys that not checked yet because invalid or duplicated keys"
                   />
                 </Row>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const BadgeStyle = styled.span`
   border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
-  width: 28px;
+  min-width: 28px;
   height: 28px;
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
 

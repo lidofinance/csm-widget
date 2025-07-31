@@ -1,6 +1,7 @@
 # dependencies
 /node_modules
 /.pnp
+/lido-csm-sdk
 
 # testing
 /coverage
@@ -17,3 +18,5 @@
 /generated
 
 **/.browser_context**
+
+/tests

@@ -1,4 +1,4 @@
-import { isAddress } from 'ethers/lib/utils.js';
+import { useDappStatus } from 'modules/web3';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
@@ -7,7 +7,8 @@ import {
   validateDepositData,
   ValidationError,
 } from 'shared/hook-form/validation';
-import { useAccount, useAwaitNetworkData } from 'shared/hooks';
+import { useAwaitNetworkData } from 'shared/hooks';
+import { isAddress } from 'viem';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
@@ -17,7 +18,7 @@ export const useSubmitKeysValidation = (
   networkData: SubmitKeysFormNetworkData,
 ) => {
   const dataPromise = useAwaitNetworkData(networkData);
-  const { chainId } = useAccount();
+  const { chainId } = useDappStatus();
 
   return useCallback<Resolver<SubmitKeysFormInputType>>(
     async (values, _, options) => {
@@ -35,17 +36,16 @@ export const useSubmitKeysValidation = (
         const {
           stethBalance,
           wstethBalance,
-          etherBalance,
-          maxStakeEther,
-          keysUploadLimit,
+          ethBalance,
+          maxStakeEth: maxStakeEther,
           blockNumber,
         } = await dataPromise;
 
         validateBondAmount({
           token,
           bondAmount,
-          maxStakeEther,
-          etherBalance,
+          maxStakeEth: maxStakeEther,
+          ethBalance,
           stethBalance,
           wstethBalance,
         });
@@ -57,7 +57,6 @@ export const useSubmitKeysValidation = (
           await validateDepositData({
             depositData,
             chainId,
-            keysUploadLimit,
             blockNumber,
           });
 

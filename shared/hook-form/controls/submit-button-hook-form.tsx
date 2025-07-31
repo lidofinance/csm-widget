@@ -1,7 +1,7 @@
 import { useFormState } from 'react-hook-form';
 
 import { ButtonIcon, Lock } from '@lidofinance/lido-ui';
-import { useAccount } from 'shared/hooks';
+import { useDappStatus } from 'modules/web3';
 import { Connect } from 'shared/wallet';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
 
@@ -19,7 +19,7 @@ export const SubmitButtonHookForm: React.FC<SubmitButtonHookFormProps> = ({
   disabled: disabledProp,
   ...props
 }) => {
-  const { active } = useAccount();
+  const { isAccountActive } = useDappStatus();
   const { isValidating, isSubmitting } = useFormState();
   const { errors } = useFormState<Record<string, unknown>>();
   const disabled =
@@ -28,7 +28,7 @@ export const SubmitButtonHookForm: React.FC<SubmitButtonHookFormProps> = ({
       isValidationErrorTypeValidate(errors[errorField]?.type)) ||
     disabledProp;
 
-  if (!active) return <Connect fullwidth />;
+  if (!isAccountActive) return <Connect fullwidth />;
 
   return (
     <ButtonIcon

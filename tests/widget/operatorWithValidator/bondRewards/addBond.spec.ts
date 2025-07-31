@@ -3,8 +3,8 @@ import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/consts/common.const';
-import { TOKEN_DISPLAY_NAMES } from 'utils/getTokenDisplayName';
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { TOKEN_DISPLAY_NAMES } from 'utils';
 
 test.describe('Bond & Rewards. Add bond.', async () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -52,9 +52,9 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     },
   );
 
-  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+  [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     const tag = [Tags.performTX];
-    if (tokenName === 'STETH') tag.push(Tags.smoke);
+    if (tokenName === TOKENS.steth) tag.push(Tags.smoke);
 
     test(
       qase(193, `Should add bond using ${tokenName} as bond token`),
@@ -84,7 +84,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     );
   });
 
-  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+  [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     test(
       qase(65, `Check max button for ${tokenName} token`),
       async ({ widgetService, sdkService }) => {
@@ -113,7 +113,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     );
   });
 
-  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+  [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     test(
       qase(
         67,
@@ -139,7 +139,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     );
   });
 
-  [TOKENS.ETH, TOKENS.STETH, TOKENS.WSTETH].forEach((tokenName) => {
+  [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     test(
       qase(
         196,
@@ -157,7 +157,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
         const tokenAmountToClaim = 1.123;
 
         const rateToStETH =
-          tokenName === TOKENS.WSTETH
+          tokenName === TOKENS.wsteth
             ? parseFloat(await sdkService.getWstETHRate())
             : parseFloat('1.0');
 
@@ -183,7 +183,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
         });
 
         await test.step('Verify "Exchange rate"', async () => {
-          if (tokenName === TOKENS.STETH) {
+          if (tokenName === TOKENS.steth) {
             await expect(bondRewardsPage.addBond.exchangeRate).toBeHidden();
           } else {
             await expect(bondRewardsPage.addBond.exchangeRate).toBeVisible();

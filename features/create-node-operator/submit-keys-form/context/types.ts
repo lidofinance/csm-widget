@@ -1,43 +1,49 @@
-import { type TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
+import {
+  Proof,
+  ShareLimitInfo,
+  ShareLimitStatus,
+} from '@lidofinance/lido-csm-sdk';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
-import { KeysAvailable, ShareLimitInfo } from 'shared/hooks';
-import { LoadingRecord, Proof } from 'types';
-import { Address } from 'wagmi';
+import { KeysAvailable } from 'shared/hooks';
+import { LoadingRecord } from 'types';
+import { Address } from 'viem';
 
 export type SubmitKeysFormInputType = {
   token: TOKENS;
-  bondAmount?: BigNumber;
+  bondAmount?: bigint;
   referrer?: Address;
-  rewardsAddress?: string;
-  managerAddress?: string;
+  rewardsAddress?: Address;
+  managerAddress?: Address;
   extendedManagerPermissions: boolean;
   specifyCustomAddresses: boolean;
   specifyReferrrer: boolean;
 } & DepositDataInputType;
 
 export type SubmitKeysFormNetworkData = {
-  etherBalance?: BigNumber;
-  stethBalance?: BigNumber;
-  wstethBalance?: BigNumber;
-  eaProof?: Proof;
-  curveId?: BigNumber;
-  maxStakeEther?: BigNumber | null;
-  keysUploadLimit?: number;
+  address?: Address;
+  ethBalance?: bigint;
+  stethBalance?: bigint;
+  wstethBalance?: bigint;
+  curveId?: bigint;
+  maxStakeEth?: bigint;
   keysAvailable?: KeysAvailable;
   isPaused?: boolean;
+  proof?: Proof;
   shareLimit?: ShareLimitInfo;
+  shareLimitStatus?: ShareLimitStatus;
   blockNumber?: number;
   loading: LoadingRecord<
-    | 'etherBalance'
+    | 'ethBalance'
     | 'stethBalance'
     | 'wstethBalance'
-    | 'eaProof'
-    | 'curveId'
-    | 'keysUploadLimit'
     | 'maxStakeEther'
     | 'status'
     | 'shareLimit'
     | 'blockNumber'
+    | 'proof'
+    | 'icsPaused'
+    | 'plsCurveId'
+    | 'icsCurveId'
   >;
 };

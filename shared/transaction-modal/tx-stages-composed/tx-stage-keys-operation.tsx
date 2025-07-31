@@ -2,14 +2,12 @@ import { TxStageSign } from '../tx-stages-basic/tx-stage-sign';
 import { TxStagePending } from '../tx-stages-basic/tx-stage-pending';
 import { TxAmount } from '../tx-stages-parts/tx-amount';
 
-import type { BigNumber } from 'ethers';
-import { NodeOperatorId } from 'types';
 import { DescriptorId } from 'shared/node-operator';
-import { TOKENS } from 'consts/tokens';
 import { Plural } from 'shared/components';
+import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 
 type TxStageSignOperationAmountProps = {
-  amount?: BigNumber;
+  amount?: bigint;
   token?: TOKENS;
   keysCount: number;
   operationText: string;
@@ -27,7 +25,7 @@ export const TxStageSignOperationKeys = ({
   isPending,
   txHash,
 }: TxStageSignOperationAmountProps) => {
-  const amountEl = amount && token && (
+  const amountEl = !!amount && token && (
     <TxAmount amount={amount} token={token} />
   );
   const Component = isPending ? TxStagePending : TxStageSign;
@@ -41,8 +39,8 @@ export const TxStageSignOperationKeys = ({
           <>
             {operationText} {keysCount}{' '}
             <Plural variants={['key', 'keys']} value={keysCount} />{' '}
-            {amount && <>and depositing {amountEl}</>}.{' '}
-            {nodeOperatorId && (
+            {!!amount && <>and depositing {amountEl}</>}.{' '}
+            {nodeOperatorId !== undefined && (
               <>
                 <br />
                 <DescriptorId id={nodeOperatorId} />

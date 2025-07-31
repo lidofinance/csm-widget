@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { DescriptorCurveStyle } from '../curve-badge/styles';
 
 export const DescriptorIdWrapperStyle = styled.span``;
 
@@ -19,6 +20,10 @@ export const DescriptorStyle = styled.span`
 
   ${({ theme }) => theme.mediaQueries.lg} {
     gap: ${({ theme }) => theme.spaceMap.xs}px;
+  }
+
+  ${DescriptorCurveStyle} {
+    padding-inline: 6px;
   }
 `;
 

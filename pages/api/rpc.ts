@@ -4,19 +4,41 @@ import { rpcFactory } from '@lidofinance/next-pages';
 import { trackedFetchRpcFactory } from '@lidofinance/api-rpc';
 import { config, secretConfig } from 'config';
 import { API_ROUTES } from 'consts/api';
-import { CHAINS } from 'consts/chains';
 import { METRICS_PREFIX } from 'consts/metrics';
 import {
-  CONTRACT_CALL_ADDRESSES,
-  CONTRACT_LOGS_ADDRESSES,
   defaultErrorHandler,
+  HttpMethod,
+  httpMethodGuard,
   /* `fetchRPC` is a function used to make RPC (Remote Procedure Call) requests to a server. It is
   likely responsible for handling the actual communication with the server. */
   rateLimit,
   requestAddressMetric,
   responseTimeMetric,
+  allowedCallAddresses,
+  allowedLogsAddresses,
 } from 'utilsApi';
 import Metrics from 'utilsApi/metrics';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
+
+const allowedRPCMethods = [
+  'test',
+  'eth_call',
+  'eth_gasPrice',
+  'eth_getCode',
+  'eth_estimateGas',
+  'eth_getBlockByNumber',
+  'eth_feeHistory',
+  'eth_maxPriorityFeePerGas',
+  'eth_getBalance',
+  'eth_blockNumber',
+  'eth_getTransactionByHash',
+  'eth_getTransactionReceipt',
+  'eth_getTransactionCount',
+  'eth_sendRawTransaction',
+  'eth_getLogs',
+  'eth_chainId',
+  'net_version',
+];
 
 const rpc = rpcFactory({
   fetchRPC: trackedFetchRpcFactory({
@@ -34,32 +56,18 @@ const rpc = rpcFactory({
     [CHAINS.Hoodi]: secretConfig.rpcUrls_560048,
   },
   validation: {
-    allowedRPCMethods: [
-      'test',
-      'eth_call',
-      'eth_gasPrice',
-      'eth_getCode',
-      'eth_estimateGas',
-      'eth_getBlockByNumber',
-      'eth_feeHistory',
-      'eth_maxPriorityFeePerGas',
-      'eth_getBalance',
-      'eth_blockNumber',
-      'eth_getTransactionByHash',
-      'eth_getTransactionReceipt',
-      'eth_getTransactionCount',
-      'eth_sendRawTransaction',
-      'eth_getLogs',
-      'eth_chainId',
-      'net_version',
-    ],
-    allowedCallAddresses: CONTRACT_CALL_ADDRESSES,
-    allowedLogsAddresses: CONTRACT_LOGS_ADDRESSES,
-    maxGetLogsRange: 3_000_000, // ~ 1 year in historical queries // TODO: improve
+    allowedRPCMethods,
+    allowedCallAddresses,
+    allowedLogsAddresses,
+    maxBatchCount: config.PROVIDER_MAX_BATCH,
+    blockEmptyAddressGetLogs: true,
+    maxGetLogsRange: 1_000_000, // only 20k blocks size historical queries // FIXME: limit to 20K
+    maxResponseSize: 1_000_000, // 1mb max response
   },
 });
 
 export default wrapNextRequest([
+  httpMethodGuard([HttpMethod.POST]),
   rateLimit,
   responseTimeMetric(Metrics.request.apiTimings, API_ROUTES.RPC),
   requestAddressMetric(Metrics.request.ethCallToAddress),

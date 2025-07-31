@@ -1,11 +1,10 @@
-import { Zero } from '@ethersproject/constants';
 import { useUnlockBondFormData } from '../context';
 
 export const useMaxValue = () => {
-  const { lockedBond, etherBalance } = useUnlockBondFormData();
-  return lockedBond && etherBalance
-    ? lockedBond?.lt(etherBalance)
+  const { lockedBond, ethBalance } = useUnlockBondFormData();
+  return lockedBond && ethBalance
+    ? lockedBond < ethBalance
       ? lockedBond
-      : etherBalance
-    : Zero;
+      : ethBalance
+    : 0n;
 };
