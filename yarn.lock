@@ -3014,10 +3014,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.47.0.tgz#186d6e2695c9470cc171d111dac352da5106e681"
   integrity sha512-dF8eUUnK35CNCVa3Z++INtlxlRlYKGx2//eLz7nyFkqwPoOGI0PmVW0qgGiGY9TrGAqkJuXlERszclH8eunYCw==
 
-"@lidofinance/lido-csm-sdk@npm:@exromany/lido-csm-sdk@0.1.7":
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/@exromany/lido-csm-sdk/-/lido-csm-sdk-0.1.7.tgz#f2254a2d01810e76cd25efe564b5c5d0743d4e35"
-  integrity sha512-H4XN3eFhlEdXXyrmhQHq930/dWEJwdrxA/2mdjrG+Om0KIWbSdG50pYO2aZIH9P8TPkAL/4XnyfeioCDzoedZw==
+"@lidofinance/lido-csm-sdk@npm:@exromany/lido-csm-sdk@0.1.8":
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/@exromany/lido-csm-sdk/-/lido-csm-sdk-0.1.8.tgz#164a13699a70df77626e0335eadee9100b2bcc0b"
+  integrity sha512-/KPh6Rt0YwwrYjOidk84iDU/o+Qhi2y5QOuP9ICtNyBz4bvPRLFqcVlFY86GWz0Uih0P3d0P6Rr9s5/Ap9Vmng==
   dependencies:
     "@lidofinance/lido-ethereum-sdk" "^4.4.0"
     "@openzeppelin/merkle-tree" "^1.0.8"

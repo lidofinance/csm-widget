@@ -27,6 +27,7 @@ export * from './use-session-storage';
 export * from './use-show-rule';
 export * from './use-sorted-keys';
 export * from './use-steth-amount';
+export * from './use-strike-dates';
 export * from './use-surveys-call';
 export * from './use-surveys-filled';
 export * from './use-web3-key';

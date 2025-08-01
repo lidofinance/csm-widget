@@ -5,8 +5,11 @@ import {
   useIcsCurveId,
   useIcsProof,
   useNodeOperatorId,
+  useOperatorBalance,
   useOperatorCurveId,
+  useOperatorInfo,
   useOperatorKeysToMigrate,
+  useOperatorKeysWithStatus,
 } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
 import { type ClaimTypeFormNetworkData } from './types';
@@ -22,15 +25,19 @@ export const useClaimTypeFormNetworkData = (): [
     data: currentCurveId,
     isPending: isCurrentCurveIdLoading,
     refetch: updateCurrentCurveId,
-  } = useOperatorCurveId(nodeOperatorId);
+  } = useOperatorCurveId(nodeOperatorId, () => 1n);
   const { data: newCurveId, isPending: isNewCurveIdLoading } = useIcsCurveId();
   const { data: currentParameters, isPending: isCurrentParametersLoading } =
     useCurveParameters(currentCurveId);
   const { data: newParameters, isPending: isNewParametersLoading } =
     useCurveParameters(newCurveId);
 
+  // TODO: invalidateQueries
   const { refetch: updateKeysToMigrate } =
     useOperatorKeysToMigrate(nodeOperatorId);
+  const { refetch: updateBondBalance } = useOperatorBalance(nodeOperatorId);
+  const { refetch: udpateInfo } = useOperatorInfo(nodeOperatorId);
+  const { refetch: udpateKeys } = useOperatorKeysWithStatus(nodeOperatorId);
 
   const {
     data: proof,
@@ -45,8 +52,18 @@ export const useClaimTypeFormNetworkData = (): [
       updateCurrentCurveId(),
       updateProof(),
       updateKeysToMigrate(),
+      updateBondBalance(),
+      udpateInfo(),
+      udpateKeys(),
     ]);
-  }, [updateCurrentCurveId, updateKeysToMigrate, updateProof]);
+  }, [
+    udpateInfo,
+    udpateKeys,
+    updateBondBalance,
+    updateCurrentCurveId,
+    updateKeysToMigrate,
+    updateProof,
+  ]);
 
   const loading = useMemo(
     () => ({

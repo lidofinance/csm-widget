@@ -6,15 +6,24 @@ import { Info } from './controls/info';
 
 export const ClaimTypeFormLoader: FC<PropsWithChildren> = ({ children }) => {
   const { isLoading } = useFormState<ClaimTypeFormInputType>();
-  const { canClaimCurve, proof } = useClaimTypeFormData();
+  const { canClaimCurve, proof, currentCurveId, newCurveId } =
+    useClaimTypeFormData();
 
+  const isClaimed =
+    currentCurveId === newCurveId && currentCurveId !== undefined;
   const isEmpty = !proof?.proof || proof.isConsumed;
   const isView = !canClaimCurve;
 
   return (
     <WhenLoaded
       loading={isLoading}
-      empty={isEmpty && <>You have no proof to claim the ICS operator type</>}
+      empty={
+        isClaimed ? (
+          <>You have already claimed the ICS operator type</>
+        ) : (
+          isEmpty && <>You are not eligible to claim the ICS operator type</>
+        )
+      }
     >
       {isView ? <Info /> : children}
     </WhenLoaded>

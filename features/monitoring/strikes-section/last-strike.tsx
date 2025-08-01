@@ -1,28 +1,19 @@
-import { Text } from '@lidofinance/lido-ui';
-import {
-  useNodeOperatorId,
-  useOperatorCurveId,
-  useCurveParameters,
-  useFrameInfo,
-} from 'modules/web3';
+import { InlineLoader, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
+import { useStrikeDates } from 'shared/hooks';
 import { formatDate } from 'utils';
 
 export const LastStrike: FC<{ strikes: number[] }> = ({ strikes }) => {
-  const nodeOperatorId = useNodeOperatorId();
-  const { data: curveId } = useOperatorCurveId(nodeOperatorId);
-  const { data: params } = useCurveParameters(curveId);
-  const { data: info } = useFrameInfo();
-
-  if (!info || !params) return null;
-
   const n = strikes.findLastIndex((v) => !!v);
-  const strikeTimestamp =
-    info.lastReport - info.frameDuration * (strikes.length - n - 1);
+  const dates = useStrikeDates(n);
+
+  if (!dates) {
+    return <InlineLoader />;
+  }
 
   return (
     <Text size="xs" color="secondary">
-      Last Strike: {formatDate(strikeTimestamp, 'dd.MM.yyyy')}
+      Last Strike: {formatDate(dates?.receivedTimestamp, 'dd.MM.yyyy')}
     </Text>
   );
 };
