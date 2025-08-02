@@ -4,7 +4,7 @@ import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/consts/common.const';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { TOKEN_DISPLAY_NAMES } from 'utils';
+import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 
 test.describe('Bond & Rewards. Add bond.', async () => {
   test.beforeEach(async ({ widgetService }) => {
