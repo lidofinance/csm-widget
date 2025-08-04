@@ -6,14 +6,16 @@ import {
   BeaconchainPubkeyLink,
   CopyLink,
   EthseerPubkeyLink,
+  FaqStrikeLifetime,
+  FaqStrikeThreshold,
   KeyStrikes,
   Pubkey,
   SectionBlock,
   Stack,
 } from 'shared/components';
 import { hasStatus } from 'utils';
-import { List, Row } from './styles';
 import { LastStrike } from './last-strike';
+import { List, Row } from './styles';
 
 type WithStrikes = KeyWithStatus & Required<Pick<KeyWithStatus, 'strikes'>>;
 
@@ -21,9 +23,11 @@ export const StrikesSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: _keys } = useOperatorKeysWithStatus(nodeOperatorId);
 
-  const keys =
-    (_keys?.filter(hasStatus([KEY_STATUS.WITH_STRIKES])) as WithStrikes[]) ??
-    [];
+  const keys = (_keys || [])
+    .filter(hasStatus(KEY_STATUS.WITH_STRIKES))
+    .filter(
+      hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING]),
+    ) as WithStrikes[];
 
   if (keys.length === 0) return null;
 
@@ -31,8 +35,9 @@ export const StrikesSection: FC = () => {
     <SectionBlock title="Keys with Strikes">
       <Stack direction="column">
         <Text size="xs" color="secondary">
-          Strikes are issued for bad performance. In case your key gets 3
-          strikes within 6 frames the key will be ejected.
+          Strikes are issued for bad performance. In case your key gets{' '}
+          <FaqStrikeThreshold /> within <FaqStrikeLifetime /> the key will be
+          ejected.
         </Text>
         <List>
           {keys.map(({ pubkey, strikes, validatorIndex }) => (

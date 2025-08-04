@@ -80,6 +80,18 @@ export const CommentActivationPending: FC = () => {
   );
 };
 
+export const CommentWithStrikes: FC = () => {
+  return (
+    <>
+      Check out the{' '}
+      <MatomoLink href="https://dvt-homestaker.stakesaurus.com/best-practices/maximising-uptime-and-performance">
+        tips
+      </MatomoLink>{' '}
+      on how to improve your performance
+    </>
+  );
+};
+
 export const CommentDepositable: FC = () => {
   const { data: status } = useShareLimitStatus();
 
