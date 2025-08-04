@@ -35,7 +35,11 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
           ...widgetFullConfig.accountConfig,
           SECRET_PHRASE: secretPhrase,
         },
-        walletConfig: widgetFullConfig.walletConfig,
+        walletConfig: {
+          ...widgetFullConfig.walletConfig,
+          LATEST_STABLE_DOWNLOAD_LINK:
+            'https://github.com/MetaMask/metamask-extension/releases/download/v12.23.1/metamask-chrome-12.23.1.zip',
+        },
         nodeConfig: { rpcUrlToMock: '**/api/rpc?chainId=1' },
         browserOptions: {
           reducedMotion: 'reduce',
