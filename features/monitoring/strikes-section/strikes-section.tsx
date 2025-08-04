@@ -21,9 +21,11 @@ export const StrikesSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: _keys } = useOperatorKeysWithStatus(nodeOperatorId);
 
-  const keys =
-    (_keys?.filter(hasStatus([KEY_STATUS.WITH_STRIKES])) as WithStrikes[]) ??
-    [];
+  const keys = (_keys || [])
+    .filter(hasStatus(KEY_STATUS.WITH_STRIKES))
+    .filter(
+      hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING]),
+    ) as WithStrikes[];
 
   if (keys.length === 0) return null;
 
