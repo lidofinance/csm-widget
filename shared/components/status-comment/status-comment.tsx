@@ -9,6 +9,7 @@ import {
   CommentUnbonded,
   CommentUnbondedNonQueued,
   CommentUnchecked,
+  CommentWithStrikes,
 } from './comments';
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 
@@ -50,6 +51,8 @@ export const StatusComment: FC<{ statuses: KEY_STATUS[] }> = ({ statuses }) => {
     return <CommentActivationPending />;
 
   if (statuses.includes(KEY_STATUS.DEPOSITABLE)) return <CommentDepositable />;
+
+  if (statuses.includes(KEY_STATUS.WITH_STRIKES)) return <CommentWithStrikes />;
 
   return null;
 };
