@@ -4,11 +4,8 @@ import { test as base } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
 import { IConfig } from 'tests/config/configs/base.config';
 import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
-import {
-  contractClients,
-  ContractClients,
-} from 'tests/services/clients.contract';
-import { SdkService } from 'tests/services/sdk.client';
+import { LidoSDKClient } from 'tests/services/csmSDK.client';
+import { SdkService } from 'tests/services/ethereumSDK.client';
 import { WidgetService } from 'tests/services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 
@@ -16,8 +13,8 @@ type WorkerFixtures = {
   secretPhrase: string;
   browserWithWallet: BrowserService;
   widgetService: WidgetService;
-  contractClients: ContractClients;
-  sdkService: SdkService;
+  csmSDK: LidoSDKClient;
+  ethereumSDK: SdkService;
 };
 
 export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
@@ -65,13 +62,13 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
     },
     { scope: 'worker' },
   ],
-  contractClients: [
+  csmSDK: [
     async ({}, use) => {
-      await use(contractClients);
+      await use(new LidoSDKClient());
     },
     { scope: 'worker' },
   ],
-  sdkService: [
+  ethereumSDK: [
     async ({ secretPhrase }, use) => {
       await use(
         new SdkService(
