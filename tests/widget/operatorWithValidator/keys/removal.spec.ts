@@ -1,6 +1,6 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
-import { test } from '../../test.fixture';
+import { skipIf, test } from '../../test.fixture';
 import { KeysPage } from 'tests/pages';
 
 test.describe('Validator keys removal', async () => {
@@ -12,12 +12,12 @@ test.describe('Validator keys removal', async () => {
   });
 
   [1, 3].forEach((keyLength: number) => {
-    test.skip(
-      // need to fix after csm v2
+    test(
       qase(
         150,
         `Should load correct data from contract when ${keyLength} key selected`,
       ),
+      { ...skipIf(keyLength === 3, 'We have a bug for 3 keys in v2') },
       async () => {
         qase.parameters({ keyLength: keyLength.toString() });
         await keysPage.removePage.page
@@ -40,13 +40,13 @@ test.describe('Validator keys removal', async () => {
 
         await test.step('Check removal fee', async () => {
           await test.step('Check removal fee value', async () => {
-            await expect(keysPage.removePage.removalFeeValue).toContainText(
+            await expect(keysPage.removePage.ejectionCostInput).toHaveValue(
               `${(0.02 * keyLength).toFixed(2)} stETH`,
             );
           });
 
           await test.step('Check tooltip text', async () => {
-            await keysPage.removePage.removalFeeInfo.hover();
+            await keysPage.removePage.ejectionCostInputSVG.hover();
             await expect(
               keysPage.removePage.removalFeeInfoTooltipText,
             ).toContainText(
