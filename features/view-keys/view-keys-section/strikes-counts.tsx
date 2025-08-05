@@ -1,12 +1,13 @@
 import { KeyStrikes } from '@lidofinance/lido-csm-sdk';
-import { Box, Text } from '@lidofinance/lido-ui';
+import { Box, Text, Tooltip } from '@lidofinance/lido-ui';
 import {
   useCurveParameters,
   useNodeOperatorId,
   useOperatorCurveId,
 } from 'modules/web3';
-import { FC } from 'react';
-import { getSum } from 'shared/hooks';
+import { FC, useCallback } from 'react';
+import { getSum, useStrikeDates } from 'shared/hooks';
+import { formatDate } from 'utils';
 
 export const StrikesCount: FC<{ strikes?: KeyStrikes }> = ({ strikes }) => {
   const id = useNodeOperatorId();
@@ -16,10 +17,13 @@ export const StrikesCount: FC<{ strikes?: KeyStrikes }> = ({ strikes }) => {
     (params) => params.strikesConfig.threshold,
   );
 
+  const lastStrike = strikes?.findIndex((v) => !!v);
+  const getDates = useStrikeDates(undefined);
+
   const count = getSum(strikes);
   const warning = max && count >= max;
 
-  return (
+  const content = (
     <Box minWidth="fit-content">
       <Text
         as="span"
@@ -32,5 +36,29 @@ export const StrikesCount: FC<{ strikes?: KeyStrikes }> = ({ strikes }) => {
         /{max?.toString() ?? 0}
       </Text>
     </Box>
+  );
+
+  const getTooltip = useCallback(
+    (n: number) => {
+      const dates = getDates(n);
+      if (!dates) return null;
+
+      return (
+        <>Last Strike: {formatDate(dates?.receivedTimestamp, 'dd.MM.yyyy')}</>
+      );
+    },
+    [getDates],
+  );
+
+  return (
+    <>
+      {lastStrike !== undefined ? (
+        <Tooltip placement="left" title={getTooltip(lastStrike)}>
+          {content}
+        </Tooltip>
+      ) : (
+        content
+      )}
+    </>
   );
 };

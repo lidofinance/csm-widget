@@ -49,6 +49,20 @@ export const KeysSection: FC = () => {
     ) : null,
   ).filter((v) => !!v);
 
+  const actionsWithStrikes = [
+    ...(keysCountWithStatus(KEY_STATUS.WITH_STRIKES)
+      ? [
+          <ItemAction
+            key={KEY_STATUS.WITH_STRIKES}
+            count={1}
+            title={StatusTitle[KEY_STATUS.WITH_STRIKES]}
+            action={<StatusComment statuses={[KEY_STATUS.WITH_STRIKES]} />}
+          />,
+        ]
+      : []),
+    ...actions,
+  ];
+
   const limit = info && info.targetLimitMode > 0 ? info.targetLimit : '—';
   const limitTooltip =
     info?.targetLimitMode === 1
@@ -123,9 +137,9 @@ export const KeysSection: FC = () => {
             }
           >
             <Stack direction="column" gap="md">
-              {actions.length > 0 && (
+              {actionsWithStrikes.length > 0 && (
                 <Stack direction="column" gap="sm">
-                  {actions}
+                  {actionsWithStrikes}
                 </Stack>
               )}
               <Stack direction="column" gap="md">

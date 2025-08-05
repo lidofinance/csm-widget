@@ -6,5 +6,7 @@ export * from './faq-key-removal-fee';
 export * from './faq-link';
 export * from './faq-performance-leeway';
 export * from './faq-share-limit';
+export * from './faq-strike-lifetime';
+export * from './faq-strike-threshold';
 export * from './faq';
 export * from './styles';
