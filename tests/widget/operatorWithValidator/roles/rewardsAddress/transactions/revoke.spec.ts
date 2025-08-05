@@ -8,6 +8,8 @@ import {
 } from 'tests/consts/timeouts';
 import { generateAddress } from 'tests/helpers/accountData';
 import { Tags } from 'tests/consts/common.const';
+import { mnemonicToAccount } from 'viem/accounts';
+import { trimAddress } from '@lidofinance/address';
 
 test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -29,8 +31,9 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
 
   test(
     qase(231, 'Should display tx modal after revoke Reward role changes'),
-    async ({ widgetService }) => {
+    async ({ widgetService, secretPhrase }) => {
       const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const currentAddress = mnemonicToAccount(secretPhrase).address;
 
       await test.step('Revoke pending rewards address role', async () => {
         const [txPage] = await Promise.all([
@@ -48,7 +51,9 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
 
           await expect(txModal.description).toContainText('Address stays');
 
-          await expect(txModal.description).toContainText('0x0000...000000');
+          await expect(txModal.description).toContainText(
+            trimAddress(currentAddress, 6),
+          );
           await expect(txModal.footerHint).toHaveText(
             'Confirm this transaction in your wallet',
           );
@@ -61,8 +66,9 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
   test(
     qase(156, 'Should success complete revoke Reward role changes'),
     { tag: [Tags.smoke, Tags.performTX] },
-    async ({ widgetService }) => {
+    async ({ widgetService, secretPhrase }) => {
       const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const currentAddress = mnemonicToAccount(secretPhrase).address;
 
       const [txPage] = await Promise.all([
         rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
@@ -84,7 +90,9 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
 
         const { txModal } = widgetService.rolesPage;
         await expect(txModal.description).toContainText('Address stays');
-        await expect(txModal.description).toContainText('0x0000...000000');
+        await expect(txModal.description).toContainText(
+          trimAddress(currentAddress, 6),
+        );
         await expect(txModal.footerHint).toContainText('View on Etherscan');
       });
     },

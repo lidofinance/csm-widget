@@ -19,7 +19,7 @@ export const AddBondFormInfo = () => {
   const { data: exchange, isPending: isExchangeLoading } = useExchangeRate();
 
   return (
-    <DataTable>
+    <DataTable data-testid="addBondTokenInfo">
       <DataTableRow
         title="Bond balance will receive"
         loading={receive.loading}

@@ -56,10 +56,10 @@ test.describe(
             managerAddressPage.proposedAddress.locator('> p').nth(0),
           ).toContainText('Action required');
           await expect(
-            managerAddressPage.proposedAddress.locator('> p').nth(1),
+            managerAddressPage.proposedAddress.locator('> div').nth(1),
           ).toContainText('Connect to CSM UI with the proposed address');
           await expect(
-            managerAddressPage.proposedAddress.locator('> p').nth(1),
+            managerAddressPage.proposedAddress.locator('> div').nth(1),
           ).toContainText(
             'Go to Roles tab → Inbox requests to confirm the change',
           );
