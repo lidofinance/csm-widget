@@ -8,12 +8,11 @@ export const FormLoading: FC<PropsWithChildren> = ({ children }) => {
   const { loading, keys } = useEjectKeysFormData();
   const isEmpty = !keys?.length;
 
-  // FIXME: empty note for eject keys is not correct
   return (
     <WhenLoaded
       loading={isLoading || loading.isKeysLoading}
       empty={isEmpty && <>No keys available to eject</>}
-      emptyNote="Only keys that have not been deposited yet can be deleted. If a key has already been deposited, the only way to retrieve the bond is to exit the validator on the Consensus Layer (CL)."
+      emptyNote="Only deposited keys that are eligible for triggerable withdrawals can be ejected. Keys must be deposited and meet withdrawal requirements to appear here."
     >
       {children}
     </WhenLoaded>

@@ -40,6 +40,8 @@ export const useRemoveKeysFormNetworkData = (): [
     keys.filter(
       hasStatus([
         KEY_STATUS.DEPOSITABLE,
+        KEY_STATUS.NON_QUEUED,
+        KEY_STATUS.UNCHECKED,
         KEY_STATUS.DUPLICATED, // TODO: check active duplicated key is here?
         KEY_STATUS.INVALID,
       ]),
