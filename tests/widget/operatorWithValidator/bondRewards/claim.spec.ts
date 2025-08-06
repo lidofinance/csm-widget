@@ -10,7 +10,7 @@ import {
 import { trimAddress } from '@lidofinance/address';
 import { mnemonicToAccount } from 'viem/accounts';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { TOKEN_DISPLAY_NAMES } from 'utils';
+import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 
 test.describe('Bond & Rewards. Claim.', async () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -19,13 +19,12 @@ test.describe('Bond & Rewards. Claim.', async () => {
 
   test(
     qase(61, 'Verify UI elements for source select'),
-    async ({ widgetService, contractClients }) => {
+    async ({ widgetService, csmSDK }) => {
       const bondRewardsPage = widgetService.bondRewardsPage;
 
       const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-      const bondSummary =
-        await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+      const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
       await test.step('Check title', async () => {
         await expect(
@@ -86,7 +85,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
   [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     test(
       qase(200, `Verify UI elements for ${tokenName} buttons`),
-      async ({ widgetService, contractClients, sdkService }) => {
+      async ({ widgetService, csmSDK, ethereumSDK }) => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
@@ -94,12 +93,11 @@ test.describe('Bond & Rewards. Claim.', async () => {
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-        const bondSummary =
-          await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+        const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
         const rateToStETH =
           tokenName === TOKENS.wsteth
-            ? parseFloat(await sdkService.getWstETHRate())
+            ? parseFloat(await ethereumSDK.getWstETHRate())
             : parseFloat('1.0');
 
         const expectedTokenAmount =
@@ -177,15 +175,14 @@ test.describe('Bond & Rewards. Claim.', async () => {
     test(
       qase(62, `Should correct claim by ${tokenName}`),
       { tag },
-      async ({ widgetService, contractClients }) => {
+      async ({ widgetService, csmSDK }) => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
         const claimAmount = '0.0003';
-        const bondSummary =
-          await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+        const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
         await widgetService.claim(tokenName, claimAmount);
 

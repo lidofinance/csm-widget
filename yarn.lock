@@ -2979,14 +2979,14 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.47.0.tgz#2367eec1c8363516bde48b632a6fbe32aec33a1e"
   integrity sha512-6xx2O89OhWAxaob+SqXEX2xtrumG4MCUrclooCIvAhz64Lp3Wa0Hzt2lgJyFMhJxpDPMj3LmYNbuB15lwEQKwg==
 
-"@lidofinance/browser-service@1.4.3":
-  version "1.4.3"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.4.3.tgz#5f48fdb2bd43307262a525fec2047d774efde3a3"
-  integrity sha512-v4UhS23sDoPEGY9QF3LCiCUSmH6YAcbTb3GHMT9673lrAoJtWkTyJPGjQFnIse4ekkH/HjtO0N4LU0DI3eb9eA==
+"@lidofinance/browser-service@1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.4.2.tgz#ee9c6a020129f8a60cb1f0c7cce8ba5000f53111"
+  integrity sha512-Aw8F11knwPXCKdhNxBbp068xiUCPhy1KP4H6AZ77LaCSdS7scczqSRamTcMrvuWT9Uf3ThCkhcjCmfqdzs9P4g==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.3.1"
     "@lidofinance/wallets-testing-nodes" "1.4.0"
-    "@lidofinance/wallets-testing-wallets" "1.36.3"
+    "@lidofinance/wallets-testing-wallets" "1.36.2"
 
 "@lidofinance/discord-reporter@1.5.2":
   version "1.5.2"
@@ -3103,17 +3103,6 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/utils/-/utils-1.3.2.tgz#63ba5be298bc415c20edcd9d930319e496199068"
   integrity sha512-sP1ZhAoWz9OpU1S5jzDzl0bnwKXZDBT1RLFFKDBW/+YkoxYAlFReyuA/w5R+I0iYjlBkdzkZZReNM/XzIO4YXg==
 
-"@lidofinance/wallets-testing-extensions@1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-extensions/-/wallets-testing-extensions-1.3.0.tgz#202f87c02a2065215dadcf35708be11d2dd83685"
-  integrity sha512-CiQmBFu6ekeyxu/OvrKdYlt7uoyenMd2bu7ahSlr7ThGq+CWbFMidB72KmTt5KXgObqp3MIOJ/94RpfSuRBWPw==
-  dependencies:
-    "@nestjs/common" "^10.0.0"
-    axios "^0.30.0"
-    reflect-metadata "^0.1.13"
-    rxjs "^7.5.6"
-    unzipper "^0.10.11"
-
 "@lidofinance/wallets-testing-extensions@1.3.1":
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-extensions/-/wallets-testing-extensions-1.3.1.tgz#6e9421bb5ebdcf5c579526d6dc279f88de9dce82"
@@ -3137,10 +3126,10 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.36.3":
-  version "1.36.3"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.36.3.tgz#6433288f9ba914c269b4e305a1851138754fa136"
-  integrity sha512-X+DwobF0GRpd9pZ/juyqzVwBVN74km1+HqI8TUHFBrpSmkCjbATIC39Xb8h/0hfltxWebFLttl1Af2HHxvG6JA==
+"@lidofinance/wallets-testing-wallets@1.36.2":
+  version "1.36.2"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.36.2.tgz#ba716a108a261753613d70026ff7f1834514bf97"
+  integrity sha512-zBQlsyHLcfT5VYBpQik4uPzxWBI3FSm2LinIvs+hlBN7uhF6sFrIIWk53VZahoIBAFbTewpJ25DWNm4CBPUMrw==
   dependencies:
     big.js "^6.2.1"
     expect "^28.1.3"
@@ -3588,12 +3577,12 @@
   resolved "https://registry.yarnpkg.com/@pkgjs/parseargs/-/parseargs-0.11.0.tgz#a77ea742fab25775145434eb1d2328cf5013ac33"
   integrity sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==
 
-"@playwright/test@1.53.1":
-  version "1.53.1"
-  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.53.1.tgz#3ad5a2ce334b4a78390fd91e0a9d8423c09bc808"
-  integrity sha512-Z4c23LHV0muZ8hfv4jw6HngPJkbbtZxTkxPNIg7cJcTc9C28N/p2q7g3JZS2SiKBBHJ3uM1dgDye66bB7LEk5w==
+"@playwright/test@1.54.2":
+  version "1.54.2"
+  resolved "https://registry.yarnpkg.com/@playwright/test/-/test-1.54.2.tgz#ff0d1e5d8e26f3258ae65364e2d4d10176926b07"
+  integrity sha512-A+znathYxPf+72riFd1r1ovOLqsIIB0jKIoPjyK2kqEIe30/6jF6BC7QNluHuwUmsD2tv1XZVugN8GqfTMOxsA==
   dependencies:
-    playwright "1.53.1"
+    playwright "1.54.2"
 
 "@polka/url@^1.0.0-next.20":
   version "1.0.0-next.24"
@@ -10217,10 +10206,10 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playwright-core@1.53.1:
-  version "1.53.1"
-  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.53.1.tgz#0b6f7a2006ccb6126ffcc3e3b2fa9efda23b6638"
-  integrity sha512-Z46Oq7tLAyT0lGoFx4DOuB1IA9D1TPj0QkYxpPVUnGDqHHvDpCftu1J2hM2PiWsNMoZh8+LQaarAWcDfPBc6zg==
+playwright-core@1.54.2:
+  version "1.54.2"
+  resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.54.2.tgz#73cc5106f19ec6b9371908603d61a7f171ebd8f0"
+  integrity sha512-n5r4HFbMmWsB4twG7tJLDN9gmBUeSPcsBZiWSE4DnYz9mJMAFqr2ID7+eGC9kpEnxExJ1epttwR59LEWCk8mtA==
 
 playwright-qase-reporter@^2.0.17:
   version "2.0.17"
@@ -10231,12 +10220,12 @@ playwright-qase-reporter@^2.0.17:
     qase-javascript-commons "~2.2.14"
     uuid "^9.0.0"
 
-playwright@1.53.1:
-  version "1.53.1"
-  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.53.1.tgz#86fb041b237a6868d163c87c4b9737fd1cac145e"
-  integrity sha512-LJ13YLr/ocweuwxyGf1XNFWIU4M2zUSo149Qbp+A4cpwDjsxRPj7k6H25LBrEHiEwxvRbD8HdwvQmRMSvquhYw==
+playwright@1.54.2:
+  version "1.54.2"
+  resolved "https://registry.yarnpkg.com/playwright/-/playwright-1.54.2.tgz#e2435abb2db3a96a276f8acc3ada1a85b587dff3"
+  integrity sha512-Hu/BMoA1NAdRUuulyvQC0pEqZ4vQbGfn8f7wPXcnqQmM+zct9UliKxsIkLNmz/ku7LElUNqmaiv1TG/aL5ACsw==
   dependencies:
-    playwright-core "1.53.1"
+    playwright-core "1.54.2"
   optionalDependencies:
     fsevents "2.3.2"
 

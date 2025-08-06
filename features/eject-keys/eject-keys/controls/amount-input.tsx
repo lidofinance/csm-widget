@@ -14,6 +14,7 @@ export const AmountInput = () => {
         token={TOKENS.eth}
         label="Ejection cost"
         fullwidth
+        data-testid="ejectionCostAmountInput"
       />
       <Text size="xxs" color="secondary">
         Will be deducted from your <b>wallet balance</b>

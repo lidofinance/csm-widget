@@ -29,7 +29,7 @@ test.describe(
     });
 
     test(
-      qase(219, 'Verify UI elements in the "Manager Address" tab'),
+      qase(219, 'Verify the addresses field with proposed address'),
       async ({ widgetService, secretPhrase }) => {
         const managerAddressPage = widgetService.rolesPage.managerAddressPage;
         const address = mnemonicToAccount(secretPhrase).address;
@@ -56,41 +56,49 @@ test.describe(
             managerAddressPage.proposedAddress.locator('> p').nth(0),
           ).toContainText('Action required');
           await expect(
-            managerAddressPage.proposedAddress.locator('> p').nth(1),
+            managerAddressPage.proposedAddress.locator('> div').nth(1),
           ).toContainText('Connect to CSM UI with the proposed address');
           await expect(
-            managerAddressPage.proposedAddress.locator('> p').nth(1),
+            managerAddressPage.proposedAddress.locator('> div').nth(1),
           ).toContainText(
             'Go to Roles tab → Inbox requests to confirm the change',
           );
         });
-
-        await test.step('Verify input', async () => {
-          await expect(managerAddressPage.addressInput).toBeVisible();
-          await expect(managerAddressPage.addressInput).toHaveAttribute(
-            'placeholder',
-            'Ethereum address',
-          );
-          await expect(managerAddressPage.inputLabel).toContainText(
-            'New manager address',
-          );
-        });
-
-        await test.step('Verify button', async () => {
-          await expect(managerAddressPage.proposeButton).toBeVisible();
-          await expect(managerAddressPage.proposeButton).toContainText(
-            'Propose a new manager address',
-          );
-        });
-
-        await test.step('Verify explanatory note below the button', async () => {
-          await expect(managerAddressPage.note).toBeVisible();
-          await expect(managerAddressPage.note).toContainText(
-            'To complete the address change, the owner of the new address must confirm the change',
-          );
-        });
       },
     );
+
+    test(qase(232, 'Verify input appearence'), async ({ widgetService }) => {
+      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+
+      await test.step('Verify input', async () => {
+        await expect(managerAddressPage.addressInput).toBeVisible();
+        await expect(managerAddressPage.addressInput).toHaveAttribute(
+          'placeholder',
+          'Ethereum address',
+        );
+        await expect(managerAddressPage.inputLabel).toContainText(
+          'New manager address',
+        );
+      });
+    });
+
+    test(qase(233, 'Verify button appearence'), async ({ widgetService }) => {
+      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+
+      await test.step('Verify button', async () => {
+        await expect(managerAddressPage.proposeButton).toBeVisible();
+        await expect(managerAddressPage.proposeButton).toContainText(
+          'Propose a new manager address',
+        );
+      });
+
+      await test.step('Verify explanatory note below the button', async () => {
+        await expect(managerAddressPage.note).toBeVisible();
+        await expect(managerAddressPage.note).toContainText(
+          'To complete the address change, the owner of the new address must confirm the change',
+        );
+      });
+    });
 
     test(
       qase(220, 'Should open etherscan for current manager address'),

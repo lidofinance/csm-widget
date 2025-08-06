@@ -4,7 +4,7 @@ import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/consts/common.const';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { TOKEN_DISPLAY_NAMES } from 'utils';
+import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 
 test.describe('Bond & Rewards. Add bond.', async () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -13,7 +13,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
 
   test(
     qase(189, 'Should displays balance and explanatory text for stETH bond'),
-    async ({ widgetService, contractClients }) => {
+    async ({ widgetService, csmSDK }) => {
       const bondRewardsPage = widgetService.bondRewardsPage;
 
       await test.step('Verify information about bond', async () => {
@@ -23,8 +23,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
           await expect(
             bondRewardsPage.addBond.titledAmount.locator('div').first(),
           ).toContainText('Bond balance');
-          const bondSummary =
-            await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+          const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
           await expect(bondRewardsPage.addBond.titledAmountBalance).toHaveText(
             `${bondSummary.excess.toCut(4)} stETH`,
@@ -59,15 +58,14 @@ test.describe('Bond & Rewards. Add bond.', async () => {
     test(
       qase(193, `Should add bond using ${tokenName} as bond token`),
       { tag },
-      async ({ widgetService, contractClients }) => {
+      async ({ widgetService, csmSDK }) => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
         const bondAmount = '0.0003';
-        const bondSummary =
-          await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+        const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
         await widgetService.addBond(tokenName, bondAmount);
 
@@ -87,7 +85,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
   [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
     test(
       qase(65, `Check max button for ${tokenName} token`),
-      async ({ widgetService, sdkService }) => {
+      async ({ widgetService, ethereumSDK }) => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
@@ -96,7 +94,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
           await bondToken.click();
         });
 
-        const expectedBalance = await sdkService.getBalanceByToken(tokenName);
+        const expectedBalance = await ethereumSDK.getBalanceByToken(tokenName);
         await test.step('Click the Max button', async () => {
           await bondRewardsPage.addBond.maxBtn.click();
         });
@@ -145,7 +143,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
         196,
         `Should display correct bond token information for ${tokenName}`,
       ),
-      async ({ widgetService, sdkService }) => {
+      async ({ widgetService, ethereumSDK }) => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
@@ -158,7 +156,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
 
         const rateToStETH =
           tokenName === TOKENS.wsteth
-            ? parseFloat(await sdkService.getWstETHRate())
+            ? parseFloat(await ethereumSDK.getWstETHRate())
             : parseFloat('1.0');
 
         const expectedTokenAmount = `${tokenAmountToClaim * rateToStETH}`.toCut(

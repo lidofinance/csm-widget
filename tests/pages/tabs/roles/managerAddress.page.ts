@@ -136,6 +136,7 @@ export class ManagerAddressPage extends BasePage {
       });
 
       await this.closeModalWindow();
+      await this.proposedAddress.waitFor({ state: 'visible' });
     });
   }
 }

@@ -148,6 +148,8 @@ export class RewardsAddressPage extends BasePage {
       });
 
       await this.closeModalWindow();
+
+      await this.proposedAddress.waitFor({ state: 'visible' });
     });
   }
 }

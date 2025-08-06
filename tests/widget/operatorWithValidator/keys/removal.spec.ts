@@ -39,13 +39,13 @@ test.describe('Validator keys removal', async () => {
 
         await test.step('Check removal fee', async () => {
           await test.step('Check removal fee value', async () => {
-            await expect(keysPage.removePage.removalFeeValue).toContainText(
+            await expect(keysPage.removePage.ejectionCostInput).toHaveValue(
               `${(0.02 * keyLength).toFixed(2)} stETH`,
             );
           });
 
           await test.step('Check tooltip text', async () => {
-            await keysPage.removePage.removalFeeInfo.hover();
+            await keysPage.removePage.ejectionCostInputSVG.hover();
             await expect(
               keysPage.removePage.removalFeeInfoTooltipText,
             ).toContainText(

@@ -11,14 +11,13 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', async ()
 
   test(
     qase(134, 'Should correctly expand and display the balance'),
-    async ({ widgetService, contractClients }) => {
+    async ({ widgetService, csmSDK }) => {
       const availableToClaim =
         widgetService.dashboardPage.bondRewards.availableToClaim;
 
       const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-      const bondSummary =
-        await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+      const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
       await test.step('Check "Available to claim" section', async () => {
         await expect(availableToClaim.rewardsBalance).toBeHidden();

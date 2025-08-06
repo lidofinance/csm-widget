@@ -29,7 +29,7 @@ test.describe(
     });
 
     test(
-      qase(213, 'Verify UI elements in the "Rewards Address" tab'),
+      qase(213, 'Verify the addresses field with proposed address'),
       async ({ widgetService, secretPhrase }) => {
         const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
         const address = mnemonicToAccount(secretPhrase).address;
@@ -55,41 +55,49 @@ test.describe(
             rewardsAddressPage.proposedAddress.locator('> p').nth(0),
           ).toContainText('Action required');
           await expect(
-            rewardsAddressPage.proposedAddress.locator('> p').nth(1),
+            rewardsAddressPage.proposedAddress.locator('> div').nth(1),
           ).toContainText('Connect to CSM UI with the proposed address');
           await expect(
-            rewardsAddressPage.proposedAddress.locator('> p').nth(1),
+            rewardsAddressPage.proposedAddress.locator('> div').nth(1),
           ).toContainText(
             'Go to Roles tab → Inbox requests to confirm the change',
           );
         });
-
-        await test.step('Verify input', async () => {
-          await expect(rewardsAddressPage.addressInput).toBeVisible();
-          await expect(rewardsAddressPage.addressInput).toHaveAttribute(
-            'placeholder',
-            'Ethereum address',
-          );
-          await expect(rewardsAddressPage.inputLabel).toContainText(
-            'New rewards address',
-          );
-        });
-
-        await test.step('Verify button', async () => {
-          await expect(rewardsAddressPage.proposeButton).toBeVisible();
-          await expect(rewardsAddressPage.proposeButton).toContainText(
-            'Propose a new rewards address',
-          );
-        });
-
-        await test.step('Verify explanatory note below the button', async () => {
-          await expect(rewardsAddressPage.note).toBeVisible();
-          await expect(rewardsAddressPage.note).toContainText(
-            'To complete the address change, the owner of the new address must confirm the change',
-          );
-        });
       },
     );
+
+    test(qase(236, 'Verify input appearence'), async ({ widgetService }) => {
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+
+      await test.step('Verify input', async () => {
+        await expect(rewardsAddressPage.addressInput).toBeVisible();
+        await expect(rewardsAddressPage.addressInput).toHaveAttribute(
+          'placeholder',
+          'Ethereum address',
+        );
+        await expect(rewardsAddressPage.inputLabel).toContainText(
+          'New rewards address',
+        );
+      });
+    });
+
+    test(qase(237, 'Verify button appearence'), async ({ widgetService }) => {
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+
+      await test.step('Verify button', async () => {
+        await expect(rewardsAddressPage.proposeButton).toBeVisible();
+        await expect(rewardsAddressPage.proposeButton).toContainText(
+          'Propose a new rewards address',
+        );
+      });
+
+      await test.step('Verify explanatory note below the button', async () => {
+        await expect(rewardsAddressPage.note).toBeVisible();
+        await expect(rewardsAddressPage.note).toContainText(
+          'To complete the address change, the owner of the new address must confirm the change',
+        );
+      });
+    });
 
     test(
       qase(214, 'Should open etherscan for current rewards address'),

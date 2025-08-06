@@ -1,6 +1,5 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
-import { trimAddress } from '@lidofinance/address';
 import {
   LOW_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
@@ -9,6 +8,8 @@ import {
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/helpers/accountData';
 import { Tags } from 'tests/consts/common.const';
+import { trimAddress } from '@lidofinance/address';
+import { mnemonicToAccount } from 'viem/accounts';
 
 test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes', () => {
   test.beforeEach(async ({ widgetService }) => {
@@ -31,8 +32,9 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
 
   test(
     qase(226, 'Should display tx modal after revoke Manager role changes'),
-    async ({ widgetService }) => {
+    async ({ widgetService, secretPhrase }) => {
       const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const currentAddress = mnemonicToAccount(secretPhrase).address;
 
       await test.step('Revoke pending manager address role', async () => {
         const [txPage] = await Promise.all([
@@ -51,10 +53,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
           await expect(txModal.description).toContainText('Address stays');
 
           await expect(txModal.description).toContainText(
-            trimAddress(
-              '0x0000000000000000000000000000000000000000000000000000000000000000',
-              6,
-            ),
+            trimAddress(currentAddress, 6),
           );
           await expect(txModal.footerHint).toHaveText(
             'Confirm this transaction in your wallet',
@@ -69,8 +68,9 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
   test(
     qase(208, 'Should success complete transacrion revoke Manager role change'),
     { tag: [Tags.performTX] },
-    async ({ widgetService }) => {
+    async ({ widgetService, secretPhrase }) => {
       const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const currentAddress = mnemonicToAccount(secretPhrase).address;
 
       const [txPage] = await Promise.all([
         managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
@@ -91,15 +91,11 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
         );
 
         const { txModal } = widgetService.rolesPage;
+
         await expect(txModal.description).toContainText('Address stays');
-
         await expect(txModal.description).toContainText(
-          trimAddress(
-            '0x0000000000000000000000000000000000000000000000000000000000000000',
-            6,
-          ),
+          trimAddress(currentAddress, 6),
         );
-
         await expect(txModal.footerHint).toContainText('View on Etherscan');
       });
     },
