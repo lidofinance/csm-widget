@@ -1,6 +1,6 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
-import { skipIf, test } from '../../test.fixture';
+import { test } from '../../test.fixture';
 import { KeysPage } from 'tests/pages';
 
 test.describe('Validator keys removal', async () => {
@@ -17,7 +17,6 @@ test.describe('Validator keys removal', async () => {
         150,
         `Should load correct data from contract when ${keyLength} key selected`,
       ),
-      { ...skipIf(keyLength === 3, 'We have a bug for 3 keys in v2') },
       async () => {
         qase.parameters({ keyLength: keyLength.toString() });
         await keysPage.removePage.page
