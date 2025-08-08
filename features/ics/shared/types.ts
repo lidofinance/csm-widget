@@ -12,10 +12,10 @@ export type IcsCommentsDto = {
   mainAddress?: string;
   twitterLink?: string;
   discordLink?: string;
-  additionalAddresses?: string[];
+  additionalAddresses?: (string | null)[];
 };
 
-export type ProofOfExperienceDto = {
+export type IcsScoresDto = {
   ethStaker?: number;
   stakeCat?: number;
   obolTechne?: number;
@@ -24,16 +24,10 @@ export type ProofOfExperienceDto = {
   csmMainnet?: number;
   sdvtTestnet?: number;
   sdvtMainnet?: number;
-};
-
-export type ProofOfHumanityDto = {
   humanPassport?: number;
   circles?: number;
   discord?: number;
   twitter?: number;
-};
-
-export type ProofOfEngagementDto = {
   aragonVotes?: number;
   snapshotVotes?: number;
   lidoGalxe?: number;
@@ -41,13 +35,7 @@ export type ProofOfEngagementDto = {
   gitPoaps?: number;
 };
 
-export type IcsScoresDto = {
-  proofOfExperience: ProofOfExperienceDto;
-  proofOfHumanity: ProofOfHumanityDto;
-  proofOfEngagement: ProofOfEngagementDto;
-};
-
-export type IcsScoresCategory = keyof IcsScoresDto;
+export type IcsScoresItem = keyof IcsScoresDto;
 
 export type IcsResponseDto = {
   form: IcsFormDataDto;

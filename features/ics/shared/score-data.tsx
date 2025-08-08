@@ -16,10 +16,10 @@ import SnapshotIcon from 'assets/icons/ics-scores/snapshot.png';
 import GalxeIcon from 'assets/icons/ics-scores/galxe.png';
 import HighSignalIcon from 'assets/icons/ics-scores/high-signal.png';
 import GitPOAPsIcon from 'assets/icons/ics-scores/git-poap.png';
-import { IcsScoresCategory } from './types';
+import { IcsScoresItem } from './types';
 
 export type ScoreSource = {
-  id: IcsScoresCategory;
+  id: string;
   title: string;
   description: string;
   min: number;
@@ -28,7 +28,7 @@ export type ScoreSource = {
 };
 
 export type ScoreItem = {
-  id: string;
+  id: IcsScoresItem;
   name: string;
   icon: ReactNode;
   points: number | string;

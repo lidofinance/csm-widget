@@ -9,7 +9,7 @@ import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { IcsFormStatus, IcsScoresDto, ScoreSource } from '../../shared';
 import { FailIcon, SuccessIcon } from '../styles';
-import { calculateScores, findScoreItem } from '../utils';
+import { calculateScores } from '../utils';
 import { ScoreItem } from './score-item';
 
 type ScoreCategoryProps = {
@@ -52,11 +52,7 @@ export const ScoreCategory: FC<ScoreCategoryProps> = ({
         )}
         <CategoryItemsWrapper>
           {category.items.map((item) => (
-            <ScoreItem
-              key={item.id}
-              item={item}
-              value={findScoreItem(scores, item.id)}
-            />
+            <ScoreItem key={item.id} item={item} value={scores[item.id] ?? 0} />
           ))}
         </CategoryItemsWrapper>
       </Stack>

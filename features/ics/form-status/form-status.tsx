@@ -1,5 +1,5 @@
 import { Block, Button, Divider } from '@lidofinance/lido-ui';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { Stack } from 'shared/components';
 import { TypeStatus } from '../shared';
 import { IcsResponseDto } from '../shared/types';
@@ -23,6 +23,11 @@ export const FormStatus: FC<FormStatusProps> = ({
 }) => {
   const { status, form, comments, createdAt, scores } = data;
 
+  const handle = useCallback(() => {
+    window.scrollTo({ top: 0 });
+    reset();
+  }, [reset]);
+
   return (
     <Block>
       <Stack direction="column" gap="xxl">
@@ -37,7 +42,7 @@ export const FormStatus: FC<FormStatusProps> = ({
         {status === 'REJECTED' && <ApplicationTip comments={comments} />}
         <Application form={form} comments={comments} createdAt={createdAt} />
         {status === 'REJECTED' && (
-          <Button variant="outlined" fullwidth onClick={reset}>
+          <Button variant="outlined" fullwidth onClick={handle}>
             Apply again
           </Button>
         )}

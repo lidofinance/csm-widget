@@ -24,15 +24,37 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
       />,
     ),
 
-  failed: (error: unknown, onRetry?: () => void) =>
-    transitStage(
+  failed: (error: unknown, onRetry?: () => void) => {
+    let errorContent;
+
+    if (typeof error === 'object' && error !== null && 'details' in error) {
+      const errorObj = error as { message: string; details: string[] };
+      errorContent = (
+        <>
+          <span>{errorObj.message}</span>
+          <br />
+          {errorObj.details.length > 0 && (
+            <ul>
+              {errorObj.details.map((detail, index) => (
+                <li key={index}>{detail}</li>
+              ))}
+            </ul>
+          )}
+        </>
+      );
+    } else {
+      errorContent = typeof error === 'string' ? error : undefined;
+    }
+
+    return transitStage(
       <TxStageFail
-        title="Something went wrong"
-        error={typeof error === 'string' ? error : undefined}
+        title="Submission failed"
+        error={errorContent}
         code={getErrorCode(error)}
         onRetry={onRetry}
       />,
-    ),
+    );
+  },
 });
 
 export const useModalStages = () => useTransactionModalStage(getModalStages);
