@@ -66,4 +66,5 @@ export const redirectionMap: Partial<
   [PATH.TYPE_CLAIM]: {
     [ROLE_CODE.NONE]: PATH.HOME,
   },
+  // TODO: TYPE_ICS & TYPE_ICS_APPLY
 };

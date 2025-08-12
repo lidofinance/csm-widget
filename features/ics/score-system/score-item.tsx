@@ -1,9 +1,9 @@
 import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { ScoreItem as ScoreItemType } from './score-data';
-import { AccordionStyle, IconStyle } from './styles';
 import { Points } from './points';
+import { ScoreItem as ScoreItemType } from './score-data';
+import { AccordionStyle } from './styles';
 
 type ScoreItemProps = {
   item: ScoreItemType;
@@ -17,7 +17,7 @@ export const ScoreItem: FC<ScoreItemProps> = ({ item, index }) => {
       summary={
         <Stack justify="space-between" align="center">
           <Stack align="center" gap="sm">
-            <IconStyle src={item.logo} />
+            {item.icon}
             <Text size="xs">{item.name}</Text>
           </Stack>
 

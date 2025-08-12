@@ -11,7 +11,11 @@ import {
 } from 'modules/web3';
 import { useModifyContext } from 'providers/modify-provider';
 import { useCallback, useMemo } from 'react';
-import { useCanClaimICS, useCanCreateNodeOperator } from 'shared/hooks';
+import {
+  useCanApplyICS,
+  useCanClaimICS,
+  useCanCreateNodeOperator,
+} from 'shared/hooks';
 
 export type ShowRule =
   | 'IS_CONNECTED_WALLET'
@@ -26,6 +30,7 @@ export type ShowRule =
   | 'HAS_REFERRER'
   | 'CAN_CREATE'
   | 'CAN_CLAIM_ICS'
+  | 'CAN_APPLY_ICS'
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE';
 
@@ -39,6 +44,7 @@ export const useShowRule = () => {
   const { data: balance } = useOperatorBalance(nodeOperator?.id);
   const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
   const canClaimICS = useCanClaimICS();
+  const canApplyICS = useCanApplyICS();
   const canCreateNO = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const { data: isOwner } = useOperatorIsOwner({
@@ -73,6 +79,8 @@ export const useShowRule = () => {
           return !!referrer;
         case 'CAN_CLAIM_ICS':
           return !!canClaimICS && isAccountActive;
+        case 'CAN_APPLY_ICS':
+          return !!canApplyICS;
         case 'EL_STEALING_REPORTER':
           return !!isReportingRole;
         case 'IS_SURVEYS_ACTIVE':
@@ -91,6 +99,7 @@ export const useShowRule = () => {
       balance?.locked,
       referrer,
       canClaimICS,
+      canApplyICS,
       isReportingRole,
     ],
   );
