@@ -8,8 +8,8 @@ import { isAddress, isAddressEqual, isHex, verifyMessage } from 'viem';
 import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
 import { generateAddressMessage } from './use-apply-form-network-data';
 
-const urlRegex =
-  /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&=]*)$/;
+const twitterUrlRegex = /^https:\/\/(twitter\.com|x\.com)\/\w+\/status\/\d+$/;
+const discordMessageRegex = /^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/;
 
 export const useApplyFormValidation = (data: ApplyFormNetworkData) => {
   return useCallback<Resolver<ApplyFormInputType>>(
@@ -93,40 +93,19 @@ export const useApplyFormValidation = (data: ApplyFormNetworkData) => {
         }
 
         // Twitter link validation
-        if (twitterLink) {
-          if (!urlRegex.test(twitterLink)) {
-            throw new ValidationError(
-              'twitterLink',
-              'Invalid Twitter post URL',
-            );
-          }
-
-          if (
-            !twitterLink.includes('twitter.com') &&
-            !twitterLink.includes('x.com')
-          ) {
-            throw new ValidationError(
-              'twitterLink',
-              'URL must be a Twitter/X post',
-            );
-          }
+        if (twitterLink && !twitterUrlRegex.test(twitterLink)) {
+          throw new ValidationError(
+            'twitterLink',
+            'Must be a valid Twitter/X status URL',
+          );
         }
 
         // Discord link validation
-        if (discordLink) {
-          if (!urlRegex.test(discordLink)) {
-            throw new ValidationError(
-              'discordLink',
-              'Invalid Discord post URL',
-            );
-          }
-
-          if (!discordLink.includes('discord.com')) {
-            throw new ValidationError(
-              'discordLink',
-              'URL must be a Discord post',
-            );
-          }
+        if (discordLink && !discordMessageRegex.test(discordLink)) {
+          throw new ValidationError(
+            'discordLink',
+            'Must be a valid Discord message URL',
+          );
         }
 
         return {
