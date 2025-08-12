@@ -16,9 +16,10 @@ import SnapshotIcon from 'assets/icons/ics-scores/snapshot.png';
 import GalxeIcon from 'assets/icons/ics-scores/galxe.png';
 import HighSignalIcon from 'assets/icons/ics-scores/high-signal.png';
 import GitPOAPsIcon from 'assets/icons/ics-scores/git-poap.png';
+import { IcsScoresCategory } from './types';
 
 export type ScoreSource = {
-  id: string;
+  id: IcsScoresCategory;
   title: string;
   description: string;
   min: number;
@@ -27,6 +28,7 @@ export type ScoreSource = {
 };
 
 export type ScoreItem = {
+  id: string;
   name: string;
   icon: ReactNode;
   points: number | string;
@@ -46,16 +48,19 @@ const IconStyle = (styled.img<{ src: string }>).attrs(({ src }) => ({
   outline-offset: -1px;
 `;
 
+export const TOTAL_SCORE_REQUIRED = 15;
+
 export const SCORE_SOURCES: ScoreSource[] = [
   {
-    id: 'proof-of-experience',
+    id: 'proofOfExperience',
     title: 'Proof-of-Experience',
     description:
       'This group of proofs represents users experience in Ethereum validation',
-    min: 4,
-    max: 7,
+    min: 5,
+    max: 8,
     items: [
       {
+        id: 'ethStaker',
         name: 'EthStaker solo-stakers list',
         icon: <IconStyle src={EthStakerIcon.src} />,
         points: 6,
@@ -63,6 +68,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           'Submitted address is present in the latest EthStaker Solo Stakers list as a deposit address, and not excluded following the a Sybil analysis of the list',
       },
       {
+        id: 'stakeCat',
         name: 'StakeCat solo-stakers list',
         icon: <IconStyle src={StakeCatIcon.src} />,
         points: 6,
@@ -70,6 +76,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           'Submitted address is present in the latest StakeCat Solo Stakers list (Gnosischain-Solo-Stakers or Solo-Stakers-B), and not excluded following a Sybil analysis of the list',
       },
       {
+        id: 'obolTechne',
         name: 'Obol Techne',
         icon: <IconStyle src={ObolIcon.src} />,
         points: '4-6',
@@ -83,6 +90,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         ),
       },
       {
+        id: 'ssvVerified',
         name: 'SSV Verified operators',
         icon: <IconStyle src={SSVIcon.src} />,
         points: 7,
@@ -90,6 +98,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           'Submitted address is present in the SSV Verified Operators list and does not belong to a professional operator',
       },
       {
+        id: 'csmTestnet',
         name: 'CSM testnet participation',
         icon: <IconStyle src={CSMIcon.src} />,
         points: '4-5',
@@ -107,6 +116,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         ),
       },
       {
+        id: 'csmMainnet',
         name: 'CSM mainnet participation',
         icon: <IconStyle src={CSMIcon.src} />,
         points: 6,
@@ -120,6 +130,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         ),
       },
       {
+        id: 'sdvtTestnet',
         name: 'SDVTM testnet participation',
         icon: <IconStyle src={SDVTIcon.src} />,
         points: 5,
@@ -127,6 +138,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           'Submitted address participated in and completed the entire duration of a Simple DVT testnet with Obol, SSV, or Safestake as a home or community staker',
       },
       {
+        id: 'sdvtMainnet',
         name: 'SDVTM mainnet participation',
         icon: <IconStyle src={SDVTIcon.src} />,
         points: 7,
@@ -136,14 +148,15 @@ export const SCORE_SOURCES: ScoreSource[] = [
     ],
   },
   {
-    id: 'proof-of-humanity',
+    id: 'proofOfHumanity',
     title: 'Proof-of-Humanity',
     description:
       'This group of proofs allows users to earn a score by being verified by third-party platforms that apply their own rules for identifying real individuals',
-    min: 1,
+    min: 4,
     max: 8,
     items: [
       {
+        id: 'humanPassport',
         name: 'Human passport',
         icon: <IconStyle src={HumanPassportIcon.src} />,
         points: '3-8',
@@ -151,6 +164,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           'Submitted address has the corresponding score according to a Lido customized scoring system on Human Passport',
       },
       {
+        id: 'circles',
         name: 'Circles',
         icon: <IconStyle src={CirclesIcon.src} />,
         points: '3-8',
@@ -158,6 +172,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           'Submitted address is verified via a dedicated Lido group on Circles',
       },
       {
+        id: 'discord',
         name: 'Discord',
         icon: <IconStyle src={DiscordIcon.src} />,
         points: 2,
@@ -170,6 +185,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         ),
       },
       {
+        id: 'twitter',
         name: 'X',
         icon: <IconStyle src={XTwitterIcon.src} />,
         points: 1,
@@ -184,14 +200,15 @@ export const SCORE_SOURCES: ScoreSource[] = [
     ],
   },
   {
-    id: 'proof-of-engagement',
+    id: 'proofOfEngagement',
     title: 'Proof-of-Engagement',
     description:
       'This group represents user engagement within the Ethereum and Lido ecosystems',
-    min: 1,
-    max: 5,
+    min: 2,
+    max: 7,
     items: [
       {
+        id: 'aragonVotes',
         name: 'Participation in Aragon Votes',
         icon: <IconStyle src={AragonIcon.src} />,
         points: 2,
@@ -199,6 +216,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           'Submitted address has voted at least twice with more than 100 LDO',
       },
       {
+        id: 'snapshotVotes',
         name: 'Participation in Snapshot Votes',
         icon: <IconStyle src={SnapshotIcon.src} />,
         points: 1,
@@ -206,6 +224,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           'Submitted address has voted at least three times with more than 100 LDO',
       },
       {
+        id: 'lidoGalxe',
         name: 'Lido Galxe score',
         icon: <IconStyle src={GalxeIcon.src} />,
         points: '4-5',
@@ -218,6 +237,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         ),
       },
       {
+        id: 'highSignal',
         name: 'Lido High Signal score',
         icon: <IconStyle src={HighSignalIcon.src} />,
         points: '2-5',
@@ -232,6 +252,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         ),
       },
       {
+        id: 'gitPoaps',
         name: 'GitPOAPs',
         icon: <IconStyle src={GitPOAPsIcon.src} />,
         points: 2,

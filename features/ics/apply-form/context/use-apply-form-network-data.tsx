@@ -13,6 +13,7 @@ const generateSocialMessage = (
   return baseMessage;
 };
 
+// FIXME: validate signature
 export const generateAddressMessage = (address: Address) =>
   `Verify ownership of address for ICS: ${address}`;
 

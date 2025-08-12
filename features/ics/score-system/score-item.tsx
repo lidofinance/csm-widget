@@ -3,17 +3,16 @@ import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { ScoreItem as ScoreItemType } from '../shared';
 import { Points } from './points';
-import { AccordionStyle } from './styles';
+import { ScoreAccordionstyle } from './styles';
 
 type ScoreItemProps = {
   item: ScoreItemType;
-  index: number;
 };
 
-export const ScoreItem: FC<ScoreItemProps> = ({ item, index }) => {
+export const ScoreItem: FC<ScoreItemProps> = ({ item }) => {
   return (
-    <AccordionStyle
-      id={`item-${index}`}
+    <ScoreAccordionstyle
+      id={`item-${item.id}`}
       summary={
         <Stack justify="space-between" align="center">
           <Stack align="center" gap="sm">
@@ -22,7 +21,7 @@ export const ScoreItem: FC<ScoreItemProps> = ({ item, index }) => {
           </Stack>
 
           <Text size="xs">
-            <Points points={item.points} />
+            <Points value={item.points} />
           </Text>
         </Stack>
       }
@@ -30,6 +29,6 @@ export const ScoreItem: FC<ScoreItemProps> = ({ item, index }) => {
       <Text size="xs" color="secondary">
         {item.description}
       </Text>
-    </AccordionStyle>
+    </ScoreAccordionstyle>
   );
 };

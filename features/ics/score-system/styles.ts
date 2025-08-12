@@ -75,7 +75,7 @@ export const StepContent = styled.div`
   }
 `;
 
-export const AccordionStyle = styled(AccordionNavigatable)`
+export const ScoreAccordionstyle = styled(AccordionNavigatable)`
   margin: 0;
   & > [type='button'] {
     padding: 0;

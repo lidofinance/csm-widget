@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { Plural } from 'shared/components';
 
-export const Points: FC<{ points: number | string }> = ({ points }) => {
-  return typeof points === 'number' ? (
-    <Plural variants={['point', 'points']} value={points} showValue={true} />
+export const Points: FC<{ value: number | string }> = ({ value }) => {
+  return typeof value === 'number' ? (
+    <Plural variants={['point', 'points']} value={value} showValue={true} />
   ) : (
-    <>{points} points</>
+    <>{value} points</>
   );
 };

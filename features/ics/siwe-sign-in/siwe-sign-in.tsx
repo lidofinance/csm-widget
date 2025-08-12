@@ -26,7 +26,7 @@ export const SiweSignIn: FC = () => {
         </Stack>
         <Stack direction="column" gap="md">
           <Text size="xs" color="secondary">
-            You are requesting ICS operator type to the following address:
+            You are requesting ICS operator type for the following address:
           </Text>
           <InputAddress
             disabled

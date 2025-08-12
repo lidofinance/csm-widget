@@ -8,6 +8,7 @@ export type IcsFormDataDto = {
 };
 
 export type IcsCommentsDto = {
+  reason?: string;
   mainAddress?: string;
   twitterLink?: string;
   discordLink?: string;
@@ -46,11 +47,15 @@ export type IcsScoresDto = {
   proofOfEngagement: ProofOfEngagementDto;
 };
 
+export type IcsScoresCategory = keyof IcsScoresDto;
+
 export type IcsResponseDto = {
   form: IcsFormDataDto;
   status: IcsFormStatus;
   comments: IcsCommentsDto;
   scores: IcsScoresDto;
+  createdAt: string;
+  updatedAt: string | null;
 };
 
 export type IcsAdditionalAddressDto = {

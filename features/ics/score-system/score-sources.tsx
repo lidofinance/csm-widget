@@ -2,7 +2,8 @@ import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { ScoreCategory } from './score-category';
-import { SCORE_SOURCES } from '../shared';
+import { SCORE_SOURCES, TOTAL_SCORE_REQUIRED } from '../shared';
+import { Points } from './points';
 
 export const ScoreSources: FC = () => {
   return (
@@ -20,7 +21,7 @@ export const ScoreSources: FC = () => {
           Total score required
         </Text>
         <Text size="sm" weight={700}>
-          15 points
+          <Points value={TOTAL_SCORE_REQUIRED} />
         </Text>
       </Stack>
       {SCORE_SOURCES.map((category) => (

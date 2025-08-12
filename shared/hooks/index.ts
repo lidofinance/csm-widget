@@ -3,7 +3,6 @@ export * from './use-available-to-claim';
 export * from './use-await-network-data';
 export * from './use-awaiter';
 export * from './use-bond-will-receive';
-export * from './use-can-apply-ics';
 export * from './use-can-claim-ics';
 export * from './use-can-create-node-operator';
 export * from './use-chain-color';

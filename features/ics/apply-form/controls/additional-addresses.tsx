@@ -53,9 +53,7 @@ export const AdditionalAddresses: FC = () => {
   return (
     <Stack direction="column" gap="md">
       <Stack direction="column" gap="xxs">
-        <FormTitle>
-          Additional Addresses <Chip>Optional</Chip>
-        </FormTitle>
+        <FormTitle chip={<Chip>Optional</Chip>}>Additional Addresses</FormTitle>
         <Text size="xs" color="secondary">
           You can add up to {MAX_ADDITIONAL_ADDRESSES} addresses where your
           achievements are stored. To prove you own each address, sign a message
@@ -96,7 +94,7 @@ export const AdditionalAddresses: FC = () => {
             <CategoryItemsWrapper $gap="md" $offset="md">
               <Stack direction="column" gap="sm">
                 <Text size="xs">
-                  1 step. Insert you Ethereum address and sign the transaction
+                  Step 1. Insert you Ethereum address and sign the transaction
                   on Etherscan.
                 </Text>
                 <AddressInputHookForm
@@ -112,7 +110,7 @@ export const AdditionalAddresses: FC = () => {
               </Stack>
               <Stack direction="column" gap="sm">
                 <Text size="xs">
-                  2 step. Copy the signature and past in the field below.
+                  Step 2. Copy the signature and past in the field below.
                 </Text>
                 <TextInputHookForm
                   fieldName={`additionalAddresses.${index}.signature`}

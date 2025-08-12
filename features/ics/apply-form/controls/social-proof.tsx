@@ -17,9 +17,7 @@ export const SocialProof: FC = () => {
   return (
     <Stack direction="column" gap="md">
       <Stack direction="column" gap="xxs">
-        <FormTitle>
-          Socials <Chip>Optional</Chip>
-        </FormTitle>
+        <FormTitle chip={<Chip>Optional</Chip>}>Socials</FormTitle>
         <Text size="xs" color="secondary">
           You can add your social accounts. To prove you own an account, post a
           message. For more info see <MatomoLink>the guide</MatomoLink>.
@@ -35,7 +33,7 @@ export const SocialProof: FC = () => {
         <CategoryItemsWrapper $gap="md" $offset="md">
           <Stack direction="column" gap="sm">
             <Text size="xs">
-              1 step. Prove the ownership of the X account by posting a tweet
+              Step 1. Prove the ownership of the X account by posting a tweet
               with the following text.
             </Text>
 
@@ -51,7 +49,7 @@ export const SocialProof: FC = () => {
           </Stack>
 
           <Stack direction="column" gap="sm">
-            <Text size="xs">2 step. Paste the link to this post</Text>
+            <Text size="xs">Step 2. Paste the link to this post</Text>
 
             <TextInputHookForm
               fieldName="socialProof.twitter"
@@ -71,8 +69,8 @@ export const SocialProof: FC = () => {
         <CategoryItemsWrapper $gap="md" $offset="md">
           <Stack direction="column" gap="sm">
             <Text size="xs">
-              1 step. Prove the ownership of the Discord account by posting the
-              following message to CSM channel.
+              Step 1. Prove the ownership of the Discord account by posting the
+              following message to the CSM channel.
             </Text>
 
             <Input
@@ -87,7 +85,7 @@ export const SocialProof: FC = () => {
           </Stack>
 
           <Stack direction="column" gap="sm">
-            <Text size="xs">2 step. Paste the link to this message</Text>
+            <Text size="xs">Step 2. Paste the link to this message</Text>
 
             <TextInputHookForm
               fieldName="socialProof.discord"
