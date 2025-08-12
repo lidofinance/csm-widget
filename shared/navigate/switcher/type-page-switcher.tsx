@@ -4,10 +4,15 @@ import { Switcher } from './switcher';
 import { SwitcherRoutes } from './types';
 
 const TYPE_ROUTES: SwitcherRoutes = [
-  { title: 'Score system', path: PATH.TYPE_ICS_SYSTEM },
+  {
+    title: 'Score system',
+    path: PATH.TYPE_ICS_SYSTEM,
+    showRules: ['ICS_APPLY_FORM'],
+  },
   {
     title: 'Application form',
     path: PATH.TYPE_ICS_APPLY,
+    showRules: ['CAN_APPLY_ICS'],
   },
   {
     title: 'Claim',

@@ -1,0 +1,193 @@
+import {
+  Text,
+  Button,
+  ButtonIcon,
+  External,
+  Input,
+} from '@lidofinance/lido-ui';
+import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
+import { FC, useCallback, useMemo, useState } from 'react';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { Stack, MatomoLink, CopyButton } from 'shared/components';
+import { VerifiedChip } from 'shared/components/input-address/verified-chip';
+import {
+  AddressInputHookForm,
+  TextInputHookForm,
+} from 'shared/hook-form/controls';
+import { isAddress, isHex, verifyMessage } from 'viem';
+import type { ApplyFormInputType } from '../context';
+import { generateAddressMessage } from '../context/use-apply-form-network-data';
+
+export type AddressItemProps = {
+  field: { id: string; address: string; signature: string; verified?: boolean };
+  index: number;
+  onRemove: (index: number) => void;
+};
+
+export const AddressItem: FC<AddressItemProps> = ({
+  field,
+  index,
+  onRemove,
+}) => {
+  const watchedAddress = useWatch<ApplyFormInputType>({
+    name: `additionalAddresses.${index}.address` as const,
+  }) as string;
+
+  const { getValues, setError, clearErrors } =
+    useFormContext<ApplyFormInputType>();
+
+  const message = useMemo(
+    () =>
+      watchedAddress && isAddress(watchedAddress)
+        ? generateAddressMessage(watchedAddress)
+        : '',
+    [watchedAddress],
+  );
+
+  const [verified, setVerified] = useState(false);
+
+  const onVerify = useCallback(
+    async (index: number) => {
+      const currentAddresses = getValues('additionalAddresses');
+      const { address, signature } = currentAddresses[index];
+
+      if (!isHex(signature)) {
+        setError(`additionalAddresses.${index}.signature`, {
+          type: 'manual',
+          message: 'Invalid signature format',
+        });
+        return;
+      }
+
+      // Check if address is valid
+      if (!isAddress(address)) {
+        setError(`additionalAddresses.${index}.address`, {
+          type: 'manual',
+          message: 'Invalid Ethereum address',
+        });
+        return;
+      }
+
+      try {
+        // Generate the expected message for this address
+        // Type assertion needed as generateAddressMessage expects Address type
+        const message = generateAddressMessage(address);
+
+        // Verify the signature
+        // Type assertions needed for viem's verifyMessage
+        const isValid = await verifyMessage({
+          address,
+          message,
+          signature,
+        });
+
+        if (isValid) {
+          clearErrors(`additionalAddresses.${index}.signature`);
+          setVerified(true);
+        } else {
+          // Signature is invalid
+          setError(`additionalAddresses.${index}.signature`, {
+            type: 'manual',
+            message: 'Invalid signature for this address and message',
+          });
+        }
+      } catch (error) {
+        // Error during verification (e.g., malformed signature)
+        setError(`additionalAddresses.${index}.signature`, {
+          type: 'manual',
+          message: 'Invalid signature format or verification failed',
+        });
+      }
+    },
+    [clearErrors, getValues, setError],
+  );
+
+  return (
+    <Stack key={field.id} direction="column" gap="sm">
+      <Stack direction="row" justify="space-between" align="center">
+        <Text as="h4" size="xs" weight="bold">
+          Additional address #{index + 1}
+        </Text>
+        <Button
+          size="xs"
+          variant="text"
+          color="error"
+          onClick={() => onRemove(index)}
+        >
+          Remove
+        </Button>
+      </Stack>
+      {verified ? (
+        <Stack direction="column" gap="sm">
+          <AddressInputHookForm
+            fieldName={`additionalAddresses.${index}.address`}
+            disabled
+            label={
+              <>
+                Additional address #{index + 1}{' '}
+                <VerifiedChip color="primary">Verified</VerifiedChip>
+              </>
+            }
+          />
+        </Stack>
+      ) : (
+        <CategoryItemsWrapper $gap="md" $offset="md">
+          <Stack direction="column" gap="sm">
+            <Text size="xs">
+              Step 1. Insert you Ethereum address and sign the message bellow on
+              Etherscan.
+            </Text>
+            <AddressInputHookForm
+              fieldName={`additionalAddresses.${index}.address`}
+              label={`Additional address #${index + 1}`}
+              placeholder="0x..."
+              rightDecorator={
+                <MatomoLink href="https://etherscan.io/verifiedSignatures#">
+                  <ButtonIcon
+                    icon={<External />}
+                    size="xs"
+                    variant="translucent"
+                  >
+                    Sign
+                  </ButtonIcon>
+                </MatomoLink>
+              }
+            />
+          </Stack>
+          <Stack direction="column" gap="sm">
+            <Text size="xs">Step 2. Copy the message to sign.</Text>
+            <Input
+              value={message}
+              readOnly
+              label="Message to sign"
+              placeholder="Enter address above to generate message..."
+              rightDecorator={
+                <CopyButton text={message} size="xs" variant="translucent" />
+              }
+            />
+          </Stack>
+          <Stack direction="column" gap="sm">
+            <Text size="xs">
+              Step 3. Paste the signature in the field below.
+            </Text>
+            <TextInputHookForm
+              fieldName={`additionalAddresses.${index}.signature`}
+              label="Signature"
+              placeholder="0x123..."
+              // error="123"
+              rightDecorator={
+                <Button
+                  size="xs"
+                  variant="translucent"
+                  onClick={() => void onVerify(index)}
+                >
+                  Verify
+                </Button>
+              }
+            />
+          </Stack>
+        </CategoryItemsWrapper>
+      )}
+    </Stack>
+  );
+};

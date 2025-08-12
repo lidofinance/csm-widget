@@ -1,16 +1,20 @@
 import { Text } from '@lidofinance/lido-ui';
 import { Points } from 'features/ics/score-system/points';
-import { IcsResponseDto } from 'features/ics/shared';
+import {
+  IcsResponseDto,
+  SCORE_SOURCES,
+  TOTAL_SCORE_REQUIRED,
+} from 'features/ics/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { SCORE_SOURCES, TOTAL_SCORE_REQUIRED } from '../../shared/score-data';
-import { calculateScores } from '../utils';
+import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreCategory } from './score-category';
-import { FailIcon, SuccessIcon } from '../styles';
+import { FailIcon, SemiFailIcon, SuccessIcon } from '../styles';
 
 type ScoreCategoryProps = Pick<IcsResponseDto, 'scores' | 'status'>;
 
 export const ScorePoints: FC<ScoreCategoryProps> = ({ scores, status }) => {
+  const isMinReached = isMinScoresReached(scores);
   const total = calculateScores(scores);
   const isEnougth = total >= TOTAL_SCORE_REQUIRED;
   const showIcons = status !== 'APPROVED';
@@ -18,8 +22,17 @@ export const ScorePoints: FC<ScoreCategoryProps> = ({ scores, status }) => {
     <Stack direction="column" gap="md">
       <Stack justify="space-between">
         <Text size="sm" weight={700}>
-          {showIcons && (isEnougth ? <SuccessIcon /> : <FailIcon />)} Total
-          Score Breakdown
+          {showIcons &&
+            (isEnougth ? (
+              isMinReached ? (
+                <SuccessIcon />
+              ) : (
+                <SemiFailIcon />
+              )
+            ) : (
+              <FailIcon />
+            ))}{' '}
+          Total Score Breakdown
         </Text>
         <Text size="sm" weight={700}>
           <Points value={total} />

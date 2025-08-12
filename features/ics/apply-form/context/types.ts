@@ -3,7 +3,6 @@ import { Address } from 'viem';
 export type AdditionalAddress = {
   address: string;
   signature: string;
-  verified?: boolean;
 };
 
 export type ApplyFormInputType = {

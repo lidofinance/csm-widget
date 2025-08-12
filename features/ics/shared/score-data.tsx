@@ -167,7 +167,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         id: 'circles',
         name: 'Circles',
         icon: <IconStyle src={CirclesIcon.src} />,
-        points: '3-8',
+        points: 4,
         description:
           'Submitted address is verified via a dedicated Lido group on Circles',
       },

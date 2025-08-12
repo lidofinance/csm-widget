@@ -2,7 +2,7 @@ import { Text } from '@lidofinance/lido-ui';
 import { Points } from 'features/ics/score-system/points';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { ScoreItem as ScoreItemType } from '../../shared';
+import { ScoreItem as ScoreItemType } from 'features/ics/shared';
 
 type ScoreItemProps = {
   item: ScoreItemType;

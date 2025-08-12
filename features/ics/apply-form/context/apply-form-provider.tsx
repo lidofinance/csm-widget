@@ -9,14 +9,14 @@ import {
 import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
 import { useApplyFormNetworkData } from './use-apply-form-network-data';
 import { useApplyFormSubmit } from './use-apply-form-submit';
-// import { useApplyFormValidation } from './use-apply-form-validation';
+import { useApplyFormValidation } from './use-apply-form-validation';
 
 export const useApplyFormData = useFormData<ApplyFormNetworkData>;
 
 export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const [networkData, revalidate] = useApplyFormNetworkData();
 
-  // const validationResolver = useApplyFormValidation(networkData);
+  const validationResolver = useApplyFormValidation(networkData);
 
   const formObject = useForm<ApplyFormInputType>({
     defaultValues: {
@@ -24,7 +24,7 @@ export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
       twitterLink: '',
       discordLink: '',
     },
-    // resolver: validationResolver,
+    resolver: validationResolver,
     mode: 'onChange',
   });
 

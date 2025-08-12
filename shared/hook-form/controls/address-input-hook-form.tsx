@@ -32,7 +32,10 @@ export const AddressInputHookForm = ({
 
   const { setValue } = useFormContext();
 
-  const hasErrorHighlight = isValidationErrorTypeValidate(error?.type);
+  const hasErrorHighlight =
+    isValidationErrorTypeValidate(error?.type) ||
+    error?.type === 'required' ||
+    error?.type === 'manual';
   // allows to show error state without message
   const errorMessage = hasErrorHighlight && (error?.message || true);
 

@@ -104,7 +104,7 @@ export const CategoryItemsWrapper = styled(StackStyle).attrs({
     position: absolute;
     width: 2px;
     height: 100%;
-    left: -1px;
+    left: 0px;
     background: var(--lido-color-border);
     border-radius: ${({ theme }) => theme.borderRadiusesMap.xl}px;
   }

@@ -81,6 +81,11 @@ export const FailIcon = styled(Close)`
   vertical-align: middle;
 `;
 
+export const SemiFailIcon = styled(Close)`
+  color: var(--lido-color-warning);
+  vertical-align: middle;
+`;
+
 export const SuccessIcon = styled(Check)`
   color: var(--lido-color-success);
   vertical-align: middle;

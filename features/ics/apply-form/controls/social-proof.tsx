@@ -52,7 +52,7 @@ export const SocialProof: FC = () => {
             <Text size="xs">Step 2. Paste the link to this post</Text>
 
             <TextInputHookForm
-              fieldName="socialProof.twitter"
+              fieldName="twitterLink"
               label="X post link"
               placeholder="https://x.com/username/status/..."
             />
@@ -88,7 +88,7 @@ export const SocialProof: FC = () => {
             <Text size="xs">Step 2. Paste the link to this message</Text>
 
             <TextInputHookForm
-              fieldName="socialProof.discord"
+              fieldName="discordLink"
               label="Discord message link"
               placeholder="https://discord.com/channels/..."
             />

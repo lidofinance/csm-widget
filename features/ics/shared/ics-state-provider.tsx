@@ -9,7 +9,13 @@ import {
 import invariant from 'tiny-invariant';
 import { IcsResponseDto } from './types';
 import { useFormStatus } from './use-form-status';
-import { useDappStatus, useIcsProof } from 'modules/web3';
+import {
+  useDappStatus,
+  useIcsProof,
+  useNodeOperatorId,
+  useOperatorType,
+} from 'modules/web3';
+import { OPERATOR_TYPE } from 'consts';
 
 export type TypeStatus = 'PENDING' | 'ISSUED' | 'CLAIMED';
 
@@ -19,7 +25,7 @@ type IcsStateContextType = {
   isPending: boolean;
   isTypePending: boolean;
   applyMode: boolean;
-  reset: () => void;
+  reset: (value?: boolean) => void;
 };
 
 const IcsStateContext = createContext<IcsStateContextType>(
@@ -34,6 +40,8 @@ export const useIcsState = () => {
 
 export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const { address } = useDappStatus();
+  const operatorId = useNodeOperatorId();
+  const { data: operatorType } = useOperatorType(operatorId);
 
   const { data: proofData, isPending: isTypePending } = useIcsProof(address);
   const { data, isPending } = useFormStatus();
@@ -43,18 +51,19 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const value: IcsStateContextType = useMemo(
     () => ({
-      typeStatus: proofData?.isConsumed
-        ? 'CLAIMED'
-        : proofData?.proof
-          ? 'ISSUED'
-          : 'PENDING',
+      typeStatus:
+        operatorType === OPERATOR_TYPE.ICS || proofData?.isConsumed
+          ? 'CLAIMED'
+          : proofData?.proof
+            ? 'ISSUED'
+            : 'PENDING',
       data,
       isPending,
       isTypePending,
       applyMode,
-      reset: () => setManualReset(true),
+      reset: (value = true) => setManualReset(value),
     }),
-    [applyMode, data, isPending, isTypePending, proofData],
+    [applyMode, data, isPending, isTypePending, proofData, operatorType],
   );
 
   return (

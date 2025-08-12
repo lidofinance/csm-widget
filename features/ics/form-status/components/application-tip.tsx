@@ -7,7 +7,7 @@ import { Stack } from 'shared/components';
 type Props = Pick<IcsResponseDto, 'comments'>;
 
 export const ApplicationTip: FC<Props> = ({ comments }) => {
-  const show = !!comments.additionalAddresses?.length;
+  const show = !!comments.additionalAddresses?.filter((c) => !!c).length;
 
   if (!show) return null;
   return (

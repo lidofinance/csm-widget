@@ -1,7 +1,10 @@
-import { IcsApplyDto } from 'features/ics/shared';
+import {
+  IcsApplyDto,
+  useApplyFormMutation,
+  useIcsState,
+} from 'features/ics/shared';
 import { useCallback } from 'react';
 import { FormSubmitter } from 'shared/hook-form/form-controller';
-import { useApplyFormMutation } from '../../shared/use-apply-form-mutation';
 import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
 import { useModalStages } from './use-modal-stages';
 
@@ -22,6 +25,7 @@ export const useApplyFormSubmit: FormSubmitter<
   ApplyFormNetworkData
 > = ({ onConfirm, onRetry }) => {
   const { txModalStages: stages } = useModalStages();
+  const { reset } = useIcsState();
 
   const mutation = useApplyFormMutation({
     onMutate: () => {
@@ -29,6 +33,7 @@ export const useApplyFormSubmit: FormSubmitter<
     },
     onSuccess: () => {
       window.scrollTo({ top: 0 });
+      reset(false);
       stages.success();
       void onConfirm?.();
     },

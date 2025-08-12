@@ -1,20 +1,9 @@
-import { Button, ButtonIcon, Plus, Text } from '@lidofinance/lido-ui';
-import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
+import { ButtonIcon, Plus, Text } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import {
-  Chip,
-  ExternalMatomoLink,
-  FormTitle,
-  MatomoLink,
-  Stack,
-} from 'shared/components';
-import { VerifiedChip } from 'shared/components/input-address/verified-chip';
-import {
-  AddressInputHookForm,
-  TextInputHookForm,
-} from 'shared/hook-form/controls';
+import { Chip, FormTitle, MatomoLink, Stack } from 'shared/components';
 import { MAX_ADDITIONAL_ADDRESSES, type ApplyFormInputType } from '../context';
+import { AddressItem } from './address-item';
 
 export const AdditionalAddresses: FC = () => {
   const { control } = useFormContext<ApplyFormInputType>();
@@ -25,7 +14,7 @@ export const AdditionalAddresses: FC = () => {
 
   const handleAddAddress = useCallback(() => {
     if (fields.length < MAX_ADDITIONAL_ADDRESSES) {
-      append({ address: '', signature: '', verified: false });
+      append({ address: '', signature: '' });
     }
   }, [append, fields.length]);
 
@@ -34,20 +23,6 @@ export const AdditionalAddresses: FC = () => {
       remove(index);
     },
     [remove],
-  );
-
-  const { setValue, getValues } = useFormContext<ApplyFormInputType>();
-
-  const handleVerifyAddress = useCallback(
-    (index: number) => {
-      const currentAddresses = getValues('additionalAddresses');
-      const updatedAddresses = [...currentAddresses];
-      updatedAddresses[index] = { ...updatedAddresses[index], verified: true };
-      setValue('additionalAddresses', updatedAddresses, {
-        shouldValidate: true,
-      });
-    },
-    [setValue, getValues],
   );
 
   return (
@@ -63,73 +38,12 @@ export const AdditionalAddresses: FC = () => {
       </Stack>
 
       {fields.map((field, index) => (
-        <Stack key={field.id} direction="column" gap="sm">
-          <Stack direction="row" justify="space-between" align="center">
-            <Text as="h4" size="xs" weight="bold">
-              Additional address #{index + 1}
-            </Text>
-            <Button
-              size="xs"
-              variant="text"
-              color="error"
-              onClick={() => handleRemoveAddress(index)}
-            >
-              Remove
-            </Button>
-          </Stack>
-          {field.verified && field.address ? (
-            <Stack direction="column" gap="sm">
-              <AddressInputHookForm
-                fieldName={`additionalAddresses.${index}.address`}
-                disabled
-                label={
-                  <>
-                    Additional address #{index + 1}{' '}
-                    <VerifiedChip color="primary">Verified</VerifiedChip>
-                  </>
-                }
-              />
-            </Stack>
-          ) : (
-            <CategoryItemsWrapper $gap="md" $offset="md">
-              <Stack direction="column" gap="sm">
-                <Text size="xs">
-                  Step 1. Insert you Ethereum address and sign the transaction
-                  on Etherscan.
-                </Text>
-                <AddressInputHookForm
-                  fieldName={`additionalAddresses.${index}.address`}
-                  label={`Additional address #${index + 1}`}
-                  placeholder="0x..."
-                  rightDecorator={
-                    <Button size="xs" variant="translucent">
-                      <ExternalMatomoLink>Sign</ExternalMatomoLink>
-                    </Button>
-                  }
-                />
-              </Stack>
-              <Stack direction="column" gap="sm">
-                <Text size="xs">
-                  Step 2. Copy the signature and past in the field below.
-                </Text>
-                <TextInputHookForm
-                  fieldName={`additionalAddresses.${index}.signature`}
-                  label="Signature"
-                  placeholder="0x123..."
-                  rightDecorator={
-                    <Button
-                      size="xs"
-                      variant="translucent"
-                      onClick={() => handleVerifyAddress(index)}
-                    >
-                      Verify
-                    </Button>
-                  }
-                />
-              </Stack>
-            </CategoryItemsWrapper>
-          )}
-        </Stack>
+        <AddressItem
+          key={field.id}
+          field={field}
+          index={index}
+          onRemove={handleRemoveAddress}
+        />
       ))}
 
       {fields.length < MAX_ADDITIONAL_ADDRESSES && (
@@ -137,7 +51,6 @@ export const AdditionalAddresses: FC = () => {
           icon={<Plus />}
           variant="translucent"
           size="sm"
-          // variant="outlined"
           onClick={handleAddAddress}
           fullwidth
         >

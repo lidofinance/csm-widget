@@ -9,13 +9,12 @@ const generateSocialMessage = (
   address: Address,
   platform: 'twitter' | 'discord',
 ) => {
-  const baseMessage = `This post is proof that I am the owner of this ${platform === 'twitter' ? 'X' : 'Discord'} account. My address to get verified for ICS: ${address}`;
+  const baseMessage = `This post is proof that I am the owner of this ${platform === 'twitter' ? 'X' : 'Discord'} account. My address to get verified for ICS: ${address.toLowerCase()}`;
   return baseMessage;
 };
 
-// FIXME: validate signature
 export const generateAddressMessage = (address: Address) =>
-  `Verify ownership of address for ICS: ${address}`;
+  `Verify ownership of address for ICS: ${address.toLowerCase()}`;
 
 export const useApplyFormNetworkData = (): [
   ApplyFormNetworkData,

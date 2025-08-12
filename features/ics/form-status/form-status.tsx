@@ -35,6 +35,7 @@ export const FormStatus: FC<FormStatusProps> = ({
           status={status}
           typeStatus={typeStatus}
           comments={comments}
+          scores={scores}
         />
         {status !== 'REVIEW' && <Divider type="horizontal" />}
 

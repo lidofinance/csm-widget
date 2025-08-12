@@ -7,7 +7,7 @@ import {
 import { TipWrapper } from 'features/monitoring/attestation-rate-section/styles';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { IcsFormStatus, IcsScoresDto, ScoreSource } from '../../shared';
+import { IcsFormStatus, IcsScoresDto, ScoreSource } from 'features/ics/shared';
 import { FailIcon, SuccessIcon } from '../styles';
 import { calculateScores } from '../utils';
 import { ScoreItem } from './score-item';

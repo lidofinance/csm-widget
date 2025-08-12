@@ -1,16 +1,24 @@
 import { Button, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
-import { TypeStatus } from 'features/ics/shared';
+import {
+  IcsCommentsDto,
+  IcsFormStatus,
+  IcsScoresDto,
+  TOTAL_SCORE_REQUIRED,
+  TypeStatus,
+} from 'features/ics/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { useNavigate } from 'shared/navigate';
-import { IcsCommentsDto, IcsFormStatus } from '../../shared/types';
+
+import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';
 
 type StatusHeaderProps = {
   typeStatus: TypeStatus;
   status?: IcsFormStatus;
   comments?: IcsCommentsDto;
+  scores?: IcsScoresDto;
 };
 
 const getStatus = (
@@ -48,6 +56,7 @@ const useHint = (
   status: IcsFormStatus | undefined,
   typeStatus: TypeStatus,
   comments: IcsCommentsDto | undefined,
+  scores: IcsScoresDto | undefined,
 ) => {
   const n = useNavigate();
 
@@ -69,7 +78,31 @@ const useHint = (
         </>
       );
     case status === 'REJECTED':
-      return <Text size="xs">{comments?.reason}</Text>;
+      if (comments?.reason) {
+        return <Text size="xs">{comments?.reason}</Text>;
+      }
+      if (scores) {
+        const isMinReached = isMinScoresReached(scores);
+        const totalScore = calculateScores(scores);
+
+        // Check if total score is sufficient but minimum category requirements are not met
+        if (totalScore >= TOTAL_SCORE_REQUIRED && !isMinReached) {
+          return (
+            <Text size="xs">
+              Your application did not reach the minimum score required for some
+              categories
+            </Text>
+          );
+        }
+
+        return (
+          <Text size="xs">
+            Your application earned {totalScore} out of the{' '}
+            {TOTAL_SCORE_REQUIRED} points required to qualify
+          </Text>
+        );
+      }
+      return null;
     case status === 'REVIEW':
       return (
         <Text size="xs">
@@ -88,15 +121,15 @@ const useHint = (
   }
 };
 
-// TODO: if claim is not available yet (v1)
 export const StatusHeader: FC<StatusHeaderProps> = ({
   status,
-  comments,
   typeStatus,
+  comments,
+  scores,
 }) => {
   const statusChip = getStatus(status, typeStatus);
   const proofChip = getProofStatus(typeStatus);
-  const hint = useHint(status, typeStatus, comments);
+  const hint = useHint(status, typeStatus, comments, scores);
 
   return (
     <Stack direction="column" gap="md">
