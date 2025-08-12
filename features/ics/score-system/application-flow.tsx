@@ -22,7 +22,7 @@ export const Step: FC<PropsWithChildren<{ number: string; title: string }>> = ({
 export const ApplicationFlow: FC = () => {
   return (
     <Stack direction="column" gap="md">
-      <Text as="h2" size="lg" weight="bold">
+      <Text as="h3" size="lg" weight="bold">
         Application Flow
       </Text>
       <Step number="1" title="Application submission">

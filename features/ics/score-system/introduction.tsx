@@ -5,18 +5,16 @@ import { MatomoLink, Stack } from 'shared/components';
 export const Introduction: FC = () => {
   return (
     <Stack direction="column" gap="md">
-      <Text as="h2" size="lg" weight="bold">
+      <Text as="h3" size="lg" weight="bold">
         Introduction
       </Text>
       <Text size="xs" color="secondary">
-        <MatomoLink>The score system</MatomoLink> is designed to introduce a
-        pathway for independent stakers to identify themselves and be able to
-        get{' '}
-        <MatomoLink>the Identified Community staker operator type</MatomoLink>.
-        Score acts as the entry gate to the Identified Community Stakers List.
-        Points can be earned by providing addresses that contain proofs across
-        various categories that represent different aspects of experience,
-        engagement, and identity.
+        The scoring system creates a clear path for independent stakers to
+        qualify as "Identified Community" operators. Your score determines
+        eligibility for the Identified Community Stakers List. Points are
+        awarded by submitting verifiable proofs; - across categories such
+        as experience, on-chain engagement, and community contributions -
+        that demonstrate your qualifications.
       </Text>
     </Stack>
   );

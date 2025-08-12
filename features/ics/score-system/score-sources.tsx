@@ -7,7 +7,7 @@ import { SCORE_SOURCES } from './score-data';
 export const ScoreSources: FC = () => {
   return (
     <Stack direction="column" gap="md">
-      <Text as="h2" size="lg" weight="bold">
+      <Text as="h3" size="lg" weight="bold">
         Score sources
       </Text>
       <Text size="xs" color="secondary">

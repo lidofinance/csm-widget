@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { Layout } from 'shared/layout';
-import { IcsScores } from './ics-scores';
-import { TypePageSwitcher } from 'shared/navigate';
-import { Faq } from 'shared/components';
 import { FAQ_OPERATOR_TYPE } from 'faq';
+import { Faq } from 'shared/components';
+import { Layout } from 'shared/layout';
+import { TypePageSwitcher } from 'shared/navigate';
+import { IcsApply } from './ics-apply';
 
 export const IcsApplyPage: FC = () => (
   <Layout
@@ -14,7 +14,7 @@ export const IcsApplyPage: FC = () => (
     matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs}
   >
     <TypePageSwitcher />
-    <IcsScores />
+    <IcsApply />
     <Faq items={FAQ_OPERATOR_TYPE} />
   </Layout>
 );
