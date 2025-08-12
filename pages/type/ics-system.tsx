@@ -2,7 +2,7 @@ import { IcsScoresPage } from 'features/ics';
 import { FC } from 'react';
 import { GateLoaded } from 'shared/navigate';
 
-const ScoresPage: FC = () => {
+const Page: FC = () => {
   return (
     <GateLoaded>
       <IcsScoresPage />
@@ -10,4 +10,4 @@ const ScoresPage: FC = () => {
   );
 };
 
-export default ScoresPage;
+export default Page;

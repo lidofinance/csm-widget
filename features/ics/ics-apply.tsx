@@ -1,49 +1,37 @@
-import { FC, useCallback } from 'react';
 import { Loader } from '@lidofinance/lido-ui';
+import { FC } from 'react';
 import { NoSSRWrapper } from 'shared/components';
 import { ApplyForm } from './apply-form';
-import { IcsProvider, useAuth, useFormStatus } from './shared';
-import { SiweSignIn } from './siwe-sign-in';
 import { FormStatus } from './form-status';
+import { IcsAuthProvider, useAuth, useFormStatus } from './shared';
+import { SiweSignIn } from './siwe-sign-in';
 
 const IcsApplyContent: FC = () => {
   const { token } = useAuth();
-  const { data: statusData, isLoading: isStatusLoading, refetch } = useFormStatus();
+  const { data: statusData, isPending: isStatusLoading } = useFormStatus();
 
-  const handleRetryOrContinue = useCallback(() => {
-    void refetch();
-  }, [refetch]);
-
-  // Not signed in - show sign in form
   if (!token) {
     return <SiweSignIn />;
   }
 
-  // Loading form status after sign in
   if (isStatusLoading) {
     return <Loader />;
   }
 
-  // Has submitted form - show status
-  if (statusData && statusData.status !== 'none') {
-    return (
-      <FormStatus 
-        statusData={statusData} 
-        onRetry={statusData.status === 'rejected' || statusData.status === 'draft' ? handleRetryOrContinue : undefined}
-      />
-    );
+  if (statusData) {
+    return <FormStatus statusData={statusData} />;
   }
 
-  // No submitted form - show application form
   return <ApplyForm />;
 };
 
 export const IcsApply: FC = () => {
   return (
     <NoSSRWrapper>
-      <IcsProvider>
+      <IcsAuthProvider>
         <IcsApplyContent />
-      </IcsProvider>
+        {/* <ApplyForm /> */}
+      </IcsAuthProvider>
     </NoSSRWrapper>
   );
 };

@@ -1,27 +1,24 @@
-export interface AdditionalAddress {
+import { Address } from 'viem';
+
+export type AdditionalAddress = {
   address: string;
   signature: string;
-}
+  verified?: boolean;
+};
 
-export interface SocialProof {
-  twitter: string;
-  discord: string;
-}
-
-export interface ApplyFormInputType {
-  mainAddress: string;
+export type ApplyFormInputType = {
   additionalAddresses: AdditionalAddress[];
-  socialProof: SocialProof;
-}
+  twitterLink?: string;
+  discordLink?: string;
+};
 
-export interface ApplyFormNetworkData {
-  connectedAddress?: string;
-  loading: {
-    connectedAddress: boolean;
-  };
-}
+export type ApplyFormNetworkData = {
+  mainAddress: Address;
+  twitterMessage: string;
+  discordMessage: string;
+};
 
-export interface ApplyFormControllerValue {
-  onSubmit: (data: ApplyFormInputType) => Promise<void>;
-  retryEvent: () => void;
-}
+export type UseApplyFormSubmitOptions = {
+  onConfirm: () => Promise<void> | void;
+  onRetry: () => void;
+};

@@ -24,10 +24,12 @@ const createSiweMessage = (address: string, chainId?: number) => {
   return message.prepareMessage();
 };
 
+// FIXME: shared hook with Surveys
 export const useSiwe = () => {
   const { address, chainId } = useDappStatus();
   const { signMessageAsync } = useSignMessage();
 
+  // TODO: pass message in callback props
   return useCallback(async () => {
     invariant(address, 'Signer is not available');
 

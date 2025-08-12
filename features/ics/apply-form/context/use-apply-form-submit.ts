@@ -1,71 +1,52 @@
+import { IcsApplyDto } from 'features/ics/shared';
 import { useCallback } from 'react';
-import { useModalStages } from 'shared/hooks';
-import type { ApplyFormInputType } from './types';
+import { FormSubmitter } from 'shared/hook-form/form-controller';
+import { useApplyFormMutation } from '../../shared/use-apply-form-mutation';
+import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
+import { useModalStages } from './use-modal-stages';
 
-const useTxModalStages = () => {
-  return [
-    {
-      sign: {
-        title: 'Submit Application',
-        description: 'Please confirm your ICS application submission...',
-      },
-      pending: {
-        title: 'Submitting Application',
-        description: 'Your application is being processed...',
-      },
-      success: {
-        title: 'Application Submitted',
-        description: 'Your ICS application has been successfully submitted. You will receive a confirmation email shortly.',
-      },
-    },
-  ];
+const transformFormDataToApiPayload = (
+  form: ApplyFormInputType,
+  data: ApplyFormNetworkData,
+): IcsApplyDto => {
+  return {
+    mainAddress: data.mainAddress,
+    additionalAddresses: form.additionalAddresses,
+    twitterLink: form.twitterLink || undefined,
+    discordLink: form.discordLink || undefined,
+  };
 };
 
-interface UseApplyFormSubmitOptions {
-  onConfirm: () => void;
-  onRetry: () => void;
-}
+export const useApplyFormSubmit: FormSubmitter<
+  ApplyFormInputType,
+  ApplyFormNetworkData
+> = ({ onConfirm, onRetry }) => {
+  const { txModalStages: stages } = useModalStages();
 
-export const useApplyFormSubmit = ({ onConfirm, onRetry }: UseApplyFormSubmitOptions) => {
-  const stages = useTxModalStages();
-  const { dispatchModalState, retryEvent } = useModalStages();
-
-  const submitAction = useCallback(
-    async (data: ApplyFormInputType) => {
-      try {
-        await dispatchModalState({
-          stages,
-          callbacks: {
-            onSign: async () => {
-              // TODO: Implement actual API call to submit application
-              console.log('Submitting application:', data);
-              
-              // Simulate API call
-              await new Promise(resolve => setTimeout(resolve, 2000));
-              
-              // For now, just log the data
-              console.log('Application data:', {
-                mainAddress: data.mainAddress,
-                additionalAddresses: data.additionalAddresses,
-                socialProof: data.socialProof,
-              });
-            },
-            onConfirm,
-          },
-        });
-      } catch (error) {
-        console.error('Failed to submit application:', error);
-        throw error;
-      }
+  const mutation = useApplyFormMutation({
+    onMutate: () => {
+      stages.pending();
     },
-    [dispatchModalState, stages, onConfirm]
-  );
+    onSuccess: () => {
+      stages.success();
+      void onConfirm?.();
+    },
+    onError: (error) => {
+      // FIXME: get error from response
+      stages.failed(error, onRetry);
+    },
+  });
 
-  return {
-    submitAction,
-    retryEvent: useCallback(() => {
-      retryEvent();
-      onRetry();
-    }, [retryEvent, onRetry]),
-  };
+  return useCallback(
+    async (form, data) => {
+      const apiPayload = transformFormDataToApiPayload(form, data);
+      try {
+        await mutation.mutateAsync(apiPayload);
+      } catch (error) {
+        return false;
+      }
+      return true;
+    },
+    [mutation],
+  );
 };

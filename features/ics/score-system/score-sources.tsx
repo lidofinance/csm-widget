@@ -2,7 +2,7 @@ import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { ScoreCategory } from './score-category';
-import { SCORE_SOURCES } from './score-data';
+import { SCORE_SOURCES } from '../shared';
 
 export const ScoreSources: FC = () => {
   return (

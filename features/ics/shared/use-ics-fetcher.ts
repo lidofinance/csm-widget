@@ -6,10 +6,7 @@ import { getExternalLinks } from 'consts/external-links';
 
 const { surveyApi } = getExternalLinks();
 
-export const useIcsFetcher = <T, R = T>(
-  transformIncoming?: (d: R) => T,
-  transformOutcoming?: (d: T) => R,
-) => {
+export const useIcsFetcher = <T, R = T>() => {
   const { token, logout } = useAuth();
 
   const handleError = useCallback(
@@ -32,13 +29,13 @@ export const useIcsFetcher = <T, R = T>(
             Authorization: token,
           },
         });
-        return res && transformIncoming ? transformIncoming(res) : (res as T);
+        return res;
       } catch (err) {
         handleError(err);
         throw err;
       }
     },
-    [handleError, token, transformIncoming],
+    [handleError, token],
   );
 
   const updater = useCallback(
@@ -47,21 +44,19 @@ export const useIcsFetcher = <T, R = T>(
       try {
         const res = await standardFetcher<R>(`${surveyApi}/${url}`, {
           method: data === null ? 'DELETE' : 'POST',
-          body: JSON.stringify(
-            data && transformOutcoming ? transformOutcoming(data) : data,
-          ),
+          body: JSON.stringify(data),
           headers: {
             'Content-type': 'application/json',
             Authorization: token,
           },
         });
-        return res && transformIncoming ? transformIncoming(res) : (res as T);
+        return res;
       } catch (err) {
         handleError(err);
         throw err;
       }
     },
-    [handleError, token, transformIncoming, transformOutcoming],
+    [handleError, token],
   );
 
   return [fetcher, updater] as const;

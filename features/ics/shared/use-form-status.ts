@@ -1,27 +1,19 @@
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from './ics-auth-provider';
 import { useIcsFetcher } from './use-ics-fetcher';
+import { STRATEGY_EAGER } from 'consts';
+import { IcsResponseDto } from './types';
 
-export type FormStatus = 'none' | 'pending' | 'approved' | 'rejected' | 'draft';
-
-export interface FormStatusResponse {
-  status: FormStatus;
-  submittedAt?: string;
-  lastUpdated?: string;
-  reviewNotes?: string;
-  formData?: Record<string, unknown>;
-}
+export const ICS_FORM_STATUS_KEY = 'ics-form-status';
 
 export const useFormStatus = () => {
   const { token } = useAuth();
-  const [fetcher] = useIcsFetcher<FormStatusResponse>();
+  const [fetcher] = useIcsFetcher<IcsResponseDto>();
 
   return useQuery({
-    queryKey: ['ics-form-status'],
-    queryFn: () => fetcher('forms/status'),
+    queryKey: [ICS_FORM_STATUS_KEY, { token }],
+    queryFn: () => fetcher('ics/status'),
     enabled: !!token,
-    staleTime: 30000, // 30 seconds
-    gcTime: 300000, // 5 minutes
-    retry: 1,
+    ...STRATEGY_EAGER,
   });
 };

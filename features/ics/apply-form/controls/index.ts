@@ -1,4 +1,4 @@
-export { MainAddressInput } from './main-address-input';
-export { AdditionalAddresses } from './additional-addresses';
-export { SocialProof } from './social-proof';
-export { SubmitButton } from './submit-button';
+export * from './additional-addresses';
+export * from './main-address';
+export * from './social-proof';
+export * from './submit-button';

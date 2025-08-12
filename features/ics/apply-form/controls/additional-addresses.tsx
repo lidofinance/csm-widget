@@ -1,8 +1,20 @@
+import { Button, ButtonIcon, Plus, Text } from '@lidofinance/lido-ui';
+import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { Button, Text, Stack } from '@lidofinance/lido-ui';
-import { AddressInputHookForm, TextInputHookForm } from 'shared/hook-form/controls';
-import type { ApplyFormInputType } from '../context';
+import {
+  Chip,
+  ExternalMatomoLink,
+  FormTitle,
+  MatomoLink,
+  Stack,
+} from 'shared/components';
+import { VerifiedChip } from 'shared/components/input-address/verified-chip';
+import {
+  AddressInputHookForm,
+  TextInputHookForm,
+} from 'shared/hook-form/controls';
+import { MAX_ADDITIONAL_ADDRESSES, type ApplyFormInputType } from '../context';
 
 export const AdditionalAddresses: FC = () => {
   const { control } = useFormContext<ApplyFormInputType>();
@@ -12,8 +24,8 @@ export const AdditionalAddresses: FC = () => {
   });
 
   const handleAddAddress = useCallback(() => {
-    if (fields.length < 5) {
-      append({ address: '', signature: '' });
+    if (fields.length < MAX_ADDITIONAL_ADDRESSES) {
+      append({ address: '', signature: '', verified: false });
     }
   }, [append, fields.length]);
 
@@ -21,25 +33,41 @@ export const AdditionalAddresses: FC = () => {
     (index: number) => {
       remove(index);
     },
-    [remove]
+    [remove],
+  );
+
+  const { setValue, getValues } = useFormContext<ApplyFormInputType>();
+
+  const handleVerifyAddress = useCallback(
+    (index: number) => {
+      const currentAddresses = getValues('additionalAddresses');
+      const updatedAddresses = [...currentAddresses];
+      updatedAddresses[index] = { ...updatedAddresses[index], verified: true };
+      setValue('additionalAddresses', updatedAddresses, {
+        shouldValidate: true,
+      });
+    },
+    [setValue, getValues],
   );
 
   return (
-    <Stack direction="column" spacing="md">
-      <Stack direction="column" spacing="xs">
-        <Text size="sm" weight="bold">
-          Additional Addresses
-        </Text>
+    <Stack direction="column" gap="md">
+      <Stack direction="column" gap="xxs">
+        <FormTitle>
+          Additional Addresses <Chip>Optional</Chip>
+        </FormTitle>
         <Text size="xs" color="secondary">
-          You can add up to 5 addresses where your achievements are stored. To
-          prove you own each address, sign a message via the verification page.
+          You can add up to {MAX_ADDITIONAL_ADDRESSES} addresses where your
+          achievements are stored. To prove you own each address, sign a message
+          via the verification page. For more info see{' '}
+          <MatomoLink>the guide</MatomoLink>
         </Text>
       </Stack>
 
       {fields.map((field, index) => (
-        <Stack key={field.id} direction="column" spacing="sm">
+        <Stack key={field.id} direction="column" gap="sm">
           <Stack direction="row" justify="space-between" align="center">
-            <Text size="sm" weight="bold">
+            <Text as="h4" size="xs" weight="bold">
               Additional address #{index + 1}
             </Text>
             <Button
@@ -51,30 +79,72 @@ export const AdditionalAddresses: FC = () => {
               Remove
             </Button>
           </Stack>
-
-          <AddressInputHookForm
-            fieldName={`additionalAddresses.${index}.address`}
-            label={`Address ${index + 1}`}
-            placeholder="0x..."
-          />
-
-          <TextInputHookForm
-            fieldName={`additionalAddresses.${index}.signature`}
-            label={`Signature ${index + 1}`}
-            placeholder="0x..."
-          />
+          {field.verified && field.address ? (
+            <Stack direction="column" gap="sm">
+              <AddressInputHookForm
+                fieldName={`additionalAddresses.${index}.address`}
+                disabled
+                label={
+                  <>
+                    Additional address #{index + 1}{' '}
+                    <VerifiedChip color="primary">Verified</VerifiedChip>
+                  </>
+                }
+              />
+            </Stack>
+          ) : (
+            <CategoryItemsWrapper $gap="md" $offset="md">
+              <Stack direction="column" gap="sm">
+                <Text size="xs">
+                  1 step. Insert you Ethereum address and sign the transaction
+                  on Etherscan.
+                </Text>
+                <AddressInputHookForm
+                  fieldName={`additionalAddresses.${index}.address`}
+                  label={`Additional address #${index + 1}`}
+                  placeholder="0x..."
+                  rightDecorator={
+                    <Button size="xs" variant="translucent">
+                      <ExternalMatomoLink>Sign</ExternalMatomoLink>
+                    </Button>
+                  }
+                />
+              </Stack>
+              <Stack direction="column" gap="sm">
+                <Text size="xs">
+                  2 step. Copy the signature and past in the field below.
+                </Text>
+                <TextInputHookForm
+                  fieldName={`additionalAddresses.${index}.signature`}
+                  label="Signature"
+                  placeholder="0x123..."
+                  rightDecorator={
+                    <Button
+                      size="xs"
+                      variant="translucent"
+                      onClick={() => handleVerifyAddress(index)}
+                    >
+                      Verify
+                    </Button>
+                  }
+                />
+              </Stack>
+            </CategoryItemsWrapper>
+          )}
         </Stack>
       ))}
 
-      {fields.length < 5 && (
-        <Button
+      {fields.length < MAX_ADDITIONAL_ADDRESSES && (
+        <ButtonIcon
+          icon={<Plus />}
+          variant="translucent"
           size="sm"
-          variant="outlined"
+          // variant="outlined"
           onClick={handleAddAddress}
           fullwidth
         >
-          Add address ({fields.length}/5)
-        </Button>
+          Add new address
+        </ButtonIcon>
       )}
     </Stack>
   );

@@ -7,7 +7,7 @@ export const FormTitle: FC<PropsWithChildren<{ extra?: ReactNode }>> = ({
   extra,
 }) => (
   <Stack spaceBetween center gap="xs">
-    <Text size="sm" weight={700}>
+    <Text as="h4" size="sm" weight={700}>
       {children}
     </Text>
     {extra}

@@ -1,8 +1,8 @@
 import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
+import { ScoreItem as ScoreItemType } from '../shared';
 import { Points } from './points';
-import { ScoreItem as ScoreItemType } from './score-data';
 import { AccordionStyle } from './styles';
 
 type ScoreItemProps = {

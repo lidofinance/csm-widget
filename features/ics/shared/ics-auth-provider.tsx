@@ -31,7 +31,7 @@ export const useAuth = () => {
 
 const { surveyApi } = getExternalLinks();
 
-export const IcsProvider: FC<PropsWithChildren> = ({ children }) => {
+export const IcsAuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const siwe = useSiwe();
   const { address } = useDappStatus();
   const [token, setToken] = useSessionStorage<string | undefined>(
@@ -49,6 +49,8 @@ export const IcsProvider: FC<PropsWithChildren> = ({ children }) => {
       const payload = await siwe();
 
       modalStages.pending();
+      // TODO: lib to work with surveys API
+      // TODO: react-query signin examples
       const response = await fetch(`${surveyApi}/auth/signin`, {
         method: 'POST',
         headers: {

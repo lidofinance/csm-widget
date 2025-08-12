@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { IconStyle } from './styles';
+import styled from 'styled-components';
 
 import EthStakerIcon from 'assets/icons/ics-scores/ethstaker.png';
 import StakeCatIcon from 'assets/icons/ics-scores/stakecat.png';
@@ -32,6 +32,19 @@ export type ScoreItem = {
   points: number | string;
   description: ReactNode;
 };
+
+const IconStyle = (styled.img<{ src: string }>).attrs(({ src }) => ({
+  src,
+}))`
+  display: flex;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+
+  border-radius: 100%;
+  outline: 1px solid var(--lido-color-border);
+  outline-offset: -1px;
+`;
 
 export const SCORE_SOURCES: ScoreSource[] = [
   {

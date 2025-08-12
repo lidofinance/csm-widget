@@ -1,31 +1,102 @@
+import { Input, Text } from '@lidofinance/lido-ui';
+import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC } from 'react';
-import { Text, Stack } from '@lidofinance/lido-ui';
+import {
+  Chip,
+  CopyButton,
+  FormTitle,
+  MatomoLink,
+  Stack,
+} from 'shared/components';
 import { TextInputHookForm } from 'shared/hook-form/controls';
+import { useApplyFormData } from '../context';
 
 export const SocialProof: FC = () => {
+  const { twitterMessage, discordMessage } = useApplyFormData();
+
   return (
-    <Stack direction="column" spacing="md">
-      <Stack direction="column" spacing="xs">
-        <Text size="sm" weight="bold">
-          Social Account Verification
-        </Text>
+    <Stack direction="column" gap="md">
+      <Stack direction="column" gap="xxs">
+        <FormTitle>
+          Socials <Chip>Optional</Chip>
+        </FormTitle>
         <Text size="xs" color="secondary">
           You can add your social accounts. To prove you own an account, post a
-          message. For more info see the guide.
+          message. For more info see <MatomoLink>the guide</MatomoLink>.
         </Text>
       </Stack>
 
-      <TextInputHookForm
-        fieldName="socialProof.twitter"
-        label="Twitter Post Link"
-        placeholder="https://twitter.com/username/status/..."
-      />
+      {/* Twitter Section */}
+      <Stack direction="column" gap="sm">
+        <Text as="h4" size="xs" weight={700}>
+          X (formerly Twitter)
+        </Text>
 
-      <TextInputHookForm
-        fieldName="socialProof.discord"
-        label="Discord Post Link"
-        placeholder="https://discord.com/channels/..."
-      />
+        <CategoryItemsWrapper $gap="md" $offset="md">
+          <Stack direction="column" gap="sm">
+            <Text size="xs">
+              1 step. Prove the ownership of the X account by posting a tweet
+              with the following text.
+            </Text>
+
+            <Input
+              id="twitter-message"
+              readOnly
+              onFocus={(e) => e.target.select()}
+              onClick={(e) => (e.target as HTMLInputElement).select()}
+              value={twitterMessage}
+              fullwidth
+              rightDecorator={<CopyButton text={twitterMessage} size="xs" />}
+            />
+          </Stack>
+
+          <Stack direction="column" gap="sm">
+            <Text size="xs">2 step. Paste the link to this post</Text>
+
+            <TextInputHookForm
+              fieldName="socialProof.twitter"
+              label="X post link"
+              placeholder="https://x.com/username/status/..."
+            />
+          </Stack>
+        </CategoryItemsWrapper>
+      </Stack>
+
+      {/* Discord Section */}
+      <Stack direction="column" gap="sm">
+        <Text as="h4" size="xs" weight={700}>
+          Discord
+        </Text>
+
+        <CategoryItemsWrapper $gap="md" $offset="md">
+          <Stack direction="column" gap="sm">
+            <Text size="xs">
+              1 step. Prove the ownership of the Discord account by posting the
+              following message to CSM channel.
+            </Text>
+
+            <Input
+              id="discord-message"
+              readOnly
+              onFocus={(e) => e.target.select()}
+              onClick={(e) => (e.target as HTMLInputElement).select()}
+              value={discordMessage}
+              fullwidth
+              rightDecorator={<CopyButton text={discordMessage} size="xs" />}
+            />
+          </Stack>
+
+          <Stack direction="column" gap="sm">
+            <Text size="xs">2 step. Paste the link to this message</Text>
+
+            <TextInputHookForm
+              fieldName="socialProof.discord"
+              label="Discord message link"
+              placeholder="https://discord.com/channels/..."
+            />
+          </Stack>
+        </CategoryItemsWrapper>
+      </Stack>
     </Stack>
   );
 };

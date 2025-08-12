@@ -1,8 +1,8 @@
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
+import { ScoreSource } from '../shared';
 import { Points } from './points';
-import { ScoreSource } from './score-data';
 import { ScoreItem } from './score-item';
 import { AccordionStyle, CategoryItemsWrapper } from './styles';
 

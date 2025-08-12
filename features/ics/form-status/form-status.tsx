@@ -1,34 +1,31 @@
 import { FC } from 'react';
 import { Block, Button, Text } from '@lidofinance/lido-ui';
 import { Stack } from 'shared/components';
-import { FormStatus as FormStatusType, FormStatusResponse } from '../shared/use-form-status';
+import { IcsFormStatus, IcsResponseDto } from '../shared/types';
 
 interface FormStatusProps {
-  statusData: FormStatusResponse;
-  onRetry?: () => void;
+  statusData: IcsResponseDto;
 }
 
-const getStatusConfig = (status: FormStatusType) => {
+const getStatusConfig = (status: IcsFormStatus) => {
   switch (status) {
-    case 'pending':
+    case 'REVIEW':
       return {
         title: 'Application Under Review',
-        description: 'Your ICS operator application has been submitted and is currently being reviewed.',
+        description:
+          'Your ICS operator application has been submitted and is currently being reviewed.',
       };
-    case 'approved':
+    case 'APPROVED':
       return {
         title: 'Application Approved',
-        description: 'Congratulations! Your ICS operator application has been approved.',
+        description:
+          'Congratulations! Your ICS operator application has been approved.',
       };
-    case 'rejected':
+    case 'REJECTED':
       return {
         title: 'Application Rejected',
-        description: 'Your ICS operator application has been rejected. Please review the feedback below.',
-      };
-    case 'draft':
-      return {
-        title: 'Draft Saved',
-        description: 'You have a saved draft of your application. You can continue where you left off.',
+        description:
+          'Your ICS operator application has been rejected. Please review the feedback below.',
       };
     default:
       return {
@@ -38,18 +35,8 @@ const getStatusConfig = (status: FormStatusType) => {
   }
 };
 
-const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-};
-
-export const FormStatus: FC<FormStatusProps> = ({ statusData, onRetry }) => {
-  const { status, submittedAt, reviewNotes } = statusData;
+export const FormStatus: FC<FormStatusProps> = ({ statusData }) => {
+  const { status, comments } = statusData;
   const config = getStatusConfig(status);
 
   return (
@@ -64,36 +51,61 @@ export const FormStatus: FC<FormStatusProps> = ({ statusData, onRetry }) => {
           </Text>
         </Stack>
 
-        {submittedAt && (
-          <Stack direction="column" gap="sm">
-            <Text size="xs" color="secondary">
-              Submitted: {formatDate(submittedAt)}
-            </Text>
-          </Stack>
-        )}
-
-        {reviewNotes && (
+        {comments && (
           <Stack direction="column" gap="sm">
             <Text size="sm" weight="bold">
-              Review Notes:
+              Review Comments:
             </Text>
-            <Text size="xs" color="secondary">
-              {reviewNotes}
-            </Text>
+            {comments.mainAddress && (
+              <Stack direction="column" gap="xs">
+                <Text size="xs" weight="bold">
+                  Main Address:
+                </Text>
+                <Text size="xs" color="secondary">
+                  {comments.mainAddress}
+                </Text>
+              </Stack>
+            )}
+            {comments.twitterLink && (
+              <Stack direction="column" gap="xs">
+                <Text size="xs" weight="bold">
+                  Twitter:
+                </Text>
+                <Text size="xs" color="secondary">
+                  {comments.twitterLink}
+                </Text>
+              </Stack>
+            )}
+            {comments.discordLink && (
+              <Stack direction="column" gap="xs">
+                <Text size="xs" weight="bold">
+                  Discord:
+                </Text>
+                <Text size="xs" color="secondary">
+                  {comments.discordLink}
+                </Text>
+              </Stack>
+            )}
+            {comments.additionalAddresses?.map(
+              (comment, index) =>
+                comment && (
+                  <Stack key={index} direction="column" gap="xs">
+                    <Text size="xs" weight="bold">
+                      Additional Address {index + 1}:
+                    </Text>
+                    <Text size="xs" color="secondary">
+                      {comment}
+                    </Text>
+                  </Stack>
+                ),
+            )}
           </Stack>
         )}
 
         <Stack direction="row" gap="md">
-          {status === 'rejected' && onRetry && (
-            <Button size="sm" onClick={onRetry} variant="outlined">
-              Submit New Application
-            </Button>
-          )}
-          {status === 'draft' && onRetry && (
-            <Button size="sm" onClick={onRetry}>
-              Continue Application
-            </Button>
-          )}
+          <Button size="sm" variant="outlined">
+            Submit New Application
+          </Button>
           <Button size="sm" variant="ghost">
             View Details
           </Button>

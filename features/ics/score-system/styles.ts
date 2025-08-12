@@ -1,4 +1,4 @@
-import { Block } from '@lidofinance/lido-ui';
+import { Block, Theme } from '@lidofinance/lido-ui';
 import { StackStyle } from 'shared/components';
 import { AccordionNavigatable } from 'shared/components/accordion-navigatable';
 import styled from 'styled-components';
@@ -94,9 +94,9 @@ export const AccordionStyle = styled(AccordionNavigatable)`
 
 export const CategoryItemsWrapper = styled(StackStyle).attrs({
   $direction: 'column',
-})`
+})<{ $offset?: keyof Theme['spaceMap'] }>`
   position: relative;
-  padding-left: 24px;
+  padding-left: ${({ theme, $offset = 'xl' }) => theme.spaceMap[$offset]}px;
 
   &:before {
     content: '';
@@ -104,21 +104,8 @@ export const CategoryItemsWrapper = styled(StackStyle).attrs({
     position: absolute;
     width: 2px;
     height: 100%;
-    left: 0;
+    left: -1px;
     background: var(--lido-color-border);
     border-radius: ${({ theme }) => theme.borderRadiusesMap.xl}px;
   }
-`;
-
-export const IconStyle = (styled.img<{ src: string }>).attrs(({ src }) => ({
-  src,
-}))`
-  display: flex;
-  flex-shrink: 0;
-  width: 32px;
-  height: 32px;
-
-  border-radius: 100%;
-  outline: 1px solid var(--lido-color-border);
-  outline-offset: -1px;
 `;
