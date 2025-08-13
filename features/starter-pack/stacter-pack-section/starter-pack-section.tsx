@@ -9,6 +9,8 @@ import {
   ABOUT_DEPOSIT_DATA_LINK,
   HOW_TO_GENERATE_DEPOSIT_DATA_LINK,
   PREPARE_HARDWARE_LINK,
+  LIDO_OPERATOR_PORTAL_BASE,
+  LIDO_OPERATOR_PORTAL_BONDS_INFO,
 } from 'consts/external-links';
 
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
@@ -18,7 +20,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
       <p>
         Make sure you’ve completed all the basic steps before joining the{' '}
         <MatomoLink
-          href="https://operatorportal.lido.fi/modules/community-staking-module"
+          href={LIDO_OPERATOR_PORTAL_BASE}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackCSMLink}
         >
           Community Staking Module
@@ -31,7 +33,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
         first validator
         <br />
         <MatomoLink
-          href="https://operatorportal.lido.fi/modules/community-staking-module#block-e4a6daadca12480d955524247f03f380"
+          href={LIDO_OPERATOR_PORTAL_BONDS_INFO}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackBondLink}
         >
           Learn more

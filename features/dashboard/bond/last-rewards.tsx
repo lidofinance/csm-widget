@@ -16,6 +16,10 @@ import {
   TextBlock,
   TxLinkEtherscan,
 } from 'shared/components';
+import {
+  LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE,
+  LIDO_OPERATOR_PORTAL_STUCK_KEYS,
+} from 'consts/external-links';
 import { FaqElement } from 'shared/components/faq/styles';
 import {
   useLastOperatorRewards,
@@ -196,7 +200,7 @@ export const WhyModal: ModalComponentType = ({ ...props }) => (
           Performance Oracle frame (7 days for testnet) the validator does not
           receive rewards for the given frame. Read more about{' '}
           <a
-            href="https://operatorportal.lido.fi/modules/community-staking-module#block-c6dc8d00f13243fcb17de3fa07ecc52c"
+            href={LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE}
             target="_blank"
             rel="nofollow noopener noreferrer"
           >
@@ -206,7 +210,7 @@ export const WhyModal: ModalComponentType = ({ ...props }) => (
         </li>
         <li>
           <a
-            href="https://operatorportal.lido.fi/modules/community-staking-module#block-0ed61a4c0a5a439bbb4be20e814b4e38"
+            href={LIDO_OPERATOR_PORTAL_STUCK_KEYS}
             target="_blank"
             rel="nofollow noopener noreferrer"
           >

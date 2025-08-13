@@ -2,6 +2,10 @@ import { TOKENS } from 'consts/tokens';
 import { FC } from 'react';
 import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
 import { useUnlockBondFormData } from '../context';
+import {
+  MEV_STEALING_LINK,
+  LIDO_REWARDS_VAULT_LINK,
+} from 'consts/external-links';
 
 export const Info: FC = () => {
   const { lockedBond, loading } = useUnlockBondFormData();
@@ -19,13 +23,13 @@ export const Info: FC = () => {
           />
           {lockedBond?.gt(0) && (
             <div>
-              <MatomoLink href="https://docs.lido.fi/staking-modules/csm/guides/mev-stealing">
+              <MatomoLink href={MEV_STEALING_LINK}>
                 EL reward stealing
               </MatomoLink>{' '}
               penalties have been applied to your Node Operator because one of
               your validators produced a block with the EL rewards sent to the
               wrong address (an address different from from{' '}
-              <MatomoLink href="https://etherscan.io/address/0x388C818CA8B9251b393131C08a736A67ccB19297">
+              <MatomoLink href={LIDO_REWARDS_VAULT_LINK}>
                 the Lido Execution Layer Rewards Vault
               </MatomoLink>
               )
@@ -40,7 +44,7 @@ export const Info: FC = () => {
                 <li>
                   Check if the feeRecipient address of your validators consensus
                   / validator client is set to{' '}
-                  <MatomoLink href="https://etherscan.io/address/0x388C818CA8B9251b393131C08a736A67ccB19297">
+                  <MatomoLink href={LIDO_REWARDS_VAULT_LINK}>
                     the Lido Execution Layer Rewards Vault
                   </MatomoLink>{' '}
                   to avoid the further penalties.
