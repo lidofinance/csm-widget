@@ -13,7 +13,7 @@ export const useExchangeRate = <TData = PerToken<bigint>>(
     queryKey: ['use-exchange-tokens-rate'],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
-      invariant(rateWsteth);
+      invariant(rateWsteth !== undefined);
       return {
         [TOKENS.eth]: ONE_ETH,
         [TOKENS.steth]: ONE_ETH,
