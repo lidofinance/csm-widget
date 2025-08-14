@@ -7,4 +7,4 @@ export const PROVIDER_MAX_BATCH = 20;
 // AA transaction polling timeout(ms)
 export const AA_TX_POLLING_TIMEOUT = 180_000; // 3 minutes
 
-export const MAX_BLOCK_RANGE_FOR_EVENTS = 10_000;
+export const MAX_BLOCK_RANGE_FOR_EVENTS = 1_000_000;
