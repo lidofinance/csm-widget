@@ -5,6 +5,7 @@ import {
   Chip,
   CopyButton,
   FormTitle,
+  IconTooltip,
   MatomoLink,
   Stack,
 } from 'shared/components';
@@ -20,7 +21,7 @@ export const SocialProof: FC = () => {
         <FormTitle chip={<Chip>Optional</Chip>}>Socials</FormTitle>
         <Text size="xs" color="secondary">
           You can add your social accounts. To prove you own an account, post a
-          message. For more info see <MatomoLink>the guide</MatomoLink>.
+          message. For more info see <MatomoLink>the guide</MatomoLink>
         </Text>
       </Stack>
 
@@ -34,7 +35,7 @@ export const SocialProof: FC = () => {
           <Stack direction="column" gap="sm">
             <Text size="xs">
               Step 1. Prove the ownership of the X account by posting a tweet
-              with the following text.
+              with the following text
             </Text>
 
             <Input
@@ -70,7 +71,14 @@ export const SocialProof: FC = () => {
           <Stack direction="column" gap="sm">
             <Text size="xs">
               Step 1. Prove the ownership of the Discord account by posting the
-              following message to the CSM channel.
+              following message to{' '}
+              <MatomoLink href="https://discord.com/channels/761182643269795850/1404810479292907662">
+                the CSM channel
+              </MatomoLink>{' '}
+              <IconTooltip
+                inline
+                tooltip="If you cannot access the CSM channel, you may need to claim the “CSM Operator” role. To claim this role, follow the instructions in the “cs-get-started” channel."
+              />
             </Text>
 
             <Input

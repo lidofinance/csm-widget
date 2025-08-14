@@ -135,42 +135,41 @@ export const AddressItem: FC<AddressItemProps> = ({
       ) : (
         <CategoryItemsWrapper $gap="md" $offset="md">
           <Stack direction="column" gap="sm">
-            <Text size="xs">
-              Step 1. Insert you Ethereum address and sign the message bellow on
-              Etherscan.
-            </Text>
+            <Text size="xs">Step 1. Insert you Ethereum address</Text>
             <AddressInputHookForm
               fieldName={`additionalAddresses.${index}.address`}
               label={`Additional address #${index + 1}`}
               placeholder="0x..."
-              rightDecorator={
-                <MatomoLink href="https://etherscan.io/verifiedSignatures#">
-                  <ButtonIcon
-                    icon={<External />}
-                    size="xs"
-                    variant="translucent"
-                  >
-                    Sign
-                  </ButtonIcon>
-                </MatomoLink>
-              }
             />
           </Stack>
           <Stack direction="column" gap="sm">
-            <Text size="xs">Step 2. Copy the message to sign.</Text>
+            <Text size="xs">
+              Step 2. Copy the message and sign it on Etherscan (or other tool)
+            </Text>
             <Input
               value={message}
               readOnly
               label="Message to sign"
               placeholder="Enter address above to generate message..."
               rightDecorator={
-                <CopyButton text={message} size="xs" variant="translucent" />
+                <Stack gap="sm">
+                  <CopyButton text={message} size="xs" variant="translucent" />
+                  <MatomoLink href="https://etherscan.io/verifiedSignatures#">
+                    <ButtonIcon
+                      icon={<External />}
+                      size="xs"
+                      variant="translucent"
+                    >
+                      Sign
+                    </ButtonIcon>
+                  </MatomoLink>
+                </Stack>
               }
             />
           </Stack>
           <Stack direction="column" gap="sm">
             <Text size="xs">
-              Step 3. Paste the signature in the field below.
+              Step 3. Paste the signature in the field below
             </Text>
             <TextInputHookForm
               fieldName={`additionalAddresses.${index}.signature`}
