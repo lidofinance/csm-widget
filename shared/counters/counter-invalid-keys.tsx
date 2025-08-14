@@ -6,7 +6,9 @@ export const CounterInvalidKeys: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: info } = useOperatorInfo(nodeOperatorId);
 
-  const count = info ? info.totalAddedKeys - info.totalVettedKeys : 0;
+  const count = info
+    ? Math.min(info.totalAddedKeys - info.totalVettedKeys, 1)
+    : 0;
 
   return <Counter warning count={count} />;
 };
