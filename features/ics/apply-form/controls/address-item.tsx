@@ -15,7 +15,7 @@ import {
   TextInputHookForm,
 } from 'shared/hook-form/controls';
 import { isAddress, isHex, verifyMessage } from 'viem';
-import type { ApplyFormInputType } from '../context';
+import { useApplyFormData, type ApplyFormInputType } from '../context';
 import { generateAddressMessage } from '../context/use-apply-form-network-data';
 
 export type AddressItemProps = {
@@ -36,12 +36,14 @@ export const AddressItem: FC<AddressItemProps> = ({
   const { getValues, setError, clearErrors } =
     useFormContext<ApplyFormInputType>();
 
+  const { mainAddress } = useApplyFormData();
+
   const message = useMemo(
     () =>
-      watchedAddress && isAddress(watchedAddress)
-        ? generateAddressMessage(watchedAddress)
+      watchedAddress && isAddress(watchedAddress) && mainAddress
+        ? generateAddressMessage(watchedAddress, mainAddress)
         : '',
-    [watchedAddress],
+    [watchedAddress, mainAddress],
   );
 
   const [verified, setVerified] = useState(false);
@@ -71,7 +73,7 @@ export const AddressItem: FC<AddressItemProps> = ({
       try {
         // Generate the expected message for this address
         // Type assertion needed as generateAddressMessage expects Address type
-        const message = generateAddressMessage(address);
+        const message = generateAddressMessage(address, mainAddress);
 
         // Verify the signature
         // Type assertions needed for viem's verifyMessage
@@ -99,7 +101,7 @@ export const AddressItem: FC<AddressItemProps> = ({
         });
       }
     },
-    [clearErrors, getValues, setError],
+    [clearErrors, getValues, mainAddress, setError],
   );
 
   return (

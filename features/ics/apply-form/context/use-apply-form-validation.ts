@@ -11,7 +11,9 @@ import { generateAddressMessage } from './use-apply-form-network-data';
 const twitterUrlRegex = /^https:\/\/(twitter\.com|x\.com)\/\w+\/status\/\d+$/;
 const discordMessageRegex = /^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/;
 
-export const useApplyFormValidation = (data: ApplyFormNetworkData) => {
+export const useApplyFormValidation = ({
+  mainAddress,
+}: ApplyFormNetworkData) => {
   return useCallback<Resolver<ApplyFormInputType>>(
     async (values) => {
       try {
@@ -41,7 +43,7 @@ export const useApplyFormValidation = (data: ApplyFormNetworkData) => {
 
         // Check if any additional address is the same as main address
         for (const [i, { address }] of additionalAddresses.entries()) {
-          if (isAddress(address) && isAddressEqual(address, data.mainAddress)) {
+          if (isAddress(address) && isAddressEqual(address, mainAddress)) {
             throw new ValidationError(
               `additionalAddresses.${i}.address`,
               'Additional address cannot be the same as main address',
@@ -71,7 +73,7 @@ export const useApplyFormValidation = (data: ApplyFormNetworkData) => {
           }
 
           try {
-            const message = generateAddressMessage(address);
+            const message = generateAddressMessage(address, mainAddress);
             const isValid = await verifyMessage({
               address,
               message,
@@ -120,6 +122,6 @@ export const useApplyFormValidation = (data: ApplyFormNetworkData) => {
         );
       }
     },
-    [data.mainAddress],
+    [mainAddress],
   );
 };
