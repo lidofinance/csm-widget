@@ -1,4 +1,4 @@
-import { getExternalLinks } from 'consts/external-links';
+import { getExternalLinks, SUBSCRIBE_EVENTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useModalActions } from 'providers/modal-provider';
 import { FC } from 'react';
@@ -15,7 +15,7 @@ type Props = {
 
 export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
   const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
-  const { subscribeEvents, beaconchain } = getExternalLinks();
+  const { beaconchain } = getExternalLinks();
   const { closeModal } = useModalActions();
 
   return (
@@ -50,7 +50,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
               matomoEvent={
                 MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents
               }
-              href={subscribeEvents}
+              href={SUBSCRIBE_EVENTS_LINK}
             >
               CSM events notifications
             </MatomoLink>

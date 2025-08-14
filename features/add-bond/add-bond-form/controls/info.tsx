@@ -3,6 +3,7 @@ import { TOKENS } from 'consts/tokens';
 import { FC } from 'react';
 import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
 import { useAddBondFormData } from '../context';
+import { UNBONDED_VALIDATORS_LINK } from 'consts/external-links';
 
 export const Info: FC = () => {
   const { bond, loading } = useAddBondFormData();
@@ -42,7 +43,7 @@ export const Info: FC = () => {
               <br />
               Adding a bond serves as a voluntary security measure for your Node
               Operator to prevent your validators from becoming{' '}
-              <MatomoLink href="https://docs.lido.fi/staking-modules/csm/guides/unbonded-validators">
+              <MatomoLink href={UNBONDED_VALIDATORS_LINK}>
                 unbonded
               </MatomoLink>{' '}
               and being requested to exit in case of applied penalties.
