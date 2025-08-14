@@ -46,7 +46,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanTxLink = 'etherscanTxLink',
   etherscanAddressLink = 'etherscanAddressLink',
   beaconchainPubkeyLink = 'beaconchainPubkeyLink',
-  ethseerPubkeyLink = 'ethseerPubkeyLink',
+  migalabsPubkeyLink = 'migalabsPubkeyLink',
   feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
@@ -69,7 +69,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalFeesMonitoringLink = 'dashboardExternalFeesMonitoringLink',
   dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
   dashboardExternalRatedLink = 'dashboardExternalRatedLink',
-  dashboardExternalEthSeerLink = 'dashboardExternalEthSeerLink',
+  dashboardExternalMigaLabsLink = 'dashboardExternalMigaLabsLink',
   // Pages
   pageWelcome = 'pageWelcome',
   pageStarterPack = 'pageStarterPack',
@@ -274,10 +274,10 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «View on beaconcha.in» link on pubkey',
     prefixed`beaconchain_pubkey_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.ethseerPubkeyLink]: [
+  [MATOMO_CLICK_EVENTS_TYPES.migalabsPubkeyLink]: [
     MATOMO_APP_NAME,
-    'Click «View on ethseer.io» link on pubkey',
-    prefixed`ethseer_pubkey_link`,
+    'Click «View on migalabs.io» link on pubkey',
+    prefixed`migalabs_pubkey_link`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: [
     MATOMO_APP_NAME,
@@ -377,10 +377,10 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Rated» on Dashboard screen',
     prefixed`dashboard_external_rated_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalEthSeerLink]: [
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalMigaLabsLink]: [
     MATOMO_APP_NAME,
-    'Click «EthSeer» on Dashboard screen',
-    prefixed`dashboard_external_ethseer_link`,
+    'Click «MigaLabs» on Dashboard screen',
+    prefixed`dashboard_external_migalabs_link`,
   ],
   // Pages
   [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: [

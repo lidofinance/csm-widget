@@ -52,8 +52,8 @@ type ExternalLinksConstants = {
   operatorsWidget: string;
   beaconchainDashboard: string;
   ratedExplorer: string;
-  ethseerDashboard: string;
-  ethseer: string;
+  migalabsDashboard: string;
+  migalabs: string;
   keysApi: string;
   surveyApi: string;
 };
@@ -77,8 +77,8 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       beaconchain: 'https://beaconcha.in',
       beaconchainDashboard: 'https://v2-beta-mainnet.beaconcha.in/dashboard',
       ratedExplorer: 'https://explorer.rated.network',
-      ethseerDashboard: 'https://ethseer.io/entity',
-      ethseer: 'https://ethseer.io',
+      migalabsDashboard: 'https://migalabs.io/entities',
+      migalabs: 'https://migalabs.io',
       keysApi: 'https://keys-api.lido.fi',
       surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
     },
@@ -99,8 +99,8 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       beaconchain: 'https://holesky.beaconcha.in',
       beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
       ratedExplorer: '',
-      ethseerDashboard: '',
-      ethseer: '',
+      migalabsDashboard: '',
+      migalabs: '',
       keysApi: 'https://keys-api-holesky.testnet.fi',
       surveyApi: '',
     },
@@ -118,8 +118,8 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<CHAINS, ExternalLinksConstants> =
       beaconchain: 'https://hoodi.beaconcha.in',
       beaconchainDashboard: 'https://v2-beta-hoodi.beaconcha.in/dashboard',
       ratedExplorer: '',
-      ethseerDashboard: '',
-      ethseer: 'https://ethseer.io',
+      migalabsDashboard: '',
+      migalabs: 'https://migalabs.io',
       keysApi: 'https://keys-api-hoodi.testnet.fi',
       surveyApi: 'https://csm-surveys-api-testnet.up.railway.app',
     },

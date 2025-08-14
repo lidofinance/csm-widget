@@ -37,7 +37,7 @@ export const AttestationRateSection: FC = () => {
           <Stack center gap="xs">
             <div>
               Data Source:{' '}
-              <MatomoLink href="https://ethseer.io">EthSeer</MatomoLink>
+              <MatomoLink href="https://migalabs.io">MigaLabs</MatomoLink>
             </div>
             <IconTooltip
               placement="bottomRight"

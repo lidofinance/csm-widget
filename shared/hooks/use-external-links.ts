@@ -44,8 +44,8 @@ export const useRatedLink = () => {
   return `${links.ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${network}`;
 };
 
-export const useEthSeerLink = () => {
+export const useMigaLabsLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  if (!links.ethseerDashboard) return null;
-  return `${links.ethseerDashboard}/csm_operator${nodeOperatorId}_lido?network=${network}`;
+  if (!links.migalabsDashboard) return null;
+  return `${links.migalabsDashboard}/csm_operator${nodeOperatorId}_lido?network=${network}`;
 };

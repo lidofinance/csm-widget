@@ -3,7 +3,7 @@ import { FC, useCallback, useMemo, useState } from 'react';
 import {
   BeaconchainPubkeyLink,
   CopyLink,
-  EthseerPubkeyLink,
+  MigalabsPubkeyLink,
   Pubkey,
   Stack,
   StatusChip,
@@ -87,7 +87,7 @@ export const KeysTable: FC<Props> = ({ keys }) => {
                   <>
                     <CopyLink text={key} data-testid="pubkeyLink" />
                     <BeaconchainPubkeyLink pubkey={key} statuses={statuses} />
-                    <EthseerPubkeyLink validator={validatorIndex} />
+                    <MigalabsPubkeyLink validator={validatorIndex} />
                   </>
                 }
               />
