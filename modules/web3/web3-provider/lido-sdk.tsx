@@ -83,7 +83,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     const csm = new LidoSDKCsm({
       core,
       clApiUrl,
-      // maxEventBlocksRange: config.MAX_BLOCK_RANGE_FOR_EVENTS,
+      maxEventBlocksRange: config.MAX_BLOCK_RANGE_FOR_EVENTS,
     });
 
     return {
