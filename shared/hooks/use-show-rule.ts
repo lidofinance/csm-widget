@@ -1,4 +1,6 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
+import { useFeatureFlags } from 'config/feature-flags';
+import { ICS_APPLY_FORM } from 'config/feature-flags/types';
 import { getExternalLinks } from 'consts/external-links';
 import {
   useDappStatus,
@@ -26,6 +28,8 @@ export type ShowRule =
   | 'HAS_REFERRER'
   | 'CAN_CREATE'
   | 'CAN_CLAIM_ICS'
+  | 'ICS_APPLY_FORM'
+  | 'CAN_APPLY_ICS'
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE';
 
@@ -45,6 +49,7 @@ export const useShowRule = () => {
     address,
     nodeOperatorId: nodeOperator?.id,
   });
+  const featureFlags = useFeatureFlags();
 
   return useCallback(
     (condition: ShowRule): boolean => {
@@ -73,6 +78,10 @@ export const useShowRule = () => {
           return !!referrer;
         case 'CAN_CLAIM_ICS':
           return !!canClaimICS && isAccountActive;
+        case 'ICS_APPLY_FORM':
+          return !!featureFlags?.[ICS_APPLY_FORM];
+        case 'CAN_APPLY_ICS':
+          return !!featureFlags?.[ICS_APPLY_FORM] && isAccountActive;
         case 'EL_STEALING_REPORTER':
           return !!isReportingRole;
         case 'IS_SURVEYS_ACTIVE':
@@ -91,6 +100,7 @@ export const useShowRule = () => {
       balance?.locked,
       referrer,
       canClaimICS,
+      featureFlags,
       isReportingRole,
     ],
   );

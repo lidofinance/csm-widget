@@ -4,13 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development Commands
 
-- **Development server**: `yarn dev` - Starts Next.js development server on http://localhost:3000
+- **Development server**: `yarn dev` - Starts Next.js development server on <http://localhost:3000>
 - **Build**: `yarn build` - Builds production bundle
 - **Production server**: `yarn start` - Starts production server (requires build first)
 - **Lint**: `yarn lint` - Runs ESLint on TypeScript files
 - **Lint fix**: `yarn lint:fix` - Runs ESLint with auto-fix
 - **Type check**: `yarn types` - Runs TypeScript compiler type checking
-- **Generate types**: `yarn typechain` - Generates TypeScript types from ABI files
 - **Tests**: `yarn test` - Runs Playwright e2e tests (same as `yarn test:e2e`)
 - **Unit tests**: `yarn test:unit` - Runs Jest unit tests
 
@@ -34,9 +33,9 @@ This is a Next.js React application for Lido's Community Staking Module (CSM) wi
 - **Styled Components** for styling
 - **Wagmi v2** + **Reef-Knot** for Web3 wallet connections
 - **Lido SDKs** (`@lidofinance/lido-csm-sdk`, `@lidofinance/lido-ethereum-sdk`)
-- **SWR** and **React Query** for data fetching
+- **React Query** for data fetching
 - **React Hook Form** for form management
-- **Ethers.js v5** for blockchain interactions
+- **viem** for blockchain interactions
 
 ### Project Structure
 
@@ -71,15 +70,9 @@ This is a Next.js React application for Lido's Community Staking Module (CSM) wi
 - `shared/hook-form/` - Form controls and validation utilities
 - `shared/layout/` - Navigation, header, footer components
 
-**Type Generation**:
-
-- `abi/` - Contract ABI files
-- `generated/` - TypeChain-generated contract types
-
 ### Development Notes
 
 - Uses **publicRuntimeConfig** for environment variables to support Docker deployment
-- Supports IPFS mode for decentralized deployment
 - Includes bundle analysis with `ANALYZE_BUNDLE=true yarn build`
 - Has automatic versioning using conventional commits
 - Uses Playwright for e2e testing with wallet extensions
@@ -91,3 +84,4 @@ This is a Next.js React application for Lido's Community Staking Module (CSM) wi
 - Respect `.editorconfig` settings for indentation, line endings, and file encoding
 - Follow `.prettierrc` configuration for code formatting and style
 - Run `yarn lint:fix` after making changes to ensure consistent formatting
+- Always use `type` declarations instead of `interface` declarations for TypeScript type definitions

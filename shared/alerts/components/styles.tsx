@@ -1,7 +1,7 @@
 import { CheckLarge, Input, Select } from '@lidofinance/lido-ui';
 import { CloseButton } from 'shared/components/copy-button/close-button';
+import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
-import { StackStyle } from '../../components/stack/style';
 
 export const AlertStyled = styled(StackStyle).attrs({
   $direction: 'column',

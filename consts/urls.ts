@@ -26,6 +26,8 @@ export const PATH = <const>{
   STEALING_CANCEL: '/stealing/cancel',
   TYPE: '/type',
   TYPE_CLAIM: '/type/claim',
+  TYPE_ICS_SYSTEM: '/type/ics-system',
+  TYPE_ICS_APPLY: '/type/ics-apply',
 
   SURVEYS: '/surveys',
   SURVEYS_CONTACTS: '/surveys/contacts',

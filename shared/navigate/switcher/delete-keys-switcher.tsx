@@ -1,9 +1,8 @@
 import { Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import { FC, ReactNode } from 'react';
-import { Grid, RadioLocalLink, Stack } from 'shared/components';
+import { Chip, Grid, RadioLocalLink, Stack } from 'shared/components';
 import { CounterInvalidKeys } from 'shared/counters';
-import { ChipStyle } from './styles';
 import { ShowRule, useFilterShowRules } from 'shared/hooks';
 
 export enum DeleteKeysSwitcherRoutes {
@@ -50,7 +49,7 @@ const items: Item[] = [
     value: DeleteKeysSwitcherRoutes.EJECT,
     route: PATH.KEYS_EJECT,
     showRules: ['HAS_OWNER_ROLE'],
-    suffix: <ChipStyle>Emergency</ChipStyle>,
+    suffix: <Chip>Emergency</Chip>,
     description: (
       <>
         Only keys that have been <b>active for at least 256 epochs</b> can be

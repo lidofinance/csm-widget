@@ -27,7 +27,9 @@ export const TextInputHookForm = ({
   });
 
   const hasErrorHighlight =
-    isValidationErrorTypeValidate(error?.type) || error?.type === 'required';
+    isValidationErrorTypeValidate(error?.type) ||
+    error?.type === 'required' ||
+    error?.type === 'manual';
   // allows to show error state without message
   const errorMessage = hasErrorHighlight && (error?.message || true);
 

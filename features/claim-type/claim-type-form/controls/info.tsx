@@ -14,7 +14,7 @@ export const Info: FC = () => {
         Community Staker operator type will change some parameters for your node
         operator according to the section below.
       </Text>
-      <AccordionStyle summary="Parameters changes">
+      <AccordionStyle summary="Parameter changes">
         <CompareParametersList
           current={currentParameters}
           new={newParameters}
