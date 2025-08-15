@@ -1,18 +1,19 @@
-import { Text } from '@lidofinance/lido-ui';
-import { DisabledInputAmount, Stack } from 'shared/components';
-import { useEjectKeysFormData } from '../context';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { Text } from '@lidofinance/lido-ui';
+import { useWatch } from 'react-hook-form';
+import { DisabledInputAmount, Stack } from 'shared/components';
+import { EjectKeysFormInputType } from '../context';
 
 export const AmountInput = () => {
-  const { withdrawalRequestFee } = useEjectKeysFormData();
+  const { feeAmount } = useWatch<EjectKeysFormInputType>();
 
   return (
     <Stack direction="column" gap="xs">
       <DisabledInputAmount
         isLocked="Key ejection cost is a network fee required to cover the cost to trigger withdrawal from the Execution layer."
-        amount={withdrawalRequestFee}
+        amount={feeAmount}
         token={TOKENS.eth}
-        label="Ejection cost"
+        label="Estimated ejection cost"
         fullwidth
         data-testid="ejectionCostAmountInput"
       />

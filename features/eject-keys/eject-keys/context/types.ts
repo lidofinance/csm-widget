@@ -7,6 +7,7 @@ import { LoadingRecord } from 'types';
 
 export type EjectKeysFormInputType = {
   selection: number[];
+  feeAmount?: bigint;
 };
 
 export type EjectKeysFormNetworkData = {
@@ -15,8 +16,8 @@ export type EjectKeysFormNetworkData = {
   ethBalance?: bigint;
   keys?: KeyWithStatus[];
   info?: NodeOperatorInfo;
-  withdrawalRequestFee?: bigint;
+  ejectKeyFee?: bigint;
   loading: LoadingRecord<
-    'ethBalance' | 'keys' | 'info' | 'withdrawalRequestFee' | 'curveId'
+    'ethBalance' | 'keys' | 'info' | 'ejectKeyFee' | 'curveId'
   >;
 };

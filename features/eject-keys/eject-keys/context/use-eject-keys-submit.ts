@@ -25,17 +25,12 @@ export const useEjectKeysSubmit = ({
 
   return useCallback(
     async (
-      { selection }: EjectKeysFormInputType,
-      {
-        nodeOperatorId,
-        info,
-        keys,
-        withdrawalRequestFee: amount,
-      }: EjectKeysFormNetworkData,
+      { selection, feeAmount }: EjectKeysFormInputType,
+      { nodeOperatorId, info, keys }: EjectKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(keys?.length, 'Keys are not defined');
-      invariant(amount !== undefined, 'Amount is not defined');
+      invariant(feeAmount !== undefined, 'Fee amount is not defined');
       invariant(
         info?.totalDepositedKeys !== undefined,
         'Offset is not defined',
@@ -77,7 +72,7 @@ export const useEjectKeysSubmit = ({
         await csm.keys.ejectKeysByArray({
           nodeOperatorId,
           keyIndices: selection.map((v) => BigInt(v)),
-          amount,
+          amount: feeAmount,
           callback,
         });
 

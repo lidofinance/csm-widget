@@ -5,6 +5,7 @@ export * from './use-csm-status';
 export * from './use-curve-parameters';
 export * from './use-dapp-status';
 export * from './use-deposit-queue-batches';
+export * from './use-eject-key-fee';
 export * from './use-frame-info';
 export * from './use-has-report-stealing-role';
 export * from './use-ics-curve-id';
