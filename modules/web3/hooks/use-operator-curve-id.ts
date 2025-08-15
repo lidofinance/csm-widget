@@ -4,20 +4,22 @@ import { useLidoSDK } from '../web3-provider';
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import invariant from 'tiny-invariant';
 
+export const KEY_OPERATOR_CURVE_ID = ['operator-curve-id'];
+
 export const useOperatorCurveId = <TData = bigint>(
-  id: NodeOperatorId | undefined,
+  nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: bigint) => TData,
 ) => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['node-operator-curve-id', { id }],
+    queryKey: [...KEY_OPERATOR_CURVE_ID, { nodeOperatorId }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
-      invariant(id !== undefined);
-      return csm.operator.getCurveId(id);
+      invariant(nodeOperatorId !== undefined);
+      return csm.operator.getCurveId(nodeOperatorId);
     },
-    enabled: id !== undefined,
+    enabled: nodeOperatorId !== undefined,
     select,
   });
 };

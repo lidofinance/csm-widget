@@ -9,7 +9,7 @@ export const useShareLimit = <TData = ShareLimitInfo>(
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['getShareLimit'],
+    queryKey: ['share-limit'],
     ...STRATEGY_CONSTANT,
     queryFn: () => csm.module.getShareLimit(),
     select,
