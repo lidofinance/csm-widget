@@ -1,38 +1,49 @@
 import {
+  Dispatch,
+  SetStateAction,
   useCallback,
   useEffect,
   useState,
-  Dispatch,
-  SetStateAction,
 } from 'react';
-
-const serialize = (_key: string, value: unknown) => {
-  return typeof value === 'bigint' ? value.toString() : value;
-};
+import { noopValue, serializeBigInt } from 'utils/serialize-bigint';
 
 export const useLocalStorage = <T>(
-  key: string,
+  key: string | undefined,
   initialValue: T,
+  readTransform: (value: any) => T = noopValue,
 ): [storedValue: T, setValue: Dispatch<SetStateAction<T>>] => {
   const readValue = useCallback(() => {
+    if (typeof window === 'undefined' || key === undefined) {
+      return initialValue;
+    }
     try {
-      if (typeof window === 'undefined') {
-        return initialValue;
-      }
       const item = window.localStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : initialValue;
+
+      return item && item !== 'undefined'
+        ? readTransform(JSON.parse(item))
+        : initialValue;
     } catch (error) {
       console.warn(`Error reading localStorage key "${key}"`);
       return initialValue;
     }
-  }, [initialValue, key]);
+  }, [initialValue, key, readTransform]);
 
   const [storedValue, setStoredValue] = useState(readValue);
 
   const saveToStorage = useCallback(
     (newValue: T) => {
+      if (key === undefined) {
+        return;
+      }
       try {
-        window.localStorage.setItem(key, JSON.stringify(newValue, serialize));
+        if (newValue === initialValue) {
+          window.localStorage.removeItem(key);
+        } else {
+          window.localStorage.setItem(
+            key,
+            JSON.stringify(newValue, serializeBigInt),
+          );
+        }
         window.dispatchEvent(new Event('local-storage'));
       } catch (error) {
         if (typeof window === 'undefined') {
@@ -40,7 +51,7 @@ export const useLocalStorage = <T>(
         }
       }
     },
-    [key],
+    [initialValue, key],
   );
 
   const setValue = useCallback<Dispatch<SetStateAction<T>>>(
