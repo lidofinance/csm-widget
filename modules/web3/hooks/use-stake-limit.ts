@@ -6,7 +6,7 @@ export const useStakeLimit = () => {
   const { stake } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['getStakeLimitInfo'],
+    queryKey: ['stake-limit'],
     ...STRATEGY_CONSTANT,
     queryFn: () => stake.getStakeLimitInfo(),
     select: (data) => (data.isStakingPaused ? 0n : data.currentStakeLimit),
