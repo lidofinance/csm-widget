@@ -57,7 +57,7 @@
     "styled-components": "^5.3.5",
     "tiny-invariant": "^1.1.0",
     "uuid": "^8.3.2",
-    "viem": "^2.30.1",
+    "viem": "^2.31.4",
     "wagmi": "^2.15.4"
   },
   "devDependencies": {
@@ -113,7 +113,6 @@
     "typechain": "^8.1.1",
     "typescript": "^5.4.5",
     "url-loader": "^4.1.1",
-    "viem": "^2.31.4",
     "webpack-preprocessor-loader": "^1.3.0",
     "zod": "^3.24.2"
   },
