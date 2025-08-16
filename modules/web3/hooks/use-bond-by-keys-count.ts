@@ -27,7 +27,7 @@ export const useBondByKeysCount = ({
         curveId,
       });
     },
-    enabled: keysCount > 0 && curveId !== undefined,
+    enabled: curveId !== undefined,
     select: (data) => data[token],
   });
 };

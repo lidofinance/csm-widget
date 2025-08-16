@@ -1,10 +1,7 @@
-import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
-import { Checkbox } from '@lidofinance/lido-ui';
+import { KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 import { ChangeEventHandler, FC, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Latice, Pubkey, Stack, StatusChip } from 'shared/components';
-import { StatusStyle } from 'shared/components/status-chip/style';
-import styled from 'styled-components';
+import { EjectableKeyCheckbox, Latice } from 'shared/components';
 
 type Props = {
   options: KeyWithStatus[];
@@ -45,20 +42,10 @@ export const EjectKeysSelectorHookForm: FC<Props> = ({
   return (
     <Latice>
       {options.map(({ pubkey, statuses, index }) => (
-        <CheckboxStyled
+        <EjectableKeyCheckbox
           key={pubkey}
-          label={
-            <Stack center spaceBetween>
-              <Pubkey pubkey={pubkey} symbols={16} />
-
-              <Stack direction="column" gap="xs">
-                {statuses.map((status) => (
-                  <StatusChip status={status} key={status} />
-                ))}
-              </Stack>
-            </Stack>
-          }
-          disabled={!statuses.includes(KEY_STATUS.EJECTABLE)}
+          pubkey={pubkey}
+          statuses={statuses}
           name={`keys.${index}.checked`}
           checked={selected.includes(index)}
           onChange={onChange}
@@ -67,18 +54,3 @@ export const EjectKeysSelectorHookForm: FC<Props> = ({
     </Latice>
   );
 };
-
-// FIXME: Checkbox render <p> as wrapper of content (usually <div>)
-const CheckboxStyled = styled(Checkbox)`
-  svg + div {
-    width: 100%;
-  }
-
-  ${StatusStyle} {
-    margin-block: -4px;
-  }
-
-  :has(input:disabled) {
-    background: var(--lido-color-background);
-  }
-`;

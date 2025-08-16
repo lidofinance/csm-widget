@@ -47,3 +47,4 @@ export * from './external-button-link';
 export * from './section-header-link';
 export * from './banner';
 export * from './key-strikes';
+export * from './ejectable-key-checkbox';

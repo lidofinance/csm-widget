@@ -1,10 +1,13 @@
 import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
-import { Checkbox } from '@lidofinance/lido-ui';
 import { ChangeEventHandler, FC, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Latice, Pubkey, Stack, StatusChip } from 'shared/components';
-import { StatusStyle } from 'shared/components/status-chip/style';
-import styled from 'styled-components';
+import {
+  CheckboxStyled,
+  Latice,
+  Pubkey,
+  Stack,
+  StatusChip,
+} from 'shared/components';
 
 type Props = {
   options: KeyWithStatus[];
@@ -90,13 +93,3 @@ export const RemoveKeysSelectorHookForm: FC<Props> = ({
     </Latice>
   );
 };
-
-const CheckboxStyled = styled(Checkbox)`
-  svg + div {
-    width: 100%;
-  }
-
-  ${StatusStyle} {
-    margin-block: -4px;
-  }
-`;

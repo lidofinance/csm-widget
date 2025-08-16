@@ -12,6 +12,7 @@ import { useGetDefaultValues } from './use-get-default-values';
 import { useEjectKeysSubmit } from './use-eject-keys-submit';
 import { useEjectKeysFormNetworkData } from './use-eject-keys-form-network-data';
 import { useEjectKeysValidation } from './use-eject-keys-validation';
+import { useFormFeeAmount } from './use-form-fee-amount';
 
 export const useEjectKeysFormData = useFormData<EjectKeysFormNetworkData>;
 
@@ -26,6 +27,8 @@ export const EjectKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     resolver: validationResolver,
     mode: 'onChange',
   });
+
+  useFormFeeAmount(formObject, networkData);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 

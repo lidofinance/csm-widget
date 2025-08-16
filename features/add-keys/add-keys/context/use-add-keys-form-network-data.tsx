@@ -1,4 +1,8 @@
 import {
+  KEY_OPERATOR_BALANCE,
+  KEY_OPERATOR_INFO,
+  KEY_OPERATOR_KEYS,
+  KEY_OPERATOR_KEYS_TO_MIGRATE,
   useCsmStatus,
   useEthereumBalance,
   useNodeOperatorId,
@@ -13,6 +17,7 @@ import { useCallback, useMemo } from 'react';
 // import { useNonWithdrawnKeysCount } from 'shared/hooks';
 import { useBlockNumber } from 'wagmi';
 import { type AddKeysFormNetworkData } from './types';
+import { useInvalidate } from 'shared/hooks';
 
 export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
@@ -71,6 +76,8 @@ export const useAddKeysFormNetworkData = (): [
   //   wstethBalance,
   // });
 
+  const invalidate = useInvalidate();
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateBlockNumber(),
@@ -80,6 +87,12 @@ export const useAddKeysFormNetworkData = (): [
       updateBond(),
       updateShareLimit(),
       updateMaxStakeEth(),
+      invalidate([
+        KEY_OPERATOR_INFO,
+        KEY_OPERATOR_BALANCE,
+        KEY_OPERATOR_KEYS,
+        KEY_OPERATOR_KEYS_TO_MIGRATE,
+      ]),
     ]);
   }, [
     updateBlockNumber,
@@ -89,6 +102,7 @@ export const useAddKeysFormNetworkData = (): [
     updateShareLimit,
     updateStethBalance,
     updateWstethBalance,
+    invalidate,
   ]);
 
   const loading = useMemo(

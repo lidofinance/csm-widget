@@ -12,7 +12,7 @@ export const AmountInput = () => {
         isLocked="Key deletion incurs a removal charge, deducted from the node operator's bond. This charge covers the maximum possible operational costs of queue processing."
         amount={removalFee}
         token={TOKENS.steth}
-        label="Ejection cost"
+        label="Removal fee"
         fullwidth
         data-testid="ejectionCostAmountInput"
       />

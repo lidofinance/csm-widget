@@ -66,6 +66,6 @@ export const sortByPubkeyDesc: SortKeysFn = (a, b) =>
   b.pubkey.localeCompare(a.pubkey);
 
 export const useSortedKeys = (
-  keys?: KeyWithStatus[],
+  keys: KeyWithStatus[] = [],
   sortFn: SortKeysFn = sortByStatus,
-) => useMemo(() => keys?.sort(sortFn), [keys, sortFn]);
+) => useMemo(() => Array.from(keys).sort(sortFn), [keys, sortFn]);

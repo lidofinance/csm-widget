@@ -24,11 +24,6 @@ export const HeaderWrapper = styled.div`
 
   padding: 0 32px;
   margin: 0 -32px;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    padding: 18px 20px;
-    margin: 0 -20px;
-  }
 `;
 
 export const HeaderStyle = styled.header`
