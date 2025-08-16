@@ -187,13 +187,72 @@ test.describe('Bond & Rewards. Claim.', async () => {
         await widgetService.claim(tokenName, claimAmount);
 
         await test.step('Verify new balance after bond added', async () => {
+          // TODO: Remove debug logging after test stability is confirmed
+          // eslint-disable-next-line no-console
+          console.log(`[DEBUG] claim test: Starting balance verification`);
+          // eslint-disable-next-line no-console
+          console.log(
+            `[DEBUG] claim test: Bond summary excess: ${bondSummary.excess}`,
+          );
+          // eslint-disable-next-line no-console
+          console.log(`[DEBUG] claim test: Claim amount: ${claimAmount}`);
+
           const expectedBalance =
             parseFloat(bondSummary.excess) - parseFloat(claimAmount);
+          // eslint-disable-next-line no-console
+          console.log(
+            `[DEBUG] claim test: Expected balance: ${expectedBalance}`,
+          );
+
+          // eslint-disable-next-line no-console
+          console.log(`[DEBUG] claim test: Getting actual balance from UI...`);
           const actualBalance =
             await bondRewardsPage.claim.titledTokenBalance.textContent();
+          // eslint-disable-next-line no-console
+          console.log(
+            `[DEBUG] claim test: Raw balance text: "${actualBalance}"`,
+          );
 
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          expect(parseFloat(actualBalance!)).toBeCloseTo(expectedBalance);
+          if (!actualBalance || actualBalance.trim() === '') {
+            // eslint-disable-next-line no-console
+            console.error(`[DEBUG] claim test: Balance text is empty or null`);
+            throw new Error('Balance text is empty or null');
+          }
+
+          // Remove non-numeric characters except digits, dots, and minus signs
+          const cleanedBalance = actualBalance.replace(/[^\d.-]/g, '');
+          // eslint-disable-next-line no-console
+          console.log(
+            `[DEBUG] claim test: Cleaned balance: "${cleanedBalance}"`,
+          );
+
+          const parsedBalance = parseFloat(cleanedBalance);
+          // eslint-disable-next-line no-console
+          console.log(`[DEBUG] claim test: Parsed balance: ${parsedBalance}`);
+
+          if (isNaN(parsedBalance)) {
+            // eslint-disable-next-line no-console
+            console.error(
+              `[DEBUG] claim test: Failed to parse balance - isNaN returned true`,
+            );
+            // eslint-disable-next-line no-console
+            console.error(
+              `[DEBUG] claim test: Original text: "${actualBalance}"`,
+            );
+            // eslint-disable-next-line no-console
+            console.error(
+              `[DEBUG] claim test: Cleaned text: "${cleanedBalance}"`,
+            );
+            throw new Error(`Could not parse balance: "${actualBalance}"`);
+          }
+
+          // eslint-disable-next-line no-console
+          console.log(
+            `[DEBUG] claim test: Comparing ${parsedBalance} to ${expectedBalance}`,
+          );
+          expect(parsedBalance).toBeCloseTo(expectedBalance);
+          // eslint-disable-next-line no-console
+          console.log(`[DEBUG] claim test: Balance verification passed`);
         });
       },
     );

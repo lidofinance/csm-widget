@@ -61,22 +61,65 @@ export const waitForCallback = async <T>(
   args: T,
   timeout: number,
 ): Promise<any> => {
+  const startTime = Date.now();
   let shouldTerminate = false;
+  let attemptCount = 0;
+
+  // TODO: Remove debug logging after test stability is confirmed
+  // eslint-disable-next-line no-console
+  console.log(`[DEBUG] waitForCallback started with timeout: ${timeout}ms`);
+
   setTimeout(() => {
     shouldTerminate = true;
   }, timeout);
 
   let result;
   while (!shouldTerminate) {
-    result = await callback(args).catch(() => {
-      console.error('Callback failed');
+    attemptCount++;
+    const elapsed = Date.now() - startTime;
+
+    if (attemptCount % 20 === 0) {
+      // Log every 2 seconds (20 * 100ms)
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] waitForCallback attempt ${attemptCount}, elapsed: ${elapsed}ms`,
+      );
+    }
+
+    result = await callback(args).catch((error) => {
+      if (attemptCount % 20 === 0) {
+        // eslint-disable-next-line no-console
+        console.error(
+          `[DEBUG] Callback failed on attempt ${attemptCount}:`,
+          error.message,
+        );
+      }
+      return null;
     });
-    if (result) return result;
+
+    if (result) {
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] waitForCallback succeeded after ${attemptCount} attempts, elapsed: ${elapsed}ms`,
+      );
+      return result;
+    }
+
+    // Add delay to prevent CPU spinning and allow for state changes
+    await new Promise((resolve) => setTimeout(resolve, 100));
   }
+
+  const finalElapsed = Date.now() - startTime;
+  // eslint-disable-next-line no-console
+  console.error(
+    `[DEBUG] waitForCallback failed after ${attemptCount} attempts, total time: ${finalElapsed}ms`,
+  );
+  // eslint-disable-next-line no-console
+  console.error(`[DEBUG] Final callback result:`, result);
 
   throw new Error(
     `callback still not done after ${
       timeout / 1000
-    } sec.\nCallback result: ${result}`,
+    } sec.\nAttempts: ${attemptCount}\nCallback result: ${result}`,
   );
 };

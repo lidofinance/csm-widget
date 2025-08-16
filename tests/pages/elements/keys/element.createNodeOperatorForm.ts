@@ -46,8 +46,75 @@ export class CreateNodeOperatorForm {
 
   async addNewKeys(keys: DepositKey[], tokenSymbol: TokenSymbol) {
     return test.step('Add new keys', async () => {
+      // TODO: Remove debug logging after test stability is confirmed
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] addNewKeys: Starting with token symbol: ${tokenSymbol}`,
+      );
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] addNewKeys: Number of keys: ${keys.length}`);
+
+      // Wait for form to be fully initialized
+      await this.base.waitForFormReady();
+
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] addNewKeys: Getting bond token element for: ${tokenSymbol}`,
+      );
       const bondTokenElement = this.getBondTokenElement(tokenSymbol);
+
+      // Debug: Check if element exists and get its properties
+      const elementExists = await bondTokenElement.count();
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] addNewKeys: Bond token element count: ${elementExists}`,
+      );
+
+      if (elementExists === 0) {
+        // eslint-disable-next-line no-console
+        console.error(
+          `[DEBUG] addNewKeys: No element found for selector: label:has([value="${tokenSymbol}"])`,
+        );
+
+        // Capture screenshot for debugging
+        await this.base.captureDebugScreenshot(
+          'addNewKeys',
+          'element-not-found',
+        );
+
+        // Let's see what radio buttons are actually available
+        const allRadios = await this.formBlock
+          .locator('input[type="radio"]')
+          .all();
+        // eslint-disable-next-line no-console
+        console.log(
+          `[DEBUG] addNewKeys: Found ${allRadios.length} radio buttons total`,
+        );
+        for (const [i, radio] of allRadios.entries()) {
+          const value = await radio.getAttribute('value');
+          const name = await radio.getAttribute('name');
+          const id = await radio.getAttribute('id');
+          // eslint-disable-next-line no-console
+          console.log(
+            `[DEBUG] addNewKeys: Radio ${i}: value="${value}", name="${name}", id="${id}"`,
+          );
+        }
+        throw new Error(`No bond token element found for ${tokenSymbol}`);
+      }
+
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] addNewKeys: Waiting for bond token element to be visible...`,
+      );
+      await bondTokenElement.waitFor({ state: 'visible' });
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] addNewKeys: Bond token element is visible, clicking...`,
+      );
       await bondTokenElement.click();
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] addNewKeys: Clicked bond token element`);
+
       await this.fillKeys(keys);
       // This formula follows the Bond Curve model:
       // https://operatorportal.lido.fi/modules/community-staking-module#block-2d1c307d95fc4f8ab7c32b7584f795cf

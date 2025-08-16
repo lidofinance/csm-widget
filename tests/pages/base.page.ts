@@ -25,17 +25,43 @@ export class BasePage {
     attempt = 1,
   ): Promise<void> {
     try {
-      await this.page.goto(url);
+      // TODO: Remove debug logging after test stability is confirmed
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] openWithRetry: Attempt ${attempt} - navigating to ${url}`,
+      );
+      await this.page.goto(url, { waitUntil: 'networkidle' });
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] openWithRetry: Page loaded with networkidle`);
 
       await test.step('Wait for balance to load', async () => {
+        // eslint-disable-next-line no-console
+        console.log(
+          `[DEBUG] openWithRetry: Waiting for text content to load...`,
+        );
         await this.waitForTextContent(
           textLocatorForWaiting,
           COMMON_ACTION_TIMEOUT,
         );
+        // eslint-disable-next-line no-console
+        console.log(`[DEBUG] openWithRetry: Text content loaded successfully`);
       });
     } catch (e) {
-      if (attempt >= 2) throw e;
-      console.warn(`Open attempt ${attempt} failed. Retrying...`);
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      // eslint-disable-next-line no-console
+      console.error(
+        `[DEBUG] openWithRetry: Attempt ${attempt} failed:`,
+        errorMessage,
+      );
+      if (attempt >= 2) {
+        // eslint-disable-next-line no-console
+        console.error(
+          `[DEBUG] openWithRetry: Max retries reached, throwing error`,
+        );
+        throw e;
+      }
+      // eslint-disable-next-line no-console
+      console.warn(`[DEBUG] openWithRetry: Retrying attempt ${attempt + 1}...`);
       return this.openWithRetry(url, textLocatorForWaiting, attempt + 1);
     }
   }
@@ -85,12 +111,45 @@ export class BasePage {
     });
   }
 
-  async waitForPage(timeout = RPC_WAIT_TIMEOUT) {
-    const page = await this.page
-      .context()
-      .waitForEvent('page', { timeout: timeout });
-    await page.waitForLoadState('load');
-    return page;
+  async waitForPage(timeout = 20000) {
+    // eslint-disable-next-line no-console
+    console.log(
+      `[DEBUG] waitForPage: Starting to wait for new page event, timeout: ${timeout}ms`,
+    );
+
+    try {
+      const page = await this.page
+        .context()
+        .waitForEvent('page', { timeout: timeout });
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] waitForPage: New page event received, URL: ${page.url()}`,
+      );
+
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] waitForPage: Waiting for domcontentloaded...`);
+      await page.waitForLoadState('domcontentloaded');
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] waitForPage: Page fully loaded`);
+
+      return page;
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : error;
+      // eslint-disable-next-line no-console
+      console.error(
+        `[DEBUG] waitForPage: Failed to wait for page:`,
+        errorMessage,
+      );
+      // eslint-disable-next-line no-console
+      console.error(
+        `[DEBUG] waitForPage: Current page URL: ${this.page.url()}`,
+      );
+      // eslint-disable-next-line no-console
+      console.error(
+        `[DEBUG] waitForPage: Number of open pages: ${this.page.context().pages().length}`,
+      );
+      throw error;
+    }
   }
 
   async allowUseCookies() {
@@ -118,8 +177,111 @@ export class BasePage {
     return this.page.locator('main >> h1').textContent();
   }
 
+  async waitForFormReady(formSelector = '[data-testid="submitKeysForm"]') {
+    await test.step('Wait for form to be ready', async () => {
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] waitForFormReady: Starting form readiness check for selector: ${formSelector}`,
+      );
+
+      // Wait for form to be visible
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] waitForFormReady: Waiting for form to be visible...`,
+      );
+      await this.page.waitForSelector(formSelector, { state: 'visible' });
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] waitForFormReady: Form is now visible`);
+
+      // Wait for network to be idle (all API calls completed)
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] waitForFormReady: Waiting for network to be idle...`,
+      );
+      await this.page.waitForLoadState('networkidle');
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] waitForFormReady: Network is now idle`);
+
+      // Wait for token buttons to have values (form initialization complete)
+      // eslint-disable-next-line no-console
+      console.log(
+        `[DEBUG] waitForFormReady: Waiting for token buttons to be initialized...`,
+      );
+      await this.page.waitForFunction(
+        () => {
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+          const inputs = document.querySelectorAll(
+            'input[type="radio"]',
+          ) as NodeListOf<HTMLInputElement>;
+          const inputCount = inputs.length;
+          const inputsWithValues = Array.from(inputs).filter(
+            (input) => input.value,
+          ).length;
+
+          // eslint-disable-next-line no-console
+          console.log(
+            `[DEBUG] Found ${inputCount} radio inputs, ${inputsWithValues} have values`,
+          );
+          if (inputCount > 0) {
+            Array.from(inputs).forEach((input, index) => {
+              // eslint-disable-next-line no-console
+              console.log(
+                `[DEBUG] Input ${index}: value="${input.value}", name="${input.name}"`,
+              );
+            });
+          }
+
+          return inputCount > 0 && inputsWithValues === inputCount;
+        },
+        { timeout: 10000 },
+      );
+
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] waitForFormReady: Form is fully ready`);
+    });
+  }
+
   async getPageSubTittle() {
     return this.page.locator('main >> h4').textContent();
+  }
+
+  async captureDebugScreenshot(testName: string, step: string) {
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const filename = `debug-${testName}-${step}-${timestamp}.png`;
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] Capturing screenshot: ${filename}`);
+
+      await this.page.screenshot({
+        path: `test-results/${filename}`,
+        fullPage: true,
+      });
+
+      // Also capture page info for debugging
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] Current URL: ${this.page.url()}`);
+      // eslint-disable-next-line no-console
+      console.log(`[DEBUG] Page title: ${await this.page.title()}`);
+
+      // Log any console errors from the page
+      const consoleMessages: string[] = await this.page.evaluate(() => {
+        const messages: string[] = [];
+        // Note: We're not actually capturing runtime console messages here,
+        // just showing the pattern. For real console capture, use page.on('console')
+        return messages;
+      });
+
+      if (consoleMessages.length > 0) {
+        // eslint-disable-next-line no-console
+        console.log(`[DEBUG] Page console messages:`, consoleMessages);
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(
+        `[DEBUG] Failed to capture screenshot:`,
+        error instanceof Error ? error.message : error,
+      );
+    }
   }
 
   async closeModalWindow() {
