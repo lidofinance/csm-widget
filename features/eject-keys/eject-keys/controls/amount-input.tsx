@@ -1,7 +1,7 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { useWatch } from 'react-hook-form';
-import { DisabledInputAmount, Stack } from 'shared/components';
+import { DisabledInputAmount, IconTooltip, Stack } from 'shared/components';
 import { EjectKeysFormInputType } from '../context';
 
 export const AmountInput = () => {
@@ -18,7 +18,11 @@ export const AmountInput = () => {
         data-testid="ejectionCostAmountInput"
       />
       <Text size="xxs" color="secondary">
-        Will be deducted from your <b>wallet balance</b>
+        Will be deducted from your <b>wallet balance</b>{' '}
+        <IconTooltip
+          inline
+          tooltip="Any excess funds will be automatically refunded to your wallet after the withdrawal is triggered. This process may take some time"
+        />
       </Text>
     </Stack>
   );

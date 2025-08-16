@@ -2,10 +2,12 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
+import { HIGH_EJECTION_COST_THRESHOLD } from 'consts';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
+import { useConfirmHighCostModal } from '../hooks/use-confirm-high-cost-modal';
 import { useConfirmEjectKeysModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesEjectKeys } from '../hooks/use-tx-modal-stages-eject-keys';
 import { EjectKeysFormInputType, EjectKeysFormNetworkData } from './types';
@@ -22,19 +24,28 @@ export const useEjectKeysSubmit = ({
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesEjectKeys();
   const confirm = useConfirmEjectKeysModal();
+  const confirmHighCost = useConfirmHighCostModal();
 
   return useCallback(
     async (
       { selection, feeAmount }: EjectKeysFormInputType,
-      { nodeOperatorId, info, keys }: EjectKeysFormNetworkData,
+      { nodeOperatorId, info, keys, ejectKeyFee }: EjectKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(keys?.length, 'Keys are not defined');
       invariant(feeAmount !== undefined, 'Fee amount is not defined');
+      invariant(ejectKeyFee, 'Eject fee is not defined');
       invariant(
         info?.totalDepositedKeys !== undefined,
         'Offset is not defined',
       );
+
+      if (
+        ejectKeyFee >= HIGH_EJECTION_COST_THRESHOLD &&
+        !(await confirmHighCost({}))
+      ) {
+        return false;
+      }
 
       if (!(await confirm({}))) {
         return false;
@@ -83,6 +94,6 @@ export const useEjectKeysSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [confirm, csm.keys, onConfirm, txModalStages, onRetry],
+    [confirm, confirmHighCost, csm.keys, onConfirm, txModalStages, onRetry],
   );
 };
