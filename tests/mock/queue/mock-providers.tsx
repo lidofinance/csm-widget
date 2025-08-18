@@ -6,6 +6,7 @@ import {
   createMockOperatorInfo,
   createMockFormData,
   createMockDepositQueueBatches,
+  createMockCurveParams,
   type MockScenarioData,
 } from './mock-data';
 import {
@@ -30,6 +31,9 @@ export const MockDepositQueueProvider: FC<
   const mockDepositQueueBatches = scenario.depositQueueBatches
     ? createMockDepositQueueBatches(scenario.depositQueueBatches)
     : null;
+  const mockCurveParams = scenario.curveParams
+    ? createMockCurveParams(scenario.curveParams)
+    : undefined;
 
   // Create a unique QueryClient for this scenario to avoid cache conflicts
   const queryClient = new QueryClient({
@@ -49,6 +53,24 @@ export const MockDepositQueueProvider: FC<
     mockOperatorInfo,
   );
   queryClient.setQueryData(KEY_DEPOSIT_QUEUE_BATCHES, mockDepositQueueBatches);
+
+  // Mock curve parameters if provided
+  if (mockCurveParams) {
+    const mockCurveId = BigInt(0); // Default curve ID for testing
+    // Mock operator curve ID
+    queryClient.setQueryData(
+      [
+        'operator-curve-id',
+        { nodeOperatorId: BigInt(scenario.nodeOperatorId) },
+      ],
+      mockCurveId,
+    );
+    // Mock curve parameters
+    queryClient.setQueryData(
+      ['curve-parameters', { curveId: mockCurveId }],
+      mockCurveParams,
+    );
+  }
 
   // Mock node operator context value
   const mockNodeOperatorContextValue: NodeOperatorContextValue = {

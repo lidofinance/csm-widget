@@ -42,7 +42,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 1000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 5,
+        depositableValidatorsCount: 0, // No keys in queue, so can't deposit any
       },
       formData: {
         depositDataLength: 0,
@@ -56,7 +56,8 @@ export const testScenarios: TestScenario[] = [
   },
   {
     title: 'Queue Within CSM Limit',
-    description: 'Active validators plus queue that stays within CSM capacity',
+    description:
+      'Active validators plus queue that stays within CSM capacity. Operator batches at pos2 and pos4.',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -65,7 +66,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 1000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 12,
+        depositableValidatorsCount: 12, // <= 75 total keys (50+25)
       },
       formData: {
         depositDataLength: 0,
@@ -73,10 +74,10 @@ export const testScenarios: TestScenario[] = [
       depositQueueBatches: {
         queues: [
           [
-            [1, 50], // Our operator: 50 keys
             [2, 40], // Other operator: 40 keys
+            [1, 50], // Our operator: 50 keys (pos2)
             [3, 35], // Other operator: 35 keys
-            [1, 25], // Our operator: 25 more keys
+            [1, 25], // Our operator: 25 more keys (pos4)
           ],
         ],
       },
@@ -84,7 +85,8 @@ export const testScenarios: TestScenario[] = [
   },
   {
     title: 'Queue Exactly at CSM Limit',
-    description: 'Queue fills exactly to CSM capacity with no room for more',
+    description:
+      'Queue fills exactly to CSM capacity. Operator batches at pos2-3 (adjacent, should merge).',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -93,7 +95,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 8,
+        depositableValidatorsCount: 8, // <= 45 total keys (15+30)
       },
       formData: {
         depositDataLength: 0,
@@ -101,10 +103,10 @@ export const testScenarios: TestScenario[] = [
       depositQueueBatches: {
         queues: [
           [
-            [1, 30], // Our operator: 30 keys
             [2, 35], // Other operator: 35 keys
+            [1, 15], // Our operator: 15 keys (pos2)
+            [1, 30], // Our operator: 30 keys (pos3) - adjacent to pos2, should merge
             [3, 20], // Other operator: 20 keys
-            [1, 15], // Our operator: 15 more keys
           ],
         ],
       },
@@ -112,7 +114,8 @@ export const testScenarios: TestScenario[] = [
   },
   {
     title: 'Queue Exceeds CSM Limit',
-    description: 'Queue extends beyond CSM capacity into over-limit territory',
+    description:
+      'Queue extends beyond CSM capacity. Operator batches at pos2 and pos5.',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -121,7 +124,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 450,
       },
       operatorInfo: {
-        depositableValidatorsCount: 20,
+        depositableValidatorsCount: 20, // <= 100 total keys (60+40)
       },
       formData: {
         depositDataLength: 0,
@@ -129,11 +132,11 @@ export const testScenarios: TestScenario[] = [
       depositQueueBatches: {
         queues: [
           [
-            [1, 60], // Our operator: 60 keys
             [2, 80], // Other operator: 80 keys
+            [1, 60], // Our operator: 60 keys (pos2)
             [3, 55], // Other operator: 55 keys
-            [1, 40], // Our operator: 40 more keys
             [4, 15], // Other operator: 15 keys
+            [1, 40], // Our operator: 40 more keys (pos5)
           ],
         ],
       },
@@ -141,7 +144,8 @@ export const testScenarios: TestScenario[] = [
   },
   {
     title: 'Keys Being Added (Pending Submission)',
-    description: 'New keys in form data waiting to be submitted to queue',
+    description:
+      'New keys pending submission. Operator batches at pos3-4 (adjacent, should merge).',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -150,7 +154,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 1000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 15,
+        depositableValidatorsCount: 15, // <= 80 total keys (45+35)
       },
       formData: {
         depositDataLength: 25, // This creates the "added" state
@@ -158,10 +162,10 @@ export const testScenarios: TestScenario[] = [
       depositQueueBatches: {
         queues: [
           [
-            [1, 45], // Our operator: 45 keys
             [2, 65], // Other operator: 65 keys
             [3, 30], // Other operator: 30 keys
-            [1, 35], // Our operator: 35 more keys
+            [1, 45], // Our operator: 45 keys (pos3)
+            [1, 35], // Our operator: 35 more keys (pos4) - adjacent to pos3, should merge
             [4, 25], // Other operator: 25 keys
           ],
         ],
@@ -170,7 +174,8 @@ export const testScenarios: TestScenario[] = [
   },
   {
     title: 'Queue Over Limit with Pending Keys',
-    description: 'Queue exceeds CSM limit while new keys are being added',
+    description:
+      'Queue over limit with pending keys. Operator batches at pos3 and pos5.',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -179,7 +184,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 450,
       },
       operatorInfo: {
-        depositableValidatorsCount: 35,
+        depositableValidatorsCount: 35, // <= 125 total keys (70+55)
       },
       formData: {
         depositDataLength: 10, // Keys being added
@@ -187,11 +192,11 @@ export const testScenarios: TestScenario[] = [
       depositQueueBatches: {
         queues: [
           [
-            [1, 70], // Our operator: 70 keys
             [2, 90], // Other operator: 90 keys
             [3, 60], // Other operator: 60 keys
-            [1, 55], // Our operator: 55 more keys
+            [1, 70], // Our operator: 70 keys (pos3)
             [4, 40], // Other operator: 40 keys
+            [1, 55], // Our operator: 55 more keys (pos5)
             [5, 35], // Other operator: 35 keys
           ],
         ],
@@ -201,7 +206,7 @@ export const testScenarios: TestScenario[] = [
   {
     title: 'Small Queue Triggering Far View',
     description:
-      'Small queue relative to large capacity triggers far-away indicator',
+      'Small queue triggers far-away indicator. Operator batch at pos2.',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -210,7 +215,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 2000, // Large capacity to trigger far away view
       },
       operatorInfo: {
-        depositableValidatorsCount: 3,
+        depositableValidatorsCount: 3, // <= 15 total keys
       },
       formData: {
         depositDataLength: 0,
@@ -218,8 +223,8 @@ export const testScenarios: TestScenario[] = [
       depositQueueBatches: {
         queues: [
           [
-            [1, 15], // Our operator: 15 keys (small batch)
             [2, 10], // Other operator: 10 keys
+            [1, 15], // Our operator: 15 keys at pos2
           ],
         ],
       },
@@ -227,7 +232,7 @@ export const testScenarios: TestScenario[] = [
   },
   {
     title: 'Large Validator Counts Test',
-    description: 'High-volume scenario with thousands of validators',
+    description: 'High-volume scenario. Operator batches at pos2 and pos5.',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -236,7 +241,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 10000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 500,
+        depositableValidatorsCount: 500, // <= 750 total keys (400+350)
       },
       formData: {
         depositDataLength: 100,
@@ -244,11 +249,11 @@ export const testScenarios: TestScenario[] = [
       depositQueueBatches: {
         queues: [
           [
-            [1, 400], // Our operator: 400 keys
             [2, 600], // Other operator: 600 keys
+            [1, 400], // Our operator: 400 keys (pos2)
             [3, 300], // Other operator: 300 keys
-            [1, 350], // Our operator: 350 more keys
             [4, 250], // Other operator: 250 keys
+            [1, 350], // Our operator: 350 more keys (pos5)
             [5, 100], // Other operator: 100 keys
           ],
         ],
@@ -266,7 +271,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 0, // Edge case
       },
       operatorInfo: {
-        depositableValidatorsCount: 10,
+        depositableValidatorsCount: 10, // <= 35 total keys (20+15)
       },
       formData: {
         depositDataLength: 5,
@@ -294,7 +299,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 2, // Extremely low capacity - only 1 more key allowed
       },
       operatorInfo: {
-        depositableValidatorsCount: 20,
+        depositableValidatorsCount: 20, // <= 25 total keys
       },
       formData: {
         depositDataLength: 3, // Trying to add more keys
@@ -303,7 +308,7 @@ export const testScenarios: TestScenario[] = [
         queues: [
           [
             // Priority 0
-            [1, 50], // Our operator: 50 keys
+            [3, 50], // Other operator: 50 keys
             [2, 40], // Other operator: 40 keys
           ],
           [
@@ -347,20 +352,19 @@ export const testScenarios: TestScenario[] = [
       },
     },
   },
-
-  // Enhanced Multi-Queue Test Scenarios
   {
-    title: 'Keys Across All Priority Levels',
-    description: 'Validators distributed across all 6 priority levels (0-5)',
+    title: 'Operator with Adjacent Batches',
+    description:
+      'Operator has consecutive batches that should merge into single spans. P0(highest):pos3-4(merged), P1:pos2-3(merged), P2:single, P3:all merged',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
         active: 300,
-        queue: 600, // Total across all priorities
-        capacity: 1200,
+        queue: 380,
+        capacity: 850,
       },
       operatorInfo: {
-        depositableValidatorsCount: 25,
+        depositableValidatorsCount: 28, // <= 230 total keys (25+35+20+30+60+15+25+20)
       },
       formData: {
         depositDataLength: 0,
@@ -369,9 +373,61 @@ export const testScenarios: TestScenario[] = [
         queues: [
           [
             // Priority 0
-            [1, 50],
             [2, 30],
-            [1, 20], // 100 keys total
+            [3, 40],
+            [1, 25], // pos3
+            [1, 35], // pos4 - adjacent to pos3, should merge
+            [4, 20],
+          ],
+          [
+            // Priority 1
+            [5, 45],
+            [1, 20], // pos2
+            [1, 30], // pos3 - adjacent to pos2, should merge
+            [6, 25],
+          ],
+          [
+            // Priority 2
+            [7, 50],
+            [8, 40],
+            [1, 60], // pos3 - single batch
+          ],
+          [
+            // Priority 3 - all operator batches, should merge into one span
+            [1, 15], // pos1
+            [1, 25], // pos2
+            [1, 20], // pos3
+          ],
+        ],
+      },
+    },
+  },
+
+  // Enhanced Multi-Queue Test Scenarios
+  {
+    title: 'Keys Across All Priority Levels',
+    description:
+      'All 6 priority levels (P0=highest to P5=lowest). Operator: P0:pos2-3(merged), P1:pos3, P2:pos1, P3:pos1+3, P4:pos2, P5:pos2.',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 300,
+        queue: 600, // Total across all priorities
+        capacity: 1200,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 25, // <= 225 total keys (50+20+25+40+90)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        queues: [
+          [
+            // Priority 0
+            [2, 30],
+            [1, 50], // pos2
+            [1, 20], // pos3 - adjacent to pos2, should merge
           ],
           [
             // Priority 1
@@ -381,8 +437,8 @@ export const testScenarios: TestScenario[] = [
           ],
           [
             // Priority 2
+            [1, 40], // pos1
             [5, 60],
-            [1, 40], // 100 keys total
           ],
           [], // Priority 3 - empty
           [
@@ -392,8 +448,8 @@ export const testScenarios: TestScenario[] = [
           ],
           [
             // Priority 5
-            [1, 90],
-            [8, 60], // 150 keys total
+            [8, 60],
+            [1, 90], // pos2
           ],
         ],
       },
@@ -402,7 +458,7 @@ export const testScenarios: TestScenario[] = [
   {
     title: 'Keys Only in Priority 0 and 5',
     description:
-      'Edge priority distribution - only lowest and highest priorities have keys',
+      'Edge priorities only - highest (P0) and lowest (P5) priority. Operator at P0:pos2, P5:pos2.',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -411,7 +467,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 18,
+        depositableValidatorsCount: 18, // <= 180 total keys (100+80)
       },
       formData: {
         depositDataLength: 0,
@@ -420,8 +476,8 @@ export const testScenarios: TestScenario[] = [
         queues: [
           [
             // Priority 0
-            [1, 100],
             [2, 50],
+            [1, 100], // pos2
           ],
           [], // Priority 1 - empty
           [], // Priority 2 - empty
@@ -429,8 +485,8 @@ export const testScenarios: TestScenario[] = [
           [], // Priority 4 - empty
           [
             // Priority 5
-            [1, 80],
             [3, 70],
+            [1, 80], // pos2
           ],
         ],
       },
@@ -439,7 +495,7 @@ export const testScenarios: TestScenario[] = [
   {
     title: 'Keys in Priority 0, 4, and 5',
     description:
-      'Sparse distribution - keys in first, second-highest, and highest priorities only',
+      'Sparse distribution - keys in highest (P0), second-lowest (P4), and lowest (P5) priorities only',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -448,7 +504,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 900,
       },
       operatorInfo: {
-        depositableValidatorsCount: 22,
+        depositableValidatorsCount: 22, // <= 150 total keys (80+50+20)
       },
       formData: {
         depositDataLength: 0,
@@ -480,7 +536,7 @@ export const testScenarios: TestScenario[] = [
   {
     title: 'Near Capacity Limit with Uneven Distribution',
     description:
-      'Very tight capacity limit (5 keys room) with most keys in highest priority',
+      'Very tight capacity limit (5 keys room) with most keys in lowest priority (P5)',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -489,7 +545,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 205, // Only 5 keys room left
       },
       operatorInfo: {
-        depositableValidatorsCount: 8,
+        depositableValidatorsCount: 8, // <= 50 total keys (from priority 5)
       },
       formData: {
         depositDataLength: 0,
@@ -534,7 +590,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 600, // Only 200 more capacity
       },
       operatorInfo: {
-        depositableValidatorsCount: 22,
+        depositableValidatorsCount: 22, // <= 170 total keys (60+50+60)
       },
       formData: {
         depositDataLength: 0,
@@ -573,7 +629,7 @@ export const testScenarios: TestScenario[] = [
   {
     title: 'Single Operator Across Multiple Priorities',
     description:
-      'One operator has validator batches across different priority levels',
+      'Operator across priorities at: P0:pos1, P1:pos2, P2:none, P3:pos1+3, P4:pos1, P5:none.',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -582,7 +638,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 1000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 45,
+        depositableValidatorsCount: 45, // <= 180 total keys (25+40+60+20+35)
       },
       formData: {
         depositDataLength: 0,
@@ -591,14 +647,14 @@ export const testScenarios: TestScenario[] = [
         queues: [
           [
             // Priority 0
+            [1, 25], // pos1
             [2, 30],
-            [1, 25],
-            [3, 20], // Operator 1 has 25 keys
+            [3, 20],
           ],
           [
             // Priority 1
-            [1, 40],
-            [4, 35], // Operator 1 has 40 keys
+            [4, 35],
+            [1, 40], // pos2
           ],
           [
             // Priority 2
@@ -612,8 +668,8 @@ export const testScenarios: TestScenario[] = [
           ],
           [
             // Priority 4
+            [1, 35], // pos1
             [7, 45],
-            [1, 35], // Operator 1 has 35 keys
           ],
           [
             // Priority 5
@@ -636,7 +692,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 200,
       },
       operatorInfo: {
-        depositableValidatorsCount: 3,
+        depositableValidatorsCount: 1, // <= 1 total key (only operator 1 is in priority 0)
       },
       formData: {
         depositDataLength: 0,
@@ -665,7 +721,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 1000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 20,
+        depositableValidatorsCount: 20, // <= 180 total keys (100+80)
       },
       formData: {
         depositDataLength: 0,
@@ -704,14 +760,12 @@ export const testScenarios: TestScenario[] = [
         capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 15,
+        depositableValidatorsCount: 15, // Fallback - no specific queue data
       },
       formData: {
         depositDataLength: 5,
       },
-      depositQueueBatches: {
-        queues: [], // Empty queues array - triggers fallback
-      },
+      depositQueueBatches: undefined, // Undefined data - triggers fallback
     },
   },
   {
@@ -726,12 +780,12 @@ export const testScenarios: TestScenario[] = [
         capacity: 900,
       },
       operatorInfo: {
-        depositableValidatorsCount: 12,
+        depositableValidatorsCount: 12, // Fallback - no specific queue data
       },
       formData: {
         depositDataLength: 8,
       },
-      depositQueueBatches: null, // Null data - triggers fallback
+      depositQueueBatches: undefined, // Undefined data - triggers fallback
     },
   },
   {
@@ -745,14 +799,12 @@ export const testScenarios: TestScenario[] = [
         capacity: 600, // Only 200 more capacity available
       },
       operatorInfo: {
-        depositableValidatorsCount: 25,
+        depositableValidatorsCount: 25, // Fallback - no specific queue data
       },
       formData: {
         depositDataLength: 12, // Keys being added
       },
-      depositQueueBatches: {
-        queues: [], // Empty queues array - triggers fallback with over-limit scenario
-      },
+      depositQueueBatches: undefined, // Undefined data - triggers fallback with over-limit scenario
     },
   },
 
@@ -769,7 +821,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 20,
+        depositableValidatorsCount: 20, // <= 150 total keys (80+40+30)
       },
       formData: {
         depositDataLength: 0,
@@ -803,7 +855,7 @@ export const testScenarios: TestScenario[] = [
   {
     title: 'Keys Only in Priority 4 and 5',
     description:
-      'Empty lower priorities (0-3), validators only in highest priorities',
+      'Empty higher priorities (P0-3), validators only in lowest priorities (P4-5)',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -812,7 +864,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 700,
       },
       operatorInfo: {
-        depositableValidatorsCount: 15,
+        depositableValidatorsCount: 15, // <= 95 total keys (60+35)
       },
       formData: {
         depositDataLength: 0,
@@ -840,9 +892,9 @@ export const testScenarios: TestScenario[] = [
     },
   },
   {
-    title: 'Keys Only in Highest Priority',
+    title: 'Keys Only in Lowest Priority',
     description:
-      'All validators concentrated in priority 5, other priorities empty',
+      'All validators concentrated in lowest priority (P5), higher priorities empty',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -851,7 +903,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 12,
+        depositableValidatorsCount: 12, // <= 80 total keys
       },
       formData: {
         depositDataLength: 0,
@@ -886,7 +938,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 25,
+        depositableValidatorsCount: 25, // <= 90 total keys (60+30)
       },
       formData: {
         depositDataLength: 0,
@@ -926,7 +978,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 750,
       },
       operatorInfo: {
-        depositableValidatorsCount: 30,
+        depositableValidatorsCount: 30, // <= 90 total keys (50+40)
       },
       formData: {
         depositDataLength: 0,
@@ -966,7 +1018,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 1000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 35,
+        depositableValidatorsCount: 35, // <= 150 total keys (70+45+35)
       },
       formData: {
         depositDataLength: 0,
@@ -1012,7 +1064,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 600, // Only 150 more capacity
       },
       operatorInfo: {
-        depositableValidatorsCount: 28,
+        depositableValidatorsCount: 28, // <= 155 total keys (30+35+50+40)
       },
       formData: {
         depositDataLength: 0,
@@ -1057,7 +1109,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 20,
+        depositableValidatorsCount: 20, // <= 125 total keys (50+45+30)
       },
       formData: {
         depositDataLength: 0,
@@ -1281,6 +1333,252 @@ export const testScenarios: TestScenario[] = [
             [4, 60],
             [5, 50],
             [1, 1],
+          ],
+        ],
+      },
+    },
+  },
+
+  // Test cases for submitting keys to multiple queue priorities
+  {
+    title: 'Submitting to Empty Priority 0',
+    description:
+      'Priority 0 is empty, operator submits 20 keys - all should go to Priority 0',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 300,
+        queue: 150,
+        capacity: 800,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 0, // No keys in current queue for operator 1
+        totalDepositedKeys: 10,
+        enqueuedCount: 5,
+      },
+      formData: {
+        depositDataLength: 20, // Submitting 20 keys
+      },
+      curveParams: {
+        priority: 0,
+        maxDeposits: 100,
+        lowestPriority: 5,
+      },
+      depositQueueBatches: {
+        queues: [
+          [], // Priority 0 - empty
+          [
+            // Priority 1
+            [2, 60],
+            [3, 40],
+          ],
+          [
+            // Priority 2
+            [4, 50],
+          ],
+          [], // Priority 3 - empty
+          [], // Priority 4 - empty
+          [], // Priority 5 - empty
+        ],
+      },
+    },
+  },
+  {
+    title: 'Submitting to Non-Empty Priority 0',
+    description:
+      'Priority 0 has existing keys, operator submits 15 keys - 10 to Priority 0, 5 to Priority 5',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 250,
+        queue: 200,
+        capacity: 700,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 0, // No keys in current queue for operator 1
+        totalDepositedKeys: 15,
+        enqueuedCount: 5,
+      },
+      formData: {
+        depositDataLength: 15, // Submitting 15 keys
+      },
+      curveParams: {
+        priority: 0,
+        maxDeposits: 30, // Only 10 slots left (30 - 15 deposited - 5 queued = 10)
+        lowestPriority: 5,
+      },
+      depositQueueBatches: {
+        queues: [
+          [
+            // Priority 0 - has existing keys
+            [2, 40],
+            [3, 30],
+          ],
+          [
+            // Priority 1
+            [4, 60],
+          ],
+          [
+            // Priority 2
+            [5, 50],
+            [6, 20],
+          ],
+          [], // Priority 3 - empty
+          [], // Priority 4 - empty
+          [
+            // Priority 5
+            [7, 40],
+          ],
+        ],
+      },
+    },
+  },
+  {
+    title: 'Submitting with Priority 0 at Limit',
+    description:
+      'Priority 0 is at maxDeposits limit, operator submits 12 keys - all should go to Priority 5',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 300,
+        queue: 180,
+        capacity: 600,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 0, // No keys in current queue for operator 1
+        totalDepositedKeys: 40,
+        enqueuedCount: 10,
+      },
+      formData: {
+        depositDataLength: 12, // Submitting 12 keys
+      },
+      curveParams: {
+        priority: 0,
+        maxDeposits: 50, // Already at limit (40 deposited + 10 queued = 50)
+        lowestPriority: 5,
+      },
+      depositQueueBatches: {
+        queues: [
+          [
+            // Priority 0 - at capacity
+            [2, 80],
+            [3, 60],
+            [4, 40],
+          ],
+          [
+            // Priority 1
+            [5, 30],
+          ],
+          [], // Priority 2 - empty
+          [], // Priority 3 - empty
+          [], // Priority 4 - empty
+          [
+            // Priority 5
+            [6, 25],
+            [7, 15],
+          ],
+        ],
+      },
+    },
+  },
+  {
+    title: 'Submitting to Multiple Priorities (Split)',
+    description:
+      'Operator priority is 2, submits 18 keys - 8 to Priority 2, 10 to Priority 5',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 200,
+        queue: 250,
+        capacity: 800,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 0, // No keys in current queue for operator 1
+        totalDepositedKeys: 20,
+        enqueuedCount: 7,
+      },
+      formData: {
+        depositDataLength: 18, // Submitting 18 keys
+      },
+      curveParams: {
+        priority: 2,
+        maxDeposits: 35, // Only 8 slots left (35 - 20 deposited - 7 queued = 8)
+        lowestPriority: 5,
+      },
+      depositQueueBatches: {
+        queues: [
+          [
+            // Priority 0
+            [2, 70],
+            [3, 50],
+          ],
+          [
+            // Priority 1
+            [4, 60],
+            [5, 40],
+          ],
+          [
+            // Priority 2 - operator's priority
+            [6, 30],
+            [7, 20],
+          ],
+          [
+            // Priority 3
+            [8, 35],
+          ],
+          [], // Priority 4 - empty
+          [
+            // Priority 5
+            [9, 25],
+          ],
+        ],
+      },
+    },
+  },
+  {
+    title: 'Submitting All to Lowest Priority',
+    description:
+      'Operator priority queue is full, submits 8 keys - all go to Priority 5',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 350,
+        queue: 120,
+        capacity: 650,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 0, // No keys in current queue for operator 1
+        totalDepositedKeys: 45,
+        enqueuedCount: 15,
+      },
+      formData: {
+        depositDataLength: 8, // Submitting 8 keys
+      },
+      curveParams: {
+        priority: 1,
+        maxDeposits: 60, // Already at limit (45 deposited + 15 queued = 60)
+        lowestPriority: 5,
+      },
+      depositQueueBatches: {
+        queues: [
+          [
+            // Priority 0
+            [2, 40],
+          ],
+          [
+            // Priority 1 - operator's priority, at capacity
+            [3, 50],
+            [4, 30],
+          ],
+          [
+            // Priority 2
+            [5, 20],
+          ],
+          [], // Priority 3 - empty
+          [], // Priority 4 - empty
+          [
+            // Priority 5
+            [6, 20],
           ],
         ],
       },

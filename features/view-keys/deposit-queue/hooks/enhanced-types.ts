@@ -41,7 +41,14 @@ export interface ShareLimit {
 
 export interface OperatorInfo {
   depositableValidatorsCount?: number;
+  totalDepositedKeys?: number;
+  enqueuedCount?: number;
 }
+
+export type SubmittingAllocation = {
+  keysCount: number;
+  allocation: [number, number][];
+}; // queue priority, keys count
 
 export interface ProcessedBatches {
   batches: BatchPart[];

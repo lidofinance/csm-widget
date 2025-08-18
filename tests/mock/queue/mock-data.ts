@@ -14,6 +14,8 @@ export type MockShareLimitParams = {
 
 export type MockOperatorInfoParams = {
   depositableValidatorsCount: number;
+  totalDepositedKeys?: number;
+  enqueuedCount?: number;
 };
 
 export type MockFormDataParams = {
@@ -25,12 +27,19 @@ export type MockDepositQueueParams = {
   queues: Array<Array<[number, number]>>;
 };
 
+export type MockCurveParams = {
+  priority: number;
+  maxDeposits: number;
+  lowestPriority: number;
+};
+
 export type MockScenarioData = {
   nodeOperatorId: number;
   shareLimit: MockShareLimitParams;
   operatorInfo: MockOperatorInfoParams;
   formData: MockFormDataParams;
-  depositQueueBatches: MockDepositQueueParams | null;
+  depositQueueBatches: MockDepositQueueParams | undefined;
+  curveParams?: MockCurveParams;
 };
 
 export const createMockShareLimit = ({
@@ -58,18 +67,20 @@ export const createMockShareLimit = ({
 
 export const createMockOperatorInfo = ({
   depositableValidatorsCount,
+  totalDepositedKeys = 0,
+  enqueuedCount = 0,
 }: MockOperatorInfoParams): NodeOperatorInfo => {
   return {
     totalAddedKeys: 0,
     totalWithdrawnKeys: 0,
-    totalDepositedKeys: 0,
+    totalDepositedKeys,
     totalVettedKeys: 0,
     stuckValidatorsCount: 0,
     depositableValidatorsCount,
     targetLimit: 0,
     targetLimitMode: 0,
     totalExitedKeys: 0,
-    enqueuedCount: 0,
+    enqueuedCount,
     managerAddress: '0x0000000000000000000000000000000000000000',
     rewardsAddress: '0x0000000000000000000000000000000000000000',
     extendedManagerPermissions: false,
@@ -80,12 +91,34 @@ export const createMockOperatorInfo = ({
 export const createMockDepositQueueBatches = ({
   queues,
 }: MockDepositQueueParams): DepositQueueBatch[][] => {
-  return queues.map((queueBatches) =>
+  const mappedQueues = queues.map((queueBatches) =>
     queueBatches.map(([nodeOperatorId, keysCount]) => ({
       nodeOperatorId: BigInt(nodeOperatorId),
       keysCount: BigInt(keysCount),
     })),
   );
+
+  // Always return exactly 6 arrays (priorities 0-5)
+  const result: DepositQueueBatch[][] = [];
+  for (let i = 0; i < 6; i++) {
+    result.push(mappedQueues[i] || []);
+  }
+
+  return result;
+};
+
+export const createMockCurveParams = ({
+  priority,
+  maxDeposits,
+  lowestPriority,
+}: MockCurveParams) => {
+  return {
+    queueConfig: {
+      priority,
+      maxDeposits,
+      lowestPriority,
+    },
+  };
 };
 
 export const createMockFormData = ({

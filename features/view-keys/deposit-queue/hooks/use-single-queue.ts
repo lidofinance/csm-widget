@@ -1,4 +1,8 @@
-import type { QueueGraphData, ShareLimit } from './enhanced-types';
+import type {
+  SubmittingAllocation,
+  QueueGraphData,
+  ShareLimit,
+} from './enhanced-types';
 import {
   calculateGraphBounds,
   calculateLimitOffset,
@@ -7,11 +11,11 @@ import {
 
 export const createSingleQueueVisualization = (
   shareLimit: ShareLimit,
-  submittingKeysCount: number | undefined,
+  submittingAllocation: SubmittingAllocation | undefined,
   fullView: boolean,
 ): QueueGraphData => {
   const { active, queue, capacity, activeLeft } = shareLimit;
-  const added = BigInt(submittingKeysCount || 0);
+  const added = BigInt(submittingAllocation?.keysCount || 0);
 
   // Calculate graph bounds and coordinates
   const bounds = calculateGraphBounds({
@@ -62,6 +66,6 @@ export const createSingleQueueVisualization = (
       keysCount: capacity,
     },
     farAway: bounds.farAway,
-    submittingKeysCount,
+    submittingKeysCount: submittingAllocation?.keysCount,
   };
 };

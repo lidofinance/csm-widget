@@ -11,7 +11,7 @@ export const useDepositQueueGraph = (
     shareLimit,
     queueAnalysis,
     operatorInfo,
-    submittingCount,
+    submittingAllocation,
     isLoading,
   } = useQueueData();
 
@@ -25,10 +25,14 @@ export const useDepositQueueGraph = (
           operatorInfo,
           queueAnalysis,
           shareLimit,
-          submittingCount,
+          submittingAllocation,
           fullView,
         )
-      : createSingleQueueVisualization(shareLimit, submittingCount, fullView);
+      : createSingleQueueVisualization(
+          shareLimit,
+          submittingAllocation,
+          fullView,
+        );
 
     return {
       isLoading: false,
@@ -39,7 +43,7 @@ export const useDepositQueueGraph = (
     shareLimit,
     queueAnalysis,
     operatorInfo,
-    submittingCount,
+    submittingAllocation,
     fullView,
   ]);
 };

@@ -1,4 +1,5 @@
 import {
+  useCurveParameters,
   useDepositQueueBatches,
   useNodeOperatorId,
   useOperatorInfo,
@@ -7,15 +8,21 @@ import {
 import { useFormContext } from 'react-hook-form';
 import { DepositDataInputType } from 'shared/hook-form/form-controller';
 import { calculateAndSelectByOperator } from './calculate-and-select-by-operator';
-import type { ShareLimit, OperatorInfo } from './enhanced-types';
+import type {
+  ShareLimit,
+  OperatorInfo,
+  SubmittingAllocation,
+} from './enhanced-types';
 import type { DepositQueueAnalysis } from './calculate-and-select-by-operator';
+import { useCurrentCurveId } from 'shared/hooks';
+import { calculatePriorityPlacement } from './calculate-priority-placement';
 
 export interface QueueDataResult {
   nodeOperatorId: bigint | undefined;
   operatorInfo: OperatorInfo | undefined;
   shareLimit: ShareLimit | undefined;
   queueAnalysis: DepositQueueAnalysis | undefined;
-  submittingCount: number | undefined;
+  submittingAllocation: SubmittingAllocation | undefined;
   isLoading: boolean;
 }
 
@@ -27,15 +34,27 @@ export const useQueueData = (): QueueDataResult => {
     calculateAndSelectByOperator(nodeOperatorId),
   );
 
+  const curveId = useCurrentCurveId();
+  const { data: queueConfig } = useCurveParameters(
+    curveId,
+    (params) => params.queueConfig,
+  );
+
   const form = useFormContext<DepositDataInputType>();
   const submittingCount = form?.getValues('depositData')?.length;
+
+  const submittingAllocation = calculatePriorityPlacement(
+    operatorInfo,
+    queueConfig,
+    submittingCount,
+  );
 
   return {
     nodeOperatorId,
     operatorInfo,
     shareLimit,
     queueAnalysis,
-    submittingCount,
+    submittingAllocation,
     isLoading: !shareLimit,
   };
 };

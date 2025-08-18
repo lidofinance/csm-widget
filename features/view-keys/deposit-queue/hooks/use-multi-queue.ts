@@ -2,6 +2,7 @@ import { GraphPart } from '../types';
 import type { DepositQueueAnalysis } from './calculate-and-select-by-operator';
 import type {
   OperatorInfo,
+  SubmittingAllocation,
   QueueGraphData,
   QueuePart,
   ShareLimit,
@@ -23,11 +24,11 @@ export const createMultiQueueVisualization = (
   operatorInfo: OperatorInfo | undefined,
   queueAnalysis: DepositQueueAnalysis,
   shareLimit: ShareLimit,
-  submittingKeysCount: number | undefined,
+  submittingAllocation: SubmittingAllocation | undefined,
   fullView: boolean,
 ): QueueGraphData => {
   const { active, queue, capacity, activeLeft } = shareLimit;
-  const added = BigInt(submittingKeysCount || 0);
+  const added = BigInt(submittingAllocation?.keysCount || 0);
 
   // Calculate graph bounds and coordinates
   const bounds = calculateGraphBounds({
@@ -40,8 +41,6 @@ export const createMultiQueueVisualization = (
 
   // Calculate segment sizes
   const activeSize = calculateSegmentSize(active, 0n, bounds);
-
-  const addedSize = calculateSegmentSize(added, queue + active, bounds);
 
   const limitOffset = calculateLimitOffset(capacity, bounds);
 
@@ -64,65 +63,82 @@ export const createMultiQueueVisualization = (
     bounds,
   );
 
-  // Filter and normalize queue data
-  const nonEmptyQueues = queues.filter((q) => q.totalKeysInQueue > 0n);
-
-  // Process priority queues
+  // Process priority queues and insert added keys at appropriate positions
   const priorityQueues: QueuePart[] = [];
   let cumulativeKeys = 0n;
 
-  nonEmptyQueues.forEach((queueData) => {
-    const normalizedKeysCount = BigInt(
-      Math.round(Number(queueData.totalKeysInQueue) * normalizationFactor),
-    ); // TODO: think how to simplify it
+  queues.forEach((queueData) => {
+    if (queueData.totalKeysInQueue > 0n) {
+      const normalizedKeysCount = BigInt(
+        Math.round(Number(queueData.totalKeysInQueue) * normalizationFactor),
+      ); // TODO: think how to simplify it
 
-    // Calculate queue segments
-    const queueUnderLimit =
-      activeLeft > 0n && cumulativeKeys < activeLeft
-        ? cumulativeKeys + normalizedKeysCount <= activeLeft
-          ? normalizedKeysCount
-          : activeLeft - cumulativeKeys
-        : 0n;
+      // Calculate queue segments
+      const queueUnderLimit =
+        activeLeft > 0n && cumulativeKeys < activeLeft
+          ? cumulativeKeys + normalizedKeysCount <= activeLeft
+            ? normalizedKeysCount
+            : activeLeft - cumulativeKeys
+          : 0n;
 
-    const queueOverLimit = normalizedKeysCount - queueUnderLimit;
-    const segmentStartPos = active + cumulativeKeys;
+      const queueOverLimit = normalizedKeysCount - queueUnderLimit;
+      const segmentStartPos = active + cumulativeKeys;
 
-    const underLimitSize = calculateSegmentSize(
-      queueUnderLimit,
-      segmentStartPos,
-      bounds,
-    );
+      const underLimitSize = calculateSegmentSize(
+        queueUnderLimit,
+        segmentStartPos,
+        bounds,
+      );
 
-    const overLimitSize = calculateSegmentSize(
-      queueOverLimit,
-      segmentStartPos + queueUnderLimit,
-      bounds,
-    );
+      const overLimitSize = calculateSegmentSize(
+        queueOverLimit,
+        segmentStartPos + queueUnderLimit,
+        bounds,
+      );
 
-    priorityQueues.push(
-      {
-        type: getPriorityType(queueData.queueIndex, false),
-        keysCount: queueUnderLimit,
-        width: underLimitSize,
-      },
-      {
-        type: getPriorityType(queueData.queueIndex, true),
-        keysCount: queueOverLimit,
-        width: overLimitSize,
-      },
-    );
+      priorityQueues.push(
+        {
+          type: getPriorityType(queueData.queueIndex, false),
+          keysCount: queueUnderLimit,
+          width: underLimitSize,
+        },
+        {
+          type: getPriorityType(queueData.queueIndex, true),
+          keysCount: queueOverLimit,
+          width: overLimitSize,
+        },
+      );
 
-    cumulativeKeys += normalizedKeysCount;
+      cumulativeKeys += normalizedKeysCount;
+    }
+
+    const [, submitting] =
+      submittingAllocation?.allocation?.find(
+        ([priority]) => priority === queueData.queueIndex,
+      ) || [];
+
+    if (submitting) {
+      const addedPrioritySize = calculateSegmentSize(
+        BigInt(submitting),
+        active + cumulativeKeys,
+        bounds,
+      );
+
+      priorityQueues.push({
+        type: 'added',
+        keysCount: BigInt(submitting),
+        width: addedPrioritySize,
+      });
+    }
   });
 
   // Collect all operator batches across all queues
-  const operatorData = batchCollector.collectAllBatches(nonEmptyQueues, active);
+  const operatorData = batchCollector.collectAllBatches(queues, active);
 
   return {
     parts: [
       { type: 'active', width: activeSize, keysCount: active },
       ...priorityQueues,
-      { type: 'added', width: addedSize, keysCount: added },
     ],
     limit: {
       offset: limitOffset,
@@ -130,6 +146,6 @@ export const createMultiQueueVisualization = (
     },
     operator: operatorData,
     farAway: bounds.farAway,
-    submittingKeysCount,
+    submittingKeysCount: submittingAllocation?.keysCount,
   };
 };

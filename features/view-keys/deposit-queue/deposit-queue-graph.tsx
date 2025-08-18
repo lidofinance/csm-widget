@@ -23,18 +23,20 @@ const Graph: FC = () => {
     <Stack direction="column">
       <LineWrapper farAway={data.farAway}>
         <LineStyle>
-          {data.parts.map((part) => (
-            <Part key={part.type} {...part} />
+          {data.parts.map((part, index) => (
+            <Part key={`${part.type}-${index}`} {...part} />
           ))}
-          {/* TODO: operator batches */}
+          {data.operator?.batches.map((batch, index) => (
+            <Part key={index} type="batch" {...batch} />
+          ))}
         </LineStyle>
         <Part type="limit" offset={data.limit.offset} />
       </LineWrapper>
       <LegendsStyle>
         {data.parts
           .filter((part) => part.type !== 'added')
-          .map((part) => (
-            <Legend key={part.type} {...part} />
+          .map((part, index) => (
+            <Legend key={`${part.type}-${index}`} {...part} />
           ))}
         <Legend type="limit" {...data.limit} />
         <Legend type="batch" {...data.operator} />

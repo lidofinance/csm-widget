@@ -4,7 +4,7 @@ import { DepositQueueGraph } from 'features/view-keys/deposit-queue/deposit-queu
 import { MockDepositQueueProvider } from 'tests/mock/queue/mock-providers';
 import { testScenarios } from 'tests/mock/queue/test-scenarios';
 import styled from 'styled-components';
-import { Block } from '@lidofinance/lido-ui';
+import { Block, Accordion } from '@lidofinance/lido-ui';
 
 const TestContainer = styled.div`
   display: flex;
@@ -31,6 +31,64 @@ const TestDescription = styled.p`
   color: var(--lido-color-textSecondary);
 `;
 
+const StyledAccordion = styled(Accordion)`
+  margin: 16px 0 0;
+  & > [type='button'] {
+    padding: 0;
+    min-height: 24px;
+  }
+  & > [type='button'] + div > div {
+    padding: 4px 0 0;
+  }
+`;
+
+const AccordionSummary = styled.span`
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--lido-color-textSecondary);
+`;
+
+const QueueDataContainer = styled.pre`
+  background: var(--lido-color-backgroundSecondary);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--lido-color-text);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+
+  .queue {
+    margin-left: 12px;
+  }
+
+  .operator-batch {
+    color: var(--lido-color-warning);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+    border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+    background: color-mix(in srgb, currentColor 15%, transparent);
+  }
+`;
+
+const highlightOperatorBatches = (
+  jsonString: string,
+  operatorId: number,
+): string => {
+  // Replace operator batches with wrapped spans
+  const highlighted = jsonString.replace(
+    new RegExp(`\\[${operatorId},(\\s*\\d+)\\]`, 'g'),
+    '<span class="operator-batch">$&</span>',
+  );
+  return highlighted;
+};
+
 const DepositQueueGraphTestPage: FC = () => {
   return (
     <Layout dummy title="Deposit Queue Graph Test">
@@ -42,6 +100,34 @@ const DepositQueueGraphTestPage: FC = () => {
             <MockDepositQueueProvider scenario={scenario.data}>
               <DepositQueueGraph />
             </MockDepositQueueProvider>
+            <StyledAccordion
+              summary={<AccordionSummary>Raw queue data</AccordionSummary>}
+            >
+              <QueueDataContainer>
+                {scenario.data.depositQueueBatches ? (
+                  <>
+                    <div>[</div>
+                    {scenario.data.depositQueueBatches.queues.map(
+                      (queue, index) => (
+                        <div
+                          key={index}
+                          className="queue"
+                          dangerouslySetInnerHTML={{
+                            __html: highlightOperatorBatches(
+                              JSON.stringify(queue),
+                              scenario.data.nodeOperatorId,
+                            ),
+                          }}
+                        ></div>
+                      ),
+                    )}
+                    <div>]</div>
+                  </>
+                ) : (
+                  <div>undefined (fallback mode)</div>
+                )}
+              </QueueDataContainer>
+            </StyledAccordion>
           </TestBlock>
         ))}
       </TestContainer>

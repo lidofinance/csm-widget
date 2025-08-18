@@ -128,7 +128,7 @@ const getPartVariant = (type: GraphPart) => {
         position: absolute;
         z-index: 1;
         width: 2px;
-        left: ${({ $offset }) =>
+        left: ${({ $offset = 50 }) =>
           !$offset ? '1px' : `calc(${$offset}% - 1px)`};
 
         top: -40%;
