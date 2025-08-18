@@ -7,7 +7,7 @@ import {
   useEthereumBalance,
   useNodeOperatorId,
   useOperatorBalance,
-  // useOperatorCurveId,
+  useOperatorCurveId,
   useShareLimit,
   useStakeLimit,
   useStethBalance,
@@ -63,7 +63,8 @@ export const useAddKeysFormNetworkData = (): [
     refetch: updateShareLimit,
   } = useShareLimit();
 
-  // const { data: curveId } = useOperatorCurveId(nodeOperatorId);
+  const { data: curveId, isPending: isCurveIdLoading } =
+    useOperatorCurveId(nodeOperatorId);
 
   // const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(`${nodeOperatorId}`);
 
@@ -115,6 +116,7 @@ export const useAddKeysFormNetworkData = (): [
       isStatusLoading,
       isBlockNumberLoading,
       isShareLimitLoading,
+      isCurveIdLoading,
     }),
     [
       isEthBalanceLoading,
@@ -125,6 +127,7 @@ export const useAddKeysFormNetworkData = (): [
       isStatusLoading,
       isBlockNumberLoading,
       isShareLimitLoading,
+      isCurveIdLoading,
     ],
   );
 
@@ -132,6 +135,7 @@ export const useAddKeysFormNetworkData = (): [
     {
       blockNumber: blockNumber ? Number(blockNumber) : undefined,
       nodeOperatorId,
+      curveId,
       // keysAvailable,
       stethBalance,
       wstethBalance,
