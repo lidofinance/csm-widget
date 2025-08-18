@@ -5,7 +5,7 @@ import {
   useOperatorCurveId,
   useOperatorInfo,
   useOperatorKeysWithStatus,
-  useEjectKeyFee,
+  useKeyEjectFee,
 } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
 import { hasStatus } from 'utils';
@@ -30,7 +30,7 @@ export const useEjectKeysFormNetworkData = (): [
   const { data: curveId, isPending: isCurveIdLoading } =
     useOperatorCurveId(nodeOperatorId);
   const { data: ejectKeyFee, isPending: isEjectKeyFeeLoading } =
-    useEjectKeyFee();
+    useKeyEjectFee();
 
   const {
     data: keys,
