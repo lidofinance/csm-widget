@@ -1,17 +1,15 @@
-import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
 import { MatomoLink } from '../matomo-link/matomo-link';
 
-import { ReactComponent as BeaconchaLink } from 'assets/icons/beaconcha-link.svg';
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
+import { ReactComponent as BeaconchaLink } from 'assets/icons/beaconcha-link.svg';
+import { useExternalLinks } from 'shared/hooks';
 
 type KeyLinkProps = {
   pubkey: string;
   statuses?: KEY_STATUS[];
 };
-
-const { beaconchain } = getExternalLinks();
 
 const NON_DEPOSITED_STATUSES: KEY_STATUS[] = [
   KEY_STATUS.DEPOSITABLE,
@@ -25,6 +23,7 @@ export const BeaconchainPubkeyLink: FC<KeyLinkProps> = ({
   pubkey,
   statuses,
 }) => {
+  const { beaconchain } = useExternalLinks();
   const href = beaconchain ? `${beaconchain}/validator/${pubkey}` : '';
   if (statuses?.every((status) => NON_DEPOSITED_STATUSES.includes(status)))
     return null;

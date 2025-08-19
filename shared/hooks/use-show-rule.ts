@@ -1,7 +1,6 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
 import { ICS_APPLY_FORM } from 'config/feature-flags/types';
-import { getExternalLinks } from 'consts/external-links';
 import {
   useDappStatus,
   useHasReportStealingRole,
@@ -14,6 +13,7 @@ import {
 import { useModifyContext } from 'providers/modify-provider';
 import { useCallback, useMemo } from 'react';
 import { useCanClaimICS, useCanCreateNodeOperator } from 'shared/hooks';
+import { useExternalLinks } from './use-external-links';
 
 export type ShowRule =
   | 'IS_CONNECTED_WALLET'
@@ -33,9 +33,8 @@ export type ShowRule =
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE';
 
-const { surveyApi } = getExternalLinks();
-
 export const useShowRule = () => {
+  const { surveyApi } = useExternalLinks();
   const { isAccountActive, address } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
@@ -102,6 +101,7 @@ export const useShowRule = () => {
       canClaimICS,
       featureFlags,
       isReportingRole,
+      surveyApi,
     ],
   );
 };

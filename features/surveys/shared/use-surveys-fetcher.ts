@@ -1,15 +1,14 @@
 import { useCallback } from 'react';
+import { useExternalLinks } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { FetcherError, standardFetcher } from 'utils';
 import { useAuth } from './survey-auth-provider';
-import { getExternalLinks } from 'consts/external-links';
-
-const { surveyApi } = getExternalLinks();
 
 export const useSurveysFetcher = <T, R = T>(
   transformIncoming?: (d: R) => T,
   transformOutcoming?: (d: T) => R,
 ) => {
+  const { surveyApi } = useExternalLinks();
   const { token, logout } = useAuth();
 
   const handleError = useCallback(
@@ -38,7 +37,7 @@ export const useSurveysFetcher = <T, R = T>(
         throw err;
       }
     },
-    [handleError, token, transformIncoming],
+    [handleError, surveyApi, token, transformIncoming],
   );
 
   const updater = useCallback(
@@ -61,7 +60,7 @@ export const useSurveysFetcher = <T, R = T>(
         throw err;
       }
     },
-    [handleError, token, transformIncoming, transformOutcoming],
+    [handleError, surveyApi, token, transformIncoming, transformOutcoming],
   );
 
   return [fetcher, updater] as const;

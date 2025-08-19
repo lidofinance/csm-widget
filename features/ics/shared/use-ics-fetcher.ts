@@ -1,12 +1,11 @@
 import { useCallback } from 'react';
+import { useExternalLinks } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { FetcherError, standardFetcher } from 'utils';
 import { useAuth } from './ics-auth-provider';
-import { getExternalLinks } from 'consts/external-links';
-
-const { surveyApi } = getExternalLinks();
 
 export const useIcsFetcher = <T, R = T>() => {
+  const { surveyApi } = useExternalLinks();
   const { token, logout } = useAuth();
 
   const handleError = useCallback(
@@ -35,7 +34,7 @@ export const useIcsFetcher = <T, R = T>() => {
         throw err;
       }
     },
-    [handleError, token],
+    [handleError, surveyApi, token],
   );
 
   const updater = useCallback(
@@ -56,7 +55,7 @@ export const useIcsFetcher = <T, R = T>() => {
         throw err;
       }
     },
-    [handleError, token],
+    [handleError, surveyApi, token],
   );
 
   return [fetcher, updater] as const;

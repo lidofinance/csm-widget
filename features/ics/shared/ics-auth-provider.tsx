@@ -1,4 +1,3 @@
-import { getExternalLinks } from 'consts/external-links';
 import { useDappStatus } from 'modules/web3';
 import { useModalActions } from 'providers/modal-provider';
 import {
@@ -9,7 +8,7 @@ import {
   useContext,
   useMemo,
 } from 'react';
-import { useSessionStorage } from 'shared/hooks';
+import { useExternalLinks, useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { extractError } from 'utils';
 import { useModalStages } from './use-modal-stages';
@@ -29,9 +28,8 @@ export const useAuth = () => {
   return context;
 };
 
-const { surveyApi } = getExternalLinks();
-
 export const IcsAuthProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { surveyApi } = useExternalLinks();
   const siwe = useSiwe();
   const { address } = useDappStatus();
   const [token, setToken] = useSessionStorage<string | undefined>(
@@ -69,7 +67,7 @@ export const IcsAuthProvider: FC<PropsWithChildren> = ({ children }) => {
     } catch (e) {
       modalStages.rejected();
     }
-  }, [closeModal, modalStages, setToken, siwe]);
+  }, [closeModal, modalStages, setToken, siwe, surveyApi]);
 
   const logout = useCallback(() => {
     setToken(undefined);
