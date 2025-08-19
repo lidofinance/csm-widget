@@ -108,8 +108,18 @@ When operator submits keys:
    - Keys only in Priority 5
    - Keys split between Priority 0 and 5
    - All priorities empty except Priority 5
+   - All priorities (P0-P5) active with keys
+   - Operator distributed across all 6 priorities
+   - All priorities active but operator has no keys
 
-5. **Submission Scenarios:**
+5. **All-Priority Scenarios:**
+
+   - Comprehensive queue state with all 6 priorities populated
+   - Operator presence across every priority level (P0-P5)
+   - All priorities extending beyond capacity limits
+   - Full queue activity without current operator participation
+
+6. **Submission Scenarios:**
    - Submitting to empty Priority 0
    - Priority 0 at limit, overflow to Priority 5
    - Large submission that spans multiple priorities
@@ -135,7 +145,7 @@ Before adding a new test scenario, verify:
 
 ## Testing Groups
 
-Test scenarios are organized into logical groups (38 total scenarios):
+Test scenarios are organized into logical groups (42 total scenarios):
 
 - **[Basic]** (5): Empty queue, active-only, within/over limits
 - **[Priority]** (5): Distribution across production priorities (P0, P4, P5)
@@ -147,4 +157,5 @@ Test scenarios are organized into logical groups (38 total scenarios):
 - **[Stress]** (2): Large-scale, high-volume testing
 - **[Coeff]** (1): Queue coefficient calculation edge cases
 - **[Reserved]** (4): Reserved priorities (P1-P3) for future feature testing
+- **[All Priorities]** (4): Comprehensive testing with all 6 priorities active
 - **[Real]** (3): Realistic edge cases - P5-only, far triggers, multi-priority operators

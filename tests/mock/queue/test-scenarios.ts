@@ -1353,6 +1353,53 @@ export const testScenarios: TestScenario[] = [
       },
     },
   },
+  {
+    title: '[All Priorities] All Priorities Active - No Current Operator',
+    description:
+      'All priorities (P0-P5) have keys but current operator has none',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 200,
+        queue: 480, // 80 + 70 + 90 + 60 + 100 + 80 = 480 total
+        capacity: 1000,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 0, // No keys in queue
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 50],
+            [3, 30],
+          ], // Priority 0: 80 total, no operator 1
+          [
+            [4, 40],
+            [5, 30],
+          ], // Priority 1: 70 total, no operator 1
+          [
+            [6, 55],
+            [7, 35],
+          ], // Priority 2: 90 total, no operator 1
+          [
+            [8, 35],
+            [9, 25],
+          ], // Priority 3: 60 total, no operator 1
+          [
+            [10, 60],
+            [11, 40],
+          ], // Priority 4: 100 total, no operator 1
+          [
+            [12, 50],
+            [13, 30],
+          ], // Priority 5: 80 total, no operator 1
+        ],
+      },
+    },
+  },
 
   // ========================================
   // GROUP L: REALISTIC EDGE CASES
