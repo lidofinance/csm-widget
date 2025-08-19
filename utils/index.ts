@@ -29,6 +29,7 @@ export * from './path';
 export * from './plural';
 export * from './rewards-tree-fetcher';
 export * from './scroll';
+export * from './serialize-bigint';
 export * from './standard-fetcher';
 export * from './track-matomo-event';
 export * from './wei-to-eth';

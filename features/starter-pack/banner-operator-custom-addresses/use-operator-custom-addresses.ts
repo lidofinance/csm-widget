@@ -5,5 +5,6 @@ export const useOperatorCustomAddresses = () => {
   return useSessionStorage<NodeOperatorId | undefined>(
     `operator-custom-address`,
     undefined,
+    BigInt,
   );
 };
