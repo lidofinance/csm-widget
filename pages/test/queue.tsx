@@ -142,9 +142,9 @@ const DepositQueueGraphTestPage: FC = () => {
 export default DepositQueueGraphTestPage;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const { developmentMode } = getSecretConfig();
+  const { defaultChain } = getSecretConfig();
 
-  if (!developmentMode) {
+  if (defaultChain === 1) {
     return { notFound: true };
   }
 
