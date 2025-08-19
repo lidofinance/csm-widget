@@ -1210,7 +1210,152 @@ export const testScenarios: TestScenario[] = [
   },
 
   // ========================================
-  // GROUP K: REALISTIC EDGE CASES
+  // GROUP K: ALL PRIORITIES SCENARIOS
+  // ========================================
+  {
+    title: '[All Priorities] Comprehensive Queue with All 6 Priorities',
+    description: 'All priorities (P0-P5) have keys - comprehensive queue state',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 300,
+        queue: 580, // 100 + 80 + 90 + 70 + 110 + 130 = 580 total
+        capacity: 1200,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 85, // Less than batch sum (105) - stale data
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 60],
+            [1, 40],
+          ], // Priority 0: 100 total
+          [
+            [3, 50],
+            [4, 30],
+          ], // Priority 1: 80 total
+          [
+            [1, 35],
+            [5, 55],
+          ], // Priority 2: 90 total
+          [
+            [6, 45],
+            [7, 25],
+          ], // Priority 3: 70 total
+          [
+            [1, 30],
+            [8, 80],
+          ], // Priority 4: 110 total
+          [
+            [9, 70],
+            [10, 40],
+            [11, 20],
+          ], // Priority 5: 130 total
+        ],
+      },
+    },
+  },
+  {
+    title: '[All Priorities] Operator Distributed Across All 6 Priorities',
+    description: 'Operator has keys in every priority queue (P0-P5)',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 250,
+        queue: 420, // 90 + 60 + 80 + 50 + 70 + 70 = 420 total
+        capacity: 800,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 110, // Less than batch sum (125) - some keys removed
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [1, 30],
+            [2, 60],
+          ], // Priority 0: Operator first, 90 total
+          [
+            [3, 40],
+            [1, 20],
+          ], // Priority 1: Operator second, 60 total
+          [
+            [1, 25],
+            [4, 55],
+          ], // Priority 2: Operator first, 80 total
+          [
+            [5, 35],
+            [1, 15],
+          ], // Priority 3: Operator last, 50 total
+          [
+            [1, 20],
+            [6, 50],
+          ], // Priority 4: Operator first, 70 total
+          [
+            [7, 35],
+            [1, 15],
+            [8, 20],
+          ], // Priority 5: Operator middle, 70 total
+        ],
+      },
+    },
+  },
+  {
+    title: '[All Priorities] All Priorities Over Capacity Limit',
+    description:
+      'Every priority extends beyond CSM capacity - extreme over-limit',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 480,
+        queue: 650, // 120 + 100 + 110 + 90 + 120 + 110 = 650 total
+        capacity: 500, // Only 20 capacity left - all priorities over limit
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 80, // Less than batch sum (95) - significant stale data
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 70],
+            [1, 50],
+          ], // Priority 0: 120 total (over limit)
+          [
+            [3, 60],
+            [4, 40],
+          ], // Priority 1: 100 total (over limit)
+          [
+            [1, 25],
+            [5, 85],
+          ], // Priority 2: 110 total (over limit)
+          [
+            [6, 50],
+            [7, 40],
+          ], // Priority 3: 90 total (over limit)
+          [
+            [1, 20],
+            [8, 100],
+          ], // Priority 4: 120 total (over limit)
+          [
+            [9, 70],
+            [10, 40],
+          ], // Priority 5: 110 total (over limit)
+        ],
+      },
+    },
+  },
+
+  // ========================================
+  // GROUP L: REALISTIC EDGE CASES
   // ========================================
   {
     title: '[Real] All Priorities Empty Except P5',

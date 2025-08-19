@@ -21,11 +21,11 @@ const getTitle = (type: GraphPart) => {
     case 'priority0':
       return 'Priority queue';
     case 'priority1':
-      return 'Priority 1 queue';
-    case 'priority2':
       return 'Priority 2 queue';
-    case 'priority3':
+    case 'priority2':
       return 'Priority 3 queue';
+    case 'priority3':
+      return 'Priority 4 queue';
     case 'priority4':
       return 'Legacy queue';
     case 'priority5':
@@ -33,11 +33,11 @@ const getTitle = (type: GraphPart) => {
     case 'priority0OverLimit':
       return 'Priority queue (over limit)';
     case 'priority1OverLimit':
-      return 'Priority 1 queue (over limit)';
-    case 'priority2OverLimit':
       return 'Priority 2 queue (over limit)';
-    case 'priority3OverLimit':
+    case 'priority2OverLimit':
       return 'Priority 3 queue (over limit)';
+    case 'priority3OverLimit':
+      return 'Priority 4 queue (over limit)';
     case 'priority4OverLimit':
       return 'Legacy queue (over limit)';
     case 'priority5OverLimit':
