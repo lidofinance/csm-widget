@@ -10,7 +10,7 @@ export const Keys8: Faq = {
       <p>
         Only keys that have not been deposited yet can be deleted. If a key has
         already been deposited, you can either{' '}
-        <FaqLink href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm/exiting-csm-validators">
+        <FaqLink href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores">
           exit the validator on the Consensus Layer (CL)
         </FaqLink>{' '}
         or use the triggerable withdrawals mechanism to eject your validator

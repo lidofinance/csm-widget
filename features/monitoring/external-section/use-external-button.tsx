@@ -2,13 +2,13 @@ import { ComponentProps, useMemo } from 'react';
 import { type ExternalButtonLink } from 'shared/components';
 
 import { ReactComponent as BeaconchaIcon } from 'assets/icons/beaconcha.svg';
-import { ReactComponent as EthseerIcon } from 'assets/icons/ethseer.svg';
+import { ReactComponent as MigaLabsIcon } from 'assets/icons/migalabs.svg';
 import { ReactComponent as LidoIcon } from 'assets/icons/lido.svg';
 import { ReactComponent as RatedIcon } from 'assets/icons/rated.svg';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   useBeaconchainDashboardLink,
-  useEthSeerLink,
+  useMigaLabsLink,
   useFeesMonitoningLink,
   useOperatorPortalLink,
   useRatedLink,
@@ -19,7 +19,7 @@ export const useExternalButtons = () => {
   const feesMonitoningLink = useFeesMonitoningLink();
   const operatorPortalLink = useOperatorPortalLink();
   const ratedLink = useRatedLink();
-  const ethSeerLink = useEthSeerLink();
+  const migaLabsLink = useMigaLabsLink();
 
   return useMemo(
     (): ComponentProps<typeof ExternalButtonLink>[] =>
@@ -40,11 +40,11 @@ export const useExternalButtons = () => {
           children:
             'Provides effectiveness ratings, APRs and other useful metrics',
         },
-        ethSeerLink && {
-          title: 'EthSeer',
-          icon: <EthseerIcon />,
-          href: ethSeerLink,
-          matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardExternalEthSeerLink,
+        migaLabsLink && {
+          title: 'MigaLabs',
+          icon: <MigaLabsIcon />,
+          href: migaLabsLink,
+          matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardExternalMigaLabsLink,
           children:
             'Provides real-time statistics of your validators’ performance',
         },
@@ -68,7 +68,7 @@ export const useExternalButtons = () => {
       ].filter((n) => !!n),
     [
       beaconchainDashboardLink,
-      ethSeerLink,
+      migaLabsLink,
       feesMonitoningLink,
       operatorPortalLink,
       ratedLink,

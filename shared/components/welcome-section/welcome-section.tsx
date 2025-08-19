@@ -2,6 +2,7 @@ import { FC, PropsWithChildren } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { MatomoLink } from 'shared/components';
+import { LIDO_OPERATOR_PORTAL_BASE } from 'consts/external-links';
 import {
   BlockStyled,
   CSMLogo,
@@ -23,7 +24,7 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => (
         Ethereum protocol as Node Operators. For a detailed description of the
         module, follow the{' '}
         <MatomoLink
-          href="https://operatorportal.lido.fi/modules/community-staking-module"
+          href={LIDO_OPERATOR_PORTAL_BASE}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
         >
           link

@@ -22,10 +22,7 @@ export const Keys1: Faq = {
       <p>
         A detailed guide on preparing all the validation tools for CSM can be
         found{' '}
-        <FaqLink href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm">
-          here
-        </FaqLink>
-        .
+        <FaqLink href="https://docs.lido.fi/run-on-lido/csm/">here</FaqLink>.
       </p>
       <p>
         A shorter flow of setting up a CSM validator for <FaqChainName /> looks
@@ -33,7 +30,7 @@ export const Keys1: Faq = {
       </p>
       <ol>
         <li>
-          <FaqLink href="https://dvt-homestaker.stakesaurus.com/keystore-generation-and-mev-boost/validator-key-generation">
+          <FaqLink href="https://docs.lido.fi/run-on-lido/csm/generating-validator-keys/key-generation-for-mainnet/">
             Generate new validator keys
           </FaqLink>{' '}
           setting the <code>withdrawal_address</code> to the Lido Withdrawal
@@ -45,7 +42,7 @@ export const Keys1: Faq = {
           WC type to <code>0x01</code> (do <strong>NOT</strong> make a deposit)
         </li>
         <li>
-          <FaqLink href="https://dvt-homestaker.stakesaurus.com/native-solo-staking-setup/validator-client-setup">
+          <FaqLink href="https://docs.lido.fi/run-on-lido/csm/troubleshooting/setting-the-fee-recipient-for-csm-validators">
             Configure your validator client
           </FaqLink>{' '}
           (and/or beacon node) setting the <code>fee_recipient</code> flag to
@@ -91,7 +88,7 @@ export const Keys1: Faq = {
           </li>
         </FaqOnlyMainnet>
         <li>
-          <FaqLink href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm/upload-remove-view-validator-keys">
+          <FaqLink href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/upload-remove-view-validator-keys#upload-keys">
             Upload the newly generated deposit data
           </FaqLink>{' '}
           file pertaining to your CSM keystores onto{' '}

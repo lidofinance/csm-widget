@@ -10,7 +10,7 @@ export const Keys9: Faq = {
       <p>
         Exiting CSM validator keys works the same way as exiting solo staking
         validator keys. The guide on how to exit the validator can be found{' '}
-        <FaqLink href="https://dvt-homestaker.stakesaurus.com/bonded-validators-setup/lido-csm/exiting-csm-validators#manual-exit">
+        <FaqLink href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores">
           here
         </FaqLink>
         .
