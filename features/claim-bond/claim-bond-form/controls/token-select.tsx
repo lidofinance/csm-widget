@@ -16,6 +16,7 @@ import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import { getExternalLinks } from 'consts/external-links';
 
 export const TokenSelect: React.FC = () => {
   const [token, claimRewards] = useWatch<
@@ -24,6 +25,7 @@ export const TokenSelect: React.FC = () => {
   >({ name: ['token', 'claimRewards'] });
   const { loading, maxValues, isContract, isSplitter } = useClaimBondFormData();
   const isLoading = loading.isBondLoading || loading.isRewardsLoading;
+  const { stakeWidget } = getExternalLinks();
 
   const { field: unlockField } = useController<
     ClaimBondFormInputType,
@@ -57,7 +59,14 @@ export const TokenSelect: React.FC = () => {
                 loading={isLoading}
               />
               <YouWillReceive
-                waitingTime="~ 1-5 days"
+                waitingTime={
+                  <>
+                    Check on{' '}
+                    <MatomoLink href={`${stakeWidget}/withdrawals/request`}>
+                      stake widget
+                    </MatomoLink>
+                  </>
+                }
                 receive="withdrawal NFT"
               />
             </Stack>
