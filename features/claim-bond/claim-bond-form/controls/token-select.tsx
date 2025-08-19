@@ -1,3 +1,4 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Checkbox } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
@@ -12,10 +13,10 @@ import {
   YouWillReceive,
 } from 'shared/components';
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
+import { useExternalLinks } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TokenSelect: React.FC = () => {
   const [token, claimRewards] = useWatch<
@@ -24,6 +25,7 @@ export const TokenSelect: React.FC = () => {
   >({ name: ['token', 'claimRewards'] });
   const { loading, maxValues, isContract, isSplitter } = useClaimBondFormData();
   const isLoading = loading.isBondLoading || loading.isRewardsLoading;
+  const { stakeWidget } = useExternalLinks();
 
   const { field: unlockField } = useController<
     ClaimBondFormInputType,
@@ -57,7 +59,14 @@ export const TokenSelect: React.FC = () => {
                 loading={isLoading}
               />
               <YouWillReceive
-                waitingTime="~ 1-5 days"
+                waitingTime={
+                  <>
+                    Check on{' '}
+                    <MatomoLink href={`${stakeWidget}/withdrawals/request`}>
+                      stake widget
+                    </MatomoLink>
+                  </>
+                }
                 receive="withdrawal NFT"
               />
             </Stack>
