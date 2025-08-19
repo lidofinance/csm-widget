@@ -2,6 +2,8 @@ import { Text } from '@lidofinance/lido-ui';
 import { FC, PropsWithChildren } from 'react';
 import { MatomoLink, Stack } from 'shared/components';
 import { Number, StepContent, StepWrapper } from './styles';
+import { LocalLink } from 'shared/navigate';
+import { PATH } from 'consts';
 
 export const Step: FC<PropsWithChildren<{ number: string; title: string }>> = ({
   number,
@@ -27,9 +29,12 @@ export const ApplicationFlow: FC = () => {
       </Text>
       <Step number="1" title="Application submission">
         People interested in being included in{' '}
-        <MatomoLink>the Identified Community Staker list</MatomoLink> must
-        submit the application on the “<MatomoLink>Application form</MatomoLink>
-        ” sub-tab
+        <MatomoLink href="https://github.com/lidofinance/community-staking-module/blob/develop/artifacts/mainnet/ics/addresses.json">
+          the Identified Community Staker list
+        </MatomoLink>{' '}
+        must submit the application on the “
+        <LocalLink href={PATH.TYPE_ICS_APPLY}>Application form</LocalLink>”
+        sub-tab
       </Step>
       <Step number="2" title="Application review">
         After submission, the application undergoes semi-automated checks to
