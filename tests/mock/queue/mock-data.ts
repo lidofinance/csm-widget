@@ -23,8 +23,9 @@ export type MockFormDataParams = {
 };
 
 export type MockDepositQueueParams = {
-  // Array of queues, each containing batches with [nodeOperatorId, keysCount] pairs
-  queues: Array<Array<[number, number]>>;
+  // Array of priority queues, each containing batches with [nodeOperatorId, keysCount] pairs
+  // Index 0 = Priority 0 (highest), Index 5 = Priority 5 (lowest)
+  priorities: Array<Array<[number, number]>>;
 };
 
 export type MockCurveParams = {
@@ -89,10 +90,10 @@ export const createMockOperatorInfo = ({
 };
 
 export const createMockDepositQueueBatches = ({
-  queues,
+  priorities,
 }: MockDepositQueueParams): DepositQueueBatch[][] => {
-  const mappedQueues = queues.map((queueBatches) =>
-    queueBatches.map(([nodeOperatorId, keysCount]) => ({
+  const mappedPriorities = priorities.map((priorityBatches) =>
+    priorityBatches.map(([nodeOperatorId, keysCount]) => ({
       nodeOperatorId: BigInt(nodeOperatorId),
       keysCount: BigInt(keysCount),
     })),
@@ -101,7 +102,7 @@ export const createMockDepositQueueBatches = ({
   // Always return exactly 6 arrays (priorities 0-5)
   const result: DepositQueueBatch[][] = [];
   for (let i = 0; i < 6; i++) {
-    result.push(mappedQueues[i] || []);
+    result.push(mappedPriorities[i] || []);
   }
 
   return result;

@@ -7,8 +7,11 @@ export type TestScenario = {
 };
 
 export const testScenarios: TestScenario[] = [
+  // ========================================
+  // GROUP A: BASIC QUEUE STATES
+  // ========================================
   {
-    title: 'Empty Queue',
+    title: '[Basic] Empty Queue',
     description: 'No active keys, no queued keys - fresh start state',
     data: {
       nodeOperatorId: 1,
@@ -24,16 +27,14 @@ export const testScenarios: TestScenario[] = [
         depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
-          [], // Empty queue
-        ],
+        priorities: [[], [], [], [], [], []], // All priorities empty
       },
     },
   },
   {
-    title: 'Active Keys Only - No Queue',
+    title: '[Basic] Active Keys Only - No Queue',
     description:
-      'Only active validators, empty queue - typical initial operator state',
+      'Only active validators, empty queue - typical established operator',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -42,22 +43,19 @@ export const testScenarios: TestScenario[] = [
         capacity: 1000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 0, // No keys in queue, so can't deposit any
+        depositableValidatorsCount: 0, // No keys in queue
       },
       formData: {
         depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
-          [], // Empty queue - no queued keys
-        ],
+        priorities: [[], [], [], [], [], []], // All priorities empty
       },
     },
   },
   {
-    title: 'Queue Within CSM Limit',
-    description:
-      'Active validators plus queue that stays within CSM capacity. Operator batches at pos2 and pos4.',
+    title: '[Basic] Queue Within CSM Limit',
+    description: 'Active + queue stays within CSM capacity',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -66,27 +64,29 @@ export const testScenarios: TestScenario[] = [
         capacity: 1000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 12, // <= 75 total keys (50+25)
+        depositableValidatorsCount: 60, // Realistic: slightly less than batch sum (65) due to stale data
       },
       formData: {
         depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
+          [[1, 45]], // Priority 0: 45 keys for operator 1
+          [],
+          [],
+          [], // Priorities 1-3: Empty (reserved)
+          [[2, 40]], // Priority 4: Other operator
           [
-            [2, 40], // Other operator: 40 keys
-            [1, 50], // Our operator: 50 keys (pos2)
-            [3, 35], // Other operator: 35 keys
-            [1, 25], // Our operator: 25 more keys (pos4)
-          ],
+            [1, 20],
+            [3, 45],
+          ], // Priority 5: 20 keys for operator 1, others
         ],
       },
     },
   },
   {
-    title: 'Queue Exactly at CSM Limit',
-    description:
-      'Queue fills exactly to CSM capacity. Operator batches at pos2-3 (adjacent, should merge).',
+    title: '[Basic] Queue Exactly at CSM Limit',
+    description: 'Queue fills exactly to CSM capacity',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -95,174 +95,589 @@ export const testScenarios: TestScenario[] = [
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 8, // <= 45 total keys (15+30)
+        depositableValidatorsCount: 45, // Exactly matches operator batch sum
       },
       formData: {
         depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
           [
-            [2, 35], // Other operator: 35 keys
-            [1, 15], // Our operator: 15 keys (pos2)
-            [1, 30], // Our operator: 30 keys (pos3) - adjacent to pos2, should merge
-            [3, 20], // Other operator: 20 keys
-          ],
+            [2, 35],
+            [1, 30],
+          ], // Priority 0: operator at end
+          [],
+          [],
+          [], // Reserved priorities
+          [], // Priority 4: empty
+          [
+            [1, 15],
+            [3, 20],
+          ], // Priority 5: operator first, others
         ],
       },
     },
   },
   {
-    title: 'Queue Exceeds CSM Limit',
-    description:
-      'Queue extends beyond CSM capacity. Operator batches at pos2 and pos5.',
+    title: '[Basic] Queue Exceeds CSM Limit',
+    description: 'Queue extends beyond CSM capacity - over limit scenario',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
         active: 300,
-        queue: 250, // 150 under limit + 100 over limit = 250 total
-        capacity: 450,
+        queue: 250,
+        capacity: 450, // Only 150 capacity left
       },
       operatorInfo: {
-        depositableValidatorsCount: 20, // <= 100 total keys (60+40)
+        depositableValidatorsCount: 80, // Less than batch sum (90) - keys were removed
       },
       formData: {
         depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
           [
-            [2, 80], // Other operator: 80 keys
-            [1, 60], // Our operator: 60 keys (pos2)
-            [3, 55], // Other operator: 55 keys
-            [4, 15], // Other operator: 15 keys
-            [1, 40], // Our operator: 40 more keys (pos5)
-          ],
+            [2, 60],
+            [1, 50],
+          ], // Priority 0: 110 total
+          [],
+          [],
+          [], // Reserved
+          [[3, 40]], // Priority 4: 40 keys
+          [
+            [1, 40],
+            [4, 60],
+          ], // Priority 5: 100 total
         ],
       },
     },
   },
+
+  // ========================================
+  // GROUP B: PRIORITY DISTRIBUTION (0, 4, 5)
+  // ========================================
   {
-    title: 'Keys Being Added (Pending Submission)',
-    description:
-      'New keys pending submission. Operator batches at pos3-4 (adjacent, should merge).',
+    title: '[Priority] Keys Only in Priority 0',
+    description: 'All validators in highest priority queue only',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
-        active: 350,
-        queue: 200,
-        capacity: 1000,
+        active: 200,
+        queue: 180,
+        capacity: 600,
       },
       operatorInfo: {
-        depositableValidatorsCount: 15, // <= 80 total keys (45+35)
+        depositableValidatorsCount: 70, // Less than batch sum (80) - some keys removed
       },
       formData: {
-        depositDataLength: 25, // This creates the "added" state
+        depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
           [
-            [2, 65], // Other operator: 65 keys
-            [3, 30], // Other operator: 30 keys
-            [1, 45], // Our operator: 45 keys (pos3)
-            [1, 35], // Our operator: 35 more keys (pos4) - adjacent to pos3, should merge
-            [4, 25], // Other operator: 25 keys
-          ],
+            [1, 80],
+            [2, 60],
+            [3, 40],
+          ], // Priority 0: All keys here
+          [],
+          [],
+          [],
+          [],
+          [], // All other priorities empty
         ],
       },
     },
   },
   {
-    title: 'Queue Over Limit with Pending Keys',
-    description:
-      'Queue over limit with pending keys. Operator batches at pos3 and pos5.',
+    title: '[Priority] Keys Only in Legacy Queue (P4)',
+    description: 'All validators in legacy priority queue only',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 150,
+        queue: 200,
+        capacity: 500,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 55, // Matches batch sum exactly
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [],
+          [],
+          [],
+          [], // Priorities 0-3: Empty
+          [
+            [2, 70],
+            [1, 55],
+            [3, 45],
+            [4, 30],
+          ], // Priority 4: All keys here
+          [], // Priority 5: Empty
+        ],
+      },
+    },
+  },
+  {
+    title: '[Priority] Keys Only in General Queue (P5)',
+    description: 'All validators in general (lowest) priority queue only',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 100,
+        queue: 250,
+        capacity: 600,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 65, // Less than batch sum (75) - stale data
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [],
+          [],
+          [],
+          [],
+          [], // Priorities 0-4: Empty
+          [
+            [2, 80],
+            [1, 75],
+            [3, 60],
+            [4, 35],
+          ], // Priority 5: All keys here
+        ],
+      },
+    },
+  },
+  {
+    title: '[Priority] Keys in Priority 0 and 5 Only',
+    description: 'Edge priorities only - highest and lowest priority',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 200,
+        queue: 220,
+        capacity: 600,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 85, // Less than batch sum (90) - some removal
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 50],
+            [1, 60],
+          ], // Priority 0: 110 total
+          [],
+          [],
+          [], // Priorities 1-3: Reserved
+          [], // Priority 4: Empty
+          [
+            [1, 30],
+            [3, 80],
+          ], // Priority 5: 110 total
+        ],
+      },
+    },
+  },
+  {
+    title: '[Priority] Keys in Priority 0, 4, and 5',
+    description: 'Realistic distribution across production priorities',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
         active: 250,
-        queue: 350, // 200 under limit + 150 over limit = 350 total
-        capacity: 450,
+        queue: 300,
+        capacity: 700,
       },
       operatorInfo: {
-        depositableValidatorsCount: 35, // <= 125 total keys (70+55)
-      },
-      formData: {
-        depositDataLength: 10, // Keys being added
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            [2, 90], // Other operator: 90 keys
-            [3, 60], // Other operator: 60 keys
-            [1, 70], // Our operator: 70 keys (pos3)
-            [4, 40], // Other operator: 40 keys
-            [1, 55], // Our operator: 55 more keys (pos5)
-            [5, 35], // Other operator: 35 keys
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Small Queue Triggering Far View',
-    description:
-      'Small queue triggers far-away indicator. Operator batch at pos2.',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 50,
-        queue: 25,
-        capacity: 2000, // Large capacity to trigger far away view
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 3, // <= 15 total keys
+        depositableValidatorsCount: 95, // Less than batch sum (105) - realistic stale data
       },
       formData: {
         depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
           [
-            [2, 10], // Other operator: 10 keys
-            [1, 15], // Our operator: 15 keys at pos2
-          ],
+            [1, 50],
+            [2, 40],
+          ], // Priority 0: 90 total
+          [],
+          [],
+          [], // Reserved priorities
+          [
+            [3, 60],
+            [1, 35],
+          ], // Priority 4: 95 total
+          [
+            [1, 20],
+            [4, 55],
+            [5, 40],
+          ], // Priority 5: 115 total
         ],
       },
     },
   },
+
+  // ========================================
+  // GROUP C: OPERATOR POSITION SCENARIOS
+  // ========================================
   {
-    title: 'Large Validator Counts Test',
-    description: 'High-volume scenario. Operator batches at pos2 and pos5.',
+    title: '[Position] Operator at Beginning of Queues',
+    description: 'Operator batches positioned at start of priority segments',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
-        active: 5000,
-        queue: 2000,
-        capacity: 10000,
+        active: 300,
+        queue: 320, // 120 + 120 + 80 = 320 total
+        capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 500, // <= 750 total keys (400+350)
+        depositableValidatorsCount: 70, // Less than batch sum (80)
       },
       formData: {
-        depositDataLength: 100,
+        depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
           [
-            [2, 600], // Other operator: 600 keys
-            [1, 400], // Our operator: 400 keys (pos2)
-            [3, 300], // Other operator: 300 keys
-            [4, 250], // Other operator: 250 keys
-            [1, 350], // Our operator: 350 more keys (pos5)
-            [5, 100], // Other operator: 100 keys
-          ],
+            [1, 50],
+            [2, 40],
+            [3, 30],
+          ], // Priority 0: Operator first
+          [],
+          [],
+          [], // Reserved
+          [
+            [1, 30],
+            [4, 50],
+            [5, 40],
+          ], // Priority 4: Operator first
+          [
+            [6, 30],
+            [7, 20],
+            [8, 30],
+          ], // Priority 5: No operator
         ],
       },
     },
   },
   {
-    title: 'Edge Case - Zero Capacity',
-    description: 'Testing edge case with zero capacity',
+    title: '[Position] Operator at End of Queues',
+    description: 'Operator batches positioned at end of priority segments',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 250,
+        queue: 260,
+        capacity: 700,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 65, // Less than batch sum (75)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 60],
+            [3, 40],
+            [1, 45],
+          ], // Priority 0: Operator last
+          [],
+          [],
+          [], // Reserved
+          [], // Priority 4: Empty
+          [
+            [4, 50],
+            [5, 35],
+            [1, 30],
+          ], // Priority 5: Operator last
+        ],
+      },
+    },
+  },
+  {
+    title: '[Position] Operator with Adjacent Batches (Should Merge)',
+    description:
+      'Consecutive operator batches that should merge in visualization',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 300,
+        queue: 285, // 130 + 85 + 70 = 285 total
+        capacity: 800,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 85, // Matches batch sum exactly
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 30],
+            [1, 25],
+            [1, 35],
+            [3, 40],
+          ], // Priority 0: Adjacent operator batches pos 2-3
+          [],
+          [],
+          [], // Reserved
+          [
+            [1, 20],
+            [1, 5],
+            [4, 60],
+          ], // Priority 4: Adjacent operator batches pos 1-2
+          [
+            [5, 40],
+            [6, 30],
+          ], // Priority 5: No operator
+        ],
+      },
+    },
+  },
+  {
+    title: '[Position] Operator as Only Batch in Priority',
+    description: 'Priority segments where operator is the sole participant',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 200,
+        queue: 140,
+        capacity: 500,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 90, // Matches batch sum exactly
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [[1, 60]], // Priority 0: Only operator
+          [],
+          [],
+          [], // Reserved
+          [[1, 30]], // Priority 4: Only operator
+          [
+            [2, 40],
+            [3, 10],
+          ], // Priority 5: Other operators only
+        ],
+      },
+    },
+  },
+  {
+    title: '[Position] Operator Single Key at Very End of Queue',
+    description:
+      'Operator has exactly 1 key positioned at the absolute end of all queues',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 200,
+        queue: 201, // 200 + 1 = 201 total
+        capacity: 500,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 1, // Exactly matches batch sum
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 80],
+            [3, 60],
+          ], // Priority 0: Other operators
+          [],
+          [],
+          [], // Reserved priorities
+          [
+            [4, 50],
+            [5, 40],
+          ], // Priority 4: Other operators
+          [
+            [6, 30],
+            [7, 20],
+            [8, 10],
+            [1, 1],
+          ], // Priority 5: Operator at very end
+        ],
+      },
+    },
+  },
+  {
+    title: '[Position] Single Key at End + Submitting One More',
+    description: 'Operator has 1 key at queue end and submits 1 additional key',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 150,
+        queue: 181, // 180 + 1 = 181 total
+        capacity: 400,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 1, // Current queue keys
+        totalDepositedKeys: 20,
+        enqueuedCount: 1,
+      },
+      formData: {
+        depositDataLength: 1, // Submitting 1 more key
+      },
+      curveParams: {
+        priority: 0,
+        maxDeposits: 30, // Room for 9 more (30 - 20 deposited - 1 queued)
+        lowestPriority: 5,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 70],
+            [3, 50],
+          ], // Priority 0: Other operators, will receive the new key
+          [],
+          [],
+          [], // Reserved priorities
+          [[4, 60]], // Priority 4: Other operator
+          [
+            [5, 40],
+            [6, 20],
+            [1, 1],
+          ], // Priority 5: Operator at very end with 1 key
+        ],
+      },
+    },
+  },
+
+  // ========================================
+  // GROUP D: STALE BATCH DATA EDGE CASES
+  // ========================================
+  {
+    title: '[Stale] Operator with Zero Depositable Keys',
+    description:
+      'All operator keys removed but batches still in queue (stale data)',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 400,
+        queue: 200,
+        capacity: 800,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 0, // All keys were removed
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [1, 40],
+            [2, 50],
+          ], // Priority 0: Stale operator batch
+          [],
+          [],
+          [], // Reserved
+          [], // Priority 4: Empty
+          [
+            [1, 35],
+            [3, 75],
+          ], // Priority 5: More stale operator batches
+        ],
+      },
+    },
+  },
+  {
+    title: '[Stale] Large Batch Sum vs Small Depositable Count',
+    description: 'Significant difference due to key removals',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 350,
+        queue: 250,
+        capacity: 800,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 15, // Very small compared to batch sum (120)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [1, 80],
+            [2, 60],
+          ], // Priority 0: Large stale batch
+          [],
+          [],
+          [], // Reserved
+          [
+            [1, 40],
+            [3, 70],
+          ], // Priority 4: More stale batches
+          [], // Priority 5: Empty
+        ],
+      },
+    },
+  },
+  {
+    title: '[Stale] Multiple Operators with Stale Data',
+    description:
+      'Several operators have inconsistent batch vs depositable counts',
+    data: {
+      nodeOperatorId: 2, // Focus on operator 2
+      shareLimit: {
+        active: 300,
+        queue: 400,
+        capacity: 900,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 25, // Much less than batch sum (80)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [1, 100],
+            [2, 50],
+          ], // Priority 0: Op 1 has 100, Op 2 has 50 (stale)
+          [],
+          [],
+          [], // Reserved
+          [
+            [2, 30],
+            [3, 90],
+          ], // Priority 4: More stale data for Op 2
+          [
+            [4, 60],
+            [5, 70],
+          ], // Priority 5: Other operators
+        ],
+      },
+    },
+  },
+
+  // ========================================
+  // GROUP E: CAPACITY & LIMIT EDGE CASES
+  // ========================================
+  {
+    title: '[Edge] Zero Capacity',
+    description: 'Testing edge case with zero CSM capacity',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -271,882 +686,425 @@ export const testScenarios: TestScenario[] = [
         capacity: 0, // Edge case
       },
       operatorInfo: {
-        depositableValidatorsCount: 10, // <= 35 total keys (20+15)
-      },
-      formData: {
-        depositDataLength: 5,
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            [1, 20], // Our operator: 20 keys
-            [2, 15], // Other operator: 15 keys
-            [1, 15], // Our operator: 15 more keys
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Extremely Low Capacity Limit',
-    description:
-      'Very small capacity limit (2 keys) with queue heavily over limit',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 1, // Only 1 active key
-        queue: 150, // Large queue
-        capacity: 2, // Extremely low capacity - only 1 more key allowed
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 20, // <= 25 total keys
-      },
-      formData: {
-        depositDataLength: 3, // Trying to add more keys
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0
-            [3, 50], // Other operator: 50 keys
-            [2, 40], // Other operator: 40 keys
-          ],
-          [
-            // Priority 1
-            [3, 35], // Other operator: 35 keys
-            [1, 25], // Our operator: 25 keys
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Extremely Low Capacity with Far Away View',
-    description:
-      'Tiny capacity limit (3 keys) with very small queue triggering far view',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 100, // Only 1 active key
-        queue: 100, // Very small queue - just 1 key
-        capacity: 50, // Extremely low capacity - only 2 more keys allowed
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 0, // Very small depositable count
-      },
-      formData: {
-        depositDataLength: 0, // No keys being added
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0 - minimal queue
-            [2, 100], // Our operator: just 100 keys
-          ],
-          [], // Priority 1 - empty
-          [], // Priority 2 - empty
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
-          [], // Priority 5 - empty
-        ],
-      },
-    },
-  },
-  {
-    title: 'Operator with Adjacent Batches',
-    description:
-      'Operator has consecutive batches that should merge into single spans. P0(highest):pos3-4(merged), P1:pos2-3(merged), P2:single, P3:all merged',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 300,
-        queue: 380,
-        capacity: 850,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 28, // <= 230 total keys (25+35+20+30+60+15+25+20)
+        depositableValidatorsCount: 25,
       },
       formData: {
         depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
+          [[1, 30]], // Priority 0: Over limit
+          [],
+          [],
+          [],
+          [], // Other priorities
+          [[2, 20]], // Priority 5: Other operator
+        ],
+      },
+    },
+  },
+  {
+    title: '[Edge] Extremely Low Capacity (2 keys room)',
+    description: 'Very tight capacity limit with large queue',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 198,
+        queue: 150,
+        capacity: 200, // Only 2 keys room left
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 35, // Less than batch sum (45)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [[2, 50]], // Priority 0: Other operator, over limit
+          [],
+          [],
+          [], // Reserved
+          [], // Priority 4: Empty
           [
-            // Priority 0
-            [2, 30],
-            [3, 40],
-            [1, 25], // pos3
-            [1, 35], // pos4 - adjacent to pos3, should merge
-            [4, 20],
-          ],
+            [1, 45],
+            [3, 55],
+          ], // Priority 5: All over limit
+        ],
+      },
+    },
+  },
+  {
+    title: '[Edge] Single Key Scenarios',
+    description: 'Minimum width testing with single validator keys',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 100,
+        queue: 6,
+        capacity: 200,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 3, // Less than batch sum (4)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [[1, 2]], // Priority 0: 2 keys
+          [],
+          [],
+          [], // Reserved
+          [[1, 1]], // Priority 4: 1 key
           [
-            // Priority 1
-            [5, 45],
-            [1, 20], // pos2
-            [1, 30], // pos3 - adjacent to pos2, should merge
-            [6, 25],
-          ],
-          [
-            // Priority 2
-            [7, 50],
-            [8, 40],
-            [1, 60], // pos3 - single batch
-          ],
-          [
-            // Priority 3 - all operator batches, should merge into one span
-            [1, 15], // pos1
-            [1, 25], // pos2
-            [1, 20], // pos3
-          ],
+            [1, 1],
+            [2, 2],
+          ], // Priority 5: Mixed
         ],
       },
     },
   },
 
-  // Enhanced Multi-Queue Test Scenarios
+  // ========================================
+  // GROUP F: KEY SUBMISSION SCENARIOS
+  // ========================================
   {
-    title: 'Keys Across All Priority Levels',
-    description:
-      'All 6 priority levels (P0=highest to P5=lowest). Operator: P0:pos2-3(merged), P1:pos3, P2:pos1, P3:pos1+3, P4:pos2, P5:pos2.',
+    title: '[Submit] Submitting to Empty Priority 0',
+    description: 'Priority 0 empty, all 20 submitted keys should go to P0',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
         active: 300,
-        queue: 600, // Total across all priorities
-        capacity: 1200,
+        queue: 100,
+        capacity: 600,
       },
       operatorInfo: {
-        depositableValidatorsCount: 25, // <= 225 total keys (50+20+25+40+90)
+        depositableValidatorsCount: 0, // No current queue keys
+        totalDepositedKeys: 10,
+        enqueuedCount: 0,
       },
       formData: {
-        depositDataLength: 0,
+        depositDataLength: 20, // Submitting 20 keys
+      },
+      curveParams: {
+        priority: 0,
+        maxDeposits: 50, // Room for 40 more (50 - 10 deposited)
+        lowestPriority: 5,
       },
       depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0
-            [2, 30],
-            [1, 50], // pos2
-            [1, 20], // pos3 - adjacent to pos2, should merge
-          ],
-          [
-            // Priority 1
-            [3, 40],
-            [4, 35],
-            [1, 25], // 100 keys total
-          ],
-          [
-            // Priority 2
-            [1, 40], // pos1
-            [5, 60],
-          ],
-          [], // Priority 3 - empty
-          [
-            // Priority 4
-            [6, 80],
-            [7, 70], // 150 keys total
-          ],
-          [
-            // Priority 5
-            [8, 60],
-            [1, 90], // pos2
-          ],
+        priorities: [
+          [], // Priority 0: Empty, will receive all 20 keys
+          [],
+          [],
+          [], // Reserved
+          [[2, 40]], // Priority 4: Other operator
+          [[3, 60]], // Priority 5: Other operator
         ],
       },
     },
   },
   {
-    title: 'Keys Only in Priority 0 and 5',
-    description:
-      'Edge priorities only - highest (P0) and lowest (P5) priority. Operator at P0:pos2, P5:pos2.',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 200,
-        queue: 300,
-        capacity: 800,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 18, // <= 180 total keys (100+80)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0
-            [2, 50],
-            [1, 100], // pos2
-          ],
-          [], // Priority 1 - empty
-          [], // Priority 2 - empty
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
-          [
-            // Priority 5
-            [3, 70],
-            [1, 80], // pos2
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Keys in Priority 0, 4, and 5',
-    description:
-      'Sparse distribution - keys in highest (P0), second-lowest (P4), and lowest (P5) priorities only',
+    title: '[Submit] Priority 0 Partial, Split Submission',
+    description: 'P0 partially full, keys split between P0 and P5',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
         active: 250,
-        queue: 320,
-        capacity: 900,
+        queue: 150,
+        capacity: 600,
       },
       operatorInfo: {
-        depositableValidatorsCount: 22, // <= 150 total keys (80+50+20)
+        depositableValidatorsCount: 0,
+        totalDepositedKeys: 25,
+        enqueuedCount: 10,
       },
       formData: {
-        depositDataLength: 0,
+        depositDataLength: 18, // Submitting 18 keys
+      },
+      curveParams: {
+        priority: 0,
+        maxDeposits: 40, // Only 5 slots left (40 - 25 deposited - 10 queued)
+        lowestPriority: 5,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
           [
-            // Priority 0
-            [1, 80],
             [2, 60],
-          ],
-          [], // Priority 1 - empty
-          [], // Priority 2 - empty
-          [], // Priority 3 - empty
-          [
-            // Priority 4
-            [3, 70],
-            [1, 50],
-          ],
-          [
-            // Priority 5
-            [4, 40],
-            [1, 20],
-          ],
+            [3, 40],
+          ], // Priority 0: Has other operators
+          [],
+          [],
+          [], // Reserved
+          [], // Priority 4: Empty
+          [[4, 50]], // Priority 5: Will receive overflow (13 keys)
         ],
       },
     },
   },
   {
-    title: 'Near Capacity Limit with Uneven Distribution',
-    description:
-      'Very tight capacity limit (5 keys room) with most keys in lowest priority (P5)',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 200,
-        queue: 106, // 1+2+1+2+100 = 106 total queue keys
-        capacity: 205, // Only 5 keys room left
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 8, // <= 50 total keys (from priority 5)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [], // Priority 0 - empty
-          [
-            // Priority 1
-            [2, 1], // 1 key
-          ],
-          [
-            // Priority 2
-            [3, 2], // 2 keys
-          ],
-          [
-            // Priority 3
-            [4, 1], // 1 key
-          ],
-          [
-            // Priority 4
-            [5, 2], // 2 keys
-          ],
-          [
-            // Priority 5
-            [1, 50],
-            [6, 40],
-            [7, 10], // 100 keys total
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Multiple Priorities Crossing CSM Limit',
-    description: 'Some priority levels under limit, others over CSM capacity',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 400,
-        queue: 500,
-        capacity: 600, // Only 200 more capacity
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 22, // <= 170 total keys (60+50+60)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0 - under limit
-            [1, 60],
-            [2, 40],
-          ],
-          [
-            // Priority 1 - under limit
-            [3, 50],
-            [1, 50],
-          ],
-          [
-            // Priority 2 - crosses limit boundary
-            [4, 80],
-            [5, 70],
-          ],
-          [
-            // Priority 3 - over limit
-            [1, 60],
-            [6, 40],
-          ],
-          [
-            // Priority 4 - over limit
-            [7, 50],
-          ],
-          [], // Priority 5 - empty
-        ],
-      },
-    },
-  },
-  {
-    title: 'Single Operator Across Multiple Priorities',
-    description:
-      'Operator across priorities at: P0:pos1, P1:pos2, P2:none, P3:pos1+3, P4:pos1, P5:none.',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 350,
-        queue: 450,
-        capacity: 1000,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 45, // <= 180 total keys (25+40+60+20+35)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0
-            [1, 25], // pos1
-            [2, 30],
-            [3, 20],
-          ],
-          [
-            // Priority 1
-            [4, 35],
-            [1, 40], // pos2
-          ],
-          [
-            // Priority 2
-            [5, 50], // Operator 1 has no keys
-          ],
-          [
-            // Priority 3
-            [1, 60],
-            [6, 30],
-            [1, 20], // Operator 1 has 80 keys
-          ],
-          [
-            // Priority 4
-            [1, 35], // pos1
-            [7, 45],
-          ],
-          [
-            // Priority 5
-            [8, 40],
-            [9, 30], // Operator 1 has no keys
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'One Key Per Priority Level',
-    description:
-      'Each priority level contains exactly one validator for minimum width testing',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 100,
-        queue: 6, // 1 key per priority
-        capacity: 200,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 1, // <= 1 total key (only operator 1 is in priority 0)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [[1, 1]], // Priority 0 - 1 key
-          [[2, 1]], // Priority 1 - 1 key
-          [[3, 1]], // Priority 2 - 1 key
-          [[4, 1]], // Priority 3 - 1 key
-          [[5, 1]], // Priority 4 - 1 key
-          [[6, 1]], // Priority 5 - 1 key
-        ],
-      },
-    },
-  },
-  {
-    title: 'Queue Sum Mismatch with ShareLimit',
-    description:
-      'Batch totals differ from shareLimit.queue value to test coefficient calculation',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 300,
-        queue: 400, // Actual count
-        capacity: 1000,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 20, // <= 180 total keys (100+80)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          // Batches that sum to 500 (mismatch with shareLimit.queue)
-          [
-            // Priority 0
-            [1, 100],
-            [2, 80],
-          ],
-          [
-            // Priority 1
-            [3, 120],
-            [4, 100],
-          ],
-          [
-            // Priority 2
-            [5, 60],
-            [6, 40],
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Fallback: Empty Queue Data',
-    description:
-      'Empty queue batches array triggers fallback to general queue display',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 250,
-        queue: 180,
-        capacity: 800,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 15, // Fallback - no specific queue data
-      },
-      formData: {
-        depositDataLength: 5,
-      },
-      depositQueueBatches: undefined, // Undefined data - triggers fallback
-    },
-  },
-  {
-    title: 'Fallback: Null Queue Data',
-    description:
-      'Null queue data simulates failed analysis, triggers fallback mode',
+    title: '[Submit] Priority 0 at Max, All to P5',
+    description: 'P0 at maxDeposits limit, all submitted keys go to P5',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
         active: 300,
         queue: 200,
-        capacity: 900,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 12, // Fallback - no specific queue data
-      },
-      formData: {
-        depositDataLength: 8,
-      },
-      depositQueueBatches: undefined, // Undefined data - triggers fallback
-    },
-  },
-  {
-    title: 'Fallback: Over Limit Queue',
-    description: 'Fallback mode with queue exceeding CSM capacity limit',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 400,
-        queue: 350, // 250 over limit (400 + 350 = 750, capacity = 600)
-        capacity: 600, // Only 200 more capacity available
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 25, // Fallback - no specific queue data
-      },
-      formData: {
-        depositDataLength: 12, // Keys being added
-      },
-      depositQueueBatches: undefined, // Undefined data - triggers fallback with over-limit scenario
-    },
-  },
-
-  // Additional Edge Case Scenarios
-  {
-    title: 'Queue Only - No Active Keys',
-    description:
-      'Zero active validators, all validators queued across multiple priorities',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 0, // No active keys
-        queue: 400,
-        capacity: 800,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 20, // <= 150 total keys (80+40+30)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0
-            [1, 80],
-            [2, 60],
-          ],
-          [
-            // Priority 1
-            [3, 50],
-            [1, 40],
-          ],
-          [
-            // Priority 2
-            [4, 70],
-            [5, 50],
-          ],
-          [
-            // Priority 3
-            [1, 30],
-            [6, 20],
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Keys Only in Priority 4 and 5',
-    description:
-      'Empty higher priorities (P0-3), validators only in lowest priorities (P4-5)',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 200,
-        queue: 250,
         capacity: 700,
       },
       operatorInfo: {
-        depositableValidatorsCount: 15, // <= 95 total keys (60+35)
+        depositableValidatorsCount: 0,
+        totalDepositedKeys: 30,
+        enqueuedCount: 20,
       },
       formData: {
-        depositDataLength: 0,
+        depositDataLength: 15, // Submitting 15 keys
+      },
+      curveParams: {
+        priority: 0,
+        maxDeposits: 50, // Already at limit (30 deposited + 20 queued)
+        lowestPriority: 5,
       },
       depositQueueBatches: {
-        queues: [
-          [], // Priority 0 - empty
-          [], // Priority 1 - empty
-          [], // Priority 2 - empty
-          [], // Priority 3 - empty
+        priorities: [
           [
-            // Priority 4
-            [1, 60],
-            [2, 50],
-            [3, 40],
-          ],
-          [
-            // Priority 5
-            [4, 45],
-            [1, 35],
-            [5, 20],
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Keys Only in Lowest Priority',
-    description:
-      'All validators concentrated in lowest priority (P5), higher priorities empty',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 150,
-        queue: 180,
-        capacity: 500,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 12, // <= 80 total keys
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [], // Priority 0 - empty
-          [], // Priority 1 - empty
-          [], // Priority 2 - empty
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
-          [
-            // Priority 5 - only priority with keys
-            [1, 80],
-            [2, 60],
-            [3, 40],
-          ],
+            [2, 80],
+            [3, 60],
+          ], // Priority 0: At capacity
+          [],
+          [],
+          [], // Reserved
+          [], // Priority 4: Empty
+          [[4, 60]], // Priority 5: Will receive all 15 keys
         ],
       },
     },
   },
 
-  // Test cases with operator batches at the end and near end of queue segments
+  // ========================================
+  // GROUP G: FALLBACK SCENARIOS
+  // ========================================
   {
-    title: 'Operator as Last Batch in Segments',
-    description: 'Operator batches positioned at the end of queue segments',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 300,
-        queue: 350,
-        capacity: 800,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 25, // <= 90 total keys (60+30)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0
-            [2, 70],
-            [3, 50],
-            [4, 40],
-            [1, 60], // Operator 1 at the end
-          ],
-          [
-            // Priority 1
-            [5, 45],
-            [6, 35],
-            [1, 30], // Operator 1 at the end
-          ],
-          [
-            // Priority 2
-            [7, 55],
-            [8, 25], // No operator 1 keys
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Operator as Second-to-Last Batch',
-    description: 'Operator batches positioned second-to-last in queue segments',
+    title: '[Fallback] Undefined Queue Data (Fallback Mode)',
+    description: 'Queue analysis failed, triggers general queue display',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
         active: 250,
-        queue: 320,
-        capacity: 750,
+        queue: 180,
+        capacity: 600,
       },
       operatorInfo: {
-        depositableValidatorsCount: 30, // <= 90 total keys (50+40)
+        depositableValidatorsCount: 45,
       },
       formData: {
         depositDataLength: 0,
       },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0
-            [2, 60],
-            [3, 40],
-            [1, 50],
-            [4, 30], // Operator 1 second-to-last
-          ],
-          [
-            // Priority 1
-            [5, 45],
-            [1, 40],
-            [6, 25], // Operator 1 second-to-last
-          ],
-          [
-            // Priority 2
-            [7, 30], // Only one batch
-          ],
-        ],
-      },
+      depositQueueBatches: undefined, // Triggers fallback
     },
   },
   {
-    title: 'Operator at Various End Positions',
-    description:
-      'Operator batches at different end positions across priority levels',
+    title: '[Fallback] Fallback with Queue Over Limit',
+    description: 'Fallback mode with queue exceeding CSM capacity',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
         active: 400,
-        queue: 450,
-        capacity: 1000,
+        queue: 350, // Over limit
+        capacity: 600,
       },
       operatorInfo: {
-        depositableValidatorsCount: 35, // <= 150 total keys (70+45+35)
+        depositableValidatorsCount: 85,
       },
       formData: {
-        depositDataLength: 0,
+        depositDataLength: 12,
       },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0
-            [2, 80],
-            [3, 60],
-            [1, 70], // Operator 1 at the end
-          ],
-          [
-            // Priority 1
-            [4, 50],
-            [1, 45],
-            [5, 35], // Operator 1 second-to-last
-          ],
-          [
-            // Priority 2
-            [6, 40],
-            [7, 30],
-            [8, 25],
-            [1, 35], // Operator 1 at the end
-          ],
-          [
-            // Priority 3
-            [9, 20], // No operator 1 keys
-          ],
-        ],
-      },
+      depositQueueBatches: undefined, // Triggers fallback
     },
   },
   {
-    title: 'End Position Batches Beyond Limit',
-    description:
-      'Operator batches at segment ends extending beyond CSM capacity',
+    title: '[Fallback] Fallback with Keys Being Added',
+    description: 'Fallback mode while operator is submitting new keys',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
-        active: 450,
-        queue: 380,
-        capacity: 600, // Only 150 more capacity
+        active: 300,
+        queue: 200,
+        capacity: 700,
       },
       operatorInfo: {
-        depositableValidatorsCount: 28, // <= 155 total keys (30+35+50+40)
+        depositableValidatorsCount: 65,
       },
       formData: {
-        depositDataLength: 0,
+        depositDataLength: 25, // Large key submission
+      },
+      depositQueueBatches: undefined, // Triggers fallback
+    },
+  },
+
+  // ========================================
+  // GROUP H: LARGE SCALE & STRESS TESTS
+  // ========================================
+  {
+    title: '[Stress] High Volume Scenario',
+    description: 'Large-scale testing with thousands of keys',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 8000,
+        queue: 4200, // 1900 + 1000 + 1300 = 4200 total
+        capacity: 15000,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 800, // Less than batch sum (1200)
+      },
+      formData: {
+        depositDataLength: 100,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
           [
-            // Priority 0 - under limit
-            [2, 50],
-            [3, 40],
-            [1, 30], // Operator 1 at the end, under limit
-          ],
+            [1, 600],
+            [2, 800],
+            [3, 500],
+          ], // Priority 0: 1900 total
+          [],
+          [],
+          [], // Reserved
           [
-            // Priority 1 - crosses limit
-            [4, 45],
-            [1, 35], // Operator 1 at the end, crosses limit boundary
-          ],
+            [1, 400],
+            [4, 600],
+          ], // Priority 4: 1000 total
           [
-            // Priority 2 - over limit
-            [5, 60],
-            [6, 40],
-            [1, 50], // Operator 1 at the end, over limit
-          ],
-          [
-            // Priority 3 - over limit
-            [7, 35],
-            [1, 40],
-            [8, 25], // Operator 1 second-to-last, over limit
-          ],
+            [1, 200],
+            [5, 700],
+            [6, 400],
+          ], // Priority 5: 1300 total
         ],
       },
     },
   },
   {
-    title: 'Operator as Only Batch in Segments',
-    description: 'Priority segments where operator is the sole batch',
+    title: '[Stress] Maximum Queue Stress Test',
+    description: 'Extreme scenario testing system limits',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 5000,
+        queue: 10000,
+        capacity: 12000,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 1500, // Much less than batch sum (3000)
+      },
+      formData: {
+        depositDataLength: 200,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [1, 1000],
+            [2, 1500],
+            [3, 1000],
+          ], // Priority 0: 3500 total
+          [],
+          [],
+          [], // Reserved
+          [
+            [1, 1200],
+            [4, 800],
+            [5, 1000],
+          ], // Priority 4: 3000 total
+          [
+            [1, 800],
+            [6, 1200],
+            [7, 1500],
+          ], // Priority 5: 3500 total
+        ],
+      },
+    },
+  },
+
+  // ========================================
+  // GROUP I: QUEUE COEFFICIENT SCENARIOS
+  // ========================================
+  {
+    title: '[Coeff] Queue Sum Mismatch (Coefficient Test)',
+    description:
+      'Batch totals differ from shareLimit.queue for coefficient calculation',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 300,
+        queue: 250, // Doesn't match actual batch sum (300)
+        capacity: 800,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 60, // Less than batch sum (80)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [1, 50],
+            [2, 60],
+          ], // Priority 0: 110 total
+          [],
+          [],
+          [], // Reserved
+          [
+            [1, 30],
+            [3, 70],
+          ], // Priority 4: 100 total
+          [[4, 90]], // Priority 5: 90 total
+          // Total: 300 (doesn't match shareLimit.queue: 250)
+        ],
+      },
+    },
+  },
+
+  // ========================================
+  // GROUP J: RESERVED PRIORITIES SCENARIOS
+  // ========================================
+  {
+    title: '[Reserved] Keys Only in Reserved Priority 1',
+    description:
+      'Testing reserved priority P1 - minimal usage for future feature testing',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
         active: 200,
-        queue: 180,
+        queue: 150,
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 20, // <= 125 total keys (50+45+30)
+        depositableValidatorsCount: 40, // Less than batch sum (50) - stale data
       },
       formData: {
         depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
+          [], // Priority 0: Empty
           [
-            // Priority 0
-            [2, 40],
-            [3, 35],
-          ],
-          [
-            // Priority 1
-            [1, 50], // Operator 1 is the only batch
-          ],
-          [
-            // Priority 2
-            [4, 30],
-            [5, 25],
-          ],
-          [
-            // Priority 3
-            [1, 45], // Operator 1 is the only batch
-          ],
-          [], // Priority 4 - empty
-          [
-            // Priority 5
-            [1, 30], // Operator 1 is the only batch
-          ],
+            [1, 50],
+            [2, 60],
+            [3, 40],
+          ], // Priority 1: Reserved - testing usage
+          [],
+          [],
+          [],
+          [], // Other priorities empty
         ],
       },
     },
   },
   {
-    title: 'End Position While Adding Keys',
+    title: '[Reserved] Keys Across Reserved Priorities P1-P3',
     description:
-      'Operator batches at segment ends with new keys being submitted',
+      'Testing all reserved priorities P1, P2, P3 for future feature compatibility',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
@@ -1155,431 +1113,201 @@ export const testScenarios: TestScenario[] = [
         capacity: 700,
       },
       operatorInfo: {
-        depositableValidatorsCount: 22,
+        depositableValidatorsCount: 75, // Less than batch sum (90) - realistic stale data
       },
       formData: {
-        depositDataLength: 15, // Adding 15 new keys
+        depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
+          [], // Priority 0: Empty
           [
-            // Priority 0
-            [2, 60],
-            [3, 45],
-            [1, 55], // Operator 1 at the end
-          ],
+            [1, 40],
+            [2, 30],
+          ], // Priority 1: Reserved
           [
-            // Priority 1
+            [1, 30],
+            [3, 50],
+          ], // Priority 2: Reserved
+          [
+            [1, 20],
             [4, 40],
+          ], // Priority 3: Reserved
+          [], // Priority 4: Empty
+          [[5, 70]], // Priority 5: Other operator
+        ],
+      },
+    },
+  },
+  {
+    title: '[Reserved] Mixed Production and Reserved Priorities',
+    description:
+      'Operator has keys in both production (P0, P5) and reserved (P2) priorities',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 250,
+        queue: 320,
+        capacity: 800,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 85, // Less than batch sum (100) - some keys removed
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
             [1, 50],
-            [5, 30], // Operator 1 second-to-last
-          ],
+            [2, 40],
+          ], // Priority 0: Production priority
+          [], // Priority 1: Empty
           [
-            // Priority 2
-            [6, 35],
-            [7, 25],
-            [1, 40], // Operator 1 at the end
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'End Positions in Sparse Priorities',
-    description:
-      'Operator batches at ends of sparse priority level distribution',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 150,
-        queue: 220,
-        capacity: 600,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 18,
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
+            [1, 30],
+            [3, 60],
+          ], // Priority 2: Reserved priority with operator
+          [], // Priority 3: Empty
+          [[4, 70]], // Priority 4: Other operator
           [
-            // Priority 0
-            [2, 50],
-            [1, 40], // Operator 1 at the end
-          ],
-          [], // Priority 1 - empty
-          [
-            // Priority 2
-            [3, 35],
-            [4, 30],
-            [1, 45], // Operator 1 at the end
-          ],
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
-          [
-            // Priority 5
-            [5, 25],
-            [1, 35],
-            [6, 15], // Operator 1 second-to-last
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'All Keys in Priority 0 - Operator Last',
-    description: 'All validators in priority 0 with operator batch at the end',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 250,
-        queue: 300,
-        capacity: 800,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 25,
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0 - all keys here
-            [2, 80],
-            [3, 70],
-            [4, 60],
+            [1, 20],
             [5, 50],
-            [1, 40], // Operator 1 at the very end
-          ],
-          [], // Priority 1 - empty
-          [], // Priority 2 - empty
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
-          [], // Priority 5 - empty
+          ], // Priority 5: Production priority
         ],
       },
     },
   },
   {
-    title: 'All Keys in Priority 0 - Operator at End',
-    description:
-      'All validators concentrated in priority 0 with operator batch at the very end',
+    title: '[Reserved] Reserved Priority Over Capacity Limit',
+    description: 'Reserved priority P2 extends beyond CSM capacity limit',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
-        active: 250,
-        queue: 300,
-        capacity: 800,
+        active: 450,
+        queue: 200,
+        capacity: 500, // Only 50 capacity left
       },
       operatorInfo: {
-        depositableValidatorsCount: 1,
+        depositableValidatorsCount: 60, // Less than batch sum (80) - stale data
       },
       formData: {
         depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
+          [[2, 30]], // Priority 0: Under limit (30 keys)
+          [], // Priority 1: Empty
           [
-            // Priority 0 - all keys here
-            [2, 80],
-            [3, 70],
-            [4, 60],
-            [5, 50],
-            [5, 39],
-            [1, 1], // Operator 1 at the very end
-          ],
-          [], // Priority 1 - empty
-          [], // Priority 2 - empty
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
-          [], // Priority 5 - empty
-        ],
-      },
-    },
-  },
-  {
-    title: 'All Keys in Priority 4 and 5 - Operator at End',
-    description:
-      'Validators only in highest priorities with operator batches at the end',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 250,
-        queue: 300,
-        capacity: 800,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 2,
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        queues: [
-          [], // Priority 0 - empty
-          [], // Priority 1 - empty
-          [], // Priority 2 - empty
-          [], // Priority 3 - empty
-          [
-            [5, 38],
-            [1, 1],
-          ], // Priority 4 - empty
-          [
-            // Priority 5 - all keys here
-            [2, 80],
-            [3, 70],
-            [4, 60],
-            [5, 50],
-            [1, 1],
-          ],
+            [1, 80],
+            [3, 90],
+          ], // Priority 2: Reserved, crosses and exceeds limit
+          [],
+          [],
+          [], // Other priorities empty
         ],
       },
     },
   },
 
-  // Test cases for submitting keys to multiple queue priorities
+  // ========================================
+  // GROUP K: REALISTIC EDGE CASES
+  // ========================================
   {
-    title: 'Submitting to Empty Priority 0',
-    description:
-      'Priority 0 is empty, operator submits 20 keys - all should go to Priority 0',
+    title: '[Real] All Priorities Empty Except P5',
+    description: 'Realistic scenario where only general queue has validators',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
-        active: 300,
-        queue: 150,
-        capacity: 800,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 0, // No keys in current queue for operator 1
-        totalDepositedKeys: 10,
-        enqueuedCount: 5,
-      },
-      formData: {
-        depositDataLength: 20, // Submitting 20 keys
-      },
-      curveParams: {
-        priority: 0,
-        maxDeposits: 100,
-        lowestPriority: 5,
-      },
-      depositQueueBatches: {
-        queues: [
-          [], // Priority 0 - empty
-          [
-            // Priority 1
-            [2, 60],
-            [3, 40],
-          ],
-          [
-            // Priority 2
-            [4, 50],
-          ],
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
-          [], // Priority 5 - empty
-        ],
-      },
-    },
-  },
-  {
-    title: 'Submitting to Non-Empty Priority 0',
-    description:
-      'Priority 0 has existing keys, operator submits 15 keys - 10 to Priority 0, 5 to Priority 5',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 250,
-        queue: 200,
-        capacity: 700,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 0, // No keys in current queue for operator 1
-        totalDepositedKeys: 15,
-        enqueuedCount: 5,
-      },
-      formData: {
-        depositDataLength: 15, // Submitting 15 keys
-      },
-      curveParams: {
-        priority: 0,
-        maxDeposits: 30, // Only 10 slots left (30 - 15 deposited - 5 queued = 10)
-        lowestPriority: 5,
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0 - has existing keys
-            [2, 40],
-            [3, 30],
-          ],
-          [
-            // Priority 1
-            [4, 60],
-          ],
-          [
-            // Priority 2
-            [5, 50],
-            [6, 20],
-          ],
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
-          [
-            // Priority 5
-            [7, 40],
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Submitting with Priority 0 at Limit',
-    description:
-      'Priority 0 is at maxDeposits limit, operator submits 12 keys - all should go to Priority 5',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 300,
+        active: 150,
         queue: 180,
-        capacity: 600,
+        capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 0, // No keys in current queue for operator 1
-        totalDepositedKeys: 40,
-        enqueuedCount: 10,
+        depositableValidatorsCount: 45, // Less than batch sum (50)
       },
       formData: {
-        depositDataLength: 12, // Submitting 12 keys
-      },
-      curveParams: {
-        priority: 0,
-        maxDeposits: 50, // Already at limit (40 deposited + 10 queued = 50)
-        lowestPriority: 5,
+        depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
+          [],
+          [],
+          [],
+          [], // Priorities 0-4: Empty
           [
-            // Priority 0 - at capacity
-            [2, 80],
-            [3, 60],
-            [4, 40],
-          ],
-          [
-            // Priority 1
-            [5, 30],
-          ],
-          [], // Priority 2 - empty
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
-          [
-            // Priority 5
-            [6, 25],
-            [7, 15],
-          ],
-        ],
-      },
-    },
-  },
-  {
-    title: 'Submitting to Multiple Priorities (Split)',
-    description:
-      'Operator priority is 2, submits 18 keys - 8 to Priority 2, 10 to Priority 5',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 200,
-        queue: 250,
-        capacity: 800,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 0, // No keys in current queue for operator 1
-        totalDepositedKeys: 20,
-        enqueuedCount: 7,
-      },
-      formData: {
-        depositDataLength: 18, // Submitting 18 keys
-      },
-      curveParams: {
-        priority: 2,
-        maxDeposits: 35, // Only 8 slots left (35 - 20 deposited - 7 queued = 8)
-        lowestPriority: 5,
-      },
-      depositQueueBatches: {
-        queues: [
-          [
-            // Priority 0
+            [1, 50],
             [2, 70],
-            [3, 50],
-          ],
-          [
-            // Priority 1
-            [4, 60],
-            [5, 40],
-          ],
-          [
-            // Priority 2 - operator's priority
-            [6, 30],
-            [7, 20],
-          ],
-          [
-            // Priority 3
-            [8, 35],
-          ],
-          [], // Priority 4 - empty
-          [
-            // Priority 5
-            [9, 25],
-          ],
+            [3, 60],
+          ], // Priority 5: All keys here
         ],
       },
     },
   },
   {
-    title: 'Submitting All to Lowest Priority',
-    description:
-      'Operator priority queue is full, submits 8 keys - all go to Priority 5',
+    title: '[Real] Far Away Indicator Trigger',
+    description: 'Small queue with large capacity triggering far-away view',
     data: {
       nodeOperatorId: 1,
       shareLimit: {
-        active: 350,
-        queue: 120,
-        capacity: 650,
+        active: 50,
+        queue: 25,
+        capacity: 2000, // Very large capacity
       },
       operatorInfo: {
-        depositableValidatorsCount: 0, // No keys in current queue for operator 1
-        totalDepositedKeys: 45,
-        enqueuedCount: 15,
+        depositableValidatorsCount: 8,
       },
       formData: {
-        depositDataLength: 8, // Submitting 8 keys
-      },
-      curveParams: {
-        priority: 1,
-        maxDeposits: 60, // Already at limit (45 deposited + 15 queued = 60)
-        lowestPriority: 5,
+        depositDataLength: 0,
       },
       depositQueueBatches: {
-        queues: [
+        priorities: [
+          [[2, 10]], // Priority 0: Small queue
+          [],
+          [],
+          [],
+          [], // Empty priorities
           [
-            // Priority 0
-            [2, 40],
-          ],
+            [1, 8],
+            [3, 7],
+          ], // Priority 5: Small operator presence
+        ],
+      },
+    },
+  },
+  {
+    title: '[Real] Operator Across All Production Priorities',
+    description: 'Operator has keys in P0, P4, and P5 simultaneously',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 400,
+        queue: 350,
+        capacity: 900,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 120, // Less than batch sum (140)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
           [
-            // Priority 1 - operator's priority, at capacity
-            [3, 50],
-            [4, 30],
-          ],
+            [1, 60],
+            [2, 50],
+          ], // Priority 0: Operator present
+          [],
+          [],
+          [], // Reserved
           [
-            // Priority 2
-            [5, 20],
-          ],
-          [], // Priority 3 - empty
-          [], // Priority 4 - empty
+            [1, 40],
+            [3, 70],
+          ], // Priority 4: Operator present
           [
-            // Priority 5
-            [6, 20],
-          ],
+            [1, 40],
+            [4, 60],
+            [5, 30],
+          ], // Priority 5: Operator present
         ],
       },
     },

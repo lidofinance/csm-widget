@@ -1,10 +1,12 @@
 import { FC } from 'react';
+import { GetServerSideProps } from 'next';
 import { Layout } from 'shared/layout';
 import { DepositQueueGraph } from 'features/view-keys/deposit-queue/deposit-queue-graph';
 import { MockDepositQueueProvider } from 'tests/mock/queue/mock-providers';
 import { testScenarios } from 'tests/mock/queue/test-scenarios';
 import styled from 'styled-components';
 import { Block, Accordion } from '@lidofinance/lido-ui';
+import { getSecretConfig } from 'config';
 
 const TestContainer = styled.div`
   display: flex;
@@ -107,18 +109,20 @@ const DepositQueueGraphTestPage: FC = () => {
                 {scenario.data.depositQueueBatches ? (
                   <>
                     <div>[</div>
-                    {scenario.data.depositQueueBatches.queues.map(
-                      (queue, index) => (
-                        <div
-                          key={index}
-                          className="queue"
-                          dangerouslySetInnerHTML={{
-                            __html: highlightOperatorBatches(
-                              JSON.stringify(queue),
-                              scenario.data.nodeOperatorId,
-                            ),
-                          }}
-                        ></div>
+                    {scenario.data.depositQueueBatches.priorities.map(
+                      (priority, index) => (
+                        <div key={index} className="queue">
+                          <div>Priority {index}:</div>
+                          <div
+                            className="queue"
+                            dangerouslySetInnerHTML={{
+                              __html: highlightOperatorBatches(
+                                JSON.stringify(priority),
+                                scenario.data.nodeOperatorId,
+                              ),
+                            }}
+                          ></div>
+                        </div>
                       ),
                     )}
                     <div>]</div>
@@ -136,3 +140,13 @@ const DepositQueueGraphTestPage: FC = () => {
 };
 
 export default DepositQueueGraphTestPage;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { developmentMode } = getSecretConfig();
+
+  if (!developmentMode) {
+    return { notFound: true };
+  }
+
+  return { props: {} };
+};
