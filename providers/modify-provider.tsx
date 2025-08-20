@@ -1,3 +1,5 @@
+import { useFeatureFlags } from 'config/feature-flags';
+import { ICS_APPLY_FORM } from 'config/feature-flags/types';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
 import {
@@ -18,6 +20,7 @@ type ModifyContextValue = {
 };
 
 const QUERY_REFERRER = 'ref';
+const QUERY_ICS_APPLY = 'ics-apply';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -36,6 +39,7 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     'referrer',
     undefined,
   );
+  const featureFlags = useFeatureFlags();
 
   const query = useSearchParams();
 
@@ -54,6 +58,16 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
       trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer);
     }
   }, [query, referrer, setReferrer]);
+
+  useEffect(() => {
+    if (!query) return;
+
+    const icsApplyParam = query?.get(QUERY_ICS_APPLY);
+
+    if (icsApplyParam && !featureFlags[ICS_APPLY_FORM]) {
+      featureFlags?.setFeatureFlag(ICS_APPLY_FORM, true);
+    }
+  }, [query, featureFlags]);
 
   const value: ModifyContextValue = useMemo(
     () => ({

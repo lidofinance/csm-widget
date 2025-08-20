@@ -6,15 +6,15 @@ export const Rate = styled(Text).attrs({ size: 'lg', weight: 700 })`
   flex: 0 0 auto;
 `;
 
-export const TipWrapper = styled.div<{ $danger: boolean }>`
+export const TipWrapper = styled.div<{ $danger?: boolean }>`
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
   padding: 12px;
-  background: ${({ $danger }) =>
+  background: ${({ $danger = false }) =>
     $danger
       ? 'rgba(var(--lido-rgb-error), 0.1);'
       : 'var(--lido-color-background)'};
 
-  color: ${({ $danger }) =>
+  color: ${({ $danger = false }) =>
     $danger ? 'var(--lido-color-error)' : 'var(--lido-color-textSecondary)'};
 `;
 

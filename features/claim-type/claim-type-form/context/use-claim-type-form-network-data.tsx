@@ -7,6 +7,7 @@ import {
   useDappStatus,
   useIcsCanClaim,
   useIcsCurveId,
+  useIcsPaused,
   useIcsProof,
   useNodeOperatorId,
   useOperatorCurveId,
@@ -22,6 +23,7 @@ export const useClaimTypeFormNetworkData = (): [
   const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId<true>();
 
+  const { data: icsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
   const {
     data: currentCurveId,
     isPending: isCurrentCurveIdLoading,
@@ -58,6 +60,7 @@ export const useClaimTypeFormNetworkData = (): [
 
   const loading = useMemo(
     () => ({
+      isIcsPausedLoading,
       isNewCurveIdLoading,
       isCurrentCurveIdLoading,
       isCurrentParametersLoading,
@@ -66,6 +69,7 @@ export const useClaimTypeFormNetworkData = (): [
       isCanClaimCurveLoading,
     }),
     [
+      isIcsPausedLoading,
       isCanClaimCurveLoading,
       isCurrentCurveIdLoading,
       isCurrentParametersLoading,
@@ -79,6 +83,7 @@ export const useClaimTypeFormNetworkData = (): [
     {
       nodeOperatorId,
       address,
+      icsPaused,
       currentCurveId,
       currentParameters,
       newCurveId,

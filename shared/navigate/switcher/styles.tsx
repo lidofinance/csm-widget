@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { LocalLink } from '../local-link';
-import { Chip } from '@lidofinance/lido-ui';
 
 export const SwitchWrapper = styled.div<{ $count: number }>`
   width: ${({ $count }) => `${$count * 134}px`} !important;
@@ -67,8 +66,4 @@ export const SwitchItemStyled = styled(LocalLink)<{
     color: ${({ $warning }) =>
       $warning ? `var(--lido-color-error)` : `var(--lido-color-text)`};
   }
-`;
-
-export const ChipStyle = styled(Chip).attrs({ variant: 'gray' })`
-  font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
 `;
