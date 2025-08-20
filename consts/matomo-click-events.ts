@@ -88,6 +88,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageClaimBond = 'pageClaimBond',
   pageUnlockBond = 'pageUnlockBond',
   pageClaimType = 'pageClaimType',
+  pageTypeIcs = 'pageTypeIcs',
   pageInboxRequests = 'pageInboxRequests',
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
@@ -472,6 +473,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «ClaimType»',
     prefixed`view_claim_type_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs]: [
+    MATOMO_APP_NAME,
+    'View page «TypeICS»',
+    prefixed`view_type_ics_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: [
     MATOMO_APP_NAME,

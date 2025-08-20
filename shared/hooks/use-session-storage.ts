@@ -5,37 +5,50 @@ import {
   Dispatch,
   SetStateAction,
 } from 'react';
-
-// FIXME: duplicate
-const serialize = (_key: string, value: unknown) => {
-  return typeof value === 'bigint' ? value.toString() : value;
-};
+import { noopValue, serializeBigInt } from 'utils/serialize-bigint';
 
 export const useSessionStorage = <T>(
-  key: string,
+  key: string | undefined,
   initialValue: T,
+  readTransform: (value: any) => T = noopValue,
 ): [storedValue: T, setValue: Dispatch<SetStateAction<T>>] => {
   const readValue = useCallback(() => {
+    if (typeof window === 'undefined' || key === undefined) {
+      return initialValue;
+    }
     try {
       const item = window.sessionStorage.getItem(key);
-      return item ? (JSON.parse(item) as T) : initialValue;
+
+      return item && item !== 'undefined'
+        ? readTransform(JSON.parse(item))
+        : initialValue;
     } catch (error) {
       return initialValue;
     }
-  }, [initialValue, key]);
+  }, [initialValue, key, readTransform]);
 
   const [storedValue, setStoredValue] = useState(readValue);
 
   const saveToStorage = useCallback(
     (newValue: T) => {
       try {
-        window.sessionStorage.setItem(key, JSON.stringify(newValue, serialize));
+        if (key === undefined) {
+          return;
+        }
+        if (newValue === initialValue) {
+          window.sessionStorage.removeItem(key);
+        } else {
+          window.sessionStorage.setItem(
+            key,
+            JSON.stringify(newValue, serializeBigInt),
+          );
+        }
         window.dispatchEvent(new Event('session-storage'));
       } catch {
         void 0;
       }
     },
-    [key],
+    [initialValue, key],
   );
 
   const setValue: Dispatch<SetStateAction<T>> = useCallback(

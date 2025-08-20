@@ -5,13 +5,9 @@ import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 export const useCachedId = () => {
   const { address } = useDappStatus();
 
-  const [value, setValue] = useLocalStorage<NodeOperatorId | undefined>(
-    `csm-no-${address}`,
+  return useLocalStorage<NodeOperatorId | undefined>(
+    address ? `csm-no-${address}` : undefined,
     undefined,
+    BigInt,
   );
-
-  // TODO: move inside useLocalStorage
-  const id = typeof value === 'string' ? BigInt(value) : value;
-
-  return [id, setValue] as const;
 };

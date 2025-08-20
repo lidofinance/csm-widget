@@ -1,8 +1,11 @@
 import styled from 'styled-components';
 import { FormController } from './form-controller';
+import { Theme } from '@lidofinance/lido-ui';
 
-export const FormControllerStyled = styled(FormController)`
+export const FormControllerStyled = styled(FormController)<{
+  $gap?: keyof Theme['spaceMap'];
+}>`
   display: flex;
   flex-direction: column;
-  row-gap: ${({ theme }) => theme.spaceMap.md}px;
+  gap: ${({ $gap = 'md', theme }) => theme.spaceMap[$gap]}px;
 `;
