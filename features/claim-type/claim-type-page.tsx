@@ -9,8 +9,8 @@ import { TypePageSwitcher } from 'shared/navigate';
 
 export const ClaimTypePage: FC = () => (
   <Layout
-    title="Apply for Identified Independent Stakers List"
-    subtitle="Get verified as an Independent Staker"
+    title="Apply for Identified Community Stakers List"
+    subtitle="Get verified as an Identified Community Staker"
     matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageClaimType}
   >
     <TypePageSwitcher />

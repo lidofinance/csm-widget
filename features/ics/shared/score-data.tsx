@@ -17,6 +17,7 @@ import GalxeIcon from 'assets/icons/ics-scores/galxe.png';
 import HighSignalIcon from 'assets/icons/ics-scores/high-signal.png';
 import GitPOAPsIcon from 'assets/icons/ics-scores/git-poap.png';
 import { IcsScoresItem } from './types';
+import { MatomoLink } from 'shared/components';
 
 export type ScoreSource = {
   id: string;
@@ -122,8 +123,8 @@ export const SCORE_SOURCES: ScoreSource[] = [
         points: 6,
         description: (
           <>
-            Submitted address belongs to a Node Operator that has been active on
-            CSM Mainnet for at least 30 days
+            - Submitted address belongs to a Node Operator that has been active
+            on CSM Mainnet for at least 30 days
             <br />- Performance for the Node Operator is above the Performance
             threshold in the latest performance oracle report
           </>
@@ -160,16 +161,28 @@ export const SCORE_SOURCES: ScoreSource[] = [
         name: 'Human passport',
         icon: <IconStyle src={HumanPassportIcon.src} />,
         points: '3-8',
-        description:
-          'Submitted address has the corresponding score according to a Lido customized scoring system on Human Passport',
+        description: (
+          <>
+            Submitted address has the corresponding score according to a{' '}
+            <MatomoLink href="https://app.passport.xyz/#/lido_csm/">
+              Lido customized scoring system on Human Passport
+            </MatomoLink>
+          </>
+        ),
       },
       {
         id: 'circles',
         name: 'Circles',
         icon: <IconStyle src={CirclesIcon.src} />,
         points: 4,
-        description:
-          'Submitted address is verified via a dedicated Lido group on Circles',
+        description: (
+          <>
+            Submitted address is verified via a dedicated{' '}
+            <MatomoLink href="https://app.metri.xyz/0xCFCEA7904F42fD10e32703a57922E8d2036e3231">
+              Lido group on Circles
+            </MatomoLink>
+          </>
+        ),
       },
       {
         id: 'discord',
@@ -230,7 +243,11 @@ export const SCORE_SOURCES: ScoreSource[] = [
         points: '4-5',
         description: (
           <>
-            Submitted address has a score on the Lido Galxe space:
+            Submitted address has a score on the{' '}
+            <MatomoLink href="https://app.galxe.com/quest/lido/loyaltyPoints">
+              Lido Galxe space
+            </MatomoLink>
+            :
             <br />- 4 points if 4 ≤ Lido Galxe score ≤ 10
             <br />- 5 points if Lido Galxe score {'>'} 10
           </>
@@ -243,7 +260,11 @@ export const SCORE_SOURCES: ScoreSource[] = [
         points: '2-5',
         description: (
           <>
-            Submitted address has a score on the Lido High Signal space:
+            Submitted address has a score on the{' '}
+            <MatomoLink href="https://app.highsignal.xyz/p/lido/">
+              Lido High Signal space
+            </MatomoLink>
+            :
             <br />- 2 points if 30 ≤ High Signal score ≤ 40
             <br />- 3 points if 40 {'<'} High Signal score ≤ 60
             <br />- 4 points if 60 {'<'} High Signal score ≤ 80

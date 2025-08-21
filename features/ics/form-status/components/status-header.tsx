@@ -1,6 +1,7 @@
 import { Button, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import {
+  ICS_ASSESSED_DATE,
   IcsCommentsDto,
   IcsFormStatus,
   IcsScoresDto,
@@ -106,8 +107,9 @@ const useHint = (
     case status === 'REVIEW':
       return (
         <Text size="xs">
-          The assessment process typically takes about two weeks. You cannot
-          change the application while it is being reviewed
+          The application will be assessed after {ICS_ASSESSED_DATE} as of{' '}
+          {ICS_ASSESSED_DATE}. You cannot change the application while it is
+          being reviewed
         </Text>
       );
     case status === 'APPROVED':
