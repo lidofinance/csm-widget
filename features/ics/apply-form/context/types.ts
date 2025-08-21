@@ -13,8 +13,6 @@ export type ApplyFormInputType = {
 
 export type ApplyFormNetworkData = {
   mainAddress: Address;
-  twitterMessage: string;
-  discordMessage: string;
 };
 
 export type UseApplyFormSubmitOptions = {
