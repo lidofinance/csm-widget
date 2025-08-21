@@ -14,6 +14,7 @@ export type AddKeysFormNetworkData = {
   stethBalance?: bigint;
   wstethBalance?: bigint;
   nodeOperatorId?: NodeOperatorId;
+  curveId?: bigint;
   // keysAvailable?: KeysAvailable;
   bond?: BondBalance;
   isPaused?: boolean;
@@ -29,5 +30,6 @@ export type AddKeysFormNetworkData = {
     | 'status'
     | 'shareLimit'
     | 'blockNumber'
+    | 'curveId'
   >;
 };

@@ -1,9 +1,13 @@
 import {
+  KEY_OPERATOR_BALANCE,
+  KEY_OPERATOR_INFO,
+  KEY_OPERATOR_KEYS,
+  KEY_OPERATOR_KEYS_TO_MIGRATE,
   useCsmStatus,
   useEthereumBalance,
   useNodeOperatorId,
   useOperatorBalance,
-  // useOperatorCurveId,
+  useOperatorCurveId,
   useShareLimit,
   useStakeLimit,
   useStethBalance,
@@ -13,6 +17,7 @@ import { useCallback, useMemo } from 'react';
 // import { useNonWithdrawnKeysCount } from 'shared/hooks';
 import { useBlockNumber } from 'wagmi';
 import { type AddKeysFormNetworkData } from './types';
+import { useInvalidate } from 'shared/hooks';
 
 export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
@@ -58,7 +63,8 @@ export const useAddKeysFormNetworkData = (): [
     refetch: updateShareLimit,
   } = useShareLimit();
 
-  // const { data: curveId } = useOperatorCurveId(nodeOperatorId);
+  const { data: curveId, isPending: isCurveIdLoading } =
+    useOperatorCurveId(nodeOperatorId);
 
   // const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(`${nodeOperatorId}`);
 
@@ -71,6 +77,8 @@ export const useAddKeysFormNetworkData = (): [
   //   wstethBalance,
   // });
 
+  const invalidate = useInvalidate();
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
       updateBlockNumber(),
@@ -80,6 +88,12 @@ export const useAddKeysFormNetworkData = (): [
       updateBond(),
       updateShareLimit(),
       updateMaxStakeEth(),
+      invalidate([
+        KEY_OPERATOR_INFO,
+        KEY_OPERATOR_BALANCE,
+        KEY_OPERATOR_KEYS,
+        KEY_OPERATOR_KEYS_TO_MIGRATE,
+      ]),
     ]);
   }, [
     updateBlockNumber,
@@ -89,6 +103,7 @@ export const useAddKeysFormNetworkData = (): [
     updateShareLimit,
     updateStethBalance,
     updateWstethBalance,
+    invalidate,
   ]);
 
   const loading = useMemo(
@@ -101,6 +116,7 @@ export const useAddKeysFormNetworkData = (): [
       isStatusLoading,
       isBlockNumberLoading,
       isShareLimitLoading,
+      isCurveIdLoading,
     }),
     [
       isEthBalanceLoading,
@@ -111,6 +127,7 @@ export const useAddKeysFormNetworkData = (): [
       isStatusLoading,
       isBlockNumberLoading,
       isShareLimitLoading,
+      isCurveIdLoading,
     ],
   );
 
@@ -118,6 +135,7 @@ export const useAddKeysFormNetworkData = (): [
     {
       blockNumber: blockNumber ? Number(blockNumber) : undefined,
       nodeOperatorId,
+      curveId,
       // keysAvailable,
       stethBalance,
       wstethBalance,

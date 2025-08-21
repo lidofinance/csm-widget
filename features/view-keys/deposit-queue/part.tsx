@@ -1,24 +1,32 @@
-import { FC } from 'react';
-import { useHover } from './hover-provider';
+import { FC, useCallback } from 'react';
+import { useGraphInteraction } from './hover-provider';
 import { GraphPart } from './types';
 import { PartStyle } from './style';
 
 type PartProps = {
   type: GraphPart;
-  size?: number;
+  width?: number;
   offset?: number;
-} & React.HTMLAttributes<HTMLDivElement>;
+};
 
-export const Part: FC<PartProps> = ({ type, size, offset, ...props }) => {
-  const { hover } = useHover();
+export const Part: FC<PartProps> = ({ type, width, offset }) => {
+  const { hover, setFullView } = useGraphInteraction();
+
+  const onMouseEnter = useCallback(() => {
+    setFullView(true);
+  }, [setFullView]);
+
+  if (!width && type !== 'limit') {
+    return null;
+  }
 
   return (
     <PartStyle
       $type={type}
-      $size={size}
+      $width={width}
       $offset={offset}
       $fade={hover && hover !== type}
-      {...props}
+      onMouseEnter={type === 'active' ? onMouseEnter : undefined}
     />
   );
 };

@@ -2,15 +2,22 @@ import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import { useLidoSDK } from '../web3-provider';
+import invariant from 'tiny-invariant';
 
-export const useOperatorRewards = (id: NodeOperatorId | undefined) => {
+export const KEY_OPERATOR_REWARDS = ['operator-rewards'];
+
+export const useOperatorRewards = (
+  nodeOperatorId: NodeOperatorId | undefined,
+) => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['node-operator-rewards', { id }],
+    queryKey: [...KEY_OPERATOR_REWARDS, { nodeOperatorId }],
     ...STRATEGY_CONSTANT,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    queryFn: () => csm.rewards.getRewards(id!),
-    enabled: id !== undefined,
+    queryFn: () => {
+      invariant(nodeOperatorId !== undefined);
+      return csm.rewards.getRewards(nodeOperatorId);
+    },
+    enabled: nodeOperatorId !== undefined,
   });
 };

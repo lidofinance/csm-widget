@@ -1,5 +1,6 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import {
+  KEY_OPERATOR_IS_OWNER,
   useDappStatus,
   useNodeOperatorId,
   useOperatorInfo,
@@ -8,6 +9,7 @@ import { useCallback, useMemo } from 'react';
 import invariant from 'tiny-invariant';
 import { compareLowercase } from 'utils';
 import { type ChangeRoleFormNetworkData } from './types';
+import { useInvalidate } from 'shared/hooks';
 
 export const useChangeRoleFormNetworkData = ({
   role,
@@ -24,9 +26,14 @@ export const useChangeRoleFormNetworkData = ({
     refetch: updateInfo,
   } = useOperatorInfo(nodeOperatorId);
 
+  const invalidate = useInvalidate();
+
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateInfo()]);
-  }, [updateInfo]);
+    await Promise.allSettled([
+      updateInfo(),
+      invalidate([KEY_OPERATOR_IS_OWNER]),
+    ]);
+  }, [invalidate, updateInfo]);
 
   const loading = useMemo(
     () => ({

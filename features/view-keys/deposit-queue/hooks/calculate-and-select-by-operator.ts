@@ -5,7 +5,7 @@ type OperatorBatch = {
   offset: bigint; // Keys count before this batch (from other operators)
 };
 
-type QueueAnalysis = {
+export type QueueAnalysis = {
   queueIndex: number;
   totalKeysInQueue: bigint;
   operatorBatches: OperatorBatch[];
@@ -28,7 +28,6 @@ export const calculateAndSelectByOperator = (
       let runningOffset = 0n;
       const operatorBatches: OperatorBatch[] = [];
 
-      // Calculate total keys in this queue and find operator batches
       batches.forEach((batch) => {
         const isOperatorBatch = batch.nodeOperatorId === nodeOperatorId;
 

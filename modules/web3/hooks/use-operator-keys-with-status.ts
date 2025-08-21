@@ -4,6 +4,8 @@ import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { useLidoSDK } from '../web3-provider';
 
+export const KEY_OPERATOR_KEYS = ['operator-keys'];
+
 export const useOperatorKeysWithStatus = <TData = KeyWithStatus[]>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: KeyWithStatus[]) => TData,
@@ -11,7 +13,7 @@ export const useOperatorKeysWithStatus = <TData = KeyWithStatus[]>(
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['node-operator-keys-with-status', { nodeOperatorId }],
+    queryKey: [...KEY_OPERATOR_KEYS, { nodeOperatorId }],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(nodeOperatorId !== undefined);
