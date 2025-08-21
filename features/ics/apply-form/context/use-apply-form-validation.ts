@@ -1,13 +1,13 @@
+import { isAddress, isHexString } from 'ethers/lib/utils.js';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
   handleResolverValidationError,
   ValidationError,
 } from 'shared/hook-form/validation';
-import { isAddress, isHexString, verifyMessage } from 'ethers/lib/utils.js';
-import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
-import { generateAddressMessage } from './use-apply-form-network-data';
 import { compareLowercase } from 'utils';
+import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
+import { useRawVefiryMessage } from './use-verify-message';
 
 const twitterUrlRegex = /^https:\/\/(twitter\.com|x\.com)\/\w+\/status\/\d+$/;
 const discordMessageRegex = /^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/;
@@ -15,6 +15,8 @@ const discordMessageRegex = /^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/;
 export const useApplyFormValidation = ({
   mainAddress,
 }: ApplyFormNetworkData) => {
+  const verifyMessage = useRawVefiryMessage(mainAddress);
+
   return useCallback<Resolver<ApplyFormInputType>>(
     async (values) => {
       try {
@@ -74,9 +76,7 @@ export const useApplyFormValidation = ({
           }
 
           try {
-            const message = generateAddressMessage(address, mainAddress);
-            const recoveredAddress = verifyMessage(message, signature);
-            const isValid = compareLowercase(recoveredAddress, address);
+            const isValid = await verifyMessage({ address, signature });
 
             if (!isValid) {
               throw new ValidationError(
@@ -120,6 +120,6 @@ export const useApplyFormValidation = ({
         );
       }
     },
-    [mainAddress],
+    [mainAddress, verifyMessage],
   );
 };

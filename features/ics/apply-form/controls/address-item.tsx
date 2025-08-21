@@ -1,23 +1,25 @@
 import {
-  Text,
   Button,
   ButtonIcon,
   External,
   Input,
+  Text,
 } from '@lidofinance/lido-ui';
+import { isAddress, isHexString } from 'ethers/lib/utils.js';
 import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { Stack, MatomoLink, CopyButton } from 'shared/components';
+import { CopyButton, MatomoLink, Stack } from 'shared/components';
 import { VerifiedChip } from 'shared/components/input-address/verified-chip';
 import {
   AddressInputHookForm,
   TextInputHookForm,
 } from 'shared/hook-form/controls';
-import { isAddress, isHexString, verifyMessage } from 'ethers/lib/utils.js';
-import { useApplyFormData, type ApplyFormInputType } from '../context';
-import { generateAddressMessage } from '../context/use-apply-form-network-data';
-import { compareLowercase } from 'utils';
+import {
+  useAddressMessage,
+  useVefiryMessage,
+  type ApplyFormInputType,
+} from '../context';
 
 export type AddressItemProps = {
   field: { id: string; address: string; signature: string; verified?: boolean };
@@ -37,17 +39,11 @@ export const AddressItem: FC<AddressItemProps> = ({
   const { getValues, setError, clearErrors } =
     useFormContext<ApplyFormInputType>();
 
-  const { mainAddress } = useApplyFormData();
-
-  const message = useMemo(
-    () =>
-      watchedAddress && isAddress(watchedAddress) && mainAddress
-        ? generateAddressMessage(watchedAddress, mainAddress)
-        : '',
-    [watchedAddress, mainAddress],
-  );
+  const message = useAddressMessage(watchedAddress);
 
   const [verified, setVerified] = useState(false);
+
+  const verifyMessage = useVefiryMessage();
 
   const onVerify = useCallback(
     async (index: number) => {
@@ -72,14 +68,7 @@ export const AddressItem: FC<AddressItemProps> = ({
       }
 
       try {
-        // Generate the expected message for this address
-        // Type assertion needed as generateAddressMessage expects Address type
-        const message = generateAddressMessage(address, mainAddress);
-
-        // Verify the signature
-        // Type assertions needed for viem's verifyMessage
-        const recoverAddress = verifyMessage(message, signature);
-        const isValid = compareLowercase(recoverAddress, address);
+        const isValid = await verifyMessage({ address, signature });
 
         if (isValid) {
           clearErrors(`additionalAddresses.${index}.signature`);
@@ -99,7 +88,7 @@ export const AddressItem: FC<AddressItemProps> = ({
         });
       }
     },
-    [clearErrors, getValues, mainAddress, setError],
+    [clearErrors, getValues, setError, verifyMessage],
   );
 
   return (

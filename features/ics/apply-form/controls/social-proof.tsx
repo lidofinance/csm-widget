@@ -10,10 +10,10 @@ import {
   Stack,
 } from 'shared/components';
 import { TextInputHookForm } from 'shared/hook-form/controls';
-import { useApplyFormData } from '../context';
+import { useSocialMessages } from '../context';
 
 export const SocialProof: FC = () => {
-  const { twitterMessage, discordMessage } = useApplyFormData();
+  const { twitterMessage, discordMessage } = useSocialMessages();
 
   return (
     <Stack direction="column" gap="md">
