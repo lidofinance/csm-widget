@@ -2,12 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import { useLidoSDK } from '../web3-provider';
 
-export const useOperatorsCount = () => {
+export const useKeyEjectFee = () => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['operators-count'],
+    queryKey: ['ics-eject-fee'],
+    queryFn: () => csm.keys.getEjectFeePerKey(),
     ...STRATEGY_CONSTANT,
-    queryFn: () => csm.module.getOperatorsCount(),
   });
 };

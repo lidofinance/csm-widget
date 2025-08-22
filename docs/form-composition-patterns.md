@@ -9,6 +9,7 @@ Forms in the codebase follow a consistent architectural pattern that promotes re
 ## Core Architecture Pattern
 
 ### 1. Form Provider Layer
+
 Each form has a dedicated provider component that wraps the entire form logic:
 
 ```
@@ -24,20 +25,29 @@ features/{feature-name}/{form-name}/
 ```
 
 ### 2. Form Component Structure
+
 All forms follow this consistent component hierarchy:
 
 ```tsx
 export const ExampleForm: FC = memo(() => {
   return (
-    <ExampleFormProvider>           {/* Context Provider */}
-      <FormBlock>                   {/* Shared layout component */}
-        <BaseFormLoader>            {/* Loading wrapper */}
-          <FormControllerStyled>    {/* Form controller */}
-            <Control1 />            {/* Form controls */}
+    <ExampleFormProvider>
+      {' '}
+      {/* Context Provider */}
+      <FormBlock>
+        {' '}
+        {/* Shared layout component */}
+        <BaseFormLoader>
+          {' '}
+          {/* Loading wrapper */}
+          <FormControllerStyled>
+            {' '}
+            {/* Form controller */}
+            <Control1 /> {/* Form controls */}
             <Control2 />
             <SubmitButton />
           </FormControllerStyled>
-          <ExampleFormInfo />       {/* Additional info display */}
+          <ExampleFormInfo /> {/* Additional info display */}
         </BaseFormLoader>
       </FormBlock>
       {/* Optional additional components */}
@@ -49,38 +59,42 @@ export const ExampleForm: FC = memo(() => {
 ## Provider Pattern Implementation
 
 ### Context Provider Structure
+
 Each form provider follows this pattern:
 
 ```tsx
 export const ExampleFormProvider: FC<PropsWithChildren> = ({ children }) => {
   // 1. Fetch network data
   const [networkData, revalidate] = useExampleFormNetworkData();
-  
+
   // 2. Setup validation
   const validationResolver = useExampleValidation(networkData);
-  
+
   // 3. Get default values
   const asyncDefaultValues = useGetDefaultValues(networkData);
-  
+
   // 4. Initialize React Hook Form
   const formObject = useForm<ExampleFormInputType>({
     defaultValues: asyncDefaultValues,
     resolver: validationResolver,
     mode: 'onChange',
   });
-  
+
   // 5. Setup submit handler
   const { submitAction } = useExampleSubmit({
     onConfirm: revalidate,
     onRetry: retryFire,
   });
-  
+
   // 6. Create context values
-  const formControllerValue = useMemo(() => ({
-    onSubmit: submitAction,
-    retryEvent,
-  }), [submitAction, retryEvent]);
-  
+  const formControllerValue = useMemo(
+    () => ({
+      onSubmit: submitAction,
+      retryEvent,
+    }),
+    [submitAction, retryEvent],
+  );
+
   // 7. Provide contexts
   return (
     <FormProvider {...formObject}>
@@ -95,6 +109,7 @@ export const ExampleFormProvider: FC<PropsWithChildren> = ({ children }) => {
 ```
 
 ### Type Definitions Pattern
+
 Each form defines two main types:
 
 ```tsx
@@ -116,6 +131,7 @@ export type ExampleFormNetworkData = {
 ## Controls Pattern
 
 ### Form Controls Structure
+
 Form controls are organized in a `controls/` directory:
 
 ```
@@ -127,19 +143,17 @@ controls/
 ```
 
 ### Control Implementation Pattern
+
 Controls follow this pattern:
 
 ```tsx
 export const ExampleControl = () => {
   // Access form data through context
   const { someNetworkData } = useExampleFormData();
-  
+
   // Use shared form components
   return (
-    <SomeSharedFormComponent
-      name="fieldName"
-      networkData={someNetworkData}
-    />
+    <SomeSharedFormComponent name="fieldName" networkData={someNetworkData} />
   );
 };
 ```
@@ -147,19 +161,23 @@ export const ExampleControl = () => {
 ## Hooks Pattern
 
 ### Custom Hooks Organization
+
 Forms use several types of custom hooks:
 
 1. **Data Fetching Hooks** (`use-{form-name}-network-data.tsx`)
+
    - Fetch external data needed by the form
    - Return data and revalidation function
    - Handle loading states
 
 2. **Validation Hooks** (`use-{form-name}-validation.ts`)
+
    - Create validation resolver for React Hook Form
    - Use network data to determine validation rules
    - Return resolver function
 
 3. **Submit Hooks** (`use-{form-name}-submit.ts`)
+
    - Handle form submission logic
    - Manage transaction modal stages
    - Execute blockchain transactions
@@ -172,32 +190,37 @@ Forms use several types of custom hooks:
 ## Modal Integration Pattern
 
 ### Transaction Modal Stages
+
 Forms integrate with transaction modals using a consistent pattern:
 
 ```tsx
 const useTxModalStages = () => {
-  return useMemo(() => [
-    {
-      sign: {
-        title: 'Sign transaction',
-        description: 'Please sign the transaction...',
+  return useMemo(
+    () => [
+      {
+        sign: {
+          title: 'Sign transaction',
+          description: 'Please sign the transaction...',
+        },
+        pending: {
+          title: 'Transaction pending',
+          description: 'Waiting for confirmation...',
+        },
+        success: {
+          title: 'Success',
+          description: 'Transaction completed successfully',
+        },
       },
-      pending: {
-        title: 'Transaction pending',
-        description: 'Waiting for confirmation...',
-      },
-      success: {
-        title: 'Success',
-        description: 'Transaction completed successfully',
-      },
-    },
-  ], []);
+    ],
+    [],
+  );
 };
 ```
 
 ## Loading States Pattern
 
 ### BaseFormLoader Component
+
 Forms use a shared loading wrapper:
 
 ```tsx
@@ -207,6 +230,7 @@ Forms use a shared loading wrapper:
 ```
 
 This component:
+
 - Shows loading spinner while data fetches
 - Prevents form interaction during loading
 - Handles error states gracefully
@@ -214,6 +238,7 @@ This component:
 ## Validation Pattern
 
 ### Validation Integration
+
 Forms use a unified validation approach:
 
 ```tsx
@@ -221,10 +246,11 @@ const useExampleValidation = (networkData: ExampleFormNetworkData) => {
   return useMemo(() => {
     return zodResolver(
       z.object({
-        amount: z.bigint()
+        amount: z
+          .bigint()
           .min(1n, 'Amount must be greater than 0')
           .max(networkData.maxAmount || 0n, 'Insufficient balance'),
-      })
+      }),
     );
   }, [networkData]);
 };
@@ -233,7 +259,9 @@ const useExampleValidation = (networkData: ExampleFormNetworkData) => {
 ## Info Components Pattern
 
 ### Form Information Display
+
 Each form includes an info component that displays:
+
 - Current form state
 - Calculated values
 - Important warnings or notices
@@ -242,7 +270,7 @@ Each form includes an info component that displays:
 ```tsx
 export const ExampleFormInfo = () => {
   const { formData } = useExampleFormData();
-  
+
   return (
     <InfoBox>
       <InfoItem label="Current Balance" value={formatEther(formData.balance)} />
@@ -255,14 +283,17 @@ export const ExampleFormInfo = () => {
 ## Examples by Feature
 
 ### Simple Forms
+
 - `add-bond-form` - Basic amount input with token selection
 - `unlock-bond-form` - Amount input with balance validation
 
-### Complex Forms  
+### Complex Forms
+
 - `submit-keys-form` - Multiple inputs, custom addresses, referrer logic
 - `add-keys-form` - Keys input, amount calculation, deposit queue display
 
 ### Specialized Forms
+
 - `change-role-form` - Address input with role-specific validation
 - `eject-keys-form` - Key selection with confirmation modals
 
