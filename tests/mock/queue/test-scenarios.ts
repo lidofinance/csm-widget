@@ -1400,6 +1400,54 @@ export const testScenarios: TestScenario[] = [
       },
     },
   },
+  {
+    title: '[All Priorities] All Priorities Active - Little Submitted Keys',
+    description:
+      'All priorities (P0-P5) have keys with current operator having few keys at the end',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 200,
+        queue: 483, // 80 + 70 + 90 + 60 + 100 + 83 = 483 total (3 extra keys from operator 1)
+        capacity: 1000,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 3, // Small number of keys
+      },
+      formData: {
+        depositDataLength: 3, // Matching the depositable count
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 50],
+            [3, 30],
+          ], // Priority 0: 80 total, no operator 1
+          [
+            [4, 40],
+            [5, 30],
+          ], // Priority 1: 70 total, no operator 1
+          [
+            [6, 55],
+            [7, 35],
+          ], // Priority 2: 90 total, no operator 1
+          [
+            [8, 35],
+            [9, 25],
+          ], // Priority 3: 60 total, no operator 1
+          [
+            [10, 60],
+            [11, 40],
+          ], // Priority 4: 100 total, no operator 1
+          [
+            [12, 50],
+            [13, 30],
+            [1, 3],
+          ], // Priority 5: 83 total, operator 1 at the end with 3 keys
+        ],
+      },
+    },
+  },
 
   // ========================================
   // GROUP L: REALISTIC EDGE CASES
