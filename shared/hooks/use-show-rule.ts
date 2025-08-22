@@ -1,7 +1,7 @@
 import { getExternalLinks } from 'consts/external-links';
-import { useModifyContext } from 'providers/modify-provider';
 import { useNodeOperatorContext } from 'providers/node-operator-provider';
 import { useCallback } from 'react';
+import { useFeatureFlags } from 'config/feature-flags';
 import {
   useAccount,
   useCanCreateNodeOperator,
@@ -32,7 +32,7 @@ export const useShowRule = () => {
   const { data: isReportingRole } = useIsReportStealingRole();
   const { data: lockedBond } = useNodeOperatorLockAmount(nodeOperator?.id);
   const canCreateNO = useCanCreateNodeOperator();
-  const { icsEnabled } = useModifyContext();
+  const featureFlags = useFeatureFlags();
 
   // TODO: enable ICS by time
 
@@ -48,7 +48,7 @@ export const useShowRule = () => {
         case 'CAN_CREATE':
           return !!canCreateNO;
         case 'ICS_ENABLED':
-          return !!icsEnabled;
+          return !!featureFlags?.icsEnabled;
         case 'HAS_MANAGER_ROLE':
           return !!nodeOperator?.roles.includes('MANAGER');
         case 'HAS_REWARDS_ROLE':
@@ -69,7 +69,7 @@ export const useShowRule = () => {
       isConnectedWallet,
       nodeOperator,
       canCreateNO,
-      icsEnabled,
+      featureFlags?.icsEnabled,
       invites?.length,
       lockedBond,
       isReportingRole,

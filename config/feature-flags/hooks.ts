@@ -5,22 +5,22 @@ import { ConfigContext } from '../provider';
 import { FeatureFlagsContextType } from './context-hook';
 import { FeatureFlagsType } from './types';
 
-type UseFeatureFlagReturnType = {
-  [key in keyof FeatureFlagsType]: boolean;
+type UseFeatureFlagReturnType<T extends keyof FeatureFlagsType> = {
+  [key in T]: boolean;
 } & {
   setFeatureFlag: (featureFlag: keyof FeatureFlagsType, value: boolean) => void;
 };
 
-export const useFeatureFlag = (
-  flag: keyof FeatureFlagsType,
-): UseFeatureFlagReturnType | null => {
+export const useFeatureFlag = <T extends keyof FeatureFlagsType>(
+  flag: T,
+): UseFeatureFlagReturnType<T> | null => {
   const context = useContext(ConfigContext);
   invariant(context, 'Attempt to use `feature flag` outside of provider');
   return useMemo(() => {
     return {
       [flag]: context.featureFlags[flag],
       setFeatureFlag: context.featureFlags?.setFeatureFlag,
-    };
+    } as UseFeatureFlagReturnType<T>;
   }, [context.featureFlags, flag]);
 };
 

@@ -1,4 +1,3 @@
-import { useLocalStorage } from '@lido-sdk/react';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
 import { isAddress } from 'ethers/lib/utils.js';
@@ -11,13 +10,14 @@ import {
   useMemo,
 } from 'react';
 import { useSearchParams, useSessionStorage } from 'shared/hooks';
+import { useFeatureFlags } from 'config/feature-flags';
+import { ICS_ENABLED } from 'config/feature-flags/types';
 import invariant from 'tiny-invariant';
 import { compareLowercase, trackMatomoEvent } from 'utils';
 import { Address } from 'wagmi';
 
 type ModifyContextValue = {
   referrer?: Address;
-  icsEnabled?: boolean;
 };
 
 const QUERY_REFERRER = 'ref';
@@ -41,11 +41,7 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     undefined,
   );
 
-  const [icsEnabled, setIcsEnabled] = useLocalStorage<boolean>(
-    'ics-enabled',
-    false,
-  );
-
+  const featureFlags = useFeatureFlags();
   const query = useSearchParams();
 
   useEffect(() => {
@@ -65,21 +61,20 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [query, referrer, setReferrer]);
 
   useEffect(() => {
-    if (!query) return;
+    if (!query || !featureFlags) return;
 
     const icsApplyParam = query?.get(QUERY_ICS_APPLY);
 
-    if (icsApplyParam && !icsEnabled) {
-      setIcsEnabled(true);
+    if (icsApplyParam && !featureFlags.icsEnabled) {
+      featureFlags.setFeatureFlag(ICS_ENABLED, true);
     }
-  }, [icsEnabled, query, setIcsEnabled]);
+  }, [featureFlags, query]);
 
   const value: ModifyContextValue = useMemo(
     () => ({
       referrer,
-      icsEnabled,
     }),
-    [icsEnabled, referrer],
+    [referrer],
   );
   return (
     <ModifyContext.Provider value={value}>{children}</ModifyContext.Provider>
