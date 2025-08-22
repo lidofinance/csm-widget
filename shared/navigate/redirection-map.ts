@@ -4,8 +4,14 @@ import { PATH } from 'consts/urls';
 
 type RedirectionMap = Partial<Record<ROLE_CODE, PATH>>;
 
+export type RedirectionProps = Partial<
+  FeatureFlagsType & { isAccountActive: boolean }
+>;
+
+export type RedirectionFn = (flags: RedirectionProps) => RedirectionMap;
+
 export const redirectionMap: Partial<
-  Record<PATH, RedirectionMap | ((flags: FeatureFlagsType) => RedirectionMap)>
+  Record<PATH, RedirectionMap | RedirectionFn>
 > = {
   [PATH.ROLES]: {
     [ROLE_CODE.NONE]: PATH.ROLES_INBOX,
@@ -60,13 +66,14 @@ export const redirectionMap: Partial<
   [PATH.BOND_UNLOCK]: {
     [ROLE_CODE.NONE]: PATH.HOME,
   },
+  // TODO: if ICS is claimed - redirect to claim page
   [PATH.TYPE]: ({ icsApplyForm }) =>
     icsApplyForm
       ? {
-          [ROLE_CODE.NONE]: PATH.TYPE_ICS_SYSTEM,
-          [ROLE_CODE.REWARDS]: PATH.TYPE_ICS_SYSTEM,
-          [ROLE_CODE.MANAGER]: PATH.TYPE_ICS_SYSTEM,
-          [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_ICS_SYSTEM,
+          [ROLE_CODE.NONE]: PATH.TYPE_ICS_APPLY,
+          [ROLE_CODE.REWARDS]: PATH.TYPE_ICS_APPLY,
+          [ROLE_CODE.MANAGER]: PATH.TYPE_ICS_APPLY,
+          [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_ICS_APPLY,
         }
       : {
           [ROLE_CODE.NONE]: PATH.HOME,
