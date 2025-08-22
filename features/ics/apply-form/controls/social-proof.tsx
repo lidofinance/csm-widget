@@ -3,7 +3,7 @@ import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC } from 'react';
 import {
   Chip,
-  CopyButton,
+  CopyButton2,
   FormTitle,
   IconTooltip,
   MatomoLink,
@@ -45,7 +45,7 @@ export const SocialProof: FC = () => {
               onClick={(e) => (e.target as HTMLInputElement).select()}
               value={twitterMessage}
               fullwidth
-              rightDecorator={<CopyButton text={twitterMessage} size="xs" />}
+              rightDecorator={<CopyButton2 text={twitterMessage} size="xs" />}
             />
           </Stack>
 
@@ -88,7 +88,7 @@ export const SocialProof: FC = () => {
               onClick={(e) => (e.target as HTMLInputElement).select()}
               value={discordMessage}
               fullwidth
-              rightDecorator={<CopyButton text={discordMessage} size="xs" />}
+              rightDecorator={<CopyButton2 text={discordMessage} size="xs" />}
             />
           </Stack>
 

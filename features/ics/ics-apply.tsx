@@ -17,8 +17,7 @@ import { Connect } from 'shared/wallet';
 const IcsApplyContent: FC = () => {
   const { active } = useAccount();
   const { token } = useAuth();
-  const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
-    useIcsState();
+  const { typeStatus, data, isPending, applyMode, reset } = useIcsState();
 
   if (!active) {
     return (
@@ -34,14 +33,6 @@ const IcsApplyContent: FC = () => {
           </Stack>
           <Connect size="sm" fullwidth />
         </Stack>
-      </Block>
-    );
-  }
-
-  if (isTypePending) {
-    return (
-      <Block>
-        <WhenLoaded loading={true} />
       </Block>
     );
   }

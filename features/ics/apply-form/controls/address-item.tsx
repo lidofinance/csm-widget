@@ -9,7 +9,7 @@ import { isAddress, isHexString } from 'ethers/lib/utils.js';
 import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC, useCallback, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { CopyButton, MatomoLink, Stack } from 'shared/components';
+import { CopyButton2, MatomoLink, Stack } from 'shared/components';
 import { VerifiedChip } from 'shared/components/input-address/verified-chip';
 import {
   AddressInputHookForm,
@@ -140,7 +140,7 @@ export const AddressItem: FC<AddressItemProps> = ({
               placeholder="Enter address above to generate message..."
               rightDecorator={
                 <Stack gap="sm">
-                  <CopyButton text={message} size="xs" variant="translucent" />
+                  <CopyButton2 text={message} size="xs" variant="translucent" />
                   <MatomoLink href="https://etherscan.io/verifiedSignatures#">
                     <ButtonIcon
                       icon={<External />}

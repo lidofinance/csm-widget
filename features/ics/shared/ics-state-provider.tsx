@@ -32,8 +32,8 @@ export const useIcsState = () => {
 };
 
 export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { data, isLoading } = useFormStatus();
-  const isPending = !data && isLoading;
+  const { data } = useFormStatus();
+  const isPending = data === undefined;
 
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
