@@ -66,21 +66,14 @@ export const redirectionMap: Partial<
   [PATH.BOND_UNLOCK]: {
     [ROLE_CODE.NONE]: PATH.HOME,
   },
-  [PATH.TYPE]: ({ icsApplyForm, isAccountActive }) =>
+  // TODO: if ICS is claimed - redirect to claim page
+  [PATH.TYPE]: ({ icsApplyForm }) =>
     icsApplyForm
       ? {
-          [ROLE_CODE.NONE]: isAccountActive
-            ? PATH.TYPE_ICS_APPLY
-            : PATH.TYPE_ICS_SYSTEM,
-          [ROLE_CODE.REWARDS]: isAccountActive
-            ? PATH.TYPE_ICS_APPLY
-            : PATH.TYPE_ICS_SYSTEM,
-          [ROLE_CODE.MANAGER]: isAccountActive
-            ? PATH.TYPE_ICS_APPLY
-            : PATH.TYPE_ICS_SYSTEM,
-          [ROLE_CODE.REWARDS_AND_MANAGER]: isAccountActive
-            ? PATH.TYPE_ICS_APPLY
-            : PATH.TYPE_ICS_SYSTEM,
+          [ROLE_CODE.NONE]: PATH.TYPE_ICS_APPLY,
+          [ROLE_CODE.REWARDS]: PATH.TYPE_ICS_APPLY,
+          [ROLE_CODE.MANAGER]: PATH.TYPE_ICS_APPLY,
+          [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_ICS_APPLY,
         }
       : {
           [ROLE_CODE.NONE]: PATH.HOME,

@@ -7,12 +7,12 @@ const TYPE_ROUTES: SwitcherRoutes = [
   {
     title: 'Score system',
     path: PATH.TYPE_ICS_SYSTEM,
-    showRules: ['ICS_APPLY_FORM'],
+    showRules: ['ICS_ENABLED'],
   },
   {
     title: 'Application form',
     path: PATH.TYPE_ICS_APPLY,
-    showRules: ['CAN_APPLY_ICS'],
+    showRules: ['ICS_ENABLED'],
   },
   {
     title: 'Claim',
