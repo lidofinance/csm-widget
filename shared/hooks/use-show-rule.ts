@@ -20,7 +20,6 @@ export type ShowRule =
   | 'HAS_LOCKED_BOND'
   | 'CAN_CREATE'
   | 'ICS_ENABLED'
-  | 'ICS_CAN_APPLY'
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE';
 
@@ -50,8 +49,6 @@ export const useShowRule = () => {
           return !!canCreateNO;
         case 'ICS_ENABLED':
           return !!icsEnabled;
-        case 'ICS_CAN_APPLY':
-          return !!icsEnabled && isConnectedWallet;
         case 'HAS_MANAGER_ROLE':
           return !!nodeOperator?.roles.includes('MANAGER');
         case 'HAS_REWARDS_ROLE':

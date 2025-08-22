@@ -11,7 +11,7 @@ const TYPE_ROUTES: SwitcherRoutes = [
   {
     title: 'Application form',
     path: PATH.TYPE_ICS_APPLY,
-    showRules: ['ICS_CAN_APPLY'],
+    showRules: ['ICS_ENABLED'],
   },
 ];
 

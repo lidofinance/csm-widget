@@ -3,7 +3,7 @@ import { GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded>
-    <Navigate path={PATH.TYPE_ICS_SYSTEM} />
+    <Navigate path={PATH.TYPE_ICS_APPLY} />
   </GateLoaded>
 );
 
