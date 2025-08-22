@@ -1,3 +1,4 @@
+import { useLocalStorage } from '@lido-sdk/react';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
 import { isAddress } from 'ethers/lib/utils.js';
@@ -16,9 +17,11 @@ import { Address } from 'wagmi';
 
 type ModifyContextValue = {
   referrer?: Address;
+  icsEnabled?: boolean;
 };
 
 const QUERY_REFERRER = 'ref';
+const QUERY_ICS_APPLY = 'ics-apply';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -36,6 +39,11 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
   const [referrer, setReferrer] = useSessionStorage<Address | undefined>(
     'referrer',
     undefined,
+  );
+
+  const [icsEnabled, setIcsEnabled] = useLocalStorage<boolean>(
+    'ics-enabled',
+    false,
   );
 
   const query = useSearchParams();
@@ -56,11 +64,22 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     }
   }, [query, referrer, setReferrer]);
 
+  useEffect(() => {
+    if (!query) return;
+
+    const icsApplyParam = query?.get(QUERY_ICS_APPLY);
+
+    if (icsApplyParam && !icsEnabled) {
+      setIcsEnabled(true);
+    }
+  }, [icsEnabled, query, setIcsEnabled]);
+
   const value: ModifyContextValue = useMemo(
     () => ({
       referrer,
+      icsEnabled,
     }),
-    [referrer],
+    [icsEnabled, referrer],
   );
   return (
     <ModifyContext.Provider value={value}>{children}</ModifyContext.Provider>
