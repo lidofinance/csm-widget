@@ -1,16 +1,10 @@
 import { Input, Text } from '@lidofinance/lido-ui';
 import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC } from 'react';
-import {
-  Chip,
-  CopyButton2,
-  FormTitle,
-  IconTooltip,
-  MatomoLink,
-  Stack,
-} from 'shared/components';
+import { CopyButton2, IconTooltip, MatomoLink, Stack } from 'shared/components';
 import { TextInputHookForm } from 'shared/hook-form/controls';
 import { useSocialMessages } from '../context';
+import { Chip, FormTitle } from '../components';
 
 export const SocialProof: FC = () => {
   const { twitterMessage, discordMessage } = useSocialMessages();
@@ -18,7 +12,7 @@ export const SocialProof: FC = () => {
   return (
     <Stack direction="column" gap="md">
       <Stack direction="column" gap="xxs">
-        <FormTitle extra={<Chip>Optional</Chip>}>Socials</FormTitle>
+        <FormTitle chip={<Chip>Optional</Chip>}>Socials</FormTitle>
         <Text size="xs" color="secondary">
           You can add your social accounts. To prove you own an account, post a
           message. For more info see <MatomoLink>the guide</MatomoLink>

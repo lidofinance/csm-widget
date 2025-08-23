@@ -3,6 +3,7 @@ import { Address } from 'wagmi';
 export type AdditionalAddress = {
   address: string;
   signature: string;
+  verified?: boolean;
 };
 
 export type ApplyFormInputType = {

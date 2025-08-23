@@ -1,9 +1,10 @@
 import { ButtonIcon, Plus, Text } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { Chip, FormTitle, MatomoLink, Stack } from 'shared/components';
+import { MatomoLink, Stack } from 'shared/components';
 import { MAX_ADDITIONAL_ADDRESSES, type ApplyFormInputType } from '../context';
 import { AddressItem } from './address-item';
+import { Chip, FormTitle } from '../components';
 
 export const AdditionalAddresses: FC = () => {
   const { control } = useFormContext<ApplyFormInputType>();
@@ -28,9 +29,7 @@ export const AdditionalAddresses: FC = () => {
   return (
     <Stack direction="column" gap="md">
       <Stack direction="column" gap="xxs">
-        <FormTitle extra={<Chip>Optional</Chip>}>
-          Additional Addresses
-        </FormTitle>
+        <FormTitle chip={<Chip>Optional</Chip>}>Additional Addresses</FormTitle>
         <Text size="xs" color="secondary">
           You can add up to {MAX_ADDITIONAL_ADDRESSES} addresses where your
           achievements are stored. To prove you own each address, sign a message

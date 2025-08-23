@@ -12,12 +12,11 @@ export const useFormStatus = () => {
   const swr = useSWR('ics/status', fetcher, STRATEGY_LAZY);
 
   const mutate = useCallback(
-    async (payload: IcsApplyDto) => {
-      return swr.mutate(updater('ics/apply', payload), {
+    async (payload: IcsApplyDto) =>
+      swr.mutate(updater('ics/apply', payload), {
         rollbackOnError: true,
         revalidate: false,
-      });
-    },
+      }),
     [swr, updater],
   );
 

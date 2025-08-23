@@ -1,6 +1,6 @@
 import { isAddress, isHexString } from 'ethers/lib/utils.js';
 import { useCallback } from 'react';
-import type { Resolver } from 'react-hook-form';
+import type { Resolver, ResolverOptions } from 'react-hook-form';
 import {
   handleResolverValidationError,
   ValidationError,
@@ -8,6 +8,18 @@ import {
 import { compareLowercase } from 'utils';
 import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
 import { useRawVefiryMessage } from './use-verify-message';
+import { MAX_ADDITIONAL_ADDRESSES } from './consts';
+
+const shouldValidateField = (
+  fieldPath: string,
+  { names }: ResolverOptions<ApplyFormInputType>,
+): boolean => {
+  if (!names?.length) {
+    return true;
+  }
+
+  return names.some((name) => name === fieldPath);
+};
 
 const twitterUrlRegex = /^https:\/\/(twitter\.com|x\.com)\/\w+\/status\/\d+$/;
 const discordMessageRegex = /^https:\/\/discord\.com\/channels\/\d+\/\d+\/\d+$/;
@@ -18,90 +30,99 @@ export const useApplyFormValidation = ({
   const verifyMessage = useRawVefiryMessage(mainAddress);
 
   return useCallback<Resolver<ApplyFormInputType>>(
-    async (values) => {
+    async (values, _, options) => {
       try {
         const { additionalAddresses, twitterLink, discordLink } = values;
 
-        // Validate additional addresses array length
-        if (additionalAddresses.length > 5) {
-          // Target the last address field (index 4) since we allow max 5
+        if (
+          shouldValidateField('additionalAddresses', options) &&
+          additionalAddresses.length > MAX_ADDITIONAL_ADDRESSES
+        ) {
           throw new ValidationError(
             'additionalAddresses.4.address',
             'Maximum 5 additional addresses allowed',
           );
         }
 
-        // Find duplicates and throw error for the first duplicate found
-        for (const [i, { address }] of additionalAddresses.entries()) {
-          if (
-            additionalAddresses.findIndex((aa) => aa.address === address) !== i
-          ) {
-            // Target the second occurrence of the duplicate
-            throw new ValidationError(
-              `additionalAddresses.${i}.address`,
-              'Duplicate addresses are not allowed',
-            );
-          }
-        }
-
-        // Check if any additional address is the same as main address
-        for (const [i, { address }] of additionalAddresses.entries()) {
-          if (isAddress(address) && compareLowercase(address, mainAddress)) {
-            throw new ValidationError(
-              `additionalAddresses.${i}.address`,
-              'Additional address cannot be the same as main address',
-            );
-          }
-        }
-
-        // Validate signatures
         for (const [
-          i,
-          { address, signature },
+          index,
+          { address, signature, verified },
         ] of additionalAddresses.entries()) {
-          // Skip validation if either address or signature is empty
-          if (!address) {
-            continue;
-          }
+          const addressPath = `additionalAddresses.${index}.address`;
+          const signaturePath = `additionalAddresses.${index}.signature`;
 
-          if (!signature) {
-            throw new ValidationError(`additionalAddresses.${i}.signature`, '');
-          }
+          if (shouldValidateField(addressPath, options)) {
+            if (!address || !isAddress(address)) {
+              throw new ValidationError(addressPath, '');
+            }
 
-          if (!isAddress(address) || !isHexString(signature)) {
-            throw new ValidationError(
-              `additionalAddresses.${i}.signature`,
-              'Invalid signature for this address and message',
-            );
-          }
-
-          try {
-            const isValid = await verifyMessage({ address, signature });
-
-            if (!isValid) {
+            if (compareLowercase(address, mainAddress)) {
               throw new ValidationError(
-                `additionalAddresses.${i}.signature`,
+                addressPath,
+                'Additional address cannot be the same as main address',
+              );
+            }
+
+            const hasDuplicateAddresses = additionalAddresses.some(
+              (a, i) =>
+                i !== index &&
+                isAddress(a.address) &&
+                compareLowercase(address, a.address),
+            );
+
+            if (hasDuplicateAddresses) {
+              throw new ValidationError(
+                addressPath,
+                'Duplicate addresses are not allowed',
+              );
+            }
+          }
+
+          if (shouldValidateField(signaturePath, options)) {
+            if (!signature || !isHexString(signature)) {
+              throw new ValidationError(signaturePath, '');
+            }
+
+            if (verified) continue;
+
+            try {
+              if (!isAddress(address)) {
+                throw new ValidationError(addressPath, '');
+              }
+
+              const isValid = await verifyMessage({ address, signature });
+
+              if (!isValid) {
+                throw new ValidationError(
+                  signaturePath,
+                  'Invalid signature for this address and message',
+                );
+              }
+            } catch {
+              throw new ValidationError(
+                signaturePath,
                 'Invalid signature for this address and message',
               );
             }
-          } catch {
-            throw new ValidationError(
-              `additionalAddresses.${i}.signature`,
-              'Invalid signature for this address and message',
-            );
           }
         }
 
-        // Twitter link validation
-        if (twitterLink && !twitterUrlRegex.test(twitterLink)) {
+        if (
+          shouldValidateField('twitterLink', options) &&
+          twitterLink &&
+          !twitterUrlRegex.test(twitterLink)
+        ) {
           throw new ValidationError(
             'twitterLink',
             'Must be a valid Twitter/X status URL',
           );
         }
 
-        // Discord link validation
-        if (discordLink && !discordMessageRegex.test(discordLink)) {
+        if (
+          shouldValidateField('discordLink', options) &&
+          discordLink &&
+          !discordMessageRegex.test(discordLink)
+        ) {
           throw new ValidationError(
             'discordLink',
             'Must be a valid Discord message URL',
