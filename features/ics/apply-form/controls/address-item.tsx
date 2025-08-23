@@ -17,7 +17,7 @@ import {
 import { isAddress, isHex } from 'viem';
 import {
   useAddressMessage,
-  useVefiryMessage,
+  useVerifyMessage,
   type ApplyFormInputType,
 } from '../context';
 
@@ -36,17 +36,23 @@ export const AddressItem: FC<AddressItemProps> = ({
     name: `additionalAddresses.${index}.address` as const,
   }) as string;
 
-  const { getValues, setError, clearErrors } =
+  const verified = useWatch<ApplyFormInputType>({
+    name: `additionalAddresses.${index}.verified` as const,
+  });
+
+  const { getValues, setError, clearErrors, setValue } =
     useFormContext<ApplyFormInputType>();
 
   const message = useAddressMessage(watchedAddress);
 
-  const [verified, setVerified] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
 
-  const verifyMessage = useVefiryMessage();
+  const verifyMessage = useVerifyMessage();
 
   const onVerify = useCallback(
     async (index: number) => {
+      if (isVerifying || verified) return;
+
       const currentAddresses = getValues('additionalAddresses');
       const { address, signature } = currentAddresses[index];
 
@@ -58,7 +64,6 @@ export const AddressItem: FC<AddressItemProps> = ({
         return;
       }
 
-      // Check if address is valid
       if (!isAddress(address)) {
         setError(`additionalAddresses.${index}.address`, {
           type: 'manual',
@@ -67,29 +72,38 @@ export const AddressItem: FC<AddressItemProps> = ({
         return;
       }
 
+      setIsVerifying(true);
+
       try {
-        // Verify the signature
         const isValid = await verifyMessage({ address, signature });
 
         if (isValid) {
           clearErrors(`additionalAddresses.${index}.signature`);
-          setVerified(true);
+          setValue(`additionalAddresses.${index}.verified`, true);
         } else {
-          // Signature is invalid
           setError(`additionalAddresses.${index}.signature`, {
             type: 'manual',
             message: 'Invalid signature for this address and message',
           });
         }
       } catch (error) {
-        // Error during verification (e.g., malformed signature)
         setError(`additionalAddresses.${index}.signature`, {
           type: 'manual',
           message: 'Invalid signature format or verification failed',
         });
+      } finally {
+        setIsVerifying(false);
       }
     },
-    [clearErrors, getValues, setError, verifyMessage],
+    [
+      clearErrors,
+      getValues,
+      setError,
+      verifyMessage,
+      isVerifying,
+      verified,
+      setValue,
+    ],
   );
 
   return (
@@ -123,7 +137,7 @@ export const AddressItem: FC<AddressItemProps> = ({
       ) : (
         <CategoryItemsWrapper $gap="md" $offset="md">
           <Stack direction="column" gap="sm">
-            <Text size="xs">Step 1. Insert you Ethereum address</Text>
+            <Text size="xs">Step 1. Insert your Ethereum address</Text>
             <AddressInputHookForm
               fieldName={`additionalAddresses.${index}.address`}
               label={`Additional address #${index + 1}`}
@@ -163,14 +177,14 @@ export const AddressItem: FC<AddressItemProps> = ({
               fieldName={`additionalAddresses.${index}.signature`}
               label="Signature"
               placeholder="0x123..."
-              // error="123"
               rightDecorator={
                 <Button
                   size="xs"
                   variant="translucent"
                   onClick={() => void onVerify(index)}
+                  disabled={isVerifying}
                 >
-                  Verify
+                  {isVerifying ? 'Verifying...' : 'Verify'}
                 </Button>
               }
             />

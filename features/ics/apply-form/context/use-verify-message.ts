@@ -55,7 +55,7 @@ export const useRawVefiryMessage = (mainAddress: Address) => {
   );
 };
 
-export const useVefiryMessage = () => {
+export const useVerifyMessage = () => {
   const { mainAddress } = useApplyFormData();
   return useRawVefiryMessage(mainAddress);
 };
