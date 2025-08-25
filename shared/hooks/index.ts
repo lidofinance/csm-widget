@@ -56,6 +56,7 @@ export * from './useCsmCurveIdDefault';
 export * from './useCsmCurveIdEarlyAdoption';
 export * from './useCsmEarlyAdoption';
 export * from './useCsmEarlyAdoptionKeysLimit';
+export * from './useIcsAddresses';
 export * from './useCsmKeyRemovalFee';
 export * from './useCsmKeysSummary';
 export * from './useCsmStatus';

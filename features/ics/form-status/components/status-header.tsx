@@ -45,7 +45,7 @@ const getProofStatus = (typeStatus: TypeStatus) => {
     case 'CLAIMED':
       return <ScoreChip type="default">Claimed</ScoreChip>;
     case 'ISSUED':
-      return <ScoreChip type="success">Issued</ScoreChip>;
+      return <ScoreChip type="success">Approved</ScoreChip>;
     default:
       return <ScoreChip type="pending">Pending</ScoreChip>;
   }
@@ -58,6 +58,13 @@ const useHint = (
   scores: IcsScoresDto | undefined,
 ) => {
   switch (true) {
+    case typeStatus === 'ISSUED':
+      return (
+        <Text size="xs">
+          You&apos;re already eligible to claim ICS type after the CSM v2
+          release
+        </Text>
+      );
     case status === 'REJECTED':
       if (comments?.reason) {
         return <Text size="xs">{comments?.reason}</Text>;

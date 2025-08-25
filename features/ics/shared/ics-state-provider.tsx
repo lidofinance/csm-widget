@@ -7,6 +7,7 @@ import {
   useState,
 } from 'react';
 import invariant from 'tiny-invariant';
+import { useIcsAddressCheck } from 'shared/hooks/useIcsAddresses';
 import { IcsResponseDto } from './types';
 import { useFormStatus } from './use-form-status';
 
@@ -35,19 +36,27 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data } = useFormStatus();
   const isPending = data === undefined;
 
+  const { data: isAddressInIcsList, initialLoading: isTypePending } =
+    useIcsAddressCheck();
+
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
 
+  const typeStatus: TypeStatus = useMemo(() => {
+    if (isAddressInIcsList) return 'ISSUED';
+    return 'PENDING';
+  }, [isAddressInIcsList]);
+
   const value: IcsStateContextType = useMemo(
     () => ({
-      typeStatus: 'PENDING',
+      typeStatus,
       data,
       isPending,
-      isTypePending: false,
+      isTypePending,
       applyMode,
       reset: (value = true) => setManualReset(value),
     }),
-    [applyMode, data, isPending],
+    [typeStatus, data, isPending, isTypePending, applyMode],
   );
 
   return (
