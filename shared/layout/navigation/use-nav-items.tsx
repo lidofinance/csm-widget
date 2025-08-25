@@ -90,7 +90,7 @@ const routes: Route[] = [
     path: PATH.TYPE,
     icon: <UserIcon />,
     subPaths: [PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
-    showRules: ['ICS_ENABLED'],
+    showRules: [],
   },
 ];
 
@@ -98,7 +98,10 @@ export const useNavItems = () => {
   const check = useShowRule();
 
   return useMemo(
-    () => routes.filter(({ showRules }) => showRules.some(check)),
+    () =>
+      routes.filter(
+        ({ showRules }) => showRules.length === 0 || showRules.some(check),
+      ),
     [check],
   );
 };
