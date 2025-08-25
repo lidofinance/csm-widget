@@ -87,6 +87,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
   pageNormalizeQueue = 'pageNormalizeQueue',
+  pageTypeIcs = 'pageTypeIcs',
+  pageTypeIcsApply = 'pageTypeIcsApply',
   page404 = 'page404',
   page500 = 'page500',
   // Actions
@@ -462,6 +464,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «NormalizeQueue»',
     prefixed`view_normalize_queue_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs]: [
+    MATOMO_APP_NAME,
+    'View page «Type ICS»',
+    prefixed`view_type_ics_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcsApply]: [
+    MATOMO_APP_NAME,
+    'View page «Type ICS apply»',
+    prefixed`view_type_ics_apply_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.page404]: [
     MATOMO_APP_NAME,

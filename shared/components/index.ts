@@ -44,3 +44,4 @@ export * from './welcome-section';
 export * from './section-header-link';
 export * from './banner';
 export * from './stack';
+export { Chip } from './chip';

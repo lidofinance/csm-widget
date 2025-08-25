@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 import { useCopyToClipboard } from 'shared/hooks';
 import { LinkStyled } from '../matomo-link/styles';
 
-type CopyButtonProps = {
+export type CopyButtonProps = {
   text: string;
 };
 

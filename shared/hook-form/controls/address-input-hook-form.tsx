@@ -2,13 +2,13 @@ import { useController, useFormContext } from 'react-hook-form';
 import { InputAddress } from 'shared/components/input-address';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
 import { Button } from '@lidofinance/lido-ui';
-import { useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 type AddressInputHookFormProps = Partial<
   React.ComponentProps<typeof InputAddress>
 > & {
   fieldName: string;
-  label?: string;
+  label?: ReactNode;
   isLocked?: boolean;
   currentAddress?: string;
 };
