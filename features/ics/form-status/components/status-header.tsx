@@ -12,6 +12,13 @@ import { Stack } from 'shared/components';
 
 import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';
+import {
+  NodeOperatorOwner,
+  useAccount,
+  useNodeOperatorOwner,
+} from 'shared/hooks';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { compareLowercase } from 'utils';
 
 type StatusHeaderProps = {
   typeStatus: TypeStatus;
@@ -58,8 +65,22 @@ const useHint = (
   typeStatus: TypeStatus,
   comments: IcsCommentsDto | undefined,
   scores: IcsScoresDto | undefined,
+  owner: NodeOperatorOwner | undefined,
 ) => {
   switch (true) {
+    case typeStatus === 'ISSUED' && !!owner:
+      return (
+        <>
+          <Text size="xs">
+            You&apos;re already eligible to claim ICS type after the CSM v2
+            release
+          </Text>
+          <Text size="xs">
+            To claim, you must be the operator&apos;s owner - Rewards Address
+            (or Manager Address if Extended is enabled)
+          </Text>
+        </>
+      );
     case typeStatus === 'ISSUED':
       return (
         <Text size="xs">
@@ -125,9 +146,16 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   comments,
   scores,
 }) => {
+  const { address } = useAccount();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: owner } = useNodeOperatorOwner(nodeOperatorId);
+
+  const otherOwner =
+    owner && !compareLowercase(owner.address, address) ? owner : undefined;
+
   const statusChip = getStatus(status, typeStatus);
   const proofChip = getProofStatus(typeStatus);
-  const hint = useHint(status, typeStatus, comments, scores);
+  const hint = useHint(status, typeStatus, comments, scores, otherOwner);
 
   return (
     <Stack direction="column" gap="md">

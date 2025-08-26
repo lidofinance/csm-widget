@@ -4,7 +4,7 @@ import { NodeOperatorId } from 'types';
 import { useNodeOperatorInfo } from './useNodeOperatorInfo';
 import { useMergeSwr } from './useMergeSwr';
 
-type NodeOperatorOwner = {
+export type NodeOperatorOwner = {
   role: ROLES;
   address: string;
 };
