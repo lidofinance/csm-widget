@@ -46,7 +46,7 @@ const IcsApplyContent: FC = () => {
     );
   }
 
-  if (typeStatus === 'ISSUED') {
+  if (typeStatus !== 'PENDING') {
     return <ProofStatus typeStatus={typeStatus} />;
   }
 

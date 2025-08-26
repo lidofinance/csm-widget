@@ -2,18 +2,18 @@ import { ROLES } from 'consts/roles';
 import { useMemo } from 'react';
 import { NodeOperatorId } from 'types';
 import { useNodeOperatorInfo } from './useNodeOperatorInfo';
+import { useMergeSwr } from './useMergeSwr';
 
 type NodeOperatorOwner = {
   role: ROLES;
   address: string;
 };
 
-export const useNodeOperatorOwner = (
-  nodeOperatorId?: NodeOperatorId,
-): NodeOperatorOwner | undefined => {
-  const { data: info } = useNodeOperatorInfo(nodeOperatorId);
+export const useNodeOperatorOwner = (nodeOperatorId?: NodeOperatorId) => {
+  const infoSwr = useNodeOperatorInfo(nodeOperatorId);
+  const info = infoSwr.data;
 
-  return useMemo<NodeOperatorOwner | undefined>(() => {
+  const owner = useMemo<NodeOperatorOwner | undefined>(() => {
     if (!info) {
       return undefined;
     }
@@ -28,4 +28,6 @@ export const useNodeOperatorOwner = (
       address: isManagerOwner ? info.managerAddress : info.rewardAddress,
     };
   }, [info]);
+
+  return useMergeSwr([infoSwr], owner);
 };

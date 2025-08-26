@@ -15,7 +15,7 @@ export const RolesSection: FC = () => {
   const isUserAddress = useAddressCompare();
   const id = useNodeOperatorId();
   const { data: info } = useNodeOperatorInfo(id);
-  const owner = useNodeOperatorOwner(id);
+  const { data: owner } = useNodeOperatorOwner(id);
 
   return (
     <SectionBlock

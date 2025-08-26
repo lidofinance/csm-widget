@@ -46,6 +46,8 @@ const getProofStatus = (typeStatus: TypeStatus) => {
       return <ScoreChip type="default">Claimed</ScoreChip>;
     case 'ISSUED':
       return <ScoreChip type="success">Approved</ScoreChip>;
+    case 'OWNER_ISSUED':
+      return <ScoreChip type="success">Approved</ScoreChip>;
     default:
       return <ScoreChip type="pending">Pending</ScoreChip>;
   }
@@ -63,6 +65,13 @@ const useHint = (
         <Text size="xs">
           You&apos;re already eligible to claim ICS type after the CSM v2
           release
+        </Text>
+      );
+    case typeStatus === 'OWNER_ISSUED':
+      return (
+        <Text size="xs">
+          Node Operator&apos;s owner address is already eligible to claim ICS
+          type after the CSM v2 release
         </Text>
       );
     case status === 'REJECTED':
