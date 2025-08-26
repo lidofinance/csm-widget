@@ -57,6 +57,12 @@ export const Chip = styled.span`
   }
 `;
 
+export const OwnerChip = styled(Chip)`
+  font-weight: 400;
+  color: var(--lido-color-textSecondary);
+  background: color-mix(in srgb, currentColor 15%, transparent);
+`;
+
 export const RoleTitle = styled.h4`
   color: var(--lido-color-text);
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;

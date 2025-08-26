@@ -78,6 +78,7 @@ export * from './useNodeOperatorCurveType';
 export * from './useNodeOperatorFirstKeysBond';
 export * from './useNodeOperatorInfo';
 export * from './useNodeOperatorKeys';
+export * from './useNodeOperatorOwner';
 export * from './useNodeOperatorLockAmount';
 export * from './useNodeOperatorNextKeysBond';
 export * from './useNodeOperatorRewards';
