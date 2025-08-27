@@ -12,6 +12,13 @@ import { Stack } from 'shared/components';
 
 import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';
+import {
+  NodeOperatorOwner,
+  useAccount,
+  useNodeOperatorOwner,
+} from 'shared/hooks';
+import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { compareLowercase } from 'utils';
 
 type StatusHeaderProps = {
   typeStatus: TypeStatus;
@@ -45,7 +52,9 @@ const getProofStatus = (typeStatus: TypeStatus) => {
     case 'CLAIMED':
       return <ScoreChip type="default">Claimed</ScoreChip>;
     case 'ISSUED':
-      return <ScoreChip type="success">Issued</ScoreChip>;
+      return <ScoreChip type="success">Approved</ScoreChip>;
+    case 'OWNER_ISSUED':
+      return <ScoreChip type="success">Approved</ScoreChip>;
     default:
       return <ScoreChip type="pending">Pending</ScoreChip>;
   }
@@ -56,8 +65,42 @@ const useHint = (
   typeStatus: TypeStatus,
   comments: IcsCommentsDto | undefined,
   scores: IcsScoresDto | undefined,
+  owner: NodeOperatorOwner | undefined,
 ) => {
   switch (true) {
+    case typeStatus === 'ISSUED' && !!owner:
+      return (
+        <>
+          <Text size="xs">
+            You&apos;re already eligible to claim ICS type after the CSM v2
+            release
+          </Text>
+          <Text size="xs">
+            To claim your current address should be set as your Node Operator
+            owner.
+          </Text>
+        </>
+      );
+    case typeStatus === 'ISSUED':
+      return (
+        <Text size="xs">
+          You&apos;re already eligible to claim ICS type after the CSM v2
+          release
+        </Text>
+      );
+    case typeStatus === 'OWNER_ISSUED':
+      return (
+        <>
+          <Text size="xs">
+            Node Operator&apos;s owner address is already eligible to claim ICS
+            type
+          </Text>
+          <Text size="xs">
+            Connect with your Node Operator&apos;s owner address after CSM v2
+            release to claim ICS type
+          </Text>
+        </>
+      );
     case status === 'REJECTED':
       if (comments?.reason) {
         return <Text size="xs">{comments?.reason}</Text>;
@@ -109,9 +152,16 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   comments,
   scores,
 }) => {
+  const { address } = useAccount();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: owner } = useNodeOperatorOwner(nodeOperatorId);
+
+  const otherOwner =
+    owner && !compareLowercase(owner.address, address) ? owner : undefined;
+
   const statusChip = getStatus(status, typeStatus);
   const proofChip = getProofStatus(typeStatus);
-  const hint = useHint(status, typeStatus, comments, scores);
+  const hint = useHint(status, typeStatus, comments, scores, otherOwner);
 
   return (
     <Stack direction="column" gap="md">

@@ -3,13 +3,19 @@ import { PATH } from 'consts/urls';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC } from 'react';
 import { SectionBlock, Stack } from 'shared/components';
-import { useAddressCompare, useNodeOperatorInfo } from 'shared/hooks';
+import {
+  useAddressCompare,
+  useNodeOperatorInfo,
+  useNodeOperatorOwner,
+} from 'shared/hooks';
 import { RoleBlock } from './role-block';
+import { ROLES } from 'consts/roles';
 
 export const RolesSection: FC = () => {
   const isUserAddress = useAddressCompare();
   const id = useNodeOperatorId();
   const { data: info } = useNodeOperatorInfo(id);
+  const { data: owner } = useNodeOperatorOwner(id);
 
   return (
     <SectionBlock
@@ -20,16 +26,18 @@ export const RolesSection: FC = () => {
       {info && (
         <Stack wrap>
           <RoleBlock
-            title="Manager Address"
+            type={ROLES.MANAGER}
             address={info.managerAddress}
             proposedAddress={info.proposedManagerAddress}
             isYou={isUserAddress(info.managerAddress)}
+            isOwner={owner?.role === ROLES.MANAGER}
           />
           <RoleBlock
-            title="Rewards Address"
+            type={ROLES.REWARDS}
             address={info.rewardAddress}
             proposedAddress={info.proposedRewardAddress}
             isYou={isUserAddress(info.rewardAddress)}
+            isOwner={owner?.role === ROLES.REWARDS}
           />
         </Stack>
       )}

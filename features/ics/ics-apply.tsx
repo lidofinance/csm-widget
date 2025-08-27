@@ -17,7 +17,8 @@ import { Connect } from 'shared/wallet';
 const IcsApplyContent: FC = () => {
   const { active } = useAccount();
   const { token } = useAuth();
-  const { typeStatus, data, isPending, applyMode, reset } = useIcsState();
+  const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
+    useIcsState();
 
   if (!active) {
     return (
@@ -37,7 +38,15 @@ const IcsApplyContent: FC = () => {
     );
   }
 
-  if (typeStatus === 'CLAIMED') {
+  if (isTypePending) {
+    return (
+      <Block>
+        <WhenLoaded loading={true} />
+      </Block>
+    );
+  }
+
+  if (typeStatus !== 'PENDING') {
     return <ProofStatus typeStatus={typeStatus} />;
   }
 
