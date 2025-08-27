@@ -10,8 +10,6 @@ import {
   useMemo,
 } from 'react';
 import { useSearchParams, useSessionStorage } from 'shared/hooks';
-import { useFeatureFlags } from 'config/feature-flags';
-import { ICS_ENABLED } from 'config/feature-flags/types';
 import invariant from 'tiny-invariant';
 import { compareLowercase, trackMatomoEvent } from 'utils';
 import { Address } from 'wagmi';
@@ -21,7 +19,6 @@ type ModifyContextValue = {
 };
 
 const QUERY_REFERRER = 'ref';
-const QUERY_ICS_APPLY = 'ics-apply';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -41,7 +38,6 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
     undefined,
   );
 
-  const featureFlags = useFeatureFlags();
   const query = useSearchParams();
 
   useEffect(() => {
@@ -59,16 +55,6 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
       trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer);
     }
   }, [query, referrer, setReferrer]);
-
-  useEffect(() => {
-    if (!query || !featureFlags) return;
-
-    const icsApplyParam = query?.get(QUERY_ICS_APPLY);
-
-    if (icsApplyParam && !featureFlags.icsEnabled) {
-      featureFlags.setFeatureFlag(ICS_ENABLED, true);
-    }
-  }, [featureFlags, query]);
 
   const value: ModifyContextValue = useMemo(
     () => ({
