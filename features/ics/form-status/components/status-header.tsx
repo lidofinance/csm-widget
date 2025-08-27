@@ -76,8 +76,8 @@ const useHint = (
             release
           </Text>
           <Text size="xs">
-            To claim, you must be the operator&apos;s owner - Rewards Address
-            (or Manager Address if Extended is enabled)
+            To claim your current address should be set as your Node Operator
+            owner.
           </Text>
         </>
       );
@@ -90,10 +90,16 @@ const useHint = (
       );
     case typeStatus === 'OWNER_ISSUED':
       return (
-        <Text size="xs">
-          Node Operator&apos;s owner address is already eligible to claim ICS
-          type after the CSM v2 release
-        </Text>
+        <>
+          <Text size="xs">
+            Node Operator&apos;s owner address is already eligible to claim ICS
+            type
+          </Text>
+          <Text size="xs">
+            Connect with your Node Operator&apos;s owner address after CSM v2
+            release to claim ICS type
+          </Text>
+        </>
       );
     case status === 'REJECTED':
       if (comments?.reason) {
