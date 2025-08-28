@@ -7,15 +7,16 @@ import { Faq } from 'shared/components';
 import { FAQ_OPERATOR_TYPE } from 'faq';
 import { BlockStyle } from './score-system/styles';
 import { ApplicationFlow, Introduction, ScoreSources } from './score-system';
+import { RoundBanner } from './round-banner';
 
 export const IcsScoresPage: FC = () => (
   <Layout
-    // dummy
     title="Apply for Identified Community Stakers List"
-    subtitle="Get verified as an Identified Community Stakers"
+    subtitle="Get verified as an Identified Community Staker"
     matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs}
   >
     <TypePageSwitcher />
+    <RoundBanner />
     <BlockStyle>
       <Introduction />
       <ScoreSources />

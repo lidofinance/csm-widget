@@ -32,8 +32,7 @@ export const AdditionalAddresses: FC = () => {
         <Text size="xs" color="secondary">
           You can add up to {MAX_ADDITIONAL_ADDRESSES} addresses where your
           achievements are stored. To prove you own each address, sign a message
-          via the verification page. For more info see{' '}
-          <MatomoLink>the guide</MatomoLink>
+          on Etherscan. For more info see <MatomoLink>the guide</MatomoLink>
         </Text>
       </Stack>
 

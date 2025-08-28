@@ -20,7 +20,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
     transitStage(
       <TxStageSuccess
         title="Your application has been submitted"
-        description="The assessment process typically takes about two weeks. You can track your application’s status on the Operator Type tab."
+        description="You can track your application’s status on the Operator Type tab."
       />,
     ),
 

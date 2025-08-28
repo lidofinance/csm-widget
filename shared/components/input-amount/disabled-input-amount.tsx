@@ -1,8 +1,9 @@
 import { Input } from '@lidofinance/lido-ui';
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, useMemo } from 'react';
 
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { getTokenDisplayName, useFormattedBalance } from 'utils';
+import { getTokenDisplayName } from 'utils';
+import { formatEther } from 'viem';
 import { InputDecoratorLocked } from './input-decorator-locked';
 import { StyledInput } from './styles';
 
@@ -22,11 +23,15 @@ export const DisabledInputAmount: FC<InputAmountProps> = ({
   placeholder = '0',
   ...props
 }) => {
-  const { trimmed } = useFormattedBalance(amount);
   const symbol = getTokenDisplayName(token);
 
   const lockedTitle = typeof isLocked === 'string' ? isLocked : undefined;
-  const defaultValue = `${trimmed} ${symbol}`;
+
+  const defaultValue = useMemo(
+    () => (amount ? `${formatEther(amount)} ${symbol}` : ''),
+    [amount, symbol],
+  );
+
   return (
     <StyledInput
       {...props}

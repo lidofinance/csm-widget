@@ -1,6 +1,5 @@
 export * from './use-balance';
 export * from './use-bond-by-keys-count';
-export * from './use-bond-eth-by-keys-count';
 export * from './use-bond-next-keys-count';
 export * from './use-csm-status';
 export * from './use-curve-parameters';
@@ -14,6 +13,7 @@ export * from './use-ics-paused';
 export * from './use-ics-proof';
 export * from './use-invites';
 export * from './use-is-contract';
+export * from './use-key-eject-fee';
 export * from './use-key-removal-fee';
 export * from './use-max-gas-price';
 export * from './use-operator-balance';

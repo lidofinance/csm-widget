@@ -92,7 +92,7 @@ export const KeysTable: FC<Props> = ({ keys }) => {
         </tr>
       </thead>
       <tbody>
-        {sortedKeys?.map(
+        {sortedKeys.map(
           ({ pubkey, index, statuses, strikes, validatorIndex }) => (
             <tr key={index}>
               <td data-testid="pubkeyCell">

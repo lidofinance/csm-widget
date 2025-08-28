@@ -6,10 +6,7 @@ import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 const ScoresPage: FC = () => {
   return (
     <GateLoaded>
-      <Gate
-        rule="IS_CONNECTED_WALLET"
-        fallback={<Navigate path={PATH.TYPE_ICS_SYSTEM} />}
-      >
+      <Gate rule="ICS_ENABLED" fallback={<Navigate path={PATH.HOME} />}>
         <IcsApplyPage />
       </Gate>
     </GateLoaded>
