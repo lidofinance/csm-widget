@@ -7,11 +7,15 @@ export class RequestMetrics {
   requestCounter: Counter<'route'>;
   ethCallToAddress: Counter<'address' | 'referrer'>;
 
+  validationFileLoadError: Counter<'error'>;
+
   constructor(public registry: Registry) {
     this.apiTimings = this.apiTimingsInit('internal');
     this.apiTimingsExternal = this.apiTimingsInit('external');
     this.requestCounter = this.requestsCounterInit();
     this.ethCallToAddress = this.ethCallToAddressInit();
+
+    this.validationFileLoadError = this.validationFileLoadErrorInit();
   }
 
   apiTimingsInit(postfix: string) {
@@ -50,6 +54,15 @@ export class RequestMetrics {
         'methodEncoded',
         'methodDecoded',
       ],
+      registers: [this.registry],
+    });
+  }
+
+  validationFileLoadErrorInit() {
+    return new Counter({
+      name: METRICS_PREFIX + METRIC_NAMES.VALIDATION_FILE_LOAD_ERROR,
+      help: 'Counts of validation file load errors',
+      labelNames: ['error'],
       registers: [this.registry],
     });
   }

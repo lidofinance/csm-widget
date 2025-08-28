@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { useInitialLoading } from 'shared/hooks';
-import { SplashPage, UnsupportedPage } from '../inner-pages';
+import { SplashPage, UnavailablePage, UnsupportedPage } from '../inner-pages';
+import { useAddressValidation } from 'providers/address-validation-provider';
 
 type Props = {
   fallback?: ReactNode;
@@ -15,6 +16,11 @@ export const GateLoaded: FC<PropsWithChildren<Props>> = ({
   children,
 }) => {
   const { isLoading, isSupported } = useInitialLoading(additional);
+  const { isNotValidAddress } = useAddressValidation();
+
+  if (isNotValidAddress) {
+    return <UnavailablePage />;
+  }
 
   if (!isSupported) {
     return <>{unsupported}</>;
