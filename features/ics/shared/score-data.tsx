@@ -181,6 +181,11 @@ export const SCORE_SOURCES: ScoreSource[] = [
             <MatomoLink href="https://app.metri.xyz/0xCFCEA7904F42fD10e32703a57922E8d2036e3231">
               Lido group on Circles
             </MatomoLink>
+            . To be able to tie the Circles account to the ICS application, the
+            external account should be added. For more details, follow{' '}
+            <MatomoLink href="https://hackmd.io/ZpLPFR77RiSGKCUqd2d5aQ?view">
+              the guide
+            </MatomoLink>
           </>
         ),
       },
