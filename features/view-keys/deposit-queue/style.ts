@@ -11,19 +11,19 @@ const COLOR_VARIANTS = {
     color: #00a3ff;
   `,
   priority0: css`
-    color: #00d4ff;
+    color: #00cfff;
   `,
   priority1: css`
-    color: #00a3ff;
+    color: #007fff;
   `,
   priority2: css`
-    color: #5e8fff;
+    color: #0046ff;
   `,
   priority3: css`
-    color: #808cff;
+    color: #002db3;
   `,
   priority4: css`
-    color: #a366ff;
+    color: #6e0eff;
   `,
   priority5: css`
     color: #c747ff;
@@ -32,28 +32,28 @@ const COLOR_VARIANTS = {
     color: #81d1ff;
   `,
   priority0OverLimit: css`
-    color: #66e9ff;
+    color: #66e7ff;
   `,
   priority1OverLimit: css`
-    color: #66d1ff;
+    color: #66bfff;
   `,
   priority2OverLimit: css`
-    color: #8eadff;
+    color: #668aff;
   `,
   priority3OverLimit: css`
-    color: #a6aeff;
+    color: #6685cc;
   `,
   priority4OverLimit: css`
-    color: #bf99ff;
+    color: #9966ff;
   `,
   priority5OverLimit: css`
-    color: #d785ff;
+    color: #da85ff;
   `,
   batch: css`
     color: #ffa276;
   `,
   added: css`
-    color: #f17ecb;
+    color: #ff8d47ff;
   `,
   limit: css``,
 } as const;
