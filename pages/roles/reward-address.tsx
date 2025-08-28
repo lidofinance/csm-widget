@@ -1,6 +1,6 @@
 import { PATH } from 'consts/urls';
 import { ChangeRewardRolePage } from 'features/change-role';
-import { getProps } from 'utils';
+import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (

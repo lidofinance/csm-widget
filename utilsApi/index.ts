@@ -7,3 +7,4 @@ export * from './nextApiWrappers';
 export * from './rpcProviders';
 export * from './api';
 export * from './metrics';
+export * from './get-props';

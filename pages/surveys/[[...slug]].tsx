@@ -9,7 +9,7 @@ import {
   SurveysSetupPage,
   SurveysSignInPage,
 } from 'features/surveys';
-import { getProps } from 'utils';
+import { getProps } from 'utilsApi';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
