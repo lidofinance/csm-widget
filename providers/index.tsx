@@ -13,8 +13,14 @@ import { AppFlagProvider } from './app-flag';
 import { InpageNavigationProvider } from './inpage-navigation';
 import { ModalProvider } from './modal-provider';
 import { ModifyProvider } from './modify-provider';
+import { AddressValidationProvider } from './address-validation-provider';
+import { AddressValidationFile } from 'utils/address-validation';
 
-type Props = { dummy?: boolean; skipWatcher?: boolean };
+type Props = {
+  dummy?: boolean;
+  skipWatcher?: boolean;
+  validationFile?: AddressValidationFile;
+};
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +35,7 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
   skipWatcher,
+  validationFile,
 }) => (
   <QueryClientProvider client={queryClient}>
     <ConfigProvider>
@@ -42,19 +49,21 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                   <ModalProvider>{children}</ModalProvider>
                 ) : (
                   <Web3Provider>
-                    <GateSupported>
-                      <NodeOperatorPrivider>
-                        <ModalProvider>
-                          {skipWatcher ? (
-                            children
-                          ) : (
-                            <AlertsWatcherPrivider>
-                              {children}
-                            </AlertsWatcherPrivider>
-                          )}
-                        </ModalProvider>
-                      </NodeOperatorPrivider>
-                    </GateSupported>
+                    <AddressValidationProvider validationFile={validationFile}>
+                      <GateSupported>
+                        <NodeOperatorPrivider>
+                          <ModalProvider>
+                            {skipWatcher ? (
+                              children
+                            ) : (
+                              <AlertsWatcherPrivider>
+                                {children}
+                              </AlertsWatcherPrivider>
+                            )}
+                          </ModalProvider>
+                        </NodeOperatorPrivider>
+                      </GateSupported>
+                    </AddressValidationProvider>
                   </Web3Provider>
                 )}
               </AlertProvider>
