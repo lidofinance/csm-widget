@@ -1,6 +1,6 @@
 import { PATH } from 'consts/urls';
 import { ClaimTypePage } from 'features/claim-type';
-import { getProps } from 'utils';
+import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (

@@ -2,7 +2,7 @@ import { PATH } from 'consts/urls';
 import { StealingCancelPage } from 'features/stealing';
 import { useHasReportStealingRole } from 'modules/web3';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utils';
+import { getProps } from 'utilsApi';
 
 const Page = () => {
   const { isPending } = useHasReportStealingRole();

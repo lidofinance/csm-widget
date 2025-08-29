@@ -45,3 +45,10 @@ export const prefillUnsafeElRpcUrls560048 =
 /** @type string */
 export const widgetApiBasePathForIpfs =
   process.env.WIDGET_API_BASE_PATH_FOR_IPFS;
+
+/** @type boolean */
+export const addressApiValidationEnabled =
+  !!process.env.VALIDATION_SERVICE_BASE_PATH;
+
+/** @type string */
+export const validationFilePath = process.env.VALIDATION_FILE_PATH;
