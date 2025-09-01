@@ -29,9 +29,9 @@ export class BasePage {
 
       await test.step('Wait for balance to load', async () => {
         if (Array.isArray(textLocatorForWaiting)) {
-          textLocatorForWaiting.forEach(async (locator) => {
+          for (const locator of textLocatorForWaiting) {
             await this.waitForTextContent(locator, COMMON_ACTION_TIMEOUT);
-          });
+          }
         } else {
           await this.waitForTextContent(
             textLocatorForWaiting,
@@ -67,7 +67,7 @@ export class BasePage {
         const text = await locator.evaluate((element) => {
           const text = element.textContent?.trim();
           return text && text.length > 0 && text != ' ' ? text : null;
-        });
+        }, timeout);
         return text || null;
       },
       locator,
