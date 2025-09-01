@@ -10,6 +10,7 @@ export type ClaimTypeFormInputType = {
 export type ClaimTypeFormNetworkData = {
   address?: Address;
   nodeOperatorId?: NodeOperatorId;
+  icsPaused?: boolean;
   canClaimCurve?: boolean;
   currentCurveId?: bigint;
   currentParameters?: CurveParameters;
@@ -17,6 +18,7 @@ export type ClaimTypeFormNetworkData = {
   newParameters?: CurveParameters;
   proof?: AddressProof;
   loading: LoadingRecord<
+    | 'icsPaused'
     | 'newCurveId'
     | 'newParameters'
     | 'currentCurveId'

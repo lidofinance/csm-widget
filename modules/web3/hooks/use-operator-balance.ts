@@ -4,20 +4,22 @@ import { useLidoSDK } from '../web3-provider';
 import { NodeOperatorId, BondBalance } from '@lidofinance/lido-csm-sdk';
 import invariant from 'tiny-invariant';
 
+export const KEY_OPERATOR_BALANCE = ['operator-balance'];
+
 export const useOperatorBalance = <TData = BondBalance>(
-  id: NodeOperatorId | undefined,
+  nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: BondBalance) => TData,
 ) => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['node-operator-balance', { id }],
+    queryKey: [...KEY_OPERATOR_BALANCE, { nodeOperatorId }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
-      invariant(id !== undefined);
-      return csm.operator.getBondBalance(id);
+      invariant(nodeOperatorId !== undefined);
+      return csm.operator.getBondBalance(nodeOperatorId);
     },
-    enabled: id !== undefined,
+    enabled: nodeOperatorId !== undefined,
     select,
   });
 };

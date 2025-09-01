@@ -3,6 +3,61 @@ import { StackStyle } from 'shared/components';
 import styled, { css } from 'styled-components';
 import { GraphPart } from './types';
 
+const COLOR_VARIANTS = {
+  active: css`
+    color: #53ba95;
+  `,
+  queue: css`
+    color: #00a3ff;
+  `,
+  priority0: css`
+    color: #00cfff;
+  `,
+  priority1: css`
+    color: #007fff;
+  `,
+  priority2: css`
+    color: #0046ff;
+  `,
+  priority3: css`
+    color: #002db3;
+  `,
+  priority4: css`
+    color: #6e0eff;
+  `,
+  priority5: css`
+    color: #c747ff;
+  `,
+  queueOverLimit: css`
+    color: #81d1ff;
+  `,
+  priority0OverLimit: css`
+    color: #66e7ff;
+  `,
+  priority1OverLimit: css`
+    color: #66bfff;
+  `,
+  priority2OverLimit: css`
+    color: #668aff;
+  `,
+  priority3OverLimit: css`
+    color: #6685cc;
+  `,
+  priority4OverLimit: css`
+    color: #9966ff;
+  `,
+  priority5OverLimit: css`
+    color: #da85ff;
+  `,
+  batch: css`
+    color: #ffa276;
+  `,
+  added: css`
+    color: #ff8d47ff;
+  `,
+  limit: css``,
+} as const;
+
 export const WrapperStyle = styled.div`
   position: relative;
 `;
@@ -33,77 +88,86 @@ export const LineStyle = styled.div`
   white-space: nowrap;
 `;
 
+const linearGradient = css`
+  --part-color-1: currentColor;
+  --part-color-2: color-mix(in srgb, var(--part-color-1) 85%, white 15%);
+
+  background: repeating-linear-gradient(
+      120deg,
+      var(--part-color-1),
+      var(--part-color-1) 4px,
+      var(--part-color-2) 4px,
+      var(--part-color-2) 8px
+    )
+    0px fixed;
+`;
+
 type PartProps = {
   $type: GraphPart;
-  $size?: number;
+  $width?: number;
   $offset?: number;
   $fade?: boolean;
 };
 
-const linearGradient = (
-  color1: string,
-  color2: string,
-  angle = 120,
-  w1 = 4,
-  w2 = 4,
-) => css`
-  background: repeating-linear-gradient(
-    ${angle}deg,
-    ${color1},
-    ${color1} ${w1}px,
-    ${color2} ${w1}px,
-    ${color2} ${w1 + w2}px
-  );
-  background-attachment: fixed;
-  background-position-x: 0px;
-`;
+const getPartVariant = (type: GraphPart) => {
+  switch (type) {
+    case 'active':
+    case 'added':
+      return css`
+        background: currentColor;
+      `;
+    case 'batch':
+      return css<PartProps>`
+        position: absolute;
+        left: ${({ $offset }) => $offset}%;
 
-const PART_VARIANTS = {
-  active: css`
-    background: #53ba95;
-  `,
-  queued: css`
-    ${linearGradient('#00a3ff', '#26b1ff')}
-  `,
-  queuedOverLimit: css`
-    ${linearGradient('#81d1ff', '#94d8ff')}
-  `,
-  yourQueued: css<PartProps>`
-    position: absolute;
-    left: ${({ $offset }) => $offset}%;
+        ${linearGradient}
+      `;
+    case 'limit':
+      return css<PartProps>`
+        position: absolute;
+        z-index: 1;
+        width: 2px;
+        left: ${({ $offset = 50 }) =>
+          !$offset ? '1px' : `calc(${$offset}% - 1px)`};
 
-    ${linearGradient('#ffa276', '#ffb695')}
-  `,
-  added: css`
-    background: #f17ecb;
-  `,
-  limit: css<PartProps>`
-    position: absolute;
-    width: 2px;
-    left: calc(${({ $offset = 50 }) => $offset}% - 1px);
+        top: -40%;
+        height: 180%;
 
-    top: -40%;
-    height: 180%;
+        --part-color-1: var(--lido-color-text);
+        --part-color-2: transparent;
+        background: repeating-linear-gradient(
+            0deg,
+            var(--part-color-1),
+            var(--part-color-1) 5px,
+            var(--part-color-2) 5px,
+            var(--part-color-2) 8px
+          )
+          0px;
 
-    ${linearGradient('var(--lido-color-text)', 'transparent', 0, 5, 3)}
-    background-attachment: initial;
-
-    mix-blend-mode: ${({ theme }) =>
-      theme.name === ThemeName.light ? 'multiply' : 'plus-lighter'};
-  `,
+        mix-blend-mode: ${({ theme }) =>
+          theme.name === ThemeName.light ? 'multiply' : 'plus-lighter'};
+      `;
+    default:
+      return css`
+        ${linearGradient}
+      `;
+  }
 };
 
 export const PartStyle = styled.div<PartProps>`
   display: inline-block;
   height: 100%;
-  width: ${({ $size = 100 }) => $size}%;
+  width: ${({ $width = 100 }) => $width}%;
   opacity: ${({ $fade }) => ($fade ? '0.2' : '1')};
   transition:
     opacity 0.25s ease-in-out,
     left 0.25s ease-in-out,
     width 0.25s ease-in-out;
+  position: relative;
 
-  ${(props) => PART_VARIANTS[props.$type]}
+  ${({ $type }) => COLOR_VARIANTS[$type] ?? ''}
+  ${({ $type }) => getPartVariant($type)}
 `;
 
 export const CircleStyle = styled(LineStyle)`
@@ -119,26 +183,10 @@ export const LegendsStyle = styled(StackStyle)`
   gap: 12px 24px;
 `;
 
-const CHIP_VARIANTS = {
-  active: css`
-    color: #53ba95;
-  `,
-  queued: css`
-    color: #00a3ff;
-  `,
-  queuedOverLimit: css`
-    color: #81d1ff;
-  `,
-  yourQueued: css`
-    color: #ffa276;
-  `,
-  added: css`
-    color: #f17ecb;
-  `,
-  limit: css``,
-};
-
-export const ChipStyle = styled.div<{ $type?: GraphPart; $loading?: boolean }>`
+export const ChipStyle = styled.div<{
+  $type: GraphPart;
+  $loading?: boolean;
+}>`
   width: fit-content;
   padding: 0px 4px;
   text-align: center;
@@ -149,7 +197,7 @@ export const ChipStyle = styled.div<{ $type?: GraphPart; $loading?: boolean }>`
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
   font-weight: 700;
-  ${(props) => CHIP_VARIANTS[props.$type || 'active']}
+  ${({ $type }) => COLOR_VARIANTS[$type] ?? ''}
 
   ${({ $loading }) =>
     $loading

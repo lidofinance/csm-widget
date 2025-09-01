@@ -6,7 +6,7 @@ export const useOperatorsCount = () => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['node-operators-count'],
+    queryKey: ['operators-count'],
     ...STRATEGY_CONSTANT,
     queryFn: () => csm.module.getOperatorsCount(),
   });

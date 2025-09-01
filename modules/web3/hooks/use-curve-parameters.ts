@@ -1,6 +1,6 @@
 import { CurveParameters } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_CONSTANT } from 'consts';
+import { STRATEGY_IMMUTABLE } from 'consts';
 import invariant from 'tiny-invariant';
 import { useLidoSDK } from '../web3-provider';
 
@@ -12,7 +12,7 @@ export const useCurveParameters = <TData = CurveParameters>(
 
   return useQuery({
     queryKey: ['curve-parameters', { curveId }],
-    ...STRATEGY_CONSTANT,
+    ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(curveId !== undefined);
       return csm.parameters.getAll(curveId);

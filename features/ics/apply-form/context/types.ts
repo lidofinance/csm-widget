@@ -1,0 +1,21 @@
+import { Address } from 'viem';
+
+export type AdditionalAddress = {
+  address: string;
+  signature: string;
+};
+
+export type ApplyFormInputType = {
+  additionalAddresses: AdditionalAddress[];
+  twitterLink?: string;
+  discordLink?: string;
+};
+
+export type ApplyFormNetworkData = {
+  mainAddress: Address;
+};
+
+export type UseApplyFormSubmitOptions = {
+  onConfirm: () => Promise<void> | void;
+  onRetry: () => void;
+};

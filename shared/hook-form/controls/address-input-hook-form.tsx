@@ -2,14 +2,14 @@ import { useController, useFormContext } from 'react-hook-form';
 import { InputAddress } from 'shared/components/input-address';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
 import { Button } from '@lidofinance/lido-ui';
-import { useCallback } from 'react';
+import { ReactNode, useCallback } from 'react';
 
 // TODO: type Address
 type AddressInputHookFormProps = Partial<
   React.ComponentProps<typeof InputAddress>
 > & {
   fieldName: string;
-  label?: string;
+  label?: ReactNode;
   isLocked?: boolean;
   currentAddress?: string;
 };
@@ -32,7 +32,10 @@ export const AddressInputHookForm = ({
 
   const { setValue } = useFormContext();
 
-  const hasErrorHighlight = isValidationErrorTypeValidate(error?.type);
+  const hasErrorHighlight =
+    isValidationErrorTypeValidate(error?.type) ||
+    error?.type === 'required' ||
+    error?.type === 'manual';
   // allows to show error state without message
   const errorMessage = hasErrorHighlight && (error?.message || true);
 

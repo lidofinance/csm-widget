@@ -98,8 +98,8 @@ const routes: Route[] = [
     name: 'Operator Type',
     path: PATH.TYPE,
     icon: <UserIcon />,
-    subPaths: [PATH.TYPE_CLAIM],
-    showRules: ['CAN_CLAIM_ICS'],
+    subPaths: [PATH.TYPE_CLAIM, PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
+    showRules: ['CAN_CLAIM_ICS', 'ICS_ENABLED'],
     suffix: <CounterIcs />,
   },
 ];

@@ -1,17 +1,19 @@
 import {
+  KEY_OPERATOR_BALANCE,
+  KEY_OPERATOR_INFO,
+  KEY_OPERATOR_KEYS,
+  KEY_OPERATOR_KEYS_TO_MIGRATE,
   useCurveParameters,
   useDappStatus,
   useIcsCanClaim,
   useIcsCurveId,
+  useIcsPaused,
   useIcsProof,
   useNodeOperatorId,
-  useOperatorBalance,
   useOperatorCurveId,
-  useOperatorInfo,
-  useOperatorKeysToMigrate,
-  useOperatorKeysWithStatus,
 } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
+import { useInvalidate } from 'shared/hooks';
 import { type ClaimTypeFormNetworkData } from './types';
 
 export const useClaimTypeFormNetworkData = (): [
@@ -21,23 +23,19 @@ export const useClaimTypeFormNetworkData = (): [
   const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId<true>();
 
+  const { data: icsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
   const {
     data: currentCurveId,
     isPending: isCurrentCurveIdLoading,
     refetch: updateCurrentCurveId,
-  } = useOperatorCurveId(nodeOperatorId, () => 1n);
+  } = useOperatorCurveId(nodeOperatorId);
   const { data: newCurveId, isPending: isNewCurveIdLoading } = useIcsCurveId();
   const { data: currentParameters, isPending: isCurrentParametersLoading } =
     useCurveParameters(currentCurveId);
   const { data: newParameters, isPending: isNewParametersLoading } =
     useCurveParameters(newCurveId);
 
-  // TODO: invalidateQueries
-  const { refetch: updateKeysToMigrate } =
-    useOperatorKeysToMigrate(nodeOperatorId);
-  const { refetch: updateBondBalance } = useOperatorBalance(nodeOperatorId);
-  const { refetch: udpateInfo } = useOperatorInfo(nodeOperatorId);
-  const { refetch: udpateKeys } = useOperatorKeysWithStatus(nodeOperatorId);
+  const invalidate = useInvalidate();
 
   const {
     data: proof,
@@ -51,22 +49,18 @@ export const useClaimTypeFormNetworkData = (): [
     await Promise.allSettled([
       updateCurrentCurveId(),
       updateProof(),
-      updateKeysToMigrate(),
-      updateBondBalance(),
-      udpateInfo(),
-      udpateKeys(),
+      invalidate([
+        KEY_OPERATOR_INFO,
+        KEY_OPERATOR_BALANCE,
+        KEY_OPERATOR_KEYS,
+        KEY_OPERATOR_KEYS_TO_MIGRATE,
+      ]),
     ]);
-  }, [
-    udpateInfo,
-    udpateKeys,
-    updateBondBalance,
-    updateCurrentCurveId,
-    updateKeysToMigrate,
-    updateProof,
-  ]);
+  }, [invalidate, updateCurrentCurveId, updateProof]);
 
   const loading = useMemo(
     () => ({
+      isIcsPausedLoading,
       isNewCurveIdLoading,
       isCurrentCurveIdLoading,
       isCurrentParametersLoading,
@@ -75,6 +69,7 @@ export const useClaimTypeFormNetworkData = (): [
       isCanClaimCurveLoading,
     }),
     [
+      isIcsPausedLoading,
       isCanClaimCurveLoading,
       isCurrentCurveIdLoading,
       isCurrentParametersLoading,
@@ -88,6 +83,7 @@ export const useClaimTypeFormNetworkData = (): [
     {
       nodeOperatorId,
       address,
+      icsPaused,
       currentCurveId,
       currentParameters,
       newCurveId,

@@ -18,7 +18,7 @@ export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   if (!beaconchainDashboard) return null;
 
   const keysToShow = (
-    sortedKeys?.length ? sortedKeys.map(({ pubkey }) => pubkey) : directKeys
+    sortedKeys.length > 0 ? sortedKeys.map(({ pubkey }) => pubkey) : directKeys
   )
     ?.slice(0, DASHBOARD_KEYS_LIMIT)
     .join(',');

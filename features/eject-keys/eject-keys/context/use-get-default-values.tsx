@@ -10,6 +10,7 @@ export const useGetDefaultValues = ({
     if (isKeysLoading || isInfoLoading) return undefined;
     return {
       selection: [],
+      feeAmount: undefined,
     };
   }, [isInfoLoading, isKeysLoading]);
 

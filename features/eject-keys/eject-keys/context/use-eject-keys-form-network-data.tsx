@@ -5,7 +5,7 @@ import {
   useOperatorCurveId,
   useOperatorInfo,
   useOperatorKeysWithStatus,
-  useWithdrawalRequestFee,
+  useKeyEjectFee,
 } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
 import { hasStatus } from 'utils';
@@ -29,12 +29,9 @@ export const useEjectKeysFormNetworkData = (): [
 
   const { data: curveId, isPending: isCurveIdLoading } =
     useOperatorCurveId(nodeOperatorId);
-  const {
-    data: withdrawalRequestFee,
-    isPending: isWithdrawalRequestFeeLoading,
-  } = useWithdrawalRequestFee(curveId);
+  const { data: ejectKeyFee, isPending: isEjectKeyFeeLoading } =
+    useKeyEjectFee();
 
-  // FIXME: filter keys by status & activaion time
   const {
     data: keys,
     isPending: isKeysLoading,
@@ -53,14 +50,14 @@ export const useEjectKeysFormNetworkData = (): [
       isCurveIdLoading,
       isEthBalanceLoading,
       isKeysLoading,
-      isWithdrawalRequestFeeLoading,
+      isEjectKeyFeeLoading,
     }),
     [
       isCurveIdLoading,
       isEthBalanceLoading,
       isInfoLoading,
       isKeysLoading,
-      isWithdrawalRequestFeeLoading,
+      isEjectKeyFeeLoading,
     ],
   );
 
@@ -69,7 +66,7 @@ export const useEjectKeysFormNetworkData = (): [
       ethBalance,
       nodeOperatorId,
       curveId,
-      withdrawalRequestFee,
+      ejectKeyFee,
       keys,
       info,
       loading,

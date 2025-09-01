@@ -9,11 +9,11 @@ export const useBondBalanceAfterRemoveKeys = (count = 0) => {
 
   const nextKeysCount = info
     ? info.totalAddedKeys - info.totalWithdrawnKeys - count
-    : undefined;
+    : 0;
 
   const { data: bondRequiredAfter } = useBondByKeysCount({
-    keysCount: nextKeysCount ?? 0,
-    curveId: curveId,
+    keysCount: nextKeysCount,
+    curveId,
   });
 
   const bondAfter = (bond?.current ?? 0n) - (removalFee || 0n);
@@ -24,7 +24,7 @@ export const useBondBalanceAfterRemoveKeys = (count = 0) => {
       { bondRequiredAfter, bondAfter },
     ],
     queryFn: () => {
-      invariant(bondRequiredAfter);
+      invariant(bondRequiredAfter !== undefined);
       return calcBondBalance({
         current: bondAfter,
         required: bondRequiredAfter,
