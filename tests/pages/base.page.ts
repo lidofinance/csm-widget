@@ -21,17 +21,23 @@ export class BasePage {
 
   async openWithRetry(
     url: string,
-    textLocatorForWaiting: Locator,
+    textLocatorForWaiting: Locator | Locator[],
     attempt = 1,
   ): Promise<void> {
     try {
       await this.page.goto(url);
 
       await test.step('Wait for balance to load', async () => {
-        await this.waitForTextContent(
-          textLocatorForWaiting,
-          COMMON_ACTION_TIMEOUT,
-        );
+        if (Array.isArray(textLocatorForWaiting)) {
+          textLocatorForWaiting.forEach(async (locator) => {
+            await this.waitForTextContent(locator, COMMON_ACTION_TIMEOUT);
+          });
+        } else {
+          await this.waitForTextContent(
+            textLocatorForWaiting,
+            COMMON_ACTION_TIMEOUT,
+          );
+        }
       });
     } catch (e) {
       if (attempt >= 2) throw e;

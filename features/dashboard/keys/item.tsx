@@ -23,13 +23,19 @@ export const Item: FC<ItemProps> = ({
   count,
   variant,
   reverse,
+  ...params
 }) => {
   const isEmptyCount = !count || typeof count === 'string';
   const secondary = variant === 'secondary' || isEmptyCount;
   const warning = variant === 'warning' && !isEmptyCount;
 
   const body = (
-    <ItemStyled $secondary={secondary} $warning={warning} $reverse={reverse}>
+    <ItemStyled
+      $secondary={secondary}
+      $warning={warning}
+      $reverse={reverse}
+      {...params}
+    >
       <CountStyled>
         {count === undefined ? <InlineLoader /> : count}
       </CountStyled>

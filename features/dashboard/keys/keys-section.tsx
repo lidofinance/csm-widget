@@ -74,6 +74,7 @@ export const KeysSection: FC = () => {
   return (
     <SectionBlock
       title="Keys"
+      data-testid="dashboardKeysSection"
       href={PATH.KEYS_VIEW}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink}
       middle={
@@ -96,26 +97,31 @@ export const KeysSection: FC = () => {
       <Stack direction="column" gap="sm">
         <Row>
           <Item
+            data-testid="keysDepositableCount"
             title="Depositable"
             count={keysCountWithStatus(KEY_STATUS.DEPOSITABLE)}
             tooltip="Keys awaiting deposit from the Lido protocol"
           />
           <Item
+            data-testid="keysPendingActivationCount"
             title="Pending activation"
             count={keysCountWithStatus(KEY_STATUS.ACTIVATION_PENDING)}
             tooltip="Keys have already got deposit from the Lido protocol and waiting to become active"
           />
           <Item
+            data-testid="keysActiveCount"
             title="Active"
             count={keysCountWithStatus([KEY_STATUS.ACTIVE, KEY_STATUS.EXITING])}
             tooltip="Keys that active"
           />
           <Item
+            data-testid="keysExitedCount"
             title="Exited"
             count={keysCountWithStatus(KEY_STATUS.WITHDRAWAL_PENDING)}
             tooltip="Keys that have already exited but not withdrawn yet"
           />
           <Item
+            data-testid="keysWithdrawnCount"
             title="Withdrawn"
             count={keysCountWithStatus(KEY_STATUS.WITHDRAWN)}
             tooltip="Keys that have already exited and withdrawn"
