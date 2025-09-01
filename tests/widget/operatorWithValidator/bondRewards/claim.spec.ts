@@ -189,6 +189,11 @@ test.describe('Bond & Rewards. Claim.', async () => {
         await test.step('Verify new balance after bond added', async () => {
           const expectedBalance =
             parseFloat(bondSummary.excess) - parseFloat(claimAmount);
+
+          await expect(
+            bondRewardsPage.claim.titledTokenBalance,
+          ).not.toContainText('N/A');
+
           const actualBalance =
             await bondRewardsPage.claim.titledTokenBalance.textContent();
 
