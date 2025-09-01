@@ -44,6 +44,9 @@ declare module 'next/config' {
 
       rateLimit: string;
       rateLimitTimeFrame: string;
+
+      validationAPI: string | undefined;
+      validationFilePath: string | undefined;
     };
     publicRuntimeConfig: {
       basePath: string | undefined;

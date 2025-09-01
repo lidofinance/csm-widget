@@ -12,6 +12,7 @@ import { Providers } from 'providers';
 import { FaqContext } from 'providers/faq-provider';
 import { BackgroundGradient } from 'shared/components';
 import { nprogress } from 'utils';
+import { AddressValidationFile } from 'utils/address-validation';
 
 // Visualize route changes
 nprogress();
@@ -25,6 +26,7 @@ const App = (props: AppProps) => {
 const MemoApp = memo(App);
 
 type AppParams = Partial<Pick<SecretConfigType, 'maintenance'>> & {
+  validationFile?: AddressValidationFile;
   isError?: boolean;
   faqList?: FaqItem[];
 };
@@ -37,6 +39,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       <Providers
         dummy={props.pageProps?.maintenance || props.pageProps?.isError}
         skipWatcher={props.pageProps?.isError}
+        validationFile={props.pageProps?.validationFile}
       >
         {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
         <Head>
