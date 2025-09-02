@@ -269,7 +269,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
         await expect(
           bondRewardsPage.claim.validationInputTooltip,
         ).toContainText(
-          `Entered ${TOKEN_DISPLAY_NAMES[tokenName]} amount exceeds available to claim of ${expectedBalance}`,
+          `Entered ${TOKEN_DISPLAY_NAMES[tokenName]} amount exceeds available to claim of ${parseFloat(expectedBalance)}`,
         );
       },
     );
