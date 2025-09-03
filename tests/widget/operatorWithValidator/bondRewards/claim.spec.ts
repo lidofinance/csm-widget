@@ -189,6 +189,11 @@ test.describe('Bond & Rewards. Claim.', async () => {
         await test.step('Verify new balance after bond added', async () => {
           const expectedBalance =
             parseFloat(bondSummary.excess) - parseFloat(claimAmount);
+
+          await expect(
+            bondRewardsPage.claim.titledTokenBalance,
+          ).not.toContainText('N/A');
+
           const actualBalance =
             await bondRewardsPage.claim.titledTokenBalance.textContent();
 
@@ -264,7 +269,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
         await expect(
           bondRewardsPage.claim.validationInputTooltip,
         ).toContainText(
-          `Entered ${TOKEN_DISPLAY_NAMES[tokenName]} amount exceeds available to claim of ${expectedBalance}`,
+          `Entered ${TOKEN_DISPLAY_NAMES[tokenName]} amount exceeds available to claim of ${parseFloat(expectedBalance)}`,
         );
       },
     );

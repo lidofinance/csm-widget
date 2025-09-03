@@ -84,10 +84,8 @@ export class ClaimPage extends BasePage {
   }
 
   async getBalanceByToken(symbol: TOKENS) {
-    return parseFloat(
-      await this.waitForTextContent(
-        this.tokenButtons.locator(`input[value="${symbol}"]`).locator('..'),
-      ),
+    return this.waitForTextContent(
+      this.tokenButtons.locator(`input[value="${symbol}"]`).locator('..'),
     );
   }
 }

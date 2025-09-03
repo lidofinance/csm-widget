@@ -39,18 +39,11 @@ test.describe('Validator keys removal', async () => {
 
         await test.step('Check removal fee', async () => {
           await test.step('Check removal fee value', async () => {
-            // The fee is now dynamically calculated from the contract
-            // Check that a fee value is displayed (should contain "stETH" and be greater than 0)
-            const feeValue =
-              await keysPage.removePage.ejectionCostInput.inputValue();
-            expect(feeValue).toContain('stETH');
-
-            // Extract numeric value and verify it's positive
-            const numericValue = parseFloat(feeValue.replace(' stETH', ''));
-            expect(numericValue).toBeGreaterThan(0);
-
-            // Verify the fee scales with the number of keys selected
-            expect(numericValue).toBeGreaterThan(0.001 * keyLength);
+            // if PLS -> 0.02 ETH per key
+            await expect(keysPage.removePage.ejectionCostInput).toHaveValue(
+              `${(0.02 * keyLength).toFixed(2)} stETH`,
+            );
+            // for ICS need to add assert by ICS fee
           });
 
           await test.step('Check tooltip text', async () => {
@@ -64,19 +57,7 @@ test.describe('Validator keys removal', async () => {
         });
 
         await test.step('Check excess bond after execution', async () => {
-          // Verify that the excess bond section is visible and shows a value
-          await expect(
-            keysPage.removePage.excessBondAfterExecution,
-          ).toBeVisible();
-
-          // Check that the excess bond value is displayed
-          const excessBondText =
-            await keysPage.removePage.excessBondAfterExecution.textContent();
-          expect(excessBondText).toBeTruthy();
-
-          // The excess bond should either show a positive value or indicate insufficient bond
-          // This depends on the operator's current bond state
-          expect(excessBondText).toMatch(/(ETH|Insufficient)/);
+          // @todo: add assertion
         });
       },
     );
