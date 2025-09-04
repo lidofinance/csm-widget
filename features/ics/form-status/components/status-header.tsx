@@ -138,7 +138,7 @@ const useHint = (
     case status === 'APPROVED':
       return (
         <Text size="xs">
-          Please await issuance; this process typically takes up to three weeks
+          Please wait for CSM v2 release; Several weeks after CSM v2 is live, you will be able to claim your ICS Node Operator type
         </Text>
       );
     default:
