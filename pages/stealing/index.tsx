@@ -1,5 +1,5 @@
 import { PATH } from 'consts/urls';
-import { getProps } from 'utils';
+import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { useHasReportStealingRole } from 'modules/web3';
 
