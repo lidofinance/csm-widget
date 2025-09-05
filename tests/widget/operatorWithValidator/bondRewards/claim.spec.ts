@@ -228,7 +228,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
             await bondRewardsPage.claim.amountInput.inputValue(),
           );
 
-          expect(inputValue).toBeCloseTo(expectedBalance);
+          expect(inputValue).toBeCloseTo(parseFloat(expectedBalance));
           if (tokenName === TOKENS.eth.valueOf()) {
             await expect(
               bondRewardsPage.claim.requestWithdrawalButton,
