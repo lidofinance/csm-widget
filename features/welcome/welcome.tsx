@@ -1,16 +1,10 @@
 import { FC } from 'react';
 
-import { getConfig } from 'config';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useDappStatus } from 'modules/web3';
 import { Stack, WelcomeSection } from 'shared/components';
 import { Connect, Fallback } from 'shared/wallet';
 import styled from 'styled-components';
-import { HoleskyBanner } from './holesky-banner';
-import { HoodiBanner } from './hoodi-banner';
-import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-
-const { defaultChain } = getConfig();
 
 export const Welcome: FC = () => {
   const { isSupportedChain, isWalletConnected } = useDappStatus();
@@ -19,8 +13,6 @@ export const Welcome: FC = () => {
 
   return (
     <>
-      {defaultChain === CHAINS.Holesky && <HoleskyBanner />}
-      {defaultChain === CHAINS.Hoodi && <HoodiBanner />}
       {isWrongChain && <Fallback />}
       <WelcomeSection>
         <Stack wrap>
