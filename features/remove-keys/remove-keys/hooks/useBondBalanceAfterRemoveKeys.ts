@@ -16,7 +16,7 @@ export const useBondBalanceAfterRemoveKeys = (count = 0) => {
     curveId,
   });
 
-  const bondAfter = (bond?.current ?? 0n) - (removalFee || 0n);
+  const bondAfter = (bond?.current ?? 0n) - (removalFee || 0n) * BigInt(count);
 
   return useQuery({
     queryKey: [
