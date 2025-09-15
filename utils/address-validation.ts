@@ -18,9 +18,11 @@ export const validateAddressLocally = (
 
   // Check if address is in the allowed list (case-insensitive)
   const normalizedAddress = address.toLowerCase();
-  const isValid = validationFile.addresses.some(
+  const isNotValid = validationFile.addresses.some(
     (addr) => addr.toLowerCase() === normalizedAddress,
   );
+
+  const isValid = !isNotValid;
 
   return { isValid };
 };
