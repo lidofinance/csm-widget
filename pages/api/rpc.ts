@@ -52,7 +52,6 @@ const rpc = rpcFactory({
   defaultChain: `${config.defaultChain}`,
   providers: {
     [CHAINS.Mainnet]: secretConfig.rpcUrls_1,
-    [CHAINS.Holesky]: secretConfig.rpcUrls_17000,
     [CHAINS.Hoodi]: secretConfig.rpcUrls_560048,
   },
   validation: {

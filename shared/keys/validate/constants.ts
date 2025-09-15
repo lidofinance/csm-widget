@@ -14,7 +14,6 @@ export const FIXED_NETWORK: {
   [key in CSM_SUPPORTED_CHAINS]?: string[];
 } = {
   [CHAINS.Mainnet]: ['mainnet'],
-  [CHAINS.Holesky]: ['holesky'],
   [CHAINS.Hoodi]: ['hoodi'],
 };
 
@@ -22,6 +21,5 @@ export const FIXED_FORK_VERSION: {
   [key in CSM_SUPPORTED_CHAINS]?: string;
 } = {
   [CHAINS.Mainnet]: '00000000',
-  [CHAINS.Holesky]: '01017000',
   [CHAINS.Hoodi]: '10000910',
 };
