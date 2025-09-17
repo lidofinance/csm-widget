@@ -1,23 +1,20 @@
 import {
-  ReactNode,
-  useEffect,
   createContext,
+  ReactNode,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_LAZY } from 'consts/react-query-strategies';
-import { useAccount } from 'wagmi';
-import { useForceDisconnect } from 'reef-knot/core-react';
 import { config } from 'config';
+import { STRATEGY_LAZY } from 'consts/react-query-strategies';
+import { useForceDisconnect } from 'reef-knot/core-react';
+import { useApiAddressValidation } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import {
-  AddressValidationFile,
-  validateAddressLocally,
-} from 'utils/address-validation';
-import { useApiAddressValidation } from 'shared/hooks/use-api-address-validation';
+import { AddressValidationFile, validateAddressLocally } from 'utils';
+import { useAccount } from 'wagmi';
 
 const AddressValidationContext = createContext<{
   validationResult: {

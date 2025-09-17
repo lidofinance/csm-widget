@@ -1,21 +1,28 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { useStethAmount } from './use-steth-amount';
+import { useExchangeRate } from './use-exchange-rate';
+import { convert } from 'utils';
 
 export const useBondWillReceive = (
   token: TOKENS,
   amount?: bigint,
   rewards?: bigint,
 ) => {
-  // FIXME: exchange tokens rate
-  const { data: stethAmount } = useStethAmount(token, amount ?? 0n);
+  const { data: stethAmount } = useExchangeRate((rates) =>
+    convert(amount ?? 0n, rates[token]),
+  );
 
   return [
-    (amount &&
-      stethAmount &&
-      rewards &&
+    (amount !== undefined &&
+      stethAmount !== undefined &&
+      rewards !== undefined &&
       rewards > stethAmount &&
       rewards - stethAmount) ||
       0n,
-    !!(amount && stethAmount && rewards && stethAmount > rewards),
+    !!(
+      amount !== undefined &&
+      stethAmount !== undefined &&
+      rewards !== undefined &&
+      stethAmount > rewards
+    ),
   ] as const;
 };

@@ -19,6 +19,10 @@ export const TitledSelectableAmount: FC<Props> = ({
   help,
   helpIcon,
   warning,
+  loading,
+  amount,
+  token,
+  sign,
   ...props
 }) => {
   return (
@@ -27,7 +31,7 @@ export const TitledSelectableAmount: FC<Props> = ({
         {title}
         <IconTooltip tooltip={help} type={helpIcon} />
       </Stack>
-      <AmountWithPrice {...props} />
+      <AmountWithPrice {...{ amount, token, loading, sign }} />
     </TitledAmountStyle>
   );
 };

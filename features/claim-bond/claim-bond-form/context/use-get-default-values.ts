@@ -17,7 +17,7 @@ export const useGetDefaultValues = ({
 
       return {
         token: isContract ? TOKENS.wsteth : TOKENS.steth,
-        claimRewards: Boolean(rewards?.available && rewards.available > 0),
+        claimRewards: Boolean(rewards?.available),
         unlockClaimTokens: !isSplitter,
       };
     }, [isContract, isSplitter, loading, rewards?.available]),
