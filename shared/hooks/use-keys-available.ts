@@ -122,9 +122,7 @@ const getMaxKeys = (bondConfig: KeyNumberValueInterval[], amount: bigint) => {
     const nextInterval = bondConfig[i + 1];
 
     // Determine the end of this interval
-    const intervalEnd = nextInterval
-      ? Number(nextInterval.minKeyNumber)
-      : Infinity;
+    const intervalEnd = nextInterval ? nextInterval.minKeyNumber : Infinity;
 
     // Calculate how many keys we can afford in this interval
     const remainingAmount = amount - currentAmount;
@@ -160,9 +158,7 @@ const getAmountByKeys = (
     const nextInterval = bondConfig[i + 1];
 
     // Determine the end of this interval
-    const intervalEnd = nextInterval
-      ? Number(nextInterval.minKeyNumber)
-      : count;
+    const intervalEnd = nextInterval ? nextInterval.minKeyNumber : count;
 
     // Calculate how many keys to process in this interval
     const keysInThisInterval = Math.min(

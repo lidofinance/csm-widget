@@ -20,16 +20,14 @@ export const formatEthKeyIntervals = (
     <FormatToken amount={value} token={TOKENS.eth} />
   ));
 
-const formatKeyIntervals = <T extends { minKeyNumber: bigint }>(
+const formatKeyIntervals = <T extends { minKeyNumber: number }>(
   intervals: T[],
   format: (item: T) => string | ReactNode,
 ): ReactNode[] =>
   intervals.map((item, index, array) => {
     const isFirst = index === 0;
     const isLast = index === array.length - 1;
-    const value = Number(
-      (array.at(index + 1)?.minKeyNumber ?? 0n) - item.minKeyNumber,
-    );
+    const value = (array.at(index + 1)?.minKeyNumber ?? 0) - item.minKeyNumber;
     const countText =
       isFirst && isLast
         ? 'all keys'
@@ -60,10 +58,10 @@ export const formatQueues = (config?: QueueConfig): ReactNode[] =>
       ];
 
 // TODO: format long numbers
-export const formatKeysLimit = (keysLimit?: bigint): ReactNode[] => {
+export const formatKeysLimit = (keysLimit?: number): ReactNode[] => {
   return keysLimit === undefined || keysLimit >= maxUint128
     ? ['not set']
-    : [pluralKeys({ value: Number(keysLimit), showValue: true })];
+    : [pluralKeys({ value: keysLimit, showValue: true })];
 };
 
 export const formatSecondsDuration = (duration = 0): string =>
