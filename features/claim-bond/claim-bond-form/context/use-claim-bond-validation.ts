@@ -25,9 +25,7 @@ export const useClaimBondValidation = (
             'amount',
             amount,
             token,
-            Boolean(
-              claimRewards && rewards?.available && rewards?.available > 0,
-            ),
+            Boolean(claimRewards && rewards?.available),
           );
 
           const maxAmount = maxValues?.[token][Number(claimRewards)];
