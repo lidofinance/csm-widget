@@ -1,4 +1,5 @@
 import {
+  CurveParameters,
   Proof,
   ShareLimitInfo,
   ShareLimitStatus,
@@ -26,6 +27,7 @@ export type SubmitKeysFormNetworkData = {
   stethBalance?: bigint;
   wstethBalance?: bigint;
   curveId?: bigint;
+  curveParameters?: CurveParameters;
   maxStakeEth?: bigint;
   keysAvailable?: KeysAvailable;
   isPaused?: boolean;
@@ -45,5 +47,6 @@ export type SubmitKeysFormNetworkData = {
     | 'icsPaused'
     | 'plsCurveId'
     | 'icsCurveId'
+    | 'curveParameters'
   >;
 };
