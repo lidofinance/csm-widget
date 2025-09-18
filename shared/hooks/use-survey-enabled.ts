@@ -11,6 +11,7 @@ import {
   startOfQuarter,
   startOfWeek,
   startOfYear,
+  subSeconds,
   subWeeks,
 } from 'date-fns';
 import { useNodeOperatorId } from 'providers/node-operator-provider';
@@ -44,16 +45,22 @@ export const useSurveyEnabled = (skipClosed = false) => {
   };
 };
 
+const SURVEY_COUNT_WEEKS = 3;
+const SURVEY_START_DAY_OF_WEEK = 4;
+
 export const getSurveyDates = (currentDate: Date = new Date()) => {
   startOfYear;
   const _corner = startOfQuarter(currentDate);
   const corner =
-    differenceInMonths(_corner, currentDate) > 1
+    Math.abs(differenceInMonths(_corner, currentDate)) > 1
       ? addQuarters(_corner, 1)
       : _corner;
 
-  const start = subWeeks(startOfWeek(corner, { weekStartsOn: 1 }), 1);
-  const end = addWeeks(start, 2);
+  const start = subWeeks(
+    startOfWeek(corner, { weekStartsOn: SURVEY_START_DAY_OF_WEEK }),
+    SURVEY_COUNT_WEEKS / 2,
+  );
+  const end = subSeconds(addWeeks(start, SURVEY_COUNT_WEEKS), 1);
 
   return {
     start,
