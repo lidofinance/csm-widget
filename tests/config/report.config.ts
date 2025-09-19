@@ -5,6 +5,7 @@ export const getReportConfig: () => ReporterDescription[] = function () {
   const reporterConfig: ReporterDescription[] = [
     reporters.htmlReporter,
     reporters.consoleReporter,
+    reporters.pgReporter,
   ];
   if (process.env.CI) {
     reporterConfig.push(
@@ -51,11 +52,27 @@ const reporters: {
   consoleReporter: ReporterDescription;
   githubReporter: ReporterDescription;
   discordReport: ReporterDescription;
+  pgReporter: ReporterDescription;
   qaseReporter: ReporterDescription;
 } = {
   htmlReporter: ['html', { open: 'never' }],
   consoleReporter: ['list'],
   githubReporter: ['github'],
+  pgReporter: [
+    '@lidofinance/pg-reporter',
+    {
+      env: process.env.STAND_TYPE,
+      runName: getTestRunName(),
+      pushgatewayOptions: {
+        username: process.env.PUSHGATEWAY_USERNAME,
+        password: process.env.PUSHGATEWAY_PASSWORD,
+        url: process.env.PUSHGATEWAY_URL,
+        cookie: `${process.env.REFUSE_CF_BLOCK_NAME}=${process.env.REFUSE_CF_BLOCK_VALUE}`,
+      },
+      network: 'L1',
+      testTags: process.env.TEST_TAGS,
+    },
+  ],
   discordReport: [
     '@lidofinance/discord-reporter',
     {
