@@ -1,17 +1,15 @@
-// import { getConfig } from 'config';
 import { FC } from 'react';
 import { NoSSRWrapper } from 'shared/components';
 import { ExternalSection } from './external-section';
 import { NotificationToolsSection } from './notification-tools-section';
 import { StrikesSection } from './strikes-section';
-
-// const { defaultChain } = getConfig();
+import { AttestationRateSection } from './attestation-rate-section';
 
 export const Monitoring: FC = () => {
   return (
     <>
       <NoSSRWrapper>
-        {/* {defaultChain === CHAINS.Mainnet && <AttestationRateSection />} */}
+        <AttestationRateSection />
         <StrikesSection />
         <ExternalSection />
         <NotificationToolsSection />
