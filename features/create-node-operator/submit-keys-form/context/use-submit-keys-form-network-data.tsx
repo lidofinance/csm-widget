@@ -1,5 +1,6 @@
 import {
   useCsmStatus,
+  useCurveParameters,
   useDappStatus,
   useEthereumBalance,
   useIcsCurveId,
@@ -54,6 +55,9 @@ export const useSubmitKeysFormNetworkData = (): [
   const isIcs = !isIcsPaused && proof?.proof && !proof.isConsumed;
   const curveId = isIcs ? icsCurveId : plsCurveId;
 
+  const { data: curveParameters, isPending: isCurveParametersLoading } =
+    useCurveParameters(curveId);
+
   const {
     data: shareLimit,
     isPending: isShareLimitLoading,
@@ -105,6 +109,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isIcsPausedLoading,
       isPlsCurveIdLoading,
       isIcsCurveIdLoading,
+      isCurveParametersLoading,
     }),
     [
       isStethBalanceLoading,
@@ -118,6 +123,7 @@ export const useSubmitKeysFormNetworkData = (): [
       isIcsPausedLoading,
       isPlsCurveIdLoading,
       isIcsCurveIdLoading,
+      isCurveParametersLoading,
     ],
   );
 
@@ -131,6 +137,7 @@ export const useSubmitKeysFormNetworkData = (): [
       wstethBalance,
       ethBalance,
       curveId,
+      curveParameters,
       keysAvailable,
       maxStakeEth,
       shareLimit,

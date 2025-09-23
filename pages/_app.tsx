@@ -10,7 +10,7 @@ import { withCsp } from 'config/csp';
 import { Providers } from 'providers';
 import { BackgroundGradient } from 'shared/components';
 import { nprogress } from 'utils';
-import { AddressValidationFile } from 'utils/address-validation';
+import { AddressValidationFile } from 'utils';
 
 // Visualize route changes
 nprogress();

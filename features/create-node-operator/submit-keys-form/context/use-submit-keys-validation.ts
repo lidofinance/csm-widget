@@ -39,6 +39,7 @@ export const useSubmitKeysValidation = (
           ethBalance,
           maxStakeEth: maxStakeEther,
           blockNumber,
+          curveParameters,
         } = await dataPromise;
 
         validateBondAmount({
@@ -53,12 +54,25 @@ export const useSubmitKeysValidation = (
         if (
           options.names?.includes('depositData') ||
           options.names?.includes('rawDepositData')
-        )
+        ) {
           await validateDepositData({
             depositData,
             chainId,
             blockNumber,
           });
+
+          if (depositData && curveParameters?.keysLimit !== undefined) {
+            const keysCount = depositData.length;
+            const { keysLimit } = curveParameters;
+
+            if (keysCount > keysLimit) {
+              throw new ValidationError(
+                'depositData',
+                `Keys limit exceeded. Allowed keys count to submit: ${keysLimit}`,
+              );
+            }
+          }
+        }
 
         if (options.names?.includes('confirmKeysReady') && !confirmKeysReady) {
           throw new ValidationError(
