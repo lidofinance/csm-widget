@@ -3081,10 +3081,10 @@
   dependencies:
     memory-cache "^0.2.0"
 
-"@lidofinance/pg-reporter@1.2.0-alpha-pg-reporter.3":
-  version "1.2.0-alpha-pg-reporter.3"
-  resolved "https://registry.yarnpkg.com/@lidofinance/pg-reporter/-/pg-reporter-1.2.0-alpha-pg-reporter.3.tgz#cc01651cfe5b812b58cb877b8673e535e58035ed"
-  integrity sha512-gmSDUZFKyZG60lLqW5olcdX8+eqVVZAhMp+T/4XhL+ci8vbb8+MN5cE4cRXT6XRrO2Gr+DrrsE+fzxR+l5hL5w==
+"@lidofinance/pg-reporter@1.2.0-alpha-pg-reporter.8":
+  version "1.2.0-alpha-pg-reporter.8"
+  resolved "https://registry.yarnpkg.com/@lidofinance/pg-reporter/-/pg-reporter-1.2.0-alpha-pg-reporter.8.tgz#a2ada292d27ba44bdc0b404d536161cc55560c9e"
+  integrity sha512-ZTN3L3JjQp7x7wNSgOA+qOesSY1XtwCfmX58xyQlFW2HxBoZIT5KC+jaeAdAYfG2TjIAWPzXKwe3+JZP/PXPZw==
   dependencies:
     axios "^1.10.0"
     date-fns "^4.1.0"

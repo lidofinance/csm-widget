@@ -61,6 +61,7 @@ const reporters: {
   pgReporter: [
     '@lidofinance/pg-reporter',
     {
+      appName: 'csm-widget',
       env: process.env.STAND_TYPE,
       runName: getTestRunName(),
       pushgatewayOptions: {
