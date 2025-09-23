@@ -44,7 +44,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanTxLink = 'etherscanTxLink',
   etherscanAddressLink = 'etherscanAddressLink',
   beaconchainPubkeyLink = 'beaconchainPubkeyLink',
-  ethseerPubkeyLink = 'ethseerPubkeyLink',
+  migalabsPubkeyLink = 'migalabsPubkeyLink',
   feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
@@ -69,7 +69,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalFeesMonitoringLink = 'dashboardExternalFeesMonitoringLink',
   dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
   dashboardExternalRatedLink = 'dashboardExternalRatedLink',
-  dashboardExternalEthSeerLink = 'dashboardExternalEthSeerLink',
+  dashboardExternalMigaLabsLink = 'dashboardExternalMigaLabsLink',
   dashboardNotificationSentinelLink = 'dashboardNotificationSentinelLink',
   // Pages
   pageWelcome = 'pageWelcome',
@@ -88,11 +88,12 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageClaimBond = 'pageClaimBond',
   pageUnlockBond = 'pageUnlockBond',
   pageClaimType = 'pageClaimType',
-  pageTypeIcs = 'pageTypeIcs',
   pageInboxRequests = 'pageInboxRequests',
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
   pageNormalizeQueue = 'pageNormalizeQueue',
+  pageTypeIcs = 'pageTypeIcs',
+  pageTypeIcsApply = 'pageTypeIcsApply',
   page404 = 'page404',
   page500 = 'page500',
   // Actions
@@ -270,10 +271,10 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «View on beaconcha.in» link on pubkey',
     prefixed`beaconchain_pubkey_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.ethseerPubkeyLink]: [
+  [MATOMO_CLICK_EVENTS_TYPES.migalabsPubkeyLink]: [
     MATOMO_APP_NAME,
-    'Click «View on ethseer.io» link on pubkey',
-    prefixed`ethseer_pubkey_link`,
+    'Click «View on migalabs.io» link on pubkey',
+    prefixed`migalabs_pubkey_link`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: [
     MATOMO_APP_NAME,
@@ -383,10 +384,10 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Rated» on Dashboard screen',
     prefixed`dashboard_external_rated_link`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalEthSeerLink]: [
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalMigaLabsLink]: [
     MATOMO_APP_NAME,
-    'Click «EthSeer» on Dashboard screen',
-    prefixed`dashboard_external_ethseer_link`,
+    'Click «MigaLabs» on Dashboard screen',
+    prefixed`dashboard_external_migalabs_link`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.dashboardNotificationSentinelLink]: [
     MATOMO_APP_NAME,
@@ -474,11 +475,6 @@ export const MATOMO_CLICK_EVENTS: Record<
     'View page «ClaimType»',
     prefixed`view_claim_type_page`,
   ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs]: [
-    MATOMO_APP_NAME,
-    'View page «TypeICS»',
-    prefixed`view_type_ics_page`,
-  ],
   [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: [
     MATOMO_APP_NAME,
     'View page «InboxRequests»',
@@ -498,6 +494,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'View page «NormalizeQueue»',
     prefixed`view_normalize_queue_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs]: [
+    MATOMO_APP_NAME,
+    'View page «Type ICS»',
+    prefixed`view_type_ics_page`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcsApply]: [
+    MATOMO_APP_NAME,
+    'View page «Type ICS apply»',
+    prefixed`view_type_ics_apply_page`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.page404]: [
     MATOMO_APP_NAME,

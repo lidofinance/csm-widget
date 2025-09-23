@@ -13,9 +13,9 @@ type Props = Omit<ComponentProps<typeof Tooltip>, 'title' | 'children'> & {
 
 export const IconTooltip: FC<Props> = ({
   tooltip,
+  inline,
   type = 'info',
   placement = 'bottomLeft',
-  inline,
   ...rest
 }) =>
   tooltip ? (

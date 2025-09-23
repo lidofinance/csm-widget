@@ -78,7 +78,6 @@ export const useShowRule = () => {
         case 'CAN_CLAIM_ICS':
           return !!canClaimICS && isAccountActive;
         case 'ICS_ENABLED':
-          // TODO: enable always before release on mainnet
           return !!featureFlags?.[ICS_APPLY_FORM];
         case 'EL_STEALING_REPORTER':
           return !!isReportingRole;

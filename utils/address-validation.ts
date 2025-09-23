@@ -1,9 +1,9 @@
 import { Address } from 'viem';
 
-export interface AddressValidationFile {
+export type AddressValidationFile = {
   addresses: string[];
-  isBroken?: boolean;
-}
+  isBroken: boolean;
+};
 
 export const validateAddressLocally = (
   address: Address,

@@ -5,10 +5,10 @@ import { FC } from 'react';
 import {
   BeaconchainPubkeyLink,
   CopyLink,
-  EthseerPubkeyLink,
   FaqStrikeLifetime,
   FaqStrikeThreshold,
   KeyStrikes,
+  MigalabsPubkeyLink,
   Pubkey,
   SectionBlock,
   Stack,
@@ -48,7 +48,7 @@ export const StrikesSection: FC = () => {
                   <>
                     <CopyLink text={pubkey} />
                     <BeaconchainPubkeyLink pubkey={pubkey} />
-                    <EthseerPubkeyLink validator={validatorIndex} />
+                    <MigalabsPubkeyLink validator={validatorIndex} />
                   </>
                 }
               />

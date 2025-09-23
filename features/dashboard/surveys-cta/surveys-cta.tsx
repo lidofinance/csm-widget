@@ -1,14 +1,13 @@
 import { Button } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Banner, CloseButton, InverseThemeProvider } from 'shared/components';
-import { useSurveysCall, useSurveysFilled } from 'shared/hooks';
+import { useSurveyEnabled } from 'shared/hooks/use-survey-enabled';
 import { LocalLink } from 'shared/navigate';
 
 export const SurveysCta: FC = () => {
-  const { enabled, closed, onClose } = useSurveysCall();
-  const { data, isPending: initialLoading } = useSurveysFilled();
+  const { enabled, onClose } = useSurveyEnabled();
 
-  if (!enabled || closed || data?.isFilled || initialLoading) return null;
+  if (!enabled) return null;
 
   return (
     <Banner

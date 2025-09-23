@@ -46,6 +46,7 @@ const IcsApplyContent: FC = () => {
     );
   }
 
+  // FIXME: types
   if (typeStatus === 'CLAIMED') {
     return <ProofStatus typeStatus={typeStatus} />;
   }

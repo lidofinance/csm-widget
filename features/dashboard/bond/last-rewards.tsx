@@ -23,6 +23,10 @@ import {
   TextBlock,
   TxLinkEtherscan,
 } from 'shared/components';
+import {
+  LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE,
+  LIDO_OPERATOR_PORTAL_STUCK_KEYS,
+} from 'consts/external-links';
 import { FaqElement } from 'shared/components/faq/styles';
 import { countDaysLeft, formatDate, formatPercent } from 'utils';
 import { Balance } from './balance';
@@ -192,10 +196,16 @@ export const WhyModal: ModalComponentType = ({ ...props }) => (
           If your validator’s performance was below the threshold within the CSM
           Performance Oracle frame (7 days for testnet) the validator does not
           receive rewards for the given frame. Read more about{' '}
-          <FaqLink href="https://operatorportal.lido.fi/modules/community-staking-module#block-c6dc8d00f13243fcb17de3fa07ecc52c">
+          <FaqLink href={LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE}>
             the CSM Performance Oracle
           </FaqLink>
           .
+        </li>
+        <li>
+          <FaqLink href={LIDO_OPERATOR_PORTAL_STUCK_KEYS}>
+            Your Node Operator has stuck keys
+          </FaqLink>{' '}
+          due to not exiting a validator requested for exit timely.
         </li>
       </ol>
     </FaqElement>

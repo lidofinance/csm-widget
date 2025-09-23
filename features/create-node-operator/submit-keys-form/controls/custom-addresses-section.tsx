@@ -5,6 +5,7 @@ import { RewardsAddressInput } from './rewards-address-input';
 import { RewardsAddressTypeSelect } from './rewards-address-type-select';
 import { OptionalSectionHookForm } from 'shared/hook-form/controls';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { EXTENDED_MODE_LINK } from 'consts/external-links';
 
 export const CustomAddressesSection: FC = () => {
   return (
@@ -20,7 +21,7 @@ export const CustomAddressesSection: FC = () => {
         access to your Node Operator, bond, and potential rewards. Please check
         the{' '}
         <MatomoLink
-          href="https://docs.lido.fi/staking-modules/csm/guides/addresses/#setting-custom-addresses-upon-node-operator-creation"
+          href={EXTENDED_MODE_LINK}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.customAddressDescription}
         >
           detailed description of this feature
@@ -36,7 +37,7 @@ export const CustomAddressesSection: FC = () => {
         <br />
         It can not be changed later on. Please check the{' '}
         <MatomoLink
-          href="https://docs.lido.fi/staking-modules/csm/guides/addresses/#extended-manager-address-permissions"
+          href={EXTENDED_MODE_LINK}
           matomoEvent={
             MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription
           }
