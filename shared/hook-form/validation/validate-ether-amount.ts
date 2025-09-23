@@ -10,7 +10,7 @@ export const validateEtherAmount = (
   token: TOKENS,
   allowZero = false,
 ) => {
-  if (!amount) throw new ValidationError(field, '');
+  if (amount === undefined) throw new ValidationError(field, '');
 
   if (allowZero) {
     if (amount < 0n)

@@ -8,13 +8,12 @@ import { GlobalStyle } from 'styles';
 import { NodeOperatorPrivider, Web3Provider } from 'modules/web3';
 import { AlertProvider, AlertsWatcherPrivider } from 'shared/alerts';
 import { GateSupported } from 'shared/navigate';
-import { hashKey } from 'utils';
+import { AddressValidationFile, hashKey } from 'utils';
+import { AddressValidationProvider } from './address-validation-provider';
 import { AppFlagProvider } from './app-flag';
 import { InpageNavigationProvider } from './inpage-navigation';
 import { ModalProvider } from './modal-provider';
 import { ModifyProvider } from './modify-provider';
-import { AddressValidationProvider } from './address-validation-provider';
-import { AddressValidationFile } from 'utils/address-validation';
 
 type Props = {
   dummy?: boolean;
