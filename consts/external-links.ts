@@ -55,23 +55,6 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     keysApi: 'https://keys-api.lido.fi',
     surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
   },
-  [CHAINS.Holesky]: {
-    rewardsTree:
-      'https://raw.githubusercontent.com/lidofinance/csm-rewards/holesky/tree.json',
-    feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
-    stakeWidget: 'https://stake-holesky.testnet.fi',
-
-    feesMonitoring: 'https://fees-monitoring-holesky.testnet.fi',
-    operatorsWidget: 'https://operators-holesky.testnet.fi',
-    beaconchain: 'https://holesky.beaconcha.in',
-    beaconchainDashboard: 'https://v2-beta-holesky.beaconcha.in/dashboard',
-    ratedExplorer: '',
-    ethseerDashboard: '',
-    ethseer: '',
-    subscribeEvents: 'https://docs.lido.fi/staking-modules/csm/guides/events',
-    keysApi: 'https://keys-api-holesky.testnet.fi',
-    surveyApi: '',
-  },
   [CHAINS.Hoodi]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
