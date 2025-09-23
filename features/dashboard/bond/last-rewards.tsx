@@ -23,10 +23,7 @@ import {
   TextBlock,
   TxLinkEtherscan,
 } from 'shared/components';
-import {
-  LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE,
-  LIDO_OPERATOR_PORTAL_STUCK_KEYS,
-} from 'consts/external-links';
+import { LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE } from 'consts/external-links';
 import { FaqElement } from 'shared/components/faq/styles';
 import { countDaysLeft, formatDate, formatPercent } from 'utils';
 import { Balance } from './balance';
@@ -190,22 +187,16 @@ const Why: FC = () => {
 export const WhyModal: ModalComponentType = ({ ...props }) => (
   <Modal {...props} title="Why didn’t I get rewards?" data-testid="whyModal">
     <FaqElement>
-      <p>There are two main reasons of you getting no reward within a frame:</p>
+      <p>There are main reason of you getting no reward within a frame:</p>
       <ol>
         <li>
           If your validator’s performance was below the threshold within the CSM
-          Performance Oracle frame (7 days for testnet) the validator does not
-          receive rewards for the given frame. Read more about{' '}
+          Performance Oracle frame the validator does not receive rewards for
+          the given frame. Read more about{' '}
           <FaqLink href={LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE}>
             the CSM Performance Oracle
           </FaqLink>
           .
-        </li>
-        <li>
-          <FaqLink href={LIDO_OPERATOR_PORTAL_STUCK_KEYS}>
-            Your Node Operator has stuck keys
-          </FaqLink>{' '}
-          due to not exiting a validator requested for exit timely.
         </li>
       </ol>
     </FaqElement>

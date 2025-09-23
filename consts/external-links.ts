@@ -32,7 +32,6 @@ export const LIDO_OPERATOR_PORTAL_BASE =
   'https://operatorportal.lido.fi/modules/community-staking-module';
 export const LIDO_OPERATOR_PORTAL_BONDS_INFO = `${LIDO_OPERATOR_PORTAL_BASE}#block-e4a6daadca12480d955524247f03f380`;
 export const LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE = `${LIDO_OPERATOR_PORTAL_BASE}#block-c6dc8d00f13243fcb17de3fa07ecc52c`;
-export const LIDO_OPERATOR_PORTAL_STUCK_KEYS = `${LIDO_OPERATOR_PORTAL_BASE}#block-0ed61a4c0a5a439bbb4be20e814b4e38`;
 export const LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW = `${LIDO_OPERATOR_PORTAL_BASE}#block-90b8ff95edc64cf7a051584820219616`;
 
 // Lido Execution Layer Rewards Vault
