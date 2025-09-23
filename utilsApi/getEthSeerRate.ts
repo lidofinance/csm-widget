@@ -6,7 +6,7 @@ import { standardFetcher } from 'utils';
 import { getCurrentFrame } from './getCurrentFrame';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
-const MIN_NUMBER_EPOCHS = 9; // one hour
+const MIN_NUMBER_EPOCHS = 62; // ~ 6 hours
 const MAX_NUMBER_EPOCHS = 6750; // one month
 
 export const getEthSeerRate = async (
@@ -25,14 +25,16 @@ export const getEthSeerRate = async (
 
   return {
     ...currentFrame,
-    operatorAttestationRate: response.operator_participation_rate,
-    overallAttestationRate: response.overall_participation_rate,
+    operatorAttestationRate: response.data.operator_unified_performance,
+    overallAttestationRate: response.data.network_unified_performance,
   };
 };
 
 type EthseerApiResponse = {
-  operator_participation_rate: number;
-  overall_participation_rate: number;
+  data: {
+    operator_unified_performance: number;
+    network_unified_performance: number;
+  };
 };
 
 const fetchAttestationRate = async (
@@ -44,6 +46,11 @@ const fetchAttestationRate = async (
     throw new Error('Error: EthSeer API URL or token is not configured');
   }
 
+  const apiUrl = ethseerApiUrl.replace(
+    /\/data-api\/api\/.*$/,
+    '/data-api/api/eth/v1/beacon/consensus/lido/csm/unified_performance',
+  );
+
   const numberEpochs = Math.min(
     MAX_NUMBER_EPOCHS,
     Math.max(countEpochs, MIN_NUMBER_EPOCHS),
@@ -53,7 +60,7 @@ const fetchAttestationRate = async (
   const TIMEOUT = ms('5s');
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
 
-  const url = `${ethseerApiUrl}?operator_number=${nodeOperatorId}&number_epochs=${numberEpochs}`;
+  const url = `${apiUrl}?operator_number=${nodeOperatorId}&number_epochs=${numberEpochs}&network=mainnet`;
   const response = await standardFetcher<EthseerApiResponse>(url, {
     signal: controller.signal,
     headers: { 'X-Api-Key': ethseerApiToken },
