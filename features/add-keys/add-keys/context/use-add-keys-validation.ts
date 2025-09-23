@@ -25,6 +25,8 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
           ethBalance,
           maxStakeEth,
           blockNumber,
+          operatorInfo,
+          curveParameters,
         } = await dataPromise;
 
         validateBondAmount({
@@ -39,12 +41,32 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
         if (
           options.names?.includes('depositData') ||
           options.names?.includes('rawDepositData')
-        )
+        ) {
           await validateDepositData({
             depositData,
             chainId,
             blockNumber,
           });
+
+          if (
+            depositData &&
+            operatorInfo &&
+            curveParameters?.keysLimit !== undefined
+          ) {
+            const keysCount = depositData.length;
+            const currentActiveKeys =
+              operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys;
+            const { keysLimit } = curveParameters;
+
+            if (currentActiveKeys + keysCount > keysLimit) {
+              const availableSlots = Math.max(keysLimit - currentActiveKeys, 0);
+              throw new ValidationError(
+                'depositData',
+                `Keys limit exceeded. Allowed keys count to submit: ${availableSlots}`,
+              );
+            }
+          }
+        }
 
         if (options.names?.includes('confirmKeysReady') && !confirmKeysReady) {
           throw new ValidationError(

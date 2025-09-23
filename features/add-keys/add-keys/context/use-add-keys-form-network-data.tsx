@@ -8,6 +8,8 @@ import {
   useNodeOperatorId,
   useOperatorBalance,
   useOperatorCurveId,
+  useOperatorInfo,
+  useCurveParameters,
   useShareLimit,
   useStakeLimit,
   useStethBalance,
@@ -66,6 +68,12 @@ export const useAddKeysFormNetworkData = (): [
   const { data: curveId, isPending: isCurveIdLoading } =
     useOperatorCurveId(nodeOperatorId);
 
+  const { data: operatorInfo, isPending: isOperatorInfoLoading } =
+    useOperatorInfo(nodeOperatorId);
+
+  const { data: curveParameters, isPending: isCurveParametersLoading } =
+    useCurveParameters(curveId);
+
   // const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(`${nodeOperatorId}`);
 
   // const { data: keysAvailable } = useKeysAvailable({
@@ -117,6 +125,8 @@ export const useAddKeysFormNetworkData = (): [
       isBlockNumberLoading,
       isShareLimitLoading,
       isCurveIdLoading,
+      isOperatorInfoLoading,
+      isCurveParametersLoading,
     }),
     [
       isEthBalanceLoading,
@@ -128,6 +138,8 @@ export const useAddKeysFormNetworkData = (): [
       isBlockNumberLoading,
       isShareLimitLoading,
       isCurveIdLoading,
+      isOperatorInfoLoading,
+      isCurveParametersLoading,
     ],
   );
 
@@ -136,6 +148,8 @@ export const useAddKeysFormNetworkData = (): [
       blockNumber: blockNumber ? Number(blockNumber) : undefined,
       nodeOperatorId,
       curveId,
+      operatorInfo,
+      curveParameters,
       // keysAvailable,
       stethBalance,
       wstethBalance,
