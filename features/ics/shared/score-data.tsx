@@ -230,16 +230,31 @@ export const SCORE_SOURCES: ScoreSource[] = [
         name: 'Participation in Aragon Votes',
         icon: <IconStyle src={AragonIcon.src} />,
         points: 2,
-        description:
-          'Submitted address has voted at least twice with more than 100 LDO',
+        description: (
+          <>
+            Submitted addresses has voted at least twice with more than 100 LDO.
+            Different addresses can be used for voting. For more details, follow{' '}
+            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
+              the guide
+            </MatomoLink>
+          </>
+        ),
       },
       {
         id: 'snapshotVotes',
         name: 'Participation in Snapshot Votes',
         icon: <IconStyle src={SnapshotIcon.src} />,
         points: 1,
-        description:
-          'Submitted address has voted at least three times with more than 100 LDO',
+        description: (
+          <>
+            Submitted address has voted at least three times with more than 100
+            LDO. Different addresses can be used for voting. For more details,
+            follow{' '}
+            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
+              the guide
+            </MatomoLink>
+          </>
+        ),
       },
       {
         id: 'lidoGalxe',
