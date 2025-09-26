@@ -39,7 +39,7 @@ const config: PlaywrightTestConfig = {
   },
   projects: [
     {
-      name: 'csm-widget',
+      name: 'widget',
       testDir: './tests',
       grep: prepareGrep(process.env.TEST_TAGS),
     },

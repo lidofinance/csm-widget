@@ -84,6 +84,8 @@ jobs:
       PUSHGATEWAY_URL: ${{ secrets.PUSHGATEWAY_URL }}
       PUSHGATEWAY_USERNAME: ${{ secrets.PUSHGATEWAY_USERNAME }}
       PUSHGATEWAY_PASSWORD: ${{ secrets.PUSHGATEWAY_PASSWORD }}
+      GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
+      GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
 
     steps:
       - uses: actions/checkout@v4
