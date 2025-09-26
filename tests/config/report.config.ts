@@ -70,6 +70,10 @@ const reporters: {
         url: process.env.PUSHGATEWAY_URL,
         cookie: `${process.env.REFUSE_CF_BLOCK_NAME}=${process.env.REFUSE_CF_BLOCK_VALUE}`,
       },
+      grafanaOptions: {
+        url: process.env.GRAFANA_URL,
+        apiKey: process.env.GRAFANA_API_KEY,
+      },
       network: 'L1',
       testTags: process.env.TEST_TAGS,
     },
