@@ -64,7 +64,7 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const icsApplyParam = query?.get(QUERY_ICS_APPLY);
 
-    if (icsApplyParam && !featureFlags[ICS_APPLY_FORM]) {
+    if (icsApplyParam && !featureFlags?.[ICS_APPLY_FORM]) {
       featureFlags?.setFeatureFlag(ICS_APPLY_FORM, true);
     }
   }, [query, featureFlags]);

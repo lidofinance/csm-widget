@@ -2,9 +2,9 @@ import { Block, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { Layout } from 'shared/layout';
+import styled from 'styled-components';
 
 import WarningIconSrc from 'assets/icons/attention-triangle.svg';
-import styled from 'styled-components';
 
 export const WarningIcon = styled.img.attrs({
   src: WarningIconSrc,

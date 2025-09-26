@@ -21,7 +21,10 @@ export const SocialProof: FC = () => {
         <FormTitle chip={<Chip>Optional</Chip>}>Socials</FormTitle>
         <Text size="xs" color="secondary">
           You can add your social accounts. To prove you own an account, post a
-          message. For more info see <MatomoLink>the guide</MatomoLink>
+          message. For more info see{' '}
+          <MatomoLink href="https://www.youtube.com/watch?v=yUX34iCbCWE">
+            the guide
+          </MatomoLink>
         </Text>
       </Stack>
 

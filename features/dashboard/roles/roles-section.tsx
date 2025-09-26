@@ -4,17 +4,20 @@ import {
   useDappStatus,
   useNodeOperatorId,
   useOperatorInfo,
+  useOperatorOwner,
 } from 'modules/web3';
 import { FC } from 'react';
 import { SectionBlock, Stack } from 'shared/components';
 import invariant from 'tiny-invariant';
 import { isAddressEqual } from 'viem';
 import { RoleBlock } from './role-block';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 
 export const RolesSection: FC = () => {
   const { address } = useDappStatus();
   const id = useNodeOperatorId();
   const { data: info } = useOperatorInfo(id);
+  const { data: owner } = useOperatorOwner(id);
 
   invariant(address, 'address should be defined');
 
@@ -27,16 +30,18 @@ export const RolesSection: FC = () => {
       {info && (
         <Stack wrap>
           <RoleBlock
-            title="Manager Address"
+            type={ROLES.MANAGER}
             address={info.managerAddress}
             proposedAddress={info.proposedManagerAddress}
             isYou={isAddressEqual(info.managerAddress, address)}
+            isOwner={owner?.role === ROLES.MANAGER}
           />
           <RoleBlock
-            title="Rewards Address"
+            type={ROLES.REWARDS}
             address={info.rewardsAddress}
             proposedAddress={info.proposedRewardsAddress}
             isYou={isAddressEqual(info.rewardsAddress, address)}
+            isOwner={owner?.role === ROLES.REWARDS}
           />
         </Stack>
       )}

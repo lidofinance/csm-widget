@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useLocalStorage } from 'shared/hooks/use-local-storage';
 import { FeatureFlagsType } from './types';
@@ -17,19 +17,21 @@ export const useFeatureFlagsContext = () => {
     useLocalStorage(STORAGE_FEATURE_FLAGS, FEATURE_FLAGS_DEFAULT);
 
   const [featureFlagsState, setFeatureFlagsState] = useState<FeatureFlagsType>(
-    featureFlagsLocalStorage,
+    FEATURE_FLAGS_DEFAULT,
   );
+
+  useEffect(() => {
+    setFeatureFlagsState(featureFlagsLocalStorage);
+  }, [featureFlagsLocalStorage]);
 
   const setFeatureFlag = useCallback(
     (featureFlag: keyof FeatureFlagsType, value: boolean) => {
-      setFeatureFlagsLocalStorage({
+      const newFlags = {
         ...featureFlagsState,
         [featureFlag]: value,
-      });
-      setFeatureFlagsState({
-        ...featureFlagsState,
-        [featureFlag]: value,
-      });
+      };
+      setFeatureFlagsLocalStorage(newFlags);
+      setFeatureFlagsState(newFlags);
     },
     [featureFlagsState, setFeatureFlagsLocalStorage],
   );
