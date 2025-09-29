@@ -1,35 +1,30 @@
-import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
-import { validate } from 'shared/keys';
-import invariant from 'tiny-invariant';
-import type { DepositData } from 'types';
+import type { DepositData, DepositDataSDK } from '@lidofinance/lido-csm-sdk';
+import { groupBy, mapValues } from 'lodash';
 import { ValidationError } from './validation-error';
-import {
-  CSM_CONTRACT_ADDRESSES,
-  CSM_SUPPORTED_CHAINS,
-} from '@lidofinance/lido-csm-sdk';
 
 type ValidateDepositDataProps = {
   depositData: DepositData[];
-  chainId?: CSM_SUPPORTED_CHAINS;
-  blockNumber?: number;
+  sdk: DepositDataSDK;
 };
 
 export const validateDepositData = async ({
   depositData,
-  chainId,
-  blockNumber,
+  sdk,
 }: ValidateDepositDataProps) => {
-  invariant(chainId, 'chainId is not specified');
-  const wc = CSM_CONTRACT_ADDRESSES[chainId]?.withdrawalVault;
-  invariant(wc, 'WC is not specified');
-  const error = await validate(
-    depositData,
-    chainId,
-    wc,
-    KEYS_UPLOAD_TX_LIMIT,
-    blockNumber,
+  if (!depositData?.length) return;
+  const errors = await sdk.validateDepositData(depositData);
+
+  if (!errors?.length) return;
+
+  const types = mapValues(groupBy(errors, 'index'), (errors) =>
+    errors.map((error) => error.message),
   );
-  if (error) {
-    throw new ValidationError('depositData', error.message);
-  }
+
+  throw new ValidationError(
+    'depositData',
+    'Invalid deposit data',
+    undefined,
+    undefined,
+    types,
+  );
 };

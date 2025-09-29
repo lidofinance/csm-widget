@@ -133,7 +133,7 @@ type SubmitOptions = {
 export const useTxCallback = () => {
   const { txModalStages } = useTxModalStagesSubmitKeys();
   const appendNO = useAppendOperator();
-  const { addCacheKeys } = useKeysCache();
+  const { addCachePubkeys } = useKeysCache();
   const n = useNavigate();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
 
@@ -161,7 +161,7 @@ export const useTxCallback = () => {
                 zeroAddress === payload.result.managerAddress,
             });
 
-            void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
+            void addCachePubkeys(depositData.map(({ pubkey }) => pubkey));
 
             if (roles.length === 0) {
               setOperatorCustomAddresses(payload.result.nodeOperatorId);
@@ -194,6 +194,6 @@ export const useTxCallback = () => {
       };
       return callback;
     },
-    [addCacheKeys, appendNO, n, setOperatorCustomAddresses, txModalStages],
+    [addCachePubkeys, appendNO, n, setOperatorCustomAddresses, txModalStages],
   );
 };

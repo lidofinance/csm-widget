@@ -21,7 +21,7 @@ export const useRemoveKeysSubmit = ({
 }: RemoveKeysOptions) => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesRemoveKeys();
-  const { removeCacheKeys } = useKeysCache();
+  const { removeCachePubkeys } = useKeysCache();
 
   return useCallback(
     async (
@@ -70,7 +70,7 @@ export const useRemoveKeysSubmit = ({
 
         await onConfirm?.();
 
-        void removeCacheKeys(
+        void removeCachePubkeys(
           keys.map(({ pubkey }) => pubkey).slice(start, start + count),
         );
 
@@ -79,6 +79,6 @@ export const useRemoveKeysSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [csm.keys, onConfirm, removeCacheKeys, txModalStages, onRetry],
+    [csm.keys, onConfirm, removeCachePubkeys, txModalStages, onRetry],
   );
 };

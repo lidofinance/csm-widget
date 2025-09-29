@@ -3,6 +3,7 @@ export * from './address-validation';
 export * from './compare-lowercase';
 export * from './compare-with-router-path';
 export * from './convert';
+export * from './curve-parameters';
 export * from './encode-url-query';
 export * from './event-subsciption';
 export * from './extract-error-message';

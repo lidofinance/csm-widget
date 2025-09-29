@@ -4,12 +4,12 @@ import {
   KEY_OPERATOR_KEYS,
   KEY_OPERATOR_KEYS_TO_MIGRATE,
   useCsmStatus,
+  useCurveParameters,
   useEthereumBalance,
   useNodeOperatorId,
   useOperatorBalance,
   useOperatorCurveId,
   useOperatorInfo,
-  useCurveParameters,
   useShareLimit,
   useStakeLimit,
   useStethBalance,
@@ -17,7 +17,6 @@ import {
 } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
 // import { useNonWithdrawnKeysCount } from 'shared/hooks';
-import { useBlockNumber } from 'wagmi';
 import { type AddKeysFormNetworkData } from './types';
 import { useInvalidate } from 'shared/hooks';
 
@@ -25,11 +24,6 @@ export const useAddKeysFormNetworkData = (): [
   AddKeysFormNetworkData,
   () => Promise<void>,
 ] => {
-  const {
-    data: blockNumber,
-    isLoading: isBlockNumberLoading,
-    refetch: updateBlockNumber,
-  } = useBlockNumber();
   const { data: status, isPending: isStatusLoading } = useCsmStatus();
   const nodeOperatorId = useNodeOperatorId();
   const {
@@ -67,12 +61,11 @@ export const useAddKeysFormNetworkData = (): [
 
   const { data: curveId, isPending: isCurveIdLoading } =
     useOperatorCurveId(nodeOperatorId);
+  const { data: curveParameters, isPending: isCurveParametersLoading } =
+    useCurveParameters(curveId);
 
   const { data: operatorInfo, isPending: isOperatorInfoLoading } =
     useOperatorInfo(nodeOperatorId);
-
-  const { data: curveParameters, isPending: isCurveParametersLoading } =
-    useCurveParameters(curveId);
 
   // const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(`${nodeOperatorId}`);
 
@@ -89,7 +82,6 @@ export const useAddKeysFormNetworkData = (): [
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
-      updateBlockNumber(),
       updateStethBalance(),
       updateWstethBalance(),
       updateEthBalance(),
@@ -104,7 +96,6 @@ export const useAddKeysFormNetworkData = (): [
       ]),
     ]);
   }, [
-    updateBlockNumber,
     updateBond,
     updateEthBalance,
     updateMaxStakeEth,
@@ -120,32 +111,29 @@ export const useAddKeysFormNetworkData = (): [
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isMaxStakeEthLoading,
+      isCurveParametersLoading,
       isBondLoading,
       isStatusLoading,
-      isBlockNumberLoading,
       isShareLimitLoading,
       isCurveIdLoading,
       isOperatorInfoLoading,
-      isCurveParametersLoading,
     }),
     [
       isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isMaxStakeEthLoading,
+      isCurveParametersLoading,
       isBondLoading,
       isStatusLoading,
-      isBlockNumberLoading,
       isShareLimitLoading,
       isCurveIdLoading,
       isOperatorInfoLoading,
-      isCurveParametersLoading,
     ],
   );
 
   return [
     {
-      blockNumber: blockNumber ? Number(blockNumber) : undefined,
       nodeOperatorId,
       curveId,
       operatorInfo,

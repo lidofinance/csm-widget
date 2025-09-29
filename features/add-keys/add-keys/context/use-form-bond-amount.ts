@@ -15,7 +15,6 @@ export const useFormBondAmount = (
     token,
   });
 
-  // TODO: move to somethere
   useEffect(() => {
     void trigger('bondAmount');
   }, [token, trigger]);
