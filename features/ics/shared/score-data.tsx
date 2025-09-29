@@ -167,6 +167,10 @@ export const SCORE_SOURCES: ScoreSource[] = [
             <MatomoLink href="https://app.passport.xyz/#/lido_csm/">
               Lido customized scoring system on Human Passport
             </MatomoLink>
+            . For more details, follow{' '}
+            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
+              the guide
+            </MatomoLink>
           </>
         ),
       },
@@ -233,11 +237,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             Submitted addresses have voted at least twice, with more than 100
-            LDO. Different addresses can be used for voting. For more details,
-            follow{' '}
-            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
-              the guide
-            </MatomoLink>
+            LDO. Different addresses can be used for voting
           </>
         ),
       },
@@ -249,11 +249,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             Submitted addresses have voted at least three times, with more than
-            100 LDO. Different addresses can be used for voting. For more
-            details, follow{' '}
-            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
-              the guide
-            </MatomoLink>
+            100 LDO. Different addresses can be used for voting
           </>
         ),
       },
@@ -290,6 +286,11 @@ export const SCORE_SOURCES: ScoreSource[] = [
             <br />- 3 points if 40 {'<'} High Signal score ≤ 60
             <br />- 4 points if 60 {'<'} High Signal score ≤ 80
             <br />- 5 points if High Signal score {'>'} 80
+            <br />
+            For more details, follow{' '}
+            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
+              the guide
+            </MatomoLink>
           </>
         ),
       },
