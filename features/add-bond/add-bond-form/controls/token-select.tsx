@@ -28,7 +28,7 @@ export const TokenSelect: React.FC = () => {
           ),
           [TOKENS.wsteth]: (
             <TokenAmount
-              token={TOKENS.steth}
+              token={TOKENS.wsteth}
               amount={wstethBalance}
               loading={loading.isWstethBalanceLoading}
             />
