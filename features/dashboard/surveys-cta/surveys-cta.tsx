@@ -1,10 +1,7 @@
 import { Button } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Banner, CloseButton, InverseThemeProvider } from 'shared/components';
-import {
-  getSurveyDates,
-  useSurveyEnabled,
-} from 'shared/hooks/use-survey-enabled';
+import { getSurveyDates, useSurveyEnabled } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { formatDate } from 'utils';
 

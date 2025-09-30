@@ -28,6 +28,8 @@ export const FormStatus: FC<FormStatusProps> = ({
     reset();
   }, [reset]);
 
+  const haveScores = Object.values(scores).some((score) => score !== null);
+
   return (
     <Block>
       <Stack direction="column" gap="xxl">
@@ -37,9 +39,8 @@ export const FormStatus: FC<FormStatusProps> = ({
           comments={comments}
           scores={scores}
         />
-        {status !== 'REVIEW' && <Divider type="horizontal" />}
-
-        {status !== 'REVIEW' && <ScorePoints scores={scores} status={status} />}
+        {(status !== 'REVIEW' || haveScores) && <Divider type="horizontal" />}
+        {haveScores && <ScorePoints scores={scores} status={status} />}
         {status === 'REJECTED' && <ApplicationTip comments={comments} />}
         <Application form={form} comments={comments} createdAt={createdAt} />
         {status === 'REJECTED' && (

@@ -14,7 +14,6 @@ export const validateAddressLocally = (
   }
 
   const normalizedAddress = address.toLowerCase();
-
   const isNotValid = validationFile.addresses.some(
     (addr) => addr.toLowerCase() === normalizedAddress,
   );
