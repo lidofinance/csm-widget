@@ -72,11 +72,19 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
       typeStatus,
       data,
       isPending,
-      isTypePending: isTypePending || isOwnerTypePending,
+      isTypePending: isTypePending || (!!owner?.address && isOwnerTypePending),
       applyMode,
       reset: (value = true) => setManualReset(value),
     }),
-    [typeStatus, data, isPending, isTypePending, isOwnerTypePending, applyMode],
+    [
+      typeStatus,
+      data,
+      isPending,
+      isTypePending,
+      owner?.address,
+      isOwnerTypePending,
+      applyMode,
+    ],
   );
 
   return (
