@@ -7,6 +7,7 @@ import {
   useTxModalStagesSubmitKeys,
 } from '../hooks/use-tx-modal-stages-submit-keys';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
+import { useKeysCache } from 'shared/hooks';
 
 type SubmitKeysOptions = {
   onConfirm?: () => Promise<void> | void;
@@ -20,6 +21,8 @@ export const useSubmitKeysSubmit = ({
   const { csm } = useLidoSDK();
 
   const { txModalStages } = useTxModalStagesSubmitKeys();
+
+  const { addCachePubkeys, removeCachePubkeys } = useKeysCache();
 
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
   const txCallback = useTxCallback();
@@ -38,10 +41,12 @@ export const useSubmitKeysSubmit = ({
       }: SubmitKeysFormInputType,
       { proof, address }: SubmitKeysFormNetworkData,
     ): Promise<boolean> => {
-      invariant(depositData.length, 'Keys is not defined');
+      invariant(depositData?.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(amount !== undefined, 'BondAmount is not defined');
       invariant(address, 'Address is not deinfed');
+
+      const pubkeys = depositData.map(({ pubkey }) => pubkey);
 
       if (
         specifyCustomAddresses &&
@@ -62,6 +67,8 @@ export const useSubmitKeysSubmit = ({
           depositData,
           onRetry,
         });
+
+        addCachePubkeys(pubkeys);
 
         if (proof) {
           await csm.icsGate.addNodeOperator({
@@ -94,7 +101,7 @@ export const useSubmitKeysSubmit = ({
 
         return true;
       } catch (error) {
-        console.warn(error);
+        removeCachePubkeys(pubkeys);
         txModalStages.failed(error, onRetry);
         return false;
       }
@@ -103,9 +110,11 @@ export const useSubmitKeysSubmit = ({
       confirmCustomAddresses,
       txCallback,
       onRetry,
+      addCachePubkeys,
       onConfirm,
       csm.icsGate,
       csm.permissionlessGate,
+      removeCachePubkeys,
       txModalStages,
     ],
   );

@@ -5,7 +5,7 @@ import {
   ShareLimitStatus,
 } from '@lidofinance/lido-csm-sdk';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { DepositDataInputType } from 'shared/hook-form/form-controller';
+import { DepositDataInputType } from 'shared/hook-form/deposit-data';
 import { KeysAvailable } from 'shared/hooks';
 import { LoadingRecord } from 'types';
 import { Address } from 'viem';
