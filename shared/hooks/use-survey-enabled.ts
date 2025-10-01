@@ -19,7 +19,9 @@ import { useLocalStorage } from './use-local-storage';
 import { useSurveysFilled } from './use-surveys-filled';
 
 export const useSurveyEnabled = (skipClosed = false) => {
-  const { start, isActive } = getSurveyDates();
+  const today = new Date();
+  const { start, end } = getSurveyDates();
+  const isActive = isAfter(today, start) && isBefore(today, end);
 
   const nodeOperatorId = useNodeOperatorId();
   const [closedAt, setClosedAt] = useLocalStorage(
@@ -60,12 +62,8 @@ export const getSurveyDates = (currentDate: Date = new Date()) => {
   );
   const end = subSeconds(addWeeks(start, SURVEY_COUNT_WEEKS), 1);
 
-  const today = new Date();
-  const isActive = isAfter(today, start) && isBefore(today, end);
-
   return {
     start,
     end,
-    isActive,
   };
 };
