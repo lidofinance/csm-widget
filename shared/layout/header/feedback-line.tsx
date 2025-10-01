@@ -1,4 +1,5 @@
 import { Link, ThemeName } from '@lidofinance/lido-ui';
+import { useExternalLinks } from 'shared/hooks';
 import styled from 'styled-components';
 
 const WarningBlock = styled.div`
@@ -22,15 +23,13 @@ const WarningText = styled.span`
   color: var(--lido-color-text);
 `;
 
-// TODO: text
 export const FeedbackLine = () => {
+  const { feedbackForm } = useExternalLinks();
   return (
     <WarningBlock>
       <WarningText>
-        {/* This is a test version of the CSM Widget. Make sure to report any bugs{' '} */}
-        This is a test version of the CSM Widget. In case of any issues, please
-        submit the report using this{' '}
-        <Link href="https://forms.gle/ZBUqbykaZokJLf4M7">form</Link>
+        This is a new version of the CSM Widget. In case of any issues, please
+        submit the report using this <Link href={feedbackForm}>form</Link>
       </WarningText>
     </WarningBlock>
   );

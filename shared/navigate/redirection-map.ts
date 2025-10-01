@@ -1,14 +1,10 @@
-import { FeatureFlagsType } from 'config/feature-flags';
 import { ROLE_CODE } from 'consts/roles';
 import { PATH } from 'consts/urls';
+import { ShowFlags } from 'shared/hooks';
 
 type RedirectionMap = Partial<Record<ROLE_CODE, PATH>>;
 
-export type RedirectionProps = Partial<
-  FeatureFlagsType & { isAccountActive: boolean }
->;
-
-export type RedirectionFn = (flags: RedirectionProps) => RedirectionMap;
+export type RedirectionFn = (flags: ShowFlags) => RedirectionMap;
 
 export const redirectionMap: Partial<
   Record<PATH, RedirectionMap | RedirectionFn>
@@ -66,23 +62,28 @@ export const redirectionMap: Partial<
   [PATH.BOND_UNLOCK]: {
     [ROLE_CODE.NONE]: PATH.HOME,
   },
-  // TODO: if ICS is claimed - redirect to claim page
-  [PATH.TYPE]: ({ icsApplyForm }) =>
-    icsApplyForm
+  [PATH.TYPE]: (flags) =>
+    flags['CAN_CLAIM_ICS']
       ? {
-          [ROLE_CODE.NONE]: PATH.TYPE_ICS_APPLY,
-          [ROLE_CODE.REWARDS]: PATH.TYPE_ICS_APPLY,
-          [ROLE_CODE.MANAGER]: PATH.TYPE_ICS_APPLY,
-          [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_ICS_APPLY,
-        }
-      : {
-          [ROLE_CODE.NONE]: PATH.HOME,
           [ROLE_CODE.REWARDS]: PATH.TYPE_CLAIM,
           [ROLE_CODE.MANAGER]: PATH.TYPE_CLAIM,
           [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_CLAIM,
-        },
-  [PATH.TYPE_CLAIM]: ({ icsApplyForm }) =>
-    icsApplyForm
+        }
+      : flags['ICS_ENABLED']
+        ? {
+            [ROLE_CODE.NONE]: PATH.TYPE_ICS_APPLY,
+            [ROLE_CODE.REWARDS]: PATH.TYPE_ICS_APPLY,
+            [ROLE_CODE.MANAGER]: PATH.TYPE_ICS_APPLY,
+            [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_ICS_APPLY,
+          }
+        : {
+            [ROLE_CODE.NONE]: PATH.HOME,
+            [ROLE_CODE.REWARDS]: PATH.TYPE_CLAIM,
+            [ROLE_CODE.MANAGER]: PATH.TYPE_CLAIM,
+            [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_CLAIM,
+          },
+  [PATH.TYPE_CLAIM]: (flags) =>
+    flags['ICS_ENABLED']
       ? {
           [ROLE_CODE.NONE]: PATH.TYPE_ICS_SYSTEM,
         }

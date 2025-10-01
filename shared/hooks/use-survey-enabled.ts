@@ -9,7 +9,6 @@ import {
   parseISO,
   startOfQuarter,
   startOfWeek,
-  startOfYear,
   subSeconds,
   subWeeks,
 } from 'date-fns';
@@ -19,9 +18,7 @@ import { useLocalStorage } from './use-local-storage';
 import { useSurveysFilled } from './use-surveys-filled';
 
 export const useSurveyEnabled = (skipClosed = false) => {
-  const today = new Date();
-  const { start, end } = getSurveyDates();
-  const isActive = isAfter(today, start) && isBefore(today, end);
+  const { start, isActive } = getSurveyDates();
 
   const nodeOperatorId = useNodeOperatorId();
   const [closedAt, setClosedAt] = useLocalStorage(
@@ -49,7 +46,8 @@ const SURVEY_COUNT_WEEKS = 3;
 const SURVEY_START_DAY_OF_WEEK = 4;
 
 export const getSurveyDates = (currentDate: Date = new Date()) => {
-  startOfYear;
+  const today = new Date();
+
   const _corner = startOfQuarter(currentDate);
   const corner =
     Math.abs(differenceInMonths(_corner, currentDate)) > 1
@@ -62,8 +60,11 @@ export const getSurveyDates = (currentDate: Date = new Date()) => {
   );
   const end = subSeconds(addWeeks(start, SURVEY_COUNT_WEEKS), 1);
 
+  const isActive = isAfter(today, start) && isBefore(today, end);
+
   return {
     start,
     end,
+    isActive,
   };
 };
