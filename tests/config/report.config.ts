@@ -59,11 +59,17 @@ const reporters: {
   discordReport: [
     '@lidofinance/discord-reporter',
     {
-      enabled: process.env.DISCORD_REPORT_ENABLED,
-      discordDutyTag: process.env.DISCORD_DUTY_TAG,
-      discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
+      enabled: process.env.REPORT_ENABLED,
       customDescription: `- Stand type: \`${process.env.STAND_TYPE}\``,
       ciRunUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+
+      // ───── Discord settings ─────
+      discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
+      discordDutyTag: process.env.DISCORD_DUTY_TAG,
+
+      // ───── Slack settings ─────
+      slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
+      slackDutyTag: process.env.SLACK_DUTY_TAG,
     },
   ],
   qaseReporter: [
