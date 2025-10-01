@@ -1,5 +1,5 @@
 import { Link, ThemeName } from '@lidofinance/lido-ui';
-import { useExternalLinks } from 'shared/hooks';
+import { getExternalLinks } from 'consts';
 import styled from 'styled-components';
 
 const WarningBlock = styled.div`
@@ -23,8 +23,9 @@ const WarningText = styled.span`
   color: var(--lido-color-text);
 `;
 
+const { feedbackForm } = getExternalLinks();
+
 export const FeedbackLine = () => {
-  const { feedbackForm } = useExternalLinks();
   return (
     <WarningBlock>
       <WarningText>
