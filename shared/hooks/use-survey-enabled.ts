@@ -16,9 +16,11 @@ import { useNodeOperatorId } from 'modules/web3';
 import { useCallback } from 'react';
 import { useLocalStorage } from './use-local-storage';
 import { useSurveysFilled } from './use-surveys-filled';
+import { useShowFlags } from './use-show-rule';
 
 export const useSurveyEnabled = (skipClosed = false) => {
   const { start, isActive } = getSurveyDates();
+  const { IS_SURVEYS_ACTIVE } = useShowFlags();
 
   const nodeOperatorId = useNodeOperatorId();
   const [closedAt, setClosedAt] = useLocalStorage(
@@ -33,7 +35,9 @@ export const useSurveyEnabled = (skipClosed = false) => {
   }, [setClosedAt]);
 
   const { data: filled } = useSurveysFilled(
-    isActive && (!isClosed || skipClosed) ? nodeOperatorId : undefined,
+    IS_SURVEYS_ACTIVE && isActive && (!isClosed || skipClosed)
+      ? nodeOperatorId
+      : undefined,
   );
 
   return {

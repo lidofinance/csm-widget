@@ -1,5 +1,8 @@
 import { useFeatureFlags } from 'config/feature-flags';
-import { ICS_APPLY_FORM } from 'config/feature-flags/types';
+import {
+  ICS_APPLY_FORM,
+  SURVEYS_SETUP_ENABLED,
+} from 'config/feature-flags/types';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
 import {
@@ -21,6 +24,7 @@ type ModifyContextValue = {
 
 const QUERY_REFERRER = 'ref';
 const QUERY_ICS_APPLY = 'ics-apply';
+const QUERY_SURVEY_SETUP = 'survey-setup';
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -66,6 +70,16 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
 
     if (icsApplyParam && !featureFlags?.[ICS_APPLY_FORM]) {
       featureFlags?.setFeatureFlag(ICS_APPLY_FORM, true);
+    }
+  }, [query, featureFlags]);
+
+  useEffect(() => {
+    if (!query) return;
+
+    const surveySetupParam = query?.get(QUERY_SURVEY_SETUP);
+
+    if (surveySetupParam && !featureFlags?.[SURVEYS_SETUP_ENABLED]) {
+      featureFlags?.setFeatureFlag(SURVEYS_SETUP_ENABLED, true);
     }
   }, [query, featureFlags]);
 

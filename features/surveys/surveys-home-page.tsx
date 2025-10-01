@@ -4,10 +4,10 @@ import { NoSSRWrapper } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { SurveysHome } from './surveys-home/surverys-home';
 
-export const SurveysHomePage: FC<{ all?: boolean }> = ({ all }) => (
+export const SurveysHomePage: FC = () => (
   <Layout title="Surveys" subtitle="Voluntary report form">
     <NoSSRWrapper>
-      <SurveysHome all={all} />
+      <SurveysHome />
     </NoSSRWrapper>
   </Layout>
 );

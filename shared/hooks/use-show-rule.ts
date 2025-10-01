@@ -1,6 +1,9 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
-import { ICS_APPLY_FORM } from 'config/feature-flags/types';
+import {
+  ICS_APPLY_FORM,
+  SURVEYS_SETUP_ENABLED,
+} from 'config/feature-flags/types';
 import { getExternalLinks } from 'consts/external-links';
 import {
   useDappStatus,
@@ -68,7 +71,11 @@ export const useShowFlags = (): ShowFlags => {
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
       ['ICS_ENABLED']: !!featureFlags?.[ICS_APPLY_FORM],
       ['EL_STEALING_REPORTER']: !!isReportingRole,
-      ['IS_SURVEYS_ACTIVE']: !!nodeOperator && !!surveyApi && isAccountActive,
+      ['IS_SURVEYS_ACTIVE']:
+        !!nodeOperator &&
+        !!surveyApi &&
+        isAccountActive &&
+        !!featureFlags?.[SURVEYS_SETUP_ENABLED],
     }),
     [
       isAccountActive,
