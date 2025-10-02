@@ -6,28 +6,25 @@ import {
   Text,
   Tooltip,
 } from '@lidofinance/lido-ui';
+import {
+  useNodeOperatorId,
+  useOperatorInfo,
+  useOperatorLastRewards,
+  useFrameInfo,
+  useRewardsLastReportTxHash,
+} from 'modules/web3';
 import { ModalComponentType, useModal } from 'providers/modal-provider';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
 import { FC, useCallback } from 'react';
 import {
+  FaqLink,
   GrayText,
   Plural,
   Stack,
   TextBlock,
   TxLinkEtherscan,
 } from 'shared/components';
-import {
-  LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE,
-  LIDO_OPERATOR_PORTAL_STUCK_KEYS,
-} from 'consts/external-links';
+import { LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE } from 'consts/external-links';
 import { FaqElement } from 'shared/components/faq/styles';
-import {
-  useLastOperatorRewards,
-  useLastRewrdsTx,
-  useNodeOperatorInfo,
-  useRewardsFrame,
-  useSharesToSteth,
-} from 'shared/hooks';
 import { countDaysLeft, formatDate, formatPercent } from 'utils';
 import { Balance } from './balance';
 import {
@@ -38,27 +35,27 @@ import {
   RowHeader,
   RowTitle,
 } from './styles';
-import { Zero } from '@ethersproject/constants';
 
 export const LastRewards: FC = () => {
-  const { data: lastRewards, initialLoading: isLoading } =
-    useLastOperatorRewards();
-  const { data: distributed, initialLoading: isDistributedLoading } =
-    useSharesToSteth(lastRewards?.distributed);
-
   const id = useNodeOperatorId();
-  const { data: info } = useNodeOperatorInfo(id);
 
-  const { data: rewardsFrame } = useRewardsFrame();
+  const { data: info } = useOperatorInfo(id);
+  const { data: lastRewards, isPending: isLoading } =
+    useOperatorLastRewards(id);
+  const { data: rewardsFrame } = useFrameInfo((data) => ({
+    lastDistribution: data.lastReport,
+    prevDistribution: data.lastReport - data.frameDuration,
+    nextDistribution: data.lastReport + data.frameDuration,
+  }));
 
-  const lastRewardsDate = formatDate(rewardsFrame?.lastRewards);
-  const prevRewardsDate = formatDate(rewardsFrame?.prevRewards);
-  const nextRewardsDate = formatDate(rewardsFrame?.nextRewards);
-  const daysLeft = countDaysLeft(rewardsFrame?.nextRewards);
+  const lastRewardsDate = formatDate(rewardsFrame?.lastDistribution);
+  const prevRewardsDate = formatDate(rewardsFrame?.prevDistribution);
+  const nextRewardsDate = formatDate(rewardsFrame?.nextDistribution);
+  const daysLeft = countDaysLeft(rewardsFrame?.nextDistribution);
 
   const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
 
-  const showWhy = lastRewards && lastRewards.distributed.isZero();
+  const showWhy = lastRewards && lastRewards.distributed === 0n;
 
   if (!showThisSection) return null;
 
@@ -78,8 +75,8 @@ export const LastRewards: FC = () => {
           <Balance
             data-testid="commonBalance"
             big
-            loading={isLoading || isDistributedLoading}
-            amount={distributed ?? Zero}
+            loading={isLoading}
+            amount={lastRewards?.distributed}
             description={showWhy ? <Why /> : undefined}
           />
         </RowHeader>
@@ -128,9 +125,10 @@ export const LastRewards: FC = () => {
 };
 
 const LastReportStats: FC = () => {
-  const { data: lastRewards, initialLoading: isLoading } =
-    useLastOperatorRewards();
-  const { data: txHash, initialLoading: isTxLoading } = useLastRewrdsTx();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: lastRewards, isPending: isLoading } =
+    useOperatorLastRewards(nodeOperatorId);
+  const { data: txHash, isPending: isTxLoading } = useRewardsLastReportTxHash();
 
   return (
     <RowBody data-testid="lastRewardsInfo">
@@ -141,22 +139,18 @@ const LastReportStats: FC = () => {
             title="Keys over threshold"
             loading={isLoading}
             description={
-              <Tooltip title={lastRewards?.threshold} placement="bottomLeft">
-                <span>Threshold: {formatPercent(lastRewards?.threshold)}%</span>
-              </Tooltip>
+              lastRewards?.threshold ? (
+                <Tooltip title={lastRewards?.threshold} placement="bottomLeft">
+                  <span>
+                    Threshold: {formatPercent(lastRewards?.threshold)}
+                  </span>
+                </Tooltip>
+              ) : null
             }
             help="Number of your keys above the performance threshold in the latest report frame"
           >
             {lastRewards?.validatorsOverThresholdCount}{' '}
             <i>/{lastRewards?.validatorsCount}</i>
-          </TextBlock>
-          <TextBlock
-            title="Stuck keys found"
-            loading={isLoading}
-            warning={lastRewards?.stuck}
-            help="Indicates whether any of your Node Operator keys were marked as “Stuck” during the latest report frame. Stuck keys prevent the Node Operator from receiving rewards for any key(s) in that frame"
-          >
-            {lastRewards?.stuck ? 'YES' : 'NO'}
           </TextBlock>
         </>
       ) : (
@@ -193,30 +187,16 @@ const Why: FC = () => {
 export const WhyModal: ModalComponentType = ({ ...props }) => (
   <Modal {...props} title="Why didn’t I get rewards?" data-testid="whyModal">
     <FaqElement>
-      <p>There are two main reasons of you getting no reward within a frame:</p>
+      <p>There are main reason of you getting no reward within a frame:</p>
       <ol>
         <li>
           If your validator’s performance was below the threshold within the CSM
-          Performance Oracle frame (7 days for testnet) the validator does not
-          receive rewards for the given frame. Read more about{' '}
-          <a
-            href={LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE}
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-          >
+          Performance Oracle frame the validator does not receive rewards for
+          the given frame. Read more about{' '}
+          <FaqLink href={LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE}>
             the CSM Performance Oracle
-          </a>
+          </FaqLink>
           .
-        </li>
-        <li>
-          <a
-            href={LIDO_OPERATOR_PORTAL_STUCK_KEYS}
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-          >
-            Your Node Operator has stuck keys
-          </a>{' '}
-          due to not exiting a validator requested for exit timely.
         </li>
       </ol>
     </FaqElement>

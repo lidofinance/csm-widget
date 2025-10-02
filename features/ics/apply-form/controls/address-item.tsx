@@ -5,19 +5,19 @@ import {
   Input,
   Text,
 } from '@lidofinance/lido-ui';
-import { isAddress, isHexString } from 'ethers/lib/utils.js';
 import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC, useCallback, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { CopyButton2, MatomoLink, Stack } from 'shared/components';
+import { CopyButton, MatomoLink, Stack } from 'shared/components';
 import { VerifiedChip } from 'shared/components/input-address/verified-chip';
 import {
   AddressInputHookForm,
   TextInputHookForm,
 } from 'shared/hook-form/controls';
+import { isAddress, isHex } from 'viem';
 import {
   useAddressMessage,
-  useVerifyMessage,
+  useVefiryMessage,
   type ApplyFormInputType,
 } from '../context';
 
@@ -47,7 +47,7 @@ export const AddressItem: FC<AddressItemProps> = ({
 
   const [isVerifying, setIsVerifying] = useState(false);
 
-  const verifyMessage = useVerifyMessage();
+  const verifyMessage = useVefiryMessage();
 
   const onVerify = useCallback(
     async (index: number) => {
@@ -56,7 +56,7 @@ export const AddressItem: FC<AddressItemProps> = ({
       const currentAddresses = getValues('additionalAddresses');
       const { address, signature } = currentAddresses[index];
 
-      if (!isHexString(signature)) {
+      if (!isHex(signature)) {
         setError(`additionalAddresses.${index}.signature`, {
           type: 'manual',
           message: 'Invalid signature format',
@@ -155,7 +155,7 @@ export const AddressItem: FC<AddressItemProps> = ({
               placeholder="Enter address above to generate message..."
               rightDecorator={
                 <Stack gap="sm">
-                  <CopyButton2 text={message} size="xs" variant="translucent" />
+                  <CopyButton text={message} size="xs" variant="translucent" />
                   <MatomoLink href="https://etherscan.io/verifiedSignatures#">
                     <ButtonIcon
                       icon={<External />}

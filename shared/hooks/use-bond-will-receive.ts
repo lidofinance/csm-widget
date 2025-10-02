@@ -1,22 +1,28 @@
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
-import { useStethAmount } from './use-steth-amount';
-import { Zero } from '@ethersproject/constants';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { useExchangeRate } from './use-exchange-rate';
+import { convert } from 'utils';
 
 export const useBondWillReceive = (
   token: TOKENS,
-  amount?: BigNumber,
-  rewards?: BigNumber,
+  amount?: bigint,
+  rewards?: bigint,
 ) => {
-  const stethAmount = useStethAmount(token, amount);
+  const { data: stethAmount } = useExchangeRate((rates) =>
+    convert(amount ?? 0n, rates[token]),
+  );
 
   return [
-    (amount &&
-      stethAmount &&
-      rewards &&
-      rewards.gt(stethAmount) &&
-      rewards.sub(stethAmount)) ||
-      Zero,
-    !!(amount && stethAmount && rewards && stethAmount.gt(rewards)),
+    (amount !== undefined &&
+      stethAmount !== undefined &&
+      rewards !== undefined &&
+      rewards > stethAmount &&
+      rewards - stethAmount) ||
+      0n,
+    !!(
+      amount !== undefined &&
+      stethAmount !== undefined &&
+      rewards !== undefined &&
+      stethAmount > rewards
+    ),
   ] as const;
 };

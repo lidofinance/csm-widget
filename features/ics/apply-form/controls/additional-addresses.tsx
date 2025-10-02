@@ -1,10 +1,9 @@
 import { ButtonIcon, Plus, Text } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { MatomoLink, Stack } from 'shared/components';
+import { Chip, FormTitle, MatomoLink, Stack } from 'shared/components';
 import { MAX_ADDITIONAL_ADDRESSES, type ApplyFormInputType } from '../context';
 import { AddressItem } from './address-item';
-import { Chip, FormTitle } from '../components';
 
 export const AdditionalAddresses: FC = () => {
   const { control } = useFormContext<ApplyFormInputType>();

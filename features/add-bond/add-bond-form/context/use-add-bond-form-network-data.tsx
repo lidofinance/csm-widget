@@ -1,14 +1,13 @@
-import { useEthereumBalance } from '@lido-sdk/react';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { useCallback, useMemo } from 'react';
 import {
-  useCsmPaused,
-  useNodeOperatorBalance,
-  useStakingLimitInfo,
-  useSTETHBalance,
-  useWSTETHBalance,
-} from 'shared/hooks';
+  useCsmStatus,
+  useEthereumBalance,
+  useNodeOperatorId,
+  useOperatorBalance,
+  useStakeLimit,
+  useStethBalance,
+  useWstethBalance,
+} from 'modules/web3';
+import { useCallback, useMemo } from 'react';
 import { type AddBondFormNetworkData } from '../context/types';
 
 export const useAddBondFormNetworkData = (): [
@@ -17,77 +16,77 @@ export const useAddBondFormNetworkData = (): [
 ] => {
   const nodeOperatorId = useNodeOperatorId();
   const {
-    data: etherBalance,
-    update: updateEtherBalance,
-    initialLoading: isEtherBalanceLoading,
-  } = useEthereumBalance(undefined, STRATEGY_LAZY);
+    data: ethBalance,
+    isPending: isEthBalanceLoading,
+    refetch: updateEthBalance,
+  } = useEthereumBalance();
   const {
     data: stethBalance,
-    update: updateStethBalance,
-    initialLoading: isStethBalanceLoading,
-  } = useSTETHBalance(STRATEGY_LAZY);
+    isPending: isStethBalanceLoading,
+    refetch: updateStethBalance,
+  } = useStethBalance();
   const {
     data: wstethBalance,
-    update: updateWstethBalance,
-    initialLoading: isWstethBalanceLoading,
-  } = useWSTETHBalance(STRATEGY_LAZY);
+    isPending: isWstethBalanceLoading,
+    refetch: updateWstethBalance,
+  } = useWstethBalance();
   const {
     data: bond,
-    update: updateBond,
-    initialLoading: isBondLoading,
-  } = useNodeOperatorBalance(nodeOperatorId);
+    isPending: isBondLoading,
+    refetch: updateBond,
+  } = useOperatorBalance(nodeOperatorId);
   const {
-    data: maxStakeEther,
-    update: updateMaxStakeEther,
-    initialLoading: isMaxStakeEtherLoading,
-  } = useStakingLimitInfo();
+    data: maxStakeEth,
+    isPending: isMaxStakeEthLoading,
+    refetch: updateMaxStakeEth,
+  } = useStakeLimit();
 
-  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
+  const { data: status, isPending: isStatusLoading } = useCsmStatus();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
+      updateEthBalance(),
       updateStethBalance(),
       updateWstethBalance(),
-      updateEtherBalance(),
       updateBond(),
-      updateMaxStakeEther(),
+      updateMaxStakeEth(),
     ]);
   }, [
+    updateBond,
+    updateEthBalance,
+    updateMaxStakeEth,
     updateStethBalance,
     updateWstethBalance,
-    updateEtherBalance,
-    updateBond,
-    updateMaxStakeEther,
   ]);
 
   const loading = useMemo(
     () => ({
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isBondLoading,
-      isMaxStakeEtherLoading,
+      isMaxStakeEthLoading,
       isStatusLoading,
     }),
     [
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isStethBalanceLoading,
       isWstethBalanceLoading,
       isBondLoading,
-      isMaxStakeEtherLoading,
+      isMaxStakeEthLoading,
       isStatusLoading,
     ],
   );
 
   return [
     {
-      etherBalance,
+      ethBalance,
       stethBalance,
       wstethBalance,
       bond,
       nodeOperatorId,
-      maxStakeEther,
-      isPaused: status?.isAccountingPaused,
+      maxStakeEth,
+      isPaused: status?.isPausedAccounting,
       loading,
     },
     revalidate,

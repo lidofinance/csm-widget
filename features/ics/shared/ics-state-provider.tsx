@@ -7,12 +7,16 @@ import {
   useState,
 } from 'react';
 import invariant from 'tiny-invariant';
-import {
-  useIcsAddressCheck,
-  useIcsOwnerCheck,
-} from 'shared/hooks/useIcsAddresses';
 import { IcsResponseDto } from './types';
 import { useFormStatus } from './use-form-status';
+import {
+  useDappStatus,
+  useIcsProof,
+  useNodeOperatorId,
+  useOperatorOwner,
+  useOperatorType,
+} from 'modules/web3';
+import { OPERATOR_TYPE } from 'consts';
 
 export type TypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
 
@@ -36,33 +40,51 @@ export const useIcsState = () => {
 };
 
 export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { data } = useFormStatus();
-  const isPending = data === undefined;
+  const { address } = useDappStatus();
+  const operatorId = useNodeOperatorId();
+  const { data: operatorType } = useOperatorType(operatorId);
+  const { data: owner } = useOperatorOwner(operatorId);
 
-  const { data: isAddressInIcsList, initialLoading: isAddressPending } =
-    useIcsAddressCheck();
-  const { data: isOwnerInIcsList, initialLoading: isOwnerPending } =
-    useIcsOwnerCheck();
+  const { data: proofData, isPending: isTypePending } = useIcsProof(address);
+  const { data: ownerProofData, isPending: isOwnerTypePending } = useIcsProof(
+    owner?.address,
+  );
+  const { data, isPending } = useFormStatus();
 
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
 
   const typeStatus: TypeStatus = useMemo(() => {
-    if (isAddressInIcsList) return 'ISSUED';
-    if (isOwnerInIcsList) return 'OWNER_ISSUED';
+    if (operatorType === OPERATOR_TYPE.ICS || proofData?.isConsumed)
+      return 'CLAIMED';
+    if (proofData?.proof) return 'ISSUED';
+    if (ownerProofData?.proof) return 'OWNER_ISSUED';
     return 'PENDING';
-  }, [isAddressInIcsList, isOwnerInIcsList]);
+  }, [
+    operatorType,
+    ownerProofData?.proof,
+    proofData?.isConsumed,
+    proofData?.proof,
+  ]);
 
   const value: IcsStateContextType = useMemo(
     () => ({
       typeStatus,
       data,
       isPending,
-      isTypePending: isAddressPending || isOwnerPending,
+      isTypePending: isTypePending || (!!owner?.address && isOwnerTypePending),
       applyMode,
       reset: (value = true) => setManualReset(value),
     }),
-    [typeStatus, data, isPending, isAddressPending, isOwnerPending, applyMode],
+    [
+      typeStatus,
+      data,
+      isPending,
+      isTypePending,
+      owner?.address,
+      isOwnerTypePending,
+      applyMode,
+    ],
   );
 
   return (

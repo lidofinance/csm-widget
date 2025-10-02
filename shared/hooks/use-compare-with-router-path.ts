@@ -5,7 +5,7 @@ import { config } from 'config';
 import {
   compareWithRouterPathInIPFS,
   compareWithRouterPathInInfra,
-} from 'utils/compare-with-router-path';
+} from 'utils';
 
 export const useCompareWithRouterPath = (href: string) => {
   const router = useRouter();

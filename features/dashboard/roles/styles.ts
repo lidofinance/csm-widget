@@ -45,7 +45,7 @@ export const Chip = styled.span`
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
   font-weight: 700;
 
-  ::before {
+  :before {
     content: '';
     position: absolute;
     display: block;

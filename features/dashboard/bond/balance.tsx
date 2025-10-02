@@ -1,5 +1,4 @@
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { FC, ReactNode } from 'react';
 import { Sign, SignType, TextBlock } from 'shared/components';
 import { FormatPrice, FormatToken } from 'shared/formatters';
@@ -8,7 +7,7 @@ import { useEthUsd } from 'shared/hooks';
 type Props = {
   title?: ReactNode;
   help?: string;
-  amount?: BigNumber;
+  amount?: bigint;
   token?: TOKENS;
   description?: ReactNode;
   sign?: SignType;
@@ -35,7 +34,7 @@ export const Balance: FC<Props> = ({
       size={big ? 'sm' : undefined}
     >
       {sign && <Sign type={sign} />}
-      <FormatToken amount={amount} token={token ?? TOKENS.STETH} />
+      <FormatToken amount={amount} token={token ?? TOKENS.steth} />
     </TextBlock>
   );
 };

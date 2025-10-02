@@ -23,13 +23,19 @@ export const Item: FC<ItemProps> = ({
   count,
   variant,
   reverse,
+  ...params
 }) => {
   const isEmptyCount = !count || typeof count === 'string';
   const secondary = variant === 'secondary' || isEmptyCount;
   const warning = variant === 'warning' && !isEmptyCount;
 
   const body = (
-    <ItemStyled $secondary={secondary} $warning={warning} $reverse={reverse}>
+    <ItemStyled
+      $secondary={secondary}
+      $warning={warning}
+      $reverse={reverse}
+      {...params}
+    >
       <CountStyled>
         {count === undefined ? <InlineLoader /> : count}
       </CountStyled>
@@ -49,12 +55,12 @@ export const Item: FC<ItemProps> = ({
 
 type ItemActionProps = {
   action: ReactNode;
-  title: string;
+  title?: string;
   count: number;
 };
 
-export const ItemAction: FC<ItemActionProps> = ({ count, title, action }) => {
-  return (
+export const ItemAction: FC<ItemActionProps> = ({ count, title, action }) =>
+  title ? (
     <ActionStyled>
       <Stack>
         <Counter warning count={count} />
@@ -62,5 +68,4 @@ export const ItemAction: FC<ItemActionProps> = ({ count, title, action }) => {
       </Stack>
       <BoxStyled>{action}</BoxStyled>
     </ActionStyled>
-  );
-};
+  ) : null;

@@ -1,28 +1,39 @@
-import { Divider, ThemeToggler } from '@lidofinance/lido-ui';
+import {
+  Button,
+  ButtonProps,
+  Divider,
+  ThemeToggler,
+} from '@lidofinance/lido-ui';
 import styled, { keyframes } from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const HeaderStyle = styled.header`
+export const HeaderWrapper = styled.div`
   grid-area: header;
-  align-self: center;
+
   display: flex;
+  flex-direction: column;
+  gap: 0;
   align-items: center;
-  flex-wrap: nowrap;
-  gap: 8px;
 
   position: sticky;
   z-index: 250;
   top: 0;
   left: 0;
   right: 0;
-  padding: 18px 32px;
-  margin: 0 -32px;
 
-  ${({ theme }) => theme.mediaQueries.lg} {
-    padding: 18px 20px;
-    margin: 0 -20px;
-  }
+  padding: 0 32px;
+  margin: 0 -32px;
+`;
+
+export const HeaderStyle = styled.header`
+  align-self: center;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  width: 100%;
+  padding: 18px 0;
 
   transition:
     box-shadow 0.3s ease,
@@ -118,4 +129,45 @@ export const LogosStyle = styled.div`
 
 export const LogoDivider = styled(Divider).attrs({ type: 'vertical' })`
   opacity: 0.6;
+`;
+
+export const HeaderButton = styled((props: ButtonProps) => (
+  <Button size="sm" variant="text" color="secondary" {...props} />
+))`
+  --grouped-padding-offset: 2px;
+  --padding: 8px;
+  flex-shrink: 1;
+  min-width: unset;
+  overflow: hidden;
+  height: 44px; // header height
+  padding: 0 var(--padding);
+
+  > span:first-of-type {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0;
+
+  > * {
+    :not(:first-child) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      padding-left: calc(
+        var(--padding, 0px) - var(--grouped-padding-offset, 0px)
+      );
+    }
+    :not(:last-child) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      padding-right: calc(
+        var(--padding, 0px) - var(--grouped-padding-offset, 0px)
+      );
+    }
+  }
 `;

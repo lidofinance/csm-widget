@@ -3,6 +3,8 @@ import { FC } from 'react';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { Layout } from 'shared/layout';
 import { TypePageSwitcher } from 'shared/navigate';
+import { Faq } from 'shared/components';
+import { FAQ_OPERATOR_TYPE } from 'faq';
 import { BlockStyle } from './score-system/styles';
 import { ApplicationFlow, Introduction, ScoreSources } from './score-system';
 import { RoundBanner } from './round-banner';
@@ -20,5 +22,6 @@ export const IcsScoresPage: FC = () => (
       <ScoreSources />
       <ApplicationFlow />
     </BlockStyle>
+    <Faq items={FAQ_OPERATOR_TYPE} />
   </Layout>
 );

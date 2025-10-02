@@ -1,15 +1,23 @@
+import { useQueryClient } from '@tanstack/react-query';
+import { ICS_FORM_STATUS_KEY } from 'features/ics/shared';
+import { useDappStatus } from 'modules/web3';
 import { useCallback } from 'react';
-import { useAccount } from 'shared/hooks';
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 import type { ApplyFormNetworkData } from './types';
 
 export const useApplyFormNetworkData = (): [
   ApplyFormNetworkData,
   () => void,
 ] => {
-  const { address } = useAccount();
+  const { address } = useDappStatus();
 
-  const revalidate = useCallback(() => {}, []);
+  const queryClient = useQueryClient();
+
+  const revalidate = useCallback(() => {
+    void queryClient.invalidateQueries({
+      queryKey: [ICS_FORM_STATUS_KEY],
+    });
+  }, [queryClient]);
 
   return [
     {

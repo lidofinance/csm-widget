@@ -1,6 +1,8 @@
 import { Block, Text } from '@lidofinance/lido-ui';
+import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
 import { NoSSRWrapper, Stack, WhenLoaded } from 'shared/components';
+import { Connect } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status';
 import { ProofStatus } from './form-status/proof-status';
@@ -11,16 +13,14 @@ import {
   useIcsState,
 } from './shared';
 import { SiweSignIn } from './siwe-sign-in';
-import { useAccount } from 'shared/hooks';
-import { Connect } from 'shared/wallet';
 
 const IcsApplyContent: FC = () => {
-  const { active } = useAccount();
+  const { isAccountActive } = useDappStatus();
   const { token } = useAuth();
   const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
     useIcsState();
 
-  if (!active) {
+  if (!isAccountActive) {
     return (
       <Block>
         <Stack direction="column" gap="lg">
@@ -46,7 +46,7 @@ const IcsApplyContent: FC = () => {
     );
   }
 
-  if (typeStatus !== 'PENDING') {
+  if (typeStatus === 'CLAIMED') {
     return <ProofStatus typeStatus={typeStatus} />;
   }
 

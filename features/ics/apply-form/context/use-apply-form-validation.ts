@@ -1,11 +1,10 @@
-import { isAddress, isHexString } from 'ethers/lib/utils.js';
 import { useCallback } from 'react';
 import type { Resolver, ResolverOptions } from 'react-hook-form';
 import {
   handleResolverValidationError,
   ValidationError,
 } from 'shared/hook-form/validation';
-import { compareLowercase } from 'utils';
+import { isAddress, isAddressEqual, isHex } from 'viem';
 import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
 import { useRawVefiryMessage } from './use-verify-message';
 import { MAX_ADDITIONAL_ADDRESSES } from './consts';
@@ -56,7 +55,7 @@ export const useApplyFormValidation = ({
               throw new ValidationError(addressPath, '');
             }
 
-            if (compareLowercase(address, mainAddress)) {
+            if (isAddressEqual(address, mainAddress)) {
               throw new ValidationError(
                 addressPath,
                 'Additional address cannot be the same as main address',
@@ -67,7 +66,7 @@ export const useApplyFormValidation = ({
               (a, i) =>
                 i !== index &&
                 isAddress(a.address) &&
-                compareLowercase(address, a.address),
+                isAddressEqual(address, a.address),
             );
 
             if (hasDuplicateAddresses) {
@@ -79,7 +78,7 @@ export const useApplyFormValidation = ({
           }
 
           if (shouldValidateField(signaturePath, options)) {
-            if (!signature || !isHexString(signature)) {
+            if (!signature || !isHex(signature)) {
               throw new ValidationError(signaturePath, '');
             }
 

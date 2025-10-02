@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 
-import { prefixUrl } from 'utils/get-ipfs-base-path';
+import { prefixUrl } from 'utils';
 
 export const usePrefixedPush = () => {
   const router = useRouter();

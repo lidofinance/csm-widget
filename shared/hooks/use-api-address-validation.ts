@@ -1,13 +1,11 @@
-import { useLidoSWR } from '@lido-sdk/react';
-import { config } from 'config';
-import { API_ROUTES } from 'consts/api';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { standardFetcher } from 'utils';
+import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 
-interface AddressValidationResponse {
-  isValid: boolean;
-}
+import { STRATEGY_LAZY } from 'consts';
+import { API_ROUTES } from 'consts/api';
+import { config } from 'config';
+import { standardFetcher } from 'utils';
+import invariant from 'tiny-invariant';
 
 const getApiUrl = (route: string, params?: Record<string, string>) => {
   // Simple: always use full URL with current origin
@@ -26,20 +24,20 @@ const getApiUrl = (route: string, params?: Record<string, string>) => {
 export const useApiAddressValidation = () => {
   const { address } = useAccount();
 
-  return useLidoSWR(
-    ['address-validation', address],
-    config.addressApiValidationEnabled
-      ? () => {
-          const url = getApiUrl(API_ROUTES.VALIDATION, {
-            address: address ?? '',
-          });
+  const currentValidationQueryResult = useQuery<{ isValid: boolean }>({
+    queryKey: ['address-validation', address],
+    ...STRATEGY_LAZY,
+    retry: 1,
+    enabled: !!address && config.addressApiValidationEnabled,
+    queryFn: async () => {
+      invariant(address);
+      const url = getApiUrl(API_ROUTES.VALIDATION, { address: address });
 
-          return standardFetcher<AddressValidationResponse>(url);
-        }
-      : null,
-    {
-      ...STRATEGY_LAZY,
-      errorRetryCount: 1,
+      return await standardFetcher(url, {
+        method: 'GET',
+      });
     },
-  );
+  });
+
+  return currentValidationQueryResult;
 };

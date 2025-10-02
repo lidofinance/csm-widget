@@ -1,23 +1,20 @@
 import {
-  ReactNode,
-  useEffect,
   createContext,
+  ReactNode,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from 'react';
 
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { useAccount } from 'wagmi';
-import { useForceDisconnect } from 'reef-knot/core-react';
+import { useQuery } from '@tanstack/react-query';
 import { config } from 'config';
+import { STRATEGY_LAZY } from 'consts/react-query-strategies';
+import { useForceDisconnect } from 'reef-knot/core-react';
+import { useApiAddressValidation } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import {
-  AddressValidationFile,
-  validateAddressLocally,
-} from 'utils/address-validation';
-import { useApiAddressValidation } from 'shared/hooks/use-api-address-validation';
-import { useLidoSWR } from '@lido-sdk/react';
+import { AddressValidationFile, validateAddressLocally } from 'utils';
+import { useAccount } from 'wagmi';
 
 const AddressValidationContext = createContext<{
   validationResult: {
@@ -157,33 +154,27 @@ export const AddressValidationProvider = ({
   const [isNotValidAddress, setIsNotValidAddress] = useState(false);
 
   // File validation query (works independently of API settings)
-  const fileValidationSwrKey = [
-    'address-validation-file',
-    address,
-    validationFile?.addresses?.length,
-    validationFile?.isBroken,
-  ];
+  const fileValidationQuery = useQuery({
+    queryKey: [
+      'address-validation-file',
+      address,
+      validationFile?.addresses?.length,
+      validationFile?.isBroken,
+    ],
+    ...STRATEGY_LAZY,
+    staleTime: 1 * 60 * 1000, // 1 minute
+    enabled: !!address && !!validationFile, // Always enabled when address and file exist
+    queryFn: async () => {
+      if (!address || !validationFile) {
+        return { isValid: true };
+      }
 
-  const fileValidationQuery = useLidoSWR(
-    fileValidationSwrKey,
-    !!address && !!validationFile
-      ? async () => {
-          if (!address || !validationFile) {
-            return { isValid: true };
-          }
+      // If validation file is broken, consider all addresses invalid
+      // if (validationFile.isBroken) return { isValid: false }; // TODO: uncomment after testing
 
-          // If validation file is broken, consider all addresses invalid
-          // if (validationFile.isBroken) return { isValid: false }; // TODO: uncomment after testing
-
-          return validateAddressLocally(address, validationFile);
-        }
-      : null,
-    {
-      ...STRATEGY_LAZY,
-      // File validation should have reasonable cache time
-      dedupingInterval: 60000, // 1 minute
+      return validateAddressLocally(address, validationFile);
     },
-  );
+  });
 
   // Define validation result
   const isValid = useMemo(() => {

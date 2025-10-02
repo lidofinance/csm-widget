@@ -1,18 +1,19 @@
-import { useEthereumBalance } from '@lido-sdk/react';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { useCallback, useMemo } from 'react';
 import {
-  useCsmCurveId,
-  useCsmEarlyAdoption,
-  useCsmEarlyAdoptionProofConsumed,
-  useCsmPaused,
-  useCSMShareLimitInfo,
-  useKeysAvailable,
-  useKeysUploadLimit,
-  useStakingLimitInfo,
-  useSTETHBalance,
-  useWSTETHBalance,
-} from 'shared/hooks';
+  useCsmStatus,
+  useCurveParameters,
+  useDappStatus,
+  useEthereumBalance,
+  useIcsCurveId,
+  useIcsPaused,
+  useIcsProof,
+  usePermissionlessCurveId,
+  useShareLimit,
+  useShareLimitStatus,
+  useStakeLimit,
+  useStethBalance,
+  useWstethBalance,
+} from 'modules/web3';
+import { useCallback, useMemo } from 'react';
 import { useBlockNumber } from 'wagmi';
 import { type SubmitKeysFormNetworkData } from './types';
 
@@ -22,114 +23,125 @@ export const useSubmitKeysFormNetworkData = (): [
 ] => {
   const { data: blockNumber, isLoading: isBlockNumberLoading } =
     useBlockNumber();
+  const { data: status, isPending: isStatusLoading } = useCsmStatus();
 
   const {
-    data: etherBalance,
-    update: updateEtherBalance,
-    initialLoading: isEtherBalanceLoading,
-  } = useEthereumBalance(undefined, STRATEGY_LAZY);
+    data: ethBalance,
+    isPending: isEthBalanceLoading,
+    refetch: ethBalanceUpdate,
+  } = useEthereumBalance();
   const {
     data: stethBalance,
-    update: updateStethBalance,
-    initialLoading: isStethBalanceLoading,
-  } = useSTETHBalance(STRATEGY_LAZY);
+    isPending: isStethBalanceLoading,
+    refetch: stethBalanceUpdate,
+  } = useStethBalance();
   const {
     data: wstethBalance,
-    update: updateWstethBalance,
-    initialLoading: isWstethBalanceLoading,
-  } = useWSTETHBalance(STRATEGY_LAZY);
+    isPending: isWstethBalanceLoading,
+    refetch: wstethBalanceUpdate,
+  } = useWstethBalance();
 
-  const { data: ea, initialLoading: isEaProofLoading } = useCsmEarlyAdoption();
-  const eaProof = ea?.proof;
+  const { address } = useDappStatus();
+  const {
+    data: proof,
+    isPending: isProofLoading,
+    refetch: updateProof,
+  } = useIcsProof(address);
+  const { data: isIcsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
+  const { data: plsCurveId, isPending: isPlsCurveIdLoading } =
+    usePermissionlessCurveId();
+  const { data: icsCurveId, isPending: isIcsCurveIdLoading } = useIcsCurveId();
 
-  const { data: curveId, initialLoading: isCurveIdLoading } =
-    useCsmCurveId(!!eaProof);
+  const isIcs = !isIcsPaused && proof?.proof && !proof.isConsumed;
+  const curveId = isIcs ? icsCurveId : plsCurveId;
 
-  const { mutate: mutateConsumed } = useCsmEarlyAdoptionProofConsumed();
+  const { data: curveParameters, isPending: isCurveParametersLoading } =
+    useCurveParameters(curveId);
 
   const {
     data: shareLimit,
-    initialLoading: isShareLimitLoading,
-    update: updateShareLimit,
-  } = useCSMShareLimitInfo();
-
+    isPending: isShareLimitLoading,
+    refetch: shareLimitUpdate,
+  } = useShareLimit();
+  const { data: shareLimitStatus } = useShareLimitStatus();
   const {
-    data: maxStakeEther,
-    update: updateMaxStakeEther,
-    initialLoading: isMaxStakeEtherLoading,
-  } = useStakingLimitInfo();
+    data: maxStakeEth,
+    isPending: isMaxStakeEtherLoading,
+    refetch: maxStakeEthUpdate,
+  } = useStakeLimit();
 
-  const { data: keysUploadLimit, initialLoading: isKeysUploadLimitLoading } =
-    useKeysUploadLimit();
-
-  const { data: keysAvailable } = useKeysAvailable({
-    curveId,
-    keysUploadLimit,
-    etherBalance,
-    stethBalance,
-    wstethBalance,
-  });
-
-  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
+  // const { data: keysAvailable } = useKeysAvailable({
+  //   curveId,
+  //   ethBalance,
+  //   stethBalance,
+  //   wstethBalance,
+  // });
+  const keysAvailable = undefined;
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
-      updateStethBalance(),
-      updateWstethBalance(),
-      updateEtherBalance(),
-      mutateConsumed(true), // @note hack to revalidate without loading state
-      updateShareLimit(),
-      updateMaxStakeEther(),
+      ethBalanceUpdate(),
+      stethBalanceUpdate(),
+      wstethBalanceUpdate(),
+      shareLimitUpdate(),
+      maxStakeEthUpdate(),
+      updateProof(),
     ]);
   }, [
-    updateStethBalance,
-    updateWstethBalance,
-    updateEtherBalance,
-    mutateConsumed,
-    updateShareLimit,
-    updateMaxStakeEther,
+    ethBalanceUpdate,
+    stethBalanceUpdate,
+    wstethBalanceUpdate,
+    shareLimitUpdate,
+    maxStakeEthUpdate,
+    updateProof,
   ]);
 
   const loading = useMemo(
     () => ({
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isEtherBalanceLoading,
-      isEaProofLoading,
-      isCurveIdLoading,
-      isKeysUploadLimitLoading,
+      isEthBalanceLoading,
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
       isStatusLoading,
       isShareLimitLoading,
+      isProofLoading,
+      isIcsPausedLoading,
+      isPlsCurveIdLoading,
+      isIcsCurveIdLoading,
+      isCurveParametersLoading,
     }),
     [
       isStethBalanceLoading,
       isWstethBalanceLoading,
-      isEtherBalanceLoading,
-      isEaProofLoading,
-      isCurveIdLoading,
-      isKeysUploadLimitLoading,
+      isEthBalanceLoading,
       isMaxStakeEtherLoading,
       isBlockNumberLoading,
       isStatusLoading,
       isShareLimitLoading,
+      isProofLoading,
+      isIcsPausedLoading,
+      isPlsCurveIdLoading,
+      isIcsCurveIdLoading,
+      isCurveParametersLoading,
     ],
   );
 
   return [
     {
-      blockNumber,
+      address,
+      blockNumber: blockNumber ? Number(blockNumber) : undefined,
+      isPaused: status?.isPaused,
+      proof: (isIcs && proof.proof) || undefined,
       stethBalance,
       wstethBalance,
-      etherBalance,
-      eaProof,
+      ethBalance,
       curveId,
-      keysUploadLimit,
+      curveParameters,
       keysAvailable,
-      maxStakeEther,
+      maxStakeEth,
       shareLimit,
-      isPaused: status?.isPaused || status?.isAccountingPaused,
+      shareLimitStatus,
       loading,
     },
     revalidate,

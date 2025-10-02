@@ -1,6 +1,6 @@
 import { PATH } from 'consts/urls';
 import { NormalizeQueuePage } from 'features/normalize-queue';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (

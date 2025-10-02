@@ -1,11 +1,13 @@
 import { FC } from 'react';
 import { WhenLoaded } from 'shared/components';
-import { useKeysWithStatus } from 'shared/hooks';
 import { KeysTable } from './keys-table';
 import { ViewKeysBlock } from './styles';
+import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
 
 export const ViewKeysSection: FC = () => {
-  const { data: keys, initialLoading: loading } = useKeysWithStatus();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: keys, isPending: loading } =
+    useOperatorKeysWithStatus(nodeOperatorId);
 
   return (
     <ViewKeysBlock data-testid="viewKeysBlock">

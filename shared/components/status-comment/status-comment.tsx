@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { KEY_STATUS } from 'consts/key-status';
 import {
   CommentActivationPending,
   CommentDepositable,
@@ -10,7 +9,9 @@ import {
   CommentUnbonded,
   CommentUnbondedNonQueued,
   CommentUnchecked,
+  CommentWithStrikes,
 } from './comments';
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 
 export const StatusComment: FC<{ statuses: KEY_STATUS[] }> = ({ statuses }) => {
   if (
@@ -19,10 +20,7 @@ export const StatusComment: FC<{ statuses: KEY_STATUS[] }> = ({ statuses }) => {
   )
     return <CommentInvalid />;
 
-  if (
-    statuses.includes(KEY_STATUS.EXIT_REQUESTED) ||
-    statuses.includes(KEY_STATUS.STUCK)
-  )
+  if (statuses.includes(KEY_STATUS.EXIT_REQUESTED))
     return <CommentExitRequested />;
 
   if (
@@ -53,6 +51,8 @@ export const StatusComment: FC<{ statuses: KEY_STATUS[] }> = ({ statuses }) => {
     return <CommentActivationPending />;
 
   if (statuses.includes(KEY_STATUS.DEPOSITABLE)) return <CommentDepositable />;
+
+  if (statuses.includes(KEY_STATUS.WITH_STRIKES)) return <CommentWithStrikes />;
 
   return null;
 };

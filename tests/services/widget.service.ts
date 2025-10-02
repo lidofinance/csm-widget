@@ -1,7 +1,11 @@
 import { expect, Page, test } from '@playwright/test';
 import { ElementController } from '../pages/elements/controller';
-import { WalletPage, WalletTypes } from '@lidofinance/wallets-testing-wallets';
-import { MainPage, KeysPage, DashboardPage } from '../pages';
+import {
+  WalletPage,
+  WalletConnectType,
+  WalletConnectTypes,
+} from '@lidofinance/wallets-testing-wallets';
+import { MainPage, KeysPage, DashboardPage, RolesPage } from '../pages';
 import { DepositKey } from 'tests/consts/keys.const';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { AssertionError } from 'assert';
@@ -10,21 +14,23 @@ import {
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
 import { BondRewardsPage } from 'tests/pages/bondRewards.page';
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export class WidgetService {
   public mainPage: MainPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
+  public rolesPage: RolesPage;
   public bondRewardsPage: BondRewardsPage;
 
   constructor(
     public page: Page,
-    public walletPage: WalletPage<WalletTypes.EOA>,
+    public walletPage: WalletPage<WalletConnectType>,
   ) {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
+    this.rolesPage = new RolesPage(this.page, this.walletPage);
     this.bondRewardsPage = new BondRewardsPage(this.page);
   }
 
@@ -38,11 +44,12 @@ export class WidgetService {
       await element.header.connectWalletBtn.click();
       await element.termAndPrivacy.confirmConditionWalletModal();
       const walletIcon = element.connectWalletModal.getWalletInModal(
-        this.walletPage.walletConfig.CONNECT_BUTTON_NAME,
+        this.walletPage.options.walletConfig.CONNECT_BUTTON_NAME,
       );
       if (
         (await walletIcon.isEnabled({ timeout: 500 })) &&
-        this.walletPage.walletConfig.WALLET_TYPE === WalletTypes.EOA
+        this.walletPage.options.walletConfig.WALLET_TYPE ===
+          WalletConnectTypes.EOA
       ) {
         try {
           const [connectWalletPage] = await Promise.all([
@@ -125,7 +132,7 @@ export class WidgetService {
         this.bondRewardsPage.addBond.addBondButton.click(),
       ]);
 
-      if (tokenName !== TOKENS.ETH) {
+      if (tokenName !== TOKENS.eth) {
         await this.bondRewardsPage.page.waitForSelector(
           `text=Confirm request in your wallet`,
           { timeout: STAGE_WAIT_TIMEOUT },
@@ -164,7 +171,7 @@ export class WidgetService {
       await this.bondRewardsPage.claim.amountInput.fill(amount);
 
       const actionButton =
-        tokenName === TOKENS.ETH
+        tokenName === TOKENS.eth
           ? this.bondRewardsPage.claim.requestWithdrawalButton
           : this.bondRewardsPage.claim.claimButton;
 
@@ -180,7 +187,7 @@ export class WidgetService {
       await this.walletPage.confirmTx(txPage);
 
       const successText =
-        tokenName === TOKENS.ETH
+        tokenName === TOKENS.eth
           ? 'Withdrawal request has been sent'
           : 'Requested amount has been successfully claimed';
 

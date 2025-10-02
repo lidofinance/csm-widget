@@ -74,7 +74,9 @@ export const ethCallValidationFactory = (
       if ('to' in params[0] && typeof params[0].to === 'string') {
         if (!allowedCallAddressMap[chainId]?.has(params[0].to.toLowerCase())) {
           rpcRequestBlocked.inc({ reason: 'address not allowed for eth_call' });
-          throw new InvalidRequestError(`Address not allowed for eth_call`);
+          throw new InvalidRequestError(
+            `Address ${params[0].to} is not allowed for eth_call`,
+          );
         }
       } else if (!('data' in params[0])) {
         throw new InvalidRequestError(`RPC method eth_call is invalid`);
@@ -132,7 +134,9 @@ export const ethGetLogsValidationFactory = (
           rpcRequestBlocked.inc({
             reason: 'address not allowed for eth_getLogs',
           });
-          throw new InvalidRequestError(`Address not allowed for eth_getLogs`);
+          throw new InvalidRequestError(
+            `Address ${params[0].to} is not allowed for eth_getLogs`,
+          );
         }
       }
 

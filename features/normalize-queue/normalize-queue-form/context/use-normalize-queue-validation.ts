@@ -16,9 +16,9 @@ export const useNormalizeQueueValidation = (
   return useCallback<Resolver<NormalizeQueueFormInputType>>(
     async (values) => {
       try {
-        const { etherBalance } = await dataPromise;
+        const { ethBalance } = await dataPromise;
 
-        invariant(etherBalance);
+        invariant(ethBalance !== undefined, 'Insufficient ETH balance');
 
         return {
           values,

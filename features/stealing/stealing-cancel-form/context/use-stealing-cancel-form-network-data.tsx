@@ -1,7 +1,5 @@
-import { useEthereumBalance } from '@lido-sdk/react';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
+import { useEthereumBalance, useOperatorsCount } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
-import { useNodeOperatorsCount } from 'shared/hooks';
 import { type StealingCancelFormNetworkData } from './types';
 
 export const useStealingCancelFormNetworkData = (): [
@@ -9,31 +7,29 @@ export const useStealingCancelFormNetworkData = (): [
   () => Promise<void>,
 ] => {
   const {
-    data: etherBalance,
-    update: updateEtherBalance,
-    initialLoading: isEtherBalanceLoading,
-  } = useEthereumBalance(undefined, STRATEGY_LAZY);
+    data: ethBalance,
+    refetch: updateEthBalance,
+    isPending: isEthBalanceLoading,
+  } = useEthereumBalance();
 
-  const {
-    data: nodeOperatorsCount,
-    initialLoading: isNodeOperatorsCountLoading,
-  } = useNodeOperatorsCount();
+  const { data: nodeOperatorsCount, isPending: isNodeOperatorsCountLoading } =
+    useOperatorsCount();
 
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateEtherBalance()]);
-  }, [updateEtherBalance]);
+    await Promise.allSettled([updateEthBalance()]);
+  }, [updateEthBalance]);
 
   const loading = useMemo(
     () => ({
-      isEtherBalanceLoading,
+      isEthBalanceLoading,
       isNodeOperatorsCountLoading,
     }),
-    [isEtherBalanceLoading, isNodeOperatorsCountLoading],
+    [isEthBalanceLoading, isNodeOperatorsCountLoading],
   );
 
   return [
     {
-      etherBalance,
+      ethBalance,
       nodeOperatorsCount,
       loading,
     },

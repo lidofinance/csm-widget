@@ -20,6 +20,7 @@ export type InpageNavigationContextValue = {
   navigateInpageAnchor: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   resetInpageAnchor: () => void;
   resetSpecificAnchor: (hash: string) => void;
+  scrollToAnchor: (hash: string) => void;
   expanded: boolean;
   toggleExpanded: () => void;
 };
@@ -41,6 +42,13 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
     setHash(hash);
   }, [asPath]);
 
+  const scrollToAnchor = useCallback((hash: string) => {
+    if (!hash) return;
+    document.getElementById(hash)?.scrollIntoView({
+      behavior: 'smooth',
+    });
+  }, []);
+
   const navigateInpageAnchor = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       const href = e.currentTarget.getAttribute('href');
@@ -52,9 +60,7 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
       setHash(hash);
 
       // Perform animated scroll
-      document.getElementById(hash)?.scrollIntoView({
-        behavior: 'smooth',
-      });
+      scrollToAnchor(hash);
 
       // Change the hash for non-ipfs ui, without scrolling the page
       // We have done animated scroll already on next step
@@ -62,7 +68,7 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
         history.pushState({}, '', `#${hash}`);
       }
     },
-    [],
+    [scrollToAnchor],
   );
 
   const resetInpageAnchor = useCallback(() => {
@@ -100,6 +106,7 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
       resetSpecificAnchor,
       expanded,
       toggleExpanded,
+      scrollToAnchor,
     }),
     [
       expanded,
@@ -107,6 +114,7 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
       navigateInpageAnchor,
       resetInpageAnchor,
       resetSpecificAnchor,
+      scrollToAnchor,
       toggleExpanded,
     ],
   );

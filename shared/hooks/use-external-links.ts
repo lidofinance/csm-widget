@@ -1,51 +1,59 @@
-import { getCsmConstants } from 'consts/csm-constants';
-import { getExternalLinks } from 'consts/external-links';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { getChainName } from 'utils';
-import { useKeysWithStatus } from './use-keys-with-status';
+import { useChainName } from './use-chain-name';
+import { useExternalLinks } from './use-csm-constants';
 import { sortByActiveStatus, useSortedKeys } from './use-sorted-keys';
+import {
+  useLidoSDK,
+  useNodeOperatorId,
+  useOperatorKeysWithStatus,
+} from 'modules/web3';
 
 const DASHBOARD_KEYS_LIMIT = 20;
 
-const { stakingModuleId } = getCsmConstants();
-const links = getExternalLinks();
-const network = getChainName();
-
 export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
-  const { data: keys } = useKeysWithStatus();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: keys } = useOperatorKeysWithStatus(nodeOperatorId);
+  const { beaconchainDashboard } = useExternalLinks();
   const sortedKeys = useSortedKeys(keys, sortByActiveStatus);
 
-  if (!links.beaconchainDashboard) return null;
+  if (!beaconchainDashboard) return null;
 
   const keysToShow = (
-    sortedKeys?.length ? sortedKeys.map(({ key }) => key) : directKeys
+    sortedKeys.length > 0 ? sortedKeys.map(({ pubkey }) => pubkey) : directKeys
   )
     ?.slice(0, DASHBOARD_KEYS_LIMIT)
     .join(',');
 
-  return `${links.beaconchainDashboard}?validators=${keysToShow ?? ''}`;
+  return `${beaconchainDashboard}?validators=${keysToShow ?? ''}`;
 };
 
 export const useFeesMonitoningLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  if (!links.feesMonitoring) return null;
-  return `${links.feesMonitoring}/operatorInfo?stakingModuleIndex=${stakingModuleId}&operatorIndex=${nodeOperatorId}`;
+  const { feesMonitoring } = useExternalLinks();
+  const { moduleId } = useLidoSDK().csm.core;
+  if (!feesMonitoring) return null;
+  return `${feesMonitoring}/operatorInfo?stakingModuleIndex=${moduleId}&operatorIndex=${nodeOperatorId}`;
 };
 
 export const useOperatorPortalLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  if (!links.operatorsWidget) return null;
-  return `${links.operatorsWidget}/module/${stakingModuleId}/${nodeOperatorId}`;
+  const { moduleId } = useLidoSDK().csm.core;
+  const { operatorsWidget } = useExternalLinks();
+  if (!operatorsWidget) return null;
+  return `${operatorsWidget}/module/${moduleId}/${nodeOperatorId}`;
 };
 
 export const useRatedLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  if (!links.ratedExplorer) return null;
-  return `${links.ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${network}`;
+  const { ratedExplorer } = useExternalLinks();
+  const chaiName = useChainName();
+  if (!ratedExplorer) return null;
+  return `${ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${chaiName}`;
 };
 
 export const useMigaLabsLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  if (!links.migalabsDashboard) return null;
-  return `${links.migalabsDashboard}/csm_operator${nodeOperatorId}_lido?network=${network}`;
+  const chaiName = useChainName();
+  const { migalabsDashboard } = useExternalLinks();
+  if (!migalabsDashboard) return null;
+  return `${migalabsDashboard}/csm_operator${nodeOperatorId}_lido?network=${chaiName}`;
 };

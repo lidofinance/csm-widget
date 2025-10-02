@@ -2,21 +2,15 @@ import { Button } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { TryCSM } from 'features/welcome/try-csm';
+import { useCsmStatus } from 'modules/web3';
 import { FC } from 'react';
-import { Faq } from 'shared/components';
-import { useCsmEarlyAdoption } from 'shared/hooks';
-import { useCsmPaused, useCsmPublicRelease } from 'shared/hooks/useCsmStatus';
 import { LocalLink } from 'shared/navigate';
 import { BannerOperatorCustomAddresses } from './banner-operator-custom-addresses';
-import { ConsumedBanner } from './consumed-banner';
-import { NotEligibleBanner } from './not-eligible-banner/not-eligible-banner';
 import { PausedBanner } from './paused-banner';
 import { StarterPackSection } from './stacter-pack-section';
 
 export const StarterPack: FC = () => {
-  const { data: paused } = useCsmPaused();
-  const { data: isPublicRelease } = useCsmPublicRelease();
-  const { data: ea } = useCsmEarlyAdoption();
+  const { data: status } = useCsmStatus();
 
   let content = (
     <StarterPackSection>
@@ -29,15 +23,7 @@ export const StarterPack: FC = () => {
     </StarterPackSection>
   );
 
-  if (!isPublicRelease && ea?.consumed) {
-    content = <ConsumedBanner />;
-  }
-
-  if (!isPublicRelease && !ea?.proof) {
-    content = <NotEligibleBanner />;
-  }
-
-  if (paused?.isPaused || paused?.isAccountingPaused) {
+  if (status?.isPaused) {
     content = <PausedBanner />;
   }
 
@@ -46,7 +32,6 @@ export const StarterPack: FC = () => {
       <BannerOperatorCustomAddresses />
       {content}
       <TryCSM />
-      <Faq />
     </>
   );
 };

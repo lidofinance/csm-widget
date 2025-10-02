@@ -1,8 +1,8 @@
-import { useSDK } from '@lido-sdk/react';
-import { getEtherscanTxLink } from '@lido-sdk/helpers';
-import { MatomoLink } from '../matomo-link/matomo-link';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
+import { MatomoLink } from '../matomo-link/matomo-link';
+import { getEtherscanTxLink } from 'utils';
 
 type TxLinkEtherscanProps = {
   text?: string;
@@ -13,7 +13,7 @@ export const TxLinkEtherscan: FC<TxLinkEtherscanProps> = ({
   txHash,
   text = 'View on Etherscan',
 }) => {
-  const { chainId } = useSDK();
+  const { chainId } = useDappStatus();
 
   if (!txHash) return null;
 

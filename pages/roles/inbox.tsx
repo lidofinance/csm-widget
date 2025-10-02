@@ -1,7 +1,6 @@
 import { PATH } from 'consts/urls';
 import { AcceptInvitePage } from 'features/accept-invite';
-import { getFaqRoles } from 'lib/getFaq';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
@@ -14,4 +13,4 @@ const Page = () => (
 
 export default Page;
 
-export const getServerSideProps = getProps(getFaqRoles);
+export const getServerSideProps = getProps();

@@ -3,7 +3,7 @@ import {
   wrapRequest as wrapNextRequest,
   cacheControl,
 } from '@lidofinance/next-api-wrapper';
-import { isAddress } from 'ethers/lib/utils';
+import { isAddress } from 'viem';
 
 import { config, secretConfig } from 'config';
 import { API_ROUTES } from 'consts/api';

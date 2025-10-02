@@ -68,8 +68,8 @@ export const waitForCallback = async <T>(
 
   let result;
   while (!shouldTerminate) {
-    result = await callback(args).catch(() => {
-      console.error('Callback failed');
+    result = await callback(args).catch((err) => {
+      console.error(`Callback failed: ${err}`);
     });
     if (result) return result;
   }

@@ -4,8 +4,8 @@ import styled from 'styled-components';
 export const TableStyle = styled(Table)`
   margin: -32px -32px;
 
-  thead tr::before,
-  thead tr::after,
+  thead tr:before,
+  thead tr:after,
   th {
     border-top: none;
   }

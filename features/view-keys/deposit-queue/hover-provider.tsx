@@ -8,25 +8,34 @@ import {
 import invariant from 'tiny-invariant';
 import { GraphPart } from './types';
 
-export type HoverContextType = {
+export type GraphInteractionContextType = {
   hover?: GraphPart;
   setHover: (hover?: GraphPart) => void;
+  fullView: boolean;
+  setFullView: (fullView: boolean) => void;
 };
 
-const HoverContext = createContext<HoverContextType>({} as HoverContextType);
+const GraphInteractionContext = createContext<GraphInteractionContextType>(
+  {} as GraphInteractionContextType,
+);
 
-export const HoverProvider: FC<PropsWithChildren> = ({ children }) => {
+export const GraphInteractionProvider: FC<PropsWithChildren> = ({
+  children,
+}) => {
   const [hover, setHover] = useState<GraphPart>();
+  const [fullView, setFullView] = useState(false);
 
   return (
-    <HoverContext.Provider value={{ hover, setHover }}>
+    <GraphInteractionContext.Provider
+      value={{ hover, setHover, fullView, setFullView }}
+    >
       {children}
-    </HoverContext.Provider>
+    </GraphInteractionContext.Provider>
   );
 };
 
-export const useHover = () => {
-  const value = useContext(HoverContext);
-  invariant(value, 'useHover was used outside the provider');
+export const useGraphInteraction = () => {
+  const value = useContext(GraphInteractionContext);
+  invariant(value, 'useGraphInteraction was used outside the provider');
   return value;
 };

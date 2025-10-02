@@ -1,20 +1,19 @@
 import { FC } from 'react';
-import { ExternalSection } from './external';
+import { NoSSRWrapper } from 'shared/components';
+import { ExternalSection } from './external-section';
+import { NotificationToolsSection } from './notification-tools-section';
+import { StrikesSection } from './strikes-section';
 import { AttestationRateSection } from './attestation-rate-section';
-import { getConfig } from 'config';
-import { CHAINS } from 'consts/chains';
-import { Faq, NoSSRWrapper } from 'shared/components';
-
-const { defaultChain } = getConfig();
 
 export const Monitoring: FC = () => {
   return (
     <>
       <NoSSRWrapper>
-        {defaultChain === CHAINS.Mainnet && <AttestationRateSection />}
+        <AttestationRateSection />
+        <StrikesSection />
         <ExternalSection />
+        <NotificationToolsSection />
       </NoSSRWrapper>
-      <Faq />
     </>
   );
 };

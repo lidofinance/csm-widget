@@ -1,6 +1,8 @@
 import styled, { css } from 'styled-components';
 import { LinkStyled } from '../matomo-link/styles';
 import { StackStyle } from '../stack/style';
+import { ComponentProps } from 'react';
+import { Text } from '@lidofinance/lido-ui';
 
 export const AddressContainerStyle = styled(StackStyle).attrs({
   $gap: 'xs',
@@ -28,10 +30,33 @@ export const AddressContainerStyle = styled(StackStyle).attrs({
   }
 `;
 
-export const PubkeyContainerStyle = styled(AddressContainerStyle)`
+const VARIANTS = {
+  default: css`
+    color: var(--lido-color-text);
+  `,
+  secondary: css`
+    color: var(--lido-color-secondary);
+  `,
+  primary: css`
+    color: var(--lido-color-primary);
+  `,
+  error: css`
+    color: var(--lido-color-error);
+  `,
+  warning: css`
+    color: var(--lido-color-warning);
+  `,
+  success: css`
+    color: var(--lido-color-success);
+  `,
+};
+
+export const PubkeyContainerStyle = styled(AddressContainerStyle)<{
+  $color?: ComponentProps<typeof Text>['color'];
+}>`
   font-family: 'Fira Code', monospace;
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
-  color: var(--lido-color-text);
+  ${({ $color = 'default' }) => $color && VARIANTS[$color]}
 `;
 
 export const Avatar = styled.img<{

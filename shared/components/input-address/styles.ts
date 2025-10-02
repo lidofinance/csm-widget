@@ -25,6 +25,12 @@ export const StyledChip = styled.span<ChipProps>`
   font-weight: 700;
 `;
 
+export const Icon = styled(Check).attrs({ width: 12, height: 12 })<ChipProps>`
+  border-radius: 90px;
+  background: ${({ color = 'success' }) => `var(--lido-color-${color})`};
+  color: rgba(255, 255, 255, 0.75);
+`;
+
 export const AddressChip = styled.span`
   display: inline-flex;
   flex-direction: row;
@@ -37,10 +43,4 @@ export const AddressChip = styled.span`
   border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;
   background: var(--lido-color-secondary);
   background: color-mix(in srgb, var(--lido-color-secondary) 10%, transparent);
-`;
-
-export const Icon = styled(Check).attrs({ width: 12, height: 12 })<ChipProps>`
-  border-radius: 90px;
-  background: ${({ color = 'success' }) => `var(--lido-color-${color})`};
-  color: rgba(255, 255, 255, 0.75);
 `;

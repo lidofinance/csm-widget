@@ -4,9 +4,7 @@ import { InlineLoader } from '@lidofinance/lido-ui';
 import { TxAmount } from '../tx-stages-parts/tx-amount';
 import { SuccessText } from '../tx-stages-parts/success-text';
 import { TxStageSuccess } from '../tx-stages-basic';
-
-import type { BigNumber } from 'ethers';
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const SkeletonBalance = styled(InlineLoader).attrs({
   color: 'text',
@@ -16,7 +14,7 @@ export const SkeletonBalance = styled(InlineLoader).attrs({
 `;
 
 type TxStageOperationSucceedBalanceShownProps = {
-  balance?: BigNumber;
+  balance?: bigint;
   balanceToken: TOKENS;
   operationText: string;
   txHash?: string;
@@ -28,7 +26,7 @@ export const TxStageOperationSucceedBalanceShown = ({
   operationText,
   txHash,
 }: TxStageOperationSucceedBalanceShownProps) => {
-  const balanceEl = balance && (
+  const balanceEl = !!balance && (
     <TxAmount amount={balance} token={balanceToken} />
   );
 

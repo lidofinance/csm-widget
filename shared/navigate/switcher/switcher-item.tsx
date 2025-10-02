@@ -1,5 +1,3 @@
-import { useCompareWithRouterPath } from 'shared/hooks/use-compare-with-router-path';
-
 import { PATH } from 'consts/urls';
 import { FC, PropsWithChildren } from 'react';
 import { SwitchItemStyled } from './styles';
@@ -7,15 +5,15 @@ import { SwitchItemStyled } from './styles';
 type Props = {
   href: PATH;
   warning?: boolean;
+  active?: boolean;
 };
 
 export const SwitcherItem: FC<PropsWithChildren<Props>> = ({
   href,
   warning,
+  active = false,
   ...rest
 }) => {
-  const active = useCompareWithRouterPath(href);
-
   return (
     <SwitchItemStyled
       href={href}

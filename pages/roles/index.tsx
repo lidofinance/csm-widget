@@ -1,5 +1,5 @@
 import { PATH } from 'consts/urls';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utilsApi';
 import { GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (

@@ -1,30 +1,26 @@
-import { ONE_ETH, TOKENS } from 'consts/tokens';
-import { useMemo } from 'react';
-import { useMergeSwr, useStethByWsteth } from 'shared/hooks';
+import { PerToken, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { useQuery } from '@tanstack/react-query';
+import { ONE_ETH, STRATEGY_IMMUTABLE } from 'consts';
+import { useStETHByWstETH } from 'modules/web3';
+import invariant from 'tiny-invariant';
 
-// TODO: drop this one
-export const useExchangeRate = (token: TOKENS) => {
-  const { data: rateWsteth, initialLoading: rateLoading } =
-    useStethByWsteth(ONE_ETH);
+export const useExchangeRate = <TData = PerToken<bigint>>(
+  select?: (data: PerToken<bigint>) => TData,
+) => {
+  const { data: rateWsteth } = useStETHByWstETH(ONE_ETH);
 
-  return {
-    rate: token === TOKENS.WSTETH ? rateWsteth : ONE_ETH,
-    loading: token === TOKENS.WSTETH ? rateLoading : false,
-  };
-};
-
-export const useExchangeTokensRate = () => {
-  const swrWstRate = useStethByWsteth(ONE_ETH);
-
-  return useMergeSwr(
-    [swrWstRate],
-    useMemo(
-      () => ({
-        [TOKENS.ETH]: ONE_ETH,
-        [TOKENS.STETH]: ONE_ETH,
-        [TOKENS.WSTETH]: swrWstRate.data,
-      }),
-      [swrWstRate.data],
-    ),
-  );
+  return useQuery({
+    queryKey: ['use-exchange-tokens-rate'],
+    ...STRATEGY_IMMUTABLE,
+    queryFn: () => {
+      invariant(rateWsteth !== undefined);
+      return {
+        [TOKENS.eth]: ONE_ETH,
+        [TOKENS.steth]: ONE_ETH,
+        [TOKENS.wsteth]: rateWsteth,
+      };
+    },
+    enabled: !!rateWsteth,
+    select,
+  });
 };

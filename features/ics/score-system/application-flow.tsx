@@ -3,7 +3,7 @@ import { FC, PropsWithChildren } from 'react';
 import { MatomoLink, Stack } from 'shared/components';
 import { Number, StepContent, StepWrapper } from './styles';
 import { LocalLink } from 'shared/navigate';
-import { PATH } from 'consts/urls';
+import { PATH } from 'consts';
 
 export const Step: FC<PropsWithChildren<{ number: string; title: string }>> = ({
   number,

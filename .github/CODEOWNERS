@@ -1,2 +1,4 @@
 * @lidofinance/community-staking
 .github @lidofinance/review-gh-workflows
+tests/ @lidofinance/lido-qa
+playwright.config.* @lidofinance/lido-qa

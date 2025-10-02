@@ -1,87 +1,107 @@
-import { Zero } from '@ethersproject/constants';
-import { ONE_ETH, TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
-import { ICSBondCurve } from 'generated/CSAccounting';
-import { useExchangeTokensRate, useMergeSwr } from 'shared/hooks';
-import { BondBalance } from 'types';
-import { useCurveInfo } from './useCurveInfo';
+import { useMemo } from 'react';
+import {
+  TOKENS,
+  BondBalance,
+  KeyNumberValueInterval,
+} from '@lidofinance/lido-csm-sdk';
+import { ONE_ETH } from 'consts/tokens';
+import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
+import { useExchangeRate } from 'shared/hooks';
+import { useCurveParameters } from 'modules/web3/hooks/use-curve-parameters';
 
 type Props = {
-  curveId?: BigNumber;
+  curveId?: bigint;
   bond?: BondBalance;
-  keysUploadLimit?: number;
   nonWithdrawnKeys?: number;
-  etherBalance?: BigNumber;
-  stethBalance?: BigNumber;
-  wstethBalance?: BigNumber;
+  ethBalance?: bigint;
+  stethBalance?: bigint;
+  wstethBalance?: bigint;
 };
 
 export type KeysAvailable = Record<TOKENS, ReturnType<typeof calc>>;
 
 export const useKeysAvailable = ({
   curveId,
-  keysUploadLimit,
   nonWithdrawnKeys,
   bond,
-  etherBalance,
+  ethBalance,
   stethBalance,
   wstethBalance,
 }: Props) => {
-  const swrCurve = useCurveInfo(curveId);
+  const { data: curve } = useCurveParameters(curveId);
+  const { data: rates } = useExchangeRate();
 
-  const swrRates = useExchangeTokensRate();
+  return useMemo(() => {
+    if (!curve || !rates) {
+      return undefined;
+    }
 
-  return useMergeSwr([swrCurve, swrRates], {
-    [TOKENS.ETH]: calc(
-      etherBalance,
-      swrRates.data?.ETH,
-      bond?.current,
-      keysUploadLimit,
-      nonWithdrawnKeys,
-      swrCurve.data,
-    ),
-    [TOKENS.STETH]: calc(
-      stethBalance,
-      swrRates.data?.STETH,
-      bond?.current,
-      keysUploadLimit,
-      nonWithdrawnKeys,
-      swrCurve.data,
-    ),
-    [TOKENS.WSTETH]: calc(
-      wstethBalance,
-      swrRates.data?.WSTETH,
-      bond?.current,
-      keysUploadLimit,
-      nonWithdrawnKeys,
-      swrCurve.data,
-    ),
-  } as KeysAvailable);
+    // Extract bond config from the parameters structure
+    const bondConfig = curve.bondConfig;
+    if (!bondConfig || bondConfig.length === 0) {
+      return undefined;
+    }
+
+    return {
+      [TOKENS.eth]: calc(
+        ethBalance,
+        rates[TOKENS.eth],
+        bond?.current,
+        KEYS_UPLOAD_TX_LIMIT,
+        nonWithdrawnKeys,
+        bondConfig,
+      ),
+      [TOKENS.steth]: calc(
+        stethBalance,
+        rates[TOKENS.steth],
+        bond?.current,
+        KEYS_UPLOAD_TX_LIMIT,
+        nonWithdrawnKeys,
+        bondConfig,
+      ),
+      [TOKENS.wsteth]: calc(
+        wstethBalance,
+        rates[TOKENS.wsteth],
+        bond?.current,
+        KEYS_UPLOAD_TX_LIMIT,
+        nonWithdrawnKeys,
+        bondConfig,
+      ),
+    } as KeysAvailable;
+  }, [
+    curve,
+    rates,
+    ethBalance,
+    bond,
+    nonWithdrawnKeys,
+    stethBalance,
+    wstethBalance,
+  ]);
 };
 
 const calc = (
-  balance?: BigNumber,
-  rate?: BigNumber,
-  bond: BigNumber = Zero,
+  balance?: bigint,
+  rate?: bigint,
+  bond = 0n,
   keysUploadLimit?: number,
   nonWithdrawnKeys = 0,
-  curve?: ICSBondCurve.BondCurveStruct,
+  bondConfig?: KeyNumberValueInterval[],
 ) => {
-  if (keysUploadLimit === undefined || !curve || !balance || !rate) return;
+  if (keysUploadLimit === undefined || !bondConfig || !balance || !rate) return;
 
   const amountInSTETH = convert(balance, rate, ONE_ETH);
-  const totalAmount = amountInSTETH.add(bond);
+  const totalAmount = amountInSTETH + bond;
 
-  const maxCount = getMaxKeys(curve, totalAmount);
+  const maxCount = getMaxKeys(bondConfig, totalAmount);
 
   const limitedMaxCount = Math.min(
     maxCount,
     nonWithdrawnKeys + keysUploadLimit,
   );
 
-  const keysAmount = getAmountByKeys(curve, limitedMaxCount).sub(bond);
+  const keysAmount = getAmountByKeys(bondConfig, limitedMaxCount) - bond;
   const count = Math.max(limitedMaxCount - nonWithdrawnKeys, 0);
-  const amount = keysAmount.gt(0) ? convert(keysAmount, ONE_ETH, rate) : Zero;
+  const amount = keysAmount > 0n ? convert(keysAmount, ONE_ETH, rate) : 0n;
 
   return {
     count,
@@ -89,29 +109,67 @@ const calc = (
   };
 };
 
-const convert = (value: BigNumber, rate: BigNumber, base: BigNumber) => {
-  return value.mul(rate).div(base);
+const convert = (value: bigint, rate: bigint, base: bigint) => {
+  return (value * rate) / base;
 };
 
-const getMaxKeys = (curve: ICSBondCurve.BondCurveStruct, amount: BigNumber) => {
-  if (amount.lte(curve.points[curve.points.length - 1])) {
-    return curve.points.findIndex((p) => amount.lt(p));
+const getMaxKeys = (bondConfig: KeyNumberValueInterval[], amount: bigint) => {
+  let currentAmount = 0n;
+  let currentKeys = 0;
+
+  for (let i = 0; i < bondConfig.length; i++) {
+    const interval = bondConfig[i];
+    const nextInterval = bondConfig[i + 1];
+
+    // Determine the end of this interval
+    const intervalEnd = nextInterval ? nextInterval.minKeyNumber : Infinity;
+
+    // Calculate how many keys we can afford in this interval
+    const remainingAmount = amount - currentAmount;
+    const keysInInterval = Number(remainingAmount / interval.value);
+
+    if (currentKeys + keysInInterval >= intervalEnd) {
+      // Move to next interval
+      const keysToAdd = intervalEnd - currentKeys;
+      currentAmount += BigInt(keysToAdd) * interval.value;
+      currentKeys = intervalEnd;
+
+      if (currentAmount >= amount) {
+        return currentKeys;
+      }
+    } else {
+      // We can't afford to fill this interval completely
+      return currentKeys + keysInInterval;
+    }
   }
-  return amount
-    .sub(curve.points[curve.points.length - 1])
-    .div(curve.trend)
-    .add(curve.points.length)
-    .toNumber();
+
+  return currentKeys;
 };
 
 const getAmountByKeys = (
-  curve: ICSBondCurve.BondCurveStruct,
+  bondConfig: KeyNumberValueInterval[],
   count: number,
 ) => {
-  if (curve.points.length >= count) {
-    return BigNumber.from(curve.points[count - 1] ?? 0);
+  let totalAmount = 0n;
+  let currentKeys = 0;
+
+  for (let i = 0; i < bondConfig.length && currentKeys < count; i++) {
+    const interval = bondConfig[i];
+    const nextInterval = bondConfig[i + 1];
+
+    // Determine the end of this interval
+    const intervalEnd = nextInterval ? nextInterval.minKeyNumber : count;
+
+    // Calculate how many keys to process in this interval
+    const keysInThisInterval = Math.min(
+      count - currentKeys,
+      intervalEnd - currentKeys,
+    );
+
+    // Add the cost for these keys
+    totalAmount += BigInt(keysInThisInterval) * interval.value;
+    currentKeys += keysInThisInterval;
   }
-  return BigNumber.from(curve.trend)
-    .mul(count - curve.points.length)
-    .add(curve.points[curve.points.length - 1]);
+
+  return totalAmount;
 };

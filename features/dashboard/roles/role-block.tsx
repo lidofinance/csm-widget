@@ -3,7 +3,7 @@ import { Address, Stack } from 'shared/components';
 import { ProposedAddress } from './proposed-address';
 import { Chip, OwnerChip, RoleBlockWrapper, RoleTitle } from './styles';
 import { Tooltip } from '@lidofinance/lido-ui';
-import { ROLES } from 'consts/roles';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 
 type RoleBlockProps = {
   type: ROLES;

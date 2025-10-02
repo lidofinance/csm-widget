@@ -7,7 +7,6 @@ import {
   FormDataContext,
   useFormControllerRetry,
   useFormData,
-  useFormDepositData,
 } from 'shared/hook-form/form-controller';
 import {
   SubmitKeysFormNetworkData,
@@ -36,7 +35,6 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
   });
 
   useFormBondAmount(formObject, networkData);
-  useFormDepositData(formObject);
 
   const { retryEvent, retryFire } = useFormControllerRetry();
 

@@ -5,10 +5,10 @@ import getConfigNext from 'next/config';
 
 const { serverRuntimeConfig } = getConfigNext();
 
-interface AddressValidationFile {
+type AddressValidationFile = {
   addresses: string[];
   isBroken?: boolean;
-}
+};
 
 const isValidValidationFile = (
   data: unknown,

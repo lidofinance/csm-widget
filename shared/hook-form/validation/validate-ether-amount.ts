@@ -1,38 +1,38 @@
-import { MaxUint256, Zero } from '@ethersproject/constants';
-import { MIN_ETH_AMOUNT, TOKENS } from 'consts/tokens';
-import type { BigNumber } from 'ethers';
-import { getTokenDisplayName } from 'utils/getTokenDisplayName';
+import { MIN_ETH_AMOUNT } from 'consts/tokens';
+import { getTokenDisplayName } from 'utils';
 import { ValidationError } from './validation-error';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { maxUint256 } from 'viem';
 
 export const validateEtherAmount = (
   field: string,
-  amount: BigNumber | undefined,
+  amount: bigint | undefined,
   token: TOKENS,
   allowZero = false,
 ) => {
-  if (!amount) throw new ValidationError(field, '');
+  if (amount === undefined) throw new ValidationError(field, '');
 
   if (allowZero) {
-    if (amount.lt(Zero))
+    if (amount < 0n)
       throw new ValidationError(
         field,
         `Enter ${getTokenDisplayName(token)} ${field}`,
       );
   } else {
-    if (amount.lte(Zero))
+    if (amount <= 0n)
       throw new ValidationError(
         field,
         `Enter ${getTokenDisplayName(token)} ${field} greater than 0`,
       );
   }
 
-  if (token === TOKENS.ETH && amount.lt(MIN_ETH_AMOUNT))
+  if (token === TOKENS.eth && amount < MIN_ETH_AMOUNT)
     throw new ValidationError(
       field,
       `Enter ${getTokenDisplayName(token)} ${field} greater than 100 wei`,
     );
 
-  if (amount.gt(MaxUint256))
+  if (amount > maxUint256)
     throw new ValidationError(
       field,
       `${getTokenDisplayName(token)} ${field} is not valid`,

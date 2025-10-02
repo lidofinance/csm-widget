@@ -1,14 +1,14 @@
-import { BigNumber } from 'ethers';
-import { LoadingRecord, NodeOperatorId } from 'types';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { LoadingRecord } from 'types';
 
 export type StealingReportFormInputType = {
-  amount?: BigNumber;
+  amount?: bigint;
   nodeOperatorId?: NodeOperatorId;
   blockhash?: string;
 };
 
 export type StealingReportFormNetworkData = {
-  etherBalance?: BigNumber;
-  nodeOperatorsCount?: BigNumber;
-  loading: LoadingRecord<'etherBalance' | 'nodeOperatorsCount'>;
+  ethBalance?: bigint;
+  nodeOperatorsCount?: bigint;
+  loading: LoadingRecord<'ethBalance' | 'nodeOperatorsCount'>;
 };

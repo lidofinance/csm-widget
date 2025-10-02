@@ -2,7 +2,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { getReportFrameForLastRewards } from 'tests/helpers/csmContract';
 import { countDaysLeft, formatDate } from 'utils/format-date';
 import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
@@ -13,7 +12,7 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
 
   test(
     qase(136, 'Should correctly display common information'),
-    async ({ widgetService }) => {
+    async ({ widgetService, csmSDK }) => {
       const latestRewardsDistribution =
         widgetService.dashboardPage.bondRewards.latestRewardsDistribution;
 
@@ -21,7 +20,7 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
         'Latest rewards distribution',
       );
 
-      const lastRewardInfoFromContract = await getReportFrameForLastRewards();
+      const lastRewardInfoFromContract = await csmSDK.getLastRewards();
       await test.step('Verify report frame information', async () => {
         const expectedRateFrame = `Report frame: ${formatDate(lastRewardInfoFromContract?.prevRewards)} — ${formatDate(lastRewardInfoFromContract?.lastRewards)}`;
         await expect(latestRewardsDistribution.rowHeader).toContainText(
@@ -41,7 +40,7 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
         const whyModal = widgetService.dashboardPage.whyModal;
         await whyModal.waitFor({ state: 'visible' });
         const expectedTextContent =
-          'There are two main reasons of you getting no reward within a frame:If your validator’s performance was below the threshold within the CSM Performance Oracle frame (7 days for testnet) the validator does not receive rewards for the given frame. Read more about the CSM Performance Oracle.Your Node Operator has stuck keys due to not exiting a validator requested for exit timely.';
+          'There are two main reasons of you getting no reward within a frame:If your validator’s performance was below the threshold within the CSM Performance Oracle frame (7 days for testnet) the validator does not receive rewards for the given frame. Read more about the CSM Performance Oracle.';
         await expect(whyModal).toContainText('Why didn’t I get rewards?');
         await expect(whyModal).toContainText(expectedTextContent);
       });
@@ -83,13 +82,13 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
   );
   test(
     qase(137, 'Upcoming Rewards Distribution Verification'),
-    async ({ widgetService }) => {
+    async ({ widgetService, csmSDK }) => {
       const latestRewardsDistribution =
         widgetService.dashboardPage.bondRewards.latestRewardsDistribution;
 
       await latestRewardsDistribution.expand();
 
-      const lastRewardInfoFromContract = await getReportFrameForLastRewards();
+      const lastRewardInfoFromContract = await csmSDK.getLastRewards();
       await test.step('Verify "Next rewards distribution" info', async () => {
         await expect(
           latestRewardsDistribution.nextRewardsInfo.getByText(

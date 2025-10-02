@@ -1,7 +1,6 @@
 import { PATH } from 'consts/urls';
 import { CreateNodeOperatorPage } from 'features/create-node-operator';
-import { getFaqKeys } from 'lib/getFaq';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
@@ -18,4 +17,4 @@ const Page = () => (
 
 export default Page;
 
-export const getServerSideProps = getProps(getFaqKeys);
+export const getServerSideProps = getProps();

@@ -1,13 +1,16 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import NextBundleAnalyzer from '@next/bundle-analyzer';
 import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
 import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
+import { startupCheckRPCs } from './scripts/startup-checks/rpc.mjs';
 import { startupCheckValidationFile } from './scripts/startup-checks/validation-file.mjs';
 
 logEnvironmentVariables();
 buildDynamics();
 
 if (process.env.RUN_STARTUP_CHECKS === 'true') {
+  void startupCheckRPCs();
   void startupCheckValidationFile();
 }
 

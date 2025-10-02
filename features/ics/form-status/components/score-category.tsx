@@ -45,7 +45,7 @@ export const ScoreCategory: FC<ScoreCategoryProps> = ({
     <ScoreAccordionstyle id={category.id} summary={categoryHeader}>
       <Stack direction="column" gap="sm">
         {!isEnougth && (
-          <TipWrapper $danger={false}>
+          <TipWrapper>
             You did not reach the minimum score of{' '}
             <Points value={category.min} /> required for this category.
           </TipWrapper>

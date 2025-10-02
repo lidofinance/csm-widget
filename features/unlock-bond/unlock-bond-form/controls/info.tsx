@@ -1,7 +1,7 @@
-import { TOKENS } from 'consts/tokens';
 import { FC } from 'react';
 import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
 import { useUnlockBondFormData } from '../context';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   MEV_STEALING_LINK,
   LIDO_REWARDS_VAULT_LINK,
@@ -19,9 +19,9 @@ export const Info: FC = () => {
             help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
             loading={loading.isLockedBondLoading}
             amount={lockedBond}
-            token={TOKENS.ETH}
+            token={TOKENS.eth}
           />
-          {lockedBond?.gt(0) && (
+          {!!lockedBond && (
             <div>
               <MatomoLink href={MEV_STEALING_LINK}>
                 EL reward stealing

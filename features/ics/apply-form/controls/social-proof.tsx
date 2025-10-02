@@ -1,10 +1,16 @@
 import { Input, Text } from '@lidofinance/lido-ui';
 import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC } from 'react';
-import { CopyButton2, IconTooltip, MatomoLink, Stack } from 'shared/components';
+import {
+  Chip,
+  CopyButton,
+  FormTitle,
+  IconTooltip,
+  MatomoLink,
+  Stack,
+} from 'shared/components';
 import { TextInputHookForm } from 'shared/hook-form/controls';
 import { useSocialMessages } from '../context';
-import { Chip, FormTitle } from '../components';
 
 export const SocialProof: FC = () => {
   const { twitterMessage, discordMessage } = useSocialMessages();
@@ -42,7 +48,7 @@ export const SocialProof: FC = () => {
               onClick={(e) => (e.target as HTMLInputElement).select()}
               value={twitterMessage}
               fullwidth
-              rightDecorator={<CopyButton2 text={twitterMessage} size="xs" />}
+              rightDecorator={<CopyButton text={twitterMessage} size="xs" />}
             />
           </Stack>
 
@@ -85,7 +91,7 @@ export const SocialProof: FC = () => {
               onClick={(e) => (e.target as HTMLInputElement).select()}
               value={discordMessage}
               fullwidth
-              rightDecorator={<CopyButton2 text={discordMessage} size="xs" />}
+              rightDecorator={<CopyButton text={discordMessage} size="xs" />}
             />
           </Stack>
 

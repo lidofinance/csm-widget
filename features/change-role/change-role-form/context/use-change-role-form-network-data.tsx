@@ -1,30 +1,39 @@
-import { ROLES } from 'consts/roles';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
+import {
+  KEY_OPERATOR_IS_OWNER,
+  useDappStatus,
+  useNodeOperatorId,
+  useOperatorInfo,
+} from 'modules/web3';
 import { useCallback, useMemo } from 'react';
-import { useAccount, useNodeOperatorInfo } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { compareLowercase } from 'utils';
 import { type ChangeRoleFormNetworkData } from './types';
+import { useInvalidate } from 'shared/hooks';
 
 export const useChangeRoleFormNetworkData = ({
   role,
 }: {
   role: ROLES;
 }): [ChangeRoleFormNetworkData, () => Promise<void>] => {
-  const { address } = useAccount();
+  const { address } = useDappStatus();
   invariant(address);
 
   const nodeOperatorId = useNodeOperatorId();
   const {
     data: info,
-    update: updateInfo,
-    initialLoading: isInfoLoading,
-  } = useNodeOperatorInfo(nodeOperatorId);
+    isPending: isInfoLoading,
+    refetch: updateInfo,
+  } = useOperatorInfo(nodeOperatorId);
 
-  // TODO: force udpate info
+  const invalidate = useInvalidate();
+
   const revalidate = useCallback(async () => {
-    await Promise.allSettled([updateInfo()]);
-  }, [updateInfo]);
+    await Promise.allSettled([
+      updateInfo(),
+      invalidate([KEY_OPERATOR_IS_OWNER]),
+    ]);
+  }, [invalidate, updateInfo]);
 
   const loading = useMemo(
     () => ({
@@ -34,16 +43,16 @@ export const useChangeRoleFormNetworkData = ({
   );
 
   const currentAddress =
-    role === ROLES.REWARDS ? info?.rewardAddress : info?.managerAddress;
+    role === ROLES.REWARDS ? info?.rewardsAddress : info?.managerAddress;
   const proposedAddress =
     role === ROLES.REWARDS
-      ? info?.proposedRewardAddress
+      ? info?.proposedRewardsAddress
       : info?.proposedManagerAddress;
 
   const isManagerReset =
     role === ROLES.MANAGER &&
     !info?.extendedManagerPermissions &&
-    compareLowercase(info?.rewardAddress, address) &&
+    compareLowercase(info?.rewardsAddress, address) &&
     !compareLowercase(info?.managerAddress, address);
 
   const isRewardsChange =

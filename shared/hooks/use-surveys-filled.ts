@@ -1,17 +1,24 @@
-import { useLidoSWR } from '@lido-sdk/react';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { useQuery } from '@tanstack/react-query';
+import { STRATEGY_LAZY } from 'consts';
 import { getExternalLinks } from 'consts/external-links';
-import { STRATEGY_LAZY } from 'consts/swr-strategies';
-import { NodeOperatorId } from 'types';
+import invariant from 'tiny-invariant';
 import { standardFetcher } from 'utils';
 
 const { surveyApi } = getExternalLinks();
 
-export const useSurveysFilled = (nodeOperatorId?: NodeOperatorId) => {
+export const useSurveysFilled = (
+  nodeOperatorId: NodeOperatorId | undefined,
+) => {
   const url = nodeOperatorId ? `${surveyApi}/open/csm-${nodeOperatorId}` : null;
 
-  return useLidoSWR(
-    url,
-    url ? standardFetcher<{ isFilled: boolean }> : null,
-    STRATEGY_LAZY,
-  );
+  return useQuery({
+    queryKey: ['surveys-filled', url],
+    queryFn: () => {
+      invariant(url);
+      return standardFetcher<{ isFilled: boolean }>(url);
+    },
+    enabled: !!url,
+    ...STRATEGY_LAZY,
+  });
 };

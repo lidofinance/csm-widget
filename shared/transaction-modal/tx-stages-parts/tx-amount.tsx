@@ -1,9 +1,8 @@
-import { TOKENS } from 'consts/tokens';
-import { BigNumber } from 'ethers';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { FormatToken } from 'shared/formatters';
 
 type TxAmountProps = {
-  amount: BigNumber;
+  amount: bigint;
   token: TOKENS;
 };
 

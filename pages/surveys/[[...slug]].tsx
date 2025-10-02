@@ -9,7 +9,7 @@ import {
   SurveysSetupPage,
   SurveysSignInPage,
 } from 'features/surveys';
-import { getProps } from 'lib/getProps';
+import { getProps } from 'utilsApi';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
@@ -32,8 +32,6 @@ const Page = () => {
         return <SurveysHowDidYouLearnCsmPage />;
       case PATH.SURVEYS_SETUP:
         return <SurveysSetupPage id={id} />;
-      case PATH.SURVEYS_ALL:
-        return <SurveysHomePage all />;
 
       default:
         return <SurveysHomePage />;

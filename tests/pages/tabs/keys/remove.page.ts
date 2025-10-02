@@ -9,10 +9,12 @@ export class RemovePage {
   keyCheckbox: Locator;
   numberOfKeysToRemove: Locator;
   numberOfKeysToRemoveValue: Locator;
-  removalFee: Locator;
-  removalFeeValue: Locator;
-  removalFeeInfo: Locator;
+  ejectionCostInput: Locator;
+  ejectionCostLabel: Locator;
+  ejectionCostInputSVG: Locator;
+
   removalFeeInfoTooltipText: Locator;
+
   excessBondAfterExecution: Locator;
   removeKeysButton: Locator;
 
@@ -27,10 +29,16 @@ export class RemovePage {
     this.numberOfKeysToRemoveValue = this.numberOfKeysToRemove
       .locator('div')
       .nth(1);
-    this.removalFee = this.removeKeysForm.getByTestId('removalFee');
-    this.removalFeeValue = this.removalFee.locator('div').nth(1);
-    this.removalFeeInfo = this.removalFee.locator('svg');
+    this.ejectionCostInput = this.removeKeysForm.getByTestId(
+      'ejectionCostAmountInput',
+    );
+    this.ejectionCostLabel = this.removeKeysForm.locator(
+      'xpath=//input[@data-testid="ejectionCostAmountInput"]/ancestor::label',
+    );
+    this.ejectionCostInputSVG = this.ejectionCostLabel.locator('svg');
+
     this.removalFeeInfoTooltipText = this.page.locator('#lido-ui-modal-root');
+
     this.excessBondAfterExecution = this.removeKeysForm.getByTestId(
       'excessBondAfterExecution',
     );

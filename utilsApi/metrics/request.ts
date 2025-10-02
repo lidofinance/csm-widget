@@ -6,7 +6,6 @@ export class RequestMetrics {
   apiTimingsExternal: Histogram<'hostname' | 'route' | 'entity' | 'status'>;
   requestCounter: Counter<'route'>;
   ethCallToAddress: Counter<'address' | 'referrer'>;
-
   validationFileLoadError: Counter<'error'>;
 
   constructor(public registry: Registry) {
@@ -14,7 +13,6 @@ export class RequestMetrics {
     this.apiTimingsExternal = this.apiTimingsInit('external');
     this.requestCounter = this.requestsCounterInit();
     this.ethCallToAddress = this.ethCallToAddressInit();
-
     this.validationFileLoadError = this.validationFileLoadErrorInit();
   }
 

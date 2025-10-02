@@ -1,10 +1,9 @@
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerContext,
-  FormControllerContextValueType,
   FormDataContext,
-  useFormControllerRetry,
+  useFormControllerWithRetry,
   useFormData,
 } from 'shared/hook-form/form-controller';
 import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
@@ -29,28 +28,15 @@ export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const { retryEvent, retryFire } = useFormControllerRetry();
-
-  const onSubmit = useApplyFormSubmit({
-    onConfirm: revalidate,
-    onRetry: retryFire,
-  });
-
-  const formControllerValue: FormControllerContextValueType<
-    ApplyFormInputType,
-    ApplyFormNetworkData
-  > = useMemo(
-    () => ({
-      onSubmit,
-      retryEvent,
-    }),
-    [onSubmit, retryEvent],
+  const formController = useFormControllerWithRetry(
+    useApplyFormSubmit,
+    revalidate,
   );
 
   return (
     <FormProvider {...formObject}>
       <FormDataContext.Provider value={networkData}>
-        <FormControllerContext.Provider value={formControllerValue}>
+        <FormControllerContext.Provider value={formController}>
           {children}
         </FormControllerContext.Provider>
       </FormDataContext.Provider>

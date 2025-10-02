@@ -1,4 +1,4 @@
-import { Address } from 'wagmi';
+import { Address } from 'viem';
 
 export const generateSocialMessage = (
   address: Address,

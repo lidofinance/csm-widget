@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 
 import { Stack } from 'shared/components';
-import { useRouterPath, useShowRule } from 'shared/hooks';
+import { useFilterShowRules, useRouterPath } from 'shared/hooks';
 import { getIsActivePath } from 'utils';
 import { Handle, SwitchWrapper } from './styles';
 import { SwitcherItem } from './switcher-item';
@@ -12,18 +12,15 @@ export type SwitchProps = {
 };
 
 export const Switcher: FC<SwitchProps> = ({ routes }) => {
-  const check = useShowRule();
   const pathname = useRouterPath();
 
-  const filteredRoutes = useMemo(() => {
-    return routes.filter(
-      ({ showRules }) => !showRules || showRules.some(check),
-    );
-  }, [check, routes]);
+  const filteredRoutes = useFilterShowRules(routes);
 
   const activePathIndex = useMemo(
     () =>
-      filteredRoutes.findIndex(({ path }) => getIsActivePath(pathname, path)),
+      filteredRoutes.findIndex(({ path, subpaths }) =>
+        getIsActivePath(pathname, path, subpaths),
+      ),
     [pathname, filteredRoutes],
   );
 
@@ -32,12 +29,13 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
   return (
     <SwitchWrapper $count={filteredRoutes.length}>
       {activePathIndex >= 0 && <Handle $active={activePathIndex} />}
-      {filteredRoutes.map((route) => {
+      {filteredRoutes.map((route, index) => {
         return (
           <SwitcherItem
             key={route.title}
             href={route.path}
             warning={route.warning}
+            active={activePathIndex === index}
           >
             <Stack gap="sm" center>
               {route.title}

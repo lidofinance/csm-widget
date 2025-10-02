@@ -2,10 +2,10 @@ import { Block, Button, Text } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
 import { InputAddress, Stack } from 'shared/components';
 import { useAuth } from '../shared';
-import { useAccount } from 'shared/hooks';
+import { useDappStatus } from 'modules/web3';
 
 export const SiweSignIn: FC = () => {
-  const { address } = useAccount();
+  const { address } = useDappStatus();
   const { signIn } = useAuth();
 
   const login = useCallback(() => {

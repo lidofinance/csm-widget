@@ -1,13 +1,12 @@
 import { Tbody, Td, Text, Th, Thead, Tr } from '@lidofinance/lido-ui';
-import { TOKENS } from 'consts/tokens';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
-import { LockedOperator } from 'shared/hooks';
 import { TableStyle } from './styles';
+import { OperatorWithLockedBond, TOKENS } from '@lidofinance/lido-csm-sdk';
 
 type Props = {
-  data?: LockedOperator[];
+  data?: OperatorWithLockedBond[];
   offset?: number;
 };
 
@@ -21,15 +20,15 @@ export const LockedTable: FC<Props> = ({ data, offset = 0 }) => (
         </Tr>
       </Thead>
       <Tbody>
-        {data?.map(([id, amount], index) => (
+        {data?.map(({ nodeOperatorId, locked }, index) => (
           <Tr key={offset + index}>
             <Td>
               <Text size="xxs" color="secondary">
-                {id}
+                {nodeOperatorId.toString()}
               </Text>
             </Td>
             <Td>
-              <FormatToken amount={amount} token={TOKENS.ETH} />
+              <FormatToken amount={locked} token={TOKENS.eth} />
             </Td>
           </Tr>
         ))}

@@ -1,5 +1,5 @@
 import { addDays } from 'date-fns';
-import { useAccount } from 'shared/hooks';
+import { useDappStatus } from 'modules/web3';
 import { useCallback } from 'react';
 import { SiweMessage } from 'siwe';
 import invariant from 'tiny-invariant';
@@ -24,10 +24,12 @@ const createSiweMessage = (address: string, chainId?: number) => {
   return message.prepareMessage();
 };
 
+// FIXME: shared hook with Surveys
 export const useSiwe = () => {
-  const { address, chainId } = useAccount();
+  const { address, chainId } = useDappStatus();
   const { signMessageAsync } = useSignMessage();
 
+  // TODO: pass message in callback props
   return useCallback(async () => {
     invariant(address, 'Signer is not available');
 

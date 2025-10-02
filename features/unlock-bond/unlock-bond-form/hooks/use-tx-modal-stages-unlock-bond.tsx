@@ -1,6 +1,4 @@
-import type { BigNumber } from 'ethers';
-
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   TransactionModalTransitStage,
   TxAmount,
@@ -11,7 +9,7 @@ import {
 } from 'shared/transaction-modal';
 
 type Props = {
-  amount: BigNumber;
+  amount: bigint;
 };
 
 const getTxModalStagesUnlockBond = (
@@ -24,7 +22,7 @@ const getTxModalStagesUnlockBond = (
       <TxStageSignOperationAmount
         operationText="Unlocking"
         amount={amount}
-        token={TOKENS.ETH}
+        token={TOKENS.eth}
       />,
     ),
 
@@ -33,26 +31,26 @@ const getTxModalStagesUnlockBond = (
       <TxStageSignOperationAmount
         operationText="Unlocking"
         amount={amount}
-        token={TOKENS.ETH}
+        token={TOKENS.eth}
         isPending
         txHash={txHash}
       />,
     ),
 
-  success: ({ lockedBond }: { lockedBond: BigNumber }, txHash?: string) =>
+  success: ({ lockedBond }: { lockedBond: bigint }, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
         title={
-          lockedBond.gt(0)
+          lockedBond > 0n
             ? 'Bond has been partially unlocked'
             : 'Bond has been completely unlocked'
         }
         description={
-          lockedBond.gt(0) && (
+          lockedBond > 0n && (
             <>
               Remaining locked bond{' '}
-              <TxAmount amount={lockedBond} token={TOKENS.ETH} />
+              <TxAmount amount={lockedBond} token={TOKENS.eth} />
             </>
           )
         }

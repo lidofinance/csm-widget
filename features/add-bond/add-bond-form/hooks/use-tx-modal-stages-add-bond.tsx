@@ -1,6 +1,4 @@
-import type { BigNumber } from 'ethers';
-
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   TransactionModalTransitStage,
   TxStageOperationSucceedBalanceShown,
@@ -14,7 +12,7 @@ const STAGE_OPERATION_ARGS = {
 };
 
 type Props = {
-  amount: BigNumber;
+  amount: bigint;
   token: TOKENS;
 };
 
@@ -43,13 +41,13 @@ const getTxModalStagesAddBond = (
       />,
     ),
 
-  success: ({ balance }: { balance: BigNumber }, txHash?: string) =>
+  success: ({ balance }: { balance: bigint }, txHash?: string) =>
     transitStage(
       <TxStageOperationSucceedBalanceShown
         {...STAGE_OPERATION_ARGS}
         txHash={txHash}
         balance={balance}
-        balanceToken={TOKENS.STETH}
+        balanceToken={TOKENS.steth}
       />,
       {
         isClosableOnLedger: true,

@@ -1,21 +1,25 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
+import {
+  useDappStatus,
+  useNodeOperatorId,
+  useOperatorInfo,
+  useOperatorOwner,
+} from 'modules/web3';
 import { FC } from 'react';
 import { SectionBlock, Stack } from 'shared/components';
-import {
-  useAddressCompare,
-  useNodeOperatorInfo,
-  useNodeOperatorOwner,
-} from 'shared/hooks';
+import invariant from 'tiny-invariant';
+import { isAddressEqual } from 'viem';
 import { RoleBlock } from './role-block';
-import { ROLES } from 'consts/roles';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 
 export const RolesSection: FC = () => {
-  const isUserAddress = useAddressCompare();
+  const { address } = useDappStatus();
   const id = useNodeOperatorId();
-  const { data: info } = useNodeOperatorInfo(id);
-  const { data: owner } = useNodeOperatorOwner(id);
+  const { data: info } = useOperatorInfo(id);
+  const { data: owner } = useOperatorOwner(id);
+
+  invariant(address, 'address should be defined');
 
   return (
     <SectionBlock
@@ -29,14 +33,14 @@ export const RolesSection: FC = () => {
             type={ROLES.MANAGER}
             address={info.managerAddress}
             proposedAddress={info.proposedManagerAddress}
-            isYou={isUserAddress(info.managerAddress)}
+            isYou={isAddressEqual(info.managerAddress, address)}
             isOwner={owner?.role === ROLES.MANAGER}
           />
           <RoleBlock
             type={ROLES.REWARDS}
-            address={info.rewardAddress}
-            proposedAddress={info.proposedRewardAddress}
-            isYou={isUserAddress(info.rewardAddress)}
+            address={info.rewardsAddress}
+            proposedAddress={info.proposedRewardsAddress}
+            isYou={isAddressEqual(info.rewardsAddress, address)}
             isOwner={owner?.role === ROLES.REWARDS}
           />
         </Stack>

@@ -1,41 +1,36 @@
-import { useMemo } from 'react';
-import {
-  useExtendedBondBalance,
-  useMergeSwr,
-  useNodeOperatorCurveId,
-  useNodeOperatorFirstKeysBond,
-} from 'shared/hooks';
-import { NodeOperatorId } from 'types';
+import { useQuery } from '@tanstack/react-query';
+import { useBondByKeysCount } from 'modules/web3';
+import invariant from 'tiny-invariant';
 import { useRemoveKeysFormData } from '../context';
-import { useRemovalFeeByKeysCount } from './useRemovalFeeByKeysCount';
+import { calcBondBalance } from '@lidofinance/lido-csm-sdk';
 
-export const useBondBalanceAfterRemoveKeys = (
-  nodeOperatorId?: NodeOperatorId,
-  count = 0,
-) => {
-  const { info, bond } = useRemoveKeysFormData();
+export const useBondBalanceAfterRemoveKeys = (count = 0) => {
+  const { info, bond, removalFee, curveId } = useRemoveKeysFormData();
 
-  const nextKeysCount = useMemo(() => {
-    return info
-      ? info.totalAddedKeys - info.totalWithdrawnKeys - count
-      : undefined;
-  }, [count, info]);
+  const nextKeysCount = info
+    ? info.totalAddedKeys - info.totalWithdrawnKeys - count
+    : 0;
 
-  const swrCurveId = useNodeOperatorCurveId(nodeOperatorId);
-  const swrRequiredAfter = useNodeOperatorFirstKeysBond({
+  const { data: bondRequiredAfter } = useBondByKeysCount({
     keysCount: nextKeysCount,
-    curveId: swrCurveId.data,
+    curveId,
   });
 
-  const swrRemovalFee = useRemovalFeeByKeysCount(count);
-  const bondAfter = useMemo(
-    () => bond?.current.sub(swrRemovalFee.data || 0),
-    [bond, swrRemovalFee.data],
-  );
-  const bondBalance = useExtendedBondBalance(swrRequiredAfter.data, bondAfter);
+  const bondAfter = (bond?.current ?? 0n) - (removalFee || 0n) * BigInt(count);
 
-  return useMergeSwr(
-    [swrCurveId, swrRequiredAfter, swrRemovalFee],
-    bondBalance,
-  );
+  return useQuery({
+    queryKey: [
+      'getBondBalanceAfterRemoveKeys',
+      { bondRequiredAfter, bondAfter },
+    ],
+    queryFn: () => {
+      invariant(bondRequiredAfter !== undefined);
+      return calcBondBalance({
+        current: bondAfter,
+        required: bondRequiredAfter,
+        locked: 0n,
+      });
+    },
+    enabled: bondRequiredAfter !== undefined,
+  });
 };

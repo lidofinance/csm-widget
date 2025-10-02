@@ -1,7 +1,7 @@
 import { UseFormReturn } from 'react-hook-form';
 import { ClaimBondFormInputType } from './types';
 import { useEffect } from 'react';
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useFormRevalidate = ({
   watch,
@@ -20,7 +20,7 @@ export const useFormRevalidate = ({
 
   useEffect(() => {
     if (!unlockClaimTokens) {
-      setValue('token', TOKENS.WSTETH, {
+      setValue('token', TOKENS.wsteth, {
         shouldTouch: true,
         shouldValidate: true,
       });

@@ -1,8 +1,7 @@
-import { BigNumber } from '@ethersproject/bignumber';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Tooltip } from '@lidofinance/lido-ui';
 
 import { DATA_UNAVAILABLE } from 'consts/text';
-import { TOKENS } from 'consts/tokens';
 import { Component } from 'types';
 import {
   FormatBalanceArgs,
@@ -13,7 +12,7 @@ import {
 export type FormatTokenProps = FormatBalanceArgs & {
   symbol?: string;
   token?: TOKENS;
-  amount?: BigNumber;
+  amount?: bigint;
   approx?: boolean;
   fallback?: string;
 };
@@ -36,13 +35,13 @@ export const FormatToken: FormatTokenComponent = ({
     adaptiveDecimals,
   });
 
-  if (!amount) return <span {...rest}>{fallback}</span>;
+  if (amount === undefined) return <span {...rest}>{fallback}</span>;
 
   const symbol = _symbol ?? (token ? getTokenDisplayName(token) : '');
 
   // we show prefix for non zero amount and if we need to show Tooltip Amount
   // overridden by explicitly set approx
-  const prefix = amount && !amount.isZero() && approx ? '≈ ' : '';
+  const prefix = amount && approx ? '≈ ' : '';
 
   const body = (
     <span {...rest} data-testid="tokenAmount">

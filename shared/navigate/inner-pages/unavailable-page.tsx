@@ -17,7 +17,7 @@ export const WarningIcon = styled.img.attrs({
 
 export const UnavailablePage: FC = () => {
   return (
-    <Layout dummy>
+    <Layout dummy="semi">
       <Block>
         <Stack direction="column" center>
           <WarningIcon />

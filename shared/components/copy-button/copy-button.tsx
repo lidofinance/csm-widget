@@ -1,29 +1,29 @@
-import { ButtonIcon, ButtonIconProps, Check, Copy } from '@lidofinance/lido-ui';
-import { FC, useState } from 'react';
-import { useCopyToClipboard } from 'shared/hooks';
+import { ButtonProps, ButtonIcon, Check, Copy } from '@lidofinance/lido-ui';
+import { FC } from 'react';
+import { CopyButtonProps } from './copy-link';
+import { useCopy } from './use-copy';
 
-type CopyButtonProps = {
-  text: string;
-} & Omit<ButtonIconProps, 'icon' | 'onClick'>;
-
-export const CopyButton: FC<CopyButtonProps> = ({ text, ...props }) => {
-  const copy = useCopyToClipboard(text);
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = () => {
-    copy();
-    setCopied(true);
-    setTimeout(() => {
-      setCopied(false);
-    }, 1000);
-  };
+export const CopyButton: FC<CopyButtonProps & ButtonProps> = ({
+  text,
+  children = 'Copy',
+  ...props
+}) => {
+  const { copy, copied } = useCopy(text);
 
   return (
     <ButtonIcon
-      icon={copied ? <Check /> : <Copy />}
-      title="Copy to clipboard"
-      onClick={handleCopy}
+      variant="translucent"
       {...props}
-    />
+      onClick={copy}
+      icon={
+        copied ? (
+          <Check width={20} height={20} />
+        ) : (
+          <Copy width={20} height={20} />
+        )
+      }
+    >
+      {children}
+    </ButtonIcon>
   );
 };

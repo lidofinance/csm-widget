@@ -1,9 +1,9 @@
 import { API } from '@lidofinance/next-api-wrapper';
 import { Cache } from 'memory-cache';
 import type { NextApiRequest } from 'next';
+import { FetcherError } from 'utils/fetcher-error';
+import { standardFetcher } from 'utils/standard-fetcher';
 import Metrics from './metrics/metrics';
-import { FetcherError } from 'utils/fetcherError';
-import { standardFetcher } from 'utils/standardFetcher';
 
 type ProxyOptions = {
   proxyUrl: string | ((req: NextApiRequest) => string);

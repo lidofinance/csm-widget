@@ -1,12 +1,12 @@
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { useCallback, useMemo } from 'react';
 import {
-  useCsmPaused,
+  useCsmStatus,
   useIsContract,
-  useNodeOperatorBalance,
-  useNodeOperatorInfo,
-  useNodeOperatorRewards,
-} from 'shared/hooks';
+  useNodeOperatorId,
+  useOperatorBalance,
+  useOperatorInfo,
+  useOperatorRewards,
+} from 'modules/web3';
+import { useCallback, useMemo } from 'react';
 import { type ClaimBondFormNetworkData } from './types';
 import { useMaxValues } from './use-max-values';
 
@@ -18,33 +18,30 @@ export const useClaimBondFormNetworkData = (): [
 
   const {
     data: bond,
-    update: updateBond,
-    initialLoading: isBondLoading,
-  } = useNodeOperatorBalance(nodeOperatorId);
+    isPending: isBondLoading,
+    refetch: updateBond,
+  } = useOperatorBalance(nodeOperatorId);
 
   const {
     data: rewards,
-    update: updateRewards,
-    initialLoading: isRewardsLoading,
-  } = useNodeOperatorRewards(nodeOperatorId);
+    isPending: isRewardsLoading,
+    refetch: updateRewards,
+  } = useOperatorRewards(nodeOperatorId);
 
-  const { data: maxValues, initialLoading: isMaxValuesLoading } = useMaxValues({
+  const { data: maxValues, isPending: isMaxValuesLoading } = useMaxValues({
     bond,
     rewards,
   });
 
-  const { data: nodeOperator, initialLoading: isInfoLoading } =
-    useNodeOperatorInfo(nodeOperatorId);
+  const { data: nodeOperator, isPending: isInfoLoading } =
+    useOperatorInfo(nodeOperatorId);
 
-  const rewardsAddress = nodeOperator?.rewardAddress;
+  const rewardsAddress = nodeOperator?.rewardsAddress;
 
-  const {
-    isContract,
-    isSplitter,
-    isLoading: isContractLoading,
-  } = useIsContract(rewardsAddress);
+  const { data: isContract, isPending: isContractLoading } =
+    useIsContract(rewardsAddress);
 
-  const { data: status, initialLoading: isStatusLoading } = useCsmPaused();
+  const { data: status, isPending: isStatusLoading } = useCsmStatus();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateBond(), updateRewards()]);
@@ -77,8 +74,7 @@ export const useClaimBondFormNetworkData = (): [
       maxValues,
       rewardsAddress,
       isContract,
-      isSplitter,
-      isPaused: status?.isAccountingPaused,
+      isPaused: status?.isPausedAccounting,
       loading,
     },
     revalidate,

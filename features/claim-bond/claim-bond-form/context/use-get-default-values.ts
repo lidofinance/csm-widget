@@ -1,7 +1,7 @@
-import { TOKENS } from 'consts/tokens';
 import { useMemo } from 'react';
 import { useDefaultValues } from 'shared/hooks';
 import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const useGetDefaultValues = ({
   rewards,
@@ -16,8 +16,8 @@ export const useGetDefaultValues = ({
       }
 
       return {
-        token: isContract ? TOKENS.WSTETH : TOKENS.STETH,
-        claimRewards: rewards?.available.gt(0) ?? false,
+        token: isContract ? TOKENS.wsteth : TOKENS.steth,
+        claimRewards: Boolean(rewards?.available),
         unlockClaimTokens: !isSplitter,
       };
     }, [isContract, isSplitter, loading, rewards?.available]),

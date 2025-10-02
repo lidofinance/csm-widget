@@ -1,37 +1,43 @@
-import { KEY_STATUS } from 'consts/key-status';
-import { ROLES } from 'consts/roles';
-import { useActiveNodeOperator } from 'providers/node-operator-provider';
-import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
+import { KEY_STATUS, ROLES } from '@lidofinance/lido-csm-sdk';
 import {
-  useKeysWithStatus,
-  useNodeOperatorInfo,
-  useNodeOperatorLockAmount,
-} from 'shared/hooks';
+  useNodeOperator,
+  useOperatorBalance,
+  useOperatorInfo,
+  useOperatorKeysWithStatus,
+} from 'modules/web3';
+import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
+import { useCanClaimICS } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
-import { AlertStuckKeys } from './components/alert-stuck-keys';
+import { AlertTransferKeys } from './components/alert-transfer-keys';
+import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
+import { AlertClaimIcs } from './components/alert-claim-ics';
+import { useRouter } from 'next/router';
+import { PATH } from 'consts';
 
 export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   const { showAlert, closeAlert } = useAlertActions();
 
-  const nodeOperator = useActiveNodeOperator();
-  const { data: info } = useNodeOperatorInfo(nodeOperator?.id);
+  const { nodeOperator } = useNodeOperator();
+  const { data: info } = useOperatorInfo(nodeOperator?.id);
+  const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
+  const canClaimICS = useCanClaimICS();
+  const { route } = useRouter();
 
   const normalizeQueue = useMemo(() => {
     return (
       info &&
       info.enqueuedCount < info.depositableValidatorsCount &&
-      info.stuckValidatorsCount === 0 &&
       nodeOperator?.roles.includes(ROLES.MANAGER)
     );
   }, [info, nodeOperator?.roles]);
 
-  const { data: lockedBond } = useNodeOperatorLockAmount(nodeOperator?.id);
+  const { data: balance } = useOperatorBalance(nodeOperator?.id);
 
-  const { data: keysWithStatus, initialLoading: isKeysLoading } =
-    useKeysWithStatus();
+  const { data: keysWithStatus, isPending: isKeysLoading } =
+    useOperatorKeysWithStatus(nodeOperator?.id);
   const hasRequestsToExit = useMemo(
     () =>
       keysWithStatus?.filter(({ statuses }) =>
@@ -51,14 +57,6 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   }, [closeAlert, hasRequestsToExit, isKeysLoading, showAlert]);
 
   useEffect(() => {
-    if (info?.stuckValidatorsCount) {
-      showAlert(AlertStuckKeys);
-    } else {
-      closeAlert(AlertStuckKeys);
-    }
-  }, [closeAlert, info?.stuckValidatorsCount, showAlert]);
-
-  useEffect(() => {
     if (normalizeQueue) {
       showAlert(AlertNomalizeQueue);
     } else {
@@ -67,12 +65,28 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
   }, [closeAlert, normalizeQueue, showAlert]);
 
   useEffect(() => {
-    if (lockedBond?.gt(0)) {
+    if (keysToTransfer) {
+      showAlert(AlertTransferKeys);
+    } else {
+      closeAlert(AlertTransferKeys);
+    }
+  }, [closeAlert, keysToTransfer, showAlert]);
+
+  useEffect(() => {
+    if (balance?.locked) {
       showAlert(AlertLockedBond);
     } else {
       closeAlert(AlertLockedBond);
     }
-  }, [closeAlert, lockedBond, showAlert]);
+  }, [balance?.locked, closeAlert, showAlert]);
+
+  useEffect(() => {
+    if (canClaimICS && route !== PATH.TYPE_CLAIM) {
+      showAlert(AlertClaimIcs);
+    } else {
+      closeAlert(AlertClaimIcs);
+    }
+  }, [canClaimICS, closeAlert, route, showAlert]);
 
   return <>{children}</>;
 };

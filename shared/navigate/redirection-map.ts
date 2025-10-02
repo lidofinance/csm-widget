@@ -1,8 +1,13 @@
 import { ROLE_CODE } from 'consts/roles';
 import { PATH } from 'consts/urls';
+import { ShowFlags } from 'shared/hooks';
+
+type RedirectionMap = Partial<Record<ROLE_CODE, PATH>>;
+
+export type RedirectionFn = (flags: ShowFlags) => RedirectionMap;
 
 export const redirectionMap: Partial<
-  Record<PATH, Partial<Record<ROLE_CODE, PATH>>>
+  Record<PATH, RedirectionMap | RedirectionFn>
 > = {
   [PATH.ROLES]: {
     [ROLE_CODE.NONE]: PATH.ROLES_INBOX,
@@ -31,7 +36,13 @@ export const redirectionMap: Partial<
     [ROLE_CODE.REWARDS]: PATH.KEYS_VIEW,
   },
   [PATH.KEYS_REMOVE]: {
-    [ROLE_CODE.REWARDS]: PATH.KEYS_VIEW,
+    [ROLE_CODE.REWARDS]: PATH.KEYS_EXIT,
+  },
+  [PATH.KEYS_EJECT]: {
+    [ROLE_CODE.NONE]: PATH.CREATE,
+  },
+  [PATH.KEYS_EXIT]: {
+    [ROLE_CODE.NONE]: PATH.CREATE,
   },
   [PATH.KEYS_VIEW]: {
     [ROLE_CODE.NONE]: PATH.HOME,
@@ -51,10 +62,32 @@ export const redirectionMap: Partial<
   [PATH.BOND_UNLOCK]: {
     [ROLE_CODE.NONE]: PATH.HOME,
   },
-  [PATH.TYPE]: {
-    [ROLE_CODE.NONE]: PATH.TYPE_ICS_APPLY,
-    [ROLE_CODE.REWARDS]: PATH.TYPE_ICS_APPLY,
-    [ROLE_CODE.MANAGER]: PATH.TYPE_ICS_APPLY,
-    [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_ICS_APPLY,
-  },
+  [PATH.TYPE]: (flags) =>
+    flags['CAN_CLAIM_ICS']
+      ? {
+          [ROLE_CODE.REWARDS]: PATH.TYPE_CLAIM,
+          [ROLE_CODE.MANAGER]: PATH.TYPE_CLAIM,
+          [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_CLAIM,
+        }
+      : flags['ICS_ENABLED']
+        ? {
+            [ROLE_CODE.NONE]: PATH.TYPE_ICS_APPLY,
+            [ROLE_CODE.REWARDS]: PATH.TYPE_ICS_APPLY,
+            [ROLE_CODE.MANAGER]: PATH.TYPE_ICS_APPLY,
+            [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_ICS_APPLY,
+          }
+        : {
+            [ROLE_CODE.NONE]: PATH.HOME,
+            [ROLE_CODE.REWARDS]: PATH.TYPE_CLAIM,
+            [ROLE_CODE.MANAGER]: PATH.TYPE_CLAIM,
+            [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_CLAIM,
+          },
+  [PATH.TYPE_CLAIM]: (flags) =>
+    flags['ICS_ENABLED']
+      ? {
+          [ROLE_CODE.NONE]: PATH.TYPE_ICS_SYSTEM,
+        }
+      : {
+          [ROLE_CODE.NONE]: PATH.HOME,
+        },
 };

@@ -12,12 +12,14 @@ tsconfig.tsbuildinfo
 /test-results/
 /playwright-report/
 /playwright/.cache/
+.playwright-mcp/
 
 # testing
 /coverage
 
 # generated
 /generated
+/modules/web3/generated.ts
 
 # next.js
 /.next/
@@ -42,7 +44,9 @@ yarn-error.log*
 #ide
 .vscode
 .idea
-
-/public/runtime/
+.claude
+.mcp.json
 .qodo
 **/.browser_context**
+
+/public/runtime/

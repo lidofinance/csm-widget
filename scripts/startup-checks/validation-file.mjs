@@ -3,9 +3,10 @@ import { promises as fs } from 'fs';
 export const VALIDATION_FILE_PATH = process.env.VALIDATION_FILE_PATH;
 
 // Safely initialize a global variable
-const globalStartupValidationFileChecks = globalThis.__startupValidationFileChecks || {
-  promise: null,
-};
+const globalStartupValidationFileChecks =
+  globalThis.__startupValidationFileChecks || {
+    promise: null,
+  };
 globalThis.__startupValidationFileChecks = globalStartupValidationFileChecks;
 
 const isValidValidationFile = (data) => {
@@ -62,12 +63,15 @@ const checkValidationFile = async (filePath) => {
     );
     return { success: true, addresses: parsed.addresses };
   } catch (error) {
-    console.error(`[checkValidationFile] Validation file check failed: ${error.message}`);
+    console.error(
+      `[checkValidationFile] Validation file check failed: ${error.message}`,
+    );
     return { success: false, error: error.message };
   }
 };
 
-export const getValidationFileChecks = () => globalStartupValidationFileChecks.promise;
+export const getValidationFileChecks = () =>
+  globalStartupValidationFileChecks.promise;
 
 export const startupCheckValidationFile = async () => {
   console.info(

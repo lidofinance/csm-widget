@@ -1,23 +1,19 @@
+import { Divider, Plus, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { FC, useCallback } from 'react';
 import { Plural, Stack, WhenLoaded } from 'shared/components';
 import {
-  SurveyLink,
-  SurveyItem,
-  SurveySection,
   SurveyButton,
+  SurveyItem,
+  SurveyLink,
+  SurveySection,
   Warning,
 } from '../components';
 import { useSurveysSWR } from '../shared/use-surveys-swr';
-import { useConfirmEraseModal } from './confirm-erase-modal';
-import { Divider, Plus, Text } from '@lidofinance/lido-ui';
 import { SetupsKeys, Summary } from '../types';
-import { CHAINS } from 'consts/chains';
-import { getConfig } from 'config';
+import { useConfirmEraseModal } from './confirm-erase-modal';
 
-const { defaultChain } = getConfig();
-
-export const SurveysHome: FC<{ all?: boolean }> = ({ all }) => {
+export const SurveysHome: FC = () => {
   const { data, isLoading, remove } = useSurveysSWR<Summary>('summary');
   const { data: keys, mutate: mutateKeys } =
     useSurveysSWR<SetupsKeys>('setups/keys');
@@ -37,11 +33,7 @@ export const SurveysHome: FC<{ all?: boolean }> = ({ all }) => {
     data?.howDidYouLearnCsm ||
     (data?.setups && data.setups.length > 0)
   );
-  const showSetups = !!(
-    (all || defaultChain === CHAINS.Mainnet) &&
-    keys &&
-    (keys.total > 0 || keys.filled > 0)
-  );
+  const showSetups = !!(keys && (keys.total > 0 || keys.filled > 0));
 
   return (
     <WhenLoaded loading={!data && isLoading}>

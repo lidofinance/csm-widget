@@ -1,6 +1,6 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../base.page';
-import { TOKENS } from 'consts/tokens';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export class AddBondPage extends BasePage {
   form: Locator;

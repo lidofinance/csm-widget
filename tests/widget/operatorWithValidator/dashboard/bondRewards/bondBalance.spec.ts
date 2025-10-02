@@ -11,13 +11,12 @@ test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
 
   test(
     qase(135, 'Should correctly expand and display the balance'),
-    async ({ widgetService, contractClients }) => {
+    async ({ widgetService, csmSDK }) => {
       const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
 
       const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-      const bondSummary =
-        await contractClients.CSAccounting.getBondSummary(nodeOperatorId);
+      const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
       await test.step('Check "Bond balance" section', async () => {
         await expect(bondBalance.requiredBondBalance).toBeHidden();

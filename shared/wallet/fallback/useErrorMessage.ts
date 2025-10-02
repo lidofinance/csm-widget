@@ -1,18 +1,30 @@
-import {
-  useSupportedChains,
-  useConnectorError,
-  helpers,
-} from 'reef-knot/web3-react';
-import { useNetwork } from 'wagmi';
+import { useDappStatus } from 'modules/web3';
+import { useConnectorInfo } from 'reef-knot/core-react';
+import { helpers } from 'reef-knot/web3-react';
+import { useChainName } from 'shared/hooks';
+import { useConnect } from 'wagmi';
 
 export const useErrorMessage = (): string | undefined => {
-  const error = useConnectorError();
-  const { isUnsupported } = useSupportedChains();
-  const { chains: supportedChains } = useNetwork();
+  const { isLedger } = useConnectorInfo();
+  const { error } = useConnect();
+  const { isSupportedChain } = useDappStatus();
+  const chainName = useChainName(true);
 
-  // TODO: fix useConnectorError in reef-knot and remove this block
-  if (isUnsupported) {
-    return helpers.getUnsupportedChainError(supportedChains).message;
+  // Errors from chain state
+
+  if (!isSupportedChain) {
+    // TODO: replace {correct network} with the correct network name
+    return `Unsupported chain. Please switch to ${chainName} in your wallet.`;
+  }
+
+  // errors from connection state
+
+  if (!error) {
+    return;
+  }
+
+  if (isLedger) {
+    return helpers.interceptLedgerError(error).message;
   }
 
   return error?.message;

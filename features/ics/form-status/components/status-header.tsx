@@ -1,4 +1,5 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Button, Text } from '@lidofinance/lido-ui';
+import { PATH } from 'consts';
 import {
   ICS_ASSESSED_DATE,
   IcsCommentsDto,
@@ -9,16 +10,17 @@ import {
 } from 'features/ics/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
+import { useNavigate } from 'shared/navigate';
 
-import { calculateScores, isMinScoresReached } from '../utils';
-import { ScoreChip } from './score-chip';
 import {
   NodeOperatorOwner,
-  useAccount,
-  useNodeOperatorOwner,
-} from 'shared/hooks';
-import { useNodeOperatorId } from 'providers/node-operator-provider';
-import { compareLowercase } from 'utils';
+  useDappStatus,
+  useNodeOperatorId,
+  useOperatorOwner,
+} from 'modules/web3';
+import { isAddressEqual } from 'viem';
+import { calculateScores, isMinScoresReached } from '../utils';
+import { ScoreChip } from './score-chip';
 
 type StatusHeaderProps = {
   typeStatus: TypeStatus;
@@ -52,7 +54,7 @@ const getProofStatus = (typeStatus: TypeStatus) => {
     case 'CLAIMED':
       return <ScoreChip type="default">Claimed</ScoreChip>;
     case 'ISSUED':
-      return <ScoreChip type="success">Approved</ScoreChip>;
+      return <ScoreChip type="success">Issued</ScoreChip>;
     case 'OWNER_ISSUED':
       return <ScoreChip type="success">Approved</ScoreChip>;
     default:
@@ -67,14 +69,15 @@ const useHint = (
   scores: IcsScoresDto | undefined,
   owner: NodeOperatorOwner | undefined,
 ) => {
+  const n = useNavigate();
+
   switch (true) {
+    case typeStatus === 'CLAIMED':
+      return <Text size="xs">You successfully claimed your Operator type</Text>;
     case typeStatus === 'ISSUED' && !!owner:
       return (
         <>
-          <Text size="xs">
-            You&apos;re already eligible to claim ICS type after the CSM v2
-            release
-          </Text>
+          <Text size="xs">You&apos;re already eligible to claim ICS type</Text>
           <Text size="xs">
             To claim your current address should be set as your Node Operator
             owner.
@@ -83,10 +86,17 @@ const useHint = (
       );
     case typeStatus === 'ISSUED':
       return (
-        <Text size="xs">
-          You&apos;re already eligible to claim ICS type after the CSM v2
-          release
-        </Text>
+        <>
+          <Text size="xs">
+            Claim your new operator type on the “Claim operator type” tab
+          </Text>
+
+          <div>
+            <Button size="xs" onClick={() => n(PATH.TYPE_CLAIM)}>
+              Go to claim
+            </Button>
+          </div>
+        </>
       );
     case typeStatus === 'OWNER_ISSUED':
       return (
@@ -96,8 +106,8 @@ const useHint = (
             type
           </Text>
           <Text size="xs">
-            Connect with your Node Operator&apos;s owner address after CSM v2
-            release to claim ICS type
+            Connect with your Node Operator&apos;s owner address to claim ICS
+            type
           </Text>
         </>
       );
@@ -138,7 +148,7 @@ const useHint = (
     case status === 'APPROVED':
       return (
         <Text size="xs">
-          Please wait for CSM v2 release; Several weeks after CSM v2 is live, you will be able to claim your ICS Node Operator type
+          Please await issuance; this process typically takes up to three weeks
         </Text>
       );
     default:
@@ -152,12 +162,14 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   comments,
   scores,
 }) => {
-  const { address } = useAccount();
+  const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: owner } = useNodeOperatorOwner(nodeOperatorId);
+  const { data: owner } = useOperatorOwner(nodeOperatorId);
 
   const otherOwner =
-    owner && !compareLowercase(owner.address, address) ? owner : undefined;
+    owner && address && !isAddressEqual(owner.address, address)
+      ? owner
+      : undefined;
 
   const statusChip = getStatus(status, typeStatus);
   const proofChip = getProofStatus(typeStatus);

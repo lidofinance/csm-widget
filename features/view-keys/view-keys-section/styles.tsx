@@ -23,7 +23,7 @@ export const TableStyle = styled.table`
 
   tr {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 5fr 3fr 1fr 3fr;
     grid-auto-rows: auto;
     grid-column-gap: 1rem;
     align-items: center;
@@ -31,21 +31,21 @@ export const TableStyle = styled.table`
 
     padding: 12px 32px;
 
-    ${MEDIA_QUERY_XXL} {
-      grid-template-columns: 1fr 1fr;
+    /* ${MEDIA_QUERY_XXL} { */
+    grid-template-columns: 5fr 4fr 1fr;
 
-      td:nth-child(3) {
-        grid-column: 1 / -1;
+    td:nth-child(4) {
+      grid-column: 1 / -1;
 
-        &:empty {
-          display: none;
-        }
-      }
-
-      th:nth-child(3) {
+      &:empty {
         display: none;
       }
     }
+
+    th:nth-child(4) {
+      display: none;
+    }
+    /* } */
 
     ${({ theme }) => theme.mediaQueries.md} {
       grid-template-columns: 1fr;

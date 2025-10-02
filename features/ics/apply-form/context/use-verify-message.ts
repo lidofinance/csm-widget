@@ -1,14 +1,13 @@
-import { verifyMessage } from '@ambire/signature-validator';
-import { isAddress } from 'ethers/lib/utils.js';
+import { useMainnetOnlyWagmi } from 'modules/web3/web3-provider/web3-provider';
 import { useCallback } from 'react';
-import { useCurrentStaticRpcProvider } from 'shared/hooks';
-import { Address } from 'wagmi';
-import { useApplyFormData } from './apply-form-provider';
+import { Address, Hex, isAddress, PublicClient } from 'viem';
 import { generateAddressMessage, generateSocialMessage } from './utils';
+import { useApplyFormData } from './apply-form-provider';
+import { usePublicClient } from 'wagmi';
 
 type VerifyMessageProps = {
   address: Address;
-  signature: string;
+  signature: Hex;
 };
 
 export const useAddressMessage = (address?: string) => {
@@ -31,26 +30,32 @@ export const useSocialMessages = () => {
 };
 
 export const useRawVefiryMessage = (mainAddress: Address) => {
-  const { staticRpcProvider } = useCurrentStaticRpcProvider();
+  const { publicClientMainnet } = useMainnetOnlyWagmi();
+  const publicClient = usePublicClient();
 
   return useCallback(
     async ({ address, signature }: VerifyMessageProps) => {
       const message = generateAddressMessage(address, mainAddress);
+      const clients = [publicClient] as PublicClient[];
+      if (publicClientMainnet.chain?.id !== publicClient?.chain.id) {
+        clients.push(publicClientMainnet);
+      }
 
-      const isValid = await verifyMessage({
-        message,
-        signature,
-        signer: address,
-        provider: staticRpcProvider,
-      });
+      const isValid = (
+        await Promise.all(
+          clients.map((client) =>
+            client?.verifyMessage({ address, message, signature }),
+          ),
+        )
+      ).some(Boolean);
 
       return isValid;
     },
-    [mainAddress, staticRpcProvider],
+    [mainAddress, publicClient, publicClientMainnet],
   );
 };
 
-export const useVerifyMessage = () => {
+export const useVefiryMessage = () => {
   const { mainAddress } = useApplyFormData();
   return useRawVefiryMessage(mainAddress);
 };

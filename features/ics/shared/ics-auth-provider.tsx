@@ -1,5 +1,5 @@
 import { getExternalLinks } from 'consts/external-links';
-import { useAccount } from 'shared/hooks';
+import { useDappStatus } from 'modules/web3';
 import { useModalActions } from 'providers/modal-provider';
 import {
   createContext,
@@ -33,7 +33,7 @@ const { surveyApi } = getExternalLinks();
 
 export const IcsAuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const siwe = useSiwe();
-  const { address } = useAccount();
+  const { address } = useDappStatus();
   const [token, setToken] = useSessionStorage<string | undefined>(
     `ics-token-${address}`,
     undefined,
@@ -49,6 +49,8 @@ export const IcsAuthProvider: FC<PropsWithChildren> = ({ children }) => {
       const payload = await siwe();
 
       modalStages.pending();
+      // TODO: lib to work with surveys API
+      // TODO: react-query signin examples
       const response = await fetch(`${surveyApi}/auth/signin`, {
         method: 'POST',
         headers: {

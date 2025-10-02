@@ -1,7 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../base.page';
-import { TOKENS } from 'consts/tokens';
 import { SourceSelect } from 'tests/pages/elements/bondRewards/claim/sourceSelect.element';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export class ClaimPage extends BasePage {
   form: Locator;
@@ -84,10 +84,11 @@ export class ClaimPage extends BasePage {
   }
 
   async getBalanceByToken(symbol: TOKENS) {
-    return parseFloat(
-      await this.waitForTextContent(
-        this.tokenButtons.locator(`input[value="${symbol}"]`).locator('..'),
-      ),
+    return this.waitForTextContent(
+      this.tokenButtons
+        .locator(`input[value="${symbol}"]`)
+        .locator('..')
+        .getByTestId('tokenAmount'),
     );
   }
 }
