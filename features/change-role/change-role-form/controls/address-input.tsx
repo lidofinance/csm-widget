@@ -12,7 +12,7 @@ export const AddressInput: React.FC = () => {
       <FormTitle>Specify a new {role} address</FormTitle>
       <AddressInputHookForm
         fieldName="address"
-        label={`New ${role} address`}
+        label={<>New {role} address</>}
         isLocked={isManagerReset}
       />
     </>
