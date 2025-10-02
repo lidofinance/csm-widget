@@ -10,7 +10,7 @@ export const getReportConfig: () => ReporterDescription[] = function () {
     reporterConfig.push(
       reporters.githubReporter,
       reporters.qaseReporter,
-      reporters.discordReport,
+      reporters.chatReporter,
     );
   }
   return reporterConfig;
@@ -50,13 +50,13 @@ const reporters: {
   htmlReporter: ReporterDescription;
   consoleReporter: ReporterDescription;
   githubReporter: ReporterDescription;
-  discordReport: ReporterDescription;
+  chatReporter: ReporterDescription;
   qaseReporter: ReporterDescription;
 } = {
   htmlReporter: ['html', { open: 'never' }],
   consoleReporter: ['list'],
   githubReporter: ['github'],
-  discordReport: [
+  chatReporter: [
     '@lidofinance/discord-reporter',
     {
       enabled: process.env.REPORT_ENABLED,
