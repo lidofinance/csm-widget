@@ -1,7 +1,7 @@
 import { Text } from '@lidofinance/lido-ui';
 import { useLidoSDK } from 'modules/web3';
 import { FC, useCallback } from 'react';
-import { useFormContext, useWatch } from 'react-hook-form';
+import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { Pubkey } from 'shared/components';
 import {
   DataCell,
@@ -22,6 +22,8 @@ export const DepositDataParsed: FC = () => {
     clearErrors,
     formState: { errors },
   } = useFormContext<DepositDataInputType>();
+
+  const { isValidating, isSubmitting } = useFormState();
 
   const depositDataErrors = errors.depositData?.types;
 
@@ -73,7 +75,10 @@ export const DepositDataParsed: FC = () => {
             <DataCell $error={hasError}>#{index + 1}</DataCell>
             <DataCell $error={hasError}>{hasError ? 'Yes' : 'No'}</DataCell>
             <DataCell>
-              <DeleteButton onClick={() => remove(index)} />
+              <DeleteButton
+                onClick={() => remove(index)}
+                disabled={isValidating || isSubmitting}
+              />
             </DataCell>
             {hasError && (
               <DataError>

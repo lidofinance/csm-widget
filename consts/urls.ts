@@ -37,7 +37,6 @@ export const PATH = <const>{
   SURVEYS_EXPERIENCE: '/surveys/experience',
   SURVEYS_HOW_DID_YOU_LEARN_CSM: '/surveys/learn-csm',
   SURVEYS_SETUP: '/surveys/setup',
-  SURVEYS_ALL: '/surveys/all',
 };
 
 export type PATH = (typeof PATH)[keyof typeof PATH];

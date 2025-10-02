@@ -46,6 +46,7 @@ const CONTRACT_NAMES = {
   aggregatorStEthUsdPriceFeed: 'aggregatorStEthUsdPriceFeed',
   aggregatorEthUsdPrice: 'aggregatorEthUsdPrice',
   lidoLocator: 'lidoLocator',
+  lidoUnsteth: 'lidoUnsteth',
 
   ens1: 'ens1',
   ens2: 'ens2',
@@ -53,7 +54,7 @@ const CONTRACT_NAMES = {
   ens4: 'ens4',
   ens5: 'ens5',
   ens6: 'ens6',
-  some1: 'some1',
+  ens7: 'ens7',
 } as const;
 type CONTRACT_NAMES = keyof typeof CONTRACT_NAMES;
 
@@ -71,16 +72,19 @@ const STATIC_ADDRESSES: {
       '0xcfe54b5cd566ab89272946f602d76ea879cab4a8',
     [CONTRACT_NAMES.aggregatorEthUsdPrice]:
       '0x5f4ec3df9cbd43714fe2740f5e3616155c5b8419',
+    [CONTRACT_NAMES.lidoLocator]: '0xC1d0b3DE6792Bf6b4b37EccdcC24e45978Cfd2Eb',
+    [CONTRACT_NAMES.lidoUnsteth]: '0x889edC2eDab5f40e902b864aD4d7AdE8E412F9B1',
     [CONTRACT_NAMES.ens1]: '0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e',
     [CONTRACT_NAMES.ens2]: '0x231b0ee14048e9dccd1d247744d114a4eb5e8e63',
     [CONTRACT_NAMES.ens3]: '0x64969fb44091A7E5fA1213D30D7A7e8488edf693',
     [CONTRACT_NAMES.ens4]: '0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41',
     [CONTRACT_NAMES.ens5]: '0xa2c122be93b0074270ebee7f6b7292c7deb45047',
     [CONTRACT_NAMES.ens6]: '0x1da022710df5002339274aadee8d58218e9d6ab5',
+    [CONTRACT_NAMES.ens7]: '0xce01f8eee7E479C928F8919abD53E553a36CeF67',
   },
   [CHAINS.Hoodi]: {
     [CONTRACT_NAMES.lidoLocator]: '0xe2EF9536DAAAEBFf5b1c130957AB3E80056b06D8',
-    [CONTRACT_NAMES.some1]: '0xfe56573178f1bcdf53F01A6E9977670dcBBD9186', // FIXME: fix
+    [CONTRACT_NAMES.lidoUnsteth]: '0xfe56573178f1bcdf53F01A6E9977670dcBBD9186',
   },
 };
 
@@ -122,6 +126,7 @@ const METRIC_CONTRACT_ABIS: Record<CONTRACT_NAMES, Abi> = {
   [CONTRACT_NAMES.withdrawalVault]: [],
   [CONTRACT_NAMES.lidoRewardsVault]: [],
   [CONTRACT_NAMES.lidoLocator]: LidoLocatorAbi,
+  [CONTRACT_NAMES.lidoUnsteth]: [],
   [CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]: [],
   [CONTRACT_NAMES.aggregatorEthUsdPrice]: [],
   [CONTRACT_NAMES.ens1]: [],
@@ -130,7 +135,7 @@ const METRIC_CONTRACT_ABIS: Record<CONTRACT_NAMES, Abi> = {
   [CONTRACT_NAMES.ens4]: [],
   [CONTRACT_NAMES.ens5]: [],
   [CONTRACT_NAMES.ens6]: [],
-  [CONTRACT_NAMES.some1]: [],
+  [CONTRACT_NAMES.ens7]: [],
   [CONTRACT_NAMES.validatorsExitBusOracle]: ValidatorsExitBusOracleAbi,
   [CONTRACT_NAMES.stakingRouter]: StakingRouterAbi,
   [CONTRACT_NAMES.csModule]: CSModuleAbi,

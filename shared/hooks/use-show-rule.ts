@@ -1,6 +1,9 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
-import { ICS_APPLY_FORM } from 'config/feature-flags/types';
+import {
+  ICS_APPLY_FORM,
+  SURVEYS_SETUP_ENABLED,
+} from 'config/feature-flags/types';
 import { getExternalLinks } from 'consts/external-links';
 import {
   useDappStatus,
@@ -32,9 +35,11 @@ export type ShowRule =
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE';
 
+export type ShowFlags = Record<ShowRule, boolean>;
+
 const { surveyApi } = getExternalLinks();
 
-export const useShowRule = () => {
+export const useShowFlags = (): ShowFlags => {
   const { isAccountActive, address } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
@@ -50,43 +55,28 @@ export const useShowRule = () => {
   });
   const featureFlags = useFeatureFlags();
 
-  return useCallback(
-    (condition: ShowRule): boolean => {
-      switch (condition) {
-        case 'IS_CONNECTED_WALLET':
-          return isAccountActive;
-        case 'NOT_NODE_OPERATOR':
-          return isAccountActive && !nodeOperator;
-        case 'IS_NODE_OPERATOR':
-          return isAccountActive && !!nodeOperator;
-        case 'CAN_CREATE':
-          return !!canCreateNO;
-        case 'HAS_MANAGER_ROLE':
-          return !!nodeOperator?.roles.includes(ROLES.MANAGER);
-        case 'HAS_REWARDS_ROLE':
-          return !!nodeOperator?.roles.includes(ROLES.REWARDS);
-        case 'HAS_OWNER_ROLE':
-          return isAccountActive && !!isOwner;
-        case 'HAS_INVITES':
-          return !!invites?.length;
-        case 'HAS_KEYS_TO_TRANSFER':
-          return !!keysToTransfer;
-        case 'HAS_LOCKED_BOND':
-          return !!balance?.locked;
-        case 'HAS_REFERRER':
-          return !!referrer;
-        case 'CAN_CLAIM_ICS':
-          return !!canClaimICS && isAccountActive;
-        case 'ICS_ENABLED':
-          return !!featureFlags?.[ICS_APPLY_FORM];
-        case 'EL_STEALING_REPORTER':
-          return !!isReportingRole;
-        case 'IS_SURVEYS_ACTIVE':
-          return !!nodeOperator && !!surveyApi && isAccountActive;
-        default:
-          return false;
-      }
-    },
+  return useMemo(
+    () => ({
+      ['IS_CONNECTED_WALLET']: isAccountActive,
+      ['NOT_NODE_OPERATOR']: isAccountActive && !nodeOperator,
+      ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
+      ['CAN_CREATE']: !!canCreateNO,
+      ['HAS_MANAGER_ROLE']: !!nodeOperator?.roles.includes(ROLES.MANAGER),
+      ['HAS_REWARDS_ROLE']: !!nodeOperator?.roles.includes(ROLES.REWARDS),
+      ['HAS_OWNER_ROLE']: isAccountActive && !!isOwner,
+      ['HAS_INVITES']: !!invites?.length,
+      ['HAS_KEYS_TO_TRANSFER']: !!keysToTransfer,
+      ['HAS_LOCKED_BOND']: !!balance?.locked,
+      ['HAS_REFERRER']: !!referrer,
+      ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
+      ['ICS_ENABLED']: !!featureFlags?.[ICS_APPLY_FORM],
+      ['EL_STEALING_REPORTER']: !!isReportingRole,
+      ['IS_SURVEYS_ACTIVE']:
+        !!nodeOperator &&
+        !!surveyApi &&
+        isAccountActive &&
+        !!featureFlags?.[SURVEYS_SETUP_ENABLED],
+    }),
     [
       isAccountActive,
       nodeOperator,
@@ -100,6 +90,17 @@ export const useShowRule = () => {
       featureFlags,
       isReportingRole,
     ],
+  );
+};
+
+export const useShowRule = () => {
+  const flags = useShowFlags();
+
+  return useCallback(
+    (condition: ShowRule): boolean => {
+      return flags[condition];
+    },
+    [flags],
   );
 };
 
