@@ -21,6 +21,7 @@ import {
 import { isAddressEqual } from 'viem';
 import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
 type StatusHeaderProps = {
   typeStatus: TypeStatus;
@@ -68,6 +69,7 @@ const useHint = (
   comments: IcsCommentsDto | undefined,
   scores: IcsScoresDto | undefined,
   owner: NodeOperatorOwner | undefined,
+  nodeOperatorId: NodeOperatorId | undefined,
 ) => {
   const n = useNavigate();
 
@@ -83,6 +85,13 @@ const useHint = (
             owner.
           </Text>
         </>
+      );
+    case typeStatus === 'ISSUED' && nodeOperatorId === undefined && !owner:
+      return (
+        <Text size="xs">
+          Now you can create a Node Operator with ICS operator type assigned to
+          it
+        </Text>
       );
     case typeStatus === 'ISSUED':
       return (
@@ -173,7 +182,14 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
 
   const statusChip = getStatus(status, typeStatus);
   const proofChip = getProofStatus(typeStatus);
-  const hint = useHint(status, typeStatus, comments, scores, otherOwner);
+  const hint = useHint(
+    status,
+    typeStatus,
+    comments,
+    scores,
+    otherOwner,
+    nodeOperatorId,
+  );
 
   return (
     <Stack direction="column" gap="md">
