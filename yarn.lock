@@ -3052,13 +3052,13 @@
     "@lidofinance/wallets-testing-nodes" "1.4.0"
     "@lidofinance/wallets-testing-wallets" "1.36.2"
 
-"@lidofinance/discord-reporter@1.5.2":
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/@lidofinance/discord-reporter/-/discord-reporter-1.5.2.tgz#ed256460680fe86cbb14f61984e0b51985905bc8"
-  integrity sha512-LcABpTlzv301Ecv5W9mwwRaINA/9baGpqzbIoyKqNQVSJZJPyupYMKrPPXLomG2TazSTxz6Nofg648KG7tW6ow==
+"@lidofinance/discord-reporter@1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/discord-reporter/-/discord-reporter-1.7.0.tgz#5cec6c44613a013617a2e0da07a7c90ef6f8e3cb"
+  integrity sha512-lOfvH2RTRYMg9FMHeK7zefUnyAP4SmpWY/dVyyGPkx46Ax2UtI1DayKcagDZO6JWCHSlHahu8ICZD9KLi9kGCw==
   dependencies:
     "@nestjs/common" "^10.0.0"
-    axios "^0.30.0"
+    axios "^1.10.0"
     reflect-metadata "^0.1.13"
 
 "@lidofinance/eslint-config@^0.43.0":
@@ -5510,15 +5510,6 @@ axios@^0.21.0:
   dependencies:
     follow-redirects "^1.14.0"
 
-axios@^0.30.0:
-  version "0.30.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.30.0.tgz#026ae2c0ae6ac35d564056690683fb77c991d0d3"
-  integrity sha512-Z4F3LjCgfjZz8BMYalWdMgAQUnEtKDmpwNHjh/C8pQZWde32TF64cqnSeyL3xD/aTIASRU30RHTNzRiV/NpGMg==
-  dependencies:
-    follow-redirects "^1.15.4"
-    form-data "^4.0.0"
-    proxy-from-env "^1.1.0"
-
 axios@^1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.10.0.tgz#af320aee8632eaf2a400b6a1979fa75856f38d54"
@@ -7666,7 +7657,7 @@ fn.name@1.x.x:
   resolved "https://registry.yarnpkg.com/fn.name/-/fn.name-1.1.0.tgz#26cad8017967aea8731bc42961d04a3d5988accc"
   integrity sha512-GRnmB5gPyJpAhTQdSZTSp9uaPSvl09KoYcMQtsB9rQoOmzs9dH6ffeccH+Z+cv6P68Hu5bC6JjRh4Ah/mHSNRw==
 
-follow-redirects@^1.14.0, follow-redirects@^1.15.4:
+follow-redirects@^1.14.0:
   version "1.15.9"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
   integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
