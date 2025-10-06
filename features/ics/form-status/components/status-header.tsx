@@ -12,6 +12,13 @@ import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { useNavigate } from 'shared/navigate';
 
+import {
+  NodeOperatorOwner,
+  useDappStatus,
+  useNodeOperatorId,
+  useOperatorOwner,
+} from 'modules/web3';
+import { isAddressEqual } from 'viem';
 import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';
 
@@ -48,6 +55,8 @@ const getProofStatus = (typeStatus: TypeStatus) => {
       return <ScoreChip type="default">Claimed</ScoreChip>;
     case 'ISSUED':
       return <ScoreChip type="success">Issued</ScoreChip>;
+    case 'OWNER_ISSUED':
+      return <ScoreChip type="success">Approved</ScoreChip>;
     default:
       return <ScoreChip type="pending">Pending</ScoreChip>;
   }
@@ -58,12 +67,23 @@ const useHint = (
   typeStatus: TypeStatus,
   comments: IcsCommentsDto | undefined,
   scores: IcsScoresDto | undefined,
+  owner: NodeOperatorOwner | undefined,
 ) => {
   const n = useNavigate();
 
   switch (true) {
     case typeStatus === 'CLAIMED':
       return <Text size="xs">You successfully claimed your Operator type</Text>;
+    case typeStatus === 'ISSUED' && !!owner:
+      return (
+        <>
+          <Text size="xs">You&apos;re already eligible to claim ICS type</Text>
+          <Text size="xs">
+            To claim your current address should be set as your Node Operator
+            owner.
+          </Text>
+        </>
+      );
     case typeStatus === 'ISSUED':
       return (
         <>
@@ -76,6 +96,19 @@ const useHint = (
               Go to claim
             </Button>
           </div>
+        </>
+      );
+    case typeStatus === 'OWNER_ISSUED':
+      return (
+        <>
+          <Text size="xs">
+            Node Operator&apos;s owner address is already eligible to claim ICS
+            type
+          </Text>
+          <Text size="xs">
+            Connect with your Node Operator&apos;s owner address to claim ICS
+            type
+          </Text>
         </>
       );
     case status === 'REJECTED':
@@ -129,9 +162,18 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   comments,
   scores,
 }) => {
+  const { address } = useDappStatus();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: owner } = useOperatorOwner(nodeOperatorId);
+
+  const otherOwner =
+    owner && address && !isAddressEqual(owner.address, address)
+      ? owner
+      : undefined;
+
   const statusChip = getStatus(status, typeStatus);
   const proofChip = getProofStatus(typeStatus);
-  const hint = useHint(status, typeStatus, comments, scores);
+  const hint = useHint(status, typeStatus, comments, scores, otherOwner);
 
   return (
     <Stack direction="column" gap="md">

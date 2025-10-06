@@ -13,7 +13,12 @@ export type PubkeyProps = {
 } & Pick<ComponentProps<typeof Text>, 'size' | 'color'> &
   Partial<Omit<AddressProps, 'address'>>;
 
-export const Pubkey: FC<PubkeyProps> = ({ pubkey = '', symbols = 8, link }) => {
+export const Pubkey: FC<PubkeyProps> = ({
+  pubkey = '',
+  symbols = 8,
+  link,
+  color,
+}) => {
   const component = (
     <AddressComponent
       address={pubkey}
@@ -24,7 +29,7 @@ export const Pubkey: FC<PubkeyProps> = ({ pubkey = '', symbols = 8, link }) => {
   return (
     <>
       {pubkey && (
-        <PubkeyContainerStyle>
+        <PubkeyContainerStyle $color={color}>
           {symbols === 0 ? (
             component
           ) : (

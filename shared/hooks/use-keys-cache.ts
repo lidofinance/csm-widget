@@ -1,34 +1,27 @@
-import { useDappStatus } from 'modules/web3';
-import { useCallback, useMemo } from 'react';
-import { removeKeys, saveKeys } from 'shared/keys/cachedKeys';
-import { usePublicClient } from 'wagmi';
+import { useLidoSDK } from 'modules/web3';
+import { useCallback } from 'react';
 
-// FIXME: refactor
 export const useKeysCache = () => {
-  const { chainId } = useDappStatus();
-  const client = usePublicClient();
+  const {
+    csm: { keysCache },
+  } = useLidoSDK();
 
-  const addCacheKeys = useCallback(
-    async (publicKeys: string[]) => {
-      const currentBlock = await client?.getBlockNumber();
-      saveKeys(publicKeys, chainId, Number(currentBlock));
+  const addCachePubkeys = useCallback(
+    (publicKeys: string[]) => {
+      keysCache.addPubkeys(publicKeys);
     },
-    [chainId, client],
+    [keysCache],
   );
 
-  const removeCacheKeys = useCallback(
-    async (publicKeys: string[]) => {
-      const currentBlock = await client?.getBlockNumber();
-      removeKeys(publicKeys, chainId, Number(currentBlock));
+  const removeCachePubkeys = useCallback(
+    (publicKeys: string[]) => {
+      keysCache.removePubkeys(publicKeys);
     },
-    [chainId, client],
+    [keysCache],
   );
 
-  return useMemo(
-    () => ({
-      addCacheKeys,
-      removeCacheKeys,
-    }),
-    [addCacheKeys, removeCacheKeys],
-  );
+  return {
+    addCachePubkeys,
+    removeCachePubkeys,
+  };
 };

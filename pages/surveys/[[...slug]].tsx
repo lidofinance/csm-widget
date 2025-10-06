@@ -32,8 +32,6 @@ const Page = () => {
         return <SurveysHowDidYouLearnCsmPage />;
       case PATH.SURVEYS_SETUP:
         return <SurveysSetupPage id={id} />;
-      case PATH.SURVEYS_ALL:
-        return <SurveysHomePage all />;
 
       default:
         return <SurveysHomePage />;

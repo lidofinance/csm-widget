@@ -50,10 +50,10 @@ export const useRatedLink = () => {
   return `${ratedExplorer}/o/CSM%20Operator%20${nodeOperatorId}%20-%20Lido%20Community%20Staking%20Module?network=${chaiName}`;
 };
 
-export const useEthSeerLink = () => {
+export const useMigaLabsLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { ethseerDashboard } = useExternalLinks();
   const chaiName = useChainName();
-  if (!ethseerDashboard) return null;
-  return `${ethseerDashboard}/csm_operator${nodeOperatorId}_lido?network=${chaiName}`;
+  const { migalabsDashboard } = useExternalLinks();
+  if (!migalabsDashboard) return null;
+  return `${migalabsDashboard}/csm_operator${nodeOperatorId}_lido?network=${chaiName}`;
 };

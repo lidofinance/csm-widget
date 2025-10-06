@@ -74,9 +74,12 @@ jobs:
       NODE_OPTIONS: --max-old-space-size=4096
       TEST_TAGS: ${{ inputs.tags || github.event.inputs.tags }}
       TEST_BRANCH: ${{ github.event.inputs.branch }}
-      DISCORD_REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
+      REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
       DISCORD_DUTY_TAG: '&1372906915667116032'
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
+      SLACK_DUTY_TAG: 'S09H269H2TT'
+
 
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}

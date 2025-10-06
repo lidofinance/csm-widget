@@ -1,9 +1,9 @@
 import { Address } from 'viem';
 
-export interface AddressValidationFile {
+export type AddressValidationFile = {
   addresses: string[];
   isBroken?: boolean;
-}
+};
 
 export const validateAddressLocally = (
   address: Address,
@@ -14,7 +14,6 @@ export const validateAddressLocally = (
   }
 
   const normalizedAddress = address.toLowerCase();
-
   const isNotValid = validationFile.addresses.some(
     (addr) => addr.toLowerCase() === normalizedAddress,
   );

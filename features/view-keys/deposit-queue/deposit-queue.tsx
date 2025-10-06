@@ -2,6 +2,10 @@ import { Accordion, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { MatomoLink, Stack } from 'shared/components';
 import { DepositQueueGraph } from './deposit-queue-graph';
+import {
+  SUBSCRIBE_EVENTS_LINK,
+  LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW,
+} from 'consts/external-links';
 
 export const DepositQueue: FC = () => (
   <Accordion
@@ -22,14 +26,14 @@ export const DepositQueue: FC = () => (
         </p>
         <p>
           You can subscribe to{' '}
-          <MatomoLink href="https://docs.lido.fi/staking-modules/csm/guides/events">
+          <MatomoLink href={SUBSCRIBE_EVENTS_LINK}>
             the important CSM events
           </MatomoLink>{' '}
           to stay notified about your validator being deposited to.
         </p>
         <p>
           Read more information about{' '}
-          <MatomoLink href="https://operatorportal.lido.fi/modules/community-staking-module#block-90b8ff95edc64cf7a051584820219616">
+          <MatomoLink href={LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW}>
             the deposits flow
           </MatomoLink>
           .

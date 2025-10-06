@@ -1,8 +1,8 @@
-import { useDappStatus } from 'modules/web3';
+import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import type { Resolver } from 'react-hook-form';
 import {
-  handleResolverValidationError,
+  initValidator,
   validateBondAmount,
   validateDepositData,
   ValidationError,
@@ -18,85 +18,103 @@ export const useSubmitKeysValidation = (
   networkData: SubmitKeysFormNetworkData,
 ) => {
   const dataPromise = useAwaitNetworkData(networkData);
-  const { chainId } = useDappStatus();
+  const {
+    csm: { depositData: sdk },
+  } = useLidoSDK();
 
   return useCallback<Resolver<SubmitKeysFormInputType>>(
     async (values, _, options) => {
-      try {
-        const {
-          token,
-          bondAmount,
-          depositData,
-          specifyCustomAddresses,
-          rewardsAddress,
-          managerAddress,
-          confirmKeysReady,
-        } = values;
+      const {
+        token,
+        bondAmount,
+        depositData,
+        rawDepositData,
+        specifyCustomAddresses,
+        rewardsAddress,
+        managerAddress,
+        confirmKeysReady,
+      } = values;
 
-        const {
-          stethBalance,
-          wstethBalance,
-          ethBalance,
-          maxStakeEth: maxStakeEther,
-          blockNumber,
-        } = await dataPromise;
+      const {
+        stethBalance,
+        wstethBalance,
+        curveParameters,
+        ethBalance,
+        maxStakeEth,
+      } = await dataPromise;
 
+      const { validate, resolve } = initValidator(options, 'token');
+
+      await validate(['token', 'bondAmount'], () =>
         validateBondAmount({
           token,
           bondAmount,
-          maxStakeEth: maxStakeEther,
+          maxStakeEth,
           ethBalance,
           stethBalance,
           wstethBalance,
+        }),
+      );
+
+      await validate('rawDepositData', () => {
+        if (rawDepositData) {
+          const { error } = sdk.parseDepositData(rawDepositData);
+          if (error) {
+            throw new ValidationError('rawDepositData', error);
+          }
+        } else {
+          throw new ValidationError('rawDepositData', '');
+        }
+      });
+
+      await validate(['rawDepositData', 'depositData'], async () => {
+        await validateDepositData({
+          depositData,
+          sdk,
         });
+      });
 
-        if (
-          options.names?.includes('depositData') ||
-          options.names?.includes('rawDepositData')
-        )
-          await validateDepositData({
-            depositData,
-            chainId,
-            blockNumber,
-          });
+      await validate(['rawDepositData', 'depositData'], () => {
+        const keysCount = depositData?.length ?? 0;
+        const keysLimit = curveParameters?.keysLimit;
 
-        if (options.names?.includes('confirmKeysReady') && !confirmKeysReady) {
+        if (keysLimit !== undefined && keysCount > keysLimit) {
+          throw new ValidationError(
+            'depositData',
+            `Keys limit exceeded. Allowed keys count to submit: ${keysLimit}`,
+          );
+        }
+      });
+
+      await validate('confirmKeysReady', () => {
+        if (!confirmKeysReady) {
           throw new ValidationError(
             'confirmKeysReady',
             'Please confirm that the keys are ready',
           );
         }
+      });
 
-        if (specifyCustomAddresses) {
-          if (
-            options.names?.includes('rewardsAddress') &&
-            !isAddress(rewardsAddress ?? '')
-          ) {
-            throw new ValidationError(
-              'rewardsAddress',
-              'Specify valid Rewards Address',
-            );
-          }
-
-          if (
-            options.names?.includes('managerAddress') &&
-            !isAddress(managerAddress ?? '')
-          ) {
-            throw new ValidationError(
-              'managerAddress',
-              'Specify valid Manager Address',
-            );
-          }
+      await validate('rewardsAddress', () => {
+        if (specifyCustomAddresses && !isAddress(rewardsAddress ?? '')) {
+          throw new ValidationError(
+            'rewardsAddress',
+            'Specify valid Rewards Address',
+          );
         }
+      });
 
-        return {
-          values,
-          errors: {},
-        };
-      } catch (error) {
-        return handleResolverValidationError(error, 'SubmitKeysForm', 'token');
-      }
+      await validate('managerAddress', () => {
+        if (specifyCustomAddresses && !isAddress(managerAddress ?? '')) {
+          throw new ValidationError(
+            'managerAddress',
+            'Specify valid Manager Address',
+          );
+        }
+      });
+
+      return resolve(values);
     },
-    [chainId, dataPromise],
+    [dataPromise, sdk],
   );
 };

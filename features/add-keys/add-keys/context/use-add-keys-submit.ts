@@ -22,7 +22,7 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
   const { txModalStages } = useTxModalStagesAddKeys();
   const n = useNavigate();
 
-  const { addCacheKeys } = useKeysCache();
+  const { addCachePubkeys, removeCachePubkeys } = useKeysCache();
 
   return useCallback(
     async (
@@ -30,9 +30,11 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
       { nodeOperatorId }: AddKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(depositData.length, 'Keys is not defined');
+      invariant(depositData?.length, 'Keys is not defined');
       invariant(token, 'Token is not defined');
       invariant(amount !== undefined, 'BondAmount is not defined');
+
+      const pubkeys = depositData.map(({ pubkey }) => pubkey);
 
       try {
         const keysCount = depositData.length;
@@ -79,6 +81,8 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
           }
         };
 
+        addCachePubkeys(pubkeys);
+
         await csm.keys.addKeys({
           nodeOperatorId,
           token,
@@ -89,16 +93,22 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
         await onConfirm?.();
 
-        // TODO: move to onConfirm
-        void addCacheKeys(depositData.map(({ pubkey }) => pubkey));
-
         void n(PATH.KEYS_VIEW);
 
         return true;
       } catch (error) {
+        removeCachePubkeys(pubkeys);
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [csm.keys, onConfirm, addCacheKeys, n, txModalStages, onRetry],
+    [
+      addCachePubkeys,
+      csm.keys,
+      onConfirm,
+      n,
+      txModalStages,
+      onRetry,
+      removeCachePubkeys,
+    ],
   );
 };

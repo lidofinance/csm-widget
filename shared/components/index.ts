@@ -49,3 +49,4 @@ export * from './banner';
 export * from './key-strikes';
 export * from './ejectable-key-checkbox';
 export * from './chip';
+export * from './tabs';

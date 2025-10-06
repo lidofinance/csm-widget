@@ -3,7 +3,7 @@ import {
   NodeOperatorInfo,
   DepositQueueBatch,
 } from '@lidofinance/lido-csm-sdk';
-import { DepositDataInputType } from 'shared/hook-form/form-controller';
+import { DepositDataInputType } from 'shared/hook-form/deposit-data';
 
 export type MockShareLimitParams = {
   active: number;

@@ -1,6 +1,12 @@
-import { ShareLimitInfo } from '@lidofinance/lido-csm-sdk';
-import { BondBalance, NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { DepositDataInputType } from 'shared/hook-form/form-controller';
+import {
+  BondBalance,
+  CurveParameters,
+  NodeOperatorId,
+  NodeOperatorInfo,
+  ShareLimitInfo,
+  TOKENS,
+} from '@lidofinance/lido-csm-sdk';
+import { DepositDataInputType } from 'shared/hook-form/deposit-data';
 // import { KeysAvailable } from 'shared/hooks';
 import { LoadingRecord } from 'types';
 
@@ -15,21 +21,23 @@ export type AddKeysFormNetworkData = {
   wstethBalance?: bigint;
   nodeOperatorId?: NodeOperatorId;
   curveId?: bigint;
+  operatorInfo?: NodeOperatorInfo;
+  curveParameters?: CurveParameters;
   // keysAvailable?: KeysAvailable;
   bond?: BondBalance;
   isPaused?: boolean;
   maxStakeEth?: bigint;
   shareLimit?: ShareLimitInfo;
-  blockNumber?: number;
   loading: LoadingRecord<
     | 'ethBalance'
     | 'stethBalance'
     | 'wstethBalance'
+    | 'curveParameters'
     | 'bond'
     | 'maxStakeEth'
     | 'status'
     | 'shareLimit'
-    | 'blockNumber'
     | 'curveId'
+    | 'operatorInfo'
   >;
 };

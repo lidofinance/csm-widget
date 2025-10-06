@@ -6,7 +6,7 @@ import {
   useShareLimit,
 } from 'modules/web3';
 import { useFormContext } from 'react-hook-form';
-import { DepositDataInputType } from 'shared/hook-form/form-controller';
+import { DepositDataInputType } from 'shared/hook-form/deposit-data';
 import { calculateAndSelectByOperator } from './calculate-and-select-by-operator';
 import type {
   ShareLimit,

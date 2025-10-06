@@ -35,6 +35,7 @@ import { Button } from '@lidofinance/lido-ui';
 import { Setup, SetupRaw, SetupsKeys } from '../types';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useSurveysFilled } from 'shared/hooks';
+import { useNodeOperatorId } from 'modules/web3';
 
 const required = { required: true };
 
@@ -55,7 +56,8 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
   const { data: keys, mutate: mutateKeys } =
     useSurveysSWR<SetupsKeys>('setups/keys');
 
-  const { refetch } = useSurveysFilled();
+  const nodeOperatorId = useNodeOperatorId();
+  const { refetch } = useSurveysFilled(nodeOperatorId);
 
   const filledWitoutCurrent = Math.max(
     0,

@@ -13,7 +13,6 @@ export const ETHERSCAN_PREFIX_BY_NETWORK: {
   [key in CHAINS]?: string;
 } = {
   [CHAINS.Mainnet]: '',
-  [CHAINS.Holesky]: 'holesky.',
   [CHAINS.Hoodi]: 'hoodi.',
 };
 

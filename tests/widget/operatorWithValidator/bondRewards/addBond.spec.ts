@@ -38,7 +38,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
           );
 
           const expectedLinkHref =
-            'https://docs.lido.fi/staking-modules/csm/guides/unbonded-validators';
+            'https://docs.lido.fi/run-on-lido/csm/troubleshooting/unbonded-validators';
           const linkUnbondedElement =
             bondRewardsPage.addBond.formInfoText.locator('a');
           // @todo: check to click on the link

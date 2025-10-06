@@ -13,11 +13,12 @@ import {
   useDappStatus,
   useIcsProof,
   useNodeOperatorId,
+  useOperatorOwner,
   useOperatorType,
 } from 'modules/web3';
 import { OPERATOR_TYPE } from 'consts';
 
-export type TypeStatus = 'PENDING' | 'ISSUED' | 'CLAIMED';
+export type TypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
 
 type IcsStateContextType = {
   typeStatus: TypeStatus;
@@ -42,28 +43,48 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const { address } = useDappStatus();
   const operatorId = useNodeOperatorId();
   const { data: operatorType } = useOperatorType(operatorId);
+  const { data: owner } = useOperatorOwner(operatorId);
 
   const { data: proofData, isPending: isTypePending } = useIcsProof(address);
+  const { data: ownerProofData, isPending: isOwnerTypePending } = useIcsProof(
+    owner?.address,
+  );
   const { data, isPending } = useFormStatus();
 
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
 
+  const typeStatus: TypeStatus = useMemo(() => {
+    if (operatorType === OPERATOR_TYPE.ICS || proofData?.isConsumed)
+      return 'CLAIMED';
+    if (proofData?.proof) return 'ISSUED';
+    if (ownerProofData?.proof) return 'OWNER_ISSUED';
+    return 'PENDING';
+  }, [
+    operatorType,
+    ownerProofData?.proof,
+    proofData?.isConsumed,
+    proofData?.proof,
+  ]);
+
   const value: IcsStateContextType = useMemo(
     () => ({
-      typeStatus:
-        operatorType === OPERATOR_TYPE.ICS || proofData?.isConsumed
-          ? 'CLAIMED'
-          : proofData?.proof
-            ? 'ISSUED'
-            : 'PENDING',
+      typeStatus,
       data,
       isPending,
-      isTypePending,
+      isTypePending: isTypePending || (!!owner?.address && isOwnerTypePending),
       applyMode,
       reset: (value = true) => setManualReset(value),
     }),
-    [applyMode, data, isPending, isTypePending, proofData, operatorType],
+    [
+      typeStatus,
+      data,
+      isPending,
+      isTypePending,
+      owner?.address,
+      isOwnerTypePending,
+      applyMode,
+    ],
   );
 
   return (

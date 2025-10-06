@@ -167,6 +167,10 @@ export const SCORE_SOURCES: ScoreSource[] = [
             <MatomoLink href="https://app.passport.xyz/#/lido_csm/">
               Lido customized scoring system on Human Passport
             </MatomoLink>
+            . For more details, follow{' '}
+            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
+              the guide
+            </MatomoLink>
           </>
         ),
       },
@@ -180,6 +184,11 @@ export const SCORE_SOURCES: ScoreSource[] = [
             Submitted address is verified via a dedicated{' '}
             <MatomoLink href="https://app.metri.xyz/0xCFCEA7904F42fD10e32703a57922E8d2036e3231">
               Lido group on Circles
+            </MatomoLink>
+            . To be able to tie the Circles account to the ICS application, the
+            external account should be added. For more details, follow{' '}
+            <MatomoLink href="https://hackmd.io/ZpLPFR77RiSGKCUqd2d5aQ?view">
+              the guide
             </MatomoLink>
           </>
         ),
@@ -225,16 +234,24 @@ export const SCORE_SOURCES: ScoreSource[] = [
         name: 'Participation in Aragon Votes',
         icon: <IconStyle src={AragonIcon.src} />,
         points: 2,
-        description:
-          'Submitted address has voted at least twice with more than 100 LDO',
+        description: (
+          <>
+            Submitted addresses have voted at least twice, with more than 100
+            LDO. Different addresses can be used for voting
+          </>
+        ),
       },
       {
         id: 'snapshotVotes',
         name: 'Participation in Snapshot Votes',
         icon: <IconStyle src={SnapshotIcon.src} />,
         points: 1,
-        description:
-          'Submitted address has voted at least three times with more than 100 LDO',
+        description: (
+          <>
+            Submitted addresses have voted at least three times, with more than
+            100 LDO. Different addresses can be used for voting
+          </>
+        ),
       },
       {
         id: 'lidoGalxe',
@@ -269,6 +286,11 @@ export const SCORE_SOURCES: ScoreSource[] = [
             <br />- 3 points if 40 {'<'} High Signal score ≤ 60
             <br />- 4 points if 60 {'<'} High Signal score ≤ 80
             <br />- 5 points if High Signal score {'>'} 80
+            <br />
+            For more details, follow{' '}
+            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
+              the guide
+            </MatomoLink>
           </>
         ),
       },

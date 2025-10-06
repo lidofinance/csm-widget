@@ -1,5 +1,11 @@
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { Block, InlineLoader, Text } from '@lidofinance/lido-ui';
 import { DATA_UNAVAILABLE } from 'consts/text';
+import {
+  useDappStatus,
+  useNodeOperatorId,
+  useOperatorInfo,
+} from 'modules/web3';
 import { FC } from 'react';
 import { IconTooltip, MatomoLink, Stack } from 'shared/components';
 import { formatDate, formatPercent } from 'utils';
@@ -7,16 +13,18 @@ import { DiffBadge } from './diff-badge';
 import { Rate } from './styles';
 import { Tip } from './tip';
 import { useEthseerApi } from './use-ethseer-api';
-// import { useNodeOperatorId } from 'modules/web3';
+import { PerformanceMetricMethodology } from './performance-metric-methodology';
 
 export const AttestationRateSection: FC = () => {
-  // const id = useNodeOperatorId();
-  // const { data: info } = useNodeOperatorInfo(id);
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: info } = useOperatorInfo(nodeOperatorId);
   const { data, error } = useEthseerApi();
+  const { chainId } = useDappStatus();
 
-  // const showThisSection = data || (info?.totalDepositedKeys ?? 0) > 0;
+  const showThisSection =
+    chainId === CHAINS.Mainnet && (data || (info?.totalDepositedKeys ?? 0) > 0);
 
-  // if (!showThisSection) return null;
+  if (!showThisSection) return null;
 
   return (
     <Block>
@@ -36,7 +44,7 @@ export const AttestationRateSection: FC = () => {
           <Stack center gap="xs">
             <div>
               Data Source:{' '}
-              <MatomoLink href="https://ethseer.io">EthSeer</MatomoLink>
+              <MatomoLink href="https://migalabs.io">MigaLabs</MatomoLink>
             </div>
             <IconTooltip
               placement="bottomRight"
@@ -55,8 +63,8 @@ export const AttestationRateSection: FC = () => {
                 />
                 <Text size="xs" color="secondary">
                   {data.status !== 'bad'
-                    ? 'higher than Performance Threshold'
-                    : 'lower than Performance Threshold'}
+                    ? 'above Performance Threshold'
+                    : 'below Performance Threshold'}
                 </Text>
                 <IconTooltip
                   placement="bottomRight"
@@ -73,6 +81,7 @@ export const AttestationRateSection: FC = () => {
         ) : (
           <InlineLoader />
         )}
+        <PerformanceMetricMethodology />
       </Stack>
     </Block>
   );

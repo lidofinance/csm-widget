@@ -1,10 +1,11 @@
 import {
+  CurveParameters,
   Proof,
   ShareLimitInfo,
   ShareLimitStatus,
 } from '@lidofinance/lido-csm-sdk';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { DepositDataInputType } from 'shared/hook-form/form-controller';
+import { DepositDataInputType } from 'shared/hook-form/deposit-data';
 import { KeysAvailable } from 'shared/hooks';
 import { LoadingRecord } from 'types';
 import { Address } from 'viem';
@@ -26,6 +27,7 @@ export type SubmitKeysFormNetworkData = {
   stethBalance?: bigint;
   wstethBalance?: bigint;
   curveId?: bigint;
+  curveParameters?: CurveParameters;
   maxStakeEth?: bigint;
   keysAvailable?: KeysAvailable;
   isPaused?: boolean;
@@ -45,5 +47,6 @@ export type SubmitKeysFormNetworkData = {
     | 'icsPaused'
     | 'plsCurveId'
     | 'icsCurveId'
+    | 'curveParameters'
   >;
 };
