@@ -1,6 +1,7 @@
 import { MainPage, KeysPage } from 'tests/pages';
 import { test } from '../test.fixture';
 import { getRandomKeys } from '../../consts/keys.const';
+import { TokenSymbol } from 'tests/consts/common.const';
 import { expect } from '@playwright/test';
 import { trimAddress } from '@lidofinance/address';
 import { qase } from 'playwright-qase-reporter/playwright';
