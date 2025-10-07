@@ -1,7 +1,7 @@
 import { test } from '../../test.fixture';
 import { KeysPage } from 'tests/pages';
 import { getRandomKeys } from '../../../consts/keys.const';
-import { Tags, TokenSymbol } from 'tests/consts/common.const';
+import { TokenSymbol } from 'tests/consts/common.const';
 import { expect } from '@playwright/test';
 import { trimAddress } from '@lidofinance/address';
 import { qase } from 'playwright-qase-reporter/playwright';
@@ -18,7 +18,7 @@ test.describe('Operator with keys. Common suite.', async () => {
 
   test(
     qase(17, 'Should open transaction page after added 1 key'),
-    { tag: Tags.smoke },
+    // { tag: Tags.smoke }, // @TODO: enable smoke tag after keys generation will be fixed (QA-4217)
     async ({ widgetService }) => {
       const txPage = await keysPage.submitPage.submitKeys(
         getRandomKeys(),
