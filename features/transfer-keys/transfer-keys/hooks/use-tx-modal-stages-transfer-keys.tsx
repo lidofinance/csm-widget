@@ -49,7 +49,7 @@ const getTxModalStagesTransferKeys = (
           <>
             {props.keysCount}{' '}
             <Plural variants={['key', 'keys']} value={props.keysCount} /> has
-            been transferd to priority queue
+            been transfered to priority queue
           </>
         }
         description={
