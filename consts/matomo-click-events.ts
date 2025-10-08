@@ -37,6 +37,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   createSuccessBeaconchainDashboard = 'createSuccessBeaconchainDashboard',
   createSuccessBeaconchain = 'createSuccessBeaconchain',
   createSuccessSubscribeEvents = 'createSuccessSubscribeEvents',
+  transferSuccessCleanQueueLink = 'transferSuccessCleanQueueLink',
   otherModuleLink = 'otherModuleLink',
   splitsOrgDocumentation = 'splitsOrgDocumentation',
   howToClaimEthSuccessLink = 'howToClaimEthSuccessLink',
@@ -240,6 +241,11 @@ export const MATOMO_CLICK_EVENTS: Record<
     MATOMO_APP_NAME,
     'Click «subscribe events» link after Create NO',
     prefixed`create_success_subscribe_events_link`,
+  ],
+  [MATOMO_CLICK_EVENTS_TYPES.transferSuccessCleanQueueLink]: [
+    MATOMO_APP_NAME,
+    'Click «Clean Queue» link after Transfer Keys',
+    prefixed`transfer_success_clean_queue_link`,
   ],
   [MATOMO_CLICK_EVENTS_TYPES.otherModuleLink]: [
     MATOMO_APP_NAME,

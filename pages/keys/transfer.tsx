@@ -5,7 +5,7 @@ import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded>
-    <Gate rule="HAS_KEYS_TO_TRANSFER" fallback={<Navigate path={PATH.KEYS} />}>
+    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.KEYS} />}>
       <TransferKeysPage />
     </Gate>
   </GateLoaded>

@@ -1,3 +1,4 @@
+import { CurveParameters, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
 import { Plural } from 'shared/components';
 import {
   TransactionModalTransitStage,
@@ -7,9 +8,15 @@ import {
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
+import { AfterTransferWarning } from './after-transfer-warning';
 
 type Props = {
   keysCount: number;
+};
+
+type SuccessProps = Props & {
+  operatorInfo: NodeOperatorInfo;
+  curveParameters: CurveParameters;
 };
 
 const getTxModalStagesTransferKeys = (
@@ -34,7 +41,7 @@ const getTxModalStagesTransferKeys = (
       />,
     ),
 
-  success: (props: Props, txHash?: string) =>
+  success: (props: SuccessProps, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
@@ -45,7 +52,14 @@ const getTxModalStagesTransferKeys = (
             been transferd to priority queue
           </>
         }
-        description=""
+        description={
+          <>
+            <AfterTransferWarning
+              operatorInfo={props.operatorInfo}
+              curveParameters={props.curveParameters}
+            />
+          </>
+        }
       />,
       {
         isClosableOnLedger: true,

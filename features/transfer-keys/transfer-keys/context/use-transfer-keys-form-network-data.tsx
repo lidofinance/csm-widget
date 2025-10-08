@@ -2,6 +2,8 @@ import {
   useNodeOperatorId,
   useOperatorInfo,
   useOperatorKeysWithStatus,
+  useOperatorCurveId,
+  useCurveParameters,
 } from 'modules/web3';
 import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
 import { useCallback, useMemo } from 'react';
@@ -29,6 +31,12 @@ export const useTransferKeysFormNetworkData = (): [
   const { data: _keys, isPending: isKeysLoading } =
     useOperatorKeysWithStatus(nodeOperatorId);
 
+  const { data: curveId, isPending: isCurveIdLoading } =
+    useOperatorCurveId(nodeOperatorId);
+
+  const { data: curveParameters, isPending: isCurveParametersLoading } =
+    useCurveParameters(curveId);
+
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateInfo(), updateKeysToMigrate()]);
   }, [updateInfo, updateKeysToMigrate]);
@@ -38,8 +46,16 @@ export const useTransferKeysFormNetworkData = (): [
       isKeysToMigrateLoading,
       isKeysLoading,
       isInfoLoading,
+      isCurveIdLoading,
+      isCurveParametersLoading,
     }),
-    [isInfoLoading, isKeysLoading, isKeysToMigrateLoading],
+    [
+      isKeysToMigrateLoading,
+      isKeysLoading,
+      isInfoLoading,
+      isCurveIdLoading,
+      isCurveParametersLoading,
+    ],
   );
 
   const keys = _keys
@@ -52,6 +68,7 @@ export const useTransferKeysFormNetworkData = (): [
       keysToMigrate,
       info,
       keys,
+      curveParameters,
       loading,
     },
     revalidate,

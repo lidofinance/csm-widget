@@ -27,10 +27,17 @@ export const useTransferKeysSubmit = ({
   return useCallback(
     async (
       _: TransferKeysFormInputType,
-      { nodeOperatorId, keysToMigrate: keysCount }: TransferKeysFormNetworkData,
+      {
+        nodeOperatorId,
+        keysToMigrate: keysCount,
+        info,
+        curveParameters,
+      }: TransferKeysFormNetworkData,
     ): Promise<boolean> => {
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(keysCount, 'No keys to transfer');
+      invariant(info, 'Node operator info is not defined');
+      invariant(curveParameters, 'Curve parameters is not defined');
 
       try {
         const callback: TransactionCallback = async ({ stage, payload }) => {
@@ -42,7 +49,10 @@ export const useTransferKeysSubmit = ({
               txModalStages.pending({ keysCount }, payload.hash);
               break;
             case TransactionCallbackStage.DONE: {
-              txModalStages.success({ keysCount }, payload.hash);
+              txModalStages.success(
+                { keysCount, operatorInfo: info, curveParameters },
+                payload.hash,
+              );
               break;
             }
             case TransactionCallbackStage.MULTISIG_DONE:
