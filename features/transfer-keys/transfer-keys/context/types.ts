@@ -1,5 +1,4 @@
 import {
-  CurveParameters,
   KeyWithStatus,
   NodeOperatorId,
   NodeOperatorInfo,
@@ -15,6 +14,6 @@ export type TransferKeysFormNetworkData = {
   keys?: KeyWithStatus[];
   info?: NodeOperatorInfo;
   keysToMigrate?: number;
-  curveParameters?: CurveParameters;
+  needCleanup?: boolean;
   loading: LoadingRecord<'keys' | 'info' | 'keysToMigrate' | 'curveParameters'>;
 };

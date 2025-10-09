@@ -1,4 +1,3 @@
-import { CurveParameters, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
 import { Plural } from 'shared/components';
 import {
   TransactionModalTransitStage,
@@ -8,15 +7,9 @@ import {
   getGeneralTransactionModalStages,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { AfterTransferWarning } from './after-transfer-warning';
 
 type Props = {
   keysCount: number;
-};
-
-type SuccessProps = Props & {
-  operatorInfo: NodeOperatorInfo;
-  curveParameters: CurveParameters;
 };
 
 const getTxModalStagesTransferKeys = (
@@ -41,7 +34,7 @@ const getTxModalStagesTransferKeys = (
       />,
     ),
 
-  success: (props: SuccessProps, txHash?: string) =>
+  success: (props: Props, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
@@ -52,14 +45,42 @@ const getTxModalStagesTransferKeys = (
             been transfered to priority queue
           </>
         }
-        description={
+        description=""
+      />,
+      {
+        isClosableOnLedger: true,
+      },
+    ),
+
+  signCleanup: () =>
+    transitStage(
+      <TxStageSign
+        title={`Cleaning up batches in legacy queue`}
+        description=""
+      />,
+    ),
+
+  pendingCleanup: (txHash?: string) =>
+    transitStage(
+      <TxStagePending
+        title={`Cleaning up batches in legacy queue`}
+        description=""
+        txHash={txHash}
+      />,
+    ),
+
+  successCleanup: (props: Props, txHash?: string) =>
+    transitStage(
+      <TxStageSuccess
+        txHash={txHash}
+        title={
           <>
-            <AfterTransferWarning
-              operatorInfo={props.operatorInfo}
-              curveParameters={props.curveParameters}
-            />
+            {props.keysCount}{' '}
+            <Plural variants={['key', 'keys']} value={props.keysCount} /> has
+            been transfered to priority queue
           </>
         }
+        description="And legacy queue has been cleaned up"
       />,
       {
         isClosableOnLedger: true,

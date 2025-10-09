@@ -9,6 +9,7 @@ import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-t
 import { useCallback, useMemo } from 'react';
 import { type TransferKeysFormNetworkData } from './types';
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
+import { canAddMorePriorityKeys } from 'utils';
 
 export const useTransferKeysFormNetworkData = (): [
   TransferKeysFormNetworkData,
@@ -36,6 +37,9 @@ export const useTransferKeysFormNetworkData = (): [
 
   const { data: curveParameters, isPending: isCurveParametersLoading } =
     useCurveParameters(curveId);
+
+  const needCleanup =
+    info && curveParameters && canAddMorePriorityKeys(info, curveParameters);
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([updateInfo(), updateKeysToMigrate()]);
@@ -68,7 +72,7 @@ export const useTransferKeysFormNetworkData = (): [
       keysToMigrate,
       info,
       keys,
-      curveParameters,
+      needCleanup,
       loading,
     },
     revalidate,
