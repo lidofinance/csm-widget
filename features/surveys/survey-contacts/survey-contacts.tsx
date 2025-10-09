@@ -14,9 +14,12 @@ import { useConfirmRemoveModal } from './confirm-remove-modal';
 import { useModalStages } from './use-modal-stages';
 import { Text } from '@lidofinance/lido-ui';
 import { Contact } from '../types';
+import { transformOutcoming } from './transform';
 
 export const SurveyContacts: FC = () => {
-  const { data, mutate, remove } = useSurveysSWR<Contact>('contacts');
+  const { data, mutate, remove } = useSurveysSWR<Contact>('contacts', {
+    transformOutcoming,
+  });
   const { txModalStages: modals } = useModalStages();
   const confirmRemove = useConfirmRemoveModal();
   const navigate = useNavigate();
