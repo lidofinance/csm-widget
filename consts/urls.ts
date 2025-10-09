@@ -11,6 +11,8 @@ export const PATH = <const>{
   KEYS_TRANSFER: '/keys/transfer',
   KEYS_NORMALIZE: '/keys/normalize',
 
+  QUEUE_CLEAN: '/queue/clean',
+
   MONITORING: '/monitoring',
 
   BOND: '/bond',
