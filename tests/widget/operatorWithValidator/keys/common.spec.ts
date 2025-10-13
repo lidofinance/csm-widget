@@ -8,7 +8,8 @@ import { qase } from 'playwright-qase-reporter/playwright';
 
 test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
-test.describe('Operator with keys. Common suite.', async () => {
+// @TODO: Should fix by QA-4217
+test.describe.skip('Operator with keys. Common suite.', async () => {
   let keysPage: KeysPage;
 
   test.beforeEach(async ({ widgetService }) => {

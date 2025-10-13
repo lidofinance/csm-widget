@@ -5,7 +5,6 @@ export const getReportConfig: () => ReporterDescription[] = function () {
   const reporterConfig: ReporterDescription[] = [
     reporters.htmlReporter,
     reporters.consoleReporter,
-    reporters.pgReporter,
   ];
   if (process.env.CI) {
     reporterConfig.push(
@@ -13,6 +12,10 @@ export const getReportConfig: () => ReporterDescription[] = function () {
       reporters.qaseReporter,
       reporters.chatReporter,
     );
+
+    if (process.env.GH_EVENT_NAME !== 'workflow_dispatch') {
+      reporterConfig.push(reporters.pgReporter);
+    }
   }
   return reporterConfig;
 };

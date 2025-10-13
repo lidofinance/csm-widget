@@ -40,7 +40,7 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
         const whyModal = widgetService.dashboardPage.whyModal;
         await whyModal.waitFor({ state: 'visible' });
         const expectedTextContent =
-          'There are two main reasons of you getting no reward within a frame:If your validator’s performance was below the threshold within the CSM Performance Oracle frame (7 days for testnet) the validator does not receive rewards for the given frame. Read more about the CSM Performance Oracle.';
+          'Why didn’t I get rewards?There are main reason of you getting no reward within a frame:If your validator’s performance was below the threshold within the CSM Performance Oracle frame the validator does not receive rewards for the given frame. Read more about the CSM Performance Oracle.';
         await expect(whyModal).toContainText('Why didn’t I get rewards?');
         await expect(whyModal).toContainText(expectedTextContent);
       });
