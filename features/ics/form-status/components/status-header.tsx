@@ -20,6 +20,7 @@ import {
 import { isAddressEqual } from 'viem';
 import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
 type StatusHeaderProps = {
   typeStatus: TypeStatus;
@@ -67,6 +68,7 @@ const useHint = (
   comments: IcsCommentsDto | undefined,
   scores: IcsScoresDto | undefined,
   owner: NodeOperatorOwner | undefined,
+  nodeOperatorId: NodeOperatorId | undefined,
 ) => {
   const n = useNavigate();
 
@@ -81,6 +83,20 @@ const useHint = (
             To claim your current address should be set as your Node Operator
             owner.
           </Text>
+        </>
+      );
+    case typeStatus === 'ISSUED' && !nodeOperatorId:
+      return (
+        <>
+          <Text size="xs">
+            Create a new Node Operator with ICS operator type
+          </Text>
+
+          <div>
+            <Button size="xs" onClick={() => n(PATH.CREATE)}>
+              Go to create Node Operator
+            </Button>
+          </div>
         </>
       );
     case typeStatus === 'ISSUED':
@@ -171,7 +187,14 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
 
   const statusChip = getStatus(status, typeStatus);
   const proofChip = getProofStatus(typeStatus);
-  const hint = useHint(status, typeStatus, comments, scores, otherOwner);
+  const hint = useHint(
+    status,
+    typeStatus,
+    comments,
+    scores,
+    otherOwner,
+    nodeOperatorId,
+  );
 
   return (
     <Stack direction="column" gap="md">
