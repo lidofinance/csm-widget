@@ -56,7 +56,7 @@ const getTxModalStagesTransferKeys = (
     transitStage(
       <TxStageSign
         title={`Cleaning up batches in legacy queue`}
-        description=""
+        description="To maintain correct priority for your new keys"
       />,
     ),
 
@@ -64,7 +64,7 @@ const getTxModalStagesTransferKeys = (
     transitStage(
       <TxStagePending
         title={`Cleaning up batches in legacy queue`}
-        description=""
+        description="To maintain correct priority for your new keys"
         txHash={txHash}
       />,
     ),

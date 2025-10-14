@@ -72,6 +72,8 @@ export const useTransferKeysSubmit = ({
           callback,
         });
 
+        const promise = onConfirm?.();
+
         if (needCleanup) {
           const callback: TransactionCallback = async ({ stage, payload }) => {
             switch (stage) {
@@ -98,7 +100,7 @@ export const useTransferKeysSubmit = ({
           await csm.depositQueue.clean({ callback });
         }
 
-        await onConfirm?.();
+        await promise;
 
         return true;
       } catch (error) {
