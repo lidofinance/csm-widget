@@ -17,14 +17,14 @@ import type { DepositQueueAnalysis } from './calculate-and-select-by-operator';
 import { useCurrentCurveId } from 'shared/hooks';
 import { calculatePriorityPlacement } from './calculate-priority-placement';
 
-export interface QueueDataResult {
+export type QueueDataResult = {
   nodeOperatorId: bigint | undefined;
   operatorInfo: OperatorInfo | undefined;
   shareLimit: ShareLimit | undefined;
   queueAnalysis: DepositQueueAnalysis | undefined;
   submittingAllocation: SubmittingAllocation | undefined;
   isLoading: boolean;
-}
+};
 
 export const useQueueData = (): QueueDataResult => {
   const nodeOperatorId = useNodeOperatorId();

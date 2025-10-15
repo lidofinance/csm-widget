@@ -12,7 +12,7 @@ import {
   calculateLimitOffset,
   calculateSegmentSize,
 } from './graph-calculations';
-import { OperatorBatchCollector } from './operator-batch-collector';
+import { collectOperatorBatches } from './operator-batch-collector';
 
 const getPriorityType = (priority: number, overLimit: boolean): GraphPart => {
   const base = `priority${priority}`;
@@ -45,23 +45,7 @@ export const createMultiQueueVisualization = (
   const limitOffset = calculateLimitOffset(capacity, bounds);
 
   // Process multi-queue data
-  const { queueAnalysis: queues, totalKeysCount } = queueAnalysis;
-
-  // Calculate normalization coefficient
-  const normalizationFactor =
-    totalKeysCount > 0n && queue > 0n
-      ? Number((queue * 100n) / totalKeysCount) / 100
-      : 1;
-
-  // Initialize batch collector
-  const depositableLimit = BigInt(
-    operatorInfo?.depositableValidatorsCount || 0,
-  );
-  const batchCollector = new OperatorBatchCollector(
-    depositableLimit,
-    normalizationFactor,
-    bounds,
-  );
+  const { queueAnalysis: queues } = queueAnalysis;
 
   // Process priority queues and insert added keys at appropriate positions
   const priorityQueues: QueuePart[] = [];
@@ -69,19 +53,17 @@ export const createMultiQueueVisualization = (
 
   queues.forEach((queueData) => {
     if (queueData.totalKeysInQueue > 0n) {
-      const normalizedKeysCount = BigInt(
-        Math.round(Number(queueData.totalKeysInQueue) * normalizationFactor),
-      ); // TODO: think how to simplify it
+      const keysInQueue = queueData.totalKeysInQueue;
 
       // Calculate queue segments
       const queueUnderLimit =
         activeLeft > 0n && cumulativeKeys < activeLeft
-          ? cumulativeKeys + normalizedKeysCount <= activeLeft
-            ? normalizedKeysCount
+          ? cumulativeKeys + keysInQueue <= activeLeft
+            ? keysInQueue
             : activeLeft - cumulativeKeys
           : 0n;
 
-      const queueOverLimit = normalizedKeysCount - queueUnderLimit;
+      const queueOverLimit = keysInQueue - queueUnderLimit;
       const segmentStartPos = active + cumulativeKeys;
 
       const underLimitSize = calculateSegmentSize(
@@ -109,7 +91,7 @@ export const createMultiQueueVisualization = (
         },
       );
 
-      cumulativeKeys += normalizedKeysCount;
+      cumulativeKeys += keysInQueue;
     }
 
     const [, submitting] =
@@ -133,7 +115,15 @@ export const createMultiQueueVisualization = (
   });
 
   // Collect all operator batches across all queues
-  const operatorData = batchCollector.collectAllBatches(queues, active);
+  const depositableLimit = BigInt(
+    operatorInfo?.depositableValidatorsCount || 0,
+  );
+  const operatorData = collectOperatorBatches({
+    queueDataList: queues,
+    activeKeys: active,
+    depositableLimit,
+    bounds,
+  });
 
   return {
     parts: [

@@ -3,149 +3,144 @@ import { QueueAnalysis } from './calculate-and-select-by-operator';
 import type { GraphBounds, OperatorBatch } from './enhanced-types';
 import { normalizeToGraphCoordinate } from './graph-calculations';
 
-interface BatchInfo {
+type BatchInfo = {
   keysCount: bigint;
   absoluteOffset: bigint; // Position from the start of all queues
   priority: number;
   queueStartPos: bigint; // Where this queue starts in absolute terms
   queueSize: bigint; // Total keys in this queue
-}
+};
 
-// TODO: rewrite to functions
-export class OperatorBatchCollector {
-  private depositableLimit: bigint;
-  private normalizationFactor: number;
-  private minSize: number;
-  private bounds: GraphBounds;
+type CollectOperatorBatchesProps = {
+  queueDataList: QueueAnalysis[];
+  activeKeys: bigint;
+  depositableLimit: bigint;
+  bounds: GraphBounds;
+};
 
-  constructor(
-    depositableLimit: bigint,
-    normalizationFactor: number,
-    bounds: GraphBounds,
-  ) {
-    this.depositableLimit = depositableLimit;
-    this.normalizationFactor = normalizationFactor;
-    this.minSize = bounds.minSegmentSize;
-    this.bounds = bounds;
-  }
+/**
+ * Collects all operator batches from multiple priority queues,
+ * converts them to graph coordinates, and combines adjacent batches.
+ */
+export const collectOperatorBatches = ({
+  queueDataList,
+  activeKeys,
+  depositableLimit,
+  bounds,
+}: CollectOperatorBatchesProps): OperatorQueue => {
+  const allBatchInfos: BatchInfo[] = [];
+  let cumulativeKeys = 0n;
+  let depositableKeysUsed = 0n;
 
-  collectAllBatches(
-    queueDataList: QueueAnalysis[],
-    activeKeys: bigint,
-  ): OperatorQueue {
-    const allBatchInfos: BatchInfo[] = [];
-    let cumulativeKeys = 0n;
-    let depositableKeysUsed = 0n;
+  // Collect all batch information
+  queueDataList.forEach((queueData) => {
+    const queueStartPos = activeKeys + cumulativeKeys;
+    const keysCountInQueue = queueData.totalKeysInQueue;
 
-    // Collect all batch information
-    queueDataList.forEach((queueData) => {
-      const queueStartPos = activeKeys + cumulativeKeys;
+    queueData.operatorBatches.forEach((batch) => {
+      const batchKeysCount = BigInt(batch.keysCount);
+      const batchOffset = batch.offset;
 
-      const normalizedKeysCount = BigInt(
-        Math.round(
-          Number(queueData.totalKeysInQueue) * this.normalizationFactor,
-        ),
-      );
+      // Check if we still have depositable limit
+      if (depositableKeysUsed >= depositableLimit) {
+        return;
+      }
 
-      queueData.operatorBatches.forEach((batch) => {
-        const normalizedKeysCount = this.normalizeBatchKeys(batch.keysCount);
-        const normalizedOffset = this.normalizeBatchKeys(batch.offset);
+      // Trim to depositable limit
+      const remainingLimit = depositableLimit - depositableKeysUsed;
+      const trimmedKeysCount =
+        batchKeysCount > remainingLimit ? remainingLimit : batchKeysCount;
 
-        // Check if we still have depositable limit
-        if (depositableKeysUsed >= this.depositableLimit) {
-          return;
-        }
+      if (trimmedKeysCount > 0n) {
+        allBatchInfos.push({
+          keysCount: trimmedKeysCount,
+          absoluteOffset: queueStartPos + batchOffset,
+          priority: queueData.queueIndex,
+          queueStartPos,
+          queueSize: keysCountInQueue,
+        });
 
-        // Trim to depositable limit
-        const remainingLimit = this.depositableLimit - depositableKeysUsed;
-        const trimmedKeysCount =
-          normalizedKeysCount > remainingLimit
-            ? remainingLimit
-            : normalizedKeysCount;
-
-        if (trimmedKeysCount > 0n) {
-          allBatchInfos.push({
-            keysCount: trimmedKeysCount,
-            absoluteOffset: queueStartPos + normalizedOffset,
-            priority: queueData.queueIndex,
-            queueStartPos,
-            queueSize: normalizedKeysCount,
-          });
-
-          depositableKeysUsed += trimmedKeysCount;
-        }
-      });
-
-      cumulativeKeys += normalizedKeysCount;
+        depositableKeysUsed += trimmedKeysCount;
+      }
     });
 
-    // Convert to graph coordinates and combine adjacent batches
-    const graphBatches = this.convertToGraphBatches(allBatchInfos);
-    const combinedBatches = this.combineAdjacentBatches(graphBatches);
+    cumulativeKeys += keysCountInQueue;
+  });
+
+  // Convert to graph coordinates and combine adjacent batches
+  const graphBatches = convertToGraphBatches(allBatchInfos, bounds);
+  const combinedBatches = combineAdjacentBatches(graphBatches);
+
+  return {
+    keysCount: depositableLimit,
+    batches: combinedBatches,
+  };
+};
+
+/**
+ * Converts batch information to graph coordinates with normalized positions.
+ */
+const convertToGraphBatches = (
+  batchInfos: BatchInfo[],
+  bounds: GraphBounds,
+): OperatorBatch[] => {
+  const minSize = bounds.minSegmentSize;
+
+  return batchInfos.map((batchInfo) => {
+    const startPos = normalizeToGraphCoordinate(
+      batchInfo.absoluteOffset,
+      bounds,
+    );
+    const endPos = normalizeToGraphCoordinate(
+      batchInfo.absoluteOffset + batchInfo.keysCount,
+      bounds,
+    );
+
+    const size = Math.max(minSize, endPos - startPos);
 
     return {
-      keysCount: this.depositableLimit,
-      batches: combinedBatches,
+      offset: startPos,
+      width: size,
     };
-  }
+  });
+};
 
-  private normalizeBatchKeys(keysCount: bigint): bigint {
-    return BigInt(Math.round(Number(keysCount) * this.normalizationFactor));
-  }
+/**
+ * Combines adjacent or overlapping batches to reduce visual clutter.
+ * Uses a 0.5% tolerance for determining adjacency.
+ */
+const combineAdjacentBatches = (batches: OperatorBatch[]): OperatorBatch[] => {
+  if (batches.length <= 1) return batches;
 
-  private convertToGraphBatches(batchInfos: BatchInfo[]): OperatorBatch[] {
-    return batchInfos.map((batchInfo) => {
-      const startPos = normalizeToGraphCoordinate(
-        batchInfo.absoluteOffset,
-        this.bounds,
-      );
-      const endPos = normalizeToGraphCoordinate(
-        batchInfo.absoluteOffset + batchInfo.keysCount,
-        this.bounds,
-      );
+  // Sort by offset
+  const sortedBatches = [...batches].sort((a, b) => a.offset - b.offset);
+  const combined: OperatorBatch[] = [];
 
-      const size = Math.max(this.minSize, endPos - startPos);
+  let current = sortedBatches[0];
 
-      return {
-        offset: startPos,
-        width: size,
+  for (let i = 1; i < sortedBatches.length; i++) {
+    const next = sortedBatches[i];
+    const currentEnd = current.offset + current.width;
+
+    // Check if batches are adjacent or overlapping (with small tolerance for visual proximity)
+    const isAdjacent = Math.abs(next.offset - currentEnd) <= 0.5; // 0.5% tolerance
+
+    if (isAdjacent) {
+      // Combine batches
+      const combinedEnd = Math.max(currentEnd, next.offset + next.width);
+      current = {
+        offset: current.offset,
+        width: combinedEnd - current.offset,
       };
-    });
-  }
-
-  private combineAdjacentBatches(batches: OperatorBatch[]): OperatorBatch[] {
-    if (batches.length <= 1) return batches;
-
-    // Sort by offset
-    const sortedBatches = [...batches].sort((a, b) => a.offset - b.offset);
-    const combined: OperatorBatch[] = [];
-
-    let current = sortedBatches[0];
-
-    for (let i = 1; i < sortedBatches.length; i++) {
-      const next = sortedBatches[i];
-      const currentEnd = current.offset + current.width;
-
-      // Check if batches are adjacent or overlapping (with small tolerance for visual proximity)
-      const isAdjacent = Math.abs(next.offset - currentEnd) <= 0.5; // 0.5% tolerance
-
-      if (isAdjacent) {
-        // Combine batches
-        const combinedEnd = Math.max(currentEnd, next.offset + next.width);
-        current = {
-          offset: current.offset,
-          width: combinedEnd - current.offset,
-        };
-      } else {
-        // Add current batch and start new one
-        combined.push(current);
-        current = next;
-      }
+    } else {
+      // Add current batch and start new one
+      combined.push(current);
+      current = next;
     }
-
-    // Add the last batch
-    combined.push(current);
-
-    return combined;
   }
-}
+
+  // Add the last batch
+  combined.push(current);
+
+  return combined;
+};
