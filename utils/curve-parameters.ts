@@ -1,4 +1,9 @@
-import { KeyNumberValueInterval, QueueConfig } from '@lidofinance/lido-csm-sdk';
+import {
+  CurveParameters,
+  KeyNumberValueInterval,
+  NodeOperatorInfo,
+  QueueConfig,
+} from '@lidofinance/lido-csm-sdk';
 
 /**
  * Find the value from an interval configuration for a specific key index
@@ -67,4 +72,11 @@ export const getQueueTypeForKey = (
 
   const actualKeyIndex = existingKeysCount + keyIndex;
   return actualKeyIndex <= queueConfig.maxDeposits ? 'Priority' : 'Basic';
+};
+
+export const canAddMorePriorityKeys = (
+  { totalAddedKeys }: Pick<NodeOperatorInfo, 'totalAddedKeys'>,
+  { queueConfig }: Pick<CurveParameters, 'queueConfig'>,
+): boolean => {
+  return totalAddedKeys < queueConfig.maxDeposits;
 };

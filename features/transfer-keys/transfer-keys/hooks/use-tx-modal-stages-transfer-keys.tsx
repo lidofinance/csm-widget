@@ -42,10 +42,45 @@ const getTxModalStagesTransferKeys = (
           <>
             {props.keysCount}{' '}
             <Plural variants={['key', 'keys']} value={props.keysCount} /> has
-            been transferd to priority queue
+            been transfered to priority queue
           </>
         }
         description=""
+      />,
+      {
+        isClosableOnLedger: true,
+      },
+    ),
+
+  signCleanup: () =>
+    transitStage(
+      <TxStageSign
+        title={`Cleaning up batches in legacy queue`}
+        description="To maintain correct priority for your new keys"
+      />,
+    ),
+
+  pendingCleanup: (txHash?: string) =>
+    transitStage(
+      <TxStagePending
+        title={`Cleaning up batches in legacy queue`}
+        description="To maintain correct priority for your new keys"
+        txHash={txHash}
+      />,
+    ),
+
+  successCleanup: (props: Props, txHash?: string) =>
+    transitStage(
+      <TxStageSuccess
+        txHash={txHash}
+        title={
+          <>
+            {props.keysCount}{' '}
+            <Plural variants={['key', 'keys']} value={props.keysCount} /> has
+            been transfered to priority queue
+          </>
+        }
+        description="And legacy queue has been cleaned up"
       />,
       {
         isClosableOnLedger: true,
