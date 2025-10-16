@@ -69,19 +69,26 @@ export const DepositDataParsed: FC = () => {
 
         return (
           <TableRow key={pubkey}>
-            <DataCell $error={hasError}>
+            <DataCell $error={hasError} data-testid="deposit-data-pubkey">
               <Pubkey pubkey={pubkey} color={hasError ? 'error' : 'default'} />
             </DataCell>
-            <DataCell $error={hasError}>#{index + 1}</DataCell>
-            <DataCell $error={hasError}>{hasError ? 'Yes' : 'No'}</DataCell>
-            <DataCell>
+            <DataCell $error={hasError} data-testid="deposit-data-index">
+              #{index + 1}
+            </DataCell>
+            <DataCell
+              $error={hasError}
+              data-testid="deposit-data-error-detected"
+            >
+              {hasError ? 'Yes' : 'No'}
+            </DataCell>
+            <DataCell data-testid="deposit-data-delete-key">
               <DeleteButton
                 onClick={() => remove(index)}
                 disabled={isValidating || isSubmitting}
               />
             </DataCell>
             {hasError && (
-              <DataError>
+              <DataError data-testid="deposit-data-error">
                 {errors?.map((error) => (
                   <Text key={error} color="secondary" size="xxs">
                     {error}
