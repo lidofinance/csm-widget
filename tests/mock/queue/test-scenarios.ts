@@ -1,4 +1,5 @@
 import { MockScenarioData } from './mock-data';
+import { realCaseScenario } from './real-case-scenario';
 
 export type TestScenario = {
   title: string;
@@ -7,6 +8,111 @@ export type TestScenario = {
 };
 
 export const testScenarios: TestScenario[] = [
+  // ========================================
+  // GROUP 0: REAL PRODUCTION DATA
+  // ========================================
+  realCaseScenario,
+  {
+    title: '[Real] All Priorities Empty Except P5',
+    description: 'Realistic scenario where only general queue has validators',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 150,
+        queue: 180,
+        capacity: 500,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 45, // Less than batch sum (50)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [],
+          [],
+          [],
+          [], // Priorities 0-4: Empty
+          [
+            [1, 50],
+            [2, 70],
+            [3, 60],
+          ], // Priority 5: All keys here
+        ],
+      },
+    },
+  },
+  {
+    title: '[Real] Far Away Indicator Trigger',
+    description: 'Small queue with large capacity triggering far-away view',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 50,
+        queue: 25,
+        capacity: 2000, // Very large capacity
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 8,
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [[2, 10]], // Priority 0: Small queue
+          [],
+          [],
+          [],
+          [], // Empty priorities
+          [
+            [1, 8],
+            [3, 7],
+          ], // Priority 5: Small operator presence
+        ],
+      },
+    },
+  },
+  {
+    title: '[Real] Operator Across All Production Priorities',
+    description: 'Operator has keys in P0, P4, and P5 simultaneously',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 400,
+        queue: 350,
+        capacity: 900,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 120, // Less than batch sum (140)
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [1, 60],
+            [2, 50],
+          ], // Priority 0: Operator present
+          [],
+          [],
+          [], // Reserved
+          [
+            [1, 40],
+            [3, 70],
+          ], // Priority 4: Operator present
+          [
+            [1, 40],
+            [4, 60],
+            [5, 30],
+          ], // Priority 5: Operator present
+        ],
+      },
+    },
+  },
+
   // ========================================
   // GROUP A: BASIC QUEUE STATES
   // ========================================
@@ -1444,110 +1550,6 @@ export const testScenarios: TestScenario[] = [
             [13, 30],
             [1, 3],
           ], // Priority 5: 83 total, operator 1 at the end with 3 keys
-        ],
-      },
-    },
-  },
-
-  // ========================================
-  // GROUP L: REALISTIC EDGE CASES
-  // ========================================
-  {
-    title: '[Real] All Priorities Empty Except P5',
-    description: 'Realistic scenario where only general queue has validators',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 150,
-        queue: 180,
-        capacity: 500,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 45, // Less than batch sum (50)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        priorities: [
-          [],
-          [],
-          [],
-          [], // Priorities 0-4: Empty
-          [
-            [1, 50],
-            [2, 70],
-            [3, 60],
-          ], // Priority 5: All keys here
-        ],
-      },
-    },
-  },
-  {
-    title: '[Real] Far Away Indicator Trigger',
-    description: 'Small queue with large capacity triggering far-away view',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 50,
-        queue: 25,
-        capacity: 2000, // Very large capacity
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 8,
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        priorities: [
-          [[2, 10]], // Priority 0: Small queue
-          [],
-          [],
-          [],
-          [], // Empty priorities
-          [
-            [1, 8],
-            [3, 7],
-          ], // Priority 5: Small operator presence
-        ],
-      },
-    },
-  },
-  {
-    title: '[Real] Operator Across All Production Priorities',
-    description: 'Operator has keys in P0, P4, and P5 simultaneously',
-    data: {
-      nodeOperatorId: 1,
-      shareLimit: {
-        active: 400,
-        queue: 350,
-        capacity: 900,
-      },
-      operatorInfo: {
-        depositableValidatorsCount: 120, // Less than batch sum (140)
-      },
-      formData: {
-        depositDataLength: 0,
-      },
-      depositQueueBatches: {
-        priorities: [
-          [
-            [1, 60],
-            [2, 50],
-          ], // Priority 0: Operator present
-          [],
-          [],
-          [], // Reserved
-          [
-            [1, 40],
-            [3, 70],
-          ], // Priority 4: Operator present
-          [
-            [1, 40],
-            [4, 60],
-            [5, 30],
-          ], // Priority 5: Operator present
         ],
       },
     },
