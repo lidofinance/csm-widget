@@ -39,7 +39,10 @@ import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 type ChainsList = [wagmiChains.Chain, ...wagmiChains.Chain[]];
 
-const WALLETS_PINNED: WalletIdsEthereum[] = ['browserExtension'];
+const WALLETS_PINNED: WalletIdsEthereum[] = [
+  'browserExtension',
+  'walletConnect',
+];
 
 export const wagmiChainMap = Object.values(wagmiChains).reduce(
   (acc, chain) => {

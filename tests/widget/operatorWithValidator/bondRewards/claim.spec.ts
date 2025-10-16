@@ -124,7 +124,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
           await test.step('Verify waiting time and receive data', async () => {
             if (tokenName === TOKENS.eth) {
               await expect(token.getByTestId('waitingTime')).toContainText(
-                'Waiting time:~ 1-5 days',
+                'Waiting time:Check on stake widget',
               );
               await expect(token.getByTestId('receive')).toContainText(
                 'Receive:withdrawal NFT',

@@ -1,14 +1,15 @@
 import { MainPage, KeysPage } from 'tests/pages';
 import { test } from '../test.fixture';
 import { getRandomKeys } from '../../consts/keys.const';
-import { Tags, TokenSymbol } from 'tests/consts/common.const';
+import { TokenSymbol } from 'tests/consts/common.const';
 import { expect } from '@playwright/test';
 import { trimAddress } from '@lidofinance/address';
 import { qase } from 'playwright-qase-reporter/playwright';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
-test.describe('Operator without keys. Common suite.', async () => {
+// @TODO: Should fix by QA-4217
+test.describe.skip('Operator without keys. Common suite.', async () => {
   let mainPage: MainPage;
   let createKeysPage: KeysPage;
 
@@ -20,7 +21,7 @@ test.describe('Operator without keys. Common suite.', async () => {
 
   test(
     qase(47, 'Should open transaction page after added 1 key'),
-    { tag: Tags.smoke },
+    // { tag: Tags.smoke }, // @TODO: enable smoke tag after keys generation will be fixed (QA-4217)
     async ({ widgetService }) => {
       await mainPage.starterPackSection.createNodeOperatorBtn.click();
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({

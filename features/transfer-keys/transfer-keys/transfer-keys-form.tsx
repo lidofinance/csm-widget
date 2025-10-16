@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import { TransferKeysFormProvider } from './context';
 import { KeysSelector } from './controls/keys-selector';
+import { CleanupInfoNote } from './controls/cleanup-info-note';
 import { SubmitButton } from './controls/submit-button';
 import { FormLoading } from './form-loading';
 import { TransferKeysFormInfo } from './transfer-keys-form-info';
@@ -14,6 +15,7 @@ export const TransferKeysForm: FC = memo(() => {
         <FormLoading>
           <FormControllerStyled>
             <KeysSelector />
+            <CleanupInfoNote />
             <SubmitButton />
           </FormControllerStyled>
           <TransferKeysFormInfo />

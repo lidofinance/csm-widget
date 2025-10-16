@@ -110,7 +110,7 @@ export const CommentDepositable: FC = () => {
   ) : (
     <LocalLink
       href={PATH.KEYS_VIEW}
-      anchor="#wwhen-does-a-validator-become-active"
+      anchor="#when-does-a-validator-become-active"
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
       }
