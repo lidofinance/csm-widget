@@ -50,3 +50,5 @@ yarn-error.log*
 **/.browser_context**
 
 /public/runtime/
+/keys-generator-bin/
+deposit_data.json
