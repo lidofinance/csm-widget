@@ -1,7 +1,7 @@
 import ms from 'ms';
 
 import { config, secretConfig } from 'config';
-import { RateReponse } from 'types/ethseer';
+import { UnifiedPerformance } from 'types';
 import { standardFetcher } from 'utils';
 import { getCurrentFrame } from './getCurrentFrame';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
@@ -9,16 +9,16 @@ import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 const MIN_NUMBER_EPOCHS = 62; // ~ 6 hours
 const MAX_NUMBER_EPOCHS = 6750; // one month
 
-export const getEthSeerRate = async (
+export const getPerformance = async (
   nodeOperatorId: string,
-): Promise<RateReponse> => {
+): Promise<UnifiedPerformance> => {
   const chainId = config.defaultChain;
   if (chainId !== CHAINS.Mainnet) {
-    throw new Error(`Error: EthSeer is not support chain ${chainId}`);
+    throw new Error(`Error: MigaLabs is not support chain ${chainId}`);
   }
   const currentFrame = await getCurrentFrame();
 
-  const response = await fetchAttestationRate(
+  const response = await fetchPerformance(
     nodeOperatorId,
     currentFrame.numberEpochs,
   );
@@ -30,26 +30,21 @@ export const getEthSeerRate = async (
   };
 };
 
-type EthseerApiResponse = {
+type MigaLabsApiResponse = {
   data: {
     operator_unified_performance: number;
     network_unified_performance: number;
   };
 };
 
-const fetchAttestationRate = async (
+const fetchPerformance = async (
   nodeOperatorId: string,
   countEpochs: number,
 ) => {
-  const { ethseerApiUrl, ethseerApiToken } = secretConfig;
-  if (!ethseerApiUrl || !ethseerApiToken) {
-    throw new Error('Error: EthSeer API URL or token is not configured');
+  const { migalabsApiUrl: apiUrl, migalabsApiToken: apiToken } = secretConfig;
+  if (!apiUrl || !apiToken) {
+    throw new Error('Error: MigaLabs API URL or token is not configured');
   }
-
-  const apiUrl = ethseerApiUrl.replace(
-    /\/data-api\/api\/.*$/,
-    '/data-api/api/eth/v1/beacon/consensus/lido/csm/unified_performance',
-  );
 
   const numberEpochs = Math.min(
     MAX_NUMBER_EPOCHS,
@@ -61,9 +56,9 @@ const fetchAttestationRate = async (
   const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
 
   const url = `${apiUrl}?operator_number=${nodeOperatorId}&number_epochs=${numberEpochs}&network=mainnet`;
-  const response = await standardFetcher<EthseerApiResponse>(url, {
+  const response = await standardFetcher<MigaLabsApiResponse>(url, {
     signal: controller.signal,
-    headers: { 'X-Api-Key': ethseerApiToken },
+    headers: { 'X-Api-Key': apiToken },
   });
 
   clearTimeout(timeoutId);

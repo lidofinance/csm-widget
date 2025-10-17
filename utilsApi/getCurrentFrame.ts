@@ -1,12 +1,12 @@
 import { config } from 'config';
 import { Cache } from 'memory-cache';
-import { CurrentFrame } from 'types/ethseer';
+import { CurrentFrame } from 'types';
 import { getClient } from './getClient';
 
 const cache = new Cache<string, CurrentFrame>();
 
 export const getCurrentFrame = async () => {
-  const cacheKey = `${config.CACHE_ETHSEER_RATE_KEY}_frame`;
+  const cacheKey = `${config.CACHE_MIGALABS_RATE_KEY}_frame`;
   const data = cache.get(cacheKey);
   if (data) {
     return data;
@@ -14,7 +14,7 @@ export const getCurrentFrame = async () => {
 
   const currentFrame = await _getCurentFrame();
 
-  cache.put(cacheKey, currentFrame, config.CACHE_ETHSEER_RATE_TTL);
+  cache.put(cacheKey, currentFrame, config.CACHE_MIGALABS_RATE_TTL);
   return currentFrame;
 };
 

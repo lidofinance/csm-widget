@@ -1,7 +1,7 @@
-import styled, { css } from 'styled-components';
-import { RateStatus } from './use-ethseer-api';
 import { Accordion, Text } from '@lidofinance/lido-ui';
 import { StackStyle } from 'shared/components';
+import styled, { css } from 'styled-components';
+import { RateStatus } from 'types';
 
 export const Rate = styled(Text).attrs({ size: 'lg', weight: 700 })`
   flex: 0 0 auto;
