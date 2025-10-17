@@ -2,7 +2,7 @@
 set -euo pipefail
 
 VERSION="v20250915.1"
-ASSET="eth-staking-smith_${VERSION}_darwin_amd64.tar.gz"
+ASSET="eth-staking-smith_${VERSION}_linux_amd64.tar.gz"
 REPO="ChorusOne/eth-staking-smith"
 URL="https://github.com/${REPO}/releases/download/${VERSION}/${ASSET}"
 OUT_DIR="./keys-generator-bin"
