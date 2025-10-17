@@ -68,7 +68,7 @@ export const DepositDataParsed: FC = () => {
         const hasError = !!errors?.length;
 
         return (
-          <TableRow key={pubkey}>
+          <TableRow key={pubkey} data-testid="deposit-data-row">
             <DataCell $error={hasError} data-testid="deposit-data-pubkey">
               <Pubkey pubkey={pubkey} color={hasError ? 'error' : 'default'} />
             </DataCell>
