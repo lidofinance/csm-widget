@@ -6,7 +6,7 @@ ASSET="eth-staking-smith_${VERSION}_linux_amd64.tar.gz"
 REPO="ChorusOne/eth-staking-smith"
 URL="https://github.com/${REPO}/releases/download/${VERSION}/${ASSET}"
 OUT_DIR="./keys-generator-bin"
-ARHIVE_SHA256="5a7695f505e582fbda856f43c258accdc88051c516c2c008df73a24d4948794f"
+ARHIVE_SHA256="bc2120402ffc6d01c81364c42d3f75595dfbe06e39a35f8522212c72afb2d1cf"
 
 echo "⬇️  Downloading eth-staking-smith ${VERSION} from GitHub..."
 mkdir -p "${OUT_DIR}"
