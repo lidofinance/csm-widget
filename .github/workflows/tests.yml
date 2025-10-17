@@ -3,11 +3,11 @@ run-name: CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet'
 
 on:
   schedule:
-    - cron: '0 6 * * *' # Every day at 6 AM UTC
+    - cron: "0 6 * * *" # Every day at 6 AM UTC
   workflow_dispatch:
     inputs:
       stand_type:
-        description: 'Stand type'
+        description: "Stand type"
         required: true
         type: choice
         default: testnet
@@ -17,12 +17,12 @@ on:
           - testnet
           - preview
       tags:
-        description: 'Tags for running test suite'
+        description: "Tags for running test suite"
         required: false
         type: choice
-        default: '-'
+        default: "-"
         options:
-          - '-'
+          - "-"
           - smoke
           - performTX
       preview_stand_url:
@@ -44,18 +44,18 @@ on:
         type: string
         description: Stand url
       stand_type:
-        description: 'Stand type'
+        description: "Stand type"
         required: true
         type: string
       tags:
         required: false
         type: string
-        default: '-'
-        description: 'Test tags'
+        default: "-"
+        description: "Test tags"
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     env:
       # Required envs
       RPC_URL: ${{ secrets.RPC_URL }}
@@ -67,7 +67,7 @@ jobs:
 
       # Common envs
       QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
-      QASE_PROJECT_ID: 'CSM'
+      QASE_PROJECT_ID: "CSM"
       GH_ACTION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       GH_BRANCH_REF_NAME: ${{ github.ref_name }}
       GH_EVENT_NAME: ${{ github.event_name }}
@@ -76,10 +76,9 @@ jobs:
       TEST_BRANCH: ${{ github.event.inputs.branch }}
       REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
       DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
-      DISCORD_DUTY_TAG: '&1372906915667116032'
+      DISCORD_DUTY_TAG: "&1372906915667116032"
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
-      SLACK_DUTY_TAG: 'S09H269H2TT'
-
+      SLACK_DUTY_TAG: "S09H269H2TT"
 
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
@@ -98,8 +97,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'yarn'
+          node-version: "20"
+          cache: "yarn"
 
       - name: Install dependencies
         run: yarn install --immutable
