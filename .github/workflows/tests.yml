@@ -108,7 +108,7 @@ jobs:
         run: yarn playwright install chromium --with-deps
 
       - name: Download keys generator binary
-        run: sh ./tests/scripts/set_up_keys_generator.sh
+        run: bash ./tests/scripts/set_up_keys_generator.sh
 
       - name: Set up preview-stand credentials
         if: ${{ inputs.stand_type  == 'preview' || github.event.inputs.stand_type == 'preview' }}
