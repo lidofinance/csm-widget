@@ -21,7 +21,7 @@ export const ClaimTypeFormLoader: FC<PropsWithChildren> = ({ children }) => {
   const isEmpty = !proof?.proof || proof.isConsumed;
   const isView = !canClaimCurve;
 
-  if (isClaimed && justClaimed) {
+  if (justClaimed) {
     return <ClaimTypeSuccess />;
   }
 

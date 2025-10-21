@@ -49,6 +49,7 @@
     "prom-client": "^14.0.1",
     "raw-loader": "^4.0.2",
     "react": "^18.2.0",
+    "react-canvas-confetti": "^2.0.7",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.60.0",

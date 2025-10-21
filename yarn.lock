@@ -4403,6 +4403,11 @@
   dependencies:
     "@babel/types" "^7.20.7"
 
+"@types/canvas-confetti@^1.6.4":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@types/canvas-confetti/-/canvas-confetti-1.9.0.tgz#d1077752e046413c9881fbb2ba34a70ebe3c1773"
+  integrity sha512-aBGj/dULrimR1XDZLtG9JwxX1b4HPRF6CX9Yfwh3NvstZEm1ZL7RBnel4keCPSqs1ANRu1u2Aoz9R+VmtjYuTg==
+
 "@types/debug@^4.1.7":
   version "4.1.12"
   resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.12.tgz#a155f21690871953410df4b6b6f53187f0500917"
@@ -5930,6 +5935,11 @@ caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001580, caniuse-lite@^1.0.300016
   version "1.0.30001718"
   resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001718.tgz"
   integrity sha512-AflseV1ahcSunK53NfEs9gFWgOEmzr0f+kaMFA4xiLZlr9Hzt7HxcSpIFcnNCUkz6R6dWKa54rUz3HUmI3nVcw==
+
+canvas-confetti@^1.9.2:
+  version "1.9.3"
+  resolved "https://registry.yarnpkg.com/canvas-confetti/-/canvas-confetti-1.9.3.tgz#ef4c857420ad8045ab4abe8547261c8cdf229845"
+  integrity sha512-rFfTURMvmVEX1gyXFgn5QMn81bYk70qa0HLzcIOSVEyl57n6o9ItHeBtUSWdvKAPY0xlvBHno4/v3QPrT83q9g==
 
 "cbw-sdk@npm:@coinbase/wallet-sdk@3.9.3":
   version "3.9.3"
@@ -10632,6 +10642,14 @@ raw-loader@^4.0.2:
   dependencies:
     loader-utils "^2.0.0"
     schema-utils "^3.0.0"
+
+react-canvas-confetti@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/react-canvas-confetti/-/react-canvas-confetti-2.0.7.tgz#0499e7815b50f6a7731fd01729e07c30faa300f3"
+  integrity sha512-DIj44O35TPAwJkUSIZqWdVsgAMHtVf8h7YNmnr3jF3bn5mG+d7Rh9gEcRmdJfYgRzh6K+MAGujwUoIqQyLnMJw==
+  dependencies:
+    "@types/canvas-confetti" "^1.6.4"
+    canvas-confetti "^1.9.2"
 
 react-collapsed@3.0.2:
   version "3.0.2"

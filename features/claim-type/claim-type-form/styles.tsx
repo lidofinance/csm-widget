@@ -1,8 +1,8 @@
-import styled from 'styled-components';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
-import { StackStyle } from 'shared/components';
 import { Button, Text } from '@lidofinance/lido-ui';
+import { StackStyle } from 'shared/components';
+import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
+import styled, { CSSProperties } from 'styled-components';
 
 export const StyledContainer = styled(StackStyle).attrs({
   $direction: 'column',
@@ -51,3 +51,13 @@ export const BadgeText = styled(Text)`
   letter-spacing: -0.5pt;
   color: var(--lido-color-foreground);
 `;
+
+export const canvasStyles: CSSProperties = {
+  position: 'fixed',
+  pointerEvents: 'none',
+  width: '100%',
+  height: '100%',
+  top: 0,
+  left: 0,
+  zIndex: 9,
+};
