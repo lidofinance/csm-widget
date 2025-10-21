@@ -17,6 +17,7 @@ export type TabButtonProps = {
   value: number;
   disabled?: boolean;
   extra?: ReactNode;
+  dataTestid?: string;
 };
 
 export type TabsContextValue = {
