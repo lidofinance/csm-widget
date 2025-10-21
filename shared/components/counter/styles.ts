@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE } from 'consts';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
 import styled from 'styled-components';
 

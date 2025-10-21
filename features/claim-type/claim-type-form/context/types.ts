@@ -24,6 +24,6 @@ export type ClaimTypeFormNetworkData = {
     | 'currentCurveId'
     | 'currentParameters'
     | 'proof'
-    | 'canClaimCurve'
+    | 'isOwner'
   >;
 };

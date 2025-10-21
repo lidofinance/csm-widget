@@ -2,12 +2,12 @@ import { ButtonProps } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 
 import {
-  getOperatorType,
   useCurveParameters,
   useDappStatus,
   useNodeOperatorId,
   useOperatorCurveId,
 } from 'modules/web3';
+import { getOperatorType } from 'utils';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { useParametersModal } from '../parameters-modal';
 import { ButtonStyle } from './styles';

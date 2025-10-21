@@ -6,7 +6,7 @@ import { Info } from './controls/info';
 
 export const ClaimTypeFormLoader: FC<PropsWithChildren> = ({ children }) => {
   const { isLoading } = useFormState<ClaimTypeFormInputType>();
-  const { canClaimCurve, proof, currentCurveId, newCurveId } =
+  const { canClaimCurve, proof, currentCurveId, newCurveId, icsPaused } =
     useClaimTypeFormData();
 
   const isClaimed =
@@ -18,7 +18,9 @@ export const ClaimTypeFormLoader: FC<PropsWithChildren> = ({ children }) => {
     <WhenLoaded
       loading={isLoading}
       empty={
-        isClaimed ? (
+        icsPaused ? (
+          <>ICS claiming is currently paused</>
+        ) : isClaimed ? (
           <>You have already claimed the ICS operator type</>
         ) : (
           isEmpty && <>You are not eligible to claim the ICS operator type</>
