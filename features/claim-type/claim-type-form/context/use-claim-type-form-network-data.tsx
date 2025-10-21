@@ -12,7 +12,7 @@ import {
   useOperatorCurveId,
   useOperatorIsOwner,
 } from 'modules/web3';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useCanClaimICS, useInvalidate } from 'shared/hooks';
 import { type ClaimTypeFormNetworkData } from './types';
 
@@ -20,6 +20,7 @@ export const useClaimTypeFormNetworkData = (): [
   ClaimTypeFormNetworkData,
   () => Promise<void>,
 ] => {
+  const [justClaimed, setJustClaimed] = useState(false);
   const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId<true>();
 
@@ -60,6 +61,7 @@ export const useClaimTypeFormNetworkData = (): [
         KEY_OPERATOR_KEYS_TO_MIGRATE,
       ]),
     ]);
+    setJustClaimed(true);
   }, [invalidate, updateCurrentCurveId, updateProof]);
 
   const loading = useMemo(
@@ -94,6 +96,7 @@ export const useClaimTypeFormNetworkData = (): [
       newParameters,
       proof,
       canClaimCurve,
+      justClaimed,
       loading,
     },
     revalidate,

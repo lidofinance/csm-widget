@@ -17,6 +17,7 @@ export type ClaimTypeFormNetworkData = {
   newCurveId?: bigint;
   newParameters?: CurveParameters;
   proof?: AddressProof;
+  justClaimed?: boolean;
   loading: LoadingRecord<
     | 'icsPaused'
     | 'newCurveId'
