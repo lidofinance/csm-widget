@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { StyledSlot } from './styles';
+
 export const HEADER_PORTAL_ID = 'header-custom-actions';
 
 /**
@@ -7,5 +9,5 @@ export const HEADER_PORTAL_ID = 'header-custom-actions';
  * Components can render content into this slot using the useHeaderCustomActions hook.
  */
 export const HeaderCustomActionsSlot: FC = () => {
-  return <div id={HEADER_PORTAL_ID} />;
+  return <StyledSlot id={HEADER_PORTAL_ID} />;
 };
