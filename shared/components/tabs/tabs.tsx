@@ -38,6 +38,7 @@ export const Tabs: FC<TabsProps> = ({ items, defaultTab = 0 }) => {
               value={index}
               disabled={item.disabled}
               extra={item.extra}
+              dataTestid={`tab-button-${item.title}`}
             >
               {item.title}
             </TabButton>

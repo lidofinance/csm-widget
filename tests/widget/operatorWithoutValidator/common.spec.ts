@@ -1,34 +1,34 @@
 import { MainPage, KeysPage } from 'tests/pages';
 import { test } from '../test.fixture';
-import { getRandomKeys } from '../../consts/keys.const';
-import { TokenSymbol } from 'tests/consts/common.const';
+import { Tags, TokenSymbol } from 'tests/consts/common.const';
 import { expect } from '@playwright/test';
-import { trimAddress } from '@lidofinance/address';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { KeysGeneratorService } from 'tests/services/keysGenerator.service';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
-// @TODO: Should fix by QA-4217
-test.describe.skip('Operator without keys. Common suite.', async () => {
+test.describe('Operator without keys. Common suite.', async () => {
   let mainPage: MainPage;
   let createKeysPage: KeysPage;
+  let keysGeneratorService: KeysGeneratorService;
 
   test.beforeEach(async ({ widgetService }) => {
     mainPage = new MainPage(widgetService.page);
     createKeysPage = new KeysPage(widgetService.page);
     await mainPage.goto();
+    keysGeneratorService = new KeysGeneratorService();
   });
 
   test(
     qase(47, 'Should open transaction page after added 1 key'),
-    // { tag: Tags.smoke }, // @TODO: enable smoke tag after keys generation will be fixed (QA-4217)
+    { tag: Tags.smoke },
     async ({ widgetService }) => {
       await mainPage.starterPackSection.createNodeOperatorBtn.click();
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
       });
       const txPage = await createKeysPage.createNodeOperatorForm.addNewKeys(
-        getRandomKeys(),
+        keysGeneratorService.generateKeys(),
         TokenSymbol.ETH,
       );
       await widgetService.walletPage.cancelTx(txPage);
@@ -40,14 +40,23 @@ test.describe.skip('Operator without keys. Common suite.', async () => {
     await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
       state: 'visible',
     });
-    const duplicatedKey = getRandomKeys();
+    const duplicatedKey = keysGeneratorService.generateKeys();
     await createKeysPage.createNodeOperatorForm.fillKeys([
       ...duplicatedKey,
       ...duplicatedKey,
     ]);
     await expect(createKeysPage.createNodeOperatorForm.formBlock).toContainText(
-      `pubkey ${trimAddress(duplicatedKey[0].pubkey, 6)} has duplicates`,
+      `Invalid deposit data`,
     );
+    await createKeysPage.createNodeOperatorForm.selectTab('Parsed');
+    await expect(
+      createKeysPage.createNodeOperatorForm.depositDataRow,
+    ).toHaveCount(2);
+    for (const row of await createKeysPage.createNodeOperatorForm.depositDataRow.all()) {
+      await expect(row.getByTestId('deposit-data-error')).toHaveText(
+        'pubkey is duplicated in deposit data',
+      );
+    }
   });
 
   test(
@@ -58,7 +67,7 @@ test.describe.skip('Operator without keys. Common suite.', async () => {
         state: 'visible',
       });
       const txPage = await createKeysPage.createNodeOperatorForm.addNewKeys(
-        getRandomKeys(25),
+        keysGeneratorService.generateKeys(25),
         TokenSymbol.ETH,
       );
       await widgetService.walletPage.cancelTx(txPage);
@@ -72,11 +81,11 @@ test.describe.skip('Operator without keys. Common suite.', async () => {
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
       });
-      const overTheLimitKeys = getRandomKeys(26);
+      const overTheLimitKeys = keysGeneratorService.generateKeys(26);
       await createKeysPage.createNodeOperatorForm.fillKeys(overTheLimitKeys);
       await expect(
         createKeysPage.createNodeOperatorForm.formBlock,
-      ).toContainText('Should have no more than 25 keys');
+      ).toContainText(`Invalid deposit data`);
     },
   );
 });

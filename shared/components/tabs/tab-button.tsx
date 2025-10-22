@@ -8,6 +8,7 @@ export const TabButton: FC<TabButtonProps> = ({
   value,
   disabled = false,
   extra,
+  dataTestid,
 }) => {
   const { value: selectedValue, onValueChange } = useTabsContext();
 
@@ -23,6 +24,7 @@ export const TabButton: FC<TabButtonProps> = ({
       onClick={handleClick}
       disabled={disabled}
       aria-current={isActive ? 'page' : undefined}
+      data-testid={dataTestid}
     >
       {children}
       {extra}

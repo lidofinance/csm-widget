@@ -5,8 +5,8 @@ import {
   TokenSymbol,
 } from 'tests/consts/common.const';
 import { BasePage } from 'tests/pages';
-import { DepositKey } from 'tests/consts/keys.const';
 import { WALLET_PAGE_TIMEOUT_WAITER } from 'tests/consts/timeouts';
+import { DepositKey } from 'tests/services/keysGenerator.service';
 
 export class CreateNodeOperatorForm {
   page: Page;
@@ -17,6 +17,9 @@ export class CreateNodeOperatorForm {
   submitKeysButton: Locator;
   amountInput: Locator;
   amountInputText: Locator;
+
+  // Parsed tab
+  depositDataRow: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -31,10 +34,20 @@ export class CreateNodeOperatorForm {
       .getByText('Create Node Operator');
     this.amountInput = this.formBlock.getByTestId('amountInput');
     this.amountInputText = this.amountInput.locator('..').locator('span');
+
+    // Parsed tab
+    this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');
   }
 
   getBondTokenElement(tokenSymbol: TokenSymbol) {
     return this.formBlock.locator(`label:has([value="${tokenSymbol}"])`);
+  }
+
+  async selectTab(tabName: 'JSON' | 'Parsed' | 'Parameters') {
+    return test.step(`Select "${tabName}" tab`, async () => {
+      const tab = this.formBlock.getByRole('button').getByText(tabName);
+      await tab.click();
+    });
   }
 
   async fillKeys(keys: DepositKey[]) {
