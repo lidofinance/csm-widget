@@ -52,7 +52,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.60.0",
-    "reef-knot": "^7.4.1",
+    "reef-knot": "^7.5.0",
     "siwe": "^3.0.0",
     "styled-components": "^5.3.5",
     "tiny-invariant": "^1.1.0",
