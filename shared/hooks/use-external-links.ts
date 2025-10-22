@@ -1,7 +1,9 @@
+import { mainnet } from 'viem/chains';
 import { useChainName } from './use-chain-name';
 import { useExternalLinks } from './use-csm-constants';
 import { sortByActiveStatus, useSortedKeys } from './use-sorted-keys';
 import {
+  useDappStatus,
   useLidoSDK,
   useNodeOperatorId,
   useOperatorKeysWithStatus,
@@ -12,10 +14,10 @@ const DASHBOARD_KEYS_LIMIT = 20;
 export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: keys } = useOperatorKeysWithStatus(nodeOperatorId);
-  const { beaconchainDashboard } = useExternalLinks();
+  const { beaconchain } = useExternalLinks();
   const sortedKeys = useSortedKeys(keys, sortByActiveStatus);
 
-  if (!beaconchainDashboard) return null;
+  if (!beaconchain) return null;
 
   const keysToShow = (
     sortedKeys.length > 0 ? sortedKeys.map(({ pubkey }) => pubkey) : directKeys
@@ -23,7 +25,17 @@ export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
     ?.slice(0, DASHBOARD_KEYS_LIMIT)
     .join(',');
 
-  return `${beaconchainDashboard}?validators=${keysToShow ?? ''}`;
+  return `${beaconchain}/dashboard?validators=${keysToShow ?? ''}`;
+};
+
+export const useBeaconchainEntityLink = () => {
+  const nodeOperatorId = useNodeOperatorId();
+  const { beaconchain } = useExternalLinks();
+  const { chainId } = useDappStatus();
+
+  if (!beaconchain || chainId !== mainnet.id) return null;
+
+  return `${beaconchain}/entity/Lido%20CSM/CSM%20Operator%20${nodeOperatorId}`;
 };
 
 export const useFeesMonitoningLink = () => {
