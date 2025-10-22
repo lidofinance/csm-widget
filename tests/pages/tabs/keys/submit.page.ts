@@ -1,8 +1,8 @@
 import { Locator, Page, test } from '@playwright/test';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { BasePage } from 'tests/pages';
-import { DepositKey } from 'tests/consts/keys.const';
 import { LOW_TIMEOUT, WALLET_PAGE_TIMEOUT_WAITER } from 'tests/consts/timeouts';
+import { DepositKey } from 'tests/services/keysGenerator.service';
 
 export class SubmitPage {
   page: Page;
@@ -13,6 +13,9 @@ export class SubmitPage {
   submitKeysButton: Locator;
   amountInput: Locator;
   amountInputText: Locator;
+
+  // Parsed tab
+  depositDataRow: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -27,11 +30,21 @@ export class SubmitPage {
       .getByText('Submit keys');
     this.amountInput = this.formBlock.getByTestId('amountInput');
     this.amountInputText = this.amountInput.locator('..').locator('span');
+
+    // Parsed tab
+    this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');
   }
 
   async open() {
     await test.step('Open submit tab for Keys page', async () => {
       await this.page.goto('/keys/submit');
+    });
+  }
+
+  async selectTab(tabName: 'JSON' | 'Parsed' | 'Parameters') {
+    return test.step(`Select "${tabName}" tab`, async () => {
+      const tab = this.formBlock.getByRole('button').getByText(tabName);
+      await tab.click();
     });
   }
 
