@@ -7,11 +7,9 @@ import HeaderTheme from './components/header-theme';
 import HeaderWallet from './components/header-wallet';
 import { Logos } from './components/logos';
 import { HeaderActionsStyle, HeaderStyle, HeaderWrapper } from './styles';
-import { FeedbackLine } from './feedback-line';
 
 export const Header: FC = () => (
   <HeaderWrapper>
-    <FeedbackLine />
     <HeaderStyle>
       <Logos />
       <HeaderActionsStyle>
