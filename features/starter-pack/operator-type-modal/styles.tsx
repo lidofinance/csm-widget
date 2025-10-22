@@ -6,7 +6,7 @@ import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
 
 export const StyledModal = styled(Modal)`
   & > div {
-    width: 600px;
+    width: 640px;
   }
 `;
 
@@ -27,7 +27,7 @@ export const OptionCard = styled(StackStyle).attrs({
   padding: 16px;
   border-radius: 10px;
   border: var(--border-width) solid transparent;
-  background: var(--lido-color-background);
+  background-color: rgba(var(--lido-rgb-background), 1);
   background-clip: padding-box;
   position: relative;
   z-index: initial;
@@ -48,6 +48,6 @@ export const OptionCard = styled(StackStyle).attrs({
   }
 
   &:hover {
-    --border-multiplyer: 1.5;
+    background-color: rgba(var(--lido-rgb-background), 0.7);
   }
 `;
