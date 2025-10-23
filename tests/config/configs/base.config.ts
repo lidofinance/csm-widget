@@ -13,12 +13,12 @@ export type StandConfig = {
   networkConfig: NetworkConfig;
 };
 
-export interface IConfig {
+export type IConfig = {
   standConfig: StandConfig;
   walletConfig: CommonWalletConfig;
   accountConfig: AccountConfig;
   getFullInfo(): string;
-}
+};
 
 export const ConfigSchema = z.object({
   standType: z.string(),

@@ -15,7 +15,7 @@ export const useInvites = () => {
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(address);
-      return csm.satellite.getNodeOperatorsByProposedAddress({ address });
+      return csm.satellite.getNodeOperatorsByProposedAddress(address);
     },
     enabled: !!address,
   });

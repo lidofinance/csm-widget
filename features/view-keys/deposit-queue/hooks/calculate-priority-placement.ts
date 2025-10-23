@@ -2,11 +2,11 @@ import type { OperatorInfo, SubmittingAllocation } from './enhanced-types';
 
 const FALLBACK_LOWEST_PRIORITY = 5;
 
-export interface QueueConfig {
+type QueueConfig = {
   priority: number;
   maxDeposits: number;
   lowestPriority: number;
-}
+};
 
 export const calculatePriorityPlacement = (
   operatorInfo: OperatorInfo | undefined,

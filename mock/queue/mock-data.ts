@@ -95,7 +95,7 @@ export const createMockDepositQueueBatches = ({
   const mappedPriorities = priorities.map((priorityBatches) =>
     priorityBatches.map(([nodeOperatorId, keysCount]) => ({
       nodeOperatorId: BigInt(nodeOperatorId),
-      keysCount: BigInt(keysCount),
+      keysCount: keysCount,
     })),
   );
 
