@@ -1,12 +1,12 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { UNBONDED_VALIDATORS_LINK } from 'consts/external-links';
 import { BOND_INSUFFICIENT } from 'consts/text';
 import { FC } from 'react';
 import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
 import { useAddBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { UNBONDED_VALIDATORS_LINK } from 'consts/external-links';
 
 export const Info: FC = () => {
-  const { bond, loading } = useAddBondFormData();
+  const { bond } = useAddBondFormData(true);
 
   return (
     <>
@@ -20,7 +20,6 @@ export const Info: FC = () => {
                 ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol'
                 : undefined
             }
-            loading={loading.isBondLoading}
             amount={bond?.delta}
             token={TOKENS.steth}
             data-testid="titledAmount"

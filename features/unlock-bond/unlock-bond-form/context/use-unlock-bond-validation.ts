@@ -1,37 +1,25 @@
-import { useCallback } from 'react';
-import type { Resolver } from 'react-hook-form';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
-  handleResolverValidationError,
+  useFormValidation,
   validateBigintMax,
   validateEtherAmount,
 } from 'shared/hook-form/validation';
-import { useAwaitNetworkData } from 'shared/hooks';
-import invariant from 'tiny-invariant';
 import { getTokenDisplayName } from 'utils';
+import { formatEther } from 'viem';
 import type {
   UnlockBondFormInputType,
   UnlockBondFormNetworkData,
 } from './types';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { formatEther } from 'viem';
 
-export const useUnlockBondValidation = (
-  networkData: UnlockBondFormNetworkData,
-) => {
-  const dataPromise = useAwaitNetworkData(networkData);
+export const useUnlockBondValidation = () => {
+  return useFormValidation<UnlockBondFormInputType, UnlockBondFormNetworkData>(
+    'amount',
+    async ({ amount }, { lockedBond, ethBalance }, validate) => {
+      await validate('amount', () =>
+        validateEtherAmount('amount', amount, TOKENS.eth),
+      );
 
-  return useCallback<Resolver<UnlockBondFormInputType>>(
-    async (values) => {
-      try {
-        const { amount } = values;
-
-        const { lockedBond, ethBalance } = await dataPromise;
-
-        invariant(ethBalance);
-        invariant(lockedBond);
-
-        validateEtherAmount('amount', amount, TOKENS.eth);
-
+      await validate('amount', () =>
         validateBigintMax(
           'amount',
           amount ?? 0n,
@@ -39,8 +27,10 @@ export const useUnlockBondValidation = (
           `Entered ${getTokenDisplayName(TOKENS.eth)} amount exceeds your balance of ${formatEther(
             ethBalance,
           )}`,
-        );
+        ),
+      );
 
+      await validate('amount', () =>
         validateBigintMax(
           'amount',
           amount ?? 0n,
@@ -48,16 +38,8 @@ export const useUnlockBondValidation = (
           `Entered ${getTokenDisplayName(TOKENS.eth)} amount exceeds locked bond of ${formatEther(
             lockedBond,
           )}`,
-        );
-
-        return {
-          values,
-          errors: {},
-        };
-      } catch (error) {
-        return handleResolverValidationError(error, 'UnlockBondForm', 'amount');
-      }
+        ),
+      );
     },
-    [dataPromise],
   );
 };

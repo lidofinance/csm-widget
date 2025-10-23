@@ -7,7 +7,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { MAX_ETH_AMOUNT } from 'consts/tokens';
 import { useWstethBySteth } from 'modules/web3';
-import { useAvailableToClaim } from 'shared/hooks';
+import { calculateAvailableToClaim } from 'utils';
 
 const limitMaxEth = (value: bigint) =>
   value > MAX_ETH_AMOUNT ? MAX_ETH_AMOUNT : value;
@@ -20,12 +20,13 @@ type Props = {
 
 export type MaxValues = PerToken<[bigint, bigint]>;
 
+// TODO: reuse
 export const useMaxValues = ({ bond, rewards }: Props) => {
-  const maxBond = useAvailableToClaim({
+  const maxBond = calculateAvailableToClaim({
     bond,
     rewards: undefined,
   });
-  const maxBondAndRewards = useAvailableToClaim({
+  const maxBondAndRewards = calculateAvailableToClaim({
     bond,
     rewards,
   });

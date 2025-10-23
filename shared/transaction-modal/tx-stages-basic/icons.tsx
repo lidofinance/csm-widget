@@ -15,7 +15,7 @@ import {
   FailIcon,
   TxLoader,
   WarningIcon,
-} from './iconsStyles';
+} from './icons-styles';
 
 const createStageIcon = (
   iconEl: React.ReactNode,

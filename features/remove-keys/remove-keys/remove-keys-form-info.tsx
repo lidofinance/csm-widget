@@ -3,7 +3,7 @@ import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
 import { RemoveKeysFormInputType } from './context';
-import { useBondBalanceAfterRemoveKeys } from './hooks/useBondBalanceAfterRemoveKeys';
+import { useBondBalanceAfterRemoveKeys } from './hooks/use-bond-balance-after-remove-keys';
 
 export const RemoveKeysFormInfo = () => {
   const { count } = useWatch<RemoveKeysFormInputType, 'selection'>({

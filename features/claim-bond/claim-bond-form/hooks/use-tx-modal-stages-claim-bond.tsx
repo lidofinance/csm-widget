@@ -37,7 +37,6 @@ const getTxModalStagesClaimBond = (
   success: ({ amount, token }: SuccessProps, txHash?: string) =>
     transitStage(
       token === TOKENS.eth ? (
-        // TODO: matomo events
         <TxStageSuccess
           title="Withdrawal request has been sent"
           description={

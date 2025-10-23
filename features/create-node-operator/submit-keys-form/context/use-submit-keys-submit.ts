@@ -1,5 +1,7 @@
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
+import { useKeysCache } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import {
@@ -7,22 +9,14 @@ import {
   useTxModalStagesSubmitKeys,
 } from '../hooks/use-tx-modal-stages-submit-keys';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
-import { useKeysCache } from 'shared/hooks';
 
-type SubmitKeysOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useSubmitKeysSubmit = ({
-  onConfirm,
-  onRetry,
-}: SubmitKeysOptions) => {
+export const useSubmitKeysSubmit: FormSubmitterHook<
+  SubmitKeysFormInputType,
+  SubmitKeysFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
-
-  const { txModalStages } = useTxModalStagesSubmitKeys();
-
   const { addCachePubkeys, removeCachePubkeys } = useKeysCache();
+  const { txModalStages } = useTxModalStagesSubmitKeys();
 
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
   const txCallback = useTxCallback();
@@ -38,13 +32,11 @@ export const useSubmitKeysSubmit = ({
         rewardsAddress,
         managerAddress,
         extendedManagerPermissions,
-      }: SubmitKeysFormInputType,
-      { proof, address }: SubmitKeysFormNetworkData,
-    ): Promise<boolean> => {
-      invariant(depositData?.length, 'Keys is not defined');
-      invariant(token, 'Token is not defined');
+      },
+      { address, proof },
+      { onConfirm, onRetry },
+    ) => {
       invariant(amount !== undefined, 'BondAmount is not defined');
-      invariant(address, 'Address is not deinfed');
 
       const pubkeys = depositData.map(({ pubkey }) => pubkey);
 
@@ -109,9 +101,7 @@ export const useSubmitKeysSubmit = ({
     [
       confirmCustomAddresses,
       txCallback,
-      onRetry,
       addCachePubkeys,
-      onConfirm,
       csm.icsGate,
       csm.permissionlessGate,
       removeCachePubkeys,

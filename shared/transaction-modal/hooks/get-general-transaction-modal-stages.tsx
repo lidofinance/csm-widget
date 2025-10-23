@@ -11,7 +11,7 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 export const getGeneralTransactionModalStages = (
   transitStage: TransactionModalTransitStage,
 ) => ({
-  signPermit: () => transitStage(<TxStagePermit />), // TODO: show token & amount
+  signPermit: () => transitStage(<TxStagePermit />),
   signApproval: (amount: bigint, token: TOKENS) =>
     transitStage(
       <TxStageSignOperationAmount

@@ -1,7 +1,5 @@
 export * from './use-address-resolution';
 export * from './use-api-address-validation';
-export * from './use-available-to-claim';
-export * from './use-await-network-data';
 export * from './use-awaiter';
 export * from './use-bond-will-receive';
 export * from './use-can-claim-ics';
@@ -13,7 +11,6 @@ export * from './use-confirm-modal';
 export * from './use-copy-to-clipboard';
 export * from './use-csm-constants';
 export * from './use-current-curve-id';
-export * from './use-default-values';
 export * from './use-eth-usd';
 export * from './use-exchange-rate';
 export * from './use-external-links';

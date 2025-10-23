@@ -1,36 +1,32 @@
 import { useCallback } from 'react';
-import invariant from 'tiny-invariant';
 
 import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
+import invariant from 'tiny-invariant';
 import { ClaimTypeFormInputType, ClaimTypeFormNetworkData } from '.';
-import { useTxModalStagesClaimType } from '../hooks/use-tx-modal-stages-claim-type';
 import { useConfirmClaimTypeModal } from '../hooks/use-confirm-modal';
+import { useTxModalStagesClaimType } from '../hooks/use-tx-modal-stages-claim-type';
 
-type UseClaimTypeOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useClaimTypeSubmit = ({
-  onConfirm,
-  onRetry,
-}: UseClaimTypeOptions) => {
+export const useClaimTypeSubmit: FormSubmitterHook<
+  ClaimTypeFormInputType,
+  ClaimTypeFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesClaimType();
   const confirmClaimtype = useConfirmClaimTypeModal();
 
-  const claimType = useCallback(
+  return useCallback(
     async (
       _: ClaimTypeFormInputType,
-      { nodeOperatorId, proof }: ClaimTypeFormNetworkData,
-    ): Promise<boolean> => {
-      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(proof?.proof, 'proof is not defined');
+      { nodeOperatorId, proof },
+      { onConfirm, onRetry },
+    ) => {
+      invariant(proof.proof, 'Proof is not defined');
 
       try {
         if (!(await confirmClaimtype({}))) {
@@ -73,10 +69,6 @@ export const useClaimTypeSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [confirmClaimtype, csm.icsGate, onConfirm, txModalStages, onRetry],
+    [confirmClaimtype, csm.icsGate, txModalStages],
   );
-
-  return {
-    claimType,
-  };
 };

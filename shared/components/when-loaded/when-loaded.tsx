@@ -3,14 +3,14 @@ import { WrapperStyle } from './style';
 import { Loader } from '@lidofinance/lido-ui';
 import { Note } from '../note/note';
 
-type Props = {
+export type WhenLoaded = {
   loading: boolean;
   empty?: ReactNode;
   emptyNote?: string;
   error?: any;
 };
 
-export const WhenLoaded: FC<PropsWithChildren<Props>> = ({
+export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
   loading,
   empty,
   emptyNote,

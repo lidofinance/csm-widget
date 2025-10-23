@@ -1,12 +1,10 @@
 import { FC, PropsWithChildren } from 'react';
-import { useFormState } from 'react-hook-form';
-import { WhenLoaded } from 'shared/components';
-import { ClaimTypeFormInputType, useClaimTypeFormData } from './context';
+import { FormLoader } from 'shared/hook-form/form-controller';
+import { useClaimTypeFormData } from './context';
 import { Info } from './controls/info';
 import { ClaimTypeSuccess } from './claim-type-success';
 
 export const ClaimTypeFormLoader: FC<PropsWithChildren> = ({ children }) => {
-  const { isLoading } = useFormState<ClaimTypeFormInputType>();
   const {
     canClaimCurve,
     proof,
@@ -26,8 +24,7 @@ export const ClaimTypeFormLoader: FC<PropsWithChildren> = ({ children }) => {
   }
 
   return (
-    <WhenLoaded
-      loading={isLoading}
+    <FormLoader
       empty={
         icsPaused ? (
           <>ICS claiming is currently paused</>
@@ -39,6 +36,6 @@ export const ClaimTypeFormLoader: FC<PropsWithChildren> = ({ children }) => {
       }
     >
       {isView ? <Info /> : children}
-    </WhenLoaded>
+    </FormLoader>
   );
 };

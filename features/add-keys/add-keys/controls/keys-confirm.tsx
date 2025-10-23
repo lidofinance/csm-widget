@@ -5,6 +5,7 @@ import { Stack } from 'shared/components';
 import { CheckboxHookForm } from 'shared/hook-form/controls';
 
 export const KeysConfirm: FC = () => {
+  // uses already loaded share limit by AddKeysFormDataProvider
   const { data: status } = useShareLimitStatus();
 
   return (

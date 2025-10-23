@@ -5,6 +5,7 @@ import {
 import { HIGH_EJECTION_COST_THRESHOLD } from 'consts';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { useConfirmHighCostModal } from '../hooks/use-confirm-high-cost-modal';
@@ -12,15 +13,10 @@ import { useConfirmEjectKeysModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesEjectKeys } from '../hooks/use-tx-modal-stages-eject-keys';
 import { EjectKeysFormInputType, EjectKeysFormNetworkData } from './types';
 
-type EjectKeysOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useEjectKeysSubmit = ({
-  onConfirm,
-  onRetry,
-}: EjectKeysOptions) => {
+export const useEjectKeysSubmit: FormSubmitterHook<
+  EjectKeysFormInputType,
+  EjectKeysFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesEjectKeys();
   const confirm = useConfirmEjectKeysModal();
@@ -28,17 +24,11 @@ export const useEjectKeysSubmit = ({
 
   return useCallback(
     async (
-      { selection, feeAmount }: EjectKeysFormInputType,
-      { nodeOperatorId, info, keys, ejectKeyFee }: EjectKeysFormNetworkData,
-    ): Promise<boolean> => {
-      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(keys?.length, 'Keys are not defined');
+      { selection, feeAmount },
+      { nodeOperatorId, ejectKeyFee },
+      { onConfirm, onRetry },
+    ) => {
       invariant(feeAmount !== undefined, 'Fee amount is not defined');
-      invariant(ejectKeyFee, 'Eject fee is not defined');
-      invariant(
-        info?.totalDepositedKeys !== undefined,
-        'Offset is not defined',
-      );
 
       if (
         ejectKeyFee >= HIGH_EJECTION_COST_THRESHOLD &&
@@ -94,6 +84,6 @@ export const useEjectKeysSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [confirm, confirmHighCost, csm.keys, onConfirm, txModalStages, onRetry],
+    [confirm, confirmHighCost, csm.keys, txModalStages],
   );
 };

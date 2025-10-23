@@ -3,6 +3,7 @@ import { useAddBondFormData } from '../context';
 
 export const SubmitButton = () => {
   const { isPaused } = useAddBondFormData();
+
   if (isPaused) {
     return <PausedButton type="Accounting" />;
   }

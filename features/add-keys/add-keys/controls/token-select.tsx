@@ -1,3 +1,4 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { PATH } from 'consts/urls';
@@ -11,7 +12,6 @@ import {
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { useAddKeysFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TokenSelect: React.FC = () => {
   const {
@@ -20,8 +20,7 @@ export const TokenSelect: React.FC = () => {
     wstethBalance,
     // keysAvailable,
     bond,
-    loading,
-  } = useAddKeysFormData();
+  } = useAddKeysFormData(true);
 
   return (
     <>
@@ -42,31 +41,19 @@ export const TokenSelect: React.FC = () => {
         options={{
           [TOKENS.eth]: (
             <Stack direction="column">
-              <TokenAmount
-                token={TOKENS.eth}
-                amount={ethBalance}
-                loading={loading.isEthBalanceLoading}
-              />
+              <TokenAmount token={TOKENS.eth} amount={ethBalance} />
               {/* <KeysAvailable {...keysAvailable?.ETH} token={TOKENS.ETH} /> */}
             </Stack>
           ),
           [TOKENS.steth]: (
             <Stack direction="column">
-              <TokenAmount
-                token={TOKENS.steth}
-                amount={stethBalance}
-                loading={loading.isStethBalanceLoading}
-              />
+              <TokenAmount token={TOKENS.steth} amount={stethBalance} />
               {/* <KeysAvailable {...keysAvailable?.STETH} token={TOKENS.STETH} /> */}
             </Stack>
           ),
           [TOKENS.wsteth]: (
             <Stack direction="column">
-              <TokenAmount
-                token={TOKENS.wsteth}
-                amount={wstethBalance}
-                loading={loading.isWstethBalanceLoading}
-              />
+              <TokenAmount token={TOKENS.wsteth} amount={wstethBalance} />
               {/* <KeysAvailable {...keysAvailable?.WSTETH} token={TOKENS.WSTETH} /> */}
             </Stack>
           ),
@@ -79,7 +66,6 @@ export const TokenSelect: React.FC = () => {
             ? 'Will be added to the transaction amount'
             : 'Will be subtracted from the transaction amount'
         }
-        loading={loading.isBondLoading}
         amount={bond?.delta}
         token={TOKENS.steth}
       />

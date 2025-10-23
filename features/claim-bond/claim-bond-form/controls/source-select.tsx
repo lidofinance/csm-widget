@@ -1,5 +1,7 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Checkbox } from '@lidofinance/lido-ui';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
+import { useFrameInfo } from 'modules/web3';
 import { FC, useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 import {
@@ -11,11 +13,9 @@ import {
 } from 'shared/components';
 import { formatDate } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { useFrameInfo } from 'modules/web3';
 
 export const SourceSelect: FC = () => {
-  const { bond, rewards, loading, maxValues } = useClaimBondFormData();
+  const { bond, rewards, maxValues } = useClaimBondFormData(true);
   const { data: nextDistribution } = useFrameInfo(
     (data) => data.lastReport + data.frameDuration,
   );
@@ -27,7 +27,7 @@ export const SourceSelect: FC = () => {
 
   const { setValue } = useFormContext<ClaimBondFormInputType>();
 
-  const availableToClaim = maxValues?.[TOKENS.steth][Number(field.value)];
+  const availableToClaim = maxValues[TOKENS.steth][Number(field.value)];
   const nextRewardsDate = formatDate(nextDistribution);
 
   useEffect(() => {
@@ -42,12 +42,7 @@ export const SourceSelect: FC = () => {
     <>
       <Stack spaceBetween data-testid="availableToClaimBalance">
         <FormTitle>Available to claim</FormTitle>
-        <AmountWithPrice
-          big
-          amount={availableToClaim}
-          token={TOKENS.steth}
-          loading={loading.isBondLoading || loading.isRewardsLoading}
-        />
+        <AmountWithPrice big amount={availableToClaim} token={TOKENS.steth} />
       </Stack>
       <Latice data-testid="sourceSelect">
         <TitledSelectableAmount
@@ -62,7 +57,6 @@ export const SourceSelect: FC = () => {
           }
           help={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected on ${nextRewardsDate}`}
           helpIcon="calendar"
-          loading={loading.isRewardsLoading}
           amount={rewards?.available}
           token={TOKENS.steth}
           data-testid="rewardsSource"
@@ -83,7 +77,6 @@ export const SourceSelect: FC = () => {
           }
           helpIcon={bond?.isInsufficient ? undefined : 'calendar'}
           sign={bond?.isInsufficient ? 'minus' : 'plus'}
-          loading={loading.isBondLoading}
           amount={bond?.delta}
           token={TOKENS.steth}
           data-testid="excessBondSource"
@@ -93,7 +86,6 @@ export const SourceSelect: FC = () => {
             warning
             title={<Checkbox checked disabled label="Locked bond" />}
             help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
-            loading={loading.isBondLoading}
             amount={bond?.locked}
             token={TOKENS.eth}
             sign="minus"

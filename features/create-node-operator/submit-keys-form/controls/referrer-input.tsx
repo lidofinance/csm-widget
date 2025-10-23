@@ -17,6 +17,8 @@ export const ReferrerInput: FC = () => {
     [referrer],
   );
 
+  if (!referrer) return null;
+
   return (
     <AddressInputHookForm
       fieldName="referrer"

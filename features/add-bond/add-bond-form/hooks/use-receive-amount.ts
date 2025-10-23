@@ -1,6 +1,7 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useStETHByWstETH } from 'modules/web3';
 
+// TODO: use exchange rate
 export const useReceiveAmount = (amount: bigint | undefined, token: TOKENS) => {
   const { data: wsteth, isPending: wstethLoadng } = useStETHByWstETH(
     (token === TOKENS.wsteth && amount) || undefined,

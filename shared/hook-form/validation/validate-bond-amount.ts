@@ -5,10 +5,10 @@ import { getTokenBalance, getTokenDisplayName } from 'utils';
 type ValidateBondAmountProps = {
   token: TOKENS;
   bondAmount?: bigint;
-  maxStakeEth?: bigint;
-  ethBalance?: bigint;
-  stethBalance?: bigint;
-  wstethBalance?: bigint;
+  maxStakeEth: bigint;
+  ethBalance: bigint;
+  stethBalance: bigint;
+  wstethBalance: bigint;
 };
 
 export const validateBondAmount = ({
@@ -20,7 +20,7 @@ export const validateBondAmount = ({
   wstethBalance,
 }: ValidateBondAmountProps) => {
   if (bondAmount && bondAmount > 0) {
-    if (token === TOKENS.eth && maxStakeEth && maxStakeEth < bondAmount) {
+    if (token === TOKENS.eth && maxStakeEth < bondAmount) {
       throw new ValidationError(
         'bondAmount',
         `Lido protocol has reached its stake limit for ETH deposits — use another token or try later`,
@@ -36,10 +36,11 @@ export const validateBondAmount = ({
       token,
     );
 
-    if (tokenBalance !== undefined && tokenBalance < bondAmount)
+    if (tokenBalance !== undefined && tokenBalance < bondAmount) {
       throw new ValidationError(
         'bondAmount',
         `Not enough balance of ${getTokenDisplayName(token)}`,
       );
+    }
   }
 };

@@ -5,7 +5,7 @@ import { RemoveKeysFormInputType, useRemoveKeysFormData } from '../context';
 import { useWatch } from 'react-hook-form';
 
 export const AmountInput = () => {
-  const { removalFee } = useRemoveKeysFormData();
+  const { removalFee } = useRemoveKeysFormData(true);
 
   const { count } = useWatch<RemoveKeysFormInputType, 'selection'>({
     name: 'selection',
@@ -15,7 +15,7 @@ export const AmountInput = () => {
     <Stack direction="column" gap="xs">
       <DisabledInputAmount
         isLocked="Key deletion incurs a removal charge, deducted from the node operator's bond. This charge covers the maximum possible operational costs of queue processing."
-        amount={(removalFee || 0n) * BigInt(count)}
+        amount={removalFee * BigInt(count)}
         token={TOKENS.steth}
         label="Removal fee"
         fullwidth
