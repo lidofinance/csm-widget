@@ -13,16 +13,25 @@ export const calculateGraphBounds = (
 
   // Calculate start position with back offset
   const activeStart = active < BACK_OFFSET ? 0n : active;
-  const startPosition =
-    activeStart - BACK_OFFSET < 0n ? activeStart : activeStart - BACK_OFFSET;
+  const startPosition = fullView
+    ? 0n
+    : activeStart - BACK_OFFSET < 0n
+      ? activeStart
+      : activeStart - BACK_OFFSET;
 
   // Calculate end position
-  const endPosition = active + queue + potential;
+  const endKeysPosition = active + queue + potential;
+  const endPosition = fullView
+    ? endKeysPosition < capacity
+      ? capacity
+      : endKeysPosition
+    : endKeysPosition;
+
   const range = endPosition - startPosition;
 
   // Determine display boundaries based on view mode and capacity
   const extraLow = !fullView && capacity < startPosition - range;
-  const extraHigh = !fullView && capacity > endPosition + range;
+  const extraHigh = !fullView && capacity > endPosition + endPosition / 10n;
 
   const displayStart = fullView
     ? 0

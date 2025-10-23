@@ -1,7 +1,7 @@
 import { DepositQueueBatch } from '@lidofinance/lido-csm-sdk';
 
 type OperatorBatch = {
-  keysCount: bigint;
+  keysCount: number;
   offset: bigint; // Keys count before this batch (from other operators)
 };
 
@@ -38,8 +38,8 @@ export const calculateAndSelectByOperator = (
           });
         }
 
-        runningOffset += batch.keysCount;
-        totalKeysInQueue += batch.keysCount;
+        runningOffset += BigInt(batch.keysCount);
+        totalKeysInQueue += BigInt(batch.keysCount);
       });
 
       totalKeysCount += totalKeysInQueue;

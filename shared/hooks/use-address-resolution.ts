@@ -6,16 +6,16 @@ import { usePublicClient } from 'wagmi';
 const ENS_REGEX = new RegExp('^[-a-zA-Z0-9@._]{1,256}.eth$');
 const isValidEns = (ens: string) => ENS_REGEX.test(ens);
 
-export interface AddressResolutionResult {
+export type AddressResolutionResult = {
   value?: string;
   ens?: boolean;
-}
+};
 
-export interface UseAddressResolutionReturn {
+export type UseAddressResolutionReturn = {
   address: AddressResolutionResult;
   isLoading: boolean;
   resolveAddress: (value: string) => void;
-}
+};
 
 export const useAddressResolution = (): UseAddressResolutionReturn => {
   const [address, setAddress] = useState<AddressResolutionResult>({});
