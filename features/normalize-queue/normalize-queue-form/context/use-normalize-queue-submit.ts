@@ -4,34 +4,27 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
-import invariant from 'tiny-invariant';
 import { useTxModalStagesNormalizeQueue } from '../hooks/use-tx-modal-stages-normalize-queue';
 import {
   NormalizeQueueFormInputType,
   NormalizeQueueFormNetworkData,
 } from './types';
 
-type UseNormalizeQueueOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useNormalizeQueueSubmit = ({
-  onConfirm,
-  onRetry,
-}: UseNormalizeQueueOptions) => {
+export const useNormalizeQueueSubmit: FormSubmitterHook<
+  NormalizeQueueFormInputType,
+  NormalizeQueueFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesNormalizeQueue();
 
-  const normalizeQueue = useCallback(
+  return useCallback(
     async (
       _: NormalizeQueueFormInputType,
-      { nodeOperatorId, info }: NormalizeQueueFormNetworkData,
-    ): Promise<boolean> => {
-      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(info, 'Info is not defined');
-
+      { nodeOperatorId, info },
+      { onConfirm, onRetry },
+    ) => {
       try {
         const keysCount = info.depositableValidatorsCount - info.enqueuedCount;
 
@@ -69,10 +62,6 @@ export const useNormalizeQueueSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [csm.keys, onConfirm, txModalStages, onRetry],
+    [csm.keys, txModalStages],
   );
-
-  return {
-    normalizeQueue,
-  };
 };

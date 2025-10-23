@@ -23,15 +23,14 @@ export const TokenSelect: React.FC = () => {
     ClaimBondFormInputType,
     ['token', 'claimRewards']
   >({ name: ['token', 'claimRewards'] });
-  const { loading, maxValues, isContract, isSplitter } = useClaimBondFormData();
-  const isLoading = loading.isBondLoading || loading.isRewardsLoading;
+  const { maxValues, isContract, isSplitter } = useClaimBondFormData(true);
   const { stakeWidget } = useExternalLinks();
 
   const { field: unlockField } = useController<
     ClaimBondFormInputType,
-    'unlockClaimTokens'
+    'unlockedClaimTokens'
   >({
-    name: 'unlockClaimTokens',
+    name: 'unlockedClaimTokens',
   });
 
   return (
@@ -55,8 +54,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.eth}
-                amount={maxValues?.[TOKENS.eth][Number(claimRewards)]}
-                loading={isLoading}
+                amount={maxValues[TOKENS.eth][Number(claimRewards)]}
               />
               <YouWillReceive
                 waitingTime={
@@ -75,8 +73,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.steth}
-                amount={maxValues?.[TOKENS.steth][Number(claimRewards)]}
-                loading={isLoading}
+                amount={maxValues[TOKENS.steth][Number(claimRewards)]}
               />
               <YouWillReceive
                 waitingTime="~ 1 min"
@@ -88,8 +85,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.wsteth}
-                amount={maxValues?.[TOKENS.wsteth][Number(claimRewards)]}
-                loading={isLoading || loading.isMaxValuesLoading}
+                amount={maxValues[TOKENS.wsteth][Number(claimRewards)]}
               />
               <YouWillReceive
                 waitingTime="~ 1 min"

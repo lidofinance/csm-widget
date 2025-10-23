@@ -1,13 +1,13 @@
 import {
+  NodeOperatorId,
   ROLES,
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
-import invariant from 'tiny-invariant';
 import { Address, zeroAddress } from 'viem';
 import { ChangeRoleFormInputType, ChangeRoleFormNetworkData } from '.';
 import {
@@ -15,11 +15,6 @@ import {
   useConfirmRewardsRoleModal,
 } from '../hooks/use-confirm-modal';
 import { useTxModalStagesChangeRole } from '../hooks/use-tx-modal-stages-change-role';
-
-type UseChangeRoleOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
 
 type ChangeRoleMethodParams = {
   address: Address;
@@ -36,7 +31,10 @@ const useChangeRoleTx = () => {
         role,
         isManagerReset,
         isRewardsChange,
-      }: { role: ROLES; isRewardsChange: boolean; isManagerReset: boolean },
+      }: Pick<
+        ChangeRoleFormNetworkData,
+        'role' | 'isManagerReset' | 'isRewardsChange'
+      >,
       params: ChangeRoleMethodParams,
     ) => {
       switch (true) {
@@ -57,10 +55,10 @@ const useChangeRoleTx = () => {
   );
 };
 
-export const useChangeRoleSubmit = ({
-  onConfirm,
-  onRetry,
-}: UseChangeRoleOptions) => {
+export const useChangeRoleSubmit: FormSubmitterHook<
+  ChangeRoleFormInputType,
+  ChangeRoleFormNetworkData
+> = () => {
   const { txModalStages } = useTxModalStagesChangeRole();
 
   const changeRoleMethod = useChangeRoleTx();
@@ -68,9 +66,9 @@ export const useChangeRoleSubmit = ({
   const confirmRepropose = useConfirmReproposeModal();
   const confirmRewardsRole = useConfirmRewardsRoleModal();
 
-  const changeRole = useCallback(
+  return useCallback(
     async (
-      { address: addressRaw, isRevoke }: ChangeRoleFormInputType,
+      { address: addressRaw, isRevoke },
       {
         nodeOperatorId,
         proposedAddress,
@@ -79,13 +77,13 @@ export const useChangeRoleSubmit = ({
         isPropose,
         isManagerReset,
         isRewardsChange,
-      }: ChangeRoleFormNetworkData,
-    ): Promise<boolean> => {
+      },
+      { onConfirm, onRetry },
+    ) => {
       const address = isRevoke ? zeroAddress : (addressRaw ?? zeroAddress);
-      invariant(role, 'Role is not defined');
-      invariant(address, 'Addess is not defined');
-      invariant(currentAddress, 'CurrentAddess is not defined');
-      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
+      if (!address) {
+        throw new Error('Address is not defined');
+      }
 
       if (
         !isRevoke &&
@@ -155,17 +153,6 @@ export const useChangeRoleSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [
-      confirmRewardsRole,
-      confirmRepropose,
-      changeRoleMethod,
-      onConfirm,
-      txModalStages,
-      onRetry,
-    ],
+    [confirmRewardsRole, confirmRepropose, changeRoleMethod, txModalStages],
   );
-
-  return {
-    changeRole,
-  };
 };

@@ -4,37 +4,26 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { useKeysCache } from 'shared/hooks';
 import { handleTxError } from 'shared/transaction-modal';
-import invariant from 'tiny-invariant';
 import { useTxModalStagesRemoveKeys } from '../hooks/use-tx-modal-stages-remove-keys';
 import { RemoveKeysFormInputType, RemoveKeysFormNetworkData } from './types';
 
-type RemoveKeysOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useRemoveKeysSubmit = ({
-  onConfirm,
-  onRetry,
-}: RemoveKeysOptions) => {
+export const useRemoveKeysSubmit: FormSubmitterHook<
+  RemoveKeysFormInputType,
+  RemoveKeysFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesRemoveKeys();
   const { removeCachePubkeys } = useKeysCache();
 
   return useCallback(
     async (
-      { selection: { start, count } }: RemoveKeysFormInputType,
-      { nodeOperatorId, info, keys }: RemoveKeysFormNetworkData,
-    ): Promise<boolean> => {
-      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(keys?.length, 'Keys are not defined');
-      invariant(
-        info?.totalDepositedKeys !== undefined,
-        'Offset is not defined',
-      );
-
+      { selection: { start, count } },
+      { nodeOperatorId, info, keys },
+      { onConfirm, onRetry },
+    ) => {
       const startIndex = info.totalDepositedKeys + start;
       const keysCount = count;
 
@@ -79,6 +68,6 @@ export const useRemoveKeysSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [csm.keys, onConfirm, removeCachePubkeys, txModalStages, onRetry],
+    [csm.keys, removeCachePubkeys, txModalStages],
   );
 };

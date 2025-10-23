@@ -1,5 +1,6 @@
 export * from './address-or-zero';
 export * from './address-validation';
+export * from './calculate-available-to-claim';
 export * from './compare-lowercase';
 export * from './compare-with-router-path';
 export * from './convert';

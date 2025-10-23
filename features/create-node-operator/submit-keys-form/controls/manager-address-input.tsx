@@ -1,8 +1,8 @@
-import { useDappStatus } from 'modules/web3';
 import { AddressInputHookForm } from 'shared/hook-form/controls';
+import { useSubmitKeysFormData } from '../context';
 
 export const ManagerAddressInput: React.FC = () => {
-  const { address } = useDappStatus();
+  const { address } = useSubmitKeysFormData(true);
 
   return (
     <AddressInputHookForm

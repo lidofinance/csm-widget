@@ -4,30 +4,29 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
-import invariant from 'tiny-invariant';
-import { useTxModalStagesStealingReport } from '../hooks/use-tx-modal-stages-stealing-report';
-import { StealingReportFormInputType } from './types';
 import { isHex } from 'viem';
+import { useTxModalStagesStealingReport } from '../hooks/use-tx-modal-stages-stealing-report';
+import {
+  StealingReportFormInputType,
+  StealingReportFormNetworkData,
+} from './types';
+import invariant from 'tiny-invariant';
 
-type UseStealingReportOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useStealingReportSubmit = ({
-  onConfirm,
-  onRetry,
-}: UseStealingReportOptions) => {
+export const useStealingReportSubmit: FormSubmitterHook<
+  StealingReportFormInputType,
+  StealingReportFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesStealingReport();
 
-  const stealingReport = useCallback(
-    async ({
-      amount,
-      nodeOperatorId,
-      blockhash,
-    }: StealingReportFormInputType): Promise<boolean> => {
+  return useCallback(
+    async (
+      { amount, nodeOperatorId, blockhash },
+      _data,
+      { onConfirm, onRetry },
+    ) => {
       invariant(amount !== undefined, 'Amount is not defined');
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
       invariant(isHex(blockhash), 'BlockHash is not valid');
@@ -75,10 +74,6 @@ export const useStealingReportSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [csm.stealing, onConfirm, txModalStages, onRetry],
+    [csm.stealing, txModalStages],
   );
-
-  return {
-    stealingReport,
-  };
 };

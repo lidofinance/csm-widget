@@ -9,10 +9,8 @@ export const SubmitButton = () => {
   }
 
   return (
-    <>
-      <SubmitButtonHookForm errorField="rawDepositData">
-        {'Submit keys'}
-      </SubmitButtonHookForm>
-    </>
+    <SubmitButtonHookForm errorField="rawDepositData">
+      {'Submit keys'}
+    </SubmitButtonHookForm>
   );
 };

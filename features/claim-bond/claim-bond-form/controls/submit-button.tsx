@@ -11,12 +11,12 @@ export const SubmitButton = () => {
     name: ['claimRewards', 'token', 'amount'],
   });
 
-  const { isPaused, maxValues } = useClaimBondFormData();
+  const { isPaused, maxValues } = useClaimBondFormData(true);
   if (isPaused) {
     return <PausedButton type="Accounting" />;
   }
 
-  const maxWithRewards = maxValues?.[TOKENS.steth][1];
+  const maxWithRewards = maxValues[TOKENS.steth][1];
   const isNothingToClaim = !maxWithRewards;
   const isPullRewards = amount !== undefined && amount === 0n && claimRewards;
   const text = isNothingToClaim

@@ -2,8 +2,8 @@ import { useMainnetOnlyWagmi } from 'modules/web3/web3-provider/web3-provider';
 import { useCallback } from 'react';
 import { Address, Hex, isAddress, PublicClient } from 'viem';
 import { generateAddressMessage, generateSocialMessage } from './utils';
-import { useApplyFormData } from './apply-form-provider';
 import { usePublicClient } from 'wagmi';
+import { useApplyFormData } from './apply-data-provider';
 
 type VerifyMessageProps = {
   address: Address;
@@ -11,7 +11,7 @@ type VerifyMessageProps = {
 };
 
 export const useAddressMessage = (address?: string) => {
-  const { mainAddress } = useApplyFormData();
+  const { mainAddress } = useApplyFormData(true);
 
   return address && isAddress(address)
     ? generateAddressMessage(address, mainAddress)
@@ -19,7 +19,7 @@ export const useAddressMessage = (address?: string) => {
 };
 
 export const useSocialMessages = () => {
-  const { mainAddress } = useApplyFormData();
+  const { mainAddress } = useApplyFormData(true);
   const twitterMessage = generateSocialMessage(mainAddress, 'twitter');
   const discordMessage = generateSocialMessage(mainAddress, 'discord');
 
@@ -55,7 +55,7 @@ export const useRawVefiryMessage = (mainAddress: Address) => {
   );
 };
 
-export const useVefiryMessage = () => {
-  const { mainAddress } = useApplyFormData();
+export const useVerifyMessage = () => {
+  const { mainAddress } = useApplyFormData(true);
   return useRawVefiryMessage(mainAddress);
 };

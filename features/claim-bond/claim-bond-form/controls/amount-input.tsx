@@ -11,12 +11,11 @@ export const AmountInput: React.FC = () => {
     ClaimBondFormInputType,
     ['token', 'claimRewards']
   >({ name: ['token', 'claimRewards'] });
-  const { maxValues } = useClaimBondFormData();
-  const maxAmount = maxValues?.[token][Number(claimRewards)];
+  const { maxValues } = useClaimBondFormData(true);
+  const maxAmount = maxValues[token][Number(claimRewards)];
 
   const coverInsufficientAmount = useInsufficientBondCoverAmount();
 
-  // TODO: reset amount on token switch, on disabled
   return (
     <>
       <FormTitle>Enter token amount</FormTitle>

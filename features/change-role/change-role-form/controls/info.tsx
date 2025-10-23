@@ -9,7 +9,7 @@ import { Text } from '@lidofinance/lido-ui';
 export const Info: FC = () => {
   const role = useRole();
   const { currentAddress, proposedAddress, isPropose } =
-    useChangeRoleFormData();
+    useChangeRoleFormData(true);
   const { setValue } = useFormContext<ChangeRoleFormInputType>();
 
   const revokeHandle = useCallback(() => {
