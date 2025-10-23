@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE } from 'consts';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import React from 'react';
 import { FaqBondAmount, FaqChainName, FaqCurveImage } from 'shared/components';
 import { Faq } from 'types';

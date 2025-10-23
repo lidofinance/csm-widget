@@ -7,7 +7,6 @@ export * from './use-dapp-status';
 export * from './use-deposit-queue-batches';
 export * from './use-frame-info';
 export * from './use-has-report-stealing-role';
-export * from './use-ics-can-claim';
 export * from './use-ics-curve-id';
 export * from './use-ics-paused';
 export * from './use-ics-proof';

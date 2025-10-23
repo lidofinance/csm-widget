@@ -1,7 +1,7 @@
 import { Theme } from '@lidofinance/lido-ui';
 import styled, { css } from 'styled-components';
 import { BadgeStyle } from '../role-badge/styles';
-import { OPERATOR_TYPE } from 'consts';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 
 type InjectedProps = {
   theme: Theme;

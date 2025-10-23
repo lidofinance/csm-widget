@@ -3,7 +3,7 @@ import { PATH } from 'consts/urls';
 import { useNodeOperator } from 'modules/web3';
 import { useCallback } from 'react';
 import { ShowFlags, useShowFlags } from 'shared/hooks';
-import { getRoleCode } from 'shared/node-operator';
+import { getRoleCode } from 'shared/node-operator/utils';
 import { redirectionMap } from './redirection-map';
 
 const getCorrectPath = (path: PATH, role: ROLE_CODE, flags: ShowFlags) => {

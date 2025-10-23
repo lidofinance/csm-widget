@@ -5,21 +5,22 @@ import {
   KEY_OPERATOR_KEYS_TO_MIGRATE,
   useCurveParameters,
   useDappStatus,
-  useIcsCanClaim,
   useIcsCurveId,
   useIcsPaused,
   useIcsProof,
   useNodeOperatorId,
   useOperatorCurveId,
+  useOperatorIsOwner,
 } from 'modules/web3';
-import { useCallback, useMemo } from 'react';
-import { useInvalidate } from 'shared/hooks';
+import { useCallback, useMemo, useState } from 'react';
+import { useCanClaimICS, useInvalidate } from 'shared/hooks';
 import { type ClaimTypeFormNetworkData } from './types';
 
 export const useClaimTypeFormNetworkData = (): [
   ClaimTypeFormNetworkData,
   () => Promise<void>,
 ] => {
+  const [justClaimed, setJustClaimed] = useState(false);
   const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId<true>();
 
@@ -34,6 +35,10 @@ export const useClaimTypeFormNetworkData = (): [
     useCurveParameters(currentCurveId);
   const { data: newParameters, isPending: isNewParametersLoading } =
     useCurveParameters(newCurveId);
+  const { isPending: isIsOwnerLoading } = useOperatorIsOwner({
+    address,
+    nodeOperatorId,
+  });
 
   const invalidate = useInvalidate();
 
@@ -42,8 +47,8 @@ export const useClaimTypeFormNetworkData = (): [
     isPending: isProofLoading,
     refetch: updateProof,
   } = useIcsProof(address);
-  const { data: canClaimCurve, isPending: isCanClaimCurveLoading } =
-    useIcsCanClaim({ address, nodeOperatorId });
+
+  const canClaimCurve = useCanClaimICS();
 
   const revalidate = useCallback(async () => {
     await Promise.allSettled([
@@ -56,6 +61,7 @@ export const useClaimTypeFormNetworkData = (): [
         KEY_OPERATOR_KEYS_TO_MIGRATE,
       ]),
     ]);
+    setJustClaimed(true);
   }, [invalidate, updateCurrentCurveId, updateProof]);
 
   const loading = useMemo(
@@ -66,16 +72,16 @@ export const useClaimTypeFormNetworkData = (): [
       isCurrentParametersLoading,
       isNewParametersLoading,
       isProofLoading,
-      isCanClaimCurveLoading,
+      isIsOwnerLoading,
     }),
     [
       isIcsPausedLoading,
-      isCanClaimCurveLoading,
+      isNewCurveIdLoading,
       isCurrentCurveIdLoading,
       isCurrentParametersLoading,
-      isNewCurveIdLoading,
       isNewParametersLoading,
       isProofLoading,
+      isIsOwnerLoading,
     ],
   );
 
@@ -90,6 +96,7 @@ export const useClaimTypeFormNetworkData = (): [
       newParameters,
       proof,
       canClaimCurve,
+      justClaimed,
       loading,
     },
     revalidate,

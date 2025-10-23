@@ -1,16 +1,18 @@
-import { InlineLoader, Text } from '@lidofinance/lido-ui';
+import { InlineLoader, Text, TextProps } from '@lidofinance/lido-ui';
 import { FC, ReactNode } from 'react';
 
 type ParametersValueProps = {
   loading?: boolean;
   values: ReactNode[];
+  size?: TextProps['size'];
 };
 
 export const ParametersValue: FC<ParametersValueProps> = ({
   loading,
   values,
+  size = 'xs',
 }) => (
-  <Text as="div" size="xs">
+  <Text as="div" size={size}>
     {loading ? (
       <InlineLoader />
     ) : (

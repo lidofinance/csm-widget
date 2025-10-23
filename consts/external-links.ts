@@ -26,6 +26,8 @@ export const UPLOAD_DEPOSIT_DATA_LINK =
   'https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/upload-remove-view-validator-keys#upload-keys';
 export const SUBSCRIBE_EVENTS_LINK =
   'https://docs.lido.fi/run-on-lido/csm/alerts-and-monitoring/expert-custom-alerts';
+export const OPERATOR_TYPES_LINK =
+  'https://docs.lido.fi/staking-modules/csm/join-csm/#node-operator-types';
 
 // Lido Operator Portal links
 export const LIDO_OPERATOR_PORTAL_BASE =
