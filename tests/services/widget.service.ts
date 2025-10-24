@@ -6,7 +6,7 @@ import {
   WalletConnectTypes,
 } from '@lidofinance/wallets-testing-wallets';
 import { MainPage, KeysPage, DashboardPage, RolesPage } from '../pages';
-import { DepositKey } from 'tests/consts/keys.const';
+import { DepositKey } from './keysGenerator.service';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { AssertionError } from 'assert';
 import {

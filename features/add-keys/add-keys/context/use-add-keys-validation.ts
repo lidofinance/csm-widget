@@ -63,28 +63,11 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
         await validateDepositData({
           depositData,
           sdk,
+          keysLimit: curveParameters?.keysLimit,
+          currentActiveKeys:
+            operatorInfo &&
+            operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys,
         });
-      });
-
-      await validate(['rawDepositData', 'depositData'], () => {
-        const keysCount = depositData?.length ?? 0;
-        const currentActiveKeys =
-          operatorInfo &&
-          operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys;
-
-        const keysLimit = curveParameters?.keysLimit;
-
-        if (
-          keysLimit !== undefined &&
-          currentActiveKeys !== undefined &&
-          currentActiveKeys + keysCount > keysLimit
-        ) {
-          const availableSlots = Math.max(keysLimit - currentActiveKeys, 0);
-          throw new ValidationError(
-            'depositData',
-            `Keys limit exceeded. Allowed keys count to submit: ${availableSlots}`,
-          );
-        }
       });
 
       await validate('confirmKeysReady', () => {

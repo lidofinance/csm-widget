@@ -71,19 +71,8 @@ export const useSubmitKeysValidation = (
         await validateDepositData({
           depositData,
           sdk,
+          keysLimit: curveParameters?.keysLimit,
         });
-      });
-
-      await validate(['rawDepositData', 'depositData'], () => {
-        const keysCount = depositData?.length ?? 0;
-        const keysLimit = curveParameters?.keysLimit;
-
-        if (keysLimit !== undefined && keysCount > keysLimit) {
-          throw new ValidationError(
-            'depositData',
-            `Keys limit exceeded. Allowed keys count to submit: ${keysLimit}`,
-          );
-        }
       });
 
       await validate('confirmKeysReady', () => {
