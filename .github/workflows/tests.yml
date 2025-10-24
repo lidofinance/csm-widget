@@ -104,15 +104,19 @@ jobs:
         with:
           node-version: "20"
           cache: "yarn"
-          
+
       - name: Checkout community-staking-module
         uses: actions/checkout@v4
         with:
           repository: lidofinance/community-staking-module
           path: community-staking-module
 
-      - name: Check repository files
-        run: ls -la && ls -la community-staking-module
+      - name: Install dependencies
+        run: |
+          cd community-staking-module && yarn install --immutable
+
+      - name: Build fork
+        run: cd community-staking-module && just build
 
       # - name: Install dependencies
       #   run: yarn install --immutable
