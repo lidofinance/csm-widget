@@ -147,6 +147,11 @@ jobs:
           path: ${{ needs.bootstrap.outputs.cache-path }}
           key: ${{ needs.bootstrap.outputs.cache-key }}
 
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.2.3
+
       - name: Install dependencies
         run: |
           cd community-staking-module && yarn install --immutable
