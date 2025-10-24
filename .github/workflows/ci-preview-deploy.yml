@@ -13,8 +13,7 @@ on:
           - testnet
 
   pull_request:
-    types:
-      [opened, synchronize, reopened, ready_for_review]
+    types: [opened, synchronize, reopened, ready_for_review]
     branches-ignore:
       - main
 
@@ -74,5 +73,6 @@ jobs:
     secrets: inherit
     with:
       preview_stand_url: ${{ needs.deploy.outputs.stand_url }}
-      stand_type: 'preview'
-      tags: 'smoke'
+      stand_type: "preview"
+      tags: "smoke"
+      qase_plan_id: 5 # Smoke Preview Plan

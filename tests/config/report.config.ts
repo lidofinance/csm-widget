@@ -114,6 +114,9 @@ const reporters: {
           title: getTestRunName(),
           description: getTestRunDescription(),
         },
+        plan: {
+          id: process.env.QASE_PLAN_ID,
+        },
         batch: {
           size: 10,
         },
