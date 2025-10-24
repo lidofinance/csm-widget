@@ -58,8 +58,39 @@ on:
         description: "Qase Plan ID"
 
 jobs:
+  bootstrap:
+    name: Bootstrap environment
+    runs-on: ubuntu-latest
+    outputs:
+      cache-path: ${{ steps.cache.outputs.path }}
+      cache-key: ${{ steps.cache.outputs.key }}
+    env:
+      JUST_TAG: 1.24.0
+    steps:
+      - name: Build cache params
+        id: cache
+        run: |
+          echo "path=$CACHE_PATH" >> "$GITHUB_OUTPUT"
+          echo "$KEY_INPUT" | md5sum | awk '{print $1}' | xargs -I% echo "key=cargobin-%-${RUNNER_OS}" >> "$GITHUB_OUTPUT"
+        env:
+          CACHE_PATH: |
+            ~/.cargo/bin/
+          KEY_INPUT: |
+            just:${{env.JUST_TAG}}
+
+      - uses: actions/cache@v4
+        id: get-cache
+        with:
+          path: ${{ steps.cache.outputs.path }}
+          key: ${{ steps.cache.outputs.key }}
+
+      - name: Install just
+        run: cargo install "just@$JUST_TAG"
+        if: steps.get-cache.outputs.cache-hit != 'true'
+
   test:
     runs-on: ubuntu-24.04
+    needs: bootstrap
     env:
       # Required envs
       RPC_URL: ${{ secrets.RPC_URL }}
