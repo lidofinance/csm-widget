@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import {
+  NodeOperatorShortInfo,
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
@@ -26,11 +27,18 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
   const n = useNavigate();
 
   return useCallback(
-    async ({ invite }, { address, nodeOperatorId }, { onConfirm, onRetry }) => {
+    async (
+      { invite },
+      { address, nodeOperatorId, invites },
+      { onConfirm, onRetry },
+    ) => {
       invariant(invite !== undefined, 'Invite is not defined');
 
       try {
-        const callback: TransactionCallback = async ({ stage, payload }) => {
+        const callback: TransactionCallback<NodeOperatorShortInfo> = async ({
+          stage,
+          payload,
+        }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:
               txModalStages.sign(invite);
@@ -39,8 +47,6 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
               txModalStages.pending(invite, payload.hash);
               break;
             case TransactionCallbackStage.DONE:
-              appendNO({ id: invite.id, roles: [invite.role] });
-
               txModalStages.success({ ...invite, address }, payload.hash);
               break;
             case TransactionCallbackStage.MULTISIG_DONE:
@@ -53,7 +59,7 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.roles.confirmRole({
+        const { result } = await csm.roles.confirmRole({
           nodeOperatorId: invite.id,
           role: invite.role,
           callback,
@@ -61,8 +67,11 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
 
         await onConfirm?.();
 
-        // FIXME: should i always redirect?
-        if (!nodeOperatorId) {
+        if (result) {
+          appendNO(result);
+        }
+
+        if (!nodeOperatorId && invites.length <= 1) {
           void n(PATH.HOME);
         }
 

@@ -1,10 +1,11 @@
 import {
   NodeOperatorId,
+  NodeOperatorShortInfo,
   ROLES,
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useLidoSDK } from 'modules/web3';
+import { useAppendOperator, useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
@@ -19,7 +20,7 @@ import { useTxModalStagesChangeRole } from '../hooks/use-tx-modal-stages-change-
 type ChangeRoleMethodParams = {
   address: Address;
   nodeOperatorId: NodeOperatorId;
-  callback: TransactionCallback;
+  callback: TransactionCallback<NodeOperatorShortInfo>;
 };
 
 const useChangeRoleTx = () => {
@@ -62,6 +63,8 @@ export const useChangeRoleSubmit: FormSubmitterHook<
   const { txModalStages } = useTxModalStagesChangeRole();
 
   const changeRoleMethod = useChangeRoleTx();
+
+  const appendNO = useAppendOperator();
 
   const confirmRepropose = useConfirmReproposeModal();
   const confirmRewardsRole = useConfirmRewardsRoleModal();
@@ -114,7 +117,10 @@ export const useChangeRoleSubmit: FormSubmitterHook<
           isManagerReset,
         };
 
-        const callback: TransactionCallback = async ({ stage, payload }) => {
+        const callback: TransactionCallback<NodeOperatorShortInfo> = async ({
+          stage,
+          payload,
+        }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:
               txModalStages.sign(props);
@@ -123,7 +129,6 @@ export const useChangeRoleSubmit: FormSubmitterHook<
               txModalStages.pending(props, payload.hash);
               break;
             case TransactionCallbackStage.DONE: {
-              payload;
               txModalStages.success(props, payload.hash);
               break;
             }
@@ -137,7 +142,7 @@ export const useChangeRoleSubmit: FormSubmitterHook<
           }
         };
 
-        await changeRoleMethod(
+        const { result } = await changeRoleMethod(
           { role, isRewardsChange, isManagerReset },
           {
             nodeOperatorId,
@@ -148,11 +153,21 @@ export const useChangeRoleSubmit: FormSubmitterHook<
 
         await onConfirm?.();
 
+        if (result) {
+          appendNO(result);
+        }
+
         return true;
       } catch (error) {
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [confirmRewardsRole, confirmRepropose, changeRoleMethod, txModalStages],
+    [
+      confirmRewardsRole,
+      confirmRepropose,
+      changeRoleMethod,
+      txModalStages,
+      appendNO,
+    ],
   );
 };
