@@ -69,7 +69,7 @@ jobs:
   tests:
     needs: deploy
     if: ${{ github.event.pull_request.draft == false }}
-    uses: ./.github/workflows/tests.yml@${{ github.head_ref || github.ref_name }}
+    uses: ./.github/workflows/tests.yml
     secrets: inherit
     with:
       preview_stand_url: ${{ needs.deploy.outputs.stand_url }}
