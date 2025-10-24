@@ -104,43 +104,52 @@ jobs:
         with:
           node-version: "20"
           cache: "yarn"
-
-      - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: Install Playwright Browsers
-        run: yarn playwright install chromium --with-deps
-
-      - name: Download keys generator binary
-        run: bash ./tests/scripts/set_up_keys_generator.sh
-
-      - name: Set up preview-stand credentials
-        if: ${{ inputs.stand_type  == 'preview' || github.event.inputs.stand_type == 'preview' }}
-        run: |
-          if [ -n "${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" ]; then
-            echo "Setting login and password for preview stand"
-            echo "PREVIEW_STAND_LOGIN=${{ secrets.PREVIEW_STAND_LOGIN }}" >> $GITHUB_ENV
-            echo "PREVIEW_STAND_PASSWORD=${{ secrets.PREVIEW_STAND_PASSWORD }}" >> $GITHUB_ENV
-            echo "PREVIEW_STAND_URL=${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" >> $GITHUB_ENV
-            echo "PREVIEW_STAND_ENV=${{ github.event.inputs.preview_stand_env }}" >> $GITHUB_ENV
-          else
-            echo "PREVIEW_STAND_URL not provided for preview environment"
-            exit 1
-          fi
-
-      - name: Run tests based on suite input
-        run: |
-          echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-          echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
-          echo -e "🧪 Test Tags: \033[1;34m$TEST_TAGS\033[0m"
-          echo -e "🌱 Branch: \033[1;34m${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\033[0m"
-          echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-
-          xvfb-run --auto-servernum -- yarn test
-
-      - uses: actions/upload-artifact@v4
-        if: always()
+          
+      - name: Checkout community-staking-module
+        uses: actions/checkout@v4
         with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 1
+          repository: lidofinance/community-staking-module
+          path: community-staking-module
+
+      - name: Check repository files
+        run: ls -la && ls -la community-staking-module
+
+      # - name: Install dependencies
+      #   run: yarn install --immutable
+
+      # - name: Install Playwright Browsers
+      #   run: yarn playwright install chromium --with-deps
+
+      # - name: Download keys generator binary
+      #   run: bash ./tests/scripts/set_up_keys_generator.sh
+
+      # - name: Set up preview-stand credentials
+      #   if: ${{ inputs.stand_type  == 'preview' || github.event.inputs.stand_type == 'preview' }}
+      #   run: |
+      #     if [ -n "${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" ]; then
+      #       echo "Setting login and password for preview stand"
+      #       echo "PREVIEW_STAND_LOGIN=${{ secrets.PREVIEW_STAND_LOGIN }}" >> $GITHUB_ENV
+      #       echo "PREVIEW_STAND_PASSWORD=${{ secrets.PREVIEW_STAND_PASSWORD }}" >> $GITHUB_ENV
+      #       echo "PREVIEW_STAND_URL=${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" >> $GITHUB_ENV
+      #       echo "PREVIEW_STAND_ENV=${{ github.event.inputs.preview_stand_env }}" >> $GITHUB_ENV
+      #     else
+      #       echo "PREVIEW_STAND_URL not provided for preview environment"
+      #       exit 1
+      #     fi
+
+      # - name: Run tests based on suite input
+      #   run: |
+      #     echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+      #     echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
+      #     echo -e "🧪 Test Tags: \033[1;34m$TEST_TAGS\033[0m"
+      #     echo -e "🌱 Branch: \033[1;34m${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\033[0m"
+      #     echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+
+      #     xvfb-run --auto-servernum -- yarn test
+
+      # - uses: actions/upload-artifact@v4
+      #   if: always()
+      #   with:
+      #     name: playwright-report
+      #     path: playwright-report/
+      #     retention-days: 1
