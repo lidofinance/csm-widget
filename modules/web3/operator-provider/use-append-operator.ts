@@ -1,21 +1,27 @@
 import {
   appendNodeOperator,
   getNodeOperatorRoles,
+  NodeOperatorShortInfo,
 } from '@lidofinance/lido-csm-sdk';
 import { NodeOperator, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDappStatus } from '../hooks';
 import { useLidoSDK } from '../web3-provider';
+import { KEY_OPERATORS } from './use-available-operators';
+import { getAddressRoles } from 'shared/node-operator/utils';
 
 export const useAppendOperator = () => {
   const queryClient = useQueryClient();
   const { address } = useDappStatus();
 
   const { mutate } = useMutation({
-    mutationFn: async (value: NodeOperator) => value,
+    mutationFn: async (value: NodeOperatorShortInfo) => ({
+      id: value.nodeOperatorId,
+      roles: getAddressRoles(value, address || '0x0'),
+    }),
     onSuccess: (data) => {
       queryClient.setQueryData<NodeOperator[]>(
-        ['node-operators', { address }],
+        [...KEY_OPERATORS, { address }],
         (prev = []) => appendNodeOperator(prev, data),
       );
     },
@@ -42,7 +48,7 @@ export const useApplyOperator = () => {
     onSuccess: (data) => {
       if (!data) return;
       queryClient.setQueryData<NodeOperator[]>(
-        ['node-operators', { address }],
+        [...KEY_OPERATORS, { address }],
         () => appendNodeOperator([], data),
       );
     },
