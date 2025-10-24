@@ -1,6 +1,6 @@
 import {
-  AddNodeOperatorResult,
   DepositData,
+  NodeOperatorShortInfo,
   Proof,
   TOKENS,
   TransactionCallback,
@@ -28,7 +28,7 @@ type SubmitKeysMethodParams = {
   managerAddress: string;
   extendedManagerPermissions: boolean;
   referrer?: Address;
-  callback: TransactionCallback<AddNodeOperatorResult>;
+  callback: TransactionCallback<NodeOperatorShortInfo>;
 };
 
 const useSubmitKeysTx = () => {
@@ -97,7 +97,7 @@ export const useSubmitKeysSubmit: FormSubmitterHook<
       try {
         const keysCount = depositData.length;
 
-        const callback: TransactionCallback<AddNodeOperatorResult> = async ({
+        const callback: TransactionCallback<NodeOperatorShortInfo> = async ({
           stage,
           payload,
         }) => {
