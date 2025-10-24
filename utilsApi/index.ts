@@ -2,7 +2,7 @@ export * from './clApiUrls';
 export * from './contractAddressesMetricsMap';
 export * from './getClient';
 export * from './getCurrentFrame';
-export * from './getEthSeerRate';
+export * from './getPerformance';
 export * from './nextApiWrappers';
 export * from './rpcProviders';
 export * from './api';

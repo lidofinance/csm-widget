@@ -1,7 +1,7 @@
 import { FC } from 'react';
+import { RateStatus } from 'types';
 import { formatPercent } from 'utils';
 import { BadgeStyle } from './styles';
-import { RateStatus } from './use-ethseer-api';
 
 import { ReactComponent as DownIcon } from 'assets/icons/triangle-down.svg';
 import { ReactComponent as UpIcon } from 'assets/icons/triangle-up.svg';
