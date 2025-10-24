@@ -59,6 +59,8 @@ const useChangeRoleFormNetworkData: NetworkData<
     !isRewardsChange &&
     compareLowercase(currentAddress, address);
 
+  const extendedManagerPermissions = info?.extendedManagerPermissions;
+
   return {
     data: {
       address,
@@ -69,6 +71,7 @@ const useChangeRoleFormNetworkData: NetworkData<
       isManagerReset,
       isRewardsChange,
       isPropose,
+      extendedManagerPermissions,
     } as ChangeRoleFormNetworkData,
     isPending: isInfoLoading,
     revalidate,

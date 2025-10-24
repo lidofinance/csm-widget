@@ -10,6 +10,7 @@ export type ChangeRoleFormNetworkData = {
   address: Address;
   role: ROLES;
   nodeOperatorId: NodeOperatorId;
+  extendedManagerPermissions: boolean;
   currentAddress: Address;
   proposedAddress: Address;
   isManagerReset: boolean;

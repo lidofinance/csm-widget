@@ -1,9 +1,14 @@
 import { Check, Input, Theme } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
+import { CustomStyledChip } from '../chip/styles';
 
 export const StyledInput = styled(Input)`
   input + span {
     overflow: visible;
+  }
+
+  ${CustomStyledChip} {
+    margin-block: -4px;
   }
 `;
 
