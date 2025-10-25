@@ -10,7 +10,7 @@ const BlockStyled = styled(Block)`
 export const FormBlock = styled(BlockStyled)<{
   $gap?: keyof Theme['spaceMap'];
 }>`
-  overflow: hidden; // TODO: check create-node-operator & apply-ics
+  overflow: hidden;
 
   ${BlockStyled} {
     padding: 0;
