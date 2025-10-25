@@ -62,6 +62,7 @@ export const useClaimTypeSubmit: FormSubmitterHook<
           callback,
         });
 
+        window.scrollTo({ top: 0 });
         await onConfirm?.();
 
         return true;

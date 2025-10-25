@@ -1,5 +1,6 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import {
+  KEY_DEPOSIT_QUEUE_BATCHES,
   KEY_OPERATOR_BALANCE,
   KEY_OPERATOR_INFO,
   KEY_OPERATOR_KEYS,
@@ -54,7 +55,12 @@ const useRemoveKeysFormNetworkData: NetworkData<
   const invalidate = useInvalidate();
 
   const revalidate = useCallback(() => {
-    invalidate([KEY_OPERATOR_BALANCE, KEY_OPERATOR_INFO, KEY_OPERATOR_KEYS]);
+    invalidate([
+      KEY_OPERATOR_BALANCE,
+      KEY_OPERATOR_INFO,
+      KEY_OPERATOR_KEYS,
+      KEY_DEPOSIT_QUEUE_BATCHES,
+    ]);
   }, [invalidate]);
 
   const isPending =

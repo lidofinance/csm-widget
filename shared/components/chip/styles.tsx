@@ -1,5 +1,5 @@
 import { Chip } from '@lidofinance/lido-ui';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const StyledChip = styled(Chip).attrs({ variant: 'gray' })`
   font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;
@@ -39,3 +39,24 @@ export const StyledOwnerChip = styled(CustomStyledChip)`
 `;
 
 export const StyledYouChip = styled(CustomStyledChip)``;
+
+export const StyledPriorityChip = styled.div`
+  display: inline-flex;
+  width: fit-content;
+  padding: 0px 4px;
+  text-align: center;
+  cursor: default;
+
+  border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;
+  background: color-mix(
+    in srgb,
+    currentColor 15%,
+    var(--lido-color-foreground)
+  );
+
+  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
+  line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
+  font-weight: 700;
+
+  color: #00cfff;
+`;
