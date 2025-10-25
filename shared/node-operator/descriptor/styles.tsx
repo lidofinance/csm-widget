@@ -29,9 +29,5 @@ export const DescriptorStyle = styled.span`
 
 export const DescriptorRolesStyle = styled.span`
   display: flex;
-  gap: ${({ theme }) => theme.spaceMap.sm}px;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    gap: ${({ theme }) => theme.spaceMap.xs}px;
-  }
+  gap: ${({ theme }) => theme.spaceMap.xs}px;
 `;

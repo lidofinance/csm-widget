@@ -8,6 +8,7 @@ import {
   useDappStatus,
   useNodeOperator,
 } from 'modules/web3';
+import { Counter, Stack } from 'shared/components';
 import { trackMatomoEvent } from 'utils';
 import { Descriptor } from '../descriptor/descriptor';
 import { useSwitchModal } from '../switch-modal';
@@ -38,7 +39,10 @@ export const SwitchOperatorButton: FC<ButtonProps> = (props) => {
       }
       {...rest}
     >
-      <Descriptor nodeOperator={nodeOperator} hideType />
+      <Stack gap="sm">
+        <Descriptor nodeOperator={nodeOperator} hideType />
+        {list.length > 1 && <Counter count={list.length} type="operators" />}
+      </Stack>
     </ButtonStyle>
   );
 };
