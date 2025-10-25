@@ -2,11 +2,9 @@ import { FC } from 'react';
 import HeaderTheme from './components/header-theme';
 import { Logos } from './components/logos';
 import { HeaderActionsStyle, HeaderStyle, HeaderWrapper } from './styles';
-import { FeedbackLine } from './feedback-line';
 
 export const DummyHeader: FC = () => (
   <HeaderWrapper>
-    <FeedbackLine />
     <HeaderStyle>
       <Logos />
       <HeaderActionsStyle>

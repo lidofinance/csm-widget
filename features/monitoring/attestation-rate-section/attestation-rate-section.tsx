@@ -12,13 +12,13 @@ import { formatDate, formatPercent } from 'utils';
 import { DiffBadge } from './diff-badge';
 import { Rate } from './styles';
 import { Tip } from './tip';
-import { useEthseerApi } from './use-ethseer-api';
+import { usePerformanceApi } from './use-performance-api';
 import { PerformanceMetricMethodology } from './performance-metric-methodology';
 
 export const AttestationRateSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: info } = useOperatorInfo(nodeOperatorId);
-  const { data, error } = useEthseerApi();
+  const { data, error } = usePerformanceApi();
   const { chainId } = useDappStatus();
 
   const showThisSection =
@@ -32,7 +32,7 @@ export const AttestationRateSection: FC = () => {
         <Stack spaceBetween align="baseline">
           <Stack direction="column" gap="xxs">
             <Text as="h2" size="md" weight={800}>
-              Attestation rate
+              Unified Performance Rating
             </Text>
             {data && (
               <div>
