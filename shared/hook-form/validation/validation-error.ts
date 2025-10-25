@@ -6,6 +6,7 @@ import {
   MultipleFieldErrors,
   ResolverOptions,
 } from 'react-hook-form';
+import { ValidateFn } from './types';
 
 export enum DefaultValidationErrorTypes {
   VALIDATE = 'VALIDATE',
@@ -52,10 +53,7 @@ export const initValidator = <T extends FieldValues>(
 ) => {
   const errors: FieldErrors<T> = {};
 
-  const validate = async (
-    fieldPath: FieldName<T> | FieldName<T>[],
-    validator: () => void | Promise<void>,
-  ) => {
+  const validate: ValidateFn<T> = async (fieldPath, validator) => {
     if (shouldValidateField(fieldPath, options)) {
       try {
         await validator();
@@ -108,34 +106,3 @@ export const shouldValidateField = <T extends FieldValues>(
 
 export const hasErrors = (errors: Record<string, unknown>) =>
   values(errors).length > 0;
-
-export const handleResolverValidationError = (
-  error: unknown,
-  formName: string,
-  fallbackErrorField: string,
-) => {
-  if (error instanceof ValidationError) {
-    return {
-      values: {},
-      errors: {
-        [error.field]: {
-          message: error.message,
-          type: error.type,
-          payload: error.payload,
-        },
-      },
-    };
-  }
-  console.warn(`[${formName}] Unhandled validation error in resolver`, error);
-  return {
-    values: {},
-    errors: {
-      // for general errors we use 'requests' field
-      // cause non-fields get ignored and form is still considerate valid
-      [fallbackErrorField]: {
-        type: DefaultValidationErrorTypes.UNHANDLED,
-        message: 'unknown validation error',
-      },
-    },
-  };
-};

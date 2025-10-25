@@ -1,61 +1,27 @@
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import {
-  FormControllerContext,
-  FormControllerContextValueType,
-  FormDataContext,
-  useFormControllerRetry,
-  useFormData,
-} from 'shared/hook-form/form-controller';
-import {
-  NormalizeQueueFormNetworkData,
-  type NormalizeQueueFormInputType,
-} from './types';
-import { useNormalizeQueueFormNetworkData } from './use-normalize-queue-form-network-data';
+import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import { type NormalizeQueueFormInputType } from './types';
 import { useNormalizeQueueSubmit } from './use-normalize-queue-submit';
 import { useNormalizeQueueValidation } from './use-normalize-queue-validation';
-
-export const useNormalizeQueueFormData =
-  useFormData<NormalizeQueueFormNetworkData>;
 
 export const NormalizeQueueFormProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
-  const [networkData, revalidate] = useNormalizeQueueFormNetworkData();
-  const validationResolver = useNormalizeQueueValidation(networkData);
+  const resolver = useNormalizeQueueValidation();
 
-  // TODO: validate (max amount)
   const formObject = useForm<NormalizeQueueFormInputType>({
-    defaultValues: {},
-    resolver: validationResolver,
+    resolver,
     mode: 'onChange',
   });
 
-  const { retryEvent, retryFire } = useFormControllerRetry();
-
-  const { normalizeQueue } = useNormalizeQueueSubmit({
-    onConfirm: revalidate,
-    onRetry: retryFire,
-  });
-
-  const formControllerValue: FormControllerContextValueType<
-    NormalizeQueueFormInputType,
-    NormalizeQueueFormNetworkData
-  > = useMemo(
-    () => ({
-      onSubmit: normalizeQueue,
-      retryEvent,
-    }),
-    [normalizeQueue, retryEvent],
-  );
+  const submitter = useNormalizeQueueSubmit();
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={networkData}>
-        <FormControllerContext.Provider value={formControllerValue}>
-          {children}
-        </FormControllerContext.Provider>
-      </FormDataContext.Provider>
+      <FormControllerProvider submitter={submitter}>
+        {children}
+      </FormControllerProvider>
     </FormProvider>
   );
 };

@@ -1,60 +1,30 @@
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import {
-  FormControllerContext,
-  FormControllerContextValueType,
-  FormDataContext,
-  useFormControllerRetry,
-  useFormData,
-} from 'shared/hook-form/form-controller';
-import { ClaimBondFormNetworkData, type ClaimBondFormInputType } from './types';
-import { useClaimBondFormNetworkData } from './use-claim-bond-form-network-data';
+import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import { ClaimBondUpdater } from './claim-bond-updater';
+import { type ClaimBondFormInputType } from './types';
+import { useClaimBondDefaultValues } from './use-claim-bond-default-values';
 import { useClaimBondSubmit } from './use-claim-bond-submit';
 import { useClaimBondValidation } from './use-claim-bond-validation';
-import { useFormRevalidate } from './use-form-revalidate';
-import { useGetDefaultValues } from './use-get-default-values';
-
-export const useClaimBondFormData = useFormData<ClaimBondFormNetworkData>;
 
 export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [networkData, revalidate] = useClaimBondFormNetworkData();
-  const validationResolver = useClaimBondValidation(networkData);
-
-  const asyncDefaultValues = useGetDefaultValues(networkData);
+  const resolver = useClaimBondValidation();
+  const defaultValues = useClaimBondDefaultValues();
 
   const formObject = useForm<ClaimBondFormInputType>({
-    defaultValues: asyncDefaultValues,
-    resolver: validationResolver,
+    defaultValues,
+    resolver,
     mode: 'onChange',
   });
 
-  useFormRevalidate(formObject);
-
-  const { retryEvent, retryFire } = useFormControllerRetry();
-
-  const { claimBond } = useClaimBondSubmit({
-    onConfirm: revalidate,
-    onRetry: retryFire,
-  });
-
-  const formControllerValue: FormControllerContextValueType<
-    ClaimBondFormInputType,
-    ClaimBondFormNetworkData
-  > = useMemo(
-    () => ({
-      onSubmit: claimBond,
-      retryEvent,
-    }),
-    [claimBond, retryEvent],
-  );
+  const submitter = useClaimBondSubmit();
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={networkData}>
-        <FormControllerContext.Provider value={formControllerValue}>
-          {children}
-        </FormControllerContext.Provider>
-      </FormDataContext.Provider>
+      <FormControllerProvider submitter={submitter}>
+        <ClaimBondUpdater />
+        {children}
+      </FormControllerProvider>
     </FormProvider>
   );
 };

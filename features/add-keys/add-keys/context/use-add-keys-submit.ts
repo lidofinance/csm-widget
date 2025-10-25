@@ -5,6 +5,7 @@ import {
 import { PATH } from 'consts/urls';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { useKeysCache } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import { handleTxError } from 'shared/transaction-modal';
@@ -12,12 +13,10 @@ import invariant from 'tiny-invariant';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
 import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
-type AddKeysOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
+export const useAddKeysSubmit: FormSubmitterHook<
+  AddKeysFormInputType,
+  AddKeysFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesAddKeys();
   const n = useNavigate();
@@ -26,12 +25,10 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
 
   return useCallback(
     async (
-      { depositData, token, bondAmount: amount }: AddKeysFormInputType,
-      { nodeOperatorId }: AddKeysFormNetworkData,
-    ): Promise<boolean> => {
-      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(depositData?.length, 'Keys is not defined');
-      invariant(token, 'Token is not defined');
+      { depositData, token, bondAmount: amount },
+      { nodeOperatorId },
+      { onConfirm, onRetry },
+    ) => {
       invariant(amount !== undefined, 'BondAmount is not defined');
 
       const pubkeys = depositData.map(({ pubkey }) => pubkey);
@@ -101,14 +98,6 @@ export const useAddKeysSubmit = ({ onConfirm, onRetry }: AddKeysOptions) => {
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [
-      addCachePubkeys,
-      csm.keys,
-      onConfirm,
-      n,
-      txModalStages,
-      onRetry,
-      removeCachePubkeys,
-    ],
+    [addCachePubkeys, csm.keys, n, txModalStages, removeCachePubkeys],
   );
 };

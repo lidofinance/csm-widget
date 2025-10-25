@@ -4,41 +4,26 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
-import invariant from 'tiny-invariant';
+import { useConfirmCleanupModal } from '../hooks/use-confirm-cleanup-modal';
 import { useTxModalStagesTransferKeys } from '../hooks/use-tx-modal-stages-transfer-keys';
 import {
   TransferKeysFormInputType,
   TransferKeysFormNetworkData,
 } from './types';
-import { useConfirmCleanupModal } from '../hooks/use-confirm-cleanup-modal';
 
-type TransferKeysOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useTransferKeysSubmit = ({
-  onConfirm,
-  onRetry,
-}: TransferKeysOptions) => {
+export const useTransferKeysSubmit: FormSubmitterHook<
+  TransferKeysFormInputType,
+  TransferKeysFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesTransferKeys();
   const confirm = useConfirmCleanupModal();
 
   return useCallback(
-    async (
-      _: TransferKeysFormInputType,
-      {
-        nodeOperatorId,
-        keysToMigrate: keysCount,
-        info,
-        needCleanup,
-      }: TransferKeysFormNetworkData,
-    ): Promise<boolean> => {
-      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(keysCount, 'No keys to transfer');
-      invariant(info, 'Node operator info is not defined');
+    async (_: TransferKeysFormInputType, data, { onConfirm, onRetry }) => {
+      const { nodeOperatorId, keysToMigrate: keysCount, needCleanup } = data;
 
       if (needCleanup && !(await confirm({}))) {
         return false;
@@ -107,6 +92,6 @@ export const useTransferKeysSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [confirm, csm.keys, csm.depositQueue, onConfirm, txModalStages, onRetry],
+    [confirm, csm.keys, csm.depositQueue, txModalStages],
   );
 };

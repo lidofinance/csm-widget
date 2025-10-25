@@ -4,7 +4,7 @@ import { useRole } from '../hooks/use-role';
 import { useChangeRoleFormData } from '../context';
 
 export const AddressInput: React.FC = () => {
-  const { isManagerReset } = useChangeRoleFormData();
+  const { isManagerReset } = useChangeRoleFormData(true);
   const role = useRole();
 
   return (

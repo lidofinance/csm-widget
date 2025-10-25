@@ -15,8 +15,3 @@ export type ApplyFormInputType = {
 export type ApplyFormNetworkData = {
   mainAddress: Address;
 };
-
-export type UseApplyFormSubmitOptions = {
-  onConfirm: () => Promise<void> | void;
-  onRetry: () => void;
-};

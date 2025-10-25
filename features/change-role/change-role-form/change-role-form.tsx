@@ -1,30 +1,33 @@
 import { FC, memo } from 'react';
 
-import { ChangeRoleFormProvider } from './context';
-
 import { FormBlock } from 'shared/components';
-import { FormControllerStyled } from 'shared/hook-form/form-controller';
+import { FormLoader, Form } from 'shared/hook-form/form-controller';
 import { ChangeRoleFormInfo } from './change-role-form-info';
-import { ChangeRoleFormProviderProps } from './context';
+import {
+  ChangeRoleDataProvider,
+  ChangeRoleDataProviderProps,
+  ChangeRoleFormProvider,
+} from './context';
 import { AddressInput } from './controls/address-input';
 import { Info } from './controls/info';
 import { SubmitButton } from './controls/submit-button';
-import { ChangeRoleFormLoader } from './change-role-form-loader';
 
 // TODO: update layout title/subtitle
-export const ChangeRoleForm: FC<ChangeRoleFormProviderProps> = memo((props) => {
+export const ChangeRoleForm: FC<ChangeRoleDataProviderProps> = memo((props) => {
   return (
-    <ChangeRoleFormProvider {...props}>
-      <FormBlock data-testid="changeRoleForm">
-        <ChangeRoleFormLoader>
-          <FormControllerStyled>
-            <Info />
-            <AddressInput />
-            <SubmitButton />
-          </FormControllerStyled>
-          <ChangeRoleFormInfo />
-        </ChangeRoleFormLoader>
-      </FormBlock>
-    </ChangeRoleFormProvider>
+    <ChangeRoleDataProvider {...props}>
+      <ChangeRoleFormProvider {...props}>
+        <FormBlock data-testid="changeRoleForm">
+          <FormLoader>
+            <Form>
+              <Info />
+              <AddressInput />
+              <SubmitButton />
+            </Form>
+            <ChangeRoleFormInfo />
+          </FormLoader>
+        </FormBlock>
+      </ChangeRoleFormProvider>
+    </ChangeRoleDataProvider>
   );
 });

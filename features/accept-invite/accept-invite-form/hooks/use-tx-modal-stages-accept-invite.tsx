@@ -40,7 +40,6 @@ const getTxModalStagesAcceptInvite = (
       />,
     ),
 
-  // TODO: "go to dashboard" button
   success: (
     { id, role, address }: NodeOperatorInvite & { address: string },
     txHash?: string,

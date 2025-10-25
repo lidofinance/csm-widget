@@ -4,28 +4,24 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
-import invariant from 'tiny-invariant';
 import { useTxModalStagesStealingCancel } from '../hooks/use-tx-modal-stages-stealing-cancel';
-import { StealingCancelFormInputType } from './types';
+import {
+  StealingCancelFormInputType,
+  StealingCancelFormNetworkData,
+} from './types';
+import invariant from 'tiny-invariant';
 
-type UseStealingCancelOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useStealingCancelSubmit = ({
-  onConfirm,
-  onRetry,
-}: UseStealingCancelOptions) => {
+export const useStealingCancelSubmit: FormSubmitterHook<
+  StealingCancelFormInputType,
+  StealingCancelFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesStealingCancel();
 
-  const stealingCancel = useCallback(
-    async ({
-      amount,
-      nodeOperatorId,
-    }: StealingCancelFormInputType): Promise<boolean> => {
+  return useCallback(
+    async ({ amount, nodeOperatorId }, _data, { onConfirm, onRetry }) => {
       invariant(amount !== undefined, 'Amount is not defined');
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
 
@@ -65,10 +61,6 @@ export const useStealingCancelSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [csm.stealing, onConfirm, txModalStages, onRetry],
+    [csm.stealing, txModalStages],
   );
-
-  return {
-    stealingCancel,
-  };
 };

@@ -12,8 +12,7 @@ import { useSubmitKeysFormData } from '../context';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TokenSelect: React.FC = () => {
-  const { ethBalance, stethBalance, wstethBalance, loading } =
-    useSubmitKeysFormData();
+  const { ethBalance, stethBalance, wstethBalance } = useSubmitKeysFormData();
 
   return (
     <>
@@ -34,31 +33,19 @@ export const TokenSelect: React.FC = () => {
         options={{
           [TOKENS.eth]: (
             <Stack direction="column">
-              <TokenAmount
-                token={TOKENS.eth}
-                amount={ethBalance}
-                loading={loading.isEthBalanceLoading}
-              />
+              <TokenAmount token={TOKENS.eth} amount={ethBalance} />
               {/* <KeysAvailable {...keysAvailable?.ETH} token={TOKENS.eth} /> */}
             </Stack>
           ),
           [TOKENS.steth]: (
             <Stack direction="column">
-              <TokenAmount
-                token={TOKENS.steth}
-                amount={stethBalance}
-                loading={loading.isStethBalanceLoading}
-              />
+              <TokenAmount token={TOKENS.steth} amount={stethBalance} />
               {/* <KeysAvailable {...keysAvailable?.STETH} token={TOKENS.steth} /> */}
             </Stack>
           ),
           [TOKENS.wsteth]: (
             <Stack direction="column">
-              <TokenAmount
-                token={TOKENS.wsteth}
-                amount={wstethBalance}
-                loading={loading.isWstethBalanceLoading}
-              />
+              <TokenAmount token={TOKENS.wsteth} amount={wstethBalance} />
               {/* <KeysAvailable {...keysAvailable?.WSTETH} token={TOKENS.wsteth} /> */}
             </Stack>
           ),

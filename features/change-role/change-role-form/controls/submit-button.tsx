@@ -7,7 +7,7 @@ import { useRole } from '../hooks/use-role';
 
 export const SubmitButton = () => {
   const role = useRole();
-  const { isPropose, isManagerReset } = useChangeRoleFormData();
+  const { isPropose, isManagerReset } = useChangeRoleFormData(true);
   const { setValue } = useFormContext<ChangeRoleFormInputType>();
 
   const clickHandle = useCallback(() => {

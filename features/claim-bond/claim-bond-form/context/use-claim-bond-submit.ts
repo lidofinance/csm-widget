@@ -1,39 +1,27 @@
-import { useCallback } from 'react';
-import invariant from 'tiny-invariant';
-
 import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
+import { useCallback } from 'react';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
-import { ClaimBondFormInputType, ClaimBondFormNetworkData } from '../context';
 import { useTxModalStagesClaimBond } from '../hooks/use-tx-modal-stages-claim-bond';
+import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
 
-type UseClaimBondOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useClaimBondSubmit = ({
-  onConfirm,
-  onRetry,
-}: UseClaimBondOptions) => {
+export const useClaimBondSubmit: FormSubmitterHook<
+  ClaimBondFormInputType,
+  ClaimBondFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesClaimBond();
 
-  const claimBond = useCallback(
+  return useCallback(
     async (
-      { amount = 0n, token, claimRewards }: ClaimBondFormInputType,
-      { nodeOperatorId, rewards }: ClaimBondFormNetworkData,
-    ): Promise<boolean> => {
-      invariant(token, 'Token is not defined');
-      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(
-        (claimRewards && rewards) || !claimRewards,
-        'Rewards is not defined',
-      );
-
+      { amount = 0n, token, claimRewards },
+      { nodeOperatorId, rewards },
+      { onConfirm, onRetry },
+    ) => {
       try {
         const args = {
           amount,
@@ -41,6 +29,7 @@ export const useClaimBondSubmit = ({
           claimRewards,
           rewards: rewards?.available,
         };
+
         const callback: TransactionCallback = async ({ stage, payload }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:
@@ -79,10 +68,6 @@ export const useClaimBondSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [csm.bond, txModalStages, onConfirm, onRetry],
+    [csm.bond, txModalStages],
   );
-
-  return {
-    claimBond,
-  };
 };

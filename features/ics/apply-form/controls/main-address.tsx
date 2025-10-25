@@ -2,10 +2,10 @@ import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { FormTitle, InputAddress, Stack } from 'shared/components';
 import { VerifiedChip } from 'shared/components/input-address/verified-chip';
-import { useApplyFormData } from '../context/apply-form-provider';
+import { useApplyFormData } from '../context';
 
 export const MainAddress: FC = () => {
-  const { mainAddress } = useApplyFormData();
+  const { mainAddress } = useApplyFormData(true);
 
   return (
     <Stack direction="column" gap="md">

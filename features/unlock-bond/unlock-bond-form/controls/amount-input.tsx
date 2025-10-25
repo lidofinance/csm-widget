@@ -6,7 +6,6 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 export const AmountInput: React.FC = () => {
   const max = useMaxValue();
 
-  // TODO: disable
   return (
     <>
       <FormTitle>Enter token amount</FormTitle>

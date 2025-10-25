@@ -1,5 +1,5 @@
 import { FallbackWalletStyle } from './styles';
-import { useErrorMessage } from './useErrorMessage';
+import { useErrorMessage } from './use-error-message';
 
 export const Fallback = () => {
   const error = useErrorMessage();

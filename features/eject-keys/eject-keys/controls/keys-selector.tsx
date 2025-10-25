@@ -5,7 +5,7 @@ import { LocalLink } from 'shared/navigate';
 import { useEjectKeysFormData } from '../context';
 
 export const KeysSelector = () => {
-  const { keys } = useEjectKeysFormData();
+  const { keys } = useEjectKeysFormData(true);
 
   return (
     <>
@@ -19,7 +19,7 @@ export const KeysSelector = () => {
         <LocalLink href={PATH.KEYS_EXIT}>the regular exit flow</LocalLink>.
       </WarningBlock>
       <FormTitle>Choose keys to eject</FormTitle>
-      <EjectKeysSelectorHookForm options={keys || []} />
+      <EjectKeysSelectorHookForm options={keys} />
     </>
   );
 };
