@@ -1,4 +1,5 @@
 import {
+  KEY_DEPOSIT_QUEUE_BATCHES,
   KEY_OPERATOR_BALANCE,
   KEY_OPERATOR_INFO,
   KEY_OPERATOR_KEYS,
@@ -83,6 +84,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
       KEY_OPERATOR_INFO,
       KEY_OPERATOR_KEYS,
       KEY_OPERATOR_KEYS_TO_MIGRATE,
+      KEY_DEPOSIT_QUEUE_BATCHES,
     ]);
   }, [
     invalidate,

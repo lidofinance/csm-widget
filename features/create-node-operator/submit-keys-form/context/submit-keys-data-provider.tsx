@@ -1,4 +1,5 @@
 import {
+  KEY_DEPOSIT_QUEUE_BATCHES,
   KEY_ICS_PROOF,
   KEY_SHARE_LIMIT,
   KEY_STAKE_LIMIT,
@@ -84,6 +85,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
       KEY_SHARE_LIMIT,
       KEY_STAKE_LIMIT,
       KEY_ICS_PROOF,
+      KEY_DEPOSIT_QUEUE_BATCHES,
     ]);
   }, [
     invalidate,
