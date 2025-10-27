@@ -27,7 +27,5 @@ export const SubmitButton = () => {
         ? 'Claim rewards to the Bond balance'
         : 'Claim to the Rewards Address';
 
-  return (
-    <SubmitButtonHookForm errorField="amount">{text}</SubmitButtonHookForm>
-  );
+  return <SubmitButtonHookForm>{text}</SubmitButtonHookForm>;
 };

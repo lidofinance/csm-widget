@@ -6,7 +6,7 @@ export const SubmitButton = () => {
   const { keysToMigrate, needCleanup } = useTransferKeysFormData();
 
   return (
-    <SubmitButtonHookForm errorField="selection">
+    <SubmitButtonHookForm>
       {needCleanup ? (
         <>
           Transfer{' '}

@@ -8,9 +8,5 @@ export const SubmitButton = () => {
     return <PausedButton type="Accounting" />;
   }
 
-  return (
-    <SubmitButtonHookForm errorField="bondAmount">
-      Add Bond
-    </SubmitButtonHookForm>
-  );
+  return <SubmitButtonHookForm>Add Bond</SubmitButtonHookForm>;
 };

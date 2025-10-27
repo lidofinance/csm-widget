@@ -10,6 +10,7 @@ export const SubmitButton = () => {
   const { isPropose, isManagerReset } = useChangeRoleFormData(true);
   const { setValue } = useFormContext<ChangeRoleFormInputType>();
 
+  // TODO: move this to somethere ?
   const clickHandle = useCallback(() => {
     setValue('isRevoke', false);
   }, [setValue]);
@@ -22,9 +23,7 @@ export const SubmitButton = () => {
 
   return (
     <>
-      <SubmitButtonHookForm errorField="address" onClick={clickHandle}>
-        {title}
-      </SubmitButtonHookForm>
+      <SubmitButtonHookForm onClick={clickHandle}>{title}</SubmitButtonHookForm>
       {isPropose && (
         <Note>
           To complete the address change, the owner of the new address must
