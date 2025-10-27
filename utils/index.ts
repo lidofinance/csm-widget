@@ -24,6 +24,7 @@ export * from './has-no-interception';
 export * from './has-status';
 export * from './hash-key';
 export * from './is-hexadecimal-string';
+export * from './is-truthy';
 export * from './is-url';
 export * from './logger';
 export * from './nprogress';
