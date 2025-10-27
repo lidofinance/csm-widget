@@ -157,7 +157,7 @@ jobs:
           cd community-staking-module && yarn install --immutable
 
       - name: Build fork
-        run: cd community-staking-module && jusy deps && just build
+        run: cd community-staking-module && just deps && just build
 
       - name: Install dependencies
         run: yarn install --immutable
