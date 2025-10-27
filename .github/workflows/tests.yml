@@ -157,13 +157,13 @@ jobs:
           cd community-staking-module && yarn install --immutable
 
       - name: Build fork
-        run: cd community-staking-module && just build
+        run: cd community-staking-module && jusy deps && just build
 
-      # - name: Install dependencies
-      #   run: yarn install --immutable
+      - name: Install dependencies
+        run: yarn install --immutable
 
-      # - name: Install Playwright Browsers
-      #   run: yarn playwright install chromium --with-deps
+      - name: Install Playwright Browsers
+        run: yarn playwright install chromium --with-deps
 
       # - name: Download keys generator binary
       #   run: bash ./tests/scripts/set_up_keys_generator.sh
