@@ -37,8 +37,8 @@ declare module 'next/config' {
       clApiUrls_17000: string | undefined;
       clApiUrls_560048: string | undefined;
 
-      ethseerApiUrl: string | undefined;
-      ethseerApiToken: string | undefined;
+      migalabsApiUrl: string | undefined;
+      migalabsApiToken: string | undefined;
 
       cspTrustedHosts: string | undefined;
       cspReportUri: string | undefined;
