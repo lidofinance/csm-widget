@@ -7,10 +7,3 @@ export const ROLE_CODE = {
 } as const;
 
 export type ROLE_CODE = (typeof ROLE_CODE)[keyof typeof ROLE_CODE];
-
-export enum OPERATOR_TYPE {
-  PLS = 'PLS',
-  LEA = 'LEA',
-  ICS = 'ICS',
-  CC = 'CC',
-}

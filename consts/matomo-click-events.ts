@@ -7,6 +7,21 @@ export const prefixed = (template: TemplateStringsArray, ...args: string[]) => {
   return `${MATOMO_APP_PREFIX}_${template.reduce((a, c, i) => a + c + (args[i] ?? ''), '').toLowerCase()}`;
 };
 
+// Helper functions to reduce duplication in event definitions
+const createEvent = (
+  description: string,
+  eventKey: string,
+): MatomoEventType => [
+  MATOMO_APP_NAME,
+  description,
+  `${MATOMO_APP_PREFIX}_${eventKey}`,
+];
+
+const createPageViewEvent = (
+  pageName: string,
+  eventKey: string,
+): MatomoEventType => createEvent(`View page «${pageName}»`, eventKey);
+
 export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Welcome
   connectWallet = 'connectWallet',
@@ -27,6 +42,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   starterPackHadwareLink = 'starterPackHadwareLink',
   starterPackSetupValidatorLink = 'starterPackSetupValidatorLink',
   starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
+  operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
+  operatorTypeModalApplyIcs = 'operatorTypeModalApplyIcs',
   // Forms
   howBondIsCalculated = 'howBondIsCalculated',
   depositDataLearnMore = 'depositDataLearnMore',
@@ -110,438 +127,363 @@ export const MATOMO_CLICK_EVENTS: Record<
   MatomoEventType
 > = {
   // Welcome
-  [MATOMO_CLICK_EVENTS_TYPES.connectWallet]: [
-    MATOMO_APP_NAME,
+  [MATOMO_CLICK_EVENTS_TYPES.connectWallet]: createEvent(
     'Push «Connect wallet» button',
-    prefixed`connect_wallet`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.disconnectWallet]: [
-    MATOMO_APP_NAME,
+    'connect_wallet',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.disconnectWallet]: createEvent(
     'Push «Disonnect» button',
-    prefixed`disconnect_wallet`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.clickShowMoreWallets]: [
-    MATOMO_APP_NAME,
+    'disconnect_wallet',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.clickShowMoreWallets]: createEvent(
     'Push "More wallets" on wallet modal',
-    prefixed`more_wallets`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.clickShowLessWallets]: [
-    MATOMO_APP_NAME,
+    'more_wallets',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.clickShowLessWallets]: createEvent(
     'Push "Less wallets" on wallet modal',
-    prefixed`less_wallets`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator]: [
-    MATOMO_APP_NAME,
+    'less_wallets',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator]: createEvent(
     'Push «I am a Node Operator» on Welcome screen',
-    prefixed`connect_wallet_as_no`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.connectToBecomeNodeOperator]: [
-    MATOMO_APP_NAME,
+    'connect_wallet_as_no',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.connectToBecomeNodeOperator]: createEvent(
     'Push «Become a Node Operator» on Welcome screen',
-    prefixed`connect_wallet_to_become_no`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink]: [
-    MATOMO_APP_NAME,
+    'connect_wallet_to_become_no',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink]: createEvent(
     'Click on Deailed description about CSM link',
-    prefixed`welcome_csm_detailed_link`,
-  ],
+    'welcome_csm_detailed_link',
+  ),
   // Starter Pack
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator]: [
-    MATOMO_APP_NAME,
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator]: createEvent(
     'Push «Create a Node Operator» on StarterPack screen',
-    prefixed`starterpack_create_node_operator`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.partnerDappnode]: [
-    MATOMO_APP_NAME,
+    'starterpack_create_node_operator',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.partnerDappnode]: createEvent(
     'Click partner «Dappnode» link on StarterPack screen',
-    prefixed`starterpack_partner_dappnode_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.partnerSedge]: [
-    MATOMO_APP_NAME,
+    'starterpack_partner_dappnode_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.partnerSedge]: createEvent(
     'Click partner «Sedge» link on StarterPack screen',
-    prefixed`starterpack_partner_sedge_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.partnerStereum]: [
-    MATOMO_APP_NAME,
+    'starterpack_partner_sedge_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.partnerStereum]: createEvent(
     'Click partner «Stereum» link on StarterPack screen',
-    prefixed`starterpack_partner_stereu_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.partnerEthdocker]: [
-    MATOMO_APP_NAME,
+    'starterpack_partner_stereu_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.partnerEthdocker]: createEvent(
     'Click partner «Eth Docker» link on StarterPack screen',
-    prefixed`starterpack_partner_ethdocker_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackCSMLink]: [
-    MATOMO_APP_NAME,
+    'starterpack_partner_ethdocker_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackCSMLink]: createEvent(
     'Click «About CSM» link on StarterPack screen',
-    prefixed`starterpack_csm_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackBondLink]: [
-    MATOMO_APP_NAME,
+    'starterpack_csm_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackBondLink]: createEvent(
     'Click «Lear about Bond» link on StarterPack screen',
-    prefixed`starterpack_bond_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackHadwareLink]: [
-    MATOMO_APP_NAME,
+    'starterpack_bond_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackHadwareLink]: createEvent(
     'Click «Run hardware» link on StarterPack screen',
-    prefixed`starterpack_hardware_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackSetupValidatorLink]: [
-    MATOMO_APP_NAME,
+    'starterpack_hardware_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackSetupValidatorLink]: createEvent(
     'Click «Setup validator» link on StarterPack screen',
-    prefixed`starterpack_setup_validator_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackGenerateKeysLink]: [
-    MATOMO_APP_NAME,
+    'starterpack_setup_validator_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackGenerateKeysLink]: createEvent(
     'Click «Generation Keys guide» link on StarterPack screen',
-    prefixed`starterpack_generate_keys_link`,
-  ],
+    'starterpack_generate_keys_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless]: createEvent(
+    'Push «Join permissionlessly» button on Operator Type modal',
+    'operator_type_modal_join_permissionless',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIcs]: createEvent(
+    'Push «Apply for ICS» button on Operator Type modal',
+    'operator_type_modal_apply_ics',
+  ),
   // Forms
-  [MATOMO_CLICK_EVENTS_TYPES.howBondIsCalculated]: [
-    MATOMO_APP_NAME,
+  [MATOMO_CLICK_EVENTS_TYPES.howBondIsCalculated]: createEvent(
     'Click «How bond is calculated» link on Upload form',
-    prefixed`how_bond_is_calculated_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: [
-    MATOMO_APP_NAME,
+    'how_bond_is_calculated_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: createEvent(
     'Click «Upload Deposit Data learn more» link on Upload form',
-    prefixed`deposti_data_learn_more_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.howToClaimEth]: [
-    MATOMO_APP_NAME,
+    'deposti_data_learn_more_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.howToClaimEth]: createEvent(
     'Click «Follow FAQ (ETH)» link on Claim form',
-    prefixed`how_to_claim_eth`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.customAddressDescription]: [
-    MATOMO_APP_NAME,
+    'how_to_claim_eth',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.customAddressDescription]: createEvent(
     'Click «Detailed description of custom addresses» link on Create NO form',
-    prefixed`cusstom_address_description_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription]: [
-    MATOMO_APP_NAME,
-    'Click «Detailed description of manager permission type» link on Create NO form',
-    prefixed`manager_address_permission_type_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.createSuccessKeysTab]: [
-    MATOMO_APP_NAME,
+    'cusstom_address_description_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription]:
+    createEvent(
+      'Click «Detailed description of manager permission type» link on Create NO form',
+      'manager_address_permission_type_link',
+    ),
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessKeysTab]: createEvent(
     'Click «check status on keys tab» link after Create NO',
-    prefixed`create_success_keys_tab_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard]: [
-    MATOMO_APP_NAME,
+    'create_success_keys_tab_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard]: createEvent(
     'Click «beaconcha.in bashboard» link after Create NO',
-    prefixed`create_success_beaconchain_dashboard_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain]: [
-    MATOMO_APP_NAME,
+    'create_success_beaconchain_dashboard_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain]: createEvent(
     'Click «beaconcha.in» link after Create NO',
-    prefixed`create_success_beaconchain_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents]: [
-    MATOMO_APP_NAME,
+    'create_success_beaconchain_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents]: createEvent(
     'Click «subscribe events» link after Create NO',
-    prefixed`create_success_subscribe_events_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.transferSuccessCleanQueueLink]: [
-    MATOMO_APP_NAME,
+    'create_success_subscribe_events_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.transferSuccessCleanQueueLink]: createEvent(
     'Click «Clean Queue» link after Transfer Keys',
-    prefixed`transfer_success_clean_queue_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.otherModuleLink]: [
-    MATOMO_APP_NAME,
+    'transfer_success_clean_queue_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.otherModuleLink]: createEvent(
     'Click «operators.lido.fi» link for other module',
-    prefixed`operator_in_other_module_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.splitsOrgDocumentation]: [
-    MATOMO_APP_NAME,
+    'operator_in_other_module_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.splitsOrgDocumentation]: createEvent(
     'Click «splits.org documentation» link',
-    prefixed`spilt_org_documentation_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.howToClaimEthSuccessLink]: [
-    MATOMO_APP_NAME,
+    'spilt_org_documentation_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.howToClaimEthSuccessLink]: createEvent(
     'Click «How to claim ETH» link in success modal',
-    prefixed`how_to_claim_eth_success_link`,
-  ],
+    'how_to_claim_eth_success_link',
+  ),
   // Common
-  [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: [
-    MATOMO_APP_NAME,
+  [MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink]: createEvent(
     'Click «View on Etherscan» link on TX modal',
-    prefixed`etherscan_transaction_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink]: [
-    MATOMO_APP_NAME,
+    'etherscan_transaction_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.etherscanAddressLink]: createEvent(
     'Click «View on Etherscan» link on address',
-    prefixed`etherscan_address_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.beaconchainPubkeyLink]: [
-    MATOMO_APP_NAME,
+    'etherscan_address_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.beaconchainPubkeyLink]: createEvent(
     'Click «View on beaconcha.in» link on pubkey',
-    prefixed`beaconchain_pubkey_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.migalabsPubkeyLink]: [
-    MATOMO_APP_NAME,
+    'beaconchain_pubkey_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.migalabsPubkeyLink]: createEvent(
     'Click «View on migalabs.io» link on pubkey',
-    prefixed`migalabs_pubkey_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: [
-    MATOMO_APP_NAME,
+    'migalabs_pubkey_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: createEvent(
     'Click «Submit report with form» link',
-    prefixed`feedback_form_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink]: [
-    MATOMO_APP_NAME,
+    'feedback_form_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink]: createEvent(
     'Click «Join CSM» in other network link',
-    prefixed`try_csm_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner]: [
-    MATOMO_APP_NAME,
+    'try_csm_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner]: createEvent(
     'Click «stake share limit» link on banner',
-    prefixed`stake_share_limit_link_banner`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.faqItemLink]: [
-    MATOMO_APP_NAME,
+    'stake_share_limit_link_banner',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.faqItemLink]: createEvent(
     'Click link in FAQ',
-    prefixed`faq_item_link`,
-  ],
+    'faq_item_link',
+  ),
   // Key status comment
-  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkComment]: [
-    MATOMO_APP_NAME,
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkComment]: createEvent(
     'Click «Exit key from CL» link on key status comment',
-    prefixed`exit_key_from_cl_link_comment`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment]: [
-    MATOMO_APP_NAME,
+    'exit_key_from_cl_link_comment',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment]: createEvent(
     'Click «When validator become active» link on key status comment',
-    prefixed`when_validator_become_active_link_comment`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeWithdrawnLinkComment]: [
-    MATOMO_APP_NAME,
-    'Click «When validator become withdrawn» link on key status comment',
-    prefixed`when_validator_become_withdrawn_link_comment`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment]: [
-    MATOMO_APP_NAME,
+    'when_validator_become_active_link_comment',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeWithdrawnLinkComment]:
+    createEvent(
+      'Click «When validator become withdrawn» link on key status comment',
+      'when_validator_become_withdrawn_link_comment',
+    ),
+  [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment]: createEvent(
     'Click «stake share limit» link on key status comment',
-    prefixed`stake_share_limit_link_comment`,
-  ],
+    'stake_share_limit_link_comment',
+  ),
   // Alerts
-  [MATOMO_CLICK_EVENTS_TYPES.howLearnCsmClose]: [
-    MATOMO_APP_NAME,
-    `Close alert «How did I learn about CSM»`,
-    prefixed`_close_how_learn_csm`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: [
-    MATOMO_APP_NAME,
+  [MATOMO_CLICK_EVENTS_TYPES.howLearnCsmClose]: createEvent(
+    'Close alert «How did I learn about CSM»',
+    '_close_how_learn_csm',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: createEvent(
     'Click «How to exit» link on Request To Exit alert',
-    prefixed`how_to_exit_link_requset_to_exit_alert`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: [
-    MATOMO_APP_NAME,
+    'how_to_exit_link_requset_to_exit_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: createEvent(
     'Click «Normalize queue» link on Normalize Queue alert',
-    prefixed`normalize_queue_link_alert`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.transferKeysLinkAlert]: [
-    MATOMO_APP_NAME,
+    'normalize_queue_link_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.transferKeysLinkAlert]: createEvent(
     'Click «Transfer keys» link on Transfer Keys alert',
-    prefixed`transfer_keys_link_alert`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: [
-    MATOMO_APP_NAME,
+    'transfer_keys_link_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: createEvent(
     'Click «Unlock bond» link on Locked Bond alert',
-    prefixed`unlock_bond_link_alert`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert]: [
-    MATOMO_APP_NAME,
+    'unlock_bond_link_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert]: createEvent(
     'Click «Claim ICS» link on Claim ICS alert',
-    prefixed`claim_ics_link_alert`,
-  ],
+    'claim_ics_link_alert',
+  ),
   // Dashboard
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: [
-    MATOMO_APP_NAME,
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: createEvent(
     'Push «Keys section» arrow on Dashboard screen',
-    prefixed`dashboard_keys_section`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardBondLink]: [
-    MATOMO_APP_NAME,
+    'dashboard_keys_section',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardBondLink]: createEvent(
     'Push «Bond section» arrow on Dashboard screen',
-    prefixed`dashboard_bond_section`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink]: [
-    MATOMO_APP_NAME,
+    'dashboard_bond_section',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink]: createEvent(
     'Push «Roles section» arrow on Dashboard screen',
-    prefixed`dashboard_roles_section`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink]: [
-    MATOMO_APP_NAME,
+    'dashboard_roles_section',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink]: createEvent(
     'Click «Beaconcha.in» on Dashboard screen',
-    prefixed`dashboard_external_beaconcha_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalFeesMonitoringLink]: [
-    MATOMO_APP_NAME,
+    'dashboard_external_beaconcha_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalFeesMonitoringLink]: createEvent(
     'Click «MEV monitoring» on Dashboard screen',
-    prefixed`dashboard_external_mev_monitoring_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalOperatorsPortalLink]: [
-    MATOMO_APP_NAME,
+    'dashboard_external_mev_monitoring_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalOperatorsPortalLink]: createEvent(
     'Click «Lido operators» on Dashboard screen',
-    prefixed`dashboard_external_operators_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalRatedLink]: [
-    MATOMO_APP_NAME,
+    'dashboard_external_operators_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalRatedLink]: createEvent(
     'Click «Rated» on Dashboard screen',
-    prefixed`dashboard_external_rated_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalMigaLabsLink]: [
-    MATOMO_APP_NAME,
+    'dashboard_external_rated_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalMigaLabsLink]: createEvent(
     'Click «MigaLabs» on Dashboard screen',
-    prefixed`dashboard_external_migalabs_link`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.dashboardNotificationSentinelLink]: [
-    MATOMO_APP_NAME,
+    'dashboard_external_migalabs_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardNotificationSentinelLink]: createEvent(
     'Click «Notification Sentinel» on Dashboard screen',
-    prefixed`dashboard_notification_sentinel_link`,
-  ],
+    'dashboard_notification_sentinel_link',
+  ),
   // Pages
-  [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: [
-    MATOMO_APP_NAME,
-    'View page «Welcome»',
-    prefixed`view_welcome_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageStarterPack]: [
-    MATOMO_APP_NAME,
-    'View page «StarterPack»',
-    prefixed`view_starter_pack_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageMaintenance]: [
-    MATOMO_APP_NAME,
-    'View page «Maintenance»',
-    prefixed`view_maintenance_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageCreateNodeOperator]: [
-    MATOMO_APP_NAME,
-    'View page «CreateNodeOperator»',
-    prefixed`view_create_node_operator_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageDashboard]: [
-    MATOMO_APP_NAME,
-    'View page «Dashboard»',
-    prefixed`view_dashboard_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageAddKeys]: [
-    MATOMO_APP_NAME,
-    'View page «AddKeys»',
-    prefixed`view_add_keys_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageViewKeys]: [
-    MATOMO_APP_NAME,
-    'View page «ViewKeys»',
-    prefixed`view_view_keys_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageRemoveKeys]: [
-    MATOMO_APP_NAME,
-    'View page «RemoveKeys»',
-    prefixed`view_remove_keys_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageExitKeys]: [
-    MATOMO_APP_NAME,
-    'View page «ExitKeys»',
-    prefixed`view_exit_keys_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageEjectKeys]: [
-    MATOMO_APP_NAME,
-    'View page «EjectKeys»',
-    prefixed`view_eject_keys_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageTransferKeys]: [
-    MATOMO_APP_NAME,
-    'View page «TransferKeys»',
-    prefixed`view_transfer_keys_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageMonitoring]: [
-    MATOMO_APP_NAME,
-    'View page «Monitoring»',
-    prefixed`view_monitoring_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageAddBond]: [
-    MATOMO_APP_NAME,
-    'View page «AddBond»',
-    prefixed`view_add_bond_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageClaimBond]: [
-    MATOMO_APP_NAME,
-    'View page «ClaimBond»',
-    prefixed`view_claim_bond_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageUnlockBond]: [
-    MATOMO_APP_NAME,
-    'View page «UnlockBond»',
-    prefixed`view_unlock_bond_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageClaimType]: [
-    MATOMO_APP_NAME,
-    'View page «ClaimType»',
-    prefixed`view_claim_type_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: [
-    MATOMO_APP_NAME,
-    'View page «InboxRequests»',
-    prefixed`view_inbox_requests_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageChangeManagerRole]: [
-    MATOMO_APP_NAME,
-    'View page «ChangeManagerRole»',
-    prefixed`view_change_manager_role_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageChangeRewardsRole]: [
-    MATOMO_APP_NAME,
-    'View page «ChangeRewardsRole»',
-    prefixed`view_change_rewards_role_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageNormalizeQueue]: [
-    MATOMO_APP_NAME,
-    'View page «NormalizeQueue»',
-    prefixed`view_normalize_queue_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageCleanQueue]: [
-    MATOMO_APP_NAME,
-    'View page «CleanQueue»',
-    prefixed`view_clean_queue_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs]: [
-    MATOMO_APP_NAME,
-    'View page «Type ICS»',
-    prefixed`view_type_ics_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcsApply]: [
-    MATOMO_APP_NAME,
-    'View page «Type ICS apply»',
-    prefixed`view_type_ics_apply_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.page404]: [
-    MATOMO_APP_NAME,
-    'View page «404»',
-    prefixed`view_404_page`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.page500]: [
-    MATOMO_APP_NAME,
-    'View page «500»',
-    prefixed`view_500_page`,
-  ],
+  [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: createPageViewEvent(
+    'Welcome',
+    'view_welcome_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageStarterPack]: createPageViewEvent(
+    'StarterPack',
+    'view_starter_pack_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageMaintenance]: createPageViewEvent(
+    'Maintenance',
+    'view_maintenance_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageCreateNodeOperator]: createPageViewEvent(
+    'CreateNodeOperator',
+    'view_create_node_operator_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageDashboard]: createPageViewEvent(
+    'Dashboard',
+    'view_dashboard_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageAddKeys]: createPageViewEvent(
+    'AddKeys',
+    'view_add_keys_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageViewKeys]: createPageViewEvent(
+    'ViewKeys',
+    'view_view_keys_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageRemoveKeys]: createPageViewEvent(
+    'RemoveKeys',
+    'view_remove_keys_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageExitKeys]: createPageViewEvent(
+    'ExitKeys',
+    'view_exit_keys_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageEjectKeys]: createPageViewEvent(
+    'EjectKeys',
+    'view_eject_keys_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageTransferKeys]: createPageViewEvent(
+    'TransferKeys',
+    'view_transfer_keys_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageMonitoring]: createPageViewEvent(
+    'Monitoring',
+    'view_monitoring_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageAddBond]: createPageViewEvent(
+    'AddBond',
+    'view_add_bond_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageClaimBond]: createPageViewEvent(
+    'ClaimBond',
+    'view_claim_bond_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageUnlockBond]: createPageViewEvent(
+    'UnlockBond',
+    'view_unlock_bond_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageClaimType]: createPageViewEvent(
+    'ClaimType',
+    'view_claim_type_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: createPageViewEvent(
+    'InboxRequests',
+    'view_inbox_requests_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageChangeManagerRole]: createPageViewEvent(
+    'ChangeManagerRole',
+    'view_change_manager_role_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageChangeRewardsRole]: createPageViewEvent(
+    'ChangeRewardsRole',
+    'view_change_rewards_role_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageNormalizeQueue]: createPageViewEvent(
+    'NormalizeQueue',
+    'view_normalize_queue_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageCleanQueue]: createPageViewEvent(
+    'CleanQueue',
+    'view_clean_queue_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs]: createPageViewEvent(
+    'Type ICS',
+    'view_type_ics_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcsApply]: createPageViewEvent(
+    'Type ICS apply',
+    'view_type_ics_apply_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.page404]: createPageViewEvent(
+    '404',
+    'view_404_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.page500]: createPageViewEvent(
+    '500',
+    'view_500_page',
+  ),
   // Actions
-  [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: [
-    MATOMO_APP_NAME,
+  [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: createEvent(
     'Switch Node Operator',
-    prefixed`switch_node_operator`,
-  ],
+    'switch_node_operator',
+  ),
   // Modifiers
-  [MATOMO_CLICK_EVENTS_TYPES.visitWithModeExtended]: [
-    MATOMO_APP_NAME,
+  [MATOMO_CLICK_EVENTS_TYPES.visitWithModeExtended]: createEvent(
     'Visit with mode extended',
-    prefixed`visit_mode_extended`,
-  ],
-  [MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer]: [
-    MATOMO_APP_NAME,
+    'visit_mode_extended',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer]: createEvent(
     'Visite with referrer',
-    prefixed`visit_referrer`,
-  ],
+    'visit_referrer',
+  ),
 };

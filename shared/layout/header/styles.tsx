@@ -170,4 +170,14 @@ export const ButtonGroup = styled.div`
       );
     }
   }
+
+  &:empty {
+    display: none;
+  }
+`;
+
+export const StyledSlot = styled.div`
+  &:empty {
+    display: none;
+  }
 `;

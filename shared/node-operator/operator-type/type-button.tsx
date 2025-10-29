@@ -1,28 +1,33 @@
 import { ButtonProps } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 
-import {
-  getOperatorType,
-  useCurveParameters,
-  useDappStatus,
-  useNodeOperatorId,
-  useOperatorCurveId,
-} from 'modules/web3';
+import { useCurveParameters } from 'modules/web3';
+import { getOperatorType } from 'utils';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { useParametersModal } from '../parameters-modal';
 import { ButtonStyle } from './styles';
 
-export const TypeButton: FC<ButtonProps> = (props) => {
-  const { onClick, ...rest } = props;
-  const { isSupportedChain, address } = useDappStatus();
+export type TypeButtonBaseProps = ButtonProps & {
+  curveId: bigint | undefined;
+};
+
+/**
+ * Base component for operator type button.
+ * Displays the operator type badge and opens parameters modal on click.
+ *
+ * @param curveId - The curve ID to display type for
+ * @param props - Additional button props
+ */
+export const TypeButton: FC<TypeButtonBaseProps> = ({
+  curveId,
+  onClick,
+  ...rest
+}) => {
   const { openModal } = useParametersModal();
-  const nodeOperatorId = useNodeOperatorId();
-  const { data: curveId } = useOperatorCurveId(nodeOperatorId);
   useCurveParameters(curveId); // pre-fetching
   const type = getOperatorType(curveId);
 
-  if (!isSupportedChain || !address || !type || curveId === undefined)
-    return null;
+  if (curveId === undefined || !type) return null;
 
   return (
     <ButtonStyle
