@@ -8,6 +8,8 @@ const BlockStyled = styled(Block)`
 `;
 
 export const FormBlock = styled(BlockStyled)`
+  overflow: hidden;
+
   ${BlockStyled} {
     padding: 0;
     border-radius: initial;

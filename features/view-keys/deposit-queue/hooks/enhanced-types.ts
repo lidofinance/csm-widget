@@ -5,7 +5,7 @@ import type {
   QueuePart,
 } from '../types';
 
-export interface GraphBounds {
+export type GraphBounds = {
   startPosition: bigint;
   endPosition: bigint;
   range: bigint;
@@ -16,58 +16,58 @@ export interface GraphBounds {
   extraLow: boolean;
   extraHigh: boolean;
   farAway: boolean;
-}
+};
 
-export interface QueueSegment {
+export type QueueSegment = {
   keysUnderLimit: bigint;
   keysOverLimit: bigint;
   underLimitSize: number;
   overLimitSize: number;
   totalSize: number;
   startPosition: bigint;
-}
+};
 
-export interface ViewConfig {
+export type ViewConfig = {
   fullView: boolean;
   minSegmentSize: number;
-}
+};
 
-export interface ShareLimit {
+export type ShareLimit = {
   active: bigint;
   queue: bigint;
   capacity: bigint;
   activeLeft: bigint;
-}
+};
 
-export interface OperatorInfo {
+export type OperatorInfo = {
   depositableValidatorsCount?: number;
   totalDepositedKeys?: number;
   enqueuedCount?: number;
-}
+};
 
 export type SubmittingAllocation = {
   keysCount: number;
   allocation: [number, number][];
 }; // queue priority, keys count
 
-export interface ProcessedBatches {
+export type ProcessedBatches = {
   batches: BatchPart[];
   cumulativeKeys: bigint;
-}
+};
 
-export interface SegmentInfo {
+export type SegmentInfo = {
   startPos: bigint;
   underLimitKeys: bigint;
   overLimitKeys: bigint;
-}
+};
 
-export interface GraphCalculationParams {
+export type GraphCalculationParams = {
   active: bigint;
   queue: bigint;
   added: bigint;
   capacity: bigint;
   fullView: boolean;
-}
+};
 
 // Re-export original types
 export type {
