@@ -84,6 +84,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardBondLink = 'dashboardBondLink',
   dashboardRolesLink = 'dashboardRolesLink',
   dashboardExternalBeaconchaLink = 'dashboardExternalBeaconchaLink',
+  dashboardExternalBeaconchaEntityLink = 'dashboardExternalBeaconchaEntityLink',
   dashboardExternalFeesMonitoringLink = 'dashboardExternalFeesMonitoringLink',
   dashboardExternalOperatorsPortalLink = 'dashboardExternalOperatorsPortalLink',
   dashboardExternalRatedLink = 'dashboardExternalRatedLink',
@@ -350,6 +351,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink]: createEvent(
     'Click «Beaconcha.in» on Dashboard screen',
     'dashboard_external_beaconcha_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaEntityLink]: createEvent(
+    'Click «Beaconcha.in Entity» on Dashboard screen',
+    'dashboard_external_beaconcha_entity_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.dashboardExternalFeesMonitoringLink]: createEvent(
     'Click «MEV monitoring» on Dashboard screen',

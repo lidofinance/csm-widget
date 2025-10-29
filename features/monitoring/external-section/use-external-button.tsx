@@ -12,9 +12,11 @@ import {
   useFeesMonitoningLink,
   useOperatorPortalLink,
   useRatedLink,
+  useBeaconchainEntityLink,
 } from 'shared/hooks';
 
 export const useExternalButtons = () => {
+  const beaconchainEntityLink = useBeaconchainEntityLink();
   const beaconchainDashboardLink = useBeaconchainDashboardLink();
   const feesMonitoningLink = useFeesMonitoningLink();
   const operatorPortalLink = useOperatorPortalLink();
@@ -24,13 +26,13 @@ export const useExternalButtons = () => {
   return useMemo(
     (): ComponentProps<typeof ExternalButtonLink>[] =>
       [
-        beaconchainDashboardLink && {
-          title: 'beaconcha.in v2',
+        beaconchainEntityLink && {
+          title: 'beaconcha.in Entity',
           icon: <BeaconchaIcon />,
-          href: beaconchainDashboardLink,
-          matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink,
-          children:
-            'Dashboard displays statistics of your validators (up to 20 in free plan)',
+          href: beaconchainEntityLink,
+          matomoEvent:
+            MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaEntityLink,
+          children: 'Overview of your operator on beaconcha.in',
         },
         ratedLink && {
           title: 'Rated explorer',
@@ -47,6 +49,14 @@ export const useExternalButtons = () => {
           matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardExternalMigaLabsLink,
           children:
             'Provides real-time statistics of your validators’ performance',
+        },
+        beaconchainDashboardLink && {
+          title: 'beaconcha.in v2',
+          icon: <BeaconchaIcon />,
+          href: beaconchainDashboardLink,
+          matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink,
+          children:
+            'Dashboard displays statistics of your validators (up to 20 in free plan)',
         },
         operatorPortalLink && {
           title: 'Lido Operators Portal',
@@ -67,11 +77,12 @@ export const useExternalButtons = () => {
         },
       ].filter((n) => !!n),
     [
-      beaconchainDashboardLink,
-      migaLabsLink,
-      feesMonitoningLink,
-      operatorPortalLink,
+      beaconchainEntityLink,
       ratedLink,
+      migaLabsLink,
+      beaconchainDashboardLink,
+      operatorPortalLink,
+      feesMonitoningLink,
     ],
   );
 };
