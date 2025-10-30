@@ -10,14 +10,14 @@ export const Main7: Faq = {
     <div>
       <p>
         The initial bond requirement for the first validator for the{' '}
-        <FaqChainName /> is <FaqBondAmount type={OPERATOR_TYPE.PLS} />. However,
+        <FaqChainName /> is <FaqBondAmount type={OPERATOR_TYPE.DEF} />. However,
         for Identified Community Stakers (ICS), this amount is reduced to{' '}
         <FaqBondAmount type={OPERATOR_TYPE.ICS} /> to incentivize independent
         stakers participation.
       </p>
       <p>
         The amount for the second and subsequent validators is{' '}
-        <FaqBondAmount type={OPERATOR_TYPE.PLS} second />
+        <FaqBondAmount type={OPERATOR_TYPE.DEF} second />
       </p>
       <p>
         For the <FaqChainName />, the values for the bond curve are the
