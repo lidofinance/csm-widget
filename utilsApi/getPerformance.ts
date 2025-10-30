@@ -41,9 +41,7 @@ const fetchPerformance = async (
   nodeOperatorId: string,
   countEpochs: number,
 ) => {
-  const apiUrl =
-    'https://www.migalabs.io/api/eth/v1/beacon/consensus/lido/csm/unified_performance';
-  const { migalabsApiToken: apiToken } = secretConfig;
+  const { migalabsApiUrl: apiUrl, migalabsApiToken: apiToken } = secretConfig;
   if (!apiUrl || !apiToken) {
     throw new Error('Error: MigaLabs API URL or token is not configured');
   }
