@@ -17,6 +17,7 @@ import { TokenSelect } from './controls/token-select';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
 import { KeysConfirm } from './controls/keys-confirm';
 import { DepositQueue } from 'features/view-keys/deposit-queue';
+import { HeaderOperatorTypeButton } from './header-operator-type-button';
 
 export const SubmitKeysForm: FC = memo(() => {
   const { referrer } = useModifyContext();
@@ -25,6 +26,7 @@ export const SubmitKeysForm: FC = memo(() => {
     <SubmitKeysFormProvider>
       <FormBlock data-testid="submitKeysForm">
         <BaseFormLoader>
+          <HeaderOperatorTypeButton />
           <FormControllerStyled>
             <TokenSelect />
             <KeysInput />

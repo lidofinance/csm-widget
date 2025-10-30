@@ -16,7 +16,7 @@ import {
   useOperatorOwner,
   useOperatorType,
 } from 'modules/web3';
-import { OPERATOR_TYPE } from 'consts';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 
 export type TypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
 

@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE } from 'consts';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { Counter } from 'shared/components';
 import { useCanClaimICS } from 'shared/hooks';

@@ -13,7 +13,7 @@ import { Descriptor } from '../descriptor/descriptor';
 import { useSwitchModal } from '../switch-modal';
 import { ButtonStyle } from './styles';
 
-export const Button: FC<ButtonProps> = (props) => {
+export const SwitchOperatorButton: FC<ButtonProps> = (props) => {
   const { onClick, ...rest } = props;
   const { isSupportedChain } = useDappStatus();
   const { openModal } = useSwitchModal();
