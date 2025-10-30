@@ -13,7 +13,7 @@ type Result = {
 
 export const useDappStatus = (): Result => {
   const {
-    address,
+    address: walletAddress,
     chainId: walletChainId,
     isConnected: isWalletConnected,
   } = useAccount();
@@ -33,6 +33,8 @@ export const useDappStatus = (): Result => {
   const isAccountActive = walletChainId
     ? isWalletConnected && isSupportedChain
     : false;
+
+  const address = isSupportedChain ? walletAddress : undefined;
 
   // no useMemo because memoisation is more expensive than boolean flags
   // hook is used in many places and every usage would create separate memoisation
