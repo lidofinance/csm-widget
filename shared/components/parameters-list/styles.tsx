@@ -32,15 +32,32 @@ export const CompareListStyle = styled.div`
 `;
 
 export const ColumnBackground = styled.div`
+  --border-radius: 12px;
   position: absolute;
   top: -8px;
-  right: -8px;
+  right: -4px;
   bottom: -8px;
-  width: calc((100% + 8px) * 5 / 14 - 2px);
-  border-radius: 12px;
-  opacity: 0.6;
+  width: calc((100% + 0px) * 5 / 14 - 2px);
+  border-radius: var(--border-radius);
   pointer-events: none;
+  opacity: 0.6;
   z-index: 0;
+
+  &:before {
+    --offset: 2px;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: var(--offset);
+
+    border-radius: calc(var(--border-radius) - var(--offset));
+    background: var(--lido-color-foreground);
+    opacity: 0.9;
+  }
 `;
 
 export const IcsColumnBackground = styled(ColumnBackground)`
@@ -49,7 +66,7 @@ export const IcsColumnBackground = styled(ColumnBackground)`
 
 export const DefColumnBackground = styled(ColumnBackground)`
   right: auto;
-  left: calc((100% + ${({ theme }) => theme.spaceMap.sm}px) * 4 / 14);
+  left: calc((100% + 0px) * 4 / 14 + 4px);
   ${CURVE_VARIANTS[OPERATOR_TYPE.DEF]}
 `;
 

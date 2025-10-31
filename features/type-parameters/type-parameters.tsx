@@ -3,6 +3,7 @@ import {
   OPERATOR_TYPE_CURVE_ID,
 } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
+import { OPERATOR_TYPE_TITLE } from 'consts';
 import { PATH } from 'consts/urls';
 import {
   useCurveParameters,
@@ -34,31 +35,34 @@ export const TypeParameters: FC = () => {
           Explore the differences in node operator parameters across different
           node operator types:
         </Text>
-        <Block color="background" padding="md">
-          <CompareParametersList
-            left={defParams}
-            right={icsParams}
-            leftTitle="Default"
-            rightTitle="ICS"
-          >
-            <DefColumnBackground />
-            <IcsColumnBackground />
-          </CompareParametersList>
-        </Block>
-        {CAN_CLAIM_ICS && (
-          <LocalLink href={PATH.TYPE_CLAIM}>
-            <Button fullwidth size="sm">
-              Go to claim
-            </Button>
-          </LocalLink>
-        )}
-        {canApply && (
-          <LocalLink href={PATH.TYPE_ICS_APPLY}>
-            <Button fullwidth size="sm">
-              Apply for ICS
-            </Button>
-          </LocalLink>
-        )}
+
+        <Stack direction="column" gap="xxl">
+          <Block padding="none">
+            <CompareParametersList
+              left={defParams}
+              right={icsParams}
+              leftTitle={OPERATOR_TYPE_TITLE[OPERATOR_TYPE.DEF]}
+              rightTitle={OPERATOR_TYPE_TITLE[OPERATOR_TYPE.ICS]}
+            >
+              <DefColumnBackground />
+              <IcsColumnBackground />
+            </CompareParametersList>
+          </Block>
+          {CAN_CLAIM_ICS && (
+            <LocalLink href={PATH.TYPE_CLAIM}>
+              <Button fullwidth size="sm">
+                Go to claim
+              </Button>
+            </LocalLink>
+          )}
+          {canApply && (
+            <LocalLink href={PATH.TYPE_ICS_APPLY}>
+              <Button fullwidth size="sm">
+                Apply for ICS
+              </Button>
+            </LocalLink>
+          )}
+        </Stack>
       </Stack>
     </Block>
   );
