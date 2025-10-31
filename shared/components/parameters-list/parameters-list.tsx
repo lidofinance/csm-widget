@@ -1,12 +1,13 @@
 import { CurveParameters } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
-import { FC, useState } from 'react';
+import { FC, PropsWithChildren, useState } from 'react';
 import { IconTooltip } from '../icon-tooltip/icon-tooltip';
 import { Stack } from '../stack/stack';
 import { PARAMETERS } from './parameters';
 import { ParametersValue } from './parameters-value';
 import {
   ArrowStyle,
+  CompareListStyle,
   CompareRowStyle,
   CompareTitleStyle,
   FoldableListStyle,
@@ -14,6 +15,8 @@ import {
   MoreStyle,
   RowStyle,
 } from './styles';
+
+export { DefColumnBackground, IcsColumnBackground } from './styles';
 
 const Title: FC<{ title: string; help?: string }> = ({ title, help }) => (
   <Text size="xs" weight={700}>
@@ -60,28 +63,35 @@ export const ParametersList: FC<{
   );
 };
 
-export const CompareParametersList: FC<{
-  current?: CurveParameters;
-  new?: CurveParameters;
-}> = ({ current, new: next }) => {
+type CompareParametersListProps = {
+  left?: CurveParameters;
+  right?: CurveParameters;
+  leftTitle?: string;
+  rightTitle?: string;
+};
+
+export const CompareParametersList: FC<
+  PropsWithChildren<CompareParametersListProps>
+> = ({ left, right, leftTitle = 'Current', rightTitle = 'New', children }) => {
   return (
-    <ListStyle>
+    <CompareListStyle>
+      {children}
       <CompareTitleStyle>
         <p></p>
         <Text size="xs" weight={700}>
-          Current
+          {leftTitle}
         </Text>
         <Text size="xs" weight={700}>
-          New
+          {rightTitle}
         </Text>
       </CompareTitleStyle>
       {PARAMETERS.map(({ title, help, render }) => (
         <CompareRowStyle key={title}>
           <Title title={title} help={help} />
-          <ParametersValue loading={!current} values={render(current)} />
-          <ParametersValue loading={!next} values={render(next)} />
+          <ParametersValue loading={!left} values={render(left)} />
+          <ParametersValue loading={!right} values={render(right)} />
         </CompareRowStyle>
       ))}
-    </ListStyle>
+    </CompareListStyle>
   );
 };

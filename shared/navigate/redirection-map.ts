@@ -69,7 +69,7 @@ export const redirectionMap: Partial<
           [ROLE_CODE.MANAGER]: PATH.TYPE_CLAIM,
           [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_CLAIM,
         }
-      : flags['ICS_ENABLED']
+      : flags['ICS_APPLY_ENABLED']
         ? {
             [ROLE_CODE.NONE]: PATH.TYPE_ICS_APPLY,
             [ROLE_CODE.REWARDS]: PATH.TYPE_ICS_APPLY,
@@ -77,17 +77,17 @@ export const redirectionMap: Partial<
             [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_ICS_APPLY,
           }
         : {
-            [ROLE_CODE.NONE]: PATH.HOME,
-            [ROLE_CODE.REWARDS]: PATH.TYPE_CLAIM,
-            [ROLE_CODE.MANAGER]: PATH.TYPE_CLAIM,
-            [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_CLAIM,
+            [ROLE_CODE.NONE]: PATH.TYPE_PARAMETERS,
+            [ROLE_CODE.REWARDS]: PATH.TYPE_PARAMETERS,
+            [ROLE_CODE.MANAGER]: PATH.TYPE_PARAMETERS,
+            [ROLE_CODE.REWARDS_AND_MANAGER]: PATH.TYPE_PARAMETERS,
           },
   [PATH.TYPE_CLAIM]: (flags) =>
-    flags['ICS_ENABLED']
+    flags['ICS_APPLY_ENABLED']
       ? {
           [ROLE_CODE.NONE]: PATH.TYPE_ICS_SYSTEM,
         }
       : {
-          [ROLE_CODE.NONE]: PATH.HOME,
+          [ROLE_CODE.NONE]: PATH.TYPE_PARAMETERS,
         },
 };
