@@ -134,6 +134,7 @@ jobs:
           echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
           echo -e "🧪 Test Tags: \033[1;34m$TEST_TAGS\033[0m"
           echo -e "🌱 Branch: \033[1;34m${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\033[0m"
+          echo -e "🔗 Test Plan: \033[1;34m${QASE_PLAN_ID}\033[0m"
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 
           xvfb-run --auto-servernum -- yarn test
