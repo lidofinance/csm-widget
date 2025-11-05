@@ -72,7 +72,7 @@ jobs:
       # Common envs
       QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
       QASE_PROJECT_ID: "CSM"
-      QASE_PLAN_ID: "${{ inputs.qase_plan_id || github.event_name == 'schedule' && 7 }}"
+      QASE_PLAN_ID: "${{ inputs.qase_plan_id || (github.event_name == 'schedule' && 7) || '' }}"      
       GH_ACTION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       GH_BRANCH_REF_NAME: ${{ github.ref_name }}
       GH_EVENT_NAME: ${{ github.event_name }}
