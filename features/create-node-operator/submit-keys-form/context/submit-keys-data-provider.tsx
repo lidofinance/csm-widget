@@ -6,11 +6,11 @@ import {
   useCsmStatus,
   useCurveParameters,
   useDappStatus,
+  useDefaultCurveId,
   useEthereumBalance,
   useIcsCurveId,
   useIcsPaused,
   useIcsProof,
-  usePermissionlessCurveId,
   useShareLimit,
   useShareLimitStatus,
   useStakeLimit,
@@ -56,12 +56,12 @@ const useSubmitKeysFormNetworkData: NetworkData<
   const isProofLoading = proofQuery.isPending;
 
   const { data: isIcsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
-  const { data: plsCurveId, isPending: isPlsCurveIdLoading } =
-    usePermissionlessCurveId();
+  const { data: defCurveId, isPending: isDefCurveIdLoading } =
+    useDefaultCurveId();
   const { data: icsCurveId, isPending: isIcsCurveIdLoading } = useIcsCurveId();
 
   const isIcs = !isIcsPaused && proof?.proof && !proof.isConsumed;
-  const curveId = isIcs ? icsCurveId : plsCurveId;
+  const curveId = isIcs ? icsCurveId : defCurveId;
 
   const { data: curveParameters, isPending: isCurveParametersLoading } =
     useCurveParameters(curveId);
@@ -103,7 +103,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
     isShareLimitLoading ||
     isProofLoading ||
     isIcsPausedLoading ||
-    isPlsCurveIdLoading ||
+    isDefCurveIdLoading ||
     isIcsCurveIdLoading ||
     isCurveParametersLoading;
 

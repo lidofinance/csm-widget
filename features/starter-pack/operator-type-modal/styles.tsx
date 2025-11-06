@@ -23,7 +23,6 @@ export const OptionCard = styled(StackStyle).attrs({
   $variant?: OPERATOR_TYPE;
 }>`
   --border-width: 2px;
-  --border-multiplyer: 1;
   padding: 16px;
   border-radius: 10px;
   border: var(--border-width) solid transparent;
@@ -41,7 +40,7 @@ export const OptionCard = styled(StackStyle).attrs({
     bottom: 0;
     left: 0;
     z-index: -1;
-    margin: calc(-1 * var(--border-multiplyer) * var(--border-width));
+    margin: calc(-1 * var(--border-width));
     border-radius: inherit;
     ${({ $variant }) => ($variant ? CURVE_VARIANTS[$variant] : '')}
     transition: all 0.2s ease;
