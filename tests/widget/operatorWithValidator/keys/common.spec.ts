@@ -32,8 +32,8 @@ test.describe('Operator with keys. Common suite.', async () => {
   test(qase(18, 'Should failed if uploaded duplicate keys'), async () => {
     const duplicatedKey = keysGeneratorService.generateKeys();
     await keysPage.submitPage.fillKeys([...duplicatedKey, ...duplicatedKey]);
-    await expect(keysPage.submitPage.formBlock).toContainText(
-      `Invalid deposit data`,
+    await expect(keysPage.submitPage.validationInputError).toContainText(
+      'Invalid deposit data',
     );
     await keysPage.submitPage.selectTab('Parsed');
     await expect(keysPage.submitPage.depositDataRow).toHaveCount(2);
@@ -60,8 +60,8 @@ test.describe('Operator with keys. Common suite.', async () => {
     async () => {
       const overTheLimitKeys = keysGeneratorService.generateKeys(26);
       await keysPage.submitPage.fillKeys(overTheLimitKeys);
-      await expect(keysPage.submitPage.formBlock).toContainText(
-        `Invalid deposit data`,
+      await expect(keysPage.submitPage.validationInputError).toContainText(
+        'Too many keys in one transaction. Maximum allowed: 25',
       );
     },
   );

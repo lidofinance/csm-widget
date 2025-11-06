@@ -33,10 +33,10 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
       }
     >
       <StackWrap>
-        <OptionCard $variant={OPERATOR_TYPE.PLS}>
+        <OptionCard $variant={OPERATOR_TYPE.DEF}>
           <Stack direction="column">
             <Text size="sm" weight={700}>
-              Permissionless
+              Default
             </Text>
             <Text size="xxs">
               The simplest way to start validating in CSM. Upload keys under the
@@ -47,7 +47,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
             <Divider />
           </Stack>
           <Stack direction="column">
-            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.PLS} />
+            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.DEF} />
             <LocalLink
               href={PATH.CREATE}
               matomoEvent={
@@ -55,7 +55,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
               }
             >
               <Button fullwidth size="sm">
-                Join permissionlessly
+                Join now
               </Button>
             </LocalLink>
           </Stack>

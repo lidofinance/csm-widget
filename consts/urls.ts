@@ -31,6 +31,7 @@ export const PATH = <const>{
   TYPE_CLAIM: '/type/claim',
   TYPE_ICS_SYSTEM: '/type/ics-system',
   TYPE_ICS_APPLY: '/type/ics-apply',
+  TYPE_PARAMETERS: '/type/parameters',
 
   SURVEYS: '/surveys',
   SURVEYS_CONTACTS: '/surveys/contacts',

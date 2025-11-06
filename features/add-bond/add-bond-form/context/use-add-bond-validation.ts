@@ -1,42 +1,32 @@
-import { useCallback } from 'react';
-import type { Resolver } from 'react-hook-form';
 import {
-  handleResolverValidationError,
+  useFormValidation,
   validateBondAmount,
   validateEtherAmount,
 } from 'shared/hook-form/validation';
-import { useAwaitNetworkData } from 'shared/hooks';
 import type { AddBondFormInputType, AddBondFormNetworkData } from './types';
+// import invaria t from 'tiny-invariant';
 
-export const useAddBondValidation = (networkData: AddBondFormNetworkData) => {
-  const dataPromise = useAwaitNetworkData(networkData);
+export const useAddBondValidation = () => {
+  return useFormValidation<AddBondFormInputType, AddBondFormNetworkData>(
+    'token',
+    async ({ token, bondAmount }, data, validate) => {
+      // invariant(token !== undefined, 'Token is not defined');
+      // invariant(bondAmount !== undefined, 'BondAmount is not defined');
 
-  return useCallback<Resolver<AddBondFormInputType>>(
-    async (values) => {
-      try {
-        const { token, bondAmount } = values;
-
-        const { stethBalance, wstethBalance, ethBalance, maxStakeEth } =
-          await dataPromise;
-
+      await validate(['token', 'bondAmount'], () =>
         validateBondAmount({
           token,
           bondAmount,
-          maxStakeEth,
-          ethBalance,
-          stethBalance,
-          wstethBalance,
-        });
-        validateEtherAmount('bondAmount', bondAmount, token);
+          maxStakeEth: data.maxStakeEth,
+          ethBalance: data.ethBalance,
+          stethBalance: data.stethBalance,
+          wstethBalance: data.wstethBalance,
+        }),
+      );
 
-        return {
-          values,
-          errors: {},
-        };
-      } catch (error) {
-        return handleResolverValidationError(error, 'AddBondForm', 'token');
-      }
+      await validate('bondAmount', () =>
+        validateEtherAmount('bondAmount', bondAmount, token),
+      );
     },
-    [dataPromise],
   );
 };

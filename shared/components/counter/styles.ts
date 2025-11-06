@@ -1,10 +1,22 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+export const COUNTER_VARIANTS = {
+  default: css`
+    background: var(--lido-color-backgroundSecondary);
+  `,
+  warning: css`
+    background: var(--lido-color-error);
+  `,
+  operators: css`
+    background: var(--lido-color-accentControlBg);
+  `,
+  ...CURVE_VARIANTS,
+} as const;
+export type COUNTER_VARIANTS = keyof typeof COUNTER_VARIANTS;
 
 type Props = {
-  $warning?: boolean;
-  $variant?: OPERATOR_TYPE;
+  $variant?: COUNTER_VARIANTS;
 };
 
 export const CounterStyle = styled.span<Props>`
@@ -20,12 +32,8 @@ export const CounterStyle = styled.span<Props>`
   align-items: center;
   align-self: center;
 
-  background: ${({ $warning }) =>
-    $warning
-      ? `var(--lido-color-error)`
-      : `var(--lido-color-backgroundSecondary)`};
   color: var(--lido-color-text);
   text-transform: capitalize;
 
-  ${({ $variant }) => ($variant ? CURVE_VARIANTS[$variant] : '')}
+  ${({ $variant = 'default' }) => ($variant ? COUNTER_VARIANTS[$variant] : '')}
 `;

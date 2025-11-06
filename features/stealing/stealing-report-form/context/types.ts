@@ -1,5 +1,4 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { LoadingRecord } from 'types';
 
 export type StealingReportFormInputType = {
   amount?: bigint;
@@ -8,7 +7,6 @@ export type StealingReportFormInputType = {
 };
 
 export type StealingReportFormNetworkData = {
-  ethBalance?: bigint;
-  nodeOperatorsCount?: bigint;
-  loading: LoadingRecord<'ethBalance' | 'nodeOperatorsCount'>;
+  ethBalance: bigint;
+  nodeOperatorsCount: bigint;
 };

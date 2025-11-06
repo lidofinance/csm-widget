@@ -3,15 +3,11 @@ import { Latice, TitledValue } from 'shared/components';
 import { useNormalizeQueueFormData } from '../context';
 
 export const Info: FC = () => {
-  const { unqueuedCount, loading } = useNormalizeQueueFormData();
+  const { unqueuedCount } = useNormalizeQueueFormData();
   return (
     <>
       <Latice variant="secondary">
-        <TitledValue
-          title="Unqueued keys count"
-          loading={loading.isInfoLoading}
-          value={unqueuedCount}
-        />
+        <TitledValue title="Unqueued keys count" value={unqueuedCount} />
       </Latice>
     </>
   );

@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 import { StatusStyle, Variants } from './style';
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 
 type Props = {
   status?: KEY_STATUS;
+  suffix?: ReactNode;
 };
 
 const variants: { [key in KEY_STATUS]?: Variants } = {
@@ -44,11 +45,12 @@ export const StatusTitle: { [key in KEY_STATUS]?: string } = {
   [KEY_STATUS.WITH_STRIKES]: 'Strikes',
 };
 
-export const StatusChip: FC<Props> = ({ status }) => (
+export const StatusChip: FC<Props> = ({ status, suffix }) => (
   <>
     {status && variants[status] ? (
       <StatusStyle $variant={variants[status]}>
         {StatusTitle[status]}
+        {suffix}
       </StatusStyle>
     ) : null}
   </>

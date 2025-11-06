@@ -29,7 +29,7 @@ export * from './use-operator-type';
 export * from './use-operators-count';
 export * from './use-operators-with-locked-bond';
 export * from './use-other-module';
-export * from './use-permissionless-curve-id';
+export * from './use-default-curve-id';
 export * from './use-rewards-last-report-tx-hash';
 export * from './use-share-limit-percentage';
 export * from './use-share-limit-status';

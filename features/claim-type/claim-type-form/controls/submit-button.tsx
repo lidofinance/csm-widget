@@ -5,7 +5,7 @@ export const SubmitButton = () => {
   const { icsPaused } = useClaimTypeFormData();
 
   return (
-    <SubmitButtonHookForm errorField="curveId" disabled={icsPaused}>
+    <SubmitButtonHookForm disabled={icsPaused}>
       Claim operator type
     </SubmitButtonHookForm>
   );

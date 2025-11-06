@@ -1,6 +1,7 @@
 import { ArrowBottom, Link } from '@lidofinance/lido-ui';
 import styled, { css } from 'styled-components';
-import { StackStyle } from '../stack/style';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { CURVE_VARIANTS } from '../../node-operator/curve-badge/styles';
 
 export const ArrowStyle = styled(ArrowBottom)<{ $expanded: boolean }>`
   vertical-align: middle;
@@ -15,10 +16,59 @@ export const MoreStyle = styled(Link)`
   font-size: 14px;
 `;
 
-export const ListStyle = styled(StackStyle).attrs({
-  $direction: 'column',
-  $gap: 'xl',
-})``;
+export const ListStyle = styled.div`
+  display: grid;
+  grid-template-columns: 1fr minmax(auto, 300px);
+  column-gap: ${({ theme }) => theme.spaceMap.sm}px;
+  row-gap: ${({ theme }) => theme.spaceMap.xl}px;
+`;
+
+export const CompareListStyle = styled.div`
+  position: relative;
+  display: grid;
+  grid-template-columns: 4fr 5fr 5fr;
+  column-gap: ${({ theme }) => theme.spaceMap.sm}px;
+  row-gap: ${({ theme }) => theme.spaceMap.xl}px;
+`;
+
+export const ColumnBackground = styled.div`
+  --border-radius: 12px;
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  bottom: -8px;
+  width: calc((100% + 0px) * 5 / 14 - 2px);
+  border-radius: var(--border-radius);
+  pointer-events: none;
+  opacity: 0.6;
+  z-index: 0;
+
+  &:before {
+    --offset: 2px;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+    margin: var(--offset);
+
+    border-radius: calc(var(--border-radius) - var(--offset));
+    background: var(--lido-color-foreground);
+    opacity: 0.9;
+  }
+`;
+
+export const IcsColumnBackground = styled(ColumnBackground)`
+  ${CURVE_VARIANTS[OPERATOR_TYPE.ICS]}
+`;
+
+export const DefColumnBackground = styled(ColumnBackground)`
+  right: auto;
+  left: calc((100% + 0px) * 4 / 14 + 4px);
+  ${CURVE_VARIANTS[OPERATOR_TYPE.DEF]}
+`;
 
 export const FoldableListStyle = styled(ListStyle)<{ $folded?: boolean }>`
   overflow: hidden;
@@ -33,14 +83,14 @@ export const FoldableListStyle = styled(ListStyle)<{ $folded?: boolean }>`
 export const RowStyle = styled.div<{ $bordered?: boolean }>`
   position: relative;
   display: grid;
-  grid-template-columns: 1fr minmax(auto, 300px);
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
   align-items: start;
-  gap: ${({ theme }) => theme.spaceMap.sm}px;
 
   &:not(:last-child):after {
     content: '';
     position: absolute;
-    bottom: -12px;
+    bottom: calc(-${({ theme }) => theme.spaceMap.xl}px / 2);
     left: 0;
     width: 100%;
     height: 1px;
@@ -54,7 +104,7 @@ export const RowStyle = styled.div<{ $bordered?: boolean }>`
           &:is(:last-child):after {
             content: '';
             position: absolute;
-            bottom: -12px;
+            bottom: calc(-${({ theme }) => theme.spaceMap.xl}px / 2);
             left: 0;
             width: 100%;
             height: 1px;
@@ -66,7 +116,7 @@ export const RowStyle = styled.div<{ $bordered?: boolean }>`
 `;
 
 export const CompareRowStyle = styled(RowStyle)`
-  grid-template-columns: 4fr 5fr 5fr;
+  z-index: 1;
 `;
 
 export const CompareTitleStyle = styled(CompareRowStyle)`

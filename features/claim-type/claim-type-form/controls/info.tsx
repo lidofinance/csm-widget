@@ -15,10 +15,7 @@ export const Info: FC = () => {
         operator according to the section below.
       </Text>
       <AccordionStyle summary="Parameter changes">
-        <CompareParametersList
-          current={currentParameters}
-          new={newParameters}
-        />
+        <CompareParametersList left={currentParameters} right={newParameters} />
       </AccordionStyle>
     </>
   );

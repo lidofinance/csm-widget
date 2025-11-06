@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Address, Stack } from 'shared/components';
+import { Address, Stack, OwnerChip, YouChip } from 'shared/components';
 import { ProposedAddress } from './proposed-address';
-import { Chip, OwnerChip, RoleBlockWrapper, RoleTitle } from './styles';
+import { RoleBlockWrapper, RoleTitle } from './styles';
 import { Tooltip } from '@lidofinance/lido-ui';
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 
@@ -31,10 +31,10 @@ export const RoleBlock: FC<RoleBlockProps> = ({
         <RoleTitle>{title}</RoleTitle>
         {isOwner && (
           <Tooltip title={ownerTooltip} placement="top">
-            <OwnerChip>Owner</OwnerChip>
+            <OwnerChip />
           </Tooltip>
         )}
-        {isYou && <Chip>You</Chip>}
+        {isYou && <YouChip />}
       </Stack>
       <Address address={address} showIcon big weight={700} size="sm" />
       <ProposedAddress address={proposedAddress} />

@@ -6,6 +6,8 @@ import { useDappStatus } from '../hooks';
 import { useLidoSDK } from '../web3-provider';
 import { useCachedNodeOperator } from './use-cached-node-operator';
 
+export const KEY_OPERATORS = ['node-operators'];
+
 export const useAvailableOperators = () => {
   const { csm } = useLidoSDK();
   const { address } = useDappStatus();
@@ -17,12 +19,11 @@ export const useAvailableOperators = () => {
   );
 
   return useQuery({
-    queryKey: ['node-operators', { address }],
+    queryKey: [...KEY_OPERATORS, { address }],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(address);
       return csm.satellite.getNodeOperatorsByAddress(address);
-      // return csm.events.getNodeOperatorsByAddress(address);
     },
     enabled: !!address,
     placeholderData,

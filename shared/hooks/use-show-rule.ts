@@ -31,7 +31,7 @@ export type ShowRule =
   | 'HAS_REFERRER'
   | 'CAN_CREATE'
   | 'CAN_CLAIM_ICS'
-  | 'ICS_ENABLED'
+  | 'ICS_APPLY_ENABLED'
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE';
 
@@ -69,7 +69,7 @@ export const useShowFlags = (): ShowFlags => {
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
-      ['ICS_ENABLED']: !!featureFlags?.[ICS_APPLY_FORM],
+      ['ICS_APPLY_ENABLED']: !!featureFlags?.[ICS_APPLY_FORM],
       ['EL_STEALING_REPORTER']: !!isReportingRole,
       ['IS_SURVEYS_ACTIVE']:
         !!nodeOperator &&

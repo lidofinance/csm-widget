@@ -5,11 +5,19 @@ import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { ChangeRoleFormInputType, useChangeRoleFormData } from '../context';
 import { useRole } from '../hooks/use-role';
 import { Text } from '@lidofinance/lido-ui';
+import { isAddressEqual } from 'viem';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 
 export const Info: FC = () => {
-  const role = useRole();
-  const { currentAddress, proposedAddress, isPropose } =
-    useChangeRoleFormData();
+  const roleTitle = useRole();
+  const {
+    currentAddress,
+    proposedAddress,
+    isPropose,
+    address,
+    extendedManagerPermissions,
+    role,
+  } = useChangeRoleFormData(true);
   const { setValue } = useFormContext<ChangeRoleFormInputType>();
 
   const revokeHandle = useCallback(() => {
@@ -20,8 +28,14 @@ export const Info: FC = () => {
     <>
       <Latice variant="secondary">
         <TitledAddress
-          title={`Current ${role} address`}
+          title={`Current ${roleTitle} address`}
           address={currentAddress}
+          isYou={isAddressEqual(currentAddress, address)}
+          isOwner={
+            extendedManagerPermissions
+              ? role === ROLES.MANAGER
+              : role === ROLES.REWARDS
+          }
         />
 
         {proposedAddress && (

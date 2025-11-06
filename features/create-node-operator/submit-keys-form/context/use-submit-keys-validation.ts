@@ -1,30 +1,25 @@
 import { useLidoSDK } from 'modules/web3';
-import { useCallback } from 'react';
-import type { Resolver } from 'react-hook-form';
 import {
-  initValidator,
+  useFormValidation,
   validateBondAmount,
   validateDepositData,
   ValidationError,
 } from 'shared/hook-form/validation';
-import { useAwaitNetworkData } from 'shared/hooks';
 import { isAddress } from 'viem';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
 
-export const useSubmitKeysValidation = (
-  networkData: SubmitKeysFormNetworkData,
-) => {
-  const dataPromise = useAwaitNetworkData(networkData);
+export const useSubmitKeysValidation = () => {
   const {
     csm: { depositData: sdk },
   } = useLidoSDK();
 
-  return useCallback<Resolver<SubmitKeysFormInputType>>(
-    async (values, _, options) => {
-      const {
+  return useFormValidation<SubmitKeysFormInputType, SubmitKeysFormNetworkData>(
+    'token',
+    async (
+      {
         token,
         bondAmount,
         depositData,
@@ -33,17 +28,11 @@ export const useSubmitKeysValidation = (
         rewardsAddress,
         managerAddress,
         confirmKeysReady,
-      } = values;
-
-      const {
-        stethBalance,
-        wstethBalance,
-        curveParameters,
-        ethBalance,
-        maxStakeEth,
-      } = await dataPromise;
-
-      const { validate, resolve } = initValidator(options, 'token');
+      },
+      { curveParameters, maxStakeEth, ethBalance, stethBalance, wstethBalance },
+      validate,
+    ) => {
+      // FIXME: validate on submit that token, bondAmount and depositData.length are defined
 
       await validate(['token', 'bondAmount'], () =>
         validateBondAmount({
@@ -56,6 +45,7 @@ export const useSubmitKeysValidation = (
         }),
       );
 
+      // TODO: validate length is zero
       await validate('rawDepositData', () => {
         if (rawDepositData) {
           const { error } = sdk.parseDepositData(rawDepositData);
@@ -67,6 +57,7 @@ export const useSubmitKeysValidation = (
         }
       });
 
+      // TODO: refactor this validation
       await validate(['rawDepositData', 'depositData'], async () => {
         await validateDepositData({
           depositData,
@@ -101,9 +92,7 @@ export const useSubmitKeysValidation = (
           );
         }
       });
-
-      return resolve(values);
     },
-    [dataPromise, sdk],
+    [sdk],
   );
 };
