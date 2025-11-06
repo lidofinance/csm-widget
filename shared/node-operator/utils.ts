@@ -1,10 +1,13 @@
 import {
   NodeOperator,
   NodeOperatorInvite,
+  NodeOperatorShortInfo,
+  packRoles,
   ROLES,
 } from '@lidofinance/lido-csm-sdk';
 import { ROLE_CODE } from 'consts/roles';
 import { capitalize } from 'lodash';
+import { Address, isAddressEqual } from 'viem';
 
 const SHORT_ROLES = {
   [ROLES.REWARDS]: 'R',
@@ -39,3 +42,28 @@ export const getRoleCode = (nodeOperator?: NodeOperator) => {
 
 export const getInviteId = (invite: NodeOperatorInvite) =>
   `${getShortRole(invite.role)}-${invite.id}` as const;
+
+export const getAddressRoles = (
+  {
+    managerAddress,
+    rewardsAddress,
+  }: Pick<NodeOperatorShortInfo, 'managerAddress' | 'rewardsAddress'>,
+  address: Address,
+) =>
+  packRoles({
+    [ROLES.REWARDS]: isAddressEqual(rewardsAddress, address),
+    [ROLES.MANAGER]: isAddressEqual(managerAddress, address),
+  });
+
+export const hasAnyRole = (
+  {
+    managerAddress,
+    rewardsAddress,
+  }: Pick<NodeOperatorShortInfo, 'managerAddress' | 'rewardsAddress'>,
+  address: Address,
+) => {
+  return (
+    isAddressEqual(rewardsAddress, address) ||
+    isAddressEqual(managerAddress, address)
+  );
+};

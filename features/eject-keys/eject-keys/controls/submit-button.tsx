@@ -1,9 +1,5 @@
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 
 export const SubmitButton = () => {
-  return (
-    <SubmitButtonHookForm errorField="selection">
-      Eject Keys
-    </SubmitButtonHookForm>
-  );
+  return <SubmitButtonHookForm>Eject Keys</SubmitButtonHookForm>;
 };

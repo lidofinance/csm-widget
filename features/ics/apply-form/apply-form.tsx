@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import { FormBlock } from 'shared/components';
-import { FormControllerStyled } from 'shared/hook-form/form-controller';
-import { ApplyFormProvider } from './context';
+import { FormLoader, Form } from 'shared/hook-form/form-controller';
+import { ApplyDataProvider, ApplyFormProvider } from './context';
 import {
   AdditionalAddresses,
   MainAddress,
@@ -9,17 +9,19 @@ import {
   SubmitButton,
 } from './controls';
 
-export const ApplyForm: FC = memo(() => {
-  return (
+export const ApplyForm: FC = memo(() => (
+  <ApplyDataProvider>
     <ApplyFormProvider>
-      <FormBlock>
-        <FormControllerStyled $gap="xxl">
-          <MainAddress />
-          <AdditionalAddresses />
-          <SocialProof />
-          <SubmitButton />
-        </FormControllerStyled>
+      <FormBlock $gap="xxl">
+        <FormLoader>
+          <Form>
+            <MainAddress />
+            <AdditionalAddresses />
+            <SocialProof />
+            <SubmitButton />
+          </Form>
+        </FormLoader>
       </FormBlock>
     </ApplyFormProvider>
-  );
-});
+  </ApplyDataProvider>
+));

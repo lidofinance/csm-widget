@@ -1,15 +1,16 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { InverseThemeProvider } from '../inverse-theme-provider';
-import { CounterStyle } from './styles';
+import { COUNTER_VARIANTS, CounterStyle } from './styles';
 
-type CounterProps = { count?: number; warning?: boolean; type?: OPERATOR_TYPE };
+type CounterProps = {
+  count: number | undefined;
+  warning?: boolean;
+  type?: COUNTER_VARIANTS;
+};
 
 export const Counter: FC<CounterProps> = ({ warning, count, type }) =>
   count ? (
     <InverseThemeProvider>
-      <CounterStyle $warning={warning} $variant={type}>
-        {count}
-      </CounterStyle>
+      <CounterStyle $variant={warning ? 'warning' : type}>{count}</CounterStyle>
     </InverseThemeProvider>
   ) : null;

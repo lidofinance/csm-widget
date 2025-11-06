@@ -1,27 +1,13 @@
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import {
-  FormControllerContext,
-  FormControllerContextValueType,
-  FormDataContext,
-  useFormControllerRetry,
-  useFormData,
-} from 'shared/hook-form/form-controller';
-import {
-  UnlockBondFormNetworkData,
-  type UnlockBondFormInputType,
-} from './types';
-import { useUnlockBondFormNetworkData } from './use-unlock-bond-form-network-data';
+import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import { type UnlockBondFormInputType } from './types';
 import { useUnlockBondSubmit } from './use-unlock-bond-submit';
 import { useUnlockBondValidation } from './use-unlock-bond-validation';
 
-export const useUnlockBondFormData = useFormData<UnlockBondFormNetworkData>;
-
 export const UnlockBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [networkData, revalidate] = useUnlockBondFormNetworkData();
-  const validationResolver = useUnlockBondValidation(networkData);
+  const validationResolver = useUnlockBondValidation();
 
-  // TODO: validate (max amount)
   const formObject = useForm<UnlockBondFormInputType>({
     defaultValues: {
       amount: undefined,
@@ -30,31 +16,13 @@ export const UnlockBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const { retryEvent, retryFire } = useFormControllerRetry();
-
-  const { unlockBond } = useUnlockBondSubmit({
-    onConfirm: revalidate,
-    onRetry: retryFire,
-  });
-
-  const formControllerValue: FormControllerContextValueType<
-    UnlockBondFormInputType,
-    UnlockBondFormNetworkData
-  > = useMemo(
-    () => ({
-      onSubmit: unlockBond,
-      retryEvent,
-    }),
-    [unlockBond, retryEvent],
-  );
+  const submitter = useUnlockBondSubmit();
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={networkData}>
-        <FormControllerContext.Provider value={formControllerValue}>
-          {children}
-        </FormControllerContext.Provider>
-      </FormDataContext.Provider>
+      <FormControllerProvider submitter={submitter}>
+        {children}
+      </FormControllerProvider>
     </FormProvider>
   );
 };

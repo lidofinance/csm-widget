@@ -9,8 +9,9 @@ import {
 } from 'features/ics/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { useNavigate } from 'shared/navigate';
+import { LocalLink } from 'shared/navigate';
 
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import {
   NodeOperatorOwner,
   useDappStatus,
@@ -20,7 +21,6 @@ import {
 import { isAddressEqual } from 'viem';
 import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
 type StatusHeaderProps = {
   typeStatus: TypeStatus;
@@ -70,8 +70,6 @@ const useHint = (
   owner: NodeOperatorOwner | undefined,
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
-  const n = useNavigate();
-
   switch (true) {
     case typeStatus === 'CLAIMED':
       return <Text size="xs">You successfully claimed your Operator type</Text>;
@@ -93,9 +91,9 @@ const useHint = (
           </Text>
 
           <div>
-            <Button size="xs" onClick={() => n(PATH.CREATE)}>
-              Go to create Node Operator
-            </Button>
+            <LocalLink href={PATH.CREATE}>
+              <Button size="xs">Go to create Node Operator</Button>
+            </LocalLink>
           </div>
         </>
       );
@@ -107,9 +105,9 @@ const useHint = (
           </Text>
 
           <div>
-            <Button size="xs" onClick={() => n(PATH.TYPE_CLAIM)}>
-              Go to claim
-            </Button>
+            <LocalLink href={PATH.TYPE_CLAIM}>
+              <Button size="xs">Go to claim</Button>
+            </LocalLink>
           </div>
         </>
       );
