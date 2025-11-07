@@ -89,7 +89,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
-        const token = bondRewardsPage.claim.selectBondToken(tokenName);
+        const token = bondRewardsPage.claim.getTokenCardsBySymbol(tokenName);
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
@@ -112,7 +112,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
             }
           });
 
-          await token.click();
+          await token.dispatchEvent('click');
           await expect(token.getByRole('radio')).toBeChecked();
 
           await test.step('Verify token amount', async () => {
@@ -211,10 +211,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
-        await test.step(`Choose ${tokenName} symbol for claim`, async () => {
-          const token = bondRewardsPage.claim.selectBondToken(tokenName);
-          await token.click();
-        });
+        await bondRewardsPage.claim.selectBondToken(tokenName);
 
         const expectedBalance =
           await bondRewardsPage.claim.getBalanceByToken(tokenName);
@@ -257,10 +254,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
-        await test.step(`Choose ${tokenName} symbol for claim`, async () => {
-          const token = bondRewardsPage.claim.selectBondToken(tokenName);
-          await token.click();
-        });
+        await bondRewardsPage.claim.selectBondToken(tokenName);
 
         const expectedBalance =
           await bondRewardsPage.claim.getBalanceByToken(tokenName);
