@@ -1,14 +1,14 @@
 import { Theme } from '@lidofinance/lido-ui';
 import styled, { css } from 'styled-components';
 import { BadgeStyle } from '../role-badge/styles';
-import { OPERATOR_TYPE } from 'consts';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 
 type InjectedProps = {
   theme: Theme;
 };
 
 export const CURVE_VARIANTS = {
-  [OPERATOR_TYPE.PLS]: css`
+  [OPERATOR_TYPE.DEF]: css`
     background: linear-gradient(78deg, #304352 -49.42%, #d7d2cc 157.87%),
       linear-gradient(79deg, #00a3ff -9.53%, #2238ff 202.88%);
   `,

@@ -1,34 +1,27 @@
 import { useCallback } from 'react';
-import invariant from 'tiny-invariant';
 
 import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
 import { useLidoSDK } from 'modules/web3';
+import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
 import { UnlockBondFormInputType, UnlockBondFormNetworkData } from '../context';
 import { useTxModalStagesUnlockBond } from '../hooks/use-tx-modal-stages-unlock-bond';
 
-type UseUnlockBondOptions = {
-  onConfirm?: () => Promise<void> | void;
-  onRetry?: () => void;
-};
-
-export const useUnlockBondSubmit = ({
-  onConfirm,
-  onRetry,
-}: UseUnlockBondOptions) => {
+export const useUnlockBondSubmit: FormSubmitterHook<
+  UnlockBondFormInputType,
+  UnlockBondFormNetworkData
+> = () => {
   const { csm } = useLidoSDK();
   const { txModalStages } = useTxModalStagesUnlockBond();
 
-  const unlockBond = useCallback(
-    async (
-      { amount }: UnlockBondFormInputType,
-      { nodeOperatorId }: UnlockBondFormNetworkData,
-    ): Promise<boolean> => {
-      invariant(amount !== undefined, 'BondAmount is not defined');
-      invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
+  return useCallback(
+    async ({ amount }, { nodeOperatorId }, { onConfirm, onRetry }) => {
+      if (amount === undefined) {
+        throw new Error('BondAmount is not defined');
+      }
 
       try {
         const callback: TransactionCallback<bigint> = async ({
@@ -73,10 +66,6 @@ export const useUnlockBondSubmit = ({
         return handleTxError(error, txModalStages, onRetry);
       }
     },
-    [csm.bond, onConfirm, txModalStages, onRetry],
+    [csm.bond, txModalStages],
   );
-
-  return {
-    unlockBond,
-  };
 };

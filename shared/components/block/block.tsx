@@ -4,6 +4,7 @@ import { BlockProps } from '@lidofinance/lido-ui';
 
 type Props = BlockProps & {
   accent?: BlockColor;
+  padding?: 'none' | 'sm' | 'md' | 'lg';
 };
 
 export const Block: FC<PropsWithChildren<Props>> = ({ children, ...props }) => (

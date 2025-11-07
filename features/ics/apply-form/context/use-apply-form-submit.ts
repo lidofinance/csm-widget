@@ -4,7 +4,6 @@ import {
   useIcsState,
 } from 'features/ics/shared';
 import { useCallback } from 'react';
-import { FormSubmitter } from 'shared/hook-form/form-controller';
 import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
 import { useModalStages } from './use-modal-stages';
 
@@ -20,54 +19,55 @@ const transformFormDataToApiPayload = (
   };
 };
 
-export const useApplyFormSubmit: FormSubmitter<
-  ApplyFormInputType,
-  ApplyFormNetworkData
-> = ({ onConfirm, onRetry }) => {
+export const useApplyFormSubmit = () => {
   const { txModalStages: stages } = useModalStages();
   const { reset } = useIcsState();
 
-  const mutation = useApplyFormMutation({
-    onMutate: () => {
-      stages.pending();
-    },
-    onSuccess: () => {
-      window.scrollTo({ top: 0 });
-      reset(false);
-      stages.success();
-      void onConfirm?.();
-    },
-    onError: (error: any) => {
-      let errorMessage = 'Something went wrong';
-      let errorDetails: string[] = [];
-
-      if (error?.response?.data?.message) {
-        const messages = error.response.data.message;
-        if (Array.isArray(messages)) {
-          errorDetails = messages;
-          errorMessage = `Validation failed: ${messages.length} error${messages.length > 1 ? 's' : ''}`;
-        } else if (typeof messages === 'string') {
-          errorMessage = messages;
-        }
-      } else if (error?.message) {
-        errorMessage = error.message;
-      }
-
-      window.scrollTo({ top: 0 });
-      stages.failed({ message: errorMessage, details: errorDetails }, onRetry);
-    },
-  });
+  const mutation = useApplyFormMutation({});
 
   return useCallback(
-    async (form, data) => {
+    async (
+      form: ApplyFormInputType,
+      data: ApplyFormNetworkData,
+      {
+        onConfirm,
+        onRetry,
+      }: { onConfirm?: () => void | Promise<void>; onRetry: () => void },
+    ) => {
       const apiPayload = transformFormDataToApiPayload(form, data);
+
       try {
+        stages.pending();
         await mutation.mutateAsync(apiPayload);
-      } catch (error) {
+        window.scrollTo({ top: 0 });
+        reset(false);
+        stages.success();
+        void onConfirm?.();
+        return true;
+      } catch (error: any) {
+        let errorMessage = 'Something went wrong';
+        let errorDetails: string[] = [];
+
+        if (error?.response?.data?.message) {
+          const messages = error.response.data.message;
+          if (Array.isArray(messages)) {
+            errorDetails = messages;
+            errorMessage = `Validation failed: ${messages.length} error${messages.length > 1 ? 's' : ''}`;
+          } else if (typeof messages === 'string') {
+            errorMessage = messages;
+          }
+        } else if (error?.message) {
+          errorMessage = error.message;
+        }
+
+        window.scrollTo({ top: 0 });
+        stages.failed(
+          { message: errorMessage, details: errorDetails },
+          onRetry,
+        );
         return false;
       }
-      return true;
     },
-    [mutation],
+    [mutation, reset, stages],
   );
 };

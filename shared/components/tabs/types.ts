@@ -10,6 +10,7 @@ export type TabItem = {
 export type TabsProps = {
   items: [TabItem, ...TabItem[]];
   defaultTab?: number;
+  error?: boolean;
 };
 
 export type TabButtonProps = {

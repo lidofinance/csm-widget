@@ -32,37 +32,6 @@ export const RoleBlockProposed = styled.div`
   }
 `;
 
-export const Chip = styled.span`
-  position: relative;
-  overflow: hidden;
-  padding: 0px 6px;
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;
-  /* background-color:; */
-
-  align-content: center;
-  color: var(--lido-color-primary);
-  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-  line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
-  font-weight: 700;
-
-  :before {
-    content: '';
-    position: absolute;
-    display: block;
-
-    background-color: var(--lido-color-primary);
-    transition: opacity 100ms ease 0s;
-    opacity: 0.1;
-    inset: 0px;
-  }
-`;
-
-export const OwnerChip = styled(Chip)`
-  font-weight: 400;
-  color: var(--lido-color-textSecondary);
-  background: color-mix(in srgb, currentColor 15%, transparent);
-`;
-
 export const RoleTitle = styled.h4`
   color: var(--lido-color-text);
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;

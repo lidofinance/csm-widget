@@ -54,10 +54,13 @@ export const DepositDataHookForm: FC = () => {
               content: <DepositDataParameters />,
             },
           ]}
+          error={!!errorMessage}
         />
       </DepositDataDrop>
       {errorMessage && typeof errorMessage === 'string' && (
-        <InputMessageStyle $bordered>{errorMessage}</InputMessageStyle>
+        <InputMessageStyle data-testid="input-message-error" $bordered>
+          {errorMessage}
+        </InputMessageStyle>
       )}
     </InputWrapper>
   );

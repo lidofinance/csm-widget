@@ -1,5 +1,4 @@
 import { NodeOperatorId, ROLES } from '@lidofinance/lido-csm-sdk';
-import { LoadingRecord } from 'types';
 import { Address } from 'viem';
 
 export type ChangeRoleFormInputType = {
@@ -10,11 +9,11 @@ export type ChangeRoleFormInputType = {
 export type ChangeRoleFormNetworkData = {
   address: Address;
   role: ROLES;
-  nodeOperatorId?: NodeOperatorId;
-  currentAddress?: Address;
-  proposedAddress?: Address;
+  nodeOperatorId: NodeOperatorId;
+  extendedManagerPermissions: boolean;
+  currentAddress: Address;
+  proposedAddress: Address;
   isManagerReset: boolean;
   isRewardsChange: boolean;
   isPropose: boolean;
-  loading: LoadingRecord<'info'>;
 };

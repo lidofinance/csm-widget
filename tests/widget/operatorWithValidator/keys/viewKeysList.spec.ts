@@ -25,10 +25,18 @@ test.describe('View keys list. Common', async () => {
           key.statusCell,
           'Expected that value of status cell wont be empty.',
         ).not.toBeEmpty();
-        await expect(
-          key.statusCommentCell,
-          'Expected that value of comment wont be empty.',
-        ).not.toBeEmpty();
+        const status = await key.statusCell.textContent();
+        if (status === 'Active') {
+          await expect(
+            key.statusCommentCell,
+            'Expected that value of comment will be empty.',
+          ).toBeEmpty();
+        } else {
+          await expect(
+            key.statusCommentCell,
+            'Expected that value of comment wont be empty.',
+          ).not.toBeEmpty();
+        }
       }
     });
   });

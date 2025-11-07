@@ -16,6 +16,10 @@ export const TabsStyled = styled.div`
   &:focus-within {
     border-color: var(--lido-color-borderActive);
   }
+
+  &[aria-invalid='true'] {
+    border-color: var(--lido-color-error);
+  }
 `;
 
 export const TabListStyled = styled.div`

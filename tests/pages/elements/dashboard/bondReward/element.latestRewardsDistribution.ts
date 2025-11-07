@@ -29,7 +29,7 @@ export class LatestRewardsDistributionBlock extends BaseExpandedBlock {
   }
 
   async waitForExpanded(): Promise<void> {
-    await this.expectedDays.waitFor({
+    await this.nextRewardsInfo.waitFor({
       state: 'visible',
       timeout: LOW_TIMEOUT,
     });

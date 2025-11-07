@@ -1,10 +1,11 @@
-import { KeyWithStatus } from '@lidofinance/lido-csm-sdk';
+import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 import { ArrowBottom, ArrowTop } from '@lidofinance/lido-ui';
 import { FC, useCallback, useMemo, useState } from 'react';
 import {
   BeaconchainPubkeyLink,
   CopyLink,
   MigalabsPubkeyLink,
+  PriorityChip,
   Pubkey,
   Stack,
   StatusChip,
@@ -17,6 +18,7 @@ import {
   sortByStatusDesc,
   sortByStrikes,
   sortByStrikesDesc,
+  useMaxPriorityKeyIndex,
   useSortedKeys,
 } from 'shared/hooks';
 import { StrikesCount } from './strikes-counts';
@@ -32,6 +34,8 @@ type SortProps = {
 };
 
 export const KeysTable: FC<Props> = ({ keys }) => {
+  const maxPriorityKeyIndex = useMaxPriorityKeyIndex();
+
   const [sortBy, setSortBy] = useState<SortProps>({
     column: 'status',
     asc: true,
@@ -113,7 +117,16 @@ export const KeysTable: FC<Props> = ({ keys }) => {
               <td data-testid="statusCell">
                 <Stack direction="column" gap="xs">
                   {statuses.map((status) => (
-                    <StatusChip status={status} key={status} />
+                    <StatusChip
+                      status={status}
+                      key={status}
+                      suffix={
+                        status === KEY_STATUS.DEPOSITABLE &&
+                        index <= maxPriorityKeyIndex ? (
+                          <PriorityChip />
+                        ) : null
+                      }
+                    />
                   ))}
                 </Stack>
               </td>

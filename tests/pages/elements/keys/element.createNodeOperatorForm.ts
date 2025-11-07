@@ -17,6 +17,7 @@ export class CreateNodeOperatorForm {
   submitKeysButton: Locator;
   amountInput: Locator;
   amountInputText: Locator;
+  validationInputError: Locator;
 
   // Parsed tab
   depositDataRow: Locator;
@@ -34,6 +35,9 @@ export class CreateNodeOperatorForm {
       .getByText('Create Node Operator');
     this.amountInput = this.formBlock.getByTestId('amountInput');
     this.amountInputText = this.amountInput.locator('..').locator('span');
+    this.validationInputError = this.formBlock.getByTestId(
+      'input-message-error',
+    );
 
     // Parsed tab
     this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');

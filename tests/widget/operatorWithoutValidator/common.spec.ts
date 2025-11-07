@@ -45,9 +45,9 @@ test.describe('Operator without keys. Common suite.', async () => {
       ...duplicatedKey,
       ...duplicatedKey,
     ]);
-    await expect(createKeysPage.createNodeOperatorForm.formBlock).toContainText(
-      `Invalid deposit data`,
-    );
+    await expect(
+      createKeysPage.createNodeOperatorForm.validationInputError,
+    ).toContainText('Invalid deposit data');
     await createKeysPage.createNodeOperatorForm.selectTab('Parsed');
     await expect(
       createKeysPage.createNodeOperatorForm.depositDataRow,
@@ -84,8 +84,8 @@ test.describe('Operator without keys. Common suite.', async () => {
       const overTheLimitKeys = keysGeneratorService.generateKeys(26);
       await createKeysPage.createNodeOperatorForm.fillKeys(overTheLimitKeys);
       await expect(
-        createKeysPage.createNodeOperatorForm.formBlock,
-      ).toContainText(`Invalid deposit data`);
+        createKeysPage.createNodeOperatorForm.validationInputError,
+      ).toContainText('Too many keys in one transaction. Maximum allowed: 25');
     },
   );
 });

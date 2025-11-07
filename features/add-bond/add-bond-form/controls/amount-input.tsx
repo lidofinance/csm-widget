@@ -8,7 +8,6 @@ export const AmountInput: React.FC = () => {
   const token = useWatch<AddBondFormInputType, 'token'>({ name: 'token' });
   const max = useMaxValue(token);
 
-  // TODO: reset amount on token switch
   return (
     <>
       <FormTitle>Enter token amount</FormTitle>

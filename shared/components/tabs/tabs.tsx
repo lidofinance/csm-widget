@@ -4,7 +4,7 @@ import { TabButton } from './tab-button';
 import { TabsContext } from './tabs-context';
 import { TabsProps } from './types';
 
-export const Tabs: FC<TabsProps> = ({ items, defaultTab = 0 }) => {
+export const Tabs: FC<TabsProps> = ({ items, defaultTab = 0, error }) => {
   const [currentTab, setCurrentTab] = useState<number>(defaultTab);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export const Tabs: FC<TabsProps> = ({ items, defaultTab = 0 }) => {
 
   return (
     <TabsContext.Provider value={contextValue}>
-      <TabsStyled>
+      <TabsStyled aria-invalid={!!error}>
         <TabListStyled>
           {items.map((item, index) => (
             <TabButton

@@ -2,42 +2,39 @@ import { FC, memo } from 'react';
 
 import { SubmitKeysFormProvider } from './context';
 
-import { useModifyContext } from 'providers/modify-provider';
 import { FormBlock } from 'shared/components';
-import {
-  BaseFormLoader,
-  FormControllerStyled,
-} from 'shared/hook-form/form-controller';
+import { FormLoader, Form } from 'shared/hook-form/form-controller';
+import { SubmitKeysDataProvider } from './context';
 import { AmountInput } from './controls/amount-input';
 import { CustomAddressesSection } from './controls/custom-addresses-section';
+import { KeysConfirm } from './controls/keys-confirm';
 import { KeysInput } from './controls/keys-input';
 import { ReferrerInput } from './controls/referrer-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
-import { KeysConfirm } from './controls/keys-confirm';
 import { DepositQueue } from 'features/view-keys/deposit-queue';
+import { HeaderOperatorTypeButton } from './header-operator-type-button';
 
-export const SubmitKeysForm: FC = memo(() => {
-  const { referrer } = useModifyContext();
-
-  return (
+export const SubmitKeysForm: FC = memo(() => (
+  <SubmitKeysDataProvider>
     <SubmitKeysFormProvider>
       <FormBlock data-testid="submitKeysForm">
-        <BaseFormLoader>
-          <FormControllerStyled>
+        <FormLoader>
+          <HeaderOperatorTypeButton />
+          <Form>
             <TokenSelect />
             <KeysInput />
             <AmountInput />
             <KeysConfirm />
             <CustomAddressesSection />
-            {referrer && <ReferrerInput />}
+            <ReferrerInput />
             <SubmitButton />
-          </FormControllerStyled>
+          </Form>
           <SubmitKeysFormInfo />
-        </BaseFormLoader>
+        </FormLoader>
       </FormBlock>
       <DepositQueue />
     </SubmitKeysFormProvider>
-  );
-});
+  </SubmitKeysDataProvider>
+));

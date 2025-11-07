@@ -1,57 +1,41 @@
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
-  FormControllerContext,
-  FormControllerContextValueType,
-  FormDataContext,
-  useFormControllerRetry,
-  useFormData,
+  FormControllerProvider,
+  useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
 import {
   AcceptInviteFormNetworkData,
   type AcceptInviteFormInputType,
 } from './types';
-import { useAcceptInviteFormNetworkData } from './use-accept-invite-form-network-data';
 import { useAcceptInviteSubmit } from './use-accept-invite-submit';
-import { useGetDefaultValues } from './use-get-default-values';
-
-export const useAcceptInviteFormData = useFormData<AcceptInviteFormNetworkData>;
+import { useAcceptInviteValidation } from './use-accept-invite-validation';
 
 export const AcceptInviteFormProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
-  const [networkData, revalidate] = useAcceptInviteFormNetworkData();
+  const defaultValues = useFormDefaultValues<
+    AcceptInviteFormInputType,
+    AcceptInviteFormNetworkData
+  >((data) => ({
+    invite: data.invites[0],
+  }));
 
-  const asyncDefaultValues = useGetDefaultValues(networkData);
+  const resolver = useAcceptInviteValidation();
 
   const formObject = useForm<AcceptInviteFormInputType>({
-    defaultValues: asyncDefaultValues,
+    defaultValues,
     mode: 'onChange',
+    resolver,
   });
 
-  const { retryEvent, retryFire } = useFormControllerRetry();
-
-  const { acceptInvite } = useAcceptInviteSubmit({
-    onConfirm: revalidate,
-    onRetry: retryFire,
-  });
-
-  const formControllerValue: FormControllerContextValueType<AcceptInviteFormInputType> =
-    useMemo(
-      () => ({
-        onSubmit: acceptInvite,
-        retryEvent,
-      }),
-      [acceptInvite, retryEvent],
-    );
+  const submitter = useAcceptInviteSubmit();
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={networkData}>
-        <FormControllerContext.Provider value={formControllerValue}>
-          {children}
-        </FormControllerContext.Provider>
-      </FormDataContext.Provider>
+      <FormControllerProvider submitter={submitter}>
+        {children}
+      </FormControllerProvider>
     </FormProvider>
   );
 };

@@ -1,5 +1,5 @@
 import { Modal } from '@lidofinance/lido-ui';
-import { OPERATOR_TYPE } from 'consts';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
 import { CURVE_VARIANTS } from '../curve-badge/styles';

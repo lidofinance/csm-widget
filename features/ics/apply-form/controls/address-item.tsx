@@ -17,7 +17,7 @@ import {
 import { isAddress, isHex } from 'viem';
 import {
   useAddressMessage,
-  useVefiryMessage,
+  useVerifyMessage,
   type ApplyFormInputType,
 } from '../context';
 
@@ -47,7 +47,7 @@ export const AddressItem: FC<AddressItemProps> = ({
 
   const [isVerifying, setIsVerifying] = useState(false);
 
-  const verifyMessage = useVefiryMessage();
+  const verifyMessage = useVerifyMessage();
 
   const onVerify = useCallback(
     async (index: number) => {
