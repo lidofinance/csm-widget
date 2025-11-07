@@ -89,7 +89,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
-        const token = bondRewardsPage.claim.getTokenCardsBySymbol(tokenName);
+        const token = bondRewardsPage.claim.getTokenCardBySymbol(tokenName);
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
