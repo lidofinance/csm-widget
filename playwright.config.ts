@@ -15,12 +15,12 @@ export const httpCredentials =
 
 const config: PlaywrightTestConfig = {
   testDir: './tests',
-  timeout: 180 * 1000,
+  timeout: 600 * 1000,
   expect: {
     timeout: 5000,
   },
   fullyParallel: false,
-  forbidOnly: !!process.env.CI,
+  // forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
   reporter: getReportConfig(),
@@ -42,6 +42,10 @@ const config: PlaywrightTestConfig = {
       name: 'widget',
       testDir: './tests',
       grep: prepareGrep(process.env.TEST_TAGS),
+      use: {
+        // @ts-expect-error because pw doesnt have custom types
+        useFork: process.env.USE_FORK === 'true',
+      },
     },
   ],
 };

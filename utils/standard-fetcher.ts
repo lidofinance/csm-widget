@@ -1,4 +1,4 @@
-import { extractErrorMessage } from 'utils';
+import { extractErrorMessage } from 'utils/extract-error-message';
 import { FetcherError } from './fetcher-error';
 
 const DEFAULT_PARAMS = {
