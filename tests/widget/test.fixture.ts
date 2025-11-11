@@ -144,7 +144,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   ],
   warmUpForkedNode: [
     async ({ browserWithWallet, csmSDK, secretPhrase }, use) => {
-      if (browserWithWallet.ethereumNodeService.state) {
+      if (browserWithWallet.ethereumNodeService?.state) {
         await warmUpForkedNode(csmSDK, secretPhrase);
       }
 
@@ -166,7 +166,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   csmSDK: [
     async ({ browserWithWallet }, use) => {
       const rpcUrls = [];
-      if (browserWithWallet.ethereumNodeService.state) {
+      if (browserWithWallet.ethereumNodeService?.state) {
         rpcUrls.push('http://127.0.0.1:8545');
       } else {
         rpcUrls.push(widgetFullConfig.standConfig.networkConfig.rpcUrl);
