@@ -70,9 +70,4 @@ export type GraphCalculationParams = {
 };
 
 // Re-export original types
-export type {
-  QueueGraphData,
-  UseDepositQueueGraphResult,
-  BatchPart as OperatorBatch,
-  QueuePart,
-};
+export type { QueueGraphData, UseDepositQueueGraphResult, QueuePart };

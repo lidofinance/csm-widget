@@ -31,9 +31,16 @@ export type QueueLimit = {
   offset: number;
 } & KeysCount;
 
+export type BatchMetadata = Array<{
+  keysCount: bigint;
+  position: bigint;
+  priority: number;
+}>;
+
 export type BatchPart = {
   offset: number;
   width: number;
+  metadata: BatchMetadata;
 };
 
 export type OperatorQueue = {

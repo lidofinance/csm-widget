@@ -1,15 +1,18 @@
+import { Tooltip } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
 import { useGraphInteraction } from './hover-provider';
-import { GraphPart } from './types';
 import { PartStyle } from './style';
+import { BatchMetadata, GraphPart } from './types';
+import { BatchTooltipContent } from './batch-tooltip-content';
 
 type PartProps = {
   type: GraphPart;
   width?: number;
   offset?: number;
+  metadata?: BatchMetadata;
 };
 
-export const Part: FC<PartProps> = ({ type, width, offset }) => {
+export const Part: FC<PartProps> = ({ type, width, offset, metadata }) => {
   const { hover, setFullView } = useGraphInteraction();
 
   const onMouseEnter = useCallback(() => {
@@ -20,7 +23,7 @@ export const Part: FC<PartProps> = ({ type, width, offset }) => {
     return null;
   }
 
-  return (
+  const part = (
     <PartStyle
       $type={type}
       $width={width}
@@ -29,4 +32,17 @@ export const Part: FC<PartProps> = ({ type, width, offset }) => {
       onMouseEnter={type === 'active' ? onMouseEnter : undefined}
     />
   );
+
+  if (metadata) {
+    return (
+      <Tooltip
+        title={<BatchTooltipContent metadata={metadata} />}
+        placement="top"
+      >
+        {part}
+      </Tooltip>
+    );
+  }
+
+  return part;
 };

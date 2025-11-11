@@ -123,6 +123,7 @@ export const createMultiQueueVisualization = (
     activeKeys: active,
     depositableLimit,
     bounds,
+    submittingAllocation,
   });
 
   return {

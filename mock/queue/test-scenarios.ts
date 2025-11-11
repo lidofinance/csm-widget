@@ -987,6 +987,47 @@ export const testScenarios: TestScenario[] = [
     },
   },
 
+  {
+    title: '[Submit] Empty Priority Queue with Keys in General Queue',
+    description:
+      'Active keys present, P0 empty, submitting 10 keys, general queue with 50 keys and operator batch of 5 at end',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 250,
+        queue: 55, // 5 existing keys in P5
+        capacity: 500,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 5, // Current queue keys
+        totalDepositedKeys: 50,
+        enqueuedCount: 5,
+      },
+      formData: {
+        depositDataLength: 10, // Submitting 10 keys
+      },
+      curveParams: {
+        priority: 0,
+        maxDeposits: 70, // Room for 15 more (70 - 50 deposited - 5 queued)
+        lowestPriority: 5,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [], // Priority 0: Empty, will receive all 10 submitted keys
+          [],
+          [],
+          [], // Reserved priorities
+          [], // Priority 4: Empty
+          [
+            [2, 25],
+            [3, 20],
+            [1, 5],
+          ], // Priority 5: General queue, 50 total with operator at end
+        ],
+      },
+    },
+  },
+
   // ========================================
   // GROUP G: FALLBACK SCENARIOS
   // ========================================

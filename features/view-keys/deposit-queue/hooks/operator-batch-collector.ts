@@ -1,14 +1,14 @@
-import { OperatorQueue } from '../types';
+import { BatchPart, OperatorQueue } from '../types';
 import { QueueAnalysis } from './calculate-and-select-by-operator';
-import type { GraphBounds, OperatorBatch } from './enhanced-types';
+import type { GraphBounds, SubmittingAllocation } from './enhanced-types';
 import { normalizeToGraphCoordinate } from './graph-calculations';
 
 type BatchInfo = {
   keysCount: bigint;
-  absoluteOffset: bigint; // Position from the start of all queues
+  absoluteOffset: bigint; // Position from the begining of active keys
+  queueOffset: bigint; // Position from the start of all queues
+  batchOffset: bigint; // Offset within its own queue
   priority: number;
-  queueStartPos: bigint; // Where this queue starts in absolute terms
-  queueSize: bigint; // Total keys in this queue
 };
 
 type CollectOperatorBatchesProps = {
@@ -16,6 +16,7 @@ type CollectOperatorBatchesProps = {
   activeKeys: bigint;
   depositableLimit: bigint;
   bounds: GraphBounds;
+  submittingAllocation?: SubmittingAllocation;
 };
 
 /**
@@ -27,44 +28,38 @@ export const collectOperatorBatches = ({
   activeKeys,
   depositableLimit,
   bounds,
+  submittingAllocation,
 }: CollectOperatorBatchesProps): OperatorQueue => {
   const allBatchInfos: BatchInfo[] = [];
   let cumulativeKeys = 0n;
-  let depositableKeysUsed = 0n;
+  let submittingKeys = 0n;
 
   // Collect all batch information
   queueDataList.forEach((queueData) => {
-    const queueStartPos = activeKeys + cumulativeKeys;
     const keysCountInQueue = queueData.totalKeysInQueue;
 
     queueData.operatorBatches.forEach((batch) => {
       const batchKeysCount = BigInt(batch.keysCount);
       const batchOffset = batch.offset;
 
-      // Check if we still have depositable limit
-      if (depositableKeysUsed >= depositableLimit) {
-        return;
-      }
-
-      // Trim to depositable limit
-      const remainingLimit = depositableLimit - depositableKeysUsed;
-      const trimmedKeysCount =
-        batchKeysCount > remainingLimit ? remainingLimit : batchKeysCount;
-
-      if (trimmedKeysCount > 0n) {
-        allBatchInfos.push({
-          keysCount: trimmedKeysCount,
-          absoluteOffset: queueStartPos + batchOffset,
-          priority: queueData.queueIndex,
-          queueStartPos,
-          queueSize: keysCountInQueue,
-        });
-
-        depositableKeysUsed += trimmedKeysCount;
-      }
+      allBatchInfos.push({
+        keysCount: batchKeysCount,
+        absoluteOffset:
+          activeKeys + cumulativeKeys + submittingKeys + batchOffset,
+        queueOffset: cumulativeKeys + batchOffset,
+        batchOffset,
+        priority: queueData.queueIndex,
+      });
     });
 
     cumulativeKeys += keysCountInQueue;
+
+    // Include submitting keys for this priority in cumulative position
+    const submittingKeysInPriority =
+      submittingAllocation?.allocation?.find(
+        ([priority]) => priority === queueData.queueIndex,
+      )?.[1] || 0;
+    submittingKeys += BigInt(submittingKeysInPriority);
   });
 
   // Convert to graph coordinates and combine adjacent batches
@@ -83,7 +78,7 @@ export const collectOperatorBatches = ({
 const convertToGraphBatches = (
   batchInfos: BatchInfo[],
   bounds: GraphBounds,
-): OperatorBatch[] => {
+): BatchPart[] => {
   const minSize = bounds.minSegmentSize;
 
   return batchInfos.map((batchInfo) => {
@@ -101,6 +96,13 @@ const convertToGraphBatches = (
     return {
       offset: startPos,
       width: size,
+      metadata: [
+        {
+          keysCount: batchInfo.keysCount,
+          position: batchInfo.queueOffset,
+          priority: batchInfo.priority,
+        },
+      ],
     };
   });
 };
@@ -108,13 +110,14 @@ const convertToGraphBatches = (
 /**
  * Combines adjacent or overlapping batches to reduce visual clutter.
  * Uses a 0.5% tolerance for determining adjacency.
+ * Preserves individual batch metadata for tooltips.
  */
-const combineAdjacentBatches = (batches: OperatorBatch[]): OperatorBatch[] => {
+const combineAdjacentBatches = (batches: BatchPart[]): BatchPart[] => {
   if (batches.length <= 1) return batches;
 
   // Sort by offset
   const sortedBatches = [...batches].sort((a, b) => a.offset - b.offset);
-  const combined: OperatorBatch[] = [];
+  const combined: BatchPart[] = [];
 
   let current = sortedBatches[0];
 
@@ -126,11 +129,13 @@ const combineAdjacentBatches = (batches: OperatorBatch[]): OperatorBatch[] => {
     const isAdjacent = Math.abs(next.offset - currentEnd) <= 0.5; // 0.5% tolerance
 
     if (isAdjacent) {
-      // Combine batches
+      // Combine batches by merging metadata arrays
       const combinedEnd = Math.max(currentEnd, next.offset + next.width);
+
       current = {
         offset: current.offset,
         width: combinedEnd - current.offset,
+        metadata: [...(current.metadata ?? []), ...(next.metadata ?? [])],
       };
     } else {
       // Add current batch and start new one
