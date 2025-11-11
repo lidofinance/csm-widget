@@ -23,21 +23,20 @@ export const TokenSelect: React.FC = () => {
     ClaimBondFormInputType,
     ['token', 'claimRewards']
   >({ name: ['token', 'claimRewards'] });
-  const { loading, maxValues, isContract, isSplitter } = useClaimBondFormData();
-  const isLoading = loading.isBondLoading || loading.isRewardsLoading;
+  const { maxValues, isContract } = useClaimBondFormData(true);
   const { stakeWidget } = useExternalLinks();
 
   const { field: unlockField } = useController<
     ClaimBondFormInputType,
-    'unlockClaimTokens'
+    'unlockedClaimTokens'
   >({
-    name: 'unlockClaimTokens',
+    name: 'unlockedClaimTokens',
   });
 
   return (
     <>
       <FormTitle>Choose a token to claim</FormTitle>
-      {isContract && !isSplitter && (
+      {isContract && (
         <WarningBlock>
           The Rewards Address of your Node Operator seems to be a smart
           contract. Please ensure the smart contract you use for the Reward
@@ -48,15 +47,14 @@ export const TokenSelect: React.FC = () => {
       <TokenButtonsHookForm
         disabled={
           !maxValues?.[TOKENS.eth][Number(claimRewards)] ||
-          (isSplitter && !unlockField.value)
+          (isContract && !unlockField.value)
         }
         options={{
           [TOKENS.eth]: (
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.eth}
-                amount={maxValues?.[TOKENS.eth][Number(claimRewards)]}
-                loading={isLoading}
+                amount={maxValues[TOKENS.eth][Number(claimRewards)]}
               />
               <YouWillReceive
                 waitingTime={
@@ -75,8 +73,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.steth}
-                amount={maxValues?.[TOKENS.steth][Number(claimRewards)]}
-                loading={isLoading}
+                amount={maxValues[TOKENS.steth][Number(claimRewards)]}
               />
               <YouWillReceive
                 waitingTime="~ 1 min"
@@ -88,8 +85,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.wsteth}
-                amount={maxValues?.[TOKENS.wsteth][Number(claimRewards)]}
-                loading={isLoading || loading.isMaxValuesLoading}
+                amount={maxValues[TOKENS.wsteth][Number(claimRewards)]}
               />
               <YouWillReceive
                 waitingTime="~ 1 min"
@@ -112,7 +108,7 @@ export const TokenSelect: React.FC = () => {
           for more details.
         </Note>
       )}
-      {isSplitter && (
+      {isContract && (
         <>
           <Note>
             The Rewards Address of your Node Operator is a splitter contract. It

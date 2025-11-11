@@ -1,41 +1,32 @@
 import { useLidoSDK } from 'modules/web3';
-import { useCallback } from 'react';
-import type { Resolver } from 'react-hook-form';
 import {
-  initValidator,
+  useFormValidation,
   validateBondAmount,
   validateDepositData,
   ValidationError,
 } from 'shared/hook-form/validation';
-import { useAwaitNetworkData } from 'shared/hooks';
 import type { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
-export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
-  const dataPromise = useAwaitNetworkData(networkData);
+export const useAddKeysValidation = () => {
   const {
     csm: { depositData: sdk },
   } = useLidoSDK();
 
-  return useCallback<Resolver<AddKeysFormInputType>>(
-    async (values, _, options) => {
-      const {
-        token,
-        bondAmount,
-        depositData,
-        rawDepositData,
-        confirmKeysReady,
-      } = values;
-
-      const {
-        stethBalance,
-        wstethBalance,
-        ethBalance,
-        maxStakeEth,
+  return useFormValidation<AddKeysFormInputType, AddKeysFormNetworkData>(
+    'token',
+    async (
+      { token, bondAmount, depositData, rawDepositData, confirmKeysReady },
+      {
         operatorInfo,
         curveParameters,
-      } = await dataPromise;
-
-      const { validate, resolve } = initValidator(options, 'token');
+        maxStakeEth,
+        ethBalance,
+        stethBalance,
+        wstethBalance,
+      },
+      validate,
+    ) => {
+      // FIXME: validate on submit that token, bondAmount and depositData.length are defined
 
       await validate(['token', 'bondAmount'], () =>
         validateBondAmount({
@@ -48,6 +39,7 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
         }),
       );
 
+      // TODO: validate length is zero
       await validate('rawDepositData', () => {
         if (rawDepositData) {
           const { error } = sdk.parseDepositData(rawDepositData);
@@ -59,32 +51,16 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
         }
       });
 
+      // TODO: refactor this validation
       await validate(['rawDepositData', 'depositData'], async () => {
         await validateDepositData({
           depositData,
           sdk,
+          keysLimit: curveParameters?.keysLimit,
+          currentActiveKeys:
+            operatorInfo &&
+            operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys,
         });
-      });
-
-      await validate(['rawDepositData', 'depositData'], () => {
-        const keysCount = depositData?.length ?? 0;
-        const currentActiveKeys =
-          operatorInfo &&
-          operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys;
-
-        const keysLimit = curveParameters?.keysLimit;
-
-        if (
-          keysLimit !== undefined &&
-          currentActiveKeys !== undefined &&
-          currentActiveKeys + keysCount > keysLimit
-        ) {
-          const availableSlots = Math.max(keysLimit - currentActiveKeys, 0);
-          throw new ValidationError(
-            'depositData',
-            `Keys limit exceeded. Allowed keys count to submit: ${availableSlots}`,
-          );
-        }
       });
 
       await validate('confirmKeysReady', () => {
@@ -95,9 +71,7 @@ export const useAddKeysValidation = (networkData: AddKeysFormNetworkData) => {
           );
         }
       });
-
-      return resolve(values);
     },
-    [dataPromise, sdk],
+    [sdk],
   );
 };

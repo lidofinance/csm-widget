@@ -8,8 +8,7 @@ import {
 } from 'modules/web3';
 import { FC } from 'react';
 import { Counter, IconTooltip } from 'shared/components';
-import { useAvailableToClaim } from 'shared/hooks';
-import { formatDate } from 'utils';
+import { calculateAvailableToClaim, formatDate } from 'utils';
 import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 
@@ -25,7 +24,7 @@ export const AvailableToClaim: FC = () => {
   );
   const nextRewardsDate = formatDate(nextDistribution);
 
-  const availableToClaim = useAvailableToClaim({
+  const availableToClaim = calculateAvailableToClaim({
     bond,
     rewards,
   });

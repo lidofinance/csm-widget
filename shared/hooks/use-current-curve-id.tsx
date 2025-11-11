@@ -2,7 +2,7 @@ import {
   useDappStatus,
   useNodeOperatorId,
   useOperatorCurveId,
-  usePermissionlessCurveId,
+  useDefaultCurveId,
   useIcsCurveId,
   useIcsProof,
   useIcsPaused,
@@ -12,7 +12,7 @@ export const useCurrentCurveId = () => {
   const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
   const { data: operatorCurveId } = useOperatorCurveId(nodeOperatorId);
-  const { data: plsCurveId } = usePermissionlessCurveId();
+  const { data: defCurveId } = useDefaultCurveId();
   const { data: icsCurveId } = useIcsCurveId();
   const { data: proof } = useIcsProof(address);
   const { data: icsPaused } = useIcsPaused();
@@ -21,5 +21,5 @@ export const useCurrentCurveId = () => {
     ? operatorCurveId
     : !icsPaused && proof?.proof && !proof.isConsumed
       ? icsCurveId
-      : plsCurveId;
+      : defCurveId;
 };

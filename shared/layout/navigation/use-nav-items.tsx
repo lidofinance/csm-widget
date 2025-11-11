@@ -99,7 +99,7 @@ const routes: Route[] = [
     path: PATH.TYPE,
     icon: <UserIcon />,
     subPaths: [PATH.TYPE_CLAIM, PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
-    showRules: ['CAN_CLAIM_ICS', 'ICS_ENABLED'],
+    showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED'],
     suffix: <CounterIcs />,
   },
 ];

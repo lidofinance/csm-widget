@@ -1,5 +1,5 @@
-export * from './address-or-zero';
 export * from './address-validation';
+export * from './calculate-available-to-claim';
 export * from './compare-lowercase';
 export * from './compare-with-router-path';
 export * from './convert';
@@ -18,6 +18,7 @@ export * from './get-error-code';
 export * from './get-etherscan-link';
 export * from './get-first-param';
 export * from './get-ipfs-base-path';
+export * from './get-operatory-type';
 export * from './get-settled-value';
 export * from './get-token-display-name';
 export * from './has-no-interception';

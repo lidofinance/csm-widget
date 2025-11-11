@@ -1,45 +1,35 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
-  FormControllerContext,
-  FormDataContext,
-  useFormControllerWithRetry,
-  useFormData,
+  FormControllerProvider,
+  useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
-import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
-import { useApplyFormNetworkData } from './use-apply-form-network-data';
+import type { ApplyFormInputType } from './types';
 import { useApplyFormSubmit } from './use-apply-form-submit';
 import { useApplyFormValidation } from './use-apply-form-validation';
 
-export const useApplyFormData = useFormData<ApplyFormNetworkData>;
-
 export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [networkData, revalidate] = useApplyFormNetworkData();
+  const resolver = useApplyFormValidation();
 
-  const validationResolver = useApplyFormValidation(networkData);
+  const defaultValues = useFormDefaultValues(() => ({
+    additionalAddresses: [],
+    twitterLink: '',
+    discordLink: '',
+  }));
 
   const formObject = useForm<ApplyFormInputType>({
-    defaultValues: {
-      additionalAddresses: [],
-      twitterLink: '',
-      discordLink: '',
-    },
-    resolver: validationResolver,
+    defaultValues,
+    resolver,
     mode: 'onChange',
   });
 
-  const formController = useFormControllerWithRetry(
-    useApplyFormSubmit,
-    revalidate,
-  );
+  const submitter = useApplyFormSubmit();
 
   return (
     <FormProvider {...formObject}>
-      <FormDataContext.Provider value={networkData}>
-        <FormControllerContext.Provider value={formController}>
-          {children}
-        </FormControllerContext.Provider>
-      </FormDataContext.Provider>
+      <FormControllerProvider submitter={submitter}>
+        {children}
+      </FormControllerProvider>
     </FormProvider>
   );
 };

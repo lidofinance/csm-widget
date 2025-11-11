@@ -26,6 +26,8 @@ export const UPLOAD_DEPOSIT_DATA_LINK =
   'https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/upload-remove-view-validator-keys#upload-keys';
 export const SUBSCRIBE_EVENTS_LINK =
   'https://docs.lido.fi/run-on-lido/csm/alerts-and-monitoring/expert-custom-alerts';
+export const OPERATOR_TYPES_LINK =
+  'https://docs.lido.fi/staking-modules/csm/join-csm/#node-operator-types';
 
 // Lido Operator Portal links
 export const LIDO_OPERATOR_PORTAL_BASE =
@@ -46,7 +48,6 @@ type ExternalLinksConstants = {
   beaconchain: string;
   feesMonitoring: string;
   operatorsWidget: string;
-  beaconchainDashboard: string;
   ratedExplorer: string;
   migalabsDashboard: string;
   migalabs: string;
@@ -67,7 +68,6 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     feesMonitoring: 'https://fees-monitoring.lido.fi',
     operatorsWidget: 'https://operators.lido.fi',
     beaconchain: 'https://beaconcha.in',
-    beaconchainDashboard: 'https://v2-beta-mainnet.beaconcha.in/dashboard',
     ratedExplorer: 'https://explorer.rated.network',
     migalabsDashboard: 'https://migalabs.io/entities',
     migalabs: 'https://migalabs.io',
@@ -83,7 +83,6 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
     operatorsWidget: 'https://operators-hoodi.testnet.fi',
     beaconchain: 'https://hoodi.beaconcha.in',
-    beaconchainDashboard: 'https://v2-beta-hoodi.beaconcha.in/dashboard',
     ratedExplorer: '',
     migalabsDashboard: '',
     migalabs: 'https://migalabs.io',

@@ -9,9 +9,7 @@ export const SubmitButton = () => {
     <>
       {unqueuedCount ? (
         <>
-          <SubmitButtonHookForm errorField="keysCount">
-            Normalizing queue
-          </SubmitButtonHookForm>
+          <SubmitButtonHookForm>Normalizing queue</SubmitButtonHookForm>
 
           <Note>Or submit more keys</Note>
         </>

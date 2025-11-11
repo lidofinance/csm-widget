@@ -84,7 +84,13 @@ export const RadioButtonStyle = styled.label<{
   }
 
   :has(:disabled) {
-    ${RadioIconStyle} {
+    :has(:checked) {
+      ${RadioIconStyle} {
+        opacity: 0.5;
+      }
+    }
+
+    :not(:has(:checked)) {
       opacity: 0.5;
     }
   }

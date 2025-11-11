@@ -13,6 +13,7 @@ export class SubmitPage {
   submitKeysButton: Locator;
   amountInput: Locator;
   amountInputText: Locator;
+  validationInputError: Locator;
 
   // Parsed tab
   depositDataRow: Locator;
@@ -30,6 +31,9 @@ export class SubmitPage {
       .getByText('Submit keys');
     this.amountInput = this.formBlock.getByTestId('amountInput');
     this.amountInputText = this.amountInput.locator('..').locator('span');
+    this.validationInputError = this.formBlock.getByTestId(
+      'input-message-error',
+    );
 
     // Parsed tab
     this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');

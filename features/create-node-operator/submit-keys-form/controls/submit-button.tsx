@@ -8,9 +8,5 @@ export const SubmitButton = () => {
     return <PausedButton type="Module" />;
   }
 
-  return (
-    <SubmitButtonHookForm errorField="rawDepositData">
-      Create Node Operator
-    </SubmitButtonHookForm>
-  );
+  return <SubmitButtonHookForm>Create Node Operator</SubmitButtonHookForm>;
 };

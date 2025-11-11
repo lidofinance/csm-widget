@@ -1,26 +1,30 @@
 import { FC, memo } from 'react';
 
-import { StealingCancelFormProvider } from './context';
+import {
+  StealingCancelDataProvider,
+  StealingCancelFormProvider,
+} from './context';
 
 import { FormBlock } from 'shared/components';
-import { FormControllerStyled } from 'shared/hook-form/form-controller';
+import { FormLoader, Form } from 'shared/hook-form/form-controller';
 import { AmountInput } from './controls/amount-input';
 import { NodeOperatorInput } from './controls/node-operator-input';
 import { SubmitButton } from './controls/submit-button';
-import { StealingCancelFormLoader } from './stealing-cancel-form-loader';
 
 export const StealingCancelForm: FC = memo(() => {
   return (
-    <StealingCancelFormProvider>
-      <FormBlock>
-        <StealingCancelFormLoader>
-          <FormControllerStyled>
-            <NodeOperatorInput />
-            <AmountInput />
-            <SubmitButton />
-          </FormControllerStyled>
-        </StealingCancelFormLoader>
-      </FormBlock>
-    </StealingCancelFormProvider>
+    <StealingCancelDataProvider>
+      <StealingCancelFormProvider>
+        <FormBlock>
+          <FormLoader>
+            <Form>
+              <NodeOperatorInput />
+              <AmountInput />
+              <SubmitButton />
+            </Form>
+          </FormLoader>
+        </FormBlock>
+      </StealingCancelFormProvider>
+    </StealingCancelDataProvider>
   );
 });
