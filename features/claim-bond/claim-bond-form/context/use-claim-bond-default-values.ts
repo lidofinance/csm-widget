@@ -4,8 +4,8 @@ import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
 
 export const useClaimBondDefaultValues = () => {
   return useFormDefaultValues<ClaimBondFormInputType, ClaimBondFormNetworkData>(
-    () => ({
-      token: TOKENS.wsteth,
+    (data) => ({
+      token: data.isContract ? TOKENS.wsteth : TOKENS.steth,
       claimRewards: false,
       unlockedClaimTokens: false,
     }),

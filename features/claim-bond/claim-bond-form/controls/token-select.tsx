@@ -23,7 +23,7 @@ export const TokenSelect: React.FC = () => {
     ClaimBondFormInputType,
     ['token', 'claimRewards']
   >({ name: ['token', 'claimRewards'] });
-  const { maxValues, isContract, isSplitter } = useClaimBondFormData(true);
+  const { maxValues, isContract } = useClaimBondFormData(true);
   const { stakeWidget } = useExternalLinks();
 
   const { field: unlockField } = useController<
@@ -36,7 +36,7 @@ export const TokenSelect: React.FC = () => {
   return (
     <>
       <FormTitle>Choose a token to claim</FormTitle>
-      {isContract && !isSplitter && (
+      {isContract && (
         <WarningBlock>
           The Rewards Address of your Node Operator seems to be a smart
           contract. Please ensure the smart contract you use for the Reward
@@ -47,7 +47,7 @@ export const TokenSelect: React.FC = () => {
       <TokenButtonsHookForm
         disabled={
           !maxValues?.[TOKENS.eth][Number(claimRewards)] ||
-          (isSplitter && !unlockField.value)
+          (isContract && !unlockField.value)
         }
         options={{
           [TOKENS.eth]: (
@@ -108,7 +108,7 @@ export const TokenSelect: React.FC = () => {
           for more details.
         </Note>
       )}
-      {isSplitter && (
+      {isContract && (
         <>
           <Note>
             The Rewards Address of your Node Operator is a splitter contract. It
