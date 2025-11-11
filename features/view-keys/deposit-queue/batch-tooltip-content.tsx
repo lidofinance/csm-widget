@@ -22,7 +22,7 @@ export const BatchTooltipContent: FC<BatchTooltipContentProps> = ({
                 {getPriorityName(`priority${batch.priority}` as GraphPart)}
               </Text>
               <Text size="xxs">Keys: {batch.keysCount.toString()}</Text>
-              <Text size="xxs">Position: {batch.position.toString()}</Text>
+              <Text size="xxs">Keys ahead: {batch.position.toString()}</Text>
             </Stack>
           </>
         ))}
