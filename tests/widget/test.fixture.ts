@@ -20,7 +20,6 @@ type WorkerFixtures = {
   widgetService: WidgetService;
   csmSDK: LidoSDKClient;
   ethereumSDK: SdkService;
-  warmUpForkedNode: void;
 };
 
 const readBlockNumber = () => {
@@ -99,9 +98,12 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
   // fixture-methods
   browserWithWallet: [
-    async ({ secretPhrase, useFork }, use) => {
+    async ({ secretPhrase, csmSDK, useFork }, use) => {
       const currentBlockNumber = readBlockNumber();
-      const runOptions = [`--mnemonic=${secretPhrase}`];
+      const runOptions = [
+        `--mnemonic=${secretPhrase}`,
+        '--fork-header=Accept-Encoding: identity',
+      ];
 
       if (currentBlockNumber) {
         runOptions.push(`--fork-block-number=${currentBlockNumber}`);
@@ -110,6 +112,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
       const rpcUrl = useFork
         ? 'http://127.0.0.1:8545'
         : widgetFullConfig.standConfig.networkConfig.rpcUrl;
+
       const browserService = new BrowserService({
         networkConfig: {
           ...widgetFullConfig.standConfig.networkConfig,
@@ -133,24 +136,18 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
       });
 
       await browserService.initWalletSetup(useFork);
-      const blockNumber = await getBlockNumber(rpcUrl);
-      fs.writeFileSync('.fork_block_number', String(blockNumber));
+
+      if (useFork) {
+        await warmUpForkedNode(csmSDK, secretPhrase);
+        const blockNumber = await getBlockNumber(rpcUrl);
+        fs.writeFileSync('.fork_block_number', String(blockNumber));
+      }
 
       await use(browserService);
 
       await browserService.teardown();
     },
     { scope: 'worker' },
-  ],
-  warmUpForkedNode: [
-    async ({ browserWithWallet, csmSDK, secretPhrase }, use) => {
-      if (browserWithWallet.ethereumNodeService?.state) {
-        await warmUpForkedNode(csmSDK, secretPhrase);
-      }
-
-      await use();
-    },
-    { scope: 'worker', auto: true },
   ],
   widgetService: [
     async ({ browserWithWallet }, use) => {
@@ -164,15 +161,12 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
     { scope: 'worker' },
   ],
   csmSDK: [
-    async ({ browserWithWallet }, use) => {
-      const rpcUrls = [];
-      if (browserWithWallet.ethereumNodeService?.state) {
-        rpcUrls.push('http://127.0.0.1:8545');
-      } else {
-        rpcUrls.push(widgetFullConfig.standConfig.networkConfig.rpcUrl);
-      }
+    async ({ useFork }, use) => {
+      const rpcUrl = useFork
+        ? 'http://127.0.0.1:8545'
+        : widgetFullConfig.standConfig.networkConfig.rpcUrl;
 
-      await use(new LidoSDKClient(rpcUrls));
+      await use(new LidoSDKClient([rpcUrl]));
     },
     { scope: 'worker' },
   ],
