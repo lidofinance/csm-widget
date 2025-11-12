@@ -100,13 +100,16 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   browserWithWallet: [
     async ({ secretPhrase, csmSDK, useFork }, use) => {
       const currentBlockNumber = readBlockNumber();
-      const runOptions = [
+      const nodeRunOptions = [
         `--mnemonic=${secretPhrase}`,
         '--fork-header=Accept-Encoding: identity',
       ];
 
       if (currentBlockNumber) {
-        runOptions.push(`--fork-block-number=${currentBlockNumber}`);
+        console.info(
+          `Using fork block number from .fork_block_number: ${currentBlockNumber}`,
+        );
+        nodeRunOptions.push(`--fork-block-number=${currentBlockNumber}`);
       }
 
       const rpcUrl = useFork
@@ -127,7 +130,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
           rpcUrlToMock: `**/api/rpc?chainId=${widgetFullConfig.standConfig.networkConfig.chainId}`,
           rpcUrl: widgetFullConfig.standConfig.networkConfig.rpcUrl,
           derivationPath: "m/44'/60'/0'/0",
-          runOptions,
+          runOptions: nodeRunOptions,
         },
         browserOptions: {
           reducedMotion: 'reduce',
@@ -140,6 +143,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
       if (useFork) {
         await warmUpForkedNode(csmSDK, secretPhrase);
         const blockNumber = await getBlockNumber(rpcUrl);
+        console.info(`Forked node is at block number: ${blockNumber}`);
         fs.writeFileSync('.fork_block_number', String(blockNumber));
       }
 

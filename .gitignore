@@ -52,3 +52,4 @@ yarn-error.log*
 /public/runtime/
 /keys-generator-bin/
 deposit_data.json
+.fork_block_number

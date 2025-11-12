@@ -6,7 +6,7 @@ test.describe('Dashboard. Bond & Rewards.', async () => {
     await widgetService.dashboardPage.open();
   });
 
-  test.only(
+  test(
     qase(138, 'Navigation from Bond & Rewards Section'),
     async ({ widgetService }) => {
       await widgetService.dashboardPage.bondRewards.sectionHeaderLink.click();
