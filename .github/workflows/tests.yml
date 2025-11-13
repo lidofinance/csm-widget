@@ -159,11 +159,11 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install dependencies
+      - name: Install CSM Contracts dependencies
         run: |
           cd community-staking-module && yarn install --immutable
 
-      - name: Build fork
+      - name: Build CSM Fork
         run: cd community-staking-module && just deps && just build
 
       - name: Install dependencies
