@@ -126,6 +126,11 @@ jobs:
       GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
       GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
 
+      # fork envs
+      DEPLOY_CONFIG: ./artifacts/hoodi/deploy-hoodi.json
+      CHAIN: hoodi
+      ARTIFACTS_DIR: ./artifacts/hoodi/
+
     steps:
       - uses: actions/checkout@v5
         with:
