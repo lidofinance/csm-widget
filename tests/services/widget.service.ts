@@ -163,10 +163,7 @@ export class WidgetService {
 
   async claim(tokenName: TOKENS, amount: string) {
     await test.step(`Claim ${amount} ${tokenName}`, async () => {
-      await test.step(`Choose ${tokenName} symbol for claim`, async () => {
-        const token = this.bondRewardsPage.claim.selectBondToken(tokenName);
-        await token.click();
-      });
+      await this.bondRewardsPage.claim.selectBondToken(tokenName);
 
       await this.bondRewardsPage.claim.amountInput.fill(amount);
 
