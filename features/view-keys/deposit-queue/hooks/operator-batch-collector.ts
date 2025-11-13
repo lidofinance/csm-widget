@@ -14,7 +14,6 @@ type BatchInfo = {
 type CollectOperatorBatchesProps = {
   queueDataList: QueueAnalysis[];
   activeKeys: bigint;
-  depositableLimit: bigint;
   bounds: GraphBounds;
   submittingAllocation?: SubmittingAllocation;
 };
@@ -26,7 +25,6 @@ type CollectOperatorBatchesProps = {
 export const collectOperatorBatches = ({
   queueDataList,
   activeKeys,
-  depositableLimit,
   bounds,
   submittingAllocation,
 }: CollectOperatorBatchesProps): OperatorQueue => {
@@ -66,8 +64,14 @@ export const collectOperatorBatches = ({
   const graphBatches = convertToGraphBatches(allBatchInfos, bounds);
   const combinedBatches = combineAdjacentBatches(graphBatches);
 
+  // Sum operator batch keys only (not total queue keys)
+  const operatorKeysCount = allBatchInfos.reduce(
+    (sum, batch) => sum + batch.keysCount,
+    0n,
+  );
+
   return {
-    keysCount: depositableLimit,
+    keysCount: operatorKeysCount,
     batches: combinedBatches,
   };
 };

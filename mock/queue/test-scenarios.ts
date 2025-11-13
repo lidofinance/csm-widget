@@ -23,7 +23,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 45, // Less than batch sum (50)
+        depositableValidatorsCount: 50,
       },
       formData: {
         depositDataLength: 0,
@@ -85,7 +85,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 900,
       },
       operatorInfo: {
-        depositableValidatorsCount: 120, // Less than batch sum (140)
+        depositableValidatorsCount: 140,
       },
       formData: {
         depositDataLength: 0,
@@ -170,7 +170,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 1000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 60, // Realistic: slightly less than batch sum (65) due to stale data
+        depositableValidatorsCount: 65,
       },
       formData: {
         depositDataLength: 0,
@@ -201,7 +201,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 45, // Exactly matches operator batch sum
+        depositableValidatorsCount: 45,
       },
       formData: {
         depositDataLength: 0,
@@ -235,7 +235,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 450, // Only 150 capacity left
       },
       operatorInfo: {
-        depositableValidatorsCount: 80, // Less than batch sum (90) - keys were removed
+        depositableValidatorsCount: 90,
       },
       formData: {
         depositDataLength: 0,
@@ -273,7 +273,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 600,
       },
       operatorInfo: {
-        depositableValidatorsCount: 70, // Less than batch sum (80) - some keys removed
+        depositableValidatorsCount: 80,
       },
       formData: {
         depositDataLength: 0,
@@ -305,7 +305,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 55, // Matches batch sum exactly
+        depositableValidatorsCount: 55,
       },
       formData: {
         depositDataLength: 0,
@@ -338,7 +338,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 600,
       },
       operatorInfo: {
-        depositableValidatorsCount: 65, // Less than batch sum (75) - stale data
+        depositableValidatorsCount: 75,
       },
       formData: {
         depositDataLength: 0,
@@ -371,7 +371,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 600,
       },
       operatorInfo: {
-        depositableValidatorsCount: 85, // Less than batch sum (90) - some removal
+        depositableValidatorsCount: 90,
       },
       formData: {
         depositDataLength: 0,
@@ -405,7 +405,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 700,
       },
       operatorInfo: {
-        depositableValidatorsCount: 95, // Less than batch sum (105) - realistic stale data
+        depositableValidatorsCount: 105,
       },
       formData: {
         depositDataLength: 0,
@@ -447,7 +447,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 70, // Less than batch sum (80)
+        depositableValidatorsCount: 80,
       },
       formData: {
         depositDataLength: 0,
@@ -487,7 +487,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 700,
       },
       operatorInfo: {
-        depositableValidatorsCount: 65, // Less than batch sum (75)
+        depositableValidatorsCount: 75,
       },
       formData: {
         depositDataLength: 0,
@@ -524,7 +524,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 85, // Matches batch sum exactly
+        depositableValidatorsCount: 85,
       },
       formData: {
         depositDataLength: 0,
@@ -564,7 +564,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 90, // Matches batch sum exactly
+        depositableValidatorsCount: 90,
       },
       formData: {
         depositDataLength: 0,
@@ -592,11 +592,11 @@ export const testScenarios: TestScenario[] = [
       nodeOperatorId: 1,
       shareLimit: {
         active: 200,
-        queue: 201, // 200 + 1 = 201 total
+        queue: 291, // 140 + 90 + 61 = 291 total
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 1, // Exactly matches batch sum
+        depositableValidatorsCount: 1,
       },
       formData: {
         depositDataLength: 0,
@@ -631,7 +631,7 @@ export const testScenarios: TestScenario[] = [
       nodeOperatorId: 1,
       shareLimit: {
         active: 150,
-        queue: 181, // 180 + 1 = 181 total
+        queue: 241, // 120 + 60 + 61 = 241 total
         capacity: 400,
       },
       operatorInfo: {
@@ -682,7 +682,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 0, // All keys were removed
+        depositableValidatorsCount: 0, // All keys were removed,
       },
       formData: {
         depositDataLength: 0,
@@ -792,7 +792,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 0, // Edge case
       },
       operatorInfo: {
-        depositableValidatorsCount: 25,
+        depositableValidatorsCount: 30,
       },
       formData: {
         depositDataLength: 0,
@@ -820,7 +820,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 200, // Only 2 keys room left
       },
       operatorInfo: {
-        depositableValidatorsCount: 35, // Less than batch sum (45)
+        depositableValidatorsCount: 45,
       },
       formData: {
         depositDataLength: 0,
@@ -851,7 +851,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 200,
       },
       operatorInfo: {
-        depositableValidatorsCount: 3, // Less than batch sum (4)
+        depositableValidatorsCount: 4,
       },
       formData: {
         depositDataLength: 0,
@@ -995,7 +995,7 @@ export const testScenarios: TestScenario[] = [
       nodeOperatorId: 1,
       shareLimit: {
         active: 250,
-        queue: 55, // 5 existing keys in P5
+        queue: 50, // 25 + 20 + 5 = 50 total
         capacity: 500,
       },
       operatorInfo: {
@@ -1103,7 +1103,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 15000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 800, // Less than batch sum (1200)
+        depositableValidatorsCount: 1200,
       },
       formData: {
         depositDataLength: 100,
@@ -1142,7 +1142,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 12000,
       },
       operatorInfo: {
-        depositableValidatorsCount: 1500, // Much less than batch sum (3000)
+        depositableValidatorsCount: 3000,
       },
       formData: {
         depositDataLength: 200,
@@ -1227,7 +1227,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500,
       },
       operatorInfo: {
-        depositableValidatorsCount: 40, // Less than batch sum (50) - stale data
+        depositableValidatorsCount: 50,
       },
       formData: {
         depositDataLength: 0,
@@ -1260,7 +1260,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 700,
       },
       operatorInfo: {
-        depositableValidatorsCount: 75, // Less than batch sum (90) - realistic stale data
+        depositableValidatorsCount: 90,
       },
       formData: {
         depositDataLength: 0,
@@ -1298,7 +1298,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 85, // Less than batch sum (100) - some keys removed
+        depositableValidatorsCount: 100,
       },
       formData: {
         depositDataLength: 0,
@@ -1335,7 +1335,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500, // Only 50 capacity left
       },
       operatorInfo: {
-        depositableValidatorsCount: 60, // Less than batch sum (80) - stale data
+        depositableValidatorsCount: 80,
       },
       formData: {
         depositDataLength: 0,
@@ -1370,7 +1370,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 1200,
       },
       operatorInfo: {
-        depositableValidatorsCount: 85, // Less than batch sum (105) - stale data
+        depositableValidatorsCount: 105,
       },
       formData: {
         depositDataLength: 0,
@@ -1417,7 +1417,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 800,
       },
       operatorInfo: {
-        depositableValidatorsCount: 110, // Less than batch sum (125) - some keys removed
+        depositableValidatorsCount: 125,
       },
       formData: {
         depositDataLength: 0,
@@ -1465,7 +1465,7 @@ export const testScenarios: TestScenario[] = [
         capacity: 500, // Only 20 capacity left - all priorities over limit
       },
       operatorInfo: {
-        depositableValidatorsCount: 80, // Less than batch sum (95) - significant stale data
+        depositableValidatorsCount: 95,
       },
       formData: {
         depositDataLength: 0,
@@ -1562,7 +1562,7 @@ export const testScenarios: TestScenario[] = [
         depositableValidatorsCount: 3, // Small number of keys
       },
       formData: {
-        depositDataLength: 3, // Matching the depositable count
+        depositDataLength: 3,
       },
       depositQueueBatches: {
         priorities: [
