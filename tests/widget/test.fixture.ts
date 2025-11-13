@@ -10,6 +10,7 @@ import { WidgetService } from 'tests/services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from 'tests/consts/timeouts';
 import { warmUpForkedNode } from 'tests/helpers/warmUpFork';
+import ForkActionsService from 'tests/services/forkActions.service';
 
 type WorkerFixtures = {
   // fixture-options
@@ -20,6 +21,7 @@ type WorkerFixtures = {
   widgetService: WidgetService;
   csmSDK: LidoSDKClient;
   ethereumSDK: SdkService;
+  forkActionService: ForkActionsService;
 };
 
 export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
@@ -29,6 +31,15 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
       await use(false);
     },
     { scope: 'worker', option: true },
+  ],
+  forkActionService: [
+    async ({}, use) => {
+      const svc = new ForkActionsService({
+        cwd: process.env.JUST_DIR || './community-staking-module',
+      });
+      await use(svc);
+    },
+    { scope: 'worker' },
   ],
   secretPhrase: [
     async ({}, use) => {

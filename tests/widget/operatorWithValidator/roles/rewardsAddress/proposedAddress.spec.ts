@@ -8,7 +8,7 @@ import { generateAddress } from 'tests/helpers/accountData';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/consts/common.const';
 
-test.describe.only(
+test.describe(
   'Roles. Rewards Address. Verify UI With Proposed Address',
   { tag: [Tags.performTX] },
   () => {
