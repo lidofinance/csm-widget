@@ -9,6 +9,7 @@ import { SdkService } from 'tests/services/ethereumSDK.client';
 import { WidgetService } from 'tests/services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from 'tests/consts/timeouts';
+import { warmUpForkedNode } from 'tests/helpers/warmUpFork';
 
 type WorkerFixtures = {
   // fixture-options
@@ -19,33 +20,6 @@ type WorkerFixtures = {
   widgetService: WidgetService;
   csmSDK: LidoSDKClient;
   ethereumSDK: SdkService;
-};
-
-const warmUpForkedNode = async (
-  csmSDK: LidoSDKClient,
-  secretPhrase: string,
-) => {
-  return await test.step('Warm up forked node', async () => {
-    const address = mnemonicToAccount(secretPhrase).address;
-    const started = Date.now();
-    let lastError: unknown;
-    while (Date.now() - started < FORK_WARM_UP_TIMEOUT) {
-      try {
-        await csmSDK.getNodeOperatorsByAddress(address);
-        await csmSDK.getNodeOperatorsByProposedAddress(address);
-        return;
-      } catch (error) {
-        lastError = error;
-        // @ts-expect-error temp ingnore
-        console.error(`Error message: ${error?.message}`);
-      }
-    }
-    throw new Error(
-      `Timeout (=${FORK_WARM_UP_TIMEOUT}ms) while waiting node operators for ${address}. Last error: ${String(
-        lastError,
-      )}`,
-    );
-  });
 };
 
 export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
