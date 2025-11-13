@@ -1,5 +1,4 @@
 /* eslint-disable no-empty-pattern */
-import fs from 'fs';
 import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
@@ -8,8 +7,8 @@ import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
 import { LidoSDKClient } from 'tests/services/csmSDK.client';
 import { SdkService } from 'tests/services/ethereumSDK.client';
 import { WidgetService } from 'tests/services/widget.service';
-import { standardFetcher } from 'utils/standard-fetcher';
 import { mnemonicToAccount } from 'viem/accounts';
+import { FORK_WARM_UP_TIMEOUT } from 'tests/consts/timeouts';
 
 type WorkerFixtures = {
   // fixture-options
@@ -22,60 +21,31 @@ type WorkerFixtures = {
   ethereumSDK: SdkService;
 };
 
-const readBlockNumber = () => {
-  try {
-    const content = fs.readFileSync('.fork_block_number', 'utf8').trim();
-    const num = Number(content);
-    return Number.isFinite(num) ? num : undefined;
-  } catch {
-    return;
-  }
-};
-
-const getBlockNumber = async (rpcUrl: string) => {
-  const res = await standardFetcher(rpcUrl, {
-    method: 'POST',
-    body: JSON.stringify({
-      jsonrpc: '2.0',
-      method: 'eth_blockNumber',
-      params: [],
-      id: 1,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-
-  // @ts-expect-error temp ingnore
-  return parseInt(res.result, 16);
-};
-
 const warmUpForkedNode = async (
   csmSDK: LidoSDKClient,
   secretPhrase: string,
 ) => {
-  console.info('Warming up forked node...');
-  const address = mnemonicToAccount(secretPhrase).address;
-  const started = Date.now();
-  let lastError: unknown;
-  while (Date.now() - started < 600000) {
-    // warming up forked node by simple sdk request
-    try {
-      await csmSDK.getNodeOperatorsByAddress(address);
-      await csmSDK.getNodeOperatorsByProposedAddress(address);
-      console.info('Forked node is warmed up.');
-      return;
-    } catch (error) {
-      lastError = error;
-      // @ts-expect-error temp ingnore
-      console.error(`Error message: ${error?.message}`);
+  return await test.step('Warm up forked node', async () => {
+    const address = mnemonicToAccount(secretPhrase).address;
+    const started = Date.now();
+    let lastError: unknown;
+    while (Date.now() - started < FORK_WARM_UP_TIMEOUT) {
+      try {
+        await csmSDK.getNodeOperatorsByAddress(address);
+        await csmSDK.getNodeOperatorsByProposedAddress(address);
+        return;
+      } catch (error) {
+        lastError = error;
+        // @ts-expect-error temp ingnore
+        console.error(`Error message: ${error?.message}`);
+      }
     }
-  }
-  throw new Error(
-    `Timeout (=600000ms) while waiting node operators for ${address}. Last error: ${String(
-      lastError,
-    )}`,
-  );
+    throw new Error(
+      `Timeout (=${FORK_WARM_UP_TIMEOUT}ms) while waiting node operators for ${address}. Last error: ${String(
+        lastError,
+      )}`,
+    );
+  });
 };
 
 export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
@@ -99,19 +69,6 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   // fixture-methods
   browserWithWallet: [
     async ({ secretPhrase, csmSDK, useFork }, use) => {
-      const currentBlockNumber = readBlockNumber();
-      const nodeRunOptions = [
-        `--mnemonic=${secretPhrase}`,
-        '--fork-header=Accept-Encoding: identity',
-      ];
-
-      if (currentBlockNumber) {
-        console.info(
-          `Using fork block number from .fork_block_number: ${currentBlockNumber}`,
-        );
-        // nodeRunOptions.push(`--fork-block-number=${currentBlockNumber}`);
-      }
-
       const rpcUrl = useFork
         ? 'http://127.0.0.1:8545'
         : widgetFullConfig.standConfig.networkConfig.rpcUrl;
@@ -130,7 +87,11 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
           rpcUrlToMock: `**/api/rpc?chainId=${widgetFullConfig.standConfig.networkConfig.chainId}`,
           rpcUrl: widgetFullConfig.standConfig.networkConfig.rpcUrl,
           derivationPath: "m/44'/60'/0'/0",
-          runOptions: nodeRunOptions,
+          runOptions: [
+            `--mnemonic=${secretPhrase}`,
+            '--fork-header=Accept-Encoding: identity',
+          ],
+          warmUpCallback: warmUpForkedNode.bind(null, csmSDK, secretPhrase),
         },
         browserOptions: {
           reducedMotion: 'reduce',
@@ -140,18 +101,11 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
       await browserService.initWalletSetup(useFork);
 
-      if (useFork) {
-        await warmUpForkedNode(csmSDK, secretPhrase);
-        const blockNumber = await getBlockNumber(rpcUrl);
-        console.info(`Forked node is at block number: ${blockNumber}`);
-        fs.writeFileSync('.fork_block_number', String(blockNumber));
-      }
-
       await use(browserService);
 
       await browserService.teardown();
     },
-    { scope: 'worker' },
+    { scope: 'worker', timeout: FORK_WARM_UP_TIMEOUT },
   ],
   widgetService: [
     async ({ browserWithWallet }, use) => {

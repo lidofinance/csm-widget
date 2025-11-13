@@ -153,6 +153,12 @@ jobs:
         with:
           version: v1.2.3
 
+      - name: Restore yarn cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+
       - name: Install dependencies
         run: |
           cd community-staking-module && yarn install --immutable
@@ -195,10 +201,10 @@ jobs:
           xvfb-run --auto-servernum -- yarn test
 
       - uses: actions/cache@v4
-        id: get-cache
+        id: node_modules
         with:
-          path: .fork_block_number
-          key: fork-block-${{ hashFiles('.fork_block_number') }}
+          path: node_modules
+          key: node_modules-${{ hashFiles('.fork_block_number') }}
 
       - uses: actions/upload-artifact@v4
         if: always()

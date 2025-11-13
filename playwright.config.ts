@@ -15,7 +15,7 @@ export const httpCredentials =
 
 const config: PlaywrightTestConfig = {
   testDir: './tests',
-  timeout: 600 * 1000,
+  timeout: 180 * 1000,
   expect: {
     timeout: 5000,
   },
