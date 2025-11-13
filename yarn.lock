@@ -3043,14 +3043,14 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.47.0.tgz#2367eec1c8363516bde48b632a6fbe32aec33a1e"
   integrity sha512-6xx2O89OhWAxaob+SqXEX2xtrumG4MCUrclooCIvAhz64Lp3Wa0Hzt2lgJyFMhJxpDPMj3LmYNbuB15lwEQKwg==
 
-"@lidofinance/browser-service@1.6.1":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.6.1.tgz#e522883b46b111c32194d0f2cba8507356e833af"
-  integrity sha512-rHLuLlBu84wZVkBTBKjooa/Tz2SdZ/7jO4I9sjv0wHh9pmvdzVJBOdX7wc1w3w5ECiUmqPkCizq4pXf2hyBOHA==
+"@lidofinance/browser-service@1.6.2":
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.6.2.tgz#1b64c5153921b8f17530302ea8e12c356f5452e9"
+  integrity sha512-riwBBllXdu0pppdkq+AfY5qkzlQ6jKUjx3KPSF128bR4HvNcQYsf/WZcoCUKS/xi90c3VtzyPTmLG+j0nE5iAA==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.3.1"
-    "@lidofinance/wallets-testing-nodes" "1.5.1"
-    "@lidofinance/wallets-testing-wallets" "1.38.0"
+    "@lidofinance/wallets-testing-nodes" "1.6.0"
+    "@lidofinance/wallets-testing-wallets" "1.39.0"
 
 "@lidofinance/discord-reporter@1.7.0":
   version "1.7.0"
@@ -3190,18 +3190,6 @@
     rxjs "^7.5.6"
     unzipper "^0.10.11"
 
-"@lidofinance/wallets-testing-nodes@1.5.1":
-  version "1.5.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-nodes/-/wallets-testing-nodes-1.5.1.tgz#d505248eaa0bd71fe87379d20eb7ceaa839de676"
-  integrity sha512-6ZCHdK/QMoCkaP2H7j4/Fs79fjuGzPJCGTI3fD0VePpG7CNZomctB8ZGqS6W73RdF2HbofYIpbz4f96sa3xOOg==
-  dependencies:
-    "@ganache/console.log" "^0.4.2"
-    "@nestjs/common" "^10.0.0"
-    axios "^1.10.0"
-    ethers "^5.8.0"
-    reflect-metadata "^0.1.13"
-    rxjs "^7.5.6"
-
 "@lidofinance/wallets-testing-nodes@1.6.0":
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-nodes/-/wallets-testing-nodes-1.6.0.tgz#b21b641c80cf31216d6b34cd43b0459f8965fafe"
@@ -3213,17 +3201,6 @@
     ethers "^5.8.0"
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
-
-"@lidofinance/wallets-testing-wallets@1.38.0":
-  version "1.38.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.38.0.tgz#f68fa58be09d3b7b8537ed78bb0af90bd1a54da9"
-  integrity sha512-nKtot7PbIXT5Esd+0DIjcmEl8DEHLonug+T/jJJHYCLpwiJ9xxswkxXVmq2IDjfXg0m5a7XVTvv6uJqsUEFmkA==
-  dependencies:
-    big.js "^6.2.1"
-    expect "^28.1.3"
-    reflect-metadata "^0.1.13"
-    rxjs "^7.5.6"
-    viem "^2.28.4"
 
 "@lidofinance/wallets-testing-wallets@1.39.0":
   version "1.39.0"

@@ -109,7 +109,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
         console.info(
           `Using fork block number from .fork_block_number: ${currentBlockNumber}`,
         );
-        nodeRunOptions.push(`--fork-block-number=${currentBlockNumber}`);
+        // nodeRunOptions.push(`--fork-block-number=${currentBlockNumber}`);
       }
 
       const rpcUrl = useFork
