@@ -46,8 +46,8 @@ export type OperatorInfo = {
 };
 
 export type SubmittingAllocation = {
-  keysCount: number;
-  allocation: [number, number][];
+  keysCount: bigint;
+  allocation: [number, bigint][];
 }; // queue priority, keys count
 
 export type ProcessedBatches = {

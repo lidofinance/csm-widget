@@ -218,3 +218,10 @@ export const ChipStyle = styled.div<{
         `
       : ''}
 `;
+
+export const TooltipContentStyle = styled(StackStyle).attrs({
+  $direction: 'column',
+  $gap: 'xs',
+})`
+  font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
+`;

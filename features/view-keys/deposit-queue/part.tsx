@@ -4,6 +4,7 @@ import { useGraphInteraction } from './hover-provider';
 import { PartStyle } from './style';
 import { BatchMetadata, GraphPart } from './types';
 import { BatchTooltipContent } from './batch-tooltip-content';
+import { AddedTooltipContent } from './added-tooltip-content';
 
 type PartProps = {
   type: GraphPart;
@@ -33,10 +34,21 @@ export const Part: FC<PartProps> = ({ type, width, offset, metadata }) => {
     />
   );
 
-  if (metadata) {
+  if (type === 'batch' && metadata) {
     return (
       <Tooltip
         title={<BatchTooltipContent metadata={metadata} />}
+        placement="top"
+      >
+        {part}
+      </Tooltip>
+    );
+  }
+
+  if (type === 'added' && metadata) {
+    return (
+      <Tooltip
+        title={<AddedTooltipContent metadata={metadata} />}
         placement="top"
       >
         {part}

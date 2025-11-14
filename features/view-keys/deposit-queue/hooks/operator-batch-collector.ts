@@ -44,7 +44,7 @@ export const collectOperatorBatches = ({
         keysCount: batchKeysCount,
         absoluteOffset:
           activeKeys + cumulativeKeys + submittingKeys + batchOffset,
-        queueOffset: cumulativeKeys + batchOffset,
+        queueOffset: cumulativeKeys + submittingKeys + batchOffset,
         batchOffset,
         priority: queueData.queueIndex,
       });
@@ -56,8 +56,8 @@ export const collectOperatorBatches = ({
     const submittingKeysInPriority =
       submittingAllocation?.allocation?.find(
         ([priority]) => priority === queueData.queueIndex,
-      )?.[1] || 0;
-    submittingKeys += BigInt(submittingKeysInPriority);
+      )?.[1] || 0n;
+    submittingKeys += submittingKeysInPriority;
   });
 
   // Convert to graph coordinates and combine adjacent batches
