@@ -15,7 +15,11 @@ import {
 } from '@lidofinance/lido-ethereum-sdk/erc20';
 
 import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
-import { LidoSDKStake, LidoSDKWrap } from '@lidofinance/lido-ethereum-sdk';
+import {
+  LidoSDKStake,
+  LidoSDKWrap,
+  LidoSDKWithdraw,
+} from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
 
@@ -26,6 +30,7 @@ type LidoSDKContextValue = {
   stETH: LidoSDKstETH;
   wstETH: LidoSDKwstETH;
   wrap: LidoSDKWrap;
+  withdraw: LidoSDKWithdraw;
   csm: LidoSDKCsm;
 };
 
@@ -80,6 +85,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     const stETH = new LidoSDKstETH({ core });
     const wstETH = new LidoSDKwstETH({ core });
     const wrap = new LidoSDKWrap({ core });
+    const withdraw = new LidoSDKWithdraw({ core });
     const csm = new LidoSDKCsm({
       core,
       clApiUrl,
@@ -96,6 +102,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       stETH,
       wstETH,
       wrap,
+      withdraw,
       csm,
     };
   }, [clApiUrl, publicClient, walletClient]);
