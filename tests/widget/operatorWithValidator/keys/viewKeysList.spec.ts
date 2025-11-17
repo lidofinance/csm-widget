@@ -60,40 +60,46 @@ test.describe('View keys list. Common', async () => {
   });
 
   keysStatusesExpectedComments.forEach((statusExpectedCommentData) => {
-    test(`Verification comments of keys with "${statusExpectedCommentData.status}" status`, async () => {
-      const keyRaw = await keysPage.keysView.getRawByStatus(
-        statusExpectedCommentData.status,
-      );
-      test.skip(
-        !keyRaw,
-        `There is no key with ${statusExpectedCommentData.status} status`,
-      );
+    test(
+      qase(
+        248,
+        `Verification comments of keys with "${statusExpectedCommentData.status}" status`,
+      ),
+      async () => {
+        const keyRaw = await keysPage.keysView.getRawByStatus(
+          statusExpectedCommentData.status,
+        );
+        test.skip(
+          !keyRaw,
+          `There is no key with ${statusExpectedCommentData.status} status`,
+        );
 
-      const strikesCount = await keyRaw?.strikesCountCell.textContent();
-      // @ts-expect-error keyRaw is checked by test.skip
-      const statusCommentCell = keyRaw.statusCommentCell;
+        const strikesCount = await keyRaw?.strikesCountCell.textContent();
+        // @ts-expect-error keyRaw is checked by test.skip
+        const statusCommentCell = keyRaw.statusCommentCell;
 
-      if (strikesCount === '0/3') {
-        await test.step('Check comment for key without strikes', async () => {
-          if (statusExpectedCommentData.defaultCommentText) {
-            await expect(statusCommentCell).toContainText(
-              statusExpectedCommentData.defaultCommentText,
-            );
-          } else {
-            await expect(statusCommentCell).not.toBeVisible();
-          }
-        });
-      } else {
-        await test.step('Check comment for key with strikes', async () => {
-          if (statusExpectedCommentData.commentTextWithStrikes) {
-            await expect(statusCommentCell).toContainText(
-              statusExpectedCommentData.commentTextWithStrikes,
-            );
-          } else {
-            await expect(statusCommentCell).not.toBeVisible();
-          }
-        });
-      }
-    });
+        if (strikesCount === '0/3') {
+          await test.step('Check comment for key without strikes', async () => {
+            if (statusExpectedCommentData.defaultCommentText) {
+              await expect(statusCommentCell).toContainText(
+                statusExpectedCommentData.defaultCommentText,
+              );
+            } else {
+              await expect(statusCommentCell).not.toBeVisible();
+            }
+          });
+        } else {
+          await test.step('Check comment for key with strikes', async () => {
+            if (statusExpectedCommentData.commentTextWithStrikes) {
+              await expect(statusCommentCell).toContainText(
+                statusExpectedCommentData.commentTextWithStrikes,
+              );
+            } else {
+              await expect(statusCommentCell).not.toBeVisible();
+            }
+          });
+        }
+      },
+    );
   });
 });
