@@ -4,6 +4,9 @@ import { NetworkConfig } from '@lidofinance/wallets-testing-wallets';
 import { createWalletClient, formatEther, http, PrivateKeyAccount } from 'viem';
 import { HDAccount } from 'viem/accounts';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { parseISO } from 'date-fns';
+import { countDaysLeft } from 'utils/format-date';
+import { plural } from 'utils/plural';
 
 export class SdkService extends LidoSDK {
   constructor(
@@ -48,5 +51,28 @@ export class SdkService extends LidoSDK {
     }
 
     return formatEther(formatBalance);
+  }
+
+  async getWithdrawalWaitingTimeByAmount(amount?: bigint) {
+    return test.step(`Get withdrawal waiting time by amount`, async () => {
+      const data =
+        await this.withdraw.waitingTime.getWithdrawalWaitingTimeByAmount({
+          amount,
+        });
+      const days =
+        (countDaysLeft(parseISO(data?.requestInfo?.finalizationAt)) ?? 0) + 1;
+
+      if (Number.isNaN(days) || days < 0) {
+        return {
+          days: 0,
+          text: '—',
+        };
+      }
+
+      return {
+        days,
+        text: `~ ${days} ${plural({ value: days, variants: ['day', 'days'] })}`,
+      };
+    });
   }
 }
