@@ -58,39 +58,8 @@ on:
         description: "Qase Plan ID"
 
 jobs:
-  bootstrap:
-    name: Bootstrap environment
-    runs-on: ubuntu-latest
-    outputs:
-      cache-path: ${{ steps.cache.outputs.path }}
-      cache-key: ${{ steps.cache.outputs.key }}
-    env:
-      JUST_TAG: 1.24.0
-    steps:
-      - name: Build cache params
-        id: cache
-        run: |
-          echo "path=$CACHE_PATH" >> "$GITHUB_OUTPUT"
-          echo "$KEY_INPUT" | md5sum | awk '{print $1}' | xargs -I% echo "key=cargobin-%-${RUNNER_OS}" >> "$GITHUB_OUTPUT"
-        env:
-          CACHE_PATH: |
-            ~/.cargo/bin/
-          KEY_INPUT: |
-            just:${{env.JUST_TAG}}
-
-      - uses: actions/cache@v4
-        id: get-cache
-        with:
-          path: ${{ steps.cache.outputs.path }}
-          key: ${{ steps.cache.outputs.key }}
-
-      - name: Install just
-        run: cargo install "just@$JUST_TAG"
-        if: steps.get-cache.outputs.cache-hit != 'true'
-
   test:
     runs-on: ubuntu-24.04
-    needs: bootstrap
     env:
       # Required envs
       RPC_URL: ${{ secrets.RPC_URL }}
@@ -99,7 +68,6 @@ jobs:
       EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
       EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
       STAND_TYPE: ${{ inputs.stand_type || github.event.inputs.STAND_TYPE || 'testnet' }}
-      USE_FORK: true
 
       # Common envs
       QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
@@ -126,11 +94,6 @@ jobs:
       GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
       GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
 
-      # fork envs
-      DEPLOY_CONFIG: ./artifacts/hoodi/deploy-hoodi.json
-      CHAIN: hoodi
-      ARTIFACTS_DIR: ./artifacts/hoodi/
-
     steps:
       - uses: actions/checkout@v5
         with:
@@ -142,43 +105,17 @@ jobs:
           node-version: "20"
           cache: "yarn"
 
-      - name: Checkout community-staking-module
-        uses: actions/checkout@v4
-        with:
-          repository: lidofinance/community-staking-module
-          path: community-staking-module
-
-      - uses: actions/cache@v4
-        with:
-          path: ${{ needs.bootstrap.outputs.cache-path }}
-          key: ${{ needs.bootstrap.outputs.cache-key }}
-
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: v1.2.3
-
       - name: Restore yarn cache
         uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install CSM Contracts dependencies
-        run: |
-          cd community-staking-module && yarn install --immutable
-
-      - name: Build CSM Fork
-        run: cd community-staking-module && just deps && just build
-
       - name: Install dependencies
         run: yarn install --immutable
 
       - name: Install Playwright Browsers
         run: yarn playwright install chromium --with-deps
-
-      # - name: Download keys generator binary
-      #   run: bash ./tests/scripts/set_up_keys_generator.sh
 
       - name: Set up preview-stand credentials
         if: ${{ inputs.stand_type  == 'preview' || github.event.inputs.stand_type == 'preview' }}
@@ -204,12 +141,6 @@ jobs:
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 
           xvfb-run --auto-servernum -- yarn test
-
-      - uses: actions/cache@v4
-        id: node_modules
-        with:
-          path: node_modules
-          key: node_modules-${{ hashFiles('.fork_block_number') }}
 
       - uses: actions/upload-artifact@v4
         if: always()

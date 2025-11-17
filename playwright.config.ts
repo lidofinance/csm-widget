@@ -48,6 +48,7 @@ const config: PlaywrightTestConfig = {
       },
     },
   ],
+  globalSetup: './tests/config/globalSetup.ts',
 };
 
 export default config;

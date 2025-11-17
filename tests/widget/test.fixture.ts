@@ -9,7 +9,6 @@ import { SdkService } from 'tests/services/ethereumSDK.client';
 import { WidgetService } from 'tests/services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from 'tests/consts/timeouts';
-import { warmUpForkedNode } from 'tests/helpers/warmUpFork';
 import ForkActionsService from 'tests/services/forkActions.service';
 
 type WorkerFixtures = {
@@ -53,7 +52,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
   // fixture-methods
   browserWithWallet: [
-    async ({ secretPhrase, csmSDK, useFork }, use) => {
+    async ({ secretPhrase, useFork }, use) => {
       const rpcUrl = useFork
         ? 'http://127.0.0.1:8545'
         : widgetFullConfig.standConfig.networkConfig.rpcUrl;
@@ -71,12 +70,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
         nodeConfig: {
           rpcUrlToMock: `**/api/rpc?chainId=${widgetFullConfig.standConfig.networkConfig.chainId}`,
           rpcUrl: widgetFullConfig.standConfig.networkConfig.rpcUrl,
-          derivationPath: "m/44'/60'/0'/0",
-          runOptions: [
-            `--mnemonic=${secretPhrase}`,
-            '--fork-header=Accept-Encoding: identity',
-          ],
-          warmUpCallback: warmUpForkedNode.bind(null, csmSDK, secretPhrase),
+          useExternalFork: true,
         },
         browserOptions: {
           reducedMotion: 'reduce',
