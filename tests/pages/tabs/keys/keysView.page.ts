@@ -5,10 +5,13 @@ export class TableRaw {
   pubkeyCell: Locator;
   statusCell: Locator;
   statusCommentCell: Locator;
+  strikesCountCell: Locator;
+
   constructor(tr: Locator) {
     this.pubkeyCell = tr.getByTestId('pubkeyCell');
     this.statusCell = tr.getByTestId('statusCell');
     this.statusCommentCell = tr.getByTestId('statusCommentCell');
+    this.strikesCountCell = tr.getByTestId('strikesCountCell');
   }
 }
 
@@ -36,6 +39,16 @@ export class KeysViewPage {
       rawsObj.push(new TableRaw(trRaw));
     }
     return rawsObj;
+  }
+
+  async getRawByStatus(status: string) {
+    const raws = await this.getAllTableRaws();
+    for (const trRaw of raws) {
+      const trStatus = await trRaw.statusCell.textContent();
+      if (trStatus === status) {
+        return trRaw;
+      }
+    }
   }
 
   async open() {
