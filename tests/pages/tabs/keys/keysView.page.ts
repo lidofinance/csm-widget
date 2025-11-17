@@ -32,7 +32,7 @@ export class KeysViewPage {
     this.loader = this.viewKeysBlock.getByTestId('loader');
   }
 
-  async getAllTableRaws() {
+  async getAllTableRows() {
     const raws = await this.tableRaws.all();
     const rawsObj = [];
     for (const trRaw of raws) {
@@ -41,8 +41,8 @@ export class KeysViewPage {
     return rawsObj;
   }
 
-  async getRawByStatus(status: string) {
-    const raws = await this.getAllTableRaws();
+  async getRowByStatus(status: string) {
+    const raws = await this.getAllTableRows();
     for (const trRaw of raws) {
       const trStatus = await trRaw.statusCell.textContent();
       if (trStatus === status) {

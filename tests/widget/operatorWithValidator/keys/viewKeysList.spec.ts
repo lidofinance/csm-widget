@@ -39,7 +39,7 @@ test.describe('View keys list. Common', async () => {
   });
 
   test(qase(148, 'Verification of displayed key statuses'), async () => {
-    const keysList = await keysPage.keysView.getAllTableRaws();
+    const keysList = await keysPage.keysView.getAllTableRows();
 
     await test.step('Check each column for all keys', async () => {
       for (const key of keysList) {
@@ -66,17 +66,17 @@ test.describe('View keys list. Common', async () => {
         `Verification comments of keys with "${statusExpectedCommentData.status}" status`,
       ),
       async () => {
-        const keyRaw = await keysPage.keysView.getRawByStatus(
+        const keyRow = await keysPage.keysView.getRowByStatus(
           statusExpectedCommentData.status,
         );
         test.skip(
-          !keyRaw,
+          !keyRow,
           `There is no key with ${statusExpectedCommentData.status} status`,
         );
 
-        const strikesCount = await keyRaw?.strikesCountCell.textContent();
-        // @ts-expect-error keyRaw is checked by test.skip
-        const statusCommentCell = keyRaw.statusCommentCell;
+        const strikesCount = await keyRow?.strikesCountCell.textContent();
+        // @ts-expect-error keyRow is checked by test.skip
+        const statusCommentCell = keyRow.statusCommentCell;
 
         if (strikesCount === '0/3') {
           await test.step('Check comment for key without strikes', async () => {
