@@ -2,7 +2,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { countDaysLeft, formatDate } from 'utils/format-date';
+import { countCalendarDaysLeft, formatDate } from 'utils/format-date';
 import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
 test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', async () => {
@@ -105,7 +105,7 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
       });
 
       await test.step('Verify expected days for reward', async () => {
-        const expectedDays = countDaysLeft(
+        const expectedDays = countCalendarDaysLeft(
           lastRewardInfoFromContract?.nextRewards,
         );
         await expect(latestRewardsDistribution.expectedDays).toContainText(
