@@ -130,7 +130,7 @@ export const KeysTable: FC<Props> = ({ keys }) => {
                   ))}
                 </Stack>
               </td>
-              <td>
+              <td data-testid="strikesCountCell">
                 <StrikesCount strikes={strikes} />
               </td>
               <td data-testid="statusCommentCell">

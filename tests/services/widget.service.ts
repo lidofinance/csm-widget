@@ -204,14 +204,14 @@ export class WidgetService {
 
   async extractNodeOperatorId(): Promise<number> {
     return test.step('Extract node operator id from header', async () => {
-      const rawHeader = await this.page
+      const rowHeader = await this.page
         .getByTestId('nodeOperatorHeader')
         .textContent();
 
-      if (!rawHeader)
+      if (!rowHeader)
         throw new Error('Failed to get text content from node operator header');
 
-      const match = rawHeader.match(/#(\d+)/);
+      const match = rowHeader.match(/#(\d+)/);
       if (!match) throw new Error('Cannot extract ID from header');
       return Number(match[1]);
     });

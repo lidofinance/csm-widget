@@ -123,9 +123,13 @@ test.describe('Bond & Rewards. Claim.', async () => {
 
           await test.step('Verify waiting time and receive data', async () => {
             if (tokenName === TOKENS.eth) {
+              const waitingTime =
+                await ethereumSDK.getWithdrawalWaitingTimeByAmount(); // 0.0003 ETH
+
               await expect(token.getByTestId('waitingTime')).toContainText(
-                'Waiting time:Check on stake widget',
+                `Waiting time:${waitingTime.text}`,
               );
+
               await expect(token.getByTestId('receive')).toContainText(
                 'Receive:withdrawal NFT',
               );
