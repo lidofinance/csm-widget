@@ -1,11 +1,10 @@
 import { GraphPart } from '../types';
 import type { DepositQueueAnalysis } from './calculate-and-select-by-operator';
 import type {
-  OperatorInfo,
-  SubmittingAllocation,
   QueueGraphData,
   QueuePart,
   ShareLimit,
+  SubmittingAllocation,
 } from './enhanced-types';
 import {
   calculateGraphBounds,
@@ -21,14 +20,13 @@ const getPriorityType = (priority: number, overLimit: boolean): GraphPart => {
 };
 
 export const createMultiQueueVisualization = (
-  operatorInfo: OperatorInfo | undefined,
   queueAnalysis: DepositQueueAnalysis,
   shareLimit: ShareLimit,
   submittingAllocation: SubmittingAllocation | undefined,
   fullView: boolean,
 ): QueueGraphData => {
   const { active, queue, capacity, activeLeft } = shareLimit;
-  const added = BigInt(submittingAllocation?.keysCount || 0);
+  const added = submittingAllocation?.keysCount || 0n;
 
   // Calculate graph bounds and coordinates
   const bounds = calculateGraphBounds({
@@ -50,6 +48,7 @@ export const createMultiQueueVisualization = (
   // Process priority queues and insert added keys at appropriate positions
   const priorityQueues: QueuePart[] = [];
   let cumulativeKeys = 0n;
+  let cumulativeAddedKeys = 0n;
 
   queues.forEach((queueData) => {
     if (queueData.totalKeysInQueue > 0n) {
@@ -101,28 +100,33 @@ export const createMultiQueueVisualization = (
 
     if (submitting) {
       const addedPrioritySize = calculateSegmentSize(
-        BigInt(submitting),
-        active + cumulativeKeys,
+        submitting,
+        active + cumulativeKeys + cumulativeAddedKeys,
         bounds,
       );
 
       priorityQueues.push({
         type: 'added',
-        keysCount: BigInt(submitting),
+        keysCount: submitting,
         width: addedPrioritySize,
+        metadata: [
+          {
+            keysCount: submitting,
+            position: cumulativeKeys + cumulativeAddedKeys,
+            priority: queueData.queueIndex,
+          },
+        ],
       });
+
+      cumulativeAddedKeys += submitting;
     }
   });
 
-  // Collect all operator batches across all queues
-  const depositableLimit = BigInt(
-    operatorInfo?.depositableValidatorsCount || 0,
-  );
   const operatorData = collectOperatorBatches({
     queueDataList: queues,
     activeKeys: active,
-    depositableLimit,
     bounds,
+    submittingAllocation,
   });
 
   return {

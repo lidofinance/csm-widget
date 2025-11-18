@@ -82,6 +82,14 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
       await use(browserService);
 
+      // We abort this request because we need to reduce the request count to the Elliptic api
+      await browserService
+        .getBrowserContextPage()
+        .context()
+        .route(new RegExp('.*/api/validation\\?.*'), async (route) => {
+          await route.abort();
+        });
+
       await browserService.teardown();
     },
     { scope: 'worker', timeout: FORK_WARM_UP_TIMEOUT },

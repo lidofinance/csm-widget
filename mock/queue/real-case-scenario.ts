@@ -28,7 +28,7 @@ export const realCaseScenario: TestScenario = {
       shareLimit: 500,
     },
     operatorInfo: {
-      depositableValidatorsCount: 905, // Matches operator 346's total keys in priority 4
+      depositableValidatorsCount: 1, // Matches operator 346's total keys in priority 4
     },
     formData: {
       depositDataLength: 0, // No new keys being submitted

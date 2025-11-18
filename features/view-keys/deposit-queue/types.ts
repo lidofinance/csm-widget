@@ -25,15 +25,23 @@ type KeysCount = {
 export type QueuePart = {
   width: number;
   type: GraphPart;
+  metadata?: BatchMetadata;
 } & KeysCount;
 
 export type QueueLimit = {
   offset: number;
 } & KeysCount;
 
+export type BatchMetadata = Array<{
+  keysCount: bigint;
+  position: bigint;
+  priority: number;
+}>;
+
 export type BatchPart = {
   offset: number;
   width: number;
+  metadata: BatchMetadata;
 };
 
 export type OperatorQueue = {
@@ -45,7 +53,7 @@ export type QueueGraphData = {
   parts: QueuePart[];
   operator?: OperatorQueue;
   farAway: boolean;
-  submittingKeysCount?: number;
+  submittingKeysCount?: bigint;
 };
 
 export type UseDepositQueueGraphResult = {
