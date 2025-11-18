@@ -6,7 +6,7 @@ import { Tags } from 'tests/consts/common.const';
 import { ROLES } from 'tests/consts/roles';
 import { InboxRequestsPage } from 'tests/pages/tabs/roles';
 
-test.describe.only(
+test.describe(
   'Roles. Inbox Rewards. Accept rewards ',
   { tag: [Tags.performTX, Tags.forked] },
   () => {
