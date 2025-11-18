@@ -20,6 +20,5 @@ export type ClaimBondFormNetworkData = {
   maxValues: MaxValues;
   rewardsAddress: string;
   isContract: boolean;
-  isSplitter: boolean;
   isPaused: boolean;
 };

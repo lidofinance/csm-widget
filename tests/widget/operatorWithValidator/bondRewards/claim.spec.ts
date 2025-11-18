@@ -89,7 +89,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
-        const token = bondRewardsPage.claim.selectBondToken(tokenName);
+        const token = bondRewardsPage.claim.getTokenCardBySymbol(tokenName);
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
@@ -112,7 +112,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
             }
           });
 
-          await token.click();
+          await token.dispatchEvent('click');
           await expect(token.getByRole('radio')).toBeChecked();
 
           await test.step('Verify token amount', async () => {
@@ -123,9 +123,13 @@ test.describe('Bond & Rewards. Claim.', async () => {
 
           await test.step('Verify waiting time and receive data', async () => {
             if (tokenName === TOKENS.eth) {
+              const waitingTime =
+                await ethereumSDK.getWithdrawalWaitingTimeByAmount(); // 0.0003 ETH
+
               await expect(token.getByTestId('waitingTime')).toContainText(
-                'Waiting time:Check on stake widget',
+                `Waiting time:${waitingTime.text}`,
               );
+
               await expect(token.getByTestId('receive')).toContainText(
                 'Receive:withdrawal NFT',
               );
@@ -211,10 +215,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
-        await test.step(`Choose ${tokenName} symbol for claim`, async () => {
-          const token = bondRewardsPage.claim.selectBondToken(tokenName);
-          await token.click();
-        });
+        await bondRewardsPage.claim.selectBondToken(tokenName);
 
         const expectedBalance =
           await bondRewardsPage.claim.getBalanceByToken(tokenName);
@@ -257,10 +258,7 @@ test.describe('Bond & Rewards. Claim.', async () => {
         qase.parameters({ tokenName });
         const bondRewardsPage = widgetService.bondRewardsPage;
 
-        await test.step(`Choose ${tokenName} symbol for claim`, async () => {
-          const token = bondRewardsPage.claim.selectBondToken(tokenName);
-          await token.click();
-        });
+        await bondRewardsPage.claim.selectBondToken(tokenName);
 
         const expectedBalance =
           await bondRewardsPage.claim.getBalanceByToken(tokenName);

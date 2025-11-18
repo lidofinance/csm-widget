@@ -1,14 +1,17 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from 'tests/pages';
 
-export class TableRaw {
+export class TableRow {
   pubkeyCell: Locator;
   statusCell: Locator;
   statusCommentCell: Locator;
+  strikesCountCell: Locator;
+
   constructor(tr: Locator) {
     this.pubkeyCell = tr.getByTestId('pubkeyCell');
     this.statusCell = tr.getByTestId('statusCell');
     this.statusCommentCell = tr.getByTestId('statusCommentCell');
+    this.strikesCountCell = tr.getByTestId('strikesCountCell');
   }
 }
 
@@ -17,7 +20,7 @@ export class KeysViewPage {
   base: BasePage;
   viewKeysBlock: Locator;
   table: Locator;
-  tableRaws: Locator;
+  tableRows: Locator;
   loader: Locator;
 
   constructor(page: Page) {
@@ -25,17 +28,27 @@ export class KeysViewPage {
     this.base = new BasePage(page);
     this.viewKeysBlock = this.page.locator('[data-testid="viewKeysBlock"]');
     this.table = this.viewKeysBlock.locator('tbody');
-    this.tableRaws = this.viewKeysBlock.locator('tbody >> tr');
+    this.tableRows = this.viewKeysBlock.locator('tbody >> tr');
     this.loader = this.viewKeysBlock.getByTestId('loader');
   }
 
-  async getAllTableRaws() {
-    const raws = await this.tableRaws.all();
-    const rawsObj = [];
-    for (const trRaw of raws) {
-      rawsObj.push(new TableRaw(trRaw));
+  async getAllTableRows() {
+    const rows = await this.tableRows.all();
+    const rowsObj = [];
+    for (const trRow of rows) {
+      rowsObj.push(new TableRow(trRow));
     }
-    return rawsObj;
+    return rowsObj;
+  }
+
+  async getRowByStatus(status: string) {
+    const rows = await this.getAllTableRows();
+    for (const trRow of rows) {
+      const trStatus = await trRow.statusCell.textContent();
+      if (trStatus === status) {
+        return trRow;
+      }
+    }
   }
 
   async open() {
