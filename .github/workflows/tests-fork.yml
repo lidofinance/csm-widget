@@ -26,6 +26,10 @@ on:
         options:
           - testnet
           - infra
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches-ignore:
+      - main
 
 jobs:
   bootstrap:
