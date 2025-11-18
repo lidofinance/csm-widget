@@ -15,7 +15,7 @@
     "postinstall": "husky install || true",
     "test": "yarn test:e2e",
     "test:unit": "jest",
-    "test:e2e": "TEST_TAGS=!forked playwright test"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@lidofinance/address": "^1.4.0",
