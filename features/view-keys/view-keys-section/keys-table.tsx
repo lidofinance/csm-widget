@@ -2,11 +2,9 @@ import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 import { ArrowBottom, ArrowTop } from '@lidofinance/lido-ui';
 import { FC, useCallback, useMemo, useState } from 'react';
 import {
-  BeaconchainPubkeyLink,
-  CopyLink,
-  MigalabsPubkeyLink,
   PriorityChip,
   Pubkey,
+  PubkeyLinks,
   Stack,
   StatusChip,
   StatusComment,
@@ -102,16 +100,7 @@ export const KeysTable: FC<Props> = ({ keys }) => {
               <td data-testid="pubkeyCell">
                 <Pubkey
                   pubkey={pubkey}
-                  link={
-                    <>
-                      <CopyLink text={pubkey} />
-                      <BeaconchainPubkeyLink
-                        pubkey={pubkey}
-                        statuses={statuses}
-                      />
-                      <MigalabsPubkeyLink validator={validatorIndex} />
-                    </>
-                  }
+                  link={<PubkeyLinks {...{ pubkey, validatorIndex }} />}
                 />
               </td>
               <td data-testid="statusCell">

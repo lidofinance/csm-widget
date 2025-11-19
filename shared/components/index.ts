@@ -51,3 +51,4 @@ export * from './ejectable-key-checkbox';
 export * from './chip';
 export * from './tabs';
 export * from './legal-disclaimer';
+export * from './date';

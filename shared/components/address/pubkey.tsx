@@ -9,7 +9,7 @@ import { PubkeyContainerStyle } from './styles';
 
 export type PubkeyProps = {
   link?: ReactNode;
-  pubkey?: string;
+  pubkey: string | undefined;
 } & Pick<ComponentProps<typeof Text>, 'size' | 'color'> &
   Partial<Omit<AddressProps, 'address'>>;
 

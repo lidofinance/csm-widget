@@ -105,6 +105,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageMonitoring = 'pageMonitoring',
   pageAddBond = 'pageAddBond',
   pageClaimBond = 'pageClaimBond',
+  pageRewardsHistory = 'pageRewardsHistory',
   pageUnlockBond = 'pageUnlockBond',
   pageClaimType = 'pageClaimType',
   pageInboxRequests = 'pageInboxRequests',
@@ -432,6 +433,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.pageClaimBond]: createPageViewEvent(
     'ClaimBond',
     'view_claim_bond_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageRewardsHistory]: createPageViewEvent(
+    'RewardsHistory',
+    'view_rewards_history_page',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.pageUnlockBond]: createPageViewEvent(
     'UnlockBond',

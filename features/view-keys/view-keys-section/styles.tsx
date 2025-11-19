@@ -1,20 +1,8 @@
-import { Block, Button } from '@lidofinance/lido-ui';
+import { Button } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
-import { MEDIA_QUERY_XXL } from 'styles/constants';
-
-export const ViewKeysBlock = styled(Block)`
-  display: flex;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
-  flex-direction: column;
-`;
 
 export const TableStyle = styled.table`
-  margin: -${({ theme }) => theme.spaceMap.xxl}px;
   border-collapse: collapse;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    margin: -${({ theme }) => theme.spaceMap.lg}px;
-  }
 
   th {
     text-align: left;
@@ -23,7 +11,6 @@ export const TableStyle = styled.table`
 
   tr {
     display: grid;
-    grid-template-columns: 5fr 3fr 1fr 3fr;
     grid-auto-rows: auto;
     grid-column-gap: 1rem;
     align-items: center;
@@ -31,7 +18,6 @@ export const TableStyle = styled.table`
 
     padding: 12px 32px;
 
-    /* ${MEDIA_QUERY_XXL} { */
     grid-template-columns: 5fr 4fr 1fr;
 
     td:nth-child(4) {
@@ -45,7 +31,6 @@ export const TableStyle = styled.table`
     th:nth-child(4) {
       display: none;
     }
-    /* } */
 
     ${({ theme }) => theme.mediaQueries.md} {
       grid-template-columns: 1fr;

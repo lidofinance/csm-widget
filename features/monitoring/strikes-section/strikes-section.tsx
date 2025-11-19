@@ -3,13 +3,11 @@ import { Text } from '@lidofinance/lido-ui';
 import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
 import { FC } from 'react';
 import {
-  BeaconchainPubkeyLink,
-  CopyLink,
   FaqStrikeLifetime,
   FaqStrikeThreshold,
   KeyStrikes,
-  MigalabsPubkeyLink,
   Pubkey,
+  PubkeyLinks,
   SectionBlock,
   Stack,
 } from 'shared/components';
@@ -44,13 +42,7 @@ export const StrikesSection: FC = () => {
             <Row key={pubkey}>
               <Pubkey
                 pubkey={pubkey}
-                link={
-                  <>
-                    <CopyLink text={pubkey} />
-                    <BeaconchainPubkeyLink pubkey={pubkey} />
-                    <MigalabsPubkeyLink validator={validatorIndex} />
-                  </>
-                }
+                link={<PubkeyLinks {...{ pubkey, validatorIndex }} />}
               />
               <KeyStrikes strikes={strikes} />
               <LastStrike strikes={strikes} />
