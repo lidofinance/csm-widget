@@ -6,6 +6,7 @@ import { SwitcherRoutes } from './types';
 const BOND_ROUTES: SwitcherRoutes = [
   { title: 'Claim', path: PATH.BOND_CLAIM },
   { title: 'Add Bond', path: PATH.BOND_ADD },
+  { title: 'Rewards history', path: PATH.BOND_REWARDS_HISTORY },
   {
     title: 'Unlock Bond',
     path: PATH.BOND_UNLOCK,

@@ -8,21 +8,11 @@ export const TabsStyled = styled.div`
 
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
   background: var(--lido-color-controlBg);
-  border: 1px solid var(--lido-color-border);
-
-  &:hover {
-    border-color: var(--lido-color-borderHover);
-  }
-  &:focus-within {
-    border-color: var(--lido-color-borderActive);
-  }
-
-  &[aria-invalid='true'] {
-    border-color: var(--lido-color-error);
-  }
 `;
 
 export const TabListStyled = styled.div`
+  background: var(--lido-color-controlBg);
+
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   position: relative;

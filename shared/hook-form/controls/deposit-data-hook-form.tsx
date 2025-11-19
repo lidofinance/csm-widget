@@ -35,7 +35,7 @@ export const DepositDataHookForm: FC = () => {
 
   return (
     <InputWrapper>
-      <DepositDataDrop>
+      <DepositDataDrop error={!!errorMessage}>
         <Tabs
           items={[
             {
@@ -54,7 +54,6 @@ export const DepositDataHookForm: FC = () => {
               content: <DepositDataParameters />,
             },
           ]}
-          error={!!errorMessage}
         />
       </DepositDataDrop>
       {errorMessage && typeof errorMessage === 'string' && (

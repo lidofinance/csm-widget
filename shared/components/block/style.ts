@@ -33,7 +33,9 @@ export type BlockColor = keyof typeof COLOR_VARIANTS;
 export const BlockStyle = styled(Block)<{
   accent?: BlockColor;
   padding?: 'none' | 'sm' | 'md' | 'lg';
+  overflowHidden?: boolean;
 }>`
   ${({ accent }) => (accent ? COLOR_VARIANTS[accent] : '')}
   ${({ padding: $padding }) => ($padding ? PADDING_VARIANTS[$padding] : '')}
+  ${({ overflowHidden }) => overflowHidden && 'overflow: hidden;'}
 `;

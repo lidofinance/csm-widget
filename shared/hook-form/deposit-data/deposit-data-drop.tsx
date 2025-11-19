@@ -5,11 +5,12 @@ import { DropzoneStyle } from './styles';
 
 type DepositKeysInputHookFormProps = {
   fieldName?: string;
+  error?: boolean;
 };
 
 export const DepositDataDrop: FC<
   PropsWithChildren<DepositKeysInputHookFormProps>
-> = ({ fieldName = 'rawDepositData', children }) => {
+> = ({ fieldName = 'rawDepositData', children, error }) => {
   const { setValue } = useFormContext();
 
   const onDrop = useCallback(
@@ -48,5 +49,9 @@ export const DepositDataDrop: FC<
     },
   });
 
-  return <DropzoneStyle {...getRootProps()}>{children}</DropzoneStyle>;
+  return (
+    <DropzoneStyle {...getRootProps()} aria-invalid={error}>
+      {children}
+    </DropzoneStyle>
+  );
 };

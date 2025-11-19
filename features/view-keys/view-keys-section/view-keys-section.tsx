@@ -1,7 +1,6 @@
 import { FC } from 'react';
-import { WhenLoaded } from 'shared/components';
+import { Block, WhenLoaded } from 'shared/components';
 import { KeysTable } from './keys-table';
-import { ViewKeysBlock } from './styles';
 import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
 
 export const ViewKeysSection: FC = () => {
@@ -10,13 +9,13 @@ export const ViewKeysSection: FC = () => {
     useOperatorKeysWithStatus(nodeOperatorId);
 
   return (
-    <ViewKeysBlock data-testid="viewKeysBlock">
+    <Block paddingLess data-testid="viewKeysBlock">
       <WhenLoaded
         loading={loading}
         empty={!keys?.length && 'There are no keys to display'}
       >
         <KeysTable keys={keys} />
       </WhenLoaded>
-    </ViewKeysBlock>
+    </Block>
   );
 };
