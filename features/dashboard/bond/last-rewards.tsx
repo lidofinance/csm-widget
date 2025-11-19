@@ -25,7 +25,7 @@ import {
 } from 'shared/components';
 import { LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE } from 'consts/external-links';
 import { FaqElement } from 'shared/components/faq/styles';
-import { countDaysLeft, formatDate, formatPercent } from 'utils';
+import { countCalendarDaysLeft, formatDate, formatPercent } from 'utils';
 import { Balance } from './balance';
 import {
   AccordionStyle,
@@ -51,7 +51,7 @@ export const LastRewards: FC = () => {
   const lastRewardsDate = formatDate(rewardsFrame?.lastDistribution);
   const prevRewardsDate = formatDate(rewardsFrame?.prevDistribution);
   const nextRewardsDate = formatDate(rewardsFrame?.nextDistribution);
-  const daysLeft = countDaysLeft(rewardsFrame?.nextDistribution);
+  const daysLeft = countCalendarDaysLeft(rewardsFrame?.nextDistribution);
 
   const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
 

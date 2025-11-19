@@ -79,8 +79,18 @@ export class ClaimPage extends BasePage {
     });
   }
 
-  selectBondToken(symbol: TOKENS) {
+  getTokenCardBySymbol(symbol: TOKENS) {
     return this.tokenButtons.locator(`input[value="${symbol}"]`).locator('..');
+  }
+
+  async selectBondToken(symbol: TOKENS) {
+    return test.step(`Choose ${symbol} symbol for claim`, async () => {
+      const token = this.getTokenCardBySymbol(symbol);
+      // token cards sometimes have links in center of element
+      // and we should use dispatchEvent to avoid navigation
+      await token.dispatchEvent('click');
+      return token;
+    });
   }
 
   async getBalanceByToken(symbol: TOKENS) {

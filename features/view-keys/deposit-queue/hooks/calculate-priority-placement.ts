@@ -18,9 +18,9 @@ export const calculatePriorityPlacement = (
   }
   if (!operatorInfo || !queueConfig || !submittingCount) {
     return {
-      keysCount: submittingCount,
+      keysCount: BigInt(submittingCount),
       allocation: submittingCount
-        ? [[FALLBACK_LOWEST_PRIORITY, submittingCount]]
+        ? [[FALLBACK_LOWEST_PRIORITY, BigInt(submittingCount)]]
         : [],
     };
   }
@@ -40,12 +40,12 @@ export const calculatePriorityPlacement = (
   const keysToLowestPriority = submittingCount - keysToPriority;
 
   const allocation = [
-    [priority, keysToPriority],
-    [lowestPriority, keysToLowestPriority],
-  ].filter(([, count]) => count > 0) as [number, number][];
+    [priority, BigInt(keysToPriority)],
+    [lowestPriority, BigInt(keysToLowestPriority)],
+  ].filter(([, count]) => count > 0) as [number, bigint][];
 
   return {
-    keysCount: submittingCount,
+    keysCount: BigInt(submittingCount),
     allocation,
   };
 };

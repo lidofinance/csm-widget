@@ -15,7 +15,7 @@ export const createSingleQueueVisualization = (
   fullView: boolean,
 ): QueueGraphData => {
   const { active, queue, capacity, activeLeft } = shareLimit;
-  const added = BigInt(submittingAllocation?.keysCount || 0);
+  const added = submittingAllocation?.keysCount || 0n;
 
   // Calculate graph bounds and coordinates
   const bounds = calculateGraphBounds({

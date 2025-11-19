@@ -7,13 +7,8 @@ import { createSingleQueueVisualization } from './use-single-queue';
 export const useDepositQueueGraph = (
   fullView = false,
 ): UseDepositQueueGraphResult => {
-  const {
-    shareLimit,
-    queueAnalysis,
-    operatorInfo,
-    submittingAllocation,
-    isLoading,
-  } = useQueueData();
+  const { shareLimit, queueAnalysis, submittingAllocation, isLoading } =
+    useQueueData();
 
   return useMemo((): UseDepositQueueGraphResult => {
     if (isLoading || !shareLimit) {
@@ -22,7 +17,6 @@ export const useDepositQueueGraph = (
 
     const data = isMultiQueue(queueAnalysis)
       ? createMultiQueueVisualization(
-          operatorInfo,
           queueAnalysis,
           shareLimit,
           submittingAllocation,
@@ -38,12 +32,5 @@ export const useDepositQueueGraph = (
       isLoading: false,
       data,
     };
-  }, [
-    isLoading,
-    shareLimit,
-    queueAnalysis,
-    operatorInfo,
-    submittingAllocation,
-    fullView,
-  ]);
+  }, [isLoading, shareLimit, queueAnalysis, submittingAllocation, fullView]);
 };

@@ -1,5 +1,6 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Checkbox } from '@lidofinance/lido-ui';
+import { INSTANT_WAITING_TIME } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { useController, useWatch } from 'react-hook-form';
@@ -13,18 +14,23 @@ import {
   YouWillReceive,
 } from 'shared/components';
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
-import { useExternalLinks } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import { useWithdrawalWaitingTime } from '../hooks/use-withdrawal-waiting-time';
 
 export const TokenSelect: React.FC = () => {
   const [token, claimRewards] = useWatch<
     ClaimBondFormInputType,
     ['token', 'claimRewards']
   >({ name: ['token', 'claimRewards'] });
-  const { maxValues, isContract, isSplitter } = useClaimBondFormData(true);
-  const { stakeWidget } = useExternalLinks();
+  const { maxValues, isContract } = useClaimBondFormData(true);
+
+  const maxEthAmount = maxValues?.[TOKENS.eth]?.[1];
+  const {
+    data: { text: waitingTimeValue } = {},
+    isPending: isWaitingTimeLoading,
+  } = useWithdrawalWaitingTime(maxEthAmount);
 
   const { field: unlockField } = useController<
     ClaimBondFormInputType,
@@ -36,7 +42,7 @@ export const TokenSelect: React.FC = () => {
   return (
     <>
       <FormTitle>Choose a token to claim</FormTitle>
-      {isContract && !isSplitter && (
+      {isContract && (
         <WarningBlock>
           The Rewards Address of your Node Operator seems to be a smart
           contract. Please ensure the smart contract you use for the Reward
@@ -47,7 +53,7 @@ export const TokenSelect: React.FC = () => {
       <TokenButtonsHookForm
         disabled={
           !maxValues?.[TOKENS.eth][Number(claimRewards)] ||
-          (isSplitter && !unlockField.value)
+          (isContract && !unlockField.value)
         }
         options={{
           [TOKENS.eth]: (
@@ -58,12 +64,7 @@ export const TokenSelect: React.FC = () => {
               />
               <YouWillReceive
                 waitingTime={
-                  <>
-                    Check on{' '}
-                    <MatomoLink href={`${stakeWidget}/withdrawals/request`}>
-                      stake widget
-                    </MatomoLink>
-                  </>
+                  isWaitingTimeLoading ? 'Loading...' : waitingTimeValue
                 }
                 receive="withdrawal NFT"
               />
@@ -76,7 +77,7 @@ export const TokenSelect: React.FC = () => {
                 amount={maxValues[TOKENS.steth][Number(claimRewards)]}
               />
               <YouWillReceive
-                waitingTime="~ 1 min"
+                waitingTime={INSTANT_WAITING_TIME}
                 receive={getTokenDisplayName(TOKENS.steth)}
               />
             </Stack>
@@ -88,7 +89,7 @@ export const TokenSelect: React.FC = () => {
                 amount={maxValues[TOKENS.wsteth][Number(claimRewards)]}
               />
               <YouWillReceive
-                waitingTime="~ 1 min"
+                waitingTime={INSTANT_WAITING_TIME}
                 receive={getTokenDisplayName(TOKENS.wsteth)}
               />
             </Stack>
@@ -108,7 +109,7 @@ export const TokenSelect: React.FC = () => {
           for more details.
         </Note>
       )}
-      {isSplitter && (
+      {isContract && (
         <>
           <Note>
             The Rewards Address of your Node Operator is a splitter contract. It
