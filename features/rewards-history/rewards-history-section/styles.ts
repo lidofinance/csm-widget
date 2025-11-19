@@ -1,44 +1,21 @@
+import { SortButton } from 'providers/table-provider';
+import { Table } from 'shared/components';
+import { PubkeyContainerStyle } from 'shared/components/address/styles';
 import styled, { css } from 'styled-components';
 import { MEDIA_QUERY_XXL } from 'styles';
 
-export const TableStyle = styled.table`
-  overflow-x: auto;
-  border-collapse: collapse;
-
-  display: grid;
+export const TableStyle = styled(Table)`
   grid-template-columns: 2fr 3fr 1fr 1fr 1fr 2fr;
 
-  thead,
-  tbody,
   tr {
-    display: grid;
-    grid-template-columns: subgrid;
-    grid-column: 1 / -1;
-  }
-
-  th {
-    text-align: left;
-    color: var(--lido-color-text);
-  }
-
-  tr {
-    align-items: center;
-    padding-inline: 32px;
-    padding-block: 12px;
-    gap: 20px;
-
     ${MEDIA_QUERY_XXL} {
       padding-inline: 16px;
       gap: 12px;
+
+      ${PubkeyContainerStyle} {
+        font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
+      }
     }
-  }
-
-  thead tr {
-    padding-block: 24px 16px;
-  }
-
-  tbody tr:nth-child(odd) {
-    background-color: var(--lido-color-accentControlBg);
   }
 
   th:nth-child(n + 3):nth-child(-n + 6),
@@ -46,11 +23,9 @@ export const TableStyle = styled.table`
     justify-self: right;
     text-align: right;
   }
-
-  tbody {
-    color: var(--lido-color-text);
-  }
 `;
+
+export const Sort = styled(SortButton).attrs({ variant: 'arrow' })``;
 
 export const DatesWrapper = styled.span`
   white-space: nowrap;
