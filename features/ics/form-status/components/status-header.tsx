@@ -83,7 +83,7 @@ const useHint = (
           </Text>
         </>
       );
-    case typeStatus === 'ISSUED' && !nodeOperatorId:
+    case typeStatus === 'ISSUED' && nodeOperatorId === undefined:
       return (
         <>
           <Text size="xs">
