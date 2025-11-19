@@ -1,10 +1,16 @@
 import styled from 'styled-components';
 import { StackStyle } from '../stack/style';
 
-export const WrapperStyle = styled(StackStyle).attrs({ $direction: 'column' })`
+export const WrapperStyle = styled(StackStyle).attrs({ $direction: 'column' })<{
+  $morePadding?: boolean;
+}>`
   align-items: center;
   justify-content: center;
-  padding: ${({ theme }) => theme.spaceMap.md}px 0;
+  padding: ${({ theme, $morePadding }) =>
+      $morePadding
+        ? theme.spaceMap.md + theme.spaceMap.xxl
+        : theme.spaceMap.md}px
+    0;
 
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.xl}px;

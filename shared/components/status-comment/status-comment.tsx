@@ -12,8 +12,21 @@ import {
   CommentWithStrikes,
 } from './comments';
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
+import { CommentStyle } from './styles';
 
-export const StatusComment: FC<{ statuses: KEY_STATUS[] }> = ({ statuses }) => {
+type Props = {
+  statuses: KEY_STATUS[];
+};
+
+export const StatusComment: FC<Props> = (props) => {
+  return (
+    <CommentStyle>
+      <Comment {...props} />
+    </CommentStyle>
+  );
+};
+
+const Comment: FC<Props> = ({ statuses }) => {
   if (
     statuses.includes(KEY_STATUS.INVALID) ||
     statuses.includes(KEY_STATUS.DUPLICATED)

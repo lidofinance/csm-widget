@@ -1,11 +1,11 @@
 import { TOKENS, ValidatorRewardsEntity } from '@lidofinance/lido-csm-sdk';
-import { SortButton, useTable } from 'providers/table-provider';
+import { useTable } from 'providers/table-provider';
 import { FC } from 'react';
 import { CopyLink, Date, Pubkey } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { formatPercent } from 'utils';
 import { Performance } from './performance';
-import { DatesWrapper, TableStyle } from './styles';
+import { DatesWrapper, Sort, TableStyle } from './styles';
 
 export const Table: FC = () => {
   const { data } = useTable<ValidatorRewardsEntity>();
@@ -15,22 +15,22 @@ export const Table: FC = () => {
       <thead>
         <tr>
           <th>
-            <SortButton column="startTimestamp">Date period</SortButton>
+            <Sort column="startTimestamp">Date period</Sort>
           </th>
           <th>
-            <SortButton column="pubkey">Key</SortButton>
+            <Sort column="pubkey">Key</Sort>
           </th>
           <th>
-            <SortButton column="fee">Fee</SortButton>
+            <Sort column="fee">Fee</Sort>
           </th>
           <th>
-            <SortButton column="performance">Performance</SortButton>
+            <Sort column="performance">Performance</Sort>
           </th>
           <th>
-            <SortButton column="threshold">Threshold</SortButton>
+            <Sort column="threshold">Threshold</Sort>
           </th>
           <th>
-            <SortButton column="receivedRewards">Rewards received</SortButton>
+            <Sort column="receivedRewards">Rewards received</Sort>
           </th>
         </tr>
       </thead>

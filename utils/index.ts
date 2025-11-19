@@ -13,6 +13,7 @@ export * from './format-balance-string';
 export * from './format-balance';
 export * from './format-date';
 export * from './format-percent';
+export * from './get-array-sum';
 export * from './get-based-hash-href';
 export * from './get-error-code';
 export * from './get-etherscan-link';

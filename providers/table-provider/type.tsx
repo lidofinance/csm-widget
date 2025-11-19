@@ -1,11 +1,14 @@
-export type SortCriteria<T> = (
+export type SortCriteria<T, R = number | bigint | string | undefined> = (
   i: T,
-) => (number | bigint | string | undefined)[];
+) => R[];
+
 export type SortFunctions<T> = Partial<Record<keyof T, SortCriteria<T>>>;
+
+export type SortDirection = 'asc' | 'desc';
 
 export type Sort<T = any> = {
   column: keyof T;
-  direction: 'asc' | 'desc';
+  direction: SortDirection;
 };
 
 export type TableContextValue<T> = {

@@ -34,7 +34,7 @@ export const BondTableSwitcher: FC = () => {
   );
 
   return (
-    <TabListStyled $size="md">
+    <TabListStyled>
       {routes.map((item, index) => (
         <TabButtonStyled
           key={item.title}

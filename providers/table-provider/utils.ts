@@ -1,4 +1,4 @@
-import { Sort, SortFunctions } from './type';
+import { Sort, SortCriteria, SortDirection, SortFunctions } from './type';
 
 export const cropPage = <T>(_data: T[], page: number, pageSize: number) => {
   const start = page * pageSize;
@@ -8,13 +8,20 @@ export const cropPage = <T>(_data: T[], page: number, pageSize: number) => {
   return [data, pages] as const;
 };
 
-export const sorting = <T = any>(
+export const applySortCirteria = <T = any>(
   sort: Sort<T>,
   sortFunctions?: SortFunctions<T>,
+) =>
+  sorting(
+    sortFunctions?.[sort.column] ?? ((item: T) => [item[sort.column]]),
+    sort.direction,
+  );
+
+export const sorting = <T = any>(
+  fn: SortCriteria<T, unknown>,
+  direction: SortDirection = 'asc',
 ) => {
-  const fn: (i: T) => unknown[] =
-    sortFunctions?.[sort.column] ?? ((item: T) => [item[sort.column]]);
-  const direction = sort.direction === 'asc' ? 1 : -1;
+  const modifier = direction === 'asc' ? 1 : -1;
 
   return (a: T, b: T) => {
     const valuesA = fn(a);
@@ -23,13 +30,8 @@ export const sorting = <T = any>(
     for (const [i, valueA] of valuesA.entries()) {
       const valueB = valuesB[i];
 
-      // undefined always sorts last
-      if (valueA === undefined && valueB === undefined) continue;
-      if (valueA === undefined) return 1;
-      if (valueB === undefined) return -1;
-
       const comparison = compareValues(valueA, valueB);
-      if (comparison !== 0) return comparison * direction;
+      if (comparison !== 0) return comparison * modifier;
     }
 
     return 0;
@@ -37,6 +39,10 @@ export const sorting = <T = any>(
 };
 
 const compareValues = (a: unknown, b: unknown): number => {
+  if (a === undefined && b === undefined) 0;
+  if (a === undefined) return 1;
+  if (b === undefined) return -1;
+
   if (typeof a === 'string' && typeof b === 'string') {
     return a.localeCompare(b);
   }
