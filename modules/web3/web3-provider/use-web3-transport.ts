@@ -124,6 +124,7 @@ const runtimeMutableTransport = (
 export const useWeb3Transport = (
   supportedChains: Chain[],
   backendRpcMap: Record<number, string>,
+  useWalletRpc = false,
 ) => {
   const { transportMap, setTransportMap } = useMemo(() => {
     const batchConfig = {
@@ -165,22 +166,23 @@ export const useWeb3Transport = (
 
   const onActiveConnection = useCallback(
     async (activeConnection: Connection | null) => {
-      // for (const chain of supportedChains) {
-      // const setTransport = setTransportMap[chain.id];
-      // if (
-      //   activeConnection &&
-      //   chain.id === activeConnection.chainId &&
-      //   activeConnection.connector.type === 'injected'
-      // ) {
-      //   const provider = (await activeConnection.connector?.getProvider?.({
-      //     chainId: chain.id,
-      //   })) as EIP1193Provider | undefined;
-      //   setTransport(provider ? custom(provider) : null);
-      // } else setTransport(null);
-      // }
+      for (const chain of supportedChains) {
+        const setTransport = setTransportMap[chain.id];
+        if (
+          useWalletRpc &&
+          activeConnection &&
+          chain.id === activeConnection.chainId &&
+          activeConnection.connector.type === 'injected'
+        ) {
+          const provider = (await activeConnection.connector?.getProvider?.({
+            chainId: chain.id,
+          })) as EIP1193Provider | undefined;
+          setTransport(provider ? custom(provider) : null);
+        } else setTransport(null);
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setTransportMap, supportedChains],
+    [setTransportMap, supportedChains, useWalletRpc],
   );
 
   return { transportMap, onActiveConnection };
