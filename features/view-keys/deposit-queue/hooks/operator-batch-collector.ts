@@ -3,6 +3,8 @@ import { QueueAnalysis } from './calculate-and-select-by-operator';
 import type { GraphBounds, SubmittingAllocation } from './enhanced-types';
 import { normalizeToGraphCoordinate } from './graph-calculations';
 
+const MAX_TOOLTIP_ITEMS = 2;
+
 type BatchInfo = {
   keysCount: bigint;
   absoluteOffset: bigint; // Position from the begining of active keys
@@ -112,6 +114,62 @@ const convertToGraphBatches = (
 };
 
 /**
+ * Merges two metadata arrays, combining consecutive entries with same priority.
+ */
+const mergeMetadataArrays = (
+  first: BatchPart['metadata'] = [],
+  second: BatchPart['metadata'] = [],
+): BatchPart['metadata'] => {
+  if (first.length > 0 && second.length > 0) {
+    const lastMeta = first[first.length - 1];
+    const firstMeta = second[0];
+
+    const isConsecutive =
+      lastMeta.position + lastMeta.keysCount === firstMeta.position &&
+      lastMeta.priority === firstMeta.priority;
+
+    if (isConsecutive) {
+      const mergedMeta = {
+        position: lastMeta.position,
+        keysCount: lastMeta.keysCount + firstMeta.keysCount,
+        priority: lastMeta.priority,
+      };
+      return [...first.slice(0, -1), mergedMeta, ...second.slice(1)];
+    }
+  }
+
+  return [...first, ...second];
+};
+
+/**
+ * Ensures batch metadata doesn't exceed MAX_TOOLTIP_ITEMS.
+ * If exceeded, combines all metadata into a single entry with summed keys.
+ */
+const ensureMetadataWithinTooltipLimit = (batch: BatchPart): BatchPart => {
+  if (batch.metadata.length > MAX_TOOLTIP_ITEMS) {
+    const totalKeysCount = batch.metadata.reduce(
+      (sum, meta) => sum + meta.keysCount,
+      0n,
+    );
+    const firstMeta = batch.metadata[0];
+
+    return {
+      ...batch,
+      metadata: [
+        {
+          keysCount: totalKeysCount,
+          position: firstMeta.position,
+          priority: firstMeta.priority,
+          combined: true,
+        },
+      ],
+    };
+  }
+
+  return batch;
+};
+
+/**
  * Combines adjacent or overlapping batches to reduce visual clutter.
  * Uses a 0.5% tolerance for determining adjacency.
  * Preserves individual batch metadata for tooltips.
@@ -130,7 +188,7 @@ const combineAdjacentBatches = (batches: BatchPart[]): BatchPart[] => {
     const currentEnd = current.offset + current.width;
 
     // Check if batches are adjacent or overlapping (with small tolerance for visual proximity)
-    const isAdjacent = Math.abs(next.offset - currentEnd) <= 0.5; // 0.5% tolerance
+    const isAdjacent = next.offset - currentEnd <= 0.5; // 0.5px tolerance
 
     if (isAdjacent) {
       // Combine batches by merging metadata arrays
@@ -139,17 +197,17 @@ const combineAdjacentBatches = (batches: BatchPart[]): BatchPart[] => {
       current = {
         offset: current.offset,
         width: combinedEnd - current.offset,
-        metadata: [...(current.metadata ?? []), ...(next.metadata ?? [])],
+        metadata: mergeMetadataArrays(current.metadata, next.metadata),
       };
     } else {
       // Add current batch and start new one
-      combined.push(current);
+      combined.push(ensureMetadataWithinTooltipLimit(current));
       current = next;
     }
   }
 
   // Add the last batch
-  combined.push(current);
+  combined.push(ensureMetadataWithinTooltipLimit(current));
 
   return combined;
 };
