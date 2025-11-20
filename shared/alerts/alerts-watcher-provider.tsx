@@ -30,7 +30,7 @@ export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
     return (
       info &&
       info.enqueuedCount < info.depositableValidatorsCount &&
-      nodeOperator?.roles.includes(ROLES.MANAGER)
+      nodeOperator?.roles?.includes(ROLES.MANAGER)
     );
   }, [info, nodeOperator?.roles]);
 
