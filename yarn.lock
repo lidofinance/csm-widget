@@ -3043,13 +3043,13 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.47.0.tgz#2367eec1c8363516bde48b632a6fbe32aec33a1e"
   integrity sha512-6xx2O89OhWAxaob+SqXEX2xtrumG4MCUrclooCIvAhz64Lp3Wa0Hzt2lgJyFMhJxpDPMj3LmYNbuB15lwEQKwg==
 
-"@lidofinance/browser-service@1.6.3-alpha-warmup.5":
-  version "1.6.3-alpha-warmup.5"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.6.3-alpha-warmup.5.tgz#c1af346568ab617f238eeecdf88c82e117af44ed"
-  integrity sha512-l9njeRheDuupEwAH+BLD0IsfmFVc8s7YQKa1UoQ3Jz++7ZQNTsXOMyvJcBpy7RzEn0YJts80LcYUHuchzN/IOQ==
+"@lidofinance/browser-service@1.6.3-alpha-warmup.6":
+  version "1.6.3-alpha-warmup.6"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.6.3-alpha-warmup.6.tgz#8d3d9bab4bbbe7ca2f75d7cc2f90f78c74245f08"
+  integrity sha512-362gRK3VolL1iqlUocL42N00ZGRBpXmCbjlaxWaRT/EQEso3QiNRAlgK2ZeXiQocFLSUXvBZnlbtQxNp7KOnhQ==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.3.1"
-    "@lidofinance/wallets-testing-nodes" "1.7.0-alpha-warmup.5"
+    "@lidofinance/wallets-testing-nodes" "1.7.0-alpha-warmup.6"
     "@lidofinance/wallets-testing-wallets" "1.39.0"
 
 "@lidofinance/discord-reporter@1.7.0":
@@ -3190,10 +3190,10 @@
     rxjs "^7.5.6"
     unzipper "^0.10.11"
 
-"@lidofinance/wallets-testing-nodes@1.7.0-alpha-warmup.5":
-  version "1.7.0-alpha-warmup.5"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-nodes/-/wallets-testing-nodes-1.7.0-alpha-warmup.5.tgz#2d55d9cc49bdd84e76b125c13a37c380f96339f8"
-  integrity sha512-+4zjfgS4EsNw7SliTyfsKmVuGpXZ86uJD6z/m0eSL4DOV6p+go7pVcpZJcQjnLbYOhMOyuNlYSqziGJ5vBjHMA==
+"@lidofinance/wallets-testing-nodes@1.7.0-alpha-warmup.6":
+  version "1.7.0-alpha-warmup.6"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-nodes/-/wallets-testing-nodes-1.7.0-alpha-warmup.6.tgz#9f70998fbc64412ed31d36b9a73d28581ad788b0"
+  integrity sha512-NQcUfYGmjFKwOVGPCdfxWZQIjBZObmHJFH6cv0bFc5Hi8xQs0dAedB7Wuo2eiXpmVgCWepJ70XCGYza1YVWjEQ==
   dependencies:
     "@ganache/console.log" "^0.4.2"
     "@nestjs/common" "^10.0.0"

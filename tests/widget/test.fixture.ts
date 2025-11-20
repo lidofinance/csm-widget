@@ -10,6 +10,7 @@ import { WidgetService } from 'tests/services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from 'tests/consts/timeouts';
 import ForkActionsService from 'tests/services/forkActions.service';
+import { warmUpForkedNode } from 'tests/helpers/warmUpFork';
 
 type WorkerFixtures = {
   // fixture-options
@@ -52,7 +53,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
   // fixture-methods
   browserWithWallet: [
-    async ({ secretPhrase, useFork }, use) => {
+    async ({ secretPhrase, useFork, csmSDK }, use) => {
       const rpcUrl = useFork
         ? 'http://127.0.0.1:8545'
         : widgetFullConfig.standConfig.networkConfig.rpcUrl;
@@ -71,6 +72,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
           rpcUrlToMock: `**/api/rpc?chainId=${widgetFullConfig.standConfig.networkConfig.chainId}`,
           rpcUrl: widgetFullConfig.standConfig.networkConfig.rpcUrl,
           useExternalFork: true,
+          warmUpCallback: warmUpForkedNode.bind(null, csmSDK, secretPhrase),
         },
         browserOptions: {
           reducedMotion: 'reduce',
