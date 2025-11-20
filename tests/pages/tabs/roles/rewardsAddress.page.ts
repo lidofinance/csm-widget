@@ -5,6 +5,7 @@ import {
 import { Locator, Page, test } from '@playwright/test';
 import {
   LOW_TIMEOUT,
+  RPC_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/consts/timeouts';
@@ -130,7 +131,7 @@ export class RewardsAddressPage extends BasePage {
       });
       await test.step('Do proposal', async () => {
         const [txPage] = await Promise.all([
-          this.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
+          this.waitForPage(RPC_WAIT_TIMEOUT),
           modalContinueButton.click(),
         ]);
 

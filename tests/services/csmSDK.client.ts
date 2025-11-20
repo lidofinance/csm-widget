@@ -5,10 +5,10 @@ import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import { formatEther } from 'viem';
 
 export class LidoSDKClient extends LidoSDKCsm {
-  constructor() {
+  constructor(rpcUrls: string[]) {
     const core = new LidoSDKCore({
       chainId: widgetFullConfig.standConfig.networkConfig.chainId,
-      rpcUrls: [widgetFullConfig.standConfig.networkConfig.rpcUrl],
+      rpcUrls,
     });
     super({ core });
   }
@@ -36,6 +36,21 @@ export class LidoSDKClient extends LidoSDKCsm {
         prevRewards: rewardsFrame.lastReport - rewardsFrame.frameDuration,
         nextRewards: rewardsFrame.lastReport + rewardsFrame.frameDuration,
       };
+    });
+  }
+
+  async getNodeOperatorsByAddress(address: `0x${string}`) {
+    return test.step(`Get node operators by address: ${address}`, async () => {
+      const operators = await this.satellite.getNodeOperatorsByAddress(address);
+      return operators;
+    });
+  }
+
+  async getNodeOperatorsByProposedAddress(address: `0x${string}`) {
+    return test.step(`Get node operators by proposed address: ${address}`, async () => {
+      const operators =
+        await this.satellite.getNodeOperatorsByProposedAddress(address);
+      return operators;
     });
   }
 }
