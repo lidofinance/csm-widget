@@ -1,9 +1,6 @@
 import { PATH } from 'consts';
-import { FC, ReactNode, useMemo } from 'react';
-import { Chip } from 'shared/components';
-import { TabButtonStyled, TabListStyled } from 'shared/components/tabs/styles';
-import { useRouterPath } from 'shared/hooks';
-import { getIsActivePath } from 'utils';
+import { FC, ReactNode } from 'react';
+import { Chip, TabItem, TabsHeader } from 'shared/components';
 
 type Item = {
   title: string;
@@ -26,25 +23,18 @@ const routes: Item[] = [
 ];
 
 export const BondTableSwitcher: FC = () => {
-  const pathname = useRouterPath();
-
-  const activeIndex = useMemo(
-    () => routes.findIndex(({ route }) => getIsActivePath(pathname, route)),
-    [pathname],
-  );
-
   return (
-    <TabListStyled>
-      {routes.map((item, index) => (
-        <TabButtonStyled
+    <TabsHeader>
+      {routes.map((item) => (
+        <TabItem
           key={item.title}
+          href={item.route}
           disabled={item.disabled}
-          aria-current={activeIndex === index ? 'page' : undefined}
+          extra={item.suffix}
         >
           {item.title}
-          {item.suffix}
-        </TabButtonStyled>
+        </TabItem>
       ))}
-    </TabListStyled>
+    </TabsHeader>
   );
 };
