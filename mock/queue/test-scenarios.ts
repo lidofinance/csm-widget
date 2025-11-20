@@ -1595,4 +1595,221 @@ export const testScenarios: TestScenario[] = [
       },
     },
   },
+
+  // ========================================
+  // GROUP L: METADATA MERGING & COMBINING
+  // ========================================
+  {
+    title: '[Merge] Consecutive Batches Same Priority',
+    description:
+      'Two consecutive operator batches in same priority should merge metadata',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 200,
+        queue: 60,
+        capacity: 500,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 60,
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [1, 25],
+            [1, 35],
+          ], // Priority 0: Consecutive operator batches (positions 0-25, 25-60)
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      },
+    },
+  },
+  {
+    title: '[Merge] Non-Consecutive Batches Same Priority',
+    description:
+      'Operator batches with gap between them should NOT merge metadata',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 150,
+        queue: 70,
+        capacity: 400,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 60,
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [1, 25],
+            [2, 10],
+            [1, 35],
+          ], // Priority 0: Operator batches with gap (positions 0-25, 35-60)
+          [],
+          [],
+          [],
+          [],
+          [],
+        ],
+      },
+    },
+  },
+  {
+    title: '[Merge] Consecutive Batches Different Priorities',
+    description:
+      'Consecutive operator batches across different priorities should NOT merge',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 250,
+        queue: 60,
+        capacity: 500,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 60,
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [[1, 30]], // Priority 0: Operator batch
+          [],
+          [],
+          [],
+          [[1, 30]], // Priority 4: Operator batch (different priority array)
+          [],
+        ],
+      },
+    },
+  },
+  {
+    title: '[Combine] Four Metadata Items',
+    description:
+      'Four metadata items in clustered batches should combine with combined flag (> MAX_TOOLTIP_ITEMS)',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 500,
+        queue: 2000, // Large queue for 0.5% = 10 keys tolerance
+        capacity: 3000,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 90, // 20 + 25 + 15 + 30 = 90
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 500],
+            [1, 20],
+            [3, 3],
+            [1, 25],
+            [4, 400],
+            [1, 15],
+            [5, 3],
+            [1, 30],
+            [6, 4],
+          ], // Priority 0: Operator batches clustered in 2 groups (500-548, 948-996)
+          [],
+          [],
+          [],
+          [],
+          [[7, 1000]], // Priority 5: Large other operator batch
+        ],
+      },
+    },
+  },
+  {
+    title: '[Combine] Five Plus Metadata Items',
+    description:
+      'Five metadata items in multiple clusters should combine with combined flag',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 800,
+        queue: 3000, // Large queue for 0.5% = 15 keys tolerance
+        capacity: 4500,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 130, // 25 + 30 + 20 + 30 + 25 = 130
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 800],
+            [1, 25],
+            [3, 5],
+            [1, 30],
+            [4, 5],
+            [1, 20],
+            [5, 115],
+          ], // Priority 0: 3 operator batches clustered at 800-885 (gaps of 5 keys)
+          [],
+          [],
+          [],
+          [
+            [6, 400],
+            [1, 30],
+            [7, 5],
+            [1, 25],
+            [8, 140],
+          ], // Priority 4: 2 operator batches clustered at 400-460 (gap of 5 keys)
+          [[9, 1400]], // Priority 5: Large other operator batch
+        ],
+      },
+    },
+  },
+  {
+    title: '[Combine] Exactly Three Metadata Items',
+    description:
+      'Boundary case: Exactly 3 metadata items in one cluster should NOT combine (≤ MAX_TOOLTIP_ITEMS)',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 500,
+        queue: 2000, // Large queue for 0.5% = 10 keys tolerance
+        capacity: 3000,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 75, // 30 + 25 + 20 = 75
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [
+            [2, 800],
+            [1, 30],
+            [3, 5],
+            [1, 25],
+            [4, 5],
+            [1, 20],
+            [5, 115],
+          ], // Priority 0: 3 operator batches clustered at 800-885 (gaps of 5 keys)
+          [],
+          [],
+          [],
+          [],
+          [[6, 1000]], // Priority 5: Large other operator batch
+        ],
+      },
+    },
+  },
 ];
