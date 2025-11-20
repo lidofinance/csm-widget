@@ -5948,9 +5948,9 @@ camelize@^1.0.0:
   integrity sha512-dU+Tx2fsypxTgtLoE36npi3UqcjSSMNYfkqgmoEhtZrraP5VWq0K7FkWVTYa8eMPtnU/G2txVsfdCJTn9uzpuQ==
 
 caniuse-lite@^1.0.30001406, caniuse-lite@^1.0.30001580, caniuse-lite@^1.0.30001629, caniuse-lite@^1.0.30001646:
-  version "1.0.30001718"
-  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001718.tgz"
-  integrity sha512-AflseV1ahcSunK53NfEs9gFWgOEmzr0f+kaMFA4xiLZlr9Hzt7HxcSpIFcnNCUkz6R6dWKa54rUz3HUmI3nVcw==
+  version "1.0.30001754"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001754.tgz"
+  integrity sha512-x6OeBXueoAceOmotzx3PO4Zpt4rzpeIFsSr6AAePTZxSkXiYDUmpypEl7e2+8NCd9bD7bXjqyef8CJYPC1jfxg==
 
 canvas-confetti@^1.9.2:
   version "1.9.3"
@@ -12855,11 +12855,6 @@ zod@3.22.4:
   version "3.22.4"
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
   integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==
-
-zod@^3.24.2:
-  version "3.24.2"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.24.2.tgz#8efa74126287c675e92f46871cfc8d15c34372b3"
-  integrity sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==
 
 zod@^4.1.12:
   version "4.1.12"
