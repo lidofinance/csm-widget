@@ -25,6 +25,7 @@ export * from './use-operator-keys-with-strikes';
 export * from './use-operator-last-rewards';
 export * from './use-operator-owner';
 export * from './use-operator-reward';
+export * from './use-operator-rewards-history';
 export * from './use-operator-type';
 export * from './use-operators-count';
 export * from './use-operators-with-locked-bond';

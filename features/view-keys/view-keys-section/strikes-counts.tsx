@@ -6,8 +6,8 @@ import {
   useOperatorCurveId,
 } from 'modules/web3';
 import { FC, useCallback } from 'react';
-import { getSum, useStrikeDates } from 'shared/hooks';
-import { formatDate } from 'utils';
+import { useStrikeDates } from 'shared/hooks';
+import { formatDate, getArraySum } from 'utils';
 
 export const StrikesCount: FC<{ strikes?: KeyStrikes }> = ({ strikes }) => {
   const id = useNodeOperatorId();
@@ -20,7 +20,7 @@ export const StrikesCount: FC<{ strikes?: KeyStrikes }> = ({ strikes }) => {
   const lastStrike = strikes?.findIndex((v) => !!v);
   const getDates = useStrikeDates(undefined);
 
-  const count = getSum(strikes);
+  const count = getArraySum(strikes);
   const warning = max && count >= max;
 
   const content = (

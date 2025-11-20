@@ -108,7 +108,9 @@ export const METRIC_CONTRACT_ADDRESSES = fromPairs(
 
 const CONTRACT_LIST_LOGS: CONTRACT_NAMES[] = [
   CONTRACT_NAMES.csModule,
+  CONTRACT_NAMES.csAccounting,
   CONTRACT_NAMES.csFeeOracle,
+  CONTRACT_NAMES.csFeeDistributor,
   CONTRACT_NAMES.validatorsExitBusOracle,
   CSM_CONTRACT_NAMES.wstETH,
   CSM_CONTRACT_NAMES.stETH,
