@@ -5,6 +5,7 @@ import { Block, Stack, WhenLoaded } from 'shared/components';
 import { BondTableSwitcher } from 'shared/navigate';
 import { Table } from './table';
 import { sortFunctions } from './sort';
+import { FiltersAndExport } from './filters-and-export';
 
 export const RewardsHistorySection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
@@ -24,6 +25,7 @@ export const RewardsHistorySection: FC = () => {
             empty={!data?.length && 'No rewards history available'}
             morePadding
           >
+            <FiltersAndExport />
             <Table />
           </WhenLoaded>
         </Block>

@@ -6,6 +6,7 @@ export * from './convert';
 export * from './curve-parameters';
 export * from './encode-url-query';
 export * from './event-subsciption';
+export * from './export-csv';
 export * from './extract-error-message';
 export * from './fetch-with-fallback';
 export * from './fetcher-error';
