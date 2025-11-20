@@ -5,51 +5,40 @@ import { FC } from 'react';
 import {
   FaqStrikeLifetime,
   FaqStrikeThreshold,
-  KeyStrikes,
-  Pubkey,
-  PubkeyLinks,
   SectionBlock,
   Stack,
 } from 'shared/components';
+import { TablePagination, TableProvider } from 'providers/table-provider';
 import { hasStatus } from 'utils';
-import { LastStrike } from './last-strike';
-import { List, Row } from './styles';
+import { StrikesTable } from './strikes-table';
 
 type WithStrikes = KeyWithStatus & Required<Pick<KeyWithStatus, 'strikes'>>;
 
 export const StrikesSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: _keys } = useOperatorKeysWithStatus(nodeOperatorId);
+  const { data: keys } = useOperatorKeysWithStatus(nodeOperatorId, (data) => {
+    return data
+      .filter(hasStatus(KEY_STATUS.WITH_STRIKES))
+      .filter(
+        hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING]),
+      ) as WithStrikes[];
+  });
 
-  const keys = (_keys || [])
-    .filter(hasStatus(KEY_STATUS.WITH_STRIKES))
-    .filter(
-      hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING]),
-    ) as WithStrikes[];
-
-  if (keys.length === 0) return null;
+  if (!keys?.length) return null;
 
   return (
     <SectionBlock title="Keys with Strikes">
-      <Stack direction="column">
-        <Text size="xs" color="secondary">
-          Strikes are issued for bad performance. In case your key gets{' '}
-          <FaqStrikeThreshold /> within <FaqStrikeLifetime /> the key will be
-          ejected.
-        </Text>
-        <List>
-          {keys.map(({ pubkey, strikes, validatorIndex }) => (
-            <Row key={pubkey}>
-              <Pubkey
-                pubkey={pubkey}
-                link={<PubkeyLinks {...{ pubkey, validatorIndex }} />}
-              />
-              <KeyStrikes strikes={strikes} />
-              <LastStrike strikes={strikes} />
-            </Row>
-          ))}
-        </List>
-      </Stack>
+      <TableProvider data={keys}>
+        <Stack direction="column">
+          <Text size="xs" color="secondary">
+            Strikes are issued for bad performance. In case your key gets{' '}
+            <FaqStrikeThreshold /> within <FaqStrikeLifetime /> the key will be
+            ejected.
+          </Text>
+          <StrikesTable />
+          <TablePagination />
+        </Stack>
+      </TableProvider>
     </SectionBlock>
   );
 };
