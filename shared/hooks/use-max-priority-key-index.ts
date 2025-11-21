@@ -6,7 +6,7 @@ import { useOperatorInfo } from 'modules/web3/hooks/use-operator-info';
 const countPriorityKeys =
   (nodeOperatorId: NodeOperatorId | undefined) =>
   (allBatches: DepositQueueBatch[][]) => {
-    if (!nodeOperatorId) return 0;
+    if (nodeOperatorId === undefined) return 0;
 
     const priorityQueue = allBatches[0];
 

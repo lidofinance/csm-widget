@@ -26,7 +26,7 @@ export const useSurveysSWR = <T, R = T>(
   const query = useQuery<T>({
     queryKey: ['surveys', url],
     queryFn: () => fetcher(url),
-    enabled: !options?.skipFetching && !!nodeOperatorId,
+    enabled: !options?.skipFetching && nodeOperatorId !== undefined,
     ...STRATEGY_LAZY,
   });
 
