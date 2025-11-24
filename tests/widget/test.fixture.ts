@@ -54,8 +54,9 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   // fixture-methods
   browserWithWallet: [
     async ({ secretPhrase, useFork, csmSDK }, use) => {
+      const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
       const rpcUrl = useFork
-        ? 'http://127.0.0.1:8545'
+        ? forkRpcURL
         : widgetFullConfig.standConfig.networkConfig.rpcUrl;
 
       const browserService = new BrowserService({
@@ -108,8 +109,9 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   ],
   csmSDK: [
     async ({ useFork }, use) => {
+      const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
       const rpcUrl = useFork
-        ? 'http://127.0.0.1:8545'
+        ? forkRpcURL
         : widgetFullConfig.standConfig.networkConfig.rpcUrl;
 
       await use(new LidoSDKClient([rpcUrl]));

@@ -12,7 +12,9 @@ export type StandConfig = {
   standType: string;
   standUrl: string;
   networkConfig: NetworkConfig;
-  nodeConfig: EthereumNodeServiceOptions;
+  nodeConfig: EthereumNodeServiceOptions & {
+    host: string;
+  };
 };
 
 export type IConfig = {

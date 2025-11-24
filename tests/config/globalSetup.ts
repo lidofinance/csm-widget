@@ -9,13 +9,11 @@ export default async function globalSetup() {
   }
 
   const secretPhrase = widgetFullConfig.accountConfig.SECRET_PHRASE;
-  const csmSDK = new LidoSDKClient(['http://127.0.0.1:8545']);
+  const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
+  const csmSDK = new LidoSDKClient([forkRpcURL]);
   const nodeConfig = {
     ...widgetFullConfig.standConfig.nodeConfig,
-    runOptions: [
-      `--mnemonic=${secretPhrase}`,
-      '--fork-header=Accept-Encoding: identity',
-    ],
+    runOptions: [`--mnemonic=${secretPhrase}`],
     warmUpCallback: warmUpForkedNode.bind(null, csmSDK, secretPhrase),
   };
   const nodeService = new EthereumNodeService(nodeConfig);
