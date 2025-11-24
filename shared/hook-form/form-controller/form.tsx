@@ -1,6 +1,8 @@
 import { useDappStatus } from 'modules/web3';
 import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useAccount } from 'wagmi';
+import { useAddressValidation } from 'providers/address-validation-provider';
 import { useFormControllerContext } from './form-controller-context';
 import { useFormData } from './form-data-context';
 
@@ -11,6 +13,8 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
   ...props
 }) => {
   const { isAccountActive } = useDappStatus();
+  const { address } = useAccount();
+  const { validateAddress } = useAddressValidation();
   const { handleSubmit, reset: resetDefault } = useFormContext();
   const { onSubmit, onReset, retryEvent, onConfirm, onRetry } =
     useFormControllerContext();
@@ -20,10 +24,24 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
   const doSubmit = useMemo(
     () =>
       handleSubmit(async (args) => {
+        // Validate address before submit - if address is not valid, don't submit
+        const result = await validateAddress(address);
+        if (!result) return;
+
         const success = await onSubmit(args, data, { onConfirm, onRetry });
         if (success) onReset ? onReset(args) : resetDefault();
       }),
-    [handleSubmit, onSubmit, data, onConfirm, onRetry, onReset, resetDefault],
+    [
+      handleSubmit,
+      onSubmit,
+      data,
+      onConfirm,
+      onRetry,
+      onReset,
+      resetDefault,
+      validateAddress,
+      address,
+    ],
   );
 
   // Bind retry callback

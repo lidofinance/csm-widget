@@ -30,6 +30,7 @@ export { Plural } from './plurals/plural';
 export { Counter } from './counter/counter';
 export { InverseThemeProvider } from './inverse-theme-provider/inverse-theme-provider';
 export { StatusComment } from './status-comment/status-comment';
+export * from './security-status-banner';
 export * from './address';
 export * from './extra-width';
 export * from './external-icon-link';
