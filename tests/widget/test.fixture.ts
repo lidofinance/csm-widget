@@ -69,8 +69,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
         },
         walletConfig: widgetFullConfig.walletConfig,
         nodeConfig: {
-          rpcUrlToMock: `**/api/rpc?chainId=${widgetFullConfig.standConfig.networkConfig.chainId}`,
-          rpcUrl: widgetFullConfig.standConfig.networkConfig.rpcUrl,
+          ...widgetFullConfig.standConfig.nodeConfig,
           useExternalFork: true,
           warmUpCallback: warmUpForkedNode.bind(null, csmSDK, secretPhrase),
         },

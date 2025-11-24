@@ -1,3 +1,4 @@
+import { EthereumNodeServiceOptions } from '@lidofinance/wallets-testing-nodes';
 import {
   NetworkConfig,
   CommonWalletConfig,
@@ -11,6 +12,7 @@ export type StandConfig = {
   standType: string;
   standUrl: string;
   networkConfig: NetworkConfig;
+  nodeConfig: EthereumNodeServiceOptions;
 };
 
 export type IConfig = {

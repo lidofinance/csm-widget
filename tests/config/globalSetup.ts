@@ -11,9 +11,7 @@ export default async function globalSetup() {
   const secretPhrase = widgetFullConfig.accountConfig.SECRET_PHRASE;
   const csmSDK = new LidoSDKClient(['http://127.0.0.1:8545']);
   const nodeConfig = {
-    rpcUrlToMock: `**/api/rpc?chainId=${widgetFullConfig.standConfig.networkConfig.chainId}`,
-    rpcUrl: widgetFullConfig.standConfig.networkConfig.rpcUrl,
-    derivationPath: "m/44'/60'/0'/0",
+    ...widgetFullConfig.standConfig.nodeConfig,
     runOptions: [
       `--mnemonic=${secretPhrase}`,
       '--fork-header=Accept-Encoding: identity',

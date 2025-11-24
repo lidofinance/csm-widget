@@ -49,6 +49,7 @@ const config: PlaywrightTestConfig = {
     },
   ],
   globalSetup: './tests/config/globalSetup.ts',
+  globalTeardown: './tests/config/globalTeardown.ts',
 };
 
 export default config;
