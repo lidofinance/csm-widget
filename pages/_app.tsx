@@ -3,7 +3,7 @@ import Head from 'next/head';
 import 'nprogress/nprogress.css';
 import { memo } from 'react';
 
-import { CookiesTooltip, ToastContainer } from '@lidofinance/lido-ui';
+import { ToastContainer } from '@lidofinance/lido-ui';
 
 import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
@@ -54,7 +54,6 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       />
       <ToastContainer />
       <MemoApp {...rest} />
-      <CookiesTooltip />
     </Providers>
   );
 };
