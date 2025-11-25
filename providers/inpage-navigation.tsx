@@ -130,7 +130,7 @@ export const useInpageNavigation = () => {
   const value = useContext(InpageNavigationContext);
   invariant(
     value !== null,
-    'useInpageNavigation was used used outside of InpageNavigationProvider',
+    'useInpageNavigation was used outside of InpageNavigationProvider',
   );
   return value;
 };

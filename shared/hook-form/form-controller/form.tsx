@@ -1,7 +1,6 @@
 import { useDappStatus } from 'modules/web3';
 import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { useAccount } from 'wagmi';
 import { useAddressValidation } from 'providers/address-validation-provider';
 import { useFormControllerContext } from './form-controller-context';
 import { useFormData } from './form-data-context';
@@ -12,8 +11,7 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
   children,
   ...props
 }) => {
-  const { isAccountActive } = useDappStatus();
-  const { address } = useAccount();
+  const { isAccountActive, address } = useDappStatus();
   const { validateAddress } = useAddressValidation();
   const { handleSubmit, reset: resetDefault } = useFormContext();
   const { onSubmit, onReset, retryEvent, onConfirm, onRetry } =

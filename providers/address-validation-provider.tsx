@@ -31,7 +31,7 @@ export const useAddressValidation = () => {
   const value = useContext(AddressValidationContext);
   invariant(
     value !== null,
-    'useAddressValidation was used used outside of AddressValidationProvider',
+    'useAddressValidation was used outside of AddressValidationProvider',
   );
   return value;
 };
