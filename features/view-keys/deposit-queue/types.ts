@@ -36,6 +36,7 @@ export type BatchMetadata = Array<{
   keysCount: bigint;
   position: bigint;
   priority: number;
+  combined?: boolean;
 }>;
 
 export type BatchPart = {
