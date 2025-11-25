@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@lidofinance/address": "^1.4.0",
-    "@lidofinance/analytics-matomo": "^0.51.0",
+    "@lidofinance/analytics-matomo": "^0.56.0",
     "@lidofinance/api-logger": "^0.47.0",
     "@lidofinance/api-metrics": "^0.47.0",
     "@lidofinance/api-rpc": "^0.47.0",
