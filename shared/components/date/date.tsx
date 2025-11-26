@@ -1,3 +1,4 @@
+import { Tooltip } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { formatDate } from 'utils';
 import { DateStyle } from './styles';
@@ -8,5 +9,12 @@ type Props = {
 };
 
 export const Date: FC<Props> = ({ timestamp, format }) => {
-  return <DateStyle>{formatDate(timestamp, format)}</DateStyle>;
+  if (!timestamp) {
+    return null;
+  }
+  return (
+    <Tooltip title={formatDate(timestamp, 'PP')} placement="top">
+      <DateStyle>{formatDate(timestamp, format)}</DateStyle>
+    </Tooltip>
+  );
 };

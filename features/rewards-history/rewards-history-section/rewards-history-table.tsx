@@ -7,7 +7,7 @@ import { formatPercent } from 'utils';
 import { Performance } from './performance';
 import { DatesWrapper, Sort, TableStyle } from './styles';
 
-export const Table: FC = () => {
+export const RewardsHistoryTable: FC = () => {
   const { data } = useTable<ValidatorRewardsEntity>();
 
   return (

@@ -3,7 +3,7 @@ import { TablePagination, TableProvider } from 'providers/table-provider';
 import { FC } from 'react';
 import { Block, Stack, WhenLoaded } from 'shared/components';
 import { BondTableSwitcher } from 'shared/navigate';
-import { Table } from './table';
+import { RewardsHistoryTable } from './rewards-history-table';
 import { sortFunctions } from './sort';
 import { FiltersAndExport } from './filters-and-export';
 
@@ -26,7 +26,7 @@ export const RewardsHistorySection: FC = () => {
             morePadding
           >
             <FiltersAndExport />
-            <Table />
+            <RewardsHistoryTable />
           </WhenLoaded>
         </Block>
         <TablePagination />

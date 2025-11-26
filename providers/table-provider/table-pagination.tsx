@@ -6,6 +6,10 @@ import { PaginationStyled, SelectStyle, Wrapper } from './styles';
 export const TablePagination: FC = () => {
   const { page, pages, pageSize, setPage, setPageSize } = useTable();
 
+  if (pages < 1) {
+    return null;
+  }
+
   return (
     <Wrapper>
       <PaginationStyled

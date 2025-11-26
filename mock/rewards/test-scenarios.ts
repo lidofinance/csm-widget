@@ -67,11 +67,19 @@ export const testScenarios: TestScenario[] = [
     },
   },
   {
-    title: 'Recent Rewards (Last 20)',
-    description: 'Most recent reward records',
+    title: 'Earliest Rewards (Last 20)',
+    description: 'Most earliest reward records',
     data: {
       nodeOperatorId: 1,
       rewardsHistory: data.slice(-20),
+    },
+  },
+  {
+    title: 'Single Pubkey Filter',
+    description: 'All records for a single validator pubkey',
+    data: {
+      nodeOperatorId: 1,
+      rewardsHistory: data.filter((record) => record.pubkey === data[0].pubkey),
     },
   },
 ];
