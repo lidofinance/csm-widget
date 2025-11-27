@@ -16,4 +16,9 @@ export const LinkStyled = styled(Link)<{ $secondary?: boolean }>`
         color: var(--lido-color-primaryHover);
       }
     `}
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `;

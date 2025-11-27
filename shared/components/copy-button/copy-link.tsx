@@ -12,7 +12,7 @@ export const CopyLink: FC<CopyButtonProps> = ({ text, ...props }) => {
 
   return (
     <LinkStyled title="Copy" {...props} onClick={copy}>
-      {copied ? <Check /> : <Copy width={20} height={20} />}
+      {copied ? <Check /> : <Copy />}
     </LinkStyled>
   );
 };

@@ -8,6 +8,7 @@ export type WhenLoaded = {
   empty?: ReactNode;
   emptyNote?: string;
   error?: any;
+  morePadding?: boolean;
 };
 
 export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
@@ -16,19 +17,20 @@ export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
   emptyNote,
   children,
   error,
+  morePadding,
 }) => (
   <>
     {error ? (
       <>
-        <WrapperStyle>Error</WrapperStyle>
+        <WrapperStyle $morePadding={morePadding}>Error</WrapperStyle>
       </>
     ) : loading ? (
-      <WrapperStyle>
+      <WrapperStyle $morePadding={morePadding}>
         <Loader data-testid="loader" />
       </WrapperStyle>
     ) : empty ? (
       <>
-        <WrapperStyle>{empty}</WrapperStyle>
+        <WrapperStyle $morePadding={morePadding}>{empty}</WrapperStyle>
         {emptyNote && <Note>{emptyNote}</Note>}
       </>
     ) : (

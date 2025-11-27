@@ -4,16 +4,17 @@ import { FC } from 'react';
 import { MatomoLink } from '../matomo-link/matomo-link';
 
 import { ReactComponent as MigalabsLink } from 'assets/icons/migalabs-link.svg';
-
-type KeyLinkProps = {
-  validator: string | undefined;
-};
+import { KeyWithStatus } from '@lidofinance/lido-csm-sdk';
 
 const { migalabs } = getExternalLinks();
 
-export const MigalabsPubkeyLink: FC<KeyLinkProps> = ({ validator }) => {
+export const MigalabsPubkeyLink: FC<Pick<KeyWithStatus, 'validatorIndex'>> = ({
+  validatorIndex,
+}) => {
   const href =
-    migalabs && validator ? `${migalabs}/validators/${validator}` : '';
+    migalabs && validatorIndex
+      ? `${migalabs}/validators/${validatorIndex}`
+      : '';
 
   return (
     <>
