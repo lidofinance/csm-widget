@@ -1,7 +1,7 @@
 import { useCurveParameters } from 'modules/web3';
 import { FC } from 'react';
 import { useCurrentCurveId } from 'shared/hooks';
-import { Plural } from '../plurals/plural';
+import { Plural } from '../plurals';
 import { ShortInlineLoader } from './styles';
 
 export const FaqStrikeThreshold: FC = () => {

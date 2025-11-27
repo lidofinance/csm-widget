@@ -2,7 +2,23 @@ import { ButtonIcon, Close, Textarea } from '@lidofinance/lido-ui';
 import { PubkeyContainerStyle } from 'shared/components/address/styles';
 import styled from 'styled-components';
 
-export const DropzoneStyle = styled.div``;
+export const DropzoneStyle = styled.div`
+  border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
+  overflow: hidden;
+
+  border: 1px solid var(--lido-color-border);
+
+  &:hover {
+    border-color: var(--lido-color-borderHover);
+  }
+  &:focus-within {
+    border-color: var(--lido-color-borderActive);
+  }
+
+  &[aria-invalid='true'] {
+    border-color: var(--lido-color-error);
+  }
+`;
 
 export const TextareaStyle = styled(Textarea)`
   & > span {
