@@ -1,5 +1,5 @@
 import { Chip } from '@lidofinance/lido-ui';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 export const StyledChip = styled(Chip).attrs({ variant: 'gray' })`
   font-size: ${({ theme }) => theme.fontSizesMap.xxxs}px;

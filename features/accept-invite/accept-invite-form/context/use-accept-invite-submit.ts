@@ -71,7 +71,7 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
           appendNO(result);
         }
 
-        if (!nodeOperatorId && invites.length <= 1) {
+        if (nodeOperatorId === undefined && invites.length <= 1) {
           void n(PATH.HOME);
         }
 
