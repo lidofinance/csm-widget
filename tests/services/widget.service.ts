@@ -53,7 +53,7 @@ export class WidgetService {
       ) {
         try {
           const [connectWalletPage] = await Promise.all([
-            this.page.context().waitForEvent('page', { timeout: 90000 }),
+            this.page.context().waitForEvent('page', { timeout: 10000 }),
             // @Fixme dbclick() when https://linear.app/lidofi/issue/SI-1447/mm-incorrect-network-required-double-click resolved
             await walletIcon.dblclick(),
           ]);
@@ -214,6 +214,35 @@ export class WidgetService {
       const match = rowHeader.match(/#(\d+)/);
       if (!match) throw new Error('Cannot extract ID from header');
       return Number(match[1]);
+    });
+  }
+
+  async mockValidationAddressRequest(isValid = false) {
+    await test.step('Mock route for CRAP-Blacklisted wallet address', async () => {
+      await this.page.route(`**/api/validation?address=*`, async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          json: { isValid },
+        });
+      });
+    });
+  }
+
+  async disconnectWalletForce() {
+    await test.step('Forcefully disconnect wallet', async () => {
+      await this.page.evaluate(() => {
+        // Get all localStorage keys
+        const localStorageKeys = Object.keys(localStorage);
+
+        // Remove all keys starting with 'wagmi'
+        localStorageKeys.forEach((key) => {
+          if (key.startsWith('wagmi')) {
+            localStorage.removeItem(key);
+          }
+        });
+      });
+      await this.page.reload();
     });
   }
 }
