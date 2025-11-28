@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../test.fixture';
+import { test } from '../../test.fixture';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { KeysPage } from 'tests/pages';
 import { KeysGeneratorService } from 'tests/services/keysGenerator.service';
@@ -10,7 +10,7 @@ test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
 const OFAC_MODAL_TEXT = 'Sorry, access is currently unavailable.';
 
-test.describe('Operator with empty validator. CRAP and widget transaction', async () => {
+test.describe('Operator with empty validator. Keys. CRAP and widget transaction', async () => {
   let txModal: TxModal;
 
   test.beforeAll(async ({ widgetService }) => {
