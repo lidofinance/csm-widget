@@ -15,7 +15,7 @@ test.describe('Bond & Rewards. CRAP and widget transaction', async () => {
   });
 
   test.afterAll(async ({ widgetService }) => {
-    await test.step('Mock route for CRAP-Blacklisted wallet address', async () => {
+    await test.step('Mock route for Blacklisted wallet address', async () => {
       await widgetService.page.unrouteAll();
     });
   });

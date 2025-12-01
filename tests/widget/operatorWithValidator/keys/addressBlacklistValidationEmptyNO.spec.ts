@@ -20,7 +20,7 @@ test.describe('Operator with empty validator. Keys. CRAP and widget transaction'
   });
 
   test.afterAll(async ({ widgetService }) => {
-    await test.step('Mock route for CRAP-Blacklisted wallet address', async () => {
+    await test.step('Mock route for Blacklisted wallet address', async () => {
       await widgetService.page.unrouteAll();
     });
   });

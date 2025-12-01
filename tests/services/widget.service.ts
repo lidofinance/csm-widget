@@ -218,7 +218,7 @@ export class WidgetService {
   }
 
   async mockValidationAddressRequest(isValid = false) {
-    await test.step('Mock route for CRAP-Blacklisted wallet address', async () => {
+    await test.step('Mock route for Blacklisted wallet address', async () => {
       await this.page.route(`**/api/validation?address=*`, async (route) => {
         await route.fulfill({
           status: 200,
