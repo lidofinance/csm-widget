@@ -4,6 +4,7 @@ import { TxModal } from 'tests/pages/elements/common/element.txProgressModal';
 import { LOW_TIMEOUT } from 'tests/consts/timeouts';
 import { generateAddress } from 'tests/helpers/accountData';
 import { OFAC_MODAL_TEXT } from 'tests/consts/texts.const';
+import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe('Roles. Rewards Address. CRAP and widget transaction', async () => {
   let txModal: TxModal;
@@ -16,57 +17,57 @@ test.describe('Roles. Rewards Address. CRAP and widget transaction', async () =>
   });
 
   test.afterAll(async ({ widgetService }) => {
-    await test.step('Mock route for Blacklisted wallet address', async () => {
-      await widgetService.page.unrouteAll();
-      await widgetService.page.reload();
-      await widgetService.page.waitForTimeout(1000);
-      await widgetService.rolesPage.rewardsAddressPage.revokePendingRole();
-    });
+    await widgetService.page.unrouteAll();
+    await widgetService.page.reload();
+    await widgetService.page.waitForTimeout(1000);
+    await widgetService.rolesPage.rewardsAddressPage.revokePendingRole();
   });
 
-  test('Should open access denied modal after propose reward role', async ({
-    widgetService,
-  }) => {
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
-    await rewardsAddressPage.open();
+  test(
+    qase(293, 'Should open access denied modal after propose reward role'),
+    async ({ widgetService }) => {
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      await rewardsAddressPage.open();
 
-    const accountForRolesChanged = generateAddress();
+      const accountForRolesChanged = generateAddress();
 
-    await test.step('Propose new rewards address', async () => {
-      await rewardsAddressPage.addressInput.fill(accountForRolesChanged);
-      await widgetService.page.waitForTimeout(LOW_TIMEOUT);
-      await rewardsAddressPage.addressValidIcon.waitFor({
-        state: 'visible',
+      await test.step('Propose new rewards address', async () => {
+        await rewardsAddressPage.addressInput.fill(accountForRolesChanged);
+        await widgetService.page.waitForTimeout(LOW_TIMEOUT);
+        await rewardsAddressPage.addressValidIcon.waitFor({
+          state: 'visible',
+        });
+
+        await rewardsAddressPage.proposeButton.click();
+      });
+      await test.step('Check the warning OFAC modal', async () => {
+        await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
+      });
+    },
+  );
+
+  test(
+    qase(294, 'Should open access denied modal after revoke reward role'),
+    async ({ widgetService }) => {
+      await test.step('Mock route for Blacklisted wallet address', async () => {
+        await widgetService.page.unrouteAll();
+      });
+      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      await rewardsAddressPage.open();
+
+      const proposedAddress = generateAddress();
+      await rewardsAddressPage.proposeNewAddress(proposedAddress);
+
+      await widgetService.mockValidationAddressRequest();
+      await widgetService.page.reload();
+
+      await test.step('Revoke proposed manager address', async () => {
+        await rewardsAddressPage.revokeButton.click();
       });
 
-      await rewardsAddressPage.proposeButton.click();
-    });
-    await test.step('Check the warning OFAC modal', async () => {
-      await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
-    });
-  });
-
-  test('Should open access denied modal after revoke reward role', async ({
-    widgetService,
-  }) => {
-    await test.step('Mock route for Blacklisted wallet address', async () => {
-      await widgetService.page.unrouteAll();
-    });
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
-    await rewardsAddressPage.open();
-
-    const proposedAddress = generateAddress();
-    await rewardsAddressPage.proposeNewAddress(proposedAddress);
-
-    await widgetService.mockValidationAddressRequest();
-    await widgetService.page.reload();
-
-    await test.step('Revoke proposed manager address', async () => {
-      await rewardsAddressPage.revokeButton.click();
-    });
-
-    await test.step('Check the warning OFAC modal', async () => {
-      await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
-    });
-  });
+      await test.step('Check the warning OFAC modal', async () => {
+        await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
+      });
+    },
+  );
 });
