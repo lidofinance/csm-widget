@@ -8,7 +8,7 @@ import { ToastContainer } from '@lidofinance/lido-ui';
 import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
 import { Providers } from 'providers';
-import { BackgroundGradient } from 'shared/components';
+import { BackgroundGradient, SecurityStatusBanner } from 'shared/components';
 import { nprogress } from 'utils';
 import { AddressValidationFile } from 'utils';
 
@@ -54,6 +54,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       />
       <ToastContainer />
       <MemoApp {...rest} />
+      <SecurityStatusBanner />
     </Providers>
   );
 };

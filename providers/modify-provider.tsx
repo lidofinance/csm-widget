@@ -33,7 +33,7 @@ export const useModifyContext = () => {
   const value = useContext(ModifyContext);
   invariant(
     value !== null,
-    'useModifyContext was used used outside of ModifyContext',
+    'useModifyContext was used outside of ModifyContext',
   );
   return value;
 };

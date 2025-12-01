@@ -1,7 +1,5 @@
 import { PATH } from 'consts/urls';
 import {
-  GateSurveyAuth,
-  SurveyAuthProvider,
   SurveysContactsPage,
   SurveysExperiencePage,
   SurveysHomePage,
@@ -13,6 +11,7 @@ import { getProps } from 'utilsApi';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { SiweAuthProvider, SiweAuthGate } from 'shared/siwe';
 
 const Page = () => {
   const router = useRouter();
@@ -41,11 +40,12 @@ const Page = () => {
   return (
     <GateLoaded>
       <Gate rule="IS_SURVEYS_ACTIVE" fallback={<Navigate path={PATH.HOME} />}>
-        <SurveyAuthProvider>
-          <GateSurveyAuth fallback={<SurveysSignInPage />}>
-            {page}
-          </GateSurveyAuth>
-        </SurveyAuthProvider>
+        <SiweAuthProvider
+          storageKeyPrefix="surveys-token"
+          statement="Sign in to use the CSM Surveys"
+        >
+          <SiweAuthGate fallback={<SurveysSignInPage />}>{page}</SiweAuthGate>
+        </SiweAuthProvider>
       </Gate>
     </GateLoaded>
   );

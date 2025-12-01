@@ -2,21 +2,17 @@ import { Block, Text } from '@lidofinance/lido-ui';
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
 import { NoSSRWrapper, Stack, WhenLoaded } from 'shared/components';
+import { SiweAuthProvider, useSiweAuth } from 'shared/siwe';
 import { Connect, Fallback } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status';
 import { ProofStatus } from './form-status/proof-status';
-import {
-  IcsAuthProvider,
-  IcsStateProvider,
-  useAuth,
-  useIcsState,
-} from './shared';
+import { IcsStateProvider, useIcsState } from './shared';
 import { SiweSignIn } from './siwe-sign-in';
 
 const IcsApplyContent: FC = () => {
   const { isAccountActive } = useDappStatus();
-  const { token } = useAuth();
+  const { token } = useSiweAuth();
   const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
     useIcsState();
 
@@ -81,11 +77,14 @@ export const IcsApply: FC = () => {
   return (
     <NoSSRWrapper>
       {isWrongChain && <Fallback />}
-      <IcsAuthProvider>
+      <SiweAuthProvider
+        storageKeyPrefix="ics-token"
+        statement="Sign in to use the ICS Apply form"
+      >
         <IcsStateProvider>
           <IcsApplyContent />
         </IcsStateProvider>
-      </IcsAuthProvider>
+      </SiweAuthProvider>
     </NoSSRWrapper>
   );
 };

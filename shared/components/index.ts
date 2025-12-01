@@ -27,6 +27,7 @@ export { StepIndicator } from './step-indicator/step-indicator';
 export { KeysAvailable } from './keys-available/keys-available';
 export { YouWillReceive } from './you-will-receive/you-will-receive';
 export { InverseThemeProvider } from './inverse-theme-provider/inverse-theme-provider';
+export * from './security-status-banner';
 export * from './plurals';
 export * from './counter';
 export * from './status-comment';
