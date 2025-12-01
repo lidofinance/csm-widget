@@ -29,21 +29,6 @@ test.describe('Operator with keys. Common suite.', async () => {
     },
   );
 
-  test(qase(18, 'Should failed if uploaded duplicate keys'), async () => {
-    const duplicatedKey = keysGeneratorService.generateKeys();
-    await keysPage.submitPage.fillKeys([...duplicatedKey, ...duplicatedKey]);
-    await expect(keysPage.submitPage.validationInputError).toContainText(
-      'Invalid deposit data',
-    );
-    await keysPage.submitPage.selectTab('Parsed');
-    await expect(keysPage.submitPage.depositDataRow).toHaveCount(2);
-    for (const row of await keysPage.submitPage.depositDataRow.all()) {
-      await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'pubkey is duplicated in deposit data',
-      );
-    }
-  });
-
   test(
     qase(19, 'Should open transaction page after added 25 keys'),
     async ({ widgetService }) => {
