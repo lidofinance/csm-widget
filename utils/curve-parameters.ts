@@ -1,24 +1,10 @@
 import {
   CurveParameters,
+  findKeyInterval,
   KeyNumberValueInterval,
   NodeOperatorInfo,
   QueueConfig,
 } from '@lidofinance/lido-csm-sdk';
-
-/**
- * Find the value from an interval configuration for a specific key index
- * @param keyIndex - 1-based key index
- * @param intervals - Array of key number value intervals
- * @returns The interval that contains the key index, or undefined if not found
- */
-export const findValueInInterval = (
-  keyIndex: number,
-  intervals: KeyNumberValueInterval[],
-): KeyNumberValueInterval | undefined => {
-  return intervals.findLast(
-    (interval) => keyIndex >= Number(interval.minKeyNumber),
-  );
-};
 
 /**
  * Get bond amount for a specific key based on curve parameters
@@ -33,7 +19,7 @@ export const getBondAmountForKey = (
   existingKeysCount = 0,
 ): bigint => {
   const actualKeyIndex = existingKeysCount + keyIndex;
-  const interval = findValueInInterval(actualKeyIndex, bondConfig);
+  const interval = findKeyInterval(actualKeyIndex, bondConfig);
   return interval?.value ?? 0n;
 };
 
@@ -50,7 +36,7 @@ export const getFeeForKey = (
   existingKeysCount = 0,
 ): bigint => {
   const actualKeyIndex = existingKeysCount + keyIndex;
-  const interval = findValueInInterval(actualKeyIndex, rewardsConfig);
+  const interval = findKeyInterval(actualKeyIndex, rewardsConfig);
   return interval?.value ?? 0n;
 };
 

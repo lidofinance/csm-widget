@@ -13,6 +13,7 @@ import {
   LayoutTitleStyle,
   Main,
 } from './styles';
+import { LegalDisclaimer } from 'shared/components';
 
 type Props = {
   title?: ReactNode;
@@ -53,6 +54,7 @@ export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
           {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}
         </Heading>
         <Content>{children}</Content>
+        {!dummy && <LegalDisclaimer />}
       </Main>
       <Footer />
     </LayoutStyle>

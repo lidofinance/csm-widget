@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const SectionStyle = styled.section`
-  margin: ${({ theme }) => theme.spaceMap.xxl}px 0;
+  margin-top: ${({ theme }) => theme.spaceMap.xxl}px;
 `;
 
 export const SectionHeaderStyle = styled.div`

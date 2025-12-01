@@ -16,6 +16,7 @@ type SectionComponent = Component<
   }
 >;
 
+// used only in FAQ
 export const Section: SectionComponent = (props) => {
   const { title, headerDecorator, children, ...rest } = props;
   const hasDecorator = !!headerDecorator;
