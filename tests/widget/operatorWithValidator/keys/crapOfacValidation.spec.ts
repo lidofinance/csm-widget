@@ -5,8 +5,7 @@ import { KeysPage } from 'tests/pages';
 import { KeysGeneratorService } from 'tests/services/keysGenerator.service';
 import { TxModal } from 'tests/pages/elements/common/element.txProgressModal';
 import { LOW_TIMEOUT } from 'tests/consts/timeouts';
-
-const OFAC_MODAL_TEXT = 'Sorry, access is currently unavailable.';
+import { OFAC_MODAL_TEXT } from 'tests/consts/texts.const';
 
 test.describe('Operator with validator. Keys. CRAP and widget transaction', async () => {
   let txModal: TxModal;

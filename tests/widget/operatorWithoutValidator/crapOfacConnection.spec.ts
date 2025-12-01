@@ -4,10 +4,9 @@ import { TokenSymbol } from 'tests/consts/common.const';
 import { KeysGeneratorService } from 'tests/services/keysGenerator.service';
 import { TxModal } from 'tests/pages/elements/common/element.txProgressModal';
 import { LOW_TIMEOUT } from 'tests/consts/timeouts';
+import { OFAC_MODAL_TEXT } from 'tests/consts/texts.const';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
-
-const OFAC_MODAL_TEXT = 'Sorry, access is currently unavailable.';
 
 test.describe('Operator without validator. CRAP and widget transaction', async () => {
   let txModal: TxModal;

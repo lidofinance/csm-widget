@@ -1,8 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
 import { TxModal } from 'tests/pages/elements/common/element.txProgressModal';
-
-const OFAC_MODAL_TEXT = 'Sorry, access is currently unavailable.';
+import { OFAC_MODAL_TEXT } from 'tests/consts/texts.const';
 
 test.describe('Operator with validator. ICS & Survey CRAP and widget transaction', async () => {
   let txModal: TxModal;

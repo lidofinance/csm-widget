@@ -3,8 +3,7 @@ import { test } from '../../../test.fixture';
 import { TxModal } from 'tests/pages/elements/common/element.txProgressModal';
 import { LOW_TIMEOUT } from 'tests/consts/timeouts';
 import { generateAddress } from 'tests/helpers/accountData';
-
-const OFAC_MODAL_TEXT = 'Sorry, access is currently unavailable.';
+import { OFAC_MODAL_TEXT } from 'tests/consts/texts.const';
 
 test.describe('Roles. Rewards Address. CRAP and widget transaction', async () => {
   let txModal: TxModal;
