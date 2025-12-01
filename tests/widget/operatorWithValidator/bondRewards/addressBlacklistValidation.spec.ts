@@ -5,7 +5,7 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { OFAC_MODAL_TEXT } from 'tests/consts/texts.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 
-test.describe('Bond & Rewards. CRAP and widget transaction', async () => {
+test.describe('Bond & Rewards. Address blacklist validation', async () => {
   let txModal: TxModal;
 
   test.beforeAll(async ({ widgetService }) => {

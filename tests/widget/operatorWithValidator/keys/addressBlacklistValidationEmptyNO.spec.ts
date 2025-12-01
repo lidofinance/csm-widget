@@ -10,7 +10,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 
 test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
-test.describe('Operator with empty validator. Keys. CRAP and widget transaction', async () => {
+test.describe('Operator with empty validator. Keys. Address blacklist validation', async () => {
   let txModal: TxModal;
 
   test.beforeAll(async ({ widgetService }) => {

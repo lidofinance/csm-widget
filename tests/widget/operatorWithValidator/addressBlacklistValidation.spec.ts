@@ -4,7 +4,7 @@ import { TxModal } from 'tests/pages/elements/common/element.txProgressModal';
 import { OFAC_MODAL_TEXT } from 'tests/consts/texts.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 
-test.describe('Operator with validator. ICS & Survey CRAP and widget transaction', async () => {
+test.describe('Operator with validator. ICS & Survey. Address blacklist validation', async () => {
   let txModal: TxModal;
 
   test.beforeAll(async ({ widgetService }) => {

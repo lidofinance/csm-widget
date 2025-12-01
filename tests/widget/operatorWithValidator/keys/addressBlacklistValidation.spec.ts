@@ -8,7 +8,7 @@ import { LOW_TIMEOUT } from 'tests/consts/timeouts';
 import { OFAC_MODAL_TEXT } from 'tests/consts/texts.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 
-test.describe('Operator with validator. Keys. CRAP and widget transaction', async () => {
+test.describe('Operator with validator. Keys. Address blacklist validation', async () => {
   let txModal: TxModal;
 
   test.beforeAll(async ({ widgetService }) => {
@@ -23,7 +23,7 @@ test.describe('Operator with validator. Keys. CRAP and widget transaction', asyn
   });
 
   test(
-    qase(289, 'Should open access denied modal after added 1 key (CRAP-API)'),
+    qase(289, 'Should open access denied modal after added 1 key'),
     async ({ widgetService }) => {
       await test.step('Submit keys', async () => {
         const keysPage = new KeysPage(widgetService.page);

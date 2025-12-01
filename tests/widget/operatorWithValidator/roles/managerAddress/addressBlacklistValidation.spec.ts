@@ -6,7 +6,7 @@ import { generateAddress } from 'tests/helpers/accountData';
 import { OFAC_MODAL_TEXT } from 'tests/consts/texts.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 
-test.describe('Roles. Manager Address. CRAP and widget transaction', async () => {
+test.describe('Roles. Manager Address. Address blacklist validation', async () => {
   let txModal: TxModal;
 
   test.beforeAll(async ({ widgetService }) => {
