@@ -100,6 +100,22 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.validationInputError).toHaveText(
         `Item at index 0 is missing required field: ${propertyName}`,
       );
+
+      await test.step('Verify that other tabs and controls are disabled', async () => {
+        await expect(
+          keysPage.submitPage.formBlock.getByRole('button').getByText('Parsed'),
+        ).toBeDisabled();
+        await expect(
+          keysPage.submitPage.formBlock
+            .getByRole('button')
+            .getByText('Parameters'),
+        ).toBeDisabled();
+
+        await expect(keysPage.submitPage.amountInput).toBeDisabled();
+        await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
+        // @TODO: Fix it after bug fixed
+        // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
+      });
     });
   });
 
@@ -116,6 +132,22 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.validationInputError).toHaveText(
         `Item at index 0 is missing required field: ${propertyName}`,
       );
+
+      await test.step('Verify that other tabs and controls are disabled', async () => {
+        await expect(
+          keysPage.submitPage.formBlock.getByRole('button').getByText('Parsed'),
+        ).toBeDisabled();
+        await expect(
+          keysPage.submitPage.formBlock
+            .getByRole('button')
+            .getByText('Parameters'),
+        ).toBeDisabled();
+
+        await expect(keysPage.submitPage.amountInput).toBeDisabled();
+        await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
+        // @TODO: Fix it after bug fixed
+        // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
+      });
     });
   });
 
@@ -130,6 +162,22 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.validationInputError).toHaveText(
         `Item at index 2 is missing required field: ${propertyName}`,
       );
+
+      await test.step('Verify that other tabs and controls are disabled', async () => {
+        await expect(
+          keysPage.submitPage.formBlock.getByRole('button').getByText('Parsed'),
+        ).toBeDisabled();
+        await expect(
+          keysPage.submitPage.formBlock
+            .getByRole('button')
+            .getByText('Parameters'),
+        ).toBeDisabled();
+
+        await expect(keysPage.submitPage.amountInput).toBeDisabled();
+        await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
+        // @TODO: Fix it after bug fixed
+        // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
+      });
     });
   });
 });
