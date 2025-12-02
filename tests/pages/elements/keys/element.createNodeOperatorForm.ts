@@ -18,6 +18,10 @@ export class CreateNodeOperatorForm {
   amountInput: Locator;
   amountInputText: Locator;
   validationInputError: Locator;
+  specifyCustomAdresses: Locator;
+  extendedManagerPermissionsRadio: Locator;
+  customRewardAddressCurrentButton: Locator;
+  customManagerAddressCurrentButton: Locator;
 
   // Parsed tab
   depositDataRow: Locator;
@@ -38,6 +42,22 @@ export class CreateNodeOperatorForm {
     this.validationInputError = this.formBlock.getByTestId(
       'input-message-error',
     );
+    this.specifyCustomAdresses = this.formBlock.getByText(
+      'Specify custom addresses',
+    );
+    this.extendedManagerPermissionsRadio = this.formBlock
+      .locator(
+        'xpath=//input[@name="extendedManagerPermissions"]/ancestor::label',
+      )
+      .getByText('Extended');
+
+    this.customRewardAddressCurrentButton = this.formBlock
+      .locator('xpath=//input[@name="rewardsAddress"]/ancestor::label')
+      .getByRole('button', { name: 'Current' });
+
+    this.customManagerAddressCurrentButton = this.formBlock
+      .locator('xpath=//input[@name="managerAddress"]/ancestor::label')
+      .getByRole('button', { name: 'Current' });
 
     // Parsed tab
     this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');

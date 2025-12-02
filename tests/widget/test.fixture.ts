@@ -11,6 +11,7 @@ import { mnemonicToAccount } from 'viem/accounts';
 
 type WorkerFixtures = {
   secretPhrase: string;
+  autoConnectWallet: boolean;
   browserWithWallet: BrowserService;
   widgetService: WidgetService;
   csmSDK: LidoSDKClient;
@@ -21,6 +22,12 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   widgetConfig: async ({}, use) => {
     await use(widgetFullConfig);
   },
+  autoConnectWallet: [
+    async ({}, use) => {
+      await use(true);
+    },
+    { scope: 'worker' },
+  ],
   secretPhrase: [
     async ({}, use) => {
       await use(widgetFullConfig.accountConfig.SECRET_PHRASE);
@@ -64,12 +71,12 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
     { scope: 'worker' },
   ],
   widgetService: [
-    async ({ browserWithWallet }, use) => {
+    async ({ browserWithWallet, autoConnectWallet }, use) => {
       const ws = new WidgetService(
         browserWithWallet.getBrowserContextPage(),
         browserWithWallet.getWalletPage(),
       );
-      await ws.connectWallet();
+      if (autoConnectWallet) await ws.connectWallet();
       await use(ws);
     },
     { scope: 'worker' },
