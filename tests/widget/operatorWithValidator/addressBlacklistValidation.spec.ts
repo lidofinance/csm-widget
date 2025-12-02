@@ -15,9 +15,7 @@ test.describe('Operator with validator. ICS & Survey. Address blacklist validati
   });
 
   test.afterAll(async ({ widgetService }) => {
-    await test.step('Mock route for Blacklisted wallet address', async () => {
-      await widgetService.page.unrouteAll();
-    });
+    await widgetService.page.unrouteAll();
   });
 
   test(
