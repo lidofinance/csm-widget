@@ -1,14 +1,10 @@
 import { Block, Button, Text } from '@lidofinance/lido-ui';
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { MatomoLink, Stack } from 'shared/components';
-import { useAuth } from '../shared';
+import { useSiweAuth } from 'shared/siwe';
 
 export const SiweSignIn: FC = () => {
-  const { signIn } = useAuth();
-
-  const login = useCallback(() => {
-    void signIn();
-  }, [signIn]);
+  const { signIn } = useSiweAuth();
 
   return (
     <Block>
@@ -24,7 +20,7 @@ export const SiweSignIn: FC = () => {
           information, you must sign in to verify that you are the owner of the
           Reward or Manager address.
         </Text>
-        <Button size="sm" onClick={login} fullwidth>
+        <Button size="sm" onClick={signIn} fullwidth>
           Sign in
         </Button>
       </Stack>

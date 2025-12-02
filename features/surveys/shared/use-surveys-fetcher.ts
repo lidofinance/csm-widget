@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 import { FetcherError, standardFetcher } from 'utils';
-import { useAuth } from './survey-auth-provider';
+import { useSiweAuth } from 'shared/siwe';
 import { getExternalLinks } from 'consts/external-links';
 
 const { surveyApi } = getExternalLinks();
@@ -10,7 +10,7 @@ export const useSurveysFetcher = <T, R = T>(
   transformIncoming?: (d: R) => T,
   transformOutcoming?: (d: T) => R,
 ) => {
-  const { token, logout } = useAuth();
+  const { token, logout } = useSiweAuth();
 
   const handleError = useCallback(
     (err: unknown) => {

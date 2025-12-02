@@ -26,6 +26,11 @@ export const TableStyle = styled(Table)`
     }
   }
 
+  td:empty,
+  td:has(> span:empty) {
+    display: none;
+  }
+
   td:nth-child(3) {
     justify-self: center;
 

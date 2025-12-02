@@ -12,45 +12,53 @@ import {
 import { useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { extractError } from 'utils';
+import { AuthContextType } from './types';
 import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
-
-type AuthContextType = {
-  token?: string;
-  signIn: () => Promise<void>;
-  logout: () => void;
-};
-
-const AuthContext = createContext<AuthContextType>({} as AuthContextType);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  invariant(context, 'Attempt to use `useAuth` outside of provider');
-  return context;
-};
+import { useAddressValidation } from 'providers/address-validation-provider';
 
 const { surveyApi } = getExternalLinks();
 
-export const IcsAuthProvider: FC<PropsWithChildren> = ({ children }) => {
-  const siwe = useSiwe();
+const SiweAuthContext = createContext<AuthContextType | null>(null);
+
+export const useSiweAuth = () => {
+  const context = useContext(SiweAuthContext);
+  invariant(context, 'Attempt to use `useSiweAuth` outside of provider');
+  return context;
+};
+
+type SiweAuthProviderProps = {
+  storageKeyPrefix: string;
+  statement: string;
+};
+
+export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
+  storageKeyPrefix,
+  statement,
+  children,
+}) => {
+  const siwe = useSiwe({ statement });
   const { address } = useDappStatus();
   const [token, setToken] = useSessionStorage<string | undefined>(
-    `ics-token-${address}`,
+    `${storageKeyPrefix}-${address}`,
     undefined,
   );
 
   const { txModalStages: modalStages } = useModalStages();
   const { closeModal } = useModalActions();
+  const { validateAddress } = useAddressValidation();
 
   const signIn = useCallback(async () => {
+    // Validate address before signin - if address is not valid, don't signin
+    const result = await validateAddress(address);
+    if (!result) return;
+
     modalStages.sign();
 
     try {
       const payload = await siwe();
 
       modalStages.pending();
-      // TODO: lib to work with surveys API
-      // TODO: react-query signin examples
       const response = await fetch(`${surveyApi}/auth/signin`, {
         method: 'POST',
         headers: {
@@ -69,7 +77,7 @@ export const IcsAuthProvider: FC<PropsWithChildren> = ({ children }) => {
     } catch (e) {
       modalStages.rejected();
     }
-  }, [closeModal, modalStages, setToken, siwe]);
+  }, [address, closeModal, modalStages, setToken, siwe, validateAddress]);
 
   const logout = useCallback(() => {
     setToken(undefined);
@@ -84,5 +92,9 @@ export const IcsAuthProvider: FC<PropsWithChildren> = ({ children }) => {
     [logout, signIn, token],
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <SiweAuthContext.Provider value={value}>
+      {children}
+    </SiweAuthContext.Provider>
+  );
 };

@@ -121,6 +121,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   page500 = 'page500',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
+  // Rewards History
+  rewardsHistoryExport = 'rewardsHistoryExport',
   // modifiers
   visitWithModeExtended = 'visitWithModeExtended',
   visitWithReferrer = 'visitWithReferrer',
@@ -496,6 +498,11 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: createEvent(
     'Switch Node Operator',
     'switch_node_operator',
+  ),
+  // Rewards History
+  [MATOMO_CLICK_EVENTS_TYPES.rewardsHistoryExport]: createEvent(
+    'Push «Export all to CSV» button on Rewards History page',
+    'rewards_history_export',
   ),
   // Modifiers
   [MATOMO_CLICK_EVENTS_TYPES.visitWithModeExtended]: createEvent(
