@@ -82,8 +82,6 @@ jobs:
       TEST_TAGS: "forked"
       TEST_BRANCH: ${{ github.event.inputs.branch }}
       REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
-      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
-      DISCORD_DUTY_TAG: "&1372906915667116032"
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
       SLACK_DUTY_TAG: "S09H269H2TT"
 
@@ -96,7 +94,7 @@ jobs:
       GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
       GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
 
-      # Froked test envs
+      # Forked test envs
       USE_FORK: true
       DEPLOY_CONFIG: ./artifacts/hoodi/deploy-hoodi.json
       CHAIN: hoodi
