@@ -1,5 +1,6 @@
 import { PATH } from 'consts/urls';
 import { GateLoaded, Navigate } from 'shared/navigate';
+import { getProps } from 'utilsApi';
 
 const Page = () => (
   <GateLoaded>
@@ -8,3 +9,5 @@ const Page = () => (
 );
 
 export default Page;
+
+export const getServerSideProps = getProps();

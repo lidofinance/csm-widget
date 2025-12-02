@@ -1,15 +1,15 @@
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { useAuth } from './ics-auth-provider';
+import { useSiweAuth } from './siwe-auth-provider';
 
-type GateProps = {
+type SiweAuthGateProps = {
   fallback?: ReactNode;
 };
 
-export const GateIcsAuth: FC<PropsWithChildren<GateProps>> = ({
+export const SiweAuthGate: FC<PropsWithChildren<SiweAuthGateProps>> = ({
   fallback,
   children,
 }) => {
-  const { token } = useAuth();
+  const { token } = useSiweAuth();
   const canShow = !!token;
 
   return <>{canShow ? children : fallback}</>;

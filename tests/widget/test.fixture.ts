@@ -17,6 +17,7 @@ type WorkerFixtures = {
   secretPhrase: string;
   useFork: boolean;
 
+  autoConnectWallet: boolean;
   browserWithWallet: BrowserService;
   widgetService: WidgetService;
   csmSDK: LidoSDKClient;
@@ -38,6 +39,12 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
         cwd: process.env.JUST_DIR || './community-staking-module',
       });
       await use(svc);
+    },
+    { scope: 'worker' },
+  ],
+  autoConnectWallet: [
+    async ({}, use) => {
+      await use(true);
     },
     { scope: 'worker' },
   ],
@@ -97,12 +104,12 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
     { scope: 'worker', timeout: FORK_WARM_UP_TIMEOUT },
   ],
   widgetService: [
-    async ({ browserWithWallet }, use) => {
+    async ({ browserWithWallet, autoConnectWallet }, use) => {
       const ws = new WidgetService(
         browserWithWallet.getBrowserContextPage(),
         browserWithWallet.getWalletPage(),
       );
-      await ws.connectWallet();
+      if (autoConnectWallet) await ws.connectWallet();
       await use(ws);
     },
     { scope: 'worker' },
