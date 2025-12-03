@@ -32,9 +32,6 @@ export const AppFlagProvider: FC<PropsWithChildren> = ({ children }) => {
 
 export const useAppFlag = () => {
   const value = useContext(AppFlagContext);
-  invariant(
-    value !== null,
-    'useAppFlag was used used outside of AppFlagProvider',
-  );
+  invariant(value !== null, 'useAppFlag was used outside of AppFlagProvider');
   return value;
 };

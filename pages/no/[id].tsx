@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Layout } from 'shared/layout';
 import { SplashPage } from 'shared/navigate';
 import { getFirstParam } from 'utils';
+import { getProps } from 'utilsApi';
 
 const Page = () => {
   const { push, query } = useRouter();
@@ -32,3 +33,5 @@ const Page = () => {
 };
 
 export default Page;
+
+export const getServerSideProps = getProps();

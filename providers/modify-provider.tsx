@@ -1,7 +1,9 @@
 import { useFeatureFlags } from 'config/feature-flags';
 import {
+  FeatureFlagsType,
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
+  USE_WALLET_RPC,
 } from 'config/feature-flags/types';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
@@ -15,7 +17,7 @@ import {
 } from 'react';
 import { useSearchParams, useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { compareLowercase, trackMatomoEvent } from 'utils';
+import { compareLowercase, isTruthy, trackMatomoEvent } from 'utils';
 import { Address, isAddress } from 'viem';
 
 type ModifyContextValue = {
@@ -23,8 +25,12 @@ type ModifyContextValue = {
 };
 
 const QUERY_REFERRER = 'ref';
-const QUERY_ICS_APPLY = 'ics-apply';
-const QUERY_SURVEY_SETUP = 'survey-setup';
+
+const FEATURE_FLAG_QUERY_MAPPING: Record<string, keyof FeatureFlagsType> = {
+  'wallet-rpc': USE_WALLET_RPC,
+  'ics-apply': ICS_APPLY_FORM,
+  'survey-setup': SURVEYS_SETUP_ENABLED,
+};
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
 ModifyContext.displayName = 'ModifyContext';
@@ -33,7 +39,7 @@ export const useModifyContext = () => {
   const value = useContext(ModifyContext);
   invariant(
     value !== null,
-    'useModifyContext was used used outside of ModifyContext',
+    'useModifyContext was used outside of ModifyContext',
   );
   return value;
 };
@@ -64,23 +70,27 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [query, referrer, setReferrer]);
 
   useEffect(() => {
-    if (!query) return;
+    if (!query || !featureFlags) return;
 
-    const icsApplyParam = query?.get(QUERY_ICS_APPLY);
+    Object.entries(FEATURE_FLAG_QUERY_MAPPING).forEach(
+      ([queryParam, flagName]) => {
+        const queryValue = query.get(queryParam);
 
-    if (icsApplyParam && !featureFlags?.[ICS_APPLY_FORM]) {
-      featureFlags?.setFeatureFlag(ICS_APPLY_FORM, true);
-    }
-  }, [query, featureFlags]);
+        if (queryValue !== null) {
+          const shouldEnable = isTruthy(queryValue);
+          const currentValue = featureFlags[flagName];
 
-  useEffect(() => {
-    if (!query) return;
-
-    const surveySetupParam = query?.get(QUERY_SURVEY_SETUP);
-
-    if (surveySetupParam && !featureFlags?.[SURVEYS_SETUP_ENABLED]) {
-      featureFlags?.setFeatureFlag(SURVEYS_SETUP_ENABLED, true);
-    }
+          // Only update if the value differs from current state
+          if (shouldEnable !== currentValue) {
+            // eslint-disable-next-line no-console
+            console.log(
+              `[Feature Flag] ${shouldEnable ? 'Enabling' : 'Disabling'} "${flagName}" via query parameter "${queryParam}=${queryValue}"`,
+            );
+            featureFlags.setFeatureFlag(flagName, shouldEnable);
+          }
+        }
+      },
+    );
   }, [query, featureFlags]);
 
   const value: ModifyContextValue = useMemo(
