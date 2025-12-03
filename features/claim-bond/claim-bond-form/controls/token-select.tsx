@@ -6,7 +6,6 @@ import { PATH } from 'consts/urls';
 import { useController, useWatch } from 'react-hook-form';
 import {
   FormTitle,
-  MatomoLink,
   Note,
   Stack,
   TokenAmount,
@@ -112,18 +111,10 @@ export const TokenSelect: React.FC = () => {
       {isContract && (
         <>
           <Note>
-            The Rewards Address of your Node Operator is a splitter contract. It
-            is strongly recommended to claim bond and rewards in wstETH only.
-            ETH withdrawal NFT is not compatible with the splitter, while a
-            rebasing token like stETH may not receive incremental rewards. More
-            information can be found in the{' '}
-            <MatomoLink
-              href="https://docs.splits.org/core/split#how-it-works"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.splitsOrgDocumentation}
-            >
-              splits.org documentation
-            </MatomoLink>
-            .
+            The Rewards Address of your Node Operator seems to be a smart
+            contract. Please ensure the smart contract you use for the Reward
+            Address is compatible with the chosen token for claiming of your
+            bond/rewards.
           </Note>
           <Checkbox
             label="I am fully aware of the risks and want to claim rewards in ETH/stETH anyway"
