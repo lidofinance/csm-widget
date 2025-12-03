@@ -18,8 +18,7 @@ const keysStatusesExpectedComments = [
   {
     status: 'Active',
     defaultCommentText: undefined,
-    commentTextWithStrikes:
-      'Check out the tips on how to improve your performance',
+    commentTextWithStrikes: 'Check out tips on how to improve your performance',
   },
   {
     status: 'Withdrawn',
