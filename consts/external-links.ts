@@ -29,7 +29,7 @@ export const SUBSCRIBE_EVENTS_LINK =
 export const OPERATOR_TYPES_LINK =
   'https://docs.lido.fi/staking-modules/csm/join-csm/#node-operator-types';
 export const FEE_RECIPIENT_LINK =
-  'https://docs.lido.fi/run-on-lido/csm/troubleshooting/setting-the-fee-recipient-for-csm-validators/verifying-fee-recipient-for-csm-validators#what-to-do-if-fee-recipient-is-wrong';
+  'https://docs.lido.fi/run-on-lido/csm/troubleshooting/setting-the-fee-recipient-for-csm-validators/#change-fee-recipient-on-existing-validator-keys';
 
 // Lido Operator Portal links
 export const LIDO_OPERATOR_PORTAL_BASE =
