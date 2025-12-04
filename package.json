@@ -13,8 +13,9 @@
     "lint:fix": "yarn lint --fix",
     "types": "tsc --noEmit",
     "postinstall": "husky install || true",
-    "test": "yarn test:e2e",
     "test:unit": "jest",
+    "test:setup": "npx playwright install chromium && ./tests/scripts/set_up_keys_generator.sh && yarn test:setup:fork",
+    "test:setup:fork": "./tests/scripts/install_foundry.sh",
     "test:e2e": "playwright test"
   },
   "dependencies": {

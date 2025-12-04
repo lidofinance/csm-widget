@@ -172,7 +172,7 @@ jobs:
           echo -e "🔗 Test Plan: \033[1;34m${QASE_PLAN_ID}\033[0m"
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 
-          xvfb-run --auto-servernum -- yarn test
+          xvfb-run --auto-servernum -- yarn test:e2e
 
       - uses: actions/upload-artifact@v4
         if: always()
