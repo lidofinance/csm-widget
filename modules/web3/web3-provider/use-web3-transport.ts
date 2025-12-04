@@ -124,6 +124,7 @@ const runtimeMutableTransport = (
 export const useWeb3Transport = (
   supportedChains: Chain[],
   backendRpcMap: Record<number, string>,
+  useWalletRpc = false,
 ) => {
   const { transportMap, setTransportMap } = useMemo(() => {
     const batchConfig = {
@@ -168,6 +169,7 @@ export const useWeb3Transport = (
       for (const chain of supportedChains) {
         const setTransport = setTransportMap[chain.id];
         if (
+          useWalletRpc &&
           activeConnection &&
           chain.id === activeConnection.chainId &&
           activeConnection.connector.type === 'injected'
@@ -180,7 +182,7 @@ export const useWeb3Transport = (
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setTransportMap, supportedChains],
+    [setTransportMap, supportedChains, useWalletRpc],
   );
 
   return { transportMap, onActiveConnection };
