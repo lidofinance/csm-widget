@@ -90,13 +90,16 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
     component: AlertWrongFeeRecipient,
     shouldShow:
       !!keysWithWrongFeeRecipient?.length && !isFeeRecipientAlertDismissed,
-    props: {
-      pubkeys: keysWithWrongFeeRecipient || [],
-      onClose: () => {
-        dismissFeeRecipientAlert();
-        closeAlert(AlertWrongFeeRecipient);
-      },
-    },
+    props: useMemo(
+      () => ({
+        pubkeys: keysWithWrongFeeRecipient || [],
+        onClose: () => {
+          dismissFeeRecipientAlert();
+          closeAlert(AlertWrongFeeRecipient);
+        },
+      }),
+      [closeAlert, dismissFeeRecipientAlert, keysWithWrongFeeRecipient],
+    ),
   });
 
   return <>{children}</>;
