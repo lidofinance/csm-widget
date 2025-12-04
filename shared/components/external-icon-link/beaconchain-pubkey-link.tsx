@@ -7,12 +7,10 @@ import { MatomoLink } from '../matomo-link/matomo-link';
 
 const { beaconchain } = getExternalLinks();
 
-export const BeaconchainPubkeyLink: FC<
-  Pick<KeyWithStatus, 'pubkey' | 'validatorIndex'>
-> = ({ pubkey, validatorIndex }) => {
+export const BeaconchainPubkeyLink: FC<Pick<KeyWithStatus, 'pubkey'>> = ({
+  pubkey,
+}) => {
   const href = beaconchain ? `${beaconchain}/validator/${pubkey}` : '';
-
-  if (!validatorIndex) return null;
 
   return (
     <>
