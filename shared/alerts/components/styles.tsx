@@ -1,4 +1,4 @@
-import { CheckLarge, Input, Select } from '@lidofinance/lido-ui';
+import { Button, CheckLarge, Input, Select } from '@lidofinance/lido-ui';
 import { CloseButton } from 'shared/components/copy-button/close-button';
 import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
@@ -50,4 +50,13 @@ export const SuccessIcon = styled(CheckLarge)`
   border: 2px solid var(--lido-color-success);
   border-radius: 50%;
   color: var(--lido-color-success);
+`;
+
+export const AlertButton = styled(Button).attrs({
+  size: 'xs',
+  color: 'secondary',
+})`
+  width: fit-content;
+  white-space: break-spaces;
+  line-height: ${({ theme }) => theme.fontSizesMap.sm}px;
 `;
