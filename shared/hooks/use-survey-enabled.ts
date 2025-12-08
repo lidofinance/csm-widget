@@ -2,28 +2,37 @@ import {
   addQuarters,
   addWeeks,
   differenceInMonths,
+  formatISO,
   isAfter,
   isBefore,
+  isValid,
+  parseISO,
   startOfQuarter,
   startOfWeek,
   subSeconds,
   subWeeks,
 } from 'date-fns';
 import { useNodeOperatorId } from 'modules/web3';
-import { useDismiss } from './use-dismiss';
+import { useCallback } from 'react';
+import { useLocalStorage } from './use-local-storage';
 import { useSurveysFilled } from './use-surveys-filled';
 import { useShowFlags } from './use-show-rule';
 
 export const useSurveyEnabled = (skipClosed = false) => {
-  const { end, isActive } = getSurveyDates();
+  const { start, isActive } = getSurveyDates();
   const { IS_SURVEYS_ACTIVE } = useShowFlags();
 
   const nodeOperatorId = useNodeOperatorId();
-
-  const { isDismissed: isClosed, dismiss: onClose } = useDismiss(
+  const [closedAt, setClosedAt] = useLocalStorage(
     `surveys-cta-closed-${nodeOperatorId}`,
-    end,
+    '',
   );
+  const closedDate = parseISO(closedAt);
+  const isClosed = isValid(closedDate) && isAfter(closedDate, start);
+
+  const onClose = useCallback(() => {
+    setClosedAt(formatISO(new Date(), { representation: 'date' }));
+  }, [setClosedAt]);
 
   const { data: filled } = useSurveysFilled(
     IS_SURVEYS_ACTIVE && isActive && (!isClosed || skipClosed)

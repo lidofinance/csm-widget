@@ -79,8 +79,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   transferKeysLinkAlert = 'transferKeysLinkAlert',
   unlockBondLinkAlert = 'unlockBondLinkAlert',
   claimIcsLinkAlert = 'claimIcsLinkAlert',
-  feeRecipientDocsLink = 'feeRecipientDocsLink',
-  feeRecipientDismissButton = 'feeRecipientDismissButton',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -339,14 +337,6 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert]: createEvent(
     'Click «Claim ICS» link on Claim ICS alert',
     'claim_ics_link_alert',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.feeRecipientDocsLink]: createEvent(
-    'Click «How to change feeRecipient» link on Wrong Fee Recipient alert',
-    'fee_recipient_docs_link_alert',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.feeRecipientDismissButton]: createEvent(
-    "Click «I've changed the feeRecipient» button on Wrong Fee Recipient alert",
-    'fee_recipient_dismiss_button_alert',
   ),
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: createEvent(

@@ -1,9 +1,9 @@
+import { Button } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { Alert } from './alert';
-import { AlertButton } from './styles';
 
 export const AlertNomalizeQueue: FC = () => (
   <Alert title="You have unqueued keys">
@@ -16,7 +16,9 @@ export const AlertNomalizeQueue: FC = () => (
       href={PATH.KEYS_NORMALIZE}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert}
     >
-      <AlertButton>Normalize queue</AlertButton>
+      <Button size="xs" color="secondary">
+        Normalize queue
+      </Button>
     </LocalLink>
   </Alert>
 );

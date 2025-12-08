@@ -6,7 +6,7 @@ import { ConfigProvider } from 'config';
 import { GlobalStyle } from 'styles';
 
 import { NodeOperatorPrivider, Web3Provider } from 'modules/web3';
-import { AlertProvider, AlertsWatcherProvider } from 'shared/alerts';
+import { AlertProvider, AlertsWatcherPrivider } from 'shared/alerts';
 import { GateSupported } from 'shared/navigate';
 import { AddressValidationFile, hashKey } from 'utils';
 import { AddressValidationProvider } from './address-validation-provider';
@@ -55,9 +55,9 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                             {skipWatcher ? (
                               children
                             ) : (
-                              <AlertsWatcherProvider>
+                              <AlertsWatcherPrivider>
                                 {children}
-                              </AlertsWatcherProvider>
+                              </AlertsWatcherPrivider>
                             )}
                           </ModalProvider>
                         </NodeOperatorPrivider>

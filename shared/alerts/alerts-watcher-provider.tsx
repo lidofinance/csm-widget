@@ -1,27 +1,24 @@
 import { KEY_STATUS, ROLES } from '@lidofinance/lido-csm-sdk';
-import { ALERT_FEE_RECIPIENT_DISMISS_HOURS, PATH } from 'consts';
 import {
   useNodeOperator,
   useOperatorBalance,
   useOperatorInfo,
   useOperatorKeysWithStatus,
 } from 'modules/web3';
-import { useOperatorKeysWithWrongFeeRecipient } from 'modules/web3/hooks';
-import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
-import { useRouter } from 'next/router';
-import { FC, PropsWithChildren, useMemo } from 'react';
-import { useCanClaimICS, useDismiss } from 'shared/hooks';
+import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
+import { useCanClaimICS } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
-import { AlertClaimIcs } from './components/alert-claim-ics';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
 import { AlertTransferKeys } from './components/alert-transfer-keys';
-import { AlertWrongFeeRecipient } from './components/alert-wrong-fee-recipient';
-import { useAlertWatcher } from './use-alert-watcher';
+import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
+import { AlertClaimIcs } from './components/alert-claim-ics';
+import { useRouter } from 'next/router';
+import { PATH } from 'consts';
 
-export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { closeAlert } = useAlertActions();
+export const AlertsWatcherPrivider: FC<PropsWithChildren> = ({ children }) => {
+  const { showAlert, closeAlert } = useAlertActions();
 
   const { nodeOperator } = useNodeOperator();
   const { data: info } = useOperatorInfo(nodeOperator?.id);
@@ -49,58 +46,47 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
     [keysWithStatus],
   );
 
-  const { data: keysWithWrongFeeRecipient } =
-    useOperatorKeysWithWrongFeeRecipient(nodeOperator?.id);
+  useEffect(() => {
+    if (!isKeysLoading) {
+      if (hasRequestsToExit) {
+        showAlert(AlertRequestToExit);
+      } else {
+        closeAlert(AlertRequestToExit);
+      }
+    }
+  }, [closeAlert, hasRequestsToExit, isKeysLoading, showAlert]);
 
-  const {
-    isDismissed: isFeeRecipientAlertDismissed,
-    dismiss: dismissFeeRecipientAlert,
-  } = useDismiss(
-    `alert-fee-recipient-dismissed-${nodeOperator?.id}`,
-    ALERT_FEE_RECIPIENT_DISMISS_HOURS,
-  );
+  useEffect(() => {
+    if (normalizeQueue) {
+      showAlert(AlertNomalizeQueue);
+    } else {
+      closeAlert(AlertNomalizeQueue);
+    }
+  }, [closeAlert, normalizeQueue, showAlert]);
 
-  useAlertWatcher({
-    component: AlertRequestToExit,
-    shouldShow: !!hasRequestsToExit,
-    loading: isKeysLoading,
-  });
+  useEffect(() => {
+    if (keysToTransfer) {
+      showAlert(AlertTransferKeys);
+    } else {
+      closeAlert(AlertTransferKeys);
+    }
+  }, [closeAlert, keysToTransfer, showAlert]);
 
-  useAlertWatcher({
-    component: AlertNomalizeQueue,
-    shouldShow: !!normalizeQueue,
-  });
+  useEffect(() => {
+    if (balance?.locked) {
+      showAlert(AlertLockedBond);
+    } else {
+      closeAlert(AlertLockedBond);
+    }
+  }, [balance?.locked, closeAlert, showAlert]);
 
-  useAlertWatcher({
-    component: AlertTransferKeys,
-    shouldShow: !!keysToTransfer,
-  });
-
-  useAlertWatcher({
-    component: AlertLockedBond,
-    shouldShow: !!balance?.locked,
-  });
-
-  useAlertWatcher({
-    component: AlertClaimIcs,
-    shouldShow: canClaimICS && route !== PATH.TYPE_CLAIM,
-  });
-
-  useAlertWatcher({
-    component: AlertWrongFeeRecipient,
-    shouldShow:
-      !!keysWithWrongFeeRecipient?.length && !isFeeRecipientAlertDismissed,
-    props: useMemo(
-      () => ({
-        pubkeys: keysWithWrongFeeRecipient || [],
-        onClose: () => {
-          dismissFeeRecipientAlert();
-          closeAlert(AlertWrongFeeRecipient);
-        },
-      }),
-      [closeAlert, dismissFeeRecipientAlert, keysWithWrongFeeRecipient],
-    ),
-  });
+  useEffect(() => {
+    if (canClaimICS && route !== PATH.TYPE_CLAIM) {
+      showAlert(AlertClaimIcs);
+    } else {
+      closeAlert(AlertClaimIcs);
+    }
+  }, [canClaimICS, closeAlert, route, showAlert]);
 
   return <>{children}</>;
 };

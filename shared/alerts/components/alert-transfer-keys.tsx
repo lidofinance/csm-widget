@@ -1,9 +1,9 @@
+import { Button } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { Alert } from './alert';
-import { AlertButton } from './styles';
 
 export const AlertTransferKeys: FC = () => (
   <Alert title="You have keys available to be transferred to priority queue">
@@ -16,7 +16,9 @@ export const AlertTransferKeys: FC = () => (
       href={PATH.KEYS_TRANSFER}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.transferKeysLinkAlert}
     >
-      <AlertButton>Go to Transfer keys tab</AlertButton>
+      <Button size="xs" color="secondary">
+        Go to Transfer keys tab
+      </Button>
     </LocalLink>
   </Alert>
 );

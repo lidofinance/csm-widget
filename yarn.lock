@@ -3078,23 +3078,23 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.47.0.tgz#186d6e2695c9470cc171d111dac352da5106e681"
   integrity sha512-dF8eUUnK35CNCVa3Z++INtlxlRlYKGx2//eLz7nyFkqwPoOGI0PmVW0qgGiGY9TrGAqkJuXlERszclH8eunYCw==
 
-"@lidofinance/lido-csm-sdk@^1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-1.9.0.tgz#b71e17e9ecdc4f1dbf9932541ac5136c78805081"
-  integrity sha512-XHmZEP/N2VUQ5SN3wsKHPkmkQOyZ+A7zmiux/Hg0GWEF9y1r9+g/uFZQg4yEAz6P27mJJV5HmxBLtZSYuTGZxg==
+"@lidofinance/lido-csm-sdk@1.8.0-alpha.4":
+  version "1.8.0-alpha.4"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-1.8.0-alpha.4.tgz#e6d09ac5e2db814658378c7e9f32c23f96ad8685"
+  integrity sha512-/zQNAT91UYjEU/TE5373VBS/gLRnV7nJk7sSJ5p+rux6dit9ydK75HY6SDAAGAf+q25EUJF6ekmHc2cFYnq6Pg==
   dependencies:
     "@chainsafe/ssz" "^1.2.2"
-    "@lidofinance/lido-ethereum-sdk" "^4.5.1"
+    "@lidofinance/lido-ethereum-sdk" "^4.4.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
     bls-eth-wasm "^1.4.0"
     json-with-bigint "^3.4.4"
     viem "^2.26.0"
     zod "^4.1.12"
 
-"@lidofinance/lido-ethereum-sdk@^4.5.1":
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-ethereum-sdk/-/lido-ethereum-sdk-4.5.1.tgz#41d229c6d6d665a6c9fcaf3371408641e7c2b1b6"
-  integrity sha512-bR3oJSmYiFyiUXLGA9+W/swsWU9hvckHQVIrcCLEownRmKfes3Xec7UMSq0BSTgudgnskWi90kECwUw1kQkNvA==
+"@lidofinance/lido-ethereum-sdk@^4.4.0":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-ethereum-sdk/-/lido-ethereum-sdk-4.4.0.tgz#7b015dad29610c03d191ebe9631ad6ee9497b96c"
+  integrity sha512-Kw4Yr+UWUlkQVrJCyUvAyXP77A4puwdgMgQ3/LkiOYkhZEl+Zzx29rjBGKGc3AcnRz3MbnNIqatBSm9PFSKkRg==
   dependencies:
     "@ethersproject/bytes" "^5.7.0"
     graphql "^16.8.1"
@@ -12857,9 +12857,9 @@ zod@3.22.4:
   integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==
 
 zod@^4.1.12:
-  version "4.1.13"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.13.tgz#93699a8afe937ba96badbb0ce8be6033c0a4b6b1"
-  integrity sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==
+  version "4.1.12"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.12.tgz#64f1ea53d00eab91853195653b5af9eee68970f0"
+  integrity sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==
 
 zustand@5.0.0:
   version "5.0.0"
