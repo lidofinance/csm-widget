@@ -6,7 +6,10 @@ import SantaSrc from 'assets/decor/santa.svg';
 import SnowSrc from 'assets/decor/snow.svg';
 
 import DecorLeft from 'assets/decor/decor-1.svg';
+import DecorLeftDark from 'assets/decor/decor-1-dark.svg';
 import DecorRight from 'assets/decor/decor-2.svg';
+import DecorRightDark from 'assets/decor/decor-2-dark.svg';
+import { ThemeName } from '@lidofinance/lido-ui';
 
 export const DecorWrapper = styled.div`
   position: relative;
@@ -27,19 +30,19 @@ const DecorStyle = styled.img`
   }
 `;
 
-export const DecorLeftStyle = styled(DecorStyle).attrs({
+export const DecorLeftStyle = styled(DecorStyle).attrs(({ theme }) => ({
   alt: 'Decor Left',
-  src: DecorLeft,
-})`
+  src: theme.name === ThemeName.dark ? DecorLeftDark : DecorLeft,
+}))`
   top: -40px;
   left: -25px;
   transform-origin: top left;
 `;
 
-export const DecorRightStyle = styled(DecorStyle).attrs({
+export const DecorRightStyle = styled(DecorStyle).attrs(({ theme }) => ({
   alt: 'Decor Right',
-  src: DecorRight,
-})`
+  src: theme.name === ThemeName.dark ? DecorRightDark : DecorRight,
+}))`
   right: -30px;
   top: -18px;
   transform-origin: top right;
