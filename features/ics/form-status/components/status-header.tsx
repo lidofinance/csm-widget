@@ -153,8 +153,8 @@ const useHint = (
     case status === 'REVIEW':
       return (
         <Text size="xs">
-          The application will not be assessed until November. You cannot change
-          the application while it is being reviewed
+          The application will be evaluated in December. You cannot change the
+          application while it is being reviewed
         </Text>
       );
     case status === 'APPROVED':

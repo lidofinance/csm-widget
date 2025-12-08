@@ -8,7 +8,6 @@ export enum ErrorCode {
   ENABLE_BLIND_SIGNING = 'ENABLE_BLIND_SIGNING',
   LIMIT_REACHED = 'LIMIT_REACHED',
   DEVICE_LOCKED = 'DEVICE_LOCKED',
-  INVALID_REFERRAL = 'INVALID_REFERRAL',
   INVALID_SIGNATURE = 'INVALID_SIGNATURE',
   BALANCE_EXCEEDED = 'BALANCE_EXCEEDED',
   WALLET_RPC = 'WALLET_RPC',
@@ -47,8 +46,6 @@ export const getErrorCode = (error: unknown): ErrorCode => {
       return ErrorCode.DENIED_SIG;
     case 'LIMIT_REACHED':
       return ErrorCode.LIMIT_REACHED;
-    case 'INVALID_REFERRAL':
-      return ErrorCode.INVALID_REFERRAL;
     case 'TRANSACTION_REVERTED':
       return ErrorCode.TRANSACTION_REVERTED;
     case 'ENABLE_BLIND_SIGNING':
@@ -81,7 +78,6 @@ export const extractCodeFromError = (
 
   if ('reason' in error && typeof error.reason == 'string') {
     if (error.reason.includes('STAKE_LIMIT')) return 'LIMIT_REACHED';
-    if (error.reason.includes('INVALID_REFERRAL')) return 'INVALID_REFERRAL';
     if (error.reason.includes('INVALID_SIGNATURE')) return 'INVALID_SIGNATURE';
     if (error.reason.includes('BALANCE_EXCEEDED')) return 'BALANCE_EXCEEDED';
   }
@@ -99,6 +95,15 @@ export const extractCodeFromError = (
       normalizedMessage.includes('transaction declined')
     )
       return 'ACTION_REJECTED';
+  }
+
+  // SDK errors use errorMessage instead of message
+  if ('errorMessage' in error && typeof error.errorMessage === 'string') {
+    if (error.errorMessage.includes('BALANCE_EXCEEDED'))
+      return 'BALANCE_EXCEEDED';
+    if (error.errorMessage.includes('STAKE_LIMIT')) return 'LIMIT_REACHED';
+    if (error.errorMessage.includes('INVALID_SIGNATURE'))
+      return 'INVALID_SIGNATURE';
   }
 
   // Ledger live errors

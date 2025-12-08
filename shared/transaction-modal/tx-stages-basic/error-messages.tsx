@@ -12,7 +12,6 @@ export const ErrorMessages: Record<ErrorCode, ReactNode> = {
   [ErrorCode.LIMIT_REACHED]:
     'Transaction could not be completed because stake limit is exhausted. Please wait until the stake limit restores and try again. Otherwise, you can swap your Ethereum on 1inch platform instantly.',
   [ErrorCode.DEVICE_LOCKED]: 'Please unlock your Ledger hardware wallet.',
-  [ErrorCode.INVALID_REFERRAL]: 'Invalid referral address or ENS.',
   [ErrorCode.INVALID_SIGNATURE]:
     'Invalid Permit signature. Perhaps it has expired or already been used. Try submitting the request again.',
   [ErrorCode.BALANCE_EXCEEDED]:

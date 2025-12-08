@@ -12,14 +12,11 @@ export const StrikesTable: FC = () => {
 
   return (
     <List>
-      {data.map(({ pubkey, strikes, validatorIndex }) => (
-        <Row key={pubkey}>
-          <Pubkey
-            pubkey={pubkey}
-            link={<PubkeyLinks {...{ pubkey, validatorIndex }} />}
-          />
-          <KeyStrikes strikes={strikes} />
-          <LastStrike strikes={strikes} />
+      {data.map((key) => (
+        <Row key={key.pubkey}>
+          <Pubkey pubkey={key.pubkey} link={<PubkeyLinks {...key} />} />
+          <KeyStrikes strikes={key.strikes} />
+          <LastStrike strikes={key.strikes} />
         </Row>
       ))}
     </List>

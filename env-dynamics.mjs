@@ -52,3 +52,9 @@ export const addressApiValidationEnabled =
 
 /** @type string */
 export const validationFilePath = process.env.VALIDATION_FILE_PATH;
+
+/** @type string */
+export const keysApiUrl = process.env.KEYS_API_URL;
+
+/** @type string */
+export const feesMonitoringApiUrl = process.env.FEES_MONITORING_API_URL;

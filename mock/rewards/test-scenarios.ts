@@ -1,5 +1,8 @@
 import { MockScenarioData } from './mock-data';
-import { data } from './data';
+import { data as _data } from './data';
+import { OperatorRewardsHistory } from '@lidofinance/lido-csm-sdk';
+
+const data = _data as OperatorRewardsHistory;
 
 export type TestScenario = {
   title: string;
