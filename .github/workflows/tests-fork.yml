@@ -4,6 +4,11 @@ run-name: Forked CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 't
 on:
   schedule:
     - cron: "0 6 * * *" # Every day at 6 AM UTC
+
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches-ignore:
+      - main
   workflow_dispatch:
     inputs:
       stand_type:
