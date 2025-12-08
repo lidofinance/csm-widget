@@ -1,0 +1,1 @@
+export const ALERT_FEE_RECIPIENT_DISMISS_HOURS = 10;
