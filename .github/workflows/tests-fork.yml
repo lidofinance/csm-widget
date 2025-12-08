@@ -68,7 +68,7 @@ jobs:
       WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
       EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
       EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
-      STAND_TYPE: ${{ inputs.stand_type || 'testnet' }}
+      STAND_TYPE: ${{ inputs.stand_type || github.event.inputs.STAND_TYPE || 'testnet' }}
 
       # Common envs
       QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
@@ -150,14 +150,14 @@ jobs:
       #   run: bash ./tests/scripts/set_up_keys_generator.sh
 
       - name: Set up preview-stand credentials
-        if: ${{ inputs.stand_type  == 'preview' }}
+        if: ${{ inputs.stand_type  == 'preview' || github.event.inputs.stand_type == 'preview' }}
         run: |
-          if [ -n "${{ inputs.preview_stand_url }}" ]; then
+          if [ -n "${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" ]; then
             echo "Setting login and password for preview stand"
             echo "PREVIEW_STAND_LOGIN=${{ secrets.PREVIEW_STAND_LOGIN }}" >> $GITHUB_ENV
             echo "PREVIEW_STAND_PASSWORD=${{ secrets.PREVIEW_STAND_PASSWORD }}" >> $GITHUB_ENV
-            echo "PREVIEW_STAND_URL=${{ inputs.preview_stand_url }}" >> $GITHUB_ENV
-            echo "PREVIEW_STAND_ENV=${{ inputs.preview_stand_env }}" >> $GITHUB_ENV
+            echo "PREVIEW_STAND_URL=${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" >> $GITHUB_ENV
+            echo "PREVIEW_STAND_ENV=${{ github.event.inputs.preview_stand_env }}" >> $GITHUB_ENV
           else
             echo "PREVIEW_STAND_URL not provided for preview environment"
             exit 1
