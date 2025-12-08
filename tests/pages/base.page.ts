@@ -1,6 +1,9 @@
 import { Locator, Page, test } from '@playwright/test';
 import { Header } from './elements/common/element.header';
-import { COMMON_ACTION_TIMEOUT, RPC_WAIT_TIMEOUT } from 'tests/consts/timeouts';
+import {
+  RPC_WAIT_TIMEOUT,
+  WALLET_PAGE_TIMEOUT_WAITER,
+} from 'tests/consts/timeouts';
 import { ConnectWalletModal } from './elements/common/element.connectWalletModal';
 import { waitForCallback } from 'tests/helpers/tests';
 
@@ -30,12 +33,12 @@ export class BasePage {
       await test.step('Wait for balance to load', async () => {
         if (Array.isArray(textLocatorForWaiting)) {
           for (const locator of textLocatorForWaiting) {
-            await this.waitForTextContent(locator, COMMON_ACTION_TIMEOUT);
+            await this.waitForTextContent(locator, 180000);
           }
         } else {
           await this.waitForTextContent(
             textLocatorForWaiting,
-            COMMON_ACTION_TIMEOUT,
+            WALLET_PAGE_TIMEOUT_WAITER,
           );
         }
       });

@@ -1,5 +1,5 @@
-name: Test CSM-widget
-run-name: CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
+name: Forked Test CSM-widget
+run-name: Forked CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
   schedule:
@@ -12,19 +12,8 @@ on:
         type: choice
         default: testnet
         options:
-          - prod
-          - staging
           - testnet
           - preview
-      tags:
-        description: "Tags for running test suite"
-        required: false
-        type: choice
-        default: "-"
-        options:
-          - "-"
-          - smoke
-          - performTX
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
         required: false
@@ -37,29 +26,41 @@ on:
         options:
           - testnet
           - infra
-  workflow_call:
-    inputs:
-      preview_stand_url:
-        required: true
-        type: string
-        description: Stand url
-      stand_type:
-        description: "Stand type"
-        required: true
-        type: string
-      tags:
-        required: false
-        type: string
-        default: "-"
-        description: "Test tags"
-      qase_plan_id:
-        required: false
-        type: number
-        description: "Qase Plan ID"
 
 jobs:
+  bootstrap:
+    name: Bootstrap environment
+    runs-on: ubuntu-latest
+    outputs:
+      cache-path: ${{ steps.cache.outputs.path }}
+      cache-key: ${{ steps.cache.outputs.key }}
+    env:
+      JUST_TAG: 1.24.0
+    steps:
+      - name: Build cache params
+        id: cache
+        run: |
+          echo "path=$CACHE_PATH" >> "$GITHUB_OUTPUT"
+          echo "$KEY_INPUT" | md5sum | awk '{print $1}' | xargs -I% echo "key=cargobin-%-${RUNNER_OS}" >> "$GITHUB_OUTPUT"
+        env:
+          CACHE_PATH: |
+            ~/.cargo/bin/
+          KEY_INPUT: |
+            just:${{env.JUST_TAG}}
+
+      - uses: actions/cache@v4
+        id: get-cache
+        with:
+          path: ${{ steps.cache.outputs.path }}
+          key: ${{ steps.cache.outputs.key }}
+
+      - name: Install just
+        run: cargo install "just@$JUST_TAG"
+        if: steps.get-cache.outputs.cache-hit != 'true'
+
   test:
     runs-on: ubuntu-24.04
+    needs: bootstrap
     env:
       # Required envs
       RPC_URL: ${{ secrets.RPC_URL }}
@@ -72,16 +73,15 @@ jobs:
       # Common envs
       QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
       QASE_PROJECT_ID: "CSM"
-      QASE_PLAN_ID: "${{ inputs.qase_plan_id || (github.event_name == 'schedule' && 7) || '' }}"
+
+      QASE_PLAN_ID: "8"
       GH_ACTION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       GH_BRANCH_REF_NAME: ${{ github.ref_name }}
       GH_EVENT_NAME: ${{ github.event_name }}
       NODE_OPTIONS: --max-old-space-size=4096
-      TEST_TAGS: ${{ inputs.tags || github.event.inputs.tags || '!forked'}}
+      TEST_TAGS: "forked"
       TEST_BRANCH: ${{ github.event.inputs.branch }}
       REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
-      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
-      DISCORD_DUTY_TAG: "&1372906915667116032"
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
       SLACK_DUTY_TAG: "S09H269H2TT"
 
@@ -94,6 +94,12 @@ jobs:
       GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
       GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
 
+      # Forked test envs
+      USE_FORK: true
+      DEPLOY_CONFIG: ./artifacts/hoodi/deploy-hoodi.json
+      CHAIN: hoodi
+      ARTIFACTS_DIR: ./artifacts/hoodi/
+
     steps:
       - uses: actions/checkout@v5
         with:
@@ -105,11 +111,34 @@ jobs:
           node-version: "20"
           cache: "yarn"
 
+      - name: Checkout community-staking-module
+        uses: actions/checkout@v4
+        with:
+          repository: lidofinance/community-staking-module
+          path: community-staking-module
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ needs.bootstrap.outputs.cache-path }}
+          key: ${{ needs.bootstrap.outputs.cache-key }}
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.2.3
+
       - name: Restore yarn cache
         uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install CSM Contracts dependencies
+        run: |
+          cd community-staking-module && yarn install --immutable
+
+      - name: Build CSM Fork
+        run: cd community-staking-module && just deps && just build
 
       - name: Install dependencies
         run: yarn install --immutable
@@ -117,8 +146,8 @@ jobs:
       - name: Install Playwright Browsers
         run: yarn playwright install chromium --with-deps
 
-      - name: Download keys generator binary
-        run: bash ./tests/scripts/set_up_keys_generator.sh
+      # - name: Download keys generator binary
+      #   run: bash ./tests/scripts/set_up_keys_generator.sh
 
       - name: Set up preview-stand credentials
         if: ${{ inputs.stand_type  == 'preview' || github.event.inputs.stand_type == 'preview' }}

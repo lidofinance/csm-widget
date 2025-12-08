@@ -13,6 +13,13 @@ export class TestnetConfig extends BaseConfig {
         rpcUrl: process.env.RPC_URL as string,
         scan: 'https://hoodi.etherscan.io/',
       },
+      nodeConfig: {
+        rpcUrlToMock: `**/api/rpc?chainId=560048`,
+        rpcUrl: process.env.RPC_URL as string,
+        derivationPath: "m/44'/60'/0'/0",
+        host: '127.0.0.1',
+        port: 8545,
+      },
     };
   }
 }
