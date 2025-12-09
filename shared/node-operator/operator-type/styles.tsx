@@ -10,4 +10,10 @@ export const ButtonStyle = styled(HeaderButton)<{
   --grouped-padding-offset: 4px;
 
   ${({ $variant }) => ($variant ? CURVE_VARIANTS[$variant] : '')}
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    > span:first-of-type {
+      display: none;
+    }
+  }
 `;
