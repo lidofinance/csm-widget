@@ -1,7 +1,7 @@
 import { mainnet } from 'viem/chains';
 import { useChainName } from './use-chain-name';
 import { useExternalLinks } from './use-csm-constants';
-import { sortByActiveStatus, useSortedKeys } from './use-sorted-keys';
+import { useSortedKeys } from './use-sorted-keys';
 import {
   useDappStatus,
   useLidoSDK,
@@ -15,7 +15,7 @@ export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: keys } = useOperatorKeysWithStatus(nodeOperatorId);
   const { beaconchain } = useExternalLinks();
-  const sortedKeys = useSortedKeys(keys, sortByActiveStatus);
+  const sortedKeys = useSortedKeys(keys);
 
   if (!beaconchain) return null;
 

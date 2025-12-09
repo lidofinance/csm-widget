@@ -6,7 +6,7 @@ export const useClaimBondDefaultValues = () => {
   return useFormDefaultValues<ClaimBondFormInputType, ClaimBondFormNetworkData>(
     (data) => ({
       token: data.isContract ? TOKENS.wsteth : TOKENS.steth,
-      claimRewards: false,
+      claimRewards: data.rewards.available > 0n,
       unlockedClaimTokens: false,
     }),
   );

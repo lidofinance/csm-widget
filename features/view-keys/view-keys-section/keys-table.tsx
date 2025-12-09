@@ -34,23 +34,20 @@ export const KeysTable: FC = () => {
         </tr>
       </thead>
       <tbody>
-        {data.map(({ pubkey, index, statuses, strikes, validatorIndex }) => (
-          <tr key={index}>
+        {data.map((key) => (
+          <tr key={key.index}>
             <td data-testid="pubkeyCell">
-              <Pubkey
-                pubkey={pubkey}
-                link={<PubkeyLinks {...{ pubkey, validatorIndex }} />}
-              />
+              <Pubkey pubkey={key.pubkey} link={<PubkeyLinks {...key} />} />
             </td>
             <td data-testid="statusCell">
               <Stack direction="column" gap="xs">
-                {statuses.map((status) => (
+                {key.statuses.map((status) => (
                   <StatusChip
                     status={status}
                     key={status}
                     suffix={
                       status === KEY_STATUS.DEPOSITABLE &&
-                      index <= maxPriorityKeyIndex ? (
+                      key.index <= maxPriorityKeyIndex ? (
                         <PriorityChip />
                       ) : null
                     }
@@ -59,10 +56,10 @@ export const KeysTable: FC = () => {
               </Stack>
             </td>
             <td data-testid="strikesCountCell">
-              <StrikesCount strikes={strikes} />
+              <StrikesCount strikes={key.strikes} />
             </td>
             <td data-testid="statusCommentCell">
-              <StatusComment statuses={statuses} />
+              <StatusComment statuses={key.statuses} />
             </td>
           </tr>
         ))}
