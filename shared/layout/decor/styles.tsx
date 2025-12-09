@@ -60,6 +60,10 @@ export const SantaWrapper = styled.div`
   ${({ theme }) => theme.mediaQueries.lg} {
     transform: scale(0.8);
   }
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    display: none;
+  }
 `;
 
 export const SantaStyle = styled.img.attrs({
@@ -174,7 +178,7 @@ export const SnowStyle = styled.img.attrs({
     transform: scale(0.8);
   }
 
-  ${({ theme }) => theme.mediaQueries.md} {
+  ${({ theme }) => theme.mediaQueries.lg} {
     display: none;
   }
 `;
