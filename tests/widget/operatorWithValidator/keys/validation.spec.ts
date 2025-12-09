@@ -26,8 +26,6 @@ const invalidTextValidation = [
   'fork_version',
   'pubkey',
   'signature',
-  // 'network_name', // @TODO: Is it optional?
-  // 'deposit_cli_version', // @TODO: Is it optional?
 ];
 
 test.describe('Operator with keys. Validation keys json.', async () => {
@@ -145,7 +143,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
 
         await expect(keysPage.submitPage.amountInput).toBeDisabled();
         await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-        // @TODO: Fix it after bug fixed
+        // @TODO: Uncomment it after bug fixed
         // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
       });
     });
@@ -175,7 +173,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
 
         await expect(keysPage.submitPage.amountInput).toBeDisabled();
         await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-        // @TODO: Fix it after bug fixed
+        // @TODO: Uncomment it after bug fixed
         // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
       });
     });
