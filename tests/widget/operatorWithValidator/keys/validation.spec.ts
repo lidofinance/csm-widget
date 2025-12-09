@@ -180,4 +180,33 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       });
     });
   });
+
+  test('Shouldnt display error for valid eth2_network_name for current chain', async ({
+    widgetConfig,
+  }) => {
+    const key = keysGeneratorService.generateKeys();
+    const propertyName = 'network_name';
+    const newJson = omitField(key[0], propertyName as keyof DepositKey);
+
+    // @ts-expect-error negative test for validation
+    newJson.eth2_network_name =
+      widgetConfig.standConfig.networkConfig.chainName.toLowerCase();
+
+    // @ts-expect-error negative test for validation
+    await keysPage.submitPage.fillKeys([newJson]);
+    await expect(keysPage.submitPage.validationInputError).toBeHidden();
+  });
+
+  test('Should ignore validation for optional deposit_cli_version', async () => {
+    const propertyName = 'deposit_cli_version';
+    const key = keysGeneratorService.generateKeys();
+    const newJson = omitField(key[0], propertyName as keyof DepositKey);
+
+    await keysPage.submitPage.fillKeys(
+      // @ts-expect-error negative test for validation
+      [newJson],
+    );
+
+    await expect(keysPage.submitPage.validationInputError).toBeHidden();
+  });
 });

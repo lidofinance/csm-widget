@@ -31,11 +31,8 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
         'amount is not equal to 32 ethinvalid signature',
       );
-      // @TODO: invalid signature??
     }
   });
-
-  // @TODO: deposit_data_root not handled ??
 
   test('Should display error for invalid pubkey', async () => {
     const key = keysGeneratorService.generateKeys();
@@ -51,7 +48,6 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
         'invalid signature',
       );
-      // @TODO: only invalid signature?? what about pubkey?
     }
   });
 
@@ -69,7 +65,6 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
         'invalid signature',
       );
-      // @TODO: only invalid signature?? what about deposit_message_root?
     }
   });
 
@@ -88,7 +83,6 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
         'withdrawal_credentials is not the Lido Withdrawal Vaultinvalid signature',
       );
-      // @TODO: invalid signature??
     }
   });
 
@@ -106,6 +100,26 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     for (const row of await keysPage.submitPage.depositDataRow.all()) {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
         'fork_version is not equal to 10000910',
+      );
+    }
+  });
+
+  test('Should display error for invalid network_name for current chain', async ({
+    widgetConfig,
+  }) => {
+    const key = keysGeneratorService.generateKeys();
+
+    key[0].network_name = 'invalid_network_name';
+
+    await keysPage.submitPage.fillKeys(key);
+    await expect(keysPage.submitPage.validationInputError).toContainText(
+      'Invalid deposit data',
+    );
+    await keysPage.submitPage.selectTab('Parsed');
+    await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
+    for (const row of await keysPage.submitPage.depositDataRow.all()) {
+      await expect(row.getByTestId('deposit-data-error')).toHaveText(
+        `network_name or eth2_network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
       );
     }
   });
