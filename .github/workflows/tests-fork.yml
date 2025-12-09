@@ -116,6 +116,7 @@ jobs:
         with:
           repository: lidofinance/community-staking-module
           path: community-staking-module
+          ref: main
 
       - uses: actions/cache@v4
         with:
@@ -125,7 +126,7 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: nightly
+          version: v1.2.3
 
       - name: Restore yarn cache
         uses: actions/cache@v4
