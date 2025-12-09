@@ -1,6 +1,7 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   SHARE_LIMIT_STATUS,
+  useHasPriorityQueueSpots,
   useShareLimit,
   useShareLimitStatus,
 } from 'modules/web3';
@@ -71,6 +72,7 @@ const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
 export const ShareLimitBanner: FC = () => {
   const { data } = useShareLimit();
   const { data: status } = useShareLimitStatus();
+  const { data: hasPrioritySpots } = useHasPriorityQueueSpots();
 
   if (!data || !status) {
     return null;
@@ -80,7 +82,7 @@ export const ShareLimitBanner: FC = () => {
     <>
       {status === SHARE_LIMIT_STATUS.REACHED ? (
         <ReachedBanner />
-      ) : status === SHARE_LIMIT_STATUS.EXHAUSTED ? (
+      ) : status === SHARE_LIMIT_STATUS.EXHAUSTED && !hasPrioritySpots ? (
         <ExhaustedBanner
           activeLeft={data.activeLeft.toString()}
           queue={data.queue.toString()}
