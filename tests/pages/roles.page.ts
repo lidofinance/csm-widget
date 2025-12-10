@@ -23,7 +23,7 @@ export class RolesPage extends BasePage {
     super(page);
     this.rewardsAddressPage = new RewardsAddressPage(this.page, walletPage);
     this.managerAddressPage = new ManagerAddressPage(this.page, walletPage);
-    this.inboxRequestsPage = new InboxRequestsPage(this.page);
+    this.inboxRequestsPage = new InboxRequestsPage(this.page, walletPage);
     this.modalRoot = new RolesModal(this.page);
     this.txModal = new TxModal(this.page);
   }

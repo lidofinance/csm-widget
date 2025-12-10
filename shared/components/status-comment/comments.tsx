@@ -1,4 +1,7 @@
-import { HOW_TO_EXIT_VALIDATOR_LINK } from 'consts/external-links';
+import {
+  HOW_TO_EXIT_VALIDATOR_LINK,
+  PERFORMANCE_TIPS_LINK,
+} from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
@@ -83,11 +86,8 @@ export const CommentActivationPending: FC = () => {
 export const CommentWithStrikes: FC = () => {
   return (
     <>
-      Check out the{' '}
-      <MatomoLink href="https://dvt-homestaker.stakesaurus.com/best-practices/maximising-uptime-and-performance">
-        tips
-      </MatomoLink>{' '}
-      on how to improve your performance
+      Check out <MatomoLink href={PERFORMANCE_TIPS_LINK}>tips</MatomoLink> on
+      how to improve your performance
     </>
   );
 };

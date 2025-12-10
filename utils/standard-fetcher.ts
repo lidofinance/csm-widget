@@ -11,7 +11,7 @@ const DEFAULT_PARAMS = {
 export const extractError = async (response: Response) => {
   try {
     const error = await response.json();
-    return extractErrorMessage(error);
+    return extractErrorMessage(error) ?? 'An error occurred';
   } catch (error) {
     return 'An error occurred while fetching the data';
   }

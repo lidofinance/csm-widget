@@ -7,7 +7,7 @@ import {
 } from '../external-icon-link';
 
 export const PubkeyLinks: FC<
-  Pick<KeyWithStatus, 'pubkey' | 'validatorIndex'>
+  Pick<KeyWithStatus, 'pubkey' | 'validatorIndex' | 'statuses'>
 > = (props) => {
   return (
     <>

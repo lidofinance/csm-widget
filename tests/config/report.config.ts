@@ -86,6 +86,7 @@ const reporters: {
     {
       enabled: process.env.REPORT_ENABLED,
       customDescription: `- Stand type: \`${process.env.STAND_TYPE}\``,
+      customTitle: process.env.GITHUB_WORKFLOW,
       ciRunUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
 
       // ───── Discord settings ─────

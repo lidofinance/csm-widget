@@ -3,6 +3,7 @@ import HeaderChain from './components/header-chain';
 import HeaderTheme from './components/header-theme';
 import { Logos } from './components/logos';
 import { HeaderActionsStyle, HeaderStyle, HeaderWrapper } from './styles';
+import { Decor } from '../decor';
 
 export const SemiDummyHeader: FC = () => (
   <HeaderWrapper>
@@ -13,5 +14,6 @@ export const SemiDummyHeader: FC = () => (
         <HeaderTheme showAlways />
       </HeaderActionsStyle>
     </HeaderStyle>
+    <Decor />
   </HeaderWrapper>
 );
