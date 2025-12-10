@@ -1,3 +1,5 @@
+import { Tags } from 'tests/consts/common.const';
+
 declare global {
   interface String {
     toCut(decimalPlaces: number): string;
@@ -25,6 +27,10 @@ export const prepareGrep = (testTag: string | undefined) => {
   const tags = testTag.split('|');
   const includeTags = [];
   const excludeTags = [];
+
+  if (!testTag.includes(Tags.forked.replace(/^@+/, ''))) {
+    excludeTags.push(Tags.forked.replace(/^@+/, ''));
+  }
 
   for (const tag of tags) {
     if (tag.startsWith('!')) {
