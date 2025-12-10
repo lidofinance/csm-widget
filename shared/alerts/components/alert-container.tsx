@@ -13,7 +13,7 @@ const AlertContainerStyled = styled.div`
   margin: 0 auto;
 
   :not(:empty) {
-    margin-top: 20px;
+    margin-top: 76px;
   }
 
   grid-area: none;
