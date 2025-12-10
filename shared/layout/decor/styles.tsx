@@ -119,6 +119,7 @@ export const HoHoHoStyle = styled.img.attrs({
   alt: 'Ho Ho Ho',
   src: HoSrc,
 })<{ $visible?: boolean }>`
+  pointer-events: none;
   position: absolute;
   top: -275px;
   right: 30px;
@@ -134,6 +135,7 @@ export const TextStyle = styled.img.attrs({
   alt: 'Merry Christmas',
   src: MerrySrc,
 })<{ $visible?: boolean }>`
+  pointer-events: none;
   position: absolute;
   top: -264px;
   right: -108px;
