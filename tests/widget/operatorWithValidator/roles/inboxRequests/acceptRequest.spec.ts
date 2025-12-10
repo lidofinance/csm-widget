@@ -9,10 +9,16 @@ import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe(
   'Roles. Inbox Rewards. Accept rewards ',
-  { tag: [Tags.performTX, Tags.forked] },
+  {
+    tag: [Tags.performTX, Tags.forked],
+  },
   () => {
     let randomId: number;
     let inboxRequestsPage: InboxRequestsPage;
+
+    test.beforeAll(({ useFork }) => {
+      test.skip(!useFork, 'Test suite runs only on forked network');
+    });
 
     test.beforeEach(async ({ widgetService, secretPhrase, csmSDK }) => {
       const operators = await csmSDK.getNodeOperatorsByAddress(

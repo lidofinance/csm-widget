@@ -17,7 +17,7 @@ String.prototype.toCut = function (decimalPlaces: number) {
   return response;
 };
 
-export const prepareGrep = (testTag = '!forked') => {
+export const prepareGrep = (testTag: string | undefined) => {
   if (!testTag || testTag.trim() === '' || testTag === '-') {
     return undefined;
   }
