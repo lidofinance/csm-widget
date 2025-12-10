@@ -56,14 +56,17 @@ export class SubmitPage {
     return this.formBlock.locator(`label:has([value="${tokenSymbol}"])`);
   }
 
-  async fillKeys(keys: DepositKey[]) {
+  async fillKeys(keys: DepositKey[] | DepositKey) {
     await test.step('Fill deposit key data', async () => {
       const value = JSON.stringify(keys);
       await this.rawDepositData.fill(value);
     });
   }
 
-  async submitKeys(keys: DepositKey[], tokenSymbol = TokenSymbol.STETH) {
+  async submitKeys(
+    keys: DepositKey[] | DepositKey,
+    tokenSymbol = TokenSymbol.STETH,
+  ) {
     return test.step('Submit keys', async () => {
       const bondTokenElement = this.getBondTokenElement(tokenSymbol);
       await bondTokenElement.click();
