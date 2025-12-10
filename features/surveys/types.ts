@@ -28,6 +28,7 @@ export type SetupsKeys = {
 };
 
 export type Setup = {
+  updatedAt: string;
   index: number;
   keysCount: number;
   dvt: string;

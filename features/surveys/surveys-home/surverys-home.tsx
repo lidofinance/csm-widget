@@ -12,7 +12,7 @@ import {
 import { useSurveysSWR } from '../shared/use-surveys-swr';
 import { MAX_DELEGATES, SetupsKeys, Summary } from '../types';
 import { useConfirmEraseModal } from './confirm-erase-modal';
-import { plural } from 'utils';
+import { formatDaysAgo, plural } from 'utils';
 
 export const SurveysHome: FC = () => {
   const { data, isLoading, remove } = useSurveysSWR<Summary>('summary');
@@ -91,14 +91,19 @@ export const SurveysHome: FC = () => {
             <SurveyItem
               key={setup.index}
               title={
-                <Stack>
-                  Setup #{setup.index}{' '}
-                  <Text as="span" size="sm" color="secondary">
-                    {setup.keysCount}{' '}
-                    <Plural
-                      value={setup.keysCount}
-                      variants={['key', 'keys']}
-                    />
+                <Stack direction="column" gap="xs">
+                  <Stack>
+                    Setup #{setup.index}{' '}
+                    <Text as="span" size="sm" color="secondary">
+                      {setup.keysCount}{' '}
+                      <Plural
+                        value={setup.keysCount}
+                        variants={['key', 'keys']}
+                      />
+                    </Text>
+                  </Stack>
+                  <Text as="span" size="xxs" color="secondary">
+                    Updated {formatDaysAgo(setup.updatedAt)}
                   </Text>
                 </Stack>
               }
