@@ -53,4 +53,16 @@ export type Summary = {
   setups: SetupRaw[];
   experience: Experience | null;
   howDidYouLearnCsm: HowDidYouLearnCsm | null;
+  delegates: Delegate[];
 };
+
+export type Delegate = {
+  address: string;
+  createdAt: string;
+};
+
+export type DelegatesResponse = {
+  delegates: Delegate[];
+};
+
+export const MAX_DELEGATES = 5;

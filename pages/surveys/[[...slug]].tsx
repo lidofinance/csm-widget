@@ -1,6 +1,7 @@
 import { PATH } from 'consts/urls';
 import {
   SurveysContactsPage,
+  SurveysDelegatesPage,
   SurveysExperiencePage,
   SurveysHomePage,
   SurveysHowDidYouLearnCsmPage,
@@ -25,6 +26,8 @@ const Page = () => {
     switch (path) {
       case PATH.SURVEYS_CONTACTS:
         return <SurveysContactsPage />;
+      case PATH.SURVEYS_DELEGATES:
+        return <SurveysDelegatesPage />;
       case PATH.SURVEYS_EXPERIENCE:
         return <SurveysExperiencePage />;
       case PATH.SURVEYS_HOW_DID_YOU_LEARN_CSM:

@@ -30,10 +30,13 @@ export const useSurveysSWR = <T, R = T>(
     ...STRATEGY_LAZY,
   });
 
+  const summaryUrl = `csm-${String(nodeOperatorId)}/summary`;
+
   const updateMutation = useMutation({
     mutationFn: (data: T) => updater(url, data)(),
     onSuccess: (result) => {
       queryClient.setQueryData(['surveys', url], result);
+      void queryClient.invalidateQueries({ queryKey: ['surveys', summaryUrl] });
     },
     onError: () => {
       void queryClient.invalidateQueries({ queryKey: ['surveys', url] });
@@ -43,7 +46,14 @@ export const useSurveysSWR = <T, R = T>(
   const deleteMutation = useMutation({
     mutationFn: () => updater(url, null)(),
     onSuccess: () => {
-      queryClient.setQueryData(['surveys', url], null);
+      void queryClient.invalidateQueries({ queryKey: ['surveys', summaryUrl] });
+      // Invalidate ALL setup caches - indexes get rebased after delete
+      void queryClient.invalidateQueries({
+        predicate: (query) => {
+          const key = query.queryKey[1];
+          return typeof key === 'string' && key.includes('/setups/');
+        },
+      });
     },
     onError: () => {
       void queryClient.invalidateQueries({ queryKey: ['surveys', url] });

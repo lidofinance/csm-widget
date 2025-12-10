@@ -1,4 +1,5 @@
 export * from './surveys-contacts-page';
+export * from './surveys-delegates-page';
 export * from './surveys-experience-page';
 export * from './surveys-home-page';
 export * from './surveys-how-did-you-learn-page';

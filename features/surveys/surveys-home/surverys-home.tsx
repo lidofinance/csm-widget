@@ -10,8 +10,9 @@ import {
   Warning,
 } from '../components';
 import { useSurveysSWR } from '../shared/use-surveys-swr';
-import { SetupsKeys, Summary } from '../types';
+import { MAX_DELEGATES, SetupsKeys, Summary } from '../types';
 import { useConfirmEraseModal } from './confirm-erase-modal';
+import { plural } from 'utils';
 
 export const SurveysHome: FC = () => {
   const { data, isLoading, remove } = useSurveysSWR<Summary>('summary');
@@ -128,6 +129,26 @@ export const SurveysHome: FC = () => {
           )}
         </SurveySection>
       )}
+
+      <SurveySection
+        title="Manage delegates"
+        subtitle="How delegates work"
+        help={`Delegates can only access and submit Setup surveys on your behalf. Contact and experience data remains private. Up to ${plural({ value: MAX_DELEGATES, variants: ['delegate', 'delegates'], showValue: true })} allowed`}
+      >
+        <SurveyItem
+          // title="Delegates"
+          title={
+            <Stack>
+              Delegates
+              <Text as="span" size="sm" color="secondary">
+                {data?.delegates.length}
+              </Text>
+            </Stack>
+          }
+        >
+          <SurveyLink path={PATH.SURVEYS_DELEGATES}>Manage</SurveyLink>
+        </SurveyItem>
+      </SurveySection>
 
       {showErase && (
         <>
