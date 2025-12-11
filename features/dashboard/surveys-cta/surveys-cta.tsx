@@ -6,28 +6,42 @@ import { LocalLink } from 'shared/navigate';
 import { formatDate } from 'utils';
 
 export const SurveysCta: FC = () => {
-  const { enabled, onClose } = useSurveyEnabled();
+  const { enabled, variant, onClose } = useSurveyEnabled();
   const { end } = getSurveyDates();
 
-  if (!enabled) return null;
+  if (!enabled || !variant) return null;
+
+  const isSubmit = variant === 'submit';
 
   return (
     <Banner
-      title="Submit Your Validator Setup"
-      variant="wary-dangerous"
+      title={
+        isSubmit ? 'Submit Your Validator Setup' : 'Review Your Validator Setup'
+      }
+      variant={isSubmit ? 'wary-dangerous' : 'wary'}
       extra={<CloseButton onClick={onClose} />}
     >
       <div>
-        Please submit your validator setup data by {formatDate(end, 'MMMM do')}{' '}
-        to help enhance the transparency of the Lido Protocol! Go to the{' '}
-        <LocalLink href="/surveys">Surveys</LocalLink> tab and fill out the
-        &quot;Your Setup&quot; form.
+        {isSubmit ? (
+          <>
+            Please submit your validator setup data by{' '}
+            {formatDate(end, 'MMMM do')} to help enhance the transparency of the
+            Lido Protocol!
+          </>
+        ) : (
+          <>
+            Configuration may have changed since your last survey. Please review
+            your setup data by {formatDate(end, 'MMMM do')}.
+          </>
+        )}{' '}
+        Go to the <LocalLink href="/surveys">Surveys</LocalLink> tab
+        {isSubmit && <> and fill out the &quot;Your Setup&quot; form</>}.
       </div>
       <br />
       <InverseThemeProvider>
         <LocalLink href="/surveys">
           <Button variant="filled" color="secondary" size="sm">
-            Submit Setup
+            {isSubmit ? 'Submit Setup' : 'Review Setup'}
           </Button>
         </LocalLink>
       </InverseThemeProvider>
