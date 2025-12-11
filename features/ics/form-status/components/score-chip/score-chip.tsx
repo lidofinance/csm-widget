@@ -18,7 +18,7 @@ export const ScoreChip: FC<PropsWithChildren<Props>> = ({
   children,
   type = 'default',
 }) => (
-  <ChipStyle $variant={type}>
+  <ChipStyle $variant={type} data-testid="scoreChip">
     {ICONS[type]}
     {children}
   </ChipStyle>

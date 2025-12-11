@@ -41,7 +41,7 @@ const config: PlaywrightTestConfig = {
     {
       name: 'widget',
       testDir: './tests',
-      grep: prepareGrep(process.env.TEST_TAGS),
+      grep: prepareGrep('-'),
       use: {
         // @ts-expect-error because pw doesnt have custom types
         useFork: process.env.USE_FORK === 'true',
