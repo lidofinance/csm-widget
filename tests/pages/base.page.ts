@@ -55,12 +55,32 @@ export class BasePage {
   }
 
   async getStorageData(name: string | string[]) {
-    return await this.page.evaluate((names) => {
-      if (Array.isArray(names)) {
-        return names.map((name) => localStorage.getItem(name));
-      } else {
-        return localStorage.getItem(names);
-      }
+    return test.step(`Get data from Local Storage by key '${name}'`, async () => {
+      return this.page.evaluate((names) => {
+        if (Array.isArray(names)) {
+          return names.map((name) => localStorage.getItem(name));
+        } else {
+          return localStorage.getItem(names);
+        }
+      }, name);
+    });
+  }
+
+  async getSessionStorageData(name: string | string[]) {
+    return test.step(`Get data from Session Storage by key '${name}'`, async () => {
+      return this.page.evaluate((names) => {
+        if (Array.isArray(names)) {
+          return names.map((name) => sessionStorage.getItem(name));
+        } else {
+          return sessionStorage.getItem(names);
+        }
+      }, name);
+    });
+  }
+
+  async removeKeyFromSessionStorage(name: string) {
+    await this.page.evaluate((key) => {
+      sessionStorage.removeItem(key);
     }, name);
   }
 
