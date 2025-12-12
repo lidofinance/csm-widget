@@ -25,17 +25,23 @@ export const SurveysCta: FC = () => {
         {isSubmit ? (
           <>
             Please submit your validator setup data by{' '}
-            {formatDate(end, 'MMMM do')} to help enhance the transparency of the
-            Lido Protocol!
+            {formatDate(end, 'MMMM do')} to help support transparency within the
+            Lido Protocol.
           </>
         ) : (
           <>
-            Configuration may have changed since your last survey. Please review
-            your setup data by {formatDate(end, 'MMMM do')}.
+            The configuration of your setup may have changed since your last
+            survey submission. Please review your setup details by{' '}
+            {formatDate(end, 'MMMM do')}.
           </>
         )}{' '}
-        Go to the <LocalLink href="/surveys">Surveys</LocalLink> tab
-        {isSubmit && <> and fill out the &quot;Your Setup&quot; form</>}.
+        Navigate to the <LocalLink href="/surveys">Surveys</LocalLink> tab
+        {isSubmit ? (
+          <> and complete the &quot;Your Setup&quot; form</>
+        ) : (
+          <> to proceed</>
+        )}
+        .
       </div>
       <br />
       <InverseThemeProvider>
