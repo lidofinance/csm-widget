@@ -48,7 +48,7 @@ jobs:
           KEY_INPUT: |
             just:${{env.JUST_TAG}}
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         id: get-cache
         with:
           path: ${{ steps.cache.outputs.path }}
@@ -118,7 +118,7 @@ jobs:
           path: community-staking-module
           ref: main
 
-      - uses: actions/cache@v4
+      - uses: actions/cache@v5
         with:
           path: ${{ needs.bootstrap.outputs.cache-path }}
           key: ${{ needs.bootstrap.outputs.cache-key }}
@@ -129,7 +129,7 @@ jobs:
           version: v1.2.3
 
       - name: Restore yarn cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
