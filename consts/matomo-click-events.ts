@@ -41,7 +41,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
   operatorTypeModalApplyIcs = 'operatorTypeModalApplyIcs',
   // Forms
-  howBondIsCalculated = 'howBondIsCalculated',
   depositDataLearnMore = 'depositDataLearnMore',
   howToClaimEth = 'howToClaimEth',
   customAddressDescription = 'customAddressDescription',
@@ -50,16 +49,13 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   createSuccessBeaconchainDashboard = 'createSuccessBeaconchainDashboard',
   createSuccessBeaconchain = 'createSuccessBeaconchain',
   createSuccessSubscribeEvents = 'createSuccessSubscribeEvents',
-  transferSuccessCleanQueueLink = 'transferSuccessCleanQueueLink',
   otherModuleLink = 'otherModuleLink',
-  splitsOrgDocumentation = 'splitsOrgDocumentation',
   howToClaimEthSuccessLink = 'howToClaimEthSuccessLink',
   // Common
   etherscanTxLink = 'etherscanTxLink',
   etherscanAddressLink = 'etherscanAddressLink',
   beaconchainPubkeyLink = 'beaconchainPubkeyLink',
   migalabsPubkeyLink = 'migalabsPubkeyLink',
-  feedbackFormLink = 'feedbackFormLink',
   tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
   faqItemLink = 'faqItemLink',
@@ -69,7 +65,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   whenValidatorBecomeWithdrawnLinkComment = 'whenValidatorBecomeWithdrawnLinkComment',
   stakeShareLimitLinkComment = 'stakeShareLimitLinkComment',
   // Alerts
-  howLearnCsmClose = 'howLearnCsmClose',
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
   transferKeysLinkAlert = 'transferKeysLinkAlert',
@@ -110,9 +105,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
   pageChangeRewardsRole = 'pageChangeRewardsRole',
   pageNormalizeQueue = 'pageNormalizeQueue',
-  pageCleanQueue = 'pageCleanQueue',
   pageTypeIcs = 'pageTypeIcs',
-  pageTypeIcsApply = 'pageTypeIcsApply',
   page404 = 'page404',
   page500 = 'page500',
   // Actions
@@ -120,7 +113,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Rewards History
   rewardsHistoryExport = 'rewardsHistoryExport',
   // modifiers
-  visitWithModeExtended = 'visitWithModeExtended',
   visitWithReferrer = 'visitWithReferrer',
   // Decor
   santaHover = 'santaHover',
@@ -255,10 +247,6 @@ export const MATOMO_CLICK_EVENTS: Record<
     'operator_type_modal_apply_ics',
   ),
   // Forms
-  [MATOMO_CLICK_EVENTS_TYPES.howBondIsCalculated]: createEvent(
-    'Click «How bond is calculated» link on Upload form',
-    'how_bond_is_calculated_link',
-  ),
   [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: createEvent(
     'Click «Upload Deposit Data learn more» link on Upload form',
     'deposti_data_learn_more_link',
@@ -292,17 +280,9 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «subscribe events» link after Create NO',
     'create_success_subscribe_events_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.transferSuccessCleanQueueLink]: createEvent(
-    'Click «Clean Queue» link after Transfer Keys',
-    'transfer_success_clean_queue_link',
-  ),
   [MATOMO_CLICK_EVENTS_TYPES.otherModuleLink]: createEvent(
     'Click «operators.lido.fi» link for other module',
     'operator_in_other_module_link',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.splitsOrgDocumentation]: createEvent(
-    'Click «splits.org documentation» link',
-    'spilt_org_documentation_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.howToClaimEthSuccessLink]: createEvent(
     'Click «How to claim ETH» link in success modal',
@@ -324,10 +304,6 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.migalabsPubkeyLink]: createEvent(
     'Click «View on migalabs.io» link on pubkey',
     'migalabs_pubkey_link',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink]: createEvent(
-    'Click «Submit report with form» link',
-    'feedback_form_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink]: createEvent(
     'Click «Join CSM» in other network link',
@@ -360,10 +336,6 @@ export const MATOMO_CLICK_EVENTS: Record<
     'stake_share_limit_link_comment',
   ),
   // Alerts
-  [MATOMO_CLICK_EVENTS_TYPES.howLearnCsmClose]: createEvent(
-    'Close alert «How did I learn about CSM»',
-    '_close_how_learn_csm',
-  ),
   [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: createEvent(
     'Click «How to exit» link on Request To Exit alert',
     'how_to_exit_link_requset_to_exit_alert',
@@ -518,17 +490,9 @@ export const MATOMO_CLICK_EVENTS: Record<
     'NormalizeQueue',
     'view_normalize_queue_page',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageCleanQueue]: createPageViewEvent(
-    'CleanQueue',
-    'view_clean_queue_page',
-  ),
   [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs]: createPageViewEvent(
     'Type ICS',
     'view_type_ics_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcsApply]: createPageViewEvent(
-    'Type ICS apply',
-    'view_type_ics_apply_page',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.page404]: createPageViewEvent(
     '404',
@@ -549,10 +513,6 @@ export const MATOMO_CLICK_EVENTS: Record<
     'rewards_history_export',
   ),
   // Modifiers
-  [MATOMO_CLICK_EVENTS_TYPES.visitWithModeExtended]: createEvent(
-    'Visit with mode extended',
-    'visit_mode_extended',
-  ),
   [MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer]: createEvent(
     'Visite with referrer',
     'visit_referrer',
