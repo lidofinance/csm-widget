@@ -14,25 +14,35 @@ import { useDismiss } from './use-dismiss';
 import { useSurveysFilled } from './use-surveys-filled';
 import { useShowFlags } from './use-show-rule';
 
+export type SurveyVariant = 'submit' | 'review';
+
 export const useSurveyEnabled = (skipClosed = false) => {
   const { end, isActive } = getSurveyDates();
   const { IS_SURVEYS_ACTIVE } = useShowFlags();
 
   const nodeOperatorId = useNodeOperatorId();
 
-  const { isDismissed: isClosed, dismiss: onClose } = useDismiss(
+  const { isDismissed, dismiss: onClose } = useDismiss(
     `surveys-cta-closed-${nodeOperatorId}`,
     end,
   );
 
   const { data: filled } = useSurveysFilled(
-    IS_SURVEYS_ACTIVE && isActive && (!isClosed || skipClosed)
+    IS_SURVEYS_ACTIVE && isActive && (!isDismissed || skipClosed)
       ? nodeOperatorId
       : undefined,
   );
 
+  const variant: SurveyVariant | null =
+    filled?.isFilled === false
+      ? 'submit'
+      : filled?.isFilled === true
+        ? 'review'
+        : null;
+
   return {
-    enabled: filled?.isFilled === false,
+    enabled: variant !== null && (!isDismissed || skipClosed),
+    variant,
     onClose,
   };
 };
