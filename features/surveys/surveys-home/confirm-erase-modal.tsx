@@ -9,15 +9,7 @@ export const ConfirmEraseModal: ModalComponentType<ConfirmModalProps> = ({
   ...props
 }) => {
   return (
-    <Modal
-      {...props}
-      // title={
-      //   <Text as="h4" size="lg" weight={700}>
-      //     Are you sure you want to erase your data from the database?
-      //   </Text>
-      // }
-      onClose={onReject}
-    >
+    <Modal {...props} onClose={onReject}>
       <Stack direction="column" gap="xxl">
         <Stack direction="column" gap="sm">
           <Text as="h5" size="sm" weight={700}>

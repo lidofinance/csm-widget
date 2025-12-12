@@ -64,24 +64,5 @@ export const useSurveysFetcher = <T, R = T>(
     [handleError, token, transformIncoming, transformOutcoming],
   );
 
-  const deleter = useCallback(
-    async (url: string) => {
-      invariant(token, 'Token is not available');
-      try {
-        await standardFetcher(`${surveyApi}/${url}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-type': 'application/json',
-            Authorization: token,
-          },
-        });
-      } catch (err) {
-        handleError(err);
-        throw err;
-      }
-    },
-    [handleError, token],
-  );
-
-  return [fetcher, updater, deleter] as const;
+  return [fetcher, updater] as const;
 };

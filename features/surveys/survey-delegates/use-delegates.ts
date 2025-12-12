@@ -1,58 +1,45 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
-import invariant from 'tiny-invariant';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { STRATEGY_LAZY } from 'consts';
 import { useNodeOperatorId } from 'modules/web3';
+import { useCallback } from 'react';
 import { useSurveysFetcher } from '../shared/use-surveys-fetcher';
-import { DelegatesResponse, MAX_DELEGATES } from '../types';
-import { useSiweAuth } from 'shared/siwe';
-import { standardFetcher } from 'utils';
-import { getExternalLinks } from 'consts/external-links';
-
-const { surveyApi } = getExternalLinks();
+import { Delegate, DelegatesResponse, MAX_DELEGATES } from '../types';
 
 export const useDelegates = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const url = `csm-${String(nodeOperatorId)}/delegates`;
-  const queryClient = useQueryClient();
-  const { token } = useSiweAuth();
+  const effectiveOperatorId = `csm-${nodeOperatorId}`;
+  const url = `${effectiveOperatorId}/delegates`;
+  const queryKey = ['surveys', effectiveOperatorId, 'delegates'];
+  const summaryQueryKey = ['surveys', effectiveOperatorId, 'summary'];
 
-  const [fetcher, , deleter] = useSurveysFetcher<DelegatesResponse>();
+  const queryClient = useQueryClient();
+
+  const [fetcher, updater] = useSurveysFetcher<DelegatesResponse, Delegate>(
+    undefined,
+    (data) => data.delegates[0],
+  );
 
   const query = useQuery<DelegatesResponse>({
-    queryKey: ['surveys', url],
+    queryKey,
     queryFn: () => fetcher(url),
     enabled: nodeOperatorId !== undefined,
     ...STRATEGY_LAZY,
   });
 
   const addMutation = useMutation({
-    mutationFn: async (address: string) => {
-      invariant(token, 'Token is not available');
-      await standardFetcher(`${surveyApi}/${url}`, {
-        method: 'POST',
-        body: JSON.stringify({ address: address.toLowerCase() }),
-        headers: {
-          'Content-type': 'application/json',
-          Authorization: token,
-        },
-      });
-    },
+    mutationFn: (address: string) =>
+      updater(url, { delegates: [{ address }] })(),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['surveys', url] });
-      void queryClient.invalidateQueries({
-        queryKey: ['surveys', `csm-${String(nodeOperatorId)}/summary`],
-      });
+      void queryClient.invalidateQueries({ queryKey });
+      void queryClient.invalidateQueries({ queryKey: summaryQueryKey });
     },
   });
 
   const removeMutation = useMutation({
-    mutationFn: (address: string) => deleter(`${url}/${address.toLowerCase()}`),
+    mutationFn: (address: string) => updater(`${url}/${address}`, null)(),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['surveys', url] });
-      void queryClient.invalidateQueries({
-        queryKey: ['surveys', `csm-${String(nodeOperatorId)}/summary`],
-      });
+      void queryClient.invalidateQueries({ queryKey });
+      void queryClient.invalidateQueries({ queryKey: summaryQueryKey });
     },
   });
 

@@ -59,7 +59,6 @@ export type Summary = {
 
 export type Delegate = {
   address: string;
-  createdAt: string;
 };
 
 export type DelegatesResponse = {
@@ -67,3 +66,7 @@ export type DelegatesResponse = {
 };
 
 export const MAX_DELEGATES = 5;
+
+export type DelegatedOperatorsResponse = {
+  nodeOperatorIds: string[]; // e.g., ['csm-1', 'csm-42']
+};

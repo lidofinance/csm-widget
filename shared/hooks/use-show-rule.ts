@@ -58,7 +58,7 @@ export const useShowFlags = (): ShowFlags => {
   return useMemo(
     () => ({
       ['IS_CONNECTED_WALLET']: isAccountActive,
-      ['NOT_NODE_OPERATOR']: isAccountActive && !nodeOperator,
+      ['NOT_NODE_OPERATOR']: !nodeOperator,
       ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
       ['CAN_CREATE']: !!canCreateNO,
       ['HAS_MANAGER_ROLE']: !!nodeOperator?.roles?.includes(ROLES.MANAGER),
@@ -72,10 +72,7 @@ export const useShowFlags = (): ShowFlags => {
       ['ICS_APPLY_ENABLED']: !!featureFlags?.[ICS_APPLY_FORM],
       ['EL_STEALING_REPORTER']: !!isReportingRole,
       ['IS_SURVEYS_ACTIVE']:
-        !!nodeOperator &&
-        !!surveyApi &&
-        isAccountActive &&
-        !!featureFlags?.[SURVEYS_SETUP_ENABLED],
+        !!surveyApi && !!featureFlags?.[SURVEYS_SETUP_ENABLED],
     }),
     [
       isAccountActive,
