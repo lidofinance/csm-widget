@@ -22,7 +22,7 @@ export const StealingReportFormProvider: FC<PropsWithChildren> = ({
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter}>
+      <FormControllerProvider submitter={submitter} formName="stealingReport">
         {children}
       </FormControllerProvider>
     </FormProvider>

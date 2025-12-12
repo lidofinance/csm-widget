@@ -17,6 +17,7 @@ export type FormControllerContextValueType<
   C extends object = any,
 > = {
   isLocked?: boolean;
+  formName?: string;
   onSubmit: FormSubmitter<F, C>;
   onReset?: (args: F) => void;
   retryEvent: EventSubsciption;
@@ -33,19 +34,20 @@ export const useFormControllerContext = () => {
 };
 
 export const FormControllerProvider: FC<
-  PropsWithChildren<{ submitter: FormSubmitter<any, any> }>
-> = ({ children, submitter }) => {
+  PropsWithChildren<{ submitter: FormSubmitter<any, any>; formName?: string }>
+> = ({ children, submitter, formName }) => {
   const { revalidate } = useFormDataContext();
 
   const { retryEvent, retryFire } = useFormControllerRetry();
   const formController: FormControllerContextValueType = useMemo(
     () => ({
+      formName,
       onSubmit: submitter,
       onConfirm: revalidate,
       onRetry: retryFire,
       retryEvent,
     }),
-    [retryEvent, retryFire, revalidate, submitter],
+    [formName, retryEvent, retryFire, revalidate, submitter],
   );
 
   return (
