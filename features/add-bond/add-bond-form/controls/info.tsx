@@ -1,4 +1,5 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { UNBONDED_VALIDATORS_LINK } from 'consts/external-links';
 import { BOND_INSUFFICIENT } from 'consts/text';
 import { FC } from 'react';
@@ -42,7 +43,10 @@ export const Info: FC = () => {
               <br />
               Adding a bond serves as a voluntary security measure for your Node
               Operator to prevent your validators from becoming{' '}
-              <MatomoLink href={UNBONDED_VALIDATORS_LINK}>
+              <MatomoLink
+                href={UNBONDED_VALIDATORS_LINK}
+                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.unbondedValidatorsLink}
+              >
                 unbonded
               </MatomoLink>{' '}
               and being requested to exit in case of applied penalties.

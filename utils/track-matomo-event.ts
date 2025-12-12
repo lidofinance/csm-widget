@@ -1,9 +1,8 @@
 import { trackEvent } from '@lidofinance/analytics-matomo';
 import {
-  MATOMO_CLICK_EVENTS_TYPES,
   MATOMO_CLICK_EVENTS,
-  MATOMO_APP_NAME,
-  prefixed,
+  MATOMO_CLICK_EVENTS_TYPES,
+  createEvent,
 } from 'consts/matomo-click-events';
 
 export type WithMatomoEvent<P = unknown> = P & {
@@ -16,15 +15,11 @@ export const trackMatomoEvent = (eventType?: MATOMO_CLICK_EVENTS_TYPES) => {
 
 export const trackMatomoFaqEvent = (faqId?: string) => {
   faqId &&
-    trackEvent(
-      MATOMO_APP_NAME,
-      `Open faq item «${faqId}»`,
-      prefixed`faq_item_open`,
-    );
+    trackEvent(...createEvent(`Open faq item «${faqId}»`, `faq_item_open`));
 };
 
 export const trackMatomoError = (description: string, tag: string) => {
-  trackEvent(MATOMO_APP_NAME, `ERROR: ${description}`, prefixed`error_${tag}`);
+  trackEvent(...createEvent(`ERROR: ${description}`, `error_${tag}`));
 };
 
 export const trackMatomoTxEvent = (
@@ -33,16 +28,9 @@ export const trackMatomoTxEvent = (
 ) => {
   txName &&
     trackEvent(
-      MATOMO_APP_NAME,
-      `Perform transaction «${txName}», ${stage}`,
-      prefixed`perform_tx_${stage}`,
+      ...createEvent(
+        `Perform transaction «${txName}», ${stage}`,
+        `perform_tx_${txName}_${stage}`,
+      ),
     );
-};
-
-export const trackMatomoHowLearnCsm = (answer: string) => {
-  trackEvent(
-    MATOMO_APP_NAME,
-    `How did I learn about CSM: «${answer}»`,
-    prefixed`_how_learn_csm`,
-  );
 };
