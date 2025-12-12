@@ -32,5 +32,12 @@ export const standardFetcher: StandardFetcher = async (url, params) => {
     throw new FetcherError(await extractError(response), response.status);
   }
 
+  if (
+    response.status === 204 ||
+    response.headers.get('content-length') === '0'
+  ) {
+    return undefined as never;
+  }
+
   return await response.json();
 };

@@ -11,28 +11,29 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
   pending: () =>
     transitStage(
       <TxStagePending
-        title="Submitting Setup"
+        title="Adding delegate"
         description="sending to server"
       />,
     ),
 
   success: () =>
-    transitStage(<TxStageSuccess title="Setup submitted" description="" />),
-
-  confirmRemove: () => transitStage(<></>),
+    transitStage(<TxStageSuccess title="Delegate added" description="" />),
 
   pendingRemove: () =>
     transitStage(
-      <TxStagePending title="Deleting Setup" description="sending to server" />,
+      <TxStagePending
+        title="Removing delegate"
+        description="sending to server"
+      />,
     ),
 
   successRemove: () =>
-    transitStage(<TxStageSuccess title="Setup deleted" description="" />),
+    transitStage(<TxStageSuccess title="Delegate removed" description="" />),
 
   failed: (error: unknown) =>
     transitStage(
       <TxStageFail
-        title="Sign in failed"
+        title="Operation failed"
         error={extractErrorMessage(error)}
         code={getErrorCode(error)}
       />,

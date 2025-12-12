@@ -28,6 +28,7 @@ export type SetupsKeys = {
 };
 
 export type Setup = {
+  updatedAt: string;
   index: number;
   keysCount: number;
   dvt: string;
@@ -53,4 +54,19 @@ export type Summary = {
   setups: SetupRaw[];
   experience: Experience | null;
   howDidYouLearnCsm: HowDidYouLearnCsm | null;
+  delegates: Delegate[];
+};
+
+export type Delegate = {
+  address: string;
+};
+
+export type DelegatesResponse = {
+  delegates: Delegate[];
+};
+
+export const MAX_DELEGATES = 5;
+
+export type DelegatedOperatorsResponse = {
+  nodeOperatorIds: string[]; // e.g., ['csm-1', 'csm-42']
 };

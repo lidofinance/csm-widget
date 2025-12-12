@@ -1,15 +1,12 @@
 import { FC } from 'react';
 
-import { NoSSRWrapper } from 'shared/components';
-import { Layout } from 'shared/layout';
 import { BackButton } from './shared';
 import { SurveyHowDidYouLearnCsm } from './survey-how-did-you-learn-csm';
+import { SurveyOperatorGate } from './surveys-provider';
 
 export const SurveysHowDidYouLearnCsmPage: FC = () => (
-  <Layout>
+  <SurveyOperatorGate>
     <BackButton />
-    <NoSSRWrapper>
-      <SurveyHowDidYouLearnCsm />
-    </NoSSRWrapper>
-  </Layout>
+    <SurveyHowDidYouLearnCsm />
+  </SurveyOperatorGate>
 );

@@ -1,15 +1,12 @@
 import { FC } from 'react';
 
-import { NoSSRWrapper } from 'shared/components';
-import { Layout } from 'shared/layout';
-import { SurveyContacts } from './survey-contacts';
 import { BackButton } from './shared';
+import { SurveyContacts } from './survey-contacts';
+import { SurveyOperatorGate } from './surveys-provider';
 
 export const SurveysContactsPage: FC = () => (
-  <Layout>
+  <SurveyOperatorGate>
     <BackButton />
-    <NoSSRWrapper>
-      <SurveyContacts />
-    </NoSSRWrapper>
-  </Layout>
+    <SurveyContacts />
+  </SurveyOperatorGate>
 );

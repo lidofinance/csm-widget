@@ -5,7 +5,7 @@ import {
   TxStageSuccess,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { getErrorCode } from 'utils';
+import { extractErrorMessage, getErrorCode } from 'utils';
 
 const getModalStages = (transitStage: TransactionModalTransitStage) => ({
   pending: () =>
@@ -43,7 +43,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
         </>
       );
     } else {
-      errorContent = typeof error === 'string' ? error : undefined;
+      errorContent = extractErrorMessage(error);
     }
 
     return transitStage(
