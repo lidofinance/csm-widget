@@ -5,6 +5,7 @@ import {
   Input,
   Text,
 } from '@lidofinance/lido-ui';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC, useCallback, useState } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
@@ -156,7 +157,12 @@ export const AddressItem: FC<AddressItemProps> = ({
               rightDecorator={
                 <Stack gap="sm">
                   <CopyButton text={message} size="xs" variant="translucent" />
-                  <MatomoLink href="https://etherscan.io/verifiedSignatures#">
+                  <MatomoLink
+                    href="https://etherscan.io/verifiedSignatures#"
+                    matomoEvent={
+                      MATOMO_CLICK_EVENTS_TYPES.icsEtherscanSignaturesLink
+                    }
+                  >
                     <ButtonIcon
                       icon={<External />}
                       size="xs"

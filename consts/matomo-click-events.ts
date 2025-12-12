@@ -3,18 +3,14 @@ import { MatomoEventType } from '@lidofinance/analytics-matomo';
 export const MATOMO_APP_NAME = 'CSM_Widget';
 export const MATOMO_APP_PREFIX = 'csm_widget';
 
-export const prefixed = (template: TemplateStringsArray, ...args: string[]) => {
-  return `${MATOMO_APP_PREFIX}_${template.reduce((a, c, i) => a + c + (args[i] ?? ''), '').toLowerCase()}`;
-};
-
 // Helper functions to reduce duplication in event definitions
-const createEvent = (
+export const createEvent = (
   description: string,
   eventKey: string,
 ): MatomoEventType => [
   MATOMO_APP_NAME,
   description,
-  `${MATOMO_APP_PREFIX}_${eventKey}`,
+  `${MATOMO_APP_PREFIX}_${eventKey.toLowerCase()}`,
 ];
 
 const createPageViewEvent = (
@@ -129,6 +125,48 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Decor
   santaHover = 'santaHover',
   santaClick = 'santaClick',
+  // Footer
+  footerTermsOfUse = 'footerTermsOfUse',
+  footerPrivacyNotice = 'footerPrivacyNotice',
+  footerFeedbackForm = 'footerFeedbackForm',
+  footerDiscord = 'footerDiscord',
+  footerVersion = 'footerVersion',
+  // ICS
+  icsPassportLink = 'icsPassportLink',
+  icsDiscordGuideLink = 'icsDiscordGuideLink',
+  icsCirclesLink = 'icsCirclesLink',
+  icsHackmdGuideLink = 'icsHackmdGuideLink',
+  icsGalxeLink = 'icsGalxeLink',
+  icsHighSignalLink = 'icsHighSignalLink',
+  icsYoutubeGuideLink = 'icsYoutubeGuideLink',
+  icsDiscordChannelLink = 'icsDiscordChannelLink',
+  icsEtherscanSignaturesLink = 'icsEtherscanSignaturesLink',
+  icsGithubAddressesLink = 'icsGithubAddressesLink',
+  // Exit Keys
+  exitKeysDappnodeLink = 'exitKeysDappnodeLink',
+  exitKeysSedgeLink = 'exitKeysSedgeLink',
+  exitKeysSteureumLink = 'exitKeysSteureumLink',
+  exitKeysEthpillarLink = 'exitKeysEthpillarLink',
+  exitKeysEthdockerLink = 'exitKeysEthdockerLink',
+  exitKeysSystemdLink = 'exitKeysSystemdLink',
+  // Bond Info
+  mevStealingDocsLink = 'mevStealingDocsLink',
+  lidoRewardsVaultLink = 'lidoRewardsVaultLink',
+  unbondedValidatorsLink = 'unbondedValidatorsLink',
+  // Monitoring
+  monitoringMigalabsLink = 'monitoringMigalabsLink',
+  monitoringRewardsDocsLink = 'monitoringRewardsDocsLink',
+  performanceTipsLink = 'performanceTipsLink',
+  // View Keys
+  subscribeEventsLink = 'subscribeEventsLink',
+  operatorPortalDepositsFlowLink = 'operatorPortalDepositsFlowLink',
+  // Claim
+  claimWithdrawalsLink = 'claimWithdrawalsLink',
+  // Other
+  operatorTypesDocsLink = 'operatorTypesDocsLink',
+  vanomDashboardLink = 'vanomDashboardLink',
+  legalPrivacyNoticeLink = 'legalPrivacyNoticeLink',
+  lidoHomeLink = 'lidoHomeLink',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
@@ -524,5 +562,149 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.santaClick]: createEvent(
     'Click on Santa decoration',
     'santa_click',
+  ),
+  // Footer
+  [MATOMO_CLICK_EVENTS_TYPES.footerTermsOfUse]: createEvent(
+    'Click «Terms of Use» link in footer',
+    'footer_terms_of_use_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.footerPrivacyNotice]: createEvent(
+    'Click «Privacy Notice» link in footer',
+    'footer_privacy_notice_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm]: createEvent(
+    'Click «Feedback form» link in footer',
+    'footer_feedback_form_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.footerDiscord]: createEvent(
+    'Click «Discord» link in footer',
+    'footer_discord_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.footerVersion]: createEvent(
+    'Click version link in footer',
+    'footer_version_link',
+  ),
+  // ICS
+  [MATOMO_CLICK_EVENTS_TYPES.icsPassportLink]: createEvent(
+    'Click «Human Passport» link on ICS page',
+    'ics_passport_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.icsDiscordGuideLink]: createEvent(
+    'Click Discord guide link on ICS page',
+    'ics_discord_guide_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.icsCirclesLink]: createEvent(
+    'Click «Circles» link on ICS page',
+    'ics_circles_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.icsHackmdGuideLink]: createEvent(
+    'Click HackMD guide link on ICS page',
+    'ics_hackmd_guide_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.icsGalxeLink]: createEvent(
+    'Click «Galxe» link on ICS page',
+    'ics_galxe_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.icsHighSignalLink]: createEvent(
+    'Click «High Signal» link on ICS page',
+    'ics_high_signal_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.icsYoutubeGuideLink]: createEvent(
+    'Click YouTube guide link on ICS page',
+    'ics_youtube_guide_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.icsDiscordChannelLink]: createEvent(
+    'Click Discord CSM channel link on ICS page',
+    'ics_discord_channel_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.icsEtherscanSignaturesLink]: createEvent(
+    'Click Etherscan verified signatures link on ICS page',
+    'ics_etherscan_signatures_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.icsGithubAddressesLink]: createEvent(
+    'Click GitHub ICS addresses link on ICS page',
+    'ics_github_addresses_link',
+  ),
+  // Exit Keys
+  [MATOMO_CLICK_EVENTS_TYPES.exitKeysDappnodeLink]: createEvent(
+    'Click «Dappnode» exit guide link',
+    'exit_keys_dappnode_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.exitKeysSedgeLink]: createEvent(
+    'Click «Sedge» exit guide link',
+    'exit_keys_sedge_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.exitKeysSteureumLink]: createEvent(
+    'Click «Stereum» exit guide link',
+    'exit_keys_stereum_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.exitKeysEthpillarLink]: createEvent(
+    'Click «ETH Pillar» exit guide link',
+    'exit_keys_ethpillar_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.exitKeysEthdockerLink]: createEvent(
+    'Click «ETH Docker» exit guide link',
+    'exit_keys_ethdocker_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.exitKeysSystemdLink]: createEvent(
+    'Click «Systemd» exit guide link',
+    'exit_keys_systemd_link',
+  ),
+  // Bond Info
+  [MATOMO_CLICK_EVENTS_TYPES.mevStealingDocsLink]: createEvent(
+    'Click «MEV stealing» docs link',
+    'mev_stealing_docs_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.lidoRewardsVaultLink]: createEvent(
+    'Click «Lido rewards vault» link',
+    'lido_rewards_vault_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.unbondedValidatorsLink]: createEvent(
+    'Click «Unbonded validators» docs link',
+    'unbonded_validators_link',
+  ),
+  // Monitoring
+  [MATOMO_CLICK_EVENTS_TYPES.monitoringMigalabsLink]: createEvent(
+    'Click «MigaLabs» link on Monitoring page',
+    'monitoring_migalabs_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.monitoringRewardsDocsLink]: createEvent(
+    'Click «Rewards» docs link on Monitoring page',
+    'monitoring_rewards_docs_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.performanceTipsLink]: createEvent(
+    'Click «Performance tips» link',
+    'performance_tips_link',
+  ),
+  // View Keys
+  [MATOMO_CLICK_EVENTS_TYPES.subscribeEventsLink]: createEvent(
+    'Click «Subscribe events» link on View Keys page',
+    'subscribe_events_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorPortalDepositsFlowLink]: createEvent(
+    'Click «Deposits flow» link on View Keys page',
+    'operator_portal_deposits_flow_link',
+  ),
+  // Claim
+  [MATOMO_CLICK_EVENTS_TYPES.claimWithdrawalsLink]: createEvent(
+    'Click «Claim withdrawals» link on Claim page',
+    'claim_withdrawals_link',
+  ),
+  // Other
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypesDocsLink]: createEvent(
+    'Click «Operator types» docs link',
+    'operator_types_docs_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.vanomDashboardLink]: createEvent(
+    'Click «VaNOM dashboard» link',
+    'vanom_dashboard_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.legalPrivacyNoticeLink]: createEvent(
+    'Click «Privacy Notice» link in legal disclaimer',
+    'legal_privacy_notice_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.lidoHomeLink]: createEvent(
+    'Click Lido logo link',
+    'lido_home_link',
   ),
 };
