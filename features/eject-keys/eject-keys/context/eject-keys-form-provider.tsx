@@ -19,7 +19,7 @@ export const EjectKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter}>
+      <FormControllerProvider submitter={submitter} formName="ejectKeys">
         <EjectKeysUpdater />
         {children}
       </FormControllerProvider>

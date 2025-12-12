@@ -37,7 +37,7 @@ export const ChangeRoleFormProvider: FC<
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter}>
+      <FormControllerProvider submitter={submitter} formName="changeRole">
         {children}
       </FormControllerProvider>
     </FormProvider>

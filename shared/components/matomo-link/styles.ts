@@ -1,7 +1,10 @@
 import { Link } from '@lidofinance/lido-ui';
 import styled, { css } from 'styled-components';
 
-export const LinkStyled = styled(Link)<{ $secondary?: boolean }>`
+export const LinkStyled = styled(Link)<{
+  $secondary?: boolean;
+  $rawIcon?: boolean;
+}>`
   display: inline-flex;
   align-items: center;
 
@@ -17,8 +20,13 @@ export const LinkStyled = styled(Link)<{ $secondary?: boolean }>`
       }
     `}
 
-  svg {
-    width: 20px;
-    height: 20px;
-  }
+  ${({ $rawIcon }) =>
+    $rawIcon
+      ? ''
+      : css`
+          svg {
+            width: 20px;
+            height: 20px;
+          }
+        `}
 `;

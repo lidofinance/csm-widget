@@ -1,4 +1,5 @@
 import { Text } from '@lidofinance/lido-ui';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC } from 'react';
 import { MatomoLink, Stack } from 'shared/components';
 import {
@@ -76,7 +77,10 @@ export const PerformanceMetricMethodology: FC = () => {
           Operator Type) are based on the weighting coefficients for these
           duties in Ethereum&apos;s Consensus Layer specification. Check out the
           detailed information{' '}
-          <MatomoLink href="https://docs.lido.fi/staking-modules/csm/intro#rewards">
+          <MatomoLink
+            href="https://docs.lido.fi/staking-modules/csm/intro#rewards"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.monitoringRewardsDocsLink}
+          >
             in the documentation
           </MatomoLink>
           .

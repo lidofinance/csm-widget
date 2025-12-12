@@ -1,4 +1,4 @@
-import { Link } from '@lidofinance/lido-ui';
+import { MatomoLink } from 'shared/components';
 import styled from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
@@ -33,7 +33,7 @@ export const FooterStyle = styled.footer`
   }
 `;
 
-export const FooterLink = styled(Link)`
+export const FooterLink = styled(MatomoLink)`
   display: flex;
   align-items: center;
   line-height: 20px;

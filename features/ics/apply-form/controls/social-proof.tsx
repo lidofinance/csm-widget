@@ -1,4 +1,5 @@
 import { Input, Text } from '@lidofinance/lido-ui';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { CategoryItemsWrapper } from 'features/ics/score-system/styles';
 import { FC } from 'react';
 import {
@@ -22,7 +23,10 @@ export const SocialProof: FC = () => {
         <Text size="xs" color="secondary">
           You can add your social accounts. To prove you own an account, post a
           message. For more info see{' '}
-          <MatomoLink href="https://www.youtube.com/watch?v=yUX34iCbCWE">
+          <MatomoLink
+            href="https://www.youtube.com/watch?v=yUX34iCbCWE"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsYoutubeGuideLink}
+          >
             the guide
           </MatomoLink>
         </Text>
@@ -75,12 +79,15 @@ export const SocialProof: FC = () => {
             <Text size="xs">
               Step 1. Prove the ownership of the Discord account by posting the
               following message to{' '}
-              <MatomoLink href="https://discord.com/channels/761182643269795850/1404810479292907662">
+              <MatomoLink
+                href="https://discord.com/channels/761182643269795850/1404810479292907662"
+                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordChannelLink}
+              >
                 the CSM channel
               </MatomoLink>{' '}
               <IconTooltip
                 inline
-                tooltip="If you cannot access the CSM channel, you may need to claim the “CSM Operator” role. To claim this role, follow the instructions in the “cs-get-started” channel."
+                tooltip='If you cannot access the CSM channel, you may need to claim the "CSM Operator" role. To claim this role, follow the instructions in the "cs-get-started" channel.'
               />
             </Text>
 

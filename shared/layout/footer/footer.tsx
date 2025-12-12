@@ -1,6 +1,7 @@
 import buildInfo from 'build-info.json';
 import { FC } from 'react';
 
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { getExternalLinks } from 'consts/external-links';
 import { LogoLido, Stack } from 'shared/components';
 import { FooterLink, FooterStyle, LinkDivider, Version } from './styles';
@@ -33,27 +34,40 @@ const getVersionInfo = () => {
 const { label, link } = getVersionInfo();
 const { feedbackForm } = getExternalLinks();
 
-// matomoEvent={MATOMO_CLICK_EVENTS_TYPES.feedbackFormLink}
-
-// TODO: matomo events
-export const Footer: FC = () => {
-  return (
-    <FooterStyle>
-      <LogoLido />
-      <Stack gap="none">
-        <FooterLink href="https://lido.fi/terms-of-use">
-          Terms of Use
-        </FooterLink>
-        <LinkDivider />
-        <FooterLink href="https://lido.fi/privacy-notice">
-          Privacy Notice
-        </FooterLink>
-        <LinkDivider />
-        <FooterLink href={feedbackForm}>Feedback form</FooterLink>
-        <LinkDivider />
-        <FooterLink href="https://discord.com/invite/lido">Discord</FooterLink>
-      </Stack>
-      <Version href={link}>{label}</Version>
-    </FooterStyle>
-  );
-};
+export const Footer: FC = () => (
+  <FooterStyle>
+    <LogoLido />
+    <Stack gap="none">
+      <FooterLink
+        href="https://lido.fi/terms-of-use"
+        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerTermsOfUse}
+      >
+        Terms of Use
+      </FooterLink>
+      <LinkDivider />
+      <FooterLink
+        href="https://lido.fi/privacy-notice"
+        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerPrivacyNotice}
+      >
+        Privacy Notice
+      </FooterLink>
+      <LinkDivider />
+      <FooterLink
+        href={feedbackForm}
+        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm}
+      >
+        Feedback form
+      </FooterLink>
+      <LinkDivider />
+      <FooterLink
+        href="https://discord.com/invite/lido"
+        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerDiscord}
+      >
+        Discord
+      </FooterLink>
+    </Stack>
+    <Version href={link} matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerVersion}>
+      {label}
+    </Version>
+  </FooterStyle>
+);

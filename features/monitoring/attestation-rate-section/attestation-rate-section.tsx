@@ -1,5 +1,6 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { Block, InlineLoader, Text } from '@lidofinance/lido-ui';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { DATA_UNAVAILABLE } from 'consts/text';
 import {
   useDappStatus,
@@ -44,7 +45,12 @@ export const AttestationRateSection: FC = () => {
           <Stack center gap="xs">
             <div>
               Data Source:{' '}
-              <MatomoLink href="https://migalabs.io">MigaLabs</MatomoLink>
+              <MatomoLink
+                href="https://migalabs.io"
+                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.monitoringMigalabsLink}
+              >
+                MigaLabs
+              </MatomoLink>
             </div>
             <IconTooltip
               placement="bottomRight"

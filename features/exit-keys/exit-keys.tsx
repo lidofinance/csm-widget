@@ -1,4 +1,5 @@
 import { Text } from '@lidofinance/lido-ui';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import {
   ExternalMatomoLink,
   FormTitle,
@@ -16,32 +17,50 @@ export const ExitKeys = () => {
       </Text>
       <StackStyle as="ul" $gap="sm" $direction="column">
         <li>
-          <ExternalMatomoLink href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#dappnode">
+          <ExternalMatomoLink
+            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#dappnode"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysDappnodeLink}
+          >
             Guide for Dappnode
           </ExternalMatomoLink>
         </li>
         <li>
-          <ExternalMatomoLink href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#sedge">
+          <ExternalMatomoLink
+            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#sedge"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSedgeLink}
+          >
             Guide for Sedge
           </ExternalMatomoLink>
         </li>
         <li>
-          <ExternalMatomoLink href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#stereum">
+          <ExternalMatomoLink
+            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#stereum"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSteureumLink}
+          >
             Guide for Stereum
           </ExternalMatomoLink>
         </li>
         <li>
-          <ExternalMatomoLink href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#ethpillar">
+          <ExternalMatomoLink
+            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#ethpillar"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysEthpillarLink}
+          >
             Guide for EthPillar
           </ExternalMatomoLink>
         </li>
         <li>
-          <ExternalMatomoLink href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#eth-docker">
+          <ExternalMatomoLink
+            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#eth-docker"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysEthdockerLink}
+          >
             Guide for EthDocker
           </ExternalMatomoLink>
         </li>
         <li>
-          <ExternalMatomoLink href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#systemd">
+          <ExternalMatomoLink
+            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#systemd"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSystemdLink}
+          >
             Guide for Systemd
           </ExternalMatomoLink>
         </li>

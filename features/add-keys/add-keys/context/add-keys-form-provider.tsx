@@ -21,7 +21,7 @@ export const AddKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter}>
+      <FormControllerProvider submitter={submitter} formName="addKeys">
         <AddKeysUpdater />
         {children}
       </FormControllerProvider>

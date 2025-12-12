@@ -16,6 +16,7 @@ import SnapshotIcon from 'assets/icons/ics-scores/snapshot.png';
 import GalxeIcon from 'assets/icons/ics-scores/galxe.png';
 import HighSignalIcon from 'assets/icons/ics-scores/high-signal.png';
 import GitPOAPsIcon from 'assets/icons/ics-scores/git-poap.png';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { IcsScoresItem } from './types';
 import { MatomoLink } from 'shared/components';
 
@@ -164,11 +165,17 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             Submitted address has the corresponding score according to a{' '}
-            <MatomoLink href="https://app.passport.xyz/#/lido_csm/">
+            <MatomoLink
+              href="https://app.passport.xyz/#/lido_csm/"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsPassportLink}
+            >
               Lido customized scoring system on Human Passport
             </MatomoLink>
             . For more details, follow{' '}
-            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
+            <MatomoLink
+              href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordGuideLink}
+            >
               the guide
             </MatomoLink>
           </>
@@ -182,12 +189,18 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             Submitted address is verified via a dedicated{' '}
-            <MatomoLink href="https://app.metri.xyz/0xCFCEA7904F42fD10e32703a57922E8d2036e3231">
+            <MatomoLink
+              href="https://app.metri.xyz/0xCFCEA7904F42fD10e32703a57922E8d2036e3231"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsCirclesLink}
+            >
               Lido group on Circles
             </MatomoLink>
             . To be able to tie the Circles account to the ICS application, the
             external account should be added. For more details, follow{' '}
-            <MatomoLink href="https://hackmd.io/ZpLPFR77RiSGKCUqd2d5aQ?view">
+            <MatomoLink
+              href="https://hackmd.io/ZpLPFR77RiSGKCUqd2d5aQ?view"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsHackmdGuideLink}
+            >
               the guide
             </MatomoLink>
           </>
@@ -261,7 +274,10 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             Submitted address has a score on the{' '}
-            <MatomoLink href="https://app.galxe.com/quest/lido/loyaltyPoints">
+            <MatomoLink
+              href="https://app.galxe.com/quest/lido/loyaltyPoints"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsGalxeLink}
+            >
               Lido Galxe space
             </MatomoLink>
             :
@@ -278,7 +294,10 @@ export const SCORE_SOURCES: ScoreSource[] = [
         description: (
           <>
             Submitted address has a score on the{' '}
-            <MatomoLink href="https://app.highsignal.xyz/p/lido/">
+            <MatomoLink
+              href="https://app.highsignal.xyz/p/lido/"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsHighSignalLink}
+            >
               Lido High Signal space
             </MatomoLink>
             :
@@ -288,7 +307,10 @@ export const SCORE_SOURCES: ScoreSource[] = [
             <br />- 5 points if High Signal score {'>'} 80
             <br />
             For more details, follow{' '}
-            <MatomoLink href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318">
+            <MatomoLink
+              href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordGuideLink}
+            >
               the guide
             </MatomoLink>
           </>

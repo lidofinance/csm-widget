@@ -1,4 +1,6 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { trackMatomoEvent } from 'utils/track-matomo-event';
 import {
   HoHoHoStyle,
   SantaStyle,
@@ -12,6 +14,7 @@ export const Santa: FC = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const handleHover = useCallback(() => {
+    trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.santaHover);
     if (audioRef.current) return;
     const audio = new Audio('/assets/hohoho.mp3');
     audio.preload = 'auto';
@@ -20,6 +23,7 @@ export const Santa: FC = () => {
   }, []);
 
   const handleClick = useCallback(() => {
+    trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.santaClick);
     if (isRevealed) return;
     setIsRevealed(true);
 

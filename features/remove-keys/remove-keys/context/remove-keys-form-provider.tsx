@@ -25,7 +25,7 @@ export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter}>
+      <FormControllerProvider submitter={submitter} formName="removeKeys">
         {children}
       </FormControllerProvider>
     </FormProvider>

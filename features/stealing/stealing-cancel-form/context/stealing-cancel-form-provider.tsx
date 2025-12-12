@@ -23,7 +23,7 @@ export const StealingCancelFormProvider: FC<PropsWithChildren> = ({
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter}>
+      <FormControllerProvider submitter={submitter} formName="stealingCancel">
         <StealingCancelUpdater />
         {children}
       </FormControllerProvider>
