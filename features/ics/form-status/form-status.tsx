@@ -31,7 +31,7 @@ export const FormStatus: FC<FormStatusProps> = ({
   const haveScores = Object.values(scores).some((score) => score !== null);
 
   return (
-    <Block>
+    <Block data-testid="applicationFormStatus">
       <Stack direction="column" gap="xxl">
         <StatusHeader
           status={status}
