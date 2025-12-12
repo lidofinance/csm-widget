@@ -22,15 +22,15 @@ export const trackMatomoError = (description: string, tag: string) => {
   trackEvent(...createEvent(`ERROR: ${description}`, `error_${tag}`));
 };
 
-export const trackMatomoTxEvent = (
-  txName?: string,
+export const trackMatomoFormEvent = (
+  formName?: string,
   stage: 'prepare' | 'done' = 'done',
 ) => {
-  txName &&
+  formName &&
     trackEvent(
       ...createEvent(
-        `Perform transaction «${txName}», ${stage}`,
-        `perform_tx_${txName}_${stage}`,
+        `Submit form «${formName}», ${stage}`,
+        `submit_form_${formName}_${stage}`,
       ),
     );
 };
