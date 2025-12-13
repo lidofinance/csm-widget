@@ -1,4 +1,5 @@
 import { ButtonIcon, Plus, Text } from '@lidofinance/lido-ui';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Chip, FormTitle, MatomoLink, Stack } from 'shared/components';
@@ -33,7 +34,10 @@ export const AdditionalAddresses: FC = () => {
           You can add up to {MAX_ADDITIONAL_ADDRESSES} addresses where your
           achievements are stored. To prove you own each address, sign a message
           on Etherscan. For more info see{' '}
-          <MatomoLink href="https://www.youtube.com/watch?v=yUX34iCbCWE">
+          <MatomoLink
+            href="https://www.youtube.com/watch?v=yUX34iCbCWE"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsYoutubeGuideLink}
+          >
             the guide
           </MatomoLink>
         </Text>

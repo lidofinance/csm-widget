@@ -24,7 +24,10 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
           </Text>
           <Text size="xxs">
             Check out details about{' '}
-            <MatomoLink href={OPERATOR_TYPES_LINK}>
+            <MatomoLink
+              href={OPERATOR_TYPES_LINK}
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.operatorTypesDocsLink}
+            >
               operator types and parameters
             </MatomoLink>{' '}
             to learn more.

@@ -19,7 +19,7 @@ export const NormalizeQueueFormProvider: FC<PropsWithChildren> = ({
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter}>
+      <FormControllerProvider submitter={submitter} formName="normalizeQueue">
         {children}
       </FormControllerProvider>
     </FormProvider>
