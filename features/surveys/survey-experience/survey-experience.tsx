@@ -1,4 +1,5 @@
 import { FC, useCallback } from 'react';
+import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormTitle, SectionBlock, Stack, WhenLoaded } from 'shared/components';
 import {
@@ -34,9 +35,11 @@ export const SurveyExperience: FC = () => {
 
   const handleSubmit = useCallback(
     async (data: ExperienceForm) => {
+      trackMatomoFormEvent('survey-experience', 'prepare');
       modals.pending();
       try {
         await mutate(data);
+        trackMatomoFormEvent('survey-experience', 'done');
         modals.success();
       } catch (e) {
         modals.failed(e);

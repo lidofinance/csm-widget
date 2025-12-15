@@ -1,4 +1,5 @@
 import { FC, useCallback, useState } from 'react';
+import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Text } from '@lidofinance/lido-ui';
 import { Plural, SectionBlock, Stack, WhenLoaded } from 'shared/components';
@@ -26,10 +27,12 @@ export const SurveyDelegates: FC = () => {
 
   const handleAdd = useCallback(
     async (data: AddDelegateFormData) => {
+      trackMatomoFormEvent('survey-delegates', 'prepare');
       modals.pending();
       try {
         await add(data.address);
         formObject.reset();
+        trackMatomoFormEvent('survey-delegates', 'done');
         modals.success();
       } catch (e) {
         modals.failed(e);
