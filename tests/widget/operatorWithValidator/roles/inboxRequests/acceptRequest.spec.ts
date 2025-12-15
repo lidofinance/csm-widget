@@ -5,13 +5,20 @@ import { mnemonicToAccount } from 'viem/accounts';
 import { Tags } from 'tests/consts/common.const';
 import { ROLES } from 'tests/consts/roles';
 import { InboxRequestsPage } from 'tests/pages/tabs/roles';
+import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe(
   'Roles. Inbox Rewards. Accept rewards ',
-  { tag: [Tags.performTX, Tags.forked] },
+  {
+    tag: [Tags.performTX, Tags.forked],
+  },
   () => {
     let randomId: number;
     let inboxRequestsPage: InboxRequestsPage;
+
+    test.beforeAll(({ useFork }) => {
+      test.skip(!useFork, 'Test suite runs only on forked network');
+    });
 
     test.beforeEach(async ({ widgetService, secretPhrase, csmSDK }) => {
       const operators = await csmSDK.getNodeOperatorsByAddress(
@@ -24,50 +31,50 @@ test.describe(
       inboxRequestsPage = widgetService.rolesPage.inboxRequestsPage;
     });
 
-    test('Verify accept request for reward invite', async ({
-      forkActionService,
-      secretPhrase,
-    }) => {
-      await forkActionService.proposeReward(
-        randomId,
-        mnemonicToAccount(secretPhrase).address,
-      );
-      await inboxRequestsPage.open();
+    test(
+      qase(309, 'Verify accept request for reward invite'),
+      async ({ forkActionService, secretPhrase }) => {
+        await forkActionService.proposeReward(
+          randomId,
+          mnemonicToAccount(secretPhrase).address,
+        );
+        await inboxRequestsPage.open();
 
-      const expectedRequest = inboxRequestsPage.getRequestLocator(
-        randomId,
-        ROLES.REWARDS,
-      );
+        const expectedRequest = inboxRequestsPage.getRequestLocator(
+          randomId,
+          ROLES.REWARDS,
+        );
 
-      await expect(expectedRequest).toBeVisible();
-      await expectedRequest.click();
-      await expect(expectedRequest).toBeChecked();
+        await expect(expectedRequest).toBeVisible();
+        await expectedRequest.click();
+        await expect(expectedRequest).toBeChecked();
 
-      await inboxRequestsPage.acceptRequest(randomId, ROLES.REWARDS);
-      await expectedRequest.waitFor({ state: 'hidden' });
-    });
+        await inboxRequestsPage.acceptRequest(randomId, ROLES.REWARDS);
+        await expectedRequest.waitFor({ state: 'hidden' });
+      },
+    );
 
-    test('Verify accept request for manager invite', async ({
-      forkActionService,
-      secretPhrase,
-    }) => {
-      await forkActionService.proposeManager(
-        randomId,
-        mnemonicToAccount(secretPhrase).address,
-      );
-      await inboxRequestsPage.open();
+    test(
+      qase(310, 'Verify accept request for manager invite'),
+      async ({ forkActionService, secretPhrase }) => {
+        await forkActionService.proposeManager(
+          randomId,
+          mnemonicToAccount(secretPhrase).address,
+        );
+        await inboxRequestsPage.open();
 
-      const expectedRequest = inboxRequestsPage.getRequestLocator(
-        randomId,
-        ROLES.MANAGER,
-      );
+        const expectedRequest = inboxRequestsPage.getRequestLocator(
+          randomId,
+          ROLES.MANAGER,
+        );
 
-      await expect(expectedRequest).toBeVisible();
-      await expectedRequest.click();
-      await expect(expectedRequest).toBeChecked();
+        await expect(expectedRequest).toBeVisible();
+        await expectedRequest.click();
+        await expect(expectedRequest).toBeChecked();
 
-      await inboxRequestsPage.acceptRequest(randomId, ROLES.REWARDS);
-      await expectedRequest.waitFor({ state: 'hidden' });
-    });
+        await inboxRequestsPage.acceptRequest(randomId, ROLES.REWARDS);
+        await expectedRequest.waitFor({ state: 'hidden' });
+      },
+    );
   },
 );
