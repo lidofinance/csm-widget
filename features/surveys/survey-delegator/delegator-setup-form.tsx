@@ -1,4 +1,5 @@
 import { FC, useCallback, useMemo } from 'react';
+import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormTitle,
@@ -102,6 +103,7 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
 
   const handleSubmit = useCallback(
     async (data: Setup) => {
+      trackMatomoFormEvent('survey-delegator-setup', 'prepare');
       modals.pending();
       try {
         const res = await mutate(data);
@@ -111,6 +113,7 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
             `${PATH.SURVEYS_DELEGATOR}/${operatorId}/${res.index}` as PATH,
           );
         }
+        trackMatomoFormEvent('survey-delegator-setup', 'done');
         modals.success();
       } catch (e) {
         modals.failed(e);

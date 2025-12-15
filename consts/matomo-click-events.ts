@@ -106,6 +106,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   pageChangeRewardsRole = 'pageChangeRewardsRole',
   pageNormalizeQueue = 'pageNormalizeQueue',
   pageTypeIcs = 'pageTypeIcs',
+  pageSurveys = 'pageSurveys',
   page404 = 'page404',
   page500 = 'page500',
   // Actions
@@ -493,6 +494,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs]: createPageViewEvent(
     'Type ICS',
     'view_type_ics_page',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.pageSurveys]: createPageViewEvent(
+    'Surveys',
+    'view_surveys_page',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.page404]: createPageViewEvent(
     '404',
