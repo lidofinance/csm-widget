@@ -31,11 +31,11 @@ export const SurveyContacts: FC = () => {
 
   const handleSubmit = useCallback(
     async (data: Contact) => {
-      trackMatomoFormEvent('survey-contacts', 'prepare');
+      trackMatomoFormEvent('surveyContacts');
       modals.pending();
       try {
         await mutate(data);
-        trackMatomoFormEvent('survey-contacts', 'done');
+        trackMatomoFormEvent('surveyContacts', 'success');
         modals.success();
       } catch (e) {
         modals.failed(e);

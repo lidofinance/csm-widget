@@ -27,12 +27,12 @@ export const SurveyDelegates: FC = () => {
 
   const handleAdd = useCallback(
     async (data: AddDelegateFormData) => {
-      trackMatomoFormEvent('survey-delegates', 'prepare');
+      trackMatomoFormEvent('surveyDelegates');
       modals.pending();
       try {
         await add(data.address);
         formObject.reset();
-        trackMatomoFormEvent('survey-delegates', 'done');
+        trackMatomoFormEvent('surveyDelegates', 'success');
         modals.success();
       } catch (e) {
         modals.failed(e);

@@ -35,11 +35,11 @@ export const SurveyExperience: FC = () => {
 
   const handleSubmit = useCallback(
     async (data: ExperienceForm) => {
-      trackMatomoFormEvent('survey-experience', 'prepare');
+      trackMatomoFormEvent('surveyExperience');
       modals.pending();
       try {
         await mutate(data);
-        trackMatomoFormEvent('survey-experience', 'done');
+        trackMatomoFormEvent('surveyExperience', 'success');
         modals.success();
       } catch (e) {
         modals.failed(e);

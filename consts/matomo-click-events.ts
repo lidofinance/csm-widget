@@ -160,9 +160,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   vanomDashboardLink = 'vanomDashboardLink',
   legalPrivacyNoticeLink = 'legalPrivacyNoticeLink',
   lidoHomeLink = 'lidoHomeLink',
-  // SIWE
-  siweSignIn = 'siweSignIn',
-  siweSignInSuccess = 'siweSignInSuccess',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
@@ -674,14 +671,5 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.lidoHomeLink]: createEvent(
     'Click Lido logo link',
     'lido_home_link',
-  ),
-  // SIWE
-  [MATOMO_CLICK_EVENTS_TYPES.siweSignIn]: createEvent(
-    'Push «Sign in» button for SIWE auth',
-    'siwe_sign_in',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.siweSignInSuccess]: createEvent(
-    'SIWE auth completed successfully',
-    'siwe_sign_in_success',
   ),
 };

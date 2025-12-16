@@ -26,11 +26,11 @@ export const SurveyHowDidYouLearnCsm: FC = () => {
 
   const handleSubmit = useCallback(
     async (data: HowDidYouLearnCsm) => {
-      trackMatomoFormEvent('survey-learn-csm', 'prepare');
+      trackMatomoFormEvent('surveyLearnCsm');
       modals.pending();
       try {
         await mutate(data);
-        trackMatomoFormEvent('survey-learn-csm', 'done');
+        trackMatomoFormEvent('surveyLearnCsm', 'success');
         modals.success();
       } catch (e) {
         modals.failed(e);

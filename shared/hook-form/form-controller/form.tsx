@@ -23,7 +23,7 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
   const doSubmit = useMemo(
     () =>
       handleSubmit(async (args) => {
-        trackMatomoFormEvent(formName, 'prepare');
+        trackMatomoFormEvent(formName);
 
         // Validate address before submit - if address is not valid, don't submit
         const result = await validateAddress(address);
@@ -31,7 +31,7 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
 
         const success = await onSubmit(args, data, { onConfirm, onRetry });
         if (success) {
-          trackMatomoFormEvent(formName, 'done');
+          trackMatomoFormEvent(formName, 'success');
           onReset ? onReset(args) : resetDefault();
         }
       }),

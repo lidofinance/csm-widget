@@ -1,4 +1,3 @@
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { getExternalLinks } from 'consts/external-links';
 import { useDappStatus } from 'modules/web3';
 import { useModalActions } from 'providers/modal-provider';
@@ -13,7 +12,7 @@ import {
 import { useSessionStorage } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { extractError } from 'utils';
-import { trackMatomoEvent } from 'utils/track-matomo-event';
+import { trackMatomoSiweEvent } from 'utils/track-matomo-event';
 import { AuthContextType } from './types';
 import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
@@ -30,19 +29,19 @@ export const useSiweAuth = () => {
 };
 
 type SiweAuthProviderProps = {
-  storageKeyPrefix: string;
+  contextName: string;
   statement: string;
 };
 
 export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
-  storageKeyPrefix,
+  contextName,
   statement,
   children,
 }) => {
   const siwe = useSiwe({ statement });
   const { address } = useDappStatus();
   const [token, setToken] = useSessionStorage<string | undefined>(
-    `${storageKeyPrefix}-${address}`,
+    `${contextName}-token-${address}`,
     undefined,
   );
 
@@ -51,7 +50,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   const { validateAddress } = useAddressValidation();
 
   const signIn = useCallback(async () => {
-    trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.siweSignIn);
+    trackMatomoSiweEvent(contextName);
 
     // Validate address before signin - if address is not valid, don't signin
     const result = await validateAddress(address);
@@ -77,12 +76,20 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
       const data: { access_token: string; token_type: string } =
         await response.json();
       setToken(`${data.token_type} ${data.access_token}`);
-      trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.siweSignInSuccess);
+      trackMatomoSiweEvent(contextName, 'success');
       closeModal();
     } catch (e) {
       modalStages.rejected();
     }
-  }, [address, closeModal, modalStages, setToken, siwe, validateAddress]);
+  }, [
+    address,
+    closeModal,
+    contextName,
+    modalStages,
+    setToken,
+    siwe,
+    validateAddress,
+  ]);
 
   const logout = useCallback(() => {
     setToken(undefined);

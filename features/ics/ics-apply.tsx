@@ -78,7 +78,7 @@ export const IcsApply: FC = () => {
     <NoSSRWrapper>
       {isWrongChain && <Fallback />}
       <SiweAuthProvider
-        storageKeyPrefix="ics-token"
+        contextName="ics"
         statement="Sign in to use the ICS Apply form"
       >
         <IcsStateProvider>

@@ -85,7 +85,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
 
   const handleSubmit = useCallback(
     async (data: Setup) => {
-      trackMatomoFormEvent('survey-setup', 'prepare');
+      trackMatomoFormEvent('surveySetup');
       modals.pending();
       try {
         const res = await mutate(data);
@@ -94,7 +94,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
         if (!id && res?.index) {
           void navigate(`${PATH.SURVEYS_SETUP}/${res.index}` as PATH);
         }
-        trackMatomoFormEvent('survey-setup', 'done');
+        trackMatomoFormEvent('surveySetup', 'success');
         modals.success();
       } catch (e) {
         modals.failed(e);

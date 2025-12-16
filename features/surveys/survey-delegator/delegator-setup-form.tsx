@@ -103,7 +103,7 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
 
   const handleSubmit = useCallback(
     async (data: Setup) => {
-      trackMatomoFormEvent('survey-delegator-setup', 'prepare');
+      trackMatomoFormEvent('surveyDelegatorSetup');
       modals.pending();
       try {
         const res = await mutate(data);
@@ -113,7 +113,7 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
             `${PATH.SURVEYS_DELEGATOR}/${operatorId}/${res.index}` as PATH,
           );
         }
-        trackMatomoFormEvent('survey-delegator-setup', 'done');
+        trackMatomoFormEvent('surveyDelegatorSetup', 'success');
         modals.success();
       } catch (e) {
         modals.failed(e);

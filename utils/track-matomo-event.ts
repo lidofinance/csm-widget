@@ -4,6 +4,7 @@ import {
   MATOMO_CLICK_EVENTS_TYPES,
   createEvent,
 } from 'consts/matomo-click-events';
+import { snakeCase } from 'lodash';
 
 export type WithMatomoEvent<P = unknown> = P & {
   matomoEvent?: MATOMO_CLICK_EVENTS_TYPES | undefined;
@@ -24,13 +25,25 @@ export const trackMatomoError = (description: string, tag: string) => {
 
 export const trackMatomoFormEvent = (
   formName?: string,
-  stage: 'prepare' | 'done' = 'done',
+  stage: 'start' | 'success' = 'start',
 ) => {
   formName &&
     trackEvent(
       ...createEvent(
-        `Submit form «${formName}», ${stage}`,
-        `submit_form_${formName}_${stage}`,
+        `Submit form ${stage} for «${formName}»`,
+        `submit_form_${snakeCase(formName)}_${stage}`,
       ),
     );
+};
+
+export const trackMatomoSiweEvent = (
+  contextName: string,
+  stage: 'start' | 'success' = 'start',
+) => {
+  trackEvent(
+    ...createEvent(
+      `SIWE sign in ${stage} for «${contextName}»`,
+      `siwe_${snakeCase(contextName)}_${stage}`,
+    ),
+  );
 };
