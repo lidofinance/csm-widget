@@ -1,3 +1,4 @@
+import { extractErrorMessage } from './extract-error-message';
 import { trackMatomoError } from './track-matomo-event';
 
 export enum ErrorCode {
@@ -67,7 +68,8 @@ export const getErrorCode = (error: unknown): ErrorCode => {
       errorCode = ErrorCode.SOMETHING_WRONG;
   }
 
-  trackMatomoError(`${error}`, errorCode);
+  const errorMessage = extractErrorMessage(error);
+  trackMatomoError(`${errorMessage}`, errorCode);
   return errorCode;
 };
 
