@@ -10,7 +10,10 @@ const { surveyApi } = getExternalLinks();
 export const useSurveysFilled = (
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
-  const url = nodeOperatorId ? `${surveyApi}/open/csm-${nodeOperatorId}` : null;
+  const url =
+    nodeOperatorId !== undefined
+      ? `${surveyApi}/open/csm-${nodeOperatorId}`
+      : null;
 
   return useQuery({
     queryKey: ['surveys-filled', url],

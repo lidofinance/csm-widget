@@ -82,7 +82,7 @@ const getTxModalStagesSubmitKeys = (
         txHash={txHash}
         title="Node Operator has been created"
         description={
-          nodeOperatorId ? (
+          nodeOperatorId !== undefined ? (
             <>
               Your Node Operator ID is <b>{nodeOperatorId.toString()}</b>
               <br />

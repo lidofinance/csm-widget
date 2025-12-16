@@ -9,7 +9,7 @@ import {
   subSeconds,
   subWeeks,
 } from 'date-fns';
-import { useNodeOperatorId } from 'modules/web3';
+import { useNodeOperatorId, useOperatorInfo } from 'modules/web3';
 import { useDismiss } from './use-dismiss';
 import { useSurveysFilled } from './use-surveys-filled';
 import { useShowFlags } from './use-show-rule';
@@ -21,6 +21,10 @@ export const useSurveyEnabled = (skipClosed = false) => {
   const { IS_SURVEYS_ACTIVE } = useShowFlags();
 
   const nodeOperatorId = useNodeOperatorId();
+  const { data: hasNonWithdrawnKeys } = useOperatorInfo(
+    nodeOperatorId,
+    (info) => info.totalAddedKeys - info.totalWithdrawnKeys > 0,
+  );
 
   const { isDismissed, dismiss: onClose } = useDismiss(
     `surveys-cta-closed-${nodeOperatorId}`,
@@ -36,7 +40,7 @@ export const useSurveyEnabled = (skipClosed = false) => {
   const variant: SurveyVariant | null =
     filled?.isFilled === false
       ? 'submit'
-      : filled?.isFilled === true
+      : filled?.isFilled === true && hasNonWithdrawnKeys
         ? 'review'
         : null;
 
@@ -61,7 +65,7 @@ export const getSurveyDates = (currentDate: Date = new Date()) => {
 
   const start = subWeeks(
     startOfWeek(corner, { weekStartsOn: SURVEY_START_DAY_OF_WEEK }),
-    SURVEY_COUNT_WEEKS / 2,
+    Math.ceil(SURVEY_COUNT_WEEKS / 2),
   );
   const end = subSeconds(addWeeks(start, SURVEY_COUNT_WEEKS), 1);
 
