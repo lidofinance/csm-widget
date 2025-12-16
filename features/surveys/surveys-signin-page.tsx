@@ -1,13 +1,10 @@
 import { FC } from 'react';
 
-import { NoSSRWrapper } from 'shared/components';
-import { Layout } from 'shared/layout';
-import { SiweSignIn } from './siwe-sign-in';
+import { useDappStatus } from 'modules/web3';
+import { SiweConnect, SiweSignIn } from './siwe-sign-in';
 
-export const SurveysSignInPage: FC = () => (
-  <Layout title="Surveys" subtitle="Voluntary report form">
-    <NoSSRWrapper>
-      <SiweSignIn />
-    </NoSSRWrapper>
-  </Layout>
-);
+export const SurveysSignInPage: FC = () => {
+  const { isAccountActive } = useDappStatus();
+
+  return <>{isAccountActive ? <SiweSignIn /> : <SiweConnect />}</>;
+};
