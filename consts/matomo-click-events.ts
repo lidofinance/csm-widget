@@ -13,11 +13,6 @@ export const createEvent = (
   `${MATOMO_APP_PREFIX}_${eventKey.toLowerCase()}`,
 ];
 
-const createPageViewEvent = (
-  pageName: string,
-  eventKey: string,
-): MatomoEventType => createEvent(`View page «${pageName}»`, eventKey);
-
 export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Welcome
   connectWallet = 'connectWallet',
@@ -83,32 +78,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardExternalRatedLink = 'dashboardExternalRatedLink',
   dashboardExternalMigaLabsLink = 'dashboardExternalMigaLabsLink',
   dashboardNotificationSentinelLink = 'dashboardNotificationSentinelLink',
-  // Pages
-  pageWelcome = 'pageWelcome',
-  pageStarterPack = 'pageStarterPack',
-  pageMaintenance = 'pageMaintenance',
-  pageCreateNodeOperator = 'pageCreateNodeOperator',
-  pageDashboard = 'pageDashboard',
-  pageAddKeys = 'pageAddKeys',
-  pageViewKeys = 'pageViewKeys',
-  pageRemoveKeys = 'pageRemoveKeys',
-  pageExitKeys = 'pageExitKeys',
-  pageEjectKeys = 'pageEjectKeys',
-  pageTransferKeys = 'pageTransferKeys',
-  pageMonitoring = 'pageMonitoring',
-  pageAddBond = 'pageAddBond',
-  pageClaimBond = 'pageClaimBond',
-  pageRewardsHistory = 'pageRewardsHistory',
-  pageUnlockBond = 'pageUnlockBond',
-  pageClaimType = 'pageClaimType',
-  pageInboxRequests = 'pageInboxRequests',
-  pageChangeManagerRole = 'pageAcceptInviteChangeManagerRole',
-  pageChangeRewardsRole = 'pageChangeRewardsRole',
-  pageNormalizeQueue = 'pageNormalizeQueue',
-  pageTypeIcs = 'pageTypeIcs',
-  pageSurveys = 'pageSurveys',
-  page404 = 'page404',
-  page500 = 'page500',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
   // Rewards History
@@ -402,107 +371,6 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.dashboardNotificationSentinelLink]: createEvent(
     'Click «Notification Sentinel» on Dashboard screen',
     'dashboard_notification_sentinel_link',
-  ),
-  // Pages
-  [MATOMO_CLICK_EVENTS_TYPES.pageWelcome]: createPageViewEvent(
-    'Welcome',
-    'view_welcome_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageStarterPack]: createPageViewEvent(
-    'StarterPack',
-    'view_starter_pack_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageMaintenance]: createPageViewEvent(
-    'Maintenance',
-    'view_maintenance_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageCreateNodeOperator]: createPageViewEvent(
-    'CreateNodeOperator',
-    'view_create_node_operator_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageDashboard]: createPageViewEvent(
-    'Dashboard',
-    'view_dashboard_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageAddKeys]: createPageViewEvent(
-    'AddKeys',
-    'view_add_keys_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageViewKeys]: createPageViewEvent(
-    'ViewKeys',
-    'view_view_keys_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageRemoveKeys]: createPageViewEvent(
-    'RemoveKeys',
-    'view_remove_keys_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageExitKeys]: createPageViewEvent(
-    'ExitKeys',
-    'view_exit_keys_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageEjectKeys]: createPageViewEvent(
-    'EjectKeys',
-    'view_eject_keys_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageTransferKeys]: createPageViewEvent(
-    'TransferKeys',
-    'view_transfer_keys_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageMonitoring]: createPageViewEvent(
-    'Monitoring',
-    'view_monitoring_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageAddBond]: createPageViewEvent(
-    'AddBond',
-    'view_add_bond_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageClaimBond]: createPageViewEvent(
-    'ClaimBond',
-    'view_claim_bond_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageRewardsHistory]: createPageViewEvent(
-    'RewardsHistory',
-    'view_rewards_history_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageUnlockBond]: createPageViewEvent(
-    'UnlockBond',
-    'view_unlock_bond_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageClaimType]: createPageViewEvent(
-    'ClaimType',
-    'view_claim_type_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests]: createPageViewEvent(
-    'InboxRequests',
-    'view_inbox_requests_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageChangeManagerRole]: createPageViewEvent(
-    'ChangeManagerRole',
-    'view_change_manager_role_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageChangeRewardsRole]: createPageViewEvent(
-    'ChangeRewardsRole',
-    'view_change_rewards_role_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageNormalizeQueue]: createPageViewEvent(
-    'NormalizeQueue',
-    'view_normalize_queue_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs]: createPageViewEvent(
-    'Type ICS',
-    'view_type_ics_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.pageSurveys]: createPageViewEvent(
-    'Surveys',
-    'view_surveys_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.page404]: createPageViewEvent(
-    '404',
-    'view_404_page',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.page500]: createPageViewEvent(
-    '500',
-    'view_500_page',
   ),
   // Actions
   [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: createEvent(

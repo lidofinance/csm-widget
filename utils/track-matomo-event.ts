@@ -47,3 +47,13 @@ export const trackMatomoSiweEvent = (
     ),
   );
 };
+
+export const trackMatomoPageEvent = (pageName?: string) => {
+  pageName &&
+    trackEvent(
+      ...createEvent(
+        `View page «${pageName}»`,
+        `view_${snakeCase(pageName)}_page`,
+      ),
+    );
+};

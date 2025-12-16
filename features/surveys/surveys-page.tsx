@@ -1,4 +1,3 @@
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import { FC, useMemo } from 'react';
 import { SiweAuthGate, SiweAuthProvider } from 'shared/siwe';
@@ -44,11 +43,7 @@ export const SurveysPage: FC<{ slug?: string[] }> = ({ slug = [] }) => {
   }, [slug]);
 
   return (
-    <Layout
-      title="Surveys"
-      subtitle="Voluntary report form"
-      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageSurveys}
-    >
+    <Layout title="Surveys" subtitle="Voluntary report form" pageName="Surveys">
       <NoSSRWrapper>
         {isWrongChain && <Fallback />}
         <SiweAuthProvider
