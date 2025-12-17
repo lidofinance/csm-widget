@@ -29,6 +29,8 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   // fixture-options
   useFork: [
     async ({}, use) => {
+      // You can set the parameter either in playwright.config.ts
+      // or directly in the test itself.
       await use(false);
     },
     { scope: 'worker', option: true },

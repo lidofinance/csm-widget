@@ -50,7 +50,8 @@ export const useRewardsHistoryExport = () => {
       setIsExporting(true);
 
       const csvData = transformData(rawData);
-      const operator = nodeOperatorId ? `csm-${nodeOperatorId}` : '';
+      const operator =
+        nodeOperatorId !== undefined ? `csm-${nodeOperatorId}` : '';
       const date = formatDate(Date.now(), 'yyyy-MM-dd');
       const filename = ['rewards-history', operator, date]
         .filter(Boolean)
