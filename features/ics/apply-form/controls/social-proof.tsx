@@ -16,7 +16,7 @@ export const SocialProof: FC = () => {
   const { twitterMessage, discordMessage } = useSocialMessages();
 
   return (
-    <Stack direction="column" gap="md">
+    <Stack direction="column" gap="md" data-testid="socialProofSection">
       <Stack direction="column" gap="xxs">
         <FormTitle chip={<Chip>Optional</Chip>}>Socials</FormTitle>
         <Text size="xs" color="secondary">
@@ -29,13 +29,13 @@ export const SocialProof: FC = () => {
       </Stack>
 
       {/* Twitter Section */}
-      <Stack direction="column" gap="sm">
+      <Stack direction="column" gap="sm" data-testid="twitterSection">
         <Text as="h4" size="xs" weight={700}>
           X (formerly Twitter)
         </Text>
 
         <CategoryItemsWrapper $gap="md" $offset="md">
-          <Stack direction="column" gap="sm">
+          <Stack direction="column" gap="sm" data-testid="twitterProofStep1">
             <Text size="xs">
               Step 1. Prove the ownership of the X account by posting a tweet
               with the following text
@@ -52,7 +52,7 @@ export const SocialProof: FC = () => {
             />
           </Stack>
 
-          <Stack direction="column" gap="sm">
+          <Stack direction="column" gap="sm" data-testid="twitterProofStep2">
             <Text size="xs">Step 2. Paste the link to this post</Text>
 
             <TextInputHookForm
@@ -65,13 +65,13 @@ export const SocialProof: FC = () => {
       </Stack>
 
       {/* Discord Section */}
-      <Stack direction="column" gap="sm">
+      <Stack direction="column" gap="sm" data-testid="discordSection">
         <Text as="h4" size="xs" weight={700}>
           Discord
         </Text>
 
         <CategoryItemsWrapper $gap="md" $offset="md">
-          <Stack direction="column" gap="sm">
+          <Stack direction="column" gap="sm" data-testid="discordProofStep1">
             <Text size="xs">
               Step 1. Prove the ownership of the Discord account by posting the
               following message to{' '}
@@ -95,7 +95,7 @@ export const SocialProof: FC = () => {
             />
           </Stack>
 
-          <Stack direction="column" gap="sm">
+          <Stack direction="column" gap="sm" data-testid="discordProofStep2">
             <Text size="xs">Step 2. Paste the link to this message</Text>
 
             <TextInputHookForm

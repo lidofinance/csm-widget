@@ -76,7 +76,7 @@
     "@nestjs/common": "^10.4.16",
     "@next/bundle-analyzer": "^13.2.4",
     "@next/eslint-plugin-next": "^13.4.13",
-    "@playwright/test": "1.56.1",
+    "@playwright/test": "1.57.0",
     "@svgr/webpack": "8.1.0",
     "@types/jest": "28.1.6",
     "@types/lodash": "^4.14.186",

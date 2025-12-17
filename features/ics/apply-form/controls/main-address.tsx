@@ -18,6 +18,7 @@ export const MainAddress: FC = () => {
       <InputAddress
         fullwidth
         disabled
+        name="mainAddress"
         label={
           <>
             Main address <VerifiedChip color="primary">Verified</VerifiedChip>

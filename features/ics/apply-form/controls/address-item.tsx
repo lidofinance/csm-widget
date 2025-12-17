@@ -107,7 +107,12 @@ export const AddressItem: FC<AddressItemProps> = ({
   );
 
   return (
-    <Stack key={field.id} direction="column" gap="sm">
+    <Stack
+      key={field.id}
+      direction="column"
+      gap="sm"
+      data-testid={`additionalAddressInfo-${index}`}
+    >
       <Stack direction="row" justify="space-between" align="center">
         <Text as="h4" size="xs" weight="bold">
           Additional address #{index + 1}
@@ -117,6 +122,7 @@ export const AddressItem: FC<AddressItemProps> = ({
           variant="text"
           color="error"
           onClick={() => onRemove(index)}
+          data-testid="removeBtn"
         >
           Remove
         </Button>
@@ -136,7 +142,11 @@ export const AddressItem: FC<AddressItemProps> = ({
         </Stack>
       ) : (
         <CategoryItemsWrapper $gap="md" $offset="md">
-          <Stack direction="column" gap="sm">
+          <Stack
+            direction="column"
+            gap="sm"
+            data-testid="additionalAddressStep1"
+          >
             <Text size="xs">Step 1. Insert your Ethereum address</Text>
             <AddressInputHookForm
               fieldName={`additionalAddresses.${index}.address`}
@@ -144,11 +154,16 @@ export const AddressItem: FC<AddressItemProps> = ({
               placeholder="0x..."
             />
           </Stack>
-          <Stack direction="column" gap="sm">
+          <Stack
+            direction="column"
+            gap="sm"
+            data-testid="additionalAddressStep2"
+          >
             <Text size="xs">
               Step 2. Copy the message and sign it on Etherscan (or other tool)
             </Text>
             <Input
+              name={`additionalAddresses.${index}.messageToSign`}
               value={message}
               readOnly
               label="Message to sign"
@@ -158,6 +173,7 @@ export const AddressItem: FC<AddressItemProps> = ({
                   <CopyButton text={message} size="xs" variant="translucent" />
                   <MatomoLink href="https://etherscan.io/verifiedSignatures#">
                     <ButtonIcon
+                      data-testid="signBtn"
                       icon={<External />}
                       size="xs"
                       variant="translucent"
@@ -169,7 +185,11 @@ export const AddressItem: FC<AddressItemProps> = ({
               }
             />
           </Stack>
-          <Stack direction="column" gap="sm">
+          <Stack
+            direction="column"
+            gap="sm"
+            data-testid="additionalAddressStep3"
+          >
             <Text size="xs">
               Step 3. Paste the signature in the field below
             </Text>
@@ -183,6 +203,7 @@ export const AddressItem: FC<AddressItemProps> = ({
                   variant="translucent"
                   onClick={() => void onVerify(index)}
                   disabled={isVerifying}
+                  data-testid="verifyBtn"
                 >
                   {isVerifying ? 'Verifying...' : 'Verify'}
                 </Button>
