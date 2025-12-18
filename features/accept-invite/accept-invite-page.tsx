@@ -1,6 +1,5 @@
 import { FC } from 'react';
 
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FAQ_ROLES } from 'faq';
 import { Faq } from 'shared/components';
 import { Layout } from 'shared/layout';
@@ -12,7 +11,7 @@ export const AcceptInvitePage: FC = () => {
     <Layout
       title="Inbox requests"
       subtitle="Accept incoming requests for addresses changes"
-      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageInboxRequests}
+      pageName="InboxRequests"
     >
       <RolesPageSwitcher />
       <AcceptInvite />

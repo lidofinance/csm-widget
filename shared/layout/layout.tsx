@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, ReactNode, useEffect } from 'react';
 
 import { AlertContainer } from 'shared/alerts';
 import { LegalDisclaimer } from 'shared/components';
-import { trackMatomoEvent, WithMatomoEvent } from 'utils';
+import { trackMatomoPageEvent } from 'utils';
 import { Santa } from './decor';
 import { Footer } from './footer';
 import { DummyHeader, Header, SemiDummyHeader } from './header';
@@ -20,20 +20,21 @@ type Props = {
   title?: ReactNode;
   subtitle?: ReactNode;
   dummy?: boolean | 'semi';
+  pageName?: string;
 };
 
-export const Layout: FC<PropsWithChildren<WithMatomoEvent<Props>>> = ({
+export const Layout: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
   title,
   subtitle,
-  matomoEvent,
+  pageName,
 }) => {
   const titlesCount = [title, subtitle].filter(Boolean).length;
 
   useEffect(() => {
-    trackMatomoEvent(matomoEvent);
-  }, [matomoEvent]);
+    trackMatomoPageEvent(pageName);
+  }, [pageName]);
 
   return (
     <LayoutStyle>

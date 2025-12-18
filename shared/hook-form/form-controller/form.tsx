@@ -2,6 +2,7 @@ import { useDappStatus } from 'modules/web3';
 import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useAddressValidation } from 'providers/address-validation-provider';
+import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { useFormControllerContext } from './form-controller-context';
 import { useFormData } from './form-data-context';
 
@@ -14,7 +15,7 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
   const { isAccountActive, address } = useDappStatus();
   const { validateAddress } = useAddressValidation();
   const { handleSubmit, reset: resetDefault } = useFormContext();
-  const { onSubmit, onReset, retryEvent, onConfirm, onRetry } =
+  const { onSubmit, onReset, retryEvent, onConfirm, onRetry, formName } =
     useFormControllerContext();
   const data = useFormData();
 
@@ -22,12 +23,17 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
   const doSubmit = useMemo(
     () =>
       handleSubmit(async (args) => {
+        trackMatomoFormEvent(formName);
+
         // Validate address before submit - if address is not valid, don't submit
         const result = await validateAddress(address);
         if (!result) return;
 
         const success = await onSubmit(args, data, { onConfirm, onRetry });
-        if (success) onReset ? onReset(args) : resetDefault();
+        if (success) {
+          trackMatomoFormEvent(formName, 'success');
+          onReset ? onReset(args) : resetDefault();
+        }
       }),
     [
       handleSubmit,
@@ -39,6 +45,7 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
       resetDefault,
       validateAddress,
       address,
+      formName,
     ],
   );
 
