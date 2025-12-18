@@ -129,6 +129,9 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   vanomDashboardLink = 'vanomDashboardLink',
   legalPrivacyNoticeLink = 'legalPrivacyNoticeLink',
   lidoHomeLink = 'lidoHomeLink',
+  // Surveys CTA
+  surveysCtaLink = 'surveysCtaLink',
+  surveysCtaClose = 'surveysCtaClose',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
@@ -539,5 +542,14 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.lidoHomeLink]: createEvent(
     'Click Lido logo link',
     'lido_home_link',
+  ),
+  // Surveys CTA
+  [MATOMO_CLICK_EVENTS_TYPES.surveysCtaLink]: createEvent(
+    'Click «Surveys» link on Surveys CTA banner',
+    'surveys_cta_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.surveysCtaClose]: createEvent(
+    'Close Surveys CTA banner',
+    'surveys_cta_close',
   ),
 };
