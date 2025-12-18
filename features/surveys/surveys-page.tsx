@@ -43,11 +43,11 @@ export const SurveysPage: FC<{ slug?: string[] }> = ({ slug = [] }) => {
   }, [slug]);
 
   return (
-    <Layout title="Surveys" subtitle="Voluntary report form">
+    <Layout title="Surveys" subtitle="Voluntary report form" pageName="Surveys">
       <NoSSRWrapper>
         {isWrongChain && <Fallback />}
         <SiweAuthProvider
-          storageKeyPrefix="surveys-token"
+          contextName="surveys"
           statement="Sign in to use the CSM Surveys"
         >
           <SiweAuthGate fallback={<SurveysSignInPage />}>

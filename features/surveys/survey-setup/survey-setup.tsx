@@ -1,4 +1,5 @@
 import { FC, useCallback, useMemo } from 'react';
+import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormTitle,
@@ -84,6 +85,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
 
   const handleSubmit = useCallback(
     async (data: Setup) => {
+      trackMatomoFormEvent('surveySetup');
       modals.pending();
       try {
         const res = await mutate(data);
@@ -92,6 +94,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
         if (!id && res?.index) {
           void navigate(`${PATH.SURVEYS_SETUP}/${res.index}` as PATH);
         }
+        trackMatomoFormEvent('surveySetup', 'success');
         modals.success();
       } catch (e) {
         modals.failed(e);

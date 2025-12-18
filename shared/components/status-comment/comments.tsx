@@ -86,8 +86,14 @@ export const CommentActivationPending: FC = () => {
 export const CommentWithStrikes: FC = () => {
   return (
     <>
-      Check out <MatomoLink href={PERFORMANCE_TIPS_LINK}>tips</MatomoLink> on
-      how to improve your performance
+      Check out{' '}
+      <MatomoLink
+        href={PERFORMANCE_TIPS_LINK}
+        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.performanceTipsLink}
+      >
+        tips
+      </MatomoLink>{' '}
+      on how to improve your performance
     </>
   );
 };

@@ -2,12 +2,11 @@ import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
 import { Welcome } from './welcome';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { TryCSM } from './try-csm';
 
 export const WelcomePage: FC = () => {
   return (
-    <Layout matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageWelcome}>
+    <Layout pageName="Welcome">
       <Welcome />
       <TryCSM />
     </Layout>

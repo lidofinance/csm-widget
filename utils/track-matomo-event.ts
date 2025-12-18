@@ -1,10 +1,10 @@
 import { trackEvent } from '@lidofinance/analytics-matomo';
 import {
-  MATOMO_CLICK_EVENTS_TYPES,
   MATOMO_CLICK_EVENTS,
-  MATOMO_APP_NAME,
-  prefixed,
+  MATOMO_CLICK_EVENTS_TYPES,
+  createEvent,
 } from 'consts/matomo-click-events';
+import { snakeCase } from 'lodash';
 
 export type WithMatomoEvent<P = unknown> = P & {
   matomoEvent?: MATOMO_CLICK_EVENTS_TYPES | undefined;
@@ -16,33 +16,44 @@ export const trackMatomoEvent = (eventType?: MATOMO_CLICK_EVENTS_TYPES) => {
 
 export const trackMatomoFaqEvent = (faqId?: string) => {
   faqId &&
-    trackEvent(
-      MATOMO_APP_NAME,
-      `Open faq item «${faqId}»`,
-      prefixed`faq_item_open`,
-    );
+    trackEvent(...createEvent(`Open faq item «${faqId}»`, `faq_item_open`));
 };
 
 export const trackMatomoError = (description: string, tag: string) => {
-  trackEvent(MATOMO_APP_NAME, `ERROR: ${description}`, prefixed`error_${tag}`);
+  trackEvent(...createEvent(`ERROR: ${description}`, `error_${tag}`));
 };
 
-export const trackMatomoTxEvent = (
-  txName?: string,
-  stage: 'prepare' | 'done' = 'done',
+export const trackMatomoFormEvent = (
+  formName?: string,
+  stage: 'start' | 'success' = 'start',
 ) => {
-  txName &&
+  formName &&
     trackEvent(
-      MATOMO_APP_NAME,
-      `Perform transaction «${txName}», ${stage}`,
-      prefixed`perform_tx_${stage}`,
+      ...createEvent(
+        `Submit form ${stage} for «${formName}»`,
+        `submit_form_${snakeCase(formName)}_${stage}`,
+      ),
     );
 };
 
-export const trackMatomoHowLearnCsm = (answer: string) => {
+export const trackMatomoSiweEvent = (
+  contextName: string,
+  stage: 'start' | 'success' = 'start',
+) => {
   trackEvent(
-    MATOMO_APP_NAME,
-    `How did I learn about CSM: «${answer}»`,
-    prefixed`_how_learn_csm`,
+    ...createEvent(
+      `SIWE sign in ${stage} for «${contextName}»`,
+      `siwe_${snakeCase(contextName)}_${stage}`,
+    ),
   );
+};
+
+export const trackMatomoPageEvent = (pageName?: string) => {
+  pageName &&
+    trackEvent(
+      ...createEvent(
+        `View page «${pageName}»`,
+        `view_${snakeCase(pageName)}_page`,
+      ),
+    );
 };

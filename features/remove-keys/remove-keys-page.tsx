@@ -7,7 +7,6 @@ import {
   KeysPageSwitcher,
 } from 'shared/navigate';
 import { RemoveKeys } from './remove-keys';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { Faq, FormBlock } from 'shared/components';
 import { FAQ_KEYS } from 'faq';
 
@@ -15,7 +14,7 @@ export const RemoveKeysPage: FC = () => (
   <Layout
     title="Delete validator keys"
     subtitle="Remove or eject your validator keys"
-    matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageRemoveKeys}
+    pageName="RemoveKeys"
   >
     <KeysPageSwitcher />
     <FormBlock>

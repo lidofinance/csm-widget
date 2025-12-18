@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FAQ_OPERATOR_TYPE } from 'faq';
 import { Faq } from 'shared/components';
 import { Layout } from 'shared/layout';
@@ -10,7 +9,7 @@ export const TypeParametersPage: FC = () => (
   <Layout
     title="Operator Type Parameters"
     subtitle="Compare parameters"
-    matomoEvent={MATOMO_CLICK_EVENTS_TYPES.pageTypeIcs}
+    pageName="TypeIcs"
   >
     <TypePageSwitcher />
     <TypeParameters />

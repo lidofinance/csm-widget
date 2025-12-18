@@ -5,7 +5,7 @@ import {
   TxStagePermit,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { ErrorCode, getErrorCode } from 'utils';
+import { ErrorCode, extractErrorMessage, getErrorCode } from 'utils';
 
 const getModalStages = (transitStage: TransactionModalTransitStage) => ({
   sign: () => transitStage(<TxStagePermit />),
@@ -22,7 +22,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
     transitStage(
       <TxStageFail
         title="Sign in failed"
-        error={typeof error === 'string' ? error : undefined}
+        error={extractErrorMessage(error)}
         code={getErrorCode(error)}
       />,
     ),
