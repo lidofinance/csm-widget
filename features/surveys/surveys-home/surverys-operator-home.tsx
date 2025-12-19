@@ -1,0 +1,200 @@
+import { Divider, Plus, Text } from '@lidofinance/lido-ui';
+import { PATH } from 'consts/urls';
+import { FC, useCallback } from 'react';
+import { Plural, Stack, WhenLoaded } from 'shared/components';
+import { formatDaysAgo, plural } from 'utils';
+import {
+  SurveyButton,
+  SurveyItem,
+  SurveyLink,
+  SurveySection,
+  Warning,
+} from '../components';
+import { useSurveysSWR } from '../shared/use-surveys-swr';
+import { useSurveyContext } from '../surveys-provider';
+import { MAX_DELEGATES, SetupsKeys, Summary } from '../types';
+import { useConfirmEraseModal } from './confirm-erase-modal';
+
+export const SurveysOperatorHome: FC = () => {
+  const { data, isLoading, remove } = useSurveysSWR<Summary>('summary');
+  const { data: keys, mutate: mutateKeys } =
+    useSurveysSWR<SetupsKeys>('setups/keys');
+  const { delegatedOperators } = useSurveyContext();
+
+  const confirmModal = useConfirmEraseModal();
+
+  const handleErase = useCallback(async () => {
+    if (await confirmModal({})) {
+      await remove();
+      void mutateKeys();
+    }
+  }, [confirmModal, mutateKeys, remove]);
+
+  const showErase = !!(
+    data?.contacts ||
+    data?.experience ||
+    data?.howDidYouLearnCsm ||
+    (data?.setups && data.setups.length > 0)
+  );
+  const showSetups = !!(keys && (keys.total > 0 || keys.filled > 0));
+
+  return (
+    <WhenLoaded loading={!data && isLoading}>
+      <SurveySection
+        title="Your contact information"
+        subtitle="How this information will be used"
+        help="Lido contributors will attempt to contact you in case you are offline or unresponsive to important matters on the Mainnet. However, we cannot guarantee that you will be notified"
+      >
+        <SurveyItem title="Contact information">
+          <SurveyLink
+            color={data?.contacts ? 'secondary' : 'primary'}
+            path={PATH.SURVEYS_CONTACTS}
+          >
+            {data?.contacts ? 'Filled' : 'Fill in'}
+          </SurveyLink>
+        </SurveyItem>
+      </SurveySection>
+
+      <SurveySection
+        title="Your experience"
+        subtitle="How this information will be used"
+        help="Information is voluntarily submitted and only retained for report building, UI/UX improvement, or feedback purposes. Information is aggregated. Information about your experience is utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports"
+      >
+        <SurveyItem title="How did you learn about CSM?">
+          <SurveyLink
+            color={data?.howDidYouLearnCsm ? 'secondary' : 'primary'}
+            path={PATH.SURVEYS_HOW_DID_YOU_LEARN_CSM}
+          >
+            {data?.howDidYouLearnCsm ? 'Filled' : 'Fill in'}
+          </SurveyLink>
+        </SurveyItem>
+        <SurveyItem title="Your validation experience">
+          <SurveyLink
+            color={data?.experience ? 'secondary' : 'primary'}
+            path={PATH.SURVEYS_EXPERIENCE}
+          >
+            {data?.experience ? 'Filled' : 'Fill in'}
+          </SurveyLink>
+        </SurveyItem>
+      </SurveySection>
+
+      {showSetups && (
+        <SurveySection
+          title="Your setup"
+          subtitle="How this information will be used"
+          help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports"
+        >
+          {keys && keys.filled > keys.total && (
+            <Warning>
+              The number of your keys has decreased. Please update the data
+            </Warning>
+          )}
+          {data?.setups.map((setup) => (
+            <SurveyItem
+              key={setup.index}
+              title={
+                <Stack direction="column" gap="xs">
+                  <Stack>
+                    Setup #{setup.index}{' '}
+                    <Text as="span" size="sm" color="secondary">
+                      {setup.keysCount}{' '}
+                      <Plural
+                        value={setup.keysCount}
+                        variants={['key', 'keys']}
+                      />
+                    </Text>
+                  </Stack>
+                  <Text as="span" size="xxs" color="secondary">
+                    Updated {formatDaysAgo(setup.updatedAt)}
+                  </Text>
+                </Stack>
+              }
+            >
+              <SurveyLink path={`${PATH.SURVEYS_SETUP}/${setup.index}`}>
+                Edit
+              </SurveyLink>
+            </SurveyItem>
+          ))}
+
+          {keys && keys.left > 0 && (
+            <SurveyLink
+              icon={<Plus />}
+              color="primary"
+              variant="translucent"
+              fullwidth
+              path={PATH.SURVEYS_SETUP}
+            >
+              <>
+                Add new setup
+                <>
+                  {' '}
+                  ({keys.left}{' '}
+                  <Plural value={keys.left} variants={['key', 'keys']} /> left)
+                </>
+              </>
+            </SurveyLink>
+          )}
+        </SurveySection>
+      )}
+
+      <SurveySection
+        title="Manage delegates"
+        subtitle="How delegates work"
+        help={`Delegates can only access and submit Setup surveys on your behalf. Contact and experience data remains private. Up to ${plural({ value: MAX_DELEGATES, variants: ['delegate', 'delegates'], showValue: true })} allowed`}
+      >
+        <SurveyItem
+          // title="Delegates"
+          title={
+            <Stack>
+              Delegates
+              <Text as="span" size="sm" color="secondary">
+                {data?.delegates.length}
+              </Text>
+            </Stack>
+          }
+        >
+          <SurveyLink path={PATH.SURVEYS_DELEGATES}>Manage</SurveyLink>
+        </SurveyItem>
+      </SurveySection>
+
+      {showErase && (
+        <>
+          <Divider />
+          <SurveySection title="Erase your data">
+            <SurveyButton
+              title="Erase all data from the database"
+              fullwidth
+              color="error"
+              variant="translucent"
+              onClick={handleErase}
+            />
+          </SurveySection>
+        </>
+      )}
+
+      {delegatedOperators.length > 0 && (
+        <>
+          <Divider />
+          <SurveySection
+            title="Delegated operators"
+            subtitle="Operators you manage"
+            help="You have been added as a delegate for these node operators. You can manage their setup surveys."
+          >
+            <SurveyItem
+              title={
+                <Stack>
+                  Operators
+                  <Text as="span" size="sm" color="secondary">
+                    {delegatedOperators.length}
+                  </Text>
+                </Stack>
+              }
+            >
+              <SurveyLink path={PATH.SURVEYS_DELEGATOR}>Manage</SurveyLink>
+            </SurveyItem>
+          </SurveySection>
+        </>
+      )}
+    </WhenLoaded>
+  );
+};

@@ -1,12 +1,12 @@
 import { FC } from 'react';
 
 import { BackButton } from './shared';
-import { SurveySetup } from './survey-setup';
+import { SurveyDelegates } from './survey-delegates';
 import { SurveyOperatorGate } from './surveys-provider';
 
-export const SurveysSetupPage: FC<{ id?: string }> = ({ id }) => (
+export const SurveysDelegatesPage: FC = () => (
   <SurveyOperatorGate>
     <BackButton />
-    <SurveySetup id={id} />
+    <SurveyDelegates />
   </SurveyOperatorGate>
 );
