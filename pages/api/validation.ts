@@ -17,6 +17,7 @@ import {
 } from 'utilsApi';
 import Metrics from 'utilsApi/metrics';
 import { createCachedProxy } from 'utilsApi/cached-proxy';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 // Validate address to prevent SSRF attacks
 const validateEthereumAddress = (address: unknown): string | null => {
@@ -42,7 +43,12 @@ if (!secretConfig.validationAPI) {
       if (!validatedAddress) {
         throw new Error('Invalid address'); // This will be caught by the handler
       }
-      return `${secretConfig.validationAPI}/v1/check/${validatedAddress}`;
+      secretConfig.defaultChain;
+      const isMainnet = config.defaultChain === CHAINS.Mainnet;
+      const path = isMainnet
+        ? `/v2/check/${validatedAddress}`
+        : `/v1/check/${validatedAddress}`;
+      return `${secretConfig.validationAPI}${path}`;
     },
     cacheTTL: 1000,
     ignoreParams: true, // Address is in path, not query

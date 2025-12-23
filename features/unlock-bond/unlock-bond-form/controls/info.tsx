@@ -1,11 +1,12 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
+import {
+  LIDO_REWARDS_VAULT_LINK,
+  MEV_STEALING_LINK,
+} from 'consts/external-links';
 import { FC } from 'react';
 import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
 import { useUnlockBondFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import {
-  MEV_STEALING_LINK,
-  LIDO_REWARDS_VAULT_LINK,
-} from 'consts/external-links';
 
 export const Info: FC = () => {
   const { lockedBond } = useUnlockBondFormData();
@@ -22,13 +23,19 @@ export const Info: FC = () => {
           />
           {!!lockedBond && (
             <div>
-              <MatomoLink href={MEV_STEALING_LINK}>
+              <MatomoLink
+                href={MEV_STEALING_LINK}
+                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.mevStealingDocsLink}
+              >
                 EL reward stealing
               </MatomoLink>{' '}
               penalties have been applied to your Node Operator because one of
               your validators produced a block with the EL rewards sent to the
               wrong address (an address different from from{' '}
-              <MatomoLink href={LIDO_REWARDS_VAULT_LINK}>
+              <MatomoLink
+                href={LIDO_REWARDS_VAULT_LINK}
+                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoRewardsVaultLink}
+              >
                 the Lido Execution Layer Rewards Vault
               </MatomoLink>
               )
@@ -43,7 +50,10 @@ export const Info: FC = () => {
                 <li>
                   Check if the feeRecipient address of your validators consensus
                   / validator client is set to{' '}
-                  <MatomoLink href={LIDO_REWARDS_VAULT_LINK}>
+                  <MatomoLink
+                    href={LIDO_REWARDS_VAULT_LINK}
+                    matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoRewardsVaultLink}
+                  >
                     the Lido Execution Layer Rewards Vault
                   </MatomoLink>{' '}
                   to avoid the further penalties.

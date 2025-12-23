@@ -33,7 +33,7 @@ export const AcceptInviteFormProvider: FC<PropsWithChildren> = ({
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter}>
+      <FormControllerProvider submitter={submitter} formName="acceptInvite">
         {children}
       </FormControllerProvider>
     </FormProvider>

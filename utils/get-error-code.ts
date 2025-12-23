@@ -1,3 +1,4 @@
+import { extractErrorMessage } from './extract-error-message';
 import { trackMatomoError } from './track-matomo-event';
 
 export enum ErrorCode {
@@ -14,8 +15,6 @@ export enum ErrorCode {
 }
 
 export const getErrorCode = (error: unknown): ErrorCode => {
-  trackMatomoError(`${error}`, 'tx_error');
-
   try {
     console.error('TX_ERROR:', { error, error_string: JSON.stringify(error) });
   } catch (e) {
@@ -23,40 +22,55 @@ export const getErrorCode = (error: unknown): ErrorCode => {
   }
 
   const code = extractCodeFromError(error);
+  let errorCode: ErrorCode;
+
   switch (code) {
-    case -32000: {
+    case -32000:
       // Handling user-canceled transaction from a safe-app
-      if ((error as any)?.message === 'User rejected transaction') {
-        return ErrorCode.DENIED_SIG;
-      }
-      return ErrorCode.SOMETHING_WRONG;
-    }
+      errorCode =
+        (error as any)?.message === 'User rejected transaction'
+          ? ErrorCode.DENIED_SIG
+          : ErrorCode.SOMETHING_WRONG;
+      break;
     case -32603:
-      return ErrorCode.WALLET_RPC;
+      errorCode = ErrorCode.WALLET_RPC;
+      break;
     // intentional fallthrough
     case 3:
     case 'UNPREDICTABLE_GAS_LIMIT':
     case 'INSUFFICIENT_FUNDS':
-      return ErrorCode.NOT_ENOUGH_ETHER;
+      errorCode = ErrorCode.NOT_ENOUGH_ETHER;
+      break;
     case 'INVALID_SIGNATURE':
-      return ErrorCode.INVALID_SIGNATURE;
+      errorCode = ErrorCode.INVALID_SIGNATURE;
+      break;
     case 'ACTION_REJECTED':
     case 4001:
     case 200001:
-      return ErrorCode.DENIED_SIG;
+      errorCode = ErrorCode.DENIED_SIG;
+      break;
     case 'LIMIT_REACHED':
-      return ErrorCode.LIMIT_REACHED;
+      errorCode = ErrorCode.LIMIT_REACHED;
+      break;
     case 'TRANSACTION_REVERTED':
-      return ErrorCode.TRANSACTION_REVERTED;
+      errorCode = ErrorCode.TRANSACTION_REVERTED;
+      break;
     case 'ENABLE_BLIND_SIGNING':
-      return ErrorCode.ENABLE_BLIND_SIGNING;
+      errorCode = ErrorCode.ENABLE_BLIND_SIGNING;
+      break;
     case 'DEVICE_LOCKED':
-      return ErrorCode.DEVICE_LOCKED;
+      errorCode = ErrorCode.DEVICE_LOCKED;
+      break;
     case 'BALANCE_EXCEEDED':
-      return ErrorCode.BALANCE_EXCEEDED;
+      errorCode = ErrorCode.BALANCE_EXCEEDED;
+      break;
     default:
-      return ErrorCode.SOMETHING_WRONG;
+      errorCode = ErrorCode.SOMETHING_WRONG;
   }
+
+  const errorMessage = extractErrorMessage(error);
+  trackMatomoError(`${errorMessage}`, errorCode);
+  return errorCode;
 };
 
 // type safe error code extractor
