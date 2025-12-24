@@ -17,12 +17,13 @@ export const Application: FC<CommentsSectionProps> = ({
   createdAt,
 }) => (
   <AccordionStyle
+    data-testid="applicationSection"
     summary={
-      <Stack direction="column" gap="xs">
+      <Stack direction="column" gap="xs" data-testid="applicationInfo">
         <Text size="sm" weight="bold">
           Your application
         </Text>
-        <Text color="secondary" size="xxs">
+        <Text color="secondary" size="xxs" data-testid="submittedDate">
           Submitted {formatDate(parseISO(createdAt), 'dd.MM.yyyy')}
         </Text>
       </Stack>
@@ -40,6 +41,7 @@ export const Application: FC<CommentsSectionProps> = ({
             label="Main address"
             value={form.mainAddress}
             error={!!comments.mainAddress}
+            name="mainAddress"
           />
           <Text size="xxs" color="error">
             {comments.mainAddress}

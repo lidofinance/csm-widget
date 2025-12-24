@@ -27,7 +27,7 @@ export const AdditionalAddresses: FC = () => {
   );
 
   return (
-    <Stack direction="column" gap="md">
+    <Stack direction="column" gap="md" data-testid="additionalAddressesSection">
       <Stack direction="column" gap="xxs">
         <FormTitle chip={<Chip>Optional</Chip>}>Additional Addresses</FormTitle>
         <Text size="xs" color="secondary">
@@ -59,6 +59,7 @@ export const AdditionalAddresses: FC = () => {
           size="sm"
           onClick={handleAddAddress}
           fullwidth
+          data-testid="addNewAddressBtn"
         >
           Add new address
         </ButtonIcon>

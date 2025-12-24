@@ -15,6 +15,7 @@ import {
 } from 'tests/consts/timeouts';
 import { BondRewardsPage } from 'tests/pages/bondRewards.page';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { OperatorTypePage } from 'tests/pages/operatorType.page';
 
 export class WidgetService {
   public mainPage: MainPage;
@@ -22,6 +23,7 @@ export class WidgetService {
   public dashboardPage: DashboardPage;
   public rolesPage: RolesPage;
   public bondRewardsPage: BondRewardsPage;
+  public operatorType: OperatorTypePage;
 
   constructor(
     public page: Page,
@@ -32,11 +34,12 @@ export class WidgetService {
     this.dashboardPage = new DashboardPage(this.page);
     this.rolesPage = new RolesPage(this.page, this.walletPage);
     this.bondRewardsPage = new BondRewardsPage(this.page);
+    this.operatorType = new OperatorTypePage(this.page, this.walletPage);
   }
 
   async connectWallet(expectConnectionState = true) {
     await test.step('Open default page for connect.', async () => {
-      await this.page.goto('/?survey-setup=1&ics-appy=1&wallet-rpc=1');
+      await this.page.goto('/?survey-setup=1&ics-apply=1&wallet-rpc=1');
     });
     await test.step('Connect wallet to widget', async () => {
       const element = new ElementController(this.page);
