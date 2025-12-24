@@ -81,7 +81,7 @@ export const useEjectKeysSubmit: FormSubmitterHook<
 
         return true;
       } catch (error) {
-        return handleTxError(error, txModalStages, onRetry);
+        return handleTxError(error);
       }
     },
     [confirm, confirmHighCost, csm.keys, txModalStages],

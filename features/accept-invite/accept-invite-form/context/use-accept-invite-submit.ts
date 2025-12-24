@@ -77,7 +77,7 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
 
         return true;
       } catch (error) {
-        return handleTxError(error, txModalStages, onRetry);
+        return handleTxError(error);
       }
     },
     [csm.roles, appendNO, txModalStages, n],

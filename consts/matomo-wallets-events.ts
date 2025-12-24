@@ -1,7 +1,7 @@
 import { trackEvent } from '@lidofinance/analytics-matomo';
 import type { ReefKnotWalletsModalConfig } from 'reef-knot/types';
 import type { WalletIdsEthereum } from 'reef-knot/wallets';
-import { MATOMO_CLICK_EVENTS } from './matomo-click-events';
+import { createEvent, MATOMO_CLICK_EVENTS } from './matomo-click-events';
 
 type MetricProps = Pick<
   ReefKnotWalletsModalConfig<WalletIdsEthereum>,
@@ -50,9 +50,7 @@ export const walletMetricProps: MetricProps = {
     const eventData = EVENTS_DATA_CONNECT_START[walletId];
     if (eventData) {
       trackEvent(
-        'Ethereum_Staking_Widget',
-        `Click ${eventData[0]} wallet`,
-        `eth_widget_click_${eventData[1]}`,
+        ...createEvent(`Click ${eventData[0]} wallet`, `click_${eventData[1]}`),
       );
     }
   },
@@ -61,9 +59,7 @@ export const walletMetricProps: MetricProps = {
     const eventData = EVENTS_DATA_CONNECT_SUCCESS[walletId];
     if (eventData) {
       trackEvent(
-        'Ethereum_Staking_Widget',
-        `Connect ${eventData[0]}`,
-        `eth_widget_connect_${eventData[1]}`,
+        ...createEvent(`Connect ${eventData[0]}`, `connect_${eventData[1]}`),
       );
     }
   },

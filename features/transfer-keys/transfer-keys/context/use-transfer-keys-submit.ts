@@ -89,7 +89,7 @@ export const useTransferKeysSubmit: FormSubmitterHook<
 
         return true;
       } catch (error) {
-        return handleTxError(error, txModalStages, onRetry);
+        return handleTxError(error);
       }
     },
     [confirm, csm.keys, csm.depositQueue, txModalStages],
