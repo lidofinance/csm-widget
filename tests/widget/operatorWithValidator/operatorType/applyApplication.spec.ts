@@ -15,11 +15,13 @@ test.describe('Operator with keys. ICS. Apply application', async () => {
     const applicationForm = widgetService.operatorType.applicationForm;
     await applicationForm.open();
 
-    const applyApplicationResponse = applyApplicationMockResponse;
-    await httpMockerService.mockIcsApply(applyApplicationResponse);
+    await test.step('Set up mock', async () => {
+      const applyApplicationResponse = applyApplicationMockResponse;
+      await httpMockerService.mockIcsApply(applyApplicationResponse);
 
-    const statusResponse = applyApplicationMockResponse;
-    await httpMockerService.mockIcsStatus(statusResponse);
+      const statusResponse = applyApplicationMockResponse;
+      await httpMockerService.mockIcsStatus(statusResponse);
+    });
 
     await applicationForm.signInForm.signIn();
   });
@@ -31,8 +33,10 @@ test.describe('Operator with keys. ICS. Apply application', async () => {
   });
 
   test.afterAll(async ({ widgetService }) => {
-    await widgetService.page.evaluate(() => {
-      sessionStorage.clear();
+    await test.step('Clear session storage', async () => {
+      await widgetService.page.evaluate(() => {
+        sessionStorage.clear();
+      });
     });
   });
 
@@ -155,11 +159,14 @@ test.describe('Operator with keys. ICS. Apply application', async () => {
     const additionalAddressField0 =
       applicationForm.submitApplicationForm.getAdditionalAddressFieldByIndex(0);
 
-    await applicationForm.submitApplicationForm.addNewAddressBtn.click();
-    await applicationForm.submitApplicationForm.fillAdditionalAddress(
-      0,
-      additionalAddress.address,
-    );
+    await test.step('Add new additional address', async () => {
+      await applicationForm.submitApplicationForm.addNewAddressBtn.click();
+      await applicationForm.submitApplicationForm.fillAdditionalAddress(
+        0,
+        additionalAddress.address,
+      );
+    });
+
     const address = mnemonicToAccount(secretPhrase).address;
 
     const signMessage = `Verify ownership of address ${additionalAddress.address.toLowerCase()} for ICS with main address ${address.toLowerCase()}`;
@@ -168,18 +175,20 @@ test.describe('Operator with keys. ICS. Apply application', async () => {
       signMessage,
     );
 
-    const signature = await new Wallet(
-      // @ts-expect-error may be null
-      utils.hexlify(additionalAddress.getHdKey().privateKey),
-    ).signMessage(signMessage);
+    await test.step('Check verified state for address', async () => {
+      const signature = await new Wallet(
+        // @ts-expect-error may be null
+        utils.hexlify(additionalAddress.getHdKey().privateKey),
+      ).signMessage(signMessage);
 
-    await additionalAddressField0.signatureInput.fill(signature);
-    await additionalAddressField0.verifySignatureBtn.click();
-    await expect(additionalAddressField0.verifyChip).toBeVisible();
-    await expect(additionalAddressField0.verifiedAddressInput).toBeDisabled();
-    await expect(additionalAddressField0.verifiedAddressInput).toHaveValue(
-      additionalAddress.address,
-    );
+      await additionalAddressField0.signatureInput.fill(signature);
+      await additionalAddressField0.verifySignatureBtn.click();
+      await expect(additionalAddressField0.verifyChip).toBeVisible();
+      await expect(additionalAddressField0.verifiedAddressInput).toBeDisabled();
+      await expect(additionalAddressField0.verifiedAddressInput).toHaveValue(
+        additionalAddress.address,
+      );
+    });
   });
 
   test('Should copy message to sign after click to copy button', async ({
@@ -200,18 +209,21 @@ test.describe('Operator with keys. ICS. Apply application', async () => {
         additionalAddress,
       );
     });
-    const address = mnemonicToAccount(secretPhrase).address;
-    const signMessage = `Verify ownership of address ${additionalAddress.toLowerCase()} for ICS with main address ${address.toLowerCase()}`;
 
-    await expect(additionalAddressField0.signMessageInput).toHaveValue(
-      signMessage,
-    );
-    await additionalAddressField0.copySignMessageBtn.click();
+    await test.step('Verify copy button for sign message', async () => {
+      const address = mnemonicToAccount(secretPhrase).address;
+      const signMessage = `Verify ownership of address ${additionalAddress.toLowerCase()} for ICS with main address ${address.toLowerCase()}`;
 
-    const clipboardText = await test.step('Verify copied message', async () => {
-      return widgetService.page.evaluate(() => navigator.clipboard.readText());
+      await expect(additionalAddressField0.signMessageInput).toHaveValue(
+        signMessage,
+      );
+      await additionalAddressField0.copySignMessageBtn.click();
+
+      const clipboardText = await widgetService.page.evaluate(() =>
+        navigator.clipboard.readText(),
+      );
+      expect(clipboardText).toBe(signMessage);
     });
-    expect(clipboardText).toBe(signMessage);
   });
 
   test('Should open sign link in a new tab', async ({ widgetService }) => {
