@@ -3,11 +3,13 @@ import {
   WalletConnectType,
   WalletPage,
 } from '@lidofinance/wallets-testing-wallets';
-import { SignInForm } from './applicationFormStates/signIn.page';
+import { SignInForm } from './applicationFormStates/signInForm.page';
+import { SubmitApplicationForm } from './applicationFormStates/submitApplicationForm.page';
 
 export class ApplicationForm {
   page: Page;
   signInForm: SignInForm;
+  submitApplicationForm: SubmitApplicationForm;
 
   constructor(
     page: Page,
@@ -15,6 +17,7 @@ export class ApplicationForm {
   ) {
     this.page = page;
     this.signInForm = new SignInForm(page, walletPage);
+    this.submitApplicationForm = new SubmitApplicationForm(page, walletPage);
   }
 
   async open() {

@@ -8,7 +8,7 @@ export const MainAddress: FC = () => {
   const { mainAddress } = useApplyFormData(true);
 
   return (
-    <Stack direction="column" gap="md">
+    <Stack direction="column" gap="md" data-testid="mainAddressSection">
       <Stack direction="column" gap="xxs">
         <FormTitle>Main address</FormTitle>
         <Text size="xs" color="secondary">

@@ -5,7 +5,7 @@ export const VerifiedChip: FC<PropsWithChildren<ChipProps>> = ({
   children,
   color,
 }) => (
-  <StyledChip color={color}>
+  <StyledChip color={color} data-testid="verifiedChip">
     {children}
     <Icon color={color} />
   </StyledChip>

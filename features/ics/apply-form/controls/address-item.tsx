@@ -209,7 +209,7 @@ export const AddressItem: FC<AddressItemProps> = ({
                   variant="translucent"
                   onClick={() => void onVerify(index)}
                   disabled={isVerifying}
-                  data-testid="verifyBtn"
+                  data-testid="verifySignatureBtn"
                 >
                   {isVerifying ? 'Verifying...' : 'Verify'}
                 </Button>
