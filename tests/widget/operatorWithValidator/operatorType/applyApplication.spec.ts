@@ -130,6 +130,7 @@ test.describe('Operator with keys. ICS. Apply application', async () => {
 
     await test.step('Verify signature input', async () => {
       const signature = await new Wallet(
+        // @ts-expect-error may be null
         utils.hexlify(additionalAddress.getHdKey().privateKey),
       ).signMessage(expectedSignMessage);
 
@@ -168,6 +169,7 @@ test.describe('Operator with keys. ICS. Apply application', async () => {
     );
 
     const signature = await new Wallet(
+      // @ts-expect-error may be null
       utils.hexlify(additionalAddress.getHdKey().privateKey),
     ).signMessage(signMessage);
 
