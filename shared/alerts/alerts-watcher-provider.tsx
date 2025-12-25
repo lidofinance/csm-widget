@@ -6,7 +6,10 @@ import {
   useOperatorInfo,
   useOperatorKeysWithStatus,
 } from 'modules/web3';
-import { useOperatorKeysWithWrongFeeRecipient } from 'modules/web3/hooks';
+import {
+  useDappStatus,
+  useOperatorKeysWithWrongFeeRecipient,
+} from 'modules/web3/hooks';
 import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren, useMemo } from 'react';
@@ -17,12 +20,14 @@ import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
 import { AlertTransferKeys } from './components/alert-transfer-keys';
+import { AlertUnsupportedChain } from './components/alert-unsupported-chain';
 import { AlertWrongFeeRecipient } from './components/alert-wrong-fee-recipient';
 import { useAlertWatcher } from './use-alert-watcher';
 
 export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { closeAlert } = useAlertActions();
 
+  const { isSupportedChain } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: info } = useOperatorInfo(nodeOperator?.id);
   const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
@@ -59,6 +64,11 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
     `alert-fee-recipient-dismissed-${nodeOperator?.id}`,
     ALERT_FEE_RECIPIENT_DISMISS_HOURS,
   );
+
+  useAlertWatcher({
+    component: AlertUnsupportedChain,
+    shouldShow: !isSupportedChain,
+  });
 
   useAlertWatcher({
     component: AlertRequestToExit,
