@@ -1,12 +1,7 @@
-import { Block } from '@lidofinance/lido-ui';
+import { HatBlock } from 'shared/components';
 import styled from 'styled-components';
 
-export const FallbackWalletStyle = styled(Block)`
-  margin-bottom: -52px;
-
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-
+export const FallbackWalletStyle = styled(HatBlock)`
   padding-bottom: ${({ theme }) =>
     theme.borderRadiusesMap.xl + theme.spaceMap.xxl}px;
 

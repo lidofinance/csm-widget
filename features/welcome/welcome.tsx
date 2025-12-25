@@ -5,6 +5,7 @@ import { useDappStatus } from 'modules/web3';
 import { Stack, WelcomeSection } from 'shared/components';
 import { Connect, Fallback } from 'shared/wallet';
 import styled from 'styled-components';
+import { LandingBlock } from './landing';
 
 export const Welcome: FC = () => {
   const { isSupportedChain, isWalletConnected } = useDappStatus();
@@ -14,6 +15,7 @@ export const Welcome: FC = () => {
   return (
     <>
       {isWrongChain && <Fallback />}
+      <LandingBlock />
       <WelcomeSection>
         <Stack wrap>
           <ConnectStyle

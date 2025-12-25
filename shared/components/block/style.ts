@@ -39,3 +39,11 @@ export const BlockStyle = styled(Block)<{
   ${({ padding: $padding }) => ($padding ? PADDING_VARIANTS[$padding] : '')}
   ${({ overflowHidden }) => overflowHidden && 'overflow: hidden;'}
 `;
+
+export const HatBlockStyle = styled(BlockStyle)`
+  margin-bottom: -52px;
+  padding-bottom: 52px;
+
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+`;
