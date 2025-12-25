@@ -46,6 +46,7 @@ type ExternalLinksConstants = {
   rewardsTree: string;
   feedbackForm: string;
   stakeWidget: string;
+  landing?: string;
 
   beaconchain: string;
   feesMonitoring: string;
@@ -66,6 +67,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
     feedbackForm: 'https://forms.gle/GL9RYeV2g4px58Sv8',
     stakeWidget: 'https://stake.lido.fi',
+    landing: 'https://lido.fi/csm',
 
     feesMonitoring: 'https://fees-monitoring.lido.fi',
     operatorsWidget: 'https://operators.lido.fi',
@@ -81,6 +83,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
     feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
     stakeWidget: 'https://stake-hoodi.testnet.fi',
+    landing: 'https://testnet.fi/csm',
 
     feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
     operatorsWidget: 'https://operators-hoodi.testnet.fi',
