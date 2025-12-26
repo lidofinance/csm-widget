@@ -53,7 +53,6 @@ const routes: Route[] = [
       PATH.KEYS_EJECT,
       PATH.KEYS_EXIT,
       PATH.KEYS_VIEW,
-      PATH.KEYS_TRANSFER,
       PATH.CREATE,
     ],
     showRules: ['IS_NODE_OPERATOR', 'CAN_CREATE'],

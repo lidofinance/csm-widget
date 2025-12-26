@@ -8,7 +8,6 @@ export const PATH = <const>{
   KEYS_EJECT: '/keys/eject',
   KEYS_EXIT: '/keys/exit',
   KEYS_VIEW: '/keys/view',
-  KEYS_TRANSFER: '/keys/transfer',
   KEYS_NORMALIZE: '/keys/normalize',
 
   MONITORING: '/monitoring',
