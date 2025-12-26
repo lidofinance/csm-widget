@@ -21,7 +21,6 @@ export * from './use-operator-balance';
 export * from './use-operator-curve-id';
 export * from './use-operator-info';
 export * from './use-operator-is-owner';
-export * from './use-operator-keys-to-migrate';
 export * from './use-operator-keys-with-issues';
 export * from './use-operator-keys-with-status';
 export * from './use-operator-keys-with-strikes';

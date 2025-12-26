@@ -4,7 +4,6 @@ import {
   KEY_OPERATOR_CURVE_ID,
   KEY_OPERATOR_INFO,
   KEY_OPERATOR_KEYS,
-  KEY_OPERATOR_KEYS_TO_MIGRATE,
   useCurveParameters,
   useDappStatus,
   useIcsCurveId,
@@ -62,7 +61,6 @@ const useClaimTypeFormNetworkData: NetworkData<
       KEY_OPERATOR_INFO,
       KEY_OPERATOR_BALANCE,
       KEY_OPERATOR_KEYS,
-      KEY_OPERATOR_KEYS_TO_MIGRATE,
     ]);
 
     setJustClaimed(true);

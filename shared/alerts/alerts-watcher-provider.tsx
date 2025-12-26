@@ -7,7 +7,6 @@ import {
   useOperatorKeysWithStatus,
 } from 'modules/web3';
 import { useOperatorKeysWithWrongFeeRecipient } from 'modules/web3/hooks';
-import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { useCanClaimICS, useDismiss } from 'shared/hooks';
@@ -16,7 +15,6 @@ import { AlertClaimIcs } from './components/alert-claim-ics';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
-import { AlertTransferKeys } from './components/alert-transfer-keys';
 import { AlertWrongFeeRecipient } from './components/alert-wrong-fee-recipient';
 import { useAlertWatcher } from './use-alert-watcher';
 
@@ -25,7 +23,6 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { nodeOperator } = useNodeOperator();
   const { data: info } = useOperatorInfo(nodeOperator?.id);
-  const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
   const canClaimICS = useCanClaimICS();
   const { route } = useRouter();
 
@@ -69,11 +66,6 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   useAlertWatcher({
     component: AlertNomalizeQueue,
     shouldShow: !!normalizeQueue,
-  });
-
-  useAlertWatcher({
-    component: AlertTransferKeys,
-    shouldShow: !!keysToTransfer,
   });
 
   useAlertWatcher({

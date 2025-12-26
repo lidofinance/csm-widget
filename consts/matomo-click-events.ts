@@ -62,7 +62,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Alerts
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
-  transferKeysLinkAlert = 'transferKeysLinkAlert',
   unlockBondLinkAlert = 'unlockBondLinkAlert',
   claimIcsLinkAlert = 'claimIcsLinkAlert',
   feeRecipientDocsLink = 'feeRecipientDocsLink',
@@ -310,10 +309,6 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: createEvent(
     'Click «Normalize queue» link on Normalize Queue alert',
     'normalize_queue_link_alert',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.transferKeysLinkAlert]: createEvent(
-    'Click «Transfer keys» link on Transfer Keys alert',
-    'transfer_keys_link_alert',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: createEvent(
     'Click «Unlock bond» link on Locked Bond alert',
