@@ -1,6 +1,7 @@
 import { Button, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import {
+  ICS_ASSESSED_DATE,
   IcsCommentsDto,
   IcsFormStatus,
   IcsScoresDto,
@@ -153,8 +154,8 @@ const useHint = (
     case status === 'REVIEW':
       return (
         <Text size="xs">
-          The application will be evaluated in December. You cannot change the
-          application while it is being reviewed
+          The application will be evaluated in {ICS_ASSESSED_DATE}. You cannot
+          change the application while it is being reviewed
         </Text>
       );
     case status === 'APPROVED':
