@@ -84,9 +84,6 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   rewardsHistoryExport = 'rewardsHistoryExport',
   // modifiers
   visitWithReferrer = 'visitWithReferrer',
-  // Decor
-  santaHover = 'santaHover',
-  santaClick = 'santaClick',
   // Footer
   footerTermsOfUse = 'footerTermsOfUse',
   footerPrivacyNotice = 'footerPrivacyNotice',
@@ -386,15 +383,6 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.visitWithReferrer]: createEvent(
     'Visite with referrer',
     'visit_referrer',
-  ),
-  // Decor
-  [MATOMO_CLICK_EVENTS_TYPES.santaHover]: createEvent(
-    'Hover on Santa decoration',
-    'santa_hover',
-  ),
-  [MATOMO_CLICK_EVENTS_TYPES.santaClick]: createEvent(
-    'Click on Santa decoration',
-    'santa_click',
   ),
   // Footer
   [MATOMO_CLICK_EVENTS_TYPES.footerTermsOfUse]: createEvent(
