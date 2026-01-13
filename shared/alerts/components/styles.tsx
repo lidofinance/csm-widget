@@ -47,6 +47,10 @@ export const AlertStyled = styled(StackStyle).attrs({
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
 `;
 
+export const AlertRed = styled(AlertStyled)`
+  background: var(--lido-color-error);
+`;
+
 export const AlertClose = styled(CloseButton)`
   position: absolute;
   top: 6px;
