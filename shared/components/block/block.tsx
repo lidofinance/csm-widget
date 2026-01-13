@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { BlockColor, BlockStyle } from './style';
+import { BlockColor, BlockStyle, HatBlockStyle } from './style';
 import { BlockProps } from '@lidofinance/lido-ui';
 
 type Props = BlockProps & {
@@ -11,3 +11,8 @@ type Props = BlockProps & {
 export const Block: FC<PropsWithChildren<Props>> = ({ children, ...props }) => (
   <BlockStyle {...props}>{children}</BlockStyle>
 );
+
+export const HatBlock: FC<PropsWithChildren<Props>> = ({
+  children,
+  ...props
+}) => <HatBlockStyle {...props}>{children}</HatBlockStyle>;
