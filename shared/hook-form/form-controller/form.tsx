@@ -1,5 +1,5 @@
 import { useDappStatus } from 'modules/web3';
-import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
+import { FC, PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useAddressValidation } from 'providers/address-validation-provider';
 import { trackMatomoFormEvent } from 'utils/track-matomo-event';
@@ -19,12 +19,9 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
     useFormControllerContext();
   const data = useFormData();
 
-  // Bind submit action
-  const doSubmit = useMemo(
+  const baseSubmit = useMemo(
     () =>
       handleSubmit(async (args) => {
-        trackMatomoFormEvent(formName);
-
         // Validate address before submit - if address is not valid, don't submit
         const result = await validateAddress(address);
         if (!result) return;
@@ -36,23 +33,39 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
         }
       }),
     [
-      handleSubmit,
-      onSubmit,
+      address,
       data,
+      formName,
+      handleSubmit,
       onConfirm,
-      onRetry,
       onReset,
+      onRetry,
+      onSubmit,
       resetDefault,
       validateAddress,
-      address,
-      formName,
     ],
+  );
+
+  const doSubmit = useCallback(
+    (...args: Parameters<typeof baseSubmit>) => {
+      trackMatomoFormEvent(formName);
+      void baseSubmit(...args);
+    },
+    [formName, baseSubmit],
+  );
+
+  const doRetry = useCallback(
+    (...args: Parameters<typeof baseSubmit>) => {
+      trackMatomoFormEvent(formName, 'retry');
+      return baseSubmit(...args);
+    },
+    [formName, baseSubmit],
   );
 
   // Bind retry callback
   useEffect(() => {
-    return retryEvent.subscribe(doSubmit);
-  }, [retryEvent, doSubmit]);
+    return retryEvent.subscribe(doRetry);
+  }, [retryEvent, doRetry]);
 
   // Reset form amount after disconnect wallet
   useEffect(() => {

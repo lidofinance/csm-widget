@@ -65,7 +65,7 @@ export const useClaimBondSubmit: FormSubmitterHook<
 
         return true;
       } catch (error) {
-        return handleTxError(error, txModalStages, onRetry);
+        return handleTxError(error);
       }
     },
     [csm.bond, txModalStages],

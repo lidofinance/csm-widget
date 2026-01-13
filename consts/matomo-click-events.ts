@@ -126,6 +126,13 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   vanomDashboardLink = 'vanomDashboardLink',
   legalPrivacyNoticeLink = 'legalPrivacyNoticeLink',
   lidoHomeLink = 'lidoHomeLink',
+  // Surveys CTA
+  surveysCtaLink = 'surveysCtaLink',
+  surveysCtaClose = 'surveysCtaClose',
+  // Header Actions
+  clickOperatorTypeButton = 'clickOperatorTypeButton',
+  clickSwitchOperatorButton = 'clickSwitchOperatorButton',
+  clickWalletButton = 'clickWalletButton',
 }
 
 export const MATOMO_CLICK_EVENTS: Record<
@@ -527,5 +534,27 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.lidoHomeLink]: createEvent(
     'Click Lido logo link',
     'lido_home_link',
+  ),
+  // Surveys CTA
+  [MATOMO_CLICK_EVENTS_TYPES.surveysCtaLink]: createEvent(
+    'Click «Surveys» link on Surveys CTA banner',
+    'surveys_cta_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.surveysCtaClose]: createEvent(
+    'Close Surveys CTA banner',
+    'surveys_cta_close',
+  ),
+  // Header Actions
+  [MATOMO_CLICK_EVENTS_TYPES.clickOperatorTypeButton]: createEvent(
+    'Click operator type button in header',
+    'click_operator_type_button',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.clickSwitchOperatorButton]: createEvent(
+    'Click switch operator button in header',
+    'click_switch_operator_button',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.clickWalletButton]: createEvent(
+    'Click wallet button in header',
+    'click_wallet_button',
   ),
 };

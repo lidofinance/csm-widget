@@ -25,7 +25,7 @@ export const trackMatomoError = (description: string, tag: string) => {
 
 export const trackMatomoFormEvent = (
   formName?: string,
-  stage: 'start' | 'success' = 'start',
+  stage: 'start' | 'success' | 'retry' = 'start',
 ) => {
   formName &&
     trackEvent(
