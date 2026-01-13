@@ -18,6 +18,24 @@ export class SubmitApplicationForm extends BasePage {
   additionalAddressesSection: Locator;
   addNewAddressBtn: Locator;
 
+  // Socials section
+  socialProofSection: Locator;
+  socialProofTitile: Locator;
+
+  // Twitter section
+  twitterSection: Locator;
+  twitterProofStep1: Locator;
+  twitterProofStep1Input: Locator;
+  twitterProofStep1CopyBtn: Locator;
+  twitterProofStep2: Locator;
+
+  // Discord section
+  discordSection: Locator;
+  discordProofStep1: Locator;
+  discordProofStep1Input: Locator;
+  discordProofStep1CopyBtn: Locator;
+  discordProofStep2: Locator;
+
   constructor(
     page: Page,
     public walletPage: WalletPage<WalletConnectType>,
@@ -41,6 +59,32 @@ export class SubmitApplicationForm extends BasePage {
     );
     this.addNewAddressBtn =
       this.additionalAddressesSection.getByTestId('addNewAddressBtn');
+
+    // socialsSection
+    this.socialProofSection = this.form.getByTestId('socialProofSection');
+    this.socialProofTitile = this.socialProofSection.getByTestId('formTitle');
+
+    // twitterSection
+    this.twitterSection = this.socialProofSection.getByTestId('twitterSection');
+    this.twitterProofStep1 =
+      this.twitterSection.getByTestId('twitterProofStep1');
+    this.twitterProofStep1Input =
+      this.twitterProofStep1.locator('#twitter-message');
+    this.twitterProofStep1CopyBtn =
+      this.twitterProofStep1.getByTestId('copyBtn');
+    this.twitterProofStep2 =
+      this.twitterSection.getByTestId('twitterProofStep2');
+
+    // discordSection
+    this.discordSection = this.socialProofSection.getByTestId('discordSection');
+    this.discordProofStep1 =
+      this.discordSection.getByTestId('discordProofStep1');
+    this.discordProofStep1Input =
+      this.discordProofStep1.locator('#discord-message');
+    this.discordProofStep1CopyBtn =
+      this.discordProofStep1.getByTestId('copyBtn');
+    this.discordProofStep2 =
+      this.discordSection.getByTestId('discordProofStep2');
   }
 
   getAdditionalAddressFieldByIndex(index: number) {
