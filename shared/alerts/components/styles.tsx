@@ -2,6 +2,38 @@ import { Button, CheckLarge, Input, Select } from '@lidofinance/lido-ui';
 import { CloseButton } from 'shared/components/copy-button/close-button';
 import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
+import { MEDIA_QUERY_XXL } from 'styles';
+
+export const AlertContainerStyled = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spaceMap.md}px;
+
+  margin: 0 auto;
+
+  :not(:empty) {
+    margin-top: 76px;
+  }
+
+  grid-area: none;
+  position: absolute;
+  right: 32px;
+  top: 80px;
+  width: calc(50% - 400px);
+  max-width: 300px;
+  grid-area: none;
+
+  ${MEDIA_QUERY_XXL} {
+    width: calc(50% - 350px);
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    grid-area: alerts;
+    position: static;
+    width: 100%;
+    max-width: var(--layout-main-width);
+  }
+`;
 
 export const AlertStyled = styled(StackStyle).attrs({
   $direction: 'column',
@@ -13,6 +45,10 @@ export const AlertStyled = styled(StackStyle).attrs({
   background: var(--lido-color-foreground);
   color: var(--lido-color-text);
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
+`;
+
+export const AlertRed = styled(AlertStyled)`
+  background: var(--lido-color-error);
 `;
 
 export const AlertClose = styled(CloseButton)`

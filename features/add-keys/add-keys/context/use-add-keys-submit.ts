@@ -95,7 +95,7 @@ export const useAddKeysSubmit: FormSubmitterHook<
         return true;
       } catch (error) {
         removeCachePubkeys(pubkeys);
-        return handleTxError(error, txModalStages, onRetry);
+        return handleTxError(error);
       }
     },
     [addCachePubkeys, csm.keys, n, txModalStages, removeCachePubkeys],

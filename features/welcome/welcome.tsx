@@ -1,19 +1,15 @@
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { useDappStatus } from 'modules/web3';
 import { Stack, WelcomeSection } from 'shared/components';
-import { Connect, Fallback } from 'shared/wallet';
+import { Connect } from 'shared/wallet';
 import styled from 'styled-components';
+import { LandingBlock } from './landing';
 
 export const Welcome: FC = () => {
-  const { isSupportedChain, isWalletConnected } = useDappStatus();
-
-  const isWrongChain = isWalletConnected && !isSupportedChain;
-
   return (
     <>
-      {isWrongChain && <Fallback />}
+      <LandingBlock />
       <WelcomeSection>
         <Stack wrap>
           <ConnectStyle
