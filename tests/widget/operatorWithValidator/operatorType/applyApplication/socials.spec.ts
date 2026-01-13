@@ -144,4 +144,41 @@ test.describe('Operator with keys. ICS. Apply application. Socials', async () =>
       ).toBeVisible();
     });
   });
+
+  test('Should copy Twitter message to post after click to copy button', async ({
+    widgetService,
+    secretPhrase,
+  }) => {
+    const applicationForm = widgetService.operatorType.applicationForm;
+
+    await test.step('Copy Twitter proof message', async () => {
+      await applicationForm.submitApplicationForm.twitterProofStep1CopyBtn.click();
+      const twitterMessage = await widgetService.page.evaluate(() =>
+        navigator.clipboard.readText(),
+      );
+      const address = mnemonicToAccount(secretPhrase).address;
+      const expectedTwitterMessage = `This post is proof that I am the owner of this X account. My address to get verified for ICS: ${address.toLowerCase()}`;
+
+      expect(twitterMessage).toBe(expectedTwitterMessage);
+    });
+  });
+
+  test('Should copy Discord message to post after click to copy button', async ({
+    widgetService,
+    secretPhrase,
+  }) => {
+    const applicationForm = widgetService.operatorType.applicationForm;
+
+    await test.step('Copy Discord proof message', async () => {
+      await applicationForm.submitApplicationForm.discordProofStep1CopyBtn.click();
+      const discordMessage = await widgetService.page.evaluate(() =>
+        navigator.clipboard.readText(),
+      );
+      const address = mnemonicToAccount(secretPhrase).address;
+      const expectedDiscordMessage = `This post is proof that I am the owner of this Discord account. My address to get verified for ICS: ${address.toLowerCase()}`;
+      expect(discordMessage).toBe(expectedDiscordMessage);
+    });
+  });
+
+  test('');
 });
