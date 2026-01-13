@@ -3,7 +3,6 @@ import { FC, PropsWithChildren, ReactNode, useEffect } from 'react';
 import { AlertContainer } from 'shared/alerts';
 import { LegalDisclaimer } from 'shared/components';
 import { trackMatomoPageEvent } from 'utils';
-import { Santa } from './decor';
 import { Footer } from './footer';
 import { DummyHeader, Header, SemiDummyHeader } from './header';
 import { Navigation } from './navigation';
@@ -59,7 +58,6 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
         {!dummy && <LegalDisclaimer />}
       </Main>
       <Footer />
-      <Santa />
     </LayoutStyle>
   );
 };
