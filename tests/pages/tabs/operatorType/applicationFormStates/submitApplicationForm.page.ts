@@ -36,6 +36,9 @@ export class SubmitApplicationForm extends BasePage {
   discordProofStep1CopyBtn: Locator;
   discordProofStep2: Locator;
 
+  // btn
+  submitBtn: Locator;
+
   constructor(
     page: Page,
     public walletPage: WalletPage<WalletConnectType>,
@@ -85,6 +88,11 @@ export class SubmitApplicationForm extends BasePage {
       this.discordProofStep1.getByTestId('copyBtn');
     this.discordProofStep2 =
       this.discordSection.getByTestId('discordProofStep2');
+
+    // btn
+    this.submitBtn = this.form.getByRole('button', {
+      name: 'Submit application',
+    });
   }
 
   getAdditionalAddressFieldByIndex(index: number) {

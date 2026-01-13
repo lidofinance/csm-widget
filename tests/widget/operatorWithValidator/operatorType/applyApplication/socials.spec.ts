@@ -180,5 +180,108 @@ test.describe('Operator with keys. ICS. Apply application. Socials', async () =>
     });
   });
 
-  test('');
+  test('Should correctly paste Twitter proof link', async ({
+    widgetService,
+  }) => {
+    const applicationForm = widgetService.operatorType.applicationForm;
+    const twitterProofLink = 'https://x.com/someuser/status/1234567890';
+
+    await test.step('Paste Twitter proof link', async () => {
+      await applicationForm.submitApplicationForm.twitterProofStep2
+        .locator('input')
+        .fill(twitterProofLink);
+
+      await expect(
+        applicationForm.submitApplicationForm.twitterProofStep2.locator(
+          'input',
+        ),
+      ).toHaveValue(twitterProofLink);
+
+      await expect(
+        applicationForm.submitApplicationForm.twitterProofStep2.locator(
+          'input',
+        ),
+      ).toHaveAttribute('placeholder', 'https://x.com/username/status/...');
+      await expect(
+        applicationForm.submitApplicationForm.twitterProofStep2.getByText(
+          'Must be a valid Twitter/X status URL',
+        ),
+      ).toBeHidden();
+    });
+  });
+
+  test('Should correctly paste Discord proof link', async ({
+    widgetService,
+  }) => {
+    const applicationForm = widgetService.operatorType.applicationForm;
+    const discordProofLink = 'https://discord.com/channels/123/456/789';
+
+    await test.step('Paste Discord proof link', async () => {
+      await applicationForm.submitApplicationForm.discordProofStep2
+        .locator('input')
+        .fill(discordProofLink);
+
+      await expect(
+        applicationForm.submitApplicationForm.discordProofStep2.locator(
+          'input',
+        ),
+      ).toHaveValue(discordProofLink);
+
+      await expect(
+        applicationForm.submitApplicationForm.discordProofStep2.locator(
+          'input',
+        ),
+      ).toHaveAttribute('placeholder', 'https://discord.com/channels/...');
+      await expect(
+        applicationForm.submitApplicationForm.discordProofStep2.getByText(
+          'Must be a valid Discord message URL',
+        ),
+      ).toBeHidden();
+    });
+  });
+
+  test('Should show error if paste incorrect Twitter proof link', async ({
+    widgetService,
+  }) => {
+    const applicationForm = widgetService.operatorType.applicationForm;
+    const twitterProofLink = 'https://x.com/someuser/1234567890';
+
+    await test.step('Paste Twitter incorrect proof link', async () => {
+      await applicationForm.submitApplicationForm.twitterProofStep2
+        .locator('input')
+        .fill(twitterProofLink);
+
+      await expect(
+        applicationForm.submitApplicationForm.twitterProofStep2.getByText(
+          'Must be a valid Twitter/X status URL',
+        ),
+      ).toBeVisible();
+
+      await expect(
+        applicationForm.submitApplicationForm.submitBtn,
+      ).toBeDisabled();
+    });
+  });
+
+  test('Should show error if paste incorrect Discord proof link', async ({
+    widgetService,
+  }) => {
+    const applicationForm = widgetService.operatorType.applicationForm;
+    const discordProofLink = 'https://discord.com/chan/123/456/789';
+    await test.step('Paste Discord incorrect proof link', async () => {
+      await applicationForm.submitApplicationForm.discordProofStep2
+        .locator('input')
+        .fill(discordProofLink);
+
+      await expect(
+        applicationForm.submitApplicationForm.discordProofStep2.getByText(
+          'Must be a valid Discord message URL',
+        ),
+      ).toBeVisible();
+
+      await expect(
+        applicationForm.submitApplicationForm.submitBtn,
+      ).toBeDisabled();
+    });
+  });
 });
