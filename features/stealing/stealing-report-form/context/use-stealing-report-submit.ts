@@ -71,7 +71,7 @@ export const useStealingReportSubmit: FormSubmitterHook<
 
         return true;
       } catch (error) {
-        return handleTxError(error, txModalStages, onRetry);
+        return handleTxError(error);
       }
     },
     [csm.stealing, txModalStages],

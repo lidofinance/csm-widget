@@ -254,7 +254,7 @@ export const useMySubmit: FormSubmitterHook<
         await onConfirm?.(); // Revalidate network data
         return true; // Success
       } catch (error) {
-        return handleTxError(error, txModalStages, onRetry);
+        return handleTxError(error);
       }
     },
     [csm.bond, txModalStages],

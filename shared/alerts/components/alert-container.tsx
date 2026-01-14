@@ -1,45 +1,10 @@
 import { DarkThemeProvider } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import styled from 'styled-components';
 import { useAlertActions } from '../alert-provider';
-import { MEDIA_QUERY_XXL } from 'styles/constants';
-import { useDappStatus } from 'modules/web3';
-
-const AlertContainerStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
-
-  margin: 0 auto;
-
-  :not(:empty) {
-    margin-top: 76px;
-  }
-
-  grid-area: none;
-  position: absolute;
-  right: 32px;
-  top: 80px;
-  width: calc(50% - 400px);
-  max-width: 300px;
-  grid-area: none;
-
-  ${MEDIA_QUERY_XXL} {
-    width: calc(50% - 350px);
-  }
-
-  ${({ theme }) => theme.mediaQueries.xl} {
-    grid-area: alerts;
-    position: static;
-    width: 100%;
-    max-width: var(--layout-main-width);
-  }
-`;
+import { AlertContainerStyled } from './styles';
 
 export const AlertContainer: FC = () => {
   const { alerts } = useAlertActions();
-  const { isSupportedChain } = useDappStatus();
-  if (!isSupportedChain) return null;
 
   return (
     <DarkThemeProvider>

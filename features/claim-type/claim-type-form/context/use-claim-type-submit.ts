@@ -67,7 +67,7 @@ export const useClaimTypeSubmit: FormSubmitterHook<
 
         return true;
       } catch (error) {
-        return handleTxError(error, txModalStages, onRetry);
+        return handleTxError(error);
       }
     },
     [confirmClaimtype, csm.icsGate, txModalStages],

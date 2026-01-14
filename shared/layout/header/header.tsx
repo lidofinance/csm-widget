@@ -1,6 +1,5 @@
 import { FC } from 'react';
 
-import { Decor } from '../decor';
 import { HeaderBurger } from './components/header-burger';
 import HeaderChain from './components/header-chain';
 import HeaderNodeOperator from './components/header-node-operator';
@@ -23,6 +22,5 @@ export const Header: FC = () => (
         <HeaderBurger />
       </HeaderActionsStyle>
     </HeaderStyle>
-    <Decor />
   </HeaderWrapper>
 );
