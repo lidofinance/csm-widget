@@ -2,24 +2,15 @@ import { test } from '../../../test.fixture';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
-import { applyApplicationMockResponse } from 'tests/services/mockResponses/applyApplication.mock';
 
 const secretPhrase = generateMnemonic(english, 128);
 
 test.use({ secretPhrase: secretPhrase });
 
 test.describe('Operator with keys. ICS. Apply application. Socials', async () => {
-  test.beforeAll(async ({ widgetService, httpMockerService }) => {
+  test.beforeAll(async ({ widgetService }) => {
     const applicationForm = widgetService.operatorType.applicationForm;
     await applicationForm.open();
-
-    await test.step('Set up mock', async () => {
-      const applyApplicationResponse = applyApplicationMockResponse;
-      await httpMockerService.mockIcsApply(applyApplicationResponse);
-
-      const statusResponse = applyApplicationMockResponse;
-      await httpMockerService.mockIcsStatus(statusResponse);
-    });
 
     await applicationForm.signInForm.signIn();
   });
@@ -82,18 +73,6 @@ test.describe('Operator with keys. ICS. Apply application. Socials', async () =>
         'Step 1. Prove the ownership of the X account by posting a tweet with the following text',
       );
 
-      await test.step('Verify link in description of step 1', async () => {
-        const csmChannelLink =
-          applicationForm.submitApplicationForm.socialProofSection.getByRole(
-            'link',
-            { name: 'the CSM channel' },
-          );
-        await expect(csmChannelLink).toHaveAttribute(
-          'href',
-          'https://discord.com/channels/761182643269795850/1404810479292907662',
-        );
-      });
-
       await expect(
         applicationForm.submitApplicationForm.twitterProofStep2,
       ).toContainText('Step 2. Paste the link to this post');
@@ -125,7 +104,17 @@ test.describe('Operator with keys. ICS. Apply application. Socials', async () =>
       ).toContainText(
         'Step 1. Prove the ownership of the Discord account by posting the following message to the CSM channel',
       );
-
+      await test.step('Verify link in description of step 1', async () => {
+        const csmChannelLink =
+          applicationForm.submitApplicationForm.discordSection.getByRole(
+            'link',
+            { name: 'the CSM channel' },
+          );
+        await expect(csmChannelLink).toHaveAttribute(
+          'href',
+          'https://discord.com/channels/761182643269795850/1404810479292907662',
+        );
+      });
       await expect(
         applicationForm.submitApplicationForm.discordProofStep2,
       ).toContainText('Step 2. Paste the link to this message');

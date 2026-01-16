@@ -1,10 +1,12 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, test, expect } from '@playwright/test';
 import {
   WalletConnectType,
   WalletPage,
 } from '@lidofinance/wallets-testing-wallets';
 import { BasePage } from 'tests/pages/base.page';
 import { AdditionalAddressPage } from './additionalAddress.page';
+import { Wallet, utils } from 'ethers';
+import { HDAccount } from 'viem/accounts';
 
 export class SubmitApplicationForm extends BasePage {
   form: Locator;
@@ -28,6 +30,7 @@ export class SubmitApplicationForm extends BasePage {
   twitterProofStep1Input: Locator;
   twitterProofStep1CopyBtn: Locator;
   twitterProofStep2: Locator;
+  defaultTwitterMessageUrl = 'https://x.com/someuser/status/1234567890';
 
   // Discord section
   discordSection: Locator;
@@ -35,6 +38,7 @@ export class SubmitApplicationForm extends BasePage {
   discordProofStep1Input: Locator;
   discordProofStep1CopyBtn: Locator;
   discordProofStep2: Locator;
+  defaultDiscordMessageUrl = 'https://discord.com/channels/123/456/789';
 
   // btn
   submitBtn: Locator;
@@ -111,21 +115,42 @@ export class SubmitApplicationForm extends BasePage {
     await addressInput.fill(address);
   }
 
-  async submitApplication() {
-    // let txPage;
-    // await test.step('Sign in a message to prove ownership', async () => {
-    //   const signInButton = this.form.getByRole('button', { name: 'Sign in' });
-    //   [txPage] = await Promise.all([
-    //     this.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-    //     signInButton.click(),
-    //   ]);
-    //   await this.page.waitForSelector(`text=Please sign the message`, {
-    //     timeout: STAGE_WAIT_TIMEOUT,
-    //   });
-    //   await this.walletPage.confirmTx(txPage);
-    //   await this.page.waitForSelector(`text=Submit application`, {
-    //     timeout: STAGE_WAIT_TIMEOUT,
-    //   });
-    // });
+  async addAdditionalAddress(account: HDAccount, mainAddress: `0x${string}`) {
+    await this.addNewAddressBtn.click();
+    const lastAdditionalAddressIndex = this.additionalAddressesSection.locator(
+      '[data-testid*="additionalAddressInfo"]',
+    );
+    const count = await lastAdditionalAddressIndex.count();
+    const lastIndex = count - 1;
+    await this.fillAdditionalAddress(lastIndex, account.address);
+
+    await test.step('Check verified state for address', async () => {
+      const signMessage = `Verify ownership of address ${account.address.toLowerCase()} for ICS with main address ${mainAddress.toLowerCase()}`;
+      const signature = await new Wallet(
+        // @ts-expect-error may be null
+        utils.hexlify(account.getHdKey().privateKey),
+      ).signMessage(signMessage);
+
+      const addressField = this.getAdditionalAddressFieldByIndex(lastIndex);
+
+      await addressField.signatureInput.fill(signature);
+      await expect(addressField.signMessageInput).toHaveValue(signMessage);
+      await addressField.verifySignatureBtn.click();
+      await expect(addressField.verifyChip).toBeVisible();
+    });
+  }
+
+  async addSocialsProof() {
+    await test.step('Fill Twitter proof', async () => {
+      await this.twitterProofStep2
+        .locator('input')
+        .fill(this.defaultTwitterMessageUrl);
+    });
+
+    await test.step('Fill Discord proof', async () => {
+      await this.discordProofStep2
+        .locator('input')
+        .fill(this.defaultDiscordMessageUrl);
+    });
   }
 }

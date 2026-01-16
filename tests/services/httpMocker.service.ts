@@ -13,7 +13,7 @@ export class HttpMockerService {
   ) {}
 
   async mockIcsApply(response: Record<string, any>) {
-    const mockUrl = `${this.config.urls.csmSurveysApi}/ics/apply/**`;
+    const mockUrl = `${this.config.urls.csmSurveysApi}/ics/apply`;
     await test.step('Mock ICS Apply request', async () => {
       await this.page.route(mockUrl, async (route) => {
         await route.fulfill({
@@ -26,7 +26,7 @@ export class HttpMockerService {
   }
 
   async mockIcsStatus(response: Record<string, any>) {
-    const mockUrl = `${this.config.urls.csmSurveysApi}/ics/status/**`;
+    const mockUrl = `${this.config.urls.csmSurveysApi}/ics/status`;
 
     await test.step('Mock ICS Status request', async () => {
       await this.page.route(mockUrl, async (route) => {

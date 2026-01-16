@@ -2,7 +2,6 @@ import { test } from '../../../test.fixture';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
-import { applyApplicationMockResponse } from 'tests/services/mockResponses/applyApplication.mock';
 import { Wallet, utils } from 'ethers';
 import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
@@ -11,17 +10,9 @@ const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase: secretPhrase });
 
 test.describe('Operator with keys. ICS. Apply application. Addresses', async () => {
-  test.beforeAll(async ({ widgetService, httpMockerService }) => {
+  test.beforeAll(async ({ widgetService }) => {
     const applicationForm = widgetService.operatorType.applicationForm;
     await applicationForm.open();
-
-    await test.step('Set up mock', async () => {
-      const applyApplicationResponse = applyApplicationMockResponse;
-      await httpMockerService.mockIcsApply(applyApplicationResponse);
-
-      const statusResponse = applyApplicationMockResponse;
-      await httpMockerService.mockIcsStatus(statusResponse);
-    });
 
     await applicationForm.signInForm.signIn();
   });
