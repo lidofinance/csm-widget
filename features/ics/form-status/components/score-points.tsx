@@ -19,8 +19,8 @@ export const ScorePoints: FC<ScoreCategoryProps> = ({ scores, status }) => {
   const isEnougth = total >= TOTAL_SCORE_REQUIRED;
   const showIcons = status !== 'APPROVED';
   return (
-    <Stack direction="column" gap="md">
-      <Stack justify="space-between">
+    <Stack direction="column" gap="md" data-testid="scorePointsSection">
+      <Stack justify="space-between" data-testid="totalScoreBreakdown">
         <Text size="sm" weight={700}>
           {showIcons &&
             (isEnougth ? (
@@ -34,7 +34,7 @@ export const ScorePoints: FC<ScoreCategoryProps> = ({ scores, status }) => {
             ))}{' '}
           Total Score Breakdown
         </Text>
-        <Text size="sm" weight={700}>
+        <Text size="sm" weight={700} data-testid="points">
           <Points value={total} />
         </Text>
       </Stack>
