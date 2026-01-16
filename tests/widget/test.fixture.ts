@@ -11,6 +11,7 @@ import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from 'tests/consts/timeouts';
 import ForkActionsService from 'tests/services/forkActions.service';
 import { warmUpForkedNode } from 'tests/helpers/warmUpFork';
+import { HttpMockerService } from 'tests/services/httpMocker.service';
 
 type WorkerFixtures = {
   // fixture-options
@@ -23,6 +24,7 @@ type WorkerFixtures = {
   csmSDK: LidoSDKClient;
   ethereumSDK: SdkService;
   forkActionService: ForkActionsService;
+  httpMockerService: HttpMockerService;
 };
 
 export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
@@ -133,6 +135,18 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
         new SdkService(
           mnemonicToAccount(secretPhrase),
           widgetFullConfig.standConfig.networkConfig,
+        ),
+      );
+    },
+    { scope: 'worker' },
+  ],
+  httpMockerService: [
+    async ({ widgetService }, use) => {
+      await use(
+        new HttpMockerService(
+          widgetService.page,
+          // @ts-expect-error may be null
+          widgetFullConfig.standConfig.mockConfig,
         ),
       );
     },

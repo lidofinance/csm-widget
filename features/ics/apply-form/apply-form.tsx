@@ -12,7 +12,7 @@ import {
 export const ApplyForm: FC = memo(() => (
   <ApplyDataProvider>
     <ApplyFormProvider>
-      <FormBlock $gap="xxl">
+      <FormBlock $gap="xxl" data-testid="applyForm">
         <FormLoader>
           <Form>
             <MainAddress />
