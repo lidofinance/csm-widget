@@ -1,7 +1,7 @@
 import { Accordion, Block, Text } from '@lidofinance/lido-ui';
-import { RewardsHistory } from 'features/rewards-history';
-import { MockRewardsHistoryProvider } from 'mock/rewards/mock-providers';
-import { testScenarios } from 'mock/rewards/test-scenarios';
+import { Wrapped } from 'features/wrapped';
+import { MockWrappedScenarioData } from 'mock/wrapped/mock-data';
+import { MockWrappedProvider } from 'mock/wrapped/mock-providers';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
@@ -10,6 +10,7 @@ import { LocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 import { getFirstParam } from 'utils';
 import { getTestProps } from 'utilsApi';
+import wrappedStats from 'utilsApi/wrapped-stats/stats.json';
 
 const TestContainer = styled.div`
   display: flex;
@@ -47,41 +48,53 @@ const StyledAccordion = styled(Accordion)`
   }
 `;
 
-const RewardsHistoryTestPage: FC = () => {
+const WrappedTestPage: FC = () => {
   const { query } = useRouter();
-  const _case = parseInt(getFirstParam(query['case']) ?? '', 10) || 0;
-  const scenario = testScenarios[_case];
+  const operatorId =
+    parseInt(getFirstParam(query['operatorId']) ?? '', 10) || 0;
+  const stats =
+    wrappedStats[operatorId.toString() as keyof typeof wrappedStats] ||
+    wrappedStats['0'];
+
+  const scenario: MockWrappedScenarioData = {
+    nodeOperatorId: operatorId,
+    stats,
+  };
 
   return (
-    <Layout dummy title="Rewards History Test">
+    <Layout dummy title="Wrapped Test">
       <TestContainer>
         <TestBlock>
-          <TestTitle>{scenario.title}</TestTitle>
-          <TestDescription>{scenario.description}</TestDescription>
+          <TestTitle>Operator #{operatorId}</TestTitle>
+          <TestDescription>
+            Performance: {stats.avgPerformance / 100}% | Percentile:{' '}
+            {stats.topPerformancePercentile} | Strikes: {stats.strikesCount} |
+            ICS: {stats.hasICS ? 'Yes' : 'No'}
+          </TestDescription>
           <StyledAccordion
             summary={
               <Text size="xs" color="secondary">
-                All Test Cases ({testScenarios.length})
+                All Operators ({Object.keys(wrappedStats).length})
               </Text>
             }
           >
             <Stack direction="column" gap="xxs">
-              {testScenarios.map((s, i) => (
-                <LocalLink key={i} query={{ case: `${i}` }}>
-                  {i}: {s.title}
+              {Object.keys(wrappedStats).map((id) => (
+                <LocalLink key={id} query={{ operatorId: id }}>
+                  Operator #{id}
                 </LocalLink>
               ))}
             </Stack>
           </StyledAccordion>
         </TestBlock>
-        <MockRewardsHistoryProvider key={_case} scenario={scenario.data}>
-          <RewardsHistory />
-        </MockRewardsHistoryProvider>
+        <MockWrappedProvider key={operatorId} scenario={scenario}>
+          <Wrapped />
+        </MockWrappedProvider>
       </TestContainer>
     </Layout>
   );
 };
 
-export default RewardsHistoryTestPage;
+export default WrappedTestPage;
 
 export const getServerSideProps = getTestProps;

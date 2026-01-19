@@ -17,3 +17,13 @@ export const getProps =
       props,
     };
   };
+
+export const getTestProps: GetServerSideProps = async () => {
+  const { defaultChain } = secretConfig;
+
+  if (defaultChain === 1) {
+    return { notFound: true };
+  }
+
+  return { props: {} };
+};
