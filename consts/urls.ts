@@ -43,7 +43,8 @@ export const PATH = <const>{
   SURVEYS_DELEGATES: '/surveys/delegates',
   SURVEYS_DELEGATOR: '/surveys/delegator',
 
-  WRAPPED: '/wrapped',
+  WRAPPED: '/wrapped-2025',
+  WRAPPED_SHARE: '/wrapped-2025/share',
 };
 
 export type PATH = (typeof PATH)[keyof typeof PATH];

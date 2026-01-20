@@ -71,6 +71,10 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   wrappedAlertLink = 'wrappedAlertLink',
   wrappedLetsGo = 'wrappedLetsGo',
   wrappedRepeat = 'wrappedRepeat',
+  wrappedShareOpen = 'wrappedShareOpen',
+  wrappedShareCopy = 'wrappedShareCopy',
+  wrappedShareNative = 'wrappedShareNative',
+  wrappedShareDownload = 'wrappedShareDownload',
   wrappedShareX = 'wrappedShareX',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
@@ -355,6 +359,22 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.wrappedRepeat]: createEvent(
     'Click «Repeat» button on Wrapped summary',
     'wrapped_repeat',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareOpen]: createEvent(
+    'Open share modal on Wrapped summary',
+    'wrapped_share_open',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareCopy]: createEvent(
+    'Copy image to clipboard in share modal',
+    'wrapped_share_copy',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareNative]: createEvent(
+    'Share via native share API in share modal',
+    'wrapped_share_native',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareDownload]: createEvent(
+    'Download image in share modal',
+    'wrapped_share_download',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.wrappedShareX]: createEvent(
     'Click «Share on X» button on Wrapped summary',

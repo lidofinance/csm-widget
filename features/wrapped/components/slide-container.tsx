@@ -7,6 +7,7 @@ import { ProgressBar } from './progress-bar';
 
 type SlideContainerProps = PropsWithChildren<{
   bg?: SlideVariant;
+  same?: boolean;
   progress?: boolean;
 }>;
 
@@ -28,6 +29,21 @@ export const SlideContainer: FC<SlideContainerProps> = ({
       >
         <Background variant={bg} />
         {progress && <ProgressBar />}
+        {children}
+      </SlideWrapper>
+    </DarkThemeProvider>
+  );
+};
+
+export const SlideDumbContainer: FC<SlideContainerProps> = ({
+  children,
+  bg,
+  same,
+}) => {
+  return (
+    <DarkThemeProvider>
+      <SlideWrapper $same={same}>
+        <Background variant={bg} />
         {children}
       </SlideWrapper>
     </DarkThemeProvider>

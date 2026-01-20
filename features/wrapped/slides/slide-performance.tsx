@@ -24,7 +24,9 @@ export const SlidePerformance: FC = () => {
         <SlideBlock>
           <StatLabel>Your best month</StatLabel>
           <StatValue>{data.bestMonth}</StatValue>
-          <StatSub>with {formatPercent(data.bestMonthPerformance)}</StatSub>
+          <StatSub>
+            with {formatPercent(data.bestMonthPerformance)} performance
+          </StatSub>
         </SlideBlock>
       </SlideContent>
       <SlideNavigation buttonText="Not bad!" />

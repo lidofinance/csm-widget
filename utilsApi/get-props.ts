@@ -1,5 +1,6 @@
 import { GetServerSideProps } from 'next';
 import { secretConfig } from 'config';
+import buildInfo from 'build-info.json';
 import { loadValidationFile } from './load-validation-file';
 
 export const getProps =
@@ -19,9 +20,14 @@ export const getProps =
   };
 
 export const getTestProps: GetServerSideProps = async () => {
-  const { defaultChain } = secretConfig;
+  const { version, branch } = buildInfo;
 
-  if (defaultChain === 1) {
+  if (
+    version !== 'REPLACE_WITH_VERSION' &&
+    version !== branch + ':-unknown' &&
+    version !== 'staging' &&
+    version !== 'dev'
+  ) {
     return { notFound: true };
   }
 

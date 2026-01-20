@@ -35,9 +35,10 @@ export const ProgressSegment = styled.div<{
     transition: width 0.3s ease;
 
     ${({ $state, $isPaused, $duration }) => {
-      if ($state === 'active' && !$isPaused) {
+      if ($state === 'active') {
         return css`
           animation: ${fillAnimation} ${$duration}ms linear forwards;
+          animation-play-state: ${$isPaused ? 'paused' : 'running'};
         `;
       }
     }}

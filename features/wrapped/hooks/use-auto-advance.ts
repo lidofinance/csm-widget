@@ -22,6 +22,7 @@ export const useAutoAdvance = () => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const startTimeRef = useRef<number>(0);
   const remainingRef = useRef<number>(AUTO_ADVANCE_INTERVAL);
+  const prevIndexRef = useRef<number>(currentIndex);
 
   const clearTimer = useCallback(() => {
     if (timerRef.current) {
@@ -30,41 +31,44 @@ export const useAutoAdvance = () => {
     }
   }, []);
 
-  const startTimer = useCallback(() => {
-    clearTimer();
-    if (isFirst || isLast) return;
+  // Unified effect that handles both pause/resume and slide changes
+  useEffect(() => {
+    // Detect if we navigated to a new slide
+    const slideChanged = prevIndexRef.current !== currentIndex;
+    prevIndexRef.current = currentIndex;
 
+    // Clear any existing timer
+    clearTimer();
+
+    // Reset timer when navigating to a new slide
+    if (slideChanged) {
+      remainingRef.current = AUTO_ADVANCE_INTERVAL;
+      startTimeRef.current = 0;
+    }
+
+    // Skip first and last slides
+    if (isFirst || isLast) {
+      return;
+    }
+
+    // Don't start timer when paused
+    if (isPaused) {
+      // Calculate remaining time when pausing (only if timer was running)
+      if (!slideChanged && startTimeRef.current > 0) {
+        const elapsed = Date.now() - startTimeRef.current;
+        remainingRef.current = Math.max(0, remainingRef.current - elapsed);
+      }
+      return clearTimer;
+    }
+
+    // Start/resume timer when not paused
     startTimeRef.current = Date.now();
     timerRef.current = setTimeout(() => {
       goNext();
-      remainingRef.current = AUTO_ADVANCE_INTERVAL;
     }, remainingRef.current);
-  }, [clearTimer, goNext, isFirst, isLast]);
-
-  useEffect(() => {
-    if (isPaused) {
-      if (timerRef.current) {
-        const elapsed = Date.now() - startTimeRef.current;
-        remainingRef.current = Math.max(0, remainingRef.current - elapsed);
-        clearTimer();
-      }
-    } else {
-      startTimer();
-    }
 
     return clearTimer;
-  }, [isPaused, clearTimer, startTimer]);
-
-  // Reset timer only when navigating to a new slide
-  // Note: isPaused is intentionally excluded from deps - the first effect handles pause/resume
-  // Adding isPaused here would reset remaining time on every pause, breaking sync with progress bar
-  useEffect(() => {
-    remainingRef.current = AUTO_ADVANCE_INTERVAL;
-    if (!isPaused) {
-      startTimer();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndex, startTimer]);
+  }, [isPaused, currentIndex, isFirst, isLast, goNext, clearTimer]);
 
   return null;
 };

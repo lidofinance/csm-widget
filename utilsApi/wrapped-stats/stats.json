@@ -11,7 +11,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 13
+    "proposedBlocksCount": 16
   },
   "1": {
     "totalRewardsETH": "1091174931947682593",
@@ -25,7 +25,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 44
+    "proposedBlocksCount": 51
   },
   "2": {
     "totalRewardsETH": "331280636647922492",
@@ -39,7 +39,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 15
   },
   "3": {
     "totalRewardsETH": "110638772409566160",
@@ -67,7 +67,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 24
   },
   "5": {
     "totalRewardsETH": "774364694344308427",
@@ -81,7 +81,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 28
+    "proposedBlocksCount": 36
   },
   "6": {
     "totalRewardsETH": "774364694344308427",
@@ -95,7 +95,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 20
+    "proposedBlocksCount": 27
   },
   "7": {
     "totalRewardsETH": "107342342799180776",
@@ -109,7 +109,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 1
+    "proposedBlocksCount": 2
   },
   "8": {
     "totalRewardsETH": "59731819656314435",
@@ -137,7 +137,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 20
+    "proposedBlocksCount": 22
   },
   "10": {
     "totalRewardsETH": "64530391195359027",
@@ -151,7 +151,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 4
   },
   "11": {
     "totalRewardsETH": "458421459069285784",
@@ -165,7 +165,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 25
   },
   "12": {
     "totalRewardsETH": "440612844910757617",
@@ -179,7 +179,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 17
+    "proposedBlocksCount": 22
   },
   "13": {
     "totalRewardsETH": "697117998522227579",
@@ -193,7 +193,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 39
   },
   "14": {
     "totalRewardsETH": "53002988024600848",
@@ -235,7 +235,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "17": {
     "totalRewardsETH": "608114729303957154",
@@ -249,7 +249,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 28
   },
   "18": {
     "totalRewardsETH": "258121564781436137",
@@ -263,7 +263,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "19": {
     "totalRewardsETH": "707625198501025273",
@@ -277,7 +277,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 20
   },
   "20": {
     "totalRewardsETH": "11289286085640022040",
@@ -291,7 +291,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 467
+    "proposedBlocksCount": 500
   },
   "21": {
     "totalRewardsETH": "576636960766093221",
@@ -305,7 +305,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 21
   },
   "22": {
     "totalRewardsETH": "1538260708484789965",
@@ -319,7 +319,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 68
+    "proposedBlocksCount": 71
   },
   "23": {
     "totalRewardsETH": "799427415924981960",
@@ -333,7 +333,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 26
   },
   "24": {
     "totalRewardsETH": "716872733323421309",
@@ -347,7 +347,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 20
   },
   "25": {
     "totalRewardsETH": "1265474649888350554",
@@ -357,11 +357,11 @@
     "bestMonthPerformance": 9999,
     "strikesCount": 28,
     "uploadedKeysCount": 16,
-    "queueDays": 36,
+    "queueDays": 37,
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 48
+    "proposedBlocksCount": 53
   },
   "26": {
     "totalRewardsETH": "28807108498879001",
@@ -375,7 +375,7 @@
     "activeDays": 211,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 1
+    "proposedBlocksCount": 2
   },
   "27": {
     "totalRewardsETH": "3479620406654629957",
@@ -389,7 +389,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 163
+    "proposedBlocksCount": 171
   },
   "28": {
     "totalRewardsETH": "568406335413583626",
@@ -403,7 +403,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 25
   },
   "29": {
     "totalRewardsETH": "3233840522800284213",
@@ -417,7 +417,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 132
+    "proposedBlocksCount": 135
   },
   "30": {
     "totalRewardsETH": "78888249350581837",
@@ -445,7 +445,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 141
+    "proposedBlocksCount": 147
   },
   "32": {
     "totalRewardsETH": "3067539143996447616",
@@ -459,7 +459,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 126
+    "proposedBlocksCount": 134
   },
   "33": {
     "totalRewardsETH": "21479046806747272",
@@ -487,7 +487,7 @@
     "activeDays": 346,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 13
   },
   "35": {
     "totalRewardsETH": "9929425741594343478",
@@ -501,7 +501,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 477
+    "proposedBlocksCount": 493
   },
   "36": {
     "totalRewardsETH": "313161382206733975",
@@ -515,7 +515,7 @@
     "activeDays": 137,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 10
+    "proposedBlocksCount": 11
   },
   "37": {
     "totalRewardsETH": "825770764861042871",
@@ -529,7 +529,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 33
+    "proposedBlocksCount": 42
   },
   "38": {
     "totalRewardsETH": "258121564781436137",
@@ -543,7 +543,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 7
   },
   "39": {
     "totalRewardsETH": "784436658939964345",
@@ -557,7 +557,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 29
   },
   "40": {
     "totalRewardsETH": "970150061698519759",
@@ -571,7 +571,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 34
+    "proposedBlocksCount": 39
   },
   "41": {
     "totalRewardsETH": "57690238869843625",
@@ -599,7 +599,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "43": {
     "totalRewardsETH": "846674513751142561",
@@ -613,7 +613,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 29
   },
   "44": {
     "totalRewardsETH": "53475896943330986",
@@ -641,7 +641,7 @@
     "activeDays": 91,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "46": {
     "totalRewardsETH": "807657079086939659",
@@ -655,7 +655,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 30
   },
   "47": {
     "totalRewardsETH": "272012297324955379",
@@ -669,7 +669,7 @@
     "activeDays": 364,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 16
   },
   "48": {
     "totalRewardsETH": "697117998522227579",
@@ -683,7 +683,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 29
   },
   "49": {
     "totalRewardsETH": "775753179184625147",
@@ -693,11 +693,11 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 6,
-    "queueDays": 43,
+    "queueDays": 44,
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 28
   },
   "50": {
     "totalRewardsETH": "711249796203595153",
@@ -711,7 +711,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 37
   },
   "51": {
     "totalRewardsETH": "64530391195359027",
@@ -725,7 +725,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 1
+    "proposedBlocksCount": 2
   },
   "52": {
     "totalRewardsETH": "129060782390718063",
@@ -739,7 +739,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 5
   },
   "53": {
     "totalRewardsETH": "708074343981338142",
@@ -753,7 +753,7 @@
     "activeDays": 363,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 30
   },
   "54": {
     "totalRewardsETH": "765751563832547219",
@@ -767,7 +767,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 34
   },
   "55": {
     "totalRewardsETH": "658438105199326188",
@@ -781,7 +781,7 @@
     "activeDays": 363,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 19
   },
   "56": {
     "totalRewardsETH": "774364694344308427",
@@ -795,7 +795,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 34
   },
   "57": {
     "totalRewardsETH": "35465518144142381",
@@ -823,7 +823,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 31
   },
   "59": {
     "totalRewardsETH": "642822517735744595",
@@ -837,7 +837,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 30
   },
   "60": {
     "totalRewardsETH": "6943181200602398",
@@ -848,7 +848,7 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 0,
     "hasLEA": true,
     "hasICS": false,
     "proposedBlocksCount": 0
@@ -865,7 +865,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 7
+    "proposedBlocksCount": 10
   },
   "62": {
     "totalRewardsETH": "420415650396089075",
@@ -879,7 +879,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 21
   },
   "63": {
     "totalRewardsETH": "1382214800859806",
@@ -890,7 +890,7 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 0,
     "hasLEA": true,
     "hasICS": false,
     "proposedBlocksCount": 0
@@ -907,7 +907,7 @@
     "activeDays": 146,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 9
+    "proposedBlocksCount": 13
   },
   "65": {
     "totalRewardsETH": "789475753539117794",
@@ -921,7 +921,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 26
   },
   "66": {
     "totalRewardsETH": "286244894206962138",
@@ -935,7 +935,7 @@
     "activeDays": 329,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 10
+    "proposedBlocksCount": 11
   },
   "67": {
     "totalRewardsETH": "193591173586077102",
@@ -949,7 +949,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 7
   },
   "68": {
     "totalRewardsETH": "1451946777873891077",
@@ -963,7 +963,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 74
+    "proposedBlocksCount": 79
   },
   "69": {
     "totalRewardsETH": "197766667716298318",
@@ -977,7 +977,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 10
   },
   "70": {
     "totalRewardsETH": "697117998522227579",
@@ -991,7 +991,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 32
   },
   "71": {
     "totalRewardsETH": "416274882704131460",
@@ -1005,7 +1005,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 13
   },
   "72": {
     "totalRewardsETH": "55293238134387540",
@@ -1030,7 +1030,7 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 0,
     "hasLEA": true,
     "hasICS": false,
     "proposedBlocksCount": 0
@@ -1047,21 +1047,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 5
-  },
-  "75": {
-    "totalRewardsETH": "0",
-    "avgPerformance": 0,
-    "topPerformancePercentile": 90,
-    "bestMonth": "",
-    "bestMonthPerformance": 0,
-    "strikesCount": 0,
-    "uploadedKeysCount": 0,
-    "queueDays": 0,
-    "activeDays": 365,
-    "hasLEA": true,
-    "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 6
   },
   "76": {
     "totalRewardsETH": "41789942374556819",
@@ -1072,7 +1058,7 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 72,
     "hasLEA": true,
     "hasICS": false,
     "proposedBlocksCount": 0
@@ -1089,7 +1075,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 24
+    "proposedBlocksCount": 27
   },
   "78": {
     "totalRewardsETH": "70081390879197168",
@@ -1103,7 +1089,7 @@
     "activeDays": 118,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 4
   },
   "79": {
     "totalRewardsETH": "851987346294805583",
@@ -1117,7 +1103,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 34
   },
   "80": {
     "totalRewardsETH": "1416208766785766891",
@@ -1131,7 +1117,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 63
+    "proposedBlocksCount": 71
   },
   "81": {
     "totalRewardsETH": "879347994216565392",
@@ -1145,7 +1131,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 35
   },
   "82": {
     "totalRewardsETH": "697117998522227579",
@@ -1159,7 +1145,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 19
   },
   "83": {
     "totalRewardsETH": "204196673507078749",
@@ -1173,7 +1159,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 8
   },
   "84": {
     "totalRewardsETH": "501169393548105493",
@@ -1187,7 +1173,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 22
   },
   "85": {
     "totalRewardsETH": "59397931728094065",
@@ -1203,20 +1189,6 @@
     "hasLEA": false,
     "proposedBlocksCount": 2
   },
-  "86": {
-    "totalRewardsETH": "0",
-    "avgPerformance": 0,
-    "topPerformancePercentile": 90,
-    "bestMonth": "",
-    "bestMonthPerformance": 0,
-    "strikesCount": 0,
-    "uploadedKeysCount": 0,
-    "queueDays": 0,
-    "activeDays": 365,
-    "hasLEA": true,
-    "hasICS": false,
-    "proposedBlocksCount": 0
-  },
   "87": {
     "totalRewardsETH": "1024046724231126022",
     "avgPerformance": 9994,
@@ -1229,7 +1201,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 33
+    "proposedBlocksCount": 35
   },
   "88": {
     "totalRewardsETH": "53502210178688495",
@@ -1253,11 +1225,11 @@
     "bestMonthPerformance": 9999,
     "strikesCount": 1,
     "uploadedKeysCount": 18,
-    "queueDays": 42,
+    "queueDays": 41,
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 31
   },
   "90": {
     "totalRewardsETH": "721101716081185696",
@@ -1271,7 +1243,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 20
+    "proposedBlocksCount": 27
   },
   "91": {
     "totalRewardsETH": "774364694344308427",
@@ -1285,7 +1257,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 24
   },
   "92": {
     "totalRewardsETH": "290465832717594819",
@@ -1299,7 +1271,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 5
+    "proposedBlocksCount": 8
   },
   "93": {
     "totalRewardsETH": "697117998522227579",
@@ -1313,7 +1285,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 24
   },
   "94": {
     "totalRewardsETH": "456639989528668837",
@@ -1327,7 +1299,7 @@
     "activeDays": 240,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 11
+    "proposedBlocksCount": 14
   },
   "95": {
     "totalRewardsETH": "108125462296747785",
@@ -1341,7 +1313,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 5
   },
   "96": {
     "totalRewardsETH": "650227942864163626",
@@ -1355,7 +1327,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 26
   },
   "97": {
     "totalRewardsETH": "774364694344308427",
@@ -1369,7 +1341,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 24
   },
   "98": {
     "totalRewardsETH": "2217057836633396702",
@@ -1383,7 +1355,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 88
+    "proposedBlocksCount": 99
   },
   "99": {
     "totalRewardsETH": "795309137574193250",
@@ -1397,7 +1369,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 32
+    "proposedBlocksCount": 37
   },
   "100": {
     "totalRewardsETH": "774364694344308427",
@@ -1411,7 +1383,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 28
   },
   "101": {
     "totalRewardsETH": "5445620915467133",
@@ -1425,7 +1397,7 @@
     "activeDays": 27,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "102": {
     "totalRewardsETH": "690311643717004963",
@@ -1439,7 +1411,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 32
   },
   "103": {
     "totalRewardsETH": "2369332413366279866",
@@ -1453,7 +1425,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 96
+    "proposedBlocksCount": 105
   },
   "104": {
     "totalRewardsETH": "214969962305289582",
@@ -1467,7 +1439,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 10
   },
   "105": {
     "totalRewardsETH": "2678542231452132862",
@@ -1481,7 +1453,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 173
+    "proposedBlocksCount": 178
   },
   "106": {
     "totalRewardsETH": "129060782390718063",
@@ -1509,7 +1481,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 31
   },
   "108": {
     "totalRewardsETH": "51137313899856344",
@@ -1551,7 +1523,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 23
   },
   "111": {
     "totalRewardsETH": "10560868570869457",
@@ -1593,7 +1565,7 @@
     "activeDays": 146,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 9
   },
   "114": {
     "totalRewardsETH": "111459619596534743",
@@ -1607,7 +1579,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 1
+    "proposedBlocksCount": 2
   },
   "115": {
     "totalRewardsETH": "774364694344308427",
@@ -1621,7 +1593,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 25
   },
   "116": {
     "totalRewardsETH": "627958523772172628",
@@ -1635,7 +1607,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 17
+    "proposedBlocksCount": 19
   },
   "117": {
     "totalRewardsETH": "31120154420409924",
@@ -1691,7 +1663,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 17
+    "proposedBlocksCount": 18
   },
   "121": {
     "totalRewardsETH": "126020745490701",
@@ -1733,7 +1705,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 15
   },
   "124": {
     "totalRewardsETH": "3619054619258378998",
@@ -1747,7 +1719,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 161
+    "proposedBlocksCount": 166
   },
   "125": {
     "totalRewardsETH": "702045637887141855",
@@ -1761,7 +1733,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 41
+    "proposedBlocksCount": 46
   },
   "126": {
     "totalRewardsETH": "41843709516868043",
@@ -1772,10 +1744,10 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 146,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "127": {
     "totalRewardsETH": "215037912418378780",
@@ -1789,7 +1761,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 10
   },
   "128": {
     "totalRewardsETH": "697117998522227579",
@@ -1803,7 +1775,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 30
   },
   "129": {
     "totalRewardsETH": "664584102584779514",
@@ -1817,7 +1789,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 28
   },
   "130": {
     "totalRewardsETH": "664584102584779514",
@@ -1827,11 +1799,11 @@
     "bestMonthPerformance": 9999,
     "strikesCount": 0,
     "uploadedKeysCount": 14,
-    "queueDays": 106,
+    "queueDays": 105,
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 32
   },
   "131": {
     "totalRewardsETH": "199491503185522615",
@@ -1845,7 +1817,7 @@
     "activeDays": 211,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 11
   },
   "132": {
     "totalRewardsETH": "535685431446453829",
@@ -1859,7 +1831,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 23
   },
   "133": {
     "totalRewardsETH": "774364694344308427",
@@ -1873,7 +1845,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 20
   },
   "134": {
     "totalRewardsETH": "55034926255652350",
@@ -1901,7 +1873,7 @@
     "activeDays": 27,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "136": {
     "totalRewardsETH": "171380902891321865",
@@ -1915,7 +1887,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 7
+    "proposedBlocksCount": 8
   },
   "137": {
     "totalRewardsETH": "38628103068174854",
@@ -1929,7 +1901,7 @@
     "activeDays": 91,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "138": {
     "totalRewardsETH": "5056883417779782",
@@ -1957,7 +1929,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 5
+    "proposedBlocksCount": 9
   },
   "140": {
     "totalRewardsETH": "47291268198559580",
@@ -1971,7 +1943,7 @@
     "activeDays": 27,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "141": {
     "totalRewardsETH": "787104520941460786",
@@ -1985,7 +1957,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 24
+    "proposedBlocksCount": 30
   },
   "142": {
     "totalRewardsETH": "11961169804893205",
@@ -2013,7 +1985,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 38
   },
   "144": {
     "totalRewardsETH": "7849340164704780387",
@@ -2027,7 +1999,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 317
+    "proposedBlocksCount": 340
   },
   "145": {
     "totalRewardsETH": "54674936238534653",
@@ -2055,7 +2027,7 @@
     "activeDays": 46,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "147": {
     "totalRewardsETH": "721101716081185696",
@@ -2069,7 +2041,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 30
+    "proposedBlocksCount": 37
   },
   "148": {
     "totalRewardsETH": "755201809320979730",
@@ -2083,7 +2055,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 37
   },
   "149": {
     "totalRewardsETH": "540782114541455708",
@@ -2097,7 +2069,7 @@
     "activeDays": 249,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 18
   },
   "150": {
     "totalRewardsETH": "58093166543518956",
@@ -2125,7 +2097,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 82
+    "proposedBlocksCount": 95
   },
   "152": {
     "totalRewardsETH": "1210310556870071188",
@@ -2139,7 +2111,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 76
+    "proposedBlocksCount": 82
   },
   "153": {
     "totalRewardsETH": "120183619346864273",
@@ -2153,7 +2125,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 6
   },
   "154": {
     "totalRewardsETH": "847865565365216141",
@@ -2167,7 +2139,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 37
+    "proposedBlocksCount": 38
   },
   "155": {
     "totalRewardsETH": "104105119418225815",
@@ -2181,7 +2153,7 @@
     "activeDays": 46,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "156": {
     "totalRewardsETH": "5720076787676953",
@@ -2223,7 +2195,7 @@
     "activeDays": 27,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "159": {
     "totalRewardsETH": "5126074435568455218",
@@ -2237,7 +2209,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 223
+    "proposedBlocksCount": 233
   },
   "160": {
     "totalRewardsETH": "614978898385158878",
@@ -2251,7 +2223,7 @@
     "activeDays": 337,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 21
   },
   "161": {
     "totalRewardsETH": "348558999261113787",
@@ -2265,7 +2237,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 20
   },
   "162": {
     "totalRewardsETH": "697117998522227579",
@@ -2279,7 +2251,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 24
+    "proposedBlocksCount": 30
   },
   "163": {
     "totalRewardsETH": "602836256599293197",
@@ -2293,7 +2265,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 23
   },
   "164": {
     "totalRewardsETH": "4493402122655748",
@@ -2335,7 +2307,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 267
+    "proposedBlocksCount": 274
   },
   "167": {
     "totalRewardsETH": "5322320505244403942",
@@ -2349,7 +2321,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 222
+    "proposedBlocksCount": 236
   },
   "168": {
     "totalRewardsETH": "717095612720519741",
@@ -2363,7 +2335,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 37
   },
   "169": {
     "totalRewardsETH": "693304937918998941",
@@ -2377,7 +2349,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 32
+    "proposedBlocksCount": 35
   },
   "170": {
     "totalRewardsETH": "100157690696406503",
@@ -2405,7 +2377,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 90
+    "proposedBlocksCount": 94
   },
   "172": {
     "totalRewardsETH": "697117998522227579",
@@ -2419,7 +2391,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 37
   },
   "173": {
     "totalRewardsETH": "53742490576322388",
@@ -2447,7 +2419,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 16
+    "proposedBlocksCount": 23
   },
   "175": {
     "totalRewardsETH": "650824911486345203",
@@ -2461,7 +2433,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 28
   },
   "176": {
     "totalRewardsETH": "5485214549490845",
@@ -2489,7 +2461,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "178": {
     "totalRewardsETH": "4494204802563332",
@@ -2531,7 +2503,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 29
   },
   "181": {
     "totalRewardsETH": "300028838982427263",
@@ -2545,7 +2517,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 7
+    "proposedBlocksCount": 8
   },
   "182": {
     "totalRewardsETH": "58093166543518956",
@@ -2559,7 +2531,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 2
+    "proposedBlocksCount": 3
   },
   "183": {
     "totalRewardsETH": "64530391195359027",
@@ -2601,7 +2573,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 35
   },
   "186": {
     "totalRewardsETH": "399819705673087939",
@@ -2615,21 +2587,7 @@
     "activeDays": 249,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 14
-  },
-  "187": {
-    "totalRewardsETH": "0",
-    "avgPerformance": 0,
-    "topPerformancePercentile": 90,
-    "bestMonth": "",
-    "bestMonthPerformance": 0,
-    "strikesCount": 0,
-    "uploadedKeysCount": 0,
-    "queueDays": 0,
-    "activeDays": 0,
-    "hasLEA": true,
-    "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 17
   },
   "188": {
     "totalRewardsETH": "770360124285371391",
@@ -2643,7 +2601,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 19
   },
   "189": {
     "totalRewardsETH": "463412883701562125",
@@ -2657,7 +2615,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "190": {
     "totalRewardsETH": "8510528131029912",
@@ -2685,7 +2643,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 32
+    "proposedBlocksCount": 36
   },
   "192": {
     "totalRewardsETH": "697117998522227579",
@@ -2699,7 +2657,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 30
   },
   "193": {
     "totalRewardsETH": "80961740476047572",
@@ -2710,10 +2668,10 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 36,
+    "activeDays": 37,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "194": {
     "totalRewardsETH": "685164723697059968",
@@ -2727,7 +2685,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 30
   },
   "195": {
     "totalRewardsETH": "774364694344308427",
@@ -2741,7 +2699,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 35
   },
   "196": {
     "totalRewardsETH": "1029324292952637770",
@@ -2755,7 +2713,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 30
+    "proposedBlocksCount": 32
   },
   "197": {
     "totalRewardsETH": "1504217669175450266",
@@ -2769,7 +2727,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 59
+    "proposedBlocksCount": 63
   },
   "198": {
     "totalRewardsETH": "774364694344308427",
@@ -2783,7 +2741,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 27
   },
   "199": {
     "totalRewardsETH": "697117998522227579",
@@ -2797,7 +2755,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 25
   },
   "200": {
     "totalRewardsETH": "19743974143770668",
@@ -2825,7 +2783,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 36
   },
   "202": {
     "totalRewardsETH": "218627428131263229",
@@ -2881,7 +2839,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 67
+    "proposedBlocksCount": 80
   },
   "206": {
     "totalRewardsETH": "780265474486610344",
@@ -2891,11 +2849,11 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 2,
-    "queueDays": 20,
+    "queueDays": 22,
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 27
   },
   "207": {
     "totalRewardsETH": "793109617133404278",
@@ -2909,7 +2867,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 33
+    "proposedBlocksCount": 36
   },
   "208": {
     "totalRewardsETH": "324872948751379420",
@@ -2923,7 +2881,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 7
   },
   "209": {
     "totalRewardsETH": "184992306035483391",
@@ -2937,7 +2895,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 2
+    "proposedBlocksCount": 3
   },
   "210": {
     "totalRewardsETH": "778258392393133184",
@@ -2951,7 +2909,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 16
+    "proposedBlocksCount": 21
   },
   "211": {
     "totalRewardsETH": "387182347172154210",
@@ -2965,7 +2923,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 11
+    "proposedBlocksCount": 12
   },
   "212": {
     "totalRewardsETH": "788486042815303646",
@@ -2993,7 +2951,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 4
   },
   "214": {
     "totalRewardsETH": "44724488358272048",
@@ -3007,7 +2965,7 @@
     "activeDays": 311,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 2
+    "proposedBlocksCount": 3
   },
   "215": {
     "totalRewardsETH": "723513546234833016",
@@ -3021,7 +2979,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 30
+    "proposedBlocksCount": 38
   },
   "216": {
     "totalRewardsETH": "158840847602224504",
@@ -3035,7 +2993,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 9
+    "proposedBlocksCount": 10
   },
   "217": {
     "totalRewardsETH": "693894674078652463",
@@ -3049,7 +3007,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 25
   },
   "218": {
     "totalRewardsETH": "666126081482198146",
@@ -3063,7 +3021,7 @@
     "activeDays": 329,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 17
+    "proposedBlocksCount": 22
   },
   "219": {
     "totalRewardsETH": "697117998522227579",
@@ -3077,7 +3035,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 35
+    "proposedBlocksCount": 40
   },
   "220": {
     "totalRewardsETH": "712775180737128862",
@@ -3091,7 +3049,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 24
   },
   "221": {
     "totalRewardsETH": "1481285494063950809",
@@ -3105,7 +3063,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 67
+    "proposedBlocksCount": 70
   },
   "222": {
     "totalRewardsETH": "682499592045306089",
@@ -3119,7 +3077,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 34
   },
   "223": {
     "totalRewardsETH": "10370529074825643",
@@ -3161,7 +3119,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 10
+    "proposedBlocksCount": 14
   },
   "226": {
     "totalRewardsETH": "1733608170203574850",
@@ -3175,7 +3133,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 94
+    "proposedBlocksCount": 102
   },
   "227": {
     "totalRewardsETH": "40107218758084078",
@@ -3217,7 +3175,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 27
   },
   "230": {
     "totalRewardsETH": "154397800804832770",
@@ -3231,7 +3189,7 @@
     "activeDays": 64,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 8
   },
   "231": {
     "totalRewardsETH": "285091545441884007",
@@ -3245,7 +3203,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 10
   },
   "232": {
     "totalRewardsETH": "59990262863285452",
@@ -3273,7 +3231,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 28
+    "proposedBlocksCount": 31
   },
   "234": {
     "totalRewardsETH": "58093166543518956",
@@ -3301,7 +3259,7 @@
     "activeDays": 311,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 20
+    "proposedBlocksCount": 27
   },
   "236": {
     "totalRewardsETH": "8819687235931723",
@@ -3329,7 +3287,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 29
   },
   "238": {
     "totalRewardsETH": "153323171798644798",
@@ -3340,10 +3298,10 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 137,
+    "activeDays": 138,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 8
   },
   "239": {
     "totalRewardsETH": "283505324575507087",
@@ -3357,7 +3315,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 13
+    "proposedBlocksCount": 16
   },
   "240": {
     "totalRewardsETH": "6403618704106377348",
@@ -3371,7 +3329,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 271
+    "proposedBlocksCount": 291
   },
   "241": {
     "totalRewardsETH": "262719278968139448",
@@ -3385,7 +3343,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 13
   },
   "242": {
     "totalRewardsETH": "58400976369540010",
@@ -3413,21 +3371,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 33
-  },
-  "244": {
-    "totalRewardsETH": "0",
-    "avgPerformance": 0,
-    "topPerformancePercentile": 90,
-    "bestMonth": "",
-    "bestMonthPerformance": 0,
-    "strikesCount": 0,
-    "uploadedKeysCount": 0,
-    "queueDays": 0,
-    "activeDays": 0,
-    "hasLEA": true,
-    "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 37
   },
   "245": {
     "totalRewardsETH": "702887004712311664",
@@ -3441,7 +3385,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 29
   },
   "246": {
     "totalRewardsETH": "18787046558261471",
@@ -3483,7 +3427,7 @@
     "activeDays": 129,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 11
   },
   "249": {
     "totalRewardsETH": "670325153751323396",
@@ -3497,7 +3441,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 22
   },
   "250": {
     "totalRewardsETH": "189586603527140064",
@@ -3511,7 +3455,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 7
+    "proposedBlocksCount": 9
   },
   "251": {
     "totalRewardsETH": "626792999981290270",
@@ -3525,7 +3469,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 37
+    "proposedBlocksCount": 40
   },
   "252": {
     "totalRewardsETH": "605030614937123925",
@@ -3539,7 +3483,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 31
   },
   "253": {
     "totalRewardsETH": "146740856047186148",
@@ -3581,7 +3525,7 @@
     "activeDays": 355,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 16
+    "proposedBlocksCount": 18
   },
   "256": {
     "totalRewardsETH": "58838437102589441",
@@ -3595,7 +3539,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "257": {
     "totalRewardsETH": "1241508277958759930",
@@ -3609,7 +3553,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 47
+    "proposedBlocksCount": 50
   },
   "258": {
     "totalRewardsETH": "681013028856460348",
@@ -3623,7 +3567,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 24
+    "proposedBlocksCount": 31
   },
   "259": {
     "totalRewardsETH": "655507782496130559",
@@ -3637,7 +3581,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 34
   },
   "260": {
     "totalRewardsETH": "1187431737468164818",
@@ -3679,7 +3623,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 21
   },
   "263": {
     "totalRewardsETH": "647352884273906963",
@@ -3693,7 +3637,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 18
   },
   "264": {
     "totalRewardsETH": "48275647381705719",
@@ -3735,7 +3679,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 33
+    "proposedBlocksCount": 35
   },
   "267": {
     "totalRewardsETH": "178075270607786827",
@@ -3763,7 +3707,7 @@
     "activeDays": 363,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "269": {
     "totalRewardsETH": "346928270029038147",
@@ -3777,7 +3721,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "270": {
     "totalRewardsETH": "34309629022768447",
@@ -3805,7 +3749,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 23
   },
   "272": {
     "totalRewardsETH": "107883050340031866",
@@ -3819,7 +3763,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 5
   },
   "273": {
     "totalRewardsETH": "7292931877533373816",
@@ -3847,7 +3791,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 5
   },
   "275": {
     "totalRewardsETH": "107878234260586361",
@@ -3861,7 +3805,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 4
   },
   "276": {
     "totalRewardsETH": "107878234260586361",
@@ -3875,7 +3819,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 5
   },
   "277": {
     "totalRewardsETH": "107878234260586361",
@@ -3917,7 +3861,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 5
+    "proposedBlocksCount": 13
   },
   "280": {
     "totalRewardsETH": "366148264401072410",
@@ -3931,7 +3875,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 9
   },
   "281": {
     "totalRewardsETH": "307522201065711347",
@@ -3945,7 +3889,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 5
+    "proposedBlocksCount": 10
   },
   "282": {
     "totalRewardsETH": "1786638901700490268",
@@ -3959,7 +3903,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 124
+    "proposedBlocksCount": 125
   },
   "283": {
     "totalRewardsETH": "60770735944554912",
@@ -3987,7 +3931,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 28
+    "proposedBlocksCount": 32
   },
   "285": {
     "totalRewardsETH": "97839553478301092",
@@ -4011,7 +3955,7 @@
     "bestMonthPerformance": 9996,
     "strikesCount": 0,
     "uploadedKeysCount": 15,
-    "queueDays": 94,
+    "queueDays": 95,
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
@@ -4043,7 +3987,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 41
+    "proposedBlocksCount": 44
   },
   "289": {
     "totalRewardsETH": "38964348863745605",
@@ -4081,11 +4025,11 @@
     "bestMonthPerformance": 9998,
     "strikesCount": 0,
     "uploadedKeysCount": 80,
-    "queueDays": 287,
+    "queueDays": 288,
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 71
+    "proposedBlocksCount": 72
   },
   "292": {
     "totalRewardsETH": "583803273800829366",
@@ -4099,7 +4043,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 22
   },
   "293": {
     "totalRewardsETH": "534457865862508789",
@@ -4113,7 +4057,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 28
   },
   "294": {
     "totalRewardsETH": "992565346021861639",
@@ -4127,7 +4071,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 56
+    "proposedBlocksCount": 58
   },
   "295": {
     "totalRewardsETH": "666861160330773766",
@@ -4141,7 +4085,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 30
   },
   "296": {
     "totalRewardsETH": "17820849583231907",
@@ -4267,7 +4211,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 1397
+    "proposedBlocksCount": 1425
   },
   "305": {
     "totalRewardsETH": "586929026522036797",
@@ -4281,7 +4225,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 27
   },
   "306": {
     "totalRewardsETH": "28856539675052356",
@@ -4309,7 +4253,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 36
+    "proposedBlocksCount": 37
   },
   "308": {
     "totalRewardsETH": "509644763817165020",
@@ -4323,7 +4267,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 25
   },
   "309": {
     "totalRewardsETH": "375924343483181736",
@@ -4365,7 +4309,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "312": {
     "totalRewardsETH": "265125122128311587",
@@ -4491,7 +4435,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 9
   },
   "321": {
     "totalRewardsETH": "132326754712095370",
@@ -4557,11 +4501,11 @@
     "bestMonthPerformance": 9990,
     "strikesCount": 0,
     "uploadedKeysCount": 14,
-    "queueDays": 41,
+    "queueDays": 42,
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 11
+    "proposedBlocksCount": 12
   },
   "326": {
     "totalRewardsETH": "216801826533271260",
@@ -4589,7 +4533,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "328": {
     "totalRewardsETH": "379591083726285243",
@@ -4617,7 +4561,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 22
   },
   "330": {
     "totalRewardsETH": "144069748589616767",
@@ -4645,7 +4589,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 250
+    "proposedBlocksCount": 260
   },
   "332": {
     "totalRewardsETH": "358886141199057084",
@@ -4659,7 +4603,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 11
+    "proposedBlocksCount": 12
   },
   "333": {
     "totalRewardsETH": "12387908350947743399",
@@ -4673,7 +4617,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 648
+    "proposedBlocksCount": 652
   },
   "334": {
     "totalRewardsETH": "53404288285493450",
@@ -4771,7 +4715,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 22
   },
   "341": {
     "totalRewardsETH": "729999637891684146",
@@ -4785,7 +4729,7 @@
     "activeDays": 317,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 25
   },
   "342": {
     "totalRewardsETH": "3538772568556407070",
@@ -4799,7 +4743,7 @@
     "activeDays": 317,
     "hasICS": false,
     "hasLEA": false,
-    "proposedBlocksCount": 159
+    "proposedBlocksCount": 162
   },
   "343": {
     "totalRewardsETH": "686680298874181941",
@@ -4813,7 +4757,7 @@
     "activeDays": 118,
     "hasICS": false,
     "hasLEA": false,
-    "proposedBlocksCount": 16
+    "proposedBlocksCount": 18
   },
   "344": {
     "totalRewardsETH": "2972401911602830691",
@@ -4827,7 +4771,7 @@
     "activeDays": 317,
     "hasICS": false,
     "hasLEA": false,
-    "proposedBlocksCount": 139
+    "proposedBlocksCount": 143
   },
   "345": {
     "totalRewardsETH": "1114190533030980026",
@@ -4841,7 +4785,7 @@
     "activeDays": 315,
     "hasICS": false,
     "hasLEA": false,
-    "proposedBlocksCount": 44
+    "proposedBlocksCount": 45
   },
   "346": {
     "totalRewardsETH": "27699688343822867095",
@@ -5369,7 +5313,7 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 2,
-    "queueDays": 232,
+    "queueDays": 231,
     "activeDays": 94,
     "hasLEA": true,
     "hasICS": false,
@@ -5901,7 +5845,7 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 1,
-    "queueDays": 153,
+    "queueDays": 152,
     "activeDays": 94,
     "hasICS": false,
     "hasLEA": false,
@@ -5985,7 +5929,7 @@
     "bestMonthPerformance": 9999,
     "strikesCount": 0,
     "uploadedKeysCount": 7,
-    "queueDays": 148,
+    "queueDays": 149,
     "activeDays": 94,
     "hasICS": false,
     "hasLEA": false,
@@ -6489,8 +6433,8 @@
     "bestMonthPerformance": 9976,
     "strikesCount": 1,
     "uploadedKeysCount": 1,
-    "queueDays": 22,
-    "activeDays": 69,
+    "queueDays": 23,
+    "activeDays": 68,
     "hasICS": false,
     "hasLEA": false,
     "proposedBlocksCount": 0
@@ -6503,7 +6447,7 @@
     "bestMonthPerformance": 9990,
     "strikesCount": 0,
     "uploadedKeysCount": 175,
-    "queueDays": 28,
+    "queueDays": 29,
     "activeDays": 83,
     "hasICS": true,
     "hasLEA": false,
@@ -6517,8 +6461,8 @@
     "bestMonthPerformance": 9412,
     "strikesCount": 2,
     "uploadedKeysCount": 4,
-    "queueDays": 36,
-    "activeDays": 69,
+    "queueDays": 37,
+    "activeDays": 68,
     "hasICS": false,
     "hasLEA": false,
     "proposedBlocksCount": 0
@@ -6531,8 +6475,8 @@
     "bestMonthPerformance": 9998,
     "strikesCount": 0,
     "uploadedKeysCount": 120,
-    "queueDays": 19,
-    "activeDays": 69,
+    "queueDays": 20,
+    "activeDays": 68,
     "hasICS": false,
     "hasLEA": false,
     "proposedBlocksCount": 31
@@ -6811,7 +6755,7 @@
     "bestMonthPerformance": 9938,
     "strikesCount": 0,
     "uploadedKeysCount": 26,
-    "queueDays": 18,
+    "queueDays": 17,
     "activeDays": 56,
     "hasICS": true,
     "hasLEA": false,
@@ -7049,8 +6993,8 @@
     "bestMonthPerformance": 5754,
     "strikesCount": 57,
     "uploadedKeysCount": 57,
-    "queueDays": 4,
-    "activeDays": 26,
+    "queueDays": 5,
+    "activeDays": 25,
     "hasICS": false,
     "hasLEA": false,
     "proposedBlocksCount": 9
@@ -7077,7 +7021,7 @@
     "bestMonthPerformance": 9994,
     "strikesCount": 0,
     "uploadedKeysCount": 158,
-    "queueDays": 5,
+    "queueDays": 4,
     "activeDays": 25,
     "hasICS": false,
     "hasLEA": false,
@@ -7133,7 +7077,7 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 13,
-    "queueDays": 5,
+    "queueDays": 4,
     "activeDays": 24,
     "hasICS": false,
     "hasLEA": false,
@@ -7231,7 +7175,7 @@
     "bestMonthPerformance": 0,
     "strikesCount": 0,
     "uploadedKeysCount": 2,
-    "queueDays": 4,
+    "queueDays": 3,
     "activeDays": 11,
     "hasICS": false,
     "hasLEA": false,
