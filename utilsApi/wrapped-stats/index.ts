@@ -4,14 +4,27 @@ import { WrappedStatsResponse } from 'features/wrapped/data';
 import stats from './stats.json';
 
 export const getWrappedStats = async (
-  nodeOperatorId: string,
+  id: string,
 ): Promise<WrappedStatsResponse> => {
   const chainId = config.defaultChain;
   if (chainId !== CHAINS.Mainnet) {
     throw new Error(`Error: Wrapped is not support chain ${chainId}`);
   }
 
-  const operatorStats = stats[nodeOperatorId as keyof typeof stats];
+  return stats[id as keyof typeof stats] || null;
+};
 
-  return operatorStats || null;
+export const getWrappedStatsByHash = async (
+  hash: string,
+): Promise<WrappedStatsResponse> => {
+  const chainId = config.defaultChain;
+  if (chainId !== CHAINS.Mainnet) {
+    throw new Error(`Error: Wrapped is not support chain ${chainId}`);
+  }
+
+  const operatorEntry = Object.entries(stats).find(
+    ([_, stat]) => stat.hash === hash,
+  );
+
+  return operatorEntry ? operatorEntry[1] : null;
 };

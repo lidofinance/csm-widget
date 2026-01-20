@@ -1,5 +1,6 @@
 {
   "0": {
+    "hash": "b28687",
     "totalRewardsETH": "394463314716112297",
     "avgPerformance": 9589,
     "topPerformancePercentile": 80,
@@ -14,6 +15,7 @@
     "proposedBlocksCount": 13
   },
   "1": {
+    "hash": "d52cf0",
     "totalRewardsETH": "1091174931947682593",
     "avgPerformance": 9964,
     "topPerformancePercentile": 45,
@@ -28,6 +30,7 @@
     "proposedBlocksCount": 44
   },
   "2": {
+    "hash": "e3a402",
     "totalRewardsETH": "331280636647922492",
     "avgPerformance": 9991,
     "topPerformancePercentile": 25,
@@ -42,6 +45,7 @@
     "proposedBlocksCount": 14
   },
   "3": {
+    "hash": "a5ad4a",
     "totalRewardsETH": "110638772409566160",
     "avgPerformance": 9867,
     "topPerformancePercentile": 65,
@@ -56,6 +60,7 @@
     "proposedBlocksCount": 4
   },
   "4": {
+    "hash": "e7b2a8",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -70,6 +75,7 @@
     "proposedBlocksCount": 18
   },
   "5": {
+    "hash": "d8adc8",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9991,
     "topPerformancePercentile": 25,
@@ -84,6 +90,7 @@
     "proposedBlocksCount": 28
   },
   "6": {
+    "hash": "795e32",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9978,
     "topPerformancePercentile": 35,
@@ -98,6 +105,7 @@
     "proposedBlocksCount": 20
   },
   "7": {
+    "hash": "ebb5d8",
     "totalRewardsETH": "107342342799180776",
     "avgPerformance": 9973,
     "topPerformancePercentile": 40,
@@ -112,6 +120,7 @@
     "proposedBlocksCount": 1
   },
   "8": {
+    "hash": "ac49bf",
     "totalRewardsETH": "59731819656314435",
     "avgPerformance": 9841,
     "topPerformancePercentile": 70,
@@ -126,6 +135,7 @@
     "proposedBlocksCount": 1
   },
   "9": {
+    "hash": "cf6cdc",
     "totalRewardsETH": "568406335413583626",
     "avgPerformance": 9256,
     "topPerformancePercentile": 85,
@@ -140,6 +150,7 @@
     "proposedBlocksCount": 20
   },
   "10": {
+    "hash": "fbba12",
     "totalRewardsETH": "64530391195359027",
     "avgPerformance": 9995,
     "topPerformancePercentile": 20,
@@ -154,6 +165,7 @@
     "proposedBlocksCount": 3
   },
   "11": {
+    "hash": "f185aa",
     "totalRewardsETH": "458421459069285784",
     "avgPerformance": 9880,
     "topPerformancePercentile": 65,
@@ -168,6 +180,7 @@
     "proposedBlocksCount": 22
   },
   "12": {
+    "hash": "ad519b",
     "totalRewardsETH": "440612844910757617",
     "avgPerformance": 9985,
     "topPerformancePercentile": 30,
@@ -182,6 +195,7 @@
     "proposedBlocksCount": 17
   },
   "13": {
+    "hash": "bea215",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9979,
     "topPerformancePercentile": 35,
@@ -196,6 +210,7 @@
     "proposedBlocksCount": 29
   },
   "14": {
+    "hash": "c8d15e",
     "totalRewardsETH": "53002988024600848",
     "avgPerformance": 9698,
     "topPerformancePercentile": 80,
@@ -210,6 +225,7 @@
     "proposedBlocksCount": 1
   },
   "15": {
+    "hash": "c8c7f2",
     "totalRewardsETH": "64530391195359027",
     "avgPerformance": 9972,
     "topPerformancePercentile": 40,
@@ -224,6 +240,7 @@
     "proposedBlocksCount": 3
   },
   "16": {
+    "hash": "aa7015",
     "totalRewardsETH": "64530391195359027",
     "avgPerformance": 9973,
     "topPerformancePercentile": 40,
@@ -238,6 +255,7 @@
     "proposedBlocksCount": 0
   },
   "17": {
+    "hash": "06c68f",
     "totalRewardsETH": "608114729303957154",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -252,6 +270,7 @@
     "proposedBlocksCount": 21
   },
   "18": {
+    "hash": "28c8de",
     "totalRewardsETH": "258121564781436137",
     "avgPerformance": 9919,
     "topPerformancePercentile": 55,
@@ -266,6 +285,7 @@
     "proposedBlocksCount": 12
   },
   "19": {
+    "hash": "f71035",
     "totalRewardsETH": "707625198501025273",
     "avgPerformance": 9957,
     "topPerformancePercentile": 50,
@@ -280,6 +300,7 @@
     "proposedBlocksCount": 18
   },
   "20": {
+    "hash": "857868",
     "totalRewardsETH": "11289286085640022040",
     "avgPerformance": 9979,
     "topPerformancePercentile": 35,
@@ -294,6 +315,7 @@
     "proposedBlocksCount": 467
   },
   "21": {
+    "hash": "57eeb8",
     "totalRewardsETH": "576636960766093221",
     "avgPerformance": 9563,
     "topPerformancePercentile": 80,
@@ -308,6 +330,7 @@
     "proposedBlocksCount": 14
   },
   "22": {
+    "hash": "b8fec8",
     "totalRewardsETH": "1538260708484789965",
     "avgPerformance": 9965,
     "topPerformancePercentile": 45,
@@ -322,6 +345,7 @@
     "proposedBlocksCount": 68
   },
   "23": {
+    "hash": "1aad9a",
     "totalRewardsETH": "799427415924981960",
     "avgPerformance": 9982,
     "topPerformancePercentile": 35,
@@ -336,6 +360,7 @@
     "proposedBlocksCount": 23
   },
   "24": {
+    "hash": "0a9795",
     "totalRewardsETH": "716872733323421309",
     "avgPerformance": 9938,
     "topPerformancePercentile": 55,
@@ -350,6 +375,7 @@
     "proposedBlocksCount": 14
   },
   "25": {
+    "hash": "94742d",
     "totalRewardsETH": "1265474649888350554",
     "avgPerformance": 9810,
     "topPerformancePercentile": 70,
@@ -364,6 +390,7 @@
     "proposedBlocksCount": 48
   },
   "26": {
+    "hash": "06c646",
     "totalRewardsETH": "28807108498879001",
     "avgPerformance": 9440,
     "topPerformancePercentile": 80,
@@ -378,6 +405,7 @@
     "proposedBlocksCount": 1
   },
   "27": {
+    "hash": "95f271",
     "totalRewardsETH": "3479620406654629957",
     "avgPerformance": 9981,
     "topPerformancePercentile": 35,
@@ -392,6 +420,7 @@
     "proposedBlocksCount": 163
   },
   "28": {
+    "hash": "2ec974",
     "totalRewardsETH": "568406335413583626",
     "avgPerformance": 9255,
     "topPerformancePercentile": 85,
@@ -406,6 +435,7 @@
     "proposedBlocksCount": 23
   },
   "29": {
+    "hash": "a9d354",
     "totalRewardsETH": "3233840522800284213",
     "avgPerformance": 9983,
     "topPerformancePercentile": 30,
@@ -420,6 +450,7 @@
     "proposedBlocksCount": 132
   },
   "30": {
+    "hash": "354303",
     "totalRewardsETH": "78888249350581837",
     "avgPerformance": 9960,
     "topPerformancePercentile": 45,
@@ -434,6 +465,7 @@
     "proposedBlocksCount": 3
   },
   "31": {
+    "hash": "5d50f5",
     "totalRewardsETH": "3068347337176780814",
     "avgPerformance": 9983,
     "topPerformancePercentile": 30,
@@ -448,6 +480,7 @@
     "proposedBlocksCount": 141
   },
   "32": {
+    "hash": "108806",
     "totalRewardsETH": "3067539143996447616",
     "avgPerformance": 9984,
     "topPerformancePercentile": 30,
@@ -462,6 +495,7 @@
     "proposedBlocksCount": 126
   },
   "33": {
+    "hash": "3869fc",
     "totalRewardsETH": "21479046806747272",
     "avgPerformance": 7047,
     "topPerformancePercentile": 90,
@@ -476,6 +510,7 @@
     "proposedBlocksCount": 0
   },
   "34": {
+    "hash": "f54aa4",
     "totalRewardsETH": "306901987592104470",
     "avgPerformance": 9813,
     "topPerformancePercentile": 70,
@@ -490,6 +525,7 @@
     "proposedBlocksCount": 12
   },
   "35": {
+    "hash": "d33b29",
     "totalRewardsETH": "9929425741594343478",
     "avgPerformance": 9991,
     "topPerformancePercentile": 25,
@@ -504,6 +540,7 @@
     "proposedBlocksCount": 477
   },
   "36": {
+    "hash": "1dc376",
     "totalRewardsETH": "313161382206733975",
     "avgPerformance": 9924,
     "topPerformancePercentile": 55,
@@ -518,6 +555,7 @@
     "proposedBlocksCount": 10
   },
   "37": {
+    "hash": "714f7e",
     "totalRewardsETH": "825770764861042871",
     "avgPerformance": 9970,
     "topPerformancePercentile": 40,
@@ -532,6 +570,7 @@
     "proposedBlocksCount": 33
   },
   "38": {
+    "hash": "03ad39",
     "totalRewardsETH": "258121564781436137",
     "avgPerformance": 9961,
     "topPerformancePercentile": 45,
@@ -546,6 +585,7 @@
     "proposedBlocksCount": 6
   },
   "39": {
+    "hash": "a4ba1d",
     "totalRewardsETH": "784436658939964345",
     "avgPerformance": 9917,
     "topPerformancePercentile": 55,
@@ -560,6 +600,7 @@
     "proposedBlocksCount": 22
   },
   "40": {
+    "hash": "9335da",
     "totalRewardsETH": "970150061698519759",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -574,6 +615,7 @@
     "proposedBlocksCount": 34
   },
   "41": {
+    "hash": "f46c40",
     "totalRewardsETH": "57690238869843625",
     "avgPerformance": 9984,
     "topPerformancePercentile": 30,
@@ -588,6 +630,7 @@
     "proposedBlocksCount": 0
   },
   "42": {
+    "hash": "0bbfe1",
     "totalRewardsETH": "64530391195359027",
     "avgPerformance": 9962,
     "topPerformancePercentile": 45,
@@ -602,6 +645,7 @@
     "proposedBlocksCount": 0
   },
   "43": {
+    "hash": "25472b",
     "totalRewardsETH": "846674513751142561",
     "avgPerformance": 9974,
     "topPerformancePercentile": 40,
@@ -616,6 +660,7 @@
     "proposedBlocksCount": 26
   },
   "44": {
+    "hash": "3b2728",
     "totalRewardsETH": "53475896943330986",
     "avgPerformance": 9893,
     "topPerformancePercentile": 60,
@@ -630,6 +675,7 @@
     "proposedBlocksCount": 3
   },
   "45": {
+    "hash": "ce62b5",
     "totalRewardsETH": "12033946450074709",
     "avgPerformance": 9677,
     "topPerformancePercentile": 80,
@@ -644,6 +690,7 @@
     "proposedBlocksCount": 0
   },
   "46": {
+    "hash": "4a700f",
     "totalRewardsETH": "807657079086939659",
     "avgPerformance": 9907,
     "topPerformancePercentile": 60,
@@ -658,6 +705,7 @@
     "proposedBlocksCount": 25
   },
   "47": {
+    "hash": "681be6",
     "totalRewardsETH": "272012297324955379",
     "avgPerformance": 9408,
     "topPerformancePercentile": 85,
@@ -672,6 +720,7 @@
     "proposedBlocksCount": 15
   },
   "48": {
+    "hash": "700c61",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9978,
     "topPerformancePercentile": 35,
@@ -686,6 +735,7 @@
     "proposedBlocksCount": 23
   },
   "49": {
+    "hash": "dd24be",
     "totalRewardsETH": "775753179184625147",
     "avgPerformance": 9993,
     "topPerformancePercentile": 25,
@@ -700,6 +750,7 @@
     "proposedBlocksCount": 25
   },
   "50": {
+    "hash": "551403",
     "totalRewardsETH": "711249796203595153",
     "avgPerformance": 9981,
     "topPerformancePercentile": 35,
@@ -714,6 +765,7 @@
     "proposedBlocksCount": 29
   },
   "51": {
+    "hash": "ce9759",
     "totalRewardsETH": "64530391195359027",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -728,6 +780,7 @@
     "proposedBlocksCount": 1
   },
   "52": {
+    "hash": "80ddb4",
     "totalRewardsETH": "129060782390718063",
     "avgPerformance": 9928,
     "topPerformancePercentile": 55,
@@ -742,6 +795,7 @@
     "proposedBlocksCount": 4
   },
   "53": {
+    "hash": "639ee3",
     "totalRewardsETH": "708074343981338142",
     "avgPerformance": 9845,
     "topPerformancePercentile": 70,
@@ -756,6 +810,7 @@
     "proposedBlocksCount": 25
   },
   "54": {
+    "hash": "61155f",
     "totalRewardsETH": "765751563832547219",
     "avgPerformance": 9847,
     "topPerformancePercentile": 70,
@@ -770,6 +825,7 @@
     "proposedBlocksCount": 31
   },
   "55": {
+    "hash": "65084e",
     "totalRewardsETH": "658438105199326188",
     "avgPerformance": 9850,
     "topPerformancePercentile": 70,
@@ -784,6 +840,7 @@
     "proposedBlocksCount": 15
   },
   "56": {
+    "hash": "13866e",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -798,6 +855,7 @@
     "proposedBlocksCount": 31
   },
   "57": {
+    "hash": "d56207",
     "totalRewardsETH": "35465518144142381",
     "avgPerformance": 9986,
     "topPerformancePercentile": 30,
@@ -812,6 +870,7 @@
     "proposedBlocksCount": 2
   },
   "58": {
+    "hash": "a6454d",
     "totalRewardsETH": "748534945782476088",
     "avgPerformance": 9935,
     "topPerformancePercentile": 55,
@@ -826,6 +885,7 @@
     "proposedBlocksCount": 25
   },
   "59": {
+    "hash": "66241d",
     "totalRewardsETH": "642822517735744595",
     "avgPerformance": 9886,
     "topPerformancePercentile": 65,
@@ -840,6 +900,7 @@
     "proposedBlocksCount": 27
   },
   "60": {
+    "hash": "082200",
     "totalRewardsETH": "6943181200602398",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -854,6 +915,7 @@
     "proposedBlocksCount": 0
   },
   "61": {
+    "hash": "45defe",
     "totalRewardsETH": "118947015555158498",
     "avgPerformance": 9933,
     "topPerformancePercentile": 55,
@@ -868,6 +930,7 @@
     "proposedBlocksCount": 7
   },
   "62": {
+    "hash": "0e17b0",
     "totalRewardsETH": "420415650396089075",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -882,6 +945,7 @@
     "proposedBlocksCount": 18
   },
   "63": {
+    "hash": "95e636",
     "totalRewardsETH": "1382214800859806",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -896,6 +960,7 @@
     "proposedBlocksCount": 0
   },
   "64": {
+    "hash": "073a05",
     "totalRewardsETH": "342365311137079305",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -910,6 +975,7 @@
     "proposedBlocksCount": 9
   },
   "65": {
+    "hash": "aad341",
     "totalRewardsETH": "789475753539117794",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -924,6 +990,7 @@
     "proposedBlocksCount": 21
   },
   "66": {
+    "hash": "1542a4",
     "totalRewardsETH": "286244894206962138",
     "avgPerformance": 9920,
     "topPerformancePercentile": 55,
@@ -938,6 +1005,7 @@
     "proposedBlocksCount": 10
   },
   "67": {
+    "hash": "f4787f",
     "totalRewardsETH": "193591173586077102",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -952,6 +1020,7 @@
     "proposedBlocksCount": 6
   },
   "68": {
+    "hash": "35a417",
     "totalRewardsETH": "1451946777873891077",
     "avgPerformance": 9983,
     "topPerformancePercentile": 30,
@@ -966,6 +1035,7 @@
     "proposedBlocksCount": 74
   },
   "69": {
+    "hash": "270254",
     "totalRewardsETH": "197766667716298318",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -980,6 +1050,7 @@
     "proposedBlocksCount": 8
   },
   "70": {
+    "hash": "287e7f",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9983,
     "topPerformancePercentile": 30,
@@ -994,6 +1065,7 @@
     "proposedBlocksCount": 25
   },
   "71": {
+    "hash": "24ce3c",
     "totalRewardsETH": "416274882704131460",
     "avgPerformance": 9976,
     "topPerformancePercentile": 40,
@@ -1008,6 +1080,7 @@
     "proposedBlocksCount": 8
   },
   "72": {
+    "hash": "e13c56",
     "totalRewardsETH": "55293238134387540",
     "avgPerformance": 9720,
     "topPerformancePercentile": 80,
@@ -1022,6 +1095,7 @@
     "proposedBlocksCount": 0
   },
   "73": {
+    "hash": "ac656a",
     "totalRewardsETH": "1286695891857299",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -1036,6 +1110,7 @@
     "proposedBlocksCount": 0
   },
   "74": {
+    "hash": "86fd22",
     "totalRewardsETH": "271038118963667925",
     "avgPerformance": 9821,
     "topPerformancePercentile": 70,
@@ -1050,6 +1125,7 @@
     "proposedBlocksCount": 5
   },
   "75": {
+    "hash": "9ba201",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -1064,6 +1140,7 @@
     "proposedBlocksCount": 0
   },
   "76": {
+    "hash": "60f003",
     "totalRewardsETH": "41789942374556819",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -1078,6 +1155,7 @@
     "proposedBlocksCount": 0
   },
   "77": {
+    "hash": "89becb",
     "totalRewardsETH": "780334559378596902",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -1092,6 +1170,7 @@
     "proposedBlocksCount": 24
   },
   "78": {
+    "hash": "077a90",
     "totalRewardsETH": "70081390879197168",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -1106,6 +1185,7 @@
     "proposedBlocksCount": 0
   },
   "79": {
+    "hash": "eaa58f",
     "totalRewardsETH": "851987346294805583",
     "avgPerformance": 9949,
     "topPerformancePercentile": 50,
@@ -1120,6 +1200,7 @@
     "proposedBlocksCount": 27
   },
   "80": {
+    "hash": "9104de",
     "totalRewardsETH": "1416208766785766891",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -1134,6 +1215,7 @@
     "proposedBlocksCount": 63
   },
   "81": {
+    "hash": "47cbe8",
     "totalRewardsETH": "879347994216565392",
     "avgPerformance": 9956,
     "topPerformancePercentile": 50,
@@ -1148,6 +1230,7 @@
     "proposedBlocksCount": 29
   },
   "82": {
+    "hash": "4407cd",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9958,
     "topPerformancePercentile": 50,
@@ -1162,6 +1245,7 @@
     "proposedBlocksCount": 15
   },
   "83": {
+    "hash": "eeb528",
     "totalRewardsETH": "204196673507078749",
     "avgPerformance": 9981,
     "topPerformancePercentile": 35,
@@ -1176,6 +1260,7 @@
     "proposedBlocksCount": 6
   },
   "84": {
+    "hash": "07a451",
     "totalRewardsETH": "501169393548105493",
     "avgPerformance": 9799,
     "topPerformancePercentile": 70,
@@ -1190,6 +1275,7 @@
     "proposedBlocksCount": 19
   },
   "85": {
+    "hash": "1b296a",
     "totalRewardsETH": "59397931728094065",
     "avgPerformance": 9848,
     "topPerformancePercentile": 70,
@@ -1204,6 +1290,7 @@
     "proposedBlocksCount": 2
   },
   "86": {
+    "hash": "d9224d",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -1218,6 +1305,7 @@
     "proposedBlocksCount": 0
   },
   "87": {
+    "hash": "e28944",
     "totalRewardsETH": "1024046724231126022",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -1232,6 +1320,7 @@
     "proposedBlocksCount": 33
   },
   "88": {
+    "hash": "d5d51e",
     "totalRewardsETH": "53502210178688495",
     "avgPerformance": 9848,
     "topPerformancePercentile": 70,
@@ -1246,6 +1335,7 @@
     "proposedBlocksCount": 0
   },
   "89": {
+    "hash": "1cf2b4",
     "totalRewardsETH": "802372729054494464",
     "avgPerformance": 9993,
     "topPerformancePercentile": 25,
@@ -1260,6 +1350,7 @@
     "proposedBlocksCount": 25
   },
   "90": {
+    "hash": "054ae0",
     "totalRewardsETH": "721101716081185696",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -1274,6 +1365,7 @@
     "proposedBlocksCount": 20
   },
   "91": {
+    "hash": "27e72b",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9985,
     "topPerformancePercentile": 30,
@@ -1288,6 +1380,7 @@
     "proposedBlocksCount": 15
   },
   "92": {
+    "hash": "cc442e",
     "totalRewardsETH": "290465832717594819",
     "avgPerformance": 9980,
     "topPerformancePercentile": 35,
@@ -1302,6 +1395,7 @@
     "proposedBlocksCount": 5
   },
   "93": {
+    "hash": "dc72f1",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9989,
     "topPerformancePercentile": 30,
@@ -1316,6 +1410,7 @@
     "proposedBlocksCount": 22
   },
   "94": {
+    "hash": "2ded6a",
     "totalRewardsETH": "456639989528668837",
     "avgPerformance": 9968,
     "topPerformancePercentile": 45,
@@ -1330,6 +1425,7 @@
     "proposedBlocksCount": 11
   },
   "95": {
+    "hash": "4ec42c",
     "totalRewardsETH": "108125462296747785",
     "avgPerformance": 9765,
     "topPerformancePercentile": 75,
@@ -1344,6 +1440,7 @@
     "proposedBlocksCount": 4
   },
   "96": {
+    "hash": "15f877",
     "totalRewardsETH": "650227942864163626",
     "avgPerformance": 9809,
     "topPerformancePercentile": 70,
@@ -1358,6 +1455,7 @@
     "proposedBlocksCount": 22
   },
   "97": {
+    "hash": "38cd74",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9953,
     "topPerformancePercentile": 50,
@@ -1372,6 +1470,7 @@
     "proposedBlocksCount": 19
   },
   "98": {
+    "hash": "f08169",
     "totalRewardsETH": "2217057836633396702",
     "avgPerformance": 9976,
     "topPerformancePercentile": 40,
@@ -1386,6 +1485,7 @@
     "proposedBlocksCount": 88
   },
   "99": {
+    "hash": "42991f",
     "totalRewardsETH": "795309137574193250",
     "avgPerformance": 9948,
     "topPerformancePercentile": 50,
@@ -1400,6 +1500,7 @@
     "proposedBlocksCount": 32
   },
   "100": {
+    "hash": "378544",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -1414,6 +1515,7 @@
     "proposedBlocksCount": 23
   },
   "101": {
+    "hash": "29a348",
     "totalRewardsETH": "5445620915467133",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -1428,6 +1530,7 @@
     "proposedBlocksCount": 0
   },
   "102": {
+    "hash": "be1d51",
     "totalRewardsETH": "690311643717004963",
     "avgPerformance": 9921,
     "topPerformancePercentile": 55,
@@ -1442,6 +1545,7 @@
     "proposedBlocksCount": 29
   },
   "103": {
+    "hash": "1c0931",
     "totalRewardsETH": "2369332413366279866",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -1456,6 +1560,7 @@
     "proposedBlocksCount": 96
   },
   "104": {
+    "hash": "4609ec",
     "totalRewardsETH": "214969962305289582",
     "avgPerformance": 9698,
     "topPerformancePercentile": 80,
@@ -1470,6 +1575,7 @@
     "proposedBlocksCount": 8
   },
   "105": {
+    "hash": "7b7f50",
     "totalRewardsETH": "2678542231452132862",
     "avgPerformance": 9993,
     "topPerformancePercentile": 25,
@@ -1484,6 +1590,7 @@
     "proposedBlocksCount": 173
   },
   "106": {
+    "hash": "9ff183",
     "totalRewardsETH": "129060782390718063",
     "avgPerformance": 9962,
     "topPerformancePercentile": 45,
@@ -1498,6 +1605,7 @@
     "proposedBlocksCount": 6
   },
   "107": {
+    "hash": "36ef3f",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -1512,6 +1620,7 @@
     "proposedBlocksCount": 27
   },
   "108": {
+    "hash": "af79ba",
     "totalRewardsETH": "51137313899856344",
     "avgPerformance": 8819,
     "topPerformancePercentile": 85,
@@ -1526,6 +1635,7 @@
     "proposedBlocksCount": 2
   },
   "109": {
+    "hash": "352838",
     "totalRewardsETH": "96291359796286439",
     "avgPerformance": 9983,
     "topPerformancePercentile": 30,
@@ -1540,6 +1650,7 @@
     "proposedBlocksCount": 3
   },
   "110": {
+    "hash": "09f712",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -1554,6 +1665,7 @@
     "proposedBlocksCount": 22
   },
   "111": {
+    "hash": "e87cc4",
     "totalRewardsETH": "10560868570869457",
     "avgPerformance": 4783,
     "topPerformancePercentile": 90,
@@ -1568,6 +1680,7 @@
     "proposedBlocksCount": 1
   },
   "112": {
+    "hash": "4a1fac",
     "totalRewardsETH": "53036283125739174",
     "avgPerformance": 9788,
     "topPerformancePercentile": 75,
@@ -1582,6 +1695,7 @@
     "proposedBlocksCount": 0
   },
   "113": {
+    "hash": "536c5c",
     "totalRewardsETH": "294173245448992240",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -1596,6 +1710,7 @@
     "proposedBlocksCount": 3
   },
   "114": {
+    "hash": "fb497e",
     "totalRewardsETH": "111459619596534743",
     "avgPerformance": 9910,
     "topPerformancePercentile": 60,
@@ -1610,6 +1725,7 @@
     "proposedBlocksCount": 1
   },
   "115": {
+    "hash": "2331df",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9964,
     "topPerformancePercentile": 45,
@@ -1624,6 +1740,7 @@
     "proposedBlocksCount": 21
   },
   "116": {
+    "hash": "0b1bad",
     "totalRewardsETH": "627958523772172628",
     "avgPerformance": 9917,
     "topPerformancePercentile": 55,
@@ -1638,6 +1755,7 @@
     "proposedBlocksCount": 17
   },
   "117": {
+    "hash": "0eb07a",
     "totalRewardsETH": "31120154420409924",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -1652,6 +1770,7 @@
     "proposedBlocksCount": 0
   },
   "118": {
+    "hash": "e61aef",
     "totalRewardsETH": "129060782390718063",
     "avgPerformance": 9950,
     "topPerformancePercentile": 50,
@@ -1666,6 +1785,7 @@
     "proposedBlocksCount": 2
   },
   "119": {
+    "hash": "448183",
     "totalRewardsETH": "58773345017227975",
     "avgPerformance": 9988,
     "topPerformancePercentile": 30,
@@ -1680,6 +1800,7 @@
     "proposedBlocksCount": 3
   },
   "120": {
+    "hash": "6369e6",
     "totalRewardsETH": "565856981504495206",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -1694,6 +1815,7 @@
     "proposedBlocksCount": 17
   },
   "121": {
+    "hash": "bdfd31",
     "totalRewardsETH": "126020745490701",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -1708,6 +1830,7 @@
     "proposedBlocksCount": 0
   },
   "122": {
+    "hash": "91419a",
     "totalRewardsETH": "5720076787676953",
     "avgPerformance": 9964,
     "topPerformancePercentile": 45,
@@ -1722,6 +1845,7 @@
     "proposedBlocksCount": 0
   },
   "123": {
+    "hash": "c5592d",
     "totalRewardsETH": "310175013750994982",
     "avgPerformance": 9987,
     "topPerformancePercentile": 30,
@@ -1736,6 +1860,7 @@
     "proposedBlocksCount": 12
   },
   "124": {
+    "hash": "327093",
     "totalRewardsETH": "3619054619258378998",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -1750,6 +1875,7 @@
     "proposedBlocksCount": 161
   },
   "125": {
+    "hash": "d26aa6",
     "totalRewardsETH": "702045637887141855",
     "avgPerformance": 9721,
     "topPerformancePercentile": 80,
@@ -1764,6 +1890,7 @@
     "proposedBlocksCount": 41
   },
   "126": {
+    "hash": "38824c",
     "totalRewardsETH": "41843709516868043",
     "avgPerformance": 9995,
     "topPerformancePercentile": 20,
@@ -1778,6 +1905,7 @@
     "proposedBlocksCount": 0
   },
   "127": {
+    "hash": "e1e9a4",
     "totalRewardsETH": "215037912418378780",
     "avgPerformance": 9948,
     "topPerformancePercentile": 50,
@@ -1792,6 +1920,7 @@
     "proposedBlocksCount": 8
   },
   "128": {
+    "hash": "0e8813",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9981,
     "topPerformancePercentile": 35,
@@ -1806,6 +1935,7 @@
     "proposedBlocksCount": 21
   },
   "129": {
+    "hash": "3251dd",
     "totalRewardsETH": "664584102584779514",
     "avgPerformance": 9847,
     "topPerformancePercentile": 70,
@@ -1820,6 +1950,7 @@
     "proposedBlocksCount": 23
   },
   "130": {
+    "hash": "26687d",
     "totalRewardsETH": "664584102584779514",
     "avgPerformance": 9846,
     "topPerformancePercentile": 70,
@@ -1834,6 +1965,7 @@
     "proposedBlocksCount": 27
   },
   "131": {
+    "hash": "f46136",
     "totalRewardsETH": "199491503185522615",
     "avgPerformance": 9906,
     "topPerformancePercentile": 60,
@@ -1848,6 +1980,7 @@
     "proposedBlocksCount": 8
   },
   "132": {
+    "hash": "9d4a1d",
     "totalRewardsETH": "535685431446453829",
     "avgPerformance": 9612,
     "topPerformancePercentile": 80,
@@ -1862,6 +1995,7 @@
     "proposedBlocksCount": 19
   },
   "133": {
+    "hash": "b2db39",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9966,
     "topPerformancePercentile": 45,
@@ -1876,6 +2010,7 @@
     "proposedBlocksCount": 19
   },
   "134": {
+    "hash": "dbbbc6",
     "totalRewardsETH": "55034926255652350",
     "avgPerformance": 9892,
     "topPerformancePercentile": 60,
@@ -1890,6 +2025,7 @@
     "proposedBlocksCount": 1
   },
   "135": {
+    "hash": "25be11",
     "totalRewardsETH": "19269936541371305",
     "avgPerformance": 9869,
     "topPerformancePercentile": 65,
@@ -1904,6 +2040,7 @@
     "proposedBlocksCount": 0
   },
   "136": {
+    "hash": "c17ddb",
     "totalRewardsETH": "171380902891321865",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -1918,6 +2055,7 @@
     "proposedBlocksCount": 7
   },
   "137": {
+    "hash": "b50dc7",
     "totalRewardsETH": "38628103068174854",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -1932,6 +2070,7 @@
     "proposedBlocksCount": 0
   },
   "138": {
+    "hash": "5546c7",
     "totalRewardsETH": "5056883417779782",
     "avgPerformance": 9323,
     "topPerformancePercentile": 85,
@@ -1946,6 +2085,7 @@
     "proposedBlocksCount": 0
   },
   "139": {
+    "hash": "268890",
     "totalRewardsETH": "304501356392623694",
     "avgPerformance": 9976,
     "topPerformancePercentile": 40,
@@ -1960,6 +2100,7 @@
     "proposedBlocksCount": 5
   },
   "140": {
+    "hash": "c623f1",
     "totalRewardsETH": "47291268198559580",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -1974,6 +2115,7 @@
     "proposedBlocksCount": 0
   },
   "141": {
+    "hash": "83738f",
     "totalRewardsETH": "787104520941460786",
     "avgPerformance": 9995,
     "topPerformancePercentile": 20,
@@ -1988,6 +2130,7 @@
     "proposedBlocksCount": 24
   },
   "142": {
+    "hash": "d733cc",
     "totalRewardsETH": "11961169804893205",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -2002,6 +2145,7 @@
     "proposedBlocksCount": 0
   },
   "143": {
+    "hash": "aecec4",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9981,
     "topPerformancePercentile": 35,
@@ -2016,6 +2160,7 @@
     "proposedBlocksCount": 31
   },
   "144": {
+    "hash": "98bbff",
     "totalRewardsETH": "7849340164704780387",
     "avgPerformance": 9981,
     "topPerformancePercentile": 35,
@@ -2030,6 +2175,7 @@
     "proposedBlocksCount": 317
   },
   "145": {
+    "hash": "f8fcba",
     "totalRewardsETH": "54674936238534653",
     "avgPerformance": 9391,
     "topPerformancePercentile": 85,
@@ -2044,6 +2190,7 @@
     "proposedBlocksCount": 3
   },
   "146": {
+    "hash": "7a9cdd",
     "totalRewardsETH": "70871662787232119",
     "avgPerformance": 9972,
     "topPerformancePercentile": 40,
@@ -2058,6 +2205,7 @@
     "proposedBlocksCount": 0
   },
   "147": {
+    "hash": "f21812",
     "totalRewardsETH": "721101716081185696",
     "avgPerformance": 9911,
     "topPerformancePercentile": 60,
@@ -2072,6 +2220,7 @@
     "proposedBlocksCount": 30
   },
   "148": {
+    "hash": "381a6b",
     "totalRewardsETH": "755201809320979730",
     "avgPerformance": 9859,
     "topPerformancePercentile": 65,
@@ -2086,6 +2235,7 @@
     "proposedBlocksCount": 31
   },
   "149": {
+    "hash": "537ab4",
     "totalRewardsETH": "540782114541455708",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -2100,6 +2250,7 @@
     "proposedBlocksCount": 14
   },
   "150": {
+    "hash": "fa25aa",
     "totalRewardsETH": "58093166543518956",
     "avgPerformance": 9971,
     "topPerformancePercentile": 40,
@@ -2114,6 +2265,7 @@
     "proposedBlocksCount": 3
   },
   "151": {
+    "hash": "963f37",
     "totalRewardsETH": "2070483240096470779",
     "avgPerformance": 9950,
     "topPerformancePercentile": 50,
@@ -2128,6 +2280,7 @@
     "proposedBlocksCount": 82
   },
   "152": {
+    "hash": "0f635e",
     "totalRewardsETH": "1210310556870071188",
     "avgPerformance": 9665,
     "topPerformancePercentile": 80,
@@ -2142,6 +2295,7 @@
     "proposedBlocksCount": 76
   },
   "153": {
+    "hash": "fe3609",
     "totalRewardsETH": "120183619346864273",
     "avgPerformance": 9963,
     "topPerformancePercentile": 45,
@@ -2156,6 +2310,7 @@
     "proposedBlocksCount": 4
   },
   "154": {
+    "hash": "17d780",
     "totalRewardsETH": "847865565365216141",
     "avgPerformance": 9898,
     "topPerformancePercentile": 60,
@@ -2170,6 +2325,7 @@
     "proposedBlocksCount": 37
   },
   "155": {
+    "hash": "0f7ea1",
     "totalRewardsETH": "104105119418225815",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -2184,6 +2340,7 @@
     "proposedBlocksCount": 0
   },
   "156": {
+    "hash": "2f1a0f",
     "totalRewardsETH": "5720076787676953",
     "avgPerformance": 9953,
     "topPerformancePercentile": 50,
@@ -2198,6 +2355,7 @@
     "proposedBlocksCount": 0
   },
   "157": {
+    "hash": "503601",
     "totalRewardsETH": "6512849323469909",
     "avgPerformance": 9985,
     "topPerformancePercentile": 30,
@@ -2212,6 +2370,7 @@
     "proposedBlocksCount": 0
   },
   "158": {
+    "hash": "f4d87a",
     "totalRewardsETH": "5095577196484772",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -2226,6 +2385,7 @@
     "proposedBlocksCount": 0
   },
   "159": {
+    "hash": "dda870",
     "totalRewardsETH": "5126074435568455218",
     "avgPerformance": 9984,
     "topPerformancePercentile": 30,
@@ -2240,6 +2400,7 @@
     "proposedBlocksCount": 223
   },
   "160": {
+    "hash": "491316",
     "totalRewardsETH": "614978898385158878",
     "avgPerformance": 9938,
     "topPerformancePercentile": 55,
@@ -2254,6 +2415,7 @@
     "proposedBlocksCount": 14
   },
   "161": {
+    "hash": "4e5dac",
     "totalRewardsETH": "348558999261113787",
     "avgPerformance": 9995,
     "topPerformancePercentile": 20,
@@ -2268,6 +2430,7 @@
     "proposedBlocksCount": 12
   },
   "162": {
+    "hash": "fda2ab",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9979,
     "topPerformancePercentile": 35,
@@ -2282,6 +2445,7 @@
     "proposedBlocksCount": 24
   },
   "163": {
+    "hash": "093a5e",
     "totalRewardsETH": "602836256599293197",
     "avgPerformance": 9763,
     "topPerformancePercentile": 75,
@@ -2296,6 +2460,7 @@
     "proposedBlocksCount": 18
   },
   "164": {
+    "hash": "4322d1",
     "totalRewardsETH": "4493402122655748",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -2310,6 +2475,7 @@
     "proposedBlocksCount": 0
   },
   "165": {
+    "hash": "530984",
     "totalRewardsETH": "60091809673432132",
     "avgPerformance": 9991,
     "topPerformancePercentile": 25,
@@ -2324,6 +2490,7 @@
     "proposedBlocksCount": 3
   },
   "166": {
+    "hash": "93c76d",
     "totalRewardsETH": "6334033194899283434",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -2338,6 +2505,7 @@
     "proposedBlocksCount": 267
   },
   "167": {
+    "hash": "5d9800",
     "totalRewardsETH": "5322320505244403942",
     "avgPerformance": 9976,
     "topPerformancePercentile": 40,
@@ -2352,6 +2520,7 @@
     "proposedBlocksCount": 222
   },
   "168": {
+    "hash": "078b7c",
     "totalRewardsETH": "717095612720519741",
     "avgPerformance": 9871,
     "topPerformancePercentile": 65,
@@ -2366,6 +2535,7 @@
     "proposedBlocksCount": 31
   },
   "169": {
+    "hash": "4351a5",
     "totalRewardsETH": "693304937918998941",
     "avgPerformance": 9665,
     "topPerformancePercentile": 80,
@@ -2380,6 +2550,7 @@
     "proposedBlocksCount": 32
   },
   "170": {
+    "hash": "78a778",
     "totalRewardsETH": "100157690696406503",
     "avgPerformance": 9715,
     "topPerformancePercentile": 80,
@@ -2394,6 +2565,7 @@
     "proposedBlocksCount": 3
   },
   "171": {
+    "hash": "d6b887",
     "totalRewardsETH": "2165749236880342706",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -2408,6 +2580,7 @@
     "proposedBlocksCount": 90
   },
   "172": {
+    "hash": "eb51a9",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -2422,6 +2595,7 @@
     "proposedBlocksCount": 29
   },
   "173": {
+    "hash": "28e69b",
     "totalRewardsETH": "53742490576322388",
     "avgPerformance": 9674,
     "topPerformancePercentile": 80,
@@ -2436,6 +2610,7 @@
     "proposedBlocksCount": 1
   },
   "174": {
+    "hash": "426da5",
     "totalRewardsETH": "650824911486345203",
     "avgPerformance": 9774,
     "topPerformancePercentile": 75,
@@ -2450,6 +2625,7 @@
     "proposedBlocksCount": 16
   },
   "175": {
+    "hash": "32e0a2",
     "totalRewardsETH": "650824911486345203",
     "avgPerformance": 9773,
     "topPerformancePercentile": 75,
@@ -2464,6 +2640,7 @@
     "proposedBlocksCount": 22
   },
   "176": {
+    "hash": "993ace",
     "totalRewardsETH": "5485214549490845",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -2478,6 +2655,7 @@
     "proposedBlocksCount": 0
   },
   "177": {
+    "hash": "262fd0",
     "totalRewardsETH": "54966970974969379",
     "avgPerformance": 9811,
     "topPerformancePercentile": 70,
@@ -2492,6 +2670,7 @@
     "proposedBlocksCount": 0
   },
   "178": {
+    "hash": "d2d7dc",
     "totalRewardsETH": "4494204802563332",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -2506,6 +2685,7 @@
     "proposedBlocksCount": 0
   },
   "179": {
+    "hash": "669b7f",
     "totalRewardsETH": "5485214549490845",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -2520,6 +2700,7 @@
     "proposedBlocksCount": 0
   },
   "180": {
+    "hash": "48ec97",
     "totalRewardsETH": "712775180737128862",
     "avgPerformance": 9799,
     "topPerformancePercentile": 70,
@@ -2534,6 +2715,7 @@
     "proposedBlocksCount": 25
   },
   "181": {
+    "hash": "02a4df",
     "totalRewardsETH": "300028838982427263",
     "avgPerformance": 9759,
     "topPerformancePercentile": 75,
@@ -2548,6 +2730,7 @@
     "proposedBlocksCount": 7
   },
   "182": {
+    "hash": "7fdba7",
     "totalRewardsETH": "58093166543518956",
     "avgPerformance": 9971,
     "topPerformancePercentile": 40,
@@ -2562,6 +2745,7 @@
     "proposedBlocksCount": 2
   },
   "183": {
+    "hash": "5f9c2b",
     "totalRewardsETH": "64530391195359027",
     "avgPerformance": 9958,
     "topPerformancePercentile": 50,
@@ -2576,6 +2760,7 @@
     "proposedBlocksCount": 3
   },
   "184": {
+    "hash": "d36b47",
     "totalRewardsETH": "44179708891576079",
     "avgPerformance": 9568,
     "topPerformancePercentile": 80,
@@ -2590,6 +2775,7 @@
     "proposedBlocksCount": 2
   },
   "185": {
+    "hash": "4b5b4e",
     "totalRewardsETH": "797888020973264368",
     "avgPerformance": 9972,
     "topPerformancePercentile": 40,
@@ -2604,6 +2790,7 @@
     "proposedBlocksCount": 29
   },
   "186": {
+    "hash": "0c80a3",
     "totalRewardsETH": "399819705673087939",
     "avgPerformance": 9856,
     "topPerformancePercentile": 65,
@@ -2618,6 +2805,7 @@
     "proposedBlocksCount": 14
   },
   "187": {
+    "hash": "10c825",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -2632,6 +2820,7 @@
     "proposedBlocksCount": 0
   },
   "188": {
+    "hash": "777e38",
     "totalRewardsETH": "770360124285371391",
     "avgPerformance": 9927,
     "topPerformancePercentile": 55,
@@ -2646,6 +2835,7 @@
     "proposedBlocksCount": 14
   },
   "189": {
+    "hash": "941c50",
     "totalRewardsETH": "463412883701562125",
     "avgPerformance": 9955,
     "topPerformancePercentile": 50,
@@ -2660,6 +2850,7 @@
     "proposedBlocksCount": 12
   },
   "190": {
+    "hash": "3a4f66",
     "totalRewardsETH": "8510528131029912",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -2674,6 +2865,7 @@
     "proposedBlocksCount": 0
   },
   "191": {
+    "hash": "4bd4d5",
     "totalRewardsETH": "985069331449526083",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -2688,6 +2880,7 @@
     "proposedBlocksCount": 32
   },
   "192": {
+    "hash": "f74934",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9984,
     "topPerformancePercentile": 30,
@@ -2702,6 +2895,7 @@
     "proposedBlocksCount": 23
   },
   "193": {
+    "hash": "7593dd",
     "totalRewardsETH": "80961740476047572",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -2716,6 +2910,7 @@
     "proposedBlocksCount": 0
   },
   "194": {
+    "hash": "a320ea",
     "totalRewardsETH": "685164723697059968",
     "avgPerformance": 9801,
     "topPerformancePercentile": 70,
@@ -2730,6 +2925,7 @@
     "proposedBlocksCount": 26
   },
   "195": {
+    "hash": "7ee06b",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9974,
     "topPerformancePercentile": 40,
@@ -2744,6 +2940,7 @@
     "proposedBlocksCount": 27
   },
   "196": {
+    "hash": "34b758",
     "totalRewardsETH": "1029324292952637770",
     "avgPerformance": 9972,
     "topPerformancePercentile": 40,
@@ -2758,6 +2955,7 @@
     "proposedBlocksCount": 30
   },
   "197": {
+    "hash": "7bd155",
     "totalRewardsETH": "1504217669175450266",
     "avgPerformance": 9920,
     "topPerformancePercentile": 55,
@@ -2772,6 +2970,7 @@
     "proposedBlocksCount": 59
   },
   "198": {
+    "hash": "16aa49",
     "totalRewardsETH": "774364694344308427",
     "avgPerformance": 9960,
     "topPerformancePercentile": 45,
@@ -2786,6 +2985,7 @@
     "proposedBlocksCount": 23
   },
   "199": {
+    "hash": "0b72a6",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9961,
     "topPerformancePercentile": 45,
@@ -2800,6 +3000,7 @@
     "proposedBlocksCount": 15
   },
   "200": {
+    "hash": "05c83b",
     "totalRewardsETH": "19743974143770668",
     "avgPerformance": 9197,
     "topPerformancePercentile": 85,
@@ -2814,6 +3015,7 @@
     "proposedBlocksCount": 1
   },
   "201": {
+    "hash": "f36e5b",
     "totalRewardsETH": "628948288702765828",
     "avgPerformance": 9326,
     "topPerformancePercentile": 85,
@@ -2828,6 +3030,7 @@
     "proposedBlocksCount": 31
   },
   "202": {
+    "hash": "4b09cb",
     "totalRewardsETH": "218627428131263229",
     "avgPerformance": 9901,
     "topPerformancePercentile": 60,
@@ -2842,6 +3045,7 @@
     "proposedBlocksCount": 12
   },
   "203": {
+    "hash": "2781b5",
     "totalRewardsETH": "58093166543518956",
     "avgPerformance": 9982,
     "topPerformancePercentile": 35,
@@ -2856,6 +3060,7 @@
     "proposedBlocksCount": 2
   },
   "204": {
+    "hash": "27d96e",
     "totalRewardsETH": "11583021042415719",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -2870,6 +3075,7 @@
     "proposedBlocksCount": 0
   },
   "205": {
+    "hash": "efe29f",
     "totalRewardsETH": "1969199434350613929",
     "avgPerformance": 9951,
     "topPerformancePercentile": 50,
@@ -2884,6 +3090,7 @@
     "proposedBlocksCount": 67
   },
   "206": {
+    "hash": "120ac9",
     "totalRewardsETH": "780265474486610344",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -2898,6 +3105,7 @@
     "proposedBlocksCount": 23
   },
   "207": {
+    "hash": "7a9670",
     "totalRewardsETH": "793109617133404278",
     "avgPerformance": 9947,
     "topPerformancePercentile": 50,
@@ -2912,6 +3120,7 @@
     "proposedBlocksCount": 33
   },
   "208": {
+    "hash": "b43da3",
     "totalRewardsETH": "324872948751379420",
     "avgPerformance": 9712,
     "topPerformancePercentile": 80,
@@ -2926,6 +3135,7 @@
     "proposedBlocksCount": 4
   },
   "209": {
+    "hash": "90ae66",
     "totalRewardsETH": "184992306035483391",
     "avgPerformance": 9979,
     "topPerformancePercentile": 35,
@@ -2940,6 +3150,7 @@
     "proposedBlocksCount": 2
   },
   "210": {
+    "hash": "983c5c",
     "totalRewardsETH": "778258392393133184",
     "avgPerformance": 9991,
     "topPerformancePercentile": 25,
@@ -2954,6 +3165,7 @@
     "proposedBlocksCount": 16
   },
   "211": {
+    "hash": "0d375d",
     "totalRewardsETH": "387182347172154210",
     "avgPerformance": 9971,
     "topPerformancePercentile": 40,
@@ -2968,6 +3180,7 @@
     "proposedBlocksCount": 11
   },
   "212": {
+    "hash": "2db32a",
     "totalRewardsETH": "788486042815303646",
     "avgPerformance": 9940,
     "topPerformancePercentile": 50,
@@ -2982,6 +3195,7 @@
     "proposedBlocksCount": 36
   },
   "213": {
+    "hash": "78fa78",
     "totalRewardsETH": "163798080567148433",
     "avgPerformance": 9737,
     "topPerformancePercentile": 75,
@@ -2996,6 +3210,7 @@
     "proposedBlocksCount": 3
   },
   "214": {
+    "hash": "edac6c",
     "totalRewardsETH": "44724488358272048",
     "avgPerformance": 9418,
     "topPerformancePercentile": 85,
@@ -3010,6 +3225,7 @@
     "proposedBlocksCount": 2
   },
   "215": {
+    "hash": "b6745f",
     "totalRewardsETH": "723513546234833016",
     "avgPerformance": 9931,
     "topPerformancePercentile": 55,
@@ -3024,6 +3240,7 @@
     "proposedBlocksCount": 30
   },
   "216": {
+    "hash": "373bcc",
     "totalRewardsETH": "158840847602224504",
     "avgPerformance": 9969,
     "topPerformancePercentile": 40,
@@ -3038,6 +3255,7 @@
     "proposedBlocksCount": 9
   },
   "217": {
+    "hash": "0fe882",
     "totalRewardsETH": "693894674078652463",
     "avgPerformance": 9909,
     "topPerformancePercentile": 60,
@@ -3052,6 +3270,7 @@
     "proposedBlocksCount": 21
   },
   "218": {
+    "hash": "b996e7",
     "totalRewardsETH": "666126081482198146",
     "avgPerformance": 9919,
     "topPerformancePercentile": 55,
@@ -3066,6 +3285,7 @@
     "proposedBlocksCount": 17
   },
   "219": {
+    "hash": "f374eb",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9948,
     "topPerformancePercentile": 50,
@@ -3080,6 +3300,7 @@
     "proposedBlocksCount": 35
   },
   "220": {
+    "hash": "3a5d39",
     "totalRewardsETH": "712775180737128862",
     "avgPerformance": 9795,
     "topPerformancePercentile": 75,
@@ -3094,6 +3315,7 @@
     "proposedBlocksCount": 22
   },
   "221": {
+    "hash": "d2c7be",
     "totalRewardsETH": "1481285494063950809",
     "avgPerformance": 9969,
     "topPerformancePercentile": 40,
@@ -3108,6 +3330,7 @@
     "proposedBlocksCount": 67
   },
   "222": {
+    "hash": "f7ba00",
     "totalRewardsETH": "682499592045306089",
     "avgPerformance": 9887,
     "topPerformancePercentile": 65,
@@ -3122,6 +3345,7 @@
     "proposedBlocksCount": 25
   },
   "223": {
+    "hash": "f0e8fb",
     "totalRewardsETH": "10370529074825643",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -3136,6 +3360,7 @@
     "proposedBlocksCount": 0
   },
   "224": {
+    "hash": "081f85",
     "totalRewardsETH": "16829789622315665",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -3150,6 +3375,7 @@
     "proposedBlocksCount": 0
   },
   "225": {
+    "hash": "6276ed",
     "totalRewardsETH": "260718345190279794",
     "avgPerformance": 9246,
     "topPerformancePercentile": 85,
@@ -3164,6 +3390,7 @@
     "proposedBlocksCount": 10
   },
   "226": {
+    "hash": "fb4439",
     "totalRewardsETH": "1733608170203574850",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -3178,6 +3405,7 @@
     "proposedBlocksCount": 94
   },
   "227": {
+    "hash": "428a7b",
     "totalRewardsETH": "40107218758084078",
     "avgPerformance": 9534,
     "topPerformancePercentile": 80,
@@ -3192,6 +3420,7 @@
     "proposedBlocksCount": 0
   },
   "228": {
+    "hash": "77563c",
     "totalRewardsETH": "8411544045970632",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -3206,6 +3435,7 @@
     "proposedBlocksCount": 0
   },
   "229": {
+    "hash": "634559",
     "totalRewardsETH": "697117998522227579",
     "avgPerformance": 9967,
     "topPerformancePercentile": 45,
@@ -3220,6 +3450,7 @@
     "proposedBlocksCount": 23
   },
   "230": {
+    "hash": "9e013b",
     "totalRewardsETH": "154397800804832770",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -3234,6 +3465,7 @@
     "proposedBlocksCount": 0
   },
   "231": {
+    "hash": "71982d",
     "totalRewardsETH": "285091545441884007",
     "avgPerformance": 9906,
     "topPerformancePercentile": 60,
@@ -3248,6 +3480,7 @@
     "proposedBlocksCount": 8
   },
   "232": {
+    "hash": "618627",
     "totalRewardsETH": "59990262863285452",
     "avgPerformance": 9850,
     "topPerformancePercentile": 70,
@@ -3262,6 +3495,7 @@
     "proposedBlocksCount": 0
   },
   "233": {
+    "hash": "9c0771",
     "totalRewardsETH": "625337953203944500",
     "avgPerformance": 9936,
     "topPerformancePercentile": 55,
@@ -3276,6 +3510,7 @@
     "proposedBlocksCount": 28
   },
   "234": {
+    "hash": "59edfe",
     "totalRewardsETH": "58093166543518956",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -3290,6 +3525,7 @@
     "proposedBlocksCount": 4
   },
   "235": {
+    "hash": "d5bda1",
     "totalRewardsETH": "643473918336228616",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -3304,6 +3540,7 @@
     "proposedBlocksCount": 20
   },
   "236": {
+    "hash": "aaf05f",
     "totalRewardsETH": "8819687235931723",
     "avgPerformance": 9381,
     "topPerformancePercentile": 85,
@@ -3318,6 +3555,7 @@
     "proposedBlocksCount": 0
   },
   "237": {
+    "hash": "179327",
     "totalRewardsETH": "818524715412025856",
     "avgPerformance": 9992,
     "topPerformancePercentile": 25,
@@ -3332,6 +3570,7 @@
     "proposedBlocksCount": 26
   },
   "238": {
+    "hash": "290400",
     "totalRewardsETH": "153323171798644798",
     "avgPerformance": 9980,
     "topPerformancePercentile": 35,
@@ -3346,6 +3585,7 @@
     "proposedBlocksCount": 6
   },
   "239": {
+    "hash": "7c0da2",
     "totalRewardsETH": "283505324575507087",
     "avgPerformance": 9943,
     "topPerformancePercentile": 50,
@@ -3360,6 +3600,7 @@
     "proposedBlocksCount": 13
   },
   "240": {
+    "hash": "33ae8e",
     "totalRewardsETH": "6403618704106377348",
     "avgPerformance": 9967,
     "topPerformancePercentile": 45,
@@ -3374,6 +3615,7 @@
     "proposedBlocksCount": 271
   },
   "241": {
+    "hash": "8ee0c1",
     "totalRewardsETH": "262719278968139448",
     "avgPerformance": 9472,
     "topPerformancePercentile": 80,
@@ -3388,6 +3630,7 @@
     "proposedBlocksCount": 8
   },
   "242": {
+    "hash": "269fe8",
     "totalRewardsETH": "58400976369540010",
     "avgPerformance": 9817,
     "topPerformancePercentile": 70,
@@ -3402,6 +3645,7 @@
     "proposedBlocksCount": 1
   },
   "243": {
+    "hash": "197363",
     "totalRewardsETH": "622231959199122380",
     "avgPerformance": 9764,
     "topPerformancePercentile": 75,
@@ -3416,6 +3660,7 @@
     "proposedBlocksCount": 33
   },
   "244": {
+    "hash": "f8d38e",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -3430,6 +3675,7 @@
     "proposedBlocksCount": 0
   },
   "245": {
+    "hash": "68d1fd",
     "totalRewardsETH": "702887004712311664",
     "avgPerformance": 9882,
     "topPerformancePercentile": 65,
@@ -3444,6 +3690,7 @@
     "proposedBlocksCount": 19
   },
   "246": {
+    "hash": "a64951",
     "totalRewardsETH": "18787046558261471",
     "avgPerformance": 9018,
     "topPerformancePercentile": 85,
@@ -3458,6 +3705,7 @@
     "proposedBlocksCount": 0
   },
   "247": {
+    "hash": "73756f",
     "totalRewardsETH": "42073627170938475",
     "avgPerformance": 7458,
     "topPerformancePercentile": 90,
@@ -3472,6 +3720,7 @@
     "proposedBlocksCount": 2
   },
   "248": {
+    "hash": "ec5f15",
     "totalRewardsETH": "234724341487527234",
     "avgPerformance": 8296,
     "topPerformancePercentile": 90,
@@ -3486,6 +3735,7 @@
     "proposedBlocksCount": 6
   },
   "249": {
+    "hash": "3b675f",
     "totalRewardsETH": "670325153751323396",
     "avgPerformance": 9965,
     "topPerformancePercentile": 45,
@@ -3500,6 +3750,7 @@
     "proposedBlocksCount": 21
   },
   "250": {
+    "hash": "c777ab",
     "totalRewardsETH": "189586603527140064",
     "avgPerformance": 9978,
     "topPerformancePercentile": 35,
@@ -3514,6 +3765,7 @@
     "proposedBlocksCount": 7
   },
   "251": {
+    "hash": "d134ba",
     "totalRewardsETH": "626792999981290270",
     "avgPerformance": 9887,
     "topPerformancePercentile": 65,
@@ -3528,6 +3780,7 @@
     "proposedBlocksCount": 37
   },
   "252": {
+    "hash": "51ca95",
     "totalRewardsETH": "605030614937123925",
     "avgPerformance": 9966,
     "topPerformancePercentile": 45,
@@ -3542,6 +3795,7 @@
     "proposedBlocksCount": 29
   },
   "253": {
+    "hash": "e95723",
     "totalRewardsETH": "146740856047186148",
     "avgPerformance": 9923,
     "topPerformancePercentile": 55,
@@ -3556,6 +3810,7 @@
     "proposedBlocksCount": 5
   },
   "254": {
+    "hash": "cde726",
     "totalRewardsETH": "6577145205738658",
     "avgPerformance": 9991,
     "topPerformancePercentile": 25,
@@ -3570,6 +3825,7 @@
     "proposedBlocksCount": 0
   },
   "255": {
+    "hash": "95a4a7",
     "totalRewardsETH": "445693746523121359",
     "avgPerformance": 9949,
     "topPerformancePercentile": 50,
@@ -3584,6 +3840,7 @@
     "proposedBlocksCount": 16
   },
   "256": {
+    "hash": "d58879",
     "totalRewardsETH": "58838437102589441",
     "avgPerformance": 9856,
     "topPerformancePercentile": 65,
@@ -3598,6 +3855,7 @@
     "proposedBlocksCount": 0
   },
   "257": {
+    "hash": "7d56c7",
     "totalRewardsETH": "1241508277958759930",
     "avgPerformance": 9965,
     "topPerformancePercentile": 45,
@@ -3612,6 +3870,7 @@
     "proposedBlocksCount": 47
   },
   "258": {
+    "hash": "9a6725",
     "totalRewardsETH": "681013028856460348",
     "avgPerformance": 9961,
     "topPerformancePercentile": 45,
@@ -3626,6 +3885,7 @@
     "proposedBlocksCount": 24
   },
   "259": {
+    "hash": "4e162d",
     "totalRewardsETH": "655507782496130559",
     "avgPerformance": 9729,
     "topPerformancePercentile": 75,
@@ -3640,6 +3900,7 @@
     "proposedBlocksCount": 26
   },
   "260": {
+    "hash": "8143a6",
     "totalRewardsETH": "1187431737468164818",
     "avgPerformance": 9954,
     "topPerformancePercentile": 50,
@@ -3654,6 +3915,7 @@
     "proposedBlocksCount": 40
   },
   "261": {
+    "hash": "f6347b",
     "totalRewardsETH": "49197099155840514",
     "avgPerformance": 9656,
     "topPerformancePercentile": 80,
@@ -3668,6 +3930,7 @@
     "proposedBlocksCount": 2
   },
   "262": {
+    "hash": "16c3c5",
     "totalRewardsETH": "479793917908591856",
     "avgPerformance": 9908,
     "topPerformancePercentile": 60,
@@ -3682,6 +3945,7 @@
     "proposedBlocksCount": 18
   },
   "263": {
+    "hash": "e91d80",
     "totalRewardsETH": "647352884273906963",
     "avgPerformance": 9929,
     "topPerformancePercentile": 55,
@@ -3696,6 +3960,7 @@
     "proposedBlocksCount": 15
   },
   "264": {
+    "hash": "8ac5e8",
     "totalRewardsETH": "48275647381705719",
     "avgPerformance": 9466,
     "topPerformancePercentile": 80,
@@ -3710,6 +3975,7 @@
     "proposedBlocksCount": 0
   },
   "265": {
+    "hash": "ce8376",
     "totalRewardsETH": "35503599896990782",
     "avgPerformance": 7159,
     "topPerformancePercentile": 90,
@@ -3724,6 +3990,7 @@
     "proposedBlocksCount": 1
   },
   "266": {
+    "hash": "1611ba",
     "totalRewardsETH": "532521991401475075",
     "avgPerformance": 9826,
     "topPerformancePercentile": 70,
@@ -3738,6 +4005,7 @@
     "proposedBlocksCount": 33
   },
   "267": {
+    "hash": "1a93b2",
     "totalRewardsETH": "178075270607786827",
     "avgPerformance": 9907,
     "topPerformancePercentile": 60,
@@ -3752,6 +4020,7 @@
     "proposedBlocksCount": 4
   },
   "268": {
+    "hash": "c1717f",
     "totalRewardsETH": "107887866419477370",
     "avgPerformance": 9854,
     "topPerformancePercentile": 65,
@@ -3766,6 +4035,7 @@
     "proposedBlocksCount": 0
   },
   "269": {
+    "hash": "983037",
     "totalRewardsETH": "346928270029038147",
     "avgPerformance": 9980,
     "topPerformancePercentile": 35,
@@ -3780,6 +4050,7 @@
     "proposedBlocksCount": 12
   },
   "270": {
+    "hash": "07d390",
     "totalRewardsETH": "34309629022768447",
     "avgPerformance": 8703,
     "topPerformancePercentile": 85,
@@ -3794,6 +4065,7 @@
     "proposedBlocksCount": 2
   },
   "271": {
+    "hash": "7bc9ef",
     "totalRewardsETH": "704894003387247702",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -3808,6 +4080,7 @@
     "proposedBlocksCount": 19
   },
   "272": {
+    "hash": "829a29",
     "totalRewardsETH": "107883050340031866",
     "avgPerformance": 9819,
     "topPerformancePercentile": 70,
@@ -3822,6 +4095,7 @@
     "proposedBlocksCount": 4
   },
   "273": {
+    "hash": "1aa8e0",
     "totalRewardsETH": "7292931877533373816",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -3836,6 +4110,7 @@
     "proposedBlocksCount": 328
   },
   "274": {
+    "hash": "c468c4",
     "totalRewardsETH": "104883484895242550",
     "avgPerformance": 9794,
     "topPerformancePercentile": 75,
@@ -3850,6 +4125,7 @@
     "proposedBlocksCount": 3
   },
   "275": {
+    "hash": "82d753",
     "totalRewardsETH": "107878234260586361",
     "avgPerformance": 9820,
     "topPerformancePercentile": 70,
@@ -3864,6 +4140,7 @@
     "proposedBlocksCount": 3
   },
   "276": {
+    "hash": "502826",
     "totalRewardsETH": "107878234260586361",
     "avgPerformance": 9819,
     "topPerformancePercentile": 70,
@@ -3878,6 +4155,7 @@
     "proposedBlocksCount": 4
   },
   "277": {
+    "hash": "f2da9a",
     "totalRewardsETH": "107878234260586361",
     "avgPerformance": 9830,
     "topPerformancePercentile": 70,
@@ -3892,6 +4170,7 @@
     "proposedBlocksCount": 6
   },
   "278": {
+    "hash": "8b78b3",
     "totalRewardsETH": "15072499151239980",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -3906,6 +4185,7 @@
     "proposedBlocksCount": 0
   },
   "279": {
+    "hash": "11127f",
     "totalRewardsETH": "366179499557978246",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -3920,6 +4200,7 @@
     "proposedBlocksCount": 5
   },
   "280": {
+    "hash": "6b1d5e",
     "totalRewardsETH": "366148264401072410",
     "avgPerformance": 9989,
     "topPerformancePercentile": 30,
@@ -3934,6 +4215,7 @@
     "proposedBlocksCount": 6
   },
   "281": {
+    "hash": "4cb7fe",
     "totalRewardsETH": "307522201065711347",
     "avgPerformance": 9983,
     "topPerformancePercentile": 30,
@@ -3948,6 +4230,7 @@
     "proposedBlocksCount": 5
   },
   "282": {
+    "hash": "f5d34a",
     "totalRewardsETH": "1786638901700490268",
     "avgPerformance": 9913,
     "topPerformancePercentile": 60,
@@ -3962,6 +4245,7 @@
     "proposedBlocksCount": 124
   },
   "283": {
+    "hash": "799df0",
     "totalRewardsETH": "60770735944554912",
     "avgPerformance": 9995,
     "topPerformancePercentile": 20,
@@ -3976,6 +4260,7 @@
     "proposedBlocksCount": 2
   },
   "284": {
+    "hash": "342af3",
     "totalRewardsETH": "505615461910766665",
     "avgPerformance": 9861,
     "topPerformancePercentile": 65,
@@ -3990,6 +4275,7 @@
     "proposedBlocksCount": 28
   },
   "285": {
+    "hash": "c12d71",
     "totalRewardsETH": "97839553478301092",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -4004,6 +4290,7 @@
     "proposedBlocksCount": 6
   },
   "286": {
+    "hash": "db4ca9",
     "totalRewardsETH": "543457586074649840",
     "avgPerformance": 9001,
     "topPerformancePercentile": 85,
@@ -4018,6 +4305,7 @@
     "proposedBlocksCount": 19
   },
   "287": {
+    "hash": "70a88e",
     "totalRewardsETH": "24583431678368219",
     "avgPerformance": 4972,
     "topPerformancePercentile": 90,
@@ -4032,6 +4320,7 @@
     "proposedBlocksCount": 0
   },
   "288": {
+    "hash": "96bd9f",
     "totalRewardsETH": "1321885235936973403",
     "avgPerformance": 9924,
     "topPerformancePercentile": 55,
@@ -4046,6 +4335,7 @@
     "proposedBlocksCount": 41
   },
   "289": {
+    "hash": "ca0449",
     "totalRewardsETH": "38964348863745605",
     "avgPerformance": 9405,
     "topPerformancePercentile": 85,
@@ -4060,6 +4350,7 @@
     "proposedBlocksCount": 1
   },
   "290": {
+    "hash": "e50644",
     "totalRewardsETH": "509860554981103614",
     "avgPerformance": 9868,
     "topPerformancePercentile": 65,
@@ -4074,6 +4365,7 @@
     "proposedBlocksCount": 17
   },
   "291": {
+    "hash": "f2ae74",
     "totalRewardsETH": "1164457921319779294",
     "avgPerformance": 9956,
     "topPerformancePercentile": 50,
@@ -4088,6 +4380,7 @@
     "proposedBlocksCount": 71
   },
   "292": {
+    "hash": "87772d",
     "totalRewardsETH": "583803273800829366",
     "avgPerformance": 9889,
     "topPerformancePercentile": 65,
@@ -4102,6 +4395,7 @@
     "proposedBlocksCount": 21
   },
   "293": {
+    "hash": "dfebd6",
     "totalRewardsETH": "534457865862508789",
     "avgPerformance": 9892,
     "topPerformancePercentile": 60,
@@ -4116,6 +4410,7 @@
     "proposedBlocksCount": 25
   },
   "294": {
+    "hash": "51433d",
     "totalRewardsETH": "992565346021861639",
     "avgPerformance": 9993,
     "topPerformancePercentile": 25,
@@ -4130,6 +4425,7 @@
     "proposedBlocksCount": 56
   },
   "295": {
+    "hash": "42a2f5",
     "totalRewardsETH": "666861160330773766",
     "avgPerformance": 9991,
     "topPerformancePercentile": 25,
@@ -4144,6 +4440,7 @@
     "proposedBlocksCount": 29
   },
   "296": {
+    "hash": "6dc1e7",
     "totalRewardsETH": "17820849583231907",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -4158,6 +4455,7 @@
     "proposedBlocksCount": 2
   },
   "297": {
+    "hash": "00117e",
     "totalRewardsETH": "641279547160050678",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -4172,6 +4470,7 @@
     "proposedBlocksCount": 21
   },
   "298": {
+    "hash": "e54dc7",
     "totalRewardsETH": "48821964622785415",
     "avgPerformance": 9776,
     "topPerformancePercentile": 75,
@@ -4186,6 +4485,7 @@
     "proposedBlocksCount": 1
   },
   "299": {
+    "hash": "3af271",
     "totalRewardsETH": "44202081162001897",
     "avgPerformance": 9901,
     "topPerformancePercentile": 60,
@@ -4200,6 +4500,7 @@
     "proposedBlocksCount": 0
   },
   "300": {
+    "hash": "4608be",
     "totalRewardsETH": "40978756718426782",
     "avgPerformance": 9579,
     "topPerformancePercentile": 80,
@@ -4214,6 +4515,7 @@
     "proposedBlocksCount": 4
   },
   "301": {
+    "hash": "f91f7b",
     "totalRewardsETH": "173015718012694995",
     "avgPerformance": 9930,
     "topPerformancePercentile": 55,
@@ -4228,6 +4530,7 @@
     "proposedBlocksCount": 4
   },
   "302": {
+    "hash": "06dde4",
     "totalRewardsETH": "102599553648356474",
     "avgPerformance": 9972,
     "topPerformancePercentile": 40,
@@ -4242,6 +4545,7 @@
     "proposedBlocksCount": 6
   },
   "303": {
+    "hash": "870260",
     "totalRewardsETH": "265171425495472500",
     "avgPerformance": 9736,
     "topPerformancePercentile": 75,
@@ -4256,6 +4560,7 @@
     "proposedBlocksCount": 10
   },
   "304": {
+    "hash": "ed877f",
     "totalRewardsETH": "31309949409049123789",
     "avgPerformance": 9980,
     "topPerformancePercentile": 35,
@@ -4270,6 +4575,7 @@
     "proposedBlocksCount": 1397
   },
   "305": {
+    "hash": "7049e9",
     "totalRewardsETH": "586929026522036797",
     "avgPerformance": 9868,
     "topPerformancePercentile": 65,
@@ -4284,6 +4590,7 @@
     "proposedBlocksCount": 26
   },
   "306": {
+    "hash": "d4a757",
     "totalRewardsETH": "28856539675052356",
     "avgPerformance": 7285,
     "topPerformancePercentile": 90,
@@ -4298,6 +4605,7 @@
     "proposedBlocksCount": 2
   },
   "307": {
+    "hash": "a281bf",
     "totalRewardsETH": "832661330042248606",
     "avgPerformance": 9961,
     "topPerformancePercentile": 45,
@@ -4312,6 +4620,7 @@
     "proposedBlocksCount": 36
   },
   "308": {
+    "hash": "989eb1",
     "totalRewardsETH": "509644763817165020",
     "avgPerformance": 9867,
     "topPerformancePercentile": 65,
@@ -4326,6 +4635,7 @@
     "proposedBlocksCount": 21
   },
   "309": {
+    "hash": "efd997",
     "totalRewardsETH": "375924343483181736",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -4340,6 +4650,7 @@
     "proposedBlocksCount": 20
   },
   "310": {
+    "hash": "14327f",
     "totalRewardsETH": "93980430634467677",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -4354,6 +4665,7 @@
     "proposedBlocksCount": 4
   },
   "311": {
+    "hash": "e4b1f4",
     "totalRewardsETH": "196397066802700179",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -4368,6 +4680,7 @@
     "proposedBlocksCount": 12
   },
   "312": {
+    "hash": "fa8e9e",
     "totalRewardsETH": "265125122128311587",
     "avgPerformance": 9795,
     "topPerformancePercentile": 75,
@@ -4382,6 +4695,7 @@
     "proposedBlocksCount": 10
   },
   "313": {
+    "hash": "6178ee",
     "totalRewardsETH": "51046979771894113",
     "avgPerformance": 9875,
     "topPerformancePercentile": 65,
@@ -4396,6 +4710,7 @@
     "proposedBlocksCount": 3
   },
   "314": {
+    "hash": "250d38",
     "totalRewardsETH": "29939410353731784",
     "avgPerformance": 9738,
     "topPerformancePercentile": 75,
@@ -4410,6 +4725,7 @@
     "proposedBlocksCount": 1
   },
   "315": {
+    "hash": "e93607",
     "totalRewardsETH": "77859679500968348",
     "avgPerformance": 9548,
     "topPerformancePercentile": 80,
@@ -4424,6 +4740,7 @@
     "proposedBlocksCount": 4
   },
   "316": {
+    "hash": "5550c1",
     "totalRewardsETH": "33984499035070701",
     "avgPerformance": 8728,
     "topPerformancePercentile": 85,
@@ -4438,6 +4755,7 @@
     "proposedBlocksCount": 4
   },
   "317": {
+    "hash": "97dcb5",
     "totalRewardsETH": "140954483455617054",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -4452,6 +4770,7 @@
     "proposedBlocksCount": 8
   },
   "318": {
+    "hash": "d877a6",
     "totalRewardsETH": "39644479861188354",
     "avgPerformance": 9307,
     "topPerformancePercentile": 85,
@@ -4466,6 +4785,7 @@
     "proposedBlocksCount": 0
   },
   "319": {
+    "hash": "665f59",
     "totalRewardsETH": "46984536602393346",
     "avgPerformance": 9930,
     "topPerformancePercentile": 55,
@@ -4480,6 +4800,7 @@
     "proposedBlocksCount": 2
   },
   "320": {
+    "hash": "2a84f9",
     "totalRewardsETH": "132724303382931105",
     "avgPerformance": 9976,
     "topPerformancePercentile": 40,
@@ -4494,6 +4815,7 @@
     "proposedBlocksCount": 8
   },
   "321": {
+    "hash": "bcd239",
     "totalRewardsETH": "132326754712095370",
     "avgPerformance": 9774,
     "topPerformancePercentile": 75,
@@ -4508,6 +4830,7 @@
     "proposedBlocksCount": 8
   },
   "322": {
+    "hash": "7e6887",
     "totalRewardsETH": "34143648065147069",
     "avgPerformance": 9091,
     "topPerformancePercentile": 85,
@@ -4522,6 +4845,7 @@
     "proposedBlocksCount": 2
   },
   "323": {
+    "hash": "d71cb0",
     "totalRewardsETH": "88366595441212871",
     "avgPerformance": 9902,
     "topPerformancePercentile": 60,
@@ -4536,6 +4860,7 @@
     "proposedBlocksCount": 6
   },
   "324": {
+    "hash": "bf57e5",
     "totalRewardsETH": "46982789305519349",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -4550,6 +4875,7 @@
     "proposedBlocksCount": 2
   },
   "325": {
+    "hash": "26e1b5",
     "totalRewardsETH": "497867251747797960",
     "avgPerformance": 9873,
     "topPerformancePercentile": 65,
@@ -4564,6 +4890,7 @@
     "proposedBlocksCount": 11
   },
   "326": {
+    "hash": "1fd9d0",
     "totalRewardsETH": "216801826533271260",
     "avgPerformance": 9926,
     "topPerformancePercentile": 55,
@@ -4578,6 +4905,7 @@
     "proposedBlocksCount": 9
   },
   "327": {
+    "hash": "033c8d",
     "totalRewardsETH": "398523182305070441",
     "avgPerformance": 9934,
     "topPerformancePercentile": 55,
@@ -4592,6 +4920,7 @@
     "proposedBlocksCount": 12
   },
   "328": {
+    "hash": "84b039",
     "totalRewardsETH": "379591083726285243",
     "avgPerformance": 9138,
     "topPerformancePercentile": 85,
@@ -4606,6 +4935,7 @@
     "proposedBlocksCount": 16
   },
   "329": {
+    "hash": "94b1b4",
     "totalRewardsETH": "640919604004007353",
     "avgPerformance": 9993,
     "topPerformancePercentile": 25,
@@ -4620,6 +4950,7 @@
     "proposedBlocksCount": 18
   },
   "330": {
+    "hash": "ec87c1",
     "totalRewardsETH": "144069748589616767",
     "avgPerformance": 9939,
     "topPerformancePercentile": 50,
@@ -4634,6 +4965,7 @@
     "proposedBlocksCount": 8
   },
   "331": {
+    "hash": "fbf04e",
     "totalRewardsETH": "4649014526791406185",
     "avgPerformance": 9961,
     "topPerformancePercentile": 45,
@@ -4648,6 +4980,7 @@
     "proposedBlocksCount": 250
   },
   "332": {
+    "hash": "4ce9a2",
     "totalRewardsETH": "358886141199057084",
     "avgPerformance": 9973,
     "topPerformancePercentile": 40,
@@ -4662,6 +4995,7 @@
     "proposedBlocksCount": 11
   },
   "333": {
+    "hash": "f78a31",
     "totalRewardsETH": "12387908350947743399",
     "avgPerformance": 9949,
     "topPerformancePercentile": 50,
@@ -4676,6 +5010,7 @@
     "proposedBlocksCount": 648
   },
   "334": {
+    "hash": "2f1185",
     "totalRewardsETH": "53404288285493450",
     "avgPerformance": 9949,
     "topPerformancePercentile": 50,
@@ -4690,6 +5025,7 @@
     "proposedBlocksCount": 0
   },
   "335": {
+    "hash": "29851d",
     "totalRewardsETH": "248911719372477933",
     "avgPerformance": 9967,
     "topPerformancePercentile": 45,
@@ -4704,6 +5040,7 @@
     "proposedBlocksCount": 3
   },
   "336": {
+    "hash": "0f153e",
     "totalRewardsETH": "1095638048830509049",
     "avgPerformance": 9856,
     "topPerformancePercentile": 65,
@@ -4718,6 +5055,7 @@
     "proposedBlocksCount": 34
   },
   "337": {
+    "hash": "5cb51a",
     "totalRewardsETH": "43019244496543224",
     "avgPerformance": 9728,
     "topPerformancePercentile": 75,
@@ -4732,6 +5070,7 @@
     "proposedBlocksCount": 0
   },
   "338": {
+    "hash": "fca35e",
     "totalRewardsETH": "48962212169818561",
     "avgPerformance": 9961,
     "topPerformancePercentile": 45,
@@ -4746,6 +5085,7 @@
     "proposedBlocksCount": 2
   },
   "339": {
+    "hash": "8c4a36",
     "totalRewardsETH": "46963569039905385",
     "avgPerformance": 9964,
     "topPerformancePercentile": 45,
@@ -4760,6 +5100,7 @@
     "proposedBlocksCount": 2
   },
   "340": {
+    "hash": "a72a19",
     "totalRewardsETH": "383352760116600658",
     "avgPerformance": 9843,
     "topPerformancePercentile": 70,
@@ -4774,6 +5115,7 @@
     "proposedBlocksCount": 21
   },
   "341": {
+    "hash": "1bbc36",
     "totalRewardsETH": "729999637891684146",
     "avgPerformance": 9891,
     "topPerformancePercentile": 65,
@@ -4788,6 +5130,7 @@
     "proposedBlocksCount": 23
   },
   "342": {
+    "hash": "858aaf",
     "totalRewardsETH": "3538772568556407070",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -4802,6 +5145,7 @@
     "proposedBlocksCount": 159
   },
   "343": {
+    "hash": "ddc72f",
     "totalRewardsETH": "686680298874181941",
     "avgPerformance": 9975,
     "topPerformancePercentile": 40,
@@ -4816,6 +5160,7 @@
     "proposedBlocksCount": 16
   },
   "344": {
+    "hash": "11cb53",
     "totalRewardsETH": "2972401911602830691",
     "avgPerformance": 9927,
     "topPerformancePercentile": 55,
@@ -4830,6 +5175,7 @@
     "proposedBlocksCount": 139
   },
   "345": {
+    "hash": "124f05",
     "totalRewardsETH": "1114190533030980026",
     "avgPerformance": 9991,
     "topPerformancePercentile": 25,
@@ -4844,6 +5190,7 @@
     "proposedBlocksCount": 44
   },
   "346": {
+    "hash": "e7a7f2",
     "totalRewardsETH": "27699688343822867095",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -4858,6 +5205,7 @@
     "proposedBlocksCount": 1431
   },
   "347": {
+    "hash": "4edeca",
     "totalRewardsETH": "163410503064081728",
     "avgPerformance": 9728,
     "topPerformancePercentile": 75,
@@ -4872,6 +5220,7 @@
     "proposedBlocksCount": 6
   },
   "348": {
+    "hash": "447f6f",
     "totalRewardsETH": "171988821746261814",
     "avgPerformance": 9730,
     "topPerformancePercentile": 75,
@@ -4886,6 +5235,7 @@
     "proposedBlocksCount": 15
   },
   "349": {
+    "hash": "3d1a81",
     "totalRewardsETH": "861388156524716964",
     "avgPerformance": 9627,
     "topPerformancePercentile": 80,
@@ -4900,6 +5250,7 @@
     "proposedBlocksCount": 86
   },
   "350": {
+    "hash": "dcfba6",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -4914,6 +5265,7 @@
     "proposedBlocksCount": 0
   },
   "351": {
+    "hash": "9fbccd",
     "totalRewardsETH": "17129269930217206",
     "avgPerformance": 9860,
     "topPerformancePercentile": 65,
@@ -4928,6 +5280,7 @@
     "proposedBlocksCount": 0
   },
   "352": {
+    "hash": "3be015",
     "totalRewardsETH": "214082879745425551",
     "avgPerformance": 9984,
     "topPerformancePercentile": 30,
@@ -4942,6 +5295,7 @@
     "proposedBlocksCount": 13
   },
   "353": {
+    "hash": "58af6a",
     "totalRewardsETH": "22676743130234581",
     "avgPerformance": 9778,
     "topPerformancePercentile": 75,
@@ -4956,6 +5310,7 @@
     "proposedBlocksCount": 1
   },
   "354": {
+    "hash": "a64e71",
     "totalRewardsETH": "30463183628482348",
     "avgPerformance": 9476,
     "topPerformancePercentile": 80,
@@ -4970,6 +5325,7 @@
     "proposedBlocksCount": 9
   },
   "355": {
+    "hash": "bf81e0",
     "totalRewardsETH": "33861792596853774",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -4984,6 +5340,7 @@
     "proposedBlocksCount": 1
   },
   "356": {
+    "hash": "e45e3f",
     "totalRewardsETH": "5336015126845039",
     "avgPerformance": 9871,
     "topPerformancePercentile": 65,
@@ -4998,6 +5355,7 @@
     "proposedBlocksCount": 0
   },
   "357": {
+    "hash": "530cc5",
     "totalRewardsETH": "39215159149662969",
     "avgPerformance": 9854,
     "topPerformancePercentile": 65,
@@ -5012,6 +5370,7 @@
     "proposedBlocksCount": 1
   },
   "358": {
+    "hash": "ee6bc5",
     "totalRewardsETH": "34230840872833303",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -5026,6 +5385,7 @@
     "proposedBlocksCount": 1
   },
   "359": {
+    "hash": "612633",
     "totalRewardsETH": "42786107062723885",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -5040,6 +5400,7 @@
     "proposedBlocksCount": 2
   },
   "360": {
+    "hash": "33cb8a",
     "totalRewardsETH": "5327868365785889",
     "avgPerformance": 9817,
     "topPerformancePercentile": 70,
@@ -5054,6 +5415,7 @@
     "proposedBlocksCount": 1
   },
   "361": {
+    "hash": "fe9d4f",
     "totalRewardsETH": "111231713462532103",
     "avgPerformance": 9995,
     "topPerformancePercentile": 20,
@@ -5068,6 +5430,7 @@
     "proposedBlocksCount": 5
   },
   "362": {
+    "hash": "648eb1",
     "totalRewardsETH": "3223324443575115",
     "avgPerformance": 7633,
     "topPerformancePercentile": 90,
@@ -5082,6 +5445,7 @@
     "proposedBlocksCount": 0
   },
   "363": {
+    "hash": "a3f3de",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5096,6 +5460,7 @@
     "proposedBlocksCount": 0
   },
   "364": {
+    "hash": "d81b06",
     "totalRewardsETH": "8550378133255088",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -5110,6 +5475,7 @@
     "proposedBlocksCount": 1
   },
   "365": {
+    "hash": "23d96f",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5124,6 +5490,7 @@
     "proposedBlocksCount": 0
   },
   "366": {
+    "hash": "a52cd1",
     "totalRewardsETH": "0",
     "avgPerformance": 4793,
     "topPerformancePercentile": 90,
@@ -5138,6 +5505,7 @@
     "proposedBlocksCount": 0
   },
   "367": {
+    "hash": "4f95ee",
     "totalRewardsETH": "87233338705408608",
     "avgPerformance": 9760,
     "topPerformancePercentile": 75,
@@ -5152,6 +5520,7 @@
     "proposedBlocksCount": 0
   },
   "368": {
+    "hash": "2d89d4",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5166,6 +5535,7 @@
     "proposedBlocksCount": 0
   },
   "369": {
+    "hash": "74c888",
     "totalRewardsETH": "25433615879485946",
     "avgPerformance": 9943,
     "topPerformancePercentile": 50,
@@ -5180,6 +5550,7 @@
     "proposedBlocksCount": 1
   },
   "370": {
+    "hash": "b5e096",
     "totalRewardsETH": "5677128874591315",
     "avgPerformance": 9815,
     "topPerformancePercentile": 70,
@@ -5194,6 +5565,7 @@
     "proposedBlocksCount": 1
   },
   "371": {
+    "hash": "84dbaa",
     "totalRewardsETH": "49814820780122027",
     "avgPerformance": 9949,
     "topPerformancePercentile": 50,
@@ -5208,6 +5580,7 @@
     "proposedBlocksCount": 3
   },
   "372": {
+    "hash": "cb9bb2",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5222,6 +5595,7 @@
     "proposedBlocksCount": 0
   },
   "373": {
+    "hash": "8c4c04",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5236,6 +5610,7 @@
     "proposedBlocksCount": 0
   },
   "374": {
+    "hash": "aa3eb9",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5250,6 +5625,7 @@
     "proposedBlocksCount": 0
   },
   "375": {
+    "hash": "945f8f",
     "totalRewardsETH": "944103261019908360",
     "avgPerformance": 9995,
     "topPerformancePercentile": 20,
@@ -5264,6 +5640,7 @@
     "proposedBlocksCount": 60
   },
   "376": {
+    "hash": "8f46a5",
     "totalRewardsETH": "846358254093089879",
     "avgPerformance": 9995,
     "topPerformancePercentile": 20,
@@ -5278,6 +5655,7 @@
     "proposedBlocksCount": 51
   },
   "377": {
+    "hash": "389dfb",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5292,6 +5670,7 @@
     "proposedBlocksCount": 0
   },
   "378": {
+    "hash": "c09d2c",
     "totalRewardsETH": "8438767506744723",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -5306,6 +5685,7 @@
     "proposedBlocksCount": 0
   },
   "379": {
+    "hash": "48b606",
     "totalRewardsETH": "7938895841513134",
     "avgPerformance": 8215,
     "topPerformancePercentile": 90,
@@ -5320,6 +5700,7 @@
     "proposedBlocksCount": 3
   },
   "380": {
+    "hash": "4a42c7",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5334,6 +5715,7 @@
     "proposedBlocksCount": 0
   },
   "381": {
+    "hash": "8b6aa0",
     "totalRewardsETH": "28922644041348046",
     "avgPerformance": 9920,
     "topPerformancePercentile": 55,
@@ -5348,6 +5730,7 @@
     "proposedBlocksCount": 1
   },
   "382": {
+    "hash": "584ada",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5362,6 +5745,7 @@
     "proposedBlocksCount": 0
   },
   "383": {
+    "hash": "cf823f",
     "totalRewardsETH": "10296447204491000",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -5376,6 +5760,7 @@
     "proposedBlocksCount": 1
   },
   "384": {
+    "hash": "50d5eb",
     "totalRewardsETH": "235690456861976916",
     "avgPerformance": 9982,
     "topPerformancePercentile": 35,
@@ -5390,6 +5775,7 @@
     "proposedBlocksCount": 11
   },
   "385": {
+    "hash": "93ec97",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5404,6 +5790,7 @@
     "proposedBlocksCount": 0
   },
   "386": {
+    "hash": "55f400",
     "totalRewardsETH": "28921014689136215",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -5418,6 +5805,7 @@
     "proposedBlocksCount": 1
   },
   "387": {
+    "hash": "dd45df",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5432,6 +5820,7 @@
     "proposedBlocksCount": 0
   },
   "388": {
+    "hash": "00c745",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5446,6 +5835,7 @@
     "proposedBlocksCount": 0
   },
   "389": {
+    "hash": "cde093",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5460,6 +5850,7 @@
     "proposedBlocksCount": 0
   },
   "390": {
+    "hash": "c6be03",
     "totalRewardsETH": "2414699977932277",
     "avgPerformance": 8658,
     "topPerformancePercentile": 85,
@@ -5474,6 +5865,7 @@
     "proposedBlocksCount": 1
   },
   "391": {
+    "hash": "6bfb0a",
     "totalRewardsETH": "500179567688294448",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -5488,6 +5880,7 @@
     "proposedBlocksCount": 34
   },
   "392": {
+    "hash": "64074e",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5502,6 +5895,7 @@
     "proposedBlocksCount": 0
   },
   "393": {
+    "hash": "81633c",
     "totalRewardsETH": "2411441273508617",
     "avgPerformance": 9213,
     "topPerformancePercentile": 85,
@@ -5516,6 +5910,7 @@
     "proposedBlocksCount": 0
   },
   "394": {
+    "hash": "c72d61",
     "totalRewardsETH": "8434694126215148",
     "avgPerformance": 9988,
     "topPerformancePercentile": 30,
@@ -5530,6 +5925,7 @@
     "proposedBlocksCount": 0
   },
   "395": {
+    "hash": "b9e17c",
     "totalRewardsETH": "6023252852706530",
     "avgPerformance": 9122,
     "topPerformancePercentile": 85,
@@ -5544,6 +5940,7 @@
     "proposedBlocksCount": 1
   },
   "396": {
+    "hash": "8aa793",
     "totalRewardsETH": "33664640979222326",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -5558,6 +5955,7 @@
     "proposedBlocksCount": 1
   },
   "397": {
+    "hash": "521140",
     "totalRewardsETH": "8433879450109233",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -5572,6 +5970,7 @@
     "proposedBlocksCount": 1
   },
   "398": {
+    "hash": "2f8894",
     "totalRewardsETH": "101186186498662943",
     "avgPerformance": 9911,
     "topPerformancePercentile": 60,
@@ -5586,6 +5985,7 @@
     "proposedBlocksCount": 8
   },
   "399": {
+    "hash": "03f0b0",
     "totalRewardsETH": "1485654699312792649",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -5600,6 +6000,7 @@
     "proposedBlocksCount": 127
   },
   "400": {
+    "hash": "c2c488",
     "totalRewardsETH": "210755742528868391",
     "avgPerformance": 9913,
     "topPerformancePercentile": 60,
@@ -5614,6 +6015,7 @@
     "proposedBlocksCount": 16
   },
   "401": {
+    "hash": "f37f30",
     "totalRewardsETH": "207924041751606286",
     "avgPerformance": 9902,
     "topPerformancePercentile": 60,
@@ -5628,6 +6030,7 @@
     "proposedBlocksCount": 19
   },
   "402": {
+    "hash": "951e22",
     "totalRewardsETH": "14444213822449805",
     "avgPerformance": 9791,
     "topPerformancePercentile": 75,
@@ -5642,6 +6045,7 @@
     "proposedBlocksCount": 2
   },
   "403": {
+    "hash": "93fc04",
     "totalRewardsETH": "210679977651018288",
     "avgPerformance": 9914,
     "topPerformancePercentile": 60,
@@ -5656,6 +6060,7 @@
     "proposedBlocksCount": 19
   },
   "404": {
+    "hash": "888bcf",
     "totalRewardsETH": "210643317226252110",
     "avgPerformance": 9912,
     "topPerformancePercentile": 60,
@@ -5670,6 +6075,7 @@
     "proposedBlocksCount": 20
   },
   "405": {
+    "hash": "26566c",
     "totalRewardsETH": "210605842125380016",
     "avgPerformance": 9911,
     "topPerformancePercentile": 60,
@@ -5684,6 +6090,7 @@
     "proposedBlocksCount": 13
   },
   "406": {
+    "hash": "299b53",
     "totalRewardsETH": "210508895668776122",
     "avgPerformance": 9910,
     "topPerformancePercentile": 60,
@@ -5698,6 +6105,7 @@
     "proposedBlocksCount": 10
   },
   "407": {
+    "hash": "582df7",
     "totalRewardsETH": "0",
     "avgPerformance": 2855,
     "topPerformancePercentile": 90,
@@ -5712,6 +6120,7 @@
     "proposedBlocksCount": 0
   },
   "408": {
+    "hash": "d9bde1",
     "totalRewardsETH": "6023252852706530",
     "avgPerformance": 9301,
     "topPerformancePercentile": 85,
@@ -5726,6 +6135,7 @@
     "proposedBlocksCount": 0
   },
   "409": {
+    "hash": "e3fc46",
     "totalRewardsETH": "15840316582154177",
     "avgPerformance": 9700,
     "topPerformancePercentile": 80,
@@ -5740,6 +6150,7 @@
     "proposedBlocksCount": 1
   },
   "410": {
+    "hash": "652f6c",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5754,6 +6165,7 @@
     "proposedBlocksCount": 0
   },
   "411": {
+    "hash": "c664c3",
     "totalRewardsETH": "120275163436836047",
     "avgPerformance": 9984,
     "topPerformancePercentile": 30,
@@ -5768,6 +6180,7 @@
     "proposedBlocksCount": 9
   },
   "412": {
+    "hash": "3d37ca",
     "totalRewardsETH": "199227836595392397",
     "avgPerformance": 9893,
     "topPerformancePercentile": 60,
@@ -5782,6 +6195,7 @@
     "proposedBlocksCount": 13
   },
   "413": {
+    "hash": "ad607e",
     "totalRewardsETH": "201982143142592568",
     "avgPerformance": 9912,
     "topPerformancePercentile": 60,
@@ -5796,6 +6210,7 @@
     "proposedBlocksCount": 13
   },
   "414": {
+    "hash": "520c83",
     "totalRewardsETH": "8415141899673186",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -5810,6 +6225,7 @@
     "proposedBlocksCount": 1
   },
   "415": {
+    "hash": "7290ab",
     "totalRewardsETH": "201941409337296814",
     "avgPerformance": 9910,
     "topPerformancePercentile": 60,
@@ -5824,6 +6240,7 @@
     "proposedBlocksCount": 16
   },
   "416": {
+    "hash": "7cee92",
     "totalRewardsETH": "201895787475365571",
     "avgPerformance": 9911,
     "topPerformancePercentile": 60,
@@ -5838,6 +6255,7 @@
     "proposedBlocksCount": 21
   },
   "417": {
+    "hash": "5275d1",
     "totalRewardsETH": "14415700158742779",
     "avgPerformance": 9993,
     "topPerformancePercentile": 25,
@@ -5852,6 +6270,7 @@
     "proposedBlocksCount": 1
   },
   "418": {
+    "hash": "0c23f3",
     "totalRewardsETH": "54369988965352795",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -5866,6 +6285,7 @@
     "proposedBlocksCount": 0
   },
   "419": {
+    "hash": "2dcd98",
     "totalRewardsETH": "8411068519143611",
     "avgPerformance": 4999,
     "topPerformancePercentile": 90,
@@ -5880,6 +6300,7 @@
     "proposedBlocksCount": 0
   },
   "420": {
+    "hash": "d36152",
     "totalRewardsETH": "7828384832259625",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -5894,6 +6315,7 @@
     "proposedBlocksCount": 0
   },
   "421": {
+    "hash": "24c84e",
     "totalRewardsETH": "8411068519143611",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -5908,6 +6330,7 @@
     "proposedBlocksCount": 0
   },
   "422": {
+    "hash": "099223",
     "totalRewardsETH": "1284200978898923493",
     "avgPerformance": 9984,
     "topPerformancePercentile": 30,
@@ -5922,6 +6345,7 @@
     "proposedBlocksCount": 88
   },
   "423": {
+    "hash": "a46bce",
     "totalRewardsETH": "8401292405872630",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -5936,6 +6360,7 @@
     "proposedBlocksCount": 1
   },
   "424": {
+    "hash": "5486fa",
     "totalRewardsETH": "164698100100343646",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -5950,6 +6375,7 @@
     "proposedBlocksCount": 7
   },
   "425": {
+    "hash": "822207",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -5964,6 +6390,7 @@
     "proposedBlocksCount": 0
   },
   "426": {
+    "hash": "a86622",
     "totalRewardsETH": "22994940640091884",
     "avgPerformance": 9988,
     "topPerformancePercentile": 30,
@@ -5978,6 +6405,7 @@
     "proposedBlocksCount": 2
   },
   "427": {
+    "hash": "923cbf",
     "totalRewardsETH": "30675160729819783",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -5992,6 +6420,7 @@
     "proposedBlocksCount": 4
   },
   "428": {
+    "hash": "1c26e3",
     "totalRewardsETH": "12686142785885077",
     "avgPerformance": 9812,
     "topPerformancePercentile": 70,
@@ -6006,6 +6435,7 @@
     "proposedBlocksCount": 1
   },
   "429": {
+    "hash": "8340b6",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -6020,6 +6450,7 @@
     "proposedBlocksCount": 0
   },
   "430": {
+    "hash": "6460f6",
     "totalRewardsETH": "8386628235966158",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -6034,6 +6465,7 @@
     "proposedBlocksCount": 1
   },
   "431": {
+    "hash": "e48f39",
     "totalRewardsETH": "114570503736887251",
     "avgPerformance": 9881,
     "topPerformancePercentile": 65,
@@ -6048,6 +6480,7 @@
     "proposedBlocksCount": 10
   },
   "432": {
+    "hash": "838381",
     "totalRewardsETH": "125265402970172071",
     "avgPerformance": 9993,
     "topPerformancePercentile": 25,
@@ -6062,6 +6495,7 @@
     "proposedBlocksCount": 4
   },
   "433": {
+    "hash": "5fb75f",
     "totalRewardsETH": "315983809969005679",
     "avgPerformance": 9981,
     "topPerformancePercentile": 35,
@@ -6076,6 +6510,7 @@
     "proposedBlocksCount": 25
   },
   "434": {
+    "hash": "fc3fc2",
     "totalRewardsETH": "0",
     "avgPerformance": 9614,
     "topPerformancePercentile": 80,
@@ -6090,6 +6525,7 @@
     "proposedBlocksCount": 1
   },
   "435": {
+    "hash": "145f3d",
     "totalRewardsETH": "184873761312004943",
     "avgPerformance": 9985,
     "topPerformancePercentile": 30,
@@ -6104,6 +6540,7 @@
     "proposedBlocksCount": 8
   },
   "436": {
+    "hash": "3a8afa",
     "totalRewardsETH": "26088995611961172",
     "avgPerformance": 9955,
     "topPerformancePercentile": 50,
@@ -6118,6 +6555,7 @@
     "proposedBlocksCount": 10
   },
   "437": {
+    "hash": "1d53a3",
     "totalRewardsETH": "25862366888252328",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -6132,6 +6570,7 @@
     "proposedBlocksCount": 0
   },
   "438": {
+    "hash": "e99890",
     "totalRewardsETH": "4858787438923138",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -6146,6 +6585,7 @@
     "proposedBlocksCount": 0
   },
   "439": {
+    "hash": "67b49f",
     "totalRewardsETH": "5436139379652629",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6160,6 +6600,7 @@
     "proposedBlocksCount": 0
   },
   "440": {
+    "hash": "b01129",
     "totalRewardsETH": "40092346959064559",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -6174,6 +6615,7 @@
     "proposedBlocksCount": 3
   },
   "441": {
+    "hash": "a90029",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -6188,6 +6630,7 @@
     "proposedBlocksCount": 0
   },
   "442": {
+    "hash": "b1f85c",
     "totalRewardsETH": "4856156869464289",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -6202,6 +6645,7 @@
     "proposedBlocksCount": 0
   },
   "443": {
+    "hash": "6573e9",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -6216,6 +6660,7 @@
     "proposedBlocksCount": 0
   },
   "444": {
+    "hash": "d1e63a",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -6230,6 +6675,7 @@
     "proposedBlocksCount": 0
   },
   "445": {
+    "hash": "b0682f",
     "totalRewardsETH": "4856156869464289",
     "avgPerformance": 9964,
     "topPerformancePercentile": 45,
@@ -6244,6 +6690,7 @@
     "proposedBlocksCount": 0
   },
   "446": {
+    "hash": "11a510",
     "totalRewardsETH": "2056228460332873",
     "avgPerformance": 9439,
     "topPerformancePercentile": 85,
@@ -6258,6 +6705,7 @@
     "proposedBlocksCount": 0
   },
   "447": {
+    "hash": "dd8261",
     "totalRewardsETH": "16641808088884199",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6272,6 +6720,7 @@
     "proposedBlocksCount": 0
   },
   "448": {
+    "hash": "9c5da2",
     "totalRewardsETH": "2056228460332873",
     "avgPerformance": 9751,
     "topPerformancePercentile": 75,
@@ -6286,6 +6735,7 @@
     "proposedBlocksCount": 0
   },
   "449": {
+    "hash": "8c2c40",
     "totalRewardsETH": "16975013553671617",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -6300,6 +6750,7 @@
     "proposedBlocksCount": 0
   },
   "450": {
+    "hash": "21dae5",
     "totalRewardsETH": "2055351603846591",
     "avgPerformance": 9649,
     "topPerformancePercentile": 80,
@@ -6314,6 +6765,7 @@
     "proposedBlocksCount": 0
   },
   "451": {
+    "hash": "d3d720",
     "totalRewardsETH": "22961783772937888",
     "avgPerformance": 9993,
     "topPerformancePercentile": 25,
@@ -6328,6 +6780,7 @@
     "proposedBlocksCount": 1
   },
   "452": {
+    "hash": "91074d",
     "totalRewardsETH": "907457847879903106",
     "avgPerformance": 9947,
     "topPerformancePercentile": 50,
@@ -6342,6 +6795,7 @@
     "proposedBlocksCount": 79
   },
   "453": {
+    "hash": "558c5a",
     "totalRewardsETH": "9572016701123352",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6356,6 +6810,7 @@
     "proposedBlocksCount": 0
   },
   "454": {
+    "hash": "d65f6a",
     "totalRewardsETH": "4670118112742736",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -6370,6 +6825,7 @@
     "proposedBlocksCount": 0
   },
   "455": {
+    "hash": "06e84c",
     "totalRewardsETH": "4784254637589110",
     "avgPerformance": 9722,
     "topPerformancePercentile": 75,
@@ -6384,6 +6840,7 @@
     "proposedBlocksCount": 1
   },
   "456": {
+    "hash": "6d4144",
     "totalRewardsETH": "14223866009283780",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6398,6 +6855,7 @@
     "proposedBlocksCount": 1
   },
   "457": {
+    "hash": "b3d755",
     "totalRewardsETH": "710971656385346981",
     "avgPerformance": 9972,
     "topPerformancePercentile": 40,
@@ -6412,6 +6870,7 @@
     "proposedBlocksCount": 77
   },
   "458": {
+    "hash": "8bc44b",
     "totalRewardsETH": "423463325888205825",
     "avgPerformance": 9984,
     "topPerformancePercentile": 30,
@@ -6426,6 +6885,7 @@
     "proposedBlocksCount": 30
   },
   "459": {
+    "hash": "2059d1",
     "totalRewardsETH": "3458447630329704",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -6440,6 +6900,7 @@
     "proposedBlocksCount": 0
   },
   "460": {
+    "hash": "619d6a",
     "totalRewardsETH": "17508457567680007",
     "avgPerformance": 9998,
     "topPerformancePercentile": 10,
@@ -6454,6 +6915,7 @@
     "proposedBlocksCount": 3
   },
   "461": {
+    "hash": "5eecf7",
     "totalRewardsETH": "7187623226387217",
     "avgPerformance": 9933,
     "topPerformancePercentile": 55,
@@ -6468,6 +6930,7 @@
     "proposedBlocksCount": 0
   },
   "462": {
+    "hash": "9c879d",
     "totalRewardsETH": "16846992506674347",
     "avgPerformance": 9974,
     "topPerformancePercentile": 40,
@@ -6482,6 +6945,7 @@
     "proposedBlocksCount": 0
   },
   "463": {
+    "hash": "1ad544",
     "totalRewardsETH": "646243230390331",
     "avgPerformance": 9272,
     "topPerformancePercentile": 85,
@@ -6496,6 +6960,7 @@
     "proposedBlocksCount": 0
   },
   "464": {
+    "hash": "2bb95b",
     "totalRewardsETH": "338698122743193641",
     "avgPerformance": 9989,
     "topPerformancePercentile": 30,
@@ -6510,6 +6975,7 @@
     "proposedBlocksCount": 28
   },
   "465": {
+    "hash": "a85424",
     "totalRewardsETH": "1219446513334982",
     "avgPerformance": 9277,
     "topPerformancePercentile": 85,
@@ -6524,6 +6990,7 @@
     "proposedBlocksCount": 0
   },
   "466": {
+    "hash": "6adeb5",
     "totalRewardsETH": "412570793468781161",
     "avgPerformance": 9987,
     "topPerformancePercentile": 30,
@@ -6538,6 +7005,7 @@
     "proposedBlocksCount": 31
   },
   "467": {
+    "hash": "083c67",
     "totalRewardsETH": "21790201964350935",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -6552,6 +7020,7 @@
     "proposedBlocksCount": 2
   },
   "468": {
+    "hash": "acb0f3",
     "totalRewardsETH": "52023277827946557",
     "avgPerformance": 9978,
     "topPerformancePercentile": 35,
@@ -6566,6 +7035,7 @@
     "proposedBlocksCount": 1
   },
   "469": {
+    "hash": "cdde0a",
     "totalRewardsETH": "118569001617432090",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -6580,6 +7050,7 @@
     "proposedBlocksCount": 4
   },
   "470": {
+    "hash": "330735",
     "totalRewardsETH": "1868396188139108",
     "avgPerformance": 9786,
     "topPerformancePercentile": 75,
@@ -6594,6 +7065,7 @@
     "proposedBlocksCount": 0
   },
   "471": {
+    "hash": "24d61e",
     "totalRewardsETH": "1868396188139108",
     "avgPerformance": 9791,
     "topPerformancePercentile": 75,
@@ -6608,6 +7080,7 @@
     "proposedBlocksCount": 0
   },
   "472": {
+    "hash": "560432",
     "totalRewardsETH": "6760654123898381",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -6622,6 +7095,7 @@
     "proposedBlocksCount": 2
   },
   "473": {
+    "hash": "a12d16",
     "totalRewardsETH": "1859256051874261",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6636,6 +7110,7 @@
     "proposedBlocksCount": 0
   },
   "474": {
+    "hash": "80433f",
     "totalRewardsETH": "2426706178316835",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -6650,6 +7125,7 @@
     "proposedBlocksCount": 0
   },
   "475": {
+    "hash": "59ab7b",
     "totalRewardsETH": "11155536311245571",
     "avgPerformance": 9997,
     "topPerformancePercentile": 15,
@@ -6664,6 +7140,7 @@
     "proposedBlocksCount": 3
   },
   "476": {
+    "hash": "f58b01",
     "totalRewardsETH": "0",
     "avgPerformance": 6513,
     "topPerformancePercentile": 90,
@@ -6678,6 +7155,7 @@
     "proposedBlocksCount": 0
   },
   "477": {
+    "hash": "e690b2",
     "totalRewardsETH": "0",
     "avgPerformance": 6518,
     "topPerformancePercentile": 90,
@@ -6692,6 +7170,7 @@
     "proposedBlocksCount": 0
   },
   "478": {
+    "hash": "fc9d68",
     "totalRewardsETH": "0",
     "avgPerformance": 7002,
     "topPerformancePercentile": 90,
@@ -6706,6 +7185,7 @@
     "proposedBlocksCount": 1
   },
   "479": {
+    "hash": "18cefb",
     "totalRewardsETH": "0",
     "avgPerformance": 6561,
     "topPerformancePercentile": 90,
@@ -6720,6 +7200,7 @@
     "proposedBlocksCount": 0
   },
   "480": {
+    "hash": "a834fb",
     "totalRewardsETH": "0",
     "avgPerformance": 6532,
     "topPerformancePercentile": 90,
@@ -6734,6 +7215,7 @@
     "proposedBlocksCount": 0
   },
   "481": {
+    "hash": "7b7491",
     "totalRewardsETH": "0",
     "avgPerformance": 6531,
     "topPerformancePercentile": 90,
@@ -6748,6 +7230,7 @@
     "proposedBlocksCount": 0
   },
   "482": {
+    "hash": "5844a8",
     "totalRewardsETH": "0",
     "avgPerformance": 6569,
     "topPerformancePercentile": 90,
@@ -6762,6 +7245,7 @@
     "proposedBlocksCount": 0
   },
   "483": {
+    "hash": "4e96ba",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -6776,6 +7260,7 @@
     "proposedBlocksCount": 0
   },
   "484": {
+    "hash": "9e2810",
     "totalRewardsETH": "0",
     "avgPerformance": 6572,
     "topPerformancePercentile": 90,
@@ -6790,6 +7275,7 @@
     "proposedBlocksCount": 0
   },
   "485": {
+    "hash": "ff223f",
     "totalRewardsETH": "6205926199528286",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -6804,6 +7290,7 @@
     "proposedBlocksCount": 0
   },
   "486": {
+    "hash": "487d23",
     "totalRewardsETH": "26903229417554611",
     "avgPerformance": 9938,
     "topPerformancePercentile": 55,
@@ -6818,6 +7305,7 @@
     "proposedBlocksCount": 7
   },
   "487": {
+    "hash": "c5a73c",
     "totalRewardsETH": "0",
     "avgPerformance": 9504,
     "topPerformancePercentile": 80,
@@ -6832,6 +7320,7 @@
     "proposedBlocksCount": 6
   },
   "488": {
+    "hash": "4713ea",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -6846,6 +7335,7 @@
     "proposedBlocksCount": 0
   },
   "489": {
+    "hash": "e0ed1d",
     "totalRewardsETH": "581922008861914",
     "avgPerformance": 9992,
     "topPerformancePercentile": 25,
@@ -6860,6 +7350,7 @@
     "proposedBlocksCount": 0
   },
   "490": {
+    "hash": "b17f6b",
     "totalRewardsETH": "576590262707421",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6874,6 +7365,7 @@
     "proposedBlocksCount": 0
   },
   "491": {
+    "hash": "6cd9ad",
     "totalRewardsETH": "6248044815044887",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6888,6 +7380,7 @@
     "proposedBlocksCount": 1
   },
   "492": {
+    "hash": "3395fe",
     "totalRewardsETH": "811187093505157",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6902,6 +7395,7 @@
     "proposedBlocksCount": 0
   },
   "493": {
+    "hash": "45324a",
     "totalRewardsETH": "11187526788172536",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6916,6 +7410,7 @@
     "proposedBlocksCount": 5
   },
   "494": {
+    "hash": "da7c9e",
     "totalRewardsETH": "1726724076033981",
     "avgPerformance": 9990,
     "topPerformancePercentile": 25,
@@ -6930,6 +7425,7 @@
     "proposedBlocksCount": 0
   },
   "495": {
+    "hash": "e82ce5",
     "totalRewardsETH": "406736063785683",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6944,6 +7440,7 @@
     "proposedBlocksCount": 0
   },
   "496": {
+    "hash": "ae3729",
     "totalRewardsETH": "586492076994337",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6958,6 +7455,7 @@
     "proposedBlocksCount": 0
   },
   "497": {
+    "hash": "e5ce89",
     "totalRewardsETH": "813472127571368",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -6972,6 +7470,7 @@
     "proposedBlocksCount": 0
   },
   "498": {
+    "hash": "a7c839",
     "totalRewardsETH": "405974385763613",
     "avgPerformance": 9978,
     "topPerformancePercentile": 35,
@@ -6986,6 +7485,7 @@
     "proposedBlocksCount": 1
   },
   "499": {
+    "hash": "c107f6",
     "totalRewardsETH": "3502195545480481",
     "avgPerformance": 9983,
     "topPerformancePercentile": 30,
@@ -7000,6 +7500,7 @@
     "proposedBlocksCount": 2
   },
   "500": {
+    "hash": "2d52e2",
     "totalRewardsETH": "13906717326964471",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -7014,6 +7515,7 @@
     "proposedBlocksCount": 6
   },
   "501": {
+    "hash": "78c36d",
     "totalRewardsETH": "8116441003183996",
     "avgPerformance": 9978,
     "topPerformancePercentile": 35,
@@ -7028,6 +7530,7 @@
     "proposedBlocksCount": 2
   },
   "502": {
+    "hash": "d95394",
     "totalRewardsETH": "4493138652194293",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -7042,6 +7545,7 @@
     "proposedBlocksCount": 2
   },
   "503": {
+    "hash": "e83ed6",
     "totalRewardsETH": "0",
     "avgPerformance": 5754,
     "topPerformancePercentile": 90,
@@ -7056,6 +7560,7 @@
     "proposedBlocksCount": 9
   },
   "504": {
+    "hash": "627642",
     "totalRewardsETH": "10146312932002065",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -7070,6 +7575,7 @@
     "proposedBlocksCount": 6
   },
   "505": {
+    "hash": "c61c7d",
     "totalRewardsETH": "29778563950871014",
     "avgPerformance": 9994,
     "topPerformancePercentile": 20,
@@ -7084,6 +7590,7 @@
     "proposedBlocksCount": 18
   },
   "506": {
+    "hash": "c76dc5",
     "totalRewardsETH": "12632429996040407",
     "avgPerformance": 9999,
     "topPerformancePercentile": 5,
@@ -7098,6 +7605,7 @@
     "proposedBlocksCount": 3
   },
   "507": {
+    "hash": "e85857",
     "totalRewardsETH": "1701588701305653",
     "avgPerformance": 9995,
     "topPerformancePercentile": 20,
@@ -7112,6 +7620,7 @@
     "proposedBlocksCount": 1
   },
   "508": {
+    "hash": "32efc9",
     "totalRewardsETH": "50700335861105439",
     "avgPerformance": 9996,
     "topPerformancePercentile": 15,
@@ -7126,6 +7635,7 @@
     "proposedBlocksCount": 33
   },
   "509": {
+    "hash": "cd2650",
     "totalRewardsETH": "1391585746322930",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -7140,6 +7650,7 @@
     "proposedBlocksCount": 0
   },
   "510": {
+    "hash": "1d8211",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -7154,6 +7665,7 @@
     "proposedBlocksCount": 0
   },
   "511": {
+    "hash": "fb3400",
     "totalRewardsETH": "380077333013214",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -7168,6 +7680,7 @@
     "proposedBlocksCount": 0
   },
   "512": {
+    "hash": "ef9ca7",
     "totalRewardsETH": "829467366034849",
     "avgPerformance": 10000,
     "topPerformancePercentile": 5,
@@ -7182,6 +7695,7 @@
     "proposedBlocksCount": 2
   },
   "513": {
+    "hash": "5b5e20",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -7196,6 +7710,7 @@
     "proposedBlocksCount": 0
   },
   "514": {
+    "hash": "8b6ea8",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -7210,6 +7725,7 @@
     "proposedBlocksCount": 0
   },
   "515": {
+    "hash": "54c52f",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -7224,6 +7740,7 @@
     "proposedBlocksCount": 0
   },
   "516": {
+    "hash": "680903",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -7238,6 +7755,7 @@
     "proposedBlocksCount": 1
   },
   "517": {
+    "hash": "df6367",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -7252,6 +7770,7 @@
     "proposedBlocksCount": 0
   },
   "518": {
+    "hash": "df8763",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -7266,6 +7785,7 @@
     "proposedBlocksCount": 0
   },
   "519": {
+    "hash": "7a8495",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -7280,6 +7800,7 @@
     "proposedBlocksCount": 0
   },
   "520": {
+    "hash": "33e1a7",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,
@@ -7294,6 +7815,7 @@
     "proposedBlocksCount": 0
   },
   "521": {
+    "hash": "7b94d0",
     "totalRewardsETH": "0",
     "avgPerformance": 0,
     "topPerformancePercentile": 90,

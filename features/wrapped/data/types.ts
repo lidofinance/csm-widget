@@ -1,4 +1,5 @@
 export type WrappedStats = {
+  hash: string;
   totalRewardsETH: bigint;
   topPerformancePercentile: number; // 0..100
   avgPerformance: bigint; // percent

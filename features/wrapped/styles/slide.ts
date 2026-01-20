@@ -22,6 +22,10 @@ export const SlideWrapper = styled.div`
 
   padding: ${({ theme }) => theme.spaceMap.lg}px;
   gap: ${({ theme }) => theme.spaceMap.xxl}px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    aspect-ratio: 2 /3;
+  }
 `;
 
 export const SlideContent = styled.div<{

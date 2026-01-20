@@ -4,10 +4,11 @@ import { FC, useCallback, useRef } from 'react';
 import { Stack } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import styled from 'styled-components';
-import { formatPercent } from 'utils';
+import { formatBalance, formatPercent } from 'utils';
 import { trackMatomoEvent } from 'utils/track-matomo-event';
 import { SlideContainer, SummaryItem } from '../components';
 import { useWrappedActions, useWrappedState } from '../context';
+import { WrappedStats } from '../data';
 import { BadgeWrapper } from '../styles';
 
 const SummaryContent = styled.div`
@@ -28,14 +29,54 @@ const SummaryContent = styled.div`
   }
 `;
 
+const buildTweetText = (data: WrappedStats): string => {
+  const eth = formatBalance(data.totalRewardsETH, {
+    maxDecimalDigits: 4,
+  }).trimmed;
+  const performance = formatPercent(data.avgPerformance);
+
+  let text = `My 2025 @LidoFinance CSM Wrapped: ${performance} performance`;
+
+  if (data.proposedBlocksCount > 0) {
+    text += `, ${data.proposedBlocksCount} blocks proposed`;
+  }
+
+  text += `, ${eth} ETH earned!`;
+
+  if (data.hasICS) {
+    text += ' Proud ICS member!';
+  }
+
+  return text;
+};
+
+const buildTwitterUrl = (text: string, url: string): string => {
+  const params = new URLSearchParams();
+  params.set('text', text);
+  params.set('url', url);
+
+  return `https://twitter.com/intent/tweet?${params}`;
+};
+
 export const SlideOutro: FC = () => {
   const { data } = useWrappedState();
   const { reset } = useWrappedActions();
   const summaryRef = useRef<HTMLDivElement>(null);
 
-  const handleShareTracking = useCallback(() => {
+  const handleShare = useCallback(() => {
     trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.wrappedShareX);
-  }, []);
+
+    const shareUrl = `${window.location.origin}/wrapped-2025/share/${data.hash}`;
+
+    const tweetText = buildTweetText(data);
+    const twitterUrl = buildTwitterUrl(tweetText, shareUrl);
+
+    window.open(
+      twitterUrl,
+      'twitter-share',
+      'width=550,height=420,resizable=yes,scrollbars=yes',
+    );
+  }, [data]);
 
   const handleRepeat = useCallback(() => {
     trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.wrappedRepeat);
@@ -83,7 +124,7 @@ export const SlideOutro: FC = () => {
         </SummaryContent>
       </SlideContainer>
       <Stack>
-        <Button onClick={handleShareTracking} size="sm" fullwidth>
+        <Button onClick={handleShare} size="sm" fullwidth>
           Share on X
         </Button>
         <Button onClick={handleRepeat} size="sm" fullwidth variant="outlined">
