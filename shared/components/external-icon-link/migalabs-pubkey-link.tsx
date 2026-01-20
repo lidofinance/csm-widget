@@ -16,17 +16,15 @@ export const MigalabsPubkeyLink: FC<Pick<KeyWithStatus, 'validatorIndex'>> = ({
       ? `${migalabs}/validators/${validatorIndex}`
       : '';
 
+  if (!href) return null;
+
   return (
-    <>
-      {href && (
-        <MatomoLink
-          href={href}
-          title="View on MigaLabs"
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.migalabsPubkeyLink}
-        >
-          <MigalabsLink />
-        </MatomoLink>
-      )}
-    </>
+    <MatomoLink
+      href={href}
+      title="View on MigaLabs"
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.migalabsPubkeyLink}
+    >
+      <MigalabsLink />
+    </MatomoLink>
   );
 };
