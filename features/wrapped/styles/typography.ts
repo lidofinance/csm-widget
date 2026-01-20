@@ -7,7 +7,6 @@ export const SlideHeading = styled.h2`
   font-size: 30px;
   font-weight: 700;
   margin: 0;
-  color: inherit;
   line-height: 1.4;
 `;
 
@@ -15,8 +14,12 @@ export const SlideCopy = styled.p`
   font-size: 22px;
   font-weight: 700;
   line-height: 1.4;
-  color: inherit;
   max-width: 80%;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 18px;
+    max-width: 100%;
+  }
 `;
 
 // Stat display components - used in main slide content
@@ -24,21 +27,30 @@ export const StatValue = styled.span`
   font-size: 72px;
   font-weight: 700;
   line-height: 1;
-  color: inherit;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 46px;
+  }
 `;
 
 export const StatLabel = styled.span`
   font-size: 32px;
   font-weight: 700;
   line-height: 1.3;
-  color: inherit;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 24px;
+  }
 `;
 
 export const StatSub = styled.span`
   font-size: 22px;
   font-weight: 700;
   line-height: 1.3;
-  color: inherit;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 18px;
+  }
 `;
 
 // Summary display components - smaller variants for outro slide grid
@@ -46,12 +58,20 @@ export const SummaryStatValue = styled.span`
   font-size: 52px;
   font-weight: 700;
   line-height: 1.2;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 42px;
+  }
 `;
 
 export const SummaryStatLabel = styled.span`
   font-size: 18px;
   font-weight: 700;
   line-height: 1.5;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 14px;
+  }
 `;
 
 export const BadgeWrapper = styled.div`

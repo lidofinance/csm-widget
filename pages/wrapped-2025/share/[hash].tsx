@@ -35,7 +35,7 @@ const buildMetaDescription = (stats: WrappedStatsRaw): string => {
 };
 
 const WrappedSharePage: FC<Props> = ({ stats, host }) => {
-  const metaTitle = `CSM Wrapped 2025 | Lido`;
+  const metaTitle = `My 2025 CSM Wrapped | Lido`;
   const metaDescription = buildMetaDescription(stats);
   const metaImage = `${host}/assets/wrapped-2025/${stats.hash}.png`;
   const metaUrl = `${host}/wrapped-2025/share/${stats.hash}`;
@@ -52,8 +52,8 @@ const WrappedSharePage: FC<Props> = ({ stats, host }) => {
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
         <meta property="og:image" content={metaImage} />
-        <meta property="og:image:width" content="1180" />
-        <meta property="og:image:height" content="1182" />
+        <meta property="og:image:width" content="590" />
+        <meta property="og:image:height" content="590" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />

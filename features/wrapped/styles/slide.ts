@@ -25,6 +25,7 @@ export const SlideWrapper = styled.div`
 
   ${({ theme }) => theme.mediaQueries.md} {
     aspect-ratio: 2 /3;
+    gap: ${({ theme }) => theme.spaceMap.lg}px;
   }
 `;
 
@@ -40,6 +41,10 @@ export const SlideContent = styled.div<{
   justify-content: ${({ $position = 'center' }) => $position};
   text-align: center;
   gap: 46px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    gap: 30px;
+  }
 `;
 
 export const SlideBlock = styled(StackStyle).attrs({

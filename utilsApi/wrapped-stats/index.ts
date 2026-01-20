@@ -17,11 +17,6 @@ export const getWrappedStats = async (
 export const getWrappedStatsByHash = async (
   hash: string,
 ): Promise<WrappedStatsResponse> => {
-  const chainId = config.defaultChain;
-  if (chainId !== CHAINS.Mainnet) {
-    throw new Error(`Error: Wrapped is not support chain ${chainId}`);
-  }
-
   const operatorEntry = Object.entries(stats).find(
     ([_, stat]) => stat.hash === hash,
   );

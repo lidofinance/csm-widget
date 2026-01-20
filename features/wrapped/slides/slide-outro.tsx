@@ -17,6 +17,7 @@ const SummaryContent = styled.div`
   flex-direction: row;
   gap: ${({ theme }) => theme.spaceMap.xxl}px;
   justify-content: space-between;
+  z-index: 1;
 
   & > :first-child {
     align-self: end;
@@ -26,6 +27,22 @@ const SummaryContent = styled.div`
   & > :last-child {
     align-self: center;
     width: 190px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: column-reverse;
+    gap: 16px;
+
+    & > :first-child {
+      max-width: unset;
+    }
+
+    & > :last-child {
+      gap: 8px;
+      width: auto;
+      align-self: end;
+      text-align: end;
+    }
   }
 `;
 
