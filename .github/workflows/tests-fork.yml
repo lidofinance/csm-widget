@@ -101,7 +101,7 @@ jobs:
       ARTIFACTS_DIR: ./artifacts/hoodi/
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
@@ -112,7 +112,7 @@ jobs:
           cache: "yarn"
 
       - name: Checkout community-staking-module
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: lidofinance/community-staking-module
           path: community-staking-module
