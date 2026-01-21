@@ -14,12 +14,12 @@ export const ScoreItem: FC<ScoreItemProps> = ({ item, value }) => {
     <Stack justify="space-between" align="center" data-testid="scoreItem">
       <Stack align="center" gap="sm">
         {item.icon}
-        <Text size="xs" data-testid="itemName">
+        <Text size="xs" data-testid="scoreLabel">
           {item.name}
         </Text>
       </Stack>
 
-      <Text size="xs" data-testid="points">
+      <Text size="xs" data-testid="scoreValue">
         <Points value={value} />
       </Text>
     </Stack>
