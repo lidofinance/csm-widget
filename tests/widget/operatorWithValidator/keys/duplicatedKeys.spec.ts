@@ -104,9 +104,7 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
 
     await keysPage.submitPage.fillKeys(duplicatedKey);
 
-    await expect(keysPage.submitPage.validationInputError).not.toContainText(
-      'Invalid deposit data',
-    );
+    await expect(keysPage.submitPage.validationInputError).toBeHidden();
   });
 
   test('Should display error if key already submitted', async ({
