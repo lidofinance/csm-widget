@@ -63,8 +63,11 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     await keysPage.submitPage.selectTab('Parsed');
     await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
     for (const row of await keysPage.submitPage.depositDataRow.all()) {
-      await expect(row.getByTestId('deposit-data-error')).toHaveText(
+      await expect(row.getByTestId('deposit-data-error')).toContainText(
         'invalid signature',
+      );
+      await expect(row.getByTestId('deposit-data-error')).toContainText(
+        'pubkey is not valid string',
       );
     }
   });
