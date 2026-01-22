@@ -1,5 +1,5 @@
 import type { DepositData, DepositDataSDK } from '@lidofinance/lido-csm-sdk';
-import { groupBy, mapValues } from 'lodash';
+import { groupBy, mapValues, uniqBy } from 'lodash';
 import { KEYS_UPLOAD_TX_LIMIT } from 'consts/keys';
 import { ValidationError } from './validation-error';
 
@@ -22,9 +22,14 @@ export const validateDepositData = async ({
   const errors = await sdk.validateDepositData(depositData);
 
   if (errors?.length) {
-    const types = mapValues(groupBy(errors, 'index'), (errors) =>
-      errors.map((error) => error.message),
-    );
+    const types = mapValues(groupBy(errors, 'index'), (errors) => {
+      const withField = errors.filter((e) => e.field);
+      const withoutField = errors.filter((e) => !e.field);
+      const uniqueWithField = uniqBy(withField, 'field');
+      return [...uniqueWithField, ...withoutField].map(
+        (error) => error.message,
+      );
+    });
 
     throw new ValidationError(
       'depositData',
