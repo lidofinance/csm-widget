@@ -6,6 +6,8 @@ import {
   ValidationError,
 } from 'shared/hook-form/validation';
 import { isAddress } from 'viem';
+import { useFeatureFlags } from 'config/feature-flags';
+import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
@@ -15,6 +17,7 @@ export const useSubmitKeysValidation = () => {
   const {
     csm: { depositData: sdk },
   } = useLidoSDK();
+  const featureFlags = useFeatureFlags();
 
   return useFormValidation<SubmitKeysFormInputType, SubmitKeysFormNetworkData>(
     'token',
@@ -59,11 +62,13 @@ export const useSubmitKeysValidation = () => {
 
       // TODO: refactor this validation
       await validate(['rawDepositData', 'depositData'], async () => {
-        await validateDepositData({
-          depositData,
-          sdk,
-          keysLimit: curveParameters?.keysLimit,
-        });
+        if (!featureFlags?.[DISABLE_DEPOSIT_DATA_VALIDATION]) {
+          await validateDepositData({
+            depositData,
+            sdk,
+            keysLimit: curveParameters?.keysLimit,
+          });
+        }
       });
 
       await validate('confirmKeysReady', () => {

@@ -4,6 +4,7 @@ import {
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
   USE_WALLET_RPC,
+  DISABLE_DEPOSIT_DATA_VALIDATION,
 } from 'config/feature-flags/types';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
@@ -30,6 +31,7 @@ const FEATURE_FLAG_QUERY_MAPPING: Record<string, keyof FeatureFlagsType> = {
   'wallet-rpc': USE_WALLET_RPC,
   'ics-apply': ICS_APPLY_FORM,
   'survey-setup': SURVEYS_SETUP_ENABLED,
+  'disable-deposit-validation': DISABLE_DEPOSIT_DATA_VALIDATION,
 };
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);
@@ -80,12 +82,7 @@ export const ModifyProvider: FC<PropsWithChildren> = ({ children }) => {
           const shouldEnable = isTruthy(queryValue);
           const currentValue = featureFlags[flagName];
 
-          // Only update if the value differs from current state
           if (shouldEnable !== currentValue) {
-            // eslint-disable-next-line no-console
-            console.log(
-              `[Feature Flag] ${shouldEnable ? 'Enabling' : 'Disabling'} "${flagName}" via query parameter "${queryParam}=${queryValue}"`,
-            );
             featureFlags.setFeatureFlag(flagName, shouldEnable);
           }
         }
