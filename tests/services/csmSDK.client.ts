@@ -53,4 +53,11 @@ export class LidoSDKClient extends LidoSDKCsm {
       return operators;
     });
   }
+
+  async getAllKeys(nodeOperatorNumber: bigint) {
+    return test.step(`Get all keys for node operator #${nodeOperatorNumber}`, async () => {
+      const operators = await this.operator.getKeys(nodeOperatorNumber);
+      return operators;
+    });
+  }
 }
