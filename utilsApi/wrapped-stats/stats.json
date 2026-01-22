@@ -12,7 +12,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 13
+    "proposedBlocksCount": 16
   },
   "1": {
     "hash": "d52cf0",
@@ -27,7 +27,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 44
+    "proposedBlocksCount": 51
   },
   "2": {
     "hash": "e3a402",
@@ -42,7 +42,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 15
   },
   "3": {
     "hash": "a5ad4a",
@@ -72,7 +72,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 24
   },
   "5": {
     "hash": "d8adc8",
@@ -87,7 +87,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 28
+    "proposedBlocksCount": 36
   },
   "6": {
     "hash": "795e32",
@@ -102,7 +102,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 20
+    "proposedBlocksCount": 27
   },
   "7": {
     "hash": "ebb5d8",
@@ -117,7 +117,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 1
+    "proposedBlocksCount": 2
   },
   "8": {
     "hash": "ac49bf",
@@ -147,7 +147,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 20
+    "proposedBlocksCount": 22
   },
   "10": {
     "hash": "fbba12",
@@ -162,7 +162,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 4
   },
   "11": {
     "hash": "f185aa",
@@ -177,7 +177,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 25
   },
   "12": {
     "hash": "ad519b",
@@ -192,7 +192,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 17
+    "proposedBlocksCount": 22
   },
   "13": {
     "hash": "bea215",
@@ -207,7 +207,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 39
   },
   "14": {
     "hash": "c8d15e",
@@ -252,7 +252,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "17": {
     "hash": "06c68f",
@@ -267,7 +267,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 28
   },
   "18": {
     "hash": "28c8de",
@@ -282,7 +282,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "19": {
     "hash": "f71035",
@@ -297,7 +297,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 20
   },
   "20": {
     "hash": "857868",
@@ -312,7 +312,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 467
+    "proposedBlocksCount": 500
   },
   "21": {
     "hash": "57eeb8",
@@ -327,7 +327,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 21
   },
   "22": {
     "hash": "b8fec8",
@@ -342,7 +342,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 68
+    "proposedBlocksCount": 71
   },
   "23": {
     "hash": "1aad9a",
@@ -357,7 +357,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 26
   },
   "24": {
     "hash": "0a9795",
@@ -372,7 +372,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 20
   },
   "25": {
     "hash": "94742d",
@@ -383,11 +383,11 @@
     "bestMonthPerformance": 9999,
     "strikesCount": 28,
     "uploadedKeysCount": 16,
-    "queueDays": 36,
+    "queueDays": 37,
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 48
+    "proposedBlocksCount": 53
   },
   "26": {
     "hash": "06c646",
@@ -402,7 +402,7 @@
     "activeDays": 211,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 1
+    "proposedBlocksCount": 2
   },
   "27": {
     "hash": "95f271",
@@ -417,7 +417,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 163
+    "proposedBlocksCount": 171
   },
   "28": {
     "hash": "2ec974",
@@ -432,7 +432,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 25
   },
   "29": {
     "hash": "a9d354",
@@ -447,7 +447,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 132
+    "proposedBlocksCount": 135
   },
   "30": {
     "hash": "354303",
@@ -477,7 +477,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 141
+    "proposedBlocksCount": 147
   },
   "32": {
     "hash": "108806",
@@ -492,7 +492,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 126
+    "proposedBlocksCount": 134
   },
   "33": {
     "hash": "3869fc",
@@ -522,7 +522,7 @@
     "activeDays": 346,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 13
   },
   "35": {
     "hash": "d33b29",
@@ -537,7 +537,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 477
+    "proposedBlocksCount": 493
   },
   "36": {
     "hash": "1dc376",
@@ -552,7 +552,7 @@
     "activeDays": 137,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 10
+    "proposedBlocksCount": 11
   },
   "37": {
     "hash": "714f7e",
@@ -567,7 +567,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 33
+    "proposedBlocksCount": 42
   },
   "38": {
     "hash": "03ad39",
@@ -582,7 +582,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 7
   },
   "39": {
     "hash": "a4ba1d",
@@ -597,7 +597,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 29
   },
   "40": {
     "hash": "9335da",
@@ -612,7 +612,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 34
+    "proposedBlocksCount": 39
   },
   "41": {
     "hash": "f46c40",
@@ -642,7 +642,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "43": {
     "hash": "25472b",
@@ -657,7 +657,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 29
   },
   "44": {
     "hash": "3b2728",
@@ -687,7 +687,7 @@
     "activeDays": 91,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "46": {
     "hash": "4a700f",
@@ -702,7 +702,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 30
   },
   "47": {
     "hash": "681be6",
@@ -717,7 +717,7 @@
     "activeDays": 364,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 16
   },
   "48": {
     "hash": "700c61",
@@ -732,7 +732,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 29
   },
   "49": {
     "hash": "dd24be",
@@ -743,11 +743,11 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 6,
-    "queueDays": 43,
+    "queueDays": 44,
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 28
   },
   "50": {
     "hash": "551403",
@@ -762,7 +762,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 37
   },
   "51": {
     "hash": "ce9759",
@@ -777,7 +777,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 1
+    "proposedBlocksCount": 2
   },
   "52": {
     "hash": "80ddb4",
@@ -792,7 +792,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 5
   },
   "53": {
     "hash": "639ee3",
@@ -807,7 +807,7 @@
     "activeDays": 363,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 30
   },
   "54": {
     "hash": "61155f",
@@ -822,7 +822,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 34
   },
   "55": {
     "hash": "65084e",
@@ -837,7 +837,7 @@
     "activeDays": 363,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 19
   },
   "56": {
     "hash": "13866e",
@@ -852,7 +852,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 34
   },
   "57": {
     "hash": "d56207",
@@ -882,7 +882,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 31
   },
   "59": {
     "hash": "66241d",
@@ -897,7 +897,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 30
   },
   "60": {
     "hash": "082200",
@@ -909,7 +909,7 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 0,
     "hasLEA": true,
     "hasICS": false,
     "proposedBlocksCount": 0
@@ -927,7 +927,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 7
+    "proposedBlocksCount": 10
   },
   "62": {
     "hash": "0e17b0",
@@ -942,7 +942,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 21
   },
   "63": {
     "hash": "95e636",
@@ -954,7 +954,7 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 0,
     "hasLEA": true,
     "hasICS": false,
     "proposedBlocksCount": 0
@@ -972,7 +972,7 @@
     "activeDays": 146,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 9
+    "proposedBlocksCount": 13
   },
   "65": {
     "hash": "aad341",
@@ -987,7 +987,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 26
   },
   "66": {
     "hash": "1542a4",
@@ -1002,7 +1002,7 @@
     "activeDays": 329,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 10
+    "proposedBlocksCount": 11
   },
   "67": {
     "hash": "f4787f",
@@ -1017,7 +1017,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 7
   },
   "68": {
     "hash": "35a417",
@@ -1032,7 +1032,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 74
+    "proposedBlocksCount": 79
   },
   "69": {
     "hash": "270254",
@@ -1047,7 +1047,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 10
   },
   "70": {
     "hash": "287e7f",
@@ -1062,7 +1062,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 32
   },
   "71": {
     "hash": "24ce3c",
@@ -1077,7 +1077,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 13
   },
   "72": {
     "hash": "e13c56",
@@ -1104,7 +1104,7 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 0,
     "hasLEA": true,
     "hasICS": false,
     "proposedBlocksCount": 0
@@ -1122,22 +1122,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 5
-  },
-  "75": {
-    "hash": "9ba201",
-    "totalRewardsETH": "0",
-    "avgPerformance": 0,
-    "topPerformancePercentile": 90,
-    "bestMonth": "",
-    "bestMonthPerformance": 0,
-    "strikesCount": 0,
-    "uploadedKeysCount": 0,
-    "queueDays": 0,
-    "activeDays": 365,
-    "hasLEA": true,
-    "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 6
   },
   "76": {
     "hash": "60f003",
@@ -1149,7 +1134,7 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 72,
     "hasLEA": true,
     "hasICS": false,
     "proposedBlocksCount": 0
@@ -1167,7 +1152,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 24
+    "proposedBlocksCount": 27
   },
   "78": {
     "hash": "077a90",
@@ -1182,7 +1167,7 @@
     "activeDays": 118,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 4
   },
   "79": {
     "hash": "eaa58f",
@@ -1197,7 +1182,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 34
   },
   "80": {
     "hash": "9104de",
@@ -1212,7 +1197,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 63
+    "proposedBlocksCount": 71
   },
   "81": {
     "hash": "47cbe8",
@@ -1227,7 +1212,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 35
   },
   "82": {
     "hash": "4407cd",
@@ -1242,7 +1227,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 19
   },
   "83": {
     "hash": "eeb528",
@@ -1257,7 +1242,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 8
   },
   "84": {
     "hash": "07a451",
@@ -1272,7 +1257,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 22
   },
   "85": {
     "hash": "1b296a",
@@ -1289,21 +1274,6 @@
     "hasLEA": false,
     "proposedBlocksCount": 2
   },
-  "86": {
-    "hash": "d9224d",
-    "totalRewardsETH": "0",
-    "avgPerformance": 0,
-    "topPerformancePercentile": 90,
-    "bestMonth": "",
-    "bestMonthPerformance": 0,
-    "strikesCount": 0,
-    "uploadedKeysCount": 0,
-    "queueDays": 0,
-    "activeDays": 365,
-    "hasLEA": true,
-    "hasICS": false,
-    "proposedBlocksCount": 0
-  },
   "87": {
     "hash": "e28944",
     "totalRewardsETH": "1024046724231126022",
@@ -1317,7 +1287,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 33
+    "proposedBlocksCount": 35
   },
   "88": {
     "hash": "d5d51e",
@@ -1343,11 +1313,11 @@
     "bestMonthPerformance": 9999,
     "strikesCount": 1,
     "uploadedKeysCount": 18,
-    "queueDays": 42,
+    "queueDays": 41,
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 31
   },
   "90": {
     "hash": "054ae0",
@@ -1362,7 +1332,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 20
+    "proposedBlocksCount": 27
   },
   "91": {
     "hash": "27e72b",
@@ -1377,7 +1347,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 24
   },
   "92": {
     "hash": "cc442e",
@@ -1392,7 +1362,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 5
+    "proposedBlocksCount": 8
   },
   "93": {
     "hash": "dc72f1",
@@ -1407,7 +1377,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 24
   },
   "94": {
     "hash": "2ded6a",
@@ -1422,7 +1392,7 @@
     "activeDays": 240,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 11
+    "proposedBlocksCount": 14
   },
   "95": {
     "hash": "4ec42c",
@@ -1437,7 +1407,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 5
   },
   "96": {
     "hash": "15f877",
@@ -1452,7 +1422,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 26
   },
   "97": {
     "hash": "38cd74",
@@ -1467,7 +1437,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 24
   },
   "98": {
     "hash": "f08169",
@@ -1482,7 +1452,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 88
+    "proposedBlocksCount": 99
   },
   "99": {
     "hash": "42991f",
@@ -1497,7 +1467,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 32
+    "proposedBlocksCount": 37
   },
   "100": {
     "hash": "378544",
@@ -1512,7 +1482,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 28
   },
   "101": {
     "hash": "29a348",
@@ -1527,7 +1497,7 @@
     "activeDays": 27,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "102": {
     "hash": "be1d51",
@@ -1542,7 +1512,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 32
   },
   "103": {
     "hash": "1c0931",
@@ -1557,7 +1527,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 96
+    "proposedBlocksCount": 105
   },
   "104": {
     "hash": "4609ec",
@@ -1572,7 +1542,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 10
   },
   "105": {
     "hash": "7b7f50",
@@ -1587,7 +1557,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 173
+    "proposedBlocksCount": 178
   },
   "106": {
     "hash": "9ff183",
@@ -1617,7 +1587,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 31
   },
   "108": {
     "hash": "af79ba",
@@ -1662,7 +1632,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 23
   },
   "111": {
     "hash": "e87cc4",
@@ -1707,7 +1677,7 @@
     "activeDays": 146,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 9
   },
   "114": {
     "hash": "fb497e",
@@ -1722,7 +1692,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 1
+    "proposedBlocksCount": 2
   },
   "115": {
     "hash": "2331df",
@@ -1737,7 +1707,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 25
   },
   "116": {
     "hash": "0b1bad",
@@ -1752,7 +1722,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 17
+    "proposedBlocksCount": 19
   },
   "117": {
     "hash": "0eb07a",
@@ -1812,7 +1782,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 17
+    "proposedBlocksCount": 18
   },
   "121": {
     "hash": "bdfd31",
@@ -1857,7 +1827,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 15
   },
   "124": {
     "hash": "327093",
@@ -1872,7 +1842,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 161
+    "proposedBlocksCount": 166
   },
   "125": {
     "hash": "d26aa6",
@@ -1887,7 +1857,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 41
+    "proposedBlocksCount": 46
   },
   "126": {
     "hash": "38824c",
@@ -1899,10 +1869,10 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 365,
+    "activeDays": 146,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "127": {
     "hash": "e1e9a4",
@@ -1917,7 +1887,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 10
   },
   "128": {
     "hash": "0e8813",
@@ -1932,7 +1902,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 30
   },
   "129": {
     "hash": "3251dd",
@@ -1947,7 +1917,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 28
   },
   "130": {
     "hash": "26687d",
@@ -1958,11 +1928,11 @@
     "bestMonthPerformance": 9999,
     "strikesCount": 0,
     "uploadedKeysCount": 14,
-    "queueDays": 106,
+    "queueDays": 105,
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 32
   },
   "131": {
     "hash": "f46136",
@@ -1977,7 +1947,7 @@
     "activeDays": 211,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 11
   },
   "132": {
     "hash": "9d4a1d",
@@ -1992,7 +1962,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 23
   },
   "133": {
     "hash": "b2db39",
@@ -2007,7 +1977,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 20
   },
   "134": {
     "hash": "dbbbc6",
@@ -2037,7 +2007,7 @@
     "activeDays": 27,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "136": {
     "hash": "c17ddb",
@@ -2052,7 +2022,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 7
+    "proposedBlocksCount": 8
   },
   "137": {
     "hash": "b50dc7",
@@ -2067,7 +2037,7 @@
     "activeDays": 91,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "138": {
     "hash": "5546c7",
@@ -2097,7 +2067,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 5
+    "proposedBlocksCount": 9
   },
   "140": {
     "hash": "c623f1",
@@ -2112,7 +2082,7 @@
     "activeDays": 27,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "141": {
     "hash": "83738f",
@@ -2127,7 +2097,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 24
+    "proposedBlocksCount": 30
   },
   "142": {
     "hash": "d733cc",
@@ -2157,7 +2127,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 38
   },
   "144": {
     "hash": "98bbff",
@@ -2172,7 +2142,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 317
+    "proposedBlocksCount": 340
   },
   "145": {
     "hash": "f8fcba",
@@ -2202,7 +2172,7 @@
     "activeDays": 46,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "147": {
     "hash": "f21812",
@@ -2217,7 +2187,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 30
+    "proposedBlocksCount": 37
   },
   "148": {
     "hash": "381a6b",
@@ -2232,7 +2202,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 37
   },
   "149": {
     "hash": "537ab4",
@@ -2247,7 +2217,7 @@
     "activeDays": 249,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 18
   },
   "150": {
     "hash": "fa25aa",
@@ -2277,7 +2247,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 82
+    "proposedBlocksCount": 95
   },
   "152": {
     "hash": "0f635e",
@@ -2292,7 +2262,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 76
+    "proposedBlocksCount": 82
   },
   "153": {
     "hash": "fe3609",
@@ -2307,7 +2277,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 6
   },
   "154": {
     "hash": "17d780",
@@ -2322,7 +2292,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 37
+    "proposedBlocksCount": 38
   },
   "155": {
     "hash": "0f7ea1",
@@ -2337,7 +2307,7 @@
     "activeDays": 46,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "156": {
     "hash": "2f1a0f",
@@ -2382,7 +2352,7 @@
     "activeDays": 27,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "159": {
     "hash": "dda870",
@@ -2397,7 +2367,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 223
+    "proposedBlocksCount": 233
   },
   "160": {
     "hash": "491316",
@@ -2412,7 +2382,7 @@
     "activeDays": 337,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 21
   },
   "161": {
     "hash": "4e5dac",
@@ -2427,7 +2397,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 20
   },
   "162": {
     "hash": "fda2ab",
@@ -2442,7 +2412,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 24
+    "proposedBlocksCount": 30
   },
   "163": {
     "hash": "093a5e",
@@ -2457,7 +2427,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 23
   },
   "164": {
     "hash": "4322d1",
@@ -2502,7 +2472,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 267
+    "proposedBlocksCount": 274
   },
   "167": {
     "hash": "5d9800",
@@ -2517,7 +2487,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 222
+    "proposedBlocksCount": 236
   },
   "168": {
     "hash": "078b7c",
@@ -2532,7 +2502,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 37
   },
   "169": {
     "hash": "4351a5",
@@ -2547,7 +2517,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 32
+    "proposedBlocksCount": 35
   },
   "170": {
     "hash": "78a778",
@@ -2577,7 +2547,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 90
+    "proposedBlocksCount": 94
   },
   "172": {
     "hash": "eb51a9",
@@ -2592,7 +2562,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 37
   },
   "173": {
     "hash": "28e69b",
@@ -2622,7 +2592,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 16
+    "proposedBlocksCount": 23
   },
   "175": {
     "hash": "32e0a2",
@@ -2637,7 +2607,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 28
   },
   "176": {
     "hash": "993ace",
@@ -2667,7 +2637,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "178": {
     "hash": "d2d7dc",
@@ -2712,7 +2682,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 29
   },
   "181": {
     "hash": "02a4df",
@@ -2727,7 +2697,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 7
+    "proposedBlocksCount": 8
   },
   "182": {
     "hash": "7fdba7",
@@ -2742,7 +2712,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 2
+    "proposedBlocksCount": 3
   },
   "183": {
     "hash": "5f9c2b",
@@ -2787,7 +2757,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 35
   },
   "186": {
     "hash": "0c80a3",
@@ -2802,22 +2772,7 @@
     "activeDays": 249,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 14
-  },
-  "187": {
-    "hash": "10c825",
-    "totalRewardsETH": "0",
-    "avgPerformance": 0,
-    "topPerformancePercentile": 90,
-    "bestMonth": "",
-    "bestMonthPerformance": 0,
-    "strikesCount": 0,
-    "uploadedKeysCount": 0,
-    "queueDays": 0,
-    "activeDays": 0,
-    "hasLEA": true,
-    "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 17
   },
   "188": {
     "hash": "777e38",
@@ -2832,7 +2787,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 14
+    "proposedBlocksCount": 19
   },
   "189": {
     "hash": "941c50",
@@ -2847,7 +2802,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "190": {
     "hash": "3a4f66",
@@ -2877,7 +2832,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 32
+    "proposedBlocksCount": 36
   },
   "192": {
     "hash": "f74934",
@@ -2892,7 +2847,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 30
   },
   "193": {
     "hash": "7593dd",
@@ -2904,10 +2859,10 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 36,
+    "activeDays": 37,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "194": {
     "hash": "a320ea",
@@ -2922,7 +2877,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 30
   },
   "195": {
     "hash": "7ee06b",
@@ -2937,7 +2892,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 27
+    "proposedBlocksCount": 35
   },
   "196": {
     "hash": "34b758",
@@ -2952,7 +2907,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 30
+    "proposedBlocksCount": 32
   },
   "197": {
     "hash": "7bd155",
@@ -2967,7 +2922,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 59
+    "proposedBlocksCount": 63
   },
   "198": {
     "hash": "16aa49",
@@ -2982,7 +2937,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 27
   },
   "199": {
     "hash": "0b72a6",
@@ -2997,7 +2952,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 25
   },
   "200": {
     "hash": "05c83b",
@@ -3027,7 +2982,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 31
+    "proposedBlocksCount": 36
   },
   "202": {
     "hash": "4b09cb",
@@ -3087,7 +3042,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 67
+    "proposedBlocksCount": 80
   },
   "206": {
     "hash": "120ac9",
@@ -3098,11 +3053,11 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 2,
-    "queueDays": 20,
+    "queueDays": 22,
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 27
   },
   "207": {
     "hash": "7a9670",
@@ -3117,7 +3072,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 33
+    "proposedBlocksCount": 36
   },
   "208": {
     "hash": "b43da3",
@@ -3132,7 +3087,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 7
   },
   "209": {
     "hash": "90ae66",
@@ -3147,7 +3102,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 2
+    "proposedBlocksCount": 3
   },
   "210": {
     "hash": "983c5c",
@@ -3162,7 +3117,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 16
+    "proposedBlocksCount": 21
   },
   "211": {
     "hash": "0d375d",
@@ -3177,7 +3132,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 11
+    "proposedBlocksCount": 12
   },
   "212": {
     "hash": "2db32a",
@@ -3207,7 +3162,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 4
   },
   "214": {
     "hash": "edac6c",
@@ -3222,7 +3177,7 @@
     "activeDays": 311,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 2
+    "proposedBlocksCount": 3
   },
   "215": {
     "hash": "b6745f",
@@ -3237,7 +3192,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 30
+    "proposedBlocksCount": 38
   },
   "216": {
     "hash": "373bcc",
@@ -3252,7 +3207,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 9
+    "proposedBlocksCount": 10
   },
   "217": {
     "hash": "0fe882",
@@ -3267,7 +3222,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 25
   },
   "218": {
     "hash": "b996e7",
@@ -3282,7 +3237,7 @@
     "activeDays": 329,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 17
+    "proposedBlocksCount": 22
   },
   "219": {
     "hash": "f374eb",
@@ -3297,7 +3252,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 35
+    "proposedBlocksCount": 40
   },
   "220": {
     "hash": "3a5d39",
@@ -3312,7 +3267,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 22
+    "proposedBlocksCount": 24
   },
   "221": {
     "hash": "d2c7be",
@@ -3327,7 +3282,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 67
+    "proposedBlocksCount": 70
   },
   "222": {
     "hash": "f7ba00",
@@ -3342,7 +3297,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 34
   },
   "223": {
     "hash": "f0e8fb",
@@ -3387,7 +3342,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 10
+    "proposedBlocksCount": 14
   },
   "226": {
     "hash": "fb4439",
@@ -3402,7 +3357,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 94
+    "proposedBlocksCount": 102
   },
   "227": {
     "hash": "428a7b",
@@ -3447,7 +3402,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 27
   },
   "230": {
     "hash": "9e013b",
@@ -3462,7 +3417,7 @@
     "activeDays": 64,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 8
   },
   "231": {
     "hash": "71982d",
@@ -3477,7 +3432,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 10
   },
   "232": {
     "hash": "618627",
@@ -3507,7 +3462,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 28
+    "proposedBlocksCount": 31
   },
   "234": {
     "hash": "59edfe",
@@ -3537,7 +3492,7 @@
     "activeDays": 311,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 20
+    "proposedBlocksCount": 27
   },
   "236": {
     "hash": "aaf05f",
@@ -3567,7 +3522,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 29
   },
   "238": {
     "hash": "290400",
@@ -3579,10 +3534,10 @@
     "strikesCount": 0,
     "uploadedKeysCount": 0,
     "queueDays": 0,
-    "activeDays": 137,
+    "activeDays": 138,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 8
   },
   "239": {
     "hash": "7c0da2",
@@ -3597,7 +3552,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 13
+    "proposedBlocksCount": 16
   },
   "240": {
     "hash": "33ae8e",
@@ -3612,7 +3567,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 271
+    "proposedBlocksCount": 291
   },
   "241": {
     "hash": "8ee0c1",
@@ -3627,7 +3582,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 13
   },
   "242": {
     "hash": "269fe8",
@@ -3657,22 +3612,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 33
-  },
-  "244": {
-    "hash": "f8d38e",
-    "totalRewardsETH": "0",
-    "avgPerformance": 0,
-    "topPerformancePercentile": 90,
-    "bestMonth": "",
-    "bestMonthPerformance": 0,
-    "strikesCount": 0,
-    "uploadedKeysCount": 0,
-    "queueDays": 0,
-    "activeDays": 0,
-    "hasLEA": true,
-    "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 37
   },
   "245": {
     "hash": "68d1fd",
@@ -3687,7 +3627,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 29
   },
   "246": {
     "hash": "a64951",
@@ -3732,7 +3672,7 @@
     "activeDays": 129,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 11
   },
   "249": {
     "hash": "3b675f",
@@ -3747,7 +3687,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 22
   },
   "250": {
     "hash": "c777ab",
@@ -3762,7 +3702,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 7
+    "proposedBlocksCount": 9
   },
   "251": {
     "hash": "d134ba",
@@ -3777,7 +3717,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 37
+    "proposedBlocksCount": 40
   },
   "252": {
     "hash": "51ca95",
@@ -3792,7 +3732,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 31
   },
   "253": {
     "hash": "e95723",
@@ -3837,7 +3777,7 @@
     "activeDays": 355,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 16
+    "proposedBlocksCount": 18
   },
   "256": {
     "hash": "d58879",
@@ -3852,7 +3792,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 1
   },
   "257": {
     "hash": "7d56c7",
@@ -3867,7 +3807,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 47
+    "proposedBlocksCount": 50
   },
   "258": {
     "hash": "9a6725",
@@ -3882,7 +3822,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 24
+    "proposedBlocksCount": 31
   },
   "259": {
     "hash": "4e162d",
@@ -3897,7 +3837,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 34
   },
   "260": {
     "hash": "8143a6",
@@ -3942,7 +3882,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 21
   },
   "263": {
     "hash": "e91d80",
@@ -3957,7 +3897,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 15
+    "proposedBlocksCount": 18
   },
   "264": {
     "hash": "8ac5e8",
@@ -4002,7 +3942,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 33
+    "proposedBlocksCount": 35
   },
   "267": {
     "hash": "1a93b2",
@@ -4032,7 +3972,7 @@
     "activeDays": 363,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 0
+    "proposedBlocksCount": 2
   },
   "269": {
     "hash": "983037",
@@ -4047,7 +3987,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "270": {
     "hash": "07d390",
@@ -4077,7 +4017,7 @@
     "activeDays": 365,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 19
+    "proposedBlocksCount": 23
   },
   "272": {
     "hash": "829a29",
@@ -4092,7 +4032,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 5
   },
   "273": {
     "hash": "1aa8e0",
@@ -4122,7 +4062,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 5
   },
   "275": {
     "hash": "82d753",
@@ -4137,7 +4077,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 3
+    "proposedBlocksCount": 4
   },
   "276": {
     "hash": "502826",
@@ -4152,7 +4092,7 @@
     "activeDays": 365,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 4
+    "proposedBlocksCount": 5
   },
   "277": {
     "hash": "f2da9a",
@@ -4197,7 +4137,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 5
+    "proposedBlocksCount": 13
   },
   "280": {
     "hash": "6b1d5e",
@@ -4212,7 +4152,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 6
+    "proposedBlocksCount": 9
   },
   "281": {
     "hash": "4cb7fe",
@@ -4227,7 +4167,7 @@
     "activeDays": 165,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 5
+    "proposedBlocksCount": 10
   },
   "282": {
     "hash": "f5d34a",
@@ -4242,7 +4182,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 124
+    "proposedBlocksCount": 125
   },
   "283": {
     "hash": "799df0",
@@ -4272,7 +4212,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 28
+    "proposedBlocksCount": 32
   },
   "285": {
     "hash": "c12d71",
@@ -4298,7 +4238,7 @@
     "bestMonthPerformance": 9996,
     "strikesCount": 0,
     "uploadedKeysCount": 15,
-    "queueDays": 94,
+    "queueDays": 95,
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
@@ -4332,7 +4272,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 41
+    "proposedBlocksCount": 44
   },
   "289": {
     "hash": "ca0449",
@@ -4373,11 +4313,11 @@
     "bestMonthPerformance": 9998,
     "strikesCount": 0,
     "uploadedKeysCount": 80,
-    "queueDays": 287,
+    "queueDays": 288,
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 71
+    "proposedBlocksCount": 72
   },
   "292": {
     "hash": "87772d",
@@ -4392,7 +4332,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 22
   },
   "293": {
     "hash": "dfebd6",
@@ -4407,7 +4347,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 25
+    "proposedBlocksCount": 28
   },
   "294": {
     "hash": "51433d",
@@ -4422,7 +4362,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 56
+    "proposedBlocksCount": 58
   },
   "295": {
     "hash": "42a2f5",
@@ -4437,7 +4377,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 29
+    "proposedBlocksCount": 30
   },
   "296": {
     "hash": "6dc1e7",
@@ -4572,7 +4512,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 1397
+    "proposedBlocksCount": 1425
   },
   "305": {
     "hash": "7049e9",
@@ -4587,7 +4527,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 26
+    "proposedBlocksCount": 27
   },
   "306": {
     "hash": "d4a757",
@@ -4617,7 +4557,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 36
+    "proposedBlocksCount": 37
   },
   "308": {
     "hash": "989eb1",
@@ -4632,7 +4572,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 25
   },
   "309": {
     "hash": "efd997",
@@ -4677,7 +4617,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "312": {
     "hash": "fa8e9e",
@@ -4812,7 +4752,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 8
+    "proposedBlocksCount": 9
   },
   "321": {
     "hash": "bcd239",
@@ -4883,11 +4823,11 @@
     "bestMonthPerformance": 9990,
     "strikesCount": 0,
     "uploadedKeysCount": 14,
-    "queueDays": 41,
+    "queueDays": 42,
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 11
+    "proposedBlocksCount": 12
   },
   "326": {
     "hash": "1fd9d0",
@@ -4917,7 +4857,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 12
+    "proposedBlocksCount": 14
   },
   "328": {
     "hash": "84b039",
@@ -4947,7 +4887,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 18
+    "proposedBlocksCount": 22
   },
   "330": {
     "hash": "ec87c1",
@@ -4977,7 +4917,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 250
+    "proposedBlocksCount": 260
   },
   "332": {
     "hash": "4ce9a2",
@@ -4992,7 +4932,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 11
+    "proposedBlocksCount": 12
   },
   "333": {
     "hash": "f78a31",
@@ -5007,7 +4947,7 @@
     "activeDays": 318,
     "hasLEA": true,
     "hasICS": false,
-    "proposedBlocksCount": 648
+    "proposedBlocksCount": 652
   },
   "334": {
     "hash": "2f1185",
@@ -5112,7 +5052,7 @@
     "activeDays": 318,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 21
+    "proposedBlocksCount": 22
   },
   "341": {
     "hash": "1bbc36",
@@ -5127,7 +5067,7 @@
     "activeDays": 317,
     "hasICS": true,
     "hasLEA": false,
-    "proposedBlocksCount": 23
+    "proposedBlocksCount": 25
   },
   "342": {
     "hash": "858aaf",
@@ -5142,7 +5082,7 @@
     "activeDays": 317,
     "hasICS": false,
     "hasLEA": false,
-    "proposedBlocksCount": 159
+    "proposedBlocksCount": 162
   },
   "343": {
     "hash": "ddc72f",
@@ -5157,7 +5097,7 @@
     "activeDays": 118,
     "hasICS": false,
     "hasLEA": false,
-    "proposedBlocksCount": 16
+    "proposedBlocksCount": 18
   },
   "344": {
     "hash": "11cb53",
@@ -5172,7 +5112,7 @@
     "activeDays": 317,
     "hasICS": false,
     "hasLEA": false,
-    "proposedBlocksCount": 139
+    "proposedBlocksCount": 143
   },
   "345": {
     "hash": "124f05",
@@ -5187,7 +5127,7 @@
     "activeDays": 315,
     "hasICS": false,
     "hasLEA": false,
-    "proposedBlocksCount": 44
+    "proposedBlocksCount": 45
   },
   "346": {
     "hash": "e7a7f2",
@@ -5753,7 +5693,7 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 2,
-    "queueDays": 232,
+    "queueDays": 231,
     "activeDays": 94,
     "hasLEA": true,
     "hasICS": false,
@@ -6323,7 +6263,7 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 1,
-    "queueDays": 153,
+    "queueDays": 152,
     "activeDays": 94,
     "hasICS": false,
     "hasLEA": false,
@@ -6413,7 +6353,7 @@
     "bestMonthPerformance": 9999,
     "strikesCount": 0,
     "uploadedKeysCount": 7,
-    "queueDays": 148,
+    "queueDays": 149,
     "activeDays": 94,
     "hasICS": false,
     "hasLEA": false,
@@ -6953,8 +6893,8 @@
     "bestMonthPerformance": 9976,
     "strikesCount": 1,
     "uploadedKeysCount": 1,
-    "queueDays": 22,
-    "activeDays": 69,
+    "queueDays": 23,
+    "activeDays": 68,
     "hasICS": false,
     "hasLEA": false,
     "proposedBlocksCount": 0
@@ -6968,7 +6908,7 @@
     "bestMonthPerformance": 9990,
     "strikesCount": 0,
     "uploadedKeysCount": 175,
-    "queueDays": 28,
+    "queueDays": 29,
     "activeDays": 83,
     "hasICS": true,
     "hasLEA": false,
@@ -6983,8 +6923,8 @@
     "bestMonthPerformance": 9412,
     "strikesCount": 2,
     "uploadedKeysCount": 4,
-    "queueDays": 36,
-    "activeDays": 69,
+    "queueDays": 37,
+    "activeDays": 68,
     "hasICS": false,
     "hasLEA": false,
     "proposedBlocksCount": 0
@@ -6998,8 +6938,8 @@
     "bestMonthPerformance": 9998,
     "strikesCount": 0,
     "uploadedKeysCount": 120,
-    "queueDays": 19,
-    "activeDays": 69,
+    "queueDays": 20,
+    "activeDays": 68,
     "hasICS": false,
     "hasLEA": false,
     "proposedBlocksCount": 31
@@ -7298,7 +7238,7 @@
     "bestMonthPerformance": 9938,
     "strikesCount": 0,
     "uploadedKeysCount": 26,
-    "queueDays": 18,
+    "queueDays": 17,
     "activeDays": 56,
     "hasICS": true,
     "hasLEA": false,
@@ -7553,8 +7493,8 @@
     "bestMonthPerformance": 5754,
     "strikesCount": 57,
     "uploadedKeysCount": 57,
-    "queueDays": 4,
-    "activeDays": 26,
+    "queueDays": 5,
+    "activeDays": 25,
     "hasICS": false,
     "hasLEA": false,
     "proposedBlocksCount": 9
@@ -7583,7 +7523,7 @@
     "bestMonthPerformance": 9994,
     "strikesCount": 0,
     "uploadedKeysCount": 158,
-    "queueDays": 5,
+    "queueDays": 4,
     "activeDays": 25,
     "hasICS": false,
     "hasLEA": false,
@@ -7643,7 +7583,7 @@
     "bestMonthPerformance": 10000,
     "strikesCount": 0,
     "uploadedKeysCount": 13,
-    "queueDays": 5,
+    "queueDays": 4,
     "activeDays": 24,
     "hasICS": false,
     "hasLEA": false,
@@ -7748,7 +7688,7 @@
     "bestMonthPerformance": 0,
     "strikesCount": 0,
     "uploadedKeysCount": 2,
-    "queueDays": 4,
+    "queueDays": 3,
     "activeDays": 11,
     "hasICS": false,
     "hasLEA": false,

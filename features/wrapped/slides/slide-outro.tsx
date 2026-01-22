@@ -128,6 +128,11 @@ export const SlideOutro: FC = () => {
               show={data.uploadedKeysCount > 0}
             />
             <SummaryItem
+              label="days in queue"
+              value={data.queueDays}
+              show={data.queueDays > 0 && data.activeDays === 0}
+            />
+            <SummaryItem
               label="ETH earned"
               value={<FormatToken amount={data.totalRewardsETH} />}
               show={data.totalRewardsETH > 0n}
