@@ -5,12 +5,15 @@ import {
   validateDepositData,
   ValidationError,
 } from 'shared/hook-form/validation';
+import { useFeatureFlags } from 'config/feature-flags';
+import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
 import type { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
 export const useAddKeysValidation = () => {
   const {
     csm: { depositData: sdk },
   } = useLidoSDK();
+  const featureFlags = useFeatureFlags();
 
   return useFormValidation<AddKeysFormInputType, AddKeysFormNetworkData>(
     'token',
@@ -53,14 +56,16 @@ export const useAddKeysValidation = () => {
 
       // TODO: refactor this validation
       await validate(['rawDepositData', 'depositData'], async () => {
-        await validateDepositData({
-          depositData,
-          sdk,
-          keysLimit: curveParameters?.keysLimit,
-          currentActiveKeys:
-            operatorInfo &&
-            operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys,
-        });
+        if (!featureFlags?.[DISABLE_DEPOSIT_DATA_VALIDATION]) {
+          await validateDepositData({
+            depositData,
+            sdk,
+            keysLimit: curveParameters?.keysLimit,
+            currentActiveKeys:
+              operatorInfo &&
+              operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys,
+          });
+        }
       });
 
       await validate('confirmKeysReady', () => {

@@ -5,6 +5,7 @@ import { Eth as EthIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
+import { ReactComponent as GiftIcon } from 'assets/icons/gift.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
@@ -26,6 +27,7 @@ export type Route = {
   subPaths?: PATH[];
   showRules: ShowRule[];
   suffix?: ReactNode;
+  colored?: boolean;
 };
 
 const routes: Route[] = [
@@ -101,6 +103,13 @@ const routes: Route[] = [
     subPaths: [PATH.TYPE_CLAIM, PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
     showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED'],
     suffix: <CounterIcs />,
+  },
+  {
+    name: 'Wrapped',
+    path: PATH.WRAPPED,
+    icon: <GiftIcon />,
+    showRules: ['HAS_WRAPPED_DATA'],
+    colored: true,
   },
 ];
 

@@ -35,6 +35,8 @@ export const AlertContainerStyled = styled.div`
   }
 `;
 
+import bgIntro from 'assets/wrapped/intro.svg';
+
 export const AlertStyled = styled(StackStyle).attrs({
   $direction: 'column',
 })`
@@ -95,4 +97,17 @@ export const AlertButton = styled(Button).attrs({
   width: fit-content;
   white-space: break-spaces;
   line-height: ${({ theme }) => theme.fontSizesMap.sm}px;
+`;
+
+export const WrappedBackground = styled.img.attrs({
+  src: bgIntro,
+})`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
 `;

@@ -3078,10 +3078,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.47.0.tgz#186d6e2695c9470cc171d111dac352da5106e681"
   integrity sha512-dF8eUUnK35CNCVa3Z++INtlxlRlYKGx2//eLz7nyFkqwPoOGI0PmVW0qgGiGY9TrGAqkJuXlERszclH8eunYCw==
 
-"@lidofinance/lido-csm-sdk@^1.9.1":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-1.9.1.tgz#c7d5bb696c7fd052b7d0525cbfec0be2e4a57b73"
-  integrity sha512-o2lgBhUQABVar60eW6SYEaJNayj6olhjmWm4w3JMdMjB+LJQ7Qyg9nAoDaKVuljPoDzW7ecs9pshUvdzzd+R4Q==
+"@lidofinance/lido-csm-sdk@^1.9.2":
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-1.9.2.tgz#1dc3cae78d0bf178238cb62acda2b5fe7ad26908"
+  integrity sha512-tG7BJla5BcaE3p/FAuI+EyUYGQltTopG1aML966WiMjfBBRHCmJHQyP0UGserDur8zIrVr+orbLp6dVgjqkSlA==
   dependencies:
     "@chainsafe/ssz" "^1.2.2"
     "@lidofinance/lido-ethereum-sdk" "^4.5.1"
