@@ -5,6 +5,14 @@ import { mnemonicToAccount } from 'viem/accounts';
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
 test.describe('Operator with keys. ICS. Sign in', async () => {
+  test.beforeAll(async ({ widgetService }) => {
+    await widgetService.setFeatureFlag('icsApplyForm', true);
+  });
+
+  test.afterAll(async ({ widgetService }) => {
+    await widgetService.setFeatureFlag('icsApplyForm', false);
+  });
+
   test.afterEach(async ({ widgetService }) => {
     await widgetService.page.evaluate(() => {
       sessionStorage.clear();
@@ -17,7 +25,6 @@ test.describe('Operator with keys. ICS. Sign in', async () => {
   }) => {
     const applicationForm = widgetService.operatorType.applicationForm;
     await applicationForm.open();
-
     await applicationForm.signInForm.signIn();
 
     await expect(

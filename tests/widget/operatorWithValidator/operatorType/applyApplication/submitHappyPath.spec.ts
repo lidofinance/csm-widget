@@ -9,10 +9,16 @@ test.use({ secretPhrase: secretPhrase });
 
 test.describe('Operator with keys. ICS. Apply application. Submit Happy Path', async () => {
   test.beforeAll(async ({ widgetService }) => {
+    await widgetService.setFeatureFlag('icsApplyForm', true);
+
     const applicationForm = widgetService.operatorType.applicationForm;
     await applicationForm.open();
 
     await applicationForm.signInForm.signIn();
+  });
+
+  test.afterAll(async ({ widgetService }) => {
+    await widgetService.setFeatureFlag('icsApplyForm', false);
   });
 
   test(

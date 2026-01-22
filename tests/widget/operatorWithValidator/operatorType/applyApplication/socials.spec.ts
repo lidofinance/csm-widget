@@ -9,6 +9,8 @@ test.use({ secretPhrase: secretPhrase });
 
 test.describe('Operator with keys. ICS. Apply application. Socials', async () => {
   test.beforeAll(async ({ widgetService }) => {
+    await widgetService.setFeatureFlag('icsApplyForm', true);
+
     const applicationForm = widgetService.operatorType.applicationForm;
     await applicationForm.open();
 
@@ -27,6 +29,7 @@ test.describe('Operator with keys. ICS. Apply application. Socials', async () =>
         sessionStorage.clear();
       });
     });
+    await widgetService.setFeatureFlag('icsApplyForm', false);
   });
 
   test('Check socials text appearance', async ({ widgetService }) => {
