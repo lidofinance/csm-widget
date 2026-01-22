@@ -3,19 +3,12 @@ import { FC } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { SlideContainer, SlideNavigation } from '../components';
 import { useWrappedState } from '../context';
-import {
-  SlideBlock,
-  SlideContent,
-  SlideCopy,
-  StatLabel,
-  StatValue,
-} from '../styles';
+import { SlideBlock, SlideContent, StatLabel, StatValue } from '../styles';
 import type { SlideComponent } from './index';
 
 export const SlideRewards: FC = () => {
   const { data } = useWrappedState();
 
-  // TODO: dynamic "by 1.8x"
   return (
     <SlideContainer bg="3" progress>
       <SlideContent>
@@ -25,7 +18,6 @@ export const SlideRewards: FC = () => {
             <FormatToken amount={data.totalRewardsETH} token={TOKENS.eth} />
           </StatValue>
         </SlideBlock>
-        <SlideCopy>outperforming regular stakers by 1.8x</SlideCopy>
       </SlideContent>
       <SlideNavigation buttonText="Keep going" />
     </SlideContainer>

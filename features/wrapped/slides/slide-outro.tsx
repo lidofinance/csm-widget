@@ -123,12 +123,12 @@ export const SlideOutro: FC = () => {
               show={data.proposedBlocksCount > 0}
             />
             <SummaryItem
-              label="keys managed"
+              label="keys uploaded"
               value={data.uploadedKeysCount}
               show={data.uploadedKeysCount > 0}
             />
             <SummaryItem
-              label="earned ETH"
+              label="ETH earned"
               value={<FormatToken amount={data.totalRewardsETH} />}
               show={data.totalRewardsETH > 0n}
             />
