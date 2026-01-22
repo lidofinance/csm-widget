@@ -1,0 +1,24 @@
+<svg width="720" height="736" viewBox="0 0 720 736" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path opacity=".1" d="M-153.74 750.27c-33.52-19.2-33.7-50.34-.4-69.53l451.47-260.33c33.3-19.21 87.48-19.21 121 0l454.41 260.32c33.52 19.21 33.7 50.34.4 69.54l-451.47 260.32c-33.31 19.21-87.49 19.21-121 0l-454.42-260.32z" fill="url(#a)"/>
+<path opacity=".3" d="M-153.74 633.72c-33.52-19.18-33.7-50.26-.4-69.43l451.47-259.91c33.3-19.18 87.48-19.18 121 0l454.41 259.9c33.52 19.18 33.7 50.26.4 69.43l-451.47 259.91c-33.31 19.18-87.49 19.18-121 0l-454.42-259.9z" fill="url(#b)"/>
+<path opacity=".5" d="M-153.74 516.72c-33.52-19.18-33.7-50.26-.4-69.43l451.47-259.91c33.3-19.18 87.48-19.18 121 0l454.41 259.9c33.52 19.18 33.7 50.26.4 69.43l-451.47 259.91c-33.31 19.18-87.49 19.18-121 0l-454.42-259.9z" fill="url(#c)"/>
+<path opacity=".7" d="M-153.74 400.27c-33.52-19.2-33.7-50.34-.4-69.53l451.47-260.33c33.3-19.21 87.48-19.21 121 0l454.41 260.32c33.52 19.21 33.7 50.34.4 69.54l-451.47 260.33c-33.31 19.21-87.49 19.21-121 0l-454.42-260.33z" fill="url(#d)"/>
+<defs>
+<radialGradient id="a" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(90 -116.75 493.47) scale(644.89 927.06)">
+<stop stop-color="#6822FF" stop-opacity="0"/>
+<stop offset="1" stop-color="#fff"/>
+</radialGradient>
+<radialGradient id="b" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(90 -58.59 435.31) scale(643.85 927.06)">
+<stop stop-color="#6822FF" stop-opacity="0"/>
+<stop offset="1" stop-color="#fff"/>
+</radialGradient>
+<radialGradient id="c" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(90 -.09 376.81) scale(643.85 927.06)">
+<stop stop-color="#6822FF" stop-opacity="0"/>
+<stop offset="1" stop-color="#fff"/>
+</radialGradient>
+<radialGradient id="d" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="rotate(90 58.25 318.47) scale(644.89 927.06)">
+<stop stop-color="#6822FF" stop-opacity="0"/>
+<stop offset="1" stop-color="#fff"/>
+</radialGradient>
+</defs>
+</svg>
