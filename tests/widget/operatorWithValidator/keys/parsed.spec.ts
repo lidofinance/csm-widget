@@ -92,25 +92,28 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     },
   );
 
-  test('Should display error for invalid string deposit_message_root', async () => {
-    const key = keysGeneratorService.generateKeys();
-    key[0].deposit_message_root = 'asdsd';
+  test(
+    qase(386, 'Should display error for invalid string deposit_message_root'),
+    async () => {
+      const key = keysGeneratorService.generateKeys();
+      key[0].deposit_message_root = 'asdsd';
 
-    await keysPage.submitPage.fillKeys(key);
-    await expect(keysPage.submitPage.validationInputError).toContainText(
-      'Invalid deposit data',
-    );
-    await keysPage.submitPage.selectTab('Parsed');
-    await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
-    for (const row of await keysPage.submitPage.depositDataRow.all()) {
-      await expect(row.getByTestId('deposit-data-error')).toContainText(
-        'invalid signature',
+      await keysPage.submitPage.fillKeys(key);
+      await expect(keysPage.submitPage.validationInputError).toContainText(
+        'Invalid deposit data',
       );
-      await expect(row.getByTestId('deposit-data-error')).toContainText(
-        'deposit_message_root is not a valid string',
-      );
-    }
-  });
+      await keysPage.submitPage.selectTab('Parsed');
+      await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
+      for (const row of await keysPage.submitPage.depositDataRow.all()) {
+        await expect(row.getByTestId('deposit-data-error')).toContainText(
+          'invalid signature',
+        );
+        await expect(row.getByTestId('deposit-data-error')).toContainText(
+          'deposit_message_root is not a valid string',
+        );
+      }
+    },
+  );
 
   test(
     qase(329, 'Should display error for invalid withdrawal_credentials'),
@@ -133,26 +136,29 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     },
   );
 
-  test('Should display error for invalid string withdrawal_credentials', async () => {
-    const key = keysGeneratorService.generateKeys();
+  test(
+    qase(387, 'Should display error for invalid string withdrawal_credentials'),
+    async () => {
+      const key = keysGeneratorService.generateKeys();
 
-    key[0].withdrawal_credentials = 'dasdasd';
+      key[0].withdrawal_credentials = 'dasdasd';
 
-    await keysPage.submitPage.fillKeys(key);
-    await expect(keysPage.submitPage.validationInputError).toContainText(
-      'Invalid deposit data',
-    );
-    await keysPage.submitPage.selectTab('Parsed');
-    await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
-    for (const row of await keysPage.submitPage.depositDataRow.all()) {
-      await expect(row.getByTestId('deposit-data-error')).toContainText(
-        'invalid signature',
+      await keysPage.submitPage.fillKeys(key);
+      await expect(keysPage.submitPage.validationInputError).toContainText(
+        'Invalid deposit data',
       );
-      await expect(row.getByTestId('deposit-data-error')).toContainText(
-        'withdrawal_credentials is not a valid string',
-      );
-    }
-  });
+      await keysPage.submitPage.selectTab('Parsed');
+      await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
+      for (const row of await keysPage.submitPage.depositDataRow.all()) {
+        await expect(row.getByTestId('deposit-data-error')).toContainText(
+          'invalid signature',
+        );
+        await expect(row.getByTestId('deposit-data-error')).toContainText(
+          'withdrawal_credentials is not a valid string',
+        );
+      }
+    },
+  );
 
   test(qase(330, 'Should display error for invalid fork_version'), async () => {
     const key = keysGeneratorService.generateKeys();
