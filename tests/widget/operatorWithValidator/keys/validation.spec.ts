@@ -71,16 +71,22 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   test('Should failed if uploaded deposit data with existing pubkey', async () => {
     const duplicatedKey = keysGeneratorService.generateKeys();
     duplicatedKey[0].pubkey =
-      'a9e7ed8c82bb7b7b8fce48df97f598d4683b6559214a1180f20fd812d1cda9bddce08e3c0a2818be39cc52b709cb76a0';
+      'aac44a76a4b3414e01105ef07861771c5e5c7f91c556b4b8bb6b07258ade39efdf673cbe0277d091cbade43196a7c9de';
     await keysPage.submitPage.fillKeys(duplicatedKey);
     await expect(keysPage.submitPage.validationInputError).toContainText(
       'Invalid deposit data',
     );
     await keysPage.submitPage.selectTab('Parsed');
-    await expect(keysPage.submitPage.depositDataRow).toHaveCount(2);
+    await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
     for (const row of await keysPage.submitPage.depositDataRow.all()) {
-      await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'pubkey is duplicated in deposit data',
+      await expect(row.getByTestId('deposit-data-error')).toContainText(
+        'invalid signature',
+      );
+      await expect(row.getByTestId('deposit-data-error')).toContainText(
+        'pubkey was previously submitted',
+      );
+      await expect(row.getByTestId('deposit-data-error')).toContainText(
+        'pubkey already exists as validator on CL',
       );
     }
   });
