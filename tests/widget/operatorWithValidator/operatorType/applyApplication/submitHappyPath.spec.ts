@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import { Tags } from 'tests/consts/common.const';
+import { qase } from 'playwright-qase-reporter/playwright';
 
 const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase: secretPhrase });
@@ -22,7 +23,10 @@ test.describe('Operator with keys. ICS. Apply application. Submit Happy Path', a
   });
 
   test(
-    'Should successfully verify signature with 1 additional addresses and socials',
+    qase(
+      359,
+      'Should successfully verify signature with 1 additional addresses and socials',
+    ),
     {
       tag: [Tags.smoke],
     },
