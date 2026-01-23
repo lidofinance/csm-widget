@@ -64,6 +64,15 @@ export class BasePage {
     }, name);
   }
 
+  async setStorageData(name: string, value: any) {
+    await this.page.evaluate(
+      ({ name, value }) => {
+        localStorage.setItem(name, value);
+      },
+      { name, value },
+    );
+  }
+
   async waitForTextContent(locator: Locator, timeout = RPC_WAIT_TIMEOUT) {
     return waitForCallback(
       async (locator: Locator) => {
