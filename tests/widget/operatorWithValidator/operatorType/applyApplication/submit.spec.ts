@@ -13,7 +13,9 @@ test.use({ secretPhrase: secretPhrase });
 
 test.describe('Operator with keys. ICS. Apply application. Addresses', async () => {
   let applicationForm: ApplicationForm;
-  test.beforeEach(async ({ widgetService }) => {
+  test.beforeAll(async ({ widgetService }) => {
+    await widgetService.setFeatureFlag('icsApplyForm', true);
+
     applicationForm = widgetService.operatorType.applicationForm;
 
     await applicationForm.open();
@@ -31,6 +33,7 @@ test.describe('Operator with keys. ICS. Apply application. Addresses', async () 
       await widgetService.page.unroute(
         `${widgetConfig.standConfig.mockConfig?.urls.csmSurveysApi}/ics/status`,
       );
+      await widgetService.setFeatureFlag('icsApplyForm', false);
     });
   });
 
