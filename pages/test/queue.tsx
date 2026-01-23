@@ -1,11 +1,12 @@
-import { Accordion, Block } from '@lidofinance/lido-ui';
+import { FC } from 'react';
+import { GetServerSideProps } from 'next';
+import { Layout } from 'shared/layout';
 import { DepositQueueGraph } from 'features/view-keys/deposit-queue/deposit-queue-graph';
 import { MockDepositQueueProvider } from 'mock/queue/mock-providers';
 import { testScenarios } from 'mock/queue/test-scenarios';
-import { FC } from 'react';
-import { Layout } from 'shared/layout';
 import styled from 'styled-components';
-import { getTestProps } from 'utilsApi';
+import { Block, Accordion } from '@lidofinance/lido-ui';
+import { getSecretConfig } from 'config';
 
 const TestContainer = styled.div`
   display: flex;
@@ -140,4 +141,12 @@ const DepositQueueGraphTestPage: FC = () => {
 
 export default DepositQueueGraphTestPage;
 
-export const getServerSideProps = getTestProps;
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { defaultChain } = getSecretConfig();
+
+  if (defaultChain === 1) {
+    return { notFound: true };
+  }
+
+  return { props: {} };
+};

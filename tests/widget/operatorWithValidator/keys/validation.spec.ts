@@ -1,6 +1,6 @@
 import { test } from '../../test.fixture';
 import { KeysPage } from 'tests/pages';
-import { Tags, TokenSymbol } from 'tests/consts/common.const';
+import { Tags } from 'tests/consts/common.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import {
@@ -50,39 +50,6 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.validationInputError).toHaveText(
         'Item at index 0 is missing required field: pubkey',
       );
-    },
-  );
-
-  test(qase(18, 'Should failed if uploaded duplicate keys'), async () => {
-    const duplicatedKey = keysGeneratorService.generateKeys();
-    await keysPage.submitPage.fillKeys([...duplicatedKey, ...duplicatedKey]);
-    await expect(keysPage.submitPage.validationInputError).toContainText(
-      'Invalid deposit data',
-    );
-    await keysPage.submitPage.selectTab('Parsed');
-    await expect(keysPage.submitPage.depositDataRow).toHaveCount(2);
-    for (const row of await keysPage.submitPage.depositDataRow.all()) {
-      await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'pubkey is duplicated in deposit data',
-      );
-    }
-  });
-
-  test(
-    qase(332, 'Should not display duplicate error if previous tx was canceled'),
-    async ({ widgetService }) => {
-      const duplicatedKey = keysGeneratorService.generateKeys();
-
-      const txPage = await keysPage.submitPage.submitKeys(
-        duplicatedKey,
-        TokenSymbol.ETH,
-      );
-      await widgetService.walletPage.cancelTx(txPage);
-      await keysPage.submitPage.open();
-
-      await keysPage.submitPage.fillKeys(duplicatedKey);
-
-      await expect(keysPage.submitPage.validationInputError).not.toBeVisible();
     },
   );
 

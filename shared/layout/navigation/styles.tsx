@@ -108,7 +108,7 @@ export const Nav = styled.nav`
 // Not wrapping <a> inside <a> in IPFS mode
 // Also avoid problems with migrate to Next v13
 // see: https://nextjs.org/docs/app/building-your-application/upgrading/app-router-migration#link-component
-export const NavLink = styled.span<{ $active?: boolean; $colored?: boolean }>`
+export const NavLink = styled.span<{ $active?: boolean }>`
   cursor: pointer;
   color: var(--lido-color-secondary);
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
@@ -146,23 +146,6 @@ export const NavLink = styled.span<{ $active?: boolean; $colored?: boolean }>`
   ${CounterStyle} {
     opacity: ${(props) => (props.$active ? 1 : 0.8)};
   }
-
-  ${({ $colored, $active }) =>
-    $colored &&
-    !$active &&
-    css`
-      background: linear-gradient(180deg, #5448ff 0%, #8349ff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      opacity: 1;
-
-      svg {
-        path {
-          stroke: url(#lido-primary-gradient);
-        }
-      }
-    `}
 `;
 
 // Button specifically for theme toggle to avoid prop forwarding issues

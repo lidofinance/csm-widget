@@ -1,5 +1,4 @@
 export const enum API_ROUTES {
-  WRAPPED = 'api/wrapped',
   PERFORMANCE = 'api/performance',
   RPC = 'api/rpc',
   CL = 'api/cl',

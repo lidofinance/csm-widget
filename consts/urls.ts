@@ -42,9 +42,6 @@ export const PATH = <const>{
   SURVEYS_SETUP: '/surveys/setup',
   SURVEYS_DELEGATES: '/surveys/delegates',
   SURVEYS_DELEGATOR: '/surveys/delegator',
-
-  WRAPPED: '/wrapped',
-  WRAPPED_SHARE: '/wrapped-2025/share',
 };
 
 export type PATH = (typeof PATH)[keyof typeof PATH];

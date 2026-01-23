@@ -1,7 +1,9 @@
 import { Accordion, Block, Text } from '@lidofinance/lido-ui';
+import { getSecretConfig } from 'config';
 import { RewardsHistory } from 'features/rewards-history';
 import { MockRewardsHistoryProvider } from 'mock/rewards/mock-providers';
 import { testScenarios } from 'mock/rewards/test-scenarios';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
@@ -9,7 +11,6 @@ import { Layout } from 'shared/layout';
 import { LocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 import { getFirstParam } from 'utils';
-import { getTestProps } from 'utilsApi';
 
 const TestContainer = styled.div`
   display: flex;
@@ -84,4 +85,12 @@ const RewardsHistoryTestPage: FC = () => {
 
 export default RewardsHistoryTestPage;
 
-export const getServerSideProps = getTestProps;
+export const getServerSideProps: GetServerSideProps = async () => {
+  const { defaultChain } = getSecretConfig();
+
+  if (defaultChain === 1) {
+    return { notFound: true };
+  }
+
+  return { props: {} };
+};
