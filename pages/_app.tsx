@@ -9,7 +9,6 @@ import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
 import { Providers } from 'providers';
 import { BackgroundGradient, SecurityStatusBanner } from 'shared/components';
-import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
 import { nprogress } from 'utils';
 import { AddressValidationFile } from 'utils';
 
@@ -53,7 +52,6 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
           opacity: 'var(--lido-color-darkThemeOpacity)',
         }}
       />
-      <SVGGradientDefs />
       <ToastContainer />
       <MemoApp {...rest} />
       <SecurityStatusBanner />
