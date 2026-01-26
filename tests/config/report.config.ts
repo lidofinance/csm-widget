@@ -89,10 +89,6 @@ const reporters: {
       customTitle: process.env.GITHUB_WORKFLOW,
       ciRunUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
 
-      // ───── Discord settings ─────
-      discordWebhookUrl: process.env.DISCORD_WEBHOOK_URL,
-      discordDutyTag: process.env.DISCORD_DUTY_TAG,
-
       // ───── Slack settings ─────
       slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
       slackDutyTag: process.env.SLACK_DUTY_TAG,
