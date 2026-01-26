@@ -11,13 +11,15 @@ type ScoreItemProps = {
 
 export const ScoreItem: FC<ScoreItemProps> = ({ item, value }) => {
   return (
-    <Stack justify="space-between" align="center">
+    <Stack justify="space-between" align="center" data-testid="scoreItem">
       <Stack align="center" gap="sm">
         {item.icon}
-        <Text size="xs">{item.name}</Text>
+        <Text size="xs" data-testid="scoreLabel">
+          {item.name}
+        </Text>
       </Stack>
 
-      <Text size="xs">
+      <Text size="xs" data-testid="scoreValue">
         <Points value={value} />
       </Text>
     </Stack>

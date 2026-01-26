@@ -9,7 +9,7 @@ export const SiweSignIn: FC = () => {
   const { signIn } = useSiweAuth();
 
   return (
-    <Block>
+    <Block data-testid="signInForm">
       <Stack direction="column" gap="lg">
         <Stack direction="column" gap="md">
           <Text as="h3" size="lg" weight="bold">
@@ -29,6 +29,7 @@ export const SiweSignIn: FC = () => {
             label="Main address"
             value={address}
             fullwidth
+            name="mainAddress"
           />
         </Stack>
 

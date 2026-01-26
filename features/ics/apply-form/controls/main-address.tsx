@@ -8,7 +8,7 @@ export const MainAddress: FC = () => {
   const { mainAddress } = useApplyFormData(true);
 
   return (
-    <Stack direction="column" gap="md">
+    <Stack direction="column" gap="md" data-testid="mainAddressSection">
       <Stack direction="column" gap="xxs">
         <FormTitle>Main address</FormTitle>
         <Text size="xs" color="secondary">
@@ -18,6 +18,7 @@ export const MainAddress: FC = () => {
       <InputAddress
         fullwidth
         disabled
+        name="mainAddress"
         label={
           <>
             Main address <VerifiedChip color="primary">Verified</VerifiedChip>

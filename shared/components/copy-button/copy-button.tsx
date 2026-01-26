@@ -12,6 +12,7 @@ export const CopyButton: FC<CopyButtonProps & ButtonProps> = ({
 
   return (
     <ButtonIcon
+      data-testid="copyBtn"
       variant="translucent"
       {...props}
       onClick={copy}
