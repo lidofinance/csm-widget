@@ -17,12 +17,13 @@ export const Application: FC<CommentsSectionProps> = ({
   createdAt,
 }) => (
   <AccordionStyle
+    data-testid="applicationSection"
     summary={
-      <Stack direction="column" gap="xs">
+      <Stack direction="column" gap="xs" data-testid="applicationInfo">
         <Text size="sm" weight="bold">
           Your application
         </Text>
-        <Text color="secondary" size="xxs">
+        <Text color="secondary" size="xxs" data-testid="submittedDate">
           Submitted {formatDate(parseISO(createdAt), 'dd.MM.yyyy')}
         </Text>
       </Stack>
@@ -40,6 +41,7 @@ export const Application: FC<CommentsSectionProps> = ({
             label="Main address"
             value={form.mainAddress}
             error={!!comments.mainAddress}
+            name="mainAddress"
           />
           <Text size="xxs" color="error">
             {comments.mainAddress}
@@ -48,12 +50,18 @@ export const Application: FC<CommentsSectionProps> = ({
       </Stack>
       {form.additionalAddresses?.length ? (
         <Stack direction="column" gap="md">
-          <Text size="xs" weight="bold">
+          <Text size="xs" weight="bold" data-testid="additionalAddressesTitle">
             Additional addresses
           </Text>
           {form.additionalAddresses?.map((address, index) => (
-            <Stack direction="column" gap="xs" key={index}>
+            <Stack
+              direction="column"
+              gap="xs"
+              key={index}
+              data-testid={`additionalAddressInfo-${index}`}
+            >
               <InputAddress
+                name={`additionalAddresses.${index}.address`}
                 fullwidth
                 disabled
                 label={`Additional address ${index + 1}`}
@@ -80,6 +88,7 @@ export const Application: FC<CommentsSectionProps> = ({
                 label="X post link"
                 value={form.twitterLink}
                 error={!!comments.twitterLink}
+                name="twitterLink"
               />
               <Text size="xxs" color="error">
                 {comments.twitterLink}
@@ -94,6 +103,7 @@ export const Application: FC<CommentsSectionProps> = ({
                 label="Discord message link"
                 value={form.discordLink}
                 error={!!comments.discordLink}
+                name="discordLink"
               />
               <Text size="xxs" color="error">
                 {comments.discordLink}

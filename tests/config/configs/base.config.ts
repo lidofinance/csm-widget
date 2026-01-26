@@ -15,6 +15,11 @@ export type StandConfig = {
   nodeConfig: EthereumNodeServiceOptions & {
     host: string;
   };
+  mockConfig?: {
+    urls: {
+      csmSurveysApi: string;
+    };
+  };
 };
 
 export type IConfig = {

@@ -52,25 +52,28 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     }
   });
 
-  test('Should display error for invalid pubkey with random symbols', async () => {
-    const key = keysGeneratorService.generateKeys();
-    key[0].pubkey = 'asdfgh';
+  test(
+    qase(392, 'Should display error for invalid pubkey with random symbols'),
+    async () => {
+      const key = keysGeneratorService.generateKeys();
+      key[0].pubkey = 'asdfgh';
 
-    await keysPage.submitPage.fillKeys(key);
-    await expect(keysPage.submitPage.validationInputError).toContainText(
-      'Invalid deposit data',
-    );
-    await keysPage.submitPage.selectTab('Parsed');
-    await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
-    for (const row of await keysPage.submitPage.depositDataRow.all()) {
-      await expect(row.getByTestId('deposit-data-error')).toContainText(
-        'invalid signature',
+      await keysPage.submitPage.fillKeys(key);
+      await expect(keysPage.submitPage.validationInputError).toContainText(
+        'Invalid deposit data',
       );
-      await expect(row.getByTestId('deposit-data-error')).toContainText(
-        'pubkey is not valid string',
-      );
-    }
-  });
+      await keysPage.submitPage.selectTab('Parsed');
+      await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
+      for (const row of await keysPage.submitPage.depositDataRow.all()) {
+        await expect(row.getByTestId('deposit-data-error')).toContainText(
+          'invalid signature',
+        );
+        await expect(row.getByTestId('deposit-data-error')).toContainText(
+          'pubkey is not valid string',
+        );
+      }
+    },
+  );
 
   test(
     qase(328, 'Should display error for invalid deposit_message_root'),

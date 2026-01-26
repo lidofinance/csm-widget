@@ -34,7 +34,7 @@ export const ScoreCategory: FC<ScoreCategoryProps> = ({
         {category.title}
       </Text>
       <Stack gap="sm" align="center">
-        <Text size="xs">
+        <Text size="xs" data-testid="points">
           <Points value={value} />
         </Text>
       </Stack>
@@ -45,12 +45,12 @@ export const ScoreCategory: FC<ScoreCategoryProps> = ({
     <ScoreAccordionstyle id={category.id} summary={categoryHeader}>
       <Stack direction="column" gap="sm">
         {!isEnougth && (
-          <TipWrapper>
+          <TipWrapper data-testid="minScoreTip">
             You did not reach the minimum score of{' '}
             <Points value={category.min} /> required for this category.
           </TipWrapper>
         )}
-        <CategoryItemsWrapper>
+        <CategoryItemsWrapper data-testid="categoryItemsWrapper">
           {category.items.map((item) => (
             <ScoreItem key={item.id} item={item} value={scores[item.id] ?? 0} />
           ))}
