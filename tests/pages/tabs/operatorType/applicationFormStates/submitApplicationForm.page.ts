@@ -5,7 +5,6 @@ import {
 } from '@lidofinance/wallets-testing-wallets';
 import { BasePage } from 'tests/pages/base.page';
 import { AdditionalAddressPage } from './additionalAddress.page';
-import { Wallet, utils } from 'ethers';
 import { HDAccount } from 'viem/accounts';
 
 export class SubmitApplicationForm extends BasePage {
@@ -126,10 +125,7 @@ export class SubmitApplicationForm extends BasePage {
 
     await test.step('Check verified state for address', async () => {
       const signMessage = `Verify ownership of address ${account.address.toLowerCase()} for ICS with main address ${mainAddress.toLowerCase()}`;
-      const signature = await new Wallet(
-        // @ts-expect-error may be null
-        utils.hexlify(account.getHdKey().privateKey),
-      ).signMessage(signMessage);
+      const signature = await account.signMessage({ message: signMessage });
 
       const addressField = this.getAdditionalAddressFieldByIndex(lastIndex);
 

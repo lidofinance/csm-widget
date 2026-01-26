@@ -3,7 +3,6 @@ import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Wallet, utils } from 'ethers';
 import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 
 const secretPhrase = generateMnemonic(english, 128);
@@ -135,10 +134,9 @@ test.describe('Operator with keys. ICS. Apply application. Addresses', async () 
       });
 
       await test.step('Verify signature input', async () => {
-        const signature = await new Wallet(
-          // @ts-expect-error may be null
-          utils.hexlify(additionalAddress.getHdKey().privateKey),
-        ).signMessage(expectedSignMessage);
+        const signature = await additionalAddress.signMessage({
+          message: expectedSignMessage,
+        });
 
         await additionalAddressField0.signatureInput.fill(signature);
         await expect(additionalAddressField0.signatureField).toContainText(
@@ -182,10 +180,9 @@ test.describe('Operator with keys. ICS. Apply application. Addresses', async () 
       );
 
       await test.step('Check verified state for address', async () => {
-        const signature = await new Wallet(
-          // @ts-expect-error may be null
-          utils.hexlify(additionalAddress.getHdKey().privateKey),
-        ).signMessage(signMessage);
+        const signature = await additionalAddress.signMessage({
+          message: signMessage,
+        });
 
         await additionalAddressField0.signatureInput.fill(signature);
         await additionalAddressField0.verifySignatureBtn.click();
