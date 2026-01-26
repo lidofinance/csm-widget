@@ -1,4 +1,5 @@
 import { ReporterDescription } from '@playwright/test';
+import { ReportType } from '@lidofinance/chat-reporter';
 import { widgetFullConfig } from '.';
 
 export const getReportConfig: () => ReporterDescription[] = function () {
@@ -88,6 +89,7 @@ const reporters: {
       customDescription: `- Stand type: \`${process.env.STAND_TYPE}\``,
       customTitle: process.env.GITHUB_WORKFLOW,
       ciRunUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+      reportType: ReportType.count,
 
       // ───── Slack settings ─────
       slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
