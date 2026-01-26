@@ -1,10 +1,12 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
+import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
 import {
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
 } from 'config/feature-flags/types';
 import { getExternalLinks } from 'consts/external-links';
+import { useWrappedApi } from 'features/wrapped/data';
 import {
   useDappStatus,
   useHasReportStealingRole,
@@ -19,6 +21,7 @@ import { useCallback, useMemo } from 'react';
 import { useCanClaimICS, useCanCreateNodeOperator } from 'shared/hooks';
 
 export type ShowRule =
+  | 'IS_MAINNET'
   | 'IS_CONNECTED_WALLET'
   | 'NOT_NODE_OPERATOR'
   | 'IS_NODE_OPERATOR'
@@ -33,14 +36,15 @@ export type ShowRule =
   | 'CAN_CLAIM_ICS'
   | 'ICS_APPLY_ENABLED'
   | 'EL_STEALING_REPORTER'
-  | 'IS_SURVEYS_ACTIVE';
+  | 'IS_SURVEYS_ACTIVE'
+  | 'HAS_WRAPPED_DATA';
 
 export type ShowFlags = Record<ShowRule, boolean>;
 
 const { surveyApi } = getExternalLinks();
 
 export const useShowFlags = (): ShowFlags => {
-  const { isAccountActive, address } = useDappStatus();
+  const { isAccountActive, address, chainId } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
   const { data: isReportingRole } = useHasReportStealingRole();
@@ -54,9 +58,11 @@ export const useShowFlags = (): ShowFlags => {
     nodeOperatorId: nodeOperator?.id,
   });
   const featureFlags = useFeatureFlags();
+  const { data: wrappedData } = useWrappedApi(nodeOperator?.id);
 
   return useMemo(
     () => ({
+      ['IS_MAINNET']: chainId === CHAINS.Mainnet,
       ['IS_CONNECTED_WALLET']: isAccountActive,
       ['NOT_NODE_OPERATOR']: !nodeOperator,
       ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
@@ -73,8 +79,10 @@ export const useShowFlags = (): ShowFlags => {
       ['EL_STEALING_REPORTER']: !!isReportingRole,
       ['IS_SURVEYS_ACTIVE']:
         !!surveyApi && !!featureFlags?.[SURVEYS_SETUP_ENABLED],
+      ['HAS_WRAPPED_DATA']: !!wrappedData,
     }),
     [
+      chainId,
       isAccountActive,
       nodeOperator,
       canCreateNO,
@@ -86,6 +94,7 @@ export const useShowFlags = (): ShowFlags => {
       canClaimICS,
       featureFlags,
       isReportingRole,
+      wrappedData,
     ],
   );
 };

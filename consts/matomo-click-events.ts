@@ -67,6 +67,15 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   claimIcsLinkAlert = 'claimIcsLinkAlert',
   feeRecipientDocsLink = 'feeRecipientDocsLink',
   feeRecipientDismissButton = 'feeRecipientDismissButton',
+  wrappedAlertClose = 'wrappedAlertClose',
+  wrappedAlertLink = 'wrappedAlertLink',
+  wrappedLetsGo = 'wrappedLetsGo',
+  wrappedRepeat = 'wrappedRepeat',
+  wrappedShareOpen = 'wrappedShareOpen',
+  wrappedShareCopy = 'wrappedShareCopy',
+  wrappedShareNative = 'wrappedShareNative',
+  wrappedShareDownload = 'wrappedShareDownload',
+  wrappedShareX = 'wrappedShareX',
   // Dashboard
   dashboardKeysLink = 'dashboardKeysLink',
   dashboardBondLink = 'dashboardBondLink',
@@ -334,6 +343,42 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.feeRecipientDismissButton]: createEvent(
     "Click «I've changed the feeRecipient» button on Wrong Fee Recipient alert",
     'fee_recipient_dismiss_button_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedAlertClose]: createEvent(
+    'Click close button on Wrapped alert',
+    'wrapped_alert_close',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedAlertLink]: createEvent(
+    'Click «See my 2025 wrapped» link on Wrapped alert',
+    'wrapped_alert_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedLetsGo]: createEvent(
+    "Click «Let's go» button on Wrapped intro",
+    'wrapped_lets_go',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedRepeat]: createEvent(
+    'Click «Repeat» button on Wrapped summary',
+    'wrapped_repeat',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareOpen]: createEvent(
+    'Open share modal on Wrapped summary',
+    'wrapped_share_open',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareCopy]: createEvent(
+    'Copy image to clipboard in share modal',
+    'wrapped_share_copy',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareNative]: createEvent(
+    'Share via native share API in share modal',
+    'wrapped_share_native',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareDownload]: createEvent(
+    'Download image in share modal',
+    'wrapped_share_download',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.wrappedShareX]: createEvent(
+    'Click «Share on X» button on Wrapped summary',
+    'wrapped_share_x',
   ),
   // Dashboard
   [MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink]: createEvent(

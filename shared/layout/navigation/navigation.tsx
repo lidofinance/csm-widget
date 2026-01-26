@@ -31,12 +31,12 @@ export const Navigation: FC = memo(() => {
     <Nav aria-expanded={expanded} hidden={hidden}>
       <NavContainer>
         <NavBlock title="Community Staking Module">
-          {routes.map(({ name, path, subPaths, icon, suffix }) => {
+          {routes.map(({ name, path, subPaths, icon, suffix, colored }) => {
             const isActive = getIsActivePath(pathname, path, subPaths);
 
             return (
               <LocalLink key={path} href={path} onClick={toggleExpanded}>
-                <NavLink $active={isActive}>
+                <NavLink $active={isActive} $colored={colored}>
                   {icon}
                   <Stack gap="sm" center>
                     <span>{name}</span>
