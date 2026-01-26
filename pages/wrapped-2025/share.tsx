@@ -42,15 +42,12 @@ const WrappedSharePage: FC = () => {
       <Layout
         dummy="semi"
         pageName="wrapped-2025-share"
-        title="Community Staker's 2025 CSM Wrapped"
+        title="Invalid share link"
       >
         <Head>
-          <title>{metaDescription}</title>
-          <meta name="description" content={metaDescription} />
           <meta name="robots" content="noindex, nofollow" />
         </Head>
         <Stack gap="lg" direction="column">
-          <p>Invalid share link</p>
           <LocalLink href={PATH.WRAPPED}>
             <Button size="sm" fullwidth>
               Check your 2025 Wrapped

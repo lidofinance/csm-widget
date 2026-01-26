@@ -3,7 +3,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import type { ModalProps } from 'providers/modal-provider';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { Stack } from 'shared/components';
-import { formatPercent } from 'utils';
+import { formatBalance, formatPercent, plural } from 'utils';
 import { generateSlideImage } from 'utils/generate-slide-image';
 import { trackMatomoEvent } from 'utils/track-matomo-event';
 import { encodeSlideData } from 'utils/wrapped-hash-codec';
@@ -20,39 +20,35 @@ type ShareModalProps = ModalProps<{
   data: WrappedStats;
 }>;
 
-const plural = (count: number, singular: string, plural: string) =>
-  count === 1 ? singular : plural;
-
 const buildTweetText = (data: WrappedStats): string => {
   const statDefs = [
     {
       check: () => data.activeDays > 0,
-      format: () => `${formatPercent(data.avgPerformance)} performance`,
+      format: () => `${formatPercent(data.avgPerformance)} average performance`,
     },
     {
       check: () => data.proposedBlocksCount > 0,
       format: () =>
-        `${data.proposedBlocksCount} ${plural(data.proposedBlocksCount, 'block', 'blocks')} proposed`,
+        `${data.proposedBlocksCount} proposed ${plural({ value: data.proposedBlocksCount, variants: ['block', 'blocks'] })}`,
     },
     {
       check: () => data.totalRewardsETH > 0n,
-      format: () =>
-        `${(Number(data.totalRewardsETH) / 1e18).toFixed(4)} ETH earned`,
+      format: () => `${formatBalance(data.totalRewardsETH).trimmed} ETH earned`,
     },
     {
       check: () => data.activeDays > 0,
       format: () =>
-        `${data.activeDays} ${plural(data.activeDays, 'day', 'days')} active`,
+        `${plural({ value: data.activeDays, variants: ['day', 'days'], showValue: true })} validated`,
     },
     {
       check: () => data.uploadedKeysCount > 0,
       format: () =>
-        `${data.uploadedKeysCount} ${plural(data.uploadedKeysCount, 'key', 'keys')} uploaded`,
+        `${plural({ value: data.uploadedKeysCount, variants: ['key', 'keys'], showValue: true })} uploaded`,
     },
     {
       check: () => data.queueDays > 0,
       format: () =>
-        `${data.queueDays} ${plural(data.queueDays, 'day', 'days')} in queue`,
+        `${plural({ value: data.queueDays, variants: ['day', 'days'], showValue: true })} in queue`,
     },
   ];
 
@@ -61,7 +57,7 @@ const buildTweetText = (data: WrappedStats): string => {
   let text = `My 2025 @LidoFinance CSM Wrapped: ${availableStats.map((s) => s.format()).join(', ')}`;
 
   if (data.hasICS) {
-    text += '. ICS member!';
+    text += '. Identified Community Staker!';
   }
 
   return text;
