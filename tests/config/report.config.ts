@@ -82,7 +82,7 @@ const reporters: {
     },
   ],
   chatReporter: [
-    '@lidofinance/discord-reporter',
+    '@lidofinance/chat-reporter',
     {
       enabled: process.env.REPORT_ENABLED,
       customDescription: `- Stand type: \`${process.env.STAND_TYPE}\``,
