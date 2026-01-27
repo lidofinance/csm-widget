@@ -3052,10 +3052,10 @@
     "@lidofinance/wallets-testing-nodes" "1.7.0"
     "@lidofinance/wallets-testing-wallets" "1.39.1"
 
-"@lidofinance/discord-reporter@1.7.0":
+"@lidofinance/chat-reporter@1.7.0":
   version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/discord-reporter/-/discord-reporter-1.7.0.tgz#5cec6c44613a013617a2e0da07a7c90ef6f8e3cb"
-  integrity sha512-lOfvH2RTRYMg9FMHeK7zefUnyAP4SmpWY/dVyyGPkx46Ax2UtI1DayKcagDZO6JWCHSlHahu8ICZD9KLi9kGCw==
+  resolved "https://registry.yarnpkg.com/@lidofinance/chat-reporter/-/chat-reporter-1.7.0.tgz#02fc0f014a6e78cddfd2dc4ea61c72e06951a8d1"
+  integrity sha512-Ckpe1f5+kUZ7Ba2Uy0p3DI/YMbXV7qAwTOaEMMqbeykLW9+Fen/7kHSA5DC+N88tQc8mhPy94xSlMxXneXPzKg==
   dependencies:
     "@nestjs/common" "^10.0.0"
     axios "^1.10.0"
