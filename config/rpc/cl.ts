@@ -12,7 +12,7 @@ import { config } from '../get-config';
 import { useUserConfig } from '../user-config';
 
 import { useDappStatus } from 'modules/web3';
-import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 export const getBackendApiPath = (chainId: string | number): string => {
   const BASE_URL = typeof window === 'undefined' ? '' : window.location.origin;
@@ -23,7 +23,7 @@ export const useGetClApiUrlByChainId = () => {
   const userConfig = useUserConfig();
 
   return useCallback(
-    (chainId: CSM_SUPPORTED_CHAINS) => {
+    (chainId: SUPPORTED_CHAINS) => {
       if (!userConfig.supportedChainIds.includes(chainId)) {
         // Has no effect on functionality. Just a fix.
         // Return empty string as a stub

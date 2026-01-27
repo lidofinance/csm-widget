@@ -37,7 +37,7 @@ import { LidoSDKProvider } from './lido-sdk';
 import { http, PublicClient } from 'viem';
 import invariant from 'tiny-invariant';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 type ChainsList = [wagmiChains.Chain, ...wagmiChains.Chain[]];
 
@@ -101,7 +101,7 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
       supportedChainIds.reduce(
         (res, curr) => ({
           ...res,
-          [curr]: getRpcUrlByChainId(curr as CSM_SUPPORTED_CHAINS),
+          [curr]: getRpcUrlByChainId(curr as SUPPORTED_CHAINS),
         }),
         {},
       ),

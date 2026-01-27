@@ -1,4 +1,4 @@
-import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
 
@@ -59,7 +59,7 @@ type ExternalLinksConstants = {
 };
 
 export const EXTERNAL_LINKS_BY_NETWORK: Record<
-  CSM_SUPPORTED_CHAINS,
+  SUPPORTED_CHAINS,
   ExternalLinksConstants
 > = {
   [CHAINS.Mainnet]: {
@@ -97,7 +97,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
 };
 
 export const getExternalLinks = (
-  chainId = config.defaultChain as CSM_SUPPORTED_CHAINS,
+  chainId = config.defaultChain as SUPPORTED_CHAINS,
 ) => {
   const links = EXTERNAL_LINKS_BY_NETWORK[chainId];
   if (!links) {

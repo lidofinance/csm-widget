@@ -59,7 +59,7 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
           }
         };
 
-        const { result } = await csm.roles.confirmRole({
+        const { result } = await csm.roles.confirmAddress({
           nodeOperatorId: invite.id,
           role: invite.role,
           callback,

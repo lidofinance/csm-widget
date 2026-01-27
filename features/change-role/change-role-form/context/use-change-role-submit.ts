@@ -40,13 +40,13 @@ const useChangeRoleTx = () => {
     ) => {
       switch (true) {
         case isRewardsChange:
-          return csm.roles.changeRewardsRole(params);
+          return csm.roles.changeRewardsAddress(params);
         case isManagerReset:
-          return csm.roles.resetManagerRole(params);
+          return csm.roles.resetManagerAddress(params);
         case role === ROLES.REWARDS:
-          return csm.roles.proposeRewardsRole(params);
+          return csm.roles.proposeRewardsAddress(params);
         case role === ROLES.MANAGER:
-          return csm.roles.proposeManagerRole(params);
+          return csm.roles.proposeManagerAddress(params);
         default: {
           throw new Error('Not implemented yet: true case');
         }

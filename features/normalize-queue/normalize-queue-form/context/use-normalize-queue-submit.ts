@@ -50,7 +50,7 @@ export const useNormalizeQueueSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.keys.normalizeQueue({
+        await csm.depositQueue.normalize({
           nodeOperatorId,
           callback,
         });
@@ -62,6 +62,6 @@ export const useNormalizeQueueSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [csm.keys, txModalStages],
+    [csm.depositQueue, txModalStages],
   );
 };
