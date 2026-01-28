@@ -6,6 +6,7 @@ export * from './keys';
 export * from './matomo-click-events';
 export * from './matomo-wallets-events';
 export * from './metrics';
+export * from './module';
 export * from './operator-type';
 export * from './react-query-strategies';
 export * from './ref-mapping';

@@ -63,7 +63,6 @@ const routes: Route[] = [
     path: PATH.MONITORING,
     icon: <MeterIcon />,
     showRules: ['IS_NODE_OPERATOR'],
-    // TODO: suffix for bad attestation rate
   },
   {
     name: 'Bond & Rewards',
@@ -86,13 +85,13 @@ const routes: Route[] = [
     path: PATH.STEALING,
     icon: <EthIcon />,
     subPaths: [PATH.STEALING_REPORT, PATH.STEALING_CANCEL],
-    showRules: ['EL_STEALING_REPORTER'],
+    showRules: ['EL_STEALING_REPORTER', 'IS_CSM'],
   },
   {
     name: 'Surveys',
     path: PATH.SURVEYS,
     icon: <FileIcon />,
-    showRules: ['IS_SURVEYS_ACTIVE'],
+    showRules: ['IS_SURVEYS_ACTIVE', 'IS_CSM'],
     suffix: <CounterSurveys />,
   },
   {
@@ -100,14 +99,14 @@ const routes: Route[] = [
     path: PATH.TYPE,
     icon: <UserIcon />,
     subPaths: [PATH.TYPE_CLAIM, PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
-    showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED'],
+    showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED', 'IS_CSM'],
     suffix: <CounterIcs />,
   },
   {
     name: 'Wrapped',
     path: PATH.WRAPPED,
     icon: <GiftIcon />,
-    showRules: ['HAS_WRAPPED_DATA'],
+    showRules: ['HAS_WRAPPED_DATA', 'IS_CSM'],
     colored: true,
   },
 ];

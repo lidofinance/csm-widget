@@ -1,4 +1,5 @@
 import { Dark, Light, ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
+import { useConfig } from 'config';
 import { useInpageNavigation } from 'providers/inpage-navigation';
 import { FC, memo, PropsWithChildren } from 'react';
 import { Stack } from 'shared/components';
@@ -16,6 +17,7 @@ import {
 } from './styles';
 import { useNavItems } from './use-nav-items';
 import { useCsmVersionSupported } from 'modules/web3';
+import { MODULE_TITLE } from 'consts';
 
 export const Navigation: FC = memo(() => {
   const isLoading = useInitialLoading();
@@ -24,13 +26,16 @@ export const Navigation: FC = memo(() => {
   const { expanded, toggleExpanded } = useInpageNavigation();
   const routes = useNavItems();
   const pathname = useRouterPath();
+  const { config } = useConfig();
+
+  const navTitle = MODULE_TITLE[config.module];
 
   const hidden = isLoading || !isSupported || routes.length === 0;
 
   return (
     <Nav aria-expanded={expanded} hidden={hidden}>
       <NavContainer>
-        <NavBlock title="Community Staking Module">
+        <NavBlock title={navTitle}>
           {routes.map(({ name, path, subPaths, icon, suffix, colored }) => {
             const isActive = getIsActivePath(pathname, path, subPaths);
 

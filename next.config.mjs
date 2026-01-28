@@ -18,6 +18,7 @@ if (process.env.RUN_STARTUP_CHECKS === 'true') {
 const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
+const moduleMode = process.env.MODULE || 'csm';
 const isIPFSMode = !!process.env.IPFS_MODE;
 const maintenance = !!process.env.MAINTENANCE; // TODO: load from runtime config
 
@@ -197,5 +198,6 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
+    module: moduleMode,
   },
 });

@@ -1,10 +1,12 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
+import { useConfig } from 'config';
 import { useFeatureFlags } from 'config/feature-flags';
 import {
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
 } from 'config/feature-flags/types';
+import { MODULE } from 'consts';
 import { getExternalLinks } from 'consts/external-links';
 import { useWrappedApi } from 'features/wrapped/data';
 import {
@@ -35,7 +37,9 @@ export type ShowRule =
   | 'ICS_APPLY_ENABLED'
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE'
-  | 'HAS_WRAPPED_DATA';
+  | 'HAS_WRAPPED_DATA'
+  | 'IS_CSM'
+  | 'IS_CM';
 
 export type ShowFlags = Record<ShowRule, boolean>;
 
@@ -56,6 +60,9 @@ export const useShowFlags = (): ShowFlags => {
   });
   const featureFlags = useFeatureFlags();
   const { data: wrappedData } = useWrappedApi(nodeOperator?.id);
+  const {
+    config: { module },
+  } = useConfig();
 
   return useMemo(
     () => ({
@@ -76,6 +83,8 @@ export const useShowFlags = (): ShowFlags => {
       ['IS_SURVEYS_ACTIVE']:
         !!surveyApi && !!featureFlags?.[SURVEYS_SETUP_ENABLED],
       ['HAS_WRAPPED_DATA']: !!wrappedData,
+      ['IS_CSM']: module === MODULE.CSM,
+      ['IS_CM']: module === MODULE.CM,
     }),
     [
       chainId,
@@ -90,6 +99,7 @@ export const useShowFlags = (): ShowFlags => {
       featureFlags,
       isReportingRole,
       wrappedData,
+      module,
     ],
   );
 };
