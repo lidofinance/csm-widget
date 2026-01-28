@@ -15,6 +15,7 @@ export type StandConfig = {
   nodeConfig: EthereumNodeServiceOptions & {
     host: string;
   };
+  matomoUrl: string;
   mockConfig?: {
     urls: {
       csmSurveysApi: string;
