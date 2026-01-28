@@ -59,21 +59,24 @@ test.describe('Welcome page without connected wallet', async () => {
     },
   );
 
-  test('Should open detailed link for docs after click', async ({ page }) => {
-    const homePage = new WelcomePage(page);
-    await homePage.goto();
+  test(
+    qase(406, 'Should open detailed link for docs after click'),
+    async ({ page }) => {
+      const homePage = new WelcomePage(page);
+      await homePage.goto();
 
-    const [detailedLink] = await Promise.all([
-      homePage.waitForPage(PAGE_WAIT_TIMEOUT),
-      matomoEventService.waitForEvent(
-        'e_n',
-        'csm_widget_welcome_csm_detailed_link',
-      ),
-      homePage.welcomeSection.detailedLink.click(),
-    ]);
+      const [detailedLink] = await Promise.all([
+        homePage.waitForPage(PAGE_WAIT_TIMEOUT),
+        matomoEventService.waitForEvent(
+          'e_n',
+          'csm_widget_welcome_csm_detailed_link',
+        ),
+        homePage.welcomeSection.detailedLink.click(),
+      ]);
 
-    expect(detailedLink.url().toLowerCase()).toContain(
-      `https://operatorportal.lido.fi/modules/community-staking-module`,
-    );
-  });
+      expect(detailedLink.url().toLowerCase()).toContain(
+        `https://operatorportal.lido.fi/modules/community-staking-module`,
+      );
+    },
+  );
 });
