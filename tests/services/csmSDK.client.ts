@@ -41,7 +41,7 @@ export class LidoSDKClient extends LidoSDKCsm {
 
   async getNodeOperatorsByAddress(address: `0x${string}`) {
     return test.step(`Get node operators by address: ${address}`, async () => {
-      const operators = await this.satellite.getNodeOperatorsByAddress(address);
+      const operators = await this.discovery.getNodeOperatorsByAddress(address);
       return operators;
     });
   }
@@ -49,7 +49,7 @@ export class LidoSDKClient extends LidoSDKCsm {
   async getNodeOperatorsByProposedAddress(address: `0x${string}`) {
     return test.step(`Get node operators by proposed address: ${address}`, async () => {
       const operators =
-        await this.satellite.getNodeOperatorsByProposedAddress(address);
+        await this.discovery.getNodeOperatorsByProposedAddress(address);
       return operators;
     });
   }

@@ -1,23 +1,23 @@
-import { FC, PropsWithChildren } from 'react';
-
+import { config } from 'config';
+import {
+  LIDO_OPERATOR_PORTAL_BASE,
+  LIDO_OPERATOR_PORTAL_CM,
+} from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { MODULE, MODULE_TITLE } from 'consts/module';
+import { FC, PropsWithChildren, ReactNode } from 'react';
 import { MatomoLink } from 'shared/components';
-import { LIDO_OPERATOR_PORTAL_BASE } from 'consts/external-links';
 import {
   BlockStyled,
-  CSMLogo,
   ContentWrapper,
   Header,
   Heading,
+  ModuleLogo,
 } from './styles';
 
-export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => (
-  <BlockStyled data-testid="welcomeSection">
-    <Heading>
-      <CSMLogo />
-      <Header>Community Staking Module</Header>
-    </Heading>
-    <ContentWrapper>
+export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
+  const DESCRIPTIONS: Record<MODULE, ReactNode> = {
+    [MODULE.CSM]: (
       <p>
         The Community Staking Module (CSM) is a permissionless staking module
         aimed at attracting community stakers to participate in the Lido on
@@ -31,7 +31,32 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => (
         </MatomoLink>
         .
       </p>
-    </ContentWrapper>
-    {children}
-  </BlockStyled>
-);
+    ),
+    [MODULE.CM]: (
+      <p>
+        The Curated Module v2 (CM) consists of allow-listed independent
+        professional staking organizations and Ethereum client teams, which
+        operate validators using the protocol. For a detailed description of the
+        module, follow{' '}
+        <MatomoLink
+          href={LIDO_OPERATOR_PORTAL_CM}
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
+        >
+          the link
+        </MatomoLink>
+        .
+      </p>
+    ),
+  };
+
+  return (
+    <BlockStyled data-testid="welcomeSection">
+      <Heading>
+        <ModuleLogo />
+        <Header>{MODULE_TITLE[config.module]}</Header>
+      </Heading>
+      <ContentWrapper>{DESCRIPTIONS[config.module]}</ContentWrapper>
+      {children}
+    </BlockStyled>
+  );
+};

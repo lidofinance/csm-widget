@@ -1,6 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-prototype-builtins */
 export const openKeys = [
+  'MODULE',
+
   'SUPPORTED_CHAINS',
   'DEFAULT_CHAIN',
 

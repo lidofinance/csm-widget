@@ -23,7 +23,7 @@ export const useAvailableOperators = () => {
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(address);
-      return csm.satellite.getNodeOperatorsByAddress(address);
+      return csm.discovery.getNodeOperatorsByAddress(address);
     },
     enabled: !!address,
     placeholderData,

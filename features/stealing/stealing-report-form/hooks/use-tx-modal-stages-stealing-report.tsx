@@ -13,7 +13,6 @@ import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 type Props = {
   amount: bigint;
   nodeOperatorId: NodeOperatorId;
-  blockhash: string;
 };
 
 const getTxModalStagesStealingReport = (

@@ -1,4 +1,4 @@
-import { TryCSM } from 'features/welcome/try-csm';
+import { TryOtherNetwork } from 'features/welcome/try-other-network';
 import { useCsmStatus } from 'modules/web3';
 import { FC } from 'react';
 import { BannerOperatorCustomAddresses } from './banner-operator-custom-addresses';
@@ -23,7 +23,7 @@ export const StarterPack: FC = () => {
     <>
       <BannerOperatorCustomAddresses />
       {content}
-      <TryCSM />
+      <TryOtherNetwork />
     </>
   );
 };

@@ -11,6 +11,7 @@ export const useInitialLoading = (externalLoading?: boolean) => {
   const { isPending: isOperatorsLoading } = useNodeOperator();
   const { error: operatorsError } = useAvailableOperators();
 
+  // TODO: CM verions
   useEffect(() => {
     if (statusError) {
       console.warn('CSM status loading error:', statusError);

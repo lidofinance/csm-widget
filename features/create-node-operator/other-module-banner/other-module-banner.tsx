@@ -10,6 +10,7 @@ const REPLACEMENTS: Record<string, string> = {
   'curated-onchain-v1': 'Lido Curated',
 };
 
+// FIXME: add support CSM and CM for each other
 export const OtherModuleBanner: FC = () => {
   const { operatorsWidget } = getExternalLinks();
   const { address } = useDappStatus();

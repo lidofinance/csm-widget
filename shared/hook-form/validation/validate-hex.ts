@@ -1,9 +1,7 @@
 import { isHexadecimalString } from 'utils';
 import { ValidationError } from './validation-error';
 
-const HASH_LENGTH = 66;
-
-export const validateHash = (field: string, value?: string) => {
+export const validateHex = (field: string, value?: string) => {
   if (!value) throw new ValidationError(field, '');
 
   const val = value.toLowerCase();
@@ -16,7 +14,4 @@ export const validateHash = (field: string, value?: string) => {
 
   if (rest && !isHexadecimalString(rest))
     throw new ValidationError(field, 'Is not hexadecimal string');
-
-  if (value.length !== HASH_LENGTH)
-    throw new ValidationError(field, 'Wrong length');
 };

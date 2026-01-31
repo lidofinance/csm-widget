@@ -1,14 +1,15 @@
 import { FC, memo } from 'react';
+import { FormBlock } from 'shared/components';
+import { Form, FormLoader } from 'shared/hook-form/form-controller';
 import {
   StealingReportDataProvider,
   StealingReportFormProvider,
 } from './context';
 import { AmountInput } from './controls/amount-input';
-import { SubmitButton } from './controls/submit-button';
-import { FormBlock } from 'shared/components';
-import { FormLoader, Form } from 'shared/hook-form/form-controller';
-import { BlockhashInput } from './controls/blockhash-input';
+import { DetailsInput } from './controls/details-input';
 import { NodeOperatorInput } from './controls/node-operator-input';
+import { PenaltyTypeInput } from './controls/penalty-type-input';
+import { SubmitButton } from './controls/submit-button';
 
 export const StealingReportForm: FC = memo(() => {
   return (
@@ -19,7 +20,8 @@ export const StealingReportForm: FC = memo(() => {
             <Form>
               <NodeOperatorInput />
               <AmountInput />
-              <BlockhashInput />
+              <PenaltyTypeInput />
+              <DetailsInput />
               <SubmitButton />
             </Form>
           </FormLoader>

@@ -6,6 +6,7 @@ type RedirectionMap = Partial<Record<ROLE_CODE, PATH>>;
 
 export type RedirectionFn = (flags: ShowFlags) => RedirectionMap;
 
+// TODO: refactor
 export const redirectionMap: Partial<
   Record<PATH, RedirectionMap | RedirectionFn>
 > = {

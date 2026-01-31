@@ -1,16 +1,24 @@
 import { MatomoEventType } from '@lidofinance/analytics-matomo';
+import { MODULE } from './module';
+import { config } from 'config';
 
-export const MATOMO_APP_NAME = 'CSM_Widget';
-export const MATOMO_APP_PREFIX = 'csm_widget';
+export const MATOMO_APP_NAME = {
+  [MODULE.CSM]: 'CSM_Widget',
+  [MODULE.CM]: 'CM_Widget',
+};
+export const MATOMO_APP_PREFIX = {
+  [MODULE.CSM]: 'csm_widget',
+  [MODULE.CM]: 'cm_widget',
+};
 
 // Helper functions to reduce duplication in event definitions
 export const createEvent = (
   description: string,
   eventKey: string,
 ): MatomoEventType => [
-  MATOMO_APP_NAME,
+  MATOMO_APP_NAME[config.module],
   description,
-  `${MATOMO_APP_PREFIX}_${eventKey.toLowerCase()}`,
+  `${MATOMO_APP_PREFIX[config.module]}_${eventKey.toLowerCase()}`,
 ];
 
 export const enum MATOMO_CLICK_EVENTS_TYPES {
@@ -51,7 +59,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanAddressLink = 'etherscanAddressLink',
   beaconchainPubkeyLink = 'beaconchainPubkeyLink',
   migalabsPubkeyLink = 'migalabsPubkeyLink',
-  tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
+  tryOtherNetworkLink = 'tryOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
   faqItemLink = 'faqItemLink',
   // Key status comment
@@ -173,8 +181,8 @@ export const MATOMO_CLICK_EVENTS: Record<
     'connect_wallet_to_become_no',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink]: createEvent(
-    'Click on Deailed description about CSM link',
-    'welcome_csm_detailed_link',
+    'Click on Deailed description about Module link',
+    'welcome_module_detailed_link',
   ),
   // Starter Pack
   [MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator]: createEvent(
@@ -284,9 +292,9 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «View on migalabs.io» link on pubkey',
     'migalabs_pubkey_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink]: createEvent(
-    'Click «Join CSM» in other network link',
-    'try_csm_link',
+  [MATOMO_CLICK_EVENTS_TYPES.tryOtherNetworkLink]: createEvent(
+    'Click «Join» in other network link',
+    'try_other_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner]: createEvent(
     'Click «stake share limit» link on banner',

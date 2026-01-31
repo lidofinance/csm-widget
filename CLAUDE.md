@@ -17,6 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The project requires an `.env.local` file with environment variables. Copy from `.env.example` and configure:
 
+- `MODULE` - Set to `csm` (default) or `cm` to choose the module version
 - RPC provider URLs and CL API URLs with keys
 - For testing, also set `STAND_TYPE`, `WALLET_SECRET_PHRASE`, `WALLET_PASSWORD`, `RPC_URL_TOKEN`
 
@@ -25,6 +26,79 @@ Install Playwright browser for tests: `yarn playwright install chromium --with-d
 ## Architecture Overview
 
 This is a Next.js React application for Lido's Community Staking Module (CSM) widget, built on the Lido Frontend Template.
+
+### Module Versions
+
+**IMPORTANT**: This application has two distinct versions that share the same codebase:
+
+- **CSM (Community Staking Module)** - Fully implemented and production-ready
+- **CM (Curated Module v2)** - Currently in development
+
+#### Configuration
+
+The active version is controlled by the `MODULE` environment variable:
+
+- Set `MODULE=csm` (default) for Community Staking Module
+- Set `MODULE=cm` for Curated Module
+
+The module value is:
+
+1. Read from `process.env.MODULE` in `next.config.mjs` (line 21)
+2. Exposed via `publicRuntimeConfig.module` (line 201)
+3. Accessible throughout the app via `useConfig()` hook: `config.module`
+
+#### Detecting Module Version in Code
+
+**Config-based detection:**
+
+```typescript
+import { useConfig } from 'config';
+
+const {
+  config: { module },
+} = useConfig();
+// module === 'csm' or 'cm'
+```
+
+**Show Rules (for conditional rendering):**
+
+Use the `useShowRule` hook with `IS_CSM` or `IS_CM` rules:
+
+```typescript
+import { useShowRule } from 'shared/hooks';
+
+const check = useShowRule();
+if (check('IS_CSM')) {
+  // CSM-specific logic
+}
+```
+
+Show rules can be applied to:
+
+- Navigation items (see `shared/layout/navigation/use-nav-items.tsx`)
+- Page components
+- Feature flags
+- Any conditional UI rendering
+
+**Gates (CM-specific):**
+
+For CM module, gates control operator access levels:
+
+- Retrieved via `useAvailableGates` hook
+- Gate types: `curated`, `permissioned`, `permissionless`
+- Each gate has an ID, name, and curveId
+- Used in CM operator registration flow
+
+#### Module-Specific Features
+
+Each module version has its own set of features and pages. The module type determines:
+
+- Available navigation routes
+- Feature accessibility
+- UI components and workflows specific to that module type
+- Permission gates (CM only)
+
+Module constants and titles are defined in `consts/module.ts`.
 
 ### Key Technologies
 

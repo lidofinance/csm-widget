@@ -23,31 +23,25 @@ export const useStealingReportSubmit: FormSubmitterHook<
 
   return useCallback(
     async (
-      { amount, nodeOperatorId, blockhash },
+      { amount, nodeOperatorId, penaltyType, details },
       _data,
       { onConfirm, onRetry },
     ) => {
       invariant(amount !== undefined, 'Amount is not defined');
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(isHex(blockhash), 'BlockHash is not valid');
+      invariant(isHex(penaltyType), 'PenaltyType is not valid');
 
       try {
         const callback: TransactionCallback = async ({ stage, payload }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:
-              txModalStages.sign({ amount, nodeOperatorId, blockhash });
+              txModalStages.sign({ amount, nodeOperatorId });
               break;
             case TransactionCallbackStage.RECEIPT:
-              txModalStages.pending(
-                { amount, nodeOperatorId, blockhash },
-                payload.hash,
-              );
+              txModalStages.pending({ amount, nodeOperatorId }, payload.hash);
               break;
             case TransactionCallbackStage.DONE: {
-              txModalStages.success(
-                { amount, nodeOperatorId, blockhash },
-                payload.hash,
-              );
+              txModalStages.success({ amount, nodeOperatorId }, payload.hash);
               break;
             }
             case TransactionCallbackStage.MULTISIG_DONE:
@@ -63,7 +57,8 @@ export const useStealingReportSubmit: FormSubmitterHook<
         await csm.stealing.report({
           nodeOperatorId,
           amount,
-          blockHash: blockhash,
+          penaltyType,
+          details: details || '',
           callback,
         });
 

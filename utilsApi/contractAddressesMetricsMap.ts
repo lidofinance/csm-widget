@@ -1,6 +1,6 @@
 import {
-  CSM_CONTRACT_ADDRESSES,
   CONTRACT_NAMES,
+  CSM_CONTRACT_ADDRESSES,
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
 import {
@@ -22,27 +22,27 @@ import {
 } from 'lodash';
 import { Abi, Address } from 'viem';
 
-import { config } from 'config';
 import {
   AccountingAbi,
+  CSModuleAbi,
+  CuratedGateAbi,
+  CuratedModuleAbi,
   EjectorAbi,
   ExitPenaltiesAbi,
   FeeDistributorAbi,
   FeeOracleAbi,
-  CSModuleAbi,
-  CSMSatelliteAbi,
-  ParametersRegistryAbi,
-  ValidatorStrikesAbi,
   HashConsensusAbi,
+  OperatorsDataAbi,
+  ParametersRegistryAbi,
   PermissionlessGateAbi,
+  SMDiscoveryAbi,
   StakingRouterAbi,
   ValidatorsExitBusOracleAbi,
-  VettedGateAbi,
-  CuratedGateAbi,
-  CuratedModuleAbi,
-  OperatorsDataAbi,
+  ValidatorStrikesAbi,
   VerifierAbi,
+  VettedGateAbi,
 } from '@lidofinance/lido-csm-sdk/abi';
+import { config } from 'config';
 // import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 
 const AlL_CONTRACT_NAMES = {
@@ -67,7 +67,7 @@ const supportedChainsWithMainnet: SUPPORTED_CHAINS[] = uniq([
   CHAINS.Mainnet,
 ]);
 
-// FIXME: addresses
+// FIXME: ENS addresses
 const STATIC_ADDRESSES: {
   [key in SUPPORTED_CHAINS]?: { [key in AlL_CONTRACT_NAMES]?: Address };
 } = {
@@ -161,8 +161,8 @@ const METRIC_CONTRACT_ABIS: Record<AlL_CONTRACT_NAMES, Abi> = {
   [AlL_CONTRACT_NAMES.permissionlessGate]: PermissionlessGateAbi,
   [AlL_CONTRACT_NAMES.vettedGate]: VettedGateAbi,
   [AlL_CONTRACT_NAMES.exitPenalties]: ExitPenaltiesAbi,
-  [AlL_CONTRACT_NAMES.CSMSatellite]: CSMSatelliteAbi,
-  [AlL_CONTRACT_NAMES.curatedGate]: CuratedGateAbi,
+  [AlL_CONTRACT_NAMES.SMDiscovery]: SMDiscoveryAbi,
+  [AlL_CONTRACT_NAMES.curatedGate1]: CuratedGateAbi,
   [AlL_CONTRACT_NAMES.curatedModule]: CuratedModuleAbi,
   [AlL_CONTRACT_NAMES.operatorsData]: OperatorsDataAbi,
   [AlL_CONTRACT_NAMES.verifier]: VerifierAbi,
