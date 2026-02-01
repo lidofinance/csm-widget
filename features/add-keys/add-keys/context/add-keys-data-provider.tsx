@@ -5,7 +5,7 @@ import {
   KEY_OPERATOR_KEYS,
   KEY_SHARE_LIMIT,
   KEY_STAKE_LIMIT,
-  useCsmStatus,
+  useSmStatus,
   useCurveParameters,
   useEthereumBalance,
   useNodeOperatorId,
@@ -27,7 +27,7 @@ import { useInvalidate } from 'shared/hooks';
 import { type AddKeysFormNetworkData } from './types';
 
 const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
-  const { data: status, isPending: isStatusLoading } = useCsmStatus();
+  const { data: status, isPending: isStatusLoading } = useSmStatus();
   const nodeOperatorId = useNodeOperatorId();
 
   const ethBalanceQuery = useEthereumBalance();

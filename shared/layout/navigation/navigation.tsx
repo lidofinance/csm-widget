@@ -1,7 +1,7 @@
 import { Dark, Light, ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
 import { config } from 'config';
 import { MODULE_TITLE } from 'consts';
-import { useCsmVersionSupported } from 'modules/web3';
+import { useSmVersionSupported } from 'modules/web3';
 import { useInpageNavigation } from 'providers/inpage-navigation';
 import { FC, memo, PropsWithChildren } from 'react';
 import { Stack } from 'shared/components';
@@ -21,7 +21,7 @@ import { useNavItems } from './use-nav-items';
 
 export const Navigation: FC = memo(() => {
   const isLoading = useInitialLoading();
-  const isSupported = useCsmVersionSupported();
+  const isSupported = useSmVersionSupported();
   const { themeName, toggleTheme } = useThemeToggle();
   const { expanded, toggleExpanded } = useInpageNavigation();
   const routes = useNavItems();

@@ -2,23 +2,23 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useLidoSDK } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
+import invariant from 'tiny-invariant';
 import { isHex } from 'viem';
 import { useTxModalStagesStealingReport } from '../hooks/use-tx-modal-stages-stealing-report';
 import {
   StealingReportFormInputType,
   StealingReportFormNetworkData,
 } from './types';
-import invariant from 'tiny-invariant';
 
 export const useStealingReportSubmit: FormSubmitterHook<
   StealingReportFormInputType,
   StealingReportFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const { stealing } = useSmSDK();
   const { txModalStages } = useTxModalStagesStealingReport();
 
   return useCallback(
@@ -54,7 +54,7 @@ export const useStealingReportSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.stealing.report({
+        await stealing.report({
           nodeOperatorId,
           amount,
           penaltyType,
@@ -69,6 +69,6 @@ export const useStealingReportSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [csm.stealing, txModalStages],
+    [stealing, txModalStages],
   );
 };

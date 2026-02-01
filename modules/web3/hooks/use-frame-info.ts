@@ -1,17 +1,17 @@
+import { FrameInfo } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
-import { useLidoSDK } from '../web3-provider';
-import { FrameInfo } from '@lidofinance/lido-csm-sdk';
+import { useSmSDK } from '../web3-provider';
 
 export const useFrameInfo = <TData = FrameInfo>(
   select?: (data: FrameInfo) => TData,
 ) => {
-  const { csm } = useLidoSDK();
+  const { frame } = useSmSDK();
 
   return useQuery({
     queryKey: ['frame-info'],
     ...STRATEGY_CONSTANT,
-    queryFn: () => csm.frame.getInfo(),
+    queryFn: () => frame.getInfo(),
     select,
   });
 };

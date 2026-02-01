@@ -4,7 +4,8 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useLidoSDK } from 'modules/web3';
+import { MODULE } from 'consts';
+import { useSmSDK } from 'modules/web3';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
@@ -16,7 +17,8 @@ export const useClaimTypeSubmit: FormSubmitterHook<
   ClaimTypeFormInputType,
   ClaimTypeFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK(MODULE.CSM);
+  invariant(sdk, 'CSM SDK is required for this operation');
   const { txModalStages } = useTxModalStagesClaimType();
   const confirmClaimtype = useConfirmClaimTypeModal();
 
@@ -56,7 +58,7 @@ export const useClaimTypeSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.icsGate.claimCurve({
+        await sdk.icsGate.claimCurve({
           nodeOperatorId,
           proof: proof.proof,
           callback,
@@ -70,6 +72,6 @@ export const useClaimTypeSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [confirmClaimtype, csm.icsGate, txModalStages],
+    [confirmClaimtype, sdk, txModalStages],
   );
 };

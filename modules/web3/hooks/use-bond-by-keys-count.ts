@@ -1,8 +1,8 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_IMMUTABLE } from 'consts';
-import { useLidoSDK } from '../web3-provider';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import invariant from 'tiny-invariant';
+import { useSmSDK } from '../web3-provider';
 
 type Props = {
   curveId: bigint | undefined;
@@ -15,14 +15,14 @@ export const useBondByKeysCount = ({
   curveId,
   token = TOKENS.steth,
 }: Props) => {
-  const { csm } = useLidoSDK();
+  const { accounting } = useSmSDK();
 
   return useQuery({
     queryKey: ['getBondAmountByKeysCountPerToken', { keysCount, curveId }],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(curveId !== undefined);
-      return csm.accounting.getBondAmountByKeysCountPerToken({
+      return accounting.getBondAmountByKeysCountPerToken({
         keysCount: BigInt(keysCount),
         curveId,
       });

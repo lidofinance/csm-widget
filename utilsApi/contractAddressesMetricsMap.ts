@@ -1,14 +1,11 @@
 import {
+  CM_CONTRACT_ADDRESSES,
+  CONTRACT_BASE_ABI,
   CONTRACT_NAMES,
   CSM_CONTRACT_ADDRESSES,
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
-import {
-  CHAINS,
-  LidoLocatorAbi,
-  StethAbi,
-  WstethABI,
-} from '@lidofinance/lido-ethereum-sdk';
+import { CHAINS, LidoLocatorAbi } from '@lidofinance/lido-ethereum-sdk';
 import {
   fromPairs,
   invert,
@@ -22,26 +19,6 @@ import {
 } from 'lodash';
 import { Abi, Address } from 'viem';
 
-import {
-  AccountingAbi,
-  CSModuleAbi,
-  CuratedGateAbi,
-  CuratedModuleAbi,
-  EjectorAbi,
-  ExitPenaltiesAbi,
-  FeeDistributorAbi,
-  FeeOracleAbi,
-  HashConsensusAbi,
-  OperatorsDataAbi,
-  ParametersRegistryAbi,
-  PermissionlessGateAbi,
-  SMDiscoveryAbi,
-  StakingRouterAbi,
-  ValidatorsExitBusOracleAbi,
-  ValidatorStrikesAbi,
-  VerifierAbi,
-  VettedGateAbi,
-} from '@lidofinance/lido-csm-sdk/abi';
 import { config } from 'config';
 // import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 
@@ -96,12 +73,15 @@ const STATIC_ADDRESSES: {
   },
 };
 
+const CONTRACT_ADDRESSES =
+  config.module === 'csm' ? CSM_CONTRACT_ADDRESSES : CM_CONTRACT_ADDRESSES;
+
 const getContractAddress = (
   name: AlL_CONTRACT_NAMES,
   chainId: SUPPORTED_CHAINS,
 ) =>
   STATIC_ADDRESSES[chainId]?.[name] ??
-  CSM_CONTRACT_ADDRESSES[chainId]?.[name as CONTRACT_NAMES];
+  CONTRACT_ADDRESSES[chainId]?.[name as CONTRACT_NAMES];
 export const METRIC_CONTRACT_ADDRESSES = fromPairs(
   supportedChainsWithMainnet.map((chainId) => [
     chainId,
@@ -118,6 +98,7 @@ export const METRIC_CONTRACT_ADDRESSES = fromPairs(
 
 const CONTRACT_LIST_LOGS: AlL_CONTRACT_NAMES[] = [
   AlL_CONTRACT_NAMES.csModule,
+  AlL_CONTRACT_NAMES.curatedModule,
   AlL_CONTRACT_NAMES.accounting,
   AlL_CONTRACT_NAMES.feeOracle,
   AlL_CONTRACT_NAMES.feeDistributor,
@@ -133,9 +114,6 @@ export const allowedLogsAddresses = mapValues(METRIC_CONTRACT_ADDRESSES, (o) =>
 );
 
 const METRIC_CONTRACT_ABIS: Record<AlL_CONTRACT_NAMES, Abi> = {
-  [AlL_CONTRACT_NAMES.stETH]: StethAbi,
-  [AlL_CONTRACT_NAMES.wstETH]: WstethABI,
-  [AlL_CONTRACT_NAMES.withdrawalVault]: [],
   [AlL_CONTRACT_NAMES.lidoRewardsVault]: [],
   [AlL_CONTRACT_NAMES.lidoLocator]: LidoLocatorAbi,
   [AlL_CONTRACT_NAMES.lidoUnsteth]: [],
@@ -148,24 +126,7 @@ const METRIC_CONTRACT_ABIS: Record<AlL_CONTRACT_NAMES, Abi> = {
   [AlL_CONTRACT_NAMES.ens5]: [],
   [AlL_CONTRACT_NAMES.ens6]: [],
   [AlL_CONTRACT_NAMES.ens7]: [],
-  [AlL_CONTRACT_NAMES.validatorsExitBusOracle]: ValidatorsExitBusOracleAbi,
-  [AlL_CONTRACT_NAMES.stakingRouter]: StakingRouterAbi,
-  [AlL_CONTRACT_NAMES.csModule]: CSModuleAbi,
-  [AlL_CONTRACT_NAMES.accounting]: AccountingAbi,
-  [AlL_CONTRACT_NAMES.feeDistributor]: FeeDistributorAbi,
-  [AlL_CONTRACT_NAMES.feeOracle]: FeeOracleAbi,
-  [AlL_CONTRACT_NAMES.hashConsensus]: HashConsensusAbi,
-  [AlL_CONTRACT_NAMES.ejector]: EjectorAbi,
-  [AlL_CONTRACT_NAMES.parametersRegistry]: ParametersRegistryAbi,
-  [AlL_CONTRACT_NAMES.validatorStrikes]: ValidatorStrikesAbi,
-  [AlL_CONTRACT_NAMES.permissionlessGate]: PermissionlessGateAbi,
-  [AlL_CONTRACT_NAMES.vettedGate]: VettedGateAbi,
-  [AlL_CONTRACT_NAMES.exitPenalties]: ExitPenaltiesAbi,
-  [AlL_CONTRACT_NAMES.SMDiscovery]: SMDiscoveryAbi,
-  [AlL_CONTRACT_NAMES.curatedGate1]: CuratedGateAbi,
-  [AlL_CONTRACT_NAMES.curatedModule]: CuratedModuleAbi,
-  [AlL_CONTRACT_NAMES.operatorsData]: OperatorsDataAbi,
-  [AlL_CONTRACT_NAMES.verifier]: VerifierAbi,
+  ...CONTRACT_BASE_ABI,
 };
 
 export const getMetricContractAbi = memoize(

@@ -2,10 +2,12 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useLidoSDK } from 'modules/web3';
+import { MODULE } from 'consts';
+import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
+import invariant from 'tiny-invariant';
 import { useTxModalStagesNormalizeQueue } from '../hooks/use-tx-modal-stages-normalize-queue';
 import {
   NormalizeQueueFormInputType,
@@ -16,7 +18,8 @@ export const useNormalizeQueueSubmit: FormSubmitterHook<
   NormalizeQueueFormInputType,
   NormalizeQueueFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK(MODULE.CSM);
+  invariant(sdk, 'CSM SDK is required for this operation');
   const { txModalStages } = useTxModalStagesNormalizeQueue();
 
   return useCallback(
@@ -50,7 +53,7 @@ export const useNormalizeQueueSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.depositQueue.normalize({
+        await sdk.depositQueue.normalize({
           nodeOperatorId,
           callback,
         });
@@ -62,6 +65,6 @@ export const useNormalizeQueueSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [csm.depositQueue, txModalStages],
+    [sdk.depositQueue, txModalStages],
   );
 };

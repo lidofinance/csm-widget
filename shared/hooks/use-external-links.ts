@@ -1,13 +1,13 @@
+import {
+  useDappStatus,
+  useNodeOperatorId,
+  useOperatorKeysWithStatus,
+  useSmSDK,
+} from 'modules/web3';
 import { mainnet } from 'viem/chains';
 import { useChainName } from './use-chain-name';
 import { useExternalLinks } from './use-csm-constants';
 import { useSortedKeys } from './use-sorted-keys';
-import {
-  useDappStatus,
-  useLidoSDK,
-  useNodeOperatorId,
-  useOperatorKeysWithStatus,
-} from 'modules/web3';
 
 const DASHBOARD_KEYS_LIMIT = 20;
 
@@ -41,14 +41,18 @@ export const useBeaconchainEntityLink = () => {
 export const useFeesMonitoningLink = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { feesMonitoring } = useExternalLinks();
-  const { moduleId } = useLidoSDK().csm.core;
+  const {
+    core: { moduleId },
+  } = useSmSDK();
   if (!feesMonitoring) return null;
   return `${feesMonitoring}/operatorInfo?stakingModuleIndex=${moduleId}&operatorIndex=${nodeOperatorId}`;
 };
 
 export const useOperatorPortalLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { moduleId } = useLidoSDK().csm.core;
+  const {
+    core: { moduleId },
+  } = useSmSDK();
   const { operatorsWidget } = useExternalLinks();
   if (!operatorsWidget) return null;
   return `${operatorsWidget}/module/${moduleId}/${nodeOperatorId}`;

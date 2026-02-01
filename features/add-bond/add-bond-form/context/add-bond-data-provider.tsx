@@ -1,7 +1,7 @@
 import {
   KEY_OPERATOR_BALANCE,
   KEY_STAKE_LIMIT,
-  useCsmStatus,
+  useSmStatus,
   useEthereumBalance,
   useNodeOperatorId,
   useOperatorBalance,
@@ -39,7 +39,7 @@ const useAddBondFormNetworkData: NetworkData<AddBondFormNetworkData> = () => {
   const isBondLoading = bondQuery.isPending;
   const isMaxStakeEthLoading = maxStakeEthQuery.isPending;
 
-  const { data: status, isPending: isStatusLoading } = useCsmStatus();
+  const { data: status, isPending: isStatusLoading } = useSmStatus();
 
   const invalidate = useInvalidate();
 

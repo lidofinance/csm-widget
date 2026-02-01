@@ -1,5 +1,5 @@
 import { TryOtherNetwork } from 'features/welcome/try-other-network';
-import { useCsmStatus } from 'modules/web3';
+import { useSmStatus } from 'modules/web3';
 import { FC } from 'react';
 import { BannerOperatorCustomAddresses } from './banner-operator-custom-addresses';
 import { CreateOperatorButton } from './create-operator-button';
@@ -7,7 +7,7 @@ import { PausedBanner } from './paused-banner';
 import { StarterPackSection } from './stacter-pack-section';
 
 export const StarterPack: FC = () => {
-  const { data: status } = useCsmStatus();
+  const { data: status } = useSmStatus();
 
   let content = (
     <StarterPackSection>

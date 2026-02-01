@@ -6,9 +6,9 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { PATH } from 'consts';
+import { MODULE, PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
-import { useAppendOperator, useLidoSDK } from 'modules/web3';
+import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { useKeysCache } from 'shared/hooks';
@@ -32,20 +32,21 @@ type SubmitKeysMethodParams = {
 };
 
 const useSubmitKeysTx = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK(MODULE.CSM);
+  invariant(sdk, 'CSM SDK is required for this operation');
 
   return useCallback(
     async (params: SubmitKeysMethodParams, proof: Proof | null) => {
       if (proof) {
-        return csm.icsGate.addNodeOperator({
+        return sdk.icsGate.addNodeOperator({
           ...params,
           proof,
         });
       } else {
-        return csm.permissionlessGate.addNodeOperator(params);
+        return sdk.permissionlessGate.addNodeOperator(params);
       }
     },
-    [csm],
+    [sdk],
   );
 };
 

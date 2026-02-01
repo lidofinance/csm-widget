@@ -5,7 +5,7 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useAppendOperator, useLidoSDK } from 'modules/web3';
+import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
@@ -24,7 +24,7 @@ type ChangeRoleMethodParams = {
 };
 
 const useChangeRoleTx = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK();
 
   return useCallback(
     async (
@@ -40,19 +40,19 @@ const useChangeRoleTx = () => {
     ) => {
       switch (true) {
         case isRewardsChange:
-          return csm.roles.changeRewardsAddress(params);
+          return sdk.roles.changeRewardsAddress(params);
         case isManagerReset:
-          return csm.roles.resetManagerAddress(params);
+          return sdk.roles.resetManagerAddress(params);
         case role === ROLES.REWARDS:
-          return csm.roles.proposeRewardsAddress(params);
+          return sdk.roles.proposeRewardsAddress(params);
         case role === ROLES.MANAGER:
-          return csm.roles.proposeManagerAddress(params);
+          return sdk.roles.proposeManagerAddress(params);
         default: {
           throw new Error('Not implemented yet: true case');
         }
       }
     },
-    [csm],
+    [sdk],
   );
 };
 

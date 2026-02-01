@@ -132,6 +132,16 @@ Module constants and titles are defined in `consts/module.ts`.
 - `modules/web3/hooks/` - Custom hooks for blockchain data (balances, operator info, etc.)
 - `modules/web3/operator-provider/` - Node operator context and state management
 
+**SDK Access:**
+
+Use `useSmSDK()` hook to access Lido SDK instances:
+
+- `useSmSDK()` - Returns module-agnostic SDK (CSM or CM based on MODULE env var)
+- `useSmSDK(MODULE.CSM)` - Returns CSM-specific SDK with type safety
+- `useSmSDK(MODULE.CM)` - Returns CM-specific SDK with type safety
+
+Note: "SM" = Staking Module (module-agnostic terminology for code shared between CSM and CM).
+
 **Configuration System**:
 
 - Runtime configuration with server/public configs in `next.config.mjs`
