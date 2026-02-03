@@ -169,3 +169,7 @@ Note: "SM" = Staking Module (module-agnostic terminology for code shared between
 - Follow `.prettierrc` configuration for code formatting and style
 - Run `yarn lint:fix` after making changes to ensure consistent formatting
 - Always use `type` declarations instead of `interface` declarations for TypeScript type definitions
+
+## Figma Design
+
+- When implementing UI from Figma designs, always use **exact texts** from the design. Do not rephrase, rewrite, or improvise copy — use the precise wording as shown in the Figma mockup.

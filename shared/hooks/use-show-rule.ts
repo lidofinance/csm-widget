@@ -1,6 +1,6 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { useConfig } from 'config';
+import { config, useConfig } from 'config';
 import { useFeatureFlags } from 'config/feature-flags';
 import {
   ICS_APPLY_FORM,
@@ -115,16 +115,19 @@ export const useShowRule = () => {
   );
 };
 
-export const useFilterShowRules = <T extends { showRules?: ShowRule[] }>(
+// FIXME: type duplication with use-nav-items.tsx
+export const useFilterShowRules = <
+  T extends { showRules?: ShowRule[]; module?: MODULE },
+>(
   items: T[],
 ) => {
   const check = useShowRule();
 
   return useMemo(
     () =>
-      items.filter(
-        ({ showRules }) => !showRules?.length || showRules.some(check),
-      ),
+      items
+        .filter(({ module }) => !module || module === config.module)
+        .filter(({ showRules }) => !showRules?.length || showRules.some(check)),
     [check, items],
   );
 };

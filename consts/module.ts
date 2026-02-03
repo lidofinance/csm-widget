@@ -1,3 +1,5 @@
+import { config } from 'config';
+
 export const MODULE = {
   CSM: 'csm',
   CM: 'cm',
@@ -19,3 +21,6 @@ export const MODULE_SHORT_NAME = {
   [MODULE.CSM]: 'CSM',
   [MODULE.CM]: 'CM',
 } as const;
+
+export const isCSM = config.module === MODULE.CSM;
+export const isCM = config.module === MODULE.CM;

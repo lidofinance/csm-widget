@@ -9,7 +9,7 @@ export const validateLength = (
   minLength = MIN_LENGTH,
   maxLength = MAX_LENGTH,
 ) => {
-  if (value.length < minLength)
+  if (value.trim().length < minLength)
     throw new ValidationError(field, `Is too short, minimum is ${minLength}`);
 
   if (value.length > maxLength)

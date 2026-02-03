@@ -1,7 +1,7 @@
 import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
-import { Eth as EthIcon } from '@lidofinance/lido-ui';
+import { Eth as EthIcon, Plus as PlusIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
@@ -11,6 +11,7 @@ import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
+import { MODULE } from 'consts';
 import {
   CounterIcs,
   CounterInvalidKeys,
@@ -26,6 +27,7 @@ export type Route = {
   icon: JSX.Element;
   subPaths?: PATH[];
   showRules: ShowRule[];
+  module?: MODULE;
   suffix?: ReactNode;
   colored?: boolean;
 };
@@ -36,12 +38,19 @@ const routes: Route[] = [
     path: PATH.HOME,
     icon: <HomeIcon />,
     showRules: ['NOT_NODE_OPERATOR'],
+    module: MODULE.CSM,
   },
   {
     name: 'Dashboard',
     path: PATH.HOME,
     icon: <DashboardIcon />,
     showRules: ['IS_NODE_OPERATOR'],
+  },
+  {
+    name: 'Create Operator',
+    path: PATH.CREATE,
+    icon: <PlusIcon />,
+    showRules: ['CAN_CREATE'],
   },
   {
     name: 'Keys',
@@ -53,9 +62,8 @@ const routes: Route[] = [
       PATH.KEYS_EJECT,
       PATH.KEYS_EXIT,
       PATH.KEYS_VIEW,
-      PATH.CREATE,
     ],
-    showRules: ['IS_NODE_OPERATOR', 'CAN_CREATE'],
+    showRules: ['IS_NODE_OPERATOR'],
     suffix: <CounterInvalidKeys />,
   },
   {
@@ -93,6 +101,7 @@ const routes: Route[] = [
     icon: <FileIcon />,
     showRules: ['IS_SURVEYS_ACTIVE', 'IS_CSM'],
     suffix: <CounterSurveys />,
+    module: MODULE.CSM,
   },
   {
     name: 'Operator Type',
@@ -101,6 +110,7 @@ const routes: Route[] = [
     subPaths: [PATH.TYPE_CLAIM, PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
     showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED', 'IS_CSM'],
     suffix: <CounterIcs />,
+    module: MODULE.CSM,
   },
   {
     name: 'Wrapped',
@@ -108,6 +118,7 @@ const routes: Route[] = [
     icon: <GiftIcon />,
     showRules: ['HAS_WRAPPED_DATA', 'IS_CSM'],
     colored: true,
+    module: MODULE.CSM,
   },
 ];
 

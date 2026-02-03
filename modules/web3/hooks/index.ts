@@ -1,7 +1,7 @@
 export * from './use-balance';
 export * from './use-bond-by-keys-count';
 export * from './use-bond-next-keys-count';
-export * from './use-sm-status';
+export * from './use-curated-gates-eligibility';
 export * from './use-curve-parameters';
 export * from './use-dapp-status';
 export * from './use-default-curve-id';
@@ -37,6 +37,7 @@ export * from './use-rewards-last-report-tx-hash';
 export * from './use-share-limit-percentage';
 export * from './use-share-limit-status';
 export * from './use-share-limit';
+export * from './use-sm-status';
 export * from './use-stETH-by-wstETH';
 export * from './use-stake-limit';
 export * from './use-tx-confirmation';

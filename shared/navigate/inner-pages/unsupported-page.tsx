@@ -5,6 +5,7 @@ import { FC } from 'react';
 import { Banner, WelcomeSection } from 'shared/components';
 import { Layout } from 'shared/layout';
 
+// TODO: title should be centered
 export const UnsupportedPage: FC = () => (
   <Layout dummy="semi">
     <Banner
