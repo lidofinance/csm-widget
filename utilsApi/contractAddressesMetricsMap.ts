@@ -20,7 +20,7 @@ import {
 import { Abi, Address } from 'viem';
 
 import { config } from 'config';
-// import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
+import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 
 const AlL_CONTRACT_NAMES = {
   ...CONTRACT_NAMES,
@@ -70,6 +70,7 @@ const STATIC_ADDRESSES: {
       '0xe2EF9536DAAAEBFf5b1c130957AB3E80056b06D8',
     [AlL_CONTRACT_NAMES.lidoUnsteth]:
       '0xfe56573178f1bcdf53F01A6E9977670dcBBD9186',
+    ...overridedAddresses,
   },
 };
 

@@ -54,6 +54,7 @@ declare module 'next/config' {
       basePath: string | undefined;
       developmentMode: boolean;
       module: 'csm' | 'cm';
+      devnetAddresses: Record<string, unknown> | null;
     };
   };
 

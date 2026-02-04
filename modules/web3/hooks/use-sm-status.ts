@@ -6,7 +6,7 @@ export const useSmStatus = () => {
   const { module } = useSmSDK();
 
   return useQuery({
-    queryKey: ['csm-status'],
+    queryKey: ['sm-status'],
     ...STRATEGY_CONSTANT,
     queryFn: () => module.getStatus(),
     select: (data) => ({
@@ -20,7 +20,7 @@ export const useSmVersionSupported = () => {
   const { module } = useSmSDK();
 
   return useQuery({
-    queryKey: ['csm-version'],
+    queryKey: ['sm-version'],
     ...STRATEGY_CONSTANT,
     queryFn: async () => module.isVersionsSupported(),
   });

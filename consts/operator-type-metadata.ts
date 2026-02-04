@@ -27,7 +27,7 @@ export const CM_OPERATOR_TYPE_METADATA: Record<
     title: 'Professional Trusted Operator (PTO)',
     description:
       'This type represents professional operators with a proven track record of strong performance, operational reliability, and ongoing adherence to the Lido protocol standards.',
-    curveId: 0n,
+    curveId: 1n,
   },
   [CM_OPERATOR_TYPE.PO]: {
     name: 'Professional Operator',
@@ -35,7 +35,7 @@ export const CM_OPERATOR_TYPE_METADATA: Record<
     title: 'Professional Operator (PO)',
     description:
       'This type serves as an initial stage in the validation journey of professional staking organizations, entering the Lido protocol validation as part of the Curated Module v2.',
-    curveId: 1n,
+    curveId: 2n,
   },
   [CM_OPERATOR_TYPE.PGO]: {
     name: 'Public Good Operator',
@@ -43,7 +43,7 @@ export const CM_OPERATOR_TYPE_METADATA: Record<
     title: 'Public Good Operator (PGO)',
     description:
       'This type acknowledges entities that strengthen the Ethereum ecosystem through client development, their financial support, or contributing to the broader public infrastructure.',
-    curveId: 2n,
+    curveId: 3n,
   },
   [CM_OPERATOR_TYPE.DO]: {
     name: 'Decentralization Operator',
@@ -51,7 +51,7 @@ export const CM_OPERATOR_TYPE_METADATA: Record<
     title: 'Decentralization Operator (DO)',
     description:
       'This type recognizes entities that advance Ethereum decentralization by operating nodes in underrepresented regions or running unique client and infrastructure combinations.',
-    curveId: 3n,
+    curveId: 4n,
   },
   [CM_OPERATOR_TYPE.EEO]: {
     name: 'Extra Effort Operator',
@@ -59,7 +59,7 @@ export const CM_OPERATOR_TYPE_METADATA: Record<
     title: 'Extra Effort Operator (EEO)',
     description:
       'This type is for entities that demonstrate strong alignment with the Lido protocol through impactful contributions, such as governance participation and stVaults adoption.',
-    curveId: 4n,
+    curveId: 5n,
   },
   [CM_OPERATOR_TYPE.MODC]: {
     name: 'Multi-Operator DVT Cluster',
@@ -67,7 +67,7 @@ export const CM_OPERATOR_TYPE_METADATA: Record<
     title: 'Multi-Operator DVT Cluster (MODC)',
     description:
       "This type applies to distributed validator clusters formed by multiple verified, independent entities operating together to strengthen Ethereum's robustness and resilience.",
-    curveId: 5n,
+    curveId: 6n,
   },
   [CM_OPERATOR_TYPE.IODC]: {
     name: 'Intra-Operator DVT Cluster',
@@ -75,7 +75,7 @@ export const CM_OPERATOR_TYPE_METADATA: Record<
     title: 'Intra-Operator DVT Cluster (IODC)',
     description:
       'This type is designed for distributed validator clusters operated by a single entity, leveraging DVT to enhance validator security, redundancy, and operational reliability.',
-    curveId: 6n,
+    curveId: 7n,
   },
   [CM_OPERATOR_TYPE.CC]: {
     name: 'Custom Curve',

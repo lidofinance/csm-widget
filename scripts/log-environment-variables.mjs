@@ -16,6 +16,7 @@ export const openKeys = [
   'MATOMO_URL',
   'WALLETCONNECT_PROJECT_ID',
   'VALIDATION_FILE_PATH',
+  'DEVNET_ADDRESSES_FILE_PATH',
 ];
 
 export const secretKeys = [

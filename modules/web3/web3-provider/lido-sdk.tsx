@@ -24,6 +24,8 @@ import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
 import { MODULE } from 'consts';
 
+import { overridedAddresses } from './devnet';
+
 type LidoSDKContextValue = {
   chainId: CHAINS;
   core: LidoSDKCore;
@@ -110,6 +112,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       skipHistoricalCalls: chainId !== CHAINS.Mainnet,
       keysApiUrl: config.keysApiUrl,
       feesMonitoringApiUrl: config.feesMonitoringApiUrl,
+      overridedAddresses,
     };
 
     const sm =
