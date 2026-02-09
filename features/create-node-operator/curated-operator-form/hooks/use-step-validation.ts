@@ -23,7 +23,7 @@ export const useStepValidation = (step: number) => {
           formValues.name.length <= 64 &&
           !!formValues.description &&
           formValues.description.trim().length > 0 &&
-          formValues.description.length <= 64
+          formValues.description.length <= 1024
         );
       case 4:
         return true;

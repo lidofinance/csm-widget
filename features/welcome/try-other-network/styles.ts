@@ -10,7 +10,9 @@ export const StyledBlock = styled(Block)`
   gap: ${({ theme }) => theme.spaceMap.md}px;
 `;
 
-export const StyledStack = styled(StackStyle).attrs({ $spaceBetween: true })`
+export const StyledStack = styled(StackStyle).attrs({
+  $justify: 'space-between',
+})`
   @media screen and (max-width: 540px) {
     flex-wrap: wrap;
 

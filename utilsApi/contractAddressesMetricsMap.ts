@@ -20,6 +20,7 @@ import {
 import { Abi, Address } from 'viem';
 
 import { config } from 'config';
+import { isModuleCSM } from 'consts';
 import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 
 const AlL_CONTRACT_NAMES = {
@@ -74,8 +75,9 @@ const STATIC_ADDRESSES: {
   },
 };
 
-const CONTRACT_ADDRESSES =
-  config.module === 'csm' ? CSM_CONTRACT_ADDRESSES : CM_CONTRACT_ADDRESSES;
+const CONTRACT_ADDRESSES = isModuleCSM
+  ? CSM_CONTRACT_ADDRESSES
+  : CM_CONTRACT_ADDRESSES;
 
 const getContractAddress = (
   name: AlL_CONTRACT_NAMES,

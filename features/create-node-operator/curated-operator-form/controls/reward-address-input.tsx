@@ -7,7 +7,7 @@ export const RewardAddressInput: FC = () => {
   return (
     <AddressInputHookForm
       fieldName="rewardAddress"
-      label="Reward Address"
+      label="Rewards Address"
       currentAddress={address}
     />
   );

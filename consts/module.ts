@@ -22,5 +22,5 @@ export const MODULE_SHORT_NAME = {
   [MODULE.CM]: 'CM',
 } as const;
 
-export const isCSM = config.module === MODULE.CSM;
-export const isCM = config.module === MODULE.CM;
+export const isModuleCSM = config.module === MODULE.CSM;
+export const isModuleCM = config.module === MODULE.CM;

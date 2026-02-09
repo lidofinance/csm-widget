@@ -1,8 +1,8 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { Button, DarkThemeProvider } from '@lidofinance/lido-ui';
 import {
-  CM_TESTNET_LINK,
   CSM_MAINNET_LINK,
+  CSM_TESTNET_LINK,
   LIDO_OPERATOR_PORTAL_BASE,
 } from 'consts';
 import { useDappStatus } from 'modules/web3';
@@ -23,9 +23,12 @@ export const BannerTryCsm: FC = () => {
             module aimed at attracting community stakers to participate in the
             Lido protocol as Node Operators. For a detailed description of the
             module, follow{' '}
-            <MatomoLink href={LIDO_OPERATOR_PORTAL_BASE}>the link</MatomoLink>.
+            <MatomoLink href={LIDO_OPERATOR_PORTAL_BASE} $likeText>
+              the link
+            </MatomoLink>
+            .
           </div>
-          <MatomoLink href={isMainnet ? CSM_MAINNET_LINK : CM_TESTNET_LINK}>
+          <MatomoLink href={isMainnet ? CSM_MAINNET_LINK : CSM_TESTNET_LINK}>
             <Button color="secondary" size="sm" fullwidth>
               Join CSM
               {/* external icon */}

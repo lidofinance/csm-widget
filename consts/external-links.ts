@@ -1,7 +1,7 @@
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
-import { MODULE } from './module';
+import { isModuleCSM } from './module';
 
 export const CSM_MAINNET_LINK = 'https://csm.lido.fi/';
 export const CSM_TESTNET_LINK = 'https://csm.testnet.fi/';
@@ -72,10 +72,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
     feedbackForm: 'https://forms.gle/GL9RYeV2g4px58Sv8',
     stakeWidget: 'https://stake.lido.fi',
-    landing:
-      config.module === MODULE.CSM
-        ? 'https://lido.fi/csm'
-        : LIDO_OPERATOR_PORTAL_CM,
+    landing: isModuleCSM ? 'https://lido.fi/csm' : LIDO_OPERATOR_PORTAL_CM,
 
     feesMonitoring: 'https://fees-monitoring.lido.fi',
     operatorsWidget: 'https://operators.lido.fi',
@@ -91,10 +88,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
     feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
     stakeWidget: 'https://stake-hoodi.testnet.fi',
-    landing:
-      config.module === MODULE.CSM
-        ? 'https://testnet.fi/csm'
-        : 'https://testnet.fi/cm',
+    landing: isModuleCSM ? 'https://testnet.fi/csm' : 'https://testnet.fi/cm',
 
     feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
     operatorsWidget: 'https://operators-hoodi.testnet.fi',

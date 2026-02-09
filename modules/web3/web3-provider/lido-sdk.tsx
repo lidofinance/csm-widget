@@ -22,7 +22,7 @@ import {
 
 import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
-import { MODULE } from 'consts';
+import { isModuleCSM, MODULE } from 'consts';
 
 import { overridedAddresses } from './devnet';
 
@@ -115,10 +115,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       overridedAddresses,
     };
 
-    const sm =
-      config.module === MODULE.CSM
-        ? new LidoSDKCsm(smProps)
-        : new LidoSDKCm(smProps);
+    const sm = isModuleCSM ? new LidoSDKCsm(smProps) : new LidoSDKCm(smProps);
 
     return {
       chainId: core.chainId,

@@ -71,7 +71,7 @@ export const useCuratedOperatorValidation = () => {
       });
 
       await validate('description', () => {
-        validateLength('description', description, 1, 64);
+        validateLength('description', description, 1, 1024);
       });
     },
   );

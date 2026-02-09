@@ -98,6 +98,10 @@ const ListStyle = styled.div`
   grid-template-columns: 1fr minmax(auto, 364px);
   column-gap: ${({ theme }) => theme.spaceMap.sm}px;
   row-gap: ${({ theme }) => theme.spaceMap.xl}px;
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const RowStyle = styled.div`

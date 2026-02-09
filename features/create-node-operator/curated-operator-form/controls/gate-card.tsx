@@ -8,6 +8,7 @@ import {
 import { RadioButton, Stack } from 'shared/components';
 import styled from 'styled-components';
 import { getCurveMetadata } from 'consts';
+import { Check } from '@lidofinance/lido-ui';
 
 type GateCardProps = {
   curveId: bigint;
@@ -26,30 +27,33 @@ export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
 
   return (
     <RadioButton small {...fieldProps}>
-      <CardLayout>
-        <Stack direction="column" gap="sm">
-          <Badge>{metadata.short}</Badge>
-          <Text size="xs" weight={700}>
-            {metadata.name}
-          </Text>
-          {metadata.description && (
-            <Description color="secondary" size="xxs">
-              {metadata.description}
-            </Description>
-          )}
-        </Stack>
-        <Divider type="vertical" />
-        <Stack direction="column" gap="md">
-          <ParamSection
-            title="Node Operator reward:"
-            items={formatPercentKeyIntervals(parameters?.rewardsConfig)}
-          />
-          <ParamSection
-            title="Bond:"
-            items={formatEthKeyIntervals(parameters?.bondConfig)}
-          />
-        </Stack>
-      </CardLayout>
+      <Stack gap="xs">
+        <CardLayout>
+          <Stack direction="column" gap="sm">
+            <Badge>{metadata.short}</Badge>
+            <Text size="xs" weight={700}>
+              {metadata.name}
+            </Text>
+            {metadata.description && (
+              <Description color="secondary" size="xxs">
+                {metadata.description}
+              </Description>
+            )}
+          </Stack>
+          <Divider type="vertical" />
+          <Stack direction="column" gap="md">
+            <ParamSection
+              title="Node Operator reward:"
+              items={formatPercentKeyIntervals(parameters?.rewardsConfig)}
+            />
+            <ParamSection
+              title="Bond:"
+              items={formatEthKeyIntervals(parameters?.bondConfig)}
+            />
+          </Stack>
+        </CardLayout>
+        <SatusStyled>{fieldProps.checked && <CheckIcon />}</SatusStyled>
+      </Stack>
     </RadioButton>
   );
 };
@@ -107,4 +111,17 @@ const ParamList = styled.ul`
   li {
     margin-bottom: 2px;
   }
+`;
+
+const SatusStyled = styled.div`
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  width: 24px;
+`;
+
+const CheckIcon = styled(Check)`
+  border-radius: 100%;
+  background: var(--lido-color-primary);
+  color: var(--lido-color-primaryContrast);
 `;

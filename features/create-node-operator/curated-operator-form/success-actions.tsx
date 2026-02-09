@@ -21,7 +21,7 @@ export const CuratedOperatorSuccessActions: FC<Props> = ({
     void n(PATH.CREATE);
   };
 
-  const showCreateAnother = availableGatesCount > 1; // TODO: may be >= 1
+  const showCreateAnother = availableGatesCount > 1;
 
   return (
     <ActionsContainer>
