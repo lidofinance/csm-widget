@@ -53,7 +53,7 @@ const getTexts = (props: Props) => {
     : props.isRevoke
       ? {
           sign: {
-            title: `You are revoking request for ${getRoleTitle(props.role)} address change`,
+            title: `You are canceling request for ${getRoleTitle(props.role)} address change`,
             description: (
               <>
                 Address stays{' '}
@@ -64,7 +64,7 @@ const getTexts = (props: Props) => {
             ),
           },
           success: {
-            title: `Proposed request for ${getRoleTitle(props.role)} address has been revoked`,
+            title: `Proposed request for ${getRoleTitle(props.role)} address has been canceled`,
             description: (
               <>
                 Address stays{' '}

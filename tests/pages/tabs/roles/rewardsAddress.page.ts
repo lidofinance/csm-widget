@@ -51,7 +51,7 @@ export class RewardsAddressPage extends BasePage {
     this.pendingAddressEtherscanLink = this.pendingAddress.locator('a');
 
     this.revokeButton = this.proposedAddress.getByRole('button', {
-      name: 'Revoke',
+      name: 'Cancel',
     });
     this.addressInput = this.form.locator('input[name="address"]');
 
@@ -94,14 +94,14 @@ export class RewardsAddressPage extends BasePage {
         ]);
 
         await this.page.waitForSelector(
-          `text=You are revoking request for rewards address change`,
+          `text=You are canceling request for rewards address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
         await this.walletPage.confirmTx(txPage);
 
         await this.page.waitForSelector(
-          `text=Proposed request for rewards address has been revoked`,
+          `text=Proposed request for rewards address has been canceled`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
       });

@@ -1,19 +1,7 @@
-import { ArrowLeft, ButtonIcon } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { LocalLink } from 'shared/navigate';
+import { BackButton as BackButtonBase } from 'shared/components';
 
 export const BackButton: FC = () => {
-  return (
-    <LocalLink href={PATH.SURVEYS}>
-      <ButtonIcon
-        variant="ghost"
-        color="secondary"
-        size="xs"
-        icon={<ArrowLeft />}
-      >
-        Back
-      </ButtonIcon>
-    </LocalLink>
-  );
+  return <BackButtonBase href={PATH.SURVEYS} color="secondary" />;
 };

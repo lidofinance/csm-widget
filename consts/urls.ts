@@ -20,8 +20,10 @@ export const PATH = <const>{
   BOND_UNLOCK: '/bond/unlock',
 
   ROLES: '/roles',
-  ROLES_REWARDS: '/roles/reward-address',
-  ROLES_MANAGER: '/roles/manager-address',
+  ROLES_REWARDS_ADDRESS: '/roles/rewards-address',
+  ROLES_MANAGER_ADDRESS: '/roles/manager-address',
+  ROLES_CLAIMER: '/roles/claimer',
+  ROLES_SPLITS: '/roles/splits',
   ROLES_INBOX: '/roles/inbox',
 
   STEALING: '/stealing',

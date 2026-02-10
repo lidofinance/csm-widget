@@ -43,7 +43,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
         ]);
 
         await managerAddressPage.page.waitForSelector(
-          `text=You are revoking request for manager address change`,
+          `text=You are canceling request for manager address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
@@ -78,7 +78,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
       ]);
 
       await managerAddressPage.page.waitForSelector(
-        `text=You are revoking request for manager address change`,
+        `text=You are canceling request for manager address change`,
         { timeout: STAGE_WAIT_TIMEOUT },
       );
 
@@ -86,7 +86,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
         await widgetService.walletPage.confirmTx(txPage);
 
         await managerAddressPage.page.waitForSelector(
-          `text=Proposed request for manager address has been revoked`,
+          `text=Proposed request for manager address has been canceled`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 

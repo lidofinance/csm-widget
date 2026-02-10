@@ -42,7 +42,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
         ]);
 
         await rewardsAddressPage.page.waitForSelector(
-          `text=You are revoking request for rewards address change`,
+          `text=You are canceling request for rewards address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
@@ -76,7 +76,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
       ]);
 
       await rewardsAddressPage.page.waitForSelector(
-        `text=You are revoking request for rewards address change`,
+        `text=You are canceling request for rewards address change`,
         { timeout: STAGE_WAIT_TIMEOUT },
       );
 
@@ -84,7 +84,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
         await widgetService.walletPage.confirmTx(txPage);
 
         await rewardsAddressPage.page.waitForSelector(
-          `text=Proposed request for rewards address has been revoked`,
+          `text=Proposed request for rewards address has been canceled`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 

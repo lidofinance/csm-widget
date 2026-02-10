@@ -1,7 +1,6 @@
-import { ArrowLeft, ButtonIcon } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
-import { LocalLink } from 'shared/navigate';
+import { BackButton } from 'shared/components';
 import { useSurveyContext } from '../surveys-provider';
 
 type DelegatorBackButtonProps = {
@@ -19,16 +18,5 @@ export const DelegatorBackButton: FC<DelegatorBackButtonProps> = ({
       ? PATH.SURVEYS_DELEGATOR
       : PATH.SURVEYS;
 
-  return (
-    <LocalLink href={href}>
-      <ButtonIcon
-        variant="ghost"
-        color="secondary"
-        size="xs"
-        icon={<ArrowLeft />}
-      >
-        Back
-      </ButtonIcon>
-    </LocalLink>
-  );
+  return <BackButton href={href} color="secondary" />;
 };

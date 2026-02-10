@@ -1,12 +1,12 @@
 import { PATH } from 'consts/urls';
-import { ChangeRewardRolePage } from 'features/change-role';
+import { SplitsPage } from 'features/change-role';
 import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
   <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.ROLES} />}>
-      <ChangeRewardRolePage />
+    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
+      <SplitsPage />
     </Gate>
   </GateLoaded>
 );

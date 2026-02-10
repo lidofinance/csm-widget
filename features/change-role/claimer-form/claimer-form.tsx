@@ -3,21 +3,16 @@ import { FC, memo } from 'react';
 import { PATH } from 'consts/urls';
 import { BackButton, FormBlock } from 'shared/components';
 import { Form, FormLoader } from 'shared/hook-form/form-controller';
-import { ChangeRoleFormInfo } from './change-role-form-info';
-import {
-  ChangeRoleDataProvider,
-  ChangeRoleDataProviderProps,
-  ChangeRoleFormProvider,
-} from './context';
+import { ClaimerDataProvider, ClaimerFormProvider } from './context';
 import { AddressInput } from './controls/address-input';
 import { Info } from './controls/info';
 import { SubmitButton } from './controls/submit-button';
 
-export const ChangeRoleForm: FC<ChangeRoleDataProviderProps> = memo((props) => {
+export const ClaimerForm: FC = memo(() => {
   return (
-    <ChangeRoleDataProvider {...props}>
-      <ChangeRoleFormProvider {...props}>
-        <FormBlock data-testid="changeRoleForm">
+    <ClaimerDataProvider>
+      <ClaimerFormProvider>
+        <FormBlock data-testid="claimerForm">
           <BackButton text="Back to all roles" href={PATH.ROLES} />
           <FormLoader>
             <Form>
@@ -25,10 +20,9 @@ export const ChangeRoleForm: FC<ChangeRoleDataProviderProps> = memo((props) => {
               <AddressInput />
               <SubmitButton />
             </Form>
-            <ChangeRoleFormInfo />
           </FormLoader>
         </FormBlock>
-      </ChangeRoleFormProvider>
-    </ChangeRoleDataProvider>
+      </ClaimerFormProvider>
+    </ClaimerDataProvider>
   );
 });

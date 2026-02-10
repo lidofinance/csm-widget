@@ -5,14 +5,9 @@ import { SwitcherRoutes } from './types';
 
 const ROLE_ROUTES: SwitcherRoutes = [
   {
-    title: 'Rewards Address',
-    path: PATH.ROLES_REWARDS,
-    showRules: ['HAS_MANAGER_ROLE', 'HAS_REWARDS_ROLE'],
-  },
-  {
-    title: 'Manager Address',
-    path: PATH.ROLES_MANAGER,
-    showRules: ['HAS_MANAGER_ROLE', 'HAS_REWARDS_ROLE'],
+    title: 'Roles',
+    path: PATH.ROLES,
+    showRules: ['IS_NODE_OPERATOR'],
   },
   {
     title: 'Inbox requests',

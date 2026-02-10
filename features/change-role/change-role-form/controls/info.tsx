@@ -7,6 +7,7 @@ import { useRole } from '../hooks/use-role';
 import { Text } from '@lidofinance/lido-ui';
 import { isAddressEqual } from 'viem';
 import { ROLES } from '@lidofinance/lido-csm-sdk';
+import { getRoleTitle } from 'shared/node-operator';
 
 export const Info: FC = () => {
   const roleTitle = useRole();
@@ -26,6 +27,9 @@ export const Info: FC = () => {
 
   return (
     <>
+      <Text size="md" weight={700} as="h4">
+        {getRoleTitle(role, true)} Address
+      </Text>
       <Latice variant="secondary">
         <TitledAddress
           title={`Current ${roleTitle} address`}
@@ -51,7 +55,7 @@ export const Info: FC = () => {
                       fullwidth={false}
                       onClick={revokeHandle}
                     >
-                      Revoke
+                      Cancel
                     </SubmitButtonHookForm>
                   )}
                 </>

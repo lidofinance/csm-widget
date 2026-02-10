@@ -47,7 +47,7 @@ export class ManagerAddressPage extends BasePage {
     this.pendingAddress = this.pendingTitledAddress.locator('> div').nth(1);
     this.pendingAddressEtherscanLink = this.pendingAddress.locator('a');
     this.revokeButton = this.proposedAddress.getByRole('button', {
-      name: 'Revoke',
+      name: 'Cancel',
     });
 
     this.addressInput = this.form.locator('input[name="address"]');
@@ -89,14 +89,14 @@ export class ManagerAddressPage extends BasePage {
         ]);
 
         await this.page.waitForSelector(
-          `text=You are revoking request for manager address change`,
+          `text=You are canceling request for manager address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
         await this.walletPage.confirmTx(txPage);
 
         await this.page.waitForSelector(
-          `text=Proposed request for manager address has been revoked`,
+          `text=Proposed request for manager address has been canceled`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
       });
