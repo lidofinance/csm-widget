@@ -5,6 +5,7 @@ export class WelcomeSection {
   welcomeSection: Locator;
   iAmANodeOperatorBtn: Locator;
   becomeANodeOperatorBtn: Locator;
+  detailedLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -15,5 +16,8 @@ export class WelcomeSection {
     this.becomeANodeOperatorBtn = this.welcomeSection.getByTestId(
       'becomeANodeOperatorBtn',
     );
+    this.detailedLink = this.welcomeSection.locator('a', {
+      hasText: 'link',
+    });
   }
 }

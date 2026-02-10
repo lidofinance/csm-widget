@@ -6,6 +6,7 @@ export class TestnetConfig extends BaseConfig {
     this.standConfig = {
       standType: 'testnet',
       standUrl: 'https://csm.testnet.fi/',
+      matomoUrl: 'https://matomo.testnet.fi/matomo.php',
       networkConfig: {
         chainId: 560048,
         tokenSymbol: 'ETH',

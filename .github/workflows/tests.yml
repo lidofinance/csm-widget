@@ -80,8 +80,6 @@ jobs:
       TEST_TAGS: ${{ inputs.tags || github.event.inputs.tags || '!forked'}}
       TEST_BRANCH: ${{ github.event.inputs.branch }}
       REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
-      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL}}
-      DISCORD_DUTY_TAG: "&1372906915667116032"
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
       SLACK_DUTY_TAG: "S09H269H2TT"
 
