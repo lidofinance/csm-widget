@@ -2,7 +2,8 @@ import { FC, memo } from 'react';
 
 import { PATH } from 'consts/urls';
 import { BackButton, FormBlock } from 'shared/components';
-import { Form, FormLoader } from 'shared/hook-form/form-controller';
+import { Form } from 'shared/hook-form/form-controller';
+import { ClaimerFormLoader } from './claimer-form-loader';
 import { ClaimerDataProvider, ClaimerFormProvider } from './context';
 import { AddressInput } from './controls/address-input';
 import { Info } from './controls/info';
@@ -14,13 +15,13 @@ export const ClaimerForm: FC = memo(() => {
       <ClaimerFormProvider>
         <FormBlock data-testid="claimerForm">
           <BackButton text="Back to all roles" href={PATH.ROLES} />
-          <FormLoader>
+          <ClaimerFormLoader>
             <Form>
               <Info />
               <AddressInput />
               <SubmitButton />
             </Form>
-          </FormLoader>
+          </ClaimerFormLoader>
         </FormBlock>
       </ClaimerFormProvider>
     </ClaimerDataProvider>

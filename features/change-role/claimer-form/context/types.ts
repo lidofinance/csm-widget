@@ -7,7 +7,7 @@ export type ClaimerFormInputType = {
 };
 
 export type ClaimerFormNetworkData = {
-  address: Address;
   nodeOperatorId: NodeOperatorId;
   currentClaimerAddress: Address | undefined;
+  isOwner: boolean;
 };

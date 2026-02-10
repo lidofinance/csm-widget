@@ -15,10 +15,19 @@ import { VerifiedChip } from './verified-chip';
 
 export const InputAddress = forwardRef<
   HTMLInputElement,
-  InputAddressProps & { addressName?: string }
+  InputAddressProps & { addressName?: string; simple?: boolean }
 >(
   (
-    { onChange, value, isLocked, rightDecorator, label, addressName, ...props },
+    {
+      onChange,
+      value,
+      isLocked,
+      rightDecorator,
+      label,
+      addressName,
+      simple,
+      ...props
+    },
     ref,
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
@@ -64,20 +73,19 @@ export const InputAddress = forwardRef<
         onChange={handleChange}
         placeholder="Ethereum address"
         leftDecorator={
-          isLoading ? (
-            <Loader size="small" />
-          ) : address.value ? (
-            <Identicon address={address.value} />
-          ) : null
+          (!simple &&
+            (isLoading ? (
+              <Loader size="small" />
+            ) : (
+              address.value && <Identicon address={address.value} />
+            ))) ??
+          null
         }
         rightDecorator={
-          rightDecorator ?? (
-            <>
-              {isLocked ? (
-                <InputDecoratorLocked title="Allows reset to the current address only" />
-              ) : undefined}
-            </>
-          )
+          rightDecorator ??
+          (isLocked ? (
+            <InputDecoratorLocked title="Allows reset to the current address only" />
+          ) : undefined)
         }
         disabled={props.disabled || isLocked}
         spellCheck="false"

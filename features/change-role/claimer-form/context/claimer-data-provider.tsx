@@ -3,6 +3,7 @@ import {
   useCustomRewardsClaimer,
   useDappStatus,
   useNodeOperatorId,
+  useOperatorIsOwner,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
 import {
@@ -11,16 +12,17 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
-import invariant from 'tiny-invariant';
 import { zeroAddress } from 'viem';
 import { type ClaimerFormNetworkData } from './types';
 
 const useClaimerFormNetworkData: NetworkData<ClaimerFormNetworkData> = () => {
   const { address } = useDappStatus();
-  invariant(address);
-
   const nodeOperatorId = useNodeOperatorId();
   const claimerQuery = useCustomRewardsClaimer(nodeOperatorId);
+  const { data: isOwner, isPending: isOwnerPending } = useOperatorIsOwner({
+    address,
+    nodeOperatorId,
+  });
 
   const currentClaimerAddress =
     claimerQuery.data === zeroAddress ? undefined : claimerQuery.data;
@@ -33,11 +35,11 @@ const useClaimerFormNetworkData: NetworkData<ClaimerFormNetworkData> = () => {
 
   return {
     data: {
-      address,
       nodeOperatorId,
       currentClaimerAddress,
+      isOwner: !!isOwner,
     } as ClaimerFormNetworkData,
-    isPending: claimerQuery.isPending,
+    isPending: claimerQuery.isPending || isOwnerPending,
     revalidate,
   };
 };
