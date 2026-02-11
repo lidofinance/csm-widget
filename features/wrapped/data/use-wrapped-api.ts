@@ -1,6 +1,6 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
-import { API_ROUTES, STRATEGY_LAZY } from 'consts';
+import { API_ROUTES, isModuleCSM, STRATEGY_LAZY } from 'consts';
 import { standardFetcher } from 'utils';
 import { WrappedStats, WrappedStatsResponse } from './types';
 
@@ -19,7 +19,7 @@ export const useWrappedApi = (nodeOperatorId?: NodeOperatorId) => {
         avgPerformance: BigInt(data.avgPerformance),
         bestMonthPerformance: BigInt(data.bestMonthPerformance),
       } as WrappedStats),
-    enabled: nodeOperatorId !== undefined,
+    enabled: isModuleCSM && nodeOperatorId !== undefined,
     ...STRATEGY_LAZY,
   });
 };

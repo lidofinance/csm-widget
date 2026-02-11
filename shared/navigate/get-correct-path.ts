@@ -1,3 +1,4 @@
+import { isModuleCSM } from 'consts';
 import { ROLE_CODE } from 'consts/roles';
 import { PATH } from 'consts/urls';
 import { ShowFlags } from 'shared/hooks';
@@ -21,7 +22,7 @@ export const getCorrectPath = (
 
     // Create — operators already have keys
     case PATH.CREATE:
-      return hasRole ? PATH.KEYS_VIEW : path;
+      return isModuleCSM && hasRole ? PATH.KEYS_VIEW : path;
 
     // Keys
     case PATH.KEYS:
