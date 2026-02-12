@@ -18,7 +18,7 @@ const ADDRESS_MAP: Record<string, CONTRACT_NAMES> = {
   ParametersRegistry: CONTRACT_NAMES.parametersRegistry,
   ValidatorStrikes: CONTRACT_NAMES.validatorStrikes,
   Verifier: CONTRACT_NAMES.verifier,
-  OperatorsData: CONTRACT_NAMES.operatorsData,
+  MetaRegistry: CONTRACT_NAMES.metaRegistry,
   PermissionlessGate: CONTRACT_NAMES.permissionlessGate,
   VettedGate: CONTRACT_NAMES.vettedGate,
 };
