@@ -31,8 +31,8 @@ export const useCuratedOperatorSubmit: FormSubmitterHook<
     async (formData, networkData, { onConfirm, onRetry }) => {
       invariant(sdk, 'CM SDK not initialized');
       invariant(formData.gateIndex !== undefined, 'Gate not selected');
-      invariant(formData.rewardAddress, 'Rewards address required');
-      invariant(formData.managerAddress, 'Manager address required');
+      invariant(formData.rewardAddress, 'Rewards Address required');
+      invariant(formData.managerAddress, 'Manager Address required');
 
       const selectedGate = networkData.availableGates.find(
         (gate) => gate.gateIndex === formData.gateIndex,

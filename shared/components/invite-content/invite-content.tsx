@@ -14,26 +14,26 @@ export const InviteContent: FC<{ invite: NodeOperatorInvite }> = ({
       title={
         invite.role === ROLES.MANAGER ? (
           <>
-            The Manager address is used for:
+            The Manager Address is used for:
             <ul>
               <li>Adding new keys</li>
               <li>Removing existing keys</li>
               <li>Adding extra bond amount</li>
-              <li>Claiming bond and rewards to the Rewards address</li>
+              <li>Claiming bond and rewards to the Rewards Address</li>
               <li>Covering locked bond</li>
-              <li>Proposing a new Manager address</li>
+              <li>Proposing a new Manager Address</li>
             </ul>
           </>
         ) : (
           <>
-            The Rewards address is used for:
+            The Rewards Address is used for:
             <ul>
               <li>Claiming bond and rewards</li>
               <li>Adding extra bond amount</li>
               <li>Covering locked bond</li>
-              <li>Proposing a new Rewards address</li>
+              <li>Proposing a new Rewards Address</li>
               <li>
-                Resetting the Manager address to the current Rewards address
+                Resetting the Manager Address to the current Rewards Address
               </li>
             </ul>
           </>

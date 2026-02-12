@@ -22,7 +22,7 @@ export const SiweSignIn: FC = () => {
           </MatomoLink>
           ), UI/UX improvements, or feedback purposes. To view or submit this
           information, you must sign in to verify that you are the owner of the
-          Reward or Manager address.
+          Reward or Manager Address.
         </Text>
         <Button size="sm" onClick={signIn} fullwidth>
           Sign in

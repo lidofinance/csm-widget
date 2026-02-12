@@ -55,7 +55,7 @@ test.describe('Roles. Rewards Address. Transactions. Reproposed Address', () => 
           );
 
           await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
-            'After changing the Rewards Address, all rewards and excess bond accumulated on the bond balance can be claimed to the new Rewards address. In the event of validator withdrawal, the whole bond is also returned to the new address.',
+            'After changing the Rewards Address, all rewards and excess bond accumulated on the bond balance can be claimed to the new Rewards Address. In the event of validator withdrawal, the whole bond is also returned to the new address.',
           );
 
           await expect(rolesPage.modalRoot.continueButton).toBeVisible();

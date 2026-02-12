@@ -56,7 +56,7 @@ export const Step2: FC = () => {
                     <li>Adding new keys</li>
                     <li>Removing existing keys</li>
                     <li>Adding extra bond amount</li>
-                    <li>Claiming bond and rewards to the Rewards address</li>
+                    <li>Claiming bond and rewards to the Rewards Address</li>
                     <li>Covering locked bond</li>
                     <li>Proposing a new Manager Address</li>
                     <li>Changing Rewards Address</li>

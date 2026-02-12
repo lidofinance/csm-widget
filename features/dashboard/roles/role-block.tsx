@@ -23,8 +23,8 @@ export const RoleBlock: FC<RoleBlockProps> = ({
   const title = type === ROLES.MANAGER ? 'Manager Address' : 'Rewards Address';
   const ownerTooltip =
     type === ROLES.MANAGER
-      ? 'Manager has extended permissions and ultimate control. Can change the Rewards address'
-      : 'Rewards address has ultimate control. Can reset the Manager address';
+      ? 'Manager has extended permissions and ultimate control. Can change the Rewards Address'
+      : 'Rewards Address has ultimate control. Can reset the Manager Address';
   return (
     <RoleBlockWrapper>
       <Stack gap="sm">
