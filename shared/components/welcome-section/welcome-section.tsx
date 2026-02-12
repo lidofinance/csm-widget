@@ -15,11 +15,11 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => (
   <BlockStyled data-testid="welcomeSection">
     <Heading>
       <CSMLogo />
-      <Header>Community Staking Module</Header>
+      <Header>Community Staking Module v2</Header>
     </Heading>
     <ContentWrapper>
       <p>
-        The Community Staking Module (CSM) is a permissionless staking module
+        The Community Staking Module v2 (CMv2) is a permissionless staking module
         aimed at attracting community stakers to participate in the Lido on
         Ethereum protocol as Node Operators. For a detailed description of the
         module, follow the{' '}
