@@ -1,4 +1,4 @@
-name: CI Preview stand deploy
+name: CI Preview stand deploy (CM)
 
 on:
   workflow_dispatch:
@@ -14,8 +14,7 @@ on:
 
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    branches-ignore:
-      - main
+    branches:
       - develop-cm
 
 permissions:
@@ -37,7 +36,7 @@ jobs:
         id: ref
         run: echo "short_ref=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
 
-      - name: Preview stand deploying
+      - name: Preview stand deploying (CM)
         uses: lidofinance/dispatch-workflow@v1
         env:
           APP_ID: ${{ secrets.APP_ID }}
@@ -45,11 +44,11 @@ jobs:
           TARGET_REPO: "lidofinance/infra-mainnet"
           TARGET: ${{ github.head_ref || steps.ref.outputs.short_ref }}
           TARGET_WORKFLOW: "preview_stand_deploy.yaml"
-          INPUTS_REPO_NAME: ${{ github.repository }}
+          INPUTS_REPO_NAME: "lidofinance/cm-widget"
           INPUTS_PR_ID: ${{ github.event.pull_request.number || steps.pr.outputs.number }}
           INPUTS_INVENTORY: "${{ inputs.inventory || 'testnet' }}"
 
-      - name: Define repo short name
+      - name: Define repo short name (CM)
         run: echo "short_name=$(echo ${{ github.repository }} | cut -d "/" -f 2)" >> $GITHUB_OUTPUT
         id: repo
 
