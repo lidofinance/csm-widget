@@ -2,12 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import { useLidoSDK } from '../web3-provider';
 
-export const useRewardsLastReportTxHash = () => {
+export const useLastReportTimestamps = () => {
   const { csm } = useLidoSDK();
 
   return useQuery({
-    queryKey: ['rewards-last-report-tx-hash'],
+    queryKey: ['last-report-timestamps'],
     ...STRATEGY_CONSTANT,
-    queryFn: () => csm.rewards.getLastReportTransactionHash(),
+    queryFn: () => csm.rewards.getLastReportTimestamps(),
   });
 };
