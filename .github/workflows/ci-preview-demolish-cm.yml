@@ -1,12 +1,11 @@
-name: CI Preview stand demolish
+name: CI Preview stand demolish (CM)
 
 on:
   workflow_dispatch:
   pull_request:
     types:
       [converted_to_draft, closed]
-    branches-ignore:
-      - main
+    branches:
       - develop-cm
 
 permissions: {}
@@ -16,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and deploy
     steps:
-      - name: Preview stand deploying
+      - name: Preview stand demolish (CM)
         uses: lidofinance/dispatch-workflow@v1
         env:
           APP_ID: ${{ secrets.APP_ID }}
@@ -24,5 +23,5 @@ jobs:
           TARGET_REPO: "lidofinance/infra-mainnet"
           TARGET: ${{ github.head_ref }}
           TARGET_WORKFLOW: "preview_stand_demolish.yaml"
-          INPUTS_REPO_NAME: ${{ github.repository }}
+          INPUTS_REPO_NAME: "lidofinance/cm-widget"
           INPUTS_PR_ID: ${{ github.event.pull_request.number }}
