@@ -3,23 +3,21 @@ import { PATH } from 'consts/urls';
 import { WrappedStats } from 'features/wrapped/data';
 import { SlideStats } from 'features/wrapped/slides/slide-outro';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { FC, useEffect, useState } from 'react';
 import { Stack } from 'shared/components';
+import { useSearchParams } from 'shared/hooks';
 import { Layout } from 'shared/layout';
 import { LocalLink } from 'shared/navigate';
-import { getFirstParam } from 'utils';
 import { decodeSlideData, type SlideData } from 'utils/wrapped-hash-codec';
 
 const WrappedSharePage: FC = () => {
-  const router = useRouter();
   const [slideData, setSlideData] = useState<SlideData | null>(null);
   const [error, setError] = useState(false);
+  const query = useSearchParams();
 
   useEffect(() => {
-    if (!router.isReady) return;
-
-    const dataParam = getFirstParam(router.query?.data);
+    if (!query) return;
+    const dataParam = query.get('data');
 
     if (!dataParam) {
       setError(true);
@@ -33,7 +31,7 @@ const WrappedSharePage: FC = () => {
       console.error('Failed to decode slide data:', err);
       setError(true);
     }
-  }, [router.isReady, router.query]);
+  }, [query]);
 
   const metaDescription = "Community Staker's 2025 CSM Wrapped";
 
