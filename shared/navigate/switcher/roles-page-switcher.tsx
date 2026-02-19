@@ -7,6 +7,12 @@ const ROLE_ROUTES: SwitcherRoutes = [
   {
     title: 'Roles',
     path: PATH.ROLES,
+    // subpaths: [
+    //   PATH.ROLES_MANAGER_ADDRESS,
+    //   PATH.ROLES_REWARDS_ADDRESS,
+    //   PATH.ROLES_CLAIMER,
+    //   PATH.ROLES_SPLITS,
+    // ],
     showRules: ['IS_NODE_OPERATOR'],
   },
   {

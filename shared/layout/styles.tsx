@@ -105,6 +105,9 @@ export const Content = styled.div`
 `;
 
 export const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+
   grid-area: main;
   position: relative;
   margin-inline: auto;
