@@ -16,7 +16,7 @@ import {
   useOperatorOwner,
   useOperatorType,
 } from 'modules/web3';
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { CSM_OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 
 export type TypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
 
@@ -55,7 +55,7 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
 
   const typeStatus: TypeStatus = useMemo(() => {
-    if (operatorType === OPERATOR_TYPE.ICS || proofData?.isConsumed)
+    if (operatorType === CSM_OPERATOR_TYPE.ICS || proofData?.isConsumed)
       return 'CLAIMED';
     if (proofData?.proof) return 'ISSUED';
     if (ownerProofData?.proof) return 'OWNER_ISSUED';

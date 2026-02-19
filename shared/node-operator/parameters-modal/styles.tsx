@@ -1,5 +1,5 @@
 import { Modal } from '@lidofinance/lido-ui';
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { type OperatorType } from '@lidofinance/lido-csm-sdk';
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
 import { CURVE_VARIANTS } from '../curve-badge/styles';
@@ -7,7 +7,7 @@ import { CURVE_VARIANTS } from '../curve-badge/styles';
 export const StyledModal = styled((props: ComponentProps<typeof Modal>) => (
   <Modal {...props} />
 ))<{
-  $variant?: OPERATOR_TYPE;
+  $variant?: OperatorType;
 }>`
   > div {
     width: 544px;
@@ -28,7 +28,7 @@ export const StyledModal = styled((props: ComponentProps<typeof Modal>) => (
         z-index: -1;
         margin: calc(-1 * var(--border-width));
         border-radius: inherit;
-        ${({ $variant }) => ($variant ? CURVE_VARIANTS[$variant] : '')}
+        ${({ $variant }) => ($variant ? (CURVE_VARIANTS[$variant] ?? '') : '')}
       }
 
       > div {

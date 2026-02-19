@@ -1,5 +1,7 @@
 import { config } from 'config';
 
+// FIXME: replace with MODULE_NAME from SDK
+// TODO: reduce direct usage
 export const MODULE = {
   CSM: 'csm',
   CM: 'cm',

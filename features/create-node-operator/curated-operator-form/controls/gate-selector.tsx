@@ -5,6 +5,8 @@ import { useCuratedOperatorFormData } from '../context';
 import type { CuratedOperatorFormInputType } from '../context/types';
 import { GateCard } from './gate-card';
 
+// TODO: use operator type style for badge
+// TODO: add loading state for parameters
 export const GateSelector: FC = () => {
   const { availableGates = [] } = useCuratedOperatorFormData();
 

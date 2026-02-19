@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { CSM_OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
 import styled, { css } from 'styled-components';
 
@@ -95,7 +95,7 @@ export const BadgeWrapper = styled.div<{ $same?: boolean }>`
 
   border-radius: 14px;
   border: 2px solid rgba(var(--lido-rgb-foreground), 0.8);
-  ${CURVE_VARIANTS[OPERATOR_TYPE.ICS]}
+  ${CURVE_VARIANTS[CSM_OPERATOR_TYPE.ICS]}
   background-origin: border-box;
 
   ${({ $same }) =>
@@ -108,7 +108,7 @@ export const BadgeWrapper = styled.div<{ $same?: boolean }>`
     content: '';
     filter: blur(38px);
     opacity: 0.8;
-    ${CURVE_VARIANTS[OPERATOR_TYPE.ICS]}
+    ${CURVE_VARIANTS[CSM_OPERATOR_TYPE.ICS]}
     position: absolute;
     left: 0;
     top: 0;

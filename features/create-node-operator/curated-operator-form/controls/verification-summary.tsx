@@ -99,7 +99,7 @@ const ListStyle = styled.div`
   column-gap: ${({ theme }) => theme.spaceMap.sm}px;
   row-gap: ${({ theme }) => theme.spaceMap.xl}px;
 
-  ${({ theme }) => theme.mediaQueries.xl} {
+  ${({ theme }) => theme.mediaQueries.lg} {
     grid-template-columns: 1fr;
   }
 `;

@@ -1,23 +1,27 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import {
+  CSM_OPERATOR_TYPE,
+  type OperatorType,
+} from '@lidofinance/lido-csm-sdk';
 import { ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
+import { getOperatorTypeForCurveId } from 'consts';
 import Image from 'next/image';
 import { FC } from 'react';
 import { useCurrentCurveId } from 'shared/hooks';
-import { getOperatorType } from 'utils';
 
 import curveIcsDark from 'faq/images/curve-ics-dark.png';
 import curveIcs from 'faq/images/curve-ics.png';
 import curveDefDark from 'faq/images/curve-def-dark.png';
 import curveDef from 'faq/images/curve-def.png';
 
-const isIcs = (type?: OPERATOR_TYPE) =>
-  !!type && [OPERATOR_TYPE.ICS, OPERATOR_TYPE.LEA].includes(type);
+const isIcs = (type?: OperatorType) =>
+  !!type &&
+  [CSM_OPERATOR_TYPE.ICS, CSM_OPERATOR_TYPE.LEA].includes(
+    type as CSM_OPERATOR_TYPE,
+  );
 
-export const FaqCurveImage: FC<{ type?: OPERATOR_TYPE }> = ({
-  type: _type,
-}) => {
+export const FaqCurveImage: FC<{ type?: OperatorType }> = ({ type: _type }) => {
   const curveId = useCurrentCurveId();
-  const type = _type ?? getOperatorType(curveId);
+  const type = _type ?? getOperatorTypeForCurveId(curveId);
   const { themeName } = useThemeToggle();
   const isDark = themeName === ThemeName.dark;
 

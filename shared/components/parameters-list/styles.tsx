@@ -1,6 +1,6 @@
 import { ArrowBottom, Link } from '@lidofinance/lido-ui';
 import styled, { css } from 'styled-components';
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { CSM_OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CURVE_VARIANTS } from '../../node-operator/curve-badge/styles';
 
 export const ArrowStyle = styled(ArrowBottom)<{ $expanded: boolean }>`
@@ -61,13 +61,13 @@ export const ColumnBackground = styled.div`
 `;
 
 export const IcsColumnBackground = styled(ColumnBackground)`
-  ${CURVE_VARIANTS[OPERATOR_TYPE.ICS]}
+  ${CURVE_VARIANTS[CSM_OPERATOR_TYPE.ICS]}
 `;
 
 export const DefColumnBackground = styled(ColumnBackground)`
   right: auto;
   left: calc((100% + 0px) * 4 / 14 + 4px);
-  ${CURVE_VARIANTS[OPERATOR_TYPE.DEF]}
+  ${CURVE_VARIANTS[CSM_OPERATOR_TYPE.DEF]}
 `;
 
 export const FoldableListStyle = styled(ListStyle)<{ $folded?: boolean }>`

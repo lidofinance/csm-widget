@@ -1,6 +1,6 @@
 import {
-  OPERATOR_TYPE,
-  OPERATOR_TYPE_CURVE_ID,
+  CSM_OPERATOR_TYPE,
+  CSM_OPERATOR_TYPE_CURVE_ID,
 } from '@lidofinance/lido-csm-sdk';
 import { Button, Divider, Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPES_LINK } from 'consts/external-links';
@@ -36,7 +36,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
       }
     >
       <StackWrap>
-        <OptionCard $variant={OPERATOR_TYPE.DEF}>
+        <OptionCard $variant={CSM_OPERATOR_TYPE.DEF}>
           <Stack direction="column">
             <Text size="sm" weight={700}>
               Default
@@ -50,7 +50,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
             <Divider />
           </Stack>
           <Stack direction="column">
-            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.DEF} />
+            <Parameters curveId={CSM_OPERATOR_TYPE_CURVE_ID.DEF} />
             <LocalLink
               href={PATH.CREATE}
               matomoEvent={
@@ -64,7 +64,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
           </Stack>
         </OptionCard>
 
-        <OptionCard $variant={OPERATOR_TYPE.ICS}>
+        <OptionCard $variant={CSM_OPERATOR_TYPE.ICS}>
           <Stack direction="column">
             <Text size="sm" weight={700}>
               Identified Community Staker
@@ -78,7 +78,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
             <Divider />
           </Stack>
           <Stack direction="column">
-            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.ICS} />
+            <Parameters curveId={CSM_OPERATOR_TYPE_CURVE_ID.ICS} />
             <LocalLink
               href={PATH.TYPE_ICS_APPLY}
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIcs}

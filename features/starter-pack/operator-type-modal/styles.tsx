@@ -1,5 +1,5 @@
 import { Modal } from '@lidofinance/lido-ui';
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { CSM_OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { StackStyle } from 'shared/components';
 import styled from 'styled-components';
 import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
@@ -20,7 +20,7 @@ export const OptionCard = styled(StackStyle).attrs({
   $direction: 'column',
   $justify: 'space-between',
 })<{
-  $variant?: OPERATOR_TYPE;
+  $variant?: CSM_OPERATOR_TYPE;
 }>`
   --border-width: 2px;
   padding: 16px;

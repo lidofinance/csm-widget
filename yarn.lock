@@ -3152,27 +3152,18 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.47.0.tgz#186d6e2695c9470cc171d111dac352da5106e681"
   integrity sha512-dF8eUUnK35CNCVa3Z++INtlxlRlYKGx2//eLz7nyFkqwPoOGI0PmVW0qgGiGY9TrGAqkJuXlERszclH8eunYCw==
 
-"@lidofinance/lido-csm-sdk@^2.0.0-alpha.5":
-  version "2.0.0-alpha.7"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.0.0-alpha.7.tgz#e5e9cf118c0843f06f031b9acc41f0673d4f1a9a"
-  integrity sha512-8EkDQQcJgmE/5v94OXR1U+EbR8j9Og0lLEYDCyE+j4vnB2C4jrzz2iTtocn7kzgdi+hfznCTmL4FWPDGrFFyYg==
+"@lidofinance/lido-csm-sdk@^2.0.0-alpha.9":
+  version "2.0.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.0.0-alpha.9.tgz#cde48d4dc23c5f5c48a04db74a64bc57a7161835"
+  integrity sha512-Q0ZoTweZrT1M75Mu6QVeEKnU6GVPVMuTs2vUIJ9MxlrK6fqeQBRyrlboP7tRaXq7YPhs42DFlF+LtaOuHtLwng==
   dependencies:
     "@chainsafe/ssz" "^1.3.0"
     "@lidofinance/lido-ethereum-sdk" "^4.7.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
     bls-eth-wasm "^1.4.0"
     json-with-bigint "^3.5.3"
-    viem "^2.46.0"
+    viem "^2.46.2"
     zod "^4.3.6"
-
-"@lidofinance/lido-ethereum-sdk@^4.5.1":
-  version "4.5.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-ethereum-sdk/-/lido-ethereum-sdk-4.5.1.tgz#41d229c6d6d665a6c9fcaf3371408641e7c2b1b6"
-  integrity sha512-bR3oJSmYiFyiUXLGA9+W/swsWU9hvckHQVIrcCLEownRmKfes3Xec7UMSq0BSTgudgnskWi90kECwUw1kQkNvA==
-  dependencies:
-    "@ethersproject/bytes" "^5.7.0"
-    graphql "^16.8.1"
-    graphql-request "^6.1.0"
 
 "@lidofinance/lido-ethereum-sdk@^4.7.0":
   version "4.7.0"
@@ -3697,13 +3688,6 @@
   version "1.9.2"
   resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.9.2.tgz#73388356ce733922396214a933ff7c95afcef911"
   integrity sha512-HxngEd2XUcg9xi20JkwlLCtYwfoFw4JGkuZpT+WlsPD4gB/cxkvTD8fSsoAnphGZhFdZYKeQIPCuFlWPm1uE0g==
-  dependencies:
-    "@noble/hashes" "1.8.0"
-
-"@noble/curves@1.9.6":
-  version "1.9.6"
-  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.9.6.tgz#b45ebedca85bb75782f6be7e7f120f0c423c99e0"
-  integrity sha512-GIKz/j99FRthB8icyJQA51E8Uk5hXmdyThjgQXRKiv9h0zeRlzSCLIzFw6K1LotZ3XuB7yzlf76qk7uBmTdFqA==
   dependencies:
     "@noble/hashes" "1.8.0"
 
@@ -10439,6 +10423,20 @@ ox@0.12.1:
     abitype "^1.2.3"
     eventemitter3 "5.0.1"
 
+ox@0.12.4:
+  version "0.12.4"
+  resolved "https://registry.yarnpkg.com/ox/-/ox-0.12.4.tgz#469a1b3cfb033d92bc615567875942173a2ddeb5"
+  integrity sha512-+P+C7QzuwPV8lu79dOwjBKfB2CbnbEXe/hfyyrff1drrO1nOOj3Hc87svHfcW1yneRr3WXaKr6nz11nq+/DF9Q==
+  dependencies:
+    "@adraffy/ens-normalize" "^1.11.0"
+    "@noble/ciphers" "^1.3.0"
+    "@noble/curves" "1.9.1"
+    "@noble/hashes" "^1.8.0"
+    "@scure/bip32" "^1.7.0"
+    "@scure/bip39" "^1.6.0"
+    abitype "^1.2.3"
+    eventemitter3 "5.0.1"
+
 ox@0.6.7:
   version "0.6.7"
   resolved "https://registry.yarnpkg.com/ox/-/ox-0.6.7.tgz#afd53f2ecef68b8526660e9d29dee6e6b599a832"
@@ -10483,20 +10481,6 @@ ox@0.8.1:
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/ox/-/ox-0.8.1.tgz#c1328e4c890583b9c19d338126aef4b796d53543"
   integrity sha512-e+z5epnzV+Zuz91YYujecW8cF01mzmrUtWotJ0oEPym/G82uccs7q0WDHTYL3eiONbTUEvcZrptAKLgTBD3u2A==
-  dependencies:
-    "@adraffy/ens-normalize" "^1.11.0"
-    "@noble/ciphers" "^1.3.0"
-    "@noble/curves" "^1.9.1"
-    "@noble/hashes" "^1.8.0"
-    "@scure/bip32" "^1.7.0"
-    "@scure/bip39" "^1.6.0"
-    abitype "^1.0.8"
-    eventemitter3 "5.0.1"
-
-ox@0.8.7:
-  version "0.8.7"
-  resolved "https://registry.yarnpkg.com/ox/-/ox-0.8.7.tgz#234812627f931aaf5bd45728a50c9a42a26e76db"
-  integrity sha512-W1f0FiMf9NZqtHPEDEAEkyzZDwbIKfmH2qmQx8NNiQ/9JhxrSblmtLJsSfTtQG5YKowLOnBlLVguCyxm/7ztxw==
   dependencies:
     "@adraffy/ens-normalize" "^1.11.0"
     "@noble/ciphers" "^1.3.0"
@@ -12947,20 +12931,6 @@ viem@^2.28.4:
     ox "0.8.1"
     ws "8.18.2"
 
-viem@^2.31.4:
-  version "2.34.0"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.34.0.tgz#566b15838d3121d03eaa9bdb2b8bf9b86c37d152"
-  integrity sha512-HJZG9Wt0DLX042MG0PK17tpataxtdAEhpta9/Q44FqKwy3xZMI5Lx4jF+zZPuXFuYjZ68R0PXqRwlswHs6r4gA==
-  dependencies:
-    "@noble/curves" "1.9.6"
-    "@noble/hashes" "1.8.0"
-    "@scure/bip32" "1.7.0"
-    "@scure/bip39" "1.6.0"
-    abitype "1.0.8"
-    isows "1.0.7"
-    ox "0.8.7"
-    ws "8.18.3"
-
 viem@^2.46.0:
   version "2.46.1"
   resolved "https://registry.yarnpkg.com/viem/-/viem-2.46.1.tgz#311d4aeb1573d16239762232e85522c8e7dc4287"
@@ -12973,6 +12943,20 @@ viem@^2.46.0:
     abitype "1.2.3"
     isows "1.0.7"
     ox "0.12.1"
+    ws "8.18.3"
+
+viem@^2.46.2:
+  version "2.46.2"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.46.2.tgz#f3967eef6284be47e184013eada587fea1f3ccd2"
+  integrity sha512-w8Qv5Vyo7TfXcH3vgmxRa1NRvzJCDy2aSGSRsJn3503nC/qVbgEQ+n3aj/CkqWXbloudZh97h5o5aQrQSVGy0w==
+  dependencies:
+    "@noble/curves" "1.9.1"
+    "@noble/hashes" "1.8.0"
+    "@scure/bip32" "1.7.0"
+    "@scure/bip39" "1.6.0"
+    abitype "1.2.3"
+    isows "1.0.7"
+    ox "0.12.4"
     ws "8.18.3"
 
 wagmi@^2.15.4:

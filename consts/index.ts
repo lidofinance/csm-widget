@@ -8,7 +8,6 @@ export * from './matomo-wallets-events';
 export * from './metrics';
 export * from './module';
 export * from './operator-type-metadata';
-export * from './operator-type';
 export * from './react-query-strategies';
 export * from './ref-mapping';
 export * from './roles';
