@@ -90,6 +90,7 @@ const routes: Route[] = [
       PATH.ROLES_CLAIMER,
       PATH.ROLES_SPLITS,
       PATH.ROLES_INBOX,
+      PATH.ROLES_OPERATOR_INFO,
     ],
     showRules: ['IS_NODE_OPERATOR', 'HAS_INVITES'],
     suffix: <CounterInvites />,

@@ -11,7 +11,7 @@ import {
 
 type ItemProps = {
   title: string;
-  count?: number | string;
+  count?: number | string | ReactNode;
   tooltip?: string;
   variant?: 'warning' | 'secondary';
   reverse?: boolean;

@@ -22,6 +22,8 @@ export const ItemStyled = styled(StackStyle).attrs({
   $direction: 'column',
   $gap: 'xs',
 })<{ $secondary?: boolean; $warning?: boolean; $reverse?: boolean }>`
+  display: flex;
+  flex: 1;
   font-size: 14px;
   line-height: 20px;
 
@@ -88,6 +90,15 @@ export const AccordionStyle = styled(Accordion)<{ $warning?: boolean }>`
     padding: 0;
     background: transparent;
   }
+`;
+
+export const SummaryBox = styled.div`
+  display: flex;
+  flex: 1 0 0;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid var(--lido-color-border);
+  border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
 `;
 
 export const ActionStyled = styled.div`

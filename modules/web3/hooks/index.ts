@@ -22,6 +22,7 @@ export * from './use-max-gas-price';
 export * from './use-operator-balance';
 export * from './use-operator-curve-id';
 export * from './use-operator-info';
+export * from './use-operator-metadata';
 export * from './use-operator-is-owner';
 export * from './use-operator-keys-with-issues';
 export * from './use-operator-keys-with-status';

@@ -25,6 +25,7 @@ export const PATH = <const>{
   ROLES_CLAIMER: '/roles/claimer',
   ROLES_SPLITS: '/roles/splits',
   ROLES_INBOX: '/roles/inbox',
+  ROLES_OPERATOR_INFO: '/roles/operator-info',
 
   STEALING: '/stealing',
   STEALING_REPORT: '/stealing/report',

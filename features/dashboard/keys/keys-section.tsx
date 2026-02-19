@@ -1,17 +1,19 @@
-import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
+import { KEY_STATUS, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { isModuleCM, isModuleCSM } from 'consts/module';
 import { PATH } from 'consts/urls';
 import {
   useNodeOperatorId,
   useOperatorInfo,
   useOperatorKeysWithStatus,
 } from 'modules/web3';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { SectionBlock, Stack, StatusComment } from 'shared/components';
 import { StatusTitle } from 'shared/components/status-chip/status-chip';
+import { FormatToken } from 'shared/formatters';
 import { hasStatus, StatusFilter } from 'utils';
 import { Item, ItemAction } from './item';
-import { AccordionStyle, Row, RowTitle } from './styles';
+import { AccordionStyle, Row, RowTitle, SummaryBox } from './styles';
 
 const BAD_STATUSES: KEY_STATUS[] = [
   // KEY_STATUS.WITH_STRIKES,
@@ -36,7 +38,7 @@ export const KeysSection: FC = () => {
 
   const hasWarnings =
     !!keysCountWithStatus(BAD_STATUSES) ||
-    !!keysCountWithStatus(KEY_STATUS.WITH_STRIKES);
+    (!isModuleCM && !!keysCountWithStatus(KEY_STATUS.WITH_STRIKES));
 
   const actions = BAD_STATUSES.map((badStatus) =>
     keysCountWithStatus(badStatus) ? (
@@ -50,7 +52,7 @@ export const KeysSection: FC = () => {
   ).filter((v) => !!v);
 
   const actionsWithStrikes = [
-    ...(keysCountWithStatus(KEY_STATUS.WITH_STRIKES)
+    ...(!isModuleCM && keysCountWithStatus(KEY_STATUS.WITH_STRIKES)
       ? [
           <ItemAction
             key={KEY_STATUS.WITH_STRIKES}
@@ -62,6 +64,11 @@ export const KeysSection: FC = () => {
       : []),
     ...actions,
   ];
+
+  const totalActiveStake = useMemo(
+    () => keys?.reduce((sum, k) => sum + (k.effectiveBalance ?? 0n), 0n),
+    [keys],
+  );
 
   const limit = info && info.targetLimitMode > 0 ? info.targetLimit : '—';
   const limitTooltip =
@@ -78,23 +85,52 @@ export const KeysSection: FC = () => {
       href={PATH.KEYS_VIEW}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink}
       middle={
-        <Stack gap="xxl">
-          <Item
-            reverse
-            title="Total keys"
-            count={info?.totalAddedKeys}
-            tooltip="Total added keys"
-          />
-          <Item
-            reverse
-            title="Keys limit"
-            count={limit}
-            tooltip={limitTooltip}
-          />
-        </Stack>
+        isModuleCSM && (
+          <Stack gap="xxl">
+            <Item
+              reverse
+              title="Total keys"
+              count={info?.totalAddedKeys}
+              tooltip="Total added keys"
+            />
+            <Item
+              reverse
+              title="Keys limit"
+              count={limit}
+              tooltip={limitTooltip}
+            />
+          </Stack>
+        )
       }
     >
       <Stack direction="column" gap="sm">
+        {isModuleCM && (
+          <Stack gap="sm">
+            <SummaryBox>
+              <Item
+                reverse
+                title="Total keys"
+                count={info?.totalAddedKeys}
+                tooltip="Total added keys"
+              />
+              <Item
+                reverse
+                title="Keys limit"
+                count={limit}
+                tooltip={limitTooltip}
+              />
+            </SummaryBox>
+            <SummaryBox>
+              <Item
+                reverse
+                title="Total active balance"
+                count={
+                  <FormatToken amount={totalActiveStake} token={TOKENS.eth} />
+                }
+              />
+            </SummaryBox>
+          </Stack>
+        )}
         <Row>
           <Item
             data-testid="keysDepositableCount"
@@ -150,12 +186,14 @@ export const KeysSection: FC = () => {
               )}
               <Stack direction="column" gap="md">
                 <Row>
-                  <Item
-                    variant="warning"
-                    title="With strikes"
-                    count={keysCountWithStatus(KEY_STATUS.WITH_STRIKES)}
-                    tooltip="Keys that reported with bad performance"
-                  />
+                  {!isModuleCM && (
+                    <Item
+                      variant="warning"
+                      title="With strikes"
+                      count={keysCountWithStatus(KEY_STATUS.WITH_STRIKES)}
+                      tooltip="Keys that reported with bad performance"
+                    />
+                  )}
                   <Item
                     variant="warning"
                     title="Unbonded"
