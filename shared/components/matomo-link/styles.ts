@@ -12,12 +12,13 @@ export const ArrowIcon = styled(Arrow)`
 `;
 
 type LinkStyledProps = {
+  $inline?: boolean;
   $secondary?: boolean;
   $likeText?: boolean;
 };
 
 export const LinkStyled = styled(Link)<LinkStyledProps>`
-  display: inline-flex;
+  display: ${({ $inline }) => ($inline ? 'inline' : 'inline-flex')};
   align-items: center;
 
   ${({ $secondary }) =>

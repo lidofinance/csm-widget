@@ -28,6 +28,7 @@ export const DepositQueue: FC = () => (
         <p>
           You can subscribe to{' '}
           <MatomoLink
+            $inline
             href={SUBSCRIBE_EVENTS_LINK}
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.subscribeEventsLink}
           >
@@ -38,6 +39,7 @@ export const DepositQueue: FC = () => (
         <p>
           Read more information about{' '}
           <MatomoLink
+            $inline
             href={LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW}
             matomoEvent={
               MATOMO_CLICK_EVENTS_TYPES.operatorPortalDepositsFlowLink

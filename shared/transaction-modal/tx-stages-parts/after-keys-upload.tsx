@@ -34,6 +34,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
             <>
               , on{' '}
               <MatomoLink
+                $inline
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain}
                 href={beaconchain}
               >
@@ -43,6 +44,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
           )}{' '}
           or subscribe to the{' '}
           <MatomoLink
+            $inline
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents}
             href={SUBSCRIBE_EVENTS_LINK}
           >
@@ -53,6 +55,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
             <>
               (you can use the{' '}
               <MatomoLink
+                $inline
                 matomoEvent={
                   MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
                 }

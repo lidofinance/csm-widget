@@ -35,6 +35,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
               <>
                 you can check their statuses on{' '}
                 <MatomoLink
+                  $inline
                   matomoEvent={
                     MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain
                   }
@@ -47,6 +48,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
             )}
             subscribe to the{' '}
             <MatomoLink
+              $inline
               matomoEvent={
                 MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents
               }
@@ -59,6 +61,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
               <>
                 (you can use the{' '}
                 <MatomoLink
+                  $inline
                   matomoEvent={
                     MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
                   }

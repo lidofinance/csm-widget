@@ -19,6 +19,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
       <p>
         Make sure you’ve completed all the basic steps before joining the{' '}
         <MatomoLink
+          $inline
           href={LIDO_OPERATOR_PORTAL_BASE}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackCSMLink}
         >
@@ -41,6 +42,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
       <Step number="2" title="Prepare hardware">
         Run{' '}
         <MatomoLink
+          $inline
           href={PREPARE_HARDWARE_LINK}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackHadwareLink}
         >
@@ -51,6 +53,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
       <Step number="3" title="Set up validation tools">
         Do it{' '}
         <MatomoLink
+          $inline
           href={ABOUT_DEPOSIT_DATA_LINK}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackSetupValidatorLink}
         >
@@ -64,6 +67,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
         <br />
         Follow the{' '}
         <MatomoLink
+          $inline
           href={HOW_TO_GENERATE_DEPOSIT_DATA_LINK}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackGenerateKeysLink}
         >

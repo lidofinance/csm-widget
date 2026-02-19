@@ -25,6 +25,7 @@ export const NavigateCMv1: FC = () => {
       <Text color="secondary" size="xs">
         If you are looking for the CM v1 interface, please navigate to
         <MatomoLink
+          $inline
           href={operatorsWidget}
           // matomoEvent={MATOMO_CLICK_EVENTS_TYPES.tryOtherNetworkLink}
         >

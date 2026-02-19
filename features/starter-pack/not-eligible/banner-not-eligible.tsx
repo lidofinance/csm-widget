@@ -24,7 +24,10 @@ export const BannerNotEligible: FC = () => {
           professional staking organizations and Ethereum client teams, which
           operate validators using the protocol. For a detailed description of
           the module, follow{' '}
-          <MatomoLink href={LIDO_OPERATOR_PORTAL_CM}>the link</MatomoLink>.
+          <MatomoLink $inline href={LIDO_OPERATOR_PORTAL_CM}>
+            the link
+          </MatomoLink>
+          .
         </div>
         <Disconnect color="error" variant="outlined" />
       </Stack>

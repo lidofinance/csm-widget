@@ -77,13 +77,19 @@ export const ExitKeys = () => {
       <Gate rule="IS_CM">
         <WarningBlock type="warning">
           Out of order exits are discouraged by{' '}
-          <MatomoLink href="https://ipfs.io/ipfs/QmW9kE61zC61PcuikCQRwn82aoTCj9yPuENGNPML9QLkSM">
+          <MatomoLink
+            $inline
+            href="https://ipfs.io/ipfs/QmW9kE61zC61PcuikCQRwn82aoTCj9yPuENGNPML9QLkSM"
+          >
             the Validator Exits Standard Node Operator Protocol (SNOP)
           </MatomoLink>
           . In case an out of order exit is required, the Node Operator must
           notify the community, specifying the number of validators affected,
           their indices, and the reason for the exit request via{' '}
-          <MatomoLink href="https://research.lido.fi/c/node-operators/12">
+          <MatomoLink
+            $inline
+            href="https://research.lido.fi/c/node-operators/12"
+          >
             the Node Operator category of the Lido Research Forum
           </MatomoLink>
           .

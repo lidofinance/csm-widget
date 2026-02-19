@@ -24,6 +24,7 @@ export const Info: FC = () => {
           {!!lockedBond && (
             <div>
               <MatomoLink
+                $inline
                 href={MEV_STEALING_LINK}
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.mevStealingDocsLink}
               >
@@ -33,6 +34,7 @@ export const Info: FC = () => {
               your validators produced a block with the EL rewards sent to the
               wrong address (an address different from from{' '}
               <MatomoLink
+                $inline
                 href={LIDO_REWARDS_VAULT_LINK}
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoRewardsVaultLink}
               >
@@ -51,6 +53,7 @@ export const Info: FC = () => {
                   Check if the feeRecipient address of your validators consensus
                   / validator client is set to{' '}
                   <MatomoLink
+                    $inline
                     href={LIDO_REWARDS_VAULT_LINK}
                     matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoRewardsVaultLink}
                   >

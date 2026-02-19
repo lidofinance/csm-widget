@@ -23,7 +23,7 @@ export const BannerTryCsm: FC = () => {
             module aimed at attracting community stakers to participate in the
             Lido protocol as Node Operators. For a detailed description of the
             module, follow{' '}
-            <MatomoLink href={LIDO_OPERATOR_PORTAL_BASE} $likeText>
+            <MatomoLink $inline href={LIDO_OPERATOR_PORTAL_BASE} $likeText>
               the link
             </MatomoLink>
             .

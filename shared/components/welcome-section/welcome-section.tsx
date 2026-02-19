@@ -24,6 +24,7 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
         Ethereum protocol as Node Operators. For a detailed description of the
         module, follow the{' '}
         <MatomoLink
+          $inline
           href={LIDO_OPERATOR_PORTAL_BASE}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
         >
@@ -39,6 +40,7 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
         operate validators using the protocol. For a detailed description of the
         module, follow{' '}
         <MatomoLink
+          $inline
           href={LIDO_OPERATOR_PORTAL_CM}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
         >

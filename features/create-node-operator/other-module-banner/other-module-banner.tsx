@@ -35,6 +35,7 @@ export const OtherModuleBanner: FC = () => {
         If you want to upload keys to another module (Curated or Simple DVT),
         navigate to{' '}
         <MatomoLink
+          $inline
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.otherModuleLink}
           href={`${operatorsWidget}/submitter`}
         >
