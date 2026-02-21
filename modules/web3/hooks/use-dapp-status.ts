@@ -18,17 +18,9 @@ export const useDappStatus = (): Result => {
     isConnected: isWalletConnected,
   } = useAccount();
 
-  const { supportedChainIds, defaultChain: defaultChainId } = useUserConfig();
+  const { defaultChain: chainId } = useUserConfig();
 
-  const chainId = (
-    walletChainId && supportedChainIds.includes(walletChainId)
-      ? walletChainId
-      : defaultChainId
-  ) as SUPPORTED_CHAINS;
-
-  const isSupportedChain = walletChainId
-    ? supportedChainIds.includes(walletChainId)
-    : true;
+  const isSupportedChain = walletChainId ? walletChainId === chainId : true;
 
   const isAccountActive = walletChainId
     ? isWalletConnected && isSupportedChain

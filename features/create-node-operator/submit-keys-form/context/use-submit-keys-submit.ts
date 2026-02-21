@@ -5,8 +5,9 @@ import {
   TOKENS,
   TransactionCallback,
   TransactionCallbackStage,
+  MODULE_NAME,
 } from '@lidofinance/lido-csm-sdk';
-import { MODULE, PATH } from 'consts';
+import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
@@ -32,7 +33,7 @@ type SubmitKeysMethodParams = {
 };
 
 const useSubmitKeysTx = () => {
-  const sdk = useSmSDK(MODULE.CSM);
+  const sdk = useSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required for this operation');
 
   return useCallback(

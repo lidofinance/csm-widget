@@ -1,8 +1,8 @@
 import {
   TransactionCallback,
   TransactionCallbackStage,
+  MODULE_NAME,
 } from '@lidofinance/lido-csm-sdk';
-import { MODULE } from 'consts';
 import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
@@ -18,7 +18,7 @@ export const useNormalizeQueueSubmit: FormSubmitterHook<
   NormalizeQueueFormInputType,
   NormalizeQueueFormNetworkData
 > = () => {
-  const sdk = useSmSDK(MODULE.CSM);
+  const sdk = useSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required for this operation');
   const { txModalStages } = useTxModalStagesNormalizeQueue();
 

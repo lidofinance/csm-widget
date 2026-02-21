@@ -1,6 +1,6 @@
-import { GateItemEligibility } from '@lidofinance/lido-csm-sdk';
+import { GateItemEligibility, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
-import { MODULE, STRATEGY_CONSTANT } from 'consts';
+import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { Address } from 'viem';
 import { useSmSDK } from '../web3-provider';
@@ -11,7 +11,7 @@ export const useCuratedGatesEligibility = <TData = GateItemEligibility[]>(
   address: Address | undefined,
   select?: (data: GateItemEligibility[]) => TData,
 ) => {
-  const sdk = useSmSDK(MODULE.CM);
+  const sdk = useSmSDK(MODULE_NAME.CM);
 
   return useQuery({
     queryKey: [...KEY_CURATED_GATES_PROOF, { address }],

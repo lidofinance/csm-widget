@@ -2,8 +2,9 @@ import {
   NodeOperatorShortInfo,
   TransactionCallback,
   TransactionCallbackStage,
+  MODULE_NAME,
 } from '@lidofinance/lido-csm-sdk';
-import { MODULE, PATH } from 'consts';
+import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses/use-operator-custom-addresses';
 import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
@@ -21,7 +22,7 @@ export const useCuratedOperatorSubmit: FormSubmitterHook<
   CuratedOperatorFormInputType,
   CuratedOperatorFormNetworkData
 > = () => {
-  const sdk = useSmSDK(MODULE.CM);
+  const sdk = useSmSDK(MODULE_NAME.CM);
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();

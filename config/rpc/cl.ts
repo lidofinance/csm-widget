@@ -24,7 +24,7 @@ export const useGetClApiUrlByChainId = () => {
 
   return useCallback(
     (chainId: SUPPORTED_CHAINS) => {
-      if (!userConfig.supportedChainIds.includes(chainId)) {
+      if (chainId !== userConfig.defaultChain) {
         // Has no effect on functionality. Just a fix.
         // Return empty string as a stub
         return '';

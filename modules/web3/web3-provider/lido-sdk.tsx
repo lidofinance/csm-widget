@@ -8,7 +8,12 @@ import {
   useWalletClient,
 } from 'wagmi';
 
-import { LidoSDKCm, LidoSDKCsm, SdkProps } from '@lidofinance/lido-csm-sdk';
+import {
+  LidoSDKCm,
+  LidoSDKCsm,
+  MODULE_NAME,
+  SdkProps,
+} from '@lidofinance/lido-csm-sdk';
 import {
   LidoSDKStake,
   LidoSDKWithdraw,
@@ -22,7 +27,7 @@ import {
 
 import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
-import { isModuleCSM, MODULE } from 'consts';
+import { isModuleCSM } from 'consts';
 
 import { overridedAddresses } from './devnet';
 
@@ -49,10 +54,10 @@ export const useLidoSDK = () => {
 };
 
 export function useSmSDK(): LidoSDKCsm | LidoSDKCm;
-export function useSmSDK(module: typeof MODULE.CSM): LidoSDKCsm | undefined;
-export function useSmSDK(module: typeof MODULE.CM): LidoSDKCm | undefined;
+export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
+export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
 // eslint-disable-next-line func-style
-export function useSmSDK(module?: MODULE) {
+export function useSmSDK(module?: MODULE_NAME) {
   const { sm } = useLidoSDK();
   if (module && module !== config.module) {
     return undefined;

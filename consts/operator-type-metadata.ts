@@ -1,11 +1,9 @@
 import {
   getOperatorTypeByCurveId,
-  MODULE_NAME,
   OPERATOR_TYPE,
   OPERATOR_TYPE_CURVE_ID,
 } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
-import { MODULE } from './module';
 
 type OperatorTypeMetadata = {
   name: string;
@@ -14,10 +12,6 @@ type OperatorTypeMetadata = {
   description: string;
   curveId: bigint | undefined;
 };
-
-// TODO: drop after improve MODULE
-export const sdkModuleName: MODULE_NAME =
-  config.module === MODULE.CM ? MODULE_NAME.CM : MODULE_NAME.CSM;
 
 export const OPERATOR_TYPE_METADATA: Record<
   OPERATOR_TYPE,
@@ -121,6 +115,6 @@ export const OPERATOR_TYPE_METADATA: Record<
 };
 
 export const getCurveMetadata = (curveId: bigint | undefined) => {
-  const operatorType = getOperatorTypeByCurveId(sdkModuleName, curveId);
+  const operatorType = getOperatorTypeByCurveId(config.module, curveId);
   return OPERATOR_TYPE_METADATA[operatorType];
 };

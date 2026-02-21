@@ -1,4 +1,4 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, ROLES } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config, useConfig } from 'config';
 import { useFeatureFlags } from 'config/feature-flags';
@@ -6,7 +6,6 @@ import {
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
 } from 'config/feature-flags/types';
-import { MODULE } from 'consts';
 import { getExternalLinks } from 'consts/external-links';
 import { useWrappedApi } from 'features/wrapped/data';
 import {
@@ -83,8 +82,8 @@ export const useShowFlags = (): ShowFlags => {
       ['IS_SURVEYS_ACTIVE']:
         !!surveyApi && !!featureFlags?.[SURVEYS_SETUP_ENABLED],
       ['HAS_WRAPPED_DATA']: !!wrappedData,
-      ['IS_CSM']: module === MODULE.CSM,
-      ['IS_CM']: module === MODULE.CM,
+      ['IS_CSM']: module === MODULE_NAME.CSM,
+      ['IS_CM']: module === MODULE_NAME.CM,
     }),
     [
       chainId,
@@ -117,7 +116,7 @@ export const useShowRule = () => {
 
 // FIXME: type duplication with use-nav-items.tsx
 export const useFilterShowRules = <
-  T extends { showRules?: ShowRule[]; module?: MODULE },
+  T extends { showRules?: ShowRule[]; module?: MODULE_NAME },
 >(
   items: T[],
 ) => {

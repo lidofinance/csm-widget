@@ -3,8 +3,8 @@ import { useCallback } from 'react';
 import {
   TransactionCallback,
   TransactionCallbackStage,
+  MODULE_NAME,
 } from '@lidofinance/lido-csm-sdk';
-import { MODULE } from 'consts';
 import { useSmSDK } from 'modules/web3';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
@@ -17,7 +17,7 @@ export const useClaimTypeSubmit: FormSubmitterHook<
   ClaimTypeFormInputType,
   ClaimTypeFormNetworkData
 > = () => {
-  const sdk = useSmSDK(MODULE.CSM);
+  const sdk = useSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required for this operation');
   const { txModalStages } = useTxModalStagesClaimType();
   const confirmClaimtype = useConfirmClaimTypeModal();

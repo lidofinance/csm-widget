@@ -1,7 +1,7 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Block, ThemeName } from '@lidofinance/lido-ui';
-import styled from 'styled-components';
 import { config } from 'config';
-import { MODULE } from 'consts/module';
+import styled from 'styled-components';
 
 import LogoCsmDark from 'assets/csm-dark.png';
 import LogoCsmLight from 'assets/csm-light.png';
@@ -9,11 +9,15 @@ import LogoCmDark from 'assets/cm-dark.png';
 import LogoCmLight from 'assets/cm-light.png';
 
 const LOGOS = {
-  [MODULE.CSM]: {
+  [MODULE_NAME.CSM]: {
     [ThemeName.dark]: LogoCsmDark.src,
     [ThemeName.light]: LogoCsmLight.src,
   },
-  [MODULE.CM]: {
+  [MODULE_NAME.CSM0x02]: {
+    [ThemeName.dark]: LogoCsmDark.src,
+    [ThemeName.light]: LogoCsmLight.src,
+  },
+  [MODULE_NAME.CM]: {
     [ThemeName.dark]: LogoCmDark.src,
     [ThemeName.light]: LogoCmLight.src,
   },

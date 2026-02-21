@@ -20,7 +20,6 @@ import {
 import { Abi, Address } from 'viem';
 
 import { config } from 'config';
-import { sdkModuleName } from 'consts';
 import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 
 const AlL_CONTRACT_NAMES = {
@@ -41,7 +40,7 @@ const AlL_CONTRACT_NAMES = {
 type AlL_CONTRACT_NAMES = keyof typeof AlL_CONTRACT_NAMES;
 
 const supportedChainsWithMainnet: SUPPORTED_CHAINS[] = uniq([
-  ...config.supportedChains,
+  config.defaultChain,
   CHAINS.Mainnet,
 ]);
 
@@ -71,14 +70,13 @@ const STATIC_ADDRESSES: {
       '0xe2EF9536DAAAEBFf5b1c130957AB3E80056b06D8',
     [AlL_CONTRACT_NAMES.lidoUnsteth]:
       '0xfe56573178f1bcdf53F01A6E9977670dcBBD9186',
-    ...overridedAddresses,
   },
 };
 
 const CONTRACT_ADDRESSES = {
-  ...COMMON_ADDRESSES[config.defaultChain as SUPPORTED_CHAINS],
-  ...MODULE_CONFIG[sdkModuleName][config.defaultChain as SUPPORTED_CHAINS]
-    ?.contractAddresses,
+  ...COMMON_ADDRESSES[config.defaultChain],
+  ...MODULE_CONFIG[config.module][config.defaultChain]?.contractAddresses,
+  ...overridedAddresses,
 };
 
 const getContractAddress = (

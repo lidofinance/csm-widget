@@ -1,8 +1,8 @@
 import {
   TransactionCallback,
   TransactionCallbackStage,
+  MODULE_NAME,
 } from '@lidofinance/lido-csm-sdk';
-import { MODULE } from 'consts';
 import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
@@ -17,7 +17,7 @@ export const useOperatorInfoSubmit: FormSubmitterHook<
   OperatorInfoFormInputType,
   OperatorInfoFormNetworkData
 > = () => {
-  const sdk = useSmSDK(MODULE.CM);
+  const sdk = useSmSDK(MODULE_NAME.CM);
   const { txModalStages } = useTxModalStagesOperatorInfo();
 
   return useCallback(

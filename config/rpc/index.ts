@@ -25,10 +25,7 @@ export const useGetRpcUrlByChainId = () => {
   return useCallback(
     (chainId: SUPPORTED_CHAINS) => {
       // We always need Mainnet RPC for some requests, e.g. ETH to USD price, ENS lookup.
-      if (
-        chainId !== CHAINS.Mainnet &&
-        !userConfig.supportedChainIds.includes(chainId)
-      ) {
+      if (chainId !== CHAINS.Mainnet && chainId !== userConfig.defaultChain) {
         // Has no effect on functionality. Just a fix.
         // Return empty string as a stub
         return '';

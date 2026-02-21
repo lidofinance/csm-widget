@@ -1,12 +1,13 @@
 import getConfigNext from 'next/config';
 import { type Modify, toBoolean } from './helpers';
+import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 const { serverRuntimeConfig } = getConfigNext();
 
 export type SecretConfigType = Modify<
   typeof serverRuntimeConfig,
   {
-    defaultChain: number;
+    defaultChain: SUPPORTED_CHAINS;
 
     rpcUrls_1: [string, ...string[]];
     rpcUrls_17000: [string, ...string[]];

@@ -1,6 +1,10 @@
-import { KeyWithStrikes, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import {
+  KeyWithStrikes,
+  MODULE_NAME,
+  NodeOperatorId,
+} from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
-import { MODULE, STRATEGY_CONSTANT } from 'consts';
+import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { useSmSDK } from '../web3-provider';
 
@@ -10,7 +14,7 @@ export const useOperatorKeysWithStrikes = <TData = KeyWithStrikes[]>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: KeyWithStrikes[]) => TData,
 ) => {
-  const sdk = useSmSDK(MODULE.CSM);
+  const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
     queryKey: [...KEY_OPERATOR_STRIKES, { nodeOperatorId }],

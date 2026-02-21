@@ -1,6 +1,7 @@
 import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Eth as EthIcon, Plus as PlusIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
@@ -11,7 +12,6 @@ import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
-import { MODULE } from 'consts';
 import {
   CounterIcs,
   CounterInvalidKeys,
@@ -27,7 +27,7 @@ export type Route = {
   icon: JSX.Element;
   subPaths?: PATH[];
   showRules: ShowRule[];
-  module?: MODULE;
+  module?: MODULE_NAME;
   suffix?: ReactNode;
   colored?: boolean;
 };
@@ -38,7 +38,7 @@ const routes: Route[] = [
     path: PATH.HOME,
     icon: <HomeIcon />,
     showRules: ['NOT_NODE_OPERATOR'],
-    module: MODULE.CSM,
+    module: MODULE_NAME.CSM,
   },
   {
     name: 'Dashboard',
@@ -108,7 +108,7 @@ const routes: Route[] = [
     icon: <FileIcon />,
     showRules: ['IS_SURVEYS_ACTIVE'],
     suffix: <CounterSurveys />,
-    module: MODULE.CSM,
+    module: MODULE_NAME.CSM,
   },
   {
     name: 'Operator Type',
@@ -117,7 +117,7 @@ const routes: Route[] = [
     subPaths: [PATH.TYPE_CLAIM, PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
     showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED'],
     suffix: <CounterIcs />,
-    module: MODULE.CSM,
+    module: MODULE_NAME.CSM,
   },
   {
     name: 'Wrapped',
@@ -125,7 +125,7 @@ const routes: Route[] = [
     icon: <GiftIcon />,
     showRules: ['HAS_WRAPPED_DATA'],
     colored: true,
-    module: MODULE.CSM,
+    module: MODULE_NAME.CSM,
   },
 ];
 

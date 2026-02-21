@@ -3,7 +3,7 @@ import {
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
 import { ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
-import { sdkModuleName } from 'consts';
+import { config } from 'config';
 import Image from 'next/image';
 import { FC } from 'react';
 import { useCurrentCurveId } from 'shared/hooks';
@@ -23,7 +23,7 @@ export const FaqCurveImage: FC<{ type?: OPERATOR_TYPE }> = ({
   type: _type,
 }) => {
   const curveId = useCurrentCurveId();
-  const type = _type ?? getOperatorTypeByCurveId(sdkModuleName, curveId);
+  const type = _type ?? getOperatorTypeByCurveId(config.module, curveId);
   const { themeName } = useThemeToggle();
   const isDark = themeName === ThemeName.dark;
 

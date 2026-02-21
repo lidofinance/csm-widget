@@ -16,12 +16,10 @@ RUN rm -rf /app/public/runtime && mkdir /app/public/runtime && chown node /app/p
 FROM node:20-alpine as base
 
 ARG BASE_PATH=""
-ARG SUPPORTED_CHAINS="1"
 ARG DEFAULT_CHAIN="1"
 
 ENV NEXT_TELEMETRY_DISABLED=1 \
   BASE_PATH=$BASE_PATH \
-  SUPPORTED_CHAINS=$SUPPORTED_CHAINS \
   DEFAULT_CHAIN=$DEFAULT_CHAIN
 
 WORKDIR /app

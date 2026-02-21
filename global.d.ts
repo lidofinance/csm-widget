@@ -53,7 +53,7 @@ declare module 'next/config' {
     publicRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
-      module: 'csm' | 'cm';
+      module: 'CSM' | 'CM' | 'CSM0x02';
       devnetAddresses: Record<string, unknown> | null;
     };
   };

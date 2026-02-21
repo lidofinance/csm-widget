@@ -15,7 +15,7 @@ export const getClient = () => {
   if (client) return client;
   const chainId = config.defaultChain;
   const chain = Object.values(chains).find((c) => c.id === chainId);
-  const urls = rpcUrls[chainId as SUPPORTED_CHAINS];
+  const urls = rpcUrls[chainId];
   if (!urls) {
     throw new Error(`Error: RPC is not configured for chain ${chainId}`);
   }

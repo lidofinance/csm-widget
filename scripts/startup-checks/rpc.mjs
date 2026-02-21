@@ -60,36 +60,31 @@ export const startupCheckRPCs = async () => {
 
   globalStartupRPCChecks.promise = (async () => {
     try {
-      const supportedChains = process.env?.SUPPORTED_CHAINS?.split(',').map(
-        (chainId) => parseInt(chainId, 10),
-      ) ?? [process.env.DEFAULT_CHAIN];
-
-      if (supportedChains.length === 0) {
-        throw new Error('[startupCheckRPCs] No supported chains found!');
+      const defaultChain = parseInt(process.env.DEFAULT_CHAIN, 10);
+      if (!defaultChain) {
+        throw new Error('[startupCheckRPCs] DEFAULT_CHAIN is not configured!');
       }
 
       const results = [];
 
-      for (const chainId of supportedChains) {
-        const rpcUrls = getRPCUrls(chainId);
-        if (!rpcUrls?.length) {
-          throw new Error(
-            `[startupCheckRPCs] [chainId=${chainId}] No RPC URLs found!`,
-          );
-        }
-
-        const chainCheckResults = await Promise.all(
-          rpcUrls.map((url) => checkRPC(url, chainId)),
-        );
-        results.push(...chainCheckResults);
-
-        const brokenRPCCount = chainCheckResults.filter(
-          (result) => !result.success,
-        ).length;
-        console.info(
-          `[startupCheckRPCs] [chainId=${chainId}] Working/Total RPCs: ${chainCheckResults.length - brokenRPCCount}/${chainCheckResults.length}`,
+      const rpcUrls = getRPCUrls(defaultChain);
+      if (!rpcUrls?.length) {
+        throw new Error(
+          `[startupCheckRPCs] [chainId=${defaultChain}] No RPC URLs found!`,
         );
       }
+
+      const chainCheckResults = await Promise.all(
+        rpcUrls.map((url) => checkRPC(url, defaultChain)),
+      );
+      results.push(...chainCheckResults);
+
+      const brokenRPCCount = chainCheckResults.filter(
+        (result) => !result.success,
+      ).length;
+      console.info(
+        `[startupCheckRPCs] [chainId=${defaultChain}] Working/Total RPCs: ${chainCheckResults.length - brokenRPCCount}/${chainCheckResults.length}`,
+      );
 
       return results;
     } catch (err) {

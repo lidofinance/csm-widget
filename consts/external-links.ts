@@ -101,9 +101,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   },
 };
 
-export const getExternalLinks = (
-  chainId = config.defaultChain as SUPPORTED_CHAINS,
-) => {
+export const getExternalLinks = (chainId = config.defaultChain) => {
   const links = EXTERNAL_LINKS_BY_NETWORK[chainId];
   if (!links) {
     throw new Error(`ExternalLinks for chain [${chainId}] are not specified`);
