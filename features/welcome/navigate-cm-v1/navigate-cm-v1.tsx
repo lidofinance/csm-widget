@@ -1,12 +1,12 @@
 import { Button, Text } from '@lidofinance/lido-ui';
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { MatomoLink } from 'shared/components/matomo-link/matomo-link';
 import { useExternalLinks } from 'shared/hooks';
 import { StyledBlock, StyledStack } from './styles';
 
 export const NavigateCMv1: FC = () => {
   const { operatorsWidget } = useExternalLinks();
-  const host = useMemo(() => new URL(operatorsWidget).host, [operatorsWidget]);
+  const { host } = new URL(operatorsWidget);
   return (
     <StyledBlock>
       <StyledStack>

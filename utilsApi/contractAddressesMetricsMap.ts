@@ -1,8 +1,8 @@
 import {
-  CM_CONTRACT_ADDRESSES,
+  COMMON_ADDRESSES,
   CONTRACT_BASE_ABI,
   CONTRACT_NAMES,
-  CSM_CONTRACT_ADDRESSES,
+  MODULE_CONFIG,
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
 import { CHAINS, LidoLocatorAbi } from '@lidofinance/lido-ethereum-sdk';
@@ -20,7 +20,7 @@ import {
 import { Abi, Address } from 'viem';
 
 import { config } from 'config';
-import { isModuleCSM } from 'consts';
+import { sdkModuleName } from 'consts';
 import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 
 const AlL_CONTRACT_NAMES = {
@@ -75,16 +75,18 @@ const STATIC_ADDRESSES: {
   },
 };
 
-const CONTRACT_ADDRESSES = isModuleCSM
-  ? CSM_CONTRACT_ADDRESSES
-  : CM_CONTRACT_ADDRESSES;
+const CONTRACT_ADDRESSES = {
+  ...COMMON_ADDRESSES[config.defaultChain as SUPPORTED_CHAINS],
+  ...MODULE_CONFIG[sdkModuleName][config.defaultChain as SUPPORTED_CHAINS]
+    ?.contractAddresses,
+};
 
 const getContractAddress = (
   name: AlL_CONTRACT_NAMES,
   chainId: SUPPORTED_CHAINS,
 ) =>
   STATIC_ADDRESSES[chainId]?.[name] ??
-  CONTRACT_ADDRESSES[chainId]?.[name as CONTRACT_NAMES];
+  CONTRACT_ADDRESSES?.[name as CONTRACT_NAMES];
 export const METRIC_CONTRACT_ADDRESSES = fromPairs(
   supportedChainsWithMainnet.map((chainId) => [
     chainId,

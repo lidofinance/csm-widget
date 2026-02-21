@@ -1,25 +1,41 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import {
+  useCustomRewardsClaimer,
   useDappStatus,
+  useFeeSplits,
   useNodeOperatorId,
   useOperatorInfo,
-  useOperatorOwner,
+  useOperatorIsOwner,
 } from 'modules/web3';
 import { FC } from 'react';
 import { SectionBlock, Stack } from 'shared/components';
-import invariant from 'tiny-invariant';
-import { isAddressEqual } from 'viem';
-import { RoleBlock } from './role-block';
-import { ROLES } from '@lidofinance/lido-csm-sdk';
+import { isAddressEqual, zeroAddress } from 'viem';
+import { RoleRow } from './role-row';
+import { SplitterRow } from './splitter-row';
+import { Divider } from './styles';
 
 export const RolesSection: FC = () => {
   const { address } = useDappStatus();
-  const id = useNodeOperatorId();
-  const { data: info } = useOperatorInfo(id);
-  const { data: owner } = useOperatorOwner(id);
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: info } = useOperatorInfo(nodeOperatorId);
+  const { data: claimerAddress } = useCustomRewardsClaimer(nodeOperatorId);
+  const { data: feeSplits } = useFeeSplits(nodeOperatorId);
+  const { data: isOwner } = useOperatorIsOwner({
+    address,
+    nodeOperatorId,
+  });
 
-  invariant(address, 'address should be defined');
+  const isRewardsYou =
+    !!address &&
+    !!info?.rewardsAddress &&
+    isAddressEqual(info.rewardsAddress, address);
+  const isManagerYou =
+    !!address &&
+    !!info?.managerAddress &&
+    isAddressEqual(info.managerAddress, address);
+
+  const isClaimerSet = !!claimerAddress && claimerAddress !== zeroAddress;
 
   return (
     <SectionBlock
@@ -27,24 +43,40 @@ export const RolesSection: FC = () => {
       href={PATH.ROLES}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink}
     >
-      {info && (
-        <Stack wrap>
-          <RoleBlock
-            type={ROLES.MANAGER}
-            address={info.managerAddress}
-            proposedAddress={info.proposedManagerAddress}
-            isYou={isAddressEqual(info.managerAddress, address)}
-            isOwner={owner?.role === ROLES.MANAGER}
-          />
-          <RoleBlock
-            type={ROLES.REWARDS}
-            address={info.rewardsAddress}
-            proposedAddress={info.proposedRewardsAddress}
-            isYou={isAddressEqual(info.rewardsAddress, address)}
-            isOwner={owner?.role === ROLES.REWARDS}
-          />
-        </Stack>
-      )}
+      <Stack direction="column" gap="lg">
+        <RoleRow
+          title="Rewards Address"
+          address={info?.rewardsAddress}
+          proposedAddress={info?.proposedRewardsAddress}
+          isYou={isRewardsYou}
+          isOwner={!info?.extendedManagerPermissions}
+        />
+
+        <Divider />
+
+        <RoleRow
+          title="Manager Address"
+          address={info?.managerAddress}
+          proposedAddress={info?.proposedManagerAddress}
+          isYou={isManagerYou}
+          isOwner={!!info?.extendedManagerPermissions}
+        />
+
+        <Divider />
+
+        <RoleRow
+          title="Rewards claimer"
+          address={isClaimerSet ? claimerAddress : undefined}
+          setupPath={isOwner ? PATH.ROLES_CLAIMER : undefined}
+        />
+
+        <Divider />
+
+        <SplitterRow
+          feeSplits={feeSplits}
+          setupPath={isOwner ? PATH.ROLES_SPLITS : undefined}
+        />
+      </Stack>
     </SectionBlock>
   );
 };

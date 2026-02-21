@@ -1,9 +1,9 @@
 import {
-  CSM_OPERATOR_TYPE,
-  CSM_OPERATOR_TYPE_CURVE_ID,
+  OPERATOR_TYPE,
+  OPERATOR_TYPE_CURVE_ID,
 } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
-import { CSM_OPERATOR_TYPE_METADATA } from 'consts';
+import { OPERATOR_TYPE_METADATA } from 'consts';
 import { PATH } from 'consts/urls';
 import {
   useCurveParameters,
@@ -23,16 +23,16 @@ export const TypeParameters: FC = () => {
   const { ICS_APPLY_ENABLED, CAN_CLAIM_ICS } = useShowFlags();
 
   const { data: defParams } = useCurveParameters(
-    CSM_OPERATOR_TYPE_CURVE_ID.DEF,
+    OPERATOR_TYPE_CURVE_ID.CSM_DEF,
   );
   const { data: icsParams } = useCurveParameters(
-    CSM_OPERATOR_TYPE_CURVE_ID.ICS,
+    OPERATOR_TYPE_CURVE_ID.CSM_ICS,
   );
 
   const canApply =
     !CAN_CLAIM_ICS &&
     ICS_APPLY_ENABLED &&
-    operatorType !== CSM_OPERATOR_TYPE.ICS;
+    operatorType !== OPERATOR_TYPE.CSM_ICS;
 
   return (
     <Block>
@@ -47,12 +47,8 @@ export const TypeParameters: FC = () => {
             <CompareParametersList
               left={defParams}
               right={icsParams}
-              leftTitle={
-                CSM_OPERATOR_TYPE_METADATA[CSM_OPERATOR_TYPE.DEF].title
-              }
-              rightTitle={
-                CSM_OPERATOR_TYPE_METADATA[CSM_OPERATOR_TYPE.ICS].title
-              }
+              leftTitle={OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_DEF].title}
+              rightTitle={OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS].title}
             >
               <DefColumnBackground />
               <IcsColumnBackground />
