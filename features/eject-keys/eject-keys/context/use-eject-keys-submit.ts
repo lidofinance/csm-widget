@@ -70,9 +70,9 @@ export const useEjectKeysSubmit: FormSubmitterHook<
           }
         };
 
-        await sdk.keys.ejectKeysByArray({
+        await sdk.keys.ejectKeys({
           nodeOperatorId,
-          keyIndices: selection.map((v) => BigInt(v)),
+          keyIndices: selection.map(BigInt),
           amount: feeAmount,
           callback,
         });
