@@ -1,8 +1,7 @@
 import { ButtonProps } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
 
-import { getOperatorTypeByCurveId } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
+import { getModuleOperatorType } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useCurveParameters } from 'modules/web3';
 import { trackMatomoEvent } from 'utils';
@@ -21,7 +20,7 @@ export const TypeButton: FC<TypeButtonBaseProps> = ({
 }) => {
   const { openModal } = useParametersModal();
   useCurveParameters(curveId); // pre-fetching
-  const type = getOperatorTypeByCurveId(config.module, curveId);
+  const type = getModuleOperatorType(curveId);
 
   const handleClick = useCallback(() => {
     if (curveId === undefined) return;

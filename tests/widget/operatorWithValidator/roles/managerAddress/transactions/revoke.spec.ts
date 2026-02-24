@@ -13,8 +13,8 @@ import { mnemonicToAccount } from 'viem/accounts';
 
 test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes', () => {
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.rolesPage.managerAddressPage.open();
-    const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+    await widgetService.settingsPage.managerAddressPage.open();
+    const managerAddressPage = widgetService.settingsPage.managerAddressPage;
     const accountForRolesChanged = generateAddress();
 
     await managerAddressPage.proposeNewAddress(accountForRolesChanged);
@@ -24,16 +24,16 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
   test.afterAll(async ({ widgetService }) => {
     await test.step('Revoke proposal role', async () => {
       // @todo: need to add cancel all tx before.
-      await widgetService.rolesPage.managerAddressPage.open();
+      await widgetService.settingsPage.managerAddressPage.open();
       await widgetService.page.waitForTimeout(1000);
-      await widgetService.rolesPage.managerAddressPage.revokePendingRole();
+      await widgetService.settingsPage.managerAddressPage.revokePendingRole();
     });
   });
 
   test(
     qase(226, 'Should display tx modal after revoke Manager role changes'),
     async ({ widgetService, secretPhrase }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       const currentAddress = mnemonicToAccount(secretPhrase).address;
 
       await test.step('Revoke pending manager address role', async () => {
@@ -48,7 +48,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
         );
 
         await test.step('Verify transaction modal', async () => {
-          const { txModal } = widgetService.rolesPage;
+          const { txModal } = widgetService.settingsPage;
 
           await expect(txModal.description).toContainText('Address stays');
 
@@ -69,7 +69,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
     qase(208, 'Should success complete transacrion revoke Manager role change'),
     { tag: [Tags.performTX] },
     async ({ widgetService, secretPhrase }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       const currentAddress = mnemonicToAccount(secretPhrase).address;
 
       const [txPage] = await Promise.all([
@@ -90,7 +90,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
-        const { txModal } = widgetService.rolesPage;
+        const { txModal } = widgetService.settingsPage;
 
         await expect(txModal.description).toContainText('Address stays');
         await expect(txModal.description).toContainText(

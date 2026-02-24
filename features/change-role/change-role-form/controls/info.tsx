@@ -1,13 +1,13 @@
+import { ROLES } from '@lidofinance/lido-csm-sdk';
+import { Text } from '@lidofinance/lido-ui';
+import { ROLES_METADATA } from 'consts/roles';
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Latice, Stack, TitledAddress, Warning } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
+import { isAddressEqual } from 'viem';
 import { ChangeRoleFormInputType, useChangeRoleFormData } from '../context';
 import { useRole } from '../hooks/use-role';
-import { Text } from '@lidofinance/lido-ui';
-import { isAddressEqual } from 'viem';
-import { ROLES } from '@lidofinance/lido-csm-sdk';
-import { getRoleTitle } from 'shared/node-operator';
 
 export const Info: FC = () => {
   const roleTitle = useRole();
@@ -28,7 +28,7 @@ export const Info: FC = () => {
   return (
     <>
       <Text size="md" weight={700} as="h4">
-        {getRoleTitle(role, true)} Address
+        {ROLES_METADATA[role].capitalizedTitle} Address
       </Text>
       <Latice variant="secondary">
         <TitledAddress

@@ -1,16 +1,16 @@
 import { FC } from 'react';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
-import { useOperatorInfoFormData } from '../context';
+import { useMetadataFormData } from '../context/metadata-data-provider';
 
 export const SubmitButton: FC = () => {
-  const { ownerEditsRestricted } = useOperatorInfoFormData(true);
+  const { ownerEditsRestricted } = useMetadataFormData(true);
 
   return (
     <SubmitButtonHookForm
       isLocked={ownerEditsRestricted}
       disabled={ownerEditsRestricted}
     >
-      Update operator info
+      Save
     </SubmitButtonHookForm>
   );
 };

@@ -7,18 +7,15 @@ import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
-import type {
-  OperatorInfoFormInputType,
-  OperatorInfoFormNetworkData,
-} from './types';
-import { useTxModalStagesOperatorInfo } from '../hooks/use-tx-modal-stages-operator-info';
+import type { MetadataFormInputType, MetadataFormNetworkData } from './types';
+import { useTxModalStagesMetadata } from '../hooks/use-tx-modal-stages-metadata';
 
-export const useOperatorInfoSubmit: FormSubmitterHook<
-  OperatorInfoFormInputType,
-  OperatorInfoFormNetworkData
+export const useMetadataSubmit: FormSubmitterHook<
+  MetadataFormInputType,
+  MetadataFormNetworkData
 > = () => {
   const sdk = useSmSDK(MODULE_NAME.CM);
-  const { txModalStages } = useTxModalStagesOperatorInfo();
+  const { txModalStages } = useTxModalStagesMetadata();
 
   return useCallback(
     async (

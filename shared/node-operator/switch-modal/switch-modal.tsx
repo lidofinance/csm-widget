@@ -1,6 +1,11 @@
 import { Button, Modal } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
+import {
+  NodeOperatorId,
+  NodeOperatorShortInfo,
+  ROLES,
+} from '@lidofinance/lido-csm-sdk';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { Descriptor } from '../descriptor/descriptor';
 import { RoleBadge } from '../role-badge/role-badge';
@@ -12,11 +17,10 @@ import {
   StyledStack,
   StyledStackItem,
 } from './styles';
-import { NodeOperator, NodeOperatorId, ROLES } from '@lidofinance/lido-csm-sdk';
 
 export const SwitchModal: ModalComponentType<{
-  active: NodeOperator;
-  list: NodeOperator[];
+  active: NodeOperatorShortInfo;
+  list: NodeOperatorShortInfo[];
   onChange: (id: NodeOperatorId) => void;
 }> = ({ onClose, active, list, onChange, ...props }) => {
   const handleSwitch = useCallback(
@@ -31,12 +35,12 @@ export const SwitchModal: ModalComponentType<{
     <Modal title="Switch Node Operator" onClose={onClose} {...props}>
       <ListStyle>
         {list.map((item) => (
-          <RowStyle key={item.id.toString()}>
+          <RowStyle key={item.nodeOperatorId.toString()}>
             <ContentStyle>
               <Descriptor nodeOperator={item} />
             </ContentStyle>
             <ActionsStyle>
-              {active?.id === item.id ? (
+              {active?.nodeOperatorId === item.nodeOperatorId ? (
                 <Button size="xs" variant="ghost" disabled>
                   Current
                 </Button>
@@ -44,7 +48,7 @@ export const SwitchModal: ModalComponentType<{
                 <Button
                   size="xs"
                   variant="outlined"
-                  onClick={() => handleSwitch(item.id)}
+                  onClick={() => handleSwitch(item.nodeOperatorId)}
                 >
                   Switch
                 </Button>
@@ -60,9 +64,6 @@ export const SwitchModal: ModalComponentType<{
         <StyledStackItem>
           <RoleBadge role={ROLES.MANAGER} /> Manager Address role
         </StyledStackItem>
-        {/* <StyledStackItem>
-          <CurveBadge type={CURVE_TYPE.CUSTOM} /> Custom Curve
-        </StyledStackItem> */}
       </StyledStack>
     </Modal>
   );

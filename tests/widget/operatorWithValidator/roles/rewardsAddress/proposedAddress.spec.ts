@@ -15,23 +15,24 @@ test.describe(
     let proposedAddress: string;
 
     test.beforeAll(async ({ widgetService }) => {
-      await widgetService.rolesPage.rewardsAddressPage.open();
+      await widgetService.settingsPage.rewardsAddressPage.open();
       proposedAddress = generateAddress();
-      await widgetService.rolesPage.rewardsAddressPage.proposeNewAddress(
+      await widgetService.settingsPage.rewardsAddressPage.proposeNewAddress(
         proposedAddress,
       );
     });
 
     test.afterAll(async ({ widgetService }) => {
-      await widgetService.rolesPage.rewardsAddressPage.open();
+      await widgetService.settingsPage.rewardsAddressPage.open();
       await widgetService.page.waitForTimeout(1000);
-      await widgetService.rolesPage.rewardsAddressPage.revokePendingRole();
+      await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
     });
 
     test(
       qase(213, 'Verify the addresses field with proposed address'),
       async ({ widgetService, secretPhrase }) => {
-        const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+        const rewardsAddressPage =
+          widgetService.settingsPage.rewardsAddressPage;
         const address = mnemonicToAccount(secretPhrase).address;
 
         await test.step('Verify the "Current rewards address" field', async () => {
@@ -67,7 +68,7 @@ test.describe(
     );
 
     test(qase(236, 'Verify input appearence'), async ({ widgetService }) => {
-      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
 
       await test.step('Verify input', async () => {
         await expect(rewardsAddressPage.addressInput).toBeVisible();
@@ -82,7 +83,7 @@ test.describe(
     });
 
     test(qase(237, 'Verify button appearence'), async ({ widgetService }) => {
-      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
 
       await test.step('Verify button', async () => {
         await expect(rewardsAddressPage.proposeButton).toBeVisible();
@@ -102,7 +103,8 @@ test.describe(
     test(
       qase(214, 'Should open etherscan for current rewards address'),
       async ({ widgetService, widgetConfig, secretPhrase }) => {
-        const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+        const rewardsAddressPage =
+          widgetService.settingsPage.rewardsAddressPage;
 
         await test.step('Verify erherscan for current address', async () => {
           const [etherscanPage] = await Promise.all([
@@ -131,7 +133,8 @@ test.describe(
     test(
       qase(215, 'Propose a new Rewards Address with invalid input'),
       async ({ widgetService }) => {
-        const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+        const rewardsAddressPage =
+          widgetService.settingsPage.rewardsAddressPage;
 
         await rewardsAddressPage.addressInput.fill(`${generateAddress()}1`);
 
@@ -146,7 +149,8 @@ test.describe(
     test(
       qase(216, 'Propose a new Rewards Address with same address'),
       async ({ widgetService, secretPhrase }) => {
-        const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+        const rewardsAddressPage =
+          widgetService.settingsPage.rewardsAddressPage;
 
         await rewardsAddressPage.addressInput.fill(
           mnemonicToAccount(secretPhrase).address,

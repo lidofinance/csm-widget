@@ -1,9 +1,9 @@
-import { KEY_STATUS, ROLES } from '@lidofinance/lido-csm-sdk';
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { ALERT_FEE_RECIPIENT_DISMISS_HOURS, PATH } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useWrappedApi } from 'features/wrapped/data';
 import {
-  useNodeOperator,
+  useNodeOperatorId,
   useOperatorBalance,
   useOperatorInfo,
   useOperatorKeysWithStatus,
@@ -30,24 +30,20 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { closeAlert } = useAlertActions();
 
   const { isSupportedChain } = useDappStatus();
-  const { nodeOperator } = useNodeOperator();
-  const { data: info } = useOperatorInfo(nodeOperator?.id);
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: info } = useOperatorInfo(nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const { route } = useRouter();
-  const { data: wrappedData } = useWrappedApi(nodeOperator?.id);
+  const { data: wrappedData } = useWrappedApi(nodeOperatorId);
 
   const normalizeQueue = useMemo(() => {
-    return (
-      info &&
-      info.enqueuedCount < info.depositableValidatorsCount &&
-      nodeOperator?.roles?.includes(ROLES.MANAGER)
-    );
-  }, [info, nodeOperator?.roles]);
+    return info && info.enqueuedCount < info.depositableValidatorsCount;
+  }, [info]);
 
-  const { data: balance } = useOperatorBalance(nodeOperator?.id);
+  const { data: balance } = useOperatorBalance(nodeOperatorId);
 
   const { data: keysWithStatus, isPending: isKeysLoading } =
-    useOperatorKeysWithStatus(nodeOperator?.id);
+    useOperatorKeysWithStatus(nodeOperatorId);
   const hasRequestsToExit = useMemo(
     () =>
       keysWithStatus?.filter(({ statuses }) =>
@@ -57,19 +53,19 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 
   const { data: keysWithWrongFeeRecipient } =
-    useOperatorKeysWithWrongFeeRecipient(nodeOperator?.id);
+    useOperatorKeysWithWrongFeeRecipient(nodeOperatorId);
 
   const {
     isDismissed: isFeeRecipientAlertDismissed,
     dismiss: dismissFeeRecipientAlert,
   } = useDismiss(
-    `alert-fee-recipient-dismissed-${nodeOperator?.id}`,
+    `alert-fee-recipient-dismissed-${nodeOperatorId}`,
     ALERT_FEE_RECIPIENT_DISMISS_HOURS,
   );
 
   const { isDismissed: isWrappedAlertDismissed, dismiss: dismissWrappedAlert } =
     useDismiss(
-      `alert-wrapped-dismissed-${nodeOperator?.id}`,
+      `alert-wrapped-dismissed-${nodeOperatorId}`,
       7200, // approx 10 months in hours
     );
 
@@ -102,7 +98,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   useAlertWatcher({
     component: AlertWrapped,
     shouldShow:
-      !!nodeOperator &&
+      !!nodeOperatorId &&
       route !== PATH.WRAPPED &&
       !isWrappedAlertDismissed &&
       !!wrappedData,

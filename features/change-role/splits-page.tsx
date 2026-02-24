@@ -4,7 +4,7 @@ import { Faq } from 'shared/components';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
-import { RolesPageSwitcher } from 'shared/navigate';
+import { SettingsPageSwitcher } from 'shared/navigate';
 import { SplitsForm } from './splits-form';
 
 export const SplitsPage: FC = () => {
@@ -12,11 +12,11 @@ export const SplitsPage: FC = () => {
 
   return (
     <Layout
-      title="Roles"
-      subtitle="Manage your operator addresses"
-      pageName="Roles"
+      title="Settings"
+      subtitle="Manage your operator"
+      pageName="Settings"
     >
-      <RolesPageSwitcher />
+      <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>
         <SplitsForm />
       </NoSSRWrapper>

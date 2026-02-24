@@ -1,6 +1,4 @@
-import { getOperatorTypeByCurveId } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
-import { OPERATOR_TYPE_METADATA } from 'consts';
+import { getModuleOperatorType, OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { ParametersList } from 'shared/components';
@@ -10,7 +8,7 @@ export const ParametersModal: ModalComponentType<{
   curveId: bigint;
 }> = ({ open, onClose, curveId }) => {
   const { data: parameters } = useCurveParameters(curveId);
-  const type = getOperatorTypeByCurveId(config.module, curveId);
+  const type = getModuleOperatorType(curveId);
 
   return (
     <StyledModal

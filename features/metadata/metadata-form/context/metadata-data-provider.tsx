@@ -6,9 +6,9 @@ import {
 import { FC, PropsWithChildren, useCallback } from 'react';
 import { FormDataContext, useFormData } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
-import type { OperatorInfoFormNetworkData } from './types';
+import type { MetadataFormNetworkData } from './types';
 
-const useOperatorInfoFormNetworkData = () => {
+const useMetadataFormNetworkData = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: metadata, isPending } = useOperatorMetadata(nodeOperatorId);
 
@@ -24,18 +24,16 @@ const useOperatorInfoFormNetworkData = () => {
       currentName: metadata?.name,
       currentDescription: metadata?.description,
       ownerEditsRestricted: metadata?.ownerEditsRestricted,
-    } as OperatorInfoFormNetworkData,
+    } as MetadataFormNetworkData,
     isPending,
     revalidate,
   };
 };
 
-export const useOperatorInfoFormData = useFormData<OperatorInfoFormNetworkData>;
+export const useMetadataFormData = useFormData<MetadataFormNetworkData>;
 
-export const OperatorInfoDataProvider: FC<PropsWithChildren> = ({
-  children,
-}) => {
-  const networkData = useOperatorInfoFormNetworkData();
+export const MetadataDataProvider: FC<PropsWithChildren> = ({ children }) => {
+  const networkData = useMetadataFormNetworkData();
 
   return (
     <FormDataContext.Provider value={networkData}>

@@ -14,7 +14,7 @@ export const ClaimerForm: FC = memo(() => {
     <ClaimerDataProvider>
       <ClaimerFormProvider>
         <FormBlock data-testid="claimerForm">
-          <BackButton text="Back to all roles" href={PATH.ROLES} />
+          <BackButton text="Back to all roles" href={PATH.SETTINGS} />
           <ClaimerFormLoader>
             <Form>
               <Info />

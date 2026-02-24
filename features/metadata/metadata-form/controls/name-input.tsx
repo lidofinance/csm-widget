@@ -5,7 +5,7 @@ export const NameInput: FC = () => {
   return (
     <TextInputHookForm
       fieldName="name"
-      label="Operator name"
+      label="Name"
       placeholder="Enter operator name"
     />
   );

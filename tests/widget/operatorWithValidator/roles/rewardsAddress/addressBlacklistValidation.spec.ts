@@ -20,13 +20,13 @@ test.describe('Roles. Rewards Address. Address blacklist validation', async () =
     await widgetService.page.unrouteAll();
     await widgetService.page.reload();
     await widgetService.page.waitForTimeout(1000);
-    await widgetService.rolesPage.rewardsAddressPage.revokePendingRole();
+    await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
   });
 
   test(
     qase(293, 'Should open access denied modal after propose reward role'),
     async ({ widgetService }) => {
-      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
       await rewardsAddressPage.open();
 
       const accountForRolesChanged = generateAddress();
@@ -52,7 +52,7 @@ test.describe('Roles. Rewards Address. Address blacklist validation', async () =
       await test.step('Mock route for Blacklisted wallet address', async () => {
         await widgetService.page.unrouteAll();
       });
-      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
       await rewardsAddressPage.open();
 
       const proposedAddress = generateAddress();

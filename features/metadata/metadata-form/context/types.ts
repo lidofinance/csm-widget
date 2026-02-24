@@ -1,11 +1,11 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
-export type OperatorInfoFormInputType = {
+export type MetadataFormInputType = {
   name: string;
   description: string;
 };
 
-export type OperatorInfoFormNetworkData = {
+export type MetadataFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   currentName: string;
   currentDescription: string;

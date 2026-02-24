@@ -1,8 +1,9 @@
 import {
+  MODULE_NAME,
   NodeOperatorShortInfo,
   TransactionCallback,
   TransactionCallbackStage,
-  MODULE_NAME,
+  getNodeOperatorRoles,
 } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses/use-operator-custom-addresses';
@@ -10,7 +11,6 @@ import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import type { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { useNavigate } from 'shared/navigate';
-import { hasAnyRole } from 'shared/node-operator';
 import invariant from 'tiny-invariant';
 import { useTxModalStagesCuratedOperator } from '../hooks/use-tx-modal-stages-curated-operator';
 import type {
@@ -90,7 +90,8 @@ export const useCuratedOperatorSubmit: FormSubmitterHook<
         await onConfirm?.();
 
         if (result) {
-          if (hasAnyRole(result, networkData.address)) {
+          const roles = getNodeOperatorRoles(result, networkData.address);
+          if (roles.length > 0) {
             appendNO(result);
           } else {
             setOperatorCustomAddresses(result.nodeOperatorId);

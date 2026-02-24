@@ -18,7 +18,7 @@ export const ChangeRoleForm: FC<ChangeRoleDataProviderProps> = memo((props) => {
     <ChangeRoleDataProvider {...props}>
       <ChangeRoleFormProvider {...props}>
         <FormBlock data-testid="changeRoleForm">
-          <BackButton text="Back to all roles" href={PATH.ROLES} />
+          <BackButton text="Back to all roles" href={PATH.SETTINGS} />
           <FormLoader>
             <Form>
               <Info />

@@ -1,11 +1,12 @@
 import {
   DepositData,
+  MODULE_NAME,
   NodeOperatorShortInfo,
   Proof,
   TOKENS,
   TransactionCallback,
   TransactionCallbackStage,
-  MODULE_NAME,
+  getNodeOperatorRoles,
 } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
@@ -14,7 +15,6 @@ import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { useKeysCache } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
-import { hasAnyRole } from 'shared/node-operator/utils';
 import invariant from 'tiny-invariant';
 import { Address } from 'viem';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
@@ -115,7 +115,8 @@ export const useSubmitKeysSubmit: FormSubmitterHook<
                 {
                   keys: depositData.map((key) => key.pubkey),
                   nodeOperatorId: payload.result.nodeOperatorId,
-                  hasAnyRole: hasAnyRole(payload.result, address),
+                  hasAnyRole:
+                    getNodeOperatorRoles(payload.result, address).length > 0,
                 },
                 payload.hash,
               );
@@ -152,7 +153,8 @@ export const useSubmitKeysSubmit: FormSubmitterHook<
 
         // FIXME: !result - mean multisig finish allowance and need to start second transaction
         if (result) {
-          if (hasAnyRole(result, address)) {
+          const roles = getNodeOperatorRoles(result, address);
+          if (roles.length > 0) {
             appendNO(result);
           } else {
             setOperatorCustomAddresses(result.nodeOperatorId);

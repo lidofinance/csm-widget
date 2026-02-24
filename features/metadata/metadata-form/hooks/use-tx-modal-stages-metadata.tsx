@@ -7,7 +7,7 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 
-const getTxModalStagesOperatorInfo = (
+const getTxModalStagesMetadata = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
@@ -15,7 +15,7 @@ const getTxModalStagesOperatorInfo = (
   sign: () =>
     transitStage(
       <TxStageSign
-        title="You are updating operator info"
+        title="You are updating metadata"
         description="Name and description will be updated"
       />,
     ),
@@ -23,7 +23,7 @@ const getTxModalStagesOperatorInfo = (
   pending: (txHash?: string) =>
     transitStage(
       <TxStagePending
-        title="Updating operator info"
+        title="Updating metadata"
         description="Name and description will be updated"
         txHash={txHash}
       />,
@@ -32,7 +32,7 @@ const getTxModalStagesOperatorInfo = (
   success: (txHash?: string) =>
     transitStage(
       <TxStageSuccess
-        title="Operator info has been updated"
+        title="Metadata has been updated"
         description="Name and description have been updated"
         txHash={txHash}
       />,
@@ -40,5 +40,5 @@ const getTxModalStagesOperatorInfo = (
     ),
 });
 
-export const useTxModalStagesOperatorInfo = () =>
-  useTransactionModalStage(getTxModalStagesOperatorInfo);
+export const useTxModalStagesMetadata = () =>
+  useTransactionModalStage(getTxModalStagesMetadata);

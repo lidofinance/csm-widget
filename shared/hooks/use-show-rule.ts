@@ -1,4 +1,4 @@
-import { MODULE_NAME, ROLES } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, NodeOperatorShortInfo } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config, useConfig } from 'config';
 import { useFeatureFlags } from 'config/feature-flags';
@@ -14,11 +14,11 @@ import {
   useInvites,
   useNodeOperator,
   useOperatorBalance,
-  useOperatorIsOwner,
 } from 'modules/web3';
 import { useModifyContext } from 'providers/modify-provider';
 import { useCallback, useMemo } from 'react';
 import { useCanClaimICS, useCanCreateNodeOperator } from 'shared/hooks';
+import { Address, isAddressEqual } from 'viem';
 
 export type ShowRule =
   | 'IS_MAINNET'
@@ -44,21 +44,50 @@ export type ShowFlags = Record<ShowRule, boolean>;
 
 const { surveyApi } = getExternalLinks();
 
+const isManagerRole = (
+  nodeOperator: NodeOperatorShortInfo | undefined,
+  address: Address | undefined,
+) => {
+  return (
+    (nodeOperator &&
+      address &&
+      isAddressEqual(nodeOperator.managerAddress, address)) ||
+    false
+  );
+};
+
+const isRewardsRole = (
+  nodeOperator: NodeOperatorShortInfo | undefined,
+  address: Address | undefined,
+) => {
+  return (
+    (nodeOperator &&
+      address &&
+      isAddressEqual(nodeOperator.rewardsAddress, address)) ||
+    false
+  );
+};
+
+const isOwnerRole = (
+  nodeOperator: NodeOperatorShortInfo | undefined,
+  address: Address | undefined,
+) => {
+  return nodeOperator?.extendedManagerPermissions
+    ? isManagerRole(nodeOperator, address)
+    : isRewardsRole(nodeOperator, address);
+};
+
 export const useShowFlags = (): ShowFlags => {
   const { isAccountActive, address, chainId } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
   const { data: isReportingRole } = useHasReportStealingRole();
-  const { data: balance } = useOperatorBalance(nodeOperator?.id);
+  const { data: balance } = useOperatorBalance(nodeOperator?.nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const canCreateNO = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
-  const { data: isOwner } = useOperatorIsOwner({
-    address,
-    nodeOperatorId: nodeOperator?.id,
-  });
   const featureFlags = useFeatureFlags();
-  const { data: wrappedData } = useWrappedApi(nodeOperator?.id);
+  const { data: wrappedData } = useWrappedApi(nodeOperator?.nodeOperatorId);
   const {
     config: { module },
   } = useConfig();
@@ -70,9 +99,11 @@ export const useShowFlags = (): ShowFlags => {
       ['NOT_NODE_OPERATOR']: !nodeOperator,
       ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
       ['CAN_CREATE']: !!canCreateNO,
-      ['HAS_MANAGER_ROLE']: !!nodeOperator?.roles?.includes(ROLES.MANAGER),
-      ['HAS_REWARDS_ROLE']: !!nodeOperator?.roles?.includes(ROLES.REWARDS),
-      ['HAS_OWNER_ROLE']: isAccountActive && !!isOwner,
+      ['HAS_MANAGER_ROLE']:
+        isAccountActive && isManagerRole(nodeOperator, address),
+      ['HAS_REWARDS_ROLE']:
+        isAccountActive && isRewardsRole(nodeOperator, address),
+      ['HAS_OWNER_ROLE']: isAccountActive && isOwnerRole(nodeOperator, address),
       ['HAS_INVITES']: !!invites?.length,
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
@@ -90,7 +121,7 @@ export const useShowFlags = (): ShowFlags => {
       isAccountActive,
       nodeOperator,
       canCreateNO,
-      isOwner,
+      address,
       invites?.length,
       balance?.locked,
       referrer,

@@ -114,7 +114,11 @@ export const OPERATOR_TYPE_METADATA: Record<
   },
 };
 
+export const getModuleOperatorType = (curveId: bigint | undefined) => {
+  return getOperatorTypeByCurveId(config.module, curveId);
+};
+
 export const getCurveMetadata = (curveId: bigint | undefined) => {
-  const operatorType = getOperatorTypeByCurveId(config.module, curveId);
+  const operatorType = getModuleOperatorType(curveId);
   return OPERATOR_TYPE_METADATA[operatorType];
 };

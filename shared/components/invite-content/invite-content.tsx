@@ -1,8 +1,9 @@
-import { FC } from 'react';
-import { DescriptorId, getRoleTitle } from 'shared/node-operator';
-import { Badge, InviteContentStyle } from './style';
-import { Tooltip } from '@lidofinance/lido-ui';
 import { NodeOperatorInvite, ROLES } from '@lidofinance/lido-csm-sdk';
+import { Tooltip } from '@lidofinance/lido-ui';
+import { ROLES_METADATA } from 'consts';
+import { FC } from 'react';
+import { DescriptorId } from 'shared/node-operator';
+import { Badge, InviteContentStyle } from './style';
 
 export const InviteContent: FC<{ invite: NodeOperatorInvite }> = ({
   invite,
@@ -40,7 +41,7 @@ export const InviteContent: FC<{ invite: NodeOperatorInvite }> = ({
         )
       }
     >
-      <Badge>{getRoleTitle(invite.role, true)} address role</Badge>
+      <Badge>{ROLES_METADATA[invite.role].capitalizedTitle} address role</Badge>
     </Tooltip>
   </InviteContentStyle>
 );

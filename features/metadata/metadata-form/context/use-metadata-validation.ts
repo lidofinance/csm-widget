@@ -1,17 +1,12 @@
 import {
   useFormValidation,
+  validateLength,
   ValidationError,
 } from 'shared/hook-form/validation';
-import type {
-  OperatorInfoFormInputType,
-  OperatorInfoFormNetworkData,
-} from './types';
+import type { MetadataFormInputType, MetadataFormNetworkData } from './types';
 
-export const useOperatorInfoValidation = () => {
-  return useFormValidation<
-    OperatorInfoFormInputType,
-    OperatorInfoFormNetworkData
-  >(
+export const useMetadataValidation = () => {
+  return useFormValidation<MetadataFormInputType, MetadataFormNetworkData>(
     'name',
     async (
       { name, description },
@@ -19,9 +14,11 @@ export const useOperatorInfoValidation = () => {
       validate,
     ) => {
       await validate('name', () => {
-        if (!name.trim()) {
-          throw new ValidationError('name', 'Name is required');
-        }
+        validateLength('name', name, 1, 64);
+      });
+
+      await validate('description', () => {
+        validateLength('description', description, 1, 1024);
       });
 
       await validate('name', () => {

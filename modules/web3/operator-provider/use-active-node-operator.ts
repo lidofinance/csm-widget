@@ -1,21 +1,23 @@
+import { NodeOperatorShortInfo } from '@lidofinance/lido-csm-sdk';
 import { useEffect, useState } from 'react';
 import { useCachedId } from './use-cached-id';
-import { NodeOperator } from '@lidofinance/lido-csm-sdk';
 
-export const useActiveNodeOperator = (list?: NodeOperator[]) => {
-  const [active, setActive] = useState<NodeOperator | undefined>();
+export const useActiveNodeOperator = (list?: NodeOperatorShortInfo[]) => {
+  const [active, setActive] = useState<NodeOperatorShortInfo | undefined>();
   const [, setCachedId] = useCachedId();
 
   useEffect(() => {
     setActive((prev) => {
-      const updated = list?.find((item) => item.id === prev?.id);
+      const updated = list?.find(
+        (item) => item.nodeOperatorId === prev?.nodeOperatorId,
+      );
 
       return updated ?? list?.[0];
     });
   }, [list]);
 
   useEffect(() => {
-    active && setCachedId(active.id);
+    active && setCachedId(active.nodeOperatorId);
   }, [active, setCachedId]);
 
   return [active ?? list?.[0], setActive] as const;

@@ -12,7 +12,7 @@ import {
 import { RolesModal } from './elements/roles/rolesModal.element';
 import { TxModal } from './elements/common/element.txProgressModal';
 
-export class RolesPage extends BasePage {
+export class SettingsPage extends BasePage {
   rewardsAddressPage: RewardsAddressPage;
   managerAddressPage: ManagerAddressPage;
   inboxRequestsPage: InboxRequestsPage;
