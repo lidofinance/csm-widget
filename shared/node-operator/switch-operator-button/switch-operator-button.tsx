@@ -13,6 +13,7 @@ import { trackMatomoEvent } from 'utils';
 import { Descriptor } from '../descriptor/descriptor';
 import { useSwitchModal } from '../switch-modal';
 import { ButtonStyle } from './styles';
+import { useShowFlags } from 'shared/hooks';
 
 export const SwitchOperatorButton: FC<ButtonProps> = (props) => {
   const { onClick, ...rest } = props;
@@ -20,6 +21,7 @@ export const SwitchOperatorButton: FC<ButtonProps> = (props) => {
   const { openModal } = useSwitchModal();
   const { data: list } = useAvailableOperators();
   const { nodeOperator, switchNodeOperator } = useNodeOperator();
+  const { CAN_CREATE } = useShowFlags();
 
   const handleSwitchOperator = useCallback(
     (id: NodeOperatorId) => {
@@ -32,8 +34,13 @@ export const SwitchOperatorButton: FC<ButtonProps> = (props) => {
   const handleButtonClick = useCallback(() => {
     if (!nodeOperator || !list) return;
     trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.clickSwitchOperatorButton);
-    openModal({ active: nodeOperator, list, onChange: handleSwitchOperator });
-  }, [nodeOperator, list, handleSwitchOperator, openModal]);
+    openModal({
+      active: nodeOperator,
+      list,
+      onChange: handleSwitchOperator,
+      canCreate: CAN_CREATE,
+    });
+  }, [nodeOperator, list, handleSwitchOperator, openModal, CAN_CREATE]);
 
   if (!isSupportedChain || !nodeOperator || !list || list.length === 0)
     return null;

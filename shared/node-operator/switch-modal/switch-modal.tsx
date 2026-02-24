@@ -1,4 +1,4 @@
-import { Button, Modal } from '@lidofinance/lido-ui';
+import { Button, ButtonIcon, Modal } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
 import {
@@ -17,12 +17,16 @@ import {
   StyledStack,
   StyledStackItem,
 } from './styles';
+import { LocalLink } from 'shared/navigate';
+import { PATH } from 'consts';
+import { Plus } from '@lidofinance/lido-ui';
 
 export const SwitchModal: ModalComponentType<{
   active: NodeOperatorShortInfo;
   list: NodeOperatorShortInfo[];
+  canCreate: boolean;
   onChange: (id: NodeOperatorId) => void;
-}> = ({ onClose, active, list, onChange, ...props }) => {
+}> = ({ onClose, active, list, onChange, canCreate, ...props }) => {
   const handleSwitch = useCallback(
     (id: NodeOperatorId) => {
       onChange(id);
@@ -56,6 +60,13 @@ export const SwitchModal: ModalComponentType<{
             </ActionsStyle>
           </RowStyle>
         ))}
+        {canCreate && (
+          <LocalLink href={PATH.CREATE}>
+            <ButtonIcon icon={<Plus />} fullwidth size="sm" variant="outlined">
+              Create a new Node Operator
+            </ButtonIcon>
+          </LocalLink>
+        )}
       </ListStyle>
       <StyledStack>
         <StyledStackItem>
