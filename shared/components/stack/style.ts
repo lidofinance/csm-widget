@@ -7,6 +7,8 @@ export type StackStyleProps = {
   $align?: CSSProperties['alignItems'];
   $justify?: CSSProperties['justifyContent'];
   $wrap?: boolean;
+  $selfAlign?: CSSProperties['alignSelf'];
+  $selfJustify?: CSSProperties['justifySelf'];
 };
 
 export const StackStyle = styled.div<StackStyleProps>`
@@ -32,5 +34,15 @@ export const StackStyle = styled.div<StackStyleProps>`
         flex: 1;
         min-width: fit-content;
       }
+    `}
+  ${({ $selfAlign }) =>
+    $selfAlign &&
+    css`
+      align-self: ${$selfAlign};
+    `}
+  ${({ $selfJustify }) =>
+    $selfJustify &&
+    css`
+      justify-self: ${$selfJustify};
     `}
 `;

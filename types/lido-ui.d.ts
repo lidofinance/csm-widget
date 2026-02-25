@@ -22,6 +22,7 @@ declare module '@lidofinance/lido-ui' {
   export const ArrowBack: ComponentType<FixedSVGProps>;
   export const External: ComponentType<FixedSVGProps>;
   export const Copy: ComponentType<FixedSVGProps>;
+  export const Edit: ComponentType<FixedSVGProps>;
   export const Check: ComponentType<FixedSVGProps>;
   export const Plus: ComponentType<FixedSVGProps>;
   export const Close: ComponentType<FixedSVGProps>;
