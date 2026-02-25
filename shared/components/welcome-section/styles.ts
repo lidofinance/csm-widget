@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import LogoCsmDark from 'assets/csm-dark.png';
 import LogoCsmLight from 'assets/csm-light.png';
-import LogoCmDark from 'assets/cm-dark.png';
 import LogoCmLight from 'assets/cm-light.png';
 
 const LOGOS = {
@@ -18,7 +17,7 @@ const LOGOS = {
     [ThemeName.light]: LogoCsmLight.src,
   },
   [MODULE_NAME.CM]: {
-    [ThemeName.dark]: LogoCmDark.src,
+    [ThemeName.dark]: LogoCmLight.src,
     [ThemeName.light]: LogoCmLight.src,
   },
 };

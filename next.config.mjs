@@ -39,6 +39,7 @@ if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
   '/manifest.json',
+  '/manifest-cm.json',
   '/favicon:size*',
   '/',
   '/runtime/window-env.js',
@@ -167,7 +168,7 @@ export default withBundleAnalyzer({
       },
       {
         // required for gnosis save apps
-        source: '/manifest.json',
+        source: '/manifest:suffix.json',
         headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }],
       },
       ...CACHE_CONTROL_PAGES.map((page) => ({

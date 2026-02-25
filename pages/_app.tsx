@@ -6,6 +6,7 @@ import { memo } from 'react';
 import { ToastContainer } from '@lidofinance/lido-ui';
 
 import { config, SecretConfigType } from 'config';
+import { MODULE_METADATA } from 'consts/module';
 import { withCsp } from 'config/csp';
 import { Providers } from 'providers';
 import { BackgroundGradient, SecurityStatusBanner } from 'shared/components';
@@ -44,7 +45,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
           name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
-        <title>CSM | Lido</title>
+        <title>{MODULE_METADATA[config.module].shortTitle} | Lido</title>
       </Head>
       <BackgroundGradient
         width={1560}
