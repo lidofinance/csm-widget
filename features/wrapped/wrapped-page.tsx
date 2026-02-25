@@ -1,11 +1,7 @@
 import { FC } from 'react';
 import { Layout } from 'shared/layout';
-import { Wrapped } from './wrapped';
 
+// FIXME: wrapped image
 export const WrappedPage: FC = () => {
-  return (
-    <Layout pageName="Wrapped">
-      <Wrapped />
-    </Layout>
-  );
+  return <Layout pageName="Wrapped">See you in 2027</Layout>;
 };

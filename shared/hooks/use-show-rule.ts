@@ -6,7 +6,6 @@ import {
   SURVEYS_SETUP_ENABLED,
 } from 'config/feature-flags/types';
 import { getExternalLinks } from 'consts/external-links';
-import { useWrappedApi } from 'features/wrapped/data';
 import {
   useDappStatus,
   useHasReportStealingRole,
@@ -36,8 +35,7 @@ export type ShowRule =
   | 'CAN_CLAIM_ICS'
   | 'ICS_APPLY_ENABLED'
   | 'EL_STEALING_REPORTER'
-  | 'IS_SURVEYS_ACTIVE'
-  | 'HAS_WRAPPED_DATA';
+  | 'IS_SURVEYS_ACTIVE';
 
 export type ShowFlags = Record<ShowRule, boolean>;
 
@@ -58,7 +56,6 @@ export const useShowFlags = (): ShowFlags => {
     nodeOperatorId: nodeOperator?.id,
   });
   const featureFlags = useFeatureFlags();
-  const { data: wrappedData } = useWrappedApi(nodeOperator?.id);
 
   return useMemo(
     () => ({
@@ -79,7 +76,6 @@ export const useShowFlags = (): ShowFlags => {
       ['EL_STEALING_REPORTER']: !!isReportingRole,
       ['IS_SURVEYS_ACTIVE']:
         !!surveyApi && !!featureFlags?.[SURVEYS_SETUP_ENABLED],
-      ['HAS_WRAPPED_DATA']: !!wrappedData,
     }),
     [
       chainId,
@@ -94,7 +90,6 @@ export const useShowFlags = (): ShowFlags => {
       canClaimICS,
       featureFlags,
       isReportingRole,
-      wrappedData,
     ],
   );
 };
