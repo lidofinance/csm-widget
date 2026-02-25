@@ -29,6 +29,7 @@ export * from './use-operator-keys-with-strikes';
 export * from './use-operator-keys-with-wrong-fee-recipient';
 export * from './use-operator-last-rewards';
 export * from './use-operator-metadata';
+export * from './use-operator-penalties';
 export * from './use-operator-owner';
 export * from './use-operator-reward';
 export * from './use-operator-rewards-history';

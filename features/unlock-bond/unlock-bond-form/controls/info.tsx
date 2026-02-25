@@ -1,11 +1,6 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import {
-  LIDO_REWARDS_VAULT_LINK,
-  MEV_STEALING_LINK,
-} from 'consts/external-links';
 import { FC } from 'react';
-import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
+import { Latice, Stack, TitledAmount } from 'shared/components';
 import { useUnlockBondFormData } from '../context';
 
 export const Info: FC = () => {
@@ -23,43 +18,19 @@ export const Info: FC = () => {
           />
           {!!lockedBond && (
             <div>
-              <MatomoLink
-                $inline
-                href={MEV_STEALING_LINK}
-                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.mevStealingDocsLink}
-              >
-                EL reward stealing
-              </MatomoLink>{' '}
-              penalties have been applied to your Node Operator because one of
-              your validators produced a block with the EL rewards sent to the
-              wrong address (an address different from from{' '}
-              <MatomoLink
-                $inline
-                href={LIDO_REWARDS_VAULT_LINK}
-                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoRewardsVaultLink}
-              >
-                the Lido Execution Layer Rewards Vault
-              </MatomoLink>
-              )
+              Penalties have been applied to your Node Operator. If they
+              aren&apos;t covered, the corresponding amount of your bond may be
+              burned. See details in the table below.
               <br />
               <b>Actions required:</b>
               <ul>
                 <li>
-                  Compensate the amount of the penalty, otherwise the
-                  corresponding part of your bond will be burned and your
-                  beneficial bond curve will be reset to the default one.{' '}
+                  Compensate the penalty amount to prevent the related portion
+                  of your bond from being burned.
                 </li>
                 <li>
-                  Check if the feeRecipient address of your validators consensus
-                  / validator client is set to{' '}
-                  <MatomoLink
-                    $inline
-                    href={LIDO_REWARDS_VAULT_LINK}
-                    matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoRewardsVaultLink}
-                  >
-                    the Lido Execution Layer Rewards Vault
-                  </MatomoLink>{' '}
-                  to avoid the further penalties.
+                  Review the penalty details and fix the underlying issue to
+                  avoid additional penalties.
                 </li>
               </ul>
             </div>
