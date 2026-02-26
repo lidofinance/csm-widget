@@ -21,17 +21,23 @@ export const calculateGraphBounds = (
 
   // Calculate end position
   const endKeysPosition = active + queue + potential;
-  const endPosition = fullView
-    ? endKeysPosition < capacity
-      ? capacity
-      : endKeysPosition
-    : endKeysPosition;
+
+  // Check if capacity is far beyond queue end (before adjusting endPosition)
+  const extraHigh =
+    !fullView && capacity > endKeysPosition + endKeysPosition / 10n;
+
+  // Include capacity in range when it's within reasonable distance
+  const endPosition =
+    endKeysPosition < capacity
+      ? extraHigh
+        ? endKeysPosition
+        : capacity
+      : endKeysPosition;
 
   const range = endPosition - startPosition;
 
   // Determine display boundaries based on view mode and capacity
   const extraLow = !fullView && capacity < startPosition - range;
-  const extraHigh = !fullView && capacity > endPosition + endPosition / 10n;
 
   const displayStart = fullView
     ? 0
