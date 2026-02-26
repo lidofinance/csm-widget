@@ -137,5 +137,8 @@
   "browserslist": [
     "> 1%, last 2 versions, not dead",
     "last 1 ios_saf major versions"
-  ]
+  ],
+  "volta": {
+    "node": "20.20.0"
+  }
 }
