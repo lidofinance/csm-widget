@@ -1,14 +1,13 @@
 import { FC } from 'react';
-import { SlideContainer, SlideNavigation } from '../components';
+import { SlideDumbContainer } from '../components';
 import { SlideContent, SlideHeading } from '../styles';
 
 export const SlideIntro: FC = () => {
   return (
-    <SlideContainer bg="intro">
+    <SlideDumbContainer bg="intro">
       <SlideContent $position="end">
-        <SlideHeading>Dive into your year of validation</SlideHeading>
+        <SlideHeading>See you next year!</SlideHeading>
       </SlideContent>
-      <SlideNavigation buttonText="Let's go" />
-    </SlideContainer>
+    </SlideDumbContainer>
   );
 };
