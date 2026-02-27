@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useCsmStatus, useDappStatus } from 'modules/web3';
 import { useNodeOperator } from 'modules/web3/operator-provider';
 import { useAvailableOperators } from 'modules/web3/operator-provider/use-available-operators';
-import { useAccount } from 'wagmi';
+import { useConnection } from 'wagmi';
 
 export const useInitialLoading = (externalLoading?: boolean) => {
-  const { isConnecting } = useAccount();
+  const { isConnecting } = useConnection();
   const { isAccountActive } = useDappStatus();
   const { isPending: isStatusLoading, error: statusError } = useCsmStatus();
   const { isPending: isOperatorsLoading } = useNodeOperator();
