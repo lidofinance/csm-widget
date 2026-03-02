@@ -21,6 +21,18 @@ export type StandConfig = {
       csmSurveysApi: string;
     };
   };
+  monitoringConfig: {
+    urls: {
+      beaconchain: string;
+      operators: string;
+      feesMonitoring: string;
+      csmSentinel: string;
+      beaconchainEntity?: string;
+      rated?: string;
+      migaLabs?: string;
+    };
+    stakingModuleIndex: number;
+  };
 };
 
 export type IConfig = {
