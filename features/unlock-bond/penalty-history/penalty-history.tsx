@@ -13,8 +13,10 @@ const getPenaltyTypeLabel = (record: PenaltyRecord): string => {
   if (record.type === 'compensated') return 'Compensation';
   if (record.type === 'cancelled') return 'Cancelled';
   if (record.type === 'settled') return 'Settled';
+  if (record.type === 'expired') return 'Expired';
   if (!record.penaltyType) return 'EL Stealing Penalty';
-  return record.penaltyType || 'Penalty';
+  // return record.penaltyType || 'Penalty';
+  return 'Penalty';
 };
 
 const enrichPenalty = (record: PenaltyRecord): EnrichedPenalty => ({

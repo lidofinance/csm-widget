@@ -73,6 +73,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
   unlockBondLinkAlert = 'unlockBondLinkAlert',
+  expiredLockedBondLinkAlert = 'expiredLockedBondLinkAlert',
   claimIcsLinkAlert = 'claimIcsLinkAlert',
   feeRecipientDocsLink = 'feeRecipientDocsLink',
   feeRecipientDismissButton = 'feeRecipientDismissButton',
@@ -336,6 +337,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: createEvent(
     'Click «Unlock bond» link on Locked Bond alert',
     'unlock_bond_link_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.expiredLockedBondLinkAlert]: createEvent(
+    'Click «Unlock bond» link on Expired Locked Bond alert',
+    'expired_locked_bond_link_alert',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert]: createEvent(
     'Click «Claim ICS» link on Claim ICS alert',

@@ -1,6 +1,8 @@
 import {
   KEY_OPERATOR_BALANCE,
+  KEY_IS_LOCK_EXPIRED,
   useEthereumBalance,
+  useIsLockExpired,
   useNodeOperatorId,
   useOperatorBalance,
 } from 'modules/web3';
@@ -20,17 +22,19 @@ const useUnlockBondFormNetworkData: NetworkData<
 
   const balanceQuery = useOperatorBalance(nodeOperatorId);
   const ethBalanceQuery = useEthereumBalance();
+  const isExpiredQuery = useIsLockExpired(nodeOperatorId);
 
   const balance = balanceQuery.data;
   const ethBalance = ethBalanceQuery.data;
 
-  const isLockedBondLoading = balanceQuery.isPending;
-  const isEthBalanceLoading = ethBalanceQuery.isPending;
-
   const invalidate = useInvalidate();
 
   const revalidate = useCallback(() => {
-    invalidate([ethBalanceQuery.queryKey, KEY_OPERATOR_BALANCE]);
+    invalidate([
+      ethBalanceQuery.queryKey,
+      KEY_OPERATOR_BALANCE,
+      KEY_IS_LOCK_EXPIRED,
+    ]);
   }, [invalidate, ethBalanceQuery.queryKey]);
 
   return {
@@ -38,8 +42,12 @@ const useUnlockBondFormNetworkData: NetworkData<
       nodeOperatorId,
       lockedBond: balance?.locked,
       ethBalance,
+      isExpired: !!isExpiredQuery.data,
     } as UnlockBondFormNetworkData,
-    isPending: isLockedBondLoading || isEthBalanceLoading,
+    isPending:
+      balanceQuery.isPending ||
+      ethBalanceQuery.isPending ||
+      isExpiredQuery.isPending,
     revalidate,
   };
 };

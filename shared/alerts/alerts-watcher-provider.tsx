@@ -1,6 +1,7 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { ALERT_FEE_RECIPIENT_DISMISS_HOURS, PATH } from 'consts';
 import {
+  useIsLockExpired,
   useNodeOperatorId,
   useOperatorBalance,
   useOperatorInfo,
@@ -15,6 +16,7 @@ import { FC, PropsWithChildren, useMemo } from 'react';
 import { useCanClaimICS, useDismiss } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
 import { AlertClaimIcs } from './components/alert-claim-ics';
+import { AlertExpiredLockedBond } from './components/alert-expired-locked-bond';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
@@ -36,6 +38,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [info]);
 
   const { data: balance } = useOperatorBalance(nodeOperatorId);
+  const { data: isLockExpired } = useIsLockExpired(nodeOperatorId);
 
   const { data: keysWithStatus, isPending: isKeysLoading } =
     useOperatorKeysWithStatus(nodeOperatorId);
@@ -76,7 +79,14 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useAlertWatcher({
     component: AlertLockedBond,
-    shouldShow: !!balance?.locked,
+    shouldShow:
+      !!balance?.locked && !isLockExpired && route !== PATH.BOND_UNLOCK,
+  });
+
+  useAlertWatcher({
+    component: AlertExpiredLockedBond,
+    shouldShow:
+      !!balance?.locked && !!isLockExpired && route !== PATH.BOND_UNLOCK,
   });
 
   useAlertWatcher({

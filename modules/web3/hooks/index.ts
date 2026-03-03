@@ -16,6 +16,7 @@ export * from './use-ics-paused';
 export * from './use-ics-proof';
 export * from './use-invites';
 export * from './use-is-contract';
+export * from './use-is-lock-expired';
 export * from './use-key-eject-fee';
 export * from './use-key-removal-fee';
 export * from './use-last-report-timestamps';

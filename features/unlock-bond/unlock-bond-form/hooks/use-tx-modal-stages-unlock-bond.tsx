@@ -2,6 +2,8 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   TransactionModalTransitStage,
   TxAmount,
+  TxStagePending,
+  TxStageSign,
   TxStageSignOperationAmount,
   TxStageSuccess,
   getGeneralTransactionModalStages,
@@ -9,7 +11,7 @@ import {
 } from 'shared/transaction-modal';
 
 type Props = {
-  amount: bigint;
+  amount?: bigint;
 };
 
 const getTxModalStagesUnlockBond = (
@@ -18,41 +20,52 @@ const getTxModalStagesUnlockBond = (
   ...getGeneralTransactionModalStages(transitStage),
 
   sign: ({ amount }: Props) =>
-    transitStage(
-      <TxStageSignOperationAmount
-        operationText="Unlocking"
-        amount={amount}
-        token={TOKENS.eth}
-      />,
-    ),
+    amount !== undefined
+      ? transitStage(
+          <TxStageSignOperationAmount
+            operationText="Unlocking"
+            amount={amount}
+            token={TOKENS.eth}
+          />,
+        )
+      : transitStage(
+          <TxStageSign
+            title="Unlocking expired bond"
+            description="Unlocking your expired bond lock"
+          />,
+        ),
 
   pending: ({ amount }: Props, txHash?: string) =>
-    transitStage(
-      <TxStageSignOperationAmount
-        operationText="Unlocking"
-        amount={amount}
-        token={TOKENS.eth}
-        isPending
-        txHash={txHash}
-      />,
-    ),
+    amount !== undefined
+      ? transitStage(
+          <TxStageSignOperationAmount
+            operationText="Unlocking"
+            amount={amount}
+            token={TOKENS.eth}
+            isPending
+            txHash={txHash}
+          />,
+        )
+      : transitStage(
+          <TxStagePending title="Unlocking expired bond" txHash={txHash} />,
+        ),
 
-  success: ({ lockedBond }: { lockedBond: bigint }, txHash?: string) =>
+  success: ({ lockedBond }: { lockedBond?: bigint }, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
         title={
-          lockedBond > 0n
+          lockedBond
             ? 'Bond has been partially unlocked'
             : 'Bond has been completely unlocked'
         }
         description={
-          lockedBond > 0n && (
+          lockedBond ? (
             <>
               Remaining locked bond{' '}
               <TxAmount amount={lockedBond} token={TOKENS.eth} />
             </>
-          )
+          ) : undefined
         }
       />,
       {

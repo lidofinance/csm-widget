@@ -7,7 +7,8 @@ const typePriority: Record<EnrichedPenalty['type'], number> = {
   settled: 0,
   compensated: 1,
   cancelled: 2,
-  reported: 3,
+  expired: 3,
+  reported: 4,
 };
 
 const sortByType: SortCriteria<EnrichedPenalty> = (item) => [
