@@ -7,7 +7,6 @@ import {
   SURVEYS_SETUP_ENABLED,
 } from 'config/feature-flags/types';
 import { getExternalLinks } from 'consts/external-links';
-import { useWrappedApi } from 'features/wrapped/data';
 import {
   useDappStatus,
   useHasReportStealingRole,
@@ -36,7 +35,6 @@ export type ShowRule =
   | 'ICS_APPLY_ENABLED'
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE'
-  | 'HAS_WRAPPED_DATA'
   | 'IS_CSM'
   | 'IS_CM';
 
@@ -87,7 +85,6 @@ export const useShowFlags = (): ShowFlags => {
   const canCreateNO = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
-  const { data: wrappedData } = useWrappedApi(nodeOperator?.nodeOperatorId);
   const {
     config: { module },
   } = useConfig();
@@ -112,7 +109,6 @@ export const useShowFlags = (): ShowFlags => {
       ['EL_STEALING_REPORTER']: !!isReportingRole,
       ['IS_SURVEYS_ACTIVE']:
         !!surveyApi && !!featureFlags?.[SURVEYS_SETUP_ENABLED],
-      ['HAS_WRAPPED_DATA']: !!wrappedData,
       ['IS_CSM']: module === MODULE_NAME.CSM,
       ['IS_CM']: module === MODULE_NAME.CM,
     }),
@@ -128,7 +124,6 @@ export const useShowFlags = (): ShowFlags => {
       canClaimICS,
       featureFlags,
       isReportingRole,
-      wrappedData,
       module,
     ],
   );

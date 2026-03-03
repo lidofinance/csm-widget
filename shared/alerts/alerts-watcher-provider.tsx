@@ -1,7 +1,5 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { ALERT_FEE_RECIPIENT_DISMISS_HOURS, PATH } from 'consts';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { useWrappedApi } from 'features/wrapped/data';
 import {
   useNodeOperatorId,
   useOperatorBalance,
@@ -15,14 +13,12 @@ import {
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { useCanClaimICS, useDismiss } from 'shared/hooks';
-import { trackMatomoEvent } from 'utils';
 import { useAlertActions } from './alert-provider';
 import { AlertClaimIcs } from './components/alert-claim-ics';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
 import { AlertUnsupportedChain } from './components/alert-unsupported-chain';
-import { AlertWrapped } from './components/alert-wrapped';
 import { AlertWrongFeeRecipient } from './components/alert-wrong-fee-recipient';
 import { useAlertWatcher } from './use-alert-watcher';
 
@@ -34,7 +30,6 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data: info } = useOperatorInfo(nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const { route } = useRouter();
-  const { data: wrappedData } = useWrappedApi(nodeOperatorId);
 
   const normalizeQueue = useMemo(() => {
     return info && info.enqueuedCount < info.depositableValidatorsCount;
@@ -63,12 +58,6 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
     ALERT_FEE_RECIPIENT_DISMISS_HOURS,
   );
 
-  const { isDismissed: isWrappedAlertDismissed, dismiss: dismissWrappedAlert } =
-    useDismiss(
-      `alert-wrapped-dismissed-${nodeOperatorId}`,
-      7200, // approx 10 months in hours
-    );
-
   useAlertWatcher({
     component: AlertUnsupportedChain,
     shouldShow: !isSupportedChain,
@@ -93,29 +82,6 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   useAlertWatcher({
     component: AlertClaimIcs,
     shouldShow: canClaimICS && route !== PATH.TYPE_CLAIM,
-  });
-
-  useAlertWatcher({
-    component: AlertWrapped,
-    shouldShow:
-      !!nodeOperatorId &&
-      route !== PATH.WRAPPED &&
-      !isWrappedAlertDismissed &&
-      !!wrappedData,
-    props: useMemo(
-      () => ({
-        onClose: () => {
-          trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.wrappedAlertClose);
-          dismissWrappedAlert();
-          closeAlert(AlertWrapped);
-        },
-        onLinkClick: () => {
-          dismissWrappedAlert();
-          closeAlert(AlertWrapped);
-        },
-      }),
-      [closeAlert, dismissWrappedAlert],
-    ),
   });
 
   useAlertWatcher({

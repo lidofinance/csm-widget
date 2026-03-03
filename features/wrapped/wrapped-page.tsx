@@ -1,11 +1,14 @@
 import { FC } from 'react';
+import { Stack } from 'shared/components';
 import { Layout } from 'shared/layout';
-import { Wrapped } from './wrapped';
+import { SlideIntro } from './slides/slide-intro';
 
 export const WrappedPage: FC = () => {
   return (
     <Layout pageName="Wrapped">
-      <Wrapped />
+      <Stack gap="lg" direction="column">
+        <SlideIntro />
+      </Stack>
     </Layout>
   );
 };

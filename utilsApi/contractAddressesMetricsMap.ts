@@ -36,6 +36,7 @@ const AlL_CONTRACT_NAMES = {
   ens5: 'ens5',
   ens6: 'ens6',
   ens7: 'ens7',
+  ens8: 'ens8',
 } as const;
 type AlL_CONTRACT_NAMES = keyof typeof AlL_CONTRACT_NAMES;
 
@@ -64,6 +65,7 @@ const STATIC_ADDRESSES: {
     [AlL_CONTRACT_NAMES.ens5]: '0xa2c122be93b0074270ebee7f6b7292c7deb45047',
     [AlL_CONTRACT_NAMES.ens6]: '0x1da022710df5002339274aadee8d58218e9d6ab5',
     [AlL_CONTRACT_NAMES.ens7]: '0xce01f8eee7E479C928F8919abD53E553a36CeF67',
+    [AlL_CONTRACT_NAMES.ens8]: '0xeeeeeeee14d718c2b47d9923deab1335e144eeee',
   },
   [CHAINS.Hoodi]: {
     [AlL_CONTRACT_NAMES.lidoLocator]:
@@ -129,6 +131,7 @@ const METRIC_CONTRACT_ABIS: Record<AlL_CONTRACT_NAMES, Abi> = {
   [AlL_CONTRACT_NAMES.ens5]: [],
   [AlL_CONTRACT_NAMES.ens6]: [],
   [AlL_CONTRACT_NAMES.ens7]: [],
+  [AlL_CONTRACT_NAMES.ens8]: [],
   ...CONTRACT_BASE_ABI,
 };
 

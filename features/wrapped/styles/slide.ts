@@ -1,4 +1,3 @@
-import { StackStyle } from 'shared/components';
 import styled, { css } from 'styled-components';
 
 export const SlideWrapper = styled.div<{ $same?: boolean }>`
@@ -50,9 +49,3 @@ export const SlideContent = styled.div<{
     gap: 30px;
   }
 `;
-
-export const SlideBlock = styled(StackStyle).attrs({
-  $direction: 'column',
-  $gap: 'sm',
-  $align: 'center',
-})``;

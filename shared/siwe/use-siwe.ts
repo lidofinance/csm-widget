@@ -30,7 +30,7 @@ const createSiweMessage = (
 
 export const useSiwe = ({ statement }: SiweOptions) => {
   const { address, chainId } = useDappStatus();
-  const { signMessageAsync } = useSignMessage();
+  const { mutateAsync: signMessageAsync } = useSignMessage();
 
   return useCallback(async () => {
     invariant(address, 'Signer is not available');

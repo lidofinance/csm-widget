@@ -1,5 +1,2 @@
-export { ProgressBar } from './progress-bar';
-export { SlideContainer } from './slide-container';
-export { SlideNavigation } from './slide-navigation';
+export { SlideDumbContainer } from './slide-container';
 export { SummaryItem } from './summary-item';
-export * from './share-modal';
