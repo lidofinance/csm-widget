@@ -3096,14 +3096,14 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.47.0.tgz#2367eec1c8363516bde48b632a6fbe32aec33a1e"
   integrity sha512-6xx2O89OhWAxaob+SqXEX2xtrumG4MCUrclooCIvAhz64Lp3Wa0Hzt2lgJyFMhJxpDPMj3LmYNbuB15lwEQKwg==
 
-"@lidofinance/browser-service@1.8.0-alpha-add-wc-wallet-without-wait.18":
-  version "1.8.0-alpha-add-wc-wallet-without-wait.18"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.8.0-alpha-add-wc-wallet-without-wait.18.tgz#b3d28fd991fcc59ba245a7fd4572d0373586f942"
-  integrity sha512-6rL6rYoKxQ0ji5dvL0Ee3CO7CJmUPr/IYDVfL7090cePyNRvWwpAKTXvtNwRrRIKqamk2qyPmzqiK20y2ZIFIQ==
+"@lidofinance/browser-service@1.8.0-alpha-add-wc-wallet-without-wait.19":
+  version "1.8.0-alpha-add-wc-wallet-without-wait.19"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.8.0-alpha-add-wc-wallet-without-wait.19.tgz#3385eddc8f04bdc1ce3ba372aea8ea8a69a89a0b"
+  integrity sha512-gnGMOfOJIjNZGu4QEA9CnigEA57mRFJpoBLEffYbnDrEhwKRHRG7dvYgg60wRnx7AkNZPRks7kMVZg1SPw80vA==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.3.1"
     "@lidofinance/wallets-testing-nodes" "1.8.0"
-    "@lidofinance/wallets-testing-wallets" "1.46.0-alpha-add-wc-wallet-without-wait.17"
+    "@lidofinance/wallets-testing-wallets" "1.46.0-alpha-add-wc-wallet-without-wait.18"
 
 "@lidofinance/chat-reporter@1.7.0":
   version "1.7.0"
@@ -3255,10 +3255,10 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.46.0-alpha-add-wc-wallet-without-wait.17":
-  version "1.46.0-alpha-add-wc-wallet-without-wait.17"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.46.0-alpha-add-wc-wallet-without-wait.17.tgz#502c8b843ff1a0b9912318802087a99bd83861f3"
-  integrity sha512-1a2YfNwP/CB0iWBRbstX7mkBAnhEqQDHtp3KwvUKmE7f7xhThDRTjgldyD9ndypKXvB7uvLG6iHiO8fRw0Yngw==
+"@lidofinance/wallets-testing-wallets@1.46.0-alpha-add-wc-wallet-without-wait.18":
+  version "1.46.0-alpha-add-wc-wallet-without-wait.18"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.46.0-alpha-add-wc-wallet-without-wait.18.tgz#d2f09e7f8c7fa65f52013597f54413d9f23a8c17"
+  integrity sha512-XMm7ffzGcAolF1sL7ui1klLssZ8N/SkoEA5VLXL6i6afHlyXkdrbrnmFc/NGReiv7bRoiwXEgvM8ta2nkUpGSg==
   dependencies:
     "@walletconnect/sign-client" "2.23.4"
     big.js "^6.2.1"
