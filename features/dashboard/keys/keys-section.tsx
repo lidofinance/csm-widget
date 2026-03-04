@@ -9,7 +9,7 @@ import {
 } from 'modules/web3';
 import { FC, useCallback, useMemo } from 'react';
 import { SectionBlock, Stack, StatusComment } from 'shared/components';
-import { StatusTitle } from 'shared/components/status-chip/status-chip';
+import { StatusTitle } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { hasStatus, StatusFilter } from 'utils';
 import { Item, ItemAction } from './item';
