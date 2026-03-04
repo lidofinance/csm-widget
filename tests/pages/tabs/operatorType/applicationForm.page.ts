@@ -1,8 +1,5 @@
 import { Page, test } from '@playwright/test';
-import {
-  WalletConnectType,
-  WalletPage,
-} from '@lidofinance/wallets-testing-wallets';
+import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { SignInForm } from './applicationFormStates/signInForm.page';
 import { SubmitApplicationForm } from './applicationFormStates/submitApplicationForm.page';
 import { ApplicationFormStatus } from './applicationFormStates/applicationFormStatus.page';
@@ -15,7 +12,7 @@ export class ApplicationForm {
 
   constructor(
     page: Page,
-    public walletPage: WalletPage<WalletConnectType>,
+    public walletPage: WalletPage,
   ) {
     this.page = page;
     this.signInForm = new SignInForm(page, walletPage);

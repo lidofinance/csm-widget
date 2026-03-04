@@ -1,8 +1,5 @@
 import { Locator, Page, test, expect } from '@playwright/test';
-import {
-  WalletConnectType,
-  WalletPage,
-} from '@lidofinance/wallets-testing-wallets';
+import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { BasePage } from 'tests/pages/base.page';
 import { AdditionalAddressPage } from './additionalAddress.page';
 import { HDAccount } from 'viem/accounts';
@@ -44,7 +41,7 @@ export class SubmitApplicationForm extends BasePage {
 
   constructor(
     page: Page,
-    public walletPage: WalletPage<WalletConnectType>,
+    public walletPage: WalletPage,
   ) {
     super(page);
     this.form = page.getByTestId('applyForm');
