@@ -6,9 +6,9 @@ import { Info } from './controls/info';
 
 export const UnlockBondFormLoader: FC<PropsWithChildren> = ({ children }) => {
   const { HAS_MANAGER_ROLE } = useShowFlags();
-  const { lockedBond } = useUnlockBondFormData();
+  const { lockedBond, isExpired } = useUnlockBondFormData();
 
-  const isView = !HAS_MANAGER_ROLE || !lockedBond;
+  const isView = !lockedBond || (!isExpired && !HAS_MANAGER_ROLE);
 
   return <FormLoader>{isView ? <Info /> : children}</FormLoader>;
 };
