@@ -8,6 +8,7 @@ import { AmountStyle, TitledAmountStyle } from './style';
 type TitledAddressProps = {
   title?: ReactNode;
   description?: ReactNode;
+  chip?: ReactNode;
   help?: string;
   loading?: boolean;
   amount?: bigint;
@@ -21,6 +22,7 @@ export const TitledAmount: FC<TitledAddressProps> = ({
   token,
   title,
   description,
+  chip,
   help,
   loading,
   warning,
@@ -41,6 +43,7 @@ export const TitledAmount: FC<TitledAddressProps> = ({
           )}
         </Stack>
         <IconTooltip tooltip={help} />
+        {chip}
       </Stack>
       {loading ? (
         <InlineLoader color="text" />

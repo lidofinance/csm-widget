@@ -6,7 +6,7 @@ import {
   Pubkey,
   PubkeyLinks,
   Stack,
-  StatusChip,
+  KeyStatusChip,
   StatusComment,
 } from 'shared/components';
 import { useMaxPriorityKeyIndex } from 'shared/hooks';
@@ -51,7 +51,7 @@ export const KeysTable: FC = () => {
             <td data-testid="statusCell">
               <Stack direction="column" gap="xs">
                 {key.statuses.map((status) => (
-                  <StatusChip
+                  <KeyStatusChip
                     status={status}
                     key={status}
                     suffix={

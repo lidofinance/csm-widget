@@ -1,7 +1,6 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
-import { Latice, Stack, TitledAmount } from 'shared/components';
-import { StatusStyle } from 'shared/components/status-chip/style';
+import { Latice, Stack, StatusChip, TitledAmount } from 'shared/components';
 import { useUnlockBondFormData } from '../context';
 
 export const Info: FC = () => {
@@ -12,15 +11,12 @@ export const Info: FC = () => {
         <Stack direction="column" gap="sm">
           <TitledAmount
             warning={!isExpired}
-            title={
-              <Stack gap="sm" center>
-                Locked bond
-                {isExpired && !!lockedBond && (
-                  <StatusStyle $variant="warning">Expired</StatusStyle>
-                )}
-              </Stack>
-            }
+            title="Locked bond"
             help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
+            chip={
+              isExpired &&
+              !!lockedBond && <StatusChip variant="warning">Expired</StatusChip>
+            }
             amount={lockedBond}
             token={TOKENS.eth}
           />
