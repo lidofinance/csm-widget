@@ -1,34 +1,17 @@
-import { KEY_STATUS, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { isModuleCM, isModuleCSM } from 'consts/module';
+import { isModuleCM } from 'consts/module';
 import { PATH } from 'consts/urls';
-import {
-  useNodeOperatorId,
-  useOperatorInfo,
-  useOperatorKeysWithStatus,
-} from 'modules/web3';
-import { FC, useCallback, useMemo } from 'react';
-import { SectionBlock, Stack, StatusComment } from 'shared/components';
-import { StatusTitle } from 'shared/components';
-import { FormatToken } from 'shared/formatters';
+import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
+import { FC, useCallback } from 'react';
+import { SectionBlock, Stack } from 'shared/components';
 import { hasStatus, StatusFilter } from 'utils';
-import { Item, ItemAction } from './item';
-import { AccordionStyle, Row, RowTitle, SummaryBox } from './styles';
-
-const BAD_STATUSES: KEY_STATUS[] = [
-  // KEY_STATUS.WITH_STRIKES,
-  KEY_STATUS.UNBONDED,
-  KEY_STATUS.DUPLICATED,
-  KEY_STATUS.INVALID,
-  KEY_STATUS.NON_QUEUED,
-  KEY_STATUS.UNCHECKED,
-  KEY_STATUS.EXIT_REQUESTED,
-];
+import { Item } from './item';
+import { KeysBreakdown } from './keys-breakdown/keys-breakdown';
+import { Row } from './styles';
 
 export const KeysSection: FC = () => {
   const id = useNodeOperatorId();
-  const { data: info } = useOperatorInfo(id);
-
   const { data: keys } = useOperatorKeysWithStatus(id);
 
   const keysCountWithStatus = useCallback(
@@ -36,101 +19,14 @@ export const KeysSection: FC = () => {
     [keys],
   );
 
-  const hasWarnings =
-    !!keysCountWithStatus(BAD_STATUSES) ||
-    (!isModuleCM && !!keysCountWithStatus(KEY_STATUS.WITH_STRIKES));
-
-  const actions = BAD_STATUSES.map((badStatus) =>
-    keysCountWithStatus(badStatus) ? (
-      <ItemAction
-        key={badStatus}
-        count={1}
-        title={StatusTitle[badStatus]}
-        action={<StatusComment statuses={[badStatus]} />}
-      />
-    ) : null,
-  ).filter((v) => !!v);
-
-  const actionsWithStrikes = [
-    ...(!isModuleCM && keysCountWithStatus(KEY_STATUS.WITH_STRIKES)
-      ? [
-          <ItemAction
-            key={KEY_STATUS.WITH_STRIKES}
-            count={1}
-            title={StatusTitle[KEY_STATUS.WITH_STRIKES]}
-            action={<StatusComment statuses={[KEY_STATUS.WITH_STRIKES]} />}
-          />,
-        ]
-      : []),
-    ...actions,
-  ];
-
-  const totalActiveStake = useMemo(
-    () => keys?.reduce((sum, k) => sum + (k.effectiveBalance ?? 0n), 0n),
-    [keys],
-  );
-
-  const limit = info && info.targetLimitMode > 0 ? info.targetLimit : '—';
-  const limitTooltip =
-    info?.targetLimitMode === 1
-      ? 'The limit of keys for this Node Operator has been set by the protocol'
-      : info?.targetLimitMode === 2
-        ? 'The limit of keys for this Node Operator has been set due to the existence of unbonded keys'
-        : undefined;
-
   return (
     <SectionBlock
-      title="Keys"
+      title={isModuleCM ? 'Stake and Keys' : 'Keys'}
       data-testid="dashboardKeysSection"
       href={PATH.KEYS_VIEW}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink}
-      middle={
-        isModuleCSM && (
-          <Stack gap="xxl">
-            <Item
-              reverse
-              title="Total keys"
-              count={info?.totalAddedKeys}
-              tooltip="Total added keys"
-            />
-            <Item
-              reverse
-              title="Keys limit"
-              count={limit}
-              tooltip={limitTooltip}
-            />
-          </Stack>
-        )
-      }
     >
       <Stack direction="column" gap="sm">
-        {isModuleCM && (
-          <Stack gap="sm">
-            <SummaryBox>
-              <Item
-                reverse
-                title="Total keys"
-                count={info?.totalAddedKeys}
-                tooltip="Total added keys"
-              />
-              <Item
-                reverse
-                title="Keys limit"
-                count={limit}
-                tooltip={limitTooltip}
-              />
-            </SummaryBox>
-            <SummaryBox>
-              <Item
-                reverse
-                title="Total active balance"
-                count={
-                  <FormatToken amount={totalActiveStake} token={TOKENS.eth} />
-                }
-              />
-            </SummaryBox>
-          </Stack>
-        )}
         <Row>
           <Item
             data-testid="keysDepositableCount"
@@ -150,12 +46,12 @@ export const KeysSection: FC = () => {
             count={keysCountWithStatus([KEY_STATUS.ACTIVE, KEY_STATUS.EXITING])}
             tooltip="Keys that active"
           />
-          <Item
+          {/* <Item
             data-testid="keysExitedCount"
             title="Exited"
             count={keysCountWithStatus(KEY_STATUS.WITHDRAWAL_PENDING)}
             tooltip="Keys that have already exited but not withdrawn yet"
-          />
+          /> */}
           <Item
             data-testid="keysWithdrawnCount"
             title="Withdrawn"
@@ -163,80 +59,7 @@ export const KeysSection: FC = () => {
             tooltip="Keys that have already exited and withdrawn"
           />
         </Row>
-        {!!keys?.length && (
-          <AccordionStyle
-            $warning={hasWarnings}
-            defaultExpanded={hasWarnings}
-            summary={
-              hasWarnings ? (
-                <RowTitle>
-                  Issues with keys found
-                  {actions.length > 0 && ', action required'}
-                </RowTitle>
-              ) : (
-                <RowTitle>No issues with keys found</RowTitle>
-              )
-            }
-          >
-            <Stack direction="column" gap="md">
-              {actionsWithStrikes.length > 0 && (
-                <Stack direction="column" gap="sm">
-                  {actionsWithStrikes}
-                </Stack>
-              )}
-              <Stack direction="column" gap="md">
-                <Row>
-                  {!isModuleCM && (
-                    <Item
-                      variant="warning"
-                      title="With strikes"
-                      count={keysCountWithStatus(KEY_STATUS.WITH_STRIKES)}
-                      tooltip="Keys that reported with bad performance"
-                    />
-                  )}
-                  <Item
-                    variant="warning"
-                    title="Unbonded"
-                    count={keysCountWithStatus(KEY_STATUS.UNBONDED)}
-                    tooltip="Keys not sufficiently covered by current bond amount"
-                  />
-                  <Item
-                    variant="warning"
-                    title="Exit requested"
-                    count={keysCountWithStatus(KEY_STATUS.EXIT_REQUESTED)}
-                    tooltip="Keys requested to exit"
-                  />
-                  <Item
-                    variant="warning"
-                    title="Non queued"
-                    count={keysCountWithStatus(KEY_STATUS.NON_QUEUED)}
-                    tooltip="Keys not in deposit queue"
-                  />
-                </Row>
-                <Row>
-                  <Item
-                    variant="warning"
-                    title="Duplicated"
-                    count={keysCountWithStatus(KEY_STATUS.DUPLICATED)}
-                    tooltip="Keys that uploaded twice"
-                  />
-                  <Item
-                    variant="warning"
-                    title="Invalid"
-                    count={keysCountWithStatus(KEY_STATUS.INVALID)}
-                    tooltip="Keys with invalid signature"
-                  />
-                  <Item
-                    variant="warning"
-                    title="Unchecked"
-                    count={keysCountWithStatus(KEY_STATUS.UNCHECKED)}
-                    tooltip="Keys that not checked yet because invalid or duplicated keys"
-                  />
-                </Row>
-              </Stack>
-            </Stack>
-          </AccordionStyle>
-        )}
+        <KeysBreakdown />
       </Stack>
     </SectionBlock>
   );
