@@ -8,8 +8,8 @@ import { AlertButton } from './styles';
 export const AlertExpiredLockedBond: FC = () => (
   <Alert title="Your locked bond has expired">
     <p>
-      The lock period on your bond has expired. You can now unlock it without
-      compensation.
+      The lock period has ended. You can unlock your bond now (no compensation
+      required).
     </p>
     <br />
     <LocalLink

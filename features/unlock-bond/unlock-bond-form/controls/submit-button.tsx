@@ -6,7 +6,7 @@ export const SubmitButton = () => {
 
   return (
     <SubmitButtonHookForm>
-      {isExpired ? 'Unlock expired locked bond' : 'Compensate locked bond'}
+      {isExpired ? 'Unlock bond' : 'Compensate locked bond'}
     </SubmitButtonHookForm>
   );
 };

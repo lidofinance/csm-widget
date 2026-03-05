@@ -1,6 +1,7 @@
 import { FC, ReactNode } from 'react';
-import { StatusStyle, Variants } from './style';
+import { ChipStyle, Variants } from './style';
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
+import { Chip } from '../chip';
 
 type Props = {
   status?: KEY_STATUS;
@@ -45,13 +46,15 @@ export const StatusTitle: { [key in KEY_STATUS]?: string } = {
   [KEY_STATUS.WITH_STRIKES]: 'Strikes',
 };
 
+Chip;
+
 export const KeyStatusChip: FC<Props> = ({ status, suffix }) => (
   <>
     {status && variants[status] ? (
-      <StatusStyle $variant={variants[status]}>
+      <ChipStyle $variant={variants[status]}>
         {StatusTitle[status]}
         {suffix}
-      </StatusStyle>
+      </ChipStyle>
     ) : null}
   </>
 );

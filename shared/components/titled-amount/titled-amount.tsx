@@ -33,16 +33,18 @@ export const TitledAmount: FC<TitledAddressProps> = ({
       $warning={warning && amount !== undefined && amount > 0n}
       {...props}
     >
-      <Stack gap="xs" center>
-        <Stack gap="md" center>
-          {title}
-          {description && (
-            <Text color="secondary" size="xxs">
-              {description}
-            </Text>
-          )}
+      <Stack gap="md" center>
+        <Stack gap="xs" center>
+          <Stack gap="md" center>
+            {title}
+            {description && (
+              <Text color="secondary" size="xxs">
+                {description}
+              </Text>
+            )}
+          </Stack>
+          <IconTooltip tooltip={help} />
         </Stack>
-        <IconTooltip tooltip={help} />
         {chip}
       </Stack>
       {loading ? (

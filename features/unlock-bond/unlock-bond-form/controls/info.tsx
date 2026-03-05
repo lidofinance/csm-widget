@@ -15,17 +15,20 @@ export const Info: FC = () => {
             help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
             chip={
               isExpired &&
-              !!lockedBond && <StatusChip variant="warning">Expired</StatusChip>
+              !!lockedBond && (
+                <StatusChip variant="warning" squared>
+                  Expired
+                </StatusChip>
+              )
             }
             amount={lockedBond}
             token={TOKENS.eth}
           />
-          {!lockedBond && <div>Nothing to unlock</div>}
           {!!lockedBond &&
             (isExpired ? (
               <div>
-                The lock period has expired. You can unlock your bond without
-                any compensation
+                The lock period has ended. You can unlock your bond now (no
+                compensation required).
               </div>
             ) : (
               <div>
