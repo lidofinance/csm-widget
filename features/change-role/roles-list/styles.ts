@@ -13,6 +13,7 @@ export const RoleNameColumn = styled.div`
   align-items: center;
   width: 180px;
   flex-shrink: 0;
+  flex-wrap: wrap;
 `;
 
 export const RoleAddressColumn = styled.div`

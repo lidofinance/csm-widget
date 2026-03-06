@@ -37,8 +37,8 @@ export const RoleRow: FC<RoleRowProps> = ({
         <Text size="xs" weight={700}>
           {title}
         </Text>
-        {isOwner && <OwnerChip />}
         {isYou && <YouChip />}
+        {isOwner && <OwnerChip />}
       </RoleNameColumn>
 
       <RoleAddressColumn>
