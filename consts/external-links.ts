@@ -1,7 +1,7 @@
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
-import { isModuleCSM } from './module';
+import { isModuleCM, isModuleCSM } from './module';
 
 export const CSM_MAINNET_LINK = 'https://csm.lido.fi/';
 export const CSM_TESTNET_LINK = 'https://csm.testnet.fi/';
@@ -86,7 +86,9 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   [CHAINS.Hoodi]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
-    feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
+    feedbackForm: isModuleCM
+      ? 'https://forms.gle/Lhh4fGXvx7Gwcd6e7'
+      : 'https://forms.gle/ZBUqbykaZokJLf4M7',
     stakeWidget: 'https://stake-hoodi.testnet.fi',
     landing: isModuleCSM ? 'https://testnet.fi/csm' : 'https://testnet.fi/cm',
 
