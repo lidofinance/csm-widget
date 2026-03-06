@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 
-import bgIntro from 'assets/wrapped/intro.svg';
 import bgOutro from 'assets/wrapped/outro.svg';
 import { FC } from 'react';
 
-export type SlideVariant = 'intro' | 'outro';
+export type SlideVariant = 'outro' | 'wrap';
 
 const SlideImage = styled.img`
   position: absolute;
@@ -17,7 +16,6 @@ const SlideImage = styled.img`
   object-position: center top;
 `;
 
-export const Background: FC<{ variant?: SlideVariant }> = ({ variant }) => {
-  const bg = variant === 'intro' ? bgIntro : bgOutro;
-  return <SlideImage src={bg} />;
+export const Background: FC = () => {
+  return <SlideImage src={bgOutro} />;
 };
