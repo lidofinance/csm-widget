@@ -8,8 +8,6 @@ import { useOperatorKeysWithStatus } from './use-operator-keys-with-status';
 import { useOperatorKeysWithIssues } from './use-operator-keys-with-issues';
 
 const ACTIVE_STATUSES = [
-  KEY_STATUS.DEPOSITABLE,
-  KEY_STATUS.ACTIVATION_PENDING,
   KEY_STATUS.ACTIVE,
   KEY_STATUS.EXITING,
   KEY_STATUS.WITHDRAWAL_PENDING,
