@@ -10,13 +10,12 @@ type SlideContainerProps = PropsWithChildren<{
 
 export const SlideDumbContainer: FC<SlideContainerProps> = ({
   children,
-  bg,
   same,
 }) => {
   return (
     <DarkThemeProvider>
       <SlideWrapper $same={same}>
-        <Background variant={bg} />
+        <Background />
         {children}
       </SlideWrapper>
     </DarkThemeProvider>
