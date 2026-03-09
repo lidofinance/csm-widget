@@ -12,10 +12,6 @@ const LOGOS = {
     [ThemeName.dark]: LogoCsmDark.src,
     [ThemeName.light]: LogoCsmLight.src,
   },
-  [MODULE_NAME.CSM0x02]: {
-    [ThemeName.dark]: LogoCsmDark.src,
-    [ThemeName.light]: LogoCsmLight.src,
-  },
   [MODULE_NAME.CM]: {
     [ThemeName.dark]: LogoCmLight.src,
     [ThemeName.light]: LogoCmLight.src,

@@ -54,10 +54,6 @@ export const CURVE_VARIANTS: Record<OPERATOR_TYPE, ReturnType<typeof css>> = {
   [OPERATOR_TYPE.CM_PGO]: css`
     background: var(--lido-color-text);
   `,
-  [OPERATOR_TYPE.CSM0x02_DEF]: css`
-    background: linear-gradient(78deg, #304352 -49.42%, #d7d2cc 157.87%),
-      linear-gradient(79deg, #00a3ff -9.53%, #2238ff 202.88%);
-  `,
 };
 
 export const DescriptorCurveStyle = styled(BadgeStyle)<{

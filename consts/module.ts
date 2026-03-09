@@ -20,15 +20,6 @@ export const MODULE_METADATA = {
     host: 'https://cm.testnet.fi', // TODO: replace to lido.fi when CM will be released
     manifestFile: 'manifest-cm.json',
   },
-  [MODULE_NAME.CSM0x02]: {
-    title: 'Community Staking Module 0x02',
-    shortTitle: 'CSM 0x02',
-    shortName: 'CSM',
-    description:
-      'The Community Staking Module is a permissionless staking module aimed at attracting community stakers to participate in the Lido on Ethereum protocol as Node Operators.',
-    host: 'https://csm.lido.fi',
-    manifestFile: 'manifest.json',
-  },
 } as const;
 
 export const isModuleCSM = config.module === MODULE_NAME.CSM;

@@ -4,12 +4,10 @@ import { config } from 'config';
 
 export const MATOMO_APP_NAME = {
   [MODULE_NAME.CSM]: 'CSM_Widget',
-  [MODULE_NAME.CSM0x02]: 'CSM_Widget',
   [MODULE_NAME.CM]: 'CM_Widget',
 };
 export const MATOMO_APP_PREFIX = {
   [MODULE_NAME.CSM]: 'csm_widget',
-  [MODULE_NAME.CSM0x02]: 'csm_widget',
   [MODULE_NAME.CM]: 'cm_widget',
 };
 

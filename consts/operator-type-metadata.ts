@@ -104,14 +104,6 @@ export const OPERATOR_TYPE_METADATA: Record<
     description: 'Custom Curve',
     curveId: OPERATOR_TYPE_CURVE_ID.CC,
   },
-  [OPERATOR_TYPE.CSM0x02_DEF]: {
-    name: 'Default',
-    short: 'DEF',
-    title: 'Default (DEF)',
-    description:
-      'The simplest way to start validating in CSM0x02. Upload keys under the general parameters without any permission or verification',
-    curveId: OPERATOR_TYPE_CURVE_ID.CSM_DEF,
-  },
 };
 
 export const getModuleOperatorType = (curveId: bigint | undefined) => {
