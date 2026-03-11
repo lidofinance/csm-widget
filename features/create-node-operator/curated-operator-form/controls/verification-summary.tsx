@@ -61,10 +61,10 @@ export const VerificationSummary: FC = () => {
       </SummaryRow>
       <DividerStyle type="horizontal" />
       <SummaryRow label="Manager Address:">
-        <Address monospace address={managerAddress} symbols={0} size="xs" />
+        <Address monospace address={managerAddress} symbols={0} size="xxs" />
       </SummaryRow>
       <SummaryRow label="Rewards Address:">
-        <Address address={rewardAddress} symbols={0} size="xs" />
+        <Address address={rewardAddress} symbols={0} size="xxs" />
       </SummaryRow>
 
       <DividerStyle />

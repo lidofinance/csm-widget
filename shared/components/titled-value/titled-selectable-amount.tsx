@@ -1,7 +1,8 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { ComponentProps, FC, ReactNode } from 'react';
 import { AmountWithPrice, IconTooltip, Stack } from 'shared/components';
-import { TitledAmountStyle } from './style';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { TitledValue } from 'shared/components/titled-value/titled-value';
+import styled from 'styled-components';
 
 type Props = {
   title?: ReactNode;
@@ -14,6 +15,16 @@ type Props = {
   sign?: 'minus' | 'plus';
 };
 
+const SelectableAmountStyle = styled(TitledValue)`
+  label > svg + div {
+    margin: 0;
+
+    p {
+      color: inherit;
+    }
+  }
+`;
+
 export const TitledSelectableAmount: FC<Props> = ({
   title,
   help,
@@ -24,14 +35,16 @@ export const TitledSelectableAmount: FC<Props> = ({
   token,
   sign,
   ...props
-}) => {
-  return (
-    <TitledAmountStyle $warning={warning} {...props}>
+}) => (
+  <SelectableAmountStyle
+    warning={warning}
+    title={
       <Stack gap="xs" center>
         {title}
         <IconTooltip tooltip={help} type={helpIcon} />
       </Stack>
-      <AmountWithPrice {...{ amount, token, loading, sign }} />
-    </TitledAmountStyle>
-  );
-};
+    }
+    value={<AmountWithPrice {...{ amount, token, loading, sign }} />}
+    {...props}
+  />
+);

@@ -5,8 +5,6 @@ export const StepsWrapper = styled.div`
   flex-direction: 'row';
   gap: 24px;
   align-self: center;
-
-  margin-top: -12px; // @style
 `;
 
 export const Step = styled.div<{ $type: -1 | 0 | 1 }>`

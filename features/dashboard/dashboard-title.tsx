@@ -28,7 +28,10 @@ const CmTitle: FC = () => {
     <Stack center gap="sm" selfJustify="center">
       <span>{metadata?.name}</span>
       {!metadata?.ownerEditsRestricted && (
-        <StyledLink href={PATH.SETTINGS_METADATA}>
+        <StyledLink
+          href={PATH.SETTINGS_METADATA}
+          title="Edit Operator Metadata"
+        >
           <Edit />
         </StyledLink>
       )}

@@ -22,7 +22,7 @@ export const Step4: FC = () => {
 
       <VerificationSummary />
 
-      <Stack>
+      <Stack wrap>
         <Button
           variant="outlined"
           fullwidth

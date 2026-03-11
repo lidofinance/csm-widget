@@ -29,7 +29,11 @@ export const MetadataFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="metadata">
+      <FormControllerProvider
+        submitter={submitter}
+        formName="metadata"
+        onReset={formObject.reset}
+      >
         {children}
       </FormControllerProvider>
     </FormProvider>

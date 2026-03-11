@@ -1,6 +1,5 @@
 import { FeeSplit } from '@lidofinance/lido-csm-sdk';
 import { Button, InlineLoader, Text } from '@lidofinance/lido-ui';
-import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import {
@@ -13,6 +12,7 @@ import { FC } from 'react';
 import {
   Address,
   OwnerChip,
+  PendingChange,
   SectionBlock,
   Stack,
   YouChip,
@@ -20,12 +20,7 @@ import {
 import { useShowFlags } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { zeroAddress } from 'viem';
-import {
-  DividerStyle,
-  PendingChangeStyle,
-  RoleRowStyle,
-  RolesGrid,
-} from './styles';
+import { DividerStyle, RoleRowStyle, RolesGrid } from './styles';
 
 const formatShare = (share: bigint) => {
   const percent = Number(share) / 100;
@@ -61,11 +56,7 @@ export const RolesSection: FC = () => {
               <>
                 <Address address={info.rewardsAddress} showIcon />
                 {info.proposedRewardsAddress && (
-                  <PendingChangeStyle>
-                    <AlertIcon />
-                    <span>Pending change:</span>
-                    <Address address={info.proposedRewardsAddress} showIcon />
-                  </PendingChangeStyle>
+                  <PendingChange address={info.proposedRewardsAddress} />
                 )}
               </>
             )}
@@ -87,11 +78,7 @@ export const RolesSection: FC = () => {
               <>
                 <Address address={info.managerAddress} showIcon />
                 {info.proposedManagerAddress && (
-                  <PendingChangeStyle>
-                    <AlertIcon />
-                    <span>Pending change:</span>
-                    <Address address={info.proposedManagerAddress} showIcon />
-                  </PendingChangeStyle>
+                  <PendingChange address={info.proposedManagerAddress} />
                 )}
               </>
             )}

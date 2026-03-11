@@ -1,6 +1,6 @@
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Latice, TitledAddress } from 'shared/components';
+import { Latice, TitledAddress, TitledValue } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { ClaimerFormInputType, useClaimerFormData } from '../context';
 import { Text } from '@lidofinance/lido-ui';
@@ -18,8 +18,8 @@ export const Info: FC = () => {
       <Text size="md" weight={700} as="h4">
         Rewards claimer
       </Text>
-      {currentClaimerAddress && (
-        <Latice variant="secondary">
+      <Latice variant="secondary">
+        {currentClaimerAddress ? (
           <TitledAddress
             title={
               <>
@@ -30,6 +30,7 @@ export const Info: FC = () => {
                     size="xs"
                     fullwidth={false}
                     onClick={unsetHandle}
+                    noDisableOnError
                   >
                     Unset
                   </SubmitButtonHookForm>
@@ -38,8 +39,10 @@ export const Info: FC = () => {
             }
             address={currentClaimerAddress}
           />
-        </Latice>
-      )}
+        ) : (
+          <TitledValue title="Current Rewards claimer" value="not set" />
+        )}
+      </Latice>
       {!currentClaimerAddress && !isOwner && (
         <Latice variant="secondary">
           <TitledAddress title="Current Rewards claimer" address="Not set" />

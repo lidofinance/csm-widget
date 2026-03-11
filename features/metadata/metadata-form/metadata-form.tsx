@@ -1,35 +1,28 @@
 import { FC, memo } from 'react';
 
-import { FormBlock } from 'shared/components';
-import { Form, FormLoader } from 'shared/hook-form/form-controller';
+import { FormBlock, FormTitle } from 'shared/components';
+import { Form } from 'shared/hook-form/form-controller';
 import { MetadataDataProvider, MetadataFormProvider } from './context';
-import { useMetadataFormData } from './context/metadata-data-provider';
 import { DescriptionInput } from './controls/description-input';
 import { NameInput } from './controls/name-input';
 import { SubmitButton } from './controls/submit-button';
-import { FormTitle } from './styles';
+import { MetadataFormLoader } from './metadata-form-loader';
 
-// TODO: view only mode for non-owners or if edit is restricted
 export const MetadataForm: FC = memo(() => {
   return (
     <MetadataDataProvider>
       <MetadataFormProvider>
         <FormBlock>
-          <FormLoader>
-            <MetadataFormTitle />
+          <MetadataFormLoader>
             <Form>
+              <FormTitle>Node Operator name</FormTitle>
               <NameInput />
               <DescriptionInput />
               <SubmitButton />
             </Form>
-          </FormLoader>
+          </MetadataFormLoader>
         </FormBlock>
       </MetadataFormProvider>
     </MetadataDataProvider>
   );
 });
-
-const MetadataFormTitle: FC = () => {
-  const { currentName } = useMetadataFormData(true);
-  return <FormTitle>{currentName || 'Node Operator name'}</FormTitle>;
-};

@@ -1,6 +1,8 @@
 import {
   KEY_OPERATOR_METADATA,
+  useDappStatus,
   useNodeOperatorId,
+  useOperatorIsOwner,
   useOperatorMetadata,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
@@ -9,8 +11,13 @@ import { useInvalidate } from 'shared/hooks';
 import type { MetadataFormNetworkData } from './types';
 
 const useMetadataFormNetworkData = () => {
+  const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
   const { data: metadata, isPending } = useOperatorMetadata(nodeOperatorId);
+  const { data: isOwner, isPending: isOwnerPending } = useOperatorIsOwner({
+    address,
+    nodeOperatorId,
+  });
 
   const invalidate = useInvalidate();
 
@@ -24,8 +31,9 @@ const useMetadataFormNetworkData = () => {
       currentName: metadata?.name,
       currentDescription: metadata?.description,
       ownerEditsRestricted: metadata?.ownerEditsRestricted,
+      isOwner,
     } as MetadataFormNetworkData,
-    isPending,
+    isPending: isPending || isOwnerPending,
     revalidate,
   };
 };

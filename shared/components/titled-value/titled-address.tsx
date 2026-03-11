@@ -1,14 +1,14 @@
 import { FC, ReactNode } from 'react';
 import { Address, OwnerChip, Stack, YouChip } from 'shared/components';
-import { TitledAddressStyle } from './style';
+import { TitledValue } from 'shared/components/titled-value/titled-value';
 
-// TODO: merge components
 type TitledAddressProps = {
   address?: string;
   title?: ReactNode;
   isYou?: boolean;
   isOwner?: boolean;
 };
+
 export const TitledAddress: FC<TitledAddressProps> = ({
   address,
   title,
@@ -17,13 +17,16 @@ export const TitledAddress: FC<TitledAddressProps> = ({
 }) => {
   if (!address) return null;
   return (
-    <TitledAddressStyle data-testid="titledAddress">
-      <Stack gap="lg">{title}</Stack>
-      <Stack center gap="sm">
-        {isOwner && <OwnerChip />}
-        {isYou && <YouChip />}
-        <Address address={address} showIcon />
-      </Stack>
-    </TitledAddressStyle>
+    <TitledValue
+      data-testid="titledAddress"
+      title={title}
+      value={
+        <Stack center gap="sm">
+          {isOwner && <OwnerChip />}
+          {isYou && <YouChip />}
+          <Address address={address} showIcon />
+        </Stack>
+      }
+    />
   );
 };

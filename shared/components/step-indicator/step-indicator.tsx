@@ -6,12 +6,10 @@ type StepIndicatorProps = {
   current: number;
 };
 
-export const StepIndicator: FC<StepIndicatorProps> = ({ length, current }) => {
-  return (
-    <StepsWrapper>
-      {Array.from({ length }, (v, i) => (
-        <Step key={i} $type={i < current ? -1 : i > current ? 1 : 0} />
-      ))}
-    </StepsWrapper>
-  );
-};
+export const StepIndicator: FC<StepIndicatorProps> = ({ length, current }) => (
+  <StepsWrapper>
+    {Array.from({ length }, (v, i) => (
+      <Step key={i} $type={i < current ? -1 : i > current ? 1 : 0} />
+    ))}
+  </StepsWrapper>
+);

@@ -5,7 +5,7 @@ import {
   useContext,
   useMemo,
 } from 'react';
-import type { FieldValues } from 'react-hook-form';
+import { useFormContext, type FieldValues } from 'react-hook-form';
 import invariant from 'tiny-invariant';
 import type { EventSubsciption } from 'utils';
 import { useFormDataContext } from './form-data-context';
@@ -34,20 +34,26 @@ export const useFormControllerContext = () => {
 };
 
 export const FormControllerProvider: FC<
-  PropsWithChildren<{ submitter: FormSubmitter<any, any>; formName?: string }>
-> = ({ children, submitter, formName }) => {
+  PropsWithChildren<{
+    submitter: FormSubmitter<any, any>;
+    formName?: string;
+    onReset?: (args: any) => any;
+  }>
+> = ({ children, submitter, formName, onReset }) => {
   const { revalidate } = useFormDataContext();
 
+  const { reset } = useFormContext();
   const { retryEvent, retryFire } = useFormControllerRetry();
   const formController: FormControllerContextValueType = useMemo(
     () => ({
       formName,
       onSubmit: submitter,
+      onReset: onReset ?? (() => reset()),
       onConfirm: revalidate,
       onRetry: retryFire,
       retryEvent,
     }),
-    [formName, retryEvent, retryFire, revalidate, submitter],
+    [formName, onReset, reset, retryEvent, retryFire, revalidate, submitter],
   );
 
   return (

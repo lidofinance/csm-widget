@@ -10,4 +10,5 @@ export type MetadataFormNetworkData = {
   currentName: string;
   currentDescription: string;
   ownerEditsRestricted: boolean;
+  isOwner: boolean;
 };

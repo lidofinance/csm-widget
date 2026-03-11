@@ -54,6 +54,7 @@ export const Info: FC = () => {
                       size="xs"
                       fullwidth={false}
                       onClick={revokeHandle}
+                      noDisableOnError
                     >
                       Cancel
                     </SubmitButtonHookForm>

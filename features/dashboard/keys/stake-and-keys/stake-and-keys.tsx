@@ -46,7 +46,7 @@ export const StakeAndKeys: FC = () => {
           <StakeTitle>
             <ColorDot $color={COLORS.active} />
             Active
-            <IconTooltip tooltip="Active stake based on effective balance of active validators" />
+            <IconTooltip tooltip="Stake amount that already has ETH deposited by the Lido protocol and are currently active in the validator set" />
           </StakeTitle>
           <StakeAmount>
             <FormatToken
@@ -64,7 +64,7 @@ export const StakeAndKeys: FC = () => {
           <StakeTitle>
             <ColorDot $color={COLORS.depositable} />
             Depositable
-            <IconTooltip tooltip="Stake from depositable keys awaiting deposit from the Lido protocol" />
+            <IconTooltip tooltip="Available capacity ready to receive stake from the Lido protocol" />
           </StakeTitle>
           <StakeAmount>
             <FormatToken
@@ -82,7 +82,7 @@ export const StakeAndKeys: FC = () => {
           <StakeTitle>
             <ColorDot $color={COLORS.potential} />
             Potential additional capacity
-            <IconTooltip tooltip="Additional stake capacity available based on target allocation" />
+            <IconTooltip tooltip="The additional stake the Lido protocol could allocate to this node operator based on its current weight, assuming enough validator keys are available" />
           </StakeTitle>
           <StakeAmount>
             <FormatToken

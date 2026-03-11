@@ -1,15 +1,9 @@
 import { Button, Text } from '@lidofinance/lido-ui';
-import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
 import { PATH } from 'consts/urls';
 import { FC, useCallback } from 'react';
-import { Address, OwnerChip, YouChip } from 'shared/components';
+import { Address, OwnerChip, PendingChange, YouChip } from 'shared/components';
 import { useNavigate } from 'shared/navigate';
-import {
-  PendingChangeStyle,
-  RoleAddressColumn,
-  RoleNameColumn,
-  RoleRowStyle,
-} from './styles';
+import { RoleAddressColumn, RoleNameColumn, RoleRowStyle } from './styles';
 
 type RoleRowProps = {
   title: string;
@@ -44,13 +38,7 @@ export const RoleRow: FC<RoleRowProps> = ({
       <RoleAddressColumn>
         {address && <Address address={address} showIcon />}
 
-        {proposedAddress && (
-          <PendingChangeStyle>
-            <AlertIcon />
-            <span>Pending change:</span>
-            <Address address={proposedAddress} showIcon />
-          </PendingChangeStyle>
-        )}
+        {proposedAddress && <PendingChange address={proposedAddress} />}
       </RoleAddressColumn>
 
       {path && (

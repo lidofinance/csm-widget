@@ -1,11 +1,12 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { InlineLoader, Text } from '@lidofinance/lido-ui';
-import { FC, ReactNode } from 'react';
+import { Text } from '@lidofinance/lido-ui';
+import { ComponentPropsWithoutRef, FC, ReactNode } from 'react';
 import { IconTooltip, Stack } from 'shared/components';
+import { TitledValue } from 'shared/components/titled-value/titled-value';
 import { FormatToken } from 'shared/formatters';
-import { AmountStyle, TitledAmountStyle } from './style';
+import styled from 'styled-components';
 
-type TitledAddressProps = {
+type TitledAmountProps = ComponentPropsWithoutRef<'div'> & {
   title?: ReactNode;
   description?: ReactNode;
   chip?: ReactNode;
@@ -16,8 +17,13 @@ type TitledAddressProps = {
   warning?: boolean;
 };
 
-// TODO: merge components
-export const TitledAmount: FC<TitledAddressProps> = ({
+const AmountStyle = styled.div`
+  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+  line-height: ${({ theme }) => theme.fontSizesMap.xl}px;
+  font-weight: 700;
+`;
+
+export const TitledAmount: FC<TitledAmountProps> = ({
   amount,
   token,
   title,
@@ -27,12 +33,11 @@ export const TitledAmount: FC<TitledAddressProps> = ({
   loading,
   warning,
   ...props
-}) => {
-  return (
-    <TitledAmountStyle
-      $warning={warning && amount !== undefined && amount > 0n}
-      {...props}
-    >
+}) => (
+  <TitledValue
+    warning={warning && amount !== undefined && amount > 0n}
+    loading={loading}
+    title={
       <Stack gap="md" center>
         <Stack gap="xs" center>
           <Stack gap="md" center>
@@ -47,13 +52,12 @@ export const TitledAmount: FC<TitledAddressProps> = ({
         </Stack>
         {chip}
       </Stack>
-      {loading ? (
-        <InlineLoader color="text" />
-      ) : (
-        <AmountStyle>
-          <FormatToken amount={amount} token={token} />
-        </AmountStyle>
-      )}
-    </TitledAmountStyle>
-  );
-};
+    }
+    value={
+      <AmountStyle>
+        <FormatToken amount={amount} token={token} />
+      </AmountStyle>
+    }
+    {...props}
+  />
+);

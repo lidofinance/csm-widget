@@ -99,7 +99,7 @@ export const ConfirmSplitsModal: ModalComponentType<
               <AddressCell>
                 <AddressComponent
                   address={row.recipient}
-                  symbols={40}
+                  symbols={0}
                   size="xxs"
                 />
               </AddressCell>
