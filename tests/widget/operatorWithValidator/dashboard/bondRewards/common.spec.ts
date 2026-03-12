@@ -11,10 +11,7 @@ test.describe('Dashboard. Bond & Rewards', async () => {
   });
 
   test(
-    qase(
-      138,
-      'Should send event and open Bond & Rewards page after click to section arrow',
-    ),
+    qase(138, 'Should open Bond & Rewards page after click to section arrow'),
     async ({ widgetService }) => {
       await Promise.all([
         matomoEventService.waitForEvent(

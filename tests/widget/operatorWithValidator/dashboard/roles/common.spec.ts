@@ -9,16 +9,9 @@ test.describe('Dashboard. Roles', async () => {
     await widgetService.dashboardPage.open();
   });
 
-  test('Should send event and open Roles page after click to section arrow', async ({
+  test('Should open Roles page after click to section arrow', async ({
     widgetService,
   }) => {
-    const rolesSectionHeaderLink = widgetService.page
-      .locator('section')
-      .filter({
-        has: widgetService.page.getByRole('heading', { name: 'Roles' }),
-      })
-      .getByTestId('sectionHeaderLink');
-
     await Promise.all([
       matomoEventService.waitForEvent(
         'e_n',
@@ -27,7 +20,7 @@ test.describe('Dashboard. Roles', async () => {
       widgetService.page.waitForURL(
         /\/roles\/(manager-address|reward-address)$/,
       ),
-      rolesSectionHeaderLink.click(),
+      widgetService.dashboardPage.rolesSection.sectionHeaderLink.click(),
     ]);
   });
 });

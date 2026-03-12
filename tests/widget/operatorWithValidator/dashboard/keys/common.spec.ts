@@ -9,7 +9,7 @@ test.describe('Dashboard. Keys', async () => {
     await widgetService.dashboardPage.open();
   });
 
-  test('Should send event and open Keys page after click to section arrow', async ({
+  test('Should open Keys page after click to section arrow', async ({
     widgetService,
   }) => {
     await Promise.all([

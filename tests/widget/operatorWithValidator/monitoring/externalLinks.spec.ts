@@ -1,31 +1,25 @@
 import { expect } from '@playwright/test';
-import { BasePage } from 'tests/pages';
 import { test } from '../../test.fixture';
 import { MatomoService } from 'tests/services/matomo.service';
 import { PAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
-import { IConfig } from 'tests/config/configs/base.config';
 
 const normalizeBaseUrl = (url: string) => url.replace(/\/+$/, '');
 const escapeRegex = (value: string) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const isProdOrStaging = (standType: string) =>
+  standType === 'prod' || standType === 'staging';
 
 test.describe('Monitoring. External links', async () => {
   let matomoEventService: MatomoService;
-  let basePage: BasePage;
-  let widgetConfig: IConfig;
 
-  test.beforeEach(async ({ widgetService, widgetConfig: config }) => {
-    widgetConfig = config;
+  test.beforeEach(async ({ widgetService, widgetConfig }) => {
     matomoEventService = new MatomoService(widgetService.page, widgetConfig);
-    basePage = new BasePage(widgetService.page);
-    await widgetService.page.goto('/monitoring');
-    await widgetService.page
-      .getByRole('heading', { name: 'Monitoring' })
-      .waitFor({ state: 'visible' });
+    await widgetService.monitoringPage.open();
   });
 
   test('Should open beaconcha.in page after click on "beaconcha.in v2"', async ({
     widgetService,
+    widgetConfig,
   }) => {
     const beaconchainBaseUrl = normalizeBaseUrl(
       widgetConfig.standConfig.monitoringConfig.urls.beaconchain,
@@ -36,16 +30,12 @@ test.describe('Monitoring. External links', async () => {
     );
 
     const [beaconchainPage] = await Promise.all([
-      basePage.waitForPage(PAGE_WAIT_TIMEOUT),
+      widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
       matomoEventService.waitForEvent(
         'e_n',
         'csm_widget_dashboard_external_beaconcha_link',
       ),
-      widgetService.page
-        .getByRole('link', {
-          name: 'beaconcha.in v2',
-        })
-        .click(),
+      widgetService.monitoringPage.beaconchainV2Link.click(),
     ]);
 
     await expect(beaconchainPage).toHaveURL(beaconchainUrlPattern);
@@ -53,6 +43,7 @@ test.describe('Monitoring. External links', async () => {
 
   test('Should open Lido Fees monitoring after click', async ({
     widgetService,
+    widgetConfig,
   }) => {
     const feesMonitoringBaseUrl = normalizeBaseUrl(
       widgetConfig.standConfig.monitoringConfig.urls.feesMonitoring,
@@ -65,16 +56,12 @@ test.describe('Monitoring. External links', async () => {
     );
 
     const [feesMonitoringPage] = await Promise.all([
-      basePage.waitForPage(PAGE_WAIT_TIMEOUT),
+      widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
       matomoEventService.waitForEvent(
         'e_n',
         'csm_widget_dashboard_external_mev_monitoring_link',
       ),
-      widgetService.page
-        .getByRole('link', {
-          name: 'Lido Fees monitoring',
-        })
-        .click(),
+      widgetService.monitoringPage.feesMonitoringLink.click(),
     ]);
 
     await expect(feesMonitoringPage).toHaveURL(feesMonitoringUrlPattern);
@@ -82,6 +69,7 @@ test.describe('Monitoring. External links', async () => {
 
   test('Should open Lido Operators Portal after click', async ({
     widgetService,
+    widgetConfig,
   }) => {
     const operatorsBaseUrl = normalizeBaseUrl(
       widgetConfig.standConfig.monitoringConfig.urls.operators,
@@ -94,37 +82,32 @@ test.describe('Monitoring. External links', async () => {
     );
 
     const [operatorsPortalPage] = await Promise.all([
-      basePage.waitForPage(PAGE_WAIT_TIMEOUT),
+      widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
       matomoEventService.waitForEvent(
         'e_n',
         'csm_widget_dashboard_external_operators_link',
       ),
-      widgetService.page
-        .getByRole('link', {
-          name: 'Lido Operators Portal',
-        })
-        .click(),
+      widgetService.monitoringPage.operatorsPortalLink.click(),
     ]);
 
     await expect(operatorsPortalPage).toHaveURL(operatorsUrlPattern);
   });
 
-  test('Should open CSM Sentinel after click', async ({ widgetService }) => {
+  test('Should open CSM Sentinel after click', async ({
+    widgetService,
+    widgetConfig,
+  }) => {
     const csmSentinelUrl = normalizeBaseUrl(
       widgetConfig.standConfig.monitoringConfig.urls.csmSentinel,
     );
 
     const [csmSentinelPage] = await Promise.all([
-      basePage.waitForPage(PAGE_WAIT_TIMEOUT),
+      widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
       matomoEventService.waitForEvent(
         'e_n',
         'csm_widget_dashboard_notification_sentinel_link',
       ),
-      widgetService.page
-        .getByRole('link', {
-          name: 'CSM Sentinel',
-        })
-        .click(),
+      widgetService.monitoringPage.csmSentinelLink.click(),
     ]);
 
     await expect(csmSentinelPage).toHaveURL(
@@ -134,14 +117,23 @@ test.describe('Monitoring. External links', async () => {
 
   test('Should open beaconcha.in Entity after click', async ({
     widgetService,
+    widgetConfig,
   }) => {
+    const isExtendedMonitoringEnv = isProdOrStaging(
+      widgetConfig.standConfig.standType,
+    );
+    test.skip(
+      !isExtendedMonitoringEnv,
+      'beaconcha.in Entity link is checked only for prod/staging',
+    );
+
     const beaconchainEntityBaseUrl =
       widgetConfig.standConfig.monitoringConfig.urls.beaconchainEntity;
-    test.skip(
-      !beaconchainEntityBaseUrl,
-      'beaconcha.in Entity link is not configured for this environment',
-    );
-    if (!beaconchainEntityBaseUrl) return;
+    if (!beaconchainEntityBaseUrl) {
+      throw new Error(
+        'monitoringConfig.urls.beaconchainEntity should be set for prod/staging',
+      );
+    }
 
     const beaconchainEntityUrlPattern = new RegExp(
       `^${escapeRegex(normalizeBaseUrl(beaconchainEntityBaseUrl))}/entity/Lido%20CSM/CSM%20Operator%20\\d+/?$`,
@@ -149,28 +141,35 @@ test.describe('Monitoring. External links', async () => {
     );
 
     const [beaconchainEntityPage] = await Promise.all([
-      basePage.waitForPage(PAGE_WAIT_TIMEOUT),
+      widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
       matomoEventService.waitForEvent(
         'e_n',
         'csm_widget_dashboard_external_beaconcha_entity_link',
       ),
-      widgetService.page
-        .getByRole('link', {
-          name: 'beaconcha.in Entity',
-        })
-        .click(),
+      widgetService.monitoringPage.beaconchainEntityLink.click(),
     ]);
 
     await expect(beaconchainEntityPage).toHaveURL(beaconchainEntityUrlPattern);
   });
 
-  test('Should open Rated explorer after click', async ({ widgetService }) => {
-    const ratedBaseUrl = widgetConfig.standConfig.monitoringConfig.urls.rated;
-    test.skip(
-      !ratedBaseUrl,
-      'Rated link is not configured for this environment',
+  test('Should open Rated explorer after click', async ({
+    widgetService,
+    widgetConfig,
+  }) => {
+    const isExtendedMonitoringEnv = isProdOrStaging(
+      widgetConfig.standConfig.standType,
     );
-    if (!ratedBaseUrl) return;
+    test.skip(
+      !isExtendedMonitoringEnv,
+      'Rated link is checked only for prod/staging',
+    );
+
+    const ratedBaseUrl = widgetConfig.standConfig.monitoringConfig.urls.rated;
+    if (!ratedBaseUrl) {
+      throw new Error(
+        'monitoringConfig.urls.rated should be set for prod/staging',
+      );
+    }
 
     const ratedOrigin = new URL(ratedBaseUrl).origin;
     const ratedUrlPattern = new RegExp(
@@ -179,29 +178,36 @@ test.describe('Monitoring. External links', async () => {
     );
 
     const [ratedPage] = await Promise.all([
-      basePage.waitForPage(PAGE_WAIT_TIMEOUT),
+      widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
       matomoEventService.waitForEvent(
         'e_n',
         'csm_widget_dashboard_external_rated_link',
       ),
-      widgetService.page
-        .getByRole('link', {
-          name: 'Rated explorer',
-        })
-        .click(),
+      widgetService.monitoringPage.ratedExplorerLink.click(),
     ]);
 
     await expect(ratedPage).toHaveURL(ratedUrlPattern);
   });
 
-  test('Should open MigaLabs after click', async ({ widgetService }) => {
+  test('Should open MigaLabs after click', async ({
+    widgetService,
+    widgetConfig,
+  }) => {
+    const isExtendedMonitoringEnv = isProdOrStaging(
+      widgetConfig.standConfig.standType,
+    );
+    test.skip(
+      !isExtendedMonitoringEnv,
+      'MigaLabs link is checked only for prod/staging',
+    );
+
     const migaLabsBaseUrl =
       widgetConfig.standConfig.monitoringConfig.urls.migaLabs;
-    test.skip(
-      !migaLabsBaseUrl,
-      'MigaLabs link is not configured for this environment',
-    );
-    if (!migaLabsBaseUrl) return;
+    if (!migaLabsBaseUrl) {
+      throw new Error(
+        'monitoringConfig.urls.migaLabs should be set for prod/staging',
+      );
+    }
 
     const migaLabsUrl = new URL(migaLabsBaseUrl);
     const migaLabsHostPattern = migaLabsUrl.hostname.startsWith('www.')
@@ -213,16 +219,12 @@ test.describe('Monitoring. External links', async () => {
     );
 
     const [migaLabsPage] = await Promise.all([
-      basePage.waitForPage(PAGE_WAIT_TIMEOUT),
+      widgetService.monitoringPage.waitForPage(PAGE_WAIT_TIMEOUT),
       matomoEventService.waitForEvent(
         'e_n',
         'csm_widget_dashboard_external_migalabs_link',
       ),
-      widgetService.page
-        .getByRole('link', {
-          name: 'MigaLabs',
-        })
-        .click(),
+      widgetService.monitoringPage.migaLabsLink.click(),
     ]);
 
     await expect(migaLabsPage).toHaveURL(migaLabsUrlPattern);
