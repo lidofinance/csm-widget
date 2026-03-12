@@ -3,10 +3,10 @@ import {
   useDappStatus,
   useFeeSplits,
   useNodeOperatorId,
+  useOperatorBalance,
   useOperatorInfo,
   useOperatorIsOwner,
   useOperatorRewards,
-  usePendingSharesToSplit,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
 import {
@@ -30,7 +30,7 @@ const useSplitsFormNetworkData: NetworkData<SplitsFormNetworkData> = () => {
   const { data: rewards, isPending: isOperatorRewardsPending } =
     useOperatorRewards(nodeOperatorId);
   const { data: pendingSharesToSplit, isPending: isPendingSharesPending } =
-    usePendingSharesToSplit(nodeOperatorId);
+    useOperatorBalance(nodeOperatorId, (data) => data.pendingSharesToSplit);
   const { data: isOwner, isPending: isOwnerPending } = useOperatorIsOwner({
     address,
     nodeOperatorId,
