@@ -24,6 +24,7 @@ export const RolesSection: FC = () => {
   return (
     <SectionBlock
       title="Roles"
+      data-testid="dashboardRolesSection"
       href={PATH.ROLES}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink}
     >

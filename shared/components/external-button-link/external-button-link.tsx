@@ -6,12 +6,15 @@ import { StyledLink } from './styles';
 type ExternalButtonLinkProps = {
   title: string;
   icon?: ReactNode;
-} & Pick<ComponentProps<typeof MatomoLink>, 'href' | 'matomoEvent'>;
+} & Pick<
+  ComponentProps<typeof MatomoLink>,
+  'href' | 'matomoEvent' | 'data-testid'
+>;
 
 export const ExternalButtonLink: FC<
   PropsWithChildren<ExternalButtonLinkProps>
-> = ({ href, matomoEvent, title, icon, children }) => (
-  <StyledLink {...{ href, matomoEvent }}>
+> = ({ href, matomoEvent, title, icon, children, ...props }) => (
+  <StyledLink {...{ href, matomoEvent }} {...props}>
     <Stack gap="sm" center>
       {icon}
       <Stack gap="xs" center>
