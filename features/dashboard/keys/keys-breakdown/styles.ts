@@ -64,11 +64,8 @@ export const WrapperStyle = styled.div<{
 export const AccordionStyle = styled(Accordion)`
   margin: 0;
 
-  & > div:first-child {
-    padding: 12px 0px;
-  }
-
+  & > div:first-child,
   & > div + div > div {
-    padding: 0px;
+    padding: 12px 0px 0px;
   }
 `;

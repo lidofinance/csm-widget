@@ -19,11 +19,7 @@ export const KeysItem: FC<KeysItemProps> = ({
   tooltip,
 }) => {
   return (
-    <WrapperStyle
-      $variant={
-        (type === 'error' || type === 'warning') && !count ? undefined : type
-      }
-    >
+    <WrapperStyle $variant={type === 'error' && !count ? undefined : type}>
       <Stack direction="column" gap="xs">
         <TitleStyle>
           <Tooltip title={tooltip} placement="topLeft">
@@ -31,7 +27,7 @@ export const KeysItem: FC<KeysItemProps> = ({
           </Tooltip>
           {count === undefined ? <ShortInlineLoader /> : <b>{count}</b>}
         </TitleStyle>
-        {count && count > 0 ? comment : null}
+        {type === 'warning' || (count && count > 0) ? comment : null}
       </Stack>
     </WrapperStyle>
   );

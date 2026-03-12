@@ -1,20 +1,18 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { InlineLoader } from '@lidofinance/lido-ui';
+import { InlineLoader, Text } from '@lidofinance/lido-ui';
+import { useNodeOperatorId } from 'modules/web3';
 import { FC } from 'react';
 import { IconTooltip, Stack } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { pluralKeys } from 'utils';
-import { useStakeAndKeys } from './use-stake-and-keys';
 import {
   ColorDot,
-  StakeAmount,
   StakeBar,
   StakeBarSegment,
   StakeColumn,
-  StakeKeys,
   StakeRow,
-  StakeTitle,
 } from './styles';
+import { useStakeAndKeys } from './use-stake-and-keys';
 
 const COLORS = {
   active: '#53ba95',
@@ -26,7 +24,8 @@ const getPercent = (part: bigint, total: bigint) =>
   total > 0n ? Number((part * 10000n) / total) / 100 : 0;
 
 export const StakeAndKeys: FC = () => {
-  const { data, isPending } = useStakeAndKeys();
+  const id = useNodeOperatorId();
+  const { data, isPending } = useStakeAndKeys(id);
 
   if (isPending || !data) {
     return (
@@ -43,60 +42,66 @@ export const StakeAndKeys: FC = () => {
     <Stack direction="column" gap="sm">
       <StakeRow>
         <StakeColumn>
-          <StakeTitle>
+          <Stack center gap="xs">
             <ColorDot $color={COLORS.active} />
-            Active
+            <Text size="xs">Active</Text>
             <IconTooltip tooltip="Stake amount that already has ETH deposited by the Lido protocol and are currently active in the validator set" />
-          </StakeTitle>
-          <StakeAmount>
-            <FormatToken
-              amount={data.activeStake}
-              token={TOKENS.eth}
-              maxDecimalDigits={0}
-            />
-          </StakeAmount>
-          <StakeKeys>
-            {pluralKeys({ value: data.activeKeys, showValue: true })}
-          </StakeKeys>
+          </Stack>
+          <Stack direction="column" gap="none">
+            <Text as="b" weight={700} size="sm">
+              <FormatToken
+                amount={data.activeStake}
+                token={TOKENS.eth}
+                maxDecimalDigits={0}
+              />
+            </Text>
+            <Text size="xxs" color="secondary">
+              {pluralKeys({ value: data.activeKeys, showValue: true })}
+            </Text>
+          </Stack>
         </StakeColumn>
 
         <StakeColumn>
-          <StakeTitle>
+          <Stack center gap="xs">
             <ColorDot $color={COLORS.depositable} />
-            Depositable
+            <Text size="xs">Depositable</Text>
             <IconTooltip tooltip="Available capacity ready to receive stake from the Lido protocol" />
-          </StakeTitle>
-          <StakeAmount>
-            <FormatToken
-              amount={data.depositableStake}
-              token={TOKENS.eth}
-              maxDecimalDigits={0}
-            />
-          </StakeAmount>
-          <StakeKeys>
-            {pluralKeys({ value: data.depositableKeys, showValue: true })}
-          </StakeKeys>
+          </Stack>
+          <Stack direction="column" gap="none">
+            <Text as="b" weight={700} size="sm">
+              <FormatToken
+                amount={data.depositableStake}
+                token={TOKENS.eth}
+                maxDecimalDigits={0}
+              />
+            </Text>
+            <Text size="xxs" color="secondary">
+              {pluralKeys({ value: data.depositableKeys, showValue: true })}
+            </Text>
+          </Stack>
         </StakeColumn>
 
         <StakeColumn>
-          <StakeTitle>
+          <Stack center gap="xs">
             <ColorDot $color={COLORS.potential} />
-            Potential additional capacity
+            <Text size="xs">Potential additional capacity</Text>
             <IconTooltip tooltip="The additional stake the Lido protocol could allocate to this node operator based on its current weight, assuming enough validator keys are available" />
-          </StakeTitle>
-          <StakeAmount>
-            <FormatToken
-              amount={data.potentialAdditionalStake}
-              token={TOKENS.eth}
-              maxDecimalDigits={0}
-            />
-          </StakeAmount>
-          <StakeKeys>
-            {pluralKeys({
-              value: data.potentialAdditionalKeys,
-              showValue: true,
-            })}
-          </StakeKeys>
+          </Stack>
+          <Stack direction="column" gap="none">
+            <Text as="b" weight={700} size="sm">
+              <FormatToken
+                amount={data.potentialAdditionalStake}
+                token={TOKENS.eth}
+                maxDecimalDigits={0}
+              />
+            </Text>
+            <Text size="xxs" color="secondary">
+              {pluralKeys({
+                value: data.potentialAdditionalKeys,
+                showValue: true,
+              })}
+            </Text>
+          </Stack>
         </StakeColumn>
       </StakeRow>
 

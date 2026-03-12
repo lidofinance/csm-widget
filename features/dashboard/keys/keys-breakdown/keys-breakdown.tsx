@@ -12,9 +12,14 @@ import {
 import { KeysItem } from './keys-item';
 import { AccordionStyle, Alert, Check } from './styles';
 import { useKeysBreakdown } from './use-keys-breakdown';
+import { useNodeOperatorId } from 'modules/web3';
+import { useStakeAndKeys } from '../stake-and-keys/use-stake-and-keys';
 
 export const KeysBreakdown: FC = () => {
-  const { data, isPending } = useKeysBreakdown();
+  const id = useNodeOperatorId();
+  const { data, isPending } = useKeysBreakdown(id);
+  const { data: stakeAndKeys } = useStakeAndKeys(id);
+  const moreKeys = (stakeAndKeys?.potentialAdditionalKeys ?? 0) > 0;
 
   return (
     <AccordionStyle
@@ -26,20 +31,11 @@ export const KeysBreakdown: FC = () => {
           <Stack>
             {isPending ? (
               <ShortInlineLoader />
-            ) : (data?.issuesCount ?? 0) > 0 ? (
-              <SquaredChip variant="error">
-                <Alert />
-                <Plural
-                  value={data?.issuesCount}
-                  variants={['issue', 'issues']}
-                  showValue
-                />
-              </SquaredChip>
             ) : (
-              <SquaredChip variant="success">
-                <Check />
-                No issues
-              </SquaredChip>
+              <>
+                {isModuleCM && <MoreKeysChip more={moreKeys} />}
+                <IssuesChip issues={data?.issuesCount} />
+              </>
             )}
           </Stack>
         </Stack>
@@ -51,6 +47,13 @@ export const KeysBreakdown: FC = () => {
           title="Depositable"
           count={data?.counts.depositable}
           tooltip="Keys awaiting deposit from the Lido protocol"
+          {...(moreKeys
+            ? {
+                type: 'warning',
+                comment:
+                  'Add more keys to get to your full depositable capacity',
+              }
+            : undefined)}
         />
         <KeysItem
           data-testid="keysPendingActivationCount"
@@ -139,3 +142,35 @@ export const KeysBreakdown: FC = () => {
     </AccordionStyle>
   );
 };
+
+const MoreKeysChip: FC<{ more: boolean }> = ({ more }) => (
+  <SquaredChip variant={more ? 'warning' : 'success'}>
+    {more ? (
+      <>
+        <Alert />
+        Upload more keys
+      </>
+    ) : (
+      <>
+        <Check />
+        Enough keys
+      </>
+    )}
+  </SquaredChip>
+);
+
+const IssuesChip: FC<{ issues?: number }> = ({ issues = 0 }) => (
+  <SquaredChip variant={issues > 0 ? 'error' : 'success'}>
+    {issues > 0 ? (
+      <>
+        <Alert />
+        <Plural value={issues} variants={['issue', 'issues']} showValue />
+      </>
+    ) : (
+      <>
+        <Check />
+        No issues
+      </>
+    )}
+  </SquaredChip>
+);

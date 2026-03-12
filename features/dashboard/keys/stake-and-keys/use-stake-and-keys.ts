@@ -1,9 +1,15 @@
-import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
-import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
+import {
+  NodeOperatorId,
+  NodeOperatorInfo,
+  OperatorStakeInfo,
+} from '@lidofinance/lido-csm-sdk';
+import { useOperatorInfo } from 'modules/web3';
+import { useOperatorStakeInfo } from 'modules/web3/hooks/use-operator-stake-info';
+import { useMemo } from 'react';
 import { parseEther } from 'viem';
-import { hasStatus } from 'utils/has-status';
 
 const MAX_EFFECTIVE_BALANCE = parseEther('2048');
+const MIN_EFFECTIVE_BALANCE = parseEther('32');
 
 type StakeAndKeysData = {
   activeStake: bigint;
@@ -16,48 +22,46 @@ type StakeAndKeysData = {
 
 const bigMax = (a: bigint, b: bigint) => (a > b ? a : b);
 
-const selectStakeAndKeys = (keys: KeyWithStatus[]): StakeAndKeysData => {
-  const activeKeysList = keys.filter(
-    hasStatus([
-      KEY_STATUS.ACTIVATION_PENDING,
-      KEY_STATUS.ACTIVE,
-      KEY_STATUS.EXITING,
-      // KEY_STATUS.WITHDRAWAL_PENDING, // ???
-    ]),
-  );
-  const activeKeys = activeKeysList.length;
-  const activeStake = activeKeysList.reduce(
-    (sum, key) => sum + (key.effectiveBalance ?? 0n),
-    0n,
-  );
+const selectStakeAndKeys =
+  (info: NodeOperatorInfo | undefined) =>
+  (meta: OperatorStakeInfo): StakeAndKeysData | undefined => {
+    if (!info) return undefined;
 
-  const depositableKeys = keys.filter(hasStatus(KEY_STATUS.DEPOSITABLE)).length;
-  const depositableStake =
-    BigInt(activeKeys + depositableKeys) * MAX_EFFECTIVE_BALANCE - activeStake;
+    const activeKeys = info.totalDepositedKeys - info.totalWithdrawnKeys;
+    const activeStake = meta.currentStake;
 
-  // TODO: calculate targetStake properly
-  const targetStake = 0n;
+    const depositableKeys = info.depositableValidatorsCount;
+    const depositableStake = bigMax(
+      0n,
+      BigInt(activeKeys + depositableKeys) * MAX_EFFECTIVE_BALANCE -
+        activeStake,
+    );
 
-  const potentialAdditionalStake = bigMax(
-    0n,
-    targetStake - (activeStake + depositableStake),
-  );
-  const potentialAdditionalKeys = Number(
-    potentialAdditionalStake / MAX_EFFECTIVE_BALANCE,
-  );
+    const targetStake = meta.targetStake;
+    const potentialAdditionalStake = bigMax(
+      0n,
+      targetStake - (activeStake + depositableStake),
+    );
+    const potentialAdditionalKeys = Math.max(
+      Number(potentialAdditionalStake / MAX_EFFECTIVE_BALANCE),
+      potentialAdditionalStake >= MIN_EFFECTIVE_BALANCE ? 1 : 0,
+    );
 
-  return {
-    activeStake,
-    activeKeys,
-    depositableStake,
-    depositableKeys,
-    potentialAdditionalStake,
-    potentialAdditionalKeys,
+    return {
+      activeStake,
+      activeKeys,
+      depositableStake,
+      depositableKeys,
+      potentialAdditionalStake,
+      potentialAdditionalKeys,
+    };
   };
-};
 
-export const useStakeAndKeys = () => {
-  const id = useNodeOperatorId();
+export const useStakeAndKeys = (id: NodeOperatorId | undefined) => {
+  const { data: info } = useOperatorInfo(id);
 
-  return useOperatorKeysWithStatus(id, selectStakeAndKeys);
+  const select = useMemo(() => selectStakeAndKeys(info), [info]);
+
+  // TODO: check targetKeys
+  return useOperatorStakeInfo(id, select);
 };

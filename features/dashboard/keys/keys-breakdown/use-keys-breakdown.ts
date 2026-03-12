@@ -1,5 +1,9 @@
-import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
-import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
+import {
+  KEY_STATUS,
+  KeyWithStatus,
+  NodeOperatorId,
+} from '@lidofinance/lido-csm-sdk';
+import { useOperatorKeysWithStatus } from 'modules/web3';
 import { hasStatus, StatusFilter } from 'utils/has-status';
 
 const ISSUE_STATUSES: KEY_STATUS[] = [
@@ -62,8 +66,6 @@ const selectKeysBreakdown = (keys: KeyWithStatus[]): KeysBreakdownData => {
   return { counts, issuesCount };
 };
 
-export const useKeysBreakdown = () => {
-  const id = useNodeOperatorId();
-
+export const useKeysBreakdown = (id: NodeOperatorId | undefined) => {
   return useOperatorKeysWithStatus(id, selectKeysBreakdown);
 };
