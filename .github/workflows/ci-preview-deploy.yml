@@ -69,7 +69,7 @@ jobs:
 
   tests:
     needs: deploy
-    if: ${{ github.event.pull_request.draft == false && inputs.inventory == 'testnet'}}
+    if: ${{ github.event.pull_request.draft == false && (!inputs.inventory || inputs.inventory == 'testnet') }}
     uses: ./.github/workflows/tests.yml
     secrets: inherit
     with:
