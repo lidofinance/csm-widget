@@ -3096,7 +3096,7 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.47.0.tgz#2367eec1c8363516bde48b632a6fbe32aec33a1e"
   integrity sha512-6xx2O89OhWAxaob+SqXEX2xtrumG4MCUrclooCIvAhz64Lp3Wa0Hzt2lgJyFMhJxpDPMj3LmYNbuB15lwEQKwg==
 
-"@lidofinance/browser-service@1.48.0-alpha-add-wc-wallet-without-wait.1":
+"@lidofinance/browser-service@1.9.0-alpha-add-wc-wallet-without-wait.1":
   version "1.9.0-alpha-add-wc-wallet-without-wait.1"
   resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.9.0-alpha-add-wc-wallet-without-wait.1.tgz#9a185d61c716229a5e297dfcc819301c7db34373"
   integrity sha512-whV8lOJVUYmch8KLpvoznIYZZl6gx+ffv8bhmybn/5REJxDxrNPHJiurcBptDoRBSf98fcrYuhw/BhQO1F9kgg==
@@ -3255,7 +3255,7 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.48.0-alpha-add-wc-wallet-without-wait.1", "@lidofinance/wallets-testing-wallets@1.9.0-alpha-add-wc-wallet-without-wait.1":
+"@lidofinance/wallets-testing-wallets@1.48.0-alpha-add-wc-wallet-without-wait.1":
   version "1.48.0-alpha-add-wc-wallet-without-wait.1"
   resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.48.0-alpha-add-wc-wallet-without-wait.1.tgz#caf5d76ab93e8eeb1d0795ec2bee8d158a908547"
   integrity sha512-ILwwqukzLcEhrXQenLUj53X0Ru3lKK2AWtm0OaL5542hXwBALzGBNCYKmBn1WLK/r1LS8Xu4t5jJ0/Rp6/oykA==
