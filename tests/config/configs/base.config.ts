@@ -3,7 +3,7 @@ import {
   NetworkConfig,
   CommonWalletConfig,
   AccountConfig,
-  METAMASK_STABLE_COMMON_CONFIG,
+  WC_SDK_COMMON_CONFIG,
 } from '@lidofinance/wallets-testing-wallets';
 
 import { z } from 'zod';
@@ -45,7 +45,7 @@ export class BaseConfig implements IConfig {
       SECRET_PHRASE: process.env.WALLET_SECRET_PHRASE || '',
       PASSWORD: process.env.WALLET_PASSWORD || '',
     };
-    this.walletConfig = METAMASK_STABLE_COMMON_CONFIG;
+    this.walletConfig = WC_SDK_COMMON_CONFIG;
   }
 
   getFullInfo(): string {

@@ -30,7 +30,7 @@ const config: PlaywrightTestConfig = {
     actionTimeout: 15000,
     screenshot: { fullPage: true, mode: 'only-on-failure' },
     baseURL: widgetFullConfig.standConfig.standUrl,
-    trace: 'on-first-retry',
+    trace: 'on',
     permissions: ['clipboard-read'],
     contextOptions: {
       reducedMotion: 'reduce',

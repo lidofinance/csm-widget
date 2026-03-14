@@ -86,6 +86,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
           warmUpCallback: warmUpForkedNode.bind(null, csmSDK, secretPhrase),
         },
         browserOptions: {
+          headless: true,
           reducedMotion: 'reduce',
           cookies: REFUSE_CF_BLOCK_COOKIE,
         },
