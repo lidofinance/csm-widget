@@ -15,22 +15,20 @@ export class MonitoringPage extends BasePage {
     super(page);
     this.heading = this.page.getByRole('heading', { name: 'Monitoring' });
     this.beaconchainV2Link = this.page.getByTestId(
-      'monitoring-beaconchain-v2-link',
+      'monitoringBeaconchainV2Link',
     );
-    this.feesMonitoringLink = this.page.getByTestId('monitoring-fees-link');
+    this.feesMonitoringLink = this.page.getByTestId('monitoringFeesLink');
     this.operatorsPortalLink = this.page.getByTestId(
-      'monitoring-operators-portal-link',
+      'monitoringOperatorsPortalLink',
     );
-    this.csmSentinelLink = this.page.getByTestId(
-      'monitoring-csm-sentinel-link',
-    );
+    this.csmSentinelLink = this.page.getByTestId('monitoringCsmSentinelLink');
     this.beaconchainEntityLink = this.page.getByTestId(
       'monitoringBeaconchainEntityLink',
     );
     this.ratedExplorerLink = this.page.getByTestId(
-      'monitoring-rated-explorer-link',
+      'monitoringRatedExplorerLink',
     );
-    this.migaLabsLink = this.page.getByTestId('monitoring-migalabs-link');
+    this.migaLabsLink = this.page.getByTestId('monitoringMigaLabsLink');
   }
 
   async open() {
