@@ -28,7 +28,7 @@ export const useExternalButtons = () => {
       [
         beaconchainEntityLink && {
           title: 'beaconcha.in Entity',
-          'data-testid': 'monitoring-beaconchain-entity-link',
+          'data-testid': 'monitoringBeaconchainEntityLink',
           icon: <BeaconchaIcon />,
           href: beaconchainEntityLink,
           matomoEvent:

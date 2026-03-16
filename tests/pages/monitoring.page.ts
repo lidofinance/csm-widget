@@ -25,7 +25,7 @@ export class MonitoringPage extends BasePage {
       'monitoring-csm-sentinel-link',
     );
     this.beaconchainEntityLink = this.page.getByTestId(
-      'monitoring-beaconchain-entity-link',
+      'monitoringBeaconchainEntityLink',
     );
     this.ratedExplorerLink = this.page.getByTestId(
       'monitoring-rated-explorer-link',

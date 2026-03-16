@@ -119,24 +119,16 @@ test.describe('Monitoring. External links', async () => {
     widgetService,
     widgetConfig,
   }) => {
-    const isExtendedMonitoringEnv = isProdOrStaging(
-      widgetConfig.standConfig.standType,
-    );
     test.skip(
-      !isExtendedMonitoringEnv,
+      !isProdOrStaging(widgetConfig.standConfig.standType),
       'beaconcha.in Entity link is checked only for prod/staging',
     );
 
-    const beaconchainEntityBaseUrl =
-      widgetConfig.standConfig.monitoringConfig.urls.beaconchainEntity;
-    if (!beaconchainEntityBaseUrl) {
-      throw new Error(
-        'monitoringConfig.urls.beaconchainEntity should be set for prod/staging',
-      );
-    }
-
+    const beaconchainEntityBaseUrl = new URL(
+      widgetConfig.standConfig.monitoringConfig.urls.beaconchainEntity ?? '',
+    ).origin;
     const beaconchainEntityUrlPattern = new RegExp(
-      `^${escapeRegex(normalizeBaseUrl(beaconchainEntityBaseUrl))}/entity/Lido%20CSM/CSM%20Operator%20\\d+/?$`,
+      `^${escapeRegex(beaconchainEntityBaseUrl)}/entity/Lido%20CSM/CSM%20Operator%20\\d+/?$`,
       'i',
     );
 
@@ -164,14 +156,9 @@ test.describe('Monitoring. External links', async () => {
       'Rated link is checked only for prod/staging',
     );
 
-    const ratedBaseUrl = widgetConfig.standConfig.monitoringConfig.urls.rated;
-    if (!ratedBaseUrl) {
-      throw new Error(
-        'monitoringConfig.urls.rated should be set for prod/staging',
-      );
-    }
-
-    const ratedOrigin = new URL(ratedBaseUrl).origin;
+    const ratedOrigin = new URL(
+      widgetConfig.standConfig.monitoringConfig.urls.rated ?? '',
+    ).origin;
     const ratedUrlPattern = new RegExp(
       `^${escapeRegex(ratedOrigin)}/o/.+\\?network=[A-Za-z0-9-]+(?:&.*)?$`,
       'i',
@@ -201,15 +188,9 @@ test.describe('Monitoring. External links', async () => {
       'MigaLabs link is checked only for prod/staging',
     );
 
-    const migaLabsBaseUrl =
-      widgetConfig.standConfig.monitoringConfig.urls.migaLabs;
-    if (!migaLabsBaseUrl) {
-      throw new Error(
-        'monitoringConfig.urls.migaLabs should be set for prod/staging',
-      );
-    }
-
-    const migaLabsUrl = new URL(migaLabsBaseUrl);
+    const migaLabsUrl = new URL(
+      widgetConfig.standConfig.monitoringConfig.urls.migaLabs ?? '',
+    );
     const migaLabsHostPattern = migaLabsUrl.hostname.startsWith('www.')
       ? escapeRegex(migaLabsUrl.hostname)
       : `(?:www\\.)?${escapeRegex(migaLabsUrl.hostname)}`;
