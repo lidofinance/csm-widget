@@ -5,7 +5,7 @@ export const validatePercentShare = (
   field: string,
   value: bigint | undefined,
 ) => {
-  if (!value || value <= 0) {
+  if (!value || value <= 0n) {
     throw new ValidationError(field, 'Share must be greater than 0');
   }
   if (value > PERCENT_BASIS) {

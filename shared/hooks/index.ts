@@ -4,6 +4,7 @@ export * from './use-awaiter';
 export * from './use-bond-will-receive';
 export * from './use-can-claim-ics';
 export * from './use-can-create-node-operator';
+export * from './use-can-edit-splits';
 export * from './use-chain-color';
 export * from './use-chain-name';
 export * from './use-compare-with-router-path';

@@ -4,14 +4,13 @@ import { useSplitsFormData } from '../context';
 import { Button } from '@lidofinance/lido-ui';
 import { useFormContext } from 'react-hook-form';
 
-export const SubmitButton: FC<{ onCancel: () => void }> = ({ onCancel }) => {
+export const SubmitButton: FC = () => {
   const { currentFeeSplits } = useSplitsFormData(true);
   const { reset } = useFormContext();
 
   const handleCancel = useCallback(() => {
-    onCancel();
     reset();
-  }, [onCancel, reset]);
+  }, [reset]);
 
   return (
     <>

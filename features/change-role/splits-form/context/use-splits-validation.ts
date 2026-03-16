@@ -6,19 +6,49 @@ import {
 } from 'shared/hook-form/validation';
 import { compareLowercase } from 'utils';
 import type { SplitsFormInputType, SplitsFormNetworkData } from './types';
-import { MAX_FEE_SPLITS_COUNT, PERCENT_BASIS } from '@lidofinance/lido-csm-sdk';
+import {
+  FeeSplit,
+  MAX_FEE_SPLITS_COUNT,
+  PERCENT_BASIS,
+} from '@lidofinance/lido-csm-sdk';
+
+const splitsEqual = (a: Partial<FeeSplit>[], b: FeeSplit[]) =>
+  a.length === b.length &&
+  a.every(
+    (s, i) =>
+      compareLowercase(s.recipient, b[i].recipient) && s.share === b[i].share,
+  );
 
 export const useSplitsValidation = () => {
   return useFormValidation<SplitsFormInputType, SplitsFormNetworkData>(
     'feeSplits',
-    async ({ feeSplits }, _, validate) => {
-      if (!feeSplits || feeSplits.length === 0) return;
+    async ({ feeSplits, totalShare }, { currentFeeSplits }, validate) => {
+      await validate('feeSplits', () => {
+        if (splitsEqual(feeSplits, currentFeeSplits)) {
+          throw new ValidationError(
+            'feeSplits',
+            'No changes were made to the additional addresses',
+          );
+        }
 
-      const totalBp = feeSplits.reduce((sum, s) => {
-        return sum + (s.share ?? 0n);
-      }, 0n);
+        if (feeSplits.length > MAX_FEE_SPLITS_COUNT) {
+          throw new ValidationError(
+            'feeSplits',
+            `Maximum ${MAX_FEE_SPLITS_COUNT} additional addresses`,
+          );
+        }
+      });
 
-      for (let i = 0; i < feeSplits.length; i++) {
+      await validate('totalShare', () => {
+        if (totalShare > PERCENT_BASIS) {
+          throw new ValidationError(
+            'totalShare',
+            "You've exceeded 100% of the total share",
+          );
+        }
+      });
+
+      for (let i = 0; i < (feeSplits?.length ?? 0); i++) {
         const { recipient, share } = feeSplits[i];
 
         await validate(`feeSplits.${i}.recipient`, () => {
@@ -37,33 +67,8 @@ export const useSplitsValidation = () => {
 
         await validate(`feeSplits.${i}.share`, () => {
           validatePercentShare(`feeSplits.${i}.share`, share);
-
-          // if (totalBp > PERCENT_BASIS) {
-          //   throw new ValidationError(
-          //     `feeSplits.${i}.share`,
-          //     "You've exceeded 100% of the total share. To add a new address to the splitter, please adjust the shares.",
-          //   );
-          // }
         });
       }
-
-      // FIXME: show this errors
-      const last = feeSplits.length - 1;
-      await validate(`feeSplits.${last}`, () => {
-        if (feeSplits.length > MAX_FEE_SPLITS_COUNT) {
-          throw new ValidationError(
-            `feeSplits.${last}.recipient`,
-            `Maximum ${MAX_FEE_SPLITS_COUNT} additional addresses`,
-          );
-        }
-
-        if (totalBp > PERCENT_BASIS) {
-          throw new ValidationError(
-            `feeSplits.${last}.share`,
-            "You've exceeded 100% of the total share. To add a new address to the splitter, please adjust the shares.",
-          );
-        }
-      });
     },
   );
 };

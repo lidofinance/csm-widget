@@ -5,11 +5,9 @@ import { Address as AddressComponent, Stack } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import styled from 'styled-components';
 import { formatPercent } from 'utils';
-import { Address } from 'viem';
 
 type ConfirmSplitsModalProps = ConfirmModalProps & {
   feeSplits: FeeSplit[];
-  rewardsAddress: Address;
 };
 
 const TableRow = styled.div`
@@ -38,12 +36,8 @@ const ShareCell = styled.div`
 
 export const ConfirmSplitsModal: ModalComponentType<
   ConfirmSplitsModalProps
-> = ({ onConfirm, onReject, feeSplits, rewardsAddress, ...props }) => {
+> = ({ onConfirm, onReject, feeSplits, ...props }) => {
   const isRemoving = feeSplits.length === 0;
-
-  const rows: FeeSplit[] = isRemoving
-    ? [{ recipient: rewardsAddress, share: 10000n }]
-    : feeSplits;
 
   return (
     <Modal
@@ -91,21 +85,30 @@ export const ConfirmSplitsModal: ModalComponentType<
 
         <Stack direction="column" gap="sm">
           <TableHeader>
-            <div>Address</div>
+            <div>Recipient</div>
             <div>Share</div>
           </TableHeader>
-          {rows.map((row) => (
-            <TableRow key={row.recipient}>
+          {isRemoving ? (
+            <TableRow>
               <AddressCell>
-                <AddressComponent
-                  address={row.recipient}
-                  symbols={0}
-                  size="xxs"
-                />
+                <Text size="xxs">Operator bond</Text>
               </AddressCell>
-              <ShareCell>{formatPercent(row.share, false, 2)} %</ShareCell>
+              <ShareCell>{formatPercent(10_000, false, 2)} %</ShareCell>
             </TableRow>
-          ))}
+          ) : (
+            feeSplits.map((row) => (
+              <TableRow key={row.recipient}>
+                <AddressCell>
+                  <AddressComponent
+                    address={row.recipient}
+                    symbols={0}
+                    size="xxs"
+                  />
+                </AddressCell>
+                <ShareCell>{formatPercent(row.share, false, 2)} %</ShareCell>
+              </TableRow>
+            ))
+          )}
         </Stack>
 
         <Stack direction="row" gap="md">

@@ -1,36 +1,79 @@
 import { Button, Text } from '@lidofinance/lido-ui';
-import { FC } from 'react';
+import { PATH } from 'consts';
+import { FC, useCallback } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Stack } from 'shared/components';
-import { useSplitsFormData } from '../context';
-import { useRewardsAddressShare } from '../hooks/use-rewards-address-share';
+import { WarningBlockStyle } from 'shared/components/warning-block/style';
+import { LocalLink } from 'shared/navigate';
+import { SplitsFormInputType, useSplitsFormData } from '../context';
+import { BondRow } from './bond-row';
 import { SplitRowView } from './split-row-view';
 
-type ViewSplitsProps = {
-  onEdit: () => void;
-};
-
-export const ViewSplits: FC<ViewSplitsProps> = ({ onEdit }) => {
-  const { rewardsAddress, currentFeeSplits, hasPendingShares, isOwner } =
+export const ViewSplits: FC = () => {
+  const { setValue } = useFormContext<SplitsFormInputType>();
+  const handleEdit = useCallback(() => setValue('isEditing', true), [setValue]);
+  const { currentFeeSplits, editRestricted, rewards, pendingSharesToSplit } =
     useSplitsFormData(true);
-
-  const rewardsShare = useRewardsAddressShare(currentFeeSplits);
 
   return (
     <>
+      {currentFeeSplits.length === 0 && rewards.proof.length === 0 ? (
+        <WarningBlockStyle>
+          You can set up rewards splitting now. Please note that editing will
+          only be available after your first rewards are distributed.
+        </WarningBlockStyle>
+      ) : currentFeeSplits.length === 0 && rewards.available ? (
+        <WarningBlockStyle>
+          <Stack gap="md" center>
+            You have unclaimed rewards. If you set up splitting now, unclaimed
+            rewards will be distributed using the new split settings. To keep
+            current distribution, claim your rewards first.
+            <LocalLink href={PATH.BOND_CLAIM}>
+              <Button variant="outlined" size="sm">
+                Go to claim
+              </Button>
+            </LocalLink>
+          </Stack>
+        </WarningBlockStyle>
+      ) : null}
+
+      {currentFeeSplits.length > 0 && rewards.proof.length === 0 ? (
+        <WarningBlockStyle>
+          <b>Editing is disabled</b> while your first rewards have not been
+          distributed yet.
+        </WarningBlockStyle>
+      ) : currentFeeSplits.length > 0 && rewards.available ? (
+        <WarningBlockStyle>
+          <Stack gap="md" center>
+            <b>Editing is disabled</b> while you have unclaimed rewards. Claim
+            them in Bond & Rewards to continue. Unclaimed rewards will be
+            distributed using your current split settings.
+            <LocalLink href={PATH.BOND_CLAIM}>
+              <Button variant="outlined" size="sm">
+                Go to claim
+              </Button>
+            </LocalLink>
+          </Stack>
+        </WarningBlockStyle>
+      ) : pendingSharesToSplit ? (
+        <WarningBlockStyle>
+          <Stack gap="md" center>
+            <b>Editing is disabled</b> while there are pending shares to
+            distribute. Claim them in Bond & Rewards to continue.
+            <LocalLink href={PATH.BOND_CLAIM}>
+              <Button variant="outlined" size="sm">
+                Go to claim
+              </Button>
+            </LocalLink>
+          </Stack>
+        </WarningBlockStyle>
+      ) : null}
+
       <Text size="md" weight={700} as="h4">
-        Rewards splitter addresses
+        Rewards splitter settings
       </Text>
 
-      <Stack direction="column" gap="sm">
-        <Text size="xs" weight={700}>
-          Rewards Address
-        </Text>
-        <SplitRowView
-          title="Rewards Address"
-          address={rewardsAddress}
-          share={rewardsShare}
-        />
-      </Stack>
+      <BondRow />
 
       {currentFeeSplits.length > 0 && (
         <Stack direction="column" gap="sm">
@@ -48,8 +91,8 @@ export const ViewSplits: FC<ViewSplitsProps> = ({ onEdit }) => {
         </Stack>
       )}
 
-      {isOwner && (
-        <Button fullwidth onClick={onEdit} disabled={hasPendingShares}>
+      {!editRestricted && (
+        <Button fullwidth onClick={handleEdit}>
           {currentFeeSplits.length > 0 ? 'Edit splits' : 'Set up splits'}
         </Button>
       )}

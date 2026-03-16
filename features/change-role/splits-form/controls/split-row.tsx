@@ -1,6 +1,6 @@
 import { ButtonIcon, Close, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { useFormState } from 'react-hook-form';
+import { useFormContext, useFormState } from 'react-hook-form';
 import { Stack } from 'shared/components';
 import {
   AddressInputHookForm,
@@ -25,17 +25,26 @@ type SplitRowProps = {
 };
 
 export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
-  const { errors } = useFormState<SplitsFormInputType>({
-    name: [`feeSplits.${index}.recipient`, `feeSplits.${index}.share`],
-  });
+  const { errors } = useFormState<SplitsFormInputType & Record<string, string>>(
+    {
+      name: [
+        `feeSplits.${index}.recipient`,
+        `feeSplits.${index}.share`,
+        `totalShare`,
+      ],
+    },
+  );
 
-  const splitErrors = errors.feeSplits?.[index];
-  const recipientError = splitErrors?.recipient;
-  const shareError = splitErrors?.share;
+  const { clearErrors } = useFormContext<SplitsFormInputType>();
+
+  const recipientError =
+    errors.feeSplits?.[index]?.recipient ??
+    errors[`feeSplits.${index}.recipient`];
+  const shareError =
+    errors.feeSplits?.[index]?.share ??
+    errors[`feeSplits.${index}.share`] ??
+    errors.totalShare;
   const errorMessage = recipientError?.message || shareError?.message;
-
-  // FIXME: reset errors on change
-  // FIXME: show share error
 
   return (
     <div>
@@ -53,6 +62,9 @@ export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
             fieldName={`feeSplits.${index}.share`}
             label="Share, %"
             placeholder="0.00"
+            onChange={() => {
+              clearErrors(`feeSplits.${index}.share`);
+            }}
             error={!!shareError}
           />
         </ShareColumn>

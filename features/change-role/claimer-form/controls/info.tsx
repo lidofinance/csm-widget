@@ -43,11 +43,6 @@ export const Info: FC = () => {
           <TitledValue title="Current Rewards claimer" value="not set" />
         )}
       </Latice>
-      {!currentClaimerAddress && !isOwner && (
-        <Latice variant="secondary">
-          <TitledAddress title="Current Rewards claimer" address="Not set" />
-        </Latice>
-      )}
     </>
   );
 };

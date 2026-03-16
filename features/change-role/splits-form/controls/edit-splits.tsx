@@ -3,9 +3,9 @@ import { ButtonIcon, Plus, Text } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Stack } from 'shared/components';
+import styled from 'styled-components';
 import { SplitsFormInputType } from '../context';
 import { SplitRow } from './split-row';
-import styled from 'styled-components';
 
 export const EditSplits: FC = () => {
   const { control } = useFormContext<SplitsFormInputType>();
@@ -15,10 +15,8 @@ export const EditSplits: FC = () => {
   });
 
   const handleAdd = useCallback(() => {
-    if (fields.length < MAX_FEE_SPLITS_COUNT) {
-      append({ recipient: undefined, share: 0n });
-    }
-  }, [append, fields.length]);
+    append({ recipient: undefined, share: 0n });
+  }, [append]);
 
   const { formState } = useFormContext<SplitsFormInputType>();
   const splitsError = formState.errors.feeSplits;
@@ -36,12 +34,7 @@ export const EditSplits: FC = () => {
       </Text>
 
       {fields.map((field, index) => (
-        <SplitRow
-          key={field.id}
-          // field={field}
-          index={index}
-          onRemove={remove}
-        />
+        <SplitRow key={field.id} index={index} onRemove={remove} />
       ))}
 
       {rootError?.message && (

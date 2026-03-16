@@ -1,4 +1,4 @@
-import { ButtonIcon, LockSmall } from '@lidofinance/lido-ui';
+import { ButtonIcon, Input, LockSmall } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { InputAddress, InputPercent, Stack } from 'shared/components';
 import styled from 'styled-components';
@@ -47,3 +47,39 @@ export const SplitRowView: FC<SplitRowProps> = ({
     </Stack>
   );
 };
+
+type BondRowProps = {
+  title: string;
+  description: string;
+  share: bigint;
+};
+
+export const BondRowView: FC<BondRowProps> = ({
+  title,
+  description,
+  share,
+}) => {
+  return (
+    <Stack direction="row" gap="sm">
+      <AddressColumn>
+        <InputStyled disabled label={title} value={description} fullwidth />
+      </AddressColumn>
+      <ShareColumn>
+        <InputPercent disabled label="Share, %" value={share} fullwidth />
+      </ShareColumn>
+    </Stack>
+  );
+};
+
+const InputStyled = styled(Input)`
+  & span span {
+    transform: translateY(-10px);
+    font-weight: 700;
+    color: var(--lido-color-text);
+  }
+  & input {
+    font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
+    line-height: 1.668;
+    top: 11px;
+  }
+`;

@@ -4,4 +4,9 @@ import { FormatToken } from 'shared/formatters';
 
 export const BalanceCell: FC<{ effectiveBalance?: bigint }> = ({
   effectiveBalance,
-}) => <FormatToken amount={effectiveBalance} token={TOKENS.eth} />;
+}) =>
+  effectiveBalance !== undefined ? (
+    <FormatToken amount={effectiveBalance} token={TOKENS.eth} />
+  ) : (
+    <>&mdash;</>
+  );

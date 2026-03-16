@@ -1,9 +1,9 @@
 import { FeeSplit } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { Address } from 'shared/components';
-import { useNavigate } from 'shared/navigate';
+import { LocalLink } from 'shared/navigate';
 import {
   RoleAddressColumn,
   RoleNameColumn,
@@ -14,7 +14,8 @@ import {
 
 type SplitterRowProps = {
   feeSplits?: FeeSplit[];
-  path?: PATH;
+  path: PATH;
+  canEdit?: boolean;
 };
 
 const formatShare = (share: bigint) => {
@@ -22,10 +23,11 @@ const formatShare = (share: bigint) => {
   return `${percent}%`;
 };
 
-export const SplitterRow: FC<SplitterRowProps> = ({ feeSplits, path }) => {
-  const navigate = useNavigate();
-  const onEdit = useCallback(() => path && navigate(path), [navigate, path]);
-
+export const SplitterRow: FC<SplitterRowProps> = ({
+  feeSplits,
+  path,
+  canEdit,
+}) => {
   return (
     <RoleRowStyle>
       <RoleNameColumn>
@@ -43,11 +45,11 @@ export const SplitterRow: FC<SplitterRowProps> = ({ feeSplits, path }) => {
         ))}
       </RoleAddressColumn>
 
-      {path && (
-        <Button size="xs" variant="outlined" onClick={onEdit}>
-          {feeSplits?.length ? 'Edit' : 'Set up'}
+      <LocalLink href={path}>
+        <Button size="xs" variant="outlined">
+          {!canEdit ? 'View' : feeSplits?.length ? 'Edit' : 'Set up'}
         </Button>
-      )}
+      </LocalLink>
     </RoleRowStyle>
   );
 };

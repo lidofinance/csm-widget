@@ -33,13 +33,13 @@ export const useSplitsSubmit: FormSubmitterHook<
   return useCallback(
     async (
       { feeSplits },
-      { nodeOperatorId, rewardsAddress, rewards },
+      { nodeOperatorId, rewards },
       { onConfirm, onRetry },
     ) => {
       invariant(rewards, 'Rewards data is required for submitting splits');
       assertFeeSplits(feeSplits);
 
-      const confirmed = await confirmSplits({ feeSplits, rewardsAddress });
+      const confirmed = await confirmSplits({ feeSplits });
       if (!confirmed) return false;
 
       try {
@@ -72,9 +72,9 @@ export const useSplitsSubmit: FormSubmitterHook<
 
         await sdk.roles.setFeeSplits({
           nodeOperatorId,
+          feeSplits,
           shares,
           proof,
-          feeSplits,
           callback,
         });
 

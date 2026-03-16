@@ -1,4 +1,5 @@
 export * from './address-validation';
+export * from './bigint-utils';
 export * from './calculate-available-to-claim';
 export * from './compare-lowercase';
 export * from './compare-with-router-path';
@@ -38,3 +39,4 @@ export * from './serialize-bigint';
 export * from './standard-fetcher';
 export * from './track-matomo-event';
 export * from './wei-to-eth';
+export * from './wrapped-hash-codec';

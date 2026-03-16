@@ -19,7 +19,12 @@ export const RolesList: FC = () => {
   const { data: info } = useOperatorInfo(nodeOperatorId);
   const { data: claimerAddress } = useCustomRewardsClaimer(nodeOperatorId);
   const { data: feeSplits } = useFeeSplits(nodeOperatorId);
-  const { HAS_MANAGER_ROLE, HAS_REWARDS_ROLE, HAS_OWNER_ROLE } = useShowFlags();
+  const {
+    HAS_MANAGER_ROLE,
+    HAS_REWARDS_ROLE,
+    HAS_OWNER_ROLE,
+    CAN_EDIT_SPLITS,
+  } = useShowFlags();
 
   const isClaimerSet = !!claimerAddress && claimerAddress !== zeroAddress;
 
@@ -62,7 +67,8 @@ export const RolesList: FC = () => {
 
         <SplitterRow
           feeSplits={feeSplits}
-          path={HAS_OWNER_ROLE ? PATH.SETTINGS_SPLITS : undefined}
+          path={PATH.SETTINGS_SPLITS}
+          canEdit={CAN_EDIT_SPLITS}
         />
       </Stack>
     </FormBlock>

@@ -4,7 +4,6 @@ import {
   useFeeSplits,
   useNodeOperatorId,
   useOperatorBalance,
-  useOperatorInfo,
   useOperatorIsOwner,
   useOperatorRewards,
 } from 'modules/web3';
@@ -23,8 +22,6 @@ const useSplitsFormNetworkData: NetworkData<SplitsFormNetworkData> = () => {
   invariant(address);
 
   const nodeOperatorId = useNodeOperatorId();
-  const { data: rewardsAddress, isPending: isOperatorInfoPending } =
-    useOperatorInfo(nodeOperatorId, (info) => info.rewardsAddress);
   const { data: currentFeeSplits, isPending: isFeeSplitsPending } =
     useFeeSplits(nodeOperatorId);
   const { data: rewards, isPending: isOperatorRewardsPending } =
@@ -42,21 +39,26 @@ const useSplitsFormNetworkData: NetworkData<SplitsFormNetworkData> = () => {
     invalidate([KEY_FEE_SPLITS]);
   }, [invalidate]);
 
-  const hasPendingShares = !!pendingSharesToSplit || !!rewards?.available;
+  const emptySplits = !currentFeeSplits?.length;
+
+  // TODO: separate hook for dashboard SetUp button
+  const editRestricted =
+    !isOwner ||
+    !(emptySplits || rewards?.proof.length) ||
+    !(emptySplits || !rewards?.available) ||
+    !!pendingSharesToSplit;
 
   return {
     data: {
       address,
       nodeOperatorId,
-      rewardsAddress,
       currentFeeSplits,
       pendingSharesToSplit,
-      hasPendingShares,
       rewards,
-      isOwner: !!isOwner,
+      isOwner,
+      editRestricted,
     } as SplitsFormNetworkData,
     isPending:
-      isOperatorInfoPending ||
       isFeeSplitsPending ||
       isPendingSharesPending ||
       isOperatorRewardsPending ||

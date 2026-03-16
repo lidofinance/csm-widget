@@ -6,6 +6,7 @@ import {
 import { useOperatorInfo } from 'modules/web3';
 import { useOperatorStakeInfo } from 'modules/web3/hooks/use-operator-stake-info';
 import { useMemo } from 'react';
+import { bigMax } from 'utils';
 import { parseEther } from 'viem';
 
 const MAX_EFFECTIVE_BALANCE = parseEther('2048');
@@ -19,8 +20,6 @@ type StakeAndKeysData = {
   potentialAdditionalStake: bigint;
   potentialAdditionalKeys: number;
 };
-
-const bigMax = (a: bigint, b: bigint) => (a > b ? a : b);
 
 const selectStakeAndKeys =
   (info: NodeOperatorInfo | undefined) =>

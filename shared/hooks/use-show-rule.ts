@@ -16,7 +16,11 @@ import {
 } from 'modules/web3';
 import { useModifyContext } from 'providers/modify-provider';
 import { useCallback, useMemo } from 'react';
-import { useCanClaimICS, useCanCreateNodeOperator } from 'shared/hooks';
+import {
+  useCanClaimICS,
+  useCanCreateNodeOperator,
+  useCanEditSplits,
+} from 'shared/hooks';
 import { Address, isAddressEqual } from 'viem';
 
 export type ShowRule =
@@ -32,6 +36,7 @@ export type ShowRule =
   | 'HAS_REFERRER'
   | 'CAN_CREATE'
   | 'CAN_CLAIM_ICS'
+  | 'CAN_EDIT_SPLITS'
   | 'ICS_APPLY_ENABLED'
   | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE'
@@ -83,6 +88,7 @@ export const useShowFlags = (): ShowFlags => {
   const { data: balance } = useOperatorBalance(nodeOperator?.nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const canCreateNO = useCanCreateNodeOperator();
+  const canEditSplits = useCanEditSplits();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
   const {
@@ -105,6 +111,7 @@ export const useShowFlags = (): ShowFlags => {
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
+      ['CAN_EDIT_SPLITS']: !!canEditSplits && isAccountActive,
       ['ICS_APPLY_ENABLED']: !!featureFlags?.[ICS_APPLY_FORM],
       ['EL_STEALING_REPORTER']: !!isReportingRole,
       ['IS_SURVEYS_ACTIVE']:
@@ -122,6 +129,7 @@ export const useShowFlags = (): ShowFlags => {
       balance?.locked,
       referrer,
       canClaimICS,
+      canEditSplits,
       featureFlags,
       isReportingRole,
       module,

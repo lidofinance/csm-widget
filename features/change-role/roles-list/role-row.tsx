@@ -1,8 +1,8 @@
 import { Button, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
-import { FC, useCallback } from 'react';
+import { FC } from 'react';
 import { Address, OwnerChip, PendingChange, YouChip } from 'shared/components';
-import { useNavigate } from 'shared/navigate';
+import { LocalLink } from 'shared/navigate';
 import { RoleAddressColumn, RoleNameColumn, RoleRowStyle } from './styles';
 
 type RoleRowProps = {
@@ -22,9 +22,6 @@ export const RoleRow: FC<RoleRowProps> = ({
   isOwner,
   path,
 }) => {
-  const navigate = useNavigate();
-  const onEdit = useCallback(() => path && navigate(path), [navigate, path]);
-
   return (
     <RoleRowStyle>
       <RoleNameColumn>
@@ -42,9 +39,11 @@ export const RoleRow: FC<RoleRowProps> = ({
       </RoleAddressColumn>
 
       {path && (
-        <Button size="xs" variant="outlined" onClick={onEdit}>
-          {address ? 'Edit' : 'Set up'}
-        </Button>
+        <LocalLink href={path}>
+          <Button size="xs" variant="outlined">
+            {address ? 'Edit' : 'Set up'}
+          </Button>
+        </LocalLink>
       )}
     </RoleRowStyle>
   );
