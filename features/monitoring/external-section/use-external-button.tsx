@@ -28,6 +28,7 @@ export const useExternalButtons = () => {
       [
         beaconchainEntityLink && {
           title: 'beaconcha.in Entity',
+          'data-testid': 'monitoringBeaconchainEntityLink',
           icon: <BeaconchaIcon />,
           href: beaconchainEntityLink,
           matomoEvent:
@@ -36,6 +37,7 @@ export const useExternalButtons = () => {
         },
         ratedLink && {
           title: 'Rated explorer',
+          'data-testid': 'monitoringRatedExplorerLink',
           icon: <RatedIcon />,
           href: ratedLink,
           matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardExternalRatedLink,
@@ -44,6 +46,7 @@ export const useExternalButtons = () => {
         },
         migaLabsLink && {
           title: 'MigaLabs',
+          'data-testid': 'monitoringMigaLabsLink',
           icon: <MigaLabsIcon />,
           href: migaLabsLink,
           matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardExternalMigaLabsLink,
@@ -52,6 +55,7 @@ export const useExternalButtons = () => {
         },
         beaconchainDashboardLink && {
           title: 'beaconcha.in v2',
+          'data-testid': 'monitoringBeaconchainV2Link',
           icon: <BeaconchaIcon />,
           href: beaconchainDashboardLink,
           matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardExternalBeaconchaLink,
@@ -60,6 +64,7 @@ export const useExternalButtons = () => {
         },
         operatorPortalLink && {
           title: 'Lido Operators Portal',
+          'data-testid': 'monitoringOperatorsPortalLink',
           icon: <LidoIcon />,
           href: operatorPortalLink,
           matomoEvent:
@@ -68,6 +73,7 @@ export const useExternalButtons = () => {
         },
         feesMonitoningLink && {
           title: 'Lido Fees monitoring',
+          'data-testid': 'monitoringFeesLink',
           icon: <LidoIcon />,
           href: feesMonitoningLink,
           matomoEvent:

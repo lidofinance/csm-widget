@@ -8,6 +8,7 @@ export const NOTIFICATION_TOOLS_BUTTONS: ComponentProps<
 >[] = [
   {
     title: 'CSM Sentinel',
+    'data-testid': 'monitoringCsmSentinelLink',
     icon: <CsmIcon />,
     href: 'https://github.com/skhomuti/csm-sentinel',
     matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardNotificationSentinelLink,
