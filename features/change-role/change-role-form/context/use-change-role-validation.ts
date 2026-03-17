@@ -14,7 +14,7 @@ export const useChangeRoleValidation = () => {
     'address',
     async (
       { address, isRevoke },
-      { currentAddress, proposedAddress, isPropose },
+      { currentAddress, proposedAddress, mode },
       validate,
     ) => {
       await validate('address', () => {
@@ -26,7 +26,7 @@ export const useChangeRoleValidation = () => {
       await validate('address', () => {
         if (
           !isRevoke &&
-          isPropose &&
+          mode === 'propose' &&
           compareLowercase(address, currentAddress)
         ) {
           throw new ValidationError(
@@ -39,7 +39,7 @@ export const useChangeRoleValidation = () => {
       await validate('address', () => {
         if (
           !isRevoke &&
-          isPropose &&
+          mode === 'propose' &&
           compareLowercase(address, proposedAddress)
         ) {
           throw new ValidationError(

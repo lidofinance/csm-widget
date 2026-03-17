@@ -1,6 +1,7 @@
 import {
   MODULE_NAME,
   NodeOperatorShortInfo,
+  ROLES,
   TransactionCallback,
   TransactionCallbackStage,
   getNodeOperatorRoles,
@@ -60,8 +61,19 @@ export const useCuratedOperatorSubmit: FormSubmitterHook<
           case TransactionCallbackStage.DONE: {
             const nodeOperatorId = payload.result?.nodeOperatorId;
             const availableGatesCount = networkData.availableGates.length;
+            const roles = payload.result
+              ? getNodeOperatorRoles(payload.result, networkData.address)
+              : [];
+            const hasAnyRole = roles.length > 0;
+            const hasManagerRole = roles.includes(ROLES.MANAGER);
             txModalStages.success(
-              { nodeOperatorId, curveId, availableGatesCount },
+              {
+                nodeOperatorId,
+                curveId,
+                availableGatesCount,
+                hasAnyRole,
+                hasManagerRole,
+              },
               payload.hash,
             );
             break;
@@ -92,10 +104,10 @@ export const useCuratedOperatorSubmit: FormSubmitterHook<
         if (result) {
           const roles = getNodeOperatorRoles(result, networkData.address);
           if (roles.length > 0) {
-            appendNO(result);
+            appendNO(result); // TODO: set new operator as active
+            void n(PATH.HOME);
           } else {
             setOperatorCustomAddresses(result.nodeOperatorId);
-            void n(PATH.HOME);
           }
         }
 

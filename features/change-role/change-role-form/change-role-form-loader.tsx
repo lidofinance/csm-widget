@@ -4,10 +4,9 @@ import { useChangeRoleFormData } from './context';
 import { Info } from './controls/info';
 
 export const ChangeRoleFormLoader: FC<PropsWithChildren> = ({ children }) => {
-  const { isManagerReset, isRewardsChange, isPropose } =
-    useChangeRoleFormData();
+  const { mode } = useChangeRoleFormData();
 
-  const isView = !(isManagerReset || isRewardsChange || isPropose);
+  const isView = mode === 'view';
 
   return <FormLoader>{isView ? <Info /> : children}</FormLoader>;
 };

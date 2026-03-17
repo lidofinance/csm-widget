@@ -8,6 +8,7 @@ import { BannerNotEligible } from './not-eligible/banner-not-eligible';
 import { BannerTryCsm } from './not-eligible/banner-try-csm';
 import { WelcomeSection } from 'shared/components';
 import { NavigateCMv1 } from 'features/welcome/navigate-cm-v1';
+import { BannerOperatorCustomAddresses } from './banner-operator-custom-addresses';
 
 export const CmWelcomePage: FC = () => {
   const { address } = useDappStatus();
@@ -26,6 +27,7 @@ export const CmWelcomePage: FC = () => {
         <InvitesRedirect />
         {!isEligible ? (
           <>
+            <BannerOperatorCustomAddresses />
             <BannerNotEligible />
             <BannerTryCsm />
             <NavigateCMv1 />

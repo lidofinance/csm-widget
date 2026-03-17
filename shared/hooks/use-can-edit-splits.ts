@@ -1,14 +1,12 @@
 import {
-  useDappStatus,
   useFeeSplits,
   useNodeOperatorId,
   useOperatorBalance,
-  useOperatorIsOwner,
   useOperatorRewards,
 } from 'modules/web3';
+import { useShowFlags } from './use-show-rule';
 
 export const useCanEditSplits = () => {
-  const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
 
   const { data: currentFeeSplits } = useFeeSplits(nodeOperatorId);
@@ -17,20 +15,15 @@ export const useCanEditSplits = () => {
     nodeOperatorId,
     (data) => data.pendingSharesToSplit,
   );
-  const { data: isOwner } = useOperatorIsOwner({
-    address,
-    nodeOperatorId,
-  });
+  const { HAS_OWNER_ROLE } = useShowFlags();
 
-  const emptySplits = !currentFeeSplits?.length;
+  const canEditSplits =
+    currentFeeSplits !== undefined &&
+    rewards !== undefined &&
+    HAS_OWNER_ROLE &&
+    (currentFeeSplits.length === 0 || rewards.proof.length > 0) &&
+    (currentFeeSplits.length === 0 || !rewards.available) &&
+    !pendingSharesToSplit;
 
-  const editRestricted =
-    !currentFeeSplits ||
-    !rewards ||
-    !isOwner ||
-    !(emptySplits || rewards?.proof.length) ||
-    !(emptySplits || !rewards?.available) ||
-    !!pendingSharesToSplit;
-
-  return Boolean(nodeOperatorId !== undefined && address && !editRestricted);
+  return canEditSplits;
 };

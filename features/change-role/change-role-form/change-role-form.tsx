@@ -2,7 +2,8 @@ import { FC, memo } from 'react';
 
 import { PATH } from 'consts/urls';
 import { BackButton, FormBlock } from 'shared/components';
-import { Form, FormLoader } from 'shared/hook-form/form-controller';
+import { Form } from 'shared/hook-form/form-controller';
+import { ChangeRoleFormLoader } from './change-role-form-loader';
 import { ChangeRoleFormInfo } from './change-role-form-info';
 import {
   ChangeRoleDataProvider,
@@ -19,14 +20,14 @@ export const ChangeRoleForm: FC<ChangeRoleDataProviderProps> = memo((props) => {
       <ChangeRoleFormProvider {...props}>
         <FormBlock data-testid="changeRoleForm">
           <BackButton text="Back to all roles" href={PATH.SETTINGS} />
-          <FormLoader>
+          <ChangeRoleFormLoader>
             <Form>
               <Info />
               <AddressInput />
               <SubmitButton />
             </Form>
             <ChangeRoleFormInfo />
-          </FormLoader>
+          </ChangeRoleFormLoader>
         </FormBlock>
       </ChangeRoleFormProvider>
     </ChangeRoleDataProvider>

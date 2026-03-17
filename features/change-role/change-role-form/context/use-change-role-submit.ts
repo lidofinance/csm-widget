@@ -28,28 +28,20 @@ const useChangeRoleTx = () => {
 
   return useCallback(
     async (
-      {
-        role,
-        isManagerReset,
-        isRewardsChange,
-      }: Pick<
-        ChangeRoleFormNetworkData,
-        'role' | 'isManagerReset' | 'isRewardsChange'
-      >,
+      { role, mode }: Pick<ChangeRoleFormNetworkData, 'role' | 'mode'>,
       params: ChangeRoleMethodParams,
     ) => {
-      switch (true) {
-        case isRewardsChange:
+      switch (mode) {
+        case 'rewardsChange':
           return sdk.roles.changeRewardsAddress(params);
-        case isManagerReset:
+        case 'managerReset':
           return sdk.roles.resetManagerAddress(params);
-        case role === ROLES.REWARDS:
-          return sdk.roles.proposeRewardsAddress(params);
-        case role === ROLES.MANAGER:
-          return sdk.roles.proposeManagerAddress(params);
-        default: {
-          throw new Error('Not implemented yet: true case');
-        }
+        case 'propose':
+          return role === ROLES.REWARDS
+            ? sdk.roles.proposeRewardsAddress(params)
+            : sdk.roles.proposeManagerAddress(params);
+        default:
+          throw new Error(`Unexpected mode: ${mode}`);
       }
     },
     [sdk],
@@ -72,15 +64,7 @@ export const useChangeRoleSubmit: FormSubmitterHook<
   return useCallback(
     async (
       { address: addressRaw, isRevoke },
-      {
-        nodeOperatorId,
-        proposedAddress,
-        currentAddress,
-        role,
-        isPropose,
-        isManagerReset,
-        isRewardsChange,
-      },
+      { nodeOperatorId, proposedAddress, currentAddress, role, mode },
       { onConfirm, onRetry },
     ) => {
       const address = isRevoke ? zeroAddress : (addressRaw ?? zeroAddress);
@@ -90,7 +74,7 @@ export const useChangeRoleSubmit: FormSubmitterHook<
 
       if (
         !isRevoke &&
-        isPropose &&
+        mode === 'propose' &&
         role === ROLES.REWARDS &&
         !(await confirmRewardsRole({}))
       ) {
@@ -99,7 +83,7 @@ export const useChangeRoleSubmit: FormSubmitterHook<
 
       if (
         !isRevoke &&
-        isPropose &&
+        mode === 'propose' &&
         proposedAddress &&
         !(await confirmRepropose({}))
       ) {
@@ -111,10 +95,8 @@ export const useChangeRoleSubmit: FormSubmitterHook<
           address,
           currentAddress,
           role,
-          isPropose,
+          mode,
           isRevoke,
-          isRewardsChange,
-          isManagerReset,
         };
 
         const callback: TransactionCallback<NodeOperatorShortInfo> = async ({
@@ -143,7 +125,7 @@ export const useChangeRoleSubmit: FormSubmitterHook<
         };
 
         const { result } = await changeRoleMethod(
-          { role, isRewardsChange, isManagerReset },
+          { role, mode },
           {
             nodeOperatorId,
             address,

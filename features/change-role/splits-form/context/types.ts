@@ -13,6 +13,6 @@ export type SplitsFormNetworkData = {
   currentFeeSplits: FeeSplit[];
   rewards: Rewards;
   pendingSharesToSplit: bigint;
+  canEdit: boolean;
   isOwner: boolean;
-  editRestricted: boolean;
 };

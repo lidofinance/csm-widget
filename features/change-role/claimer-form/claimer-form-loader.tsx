@@ -4,7 +4,7 @@ import { useClaimerFormData } from './context';
 import { Info } from './controls/info';
 
 export const ClaimerFormLoader: FC<PropsWithChildren> = ({ children }) => {
-  const { isOwner } = useClaimerFormData();
+  const { canEdit } = useClaimerFormData();
 
-  return <FormLoader>{isOwner ? children : <Info />}</FormLoader>;
+  return <FormLoader>{canEdit ? children : <Info />}</FormLoader>;
 };

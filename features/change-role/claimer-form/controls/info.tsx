@@ -6,7 +6,7 @@ import { ClaimerFormInputType, useClaimerFormData } from '../context';
 import { Text } from '@lidofinance/lido-ui';
 
 export const Info: FC = () => {
-  const { currentClaimerAddress, isOwner } = useClaimerFormData(true);
+  const { currentClaimerAddress, canEdit } = useClaimerFormData(true);
   const { setValue } = useFormContext<ClaimerFormInputType>();
 
   const unsetHandle = useCallback(() => {
@@ -24,7 +24,7 @@ export const Info: FC = () => {
             title={
               <>
                 Current Rewards claimer
-                {isOwner && (
+                {canEdit && (
                   <SubmitButtonHookForm
                     variant="outlined"
                     size="xs"

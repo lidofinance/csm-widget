@@ -12,17 +12,19 @@ import { SplitRowView } from './split-row-view';
 export const ViewSplits: FC = () => {
   const { setValue } = useFormContext<SplitsFormInputType>();
   const handleEdit = useCallback(() => setValue('isEditing', true), [setValue]);
-  const { currentFeeSplits, editRestricted, rewards, pendingSharesToSplit } =
+  const { currentFeeSplits, canEdit, rewards, pendingSharesToSplit } =
     useSplitsFormData(true);
 
   return (
     <>
-      {currentFeeSplits.length === 0 && rewards.proof.length === 0 ? (
+      {canEdit &&
+      currentFeeSplits.length === 0 &&
+      rewards.proof.length === 0 ? (
         <WarningBlockStyle>
           You can set up rewards splitting now. Please note that editing will
           only be available after your first rewards are distributed.
         </WarningBlockStyle>
-      ) : currentFeeSplits.length === 0 && rewards.available ? (
+      ) : canEdit && currentFeeSplits.length === 0 && rewards.available ? (
         <WarningBlockStyle>
           <Stack gap="md" center>
             You have unclaimed rewards. If you set up splitting now, unclaimed
@@ -91,7 +93,7 @@ export const ViewSplits: FC = () => {
         </Stack>
       )}
 
-      {!editRestricted && (
+      {canEdit && (
         <Button fullwidth onClick={handleEdit}>
           {currentFeeSplits.length > 0 ? 'Edit splits' : 'Set up splits'}
         </Button>

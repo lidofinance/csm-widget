@@ -17,7 +17,11 @@ import {
   Stack,
   YouChip,
 } from 'shared/components';
-import { useShowFlags } from 'shared/hooks';
+import {
+  useCanEditClaimer,
+  useCanEditSplits,
+  useShowFlags,
+} from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { zeroAddress } from 'viem';
 import { DividerStyle, RoleRowStyle, RolesGrid } from './styles';
@@ -32,7 +36,9 @@ export const RolesSection: FC = () => {
   const { data: info } = useOperatorInfo(nodeOperatorId);
   const { data: claimerAddress } = useCustomRewardsClaimer(nodeOperatorId);
   const { data: feeSplits } = useFeeSplits(nodeOperatorId);
-  const { HAS_MANAGER_ROLE, HAS_REWARDS_ROLE, HAS_OWNER_ROLE } = useShowFlags();
+  const { HAS_MANAGER_ROLE, HAS_REWARDS_ROLE } = useShowFlags();
+  const canEditClaimer = useCanEditClaimer();
+  const canEditSplits = useCanEditSplits();
 
   const isClaimerSet = !!claimerAddress && claimerAddress !== zeroAddress;
 
@@ -91,7 +97,7 @@ export const RolesSection: FC = () => {
           <Text size="xs">Rewards claimer</Text>
           <Stack direction="column" gap="md">
             {isClaimerSet && <Address address={claimerAddress} showIcon />}
-            {HAS_OWNER_ROLE && !isClaimerSet && (
+            {!isClaimerSet && canEditClaimer && (
               <LocalLink href={PATH.SETTINGS_CLAIMER}>
                 <Button size="xs" variant="outlined">
                   Set up
@@ -114,7 +120,7 @@ export const RolesSection: FC = () => {
                 </Text>
               </Stack>
             ))}
-            {HAS_OWNER_ROLE && !feeSplits?.length && (
+            {!feeSplits?.length && canEditSplits && (
               <LocalLink href={PATH.SETTINGS_SPLITS}>
                 <Button size="xs" variant="outlined">
                   Set up

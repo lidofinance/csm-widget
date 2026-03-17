@@ -11,7 +11,8 @@ type RoleRowProps = {
   proposedAddress?: string;
   isYou?: boolean;
   isOwner?: boolean;
-  path?: PATH;
+  canEdit?: boolean;
+  path: PATH;
 };
 
 export const RoleRow: FC<RoleRowProps> = ({
@@ -20,8 +21,11 @@ export const RoleRow: FC<RoleRowProps> = ({
   proposedAddress,
   isYou,
   isOwner,
+  canEdit = false,
   path,
 }) => {
+  const buttonLabel = canEdit ? (!address ? 'Set up' : 'Edit') : 'View';
+
   return (
     <RoleRowStyle>
       <RoleNameColumn>
@@ -38,13 +42,11 @@ export const RoleRow: FC<RoleRowProps> = ({
         {proposedAddress && <PendingChange address={proposedAddress} />}
       </RoleAddressColumn>
 
-      {path && (
-        <LocalLink href={path}>
-          <Button size="xs" variant="outlined">
-            {address ? 'Edit' : 'Set up'}
-          </Button>
-        </LocalLink>
-      )}
+      <LocalLink href={path}>
+        <Button size="xs" variant="outlined">
+          {buttonLabel}
+        </Button>
+      </LocalLink>
     </RoleRowStyle>
   );
 };
