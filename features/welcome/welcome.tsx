@@ -36,7 +36,7 @@ export const Welcome: FC = () => {
           <ConnectStyle
             fullwidth
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.connectWallet} // TODO: dedicated event for welcome page
-            data-testid="connect-wallet"
+            data-testid="connectWallet"
           >
             Connect wallet
           </ConnectStyle>
