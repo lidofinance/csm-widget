@@ -11,6 +11,7 @@ import {
   TxStageSign,
   TxStageSuccess,
 } from 'shared/transaction-modal/tx-stages-basic';
+import { CuratedOperatorCustomAddressActions } from '../custom-address-actions';
 import { CuratedOperatorSuccessActions } from '../success-actions';
 
 type SignPendingProps = {
@@ -21,6 +22,8 @@ type SuccessProps = {
   nodeOperatorId?: NodeOperatorId;
   curveId: bigint;
   availableGatesCount: number;
+  hasAnyRole: boolean;
+  hasManagerRole: boolean;
 };
 
 const getTxModalStagesCuratedOperator = (
@@ -54,7 +57,12 @@ const getTxModalStagesCuratedOperator = (
     ),
 
   success: (
-    { nodeOperatorId, availableGatesCount }: SuccessProps,
+    {
+      nodeOperatorId,
+      availableGatesCount,
+      hasAnyRole,
+      hasManagerRole,
+    }: SuccessProps,
     txHash?: string,
   ) => {
     return transitStage(
@@ -69,9 +77,16 @@ const getTxModalStagesCuratedOperator = (
           ) : undefined
         }
         footer={
-          <CuratedOperatorSuccessActions
-            availableGatesCount={availableGatesCount}
-          />
+          hasAnyRole ? (
+            <CuratedOperatorSuccessActions
+              availableGatesCount={availableGatesCount}
+              hasManagerRole={hasManagerRole}
+            />
+          ) : (
+            <CuratedOperatorCustomAddressActions
+              availableGatesCount={availableGatesCount}
+            />
+          )
         }
       />,
       {

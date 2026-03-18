@@ -8,6 +8,12 @@ import {
 } from 'modules/web3';
 import { FC } from 'react';
 import { FormBlock, Stack } from 'shared/components';
+import {
+  useCanEditClaimer,
+  useCanEditManagerRole,
+  useCanEditRewardsRole,
+  useCanEditSplits,
+} from 'shared/hooks';
 import { useShowFlags } from 'shared/hooks/use-show-rule';
 import { zeroAddress } from 'viem';
 import { RoleRow } from './role-row';
@@ -19,12 +25,12 @@ export const RolesList: FC = () => {
   const { data: info } = useOperatorInfo(nodeOperatorId);
   const { data: claimerAddress } = useCustomRewardsClaimer(nodeOperatorId);
   const { data: feeSplits } = useFeeSplits(nodeOperatorId);
-  const {
-    HAS_MANAGER_ROLE,
-    HAS_REWARDS_ROLE,
-    HAS_OWNER_ROLE,
-    CAN_EDIT_SPLITS,
-  } = useShowFlags();
+  const { HAS_MANAGER_ROLE, HAS_REWARDS_ROLE } = useShowFlags();
+
+  const canEditRewards = !!useCanEditRewardsRole();
+  const canEditManager = !!useCanEditManagerRole();
+  const canEditClaimer = useCanEditClaimer();
+  const canEditSplits = useCanEditSplits();
 
   const isClaimerSet = !!claimerAddress && claimerAddress !== zeroAddress;
 
@@ -41,6 +47,7 @@ export const RolesList: FC = () => {
           proposedAddress={info?.proposedRewardsAddress}
           isYou={HAS_REWARDS_ROLE}
           isOwner={!info?.extendedManagerPermissions}
+          canEdit={canEditRewards}
           path={PATH.SETTINGS_REWARDS_ADDRESS}
         />
 
@@ -52,6 +59,7 @@ export const RolesList: FC = () => {
           proposedAddress={info?.proposedManagerAddress}
           isYou={HAS_MANAGER_ROLE}
           isOwner={!!info?.extendedManagerPermissions}
+          canEdit={canEditManager}
           path={PATH.SETTINGS_MANAGER_ADDRESS}
         />
 
@@ -60,7 +68,8 @@ export const RolesList: FC = () => {
         <RoleRow
           title="Rewards claimer"
           address={isClaimerSet ? claimerAddress : undefined}
-          path={HAS_OWNER_ROLE ? PATH.SETTINGS_CLAIMER : undefined}
+          path={PATH.SETTINGS_CLAIMER}
+          canEdit={canEditClaimer}
         />
 
         <Divider />
@@ -68,7 +77,7 @@ export const RolesList: FC = () => {
         <SplitterRow
           feeSplits={feeSplits}
           path={PATH.SETTINGS_SPLITS}
-          canEdit={CAN_EDIT_SPLITS}
+          canEdit={canEditSplits}
         />
       </Stack>
     </FormBlock>

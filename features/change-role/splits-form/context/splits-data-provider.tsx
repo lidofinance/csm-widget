@@ -4,7 +4,6 @@ import {
   useFeeSplits,
   useNodeOperatorId,
   useOperatorBalance,
-  useOperatorIsOwner,
   useOperatorRewards,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
@@ -13,7 +12,7 @@ import {
   NetworkData,
   useFormData,
 } from 'shared/hook-form/form-controller';
-import { useInvalidate } from 'shared/hooks';
+import { useCanEditSplits, useInvalidate, useShowFlags } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { type SplitsFormNetworkData } from './types';
 
@@ -28,25 +27,15 @@ const useSplitsFormNetworkData: NetworkData<SplitsFormNetworkData> = () => {
     useOperatorRewards(nodeOperatorId);
   const { data: pendingSharesToSplit, isPending: isPendingSharesPending } =
     useOperatorBalance(nodeOperatorId, (data) => data.pendingSharesToSplit);
-  const { data: isOwner, isPending: isOwnerPending } = useOperatorIsOwner({
-    address,
-    nodeOperatorId,
-  });
+
+  const canEdit = useCanEditSplits();
+  const { HAS_OWNER_ROLE: isOwner } = useShowFlags();
 
   const invalidate = useInvalidate();
 
   const revalidate = useCallback(() => {
     invalidate([KEY_FEE_SPLITS]);
   }, [invalidate]);
-
-  const emptySplits = !currentFeeSplits?.length;
-
-  // TODO: separate hook for dashboard SetUp button
-  const editRestricted =
-    !isOwner ||
-    !(emptySplits || rewards?.proof.length) ||
-    !(emptySplits || !rewards?.available) ||
-    !!pendingSharesToSplit;
 
   return {
     data: {
@@ -55,14 +44,11 @@ const useSplitsFormNetworkData: NetworkData<SplitsFormNetworkData> = () => {
       currentFeeSplits,
       pendingSharesToSplit,
       rewards,
+      canEdit,
       isOwner,
-      editRestricted,
     } as SplitsFormNetworkData,
     isPending:
-      isFeeSplitsPending ||
-      isPendingSharesPending ||
-      isOperatorRewardsPending ||
-      isOwnerPending,
+      isFeeSplitsPending || isPendingSharesPending || isOperatorRewardsPending,
     revalidate,
   };
 };

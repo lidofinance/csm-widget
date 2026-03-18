@@ -2,17 +2,16 @@ import { Button } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { useModalActions } from 'providers/modal-provider';
 import { FC } from 'react';
-import { LocalLink, useNavigate } from 'shared/navigate';
+import { useNavigate } from 'shared/navigate';
+import { Disconnect } from 'shared/wallet';
 import styled from 'styled-components';
 
 type Props = {
   availableGatesCount: number;
-  hasManagerRole: boolean;
 };
 
-export const CuratedOperatorSuccessActions: FC<Props> = ({
+export const CuratedOperatorCustomAddressActions: FC<Props> = ({
   availableGatesCount,
-  hasManagerRole,
 }) => {
   const n = useNavigate();
   const { closeModal } = useModalActions();
@@ -26,13 +25,17 @@ export const CuratedOperatorSuccessActions: FC<Props> = ({
 
   return (
     <ActionsContainer>
-      {hasManagerRole && (
-        <LocalLink href={PATH.KEYS_SUBMIT}>
-          <Button fullwidth size="sm">
-            Add keys
-          </Button>
-        </LocalLink>
-      )}
+      <Description>
+        To continue, connect with the address you specified as Reward/Manager
+        Address
+        {showCreateAnother
+          ? ' or create a new Node Operator using the currently connected address'
+          : ''}
+        .
+      </Description>
+      <Disconnect onClick={() => closeModal()} fullwidth>
+        Disconnect wallet
+      </Disconnect>
       {showCreateAnother && (
         <Button
           fullwidth
@@ -52,4 +55,10 @@ const ActionsContainer = styled.div`
   flex-direction: column;
   gap: ${({ theme }) => theme.spaceMap.md}px;
   width: 100%;
+`;
+
+const Description = styled.p`
+  text-align: center;
+  color: var(--lido-color-textSecondary);
+  margin: 0;
 `;

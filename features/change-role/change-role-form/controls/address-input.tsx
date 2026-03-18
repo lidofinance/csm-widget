@@ -4,7 +4,7 @@ import { useRole } from '../hooks/use-role';
 import { useChangeRoleFormData } from '../context';
 
 export const AddressInput: React.FC = () => {
-  const { isManagerReset } = useChangeRoleFormData(true);
+  const { mode } = useChangeRoleFormData(true);
   const role = useRole();
 
   return (
@@ -13,7 +13,7 @@ export const AddressInput: React.FC = () => {
       <AddressInputHookForm
         fieldName="address"
         label={`New ${role} address`}
-        isLocked={isManagerReset}
+        isLocked={mode === 'managerReset'}
       />
     </>
   );

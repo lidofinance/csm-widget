@@ -1,4 +1,6 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { config } from 'config';
+import { MODULE_METADATA } from 'consts';
 import { getExternalLinks, SUBSCRIBE_EVENTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useModalActions } from 'providers/modal-provider';
@@ -25,8 +27,8 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
         <br />
         <ol>
           <li>
-            Connect to CSM UI with the address you specified as Reward/Manager
-            Address
+            Connect to {MODULE_METADATA[config.module].shortTitle} UI with the
+            address you specified as Reward/Manager Address
           </li>
           <li>Wait for your keys to be deposited to through the protocol.</li>
           <li>

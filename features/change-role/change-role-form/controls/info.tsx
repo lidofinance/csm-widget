@@ -8,13 +8,15 @@ import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { isAddressEqual } from 'viem';
 import { ChangeRoleFormInputType, useChangeRoleFormData } from '../context';
 import { useRole } from '../hooks/use-role';
+import { MODULE_METADATA } from 'consts';
+import { config } from 'config';
 
 export const Info: FC = () => {
   const roleTitle = useRole();
   const {
     currentAddress,
     proposedAddress,
-    isPropose,
+    mode,
     address,
     extendedManagerPermissions,
     role,
@@ -48,7 +50,7 @@ export const Info: FC = () => {
               title={
                 <>
                   <Warning text="Pending change" />
-                  {isPropose && (
+                  {mode === 'propose' && (
                     <SubmitButtonHookForm
                       variant="outlined"
                       size="xs"
@@ -68,7 +70,10 @@ export const Info: FC = () => {
             </Text>
             <Text as="div" size="xxs">
               <ol>
-                <li>Connect to CSM UI with the proposed address</li>
+                <li>
+                  Connect to {MODULE_METADATA[config.module].shortTitle} UI with
+                  the proposed address
+                </li>
                 <li>Go to Roles tab → Inbox requests to confirm the change</li>
               </ol>
             </Text>

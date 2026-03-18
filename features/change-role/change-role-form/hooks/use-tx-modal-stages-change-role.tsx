@@ -13,19 +13,18 @@ import {
   useTransactionModalStage,
 } from 'shared/transaction-modal';
 import { Address } from 'viem';
+import { ChangeRoleMode } from '../context/types';
 
 type Props = {
   address: Address;
   currentAddress: Address;
   role: ROLES;
-  isManagerReset: boolean;
-  isRewardsChange: boolean;
-  isPropose: boolean;
+  mode: ChangeRoleMode;
   isRevoke: boolean;
 };
 
 const getTexts = (props: Props) => {
-  return props.isManagerReset || props.isRewardsChange
+  return props.mode === 'managerReset' || props.mode === 'rewardsChange'
     ? {
         sign: {
           title: `You are changing ${ROLES_METADATA[props.role].title} address`,

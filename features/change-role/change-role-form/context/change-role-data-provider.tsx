@@ -12,9 +12,8 @@ import {
   NetworkData,
   useFormData,
 } from 'shared/hook-form/form-controller';
-import { useInvalidate } from 'shared/hooks';
+import { useChangeRoleMode, useInvalidate } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { compareLowercase } from 'utils';
 import { type ChangeRoleFormNetworkData } from './types';
 
 const useChangeRoleFormNetworkData: NetworkData<
@@ -43,22 +42,7 @@ const useChangeRoleFormNetworkData: NetworkData<
       ? info?.proposedRewardsAddress
       : info?.proposedManagerAddress;
 
-  const isManagerReset =
-    role === ROLES.MANAGER &&
-    !info?.extendedManagerPermissions &&
-    compareLowercase(info?.rewardsAddress, address) &&
-    !compareLowercase(info?.managerAddress, address);
-
-  const isRewardsChange =
-    role === ROLES.REWARDS &&
-    !!info?.extendedManagerPermissions &&
-    compareLowercase(info.managerAddress, address);
-
-  const isPropose =
-    !isManagerReset &&
-    !isRewardsChange &&
-    compareLowercase(currentAddress, address);
-
+  const mode = useChangeRoleMode(role);
   const extendedManagerPermissions = info?.extendedManagerPermissions;
 
   return {
@@ -68,9 +52,7 @@ const useChangeRoleFormNetworkData: NetworkData<
       currentAddress,
       proposedAddress,
       nodeOperatorId,
-      isManagerReset,
-      isRewardsChange,
-      isPropose,
+      mode,
       extendedManagerPermissions,
     } as ChangeRoleFormNetworkData,
     isPending: isInfoLoading,
