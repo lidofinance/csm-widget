@@ -1,53 +1,47 @@
 import { expect, Page, test } from '@playwright/test';
-import { ElementController } from '../../csm-widget/pages/elements/controller';
+import { ElementController } from '../pages/elements/controller';
 import {
   WalletPage,
   WalletConnectType,
   WalletConnectTypes,
 } from '@lidofinance/wallets-testing-wallets';
 import {
-  MainPage,
   KeysPage,
   DashboardPage,
   SettingsPage,
-} from '../../csm-widget/pages';
-import { DepositKey } from './keysGenerator.service';
-import { TokenSymbol } from '../consts/common.const';
+  BondRewardsPage,
+} from '../pages';
+import { DepositKey } from '../../shared/services/keysGenerator.service';
+import { TokenSymbol } from '../../shared/consts/common.const';
 import { AssertionError } from 'assert';
 import {
   STAGE_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
-} from '../consts/timeouts';
-import { BondRewardsPage } from '../../csm-widget/pages/bondRewards.page';
+} from '../../shared/consts/timeouts';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { OperatorTypePage } from '../../csm-widget/pages/operatorType.page';
 import { FeatureFlagsType } from 'config/feature-flags/types';
 
 type FeatureFlagName = keyof FeatureFlagsType;
 
 export class WidgetService {
-  public mainPage: MainPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
   public settingsPage: SettingsPage;
   public bondRewardsPage: BondRewardsPage;
-  public operatorType: OperatorTypePage;
 
   constructor(
     public page: Page,
     public walletPage: WalletPage<WalletConnectType>,
   ) {
-    this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
     this.bondRewardsPage = new BondRewardsPage(this.page);
-    this.operatorType = new OperatorTypePage(this.page, this.walletPage);
   }
 
   async connectWallet(expectConnectionState = true) {
     await test.step('Open default page for connect.', async () => {
-      await this.page.goto('/?survey-setup=1&wallet-rpc=1');
+      await this.page.goto('');
     });
     await test.step('Connect wallet to widget', async () => {
       const element = new ElementController(this.page);

@@ -6,7 +6,7 @@ import { IConfig } from '../config/configs/base.config';
 import { REFUSE_CF_BLOCK_COOKIE } from '../../shared/config/storageState';
 import { LidoSDKClient } from '../services/csmSDK.client';
 import { SdkService } from '../../shared/services/ethereumSDK.client';
-import { WidgetService } from '../../shared/services/widget.service';
+import { WidgetService } from '../services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from '../../shared/consts/timeouts';
 import ForkActionsService from '../../shared/services/forkActions.service';

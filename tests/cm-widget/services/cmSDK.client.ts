@@ -3,14 +3,19 @@ import { widgetFullConfig } from '../config';
 import { LidoSDKCm } from '@lidofinance/lido-csm-sdk';
 import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import { formatEther } from 'viem';
+import { parseDevnetAddresses } from './devnet';
 
 export class LidoSDKClient extends LidoSDKCm {
-  constructor(rpcUrls: string[]) {
+  constructor(rpcUrls: string[], devnetAddresses: Record<string, string>) {
     const core = new LidoSDKCore({
       chainId: widgetFullConfig.standConfig.networkConfig.chainId,
       rpcUrls,
     });
-    super({ core });
+
+    const overridedAddresses = devnetAddresses
+      ? parseDevnetAddresses(devnetAddresses)
+      : undefined;
+    super({ core, overridedAddresses });
   }
 
   async getBondSummary(nodeOperatorNumber: number) {

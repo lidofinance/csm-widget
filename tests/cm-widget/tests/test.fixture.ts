@@ -1,4 +1,5 @@
 /* eslint-disable no-empty-pattern */
+import fs from 'fs';
 import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from '../config';
@@ -6,12 +7,13 @@ import { IConfig } from '../config/configs/base.config';
 import { REFUSE_CF_BLOCK_COOKIE } from '../../shared/config/storageState';
 import { LidoSDKClient } from '../services/cmSDK.client';
 import { SdkService } from '../../shared/services/ethereumSDK.client';
-import { WidgetService } from '../../shared/services/widget.service';
+import { WidgetService } from '../services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from '../../shared/consts/timeouts';
 import ForkActionsService from '../../shared/services/forkActions.service';
 import { warmUpForkedNode } from '../../shared/helpers/warmUpFork';
 import { HttpMockerService } from '../../shared/services/httpMocker.service';
+import path from 'path';
 
 type WorkerFixtures = {
   // fixture-options
@@ -21,7 +23,7 @@ type WorkerFixtures = {
   autoConnectWallet: boolean;
   browserWithWallet: BrowserService;
   widgetService: WidgetService;
-  csmSDK: LidoSDKClient;
+  cmSDK: LidoSDKClient;
   ethereumSDK: SdkService;
   forkActionService: ForkActionsService;
   httpMockerService: HttpMockerService;
@@ -64,7 +66,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
   // fixture-methods
   browserWithWallet: [
-    async ({ secretPhrase, useFork, csmSDK }, use) => {
+    async ({ secretPhrase, useFork, cmSDK }, use) => {
       const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
       const rpcUrl = useFork
         ? forkRpcURL
@@ -83,7 +85,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
         nodeConfig: {
           ...widgetFullConfig.standConfig.nodeConfig,
           useExternalFork: true,
-          warmUpCallback: warmUpForkedNode.bind(null, csmSDK, secretPhrase),
+          warmUpCallback: warmUpForkedNode.bind(null, cmSDK, secretPhrase),
         },
         browserOptions: {
           reducedMotion: 'reduce',
@@ -118,14 +120,29 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
     },
     { scope: 'worker' },
   ],
-  csmSDK: [
+  cmSDK: [
     async ({ useFork }, use) => {
       const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
       const rpcUrl = useFork
         ? forkRpcURL
         : widgetFullConfig.standConfig.networkConfig.rpcUrl;
 
-      await use(new LidoSDKClient([rpcUrl]));
+      // Load devnet contract addresses from JSON file if specified
+      let devnetAddresses = null;
+      if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
+        try {
+          const filePath = path.resolve(process.env.DEVNET_ADDRESSES_FILE_PATH);
+          devnetAddresses = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+        } catch (e) {
+          if (e instanceof Error) {
+            console.warn('Failed to load devnet addresses:', e.message);
+          } else {
+            console.warn('Failed to load devnet addresses:', e);
+          }
+        }
+      }
+
+      await use(new LidoSDKClient([rpcUrl], devnetAddresses));
     },
     { scope: 'worker' },
   ],
