@@ -18,6 +18,16 @@ export const LayoutStyle = styled(Container)`
     'nav main alerts'
     'footer footer footer';
 
+  &:has(nav[data-desktop-hidden]) {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      'header'
+      'alerts'
+      'main'
+      'footer';
+  }
+
   ${({ theme }) => theme.mediaQueries.xl} {
     grid-template-columns: var(--layout-side-width) 1fr;
     grid-template-rows:
@@ -30,6 +40,7 @@ export const LayoutStyle = styled(Container)`
       'footer footer';
 
     &:has(nav[hidden]),
+    &:has(nav[data-desktop-hidden]),
     &:not(:has(nav)) {
       grid-template-columns: 1fr;
       grid-template-areas:

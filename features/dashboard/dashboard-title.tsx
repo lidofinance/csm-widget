@@ -28,25 +28,32 @@ const CmTitle: FC = () => {
     <Stack center gap="sm" selfJustify="center">
       <span>{metadata?.name}</span>
       {!metadata?.ownerEditsRestricted && (
-        <StyledLink
+        <StyledLocalLink
           href={PATH.SETTINGS_METADATA}
           title="Edit Operator Metadata"
         >
           <Edit />
-        </StyledLink>
+        </StyledLocalLink>
       )}
     </Stack>
   );
 };
 
-const StyledLink = styled(LocalLink)`
+export const StyledLocalLink = styled(LocalLink)`
   display: inline-flex;
+  font-weight: normal;
+  svg {
+    color: var(--lido-color-textSecondary);
+  }
 
   &,
   &:visited {
-    color: ${({ theme }) => theme.colors.textSecondary};
+    color: var(--lido-color-text);
   }
   &:hover {
-    color: ${({ theme }) => theme.colors.primary};
+    color: var(--lido-color-primary);
+    svg {
+      color: currentColor;
+    }
   }
 `;

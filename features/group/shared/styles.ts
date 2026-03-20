@@ -42,7 +42,6 @@ export const StakeBarSegment = styled.div<{
   $color: string;
   $width: number;
 }>`
-  display: inline-block;
   height: 100%;
   width: ${({ $width }) => $width}%;
   background: ${({ $color }) => $color};

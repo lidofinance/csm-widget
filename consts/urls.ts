@@ -46,6 +46,8 @@ export const PATH = <const>{
   SURVEYS_DELEGATES: '/surveys/delegates',
   SURVEYS_DELEGATOR: '/surveys/delegator',
 
+  GROUP: '/group',
+
   WRAPPED_SHARE: '/wrapped-2025/share',
 };
 

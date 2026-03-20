@@ -19,12 +19,14 @@ type Props = {
   title?: ReactNode;
   subtitle?: ReactNode;
   dummy?: boolean | 'semi';
+  noNav?: boolean;
   pageName?: string;
 };
 
 export const Layout: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
+  noNav,
   title,
   subtitle,
   pageName,
@@ -43,7 +45,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
         <DummyHeader />
       ) : (
         <>
-          <Navigation />
+          <Navigation desktopHidden={noNav} />
           <Header />
           <AlertContainer />
         </>

@@ -1,7 +1,7 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { isModuleCM } from 'consts';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import {
   Plural,
   ShortInlineLoader,
@@ -9,17 +9,28 @@ import {
   Stack,
   StatusComment,
 } from 'shared/components';
+import { MoreKeysChip } from 'features/group/shared';
 import { KeysItem } from './keys-item';
 import { AccordionStyle, Alert, Check } from './styles';
 import { useKeysBreakdown } from './use-keys-breakdown';
-import { useNodeOperatorId } from 'modules/web3';
-import { useStakeAndKeys } from '../stake-and-keys/use-stake-and-keys';
+import {
+  useNodeOperatorId,
+  useOperatorInfo,
+  useOperatorStakeSummary,
+} from 'modules/web3';
+import { computeStakeData } from 'utils';
 
 export const KeysBreakdown: FC = () => {
-  const id = useNodeOperatorId();
-  const { data, isPending } = useKeysBreakdown(id);
-  const { data: stakeAndKeys } = useStakeAndKeys(id);
-  const moreKeys = (stakeAndKeys?.potentialAdditionalKeys ?? 0) > 0;
+  const nodeOperatorId = useNodeOperatorId();
+  const { data, isPending } = useKeysBreakdown(nodeOperatorId);
+  const { data: stakeSummary } = useOperatorStakeSummary(nodeOperatorId);
+  const { data: info } = useOperatorInfo(nodeOperatorId);
+
+  const moreKeys = useMemo(() => {
+    const stakeAndKeys =
+      stakeSummary && info ? computeStakeData(stakeSummary, info) : undefined;
+    return (stakeAndKeys?.potentialAdditionalKeys ?? 0) > 0;
+  }, [info, stakeSummary]);
 
   return (
     <AccordionStyle
@@ -142,22 +153,6 @@ export const KeysBreakdown: FC = () => {
     </AccordionStyle>
   );
 };
-
-const MoreKeysChip: FC<{ more: boolean }> = ({ more }) => (
-  <SquaredChip variant={more ? 'warning' : 'success'}>
-    {more ? (
-      <>
-        <Alert />
-        Upload more keys
-      </>
-    ) : (
-      <>
-        <Check />
-        Enough keys
-      </>
-    )}
-  </SquaredChip>
-);
 
 const IssuesChip: FC<{ issues?: number }> = ({ issues = 0 }) => (
   <SquaredChip variant={issues > 0 ? 'error' : 'success'}>

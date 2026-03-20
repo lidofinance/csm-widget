@@ -39,4 +39,5 @@ export * from './serialize-bigint';
 export * from './standard-fetcher';
 export * from './track-matomo-event';
 export * from './wei-to-eth';
+export * from './compute-stake-data';
 export * from './wrapped-hash-codec';
