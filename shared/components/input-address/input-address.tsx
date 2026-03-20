@@ -1,15 +1,8 @@
 import { Address, Identicon, Loader } from '@lidofinance/lido-ui';
-import {
-  ChangeEvent,
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-} from 'react';
-import { useAddressResolution } from 'shared/hooks';
+import { ChangeEvent, forwardRef, useCallback, useEffect, useRef } from 'react';
+import { useEnsResolution } from 'shared/hooks/use-ens-resolution';
 import { InputDecoratorLocked } from '../input-amount/input-decorator-locked';
-import { AddressChip, StyledInput } from './styles';
+import { AddressChip, IdenticonSlot, StyledInput } from './styles';
 import { InputAddressProps } from './types';
 import { VerifiedChip } from './verified-chip';
 
@@ -30,29 +23,39 @@ export const InputAddress = forwardRef<
     },
     ref,
   ) => {
-    const inputRef = useRef<HTMLInputElement>(null);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    useImperativeHandle(ref, () => inputRef.current!, []);
-    const { address, isLoading, resolveAddress } = useAddressResolution();
+    const { inputValue, address, ensName, isEns, isLoading, handleChange } =
+      useEnsResolution();
 
+    // Track what we emitted to parent to distinguish echoes from external changes
+    const initializedRef = useRef(false);
+    const emittedRef = useRef('');
+
+    // Notify parent when resolved address changes (skip initial mount)
     useEffect(() => {
-      if (address.value !== undefined) onChange?.(address.value);
+      const emitValue = address ?? '';
+      emittedRef.current = emitValue;
+      if (!initializedRef.current) {
+        initializedRef.current = true;
+        return;
+      }
+      onChange?.(emitValue);
     }, [address, onChange]);
 
-    const handleChange = useCallback(
-      (e: ChangeEvent<HTMLInputElement>) => {
-        const currentValue = e.currentTarget.value;
-        void resolveAddress(currentValue);
-      },
-      [resolveAddress],
-    );
-
+    // Sync from parent value prop (programmatic fills only)
     useEffect(() => {
-      if (inputRef.current) {
-        inputRef.current.value = value ?? '';
+      if (value === emittedRef.current) return;
+      if (value !== undefined && value !== inputValue) {
+        handleChange(value);
       }
-      void resolveAddress(value ?? '');
-    }, [resolveAddress, value]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value]);
+
+    const onInputChange = useCallback(
+      (e: ChangeEvent<HTMLInputElement>) => {
+        handleChange(e.currentTarget.value);
+      },
+      [handleChange],
+    );
 
     return (
       <StyledInput
@@ -60,25 +63,29 @@ export const InputAddress = forwardRef<
         label={
           <>
             {label}
-            {address.ens && address.value && (
+            {isEns && address && (
               <AddressChip>
-                <Address address={address.value} symbols={32} />
+                <Address address={address} symbols={32} />
               </AddressChip>
             )}
+            {!isEns && ensName && <AddressChip>{ensName}</AddressChip>}
             {addressName && <VerifiedChip>{addressName}</VerifiedChip>}
           </>
         }
-        ref={inputRef}
-        defaultValue={value}
-        onChange={handleChange}
-        placeholder="Ethereum address"
+        ref={ref}
+        value={inputValue}
+        onChange={onInputChange}
+        placeholder="Ethereum address or ENS name"
         leftDecorator={
-          (!simple &&
-            (isLoading ? (
-              <Loader size="small" />
-            ) : (
-              address.value && <Identicon address={address.value} />
-            ))) ??
+          (!simple && (
+            <IdenticonSlot>
+              {isLoading ? (
+                <Loader size="small" />
+              ) : (
+                address && <Identicon address={address} />
+              )}
+            </IdenticonSlot>
+          )) ??
           null
         }
         rightDecorator={
