@@ -51,7 +51,7 @@ export const useNodeOperatorId = <
   return value.nodeOperator?.nodeOperatorId as any;
 };
 
-export const NodeOperatorPrivider: FC<PropsWithChildren> = ({ children }) => {
+export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data: list, isPending } = useAvailableOperators();
   const [active, setActive] = useActiveNodeOperator(list);
 
