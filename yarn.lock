@@ -3096,14 +3096,14 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.47.0.tgz#2367eec1c8363516bde48b632a6fbe32aec33a1e"
   integrity sha512-6xx2O89OhWAxaob+SqXEX2xtrumG4MCUrclooCIvAhz64Lp3Wa0Hzt2lgJyFMhJxpDPMj3LmYNbuB15lwEQKwg==
 
-"@lidofinance/browser-service@1.9.0-alpha-add-wc-wallet-without-wait.3":
-  version "1.9.0-alpha-add-wc-wallet-without-wait.3"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.9.0-alpha-add-wc-wallet-without-wait.3.tgz#c52f83e9d02a5cffc57b178081780b3fce137a62"
-  integrity sha512-qB197s2fiBaXdA9QmtFiyPMbaioVOTdWgLzi9bjBkVI8N37xgFob6pPEuovzzkA946NRpkuDUdYIMR032so/8Q==
+"@lidofinance/browser-service@1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.9.0.tgz#98e232e563cc96d97ae77a2f5af8f90d62dd7c9a"
+  integrity sha512-0rmSIbU/Mv2x2C/FsY4waaY5BF8IA3panOY7rmMH+SfDMDyJpFHorxgDHqhqQ0igXUYz6wpxTnB8YCYNn3S50g==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.3.1"
     "@lidofinance/wallets-testing-nodes" "1.8.0"
-    "@lidofinance/wallets-testing-wallets" "1.48.0-alpha-add-wc-wallet-without-wait.2"
+    "@lidofinance/wallets-testing-wallets" "1.48.0"
 
 "@lidofinance/chat-reporter@1.7.0":
   version "1.7.0"
@@ -3255,10 +3255,10 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.48.0-alpha-add-wc-wallet-without-wait.2":
-  version "1.48.0-alpha-add-wc-wallet-without-wait.2"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.48.0-alpha-add-wc-wallet-without-wait.2.tgz#1a8d2b8e6c18406b29d9e1eed822644abfeb0db3"
-  integrity sha512-fP/rU79H3H7lYYLt54kn74iTfiLivZGcVY1nnxh1oabYNZ72N2A8rSHOs2wcCvW+wBmb131fM8Yj5Q+oYnvR2A==
+"@lidofinance/wallets-testing-wallets@1.48.0":
+  version "1.48.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.48.0.tgz#ba9b1a80e665f8174705da63612cceeb721833bd"
+  integrity sha512-VvEAzZjrB5lAO8nJdwGGIRoTfVeFDWtm9W/PnswvhaFYpSSdy4zHjeEdprBdvwH1LidrfiWsO9Q0PdsUoej1Sg==
   dependencies:
     "@walletconnect/sign-client" "2.23.4"
     big.js "^6.2.1"
