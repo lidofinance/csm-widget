@@ -26,6 +26,15 @@ export class TestnetConfig extends BaseConfig {
           csmSurveysApi: 'https://csm-surveys-api-testnet.up.railway.app',
         },
       },
+      monitoringConfig: {
+        urls: {
+          beaconchain: 'https://hoodi.beaconcha.in',
+          operators: 'https://operators-hoodi.testnet.fi',
+          feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
+          csmSentinel: 'https://github.com/skhomuti/csm-sentinel',
+        },
+        stakingModuleIndex: 4,
+      },
     };
   }
 }

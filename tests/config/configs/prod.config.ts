@@ -22,6 +22,18 @@ export class ProdConfig extends BaseConfig {
         host: '127.0.0.1',
         port: 8545,
       },
+      monitoringConfig: {
+        urls: {
+          beaconchain: 'https://beaconcha.in',
+          operators: 'https://operators.lido.fi',
+          feesMonitoring: 'https://fees-monitoring.lido.fi',
+          csmSentinel: 'https://github.com/skhomuti/csm-sentinel',
+          beaconchainEntity: 'https://beaconcha.in',
+          rated: 'https://explorer.rated.network',
+          migaLabs: 'https://migalabs.io/entities',
+        },
+        stakingModuleIndex: 4,
+      },
     };
   }
 }

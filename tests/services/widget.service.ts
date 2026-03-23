@@ -4,7 +4,13 @@ import {
   WalletPage,
   WalletConnectTypes,
 } from '@lidofinance/wallets-testing-wallets';
-import { MainPage, KeysPage, DashboardPage, RolesPage } from '../pages';
+import {
+  MainPage,
+  KeysPage,
+  DashboardPage,
+  RolesPage,
+  MonitoringPage,
+} from '../pages';
 import { DepositKey } from './keysGenerator.service';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
@@ -20,6 +26,7 @@ export class WidgetService {
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
   public rolesPage: RolesPage;
+  public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
   public operatorType: OperatorTypePage;
 
@@ -31,6 +38,7 @@ export class WidgetService {
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
     this.rolesPage = new RolesPage(this.page, this.walletPage);
+    this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
     this.operatorType = new OperatorTypePage(this.page, this.walletPage);
   }
