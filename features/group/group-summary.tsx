@@ -1,9 +1,9 @@
 import { SubOperatorStakeSummary } from '@lidofinance/lido-csm-sdk';
-import { Block, InlineLoader, Text } from '@lidofinance/lido-ui';
+import { InlineLoader, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { SquaredChip, Stack } from 'shared/components';
-import { StakeStats, MoreKeysChip, StakeRow } from './shared';
-import { CardHeader, CardHeaderLeft } from './styles';
+import { MoreKeysChip, StakeRow, StakeStats } from './shared';
+import { CardHeader, CardHeaderLeft, GroupBlockStyled } from './styles';
 import { useAggregatedStake } from './use-aggregated-stake';
 
 type Props = {
@@ -15,7 +15,7 @@ export const GroupSummary: FC<Props> = ({ operators }) => {
     useAggregatedStake(operators);
 
   return (
-    <Block>
+    <GroupBlockStyled color="background">
       <Stack direction="column" gap="md">
         <CardHeader>
           <CardHeaderLeft>
@@ -37,6 +37,6 @@ export const GroupSummary: FC<Props> = ({ operators }) => {
           <StakeStats data={aggregated} />
         )}
       </Stack>
-    </Block>
+    </GroupBlockStyled>
   );
 };

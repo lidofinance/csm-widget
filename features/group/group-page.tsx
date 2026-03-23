@@ -1,19 +1,16 @@
+import { InlineLoader } from '@lidofinance/lido-ui';
+import { useNodeOperatorId, useOperatorGroupId } from 'modules/web3';
 import { FC } from 'react';
-import { PATH } from 'consts/urls';
-import { BackButton } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { Group } from './group';
-import { useNodeOperatorId, useOperatorGroupId } from 'modules/web3';
-import { InlineLoader } from '@lidofinance/lido-ui';
 
 export const GroupPage: FC = () => (
   <Layout
-    noNav
+    fullwidth
     title={<GroupTitle />}
     subtitle={<GroupSubtitle />}
     pageName="Group"
   >
-    <BackButton href={PATH.HOME} />
     <Group />
   </Layout>
 );

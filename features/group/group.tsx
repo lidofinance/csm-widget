@@ -11,8 +11,8 @@ export const Group: FC = () => {
 
   return (
     <WhenLoaded loading={isPending} empty={!data && <>No Group</>}>
-      <GroupSummary operators={data?.operators ?? []} />
       <GroupGrid>
+        <GroupSummary operators={data?.operators ?? []} />
         {data?.operators.map((stakeSummary) => (
           <OperatorCard
             key={String(stakeSummary.nodeOperatorId)}

@@ -1,4 +1,5 @@
 import { Divider } from '@lidofinance/lido-ui';
+import { Block } from 'shared/components';
 import styled from 'styled-components';
 
 export const GroupGrid = styled.div`
@@ -6,11 +7,16 @@ export const GroupGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: ${({ theme }) => theme.spaceMap.xl}px;
 
-  &:has(> :only-child) {
-    grid-template-columns: 1fr;
+  > :first-child {
+    grid-column: 1 / -1;
   }
 
-  ${({ theme }) => theme.mediaQueries.md} {
+  &:not(:has(> :nth-child(3))) {
+    grid-template-columns: 1fr;
+    max-width: var(--layout-base-width);
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl} {
     grid-template-columns: 1fr;
   }
 `;
@@ -53,4 +59,8 @@ export const KeyLimitText = styled.p`
 
 export const DividerStyled = styled(Divider).attrs({ type: 'vertical' })`
   opacity: 0.3;
+`;
+
+export const GroupBlockStyled = styled(Block)`
+  outline: 1px solid var(--lido-color-border);
 `;

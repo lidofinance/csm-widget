@@ -4,7 +4,6 @@ import { PATH } from 'consts';
 import { isModuleCM, MODULE_METADATA } from 'consts/module';
 import { useNodeOperator, useOperatorMetadata } from 'modules/web3';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 
@@ -25,19 +24,27 @@ const CmTitle: FC = () => {
   if (isPending) return <ModuleTitle />;
 
   return (
-    <Stack center gap="sm" selfJustify="center">
+    <>
       <span>{metadata?.name}</span>
       {!metadata?.ownerEditsRestricted && (
-        <StyledLocalLink
-          href={PATH.SETTINGS_METADATA}
-          title="Edit Operator Metadata"
-        >
-          <Edit />
-        </StyledLocalLink>
+        <InlineWrapper>
+          <StyledLocalLink
+            href={PATH.SETTINGS_METADATA}
+            title="Edit Operator Metadata"
+          >
+            <Edit />
+          </StyledLocalLink>
+        </InlineWrapper>
       )}
-    </Stack>
+    </>
   );
 };
+
+const InlineWrapper = styled.span`
+  display: inline-flex;
+  margin-left: 4px;
+  vertical-align: middle;
+`;
 
 export const StyledLocalLink = styled(LocalLink)`
   display: inline-flex;

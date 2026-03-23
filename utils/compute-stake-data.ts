@@ -1,13 +1,10 @@
 import {
+  MAX_EFFECTIVE_BALANCE,
+  MIN_EFFECTIVE_BALANCE,
   NodeOperatorInfo,
   OperatorStakeSummary,
 } from '@lidofinance/lido-csm-sdk';
-import { bigMax } from 'utils';
-import { parseEther } from 'viem';
-
-// TODO: read from sdk
-const MAX_EFFECTIVE_BALANCE = parseEther('2048');
-const MIN_EFFECTIVE_BALANCE = parseEther('32');
+import { bigMax, bigMin } from 'utils';
 
 export type StakeAndKeysData = {
   activeStake: bigint;
@@ -24,14 +21,16 @@ export const computeStakeData = (
 ): StakeAndKeysData => {
   const activeKeys = info.totalDepositedKeys - info.totalWithdrawnKeys;
   const activeStake = summary.currentStake;
+  const targetStake = summary.targetStake;
 
   const depositableKeys = info.totalAddedKeys - info.totalDepositedKeys;
+  const maxDepositableStake =
+    BigInt(activeKeys + depositableKeys) * MAX_EFFECTIVE_BALANCE;
   const depositableStake = bigMax(
     0n,
-    BigInt(activeKeys + depositableKeys) * MAX_EFFECTIVE_BALANCE - activeStake,
+    bigMin(targetStake - activeStake, maxDepositableStake),
   );
 
-  const targetStake = summary.targetStake;
   const potentialAdditionalStake = bigMax(
     0n,
     targetStake - (activeStake + depositableStake),
