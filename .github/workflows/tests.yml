@@ -1,10 +1,6 @@
 name: Test CSM-widget
 run-name: CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
-permissions:
-  pull-requests: write
-  checks: write
-
 on:
   schedule:
     - cron: "0 6 * * *" # Every day at 6 AM UTC
@@ -88,6 +84,7 @@ jobs:
       SLACK_DUTY_TAG: "S09H269H2TT"
       WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
 
+
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
       REFUSE_CF_BLOCK_VALUE: ${{ secrets.REFUSE_CF_BLOCK_VALUE }}
@@ -146,7 +143,7 @@ jobs:
           echo -e "🔗 Test Plan: \033[1;34m${QASE_PLAN_ID}\033[0m"
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
 
-          npx allure run -- yarn test:e2e
+          xvfb-run --auto-servernum -- yarn test:e2e
 
       - uses: actions/upload-artifact@v6
         if: always()
@@ -154,9 +151,3 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 1
-
-      - name: Run Allure Action
-        uses: allure-framework/allure-action@v0
-        with:
-          report-directory: "./allure-report"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
