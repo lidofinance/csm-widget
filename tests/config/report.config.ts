@@ -118,6 +118,10 @@ const reporters: {
           size: 10,
         },
       },
+      profilers: ['network'],
+      networkProfiler: {
+        track_on_fail: true,
+      },
     },
   ],
 };
