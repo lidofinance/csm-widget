@@ -5,6 +5,7 @@ export const getReportConfig: () => ReporterDescription[] = function () {
   const reporterConfig: ReporterDescription[] = [
     reporters.htmlReporter,
     reporters.consoleReporter,
+    reporters.allureReporter,
   ];
   if (process.env.CI) {
     reporterConfig.push(
@@ -57,6 +58,7 @@ const reporters: {
   chatReporter: ReporterDescription;
   pgReporter: ReporterDescription;
   qaseReporter: ReporterDescription;
+  allureReporter: ReporterDescription;
 } = {
   htmlReporter: ['html', { open: 'never' }],
   consoleReporter: ['list'],
@@ -121,6 +123,17 @@ const reporters: {
       profilers: ['network'],
       networkProfiler: {
         track_on_fail: true,
+      },
+    },
+  ],
+  allureReporter: [
+    'allure-playwright',
+    {
+      resultsDir: 'allure-results',
+      detail: true, // шаги для beforeEach, afterEach и т.д.
+      suiteTitle: true, // группировка по именам файлов
+      environmentInfo: {
+        node_version: process.version,
       },
     },
   ],

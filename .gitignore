@@ -53,3 +53,12 @@ yarn-error.log*
 /keys-generator-bin/
 deposit_data.json
 local_fork_config.json
+allure-results/56b71cce-2acb-4851-b12e-63a133d4a331-result.json
+allure-results/74b1ff9c-7516-4a77-b9b3-570d93f07ffd-attachment.png
+allure-results/87bbfe22-203b-4fe9-a76c-48097341eeb6-attachment.txt
+allure-results/321e1bf5-d57b-4bc4-b238-dca56da39279-result.json
+allure-results/c50060e5-0483-48bb-b972-54fae999519b-attachment.txt
+allure-results/cbbd5ac1-f247-4a30-95da-2bd4fae8db83-attachment.txt
+allure-results/d29f62a2-a342-48ec-9a51-135ed52ee9ef-attachment.md
+allure-results/ea7abe20-8e54-466a-9714-63ae7d027a1a-attachment.txt
+allure-results/environment.properties
