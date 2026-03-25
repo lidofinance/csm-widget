@@ -1,7 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { BrowserService } from '@lidofinance/browser-service';
-// import { test as base } from '@playwright/test';
-import { test as base } from 'playwright-qase-reporter';
+import { test as base } from '@playwright/test';
 import { widgetFullConfig } from 'tests/config';
 import { IConfig } from 'tests/config/configs/base.config';
 import { REFUSE_CF_BLOCK_COOKIE } from 'tests/config/storageState';
