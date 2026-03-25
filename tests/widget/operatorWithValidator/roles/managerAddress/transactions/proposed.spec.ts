@@ -1,11 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
 import { trimAddress } from '@lidofinance/address';
-import {
-  LOW_TIMEOUT,
-  STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from 'tests/consts/timeouts';
+import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/helpers/accountData';
 import { Tags } from 'tests/consts/common.const';
@@ -40,10 +36,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
         state: 'visible',
       });
 
-      const [txPage] = await Promise.all([
-        managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        managerAddressPage.proposeButton.click(),
-      ]);
+      await managerAddressPage.proposeButton.click();
 
       await managerAddressPage.page.waitForSelector(
         `text=You are proposing manager address change`,
@@ -62,7 +55,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
           'Confirm this transaction in your wallet',
         );
       });
-      await widgetService.walletPage.cancelTx(txPage);
+      await widgetService.walletPage.cancelTx();
     },
   );
 
@@ -81,10 +74,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
           state: 'visible',
         });
 
-        const [txPage] = await Promise.all([
-          managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          managerAddressPage.proposeButton.click(),
-        ]);
+        await managerAddressPage.proposeButton.click();
 
         await managerAddressPage.page.waitForSelector(
           `text=You are proposing manager address change`,
@@ -92,7 +82,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
         );
 
         await test.step('Verify confirm transaction', async () => {
-          await widgetService.walletPage.confirmTx(txPage);
+          await widgetService.walletPage.confirmTx();
 
           await managerAddressPage.page.waitForSelector(
             `text=New manager address has been proposed`,
