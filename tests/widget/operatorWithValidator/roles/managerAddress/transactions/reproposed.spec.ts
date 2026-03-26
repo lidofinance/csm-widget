@@ -1,11 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
 import { trimAddress } from '@lidofinance/address';
-import {
-  LOW_TIMEOUT,
-  STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from 'tests/consts/timeouts';
+import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/helpers/accountData';
 import { Tags } from 'tests/consts/common.const';
@@ -90,10 +86,7 @@ test.describe(
             state: 'visible',
           });
 
-          const [txPage] = await Promise.all([
-            managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-            settingsPage.modalRoot.continueButton.click(),
-          ]);
+          await settingsPage.modalRoot.continueButton.click();
 
           await test.step('Continue proposal', async () => {
             await managerAddressPage.page.waitForSelector(
@@ -116,7 +109,7 @@ test.describe(
               );
             });
           });
-          await managerAddressPage.walletPage.cancelTx(txPage);
+          await managerAddressPage.walletPage.cancelTx();
         });
       },
     );
@@ -141,16 +134,13 @@ test.describe(
           state: 'visible',
         });
 
-        const [txPage] = await Promise.all([
-          managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          settingsPage.modalRoot.continueButton.click(),
-        ]);
+        await settingsPage.modalRoot.continueButton.click();
 
         await managerAddressPage.page.waitForSelector(
           `text=You are proposing manager address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
-        await managerAddressPage.walletPage.confirmTx(txPage);
+        await managerAddressPage.walletPage.confirmTx();
 
         await test.step('Verify confirm transaction', async () => {
           await managerAddressPage.page.waitForSelector(

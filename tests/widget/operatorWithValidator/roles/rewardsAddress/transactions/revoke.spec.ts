@@ -1,11 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import {
-  LOW_TIMEOUT,
-  STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from 'tests/consts/timeouts';
+import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 import { generateAddress } from 'tests/helpers/accountData';
 import { Tags } from 'tests/consts/common.const';
 import { mnemonicToAccount } from 'viem/accounts';
@@ -36,10 +32,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
       const currentAddress = mnemonicToAccount(secretPhrase).address;
 
       await test.step('Revoke pending rewards address role', async () => {
-        const [txPage] = await Promise.all([
-          rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          rewardsAddressPage.revokeButton.click(),
-        ]);
+        await rewardsAddressPage.revokeButton.click();
 
         await rewardsAddressPage.page.waitForSelector(
           `text=You are canceling request for rewards address change`,
@@ -58,7 +51,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
             'Confirm this transaction in your wallet',
           );
         });
-        await widgetService.walletPage.cancelTx(txPage);
+        await widgetService.walletPage.cancelTx();
       });
     },
   );
@@ -70,10 +63,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
       const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
       const currentAddress = mnemonicToAccount(secretPhrase).address;
 
-      const [txPage] = await Promise.all([
-        rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        rewardsAddressPage.revokeButton.click(),
-      ]);
+      await rewardsAddressPage.revokeButton.click();
 
       await rewardsAddressPage.page.waitForSelector(
         `text=You are canceling request for rewards address change`,
@@ -81,7 +71,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
       );
 
       await test.step('Verify confirm transaction', async () => {
-        await widgetService.walletPage.confirmTx(txPage);
+        await widgetService.walletPage.confirmTx();
 
         await rewardsAddressPage.page.waitForSelector(
           `text=Proposed request for rewards address has been canceled`,

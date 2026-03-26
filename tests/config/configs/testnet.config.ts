@@ -15,7 +15,7 @@ export class TestnetConfig extends BaseConfig {
         scan: 'https://hoodi.etherscan.io/',
       },
       nodeConfig: {
-        rpcUrlToMock: `**/api/rpc?chainId=560048`,
+        rpcUrlToMock: [`.*/api/rpc\\?chainId=560048`],
         rpcUrl: process.env.RPC_URL as string,
         derivationPath: "m/44'/60'/0'/0",
         host: '127.0.0.1',
@@ -25,6 +25,15 @@ export class TestnetConfig extends BaseConfig {
         urls: {
           csmSurveysApi: 'https://csm-surveys-api-testnet.up.railway.app',
         },
+      },
+      monitoringConfig: {
+        urls: {
+          beaconchain: 'https://hoodi.beaconcha.in',
+          operators: 'https://operators-hoodi.testnet.fi',
+          feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
+          csmSentinel: 'https://github.com/skhomuti/csm-sentinel',
+        },
+        stakingModuleIndex: 4,
       },
     };
   }
