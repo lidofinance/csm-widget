@@ -55,10 +55,11 @@ export const CURVE_VARIANTS: Record<OPERATOR_TYPE, ReturnType<typeof css>> = {
 
 export const DescriptorCurveStyle = styled(BadgeStyle)<{
   $variant?: OPERATOR_TYPE;
+  $inline?: boolean;
 }>`
   font-weight: 700;
   color: var(--lido-color-foreground);
-  padding-inline: 0px;
+  padding-inline: ${({ $inline }) => ($inline ? '6px' : '0px')};
 
   ${({ $variant }) => ($variant ? (CURVE_VARIANTS[$variant] ?? '') : '')}
 `;
