@@ -17,10 +17,10 @@ export const SubmitButton = () => {
 
   const title =
     mode === 'managerReset'
-      ? `Reset ${role} address`
+      ? `Reset ${role} Address`
       : mode === 'propose'
-        ? `Propose a new ${role} address`
-        : `Change ${role} address`;
+        ? `Propose a new ${role} Address`
+        : `Change ${role} Address`;
 
   return (
     <>

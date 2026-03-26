@@ -34,7 +34,7 @@ export const Info: FC = () => {
       </Text>
       <Latice variant="secondary">
         <TitledAddress
-          title={`Current ${roleTitle} address`}
+          title={`Current ${roleTitle} Address`}
           address={currentAddress}
           isYou={isAddressEqual(currentAddress, address)}
           isOwner={
