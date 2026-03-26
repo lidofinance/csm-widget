@@ -14,7 +14,7 @@ import {
   useOperatorMetadata,
 } from 'modules/web3';
 import { FC, useMemo } from 'react';
-import { ShortInlineLoader, Stack } from 'shared/components';
+import { Stack } from 'shared/components';
 import { computeStakeData, getPercent } from 'utils';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { DescriptorId } from '../descriptor/descriptor-id';
@@ -93,12 +93,10 @@ export const OperatorRow: FC<OperatorRowProps> = ({
           />
         </Stack>
 
-        {metadata ? (
+        {metadata && (
           <Text size="xxs" color="secondary">
             {metadata.name}
           </Text>
-        ) : (
-          <ShortInlineLoader />
         )}
       </Stack>
 
