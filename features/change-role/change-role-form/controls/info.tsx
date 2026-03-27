@@ -74,7 +74,9 @@ export const Info: FC = () => {
                   Connect to {MODULE_METADATA[config.module].shortTitle} UI with
                   the proposed address
                 </li>
-                <li>Go to Roles tab → Inbox requests to confirm the change</li>
+                <li>
+                  Go to Settings tab → Inbox requests to confirm the change
+                </li>
               </ol>
             </Text>
           </Stack>

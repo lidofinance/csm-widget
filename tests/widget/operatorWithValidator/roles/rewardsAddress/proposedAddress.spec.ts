@@ -61,7 +61,7 @@ test.describe(
           await expect(
             rewardsAddressPage.proposedAddress.locator('> div').nth(1),
           ).toContainText(
-            'Go to Roles tab → Inbox requests to confirm the change',
+            'Go to Settings tab → Inbox requests to confirm the change',
           );
         });
       },

@@ -22,7 +22,7 @@ export const AfterAddressProposed: FC<Props> = ({ address }) => {
             <Address address={address} showIcon />
           </Text>
         </li>
-        <li>Go to Roles tab → Inbox requests to confirm the change</li>
+        <li>Go to Settings tab → Inbox requests to confirm the change</li>
       </ol>
     </BlockStyled>
   );

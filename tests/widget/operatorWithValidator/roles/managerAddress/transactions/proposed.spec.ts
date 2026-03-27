@@ -96,7 +96,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
             'Connect to CSM UI with the proposed address',
           );
           await expect(txModal.description).toContainText(
-            'Go to Roles tab → Inbox requests to confirm the change',
+            'Go to Settings tab → Inbox requests to confirm the change',
           );
 
           await expect(txModal.description).toContainText(
