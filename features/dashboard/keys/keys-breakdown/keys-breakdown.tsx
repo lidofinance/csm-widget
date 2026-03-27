@@ -1,28 +1,22 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { isModuleCM } from 'consts';
-import { FC, useMemo } from 'react';
-import {
-  Plural,
-  ShortInlineLoader,
-  SquaredChip,
-  Stack,
-  StatusComment,
-} from 'shared/components';
 import { MoreKeysChip } from 'features/group/shared';
-import { KeysItem } from './keys-item';
-import { AccordionStyle, Alert, Check } from './styles';
-import { useKeysBreakdown } from './use-keys-breakdown';
 import {
   useNodeOperatorId,
   useOperatorInfo,
   useOperatorStakeSummary,
 } from 'modules/web3';
+import { FC, useMemo } from 'react';
+import { Plural, SquaredChip, Stack, StatusComment } from 'shared/components';
 import { computeStakeData } from 'utils';
+import { KeysItem } from './keys-item';
+import { AccordionStyle, Alert, Check } from './styles';
+import { useKeysBreakdown } from './use-keys-breakdown';
 
 export const KeysBreakdown: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data, isPending } = useKeysBreakdown(nodeOperatorId);
+  const { data } = useKeysBreakdown(nodeOperatorId);
   const { data: stakeSummary } = useOperatorStakeSummary(nodeOperatorId);
   const { data: info } = useOperatorInfo(nodeOperatorId);
 
@@ -32,6 +26,10 @@ export const KeysBreakdown: FC = () => {
     return (stakeAndKeys?.potentialAdditionalKeys ?? 0) > 0;
   }, [info, stakeSummary]);
 
+  const hasAnyKey = useMemo(() => {
+    return !!info && info.totalAddedKeys > 0;
+  }, [info]);
+
   return (
     <AccordionStyle
       summary={
@@ -39,16 +37,12 @@ export const KeysBreakdown: FC = () => {
           <Text as="h4" size="sm" weight={700}>
             Keys Breakdown
           </Text>
-          <Stack>
-            {isPending ? (
-              <ShortInlineLoader />
-            ) : (
-              <>
-                {isModuleCM && <MoreKeysChip more={moreKeys} />}
-                <IssuesChip issues={data?.issuesCount} />
-              </>
-            )}
-          </Stack>
+          {hasAnyKey && (
+            <Stack>
+              {isModuleCM && <MoreKeysChip more={moreKeys} />}
+              <IssuesChip issues={data?.issuesCount} />
+            </Stack>
+          )}
         </Stack>
       }
     >
@@ -74,7 +68,6 @@ export const KeysBreakdown: FC = () => {
         />
         <KeysItem
           data-testid="keysActiveCount"
-          type="active"
           title="Active"
           count={data?.counts.active}
           tooltip="Keys that active"
@@ -117,14 +110,16 @@ export const KeysBreakdown: FC = () => {
           tooltip="Keys requested to exit"
           comment={<StatusComment statuses={[KEY_STATUS.EXIT_REQUESTED]} />}
         />
-        <KeysItem
-          data-testid="keysNonQueuedCount"
-          type="error"
-          title="Non queued"
-          count={data?.counts.nonQueued}
-          tooltip="Keys not in deposit queue"
-          comment={<StatusComment statuses={[KEY_STATUS.NON_QUEUED]} />}
-        />
+        {!isModuleCM && (
+          <KeysItem
+            data-testid="keysNonQueuedCount"
+            type="error"
+            title="Non queued"
+            count={data?.counts.nonQueued}
+            tooltip="Keys not in deposit queue"
+            comment={<StatusComment statuses={[KEY_STATUS.NON_QUEUED]} />}
+          />
+        )}
         <KeysItem
           data-testid="keysDuplicatedCount"
           type="error"
