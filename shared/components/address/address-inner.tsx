@@ -33,7 +33,13 @@ export const AddressInner: FC<AddressProps> = ({
   name,
 }) => {
   const component = (
-    <Text as="span" weight={weight} size={size} color={color}>
+    <Text
+      as="span"
+      weight={weight}
+      size={size}
+      color={color}
+      data-testid="addressText"
+    >
       {name ?? (
         <AddressComponent
           address={address}
@@ -46,12 +52,24 @@ export const AddressInner: FC<AddressProps> = ({
   return (
     <>
       {address && (
-        <AddressContainerStyle $big={big} $monospace={monospace}>
+        <AddressContainerStyle
+          $big={big}
+          $monospace={monospace}
+          data-testid="addressContainer"
+        >
           {showIcon &&
             (avatar ? (
-              <Avatar src={avatar} diameter={big ? 24 : 20} />
+              <Avatar
+                src={avatar}
+                diameter={big ? 24 : 20}
+                data-testid="avatar"
+              />
             ) : (
-              <Identicon address={address} diameter={big ? 24 : 20} />
+              <Identicon
+                address={address}
+                diameter={big ? 24 : 20}
+                data-testid="identicon"
+              />
             ))}
           {symbols === 0 && !name ? (
             component
@@ -60,11 +78,18 @@ export const AddressInner: FC<AddressProps> = ({
               placement="top"
               title={address}
               style={{ wordWrap: 'break-word', maxWidth: '300px' }}
+              data-testid="addressTooltip"
             >
               {component}
             </Tooltip>
           )}
-          {link ?? <EtherscanAddressLink $secondary={!big} address={address} />}
+          {link ?? (
+            <EtherscanAddressLink
+              $secondary={!big}
+              address={address}
+              data-testid="etherscanLink"
+            />
+          )}
         </AddressContainerStyle>
       )}
     </>
