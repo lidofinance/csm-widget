@@ -1,0 +1,79 @@
+import { Locator, Page, test } from '@playwright/test';
+import { TokenSymbol } from 'tests/shared/consts/common.const';
+import { BasePage } from 'tests/csm-widget/pages';
+import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { DepositKey } from 'tests/csm-widget/services/keysGenerator.service';
+
+export class SubmitPage {
+  page: Page;
+  base: BasePage;
+  formBlock: Locator;
+  rawDepositData: Locator;
+  confirmKeysReady: Locator;
+  submitKeysButton: Locator;
+  amountInput: Locator;
+  amountInputText: Locator;
+  validationInputError: Locator;
+
+  // Parsed tab
+  depositDataRow: Locator;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.base = new BasePage(page);
+    this.formBlock = this.page.getByTestId('submitKeysForm');
+    this.rawDepositData = this.formBlock.locator('[name="rawDepositData"]');
+    this.confirmKeysReady = this.formBlock
+      .locator('label:has([name="confirmKeysReady"])')
+      .locator('svg');
+    this.submitKeysButton = this.formBlock
+      .getByRole('button')
+      .getByText('Submit keys');
+    this.amountInput = this.formBlock.getByTestId('amountInput');
+    this.amountInputText = this.amountInput.locator('..').locator('span');
+    this.validationInputError = this.formBlock.getByTestId(
+      'input-message-error',
+    );
+
+    // Parsed tab
+    this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');
+  }
+
+  async open() {
+    await test.step('Open submit tab for Keys page', async () => {
+      await this.page.goto('/keys/submit');
+    });
+  }
+
+  async selectTab(tabName: 'JSON' | 'Parsed' | 'Parameters') {
+    return test.step(`Select "${tabName}" tab`, async () => {
+      const tab = this.formBlock.getByRole('button').getByText(tabName);
+      await tab.click();
+    });
+  }
+
+  getBondTokenElement(tokenSymbol: TokenSymbol) {
+    return this.formBlock.locator(`label:has([value="${tokenSymbol}"])`);
+  }
+
+  async fillKeys(keys: DepositKey[] | DepositKey) {
+    await test.step('Fill deposit key data', async () => {
+      const value = JSON.stringify(keys);
+      await this.rawDepositData.fill(value);
+    });
+  }
+
+  async submitKeys(
+    keys: DepositKey[] | DepositKey,
+    tokenSymbol = TokenSymbol.STETH,
+  ) {
+    await test.step('Submit keys', async () => {
+      const bondTokenElement = this.getBondTokenElement(tokenSymbol);
+      await bondTokenElement.click();
+      await this.fillKeys(keys);
+      await this.page.waitForTimeout(LOW_TIMEOUT);
+      await this.confirmKeysReady.click();
+      await this.submitKeysButton.click();
+    });
+  }
+}
