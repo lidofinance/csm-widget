@@ -13,7 +13,7 @@ export const KeysSection: FC = () => {
     <>
       <NoGroupBanner />
       <SectionBlock
-        title={isModuleCM ? 'Stake and Keys' : 'Keys'}
+        title={isModuleCM ? 'Stake & Keys' : 'Keys'}
         data-testid="dashboardKeysSection"
         href={PATH.KEYS_VIEW}
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink}
