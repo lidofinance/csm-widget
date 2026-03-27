@@ -3,12 +3,13 @@ import { WrappedPage } from 'features/wrapped';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
-// FIXME: wrapped image
 const Page = () => (
   <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <Gate rule="IS_MAINNET" fallback={<Navigate path={PATH.HOME} />}>
-        <WrappedPage />
+    <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
+      <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
+        <Gate rule="IS_MAINNET" fallback={<Navigate path={PATH.HOME} />}>
+          <WrappedPage />
+        </Gate>
       </Gate>
     </Gate>
   </GateLoaded>

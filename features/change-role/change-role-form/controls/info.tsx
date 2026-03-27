@@ -1,19 +1,22 @@
+import { ROLES } from '@lidofinance/lido-csm-sdk';
+import { Text } from '@lidofinance/lido-ui';
+import { ROLES_METADATA } from 'consts/roles';
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Latice, Stack, TitledAddress, Warning } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
+import { isAddressEqual } from 'viem';
 import { ChangeRoleFormInputType, useChangeRoleFormData } from '../context';
 import { useRole } from '../hooks/use-role';
-import { Text } from '@lidofinance/lido-ui';
-import { isAddressEqual } from 'viem';
-import { ROLES } from '@lidofinance/lido-csm-sdk';
+import { MODULE_METADATA } from 'consts';
+import { config } from 'config';
 
 export const Info: FC = () => {
   const roleTitle = useRole();
   const {
     currentAddress,
     proposedAddress,
-    isPropose,
+    mode,
     address,
     extendedManagerPermissions,
     role,
@@ -26,9 +29,12 @@ export const Info: FC = () => {
 
   return (
     <>
+      <Text size="md" weight={700} as="h4">
+        {ROLES_METADATA[role].capitalizedTitle} Address
+      </Text>
       <Latice variant="secondary">
         <TitledAddress
-          title={`Current ${roleTitle} address`}
+          title={`Current ${roleTitle} Address`}
           address={currentAddress}
           isYou={isAddressEqual(currentAddress, address)}
           isOwner={
@@ -44,14 +50,15 @@ export const Info: FC = () => {
               title={
                 <>
                   <Warning text="Pending change" />
-                  {isPropose && (
+                  {mode === 'propose' && (
                     <SubmitButtonHookForm
                       variant="outlined"
                       size="xs"
                       fullwidth={false}
                       onClick={revokeHandle}
+                      noDisableOnError
                     >
-                      Revoke
+                      Cancel
                     </SubmitButtonHookForm>
                   )}
                 </>
@@ -63,7 +70,10 @@ export const Info: FC = () => {
             </Text>
             <Text as="div" size="xxs">
               <ol>
-                <li>Connect to CSM UI with the proposed address</li>
+                <li>
+                  Connect to {MODULE_METADATA[config.module].shortTitle} UI with
+                  the proposed address
+                </li>
                 <li>Go to Roles tab → Inbox requests to confirm the change</li>
               </ol>
             </Text>

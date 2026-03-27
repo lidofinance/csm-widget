@@ -8,5 +8,7 @@ export const SubmitButton = () => {
     return <PausedButton type="Module" />;
   }
 
-  return <SubmitButtonHookForm>{'Submit keys'}</SubmitButtonHookForm>;
+  return (
+    <SubmitButtonHookForm disableIfClean>{'Submit keys'}</SubmitButtonHookForm>
+  );
 };

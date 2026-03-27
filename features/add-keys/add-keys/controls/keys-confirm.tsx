@@ -1,41 +1,49 @@
 import { Text } from '@lidofinance/lido-ui';
+import { isModuleCM } from 'consts';
 import { SHARE_LIMIT_STATUS, useShareLimitStatus } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { CheckboxHookForm } from 'shared/hook-form/controls';
 
 export const KeysConfirm: FC = () => {
-  // uses already loaded share limit by AddKeysFormDataProvider
   const { data: status } = useShareLimitStatus();
 
   return (
-    <Stack align="start">
+    <Stack align={isModuleCM ? 'center' : 'start'}>
       <CheckboxHookForm fieldName="confirmKeysReady" />
-      <Text size="xxs" color="secondary" as="div">
-        I confirm that:
-        <ul>
-          <li>
-            My nodes are synced, running, and ready for the validator activation
-          </li>
-          {status === SHARE_LIMIT_STATUS.APPROACHING && (
+      {isModuleCM ? (
+        <Text size="xxs" color="secondary" as="div">
+          I confirm that my nodes are synced, running, and ready for the
+          validator activation.
+        </Text>
+      ) : (
+        <Text size="xxs" color="secondary" as="div">
+          I confirm that:
+          <ul>
             <li>
-              I understand that the deposit time for my keys can be months or
-              longer because CSM is approaching its stake share limit
+              My nodes are synced, running, and ready for the validator
+              activation
             </li>
-          )}
-          {status === SHARE_LIMIT_STATUS.REACHED && (
+            {status === SHARE_LIMIT_STATUS.APPROACHING && (
+              <li>
+                I understand that the deposit time for my keys can be months or
+                longer because CSM is approaching its stake share limit
+              </li>
+            )}
+            {status === SHARE_LIMIT_STATUS.REACHED && (
+              <li>
+                I understand that my newly uploaded keys are very unlikely to
+                receive deposits in the near future because CSM has reached its
+                stake share limit
+              </li>
+            )}
             <li>
-              I understand that my newly uploaded keys are very unlikely to
-              receive deposits in the near future because CSM has reached its
-              stake share limit
+              I understand that deleting keys from the deposit queue will incur
+              a removal fee
             </li>
-          )}
-          <li>
-            I understand that deleting keys from the deposit queue will incur a
-            removal fee
-          </li>
-        </ul>
-      </Text>
+          </ul>
+        </Text>
+      )}
     </Stack>
   );
 };

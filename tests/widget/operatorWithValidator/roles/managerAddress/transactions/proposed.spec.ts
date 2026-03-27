@@ -8,15 +8,15 @@ import { Tags } from 'tests/consts/common.const';
 
 test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.rolesPage.managerAddressPage.open();
+    await widgetService.settingsPage.managerAddressPage.open();
   });
 
   test.afterEach(async ({ widgetService }) => {
     await test.step('Revoke proposal role', async () => {
       // @todo: need to add cancel all tx before.
-      await widgetService.rolesPage.managerAddressPage.open();
+      await widgetService.settingsPage.managerAddressPage.open();
       await widgetService.page.waitForTimeout(1000);
-      await widgetService.rolesPage.managerAddressPage.revokePendingRole();
+      await widgetService.settingsPage.managerAddressPage.revokePendingRole();
     });
   });
 
@@ -26,7 +26,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
       'Should display tx modal after approve warning after propose button',
     ),
     async ({ widgetService }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 
       const accountForRolesChanged = generateAddress();
 
@@ -44,7 +44,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
       );
 
       await test.step('Verify transaction modal', async () => {
-        const { txModal } = widgetService.rolesPage;
+        const { txModal } = widgetService.settingsPage;
 
         await expect(txModal.description).toContainText('Proposed address');
 
@@ -63,7 +63,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
     qase(77, 'Propose a new Manager Address with valid input'),
     { tag: [Tags.smoke, Tags.performTX] },
     async ({ widgetService }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 
       await test.step('Propose a new manager address', async () => {
         const accountForRolesChanged = generateAddress();
@@ -89,7 +89,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
             { timeout: STAGE_WAIT_TIMEOUT },
           );
 
-          const { txModal } = widgetService.rolesPage;
+          const { txModal } = widgetService.settingsPage;
 
           await expect(txModal.description).toContainText('What is next:');
           await expect(txModal.description).toContainText(

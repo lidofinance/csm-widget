@@ -3,7 +3,7 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useLidoSDK } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
@@ -15,7 +15,7 @@ export const useAddBondSubmit: FormSubmitterHook<
   AddBondFormInputType,
   AddBondFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK();
   const { txModalStages } = useTxModalStagesAddBond();
 
   return useCallback(
@@ -70,7 +70,7 @@ export const useAddBondSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.bond.addBond({
+        await sdk.bond.addBond({
           nodeOperatorId,
           token,
           amount,
@@ -84,6 +84,6 @@ export const useAddBondSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [csm.bond, txModalStages],
+    [sdk.bond, txModalStages],
   );
 };

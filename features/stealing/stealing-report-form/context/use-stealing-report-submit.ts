@@ -2,52 +2,46 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useLidoSDK } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
+import invariant from 'tiny-invariant';
 import { isHex } from 'viem';
 import { useTxModalStagesStealingReport } from '../hooks/use-tx-modal-stages-stealing-report';
 import {
   StealingReportFormInputType,
   StealingReportFormNetworkData,
 } from './types';
-import invariant from 'tiny-invariant';
 
 export const useStealingReportSubmit: FormSubmitterHook<
   StealingReportFormInputType,
   StealingReportFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const { stealing } = useSmSDK();
   const { txModalStages } = useTxModalStagesStealingReport();
 
   return useCallback(
     async (
-      { amount, nodeOperatorId, blockhash },
+      { amount, nodeOperatorId, penaltyType, details },
       _data,
       { onConfirm, onRetry },
     ) => {
       invariant(amount !== undefined, 'Amount is not defined');
       invariant(nodeOperatorId !== undefined, 'NodeOperatorId is not defined');
-      invariant(isHex(blockhash), 'BlockHash is not valid');
+      invariant(isHex(penaltyType), 'PenaltyType is not valid');
 
       try {
         const callback: TransactionCallback = async ({ stage, payload }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:
-              txModalStages.sign({ amount, nodeOperatorId, blockhash });
+              txModalStages.sign({ amount, nodeOperatorId });
               break;
             case TransactionCallbackStage.RECEIPT:
-              txModalStages.pending(
-                { amount, nodeOperatorId, blockhash },
-                payload.hash,
-              );
+              txModalStages.pending({ amount, nodeOperatorId }, payload.hash);
               break;
             case TransactionCallbackStage.DONE: {
-              txModalStages.success(
-                { amount, nodeOperatorId, blockhash },
-                payload.hash,
-              );
+              txModalStages.success({ amount, nodeOperatorId }, payload.hash);
               break;
             }
             case TransactionCallbackStage.MULTISIG_DONE:
@@ -60,10 +54,11 @@ export const useStealingReportSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.stealing.report({
+        await stealing.report({
           nodeOperatorId,
           amount,
-          blockHash: blockhash,
+          penaltyType,
+          details: details || '',
           callback,
         });
 
@@ -74,6 +69,6 @@ export const useStealingReportSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [csm.stealing, txModalStages],
+    [stealing, txModalStages],
   );
 };

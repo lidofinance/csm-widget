@@ -47,7 +47,7 @@ export const AddressInputHookForm = ({
       rightDecorator={
         currentAddress && (
           <Button size="xs" variant="translucent" onClick={onClick}>
-            Current
+            Connected address
           </Button>
         )
       }

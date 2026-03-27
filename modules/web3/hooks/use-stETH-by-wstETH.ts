@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLidoSDK } from 'modules/web3';
 import invariant from 'tiny-invariant';
 
+// FIXME: use lido-csm-sdk
 export const useStETHByWstETH = (wsteth: bigint | undefined | null) => {
   const { wrap } = useLidoSDK();
 

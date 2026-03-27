@@ -8,4 +8,5 @@ export type UnlockBondFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   lockedBond: bigint;
   ethBalance: bigint;
+  isExpired: boolean;
 };

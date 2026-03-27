@@ -1,5 +1,12 @@
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
+import { useUnlockBondFormData } from '../context';
 
 export const SubmitButton = () => {
-  return <SubmitButtonHookForm>Compensate locked bond</SubmitButtonHookForm>;
+  const { isExpired } = useUnlockBondFormData();
+
+  return (
+    <SubmitButtonHookForm>
+      {isExpired ? 'Unlock bond' : 'Compensate locked bond'}
+    </SubmitButtonHookForm>
+  );
 };

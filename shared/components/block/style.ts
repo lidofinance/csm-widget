@@ -11,6 +11,9 @@ const COLOR_VARIANTS = {
   success: css`
     background: rgba(var(--lido-rgb-success), 0.1);
   `,
+  secondary: css`
+    background: rgba(var(--lido-rgb-secondary), 0.1);
+  `,
 };
 
 const PADDING_VARIANTS = {

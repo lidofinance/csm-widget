@@ -3,7 +3,7 @@ import {
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
-import { useLidoSDK } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { useKeysCache } from 'shared/hooks';
@@ -17,7 +17,7 @@ export const useAddKeysSubmit: FormSubmitterHook<
   AddKeysFormInputType,
   AddKeysFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK();
   const { txModalStages } = useTxModalStagesAddKeys();
   const n = useNavigate();
 
@@ -80,7 +80,7 @@ export const useAddKeysSubmit: FormSubmitterHook<
 
         addCachePubkeys(pubkeys);
 
-        await csm.keys.addKeys({
+        await sdk.keys.addKeys({
           nodeOperatorId,
           token,
           amount,
@@ -98,6 +98,6 @@ export const useAddKeysSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [addCachePubkeys, csm.keys, n, txModalStages, removeCachePubkeys],
+    [addCachePubkeys, sdk.keys, n, txModalStages, removeCachePubkeys],
   );
 };

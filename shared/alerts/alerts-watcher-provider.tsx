@@ -1,7 +1,8 @@
-import { KEY_STATUS, ROLES } from '@lidofinance/lido-csm-sdk';
-import { ALERT_FEE_RECIPIENT_DISMISS_HOURS, PATH } from 'consts';
+import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
+import { ALERT_FEE_RECIPIENT_DISMISS_HOURS, isModuleCM, PATH } from 'consts';
 import {
-  useNodeOperator,
+  useIsLockExpired,
+  useNodeOperatorId,
   useOperatorBalance,
   useOperatorInfo,
   useOperatorKeysWithStatus,
@@ -10,16 +11,15 @@ import {
   useDappStatus,
   useOperatorKeysWithWrongFeeRecipient,
 } from 'modules/web3/hooks';
-import { useOperatorKeysToMigrate } from 'modules/web3/hooks/use-operator-keys-to-migrate';
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { useCanClaimICS, useDismiss } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
 import { AlertClaimIcs } from './components/alert-claim-ics';
+import { AlertExpiredLockedBond } from './components/alert-expired-locked-bond';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
 import { AlertRequestToExit } from './components/alert-request-to-exit';
-import { AlertTransferKeys } from './components/alert-transfer-keys';
 import { AlertUnsupportedChain } from './components/alert-unsupported-chain';
 import { AlertWrongFeeRecipient } from './components/alert-wrong-fee-recipient';
 import { useAlertWatcher } from './use-alert-watcher';
@@ -28,24 +28,20 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { closeAlert } = useAlertActions();
 
   const { isSupportedChain } = useDappStatus();
-  const { nodeOperator } = useNodeOperator();
-  const { data: info } = useOperatorInfo(nodeOperator?.id);
-  const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: info } = useOperatorInfo(nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const { route } = useRouter();
 
   const normalizeQueue = useMemo(() => {
-    return (
-      info &&
-      info.enqueuedCount < info.depositableValidatorsCount &&
-      nodeOperator?.roles?.includes(ROLES.MANAGER)
-    );
-  }, [info, nodeOperator?.roles]);
+    return info && info.enqueuedCount < info.depositableValidatorsCount;
+  }, [info]);
 
-  const { data: balance } = useOperatorBalance(nodeOperator?.id);
+  const { data: balance } = useOperatorBalance(nodeOperatorId);
+  const { data: isLockExpired } = useIsLockExpired(nodeOperatorId);
 
   const { data: keysWithStatus, isPending: isKeysLoading } =
-    useOperatorKeysWithStatus(nodeOperator?.id);
+    useOperatorKeysWithStatus(nodeOperatorId);
   const hasRequestsToExit = useMemo(
     () =>
       keysWithStatus?.filter(({ statuses }) =>
@@ -55,13 +51,13 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 
   const { data: keysWithWrongFeeRecipient } =
-    useOperatorKeysWithWrongFeeRecipient(nodeOperator?.id);
+    useOperatorKeysWithWrongFeeRecipient(nodeOperatorId);
 
   const {
     isDismissed: isFeeRecipientAlertDismissed,
     dismiss: dismissFeeRecipientAlert,
   } = useDismiss(
-    `alert-fee-recipient-dismissed-${nodeOperator?.id}`,
+    `alert-fee-recipient-dismissed-${nodeOperatorId}`,
     ALERT_FEE_RECIPIENT_DISMISS_HOURS,
   );
 
@@ -78,17 +74,19 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useAlertWatcher({
     component: AlertNomalizeQueue,
-    shouldShow: !!normalizeQueue,
-  });
-
-  useAlertWatcher({
-    component: AlertTransferKeys,
-    shouldShow: !!keysToTransfer,
+    shouldShow: !isModuleCM && !!normalizeQueue,
   });
 
   useAlertWatcher({
     component: AlertLockedBond,
-    shouldShow: !!balance?.locked,
+    shouldShow:
+      !!balance?.locked && !isLockExpired && route !== PATH.BOND_UNLOCK,
+  });
+
+  useAlertWatcher({
+    component: AlertExpiredLockedBond,
+    shouldShow:
+      !!balance?.locked && !!isLockExpired && route !== PATH.BOND_UNLOCK,
   });
 
   useAlertWatcher({

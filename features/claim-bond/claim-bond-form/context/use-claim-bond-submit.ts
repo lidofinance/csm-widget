@@ -2,7 +2,7 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useLidoSDK } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
@@ -13,7 +13,7 @@ export const useClaimBondSubmit: FormSubmitterHook<
   ClaimBondFormInputType,
   ClaimBondFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK();
   const { txModalStages } = useTxModalStagesClaimBond();
 
   return useCallback(
@@ -52,7 +52,7 @@ export const useClaimBondSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.bond.claimBond({
+        await sdk.bond.claimBond({
           nodeOperatorId,
           token,
           amount,
@@ -68,6 +68,6 @@ export const useClaimBondSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [csm.bond, txModalStages],
+    [sdk.bond, txModalStages],
   );
 };

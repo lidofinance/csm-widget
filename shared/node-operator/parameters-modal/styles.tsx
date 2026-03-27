@@ -28,7 +28,7 @@ export const StyledModal = styled((props: ComponentProps<typeof Modal>) => (
         z-index: -1;
         margin: calc(-1 * var(--border-width));
         border-radius: inherit;
-        ${({ $variant }) => ($variant ? CURVE_VARIANTS[$variant] : '')}
+        ${({ $variant }) => ($variant ? (CURVE_VARIANTS[$variant] ?? '') : '')}
       }
 
       > div {

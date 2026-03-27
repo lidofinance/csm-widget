@@ -1,66 +1,54 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import {
-  LIDO_REWARDS_VAULT_LINK,
-  MEV_STEALING_LINK,
-} from 'consts/external-links';
 import { FC } from 'react';
-import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
+import { Latice, Stack, StatusChip, TitledAmount } from 'shared/components';
 import { useUnlockBondFormData } from '../context';
 
 export const Info: FC = () => {
-  const { lockedBond } = useUnlockBondFormData();
+  const { lockedBond, isExpired } = useUnlockBondFormData();
   return (
     <>
       <Latice variant="secondary">
         <Stack direction="column" gap="sm">
           <TitledAmount
-            warning
+            warning={!isExpired}
             title="Locked bond"
             help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
+            chip={
+              isExpired &&
+              !!lockedBond && (
+                <StatusChip variant="warning" squared>
+                  Expired
+                </StatusChip>
+              )
+            }
             amount={lockedBond}
             token={TOKENS.eth}
           />
-          {!!lockedBond && (
-            <div>
-              <MatomoLink
-                href={MEV_STEALING_LINK}
-                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.mevStealingDocsLink}
-              >
-                EL reward stealing
-              </MatomoLink>{' '}
-              penalties have been applied to your Node Operator because one of
-              your validators produced a block with the EL rewards sent to the
-              wrong address (an address different from from{' '}
-              <MatomoLink
-                href={LIDO_REWARDS_VAULT_LINK}
-                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoRewardsVaultLink}
-              >
-                the Lido Execution Layer Rewards Vault
-              </MatomoLink>
-              )
-              <br />
-              <b>Actions required:</b>
-              <ul>
-                <li>
-                  Compensate the amount of the penalty, otherwise the
-                  corresponding part of your bond will be burned and your
-                  beneficial bond curve will be reset to the default one.{' '}
-                </li>
-                <li>
-                  Check if the feeRecipient address of your validators consensus
-                  / validator client is set to{' '}
-                  <MatomoLink
-                    href={LIDO_REWARDS_VAULT_LINK}
-                    matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoRewardsVaultLink}
-                  >
-                    the Lido Execution Layer Rewards Vault
-                  </MatomoLink>{' '}
-                  to avoid the further penalties.
-                </li>
-              </ul>
-            </div>
-          )}
+          {!!lockedBond &&
+            (isExpired ? (
+              <div>
+                The lock period has ended. You can unlock your bond now (no
+                compensation required).
+              </div>
+            ) : (
+              <div>
+                Penalties have been applied to your Node Operator. If they
+                aren&apos;t covered, the corresponding amount of your bond may
+                be burned. See details in the table below.
+                <br />
+                <b>Actions required:</b>
+                <ul>
+                  <li>
+                    Compensate the penalty amount to prevent the related portion
+                    of your bond from being burned.
+                  </li>
+                  <li>
+                    Review the penalty details and fix the underlying issue to
+                    avoid additional penalties.
+                  </li>
+                </ul>
+              </div>
+            ))}
         </Stack>
       </Latice>
     </>

@@ -3,7 +3,7 @@ import {
   KEY_ICS_PROOF,
   KEY_SHARE_LIMIT,
   KEY_STAKE_LIMIT,
-  useCsmStatus,
+  useSmStatus,
   useCurveParameters,
   useDappStatus,
   useDefaultCurveId,
@@ -29,7 +29,7 @@ import { type SubmitKeysFormNetworkData } from './types';
 const useSubmitKeysFormNetworkData: NetworkData<
   SubmitKeysFormNetworkData
 > = () => {
-  const { data: status, isPending: isStatusLoading } = useCsmStatus();
+  const { data: status, isPending: isStatusLoading } = useSmStatus();
 
   const ethBalanceQuery = useEthereumBalance();
   const stethBalanceQuery = useStethBalance();

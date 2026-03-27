@@ -44,6 +44,7 @@ export const Info: FC = () => {
               Adding a bond serves as a voluntary security measure for your Node
               Operator to prevent your validators from becoming{' '}
               <MatomoLink
+                $inline
                 href={UNBONDED_VALIDATORS_LINK}
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.unbondedValidatorsLink}
               >

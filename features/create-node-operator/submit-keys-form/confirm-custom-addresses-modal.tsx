@@ -3,6 +3,7 @@ import type { ModalComponentType } from 'providers/modal-provider';
 import { FC, useCallback, useState } from 'react';
 import { Address, OwnerChip, Stack, StepIndicator } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
+import styled from 'styled-components';
 import invariant from 'tiny-invariant';
 
 type Props = {
@@ -100,7 +101,7 @@ const CustomAddresses: FC<Required<Props>> = ({
         <Address address={managerAddress} symbols={0} big weight={700} />
       </Stack>
     </Stack>
-    {extendedManagerPermissions && <StepIndicator length={2} current={0} />}
+    {extendedManagerPermissions && <StepStyle length={2} current={0} />}
   </>
 );
 
@@ -129,6 +130,10 @@ const ExtendedManagerPermissions: FC = () => (
         </ul>
       </Box>
     </Block>
-    <StepIndicator length={2} current={1} />
+    <StepStyle length={2} current={1} />
   </>
 );
+
+const StepStyle = styled(StepIndicator)`
+  margin-top: -12px; // @style
+`;

@@ -45,6 +45,7 @@ const getTxModalStagesClaimBond = (
               <TxAmount amount={amount} token={TOKENS.steth} /> has been sent.
               Check{' '}
               <MatomoLink
+                $inline
                 href={`${stakeWidget}/withdrawals/claim`}
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.claimWithdrawalsLink}
               >

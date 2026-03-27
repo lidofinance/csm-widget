@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
-import { useLidoSDK } from '../web3-provider';
+import { useSmSDK } from '../web3-provider';
 
 export const useKeyEjectFee = () => {
-  const { csm } = useLidoSDK();
+  const { keys } = useSmSDK();
 
   return useQuery({
     queryKey: ['ics-eject-fee'],
-    queryFn: () => csm.keys.getEjectFeePerKey(),
+    queryFn: () => keys.getEjectFeePerKey(),
     ...STRATEGY_CONSTANT,
   });
 };

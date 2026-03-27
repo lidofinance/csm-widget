@@ -29,7 +29,7 @@ export const BadgeWrapper = styled.div`
     grid-area: 1 / 1;
     filter: blur(38px);
     opacity: 0.8;
-    ${CURVE_VARIANTS[OPERATOR_TYPE.ICS]}
+    ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_ICS]}
   }
 `;
 
@@ -41,7 +41,7 @@ export const BadgeMain = styled.div`
   z-index: 1;
   border-radius: 28px;
   border: 4px solid rgba(var(--lido-rgb-foreground), 0.8);
-  ${CURVE_VARIANTS[OPERATOR_TYPE.ICS]}
+  ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_ICS]}
   background-origin: border-box;
 `;
 

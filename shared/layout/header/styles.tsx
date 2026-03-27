@@ -120,6 +120,8 @@ export const LogosStyle = styled.div`
   margin-block: 8px;
   align-self: start;
 
+  white-space: nowrap;
+
   ${({ theme }) => theme.mediaQueries.md} {
     > :not(:nth-child(1)) {
       display: none;

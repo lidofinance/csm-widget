@@ -9,6 +9,7 @@ export const StyledChip = styled(Chip).attrs({ variant: 'gray' })`
 // TODO: can it extend Chip from lido-ui?
 export const CustomStyledChip = styled.span`
   display: inline-flex;
+  flex: 0 0 auto;
   position: relative;
   overflow: hidden;
   padding: 2px 6px;

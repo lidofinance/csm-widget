@@ -9,6 +9,7 @@ import { useDappStatus } from 'modules/web3';
 export const useTxConfirmation = () => {
   const { chainId } = useDappStatus();
   const client = useClient({ chainId });
+
   return useCallback(
     (hash: string) => {
       return waitForTransactionReceipt(client as any, {

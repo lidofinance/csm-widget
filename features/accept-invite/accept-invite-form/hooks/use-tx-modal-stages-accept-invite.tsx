@@ -1,6 +1,7 @@
 import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk';
+import { ROLES_METADATA } from 'consts/roles';
 import { Address } from 'shared/components';
-import { DescriptorId, getRoleTitle } from 'shared/node-operator';
+import { DescriptorId } from 'shared/node-operator';
 import {
   TransactionModalTransitStage,
   TxStagePending,
@@ -21,7 +22,8 @@ const getTxModalStagesAcceptInvite = (
         title={`You are accepting address change`}
         description={
           <>
-            <DescriptorId id={id} /> &mdash; <b>{getRoleTitle(role)}</b> address
+            <DescriptorId id={id} /> &mdash; <b>{ROLES_METADATA[role].title}</b>{' '}
+            address
           </>
         }
       />,
@@ -33,7 +35,8 @@ const getTxModalStagesAcceptInvite = (
         title={`You are accepting address change`}
         description={
           <>
-            <DescriptorId id={id} /> &mdash; <b>{getRoleTitle(role)}</b> address
+            <DescriptorId id={id} /> &mdash; <b>{ROLES_METADATA[role].title}</b>{' '}
+            address
           </>
         }
         txHash={txHash}
@@ -50,7 +53,8 @@ const getTxModalStagesAcceptInvite = (
         title={<>Address change has been accepted</>}
         description={
           <>
-            {getRoleTitle(role, true)} address of <DescriptorId id={id} /> is
+            {ROLES_METADATA[role].capitalizedTitle} address of{' '}
+            <DescriptorId id={id} /> is
             <br />
             <Address address={address} symbols={0} />
           </>

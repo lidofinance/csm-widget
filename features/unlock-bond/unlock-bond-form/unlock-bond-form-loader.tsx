@@ -1,13 +1,14 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk';
-import { useNodeOperator } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
 import { FormLoader } from 'shared/hook-form/form-controller';
+import { useShowFlags } from 'shared/hooks';
+import { useUnlockBondFormData } from './context';
 import { Info } from './controls/info';
 
 export const UnlockBondFormLoader: FC<PropsWithChildren> = ({ children }) => {
-  const { nodeOperator } = useNodeOperator<true>();
+  const { HAS_MANAGER_ROLE } = useShowFlags();
+  const { lockedBond, isExpired } = useUnlockBondFormData();
 
-  const isView = !nodeOperator.roles.includes(ROLES.MANAGER);
+  const isView = !lockedBond || (!isExpired && !HAS_MANAGER_ROLE);
 
   return <FormLoader>{isView ? <Info /> : children}</FormLoader>;
 };

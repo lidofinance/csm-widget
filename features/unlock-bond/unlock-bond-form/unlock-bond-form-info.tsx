@@ -5,11 +5,13 @@ import { FormatToken } from 'shared/formatters';
 import { UnlockBondFormInputType, useUnlockBondFormData } from './context';
 
 export const UnlockBondFormInfo = () => {
-  const { lockedBond } = useUnlockBondFormData(true);
+  const { lockedBond, isExpired } = useUnlockBondFormData(true);
 
   const amount = useWatch<UnlockBondFormInputType, 'amount'>({
     name: 'amount',
   });
+
+  if (isExpired) return null;
 
   const remainLockedBond = lockedBond - (amount ?? 0n);
 

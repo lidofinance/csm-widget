@@ -5,7 +5,7 @@ import { FC, PropsWithChildren } from 'react';
 import { ConfigProvider } from 'config';
 import { GlobalStyle } from 'styles';
 
-import { NodeOperatorPrivider, Web3Provider } from 'modules/web3';
+import { NodeOperatorProvider, Web3Provider } from 'modules/web3';
 import { AlertProvider, AlertsWatcherProvider } from 'shared/alerts';
 import { GateSupported } from 'shared/navigate';
 import { AddressValidationFile, hashKey } from 'utils';
@@ -50,7 +50,7 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                   <Web3Provider>
                     <AddressValidationProvider validationFile={validationFile}>
                       <GateSupported>
-                        <NodeOperatorPrivider>
+                        <NodeOperatorProvider>
                           <ModalProvider>
                             {skipWatcher ? (
                               children
@@ -60,7 +60,7 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                               </AlertsWatcherProvider>
                             )}
                           </ModalProvider>
-                        </NodeOperatorPrivider>
+                        </NodeOperatorProvider>
                       </GateSupported>
                     </AddressValidationProvider>
                   </Web3Provider>

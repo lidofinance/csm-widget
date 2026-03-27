@@ -4,27 +4,28 @@ import {
   TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useLidoSDK } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
 import { UnlockBondFormInputType, UnlockBondFormNetworkData } from '../context';
 import { useTxModalStagesUnlockBond } from '../hooks/use-tx-modal-stages-unlock-bond';
+import invariant from 'tiny-invariant';
 
 export const useUnlockBondSubmit: FormSubmitterHook<
   UnlockBondFormInputType,
   UnlockBondFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const { bond } = useSmSDK();
   const { txModalStages } = useTxModalStagesUnlockBond();
 
   return useCallback(
-    async ({ amount }, { nodeOperatorId }, { onConfirm, onRetry }) => {
-      if (amount === undefined) {
-        throw new Error('BondAmount is not defined');
-      }
-
+    async (
+      { amount },
+      { nodeOperatorId, isExpired },
+      { onConfirm, onRetry },
+    ) => {
       try {
-        const callback: TransactionCallback<bigint> = async ({
+        const callback: TransactionCallback<bigint | undefined> = async ({
           stage,
           payload,
         }) => {
@@ -35,14 +36,12 @@ export const useUnlockBondSubmit: FormSubmitterHook<
             case TransactionCallbackStage.RECEIPT:
               txModalStages.pending({ amount }, payload.hash);
               break;
-            case TransactionCallbackStage.DONE: {
-              payload;
+            case TransactionCallbackStage.DONE:
               txModalStages.success(
-                { lockedBond: payload.result },
+                { lockedBond: payload.result ?? undefined },
                 payload.hash,
               );
               break;
-            }
             case TransactionCallbackStage.MULTISIG_DONE:
               txModalStages.successMultisig();
               break;
@@ -53,11 +52,12 @@ export const useUnlockBondSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.bond.coverLockedBond({
-          nodeOperatorId,
-          amount,
-          callback,
-        });
+        if (isExpired) {
+          await bond.unlockExpiredLock({ nodeOperatorId, callback });
+        } else {
+          invariant(amount !== undefined, 'BondAmount is not defined');
+          await bond.coverLockedBond({ nodeOperatorId, amount, callback });
+        }
 
         await onConfirm?.();
 
@@ -66,6 +66,6 @@ export const useUnlockBondSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [csm.bond, txModalStages],
+    [bond, txModalStages],
   );
 };

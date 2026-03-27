@@ -10,6 +10,7 @@ const REPLACEMENTS: Record<string, string> = {
   'curated-onchain-v1': 'Lido Curated',
 };
 
+// FIXME: add support CSM and CM for each other
 export const OtherModuleBanner: FC = () => {
   const { operatorsWidget } = getExternalLinks();
   const { address } = useDappStatus();
@@ -34,6 +35,7 @@ export const OtherModuleBanner: FC = () => {
         If you want to upload keys to another module (Curated or Simple DVT),
         navigate to{' '}
         <MatomoLink
+          $inline
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.otherModuleLink}
           href={`${operatorsWidget}/submitter`}
         >

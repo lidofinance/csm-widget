@@ -1,7 +1,7 @@
 import {
   KEY_OPERATOR_BALANCE,
   KEY_OPERATOR_REWARDS,
-  useCsmStatus,
+  useSmStatus,
   useIsContract,
   useNodeOperatorId,
   useOperatorBalance,
@@ -45,7 +45,7 @@ const useClaimBondFormNetworkData: NetworkData<
   const { data: isContract, isPending: isContractLoading } =
     useIsContract(rewardsAddress);
 
-  const { data: status, isPending: isStatusLoading } = useCsmStatus();
+  const { data: status, isPending: isStatusLoading } = useSmStatus();
 
   const invalidate = useInvalidate();
 

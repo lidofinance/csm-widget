@@ -1,10 +1,14 @@
 import { FormTitle, Note } from 'shared/components';
 import { TokenAmountInputHookForm } from 'shared/hook-form/controls';
+import { useUnlockBondFormData } from '../context';
 import { useMaxValue } from '../hooks/use-max-value';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const AmountInput: React.FC = () => {
+  const { isExpired } = useUnlockBondFormData();
   const max = useMaxValue();
+
+  if (isExpired) return null;
 
   return (
     <>

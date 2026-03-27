@@ -25,6 +25,7 @@ import {
   TxLinkEtherscan,
 } from 'shared/components';
 import { LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE } from 'consts/external-links';
+import { isModuleCM } from 'consts/module';
 import { FaqElement } from 'shared/components/faq/styles';
 import { countCalendarDaysLeft, formatDate, formatPercent } from 'utils';
 import { Balance } from './balance';
@@ -54,7 +55,8 @@ export const LastRewards: FC = () => {
   const prevRewardsDate = formatDate(lastFrame?.start);
   const daysLeft = countCalendarDaysLeft(rewardsFrame?.nextDistribution);
 
-  const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
+  const showThisSection =
+    lastFrame && (lastRewards || (info?.totalDepositedKeys ?? 0) > 0);
 
   const showWhy = lastRewards && lastRewards.distributed === 0n;
 
@@ -133,9 +135,8 @@ const LastReportStats: FC = () => {
 
   return (
     <RowBody data-testid="lastRewardsInfo">
-      {!lastRewards || lastRewards.validatorsCount ? (
-        <>
-          {' '}
+      {!isModuleCM &&
+        (!lastRewards || lastRewards.validatorsCount ? (
           <TextBlock
             title="Keys over threshold"
             loading={isLoading}
@@ -153,12 +154,11 @@ const LastReportStats: FC = () => {
             {lastRewards?.validatorsOverThresholdCount}{' '}
             <i>/{lastRewards?.validatorsCount}</i>
           </TextBlock>
-        </>
-      ) : (
-        <DoubleColumnStyle>
-          <TextBlock title="You had no active keys during the latest rewards frame" />
-        </DoubleColumnStyle>
-      )}
+        ) : (
+          <DoubleColumnStyle>
+            <TextBlock title="You had no active keys during the latest rewards frame" />
+          </DoubleColumnStyle>
+        ))}
 
       <TextBlock title="Distribution transaction" loading={isTxLoading}>
         <Box as="span" fontWeight={400} fontSize={12}>

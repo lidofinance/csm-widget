@@ -12,9 +12,11 @@ import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 
 import { config } from 'config';
 import { contentSecurityPolicy } from 'config/csp';
+import { MODULE_METADATA } from 'consts/module';
 import { FiraCodeFont } from 'styles';
 
-let host = 'https://csm.lido.fi';
+const moduleMeta = MODULE_METADATA[config.module];
+let host: string = moduleMeta.host;
 
 const secureHeaders = createHeadersObject({ contentSecurityPolicy });
 const cspMetaTagContent =
@@ -56,11 +58,11 @@ export default class MyDocument extends Document {
   }
 
   get metaTitle(): string {
-    return 'Community Staking Module | Lido';
+    return `${moduleMeta.title} | Lido`;
   }
 
   get metaDescription(): string {
-    return 'The Community Staking Module is a permissionless staking module aimed at attracting community stakers to participate in the Lido on Ethereum protocol as Node Operators.';
+    return moduleMeta.description;
   }
 
   get metaPreviewImgUrl(): string {
@@ -79,7 +81,7 @@ export default class MyDocument extends Document {
           )}
           <link
             rel="manifest"
-            href={`${config.BASE_PATH_ASSET}/manifest.json`}
+            href={`${config.BASE_PATH_ASSET}/${moduleMeta.manifestFile}`}
           />
           <link
             rel="icon"

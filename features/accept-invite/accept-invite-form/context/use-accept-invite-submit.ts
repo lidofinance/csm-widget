@@ -6,7 +6,7 @@ import {
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
-import { useAppendOperator, useLidoSDK } from 'modules/web3';
+import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { useNavigate } from 'shared/navigate';
 import { handleTxError } from 'shared/transaction-modal';
@@ -21,7 +21,7 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
   AcceptInviteFormInputType,
   AcceptInviteFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK();
   const { txModalStages } = useTxModalStagesAcceptInvite();
   const appendNO = useAppendOperator();
   const n = useNavigate();
@@ -59,7 +59,7 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
           }
         };
 
-        const { result } = await csm.roles.confirmRole({
+        const { result } = await sdk.roles.confirmAddress({
           nodeOperatorId: invite.id,
           role: invite.role,
           callback,
@@ -80,6 +80,6 @@ export const useAcceptInviteSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [csm.roles, appendNO, txModalStages, n],
+    [sdk.roles, appendNO, txModalStages, n],
   );
 };

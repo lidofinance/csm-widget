@@ -34,7 +34,10 @@ export const TextareaStyle = styled(Textarea)`
   }
 `;
 
-export const TableContainer = styled.div<{ $equal?: boolean }>`
+export const TableContainer = styled.div<{
+  $equal?: boolean;
+  $short?: boolean;
+}>`
   background: var(--lido-color-accentControlBg);
   padding: ${({ theme }) => theme.spaceMap.md}px;
   position: relative;
@@ -45,8 +48,14 @@ export const TableContainer = styled.div<{ $equal?: boolean }>`
   flex-direction: column;
   gap: 8px;
 
-  --columns: ${({ $equal }) =>
-    $equal ? '1fr 1fr 1fr 1fr' : '3fr 2fr 2fr 2fr'};
+  --columns: ${({ $equal, $short }) =>
+    $short
+      ? $equal
+        ? '1fr 1fr 1fr'
+        : '3fr 2fr 2fr'
+      : $equal
+        ? '1fr 1fr 1fr 1fr'
+        : '3fr 2fr 2fr 2fr'};
 `;
 
 export const TableHeader = styled.div`

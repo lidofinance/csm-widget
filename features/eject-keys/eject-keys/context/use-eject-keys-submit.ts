@@ -3,7 +3,7 @@ import {
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
 import { HIGH_EJECTION_COST_THRESHOLD } from 'consts';
-import { useLidoSDK } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
@@ -17,7 +17,7 @@ export const useEjectKeysSubmit: FormSubmitterHook<
   EjectKeysFormInputType,
   EjectKeysFormNetworkData
 > = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK();
   const { txModalStages } = useTxModalStagesEjectKeys();
   const confirm = useConfirmEjectKeysModal();
   const confirmHighCost = useConfirmHighCostModal();
@@ -70,9 +70,9 @@ export const useEjectKeysSubmit: FormSubmitterHook<
           }
         };
 
-        await csm.keys.ejectKeysByArray({
+        await sdk.keys.ejectKeys({
           nodeOperatorId,
-          keyIndices: selection.map((v) => BigInt(v)),
+          keyIndices: selection.map(BigInt),
           amount: feeAmount,
           callback,
         });
@@ -84,6 +84,6 @@ export const useEjectKeysSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [confirm, confirmHighCost, csm.keys, txModalStages],
+    [confirm, confirmHighCost, sdk.keys, txModalStages],
   );
 };

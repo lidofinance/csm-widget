@@ -24,7 +24,7 @@ export const ChangeRoleFormProvider: FC<
     ChangeRoleFormNetworkData
   >((data) => ({
     isRevoke: false,
-    address: data.isManagerReset ? data.address : undefined,
+    address: data.mode === 'managerReset' ? data.address : undefined,
   }));
 
   const formObject = useForm<ChangeRoleFormInputType>({
