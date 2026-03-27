@@ -4,7 +4,6 @@ import { trimAddress } from '@lidofinance/address';
 import {
   LOW_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
 } from '../../../../../../shared/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from '../../../../../../shared/helpers/accountData';
@@ -90,10 +89,7 @@ test.describe(
             state: 'visible',
           });
 
-          const [txPage] = await Promise.all([
-            managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-            settingsPage.modalRoot.continueButton.click(),
-          ]);
+          await settingsPage.modalRoot.continueButton.click();
 
           await test.step('Continue proposal', async () => {
             await managerAddressPage.page.waitForSelector(
@@ -116,7 +112,7 @@ test.describe(
               );
             });
           });
-          await managerAddressPage.walletPage.cancelTx(txPage);
+          await managerAddressPage.walletPage.cancelTx();
         });
       },
     );
@@ -141,16 +137,13 @@ test.describe(
           state: 'visible',
         });
 
-        const [txPage] = await Promise.all([
-          managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          settingsPage.modalRoot.continueButton.click(),
-        ]);
+        await settingsPage.modalRoot.continueButton.click();
 
         await managerAddressPage.page.waitForSelector(
           `text=You are proposing manager address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
-        await managerAddressPage.walletPage.confirmTx(txPage);
+        await managerAddressPage.walletPage.confirmTx();
 
         await test.step('Verify confirm transaction', async () => {
           await managerAddressPage.page.waitForSelector(
@@ -165,7 +158,7 @@ test.describe(
             'Connect to CSM UI with the proposed address',
           );
           await expect(txModal.description).toContainText(
-            'Go to Roles tab → Inbox requests to confirm the change',
+            'Go to Settings tab → Inbox requests to confirm the change',
           );
 
           await expect(txModal.description).toContainText(

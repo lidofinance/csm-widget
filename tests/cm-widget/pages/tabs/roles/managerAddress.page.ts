@@ -1,12 +1,6 @@
-import {
-  WalletConnectType,
-  WalletPage,
-} from '@lidofinance/wallets-testing-wallets';
+import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { Locator, Page, test } from '@playwright/test';
-import {
-  STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from '../../../../shared/consts/timeouts';
+import { STAGE_WAIT_TIMEOUT } from '../../../../shared/consts/timeouts';
 import { BasePage } from '../../../pages/base.page';
 
 export class ManagerAddressPage extends BasePage {
@@ -32,7 +26,7 @@ export class ManagerAddressPage extends BasePage {
 
   constructor(
     public page: Page,
-    public walletPage: WalletPage<WalletConnectType>,
+    public walletPage: WalletPage,
   ) {
     super(page);
     this.form = this.page.getByTestId('changeRoleForm');
@@ -83,17 +77,14 @@ export class ManagerAddressPage extends BasePage {
       }
 
       await test.step('Do revoke', async () => {
-        const [txPage] = await Promise.all([
-          this.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          this.revokeButton.click(),
-        ]);
+        await this.revokeButton.click();
 
         await this.page.waitForSelector(
           `text=You are canceling request for manager address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
-        await this.walletPage.confirmTx(txPage);
+        await this.walletPage.confirmTx();
 
         await this.page.waitForSelector(
           `text=Proposed request for manager address has been canceled`,
@@ -117,17 +108,14 @@ export class ManagerAddressPage extends BasePage {
       await this.addressValidIcon.waitFor({ state: 'visible' });
 
       await test.step('Do proposal', async () => {
-        const [txPage] = await Promise.all([
-          this.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          this.proposeButton.click(),
-        ]);
+        await this.proposeButton.click();
 
         await this.page.waitForSelector(
           `text=You are proposing manager address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
-        await this.walletPage.confirmTx(txPage);
+        await this.walletPage.confirmTx();
 
         await this.page.waitForSelector(
           `text=New manager address has been proposed`,

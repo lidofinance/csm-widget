@@ -4,7 +4,6 @@ import { trimAddress } from '@lidofinance/address';
 import {
   LOW_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
 } from '../../../../../../shared/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from '../../../../../../shared/helpers/accountData';
@@ -40,10 +39,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
         state: 'visible',
       });
 
-      const [txPage] = await Promise.all([
-        managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        managerAddressPage.proposeButton.click(),
-      ]);
+      await managerAddressPage.proposeButton.click();
 
       await managerAddressPage.page.waitForSelector(
         `text=You are proposing manager address change`,
@@ -62,7 +58,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
           'Confirm this transaction in your wallet',
         );
       });
-      await widgetService.walletPage.cancelTx(txPage);
+      await widgetService.walletPage.cancelTx();
     },
   );
 
@@ -81,10 +77,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
           state: 'visible',
         });
 
-        const [txPage] = await Promise.all([
-          managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          managerAddressPage.proposeButton.click(),
-        ]);
+        await managerAddressPage.proposeButton.click();
 
         await managerAddressPage.page.waitForSelector(
           `text=You are proposing manager address change`,
@@ -92,7 +85,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
         );
 
         await test.step('Verify confirm transaction', async () => {
-          await widgetService.walletPage.confirmTx(txPage);
+          await widgetService.walletPage.confirmTx();
 
           await managerAddressPage.page.waitForSelector(
             `text=New manager address has been proposed`,
@@ -106,7 +99,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
             'Connect to CSM UI with the proposed address',
           );
           await expect(txModal.description).toContainText(
-            'Go to Roles tab → Inbox requests to confirm the change',
+            'Go to Settings tab → Inbox requests to confirm the change',
           );
 
           await expect(txModal.description).toContainText(

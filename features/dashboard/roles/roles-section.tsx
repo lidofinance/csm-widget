@@ -46,8 +46,8 @@ export const RolesSection: FC = () => {
     <SectionBlock
       title="Roles"
       href={PATH.SETTINGS_ROLES}
+      data-testid="dashboardRolesSection"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink}
-      data-testid="rolesSection"
     >
       <RolesGrid>
         <RoleRowStyle data-testid="rewardsAddressRow">

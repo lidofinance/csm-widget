@@ -1,7 +1,8 @@
-import { FC, PropsWithChildren } from 'react';
+import { ElementType, FC, PropsWithChildren } from 'react';
 import { StackStyle, StackStyleProps } from './style';
 
 type Props = {
+  as?: ElementType;
   direction?: 'row' | 'column';
   gap?: StackStyleProps['$gap'];
   center?: boolean;

@@ -5,7 +5,6 @@ import {
   TokenSymbol,
 } from '../../../../shared/consts/common.const';
 import { BasePage } from '../../../pages';
-import { WALLET_PAGE_TIMEOUT_WAITER } from '../../../../shared/consts/timeouts';
 import { DepositKey } from '../../../../shared/services/keysGenerator.service';
 
 export class CreateNodeOperatorForm {
@@ -82,7 +81,7 @@ export class CreateNodeOperatorForm {
   }
 
   async addNewKeys(keys: DepositKey[], tokenSymbol: TokenSymbol) {
-    return test.step('Add new keys', async () => {
+    await test.step('Add new keys', async () => {
       const bondTokenElement = this.getBondTokenElement(tokenSymbol);
       await bondTokenElement.click();
       await this.fillKeys(keys);
@@ -96,12 +95,7 @@ export class CreateNodeOperatorForm {
       ).toHaveValue(expectedBond.toFixed(1));
       await this.confirmKeysReady.click();
 
-      const [walletSignPage] = await Promise.all([
-        this.base.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        this.submitKeysButton.click(),
-      ]);
-
-      return walletSignPage;
+      await this.submitKeysButton.click();
     });
   }
 }

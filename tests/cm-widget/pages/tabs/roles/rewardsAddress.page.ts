@@ -1,13 +1,8 @@
-import {
-  WalletPage,
-  WalletConnectType,
-} from '@lidofinance/wallets-testing-wallets';
+import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { Locator, Page, test } from '@playwright/test';
 import {
   LOW_TIMEOUT,
-  RPC_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
 } from '../../../../shared/consts/timeouts';
 import { BasePage } from '../../../pages/base.page';
 
@@ -35,7 +30,7 @@ export class RewardsAddressPage extends BasePage {
 
   constructor(
     public page: Page,
-    public walletPage: WalletPage<WalletConnectType>,
+    public walletPage: WalletPage,
   ) {
     super(page);
     this.form = this.page.getByTestId('changeRoleForm');
@@ -88,17 +83,14 @@ export class RewardsAddressPage extends BasePage {
       }
 
       await test.step('Do revoke', async () => {
-        const [txPage] = await Promise.all([
-          this.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          this.revokeButton.click(),
-        ]);
+        await this.revokeButton.click();
 
         await this.page.waitForSelector(
           `text=You are canceling request for rewards address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
-        await this.walletPage.confirmTx(txPage);
+        await this.walletPage.confirmTx();
 
         await this.page.waitForSelector(
           `text=Proposed request for rewards address has been canceled`,
@@ -130,17 +122,14 @@ export class RewardsAddressPage extends BasePage {
         state: 'visible',
       });
       await test.step('Do proposal', async () => {
-        const [txPage] = await Promise.all([
-          this.waitForPage(RPC_WAIT_TIMEOUT),
-          modalContinueButton.click(),
-        ]);
+        await modalContinueButton.click();
 
         await this.page.waitForSelector(
           `text=You are proposing rewards address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
-        await this.walletPage.confirmTx(txPage);
+        await this.walletPage.confirmTx();
 
         await this.page.waitForSelector(
           `text=New rewards address has been proposed`,

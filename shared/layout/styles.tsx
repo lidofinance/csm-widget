@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const LayoutStyle = styled(Container)`
-  --layout-main-width: 590px;
+  --layout-base-width: 590px;
+  --layout-main-width: var(--layout-base-width);
   --layout-side-width: 170px;
 
   position: relative;
@@ -40,6 +41,19 @@ export const LayoutStyle = styled(Container)`
     }
   }
 
+  &:has(nav[data-desktop-hidden]) {
+    --layout-main-width: 1204px;
+
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto 1fr auto;
+    grid-template-areas:
+      'header'
+      'alerts'
+      'buttons'
+      'main'
+      'footer';
+  }
+
   ${NAV_MOBILE_MEDIA} {
     grid-template-rows: auto auto 1fr auto;
     grid-template-columns: 1fr;
@@ -58,6 +72,9 @@ export const Heading = styled.header<{ $titlesCount: number }>`
 
   margin-bottom: ${({ theme, $titlesCount }) =>
     $titlesCount < 2 ? theme.spaceMap.xxl : theme.spaceMap.md}px;
+
+  max-width: var(--layout-base-width);
+  align-self: center;
 `;
 
 export const LayoutTitleStyle = styled(H1)`
@@ -65,6 +82,7 @@ export const LayoutTitleStyle = styled(H1)`
   font-size: ${({ theme }) => theme.fontSizesMap.xl}px;
   line-height: 1.46em;
   text-align: center;
+  text-wrap: balance;
 
   &:empty {
     display: none;
@@ -117,4 +135,16 @@ export const Main = styled.main`
   width: 100%;
 
   max-width: var(--layout-main-width);
+`;
+
+export const FullWidthButtonWrapper = styled.div`
+  grid-area: buttons;
+
+  position: absolute;
+  top: 12px;
+  z-index: 9;
+
+  ${NAV_MOBILE_MEDIA} {
+    position: static;
+  }
 `;

@@ -1,5 +1,5 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
-import { ALERT_FEE_RECIPIENT_DISMISS_HOURS, PATH } from 'consts';
+import { ALERT_FEE_RECIPIENT_DISMISS_HOURS, isModuleCM, PATH } from 'consts';
 import {
   useIsLockExpired,
   useNodeOperatorId,
@@ -74,7 +74,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useAlertWatcher({
     component: AlertNomalizeQueue,
-    shouldShow: !!normalizeQueue,
+    shouldShow: !isModuleCM && !!normalizeQueue,
   });
 
   useAlertWatcher({

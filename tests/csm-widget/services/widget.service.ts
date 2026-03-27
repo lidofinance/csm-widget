@@ -1,22 +1,19 @@
-import { expect, Page, test } from '@playwright/test';
-import { ElementController } from '../pages/elements/controller';
 import {
-  WalletPage,
-  WalletConnectType,
   WalletConnectTypes,
+  WalletPage,
 } from '@lidofinance/wallets-testing-wallets';
 import { MainPage, KeysPage, DashboardPage, SettingsPage } from '../pages';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
 import { TokenSymbol } from '../../shared/consts/common.const';
-import { AssertionError } from 'assert';
-import {
-  STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from '../../shared/consts/timeouts';
-import { BondRewardsPage } from '../pages/bondRewards.page';
+import { STAGE_WAIT_TIMEOUT } from '../../shared/consts/timeouts';
+import { test, expect } from '@playwright/test';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { OperatorTypePage } from '../pages/operatorType.page';
 import { FeatureFlagsType } from 'config/feature-flags/types';
+import { BondRewardsPage } from '../pages/bondRewards.page';
+import { OperatorTypePage } from '../pages/operatorType.page';
+import { Page } from '@playwright/test';
+import { ElementController } from '../pages/elements/controller';
+import { MonitoringPage } from 'tests/cm-widget/pages/monitoring.page';
 
 type FeatureFlagName = keyof FeatureFlagsType;
 
@@ -25,17 +22,19 @@ export class WidgetService {
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
   public settingsPage: SettingsPage;
+  public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
   public operatorType: OperatorTypePage;
 
   constructor(
     public page: Page,
-    public walletPage: WalletPage<WalletConnectType>,
+    public walletPage: WalletPage,
   ) {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
+    this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
     this.operatorType = new OperatorTypePage(this.page, this.walletPage);
   }
@@ -67,6 +66,23 @@ export class WidgetService {
         } catch {
           console.error('Wallet page didnt open');
         }
+      } else if (
+        (await walletIcon.isEnabled({ timeout: 500 })) &&
+        this.walletPage.options.walletConfig.WALLET_TYPE ===
+          WalletConnectTypes.WC_SDK
+      ) {
+        try {
+          await Promise.all([
+            this.page.getByTestId('wui-qr-code').waitFor({ state: 'visible' }),
+            await walletIcon.dblclick(),
+          ]);
+          const uri = await this.page
+            .getByTestId('wui-qr-code')
+            .getAttribute('uri');
+          await this.walletPage.connectWallet(uri as string);
+        } catch {
+          console.error('Wallet is not connected');
+        }
       }
 
       expect(
@@ -80,23 +96,13 @@ export class WidgetService {
 
   async submitKeys(keys: DepositKey[], tokenSymbol = TokenSymbol.STETH) {
     const isNewOperator = await this.keysPage.isNewOperator();
-    let txPage;
     if (isNewOperator) {
-      txPage = await this.keysPage.createNodeOperatorForm.addNewKeys(
-        keys,
-        tokenSymbol,
-      );
+      await this.keysPage.createNodeOperatorForm.addNewKeys(keys, tokenSymbol);
     } else {
-      txPage = await this.keysPage.submitPage.submitKeys(keys, tokenSymbol);
+      await this.keysPage.submitPage.submitKeys(keys, tokenSymbol);
     }
 
-    if (!txPage) {
-      throw new AssertionError({
-        message: 'Wallet page for submit transaction has not opened.',
-      });
-    }
-
-    await this.walletPage.confirmTx(txPage);
+    await this.walletPage.confirmTx();
     await this.page.waitForSelector(
       `text=Uploading operation was successful.`,
       { timeout: STAGE_WAIT_TIMEOUT },
@@ -109,12 +115,9 @@ export class WidgetService {
         await this.keysPage.removePage.getCheckboxByAddress(key).click();
       }
 
-      const [walletSignPage] = await Promise.all([
-        this.keysPage.base.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        this.page.getByRole('button', { name: 'Remove Keys' }).click(),
-      ]);
+      await this.page.getByRole('button', { name: 'Remove Keys' }).click();
 
-      await this.walletPage.confirmTx(walletSignPage);
+      await this.walletPage.confirmTx();
       await this.keysPage.page.waitForSelector(
         `text=${keysToRemove.length} key has been removed`,
         { timeout: STAGE_WAIT_TIMEOUT },
@@ -130,31 +133,22 @@ export class WidgetService {
           this.bondRewardsPage.addBond.selectBondToken(tokenName);
         await bondToken.click();
       });
-
       await this.bondRewardsPage.addBond.amountInput.fill(amount);
-
-      let [txPage] = await Promise.all([
-        this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        this.bondRewardsPage.addBond.addBondButton.click(),
-      ]);
+      await this.bondRewardsPage.addBond.addBondButton.click();
 
       if (tokenName !== TOKENS.eth) {
         await this.bondRewardsPage.page.waitForSelector(
           `text=Confirm request in your wallet`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
-
-        [txPage] = await Promise.all([
-          this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          this.walletPage.confirmTx(txPage),
-        ]);
+        await this.walletPage.confirmTx();
       }
 
       await this.page.waitForSelector(
         `text=Confirm this transaction in your wallet`,
         { timeout: STAGE_WAIT_TIMEOUT },
       );
-      await this.walletPage.confirmTx(txPage);
+      await this.walletPage.confirmTx();
       await this.page.waitForSelector(`text=Awaiting block confirmation`, {
         timeout: STAGE_WAIT_TIMEOUT,
       });
@@ -178,16 +172,13 @@ export class WidgetService {
           ? this.bondRewardsPage.claim.requestWithdrawalButton
           : this.bondRewardsPage.claim.claimButton;
 
-      const [txPage] = await Promise.all([
-        this.bondRewardsPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        actionButton.click(),
-      ]);
+      await actionButton.click();
 
       await this.page.waitForSelector(
         `text=Confirm this transaction in your wallet`,
         { timeout: STAGE_WAIT_TIMEOUT },
       );
-      await this.walletPage.confirmTx(txPage);
+      await this.walletPage.confirmTx();
 
       const successText =
         tokenName === TOKENS.eth

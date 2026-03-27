@@ -1,7 +1,6 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { ROLES_METADATA } from 'consts/roles';
-import { capitalize } from 'lodash';
 import { Address as AddressComponent } from 'shared/components';
 import {
   AfterAddressProposed,
@@ -27,10 +26,10 @@ const getTexts = (props: Props) => {
   return props.mode === 'managerReset' || props.mode === 'rewardsChange'
     ? {
         sign: {
-          title: `You are changing ${ROLES_METADATA[props.role].title} address`,
+          title: `You are changing ${ROLES_METADATA[props.role].capitalizedTitle} Address`,
           description: (
             <>
-              New {ROLES_METADATA[props.role].title} address is{' '}
+              New {ROLES_METADATA[props.role].capitalizedTitle} Address is{' '}
               <Text size="xxs">
                 <AddressComponent address={props.address} showIcon />
               </Text>
@@ -38,10 +37,10 @@ const getTexts = (props: Props) => {
           ),
         },
         success: {
-          title: `${capitalize(ROLES_METADATA[props.role].title)} address has been changed`,
+          title: `${ROLES_METADATA[props.role].capitalizedTitle} Address has been changed`,
           description: (
             <>
-              New {ROLES_METADATA[props.role].title} address is{' '}
+              New {ROLES_METADATA[props.role].capitalizedTitle} Address is{' '}
               <Text size="xxs">
                 <AddressComponent address={props.address} showIcon />
               </Text>
@@ -52,7 +51,7 @@ const getTexts = (props: Props) => {
     : props.isRevoke
       ? {
           sign: {
-            title: `You are canceling request for ${ROLES_METADATA[props.role].title} address change`,
+            title: `You are canceling request for ${ROLES_METADATA[props.role].capitalizedTitle} Address change`,
             description: (
               <>
                 Address stays{' '}
@@ -63,7 +62,7 @@ const getTexts = (props: Props) => {
             ),
           },
           success: {
-            title: `Proposed request for ${ROLES_METADATA[props.role].title} address has been canceled`,
+            title: `Proposed request for ${ROLES_METADATA[props.role].capitalizedTitle} Address has been canceled`,
             description: (
               <>
                 Address stays{' '}
@@ -76,7 +75,7 @@ const getTexts = (props: Props) => {
         }
       : {
           sign: {
-            title: `You are proposing ${ROLES_METADATA[props.role].title} address change`,
+            title: `You are proposing ${ROLES_METADATA[props.role].capitalizedTitle} Address change`,
             description: (
               <>
                 Proposed address{' '}
@@ -87,7 +86,7 @@ const getTexts = (props: Props) => {
             ),
           },
           success: {
-            title: `New ${ROLES_METADATA[props.role].title} address has been proposed`,
+            title: `New ${ROLES_METADATA[props.role].capitalizedTitle} Address has been proposed`,
             description: (
               <>
                 <br />

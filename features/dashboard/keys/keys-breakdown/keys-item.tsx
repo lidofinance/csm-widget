@@ -18,8 +18,10 @@ export const KeysItem: FC<KeysItemProps> = ({
   comment,
   tooltip,
 }) => {
+  const variant =
+    !type && count ? 'active' : type === 'error' && !count ? undefined : type;
   return (
-    <WrapperStyle $variant={type === 'error' && !count ? undefined : type}>
+    <WrapperStyle $variant={variant}>
       <Stack direction="column" gap="xs">
         <TitleStyle>
           <Tooltip title={tooltip} placement="topLeft">

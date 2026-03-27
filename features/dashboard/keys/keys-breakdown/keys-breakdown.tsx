@@ -1,25 +1,34 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { isModuleCM } from 'consts';
-import { FC } from 'react';
+import { MoreKeysChip } from 'features/group/shared';
 import {
-  Plural,
-  ShortInlineLoader,
-  SquaredChip,
-  Stack,
-  StatusComment,
-} from 'shared/components';
+  useNodeOperatorId,
+  useOperatorInfo,
+  useOperatorStakeSummary,
+} from 'modules/web3';
+import { FC, useMemo } from 'react';
+import { Plural, SquaredChip, Stack, StatusComment } from 'shared/components';
+import { computeStakeData } from 'utils';
 import { KeysItem } from './keys-item';
 import { AccordionStyle, Alert, Check } from './styles';
 import { useKeysBreakdown } from './use-keys-breakdown';
-import { useNodeOperatorId } from 'modules/web3';
-import { useStakeAndKeys } from '../stake-and-keys/use-stake-and-keys';
 
 export const KeysBreakdown: FC = () => {
-  const id = useNodeOperatorId();
-  const { data, isPending } = useKeysBreakdown(id);
-  const { data: stakeAndKeys } = useStakeAndKeys(id);
-  const moreKeys = (stakeAndKeys?.potentialAdditionalKeys ?? 0) > 0;
+  const nodeOperatorId = useNodeOperatorId();
+  const { data } = useKeysBreakdown(nodeOperatorId);
+  const { data: stakeSummary } = useOperatorStakeSummary(nodeOperatorId);
+  const { data: info } = useOperatorInfo(nodeOperatorId);
+
+  const moreKeys = useMemo(() => {
+    const stakeAndKeys =
+      stakeSummary && info ? computeStakeData(stakeSummary, info) : undefined;
+    return (stakeAndKeys?.potentialAdditionalKeys ?? 0) > 0;
+  }, [info, stakeSummary]);
+
+  const hasAnyKey = useMemo(() => {
+    return !!info && info.totalAddedKeys > 0;
+  }, [info]);
 
   return (
     <AccordionStyle
@@ -28,16 +37,12 @@ export const KeysBreakdown: FC = () => {
           <Text as="h4" size="sm" weight={700}>
             Keys Breakdown
           </Text>
-          <Stack>
-            {isPending ? (
-              <ShortInlineLoader />
-            ) : (
-              <>
-                {isModuleCM && <MoreKeysChip more={moreKeys} />}
-                <IssuesChip issues={data?.issuesCount} />
-              </>
-            )}
-          </Stack>
+          {hasAnyKey && (
+            <Stack>
+              {isModuleCM && <MoreKeysChip more={moreKeys} />}
+              <IssuesChip issues={data?.issuesCount} />
+            </Stack>
+          )}
         </Stack>
       }
     >
@@ -63,7 +68,6 @@ export const KeysBreakdown: FC = () => {
         />
         <KeysItem
           data-testid="keysActiveCount"
-          type="active"
           title="Active"
           count={data?.counts.active}
           tooltip="Keys that active"
@@ -106,14 +110,16 @@ export const KeysBreakdown: FC = () => {
           tooltip="Keys requested to exit"
           comment={<StatusComment statuses={[KEY_STATUS.EXIT_REQUESTED]} />}
         />
-        <KeysItem
-          data-testid="keysNonQueuedCount"
-          type="error"
-          title="Non queued"
-          count={data?.counts.nonQueued}
-          tooltip="Keys not in deposit queue"
-          comment={<StatusComment statuses={[KEY_STATUS.NON_QUEUED]} />}
-        />
+        {!isModuleCM && (
+          <KeysItem
+            data-testid="keysNonQueuedCount"
+            type="error"
+            title="Non queued"
+            count={data?.counts.nonQueued}
+            tooltip="Keys not in deposit queue"
+            comment={<StatusComment statuses={[KEY_STATUS.NON_QUEUED]} />}
+          />
+        )}
         <KeysItem
           data-testid="keysDuplicatedCount"
           type="error"
@@ -142,22 +148,6 @@ export const KeysBreakdown: FC = () => {
     </AccordionStyle>
   );
 };
-
-const MoreKeysChip: FC<{ more: boolean }> = ({ more }) => (
-  <SquaredChip variant={more ? 'warning' : 'success'}>
-    {more ? (
-      <>
-        <Alert />
-        Upload more keys
-      </>
-    ) : (
-      <>
-        <Check />
-        Enough keys
-      </>
-    )}
-  </SquaredChip>
-);
 
 const IssuesChip: FC<{ issues?: number }> = ({ issues = 0 }) => (
   <SquaredChip variant={issues > 0 ? 'error' : 'success'}>

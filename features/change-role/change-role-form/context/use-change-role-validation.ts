@@ -26,7 +26,7 @@ export const useChangeRoleValidation = () => {
       await validate('address', () => {
         if (
           !isRevoke &&
-          mode === 'propose' &&
+          (mode === 'propose' || mode === 'rewardsChange') &&
           compareLowercase(address, currentAddress)
         ) {
           throw new ValidationError(

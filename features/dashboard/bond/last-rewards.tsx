@@ -55,7 +55,8 @@ export const LastRewards: FC = () => {
   const prevRewardsDate = formatDate(lastFrame?.start);
   const daysLeft = countCalendarDaysLeft(rewardsFrame?.nextDistribution);
 
-  const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
+  const showThisSection =
+    lastFrame && (lastRewards || (info?.totalDepositedKeys ?? 0) > 0);
 
   const showWhy = lastRewards && lastRewards.distributed === 0n;
 

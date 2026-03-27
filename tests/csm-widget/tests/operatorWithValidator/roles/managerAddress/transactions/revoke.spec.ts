@@ -3,7 +3,6 @@ import { test } from '../../../../test.fixture';
 import {
   LOW_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
 } from '../../../../../../shared/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from '../../../../../../shared/helpers/accountData';
@@ -37,10 +36,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
       const currentAddress = mnemonicToAccount(secretPhrase).address;
 
       await test.step('Revoke pending manager address role', async () => {
-        const [txPage] = await Promise.all([
-          managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          managerAddressPage.revokeButton.click(),
-        ]);
+        await managerAddressPage.revokeButton.click();
 
         await managerAddressPage.page.waitForSelector(
           `text=You are canceling request for manager address change`,
@@ -60,7 +56,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
           );
         });
 
-        await widgetService.walletPage.cancelTx(txPage);
+        await widgetService.walletPage.cancelTx();
       });
     },
   );
@@ -72,10 +68,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
       const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       const currentAddress = mnemonicToAccount(secretPhrase).address;
 
-      const [txPage] = await Promise.all([
-        managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        managerAddressPage.revokeButton.click(),
-      ]);
+      await managerAddressPage.revokeButton.click();
 
       await managerAddressPage.page.waitForSelector(
         `text=You are canceling request for manager address change`,
@@ -83,7 +76,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
       );
 
       await test.step('Verify confirm transaction', async () => {
-        await widgetService.walletPage.confirmTx(txPage);
+        await widgetService.walletPage.confirmTx();
 
         await managerAddressPage.page.waitForSelector(
           `text=Proposed request for manager address has been canceled`,

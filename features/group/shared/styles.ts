@@ -11,7 +11,7 @@ export const StakeRow = styled.div`
 `;
 
 export const StakeColumn = styled.div`
-  min-width: 25%;
+  min-width: 20%;
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
@@ -42,7 +42,6 @@ export const StakeBarSegment = styled.div<{
   $color: string;
   $width: number;
 }>`
-  display: inline-block;
   height: 100%;
   width: ${({ $width }) => $width}%;
   background: ${({ $color }) => $color};

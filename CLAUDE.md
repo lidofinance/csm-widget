@@ -161,14 +161,52 @@ Note: "SM" = Staking Module (module-agnostic terminology for code shared between
 - Has automatic versioning using conventional commits
 - Uses Playwright for e2e testing with wallet extensions
 
-## Code Formatting
+### Form Architecture
 
-**IMPORTANT**: Always follow the project's formatting rules when creating or editing files:
+Forms follow a layered provider pattern documented in `shared/hook-form/README.md`:
 
-- Respect `.editorconfig` settings for indentation, line endings, and file encoding
-- Follow `.prettierrc` configuration for code formatting and style
-- Run `yarn lint:fix` after making changes to ensure consistent formatting
-- Always use `type` declarations instead of `interface` declarations for TypeScript type definitions
+```
+DataProvider → FormProvider → FormControllerProvider → Form → FormLoader → Controls
+```
+
+Each form lives in `features/{feature}/{form-name}/` with a standard file structure:
+
+- `context/types.ts` — `*FormInputType` (form fields) and `*FormNetworkData` (blockchain data)
+- `context/{form}-data-provider.tsx` — Network data fetching via React Query
+- `context/{form}-provider.tsx` — React Hook Form setup with validation + submission
+- `context/use-{form}-default-values.ts` — Initial values from network data
+- `context/use-{form}-validation.ts` — Validation using `useFormValidation()` + `ValidationError`
+- `context/use-{form}-submit.ts` — Transaction submission (`FormSubmitterHook` pattern)
+- `context/{form}-updater.tsx` — Optional cross-field revalidation
+- `controls/` — Form input components
+- Custom `*FormLoader` — Permission-based rendering (show `<Info />` for read-only, full form for authorized users)
+
+### Show Rules
+
+`useShowRule` from `shared/hooks` powers conditional rendering based on module, wallet, and operator state:
+
+- Module: `IS_CSM`, `IS_CM`
+- Wallet: `IS_CONNECTED_WALLET`, `IS_MAINNET`
+- Operator: `IS_NODE_OPERATOR`, `NOT_NODE_OPERATOR`, `HAS_MANAGER_ROLE`, `HAS_REWARDS_ROLE`, `HAS_OWNER_ROLE`
+- Features: `HAS_LOCKED_BOND`, `CAN_CREATE`, `CAN_CLAIM_ICS`
+
+Used in navigation items (`use-nav-items.tsx`), page guards, and conditional UI.
+
+## Code Style
+
+**IMPORTANT**: Follow these rules when writing code:
+
+- Always use `type` instead of `interface` for TypeScript type definitions
+- Use function expressions only (`func-style: expression`) — no function declarations
+- No `console.log` — only `console.warn`, `console.error`, `console.info`, `console.debug`
+- Prefix unused variables with `_` (e.g., `_unused`)
+- Respect `.editorconfig` (2-space indent) and `.prettierrc` (single quotes, trailing commas)
+- Run `yarn lint:fix` after changes
+
+## Commit Conventions
+
+- Conventional commits required: `fix:`, `feat:`, `chore:`, etc.
+- Enforced by commitlint + husky pre-commit hooks
 
 ## Figma Design
 

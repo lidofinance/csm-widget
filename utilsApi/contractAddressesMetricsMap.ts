@@ -18,9 +18,12 @@ import {
   uniq,
 } from 'lodash';
 import { Abi, Address } from 'viem';
+import { mainnet } from 'viem/chains';
 
+import { ENSUniversalResolverAbi } from 'abi/ens-universal-resolver-abi';
 import { config } from 'config';
 import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
+import { AggregatorAbi } from 'abi/aggregator-abi';
 
 const AlL_CONTRACT_NAMES = {
   ...CONTRACT_NAMES,
@@ -28,15 +31,7 @@ const AlL_CONTRACT_NAMES = {
   aggregatorEthUsdPrice: 'aggregatorEthUsdPrice',
   lidoLocator: 'lidoLocator',
   lidoUnsteth: 'lidoUnsteth',
-
-  ens1: 'ens1',
-  ens2: 'ens2',
-  ens3: 'ens3',
-  ens4: 'ens4',
-  ens5: 'ens5',
-  ens6: 'ens6',
-  ens7: 'ens7',
-  ens8: 'ens8',
+  ensUniversalResolver: 'ensUniversalResolver',
 } as const;
 type AlL_CONTRACT_NAMES = keyof typeof AlL_CONTRACT_NAMES;
 
@@ -45,7 +40,6 @@ const supportedChainsWithMainnet: SUPPORTED_CHAINS[] = uniq([
   CHAINS.Mainnet,
 ]);
 
-// FIXME: ENS addresses
 const STATIC_ADDRESSES: {
   [key in SUPPORTED_CHAINS]?: { [key in AlL_CONTRACT_NAMES]?: Address };
 } = {
@@ -58,14 +52,8 @@ const STATIC_ADDRESSES: {
       '0xC1d0b3DE6792Bf6b4b37EccdcC24e45978Cfd2Eb',
     [AlL_CONTRACT_NAMES.lidoUnsteth]:
       '0x889edC2eDab5f40e902b864aD4d7AdE8E412F9B1',
-    [AlL_CONTRACT_NAMES.ens1]: '0x00000000000c2e074ec69a0dfb2997ba6c7d2e1e',
-    [AlL_CONTRACT_NAMES.ens2]: '0x231b0ee14048e9dccd1d247744d114a4eb5e8e63',
-    [AlL_CONTRACT_NAMES.ens3]: '0x64969fb44091A7E5fA1213D30D7A7e8488edf693',
-    [AlL_CONTRACT_NAMES.ens4]: '0x4976fb03c32e5b8cfe2b6ccb31c09ba78ebaba41',
-    [AlL_CONTRACT_NAMES.ens5]: '0xa2c122be93b0074270ebee7f6b7292c7deb45047',
-    [AlL_CONTRACT_NAMES.ens6]: '0x1da022710df5002339274aadee8d58218e9d6ab5',
-    [AlL_CONTRACT_NAMES.ens7]: '0xce01f8eee7E479C928F8919abD53E553a36CeF67',
-    [AlL_CONTRACT_NAMES.ens8]: '0xeeeeeeee14d718c2b47d9923deab1335e144eeee',
+    [AlL_CONTRACT_NAMES.ensUniversalResolver]:
+      mainnet.contracts.ensUniversalResolver.address,
   },
   [CHAINS.Hoodi]: {
     [AlL_CONTRACT_NAMES.lidoLocator]:
@@ -119,19 +107,12 @@ export const allowedLogsAddresses = mapValues(METRIC_CONTRACT_ADDRESSES, (o) =>
 );
 
 const METRIC_CONTRACT_ABIS: Record<AlL_CONTRACT_NAMES, Abi> = {
-  [AlL_CONTRACT_NAMES.lidoRewardsVault]: [],
   [AlL_CONTRACT_NAMES.lidoLocator]: LidoLocatorAbi,
+  [AlL_CONTRACT_NAMES.lidoRewardsVault]: [],
   [AlL_CONTRACT_NAMES.lidoUnsteth]: [],
-  [AlL_CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]: [],
-  [AlL_CONTRACT_NAMES.aggregatorEthUsdPrice]: [],
-  [AlL_CONTRACT_NAMES.ens1]: [],
-  [AlL_CONTRACT_NAMES.ens2]: [],
-  [AlL_CONTRACT_NAMES.ens3]: [],
-  [AlL_CONTRACT_NAMES.ens4]: [],
-  [AlL_CONTRACT_NAMES.ens5]: [],
-  [AlL_CONTRACT_NAMES.ens6]: [],
-  [AlL_CONTRACT_NAMES.ens7]: [],
-  [AlL_CONTRACT_NAMES.ens8]: [],
+  [AlL_CONTRACT_NAMES.aggregatorStEthUsdPriceFeed]: AggregatorAbi,
+  [AlL_CONTRACT_NAMES.aggregatorEthUsdPrice]: AggregatorAbi,
+  [AlL_CONTRACT_NAMES.ensUniversalResolver]: ENSUniversalResolverAbi,
   ...CONTRACT_BASE_ABI,
 };
 

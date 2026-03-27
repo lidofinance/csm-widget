@@ -5,7 +5,6 @@ import { trimAddress } from '@lidofinance/address';
 import {
   LOW_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
 } from '../../../../../../shared/consts/timeouts';
 import { generateAddress } from '../../../../../../shared/helpers/accountData';
 import { Tags } from '../../../../../../shared/consts/common.const';
@@ -80,10 +79,7 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
         state: 'visible',
       });
 
-      const [txPage] = await Promise.all([
-        rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        settingsPage.modalRoot.continueButton.click(),
-      ]);
+      await settingsPage.modalRoot.continueButton.click();
 
       await rewardsAddressPage.page.waitForSelector(
         `text=You are proposing rewards address change`,
@@ -103,7 +99,7 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
         );
       });
 
-      await rewardsAddressPage.walletPage.cancelTx(txPage);
+      await rewardsAddressPage.walletPage.cancelTx();
     },
   );
 
@@ -129,17 +125,14 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
           state: 'visible',
         });
 
-        const [txPage] = await Promise.all([
-          rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          settingsPage.modalRoot.continueButton.click(),
-        ]);
+        await settingsPage.modalRoot.continueButton.click();
 
         await rewardsAddressPage.page.waitForSelector(
           `text=You are proposing rewards address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
-        await rewardsAddressPage.walletPage.confirmTx(txPage);
+        await rewardsAddressPage.walletPage.confirmTx();
 
         await test.step('Verify confirm transaction', async () => {
           await rewardsAddressPage.page.waitForSelector(
@@ -154,7 +147,7 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
             'Connect to CSM UI with the proposed address',
           );
           await expect(txModal.description).toContainText(
-            'Go to Roles tab → Inbox requests to confirm the change',
+            'Go to Settings tab → Inbox requests to confirm the change',
           );
 
           await expect(txModal.description).toContainText(

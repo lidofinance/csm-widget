@@ -37,7 +37,7 @@ export const ClaimBondFormInfo = () => {
             ) will receive
           </>
         }
-        help="The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Roles tab"
+        help="The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab"
       >
         <FormatToken amount={amount ?? 0n} token={token} />
       </DataTableRow>

@@ -37,7 +37,7 @@ const getTxModalStagesCuratedOperator = (
         title="Creating Curated Node Operator"
         description={
           <>
-            Creating operator for <b>{getCurveMetadata(curveId).name}</b>.
+            Creating operator for <b>{getCurveMetadata(curveId).name}</b>
           </>
         }
       />,
@@ -50,7 +50,7 @@ const getTxModalStagesCuratedOperator = (
         title="Creating Curated Node Operator"
         description={
           <>
-            Creating operator for <b>{getCurveMetadata(curveId).name}</b>.
+            Creating operator for <b>{getCurveMetadata(curveId).name}</b>
           </>
         }
       />,

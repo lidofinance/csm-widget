@@ -1,10 +1,28 @@
 import { NodeOperatorShortInfo } from '@lidofinance/lido-csm-sdk';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useDappStatus } from '../hooks';
 import { useCachedId } from './use-cached-id';
+import { useInvalidateOperatorCache } from './use-invalidate-operator-cache';
 
 export const useActiveNodeOperator = (list?: NodeOperatorShortInfo[]) => {
   const [active, setActive] = useState<NodeOperatorShortInfo | undefined>();
   const [, setCachedId] = useCachedId();
+  const { address } = useDappStatus();
+  const invalidate = useInvalidateOperatorCache();
+
+  const resolved = active ?? list?.[0];
+
+  const prevActiveRef = useRef(resolved);
+  const prevAddressRef = useRef(address);
+
+  if (address !== prevAddressRef.current) {
+    prevAddressRef.current = address;
+    prevActiveRef.current = resolved;
+    invalidate('operatorAndAddress');
+  } else if (resolved !== prevActiveRef.current) {
+    prevActiveRef.current = resolved;
+    invalidate('operator');
+  }
 
   useEffect(() => {
     setActive((prev) => {
@@ -17,8 +35,8 @@ export const useActiveNodeOperator = (list?: NodeOperatorShortInfo[]) => {
   }, [list]);
 
   useEffect(() => {
-    active && setCachedId(active.nodeOperatorId);
-  }, [active, setCachedId]);
+    resolved && setCachedId(resolved.nodeOperatorId);
+  }, [resolved, setCachedId]);
 
-  return [active ?? list?.[0], setActive] as const;
+  return [resolved, setActive] as const;
 };

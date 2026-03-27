@@ -1,10 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
 import { TokenSymbol } from '../../../../shared/consts/common.const';
 import { BasePage } from '../../../pages';
-import {
-  LOW_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from '../../../../shared/consts/timeouts';
+import { LOW_TIMEOUT } from '../../../../shared/consts/timeouts';
 import { DepositKey } from '../../../../shared/services/keysGenerator.service';
 
 export class SubmitPage {
@@ -70,19 +67,13 @@ export class SubmitPage {
     keys: DepositKey[] | DepositKey,
     tokenSymbol = TokenSymbol.STETH,
   ) {
-    return test.step('Submit keys', async () => {
+    await test.step('Submit keys', async () => {
       const bondTokenElement = this.getBondTokenElement(tokenSymbol);
       await bondTokenElement.click();
       await this.fillKeys(keys);
       await this.page.waitForTimeout(LOW_TIMEOUT);
       await this.confirmKeysReady.click();
-
-      const [walletSignPage] = await Promise.all([
-        this.base.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        this.submitKeysButton.click(),
-      ]);
-
-      return walletSignPage;
+      await this.submitKeysButton.click();
     });
   }
 }

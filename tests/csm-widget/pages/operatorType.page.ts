@@ -1,9 +1,6 @@
 import { Page } from '@playwright/test';
 import { BasePage } from './base.page';
-import {
-  WalletPage,
-  WalletConnectType,
-} from '@lidofinance/wallets-testing-wallets';
+import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { TxModal } from './elements/common/element.txProgressModal';
 import { ApplicationForm } from './tabs/operatorType/applicationForm.page';
 
@@ -13,7 +10,7 @@ export class OperatorTypePage extends BasePage {
 
   constructor(
     page: Page,
-    public walletPage: WalletPage<WalletConnectType>,
+    public walletPage: WalletPage,
   ) {
     super(page);
     this.applicationForm = new ApplicationForm(page, walletPage);

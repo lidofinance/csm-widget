@@ -24,7 +24,7 @@ export const useCuratedOperatorSubmit: FormSubmitterHook<
   CuratedOperatorFormNetworkData
 > = () => {
   const sdk = useSmSDK(MODULE_NAME.CM);
-  const appendNO = useAppendOperator();
+  const appendNO = useAppendOperator(true);
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
   const { txModalStages } = useTxModalStagesCuratedOperator();
@@ -104,7 +104,7 @@ export const useCuratedOperatorSubmit: FormSubmitterHook<
         if (result) {
           const roles = getNodeOperatorRoles(result, networkData.address);
           if (roles.length > 0) {
-            appendNO(result); // TODO: set new operator as active
+            appendNO(result);
             void n(PATH.HOME);
           } else {
             setOperatorCustomAddresses(result.nodeOperatorId);
