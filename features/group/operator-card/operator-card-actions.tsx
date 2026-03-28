@@ -3,9 +3,9 @@ import { Button, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { useNodeOperator } from 'modules/web3';
 import { useDappStatus } from 'modules/web3/hooks/use-dapp-status';
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { LocalLink } from 'shared/navigate';
-import { useNavigate } from 'shared/navigate/use-navigate';
+import { useOpenOperatorSwitchModal } from 'shared/node-operator/switch-modal';
 
 type Props = {
   nodeOperatorId: NodeOperatorId;
@@ -18,9 +18,14 @@ export const OperatorCardActions: FC<Props> = ({
   info,
   moreKeys,
 }) => {
-  const { nodeOperator, switchNodeOperator } = useNodeOperator();
+  const { nodeOperator } = useNodeOperator();
   const { address } = useDappStatus();
-  const navigate = useNavigate();
+  const openModal = useOpenOperatorSwitchModal(PATH.HOME);
+
+  const handleOpenSwitchModal = useCallback(() => {
+    // TODO: track this to matomo with a separate event
+    openModal();
+  }, [openModal]);
 
   const isCurrentOperator = nodeOperator?.nodeOperatorId === nodeOperatorId;
 
@@ -46,10 +51,7 @@ export const OperatorCardActions: FC<Props> = ({
         fullwidth
         variant="outlined"
         color="warning"
-        onClick={() => {
-          switchNodeOperator(nodeOperatorId);
-          void navigate(PATH.KEYS_SUBMIT);
-        }}
+        onClick={handleOpenSwitchModal}
       >
         Switch to this operator and upload keys
       </Button>
@@ -62,7 +64,7 @@ export const OperatorCardActions: FC<Props> = ({
         fullwidth
         variant="outlined"
         color="primary"
-        onClick={() => switchNodeOperator(nodeOperatorId)}
+        onClick={handleOpenSwitchModal}
       >
         Switch to this operator
       </Button>
