@@ -24,7 +24,9 @@ export const SubmitButton = () => {
 
   return (
     <>
-      <SubmitButtonHookForm onClick={clickHandle}>{title}</SubmitButtonHookForm>
+      <SubmitButtonHookForm disableIfClean onClick={clickHandle}>
+        {title}
+      </SubmitButtonHookForm>
       {mode === 'propose' && (
         <Note>
           To complete the address change, the owner of the new address must
