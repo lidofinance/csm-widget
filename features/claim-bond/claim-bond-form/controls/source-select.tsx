@@ -11,14 +11,16 @@ import {
   Stack,
   TitledSelectableAmount,
 } from 'shared/components';
-import { formatDate } from 'utils';
+import { formatDate, isDayInPast } from 'utils';
 import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
 
 export const SourceSelect: FC = () => {
   const { bond, rewards, maxValues } = useClaimBondFormData(true);
-  const { data: nextDistribution } = useFrameInfo(
-    (data) => data.lastReport + data.frameDuration,
-  );
+  const { data: nextDistribution } = useFrameInfo((data) => {
+    return isDayInPast(data.nextReport)
+      ? 'soon'
+      : `on ${formatDate(data.nextReport)}`;
+  });
 
   const { field } = useController<ClaimBondFormInputType, 'claimRewards'>({
     name: 'claimRewards',
@@ -28,7 +30,6 @@ export const SourceSelect: FC = () => {
   const { setValue } = useFormContext<ClaimBondFormInputType>();
 
   const availableToClaim = maxValues[TOKENS.steth][Number(field.value)];
-  const nextRewardsDate = formatDate(nextDistribution);
 
   useEffect(() => {
     if (bond?.isInsufficient) {
@@ -55,7 +56,7 @@ export const SourceSelect: FC = () => {
               disabled={!rewards?.available}
             />
           }
-          help={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected on ${nextRewardsDate}`}
+          help={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected ${nextDistribution}`}
           helpIcon="calendar"
           amount={rewards?.available}
           token={TOKENS.steth}
