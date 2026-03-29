@@ -12,7 +12,7 @@ import { SplitRowView } from './split-row-view';
 export const ViewSplits: FC = () => {
   const { setValue } = useFormContext<SplitsFormInputType>();
   const handleEdit = useCallback(() => setValue('isEditing', true), [setValue]);
-  const { currentFeeSplits, canEdit, rewards, pendingSharesToSplit } =
+  const { currentFeeSplits, canEdit, rewards, pendingToSplit } =
     useSplitsFormData(true);
 
   return (
@@ -57,7 +57,7 @@ export const ViewSplits: FC = () => {
             </LocalLink>
           </Stack>
         </WarningBlockStyle>
-      ) : pendingSharesToSplit ? (
+      ) : pendingToSplit ? (
         <WarningBlockStyle>
           <Stack gap="md" center>
             <b>Editing is disabled</b> while there are pending shares to

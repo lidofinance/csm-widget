@@ -1,10 +1,20 @@
 import { Theme } from '@lidofinance/lido-ui';
 import styled, { css, CSSProperties } from 'styled-components';
 
-const gapValues = {
+export const gapValues = {
   none: 0,
   xxs: 2,
   ms: 12,
+};
+
+export const getGap = (
+  gap: keyof Theme['spaceMap'] | keyof typeof gapValues,
+  theme: Theme,
+) => {
+  if (gap in gapValues) {
+    return gapValues[gap as keyof typeof gapValues];
+  }
+  return theme.spaceMap[gap as keyof Theme['spaceMap']];
 };
 
 export type StackStyleProps = {
@@ -20,10 +30,7 @@ export type StackStyleProps = {
 export const StackStyle = styled.div<StackStyleProps>`
   display: flex;
   flex-direction: ${({ $direction = 'row' }) => $direction};
-  gap: ${({ $gap = 'md', theme }) =>
-    $gap in gapValues
-      ? gapValues[$gap as keyof typeof gapValues]
-      : theme.spaceMap[$gap as keyof Theme['spaceMap']]}px;
+  gap: ${({ $gap = 'md', theme }) => getGap($gap, theme)}px;
   ${({ $align }) =>
     $align &&
     css`

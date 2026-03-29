@@ -25,8 +25,8 @@ const useSplitsFormNetworkData: NetworkData<SplitsFormNetworkData> = () => {
     useFeeSplits(nodeOperatorId);
   const { data: rewards, isPending: isOperatorRewardsPending } =
     useOperatorRewards(nodeOperatorId);
-  const { data: pendingSharesToSplit, isPending: isPendingSharesPending } =
-    useOperatorBalance(nodeOperatorId, (data) => data.pendingSharesToSplit);
+  const { data: pendingToSplit, isPending: isBalancePending } =
+    useOperatorBalance(nodeOperatorId, (data) => data.pendingToSplit);
 
   const canEdit = useCanEditSplits();
   const { HAS_OWNER_ROLE: isOwner } = useShowFlags();
@@ -42,13 +42,13 @@ const useSplitsFormNetworkData: NetworkData<SplitsFormNetworkData> = () => {
       address,
       nodeOperatorId,
       currentFeeSplits,
-      pendingSharesToSplit,
+      pendingToSplit,
       rewards,
       canEdit,
       isOwner,
     } as SplitsFormNetworkData,
     isPending:
-      isFeeSplitsPending || isPendingSharesPending || isOperatorRewardsPending,
+      isFeeSplitsPending || isBalancePending || isOperatorRewardsPending,
     revalidate,
   };
 };

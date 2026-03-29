@@ -11,9 +11,9 @@ export const useCanEditSplits = () => {
 
   const { data: currentFeeSplits } = useFeeSplits(nodeOperatorId);
   const { data: rewards } = useOperatorRewards(nodeOperatorId);
-  const { data: pendingSharesToSplit } = useOperatorBalance(
+  const { data: pendingToSplit } = useOperatorBalance(
     nodeOperatorId,
-    (data) => data.pendingSharesToSplit,
+    (data) => data.pendingToSplit,
   );
   const { HAS_OWNER_ROLE } = useShowFlags();
 
@@ -23,7 +23,7 @@ export const useCanEditSplits = () => {
     HAS_OWNER_ROLE &&
     (currentFeeSplits.length === 0 || rewards.proof.length > 0) &&
     (currentFeeSplits.length === 0 || !rewards.available) &&
-    !pendingSharesToSplit;
+    !pendingToSplit;
 
   return canEditSplits;
 };
