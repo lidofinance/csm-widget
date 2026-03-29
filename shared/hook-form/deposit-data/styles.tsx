@@ -2,7 +2,11 @@ import { ButtonIcon, Close, Textarea } from '@lidofinance/lido-ui';
 import { PubkeyContainerStyle } from 'shared/components/address/styles';
 import styled from 'styled-components';
 
-export const DropzoneStyle = styled.div`
+type DragProps = {
+  isDragAccept?: boolean;
+};
+
+export const DropzoneStyle = styled.div<DragProps>`
   border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
   overflow: hidden;
 
@@ -18,9 +22,15 @@ export const DropzoneStyle = styled.div`
   &[aria-invalid='true'] {
     border-color: var(--lido-color-error);
   }
+
+  outline: ${({ isDragAccept }) =>
+    isDragAccept ? '2px dashed var(--lido-color-primary)' : 'none'};
+  outline-offset: 2px;
 `;
 
 export const TextareaStyle = styled(Textarea)`
+  grid-area: 1 / 1;
+
   & > span {
     border: none;
   }
@@ -31,6 +41,42 @@ export const TextareaStyle = styled(Textarea)`
     font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
     line-height: 1.6em;
     height: 116px;
+  }
+
+  textarea:not(:focus):placeholder-shown + span {
+    opacity: 0 !important;
+  }
+`;
+
+export const TextareaWrapper = styled.div`
+  display: grid;
+`;
+
+export const Placeholder = styled.div`
+  grid-area: 1 / 1;
+  place-self: center;
+  text-align: center;
+  pointer-events: none;
+  z-index: 1;
+  color: var(--lido-color-textSecondary);
+  font-size: 12px;
+  line-height: 1.6em;
+
+  opacity: 0;
+  transition: transform 100ms ease;
+  transition-property: transform, opacity;
+
+  transform-origin: 0% 0%;
+  transform: translateY(-14px) scale(0.75);
+
+  ${TextareaWrapper}:has(textarea:not(:focus):placeholder-shown) & {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+
+  a,
+  button {
+    pointer-events: auto;
   }
 `;
 
