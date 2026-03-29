@@ -4,7 +4,7 @@ import { PATH } from 'consts';
 import { isModuleCM, MODULE_METADATA } from 'consts/module';
 import { useNodeOperator, useOperatorMetadata } from 'modules/web3';
 import { FC } from 'react';
-import { LocalLink } from 'shared/navigate';
+import { SecondaryLocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 
 const ModuleTitle: FC = () => <>{MODULE_METADATA[config.module].title}</>;
@@ -28,12 +28,12 @@ const CmTitle: FC = () => {
       <span>{metadata?.name}</span>
       {!metadata?.ownerEditsRestricted && (
         <InlineWrapper>
-          <StyledLocalLink
+          <SecondaryLocalLink
             href={PATH.SETTINGS_METADATA}
             title="Edit Operator Metadata"
           >
             <Edit />
-          </StyledLocalLink>
+          </SecondaryLocalLink>
         </InlineWrapper>
       )}
     </>
@@ -44,23 +44,4 @@ const InlineWrapper = styled.span`
   display: inline-flex;
   margin-left: 4px;
   vertical-align: middle;
-`;
-
-export const StyledLocalLink = styled(LocalLink)`
-  display: inline-flex;
-  font-weight: normal;
-  svg {
-    color: var(--lido-color-textSecondary);
-  }
-
-  &,
-  &:visited {
-    color: var(--lido-color-text);
-  }
-  &:hover {
-    color: var(--lido-color-primary);
-    svg {
-      color: currentColor;
-    }
-  }
 `;

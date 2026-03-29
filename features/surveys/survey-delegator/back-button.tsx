@@ -18,5 +18,5 @@ export const DelegatorBackButton: FC<DelegatorBackButtonProps> = ({
       ? PATH.SURVEYS_DELEGATOR
       : PATH.SURVEYS;
 
-  return <BackButton href={href} color="secondary" />;
+  return <BackButton href={href} />;
 };

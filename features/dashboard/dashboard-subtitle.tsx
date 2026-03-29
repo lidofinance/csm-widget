@@ -7,7 +7,7 @@ import { FC } from 'react';
 import { Stack } from 'shared/components/stack/stack';
 import { DescriptorId } from 'shared/node-operator';
 import styled from 'styled-components';
-import { StyledLocalLink } from './dashboard-title';
+import { TextLocalLink } from 'shared/navigate';
 
 import { ReactComponent as ArrowRight } from 'assets/icons/arrow-forward.svg';
 
@@ -33,14 +33,12 @@ const CmSubtitle: FC = () => {
       {groupId ? (
         <>
           <DividerStyle />
-          <Stack gap="sm" center>
-            <StyledLocalLink href={PATH.GROUP} title="View group">
-              <Stack as="span" center gap="xs">
-                Operator Group #{`${groupId}`}
-                <ArrowRight />
-              </Stack>
-            </StyledLocalLink>
-          </Stack>
+          <TextLocalLink href={PATH.GROUP} title="View group">
+            <Stack as="span" center gap="xs">
+              Operator Group #{`${groupId}`}
+              <ArrowRight />
+            </Stack>
+          </TextLocalLink>
         </>
       ) : null}
     </Stack>

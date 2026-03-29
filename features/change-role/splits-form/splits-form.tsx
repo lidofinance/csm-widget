@@ -12,7 +12,7 @@ export const SplitsForm: FC = memo(() => {
   return (
     <SplitsDataProvider>
       <FormBlock data-testid="splitsForm">
-        <BackButton text="Back to all roles" href={PATH.SETTINGS} />
+        <BackButton href={PATH.SETTINGS} />
         <SplitsFormProvider>
           <SplitsFormLoader>
             <Form>

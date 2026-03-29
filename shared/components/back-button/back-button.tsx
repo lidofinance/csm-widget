@@ -1,24 +1,34 @@
 import { ArrowLeft, ButtonIcon } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { ComponentProps, FC } from 'react';
-import { LocalLink } from 'shared/navigate';
+import { SecondaryLocalLink } from 'shared/navigate';
+import styled from 'styled-components';
+import { StackStyle } from '../stack';
 
 type BackButtonProps = {
-  href: PATH;
+  href?: PATH;
   text?: string;
   color?: ComponentProps<typeof ButtonIcon>['color'];
 };
 
 export const BackButton: FC<BackButtonProps> = ({
-  href,
+  href = PATH.HOME,
   text = 'Back',
-  color = 'primary',
 }) => {
   return (
-    <LocalLink href={href}>
-      <ButtonIcon variant="ghost" color={color} size="xs" icon={<ArrowLeft />}>
+    <SecondaryLocalLink href={href}>
+      <Wrap>
+        <ArrowLeft />
         {text}
-      </ButtonIcon>
-    </LocalLink>
+      </Wrap>
+    </SecondaryLocalLink>
   );
 };
+
+const Wrap = styled(StackStyle).attrs({
+  $align: 'center',
+  $gap: 'xxs',
+})`
+  padding: 4px;
+  margin: -4px;
+`;
