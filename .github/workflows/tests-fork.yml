@@ -69,6 +69,8 @@ jobs:
       EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
       EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
       STAND_TYPE: ${{ inputs.stand_type || github.event.inputs.STAND_TYPE || 'testnet' }}
+      WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
+
 
       # Common envs
       QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}

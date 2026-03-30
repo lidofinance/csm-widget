@@ -2,11 +2,7 @@ import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { trimAddress } from '@lidofinance/address';
-import {
-  LOW_TIMEOUT,
-  STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from 'tests/consts/timeouts';
+import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 import { generateAddress } from 'tests/helpers/accountData';
 import { Tags } from 'tests/consts/common.const';
 
@@ -80,10 +76,7 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
         state: 'visible',
       });
 
-      const [txPage] = await Promise.all([
-        rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        rolesPage.modalRoot.continueButton.click(),
-      ]);
+      await rolesPage.modalRoot.continueButton.click();
 
       await rewardsAddressPage.page.waitForSelector(
         `text=You are proposing rewards address change`,
@@ -103,7 +96,7 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
         );
       });
 
-      await rewardsAddressPage.walletPage.cancelTx(txPage);
+      await rewardsAddressPage.walletPage.cancelTx();
     },
   );
 
@@ -129,17 +122,14 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
           state: 'visible',
         });
 
-        const [txPage] = await Promise.all([
-          rewardsAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          rolesPage.modalRoot.continueButton.click(),
-        ]);
+        await rolesPage.modalRoot.continueButton.click();
 
         await rewardsAddressPage.page.waitForSelector(
           `text=You are proposing rewards address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
-        await rewardsAddressPage.walletPage.confirmTx(txPage);
+        await rewardsAddressPage.walletPage.confirmTx();
 
         await test.step('Verify confirm transaction', async () => {
           await rewardsAddressPage.page.waitForSelector(
