@@ -1,21 +1,19 @@
 import { FC, PropsWithChildren, ReactNode, useEffect } from 'react';
 
 import { AlertContainer } from 'shared/alerts';
-import { BackButton, LegalDisclaimer } from 'shared/components';
+import { LegalDisclaimer } from 'shared/components';
 import { trackMatomoPageEvent } from 'utils';
 import { Footer } from './footer';
 import { DummyHeader, Header, SemiDummyHeader } from './header';
 import { Navigation } from './navigation';
 import {
   Content,
-  FullWidthButtonWrapper,
   Heading,
   LayoutStyle,
   LayoutSubTitleStyle,
   LayoutTitleStyle,
   Main,
 } from './styles';
-import { PATH } from 'consts';
 
 type Props = {
   title?: ReactNode;
@@ -23,6 +21,7 @@ type Props = {
   dummy?: boolean | 'semi';
   pageName?: string;
   fullwidth?: boolean;
+  mainPrefix?: ReactNode;
 };
 
 export const Layout: FC<PropsWithChildren<Props>> = ({
@@ -32,6 +31,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
   title,
   subtitle,
   pageName,
+  mainPrefix,
 }) => {
   const titlesCount = [title, subtitle].filter(Boolean).length;
 
@@ -53,12 +53,8 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
         </>
       )}
 
-      {fullwidth && (
-        <FullWidthButtonWrapper>
-          <BackButton href={PATH.HOME} />
-        </FullWidthButtonWrapper>
-      )}
       <Main>
+        {mainPrefix}
         <Heading $titlesCount={titlesCount}>
           {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}
           {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}

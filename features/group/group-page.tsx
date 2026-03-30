@@ -3,10 +3,12 @@ import { useNodeOperatorId, useOperatorGroupId } from 'modules/web3';
 import { FC } from 'react';
 import { Layout } from 'shared/layout';
 import { Group } from './group';
+import { BackButton } from 'shared/components';
 
 export const GroupPage: FC = () => (
   <Layout
     fullwidth
+    mainPrefix={<BackButton />}
     title={<GroupTitle />}
     subtitle={<GroupSubtitle />}
     pageName="Group"

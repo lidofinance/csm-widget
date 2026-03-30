@@ -23,7 +23,7 @@ export const AddressInputHookForm = ({
 }: AddressInputHookFormProps) => {
   const {
     field,
-    fieldState: { error },
+    fieldState: { error, isTouched },
   } = useController({
     name: fieldName,
     defaultValue: '',
@@ -32,11 +32,12 @@ export const AddressInputHookForm = ({
   const { setValue } = useFormContext();
 
   const hasErrorHighlight =
-    isValidationErrorTypeValidate(error?.type) ||
-    error?.type === 'required' ||
-    error?.type === 'manual';
+    isTouched &&
+    (isValidationErrorTypeValidate(error?.type) ||
+      error?.type === 'required' ||
+      error?.type === 'manual');
   // allows to show error state without message
-  const errorMessage = hasErrorHighlight && (error?.message || true);
+  const errorMessage = hasErrorHighlight && error?.message;
 
   const onClick = useCallback(() => {
     setValue(fieldName, currentAddress, { shouldValidate: true });
