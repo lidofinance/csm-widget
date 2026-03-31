@@ -1,8 +1,8 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
-import { widgetFullConfig } from 'tests/csm-widget/config';
-import { getReportConfig } from 'tests/shared/config/report.config';
-import { storageState } from 'tests/shared/config/storageState';
-import { prepareGrep } from 'tests/shared/helpers/tests';
+import { widgetFullConfig } from '../csm-widget/config';
+import { getReportConfig } from '../shared/config/report.config';
+import { storageState } from '../shared/config/storageState';
+import { prepareGrep } from '../shared/helpers/tests';
 
 // TODO: move it pls
 export const httpCredentials =
@@ -14,7 +14,7 @@ export const httpCredentials =
     : undefined;
 
 const config: PlaywrightTestConfig = {
-  testDir: './tests/csm-widget/tests',
+  testDir: './tests',
   timeout: 180 * 1000,
   expect: {
     timeout: 5000,
@@ -39,8 +39,8 @@ const config: PlaywrightTestConfig = {
   },
   projects: [
     {
-      name: 'widget',
-      testDir: './tests/csm-widget/tests',
+      name: 'csm-widget',
+      testDir: './tests',
       grep: prepareGrep(process.env.TEST_TAGS),
       use: {
         // @ts-expect-error because pw doesnt have custom types
@@ -48,8 +48,8 @@ const config: PlaywrightTestConfig = {
       },
     },
   ],
-  globalSetup: './tests/csm-widget/config/globalSetup.ts',
-  globalTeardown: './tests/csm-widget/config/globalTeardown.ts',
+  globalSetup: './config/globalSetup.ts',
+  globalTeardown: './config/globalTeardown.ts',
 };
 
 export default config;
