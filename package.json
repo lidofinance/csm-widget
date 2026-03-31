@@ -16,6 +16,7 @@
     "test:unit": "jest",
     "test:setup": "npx playwright install chromium && ./tests/scripts/set_up_keys_generator.sh && yarn test:setup:fork",
     "test:setup:fork": "./tests/scripts/install_foundry.sh",
+    "test:cm:e2e": "playwright test --config=./tests/cm-widget/playwright.config.ts",
     "test:csm:e2e": "playwright test --config=./tests/csm-widget/playwright.config.ts",
     "test:ui": "playwright test --ui"
   },

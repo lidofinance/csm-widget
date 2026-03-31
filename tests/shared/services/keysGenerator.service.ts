@@ -29,7 +29,7 @@ export class KeysGeneratorService {
   private readonly depositDataPath: string;
   private readonly binPath: string;
 
-  constructor() {
+  constructor(private options?: { isCM?: boolean }) {
     this.depositDataPath = path.join(process.cwd(), 'deposit_data.json');
     this.binPath = path.join(
       process.cwd(),
@@ -53,8 +53,12 @@ export class KeysGeneratorService {
     withdrawalCredentials = '0x4473dCDDbf77679A643BdB654dbd86D67F8d32f2',
     password = 'testtest',
   ): DepositKey[] {
-    const command = `${this.binPath} new-mnemonic --chain ${chain} --keystore_password ${password} --num_validators ${numValidators} --withdrawal_credentials "${withdrawalCredentials}" > ${this.depositDataPath}`;
+    let command = `${this.binPath} new-mnemonic --chain ${chain} --keystore_password ${password} --num_validators ${numValidators} --withdrawal_credentials "${withdrawalCredentials}"`;
 
+    if (this.options?.isCM) {
+      command = command.concat(' --compounding');
+    }
+    command = command.concat(`  > ${this.depositDataPath}`);
     try {
       execSync(command, {
         encoding: 'utf-8',

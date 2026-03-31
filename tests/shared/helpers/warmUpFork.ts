@@ -1,9 +1,10 @@
-import { LidoSDKClient } from 'tests/csm-widget/services/csmSDK.client';
+import { LidoSDKClient as csmClient } from '../../csm-widget/services/csmSDK.client';
+import { LidoSDKClient as cmClient } from '../../cm-widget/services/cmSDK.client';
 import { mnemonicToAccount } from 'viem/accounts';
-import { FORK_WARM_UP_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { FORK_WARM_UP_TIMEOUT } from '../consts/timeouts';
 
 export const warmUpForkedNode = async (
-  csmSDK: LidoSDKClient,
+  csmSDK: csmClient | cmClient,
   secretPhrase: string,
 ) => {
   const address = mnemonicToAccount(secretPhrase).address;
