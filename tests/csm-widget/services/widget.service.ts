@@ -17,7 +17,7 @@ import {
   SettingsPage,
 } from '../pages';
 import { ElementController } from '../pages/elements/controller';
-import { DepositKey } from './keysGenerator.service';
+import { DepositKey } from '../../shared/services/keysGenerator.service';
 
 type FeatureFlagName = keyof FeatureFlagsType;
 

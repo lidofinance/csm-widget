@@ -3,7 +3,7 @@ import { test } from '../test.fixture';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { KeysGeneratorService } from 'tests/csm-widget/services/keysGenerator.service';
+import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 

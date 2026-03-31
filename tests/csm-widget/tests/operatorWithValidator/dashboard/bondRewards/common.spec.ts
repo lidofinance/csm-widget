@@ -1,6 +1,6 @@
 import { test } from '../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { MatomoService } from 'tests/csm-widget/services/matomo.service';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.describe('Dashboard. Bond & Rewards', async () => {
   let matomoEventService: MatomoService;

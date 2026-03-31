@@ -2,7 +2,7 @@ import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { KeysPage } from 'tests/csm-widget/pages';
-import { KeysGeneratorService } from 'tests/csm-widget/services/keysGenerator.service';
+import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { TxModal } from 'tests/csm-widget/pages/elements/common/element.txProgressModal';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';

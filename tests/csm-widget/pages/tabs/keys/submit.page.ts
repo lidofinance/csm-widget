@@ -2,7 +2,7 @@ import { Locator, Page, test } from '@playwright/test';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { BasePage } from 'tests/csm-widget/pages';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
-import { DepositKey } from 'tests/csm-widget/services/keysGenerator.service';
+import { DepositKey } from 'tests/shared/services/keysGenerator.service';
 
 export class SubmitPage {
   page: Page;

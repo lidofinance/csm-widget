@@ -1,5 +1,5 @@
 import { test, Page } from '@playwright/test';
-import { IConfig } from '../config/configs/base.config';
+import { IConfig } from '../../csm-widget/config/configs/base.config';
 
 const red = (s: string) => `\u001B[31m${s}\u001B[0m`;
 const gray = (s: string) => `\u001B[90m${s}\u001B[0m`;

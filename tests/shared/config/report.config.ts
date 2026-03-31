@@ -1,5 +1,5 @@
 import { ReporterDescription } from '@playwright/test';
-import { widgetFullConfig } from '.';
+import { widgetFullConfig } from '../../csm-widget/config';
 
 export const getReportConfig: () => ReporterDescription[] = function () {
   const reporterConfig: ReporterDescription[] = [

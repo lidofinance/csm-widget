@@ -1,7 +1,7 @@
 import { WelcomePage } from 'tests/csm-widget/pages';
 import { test } from './test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { MatomoService } from 'tests/csm-widget/services/matomo.service';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { expect } from '@playwright/test';
 

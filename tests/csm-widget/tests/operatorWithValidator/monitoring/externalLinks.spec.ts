@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
-import { MatomoService } from 'tests/csm-widget/services/matomo.service';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 const normalizeBaseUrl = (url: string) => url.replace(/\/+$/, '');

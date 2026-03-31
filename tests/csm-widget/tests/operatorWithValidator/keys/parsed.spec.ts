@@ -1,7 +1,7 @@
 import { test } from '../../test.fixture';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { expect } from '@playwright/test';
-import { KeysGeneratorService } from 'tests/csm-widget/services/keysGenerator.service';
+import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { randomBytes } from 'node:crypto';
 import { generateWithdrawalCredentials } from 'tests/shared/helpers/accountData';
 import { qase } from 'playwright-qase-reporter/playwright';

@@ -1,5 +1,5 @@
 import { test } from '../../test.fixture';
-import { MatomoService } from 'tests/csm-widget/services/matomo.service';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.describe('Bond & Rewards. Rewards History', async () => {
   let matomoEventService: MatomoService;

@@ -5,7 +5,7 @@ import {
   TokenSymbol,
 } from 'tests/shared/consts/common.const';
 import { BasePage } from 'tests/csm-widget/pages';
-import { DepositKey } from 'tests/csm-widget/services/keysGenerator.service';
+import { DepositKey } from 'tests/shared/services/keysGenerator.service';
 
 export class CreateNodeOperatorForm {
   page: Page;

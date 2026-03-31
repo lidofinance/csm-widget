@@ -1,7 +1,7 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
 import { widgetFullConfig } from 'tests/csm-widget/config';
-import { getReportConfig } from 'tests/csm-widget/config/report.config';
-import { storageState } from 'tests/csm-widget/config/storageState';
+import { getReportConfig } from 'tests/shared/config/report.config';
+import { storageState } from 'tests/shared/config/storageState';
 import { prepareGrep } from 'tests/shared/helpers/tests';
 
 // TODO: move it pls

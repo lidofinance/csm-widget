@@ -3,15 +3,15 @@ import { BrowserService } from '@lidofinance/browser-service';
 import { test as base } from '@playwright/test';
 import { widgetFullConfig } from '../config';
 import { IConfig } from '../config/configs/base.config';
-import { REFUSE_CF_BLOCK_COOKIE } from '../config/storageState';
+import { REFUSE_CF_BLOCK_COOKIE } from '../../shared/config/storageState';
 import { LidoSDKClient } from 'tests/csm-widget/services/csmSDK.client';
-import { SdkService } from 'tests/csm-widget/services/ethereumSDK.client';
+import { SdkService } from 'tests/shared/services/ethereumSDK.client';
 import { WidgetService } from 'tests/csm-widget/services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from 'tests/shared/consts/timeouts';
-import ForkActionsService from 'tests/csm-widget/services/forkActions.service';
+import ForkActionsService from 'tests/shared/services/forkActions.service';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
-import { HttpMockerService } from 'tests/csm-widget/services/httpMocker.service';
+import { HttpMockerService } from 'tests/shared/services/httpMocker.service';
 
 type WorkerFixtures = {
   // fixture-options

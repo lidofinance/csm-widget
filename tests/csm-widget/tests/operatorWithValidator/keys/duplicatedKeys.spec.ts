@@ -3,7 +3,7 @@ import { KeysPage } from 'tests/csm-widget/pages';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { KeysGeneratorService } from 'tests/csm-widget/services/keysGenerator.service';
+import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 
 test.describe('Operator with keys. Validation duplicated keys.', async () => {
   let keysPage: KeysPage;

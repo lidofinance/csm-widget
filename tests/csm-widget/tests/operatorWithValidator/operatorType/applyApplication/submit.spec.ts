@@ -7,7 +7,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import {
   applicationStatus,
   applyApplicationMockResponse,
-} from 'tests/csm-widget/services/mockResponses/applyApplication.mock';
+} from 'tests/shared/services/mockResponses/applyApplication.mock';
 
 const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase: secretPhrase });

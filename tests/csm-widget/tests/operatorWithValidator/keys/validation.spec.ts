@@ -6,7 +6,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import {
   KeysGeneratorService,
   DepositKey,
-} from 'tests/csm-widget/services/keysGenerator.service';
+} from 'tests/shared/services/keysGenerator.service';
 
 test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
