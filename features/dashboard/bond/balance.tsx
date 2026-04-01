@@ -14,6 +14,7 @@ type Props = {
   loading?: boolean;
   big?: boolean;
   warning?: boolean;
+  approx?: boolean;
 };
 
 export const Balance: FC<Props> = ({
@@ -22,6 +23,7 @@ export const Balance: FC<Props> = ({
   big,
   sign,
   description,
+  approx,
   ...props
 }) => {
   const { usdAmount } = useEthUsd(amount);
@@ -29,7 +31,9 @@ export const Balance: FC<Props> = ({
   return (
     <TextBlock
       {...props}
-      description={description ?? <FormatPrice amount={usdAmount} />}
+      description={
+        description ?? <FormatPrice amount={usdAmount} approx={approx} />
+      }
       align={big ? 'flex-end' : undefined}
       size={big ? 'sm' : undefined}
     >

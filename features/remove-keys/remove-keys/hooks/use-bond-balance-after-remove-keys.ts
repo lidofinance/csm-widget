@@ -28,7 +28,7 @@ export const useBondBalanceAfterRemoveKeys = (count = 0) => {
         required: bondRequiredAfter,
         locked: 0n,
         debt: bond.debt,
-        pendingSharesToSplit: bond.pendingSharesToSplit,
+        pendingToSplit: bond.pendingToSplit,
       });
     },
     enabled: bondRequiredAfter !== undefined,

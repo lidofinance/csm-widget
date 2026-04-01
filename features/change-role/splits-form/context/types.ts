@@ -12,7 +12,7 @@ export type SplitsFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   currentFeeSplits: FeeSplit[];
   rewards: Rewards;
-  pendingSharesToSplit: bigint;
+  pendingToSplit: bigint;
   canEdit: boolean;
   isOwner: boolean;
 };

@@ -1,7 +1,6 @@
 import { ButtonIcon, History, Textarea } from '@lidofinance/lido-ui';
 import { FC, useContext } from 'react';
 import { useController } from 'react-hook-form';
-import { LocalLink } from 'shared/navigate';
 import { DepositDataDropContext } from './deposit-data-drop';
 import { Placeholder, TextareaStyle, TextareaWrapper } from './styles';
 
@@ -34,8 +33,7 @@ export const DepositDataInput: FC<DepositKeysInputHookFormProps> = ({
         <br />
         Paste JSON with deposit data or drag and drop the file
         <br />
-        Please make sure you followed the key generation guide provided in{' '}
-        <LocalLink anchor="#how-to-set-up-a-validator">FAQ</LocalLink>
+        Please make sure you followed the key generation guide provided in FAQ
         <br />
         <br />
         <ButtonIcon
