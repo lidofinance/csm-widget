@@ -23,8 +23,7 @@ export class DashboardPage extends BasePage {
   async open() {
     await test.step('Open the Dasboard page', async () => {
       await this.openWithRetry('/', [
-        this.bondRewards.latestRewardsDistribution.commonBalance_Text,
-        this.keysSection.keysDepositableCountValue,
+        this.bondRewards.bondBalance.commonBalance_Text,
       ]);
     });
   }
