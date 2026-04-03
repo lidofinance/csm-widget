@@ -140,12 +140,12 @@ export const useShowRule = () => {
   );
 };
 
-// FIXME: type duplication with use-nav-items.tsx
-export const useFilterShowRules = <
-  T extends { showRules?: ShowRule[]; module?: MODULE_NAME },
->(
-  items: T[],
-) => {
+export type ShowRuleProps = {
+  showRules?: ShowRule[];
+  module?: MODULE_NAME;
+};
+
+export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
   const check = useShowRule();
 
   return useMemo(

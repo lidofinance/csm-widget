@@ -2,6 +2,7 @@ import { PATH } from 'consts/urls';
 import { CounterInvites } from 'shared/counters';
 import { Switcher } from './switcher';
 import { SwitcherRoutes } from './types';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 
 const ROLE_ROUTES: SwitcherRoutes = [
   {
@@ -18,7 +19,8 @@ const ROLE_ROUTES: SwitcherRoutes = [
   {
     title: 'Meta data',
     path: PATH.SETTINGS_METADATA,
-    showRules: ['IS_CM'],
+    showRules: ['IS_NODE_OPERATOR'],
+    module: MODULE_NAME.CSM,
   },
   {
     title: 'Inbox requests',
