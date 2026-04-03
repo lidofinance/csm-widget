@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-import { BasePage } from '../../../pages';
+import { BasePage } from '../../../../shared/pages/base.page';
 
 export class RolesSection extends BasePage {
   page: Page;

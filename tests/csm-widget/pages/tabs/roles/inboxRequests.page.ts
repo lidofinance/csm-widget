@@ -2,7 +2,7 @@ import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { Locator, Page, test } from '@playwright/test';
 import { ROLES, SHORT_ROLES } from 'tests/shared/consts/roles';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
-import { BasePage } from 'tests/csm-widget/pages/base.page';
+import { BasePage } from '../../../../shared/pages/base.page';
 
 export class InboxRequestsPage extends BasePage {
   acceptRequestButton: Locator;

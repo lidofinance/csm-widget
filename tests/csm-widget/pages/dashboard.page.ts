@@ -1,5 +1,5 @@
 import { Locator, Page, test } from '@playwright/test';
-import { BasePage } from './base.page';
+import { BasePage } from '../../shared/pages/base.page';
 import { BondRewards } from './elements/dashboard/element.bondRewards';
 import { KeysSection } from './elements/dashboard/element.keysSection';
 import { RolesSection } from './elements/dashboard/element.rolesSection';

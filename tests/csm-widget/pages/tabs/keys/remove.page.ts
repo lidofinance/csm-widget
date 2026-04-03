@@ -1,6 +1,6 @@
 import { trimAddress } from '@lidofinance/address';
 import { Locator, Page, test } from '@playwright/test';
-import { BasePage } from 'tests/csm-widget/pages';
+import { BasePage } from '../../../../shared/pages/base.page';
 
 export class RemovePage {
   page: Page;

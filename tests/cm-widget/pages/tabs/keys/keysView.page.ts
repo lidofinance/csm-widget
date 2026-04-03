@@ -1,5 +1,5 @@
 import { Locator, Page, test } from '@playwright/test';
-import { BasePage } from '../../../pages';
+import { BasePage } from '../../../../shared/pages/base.page';
 
 export class TableRow {
   pubkeyCell: Locator;

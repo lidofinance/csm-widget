@@ -1,10 +1,10 @@
 import { Locator, Page, test } from '@playwright/test';
-import { Header } from './elements/common/element.header';
+import { Header } from '../../cm-widget/pages/elements/common/element.header';
 import {
   RPC_WAIT_TIMEOUT,
   WALLET_PAGE_TIMEOUT_WAITER,
 } from 'tests/shared/consts/timeouts';
-import { ConnectWalletModal } from './elements/common/element.connectWalletModal';
+import { ConnectWalletModal } from '../../cm-widget/pages/elements/common/element.connectWalletModal';
 import { waitForCallback } from 'tests/shared/helpers/tests';
 
 export class BasePage {

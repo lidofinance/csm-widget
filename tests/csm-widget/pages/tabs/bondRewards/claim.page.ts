@@ -1,5 +1,5 @@
 import { Locator, Page, test } from '@playwright/test';
-import { BasePage } from '../../base.page';
+import { BasePage } from '../../../../shared/pages/base.page';
 import { SourceSelect } from 'tests/csm-widget/pages/elements/bondRewards/claim/sourceSelect.element';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 

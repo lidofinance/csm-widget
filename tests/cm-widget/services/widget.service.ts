@@ -13,28 +13,38 @@ import {
   KeysPage,
   MonitoringPage,
   SettingsPage,
+  CreateNodeOperatorPage,
 } from '../pages';
 import { ElementController } from '../pages/elements/controller';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
+import { NavBlockElement } from '../../shared/pages/elements';
 
 type FeatureFlagName = keyof FeatureFlagsType;
 
 export class WidgetService {
+  public createNodeOperatorPage: CreateNodeOperatorPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
   public settingsPage: SettingsPage;
   public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
 
+  // common elements
+  public navBlockElement: NavBlockElement;
+
   constructor(
     public page: Page,
     public walletPage: WalletPage,
   ) {
+    this.createNodeOperatorPage = new CreateNodeOperatorPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
     this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
+
+    // common elements
+    this.navBlockElement = new NavBlockElement(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {

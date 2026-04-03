@@ -26,12 +26,16 @@ export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
   const metadata = getCurveMetadata(curveId);
 
   return (
-    <RadioButton small {...fieldProps}>
+    <RadioButton
+      small
+      {...fieldProps}
+      data-testid={`gateCard${metadata.short}`}
+    >
       <Stack gap="xs">
         <CardLayout>
           <Stack direction="column" gap="sm">
             <Badge data-testid={`gateCardBadge`}>{metadata.short}</Badge>
-            <Text size="xs" weight={700} data-testid={`gateCardName`}>
+            <Text size="xs" weight={700} data-testid={`gateCardTitle`}>
               {metadata.name}
             </Text>
             {metadata.description && (

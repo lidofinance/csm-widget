@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { BasePage } from './base.page';
+import { BasePage } from '../../shared/pages/base.page';
 import { AddBondPage } from './tabs/bondRewards/addBond.page';
 import { ClaimPage } from './tabs/bondRewards/claim.page';
 

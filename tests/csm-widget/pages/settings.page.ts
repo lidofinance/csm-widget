@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { BasePage } from './base.page';
+import { BasePage } from '../../shared/pages/base.page';
 import {
   RewardsAddressPage,
   ManagerAddressPage,

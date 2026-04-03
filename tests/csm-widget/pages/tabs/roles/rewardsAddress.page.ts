@@ -1,7 +1,7 @@
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { Locator, Page, test } from '@playwright/test';
 import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
-import { BasePage } from 'tests/csm-widget/pages/base.page';
+import { BasePage } from '../../../../shared/pages/base.page';
 
 export class RewardsAddressPage extends BasePage {
   form: Locator;

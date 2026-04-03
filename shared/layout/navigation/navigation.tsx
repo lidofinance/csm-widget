@@ -37,7 +37,7 @@ export const Navigation: FC<{ desktopHidden?: boolean }> = memo(
         data-desktop-hidden={desktopHidden || undefined}
         $desktopHidden={desktopHidden}
       >
-        <NavContainer>
+        <NavContainer data-testid="navBlockMain">
           <NavBlock title={MODULE_METADATA[config.module].title}>
             {routes.map(({ name, path, subPaths, icon, suffix, colored }) => {
               const isActive = getIsActivePath(pathname, path, subPaths);

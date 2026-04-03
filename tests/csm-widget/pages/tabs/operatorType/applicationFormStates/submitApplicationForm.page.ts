@@ -1,6 +1,6 @@
 import { Locator, Page, test, expect } from '@playwright/test';
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
-import { BasePage } from 'tests/csm-widget/pages/base.page';
+import { BasePage } from '../../../../../shared/pages/base.page';
 import { AdditionalAddressPage } from './additionalAddress.page';
 import { HDAccount } from 'viem/accounts';
 

@@ -1,7 +1,7 @@
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { Locator, Page, test } from '@playwright/test';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
-import { BasePage } from '../../../pages/base.page';
+import { BasePage } from '../../../../shared/pages/base.page';
 
 export class ManagerAddressPage extends BasePage {
   form: Locator;

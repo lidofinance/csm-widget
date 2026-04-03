@@ -1,7 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
-import { BasePage } from 'tests/csm-widget/pages/base.page';
+import { BasePage } from '../../../../../shared/pages/base.page';
 
 export class SignInForm extends BasePage {
   form: Locator;

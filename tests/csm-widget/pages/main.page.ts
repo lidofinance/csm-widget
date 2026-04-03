@@ -1,5 +1,5 @@
 import { Page, test } from '@playwright/test';
-import { BasePage } from './base.page';
+import { BasePage } from '../../shared/pages/base.page';
 import { StarterPackSection } from './elements/main/element.starterPackSection';
 
 export class MainPage extends BasePage {

@@ -1,5 +1,5 @@
 import { Locator, Page } from '@playwright/test';
-import { BasePage } from '../../../pages';
+import { BasePage } from '../../../../shared/pages/base.page';
 import { AvailableToClaimBlock } from './bondReward/element.availableToClaimSection';
 import { BondBalanceBlock } from './bondReward/element.bondBalance';
 import { LatestRewardsDistributionBlock } from './bondReward/element.latestRewardsDistribution';

@@ -1,6 +1,6 @@
 import { Locator, Page, test } from '@playwright/test';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
-import { BasePage } from 'tests/csm-widget/pages';
+import { BasePage } from '../../../../shared/pages/base.page';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { DepositKey } from 'tests/shared/services/keysGenerator.service';
 

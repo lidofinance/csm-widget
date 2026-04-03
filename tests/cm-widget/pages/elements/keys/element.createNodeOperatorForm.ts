@@ -4,7 +4,7 @@ import {
   FIRST_BOND,
   TokenSymbol,
 } from 'tests/shared/consts/common.const';
-import { BasePage } from '../../../pages';
+import { BasePage } from '../../../../shared/pages/base.page';
 import { DepositKey } from 'tests/shared/services/keysGenerator.service';
 
 export class CreateNodeOperatorForm {

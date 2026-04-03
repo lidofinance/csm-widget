@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { BasePage } from './base.page';
+import { BasePage } from '../../shared/pages/base.page';
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { TxModal } from './elements/common/element.txProgressModal';
 import { ApplicationForm } from './tabs/operatorType/applicationForm.page';
