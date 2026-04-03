@@ -18,15 +18,13 @@ import {
   CounterLockedBond,
   CounterSurveys,
 } from 'shared/counters';
-import { ShowRule, useFilterShowRules } from 'shared/hooks';
+import { ShowRuleProps, useFilterShowRules } from 'shared/hooks';
 
-export type Route = {
+export type Route = ShowRuleProps & {
   name: string;
   path: PATH;
   icon: JSX.Element;
   subPaths?: PATH[];
-  showRules: ShowRule[];
-  module?: MODULE_NAME;
   suffix?: ReactNode;
   colored?: boolean;
 };
