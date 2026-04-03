@@ -69,14 +69,19 @@ export const Placeholder = styled.div`
   transform-origin: 0% 0%;
   transform: translateY(-14px) scale(0.75);
 
+  a,
+  button {
+    pointer-events: none;
+  }
+
   ${TextareaWrapper}:has(textarea:not(:focus):placeholder-shown) & {
     opacity: 0.9;
     transform: scale(1);
-  }
 
-  a,
-  button {
-    pointer-events: auto;
+    a,
+    button {
+      pointer-events: auto;
+    }
   }
 `;
 

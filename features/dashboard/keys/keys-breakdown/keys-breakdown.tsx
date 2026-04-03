@@ -26,9 +26,8 @@ export const KeysBreakdown: FC = () => {
     return (stakeAndKeys?.potentialAdditionalKeys ?? 0) > 0;
   }, [info, stakeSummary]);
 
-  const hasAnyKey = useMemo(() => {
-    return !!info && info.totalAddedKeys > 0;
-  }, [info]);
+  const hasAnyKey = !!info && info.totalAddedKeys > 0;
+  const hasGroup = stakeSummary && stakeSummary.weight > 0;
 
   return (
     <AccordionStyle
@@ -39,7 +38,7 @@ export const KeysBreakdown: FC = () => {
           </Text>
           {hasAnyKey && (
             <Stack>
-              {isModuleCM && <MoreKeysChip more={moreKeys} />}
+              {isModuleCM && hasGroup && <MoreKeysChip more={moreKeys} />}
               <IssuesChip issues={data?.issuesCount} />
             </Stack>
           )}

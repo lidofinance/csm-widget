@@ -42,7 +42,7 @@ export const StakeStats: FC<Props> = ({ data }) => {
               <FormatToken
                 amount={data.activeStake}
                 token={TOKENS.eth}
-                maxDecimalDigits={0}
+                maxDecimalDigits={2}
               />
             </Text>
             <Text size="xxs" color="secondary">
@@ -62,7 +62,7 @@ export const StakeStats: FC<Props> = ({ data }) => {
               <FormatToken
                 amount={data.depositableStake}
                 token={TOKENS.eth}
-                maxDecimalDigits={0}
+                maxDecimalDigits={2}
               />
             </Text>
             <Text size="xxs" color="secondary">
@@ -82,7 +82,7 @@ export const StakeStats: FC<Props> = ({ data }) => {
               <FormatToken
                 amount={data.potentialAdditionalStake}
                 token={TOKENS.eth}
-                maxDecimalDigits={0}
+                maxDecimalDigits={2}
               />
             </Text>
             <Text size="xxs" color="secondary">

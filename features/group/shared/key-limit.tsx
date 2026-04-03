@@ -11,7 +11,7 @@ export const KeyLimit: FC<Props> = ({ info }) => {
   if (!info?.targetLimit) return null;
 
   const keys = info.totalAddedKeys - info.totalWithdrawnKeys;
-  const limitText = pluralKeys({ value: keys, showValue: true });
+  const limitText = pluralKeys({ value: info.targetLimit, showValue: true });
 
   return (
     <Text color="secondary" size="xxs">
