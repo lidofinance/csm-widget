@@ -27,7 +27,7 @@ export const KeysBreakdown: FC = () => {
   }, [info, stakeSummary]);
 
   const hasAnyKey = !!info && info.totalAddedKeys > 0;
-  const hasGroup = stakeSummary && stakeSummary.weight > 0;
+  const hasGroup = isModuleCM && stakeSummary && stakeSummary.weight > 0;
 
   return (
     <AccordionStyle
@@ -36,12 +36,10 @@ export const KeysBreakdown: FC = () => {
           <Text as="h4" size="sm" weight={700}>
             Keys Breakdown
           </Text>
-          {hasAnyKey && (
-            <Stack>
-              {isModuleCM && hasGroup && <MoreKeysChip more={moreKeys} />}
-              <IssuesChip issues={data?.issuesCount} />
-            </Stack>
-          )}
+          <Stack>
+            {hasGroup && <MoreKeysChip more={moreKeys} />}
+            {hasAnyKey && <IssuesChip issues={data?.issuesCount} />}
+          </Stack>
         </Stack>
       }
     >
