@@ -9,6 +9,7 @@ type KeysItemProps = {
   tooltip?: string;
   type?: keyof typeof VARIANTS;
   comment?: ReactNode;
+  ignoreCountZero?: boolean;
 };
 
 export const KeysItem: FC<KeysItemProps> = ({
@@ -17,9 +18,16 @@ export const KeysItem: FC<KeysItemProps> = ({
   type,
   comment,
   tooltip,
+  ignoreCountZero,
 }) => {
-  const variant =
-    !type && count ? 'active' : type === 'error' && !count ? undefined : type;
+  const hasCount =
+    count === undefined ? undefined : count > 0 || ignoreCountZero;
+  const variant = hasCount
+    ? (type ?? 'active')
+    : type === 'active'
+      ? type
+      : undefined;
+
   return (
     <WrapperStyle $variant={variant}>
       <Stack direction="column" gap="xs">
@@ -29,7 +37,7 @@ export const KeysItem: FC<KeysItemProps> = ({
           </Tooltip>
           {count === undefined ? <ShortInlineLoader /> : <b>{count}</b>}
         </TitleStyle>
-        {type === 'warning' || (count && count > 0) ? comment : null}
+        {hasCount ? comment : null}
       </Stack>
     </WrapperStyle>
   );
