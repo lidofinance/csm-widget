@@ -1,0 +1,2 @@
+export * from './step1.page';
+export * from './step2.page';

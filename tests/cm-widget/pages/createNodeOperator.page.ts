@@ -1,11 +1,14 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../shared/pages/base.page';
-import { CreateOperatorStep1Page } from './tabs/createNodeOperator/step1.page';
+import {
+  CreateOperatorStep1Page,
+  CreateOperatorStep2Page,
+} from './tabs/createNodeOperator';
 
 export class CreateNodeOperatorPage extends BasePage {
   createdOperatorForm: Locator;
   step1: CreateOperatorStep1Page;
-  // step2: Locator;
+  step2: CreateOperatorStep2Page;
   // step3: Locator;
   // step4: Locator;
 
@@ -14,6 +17,7 @@ export class CreateNodeOperatorPage extends BasePage {
 
     this.createdOperatorForm = this.page.getByTestId('createdOperatorForm');
     this.step1 = new CreateOperatorStep1Page(page, this.createdOperatorForm);
+    this.step2 = new CreateOperatorStep2Page(page, this.createdOperatorForm);
   }
 
   async open() {

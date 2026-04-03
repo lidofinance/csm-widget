@@ -20,10 +20,10 @@ export const Step2: FC = () => {
   return (
     <Stack direction="column" gap="xxl">
       <Stack direction="column" gap="md">
-        <Text as="h3" size="lg" weight={700}>
+        <Text as="h3" size="lg" weight={700} data-testid="stepTitle">
           Specify addresses
         </Text>
-        <Text size="xs" color="secondary">
+        <Text size="xs" color="secondary" data-testid="stepDescription">
           <b>Manager Address</b> will have the ultimate control over the Node
           Operator, while <b>Rewards Address</b> is only used to receive
           rewards.

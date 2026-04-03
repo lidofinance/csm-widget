@@ -50,9 +50,11 @@ export class CreateOperatorStep1Page extends BasePage {
     return new GateCard(this.form, shortName);
   }
 
-  async open() {
-    await test.step('Open the Dasboard page', async () => {
-      await this.page.goto('/create');
+  async fillForm(type: OPERATOR_TYPE) {
+    await test.step(`Select operator type: ${type}`, async () => {
+      const gateInput = this.getGateInput(type);
+      await gateInput.click();
+      await this.continueButton.click();
     });
   }
 }
