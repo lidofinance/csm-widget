@@ -4,7 +4,7 @@ import { Tags, TokenSymbol } from '../../../../shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { KeysGeneratorService } from '../../../../shared/services/keysGenerator.service';
 
-test.describe('Operator with keys. Common suite.', async () => {
+test.describe('Operator with keys. Common suite.', () => {
   let keysPage: KeysPage;
   let keysGeneratorService: KeysGeneratorService;
 

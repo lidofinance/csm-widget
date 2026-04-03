@@ -26,7 +26,7 @@ const invalidTextValidation = [
   'signature',
 ];
 
-test.describe('Operator with keys. Validation keys json.', async () => {
+test.describe('Operator with keys. Validation keys json.', () => {
   let keysPage: KeysPage;
   let keysGeneratorService: KeysGeneratorService;
 

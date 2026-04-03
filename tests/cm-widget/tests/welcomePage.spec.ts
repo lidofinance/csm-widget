@@ -3,7 +3,7 @@ import { test } from './test.fixture';
 import { PAGE_WAIT_TIMEOUT } from '../../shared/consts/timeouts';
 import { expect } from '@playwright/test';
 
-test.describe('Welcome page without connected wallet', async () => {
+test.describe('Welcome page without connected wallet', () => {
   test('Should open connect modal after click to "I am a Node Operator"', async ({
     page,
   }) => {

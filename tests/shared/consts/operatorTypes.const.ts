@@ -39,6 +39,8 @@ export const OPERATOR_TYPE_METADATA: Record<
       'Obtain enhanced validation parameters by becoming recognized as an independent Community Staker. Please note that the verification process takes time and requires the submission of specific supporting proofs',
     curveId: OPERATOR_TYPE_CURVE_ID.CSM_ICS,
   },
+
+  // Curated Module types
   [OPERATOR_TYPE.CM_PTO]: {
     name: 'Professional Trusted Operator',
     short: 'PTO',

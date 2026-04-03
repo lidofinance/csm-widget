@@ -7,7 +7,7 @@ import { CreateOperatorStep1Page } from '../../pages/tabs/createNodeOperator/ste
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
-test.describe('Operator without keys. Step 1.', async () => {
+test.describe('Operator without keys. Step 1.', () => {
   let step1: CreateOperatorStep1Page;
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.page.goto('/');

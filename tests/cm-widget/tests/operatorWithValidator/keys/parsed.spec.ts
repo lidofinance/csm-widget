@@ -5,7 +5,7 @@ import { KeysGeneratorService } from '../../../../shared/services/keysGenerator.
 import { randomBytes } from 'node:crypto';
 import { generateWithdrawalCredentials } from '../../../../shared/helpers/accountData';
 
-test.describe('Operator with keys. Validation keys json.', async () => {
+test.describe('Operator with keys. Validation keys json.', () => {
   let keysPage: KeysPage;
   let keysGeneratorService: KeysGeneratorService;
 

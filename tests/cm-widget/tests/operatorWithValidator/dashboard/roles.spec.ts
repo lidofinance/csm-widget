@@ -4,7 +4,7 @@ import { test } from '../../test.fixture';
 import { mnemonicToAccount } from 'viem/accounts';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
-test.describe('Dashboard. Roles.', async () => {
+test.describe('Dashboard. Roles.', () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
   });

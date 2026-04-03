@@ -3,7 +3,7 @@ import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { USD_AMOUNT_REGEX } from '../../../../../shared/consts/regexp.const';
 
-test.describe('Dashboard. Bond & Rewards. Bond balance section.', async () => {
+test.describe('Dashboard. Bond & Rewards. Bond balance section.', () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
   });
