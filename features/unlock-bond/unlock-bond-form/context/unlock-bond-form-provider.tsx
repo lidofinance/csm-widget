@@ -2,19 +2,10 @@ import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FormControllerProvider } from 'shared/hook-form/form-controller';
 import { type UnlockBondFormInputType } from './types';
-import { useUnlockBondFormData } from './unlock-bond-data-provider';
 import { useUnlockBondSubmit } from './use-unlock-bond-submit';
-import { useUnlockBondValidation } from './use-unlock-bond-validation';
 
 export const UnlockBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { isExpired } = useUnlockBondFormData();
-  const validationResolver = useUnlockBondValidation();
-
   const formObject = useForm<UnlockBondFormInputType>({
-    defaultValues: {
-      amount: undefined,
-    },
-    resolver: isExpired ? undefined : validationResolver,
     mode: 'onChange',
   });
 

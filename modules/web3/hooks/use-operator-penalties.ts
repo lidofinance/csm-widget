@@ -4,6 +4,8 @@ import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { useSmSDK } from '../web3-provider';
 
+export const KEY_OPERATOR_PENALTIES = ['operator-penalties'];
+
 export const useOperatorPenalties = <TData = PenaltyRecord[]>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: PenaltyRecord[]) => TData,
@@ -11,7 +13,7 @@ export const useOperatorPenalties = <TData = PenaltyRecord[]>(
   const { events } = useSmSDK();
 
   return useQuery({
-    queryKey: ['operator-penalties', { nodeOperatorId }],
+    queryKey: [...KEY_OPERATOR_PENALTIES, { nodeOperatorId }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(nodeOperatorId !== undefined);

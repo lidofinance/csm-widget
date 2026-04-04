@@ -1,10 +1,10 @@
 import {
   KEY_OPERATOR_BALANCE,
   KEY_IS_LOCK_EXPIRED,
-  useEthereumBalance,
   useIsLockExpired,
   useNodeOperatorId,
   useOperatorBalance,
+  KEY_OPERATOR_PENALTIES,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
 import {
@@ -14,6 +14,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
 import { type UnlockBondFormNetworkData } from './types';
+import { bigMin } from 'utils';
 
 const useUnlockBondFormNetworkData: NetworkData<
   UnlockBondFormNetworkData
@@ -21,33 +22,35 @@ const useUnlockBondFormNetworkData: NetworkData<
   const nodeOperatorId = useNodeOperatorId<true>();
 
   const balanceQuery = useOperatorBalance(nodeOperatorId);
-  const ethBalanceQuery = useEthereumBalance();
+
   const isExpiredQuery = useIsLockExpired(nodeOperatorId);
 
-  const balance = balanceQuery.data;
-  const ethBalance = ethBalanceQuery.data;
+  const bond = balanceQuery.data;
+  const isExpired = !!isExpiredQuery.data;
+
+  const compensationAmount =
+    !isExpired && !bond?.isInsufficient
+      ? bigMin(bond?.delta || 0n, bond?.locked || 0n)
+      : 0n;
 
   const invalidate = useInvalidate();
 
   const revalidate = useCallback(() => {
     invalidate([
-      ethBalanceQuery.queryKey,
       KEY_OPERATOR_BALANCE,
       KEY_IS_LOCK_EXPIRED,
+      KEY_OPERATOR_PENALTIES,
     ]);
-  }, [invalidate, ethBalanceQuery.queryKey]);
+  }, [invalidate]);
 
   return {
     data: {
       nodeOperatorId,
-      lockedBond: balance?.locked,
-      ethBalance,
-      isExpired: !!isExpiredQuery.data,
+      bond,
+      isExpired,
+      compensationAmount,
     } as UnlockBondFormNetworkData,
-    isPending:
-      balanceQuery.isPending ||
-      ethBalanceQuery.isPending ||
-      isExpiredQuery.isPending,
+    isPending: balanceQuery.isPending || isExpiredQuery.isPending,
     revalidate,
   };
 };

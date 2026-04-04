@@ -49,7 +49,7 @@ export const PenaltyHistoryTable: FC = () => {
                 <Text size="xxs" color={'error'}>
                   <FormatToken
                     amount={record.additionalFine}
-                    token={TOKENS.eth}
+                    token={TOKENS.steth}
                   />
                 </Text>
               )) || <>&mdash;</>}
@@ -65,7 +65,7 @@ export const PenaltyHistoryTable: FC = () => {
                       : 'warning'
                 }
               >
-                <FormatToken amount={record.amount} token={TOKENS.eth} />
+                <FormatToken amount={record.amount} token={TOKENS.steth} />
               </Text>
             </td>
             <td>
