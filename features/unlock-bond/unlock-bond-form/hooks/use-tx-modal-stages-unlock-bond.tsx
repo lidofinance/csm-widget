@@ -7,20 +7,24 @@ import {
   TxStageSignOperationAmount,
   TxStageSuccess,
   getGeneralTransactionModalStages,
-  useTransactionModalStage,
 } from 'shared/transaction-modal';
+import { useTxCallbackStages } from 'shared/hook-form/form-controller';
+import {
+  UnlockBondFormInputType,
+  UnlockBondFormNetworkData,
+} from '../context/types';
 
-type Props = {
-  lockedBond?: bigint;
-  compensationAmount?: bigint;
-};
+type TxResult = bigint | undefined;
 
 const getTxModalStagesUnlockBond = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: ({ compensationAmount }: Props) =>
+  sign: (
+    _input: UnlockBondFormInputType,
+    { compensationAmount }: UnlockBondFormNetworkData,
+  ) =>
     compensationAmount !== undefined
       ? transitStage(
           <TxStageSignOperationAmount
@@ -36,7 +40,11 @@ const getTxModalStagesUnlockBond = (
           />,
         ),
 
-  pending: ({ compensationAmount }: Props, txHash?: string) =>
+  pending: (
+    _input: UnlockBondFormInputType,
+    { compensationAmount }: UnlockBondFormNetworkData,
+    txHash?: string,
+  ) =>
     compensationAmount !== undefined
       ? transitStage(
           <TxStageSignOperationAmount
@@ -51,22 +59,27 @@ const getTxModalStagesUnlockBond = (
           <TxStagePending title="Unlocking expired bond" txHash={txHash} />,
         ),
 
-  success: ({ lockedBond, compensationAmount }: Props, txHash?: string) =>
+  success: (
+    _input: UnlockBondFormInputType,
+    { compensationAmount }: UnlockBondFormNetworkData,
+    result: TxResult,
+    txHash?: string,
+  ) => {
     transitStage(
       <TxStageSuccess
         txHash={txHash}
         title={
           compensationAmount !== undefined
-            ? lockedBond
+            ? result
               ? 'Locked bond has been partially compensated'
               : 'Locked bond has been fully compensated'
             : 'Expired bond lock has been unlocked'
         }
         description={
-          lockedBond ? (
+          result ? (
             <>
               Remaining locked bond{' '}
-              <TxAmount amount={lockedBond} token={TOKENS.steth} />
+              <TxAmount amount={result} token={TOKENS.steth} />
             </>
           ) : undefined
         }
@@ -74,9 +87,13 @@ const getTxModalStagesUnlockBond = (
       {
         isClosableOnLedger: true,
       },
-    ),
+    );
+  },
 });
 
-export const useTxModalStagesUnlockBond = () => {
-  return useTransactionModalStage(getTxModalStagesUnlockBond);
-};
+export const useTxModalStagesUnlockBond = () =>
+  useTxCallbackStages<
+    UnlockBondFormInputType,
+    UnlockBondFormNetworkData,
+    TxResult
+  >(getTxModalStagesUnlockBond);

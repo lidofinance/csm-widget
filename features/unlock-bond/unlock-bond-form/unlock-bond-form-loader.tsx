@@ -1,14 +1,21 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormLoader } from 'shared/hook-form/form-controller';
-import { useShowFlags } from 'shared/hooks';
-import { useUnlockBondFormData } from './context';
+import { useUnlockBondFlow } from './context';
 import { Info } from './controls/info';
 
-export const UnlockBondFormLoader: FC<PropsWithChildren> = ({ children }) => {
-  const { HAS_MANAGER_ROLE } = useShowFlags();
-  const { bond, isExpired } = useUnlockBondFormData();
+const UnlockBondFormGate: FC<PropsWithChildren> = ({ children }) => {
+  const flow = useUnlockBondFlow();
 
-  const isView = !bond?.locked || (!isExpired && !HAS_MANAGER_ROLE);
+  const isReadOnly =
+    flow.action === 'nothing' ||
+    flow.action === 'no-access' ||
+    flow.action === 'insufficient-bond';
 
-  return <FormLoader>{isView ? <Info /> : children}</FormLoader>;
+  return isReadOnly ? <Info /> : <>{children}</>;
 };
+
+export const UnlockBondFormLoader: FC<PropsWithChildren> = ({ children }) => (
+  <FormLoader>
+    <UnlockBondFormGate>{children}</UnlockBondFormGate>
+  </FormLoader>
+);
