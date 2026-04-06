@@ -11,7 +11,8 @@ import {
 } from 'shared/transaction-modal';
 
 type Props = {
-  amount?: bigint;
+  lockedBond?: bigint;
+  compensationAmount?: bigint;
 };
 
 const getTxModalStagesUnlockBond = (
@@ -19,13 +20,13 @@ const getTxModalStagesUnlockBond = (
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: ({ amount }: Props) =>
-    amount !== undefined
+  sign: ({ compensationAmount }: Props) =>
+    compensationAmount !== undefined
       ? transitStage(
           <TxStageSignOperationAmount
-            operationText="Unlocking"
-            amount={amount}
-            token={TOKENS.eth}
+            operationText="Compensating"
+            amount={compensationAmount}
+            token={TOKENS.steth}
           />,
         )
       : transitStage(
@@ -35,13 +36,13 @@ const getTxModalStagesUnlockBond = (
           />,
         ),
 
-  pending: ({ amount }: Props, txHash?: string) =>
-    amount !== undefined
+  pending: ({ compensationAmount }: Props, txHash?: string) =>
+    compensationAmount !== undefined
       ? transitStage(
           <TxStageSignOperationAmount
-            operationText="Unlocking"
-            amount={amount}
-            token={TOKENS.eth}
+            operationText="Compensating"
+            amount={compensationAmount}
+            token={TOKENS.steth}
             isPending
             txHash={txHash}
           />,
@@ -50,20 +51,22 @@ const getTxModalStagesUnlockBond = (
           <TxStagePending title="Unlocking expired bond" txHash={txHash} />,
         ),
 
-  success: ({ lockedBond }: { lockedBond?: bigint }, txHash?: string) =>
+  success: ({ lockedBond, compensationAmount }: Props, txHash?: string) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
         title={
-          lockedBond
-            ? 'Bond has been partially unlocked'
-            : 'Bond has been completely unlocked'
+          compensationAmount !== undefined
+            ? lockedBond
+              ? 'Locked bond has been partially compensated'
+              : 'Locked bond has been fully compensated'
+            : 'Expired bond lock has been unlocked'
         }
         description={
           lockedBond ? (
             <>
               Remaining locked bond{' '}
-              <TxAmount amount={lockedBond} token={TOKENS.eth} />
+              <TxAmount amount={lockedBond} token={TOKENS.steth} />
             </>
           ) : undefined
         }

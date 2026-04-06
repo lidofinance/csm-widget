@@ -37,7 +37,7 @@ export const KeysBreakdown: FC = () => {
             Keys Breakdown
           </Text>
           <Stack>
-            {hasGroup && <MoreKeysChip more={moreKeys} />}
+            {hasGroup && <MoreKeysChip more={moreKeys} empty={!hasAnyKey} />}
             {hasAnyKey && <IssuesChip issues={data?.issuesCount} />}
           </Stack>
         </Stack>
@@ -51,7 +51,8 @@ export const KeysBreakdown: FC = () => {
           tooltip="Keys awaiting deposit from the Lido protocol"
           {...(moreKeys
             ? {
-                type: 'warning',
+                type: hasAnyKey ? 'warning' : 'error',
+                ignoreCountZero: true,
                 comment:
                   'Add more keys to get to your full depositable capacity',
               }

@@ -9,19 +9,18 @@ import { FormSubmitterHook } from 'shared/hook-form/form-controller';
 import { handleTxError } from 'shared/transaction-modal';
 import { UnlockBondFormInputType, UnlockBondFormNetworkData } from '../context';
 import { useTxModalStagesUnlockBond } from '../hooks/use-tx-modal-stages-unlock-bond';
-import invariant from 'tiny-invariant';
 
 export const useUnlockBondSubmit: FormSubmitterHook<
   UnlockBondFormInputType,
   UnlockBondFormNetworkData
 > = () => {
-  const { bond } = useSmSDK();
+  const { bond: bondSDK } = useSmSDK();
   const { txModalStages } = useTxModalStagesUnlockBond();
 
   return useCallback(
     async (
-      { amount },
-      { nodeOperatorId, isExpired },
+      _,
+      { nodeOperatorId, isExpired, compensationAmount },
       { onConfirm, onRetry },
     ) => {
       try {
@@ -31,14 +30,17 @@ export const useUnlockBondSubmit: FormSubmitterHook<
         }) => {
           switch (stage) {
             case TransactionCallbackStage.SIGN:
-              txModalStages.sign({ amount });
+              txModalStages.sign({ compensationAmount });
               break;
             case TransactionCallbackStage.RECEIPT:
-              txModalStages.pending({ amount }, payload.hash);
+              txModalStages.pending({ compensationAmount }, payload.hash);
               break;
             case TransactionCallbackStage.DONE:
               txModalStages.success(
-                { lockedBond: payload.result ?? undefined },
+                {
+                  lockedBond: payload.result ?? undefined,
+                  compensationAmount,
+                },
                 payload.hash,
               );
               break;
@@ -53,10 +55,9 @@ export const useUnlockBondSubmit: FormSubmitterHook<
         };
 
         if (isExpired) {
-          await bond.unlockExpiredLock({ nodeOperatorId, callback });
+          await bondSDK.unlockExpiredLock({ nodeOperatorId, callback });
         } else {
-          invariant(amount !== undefined, 'BondAmount is not defined');
-          await bond.coverLockedBond({ nodeOperatorId, amount, callback });
+          await bondSDK.compensateLockedBond({ nodeOperatorId, callback });
         }
 
         await onConfirm?.();
@@ -66,6 +67,6 @@ export const useUnlockBondSubmit: FormSubmitterHook<
         return handleTxError(error);
       }
     },
-    [bond, txModalStages],
+    [bondSDK, txModalStages],
   );
 };
