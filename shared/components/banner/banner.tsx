@@ -20,8 +20,9 @@ export const Banner: FC<PropsWithChildren<BannerProps>> = ({
   extra,
   center,
   children,
+  ...rest
 }) => (
-  <BannerStyled $variant={variant}>
+  <BannerStyled $variant={variant} {...rest}>
     <Stack justify={center && !extra ? 'center' : 'space-between'} center>
       <BannerHeader>{title}</BannerHeader>
       {extra}

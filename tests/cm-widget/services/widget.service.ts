@@ -12,6 +12,7 @@ import {
   DashboardPage,
   KeysPage,
   MonitoringPage,
+  NotEligiblePage,
   SettingsPage,
   CreateNodeOperatorPage,
 } from '../pages';
@@ -25,6 +26,7 @@ export class WidgetService {
   public createNodeOperatorPage: CreateNodeOperatorPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
+  public notEligiblePage: NotEligiblePage;
   public settingsPage: SettingsPage;
   public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
@@ -39,6 +41,7 @@ export class WidgetService {
     this.createNodeOperatorPage = new CreateNodeOperatorPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
+    this.notEligiblePage = new NotEligiblePage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
     this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);

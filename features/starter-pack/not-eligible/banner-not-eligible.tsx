@@ -8,6 +8,7 @@ import { Disconnect } from 'shared/wallet';
 export const BannerNotEligible: FC = () => {
   return (
     <Banner
+      data-testid="notEligibleSection"
       center
       title={
         <Stack direction="column" center gap="lg">
