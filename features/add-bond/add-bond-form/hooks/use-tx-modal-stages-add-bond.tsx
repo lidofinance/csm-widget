@@ -1,19 +1,15 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { type AddBondResult, TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   TransactionModalTransitStage,
   TxStageOperationSucceedBalanceShown,
   TxStageSignOperationAmount,
   getGeneralTransactionModalStages,
-  useTransactionModalStage,
 } from 'shared/transaction-modal';
+import { useTxCallbackStages } from 'shared/hook-form/form-controller';
+import { AddBondFormInputType, AddBondFormNetworkData } from '../context/types';
 
 const STAGE_OPERATION_ARGS = {
   operationText: 'Adding Bond',
-};
-
-type Props = {
-  amount: bigint;
-  token: TOKENS;
 };
 
 const getTxModalStagesAddBond = (
@@ -21,32 +17,41 @@ const getTxModalStagesAddBond = (
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: ({ amount, token }: Props) =>
+  sign: (input: AddBondFormInputType, _data: AddBondFormNetworkData) =>
     transitStage(
       <TxStageSignOperationAmount
         {...STAGE_OPERATION_ARGS}
-        amount={amount}
-        token={token}
+        amount={input.bondAmount ?? 0n}
+        token={input.token}
       />,
     ),
 
-  pending: ({ amount, token }: Props, txHash?: string) =>
+  pending: (
+    input: AddBondFormInputType,
+    _data: AddBondFormNetworkData,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageSignOperationAmount
         {...STAGE_OPERATION_ARGS}
-        amount={amount}
-        token={token}
+        amount={input.bondAmount ?? 0n}
+        token={input.token}
         isPending
         txHash={txHash}
       />,
     ),
 
-  success: ({ balance }: { balance: bigint }, txHash?: string) =>
+  success: (
+    _input: AddBondFormInputType,
+    _data: AddBondFormNetworkData,
+    result: AddBondResult,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageOperationSucceedBalanceShown
         {...STAGE_OPERATION_ARGS}
         txHash={txHash}
-        balance={balance}
+        balance={result.current}
         balanceToken={TOKENS.steth}
       />,
       {
@@ -55,6 +60,9 @@ const getTxModalStagesAddBond = (
     ),
 });
 
-export const useTxModalStagesAddBond = () => {
-  return useTransactionModalStage(getTxModalStagesAddBond);
-};
+export const useTxModalStagesAddBond = () =>
+  useTxCallbackStages<
+    AddBondFormInputType,
+    AddBondFormNetworkData,
+    AddBondResult
+  >(getTxModalStagesAddBond);

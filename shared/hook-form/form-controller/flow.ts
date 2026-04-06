@@ -6,6 +6,7 @@ import { type FormSubmitter } from './types';
 
 // Intersection type for flow variants that can execute a transaction
 export type Executable<TResult = undefined> = {
+  confirm?: () => Promise<boolean>;
   submit: (callback: TransactionCallback<TResult>) => Promise<unknown>;
 };
 
@@ -40,6 +41,8 @@ export const useFlowSubmit = <
     async (input, data, { onConfirm, onRetry }) => {
       const flow = resolve(input, data);
       if (!isExecutable(flow)) return false;
+
+      if (flow.confirm && !(await flow.confirm())) return false;
 
       try {
         await flow.submit(buildCallback(input, data, onRetry));

@@ -1,48 +1,57 @@
 import { Plural } from 'shared/components';
+import { useTxCallbackStages } from 'shared/hook-form/form-controller';
 import {
   TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
-  useTransactionModalStage,
 } from 'shared/transaction-modal';
-
-type Props = {
-  keysCount: number;
-};
+import {
+  RemoveKeysFormInputType,
+  RemoveKeysFormNetworkData,
+} from '../context/types';
 
 const getTxModalStagesRemoveKeys = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: (props: Props) =>
+  sign: (input: RemoveKeysFormInputType, _data: RemoveKeysFormNetworkData) =>
     transitStage(
       <TxStageSign
-        title={`Removing ${props.keysCount} key(s)`}
+        title={`Removing ${input.selection.count} key(s)`}
         description=""
       />,
     ),
 
-  pending: (props: Props, txHash?: string) =>
+  pending: (
+    input: RemoveKeysFormInputType,
+    _data: RemoveKeysFormNetworkData,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStagePending
-        title={`Removing ${props.keysCount} key(s)`}
+        title={`Removing ${input.selection.count} key(s)`}
         description=""
         txHash={txHash}
       />,
     ),
 
-  success: (props: Props, txHash?: string) =>
+  success: (
+    input: RemoveKeysFormInputType,
+    _data: RemoveKeysFormNetworkData,
+    _result: undefined,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
         title={
           <>
-            {props.keysCount}{' '}
-            <Plural variants={['key', 'keys']} value={props.keysCount} /> has
-            been removed
+            {input.selection.count}{' '}
+            <Plural variants={['key', 'keys']} value={input.selection.count} />{' '}
+            has been removed
           </>
         }
         description=""
@@ -53,6 +62,7 @@ const getTxModalStagesRemoveKeys = (
     ),
 });
 
-export const useTxModalStagesRemoveKeys = () => {
-  return useTransactionModalStage(getTxModalStagesRemoveKeys);
-};
+export const useTxModalStagesRemoveKeys = () =>
+  useTxCallbackStages<RemoveKeysFormInputType, RemoveKeysFormNetworkData>(
+    getTxModalStagesRemoveKeys,
+  );

@@ -4,15 +4,19 @@ import {
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
-  useTransactionModalStage,
 } from 'shared/transaction-modal';
+import { useTxCallbackStages } from 'shared/hook-form/form-controller';
+import type {
+  MetadataFormInputType,
+  MetadataFormNetworkData,
+} from '../context/types';
 
 const getTxModalStagesMetadata = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: () =>
+  sign: (_input: MetadataFormInputType, _data: MetadataFormNetworkData) =>
     transitStage(
       <TxStageSign
         title="You are updating metadata"
@@ -20,7 +24,11 @@ const getTxModalStagesMetadata = (
       />,
     ),
 
-  pending: (txHash?: string) =>
+  pending: (
+    _input: MetadataFormInputType,
+    _data: MetadataFormNetworkData,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStagePending
         title="Updating metadata"
@@ -29,7 +37,12 @@ const getTxModalStagesMetadata = (
       />,
     ),
 
-  success: (txHash?: string) =>
+  success: (
+    _input: MetadataFormInputType,
+    _data: MetadataFormNetworkData,
+    _result: undefined,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageSuccess
         title="Metadata has been updated"
@@ -41,4 +54,6 @@ const getTxModalStagesMetadata = (
 });
 
 export const useTxModalStagesMetadata = () =>
-  useTransactionModalStage(getTxModalStagesMetadata);
+  useTxCallbackStages<MetadataFormInputType, MetadataFormNetworkData>(
+    getTxModalStagesMetadata,
+  );

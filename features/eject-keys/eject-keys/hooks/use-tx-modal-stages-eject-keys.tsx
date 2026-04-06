@@ -1,48 +1,57 @@
 import { Plural } from 'shared/components';
+import { useTxCallbackStages } from 'shared/hook-form/form-controller';
 import {
   TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
-  useTransactionModalStage,
 } from 'shared/transaction-modal';
-
-type Props = {
-  keysCount: number;
-};
+import {
+  EjectKeysFormInputType,
+  EjectKeysFormNetworkData,
+} from '../context/types';
 
 const getTxModalStagesEjectKeys = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: (props: Props) =>
+  sign: (input: EjectKeysFormInputType, _data: EjectKeysFormNetworkData) =>
     transitStage(
       <TxStageSign
-        title={`Ejecting ${props.keysCount} key(s)`}
+        title={`Ejecting ${input.selection.length} key(s)`}
         description=""
       />,
     ),
 
-  pending: (props: Props, txHash?: string) =>
+  pending: (
+    input: EjectKeysFormInputType,
+    _data: EjectKeysFormNetworkData,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStagePending
-        title={`Ejecting ${props.keysCount} key(s)`}
+        title={`Ejecting ${input.selection.length} key(s)`}
         description=""
         txHash={txHash}
       />,
     ),
 
-  success: (props: Props, txHash?: string) =>
+  success: (
+    input: EjectKeysFormInputType,
+    _data: EjectKeysFormNetworkData,
+    _result: undefined,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
         title={
           <>
-            {props.keysCount}{' '}
-            <Plural variants={['key', 'keys']} value={props.keysCount} /> has
-            been ejected
+            {input.selection.length}{' '}
+            <Plural variants={['key', 'keys']} value={input.selection.length} />{' '}
+            has been ejected
           </>
         }
         description=""
@@ -53,6 +62,7 @@ const getTxModalStagesEjectKeys = (
     ),
 });
 
-export const useTxModalStagesEjectKeys = () => {
-  return useTransactionModalStage(getTxModalStagesEjectKeys);
-};
+export const useTxModalStagesEjectKeys = () =>
+  useTxCallbackStages<EjectKeysFormInputType, EjectKeysFormNetworkData>(
+    getTxModalStagesEjectKeys,
+  );
