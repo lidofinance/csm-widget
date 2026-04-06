@@ -6023,7 +6023,7 @@ ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.0, ajv@^8.12.0:
+ajv@^8.0.0:
   version "8.17.1"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.17.1.tgz#37d9a5c776af6bc92d7f4f9510eba4c0a60d11a6"
   integrity sha512-B/gBuNg5SiMTrPkC+A2+cW0RszwxYmn6VYxB/inlBStS5nx6xHIt/ehKRhIMhqusl7a8LjQoZnjCs5vhwxOQ1g==
@@ -6043,7 +6043,7 @@ ajv@^8.11.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
-ajv@^8.9.0:
+ajv@^8.18.0, ajv@^8.9.0:
   version "8.18.0"
   resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.18.0.tgz#8864186b6738d003eb3a933172bb3833e10cefbc"
   integrity sha512-PlXPeEWMXMZ7sPYOHqmDyCJzcfNrUr3fGNKtezX14ykXOEIvyK81d+qydx89KY5O71FKMPaQ2vBfBFI5NHR63A==
@@ -6346,15 +6346,6 @@ axios@^1.10.0:
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
-axios@^1.12.0:
-  version "1.12.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.12.2.tgz#6c307390136cf7a2278d09cec63b136dfc6e6da7"
-  integrity sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==
-  dependencies:
-    follow-redirects "^1.15.6"
-    form-data "^4.0.4"
-    proxy-from-env "^1.1.0"
-
 axios@^1.12.2:
   version "1.13.5"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.5.tgz#5e464688fa127e11a660a2c49441c009f6567a43"
@@ -6363,6 +6354,15 @@ axios@^1.12.2:
     follow-redirects "^1.15.11"
     form-data "^4.0.5"
     proxy-from-env "^1.1.0"
+
+axios@^1.13.5:
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.14.0.tgz#7c29f4cf2ea91ef05018d5aa5399bf23ed3120eb"
+  integrity sha512-3Y8yrqLSwjuzpXuZ0oIYZ/XGgLwUIBU3uLvbcpb0pidD9ctpShJd43KSlEEkVQg6DS0G9NKyzOvBfUtDKEyHvQ==
+  dependencies:
+    follow-redirects "^1.15.11"
+    form-data "^4.0.5"
+    proxy-from-env "^2.1.0"
 
 axios@^1.3.5:
   version "1.7.9"
@@ -7799,7 +7799,7 @@ env-paths@^2.2.1:
   resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-2.2.1.tgz#420399d416ce1fbe9bc0a07c62fa68d67fd0f8f2"
   integrity sha512-+h1lkLKhZMTYjog1VEpJNG7NZJWcuc2DDk/qsqSTRRCOXiLjeQ1d1/udrUGhqMxUgAlwKNZ0cf2uqan5GLuS2A==
 
-env-schema@^5.2.0:
+env-schema@^5.2.1:
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/env-schema/-/env-schema-5.2.1.tgz#7af7d5464690f18c862c21f9b1fe662d3ae6485a"
   integrity sha512-gWMNrQ3dVHAZcCx7epiFwgXcyfBh4heD/6+OK3bEbke3uL+KqwYA9nUOwzJyRZh1cJOFcwdPuY1n0GKSFlSWAg==
@@ -8610,7 +8610,7 @@ foreground-child@^3.1.0:
     cross-spawn "^7.0.0"
     signal-exit "^4.0.1"
 
-form-data@^4.0.0, form-data@^4.0.4:
+form-data@^4.0.0:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.4.tgz#784cdcce0669a9d68e94d11ac4eea98088edd2c4"
   integrity sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==
@@ -10663,7 +10663,7 @@ mime-db@1.52.0:
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.52.0.tgz#bbabcdc02859f4987301c856e3387ce5ec43bf70"
   integrity sha512-sPU4uV7dYlvtWJxwwxHD0PuihVNiE7TyAbQ5SWxDCB9mUYvOgroQOwYQQOKPJ8CIbE+1ETVlOoK1UC2nU3gYvg==
 
-mime-types@^2.1.12, mime-types@^2.1.27, mime-types@^2.1.33:
+mime-types@^2.1.12, mime-types@^2.1.27, mime-types@^2.1.35:
   version "2.1.35"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.35.tgz#381a871b62a734450660ae3deee44813f70d959a"
   integrity sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==
@@ -11440,14 +11440,14 @@ playwright-core@1.58.1:
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.58.1.tgz#d63be2c9b7dcbdb035beddd4b42437bd3ca89107"
   integrity sha512-bcWzOaTxcW+VOOGBCQgnaKToLJ65d6AqfLVKEWvexyS3AS6rbXl+xdpYRMGSRBClPvyj44njOWoxjNdL/H9UNg==
 
-playwright-qase-reporter@^2.1.6:
-  version "2.1.6"
-  resolved "https://registry.yarnpkg.com/playwright-qase-reporter/-/playwright-qase-reporter-2.1.6.tgz#cd59af5f0a5c36ac1102b1562eaebaf850a1d9e9"
-  integrity sha512-tlQ1VYuhrOFwrQhSKMFttu/cAgktooc29vFeClnhV235D0ErTSrApw1lrf942457wydvKEsl6ztIUegjsMWppQ==
+playwright-qase-reporter@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/playwright-qase-reporter/-/playwright-qase-reporter-2.2.3.tgz#acc484bb4a87ec22f7320f14d925925eb86ab4b0"
+  integrity sha512-hcq6WD71VYYkDh0dsuv+C3dvA9NR6cfKvF4T/7+BtfwgOUrViUu55n/LJ0pwQe62lcQsTJ78EYr8WY51JIW8RQ==
   dependencies:
     chalk "^4.1.2"
-    qase-javascript-commons "~2.4.2"
-    uuid "^9.0.0"
+    qase-javascript-commons "~2.5.7"
+    uuid "^9.0.1"
 
 playwright@1.58.1:
   version "1.58.1"
@@ -11663,6 +11663,11 @@ proxy-from-env@^1.1.0:
   resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-1.1.0.tgz#e102f16ca355424865755d2c9e8ea4f24d58c3e2"
   integrity sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==
 
+proxy-from-env@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/proxy-from-env/-/proxy-from-env-2.1.0.tgz#a7487568adad577cfaaa7e88c49cab3ab3081aba"
+  integrity sha512-cJ+oHTW1VAEa8cJslgmUZrc+sjRKgAKl3Zyse6+PV38hZe/V6Z14TbCuXcan9F9ghlz4QrFr2c92TNF82UkYHA==
+
 pump@^3.0.0:
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/pump/-/pump-3.0.3.tgz#151d979f1a29668dc0025ec589a455b53282268d"
@@ -11681,40 +11686,40 @@ pure-rand@^6.0.0:
   resolved "https://registry.yarnpkg.com/pure-rand/-/pure-rand-6.0.4.tgz#50b737f6a925468679bff00ad20eade53f37d5c7"
   integrity sha512-LA0Y9kxMYv47GIPJy6MI84fqTd2HmYZI83W/kM/SkKfDlajnZYfmXFTxkbY+xSBPkLJxltMa9hIkmdc29eguMA==
 
-qase-api-client@~1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/qase-api-client/-/qase-api-client-1.1.0.tgz#7300eeac81e0b6238ae828dbf166afcad89f1bc7"
-  integrity sha512-C+5CNxuAbjCz1t6dfSGmygfkQMs4Q1XvmpvU1EBEUlLGhgAUpCUgBOBYvGNyxt/fBZ7Sn2yp0MeYdlDsoJVdSw==
+qase-api-client@~1.1.1:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/qase-api-client/-/qase-api-client-1.1.5.tgz#95faaac65a8cd13e2fb510af9134240845cd5593"
+  integrity sha512-Ketwqmx2WURSFtMflIbwHM6naJZjssFPX0uBU6Xbdwi33i8pZLeJZFhL2cWFvELDNJdUSod7G8wMt84e+6cyeg==
   dependencies:
-    axios "^1.12.0"
+    axios "^1.13.5"
     axios-retry "^4.5.0"
 
-qase-api-v2-client@~1.0.1:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/qase-api-v2-client/-/qase-api-v2-client-1.0.3.tgz#8be43ee3c01fe66f1fc532fea9ec05dcfcded436"
-  integrity sha512-zkgcpRyDRnpKENm1Ak32Bg4wAPKBUoel/BHzoctPKYew/ZHkhjel1GDd0Jv5vm90TlhCCzCIwbY0RKGUB8dw+A==
+qase-api-v2-client@~1.0.4:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/qase-api-v2-client/-/qase-api-v2-client-1.0.6.tgz#706a9d8eec6ce093fc443f05b85ccceee68ef947"
+  integrity sha512-wAZLIvJHwnhfurCBMCF8Rubzk9fcQgsYCPthSF7hYVCbArsUlfAsroBat8AIC1dcE7YP/8P2bb9RijDED06laA==
   dependencies:
-    axios "^1.8.2"
+    axios "^1.13.5"
     axios-retry "^4.5.0"
 
-qase-javascript-commons@^2.4.9, qase-javascript-commons@~2.4.2:
-  version "2.4.9"
-  resolved "https://registry.yarnpkg.com/qase-javascript-commons/-/qase-javascript-commons-2.4.9.tgz#2a699f008dd83c0fad141e7f4fe2c9e14085fe82"
-  integrity sha512-waOUhAcVy72z9W67HarkkhWeQK6cJg55CJWiCQj+NpdT/bs7+NDsoZrt+EGsbRSVEAHS1u7mSzQ4qYG5AppdBA==
+qase-javascript-commons@^2.5.10, qase-javascript-commons@~2.5.7:
+  version "2.5.10"
+  resolved "https://registry.yarnpkg.com/qase-javascript-commons/-/qase-javascript-commons-2.5.10.tgz#752424fa4790f651096ae6017fcf15b2461e9eec"
+  integrity sha512-vVJP+9JAJcGp5jn7DYmCUeo7RymFVDB9pcQAAhPElHW2IqSeHApiT2D2PTaIwHyt8mpr711krkQ2neAYIR0gMg==
   dependencies:
-    ajv "^8.12.0"
+    ajv "^8.18.0"
     async-mutex "~0.5.0"
     chalk "^4.1.2"
-    env-schema "^5.2.0"
-    form-data "^4.0.4"
+    env-schema "^5.2.1"
+    form-data "^4.0.5"
     lodash.get "^4.4.2"
     lodash.merge "^4.6.2"
     lodash.mergewith "^4.6.2"
-    mime-types "^2.1.33"
-    qase-api-client "~1.1.0"
-    qase-api-v2-client "~1.0.1"
+    mime-types "^2.1.35"
+    qase-api-client "~1.1.1"
+    qase-api-v2-client "~1.0.4"
     strip-ansi "^6.0.1"
-    uuid "^9.0.0"
+    uuid "^9.0.1"
 
 qaseio@^2.4.3:
   version "2.4.3"
@@ -13492,7 +13497,7 @@ uuid@^8.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
-uuid@^9.0.0, uuid@^9.0.1:
+uuid@^9.0.1:
   version "9.0.1"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.1.tgz#e188d4c8853cc722220392c424cd637f32293f30"
   integrity sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==
