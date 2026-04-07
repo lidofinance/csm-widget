@@ -2,6 +2,7 @@ import { useController, UseControllerProps } from 'react-hook-form';
 
 import { InputPercent } from 'shared/components/input-amount';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
+import { testableError } from './testable-error';
 
 type PercentInputHookFormProps = Partial<
   React.ComponentProps<typeof InputPercent>
@@ -35,7 +36,10 @@ export const PercentInputHookForm = ({
       {...props}
       {...field}
       disabled={props.disabled ?? field.disabled}
-      error={errorProp ?? (showErrorMessage ? errorMessage : hasErrorHighlight)}
+      error={testableError(
+        errorProp ?? (showErrorMessage ? errorMessage : hasErrorHighlight),
+        fieldName,
+      )}
       label={label ?? fieldName}
       fullwidth
     />

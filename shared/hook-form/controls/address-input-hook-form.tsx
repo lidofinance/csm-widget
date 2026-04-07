@@ -1,6 +1,7 @@
 import { useController, useFormContext } from 'react-hook-form';
 import { InputAddress } from 'shared/components/input-address';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
+import { testableError } from './testable-error';
 import { Button } from '@lidofinance/lido-ui';
 import { ReactNode, useCallback } from 'react';
 
@@ -54,7 +55,7 @@ export const AddressInputHookForm = ({
       }
       {...props}
       {...field}
-      error={errorProp ?? errorMessage}
+      error={testableError(errorProp ?? errorMessage, fieldName)}
       disabled={props.disabled ?? field.disabled}
       isLocked={isLocked}
       label={label ?? fieldName}
