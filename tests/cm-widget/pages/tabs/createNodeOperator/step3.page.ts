@@ -29,15 +29,14 @@ export class CreateOperatorStep3Page extends BasePage {
     this.nameContainer = this.form.locator(
       'xpath=//input[@name="name"]/ancestor::label/..',
     );
-    this.nameError = this.nameContainer.getByTestId('input-message-error');
+    this.nameError = this.nameContainer.getByTestId('inputMessageError');
 
     this.descriptionInput = this.form.locator('input[name="description"]');
     this.descriptionContainer = this.form.locator(
       'xpath=//input[@name="description"]/ancestor::label/..',
     );
-    this.descriptionError = this.descriptionContainer.getByTestId(
-      'input-message-error',
-    );
+    this.descriptionError =
+      this.descriptionContainer.getByTestId('inputMessageError');
   }
 
   async fillForm(name = 'Test Operator', description = 'Test description') {

@@ -39,7 +39,7 @@ export const TextInputHookForm = ({
       {...props}
       {...field}
       disabled={props.disabled || field.disabled}
-      error={testableError(errorProp ?? errorMessage, fieldName)}
+      error={testableError(errorProp ?? errorMessage)}
       label={label ?? fieldName}
       spellCheck="false"
       fullwidth

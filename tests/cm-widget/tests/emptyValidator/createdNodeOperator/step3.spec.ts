@@ -1,9 +1,9 @@
 /* eslint-disable no-empty-pattern */
-import { test } from '../test.fixture';
+import { test } from '../../test.fixture';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { CreateOperatorStep3Page } from '../../pages/tabs/createNodeOperator';
+import { CreateOperatorStep3Page } from '../../../pages/tabs/createNodeOperator';
 
 const VALID_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
 

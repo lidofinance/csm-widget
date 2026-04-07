@@ -55,7 +55,7 @@ export const AddressInputHookForm = ({
       }
       {...props}
       {...field}
-      error={testableError(errorProp ?? errorMessage, fieldName)}
+      error={testableError(errorProp ?? errorMessage)}
       disabled={props.disabled ?? field.disabled}
       isLocked={isLocked}
       label={label ?? fieldName}

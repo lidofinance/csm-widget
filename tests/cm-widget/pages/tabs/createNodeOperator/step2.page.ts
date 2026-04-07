@@ -38,9 +38,8 @@ export class CreateOperatorStep2Page extends BasePage {
     this.managerAddressContainer = this.form.locator(
       'xpath=//input[@name="managerAddress"]/ancestor::label/..',
     );
-    this.managerAddressError = this.managerAddressContainer.getByTestId(
-      'input-message-error',
-    );
+    this.managerAddressError =
+      this.managerAddressContainer.getByTestId('inputMessageError');
     this.managerAddressConnectedButton = this.managerAddressContainer.getByRole(
       'button',
       { name: 'Connected address' },
@@ -54,9 +53,8 @@ export class CreateOperatorStep2Page extends BasePage {
     this.rewardAddressContainer = this.form.locator(
       'xpath=//input[@name="rewardAddress"]/ancestor::label/..',
     );
-    this.rewardAddressError = this.rewardAddressContainer.getByTestId(
-      'input-message-error',
-    );
+    this.rewardAddressError =
+      this.rewardAddressContainer.getByTestId('inputMessageError');
     this.rewardAddressConnectedButton = this.rewardAddressContainer.getByRole(
       'button',
       { name: 'Connected address' },

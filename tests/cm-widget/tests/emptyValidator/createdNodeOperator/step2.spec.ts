@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-pattern */
-import { test } from '../test.fixture';
+import { test } from '../../test.fixture';
 import { expect, Locator } from '@playwright/test';
-import { CreateOperatorStep2Page } from '../../pages/tabs/createNodeOperator';
+import { CreateOperatorStep2Page } from '../../../pages/tabs/createNodeOperator';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { mnemonicToAccount } from 'viem/accounts';
 import { qase } from 'playwright-qase-reporter/playwright';
