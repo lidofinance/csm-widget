@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../../../shared/pages/base.page';
 
 export class CreateOperatorStep2Page extends BasePage {
@@ -63,5 +63,13 @@ export class CreateOperatorStep2Page extends BasePage {
     );
     this.rewardAddressTooltipIcon =
       this.rewardAddressContainer.getByTestId('iconTooltip');
+  }
+
+  async fillForm(managerAddress: string, rewardAddress: string) {
+    await test.step('Fill step 2 with manager and reward addresses', async () => {
+      await this.managerAddressInput.fill(managerAddress);
+      await this.rewardAddressInput.fill(rewardAddress);
+      await this.continueButton.click();
+    });
   }
 }

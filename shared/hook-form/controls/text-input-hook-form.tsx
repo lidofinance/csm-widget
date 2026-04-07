@@ -33,12 +33,19 @@ export const TextInputHookForm = ({
   // allows to show error state without message
   const errorMessage = hasErrorHighlight && (error?.message || true);
 
+  const errorNode =
+    errorMessage && typeof errorMessage === 'string' ? (
+      <span data-testid="input-message-error">{errorMessage}</span>
+    ) : (
+      errorMessage
+    );
+
   return (
     <Input
       {...props}
       {...field}
       disabled={props.disabled || field.disabled}
-      error={errorProp ?? errorMessage}
+      error={errorProp ?? errorNode}
       label={label ?? fieldName}
       spellCheck="false"
       fullwidth
