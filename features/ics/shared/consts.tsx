@@ -15,14 +15,14 @@ export const ICS_ROUNDS: IcsRound[] = [
   {
     round: 5,
     start: new Date(`2026-04-14`),
-    assessedDate: `Q3-Q4\u00A02026`,
+    assessedDate: `late Q2, or Q3 2026`,
   },
 ];
 
 const formatIcsRoundDate = (date: Date) => format(date, 'MMMM\u00A0dd, yyyy');
 
 const getCurrentRound = () => {
-  const now = new Date('2077-01-01');
+  const now = new Date();
   const current =
     ICS_ROUNDS.findLast((round) => now >= round.start) ||
     ICS_ROUNDS[ICS_ROUNDS.length - 1];
