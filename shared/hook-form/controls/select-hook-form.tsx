@@ -1,6 +1,7 @@
 import { Option as OptionType, Select } from '@lidofinance/lido-ui';
 import { useController, UseControllerProps } from 'react-hook-form';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
+import { testableError } from './testable-error';
 
 type OptionType = {
   value: string;
@@ -44,7 +45,7 @@ export const SelectHookForm = ({
       fullwidth
       placeholder={placeholder}
       disabled={props.disabled || field.disabled}
-      error={errorProp ?? errorMessage}
+      error={testableError(errorProp ?? errorMessage, fieldName)}
       {...props}
       {...field}
     >
