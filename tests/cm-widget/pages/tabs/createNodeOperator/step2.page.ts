@@ -45,9 +45,8 @@ export class CreateOperatorStep2Page extends BasePage {
       'button',
       { name: 'Connected address' },
     );
-    this.managerAddressTooltipIcon = this.managerAddressContainer
-      .locator('..')
-      .getByTestId('iconTooltip');
+    this.managerAddressTooltipIcon =
+      this.managerAddressContainer.getByTestId('iconTooltip');
     this.managerAddressOwnerChip =
       this.managerAddressContainer.getByTestId('ownerChip');
 
@@ -62,8 +61,7 @@ export class CreateOperatorStep2Page extends BasePage {
       'button',
       { name: 'Connected address' },
     );
-    this.rewardAddressTooltipIcon = this.rewardAddressContainer
-      .locator('..')
-      .getByTestId('iconTooltip');
+    this.rewardAddressTooltipIcon =
+      this.rewardAddressContainer.getByTestId('iconTooltip');
   }
 }
