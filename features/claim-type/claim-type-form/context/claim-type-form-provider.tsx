@@ -1,8 +1,12 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import {
+  FormControllerProvider,
+  useFlowSubmit,
+} from 'shared/hook-form/form-controller';
+import { useTxModalStagesClaimType } from '../hooks/use-tx-modal-stages-claim-type';
 import { type ClaimTypeFormInputType } from './types';
-import { useClaimTypeSubmit } from './use-claim-type-submit';
+import { useClaimTypeFlowResolver } from './use-claim-type-flow';
 import { useClaimTypeValidation } from './use-claim-type-validation';
 
 export const ClaimTypeFormProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -13,7 +17,9 @@ export const ClaimTypeFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useClaimTypeSubmit();
+  const resolve = useClaimTypeFlowResolver();
+  const { buildCallback } = useTxModalStagesClaimType();
+  const submitter = useFlowSubmit(resolve, buildCallback);
 
   return (
     <FormProvider {...formObject}>

@@ -1,10 +1,14 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormLoader } from 'shared/hook-form/form-controller';
-import { useClaimerFormData } from './context';
+import { useClaimerFlow } from './context';
 import { Info } from './controls/info';
 
 export const ClaimerFormLoader: FC<PropsWithChildren> = ({ children }) => {
-  const { canEdit } = useClaimerFormData();
+  const flow = useClaimerFlow();
 
-  return <FormLoader>{canEdit ? children : <Info />}</FormLoader>;
+  return (
+    <FormLoader>
+      {flow.action === 'view' ? <Info /> : <>{children}</>}
+    </FormLoader>
+  );
 };

@@ -1,22 +1,22 @@
 import { Text } from '@lidofinance/lido-ui';
 import { Address as AddressComponent } from 'shared/components';
+import { useTxCallbackStages } from 'shared/hook-form/form-controller';
 import {
   TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
-  useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { Address } from 'viem';
+import { zeroAddress } from 'viem';
+import { ClaimerFormInputType, ClaimerFormNetworkData } from '../context/types';
 
-type Props = {
-  claimerAddress: Address;
-  isUnset: boolean;
-};
+const getTexts = (input: ClaimerFormInputType) => {
+  const claimerAddress = input.isUnset
+    ? zeroAddress
+    : (input.address ?? zeroAddress);
 
-const getTexts = ({ claimerAddress, isUnset }: Props) =>
-  isUnset
+  return input.isUnset
     ? {
         sign: {
           title: 'You are unsetting Rewards claimer',
@@ -51,21 +51,31 @@ const getTexts = ({ claimerAddress, isUnset }: Props) =>
           ),
         },
       };
+};
 
 const getTxModalStagesClaimer = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: (props: Props) =>
-    transitStage(<TxStageSign {...getTexts(props).sign} />),
+  sign: (input: ClaimerFormInputType, _data: ClaimerFormNetworkData) =>
+    transitStage(<TxStageSign {...getTexts(input).sign} />),
 
-  pending: (props: Props, txHash?: string) =>
-    transitStage(<TxStagePending {...getTexts(props).sign} txHash={txHash} />),
+  pending: (
+    input: ClaimerFormInputType,
+    _data: ClaimerFormNetworkData,
+    txHash?: string,
+  ) =>
+    transitStage(<TxStagePending {...getTexts(input).sign} txHash={txHash} />),
 
-  success: (props: Props, txHash?: string) =>
+  success: (
+    input: ClaimerFormInputType,
+    _data: ClaimerFormNetworkData,
+    _result: undefined,
+    txHash?: string,
+  ) =>
     transitStage(
-      <TxStageSuccess txHash={txHash} {...getTexts(props).success} />,
+      <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
       {
         isClosableOnLedger: true,
       },
@@ -73,4 +83,6 @@ const getTxModalStagesClaimer = (
 });
 
 export const useTxModalStagesClaimer = () =>
-  useTransactionModalStage(getTxModalStagesClaimer);
+  useTxCallbackStages<ClaimerFormInputType, ClaimerFormNetworkData>(
+    getTxModalStagesClaimer,
+  );

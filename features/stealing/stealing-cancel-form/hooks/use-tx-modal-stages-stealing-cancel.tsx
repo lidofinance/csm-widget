@@ -1,4 +1,5 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { useTxCallbackStages } from 'shared/hook-form/form-controller';
 import {
   TransactionModalTransitStage,
   TxAmount,
@@ -6,59 +7,68 @@ import {
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
-  useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-
-type Props = {
-  amount: bigint;
-  nodeOperatorId: NodeOperatorId;
-};
+import {
+  StealingCancelFormInputType,
+  StealingCancelFormNetworkData,
+} from '../context/types';
 
 const getTxModalStagesStealingCancel = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: ({ amount, nodeOperatorId }: Props) =>
+  sign: (
+    input: StealingCancelFormInputType,
+    _data: StealingCancelFormNetworkData,
+  ) =>
     transitStage(
       <TxStageSign
         title="You are canceling stealing"
         description={
           <>
-            Node Operator ID: <b>{nodeOperatorId.toString()}</b>
+            Node Operator ID: <b>{input.nodeOperatorId?.toString()}</b>
             <br />
-            Amount: <TxAmount amount={amount} token={TOKENS.eth} />
+            Amount: <TxAmount amount={input.amount ?? 0n} token={TOKENS.eth} />
           </>
         }
       />,
     ),
 
-  pending: ({ amount, nodeOperatorId }: Props, txHash?: string) =>
+  pending: (
+    input: StealingCancelFormInputType,
+    _data: StealingCancelFormNetworkData,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStagePending
         txHash={txHash}
         title="You are canceling stealing"
         description={
           <>
-            Node Operator ID: <b>{nodeOperatorId.toString()}</b>
+            Node Operator ID: <b>{input.nodeOperatorId?.toString()}</b>
             <br />
-            Amount: <TxAmount amount={amount} token={TOKENS.eth} />
+            Amount: <TxAmount amount={input.amount ?? 0n} token={TOKENS.eth} />
           </>
         }
       />,
     ),
 
-  success: ({ amount, nodeOperatorId }: Props, txHash?: string) =>
+  success: (
+    input: StealingCancelFormInputType,
+    _data: StealingCancelFormNetworkData,
+    _result: undefined,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
         title="Stealing is canceled"
         description={
           <>
-            Node Operator ID: <b>{nodeOperatorId.toString()}</b>
+            Node Operator ID: <b>{input.nodeOperatorId?.toString()}</b>
             <br />
-            Amount: <TxAmount amount={amount} token={TOKENS.eth} />
+            Amount: <TxAmount amount={input.amount ?? 0n} token={TOKENS.eth} />
           </>
         }
       />,
@@ -68,6 +78,8 @@ const getTxModalStagesStealingCancel = (
     ),
 });
 
-export const useTxModalStagesStealingCancel = () => {
-  return useTransactionModalStage(getTxModalStagesStealingCancel);
-};
+export const useTxModalStagesStealingCancel = () =>
+  useTxCallbackStages<
+    StealingCancelFormInputType,
+    StealingCancelFormNetworkData
+  >(getTxModalStagesStealingCancel);

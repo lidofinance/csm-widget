@@ -1,19 +1,15 @@
-import { FeeSplit } from '@lidofinance/lido-csm-sdk';
+import { useTxCallbackStages } from 'shared/hook-form/form-controller';
 import {
   TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
-  useTransactionModalStage,
 } from 'shared/transaction-modal';
+import { SplitsFormInputType, SplitsFormNetworkData } from '../context/types';
 
-type Props = {
-  feeSplits: FeeSplit[];
-};
-
-const getTexts = ({ feeSplits }: Props) =>
-  feeSplits.length === 0
+const getTexts = (input: SplitsFormInputType) =>
+  input.feeSplits.length === 0
     ? {
         sign: {
           title: 'You are removing fee splitter',
@@ -27,11 +23,11 @@ const getTexts = ({ feeSplits }: Props) =>
     : {
         sign: {
           title: 'You are updating fee splitter configuration',
-          description: `Setting ${feeSplits.length} additional recipient${feeSplits.length > 1 ? 's' : ''}`,
+          description: `Setting ${input.feeSplits.length} additional recipient${input.feeSplits.length > 1 ? 's' : ''}`,
         },
         success: {
           title: 'Fee splitter configuration has been updated',
-          description: `${feeSplits.length} additional recipient${feeSplits.length > 1 ? 's' : ''} configured`,
+          description: `${input.feeSplits.length} additional recipient${input.feeSplits.length > 1 ? 's' : ''} configured`,
         },
       };
 
@@ -40,15 +36,24 @@ const getTxModalStagesSplits = (
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: (props: Props) =>
-    transitStage(<TxStageSign {...getTexts(props).sign} />),
+  sign: (input: SplitsFormInputType, _data: SplitsFormNetworkData) =>
+    transitStage(<TxStageSign {...getTexts(input).sign} />),
 
-  pending: (props: Props, txHash?: string) =>
-    transitStage(<TxStagePending {...getTexts(props).sign} txHash={txHash} />),
+  pending: (
+    input: SplitsFormInputType,
+    _data: SplitsFormNetworkData,
+    txHash?: string,
+  ) =>
+    transitStage(<TxStagePending {...getTexts(input).sign} txHash={txHash} />),
 
-  success: (props: Props, txHash?: string) =>
+  success: (
+    input: SplitsFormInputType,
+    _data: SplitsFormNetworkData,
+    _result: undefined,
+    txHash?: string,
+  ) =>
     transitStage(
-      <TxStageSuccess txHash={txHash} {...getTexts(props).success} />,
+      <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
       {
         isClosableOnLedger: true,
       },
@@ -56,4 +61,6 @@ const getTxModalStagesSplits = (
 });
 
 export const useTxModalStagesSplits = () =>
-  useTransactionModalStage(getTxModalStagesSplits);
+  useTxCallbackStages<SplitsFormInputType, SplitsFormNetworkData>(
+    getTxModalStagesSplits,
+  );

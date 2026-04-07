@@ -1,10 +1,10 @@
 import { FormTitle } from 'shared/components';
 import { AddressInputHookForm } from 'shared/hook-form/controls';
 import { useRole } from '../hooks/use-role';
-import { useChangeRoleFormData } from '../context';
+import { useChangeRoleFlow } from '../context';
 
 export const AddressInput: React.FC = () => {
-  const { mode } = useChangeRoleFormData(true);
+  const flow = useChangeRoleFlow();
   const role = useRole();
 
   return (
@@ -13,7 +13,7 @@ export const AddressInput: React.FC = () => {
       <AddressInputHookForm
         fieldName="address"
         label={`New ${role} Address`}
-        isLocked={mode === 'managerReset'}
+        isLocked={flow.action === 'manager-reset'}
       />
     </>
   );

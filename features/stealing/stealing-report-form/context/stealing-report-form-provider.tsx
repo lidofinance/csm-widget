@@ -1,8 +1,12 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import {
+  FormControllerProvider,
+  useFlowSubmit,
+} from 'shared/hook-form/form-controller';
+import { useTxModalStagesStealingReport } from '../hooks/use-tx-modal-stages-stealing-report';
 import { type StealingReportFormInputType } from './types';
-import { useStealingReportSubmit } from './use-stealing-report-submit';
+import { useStealingReportFlowResolver } from './use-stealing-report-flow';
 import { useStealingReportValidation } from './use-stealing-report-validation';
 
 export const StealingReportFormProvider: FC<PropsWithChildren> = ({
@@ -18,7 +22,9 @@ export const StealingReportFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const submitter = useStealingReportSubmit();
+  const resolve = useStealingReportFlowResolver();
+  const { buildCallback } = useTxModalStagesStealingReport();
+  const submitter = useFlowSubmit(resolve, buildCallback);
 
   return (
     <FormProvider {...formObject}>

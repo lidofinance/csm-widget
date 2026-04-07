@@ -2,10 +2,12 @@ import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerProvider,
+  useFlowSubmit,
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
+import { useTxModalStagesClaimer } from '../hooks/use-tx-modal-stages-claimer';
 import { ClaimerFormNetworkData, type ClaimerFormInputType } from './types';
-import { useClaimerSubmit } from './use-claimer-submit';
+import { useClaimerFlowResolver } from './use-claimer-flow';
 import { useClaimerValidation } from './use-claimer-validation';
 
 export const ClaimerFormProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -25,7 +27,9 @@ export const ClaimerFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useClaimerSubmit();
+  const resolve = useClaimerFlowResolver();
+  const { buildCallback } = useTxModalStagesClaimer();
+  const submitter = useFlowSubmit(resolve, buildCallback);
 
   return (
     <FormProvider {...formObject}>

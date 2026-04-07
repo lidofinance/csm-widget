@@ -6,17 +6,21 @@ import { useFormContext } from 'react-hook-form';
 import { Latice, Stack, TitledAddress, Warning } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { isAddressEqual } from 'viem';
-import { ChangeRoleFormInputType, useChangeRoleFormData } from '../context';
+import {
+  type ChangeRoleFormInputType,
+  useChangeRoleFlow,
+  useChangeRoleFormData,
+} from '../context';
 import { useRole } from '../hooks/use-role';
 import { MODULE_METADATA } from 'consts';
 import { config } from 'config';
 
 export const Info: FC = () => {
   const roleTitle = useRole();
+  const flow = useChangeRoleFlow();
   const {
     currentAddress,
     proposedAddress,
-    mode,
     address,
     extendedManagerPermissions,
     role,
@@ -50,7 +54,7 @@ export const Info: FC = () => {
               title={
                 <>
                   <Warning text="Pending change" />
-                  {mode === 'propose' && (
+                  {flow.action === 'propose' && (
                     <SubmitButtonHookForm
                       variant="outlined"
                       size="xs"

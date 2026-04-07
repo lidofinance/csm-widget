@@ -1,20 +1,22 @@
+import { useTxCallbackStages } from 'shared/hook-form/form-controller';
 import {
   TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
-  useTransactionModalStage,
 } from 'shared/transaction-modal';
-
-type Props = unknown;
+import {
+  ClaimTypeFormInputType,
+  ClaimTypeFormNetworkData,
+} from '../context/types';
 
 const getTxModalStagesClaimType = (
   transitStage: TransactionModalTransitStage,
 ) => ({
   ...getGeneralTransactionModalStages(transitStage),
 
-  sign: (_: Props) =>
+  sign: (_input: ClaimTypeFormInputType, _data: ClaimTypeFormNetworkData) =>
     transitStage(
       <TxStageSign
         title="Claiming ICS type"
@@ -22,10 +24,19 @@ const getTxModalStagesClaimType = (
       />,
     ),
 
-  pending: (_: Props, txHash?: string) =>
+  pending: (
+    _input: ClaimTypeFormInputType,
+    _data: ClaimTypeFormNetworkData,
+    txHash?: string,
+  ) =>
     transitStage(<TxStagePending title="Claiming ICS type" txHash={txHash} />),
 
-  success: (_: Props, txHash?: string) =>
+  success: (
+    _input: ClaimTypeFormInputType,
+    _data: ClaimTypeFormNetworkData,
+    _result: undefined,
+    txHash?: string,
+  ) =>
     transitStage(
       <TxStageSuccess
         txHash={txHash}
@@ -38,6 +49,7 @@ const getTxModalStagesClaimType = (
     ),
 });
 
-export const useTxModalStagesClaimType = () => {
-  return useTransactionModalStage(getTxModalStagesClaimType);
-};
+export const useTxModalStagesClaimType = () =>
+  useTxCallbackStages<ClaimTypeFormInputType, ClaimTypeFormNetworkData>(
+    getTxModalStagesClaimType,
+  );

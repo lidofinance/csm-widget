@@ -1,9 +1,13 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import {
+  FormControllerProvider,
+  useFlowSubmit,
+} from 'shared/hook-form/form-controller';
+import { useTxModalStagesStealingCancel } from '../hooks/use-tx-modal-stages-stealing-cancel';
 import { StealingCancelUpdater } from './stealing-cancel-updater';
 import { type StealingCancelFormInputType } from './types';
-import { useStealingCancelSubmit } from './use-stealing-cancel-submit';
+import { useStealingCancelFlowResolver } from './use-stealing-cancel-flow';
 import { useStealingCancelValidation } from './use-stealing-cancel-validation';
 
 export const StealingCancelFormProvider: FC<PropsWithChildren> = ({
@@ -19,7 +23,9 @@ export const StealingCancelFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const submitter = useStealingCancelSubmit();
+  const resolve = useStealingCancelFlowResolver();
+  const { buildCallback } = useTxModalStagesStealingCancel();
+  const submitter = useFlowSubmit(resolve, buildCallback);
 
   return (
     <FormProvider {...formObject}>
