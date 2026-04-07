@@ -40,10 +40,11 @@ export class CreateOperatorStep3Page extends BasePage {
     );
   }
 
-  async fillForm() {
+  async fillForm(name = 'Test Operator', description = 'Test description') {
     await test.step('Fill step 3 with valid name and description', async () => {
-      await this.nameInput.fill('Test Operator');
-      await this.descriptionInput.fill('Test description');
+      await this.nameInput.fill(name);
+      await this.descriptionInput.fill(description);
+      await this.continueButton.click();
     });
   }
 }

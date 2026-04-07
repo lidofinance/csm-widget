@@ -4,6 +4,7 @@ import {
   CreateOperatorStep1Page,
   CreateOperatorStep2Page,
   CreateOperatorStep3Page,
+  CreateOperatorStep4Page,
 } from './tabs/createNodeOperator';
 
 export class CreateNodeOperatorPage extends BasePage {
@@ -11,7 +12,7 @@ export class CreateNodeOperatorPage extends BasePage {
   step1: CreateOperatorStep1Page;
   step2: CreateOperatorStep2Page;
   step3: CreateOperatorStep3Page;
-  // step4: Locator;
+  step4: CreateOperatorStep4Page;
 
   constructor(page: Page) {
     super(page);
@@ -20,6 +21,7 @@ export class CreateNodeOperatorPage extends BasePage {
     this.step1 = new CreateOperatorStep1Page(page, this.createdOperatorForm);
     this.step2 = new CreateOperatorStep2Page(page, this.createdOperatorForm);
     this.step3 = new CreateOperatorStep3Page(page, this.createdOperatorForm);
+    this.step4 = new CreateOperatorStep4Page(page, this.createdOperatorForm);
   }
 
   async open() {

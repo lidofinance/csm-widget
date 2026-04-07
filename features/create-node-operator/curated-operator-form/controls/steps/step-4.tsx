@@ -19,7 +19,7 @@ export const Step4: FC = () => {
 
   return (
     <Stack direction="column" gap="xxl">
-      <Text as="h3" size="lg" weight={700}>
+      <Text as="h3" size="lg" weight={700} data-testid="stepTitle">
         Confirm Node Operator creation
       </Text>
 
