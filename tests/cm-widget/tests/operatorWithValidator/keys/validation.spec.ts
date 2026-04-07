@@ -37,7 +37,7 @@ test.describe('Operator with keys. Validation keys json.', () => {
   });
 
   test(
-    qase(308, 'Should display error for empty keys json'),
+    qase(103, 'Should display error for empty keys json'),
     { tag: Tags.smoke },
     async () => {
       await keysPage.submitPage.fillKeys(
@@ -54,10 +54,11 @@ test.describe('Operator with keys. Validation keys json.', () => {
   invalidTextValidation.forEach((propertyName) => {
     test(
       qase(
-        333,
+        104,
         `Should display error if ${propertyName} does not passed for 1 key as object`,
       ),
       async () => {
+        qase.parameters({ propertyName });
         const key = keysGeneratorService.generateKeys();
         const newJson = omitField(key[0], propertyName as keyof DepositKey);
 
@@ -94,10 +95,11 @@ test.describe('Operator with keys. Validation keys json.', () => {
   invalidTextValidation.forEach((propertyName) => {
     test(
       qase(
-        340,
+        111,
         `Should display error if ${propertyName} does not passed for array of keys`,
       ),
       async () => {
+        qase.parameters({ propertyName });
         const key = keysGeneratorService.generateKeys();
         const newJson = omitField(key[0], propertyName as keyof DepositKey);
 
@@ -134,10 +136,11 @@ test.describe('Operator with keys. Validation keys json.', () => {
   invalidTextValidation.forEach((propertyName) => {
     test(
       qase(
-        347,
+        118,
         `Should display error if ${propertyName} does not passed for index >0 in array of keys`,
       ),
       async () => {
+        qase.parameters({ propertyName });
         const keys = keysGeneratorService.generateKeys(3);
         // @ts-expect-error negative test for validation
         keys[2] = omitField(keys[2], propertyName);
@@ -171,7 +174,7 @@ test.describe('Operator with keys. Validation keys json.', () => {
 
   test(
     qase(
-      354,
+      125,
       'Shouldnt display error for valid eth2_network_name for current chain',
     ),
     async ({ widgetConfig }) => {
@@ -190,7 +193,7 @@ test.describe('Operator with keys. Validation keys json.', () => {
   );
 
   test(
-    qase(355, 'Should ignore validation for optional deposit_cli_version'),
+    qase(126, 'Should ignore validation for optional deposit_cli_version'),
     async () => {
       const propertyName = 'deposit_cli_version';
       const key = keysGeneratorService.generateKeys();
