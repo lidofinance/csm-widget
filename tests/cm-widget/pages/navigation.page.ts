@@ -20,4 +20,8 @@ export class NavigationPage extends BasePage {
       .getByTestId('switcherTab')
       .filter({ hasText: title });
   }
+
+  deleteKeysCard(title: string) {
+    return this.page.getByTestId('deleteKeysCard').filter({ hasText: title });
+  }
 }

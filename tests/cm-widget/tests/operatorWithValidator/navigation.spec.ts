@@ -30,6 +30,12 @@ const SETTINGS_TABS = [
   { title: 'Inbox requests', url: '/settings/inbox' },
 ];
 
+const DELETE_KEYS_CARDS = [
+  { title: 'Remove', url: '/keys/remove' },
+  { title: 'Exit', url: '/keys/exit' },
+  { title: 'Eject', url: '/keys/eject' },
+];
+
 test.describe('Navigation. Operator with validator.', () => {
   let navigation: NavigationPage;
 
@@ -147,6 +153,31 @@ test.describe('Navigation. Operator with validator.', () => {
         await editMetadataLink.click();
         await expect(widgetService.page).toHaveURL(/\/settings\/metadata/);
       });
+    },
+  );
+
+  test(
+    qase(179, 'Should display Delete keys cards and navigate correctly'),
+    async ({ widgetService }) => {
+      await navigation.navItem('Keys').click();
+      await navigation.switcherTab('Delete').click();
+      await widgetService.page.waitForURL(/\/keys\/exit/);
+
+      await test.step('All Delete keys cards are visible', async () => {
+        for (const { title } of DELETE_KEYS_CARDS) {
+          await expect(
+            navigation.deleteKeysCard(title),
+            `"${title}" card should be visible`,
+          ).toBeVisible();
+        }
+      });
+
+      for (const { title, url } of DELETE_KEYS_CARDS) {
+        await test.step(`Navigate to "${title}" on click`, async () => {
+          await navigation.deleteKeysCard(title).click();
+          await expect(widgetService.page).toHaveURL(new RegExp(url));
+        });
+      }
     },
   );
 
