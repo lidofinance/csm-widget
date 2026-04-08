@@ -5,7 +5,6 @@ import {
   useFlowSubmit,
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
-import { useTxModalStagesSplits } from '../hooks/use-tx-modal-stages-splits';
 import { SplitsShareTrigger } from './splits-share-trigger';
 import { SplitsFormInputType, SplitsFormNetworkData } from './types';
 import { useSplitsFlowResolver } from './use-splits-flow';
@@ -30,8 +29,7 @@ export const SplitsFormProvider: FC<PropsWithChildren> = ({ children }) => {
   });
 
   const resolve = useSplitsFlowResolver();
-  const { buildCallback } = useTxModalStagesSplits();
-  const submitter = useFlowSubmit(resolve, buildCallback);
+  const submitter = useFlowSubmit(resolve);
 
   const handleReset = useCallback(
     (args: SplitsFormInputType) => {

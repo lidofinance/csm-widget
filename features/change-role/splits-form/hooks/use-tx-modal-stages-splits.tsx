@@ -1,10 +1,12 @@
-import { useTxCallbackStages } from 'shared/hook-form/form-controller';
+import { type TransactionCallback } from '@lidofinance/lido-csm-sdk';
+import { useMemo } from 'react';
+import { buildTxCallback } from 'shared/hook-form/form-controller';
 import {
-  TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
+  useTransitStage,
 } from 'shared/transaction-modal';
 import { SplitsFormInputType, SplitsFormNetworkData } from '../context/types';
 
@@ -31,36 +33,36 @@ const getTexts = (input: SplitsFormInputType) =>
         },
       };
 
-const getTxModalStagesSplits = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
+export const useTxModalStagesSplits = (): ((
+  input: SplitsFormInputType,
+  data: SplitsFormNetworkData,
+  onRetry: () => void,
+) => TransactionCallback) => {
+  const transitStage = useTransitStage();
 
-  sign: (input: SplitsFormInputType, _data: SplitsFormNetworkData) =>
-    transitStage(<TxStageSign {...getTexts(input).sign} />),
-
-  pending: (
-    input: SplitsFormInputType,
-    _data: SplitsFormNetworkData,
-    txHash?: string,
-  ) =>
-    transitStage(<TxStagePending {...getTexts(input).sign} txHash={txHash} />),
-
-  success: (
-    input: SplitsFormInputType,
-    _data: SplitsFormNetworkData,
-    _result: undefined,
-    txHash?: string,
-  ) =>
-    transitStage(
-      <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-});
-
-export const useTxModalStagesSplits = () =>
-  useTxCallbackStages<SplitsFormInputType, SplitsFormNetworkData>(
-    getTxModalStagesSplits,
+  return useMemo(
+    () =>
+      (
+        input: SplitsFormInputType,
+        _data: SplitsFormNetworkData,
+        onRetry: () => void,
+      ) =>
+        buildTxCallback(
+          {
+            ...getGeneralTransactionModalStages(transitStage),
+            sign: () => transitStage(<TxStageSign {...getTexts(input).sign} />),
+            pending: (txHash) =>
+              transitStage(
+                <TxStagePending {...getTexts(input).sign} txHash={txHash} />,
+              ),
+            success: (_result: undefined, txHash) =>
+              transitStage(
+                <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
+                { isClosableOnLedger: true },
+              ),
+          },
+          onRetry,
+        ),
+    [transitStage],
   );
+};

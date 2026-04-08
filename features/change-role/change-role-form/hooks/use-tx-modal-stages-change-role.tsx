@@ -1,16 +1,21 @@
-import { type NodeOperatorShortInfo, ROLES } from '@lidofinance/lido-csm-sdk';
+import {
+  type NodeOperatorShortInfo,
+  type TransactionCallback,
+  ROLES,
+} from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
+import { useMemo } from 'react';
 import { ROLES_METADATA } from 'consts/roles';
 import { Address as AddressComponent } from 'shared/components';
-import { useTxCallbackStages } from 'shared/hook-form/form-controller';
+import { buildTxCallback } from 'shared/hook-form/form-controller';
 import { type ChangeRoleMode, useChangeRoleMode } from 'shared/hooks';
 import {
   AfterAddressProposed,
-  TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
+  useTransitStage,
 } from 'shared/transaction-modal';
 import { zeroAddress } from 'viem';
 import {
@@ -100,47 +105,48 @@ const getTexts = (
         };
 };
 
-const getTxModalStagesChangeRole = (
-  transitStage: TransactionModalTransitStage,
-  mode: ChangeRoleMode,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
-
-  sign: (input: ChangeRoleFormInputType, data: ChangeRoleFormNetworkData) =>
-    transitStage(<TxStageSign {...getTexts(input, data, mode).sign} />),
-
-  pending: (
-    input: ChangeRoleFormInputType,
-    data: ChangeRoleFormNetworkData,
-    txHash?: string,
-  ) =>
-    transitStage(
-      <TxStagePending {...getTexts(input, data, mode).sign} txHash={txHash} />,
-    ),
-
-  success: (
-    input: ChangeRoleFormInputType,
-    data: ChangeRoleFormNetworkData,
-    _result: NodeOperatorShortInfo,
-    txHash?: string,
-  ) =>
-    transitStage(
-      <TxStageSuccess
-        txHash={txHash}
-        {...getTexts(input, data, mode).success}
-      />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-});
-
-export const useTxModalStagesChangeRole = (role: ROLES) => {
+export const useTxModalStagesChangeRole = (
+  role: ROLES,
+): ((
+  input: ChangeRoleFormInputType,
+  data: ChangeRoleFormNetworkData,
+  onRetry: () => void,
+) => TransactionCallback<NodeOperatorShortInfo>) => {
+  const transitStage = useTransitStage();
   const mode = useChangeRoleMode(role);
 
-  return useTxCallbackStages<
-    ChangeRoleFormInputType,
-    ChangeRoleFormNetworkData,
-    NodeOperatorShortInfo
-  >((transitStage) => getTxModalStagesChangeRole(transitStage, mode));
+  return useMemo(
+    () =>
+      (
+        input: ChangeRoleFormInputType,
+        data: ChangeRoleFormNetworkData,
+        onRetry: () => void,
+      ) =>
+        buildTxCallback(
+          {
+            ...getGeneralTransactionModalStages(transitStage),
+            sign: () =>
+              transitStage(
+                <TxStageSign {...getTexts(input, data, mode).sign} />,
+              ),
+            pending: (txHash) =>
+              transitStage(
+                <TxStagePending
+                  {...getTexts(input, data, mode).sign}
+                  txHash={txHash}
+                />,
+              ),
+            success: (_result: NodeOperatorShortInfo, txHash) =>
+              transitStage(
+                <TxStageSuccess
+                  txHash={txHash}
+                  {...getTexts(input, data, mode).success}
+                />,
+                { isClosableOnLedger: true },
+              ),
+          },
+          onRetry,
+        ),
+    [transitStage, mode],
+  );
 };

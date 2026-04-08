@@ -7,6 +7,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import invariant from 'tiny-invariant';
 import { useConfirmSplitsModal } from '../hooks/use-confirm-modal';
+import { useTxModalStagesSplits } from '../hooks/use-tx-modal-stages-splits';
 import { useSplitsFormData } from './splits-data-provider';
 import { SplitsFormInputType, SplitsFormNetworkData } from './types';
 
@@ -31,19 +32,20 @@ export const useSplitsFlowResolver = (): FlowResolver<
 > => {
   const sdk = useSmSDK();
   const confirmSplits = useConfirmSplitsModal();
+  const buildCallback = useTxModalStagesSplits();
 
   return useCallback(
-    (_input, data) => {
+    (input, data) => {
       if (!data.canEdit) return { action: 'view' };
 
       return {
         action: 'set-splits' as const,
         confirm: async () => {
-          assertFeeSplits(_input.feeSplits);
-          return confirmSplits({ feeSplits: _input.feeSplits });
+          assertFeeSplits(input.feeSplits);
+          return confirmSplits({ feeSplits: input.feeSplits });
         },
-        submit: (callback) => {
-          assertFeeSplits(_input.feeSplits);
+        submit: (onRetry) => {
+          assertFeeSplits(input.feeSplits);
           invariant(
             data.rewards,
             'Rewards data is required for submitting splits',
@@ -52,15 +54,15 @@ export const useSplitsFlowResolver = (): FlowResolver<
 
           return sdk.roles.setFeeSplits({
             nodeOperatorId: data.nodeOperatorId,
-            feeSplits: _input.feeSplits,
+            feeSplits: input.feeSplits,
             shares,
             proof,
-            callback,
+            callback: buildCallback(input, data, onRetry),
           });
         },
       };
     },
-    [sdk, confirmSplits],
+    [sdk, confirmSplits, buildCallback],
   );
 };
 

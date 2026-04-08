@@ -1,12 +1,14 @@
+import { type TransactionCallback } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
+import { useMemo } from 'react';
 import { Address as AddressComponent } from 'shared/components';
-import { useTxCallbackStages } from 'shared/hook-form/form-controller';
+import { buildTxCallback } from 'shared/hook-form/form-controller';
 import {
-  TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
+  useTransitStage,
 } from 'shared/transaction-modal';
 import { zeroAddress } from 'viem';
 import { ClaimerFormInputType, ClaimerFormNetworkData } from '../context/types';
@@ -53,36 +55,36 @@ const getTexts = (input: ClaimerFormInputType) => {
       };
 };
 
-const getTxModalStagesClaimer = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
+export const useTxModalStagesClaimer = (): ((
+  input: ClaimerFormInputType,
+  data: ClaimerFormNetworkData,
+  onRetry: () => void,
+) => TransactionCallback) => {
+  const transitStage = useTransitStage();
 
-  sign: (input: ClaimerFormInputType, _data: ClaimerFormNetworkData) =>
-    transitStage(<TxStageSign {...getTexts(input).sign} />),
-
-  pending: (
-    input: ClaimerFormInputType,
-    _data: ClaimerFormNetworkData,
-    txHash?: string,
-  ) =>
-    transitStage(<TxStagePending {...getTexts(input).sign} txHash={txHash} />),
-
-  success: (
-    input: ClaimerFormInputType,
-    _data: ClaimerFormNetworkData,
-    _result: undefined,
-    txHash?: string,
-  ) =>
-    transitStage(
-      <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-});
-
-export const useTxModalStagesClaimer = () =>
-  useTxCallbackStages<ClaimerFormInputType, ClaimerFormNetworkData>(
-    getTxModalStagesClaimer,
+  return useMemo(
+    () =>
+      (
+        input: ClaimerFormInputType,
+        _data: ClaimerFormNetworkData,
+        onRetry: () => void,
+      ) =>
+        buildTxCallback(
+          {
+            ...getGeneralTransactionModalStages(transitStage),
+            sign: () => transitStage(<TxStageSign {...getTexts(input).sign} />),
+            pending: (txHash) =>
+              transitStage(
+                <TxStagePending {...getTexts(input).sign} txHash={txHash} />,
+              ),
+            success: (_result: undefined, txHash) =>
+              transitStage(
+                <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
+                { isClosableOnLedger: true },
+              ),
+          },
+          onRetry,
+        ),
+    [transitStage],
   );
+};

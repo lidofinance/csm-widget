@@ -7,6 +7,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
 import invariant from 'tiny-invariant';
+import { useTxModalStagesNormalizeQueue } from '../hooks/use-tx-modal-stages-normalize-queue';
 import { useNormalizeQueueFormData } from './normalize-queue-data-provider';
 import {
   NormalizeQueueFormInputType,
@@ -26,22 +27,23 @@ export const useNormalizeQueueFlowResolver = (): FlowResolver<
   const sdk = useSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required');
   const [canNormalize, access] = useCanPerform(sdk.depositQueue, 'normalize');
+  const buildCallback = useTxModalStagesNormalizeQueue();
 
   return useCallback(
-    (_input, data) => {
+    (input, data) => {
       if (!canNormalize) return { action: 'no-access', access };
       if (data.unqueuedCount === 0) return { action: 'nothing' };
 
       return {
         action: 'normalize' as const,
-        submit: (callback) =>
+        submit: (onRetry) =>
           sdk.depositQueue.normalize({
             nodeOperatorId: data.nodeOperatorId,
-            callback,
+            callback: buildCallback(input, data, onRetry),
           }),
       };
     },
-    [sdk.depositQueue, canNormalize, access],
+    [sdk.depositQueue, canNormalize, access, buildCallback],
   );
 };
 

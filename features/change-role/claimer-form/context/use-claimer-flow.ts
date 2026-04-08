@@ -5,6 +5,7 @@ import {
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import { zeroAddress } from 'viem';
+import { useTxModalStagesClaimer } from '../hooks/use-tx-modal-stages-claimer';
 import { useClaimerFormData } from './claimer-data-provider';
 import { ClaimerFormInputType, ClaimerFormNetworkData } from './types';
 
@@ -18,27 +19,28 @@ export const useClaimerFlowResolver = (): FlowResolver<
   ClaimerFlow
 > => {
   const sdk = useSmSDK();
+  const buildCallback = useTxModalStagesClaimer();
 
   return useCallback(
-    (_input, data) => {
+    (input, data) => {
       if (!data.canEdit) return { action: 'view' };
 
       return {
         action: 'set-claimer' as const,
-        submit: (callback) => {
-          const claimerAddress = _input.isUnset
+        submit: (onRetry) => {
+          const claimerAddress = input.isUnset
             ? zeroAddress
-            : (_input.address ?? zeroAddress);
+            : (input.address ?? zeroAddress);
 
           return sdk.roles.setCustomRewardsClaimer({
             nodeOperatorId: data.nodeOperatorId,
             claimerAddress,
-            callback,
+            callback: buildCallback(input, data, onRetry),
           });
         },
       };
     },
-    [sdk],
+    [sdk, buildCallback],
   );
 };
 

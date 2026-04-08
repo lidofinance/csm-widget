@@ -6,6 +6,7 @@ import {
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import invariant from 'tiny-invariant';
+import { useTxModalStagesClaimType } from '../hooks/use-tx-modal-stages-claim-type';
 import { useConfirmClaimTypeModal } from '../hooks/use-confirm-modal';
 import { useClaimTypeFormData } from './claim-type-data-provider';
 import { ClaimTypeFormInputType, ClaimTypeFormNetworkData } from './types';
@@ -25,9 +26,10 @@ export const useClaimTypeFlowResolver = (): FlowResolver<
   const sdk = useSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required for this operation');
   const confirmClaimtype = useConfirmClaimTypeModal();
+  const buildCallback = useTxModalStagesClaimType();
 
   return useCallback(
-    (_input, data) => {
+    (input, data) => {
       if (data.icsPaused) return { action: 'paused' };
 
       const isClaimed =
@@ -43,20 +45,20 @@ export const useClaimTypeFlowResolver = (): FlowResolver<
       return {
         action: 'claim' as const,
         confirm: () => confirmClaimtype({}),
-        submit: async (callback) => {
+        submit: async (onRetry) => {
           invariant(data.proof.proof, 'Proof is not defined');
 
           await sdk.icsGate.claimCurve({
             nodeOperatorId: data.nodeOperatorId,
             proof: data.proof.proof,
-            callback,
+            callback: buildCallback(input, data, onRetry),
           });
 
           window.scrollTo({ top: 0 });
         },
       };
     },
-    [sdk, confirmClaimtype],
+    [sdk, confirmClaimtype, buildCallback],
   );
 };
 

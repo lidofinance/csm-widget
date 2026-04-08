@@ -5,7 +5,6 @@ import {
   useFlowSubmit,
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
-import { useTxModalStagesClaimer } from '../hooks/use-tx-modal-stages-claimer';
 import { ClaimerFormNetworkData, type ClaimerFormInputType } from './types';
 import { useClaimerFlowResolver } from './use-claimer-flow';
 import { useClaimerValidation } from './use-claimer-validation';
@@ -28,8 +27,7 @@ export const ClaimerFormProvider: FC<PropsWithChildren> = ({ children }) => {
   });
 
   const resolve = useClaimerFlowResolver();
-  const { buildCallback } = useTxModalStagesClaimer();
-  const submitter = useFlowSubmit(resolve, buildCallback);
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>

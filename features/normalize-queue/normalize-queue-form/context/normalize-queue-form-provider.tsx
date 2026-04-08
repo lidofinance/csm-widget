@@ -1,8 +1,11 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import {
+  FormControllerProvider,
+  useFlowSubmit,
+} from 'shared/hook-form/form-controller';
 import { type NormalizeQueueFormInputType } from './types';
-import { useNormalizeQueueSubmit } from './use-normalize-queue-submit';
+import { useNormalizeQueueFlowResolver } from './use-normalize-queue-flow';
 import { useNormalizeQueueValidation } from './use-normalize-queue-validation';
 
 export const NormalizeQueueFormProvider: FC<PropsWithChildren> = ({
@@ -15,7 +18,7 @@ export const NormalizeQueueFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const submitter = useNormalizeQueueSubmit();
+  const submitter = useFlowSubmit(useNormalizeQueueFlowResolver());
 
   return (
     <FormProvider {...formObject}>

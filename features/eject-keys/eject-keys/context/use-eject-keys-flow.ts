@@ -7,11 +7,12 @@ import {
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
-import { useEjectKeysFormData } from './eject-keys-data-provider';
-import { EjectKeysFormInputType, EjectKeysFormNetworkData } from './types';
 import { invariant } from '@lidofinance/lido-ethereum-sdk';
+import { useTxModalStagesEjectKeys } from '../hooks/use-tx-modal-stages-eject-keys';
 import { useConfirmHighCostModal } from '../hooks/use-confirm-high-cost-modal';
 import { useConfirmEjectKeysModal } from '../hooks/use-confirm-modal';
+import { useEjectKeysFormData } from './eject-keys-data-provider';
+import { EjectKeysFormInputType, EjectKeysFormNetworkData } from './types';
 
 export type EjectKeysFlow =
   | { action: 'no-access'; access: MethodAccess }
@@ -27,6 +28,7 @@ export const useEjectKeysFlowResolver = (): FlowResolver<
   const [canEjectKeys, access] = useCanPerform(keysSDK, 'ejectKeys');
   const confirmEject = useConfirmEjectKeysModal();
   const confirmHighCost = useConfirmHighCostModal();
+  const buildCallback = useTxModalStagesEjectKeys();
 
   return useCallback(
     (input, data) => {
@@ -45,19 +47,26 @@ export const useEjectKeysFlowResolver = (): FlowResolver<
 
           return confirmEject({});
         },
-        submit: (callback) => {
+        submit: (onRetry) => {
           invariant(input.feeAmount !== undefined, 'Fee amount is required');
 
           return keysSDK.ejectKeys({
             nodeOperatorId: data.nodeOperatorId,
             keyIndices: input.selection.map(BigInt),
             amount: input.feeAmount,
-            callback,
+            callback: buildCallback(input, data, onRetry),
           });
         },
       };
     },
-    [keysSDK, canEjectKeys, access, confirmEject, confirmHighCost],
+    [
+      keysSDK,
+      canEjectKeys,
+      access,
+      confirmEject,
+      confirmHighCost,
+      buildCallback,
+    ],
   );
 };
 

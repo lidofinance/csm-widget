@@ -11,14 +11,15 @@ import {
   useConfirmReproposeModal,
   useConfirmRewardsRoleModal,
 } from '../hooks/use-confirm-modal';
+import { useTxModalStagesChangeRole } from '../hooks/use-tx-modal-stages-change-role';
 import { useChangeRoleFormData } from './change-role-data-provider';
 import { ChangeRoleFormInputType, ChangeRoleFormNetworkData } from './types';
 
 export type ChangeRoleFlow =
   | { action: 'view' }
-  | ({ action: 'manager-reset' } & Executable<NodeOperatorShortInfo>)
-  | ({ action: 'rewards-change' } & Executable<NodeOperatorShortInfo>)
-  | ({ action: 'propose' } & Executable<NodeOperatorShortInfo>);
+  | ({ action: 'manager-reset' } & Executable)
+  | ({ action: 'rewards-change' } & Executable)
+  | ({ action: 'propose' } & Executable);
 
 export const useChangeRoleFlowResolver = (
   role: ROLES,
@@ -32,6 +33,7 @@ export const useChangeRoleFlowResolver = (
   const confirmRepropose = useConfirmReproposeModal();
   const confirmRewardsRole = useConfirmRewardsRoleModal();
   const mode = useChangeRoleMode(role);
+  const buildCallback = useTxModalStagesChangeRole(role);
 
   return useCallback(
     (input, data) => {
@@ -60,10 +62,12 @@ export const useChangeRoleFlowResolver = (
           }
           return true;
         },
-        submit: async (callback) => {
+        submit: async (onRetry) => {
           const address = input.isRevoke
             ? zeroAddress
             : (input.address ?? zeroAddress);
+
+          const callback = buildCallback(input, data, onRetry);
 
           const params = {
             address,
@@ -94,7 +98,7 @@ export const useChangeRoleFlowResolver = (
         },
       };
     },
-    [sdk, appendNO, confirmRepropose, confirmRewardsRole, mode],
+    [sdk, appendNO, confirmRepropose, confirmRewardsRole, mode, buildCallback],
   );
 };
 

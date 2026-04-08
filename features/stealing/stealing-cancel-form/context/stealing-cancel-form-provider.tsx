@@ -4,7 +4,6 @@ import {
   FormControllerProvider,
   useFlowSubmit,
 } from 'shared/hook-form/form-controller';
-import { useTxModalStagesStealingCancel } from '../hooks/use-tx-modal-stages-stealing-cancel';
 import { StealingCancelUpdater } from './stealing-cancel-updater';
 import { type StealingCancelFormInputType } from './types';
 import { useStealingCancelFlowResolver } from './use-stealing-cancel-flow';
@@ -23,9 +22,7 @@ export const StealingCancelFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const resolve = useStealingCancelFlowResolver();
-  const { buildCallback } = useTxModalStagesStealingCancel();
-  const submitter = useFlowSubmit(resolve, buildCallback);
+  const submitter = useFlowSubmit(useStealingCancelFlowResolver());
 
   return (
     <FormProvider {...formObject}>

@@ -6,6 +6,7 @@ import {
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import { useCanPerform, useKeysCache } from 'shared/hooks';
+import { useTxModalStagesRemoveKeys } from '../hooks/use-tx-modal-stages-remove-keys';
 import { useRemoveKeysFormData } from './remove-keys-data-provider';
 import { RemoveKeysFormInputType, RemoveKeysFormNetworkData } from './types';
 
@@ -22,6 +23,7 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
   const { keys: keysSDK } = useSmSDK();
   const { removeCachePubkeys } = useKeysCache();
   const [canRemoveKeys, access] = useCanPerform(keysSDK, 'removeKeys');
+  const buildCallback = useTxModalStagesRemoveKeys();
 
   return useCallback(
     (input, data) => {
@@ -30,14 +32,14 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
 
       return {
         action: 'remove' as const,
-        submit: async (callback) => {
+        submit: async (onRetry) => {
           const result = await keysSDK.removeKeys({
             nodeOperatorId: data.nodeOperatorId,
             startIndex: BigInt(
               data.info.totalDepositedKeys + input.selection.start,
             ),
             keysCount: BigInt(input.selection.count),
-            callback,
+            callback: buildCallback(input, data, onRetry),
           });
           void removeCachePubkeys(
             data.keys
@@ -51,7 +53,7 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
         },
       };
     },
-    [canRemoveKeys, access, keysSDK, removeCachePubkeys],
+    [canRemoveKeys, access, keysSDK, removeCachePubkeys, buildCallback],
   );
 };
 

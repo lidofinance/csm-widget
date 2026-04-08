@@ -2,17 +2,12 @@ import {
   type TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
-import { useCallback } from 'react';
-import {
-  type TransactionModalTransitStage,
-  useTransactionModalStage,
-} from 'shared/transaction-modal';
 
-// Shape that stage factories must satisfy for auto-callback building
-export type TxCallbackStages<F, C, TResult> = {
-  sign(input: F, data: C): void;
-  pending(input: F, data: C, txHash?: string): void;
-  success(input: F, data: C, result: TResult, txHash?: string): void;
+// Stage handlers with no input/data params — they close over those via the factory
+export type FlowStages<TResult = undefined> = {
+  sign(): void;
+  pending(txHash?: string): void;
+  success(result: TResult, txHash?: string): void;
   successMultisig(): void;
   failed(error: unknown, onRetry?: () => void): void;
   signPermit?(): void;
@@ -20,24 +15,22 @@ export type TxCallbackStages<F, C, TResult> = {
   pendingApproval?(amount: bigint, token: unknown, txHash?: string): void;
 };
 
-// Pure function: stages + form data → TransactionCallback
+// Pure function: stages + onRetry → TransactionCallback
 export const buildTxCallback =
-  <F, C, TResult = undefined>(
-    stages: TxCallbackStages<F, C, TResult>,
-    input: F,
-    data: C,
+  <TResult = undefined>(
+    stages: FlowStages<TResult>,
     onRetry: () => void,
   ): TransactionCallback<TResult> =>
   async ({ stage, payload }) => {
     switch (stage) {
       case TransactionCallbackStage.SIGN:
-        stages.sign(input, data);
+        stages.sign();
         break;
       case TransactionCallbackStage.RECEIPT:
-        stages.pending(input, data, payload.hash);
+        stages.pending(payload.hash);
         break;
       case TransactionCallbackStage.DONE:
-        stages.success(input, data, payload.result, payload.hash);
+        stages.success(payload.result, payload.hash);
         break;
       case TransactionCallbackStage.MULTISIG_DONE:
         stages.successMultisig();
@@ -57,23 +50,3 @@ export const buildTxCallback =
       default:
     }
   };
-
-// Hook: combines useTransactionModalStage + buildTxCallback into one
-export const useTxCallbackStages = <
-  F,
-  C,
-  TResult = undefined,
-  S extends TxCallbackStages<F, C, TResult> = TxCallbackStages<F, C, TResult>,
->(
-  getStages: (transitStage: TransactionModalTransitStage) => S,
-) => {
-  const { txModalStages } = useTransactionModalStage(getStages);
-
-  const buildCallback = useCallback(
-    (input: F, data: C, onRetry: () => void) =>
-      buildTxCallback(txModalStages, input, data, onRetry),
-    [txModalStages],
-  );
-
-  return { txModalStages, buildCallback };
-};

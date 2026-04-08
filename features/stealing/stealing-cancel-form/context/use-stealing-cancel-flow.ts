@@ -5,6 +5,7 @@ import {
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import invariant from 'tiny-invariant';
+import { useTxModalStagesStealingCancel } from '../hooks/use-tx-modal-stages-stealing-cancel';
 import {
   StealingCancelFormInputType,
   StealingCancelFormNetworkData,
@@ -18,11 +19,12 @@ export const useStealingCancelFlowResolver = (): FlowResolver<
   StealingCancelFlow
 > => {
   const { stealing } = useSmSDK();
+  const buildCallback = useTxModalStagesStealingCancel();
 
   return useCallback(
-    (input, _data) => ({
+    (input, data) => ({
       action: 'cancel' as const,
-      submit: (callback) => {
+      submit: (onRetry) => {
         invariant(input.amount !== undefined, 'Amount is not defined');
         invariant(
           input.nodeOperatorId !== undefined,
@@ -32,10 +34,10 @@ export const useStealingCancelFlowResolver = (): FlowResolver<
         return stealing.cancel({
           nodeOperatorId: input.nodeOperatorId,
           amount: input.amount,
-          callback,
+          callback: buildCallback(input, data, onRetry),
         });
       },
     }),
-    [stealing],
+    [stealing, buildCallback],
   );
 };

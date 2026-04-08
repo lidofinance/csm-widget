@@ -6,6 +6,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import invariant from 'tiny-invariant';
 import { isHex } from 'viem';
+import { useTxModalStagesStealingReport } from '../hooks/use-tx-modal-stages-stealing-report';
 import {
   StealingReportFormInputType,
   StealingReportFormNetworkData,
@@ -19,11 +20,12 @@ export const useStealingReportFlowResolver = (): FlowResolver<
   StealingReportFlow
 > => {
   const { stealing } = useSmSDK();
+  const buildCallback = useTxModalStagesStealingReport();
 
   return useCallback(
-    (input, _data) => ({
+    (input, data) => ({
       action: 'report' as const,
-      submit: (callback) => {
+      submit: (onRetry) => {
         invariant(input.amount !== undefined, 'Amount is not defined');
         invariant(
           input.nodeOperatorId !== undefined,
@@ -36,10 +38,10 @@ export const useStealingReportFlowResolver = (): FlowResolver<
           amount: input.amount,
           penaltyType: input.penaltyType,
           details: input.details || '',
-          callback,
+          callback: buildCallback(input, data, onRetry),
         });
       },
     }),
-    [stealing],
+    [stealing, buildCallback],
   );
 };

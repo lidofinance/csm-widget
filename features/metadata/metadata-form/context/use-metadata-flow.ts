@@ -7,6 +7,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
 import invariant from 'tiny-invariant';
+import { useTxModalStagesMetadata } from '../hooks/use-tx-modal-stages-metadata';
 import { useMetadataFormData } from './metadata-data-provider';
 import type { MetadataFormInputType, MetadataFormNetworkData } from './types';
 
@@ -26,6 +27,7 @@ export const useMetadataFlowResolver = (): FlowResolver<
     sdk.metaRegistry,
     'setOperatorInfo',
   );
+  const buildCallback = useTxModalStagesMetadata();
 
   return useCallback(
     (input, data) => {
@@ -34,16 +36,16 @@ export const useMetadataFlowResolver = (): FlowResolver<
 
       return {
         action: 'update' as const,
-        submit: (callback) =>
+        submit: (onRetry) =>
           sdk.metaRegistry.setOperatorInfo({
             nodeOperatorId: data.nodeOperatorId,
             name: input.name,
             description: input.description,
-            callback,
+            callback: buildCallback(input, data, onRetry),
           }),
       };
     },
-    [sdk.metaRegistry, canUpdate, updateAccess],
+    [sdk.metaRegistry, canUpdate, updateAccess, buildCallback],
   );
 };
 

@@ -1,11 +1,13 @@
+import { type TransactionCallback } from '@lidofinance/lido-csm-sdk';
+import { useMemo } from 'react';
+import { buildTxCallback } from 'shared/hook-form/form-controller';
 import {
-  TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
+  useTransitStage,
 } from 'shared/transaction-modal';
-import { useTxCallbackStages } from 'shared/hook-form/form-controller';
 import {
   NormalizeQueueFormInputType,
   NormalizeQueueFormNetworkData,
@@ -14,61 +16,52 @@ import {
 const getKeysCount = (data: NormalizeQueueFormNetworkData) =>
   data.info.depositableValidatorsCount - data.info.enqueuedCount;
 
-const getTxModalStagesNormalizeQueue = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
+export const useTxModalStagesNormalizeQueue = (): ((
+  input: NormalizeQueueFormInputType,
+  data: NormalizeQueueFormNetworkData,
+  onRetry: () => void,
+) => TransactionCallback) => {
+  const transitStage = useTransitStage();
 
-  sign: (
-    _input: NormalizeQueueFormInputType,
-    data: NormalizeQueueFormNetworkData,
-  ) => {
-    const keysCount = getKeysCount(data);
-    transitStage(
-      <TxStageSign
-        title="You are normalizing queue"
-        description={`Placing ${keysCount} keys(s) it the depositing queue`}
-      />,
-    );
-  },
-
-  pending: (
-    _input: NormalizeQueueFormInputType,
-    data: NormalizeQueueFormNetworkData,
-    txHash?: string,
-  ) => {
-    const keysCount = getKeysCount(data);
-    transitStage(
-      <TxStagePending
-        title="You are normalizing queue"
-        description={`Placing ${keysCount} keys(s) it the depositing queue`}
-        txHash={txHash}
-      />,
-    );
-  },
-
-  success: (
-    _input: NormalizeQueueFormInputType,
-    data: NormalizeQueueFormNetworkData,
-    _result: undefined,
-    txHash?: string,
-  ) => {
-    const keysCount = getKeysCount(data);
-    transitStage(
-      <TxStageSuccess
-        txHash={txHash}
-        title="Queue has been noramlized"
-        description={`You have ${keysCount} keys(s) in depositing queue`}
-      />,
-      {
-        isClosableOnLedger: true,
+  return useMemo(
+    () =>
+      (
+        _input: NormalizeQueueFormInputType,
+        data: NormalizeQueueFormNetworkData,
+        onRetry: () => void,
+      ) => {
+        const keysCount = getKeysCount(data);
+        return buildTxCallback(
+          {
+            ...getGeneralTransactionModalStages(transitStage),
+            sign: () =>
+              transitStage(
+                <TxStageSign
+                  title="You are normalizing queue"
+                  description={`Placing ${keysCount} keys(s) it the depositing queue`}
+                />,
+              ),
+            pending: (txHash) =>
+              transitStage(
+                <TxStagePending
+                  title="You are normalizing queue"
+                  description={`Placing ${keysCount} keys(s) it the depositing queue`}
+                  txHash={txHash}
+                />,
+              ),
+            success: (_result: undefined, txHash) =>
+              transitStage(
+                <TxStageSuccess
+                  txHash={txHash}
+                  title="Queue has been noramlized"
+                  description={`You have ${keysCount} keys(s) in depositing queue`}
+                />,
+                { isClosableOnLedger: true },
+              ),
+          },
+          onRetry,
+        );
       },
-    );
-  },
-});
-
-export const useTxModalStagesNormalizeQueue = () =>
-  useTxCallbackStages<
-    NormalizeQueueFormInputType,
-    NormalizeQueueFormNetworkData
-  >(getTxModalStagesNormalizeQueue);
+    [transitStage],
+  );
+};

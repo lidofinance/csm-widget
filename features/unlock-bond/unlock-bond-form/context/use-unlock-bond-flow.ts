@@ -6,17 +6,17 @@ import {
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
+import { useTxModalStagesCompensate } from '../hooks/use-tx-modal-stages-compensate';
+import { useTxModalStagesUnlockExpired } from '../hooks/use-tx-modal-stages-unlock-expired';
 import { useUnlockBondFormData } from './unlock-bond-data-provider';
 import { UnlockBondFormInputType, UnlockBondFormNetworkData } from './types';
-
-type TxResult = bigint | undefined;
 
 export type UnlockBondFlow =
   | { action: 'nothing' }
   | { action: 'no-access'; access: MethodAccess }
   | { action: 'insufficient-bond' }
-  | ({ action: 'compensate' } & Executable<TxResult>)
-  | ({ action: 'unlock-expired' } & Executable<TxResult>);
+  | ({ action: 'compensate' } & Executable)
+  | ({ action: 'unlock-expired' } & Executable);
 
 export const useUnlockBondFlowResolver = (): FlowResolver<
   UnlockBondFormInputType,
@@ -32,9 +32,11 @@ export const useUnlockBondFlowResolver = (): FlowResolver<
     bondSDK,
     'unlockExpiredLock',
   );
+  const buildCompensateCallback = useTxModalStagesCompensate();
+  const buildUnlockExpiredCallback = useTxModalStagesUnlockExpired();
 
   return useCallback(
-    (_input, data) => {
+    (input, data) => {
       if (!data.bond?.locked) return { action: 'nothing' };
       if (data.isExpired && !canUnlockExpired)
         return { action: 'no-access', access: unlockExpiredAccess };
@@ -46,19 +48,19 @@ export const useUnlockBondFlowResolver = (): FlowResolver<
       if (data.isExpired)
         return {
           action: 'unlock-expired' as const,
-          submit: (callback) =>
+          submit: (onRetry) =>
             bondSDK.unlockExpiredLock({
               nodeOperatorId: data.nodeOperatorId,
-              callback,
+              callback: buildUnlockExpiredCallback(input, data, onRetry),
             }),
         };
 
       return {
         action: 'compensate' as const,
-        submit: (callback) =>
+        submit: (onRetry) =>
           bondSDK.compensateLockedBond({
             nodeOperatorId: data.nodeOperatorId,
-            callback,
+            callback: buildCompensateCallback(input, data, onRetry),
           }),
       };
     },
@@ -68,6 +70,8 @@ export const useUnlockBondFlowResolver = (): FlowResolver<
       compensateAccess,
       canUnlockExpired,
       unlockExpiredAccess,
+      buildCompensateCallback,
+      buildUnlockExpiredCallback,
     ],
   );
 };

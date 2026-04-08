@@ -7,7 +7,6 @@ import {
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
 import { useChangeRoleMode } from 'shared/hooks';
-import { useTxModalStagesChangeRole } from '../hooks/use-tx-modal-stages-change-role';
 import {
   ChangeRoleFormNetworkData,
   type ChangeRoleFormInputType,
@@ -38,8 +37,7 @@ export const ChangeRoleFormProvider: FC<
   });
 
   const resolve = useChangeRoleFlowResolver(role);
-  const { buildCallback } = useTxModalStagesChangeRole(role);
-  const submitter = useFlowSubmit(resolve, buildCallback);
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>

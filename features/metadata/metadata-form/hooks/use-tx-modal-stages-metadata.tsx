@@ -1,59 +1,62 @@
+import { type TransactionCallback } from '@lidofinance/lido-csm-sdk';
+import { useMemo } from 'react';
+import { buildTxCallback } from 'shared/hook-form/form-controller';
 import {
-  TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
   getGeneralTransactionModalStages,
+  useTransitStage,
 } from 'shared/transaction-modal';
-import { useTxCallbackStages } from 'shared/hook-form/form-controller';
 import type {
   MetadataFormInputType,
   MetadataFormNetworkData,
 } from '../context/types';
 
-const getTxModalStagesMetadata = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
+export const useTxModalStagesMetadata = (): ((
+  input: MetadataFormInputType,
+  data: MetadataFormNetworkData,
+  onRetry: () => void,
+) => TransactionCallback) => {
+  const transitStage = useTransitStage();
 
-  sign: (_input: MetadataFormInputType, _data: MetadataFormNetworkData) =>
-    transitStage(
-      <TxStageSign
-        title="You are updating metadata"
-        description="Name and description will be updated"
-      />,
-    ),
-
-  pending: (
-    _input: MetadataFormInputType,
-    _data: MetadataFormNetworkData,
-    txHash?: string,
-  ) =>
-    transitStage(
-      <TxStagePending
-        title="Updating metadata"
-        description="Name and description will be updated"
-        txHash={txHash}
-      />,
-    ),
-
-  success: (
-    _input: MetadataFormInputType,
-    _data: MetadataFormNetworkData,
-    _result: undefined,
-    txHash?: string,
-  ) =>
-    transitStage(
-      <TxStageSuccess
-        title="Metadata has been updated"
-        description="Name and description have been updated"
-        txHash={txHash}
-      />,
-      { isClosableOnLedger: true },
-    ),
-});
-
-export const useTxModalStagesMetadata = () =>
-  useTxCallbackStages<MetadataFormInputType, MetadataFormNetworkData>(
-    getTxModalStagesMetadata,
+  return useMemo(
+    () =>
+      (
+        _input: MetadataFormInputType,
+        _data: MetadataFormNetworkData,
+        onRetry: () => void,
+      ) =>
+        buildTxCallback(
+          {
+            ...getGeneralTransactionModalStages(transitStage),
+            sign: () =>
+              transitStage(
+                <TxStageSign
+                  title="You are updating metadata"
+                  description="Name and description will be updated"
+                />,
+              ),
+            pending: (txHash) =>
+              transitStage(
+                <TxStagePending
+                  title="Updating metadata"
+                  description="Name and description will be updated"
+                  txHash={txHash}
+                />,
+              ),
+            success: (_result: undefined, txHash) =>
+              transitStage(
+                <TxStageSuccess
+                  title="Metadata has been updated"
+                  description="Name and description have been updated"
+                  txHash={txHash}
+                />,
+                { isClosableOnLedger: true },
+              ),
+          },
+          onRetry,
+        ),
+    [transitStage],
   );
+};
