@@ -19,6 +19,7 @@ export const SwitcherItem: FC<PropsWithChildren<Props>> = ({
       href={href}
       $active={active}
       $warning={warning}
+      data-testid="switcherTab"
       {...rest}
     />
   );

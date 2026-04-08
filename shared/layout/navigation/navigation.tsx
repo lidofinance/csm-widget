@@ -43,7 +43,12 @@ export const Navigation: FC<{ desktopHidden?: boolean }> = memo(
               const isActive = getIsActivePath(pathname, path, subPaths);
 
               return (
-                <LocalLink key={path} href={path} onClick={toggleExpanded}>
+                <LocalLink
+                  key={path}
+                  href={path}
+                  onClick={toggleExpanded}
+                  data-testid="navItem"
+                >
                   <NavLink $active={isActive} $colored={colored}>
                     {icon}
                     <Stack gap="sm" center>

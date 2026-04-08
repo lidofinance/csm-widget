@@ -10,6 +10,7 @@ export class DashboardPage extends BasePage {
   rolesSection: RolesSection;
 
   whyModal: Locator;
+  operatorGroupLink: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -18,6 +19,7 @@ export class DashboardPage extends BasePage {
     this.rolesSection = new RolesSection(this.page);
 
     this.whyModal = this.page.getByTestId('whyModal');
+    this.operatorGroupLink = this.page.getByTestId('operatorGroupLink');
   }
 
   async open() {

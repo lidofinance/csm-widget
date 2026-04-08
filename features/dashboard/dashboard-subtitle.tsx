@@ -33,7 +33,11 @@ const CmSubtitle: FC = () => {
       {groupId ? (
         <>
           <DividerStyle />
-          <TextLocalLink href={PATH.GROUP} title="View group">
+          <TextLocalLink
+            href={PATH.GROUP}
+            title="View group"
+            data-testid="operatorGroupLink"
+          >
             <Stack as="span" center gap="xs">
               Operator Group #{`${groupId}`}
               <ArrowRight />
