@@ -31,7 +31,7 @@ export const StakeStats: FC<Props> = ({ data }) => {
   return (
     <Stack direction="column" gap="sm">
       <StakeRow>
-        <StakeColumn>
+        <StakeColumn data-testid="stakeColumnActive">
           <Stack center gap="xs">
             <ColorDot $color={STAKE_COLORS.active} />
             <Text size="xs">Active</Text>
@@ -45,13 +45,17 @@ export const StakeStats: FC<Props> = ({ data }) => {
                 maxDecimalDigits={2}
               />
             </Text>
-            <Text size="xxs" color="secondary">
+            <Text
+              size="xxs"
+              color="secondary"
+              data-testid="stakeColumnActiveKeys"
+            >
               {pluralKeys({ value: data.activeKeys, showValue: true })}
             </Text>
           </Stack>
         </StakeColumn>
 
-        <StakeColumn>
+        <StakeColumn data-testid="stakeColumnDepositable">
           <Stack center gap="xs">
             <ColorDot $color={STAKE_COLORS.depositable} />
             <Text size="xs">Depositable</Text>
@@ -65,13 +69,17 @@ export const StakeStats: FC<Props> = ({ data }) => {
                 maxDecimalDigits={2}
               />
             </Text>
-            <Text size="xxs" color="secondary">
+            <Text
+              size="xxs"
+              color="secondary"
+              data-testid="stakeColumnDepositableKeys"
+            >
               {pluralKeys({ value: data.depositableKeys, showValue: true })}
             </Text>
           </Stack>
         </StakeColumn>
 
-        <StakeColumn>
+        <StakeColumn data-testid="stakeColumnPotential">
           <Stack center gap="xs">
             <ColorDot $color={STAKE_COLORS.potential} />
             <Text size="xs">Potential additional capacity</Text>
