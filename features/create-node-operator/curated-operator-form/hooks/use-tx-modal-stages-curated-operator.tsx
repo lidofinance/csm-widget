@@ -1,101 +1,114 @@
-import { getGeneralTransactionModalStages } from 'shared/transaction-modal/hooks/get-general-transaction-modal-stages';
 import {
-  TransactionModalTransitStage,
-  useTransactionModalStage,
-} from 'shared/transaction-modal/hooks/use-transaction-modal-stage';
-
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+  type NodeOperatorShortInfo,
+  ROLES,
+  type TransactionCallback,
+  getNodeOperatorRoles,
+} from '@lidofinance/lido-csm-sdk';
 import { getCurveMetadata } from 'consts';
+import { useMemo } from 'react';
+import { buildTxCallback } from 'shared/hook-form/form-controller';
 import {
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
-} from 'shared/transaction-modal/tx-stages-basic';
+  getGeneralTransactionModalStages,
+  useTransitStage,
+} from 'shared/transaction-modal';
+import {
+  CuratedOperatorFormInputType,
+  CuratedOperatorFormNetworkData,
+} from '../context/types';
 import { CuratedOperatorCustomAddressActions } from '../custom-address-actions';
 import { CuratedOperatorSuccessActions } from '../success-actions';
 
-type SignPendingProps = {
-  curveId: bigint;
-};
+export const useTxModalStagesCuratedOperator = (): ((
+  input: CuratedOperatorFormInputType,
+  data: CuratedOperatorFormNetworkData,
+  onRetry: () => void,
+) => TransactionCallback<NodeOperatorShortInfo>) => {
+  const transitStage = useTransitStage();
 
-type SuccessProps = {
-  nodeOperatorId?: NodeOperatorId;
-  curveId: bigint;
-  availableGatesCount: number;
-  hasAnyRole: boolean;
-  hasManagerRole: boolean;
-};
+  return useMemo(
+    () =>
+      (
+        input: CuratedOperatorFormInputType,
+        data: CuratedOperatorFormNetworkData,
+        onRetry: () => void,
+      ) => {
+        const selectedGate = data.availableGates.find(
+          (gate) => gate.gateIndex === input.gateIndex,
+        );
+        const curveId = selectedGate?.curveId ?? 0n;
 
-const getTxModalStagesCuratedOperator = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
+        return buildTxCallback<NodeOperatorShortInfo>(
+          {
+            ...getGeneralTransactionModalStages(transitStage),
+            sign: () =>
+              transitStage(
+                <TxStageSign
+                  title="Creating Curated Node Operator"
+                  description={
+                    <>
+                      Creating operator for{' '}
+                      <b>{getCurveMetadata(curveId).name}</b>
+                    </>
+                  }
+                />,
+              ),
+            pending: (txHash) =>
+              transitStage(
+                <TxStagePending
+                  txHash={txHash}
+                  title="Creating Curated Node Operator"
+                  description={
+                    <>
+                      Creating operator for{' '}
+                      <b>{getCurveMetadata(curveId).name}</b>
+                    </>
+                  }
+                />,
+              ),
+            success: (result, txHash) => {
+              const roles = result
+                ? getNodeOperatorRoles(result, data.address)
+                : [];
+              const hasAnyRole = roles.length > 0;
+              const hasManagerRole = roles.includes(ROLES.MANAGER);
 
-  sign: ({ curveId }: SignPendingProps) =>
-    transitStage(
-      <TxStageSign
-        title="Creating Curated Node Operator"
-        description={
-          <>
-            Creating operator for <b>{getCurveMetadata(curveId).name}</b>
-          </>
-        }
-      />,
-    ),
-
-  pending: ({ curveId }: SignPendingProps, txHash?: string) =>
-    transitStage(
-      <TxStagePending
-        txHash={txHash}
-        title="Creating Curated Node Operator"
-        description={
-          <>
-            Creating operator for <b>{getCurveMetadata(curveId).name}</b>
-          </>
-        }
-      />,
-    ),
-
-  success: (
-    {
-      nodeOperatorId,
-      availableGatesCount,
-      hasAnyRole,
-      hasManagerRole,
-    }: SuccessProps,
-    txHash?: string,
-  ) => {
-    return transitStage(
-      <TxStageSuccess
-        txHash={txHash}
-        title="Node Operator has been created"
-        description={
-          nodeOperatorId !== undefined ? (
-            <>
-              Your Node Operator ID is <b>{nodeOperatorId.toString()}</b>
-            </>
-          ) : undefined
-        }
-        footer={
-          hasAnyRole ? (
-            <CuratedOperatorSuccessActions
-              availableGatesCount={availableGatesCount}
-              hasManagerRole={hasManagerRole}
-            />
-          ) : (
-            <CuratedOperatorCustomAddressActions
-              availableGatesCount={availableGatesCount}
-            />
-          )
-        }
-      />,
-      {
-        isClosableOnLedger: true,
+              return transitStage(
+                <TxStageSuccess
+                  txHash={txHash}
+                  title="Node Operator has been created"
+                  description={
+                    result?.nodeOperatorId !== undefined ? (
+                      <>
+                        Your Node Operator ID is{' '}
+                        <b>{result.nodeOperatorId.toString()}</b>
+                      </>
+                    ) : undefined
+                  }
+                  footer={
+                    hasAnyRole ? (
+                      <CuratedOperatorSuccessActions
+                        availableGatesCount={data.availableGates.length}
+                        hasManagerRole={hasManagerRole}
+                      />
+                    ) : (
+                      <CuratedOperatorCustomAddressActions
+                        availableGatesCount={data.availableGates.length}
+                      />
+                    )
+                  }
+                />,
+                {
+                  isClosableOnLedger: true,
+                },
+              );
+            },
+          },
+          onRetry,
+        );
       },
-    );
-  },
-});
-
-export const useTxModalStagesCuratedOperator = () => {
-  return useTransactionModalStage(getTxModalStagesCuratedOperator);
+    [transitStage],
+  );
 };
