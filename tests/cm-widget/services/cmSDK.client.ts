@@ -69,6 +69,18 @@ export class LidoSDKClient extends LidoSDKCm {
     });
   }
 
+  async getOperatorMetadata(nodeOperatorId: number) {
+    return test.step(`Get operator metadata for #${nodeOperatorId}`, async () => {
+      const info = await this.metaRegistry.getOperatorInfo(
+        BigInt(nodeOperatorId),
+      );
+      return {
+        name: info?.name ?? '',
+        description: info?.description ?? '',
+      };
+    });
+  }
+
   async getAllKeys(nodeOperatorNumber: bigint) {
     return test.step(`Get all keys for node operator #${nodeOperatorNumber}`, async () => {
       const operators = await this.operator.getKeys(nodeOperatorNumber);

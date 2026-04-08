@@ -10,6 +10,7 @@ export class DashboardPage extends BasePage {
   rolesSection: RolesSection;
 
   whyModal: Locator;
+  operatorName: Locator;
   operatorGroupLink: Locator;
   editMetadataLink: Locator;
 
@@ -20,6 +21,7 @@ export class DashboardPage extends BasePage {
     this.rolesSection = new RolesSection(this.page);
 
     this.whyModal = this.page.getByTestId('whyModal');
+    this.operatorName = this.page.getByTestId('operatorName');
     this.operatorGroupLink = this.page.getByTestId('operatorGroupLink');
     this.editMetadataLink = this.page.getByTestId('editMetadataLink');
   }

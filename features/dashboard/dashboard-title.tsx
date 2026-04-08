@@ -25,7 +25,7 @@ const CmTitle: FC = () => {
 
   return (
     <>
-      <span>{metadata?.name}</span>
+      <span data-testid="operatorName">{metadata?.name}</span>
       {!metadata?.ownerEditsRestricted && (
         <InlineWrapper>
           <SecondaryLocalLink
