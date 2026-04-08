@@ -11,6 +11,7 @@ export class DashboardPage extends BasePage {
 
   whyModal: Locator;
   operatorGroupLink: Locator;
+  editMetadataLink: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -20,6 +21,7 @@ export class DashboardPage extends BasePage {
 
     this.whyModal = this.page.getByTestId('whyModal');
     this.operatorGroupLink = this.page.getByTestId('operatorGroupLink');
+    this.editMetadataLink = this.page.getByTestId('editMetadataLink');
   }
 
   async open() {

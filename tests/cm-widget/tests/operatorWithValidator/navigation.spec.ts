@@ -133,6 +133,25 @@ test.describe('Navigation. Operator with validator.', () => {
 
   test(
     qase(
+      178,
+      'Should display edit metadata button on dashboard and navigate to metadata page',
+    ),
+    async ({ widgetService }) => {
+      const { editMetadataLink } = widgetService.dashboardPage;
+
+      await test.step('Edit metadata button is visible', async () => {
+        await expect(editMetadataLink).toBeVisible();
+      });
+
+      await test.step('Navigate to metadata page on click', async () => {
+        await editMetadataLink.click();
+        await expect(widgetService.page).toHaveURL(/\/settings\/metadata/);
+      });
+    },
+  );
+
+  test(
+    qase(
       177,
       'Should display Operator Group link in dashboard subtitle and navigate to group page',
     ),

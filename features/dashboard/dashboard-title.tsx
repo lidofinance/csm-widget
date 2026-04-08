@@ -31,6 +31,7 @@ const CmTitle: FC = () => {
           <SecondaryLocalLink
             href={PATH.SETTINGS_METADATA}
             title="Edit Operator Metadata"
+            data-testid="editMetadataLink"
           >
             <Edit />
           </SecondaryLocalLink>
