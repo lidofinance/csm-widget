@@ -135,7 +135,8 @@
   "resolutions": {
     "postcss": "^8.4.31",
     "crypto-js": "^4.2.0",
-    "wrap-ansi": "7.0.0"
+    "wrap-ansi": "7.0.0",
+    "@noble/hashes": "^1.8.0"
   },
   "lint-staged": {
     "./**/*.{ts,tsx}": [
