@@ -81,6 +81,25 @@ export class LidoSDKClient extends LidoSDKCm {
     });
   }
 
+  async evmSnapshot(): Promise<string> {
+    return test.step('Take EVM snapshot', async () => {
+      const snapshotId = await this.core.publicClient.request({
+        method: 'evm_snapshot' as never,
+        params: [] as never,
+      });
+      return snapshotId as string;
+    });
+  }
+
+  async evmRevert(snapshotId: string): Promise<void> {
+    await test.step(`Revert EVM to snapshot ${snapshotId}`, async () => {
+      await this.core.publicClient.request({
+        method: 'evm_revert' as never,
+        params: [snapshotId] as never,
+      });
+    });
+  }
+
   async getAllKeys(nodeOperatorNumber: bigint) {
     return test.step(`Get all keys for node operator #${nodeOperatorNumber}`, async () => {
       const operators = await this.operator.getKeys(nodeOperatorNumber);

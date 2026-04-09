@@ -15,10 +15,10 @@ export const Info: FC = () => {
 
   return (
     <>
-      <Text size="md" weight={700} as="h4">
+      <Text size="md" weight={700} as="h4" data-testid="claimerSectionTitle">
         Rewards claimer
       </Text>
-      <Latice variant="secondary">
+      <Latice variant="secondary" data-testid="currentClaimerInfo">
         {currentClaimerAddress ? (
           <TitledAddress
             title={
@@ -31,6 +31,7 @@ export const Info: FC = () => {
                     fullwidth={false}
                     onClick={unsetHandle}
                     noDisableOnError
+                    data-testid="unsetClaimerButton"
                   >
                     Unset
                   </SubmitButtonHookForm>
