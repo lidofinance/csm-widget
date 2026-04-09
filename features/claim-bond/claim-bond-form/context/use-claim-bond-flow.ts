@@ -8,6 +8,7 @@ import {
 import { useCanPerform } from 'shared/hooks';
 import { useTxModalStagesClaimBond } from '../hooks/use-tx-modal-stages-claim-bond';
 import { useClaimBondFormData } from './claim-bond-data-provider';
+import { optionIncludesRewards, optionShowsTokenAmount } from './claim-options';
 import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
 
 export type ClaimBondFlow =
@@ -27,15 +28,20 @@ export const useClaimBondFlowResolver = (): FlowResolver<
     (input, data) => {
       if (!canClaim) return { action: 'no-access', access: claimAccess };
 
+      const includeRewards = optionIncludesRewards(input.claimOption);
+      const amount = optionShowsTokenAmount(input.claimOption)
+        ? (input.amount ?? 0n)
+        : 0n;
+
       return {
         action: 'claim' as const,
         submit: (onRetry) =>
           bondSDK.claimBond({
             nodeOperatorId: data.nodeOperatorId,
             token: input.token,
-            amount: input.amount ?? 0n,
-            proof: data.rewards?.proof,
-            shares: data.rewards?.shares,
+            amount,
+            proof: includeRewards ? data.rewards?.proof : undefined,
+            shares: includeRewards ? data.rewards?.shares : undefined,
             callback: buildCallback(input, data, onRetry),
           }),
       };

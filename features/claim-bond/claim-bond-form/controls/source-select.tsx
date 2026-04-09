@@ -1,98 +1,99 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { Checkbox } from '@lidofinance/lido-ui';
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
-import { useFrameInfo } from 'modules/web3';
-import { FC, useEffect } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import { FormTitle, RadioButton, RadioIcon, Stack } from 'shared/components';
+import { Text } from '@lidofinance/lido-ui';
+import styled from 'styled-components';
+
+import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
+import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
+
 import {
-  AmountWithPrice,
-  FormTitle,
-  Latice,
-  Stack,
-  TitledSelectableAmount,
-} from 'shared/components';
-import { formatDate, isDayInPast } from 'utils';
-import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+  ClaimBondFormInputType,
+  ClaimOption,
+  useClaimBondFormData,
+  getOptionSet,
+  getOptionMeta,
+  OptionEntry,
+} from '../context';
+
+const OptionIcon: FC<{ type: 'bond' | 'reward' }> = ({ type }) =>
+  type === 'bond' ? (
+    <SmallIcon as={BondIcon} />
+  ) : (
+    <SmallIcon as={RewardsIcon} />
+  );
 
 export const SourceSelect: FC = () => {
-  const { bond, rewards, maxValues } = useClaimBondFormData(true);
-  const { data: nextDistribution } = useFrameInfo((data) => {
-    return isDayInPast(data.nextReport)
-      ? 'soon'
-      : `on ${formatDate(data.nextReport)}`;
+  const { bond, rewards } = useClaimBondFormData(true);
+  const optionSet = getOptionSet({ bond, rewards });
+
+  const { field } = useController<ClaimBondFormInputType, 'claimOption'>({
+    name: 'claimOption',
   });
-
-  const { field } = useController<ClaimBondFormInputType, 'claimRewards'>({
-    name: 'claimRewards',
-    disabled: bond?.isInsufficient,
-  });
-
-  const { setValue } = useFormContext<ClaimBondFormInputType>();
-
-  const availableToClaim = maxValues[TOKENS.steth][Number(field.value)];
-
-  useEffect(() => {
-    if (bond?.isInsufficient) {
-      setValue('claimRewards', true);
-    }
-  }, [bond?.isInsufficient, setValue]);
-
-  const showLockedBond = !!bond?.locked;
 
   return (
     <>
-      <Stack spaceBetween data-testid="availableToClaimBalance">
-        <FormTitle>Available to claim</FormTitle>
-        <AmountWithPrice big amount={availableToClaim} token={TOKENS.steth} />
-      </Stack>
-      <Latice data-testid="sourceSelect">
-        <TitledSelectableAmount
-          title={
-            <Checkbox
-              label="Rewards"
-              {...field}
-              value=""
-              checked={!!field.value}
-              disabled={!rewards?.available}
-            />
-          }
-          help={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected ${nextDistribution}`}
-          helpIcon="calendar"
-          amount={rewards?.available}
-          token={TOKENS.steth}
-          data-testid="rewardsSource"
-        />
-        <TitledSelectableAmount
-          warning={bond?.isInsufficient}
-          title={
-            <Checkbox
-              checked
-              disabled
-              label={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
-            />
-          }
-          help={
-            bond?.isInsufficient
-              ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys'
-              : 'The bond amount available to claim without having to exit validators. Increases daily'
-          }
-          helpIcon={bond?.isInsufficient ? undefined : 'calendar'}
-          sign={bond?.isInsufficient ? 'minus' : 'plus'}
-          amount={bond?.delta}
-          token={TOKENS.steth}
-          data-testid="excessBondSource"
-        />
-        {showLockedBond && (
-          <TitledSelectableAmount
-            warning
-            title={<Checkbox checked disabled label="Locked bond" />}
-            help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
-            amount={bond?.locked}
-            token={TOKENS.eth}
-            sign="minus"
+      <FormTitle>Select claiming option</FormTitle>
+      <Stack direction="column">
+        {optionSet.options.map((entry) => (
+          <ClaimOptionRadio
+            key={entry.value}
+            entry={entry}
+            bond={bond}
+            selected={field.value}
+            onChange={field.onChange}
           />
-        )}
-      </Latice>
+        ))}
+      </Stack>
     </>
   );
 };
+
+type ClaimOptionRadioProps = {
+  entry: OptionEntry;
+  bond: Parameters<typeof getOptionMeta>[1];
+  selected: ClaimOption;
+  onChange: (value: ClaimOption) => void;
+};
+
+const ClaimOptionRadio: FC<ClaimOptionRadioProps> = ({
+  entry,
+  bond,
+  selected,
+  onChange,
+}) => {
+  const meta = getOptionMeta(entry.value, bond);
+
+  return (
+    <RadioButton
+      name="claimOption"
+      value={entry.value}
+      checked={entry.value === selected}
+      disabled={entry.disabled}
+      onChange={() => onChange(entry.value)}
+    >
+      <Stack gap="sm" center>
+        <RadioIcon />
+        <Stack direction="column" gap="xxs">
+          <Stack gap="xxs" center>
+            {meta.icons.map((icon) => (
+              <OptionIcon key={icon} type={icon} />
+            ))}
+            <Text size="xs" weight={700}>
+              {meta.label}
+            </Text>
+          </Stack>
+          <Text size="xxs" color="secondary">
+            {meta.description}
+          </Text>
+        </Stack>
+      </Stack>
+    </RadioButton>
+  );
+};
+
+const SmallIcon = styled.svg`
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+`;

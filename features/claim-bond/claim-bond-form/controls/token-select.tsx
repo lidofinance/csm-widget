@@ -15,15 +15,21 @@ import {
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
-import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import {
+  ClaimBondFormInputType,
+  useClaimBondFormData,
+  optionMaxValueIndex,
+} from '../context';
 import { useWithdrawalWaitingTime } from '../hooks/use-withdrawal-waiting-time';
 
 export const TokenSelect: React.FC = () => {
-  const [token, claimRewards] = useWatch<
+  const [token, claimOption] = useWatch<
     ClaimBondFormInputType,
-    ['token', 'claimRewards']
-  >({ name: ['token', 'claimRewards'] });
+    ['token', 'claimOption']
+  >({ name: ['token', 'claimOption'] });
   const { maxValues, isContract } = useClaimBondFormData(true);
+
+  const maxIdx = optionMaxValueIndex(claimOption);
 
   const maxEthAmount = maxValues?.[TOKENS.eth]?.[1];
   const {
@@ -51,15 +57,14 @@ export const TokenSelect: React.FC = () => {
       )}
       <TokenButtonsHookForm
         disabled={
-          !maxValues?.[TOKENS.eth][Number(claimRewards)] ||
-          (isContract && !unlockField.value)
+          !maxValues?.[TOKENS.eth][maxIdx] || (isContract && !unlockField.value)
         }
         options={{
           [TOKENS.eth]: (
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.eth}
-                amount={maxValues[TOKENS.eth][Number(claimRewards)]}
+                amount={maxValues[TOKENS.eth][maxIdx]}
               />
               <YouWillReceive
                 waitingTime={
@@ -73,7 +78,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.steth}
-                amount={maxValues[TOKENS.steth][Number(claimRewards)]}
+                amount={maxValues[TOKENS.steth][maxIdx]}
               />
               <YouWillReceive
                 waitingTime={INSTANT_WAITING_TIME}
@@ -85,7 +90,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.wsteth}
-                amount={maxValues[TOKENS.wsteth][Number(claimRewards)]}
+                amount={maxValues[TOKENS.wsteth][maxIdx]}
               />
               <YouWillReceive
                 waitingTime={INSTANT_WAITING_TIME}

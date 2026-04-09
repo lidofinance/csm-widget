@@ -15,6 +15,10 @@ import {
   useTransitStage,
 } from 'shared/transaction-modal';
 import {
+  optionIncludesRewards,
+  optionShowsTokenAmount,
+} from '../context/claim-options';
+import {
   ClaimBondFormInputType,
   ClaimBondFormNetworkData,
 } from '../context/types';
@@ -34,25 +38,30 @@ export const useTxModalStagesClaimBond = (): ((
         input: ClaimBondFormInputType,
         data: ClaimBondFormNetworkData,
         onRetry: () => void,
-      ) =>
-        buildTxCallback(
+      ) => {
+        const amount = optionShowsTokenAmount(input.claimOption)
+          ? (input.amount ?? 0n)
+          : 0n;
+        const claimRewards = optionIncludesRewards(input.claimOption);
+
+        return buildTxCallback(
           {
             ...getGeneralTransactionModalStages(transitStage),
             sign: () =>
               transitStage(
                 <TxStageClaim
-                  amount={input.amount ?? 0n}
+                  amount={amount}
                   token={input.token}
-                  claimRewards={input.claimRewards}
+                  claimRewards={claimRewards}
                   rewards={data.rewards?.available}
                 />,
               ),
             pending: (txHash) =>
               transitStage(
                 <TxStageClaim
-                  amount={input.amount ?? 0n}
+                  amount={amount}
                   token={input.token}
-                  claimRewards={input.claimRewards}
+                  claimRewards={claimRewards}
                   rewards={data.rewards?.available}
                   isPending
                   txHash={txHash}
@@ -66,11 +75,8 @@ export const useTxModalStagesClaimBond = (): ((
                     description={
                       <>
                         Request withdrawal of{' '}
-                        <TxAmount
-                          amount={input.amount ?? 0n}
-                          token={TOKENS.steth}
-                        />{' '}
-                        has been sent. Check{' '}
+                        <TxAmount amount={amount} token={TOKENS.steth} /> has
+                        been sent. Check{' '}
                         <MatomoLink
                           $inline
                           href={`${stakeWidget}/withdrawals/claim`}
@@ -117,7 +123,8 @@ export const useTxModalStagesClaimBond = (): ((
               ),
           },
           onRetry,
-        ),
+        );
+      },
     [transitStage],
   );
 };

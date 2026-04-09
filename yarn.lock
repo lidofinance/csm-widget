@@ -3205,10 +3205,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.47.0.tgz#186d6e2695c9470cc171d111dac352da5106e681"
   integrity sha512-dF8eUUnK35CNCVa3Z++INtlxlRlYKGx2//eLz7nyFkqwPoOGI0PmVW0qgGiGY9TrGAqkJuXlERszclH8eunYCw==
 
-"@lidofinance/lido-csm-sdk@^2.0.0-alpha.37":
-  version "2.0.0-alpha.37"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.0.0-alpha.37.tgz#5bc3d4cc5305edce759825d7c9bd0ef7d5a29f8f"
-  integrity sha512-26u+pDUKKT9nVAzrJk+gJAqMM2HKbOsbMTrJfrS9lI5Cw8R2/nulM3fRfx4i5A1qz/2NkrC6qt/n7x3sDavyHw==
+"@lidofinance/lido-csm-sdk@^2.0.0-alpha.38":
+  version "2.0.0-alpha.38"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.0.0-alpha.38.tgz#e0c40e7cc68c7989aff354698e889b832090b49c"
+  integrity sha512-R6WXmkzlVZmFwn/d9MXKjwC8Vj4q2xIluQ+nvHH9QC7UbQDu3gC8mP7qvwIDv0qJIQa2enfCJmlWzeRZE7yTUA==
   dependencies:
     "@chainsafe/ssz" "^1.3.0"
     "@lidofinance/lido-ethereum-sdk" "^4.7.0"
@@ -11154,10 +11154,10 @@ ox@0.12.4:
     abitype "^1.2.3"
     eventemitter3 "5.0.1"
 
-ox@0.14.7:
-  version "0.14.7"
-  resolved "https://registry.yarnpkg.com/ox/-/ox-0.14.7.tgz#efe6770f7a138f823fb2df26001b679c2565b0a4"
-  integrity sha512-zSQ/cfBdolj7U4++NAvH7sI+VG0T3pEohITCgcQj8KlawvTDY4vGVhDT64Atsm0d6adWfIYHDpu88iUBMMp+AQ==
+ox@0.14.13:
+  version "0.14.13"
+  resolved "https://registry.yarnpkg.com/ox/-/ox-0.14.13.tgz#8329bf0b67ab13c8148eb3a4ac8d43a8d5b4d5fc"
+  integrity sha512-N3slDyEUq3qGw/53Xd8YZPZD7NUbbiOJDeWKvQ1ElNo2mFjjz6cV2TIbGenHw7k5ATcefDQh42dwUWoGtxU9Hg==
   dependencies:
     "@adraffy/ens-normalize" "^1.11.0"
     "@noble/ciphers" "^1.3.0"
@@ -13553,9 +13553,9 @@ viem@^2.28.4:
     ws "8.18.2"
 
 viem@^2.46.2:
-  version "2.47.6"
-  resolved "https://registry.yarnpkg.com/viem/-/viem-2.47.6.tgz#0249c166d5e0555074ffd3d320f2be2057551796"
-  integrity sha512-zExmbI99NGvMdYa7fmqSTLgkwh48dmhgEqFrUgkpL4kfG4XkVefZ8dZqIKVUhZo6Uhf0FrrEXOsHm9LUyIvI2Q==
+  version "2.47.11"
+  resolved "https://registry.yarnpkg.com/viem/-/viem-2.47.11.tgz#5f8fce4d6325304e63cf7c7a55866df5af486e71"
+  integrity sha512-UbEKBW11wKI+TkGMl3ONPvFYN2tV0Srhtm6Bbvct/cirhBRNfv0hB3S1Pnn/zIl+U0RvNEm+yRXEOQVIr8rK+g==
   dependencies:
     "@noble/curves" "1.9.1"
     "@noble/hashes" "1.8.0"
@@ -13563,7 +13563,7 @@ viem@^2.46.2:
     "@scure/bip39" "1.6.0"
     abitype "1.2.3"
     isows "1.0.7"
-    ox "0.14.7"
+    ox "0.14.13"
     ws "8.18.3"
 
 wagmi@3.4.1:
