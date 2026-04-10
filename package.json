@@ -10,6 +10,7 @@
     "build:analyze": "ANALYZE_BUNDLE=true next build",
     "start": "NODE_OPTIONS='-r next-logger' next start",
     "lint": "eslint --ext ts,tsx,js,mjs .",
+    "lint:test": "eslint --ext ts,tsx,js,mjs --ignore-pattern '!tests/' tests/",
     "lint:fix": "yarn lint --fix",
     "types": "tsc --noEmit",
     "postinstall": "husky install || true",
