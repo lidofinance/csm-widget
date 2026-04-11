@@ -4,10 +4,9 @@ import { handleTxError } from 'shared/transaction-modal';
 import { type FormSubmitter } from './types';
 
 // Intersection type for flow variants that can execute a transaction
-// submit receives onRetry and builds the TransactionCallback internally
 export type Executable = {
   confirm?: () => Promise<boolean>;
-  submit: (onRetry: () => void) => Promise<unknown>;
+  submit: () => Promise<unknown>;
   onError?: () => void;
 };
 
@@ -23,21 +22,23 @@ export const isExecutable = <T extends { action: string }>(
 ): flow is T & Executable =>
   'submit' in flow && typeof (flow as any).submit === 'function';
 
+import { setFormRetry } from './form-retry';
+
 // Generic submit: resolve → check → submit → confirm
-// For forms WITHOUT side effects. Forms with cache/navigation/state use the pattern manually.
 export const useFlowSubmit = <F extends FieldValues, C extends object>(
   resolve: FlowResolver<F, C, { action: string }>,
 ): FormSubmitter<F, C> =>
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useCallback(
     async (input, data, { onConfirm, onRetry }) => {
+      setFormRetry(onRetry);
       const flow = resolve(input, data);
       if (!isExecutable(flow)) return false;
 
       if (flow.confirm && !(await flow.confirm())) return false;
 
       try {
-        await flow.submit(onRetry);
+        await flow.submit();
         await onConfirm?.();
         return true;
       } catch (error) {

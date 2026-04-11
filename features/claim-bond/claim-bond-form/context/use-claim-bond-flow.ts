@@ -35,14 +35,14 @@ export const useClaimBondFlowResolver = (): FlowResolver<
 
       return {
         action: 'claim' as const,
-        submit: (onRetry) =>
+        submit: () =>
           bondSDK.claimBond({
             nodeOperatorId: data.nodeOperatorId,
             token: input.token,
             amount,
             proof: includeRewards ? data.rewards?.proof : undefined,
             shares: includeRewards ? data.rewards?.shares : undefined,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           }),
       };
     },

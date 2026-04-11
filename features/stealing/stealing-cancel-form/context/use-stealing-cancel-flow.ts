@@ -24,7 +24,7 @@ export const useStealingCancelFlowResolver = (): FlowResolver<
   return useCallback(
     (input, data) => ({
       action: 'cancel' as const,
-      submit: (onRetry) => {
+      submit: () => {
         invariant(input.amount !== undefined, 'Amount is not defined');
         invariant(
           input.nodeOperatorId !== undefined,
@@ -34,7 +34,7 @@ export const useStealingCancelFlowResolver = (): FlowResolver<
         return stealing.cancel({
           nodeOperatorId: input.nodeOperatorId,
           amount: input.amount,
-          callback: buildCallback(input, data, onRetry),
+          callback: buildCallback(input, data),
         });
       },
     }),

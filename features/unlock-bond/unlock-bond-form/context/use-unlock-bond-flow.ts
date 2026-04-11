@@ -48,19 +48,19 @@ export const useUnlockBondFlowResolver = (): FlowResolver<
       if (data.isExpired)
         return {
           action: 'unlock-expired' as const,
-          submit: (onRetry) =>
+          submit: () =>
             bondSDK.unlockExpiredLock({
               nodeOperatorId: data.nodeOperatorId,
-              callback: buildUnlockExpiredCallback(input, data, onRetry),
+              callback: buildUnlockExpiredCallback(input, data),
             }),
         };
 
       return {
         action: 'compensate' as const,
-        submit: (onRetry) =>
+        submit: () =>
           bondSDK.compensateLockedBond({
             nodeOperatorId: data.nodeOperatorId,
-            callback: buildCompensateCallback(input, data, onRetry),
+            callback: buildCompensateCallback(input, data),
           }),
       };
     },

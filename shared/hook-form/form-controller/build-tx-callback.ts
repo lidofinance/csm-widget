@@ -3,23 +3,28 @@ import {
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
 
+// Factory type: hook returns a function that builds a TransactionCallback from form input+data
+export type TxModalStagesFactory<I, D, R = undefined> = (
+  input: I,
+  data: D,
+) => TransactionCallback<R>;
+
 // Stage handlers with no input/data params — they close over those via the factory
 export type FlowStages<TResult = undefined> = {
   sign(): void;
   pending(txHash?: string): void;
   success(result: TResult, txHash?: string): void;
   successMultisig(): void;
-  failed(error: unknown, onRetry?: () => void): void;
+  failed(error: unknown): void;
   signPermit?(): void;
   signApproval?(amount: bigint, token: unknown): void;
   pendingApproval?(amount: bigint, token: unknown, txHash?: string): void;
 };
 
-// Pure function: stages + onRetry → TransactionCallback
+// Pure function: stages → TransactionCallback
 export const buildTxCallback =
   <TResult = undefined>(
     stages: FlowStages<TResult>,
-    onRetry: () => void,
   ): TransactionCallback<TResult> =>
   async ({ stage, payload }) => {
     switch (stage) {
@@ -36,7 +41,7 @@ export const buildTxCallback =
         stages.successMultisig();
         break;
       case TransactionCallbackStage.ERROR:
-        stages.failed(payload.error, onRetry);
+        stages.failed(payload.error);
         break;
       case TransactionCallbackStage.PERMIT_SIGN:
         stages.signPermit?.();

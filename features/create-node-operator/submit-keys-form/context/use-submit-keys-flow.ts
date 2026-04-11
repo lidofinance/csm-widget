@@ -56,13 +56,13 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             rewardsAddress,
             extendedManagerPermissions,
           }),
-        submit: async (onRetry) => {
+        submit: async () => {
           invariant(amount !== undefined, 'BondAmount is not defined');
 
           const pubkeys = depositData.map(({ pubkey }) => pubkey);
           addCachePubkeys(pubkeys);
 
-          const callback = buildCallback(input, data, onRetry);
+          const callback = buildCallback(input, data);
 
           const params = {
             token,

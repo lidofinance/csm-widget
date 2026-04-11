@@ -27,7 +27,7 @@ export const useClaimerFlowResolver = (): FlowResolver<
 
       return {
         action: 'set-claimer' as const,
-        submit: (onRetry) => {
+        submit: () => {
           const claimerAddress = input.isUnset
             ? zeroAddress
             : (input.address ?? zeroAddress);
@@ -35,7 +35,7 @@ export const useClaimerFlowResolver = (): FlowResolver<
           return sdk.roles.setCustomRewardsClaimer({
             nodeOperatorId: data.nodeOperatorId,
             claimerAddress,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           });
         },
       };

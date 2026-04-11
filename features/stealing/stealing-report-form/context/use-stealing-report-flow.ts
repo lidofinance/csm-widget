@@ -25,7 +25,7 @@ export const useStealingReportFlowResolver = (): FlowResolver<
   return useCallback(
     (input, data) => ({
       action: 'report' as const,
-      submit: (onRetry) => {
+      submit: () => {
         invariant(input.amount !== undefined, 'Amount is not defined');
         invariant(
           input.nodeOperatorId !== undefined,
@@ -38,7 +38,7 @@ export const useStealingReportFlowResolver = (): FlowResolver<
           amount: input.amount,
           penaltyType: input.penaltyType,
           details: input.details || '',
-          callback: buildCallback(input, data, onRetry),
+          callback: buildCallback(input, data),
         });
       },
     }),

@@ -44,7 +44,7 @@ export const useSplitsFlowResolver = (): FlowResolver<
           assertFeeSplits(input.feeSplits);
           return confirmSplits({ feeSplits: input.feeSplits });
         },
-        submit: (onRetry) => {
+        submit: () => {
           assertFeeSplits(input.feeSplits);
           invariant(
             data.rewards,
@@ -57,7 +57,7 @@ export const useSplitsFlowResolver = (): FlowResolver<
             feeSplits: input.feeSplits,
             shares,
             proof,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           });
         },
       };

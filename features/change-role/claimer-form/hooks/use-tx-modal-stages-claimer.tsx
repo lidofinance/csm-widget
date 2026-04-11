@@ -1,14 +1,10 @@
-import { type TransactionCallback } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
-import { useMemo } from 'react';
 import { Address as AddressComponent } from 'shared/components';
-import { buildTxCallback } from 'shared/hook-form/form-controller';
 import {
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
-  getGeneralTransactionModalStages,
-  useTransitStage,
+  useTxStages,
 } from 'shared/transaction-modal';
 import { zeroAddress } from 'viem';
 import { ClaimerFormInputType, ClaimerFormNetworkData } from '../context/types';
@@ -55,36 +51,18 @@ const getTexts = (input: ClaimerFormInputType) => {
       };
 };
 
-export const useTxModalStagesClaimer = (): ((
-  input: ClaimerFormInputType,
-  data: ClaimerFormNetworkData,
-  onRetry: () => void,
-) => TransactionCallback) => {
-  const transitStage = useTransitStage();
-
-  return useMemo(
-    () =>
-      (
-        input: ClaimerFormInputType,
-        _data: ClaimerFormNetworkData,
-        onRetry: () => void,
-      ) =>
-        buildTxCallback(
-          {
-            ...getGeneralTransactionModalStages(transitStage),
-            sign: () => transitStage(<TxStageSign {...getTexts(input).sign} />),
-            pending: (txHash) =>
-              transitStage(
-                <TxStagePending {...getTexts(input).sign} txHash={txHash} />,
-              ),
-            success: (_result: undefined, txHash) =>
-              transitStage(
-                <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
-                { isClosableOnLedger: true },
-              ),
-          },
-          onRetry,
+export const useTxModalStagesClaimer = () =>
+  useTxStages<ClaimerFormInputType, ClaimerFormNetworkData>(
+    (transitStage, input) => ({
+      sign: () => transitStage(<TxStageSign {...getTexts(input).sign} />),
+      pending: (txHash) =>
+        transitStage(
+          <TxStagePending {...getTexts(input).sign} txHash={txHash} />,
         ),
-    [transitStage],
+      success: (_result: undefined, txHash) =>
+        transitStage(
+          <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
+          { isClosableOnLedger: true },
+        ),
+    }),
   );
-};

@@ -36,7 +36,7 @@ export const useAddKeysFlowResolver = (): FlowResolver<
 
       return {
         action: 'add-keys' as const,
-        submit: async (onRetry) => {
+        submit: async () => {
           invariant(amount !== undefined, 'BondAmount is not defined');
 
           const pubkeys = depositData.map(({ pubkey }) => pubkey);
@@ -47,7 +47,7 @@ export const useAddKeysFlowResolver = (): FlowResolver<
             token,
             amount,
             depositData,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           });
 
           void n(PATH.KEYS_VIEW);

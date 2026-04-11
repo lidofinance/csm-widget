@@ -47,14 +47,14 @@ export const useEjectKeysFlowResolver = (): FlowResolver<
 
           return confirmEject({});
         },
-        submit: (onRetry) => {
+        submit: () => {
           invariant(input.feeAmount !== undefined, 'Fee amount is required');
 
           return keysSDK.ejectKeys({
             nodeOperatorId: data.nodeOperatorId,
             keyIndices: input.selection.map(BigInt),
             amount: input.feeAmount,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           });
         },
       };

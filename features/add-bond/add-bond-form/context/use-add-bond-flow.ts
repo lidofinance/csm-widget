@@ -32,7 +32,7 @@ export const useAddBondFlowResolver = (): FlowResolver<
 
       return {
         action: 'add-bond' as const,
-        submit: (onRetry) => {
+        submit: () => {
           invariant(
             input.bondAmount !== undefined,
             'BondAmount is not defined',
@@ -41,7 +41,7 @@ export const useAddBondFlowResolver = (): FlowResolver<
             nodeOperatorId: data.nodeOperatorId,
             token: input.token,
             amount: input.bondAmount,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           });
         },
       };

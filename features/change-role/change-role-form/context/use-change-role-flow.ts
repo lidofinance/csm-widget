@@ -62,12 +62,12 @@ export const useChangeRoleFlowResolver = (
           }
           return true;
         },
-        submit: async (onRetry) => {
+        submit: async () => {
           const address = input.isRevoke
             ? zeroAddress
             : (input.address ?? zeroAddress);
 
-          const callback = buildCallback(input, data, onRetry);
+          const callback = buildCallback(input, data);
 
           const params = {
             address,

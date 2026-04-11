@@ -1,12 +1,8 @@
-import { type TransactionCallback } from '@lidofinance/lido-csm-sdk';
-import { useMemo } from 'react';
-import { buildTxCallback } from 'shared/hook-form/form-controller';
 import {
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
-  getGeneralTransactionModalStages,
-  useTransitStage,
+  useTxStages,
 } from 'shared/transaction-modal';
 import { SplitsFormInputType, SplitsFormNetworkData } from '../context/types';
 
@@ -33,36 +29,18 @@ const getTexts = (input: SplitsFormInputType) =>
         },
       };
 
-export const useTxModalStagesSplits = (): ((
-  input: SplitsFormInputType,
-  data: SplitsFormNetworkData,
-  onRetry: () => void,
-) => TransactionCallback) => {
-  const transitStage = useTransitStage();
-
-  return useMemo(
-    () =>
-      (
-        input: SplitsFormInputType,
-        _data: SplitsFormNetworkData,
-        onRetry: () => void,
-      ) =>
-        buildTxCallback(
-          {
-            ...getGeneralTransactionModalStages(transitStage),
-            sign: () => transitStage(<TxStageSign {...getTexts(input).sign} />),
-            pending: (txHash) =>
-              transitStage(
-                <TxStagePending {...getTexts(input).sign} txHash={txHash} />,
-              ),
-            success: (_result: undefined, txHash) =>
-              transitStage(
-                <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
-                { isClosableOnLedger: true },
-              ),
-          },
-          onRetry,
+export const useTxModalStagesSplits = () =>
+  useTxStages<SplitsFormInputType, SplitsFormNetworkData>(
+    (transitStage, input) => ({
+      sign: () => transitStage(<TxStageSign {...getTexts(input).sign} />),
+      pending: (txHash) =>
+        transitStage(
+          <TxStagePending {...getTexts(input).sign} txHash={txHash} />,
         ),
-    [transitStage],
+      success: (_result: undefined, txHash) =>
+        transitStage(
+          <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
+          { isClosableOnLedger: true },
+        ),
+    }),
   );
-};

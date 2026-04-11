@@ -28,7 +28,7 @@ export const useModalStages = () => {
           />,
         ),
 
-      failed: (error: unknown, onRetry?: () => void) => {
+      failed: (error: unknown) => {
         let errorContent;
 
         if (typeof error === 'object' && error !== null && 'details' in error) {
@@ -55,8 +55,8 @@ export const useModalStages = () => {
             title="Submission failed"
             error={errorContent}
             code={getErrorCode(error)}
-            onRetry={onRetry}
           />,
+          { isClosableOnLedger: true },
         );
       },
     }),

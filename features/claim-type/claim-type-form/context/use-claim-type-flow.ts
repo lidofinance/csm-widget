@@ -45,13 +45,13 @@ export const useClaimTypeFlowResolver = (): FlowResolver<
       return {
         action: 'claim' as const,
         confirm: () => confirmClaimtype({}),
-        submit: async (onRetry) => {
+        submit: async () => {
           invariant(data.proof.proof, 'Proof is not defined');
 
           await sdk.icsGate.claimCurve({
             nodeOperatorId: data.nodeOperatorId,
             proof: data.proof.proof,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           });
 
           window.scrollTo({ top: 0 });

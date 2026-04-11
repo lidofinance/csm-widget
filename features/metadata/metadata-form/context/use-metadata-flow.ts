@@ -36,12 +36,12 @@ export const useMetadataFlowResolver = (): FlowResolver<
 
       return {
         action: 'update' as const,
-        submit: (onRetry) =>
+        submit: () =>
           sdk.metaRegistry.setOperatorInfo({
             nodeOperatorId: data.nodeOperatorId,
             name: input.name,
             description: input.description,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           }),
       };
     },

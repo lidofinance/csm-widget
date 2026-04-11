@@ -37,7 +37,7 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
 
       return {
         action: 'create-operator' as const,
-        submit: async (onRetry) => {
+        submit: async () => {
           invariant(sdk, 'CM SDK not initialized');
           invariant(input.gateIndex !== undefined, 'Gate not selected');
           invariant(input.rewardAddress, 'Rewards Address required');
@@ -56,7 +56,7 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
             managerAddress: input.managerAddress,
             rewardAddress: input.rewardAddress,
             proof: selectedGate.proof,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           });
 
           if (result) {

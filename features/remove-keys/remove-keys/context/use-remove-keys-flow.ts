@@ -32,14 +32,14 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
 
       return {
         action: 'remove' as const,
-        submit: async (onRetry) => {
+        submit: async () => {
           const result = await keysSDK.removeKeys({
             nodeOperatorId: data.nodeOperatorId,
             startIndex: BigInt(
               data.info.totalDepositedKeys + input.selection.start,
             ),
             keysCount: BigInt(input.selection.count),
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           });
           void removeCachePubkeys(
             data.keys

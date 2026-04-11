@@ -35,7 +35,7 @@ export const useApplyFlowResolver = (): FlowResolver<
   return useCallback(
     (input, data) => ({
       action: 'submit' as const,
-      submit: async (onRetry) => {
+      submit: async () => {
         const apiPayload = transformFormDataToApiPayload(input, data);
 
         try {
@@ -61,10 +61,7 @@ export const useApplyFlowResolver = (): FlowResolver<
           }
 
           window.scrollTo({ top: 0 });
-          stages.failed(
-            { message: errorMessage, details: errorDetails },
-            onRetry,
-          );
+          stages.failed({ message: errorMessage, details: errorDetails });
           throw error;
         }
       },

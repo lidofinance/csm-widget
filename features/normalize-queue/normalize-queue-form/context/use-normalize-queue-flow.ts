@@ -36,10 +36,10 @@ export const useNormalizeQueueFlowResolver = (): FlowResolver<
 
       return {
         action: 'normalize' as const,
-        submit: (onRetry) =>
+        submit: () =>
           sdk.depositQueue.normalize({
             nodeOperatorId: data.nodeOperatorId,
-            callback: buildCallback(input, data, onRetry),
+            callback: buildCallback(input, data),
           }),
       };
     },
