@@ -13,6 +13,7 @@ import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
 
 export type ClaimBondFlow =
   | { action: 'no-access'; access: MethodAccess }
+  | { action: 'nothing' }
   | ({ action: 'claim' } & Executable);
 
 export const useClaimBondFlowResolver = (): FlowResolver<
@@ -27,6 +28,13 @@ export const useClaimBondFlowResolver = (): FlowResolver<
   return useCallback(
     (input, data) => {
       if (!canClaim) return { action: 'no-access', access: claimAccess };
+
+      if (
+        data?.rewards.available === 0n &&
+        !data?.bond.isInsufficient &&
+        data?.bond.delta === 0n
+      )
+        return { action: 'nothing' };
 
       const includeRewards = optionIncludesRewards(input.claimOption);
       const amount = optionShowsTokenAmount(input.claimOption)

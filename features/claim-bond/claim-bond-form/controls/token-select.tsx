@@ -19,6 +19,7 @@ import {
   ClaimBondFormInputType,
   useClaimBondFormData,
   optionMaxValueIndex,
+  optionShowsTokenAmount,
 } from '../context';
 import { useWithdrawalWaitingTime } from '../hooks/use-withdrawal-waiting-time';
 
@@ -43,6 +44,9 @@ export const TokenSelect: React.FC = () => {
   >({
     name: 'unlockedClaimTokens',
   });
+
+  const showTokenAmount = optionShowsTokenAmount(claimOption);
+  if (!showTokenAmount) return null;
 
   return (
     <>

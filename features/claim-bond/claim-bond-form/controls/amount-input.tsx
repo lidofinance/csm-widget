@@ -7,6 +7,7 @@ import {
   ClaimBondFormInputType,
   useClaimBondFormData,
   optionMaxValueIndex,
+  optionShowsTokenAmount,
 } from '../context';
 import { useInsufficientBondCoverAmount } from '../hooks/use-insufficient-bond-cover-amount';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
@@ -27,6 +28,9 @@ export const AmountInput: React.FC = () => {
     coverInsufficientAmount && rewards.available > coverInsufficientAmount
       ? rewards.available - coverInsufficientAmount
       : undefined;
+
+  const showTokenAmount = optionShowsTokenAmount(claimOption);
+  if (!showTokenAmount) return null;
 
   return (
     <>

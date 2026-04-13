@@ -7,10 +7,7 @@ export const useClaimBondDefaultValues = () => {
   return useFormDefaultValues<ClaimBondFormInputType, ClaimBondFormNetworkData>(
     (data) => ({
       token: data.isContract ? TOKENS.wsteth : TOKENS.steth,
-      claimOption: getOptionSet({
-        bond: data.bond,
-        rewards: data.rewards,
-      }).defaultOption,
+      claimOption: getOptionSet(data).defaultOption,
       unlockedClaimTokens: false,
     }),
   );

@@ -34,7 +34,7 @@ export const SourceSelect: FC = () => {
   return (
     <>
       <FormTitle>Select claiming option</FormTitle>
-      <Stack direction="column">
+      <Stack direction="column" gap="ms">
         {optionSet.options.map((entry) => (
           <ClaimOptionRadio
             key={entry.value}
@@ -75,10 +75,12 @@ const ClaimOptionRadio: FC<ClaimOptionRadioProps> = ({
       <Stack gap="sm" center>
         <RadioIcon />
         <Stack direction="column" gap="xxs">
-          <Stack gap="xxs" center>
-            {meta.icons.map((icon) => (
-              <OptionIcon key={icon} type={icon} />
-            ))}
+          <Stack gap="xs" center>
+            <Stack gap="none" center>
+              {meta.icons.map((icon) => (
+                <OptionIcon key={icon} type={icon} />
+              ))}
+            </Stack>
             <Text size="xs" weight={700}>
               {meta.label}
             </Text>
@@ -93,7 +95,7 @@ const ClaimOptionRadio: FC<ClaimOptionRadioProps> = ({
 };
 
 const SmallIcon = styled.svg`
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   flex: 0 0 auto;
 `;

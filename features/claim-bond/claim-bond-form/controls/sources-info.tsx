@@ -1,14 +1,13 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
-import { useFrameInfo } from 'modules/web3';
+import { getNextDistribution, useFrameInfo } from 'modules/web3';
 import { FC, Fragment, ReactNode } from 'react';
 import { useFormState } from 'react-hook-form';
 import { Block, Grid, IconTooltip, Stack } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import { useShowRule } from 'shared/hooks';
 import styled from 'styled-components';
-import { formatDate, isDayInPast } from 'utils';
 import { useClaimBondFormData } from '../context';
 
 import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
@@ -61,9 +60,7 @@ const useBondNegativeMetadata = () => {
 export const SourcesInfo: FC = () => {
   const { isLoading } = useFormState();
   const { bond, rewards } = useClaimBondFormData();
-  const { data: nextDistribution } = useFrameInfo((data) =>
-    isDayInPast(data.nextReport) ? 'soon' : `on ${formatDate(data.nextReport)}`,
-  );
+  const { data: nextDistribution } = useFrameInfo(getNextDistribution);
   const bondNegativeMetadata = useBondNegativeMetadata();
 
   const negative = bond ? NEGATIVE_FIELDS.filter((field) => bond[field]) : [];

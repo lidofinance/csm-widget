@@ -28,6 +28,7 @@ export type ClaimBondFormInputType = {
   unlockedClaimTokens: boolean;
 };
 
+// TODO: splitters
 export type ClaimBondFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   bond: BondBalance;
