@@ -43,6 +43,7 @@ const useChangeRoleFormNetworkData: NetworkData<
       : info?.proposedManagerAddress;
 
   const mode = useChangeRoleMode(role);
+  const canEdit = mode !== 'view';
   const extendedManagerPermissions = info?.extendedManagerPermissions;
 
   return {
@@ -52,7 +53,7 @@ const useChangeRoleFormNetworkData: NetworkData<
       currentAddress,
       proposedAddress,
       nodeOperatorId,
-      mode,
+      canEdit,
       extendedManagerPermissions,
     } as ChangeRoleFormNetworkData,
     isPending: isInfoLoading,

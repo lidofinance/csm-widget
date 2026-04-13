@@ -22,6 +22,7 @@ const variants: { [key in KEY_STATUS]?: Variants } = {
   [KEY_STATUS.INVALID]: 'error',
 
   [KEY_STATUS.UNBONDED]: 'error',
+  [KEY_STATUS.TRIGGERED_EJECTION]: 'secondary',
   [KEY_STATUS.EXIT_REQUESTED]: 'warning',
   [KEY_STATUS.SLASHED]: 'secondary',
 };
@@ -40,6 +41,7 @@ export const StatusTitle: { [key in KEY_STATUS]?: string } = {
   [KEY_STATUS.INVALID]: 'Invalid',
 
   [KEY_STATUS.UNBONDED]: 'Unbonded',
+  [KEY_STATUS.TRIGGERED_EJECTION]: 'Exit initiated',
   [KEY_STATUS.EXIT_REQUESTED]: 'Exit requested',
   [KEY_STATUS.SLASHED]: 'Slashed',
 

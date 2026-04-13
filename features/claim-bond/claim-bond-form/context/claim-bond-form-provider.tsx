@@ -1,10 +1,13 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import {
+  FormControllerProvider,
+  useFlowSubmit,
+} from 'shared/hook-form/form-controller';
 import { ClaimBondUpdater } from './claim-bond-updater';
 import { type ClaimBondFormInputType } from './types';
+import { useClaimBondFlowResolver } from './use-claim-bond-flow';
 import { useClaimBondDefaultValues } from './use-claim-bond-default-values';
-import { useClaimBondSubmit } from './use-claim-bond-submit';
 import { useClaimBondValidation } from './use-claim-bond-validation';
 
 export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -17,7 +20,7 @@ export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useClaimBondSubmit();
+  const submitter = useFlowSubmit(useClaimBondFlowResolver());
 
   return (
     <FormProvider {...formObject}>

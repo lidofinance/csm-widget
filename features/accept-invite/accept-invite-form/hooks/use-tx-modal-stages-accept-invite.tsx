@@ -1,71 +1,71 @@
-import { NodeOperatorInvite } from '@lidofinance/lido-csm-sdk';
+import { type NodeOperatorShortInfo } from '@lidofinance/lido-csm-sdk';
 import { ROLES_METADATA } from 'consts/roles';
 import { Address } from 'shared/components';
 import { DescriptorId } from 'shared/node-operator';
 import {
-  TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
-  getGeneralTransactionModalStages,
-  useTransactionModalStage,
+  useTxStages,
 } from 'shared/transaction-modal';
+import invariant from 'tiny-invariant';
+import {
+  AcceptInviteFormInputType,
+  AcceptInviteFormNetworkData,
+} from '../context/types';
 
-const getTxModalStagesAcceptInvite = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
+export const useTxModalStagesAcceptInvite = () =>
+  useTxStages<
+    AcceptInviteFormInputType,
+    AcceptInviteFormNetworkData,
+    NodeOperatorShortInfo
+  >((transitStage, input, data) => {
+    invariant(input.invite, 'Invite is required');
+    const invite = input.invite;
 
-  sign: ({ id, role }: NodeOperatorInvite) =>
-    transitStage(
-      <TxStageSign
-        title={`You are accepting address change`}
-        description={
-          <>
-            <DescriptorId id={id} /> &mdash; <b>{ROLES_METADATA[role].title}</b>{' '}
-            address
-          </>
-        }
-      />,
-    ),
-
-  pending: ({ id, role }: NodeOperatorInvite, txHash?: string) =>
-    transitStage(
-      <TxStagePending
-        title={`You are accepting address change`}
-        description={
-          <>
-            <DescriptorId id={id} /> &mdash; <b>{ROLES_METADATA[role].title}</b>{' '}
-            address
-          </>
-        }
-        txHash={txHash}
-      />,
-    ),
-
-  success: (
-    { id, role, address }: NodeOperatorInvite & { address: string },
-    txHash?: string,
-  ) =>
-    transitStage(
-      <TxStageSuccess
-        txHash={txHash}
-        title={<>Address change has been accepted</>}
-        description={
-          <>
-            {ROLES_METADATA[role].capitalizedTitle} address of{' '}
-            <DescriptorId id={id} /> is
-            <br />
-            <Address address={address} symbols={0} />
-          </>
-        }
-      />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-});
-
-export const useTxModalStagesAcceptInvite = () => {
-  return useTransactionModalStage(getTxModalStagesAcceptInvite);
-};
+    return {
+      sign: () =>
+        transitStage(
+          <TxStageSign
+            title="You are accepting address change"
+            description={
+              <>
+                <DescriptorId id={invite.id} /> &mdash;{' '}
+                <b>{ROLES_METADATA[invite.role].title}</b> address
+              </>
+            }
+          />,
+        ),
+      pending: (txHash) =>
+        transitStage(
+          <TxStagePending
+            title="You are accepting address change"
+            description={
+              <>
+                <DescriptorId id={invite.id} /> &mdash;{' '}
+                <b>{ROLES_METADATA[invite.role].title}</b> address
+              </>
+            }
+            txHash={txHash}
+          />,
+        ),
+      success: (_result, txHash) =>
+        transitStage(
+          <TxStageSuccess
+            txHash={txHash}
+            title={<>Address change has been accepted</>}
+            description={
+              <>
+                {ROLES_METADATA[invite.role].capitalizedTitle} address of{' '}
+                <DescriptorId id={invite.id} /> is
+                <br />
+                <Address address={data.address} symbols={0} />
+              </>
+            }
+          />,
+          {
+            isClosableOnLedger: true,
+          },
+        ),
+    };
+  });

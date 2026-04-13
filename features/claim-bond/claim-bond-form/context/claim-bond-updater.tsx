@@ -5,10 +5,10 @@ import { ClaimBondFormInputType } from './types';
 import { useClaimBondFormData } from './claim-bond-data-provider';
 
 export const ClaimBondUpdater: FC = () => {
-  const [token, claimRewards, unlockedClaimTokens] = useWatch<
+  const [token, claimOption, unlockedClaimTokens] = useWatch<
     ClaimBondFormInputType,
-    ['token', 'claimRewards', 'unlockedClaimTokens']
-  >({ name: ['token', 'claimRewards', 'unlockedClaimTokens'] });
+    ['token', 'claimOption', 'unlockedClaimTokens']
+  >({ name: ['token', 'claimOption', 'unlockedClaimTokens'] });
 
   const { trigger, setValue } = useFormContext<ClaimBondFormInputType>();
   const { isContract } = useClaimBondFormData();
@@ -17,7 +17,7 @@ export const ClaimBondUpdater: FC = () => {
     void trigger('amount');
     // trigger is stable ref and shouldn't be in deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token, claimRewards]);
+  }, [token, claimOption]);
 
   useEffect(() => {
     if (!unlockedClaimTokens && isContract) {

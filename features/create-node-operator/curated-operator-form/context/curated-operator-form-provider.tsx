@@ -1,9 +1,12 @@
 import { type FC, type PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import {
+  FormControllerProvider,
+  useFlowSubmit,
+} from 'shared/hook-form/form-controller';
 import { type CuratedOperatorFormInputType } from './types';
+import { useCuratedOperatorFlowResolver } from './use-curated-operator-flow';
 import { useCuratedOperatorDefaultValues } from './use-curated-operator-default-values';
-import { useCuratedOperatorSubmit } from './use-curated-operator-submit';
 import { useCuratedOperatorValidation } from './use-curated-operator-validation';
 
 export const CuratedOperatorFormProvider: FC<PropsWithChildren> = ({
@@ -18,7 +21,7 @@ export const CuratedOperatorFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const submitter = useCuratedOperatorSubmit();
+  const submitter = useFlowSubmit(useCuratedOperatorFlowResolver());
 
   return (
     <FormProvider {...formObject}>

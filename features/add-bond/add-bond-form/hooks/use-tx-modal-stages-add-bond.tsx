@@ -1,60 +1,45 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { type AddBondResult, TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
-  TransactionModalTransitStage,
   TxStageOperationSucceedBalanceShown,
   TxStageSignOperationAmount,
-  getGeneralTransactionModalStages,
-  useTransactionModalStage,
+  useTxStages,
 } from 'shared/transaction-modal';
+import { AddBondFormInputType, AddBondFormNetworkData } from '../context/types';
 
 const STAGE_OPERATION_ARGS = {
   operationText: 'Adding Bond',
 };
 
-type Props = {
-  amount: bigint;
-  token: TOKENS;
-};
-
-const getTxModalStagesAddBond = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
-
-  sign: ({ amount, token }: Props) =>
-    transitStage(
-      <TxStageSignOperationAmount
-        {...STAGE_OPERATION_ARGS}
-        amount={amount}
-        token={token}
-      />,
-    ),
-
-  pending: ({ amount, token }: Props, txHash?: string) =>
-    transitStage(
-      <TxStageSignOperationAmount
-        {...STAGE_OPERATION_ARGS}
-        amount={amount}
-        token={token}
-        isPending
-        txHash={txHash}
-      />,
-    ),
-
-  success: ({ balance }: { balance: bigint }, txHash?: string) =>
-    transitStage(
-      <TxStageOperationSucceedBalanceShown
-        {...STAGE_OPERATION_ARGS}
-        txHash={txHash}
-        balance={balance}
-        balanceToken={TOKENS.steth}
-      />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-});
-
-export const useTxModalStagesAddBond = () => {
-  return useTransactionModalStage(getTxModalStagesAddBond);
-};
+export const useTxModalStagesAddBond = () =>
+  useTxStages<AddBondFormInputType, AddBondFormNetworkData, AddBondResult>(
+    (transitStage, input) => ({
+      sign: () =>
+        transitStage(
+          <TxStageSignOperationAmount
+            {...STAGE_OPERATION_ARGS}
+            amount={input.bondAmount ?? 0n}
+            token={input.token}
+          />,
+        ),
+      pending: (txHash) =>
+        transitStage(
+          <TxStageSignOperationAmount
+            {...STAGE_OPERATION_ARGS}
+            amount={input.bondAmount ?? 0n}
+            token={input.token}
+            isPending
+            txHash={txHash}
+          />,
+        ),
+      success: (result: AddBondResult, txHash) =>
+        transitStage(
+          <TxStageOperationSucceedBalanceShown
+            {...STAGE_OPERATION_ARGS}
+            txHash={txHash}
+            balance={result.current}
+            balanceToken={TOKENS.steth}
+          />,
+          { isClosableOnLedger: true },
+        ),
+    }),
+  );

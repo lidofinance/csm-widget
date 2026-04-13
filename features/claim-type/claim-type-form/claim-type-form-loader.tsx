@@ -1,41 +1,26 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormLoader } from 'shared/hook-form/form-controller';
-import { useClaimTypeFormData } from './context';
+import { useClaimTypeFormData, useClaimTypeFlow } from './context';
 import { Info } from './controls/info';
 import { ClaimTypeSuccess } from './claim-type-success';
 
-export const ClaimTypeFormLoader: FC<PropsWithChildren> = ({ children }) => {
-  const {
-    canClaimCurve,
-    proof,
-    currentCurveId,
-    newCurveId,
-    icsPaused,
-    justClaimed,
-  } = useClaimTypeFormData();
+const EMPTY_STATE: Record<string, React.ReactNode> = {
+  paused: <>ICS claiming is currently paused</>,
+  claimed: <>You have already claimed the ICS operator type</>,
+  'not-eligible': <>You are not eligible to claim the ICS operator type</>,
+};
 
-  const isClaimed =
-    currentCurveId === newCurveId && currentCurveId !== undefined;
-  const isEmpty = !proof?.proof || proof.isConsumed;
-  const isView = !canClaimCurve;
+export const ClaimTypeFormLoader: FC<PropsWithChildren> = ({ children }) => {
+  const { justClaimed } = useClaimTypeFormData();
+  const flow = useClaimTypeFlow();
 
   if (justClaimed) {
     return <ClaimTypeSuccess />;
   }
 
   return (
-    <FormLoader
-      empty={
-        icsPaused ? (
-          <>ICS claiming is currently paused</>
-        ) : isClaimed ? (
-          <>You have already claimed the ICS operator type</>
-        ) : (
-          isEmpty && <>You are not eligible to claim the ICS operator type</>
-        )
-      }
-    >
-      {isView ? <Info /> : children}
+    <FormLoader empty={EMPTY_STATE[flow.action]}>
+      {flow.action === 'no-access' ? <Info /> : children}
     </FormLoader>
   );
 };
