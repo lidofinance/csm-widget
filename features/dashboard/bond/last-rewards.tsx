@@ -169,11 +169,13 @@ const LastReportStats: FC = () => {
           </DoubleColumnStyle>
         ))}
 
-      <TextBlock title="Distribution transaction" loading={isTxLoading}>
-        <Box as="span" fontWeight={400} fontSize={12}>
-          <TxLinkEtherscan txHash={txHash} />
-        </Box>
-      </TextBlock>
+      {txHash && (
+        <TextBlock title="Distribution transaction" loading={isTxLoading}>
+          <Box as="span" fontWeight={400} fontSize={12}>
+            <TxLinkEtherscan txHash={txHash} />
+          </Box>
+        </TextBlock>
+      )}
     </RowBody>
   );
 };
