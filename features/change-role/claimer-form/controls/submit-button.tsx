@@ -13,7 +13,7 @@ export const SubmitButton: FC = () => {
   return (
     <>
       <SubmitButtonHookForm disableIfClean onClick={clickHandle}>
-        Set new Rewards claimer address
+        Set new Rewards Claimer Address
       </SubmitButtonHookForm>
     </>
   );

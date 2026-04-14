@@ -27,10 +27,10 @@ const getTexts = (input: ClaimerFormInputType) => {
       }
     : {
         sign: {
-          title: 'You are setting Rewards claimer address',
+          title: 'You are setting Rewards Claimer Address',
           description: (
             <>
-              New Rewards claimer address is{' '}
+              New Rewards Claimer Address is{' '}
               <Text size="xxs">
                 <AddressComponent address={claimerAddress} showIcon />
               </Text>
@@ -38,10 +38,10 @@ const getTexts = (input: ClaimerFormInputType) => {
           ),
         },
         success: {
-          title: 'Rewards claimer address has been set',
+          title: 'Rewards Claimer Address has been set',
           description: (
             <>
-              New Rewards claimer address is{' '}
+              New Rewards Claimer Address is{' '}
               <Text size="xxs">
                 <AddressComponent address={claimerAddress} showIcon />
               </Text>

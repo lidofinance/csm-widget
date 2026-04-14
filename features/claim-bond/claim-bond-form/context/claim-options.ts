@@ -84,10 +84,10 @@ type SelectionInput = {
 };
 
 export const getOptionSet = ({ bond, rewards }: SelectionInput): OptionSet => {
-  const hasRewards = rewards.available > 0n;
-  const hasExcess = !bond.isInsufficient && bond.delta > 0n;
+  const hasRewards = rewards?.available > 0n;
+  const hasExcess = !bond?.isInsufficient && bond.delta > 0n;
 
-  if (bond.isInsufficient) {
+  if (bond?.isInsufficient) {
     if (hasRewards && rewards.available > bond.delta) {
       return SET_C;
     }

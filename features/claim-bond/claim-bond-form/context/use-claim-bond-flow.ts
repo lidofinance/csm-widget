@@ -30,9 +30,11 @@ export const useClaimBondFlowResolver = (): FlowResolver<
       if (!canClaim) return { action: 'no-access', access: claimAccess };
 
       if (
-        data?.rewards.available === 0n &&
-        !data?.bond.isInsufficient &&
-        data?.bond.delta === 0n
+        !data.rewards ||
+        !data.bond ||
+        (data?.rewards.available === 0n &&
+          !data?.bond.isInsufficient &&
+          data?.bond.delta === 0n)
       )
         return { action: 'nothing' };
 

@@ -1,6 +1,6 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
-import { MODULE_METADATA } from 'consts';
+import { isModuleCSM, MODULE_METADATA } from 'consts';
 import { getExternalLinks, SUBSCRIBE_EVENTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useModalActions } from 'providers/modal-provider';
@@ -48,16 +48,20 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
                 or{' '}
               </>
             )}
-            subscribe to the{' '}
-            <MatomoLink
-              $inline
-              matomoEvent={
-                MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents
-              }
-              href={SUBSCRIBE_EVENTS_LINK}
-            >
-              CSM events notifications
-            </MatomoLink>
+            {isModuleCSM && (
+              <>
+                subscribe to the{' '}
+                <MatomoLink
+                  $inline
+                  matomoEvent={
+                    MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents
+                  }
+                  href={SUBSCRIBE_EVENTS_LINK}
+                >
+                  CSM events notifications
+                </MatomoLink>
+              </>
+            )}
             ) make sure your validators are producing attestations{' '}
             {beaconchainDashboardLink && (
               <>
