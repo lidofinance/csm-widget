@@ -3,12 +3,13 @@ import { FormLoader } from 'shared/hook-form/form-controller';
 import { useClaimerFlow } from './context';
 import { Info } from './controls/info';
 
-export const ClaimerFormLoader: FC<PropsWithChildren> = ({ children }) => {
+const ClaimerFormGate: FC<PropsWithChildren> = ({ children }) => {
   const flow = useClaimerFlow();
-
-  return (
-    <FormLoader>
-      {flow.action === 'view' ? <Info /> : <>{children}</>}
-    </FormLoader>
-  );
+  return flow.action === 'view' ? <Info /> : <>{children}</>;
 };
+
+export const ClaimerFormLoader: FC<PropsWithChildren> = ({ children }) => (
+  <FormLoader>
+    <ClaimerFormGate>{children}</ClaimerFormGate>
+  </FormLoader>
+);

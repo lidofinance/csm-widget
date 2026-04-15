@@ -49,14 +49,18 @@ export const useChangeRoleFlowResolver = (
       return {
         action,
         confirm: async () => {
-          if (action === 'propose' && !input.isRevoke) {
-            if (
-              data.role === ROLES.REWARDS &&
-              !(await confirmRewardsRole({}))
-            ) {
-              return false;
+          if (!input.isRevoke && data.role === ROLES.REWARDS) {
+            if (action === 'propose' || action === 'rewards-change') {
+              const confirmed = await confirmRewardsRole({
+                isProposal: action === 'propose',
+              });
+              if (!confirmed) return false;
             }
-            if (data.proposedAddress && !(await confirmRepropose({}))) {
+            if (
+              action === 'propose' &&
+              data.proposedAddress &&
+              !(await confirmRepropose({}))
+            ) {
               return false;
             }
           }

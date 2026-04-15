@@ -3,12 +3,13 @@ import { FormLoader } from 'shared/hook-form/form-controller';
 import { useChangeRoleFlow } from './context';
 import { Info } from './controls/info';
 
-export const ChangeRoleFormLoader: FC<PropsWithChildren> = ({ children }) => {
+const ChangeRoleFormGate: FC<PropsWithChildren> = ({ children }) => {
   const flow = useChangeRoleFlow();
-
-  return (
-    <FormLoader>
-      {flow.action === 'view' ? <Info /> : <>{children}</>}
-    </FormLoader>
-  );
+  return flow.action === 'view' ? <Info /> : <>{children}</>;
 };
+
+export const ChangeRoleFormLoader: FC<PropsWithChildren> = ({ children }) => (
+  <FormLoader>
+    <ChangeRoleFormGate>{children}</ChangeRoleFormGate>
+  </FormLoader>
+);

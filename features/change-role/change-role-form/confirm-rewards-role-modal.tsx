@@ -4,17 +4,17 @@ import type { ModalComponentType } from 'providers/modal-provider';
 import { Stack } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 
-export const ConfirmRewardsRoleModal: ModalComponentType<ConfirmModalProps> = ({
-  onConfirm,
-  onReject,
-  ...props
-}) => {
+export const ConfirmRewardsRoleModal: ModalComponentType<
+  ConfirmModalProps & { isProposal: boolean }
+> = ({ onConfirm, onReject, isProposal, ...props }) => {
   return (
     <Modal {...props} center onClose={onReject}>
       <Stack direction="column" gap="xxl">
         <Stack direction="column" gap="sm">
           <Text as="h5" size="sm" weight={700}>
-            All rewards will be claimable to the proposed address
+            {isProposal
+              ? 'All rewards will be claimable to the proposed address'
+              : 'All rewards will be claimable to the new address'}
           </Text>
           <Text size="xs" color="secondary">
             After changing the Rewards Address, all rewards and excess bond
@@ -28,10 +28,12 @@ export const ConfirmRewardsRoleModal: ModalComponentType<ConfirmModalProps> = ({
           <Button fullwidth onClick={onConfirm}>
             Continue
           </Button>
-          <Text size="xxs" color="secondary">
-            The change doesn’t apply immediately. To complete the address
-            change, the owner of the new address must confirm the change
-          </Text>
+          {isProposal && (
+            <Text size="xxs" color="secondary">
+              The change doesn’t apply immediately. To complete the address
+              change, the owner of the new address must confirm the change
+            </Text>
+          )}
         </Stack>
       </Stack>
     </Modal>

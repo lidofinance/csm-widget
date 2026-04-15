@@ -6,6 +6,6 @@ export const useConfirmReproposeModal = getUseConfirmModal(
   ConfirmReproposeModal,
 );
 
-export const useConfirmRewardsRoleModal = getUseConfirmModal(
-  ConfirmRewardsRoleModal,
-);
+export const useConfirmRewardsRoleModal = getUseConfirmModal<{
+  isProposal: boolean;
+}>(ConfirmRewardsRoleModal);

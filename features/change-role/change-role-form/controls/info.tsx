@@ -3,7 +3,14 @@ import { Text } from '@lidofinance/lido-ui';
 import { ROLES_METADATA } from 'consts/roles';
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Latice, Stack, TitledAddress, Warning } from 'shared/components';
+import {
+  IconTooltip,
+  Latice,
+  RoleActionsList,
+  Stack,
+  TitledAddress,
+  Warning,
+} from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { isAddressEqual } from 'viem';
 import {
@@ -38,7 +45,19 @@ export const Info: FC = () => {
       </Text>
       <Latice variant="secondary">
         <TitledAddress
-          title={`Current ${roleTitle} Address`}
+          title={
+            <Stack center gap="xs">
+              Current {roleTitle} Address
+              <IconTooltip
+                tooltip={
+                  <RoleActionsList
+                    role={role}
+                    extendedManagerPermissions={extendedManagerPermissions}
+                  />
+                }
+              />
+            </Stack>
+          }
           address={currentAddress}
           isYou={isAddressEqual(currentAddress, address)}
           isOwner={
