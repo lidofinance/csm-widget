@@ -61,12 +61,12 @@ export class WidgetService {
           WalletConnectTypes.EOA
       ) {
         try {
-          const [connectWalletPage] = await Promise.all([
+          await Promise.all([
             this.page.context().waitForEvent('page', { timeout: 10000 }),
             // @Fixme dbclick() when https://linear.app/lidofi/issue/SI-1447/mm-incorrect-network-required-double-click resolved
             await walletIcon.dblclick(),
           ]);
-          await this.walletPage.connectWallet(connectWalletPage);
+          await this.walletPage.connectWallet();
         } catch {
           console.error('Wallet page didnt open');
         }
