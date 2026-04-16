@@ -41,7 +41,7 @@ export const useAcceptInviteFlowResolver = (): FlowResolver<
           invariant(invite !== undefined, 'Invite is not defined');
 
           const { result } = await sdk.roles.confirmAddress({
-            nodeOperatorId: invite.id,
+            nodeOperatorId: invite.nodeOperatorId,
             role: invite.role,
             callback: buildCallback(input, data),
           });

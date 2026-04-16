@@ -30,7 +30,7 @@ export const useTxModalStagesAcceptInvite = () =>
             title="You are accepting address change"
             description={
               <>
-                <DescriptorId id={invite.id} /> &mdash;{' '}
+                <DescriptorId id={invite.nodeOperatorId} /> &mdash;{' '}
                 <b>{ROLES_METADATA[invite.role].capitalizedTitle}</b> Address
               </>
             }
@@ -42,7 +42,7 @@ export const useTxModalStagesAcceptInvite = () =>
             title="You are accepting address change"
             description={
               <>
-                <DescriptorId id={invite.id} /> &mdash;{' '}
+                <DescriptorId id={invite.nodeOperatorId} /> &mdash;{' '}
                 <b>{ROLES_METADATA[invite.role].capitalizedTitle}</b> Address
               </>
             }
@@ -57,7 +57,7 @@ export const useTxModalStagesAcceptInvite = () =>
             description={
               <>
                 {ROLES_METADATA[invite.role].capitalizedTitle} Address of{' '}
-                <DescriptorId id={invite.id} /> is
+                <DescriptorId id={invite.nodeOperatorId} /> is
                 <br />
                 <Address address={data.address} symbols={0} />
               </>
