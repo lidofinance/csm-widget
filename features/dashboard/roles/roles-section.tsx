@@ -50,7 +50,7 @@ export const RolesSection: FC = () => {
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink}
     >
       <RolesGrid>
-        <RoleRowStyle>
+        <RoleRowStyle data-testid="rewardsAddressRow">
           <Stack gap="sm" center>
             <Text size="xs">Rewards Address</Text>
             {HAS_REWARDS_ROLE && <YouChip />}
@@ -72,7 +72,7 @@ export const RolesSection: FC = () => {
 
         <DividerStyle />
 
-        <RoleRowStyle>
+        <RoleRowStyle data-testid="managerAddressRow">
           <Stack gap="sm" center>
             <Text size="xs">Manager Address</Text>
             {HAS_MANAGER_ROLE && <YouChip />}
@@ -94,7 +94,7 @@ export const RolesSection: FC = () => {
 
         <DividerStyle />
 
-        <RoleRowStyle>
+        <RoleRowStyle data-testid="claimerAddressRow">
           <Text size="xs">Rewards claimer</Text>
           <Stack direction="column" gap="md">
             {isClaimerSet && <Address address={claimerAddress} showIcon />}
@@ -110,13 +110,13 @@ export const RolesSection: FC = () => {
 
         <DividerStyle />
 
-        <RoleRowStyle>
+        <RoleRowStyle data-testid="feeSplitsRow">
           <Text size="xs">Rewards splitter</Text>
           <Stack direction="column" gap="md">
             {feeSplits?.map((split: FeeSplit) => (
               <Stack gap="lg" center key={split.recipient}>
                 <Address address={split.recipient} showIcon />
-                <Text size="xxs" color="secondary">
+                <Text size="xxs" color="secondary" data-testid="splitShare">
                   {formatShare(split.share)}
                 </Text>
               </Stack>

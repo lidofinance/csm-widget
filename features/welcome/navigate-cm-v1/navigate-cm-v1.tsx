@@ -8,7 +8,7 @@ export const NavigateCMv1: FC = () => {
   const { operatorsWidget } = useExternalLinks();
   const { host } = new URL(operatorsWidget);
   return (
-    <StyledBlock>
+    <StyledBlock data-testid="navigateCMv1Section">
       <StyledStack>
         <Text weight={700} size="lg">
           Navigate to CM v1
@@ -17,7 +17,7 @@ export const NavigateCMv1: FC = () => {
           href={operatorsWidget}
           // matomoEvent={MATOMO_CLICK_EVENTS_TYPES.tryOtherNetworkLink} // TODO: fix events
         >
-          <Button size="xs" variant="outlined">
+          <Button size="xs" variant="outlined" data-testid="navigateToCMv1Btn">
             Open CM v1 widget
           </Button>
         </MatomoLink>

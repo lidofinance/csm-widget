@@ -1,0 +1,242 @@
+import {
+  WalletConnectTypes,
+  WalletPage,
+} from '@lidofinance/wallets-testing-wallets';
+import { MainPage, KeysPage, DashboardPage, SettingsPage } from '../pages';
+import { DepositKey } from '../../shared/services/keysGenerator.service';
+import { TokenSymbol } from '../../shared/consts/common.const';
+import { STAGE_WAIT_TIMEOUT } from '../../shared/consts/timeouts';
+import { test, expect } from '@playwright/test';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { FeatureFlagsType } from 'config/feature-flags/types';
+import { BondRewardsPage } from '../pages/bondRewards.page';
+import { OperatorTypePage } from '../pages/operatorType.page';
+import { Page } from '@playwright/test';
+import { ElementController } from '../pages/elements/controller';
+import { MonitoringPage } from 'tests/cm-widget/pages/monitoring.page';
+
+type FeatureFlagName = keyof FeatureFlagsType;
+
+export class WidgetService {
+  public mainPage: MainPage;
+  public keysPage: KeysPage;
+  public dashboardPage: DashboardPage;
+  public settingsPage: SettingsPage;
+  public monitoringPage: MonitoringPage;
+  public bondRewardsPage: BondRewardsPage;
+  public operatorType: OperatorTypePage;
+
+  constructor(
+    public page: Page,
+    public walletPage: WalletPage,
+  ) {
+    this.mainPage = new MainPage(this.page);
+    this.keysPage = new KeysPage(this.page);
+    this.dashboardPage = new DashboardPage(this.page);
+    this.settingsPage = new SettingsPage(this.page, this.walletPage);
+    this.monitoringPage = new MonitoringPage(this.page);
+    this.bondRewardsPage = new BondRewardsPage(this.page);
+    this.operatorType = new OperatorTypePage(this.page, this.walletPage);
+  }
+
+  async connectWallet(expectConnectionState = true) {
+    await test.step('Open default page for connect.', async () => {
+      await this.page.goto('/?survey-setup=1&wallet-rpc=1');
+    });
+    await test.step('Connect wallet to widget', async () => {
+      const element = new ElementController(this.page);
+      if (await this.isConnectedWallet()) return;
+      await element.header.connectWalletBtn.click();
+      await element.termAndPrivacy.confirmConditionWalletModal();
+      const walletIcon = element.connectWalletModal.getWalletInModal(
+        this.walletPage.options.walletConfig.CONNECT_BUTTON_NAME,
+      );
+      if (
+        (await walletIcon.isEnabled({ timeout: 500 })) &&
+        this.walletPage.options.walletConfig.WALLET_TYPE ===
+          WalletConnectTypes.EOA
+      ) {
+        try {
+          const [connectWalletPage] = await Promise.all([
+            this.page.context().waitForEvent('page', { timeout: 10000 }),
+            // @Fixme dbclick() when https://linear.app/lidofi/issue/SI-1447/mm-incorrect-network-required-double-click resolved
+            await walletIcon.dblclick(),
+          ]);
+          await this.walletPage.connectWallet(connectWalletPage);
+        } catch {
+          console.error('Wallet page didnt open');
+        }
+      } else if (
+        (await walletIcon.isEnabled({ timeout: 500 })) &&
+        this.walletPage.options.walletConfig.WALLET_TYPE ===
+          WalletConnectTypes.WC_SDK
+      ) {
+        try {
+          await Promise.all([
+            this.page.getByTestId('wui-qr-code').waitFor({ state: 'visible' }),
+            await walletIcon.dblclick(),
+          ]);
+          const uri = await this.page
+            .getByTestId('wui-qr-code')
+            .getAttribute('uri');
+          await this.walletPage.connectWallet(uri as string);
+        } catch {
+          console.error('Wallet is not connected');
+        }
+      }
+
+      expect(
+        await this.isConnectedWallet(),
+        expectConnectionState
+          ? 'Wallet should be connected'
+          : 'Wallet should be disconnected',
+      ).toBe(expectConnectionState);
+    });
+  }
+
+  async submitKeys(keys: DepositKey[], tokenSymbol = TokenSymbol.STETH) {
+    const isNewOperator = await this.keysPage.isNewOperator();
+    if (isNewOperator) {
+      await this.keysPage.createNodeOperatorForm.addNewKeys(keys, tokenSymbol);
+    } else {
+      await this.keysPage.submitPage.submitKeys(keys, tokenSymbol);
+    }
+
+    await this.walletPage.confirmTx();
+    await this.page.waitForSelector(
+      `text=Uploading operation was successful.`,
+      { timeout: STAGE_WAIT_TIMEOUT },
+    );
+  }
+
+  async removeKeys(keysToRemove: string[]) {
+    await test.step(`Remove ${keysToRemove.length} keys`, async () => {
+      for (const key of keysToRemove) {
+        await this.keysPage.removePage.getCheckboxByAddress(key).click();
+      }
+
+      await this.page.getByRole('button', { name: 'Remove Keys' }).click();
+
+      await this.walletPage.confirmTx();
+      await this.keysPage.page.waitForSelector(
+        `text=${keysToRemove.length} key has been removed`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+      await this.keysPage.base.closeModalWindow();
+    });
+  }
+
+  async addBond(tokenName: TOKENS, amount: string) {
+    await test.step(`Add ${amount} ${tokenName} as bond`, async () => {
+      await test.step(`Choose ${tokenName} symbol for bond`, async () => {
+        const bondToken =
+          this.bondRewardsPage.addBond.selectBondToken(tokenName);
+        await bondToken.click();
+      });
+      await this.bondRewardsPage.addBond.amountInput.fill(amount);
+      await this.bondRewardsPage.addBond.addBondButton.click();
+
+      if (tokenName !== TOKENS.eth) {
+        await this.bondRewardsPage.page.waitForSelector(
+          `text=Confirm request in your wallet`,
+          { timeout: STAGE_WAIT_TIMEOUT },
+        );
+        await this.walletPage.confirmTx();
+      }
+
+      await this.page.waitForSelector(
+        `text=Confirm this transaction in your wallet`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+      await this.walletPage.confirmTx();
+      await this.page.waitForSelector(`text=Awaiting block confirmation`, {
+        timeout: STAGE_WAIT_TIMEOUT,
+      });
+      await this.page.waitForSelector(
+        `text=Adding Bond operation was successful`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+
+      await this.bondRewardsPage.closeModalWindow();
+    });
+  }
+
+  async claim(tokenName: TOKENS, amount: string) {
+    await test.step(`Claim ${amount} ${tokenName}`, async () => {
+      await this.bondRewardsPage.claim.selectBondToken(tokenName);
+
+      await this.bondRewardsPage.claim.amountInput.fill(amount);
+
+      const actionButton =
+        tokenName === TOKENS.eth
+          ? this.bondRewardsPage.claim.requestWithdrawalButton
+          : this.bondRewardsPage.claim.claimButton;
+
+      await actionButton.click();
+
+      await this.page.waitForSelector(
+        `text=Confirm this transaction in your wallet`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+      await this.walletPage.confirmTx();
+
+      const successText =
+        tokenName === TOKENS.eth
+          ? 'Withdrawal request has been sent'
+          : 'Requested amount has been successfully claimed';
+
+      await this.page.waitForSelector(`text=${successText}`, {
+        timeout: STAGE_WAIT_TIMEOUT,
+      });
+
+      await this.bondRewardsPage.closeModalWindow();
+    });
+  }
+
+  async isConnectedWallet() {
+    return test.step('Check wallet connection', async () => {
+      return new ElementController(this.page).header.isAccountSectionVisible();
+    });
+  }
+
+  async extractNodeOperatorId(): Promise<number> {
+    return test.step('Extract node operator id from header', async () => {
+      const rowHeader = await this.page
+        .getByTestId('nodeOperatorHeader')
+        .textContent();
+
+      if (!rowHeader)
+        throw new Error('Failed to get text content from node operator header');
+
+      const match = rowHeader.match(/#(\d+)/);
+      if (!match) throw new Error('Cannot extract ID from header');
+      return Number(match[1]);
+    });
+  }
+
+  async mockValidationAddressRequest(isValid = false) {
+    await test.step('Mock route for Blacklisted wallet address', async () => {
+      await this.page.route(`**/api/validation?address=*`, async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          json: { isValid },
+        });
+      });
+    });
+  }
+
+  async setFeatureFlag(flag: FeatureFlagName, value: boolean) {
+    await test.step(`Set feature flag ${flag} to ${value}`, async () => {
+      const featureFlagsString =
+        (await this.page.evaluate(() => {
+          return localStorage.getItem('lido-feature-flags');
+        })) || '{}';
+      const featureFlags = JSON.parse(featureFlagsString);
+      featureFlags[flag] = value;
+      await this.page.evaluate((flags) => {
+        localStorage.setItem('lido-feature-flags', JSON.stringify(flags));
+      }, featureFlags);
+    });
+  }
+}
