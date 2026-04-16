@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
 import { useSmSDK } from 'modules/web3/web3-provider';
+import { useCallback } from 'react';
 
 type InvalidationScope = 'operator' | 'address' | 'operatorAndAddress';
 

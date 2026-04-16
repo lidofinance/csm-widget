@@ -1,18 +1,17 @@
+import 'utils/zod-jitless';
+
+import { ToastContainer } from '@lidofinance/lido-ui';
+import { config, SecretConfigType } from 'config';
+import { withCsp } from 'config/csp';
+import { MODULE_METADATA } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
-import { memo } from 'react';
-
-import { ToastContainer } from '@lidofinance/lido-ui';
-
-import { config, SecretConfigType } from 'config';
-import { MODULE_METADATA } from 'consts/module';
-import { withCsp } from 'config/csp';
 import { Providers } from 'providers';
+import { memo } from 'react';
 import { BackgroundGradient, SecurityStatusBanner } from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
-import { nprogress } from 'utils';
-import { AddressValidationFile } from 'utils';
+import { AddressValidationFile, nprogress } from 'utils';
 
 // Visualize route changes
 nprogress();
