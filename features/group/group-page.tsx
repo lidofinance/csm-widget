@@ -35,9 +35,6 @@ const GroupSubtitle: FC = () => {
   const { data: groupId } = useOperatorGroupId(nodeOperatorId);
 
   return groupId ? (
-    <>
-      This group is responsible for managing the infrastructure and keys for a
-      set of node operators
-    </>
+    <>View all of the sub-operators within your Node Operator Group</>
   ) : null;
 };
