@@ -75,7 +75,7 @@ export const OperatorRow: FC<OperatorRowProps> = ({
     : 0n;
 
   return (
-    <CmRowStyle>
+    <CmRowStyle data-testid="switchModalOperatorRow">
       <Stack direction="column" gap="none">
         <Stack gap="sm" center spaceBetween>
           <CmRowDescriptor>
@@ -94,7 +94,11 @@ export const OperatorRow: FC<OperatorRowProps> = ({
         </Stack>
 
         {metadata && (
-          <Text size="xxs" color="secondary">
+          <Text
+            size="xxs"
+            color="secondary"
+            data-testid="switchModalOperatorName"
+          >
             {metadata.name}
           </Text>
         )}

@@ -27,7 +27,7 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
   if (filteredRoutes.length <= 1) return null;
 
   return (
-    <SwitchWrapper $count={filteredRoutes.length}>
+    <SwitchWrapper data-testid="pageSwitcher" $count={filteredRoutes.length}>
       {activePathIndex >= 0 && <Handle $active={activePathIndex} />}
       {filteredRoutes.map((route, index) => {
         return (

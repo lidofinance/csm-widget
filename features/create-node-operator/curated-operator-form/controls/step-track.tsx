@@ -12,7 +12,7 @@ export const StepTrack: FC = () => {
   // TODO: enchance styles
   return (
     <Stack direction="row" gap="md" center justify="space-between">
-      <Text size="xxs" color="secondary">
+      <Text size="xxs" color="secondary" data-testid="stepTrackText">
         Step {currentStep} of 4
       </Text>
       <StepIndicator length={4} current={currentStep - 1} />

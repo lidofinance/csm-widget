@@ -26,16 +26,24 @@ export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
   const metadata = getCurveMetadata(curveId);
 
   return (
-    <RadioButton small {...fieldProps}>
+    <RadioButton
+      small
+      {...fieldProps}
+      data-testid={`gateCard${metadata.short}`}
+    >
       <Stack gap="xs">
         <CardLayout>
           <Stack direction="column" gap="sm">
-            <Badge>{metadata.short}</Badge>
-            <Text size="xs" weight={700}>
+            <Badge data-testid={`gateCardBadge`}>{metadata.short}</Badge>
+            <Text size="xs" weight={700} data-testid={`gateCardTitle`}>
               {metadata.name}
             </Text>
             {metadata.description && (
-              <Description color="secondary" size="xxs">
+              <Description
+                color="secondary"
+                size="xxs"
+                data-testid={`gateCardDescription`}
+              >
                 {metadata.description}
               </Description>
             )}
@@ -45,14 +53,20 @@ export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
             <ParamSection
               title="Node Operator reward:"
               items={formatPercentKeyIntervals(parameters?.rewardsConfig)}
+              data-testid={`gateCardRewardParams`}
             />
             <ParamSection
               title="Bond:"
               items={formatEthKeyIntervals(parameters?.bondConfig)}
+              data-testid={`gateCardBondParams`}
             />
           </Stack>
         </CardLayout>
-        <SatusStyled>{fieldProps.checked && <CheckIcon />}</SatusStyled>
+        <SatusStyled>
+          {fieldProps.checked && (
+            <CheckIcon data-testid={`gateCardCheckIcon`} />
+          )}
+        </SatusStyled>
       </Stack>
     </RadioButton>
   );
@@ -61,8 +75,9 @@ export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
 const ParamSection: FC<{ title: string; items: ReactNode[] }> = ({
   title,
   items,
+  ...props
 }) => (
-  <div>
+  <div {...props}>
     <Text size="xxs" weight={700}>
       {title}
     </Text>

@@ -16,7 +16,8 @@
     "test:unit": "jest",
     "test:setup": "npx playwright install chromium && ./tests/scripts/set_up_keys_generator.sh && yarn test:setup:fork",
     "test:setup:fork": "./tests/scripts/install_foundry.sh",
-    "test:e2e": "playwright test",
+    "test:cm:e2e": "playwright test --config=./tests/cm-widget/playwright.config.ts",
+    "test:csm:e2e": "playwright test --config=./tests/csm-widget/playwright.config.ts",
     "test:ui": "playwright test --ui"
   },
   "dependencies": {
@@ -86,7 +87,7 @@
     "@nestjs/common": "^10.4.16",
     "@next/bundle-analyzer": "^13.2.4",
     "@next/eslint-plugin-next": "^13.4.13",
-    "@playwright/test": "1.57.0",
+    "@playwright/test": "1.58.1",
     "@scure/bip39": "2.0.1",
     "@svgr/webpack": "8.1.0",
     "@types/jest": "28.1.6",
@@ -119,9 +120,9 @@
     "jest": "^29.5.0",
     "jsonschema": "^1.4.1",
     "lint-staged": "^13.2.3",
-    "playwright-qase-reporter": "^2.1.6",
+    "playwright-qase-reporter": "^2.2.3",
     "prettier": "^3.3.3",
-    "qase-javascript-commons": "^2.4.9",
+    "qase-javascript-commons": "^2.5.10",
     "qaseio": "^2.4.3",
     "string-replace-loader": "^3.3.0",
     "ts-jest": "^29.1.0",
@@ -134,7 +135,8 @@
   "resolutions": {
     "postcss": "^8.4.31",
     "crypto-js": "^4.2.0",
-    "wrap-ansi": "7.0.0"
+    "wrap-ansi": "7.0.0",
+    "@noble/hashes": "^1.8.0"
   },
   "lint-staged": {
     "./**/*.{ts,tsx}": [

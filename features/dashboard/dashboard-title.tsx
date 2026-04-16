@@ -25,12 +25,13 @@ const CmTitle: FC = () => {
 
   return (
     <>
-      <span>{metadata?.name}</span>
+      <span data-testid="operatorName">{metadata?.name}</span>
       {!metadata?.ownerEditsRestricted && (
         <InlineWrapper>
           <SecondaryLocalLink
             href={PATH.SETTINGS_METADATA}
             title="Edit Operator Metadata"
+            data-testid="editMetadataLink"
           >
             <Edit />
           </SecondaryLocalLink>
