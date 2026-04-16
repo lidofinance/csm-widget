@@ -134,7 +134,19 @@
   "resolutions": {
     "postcss": "^8.4.31",
     "crypto-js": "^4.2.0",
-    "wrap-ansi": "7.0.0"
+    "wrap-ansi": "7.0.0",
+    "elliptic": "^6.6.1",
+    "minimatch": "^3.1.4",
+    "js-yaml": "^4.1.1",
+    "follow-redirects": "^1.16.0",
+    "secp256k1": "^4.0.4",
+    "@babel/helpers": "^7.26.10",
+    "@babel/runtime": "^7.26.10",
+    "yaml": "^2.8.3",
+    "h3": "^1.15.9",
+    "hono": "^4.12.14",
+    "axios": "^1.15.0",
+    "micromatch": "^4.0.8"
   },
   "lint-staged": {
     "./**/*.{ts,tsx}": [
