@@ -22,7 +22,7 @@ export const InviteContent: FC<{ invite: NodeOperatorInviteInfo }> = ({
         }
       >
         <Badge>
-          {ROLES_METADATA[invite.role].capitalizedTitle} address role
+          {ROLES_METADATA[invite.role].capitalizedTitle} Address role
         </Badge>
       </Tooltip>
     </InviteContentStyle>
