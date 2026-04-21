@@ -13,7 +13,6 @@ import { useStepValidation } from '../../hooks/use-step-validation';
 import { ManagerAddressInput } from '../manager-address-input';
 import { RewardAddressInput } from '../reward-address-input';
 
-// TODO: gaps
 export const Step2: FC = () => {
   const currentStep = useWatch<CuratedOperatorFormInputType, 'step'>({
     name: 'step',

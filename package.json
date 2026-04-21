@@ -6,6 +6,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "next dev",
+    "dev:cm": "MODULE=cm next dev",
     "build": "next build",
     "build:analyze": "ANALYZE_BUNDLE=true next build",
     "start": "NODE_OPTIONS='-r next-logger' next start",

@@ -1,34 +1,31 @@
 import { useMemo } from 'react';
-import { useWatch } from 'react-hook-form';
-import { isAddress } from 'viem';
+import { useFormState, useWatch } from 'react-hook-form';
 import type { CuratedOperatorFormInputType } from '../context/types';
 
-export const useStepValidation = (step: number) => {
-  const formValues = useWatch<CuratedOperatorFormInputType>();
+type StepField = keyof CuratedOperatorFormInputType;
 
-  // TODO: reuse validation logic from useCuratedOperatorValidation
+const STEP_FIELDS: Record<number, StepField[]> = {
+  1: ['gateIndex'],
+  2: ['managerAddress', 'rewardAddress'],
+  3: ['name', 'description'],
+  4: [],
+};
+
+export const useStepValidation = (step: number) => {
+  const fields = useMemo(() => STEP_FIELDS[step] ?? [], [step]);
+  const values = useWatch<CuratedOperatorFormInputType>({ name: fields });
+  const { errors } = useFormState<CuratedOperatorFormInputType>({
+    name: fields,
+  });
+
   return useMemo(() => {
-    switch (step) {
-      case 1:
-        return formValues.gateIndex !== undefined;
-      case 2:
-        return (
-          isAddress(formValues.rewardAddress ?? '') &&
-          isAddress(formValues.managerAddress ?? '')
-        );
-      case 3:
-        return (
-          !!formValues.name &&
-          formValues.name.trim().length > 0 &&
-          formValues.name.length <= 64 &&
-          !!formValues.description &&
-          formValues.description.trim().length > 0 &&
-          formValues.description.length <= 1024
-        );
-      case 4:
-        return true;
-      default:
-        return false;
-    }
-  }, [step, formValues]);
+    if (fields.length === 0) return true;
+
+    const filled = (values as unknown[]).every(
+      (v) => v !== undefined && v !== '',
+    );
+    const noErrors = fields.every((f) => !errors[f]);
+
+    return filled && noErrors;
+  }, [fields, values, errors]);
 };
