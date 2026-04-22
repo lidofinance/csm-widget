@@ -1,15 +1,17 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { TxStagePending } from '../tx-stages-basic/tx-stage-pending';
-import { TxStageSign } from '../tx-stages-basic/tx-stage-sign';
-import { TxAmount } from '../tx-stages-parts/tx-amount';
-
-import { useBondWillReceive } from 'shared/hooks';
+import { StethPoolData, TOKENS } from '@lidofinance/lido-csm-sdk';
+import {
+  TxAmount,
+  TxStagePending,
+  TxStageSign,
+} from 'shared/transaction-modal';
+import { getBondWillReceive } from '../get-bond-will-receive';
 
 type TxStageClaimProps = {
   claimRewards: boolean;
   amount: bigint;
   token: TOKENS;
   rewards?: bigint;
+  poolData: StethPoolData;
   isPending?: boolean;
   txHash?: string;
 };
@@ -19,13 +21,15 @@ export const TxStageClaim = ({
   amount,
   token,
   rewards,
+  poolData,
   isPending,
   txHash,
 }: TxStageClaimProps) => {
-  const [bondReceive, amountBiggerRewards] = useBondWillReceive(
+  const [bondReceive, amountBiggerRewards] = getBondWillReceive(
     token,
     amount,
     claimRewards ? rewards : undefined,
+    poolData,
   );
 
   const operationText =

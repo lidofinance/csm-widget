@@ -3,16 +3,16 @@ import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { useWatch } from 'react-hook-form';
 import { Address } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
-import { useBondWillReceive } from 'shared/hooks';
 import {
   CLAIM_OPTION,
   ClaimBondFormInputType,
   useClaimBondFormData,
 } from './context';
+import { getBondWillReceive } from './get-bond-will-receive';
 import { useInsufficientBondCoverAmount } from './hooks/use-insufficient-bond-cover-amount';
 
 export const ClaimBondFormInfo = () => {
-  const { rewardsAddress, rewards } = useClaimBondFormData(true);
+  const { rewardsAddress, rewards, poolData } = useClaimBondFormData(true);
   const [token, amount, claimOption] = useWatch<
     ClaimBondFormInputType,
     ['token', 'amount', 'claimOption']
@@ -29,7 +29,12 @@ export const ClaimBondFormInfo = () => {
     ? rewards.available - (coverAmount ?? 0n)
     : undefined;
 
-  const [bondReceive] = useBondWillReceive(token, amount, rewardsAfterCover);
+  const [bondReceive] = getBondWillReceive(
+    token,
+    amount,
+    rewardsAfterCover,
+    poolData,
+  );
 
   const raAmount = isRewardsToBond ? 0n : (amount ?? 0n);
 

@@ -5,6 +5,7 @@ import {
 } from 'shared/hook-form/validation';
 import { getTokenDisplayName } from 'utils';
 import { formatEther } from 'viem';
+import { getMaxValues } from './get-max-values';
 import {
   CLAIM_OPTION,
   type ClaimBondFormInputType,
@@ -16,7 +17,7 @@ export const useClaimBondValidation = () => {
     'token',
     async (
       { token, amount, claimOption },
-      { maxValues, rewards },
+      { bond, rewards, poolData },
       validate,
     ) => {
       if (claimOption === CLAIM_OPTION.REWARDS_TO_BOND) return;
@@ -31,7 +32,9 @@ export const useClaimBondValidation = () => {
         );
 
         const index = claimOption === CLAIM_OPTION.BOND_TO_RA ? 0 : 1;
-        const maxAmount = maxValues?.[token][index];
+        const maxAmount = getMaxValues({ bond, rewards, poolData })?.[token][
+          index
+        ];
         if (amount && maxAmount)
           validateBigintMax(
             'amount',

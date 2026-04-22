@@ -7,7 +7,6 @@ import { TxLinkEtherscan } from 'shared/components/tx-link-etherscan';
 import { LocalLink } from 'shared/navigate';
 import {
   TxAmount,
-  TxStageClaim,
   TxStageSuccess,
   useTxStages,
 } from 'shared/transaction-modal';
@@ -16,6 +15,7 @@ import {
   ClaimBondFormInputType,
   ClaimBondFormNetworkData,
 } from '../context/types';
+import { TxStageClaim } from './tx-stage-claim';
 
 const { stakeWidget } = getExternalLinks();
 
@@ -36,6 +36,7 @@ export const useTxModalStagesClaimBond = () =>
               token={input.token}
               claimRewards={claimRewards}
               rewards={data.rewards?.available}
+              poolData={data.poolData}
             />,
           ),
         pending: (txHash) =>
@@ -45,6 +46,7 @@ export const useTxModalStagesClaimBond = () =>
               token={input.token}
               claimRewards={claimRewards}
               rewards={data.rewards?.available}
+              poolData={data.poolData}
               isPending
               txHash={txHash}
             />,

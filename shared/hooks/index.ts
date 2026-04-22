@@ -1,7 +1,6 @@
 export * from './use-ens-resolution';
 export * from './use-api-address-validation';
 export * from './use-awaiter';
-export * from './use-bond-will-receive';
 export * from './use-can-claim-ics';
 export * from './use-can-perform';
 export * from './use-can-create-node-operator';

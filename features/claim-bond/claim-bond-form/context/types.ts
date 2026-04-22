@@ -2,9 +2,9 @@ import {
   BondBalance,
   NodeOperatorId,
   Rewards,
+  StethPoolData,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
-import { MaxValues } from './use-max-values';
 
 export const CLAIM_OPTION = {
   /** Claim available bond (excess) + rewards → Rewards Address. */
@@ -29,7 +29,7 @@ export type ClaimBondFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   bond: BondBalance;
   rewards: Rewards;
-  maxValues: MaxValues;
+  poolData: StethPoolData;
   rewardsAddress: string;
   isContract: boolean;
   isPaused: boolean;

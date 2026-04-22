@@ -3,6 +3,7 @@ import { Checkbox } from '@lidofinance/lido-ui';
 import { INSTANT_WAITING_TIME } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
+import { useMemo } from 'react';
 import { useController, useWatch } from 'react-hook-form';
 import {
   FormTitle,
@@ -20,14 +21,20 @@ import {
   useClaimBondFlow,
   useClaimBondFormData,
 } from '../context';
+import { getMaxValues } from '../context/get-max-values';
 import { useWithdrawalWaitingTime } from '../hooks/use-withdrawal-waiting-time';
 
 export const TokenSelect: React.FC = () => {
   const [token] = useWatch<ClaimBondFormInputType, ['token']>({
     name: ['token'],
   });
-  const { maxValues, isContract } = useClaimBondFormData(true);
+  const { bond, rewards, poolData, isContract } = useClaimBondFormData(true);
   const flow = useClaimBondFlow();
+
+  const maxValues = useMemo(
+    () => getMaxValues({ bond, rewards, poolData }),
+    [bond, rewards, poolData],
+  );
 
   const maxEthAmount = maxValues?.[TOKENS.eth]?.[1];
   const {
