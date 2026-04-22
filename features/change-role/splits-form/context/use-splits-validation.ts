@@ -12,7 +12,7 @@ import {
   PERCENT_BASIS,
 } from '@lidofinance/lido-csm-sdk';
 
-const splitsEqual = (a: Partial<FeeSplit>[], b: FeeSplit[]) =>
+export const splitsEqual = (a: Partial<FeeSplit>[], b: FeeSplit[]) =>
   a.length === b.length &&
   a.every(
     (s, i) =>
