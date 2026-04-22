@@ -31,11 +31,16 @@ export const Info: FC = () => {
     address,
     extendedManagerPermissions,
     role,
+    invite,
   } = useChangeRoleFormData(true);
   const { setValue } = useFormContext<ChangeRoleFormInputType>();
 
   const revokeHandle = useCallback(() => {
-    setValue('isRevoke', true);
+    setValue('intent', 'revoke');
+  }, [setValue]);
+
+  const acceptHandle = useCallback(() => {
+    setValue('intent', 'accept');
   }, [setValue]);
 
   return (
@@ -73,7 +78,7 @@ export const Info: FC = () => {
               title={
                 <>
                   <Warning text="Pending change" />
-                  {flow.action === 'propose' && (
+                  {flow.action === 'propose' ? (
                     <SubmitButtonHookForm
                       variant="outlined"
                       size="xs"
@@ -83,10 +88,23 @@ export const Info: FC = () => {
                     >
                       Cancel
                     </SubmitButtonHookForm>
+                  ) : (
+                    invite && (
+                      <SubmitButtonHookForm
+                        variant="outlined"
+                        size="xs"
+                        fullwidth={false}
+                        onClick={acceptHandle}
+                        noDisableOnError
+                      >
+                        Accept
+                      </SubmitButtonHookForm>
+                    )
                   )}
                 </>
               }
               address={proposedAddress}
+              isYou={isAddressEqual(proposedAddress, address)}
             />
             <Text size="xxs" weight={700}>
               Action required

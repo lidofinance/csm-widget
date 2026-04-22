@@ -1,5 +1,6 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import {
+  KEY_INVITES,
   KEY_OPERATOR_INFO,
   KEY_OPERATOR_IS_OWNER,
   useDappStatus,
@@ -15,6 +16,7 @@ import {
 import { useChangeRoleMode, useInvalidate } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { type ChangeRoleFormNetworkData } from './types';
+import { isAddressEqual } from 'viem';
 
 const useChangeRoleFormNetworkData: NetworkData<
   ChangeRoleFormNetworkData,
@@ -32,7 +34,7 @@ const useChangeRoleFormNetworkData: NetworkData<
   const invalidate = useInvalidate();
 
   const revalidate = useCallback(() => {
-    invalidate([KEY_OPERATOR_INFO, KEY_OPERATOR_IS_OWNER]);
+    invalidate([KEY_OPERATOR_INFO, KEY_OPERATOR_IS_OWNER, KEY_INVITES]);
   }, [invalidate]);
 
   const currentAddress =
@@ -46,6 +48,14 @@ const useChangeRoleFormNetworkData: NetworkData<
   const canEdit = mode !== 'view';
   const extendedManagerPermissions = info?.extendedManagerPermissions;
 
+  const invite =
+    proposedAddress && isAddressEqual(proposedAddress, address)
+      ? {
+          nodeOperatorId,
+          role,
+        }
+      : null;
+
   return {
     data: {
       address,
@@ -55,6 +65,7 @@ const useChangeRoleFormNetworkData: NetworkData<
       nodeOperatorId,
       canEdit,
       extendedManagerPermissions,
+      invite,
     } as ChangeRoleFormNetworkData,
     isPending: isInfoLoading,
     revalidate,

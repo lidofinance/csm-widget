@@ -12,7 +12,7 @@ export const SubmitButton = () => {
 
   // TODO: move this to somethere ?
   const clickHandle = useCallback(() => {
-    setValue('isRevoke', false);
+    setValue('intent', 'submit');
   }, [setValue]);
 
   const title =

@@ -17,19 +17,21 @@ export const useChangeRoleValidation = (role: ROLES) => {
   return useFormValidation<ChangeRoleFormInputType, ChangeRoleFormNetworkData>(
     'address',
     async (
-      { address, isRevoke },
+      { address, intent },
       { currentAddress, proposedAddress },
       validate,
     ) => {
+      const isSubmit = intent === 'submit';
+
       await validate('address', () => {
-        if (!isRevoke && !isAddress(address ?? '')) {
+        if (isSubmit && !isAddress(address ?? '')) {
           throw new ValidationError('address', 'Specify a valid address');
         }
       });
 
       await validate('address', () => {
         if (
-          !isRevoke &&
+          isSubmit &&
           (mode === 'propose' || mode === 'rewardsChange') &&
           compareLowercase(address, currentAddress)
         ) {
@@ -42,7 +44,7 @@ export const useChangeRoleValidation = (role: ROLES) => {
 
       await validate('address', () => {
         if (
-          !isRevoke &&
+          isSubmit &&
           mode === 'propose' &&
           compareLowercase(address, proposedAddress)
         ) {

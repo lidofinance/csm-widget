@@ -11,6 +11,7 @@ import {
   useTxStages,
 } from 'shared/transaction-modal';
 import { zeroAddress } from 'viem';
+import { buildAcceptInviteStages } from 'features/accept-invite/accept-invite-form/hooks/use-tx-modal-stages-accept-invite';
 import {
   ChangeRoleFormInputType,
   ChangeRoleFormNetworkData,
@@ -21,7 +22,8 @@ const getTexts = (
   data: ChangeRoleFormNetworkData,
   mode: ChangeRoleMode,
 ) => {
-  const address = input.isRevoke ? zeroAddress : (input.address ?? zeroAddress);
+  const address =
+    input.intent === 'revoke' ? zeroAddress : (input.address ?? zeroAddress);
 
   return mode === 'managerReset' || mode === 'rewardsChange'
     ? {
@@ -48,7 +50,7 @@ const getTexts = (
           ),
         },
       }
-    : input.isRevoke
+    : input.intent === 'revoke'
       ? {
           sign: {
             title: `You are canceling request for ${ROLES_METADATA[data.role].capitalizedTitle} Address change`,
@@ -106,25 +108,34 @@ export const useTxModalStagesChangeRole = (role: ROLES) => {
     ChangeRoleFormNetworkData,
     NodeOperatorShortInfo
   >(
-    (transitStage, input, data) => ({
-      sign: () =>
-        transitStage(<TxStageSign {...getTexts(input, data, mode).sign} />),
-      pending: (txHash) =>
-        transitStage(
-          <TxStagePending
-            {...getTexts(input, data, mode).sign}
-            txHash={txHash}
-          />,
-        ),
-      success: (_result: NodeOperatorShortInfo, txHash) =>
-        transitStage(
-          <TxStageSuccess
-            txHash={txHash}
-            {...getTexts(input, data, mode).success}
-          />,
-          { isClosableOnLedger: true },
-        ),
-    }),
+    (transitStage, input, data) => {
+      if (input.intent === 'accept') {
+        return buildAcceptInviteStages(transitStage, {
+          invite: { nodeOperatorId: data.nodeOperatorId, role: data.role },
+          address: data.address,
+        });
+      }
+
+      return {
+        sign: () =>
+          transitStage(<TxStageSign {...getTexts(input, data, mode).sign} />),
+        pending: (txHash) =>
+          transitStage(
+            <TxStagePending
+              {...getTexts(input, data, mode).sign}
+              txHash={txHash}
+            />,
+          ),
+        success: (_result: NodeOperatorShortInfo, txHash) =>
+          transitStage(
+            <TxStageSuccess
+              txHash={txHash}
+              {...getTexts(input, data, mode).success}
+            />,
+            { isClosableOnLedger: true },
+          ),
+      };
+    },
     [mode],
   );
 };

@@ -19,7 +19,8 @@ export type ChangeRoleFlow =
   | { action: 'view' }
   | ({ action: 'manager-reset' } & Executable)
   | ({ action: 'rewards-change' } & Executable)
-  | ({ action: 'propose' } & Executable);
+  | ({ action: 'propose' } & Executable)
+  | ({ action: 'accept' } & Executable);
 
 export const useChangeRoleFlowResolver = (
   role: ROLES,
@@ -37,6 +38,20 @@ export const useChangeRoleFlowResolver = (
 
   return useCallback(
     (input, data) => {
+      if (input.intent === 'accept' && data.invite) {
+        return {
+          action: 'accept',
+          submit: async () => {
+            const { result } = await sdk.roles.confirmAddress({
+              nodeOperatorId: data.nodeOperatorId,
+              role: data.role,
+              callback: buildCallback(input, data),
+            });
+            if (result) appendNO(result);
+          },
+        };
+      }
+
       if (!data.canEdit) return { action: 'view' };
 
       const action =
@@ -46,10 +61,11 @@ export const useChangeRoleFlowResolver = (
             ? ('rewards-change' as const)
             : ('propose' as const);
 
+      // TODO: split this flow into separate ones for better readability and maintainability
       return {
         action,
         confirm: async () => {
-          if (!input.isRevoke && data.role === ROLES.REWARDS) {
+          if (input.intent === 'submit' && data.role === ROLES.REWARDS) {
             if (action === 'propose' || action === 'rewards-change') {
               const confirmed = await confirmRewardsRole({
                 isProposal: action === 'propose',
@@ -67,9 +83,10 @@ export const useChangeRoleFlowResolver = (
           return true;
         },
         submit: async () => {
-          const address = input.isRevoke
-            ? zeroAddress
-            : (input.address ?? zeroAddress);
+          const address =
+            input.intent === 'revoke'
+              ? zeroAddress
+              : (input.address ?? zeroAddress);
 
           const callback = buildCallback(input, data);
 
