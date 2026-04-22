@@ -45,6 +45,9 @@ export const CURVE_VARIANTS: Record<OPERATOR_TYPE, ReturnType<typeof css>> = {
   [OPERATOR_TYPE.CM_IODC]: css`
     background: var(--lido-color-text);
   `,
+  [OPERATOR_TYPE.CM_IODCP]: css`
+    background: var(--lido-color-text);
+  `,
   [OPERATOR_TYPE.CM_MODC]: css`
     background: var(--lido-color-text);
   `,
