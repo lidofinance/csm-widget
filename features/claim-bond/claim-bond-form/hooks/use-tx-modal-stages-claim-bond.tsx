@@ -12,10 +12,7 @@ import {
   useTxStages,
 } from 'shared/transaction-modal';
 import {
-  optionIncludesRewards,
-  optionShowsTokenAmount,
-} from '../context/claim-options';
-import {
+  CLAIM_OPTION,
   ClaimBondFormInputType,
   ClaimBondFormNetworkData,
 } from '../context/types';
@@ -25,10 +22,11 @@ const { stakeWidget } = getExternalLinks();
 export const useTxModalStagesClaimBond = () =>
   useTxStages<ClaimBondFormInputType, ClaimBondFormNetworkData>(
     (transitStage, input, data) => {
-      const amount = optionShowsTokenAmount(input.claimOption)
-        ? (input.amount ?? 0n)
-        : 0n;
-      const claimRewards = optionIncludesRewards(input.claimOption);
+      const claimRewards = input.claimOption !== CLAIM_OPTION.BOND_TO_RA;
+      const amount =
+        input.claimOption !== CLAIM_OPTION.REWARDS_TO_BOND
+          ? (input.amount ?? 0n)
+          : 0n;
 
       return {
         sign: () =>

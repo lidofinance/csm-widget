@@ -1,12 +1,12 @@
 import {
   KEY_OPERATOR_BALANCE,
   KEY_OPERATOR_REWARDS,
-  useSmStatus,
   useIsContract,
   useNodeOperatorId,
   useOperatorBalance,
   useOperatorInfo,
   useOperatorRewards,
+  useSmStatus,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
 import {
@@ -15,7 +15,7 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
-import { type ClaimBondFormNetworkData } from './types';
+import { CLAIM_OPTION, type ClaimBondFormNetworkData } from './types';
 import { useMaxValues } from './use-max-values';
 
 const useClaimBondFormNetworkData: NetworkData<
@@ -61,6 +61,12 @@ const useClaimBondFormNetworkData: NetworkData<
     isContractLoading ||
     isStatusLoading;
 
+  const availableOptions: CLAIM_OPTION[] = [
+    rewards?.available ? CLAIM_OPTION.ALL_TO_RA : undefined,
+    !bond?.isInsufficient && bond?.delta ? CLAIM_OPTION.BOND_TO_RA : undefined,
+    rewards?.available ? CLAIM_OPTION.REWARDS_TO_BOND : undefined,
+  ].filter((o) => !!o);
+
   return {
     data: {
       nodeOperatorId,
@@ -70,6 +76,7 @@ const useClaimBondFormNetworkData: NetworkData<
       rewardsAddress,
       isContract,
       isPaused: status?.isPausedAccounting,
+      availableOptions,
     } as ClaimBondFormNetworkData,
     isPending,
     revalidate,

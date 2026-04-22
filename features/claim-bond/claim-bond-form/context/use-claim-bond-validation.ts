@@ -6,11 +6,10 @@ import {
 import { getTokenDisplayName } from 'utils';
 import { formatEther } from 'viem';
 import {
-  optionIncludesRewards,
-  optionMaxValueIndex,
-  optionShowsTokenAmount,
-} from './claim-options';
-import type { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
+  CLAIM_OPTION,
+  type ClaimBondFormInputType,
+  type ClaimBondFormNetworkData,
+} from './types';
 
 export const useClaimBondValidation = () => {
   return useFormValidation<ClaimBondFormInputType, ClaimBondFormNetworkData>(
@@ -20,10 +19,10 @@ export const useClaimBondValidation = () => {
       { maxValues, rewards },
       validate,
     ) => {
-      if (!optionShowsTokenAmount(claimOption)) return;
+      if (claimOption === CLAIM_OPTION.REWARDS_TO_BOND) return;
 
       await validate('amount', () => {
-        const includesRewards = optionIncludesRewards(claimOption);
+        const includesRewards = claimOption !== CLAIM_OPTION.BOND_TO_RA;
         validateEtherAmount(
           'amount',
           amount,
@@ -31,7 +30,8 @@ export const useClaimBondValidation = () => {
           Boolean(includesRewards && rewards?.available),
         );
 
-        const maxAmount = maxValues?.[token][optionMaxValueIndex(claimOption)];
+        const index = claimOption === CLAIM_OPTION.BOND_TO_RA ? 0 : 1;
+        const maxAmount = maxValues?.[token][index];
         if (amount && maxAmount)
           validateBigintMax(
             'amount',

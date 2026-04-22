@@ -24,7 +24,11 @@ export const ClaimBondFormProvider: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="claimBond">
+      <FormControllerProvider
+        submitter={submitter}
+        formName="claimBond"
+        // onReset={formObject.reset}
+      >
         <ClaimBondUpdater />
         {children}
       </FormControllerProvider>

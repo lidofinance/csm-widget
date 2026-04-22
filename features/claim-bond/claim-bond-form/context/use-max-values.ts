@@ -20,7 +20,7 @@ type Props = {
 
 export type MaxValues = PerToken<[bigint, bigint]>;
 
-// TODO: reuse
+// TODO: use sharePool to convert
 export const useMaxValues = ({ bond, rewards }: Props) => {
   const maxBond = calculateAvailableToClaim({
     bond,

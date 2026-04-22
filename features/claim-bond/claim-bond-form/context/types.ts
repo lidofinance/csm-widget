@@ -7,24 +7,20 @@ import {
 import { MaxValues } from './use-max-values';
 
 export const CLAIM_OPTION = {
-  /** Claim both Excess Bond and Rewards → Rewards Address */
+  /** Claim available bond (excess) + rewards → Rewards Address. */
   ALL_TO_RA: 'all-to-ra',
-  /** Claim only Excess Bond → Rewards Address */
+  /** Claim only Excess Bond → Rewards Address. Requires excess bond > 0. */
   BOND_TO_RA: 'bond-to-ra',
-  /** Move all rewards to the bond */
+  /** Move rewards to the bond. */
   REWARDS_TO_BOND: 'rewards-to-bond',
-  /** Claim Rewards → Rewards Address (no excess / insufficient with rewards > debt) */
-  REWARDS_TO_RA: 'rewards-to-ra',
-  /** Compensate Insufficient Bond from rewards (rewards ≤ debt) */
-  COMPENSATE: 'compensate',
 } as const;
 
-export type ClaimOption = (typeof CLAIM_OPTION)[keyof typeof CLAIM_OPTION];
+export type CLAIM_OPTION = (typeof CLAIM_OPTION)[keyof typeof CLAIM_OPTION];
 
 export type ClaimBondFormInputType = {
   token: TOKENS;
   amount?: bigint;
-  claimOption: ClaimOption;
+  claimOption: CLAIM_OPTION;
   unlockedClaimTokens: boolean;
 };
 
@@ -37,4 +33,5 @@ export type ClaimBondFormNetworkData = {
   rewardsAddress: string;
   isContract: boolean;
   isPaused: boolean;
+  availableOptions: CLAIM_OPTION[];
 };

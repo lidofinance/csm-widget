@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormLoader } from 'shared/hook-form/form-controller';
-import { useClaimBondFlow } from './context/use-claim-bond-flow';
+import { useClaimBondFlow } from './context';
 import { EmptyState } from './controls/empty-state';
 
 const ClaimBondFormGate: FC<PropsWithChildren> = ({ children }) => {

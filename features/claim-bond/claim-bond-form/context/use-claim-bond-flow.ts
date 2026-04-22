@@ -8,13 +8,22 @@ import {
 import { useCanPerform } from 'shared/hooks';
 import { useTxModalStagesClaimBond } from '../hooks/use-tx-modal-stages-claim-bond';
 import { useClaimBondFormData } from './claim-bond-data-provider';
-import { optionIncludesRewards, optionShowsTokenAmount } from './claim-options';
-import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
+import {
+  CLAIM_OPTION,
+  ClaimBondFormInputType,
+  ClaimBondFormNetworkData,
+} from './types';
+import { useWatch } from 'react-hook-form';
 
 export type ClaimBondFlow =
   | { action: 'no-access'; access: MethodAccess }
   | { action: 'nothing' }
-  | ({ action: 'claim' } & Executable);
+  | ({
+      action: 'claim';
+      includeRewards: boolean;
+      showAmount: boolean;
+      maxValueIndex: 0 | 1;
+    } & Executable);
 
 export const useClaimBondFlowResolver = (): FlowResolver<
   ClaimBondFormInputType,
@@ -30,21 +39,30 @@ export const useClaimBondFlowResolver = (): FlowResolver<
       if (!canClaim) return { action: 'no-access', access: claimAccess };
 
       if (
-        !data.rewards ||
-        !data.bond ||
-        (data?.rewards.available === 0n &&
-          !data?.bond.isInsufficient &&
-          data?.bond.delta === 0n)
-      )
+        !data?.rewards?.available &&
+        (!data?.bond?.delta || data?.bond?.isInsufficient)
+      ) {
         return { action: 'nothing' };
+      }
 
-      const includeRewards = optionIncludesRewards(input.claimOption);
-      const amount = optionShowsTokenAmount(input.claimOption)
-        ? (input.amount ?? 0n)
-        : 0n;
+      const rewardsFullyCoverInsufficient =
+        data.bond.isInsufficient && data.bond.delta >= data.rewards.available;
+      const includeRewards = input.claimOption !== CLAIM_OPTION.BOND_TO_RA;
+      const showAmount =
+        input.claimOption !== CLAIM_OPTION.REWARDS_TO_BOND &&
+        !(
+          input.claimOption === CLAIM_OPTION.ALL_TO_RA &&
+          rewardsFullyCoverInsufficient
+        );
+      const amount = showAmount ? (input.amount ?? 0n) : 0n;
+      const maxValueIndex =
+        input.claimOption === CLAIM_OPTION.BOND_TO_RA ? 0 : 1;
 
       return {
-        action: 'claim' as const,
+        action: 'claim',
+        includeRewards,
+        showAmount,
+        maxValueIndex,
         submit: () =>
           bondSDK.claimBond({
             nodeOperatorId: data.nodeOperatorId,
@@ -63,5 +81,10 @@ export const useClaimBondFlowResolver = (): FlowResolver<
 export const useClaimBondFlow = (): ClaimBondFlow => {
   const resolve = useClaimBondFlowResolver();
   const data = useClaimBondFormData(true);
-  return resolve({} as ClaimBondFormInputType, data);
+  const [token, claimOption, amount, unlockedClaimTokens] = useWatch<
+    ClaimBondFormInputType,
+    ['token', 'claimOption', 'amount', 'unlockedClaimTokens']
+  >({ name: ['token', 'claimOption', 'amount', 'unlockedClaimTokens'] });
+
+  return resolve({ token, claimOption, amount, unlockedClaimTokens }, data);
 };

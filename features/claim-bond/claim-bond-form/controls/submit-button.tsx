@@ -15,19 +15,23 @@ export const SubmitButton = () => {
     name: ['claimOption', 'token'],
   });
 
-  const { isPaused } = useClaimBondFormData(true);
+  const { isPaused, bond, rewards } = useClaimBondFormData(true);
   if (isPaused) {
     return <PausedButton type="Accounting" />;
   }
 
-  const text =
-    claimOption === CLAIM_OPTION.COMPENSATE
-      ? 'Compensate'
-      : claimOption === CLAIM_OPTION.REWARDS_TO_BOND
-        ? 'Claim rewards to the Bond balance'
-        : token === TOKENS.eth
-          ? 'Request withdrawal'
-          : 'Claim';
+  const isCompensateFlow =
+    claimOption === CLAIM_OPTION.REWARDS_TO_BOND &&
+    bond.isInsufficient &&
+    rewards.available <= bond.delta;
+
+  const text = isCompensateFlow
+    ? 'Compensate'
+    : claimOption === CLAIM_OPTION.REWARDS_TO_BOND
+      ? 'Claim rewards to the Bond balance'
+      : token === TOKENS.eth
+        ? 'Request withdrawal'
+        : 'Claim';
 
   return <SubmitButtonHookForm>{text}</SubmitButtonHookForm>;
 };

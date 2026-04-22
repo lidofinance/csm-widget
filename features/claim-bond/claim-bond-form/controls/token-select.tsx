@@ -17,20 +17,17 @@ import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
 import {
   ClaimBondFormInputType,
+  useClaimBondFlow,
   useClaimBondFormData,
-  optionMaxValueIndex,
-  optionShowsTokenAmount,
 } from '../context';
 import { useWithdrawalWaitingTime } from '../hooks/use-withdrawal-waiting-time';
 
 export const TokenSelect: React.FC = () => {
-  const [token, claimOption] = useWatch<
-    ClaimBondFormInputType,
-    ['token', 'claimOption']
-  >({ name: ['token', 'claimOption'] });
+  const [token] = useWatch<ClaimBondFormInputType, ['token']>({
+    name: ['token'],
+  });
   const { maxValues, isContract } = useClaimBondFormData(true);
-
-  const maxIdx = optionMaxValueIndex(claimOption);
+  const flow = useClaimBondFlow();
 
   const maxEthAmount = maxValues?.[TOKENS.eth]?.[1];
   const {
@@ -45,8 +42,8 @@ export const TokenSelect: React.FC = () => {
     name: 'unlockedClaimTokens',
   });
 
-  const showTokenAmount = optionShowsTokenAmount(claimOption);
-  if (!showTokenAmount) return null;
+  if (flow.action !== 'claim' || !flow.showAmount) return null;
+  const maxIdx = flow.maxValueIndex;
 
   return (
     <>

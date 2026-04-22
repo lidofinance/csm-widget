@@ -1,3 +1,4 @@
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useWatch } from 'react-hook-form';
 import { FormTitle, Note } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
@@ -5,32 +6,30 @@ import { TokenAmountInputHookForm } from 'shared/hook-form/controls';
 import {
   CLAIM_OPTION,
   ClaimBondFormInputType,
+  useClaimBondFlow,
   useClaimBondFormData,
-  optionMaxValueIndex,
-  optionShowsTokenAmount,
 } from '../context';
 import { useInsufficientBondCoverAmount } from '../hooks/use-insufficient-bond-cover-amount';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const AmountInput: React.FC = () => {
   const [token, claimOption] = useWatch<
     ClaimBondFormInputType,
     ['token', 'claimOption']
   >({ name: ['token', 'claimOption'] });
+  const flow = useClaimBondFlow();
   const { bond, rewards, maxValues } = useClaimBondFormData(true);
-  const maxAmount = maxValues[token][optionMaxValueIndex(claimOption)];
 
   const coverInsufficientAmount = useInsufficientBondCoverAmount();
   const hasNoExcess = !bond.isInsufficient && bond.delta === 0n;
-  const showExcessNote =
-    hasNoExcess && claimOption === CLAIM_OPTION.REWARDS_TO_RA;
+  const showExcessNote = hasNoExcess && claimOption === CLAIM_OPTION.ALL_TO_RA;
   const availableAfterCover =
     coverInsufficientAmount && rewards.available > coverInsufficientAmount
       ? rewards.available - coverInsufficientAmount
       : undefined;
 
-  const showTokenAmount = optionShowsTokenAmount(claimOption);
-  if (!showTokenAmount) return null;
+  if (flow.action !== 'claim' || !flow.showAmount) return null;
+  const maxIdx = flow.maxValueIndex;
+  const maxAmount = maxValues[token][maxIdx];
 
   return (
     <>
