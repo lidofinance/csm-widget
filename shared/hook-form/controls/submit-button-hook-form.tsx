@@ -9,6 +9,8 @@ type SubmitButtonHookFormProps = Partial<
   React.ComponentProps<typeof ButtonIcon>
 > & {
   isLocked?: boolean;
+  noDisableOnError?: boolean;
+  disableIfClean?: boolean;
 };
 
 export const SubmitButtonHookForm: React.FC<SubmitButtonHookFormProps> = ({
@@ -18,9 +20,12 @@ export const SubmitButtonHookForm: React.FC<SubmitButtonHookFormProps> = ({
   ...props
 }) => {
   const { isAccountActive } = useDappStatus();
-  const { isValidating, isSubmitting } = useFormState();
+  const { isValidating, isSubmitting, isDirty } = useFormState();
   const { errors } = useFormState<Record<string, unknown>>();
-  const disabled = hasErrors(errors) || disabledProp;
+  const disabled =
+    (hasErrors(errors) && !props.noDisableOnError) ||
+    (props.disableIfClean && !isDirty) ||
+    disabledProp;
 
   if (!isAccountActive) return <Connect fullwidth />;
 

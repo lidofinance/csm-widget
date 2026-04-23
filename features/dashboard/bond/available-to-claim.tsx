@@ -1,6 +1,7 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import {
+  getNextDistribution,
   useFrameInfo,
   useNodeOperatorId,
   useOperatorBalance,
@@ -8,7 +9,7 @@ import {
 } from 'modules/web3';
 import { FC } from 'react';
 import { Counter, IconTooltip } from 'shared/components';
-import { calculateAvailableToClaim, formatDate } from 'utils';
+import { calculateAvailableToClaim } from 'utils';
 import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 
@@ -19,10 +20,7 @@ export const AvailableToClaim: FC = () => {
 
   const { data: rewards, isPending: isRewardsLoading } = useOperatorRewards(id);
 
-  const { data: nextDistribution } = useFrameInfo(
-    (data) => data.lastReport + data.frameDuration,
-  );
-  const nextRewardsDate = formatDate(nextDistribution);
+  const { data: nextDistribution } = useFrameInfo(getNextDistribution);
 
   const availableToClaim = calculateAvailableToClaim({
     bond,
@@ -56,7 +54,7 @@ export const AvailableToClaim: FC = () => {
             <>
               Rewards
               <IconTooltip
-                tooltip={`Next rewards distribution is expected on ${nextRewardsDate}`}
+                tooltip={`Next rewards distribution is expected ${nextDistribution}`}
                 type="calendar"
               />
             </>

@@ -9,6 +9,7 @@ export const LegalDisclaimer: FC = () => (
     anonymized data for improvements. Cookies are used for functionality only.
     For more info read{' '}
     <MatomoLink
+      $inline
       href="https://lido.fi/privacy-notice"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.legalPrivacyNoticeLink}
     >

@@ -2,7 +2,8 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   useFormValidation,
   validateEtherAmount,
-  validateHash,
+  validateHex,
+  validateLength,
   validateNodeOperatorId,
 } from 'shared/hook-form/validation';
 import type {
@@ -17,7 +18,7 @@ export const useStealingReportValidation = () => {
   >(
     'amount',
     async (
-      { amount, nodeOperatorId, blockhash },
+      { amount, nodeOperatorId, penaltyType, details },
       { nodeOperatorsCount },
       validate,
     ) => {
@@ -33,8 +34,12 @@ export const useStealingReportValidation = () => {
         validateEtherAmount('amount', amount, TOKENS.eth);
       });
 
-      await validate('blockhash', () => {
-        validateHash('blockhash', blockhash);
+      await validate('penaltyType', () => {
+        validateHex('penaltyType', penaltyType);
+      });
+
+      await validate('details', () => {
+        validateLength('details', details, 0, 256);
       });
     },
   );

@@ -1,23 +1,23 @@
-import { expect, Page, test } from '@playwright/test';
-import { ElementController } from '../pages/elements/controller';
+import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
-  WalletPage,
   WalletConnectTypes,
+  WalletPage,
 } from '@lidofinance/wallets-testing-wallets';
-import {
-  MainPage,
-  KeysPage,
-  DashboardPage,
-  RolesPage,
-  MonitoringPage,
-} from '../pages';
-import { DepositKey } from './keysGenerator.service';
+import { expect, Page, test } from '@playwright/test';
+import { FeatureFlagsType } from 'config/feature-flags/types';
 import { TokenSymbol } from 'tests/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 import { BondRewardsPage } from 'tests/pages/bondRewards.page';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { OperatorTypePage } from 'tests/pages/operatorType.page';
-import { FeatureFlagsType } from 'config/feature-flags/types';
+import {
+  DashboardPage,
+  KeysPage,
+  MainPage,
+  MonitoringPage,
+  SettingsPage,
+} from '../pages';
+import { ElementController } from '../pages/elements/controller';
+import { DepositKey } from './keysGenerator.service';
 
 type FeatureFlagName = keyof FeatureFlagsType;
 
@@ -25,7 +25,7 @@ export class WidgetService {
   public mainPage: MainPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
-  public rolesPage: RolesPage;
+  public settingsPage: SettingsPage;
   public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
   public operatorType: OperatorTypePage;
@@ -37,7 +37,7 @@ export class WidgetService {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
-    this.rolesPage = new RolesPage(this.page, this.walletPage);
+    this.settingsPage = new SettingsPage(this.page, this.walletPage);
     this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
     this.operatorType = new OperatorTypePage(this.page, this.walletPage);
@@ -61,12 +61,12 @@ export class WidgetService {
           WalletConnectTypes.EOA
       ) {
         try {
-          const [connectWalletPage] = await Promise.all([
+          await Promise.all([
             this.page.context().waitForEvent('page', { timeout: 10000 }),
             // @Fixme dbclick() when https://linear.app/lidofi/issue/SI-1447/mm-incorrect-network-required-double-click resolved
             await walletIcon.dblclick(),
           ]);
-          await this.walletPage.connectWallet(connectWalletPage);
+          await this.walletPage.connectWallet();
         } catch {
           console.error('Wallet page didnt open');
         }

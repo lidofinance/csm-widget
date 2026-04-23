@@ -1,3 +1,4 @@
+import { isModuleCM } from 'consts';
 import { FC } from 'react';
 import { Section } from 'shared/components';
 import { useFilterShowRules } from 'shared/hooks';
@@ -6,6 +7,8 @@ import { AccordionNavigatable } from '../accordion-navigatable';
 
 export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
   const items = useFilterShowRules(_items);
+
+  if (isModuleCM) return null; // @note until CM FAQ is ready
 
   return (
     <Section title="FAQ">

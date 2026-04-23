@@ -7,5 +7,5 @@ export const CounterIcs: FC = () => {
   const canClaimIcs = useCanClaimICS();
   const count = Number(canClaimIcs);
 
-  return <Counter count={count} type={OPERATOR_TYPE.ICS} />;
+  return <Counter count={count} type={OPERATOR_TYPE.CSM_ICS} />;
 };

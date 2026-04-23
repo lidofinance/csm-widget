@@ -5,27 +5,36 @@ import {
 } from 'shared/hook-form/validation';
 import { getTokenDisplayName } from 'utils';
 import { formatEther } from 'viem';
-import type { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
+import { getMaxValues } from './get-max-values';
+import {
+  CLAIM_OPTION,
+  type ClaimBondFormInputType,
+  type ClaimBondFormNetworkData,
+} from './types';
 
 export const useClaimBondValidation = () => {
   return useFormValidation<ClaimBondFormInputType, ClaimBondFormNetworkData>(
     'token',
     async (
-      { token, amount, claimRewards },
-      { maxValues, rewards },
+      { token, amount, claimOption },
+      { bond, rewards, poolData },
       validate,
     ) => {
-      // FIXME: validate on submit that token and amount is defined
+      if (claimOption === CLAIM_OPTION.REWARDS_TO_BOND) return;
 
       await validate('amount', () => {
+        const includesRewards = claimOption !== CLAIM_OPTION.BOND_TO_RA;
         validateEtherAmount(
           'amount',
           amount,
           token,
-          Boolean(claimRewards && rewards?.available),
+          Boolean(includesRewards && rewards?.available),
         );
 
-        const maxAmount = maxValues?.[token][Number(claimRewards)];
+        const index = claimOption === CLAIM_OPTION.BOND_TO_RA ? 0 : 1;
+        const maxAmount = getMaxValues({ bond, rewards, poolData })?.[token][
+          index
+        ];
         if (amount && maxAmount)
           validateBigintMax(
             'amount',

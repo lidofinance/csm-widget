@@ -10,7 +10,6 @@ export const LogoLido: FC = () => (
     <MatomoLink
       href="https://lido.fi"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoHomeLink}
-      $rawIcon
     >
       <LidoLogo data-testid="lidoLogo" as="span" />
     </MatomoLink>

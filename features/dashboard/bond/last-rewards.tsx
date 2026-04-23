@@ -6,13 +6,15 @@ import {
   Text,
   Tooltip,
 } from '@lidofinance/lido-ui';
+import { LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE } from 'consts/external-links';
+import { isModuleCM } from 'consts/module';
 import {
+  useFrameInfo,
+  useLastReportTimestamps,
+  useLastReportTxHash,
   useNodeOperatorId,
   useOperatorInfo,
   useOperatorLastRewards,
-  useFrameInfo,
-  useLastReportTxHash,
-  useLastReportTimestamps,
 } from 'modules/web3';
 import { ModalComponentType, useModal } from 'providers/modal-provider';
 import { FC, useCallback } from 'react';
@@ -24,9 +26,13 @@ import {
   TextBlock,
   TxLinkEtherscan,
 } from 'shared/components';
-import { LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE } from 'consts/external-links';
 import { FaqElement } from 'shared/components/faq/styles';
-import { countCalendarDaysLeft, formatDate, formatPercent } from 'utils';
+import {
+  countCalendarDaysLeft,
+  formatDate,
+  formatPercent,
+  isDayInPast,
+} from 'utils';
 import { Balance } from './balance';
 import {
   AccordionStyle,
@@ -43,18 +49,18 @@ export const LastRewards: FC = () => {
   const { data: info } = useOperatorInfo(id);
   const { data: lastRewards, isPending: isLoading } =
     useOperatorLastRewards(id);
-  const { data: lastFrame } = useLastReportTimestamps();
   const { data: rewardsFrame } = useFrameInfo((data) => ({
-    lastDistribution: data.lastReport,
-    nextDistribution: data.lastReport + data.frameDuration,
+    lastDistribution: formatDate(data.lastReport),
+    nextDistribution: formatDate(data.nextReport),
+    daysLeft: countCalendarDaysLeft(data.nextReport),
+    isDelayed: isDayInPast(data.nextReport),
   }));
+  const { data: prevDistribution } = useLastReportTimestamps((data) =>
+    formatDate(data?.start),
+  );
 
-  const lastRewardsDate = formatDate(rewardsFrame?.lastDistribution);
-  const nextRewardsDate = formatDate(rewardsFrame?.nextDistribution);
-  const prevRewardsDate = formatDate(lastFrame?.start);
-  const daysLeft = countCalendarDaysLeft(rewardsFrame?.nextDistribution);
-
-  const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
+  const showThisSection =
+    prevDistribution && (lastRewards || (info?.totalDepositedKeys ?? 0) > 0);
 
   const showWhy = lastRewards && lastRewards.distributed === 0n;
 
@@ -67,9 +73,10 @@ export const LastRewards: FC = () => {
         <RowHeader>
           <Stack direction="column" gap="xxs" data-testid="rowHeader">
             <RowTitle>Latest rewards distribution</RowTitle>
-            {prevRewardsDate && lastRewardsDate && (
+            {prevDistribution && rewardsFrame && (
               <GrayText data-testid="reportFrame">
-                Report frame: {prevRewardsDate} — {lastRewardsDate}
+                Report frame: {prevDistribution} —{' '}
+                {rewardsFrame.lastDistribution}
               </GrayText>
             )}
           </Stack>
@@ -91,16 +98,17 @@ export const LastRewards: FC = () => {
             <Text size="xs" weight={700}>
               Next rewards distribution
             </Text>
-            {lastRewardsDate && nextRewardsDate ? (
+            {rewardsFrame ? (
               <GrayText data-testid="reportFrame">
-                Report frame: {lastRewardsDate} — {nextRewardsDate}
+                Report frame: {rewardsFrame.lastDistribution} —{' '}
+                {rewardsFrame.nextDistribution}
               </GrayText>
             ) : (
               <InlineLoader />
             )}
           </Stack>
-          {daysLeft !== null &&
-            (daysLeft < 0 ? (
+          {rewardsFrame &&
+            (rewardsFrame.isDelayed ? (
               <BadgeStyle $variant="warning">
                 Oracle report is delayed
               </BadgeStyle>
@@ -108,12 +116,15 @@ export const LastRewards: FC = () => {
               <Stack center gap="xs" data-testid="expectedDays">
                 <GrayText>Expected</GrayText>
                 <BadgeStyle>
-                  {daysLeft === 0 ? (
+                  {rewardsFrame.daysLeft === 0 ? (
                     'Today'
                   ) : (
                     <>
-                      in {daysLeft}{' '}
-                      <Plural variants={['day', 'days']} value={daysLeft} />
+                      in {rewardsFrame.daysLeft}{' '}
+                      <Plural
+                        variants={['day', 'days']}
+                        value={rewardsFrame.daysLeft}
+                      />
                     </>
                   )}
                 </BadgeStyle>
@@ -133,9 +144,8 @@ const LastReportStats: FC = () => {
 
   return (
     <RowBody data-testid="lastRewardsInfo">
-      {!lastRewards || lastRewards.validatorsCount ? (
-        <>
-          {' '}
+      {!isModuleCM &&
+        (!lastRewards || lastRewards.validatorsCount ? (
           <TextBlock
             title="Keys over threshold"
             loading={isLoading}
@@ -153,18 +163,19 @@ const LastReportStats: FC = () => {
             {lastRewards?.validatorsOverThresholdCount}{' '}
             <i>/{lastRewards?.validatorsCount}</i>
           </TextBlock>
-        </>
-      ) : (
-        <DoubleColumnStyle>
-          <TextBlock title="You had no active keys during the latest rewards frame" />
-        </DoubleColumnStyle>
-      )}
+        ) : (
+          <DoubleColumnStyle>
+            <TextBlock title="You had no active keys during the latest rewards frame" />
+          </DoubleColumnStyle>
+        ))}
 
-      <TextBlock title="Distribution transaction" loading={isTxLoading}>
-        <Box as="span" fontWeight={400} fontSize={12}>
-          <TxLinkEtherscan txHash={txHash} />
-        </Box>
-      </TextBlock>
+      {txHash && (
+        <TextBlock title="Distribution transaction" loading={isTxLoading}>
+          <Box as="span" fontWeight={400} fontSize={12}>
+            <TxLinkEtherscan txHash={txHash} />
+          </Box>
+        </TextBlock>
+      )}
     </RowBody>
   );
 };

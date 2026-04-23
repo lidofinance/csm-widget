@@ -1,10 +1,10 @@
-import { CSM_SUPPORTED_CHAINS, LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
+import { SUPPORTED_CHAINS, LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
 import { CHAINS, LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
 import { config, secretConfig } from 'config';
 import { PublicClient, createPublicClient, fallback, http } from 'viem';
 import * as chains from 'viem/chains';
 
-const rpcUrls: Partial<Record<CSM_SUPPORTED_CHAINS, [string, ...string[]]>> = {
+const rpcUrls: Partial<Record<SUPPORTED_CHAINS, [string, ...string[]]>> = {
   [CHAINS.Mainnet]: secretConfig.rpcUrls_1,
   [CHAINS.Hoodi]: secretConfig.rpcUrls_560048,
 };
@@ -15,7 +15,7 @@ export const getClient = () => {
   if (client) return client;
   const chainId = config.defaultChain;
   const chain = Object.values(chains).find((c) => c.id === chainId);
-  const urls = rpcUrls[chainId as CSM_SUPPORTED_CHAINS];
+  const urls = rpcUrls[chainId];
   if (!urls) {
     throw new Error(`Error: RPC is not configured for chain ${chainId}`);
   }

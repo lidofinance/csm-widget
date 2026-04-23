@@ -3,13 +3,13 @@ import { useMemo, useState, useCallback } from 'react';
 import { getUserConfigDefault } from './utils';
 import { UserConfigDefaultType } from './types';
 import { useLocalStorage } from 'shared/hooks/use-local-storage';
-import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 const STORAGE_USER_CONFIG = 'lido-user-config';
 
 type SavedUserConfig = {
-  rpcUrls: Partial<Record<CSM_SUPPORTED_CHAINS, string>>;
-  clApiUrls: Partial<Record<CSM_SUPPORTED_CHAINS, string>>;
+  rpcUrls: Partial<Record<SUPPORTED_CHAINS, string>>;
+  clApiUrls: Partial<Record<SUPPORTED_CHAINS, string>>;
 };
 
 export type UserConfigContextType = UserConfigDefaultType & {

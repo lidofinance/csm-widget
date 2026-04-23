@@ -1,7 +1,8 @@
 import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
-import { Eth as EthIcon } from '@lidofinance/lido-ui';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { Eth as EthIcon, Plus as PlusIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
@@ -17,14 +18,13 @@ import {
   CounterLockedBond,
   CounterSurveys,
 } from 'shared/counters';
-import { ShowRule, useFilterShowRules } from 'shared/hooks';
+import { ShowRuleProps, useFilterShowRules } from 'shared/hooks';
 
-export type Route = {
+export type Route = ShowRuleProps & {
   name: string;
   path: PATH;
   icon: JSX.Element;
   subPaths?: PATH[];
-  showRules: ShowRule[];
   suffix?: ReactNode;
   colored?: boolean;
 };
@@ -35,12 +35,19 @@ const routes: Route[] = [
     path: PATH.HOME,
     icon: <HomeIcon />,
     showRules: ['NOT_NODE_OPERATOR'],
+    module: MODULE_NAME.CSM,
   },
   {
     name: 'Dashboard',
     path: PATH.HOME,
     icon: <DashboardIcon />,
     showRules: ['IS_NODE_OPERATOR'],
+  },
+  {
+    name: 'Create Operator',
+    path: PATH.CREATE,
+    icon: <PlusIcon />,
+    showRules: ['CAN_CREATE'],
   },
   {
     name: 'Keys',
@@ -52,10 +59,8 @@ const routes: Route[] = [
       PATH.KEYS_EJECT,
       PATH.KEYS_EXIT,
       PATH.KEYS_VIEW,
-      PATH.KEYS_TRANSFER,
-      PATH.CREATE,
     ],
-    showRules: ['IS_NODE_OPERATOR', 'CAN_CREATE'],
+    showRules: ['IS_NODE_OPERATOR'],
     suffix: <CounterInvalidKeys />,
   },
   {
@@ -63,7 +68,6 @@ const routes: Route[] = [
     path: PATH.MONITORING,
     icon: <MeterIcon />,
     showRules: ['IS_NODE_OPERATOR'],
-    // TODO: suffix for bad attestation rate
   },
   {
     name: 'Bond & Rewards',
@@ -74,10 +78,17 @@ const routes: Route[] = [
     suffix: <CounterLockedBond />,
   },
   {
-    name: 'Roles',
-    path: PATH.ROLES,
+    name: 'Settings',
+    path: PATH.SETTINGS,
     icon: <GearIcon />,
-    subPaths: [PATH.ROLES_MANAGER, PATH.ROLES_REWARDS, PATH.ROLES_INBOX],
+    subPaths: [
+      PATH.SETTINGS_REWARDS_ADDRESS,
+      PATH.SETTINGS_MANAGER_ADDRESS,
+      PATH.SETTINGS_CLAIMER,
+      PATH.SETTINGS_SPLITS,
+      PATH.SETTINGS_INBOX,
+      PATH.SETTINGS_METADATA,
+    ],
     showRules: ['IS_NODE_OPERATOR', 'HAS_INVITES'],
     suffix: <CounterInvites />,
   },
@@ -94,6 +105,7 @@ const routes: Route[] = [
     icon: <FileIcon />,
     showRules: ['IS_SURVEYS_ACTIVE'],
     suffix: <CounterSurveys />,
+    module: MODULE_NAME.CSM,
   },
   {
     name: 'Operator Type',
@@ -102,6 +114,7 @@ const routes: Route[] = [
     subPaths: [PATH.TYPE_CLAIM, PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
     showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED'],
     suffix: <CounterIcs />,
+    module: MODULE_NAME.CSM,
   },
 ];
 

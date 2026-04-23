@@ -8,7 +8,6 @@ export const PATH = <const>{
   KEYS_EJECT: '/keys/eject',
   KEYS_EXIT: '/keys/exit',
   KEYS_VIEW: '/keys/view',
-  KEYS_TRANSFER: '/keys/transfer',
   KEYS_NORMALIZE: '/keys/normalize',
 
   MONITORING: '/monitoring',
@@ -20,10 +19,14 @@ export const PATH = <const>{
   BOND_REBASE_HISTORY: '/bond/rebase-history',
   BOND_UNLOCK: '/bond/unlock',
 
-  ROLES: '/roles',
-  ROLES_REWARDS: '/roles/reward-address',
-  ROLES_MANAGER: '/roles/manager-address',
-  ROLES_INBOX: '/roles/inbox',
+  SETTINGS: '/settings',
+  SETTINGS_ROLES: '/settings/roles',
+  SETTINGS_REWARDS_ADDRESS: '/settings/rewards-address',
+  SETTINGS_MANAGER_ADDRESS: '/settings/manager-address',
+  SETTINGS_CLAIMER: '/settings/claimer',
+  SETTINGS_SPLITS: '/settings/splits',
+  SETTINGS_INBOX: '/settings/inbox',
+  SETTINGS_METADATA: '/settings/metadata',
 
   STEALING: '/stealing',
   STEALING_REPORT: '/stealing/report',
@@ -42,6 +45,8 @@ export const PATH = <const>{
   SURVEYS_SETUP: '/surveys/setup',
   SURVEYS_DELEGATES: '/surveys/delegates',
   SURVEYS_DELEGATOR: '/surveys/delegator',
+
+  GROUP: '/group',
 
   WRAPPED_SHARE: '/wrapped-2025/share',
 };

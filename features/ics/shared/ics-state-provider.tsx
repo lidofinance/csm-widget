@@ -55,7 +55,7 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
 
   const typeStatus: TypeStatus = useMemo(() => {
-    if (operatorType === OPERATOR_TYPE.ICS || proofData?.isConsumed)
+    if (operatorType === OPERATOR_TYPE.CSM_ICS || proofData?.isConsumed)
       return 'CLAIMED';
     if (proofData?.proof) return 'ISSUED';
     if (ownerProofData?.proof) return 'OWNER_ISSUED';

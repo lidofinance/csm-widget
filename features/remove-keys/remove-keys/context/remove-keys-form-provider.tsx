@@ -2,10 +2,11 @@ import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerProvider,
+  useFlowSubmit,
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
 import { type RemoveKeysFormInputType } from './types';
-import { useRemoveKeysSubmit } from './use-remove-keys-submit';
+import { useRemoveKeysFlowResolver } from './use-remove-keys-flow';
 import { useRemoveKeysValidation } from './use-remove-keys-validation';
 
 export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -21,7 +22,7 @@ export const RemoveKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useRemoveKeysSubmit();
+  const submitter = useFlowSubmit(useRemoveKeysFlowResolver());
 
   return (
     <FormProvider {...formObject}>

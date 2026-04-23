@@ -4,6 +4,7 @@ import {
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { FC, useMemo } from 'react';
+import { isModuleCM, isModuleCSM } from 'consts/module';
 import { IconTooltip } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import {
@@ -56,17 +57,19 @@ export const DepositDataParameters: FC = () => {
           curveParameters.rewardsConfig,
           existsKeysCount,
         ),
-        queueType: getQueueTypeForKey(
-          keyNumber,
-          curveParameters.queueConfig,
-          addedKeysCount,
-        ),
+        queueType: isModuleCSM
+          ? getQueueTypeForKey(
+              keyNumber,
+              curveParameters.queueConfig,
+              addedKeysCount,
+            )
+          : undefined,
       };
     });
   }, [curveParameters, depositData.length, operatorInfo]);
 
   return (
-    <TableContainer $equal>
+    <TableContainer $equal $short={isModuleCM}>
       <TableHeader>
         <HeaderCell>Key number</HeaderCell>
         <HeaderCell>
@@ -76,13 +79,15 @@ export const DepositDataParameters: FC = () => {
             placement="bottomRight"
           />
         </HeaderCell>
-        <HeaderCell>
-          Queue
-          <IconTooltip
-            tooltip="Priority queue stays ahead of the general queue"
-            placement="bottomRight"
-          />
-        </HeaderCell>
+        {isModuleCSM && (
+          <HeaderCell>
+            Queue
+            <IconTooltip
+              tooltip="Priority queue stays ahead of the general queue"
+              placement="bottomRight"
+            />
+          </HeaderCell>
+        )}
         <HeaderCell>
           Bond
           <IconTooltip
@@ -96,7 +101,7 @@ export const DepositDataParameters: FC = () => {
         <TableRow key={keyNumber}>
           <DataCell>#{keyNumber}</DataCell>
           <DataCell>{formatPercent(feePercentage)}</DataCell>
-          <DataCell>{queueType}</DataCell>
+          {isModuleCSM && <DataCell>{queueType}</DataCell>}
           <DataCell>
             <FormatToken amount={bondAmount} token={TOKENS.eth} />
           </DataCell>

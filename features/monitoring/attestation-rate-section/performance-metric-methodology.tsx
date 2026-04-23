@@ -78,6 +78,7 @@ export const PerformanceMetricMethodology: FC = () => {
           duties in Ethereum&apos;s Consensus Layer specification. Check out the
           detailed information{' '}
           <MatomoLink
+            $inline
             href="https://docs.lido.fi/staking-modules/csm/intro#rewards"
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.monitoringRewardsDocsLink}
           >

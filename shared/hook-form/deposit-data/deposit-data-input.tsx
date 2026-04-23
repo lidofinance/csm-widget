@@ -1,7 +1,8 @@
-import { Textarea } from '@lidofinance/lido-ui';
-import { FC } from 'react';
+import { ButtonIcon, History, Textarea } from '@lidofinance/lido-ui';
+import { FC, useContext } from 'react';
 import { useController } from 'react-hook-form';
-import { TextareaStyle } from './styles';
+import { DepositDataDropContext } from './deposit-data-drop';
+import { Placeholder, TextareaStyle, TextareaWrapper } from './styles';
 
 type DepositKeysInputHookFormProps = Partial<
   React.ComponentProps<typeof Textarea>
@@ -16,15 +17,34 @@ export const DepositDataInput: FC<DepositKeysInputHookFormProps> = ({
   ...props
 }) => {
   const { field } = useController<Record<string, string>>({ name: fieldName });
+  const openFileDialog = useContext(DepositDataDropContext);
 
   return (
-    <TextareaStyle
-      {...props}
-      {...field}
-      disabled={props.disabled || field.disabled}
-      label={label}
-      rows={6}
-      fullwidth
-    />
+    <TextareaWrapper>
+      <TextareaStyle
+        {...props}
+        {...field}
+        disabled={props.disabled || field.disabled}
+        label={label}
+        rows={6}
+        fullwidth
+      />
+      <Placeholder>
+        <br />
+        Paste JSON with deposit data or drag and drop the file
+        <br />
+        Please make sure you followed the key generation guide provided in FAQ
+        <br />
+        <br />
+        <ButtonIcon
+          icon={<History width={16} height={16} />}
+          size="xs"
+          variant="ghost"
+          onClick={openFileDialog}
+        >
+          select file
+        </ButtonIcon>
+      </Placeholder>
+    </TextareaWrapper>
   );
 };

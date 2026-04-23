@@ -6,6 +6,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "next dev",
+    "dev:cm": "MODULE=cm next dev",
     "build": "next build",
     "build:analyze": "ANALYZE_BUNDLE=true next build",
     "start": "NODE_OPTIONS='-r next-logger' next start",
@@ -30,9 +31,9 @@
     "@lidofinance/api-rpc": "^0.47.0",
     "@lidofinance/eth-api-providers": "^0.47.0",
     "@lidofinance/eth-providers": "^0.47.0",
-    "@lidofinance/lido-csm-sdk": "^1.11.0",
-    "@lidofinance/lido-ethereum-sdk": "^4.5.1",
-    "@lidofinance/lido-ui": "^3.36.0",
+    "@lidofinance/lido-csm-sdk": "^2.0.0-alpha.46",
+    "@lidofinance/lido-ethereum-sdk": "^4.7.0",
+    "@lidofinance/lido-ui": "^3.42.1",
     "@lidofinance/next-api-wrapper": "^0.47.0",
     "@lidofinance/next-ip-rate-limit": "^0.47.0",
     "@lidofinance/next-pages": "^0.47.0",
@@ -69,7 +70,7 @@
     "styled-components": "^5.3.5",
     "tiny-invariant": "^1.1.0",
     "uuid": "^8.3.2",
-    "viem": "2.45.0",
+    "viem": "2.46.0",
     "wagmi": "3.4.1",
     "zod": "^4.1.12"
   },
@@ -134,7 +135,19 @@
   "resolutions": {
     "postcss": "^8.4.31",
     "crypto-js": "^4.2.0",
-    "wrap-ansi": "7.0.0"
+    "wrap-ansi": "7.0.0",
+    "elliptic": "^6.6.1",
+    "minimatch": "^3.1.4",
+    "js-yaml": "^4.1.1",
+    "follow-redirects": "^1.16.0",
+    "secp256k1": "^4.0.4",
+    "@babel/helpers": "^7.26.10",
+    "@babel/runtime": "^7.26.10",
+    "yaml": "^2.8.3",
+    "h3": "^1.15.9",
+    "hono": "^4.12.14",
+    "axios": "^1.15.0",
+    "micromatch": "^4.0.8"
   },
   "lint-staged": {
     "./**/*.{ts,tsx}": [
@@ -148,6 +161,9 @@
     "> 1%, last 2 versions, not dead",
     "last 1 ios_saf major versions"
   ],
+  "engines": {
+    "node": ">=24.0.0 <25.0.0"
+  },
   "volta": {
     "node": "24.14.0"
   }

@@ -1,11 +1,10 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { BondBalance, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 
-export type UnlockBondFormInputType = {
-  amount?: bigint;
-};
+export type UnlockBondFormInputType = Record<string, never>;
 
 export type UnlockBondFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
-  lockedBond: bigint;
-  ethBalance: bigint;
+  bond: BondBalance;
+  isExpired: boolean;
+  compensationAmount: bigint;
 };

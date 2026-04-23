@@ -1,12 +1,13 @@
 import {
   KEY_OPERATOR_BALANCE,
   KEY_STAKE_LIMIT,
-  useCsmStatus,
+  useSmStatus,
   useEthereumBalance,
   useNodeOperatorId,
   useOperatorBalance,
   useStakeLimit,
   useStethBalance,
+  useStethPoolData,
   useWstethBalance,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
@@ -39,7 +40,9 @@ const useAddBondFormNetworkData: NetworkData<AddBondFormNetworkData> = () => {
   const isBondLoading = bondQuery.isPending;
   const isMaxStakeEthLoading = maxStakeEthQuery.isPending;
 
-  const { data: status, isPending: isStatusLoading } = useCsmStatus();
+  const { data: poolData, isPending: isPoolDataLoading } = useStethPoolData();
+
+  const { data: status, isPending: isStatusLoading } = useSmStatus();
 
   const invalidate = useInvalidate();
 
@@ -64,6 +67,7 @@ const useAddBondFormNetworkData: NetworkData<AddBondFormNetworkData> = () => {
     isWstethBalanceLoading ||
     isBondLoading ||
     isMaxStakeEthLoading ||
+    isPoolDataLoading ||
     isStatusLoading;
 
   return {
@@ -74,6 +78,7 @@ const useAddBondFormNetworkData: NetworkData<AddBondFormNetworkData> = () => {
       wstethBalance,
       bond,
       maxStakeEth,
+      poolData,
       isPaused: status?.isPausedAccounting,
     } as AddBondFormNetworkData,
     isPending,
