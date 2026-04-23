@@ -2,6 +2,7 @@ import { Button } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { useModalActions } from 'providers/modal-provider';
 import { FC } from 'react';
+import { Stack } from 'shared/components';
 import { useNavigate } from 'shared/navigate';
 import { Disconnect } from 'shared/wallet';
 import styled from 'styled-components';
@@ -24,7 +25,7 @@ export const CuratedOperatorCustomAddressActions: FC<Props> = ({
   const showCreateAnother = availableGatesCount > 1;
 
   return (
-    <ActionsContainer>
+    <Stack direction="column" gap="sm">
       <Description>
         To continue, connect with the address you specified as Reward/Manager
         Address
@@ -46,16 +47,9 @@ export const CuratedOperatorCustomAddressActions: FC<Props> = ({
           Create another Node Operator
         </Button>
       )}
-    </ActionsContainer>
+    </Stack>
   );
 };
-
-const ActionsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
-  width: 100%;
-`;
 
 const Description = styled.p`
   text-align: center;

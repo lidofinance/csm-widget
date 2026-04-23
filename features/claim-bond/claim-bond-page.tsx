@@ -9,7 +9,7 @@ import { FAQ_BOND } from 'faq';
 export const ClaimBondPage: FC = () => (
   <Layout
     title="Manage Bond & Rewards"
-    subtitle="Claim Bond to the Rewards Address"
+    subtitle="Select a claiming option for bond and rewards"
     pageName="ClaimBond"
   >
     <BondPageSwitcher />

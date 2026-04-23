@@ -10,6 +10,7 @@ import {
   TxStageSuccess,
   useTxStages,
 } from 'shared/transaction-modal';
+import styled from 'styled-components';
 import {
   CuratedOperatorFormInputType,
   CuratedOperatorFormNetworkData,
@@ -63,10 +64,10 @@ export const useTxModalStagesCuratedOperator = () =>
             title="Node Operator has been created"
             description={
               result?.nodeOperatorId !== undefined ? (
-                <>
+                <WrapperSpan>
                   Your Node Operator ID is{' '}
                   <b>{result.nodeOperatorId.toString()}</b>
-                </>
+                </WrapperSpan>
               ) : undefined
             }
             footer={
@@ -89,3 +90,8 @@ export const useTxModalStagesCuratedOperator = () =>
       },
     };
   });
+
+const WrapperSpan = styled.span`
+  display: block;
+  margin-bottom: -${({ theme }) => theme.spaceMap.xl}px;
+`;

@@ -3,7 +3,7 @@ import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { getExternalLinks } from 'consts/external-links';
-import { LogoLido, Stack } from 'shared/components';
+import { LogoLidoLink, Stack } from 'shared/components';
 import { FooterLink, FooterStyle, LinkDivider, Version } from './styles';
 
 const getVersionInfo = () => {
@@ -36,7 +36,7 @@ const { feedbackForm } = getExternalLinks();
 
 export const Footer: FC = () => (
   <FooterStyle>
-    <LogoLido />
+    <LogoLidoLink />
     <Stack gap="none">
       <FooterLink
         href="https://lido.fi/terms-of-use"

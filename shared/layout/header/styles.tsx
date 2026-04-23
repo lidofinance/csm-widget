@@ -2,6 +2,7 @@ import {
   Button,
   ButtonProps,
   Divider,
+  Link,
   ThemeToggler,
 } from '@lidofinance/lido-ui';
 import styled, { keyframes } from 'styled-components';
@@ -111,7 +112,7 @@ export const ThemeTogglerStyle = styled(ThemeToggler)<{ $always?: boolean }>`
   }
 `;
 
-export const LogosStyle = styled.div`
+export const LogosStyle = styled(Link)`
   display: flex;
   gap: 12px;
   align-items: center;
@@ -131,6 +132,7 @@ export const LogosStyle = styled.div`
 
 export const LogoDivider = styled(Divider).attrs({ type: 'vertical' })`
   opacity: 0.6;
+  color: var(--lido-color-text);
 `;
 
 export const HeaderButton = styled((props: ButtonProps) => (

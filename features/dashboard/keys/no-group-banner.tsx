@@ -17,10 +17,9 @@ export const NoGroupBanner: FC = () => {
             Deposits to this Node Operator are currently paused
           </Text>
           <Text size="xxs">
-            Deposits to this Node Operator are currently paused. Your
-            sub-operator is unable to receive deposits because it has not yet
-            been added to the Node Operator group. Deposits will be enabled once
-            CMC adds it to the group.
+            Your sub-operator is unable to receive deposits because it has not
+            yet been added to the Node Operator group. Deposits will be enabled
+            once the CMC adds it to the group.
           </Text>
         </Stack>
       </HatBlock>

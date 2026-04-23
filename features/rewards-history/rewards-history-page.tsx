@@ -9,7 +9,7 @@ import { FAQ_BOND } from 'faq';
 export const RewardsHistoryPage: FC = () => (
   <Layout
     title="Rewards history"
-    subtitle="Claim Bond & Rewards to the Rewards Address"
+    subtitle="View your rewards history"
     pageName="RewardsHistory"
   >
     <BondPageSwitcher />

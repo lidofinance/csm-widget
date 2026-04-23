@@ -1,16 +1,14 @@
-import { Link, Text } from '@lidofinance/lido-ui';
+import { Text } from '@lidofinance/lido-ui';
+import { config } from 'config';
+import { MODULE_METADATA } from 'consts';
 import { FC } from 'react';
 import { LogoLido } from 'shared/components';
 import { LogoDivider, LogosStyle } from '../styles';
-import { MODULE_METADATA } from 'consts';
-import { config } from 'config';
 
 export const Logos: FC = () => (
-  <LogosStyle>
+  <LogosStyle href="/" target={undefined}>
     <LogoLido />
     <LogoDivider />
-    <Link href="/" target={undefined}>
-      <Text as="span">{MODULE_METADATA[config.module].shortTitle}</Text>
-    </Link>
+    <Text as="span">{MODULE_METADATA[config.module].shortTitle}</Text>
   </LogosStyle>
 );

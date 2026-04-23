@@ -7,7 +7,7 @@ export const EditInfo: FC = () => {
   return (
     <>
       <Text size="md" weight={700} as="h4">
-        Set up rewards splitter addresses
+        Set up addresses to split rewards to
       </Text>
 
       <ul>
