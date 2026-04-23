@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import NextBundleAnalyzer from '@next/bundle-analyzer';
 import buildDynamics from './scripts/build-dynamics.mjs';
@@ -18,13 +20,26 @@ if (process.env.RUN_STARTUP_CHECKS === 'true') {
 const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
+const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
 const isIPFSMode = !!process.env.IPFS_MODE;
 const maintenance = !!process.env.MAINTENANCE; // TODO: load from runtime config
+
+// Load devnet contract addresses from JSON file if specified
+let devnetAddresses = null;
+if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
+  try {
+    const filePath = path.resolve(process.env.DEVNET_ADDRESSES_FILE_PATH);
+    devnetAddresses = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+  } catch (e) {
+    console.warn('Failed to load devnet addresses:', e.message);
+  }
+}
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
   '/manifest.json',
+  '/manifest-cm.json',
   '/favicon:size*',
   '/',
   '/runtime/window-env.js',
@@ -121,7 +136,29 @@ export default withBundleAnalyzer({
           },
         ],
       },
+
+      // Handle JSON imports with 'with' assertions syntax from node_modules
+      // by removing the assertions, because next v12 does not support them, which causes build error.
+      // Specifically targeting affected modules here
+      {
+        test: /node_modules\/@base-org\/account.*\.js$/,
+        use: {
+          loader: 'string-replace-loader',
+          options: {
+            search: 'with\\s*\\{\\s*type:\\s*[\'"]json[\'"]\\s*\\}',
+            replace: '',
+            flags: 'g',
+          },
+        },
+      },
     );
+
+    // Fixes warning about missing dependency @react-native-async-storage/async-storage,
+    // which comes from @metamask/sdk v0.33.1
+    // See https://github.com/MetaMask/metamask-sdk/issues/1376
+    config.resolve.fallback = {
+      '@react-native-async-storage/async-storage': false,
+    };
 
     return config;
   },
@@ -153,7 +190,7 @@ export default withBundleAnalyzer({
       },
       {
         // required for gnosis save apps
-        source: '/manifest.json',
+        source: '/manifest:suffix.json',
         headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }],
       },
       ...CACHE_CONTROL_PAGES.map((page) => ({
@@ -197,5 +234,7 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
+    module: moduleMode,
+    devnetAddresses,
   },
 });

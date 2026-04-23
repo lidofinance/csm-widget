@@ -1,4 +1,5 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { isModuleCSM } from 'consts';
 import { getExternalLinks, SUBSCRIBE_EVENTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
@@ -34,25 +35,35 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
             <>
               , on{' '}
               <MatomoLink
+                $inline
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain}
                 href={beaconchain}
               >
                 beaconcha.in
               </MatomoLink>
             </>
-          )}{' '}
-          or subscribe to the{' '}
-          <MatomoLink
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents}
-            href={SUBSCRIBE_EVENTS_LINK}
-          >
-            CSM events notifications
-          </MatomoLink>
+          )}
+          {isModuleCSM && (
+            <>
+              {' '}
+              or subscribe to the{' '}
+              <MatomoLink
+                $inline
+                matomoEvent={
+                  MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents
+                }
+                href={SUBSCRIBE_EVENTS_LINK}
+              >
+                CSM events notifications
+              </MatomoLink>
+            </>
+          )}
           ) make sure your validators are producing attestations{' '}
           {beaconchainDashboardLink && (
             <>
               (you can use the{' '}
               <MatomoLink
+                $inline
                 matomoEvent={
                   MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
                 }

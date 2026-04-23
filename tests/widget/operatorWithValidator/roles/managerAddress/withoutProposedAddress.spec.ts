@@ -9,14 +9,14 @@ import { generateAddress } from 'tests/helpers/accountData';
 
 test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () => {
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.rolesPage.managerAddressPage.open();
-    await widgetService.rolesPage.managerAddressPage.revokePendingRole();
+    await widgetService.settingsPage.managerAddressPage.open();
+    await widgetService.settingsPage.managerAddressPage.revokePendingRole();
   });
 
   test(
     qase(71, 'Verify the addresses field'),
     async ({ widgetService, secretPhrase }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       const address = mnemonicToAccount(secretPhrase).address;
 
       await test.step('Verify the "Current manager address" field', async () => {
@@ -37,7 +37,7 @@ test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () =
   );
 
   test(qase(234, 'Verify input appearence'), async ({ widgetService }) => {
-    const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+    const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 
     await test.step('Verify input', async () => {
       await expect(managerAddressPage.addressInput).toBeVisible();
@@ -52,7 +52,7 @@ test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () =
   });
 
   test(qase(235, 'Verify button appearence'), async ({ widgetService }) => {
-    const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+    const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 
     await test.step('Verify button', async () => {
       await expect(managerAddressPage.proposeButton).toBeVisible();
@@ -72,7 +72,7 @@ test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () =
   test(
     qase(210, 'Should open etherscan for current manager address'),
     async ({ widgetService, widgetConfig, secretPhrase }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 
       const [etherscanPage] = await Promise.all([
         widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
@@ -87,7 +87,7 @@ test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () =
   test(
     qase(211, 'Propose a new Manager Address with invalid input'),
     async ({ widgetService }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 
       await managerAddressPage.addressInput.fill(`${generateAddress()}1`);
 
@@ -102,7 +102,7 @@ test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () =
   test(
     qase(212, 'Propose a new Manager Address with same address'),
     async ({ widgetService, secretPhrase }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 
       await managerAddressPage.addressInput.fill(
         mnemonicToAccount(secretPhrase).address,

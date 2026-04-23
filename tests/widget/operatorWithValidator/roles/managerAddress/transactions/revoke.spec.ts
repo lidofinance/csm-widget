@@ -1,10 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
-import {
-  LOW_TIMEOUT,
-  STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from 'tests/consts/timeouts';
+import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/helpers/accountData';
 import { Tags } from 'tests/consts/common.const';
@@ -13,8 +9,8 @@ import { mnemonicToAccount } from 'viem/accounts';
 
 test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes', () => {
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.rolesPage.managerAddressPage.open();
-    const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+    await widgetService.settingsPage.managerAddressPage.open();
+    const managerAddressPage = widgetService.settingsPage.managerAddressPage;
     const accountForRolesChanged = generateAddress();
 
     await managerAddressPage.proposeNewAddress(accountForRolesChanged);
@@ -24,31 +20,28 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
   test.afterAll(async ({ widgetService }) => {
     await test.step('Revoke proposal role', async () => {
       // @todo: need to add cancel all tx before.
-      await widgetService.rolesPage.managerAddressPage.open();
+      await widgetService.settingsPage.managerAddressPage.open();
       await widgetService.page.waitForTimeout(1000);
-      await widgetService.rolesPage.managerAddressPage.revokePendingRole();
+      await widgetService.settingsPage.managerAddressPage.revokePendingRole();
     });
   });
 
   test(
     qase(226, 'Should display tx modal after revoke Manager role changes'),
     async ({ widgetService, secretPhrase }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       const currentAddress = mnemonicToAccount(secretPhrase).address;
 
       await test.step('Revoke pending manager address role', async () => {
-        const [txPage] = await Promise.all([
-          managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          managerAddressPage.revokeButton.click(),
-        ]);
+        await managerAddressPage.revokeButton.click();
 
         await managerAddressPage.page.waitForSelector(
-          `text=You are revoking request for manager address change`,
+          `text=You are canceling request for manager address change`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
         await test.step('Verify transaction modal', async () => {
-          const { txModal } = widgetService.rolesPage;
+          const { txModal } = widgetService.settingsPage;
 
           await expect(txModal.description).toContainText('Address stays');
 
@@ -60,7 +53,7 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
           );
         });
 
-        await widgetService.walletPage.cancelTx(txPage);
+        await widgetService.walletPage.cancelTx();
       });
     },
   );
@@ -69,28 +62,25 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
     qase(208, 'Should success complete transacrion revoke Manager role change'),
     { tag: [Tags.performTX] },
     async ({ widgetService, secretPhrase }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       const currentAddress = mnemonicToAccount(secretPhrase).address;
 
-      const [txPage] = await Promise.all([
-        managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        managerAddressPage.revokeButton.click(),
-      ]);
+      await managerAddressPage.revokeButton.click();
 
       await managerAddressPage.page.waitForSelector(
-        `text=You are revoking request for manager address change`,
+        `text=You are canceling request for manager address change`,
         { timeout: STAGE_WAIT_TIMEOUT },
       );
 
       await test.step('Verify confirm transaction', async () => {
-        await widgetService.walletPage.confirmTx(txPage);
+        await widgetService.walletPage.confirmTx();
 
         await managerAddressPage.page.waitForSelector(
-          `text=Proposed request for manager address has been revoked`,
+          `text=Proposed request for manager address has been canceled`,
           { timeout: STAGE_WAIT_TIMEOUT },
         );
 
-        const { txModal } = widgetService.rolesPage;
+        const { txModal } = widgetService.settingsPage;
 
         await expect(txModal.description).toContainText('Address stays');
         await expect(txModal.description).toContainText(

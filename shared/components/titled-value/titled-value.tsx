@@ -1,46 +1,35 @@
-import { InlineLoader, Text } from '@lidofinance/lido-ui';
-import { FC, ReactNode } from 'react';
-import { IconTooltip, Stack } from 'shared/components';
-import { AmountStyle, TitledAmountStyle } from './style';
+import { InlineLoader } from '@lidofinance/lido-ui';
+import { ComponentPropsWithoutRef, FC, ReactNode } from 'react';
+import { ValueStyle, TitledValueStyle } from './style';
+import { Stack } from '../stack';
 
-type TitledAddressProps = {
+export type TitledValueProps = Omit<
+  ComponentPropsWithoutRef<'div'>,
+  'title'
+> & {
   title?: ReactNode;
-  description?: ReactNode;
-  help?: string;
+  value?: ReactNode;
   loading?: boolean;
-  value?: string | number;
   warning?: boolean;
 };
 
-// TODO: merge components
-export const TitledValue: FC<TitledAddressProps> = ({
+export const TitledValue: FC<TitledValueProps> = ({
   title,
   value,
-  description,
-  help,
   loading,
   warning,
+  ...props
 }) => {
   return (
-    <TitledAmountStyle $warning={warning}>
-      <Stack gap="xs" center>
-        <Stack gap="md" center>
-          {title}
-          {description && (
-            <Text color="secondary" size="xxs">
-              {description}
-            </Text>
-          )}
-        </Stack>
-        <IconTooltip tooltip={help} />
+    <TitledValueStyle $warning={warning} {...props}>
+      <Stack gap="md" center>
+        {title}
       </Stack>
       {loading ? (
         <InlineLoader color="text" />
       ) : (
-        <AmountStyle>
-          <Text size="xs">{value}</Text>
-        </AmountStyle>
+        <ValueStyle>{value}</ValueStyle>
       )}
-    </TitledAmountStyle>
+    </TitledValueStyle>
   );
 };

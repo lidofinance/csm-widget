@@ -1,58 +1,50 @@
 import { Plural } from 'shared/components';
 import {
-  TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
-  getGeneralTransactionModalStages,
-  useTransactionModalStage,
+  useTxStages,
 } from 'shared/transaction-modal';
+import {
+  RemoveKeysFormInputType,
+  RemoveKeysFormNetworkData,
+} from '../context/types';
 
-type Props = {
-  keysCount: number;
-};
-
-const getTxModalStagesRemoveKeys = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
-
-  sign: (props: Props) =>
-    transitStage(
-      <TxStageSign
-        title={`Removing ${props.keysCount} key(s)`}
-        description=""
-      />,
-    ),
-
-  pending: (props: Props, txHash?: string) =>
-    transitStage(
-      <TxStagePending
-        title={`Removing ${props.keysCount} key(s)`}
-        description=""
-        txHash={txHash}
-      />,
-    ),
-
-  success: (props: Props, txHash?: string) =>
-    transitStage(
-      <TxStageSuccess
-        txHash={txHash}
-        title={
-          <>
-            {props.keysCount}{' '}
-            <Plural variants={['key', 'keys']} value={props.keysCount} /> has
-            been removed
-          </>
-        }
-        description=""
-      />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-});
-
-export const useTxModalStagesRemoveKeys = () => {
-  return useTransactionModalStage(getTxModalStagesRemoveKeys);
-};
+export const useTxModalStagesRemoveKeys = () =>
+  useTxStages<RemoveKeysFormInputType, RemoveKeysFormNetworkData>(
+    (transitStage, input) => ({
+      sign: () =>
+        transitStage(
+          <TxStageSign
+            title={`Removing ${input.selection.count} key(s)`}
+            description=""
+          />,
+        ),
+      pending: (txHash) =>
+        transitStage(
+          <TxStagePending
+            title={`Removing ${input.selection.count} key(s)`}
+            description=""
+            txHash={txHash}
+          />,
+        ),
+      success: (_result: undefined, txHash) =>
+        transitStage(
+          <TxStageSuccess
+            txHash={txHash}
+            title={
+              <>
+                {input.selection.count}{' '}
+                <Plural
+                  variants={['key', 'keys']}
+                  value={input.selection.count}
+                />{' '}
+                has been removed
+              </>
+            }
+            description=""
+          />,
+          { isClosableOnLedger: true },
+        ),
+    }),
+  );

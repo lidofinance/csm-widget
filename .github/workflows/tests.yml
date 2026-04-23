@@ -82,6 +82,8 @@ jobs:
       REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
       SLACK_DUTY_TAG: "S09H269H2TT"
+      WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
+
 
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}

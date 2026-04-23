@@ -24,6 +24,7 @@ export const SocialProof: FC = () => {
           You can add your social accounts. To prove you own an account, post a
           message. For more info see{' '}
           <MatomoLink
+            $inline
             href="https://www.youtube.com/watch?v=yUX34iCbCWE"
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsYoutubeGuideLink}
           >
@@ -80,6 +81,7 @@ export const SocialProof: FC = () => {
               Step 1. Prove the ownership of the Discord account by posting the
               following message to{' '}
               <MatomoLink
+                $inline
                 href="https://discord.com/channels/761182643269795850/1404810479292907662"
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordChannelLink}
               >

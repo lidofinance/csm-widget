@@ -1,12 +1,12 @@
 import { Tooltip } from '@lidofinance/lido-ui';
-import { ComponentProps, FC } from 'react';
+import { ComponentProps, FC, ReactNode } from 'react';
 
 import { ReactComponent as InfoIcon } from 'assets/icons/info.svg';
 import { ReactComponent as CalendarIcon } from 'assets/icons/info-calendar.svg';
 import { IconStyle } from './style';
 
 type Props = Omit<ComponentProps<typeof Tooltip>, 'title' | 'children'> & {
-  tooltip?: string;
+  tooltip?: ReactNode;
   type?: 'info' | 'calendar';
   inline?: boolean;
 };

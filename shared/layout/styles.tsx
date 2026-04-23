@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
 export const LayoutStyle = styled(Container)`
-  --layout-main-width: 590px;
+  --layout-base-width: 590px;
+  --layout-main-width: var(--layout-base-width);
   --layout-side-width: 170px;
 
   position: relative;
@@ -40,6 +41,18 @@ export const LayoutStyle = styled(Container)`
     }
   }
 
+  &:has(nav[data-desktop-hidden]) {
+    --layout-main-width: 1204px;
+
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      'header'
+      'alerts'
+      'main'
+      'footer';
+  }
+
   ${NAV_MOBILE_MEDIA} {
     grid-template-rows: auto auto 1fr auto;
     grid-template-columns: 1fr;
@@ -58,6 +71,9 @@ export const Heading = styled.header<{ $titlesCount: number }>`
 
   margin-bottom: ${({ theme, $titlesCount }) =>
     $titlesCount < 2 ? theme.spaceMap.xxl : theme.spaceMap.md}px;
+
+  max-width: var(--layout-base-width);
+  align-self: center;
 `;
 
 export const LayoutTitleStyle = styled(H1)`
@@ -65,6 +81,7 @@ export const LayoutTitleStyle = styled(H1)`
   font-size: ${({ theme }) => theme.fontSizesMap.xl}px;
   line-height: 1.46em;
   text-align: center;
+  text-wrap: balance;
 
   &:empty {
     display: none;
@@ -105,6 +122,9 @@ export const Content = styled.div`
 `;
 
 export const Main = styled.main`
+  display: flex;
+  flex-direction: column;
+
   grid-area: main;
   position: relative;
   margin-inline: auto;

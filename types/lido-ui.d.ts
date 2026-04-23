@@ -16,13 +16,12 @@ interface FixedSVGProps
 // Module augmentation to fix only pure SVG icon components
 declare module '@lidofinance/lido-ui' {
   // Pure SVG icon components that need pointer capture props fix
-  export const ArrowBack: ComponentType<FixedSVGProps>;
   export const ArrowTop: ComponentType<FixedSVGProps>;
   export const ArrowBottom: ComponentType<FixedSVGProps>;
   export const ArrowLeft: ComponentType<FixedSVGProps>;
-  export const ArrowBack: ComponentType<FixedSVGProps>;
   export const External: ComponentType<FixedSVGProps>;
   export const Copy: ComponentType<FixedSVGProps>;
+  export const Edit: ComponentType<FixedSVGProps>;
   export const Check: ComponentType<FixedSVGProps>;
   export const Plus: ComponentType<FixedSVGProps>;
   export const Close: ComponentType<FixedSVGProps>;

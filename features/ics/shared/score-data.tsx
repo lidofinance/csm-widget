@@ -108,9 +108,9 @@ export const SCORE_SOURCES: ScoreSource[] = [
           <>
             4 points are assigned in case:
             <br />- Submitted address belongs to a Node Operator that has been
-            active on CSM Testnet for at least 60 days
+            active on CSM Hoodi Testnet for at least 60 days
             <br />- Performance for the Node Operator is above the Performance
-            threshold in several of the latest performance oracle reports.
+            threshold over at least 60 days of activity.
             <br />5 points are assigned in case all the requirements from above
             are met, and the application contains an address that has Circles
             verification
@@ -166,6 +166,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           <>
             Submitted address has the corresponding score according to a{' '}
             <MatomoLink
+              $inline
               href="https://app.passport.xyz/#/lido_csm/"
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsPassportLink}
             >
@@ -173,6 +174,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
             </MatomoLink>
             . For more details, follow{' '}
             <MatomoLink
+              $inline
               href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318"
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordGuideLink}
             >
@@ -190,6 +192,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           <>
             Submitted address is verified via a dedicated{' '}
             <MatomoLink
+              $inline
               href="https://app.metri.xyz/0xCFCEA7904F42fD10e32703a57922E8d2036e3231"
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsCirclesLink}
             >
@@ -198,6 +201,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
             . To be able to tie the Circles account to the ICS application, the
             external account should be added. For more details, follow{' '}
             <MatomoLink
+              $inline
               href="https://hackmd.io/ZpLPFR77RiSGKCUqd2d5aQ?view"
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsHackmdGuideLink}
             >
@@ -275,6 +279,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           <>
             Submitted address has a score on the{' '}
             <MatomoLink
+              $inline
               href="https://app.galxe.com/quest/lido/loyaltyPoints"
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsGalxeLink}
             >
@@ -295,6 +300,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
           <>
             Submitted address has a score on the{' '}
             <MatomoLink
+              $inline
               href="https://app.highsignal.xyz/p/lido/"
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsHighSignalLink}
             >
@@ -308,6 +314,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
             <br />
             For more details, follow{' '}
             <MatomoLink
+              $inline
               href="https://discord.com/channels/761182643269795850/1293241757382738001/1413190697326215318"
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordGuideLink}
             >

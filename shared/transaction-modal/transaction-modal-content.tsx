@@ -20,6 +20,7 @@ export const Description = styled(Text).attrs({
 })`
   margin-top: ${({ theme }) => theme.spaceMap.xs}px;
   text-align: center;
+  word-break: break-word;
 `;
 
 export const Footer = styled.div`

@@ -1,6 +1,7 @@
 import { FC, PropsWithChildren } from 'react';
 import { WarningBlockStyle, NoteTypeStyle, BlockVariant } from './style';
 
+// TODO: refactor
 export const WarningBlock: FC<PropsWithChildren<{ type?: BlockVariant }>> = ({
   children,
   type = 'warning',

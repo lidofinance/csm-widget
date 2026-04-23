@@ -8,6 +8,7 @@ import {
   useIcsPaused,
 } from 'modules/web3';
 
+// TODO: CM version
 export const useCurrentCurveId = () => {
   const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();

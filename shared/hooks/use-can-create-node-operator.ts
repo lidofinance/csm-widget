@@ -1,11 +1,24 @@
-import { useCsmStatus, useDappStatus, useNodeOperatorId } from 'modules/web3';
+import { isModuleCSM } from 'consts';
+import {
+  useCuratedGatesEligibility,
+  useDappStatus,
+  useNodeOperatorId,
+  useSmStatus,
+} from 'modules/web3';
 
 export const useCanCreateNodeOperator = () => {
-  const { isAccountActive } = useDappStatus();
+  const { isAccountActive, address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: status } = useCsmStatus();
+  const { data: status } = useSmStatus();
 
-  return Boolean(
-    isAccountActive && nodeOperatorId === undefined && !status?.isPaused,
+  const { data: gatesCount } = useCuratedGatesEligibility(
+    address,
+    (data) => data.length,
   );
+
+  const condition = isModuleCSM
+    ? nodeOperatorId === undefined
+    : gatesCount !== undefined && gatesCount > 0;
+
+  return Boolean(isAccountActive && !status?.isPaused && condition);
 };

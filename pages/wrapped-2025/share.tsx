@@ -1,5 +1,3 @@
-import { Button } from '@lidofinance/lido-ui';
-import { PATH } from 'consts/urls';
 import { WrappedStats } from 'features/wrapped/data';
 import { SlideStats } from 'features/wrapped/slides/slide-outro';
 import Head from 'next/head';
@@ -7,7 +5,6 @@ import { FC, useEffect, useState } from 'react';
 import { Stack } from 'shared/components';
 import { useSearchParams } from 'shared/hooks';
 import { Layout } from 'shared/layout';
-import { LocalLink } from 'shared/navigate';
 import { decodeSlideData, type SlideData } from 'utils/wrapped-hash-codec';
 
 const WrappedSharePage: FC = () => {
@@ -45,13 +42,6 @@ const WrappedSharePage: FC = () => {
         <Head>
           <meta name="robots" content="noindex, nofollow" />
         </Head>
-        <Stack gap="lg" direction="column">
-          <LocalLink href={PATH.WRAPPED}>
-            <Button size="sm" fullwidth>
-              Check your 2025 Wrapped
-            </Button>
-          </LocalLink>
-        </Stack>
       </Layout>
     );
   }
@@ -102,11 +92,6 @@ const WrappedSharePage: FC = () => {
       </Head>
       <Stack gap="lg" direction="column">
         <SlideStats data={stats} />
-        <LocalLink href={PATH.WRAPPED}>
-          <Button size="sm" fullwidth>
-            Check your 2025 Wrapped
-          </Button>
-        </LocalLink>
       </Stack>
     </Layout>
   );

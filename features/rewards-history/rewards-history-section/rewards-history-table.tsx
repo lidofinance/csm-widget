@@ -30,7 +30,7 @@ export const RewardsHistoryTable: FC = () => {
             <Sort column="threshold">Threshold</Sort>
           </th>
           <th>
-            <Sort column="receivedRewards">Rewards received</Sort>
+            <Sort column="receivedRewards">Rewards</Sort>
           </th>
         </tr>
       </thead>
@@ -39,8 +39,8 @@ export const RewardsHistoryTable: FC = () => {
           <tr key={index}>
             <td>
               <DatesWrapper>
-                <Date timestamp={record.startTimestamp} /> &mdash;{' '}
-                <Date timestamp={record.endTimestamp} />
+                <Date timestamp={record.startTimestamp} format="yyyy, MMM dd" />{' '}
+                &mdash; <Date timestamp={record.endTimestamp} />
               </DatesWrapper>
             </td>
             <td>

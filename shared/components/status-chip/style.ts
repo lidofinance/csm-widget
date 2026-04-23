@@ -21,7 +21,13 @@ const variants = {
   `,
 };
 
-export const StatusStyle = styled.div<{ $variant?: Variants }>`
+export const ChipStyle = styled.div<{
+  $variant?: Variants;
+  $squared?: boolean;
+  $pale?: boolean;
+}>`
+  --pale: ${({ $pale }) => ($pale ? '10%' : '15%')};
+
   display: flex;
   gap: 6px;
   align-items: center;
@@ -31,8 +37,11 @@ export const StatusStyle = styled.div<{ $variant?: Variants }>`
   text-align: center;
   white-space: nowrap;
 
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.xl}px;
-  background: color-mix(in srgb, currentColor 15%, transparent);
+  border-radius: ${({ theme, $squared }) =>
+    $squared
+      ? `${theme.borderRadiusesMap.md}px`
+      : `${theme.borderRadiusesMap.xl}px`};
+  background: color-mix(in srgb, currentColor var(--pale), transparent);
 
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;

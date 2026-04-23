@@ -1,13 +1,21 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk';
-import { useNodeOperator } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
 import { FormLoader } from 'shared/hook-form/form-controller';
+import { useUnlockBondFlow } from './context';
 import { Info } from './controls/info';
 
-export const UnlockBondFormLoader: FC<PropsWithChildren> = ({ children }) => {
-  const { nodeOperator } = useNodeOperator<true>();
+const UnlockBondFormGate: FC<PropsWithChildren> = ({ children }) => {
+  const flow = useUnlockBondFlow();
 
-  const isView = !nodeOperator.roles.includes(ROLES.MANAGER);
+  const isReadOnly =
+    flow.action === 'nothing' ||
+    flow.action === 'no-access' ||
+    flow.action === 'insufficient-bond';
 
-  return <FormLoader>{isView ? <Info /> : children}</FormLoader>;
+  return isReadOnly ? <Info /> : <>{children}</>;
 };
+
+export const UnlockBondFormLoader: FC<PropsWithChildren> = ({ children }) => (
+  <FormLoader>
+    <UnlockBondFormGate>{children}</UnlockBondFormGate>
+  </FormLoader>
+);

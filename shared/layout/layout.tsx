@@ -20,14 +20,18 @@ type Props = {
   subtitle?: ReactNode;
   dummy?: boolean | 'semi';
   pageName?: string;
+  fullwidth?: boolean;
+  mainPrefix?: ReactNode;
 };
 
 export const Layout: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
+  fullwidth,
   title,
   subtitle,
   pageName,
+  mainPrefix,
 }) => {
   const titlesCount = [title, subtitle].filter(Boolean).length;
 
@@ -43,13 +47,14 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
         <DummyHeader />
       ) : (
         <>
-          <Navigation />
+          <Navigation desktopHidden={fullwidth} />
           <Header />
-          <AlertContainer />
+          {!fullwidth && <AlertContainer />}
         </>
       )}
 
       <Main>
+        {mainPrefix}
         <Heading $titlesCount={titlesCount}>
           {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}
           {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}

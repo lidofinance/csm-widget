@@ -1,26 +1,22 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
 import { trimAddress } from '@lidofinance/address';
-import {
-  LOW_TIMEOUT,
-  STAGE_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from 'tests/consts/timeouts';
+import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/helpers/accountData';
 import { Tags } from 'tests/consts/common.const';
 
 test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.rolesPage.managerAddressPage.open();
+    await widgetService.settingsPage.managerAddressPage.open();
   });
 
   test.afterEach(async ({ widgetService }) => {
     await test.step('Revoke proposal role', async () => {
       // @todo: need to add cancel all tx before.
-      await widgetService.rolesPage.managerAddressPage.open();
+      await widgetService.settingsPage.managerAddressPage.open();
       await widgetService.page.waitForTimeout(1000);
-      await widgetService.rolesPage.managerAddressPage.revokePendingRole();
+      await widgetService.settingsPage.managerAddressPage.revokePendingRole();
     });
   });
 
@@ -30,7 +26,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
       'Should display tx modal after approve warning after propose button',
     ),
     async ({ widgetService }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 
       const accountForRolesChanged = generateAddress();
 
@@ -40,10 +36,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
         state: 'visible',
       });
 
-      const [txPage] = await Promise.all([
-        managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-        managerAddressPage.proposeButton.click(),
-      ]);
+      await managerAddressPage.proposeButton.click();
 
       await managerAddressPage.page.waitForSelector(
         `text=You are proposing manager address change`,
@@ -51,7 +44,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
       );
 
       await test.step('Verify transaction modal', async () => {
-        const { txModal } = widgetService.rolesPage;
+        const { txModal } = widgetService.settingsPage;
 
         await expect(txModal.description).toContainText('Proposed address');
 
@@ -62,7 +55,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
           'Confirm this transaction in your wallet',
         );
       });
-      await widgetService.walletPage.cancelTx(txPage);
+      await widgetService.walletPage.cancelTx();
     },
   );
 
@@ -70,7 +63,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
     qase(77, 'Propose a new Manager Address with valid input'),
     { tag: [Tags.smoke, Tags.performTX] },
     async ({ widgetService }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 
       await test.step('Propose a new manager address', async () => {
         const accountForRolesChanged = generateAddress();
@@ -81,10 +74,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
           state: 'visible',
         });
 
-        const [txPage] = await Promise.all([
-          managerAddressPage.waitForPage(WALLET_PAGE_TIMEOUT_WAITER),
-          managerAddressPage.proposeButton.click(),
-        ]);
+        await managerAddressPage.proposeButton.click();
 
         await managerAddressPage.page.waitForSelector(
           `text=You are proposing manager address change`,
@@ -92,21 +82,21 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
         );
 
         await test.step('Verify confirm transaction', async () => {
-          await widgetService.walletPage.confirmTx(txPage);
+          await widgetService.walletPage.confirmTx();
 
           await managerAddressPage.page.waitForSelector(
             `text=New manager address has been proposed`,
             { timeout: STAGE_WAIT_TIMEOUT },
           );
 
-          const { txModal } = widgetService.rolesPage;
+          const { txModal } = widgetService.settingsPage;
 
           await expect(txModal.description).toContainText('What is next:');
           await expect(txModal.description).toContainText(
             'Connect to CSM UI with the proposed address',
           );
           await expect(txModal.description).toContainText(
-            'Go to Roles tab → Inbox requests to confirm the change',
+            'Go to Settings tab → Inbox requests to confirm the change',
           );
 
           await expect(txModal.description).toContainText(

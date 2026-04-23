@@ -9,14 +9,14 @@ import { generateAddress } from 'tests/helpers/accountData';
 
 test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () => {
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.rolesPage.rewardsAddressPage.open();
-    await widgetService.rolesPage.rewardsAddressPage.revokePendingRole();
+    await widgetService.settingsPage.rewardsAddressPage.open();
+    await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
   });
 
   test(
     qase(79, 'Verify the addresses field'),
     async ({ widgetService, secretPhrase }) => {
-      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
       const address = mnemonicToAccount(secretPhrase).address;
 
       await test.step('Verify the "Current rewards address" field', async () => {
@@ -37,7 +37,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
   );
 
   test(qase(238, 'Verify input appearence'), async ({ widgetService }) => {
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+    const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
 
     await test.step('Verify input', async () => {
       await expect(rewardsAddressPage.addressInput).toBeVisible();
@@ -52,7 +52,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
   });
 
   test(qase(239, 'Verify button appearence'), async ({ widgetService }) => {
-    const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+    const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
 
     await test.step('Verify button', async () => {
       await expect(rewardsAddressPage.proposeButton).toBeVisible();
@@ -72,7 +72,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
   test(
     qase(78, 'Should open etherscan for current rewards address'),
     async ({ widgetService, widgetConfig, secretPhrase }) => {
-      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
 
       const [etherscanPage] = await Promise.all([
         widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
@@ -87,7 +87,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
   test(
     qase(75, 'Propose a new Rewards Address with invalid input'),
     async ({ widgetService }) => {
-      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
 
       await rewardsAddressPage.addressInput.fill(`${generateAddress()}1`);
 
@@ -102,7 +102,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
   test(
     qase(218, 'Propose a new Rewards Address with same address'),
     async ({ widgetService, secretPhrase }) => {
-      const rewardsAddressPage = widgetService.rolesPage.rewardsAddressPage;
+      const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
 
       await rewardsAddressPage.addressInput.fill(
         mnemonicToAccount(secretPhrase).address,

@@ -4,6 +4,7 @@ import { InputAmount } from 'shared/components/input-amount';
 
 import { getTokenDisplayName } from 'utils';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
+import { testableError } from './testable-error';
 
 type TokenAmountInputHookFormProps = Partial<
   React.ComponentProps<typeof InputAmount>
@@ -41,7 +42,10 @@ export const TokenAmountInputHookForm = ({
       {...props}
       {...field}
       disabled={props.disabled ?? field.disabled}
-      error={errorProp ?? (showErrorMessage ? errorMessage : hasErrorHighlight)}
+      error={testableError(
+        errorProp ?? (showErrorMessage ? errorMessage : hasErrorHighlight),
+        fieldName,
+      )}
       isLocked={isLocked}
       maxValue={maxValue}
       label={`${getTokenDisplayName(token)} amount`}

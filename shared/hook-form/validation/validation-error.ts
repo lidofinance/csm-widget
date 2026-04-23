@@ -1,4 +1,4 @@
-import { values } from 'lodash';
+import { get, set, values } from 'lodash';
 import {
   FieldErrors,
   FieldName,
@@ -59,13 +59,13 @@ export const initValidator = <T extends FieldValues>(
         await validator();
       } catch (error) {
         if (error instanceof ValidationError) {
-          if (!errors[error.field]) {
-            (errors[error.field] as any) = {
+          if (!get(errors, error.field)) {
+            set(errors, error.field, {
               message: error.message,
               type: error.type,
               types: error.types,
               payload: error.payload,
-            };
+            });
           }
         } else {
           console.warn(`Unhandled validation error in resolver`, error);

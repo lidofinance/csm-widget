@@ -2,13 +2,48 @@ import { Check, Input, Theme } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 import { CustomStyledChip } from '../chip/styles';
 
+export const IdenticonSlot = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  flex-shrink: 0;
+  background: var(--lido-color-warningBackground);
+  border-radius: 100%;
+  overflow: hidden;
+  transition:
+    opacity 100ms ease,
+    width 100ms ease,
+    margin-right 100ms ease;
+
+  width: var(--slot-w, 0px);
+  opacity: var(--slot-o, 0);
+  margin-right: var(--slot-mr, 0px);
+
+  label:not(:has(input:placeholder-shown)) &,
+  label:is(:focus-within) & {
+    --slot-w: 24px;
+    --slot-o: 1;
+    --slot-mr: 16px;
+  }
+`;
+
 export const StyledInput = styled(Input)`
   input + span {
     overflow: visible;
+    user-select: none;
+
+    > * {
+      user-select: all;
+    }
   }
 
   ${CustomStyledChip} {
     margin-block: -4px;
+  }
+
+  span:has(> ${IdenticonSlot}) {
+    padding-right: 0;
   }
 `;
 

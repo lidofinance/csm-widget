@@ -11,11 +11,14 @@ export const ArrowIcon = styled(Arrow)`
   margin-top: -1px;
 `;
 
-export const LinkStyled = styled(Link)<{
+type LinkStyledProps = {
+  $inline?: boolean;
   $secondary?: boolean;
-  $rawIcon?: boolean;
-}>`
-  display: inline-flex;
+  $likeText?: boolean;
+};
+
+export const LinkStyled = styled(Link)<LinkStyledProps>`
+  display: ${({ $inline }) => ($inline ? 'inline' : 'inline-flex')};
   align-items: center;
 
   ${({ $secondary }) =>
@@ -30,13 +33,16 @@ export const LinkStyled = styled(Link)<{
       }
     `}
 
-  ${({ $rawIcon }) =>
-    $rawIcon
-      ? ''
-      : css`
-          svg {
-            width: 20px;
-            height: 20px;
-          }
-        `}
+  ${({ $likeText }) =>
+    $likeText &&
+    css`
+      &,
+      &:visited {
+        color: var(--lido-color-text);
+        text-decoration: underline;
+      }
+      &:hover {
+        color: var(--lido-color-textSecondary);
+      }
+    `}
 `;

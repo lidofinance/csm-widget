@@ -1,11 +1,14 @@
 import { Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
+import { MODULE_METADATA } from 'consts/module';
+import { config } from 'config';
 import {
   FormTitle,
   MatomoLink,
   StackStyle,
   WarningBlock,
 } from 'shared/components';
+import { Gate } from 'shared/navigate';
 
 export const ExitKeys = () => {
   return (
@@ -71,8 +74,30 @@ export const ExitKeys = () => {
           </MatomoLink>
         </li>
       </StackStyle>
+      <Gate rule="IS_CM">
+        <WarningBlock type="warning">
+          Out of order exits are discouraged by{' '}
+          <MatomoLink
+            $inline
+            href="https://ipfs.io/ipfs/QmW9kE61zC61PcuikCQRwn82aoTCj9yPuENGNPML9QLkSM"
+          >
+            the Validator Exits Standard Node Operator Protocol (SNOP)
+          </MatomoLink>
+          . In case an out of order exit is required, the Node Operator must
+          notify the community, specifying the number of validators affected,
+          their indices, and the reason for the exit request via{' '}
+          <MatomoLink
+            $inline
+            href="https://research.lido.fi/c/node-operators/12"
+          >
+            the Node Operator category of the Lido Research Forum
+          </MatomoLink>
+          .
+        </WarningBlock>
+      </Gate>
       <WarningBlock type="notice">
-        This action should be performed <b>outside the CSM UI</b>
+        This action should be performed{' '}
+        <b>outside the {MODULE_METADATA[config.module].shortName} UI</b>
       </WarningBlock>
     </>
   );

@@ -1,27 +1,35 @@
 import { createContext, useContext, useEffect, useMemo } from 'react';
 import invariant from 'tiny-invariant';
 import {
-  useAccount,
+  useConnection,
   useConfig,
   usePublicClient,
   useSwitchChain,
   useWalletClient,
 } from 'wagmi';
 
+import {
+  LidoSDKCm,
+  LidoSDKCsm,
+  MODULE_NAME,
+  SdkProps,
+} from '@lidofinance/lido-csm-sdk';
+import {
+  LidoSDKStake,
+  LidoSDKWithdraw,
+  LidoSDKWrap,
+} from '@lidofinance/lido-ethereum-sdk';
 import { CHAINS, LidoSDKCore } from '@lidofinance/lido-ethereum-sdk/core';
 import {
   LidoSDKstETH,
   LidoSDKwstETH,
 } from '@lidofinance/lido-ethereum-sdk/erc20';
 
-import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
-import {
-  LidoSDKStake,
-  LidoSDKWrap,
-  LidoSDKWithdraw,
-} from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
+import { isModuleCSM } from 'consts';
+
+import { overridedAddresses } from './devnet';
 
 type LidoSDKContextValue = {
   chainId: CHAINS;
@@ -31,7 +39,7 @@ type LidoSDKContextValue = {
   wstETH: LidoSDKwstETH;
   wrap: LidoSDKWrap;
   withdraw: LidoSDKWithdraw;
-  csm: LidoSDKCsm;
+  sm: LidoSDKCsm | LidoSDKCm;
 };
 
 const chainId = config.defaultChain;
@@ -45,16 +53,28 @@ export const useLidoSDK = () => {
   return value;
 };
 
+export function useSmSDK(): LidoSDKCsm | LidoSDKCm;
+export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
+export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
+// eslint-disable-next-line func-style
+export function useSmSDK(module?: MODULE_NAME) {
+  const { sm } = useLidoSDK();
+  if (module && module !== config.module) {
+    return undefined;
+  }
+  return sm;
+}
+
 export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
   const { data: walletClient } = useWalletClient({ chainId });
   const publicClient = usePublicClient({ chainId });
   // reset internal wagmi state after disconnect
-  const { isConnected } = useAccount();
+  const { isConnected } = useConnection();
 
   const clApiUrl = useClApiUrl();
 
   const wagmiConfig = useConfig();
-  const { switchChain } = useSwitchChain();
+  const { mutate: switchChain } = useSwitchChain();
   useEffect(() => {
     if (isConnected) {
       return () => {
@@ -86,7 +106,8 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
     const wstETH = new LidoSDKwstETH({ core });
     const wrap = new LidoSDKWrap({ core });
     const withdraw = new LidoSDKWithdraw({ core });
-    const csm = new LidoSDKCsm({
+
+    const smProps: SdkProps = {
       core,
       clApiUrl,
       maxEventBlocksRange:
@@ -96,7 +117,10 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       skipHistoricalCalls: chainId !== CHAINS.Mainnet,
       keysApiUrl: config.keysApiUrl,
       feesMonitoringApiUrl: config.feesMonitoringApiUrl,
-    });
+      overridedAddresses,
+    };
+
+    const sm = isModuleCSM ? new LidoSDKCsm(smProps) : new LidoSDKCm(smProps);
 
     return {
       chainId: core.chainId,
@@ -106,7 +130,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       wstETH,
       wrap,
       withdraw,
-      csm,
+      sm,
     };
   }, [clApiUrl, publicClient, walletClient]);
   return (
