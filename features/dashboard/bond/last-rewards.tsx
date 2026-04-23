@@ -11,7 +11,8 @@ import {
   useOperatorInfo,
   useOperatorLastRewards,
   useFrameInfo,
-  useRewardsLastReportTxHash,
+  useLastReportTxHash,
+  useLastReportTimestamps,
 } from 'modules/web3';
 import { ModalComponentType, useModal } from 'providers/modal-provider';
 import { FC, useCallback } from 'react';
@@ -42,15 +43,15 @@ export const LastRewards: FC = () => {
   const { data: info } = useOperatorInfo(id);
   const { data: lastRewards, isPending: isLoading } =
     useOperatorLastRewards(id);
+  const { data: lastFrame } = useLastReportTimestamps();
   const { data: rewardsFrame } = useFrameInfo((data) => ({
     lastDistribution: data.lastReport,
-    prevDistribution: data.lastReport - data.frameDuration,
     nextDistribution: data.lastReport + data.frameDuration,
   }));
 
   const lastRewardsDate = formatDate(rewardsFrame?.lastDistribution);
-  const prevRewardsDate = formatDate(rewardsFrame?.prevDistribution);
   const nextRewardsDate = formatDate(rewardsFrame?.nextDistribution);
+  const prevRewardsDate = formatDate(lastFrame?.start);
   const daysLeft = countCalendarDaysLeft(rewardsFrame?.nextDistribution);
 
   const showThisSection = lastRewards || (info?.totalDepositedKeys ?? 0) > 0;
@@ -128,7 +129,7 @@ const LastReportStats: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: lastRewards, isPending: isLoading } =
     useOperatorLastRewards(nodeOperatorId);
-  const { data: txHash, isPending: isTxLoading } = useRewardsLastReportTxHash();
+  const { data: txHash, isPending: isTxLoading } = useLastReportTxHash();
 
   return (
     <RowBody data-testid="lastRewardsInfo">

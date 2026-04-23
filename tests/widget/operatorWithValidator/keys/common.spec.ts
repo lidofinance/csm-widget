@@ -21,22 +21,22 @@ test.describe('Operator with keys. Common suite.', async () => {
     qase(17, 'Should open transaction page after added 1 key'),
     { tag: Tags.smoke },
     async ({ widgetService }) => {
-      const txPage = await keysPage.submitPage.submitKeys(
+      await keysPage.submitPage.submitKeys(
         keysGeneratorService.generateKeys(),
         TokenSymbol.ETH,
       );
-      await widgetService.walletPage.cancelTx(txPage);
+      await widgetService.walletPage.cancelTx();
     },
   );
 
   test(
     qase(19, 'Should open transaction page after added 25 keys'),
     async ({ widgetService }) => {
-      const txPage = await keysPage.submitPage.submitKeys(
+      await keysPage.submitPage.submitKeys(
         keysGeneratorService.generateKeys(25),
         TokenSymbol.ETH,
       );
-      await widgetService.walletPage.cancelTx(txPage);
+      await widgetService.walletPage.cancelTx();
     },
   );
 

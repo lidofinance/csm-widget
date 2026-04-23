@@ -13,6 +13,39 @@ export const testScenarios: TestScenario[] = [
   // ========================================
   realCaseScenario,
   {
+    title: '[Real] Large Active with Tiny Priority Queue',
+    description:
+      'High active count (17581) with minimal priority queue (10) and large general queue (3444), limit just above total',
+    data: {
+      nodeOperatorId: 1,
+      shareLimit: {
+        active: 17581,
+        queue: 3454, // 10 + 3444
+        capacity: 22169,
+      },
+      operatorInfo: {
+        depositableValidatorsCount: 0,
+      },
+      formData: {
+        depositDataLength: 0,
+      },
+      depositQueueBatches: {
+        priorities: [
+          [[2, 10]], // Priority 0: 10 keys
+          [],
+          [],
+          [], // Reserved
+          [], // Priority 4: Empty
+          [
+            [3, 1500],
+            [4, 1000],
+            [5, 944],
+          ], // Priority 5: 3444 keys total
+        ],
+      },
+    },
+  },
+  {
     title: '[Real] All Priorities Empty Except P5',
     description: 'Realistic scenario where only general queue has validators',
     data: {

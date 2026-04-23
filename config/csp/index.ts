@@ -19,16 +19,12 @@ export const contentSecurityPolicy: ContentSecurityPolicyOption = {
   directives: {
     'default-src': ["'self'"],
     styleSrc: ["'self'", "'unsafe-inline'"],
-    fontSrc: ["'self'", 'data:'],
-    imgSrc: [
-      "'self'",
-      'data:',
-      'https://*.walletconnect.org',
-      'https://*.walletconnect.com',
-    ],
+    fontSrc: ["'self'", 'data:', 'https://fonts.reown.com'],
+    imgSrc: ["'self'", 'data:', 'blob:'],
     scriptSrc: [
       "'self'",
       "'unsafe-inline'",
+      "'wasm-unsafe-eval'",
       ...(config.developmentMode ? ["'unsafe-eval'"] : []), // for HMR
       ...trustedHosts,
     ],

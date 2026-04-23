@@ -5,10 +5,7 @@ import {
   ManagerAddressPage,
   InboxRequestsPage,
 } from './tabs/roles';
-import {
-  WalletPage,
-  WalletConnectType,
-} from '@lidofinance/wallets-testing-wallets';
+import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { RolesModal } from './elements/roles/rolesModal.element';
 import { TxModal } from './elements/common/element.txProgressModal';
 
@@ -19,7 +16,7 @@ export class RolesPage extends BasePage {
   modalRoot: RolesModal;
   txModal: TxModal;
 
-  constructor(page: Page, walletPage: WalletPage<WalletConnectType>) {
+  constructor(page: Page, walletPage: WalletPage) {
     super(page);
     this.rewardsAddressPage = new RewardsAddressPage(this.page, walletPage);
     this.managerAddressPage = new ManagerAddressPage(this.page, walletPage);

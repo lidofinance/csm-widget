@@ -2,7 +2,7 @@
 import { useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
-  useAccount,
+  useConnection,
   useBalance,
   useReadContract,
   useWatchContractEvent,
@@ -80,7 +80,7 @@ const onError = (error: unknown) =>
   );
 
 export const useTokenTransferSubscription = () => {
-  const { address } = useAccount();
+  const { address } = useConnection();
   const queryClient = useQueryClient();
   const [subscriptions, setSubscriptions] = useState<TokenSubscriptionState>(
     {},
