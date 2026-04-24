@@ -219,5 +219,6 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
+    module: process.env.MODULE,
   },
 });

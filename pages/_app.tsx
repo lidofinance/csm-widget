@@ -15,6 +15,11 @@ import { AddressValidationFile, nprogress } from 'utils';
 // Visualize route changes
 nprogress();
 
+if (typeof window !== 'undefined') {
+  // eslint-disable-next-line no-console
+  console.info(`MODULE = ${config.module ?? '(not set)'}`);
+}
+
 const App = (props: AppProps) => {
   const { Component, pageProps } = props;
 

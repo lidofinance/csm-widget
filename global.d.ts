@@ -53,6 +53,7 @@ declare module 'next/config' {
     publicRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
+      module: string | undefined;
     };
   };
 
