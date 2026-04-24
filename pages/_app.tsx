@@ -8,7 +8,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
 import { Providers } from 'providers';
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { BackgroundGradient, SecurityStatusBanner } from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
 import { AddressValidationFile, nprogress } from 'utils';
@@ -31,10 +31,6 @@ type AppParams = Partial<Pick<SecretConfigType, 'maintenance'>> & {
 
 const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const { ...rest } = props;
-
-  useEffect(() => {
-    console.info('MODULE:', config.module);
-  }, []);
 
   return (
     <Providers

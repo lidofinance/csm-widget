@@ -1,5 +1,5 @@
 import getConfigNext from 'next/config';
-import { type Modify, toBoolean } from './helpers';
+import { type Modify, parseUrlList, toBoolean } from './helpers';
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 const { serverRuntimeConfig } = getConfigNext();
@@ -10,11 +10,9 @@ export type SecretConfigType = Modify<
     defaultChain: SUPPORTED_CHAINS;
 
     rpcUrls_1: [string, ...string[]];
-    rpcUrls_17000: [string, ...string[]];
     rpcUrls_560048: [string, ...string[]];
 
     clApiUrls_1: [string, ...string[]];
-    clApiUrls_17000: [string, ...string[]];
     clApiUrls_560048: [string, ...string[]];
 
     cspReportOnly: boolean;
@@ -37,27 +35,23 @@ export const getSecretConfig = (): SecretConfigType => {
     defaultChain: Number(serverRuntimeConfig.defaultChain) || 560048,
 
     // Hack: in the current implementation we can treat an empty array as a "tuple" (conditionally)
-    rpcUrls_1: (serverRuntimeConfig.rpcUrls_1?.split(',') ?? []) as [
+    rpcUrls_1: parseUrlList(serverRuntimeConfig.rpcUrls_1) as [
       string,
       ...string[],
     ],
-    rpcUrls_17000: (serverRuntimeConfig.rpcUrls_17000?.split(',') ?? []) as [
-      string,
-      ...string[],
-    ],
-    rpcUrls_560048: (serverRuntimeConfig.rpcUrls_560048?.split(',') ?? []) as [
+    rpcUrls_560048: parseUrlList(serverRuntimeConfig.rpcUrls_560048) as [
       string,
       ...string[],
     ],
 
-    clApiUrls_1: (serverRuntimeConfig.clApiUrls_1?.split(',') ?? []) as [
+    clApiUrls_1: parseUrlList(serverRuntimeConfig.clApiUrls_1) as [
       string,
       ...string[],
     ],
-    clApiUrls_17000: (serverRuntimeConfig.clApiUrls_17000?.split(',') ??
-      []) as [string, ...string[]],
-    clApiUrls_560048: (serverRuntimeConfig.clApiUrls_560048?.split(',') ??
-      []) as [string, ...string[]],
+    clApiUrls_560048: parseUrlList(serverRuntimeConfig.clApiUrls_560048) as [
+      string,
+      ...string[],
+    ],
 
     cspReportOnly: toBoolean(serverRuntimeConfig.cspReportOnly),
 

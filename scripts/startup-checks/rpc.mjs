@@ -14,9 +14,14 @@ const globalStartupRPCChecks = globalThis.__startupRPCChecks || {
 };
 globalThis.__startupRPCChecks = globalStartupRPCChecks;
 
+const parseUrlList = (val) =>
+  val
+    ?.split(',')
+    .map((s) => s.trim().replace(/\/+$/, ''))
+    .filter(Boolean) ?? [];
+
 const getRPCUrls = (chainId) => {
-  const rpcUrls = process.env[`EL_RPC_URLS_${chainId}`]?.split(',');
-  return rpcUrls?.filter((url) => url);
+  return parseUrlList(process.env[`EL_RPC_URLS_${chainId}`]);
 };
 
 const checkRPC = async (url, chainId) => {
