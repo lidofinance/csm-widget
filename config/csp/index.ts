@@ -51,7 +51,7 @@ export const contentSecurityPolicy: ContentSecurityPolicyOption = {
     workerSrc: ["'none'"],
     'base-uri': config.ipfsMode ? undefined : ["'none'"],
   },
-  reportOnly: secretConfig.cspReportOnly,
+  reportOnly: false, // secretConfig.cspReportOnly,
 };
 
 export const withCsp = (app: FC<AppProps>): FC =>
