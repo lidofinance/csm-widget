@@ -23,6 +23,19 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v4
 
+      - name: Generate build-info.json
+        env:
+          BRANCH: ${{ github.ref_name }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          jq -n \
+            --arg version "${BRANCH}:${COMMIT}" \
+            --arg branch "$BRANCH" \
+            --arg commit "$COMMIT" \
+            '{version: $version, branch: $branch, commit: $commit}' \
+            > build-info.json
+          cat build-info.json
+
       - name: Setup buildx
         uses: docker/setup-buildx-action@v3.3.0
 
