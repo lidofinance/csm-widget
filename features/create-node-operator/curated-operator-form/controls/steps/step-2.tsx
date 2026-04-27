@@ -30,7 +30,7 @@ export const Step2: FC = () => {
         </Text>
         <Text size="xs" color="secondary">
           <b>Manager Address</b> will have the ultimate control over the Node
-          Operator, while <b>Rewards Address</b> is only used to receive
+          Operator, while <b>Rewards Address</b> is mainly used to receive
           rewards.
         </Text>
         <ul>

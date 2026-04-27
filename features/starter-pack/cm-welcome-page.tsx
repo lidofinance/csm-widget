@@ -1,43 +1,43 @@
 import { PATH } from 'consts';
-import { useCuratedGatesEligibility, useDappStatus } from 'modules/web3';
+import { NavigateCMv1 } from 'features/welcome/navigate-cm-v1';
+import { useCuratedGatesEligibility, useInvites } from 'modules/web3';
 import { FC } from 'react';
+import { WelcomeSection } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { Navigate, SplashPage } from 'shared/navigate';
-import { InvitesRedirect } from './invites-redirect';
+import { BannerOperatorCustomAddresses } from './banner-operator-custom-addresses';
 import { BannerNotEligible } from './not-eligible/banner-not-eligible';
 import { BannerTryCsm } from './not-eligible/banner-try-csm';
-import { WelcomeSection } from 'shared/components';
-import { NavigateCMv1 } from 'features/welcome/navigate-cm-v1';
-import { BannerOperatorCustomAddresses } from './banner-operator-custom-addresses';
 
 export const CmWelcomePage: FC = () => {
-  const { address } = useDappStatus();
   const { data: isEligible, isPending } = useCuratedGatesEligibility(
-    address,
+    undefined,
     (data) => data.length > 0,
   );
+  const { data: invites, isPending: isPendingInvites } = useInvites();
 
-  if (isPending) {
+  if (isPending || isPendingInvites) {
     return <SplashPage />;
   }
 
   return (
-    <>
-      <Layout pageName="CmStarterPack">
-        <InvitesRedirect />
-        {!isEligible ? (
-          <>
-            <BannerOperatorCustomAddresses />
-            <BannerNotEligible />
-            <BannerTryCsm />
-            <NavigateCMv1 />
-          </>
-        ) : (
-          <WelcomeSection>
-            <Navigate path={PATH.CREATE} fallback={null} />
-          </WelcomeSection>
-        )}
-      </Layout>
-    </>
+    <Layout pageName="CmStarterPack">
+      {isEligible ? (
+        <WelcomeSection>
+          <Navigate path={PATH.CREATE} fallback={null} />
+        </WelcomeSection>
+      ) : invites?.length ? (
+        <WelcomeSection>
+          <Navigate path={PATH.SETTINGS_INBOX} fallback={null} />
+        </WelcomeSection>
+      ) : (
+        <>
+          <BannerOperatorCustomAddresses />
+          <BannerNotEligible />
+          <BannerTryCsm />
+          <NavigateCMv1 />
+        </>
+      )}
+    </Layout>
   );
 };

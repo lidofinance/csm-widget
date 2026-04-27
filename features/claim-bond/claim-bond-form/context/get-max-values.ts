@@ -15,14 +15,28 @@ type Props = {
   bond?: BondBalance;
   rewards?: Rewards;
   poolData: StethPoolData;
+  hasSplits?: boolean;
 };
 
 const limitMaxEth = (value: bigint) =>
   value > MAX_ETH_AMOUNT ? MAX_ETH_AMOUNT : value;
 
-export const getMaxValues = ({ bond, rewards, poolData }: Props): MaxValues => {
-  const maxBond = calculateAvailableToClaim({ bond, rewards: undefined });
-  const maxBondAndRewards = calculateAvailableToClaim({ bond, rewards });
+export const getMaxValues = ({
+  bond,
+  rewards,
+  poolData,
+  hasSplits,
+}: Props): MaxValues => {
+  const maxBond = calculateAvailableToClaim({
+    bond,
+    rewards: undefined,
+    hasSplits,
+  });
+  const maxBondAndRewards = calculateAvailableToClaim({
+    bond,
+    rewards,
+    hasSplits,
+  });
 
   return {
     [TOKENS.eth]: [limitMaxEth(maxBond), limitMaxEth(maxBondAndRewards)],

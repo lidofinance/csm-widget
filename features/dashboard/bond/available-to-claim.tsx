@@ -2,6 +2,7 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import {
   getNextDistribution,
+  useFeeSplits,
   useFrameInfo,
   useNodeOperatorId,
   useOperatorBalance,
@@ -14,17 +15,22 @@ import { Balance } from './balance';
 import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 
 export const AvailableToClaim: FC = () => {
-  const id = useNodeOperatorId();
+  const nodeOperatorId = useNodeOperatorId();
 
-  const { data: bond, isPending: isBondLoading } = useOperatorBalance(id);
+  const { data: bond, isPending: isBondLoading } =
+    useOperatorBalance(nodeOperatorId);
 
-  const { data: rewards, isPending: isRewardsLoading } = useOperatorRewards(id);
+  const { data: rewards, isPending: isRewardsLoading } =
+    useOperatorRewards(nodeOperatorId);
+
+  const { data: feeSplits } = useFeeSplits(nodeOperatorId);
 
   const { data: nextDistribution } = useFrameInfo(getNextDistribution);
 
   const availableToClaim = calculateAvailableToClaim({
     bond,
     rewards,
+    hasSplits: (feeSplits?.length ?? 0) > 0,
   });
 
   return (

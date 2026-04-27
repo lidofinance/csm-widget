@@ -1,6 +1,7 @@
 import {
   KEY_OPERATOR_BALANCE,
   KEY_OPERATOR_REWARDS,
+  useFeeSplits,
   useIsContract,
   useNodeOperatorId,
   useOperatorBalance,
@@ -44,6 +45,9 @@ const useClaimBondFormNetworkData: NetworkData<
 
   const { data: status, isPending: isStatusLoading } = useSmStatus();
 
+  const { data: feeSplits, isPending: isFeeSplitsLoading } =
+    useFeeSplits(nodeOperatorId);
+
   const invalidate = useInvalidate();
 
   const revalidate = useCallback(() => {
@@ -56,7 +60,8 @@ const useClaimBondFormNetworkData: NetworkData<
     isPoolDataLoading ||
     isInfoLoading ||
     isContractLoading ||
-    isStatusLoading;
+    isStatusLoading ||
+    isFeeSplitsLoading;
 
   const availableOptions: CLAIM_OPTION[] = [
     rewards?.available ? CLAIM_OPTION.ALL_TO_RA : undefined,
@@ -74,6 +79,7 @@ const useClaimBondFormNetworkData: NetworkData<
       isContract,
       isPaused: status?.isPausedAccounting,
       availableOptions,
+      feeSplits,
     } as ClaimBondFormNetworkData,
     isPending,
     revalidate,

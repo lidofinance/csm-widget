@@ -20,11 +20,15 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
 
     // Create — operators already have keys
     case PATH.CREATE:
-      return isModuleCSM && hasRole ? PATH.KEYS_VIEW : path;
+      return isModuleCSM && hasRole ? PATH.KEYS_VIEW : path; // TODO: rework for dvt
 
     // Keys
     case PATH.KEYS:
-      return hasRole ? PATH.KEYS_VIEW : PATH.CREATE;
+      return hasRole
+        ? flags.HAS_KEYS
+          ? PATH.KEYS_VIEW
+          : PATH.KEYS_SUBMIT
+        : PATH.CREATE;
     case PATH.KEYS_SUBMIT:
       return flags.HAS_MANAGER_ROLE ? path : PATH.KEYS_VIEW;
     case PATH.KEYS_REMOVE:

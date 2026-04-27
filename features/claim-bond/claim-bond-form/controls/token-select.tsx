@@ -28,7 +28,8 @@ export const TokenSelect: React.FC = () => {
   const [token] = useWatch<ClaimBondFormInputType, ['token']>({
     name: ['token'],
   });
-  const { bond, rewards, poolData, isContract } = useClaimBondFormData(true);
+  const { bond, rewards, poolData, isContract, feeSplits } =
+    useClaimBondFormData(true);
   const flow = useClaimBondFlow();
 
   const maxValues = useMemo(
@@ -55,6 +56,12 @@ export const TokenSelect: React.FC = () => {
   return (
     <>
       <FormTitle>Choose a token to claim</FormTitle>
+      {flow.includeRewards && feeSplits.length > 0 && (
+        <Note>
+          Splitter addresses receive stETH. Choose the token for your Rewards
+          Address.
+        </Note>
+      )}
       {isContract && (
         <WarningBlock>
           The Rewards Address of your Node Operator seems to be a smart

@@ -10,10 +10,8 @@ const Page = () => {
 
   return (
     <GateLoaded>
-      <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
-        <Gate rule="IS_SURVEYS_ACTIVE" fallback={<Navigate path={PATH.HOME} />}>
-          <SurveysPage slug={slug} />
-        </Gate>
+      <Gate rule="IS_SURVEYS_ACTIVE" fallback={<Navigate path={PATH.HOME} />}>
+        <SurveysPage slug={slug} />
       </Gate>
     </GateLoaded>
   );

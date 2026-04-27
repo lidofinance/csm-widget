@@ -20,9 +20,7 @@ export const OperatorInfoInputs: FC = () => {
           }}
         />
         <Text size="xxs" color="secondary">
-          {
-            'This name will be publicly visible on-chain. Your operator type will be added automatically (e.g., <NodeOperatorName>_ExtraEffort).'
-          }
+          This name will be publicly visible on-chain
         </Text>
       </Stack>
 
@@ -39,8 +37,7 @@ export const OperatorInfoInputs: FC = () => {
           }}
         />
         <Text size="xxs" color="secondary">
-          A short public blurb about your operator. Great for visibility and
-          marketing.
+          This name will be publicly visible on-chain
         </Text>
       </Stack>
     </Stack>

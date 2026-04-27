@@ -2,8 +2,8 @@ import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { isModuleCM } from 'consts';
 
 const OWNER_COMMON_ACTIONS = [
-  'Set up rewards splits',
-  ...(isModuleCM ? ['Change name and description'] : []),
+  'Setting up rewards splits',
+  ...(isModuleCM ? ['Changing name and description'] : []),
 ];
 
 const OWNER_MANAGER_ACTIONS = [

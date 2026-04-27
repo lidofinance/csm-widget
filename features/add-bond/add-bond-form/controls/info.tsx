@@ -1,4 +1,5 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { UNBONDED_VALIDATORS_LINK } from 'consts/external-links';
 import { BOND_INSUFFICIENT } from 'consts/text';
@@ -15,7 +16,11 @@ export const Info: FC = () => {
         <Stack direction="column" gap="sm" data-testid="formInfo">
           <TitledAmount
             warning={bond?.isInsufficient}
-            title={bond?.isInsufficient ? BOND_INSUFFICIENT : 'Bond balance'}
+            title={
+              <Text size="xxs" weight={700}>
+                {bond?.isInsufficient ? BOND_INSUFFICIENT : 'Bond balance'}
+              </Text>
+            }
             help={
               bond?.isInsufficient
                 ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol'
