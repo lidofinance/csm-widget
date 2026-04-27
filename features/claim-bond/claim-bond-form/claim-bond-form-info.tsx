@@ -1,51 +1,52 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
-import { useWatch } from 'react-hook-form';
 import { Address } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
-import {
-  CLAIM_OPTION,
-  ClaimBondFormInputType,
-  useClaimBondFormData,
-} from './context';
-import { getBondWillReceive } from './get-bond-will-receive';
-import { useInsufficientBondCoverAmount } from './hooks/use-insufficient-bond-cover-amount';
+import { ClaimBondFormInfoSplitters } from './claim-bond-form-info-splitters';
+import { useClaimBondFormData } from './context';
+import { useClaimBreakdown } from './hooks/use-claim-breakdown';
 
 export const ClaimBondFormInfo = () => {
-  const { rewardsAddress, rewards, poolData } = useClaimBondFormData(true);
-  const [token, amount, claimOption] = useWatch<
-    ClaimBondFormInputType,
-    ['token', 'amount', 'claimOption']
-  >({
-    name: ['token', 'amount', 'claimOption'],
-  });
-
-  const coverAmount = useInsufficientBondCoverAmount();
-  const isRewardsToBond = claimOption === CLAIM_OPTION.REWARDS_TO_BOND;
-  const includesRewards = claimOption !== CLAIM_OPTION.BOND_TO_RA;
-
-  // Rewards remaining after covering an insufficient bond shortfall
-  const rewardsAfterCover = includesRewards
-    ? rewards.available - (coverAmount ?? 0n)
-    : undefined;
-
-  const [bondReceive] = getBondWillReceive(
-    token,
-    amount,
-    rewardsAfterCover,
-    poolData,
-  );
-
-  const raAmount = isRewardsToBond ? 0n : (amount ?? 0n);
+  const { rewardsAddress, feeSplits } = useClaimBondFormData(true);
+  const {
+    coverAmount,
+    splittable,
+    toRA,
+    bondDelta,
+    debtBurned,
+    debtRemain,
+    includesRewards,
+    hasSplits,
+    isRewardsToBond,
+  } = useClaimBreakdown();
 
   return (
     <DataTable data-testid="claimBondFormInfo">
-      {!isRewardsToBond && !!coverAmount && (
+      {includesRewards && coverAmount > 0n && (
         <DataTableRow title="Compensation for the Insufficient Bond">
           <FormatToken amount={coverAmount} token={TOKENS.steth} />
         </DataTableRow>
       )}
-      {raAmount > 0n && (
+      {includesRewards && debtBurned > 0n && (
+        <DataTableRow
+          title="Bond debt covered"
+          help="Outstanding bond debt is automatically burned from the bond on every rewards distribution and deposit."
+        >
+          <FormatToken amount={debtBurned} token={TOKENS.steth} />
+        </DataTableRow>
+      )}
+      {debtRemain > 0n && (
+        <DataTableRow
+          title="Bond debt remaining"
+          help="Bond debt that cannot be covered yet — it will be paid down by future rewards or deposits."
+        >
+          <FormatToken amount={debtRemain} token={TOKENS.steth} />
+        </DataTableRow>
+      )}
+      {hasSplits && splittable > 0n && (
+        <ClaimBondFormInfoSplitters feeSplits={feeSplits} amount={splittable} />
+      )}
+      {toRA > 0n && (
         <DataTableRow
           data-testid="claimBondFormInfoTitle"
           title={
@@ -62,17 +63,23 @@ export const ClaimBondFormInfo = () => {
           }
           help="The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab"
         >
-          <FormatToken amount={raAmount} token={token} />
+          <FormatToken amount={toRA} token={TOKENS.steth} />
         </DataTableRow>
       )}
-      {isRewardsToBond && (
-        <DataTableRow title="Bond will receive">
-          <FormatToken amount={rewards.available} token={TOKENS.steth} />
+      {bondDelta > 0n && (
+        <DataTableRow
+          title={
+            isRewardsToBond
+              ? 'Bond will receive'
+              : 'Excess bond will increase by'
+          }
+        >
+          <FormatToken amount={bondDelta} token={TOKENS.steth} />
         </DataTableRow>
       )}
-      {!isRewardsToBond && bondReceive > 0n && (
-        <DataTableRow title="Excess bond will increase by">
-          <FormatToken amount={bondReceive} token={TOKENS.steth} />
+      {bondDelta < 0n && (
+        <DataTableRow title="Excess bond will decrease by">
+          <FormatToken amount={-bondDelta} token={TOKENS.steth} />
         </DataTableRow>
       )}
     </DataTable>

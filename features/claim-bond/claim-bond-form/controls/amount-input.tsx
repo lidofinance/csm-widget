@@ -18,7 +18,7 @@ export const AmountInput: React.FC = () => {
     ['token', 'claimOption']
   >({ name: ['token', 'claimOption'] });
   const flow = useClaimBondFlow();
-  const { bond, rewards, poolData } = useClaimBondFormData(true);
+  const { bond, rewards, poolData, feeSplits } = useClaimBondFormData(true);
 
   const coverInsufficientAmount = useInsufficientBondCoverAmount();
   const hasNoExcess = !bond.isInsufficient && bond.delta === 0n;
@@ -30,7 +30,13 @@ export const AmountInput: React.FC = () => {
 
   if (flow.action !== 'claim' || !flow.showAmount) return null;
   const maxIdx = flow.maxValueIndex;
-  const maxAmount = getMaxValues({ bond, rewards, poolData })?.[token][maxIdx];
+  const hasSplits = feeSplits.length > 0;
+  const maxAmount = getMaxValues({
+    bond,
+    rewards,
+    poolData,
+    hasSplits,
+  })?.[token][maxIdx];
 
   return (
     <>

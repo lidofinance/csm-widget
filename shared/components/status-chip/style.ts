@@ -10,6 +10,9 @@ const variants = {
   secondary: css`
     color: var(--lido-color-textSecondary);
   `,
+  primary: css`
+    color: var(--lido-color-primary);
+  `,
   success: css`
     color: var(--lido-color-success);
   `,

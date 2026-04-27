@@ -1,4 +1,4 @@
-import { Tooltip } from '@lidofinance/lido-ui';
+import { Tooltip, Question } from '@lidofinance/lido-ui';
 import { ComponentProps, FC, ReactNode } from 'react';
 
 import { ReactComponent as InfoIcon } from 'assets/icons/info.svg';
@@ -7,7 +7,7 @@ import { IconStyle } from './style';
 
 type Props = Omit<ComponentProps<typeof Tooltip>, 'title' | 'children'> & {
   tooltip?: ReactNode;
-  type?: 'info' | 'calendar';
+  type?: 'info' | 'question' | 'calendar';
   inline?: boolean;
 };
 
@@ -23,8 +23,19 @@ export const IconTooltip: FC<Props> = ({
       {inline && <>&nbsp;</>}
       <Tooltip placement={placement} title={tooltip} {...rest}>
         <IconStyle inline={inline} data-testid="iconTooltip">
-          {type === 'calendar' ? <CalendarIcon /> : <InfoIcon />}
+          {getIcon(type)}
         </IconStyle>
       </Tooltip>
     </>
   ) : null;
+
+const getIcon = (type: Props['type']) => {
+  switch (type) {
+    case 'question':
+      return <Question />;
+    case 'calendar':
+      return <CalendarIcon />;
+    default:
+      return <InfoIcon />;
+  }
+};
