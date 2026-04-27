@@ -4,16 +4,16 @@ import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { Address } from 'viem';
 import { useSmSDK } from '../web3-provider';
+import { useDappStatus } from './use-dapp-status';
 
 export const KEY_OPERATOR_IS_OWNER = ['operator-is-owner'];
 
-export const useOperatorIsOwner = ({
-  address,
-  nodeOperatorId,
-}: {
-  address: Address | undefined;
-  nodeOperatorId: NodeOperatorId | undefined;
-}) => {
+export const useOperatorIsOwner = (
+  nodeOperatorId: NodeOperatorId | undefined,
+  customAddress?: Address,
+) => {
+  const { address: dappAddress } = useDappStatus();
+  const address = customAddress ?? dappAddress;
   const { operator } = useSmSDK();
 
   return useQuery({

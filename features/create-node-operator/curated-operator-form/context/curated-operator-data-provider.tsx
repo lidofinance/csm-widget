@@ -25,15 +25,13 @@ const useCuratedOperatorFormNetworkData: NetworkData<
   const isEthBalanceLoading = ethBalanceQuery.isPending;
 
   const { data: availableGates, isPending: isGatesLoading } =
-    useCuratedGatesEligibility(address);
+    useCuratedGatesEligibility();
 
   const invalidate = useInvalidate();
 
   const revalidate = useCallback(() => {
-    invalidate([['available-gates', address]]);
-
     invalidate([ethBalanceQuery.queryKey, KEY_CURATED_GATES_PROOF]);
-  }, [address, ethBalanceQuery.queryKey, invalidate]);
+  }, [ethBalanceQuery.queryKey, invalidate]);
 
   const isPending = isStatusLoading || isGatesLoading || isEthBalanceLoading;
 

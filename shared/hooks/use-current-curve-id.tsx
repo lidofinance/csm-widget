@@ -1,21 +1,18 @@
 import {
-  useDappStatus,
-  useNodeOperatorId,
-  useOperatorCurveId,
   useDefaultCurveId,
   useIcsCurveId,
-  useIcsProof,
   useIcsPaused,
+  useIcsProof,
+  useNodeOperatorId,
+  useOperatorCurveId,
 } from 'modules/web3';
 
-// TODO: CM version
 export const useCurrentCurveId = () => {
-  const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
   const { data: operatorCurveId } = useOperatorCurveId(nodeOperatorId);
   const { data: defCurveId } = useDefaultCurveId();
   const { data: icsCurveId } = useIcsCurveId();
-  const { data: proof } = useIcsProof(address);
+  const { data: proof } = useIcsProof();
   const { data: icsPaused } = useIcsPaused();
 
   return nodeOperatorId

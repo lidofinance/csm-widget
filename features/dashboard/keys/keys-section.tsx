@@ -15,7 +15,7 @@ export const KeysSection: FC = () => {
       <SectionBlock
         title={isModuleCM ? 'Stake & Keys' : 'Keys'}
         data-testid="dashboardKeysSection"
-        href={PATH.KEYS_VIEW}
+        href={PATH.KEYS}
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardKeysLink}
       >
         <Stack direction="column" gap="sm">
