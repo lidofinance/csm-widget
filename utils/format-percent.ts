@@ -1,5 +1,8 @@
 import { PERCENT_BASIS } from '@lidofinance/lido-csm-sdk';
 
+export const formatBP = (value: bigint, decimals = 2) =>
+  parseFloat((Number(value) / Number(PERCENT_BASIS)).toFixed(decimals));
+
 export const formatPercent = (
   value?: number | bigint,
   percentSymbol = true,

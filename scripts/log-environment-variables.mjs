@@ -20,10 +20,8 @@ export const openKeys = [
 
 export const secretKeys = [
   'EL_RPC_URLS_1',
-  'EL_RPC_URLS_17000',
   'EL_RPC_URLS_560048',
   'CL_API_URLS_1',
-  'CL_API_URLS_17000',
   'CL_API_URLS_560048',
   'ETHSEER_API_URL',
   'ETHSEER_API_TOKEN',

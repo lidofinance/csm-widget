@@ -95,6 +95,7 @@ const CONTRACT_LIST_LOGS: AlL_CONTRACT_NAMES[] = [
   AlL_CONTRACT_NAMES.accounting,
   AlL_CONTRACT_NAMES.feeOracle,
   AlL_CONTRACT_NAMES.feeDistributor,
+  AlL_CONTRACT_NAMES.ejector,
   AlL_CONTRACT_NAMES.validatorsExitBusOracle,
   CONTRACT_NAMES.wstETH,
   CONTRACT_NAMES.stETH,

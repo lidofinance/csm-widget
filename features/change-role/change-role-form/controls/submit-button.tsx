@@ -2,23 +2,23 @@ import { useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Note } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
-import { ChangeRoleFormInputType, useChangeRoleFormData } from '../context';
+import { type ChangeRoleFormInputType, useChangeRoleFlow } from '../context';
 import { useRole } from '../hooks/use-role';
 
 export const SubmitButton = () => {
   const role = useRole();
-  const { mode } = useChangeRoleFormData(true);
+  const flow = useChangeRoleFlow();
   const { setValue } = useFormContext<ChangeRoleFormInputType>();
 
   // TODO: move this to somethere ?
   const clickHandle = useCallback(() => {
-    setValue('isRevoke', false);
+    setValue('intent', 'submit');
   }, [setValue]);
 
   const title =
-    mode === 'managerReset'
+    flow.action === 'manager-reset'
       ? `Reset ${role} Address`
-      : mode === 'propose'
+      : flow.action === 'propose'
         ? `Propose a new ${role} Address`
         : `Change ${role} Address`;
 
@@ -27,7 +27,7 @@ export const SubmitButton = () => {
       <SubmitButtonHookForm disableIfClean onClick={clickHandle}>
         {title}
       </SubmitButtonHookForm>
-      {mode === 'propose' && (
+      {flow.action === 'propose' && (
         <Note>
           To complete the address change, the owner of the new address must
           confirm the change

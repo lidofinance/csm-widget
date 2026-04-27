@@ -6,6 +6,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "next dev",
+    "dev:cm": "MODULE=cm next dev",
     "build": "next build",
     "build:analyze": "ANALYZE_BUNDLE=true next build",
     "start": "NODE_OPTIONS='-r next-logger' next start",
@@ -25,13 +26,13 @@
     "@coinbase/wallet-sdk": "^4.3.6",
     "@gemini-wallet/core": "~0.3.1",
     "@lidofinance/address": "^1.4.0",
-    "@lidofinance/analytics-matomo": "^0.56.0",
+    "@lidofinance/analytics-matomo": "^0.58.0",
     "@lidofinance/api-logger": "^0.47.0",
     "@lidofinance/api-metrics": "^0.47.0",
     "@lidofinance/api-rpc": "^0.47.0",
     "@lidofinance/eth-api-providers": "^0.47.0",
     "@lidofinance/eth-providers": "^0.47.0",
-    "@lidofinance/lido-csm-sdk": "^2.0.0-alpha.37",
+    "@lidofinance/lido-csm-sdk": "^2.0.0-alpha.47",
     "@lidofinance/lido-ethereum-sdk": "^4.7.0",
     "@lidofinance/lido-ui": "^3.42.1",
     "@lidofinance/next-api-wrapper": "^0.47.0",
@@ -50,7 +51,7 @@
     "date-fns": "2.29.2",
     "fs-extra": "^11.2.0",
     "html2canvas": "^1.4.1",
-    "lodash": "^4.17.23",
+    "lodash": "^4.18.1",
     "memory-cache": "^0.2.0",
     "ms": "^2.1.3",
     "next": "^12.3.4",
@@ -71,7 +72,8 @@
     "tiny-invariant": "^1.1.0",
     "uuid": "^8.3.2",
     "viem": "2.46.0",
-    "wagmi": "3.4.1"
+    "wagmi": "3.4.1",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.3.1",
@@ -87,7 +89,7 @@
     "@nestjs/common": "^10.4.16",
     "@next/bundle-analyzer": "^13.2.4",
     "@next/eslint-plugin-next": "^13.4.13",
-    "@playwright/test": "1.58.1",
+    "@playwright/test": "1.58.2",
     "@scure/bip39": "2.0.1",
     "@svgr/webpack": "8.1.0",
     "@types/jest": "28.1.6",
@@ -129,14 +131,25 @@
     "typechain": "^8.1.1",
     "typescript": "^5.7.3",
     "url-loader": "^4.1.1",
-    "webpack-preprocessor-loader": "^1.3.0",
-    "zod": "^4.1.12"
+    "webpack-preprocessor-loader": "^1.3.0"
   },
   "resolutions": {
     "postcss": "^8.4.31",
     "crypto-js": "^4.2.0",
     "wrap-ansi": "7.0.0",
-    "@noble/hashes": "^1.8.0"
+    "@noble/hashes": "^1.8.0",
+    "elliptic": "^6.6.1",
+    "minimatch": "^3.1.4",
+    "js-yaml": "^4.1.1",
+    "follow-redirects": "^1.16.0",
+    "secp256k1": "^4.0.4",
+    "@babel/helpers": "^7.26.10",
+    "@babel/runtime": "^7.26.10",
+    "yaml": "^2.8.3",
+    "h3": "^1.15.9",
+    "hono": "^4.12.14",
+    "axios": "^1.15.0",
+    "micromatch": "^4.0.8"
   },
   "lint-staged": {
     "./**/*.{ts,tsx}": [

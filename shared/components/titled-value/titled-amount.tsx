@@ -6,7 +6,7 @@ import { TitledValue } from 'shared/components/titled-value/titled-value';
 import { FormatToken } from 'shared/formatters';
 import styled from 'styled-components';
 
-type TitledAmountProps = ComponentPropsWithoutRef<'div'> & {
+type TitledAmountProps = Omit<ComponentPropsWithoutRef<'div'>, 'title'> & {
   title?: ReactNode;
   description?: ReactNode;
   chip?: ReactNode;

@@ -1,22 +1,20 @@
 import { Text } from '@lidofinance/lido-ui';
 import { Address as AddressComponent } from 'shared/components';
 import {
-  TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
-  getGeneralTransactionModalStages,
-  useTransactionModalStage,
+  useTxStages,
 } from 'shared/transaction-modal';
-import { Address } from 'viem';
+import { zeroAddress } from 'viem';
+import { ClaimerFormInputType, ClaimerFormNetworkData } from '../context/types';
 
-type Props = {
-  claimerAddress: Address;
-  isUnset: boolean;
-};
+const getTexts = (input: ClaimerFormInputType) => {
+  const claimerAddress = input.isUnset
+    ? zeroAddress
+    : (input.address ?? zeroAddress);
 
-const getTexts = ({ claimerAddress, isUnset }: Props) =>
-  isUnset
+  return input.isUnset
     ? {
         sign: {
           title: 'You are unsetting Rewards claimer',
@@ -29,10 +27,10 @@ const getTexts = ({ claimerAddress, isUnset }: Props) =>
       }
     : {
         sign: {
-          title: 'You are setting Rewards claimer address',
+          title: 'You are setting Rewards Claimer Address',
           description: (
             <>
-              New Rewards claimer address is{' '}
+              New Rewards Claimer Address is{' '}
               <Text size="xxs">
                 <AddressComponent address={claimerAddress} showIcon />
               </Text>
@@ -40,10 +38,10 @@ const getTexts = ({ claimerAddress, isUnset }: Props) =>
           ),
         },
         success: {
-          title: 'Rewards claimer address has been set',
+          title: 'Rewards Claimer Address has been set',
           description: (
             <>
-              New Rewards claimer address is{' '}
+              New Rewards Claimer Address is{' '}
               <Text size="xxs">
                 <AddressComponent address={claimerAddress} showIcon />
               </Text>
@@ -51,26 +49,20 @@ const getTexts = ({ claimerAddress, isUnset }: Props) =>
           ),
         },
       };
-
-const getTxModalStagesClaimer = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
-
-  sign: (props: Props) =>
-    transitStage(<TxStageSign {...getTexts(props).sign} />),
-
-  pending: (props: Props, txHash?: string) =>
-    transitStage(<TxStagePending {...getTexts(props).sign} txHash={txHash} />),
-
-  success: (props: Props, txHash?: string) =>
-    transitStage(
-      <TxStageSuccess txHash={txHash} {...getTexts(props).success} />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-});
+};
 
 export const useTxModalStagesClaimer = () =>
-  useTransactionModalStage(getTxModalStagesClaimer);
+  useTxStages<ClaimerFormInputType, ClaimerFormNetworkData>(
+    (transitStage, input) => ({
+      sign: () => transitStage(<TxStageSign {...getTexts(input).sign} />),
+      pending: (txHash) =>
+        transitStage(
+          <TxStagePending {...getTexts(input).sign} txHash={txHash} />,
+        ),
+      success: (_result: undefined, txHash) =>
+        transitStage(
+          <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
+          { isClosableOnLedger: true },
+        ),
+    }),
+  );

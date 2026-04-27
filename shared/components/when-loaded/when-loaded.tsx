@@ -1,7 +1,7 @@
-import { FC, PropsWithChildren, ReactNode } from 'react';
-import { WrapperStyle } from './style';
 import { Loader } from '@lidofinance/lido-ui';
-import { Note } from '../note/note';
+import { FC, PropsWithChildren, ReactNode } from 'react';
+import { EmptyState } from './empty-state';
+import { WrapperStyle } from './style';
 
 export type WhenLoaded = {
   loading: boolean;
@@ -29,10 +29,9 @@ export const WhenLoaded: FC<PropsWithChildren<WhenLoaded>> = ({
         <Loader data-testid="loader" />
       </WrapperStyle>
     ) : empty ? (
-      <>
-        <WrapperStyle $morePadding={morePadding}>{empty}</WrapperStyle>
-        {emptyNote && <Note>{emptyNote}</Note>}
-      </>
+      <EmptyState note={emptyNote} morePadding={morePadding}>
+        {empty}
+      </EmptyState>
     ) : (
       children
     )}

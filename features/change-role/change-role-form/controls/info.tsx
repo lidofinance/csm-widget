@@ -3,28 +3,44 @@ import { Text } from '@lidofinance/lido-ui';
 import { ROLES_METADATA } from 'consts/roles';
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Latice, Stack, TitledAddress, Warning } from 'shared/components';
+import {
+  IconTooltip,
+  Latice,
+  RoleActionsList,
+  Stack,
+  TitledAddress,
+  Warning,
+} from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { isAddressEqual } from 'viem';
-import { ChangeRoleFormInputType, useChangeRoleFormData } from '../context';
+import {
+  type ChangeRoleFormInputType,
+  useChangeRoleFlow,
+  useChangeRoleFormData,
+} from '../context';
 import { useRole } from '../hooks/use-role';
 import { MODULE_METADATA } from 'consts';
 import { config } from 'config';
 
 export const Info: FC = () => {
   const roleTitle = useRole();
+  const flow = useChangeRoleFlow();
   const {
     currentAddress,
     proposedAddress,
-    mode,
     address,
     extendedManagerPermissions,
     role,
+    invite,
   } = useChangeRoleFormData(true);
   const { setValue } = useFormContext<ChangeRoleFormInputType>();
 
   const revokeHandle = useCallback(() => {
-    setValue('isRevoke', true);
+    setValue('intent', 'revoke');
+  }, [setValue]);
+
+  const acceptHandle = useCallback(() => {
+    setValue('intent', 'accept');
   }, [setValue]);
 
   return (
@@ -34,7 +50,19 @@ export const Info: FC = () => {
       </Text>
       <Latice variant="secondary">
         <TitledAddress
-          title={`Current ${roleTitle} Address`}
+          title={
+            <Stack center gap="xs">
+              Current {roleTitle} Address
+              <IconTooltip
+                tooltip={
+                  <RoleActionsList
+                    role={role}
+                    extendedManagerPermissions={extendedManagerPermissions}
+                  />
+                }
+              />
+            </Stack>
+          }
           address={currentAddress}
           isYou={isAddressEqual(currentAddress, address)}
           isOwner={
@@ -50,7 +78,7 @@ export const Info: FC = () => {
               title={
                 <>
                   <Warning text="Pending change" />
-                  {mode === 'propose' && (
+                  {flow.action === 'propose' ? (
                     <SubmitButtonHookForm
                       variant="outlined"
                       size="xs"
@@ -60,10 +88,23 @@ export const Info: FC = () => {
                     >
                       Cancel
                     </SubmitButtonHookForm>
+                  ) : (
+                    invite && (
+                      <SubmitButtonHookForm
+                        variant="outlined"
+                        size="xs"
+                        fullwidth={false}
+                        onClick={acceptHandle}
+                        noDisableOnError
+                      >
+                        Accept
+                      </SubmitButtonHookForm>
+                    )
                   )}
                 </>
               }
               address={proposedAddress}
+              isYou={isAddressEqual(proposedAddress, address)}
             />
             <Text size="xxs" weight={700}>
               Action required

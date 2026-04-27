@@ -1,11 +1,14 @@
 import { NodeOperatorId, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { PATH } from 'consts/urls';
 import { useNodeOperator } from 'modules/web3';
 import { useDappStatus } from 'modules/web3/hooks/use-dapp-status';
 import { FC, useCallback } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { useOpenOperatorSwitchModal } from 'shared/node-operator/switch-modal';
+import { trackMatomoEvent } from 'utils';
+import { isAddressEqual } from 'viem';
 
 type Props = {
   nodeOperatorId: NodeOperatorId;
@@ -23,29 +26,32 @@ export const OperatorCardActions: FC<Props> = ({
   const openModal = useOpenOperatorSwitchModal(PATH.HOME);
 
   const handleOpenSwitchModal = useCallback(() => {
-    // TODO: track this to matomo with a separate event
+    trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.groupSwitchOperator);
     openModal();
   }, [openModal]);
 
   const isCurrentOperator = nodeOperator?.nodeOperatorId === nodeOperatorId;
 
-  const isManagedByCurrentWallet =
-    !!address &&
-    !!info &&
-    (info.managerAddress.toLowerCase() === address.toLowerCase() ||
-      info.rewardsAddress.toLowerCase() === address.toLowerCase());
+  const isManagerByCurrentWallet =
+    !!address && !!info && isAddressEqual(info.managerAddress, address);
+
+  const isRewardsByCurrentWallet =
+    !!address && !!info && isAddressEqual(info.rewardsAddress, address);
 
   if (isCurrentOperator) {
-    return (
-      <LocalLink href={PATH.KEYS_SUBMIT}>
-        <Button fullwidth variant="outlined" color="primary">
-          Upload keys
-        </Button>
-      </LocalLink>
-    );
+    if (isManagerByCurrentWallet) {
+      return (
+        <LocalLink href={PATH.KEYS_SUBMIT}>
+          <Button fullwidth variant="outlined" color="primary">
+            Upload keys
+          </Button>
+        </LocalLink>
+      );
+    }
+    return null;
   }
 
-  if (isManagedByCurrentWallet && moreKeys) {
+  if (isManagerByCurrentWallet && moreKeys) {
     return (
       <Button
         fullwidth
@@ -58,7 +64,7 @@ export const OperatorCardActions: FC<Props> = ({
     );
   }
 
-  if (isManagedByCurrentWallet) {
+  if (isManagerByCurrentWallet || isRewardsByCurrentWallet) {
     return (
       <Button
         fullwidth

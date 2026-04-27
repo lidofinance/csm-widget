@@ -27,12 +27,14 @@ export const FormatToken: FormatTokenComponent = ({
   maxTotalLength = 15,
   fallback = DATA_UNAVAILABLE,
   adaptiveDecimals,
+  trimTrailingZeros,
   ...rest
 }) => {
   const { actual, trimmed } = useFormattedBalance(amount, {
     maxDecimalDigits,
     maxTotalLength,
     adaptiveDecimals,
+    trimTrailingZeros,
   });
 
   if (amount === undefined) return <span {...rest}>{fallback}</span>;

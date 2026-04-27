@@ -43,6 +43,7 @@ export const StakeStats: FC<Props> = ({ data }) => {
                 amount={data.activeStake}
                 token={TOKENS.eth}
                 maxDecimalDigits={2}
+                trimTrailingZeros
               />
             </Text>
             <Text
@@ -67,6 +68,7 @@ export const StakeStats: FC<Props> = ({ data }) => {
                 amount={data.depositableStake}
                 token={TOKENS.eth}
                 maxDecimalDigits={2}
+                trimTrailingZeros
               />
             </Text>
             <Text
@@ -91,6 +93,7 @@ export const StakeStats: FC<Props> = ({ data }) => {
                 amount={data.potentialAdditionalStake}
                 token={TOKENS.eth}
                 maxDecimalDigits={2}
+                trimTrailingZeros
               />
             </Text>
             <Text size="xxs" color="secondary">

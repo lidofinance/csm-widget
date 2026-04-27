@@ -97,6 +97,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardNotificationSentinelLink = 'dashboardNotificationSentinelLink',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
+  groupSwitchOperator = 'groupSwitchOperator',
   // Rewards History
   rewardsHistoryExport = 'rewardsHistoryExport',
   // modifiers
@@ -433,6 +434,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator]: createEvent(
     'Switch Node Operator',
     'switch_node_operator',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.groupSwitchOperator]: createEvent(
+    'Click «Switch to this operator» on Group page',
+    'group_switch_operator',
   ),
   // Rewards History
   [MATOMO_CLICK_EVENTS_TYPES.rewardsHistoryExport]: createEvent(

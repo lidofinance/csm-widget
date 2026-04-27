@@ -1,13 +1,18 @@
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
 import { type FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
-import { IconTooltip, Stack, WarningBlock } from 'shared/components';
+import {
+  IconTooltip,
+  RoleActionsList,
+  Stack,
+  WarningBlock,
+} from 'shared/components';
 import type { CuratedOperatorFormInputType } from '../../context/types';
 import { useStepValidation } from '../../hooks/use-step-validation';
 import { ManagerAddressInput } from '../manager-address-input';
 import { RewardAddressInput } from '../reward-address-input';
 
-// TODO: gaps
 export const Step2: FC = () => {
   const currentStep = useWatch<CuratedOperatorFormInputType, 'step'>({
     name: 'step',
@@ -25,7 +30,7 @@ export const Step2: FC = () => {
         </Text>
         <Text size="xs" color="secondary" data-testid="stepDescription">
           <b>Manager Address</b> will have the ultimate control over the Node
-          Operator, while <b>Rewards Address</b> is only used to receive
+          Operator, while <b>Rewards Address</b> is mainly used to receive
           rewards.
         </Text>
         <ul>
@@ -50,20 +55,10 @@ export const Step2: FC = () => {
             <IconTooltip
               inline
               tooltip={
-                <>
-                  The Manager Address is used for:
-                  <ul>
-                    <li>Adding new keys</li>
-                    <li>Removing existing keys</li>
-                    <li>Adding extra bond amount</li>
-                    <li>Claiming bond and rewards to the Rewards Address</li>
-                    <li>Covering locked bond</li>
-                    <li>Proposing a new Manager Address</li>
-                    <li>Changing Rewards Address</li>
-                    <li>Set up rewards splits</li>
-                    <li>Change name and description</li>
-                  </ul>
-                </>
+                <RoleActionsList
+                  role={ROLES.MANAGER}
+                  extendedManagerPermissions
+                />
               }
             />
           </Text>
@@ -77,14 +72,10 @@ export const Step2: FC = () => {
             <IconTooltip
               inline
               tooltip={
-                <>
-                  The Rewards Address is used for:
-                  <ul>
-                    <li>Claiming bond and rewards</li>
-                    <li>Adding extra bond amount</li>
-                    <li>Proposing a new Rewards Address</li>
-                  </ul>
-                </>
+                <RoleActionsList
+                  role={ROLES.REWARDS}
+                  extendedManagerPermissions
+                />
               }
             />
           </Text>

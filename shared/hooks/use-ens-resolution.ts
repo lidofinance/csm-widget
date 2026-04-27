@@ -25,6 +25,8 @@ export type EnsResolution = {
   isLoading: boolean;
   /** Update input value and trigger resolution */
   handleChange: (value: string) => void;
+  /** Raw resolution state — reference changes on every resolve pass */
+  resolution: ResolvedAddress;
 };
 
 export const useEnsResolution = (): EnsResolution => {
@@ -100,5 +102,6 @@ export const useEnsResolution = (): EnsResolution => {
     isEns: resolved.isEns,
     isLoading,
     handleChange,
+    resolution: resolved,
   };
 };

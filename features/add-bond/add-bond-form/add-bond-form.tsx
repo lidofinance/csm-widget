@@ -3,8 +3,9 @@ import { FC, memo } from 'react';
 import { AddBondDataProvider, AddBondFormProvider } from './context';
 
 import { FormBlock } from 'shared/components';
-import { FormLoader, Form } from 'shared/hook-form/form-controller';
+import { Form } from 'shared/hook-form/form-controller';
 import { AddBondFormInfo } from './add-bond-form-info';
+import { AddBondFormLoader } from './add-bond-form-loader';
 import { AmountInput } from './controls/amount-input';
 import { Info } from './controls/info';
 import { SubmitButton } from './controls/submit-button';
@@ -15,7 +16,7 @@ export const AddBondForm: FC = memo(() => {
     <AddBondDataProvider>
       <AddBondFormProvider>
         <FormBlock data-testid="addBondForm">
-          <FormLoader>
+          <AddBondFormLoader>
             <Form>
               <Info />
               <TokenSelect />
@@ -23,7 +24,7 @@ export const AddBondForm: FC = memo(() => {
               <SubmitButton />
             </Form>
             <AddBondFormInfo />
-          </FormLoader>
+          </AddBondFormLoader>
         </FormBlock>
       </AddBondFormProvider>
     </AddBondDataProvider>

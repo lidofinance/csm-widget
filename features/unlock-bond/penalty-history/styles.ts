@@ -1,12 +1,16 @@
+import { Accordion } from '@lidofinance/lido-ui';
 import { Table } from 'shared/components';
 import styled from 'styled-components';
 
-export const WideWrapper = styled.div`
-  margin-inline: -32px;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    margin-inline: -20px;
+export const AccordionStyle = styled(Accordion)`
+  & > div + div > div {
+    padding-inline: 0;
+    padding-block-end: ${({ theme }) => theme.spaceMap.md}px;
   }
+`;
+
+export const Wrapper = styled.div`
+  margin-inline: ${({ theme }) => theme.spaceMap.xxl}px;
 `;
 
 export const TableStyle = styled(Table)`

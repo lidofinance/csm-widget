@@ -3,11 +3,11 @@ import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { getExternalLinks } from 'consts/external-links';
-import { LogoLido, Stack } from 'shared/components';
+import { LogoLidoLink, Stack } from 'shared/components';
 import { FooterLink, FooterStyle, LinkDivider, Version } from './styles';
 
 const getVersionInfo = () => {
-  const { version, branch } = buildInfo;
+  const { version, branch, commit } = buildInfo;
   const repoBaseUrl = 'https://github.com/lidofinance/csm-widget';
   if (version === 'REPLACE_WITH_VERSION')
     return {
@@ -19,12 +19,16 @@ const getVersionInfo = () => {
       label: 'preview',
       link: `${repoBaseUrl}/tree/${branch}`,
     };
-  if (version === 'staging' || version === 'dev') {
+  if (version === 'staging' || version === 'dev')
     return {
       label: version,
       link: `${repoBaseUrl}/tree/${branch}`,
     };
-  }
+  if (version === `${branch}:${commit}`)
+    return {
+      label: branch,
+      link: `${repoBaseUrl}/commit/${commit}`,
+    };
   return {
     label: `v${version}`,
     link: `${repoBaseUrl}/releases/tag/${version}`,
@@ -36,7 +40,7 @@ const { feedbackForm } = getExternalLinks();
 
 export const Footer: FC = () => (
   <FooterStyle>
-    <LogoLido />
+    <LogoLidoLink />
     <Stack gap="none">
       <FooterLink
         href="https://lido.fi/terms-of-use"

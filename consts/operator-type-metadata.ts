@@ -89,6 +89,14 @@ export const OPERATOR_TYPE_METADATA: Record<
       'This type is designed for distributed validator clusters operated by a single entity, leveraging DVT to enhance validator security, redundancy, and operational reliability.',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_IODC,
   },
+  [OPERATOR_TYPE.CM_IODCP]: {
+    name: 'Intra-Operator DVT Cluster Plus',
+    short: 'IODC+',
+    title: 'Intra-Operator DVT Cluster Plus (IODC+)',
+    description:
+      'This type is designed for distributed validator clusters operated by a single entity, leveraging DVT to enhance validator security, redundancy, and operational reliability.',
+    curveId: OPERATOR_TYPE_CURVE_ID.CM_IODC,
+  },
   [OPERATOR_TYPE.CC]: {
     name: 'Custom Curve',
     short: 'CC',

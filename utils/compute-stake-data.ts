@@ -1,4 +1,5 @@
 import {
+  KeyWithStatus,
   MAX_EFFECTIVE_BALANCE,
   MIN_EFFECTIVE_BALANCE,
   NodeOperatorInfo,
@@ -15,17 +16,27 @@ export type StakeAndKeysData = {
   potentialAdditionalKeys: number;
 };
 
+export const sumActiveKeysBalance = (keys: KeyWithStatus[]): bigint =>
+  keys.reduce((acc, k) => acc + (k.effectiveBalance ?? 0n), 0n);
+
 export const computeStakeData = (
   summary: OperatorStakeSummary,
   info: NodeOperatorInfo,
+  keys?: KeyWithStatus[],
 ): StakeAndKeysData => {
   const activeKeys = info.totalDepositedKeys - info.totalWithdrawnKeys;
-  const activeStake = summary.currentStake;
+  // Contract skips operators without a group, returning currentStake = 0
+  // even when the operator has active validators holding real CL balance.
+  // Fall back to the sum of key effective balances in that case.
+  const activeStake =
+    summary.currentStake === 0n && keys
+      ? sumActiveKeysBalance(keys)
+      : summary.currentStake;
   const targetStake = summary.targetStake;
 
-  const depositableKeys = info.totalAddedKeys - info.totalDepositedKeys;
+  const depositableKeys = info.totalVettedKeys - info.totalDepositedKeys;
   const maxDepositableStake =
-    BigInt(activeKeys + depositableKeys) * MAX_EFFECTIVE_BALANCE;
+    BigInt(activeKeys + depositableKeys) * MAX_EFFECTIVE_BALANCE - activeStake;
   const depositableStake = bigMax(
     0n,
     bigMin(targetStake - activeStake, maxDepositableStake),
@@ -35,10 +46,13 @@ export const computeStakeData = (
     0n,
     targetStake - (activeStake + depositableStake),
   );
-  const potentialAdditionalKeys = Math.max(
-    Number(potentialAdditionalStake / MAX_EFFECTIVE_BALANCE),
-    potentialAdditionalStake >= MIN_EFFECTIVE_BALANCE ? 1 : 0,
-  );
+  const potentialAdditionalKeys =
+    potentialAdditionalStake < MIN_EFFECTIVE_BALANCE
+      ? 0
+      : Number(
+          (potentialAdditionalStake + MAX_EFFECTIVE_BALANCE - 1n) /
+            MAX_EFFECTIVE_BALANCE,
+        );
 
   return {
     activeStake,

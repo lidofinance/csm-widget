@@ -4,10 +4,10 @@ import { AddressInputHookForm } from 'shared/hook-form/controls';
 export const AddressInput: React.FC = () => {
   return (
     <>
-      <FormTitle>Specify a new Rewards claimer address</FormTitle>
+      <FormTitle>Specify a new Rewards Claimer Address</FormTitle>
       <AddressInputHookForm
         fieldName="address"
-        label="New Rewards claimer address"
+        label="New Rewards Claimer Address"
       />
     </>
   );

@@ -1,73 +1,75 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk';
+import { type NodeOperatorShortInfo, ROLES } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { ROLES_METADATA } from 'consts/roles';
 import { Address as AddressComponent } from 'shared/components';
+import { type ChangeRoleMode, useChangeRoleMode } from 'shared/hooks';
 import {
   AfterAddressProposed,
-  TransactionModalTransitStage,
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
-  getGeneralTransactionModalStages,
-  useTransactionModalStage,
+  useTxStages,
 } from 'shared/transaction-modal';
-import { Address } from 'viem';
-import { ChangeRoleMode } from '../context/types';
+import { zeroAddress } from 'viem';
+import { buildAcceptInviteStages } from 'features/accept-invite/accept-invite-form/hooks/use-tx-modal-stages-accept-invite';
+import {
+  ChangeRoleFormInputType,
+  ChangeRoleFormNetworkData,
+} from '../context/types';
 
-type Props = {
-  address: Address;
-  currentAddress: Address;
-  role: ROLES;
-  mode: ChangeRoleMode;
-  isRevoke: boolean;
-};
+const getTexts = (
+  input: ChangeRoleFormInputType,
+  data: ChangeRoleFormNetworkData,
+  mode: ChangeRoleMode,
+) => {
+  const address =
+    input.intent === 'revoke' ? zeroAddress : (input.address ?? zeroAddress);
 
-const getTexts = (props: Props) => {
-  return props.mode === 'managerReset' || props.mode === 'rewardsChange'
+  return mode === 'managerReset' || mode === 'rewardsChange'
     ? {
         sign: {
-          title: `You are changing ${ROLES_METADATA[props.role].capitalizedTitle} Address`,
+          title: `You are changing ${ROLES_METADATA[data.role].capitalizedTitle} Address`,
           description: (
             <>
-              New {ROLES_METADATA[props.role].capitalizedTitle} Address is{' '}
+              New {ROLES_METADATA[data.role].capitalizedTitle} Address is{' '}
               <Text size="xxs">
-                <AddressComponent address={props.address} showIcon />
+                <AddressComponent address={address} showIcon />
               </Text>
             </>
           ),
         },
         success: {
-          title: `${ROLES_METADATA[props.role].capitalizedTitle} Address has been changed`,
+          title: `${ROLES_METADATA[data.role].capitalizedTitle} Address has been changed`,
           description: (
             <>
-              New {ROLES_METADATA[props.role].capitalizedTitle} Address is{' '}
+              New {ROLES_METADATA[data.role].capitalizedTitle} Address is{' '}
               <Text size="xxs">
-                <AddressComponent address={props.address} showIcon />
+                <AddressComponent address={address} showIcon />
               </Text>
             </>
           ),
         },
       }
-    : props.isRevoke
+    : input.intent === 'revoke'
       ? {
           sign: {
-            title: `You are canceling request for ${ROLES_METADATA[props.role].capitalizedTitle} Address change`,
+            title: `You are canceling request for ${ROLES_METADATA[data.role].capitalizedTitle} Address change`,
             description: (
               <>
                 Address stays{' '}
                 <Text size="xxs">
-                  <AddressComponent address={props.currentAddress} showIcon />
+                  <AddressComponent address={data.currentAddress} showIcon />
                 </Text>
               </>
             ),
           },
           success: {
-            title: `Proposed request for ${ROLES_METADATA[props.role].capitalizedTitle} Address has been canceled`,
+            title: `Proposed request for ${ROLES_METADATA[data.role].capitalizedTitle} Address has been canceled`,
             description: (
               <>
                 Address stays{' '}
                 <Text size="xxs">
-                  <AddressComponent address={props.currentAddress} showIcon />
+                  <AddressComponent address={data.currentAddress} showIcon />
                 </Text>
               </>
             ),
@@ -75,48 +77,65 @@ const getTexts = (props: Props) => {
         }
       : {
           sign: {
-            title: `You are proposing ${ROLES_METADATA[props.role].capitalizedTitle} Address change`,
+            title: `You are proposing ${ROLES_METADATA[data.role].capitalizedTitle} Address change`,
             description: (
               <>
                 Proposed address{' '}
                 <Text size="xxs">
-                  <AddressComponent address={props.address} showIcon />
+                  <AddressComponent address={address} showIcon />
                 </Text>
               </>
             ),
           },
           success: {
-            title: `New ${ROLES_METADATA[props.role].capitalizedTitle} Address has been proposed`,
+            title: `New ${ROLES_METADATA[data.role].capitalizedTitle} Address has been proposed`,
             description: (
               <>
                 <br />
                 <br />
-                <AfterAddressProposed address={props.address} />
+                <AfterAddressProposed address={address} />
               </>
             ),
           },
         };
 };
 
-const getTxModalStagesChangeRole = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
+export const useTxModalStagesChangeRole = (role: ROLES) => {
+  const mode = useChangeRoleMode(role);
 
-  sign: (props: Props) =>
-    transitStage(<TxStageSign {...getTexts(props).sign} />),
+  return useTxStages<
+    ChangeRoleFormInputType,
+    ChangeRoleFormNetworkData,
+    NodeOperatorShortInfo
+  >(
+    (transitStage, input, data) => {
+      if (input.intent === 'accept') {
+        return buildAcceptInviteStages(transitStage, {
+          invite: { nodeOperatorId: data.nodeOperatorId, role: data.role },
+          address: data.address,
+        });
+      }
 
-  pending: (props: Props, txHash?: string) =>
-    transitStage(<TxStagePending {...getTexts(props).sign} txHash={txHash} />),
-
-  success: (props: Props, txHash?: string) =>
-    transitStage(
-      <TxStageSuccess txHash={txHash} {...getTexts(props).success} />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-});
-
-export const useTxModalStagesChangeRole = () =>
-  useTransactionModalStage(getTxModalStagesChangeRole);
+      return {
+        sign: () =>
+          transitStage(<TxStageSign {...getTexts(input, data, mode).sign} />),
+        pending: (txHash) =>
+          transitStage(
+            <TxStagePending
+              {...getTexts(input, data, mode).sign}
+              txHash={txHash}
+            />,
+          ),
+        success: (_result: NodeOperatorShortInfo, txHash) =>
+          transitStage(
+            <TxStageSuccess
+              txHash={txHash}
+              {...getTexts(input, data, mode).success}
+            />,
+            { isClosableOnLedger: true },
+          ),
+      };
+    },
+    [mode],
+  );
+};

@@ -1,4 +1,9 @@
-import { BondBalance, NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
+import {
+  BondBalance,
+  NodeOperatorId,
+  StethPoolData,
+  TOKENS,
+} from '@lidofinance/lido-csm-sdk';
 
 export type AddBondFormInputType = {
   token: TOKENS;
@@ -12,5 +17,6 @@ export type AddBondFormNetworkData = {
   wstethBalance: bigint;
   bond: BondBalance;
   maxStakeEth: bigint;
+  poolData: StethPoolData;
   isPaused: boolean;
 };

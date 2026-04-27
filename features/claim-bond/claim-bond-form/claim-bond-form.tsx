@@ -3,13 +3,14 @@ import { FC, memo } from 'react';
 import { ClaimBondDataProvider, ClaimBondFormProvider } from './context';
 
 import { FormBlock, Stack } from 'shared/components';
-import { FormLoader, Form } from 'shared/hook-form/form-controller';
+import { Form } from 'shared/hook-form/form-controller';
 import { ClaimBondFormInfo } from './claim-bond-form-info';
+import { ClaimBondFormLoader } from './claim-bond-form-loader';
 import { AmountInput } from './controls/amount-input';
 import { SourceSelect } from './controls/source-select';
+import { SourcesInfo } from './controls/sources-info';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
-import { SourcesInfo } from './controls/sources-info';
 
 export const ClaimBondForm: FC = memo(() => {
   return (
@@ -18,7 +19,7 @@ export const ClaimBondForm: FC = memo(() => {
         <Stack direction="column" gap="ms">
           <SourcesInfo />
           <FormBlock data-testid="claimBondForm">
-            <FormLoader>
+            <ClaimBondFormLoader>
               <Form>
                 <SourceSelect />
                 <TokenSelect />
@@ -26,7 +27,7 @@ export const ClaimBondForm: FC = memo(() => {
                 <SubmitButton />
               </Form>
               <ClaimBondFormInfo />
-            </FormLoader>
+            </ClaimBondFormLoader>
           </FormBlock>
         </Stack>
       </ClaimBondFormProvider>

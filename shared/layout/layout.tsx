@@ -49,7 +49,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
         <>
           <Navigation desktopHidden={fullwidth} />
           <Header />
-          <AlertContainer />
+          {!fullwidth && <AlertContainer />}
         </>
       )}
 

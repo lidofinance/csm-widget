@@ -9,13 +9,17 @@ export const StepTrack: FC = () => {
     name: 'step',
   });
 
-  // TODO: enchance styles
   return (
     <Stack direction="row" gap="md" center justify="space-between">
-      <Text size="xxs" color="secondary" data-testid="stepTrackText">
+      <Text
+        size="xxs"
+        color="secondary"
+        data-testid="stepTrackText"
+        weight={500}
+      >
         Step {currentStep} of 4
       </Text>
-      <StepIndicator length={4} current={currentStep - 1} />
+      <StepIndicator length={4} current={currentStep - 1} backSolid />
     </Stack>
   );
 };

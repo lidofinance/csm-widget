@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const StepsWrapper = styled.div`
+export const StepsWrapper = styled.div<{ $backSolid?: boolean }>`
+  --back-opacity: ${({ $backSolid }) => ($backSolid ? 1 : 0.4)};
+  --current-opacity: 1;
+  --next-opacity: 0.1;
+
   display: flex;
   flex-direction: 'row';
   gap: 24px;
@@ -14,7 +18,12 @@ export const Step = styled.div<{ $type: -1 | 0 | 1 }>`
   border-radius: 6px;
 
   background: var(--lido-color-primary);
-  opacity: ${({ $type }) => ($type === -1 ? 0.4 : $type === 1 ? 0.1 : 1)};
+  opacity: ${({ $type }) =>
+    $type === -1
+      ? 'var(--back-opacity)'
+      : $type === 1
+        ? 'var(--next-opacity)'
+        : 'var(--current-opacity)'};
 
   &:after {
     content: '';

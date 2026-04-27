@@ -8,12 +8,20 @@ export const MAX_RETRY_COUNT = 3;
 // Safely initialize a global variable
 const globalStartupRPCChecks = globalThis.__startupRPCChecks || {
   promise: null,
+  resolved: false,
+  result: null,
+  reason: null,
 };
 globalThis.__startupRPCChecks = globalStartupRPCChecks;
 
+const parseUrlList = (val) =>
+  val
+    ?.split(',')
+    .map((s) => s.trim().replace(/\/+$/, ''))
+    .filter(Boolean) ?? [];
+
 const getRPCUrls = (chainId) => {
-  const rpcUrls = process.env[`EL_RPC_URLS_${chainId}`]?.split(',');
-  return rpcUrls?.filter((url) => url);
+  return parseUrlList(process.env[`EL_RPC_URLS_${chainId}`]);
 };
 
 const checkRPC = async (url, chainId) => {
@@ -51,6 +59,13 @@ const checkRPC = async (url, chainId) => {
 
 export const getRPCChecks = () => globalStartupRPCChecks.promise;
 
+export const getRPCCheckState = () => ({
+  started: !!globalStartupRPCChecks.promise,
+  resolved: globalStartupRPCChecks.resolved,
+  result: globalStartupRPCChecks.result,
+  reason: globalStartupRPCChecks.reason,
+});
+
 export const startupCheckRPCs = async () => {
   console.info('[startupCheckRPCs] Starting RPC checks...');
 
@@ -86,10 +101,15 @@ export const startupCheckRPCs = async () => {
         `[startupCheckRPCs] [chainId=${defaultChain}] Working/Total RPCs: ${chainCheckResults.length - brokenRPCCount}/${chainCheckResults.length}`,
       );
 
+      globalStartupRPCChecks.result = results;
       return results;
     } catch (err) {
       console.error('[startupCheckRPCs] Error during RPC checks:', err);
+      globalStartupRPCChecks.reason = err?.message ?? String(err);
+      globalStartupRPCChecks.result = null;
       return null;
+    } finally {
+      globalStartupRPCChecks.resolved = true;
     }
   })();
 };

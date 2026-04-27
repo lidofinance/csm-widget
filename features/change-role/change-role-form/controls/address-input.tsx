@@ -1,19 +1,24 @@
 import { FormTitle } from 'shared/components';
 import { AddressInputHookForm } from 'shared/hook-form/controls';
 import { useRole } from '../hooks/use-role';
-import { useChangeRoleFormData } from '../context';
+import { useChangeRoleFlow, useChangeRoleFormData } from '../context';
+import { isAddressEqual } from 'viem';
 
 export const AddressInput: React.FC = () => {
-  const { mode } = useChangeRoleFormData(true);
+  const flow = useChangeRoleFlow();
+  const { address, currentAddress } = useChangeRoleFormData(true);
   const role = useRole();
 
   return (
     <>
-      <FormTitle>Specify a new {role} address</FormTitle>
+      <FormTitle>Specify a new {role} Address</FormTitle>
       <AddressInputHookForm
         fieldName="address"
         label={`New ${role} Address`}
-        isLocked={mode === 'managerReset'}
+        isLocked={flow.action === 'manager-reset'}
+        currentAddress={
+          isAddressEqual(currentAddress, address) ? undefined : address
+        }
       />
     </>
   );

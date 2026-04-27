@@ -47,7 +47,7 @@ export const DisabledInputAmount: FC<InputAmountProps> = ({
       }
       disabled={true}
       inputMode="none"
-      defaultValue={defaultValue}
+      value={defaultValue}
     />
   );
 };

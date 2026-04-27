@@ -108,9 +108,9 @@ export const SCORE_SOURCES: ScoreSource[] = [
           <>
             4 points are assigned in case:
             <br />- Submitted address belongs to a Node Operator that has been
-            active on CSM Testnet for at least 60 days
+            active on CSM Hoodi Testnet for at least 60 days
             <br />- Performance for the Node Operator is above the Performance
-            threshold in several of the latest performance oracle reports.
+            threshold over at least 60 days of activity.
             <br />5 points are assigned in case all the requirements from above
             are met, and the application contains an address that has Circles
             verification

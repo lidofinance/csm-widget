@@ -3,6 +3,7 @@ import { Checkbox } from '@lidofinance/lido-ui';
 import { INSTANT_WAITING_TIME } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
+import { useMemo } from 'react';
 import { useController, useWatch } from 'react-hook-form';
 import {
   FormTitle,
@@ -15,15 +16,25 @@ import {
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
-import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import {
+  ClaimBondFormInputType,
+  useClaimBondFlow,
+  useClaimBondFormData,
+} from '../context';
+import { getMaxValues } from '../context/get-max-values';
 import { useWithdrawalWaitingTime } from '../hooks/use-withdrawal-waiting-time';
 
 export const TokenSelect: React.FC = () => {
-  const [token, claimRewards] = useWatch<
-    ClaimBondFormInputType,
-    ['token', 'claimRewards']
-  >({ name: ['token', 'claimRewards'] });
-  const { maxValues, isContract } = useClaimBondFormData(true);
+  const [token] = useWatch<ClaimBondFormInputType, ['token']>({
+    name: ['token'],
+  });
+  const { bond, rewards, poolData, isContract } = useClaimBondFormData(true);
+  const flow = useClaimBondFlow();
+
+  const maxValues = useMemo(
+    () => getMaxValues({ bond, rewards, poolData }),
+    [bond, rewards, poolData],
+  );
 
   const maxEthAmount = maxValues?.[TOKENS.eth]?.[1];
   const {
@@ -38,6 +49,9 @@ export const TokenSelect: React.FC = () => {
     name: 'unlockedClaimTokens',
   });
 
+  if (flow.action !== 'claim' || !flow.showAmount) return null;
+  const maxIdx = flow.maxValueIndex;
+
   return (
     <>
       <FormTitle>Choose a token to claim</FormTitle>
@@ -51,15 +65,14 @@ export const TokenSelect: React.FC = () => {
       )}
       <TokenButtonsHookForm
         disabled={
-          !maxValues?.[TOKENS.eth][Number(claimRewards)] ||
-          (isContract && !unlockField.value)
+          !maxValues?.[TOKENS.eth][maxIdx] || (isContract && !unlockField.value)
         }
         options={{
           [TOKENS.eth]: (
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.eth}
-                amount={maxValues[TOKENS.eth][Number(claimRewards)]}
+                amount={maxValues[TOKENS.eth][maxIdx]}
               />
               <YouWillReceive
                 waitingTime={
@@ -73,7 +86,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.steth}
-                amount={maxValues[TOKENS.steth][Number(claimRewards)]}
+                amount={maxValues[TOKENS.steth][maxIdx]}
               />
               <YouWillReceive
                 waitingTime={INSTANT_WAITING_TIME}
@@ -85,7 +98,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.wsteth}
-                amount={maxValues[TOKENS.wsteth][Number(claimRewards)]}
+                amount={maxValues[TOKENS.wsteth][maxIdx]}
               />
               <YouWillReceive
                 waitingTime={INSTANT_WAITING_TIME}

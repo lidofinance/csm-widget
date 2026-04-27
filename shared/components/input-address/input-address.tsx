@@ -23,23 +23,32 @@ export const InputAddress = forwardRef<
     },
     ref,
   ) => {
-    const { inputValue, address, ensName, isEns, isLoading, handleChange } =
-      useEnsResolution();
+    const {
+      inputValue,
+      address,
+      ensName,
+      isEns,
+      isLoading,
+      handleChange,
+      resolution,
+    } = useEnsResolution();
 
     // Track what we emitted to parent to distinguish echoes from external changes
     const initializedRef = useRef(false);
     const emittedRef = useRef('');
 
-    // Notify parent when resolved address changes (skip initial mount)
+    // Notify parent on every resolution pass (skip initial mount) so RHF
+    // validation fires even when successive resolves stay at `undefined`
+    // (e.g. user typing an incomplete address).
     useEffect(() => {
-      const emitValue = address ?? '';
+      const emitValue = resolution.value ?? '';
       emittedRef.current = emitValue;
       if (!initializedRef.current) {
         initializedRef.current = true;
         return;
       }
       onChange?.(emitValue);
-    }, [address, onChange]);
+    }, [resolution, onChange]);
 
     // Sync from parent value prop (programmatic fills only)
     useEffect(() => {

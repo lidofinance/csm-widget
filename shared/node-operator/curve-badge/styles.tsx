@@ -45,6 +45,9 @@ export const CURVE_VARIANTS: Record<OPERATOR_TYPE, ReturnType<typeof css>> = {
   [OPERATOR_TYPE.CM_IODC]: css`
     background: var(--lido-color-text);
   `,
+  [OPERATOR_TYPE.CM_IODCP]: css`
+    background: var(--lido-color-text);
+  `,
   [OPERATOR_TYPE.CM_MODC]: css`
     background: var(--lido-color-text);
   `,
@@ -60,6 +63,7 @@ export const DescriptorCurveStyle = styled(BadgeStyle)<{
   font-weight: 700;
   color: var(--lido-color-foreground);
   padding-inline: ${({ $inline }) => ($inline ? '6px' : '0px')};
+  width: max-content;
 
   ${({ $variant }) => ($variant ? (CURVE_VARIANTS[$variant] ?? '') : '')}
 `;

@@ -25,17 +25,23 @@ export const walletconnectProjectId = process.env.WALLETCONNECT_PROJECT_ID;
 /** @type boolean */
 export const ipfsMode = toBoolean(process.env.IPFS_MODE);
 
-/** @type string[] */
-export const prefillUnsafeElRpcUrls1 =
-  process.env.PREFILL_UNSAFE_EL_RPC_URLS_1?.split(',') ?? [];
+// Parse comma-separated URL list: trim whitespace, strip trailing slashes,
+// drop empty entries. Trailing `/` breaks some RPC providers (e.g. Infura).
+const parseUrlList = (val) =>
+  val
+    ?.split(',')
+    .map((s) => s.trim().replace(/\/+$/, ''))
+    .filter(Boolean) ?? [];
 
 /** @type string[] */
-export const prefillUnsafeElRpcUrls17000 =
-  process.env.PREFILL_UNSAFE_EL_RPC_URLS_17000?.split(',') ?? [];
+export const prefillUnsafeElRpcUrls1 = parseUrlList(
+  process.env.PREFILL_UNSAFE_EL_RPC_URLS_1,
+);
 
 /** @type string[] */
-export const prefillUnsafeElRpcUrls560048 =
-  process.env.PREFILL_UNSAFE_EL_RPC_URLS_560048?.split(',') ?? [];
+export const prefillUnsafeElRpcUrls560048 = parseUrlList(
+  process.env.PREFILL_UNSAFE_EL_RPC_URLS_560048,
+);
 
 /** @type string */
 export const widgetApiBasePathForIpfs =

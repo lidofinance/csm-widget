@@ -11,10 +11,11 @@ import {
   useOperatorMetadata,
 } from 'modules/web3';
 import { FC, useMemo } from 'react';
-import { Address, SquaredChip, Stack } from 'shared/components';
-import { computeStakeData, StakeAndKeysData } from 'utils';
+import { Address, Stack } from 'shared/components';
 import { DescriptorId } from 'shared/node-operator';
-import { StakeStats, KeyLimit, MoreKeysChip } from '../shared';
+import { computeStakeData, StakeAndKeysData } from 'utils';
+import { KeyLimit, MoreKeysChip, StakeStats } from '../shared';
+import { WeightChip } from '../shared/weight-chip';
 import { DividerStyled } from '../styles';
 import { OperatorCardActions } from './operator-card-actions';
 
@@ -72,7 +73,7 @@ const OperatorCardHeader: FC<
         <Text as="h4" size="sm" weight={700}>
           <DescriptorId id={nodeOperatorId} />
         </Text>
-        <SquaredChip>Weight: {String(weight)}</SquaredChip>
+        <WeightChip weight={weight} />
       </Stack>
 
       {info && (

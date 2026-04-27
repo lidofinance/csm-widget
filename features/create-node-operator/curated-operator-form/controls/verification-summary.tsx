@@ -3,7 +3,7 @@ import { getCurveMetadata } from 'consts/operator-type-metadata';
 import { useCurveParameters } from 'modules/web3/';
 import { type FC, type ReactNode } from 'react';
 import { useWatch } from 'react-hook-form';
-import { Address, Stack } from 'shared/components';
+import { Address } from 'shared/components';
 import {
   formatEthKeyIntervals,
   formatPercentKeyIntervals,
@@ -71,24 +71,12 @@ export const VerificationSummary: FC = () => {
       <DividerStyle />
 
       <SummaryRow label="Node Operator reward:">
-        <Stack direction="column" gap="xs">
-          {formatPercentKeyIntervals(parameters?.rewardsConfig).map(
-            (item, i) => (
-              <Text key={i} size="xs">
-                - {item}
-              </Text>
-            ),
-          )}
-        </Stack>
+        <ParamValues
+          items={formatPercentKeyIntervals(parameters?.rewardsConfig)}
+        />
       </SummaryRow>
       <SummaryRow label="Bond:">
-        <Stack direction="column" gap="xs">
-          {formatEthKeyIntervals(parameters?.bondConfig).map((item, i) => (
-            <Text key={i} size="xs">
-              - {item}
-            </Text>
-          ))}
-        </Stack>
+        <ParamValues items={formatEthKeyIntervals(parameters?.bondConfig)} />
       </SummaryRow>
     </ListStyle>
   );
@@ -116,3 +104,24 @@ const RowStyle = styled.div`
 const DividerStyle = styled(Divider)`
   grid-column: 1 / -1;
 `;
+
+const ParamList = styled.ul`
+  margin: 4px 0 0;
+  padding-left: 16px;
+  list-style: disc;
+  color: var(--lido-color-text);
+
+  li {
+    margin-bottom: 2px;
+  }
+`;
+
+export const ParamValues: FC<{ items: ReactNode[] }> = ({ items }) => (
+  <ParamList>
+    {items.map((item, i) => (
+      <li key={i}>
+        <Text size="xs">{item}</Text>
+      </li>
+    ))}
+  </ParamList>
+);

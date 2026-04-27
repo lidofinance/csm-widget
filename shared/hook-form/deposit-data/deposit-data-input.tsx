@@ -3,6 +3,7 @@ import { FC, useContext } from 'react';
 import { useController } from 'react-hook-form';
 import { DepositDataDropContext } from './deposit-data-drop';
 import { Placeholder, TextareaStyle, TextareaWrapper } from './styles';
+import { Gate } from 'shared/navigate';
 
 type DepositKeysInputHookFormProps = Partial<
   React.ComponentProps<typeof Textarea>
@@ -33,8 +34,10 @@ export const DepositDataInput: FC<DepositKeysInputHookFormProps> = ({
         <br />
         Paste JSON with deposit data or drag and drop the file
         <br />
-        Please make sure you followed the key generation guide provided in FAQ
-        <br />
+        <Gate rule="IS_CSM">
+          Please make sure you followed the key generation guide provided in FAQ
+          <br />
+        </Gate>
         <br />
         <ButtonIcon
           icon={<History width={16} height={16} />}
