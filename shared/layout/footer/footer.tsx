@@ -1,41 +1,11 @@
-import buildInfo from 'build-info.json';
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { getExternalLinks } from 'consts/external-links';
 import { LogoLidoLink, Stack } from 'shared/components';
-import { FooterLink, FooterStyle, LinkDivider, Version } from './styles';
+import { FooterLink, FooterStyle, LinkDivider } from './styles';
+import { Version } from './version';
 
-const getVersionInfo = () => {
-  const { version, branch, commit } = buildInfo;
-  const repoBaseUrl = 'https://github.com/lidofinance/csm-widget';
-  if (version === 'REPLACE_WITH_VERSION')
-    return {
-      label: 'dev',
-      link: repoBaseUrl,
-    };
-  if (version === branch + ':-unknown')
-    return {
-      label: 'preview',
-      link: `${repoBaseUrl}/tree/${branch}`,
-    };
-  if (version === 'staging' || version === 'dev')
-    return {
-      label: version,
-      link: `${repoBaseUrl}/tree/${branch}`,
-    };
-  if (version === `${branch}:${commit}`)
-    return {
-      label: branch,
-      link: `${repoBaseUrl}/commit/${commit}`,
-    };
-  return {
-    label: `v${version}`,
-    link: `${repoBaseUrl}/releases/tag/${version}`,
-  };
-};
-
-const { label, link } = getVersionInfo();
 const { feedbackForm } = getExternalLinks();
 
 export const Footer: FC = () => (
@@ -70,8 +40,6 @@ export const Footer: FC = () => (
         Discord
       </FooterLink>
     </Stack>
-    <Version href={link} matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerVersion}>
-      {label}
-    </Version>
+    <Version />
   </FooterStyle>
 );
