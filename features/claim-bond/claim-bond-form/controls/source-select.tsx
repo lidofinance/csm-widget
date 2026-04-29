@@ -25,7 +25,8 @@ const OPTIONS: readonly CLAIM_OPTION[] = [
 ];
 
 export const SourceSelect: FC = () => {
-  const { bond, rewards, availableOptions } = useClaimBondFormData(true);
+  const { bond, rewards, availableOptions, feeSplits } =
+    useClaimBondFormData(true);
 
   const { field } = useController<ClaimBondFormInputType, 'claimOption'>({
     name: 'claimOption',
@@ -38,7 +39,7 @@ export const SourceSelect: FC = () => {
         {OPTIONS.map((option) => ({
           option,
           disabled: availableOptions.indexOf(option) < 0,
-          ...getClaimOption(option, { bond, rewards }),
+          ...getClaimOption(option, { bond, rewards, feeSplits }),
         }))
           .sort((a, b) => Number(a.disabled) - Number(b.disabled))
           .map(({ option, label, description, disabled }) => (
