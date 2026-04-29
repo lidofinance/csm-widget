@@ -13,6 +13,7 @@ import {
   useInvites,
   useNodeOperator,
   useOperatorBalance,
+  useOperatorInfo,
 } from 'modules/web3';
 import { useModifyContext } from 'providers/modify-provider';
 import { useCallback, useMemo } from 'react';
@@ -24,16 +25,17 @@ export type ShowRule =
   | 'IS_CONNECTED_WALLET'
   | 'NOT_NODE_OPERATOR'
   | 'IS_NODE_OPERATOR'
+  | 'CAN_CREATE'
+  | 'HAS_KEYS'
   | 'HAS_INVITES'
   | 'HAS_MANAGER_ROLE'
   | 'HAS_REWARDS_ROLE'
   | 'HAS_OWNER_ROLE'
   | 'HAS_LOCKED_BOND'
   | 'HAS_REFERRER'
-  | 'CAN_CREATE'
+  | 'EL_STEALING_REPORTER'
   | 'CAN_CLAIM_ICS'
   | 'ICS_APPLY_ENABLED'
-  | 'EL_STEALING_REPORTER'
   | 'IS_SURVEYS_ACTIVE'
   | 'IS_CSM'
   | 'IS_CM';
@@ -81,6 +83,7 @@ export const useShowFlags = (): ShowFlags => {
   const { data: invites } = useInvites();
   const { data: isReportingRole } = useHasReportStealingRole();
   const { data: balance } = useOperatorBalance(nodeOperator?.nodeOperatorId);
+  const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const canCreateNO = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
@@ -96,6 +99,7 @@ export const useShowFlags = (): ShowFlags => {
       ['NOT_NODE_OPERATOR']: !nodeOperator,
       ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
       ['CAN_CREATE']: !!canCreateNO,
+      ['HAS_KEYS']: !!info?.totalAddedKeys,
       ['HAS_MANAGER_ROLE']:
         isAccountActive && isManagerRole(nodeOperator, address),
       ['HAS_REWARDS_ROLE']:
@@ -104,11 +108,14 @@ export const useShowFlags = (): ShowFlags => {
       ['HAS_INVITES']: !!invites?.length,
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
-      ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
-      ['ICS_APPLY_ENABLED']: !!featureFlags?.[ICS_APPLY_FORM],
       ['EL_STEALING_REPORTER']: !!isReportingRole,
+      ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
+      ['ICS_APPLY_ENABLED']:
+        !!featureFlags?.[ICS_APPLY_FORM] && module === MODULE_NAME.CSM,
       ['IS_SURVEYS_ACTIVE']:
-        !!surveyApi && !!featureFlags?.[SURVEYS_SETUP_ENABLED],
+        !!surveyApi &&
+        !!featureFlags?.[SURVEYS_SETUP_ENABLED] &&
+        module === MODULE_NAME.CSM,
       ['IS_CSM']: module === MODULE_NAME.CSM,
       ['IS_CM']: module === MODULE_NAME.CM,
     }),
@@ -117,13 +124,14 @@ export const useShowFlags = (): ShowFlags => {
       isAccountActive,
       nodeOperator,
       canCreateNO,
+      info?.totalAddedKeys,
       address,
       invites?.length,
       balance?.locked,
       referrer,
+      isReportingRole,
       canClaimICS,
       featureFlags,
-      isReportingRole,
       module,
     ],
   );
@@ -141,7 +149,7 @@ export const useShowRule = () => {
 };
 
 export type ShowRuleProps = {
-  showRules?: ShowRule[];
+  showRules?: (ShowRule | ShowRule[])[];
   module?: MODULE_NAME;
 };
 
@@ -152,7 +160,13 @@ export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
     () =>
       items
         .filter(({ module }) => !module || module === config.module)
-        .filter(({ showRules }) => !showRules?.length || showRules.some(check)),
+        .filter(
+          ({ showRules }) =>
+            !showRules?.length ||
+            showRules.some((rule) =>
+              Array.isArray(rule) ? rule.every(check) : check(rule),
+            ),
+        ),
     [check, items],
   );
 };

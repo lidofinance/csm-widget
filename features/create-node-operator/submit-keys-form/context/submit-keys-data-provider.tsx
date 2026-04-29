@@ -50,7 +50,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
   const isMaxStakeEtherLoading = maxStakeEthQuery.isPending;
 
   const { address } = useDappStatus();
-  const proofQuery = useIcsProof(address);
+  const proofQuery = useIcsProof();
 
   const proof = proofQuery.data;
   const isProofLoading = proofQuery.isPending;

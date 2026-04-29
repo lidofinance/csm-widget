@@ -89,7 +89,14 @@ const routes: Route[] = [
       PATH.SETTINGS_INBOX,
       PATH.SETTINGS_METADATA,
     ],
-    showRules: ['IS_NODE_OPERATOR', 'HAS_INVITES'],
+    showRules: ['IS_NODE_OPERATOR'],
+    suffix: <CounterInvites />,
+  },
+  {
+    name: 'Inbox Requests',
+    path: PATH.SETTINGS_INBOX,
+    icon: <GearIcon />,
+    showRules: [['HAS_INVITES', 'NOT_NODE_OPERATOR']],
     suffix: <CounterInvites />,
   },
   {
@@ -105,7 +112,6 @@ const routes: Route[] = [
     icon: <FileIcon />,
     showRules: ['IS_SURVEYS_ACTIVE'],
     suffix: <CounterSurveys />,
-    module: MODULE_NAME.CSM,
   },
   {
     name: 'Operator Type',
@@ -114,7 +120,6 @@ const routes: Route[] = [
     subPaths: [PATH.TYPE_CLAIM, PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
     showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED'],
     suffix: <CounterIcs />,
-    module: MODULE_NAME.CSM,
   },
 ];
 

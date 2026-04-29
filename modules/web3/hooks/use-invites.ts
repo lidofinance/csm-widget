@@ -3,12 +3,14 @@ import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { useSmSDK } from '../web3-provider';
 import { useDappStatus } from './use-dapp-status';
+import { Address } from 'viem';
 
 export const KEY_INVITES = ['invites'];
 
-export const useInvites = () => {
+export const useInvites = (customAddress?: Address) => {
+  const { address: dappAddress } = useDappStatus();
+  const address = customAddress ?? dappAddress;
   const { discovery } = useSmSDK();
-  const { address } = useDappStatus();
 
   return useQuery({
     queryKey: [...KEY_INVITES, { address }],

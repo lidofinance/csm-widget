@@ -1,5 +1,6 @@
 import {
   BondBalance,
+  FeeSplit,
   NodeOperatorId,
   Rewards,
   StethPoolData,
@@ -24,7 +25,6 @@ export type ClaimBondFormInputType = {
   unlockedClaimTokens: boolean;
 };
 
-// TODO: splitters
 export type ClaimBondFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   bond: BondBalance;
@@ -34,4 +34,5 @@ export type ClaimBondFormNetworkData = {
   isContract: boolean;
   isPaused: boolean;
   availableOptions: CLAIM_OPTION[];
+  feeSplits: FeeSplit[];
 };

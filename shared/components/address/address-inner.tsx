@@ -16,6 +16,7 @@ export type AddressProps = {
   link?: ReactNode;
   name?: string;
   avatar?: string;
+  noStyle?: boolean;
 } & Pick<ComponentProps<typeof Text>, 'weight' | 'size' | 'color'> &
   Partial<BaseAddressProps>;
 
@@ -28,11 +29,22 @@ export const AddressInner: FC<AddressProps> = ({
   size = 'xs',
   color,
   monospace = false,
+  noStyle = false,
   link,
   avatar,
   name,
 }) => {
-  const component = (
+  const content = name ?? (
+    <AddressComponent
+      address={address}
+      symbols={!symbols ? 90 : symbols}
+      as="span"
+    />
+  );
+
+  const component = noStyle ? (
+    <span data-testid="addressText">{content}</span>
+  ) : (
     <Text
       as="span"
       weight={weight}
@@ -40,15 +52,10 @@ export const AddressInner: FC<AddressProps> = ({
       color={color}
       data-testid="addressText"
     >
-      {name ?? (
-        <AddressComponent
-          address={address}
-          symbols={!symbols ? 90 : symbols}
-          as="span"
-        />
-      )}
+      {content}
     </Text>
   );
+
   return (
     <>
       {address && (

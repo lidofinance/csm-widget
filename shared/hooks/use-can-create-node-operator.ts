@@ -7,12 +7,12 @@ import {
 } from 'modules/web3';
 
 export const useCanCreateNodeOperator = () => {
-  const { isAccountActive, address } = useDappStatus();
+  const { isAccountActive } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
   const { data: status } = useSmStatus();
 
   const { data: gatesCount } = useCuratedGatesEligibility(
-    address,
+    undefined,
     (data) => data.length,
   );
 

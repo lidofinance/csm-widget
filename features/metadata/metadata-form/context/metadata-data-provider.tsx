@@ -1,6 +1,5 @@
 import {
   KEY_OPERATOR_METADATA,
-  useDappStatus,
   useNodeOperatorId,
   useOperatorIsOwner,
   useOperatorMetadata,
@@ -11,13 +10,10 @@ import { useInvalidate } from 'shared/hooks';
 import type { MetadataFormNetworkData } from './types';
 
 const useMetadataFormNetworkData = () => {
-  const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
   const { data: metadata, isPending } = useOperatorMetadata(nodeOperatorId);
-  const { data: isOwner, isPending: isOwnerPending } = useOperatorIsOwner({
-    address,
-    nodeOperatorId,
-  });
+  const { data: isOwner, isPending: isOwnerPending } =
+    useOperatorIsOwner(nodeOperatorId);
 
   const invalidate = useInvalidate();
 

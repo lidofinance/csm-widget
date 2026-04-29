@@ -1,10 +1,10 @@
 import { Text } from '@lidofinance/lido-ui';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { useOtherModule } from 'modules/web3';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 import { StyledAccordion } from './styles';
-import { useDappStatus, useOtherModule } from 'modules/web3';
 
 const REPLACEMENTS: Record<string, string> = {
   'curated-onchain-v1': 'Lido Curated',
@@ -13,8 +13,7 @@ const REPLACEMENTS: Record<string, string> = {
 // FIXME: add support CSM and CM for each other
 export const OtherModuleBanner: FC = () => {
   const { operatorsWidget } = getExternalLinks();
-  const { address } = useDappStatus();
-  const { data } = useOtherModule(address);
+  const { data } = useOtherModule();
   const moduleName = (data && REPLACEMENTS[data]) ?? data;
 
   if (!moduleName) return null;

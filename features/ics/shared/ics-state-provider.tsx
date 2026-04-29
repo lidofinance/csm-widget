@@ -1,3 +1,10 @@
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import {
+  useIcsProof,
+  useNodeOperatorId,
+  useOperatorOwner,
+  useOperatorType,
+} from 'modules/web3';
 import {
   createContext,
   FC,
@@ -9,14 +16,6 @@ import {
 import invariant from 'tiny-invariant';
 import { IcsResponseDto } from './types';
 import { useFormStatus } from './use-form-status';
-import {
-  useDappStatus,
-  useIcsProof,
-  useNodeOperatorId,
-  useOperatorOwner,
-  useOperatorType,
-} from 'modules/web3';
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 
 export type TypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
 
@@ -40,12 +39,11 @@ export const useIcsState = () => {
 };
 
 export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { address } = useDappStatus();
   const operatorId = useNodeOperatorId();
   const { data: operatorType } = useOperatorType(operatorId);
   const { data: owner } = useOperatorOwner(operatorId);
 
-  const { data: proofData, isPending: isTypePending } = useIcsProof(address);
+  const { data: proofData, isPending: isTypePending } = useIcsProof();
   const { data: ownerProofData, isPending: isOwnerTypePending } = useIcsProof(
     owner?.address,
   );

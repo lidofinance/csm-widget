@@ -15,7 +15,7 @@ export const EditSplits: FC = () => {
   });
 
   const handleAdd = useCallback(() => {
-    append({ recipient: undefined, share: 0n });
+    append({ recipient: undefined, share: undefined });
   }, [append]);
 
   const { formState } = useFormContext<SplitsFormInputType>();

@@ -4,9 +4,10 @@ import { AddKeysDataProvider, AddKeysFormProvider } from './context';
 
 import { DepositQueue } from 'features/view-keys/deposit-queue';
 import { FormBlock } from 'shared/components';
-import { Form, FormLoader } from 'shared/hook-form/form-controller';
+import { Form } from 'shared/hook-form/form-controller';
 import { Gate } from 'shared/navigate';
 import { AddKeysFormInfo } from './add-keys-form-info';
+import { AddKeysFormLoader } from './add-keys-form-loader';
 import { AmountInput } from './controls/amount-input';
 import { KeysConfirm } from './controls/keys-confirm';
 import { KeysInput } from './controls/keys-input';
@@ -18,7 +19,7 @@ export const AddKeysForm: FC = memo(() => {
     <AddKeysDataProvider>
       <AddKeysFormProvider>
         <FormBlock data-testid="submitKeysForm">
-          <FormLoader>
+          <AddKeysFormLoader>
             <Form>
               <TokenSelect />
               <KeysInput />
@@ -27,7 +28,7 @@ export const AddKeysForm: FC = memo(() => {
               <SubmitButton />
             </Form>
             <AddKeysFormInfo />
-          </FormLoader>
+          </AddKeysFormLoader>
         </FormBlock>
         <Gate rule="IS_CSM">
           <DepositQueue />

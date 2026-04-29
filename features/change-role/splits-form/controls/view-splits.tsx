@@ -41,15 +41,19 @@ export const ViewSplits: FC = () => {
 
       {currentFeeSplits.length > 0 && rewards.proof.length === 0 ? (
         <WarningBlockStyle>
-          <b>Editing is disabled</b> while your first rewards have not been
-          distributed yet.
+          <span>
+            <b>Editing is disabled</b> while your first rewards have not been
+            distributed yet.
+          </span>
         </WarningBlockStyle>
       ) : currentFeeSplits.length > 0 && rewards.available ? (
         <WarningBlockStyle>
           <Stack gap="md" center>
-            <b>Editing is disabled</b> while you have unclaimed rewards. Claim
-            them in Bond & Rewards to continue. Unclaimed rewards will be
-            distributed using your current split settings.
+            <span>
+              <b>Editing is disabled</b> while you have unclaimed rewards. Claim
+              them in Bond & Rewards to continue. Unclaimed rewards will be
+              distributed using your current split settings.
+            </span>
             <LocalLink href={PATH.BOND_CLAIM}>
               <Button variant="outlined" size="sm">
                 Go to claim
@@ -60,8 +64,10 @@ export const ViewSplits: FC = () => {
       ) : pendingToSplit ? (
         <WarningBlockStyle>
           <Stack gap="md" center>
-            <b>Editing is disabled</b> while there are pending shares to
-            distribute. Claim them in Bond & Rewards to continue.
+            <span>
+              <b>Editing is disabled</b> while there are pending shares to
+              distribute. Claim them in Bond & Rewards to continue.
+            </span>
             <LocalLink href={PATH.BOND_CLAIM}>
               <Button variant="outlined" size="sm">
                 Go to claim

@@ -24,7 +24,7 @@ const RewardsIcon = styled(_RewardsIcon)`
   ${iconStyle}
 `;
 
-type Data = Pick<ClaimBondFormNetworkData, 'bond' | 'rewards'>;
+type Data = Pick<ClaimBondFormNetworkData, 'bond' | 'rewards' | 'feeSplits'>;
 
 type ClaimOptionMeta = {
   label: ReactNode;
@@ -95,23 +95,69 @@ const REWARDS_TO_EXCESS_BOND: ClaimOptionMeta = {
   description: 'Move all rewards to the bond. Best for uploading more keys',
 };
 
+const SPLIT_REWARDS_ONLY: ClaimOptionMeta = {
+  label: (
+    <>
+      <RewardsIcon /> Rewards → Splitter addresses
+    </>
+  ),
+  description: 'Split rewards',
+};
+
+const SPLIT_AND_CLAIM_BOND: ClaimOptionMeta = {
+  label: (
+    <>
+      <BondIcon /> <RewardsIcon /> Rewards → Splitter addresses, Excess Bond →
+      Rewards Address
+    </>
+  ),
+  description: 'Split rewards and claim Excess bond',
+};
+
+const SPLIT_AND_COMPENSATE_TO_RA: ClaimOptionMeta = {
+  label: (
+    <>
+      <RewardsIcon /> Rewards → Splitter addresses → Rewards Address
+    </>
+  ),
+  description: 'Split rewards, send remaining to Rewards Address',
+};
+
+const SPLIT_REWARDS_TO_BOND: ClaimOptionMeta = {
+  label: (
+    <>
+      <BondIcon /> <RewardsIcon /> Rewards → Splitter addresses → Excess bond
+    </>
+  ),
+  description: 'Split rewards, send remaining to Excess bond',
+};
+
 export const getClaimOption = (
   option: CLAIM_OPTION,
-  { bond, rewards }: Data,
+  { bond, rewards, feeSplits }: Data,
 ): ClaimOptionMeta => {
+  const hasSplits = feeSplits.length > 0;
+
   switch (option) {
     case CLAIM_OPTION.ALL_TO_RA:
       if (bond.isInsufficient) {
-        return bond.delta >= rewards.available
-          ? COMPENSATE_ALL_FROM_REWARDS
+        if (bond.delta >= rewards.available) {
+          return COMPENSATE_ALL_FROM_REWARDS;
+        }
+        return hasSplits
+          ? SPLIT_AND_COMPENSATE_TO_RA
           : COMPENSATE_AND_CLAIM_REWARDS;
       }
-      return bond.delta ? CLAIM_ALL : CLAIM_REWARDS_ONLY;
+      if (bond.delta) {
+        return hasSplits ? SPLIT_AND_CLAIM_BOND : CLAIM_ALL;
+      }
+      return hasSplits ? SPLIT_REWARDS_ONLY : CLAIM_REWARDS_ONLY;
 
     case CLAIM_OPTION.BOND_TO_RA:
       return CLAIM_EXCESS_BOND;
 
     case CLAIM_OPTION.REWARDS_TO_BOND:
+      if (hasSplits) return SPLIT_REWARDS_TO_BOND;
       return bond.isInsufficient
         ? COMPENSATE_INSUFFICIENT
         : REWARDS_TO_EXCESS_BOND;
