@@ -17,6 +17,7 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
+import { calculateAvailableToClaim } from 'utils';
 import { CLAIM_OPTION, type ClaimBondFormNetworkData } from './types';
 
 const useClaimBondFormNetworkData: NetworkData<
@@ -63,10 +64,17 @@ const useClaimBondFormNetworkData: NetworkData<
     isStatusLoading ||
     isFeeSplitsLoading;
 
+  const maxBondAndRewards = calculateAvailableToClaim({
+    bond,
+    rewards,
+    feeSplits,
+  });
+  const maxBond = calculateAvailableToClaim({ bond, feeSplits });
+
   const availableOptions: CLAIM_OPTION[] = [
     rewards?.available ? CLAIM_OPTION.ALL_TO_RA : undefined,
-    !bond?.isInsufficient && bond?.delta ? CLAIM_OPTION.BOND_TO_RA : undefined,
-    rewards?.available ? CLAIM_OPTION.REWARDS_TO_BOND : undefined,
+    maxBond > 0n ? CLAIM_OPTION.BOND_TO_RA : undefined,
+    maxBondAndRewards > 0n ? CLAIM_OPTION.REWARDS_TO_BOND : undefined,
   ].filter((o) => !!o);
 
   return {

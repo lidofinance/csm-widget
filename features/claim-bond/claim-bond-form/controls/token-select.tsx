@@ -33,8 +33,8 @@ export const TokenSelect: React.FC = () => {
   const flow = useClaimBondFlow();
 
   const maxValues = useMemo(
-    () => getMaxValues({ bond, rewards, poolData }),
-    [bond, rewards, poolData],
+    () => getMaxValues({ bond, rewards, poolData, feeSplits }),
+    [bond, rewards, poolData, feeSplits],
   );
 
   const maxEthAmount = maxValues?.[TOKENS.eth]?.[1];

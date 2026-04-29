@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { STETH_ROUNDING_THRESHOLD, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { Address } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
@@ -10,6 +10,7 @@ export const ClaimBondFormInfo = () => {
   const { rewardsAddress, feeSplits } = useClaimBondFormData(true);
   const {
     coverAmount,
+    splittableGross,
     splittable,
     toRA,
     bondDelta,
@@ -22,7 +23,7 @@ export const ClaimBondFormInfo = () => {
 
   return (
     <DataTable data-testid="claimBondFormInfo">
-      {includesRewards && coverAmount > 0n && (
+      {includesRewards && coverAmount > STETH_ROUNDING_THRESHOLD && (
         <DataTableRow title="Compensation for the Insufficient Bond">
           <FormatToken amount={coverAmount} token={TOKENS.steth} />
         </DataTableRow>
@@ -44,7 +45,10 @@ export const ClaimBondFormInfo = () => {
         </DataTableRow>
       )}
       {hasSplits && splittable > 0n && (
-        <ClaimBondFormInfoSplitters feeSplits={feeSplits} amount={splittable} />
+        <ClaimBondFormInfoSplitters
+          feeSplits={feeSplits}
+          amount={splittableGross}
+        />
       )}
       {toRA > 0n && (
         <DataTableRow
