@@ -47,7 +47,7 @@ test.describe(
 
         await test.step('Success modal is shown', async () => {
           await expect(txModal.title).toHaveText(
-            'Rewards claimer address has been set',
+            'Rewards Claimer Address has been set',
             { timeout: STAGE_WAIT_TIMEOUT },
           );
           await txModal.closeModal();
@@ -83,7 +83,7 @@ test.describe(
           );
           await widgetService.walletPage.confirmTx();
           await expect(txModal.title).toHaveText(
-            'Rewards claimer address has been set',
+            'Rewards Claimer Address has been set',
             { timeout: STAGE_WAIT_TIMEOUT },
           );
           await txModal.closeModal();
@@ -130,7 +130,7 @@ test.describe(
           );
           await widgetService.walletPage.confirmTx();
           await expect(txModal.title).toHaveText(
-            'Rewards claimer address has been set',
+            'Rewards Claimer Address has been set',
             { timeout: STAGE_WAIT_TIMEOUT },
           );
           await txModal.closeModal();
@@ -186,7 +186,7 @@ test.describe(
         );
         await widgetService.walletPage.confirmTx();
         await expect(txModal.title).toHaveText(
-          'Rewards claimer address has been set',
+          'Rewards Claimer Address has been set',
           { timeout: STAGE_WAIT_TIMEOUT },
         );
         await txModal.closeModal();

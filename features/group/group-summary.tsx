@@ -16,14 +16,19 @@ export const GroupSummary: FC<Props> = ({ operators }) => {
     useAggregatedStake(operators);
 
   return (
-    <GroupBlockStyled color="foreground">
+    <GroupBlockStyled data-testid="groupSummaryCard" color="foreground">
       <Stack direction="column" gap="md">
         <CardHeader>
           <CardHeaderLeft>
-            <Text as="h3" size="sm" weight={800}>
+            <Text
+              as="h3"
+              size="sm"
+              weight={800}
+              data-testid="groupSummaryTitle"
+            >
               Group summary
             </Text>
-            <WeightChip weight={totalWeight} />
+            <WeightChip weight={totalWeight} data-testid="groupTotalWeight" />
           </CardHeaderLeft>
           <MoreKeysChip more={moreKeys} isPending={isPending} />
         </CardHeader>

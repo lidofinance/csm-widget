@@ -34,10 +34,10 @@ test.describe('Settings. Rewards claimer.', () => {
         await expect(claimerPage.currentClaimerTitle).toContainText('not set');
       });
 
-      await test.step('"Specify a new Rewards claimer address" title is visible', async () => {
+      await test.step('"Specify a new Rewards Claimer Address" title is visible', async () => {
         await expect(claimerPage.addressInputTitle).toBeVisible();
         await expect(claimerPage.addressInputTitle).toHaveText(
-          'Specify a new Rewards claimer address',
+          'Specify a new Rewards Claimer Address',
         );
       });
 

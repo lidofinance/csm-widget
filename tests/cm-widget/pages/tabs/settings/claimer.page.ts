@@ -22,7 +22,10 @@ export class ClaimerPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.form = this.page.getByTestId('claimerForm');
-    this.backButton = this.form.getByRole('link', { name: 'Back' });
+    this.backButton = this.form.getByRole('link', {
+      name: 'Back',
+      exact: true,
+    });
 
     this.currentClaimerSection = this.form.getByTestId('claimerSectionTitle');
     this.currentClaimerTitle = this.form.getByTestId('currentClaimerInfo');

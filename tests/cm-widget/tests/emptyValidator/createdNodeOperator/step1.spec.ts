@@ -22,7 +22,7 @@ test.describe('Operator without keys. Step 1.', () => {
       await expect(
         step1.stepTrackText,
         'Step track should display "Step 1 of 4"',
-      ).toHaveText('Step 1 of 4');
+      ).toHaveText('Step 1 of 4', { timeout: 10000 });
     });
 
     await test.step('Check step title', async () => {

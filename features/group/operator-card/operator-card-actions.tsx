@@ -41,7 +41,7 @@ export const OperatorCardActions: FC<Props> = ({
   if (isCurrentOperator) {
     if (isManagerByCurrentWallet) {
       return (
-        <LocalLink href={PATH.KEYS_SUBMIT}>
+        <LocalLink href={PATH.KEYS_SUBMIT} data-testid="uploadKeysLink">
           <Button fullwidth variant="outlined" color="primary">
             Upload keys
           </Button>
@@ -58,6 +58,7 @@ export const OperatorCardActions: FC<Props> = ({
         variant="outlined"
         color="warning"
         onClick={handleOpenSwitchModal}
+        data-testid="switchAndUploadButton"
       >
         Switch to this operator and upload keys
       </Button>
@@ -71,6 +72,7 @@ export const OperatorCardActions: FC<Props> = ({
         variant="outlined"
         color="primary"
         onClick={handleOpenSwitchModal}
+        data-testid="switchOperatorButton"
       >
         Switch to this operator
       </Button>
@@ -78,7 +80,12 @@ export const OperatorCardActions: FC<Props> = ({
   }
 
   return (
-    <Button fullwidth variant="outlined" disabled>
+    <Button
+      fullwidth
+      variant="outlined"
+      disabled
+      data-testid="differentWalletMessage"
+    >
       <Text size="xxs" color="secondary">
         This Node Operator is managed by a different wallet. Switch wallets to
         upload keys.

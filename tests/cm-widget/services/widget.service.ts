@@ -16,6 +16,7 @@ import {
   SettingsPage,
   CreateNodeOperatorPage,
 } from '../pages';
+import { GroupPage } from '../pages/group.page';
 import { ElementController } from '../pages/elements/controller';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
 import { NavBlockElement } from '../../shared/pages/elements';
@@ -26,6 +27,7 @@ export class WidgetService {
   public createNodeOperatorPage: CreateNodeOperatorPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
+  public groupPage: GroupPage;
   public notEligiblePage: NotEligiblePage;
   public settingsPage: SettingsPage;
   public monitoringPage: MonitoringPage;
@@ -41,6 +43,7 @@ export class WidgetService {
     this.createNodeOperatorPage = new CreateNodeOperatorPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
+    this.groupPage = new GroupPage(this.page);
     this.notEligiblePage = new NotEligiblePage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
     this.monitoringPage = new MonitoringPage(this.page);
