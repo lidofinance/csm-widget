@@ -1,16 +1,21 @@
-import { BondBalance, Rewards } from '@lidofinance/lido-csm-sdk';
+import {
+  BondBalance,
+  FeeSplit,
+  PERCENT_BASIS,
+  Rewards,
+} from '@lidofinance/lido-csm-sdk';
 import { bigMax, bigMin } from './bigint-utils';
 
 type Props = {
   bond?: BondBalance;
   rewards?: Rewards;
-  hasSplits?: boolean;
+  feeSplits?: FeeSplit[];
 };
 
 export const calculateAvailableToClaim = ({
   bond,
   rewards,
-  hasSplits,
+  feeSplits,
 }: Props) => {
   if (!bond) return 0n;
   const distributed = rewards?.available ?? 0n;
@@ -20,8 +25,9 @@ export const calculateAvailableToClaim = ({
     bond.current + distributed - bond.required - bond.locked - bond.debt,
   );
 
-  const pendingTotal = bond.pendingToSplit + distributed;
-  const splittable = hasSplits ? bigMin(claimable, pendingTotal) : 0n;
+  const totalShare = feeSplits?.reduce((sum, s) => sum + s.share, 0n) ?? 0n;
+  const splittableGross = bigMin(claimable, bond.pendingToSplit + distributed);
+  const splitterCut = (splittableGross * totalShare) / PERCENT_BASIS;
 
-  return claimable - splittable;
+  return claimable - splitterCut;
 };

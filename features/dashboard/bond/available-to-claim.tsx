@@ -30,7 +30,7 @@ export const AvailableToClaim: FC = () => {
   const availableToClaim = calculateAvailableToClaim({
     bond,
     rewards,
-    hasSplits: (feeSplits?.length ?? 0) > 0,
+    feeSplits,
   });
 
   return (

@@ -30,12 +30,11 @@ export const AmountInput: React.FC = () => {
 
   if (flow.action !== 'claim' || !flow.showAmount) return null;
   const maxIdx = flow.maxValueIndex;
-  const hasSplits = feeSplits.length > 0;
   const maxAmount = getMaxValues({
     bond,
     rewards,
     poolData,
-    hasSplits,
+    feeSplits,
   })?.[token][maxIdx];
 
   return (

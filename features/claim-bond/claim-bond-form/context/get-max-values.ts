@@ -1,6 +1,7 @@
 import {
   BondBalance,
   convertEthToShares,
+  FeeSplit,
   PerToken,
   Rewards,
   StethPoolData,
@@ -15,7 +16,7 @@ type Props = {
   bond?: BondBalance;
   rewards?: Rewards;
   poolData: StethPoolData;
-  hasSplits?: boolean;
+  feeSplits?: FeeSplit[];
 };
 
 const limitMaxEth = (value: bigint) =>
@@ -25,17 +26,17 @@ export const getMaxValues = ({
   bond,
   rewards,
   poolData,
-  hasSplits,
+  feeSplits,
 }: Props): MaxValues => {
   const maxBond = calculateAvailableToClaim({
     bond,
     rewards: undefined,
-    hasSplits,
+    feeSplits,
   });
   const maxBondAndRewards = calculateAvailableToClaim({
     bond,
     rewards,
-    hasSplits,
+    feeSplits,
   });
 
   return {
