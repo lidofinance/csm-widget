@@ -16,7 +16,7 @@ export const GroupSummary: FC<Props> = ({ operators }) => {
     useAggregatedStake(operators);
 
   return (
-    <GroupBlockStyled color="background">
+    <GroupBlockStyled color="foreground">
       <Stack direction="column" gap="md">
         <CardHeader>
           <CardHeaderLeft>
