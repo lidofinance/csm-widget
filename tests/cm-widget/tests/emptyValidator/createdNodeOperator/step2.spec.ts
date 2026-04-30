@@ -6,6 +6,8 @@ import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { mnemonicToAccount } from 'viem/accounts';
 import { qase } from 'playwright-qase-reporter/playwright';
 
+test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+
 const VALID_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
 
 type AddressField = {
@@ -32,8 +34,8 @@ const addressFields: AddressField[] = [
       'Covering locked bond',
       'Proposing a new Manager Address',
       'Changing Rewards Address',
-      'Set up rewards splits',
-      'Change name and description',
+      'Setting up rewards splits',
+      'Changing name and description',
     ],
     getInput: (s) => s.managerAddressInput,
     getContainer: (s) => s.managerAddressContainer,
@@ -58,12 +60,10 @@ const addressFields: AddressField[] = [
   },
 ];
 
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
-
 test.describe('Operator without keys. Step 2.', () => {
   let step2: CreateOperatorStep2Page;
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.page.goto('/');
+    await widgetService.page.goto('/create');
     // @todo: should be used after fix bug
     // await widgetService.createNodeOperatorPage.open();
     step2 = widgetService.createNodeOperatorPage.step2;
@@ -92,7 +92,7 @@ test.describe('Operator without keys. Step 2.', () => {
         step2.stepDescription,
         'Step description should display correct hint text',
       ).toHaveText(
-        'Manager Address will have the ultimate control over the Node Operator, while Rewards Address is only used to receive rewards.',
+        'Manager Address will have the ultimate control over the Node Operator, while Rewards Address is mainly used to receive rewards.',
       );
     });
 

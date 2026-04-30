@@ -18,7 +18,7 @@ export class Header {
     await this.accountSection
       .waitFor({
         state: 'visible',
-        timeout: 10000,
+        timeout: 8000,
       })
       .catch(() => {
         console.error(
