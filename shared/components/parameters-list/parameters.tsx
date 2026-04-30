@@ -56,7 +56,7 @@ const ALL_PARAMETERS: Parameter[] = [
   },
   {
     title: 'Penalty fee',
-    help: 'A fine charged in case of EL rewards stealing event settled',
+    help: 'An additional amount that is levied for violations committed by a Node Operator',
     render: (parameters) => [
       <>
         <FormatToken
@@ -104,7 +104,7 @@ const ALL_PARAMETERS: Parameter[] = [
   },
   {
     title: 'Keys limit',
-    help: 'A maximum number of keys a node operator can have during its lifetime',
+    help: 'A maximum number of active keys a Node Operator can have',
     render: (parameters) => formatKeysLimit(parameters?.keysLimit),
   },
   {
