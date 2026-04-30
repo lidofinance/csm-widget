@@ -35,4 +35,5 @@ export const FaqElement = styled.div`
 
 export const ShortInlineLoader = styled(InlineLoader)`
   max-width: 50px;
+  min-width: 30px;
 `;

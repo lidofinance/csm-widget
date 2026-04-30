@@ -4,6 +4,7 @@ import { Note } from 'shared/components';
 
 export type PauseType = 'Module' | 'Accounting';
 
+// TODO: CM version
 const titles: Record<PauseType, string> = {
   Module: 'CSM',
   Accounting: 'CSM Accounting',

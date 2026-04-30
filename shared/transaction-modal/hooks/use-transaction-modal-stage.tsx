@@ -1,7 +1,6 @@
-import { useModalActions } from 'providers/modal-provider';
-import { useEffect, useMemo, useRef } from 'react';
-import { TransactionModal, useTransactionModal } from '../transaction-modal';
-import { useDappStatus } from 'modules/web3';
+import { useMemo } from 'react';
+import { TransactionModal } from '../transaction-modal';
+import { useTransitStage } from './use-transit-stage';
 
 export type TransactionModalTransitStage = (
   TxStageEl: React.ReactNode,
@@ -12,37 +11,12 @@ export type TransactionModalTransitStage = (
 export const useTransactionModalStage = <S extends Record<string, Function>>(
   getStages: (transitStage: TransactionModalTransitStage) => S,
 ) => {
-  const { isAccountActive } = useDappStatus();
-  const { openModal } = useTransactionModal();
-  const { closeModal } = useModalActions();
-  const isMountedRef = useRef(true);
+  const transitStage = useTransitStage();
 
-  const txModalStages = useMemo(() => {
-    const transitStage: TransactionModalTransitStage = (
-      TxStageEl,
-      modalProps = {},
-    ) => {
-      if (!isMountedRef.current) return;
-      openModal({
-        children: TxStageEl,
-        ...modalProps,
-      });
-    };
-
-    return getStages(transitStage);
-  }, [getStages, openModal]);
-
-  useEffect(() => {
-    return () => {
-      isMountedRef.current = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isAccountActive) {
-      closeModal(TransactionModal);
-    }
-  }, [isAccountActive, closeModal]);
+  const txModalStages = useMemo(
+    () => getStages(transitStage),
+    [getStages, transitStage],
+  );
 
   return {
     txModalStages,

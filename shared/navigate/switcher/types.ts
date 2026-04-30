@@ -1,12 +1,13 @@
 import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
-import { ShowRule } from 'shared/hooks';
+import { ShowRuleProps } from 'shared/hooks';
 
-export type SwitcherRoutes = {
+type SwitcherRoute = ShowRuleProps & {
   title: string;
   path: PATH;
   subpaths?: PATH[];
-  showRules?: ShowRule[];
   suffix?: ReactNode;
   warning?: boolean;
-}[];
+};
+
+export type SwitcherRoutes = SwitcherRoute[];

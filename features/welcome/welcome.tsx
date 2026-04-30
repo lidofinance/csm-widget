@@ -5,29 +5,42 @@ import { Stack, WelcomeSection } from 'shared/components';
 import { Connect } from 'shared/wallet';
 import styled from 'styled-components';
 import { LandingBlock } from './landing';
+import { isModuleCSM } from 'consts';
 
 export const Welcome: FC = () => {
   return (
     <>
-      <LandingBlock />
+      {isModuleCSM && <LandingBlock />}
       <WelcomeSection>
-        <Stack wrap>
+        {isModuleCSM ? (
+          <Stack wrap>
+            <ConnectStyle
+              fullwidth
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator}
+              data-testid="iAmANodeOperatorBtn"
+            >
+              I am a Node Operator
+            </ConnectStyle>
+            <ConnectStyle
+              fullwidth
+              matomoEvent={
+                MATOMO_CLICK_EVENTS_TYPES.connectToBecomeNodeOperator
+              }
+              color="secondary"
+              data-testid="becomeANodeOperatorBtn"
+            >
+              Become a Node Operator
+            </ConnectStyle>
+          </Stack>
+        ) : (
           <ConnectStyle
             fullwidth
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator}
-            data-testid="iAmANodeOperatorBtn"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.connectWallet} // TODO: dedicated event for welcome page
+            data-testid="connect-wallet"
           >
-            I am a Node Operator
+            Connect wallet
           </ConnectStyle>
-          <ConnectStyle
-            fullwidth
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.connectToBecomeNodeOperator}
-            color="secondary"
-            data-testid="becomeANodeOperatorBtn"
-          >
-            Become a Node Operator
-          </ConnectStyle>
-        </Stack>
+        )}
       </WelcomeSection>
     </>
   );

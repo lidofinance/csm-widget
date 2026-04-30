@@ -1,4 +1,6 @@
-import { useLidoSDK } from 'modules/web3';
+import { useFeatureFlags } from 'config/feature-flags';
+import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
+import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
   validateBondAmount,
@@ -6,17 +8,13 @@ import {
   ValidationError,
 } from 'shared/hook-form/validation';
 import { isAddress } from 'viem';
-import { useFeatureFlags } from 'config/feature-flags';
-import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
 
 export const useSubmitKeysValidation = () => {
-  const {
-    csm: { depositData: sdk },
-  } = useLidoSDK();
+  const { depositData: sdk } = useSmSDK();
   const featureFlags = useFeatureFlags();
 
   return useFormValidation<SubmitKeysFormInputType, SubmitKeysFormNetworkData>(

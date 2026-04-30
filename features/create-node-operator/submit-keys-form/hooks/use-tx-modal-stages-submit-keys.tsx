@@ -1,108 +1,100 @@
-import { getGeneralTransactionModalStages } from 'shared/transaction-modal/hooks/get-general-transaction-modal-stages';
 import {
-  TransactionModalTransitStage,
-  useTransactionModalStage,
-} from 'shared/transaction-modal/hooks/use-transaction-modal-stage';
-
-import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
+  type NodeOperatorShortInfo,
+  getNodeOperatorRoles,
+} from '@lidofinance/lido-csm-sdk';
 import { Plural } from 'shared/components';
 import {
   AfterCreateCustomNodeOperator,
   AfterKeysUpload,
   TxAmount,
-} from 'shared/transaction-modal';
-import {
   TxStagePending,
   TxStageSign,
   TxStageSuccess,
-} from 'shared/transaction-modal/tx-stages-basic';
+  useTxStages,
+} from 'shared/transaction-modal';
+import {
+  SubmitKeysFormInputType,
+  SubmitKeysFormNetworkData,
+} from '../context/types';
 
-type Props = {
-  keysCount: number;
-  amount: bigint;
-  token: TOKENS;
-};
+export const useTxModalStagesSubmitKeys = () =>
+  useTxStages<
+    SubmitKeysFormInputType,
+    SubmitKeysFormNetworkData,
+    NodeOperatorShortInfo
+  >((transitStage, input, data) => {
+    const keysCount = input.depositData.length;
+    const amount = input.bondAmount ?? 0n;
+    const { token } = input;
 
-type SuccessProps = {
-  nodeOperatorId?: NodeOperatorId;
-  keys: string[];
-  hasAnyRole: boolean;
-};
-
-const getTxModalStagesSubmitKeys = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
-
-  sign: ({ keysCount, amount, token }: Props) =>
-    transitStage(
-      <TxStageSign
-        title="Creating Node Operator"
-        description={
-          <>
-            Uploading {keysCount}{' '}
-            <Plural variants={['key', 'keys']} value={keysCount} />{' '}
-            {!!amount && (
+    return {
+      sign: () =>
+        transitStage(
+          <TxStageSign
+            title="Creating Node Operator"
+            description={
               <>
-                and depositing <TxAmount amount={amount} token={token} />
+                Uploading {keysCount}{' '}
+                <Plural variants={['key', 'keys']} value={keysCount} />{' '}
+                {!!amount && (
+                  <>
+                    and depositing <TxAmount amount={amount} token={token} />
+                  </>
+                )}
+                .
               </>
-            )}
-            .
-          </>
-        }
-      />,
-    ),
-
-  pending: ({ keysCount, amount, token }: Props, txHash?: string) =>
-    transitStage(
-      <TxStagePending
-        txHash={txHash}
-        title="Creating Node Operator"
-        description={
-          <>
-            Uploading {keysCount}{' '}
-            <Plural variants={['key', 'keys']} value={keysCount} />{' '}
-            {!!amount && (
+            }
+          />,
+        ),
+      pending: (txHash) =>
+        transitStage(
+          <TxStagePending
+            txHash={txHash}
+            title="Creating Node Operator"
+            description={
               <>
-                and depositing <TxAmount amount={amount} token={token} />
+                Uploading {keysCount}{' '}
+                <Plural variants={['key', 'keys']} value={keysCount} />{' '}
+                {!!amount && (
+                  <>
+                    and depositing <TxAmount amount={amount} token={token} />
+                  </>
+                )}
+                .
               </>
-            )}
-            .
-          </>
-        }
-      />,
-    ),
+            }
+          />,
+        ),
+      success: (result, txHash) => {
+        const keys = input.depositData.map((key) => key.pubkey);
+        const hasAnyRole = result
+          ? getNodeOperatorRoles(result, data.address).length > 0
+          : false;
 
-  success: (
-    { nodeOperatorId, keys, hasAnyRole }: SuccessProps,
-    txHash?: string,
-  ) => {
-    return transitStage(
-      <TxStageSuccess
-        txHash={txHash}
-        title="Node Operator has been created"
-        description={
-          nodeOperatorId !== undefined ? (
-            <>
-              Your Node Operator ID is <b>{nodeOperatorId.toString()}</b>
-              <br />
-              <br />
-              {hasAnyRole ? (
-                <AfterKeysUpload keys={keys} />
-              ) : (
-                <AfterCreateCustomNodeOperator keys={keys} />
-              )}
-            </>
-          ) : undefined
-        }
-      />,
-      {
-        isClosableOnLedger: true,
+        return transitStage(
+          <TxStageSuccess
+            txHash={txHash}
+            title="Node Operator has been created"
+            description={
+              result?.nodeOperatorId !== undefined ? (
+                <>
+                  Your Node Operator ID is{' '}
+                  <b>{result.nodeOperatorId.toString()}</b>
+                  <br />
+                  <br />
+                  {hasAnyRole ? (
+                    <AfterKeysUpload keys={keys} />
+                  ) : (
+                    <AfterCreateCustomNodeOperator keys={keys} />
+                  )}
+                </>
+              ) : undefined
+            }
+          />,
+          {
+            isClosableOnLedger: true,
+          },
+        );
       },
-    );
-  },
-});
-
-export const useTxModalStagesSubmitKeys = () => {
-  return useTransactionModalStage(getTxModalStagesSubmitKeys);
-};
+    };
+  });

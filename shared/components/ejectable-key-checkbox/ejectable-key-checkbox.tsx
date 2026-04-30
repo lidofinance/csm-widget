@@ -1,6 +1,6 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { ChangeEventHandler, FC } from 'react';
-import { IconTooltip, Pubkey, Stack, StatusChip } from 'shared/components';
+import { IconTooltip, Pubkey, Stack, KeyStatusChip } from 'shared/components';
 import { Hex } from 'viem';
 import { CheckboxStyled, StatusesWrapper } from './styles';
 
@@ -29,7 +29,7 @@ export const EjectableKeyCheckbox: FC<EjectableKeyCheckboxProps> = ({
           <Stack center gap="sm">
             <StatusesWrapper>
               {statuses.map((status) => (
-                <StatusChip status={status} key={status} />
+                <KeyStatusChip status={status} key={status} />
               ))}
             </StatusesWrapper>
             {disabled && (

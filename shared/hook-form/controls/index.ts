@@ -6,6 +6,7 @@ export * from './eject-keys-selector-hook-form';
 export * from './invite-buttons-hook-form';
 export * from './number-input-hook-form';
 export * from './optional-section-hook-form';
+export * from './percent-input-hook-form';
 export * from './options-buttons-hook-form';
 export * from './paused-button';
 export * from './remove-keys-selector-hook-form';

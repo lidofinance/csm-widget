@@ -34,14 +34,15 @@ export const useSurveyContext = (): SurveyContextValue => {
 export const SurveysProvider: FC<PropsWithChildren> = ({ children }) => {
   const { nodeOperator, isPending: operatorPending } = useNodeOperator();
   const { data: delegatedOperators, isLoading: delegatorLoading } =
-    useDelegatedOperators(nodeOperator?.id);
+    useDelegatedOperators(nodeOperator?.nodeOperatorId);
 
   const isLoading = operatorPending || delegatorLoading;
   const isOperator = !!nodeOperator;
 
   const mode = useMemo((): SurveyMode => {
     if (isLoading) return { type: 'loading' };
-    if (nodeOperator) return { type: 'operator', operatorId: nodeOperator.id };
+    if (nodeOperator)
+      return { type: 'operator', operatorId: nodeOperator.nodeOperatorId };
     if (delegatedOperators?.length)
       return { type: 'delegator', delegatedOperators };
     return { type: 'empty' };

@@ -2,8 +2,10 @@ import { FC, memo } from 'react';
 
 import { SubmitKeysFormProvider } from './context';
 
+import { DepositQueue } from 'features/view-keys/deposit-queue';
 import { FormBlock } from 'shared/components';
-import { FormLoader, Form } from 'shared/hook-form/form-controller';
+import { Form, FormLoader } from 'shared/hook-form/form-controller';
+import { Gate } from 'shared/navigate';
 import { SubmitKeysDataProvider } from './context';
 import { AmountInput } from './controls/amount-input';
 import { CustomAddressesSection } from './controls/custom-addresses-section';
@@ -12,9 +14,8 @@ import { KeysInput } from './controls/keys-input';
 import { ReferrerInput } from './controls/referrer-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
-import { SubmitKeysFormInfo } from './submit-keys-form-info';
-import { DepositQueue } from 'features/view-keys/deposit-queue';
 import { HeaderOperatorTypeButton } from './header-operator-type-button';
+import { SubmitKeysFormInfo } from './submit-keys-form-info';
 
 export const SubmitKeysForm: FC = memo(() => (
   <SubmitKeysDataProvider>
@@ -34,7 +35,9 @@ export const SubmitKeysForm: FC = memo(() => (
           <SubmitKeysFormInfo />
         </FormLoader>
       </FormBlock>
-      <DepositQueue />
+      <Gate rule="IS_CSM">
+        <DepositQueue />
+      </Gate>
     </SubmitKeysFormProvider>
   </SubmitKeysDataProvider>
 ));

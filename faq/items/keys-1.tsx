@@ -9,7 +9,6 @@ import {
   FaqWithdrawalVault,
 } from 'shared/components';
 
-// FIXME: link to ".lido.fi"
 export const Keys1: Faq = {
   title: (
     <>

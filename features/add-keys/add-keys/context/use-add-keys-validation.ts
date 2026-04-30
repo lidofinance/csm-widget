@@ -1,18 +1,16 @@
-import { useLidoSDK } from 'modules/web3';
+import { useFeatureFlags } from 'config/feature-flags';
+import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
+import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
   validateBondAmount,
   validateDepositData,
   ValidationError,
 } from 'shared/hook-form/validation';
-import { useFeatureFlags } from 'config/feature-flags';
-import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
 import type { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
 export const useAddKeysValidation = () => {
-  const {
-    csm: { depositData: sdk },
-  } = useLidoSDK();
+  const { depositData: sdk } = useSmSDK();
   const featureFlags = useFeatureFlags();
 
   return useFormValidation<AddKeysFormInputType, AddKeysFormNetworkData>(

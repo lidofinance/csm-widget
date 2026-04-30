@@ -7,8 +7,10 @@ import { getProps } from 'utilsApi';
 const ScoresPage: FC = () => {
   return (
     <GateLoaded>
-      <Gate rule="ICS_APPLY_ENABLED" fallback={<Navigate path={PATH.HOME} />}>
-        <IcsApplyPage />
+      <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
+        <Gate rule="ICS_APPLY_ENABLED" fallback={<Navigate path={PATH.HOME} />}>
+          <IcsApplyPage />
+        </Gate>
       </Gate>
     </GateLoaded>
   );

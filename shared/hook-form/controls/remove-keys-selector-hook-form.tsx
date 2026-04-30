@@ -6,7 +6,7 @@ import {
   Latice,
   Pubkey,
   Stack,
-  StatusChip,
+  KeyStatusChip,
 } from 'shared/components';
 
 type Props = {
@@ -80,7 +80,7 @@ export const RemoveKeysSelectorHookForm: FC<Props> = ({
                 {statuses
                   .filter((status) => BAD_STATUSES.includes(status))
                   .map((status) => (
-                    <StatusChip status={status} key={status} />
+                    <KeyStatusChip status={status} key={status} />
                   ))}
               </Stack>
             }

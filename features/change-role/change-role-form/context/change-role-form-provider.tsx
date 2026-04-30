@@ -3,28 +3,31 @@ import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerProvider,
+  useFlowSubmit,
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
+import { useChangeRoleMode } from 'shared/hooks';
 import {
   ChangeRoleFormNetworkData,
   type ChangeRoleFormInputType,
 } from './types';
-import { useChangeRoleSubmit } from './use-change-role-submit';
+import { useChangeRoleFlowResolver } from './use-change-role-flow';
 import { useChangeRoleValidation } from './use-change-role-validation';
 
 export type ChangeRoleFormProviderProps = { role: ROLES };
 
 export const ChangeRoleFormProvider: FC<
   PropsWithChildren<ChangeRoleFormProviderProps>
-> = ({ children }) => {
-  const resolver = useChangeRoleValidation();
+> = ({ children, role }) => {
+  const mode = useChangeRoleMode(role);
+  const resolver = useChangeRoleValidation(role);
 
   const defaultValues = useFormDefaultValues<
     ChangeRoleFormInputType,
     ChangeRoleFormNetworkData
   >((data) => ({
-    isRevoke: false,
-    address: data.isManagerReset ? data.address : undefined,
+    intent: 'submit',
+    address: mode === 'managerReset' ? data.address : undefined,
   }));
 
   const formObject = useForm<ChangeRoleFormInputType>({
@@ -33,7 +36,8 @@ export const ChangeRoleFormProvider: FC<
     mode: 'onChange',
   });
 
-  const submitter = useChangeRoleSubmit();
+  const resolve = useChangeRoleFlowResolver(role);
+  const submitter = useFlowSubmit(resolve);
 
   return (
     <FormProvider {...formObject}>

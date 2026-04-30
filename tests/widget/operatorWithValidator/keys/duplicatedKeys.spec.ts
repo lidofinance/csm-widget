@@ -58,11 +58,8 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
     async ({ widgetService }) => {
       const duplicatedKey = keysGeneratorService.generateKeys();
 
-      const txPage = await keysPage.submitPage.submitKeys(
-        duplicatedKey,
-        TokenSymbol.ETH,
-      );
-      await widgetService.walletPage.cancelTx(txPage);
+      await keysPage.submitPage.submitKeys(duplicatedKey, TokenSymbol.ETH);
+      await widgetService.walletPage.cancelTx();
       await keysPage.submitPage.open();
 
       await keysPage.submitPage.fillKeys(duplicatedKey);

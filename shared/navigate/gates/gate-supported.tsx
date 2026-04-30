@@ -1,4 +1,4 @@
-import { useCsmVersionSupported } from 'modules/web3';
+import { useSmVersionSupported } from 'modules/web3';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 import { SplashPage, UnsupportedPage } from '../inner-pages';
 
@@ -13,7 +13,7 @@ export const GateSupported: FC<PropsWithChildren<Props>> = ({
   unsupported = <UnsupportedPage />,
   children,
 }) => {
-  const { data: isSupported, isPending } = useCsmVersionSupported();
+  const { data: isSupported, isPending } = useSmVersionSupported();
 
   return <>{isPending ? fallback : isSupported ? children : unsupported}</>;
 };

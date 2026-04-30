@@ -140,7 +140,7 @@ export const createMockFormData = ({
     fork_version: '0x00000000',
     deposit_cli_version: '2.3.0',
     network_name: 'mainnet',
-  };
+  } as const;
 
   const depositData = Array.from(
     { length: depositDataLength },

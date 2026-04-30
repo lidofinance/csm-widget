@@ -1,77 +1,59 @@
-import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 import {
   AfterKeysUpload,
-  TransactionModalTransitStage,
   TxStageSuccess,
-  getGeneralTransactionModalStages,
-  useTransactionModalStage,
+  useTxStages,
 } from 'shared/transaction-modal';
 import { TxStageSignOperationKeys } from 'shared/transaction-modal/tx-stages-composed/tx-stage-keys-operation';
+import { AddKeysFormInputType, AddKeysFormNetworkData } from '../context/types';
 
 const STAGE_OPERATION_ARGS = {
   operationText: 'Uploading',
 };
 
-type Props = {
-  keysCount: number;
-  amount: bigint;
-  token: TOKENS;
-  nodeOperatorId: NodeOperatorId;
-};
-
-type SuccessProps = {
-  keys: string[];
-};
-
-const getTxModalStagesAddKeys = (
-  transitStage: TransactionModalTransitStage,
-) => ({
-  ...getGeneralTransactionModalStages(transitStage),
-
-  sign: (props: Props) =>
-    transitStage(
-      <TxStageSignOperationKeys
-        {...STAGE_OPERATION_ARGS}
-        amount={props.amount}
-        token={props.token}
-        keysCount={props.keysCount}
-        nodeOperatorId={props.nodeOperatorId}
-      />,
-    ),
-
-  pending: (props: Props, txHash?: string) =>
-    transitStage(
-      <TxStageSignOperationKeys
-        {...STAGE_OPERATION_ARGS}
-        amount={props.amount}
-        token={props.token}
-        keysCount={props.keysCount}
-        nodeOperatorId={props.nodeOperatorId}
-        isPending
-        txHash={txHash}
-      />,
-    ),
-
-  success: ({ keys }: SuccessProps, txHash?: string) =>
-    transitStage(
-      <TxStageSuccess
-        txHash={txHash}
-        title={<>Your keys has been uploaded</>}
-        description={
-          <>
-            Uploading operation was successful.
-            <br />
-            <br />
-            <AfterKeysUpload keys={keys} />
-          </>
-        }
-      />,
-      {
-        isClosableOnLedger: true,
-      },
-    ),
-});
-
-export const useTxModalStagesAddKeys = () => {
-  return useTransactionModalStage(getTxModalStagesAddKeys);
-};
+export const useTxModalStagesAddKeys = () =>
+  useTxStages<AddKeysFormInputType, AddKeysFormNetworkData>(
+    (transitStage, input, data) => ({
+      sign: () =>
+        transitStage(
+          <TxStageSignOperationKeys
+            {...STAGE_OPERATION_ARGS}
+            amount={input.bondAmount ?? 0n}
+            token={input.token}
+            keysCount={input.depositData.length}
+            nodeOperatorId={data.nodeOperatorId}
+          />,
+        ),
+      pending: (txHash) =>
+        transitStage(
+          <TxStageSignOperationKeys
+            {...STAGE_OPERATION_ARGS}
+            amount={input.bondAmount ?? 0n}
+            token={input.token}
+            keysCount={input.depositData.length}
+            nodeOperatorId={data.nodeOperatorId}
+            isPending
+            txHash={txHash}
+          />,
+        ),
+      success: (_result, txHash) =>
+        transitStage(
+          <TxStageSuccess
+            txHash={txHash}
+            title={<>Your keys has been uploaded</>}
+            description={
+              <>
+                Uploading operation was successful.
+                <br />
+                <br />
+                <AfterKeysUpload
+                  keys={input.depositData.map((key) => key.pubkey)}
+                />
+              </>
+            }
+          />,
+          {
+            isClosableOnLedger: true,
+          },
+        ),
+    }),
+  );

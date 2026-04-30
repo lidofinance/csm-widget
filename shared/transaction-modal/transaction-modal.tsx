@@ -1,6 +1,11 @@
+import { createContext, useContext } from 'react';
 import { Modal } from '@lidofinance/lido-ui';
 import { useConnectorInfo } from 'reef-knot/core-react';
 import { getUseModal, ModalComponentType } from 'providers/modal-provider';
+import { getFormRetry } from 'shared/hook-form/form-controller/form-retry';
+
+const ModalRetryContext = createContext<(() => void) | undefined>(undefined);
+export const useModalRetry = () => useContext(ModalRetryContext);
 
 type TransactionModalProps = {
   isClosableOnLedger?: boolean;
@@ -16,6 +21,7 @@ export const TransactionModal: ModalComponentType<TransactionModalProps> = ({
 }) => {
   const { isLedger } = useConnectorInfo();
   const isClosable = !isLedger || isClosableOnLedger;
+  const onRetry = getFormRetry();
 
   return (
     <Modal
@@ -23,7 +29,9 @@ export const TransactionModal: ModalComponentType<TransactionModalProps> = ({
       open={open && Boolean(children)}
       onClose={isClosable ? onClose : undefined}
     >
-      {children}
+      <ModalRetryContext.Provider value={onRetry}>
+        {children}
+      </ModalRetryContext.Provider>
     </Modal>
   );
 };

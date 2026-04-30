@@ -1,7 +1,7 @@
-import { getRoleTitle } from 'shared/node-operator';
+import { ROLES_METADATA } from 'consts';
 import { useChangeRoleFormData } from '../context';
 
 export const useRole = () => {
   const { role } = useChangeRoleFormData(true);
-  return getRoleTitle(role);
+  return ROLES_METADATA[role].capitalizedTitle;
 };

@@ -1,58 +1,40 @@
 import {
   appendNodeOperator,
-  getNodeOperatorRoles,
+  NodeOperatorId,
   NodeOperatorShortInfo,
 } from '@lidofinance/lido-csm-sdk';
-import { NodeOperator, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 import { useDappStatus } from '../hooks';
-import { useLidoSDK } from '../web3-provider';
+import { useNodeOperator } from './node-operator-provider';
 import { KEY_OPERATORS } from './use-available-operators';
-import { getAddressRoles } from 'shared/node-operator/utils';
 
-export const useAppendOperator = () => {
+export const useAppendOperator = (switchOperator?: boolean) => {
   const queryClient = useQueryClient();
   const { address } = useDappStatus();
+  const { switchNodeOperator } = useNodeOperator();
+  const pendingSwitchRef = useRef<NodeOperatorId>();
+
+  // Deferred switch: fires after React re-renders with updated operator list
+  useEffect(() => {
+    if (pendingSwitchRef.current !== undefined) {
+      switchNodeOperator(pendingSwitchRef.current);
+      pendingSwitchRef.current = undefined;
+    }
+  }, [switchNodeOperator]);
 
   const { mutate } = useMutation({
-    mutationFn: async (value: NodeOperatorShortInfo) => ({
-      id: value.nodeOperatorId,
-      roles: getAddressRoles(value, address || '0x0'),
-    }),
+    mutationFn: async (value: NodeOperatorShortInfo) => value,
     onSuccess: (data) => {
-      queryClient.setQueryData<NodeOperator[]>(
+      queryClient.setQueryData<NodeOperatorShortInfo[]>(
         [...KEY_OPERATORS, { address }],
         (prev = []) => appendNodeOperator(prev, data),
       );
+      if (switchOperator) {
+        pendingSwitchRef.current = data.nodeOperatorId;
+      }
     },
   });
 
   return mutate;
-};
-
-export const useApplyOperator = () => {
-  const { csm } = useLidoSDK();
-  const { address } = useDappStatus();
-  const queryClient = useQueryClient();
-
-  const { mutateAsync } = useMutation({
-    mutationFn: async (id: NodeOperatorId) => {
-      const data = await csm.operator.getInfo(id);
-      if (!address || !data) return null;
-
-      const roles = getNodeOperatorRoles(data, address);
-      if (roles.length > 0) null;
-
-      return { id, roles } as NodeOperator;
-    },
-    onSuccess: (data) => {
-      if (!data) return;
-      queryClient.setQueryData<NodeOperator[]>(
-        [...KEY_OPERATORS, { address }],
-        () => appendNodeOperator([], data),
-      );
-    },
-  });
-
-  return mutateAsync;
 };

@@ -11,7 +11,7 @@ export const warmUpForkedNode = async (
   let lastError: unknown;
   while (Date.now() - started < FORK_WARM_UP_TIMEOUT) {
     try {
-      await csmSDK.satellite.getNodeOperatorsByProposedAddress(address);
+      await csmSDK.discovery.getNodeOperatorsByProposedAddress(address);
       return;
     } catch (error) {
       lastError = error;

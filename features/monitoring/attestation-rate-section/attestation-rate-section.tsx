@@ -46,6 +46,7 @@ export const AttestationRateSection: FC = () => {
             <div>
               Data Source:{' '}
               <MatomoLink
+                $inline
                 href="https://migalabs.io"
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.monitoringMigalabsLink}
               >

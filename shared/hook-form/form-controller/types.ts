@@ -25,9 +25,4 @@ export type FormSubmitter<F extends FieldValues, C extends object> = (
   options: FormSubmitOptions,
 ) => Promise<boolean>;
 
-export type FormSubmitterHook<
-  F extends FieldValues,
-  C extends object,
-> = () => FormSubmitter<F, C>;
-
 export type NetworkData<T extends object, P = void> = (props: P) => FormData<T>;

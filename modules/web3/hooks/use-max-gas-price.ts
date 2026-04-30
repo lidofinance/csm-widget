@@ -20,6 +20,7 @@ const feeHistoryToMaxFee = ({
   return lastBaseFeePerGas * 2n + maxPriorityFeePerGas;
 };
 
+// TODO: rework
 export const useMaxGasPrice = (chainId?: number) => {
   const { chainId: dappChainId } = useDappStatus();
 

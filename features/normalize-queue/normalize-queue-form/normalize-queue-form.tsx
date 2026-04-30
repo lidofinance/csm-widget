@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 
 import { FormBlock } from 'shared/components';
-import { FormLoader, Form } from 'shared/hook-form/form-controller';
+import { Form } from 'shared/hook-form/form-controller';
 import {
   NormalizeQueueDataProvider,
   NormalizeQueueFormProvider,
@@ -9,19 +9,20 @@ import {
 import { Info } from './controls/info';
 import { SubmitButton } from './controls/submit-button';
 import { NormalizeQueueFormInfo } from './normalize-queue-form-info';
+import { NormalizeQueueFormLoader } from './normalize-queue-form-loader';
 
 export const NormalizeQueueForm: FC = memo(() => {
   return (
     <NormalizeQueueDataProvider>
       <NormalizeQueueFormProvider>
         <FormBlock>
-          <FormLoader>
+          <NormalizeQueueFormLoader>
             <Form>
               <Info />
               <SubmitButton />
             </Form>
             <NormalizeQueueFormInfo />
-          </FormLoader>
+          </NormalizeQueueFormLoader>
         </FormBlock>
       </NormalizeQueueFormProvider>
     </NormalizeQueueDataProvider>

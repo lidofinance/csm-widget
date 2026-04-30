@@ -1,78 +1,105 @@
 import { Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
+import { MODULE_METADATA } from 'consts/module';
+import { config } from 'config';
 import {
   FormTitle,
   MatomoLink,
   StackStyle,
   WarningBlock,
 } from 'shared/components';
+import { Gate } from 'shared/navigate';
 
 export const ExitKeys = () => {
   return (
     <>
-      <FormTitle>Follow the instuctions</FormTitle>
-      <Text size="xs">
-        Sign and broadcast an exit message for each validator key you want to
-        exit using one of the guides below:
-      </Text>
-      <StackStyle as="ul" $gap="sm" $direction="column">
-        <li>
+      <Gate rule="IS_CSM">
+        <FormTitle>Follow the instuctions</FormTitle>
+        <Text size="xs">
+          Sign and broadcast an exit message for each validator key you want to
+          exit using one of the guides below:
+        </Text>
+        <StackStyle as="ul" $gap="sm" $direction="column">
+          <li>
+            <MatomoLink
+              icon="external"
+              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#dappnode"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysDappnodeLink}
+            >
+              Guide for Dappnode
+            </MatomoLink>
+          </li>
+          <li>
+            <MatomoLink
+              icon="external"
+              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#sedge"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSedgeLink}
+            >
+              Guide for Sedge
+            </MatomoLink>
+          </li>
+          <li>
+            <MatomoLink
+              icon="external"
+              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#stereum"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSteureumLink}
+            >
+              Guide for Stereum
+            </MatomoLink>
+          </li>
+          <li>
+            <MatomoLink
+              icon="external"
+              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#ethpillar"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysEthpillarLink}
+            >
+              Guide for EthPillar
+            </MatomoLink>
+          </li>
+          <li>
+            <MatomoLink
+              icon="external"
+              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#eth-docker"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysEthdockerLink}
+            >
+              Guide for EthDocker
+            </MatomoLink>
+          </li>
+          <li>
+            <MatomoLink
+              icon="external"
+              href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#systemd"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSystemdLink}
+            >
+              Guide for Systemd
+            </MatomoLink>
+          </li>
+        </StackStyle>
+      </Gate>
+      <Gate rule="IS_CM">
+        <WarningBlock type="warning">
+          Out of order exits are discouraged by{' '}
           <MatomoLink
-            icon="external"
-            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#dappnode"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysDappnodeLink}
+            $inline
+            href="https://ipfs.io/ipfs/QmW9kE61zC61PcuikCQRwn82aoTCj9yPuENGNPML9QLkSM"
           >
-            Guide for Dappnode
+            the Validator Exits Standard Node Operator Protocol (SNOP)
           </MatomoLink>
-        </li>
-        <li>
+          . In case an out of order exit is required, the Node Operator must
+          notify the community, specifying the number of validators affected,
+          their indices, and the reason for the exit request via{' '}
           <MatomoLink
-            icon="external"
-            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#sedge"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSedgeLink}
+            $inline
+            href="https://research.lido.fi/c/node-operators/12"
           >
-            Guide for Sedge
+            the Node Operator category of the Lido Research Forum
           </MatomoLink>
-        </li>
-        <li>
-          <MatomoLink
-            icon="external"
-            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#stereum"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSteureumLink}
-          >
-            Guide for Stereum
-          </MatomoLink>
-        </li>
-        <li>
-          <MatomoLink
-            icon="external"
-            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#ethpillar"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysEthpillarLink}
-          >
-            Guide for EthPillar
-          </MatomoLink>
-        </li>
-        <li>
-          <MatomoLink
-            icon="external"
-            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#eth-docker"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysEthdockerLink}
-          >
-            Guide for EthDocker
-          </MatomoLink>
-        </li>
-        <li>
-          <MatomoLink
-            icon="external"
-            href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#systemd"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSystemdLink}
-          >
-            Guide for Systemd
-          </MatomoLink>
-        </li>
-      </StackStyle>
+          .
+        </WarningBlock>
+      </Gate>
       <WarningBlock type="notice">
-        This action should be performed <b>outside the CSM UI</b>
+        This action should be performed{' '}
+        <b>outside the {MODULE_METADATA[config.module].shortName} UI</b>
       </WarningBlock>
     </>
   );

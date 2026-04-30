@@ -6,15 +6,16 @@ export const extractErrorMessage = (error: unknown): string | undefined => {
     // SDK errors use errorMessage
     if ('errorMessage' in error && typeof error.errorMessage === 'string') {
       const msg = error.errorMessage;
+      //"Execution reverted with reason: custom error 0x5e7b862d.
       // Extract reason from "Execution reverted with reason: BALANCE_EXCEEDED"
-      const match = msg.match(/Execution reverted with reason: (\w+)/);
+      const match = msg.match(/Execution reverted with reason: (.+)/);
       return match ? match[1] : msg;
     }
 
     // Standard error.message
     if ('message' in error && typeof error.message === 'string') {
       const msg = error.message;
-      const match = msg.match(/Execution reverted with reason: (\w+)/);
+      const match = msg.match(/Execution reverted with reason: (.+)/);
       if (match) return match[1];
       // Return if short and readable
       if (msg.length < 150 && !msg.includes('0x')) return msg;

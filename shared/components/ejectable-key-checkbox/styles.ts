@@ -22,4 +22,5 @@ export const StatusesWrapper = styled(StackStyle).attrs({
   $gap: 'xs',
 })`
   margin-block: -4px;
+  align-items: end;
 `;

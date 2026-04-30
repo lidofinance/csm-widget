@@ -30,6 +30,7 @@ export const ApplicationFlow: FC = () => {
       <Step number="1" title="Application submission">
         People interested in being included in{' '}
         <MatomoLink
+          $inline
           href="https://github.com/lidofinance/community-staking-module/blob/develop/artifacts/mainnet/ics/addresses.json"
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsGithubAddressesLink}
         >

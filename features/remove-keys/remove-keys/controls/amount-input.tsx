@@ -11,6 +11,8 @@ export const AmountInput = () => {
     name: 'selection',
   });
 
+  if (!removalFee) return null;
+
   return (
     <Stack direction="column" gap="xs">
       <DisabledInputAmount

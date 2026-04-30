@@ -1,31 +1,37 @@
 import { useWatch } from 'react-hook-form';
 import { PausedButton, SubmitButtonHookForm } from 'shared/hook-form/controls';
-import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import {
+  CLAIM_OPTION,
+  ClaimBondFormInputType,
+  useClaimBondFormData,
+} from '../context';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const SubmitButton = () => {
-  const [claimRewards, token, amount] = useWatch<
+  const [claimOption, token] = useWatch<
     ClaimBondFormInputType,
-    ['claimRewards', 'token', 'amount']
+    ['claimOption', 'token']
   >({
-    name: ['claimRewards', 'token', 'amount'],
+    name: ['claimOption', 'token'],
   });
 
-  const { isPaused, maxValues } = useClaimBondFormData(true);
+  const { isPaused, bond, rewards } = useClaimBondFormData(true);
   if (isPaused) {
     return <PausedButton type="Accounting" />;
   }
 
-  const maxWithRewards = maxValues[TOKENS.steth][1];
-  const isNothingToClaim = !maxWithRewards;
-  const isPullRewards = amount !== undefined && amount === 0n && claimRewards;
-  const text = isNothingToClaim
-    ? 'Nothing to claim'
-    : token === TOKENS.eth
-      ? 'Request withdrawal to the Rewards Address'
-      : isPullRewards
-        ? 'Claim rewards to the Bond balance'
-        : 'Claim to the Rewards Address';
+  const isCompensateFlow =
+    claimOption === CLAIM_OPTION.REWARDS_TO_BOND &&
+    bond.isInsufficient &&
+    rewards.available <= bond.delta;
+
+  const text = isCompensateFlow
+    ? 'Compensate'
+    : claimOption === CLAIM_OPTION.REWARDS_TO_BOND
+      ? 'Claim rewards to the Bond balance'
+      : token === TOKENS.eth
+        ? 'Request withdrawal'
+        : 'Claim';
 
   return <SubmitButtonHookForm>{text}</SubmitButtonHookForm>;
 };

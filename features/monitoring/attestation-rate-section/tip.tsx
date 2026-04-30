@@ -8,6 +8,7 @@ export const Tip: FC<{ danger?: boolean }> = ({ danger = false }) => (
   <TipWrapper $danger={danger}>
     Check out{' '}
     <MatomoLink
+      $inline
       href={PERFORMANCE_TIPS_LINK}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.performanceTipsLink}
     >

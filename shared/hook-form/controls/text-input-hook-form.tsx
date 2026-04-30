@@ -1,6 +1,7 @@
 import { Input } from '@lidofinance/lido-ui';
 import { useController, UseControllerProps } from 'react-hook-form';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
+import { testableError } from './testable-error';
 
 type BlockhashInputHookFormProps = Partial<
   React.ComponentProps<typeof Input>
@@ -38,7 +39,7 @@ export const TextInputHookForm = ({
       {...props}
       {...field}
       disabled={props.disabled || field.disabled}
-      error={errorProp ?? errorMessage}
+      error={testableError(errorProp ?? errorMessage, fieldName)}
       label={label ?? fieldName}
       spellCheck="false"
       fullwidth

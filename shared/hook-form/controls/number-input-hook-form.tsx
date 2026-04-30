@@ -2,6 +2,7 @@ import { useController, UseControllerProps } from 'react-hook-form';
 
 import { InputNumber } from 'shared/components';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
+import { testableError } from './testable-error';
 
 type NumberInputHookFormProps = Partial<
   React.ComponentProps<typeof InputNumber>
@@ -39,7 +40,10 @@ export const NumberInputHookForm = ({
       {...props}
       {...field}
       disabled={props.disabled ?? field.disabled}
-      error={errorProp ?? (showErrorMessage ? errorMessage : hasErrorHighlight)}
+      error={testableError(
+        errorProp ?? (showErrorMessage ? errorMessage : hasErrorHighlight),
+        fieldName,
+      )}
       isLocked={isLocked}
       maxValue={maxValue}
       label={label ?? fieldName}

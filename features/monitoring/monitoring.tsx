@@ -4,15 +4,16 @@ import { ExternalSection } from './external-section';
 import { NotificationToolsSection } from './notification-tools-section';
 import { StrikesSection } from './strikes-section';
 import { AttestationRateSection } from './attestation-rate-section';
+import { isModuleCSM } from 'consts';
 
 export const Monitoring: FC = () => {
   return (
     <>
       <NoSSRWrapper>
-        <AttestationRateSection />
-        <StrikesSection />
+        {isModuleCSM && <AttestationRateSection />}
+        {isModuleCSM && <StrikesSection />}
         <ExternalSection />
-        <NotificationToolsSection />
+        {isModuleCSM && <NotificationToolsSection />}
       </NoSSRWrapper>
     </>
   );

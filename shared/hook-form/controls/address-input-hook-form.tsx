@@ -1,6 +1,7 @@
 import { useController, useFormContext } from 'react-hook-form';
 import { InputAddress } from 'shared/components/input-address';
 import { isValidationErrorTypeValidate } from '../validation/validation-error';
+import { testableError } from './testable-error';
 import { Button } from '@lidofinance/lido-ui';
 import { ReactNode, useCallback } from 'react';
 
@@ -23,7 +24,7 @@ export const AddressInputHookForm = ({
 }: AddressInputHookFormProps) => {
   const {
     field,
-    fieldState: { error },
+    fieldState: { error, isTouched },
   } = useController({
     name: fieldName,
     defaultValue: '',
@@ -32,11 +33,12 @@ export const AddressInputHookForm = ({
   const { setValue } = useFormContext();
 
   const hasErrorHighlight =
-    isValidationErrorTypeValidate(error?.type) ||
-    error?.type === 'required' ||
-    error?.type === 'manual';
+    isTouched &&
+    (isValidationErrorTypeValidate(error?.type) ||
+      error?.type === 'required' ||
+      error?.type === 'manual');
   // allows to show error state without message
-  const errorMessage = hasErrorHighlight && (error?.message || true);
+  const errorMessage = hasErrorHighlight && error?.message;
 
   const onClick = useCallback(() => {
     setValue(fieldName, currentAddress, { shouldValidate: true });
@@ -47,13 +49,13 @@ export const AddressInputHookForm = ({
       rightDecorator={
         currentAddress && (
           <Button size="xs" variant="translucent" onClick={onClick}>
-            Current
+            Connected address
           </Button>
         )
       }
       {...props}
       {...field}
-      error={errorProp ?? errorMessage}
+      error={testableError(errorProp ?? errorMessage, fieldName)}
       disabled={props.disabled ?? field.disabled}
       isLocked={isLocked}
       label={label ?? fieldName}

@@ -11,9 +11,9 @@ test.describe(
   { tag: [Tags.performTX] },
   () => {
     test.beforeEach(async ({ widgetService }) => {
-      await widgetService.rolesPage.managerAddressPage.open();
+      await widgetService.settingsPage.managerAddressPage.open();
       const accountForRolesChanged = generateAddress();
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       await managerAddressPage.proposeNewAddress(accountForRolesChanged);
       await widgetService.page.waitForTimeout(LOW_TIMEOUT);
     });
@@ -21,19 +21,20 @@ test.describe(
     test.afterEach(async ({ widgetService }) => {
       await test.step('Revoke proposal role', async () => {
         // @todo: need to add cancel all tx before.
-        await widgetService.rolesPage.managerAddressPage.open();
+        await widgetService.settingsPage.managerAddressPage.open();
         await widgetService.page.waitForTimeout(1000);
-        await widgetService.rolesPage.managerAddressPage.revokePendingRole();
+        await widgetService.settingsPage.managerAddressPage.revokePendingRole();
       });
     });
 
     test(
       qase(224, 'Should display warning modal after click to repropose button'),
       async ({ widgetService }) => {
-        const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+        const managerAddressPage =
+          widgetService.settingsPage.managerAddressPage;
         const accountForSecondRolesChanged = generateAddress();
 
-        const rolesPage = widgetService.rolesPage;
+        const settingsPage = widgetService.settingsPage;
 
         await managerAddressPage.addressInput.fill(
           accountForSecondRolesChanged,
@@ -44,19 +45,19 @@ test.describe(
         await managerAddressPage.proposeButton.click();
 
         await test.step('Verify modal for repropose', async () => {
-          await rolesPage.modalRoot.modal.waitFor({
+          await settingsPage.modalRoot.modal.waitFor({
             state: 'visible',
           });
 
-          await expect(rolesPage.modalRoot.headings).toContainText(
+          await expect(settingsPage.modalRoot.headings).toContainText(
             'Only most recent proposed address change is valid',
           );
 
-          await expect(rolesPage.modalRoot.paragraphs.first()).toContainText(
+          await expect(settingsPage.modalRoot.paragraphs.first()).toContainText(
             'When you propose a new address for change - the previous change proposal is voided.',
           );
 
-          await expect(rolesPage.modalRoot.continueButton).toBeVisible();
+          await expect(settingsPage.modalRoot.continueButton).toBeVisible();
         });
       },
     );
@@ -67,10 +68,11 @@ test.describe(
         'Should display tx modal after approve warning after repropose button',
       ),
       async ({ widgetService }) => {
-        const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+        const managerAddressPage =
+          widgetService.settingsPage.managerAddressPage;
         const accountForSecondRolesChanged = generateAddress();
 
-        const rolesPage = widgetService.rolesPage;
+        const settingsPage = widgetService.settingsPage;
 
         await test.step('Repropose a new manager address', async () => {
           await managerAddressPage.addressInput.fill(
@@ -80,11 +82,11 @@ test.describe(
             state: 'visible',
           });
           await managerAddressPage.proposeButton.click();
-          await rolesPage.modalRoot.modal.waitFor({
+          await settingsPage.modalRoot.modal.waitFor({
             state: 'visible',
           });
 
-          await rolesPage.modalRoot.continueButton.click();
+          await settingsPage.modalRoot.continueButton.click();
 
           await test.step('Continue proposal', async () => {
             await managerAddressPage.page.waitForSelector(
@@ -93,7 +95,7 @@ test.describe(
             );
 
             await test.step('Verify transaction modal', async () => {
-              const { txModal } = widgetService.rolesPage;
+              const { txModal } = widgetService.settingsPage;
 
               await expect(txModal.description).toContainText(
                 'Proposed address',
@@ -115,10 +117,11 @@ test.describe(
     test(
       qase(207, 'Repropose a new Manager Address'),
       async ({ widgetService }) => {
-        const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+        const managerAddressPage =
+          widgetService.settingsPage.managerAddressPage;
         const accountForSecondRolesChanged = generateAddress();
 
-        const rolesPage = widgetService.rolesPage;
+        const settingsPage = widgetService.settingsPage;
 
         await managerAddressPage.addressInput.fill(
           accountForSecondRolesChanged,
@@ -127,11 +130,11 @@ test.describe(
           state: 'visible',
         });
         await managerAddressPage.proposeButton.click();
-        await rolesPage.modalRoot.modal.waitFor({
+        await settingsPage.modalRoot.modal.waitFor({
           state: 'visible',
         });
 
-        await rolesPage.modalRoot.continueButton.click();
+        await settingsPage.modalRoot.continueButton.click();
 
         await managerAddressPage.page.waitForSelector(
           `text=You are proposing manager address change`,
@@ -145,14 +148,14 @@ test.describe(
             { timeout: STAGE_WAIT_TIMEOUT },
           );
 
-          const { txModal } = widgetService.rolesPage;
+          const { txModal } = widgetService.settingsPage;
 
           await expect(txModal.description).toContainText('What is next:');
           await expect(txModal.description).toContainText(
             'Connect to CSM UI with the proposed address',
           );
           await expect(txModal.description).toContainText(
-            'Go to Roles tab → Inbox requests to confirm the change',
+            'Go to Settings tab → Inbox requests to confirm the change',
           );
 
           await expect(txModal.description).toContainText(

@@ -7,10 +7,15 @@ import { LogoLidoStyle } from './styles';
 
 export const LogoLido: FC = () => (
   <LogoLidoStyle>
+    <LidoLogo data-testid="lidoLogo" as="span" />
+  </LogoLidoStyle>
+);
+
+export const LogoLidoLink: FC = () => (
+  <LogoLidoStyle>
     <MatomoLink
       href="https://lido.fi"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoHomeLink}
-      $rawIcon
     >
       <LidoLogo data-testid="lidoLogo" as="span" />
     </MatomoLink>
