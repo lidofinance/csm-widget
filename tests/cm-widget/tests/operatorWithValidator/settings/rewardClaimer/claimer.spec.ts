@@ -57,6 +57,18 @@ test.describe('Settings. Rewards claimer.', () => {
     },
   );
 
+  test('Should show tooltip for "Current Rewards claimer" info icon', async ({
+    widgetService,
+  }) => {
+    const { claimerPage } = widgetService.settingsPage;
+    const { page } = widgetService;
+
+    await claimerPage.currentClaimerTooltipIcon.hover();
+    await expect(page.getByTestId('tooltipWrapper')).toContainText(
+      'Is an optional address authorized to trigger reward claims on your behalf. Unlike the Rewards Address, it does not receive the funds. It only initiates the claim transaction.',
+    );
+  });
+
   test(
     qase(207, 'Should navigate back to Settings on "Back" button click'),
     async ({ widgetService }) => {

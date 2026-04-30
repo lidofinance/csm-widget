@@ -8,6 +8,7 @@ export class ClaimerPage extends BasePage {
   // Info section
   currentClaimerSection: Locator;
   currentClaimerTitle: Locator;
+  currentClaimerTooltipIcon: Locator;
   unsetButton: Locator;
 
   // Address input section
@@ -29,6 +30,8 @@ export class ClaimerPage extends BasePage {
 
     this.currentClaimerSection = this.form.getByTestId('claimerSectionTitle');
     this.currentClaimerTitle = this.form.getByTestId('currentClaimerInfo');
+    this.currentClaimerTooltipIcon =
+      this.currentClaimerTitle.getByTestId('iconTooltip');
     this.unsetButton = this.form.getByTestId('unsetClaimerButton');
 
     this.addressInputTitle = this.form.getByText(
