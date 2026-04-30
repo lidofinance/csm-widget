@@ -8,7 +8,7 @@ export const BondRow: FC = () => {
   return (
     <BondRowView
       title="Operator bond"
-      description="The amount is added to the bond and claimable to the Rewards Address"
+      description="This share of the rewards will be sent to the Node Operator’s bond"
       share={share}
     />
   );

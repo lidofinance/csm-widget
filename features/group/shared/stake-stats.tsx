@@ -35,7 +35,7 @@ export const StakeStats: FC<Props> = ({ data }) => {
           <Stack center gap="xs">
             <ColorDot $color={STAKE_COLORS.active} />
             <Text size="xs">Active</Text>
-            <IconTooltip tooltip="Stake amount that already has ETH deposited by the Lido protocol and are currently active in the validator set" />
+            <IconTooltip tooltip="The amount of ETH currently staked by the Lido protocol with this Node Operator" />
           </Stack>
           <Stack direction="column" gap="none">
             <Text as="b" weight={700} size="sm">
@@ -77,7 +77,7 @@ export const StakeStats: FC<Props> = ({ data }) => {
           <Stack center gap="xs">
             <ColorDot $color={STAKE_COLORS.potential} />
             <Text size="xs">Potential additional capacity</Text>
-            <IconTooltip tooltip="The additional stake the Lido protocol could allocate based on current weight, assuming enough validator keys are available" />
+            <IconTooltip tooltip="The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available." />
           </Stack>
           <Stack direction="column" gap="none">
             <Text as="b" weight={700} size="sm">
