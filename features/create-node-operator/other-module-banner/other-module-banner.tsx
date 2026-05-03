@@ -5,12 +5,13 @@ import { useOtherModule } from 'modules/web3';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 import { StyledAccordion } from './styles';
+import { MODULE_METADATA } from 'consts';
+import { config } from 'config';
 
 const REPLACEMENTS: Record<string, string> = {
-  'curated-onchain-v1': 'Lido Curated',
+  'curated-onchain-v1': 'Lido Curated v1',
 };
 
-// FIXME: add support CSM and CM for each other
 export const OtherModuleBanner: FC = () => {
   const { operatorsWidget } = getExternalLinks();
   const { data } = useOtherModule();
@@ -28,10 +29,10 @@ export const OtherModuleBanner: FC = () => {
       }
     >
       <Text size="xxs">
-        To become a Node Operator in CSM, start by uploading your first key
-        here.
+        To become a Node Operator in {MODULE_METADATA[config.module].shortTitle}
+        , start by uploading your first key here.
         <br />
-        If you want to upload keys to another module (Curated or Simple DVT),
+        If you want to upload keys to another module (Curated v1 or Simple DVT),
         navigate to{' '}
         <MatomoLink
           $inline

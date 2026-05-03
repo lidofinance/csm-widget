@@ -1,4 +1,5 @@
 import { FeeSplit } from '@lidofinance/lido-csm-sdk';
+import { BASIS_POINTS_DENOMINATOR } from '@lidofinance/lido-ethereum-sdk';
 import { Button, Modal, Text } from '@lidofinance/lido-ui';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { Address as AddressComponent, Stack } from 'shared/components';
@@ -93,7 +94,9 @@ export const ConfirmSplitsModal: ModalComponentType<
               <AddressCell>
                 <Text size="xxs">Operator bond</Text>
               </AddressCell>
-              <ShareCell>{formatPercent(10_000, false, 2)} %</ShareCell>
+              <ShareCell>
+                {formatPercent(BASIS_POINTS_DENOMINATOR, false, 2)} %
+              </ShareCell>
             </TableRow>
           ) : (
             feeSplits.map((row) => (
