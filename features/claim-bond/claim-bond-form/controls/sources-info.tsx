@@ -12,7 +12,7 @@ import { useClaimBondFormData } from '../context';
 
 import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
 import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
-import { moduleMetadata } from 'consts';
+import { moduleMeta } from 'consts';
 import { Balance } from 'features/dashboard/bond/balance';
 
 const LOCKED_TOOLTIP_CSM =
@@ -41,7 +41,7 @@ const useBondNegativeMetadata = () => {
     },
     pendingToSplit: {
       title: 'Splitter debt:',
-      tooltip: `Is the amount that has not been split due to insufficient bond or locked bond that occurred earlier. When claiming rewards ${moduleMetadata.shortName} will try to split this amount from excess bond.`,
+      tooltip: `Is the amount that has not been split due to insufficient bond or locked bond that occurred earlier. When claiming rewards ${moduleMeta.shortName} will try to split this amount from excess bond.`,
       token: TOKENS.steth,
     },
     debt: {

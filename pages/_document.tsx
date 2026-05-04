@@ -12,10 +12,9 @@ import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 
 import { config } from 'config';
 import { contentSecurityPolicy } from 'config/csp';
-import { MODULE_METADATA } from 'consts/module';
+import { moduleMeta } from 'consts/module';
 import { FiraCodeFont } from 'styles';
 
-const moduleMeta = MODULE_METADATA[config.module];
 let host: string = moduleMeta.host;
 
 const secureHeaders = createHeadersObject({ contentSecurityPolicy });
@@ -66,7 +65,7 @@ export default class MyDocument extends Document {
   }
 
   get metaPreviewImgUrl(): string {
-    return `${host}/preview.png`;
+    return `${host}/${moduleMeta.previewFile}`;
   }
 
   render(): JSX.Element {
