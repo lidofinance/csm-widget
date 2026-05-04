@@ -5,23 +5,18 @@ import {
   useContext,
   useMemo,
 } from 'react';
-import type { FieldValues } from 'react-hook-form';
+import { type FieldValues } from 'react-hook-form';
 import invariant from 'tiny-invariant';
-import type { EventSubsciption } from 'utils';
-import { useFormDataContext } from './form-data-context';
-import { useFormControllerRetry } from './use-form-controller-retry-delegate';
-import { FormSubmitOptions, FormSubmitter } from './types';
+import { FormSubmitter } from './types';
 
 export type FormControllerContextValueType<
   F extends FieldValues = any,
   C extends object = any,
 > = {
-  isLocked?: boolean;
   formName?: string;
   onSubmit: FormSubmitter<F, C>;
   onReset?: (args: F) => void;
-  retryEvent: EventSubsciption;
-} & FormSubmitOptions;
+};
 
 export const FormControllerContext =
   createContext<FormControllerContextValueType | null>(null);
@@ -34,20 +29,19 @@ export const useFormControllerContext = () => {
 };
 
 export const FormControllerProvider: FC<
-  PropsWithChildren<{ submitter: FormSubmitter<any, any>; formName?: string }>
-> = ({ children, submitter, formName }) => {
-  const { revalidate } = useFormDataContext();
-
-  const { retryEvent, retryFire } = useFormControllerRetry();
+  PropsWithChildren<{
+    submitter: FormSubmitter<any, any>;
+    formName?: string;
+    onReset?: (args: any) => any;
+  }>
+> = ({ children, submitter, formName, onReset }) => {
   const formController: FormControllerContextValueType = useMemo(
     () => ({
       formName,
       onSubmit: submitter,
-      onConfirm: revalidate,
-      onRetry: retryFire,
-      retryEvent,
+      onReset,
     }),
-    [formName, retryEvent, retryFire, revalidate, submitter],
+    [formName, onReset, submitter],
   );
 
   return (

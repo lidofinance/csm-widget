@@ -59,16 +59,18 @@ export const TokenSelect: React.FC = () => {
           ),
         }}
       />
-      <TitledAmount
-        title={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
-        description={
-          bond?.isInsufficient
-            ? 'Will be added to the transaction amount'
-            : 'Will be subtracted from the transaction amount'
-        }
-        amount={bond?.delta}
-        token={TOKENS.steth}
-      />
+      {bond.delta && (
+        <TitledAmount
+          title={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
+          description={
+            bond?.isInsufficient
+              ? 'Will be added to the transaction amount'
+              : 'Will be subtracted from the transaction amount'
+          }
+          amount={bond?.delta}
+          token={TOKENS.steth}
+        />
+      )}
     </>
   );
 };

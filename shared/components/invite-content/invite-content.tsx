@@ -1,46 +1,30 @@
-import { FC } from 'react';
-import { DescriptorId, getRoleTitle } from 'shared/node-operator';
-import { Badge, InviteContentStyle } from './style';
+import { NodeOperatorInviteInfo } from '@lidofinance/lido-csm-sdk';
 import { Tooltip } from '@lidofinance/lido-ui';
-import { NodeOperatorInvite, ROLES } from '@lidofinance/lido-csm-sdk';
+import { FC } from 'react';
+import { RoleActionsList } from 'shared/components/role-actions';
+import { ROLES_METADATA } from 'consts';
+import { DescriptorId } from 'shared/node-operator';
+import { Badge, InviteContentStyle } from './style';
 
-export const InviteContent: FC<{ invite: NodeOperatorInvite }> = ({
+export const InviteContent: FC<{ invite: NodeOperatorInviteInfo }> = ({
   invite,
-}) => (
-  <InviteContentStyle>
-    <DescriptorId id={invite.id} />
-    <Tooltip
-      placement="bottomLeft"
-      title={
-        invite.role === ROLES.MANAGER ? (
-          <>
-            The Manager address is used for:
-            <ul>
-              <li>Adding new keys</li>
-              <li>Removing existing keys</li>
-              <li>Adding extra bond amount</li>
-              <li>Claiming bond and rewards to the Rewards address</li>
-              <li>Covering locked bond</li>
-              <li>Proposing a new Manager address</li>
-            </ul>
-          </>
-        ) : (
-          <>
-            The Rewards address is used for:
-            <ul>
-              <li>Claiming bond and rewards</li>
-              <li>Adding extra bond amount</li>
-              <li>Covering locked bond</li>
-              <li>Proposing a new Rewards address</li>
-              <li>
-                Resetting the Manager address to the current Rewards address
-              </li>
-            </ul>
-          </>
-        )
-      }
-    >
-      <Badge>{getRoleTitle(invite.role, true)} address role</Badge>
-    </Tooltip>
-  </InviteContentStyle>
-);
+}) => {
+  return (
+    <InviteContentStyle>
+      <DescriptorId id={invite.nodeOperatorId} />
+      <Tooltip
+        placement="bottomLeft"
+        title={
+          <RoleActionsList
+            role={invite.role}
+            extendedManagerPermissions={invite.extendedManagerPermissions}
+          />
+        }
+      >
+        <Badge>
+          {ROLES_METADATA[invite.role].capitalizedTitle} Address role
+        </Badge>
+      </Tooltip>
+    </InviteContentStyle>
+  );
+};

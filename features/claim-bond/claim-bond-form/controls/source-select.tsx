@@ -1,97 +1,107 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { Checkbox } from '@lidofinance/lido-ui';
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
-import { useFrameInfo } from 'modules/web3';
-import { FC, useEffect } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
 import {
-  AmountWithPrice,
+  Address,
   FormTitle,
-  Latice,
+  IconTooltip,
+  RadioButton,
+  RadioIcon,
+  SquaredChip,
   Stack,
-  TitledSelectableAmount,
 } from 'shared/components';
-import { formatDate } from 'utils';
-import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import { Text } from '@lidofinance/lido-ui';
+import {
+  CLAIM_OPTION,
+  ClaimBondFormInputType,
+  useClaimBondFormData,
+} from '../context';
+import { getClaimOption } from './get-claim-option';
+import { FeeSplit } from '@lidofinance/lido-csm-sdk';
+
+const OPTIONS: readonly CLAIM_OPTION[] = [
+  CLAIM_OPTION.ALL_TO_RA,
+  CLAIM_OPTION.BOND_TO_RA,
+  CLAIM_OPTION.REWARDS_TO_BOND,
+];
 
 export const SourceSelect: FC = () => {
-  const { bond, rewards, maxValues } = useClaimBondFormData(true);
-  const { data: nextDistribution } = useFrameInfo(
-    (data) => data.lastReport + data.frameDuration,
-  );
+  const { bond, rewards, availableOptions, feeSplits } =
+    useClaimBondFormData(true);
 
-  const { field } = useController<ClaimBondFormInputType, 'claimRewards'>({
-    name: 'claimRewards',
-    disabled: bond?.isInsufficient,
+  const { field } = useController<ClaimBondFormInputType, 'claimOption'>({
+    name: 'claimOption',
   });
-
-  const { setValue } = useFormContext<ClaimBondFormInputType>();
-
-  const availableToClaim = maxValues[TOKENS.steth][Number(field.value)];
-  const nextRewardsDate = formatDate(nextDistribution);
-
-  useEffect(() => {
-    if (bond?.isInsufficient) {
-      setValue('claimRewards', true);
-    }
-  }, [bond?.isInsufficient, setValue]);
-
-  const showLockedBond = !!bond?.locked;
 
   return (
     <>
-      <Stack spaceBetween data-testid="availableToClaimBalance">
-        <FormTitle>Available to claim</FormTitle>
-        <AmountWithPrice big amount={availableToClaim} token={TOKENS.steth} />
+      <FormTitle extra={<SplittersChip />}>Select claiming option</FormTitle>
+      <Stack direction="column" gap="ms">
+        {OPTIONS.map((option) => ({
+          option,
+          disabled: availableOptions.indexOf(option) < 0,
+          ...getClaimOption(option, { bond, rewards, feeSplits }),
+        }))
+          .sort((a, b) => Number(a.disabled) - Number(b.disabled))
+          .map(({ option, label, description, disabled }) => (
+            <RadioButton
+              key={option}
+              name="claimOption"
+              value={option}
+              checked={option === field.value}
+              disabled={disabled}
+              onChange={() => field.onChange(option)}
+            >
+              <Stack gap="sm" center>
+                <RadioIcon />
+                <Stack direction="column" gap="xxs">
+                  <Stack gap="xs" center>
+                    <Text size="xs" weight={700}>
+                      {label}
+                    </Text>
+                  </Stack>
+                  <Text size="xxs" color="secondary">
+                    {description}
+                  </Text>
+                </Stack>
+              </Stack>
+            </RadioButton>
+          ))}
       </Stack>
-      <Latice data-testid="sourceSelect">
-        <TitledSelectableAmount
-          title={
-            <Checkbox
-              label="Rewards"
-              {...field}
-              value=""
-              checked={!!field.value}
-              disabled={!rewards?.available}
-            />
-          }
-          help={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected on ${nextRewardsDate}`}
-          helpIcon="calendar"
-          amount={rewards?.available}
-          token={TOKENS.steth}
-          data-testid="rewardsSource"
-        />
-        <TitledSelectableAmount
-          warning={bond?.isInsufficient}
-          title={
-            <Checkbox
-              checked
-              disabled
-              label={bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
-            />
-          }
-          help={
-            bond?.isInsufficient
-              ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys'
-              : 'The bond amount available to claim without having to exit validators. Increases daily'
-          }
-          helpIcon={bond?.isInsufficient ? undefined : 'calendar'}
-          sign={bond?.isInsufficient ? 'minus' : 'plus'}
-          amount={bond?.delta}
-          token={TOKENS.steth}
-          data-testid="excessBondSource"
-        />
-        {showLockedBond && (
-          <TitledSelectableAmount
-            warning
-            title={<Checkbox checked disabled label="Locked bond" />}
-            help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
-            amount={bond?.locked}
-            token={TOKENS.eth}
-            sign="minus"
-          />
-        )}
-      </Latice>
     </>
   );
 };
+
+const formatShare = (share: bigint) => `${Number(share) / 100}%`;
+
+const SplittersChip: FC = () => {
+  const { feeSplits } = useClaimBondFormData(true);
+
+  if (feeSplits.length === 0) return null;
+
+  return (
+    <SquaredChip variant="primary">
+      SPLITTERS ON{' '}
+      <IconTooltip
+        placement="bottomRight"
+        tooltip={<SplittersTooltip feeSplits={feeSplits} />}
+      />
+    </SquaredChip>
+  );
+};
+
+const SplittersTooltip: FC<{ feeSplits: FeeSplit[] }> = ({ feeSplits }) => (
+  <Stack direction="column" gap="ms">
+    <span>
+      When you claim rewards, they will be distributed according to the
+      proportions below.
+    </span>
+    <Stack direction="column" gap="xxs">
+      {feeSplits.map((split) => (
+        <Stack key={split.recipient} gap="xs" justify="space-between">
+          <Address address={split.recipient} link="" symbols={8} noStyle />
+          <span>{formatShare(split.share)}</span>
+        </Stack>
+      ))}
+    </Stack>
+  </Stack>
+);

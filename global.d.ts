@@ -30,11 +30,9 @@ declare module 'next/config' {
       defaultChain: string;
 
       rpcUrls_1: string | undefined;
-      rpcUrls_17000: string | undefined;
       rpcUrls_560048: string | undefined;
 
       clApiUrls_1: string | undefined;
-      clApiUrls_17000: string | undefined;
       clApiUrls_560048: string | undefined;
 
       migalabsApiUrl: string | undefined;
@@ -53,6 +51,8 @@ declare module 'next/config' {
     publicRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
+      module: 'CSM' | 'CM';
+      devnetAddresses: Record<string, unknown> | null;
     };
   };
 

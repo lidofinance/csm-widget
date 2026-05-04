@@ -6,6 +6,7 @@ import {
   CommentExitRequested,
   CommentInvalid,
   CommentNonQueued,
+  CommentTriggeredEjection,
   CommentUnbonded,
   CommentUnbondedNonQueued,
   CommentUnchecked,
@@ -35,6 +36,9 @@ const Comment: FC<Props> = ({ statuses }) => {
 
   if (statuses.includes(KEY_STATUS.EXIT_REQUESTED))
     return <CommentExitRequested />;
+
+  if (statuses.includes(KEY_STATUS.TRIGGERED_EJECTION))
+    return <CommentTriggeredEjection />;
 
   if (
     statuses.includes(KEY_STATUS.UNBONDED) &&

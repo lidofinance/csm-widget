@@ -1,12 +1,14 @@
 import getConfigNext from 'next/config';
 import { default as dynamics } from './dynamics';
+import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfigNext();
 
-export type PreConfigType = {
-  BASE_PATH_ASSET: string;
-} & typeof publicRuntimeConfig &
-  typeof dynamics;
+export type PreConfigType = typeof publicRuntimeConfig &
+  typeof dynamics & {
+    defaultChain: SUPPORTED_CHAINS;
+    BASE_PATH_ASSET: string;
+  };
 
 // `getPreConfig()` needs for internal using in 'config/groups/*'
 // Do not use `getPreConfig()` outside of 'config/groups/*'

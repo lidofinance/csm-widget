@@ -21,6 +21,7 @@ export const CustomAddressesSection: FC = () => {
         access to your Node Operator, bond, and potential rewards. Please check
         the{' '}
         <MatomoLink
+          $inline
           href={EXTENDED_MODE_LINK}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.customAddressDescription}
         >
@@ -37,6 +38,7 @@ export const CustomAddressesSection: FC = () => {
         <br />
         It can not be changed later on. Please check the{' '}
         <MatomoLink
+          $inline
           href={EXTENDED_MODE_LINK}
           matomoEvent={
             MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription

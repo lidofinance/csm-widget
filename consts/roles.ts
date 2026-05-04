@@ -1,9 +1,20 @@
-// TODO: spectacular
-export const ROLE_CODE = {
-  NONE: 0,
-  REWARDS: 1,
-  MANAGER: 2,
-  REWARDS_AND_MANAGER: 3,
-} as const;
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 
-export type ROLE_CODE = (typeof ROLE_CODE)[keyof typeof ROLE_CODE];
+export const ROLES_METADATA = {
+  [ROLES.REWARDS]: {
+    short: 'R',
+    title: 'rewards',
+    capitalizedTitle: 'Rewards',
+  },
+  [ROLES.MANAGER]: {
+    short: 'M',
+    title: 'manager',
+    capitalizedTitle: 'Manager',
+  },
+};
+
+export const getRoleTitle = (role: ROLES, capitalized = false) => {
+  return capitalized
+    ? ROLES_METADATA[role].capitalizedTitle
+    : ROLES_METADATA[role].title;
+};

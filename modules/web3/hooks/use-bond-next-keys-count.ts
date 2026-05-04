@@ -1,8 +1,8 @@
+import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_IMMUTABLE } from 'consts';
-import { useLidoSDK } from '../web3-provider';
-import { NodeOperatorId, TOKENS } from '@lidofinance/lido-csm-sdk';
 import invariant from 'tiny-invariant';
+import { useSmSDK } from '../web3-provider';
 
 type Props = {
   nodeOperatorId: NodeOperatorId | undefined;
@@ -15,14 +15,14 @@ export const useBondNextKeysCount = ({
   token,
   keysCount = 0,
 }: Props) => {
-  const { csm } = useLidoSDK();
+  const { accounting } = useSmSDK();
 
   return useQuery({
     queryKey: ['getBondForNextKeysPerToken', { keysCount, nodeOperatorId }],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(nodeOperatorId !== undefined);
-      return csm.accounting.getBondForNextKeysPerToken({
+      return accounting.getBondForNextKeysPerToken({
         keysCount: BigInt(keysCount),
         nodeOperatorId,
       });

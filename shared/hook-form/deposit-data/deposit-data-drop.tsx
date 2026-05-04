@@ -1,7 +1,10 @@
-import { FC, PropsWithChildren, useCallback } from 'react';
+import { createContext, FC, PropsWithChildren, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
 import { DropzoneStyle } from './styles';
+import { NOOP } from '@lidofinance/lido-ethereum-sdk';
+
+export const DepositDataDropContext = createContext<() => void>(NOOP);
 
 type DepositKeysInputHookFormProps = {
   fieldName?: string;
@@ -39,19 +42,22 @@ export const DepositDataDrop: FC<
     [fieldName, setValue],
   );
 
-  const { getRootProps } = useDropzone({
+  const { getRootProps, open, isDragAccept } = useDropzone({
     onDrop,
     noKeyboard: true,
     noClick: true,
     multiple: false,
     accept: {
+      'application/json': ['.json'],
       'text/json': ['.json'],
     },
   });
 
   return (
-    <DropzoneStyle {...getRootProps()} aria-invalid={error}>
-      {children}
-    </DropzoneStyle>
+    <DepositDataDropContext.Provider value={open}>
+      <DropzoneStyle {...getRootProps({ isDragAccept })} aria-invalid={error}>
+        {children}
+      </DropzoneStyle>
+    </DepositDataDropContext.Provider>
   );
 };

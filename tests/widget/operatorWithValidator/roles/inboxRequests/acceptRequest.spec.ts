@@ -24,11 +24,11 @@ test.describe(
       const operators = await csmSDK.getNodeOperatorsByAddress(
         mnemonicToAccount(secretPhrase).address,
       );
-      const forbiddenIds = operators.map((x) => Number(x.id));
+      const forbiddenIds = operators.map((x) => Number(x.nodeOperatorId));
       randomId = Array.from({ length: 200 }, (_, i) => i + 1)
         .filter((id) => !forbiddenIds.includes(id))
         .at(Math.floor(Math.random() * (200 - forbiddenIds.length))) as number;
-      inboxRequestsPage = widgetService.rolesPage.inboxRequestsPage;
+      inboxRequestsPage = widgetService.settingsPage.inboxRequestsPage;
     });
 
     test(

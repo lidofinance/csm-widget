@@ -1,20 +1,12 @@
 import { InlineLoader, Tooltip } from '@lidofinance/lido-ui';
 import { FC, ReactNode } from 'react';
-import { Counter, Stack } from 'shared/components';
-import {
-  ActionStyled,
-  BoxStyled,
-  CountStyled,
-  ItemStyled,
-  TitleStyled,
-} from './styles';
+import { CountStyled, ItemStyled } from './styles';
 
 type ItemProps = {
   title: string;
-  count?: number | string;
+  count?: number | string | ReactNode;
   tooltip?: string;
-  variant?: 'warning' | 'secondary';
-  reverse?: boolean;
+  variant?: 'secondary';
 };
 
 export const Item: FC<ItemProps> = ({
@@ -22,20 +14,13 @@ export const Item: FC<ItemProps> = ({
   tooltip,
   count,
   variant,
-  reverse,
   ...params
 }) => {
   const isEmptyCount = !count || typeof count === 'string';
   const secondary = variant === 'secondary' || isEmptyCount;
-  const warning = variant === 'warning' && !isEmptyCount;
 
   const body = (
-    <ItemStyled
-      $secondary={secondary}
-      $warning={warning}
-      $reverse={reverse}
-      {...params}
-    >
+    <ItemStyled $secondary={secondary} {...params}>
       <CountStyled>
         {count === undefined ? <InlineLoader /> : count}
       </CountStyled>
@@ -52,20 +37,3 @@ export const Item: FC<ItemProps> = ({
   }
   return body;
 };
-
-type ItemActionProps = {
-  action: ReactNode;
-  title?: string;
-  count: number;
-};
-
-export const ItemAction: FC<ItemActionProps> = ({ count, title, action }) =>
-  title ? (
-    <ActionStyled>
-      <Stack>
-        <Counter warning count={count} />
-        <TitleStyled>{title}</TitleStyled>
-      </Stack>
-      <BoxStyled>{action}</BoxStyled>
-    </ActionStyled>
-  ) : null;

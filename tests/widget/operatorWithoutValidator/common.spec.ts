@@ -27,11 +27,11 @@ test.describe('Operator without keys. Common suite.', async () => {
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
       });
-      const txPage = await createKeysPage.createNodeOperatorForm.addNewKeys(
+      await createKeysPage.createNodeOperatorForm.addNewKeys(
         keysGeneratorService.generateKeys(),
         TokenSymbol.ETH,
       );
-      await widgetService.walletPage.cancelTx(txPage);
+      await widgetService.walletPage.cancelTx();
     },
   );
 
@@ -66,11 +66,11 @@ test.describe('Operator without keys. Common suite.', async () => {
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
       });
-      const txPage = await createKeysPage.createNodeOperatorForm.addNewKeys(
+      await createKeysPage.createNodeOperatorForm.addNewKeys(
         keysGeneratorService.generateKeys(25),
         TokenSymbol.ETH,
       );
-      await widgetService.walletPage.cancelTx(txPage);
+      await widgetService.walletPage.cancelTx();
     },
   );
 

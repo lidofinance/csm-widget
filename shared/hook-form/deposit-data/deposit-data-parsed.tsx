@@ -1,5 +1,5 @@
 import { Text } from '@lidofinance/lido-ui';
-import { useLidoSDK } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { Pubkey } from 'shared/components';
@@ -14,8 +14,10 @@ import {
 } from './styles';
 import { DepositDataInputType } from './use-parse-deposit-data';
 
+// TODO: refactor to separate component and hook
 export const DepositDataParsed: FC = () => {
-  const { csm } = useLidoSDK();
+  const { depositData: sdk } = useSmSDK();
+
   const {
     setValue,
     setError,
@@ -36,7 +38,7 @@ export const DepositDataParsed: FC = () => {
 
   const remove = useCallback(
     (index: number) => {
-      const result = csm.depositData.removeKey(rawDepositData ?? '', index);
+      const result = sdk.removeKey(rawDepositData ?? '', index);
 
       if (result.success && result.json !== undefined) {
         clearErrors('rawDepositData');
@@ -51,7 +53,7 @@ export const DepositDataParsed: FC = () => {
         });
       }
     },
-    [csm.depositData, rawDepositData, setValue, setError, clearErrors],
+    [sdk, rawDepositData, setValue, setError, clearErrors],
   );
 
   return (

@@ -4,4 +4,4 @@ export * from './main.page';
 export * from './monitoring.page';
 export * from './welcome.page';
 export * from './base.page';
-export * from './roles.page';
+export * from './settings.page';

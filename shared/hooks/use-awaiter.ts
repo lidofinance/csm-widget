@@ -1,60 +1,48 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { useEffect, useMemo, useRef } from 'react';
 
-type Resolver<T> = {
+type Deferred<T> = {
+  promise: Promise<T>;
   resolve: (value: T) => void;
   reject: (reason: unknown) => void;
-  isResolved: boolean;
-  isRejected: boolean;
+  settled: boolean;
 };
 
-const createAwaiter = <T>() => {
-  const resolver: Resolver<T> = {
-    isResolved: false,
-    isRejected: false,
-    resolve: () => {},
-    reject: () => {},
-  };
-  const awaiter = new Promise<T>((resolve, reject) => {
-    resolver.resolve = (value) => {
-      resolver.isResolved = true;
+const createDeferred = <T>(): Deferred<T> => {
+  const deferred = { settled: false } as Deferred<T>;
+  deferred.promise = new Promise<T>((resolve, reject) => {
+    deferred.resolve = (value) => {
+      deferred.settled = true;
       resolve(value);
     };
-    resolver.reject = (reason) => {
-      resolver.isResolved = true;
-      resolver.isRejected = true;
+    deferred.reject = (reason) => {
+      deferred.settled = true;
       reject(reason);
     };
   });
-  return { awaiter, resolver };
+  return deferred;
 };
 
-// this return up-to-date promise that resolves if value is trueish
-// helps async functions to wait for stalled data
+// Returns a promise that resolves when value becomes defined.
+// Resets on each render after resolution, providing a fresh promise.
+// NOTE: resolve/reset runs during render (not in useEffect) for faster resolution.
 export const useAwaiter = <T>(value: T | undefined, timeout = 0) => {
-  const awaiterState = useRef(useMemo(() => createAwaiter<T>(), []));
+  const ref = useRef(useMemo(() => createDeferred<T>(), []));
+
+  if (ref.current.settled) {
+    ref.current = createDeferred<T>();
+  }
+  if (value !== undefined && !ref.current.settled) {
+    ref.current.resolve(value);
+  }
 
   useEffect(() => {
-    let awaiter = awaiterState.current;
-    if (awaiter.resolver.isResolved) {
-      awaiter = createAwaiter();
-      awaiterState.current = awaiter;
-    }
-    if (value !== undefined) {
-      awaiterState.current.resolver.resolve(value);
-    }
-  }, [timeout, value]);
-
-  useEffect(() => {
-    if (timeout) {
-      const timer = setTimeout(
-        () =>
-          awaiterState.current.resolver.reject(new Error('promise timeout')),
-        timeout,
-      );
-      return () => clearTimeout(timer);
-    }
+    if (!timeout) return;
+    const timer = setTimeout(
+      () => ref.current.reject(new Error('promise timeout')),
+      timeout,
+    );
+    return () => clearTimeout(timer);
   }, [timeout]);
 
-  return awaiterState.current;
+  return ref.current.promise;
 };

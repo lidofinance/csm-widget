@@ -11,6 +11,7 @@ export const useFormDataContext = <T extends object>(): FormData<T> => {
   return value;
 };
 
+// TODO: refactor to async ??
 export function useFormData<T extends object>(onlyLoaded: true): T;
 export function useFormData<T extends object>(onlyLoaded?: false): Partial<T>;
 // eslint-disable-next-line func-style

@@ -8,8 +8,8 @@ import {
 export const useCanClaimICS = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { address } = useDappStatus();
-  const { data: proof } = useIcsProof(address);
-  const { data: isOwner } = useOperatorIsOwner({ address, nodeOperatorId });
+  const { data: proof } = useIcsProof();
+  const { data: isOwner } = useOperatorIsOwner(nodeOperatorId);
 
   return Boolean(
     nodeOperatorId !== undefined &&

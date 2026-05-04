@@ -38,8 +38,14 @@ const sortByStrikes: SortCriteria<KeyWithStatus> = (item) => [
   item.index,
 ];
 
+const sortByBalance: SortCriteria<KeyWithStatus> = (item) => [
+  Number(item.effectiveBalance ?? 0n),
+  item.index,
+];
+
 export const sortFunctions: SortFunctions<KeyWithStatus> = {
   pubkey: sortByPubkey,
   statuses: sortByStatus,
   strikes: sortByStrikes,
+  effectiveBalance: sortByBalance,
 };

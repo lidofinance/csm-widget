@@ -20,13 +20,13 @@ test.describe('Roles. Manager Address. Address blacklist validation', async () =
     await widgetService.page.unrouteAll();
     await widgetService.page.reload();
     await widgetService.page.waitForTimeout(1000);
-    await widgetService.rolesPage.managerAddressPage.revokePendingRole();
+    await widgetService.settingsPage.managerAddressPage.revokePendingRole();
   });
 
   test(
     qase(291, 'Should open access denied modal after propose manager role'),
     async ({ widgetService }) => {
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       await managerAddressPage.open();
 
       const accountForRolesChanged = generateAddress();
@@ -53,7 +53,7 @@ test.describe('Roles. Manager Address. Address blacklist validation', async () =
       await test.step('Mock route for Blacklisted wallet address', async () => {
         await widgetService.page.unrouteAll();
       });
-      const managerAddressPage = widgetService.rolesPage.managerAddressPage;
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       await managerAddressPage.open();
 
       const proposedAddress = generateAddress();

@@ -1,7 +1,6 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { FieldValues } from 'react-hook-form';
-import { useAwaiter } from 'shared/hooks';
-import { useFormDataContext } from './';
+import { useAwaitFormData } from './use-await-form-data';
 
 export const useFormDefaultValues = <
   F extends FieldValues = any,
@@ -9,14 +8,6 @@ export const useFormDefaultValues = <
 >(
   select: (data: C) => F,
 ) => {
-  const { data, isPending } = useFormDataContext<C>();
-
-  const defaultValue = useMemo(
-    () => (isPending ? undefined : select(data)),
-    [isPending, select, data],
-  );
-
-  const { awaiter } = useAwaiter(defaultValue);
-
+  const awaiter = useAwaitFormData<C, F>({ select, timeout: 0 });
   return useCallback(() => awaiter, [awaiter]);
 };

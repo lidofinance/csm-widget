@@ -5,6 +5,7 @@ export type FormatBalanceArgs = {
   maxDecimalDigits?: number;
   adaptiveDecimals?: boolean;
   maxTotalLength?: number;
+  trimTrailingZeros?: boolean;
 };
 
 export const formatBalance = (
@@ -13,6 +14,7 @@ export const formatBalance = (
     maxDecimalDigits = 4,
     maxTotalLength,
     adaptiveDecimals,
+    trimTrailingZeros,
   }: FormatBalanceArgs = {},
 ) => {
   const actual = formatEther(balance);
@@ -26,6 +28,10 @@ export const formatBalance = (
     const nonZeroIdx = decimal.split('').findIndex((v) => v !== '0');
     const sliceAt = Math.max(maxDecimalDigits, nonZeroIdx + 1);
     trimmedDecimal = decimal.slice(0, sliceAt);
+  }
+
+  if (trimTrailingZeros) {
+    trimmedDecimal = trimmedDecimal.replace(/0+$/, '');
   }
 
   if (maxTotalLength && integer.length >= maxTotalLength - 1) {
@@ -57,7 +63,12 @@ export const formatBalance = (
 
 export const useFormattedBalance: typeof formatBalance = (
   balance = 0n,
-  { maxDecimalDigits = 4, maxTotalLength, adaptiveDecimals } = {},
+  {
+    maxDecimalDigits = 4,
+    maxTotalLength,
+    adaptiveDecimals,
+    trimTrailingZeros,
+  } = {},
 ) => {
   return useMemo(
     () =>
@@ -65,7 +76,14 @@ export const useFormattedBalance: typeof formatBalance = (
         maxDecimalDigits,
         maxTotalLength,
         adaptiveDecimals,
+        trimTrailingZeros,
       }),
-    [adaptiveDecimals, balance, maxDecimalDigits, maxTotalLength],
+    [
+      adaptiveDecimals,
+      balance,
+      maxDecimalDigits,
+      maxTotalLength,
+      trimTrailingZeros,
+    ],
   );
 };

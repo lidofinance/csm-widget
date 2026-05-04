@@ -2,10 +2,11 @@ import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerProvider,
+  useFlowSubmit,
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
 import type { ApplyFormInputType } from './types';
-import { useApplyFormSubmit } from './use-apply-form-submit';
+import { useApplyFlowResolver } from './use-apply-flow';
 import { useApplyFormValidation } from './use-apply-form-validation';
 
 export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -23,7 +24,7 @@ export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useApplyFormSubmit();
+  const submitter = useFlowSubmit(useApplyFlowResolver());
 
   return (
     <FormProvider {...formObject}>

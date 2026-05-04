@@ -19,6 +19,10 @@ export const CommentExitRequested: FC = () => (
   </MatomoLink>
 );
 
+export const CommentTriggeredEjection: FC = () => (
+  <>The key has been triggered to be ejected</>
+);
+
 export const CommentUnbonded: FC = () => (
   <>
     <LocalLink href={PATH.BOND_ADD}>Top up the bond</LocalLink> or{' '}

@@ -30,6 +30,7 @@ tsconfig.tsbuildinfo
 
 # misc
 .DS_Store
+dev-cm
 
 # env
 .env.local

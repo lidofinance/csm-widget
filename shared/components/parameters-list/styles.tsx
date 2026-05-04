@@ -61,13 +61,13 @@ export const ColumnBackground = styled.div`
 `;
 
 export const IcsColumnBackground = styled(ColumnBackground)`
-  ${CURVE_VARIANTS[OPERATOR_TYPE.ICS]}
+  ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_ICS]}
 `;
 
 export const DefColumnBackground = styled(ColumnBackground)`
   right: auto;
   left: calc((100% + 0px) * 4 / 14 + 4px);
-  ${CURVE_VARIANTS[OPERATOR_TYPE.DEF]}
+  ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_DEF]}
 `;
 
 export const FoldableListStyle = styled(ListStyle)<{ $folded?: boolean }>`

@@ -1,10 +1,9 @@
 import {
   getNodeOperatorRoles,
-  NodeOperatorInfo,
+  NodeOperatorShortInfo,
 } from '@lidofinance/lido-csm-sdk';
-import { NodeOperator } from '@lidofinance/lido-csm-sdk';
 import { useCallback } from 'react';
-import { useDappStatus, useOperatorInfo } from '../hooks';
+import { useDappStatus, useOperatorShortInfo } from '../hooks';
 import { useCachedId } from './use-cached-id';
 
 export const useCachedNodeOperator = () => {
@@ -12,7 +11,7 @@ export const useCachedNodeOperator = () => {
   const [cachedId, setCachedId] = useCachedId();
 
   const select = useCallback(
-    (data: NodeOperatorInfo) => {
+    (data: NodeOperatorShortInfo) => {
       if (!cachedId || !address) return undefined;
       const roles = getNodeOperatorRoles(data, address);
 
@@ -21,10 +20,10 @@ export const useCachedNodeOperator = () => {
         return undefined;
       }
 
-      return { id: cachedId, roles } as NodeOperator;
+      return data;
     },
     [address, cachedId, setCachedId],
   );
 
-  return useOperatorInfo(cachedId, select);
+  return useOperatorShortInfo(cachedId, select);
 };

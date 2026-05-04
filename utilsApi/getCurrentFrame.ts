@@ -20,7 +20,7 @@ export const getCurrentFrame = async () => {
 
 export const _getCurentFrame = async (): Promise<CurrentFrame> => {
   const csm = getClient();
-  const frame = await csm.frame.getCurentFrame();
+  const frame = await csm.frame.getCurrentFrame();
 
   return {
     endTimestamp: frame.now,

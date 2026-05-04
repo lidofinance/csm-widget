@@ -1,4 +1,7 @@
-import { NodeOperator, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import {
+  NodeOperatorId,
+  NodeOperatorShortInfo,
+} from '@lidofinance/lido-csm-sdk';
 import {
   createContext,
   FC,
@@ -13,12 +16,12 @@ import { useAvailableOperators } from './use-available-operators';
 
 export type NodeOperatorContextValue = {
   isPending: boolean;
-  nodeOperator: NodeOperator | undefined;
+  nodeOperator: NodeOperatorShortInfo | undefined;
   switchNodeOperator: (id: NodeOperatorId) => void;
 };
 
 export type NodeOperatorDefinedContextValue = NodeOperatorContextValue & {
-  nodeOperator: NodeOperator;
+  nodeOperator: NodeOperatorShortInfo;
 };
 
 export const NodeOperatorContext =
@@ -45,7 +48,7 @@ export const useNodeOperatorId = <
     value,
     'useNodeOperatorId was used outside the NodeOperatorContext provider',
   );
-  return value.nodeOperator?.id as any;
+  return value.nodeOperator?.nodeOperatorId as any;
 };
 
 export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -54,7 +57,7 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const switchNodeOperator = useCallback(
     (id: NodeOperatorId) => {
-      const newActive = list?.find((item) => item.id === id);
+      const newActive = list?.find((item) => item.nodeOperatorId === id);
       if (newActive) {
         setActive(newActive);
       }

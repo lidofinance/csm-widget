@@ -25,6 +25,7 @@ export const AddressContainerStyle = styled(StackStyle).attrs({
       css`
         svg {
           width: 20px;
+          height: 20px;
         }
       `}
   }

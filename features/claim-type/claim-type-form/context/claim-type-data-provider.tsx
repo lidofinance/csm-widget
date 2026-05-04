@@ -4,7 +4,6 @@ import {
   KEY_OPERATOR_CURVE_ID,
   KEY_OPERATOR_INFO,
   KEY_OPERATOR_KEYS,
-  KEY_OPERATOR_KEYS_TO_MIGRATE,
   useCurveParameters,
   useDappStatus,
   useIcsCurveId,
@@ -33,7 +32,7 @@ const useClaimTypeFormNetworkData: NetworkData<
 
   const { data: icsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
   const currentCurveIdQuery = useOperatorCurveId(nodeOperatorId);
-  const proofQuery = useIcsProof(address);
+  const proofQuery = useIcsProof();
 
   const currentCurveId = currentCurveIdQuery.data;
   const proof = proofQuery.data;
@@ -41,10 +40,7 @@ const useClaimTypeFormNetworkData: NetworkData<
   const isCurrentCurveIdLoading = currentCurveIdQuery.isPending;
   const isProofLoading = proofQuery.isPending;
 
-  const { isPending: isIsOwnerLoading } = useOperatorIsOwner({
-    address,
-    nodeOperatorId,
-  });
+  const { isPending: isIsOwnerLoading } = useOperatorIsOwner(nodeOperatorId);
   const canClaimCurve = useCanClaimICS();
 
   const { data: newCurveId, isPending: isNewCurveIdLoading } = useIcsCurveId();
@@ -62,7 +58,6 @@ const useClaimTypeFormNetworkData: NetworkData<
       KEY_OPERATOR_INFO,
       KEY_OPERATOR_BALANCE,
       KEY_OPERATOR_KEYS,
-      KEY_OPERATOR_KEYS_TO_MIGRATE,
     ]);
 
     setJustClaimed(true);

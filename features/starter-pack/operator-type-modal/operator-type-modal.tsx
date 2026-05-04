@@ -9,8 +9,8 @@ import { PATH } from 'consts/urls';
 import { getUseModal, ModalComponentType } from 'providers/modal-provider';
 import { MatomoLink, Stack } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
-import { OptionCard, StackWrap, StyledModal } from './styles';
 import { Parameters } from './parameters';
+import { OptionCard, StackWrap, StyledModal } from './styles';
 
 export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
   return (
@@ -25,6 +25,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
           <Text size="xxs">
             Check out details about{' '}
             <MatomoLink
+              $inline
               href={OPERATOR_TYPES_LINK}
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.operatorTypesDocsLink}
             >
@@ -36,7 +37,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
       }
     >
       <StackWrap>
-        <OptionCard $variant={OPERATOR_TYPE.DEF}>
+        <OptionCard $variant={OPERATOR_TYPE.CSM_DEF}>
           <Stack direction="column">
             <Text size="sm" weight={700}>
               Default
@@ -50,7 +51,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
             <Divider />
           </Stack>
           <Stack direction="column">
-            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.DEF} />
+            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.CSM_DEF} />
             <LocalLink
               href={PATH.CREATE}
               matomoEvent={
@@ -64,7 +65,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
           </Stack>
         </OptionCard>
 
-        <OptionCard $variant={OPERATOR_TYPE.ICS}>
+        <OptionCard $variant={OPERATOR_TYPE.CSM_ICS}>
           <Stack direction="column">
             <Text size="sm" weight={700}>
               Identified Community Staker
@@ -78,7 +79,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
             <Divider />
           </Stack>
           <Stack direction="column">
-            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.ICS} />
+            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.CSM_ICS} />
             <LocalLink
               href={PATH.TYPE_ICS_APPLY}
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIcs}

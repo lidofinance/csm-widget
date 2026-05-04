@@ -1,10 +1,12 @@
 import { PATH } from 'consts/urls';
-import { GateLoaded, Navigate } from 'shared/navigate';
+import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
 const Page = () => (
   <GateLoaded>
-    <Navigate path={PATH.TYPE_ICS_APPLY} />
+    <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
+      <Navigate path={PATH.TYPE_ICS_APPLY} />
+    </Gate>
   </GateLoaded>
 );
 

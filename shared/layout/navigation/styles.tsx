@@ -68,7 +68,7 @@ const menuAppearing = keyframes`
   }
 `;
 
-export const Nav = styled.nav`
+export const Nav = styled.nav<{ $desktopHidden?: boolean }>`
   grid-area: nav;
   position: relative;
 
@@ -77,7 +77,7 @@ export const Nav = styled.nav`
   }
 
   ${NAV_MOBILE_MEDIA} {
-    position: absolute;
+    position: fixed;
     left: 0;
     right: 0;
     top: 0;
@@ -103,6 +103,20 @@ export const Nav = styled.nav`
   }
 
   z-index: 6;
+
+  ${({ $desktopHidden }) =>
+    $desktopHidden &&
+    css`
+      display: none;
+
+      ${NAV_MOBILE_MEDIA} {
+        display: block;
+
+        &[aria-expanded='false'] {
+          display: none;
+        }
+      }
+    `}
 `;
 
 // Not wrapping <a> inside <a> in IPFS mode

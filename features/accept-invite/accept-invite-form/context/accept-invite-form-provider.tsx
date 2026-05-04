@@ -2,13 +2,14 @@ import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerProvider,
+  useFlowSubmit,
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
 import {
   AcceptInviteFormNetworkData,
   type AcceptInviteFormInputType,
 } from './types';
-import { useAcceptInviteSubmit } from './use-accept-invite-submit';
+import { useAcceptInviteFlowResolver } from './use-accept-invite-flow';
 import { useAcceptInviteValidation } from './use-accept-invite-validation';
 
 export const AcceptInviteFormProvider: FC<PropsWithChildren> = ({
@@ -29,7 +30,7 @@ export const AcceptInviteFormProvider: FC<PropsWithChildren> = ({
     resolver,
   });
 
-  const submitter = useAcceptInviteSubmit();
+  const submitter = useFlowSubmit(useAcceptInviteFlowResolver());
 
   return (
     <FormProvider {...formObject}>

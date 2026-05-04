@@ -49,12 +49,11 @@ operator batches total: 25 keys // ❌ Invalid - impossible scenario
 **Realistic Priorities (Production Use):**
 
 - **Priority 0**: "Priority queue" - Highest priority, limited capacity per operator
-- **Priority 4**: "Legacy queue" - For legacy operators
 - **Priority 5**: "General queue" - Default queue for most operators
 
 **Reserved Priorities (Future Use):**
 
-- **Priority 1-3**: Reserved for future features, minimal test coverage
+- **Priority 1-4**: Reserved for future features, minimal test coverage
 
 ### 4. **CSM Capacity Limits**
 

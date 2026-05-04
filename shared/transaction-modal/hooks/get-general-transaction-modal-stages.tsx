@@ -34,16 +34,14 @@ export const getGeneralTransactionModalStages = (
     transitStage(<TxStageSuccessMultisig />, {
       isClosableOnLedger: true,
     }),
-  failed: (error: unknown, onRetry?: () => void) => {
+  failed: (error: unknown) => {
     const code = getErrorCode(error);
-    // Only show raw error message for unknown errors
     const errorMessage =
       code === ErrorCode.SOMETHING_WRONG
         ? extractErrorMessage(error)
         : undefined;
-    return transitStage(
-      <TxStageFail code={code} error={errorMessage} onRetry={onRetry} />,
-      { isClosableOnLedger: true },
-    );
+    return transitStage(<TxStageFail code={code} error={errorMessage} />, {
+      isClosableOnLedger: true,
+    });
   },
 });
