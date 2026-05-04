@@ -5,8 +5,7 @@ import { useOtherModule } from 'modules/web3';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 import { StyledAccordion } from './styles';
-import { MODULE_METADATA } from 'consts';
-import { config } from 'config';
+import { moduleMeta } from 'consts';
 
 const REPLACEMENTS: Record<string, string> = {
   'curated-onchain-v1': 'Lido Curated v1',
@@ -29,7 +28,7 @@ export const OtherModuleBanner: FC = () => {
       }
     >
       <Text size="xxs">
-        To become a Node Operator in {MODULE_METADATA[config.module].shortTitle}
+        To become a Node Operator in {moduleMeta.shortTitle}
         , start by uploading your first key here.
         <br />
         If you want to upload keys to another module (Curated v1 or Simple DVT),

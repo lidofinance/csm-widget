@@ -1,6 +1,5 @@
 import { CurveParameters, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
-import { isModuleCM, MODULE_METADATA } from 'consts';
+import { isModuleCM, moduleMeta } from 'consts';
 import { ReactNode } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { plural } from 'utils';
@@ -28,7 +27,7 @@ const ALL_PARAMETERS: Parameter[] = [
   },
   {
     title: 'Bond',
-    help: `A security collateral that Node Operators must submit before uploading validator keys into ${MODULE_METADATA[config.module].shortName}`,
+    help: `A security collateral that Node Operators must submit before uploading validator keys into ${moduleMeta.shortName}`,
     render: (parameters) => formatEthKeyIntervals(parameters?.bondConfig),
   },
   {

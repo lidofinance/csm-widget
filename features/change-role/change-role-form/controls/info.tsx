@@ -19,8 +19,7 @@ import {
   useChangeRoleFormData,
 } from '../context';
 import { useRole } from '../hooks/use-role';
-import { MODULE_METADATA } from 'consts';
-import { config } from 'config';
+import { moduleMeta } from 'consts';
 
 export const Info: FC = () => {
   const roleTitle = useRole();
@@ -112,8 +111,8 @@ export const Info: FC = () => {
             <Text as="div" size="xxs">
               <ol>
                 <li>
-                  Connect to {MODULE_METADATA[config.module].shortTitle} UI with
-                  the proposed address
+                  Connect to {moduleMeta.shortTitle} UI with the proposed
+                  address
                 </li>
                 <li>
                   Go to Settings tab → Inbox requests to confirm the change

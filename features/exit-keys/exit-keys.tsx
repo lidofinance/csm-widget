@@ -1,7 +1,6 @@
 import { Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { MODULE_METADATA } from 'consts/module';
-import { config } from 'config';
+import { moduleMeta } from 'consts/module';
 import {
   FormTitle,
   MatomoLink,
@@ -99,7 +98,7 @@ export const ExitKeys = () => {
       </Gate>
       <WarningBlock type="notice">
         This action should be performed{' '}
-        <b>outside the {MODULE_METADATA[config.module].shortName} UI</b>
+        <b>outside the {moduleMeta.shortName} UI</b>
       </WarningBlock>
     </>
   );

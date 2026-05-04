@@ -5,7 +5,7 @@ import {
   LIDO_OPERATOR_PORTAL_CM,
 } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { MODULE_METADATA } from 'consts/module';
+import { moduleMeta } from 'consts/module';
 import { FC, PropsWithChildren } from 'react';
 import { MatomoLink } from 'shared/components';
 import {
@@ -56,7 +56,7 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
     <BlockStyled data-testid="welcomeSection">
       <Heading>
         <ModuleLogo />
-        <Header>{MODULE_METADATA[config.module].title}</Header>
+        <Header>{moduleMeta.title}</Header>
       </Heading>
       <ContentWrapper>{DESCRIPTIONS[config.module]}</ContentWrapper>
       {children}
