@@ -22,5 +22,7 @@ export const MODULE_METADATA = {
   },
 } as const;
 
+export const moduleMetadata = MODULE_METADATA[config.module];
+
 export const isModuleCSM = config.module === MODULE_NAME.CSM;
 export const isModuleCM = config.module === MODULE_NAME.CM;

@@ -8,11 +8,12 @@ import { bigMax, bigMin } from 'utils';
 import {
   CLAIM_OPTION,
   ClaimBondFormInputType,
+  ClaimBondFormNetworkData,
   useClaimBondFormData,
 } from '../context';
 
 export type ClaimBreakdown = {
-  /** stETH from incoming rewards absorbed by bond top-up (insufficient/locked/debt). */
+  /** stETH from incoming rewards absorbed by bond top-up to cover forKeys + locked deficit (debt cover tracked separately as `debtBurned`). */
   coverAmount: bigint;
   /** Gross stETH flowing into the splitter contract (basis for per-recipient share). */
   splittableGross: bigint;
@@ -34,6 +35,11 @@ export type ClaimBreakdown = {
   isRewardsToBond: boolean;
 };
 
+type BreakdownInput = Pick<
+  ClaimBondFormInputType,
+  'token' | 'amount' | 'claimOption'
+>;
+
 // Mirrors Accounting._pullAndSplitFeeRewards (Accounting.sol:460-502):
 //   1. distribute R into bond, increase pendingToSplit by R
 //   2. _coverBondDebt burns min(debt, current+R) from bond
@@ -43,17 +49,21 @@ export type ClaimBreakdown = {
 //      stays in bond as additional excess
 //   6. toRA = min(userClaim, claimable - splitterCut)
 // SDK note: bond.required equals forKeys only; bond.locked and bond.debt are separate fields.
-export const useClaimBreakdown = (): ClaimBreakdown => {
-  const { bond, rewards, poolData, feeSplits } = useClaimBondFormData(true);
-  const [token, amount, claimOption] = useWatch<
-    ClaimBondFormInputType,
-    ['token', 'amount', 'claimOption']
-  >({ name: ['token', 'amount', 'claimOption'] });
+export const computeClaimBreakdown = (
+  { token, amount, claimOption }: BreakdownInput,
+  data: ClaimBondFormNetworkData,
+): ClaimBreakdown => {
+  const {
+    bond,
+    rewards,
+    poolData,
+    feeSplits,
+    calculation: { totalShare },
+  } = data;
 
   const isRewardsToBond = claimOption === CLAIM_OPTION.REWARDS_TO_BOND;
   const includesRewards = claimOption !== CLAIM_OPTION.BOND_TO_RA;
   const hasSplits = feeSplits.length > 0;
-  const totalShare = feeSplits.reduce((sum, s) => sum + s.share, 0n);
 
   const distributed = includesRewards ? rewards.available : 0n;
 
@@ -63,9 +73,21 @@ export const useClaimBreakdown = (): ClaimBreakdown => {
   );
   const claimable = bigMax(
     0n,
-    bond.current + distributed - bond.required - bond.locked,
+    bond.current + distributed - bond.required - bond.locked - bond.debt,
   );
-  const coverAmount = distributed - (claimable - claimablePre);
+  const totalAbsorbed = distributed - (claimable - claimablePre);
+  // _coverBondDebt only runs inside _creditBondShares, i.e. when a rewards
+  // proof is submitted. BOND_TO_RA passes no proof, so debt is untouched.
+  const debtBurned = includesRewards
+    ? bigMin(bond.debt, bond.current + distributed)
+    : 0n;
+  const debtRemain = bond.debt - debtBurned;
+  // Of `debtBurned`, the portion attributable to fresh rewards is bounded by
+  // `distributed`; the rest came from pre-existing bond. `coverAmount` is what
+  // remains of the absorbed rewards after subtracting that — i.e. the portion
+  // that filled forKeys + locked deficit.
+  const debtCoveredFromRewards = bigMin(distributed, debtBurned);
+  const coverAmount = bigMax(0n, totalAbsorbed - debtCoveredFromRewards);
 
   const splittableGross = hasSplits
     ? bigMin(claimable, bond.pendingToSplit + distributed)
@@ -82,9 +104,6 @@ export const useClaimBreakdown = (): ClaimBreakdown => {
 
   const bondDelta = claimable - claimablePre - splittable - toRA;
 
-  const debtBurned = bigMin(bond.debt, bond.current + distributed);
-  const debtRemain = bond.debt - debtBurned;
-
   return {
     coverAmount,
     splittableGross,
@@ -97,4 +116,14 @@ export const useClaimBreakdown = (): ClaimBreakdown => {
     hasSplits,
     isRewardsToBond,
   };
+};
+
+export const useClaimBreakdown = (): ClaimBreakdown => {
+  const data = useClaimBondFormData(true);
+  const [token, amount, claimOption] = useWatch<
+    ClaimBondFormInputType,
+    ['token', 'amount', 'claimOption']
+  >({ name: ['token', 'amount', 'claimOption'] });
+
+  return computeClaimBreakdown({ token, amount, claimOption }, data);
 };

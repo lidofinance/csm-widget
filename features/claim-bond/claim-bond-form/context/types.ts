@@ -2,10 +2,13 @@ import {
   BondBalance,
   FeeSplit,
   NodeOperatorId,
+  PerToken,
   Rewards,
   StethPoolData,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
+
+export type MaxValues = PerToken<[bigint, bigint]>;
 
 export const CLAIM_OPTION = {
   /** Claim available bond (excess) + rewards → Rewards Address. */
@@ -25,6 +28,16 @@ export type ClaimBondFormInputType = {
   unlockedClaimTokens: boolean;
 };
 
+export type ClaimBondCalculation = {
+  claimableBond: bigint;
+  claimableBondAndRewards: bigint;
+  claimableMaxValues: MaxValues;
+  realInsufficient: bigint;
+  realExcess: bigint;
+  rewardsRemainder: bigint;
+  totalShare: bigint;
+};
+
 export type ClaimBondFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   bond: BondBalance;
@@ -35,4 +48,5 @@ export type ClaimBondFormNetworkData = {
   isPaused: boolean;
   availableOptions: CLAIM_OPTION[];
   feeSplits: FeeSplit[];
+  calculation: ClaimBondCalculation;
 };
