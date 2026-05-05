@@ -51,6 +51,7 @@ yarn-error.log*
 **/.browser_context**
 
 /public/runtime/
+/public/manifest.json
 /keys-generator-bin/
 deposit_data.json
 local_fork_config.json

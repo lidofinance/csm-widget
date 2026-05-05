@@ -80,7 +80,7 @@ export default class MyDocument extends Document {
           )}
           <link
             rel="manifest"
-            href={`${config.BASE_PATH_ASSET}/${moduleMeta.manifestFile}`}
+            href={`${config.BASE_PATH_ASSET}/manifest.json`}
           />
           <link
             rel="icon"
