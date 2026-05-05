@@ -28,8 +28,8 @@ export const OtherModuleBanner: FC = () => {
       }
     >
       <Text size="xxs">
-        To become a Node Operator in {moduleMeta.shortTitle}, start by{' '}
-        {isModuleCSM ? 'uploading your first key' : 'continue'} here.
+        To become a Node Operator in {moduleMeta.shortTitle},{' '}
+        {isModuleCSM ? 'start by uploading your first key' : 'continue'} here.
         <br />
         If you want to upload keys to another module (Curated v1 or Simple DVT),
         navigate to{' '}
