@@ -25,7 +25,7 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
     // Keys
     case PATH.KEYS:
       return hasRole
-        ? flags.HAS_KEYS
+        ? flags.HAS_KEYS || !flags.HAS_MANAGER_ROLE
           ? PATH.KEYS_VIEW
           : PATH.KEYS_SUBMIT
         : PATH.CREATE;
