@@ -5,6 +5,8 @@ import {
   FieldValues,
   MultipleFieldErrors,
   ResolverOptions,
+  get,
+  set,
 } from 'react-hook-form';
 import { ValidateFn } from './types';
 
@@ -69,11 +71,11 @@ export const initValidator = <T extends FieldValues>(
           }
         } else {
           console.warn(`Unhandled validation error in resolver`, error);
-          if (!errors[fallbackErrorField]) {
-            (errors[fallbackErrorField] as any) = {
+          if (!get(errors, fallbackErrorField)) {
+            set(errors, fallbackErrorField, {
               type: DefaultValidationErrorTypes.UNHANDLED,
               message: 'unknown validation error',
-            };
+            });
           }
         }
       }
