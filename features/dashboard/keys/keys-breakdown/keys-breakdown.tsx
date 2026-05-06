@@ -63,25 +63,25 @@ export const KeysBreakdown: FC = () => {
           data-testid="keysPendingActivationCount"
           title="Pending activation"
           count={data?.counts.activationPending}
-          tooltip="Keys have already got deposit from the Lido protocol and waiting to become active"
+          tooltip="Keys that have received deposits from the Lido protocol and are waiting to become active"
         />
         <KeysItem
           data-testid="keysActiveCount"
           title="Active"
           count={data?.counts.active}
-          tooltip="Keys that active"
+          tooltip="Keys that are active on the Beacon Chain"
         />
         <KeysItem
           data-testid="keysExitedCount"
           title="Exited"
           count={data?.counts.exited}
-          tooltip="Keys that have already exited but not withdrawn yet"
+          tooltip="Keys that have exited but have not yet been withdrawn"
         />
         <KeysItem
           data-testid="keysWithdrawnCount"
           title="Withdrawn"
           count={data?.counts.withdrawn}
-          tooltip="Keys that have already exited and withdrawn"
+          tooltip="Keys that have been exited and fully withdrawn"
         />
         {!isModuleCM && (
           <KeysItem
@@ -98,7 +98,7 @@ export const KeysBreakdown: FC = () => {
           type="error"
           title="Unbonded"
           count={data?.counts.unbonded}
-          tooltip="Keys not sufficiently covered by current bond amount"
+          tooltip="Keys that are not sufficiently covered by the current bond amount"
           comment={<StatusComment statuses={[KEY_STATUS.UNBONDED]} />}
         />
         <KeysItem
@@ -106,7 +106,7 @@ export const KeysBreakdown: FC = () => {
           type="error"
           title="Exit requested"
           count={data?.counts.exitRequested}
-          tooltip="Keys requested to exit"
+          tooltip="Keys for which an exit has been requested"
           comment={<StatusComment statuses={[KEY_STATUS.EXIT_REQUESTED]} />}
         />
         {!isModuleCM && (
@@ -124,7 +124,7 @@ export const KeysBreakdown: FC = () => {
           type="error"
           title="Duplicated"
           count={data?.counts.duplicated}
-          tooltip="Keys that uploaded twice"
+          tooltip="Keys that have been uploaded more than once"
           comment={<StatusComment statuses={[KEY_STATUS.DUPLICATED]} />}
         />
         <KeysItem
@@ -132,7 +132,7 @@ export const KeysBreakdown: FC = () => {
           type="error"
           title="Invalid"
           count={data?.counts.invalid}
-          tooltip="Keys with invalid signature"
+          tooltip="Keys with invalid signatures"
           comment={<StatusComment statuses={[KEY_STATUS.INVALID]} />}
         />
         <KeysItem
@@ -140,7 +140,7 @@ export const KeysBreakdown: FC = () => {
           type="error"
           title="Unchecked"
           count={data?.counts.unchecked}
-          tooltip="Keys that not checked yet because invalid or duplicated keys"
+          tooltip="Keys that have not yet been checked due to being invalid or duplicated"
           comment={<StatusComment statuses={[KEY_STATUS.UNCHECKED]} />}
         />
       </Stack>

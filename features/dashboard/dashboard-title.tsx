@@ -1,13 +1,12 @@
 import { Edit } from '@lidofinance/lido-ui';
-import { config } from 'config';
 import { PATH } from 'consts';
-import { isModuleCM, MODULE_METADATA } from 'consts/module';
+import { isModuleCM, moduleMeta } from 'consts/module';
 import { useNodeOperator, useOperatorMetadata } from 'modules/web3';
 import { FC } from 'react';
 import { SecondaryLocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 
-const ModuleTitle: FC = () => <>{MODULE_METADATA[config.module].title}</>;
+const ModuleTitle: FC = () => <>{moduleMeta.title}</>;
 
 export const DashboardTitle: FC = () => {
   if (isModuleCM) return <CmTitle />;
