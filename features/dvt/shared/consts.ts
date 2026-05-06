@@ -1,1 +1,1 @@
-export const DVT_ASSESSED_DATE = 'October\u00A01st';
+export const DVT_ASSESSED_DATE = 'June\u00A024th';
