@@ -14,16 +14,30 @@ jobs:
   # test:
   #   ...
 
-  deploy:
+  deploy-csm:
     runs-on: ubuntu-latest
     # needs: test
-    name: Build and deploy
+    name: Build and deploy CSM testnet
     steps:
-      - name: Testnet deploy
+      - name: Testnet deploy (CSM)
         uses: lidofinance/dispatch-workflow@v1
         env:
           APP_ID: ${{ secrets.APP_ID }}
           APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
           TARGET_REPO: "lidofinance/infra-mainnet"
           TARGET_WORKFLOW: "deploy_hoodi_testnet_csm_widget.yaml"
+          TARGET: "develop"
+
+  deploy-cm:
+    runs-on: ubuntu-latest
+    # needs: test
+    name: Build and deploy CM testnet
+    steps:
+      - name: Testnet deploy (CM)
+        uses: lidofinance/dispatch-workflow@v1
+        env:
+          APP_ID: ${{ secrets.APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
+          TARGET_REPO: "lidofinance/infra-mainnet"
+          TARGET_WORKFLOW: "deploy_hoodi_testnet_cm_widget.yaml"
           TARGET: "develop"

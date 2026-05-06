@@ -14,8 +14,8 @@ on:
 
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    branches:
-      - develop-cm
+    branches-ignore:
+      - main
 
 permissions:
   contents: read
@@ -44,12 +44,13 @@ jobs:
           TARGET_REPO: "lidofinance/infra-mainnet"
           TARGET: ${{ github.head_ref || steps.ref.outputs.short_ref }}
           TARGET_WORKFLOW: "preview_stand_deploy.yaml"
-          INPUTS_REPO_NAME: "lidofinance/cm-widget"
+          INPUTS_REPO_NAME: ${{ github.repository }}
+          INPUTS_APP_NAME: "cm-widget"
           INPUTS_PR_ID: ${{ github.event.pull_request.number || steps.pr.outputs.number }}
           INPUTS_INVENTORY: "${{ inputs.inventory || 'testnet' }}"
 
       - name: Define repo short name (CM)
-        run: echo "short_name=$(echo ${{ github.repository }} | cut -d "/" -f 2)" >> $GITHUB_OUTPUT
+        run: echo "short_name=cm-widget" >> $GITHUB_OUTPUT
         id: repo
 
       - name: Define branch hash
@@ -68,7 +69,7 @@ jobs:
 
   tests:
     needs: deploy
-    if: ${{ github.event.pull_request.draft == false  && inputs.inventory == 'testnet'}}
+    if: ${{ github.event.pull_request.draft == false && (!inputs.inventory || inputs.inventory == 'testnet') }}
     uses: ./.github/workflows/tests.yml
     secrets: inherit
     with:

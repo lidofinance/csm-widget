@@ -5,8 +5,8 @@ on:
   pull_request:
     types:
       [converted_to_draft, closed]
-    branches:
-      - develop-cm
+    branches-ignore:
+      - main
 
 permissions: {}
 
@@ -23,5 +23,6 @@ jobs:
           TARGET_REPO: "lidofinance/infra-mainnet"
           TARGET: ${{ github.head_ref }}
           TARGET_WORKFLOW: "preview_stand_demolish.yaml"
-          INPUTS_REPO_NAME: "lidofinance/cm-widget"
+          INPUTS_REPO_NAME: ${{ github.repository }}
+          INPUTS_APP_NAME: "cm-widget"
           INPUTS_PR_ID: ${{ github.event.pull_request.number }}
