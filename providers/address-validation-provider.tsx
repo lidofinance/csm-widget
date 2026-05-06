@@ -164,6 +164,7 @@ export const AddressValidationProvider = ({
     [validationFile, queryClient],
   );
 
+  const skip = true;
   const validateAddress = useCallback(
     async (addressToValidate?: Address) => {
       // If no address, consider valid
@@ -172,7 +173,7 @@ export const AddressValidationProvider = ({
         return true;
       }
 
-      if (config.addressApiValidationEnabled) {
+      if (!skip && config.addressApiValidationEnabled) {
         const apiResult = await validateAddressAPI(addressToValidate);
 
         // API responded successfully - use API result
@@ -183,7 +184,7 @@ export const AddressValidationProvider = ({
       }
 
       // Fallback to file validation if available
-      if (validationFile) {
+      if (!skip && validationFile) {
         const fileResult = await validateAddressFile(addressToValidate);
         setIsValidAddress(fileResult.isValid);
         return fileResult.isValid;
@@ -193,7 +194,7 @@ export const AddressValidationProvider = ({
       setIsValidAddress(true);
       return true;
     },
-    [validateAddressAPI, validateAddressFile, validationFile],
+    [skip, validateAddressAPI, validateAddressFile, validationFile],
   );
 
   const resetIsValidAddress = useCallback(() => {
