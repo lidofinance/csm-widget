@@ -1,17 +1,26 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../../../shared/pages/base.page';
-import { SourceSelect } from '../../../pages/elements/bondRewards/claim/sourceSelect.element';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export class ClaimPage extends BasePage {
   form: Locator;
 
-  // Source select
-  availableToClaimBalance: Locator;
-  titledAmountPrice: Locator;
-  titledTokenBalance: Locator;
-  titledTokenPrice: Locator;
-  sourceSelect: SourceSelect;
+  // Sources info balance cards (rendered OUTSIDE claimBondForm, scoped to page)
+  rewardsBalanceCard: Locator;
+  bondBalanceCard: Locator;
+  lockedBondRow: Locator;
+  pendingToSplitRow: Locator;
+  debtBondRow: Locator;
+
+  // Info icons (tooltip triggers)
+  rewardsBalanceCardInfoIcon: Locator;
+  bondBalanceCardInfoIcon: Locator;
+  lockedBondRowInfoIcon: Locator;
+  splittersChipInfoIcon: Locator;
+
+  // Claim option select
+  claimOptionSection: Locator;
+  splittersChip: Locator;
 
   // Token buttons
   tokenButtons: Locator;
@@ -22,9 +31,14 @@ export class ClaimPage extends BasePage {
   validationInputTooltip: Locator;
   maxBtn: Locator;
 
-  // Button
+  // Submit buttons (text varies by option/token)
   claimButton: Locator;
   requestWithdrawalButton: Locator;
+  claimRewardsToBondButton: Locator;
+  compensateButton: Locator;
+
+  // Empty state (shown when nothing to claim)
+  claimEmptyState: Locator;
 
   // Claim info
   claimBondFormInfo: Locator;
@@ -35,16 +49,26 @@ export class ClaimPage extends BasePage {
     super(page);
     this.form = this.page.getByTestId('claimBondForm');
 
-    // Source select
-    this.availableToClaimBalance = this.form.getByTestId(
-      'availableToClaimBalance',
-    );
-    this.titledAmountPrice =
-      this.availableToClaimBalance.getByTestId('amountPrice');
-    this.titledTokenBalance = this.titledAmountPrice.locator('> div').nth(0);
-    this.titledTokenPrice = this.titledAmountPrice.getByTestId('usdPrice');
+    // Sources info balance cards — rendered outside claimBondForm
+    this.rewardsBalanceCard = this.page.getByTestId('rewardsBalanceCard');
+    this.bondBalanceCard = this.page.getByTestId('bondBalanceCard');
+    this.lockedBondRow = this.page.getByTestId('lockedBondRow');
+    this.pendingToSplitRow = this.page.getByTestId('pendingToSplitBondRow');
+    this.debtBondRow = this.page.getByTestId('debtBondRow');
 
-    this.sourceSelect = new SourceSelect(this.form);
+    // Claim option select
+    this.claimOptionSection = this.form
+      .getByText('Select claiming option')
+      .locator('..');
+    this.splittersChip = this.page.getByTestId('splittersChip');
+
+    // Info icons (tooltip triggers)
+    this.rewardsBalanceCardInfoIcon =
+      this.rewardsBalanceCard.getByTestId('iconTooltip');
+    this.bondBalanceCardInfoIcon =
+      this.bondBalanceCard.getByTestId('iconTooltip');
+    this.lockedBondRowInfoIcon = this.lockedBondRow.getByTestId('iconTooltip');
+    this.splittersChipInfoIcon = this.splittersChip.getByTestId('iconTooltip');
 
     // Token buttons
     this.tokenButtons = this.form.getByTestId('tokenButtons');
@@ -57,13 +81,26 @@ export class ClaimPage extends BasePage {
     this.validationInputTooltip = this.amountLabel.locator('> span').nth(1);
     this.maxBtn = this.amountLabel.getByTestId('maxBtn');
 
-    // Button
+    // Submit buttons — text depends on selected option and token
     this.claimButton = this.form.getByRole('button', {
-      name: 'Claim to the Rewards Address',
+      name: 'Claim',
+      exact: true,
     });
     this.requestWithdrawalButton = this.form.getByRole('button', {
-      name: 'Request withdrawal to the Rewards Address',
+      name: 'Request withdrawal',
+      exact: true,
     });
+    this.claimRewardsToBondButton = this.form.getByRole('button', {
+      name: 'Claim rewards to the Bond balance',
+      exact: true,
+    });
+    this.compensateButton = this.form.getByRole('button', {
+      name: 'Compensate',
+      exact: true,
+    });
+
+    // Empty state
+    this.claimEmptyState = this.form.getByTestId('claimEmptyState');
 
     // Claim info
     this.claimBondFormInfo = this.form.getByTestId('claimBondFormInfo');
@@ -75,7 +112,7 @@ export class ClaimPage extends BasePage {
 
   async open() {
     await test.step('Open the Bond & Rewards page', async () => {
-      await this.openWithRetry('/bond/claim', this.titledTokenBalance);
+      await this.openWithRetry('/bond/claim', this.rewardsBalanceCard);
     });
   }
 
@@ -86,8 +123,6 @@ export class ClaimPage extends BasePage {
   async selectBondToken(symbol: TOKENS) {
     return test.step(`Choose ${symbol} symbol for claim`, async () => {
       const token = this.getTokenCardBySymbol(symbol);
-      // token cards sometimes have links in center of element
-      // and we should use dispatchEvent to avoid navigation
       await token.dispatchEvent('click');
       return token;
     });
@@ -100,5 +135,22 @@ export class ClaimPage extends BasePage {
         .locator('..')
         .getByTestId('tokenAmount'),
     );
+  }
+
+  getClaimOptionRadio(option: string) {
+    return this.form.locator(`input[name="claimOption"][value="${option}"]`);
+  }
+
+  async selectClaimOption(option: string) {
+    return test.step(`Select claim option: ${option}`, async () => {
+      await this.getClaimOptionRadio(option).locator('..').click();
+    });
+  }
+
+  getActiveSubmitButton() {
+    return this.form
+      .getByRole('button')
+      .filter({ has: this.page.locator(':not([disabled])') })
+      .last();
   }
 }

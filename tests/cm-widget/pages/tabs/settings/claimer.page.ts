@@ -35,7 +35,7 @@ export class ClaimerPage extends BasePage {
     this.unsetButton = this.form.getByTestId('unsetClaimerButton');
 
     this.addressInputTitle = this.form.getByText(
-      'Specify a new Rewards claimer address',
+      'Specify a new Rewards Claimer Address',
     );
     this.addressInput = this.form.locator('input[name="address"]');
     this.addressInputContainer = this.form.locator(
@@ -45,7 +45,7 @@ export class ClaimerPage extends BasePage {
       this.addressInputContainer.getByTestId('inputMessageError');
 
     this.submitButton = this.form.getByRole('button', {
-      name: 'Set new Rewards claimer address',
+      name: 'Set new Rewards Claimer Address',
     });
   }
 

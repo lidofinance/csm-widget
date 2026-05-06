@@ -27,6 +27,7 @@ type BondNegativeProps = {
   tooltip?: ReactNode;
   amount: bigint;
   token: TOKENS;
+  'data-testid'?: string;
 };
 
 const useBondNegativeMetadata = () => {
@@ -71,7 +72,7 @@ export const SourcesInfo: FC = () => {
 
   return (
     <Grid $gap="ms">
-      <Block padding="none" overflowHidden>
+      <Block data-testid="rewardsBalanceCard" padding="none" overflowHidden>
         <ContentPadding gap="sm" center spaceBetween>
           <Balance
             title={
@@ -92,7 +93,7 @@ export const SourcesInfo: FC = () => {
           </IconWrapper>
         </ContentPadding>
       </Block>
-      <Block padding="none" overflowHidden>
+      <Block data-testid="bondBalanceCard" padding="none" overflowHidden>
         <ContentPadding gap="sm" center spaceBetween>
           <Balance
             title={
@@ -128,6 +129,7 @@ export const SourcesInfo: FC = () => {
                 <BondNegative
                   {...bondNegativeMetadata[field]}
                   amount={bond[field]}
+                  data-testid={`${field}BondRow`}
                 />
               </Fragment>
             ))}
@@ -143,8 +145,9 @@ const BondNegative: FC<BondNegativeProps> = ({
   tooltip,
   amount,
   token,
+  'data-testid': testId,
 }) => (
-  <Stack gap="xs" center>
+  <Stack gap="xs" center data-testid={testId}>
     <Text size="xxs" weight={700}>
       {title}
     </Text>

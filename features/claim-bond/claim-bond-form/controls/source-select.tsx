@@ -79,7 +79,7 @@ const SplittersChip: FC = () => {
   if (feeSplits.length === 0) return null;
 
   return (
-    <SquaredChip variant="primary">
+    <SquaredChip data-testid="splittersChip" variant="primary">
       SPLITTERS ON{' '}
       <IconTooltip
         placement="bottomRight"

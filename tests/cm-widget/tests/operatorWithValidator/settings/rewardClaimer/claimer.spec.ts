@@ -44,14 +44,14 @@ test.describe('Settings. Rewards claimer.', () => {
       await test.step('Address input is visible with correct placeholder', async () => {
         await expect(claimerPage.addressInput).toBeVisible();
         await expect(claimerPage.addressInputContainer).toContainText(
-          'New Rewards claimer address',
+          'New Rewards Claimer Address',
         );
       });
 
       await test.step('Submit button is visible with correct text', async () => {
         await expect(claimerPage.submitButton).toBeVisible();
         await expect(claimerPage.submitButton).toHaveText(
-          'Set new Rewards claimer address',
+          'Set new Rewards Claimer Address',
         );
       });
     },

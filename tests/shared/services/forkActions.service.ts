@@ -121,6 +121,10 @@ export class ForkActionsService {
     return test.step(`[Fork] Report stealing for NO #${noId} (amount: ${amount})`, () =>
       this.run('report-stealing', String(noId), String(amount)));
   }
+  reportPenalty(noId: number, amount: string | number) {
+    return test.step(`[Fork] Report penalty for NO #${noId} (amount: ${amount})`, () =>
+      this.run('report-penalty', String(noId), String(amount)));
+  }
   cancelStealing(noId: number, amount: string | number) {
     return test.step(`[Fork] Cancel stealing for NO #${noId} (amount: ${amount})`, () =>
       this.run('cancel-stealing', String(noId), String(amount)));
@@ -128,6 +132,10 @@ export class ForkActionsService {
   settleStealing(noId: number) {
     return test.step(`[Fork] Settle stealing for NO #${noId}`, () =>
       this.run('settle-stealing', String(noId)));
+  }
+  settlePenalty(noId: number) {
+    return test.step(`[Fork] Settle penalty for NO #${noId}`, () =>
+      this.run('settle-penalty', String(noId)));
   }
   compensateStealing(noId: number, amount: string | number) {
     return test.step(`[Fork] Compensate stealing for NO #${noId} (amount: ${amount})`, () =>
@@ -169,6 +177,11 @@ export class ForkActionsService {
   resumeAccounting() {
     return test.step('[Fork] Resume accounting', () =>
       this.run('resume-accounting'));
+  }
+
+  createBondDebt(noId: number, amountEth: string) {
+    return test.step(`[Fork] Create bond debt ${amountEth} ETH for NO #${noId}`, () =>
+      this.run('create-bond-debt', String(noId), amountEth));
   }
 
   createOperatorGroup(operators: Array<{ id: number; weight: number }>) {

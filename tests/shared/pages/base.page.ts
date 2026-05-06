@@ -11,11 +11,13 @@ export class BasePage {
   page: Page;
   header: Header;
   connectWalletModal: ConnectWalletModal;
+  tooltipWrapper: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.header = new Header(this.page);
     this.connectWalletModal = new ConnectWalletModal(this.page);
+    this.tooltipWrapper = this.page.getByTestId('tooltipWrapper');
   }
 
   async getClipboardText() {
