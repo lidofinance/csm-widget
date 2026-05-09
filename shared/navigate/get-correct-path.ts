@@ -49,9 +49,12 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
 
     // Type/ICS — flag-based
     case PATH.TYPE:
-      if (flags.CAN_CLAIM_ICS) return hasRole ? PATH.TYPE_CLAIM : path;
-      if (flags.ICS_APPLY_ENABLED) return PATH.TYPE_ICS_APPLY;
-      return PATH.TYPE_PARAMETERS;
+      if (!flags.ICS_APPLY_ENABLED) {
+        return flags.CAN_CLAIM_ICS && hasRole
+          ? PATH.TYPE_CLAIM
+          : PATH.TYPE_PARAMETERS;
+      }
+      return path;
     case PATH.TYPE_CLAIM:
       return hasRole
         ? path
