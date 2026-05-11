@@ -13,6 +13,8 @@ export const ClaimBondFormInfo = () => {
     splittableGross,
     splittable,
     toRA,
+    toRAToken,
+    token,
     bondDelta,
     debtBurned,
     debtRemain,
@@ -67,7 +69,7 @@ export const ClaimBondFormInfo = () => {
           }
           help="The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab"
         >
-          <FormatToken amount={toRA} token={TOKENS.steth} />
+          <FormatToken amount={toRAToken} token={token} />
         </DataTableRow>
       )}
       {bondDelta > 0n && (
