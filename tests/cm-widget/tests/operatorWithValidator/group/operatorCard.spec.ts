@@ -167,28 +167,27 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
       qase(224, 'Should show correct tooltips on stake columns'),
       async ({ widgetService }) => {
         const op0 = widgetService.groupPage.operator(OPERATOR_0_ID);
-        const { page } = widgetService;
 
         await test.step('"Active" column tooltip', async () => {
           await op0.stakeColumnActiveTooltip.hover();
-          await expect(page.getByTestId('tooltipWrapper')).toHaveCount(1);
-          await expect(page.getByTestId('tooltipWrapper')).toContainText(
+          await expect(op0.tooltipWrapper).toHaveCount(1);
+          await expect(op0.tooltipWrapper).toContainText(
             'Stake amount that already has ETH deposited by the Lido protocol and are currently active in the validator set',
           );
         });
 
         await test.step('"Depositable" column tooltip', async () => {
           await op0.stakeColumnDepositableTooltip.hover();
-          await expect(page.getByTestId('tooltipWrapper')).toHaveCount(1);
-          await expect(page.getByTestId('tooltipWrapper')).toContainText(
+          await expect(op0.tooltipWrapper).toHaveCount(1);
+          await expect(op0.tooltipWrapper).toContainText(
             'Available capacity ready to receive stake from the Lido protocol',
           );
         });
 
         await test.step('"Potential additional capacity" column tooltip', async () => {
           await op0.stakeColumnPotentialTooltip.hover();
-          await expect(page.getByTestId('tooltipWrapper')).toHaveCount(1);
-          await expect(page.getByTestId('tooltipWrapper')).toContainText(
+          await expect(op0.tooltipWrapper).toHaveCount(1);
+          await expect(op0.tooltipWrapper).toContainText(
             'The additional stake the Lido protocol could allocate based on current weight, assuming enough validator keys are available',
           );
         });

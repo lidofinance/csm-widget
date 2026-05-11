@@ -179,6 +179,16 @@ export class ForkActionsService {
       this.run('resume-accounting'));
   }
 
+  addBond(noId: number, amountEth: string) {
+    return test.step(`[Fork] Add bond ${amountEth} ETH for NO #${noId}`, () =>
+      this.run('add-bond', String(noId), amountEth));
+  }
+
+  reportRewards() {
+    return test.step('[Fork] Report rewards (make + submit)', () =>
+      this.run('report-rewards'));
+  }
+
   createBondDebt(noId: number, amountEth: string) {
     return test.step(`[Fork] Create bond debt ${amountEth} ETH for NO #${noId}`, () =>
       this.run('create-bond-debt', String(noId), amountEth));
