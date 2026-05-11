@@ -141,6 +141,18 @@ export class ClaimPage extends BasePage {
     return this.form.locator(`input[name="claimOption"][value="${option}"]`);
   }
 
+  getClaimOptionLabel(option: string) {
+    return this.getClaimOptionRadio(option)
+      .locator('..')
+      .getByTestId('claimOptionLabel');
+  }
+
+  getClaimOptionDescription(option: string) {
+    return this.getClaimOptionRadio(option)
+      .locator('..')
+      .getByTestId('claimOptionDescription');
+  }
+
   async selectClaimOption(option: string) {
     return test.step(`Select claim option: ${option}`, async () => {
       await this.getClaimOptionRadio(option).locator('..').click();

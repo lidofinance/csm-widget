@@ -37,11 +37,15 @@ export const SourceSelect: FC = () => {
               <RadioIcon />
               <Stack direction="column" gap="xxs">
                 <Stack gap="xs" center>
-                  <Text size="xs" weight={700}>
+                  <Text size="xs" weight={700} data-testid="claimOptionLabel">
                     {label}
                   </Text>
                 </Stack>
-                <Text size="xxs" color="secondary">
+                <Text
+                  size="xxs"
+                  color="secondary"
+                  data-testid="claimOptionDescription"
+                >
                   {description}
                 </Text>
               </Stack>
