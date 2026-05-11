@@ -73,13 +73,13 @@ export const OPERATOR_TYPE_METADATA: Record<
       'This type recognizes entities that advance Ethereum decentralization by operating nodes in underrepresented regions or running unique client and infrastructure combinations.',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_DO,
   },
-  [OPERATOR_TYPE.CM_MODC]: {
-    name: 'Multi-Operator DVT Cluster',
-    short: 'MODC',
-    title: 'Multi-Operator DVT Cluster (MODC)',
+  [OPERATOR_TYPE.CM_EEO]: {
+    name: 'Extra Effort Operator',
+    short: 'EEO',
+    title: 'Extra Effort Operator (EEO)',
     description:
-      "This type applies to distributed validator clusters formed by multiple verified, independent entities operating together to strengthen Ethereum's robustness and resilience.",
-    curveId: OPERATOR_TYPE_CURVE_ID.CM_MODC,
+      'This type is for entities that demonstrate strong alignment with the Lido protocol through impactful contributions, such as governance participation and stVaults adoption.',
+    curveId: OPERATOR_TYPE_CURVE_ID.CM_EEO,
   },
   [OPERATOR_TYPE.CM_IODC]: {
     name: 'Intra-Operator DVT Cluster',

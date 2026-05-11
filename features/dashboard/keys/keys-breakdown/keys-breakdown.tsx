@@ -27,7 +27,7 @@ export const KeysBreakdown: FC = () => {
   }, [info, stakeSummary]);
 
   const hasAnyKey = !!info && info.totalAddedKeys > 0;
-  const hasGroup = isModuleCM && stakeSummary && stakeSummary.weight > 0;
+  const hasWeight = isModuleCM && stakeSummary && stakeSummary.weight > 0;
 
   return (
     <AccordionStyle
@@ -38,27 +38,38 @@ export const KeysBreakdown: FC = () => {
             Keys Breakdown
           </Text>
           <Stack>
-            {hasGroup && <MoreKeysChip more={moreKeys} empty={!hasAnyKey} />}
+            {hasWeight && <MoreKeysChip more={moreKeys} empty={!hasAnyKey} />}
             {hasAnyKey && <IssuesChip issues={data?.issuesCount} />}
           </Stack>
         </Stack>
       }
     >
       <Stack direction="column" gap="ms">
-        <KeysItem
-          data-testid="keysDepositableCount"
-          title="Depositable"
-          count={data?.counts.depositable}
-          tooltip="Keys awaiting deposit from the Lido protocol"
-          {...(moreKeys
-            ? {
-                type: hasAnyKey ? 'warning' : 'error',
-                ignoreCountZero: true,
-                comment:
-                  'Add more keys to get to your full depositable capacity',
-              }
-            : undefined)}
-        />
+        {isModuleCM && !hasWeight ? (
+          !!data?.counts.depositable && (
+            <KeysItem
+              data-testid="keysAddedCount"
+              title="Added"
+              count={data?.counts.depositable}
+              tooltip="Keys uploaded but unable to receive deposits until the CMC sets a non-zero weight for the sub-operator"
+            />
+          )
+        ) : (
+          <KeysItem
+            data-testid="keysDepositableCount"
+            title="Depositable"
+            count={data?.counts.depositable}
+            tooltip="Keys awaiting deposit from the Lido protocol"
+            {...(moreKeys
+              ? {
+                  type: hasAnyKey ? 'warning' : 'error',
+                  ignoreCountZero: true,
+                  comment:
+                    'Add more keys to get to your full depositable capacity',
+                }
+              : undefined)}
+          />
+        )}
         <KeysItem
           data-testid="keysPendingActivationCount"
           title="Pending activation"

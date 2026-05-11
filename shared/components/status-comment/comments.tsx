@@ -1,3 +1,4 @@
+import { isModuleCM } from 'consts';
 import {
   HOW_TO_EXIT_VALIDATOR_LINK,
   PERFORMANCE_TIPS_LINK,
@@ -8,6 +9,13 @@ import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { MatomoLink } from '../matomo-link/matomo-link';
 import { SHARE_LIMIT_STATUS, useShareLimitStatus } from 'modules/web3';
+
+const VALIDATOR_ACTIVE_ANCHOR = isModuleCM
+  ? '#what-are-the-possible-key-statuses'
+  : '#when-does-a-validator-become-active';
+const STAKE_SHARE_LIMIT_ANCHOR = isModuleCM
+  ? '#what-are-the-possible-key-statuses'
+  : '#what-is-the-csm-stake-share-limit';
 
 // TODO: check role
 export const CommentExitRequested: FC = () => (
@@ -77,7 +85,7 @@ export const CommentActivationPending: FC = () => {
   return (
     <LocalLink
       href={PATH.KEYS_VIEW}
-      anchor="#when-does-a-validator-become-active"
+      anchor={VALIDATOR_ACTIVE_ANCHOR}
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
       }
@@ -111,7 +119,7 @@ export const CommentDepositable: FC = () => {
       reached its{' '}
       <LocalLink
         href={PATH.KEYS_VIEW}
-        anchor="#what-is-the-csm-stake-share-limit"
+        anchor={STAKE_SHARE_LIMIT_ANCHOR}
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment}
       >
         stake share limit
@@ -120,7 +128,7 @@ export const CommentDepositable: FC = () => {
   ) : (
     <LocalLink
       href={PATH.KEYS_VIEW}
-      anchor="#when-does-a-validator-become-active"
+      anchor={VALIDATOR_ACTIVE_ANCHOR}
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
       }
