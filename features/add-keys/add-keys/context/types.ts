@@ -24,6 +24,6 @@ export type AddKeysFormNetworkData = {
   bond: BondBalance;
   isPaused: boolean;
   maxStakeEth: bigint;
-  shareLimit: ShareLimitInfo;
+  shareLimit?: ShareLimitInfo;
   // keysAvailable: KeysAvailable;
 };
