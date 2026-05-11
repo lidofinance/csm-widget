@@ -74,7 +74,12 @@ export const SocialProof: FC = () => {
 
       {/* Telegram Section */}
       <Stack direction="column" gap="sm" data-testid="telegramSection">
-        <FormTitle chip={<Chip>Optional</Chip>}>Telegram</FormTitle>
+        <Stack center gap="sm">
+          <Text as="h4" size="xs" weight={700}>
+            Telegram
+          </Text>
+          <Chip>Optional</Chip>
+        </Stack>
 
         <TextInputHookForm
           fieldName="telegramUsername"
