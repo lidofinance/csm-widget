@@ -1,4 +1,5 @@
 import {
+  convertEthToShares,
   convertSharesToEth,
   PERCENT_BASIS,
   TOKENS,
@@ -21,6 +22,10 @@ export type ClaimBreakdown = {
   splittable: bigint;
   /** stETH that will be delivered to the Rewards Address. */
   toRA: bigint;
+  /** Amount the Rewards Address will receive in the operator-selected token (wstETH shares for wstETH, stETH otherwise). */
+  toRAToken: bigint;
+  /** Token chosen by the operator for the claim payout. */
+  token: TOKENS;
   /** Change in Excess Bond (positive = grows, negative = shrinks). */
   bondDelta: bigint;
   /** Bond debt burned during this tx. */
@@ -101,6 +106,11 @@ export const computeClaimBreakdown = (
       : (amount ?? 0n);
 
   const toRA = bigMin(userClaimSteth, claimable - splittable);
+  // The contract pays the Rewards Address in the chosen token: stETH/ETH go
+  // out 1:1 (ETH via withdrawal NFT), wstETH is the share-equivalent of
+  // `toRA`. Mirrors the conversion in `userClaimSteth`.
+  const toRAToken =
+    token === TOKENS.wsteth ? convertEthToShares(toRA, poolData) : toRA;
 
   const bondDelta = claimable - claimablePre - splittable - toRA;
 
@@ -109,6 +119,8 @@ export const computeClaimBreakdown = (
     splittableGross,
     splittable,
     toRA,
+    toRAToken,
+    token,
     bondDelta,
     debtBurned,
     debtRemain,

@@ -1,8 +1,11 @@
+import { isModuleCM } from 'consts';
+import { CM_BOND_AMOUNTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import {
   FormTitle,
   // KeysAvailable,
+  MatomoLink,
   Stack,
   TokenAmount,
 } from 'shared/components';
@@ -18,13 +21,22 @@ export const TokenSelect: React.FC = () => {
     <>
       <FormTitle
         extra={
-          <LocalLink
-            href={PATH.CREATE}
-            anchor="#how-much-bond-is-needed"
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
-          >
-            How bond is calculated
-          </LocalLink>
+          isModuleCM ? (
+            <MatomoLink
+              href={CM_BOND_AMOUNTS_LINK}
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
+            >
+              How bond is calculated
+            </MatomoLink>
+          ) : (
+            <LocalLink
+              href={PATH.CREATE}
+              anchor="#how-much-bond-is-needed"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
+            >
+              How bond is calculated
+            </LocalLink>
+          )
         }
       >
         Choose bond token

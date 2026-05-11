@@ -31,6 +31,8 @@ export const SUBSCRIBE_EVENTS_LINK =
   'https://docs.lido.fi/run-on-lido/csm/alerts-and-monitoring/expert-custom-alerts';
 export const OPERATOR_TYPES_LINK =
   'https://docs.lido.fi/staking-modules/csm/join-csm/#node-operator-types';
+export const CM_BOND_AMOUNTS_LINK =
+  'https://docs.lido.fi/run-on-lido/cm-v2/bond-and-key-management#bond-amounts';
 export const FEE_RECIPIENT_LINK =
   'https://docs.lido.fi/run-on-lido/csm/troubleshooting/setting-the-fee-recipient-for-csm-validators/#change-fee-recipient-on-existing-validator-keys';
 

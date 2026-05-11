@@ -34,15 +34,6 @@ const RewardsIcon = styled(_RewardsIcon)`
 
 type Meta = { label: ReactNode; description: ReactNode };
 
-const COMPENSATE_ALL_FROM_REWARDS: Meta = {
-  label: (
-    <>
-      <RewardsIcon /> Rewards → <BondIcon /> Bond
-    </>
-  ),
-  description: 'All Rewards will compensate the Insufficient Bond',
-};
-
 const COMPENSATE_AND_CLAIM_REWARDS: Meta = {
   label: (
     <>
@@ -50,15 +41,6 @@ const COMPENSATE_AND_CLAIM_REWARDS: Meta = {
     </>
   ),
   description: 'Compensate the Insufficient Bond and claim Rewards',
-};
-
-const CLAIM_REWARDS_ONLY: Meta = {
-  label: (
-    <>
-      <RewardsIcon /> <BondIcon /> Rewards → Rewards Address
-    </>
-  ),
-  description: 'Claim Rewards',
 };
 
 const CLAIM_ALL: Meta = {
@@ -159,18 +141,25 @@ const describe = (
   ctx: Ctx,
   token: TOKENS,
 ): Descriptor => {
-  const { realInsufficient, realExcess, rewardsRemainder, feeSplits, bond } =
+  const { keysInsufficient, realExcess, rewardsRemainder, feeSplits, bond } =
     ctx;
 
   const hasSplits = feeSplits.length > 0;
   const hasPendingToSplit = bond.pendingToSplit > 0n;
+  // Only forKeys-deficit triggers "Compensate Insufficient Bond" wording.
+  // Locked/debt absorb rewards into bond too, but the operator does not see
+  // "Insufficient bond" in sources-info, so the Claim variants are used and
+  // the breakdown panel reflects the actual on-chain effect.
+  const isKeysInsufficient = keysInsufficient > 0n;
 
   switch (option) {
     case CLAIM_OPTION.ALL_TO_RA: {
-      if (realInsufficient > 0n && rewardsRemainder === 0n) {
-        return { ...COMPENSATE_ALL_FROM_REWARDS, submitLabel: 'Compensate' };
-      }
-      if (realInsufficient > 0n) {
+      // "Compensate + claim Rewards" only when rewards actually survive the
+      // insufficient-bond top-up. Otherwise ALL_TO_RA falls through to a basic
+      // CLAIM_ALL ("All → Rewards Address") that conveys the option's intent
+      // regardless of how much actually reaches RA — keeps the label distinct
+      // from REWARDS_TO_BOND when the option is disabled.
+      if (isKeysInsufficient && rewardsRemainder > 0n) {
         return {
           ...(hasSplits
             ? SPLIT_AND_COMPENSATE_TO_RA
@@ -178,14 +167,11 @@ const describe = (
           submitLabel: claimSubmit(token),
         };
       }
-      if (realExcess > 0n) {
-        return {
-          ...(hasSplits ? SPLIT_AND_CLAIM_BOND : CLAIM_ALL),
-          submitLabel: claimSubmit(token),
-        };
+      if (hasSplits && realExcess === 0n) {
+        return { ...SPLIT_REWARDS_ONLY, submitLabel: claimSubmit(token) };
       }
       return {
-        ...(hasSplits ? SPLIT_REWARDS_ONLY : CLAIM_REWARDS_ONLY),
+        ...(hasSplits ? SPLIT_AND_CLAIM_BOND : CLAIM_ALL),
         submitLabel: claimSubmit(token),
       };
     }
@@ -205,7 +191,7 @@ const describe = (
           submitLabel: rewardsToBondSubmit(rewardsRemainder),
         };
       }
-      if (realInsufficient > 0n) {
+      if (isKeysInsufficient) {
         return {
           ...COMPENSATE_INSUFFICIENT,
           submitLabel: rewardsToBondSubmit(rewardsRemainder),

@@ -32,6 +32,11 @@ export type ClaimBondCalculation = {
   claimableBond: bigint;
   claimableBondAndRewards: bigint;
   claimableMaxValues: MaxValues;
+  // forKeys-only deficit. Drives "Insufficient bond" wording in UI labels and
+  // mirrors `bond.isInsufficient` shown by sources-info.
+  keysInsufficient: bigint;
+  // forKeys + locked + debt deficit. Used to size how much of the rewards is
+  // absorbed by bond before excess flows to the Rewards Address.
   realInsufficient: bigint;
   realExcess: bigint;
   rewardsRemainder: bigint;

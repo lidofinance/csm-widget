@@ -94,6 +94,7 @@ const useClaimBondFormNetworkData: NetworkData<
       }
     : undefined;
 
+  const keysInsufficient = bond ? bigMax(0n, bond.required - bond.current) : 0n;
   const realInsufficient = bond
     ? bigMax(0n, bond.required + bond.locked + bond.debt - bond.current)
     : 0n;
@@ -105,12 +106,17 @@ const useClaimBondFormNetworkData: NetworkData<
     : 0n;
   const totalShare = feeSplits?.reduce((sum, s) => sum + s.share, 0n) ?? 0n;
 
+  // ALL_TO_RA collapses to REWARDS_TO_BOND whenever nothing reaches the Rewards
+  // Address (rewards fully absorbed by forKeys/locked/debt, or splitters take
+  // 100%). In that case the Rewards-to-Bond option carries the same tx and we
+  // hide the duplicate. REWARDS_TO_BOND is offered whenever rewards exist —
+  // pulling them into bond is useful even without claimable excess.
   const availableOptions = [
-    rewards?.available && CLAIM_OPTION.ALL_TO_RA,
-    claimableBond > 0n && CLAIM_OPTION.BOND_TO_RA,
     rewards?.available &&
       claimableBondAndRewards > 0n &&
-      CLAIM_OPTION.REWARDS_TO_BOND,
+      CLAIM_OPTION.ALL_TO_RA,
+    claimableBond > 0n && CLAIM_OPTION.BOND_TO_RA,
+    rewards?.available && CLAIM_OPTION.REWARDS_TO_BOND,
   ].filter((o): o is CLAIM_OPTION => !!o);
 
   return {
@@ -128,6 +134,7 @@ const useClaimBondFormNetworkData: NetworkData<
         claimableBond,
         claimableBondAndRewards,
         claimableMaxValues,
+        keysInsufficient,
         realInsufficient,
         realExcess,
         rewardsRemainder,
