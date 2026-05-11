@@ -6,11 +6,7 @@ import { formatEther } from 'viem';
 
 const BOND_EXCESS_ETH = '2';
 
-const CLAIM_OPTION = {
-  ALL_TO_RA: 'all-to-ra',
-  BOND_TO_RA: 'bond-to-ra',
-  REWARDS_TO_BOND: 'rewards-to-bond',
-} as const;
+import { CLAIM_OPTION } from './claim.const';
 
 test.describe(
   'Bond & Rewards. Claim. Penalty state — all excess locked.',
@@ -45,7 +41,7 @@ test.describe(
       await cmSDK.evmRevert(snapshotId);
     });
 
-    test('Should display "Excess bond" card with locked bond row when penalty is active', async ({
+    test('Should show locked bond row on "Excess bond" card', async ({
       widgetService,
     }) => {
       const { claim } = widgetService.bondRewardsPage;
@@ -64,7 +60,7 @@ test.describe(
       });
     });
 
-    test('Should show penalty tooltip on locked bond row info icon', async ({
+    test('Should show penalty tooltip on locked bond row', async ({
       widgetService,
     }) => {
       const { claim } = widgetService.bondRewardsPage;
@@ -83,12 +79,12 @@ test.describe(
       });
     });
 
-    test('Should disable BOND_TO_RA and show "Claim Rewards" descriptions when all excess is locked', async ({
+    test('Should disable "Excess Bond" option when all excess locked', async ({
       widgetService,
     }) => {
       const { claim } = widgetService.bondRewardsPage;
 
-      await test.step('ALL_TO_RA is enabled, checked by default, description reads "Claim Rewards"', async () => {
+      await test.step('"Claim All" option is enabled, checked by default, description reads "Claim Rewards"', async () => {
         await expect(
           claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
         ).toBeEnabled({ timeout: PAGE_WAIT_TIMEOUT });
@@ -100,7 +96,7 @@ test.describe(
         ).toHaveText('Claim Rewards');
       });
 
-      await test.step('BOND_TO_RA is disabled and not checked', async () => {
+      await test.step('"Excess Bond" option is disabled and not checked', async () => {
         await expect(
           claim.getClaimOptionRadio(CLAIM_OPTION.BOND_TO_RA),
         ).toBeDisabled();
@@ -112,7 +108,7 @@ test.describe(
         ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed');
       });
 
-      await test.step('REWARDS_TO_BOND is enabled, not checked, description reads "Move all rewards to the bond"', async () => {
+      await test.step('"Rewards to Bond" option is enabled, not checked, description reads "Move all rewards to the bond"', async () => {
         await expect(
           claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
         ).toBeEnabled();

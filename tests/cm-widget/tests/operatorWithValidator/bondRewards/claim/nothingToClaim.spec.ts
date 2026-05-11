@@ -18,7 +18,7 @@ test.describe(
       await widgetService.bondRewardsPage.claim.open();
     });
 
-    test('Should show empty state with zero balances and no claim controls when operator has no rewards and no excess bond', async ({
+    test('Should show empty state with zero balances', async ({
       widgetService,
     }) => {
       const { claim } = widgetService.bondRewardsPage;
@@ -47,6 +47,46 @@ test.describe(
         await expect(claim.claimOptionSection).not.toBeVisible();
         await expect(claim.tokenButtons).not.toBeVisible();
         await expect(claim.claimButton).not.toBeVisible();
+      });
+    });
+
+    test('Should show Rewards balance card tooltip', async ({
+      widgetService,
+    }) => {
+      const { claim } = widgetService.bondRewardsPage;
+
+      await test.step('Tooltip appears on hover', async () => {
+        await claim.rewardsBalanceCardInfoIcon.hover();
+        await expect(claim.tooltipWrapper).toHaveCount(1);
+        await expect(claim.tooltipWrapper).toBeVisible({
+          timeout: PAGE_WAIT_TIMEOUT,
+        });
+      });
+
+      await test.step('Tooltip describes rewards distribution schedule', async () => {
+        await expect(claim.tooltipWrapper).toContainText(
+          'The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected',
+        );
+      });
+    });
+
+    test('Should show Bond balance card tooltip in excess state', async ({
+      widgetService,
+    }) => {
+      const { claim } = widgetService.bondRewardsPage;
+
+      await test.step('Tooltip appears on hover', async () => {
+        await claim.bondBalanceCardInfoIcon.hover();
+        await expect(claim.tooltipWrapper).toHaveCount(1);
+        await expect(claim.tooltipWrapper).toBeVisible({
+          timeout: PAGE_WAIT_TIMEOUT,
+        });
+      });
+
+      await test.step('Tooltip describes claimable excess bond without exit', async () => {
+        await expect(claim.tooltipWrapper).toContainText(
+          'The bond amount available to claim without having to exit validators. Increases daily',
+        );
       });
     });
   },
@@ -82,7 +122,7 @@ test.describe(
       await cmSDK.evmRevert(snapshotId);
     });
 
-    test('Should show empty state with "Insufficient bond" card and no claim controls when bond is insufficient and no rewards', async ({
+    test('Should show empty state with "Insufficient bond" card', async ({
       widgetService,
     }) => {
       const { claim } = widgetService.bondRewardsPage;
