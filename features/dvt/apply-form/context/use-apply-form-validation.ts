@@ -49,7 +49,7 @@ export const useApplyFormValidation = () => {
                 );
               }
 
-              await validateIcsProof(address, addressPath);
+              // await validateIcsProof(address, addressPath);
             });
 
             await validate(signaturePath, async () => {
