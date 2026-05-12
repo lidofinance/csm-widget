@@ -1,6 +1,5 @@
 import { Link, ThemeName } from '@lidofinance/lido-ui';
-import { config } from 'config';
-import { getExternalLinks, MODULE_METADATA } from 'consts';
+import { getExternalLinks, moduleMeta } from 'consts';
 import styled from 'styled-components';
 
 const WarningBlock = styled.div`
@@ -30,8 +29,8 @@ export const FeedbackLine = () => {
   return (
     <WarningBlock>
       <WarningText>
-        This is a new version of the {MODULE_METADATA[config.module].shortName}{' '}
-        Widget. In case of any issues, please submit the report using this{' '}
+        This is a new version of the {moduleMeta.shortName} Widget. In case of
+        any issues, please submit the report using this{' '}
         <Link href={feedbackForm}>form</Link>
       </WarningText>
     </WarningBlock>

@@ -24,6 +24,7 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
+import { isModuleCSM } from 'consts';
 import { type AddKeysFormNetworkData } from './types';
 
 const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
@@ -99,7 +100,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
     isCurveParametersLoading ||
     isBondLoading ||
     isStatusLoading ||
-    isShareLimitLoading ||
+    (isModuleCSM && isShareLimitLoading) ||
     isCurveIdLoading ||
     isOperatorInfoLoading;
 

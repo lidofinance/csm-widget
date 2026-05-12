@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { PERCENT_BASIS, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { getNextDistribution, useFrameInfo } from 'modules/web3';
@@ -12,6 +12,7 @@ import { useClaimBondFormData } from '../context';
 
 import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
 import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
+import { moduleMeta } from 'consts';
 import { Balance } from 'features/dashboard/bond/balance';
 
 const LOCKED_TOOLTIP_CSM =
@@ -31,24 +32,22 @@ type BondNegativeProps = {
 
 const useBondNegativeMetadata = () => {
   const check = useShowRule();
-  const lockedTooltip = check('IS_CSM')
-    ? LOCKED_TOOLTIP_CSM
-    : LOCKED_TOOLTIP_CM;
 
   return {
     locked: {
       title: 'Locked:',
-      tooltip: lockedTooltip,
-      token: TOKENS.eth,
+      tooltip: check('IS_CSM') ? LOCKED_TOOLTIP_CSM : LOCKED_TOOLTIP_CM,
+      token: TOKENS.steth,
     },
     pendingToSplit: {
-      title: 'Pending to split:',
-      tooltip:
-        '"Pending to split" is the amount that has not been split due to insufficient bond or locked bond that occurred earlier. When claiming rewards CSM will try to split this amount from excess bond.',
+      title: 'Splitter debt:',
+      tooltip: `Is the amount that has not been split due to insufficient bond or locked bond that occurred earlier. When claiming rewards ${moduleMeta.shortName} will try to split this amount from excess bond.`,
       token: TOKENS.steth,
     },
     debt: {
       title: 'Debt:',
+      tooltip:
+        'Outstanding penalty that exceeded your bond balance. Top up your bond to clear it.',
       token: TOKENS.steth,
     },
   } as Record<
@@ -59,11 +58,15 @@ const useBondNegativeMetadata = () => {
 
 export const SourcesInfo: FC = () => {
   const { isLoading } = useFormState();
-  const { bond, rewards } = useClaimBondFormData();
+  const { bond, rewards, calculation } = useClaimBondFormData();
   const { data: nextDistribution } = useFrameInfo(getNextDistribution);
   const bondNegativeMetadata = useBondNegativeMetadata();
 
   const negative = bond ? NEGATIVE_FIELDS.filter((field) => bond[field]) : [];
+
+  const splittable =
+    ((rewards?.available ?? 0n) * (calculation?.totalShare ?? 0n)) /
+    PERCENT_BASIS;
 
   if (isLoading || !bond || !rewards) {
     return null;
@@ -91,6 +94,16 @@ export const SourcesInfo: FC = () => {
             <RewardsIcon />
           </IconWrapper>
         </ContentPadding>
+        {splittable > 0n && (
+          <FooterStyle>
+            <BondNegative
+              title="To splitters:"
+              tooltip="Portion of rewards routed to splitters. See the Splitters section for exact proportions."
+              amount={splittable}
+              token={TOKENS.steth}
+            />
+          </FooterStyle>
+        )}
       </Block>
       <Block padding="none" overflowHidden>
         <ContentPadding gap="sm" center spaceBetween>

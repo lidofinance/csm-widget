@@ -1,6 +1,5 @@
 import { Text } from '@lidofinance/lido-ui';
-import { config } from 'config';
-import { MODULE_METADATA } from 'consts';
+import { moduleMeta } from 'consts';
 import { FC } from 'react';
 import { Address } from 'shared/components';
 import styled from 'styled-components';
@@ -16,8 +15,7 @@ export const AfterAddressProposed: FC<Props> = ({ address }) => {
       <br />
       <ol>
         <li>
-          Connect to {MODULE_METADATA[config.module].shortTitle} UI with the
-          proposed address
+          Connect to {moduleMeta.shortTitle} UI with the proposed address
           <Text size="xxs">
             <Address address={address} showIcon />
           </Text>

@@ -1,6 +1,5 @@
 import { Dark, Light, ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
-import { config } from 'config';
-import { MODULE_METADATA } from 'consts';
+import { moduleMeta } from 'consts';
 import { useSmVersionSupported } from 'modules/web3';
 import { useInpageNavigation } from 'providers/inpage-navigation';
 import { FC, memo, PropsWithChildren } from 'react';
@@ -38,7 +37,7 @@ export const Navigation: FC<{ desktopHidden?: boolean }> = memo(
         $desktopHidden={desktopHidden}
       >
         <NavContainer>
-          <NavBlock title={MODULE_METADATA[config.module].title}>
+          <NavBlock title={moduleMeta.title}>
             {routes.map(({ name, path, subPaths, icon, suffix, colored }) => {
               const isActive = getIsActivePath(pathname, path, subPaths);
 

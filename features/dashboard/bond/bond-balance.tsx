@@ -10,6 +10,7 @@ export const BondBalance: FC = () => {
   const id = useNodeOperatorId();
 
   const { data: bond, isPending: isBondLoading } = useOperatorBalance(id);
+  const totalBond = (bond?.current ?? 0n) - (bond?.debt ?? 0n);
 
   return (
     <AccordionStyle
@@ -24,7 +25,8 @@ export const BondBalance: FC = () => {
             data-testid="commonBalance"
             big
             loading={isBondLoading}
-            amount={bond?.current}
+            amount={totalBond}
+            warning={!!bond?.debt}
             token={TOKENS.steth}
           />
         </RowHeader>
@@ -40,27 +42,34 @@ export const BondBalance: FC = () => {
         />
 
         {bond?.isInsufficient ? (
-          <>
-            <Balance
-              warning
-              sign="minus"
-              title={BOND_INSUFFICIENT}
-              loading={isBondLoading}
-              amount={bond?.delta}
-              help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys"
-            />
-          </>
+          <Balance
+            warning
+            sign="minus"
+            title={BOND_INSUFFICIENT}
+            loading={isBondLoading}
+            amount={bond?.delta}
+            help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys"
+          />
         ) : (
-          <>
-            <Balance
-              data-testid="excessBondBalance"
-              sign="plus"
-              title={BOND_EXCESS}
-              loading={isBondLoading}
-              amount={bond?.delta}
-              help="The bond amount available to claim without having to exit validators. Increases daily"
-            />
-          </>
+          <Balance
+            data-testid="excessBondBalance"
+            sign="plus"
+            title={BOND_EXCESS}
+            loading={isBondLoading}
+            amount={bond?.delta}
+            help="The bond amount available to claim without having to exit validators. Increases daily"
+          />
+        )}
+        {!!bond?.debt && (
+          <Balance
+            warning
+            title="Debt"
+            sign="minus"
+            loading={isBondLoading}
+            amount={bond.debt}
+            token={TOKENS.steth}
+            help="Outstanding penalty that exceeded your bond balance. Top up your bond to clear it."
+          />
         )}
       </RowBody>
     </AccordionStyle>

@@ -190,7 +190,7 @@ export default withBundleAnalyzer({
       },
       {
         // required for gnosis save apps
-        source: '/manifest:suffix.json',
+        source: '/manifest:suffix(-[a-z]+)?.json',
         headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }],
       },
       ...CACHE_CONTROL_PAGES.map((page) => ({
