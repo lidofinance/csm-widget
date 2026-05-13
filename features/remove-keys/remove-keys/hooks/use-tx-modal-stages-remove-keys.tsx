@@ -36,10 +36,10 @@ export const useTxModalStagesRemoveKeys = () =>
               <>
                 {input.selection.count}{' '}
                 <Plural
-                  variants={['key', 'keys']}
+                  variants={['key has been', 'keys have been']}
                   value={input.selection.count}
                 />{' '}
-                has been removed
+                removed
               </>
             }
             description=""

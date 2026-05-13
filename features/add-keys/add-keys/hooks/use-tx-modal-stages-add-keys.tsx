@@ -39,7 +39,7 @@ export const useTxModalStagesAddKeys = () =>
         transitStage(
           <TxStageSuccess
             txHash={txHash}
-            title={<>Your keys has been uploaded</>}
+            title={<>Your keys have been uploaded</>}
             description={
               <>
                 Uploading operation was successful.
