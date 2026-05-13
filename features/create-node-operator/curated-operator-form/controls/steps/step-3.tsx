@@ -17,7 +17,7 @@ export const Step3: FC = () => {
 
   return (
     <Stack direction="column" gap="xxl">
-      <Text as="h3" size="lg" weight={700}>
+      <Text as="h3" size="lg" weight={700} data-testid="stepTitle">
         Set Node Operator name and description
       </Text>
 

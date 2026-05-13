@@ -27,16 +27,28 @@ export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
   const loading = !parameters;
 
   return (
-    <RadioButton small {...fieldProps}>
+    <RadioButton
+      small
+      {...fieldProps}
+      data-testid={`gateCard${metadata.short}`}
+    >
       <Stack gap="xs">
         <CardLayout>
           <Stack direction="column" gap="sm">
-            <CurveBadge type={operatorType} inline />
-            <Text size="xs" weight={700}>
+            <CurveBadge
+              data-testid={`gateCardBadge`}
+              type={operatorType}
+              inline
+            />
+            <Text size="xs" weight={700} data-testid={`gateCardTitle`}>
               {metadata.name}
             </Text>
             {metadata.description && (
-              <Description color="secondary" size="xxs">
+              <Description
+                color="secondary"
+                size="xxs"
+                data-testid={`gateCardDescription`}
+              >
                 {metadata.description}
               </Description>
             )}
@@ -47,15 +59,21 @@ export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
               title="Node Operator reward:"
               loading={loading}
               items={formatPercentKeyIntervals(parameters?.rewardsConfig)}
+              data-testid={`gateCardRewardParams`}
             />
             <ParamSection
               title="Bond:"
               loading={loading}
               items={formatEthKeyIntervals(parameters?.bondConfig)}
+              data-testid={`gateCardBondParams`}
             />
           </Stack>
         </CardLayout>
-        <SatusStyled>{fieldProps.checked && <CheckIcon />}</SatusStyled>
+        <SatusStyled>
+          {fieldProps.checked && (
+            <CheckIcon data-testid={`gateCardCheckIcon`} />
+          )}
+        </SatusStyled>
       </Stack>
     </RadioButton>
   );
@@ -65,8 +83,8 @@ const ParamSection: FC<{
   title: string;
   items: ReactNode[];
   loading?: boolean;
-}> = ({ title, items, loading }) => (
-  <div>
+}> = ({ title, items, loading, ...props }) => (
+  <div {...props}>
     <Text size="xxs" weight={700}>
       {title}
     </Text>

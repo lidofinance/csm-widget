@@ -12,7 +12,10 @@ export const MoreKeysChip: FC<Props> = ({ more, empty, isPending }) => {
   if (isPending) return null;
 
   return (
-    <SquaredChip variant={more ? (empty ? 'error' : 'warning') : 'success'}>
+    <SquaredChip
+      data-testid="moreKeysChip"
+      variant={more ? (empty ? 'error' : 'warning') : 'success'}
+    >
       {more ? (
         <>
           <Alert />

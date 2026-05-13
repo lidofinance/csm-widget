@@ -15,8 +15,9 @@ import { useCuratedOperatorFormData } from '../context/';
 const SummaryRow: FC<{ label: string; children: ReactNode }> = ({
   label,
   children,
+  ...rest
 }) => (
-  <RowStyle>
+  <RowStyle {...rest}>
     <Text size="xs" color="secondary">
       {label}
     </Text>
@@ -48,22 +49,22 @@ export const VerificationSummary: FC = () => {
 
   return (
     <ListStyle>
-      <SummaryRow label="Node Operator type:">
+      <SummaryRow label="Node Operator type:" data-testid="summaryOperatorType">
         <Text size="xs">
           {getCurveMetadata(selectedGate?.curveId)?.name ?? '—'}
         </Text>
       </SummaryRow>
-      <SummaryRow label="Name:">
+      <SummaryRow label="Name:" data-testid="summaryName">
         <Text size="xs">{name}</Text>
       </SummaryRow>
-      <SummaryRow label="Description:">
+      <SummaryRow label="Description:" data-testid="summaryDescription">
         <Text size="xs">{description}</Text>
       </SummaryRow>
       <DividerStyle type="horizontal" />
-      <SummaryRow label="Manager Address:">
+      <SummaryRow label="Manager Address:" data-testid="summaryManagerAddress">
         <Address monospace address={managerAddress} symbols={0} size="xxs" />
       </SummaryRow>
-      <SummaryRow label="Rewards Address:">
+      <SummaryRow label="Rewards Address:" data-testid="summaryRewardsAddress">
         <Address address={rewardAddress} symbols={0} size="xxs" />
       </SummaryRow>
 

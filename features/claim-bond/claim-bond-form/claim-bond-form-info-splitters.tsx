@@ -25,8 +25,9 @@ export const ClaimBondFormInfoSplitters: FC<Props> = ({
   return (
     <AccordionStyle
       withoutBorder
+      data-testid="splittersAccordion"
       summary={
-        <Stack gap="md" center spaceBetween>
+        <Stack gap="md" center spaceBetween data-testid="splittersSummary">
           <div>
             Splitter addresses ({feeSplits.length}) will receive
             <IconTooltip
@@ -35,7 +36,7 @@ export const ClaimBondFormInfoSplitters: FC<Props> = ({
               tooltip="When you claim rewards, they will be distributed to the splitter recipients in stETH according to the configured shares."
             />
           </div>
-          <Text size="xxs">
+          <Text size="xxs" data-testid="splittersTotalAmount">
             <FormatToken amount={total} token={TOKENS.steth} />
           </Text>
         </Stack>
@@ -43,7 +44,11 @@ export const ClaimBondFormInfoSplitters: FC<Props> = ({
     >
       <Stack direction="column" gap="sm">
         {feeSplits.map((split) => (
-          <Stack spaceBetween key={split.recipient}>
+          <Stack
+            spaceBetween
+            key={split.recipient}
+            data-testid="splitterRecipient"
+          >
             <Address
               address={split.recipient}
               size="xxs"

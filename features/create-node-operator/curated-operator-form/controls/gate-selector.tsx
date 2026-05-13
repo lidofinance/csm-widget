@@ -20,7 +20,7 @@ export const GateSelector: FC = () => {
   );
 
   return (
-    <Stack direction="column" gap="md">
+    <Stack direction="column" gap="md" data-testid="gateSelector">
       {availableGates.map((gate) => {
         return (
           <GateCard

@@ -16,7 +16,12 @@ export const BannerTryCsm: FC = () => {
 
   return (
     <DarkThemeProvider>
-      <Banner center variant="sunset" title="Try Lido CSM">
+      <Banner
+        data-testid="tryCsmSection"
+        center
+        variant="sunset"
+        title="Try Lido CSM"
+      >
         <Stack direction="column">
           <div>
             The Community Staking Module (CSM) is a permissionless staking

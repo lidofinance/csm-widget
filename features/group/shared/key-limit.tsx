@@ -14,7 +14,7 @@ export const KeyLimit: FC<Props> = ({ info }) => {
   const limitText = pluralKeys({ value: info.targetLimit, showValue: true });
 
   return (
-    <Text color="secondary" size="xxs">
+    <Text color="secondary" size="xxs" data-testid="operatorKeyLimit">
       {info.targetLimit <= keys ? (
         <>Key limit of {limitText} has been reached</>
       ) : (

@@ -13,7 +13,7 @@ import { CuratedOperatorFormInfo } from './curated-operator-form-info';
 export const CuratedOperatorForm: FC = memo(() => (
   <CuratedOperatorDataProvider>
     <CuratedOperatorFormProvider>
-      <FormBlock data-testid="curatedOperatorForm">
+      <FormBlock data-testid="createdOperatorForm">
         <FormLoader>
           <Form>
             <Stack direction="column" gap="sm">
