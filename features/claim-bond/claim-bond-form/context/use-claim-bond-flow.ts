@@ -6,7 +6,6 @@ import {
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
-import { calculateAvailableToClaim } from 'utils';
 import { useTxModalStagesClaimBond } from '../hooks/use-tx-modal-stages-claim-bond';
 import { useClaimBondFormData } from './claim-bond-data-provider';
 import {
@@ -39,10 +38,7 @@ export const useClaimBondFlowResolver = (): FlowResolver<
     (input, data) => {
       if (!canClaim) return { action: 'no-access', access: claimAccess };
 
-      if (
-        !data?.rewards?.available &&
-        (!data?.bond?.delta || data?.bond?.isInsufficient)
-      ) {
+      if (!data || data.availableOptions.length === 0) {
         return { action: 'nothing' };
       }
 
@@ -50,11 +46,9 @@ export const useClaimBondFlowResolver = (): FlowResolver<
       // Hide amount/token inputs when nothing is receivable on Rewards Address —
       // covers both rewards fully covering an insufficient bond and splitters
       // taking 100% with no excess bond.
-      const maxAvailableSteth = calculateAvailableToClaim({
-        bond: data.bond,
-        rewards: includeRewards ? data.rewards : undefined,
-        feeSplits: data.feeSplits,
-      });
+      const maxAvailableSteth = includeRewards
+        ? data.calculation.claimableBondAndRewards
+        : data.calculation.claimableBond;
       const showAmount =
         input.claimOption !== CLAIM_OPTION.REWARDS_TO_BOND &&
         maxAvailableSteth > 0n;

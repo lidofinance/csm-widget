@@ -11,10 +11,10 @@ import {
   useTxStages,
 } from 'shared/transaction-modal';
 import {
-  CLAIM_OPTION,
   ClaimBondFormInputType,
   ClaimBondFormNetworkData,
 } from '../context/types';
+import { computeClaimBreakdown } from './use-claim-breakdown';
 import { TxStageClaim } from './tx-stage-claim';
 
 const { stakeWidget } = getExternalLinks();
@@ -22,11 +22,9 @@ const { stakeWidget } = getExternalLinks();
 export const useTxModalStagesClaimBond = () =>
   useTxStages<ClaimBondFormInputType, ClaimBondFormNetworkData>(
     (transitStage, input, data) => {
-      const claimRewards = input.claimOption !== CLAIM_OPTION.BOND_TO_RA;
-      const amount =
-        input.claimOption !== CLAIM_OPTION.REWARDS_TO_BOND
-          ? (input.amount ?? 0n)
-          : 0n;
+      const breakdown = computeClaimBreakdown(input, data);
+      const { includesRewards, isRewardsToBond, toRA, bondDelta } = breakdown;
+      const amount = isRewardsToBond ? 0n : (input.amount ?? 0n);
 
       return {
         sign: () =>
@@ -34,9 +32,10 @@ export const useTxModalStagesClaimBond = () =>
             <TxStageClaim
               amount={amount}
               token={input.token}
-              claimRewards={claimRewards}
-              rewards={data.rewards?.available}
-              poolData={data.poolData}
+              claimRewards={includesRewards}
+              isRewardsToBond={isRewardsToBond}
+              toRA={toRA}
+              bondDelta={bondDelta}
             />,
           ),
         pending: (txHash) =>
@@ -44,9 +43,10 @@ export const useTxModalStagesClaimBond = () =>
             <TxStageClaim
               amount={amount}
               token={input.token}
-              claimRewards={claimRewards}
-              rewards={data.rewards?.available}
-              poolData={data.poolData}
+              claimRewards={includesRewards}
+              isRewardsToBond={isRewardsToBond}
+              toRA={toRA}
+              bondDelta={bondDelta}
               isPending
               txHash={txHash}
             />,
