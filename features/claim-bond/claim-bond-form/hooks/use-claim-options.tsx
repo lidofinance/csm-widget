@@ -98,8 +98,9 @@ const SPLIT_REWARDS_ONLY: Meta = {
 const SPLIT_AND_CLAIM_BOND: Meta = {
   label: (
     <>
-      <RewardsIcon /> <BondIcon /> Rewards → Splitter addresses, Excess Bond →
-      Rewards Address
+      <RewardsIcon /> Rewards → Splitter addresses,
+      <br />
+      <BondIcon /> Excess Bond → Rewards Address
     </>
   ),
   description: 'Split rewards and claim Excess bond',
