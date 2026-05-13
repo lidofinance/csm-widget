@@ -1,9 +1,9 @@
 import { Tooltip } from '@lidofinance/lido-ui';
-import { FC, ReactNode } from 'react';
+import { ComponentPropsWithoutRef, FC, ReactNode } from 'react';
 import { ShortInlineLoader, Stack } from 'shared/components';
 import { TitleStyle, VARIANTS, WrapperStyle } from './styles';
 
-type KeysItemProps = {
+type KeysItemProps = ComponentPropsWithoutRef<'div'> & {
   title: string;
   count: number | undefined;
   tooltip?: string;
@@ -19,6 +19,7 @@ export const KeysItem: FC<KeysItemProps> = ({
   comment,
   tooltip,
   ignoreCountZero,
+  ...rest
 }) => {
   const hasCount =
     count === undefined ? undefined : count > 0 || ignoreCountZero;
@@ -29,7 +30,7 @@ export const KeysItem: FC<KeysItemProps> = ({
       : undefined;
 
   return (
-    <WrapperStyle $variant={variant}>
+    <WrapperStyle $variant={variant} {...rest}>
       <Stack direction="column" gap="xs">
         <TitleStyle>
           <Tooltip title={tooltip} placement="topLeft">

@@ -31,6 +31,7 @@ export const KeysBreakdown: FC = () => {
 
   return (
     <AccordionStyle
+      data-testid="keysBreakdownBlock"
       summary={
         <Stack center spaceBetween>
           <Text as="h4" size="sm" weight={700}>
