@@ -1,9 +1,9 @@
 import { Tooltip } from '@lidofinance/lido-ui';
-import { FC, ReactNode } from 'react';
+import { ComponentPropsWithoutRef, FC, ReactNode } from 'react';
 import { ShortInlineLoader, Stack } from 'shared/components';
 import { TitleStyle, VARIANTS, WrapperStyle } from './styles';
 
-type KeysItemProps = {
+type KeysItemProps = ComponentPropsWithoutRef<'div'> & {
   title: string;
   count: number | undefined;
   tooltip?: string;

@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { SquaredChip } from 'shared/components';
+import { ChipProps, SquaredChip } from 'shared/components';
 import { formatBP } from 'utils';
 
-export const WeightChip: FC<{ weight: bigint | undefined }> = ({
+export const WeightChip: FC<ChipProps & { weight: bigint | undefined }> = ({
   weight,
   ...props
 }) =>

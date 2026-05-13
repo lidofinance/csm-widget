@@ -24,8 +24,8 @@ export const IconTooltip: FC<Props> = ({
       <Tooltip
         placement={placement}
         title={tooltip}
-        {...rest}
         data-testid="tooltipWrapper"
+        {...rest}
       >
         <IconStyle inline={inline} data-testid="iconTooltip">
           {getIcon(type)}
