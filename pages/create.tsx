@@ -11,14 +11,16 @@ const Page = () => {
   const isPending = isModuleCSM ? isPendingCSM : isPendingCM;
 
   return (
-    <GateLoaded additional={isPending}>
+    <GateLoaded>
       <Gate
         rule={'IS_CONNECTED_WALLET'}
         fallback={<Navigate path={PATH.HOME} />}
       >
-        <Gate rule={'CAN_CREATE'} fallback={<Navigate path={PATH.HOME} />}>
-          <CreateNodeOperatorPage />
-        </Gate>
+        <GateLoaded additional={isPending}>
+          <Gate rule={'CAN_CREATE'} fallback={<Navigate path={PATH.HOME} />}>
+            <CreateNodeOperatorPage />
+          </Gate>
+        </GateLoaded>
       </Gate>
     </GateLoaded>
   );
