@@ -3,7 +3,6 @@ import {
   FC,
   PropsWithChildren,
   useContext,
-  useEffect,
   useMemo,
 } from 'react';
 import {
@@ -11,7 +10,6 @@ import {
   WagmiProvider,
   createConfig,
   fallback,
-  useConnections,
   usePublicClient,
 } from 'wagmi';
 import * as wagmiChains from 'wagmi/chains';
@@ -28,8 +26,6 @@ import { useThemeToggle } from '@lidofinance/lido-ui';
 import { config } from 'config';
 import { useGetRpcUrlByChainId } from 'config/rpc';
 import { useUserConfig } from 'config/user-config';
-import { useFeatureFlags } from 'config/feature-flags';
-import { USE_WALLET_RPC } from 'config/feature-flags/types';
 import { walletMetricProps } from 'consts/matomo-wallets-events';
 
 import { useWeb3Transport } from './use-web3-transport';
@@ -76,8 +72,6 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
     isWalletConnectionAllowed,
   } = useUserConfig();
   const { themeName } = useThemeToggle();
-  const featureFlags = useFeatureFlags();
-  const useWalletRpc = featureFlags?.[USE_WALLET_RPC] ?? false;
 
   const { supportedChains, defaultChain } = useMemo(() => {
     const defaultChain = wagmiChainMap[defaultChainId];
@@ -93,11 +87,7 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
     () => ({ [defaultChainId]: getRpcUrlByChainId(defaultChainId) }),
     [defaultChainId, getRpcUrlByChainId],
   );
-  const { transportMap, onActiveConnection } = useWeb3Transport(
-    supportedChains,
-    backendRPC,
-    useWalletRpc,
-  );
+  const transportMap = useWeb3Transport(supportedChains, backendRPC);
 
   const mainnetConfig = useMemo(() => {
     const batchConfig = {
@@ -167,12 +157,6 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
     isWalletConnectionAllowed,
     transportMap,
   ]);
-
-  const [activeConnection] = useConnections({ config: wagmiConfig });
-
-  useEffect(() => {
-    void onActiveConnection(activeConnection ?? null);
-  }, [activeConnection, onActiveConnection]);
 
   return (
     <Web3ProviderContext.Provider

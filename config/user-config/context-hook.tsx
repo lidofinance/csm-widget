@@ -15,6 +15,7 @@ type SavedUserConfig = {
 export type UserConfigContextType = UserConfigDefaultType & {
   savedUserConfig: SavedUserConfig;
   setSavedUserConfig: (config: SavedUserConfig) => void;
+  resetSavedUserConfig: () => void;
   isWalletConnectionAllowed: boolean;
   setIsWalletConnectionAllowed: (isAllowed: boolean) => void;
 };
@@ -44,6 +45,11 @@ export const useUserConfigContext = () => {
     [setLocalStorage],
   );
 
+  const resetSavedUserConfig = useCallback(() => {
+    setLocalStorage(DEFAULT_STATE);
+    setSavedUserConfig(DEFAULT_STATE);
+  }, [setLocalStorage]);
+
   return useMemo(() => {
     const userConfigDefault = getUserConfigDefault();
 
@@ -51,8 +57,14 @@ export const useUserConfigContext = () => {
       ...userConfigDefault,
       savedUserConfig,
       setSavedUserConfig: setSavedConfigAndRemember,
+      resetSavedUserConfig,
       isWalletConnectionAllowed,
       setIsWalletConnectionAllowed,
     };
-  }, [isWalletConnectionAllowed, savedUserConfig, setSavedConfigAndRemember]);
+  }, [
+    isWalletConnectionAllowed,
+    savedUserConfig,
+    setSavedConfigAndRemember,
+    resetSavedUserConfig,
+  ]);
 };
