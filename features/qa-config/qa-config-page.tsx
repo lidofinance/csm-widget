@@ -5,6 +5,7 @@ import { QaConfigForm } from './qa-config-form';
 
 export const QaConfigPage: FC = () => (
   <Layout
+    dummy="semi"
     title="QA Config"
     subtitle="Override RPC and Consensus Layer endpoints"
     pageName="QA Config"
