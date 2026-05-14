@@ -27,8 +27,8 @@ export const ClaimBondFormInfoSplitters: FC<Props> = ({
       withoutBorder
       data-testid="splittersAccordion"
       summary={
-        <Stack gap="md" center spaceBetween data-testid="splittersSummary">
-          <div>
+        <Stack gap="md" center spaceBetween>
+          <div data-testid="splittersSummary">
             Splitter addresses ({feeSplits.length}) will receive
             <IconTooltip
               placement="bottomLeft"

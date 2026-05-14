@@ -163,10 +163,16 @@ test.describe(
           await expect(btn).toBeEnabled({ timeout: PAGE_WAIT_TIMEOUT });
         });
 
-        await test.step('"Rewards Address will receive" row shows stETH amount', async () => {
-          // "will receive" always shows stETH regardless of selected token (app renders FormatToken with TOKENS.steth)
+        await test.step('"Rewards Address will receive" row is shown', async () => {
           await expect(claim.claimBondFormInfoTitle).toContainText(
-            /will receive.+stETH/,
+            'will receive',
+            { timeout: PAGE_WAIT_TIMEOUT },
+          );
+        });
+
+        await test.step('"will receive" amount shows selected token', async () => {
+          await expect(claim.willReceiveAmount).toContainText(
+            TOKEN_DISPLAY_NAMES[tokenName],
             { timeout: PAGE_WAIT_TIMEOUT },
           );
         });

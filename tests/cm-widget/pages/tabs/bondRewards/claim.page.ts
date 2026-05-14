@@ -24,6 +24,7 @@ export class ClaimPage extends BasePage {
 
   // Token buttons
   tokenButtons: Locator;
+  ethNote: Locator;
 
   // Enter token amount
   amountInput: Locator;
@@ -44,6 +45,13 @@ export class ClaimPage extends BasePage {
   claimBondFormInfo: Locator;
   claimBondFormInfoTitle: Locator;
   willReceiveAmount: Locator;
+  bondDecreaseRow: Locator;
+
+  // Splitters accordion
+  splittersAccordion: Locator;
+  splittersSummary: Locator;
+  splittersTotalAmount: Locator;
+  splitterRecipient: Locator;
 
   constructor(public page: Page) {
     super(page);
@@ -72,6 +80,7 @@ export class ClaimPage extends BasePage {
 
     // Token buttons
     this.tokenButtons = this.form.getByTestId('tokenButtons');
+    this.ethNote = this.form.getByTestId('ethNote');
 
     // Enter token amount
     this.amountInput = this.form.locator('input[name="amount"]');
@@ -107,7 +116,20 @@ export class ClaimPage extends BasePage {
     this.claimBondFormInfoTitle = this.claimBondFormInfo.getByTestId(
       'claimBondFormInfoTitle',
     );
-    this.willReceiveAmount = this.claimBondFormInfo.getByTestId('tokenAmount');
+    this.willReceiveAmount =
+      this.claimBondFormInfoTitle.getByTestId('tokenAmount');
+    this.bondDecreaseRow = this.form.getByTestId('bondDecreaseRow');
+
+    // Splitters accordion
+    this.splittersAccordion =
+      this.claimBondFormInfo.getByTestId('splittersAccordion');
+    this.splittersSummary =
+      this.claimBondFormInfo.getByTestId('splittersSummary');
+    this.splittersTotalAmount = this.claimBondFormInfo.getByTestId(
+      'splittersTotalAmount',
+    );
+    this.splitterRecipient =
+      this.claimBondFormInfo.getByTestId('splitterRecipient');
   }
 
   async open() {
