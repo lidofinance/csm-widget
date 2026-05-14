@@ -1,7 +1,7 @@
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { getCurveMetadata } from 'consts/operator-type-metadata';
 import { useCurveParameters } from 'modules/web3/';
-import { type FC, type ReactNode } from 'react';
+import { type ComponentPropsWithoutRef, type FC, type ReactNode } from 'react';
 import { useWatch } from 'react-hook-form';
 import { Address } from 'shared/components';
 import {
@@ -12,11 +12,9 @@ import styled from 'styled-components';
 import type { CuratedOperatorFormInputType } from '../context/';
 import { useCuratedOperatorFormData } from '../context/';
 
-const SummaryRow: FC<{ label: string; children: ReactNode }> = ({
-  label,
-  children,
-  ...rest
-}) => (
+const SummaryRow: FC<
+  ComponentPropsWithoutRef<'div'> & { label: string; children: ReactNode }
+> = ({ label, children, ...rest }) => (
   <RowStyle {...rest}>
     <Text size="xs" color="secondary">
       {label}

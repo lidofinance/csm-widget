@@ -100,7 +100,7 @@ export const ViewSplits: FC = () => {
       )}
 
       {canEdit && (
-        <Button fullwidth onClick={handleEdit}>
+        <Button fullwidth onClick={handleEdit} data-testid="splitsActionButton">
           {currentFeeSplits.length > 0 ? 'Edit splits' : 'Set up splits'}
         </Button>
       )}

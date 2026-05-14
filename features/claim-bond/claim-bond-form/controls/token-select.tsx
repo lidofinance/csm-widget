@@ -113,19 +113,17 @@ export const TokenSelect: React.FC = () => {
         }}
       />
       {token === TOKENS.eth && (
-        <div data-testid="ethNote">
-          <Note>
-            After receiving NFT you will need to claim ETH manually. Follow{' '}
-            <LocalLink
-              href={PATH.BOND_CLAIM}
-              anchor="#how-to-claim-eth-using-a-withdrawal-nft"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToClaimEth}
-            >
-              FAQ
-            </LocalLink>{' '}
-            for more details.
-          </Note>
-        </div>
+        <Note data-testid="ethNote">
+          After receiving NFT you will need to claim ETH manually. Follow{' '}
+          <LocalLink
+            href={PATH.BOND_CLAIM}
+            anchor="#how-to-claim-eth-using-a-withdrawal-nft"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.howToClaimEth}
+          >
+            FAQ
+          </LocalLink>{' '}
+          for more details.
+        </Note>
       )}
       {isContract && (
         <>

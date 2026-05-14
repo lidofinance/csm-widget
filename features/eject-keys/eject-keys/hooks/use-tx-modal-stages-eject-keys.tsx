@@ -36,10 +36,10 @@ export const useTxModalStagesEjectKeys = () =>
               <>
                 {input.selection.length}{' '}
                 <Plural
-                  variants={['key', 'keys']}
+                  variants={['key has been', 'keys have been']}
                   value={input.selection.length}
                 />{' '}
-                has been ejected
+                ejected
               </>
             }
             description=""

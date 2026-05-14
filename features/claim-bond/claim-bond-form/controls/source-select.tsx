@@ -83,7 +83,12 @@ const SplittersTooltip: FC<{ feeSplits: FeeSplit[] }> = ({ feeSplits }) => (
     </span>
     <Stack direction="column" gap="xxs">
       {feeSplits.map((split) => (
-        <Stack key={split.recipient} gap="xs" justify="space-between">
+        <Stack
+          key={split.recipient}
+          gap="xs"
+          justify="space-between"
+          data-testid="splittersTooltipRow"
+        >
           <Address address={split.recipient} link="" symbols={8} noStyle />
           <span>{formatShare(split.share)}</span>
         </Stack>

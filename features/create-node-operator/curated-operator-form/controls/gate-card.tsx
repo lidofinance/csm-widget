@@ -1,5 +1,10 @@
 import { Check, Divider, InlineLoader, Text } from '@lidofinance/lido-ui';
-import { type ChangeEvent, type FC, type ReactNode } from 'react';
+import {
+  type ChangeEvent,
+  type ComponentPropsWithoutRef,
+  type FC,
+  type ReactNode,
+} from 'react';
 import { useCurveParameters } from 'modules/web3';
 import {
   formatPercentKeyIntervals,
@@ -36,18 +41,18 @@ export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
         <CardLayout>
           <Stack direction="column" gap="sm">
             <CurveBadge
-              data-testid={`gateCardBadge`}
+              data-testid="gateCardBadge"
               type={operatorType}
               inline
             />
-            <Text size="xs" weight={700} data-testid={`gateCardTitle`}>
+            <Text size="xs" weight={700} data-testid="gateCardTitle">
               {metadata.name}
             </Text>
             {metadata.description && (
               <Description
                 color="secondary"
                 size="xxs"
-                data-testid={`gateCardDescription`}
+                data-testid="gateCardDescription"
               >
                 {metadata.description}
               </Description>
@@ -59,31 +64,31 @@ export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
               title="Node Operator reward:"
               loading={loading}
               items={formatPercentKeyIntervals(parameters?.rewardsConfig)}
-              data-testid={`gateCardRewardParams`}
+              data-testid="gateCardRewardParams"
             />
             <ParamSection
               title="Bond:"
               loading={loading}
               items={formatEthKeyIntervals(parameters?.bondConfig)}
-              data-testid={`gateCardBondParams`}
+              data-testid="gateCardBondParams"
             />
           </Stack>
         </CardLayout>
         <SatusStyled>
-          {fieldProps.checked && (
-            <CheckIcon data-testid={`gateCardCheckIcon`} />
-          )}
+          {fieldProps.checked && <CheckIcon data-testid="gateCardCheckIcon" />}
         </SatusStyled>
       </Stack>
     </RadioButton>
   );
 };
 
-const ParamSection: FC<{
-  title: string;
-  items: ReactNode[];
-  loading?: boolean;
-}> = ({ title, items, loading, ...props }) => (
+const ParamSection: FC<
+  ComponentPropsWithoutRef<'div'> & {
+    title: string;
+    items: ReactNode[];
+    loading?: boolean;
+  }
+> = ({ title, items, loading, ...props }) => (
   <div {...props}>
     <Text size="xxs" weight={700}>
       {title}
