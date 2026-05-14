@@ -108,7 +108,7 @@ test.describe('Operator without keys. Step 1.', () => {
 
       await test.step('Check next step is displayed', async () => {
         await expect(
-          widgetService.createNodeOperatorPage.createdOperatorForm,
+          widgetService.createNodeOperatorPage.curatedOperatorForm,
           'Next step should display "Specify addresses" form',
         ).toContainText('Specify addresses');
       });

@@ -8,7 +8,7 @@ import {
 } from './tabs/createNodeOperator';
 
 export class CreateNodeOperatorPage extends BasePage {
-  createdOperatorForm: Locator;
+  curatedOperatorForm: Locator;
   step1: CreateOperatorStep1Page;
   step2: CreateOperatorStep2Page;
   step3: CreateOperatorStep3Page;
@@ -17,11 +17,11 @@ export class CreateNodeOperatorPage extends BasePage {
   constructor(page: Page) {
     super(page);
 
-    this.createdOperatorForm = this.page.getByTestId('createdOperatorForm');
-    this.step1 = new CreateOperatorStep1Page(page, this.createdOperatorForm);
-    this.step2 = new CreateOperatorStep2Page(page, this.createdOperatorForm);
-    this.step3 = new CreateOperatorStep3Page(page, this.createdOperatorForm);
-    this.step4 = new CreateOperatorStep4Page(page, this.createdOperatorForm);
+    this.curatedOperatorForm = this.page.getByTestId('curatedOperatorForm');
+    this.step1 = new CreateOperatorStep1Page(page, this.curatedOperatorForm);
+    this.step2 = new CreateOperatorStep2Page(page, this.curatedOperatorForm);
+    this.step3 = new CreateOperatorStep3Page(page, this.curatedOperatorForm);
+    this.step4 = new CreateOperatorStep4Page(page, this.curatedOperatorForm);
   }
 
   async open() {
