@@ -10,6 +10,7 @@ const STORAGE_USER_CONFIG = 'lido-user-config';
 type SavedUserConfig = {
   rpcUrls: Partial<Record<SUPPORTED_CHAINS, string>>;
   clApiUrls: Partial<Record<SUPPORTED_CHAINS, string>>;
+  ipfsGateways: string[];
 };
 
 export type UserConfigContextType = UserConfigDefaultType & {
@@ -23,6 +24,7 @@ export type UserConfigContextType = UserConfigDefaultType & {
 const DEFAULT_STATE: SavedUserConfig = {
   rpcUrls: {},
   clApiUrls: {},
+  ipfsGateways: [],
 };
 
 export const useUserConfigContext = () => {
@@ -34,8 +36,10 @@ export const useUserConfigContext = () => {
   const [isWalletConnectionAllowed, setIsWalletConnectionAllowed] =
     useState(true);
 
-  const [savedUserConfig, setSavedUserConfig] =
-    useState<SavedUserConfig>(restoredSettings);
+  const [savedUserConfig, setSavedUserConfig] = useState<SavedUserConfig>({
+    ...DEFAULT_STATE,
+    ...restoredSettings,
+  });
 
   const setSavedConfigAndRemember = useCallback(
     (config: SavedUserConfig) => {

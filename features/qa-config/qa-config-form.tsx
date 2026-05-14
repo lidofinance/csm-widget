@@ -22,9 +22,21 @@ type ChainRow = {
 
 const rpcKey = (chainId: SUPPORTED_CHAINS) => `rpc_${chainId}`;
 const clKey = (chainId: SUPPORTED_CHAINS) => `cl_${chainId}`;
+const IPFS_GATEWAYS_KEY = 'ipfsGateways';
 
 const validateUrl = (value: string) =>
   !value || isUrl(value) || 'Not a valid URL';
+
+const parseGateways = (value: string): string[] =>
+  value
+    .split(',')
+    .map((url) => url.trim())
+    .filter(Boolean);
+
+const validateGateways = (value: string) => {
+  const invalid = parseGateways(value).find((url) => !isUrl(url));
+  return !invalid || `Not a valid URL: ${invalid}`;
+};
 
 export const QaConfigForm = () => {
   const {
@@ -60,6 +72,7 @@ export const QaConfigForm = () => {
         values[clKey(chainId)] = savedUserConfig.clApiUrls[chainId] ?? '';
       }
     }
+    values[IPFS_GATEWAYS_KEY] = savedUserConfig.ipfsGateways.join(', ');
     return values;
   }, [rows, savedUserConfig]);
 
@@ -82,7 +95,9 @@ export const QaConfigForm = () => {
         }
       }
 
-      setSavedUserConfig({ rpcUrls, clApiUrls });
+      const ipfsGateways = parseGateways(values[IPFS_GATEWAYS_KEY] ?? '');
+
+      setSavedUserConfig({ rpcUrls, clApiUrls, ipfsGateways });
       ToastSuccess('QA endpoints saved. Reload the page to apply.');
     },
     [rows, setSavedUserConfig],
@@ -120,6 +135,13 @@ export const QaConfigForm = () => {
               )}
             </Fragment>
           ))}
+          <Input
+            fullwidth
+            label="IPFS gateway"
+            placeholder="https://ipfs.io/ipfs/{cid}"
+            error={formState.errors[IPFS_GATEWAYS_KEY]?.message}
+            {...register(IPFS_GATEWAYS_KEY, { validate: validateGateways })}
+          />
           <Stack>
             <Button
               fullwidth
@@ -144,9 +166,14 @@ export const QaConfigForm = () => {
       <Block>
         <Description>
           <p>
-            Override the JSON-RPC endpoint and Consensus Layer API base URL used
-            by the widget. Intended for QA against custom forks or staging
-            backends — not for end users.
+            Override the JSON-RPC endpoint, Consensus Layer API base URL, and
+            IPFS gateway used by the widget. Intended for QA against custom
+            forks or staging backends — not for end users.
+          </p>
+          <p>
+            The IPFS gateway is tried before the default public gateways and may
+            include a <code>{'{cid}'}</code> placeholder; otherwise the CID is
+            appended to the URL.
           </p>
           <p>
             Values are stored in <code>localStorage</code> under{' '}

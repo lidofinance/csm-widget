@@ -8,4 +8,5 @@ export type UserConfigDefaultType = {
     [CHAINS.Hoodi]: string[];
   };
   walletconnectProjectId: string | undefined;
+  defaultIpfsGateways: string[];
 };
