@@ -15,5 +15,6 @@ export const getUserConfigDefault = (): UserConfigDefaultType => {
       [CHAINS.Hoodi]: config.prefillUnsafeElRpcUrls560048,
     },
     walletconnectProjectId: config.walletconnectProjectId,
+    defaultIpfsGateways: config.ipfsGateways,
   };
 };
