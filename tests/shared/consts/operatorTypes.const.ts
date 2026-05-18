@@ -39,8 +39,6 @@ export const OPERATOR_TYPE_METADATA: Record<
       'Obtain enhanced validation parameters by becoming recognized as an independent Community Staker. Please note that the verification process takes time and requires the submission of specific supporting proofs',
     curveId: OPERATOR_TYPE_CURVE_ID.CSM_ICS,
   },
-
-  // Curated Module types
   [OPERATOR_TYPE.CM_PTO]: {
     name: 'Professional Trusted Operator',
     short: 'PTO',
@@ -73,18 +71,26 @@ export const OPERATOR_TYPE_METADATA: Record<
       'This type recognizes entities that advance Ethereum decentralization by operating nodes in underrepresented regions or running unique client and infrastructure combinations.',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_DO,
   },
-  [OPERATOR_TYPE.CM_MODC]: {
-    name: 'Multi-Operator DVT Cluster',
-    short: 'MODC',
-    title: 'Multi-Operator DVT Cluster (MODC)',
+  [OPERATOR_TYPE.CM_EEO]: {
+    name: 'Extra Effort Operator',
+    short: 'EEO',
+    title: 'Extra Effort Operator (EEO)',
     description:
-      "This type applies to distributed validator clusters formed by multiple verified, independent entities operating together to strengthen Ethereum's robustness and resilience.",
-    curveId: OPERATOR_TYPE_CURVE_ID.CM_MODC,
+      'This type is for entities that demonstrate strong alignment with the Lido protocol through impactful contributions, such as governance participation and stVaults adoption.',
+    curveId: OPERATOR_TYPE_CURVE_ID.CM_EEO,
   },
   [OPERATOR_TYPE.CM_IODC]: {
     name: 'Intra-Operator DVT Cluster',
     short: 'IODC',
     title: 'Intra-Operator DVT Cluster (IODC)',
+    description:
+      'This type is designed for distributed validator clusters operated by a single entity, leveraging DVT to enhance validator security, redundancy, and operational reliability.',
+    curveId: OPERATOR_TYPE_CURVE_ID.CM_IODC,
+  },
+  [OPERATOR_TYPE.CM_IODCP]: {
+    name: 'Intra-Operator DVT Cluster Plus',
+    short: 'IODC+',
+    title: 'Intra-Operator DVT Cluster Plus (IODC+)',
     description:
       'This type is designed for distributed validator clusters operated by a single entity, leveraging DVT to enhance validator security, redundancy, and operational reliability.',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_IODC,

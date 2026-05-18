@@ -43,9 +43,7 @@ test.describe('Operator without keys. Step 3.', () => {
       await expect(
         step3.form,
         'Form should display name hint text',
-      ).toContainText(
-        'This name will be publicly visible on-chain. Your operator type will be added automatically (e.g., <NodeOperatorName>_ExtraEffort).',
-      );
+      ).toContainText('This name will be publicly visible on-chain');
     });
 
     await test.step('Check description hint text', async () => {
@@ -53,7 +51,7 @@ test.describe('Operator without keys. Step 3.', () => {
         step3.form,
         'Form should display description hint text',
       ).toContainText(
-        'A short public blurb about your operator. Great for visibility and marketing.',
+        'A short blurb about your operator. Will be publicly visible on-chain.',
       );
     });
   });
@@ -88,25 +86,26 @@ test.describe('Operator without keys. Step 3.', () => {
       await expect(
         step3.form,
         'Form should display name hint text',
-      ).toContainText(
-        'This name will be publicly visible on-chain. Your operator type will be added automatically (e.g., <NodeOperatorName>_ExtraEffort).',
-      );
+      ).toContainText('This name will be publicly visible on-chain');
     });
   });
 
-  test('Name: Should show required error for empty field', async ({}) => {
-    await test.step('Focus and blur name input without filling', async () => {
-      await step3.nameInput.focus();
-      await step3.nameInput.blur();
-    });
+  test(
+    qase(309, 'Name: Should show required error for empty field'),
+    async ({}) => {
+      await test.step('Focus and blur name input without filling', async () => {
+        await step3.nameInput.focus();
+        await step3.nameInput.blur();
+      });
 
-    await test.step('Check required validation error is displayed', async () => {
-      await expect(
-        step3.nameError,
-        '"Name" should show "Operator name is required" error when empty',
-      ).toHaveText('Operator name is required');
-    });
-  });
+      await test.step('Check required validation error is displayed', async () => {
+        await expect(
+          step3.nameError,
+          '"Name" should show "Operator name is required" error when empty',
+        ).toHaveText('Operator name is required');
+      });
+    },
+  );
 
   test(
     qase(67, 'Name: Should show error when value exceeds max length of 64'),
@@ -154,24 +153,27 @@ test.describe('Operator without keys. Step 3.', () => {
         step3.form,
         'Form should display description hint text',
       ).toContainText(
-        'A short public blurb about your operator. Great for visibility and marketing.',
+        'A short blurb about your operator. Will be publicly visible on-chain.',
       );
     });
   });
 
-  test('Description: Should show required error for empty field', async ({}) => {
-    await test.step('Focus and blur description input without filling', async () => {
-      await step3.descriptionInput.focus();
-      await step3.descriptionInput.blur();
-    });
+  test(
+    qase(310, 'Description: Should show required error for empty field'),
+    async ({}) => {
+      await test.step('Focus and blur description input without filling', async () => {
+        await step3.descriptionInput.focus();
+        await step3.descriptionInput.blur();
+      });
 
-    await test.step('Check required validation error is displayed', async () => {
-      await expect(
-        step3.descriptionError,
-        '"Description" should show "Description is required" error when empty',
-      ).toHaveText('Description is required');
-    });
-  });
+      await test.step('Check required validation error is displayed', async () => {
+        await expect(
+          step3.descriptionError,
+          '"Description" should show "Description is required" error when empty',
+        ).toHaveText('Description is required');
+      });
+    },
+  );
 
   test(
     qase(

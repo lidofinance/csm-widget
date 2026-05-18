@@ -4,26 +4,27 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
 
-const OPERATOR_0_ID = 0;
-const OPERATOR_1_ID = 1;
-
 test.describe('Group page. Navigation.', { tag: [Tags.forked] }, () => {
   let snapshotId: string;
+  let noId: number;
 
   test.beforeAll(({ useFork }) => {
     test.skip(!useFork, 'Test suite runs only on forked network');
   });
 
-  test.beforeEach(async ({ cmSDK, forkActionService, widgetService }) => {
+  test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
     snapshotId = await cmSDK.evmSnapshot();
+
+    noId = await widgetService.extractNodeOperatorId();
+
     await forkActionService.createOperatorGroup([
-      { id: OPERATOR_0_ID, weight: 50 },
-      { id: OPERATOR_1_ID, weight: 50 },
+      { id: noId, weight: 50 },
+      { id: noId - 1, weight: 50 },
     ]);
     await widgetService.groupPage.open();
   });
 
-  test.afterEach(async ({ cmSDK }) => {
+  test.afterAll(async ({ cmSDK }) => {
     await cmSDK.evmRevert(snapshotId);
   });
 
@@ -57,7 +58,7 @@ test.describe('Group page. Navigation.', { tag: [Tags.forked] }, () => {
   test(
     qase(218, 'Should navigate to keys submit page from "Upload keys" link'),
     async ({ widgetService }) => {
-      const op0 = widgetService.groupPage.operator(OPERATOR_0_ID);
+      const op0 = widgetService.groupPage.operator(noId);
 
       await expect(op0.uploadKeysLink).toBeVisible({
         timeout: STAGE_WAIT_TIMEOUT,

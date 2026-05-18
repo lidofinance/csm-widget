@@ -117,37 +117,38 @@ test.describe('Dashboard. Keys Breakdown.', () => {
           locator: keysSection.keysPendingActivationCount,
           label: 'Pending activation',
           tooltip:
-            'Keys have already got deposit from the Lido protocol and waiting to become active',
+            'Keys that have received deposits from the Lido protocol and are waiting to become active',
         },
         {
           locator: keysSection.keysActiveCount,
           label: 'Active',
-          tooltip: 'Keys that active',
+          tooltip: 'Keys that are active on the Beacon Chain',
         },
         {
           locator: keysSection.keysExitedCount,
           label: 'Exited',
-          tooltip: 'Keys that have already exited but not withdrawn yet',
+          tooltip: 'Keys that have exited but have not yet been withdrawn',
         },
         {
           locator: keysSection.keysWithdrawnCount,
           label: 'Withdrawn',
-          tooltip: 'Keys that have already exited and withdrawn',
+          tooltip: 'Keys that have been exited and fully withdrawn',
         },
         {
           locator: keysSection.keysUnbondedCount,
           label: 'Unbonded',
-          tooltip: 'Keys not sufficiently covered by current bond amount',
+          tooltip:
+            'Keys that are not sufficiently covered by the current bond amount',
         },
         {
           locator: keysSection.keysExitRequestedCount,
           label: 'Exit requested',
-          tooltip: 'Keys requested to exit',
+          tooltip: 'Keys for which an exit has been requested',
         },
         {
           locator: keysSection.keysDuplicatedCount,
           label: 'Duplicated',
-          tooltip: 'Keys that uploaded twice',
+          tooltip: 'Keys that have been uploaded more than once',
         },
         {
           locator: keysSection.keysInvalidCount,
@@ -158,7 +159,7 @@ test.describe('Dashboard. Keys Breakdown.', () => {
           locator: keysSection.keysUncheckedCount,
           label: 'Unchecked',
           tooltip:
-            'Keys that not checked yet because invalid or duplicated keys',
+            'Keys that have not yet been checked due to being invalid or duplicated',
         },
       ];
 
@@ -167,7 +168,7 @@ test.describe('Dashboard. Keys Breakdown.', () => {
           const tooltipText = await widgetService.dashboardPage.hoverElement(
             locator.locator('span').first(),
           );
-          expect(tooltipText).toContain(tooltip);
+          expect.soft(tooltipText).toContain(tooltip);
           await widgetService.dashboardPage.closeTooltip();
         });
       }

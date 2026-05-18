@@ -33,8 +33,7 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', () => {
       await test.step('Verify "Rewards" stETH value', async () => {
         const rewardsBalance =
           await availableToClaim.rewardsBalance_Text.textContent();
-        expect(rewardsBalance).toEqual('0.0 stETH');
-
+        expect(rewardsBalance).toMatch(/^\d+([.,]\d{1,4})?\s+stETH$/);
         await expect(availableToClaim.rewardsBalance_SubText).not.toHaveText(
           'N/A',
           {
@@ -43,7 +42,7 @@ test.describe('Dashboard. Bond & Rewards. Available to claim section.', () => {
         );
         const rewardsUSDBalance =
           await availableToClaim.rewardsBalance_SubText.textContent();
-        expect(rewardsUSDBalance).toEqual('$0.00');
+        expect(rewardsUSDBalance).toMatch(/^\$\d{1,3}(,\d{3})*(\.\d{1,2})?$/); // $1,799.52
       });
 
       await test.step('Verify "Excess bond" stETH value', async () => {

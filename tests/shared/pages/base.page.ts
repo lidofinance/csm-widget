@@ -104,11 +104,13 @@ export class BasePage {
   async waitForTextContent(locator: Locator, timeout = RPC_WAIT_TIMEOUT) {
     return waitForCallback(
       async (locator: Locator) => {
-        const text = await locator.evaluate((element) => {
-          const text = element.textContent?.trim();
-          return text && text.length > 0 && text != ' ' ? text : null;
-        }, timeout);
-        return text || null;
+        return await test.step('Wait for text content to be non-empty', async () => {
+          const text = await locator.evaluate((element) => {
+            const text = element.textContent?.trim();
+            return text && text.length > 0 && text != ' ' ? text : null;
+          }, timeout);
+          return text || null;
+        });
       },
       locator,
       timeout,

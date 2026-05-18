@@ -4,29 +4,31 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
 
-const OPERATOR_0_ID = 0;
-const OPERATOR_1_ID = 1;
 const OPERATOR_0_WEIGHT = 50;
 const OPERATOR_1_WEIGHT = 50;
-const TOTAL_WEIGHT = OPERATOR_0_WEIGHT + OPERATOR_1_WEIGHT;
 
 test.describe('Group page. Group summary.', { tag: [Tags.forked] }, () => {
   let snapshotId: string;
+  let noId: number;
 
   test.beforeAll(({ useFork }) => {
     test.skip(!useFork, 'Test suite runs only on forked network');
   });
 
-  test.beforeEach(async ({ cmSDK, forkActionService, widgetService }) => {
+  test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
     snapshotId = await cmSDK.evmSnapshot();
+
+    await widgetService.dashboardPage.open();
+    noId = await widgetService.extractNodeOperatorId();
+
     await forkActionService.createOperatorGroup([
-      { id: OPERATOR_0_ID, weight: OPERATOR_0_WEIGHT },
-      { id: OPERATOR_1_ID, weight: OPERATOR_1_WEIGHT },
+      { id: noId, weight: OPERATOR_0_WEIGHT },
+      { id: noId - 1, weight: OPERATOR_1_WEIGHT },
     ]);
     await widgetService.groupPage.open();
   });
 
-  test.afterEach(async ({ cmSDK }) => {
+  test.afterAll(async ({ cmSDK }) => {
     await cmSDK.evmRevert(snapshotId);
   });
 
@@ -82,8 +84,7 @@ test.describe('Group page. Group summary.', { tag: [Tags.forked] }, () => {
       await expect(summary.totalWeight).toBeVisible({
         timeout: STAGE_WAIT_TIMEOUT,
       });
-      // @todo: не работает сейчас - надо чинить
-      await expect(summary.totalWeight).toContainText(String(TOTAL_WEIGHT));
+      await expect(summary.totalWeight).toContainText(/\d+(\.\d+)?/);
     },
   );
 

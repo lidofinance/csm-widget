@@ -96,6 +96,19 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
       await browserService.initWalletSetup(useFork);
 
+      // When using fork, BrowserService.setupWithNode() imports the node's pre-funded
+      // account (derived from Anvil's mnemonic) into MetaMask and makes it active,
+      // ignoring accountConfig.SECRET_PHRASE. Switch back to the intended account.
+      if (
+        useFork &&
+        secretPhrase !== widgetFullConfig.accountConfig.SECRET_PHRASE
+      ) {
+        const targetAddress = mnemonicToAccount(secretPhrase).address;
+        await browserService
+          .getWalletPage()
+          .changeWalletAccountByAddress?.(targetAddress);
+      }
+
       await use(browserService);
 
       // We abort this request because we need to reduce the request count to the Elliptic api

@@ -63,9 +63,7 @@ const addressFields: AddressField[] = [
 test.describe('Operator without keys. Step 2.', () => {
   let step2: CreateOperatorStep2Page;
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.page.goto('/create');
-    // @todo: should be used after fix bug
-    // await widgetService.createNodeOperatorPage.open();
+    await widgetService.createNodeOperatorPage.open();
     step2 = widgetService.createNodeOperatorPage.step2;
     await widgetService.createNodeOperatorPage.step1.fillForm(
       OPERATOR_TYPE.CM_PTO,

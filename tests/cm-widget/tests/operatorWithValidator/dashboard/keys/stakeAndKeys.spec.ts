@@ -82,7 +82,7 @@ test.describe('Dashboard. Stake & Keys.', () => {
           tooltipIcon: keysSection.stakeColumnActiveTooltip,
           label: 'Active',
           tooltip:
-            'Stake amount that already has ETH deposited by the Lido protocol and are currently active in the validator set',
+            'The amount of ETH currently staked by the Lido protocol with this Node Operator',
         },
         {
           tooltipIcon: keysSection.stakeColumnDepositableTooltip,
@@ -94,7 +94,7 @@ test.describe('Dashboard. Stake & Keys.', () => {
           tooltipIcon: keysSection.stakeColumnPotentialTooltip,
           label: 'Potential additional capacity',
           tooltip:
-            'The additional stake the Lido protocol could allocate based on current weight, assuming enough validator keys are available',
+            'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available.',
         },
       ];
 
@@ -102,7 +102,7 @@ test.describe('Dashboard. Stake & Keys.', () => {
         await test.step(`Check tooltip for "${label}" column`, async () => {
           const tooltipText =
             await widgetService.dashboardPage.hoverElement(tooltipIcon);
-          expect(tooltipText).toContain(tooltip);
+          expect.soft(tooltipText).toContain(tooltip);
           await widgetService.dashboardPage.closeTooltip();
         });
       }

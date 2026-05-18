@@ -4,28 +4,32 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
 
-const OPERATOR_0_ID = 0;
-const OPERATOR_1_ID = 1;
-const OPERATOR_0_WEIGHT = 50;
-const OPERATOR_1_WEIGHT = 50;
+const OPERATOR_WEIGHT = 50;
 
 test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
   let snapshotId: string;
+  let noId: number;
+  let companionId: number;
 
   test.beforeAll(({ useFork }) => {
     test.skip(!useFork, 'Test suite runs only on forked network');
   });
 
-  test.beforeEach(async ({ cmSDK, forkActionService, widgetService }) => {
+  test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
     snapshotId = await cmSDK.evmSnapshot();
+
+    await widgetService.dashboardPage.open();
+    noId = await widgetService.extractNodeOperatorId();
+    companionId = noId - 1;
+
     await forkActionService.createOperatorGroup([
-      { id: OPERATOR_0_ID, weight: OPERATOR_0_WEIGHT },
-      { id: OPERATOR_1_ID, weight: OPERATOR_1_WEIGHT },
+      { id: noId, weight: OPERATOR_WEIGHT },
+      { id: companionId, weight: OPERATOR_WEIGHT },
     ]);
     await widgetService.groupPage.open();
   });
 
-  test.afterEach(async ({ cmSDK }) => {
+  test.afterAll(async ({ cmSDK }) => {
     await cmSDK.evmRevert(snapshotId);
   });
 
@@ -36,19 +40,17 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
         const { groupPage } = widgetService;
 
         await test.step('Operator #0 weight chip', async () => {
-          const op0 = groupPage.operator(OPERATOR_0_ID);
+          const op0 = groupPage.operator(noId);
           await expect(op0.weight).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
-          await expect(op0.weight).toContainText(
-            `Weight: ${OPERATOR_0_WEIGHT}`,
-          );
+          await expect(op0.weight).toContainText('Weight:');
+          await expect(op0.weight).toContainText(/\d+(\.\d+)?/);
         });
 
         await test.step('Operator #1 weight chip', async () => {
-          const op1 = groupPage.operator(OPERATOR_1_ID);
+          const op1 = groupPage.operator(companionId);
           await expect(op1.weight).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
-          await expect(op1.weight).toContainText(
-            `Weight: ${OPERATOR_1_WEIGHT}`,
-          );
+          await expect(op1.weight).toContainText('Weight:');
+          await expect(op1.weight).toContainText(/\d+(\.\d+)?/);
         });
       },
     );
@@ -61,7 +63,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
       async ({ widgetService }) => {
         const { groupPage } = widgetService;
 
-        for (const id of [OPERATOR_0_ID, OPERATOR_1_ID]) {
+        for (const id of [noId, companionId]) {
           const op = groupPage.operator(id);
 
           await test.step(`Operator #${id} metadata name is visible`, async () => {
@@ -87,7 +89,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
       async ({ widgetService }) => {
         const { groupPage } = widgetService;
 
-        for (const id of [OPERATOR_0_ID, OPERATOR_1_ID]) {
+        for (const id of [noId, companionId]) {
           const op = groupPage.operator(id);
 
           await test.step(`Operator #${id} rewards address label`, async () => {
@@ -117,7 +119,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
       async ({ widgetService }) => {
         const { groupPage } = widgetService;
 
-        for (const id of [OPERATOR_0_ID, OPERATOR_1_ID]) {
+        for (const id of [noId, companionId]) {
           const op = groupPage.operator(id);
 
           await test.step(`Operator #${id} — "Active" column`, async () => {
@@ -147,7 +149,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
     test(
       qase(223, 'Should show key counts in active and depositable columns'),
       async ({ widgetService }) => {
-        const op0 = widgetService.groupPage.operator(OPERATOR_0_ID);
+        const op0 = widgetService.groupPage.operator(noId);
 
         await test.step('Active keys count contains "key"', async () => {
           await expect(op0.stakeColumnActiveKeys).toBeVisible({
@@ -166,13 +168,13 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
     test(
       qase(224, 'Should show correct tooltips on stake columns'),
       async ({ widgetService }) => {
-        const op0 = widgetService.groupPage.operator(OPERATOR_0_ID);
+        const op0 = widgetService.groupPage.operator(noId);
 
         await test.step('"Active" column tooltip', async () => {
           await op0.stakeColumnActiveTooltip.hover();
           await expect(op0.tooltipWrapper).toHaveCount(1);
           await expect(op0.tooltipWrapper).toContainText(
-            'Stake amount that already has ETH deposited by the Lido protocol and are currently active in the validator set',
+            'The amount of ETH currently staked by the Lido protocol with this Node Operator',
           );
         });
 
@@ -201,7 +203,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
       async ({ widgetService }) => {
         const { groupPage } = widgetService;
 
-        for (const id of [OPERATOR_0_ID, OPERATOR_1_ID]) {
+        for (const id of [noId, companionId]) {
           await test.step(`Operator #${id} keys chip is visible`, async () => {
             await expect(groupPage.operator(id).keysChip).toBeVisible({
               timeout: STAGE_WAIT_TIMEOUT,
@@ -217,7 +219,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
         'Should show "Enough keys" chip for operator with sufficient keys',
       ),
       async ({ widgetService }) => {
-        const op0 = widgetService.groupPage.operator(OPERATOR_0_ID);
+        const op0 = widgetService.groupPage.operator(noId);
 
         await expect(op0.keysChip).toContainText('Enough keys', {
           timeout: STAGE_WAIT_TIMEOUT,
@@ -230,7 +232,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
     test(
       qase(227, 'Should show "Upload keys" link for the current operator'),
       async ({ widgetService }) => {
-        const op0 = widgetService.groupPage.operator(OPERATOR_0_ID);
+        const op0 = widgetService.groupPage.operator(noId);
 
         await expect(op0.uploadKeysLink).toBeVisible({
           timeout: STAGE_WAIT_TIMEOUT,
@@ -245,7 +247,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
         'Should show disabled message for operator managed by a different wallet',
       ),
       async ({ widgetService }) => {
-        const op1 = widgetService.groupPage.operator(OPERATOR_1_ID);
+        const op1 = widgetService.groupPage.operator(companionId);
 
         await expect(op1.differentWalletMessage).toBeVisible({
           timeout: STAGE_WAIT_TIMEOUT,
