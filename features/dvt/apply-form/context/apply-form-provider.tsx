@@ -2,12 +2,13 @@ import { FC, PropsWithChildren, useEffect, useRef } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerProvider,
+  useFlowSubmit,
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
 import { CLUSTER_SIZE } from './consts';
 import type { ClusterMember, DvtApplyFormInputType } from './types';
 import { useApplyFormData } from './apply-data-provider';
-import { useApplyFormSubmit } from './use-apply-form-submit';
+import { useApplyFlowResolver } from './use-apply-flow';
 import { useApplyFormValidation } from './use-apply-form-validation';
 import { useFormPersist } from './use-form-persist';
 
@@ -67,7 +68,7 @@ export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
     };
   }, [watch, save]);
 
-  const submitter = useApplyFormSubmit(clear);
+  const submitter = useFlowSubmit(useApplyFlowResolver(clear));
 
   return (
     <FormProvider {...formObject}>

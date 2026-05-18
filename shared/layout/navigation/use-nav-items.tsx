@@ -12,7 +12,7 @@ import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import {
-  CounterIcs,
+  CounterClaimType,
   CounterInvalidKeys,
   CounterInvites,
   CounterLockedBond,
@@ -118,14 +118,15 @@ const routes: Route[] = [
     path: PATH.TYPE,
     icon: <UserIcon />,
     subPaths: [
-      PATH.TYPE_CLAIM,
       PATH.TYPE_ICS_SYSTEM,
       PATH.TYPE_ICS_APPLY,
+      PATH.TYPE_ICS_CLAIM,
       PATH.TYPE_DVT_DESCRIPTION,
       PATH.TYPE_DVT_APPLY,
+      PATH.TYPE_DVT_CLAIM,
     ],
-    showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED'],
-    suffix: <CounterIcs />,
+    showRules: ['CAN_CLAIM_ICS', 'CAN_CLAIM_IDVTC', 'ICS_APPLY_ENABLED'],
+    suffix: <CounterClaimType />,
   },
 ];
 

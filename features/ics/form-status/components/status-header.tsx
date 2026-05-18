@@ -106,7 +106,7 @@ const useHint = (
           </Text>
 
           <div>
-            <LocalLink href={PATH.TYPE_CLAIM}>
+            <LocalLink href={PATH.TYPE_ICS_CLAIM}>
               <Button size="xs">Go to claim</Button>
             </LocalLink>
           </div>

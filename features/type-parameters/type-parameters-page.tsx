@@ -6,7 +6,6 @@ import { TypePageSwitcher } from 'shared/navigate';
 import { TypeParameters } from './type-parameters';
 import { PATH } from 'consts/urls';
 
-// FIXME: show back-button only if flags.ICS_APPLY_ENABLED
 export const TypeParametersPage: FC = () => (
   <Layout
     title="Operator Type Parameters"
