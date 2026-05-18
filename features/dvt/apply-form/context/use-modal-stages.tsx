@@ -24,7 +24,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
       />,
     ),
 
-  failed: (error: unknown, onRetry?: () => void) => {
+  failed: (error: unknown) => {
     let errorContent;
 
     if (typeof error === 'object' && error !== null && 'details' in error) {
@@ -51,8 +51,8 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
         title="Submission failed"
         error={errorContent}
         code={getErrorCode(error)}
-        onRetry={onRetry}
       />,
+      { isClosableOnLedger: true },
     );
   },
 });

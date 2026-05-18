@@ -1,4 +1,4 @@
-export * from './counter-ics';
+export * from './counter-claim-type';
 export * from './counter-invalid-keys';
 export * from './counter-invites';
 export * from './counter-locked-bond';

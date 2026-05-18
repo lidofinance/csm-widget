@@ -33,13 +33,14 @@ export const PATH = <const>{
   STEALING_CANCEL: '/stealing/cancel',
 
   TYPE: '/type',
-  TYPE_CLAIM: '/type/claim',
+  TYPE_ICS_CLAIM: '/type/ics-claim',
   TYPE_ICS_SYSTEM: '/type/ics-system',
   TYPE_ICS_APPLY: '/type/ics-apply',
   TYPE_PARAMETERS: '/type/parameters',
 
   TYPE_DVT_DESCRIPTION: '/type/idvtc-description',
   TYPE_DVT_APPLY: '/type/idvtc-apply',
+  TYPE_DVT_CLAIM: '/type/idvtc-claim',
 
   SURVEYS: '/surveys',
   SURVEYS_CONTACTS: '/surveys/contacts',

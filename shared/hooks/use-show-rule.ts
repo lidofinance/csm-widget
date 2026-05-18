@@ -17,7 +17,11 @@ import {
 } from 'modules/web3';
 import { useModifyContext } from 'providers/modify-provider';
 import { useCallback, useMemo } from 'react';
-import { useCanClaimICS, useCanCreateNodeOperator } from 'shared/hooks';
+import {
+  useCanClaimICS,
+  useCanClaimIDVTC,
+  useCanCreateNodeOperator,
+} from 'shared/hooks';
 import { Address, isAddressEqual } from 'viem';
 
 export type ShowRule =
@@ -35,6 +39,7 @@ export type ShowRule =
   | 'HAS_REFERRER'
   | 'EL_STEALING_REPORTER'
   | 'CAN_CLAIM_ICS'
+  | 'CAN_CLAIM_IDVTC'
   | 'ICS_APPLY_ENABLED'
   | 'IS_SURVEYS_ACTIVE'
   | 'IS_CSM'
@@ -85,6 +90,7 @@ export const useShowFlags = (): ShowFlags => {
   const { data: balance } = useOperatorBalance(nodeOperator?.nodeOperatorId);
   const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
   const canClaimICS = useCanClaimICS();
+  const canClaimIDVTC = useCanClaimIDVTC();
   const canCreateNO = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
@@ -110,6 +116,7 @@ export const useShowFlags = (): ShowFlags => {
       ['HAS_REFERRER']: !!referrer,
       ['EL_STEALING_REPORTER']: !!isReportingRole,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
+      ['CAN_CLAIM_IDVTC']: !!canClaimIDVTC && isAccountActive,
       ['ICS_APPLY_ENABLED']:
         !!featureFlags?.[ICS_APPLY_FORM] && module === MODULE_NAME.CSM,
       ['IS_SURVEYS_ACTIVE']:
@@ -131,6 +138,7 @@ export const useShowFlags = (): ShowFlags => {
       referrer,
       isReportingRole,
       canClaimICS,
+      canClaimIDVTC,
       featureFlags,
       module,
     ],

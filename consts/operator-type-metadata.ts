@@ -41,6 +41,14 @@ export const OPERATOR_TYPE_METADATA: Record<
       'Obtain enhanced validation parameters by becoming recognized as an independent Community Staker. Please note that the verification process takes time and requires the submission of specific supporting proofs',
     curveId: OPERATOR_TYPE_CURVE_ID.CSM_ICS,
   },
+  [OPERATOR_TYPE.CSM_IDVTC]: {
+    name: 'Identified DVT Cluster',
+    short: 'IDVTC',
+    title: 'Identified DVT Cluster (IDVTC)',
+    description:
+      'Unlock a more resilient and capital-efficient validation path by creating a verified DVT cluster of independent Community Stakers. Approval requires meeting criteria and completing verification.',
+    curveId: OPERATOR_TYPE_CURVE_ID.CSM_IDVTC,
+  },
   [OPERATOR_TYPE.CM_PTO]: {
     name: 'Professional Trusted Operator',
     short: 'PTO',

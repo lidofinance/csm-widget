@@ -16,6 +16,7 @@ import { DefColumnBackground, IcsColumnBackground } from 'shared/components';
 import { useShowFlags } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 
+// TODO: upgrade for idvtc
 export const TypeParameters: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: operatorType } = useOperatorType(nodeOperatorId);
@@ -55,7 +56,7 @@ export const TypeParameters: FC = () => {
             </CompareParametersList>
           </Block>
           {CAN_CLAIM_ICS && (
-            <LocalLink href={PATH.TYPE_CLAIM}>
+            <LocalLink href={PATH.TYPE_ICS_CLAIM}>
               <Button fullwidth size="sm">
                 Go to claim
               </Button>

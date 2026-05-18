@@ -73,6 +73,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   unlockBondLinkAlert = 'unlockBondLinkAlert',
   expiredLockedBondLinkAlert = 'expiredLockedBondLinkAlert',
   claimIcsLinkAlert = 'claimIcsLinkAlert',
+  claimIdvtcLinkAlert = 'claimIdvtcLinkAlert',
   feeRecipientDocsLink = 'feeRecipientDocsLink',
   feeRecipientDismissButton = 'feeRecipientDismissButton',
   wrappedAlertClose = 'wrappedAlertClose',
@@ -344,6 +345,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert]: createEvent(
     'Click «Claim ICS» link on Claim ICS alert',
     'claim_ics_link_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.claimIdvtcLinkAlert]: createEvent(
+    'Click «Claim IDVTC» link on Claim IDVTC alert',
+    'claim_idvtc_link_alert',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.feeRecipientDocsLink]: createEvent(
     'Click «How to change feeRecipient» link on Wrong Fee Recipient alert',

@@ -13,6 +13,7 @@ export const RadioIconStyle = styled(Radio)`
     box-shadow 0.1s ease,
     background-color 0.1s ease;
   fill: var(--lido-color-controlBg);
+  flex: 0 0 auto;
 
   background-color: var(--lido-color-controlBg);
   box-shadow: inset 0 0 0 1px var(--lido-color-border);

@@ -6,13 +6,15 @@ import { SiweAuthProvider, useSiweAuth } from 'shared/siwe';
 import { Connect } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status/form-status';
+import { ProofStatus } from './form-status/proof-status';
 import { DvtStateProvider, useDvtState } from './shared';
 import { SiweSignIn } from './siwe-sign-in/siwe-sign-in';
 
 const DvtApplyContent: FC = () => {
   const { isAccountActive } = useDappStatus();
   const { token } = useSiweAuth();
-  const { data, isPending, applyMode, reset } = useDvtState();
+  const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
+    useDvtState();
 
   if (!isAccountActive) {
     return (
@@ -32,6 +34,18 @@ const DvtApplyContent: FC = () => {
     );
   }
 
+  if (isTypePending) {
+    return (
+      <Block>
+        <WhenLoaded loading={true} />
+      </Block>
+    );
+  }
+
+  if (typeStatus === 'CLAIMED') {
+    return <ProofStatus typeStatus={typeStatus} />;
+  }
+
   if (!token) {
     return <SiweSignIn />;
   }
@@ -45,7 +59,11 @@ const DvtApplyContent: FC = () => {
   }
 
   if (data && !applyMode) {
-    return <FormStatus data={data} reset={reset} />;
+    return <FormStatus data={data} typeStatus={typeStatus} reset={reset} />;
+  }
+
+  if (!data && typeStatus !== 'PENDING') {
+    return <ProofStatus typeStatus={typeStatus} />;
   }
 
   return <ApplyForm />;

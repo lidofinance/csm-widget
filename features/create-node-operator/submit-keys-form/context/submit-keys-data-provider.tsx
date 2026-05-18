@@ -1,18 +1,15 @@
 import {
   KEY_DEPOSIT_QUEUE_BATCHES,
   KEY_ICS_PROOF,
+  KEY_IDVTC_PROOF,
   KEY_SHARE_LIMIT,
   KEY_STAKE_LIMIT,
-  useSmStatus,
   useCurveParameters,
   useDappStatus,
-  useDefaultCurveId,
   useEthereumBalance,
-  useIcsCurveId,
-  useIcsPaused,
-  useIcsProof,
   useShareLimit,
   useShareLimitStatus,
+  useSmStatus,
   useStakeLimit,
   useStethBalance,
   useWstethBalance,
@@ -23,7 +20,7 @@ import {
   NetworkData,
   useFormData,
 } from 'shared/hook-form/form-controller';
-import { useInvalidate } from 'shared/hooks';
+import { useCreateCurveId, useInvalidate } from 'shared/hooks';
 import { type SubmitKeysFormNetworkData } from './types';
 
 const useSubmitKeysFormNetworkData: NetworkData<
@@ -50,18 +47,9 @@ const useSubmitKeysFormNetworkData: NetworkData<
   const isMaxStakeEtherLoading = maxStakeEthQuery.isPending;
 
   const { address } = useDappStatus();
-  const proofQuery = useIcsProof();
 
-  const proof = proofQuery.data;
-  const isProofLoading = proofQuery.isPending;
-
-  const { data: isIcsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
-  const { data: defCurveId, isPending: isDefCurveIdLoading } =
-    useDefaultCurveId();
-  const { data: icsCurveId, isPending: isIcsCurveIdLoading } = useIcsCurveId();
-
-  const isIcs = !isIcsPaused && proof?.proof && !proof.isConsumed;
-  const curveId = isIcs ? icsCurveId : defCurveId;
+  const { data: createData, isPending: isCurveIdPending } = useCreateCurveId();
+  const { curveId, proof } = createData ?? {};
 
   const { data: curveParameters, isPending: isCurveParametersLoading } =
     useCurveParameters(curveId);
@@ -85,6 +73,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
       KEY_SHARE_LIMIT,
       KEY_STAKE_LIMIT,
       KEY_ICS_PROOF,
+      KEY_IDVTC_PROOF,
       KEY_DEPOSIT_QUEUE_BATCHES,
     ]);
   }, [
@@ -101,17 +90,14 @@ const useSubmitKeysFormNetworkData: NetworkData<
     isMaxStakeEtherLoading ||
     isStatusLoading ||
     isShareLimitLoading ||
-    isProofLoading ||
-    isIcsPausedLoading ||
-    isDefCurveIdLoading ||
-    isIcsCurveIdLoading ||
+    isCurveIdPending ||
     isCurveParametersLoading;
 
   return {
     data: {
       address,
       isPaused: status?.isPaused,
-      proof: (isIcs && proof.proof) || undefined,
+      proof,
       stethBalance,
       wstethBalance,
       ethBalance,
