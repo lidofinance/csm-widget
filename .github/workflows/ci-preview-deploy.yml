@@ -16,7 +16,6 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     branches-ignore:
       - main
-      - develop-cm
 
 permissions:
   contents: read
@@ -46,6 +45,7 @@ jobs:
           TARGET: ${{ github.head_ref || steps.ref.outputs.short_ref }}
           TARGET_WORKFLOW: "preview_stand_deploy.yaml"
           INPUTS_REPO_NAME: ${{ github.repository }}
+          INPUTS_APP_NAME: "csm-widget"
           INPUTS_PR_ID: ${{ github.event.pull_request.number || steps.pr.outputs.number }}
           INPUTS_INVENTORY: "${{ inputs.inventory || 'testnet' }}"
 

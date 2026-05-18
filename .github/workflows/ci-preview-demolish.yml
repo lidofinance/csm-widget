@@ -7,7 +7,6 @@ on:
       [converted_to_draft, closed]
     branches-ignore:
       - main
-      - develop-cm
 
 permissions: {}
 
@@ -25,4 +24,5 @@ jobs:
           TARGET: ${{ github.head_ref }}
           TARGET_WORKFLOW: "preview_stand_demolish.yaml"
           INPUTS_REPO_NAME: ${{ github.repository }}
+          INPUTS_APP_NAME: "csm-widget"
           INPUTS_PR_ID: ${{ github.event.pull_request.number }}
