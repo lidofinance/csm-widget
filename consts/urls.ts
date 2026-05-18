@@ -53,6 +53,8 @@ export const PATH = <const>{
   GROUP: '/group',
 
   WRAPPED_SHARE: '/wrapped-2025/share',
+
+  QA_CONFIG: '/qa-config',
 };
 
 export type PATH = (typeof PATH)[keyof typeof PATH];

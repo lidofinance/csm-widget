@@ -11,7 +11,12 @@ export const StepTrack: FC = () => {
 
   return (
     <Stack direction="row" gap="md" center justify="space-between">
-      <Text size="xxs" color="secondary" weight={500}>
+      <Text
+        size="xxs"
+        color="secondary"
+        data-testid="stepTrackText"
+        weight={500}
+      >
         Step {currentStep} of 4
       </Text>
       <StepIndicator length={4} current={currentStep - 1} backSolid />

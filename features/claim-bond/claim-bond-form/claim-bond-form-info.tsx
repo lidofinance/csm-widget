@@ -84,7 +84,10 @@ export const ClaimBondFormInfo = () => {
         </DataTableRow>
       )}
       {bondDelta < 0n && (
-        <DataTableRow title="Excess bond will decrease by">
+        <DataTableRow
+          data-testid="bondDecreaseRow"
+          title="Excess bond will decrease by"
+        >
           <FormatToken amount={-bondDelta} token={TOKENS.steth} />
         </DataTableRow>
       )}

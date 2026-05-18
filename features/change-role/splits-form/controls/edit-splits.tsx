@@ -49,6 +49,7 @@ export const EditSplits: FC = () => {
           variant="text"
           size="xs"
           onClick={handleAdd}
+          data-testid="addSplitButton"
         >
           Add new address
         </ButtonStyled>

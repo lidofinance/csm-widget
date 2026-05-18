@@ -45,7 +45,7 @@ export const SelectHookForm = ({
       fullwidth
       placeholder={placeholder}
       disabled={props.disabled || field.disabled}
-      error={testableError(errorProp ?? errorMessage, fieldName)}
+      error={testableError(errorProp ?? errorMessage)}
       {...props}
       {...field}
     >

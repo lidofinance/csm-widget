@@ -3,7 +3,6 @@ import {
   FeatureFlagsType,
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
-  USE_WALLET_RPC,
   DISABLE_DEPOSIT_DATA_VALIDATION,
 } from 'config/feature-flags/types';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
@@ -28,7 +27,6 @@ type ModifyContextValue = {
 const QUERY_REFERRER = 'ref';
 
 const FEATURE_FLAG_QUERY_MAPPING: Record<string, keyof FeatureFlagsType> = {
-  'wallet-rpc': USE_WALLET_RPC,
   'ics-apply': ICS_APPLY_FORM,
   'survey-setup': SURVEYS_SETUP_ENABLED,
   'disable-deposit-validation': DISABLE_DEPOSIT_DATA_VALIDATION,

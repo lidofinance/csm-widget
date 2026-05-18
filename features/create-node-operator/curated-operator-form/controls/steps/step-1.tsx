@@ -18,10 +18,10 @@ export const Step1: FC = () => {
   return (
     <Stack direction="column" gap="xxl">
       <Stack direction="column" gap="sm">
-        <Text as="h3" size="lg" weight={700}>
+        <Text as="h3" size="lg" weight={700} data-testid="stepTitle">
           Select Sub-Node Operator Type
         </Text>
-        <Text size="xs" color="secondary">
+        <Text size="xs" color="secondary" data-testid="stepDescription">
           Choose the type you want to create now. You can create additional
           Sub-Node Operators with other types later
         </Text>

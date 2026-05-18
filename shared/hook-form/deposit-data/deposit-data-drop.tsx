@@ -42,7 +42,7 @@ export const DepositDataDrop: FC<
     [fieldName, setValue],
   );
 
-  const { getRootProps, open, isDragAccept } = useDropzone({
+  const { getRootProps, getInputProps, open, isDragAccept } = useDropzone({
     onDrop,
     noKeyboard: true,
     noClick: true,
@@ -56,6 +56,7 @@ export const DepositDataDrop: FC<
   return (
     <DepositDataDropContext.Provider value={open}>
       <DropzoneStyle {...getRootProps({ isDragAccept })} aria-invalid={error}>
+        <input {...getInputProps()} />
         {children}
       </DropzoneStyle>
     </DepositDataDropContext.Provider>

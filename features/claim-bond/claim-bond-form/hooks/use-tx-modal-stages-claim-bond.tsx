@@ -23,30 +23,23 @@ export const useTxModalStagesClaimBond = () =>
   useTxStages<ClaimBondFormInputType, ClaimBondFormNetworkData>(
     (transitStage, input, data) => {
       const breakdown = computeClaimBreakdown(input, data);
-      const { includesRewards, isRewardsToBond, toRA, bondDelta } = breakdown;
-      const amount = isRewardsToBond ? 0n : (input.amount ?? 0n);
+      const { toRA } = breakdown;
 
       return {
         sign: () =>
           transitStage(
             <TxStageClaim
-              amount={amount}
-              token={input.token}
-              claimRewards={includesRewards}
-              isRewardsToBond={isRewardsToBond}
-              toRA={toRA}
-              bondDelta={bondDelta}
+              breakdown={breakdown}
+              rewardsAddress={data.rewardsAddress}
+              feeSplitsCount={data.feeSplits.length}
             />,
           ),
         pending: (txHash) =>
           transitStage(
             <TxStageClaim
-              amount={amount}
-              token={input.token}
-              claimRewards={includesRewards}
-              isRewardsToBond={isRewardsToBond}
-              toRA={toRA}
-              bondDelta={bondDelta}
+              breakdown={breakdown}
+              rewardsAddress={data.rewardsAddress}
+              feeSplitsCount={data.feeSplits.length}
               isPending
               txHash={txHash}
             />,
@@ -59,7 +52,7 @@ export const useTxModalStagesClaimBond = () =>
                 description={
                   <>
                     Request withdrawal of{' '}
-                    <TxAmount amount={amount} token={TOKENS.steth} /> has been
+                    <TxAmount amount={toRA} token={TOKENS.steth} /> has been
                     sent. Check{' '}
                     <MatomoLink
                       $inline

@@ -1,5 +1,5 @@
 import { StyledYouChip } from './styles';
 
 export const YouChip = () => {
-  return <StyledYouChip>You</StyledYouChip>;
+  return <StyledYouChip data-testid="youChip">You</StyledYouChip>;
 };

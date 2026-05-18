@@ -2,9 +2,10 @@ import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 import { FetcherError, standardFetcher } from 'utils';
 import { useSiweAuth } from 'shared/siwe';
+import { config } from 'config';
 import { getExternalLinks } from 'consts/external-links';
 
-const { surveyApi } = getExternalLinks();
+const surveyApi = config.surveysApiUrl || getExternalLinks().surveyApi;
 
 export const useSurveysFetcher = <T, R = T>(
   transformIncoming?: (d: R) => T,
