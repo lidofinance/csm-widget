@@ -23,21 +23,31 @@ export const ListStyle = styled.div`
   row-gap: ${({ theme }) => theme.spaceMap.xl}px;
 `;
 
-export const CompareListStyle = styled.div`
+export const CompareListStyle = styled.div<{ $columns: number }>`
+  --columns: ${({ $columns }) => $columns};
+  --title-fr: ${({ $columns }) => ($columns > 2 ? 3 : 4)};
+  --col-fr: 5;
+  --total-fr: calc(var(--title-fr) + var(--col-fr) * var(--columns));
   position: relative;
   display: grid;
-  grid-template-columns: 4fr 5fr 5fr;
+  grid-template-columns: ${({ $columns }) => ($columns > 2 ? 3 : 4)}fr repeat(
+      ${({ $columns }) => $columns},
+      5fr
+    );
   column-gap: ${({ theme }) => theme.spaceMap.sm}px;
   row-gap: ${({ theme }) => theme.spaceMap.xl}px;
 `;
 
-export const ColumnBackground = styled.div`
+export const ColumnBackground = styled.div<{ $index: number }>`
   --border-radius: 12px;
   position: absolute;
   top: -8px;
-  right: -4px;
   bottom: -8px;
-  width: calc((100% + 0px) * 5 / 14 - 2px);
+  left: calc(
+    100% * (var(--title-fr) + var(--col-fr) * ${({ $index }) => $index}) /
+      var(--total-fr) + 2px
+  );
+  width: calc(100% * var(--col-fr) / var(--total-fr) - 4px);
   border-radius: var(--border-radius);
   pointer-events: none;
   opacity: 0.6;
@@ -64,9 +74,11 @@ export const IcsColumnBackground = styled(ColumnBackground)`
   ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_ICS]}
 `;
 
+export const IdvtcColumnBackground = styled(ColumnBackground)`
+  ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_IDVTC]}
+`;
+
 export const DefColumnBackground = styled(ColumnBackground)`
-  right: auto;
-  left: calc((100% + 0px) * 4 / 14 + 4px);
   ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_DEF]}
 `;
 
@@ -117,6 +129,10 @@ export const RowStyle = styled.div<{ $bordered?: boolean }>`
 
 export const CompareRowStyle = styled(RowStyle)`
   z-index: 1;
+
+  & > :not(:first-child) {
+    padding-right: 10px;
+  }
 `;
 
 export const CompareTitleStyle = styled(CompareRowStyle)`
