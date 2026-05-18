@@ -21,10 +21,16 @@ export const Info: FC = () => {
       </Text>
       <AccordionStyle summary="Parameter changes">
         <CompareParametersList
-          left={currentParameters}
-          right={newParameters}
-          leftTitle={`Current (${OPERATOR_TYPE_METADATA[currentOperatorType].short})`}
-          rightTitle={`New (${OPERATOR_TYPE_METADATA[newOperatorType].short})`}
+          items={[
+            {
+              parameters: currentParameters,
+              title: `Current (${OPERATOR_TYPE_METADATA[currentOperatorType].short})`,
+            },
+            {
+              parameters: newParameters,
+              title: `New (${OPERATOR_TYPE_METADATA[newOperatorType].short})`,
+            },
+          ]}
         />
       </AccordionStyle>
     </>
