@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { ReactComponent as RewardsIcon } from 'assets/balance/empty.svg';
 
 export const EmptyState: FC = () => (
-  <Wrapper direction="column" center gap="sm">
+  <Wrapper data-testid="claimEmptyState" direction="column" center gap="sm">
     <RewardsIcon />
     <Text size="sm" weight={700}>
       Nothing to claim at the moment

@@ -38,7 +38,6 @@ export const PercentInputHookForm = ({
       disabled={props.disabled ?? field.disabled}
       error={testableError(
         errorProp ?? (showErrorMessage ? errorMessage : hasErrorHighlight),
-        fieldName,
       )}
       label={label ?? fieldName}
       fullwidth

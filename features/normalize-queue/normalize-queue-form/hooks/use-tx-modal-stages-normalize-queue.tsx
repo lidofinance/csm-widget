@@ -36,7 +36,7 @@ export const useTxModalStagesNormalizeQueue = () =>
           transitStage(
             <TxStageSuccess
               txHash={txHash}
-              title="Queue has been noramlized"
+              title="Queue has been normalized"
               description={`You have ${keysCount} keys(s) in depositing queue`}
             />,
             { isClosableOnLedger: true },

@@ -68,7 +68,12 @@ export const DeleteKeysSwitcher: FC<Props> = ({ active }) => {
   return (
     <Grid>
       {filteredItems.map(({ value, route, suffix, title, description }) => (
-        <RadioLocalLink key={value} $active={active === value} href={route}>
+        <RadioLocalLink
+          key={value}
+          $active={active === value}
+          href={route}
+          data-testid="deleteKeysCard"
+        >
           <Stack direction="column" gap="md">
             <Stack gap="sm" center>
               <Text size="xs" weight={700}>

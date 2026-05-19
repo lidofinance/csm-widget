@@ -59,3 +59,9 @@ export const keysApiUrl = process.env.KEYS_API_URL;
 
 /** @type string */
 export const feesMonitoringApiUrl = process.env.FEES_MONITORING_API_URL;
+
+/** @type string[] */
+export const ipfsGateways = parseUrlList(process.env.IPFS_GATEWAYS);
+
+/** @type string */
+export const surveysApiUrl = process.env.SURVEYS_API_URL;

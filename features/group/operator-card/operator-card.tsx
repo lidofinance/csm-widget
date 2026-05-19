@@ -35,7 +35,7 @@ export const OperatorCard: FC<SubOperatorStakeSummary> = ({
   const moreKeys = !!stakeAndKeys?.potentialAdditionalKeys;
 
   return (
-    <Block>
+    <Block data-testid="operatorCard">
       <Stack direction="column" gap="md">
         <OperatorCardHeader
           {...{
@@ -73,7 +73,7 @@ const OperatorCardHeader: FC<
         <Text as="h4" size="sm" weight={700}>
           <DescriptorId id={nodeOperatorId} />
         </Text>
-        <WeightChip weight={weight} />
+        <WeightChip weight={weight} data-testid="operatorWeight" />
       </Stack>
 
       {info && (
@@ -86,9 +86,13 @@ const OperatorCardHeader: FC<
 
     {metadata && info && curveId !== undefined ? (
       <Stack center gap="sm">
-        <Text size="xs">{metadata.name}</Text>
+        <Text size="xs" data-testid="operatorMetadataName">
+          {metadata.name}
+        </Text>
         <DividerStyled />
-        <Text size="xs">{getCurveMetadata(curveId).name}</Text>
+        <Text size="xs" data-testid="operatorCurveName">
+          {getCurveMetadata(curveId).name}
+        </Text>
       </Stack>
     ) : (
       <InlineLoader />
@@ -96,12 +100,12 @@ const OperatorCardHeader: FC<
 
     {info ? (
       <Stack center gap="sm">
-        <Text size="xxs" color="secondary">
+        <Text size="xxs" color="secondary" data-testid="operatorRewardsAddress">
           Rewards:{' '}
           <Address address={info.rewardsAddress} symbols={4} size="xxs" />
         </Text>
         <DividerStyled />
-        <Text size="xxs" color="secondary">
+        <Text size="xxs" color="secondary" data-testid="operatorManagerAddress">
           Manager:{' '}
           <Address address={info.managerAddress} symbols={4} size="xxs" />
         </Text>

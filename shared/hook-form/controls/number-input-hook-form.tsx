@@ -42,7 +42,6 @@ export const NumberInputHookForm = ({
       disabled={props.disabled ?? field.disabled}
       error={testableError(
         errorProp ?? (showErrorMessage ? errorMessage : hasErrorHighlight),
-        fieldName,
       )}
       isLocked={isLocked}
       maxValue={maxValue}

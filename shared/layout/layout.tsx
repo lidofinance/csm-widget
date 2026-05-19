@@ -57,7 +57,11 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
         {mainPrefix}
         <Heading $titlesCount={titlesCount}>
           {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}
-          {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}
+          {subtitle && (
+            <LayoutSubTitleStyle data-testid="pageSubtitle">
+              {subtitle}
+            </LayoutSubTitleStyle>
+          )}
         </Heading>
         <Content>{children}</Content>
         {!dummy && <LegalDisclaimer />}

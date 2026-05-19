@@ -27,6 +27,7 @@ import {
 
 import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
+import { useUserConfig } from 'config/user-config';
 import { isModuleCSM } from 'consts';
 
 import { overridedAddresses } from './devnet';
@@ -72,6 +73,12 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
   const { isConnected } = useConnection();
 
   const clApiUrl = useClApiUrl();
+  const {
+    savedUserConfig: { ipfsGateways: userIpfsGateways },
+    defaultIpfsGateways,
+  } = useUserConfig();
+  const ipfsGateways =
+    userIpfsGateways.length > 0 ? userIpfsGateways : defaultIpfsGateways;
 
   const wagmiConfig = useConfig();
   const { mutate: switchChain } = useSwitchChain();
@@ -117,6 +124,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       skipHistoricalCalls: chainId !== CHAINS.Mainnet,
       keysApiUrl: config.keysApiUrl,
       feesMonitoringApiUrl: config.feesMonitoringApiUrl,
+      ipfsGateways: ipfsGateways,
       overridedAddresses,
     };
 
@@ -132,7 +140,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       withdraw,
       sm,
     };
-  }, [clApiUrl, publicClient, walletClient]);
+  }, [clApiUrl, ipfsGateways, publicClient, walletClient]);
   return (
     <LidoSDKContext.Provider value={contextValue}>
       {children}
