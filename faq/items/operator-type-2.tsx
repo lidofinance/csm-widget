@@ -20,9 +20,13 @@ export const OperatorType2: Faq = {
           Gate;
         </li>
         <li>
-          Legacy EA operator - the custom Node Operator type assigned by default
-          to the Early Adopters of CSM who have joined the module before the
-          release of CSM v2.
+          Identified DVT Clusters (IDVTC) - the custom Node Operator type
+          designed for DVT Clusters and creates a more capital-efficient path
+          for independent stakers who are willing to identify themselves and
+          operate validators collaboratively via DVT. This approach combines the
+          trust properties of ICS with the operational resilience of DVT,
+          aligning incentives for small independent operators who share
+          validator rewards within a cluster.
         </li>
       </ul>
     </div>
