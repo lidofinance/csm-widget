@@ -11,6 +11,7 @@ import {
   useNodeOperatorId,
   useOperatorCurveId,
 } from 'modules/web3';
+import { useRequestedOperatorType } from './use-requested-operator-type';
 
 export const useCurrentCurveId = () => {
   const nodeOperatorId = useNodeOperatorId();
@@ -49,11 +50,19 @@ export const useCreateCurveId = () => {
     !idvtcPaused && idvtcProof?.proof && !idvtcProof.isConsumed;
   const isIcsEligible = !icsPaused && icsProof?.proof && !icsProof.isConsumed;
 
-  const curveId = isIdvtcEligible
-    ? idvtcCurveId
-    : isIcsEligible
-      ? icsCurveId
-      : defCurveId;
+  const { isRequested, type: requestedType } = useRequestedOperatorType();
+
+  const curveId = isRequested
+    ? requestedType === OPERATOR_TYPE.CSM_IDVTC && isIdvtcEligible
+      ? idvtcCurveId
+      : requestedType === OPERATOR_TYPE.CSM_ICS && isIcsEligible
+        ? icsCurveId
+        : defCurveId
+    : isIdvtcEligible
+      ? idvtcCurveId
+      : isIcsEligible
+        ? icsCurveId
+        : defCurveId;
 
   const type =
     curveId !== undefined
