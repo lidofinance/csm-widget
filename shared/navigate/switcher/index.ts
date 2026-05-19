@@ -6,4 +6,5 @@ export * from './roles-page-switcher';
 export * from './stealing-page-switcher';
 export * from './switcher';
 export * from './type-page-switcher';
+export * from './dvt-page-switcher';
 export * from './types';

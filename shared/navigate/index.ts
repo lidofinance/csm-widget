@@ -6,3 +6,4 @@ export * from './use-navigate';
 export * from './gates';
 export * from './switcher';
 export * from './inner-pages';
+export * from './styles';
