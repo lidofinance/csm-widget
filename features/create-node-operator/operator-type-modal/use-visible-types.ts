@@ -14,6 +14,7 @@ import { useShowFlags } from 'shared/hooks';
 export type VisibleType = {
   type: OPERATOR_TYPE;
   href: PATH;
+  query?: Record<string, string>;
   label: string;
   matomoEvent: MATOMO_CLICK_EVENTS_TYPES;
   primary: boolean;
@@ -35,6 +36,7 @@ const buildApplyEntry = (
     ? {
         type,
         href: PATH.CREATE,
+        query: { type: short.toLocaleLowerCase() },
         label: `Create ${short} operator`,
         matomoEvent: createEvent,
         primary: true,

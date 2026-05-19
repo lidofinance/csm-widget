@@ -26,6 +26,7 @@ export * from './use-keys-cache';
 export * from './use-local-storage';
 export * from './use-max-priority-key-index';
 export * from './use-prefixed-history';
+export * from './use-requested-operator-type';
 export * from './use-router-path';
 export * from './use-search-params';
 export * from './use-session-storage';
