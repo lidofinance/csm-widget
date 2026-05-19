@@ -1,3 +1,4 @@
+import { isModuleCM } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   SHARE_LIMIT_STATUS,
@@ -74,7 +75,7 @@ export const ShareLimitBanner: FC = () => {
   const { data: status } = useShareLimitStatus();
   const { data: hasPrioritySpots } = useHasPriorityQueueSpots();
 
-  if (!data || !status) {
+  if (!data || !status || isModuleCM) {
     return null;
   }
 
