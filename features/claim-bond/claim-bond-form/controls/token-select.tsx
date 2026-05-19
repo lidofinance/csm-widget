@@ -113,7 +113,7 @@ export const TokenSelect: React.FC = () => {
         }}
       />
       {token === TOKENS.eth && (
-        <Note>
+        <Note data-testid="ethNote">
           After receiving NFT you will need to claim ETH manually. Follow{' '}
           <LocalLink
             href={PATH.BOND_CLAIM}
