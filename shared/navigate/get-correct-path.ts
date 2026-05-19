@@ -18,9 +18,13 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
     case PATH.SETTINGS_METADATA:
       return isModuleCM ? path : PATH.SETTINGS;
 
-    // Create — operators already have keys
+    // Create
     case PATH.CREATE:
-      return isModuleCSM && hasRole ? PATH.KEYS_VIEW : path; // TODO: rework for dvt
+      return isModuleCSM
+        ? hasRole && !flags.CAN_CREATE
+          ? PATH.KEYS_VIEW
+          : path
+        : path;
 
     // Keys
     case PATH.KEYS:
@@ -49,14 +53,25 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
 
     // Type/ICS — flag-based
     case PATH.TYPE:
-      if (flags.CAN_CLAIM_ICS) return hasRole ? PATH.TYPE_CLAIM : path;
-      if (flags.ICS_APPLY_ENABLED) return PATH.TYPE_ICS_APPLY;
-      return PATH.TYPE_PARAMETERS;
-    case PATH.TYPE_CLAIM:
+      if (!flags.ICS_APPLY_ENABLED) {
+        return flags.CAN_CLAIM_ICS && hasRole
+          ? PATH.TYPE_ICS_CLAIM
+          : flags.CAN_CLAIM_IDVTC && hasRole
+            ? PATH.TYPE_DVT_CLAIM
+            : PATH.TYPE_PARAMETERS;
+      }
+      return path;
+    case PATH.TYPE_ICS_CLAIM:
       return hasRole
         ? path
         : flags.ICS_APPLY_ENABLED
           ? PATH.TYPE_ICS_SYSTEM
+          : PATH.TYPE_PARAMETERS;
+    case PATH.TYPE_DVT_CLAIM:
+      return hasRole
+        ? path
+        : flags.ICS_APPLY_ENABLED
+          ? PATH.TYPE_DVT_DESCRIPTION
           : PATH.TYPE_PARAMETERS;
 
     default:

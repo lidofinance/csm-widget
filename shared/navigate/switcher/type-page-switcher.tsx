@@ -1,5 +1,6 @@
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts/urls';
-import { CounterIcs } from 'shared/counters';
+import { CounterClaimType } from 'shared/counters';
 import { Switcher } from './switcher';
 import { SwitcherRoutes } from './types';
 
@@ -20,9 +21,9 @@ const TYPE_ROUTES: SwitcherRoutes = [
   },
   {
     title: 'Claim',
-    path: PATH.TYPE_CLAIM,
+    path: PATH.TYPE_ICS_CLAIM,
     showRules: ['CAN_CLAIM_ICS'],
-    suffix: <CounterIcs />,
+    suffix: <CounterClaimType type={OPERATOR_TYPE.CSM_ICS} />,
   },
 ];
 
