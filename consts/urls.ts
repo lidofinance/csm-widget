@@ -35,6 +35,9 @@ export const PATH = <const>{
   TYPE_ICS_APPLY: '/type/ics-apply',
   TYPE_PARAMETERS: '/type/parameters',
 
+  TYPE_DVT_DESCRIPTION: '/type/idvtc-description',
+  TYPE_DVT_APPLY: '/type/idvtc-apply',
+
   SURVEYS: '/surveys',
   SURVEYS_CONTACTS: '/surveys/contacts',
   SURVEYS_EXPERIENCE: '/surveys/experience',

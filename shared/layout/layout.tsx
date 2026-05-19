@@ -20,6 +20,7 @@ type Props = {
   subtitle?: ReactNode;
   dummy?: boolean | 'semi';
   pageName?: string;
+  mainPrefix?: ReactNode;
 };
 
 export const Layout: FC<PropsWithChildren<Props>> = ({
@@ -28,6 +29,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
   title,
   subtitle,
   pageName,
+  mainPrefix,
 }) => {
   const titlesCount = [title, subtitle].filter(Boolean).length;
 
@@ -50,6 +52,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
       )}
 
       <Main>
+        {mainPrefix}
         <Heading $titlesCount={titlesCount}>
           {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}
           {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}

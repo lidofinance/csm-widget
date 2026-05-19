@@ -76,7 +76,8 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     migalabsDashboard: 'https://migalabs.io/entities',
     migalabs: 'https://migalabs.io',
     keysApi: 'https://keys-api.lido.fi',
-    surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
+    // surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
+    surveyApi: 'https://csm-surveys-api-stage.up.railway.app',
   },
   [CHAINS.Hoodi]: {
     rewardsTree:

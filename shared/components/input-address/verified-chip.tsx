@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { ChipProps, Icon, StyledChip } from './styles';
+import { ChipProps, VerifiedIcon, StyledChip } from './styles';
 
 export const VerifiedChip: FC<PropsWithChildren<ChipProps>> = ({
   children,
@@ -7,6 +7,6 @@ export const VerifiedChip: FC<PropsWithChildren<ChipProps>> = ({
 }) => (
   <StyledChip color={color} data-testid="verifiedChip">
     {children}
-    <Icon color={color} />
+    <VerifiedIcon color={color} />
   </StyledChip>
 );

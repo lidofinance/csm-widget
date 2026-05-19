@@ -54,3 +54,4 @@ export * from './tabs';
 export * from './legal-disclaimer';
 export * from './date';
 export * from './table';
+export * from './back-button';
