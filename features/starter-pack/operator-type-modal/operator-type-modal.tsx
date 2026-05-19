@@ -1,22 +1,20 @@
-import {
-  OPERATOR_TYPE,
-  OPERATOR_TYPE_CURVE_ID,
-} from '@lidofinance/lido-csm-sdk';
-import { Button, Divider, Text } from '@lidofinance/lido-ui';
+import { Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPES_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { PATH } from 'consts/urls';
 import { getUseModal, ModalComponentType } from 'providers/modal-provider';
-import { MatomoLink, Stack } from 'shared/components';
-import { LocalLink } from 'shared/navigate';
-import { Parameters } from './parameters';
-import { OptionCard, StackWrap, StyledModal } from './styles';
+import { Grid, MatomoLink, Stack } from 'shared/components';
+import { StyledModal } from './styles';
+import { TypeCard } from './type-card';
+import { useVisibleTypes } from './use-visible-types';
 
 export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
+  const types = useVisibleTypes();
+
   return (
     <StyledModal
       open={open}
       onClose={onClose}
+      $compact={types.length <= 2}
       title={
         <Stack direction="column" gap="xs">
           <Text as="h3" size="lg" weight={700}>
@@ -36,61 +34,11 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
         </Stack>
       }
     >
-      <StackWrap>
-        <OptionCard $variant={OPERATOR_TYPE.CSM_DEF}>
-          <Stack direction="column">
-            <Text size="sm" weight={700}>
-              Default
-            </Text>
-            <Text size="xxs">
-              The simplest way to start validating in CSM. Upload keys under the
-              general parameters without any permission or verification.At any
-              point in the future, you may apply to become an Identified
-              Community Staker to access more favorable parameters
-            </Text>
-            <Divider />
-          </Stack>
-          <Stack direction="column">
-            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.CSM_DEF} />
-            <LocalLink
-              href={PATH.CREATE}
-              matomoEvent={
-                MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless
-              }
-            >
-              <Button fullwidth size="sm">
-                Join now
-              </Button>
-            </LocalLink>
-          </Stack>
-        </OptionCard>
-
-        <OptionCard $variant={OPERATOR_TYPE.CSM_ICS}>
-          <Stack direction="column">
-            <Text size="sm" weight={700}>
-              Identified Community Staker
-            </Text>
-            <Text size="xxs">
-              Obtain enhanced validation parameters by becoming recognized as an
-              independent Community Staker. Please note that the verification
-              process takes time and requires the submission of specific
-              supporting proofs
-            </Text>
-            <Divider />
-          </Stack>
-          <Stack direction="column">
-            <Parameters curveId={OPERATOR_TYPE_CURVE_ID.CSM_ICS} />
-            <LocalLink
-              href={PATH.TYPE_ICS_APPLY}
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIcs}
-            >
-              <Button fullwidth size="sm">
-                Apply for ICS
-              </Button>
-            </LocalLink>
-          </Stack>
-        </OptionCard>
-      </StackWrap>
+      <Grid>
+        {types.map((type) => (
+          <TypeCard key={type.type} type={type} />
+        ))}
+      </Grid>
     </StyledModal>
   );
 };

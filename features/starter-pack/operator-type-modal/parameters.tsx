@@ -10,9 +10,6 @@ export const Parameters: FC<{ curveId: bigint }> = ({ curveId }) => {
 
   return (
     <Stack direction="column">
-      <Text size="sm" weight={700}>
-        Parameters
-      </Text>
       {PARAMETERS.slice(0, 2).map(({ title: paramTitle, render }) => {
         const values = render(parameters);
         return (
