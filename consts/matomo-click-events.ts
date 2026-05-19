@@ -43,6 +43,9 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
   operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
   operatorTypeModalApplyIcs = 'operatorTypeModalApplyIcs',
+  operatorTypeModalApplyIdvtc = 'operatorTypeModalApplyIdvtc',
+  operatorTypeModalCreateIcs = 'operatorTypeModalCreateIcs',
+  operatorTypeModalCreateIdvtc = 'operatorTypeModalCreateIdvtc',
   // Forms
   depositDataLearnMore = 'depositDataLearnMore',
   howToClaimEth = 'howToClaimEth',
@@ -235,6 +238,18 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIcs]: createEvent(
     'Push «Apply for ICS» button on Operator Type modal',
     'operator_type_modal_apply_ics',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIdvtc]: createEvent(
+    'Push «Apply for IDVTC» button on Operator Type modal',
+    'operator_type_modal_apply_idvtc',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIcs]: createEvent(
+    'Push «Create ICS operator» button on Operator Type modal',
+    'operator_type_modal_create_ics',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIdvtc]: createEvent(
+    'Push «Create IDVTC operator» button on Operator Type modal',
+    'operator_type_modal_create_idvtc',
   ),
   // Forms
   [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: createEvent(
