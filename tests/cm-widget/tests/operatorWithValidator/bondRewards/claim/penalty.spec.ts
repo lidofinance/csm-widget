@@ -38,7 +38,7 @@ test.describe(
     });
 
     test.afterAll(async ({ cmSDK }) => {
-      await cmSDK.evmRevert(snapshotId);
+      if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
     test('Should show locked bond row on "Excess bond" card', async ({

@@ -25,7 +25,7 @@ test.describe('Group page. Navigation.', { tag: [Tags.forked] }, () => {
   });
 
   test.afterAll(async ({ cmSDK }) => {
-    await cmSDK.evmRevert(snapshotId);
+    if (snapshotId) await cmSDK.evmRevert(snapshotId);
   });
 
   test(

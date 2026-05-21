@@ -32,7 +32,7 @@ test.describe(
     });
 
     test.afterAll(async ({ cmSDK }) => {
-      await cmSDK.evmRevert(snapshotId);
+      if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
     test('Should auto-select "Excess Bond" and disable other options', async ({

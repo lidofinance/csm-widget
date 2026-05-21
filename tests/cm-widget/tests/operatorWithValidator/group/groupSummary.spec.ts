@@ -29,7 +29,7 @@ test.describe('Group page. Group summary.', { tag: [Tags.forked] }, () => {
   });
 
   test.afterAll(async ({ cmSDK }) => {
-    await cmSDK.evmRevert(snapshotId);
+    if (snapshotId) await cmSDK.evmRevert(snapshotId);
   });
 
   test(

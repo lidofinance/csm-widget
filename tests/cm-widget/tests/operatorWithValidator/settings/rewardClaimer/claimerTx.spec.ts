@@ -25,7 +25,7 @@ test.describe(
     });
 
     test.afterEach(async ({ cmSDK }) => {
-      await cmSDK.evmRevert(snapshotId);
+      if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
     test(
