@@ -22,7 +22,6 @@ export * from './use-external-links';
 export * from './use-initial-loading';
 export * from './use-invalidate';
 export * from './use-keys-available';
-export * from './use-keys-cache';
 export * from './use-local-storage';
 export * from './use-max-priority-key-index';
 export * from './use-prefixed-history';

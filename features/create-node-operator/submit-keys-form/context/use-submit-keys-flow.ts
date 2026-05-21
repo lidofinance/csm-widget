@@ -11,7 +11,6 @@ import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { useKeysCache } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import invariant from 'tiny-invariant';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
@@ -29,7 +28,6 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFlow
 > => {
   const sdk = useSmSDK(MODULE_NAME.CSM);
-  const { addCachePubkeys, removeCachePubkeys } = useKeysCache();
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
@@ -62,9 +60,6 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
           }),
         submit: async () => {
           invariant(amount !== undefined, 'BondAmount is not defined');
-
-          const pubkeys = depositData.map(({ pubkey }) => pubkey);
-          addCachePubkeys(pubkeys);
 
           const callback = buildCallback(input, data);
 
@@ -105,16 +100,10 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             }
           }
         },
-        onError: () => {
-          const pubkeys = depositData.map(({ pubkey }) => pubkey);
-          removeCachePubkeys(pubkeys);
-        },
       };
     },
     [
       sdk,
-      addCachePubkeys,
-      removeCachePubkeys,
       appendNO,
       setOperatorCustomAddresses,
       n,

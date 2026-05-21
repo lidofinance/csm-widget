@@ -6,7 +6,7 @@ import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { useCanPerform, useKeysCache } from 'shared/hooks';
+import { useCanPerform } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import invariant from 'tiny-invariant';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
@@ -24,7 +24,6 @@ export const useAddKeysFlowResolver = (): FlowResolver<
 > => {
   const { keys: keysSDK } = useSmSDK();
   const [canAddKeys, addKeysAccess] = useCanPerform(keysSDK, 'addKeys');
-  const { addCachePubkeys, removeCachePubkeys } = useKeysCache();
   const n = useNavigate();
   const buildCallback = useTxModalStagesAddKeys();
 
@@ -39,9 +38,6 @@ export const useAddKeysFlowResolver = (): FlowResolver<
         submit: async () => {
           invariant(amount !== undefined, 'BondAmount is not defined');
 
-          const pubkeys = depositData.map(({ pubkey }) => pubkey);
-          addCachePubkeys(pubkeys);
-
           await keysSDK.addKeys({
             nodeOperatorId: data.nodeOperatorId,
             token,
@@ -52,21 +48,9 @@ export const useAddKeysFlowResolver = (): FlowResolver<
 
           void n(PATH.KEYS_VIEW);
         },
-        onError: () => {
-          const pubkeys = depositData.map(({ pubkey }) => pubkey);
-          removeCachePubkeys(pubkeys);
-        },
       };
     },
-    [
-      keysSDK,
-      canAddKeys,
-      addKeysAccess,
-      addCachePubkeys,
-      removeCachePubkeys,
-      n,
-      buildCallback,
-    ],
+    [keysSDK, canAddKeys, addKeysAccess, n, buildCallback],
   );
 };
 
