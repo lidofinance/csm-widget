@@ -73,9 +73,9 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
     async ({ widgetService }) => {
       const duplicatedKey = keysGeneratorService.generateKeys();
       await widgetService.keysPage.setStorageData(
-        'lido-csm-keys-cache-560048',
+        'lido-keys-cache-560048',
         JSON.stringify({
-          [duplicatedKey[0].pubkey]: Date.now(),
+          [duplicatedKey[0].pubkey]: { ts: Date.now(), confirmed: true },
         }),
       );
 
@@ -88,7 +88,7 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'pubkey already exists in cache',
+          'pubkey already submitted',
         );
       }
     },
@@ -99,9 +99,12 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
     async ({ widgetService }) => {
       const duplicatedKey = keysGeneratorService.generateKeys();
       await widgetService.keysPage.setStorageData(
-        'lido-csm-keys-cache-560048',
+        'lido-keys-cache-560048',
         JSON.stringify({
-          [duplicatedKey[0].pubkey]: Date.now() - 15 * 24 * 60 * 60 * 1000,
+          [duplicatedKey[0].pubkey]: {
+            ts: Date.now() - 15 * 24 * 60 * 60 * 1000,
+            confirmed: true,
+          },
         }),
       );
 
