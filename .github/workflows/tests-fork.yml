@@ -71,7 +71,6 @@ jobs:
       STAND_TYPE: ${{ inputs.stand_type || github.event.inputs.STAND_TYPE || 'testnet' }}
       WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
 
-
       # Common envs
       QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
       QASE_PROJECT_ID: "CSM"
@@ -224,6 +223,8 @@ jobs:
       DEPLOY_CONFIG: ./artifacts/hoodi/curated/deploy-hoodi.json
       CHAIN: hoodi
       ARTIFACTS_DIR: ./artifacts/hoodi/
+      PINATA_API_KEY: ${{ secrets.QA_PINATA_API_KEY }}
+      PINATA_API_SECRET: ${{ secrets.QA_PINATA_API_SECRET }}
 
     steps:
       - uses: actions/checkout@v6
