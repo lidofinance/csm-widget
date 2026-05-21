@@ -190,9 +190,9 @@ jobs:
     env:
       # Required envs
       RPC_URL: ${{ secrets.RPC_URL }}
-      WALLET_SECRET_PHRASE: ${{ secrets.CM_WALLET_SECRET_PHRASE }}
-      WALLET_PASSWORD: ${{ secrets.CM_WALLET_PASSWORD }}
-      EMPTY_SECRET_PHRASE: ${{ secrets.CM_EMPTY_SECRET_PHRASE }}
+      WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
+      WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
+      EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
       STAND_TYPE: ${{ inputs.stand_type || github.event.inputs.STAND_TYPE || 'testnet' }}
       WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
       MODULE: cm
@@ -259,11 +259,11 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install CSM Contracts dependencies
+      - name: Install CM Contracts dependencies
         run: |
           cd community-staking-module && yarn install --immutable
 
-      - name: Build CSM Fork
+      - name: Build CM Fork
         run: cd community-staking-module && just deps && just build
 
       - name: Install dependencies
