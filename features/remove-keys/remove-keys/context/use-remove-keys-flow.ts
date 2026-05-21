@@ -5,7 +5,7 @@ import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { useCanPerform, useKeysCache } from 'shared/hooks';
+import { useCanPerform } from 'shared/hooks';
 import { useTxModalStagesRemoveKeys } from '../hooks/use-tx-modal-stages-remove-keys';
 import { useRemoveKeysFormData } from './remove-keys-data-provider';
 import { RemoveKeysFormInputType, RemoveKeysFormNetworkData } from './types';
@@ -21,7 +21,6 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
   RemoveKeysFlow
 > => {
   const { keys: keysSDK } = useSmSDK();
-  const { removeCachePubkeys } = useKeysCache();
   const [canRemoveKeys, access] = useCanPerform(keysSDK, 'removeKeys');
   const buildCallback = useTxModalStagesRemoveKeys();
 
@@ -33,27 +32,22 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
       return {
         action: 'remove' as const,
         submit: async () => {
-          const result = await keysSDK.removeKeys({
+          const { start, count } = input.selection;
+          const pubkeys = data.keys
+            .map(({ pubkey }) => pubkey)
+            .slice(start, start + count);
+
+          return keysSDK.removeKeys({
             nodeOperatorId: data.nodeOperatorId,
-            startIndex: BigInt(
-              data.info.totalDepositedKeys + input.selection.start,
-            ),
-            keysCount: BigInt(input.selection.count),
+            startIndex: BigInt(data.info.totalDepositedKeys + start),
+            keysCount: BigInt(count),
+            pubkeys,
             callback: buildCallback(input, data),
           });
-          void removeCachePubkeys(
-            data.keys
-              .map(({ pubkey }) => pubkey)
-              .slice(
-                input.selection.start,
-                input.selection.start + input.selection.count,
-              ),
-          );
-          return result;
         },
       };
     },
-    [canRemoveKeys, access, keysSDK, removeCachePubkeys, buildCallback],
+    [canRemoveKeys, access, keysSDK, buildCallback],
   );
 };
 
