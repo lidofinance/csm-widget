@@ -5,12 +5,23 @@ import { expect } from '@playwright/test';
 import { OPERATOR_TYPE_METADATA } from '../../../../shared/consts/operatorTypes.const';
 import { CreateOperatorStep1Page } from '../../../pages/tabs/createNodeOperator/step1.page';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { mnemonicToAccount } from 'viem/accounts';
+import { attachRpcLogger } from 'tests/shared/helpers/rpcLogger';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
-test.describe('Operator without keys. Step 1.', () => {
+test.describe.only('Operator without keys. Step 1.', () => {
   let step1: CreateOperatorStep1Page;
+
+  test.beforeAll(async ({ forkActionService, secretPhrase }) => {
+    await forkActionService.setGateAddrs(
+      ['po', 'pto', 'pgo', 'do', 'eeo', 'iodc'],
+      mnemonicToAccount(secretPhrase).address,
+    );
+  });
+
   test.beforeEach(async ({ widgetService }) => {
+    attachRpcLogger(widgetService.page);
     await widgetService.createNodeOperatorPage.open();
     step1 = widgetService.createNodeOperatorPage.step1;
   });

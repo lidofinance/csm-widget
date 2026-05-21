@@ -3,6 +3,9 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { test } from '@playwright/test';
 
+type GateSelector =
+  (typeof ForkActionsService.GATE_SELECTOR)[keyof typeof ForkActionsService.GATE_SELECTOR];
+
 export interface ForkActionsOptions {
   cwd?: string;
   env?: NodeJS.ProcessEnv;
@@ -209,15 +212,49 @@ export class ForkActionsService {
       this.run('get-curve-info', String(id)));
   }
 
+  static readonly GATE_SELECTOR = {
+    po: 'po',
+    pto: 'pto',
+    pgo: 'pgo',
+    do: 'do',
+    eeo: 'eeo',
+    iodc: 'iodc',
+    iodcp: 'iodcp',
+    ics: 'ics',
+    idvtc: 'idvtc',
+  } as const;
+
+  setGateAddrs(
+    selector: GateSelector | GateSelector[],
+    ...addresses: `0x${string}`[]
+  ) {
+    const selectors = Array.isArray(selector) ? selector : [selector];
+    return test.step(`[Fork] Set gate tree for [${selectors.join(', ')}]`, async () => {
+      for (const selector of selectors) {
+        const { stdout } = await this.run(
+          'set-gate-addrs',
+          selector,
+          ...addresses,
+        );
+        if (stdout) console.info(stdout.trimEnd());
+      }
+    });
+  }
+
   private execJust(args: string[]): Promise<RunResult> {
     return new Promise((resolve, reject) => {
-      execFile('just', args, { cwd: this.cwd, env: this.baseEnv }, (error) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-        resolve({ stdout: '', stderr: '', code: 0 });
-      });
+      execFile(
+        'just',
+        args,
+        { cwd: this.cwd, env: this.baseEnv },
+        (error, stdout, stderr) => {
+          if (error) {
+            reject(error);
+            return;
+          }
+          resolve({ stdout, stderr, code: 0 });
+        },
+      );
     });
   }
 }
