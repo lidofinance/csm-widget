@@ -43,6 +43,9 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
   operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
   operatorTypeModalApplyIcs = 'operatorTypeModalApplyIcs',
+  operatorTypeModalApplyIdvtc = 'operatorTypeModalApplyIdvtc',
+  operatorTypeModalCreateIcs = 'operatorTypeModalCreateIcs',
+  operatorTypeModalCreateIdvtc = 'operatorTypeModalCreateIdvtc',
   // Forms
   depositDataLearnMore = 'depositDataLearnMore',
   howToClaimEth = 'howToClaimEth',
@@ -73,6 +76,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   unlockBondLinkAlert = 'unlockBondLinkAlert',
   expiredLockedBondLinkAlert = 'expiredLockedBondLinkAlert',
   claimIcsLinkAlert = 'claimIcsLinkAlert',
+  claimIdvtcLinkAlert = 'claimIdvtcLinkAlert',
   feeRecipientDocsLink = 'feeRecipientDocsLink',
   feeRecipientDismissButton = 'feeRecipientDismissButton',
   wrappedAlertClose = 'wrappedAlertClose',
@@ -235,6 +239,18 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Push «Apply for ICS» button on Operator Type modal',
     'operator_type_modal_apply_ics',
   ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIdvtc]: createEvent(
+    'Push «Apply for IDVTC» button on Operator Type modal',
+    'operator_type_modal_apply_idvtc',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIcs]: createEvent(
+    'Push «Create ICS operator» button on Operator Type modal',
+    'operator_type_modal_create_ics',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIdvtc]: createEvent(
+    'Push «Create IDVTC operator» button on Operator Type modal',
+    'operator_type_modal_create_idvtc',
+  ),
   // Forms
   [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: createEvent(
     'Click «Upload Deposit Data learn more» link on Upload form',
@@ -344,6 +360,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert]: createEvent(
     'Click «Claim ICS» link on Claim ICS alert',
     'claim_ics_link_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.claimIdvtcLinkAlert]: createEvent(
+    'Click «Claim IDVTC» link on Claim IDVTC alert',
+    'claim_idvtc_link_alert',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.feeRecipientDocsLink]: createEvent(
     'Click «How to change feeRecipient» link on Wrong Fee Recipient alert',

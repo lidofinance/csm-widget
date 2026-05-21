@@ -13,9 +13,10 @@ import {
 } from 'modules/web3/hooks';
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren, useMemo } from 'react';
-import { useCanClaimICS, useDismiss } from 'shared/hooks';
+import { useCanClaimICS, useCanClaimIDVTC, useDismiss } from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
 import { AlertClaimIcs } from './components/alert-claim-ics';
+import { AlertClaimIdvtc } from './components/alert-claim-idvtc';
 import { AlertExpiredLockedBond } from './components/alert-expired-locked-bond';
 import { AlertLockedBond } from './components/alert-locked-bond';
 import { AlertNomalizeQueue } from './components/alert-normalize-queue';
@@ -31,6 +32,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: info } = useOperatorInfo(nodeOperatorId);
   const canClaimICS = useCanClaimICS();
+  const canClaimIDVTC = useCanClaimIDVTC();
   const { route } = useRouter();
 
   const normalizeQueue = useMemo(() => {
@@ -91,7 +93,17 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useAlertWatcher({
     component: AlertClaimIcs,
-    shouldShow: canClaimICS && route !== PATH.TYPE_CLAIM,
+    shouldShow:
+      canClaimICS &&
+      !canClaimIDVTC &&
+      route !== PATH.TYPE_ICS_CLAIM &&
+      route !== PATH.CREATE,
+  });
+
+  useAlertWatcher({
+    component: AlertClaimIdvtc,
+    shouldShow:
+      canClaimIDVTC && route !== PATH.TYPE_DVT_CLAIM && route !== PATH.CREATE,
   });
 
   useAlertWatcher({
