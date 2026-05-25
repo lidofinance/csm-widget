@@ -166,6 +166,7 @@ jobs:
           fi
 
       - name: Run tests based on suite input
+        id: run-tests
         run: |
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
           echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
@@ -191,3 +192,11 @@ jobs:
           name: playwright-report
           path: playwright-report.tar.gz.enc
           retention-days: 1
+
+      - name: Notify Slack about broken workflow
+        if: always() && steps.run-tests.conclusion == 'skipped'
+        uses: ./.github/actions/notify-broken-tests
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          duty-tag: ${{ env.SLACK_DUTY_TAG }}
+          test-tags: ${{ env.TEST_TAGS }}
