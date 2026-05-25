@@ -84,7 +84,6 @@ jobs:
       SLACK_DUTY_TAG: "S09H269H2TT"
       WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
 
-
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
       REFUSE_CF_BLOCK_VALUE: ${{ secrets.REFUSE_CF_BLOCK_VALUE }}
@@ -135,6 +134,7 @@ jobs:
           fi
 
       - name: Run tests based on suite input
+        id: run-tests
         run: |
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
           echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
@@ -145,9 +145,10 @@ jobs:
 
           xvfb-run --auto-servernum -- yarn test:e2e
 
-      - uses: actions/upload-artifact@v7
-        if: always()
+      - name: Notify Slack about broken workflow
+        if: always() && steps.run-tests.conclusion == 'skipped'
+        uses: lidofinance/lido-autotests/.github/actions/notify-slack-broken@slack-report-if-wf-broken
         with:
-          name: playwright-report
-          path: playwright-report/
-          retention-days: 1
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          duty-tag: ${{ secrets.SLACK_DUTY_TAG }}
+          test-tags: ${{ env.TEST_TAGS }}
