@@ -192,7 +192,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
                     <MatomoLink
                       href="https://etherscan.io/verifiedSignatures#"
                       matomoEvent={
-                        MATOMO_CLICK_EVENTS_TYPES.icsEtherscanSignaturesLink
+                        MATOMO_CLICK_EVENTS_TYPES.dvtEtherscanSignaturesLink
                       }
                     >
                       <ButtonIcon

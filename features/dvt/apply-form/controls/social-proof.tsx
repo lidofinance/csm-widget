@@ -22,7 +22,13 @@ export const SocialProof: FC = () => {
         <FormTitle>Socials</FormTitle>
         <Text size="xs" color="secondary">
           You must add your social accounts. To prove you own an account, post a
-          message. For more info see <MatomoLink>the guide</MatomoLink>
+          message. For more info see{' '}
+          <MatomoLink
+            href="https://www.youtube.com/watch?v=yUX34iCbCWE"
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dvtYoutubeGuideLink}
+          >
+            the guide
+          </MatomoLink>
         </Text>
       </Stack>
 
@@ -39,7 +45,7 @@ export const SocialProof: FC = () => {
               following message to{' '}
               <MatomoLink
                 href="https://discord.com/channels/761182643269795850/1404810479292907662"
-                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordChannelLink}
+                matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dvtDiscordChannelLink}
               >
                 the CSM channel
               </MatomoLink>{' '}
