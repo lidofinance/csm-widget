@@ -133,6 +133,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
           <Stack direction="column" gap="sm">
             <AddressInputHookForm
               fieldName={`clusterMembers.${index}.address`}
+              label={`Cluster member #${index + 1}`}
               disabled
               rightDecorator={
                 <Button
