@@ -110,6 +110,10 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   icsDiscordChannelLink = 'icsDiscordChannelLink',
   icsEtherscanSignaturesLink = 'icsEtherscanSignaturesLink',
   icsGithubAddressesLink = 'icsGithubAddressesLink',
+  // DVT
+  dvtYoutubeGuideLink = 'dvtYoutubeGuideLink',
+  dvtDiscordChannelLink = 'dvtDiscordChannelLink',
+  dvtEtherscanSignaturesLink = 'dvtEtherscanSignaturesLink',
   // Exit Keys
   exitKeysDappnodeLink = 'exitKeysDappnodeLink',
   exitKeysSedgeLink = 'exitKeysSedgeLink',
@@ -497,6 +501,19 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.icsGithubAddressesLink]: createEvent(
     'Click GitHub ICS addresses link on ICS page',
     'ics_github_addresses_link',
+  ),
+  // DVT
+  [MATOMO_CLICK_EVENTS_TYPES.dvtYoutubeGuideLink]: createEvent(
+    'Click YouTube guide link on DVT page',
+    'dvt_youtube_guide_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dvtDiscordChannelLink]: createEvent(
+    'Click Discord CSM channel link on DVT page',
+    'dvt_discord_channel_link',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.dvtEtherscanSignaturesLink]: createEvent(
+    'Click Etherscan verified signatures link on DVT page',
+    'dvt_etherscan_signatures_link',
   ),
   // Exit Keys
   [MATOMO_CLICK_EVENTS_TYPES.exitKeysDappnodeLink]: createEvent(

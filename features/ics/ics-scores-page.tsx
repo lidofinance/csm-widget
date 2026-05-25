@@ -7,6 +7,8 @@ import { FAQ_OPERATOR_TYPE } from 'faq';
 import { BlockStyle } from './score-system/styles';
 import { ApplicationFlow, Introduction, ScoreSources } from './score-system';
 import { RoundBanner } from './round-banner';
+import { IcsApplyButton } from './apply-button';
+import { IcsProviders } from './shared';
 import { PATH } from 'consts/urls';
 
 export const IcsScoresPage: FC = () => (
@@ -18,11 +20,14 @@ export const IcsScoresPage: FC = () => (
   >
     <TypePageSwitcher />
     <RoundBanner />
-    <BlockStyle>
-      <Introduction />
-      <ScoreSources />
-      <ApplicationFlow />
-    </BlockStyle>
+    <IcsProviders>
+      <BlockStyle>
+        <Introduction />
+        <ScoreSources />
+        <ApplicationFlow />
+        <IcsApplyButton />
+      </BlockStyle>
+    </IcsProviders>
     <Faq items={FAQ_OPERATOR_TYPE} />
   </Layout>
 );

@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { FAQ_OPERATOR_TYPE } from 'faq';
+import { IcsProviders } from 'features/ics/shared';
 import { BackButton, Faq } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { TypePageSwitcher } from 'shared/navigate';
@@ -15,7 +16,9 @@ export const TypeParametersPage: FC = () => (
     mainPrefix={<BackButton href={PATH.TYPE} />}
   >
     <TypePageSwitcher />
-    <TypeParameters />
+    <IcsProviders>
+      <TypeParameters />
+    </IcsProviders>
     <Faq items={FAQ_OPERATOR_TYPE} />
   </Layout>
 );

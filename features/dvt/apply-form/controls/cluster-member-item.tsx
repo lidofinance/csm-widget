@@ -133,6 +133,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
           <Stack direction="column" gap="sm">
             <AddressInputHookForm
               fieldName={`clusterMembers.${index}.address`}
+              label={`Cluster member #${index + 1}`}
               disabled
               rightDecorator={
                 <Button
@@ -192,7 +193,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
                     <MatomoLink
                       href="https://etherscan.io/verifiedSignatures#"
                       matomoEvent={
-                        MATOMO_CLICK_EVENTS_TYPES.icsEtherscanSignaturesLink
+                        MATOMO_CLICK_EVENTS_TYPES.dvtEtherscanSignaturesLink
                       }
                     >
                       <ButtonIcon

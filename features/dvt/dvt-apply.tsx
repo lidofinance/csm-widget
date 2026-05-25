@@ -2,11 +2,11 @@ import { Block, Text } from '@lidofinance/lido-ui';
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
 import { NoSSRWrapper, Stack, WhenLoaded } from 'shared/components';
-import { SiweAuthProvider, useSiweAuth } from 'shared/siwe';
+import { useSiweAuth } from 'shared/siwe';
 import { Connect } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status/form-status';
-import { DvtStateProvider, useDvtState } from './shared';
+import { DvtProviders, useDvtState } from './shared';
 import { SiweSignIn } from './siwe-sign-in/siwe-sign-in';
 
 const DvtApplyContent: FC = () => {
@@ -53,13 +53,8 @@ const DvtApplyContent: FC = () => {
 
 export const DvtApply: FC = () => (
   <NoSSRWrapper>
-    <SiweAuthProvider
-      contextName="dvt"
-      statement="Sign in to use the IDVTC Apply form"
-    >
-      <DvtStateProvider>
-        <DvtApplyContent />
-      </DvtStateProvider>
-    </SiweAuthProvider>
+    <DvtProviders>
+      <DvtApplyContent />
+    </DvtProviders>
   </NoSSRWrapper>
 );

@@ -7,10 +7,11 @@ import { FAQ_OPERATOR_TYPE } from 'faq';
 import { BlockStyle } from './description/styles';
 import {
   ApplicationFlow,
-  ApplyButton,
   Introduction,
   RequirementsCriteria,
 } from './description';
+import { DvtApplyButton } from './apply-button';
+import { DvtProviders } from './shared';
 import { PATH } from 'consts';
 
 export const DvtDescriptionPage: FC = () => (
@@ -21,12 +22,14 @@ export const DvtDescriptionPage: FC = () => (
     mainPrefix={<BackButton href={PATH.TYPE} />}
   >
     <DvtPageSwitcher />
-    <BlockStyle>
-      <Introduction />
-      <RequirementsCriteria />
-      <ApplicationFlow />
-      <ApplyButton />
-    </BlockStyle>
+    <DvtProviders>
+      <BlockStyle>
+        <Introduction />
+        <RequirementsCriteria />
+        <ApplicationFlow />
+        <DvtApplyButton />
+      </BlockStyle>
+    </DvtProviders>
     <Faq items={FAQ_OPERATOR_TYPE} />
   </Layout>
 );
