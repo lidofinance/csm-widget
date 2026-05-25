@@ -150,5 +150,5 @@ jobs:
         uses: ./.github/actions/notify-broken-tests
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          duty-tag: ${{ secrets.SLACK_DUTY_TAG }}
+          duty-tag: ${{ env.SLACK_DUTY_TAG }}
           test-tags: ${{ env.TEST_TAGS }}
