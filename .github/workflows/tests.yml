@@ -147,7 +147,7 @@ jobs:
 
       - name: Notify Slack about broken workflow
         if: always() && steps.run-tests.conclusion == 'skipped'
-        uses: lidofinance/lido-autotests/.github/actions/notify-slack-broken@slack-report-if-wf-broken
+        uses: ./.github/actions/notify-broken-tests
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
           duty-tag: ${{ secrets.SLACK_DUTY_TAG }}
