@@ -1,6 +1,5 @@
 import { Block, Text } from '@lidofinance/lido-ui';
-import { SiweAuthProvider, useSiweAuth } from 'modules/siwe';
-import { surveysSignin } from 'modules/surveys-sdk';
+import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
 import { NoSSRWrapper, Stack, WhenLoaded } from 'shared/components';
@@ -8,7 +7,7 @@ import { Connect } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status';
 import { ProofStatus } from './form-status/proof-status';
-import { IcsStateProvider, useIcsState } from './shared';
+import { IcsProviders, useIcsState } from './shared';
 import { SiweSignIn } from './siwe-sign-in';
 
 const IcsApplyContent: FC = () => {
@@ -73,15 +72,9 @@ const IcsApplyContent: FC = () => {
 export const IcsApply: FC = () => {
   return (
     <NoSSRWrapper>
-      <SiweAuthProvider
-        contextName="ics"
-        statement="Sign in to use the ICS Apply form"
-        signin={surveysSignin}
-      >
-        <IcsStateProvider>
-          <IcsApplyContent />
-        </IcsStateProvider>
-      </SiweAuthProvider>
+      <IcsProviders>
+        <IcsApplyContent />
+      </IcsProviders>
     </NoSSRWrapper>
   );
 };

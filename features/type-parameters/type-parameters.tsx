@@ -2,26 +2,18 @@ import {
   OPERATOR_TYPE,
   OPERATOR_TYPE_CURVE_ID,
 } from '@lidofinance/lido-csm-sdk';
-import { Button, Text } from '@lidofinance/lido-ui';
+import { Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
-import { PATH } from 'consts/urls';
-import {
-  useCurveParameters,
-  useNodeOperatorId,
-  useOperatorType,
-} from 'modules/web3';
+import { IcsApplyButton } from 'features/ics/apply-button';
+import { useCurveParameters } from 'modules/web3';
 import { FC } from 'react';
 import { Block, CompareParametersList, Stack } from 'shared/components';
 import { DefColumnBackground, IcsColumnBackground } from 'shared/components';
 import { IdvtcColumnBackground } from 'shared/components/parameters-list/styles';
 import { useShowFlags } from 'shared/hooks';
-import { LocalLink } from 'shared/navigate';
 
 // TODO: upgrade for idvtc
 export const TypeParameters: FC = () => {
-  const nodeOperatorId = useNodeOperatorId();
-  const { data: operatorType } = useOperatorType(nodeOperatorId);
-
   const { ICS_APPLY_ENABLED, CAN_CLAIM_ICS } = useShowFlags();
 
   const { data: defParams } = useCurveParameters(
@@ -33,11 +25,6 @@ export const TypeParameters: FC = () => {
   const { data: idvtcParams } = useCurveParameters(
     OPERATOR_TYPE_CURVE_ID.CSM_IDVTC,
   );
-
-  const canApply =
-    !CAN_CLAIM_ICS &&
-    ICS_APPLY_ENABLED &&
-    operatorType !== OPERATOR_TYPE.CSM_ICS;
 
   return (
     <Block>
@@ -71,20 +58,7 @@ export const TypeParameters: FC = () => {
               <IdvtcColumnBackground $index={2} />
             </CompareParametersList>
           </Block>
-          {CAN_CLAIM_ICS && (
-            <LocalLink href={PATH.TYPE_ICS_CLAIM}>
-              <Button fullwidth size="sm">
-                Go to claim
-              </Button>
-            </LocalLink>
-          )}
-          {canApply && (
-            <LocalLink href={PATH.TYPE_ICS_APPLY}>
-              <Button fullwidth size="sm">
-                Apply for ICS
-              </Button>
-            </LocalLink>
-          )}
+          {(ICS_APPLY_ENABLED || CAN_CLAIM_ICS) && <IcsApplyButton size="sm" />}
         </Stack>
       </Stack>
     </Block>

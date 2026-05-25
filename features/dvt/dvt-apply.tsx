@@ -1,6 +1,5 @@
 import { Block, Text } from '@lidofinance/lido-ui';
-import { SiweAuthProvider, useSiweAuth } from 'modules/siwe';
-import { surveysSignin } from 'modules/surveys-sdk';
+import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
 import { NoSSRWrapper, Stack, WhenLoaded } from 'shared/components';
@@ -8,7 +7,7 @@ import { Connect } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status/form-status';
 import { ProofStatus } from './form-status/proof-status';
-import { DvtStateProvider, useDvtState } from './shared';
+import { DvtProviders, useDvtState } from './shared';
 import { SiweSignIn } from './siwe-sign-in/siwe-sign-in';
 
 const DvtApplyContent: FC = () => {
@@ -72,14 +71,8 @@ const DvtApplyContent: FC = () => {
 
 export const DvtApply: FC = () => (
   <NoSSRWrapper>
-    <SiweAuthProvider
-      contextName="dvt"
-      statement="Sign in to use the IDVTC Apply form"
-      signin={surveysSignin}
-    >
-      <DvtStateProvider>
-        <DvtApplyContent />
-      </DvtStateProvider>
-    </SiweAuthProvider>
+    <DvtProviders>
+      <DvtApplyContent />
+    </DvtProviders>
   </NoSSRWrapper>
 );
