@@ -11,6 +11,7 @@ export * from './cm-keys-6';
 export * from './cm-keys-7';
 export * from './cm-keys-8';
 export * from './cm-keys-9';
+export * from './cm-keys-10';
 export * from './cm-locked-bond-1';
 export * from './cm-locked-bond-2';
 export * from './cm-locked-bond-3';

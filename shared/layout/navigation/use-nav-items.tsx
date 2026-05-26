@@ -12,7 +12,7 @@ import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import {
-  CounterIcs,
+  CounterClaimType,
   CounterInvalidKeys,
   CounterInvites,
   CounterLockedBond,
@@ -100,11 +100,11 @@ const routes: Route[] = [
     suffix: <CounterInvites />,
   },
   {
-    name: 'Stealing',
-    path: PATH.STEALING,
+    name: 'Delayed penalty',
+    path: PATH.DELAYED_PENALTY,
     icon: <EthIcon />,
-    subPaths: [PATH.STEALING_REPORT, PATH.STEALING_CANCEL],
-    showRules: ['EL_STEALING_REPORTER'],
+    subPaths: [PATH.DELAYED_PENALTY_REPORT, PATH.DELAYED_PENALTY_CANCEL],
+    showRules: ['EL_DELAYED_PENALTY_REPORTER'],
   },
   {
     name: 'Surveys',
@@ -117,9 +117,16 @@ const routes: Route[] = [
     name: 'Operator Type',
     path: PATH.TYPE,
     icon: <UserIcon />,
-    subPaths: [PATH.TYPE_CLAIM, PATH.TYPE_ICS_SYSTEM, PATH.TYPE_ICS_APPLY],
-    showRules: ['CAN_CLAIM_ICS', 'ICS_APPLY_ENABLED'],
-    suffix: <CounterIcs />,
+    subPaths: [
+      PATH.TYPE_ICS_SYSTEM,
+      PATH.TYPE_ICS_APPLY,
+      PATH.TYPE_ICS_CLAIM,
+      PATH.TYPE_DVT_DESCRIPTION,
+      PATH.TYPE_DVT_APPLY,
+      PATH.TYPE_DVT_CLAIM,
+    ],
+    showRules: ['CAN_CLAIM_ICS', 'CAN_CLAIM_IDVTC', 'ICS_APPLY_ENABLED'],
+    suffix: <CounterClaimType />,
   },
 ];
 

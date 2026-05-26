@@ -1,5 +1,9 @@
-import { MODULE_NAME, getNodeOperatorRoles } from '@lidofinance/lido-csm-sdk';
-import { PATH } from 'consts';
+import {
+  getNodeOperatorRoles,
+  MODULE_NAME,
+  OPERATOR_TYPE,
+} from '@lidofinance/lido-csm-sdk';
+import { getModuleOperatorType, PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
@@ -7,7 +11,6 @@ import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { useKeysCache } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import invariant from 'tiny-invariant';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
@@ -25,7 +28,6 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFlow
 > => {
   const sdk = useSmSDK(MODULE_NAME.CSM);
-  const { addCachePubkeys, removeCachePubkeys } = useKeysCache();
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
@@ -59,9 +61,6 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
         submit: async () => {
           invariant(amount !== undefined, 'BondAmount is not defined');
 
-          const pubkeys = depositData.map(({ pubkey }) => pubkey);
-          addCachePubkeys(pubkeys);
-
           const callback = buildCallback(input, data);
 
           const params = {
@@ -76,12 +75,20 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             callback,
           };
 
-          const { result } = data.proof
-            ? await sdk.icsGate.addNodeOperator({
-                ...params,
-                proof: data.proof,
-              })
-            : await sdk.permissionlessGate.addNodeOperator(params);
+          const type = getModuleOperatorType(data.curveId);
+
+          const { result } =
+            type === OPERATOR_TYPE.CSM_ICS && data.proof
+              ? await sdk.icsGate.addNodeOperator({
+                  ...params,
+                  proof: data.proof,
+                })
+              : type === OPERATOR_TYPE.CSM_IDVTC && data.proof
+                ? await sdk.idvtcGate.addNodeOperator({
+                    ...params,
+                    proof: data.proof,
+                  })
+                : await sdk.permissionlessGate.addNodeOperator(params);
 
           if (result) {
             const roles = getNodeOperatorRoles(result, data.address);
@@ -93,16 +100,10 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             }
           }
         },
-        onError: () => {
-          const pubkeys = depositData.map(({ pubkey }) => pubkey);
-          removeCachePubkeys(pubkeys);
-        },
       };
     },
     [
       sdk,
-      addCachePubkeys,
-      removeCachePubkeys,
       appendNO,
       setOperatorCustomAddresses,
       n,

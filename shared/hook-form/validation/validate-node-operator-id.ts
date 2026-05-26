@@ -3,10 +3,10 @@ import { ValidationError } from './validation-error';
 
 export const validateNodeOperatorId = (
   field: string,
-  value?: NodeOperatorId,
+  value?: NodeOperatorId | '',
   max?: NodeOperatorId,
 ) => {
-  if (value === undefined) throw new ValidationError(field, '');
+  if (value === undefined || value === '') throw new ValidationError(field, '');
 
   try {
     if (value < 0n) {

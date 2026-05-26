@@ -3,13 +3,15 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import { useSmSDK } from '../web3-provider';
 
+export const KEY_OPERATORS_WITH_LOCKED_BOND = ['operators-with-locked-bond'];
+
 export const useOperatorsWithLockedBond = () => {
-  const { stealing } = useSmSDK();
+  const { delayedPenalty } = useSmSDK();
 
   return useQuery({
-    queryKey: ['operators-with-locked-bond'],
+    queryKey: [...KEY_OPERATORS_WITH_LOCKED_BOND],
     ...STRATEGY_CONSTANT,
-    queryFn: () => stealing.getOperatorsWithLockedBond(),
+    queryFn: () => delayedPenalty.getOperatorsWithLockedBond(),
     select: (data) =>
       data.filter(({ locked }) => locked > STETH_ROUNDING_THRESHOLD),
   });

@@ -30,6 +30,9 @@ export const CURVE_VARIANTS: Record<OPERATOR_TYPE, ReturnType<typeof css>> = {
       ),
       linear-gradient(97deg, #00a3ff 36.36%, #2238ff 99.58%);
   `,
+  [OPERATOR_TYPE.CSM_IDVTC]: css`
+    background: linear-gradient(91deg, #c4a8ff 2.95%, #f7a3cc 103.56%);
+  `,
   [OPERATOR_TYPE.CC]: css<InjectedProps>`
     background: linear-gradient(93deg, #08d1ff -23.5%, #88f493 121.99%);
   `,

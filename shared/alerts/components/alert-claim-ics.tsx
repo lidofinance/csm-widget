@@ -13,7 +13,7 @@ export const AlertClaimIcs: FC = () => (
     </p>
     <br />
     <LocalLink
-      href={PATH.TYPE_CLAIM}
+      href={PATH.TYPE_ICS_CLAIM}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert}
     >
       <AlertButton>Go to Claim page</AlertButton>

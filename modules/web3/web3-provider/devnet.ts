@@ -20,7 +20,8 @@ const ADDRESS_MAP: Record<string, CONTRACT_NAMES> = {
   Verifier: CONTRACT_NAMES.verifier,
   MetaRegistry: CONTRACT_NAMES.metaRegistry,
   PermissionlessGate: CONTRACT_NAMES.permissionlessGate,
-  VettedGate: CONTRACT_NAMES.vettedGate,
+  VettedGate: CONTRACT_NAMES.icsGate,
+  IdentifiedDVTClusterGate: CONTRACT_NAMES.idvtcGate,
 };
 
 export const parseDevnetAddresses = (
