@@ -135,7 +135,7 @@ jobs:
 
       - name: Run tests based on suite input
         id: run-tests
-        timeout-minutes: 60
+        timeout-minutes: 90
         run: |
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
           echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
@@ -155,7 +155,7 @@ jobs:
             tar -czf - playwright-report/ | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -pass env:ARTIFACT_PASSWORD -out playwright-report.tar.gz.enc
           fi
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report
