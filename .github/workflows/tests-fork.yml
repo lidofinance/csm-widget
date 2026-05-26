@@ -167,6 +167,7 @@ jobs:
 
       - name: Run tests based on suite input
         id: run-tests
+        timeout-minutes: 30
         run: |
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
           echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
