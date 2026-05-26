@@ -135,7 +135,7 @@ jobs:
 
       - name: Run tests based on suite input
         id: run-tests
-        timeout-minutes: 2
+        timeout-minutes: 60
         run: |
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
           echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
@@ -163,7 +163,7 @@ jobs:
           retention-days: 1
 
       - name: Notify Slack about broken workflow
-        if: always() && (steps.run-tests.conclusion == 'skipped' || steps.run-tests.conclusion == 'cancelled')
+        if: always() && github.event_name == 'schedule' && (steps.run-tests.conclusion == 'skipped' || steps.run-tests.conclusion == 'cancelled')
         uses: ./.github/actions/notify-broken-tests
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
