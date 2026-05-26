@@ -6,7 +6,7 @@ import {
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
 } from 'config/feature-flags/types';
-import { getExternalLinks } from 'consts/external-links';
+import { isSurveysApiConfigured } from 'modules/surveys-sdk';
 import {
   useDappStatus,
   useHasReportDelayedPenaltyRole,
@@ -46,8 +46,6 @@ export type ShowRule =
   | 'IS_CM';
 
 export type ShowFlags = Record<ShowRule, boolean>;
-
-const { surveyApi } = getExternalLinks();
 
 const isManagerRole = (
   nodeOperator: NodeOperatorShortInfo | undefined,
@@ -120,7 +118,7 @@ export const useShowFlags = (): ShowFlags => {
       ['ICS_APPLY_ENABLED']:
         !!featureFlags?.[ICS_APPLY_FORM] && module === MODULE_NAME.CSM,
       ['IS_SURVEYS_ACTIVE']:
-        !!surveyApi &&
+        isSurveysApiConfigured &&
         !!featureFlags?.[SURVEYS_SETUP_ENABLED] &&
         module === MODULE_NAME.CSM,
       ['IS_CSM']: module === MODULE_NAME.CSM,

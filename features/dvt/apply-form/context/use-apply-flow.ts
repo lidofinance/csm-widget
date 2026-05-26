@@ -1,8 +1,5 @@
-import {
-  DvtApplyDto,
-  useApplyFormMutation,
-  useDvtState,
-} from 'features/dvt/shared';
+import { DvtApplyDto, DvtResponseDto, useDvtState } from 'features/dvt/shared';
+import { endpoints, useSurveysMutation } from 'modules/surveys-sdk';
 import { useCallback } from 'react';
 import type {
   Executable,
@@ -35,7 +32,10 @@ export const useApplyFlowResolver = (
 ): FlowResolver<DvtApplyFormInputType, DvtApplyFormNetworkData, ApplyFlow> => {
   const { txModalStages: stages } = useModalStages();
   const { reset } = useDvtState();
-  const mutation = useApplyFormMutation({});
+  const mutation = useSurveysMutation<DvtResponseDto, DvtApplyDto>(
+    endpoints.dvtApply,
+    { mutationKey: ['dvt-apply'] },
+  );
 
   return useCallback(
     (input, data) => ({

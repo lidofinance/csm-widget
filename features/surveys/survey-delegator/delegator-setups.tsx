@@ -4,7 +4,7 @@ import { FC } from 'react';
 import { Plural, Stack, WhenLoaded } from 'shared/components';
 import { formatDaysAgo } from 'utils';
 import { SurveyItem, SurveyLink, SurveySection, Warning } from '../components';
-import { useSurveysSWR } from '../shared/use-surveys-swr';
+import { parseOperatorKey, useOperatorSurvey } from 'modules/surveys-sdk';
 import { SetupRaw, SetupsKeys } from '../types';
 
 type DelegatorSetupsProps = {
@@ -12,11 +12,13 @@ type DelegatorSetupsProps = {
 };
 
 export const DelegatorSetups: FC<DelegatorSetupsProps> = ({ operatorId }) => {
-  const { data, isLoading } = useSurveysSWR<SetupRaw[]>('setups', {
-    operatorId,
+  const operatorKey = parseOperatorKey(operatorId) ?? undefined;
+
+  const { data, isLoading } = useOperatorSurvey<SetupRaw[]>('setups', {
+    operatorKey,
   });
-  const { data: keys } = useSurveysSWR<SetupsKeys>('setups/keys', {
-    operatorId,
+  const { data: keys } = useOperatorSurvey<SetupsKeys>('setups/keys', {
+    operatorKey,
   });
 
   const showSetups = !!(keys && (keys.total > 0 || keys.filled > 0));

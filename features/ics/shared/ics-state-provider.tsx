@@ -5,6 +5,7 @@ import {
   useOperatorOwner,
   useOperatorType,
 } from 'modules/web3';
+import { endpoints, useSurveysQuery } from 'modules/surveys-sdk';
 import {
   createContext,
   FC,
@@ -15,7 +16,6 @@ import {
 } from 'react';
 import invariant from 'tiny-invariant';
 import { IcsResponseDto } from './types';
-import { useFormStatus } from './use-form-status';
 
 export type TypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
 
@@ -47,7 +47,9 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data: ownerProofData, isPending: isOwnerTypePending } = useIcsProof(
     owner?.address,
   );
-  const { data, isPending } = useFormStatus();
+  const { data, isPending } = useSurveysQuery<IcsResponseDto>(
+    endpoints.icsStatus,
+  );
 
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);

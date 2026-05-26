@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { DVT_FORM_STATUS_KEY } from 'features/dvt/shared';
+import { surveysKeys } from 'modules/surveys-sdk';
 import { useDappStatus } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
 import {
@@ -15,9 +15,7 @@ const useApplyFormNetworkData: NetworkData<DvtApplyFormNetworkData> = () => {
   const queryClient = useQueryClient();
 
   const revalidate = useCallback(() => {
-    void queryClient.invalidateQueries({
-      queryKey: [DVT_FORM_STATUS_KEY],
-    });
+    void queryClient.invalidateQueries({ queryKey: surveysKeys.auth });
   }, [queryClient]);
 
   return {

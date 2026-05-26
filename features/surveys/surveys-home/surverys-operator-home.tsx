@@ -3,6 +3,7 @@ import { PATH } from 'consts/urls';
 import { FC, useCallback } from 'react';
 import { Plural, Stack, WhenLoaded } from 'shared/components';
 import { formatDaysAgo, plural } from 'utils';
+import { useOperatorSurvey } from 'modules/surveys-sdk';
 import {
   SurveyButton,
   SurveyItem,
@@ -10,15 +11,14 @@ import {
   SurveySection,
   Warning,
 } from '../components';
-import { useSurveysSWR } from '../shared/use-surveys-swr';
 import { useSurveyContext } from '../surveys-provider';
 import { MAX_DELEGATES, SetupsKeys, Summary } from '../types';
 import { useConfirmEraseModal } from './confirm-erase-modal';
 
 export const SurveysOperatorHome: FC = () => {
-  const { data, isLoading, remove } = useSurveysSWR<Summary>('summary');
+  const { data, isLoading, remove } = useOperatorSurvey<Summary>('summary');
   const { data: keys, mutate: mutateKeys } =
-    useSurveysSWR<SetupsKeys>('setups/keys');
+    useOperatorSurvey<SetupsKeys>('setups/keys');
   const { delegatedOperators } = useSurveyContext();
 
   const confirmModal = useConfirmEraseModal();

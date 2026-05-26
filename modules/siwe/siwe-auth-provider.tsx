@@ -1,45 +1,28 @@
-import { getExternalLinks } from 'consts/external-links';
 import { useDappStatus } from 'modules/web3';
+import { useAddressValidation } from 'providers/address-validation-provider';
 import { useModalActions } from 'providers/modal-provider';
-import {
-  createContext,
-  FC,
-  PropsWithChildren,
-  useCallback,
-  useContext,
-  useMemo,
-} from 'react';
+import { FC, PropsWithChildren, useCallback, useMemo } from 'react';
 import { useSessionStorage } from 'shared/hooks';
-import invariant from 'tiny-invariant';
-import { extractError } from 'utils';
 import { trackMatomoSiweEvent } from 'utils/track-matomo-event';
-import { AuthContextType } from './types';
+import { SiweAuthContext } from './siwe-auth-context';
 import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
-import { useAddressValidation } from 'providers/address-validation-provider';
-
-const { surveyApi } = getExternalLinks();
-
-const SiweAuthContext = createContext<AuthContextType | null>(null);
-
-export const useSiweAuth = () => {
-  const context = useContext(SiweAuthContext);
-  invariant(context, 'Attempt to use `useSiweAuth` outside of provider');
-  return context;
-};
+import type { SiweSigninPayload, SiweSigninResponse } from './types';
 
 type SiweAuthProviderProps = {
   contextName: string;
   statement: string;
+  signin: (payload: SiweSigninPayload) => Promise<SiweSigninResponse>;
 };
 
 export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   contextName,
   statement,
+  signin,
   children,
 }) => {
-  const siwe = useSiwe({ statement });
   const { address } = useDappStatus();
+  const siwe = useSiwe({ statement });
   const [token, setToken] = useSessionStorage<string | undefined>(
     `${contextName}-token-${address}`,
     undefined,
@@ -52,7 +35,6 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   const signIn = useCallback(async () => {
     trackMatomoSiweEvent(contextName);
 
-    // Validate address before signin - if address is not valid, don't signin
     const result = await validateAddress(address);
     if (!result) return;
 
@@ -62,23 +44,15 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
       const payload = await siwe();
 
       modalStages.pending();
-      const response = await fetch(`${surveyApi}/auth/signin`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
-      if (!response.ok) {
-        modalStages.failed(await extractError(response));
-        return;
+      try {
+        const data = await signin(payload);
+        setToken(`${data.token_type} ${data.access_token}`);
+        trackMatomoSiweEvent(contextName, 'success');
+        closeModal();
+      } catch (err) {
+        modalStages.failed((err as Error).message);
       }
-      const data: { access_token: string; token_type: string } =
-        await response.json();
-      setToken(`${data.token_type} ${data.access_token}`);
-      trackMatomoSiweEvent(contextName, 'success');
-      closeModal();
-    } catch (e) {
+    } catch (_e) {
       modalStages.rejected();
     }
   }, [
@@ -87,6 +61,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
     contextName,
     modalStages,
     setToken,
+    signin,
     siwe,
     validateAddress,
   ]);
@@ -96,11 +71,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   }, [setToken]);
 
   const value = useMemo(
-    () => ({
-      token,
-      signIn,
-      logout,
-    }),
+    () => ({ token, signIn, logout }),
     [logout, signIn, token],
   );
 

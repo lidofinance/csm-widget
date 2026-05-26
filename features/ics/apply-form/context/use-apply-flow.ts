@@ -1,8 +1,5 @@
-import {
-  IcsApplyDto,
-  useApplyFormMutation,
-  useIcsState,
-} from 'features/ics/shared';
+import { IcsApplyDto, IcsResponseDto, useIcsState } from 'features/ics/shared';
+import { endpoints, useSurveysMutation } from 'modules/surveys-sdk';
 import { useCallback } from 'react';
 import type {
   Executable,
@@ -30,7 +27,10 @@ export const useApplyFlowResolver = (): FlowResolver<
 > => {
   const stages = useModalStages();
   const { reset } = useIcsState();
-  const mutation = useApplyFormMutation({});
+  const mutation = useSurveysMutation<IcsResponseDto, IcsApplyDto>(
+    endpoints.icsApply,
+    { mutationKey: ['ics-apply'] },
+  );
 
   return useCallback(
     (input, data) => ({

@@ -1,6 +1,6 @@
 import { Setup, SetupRaw } from '../types';
 
-export const transformOutcoming = (data: Setup): SetupRaw => ({
+export const transformOutgoing = (data: Setup): SetupRaw => ({
   ...data,
   mevMinBid: data.mevMinBid?.toString() || null,
   validatorClient: data.validatorSameAsCl ? '' : data.validatorClient,

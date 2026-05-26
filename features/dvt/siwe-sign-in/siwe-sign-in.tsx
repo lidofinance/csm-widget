@@ -2,7 +2,7 @@ import { Block, Button, Text } from '@lidofinance/lido-ui';
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
 import { InputAddress, Stack } from 'shared/components';
-import { useSiweAuth } from 'shared/siwe';
+import { useSiweAuth } from 'modules/siwe';
 
 export const SiweSignIn: FC = () => {
   const { address } = useDappStatus();

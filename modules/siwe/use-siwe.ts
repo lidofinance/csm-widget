@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { SiweMessage } from 'siwe';
 import invariant from 'tiny-invariant';
 import { useSignMessage } from 'wagmi';
-import { SiweOptions } from './types';
+import type { SiweOptions } from './types';
 
 const createSiweMessage = (
   address: string,

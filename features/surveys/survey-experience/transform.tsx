@@ -9,7 +9,7 @@ export type ExperienceForm = {
   otherValidatorsCount: number;
 };
 
-export const transformOutcoming = (data: ExperienceForm): Experience => ({
+export const transformOutgoing = (data: ExperienceForm): Experience => ({
   professional: data.professional === 'on',
   validatedBefore: data.validatedBefore === 'on',
   fromCurated:

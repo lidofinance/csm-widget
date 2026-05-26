@@ -15,7 +15,7 @@ import {
   SubmitButtonHookForm,
   TokenAmountInputHookForm,
 } from 'shared/hook-form/controls';
-import { useSurveysSWR } from '../shared/use-surveys-swr';
+import { useOperatorSurvey } from 'modules/surveys-sdk';
 import {
   CL_CLIENT_OPTIONS,
   COUNTRY_OPTIONS,
@@ -26,7 +26,7 @@ import {
   TOOL_OPTIONS,
   VALIDATOR_CLIENT_OPTIONS,
 } from './options';
-import { transformIncoming, transformOutcoming } from './transform';
+import { transformIncoming, transformOutgoing } from './transform';
 import { useModalStages } from './use-modal-stages';
 import { useConfirmRemoveModal } from './confirm-remove-modal';
 import { useNavigate } from 'shared/navigate';
@@ -46,16 +46,16 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
     error,
     mutate,
     remove,
-  } = useSurveysSWR<Setup, SetupRaw>(`setups${id ? '/' + id : ''}`, {
+  } = useOperatorSurvey<Setup, SetupRaw>(`setups${id ? '/' + id : ''}`, {
     skipFetching: !id,
     transformIncoming,
-    transformOutcoming,
+    transformOutgoing,
   });
 
   const data = useMemo(() => (id ? filled : undefined), [id, filled]);
 
   const { data: keys, mutate: mutateKeys } =
-    useSurveysSWR<SetupsKeys>('setups/keys');
+    useOperatorSurvey<SetupsKeys>('setups/keys');
 
   const nodeOperatorId = useNodeOperatorId();
   const { refetch } = useSurveysFilled(nodeOperatorId);

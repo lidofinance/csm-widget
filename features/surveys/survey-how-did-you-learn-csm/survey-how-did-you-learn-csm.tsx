@@ -7,16 +7,16 @@ import {
   SubmitButtonHookForm,
   TextInputHookForm,
 } from 'shared/hook-form/controls';
-import { useSurveysSWR } from '../shared/use-surveys-swr';
+import { useOperatorSurvey } from 'modules/surveys-sdk';
 import { HowDidYouLearnCsm } from '../types';
 import { useModalStages } from './use-modal-stages';
 import { sources } from './sources';
-import { transformOutcoming } from './transform';
+import { transformOutgoing } from './transform';
 
 export const SurveyHowDidYouLearnCsm: FC = () => {
-  const { data, mutate } = useSurveysSWR<HowDidYouLearnCsm>(
+  const { data, mutate } = useOperatorSurvey<HowDidYouLearnCsm>(
     'how-did-you-learn-csm',
-    { transformOutcoming },
+    { transformOutgoing },
   );
   const { txModalStages: modals } = useModalStages();
 

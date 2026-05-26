@@ -1,18 +1,22 @@
-import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_LAZY } from 'consts';
-import { useSurveysFetcher } from '../shared/use-surveys-fetcher';
+import {
+  endpoints,
+  useOperatorKey,
+  useSurveysQuery,
+} from 'modules/surveys-sdk';
+import { useCallback } from 'react';
 import { DelegatedOperatorsResponse } from '../types';
 
 export const useDelegatedOperators = (nodeOperatorId?: bigint) => {
-  const excludeId =
-    nodeOperatorId !== undefined ? `csm-${nodeOperatorId}` : undefined;
+  const excludeId = useOperatorKey(nodeOperatorId);
 
-  const [fetcher] = useSurveysFetcher<DelegatedOperatorsResponse>();
+  const select = useCallback(
+    (data: DelegatedOperatorsResponse) =>
+      data.nodeOperatorIds.filter((id) => id !== excludeId),
+    [excludeId],
+  );
 
-  return useQuery({
-    queryKey: ['surveys', 'delegates/my'],
-    queryFn: () => fetcher('delegates/my'),
-    ...STRATEGY_LAZY,
-    select: (data) => data.nodeOperatorIds.filter((id) => id !== excludeId),
-  });
+  return useSurveysQuery<DelegatedOperatorsResponse, string[]>(
+    endpoints.myDelegates,
+    { select },
+  );
 };

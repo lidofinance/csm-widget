@@ -1,50 +1,64 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { STRATEGY_LAZY } from 'consts';
-import { useNodeOperatorId } from 'modules/web3';
-import { useCallback } from 'react';
-import { useSurveysFetcher } from '../shared/use-surveys-fetcher';
+import {
+  endpoints,
+  OperatorKey,
+  surveysKeys,
+  useOperatorKey,
+  useSurveysMutation,
+  useSurveysQuery,
+} from 'modules/surveys-sdk';
+import { useCallback, useMemo } from 'react';
+import invariant from 'tiny-invariant';
 import { Delegate, DelegatesResponse, MAX_DELEGATES } from '../types';
 
 export const useDelegates = () => {
-  const nodeOperatorId = useNodeOperatorId();
-  const effectiveOperatorId = `csm-${nodeOperatorId}`;
-  const url = `${effectiveOperatorId}/delegates`;
-  const queryKey = ['surveys', effectiveOperatorId, 'delegates'];
-  const summaryQueryKey = ['surveys', effectiveOperatorId, 'summary'];
+  const operatorKey = useOperatorKey();
 
-  const queryClient = useQueryClient();
+  const requireKey = useCallback((): OperatorKey => {
+    invariant(operatorKey, 'useDelegates: operator key is not available');
+    return operatorKey;
+  }, [operatorKey]);
 
-  const [fetcher, updater] = useSurveysFetcher<DelegatesResponse, Delegate>(
-    undefined,
-    (data) => data.delegates[0],
+  const queryKey = useMemo(
+    () =>
+      operatorKey
+        ? surveysKeys.path(operatorKey, 'delegates')
+        : surveysKeys.pending('delegates'),
+    [operatorKey],
   );
 
-  const query = useQuery<DelegatesResponse>({
-    queryKey,
-    queryFn: () => fetcher(url),
-    enabled: nodeOperatorId !== undefined,
-    ...STRATEGY_LAZY,
+  const invalidate = useMemo<readonly (readonly unknown[])[]>(
+    () =>
+      operatorKey ? [queryKey, surveysKeys.summary(operatorKey)] : [queryKey],
+    [operatorKey, queryKey],
+  );
+
+  const query = useSurveysQuery<DelegatesResponse>(
+    operatorKey ? endpoints.delegates(operatorKey) : '',
+    {
+      queryKey,
+      enabled: operatorKey !== undefined,
+    },
+  );
+
+  const addMutation = useSurveysMutation<
+    DelegatesResponse,
+    { delegates: Delegate[] }
+  >(() => endpoints.delegates(requireKey()), {
+    mutationKey: ['surveys-delegates-add', operatorKey],
+    invalidate,
   });
 
-  const addMutation = useMutation({
-    mutationFn: (address: string) =>
-      updater(url, { delegates: [{ address }] })(),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey });
-      void queryClient.invalidateQueries({ queryKey: summaryQueryKey });
+  const removeMutation = useSurveysMutation<unknown, string>(
+    (address) => endpoints.delegate(requireKey(), address),
+    {
+      method: 'DELETE',
+      mutationKey: ['surveys-delegates-remove', operatorKey],
+      invalidate,
     },
-  });
-
-  const removeMutation = useMutation({
-    mutationFn: (address: string) => updater(`${url}/${address}`, null)(),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey });
-      void queryClient.invalidateQueries({ queryKey: summaryQueryKey });
-    },
-  });
+  );
 
   const add = useCallback(
-    (address: string) => addMutation.mutateAsync(address),
+    (address: string) => addMutation.mutateAsync({ delegates: [{ address }] }),
     [addMutation],
   );
 

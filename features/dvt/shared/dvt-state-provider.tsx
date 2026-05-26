@@ -5,6 +5,7 @@ import {
   useOperatorOwner,
   useOperatorType,
 } from 'modules/web3';
+import { endpoints, useSurveysQuery } from 'modules/surveys-sdk';
 import {
   createContext,
   FC,
@@ -15,7 +16,6 @@ import {
 } from 'react';
 import invariant from 'tiny-invariant';
 import { DvtResponseDto } from './types';
-import { useFormStatus } from './use-form-status';
 
 export type DvtTypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
 
@@ -47,7 +47,9 @@ export const DvtStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data: ownerProofData, isPending: isOwnerTypePending } = useIdvtcProof(
     owner?.address,
   );
-  const { data, isPending } = useFormStatus();
+  const { data, isPending } = useSurveysQuery<DvtResponseDto>(
+    endpoints.dvtStatus,
+  );
 
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);

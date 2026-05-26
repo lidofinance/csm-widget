@@ -2,7 +2,7 @@ import { Block, Button, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { MatomoLink, Stack } from 'shared/components';
-import { useSiweAuth } from 'shared/siwe';
+import { useSiweAuth } from 'modules/siwe';
 
 export const SiweSignIn: FC = () => {
   const { signIn } = useSiweAuth();
