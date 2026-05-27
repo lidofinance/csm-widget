@@ -41,11 +41,7 @@ export const SurveysPage: FC<{ slug?: string[] }> = ({ slug = [] }) => {
   return (
     <Layout title="Surveys" subtitle="Voluntary report form" pageName="Surveys">
       <NoSSRWrapper>
-        <SiweAuthProvider
-          contextName="surveys"
-          statement="Sign in to use the CSM Surveys"
-          signin={surveysSignin}
-        >
+        <SiweAuthProvider signin={surveysSignin}>
           <SiweAuthGate fallback={<SurveysSignInPage />}>
             <SurveyProvider>{page}</SurveyProvider>
           </SiweAuthGate>

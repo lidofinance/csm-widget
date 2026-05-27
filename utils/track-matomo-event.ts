@@ -36,16 +36,8 @@ export const trackMatomoFormEvent = (
     );
 };
 
-export const trackMatomoSiweEvent = (
-  contextName: string,
-  stage: 'start' | 'success' = 'start',
-) => {
-  trackEvent(
-    ...createEvent(
-      `SIWE sign in ${stage} for «${contextName}»`,
-      `siwe_${snakeCase(contextName)}_${stage}`,
-    ),
-  );
+export const trackMatomoSiweEvent = (stage: 'start' | 'success' = 'start') => {
+  trackEvent(...createEvent(`SIWE sign in ${stage}`, `siwe_signin_${stage}`));
 };
 
 export const trackMatomoPageEvent = (pageName?: string) => {

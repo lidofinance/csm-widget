@@ -9,22 +9,21 @@ import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
 import type { SiweSigninPayload, SiweSigninResponse } from './types';
 
+const SIWE_STATEMENT =
+  'The section you are attempting to access requires you to prove the address ownership.';
+
 type SiweAuthProviderProps = {
-  contextName: string;
-  statement: string;
   signin: (payload: SiweSigninPayload) => Promise<SiweSigninResponse>;
 };
 
 export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
-  contextName,
-  statement,
   signin,
   children,
 }) => {
   const { address } = useDappStatus();
-  const siwe = useSiwe({ statement });
+  const siwe = useSiwe({ statement: SIWE_STATEMENT });
   const [token, setToken] = useSessionStorage<string | undefined>(
-    `${contextName}-token-${address}`,
+    `siwe-token-${address}`,
     undefined,
   );
 
@@ -33,7 +32,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   const { validateAddress } = useAddressValidation();
 
   const signIn = useCallback(async () => {
-    trackMatomoSiweEvent(contextName);
+    trackMatomoSiweEvent();
 
     const result = await validateAddress(address);
     if (!result) return;
@@ -47,7 +46,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
       try {
         const data = await signin(payload);
         setToken(`${data.token_type} ${data.access_token}`);
-        trackMatomoSiweEvent(contextName, 'success');
+        trackMatomoSiweEvent('success');
         closeModal();
       } catch (err) {
         modalStages.failed((err as Error).message);
@@ -58,7 +57,6 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   }, [
     address,
     closeModal,
-    contextName,
     modalStages,
     setToken,
     signin,
