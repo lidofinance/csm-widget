@@ -31,8 +31,8 @@ export const computeStakeData = (
   const activeStake =
     summary.currentStake === 0n && keys
       ? sumActiveKeysBalance(keys)
-      : summary.currentStake;
-  const targetStake = summary.targetStake;
+      : bigMax(summary.currentStake - summary.externalStake, 0n);
+  const targetStake = bigMax(summary.targetStake - summary.externalStake, 0n);
 
   const depositableKeys = info.depositableValidatorsCount;
   const maxDepositableStake =
