@@ -69,7 +69,7 @@
     "siwe": "^3.0.0",
     "styled-components": "^5.3.5",
     "tiny-invariant": "^1.1.0",
-    "uuid": "^8.3.2",
+    "uuid": "^11.1.1",
     "viem": "2.46.0",
     "wagmi": "3.4.1",
     "zod": "^4.1.12"
@@ -101,7 +101,6 @@
     "@types/react-transition-group": "^4.4.3",
     "@types/styled-components": "^5.1.23",
     "@types/styled-system": "^5.1.17",
-    "@types/uuid": "^8.3.2",
     "@types/winston": "^2.4.4",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
@@ -145,9 +144,11 @@
     "@babel/runtime": "^7.26.10",
     "yaml": "^2.8.3",
     "h3": "^1.15.9",
-    "hono": "^4.12.14",
-    "axios": "^1.15.0",
-    "micromatch": "^4.0.8"
+    "hono": "^4.12.23",
+    "axios": "^1.15.2",
+    "micromatch": "^4.0.8",
+    "@babel/plugin-transform-modules-systemjs": "^7.29.4",
+    "fast-uri": "^3.1.2"
   },
   "lint-staged": {
     "./**/*.{ts,tsx}": [
