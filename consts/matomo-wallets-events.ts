@@ -16,27 +16,23 @@ type EventsData = Partial<Record<WalletIdsEthereum, [string, string]>>;
 
 const EVENTS_DATA_CONNECT_START: EventsData = {
   ambire: ['on Ambire', 'ambire'],
-  binanceWallet: ['Binance Web3', 'binance_web3'],
+  anchorageDigital: ['Anchorage Digital', 'anchorage_digital'],
   bitget: ['BitGet', 'bitget'],
-  brave: ['Brave', 'brave'],
   browserExtension: ['Browser', 'browser'],
-  coin98: ['Coin98', 'coin98'],
-  coinbase: ['Coinbase Wallet', 'coinbase_wallet'],
   coinbaseSmartWallet: ['Coinbase Smart Wallet', 'coinbase_smart_wallet'],
-  exodus: ['Exodus', 'exodus'],
+  dappBrowserInjected: ['Dapp Browser', 'dapp_browser'],
   imToken: ['imToken', 'imtoken'],
   ledgerHID: ['Ledger', 'ledger'],
+  ledgerLive: ['Ledger Live', 'ledger_live'],
   metaMask: ['Metamask', 'metamask'],
   okx: ['OKX', 'okx'],
-  trust: ['Trust', 'trust'],
+  safe: ['Safe', 'safe'],
   walletConnect: ['WalletConnect', 'walletconnect'],
-  ctrl: ['Ctrl', 'ctrl'],
 } as const;
 
 const EVENTS_DATA_CONNECT_SUCCESS: EventsData = {
   ...EVENTS_DATA_CONNECT_START,
   ambire: ['Ambire', 'ambire'],
-  binanceWallet: ['Binance Web3', 'binance_web3_wallet'],
 };
 
 export const walletMetricProps: MetricProps = {
