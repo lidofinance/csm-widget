@@ -20,6 +20,9 @@ import { useAddressValidation } from 'providers/address-validation-provider';
 
 const { surveyApi } = getExternalLinks();
 
+const SIWE_STATEMENT =
+  'The section you are attempting to access requires you to prove the address ownership.';
+
 const SiweAuthContext = createContext<AuthContextType | null>(null);
 
 export const useSiweAuth = () => {
@@ -28,20 +31,11 @@ export const useSiweAuth = () => {
   return context;
 };
 
-type SiweAuthProviderProps = {
-  contextName: string;
-  statement: string;
-};
-
-export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
-  contextName,
-  statement,
-  children,
-}) => {
-  const siwe = useSiwe({ statement });
+export const SiweAuthProvider: FC<PropsWithChildren> = ({ children }) => {
+  const siwe = useSiwe({ statement: SIWE_STATEMENT });
   const { address } = useDappStatus();
   const [token, setToken] = useSessionStorage<string | undefined>(
-    `${contextName}-token-${address}`,
+    `siwe-token-${address}`,
     undefined,
   );
 
@@ -50,7 +44,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   const { validateAddress } = useAddressValidation();
 
   const signIn = useCallback(async () => {
-    trackMatomoSiweEvent(contextName);
+    trackMatomoSiweEvent();
 
     // Validate address before signin - if address is not valid, don't signin
     const result = await validateAddress(address);
@@ -76,20 +70,12 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
       const data: { access_token: string; token_type: string } =
         await response.json();
       setToken(`${data.token_type} ${data.access_token}`);
-      trackMatomoSiweEvent(contextName, 'success');
+      trackMatomoSiweEvent('success');
       closeModal();
     } catch (e) {
       modalStages.rejected();
     }
-  }, [
-    address,
-    closeModal,
-    contextName,
-    modalStages,
-    setToken,
-    siwe,
-    validateAddress,
-  ]);
+  }, [address, closeModal, modalStages, setToken, siwe, validateAddress]);
 
   const logout = useCallback(() => {
     setToken(undefined);
