@@ -27,6 +27,7 @@ export * from './use-last-report-tx-hash';
 export * from './use-max-gas-price';
 export * from './use-operator-balance';
 export * from './use-operator-curve-id';
+export * from './use-operator-group';
 export * from './use-operator-group-id';
 export * from './use-operator-group-stake-summary';
 export * from './use-operator-info';

@@ -10,6 +10,7 @@ import { OperatorAction, OperatorRow } from './operator-row';
 import { OperatorGroupData } from './use-grouped-operators';
 import { LocalLink } from 'shared/navigate';
 import { PATH } from 'consts';
+import { formatGroupTitle } from 'shared/node-operator/utils';
 
 type GroupSectionProps = {
   group: OperatorGroupData;
@@ -38,7 +39,7 @@ export const GroupSection: FC<GroupSectionProps> = ({
     <Stack direction="column" gap="sm">
       <Stack center spaceBetween>
         <Text size="xs" weight={700}>
-          Operator Group #{String(group.groupId)}
+          {formatGroupTitle(group)}
         </Text>
         {group.allOperatorIds.includes(activeId) && (
           <LocalLink href={PATH.GROUP}>

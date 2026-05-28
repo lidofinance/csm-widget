@@ -1,9 +1,13 @@
-import { InlineLoader } from '@lidofinance/lido-ui';
-import { useNodeOperatorId, useOperatorGroupId } from 'modules/web3';
+import {
+  useNodeOperatorId,
+  useOperatorGroup,
+  useOperatorGroupId,
+} from 'modules/web3';
 import { FC } from 'react';
 import { Layout } from 'shared/layout';
 import { Group } from './group';
-import { BackButton } from 'shared/components';
+import { BackButton, ShortInlineLoader } from 'shared/components';
+import { formatGroupTitle } from 'shared/node-operator';
 
 export const GroupPage: FC = () => (
   <Layout
@@ -19,12 +23,12 @@ export const GroupPage: FC = () => (
 
 const GroupTitle: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: groupId, isPending } = useOperatorGroupId(nodeOperatorId);
+  const { data: group, isPending } = useOperatorGroup(nodeOperatorId);
 
   return isPending ? (
-    <InlineLoader />
-  ) : groupId ? (
-    <>Operator Group #{`${groupId}`}</>
+    <ShortInlineLoader />
+  ) : group ? (
+    <>{formatGroupTitle(group)}</>
   ) : (
     <>No group attached to operator</>
   );
