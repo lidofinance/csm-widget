@@ -1,0 +1,147 @@
+name: Sync preview descriptors
+description: >-
+  Check out the helm-charts preview branch, add (publish) or remove (cleanup)
+  the csm-widget + cm-widget preview descriptors for a PR, then commit & push.
+
+inputs:
+  mode:
+    description: publish | cleanup
+    required: true
+  pr:
+    description: PR number
+    required: true
+  token:
+    description: Token with write access to the preview repo
+    required: true
+  preview-repo:
+    description: owner/name of the helm-charts preview repo
+    required: true
+  preview-branch:
+    description: Branch holding the preview descriptors
+    required: true
+  preview-dir:
+    description: Directory (within the preview repo) holding descriptors
+    required: true
+  image-name:
+    description: Fully-qualified image name written into imageNameValue (publish only)
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    # publish always proceeds (a missing branch is a setup error → checkout fails loudly).
+    # cleanup probes first: a PR closed after the branch is gone must skip, not fail red.
+    - name: Resolve whether to proceed
+      id: gate
+      shell: bash
+      env:
+        MODE: ${{ inputs.mode }}
+        TOKEN: ${{ inputs.token }}
+        REPO: ${{ inputs.preview-repo }}
+        BRANCH: ${{ inputs.preview-branch }}
+      run: |
+        set -euo pipefail
+        if [ "$MODE" = "cleanup" ]; then
+          # Token passed via header, never in the URL/argv (matches the push step).
+          AUTH_HEADER=$(printf 'Authorization: token %s' "${TOKEN}")
+          REMOTE="https://github.com/${REPO}.git"
+          if git -c http.extraheader="${AUTH_HEADER}" ls-remote --exit-code --heads "$REMOTE" "$BRANCH" >/dev/null 2>&1; then
+            echo "proceed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::preview branch absent on ${REPO} — skipping descriptor cleanup."
+            echo "proceed=false" >> "$GITHUB_OUTPUT"
+          fi
+        else
+          echo "proceed=true" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Checkout preview branch
+      if: steps.gate.outputs.proceed == 'true'
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.preview-repo }}
+        ref: ${{ inputs.preview-branch }}
+        token: ${{ inputs.token }}
+        persist-credentials: false
+        path: helm-charts-csm
+
+    - name: Write descriptors
+      if: steps.gate.outputs.proceed == 'true' && inputs.mode == 'publish'
+      working-directory: helm-charts-csm
+      shell: bash
+      env:
+        PR: ${{ inputs.pr }}
+        PREVIEW_DIR: ${{ inputs.preview-dir }}
+        IMAGE_NAME: ${{ inputs.image-name }}
+        PREVIEW_REPO: ${{ inputs.preview-repo }}
+        TEMPLATE: ${{ github.action_path }}/descriptor.tmpl.yaml
+      run: |
+        set -euo pipefail
+        mkdir -p "${PREVIEW_DIR}"
+        export PR IMAGE_NAME REPO_URL="https://github.com/${PREVIEW_REPO}.git"
+        for CHART in csm-widget cm-widget; do
+          # Hostname stem matches prod (csm.dev.k8s-dev.org / cm.dev.k8s-dev.org).
+          export CHART HOST="${CHART%-widget}-pr-${PR}.dev.k8s-dev.org"
+          envsubst '${CHART} ${PR} ${IMAGE_NAME} ${HOST} ${REPO_URL}' \
+            < "${TEMPLATE}" > "${PREVIEW_DIR}/${CHART}-pr-${PR}.yaml"
+        done
+        ls -l "${PREVIEW_DIR}"
+
+    - name: Remove descriptors
+      if: steps.gate.outputs.proceed == 'true' && inputs.mode == 'cleanup'
+      working-directory: helm-charts-csm
+      shell: bash
+      env:
+        PR: ${{ inputs.pr }}
+        PREVIEW_DIR: ${{ inputs.preview-dir }}
+      run: |
+        set -euo pipefail
+        for CHART in csm-widget cm-widget; do
+          FILE="${PREVIEW_DIR}/${CHART}-pr-${PR}.yaml"
+          if [ -f "$FILE" ]; then
+            git rm "$FILE"
+          else
+            echo "No descriptor at $FILE — skipping."
+          fi
+        done
+
+    - name: Commit & push
+      if: steps.gate.outputs.proceed == 'true'
+      working-directory: helm-charts-csm
+      shell: bash
+      env:
+        MODE: ${{ inputs.mode }}
+        PR: ${{ inputs.pr }}
+        TOKEN: ${{ inputs.token }}
+        BRANCH: ${{ inputs.preview-branch }}
+      run: |
+        set -euo pipefail
+        git config user.name  "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add -A
+        if git diff --cached --quiet; then
+          echo "Descriptors already up to date — nothing to commit."
+          exit 0
+        fi
+        if [ "$MODE" = "publish" ]; then
+          MSG="preview: add csm-widget + cm-widget descriptors for PR #${PR}"
+        else
+          MSG="preview: remove csm-widget + cm-widget descriptors for PR #${PR}"
+        fi
+        git commit -m "$MSG"
+        # Token passed only at push time, never written to .git/config.
+        AUTH_HEADER=$(printf 'Authorization: token %s' "${TOKEN}")
+        # Concurrent writers race the branch tip. Each PR touches disjoint files
+        # (${CHART}-pr-${PR}.yaml), so a rejected push rebases cleanly and retries.
+        for attempt in 1 2 3 4 5; do
+          if git -c http.extraheader="${AUTH_HEADER}" push origin "HEAD:${BRANCH}"; then
+            exit 0
+          fi
+          echo "::warning::push rejected (attempt ${attempt}/5) — rebasing on origin/${BRANCH}."
+          git -c http.extraheader="${AUTH_HEADER}" fetch origin "${BRANCH}"
+          git rebase "origin/${BRANCH}"
+          sleep "$((attempt * 2))"
+        done
+        echo "::error::push to ${BRANCH} failed after 5 attempts."
+        exit 1

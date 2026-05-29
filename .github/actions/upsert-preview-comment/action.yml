@@ -1,0 +1,49 @@
+name: Upsert preview comment
+description: >-
+  Create or update a single sticky PR comment (matched by a hidden marker) with
+  the given body. Uses the gh CLI only — no third-party actions.
+
+inputs:
+  pr:
+    description: PR number to comment on
+    required: true
+  token:
+    description: Token with pull-requests:write (usually github.token)
+    required: true
+  repo:
+    description: owner/name of the repo holding the PR
+    required: false
+    default: ${{ github.repository }}
+  body:
+    description: Markdown body (the marker is prepended automatically)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Upsert sticky comment
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        PR: ${{ inputs.pr }}
+        REPO: ${{ inputs.repo }}
+        BODY: ${{ inputs.body }}
+      run: |
+        set -euo pipefail
+        # Hidden HTML marker identifies *our* comment so repeated runs update in
+        # place instead of appending a new comment on every push.
+        MARKER='<!-- preview-stand-comment -->'
+        FILE="$(mktemp)"
+        { printf '%s\n\n' "$MARKER"; printf '%s\n' "$BODY"; } > "$FILE"
+
+        # First comment carrying the marker wins; --paginate covers busy threads.
+        ID=$(gh api "repos/${REPO}/issues/${PR}/comments" --paginate \
+          --jq ".[] | select(.body | contains(\"${MARKER}\")) | .id" | head -n1)
+
+        if [ -n "$ID" ]; then
+          gh api "repos/${REPO}/issues/comments/${ID}" -X PATCH -F body=@"$FILE" >/dev/null
+          echo "Updated comment ${ID}."
+        else
+          gh api "repos/${REPO}/issues/${PR}/comments" -F body=@"$FILE" >/dev/null
+          echo "Created new comment."
+        fi

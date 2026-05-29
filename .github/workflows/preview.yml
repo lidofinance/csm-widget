@@ -1,0 +1,205 @@
+name: Preview stand
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review, closed]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: PR number to simulate (must be numeric)
+        required: true
+        type: string
+
+# One group per PR across every event (open/sync/close). cancel-in-progress means a `closed`
+# event cancels its own in-flight build/publish before cleanup runs — so cleanup never races a
+# half-finished push and can't leave orphaned descriptors or Harbor tags. A re-open likewise
+# cancels an in-flight cleanup, then republishes from scratch (publish runs on reopen).
+concurrency:
+  group: preview-${{ github.event.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: harbor.dev.k8s-dev.org
+  REPOSITORY: team-csm
+  APP: csm-widget
+  # Quoted so the literal $ survives shell expansion in any downstream `run:` step.
+  REGISTRY_USER: 'robot$team-csm-rw'
+  PREVIEW_REPO: lidofinance/helm-charts-csm
+  PREVIEW_BRANCH: preview
+  PREVIEW_DIR: previews
+
+jobs:
+  build:
+    name: Build & push :pr-${{ github.event.number || inputs.pr_number }}
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.action != 'closed' &&
+       github.event.pull_request.draft == false)
+    runs-on: ubuntu-latest
+    env:
+      PR: ${{ github.event.number || inputs.pr_number }}
+    steps:
+      # Reject non-numeric workflow_dispatch input early. PR-event payloads are always numeric.
+      - name: Validate PR number
+        run: |
+          set -euo pipefail
+          case "${PR}" in
+            ''|*[!0-9]*) echo "::error::PR must be a positive integer (got '${PR}')." ; exit 1 ;;
+          esac
+
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Generate build-info.json
+        env:
+          BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          COMMIT: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          printf '{"version":"%s:%s"}\n' "$BRANCH" "$COMMIT" > build-info.json
+          cat build-info.json
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3.3.0
+
+      - name: Log in to Harbor
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.REGISTRY_USER }}
+          password: ${{ secrets.HARBOR_ROBOT_TOKEN }}
+
+      - name: Build and push :pr-${{ env.PR }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}/${{ env.APP }}:pr-${{ env.PR }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  comment:
+    name: Comment preview URLs
+    needs: build
+    # PR events only (workflow_dispatch has no real PR to comment on), never on close.
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.action != 'closed' &&
+      github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      PR: ${{ github.event.number }}
+      SHA: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - name: Checkout widget repo (for local action)
+        uses: actions/checkout@v4
+
+      - name: Post preview URLs
+        uses: ./.github/actions/upsert-preview-comment
+        with:
+          pr: ${{ env.PR }}
+          token: ${{ github.token }}
+          # Hosts are deterministic: ${CHART%-widget}-pr-${PR}.dev.k8s-dev.org
+          # (see sync-preview-descriptors/action.yml). No need to read them back.
+          body: |
+            ### 🚀 Preview stands
+
+            | Module | URL |
+            | --- | --- |
+            | CSM | https://csm-pr-${{ env.PR }}.dev.k8s-dev.org |
+            | CM | https://cm-pr-${{ env.PR }}.dev.k8s-dev.org |
+
+            Built from `${{ env.SHA }}`. Updated on every push to this PR.
+
+  publish-descriptors:
+    name: Publish csm + cm preview descriptors
+    needs: build
+    if: >-
+      github.event_name == 'pull_request' &&
+      (github.event.action == 'opened' ||
+       github.event.action == 'reopened' ||
+       github.event.action == 'ready_for_review') &&
+      github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      # Local composite action lives in this repo — check it out before `uses: ./...`.
+      # HARDENING (future): this default checkout resolves to the PR merge ref, so the
+      # action code below is PR-modifiable yet runs with HELM_CHARTS_TOKEN (cross-repo
+      # write). Safe for forks (token absent), but a same-repo PR could edit the action
+      # to exfiltrate the token. Pin to the base/default branch — e.g.
+      #   with: { ref: ${{ github.event.pull_request.base.sha }} } — so only trusted
+      # action code runs with the token. The build job must stay on PR head (it builds
+      # the image) but holds only the narrower Harbor token.
+      - name: Checkout widget repo (for local action)
+        uses: actions/checkout@v4
+
+      - name: Publish descriptors
+        uses: ./.github/actions/sync-preview-descriptors
+        with:
+          mode: publish
+          pr: ${{ github.event.number }}
+          token: ${{ secrets.HELM_CHARTS_TOKEN }}
+          preview-repo: ${{ env.PREVIEW_REPO }}
+          preview-branch: ${{ env.PREVIEW_BRANCH }}
+          preview-dir: ${{ env.PREVIEW_DIR }}
+          image-name: ${{ env.REGISTRY }}/${{ env.REPOSITORY }}/${{ env.APP }}
+
+  cleanup:
+    name: Cleanup preview stands
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      PR: ${{ github.event.number }}
+    steps:
+      # Local composite action lives in this repo — check it out before `uses: ./...`.
+      # HARDENING (future): like publish-descriptors, this runs PR-modifiable action
+      # code with HELM_CHARTS_TOKEN. Pin to the base/default branch — e.g.
+      #   with: { ref: ${{ github.event.pull_request.base.sha }} } — to close the
+      # same-repo token-exfil path.
+      - name: Checkout widget repo (for local action)
+        uses: actions/checkout@v4
+
+      - name: Remove descriptors
+        uses: ./.github/actions/sync-preview-descriptors
+        with:
+          mode: cleanup
+          pr: ${{ env.PR }}
+          token: ${{ secrets.HELM_CHARTS_TOKEN }}
+          preview-repo: ${{ env.PREVIEW_REPO }}
+          preview-branch: ${{ env.PREVIEW_BRANCH }}
+          preview-dir: ${{ env.PREVIEW_DIR }}
+
+      - name: Delete Harbor tag
+        uses: ./.github/actions/delete-harbor-tag
+        with:
+          pr: ${{ env.PR }}
+          registry: ${{ env.REGISTRY }}
+          repository: ${{ env.REPOSITORY }}
+          app: ${{ env.APP }}
+          registry-user: ${{ env.REGISTRY_USER }}
+          token: ${{ secrets.HARBOR_ROBOT_TOKEN }}
+
+      # Mark the sticky comment as torn down rather than deleting it (keeps thread history).
+      - name: Mark preview as removed
+        if: always()
+        uses: ./.github/actions/upsert-preview-comment
+        with:
+          pr: ${{ env.PR }}
+          token: ${{ github.token }}
+          body: |
+            ### 🧹 Preview stands removed
+
+            The CSM & CM preview stands for this PR were torn down when it closed.

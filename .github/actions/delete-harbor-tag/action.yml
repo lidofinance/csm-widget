@@ -1,0 +1,53 @@
+name: Delete Harbor tag
+description: >-
+  Best-effort delete of a PR's image tag from Harbor. A transient failure is
+  surfaced as a warning, never a job failure — the preview stand is already
+  torn down by the descriptor delete, so a lingering tag is storage-only.
+
+inputs:
+  pr:
+    description: PR number (tag is pr-<PR>)
+    required: true
+  registry:
+    description: Harbor registry host
+    required: true
+  repository:
+    description: Harbor project / repository
+    required: true
+  app:
+    description: Image name within the repository
+    required: true
+  registry-user:
+    description: Harbor robot user
+    required: true
+  token:
+    description: Harbor robot token
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Delete Harbor tag pr-${{ inputs.pr }} (best-effort)
+      shell: bash
+      env:
+        PR: ${{ inputs.pr }}
+        REGISTRY: ${{ inputs.registry }}
+        REPOSITORY: ${{ inputs.repository }}
+        APP: ${{ inputs.app }}
+        REGISTRY_USER: ${{ inputs.registry-user }}
+        HARBOR_TOKEN: ${{ inputs.token }}
+      run: |
+        set -euo pipefail
+        URL="https://${REGISTRY}/api/v2.0/projects/${REPOSITORY}/repositories/${APP}/artifacts/pr-${PR}/tags/pr-${PR}"
+        echo "DELETE ${URL}"
+        STATUS=$(curl -sS -o /tmp/harbor-resp -w '%{http_code}' \
+          -X DELETE \
+          -u "${REGISTRY_USER}:${HARBOR_TOKEN}" \
+          -H 'Accept: application/json' \
+          "${URL}" || echo "000")
+        echo "Harbor responded: ${STATUS}"
+        cat /tmp/harbor-resp || true
+        case "${STATUS}" in
+          2*|404) echo "OK (tag deleted or already absent)." ;;
+          *)      echo "::warning::Harbor returned ${STATUS} — descriptor cleanup already pushed, tag deletion deferred." ;;
+        esac

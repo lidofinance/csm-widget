@@ -1,0 +1,10 @@
+# Preview descriptor template. Rendered per-chart by action.yml via envsubst.
+# Substituted vars: CHART, PR, IMAGE_NAME, HOST, REPO_URL. Anything else is left literal.
+name: "${CHART}-preview-${PR}"
+repoURL: "${REPO_URL}"
+revision: "preview"
+chartPath: "${CHART}"
+imageParameter: "overrides.containers[0].image.tag"
+imageValue: "pr-${PR}"
+imageNameValue: "${IMAGE_NAME}"
+ingressHost: "${HOST}"
