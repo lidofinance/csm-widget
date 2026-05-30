@@ -22,7 +22,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
       await test.step('Verify the "Current rewards address" field', async () => {
         await expect(rewardsAddressPage.currentTitledAddress).toBeVisible();
         await expect(rewardsAddressPage.currentTitledAddress).toContainText(
-          'Current rewards address',
+          'Current Rewards Address',
         );
 
         await expect(rewardsAddressPage.currentAddress).toContainText(
@@ -43,10 +43,10 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
       await expect(rewardsAddressPage.addressInput).toBeVisible();
       await expect(rewardsAddressPage.addressInput).toHaveAttribute(
         'placeholder',
-        'Ethereum address',
+        'Ethereum address or ENS name',
       );
       await expect(rewardsAddressPage.inputLabel).toContainText(
-        'New rewards address',
+        'New Rewards Address',
       );
     });
   });
@@ -57,7 +57,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
     await test.step('Verify button', async () => {
       await expect(rewardsAddressPage.proposeButton).toBeVisible();
       await expect(rewardsAddressPage.proposeButton).toContainText(
-        'Propose a new rewards address',
+        'Propose a new Rewards Address',
       );
     });
 
@@ -90,6 +90,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
       const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
 
       await rewardsAddressPage.addressInput.fill(`${generateAddress()}1`);
+      await rewardsAddressPage.addressInput.blur();
 
       const expectedTooltipError = 'Specify a valid address';
       await expect(rewardsAddressPage.validationInputTooltip).toContainText(
@@ -107,6 +108,7 @@ test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () =
       await rewardsAddressPage.addressInput.fill(
         mnemonicToAccount(secretPhrase).address,
       );
+      await rewardsAddressPage.addressInput.blur();
 
       const expectedTooltipError = 'Should not be same as current address';
       await expect(rewardsAddressPage.validationInputTooltip).toContainText(

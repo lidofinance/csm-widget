@@ -20,7 +20,7 @@ export class InboxRequestsPage extends BasePage {
 
   async open() {
     await test.step('Open Inbox Requests tab', async () => {
-      await this.page.goto('/roles/inbox');
+      await this.page.goto('/settings/inbox');
     });
   }
 

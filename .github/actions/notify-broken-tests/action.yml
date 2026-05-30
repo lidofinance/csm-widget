@@ -1,0 +1,66 @@
+name: 'Notify Slack about broken workflow'
+description: 'Sends a Slack message that the test workflow is broken'
+
+inputs:
+  webhook-url:
+    description: 'Slack incoming webhook URL'
+    required: true
+  duty-tag:
+    description: 'Slack subteam ID to mention (optional)'
+    required: false
+    default: ''
+  test-tags:
+    description: 'Test tags value to include in the message'
+    required: false
+    default: ''
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Send Slack notification
+      shell: bash
+      env:
+        SLACK_WEBHOOK_URL: ${{ inputs.webhook-url }}
+        SLACK_DUTY_TAG: ${{ inputs.duty-tag }}
+        TEST_TAGS: ${{ inputs.test-tags }}
+        GH_ACTION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        if [ -z "$SLACK_WEBHOOK_URL" ]; then
+          echo "Skipping notification — no webhook URL configured"
+          exit 0
+        fi
+        DUTY_TAG=""
+        if [ -n "$SLACK_DUTY_TAG" ]; then
+          DUTY_TAG="<!subteam^${SLACK_DUTY_TAG}> "
+        fi
+        TAGS=""
+        if [ -n "$TEST_TAGS" ]; then
+          TAGS=" (t:${TEST_TAGS})"
+        fi
+        PAYLOAD=$(jq -n \
+          --arg duty "$DUTY_TAG" \
+          --arg url "$GH_ACTION_URL" \
+          --arg tags "$TAGS" \
+          '{
+            text: "Attention. Test workflow is broken!",
+            blocks: [
+              {
+                type: "section",
+                text: {
+                  type: "mrkdwn",
+                  text: (":rotating_light: " + $duty + "*Attention. Test workflow is broken!*" + $tags)
+                }
+              },
+              {
+                type: "actions",
+                elements: [
+                  {
+                    type: "button",
+                    text: { type: "plain_text", text: "View run" },
+                    url: $url
+                  }
+                ]
+              }
+            ]
+          }')
+        curl -X POST -H 'Content-type: application/json' --data "$PAYLOAD" "$SLACK_WEBHOOK_URL"

@@ -58,7 +58,7 @@ export class ManagerAddressPage extends BasePage {
 
   async open() {
     await test.step('Open Manager Address tab', async () => {
-      await this.page.goto('/roles/manager-address');
+      await this.page.goto('/settings/manager-address');
       await this.currentAddress.waitFor({ state: 'visible' });
     });
   }
