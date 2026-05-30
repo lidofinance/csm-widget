@@ -89,17 +89,17 @@ export const startupCheckRPCs = async () => {
         );
       }
 
-      const chainCheckResults = await Promise.all(
-        rpcUrls.map((url) => checkRPC(url, defaultChain)),
-      );
-      results.push(...chainCheckResults);
+      // const chainCheckResults = await Promise.all(
+      //   rpcUrls.map((url) => checkRPC(url, defaultChain)),
+      // );
+      // results.push(...chainCheckResults);
 
-      const brokenRPCCount = chainCheckResults.filter(
-        (result) => !result.success,
-      ).length;
-      console.info(
-        `[startupCheckRPCs] [chainId=${defaultChain}] Working/Total RPCs: ${chainCheckResults.length - brokenRPCCount}/${chainCheckResults.length}`,
-      );
+      // const brokenRPCCount = chainCheckResults.filter(
+      //   (result) => !result.success,
+      // ).length;
+      // console.info(
+      //   `[startupCheckRPCs] [chainId=${defaultChain}] Working/Total RPCs: ${chainCheckResults.length - brokenRPCCount}/${chainCheckResults.length}`,
+      // );
 
       globalStartupRPCChecks.result = results;
       return results;
