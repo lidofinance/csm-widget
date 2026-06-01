@@ -1,4 +1,4 @@
-import { MatomoLink } from 'shared/components';
+import { MatomoLink } from 'shared/components/matomo-link/matomo-link';
 import styled from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
