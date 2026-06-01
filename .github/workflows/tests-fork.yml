@@ -110,6 +110,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: "24"
+          node-version: "24"
           cache: "yarn"
 
       - name: Checkout community-staking-module
@@ -166,6 +167,8 @@ jobs:
           fi
 
       - name: Run tests based on suite input
+        id: run-tests
+        timeout-minutes: 30
         run: |
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
           echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
@@ -176,12 +179,38 @@ jobs:
 
           xvfb-run --auto-servernum -- yarn test:csm:e2e
 
+      - name: Encrypt Playwright report
+        if: always()
+        env:
+          ARTIFACT_PASSWORD: ${{ secrets.ARTIFACT_PASSWORD }}
+        run: |
+          if [ -d playwright-report ]; then
+            tar -czf - playwright-report/ | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -pass env:ARTIFACT_PASSWORD -out playwright-report.tar.gz.enc
+          fi
+
+      - name: Encrypt Playwright report
+        if: always()
+        env:
+          ARTIFACT_PASSWORD: ${{ secrets.ARTIFACT_PASSWORD }}
+        run: |
+          if [ -d playwright-report ]; then
+            tar -czf - playwright-report/ | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -pass env:ARTIFACT_PASSWORD -out playwright-report.tar.gz.enc
+          fi
+
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: playwright-report-csm
-          path: playwright-report/
+          name: playwright-report
+          path: playwright-report.tar.gz.enc
           retention-days: 1
+
+      - name: Notify Slack about broken workflow
+        if: always() && steps.run-tests.conclusion == 'skipped'
+        uses: ./.github/actions/notify-broken-tests
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          duty-tag: ${{ env.SLACK_DUTY_TAG }}
+          test-tags: ${{ env.TEST_TAGS }}
 
   test-cm:
     runs-on: ubuntu-24.04

@@ -38,7 +38,7 @@ test.describe(
         await test.step('Verify the "Current manager address" field', async () => {
           await expect(managerAddressPage.currentTitledAddress).toBeVisible();
           await expect(managerAddressPage.currentTitledAddress).toContainText(
-            'Current manager address',
+            'Current Manager Address',
           );
 
           await expect(managerAddressPage.currentAddress).toContainText(
@@ -75,10 +75,10 @@ test.describe(
         await expect(managerAddressPage.addressInput).toBeVisible();
         await expect(managerAddressPage.addressInput).toHaveAttribute(
           'placeholder',
-          'Ethereum address',
+          'Ethereum address or ENS name',
         );
         await expect(managerAddressPage.inputLabel).toContainText(
-          'New manager address',
+          'New Manager Address',
         );
       });
     });
@@ -89,7 +89,7 @@ test.describe(
       await test.step('Verify button', async () => {
         await expect(managerAddressPage.proposeButton).toBeVisible();
         await expect(managerAddressPage.proposeButton).toContainText(
-          'Propose a new manager address',
+          'Propose a new Manager Address',
         );
       });
 
@@ -138,6 +138,7 @@ test.describe(
           widgetService.settingsPage.managerAddressPage;
 
         await managerAddressPage.addressInput.fill(`${generateAddress()}1`);
+        await managerAddressPage.addressInput.blur();
 
         const expectedTooltipError = 'Specify a valid address';
         await expect(managerAddressPage.validationInputTooltip).toContainText(
@@ -156,6 +157,7 @@ test.describe(
         await managerAddressPage.addressInput.fill(
           mnemonicToAccount(secretPhrase).address,
         );
+        await managerAddressPage.addressInput.blur();
 
         const expectedTooltipError = 'Should not be same as current address';
         await expect(managerAddressPage.validationInputTooltip).toContainText(

@@ -12,6 +12,7 @@ import { KEY_OPERATOR_GROUP_SUMMARY } from 'modules/web3/hooks/use-operator-grou
 
 export type OperatorGroupData = {
   groupId: bigint;
+  name: string;
   stakeSummaries: Map<bigint, SubOperatorStakeSummary>;
   allOperatorIds: bigint[];
   availableIds: Set<bigint>;
@@ -133,6 +134,7 @@ export const useGroupedOperators = (
 
         return {
           groupId: summary.groupId,
+          name: summary.name,
           stakeSummaries,
           allOperatorIds,
           availableIds,
