@@ -1,11 +1,37 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../../test.fixture';
+import { Tags } from 'tests/shared/consts/common.const';
 
-test.describe('Dashboard. Keys Breakdown.', () => {
+test.describe('Dashboard. Keys Breakdown.', { tag: [Tags.forked] }, () => {
+  let snapshotId: string;
+
+  test.beforeAll(
+    async ({ useFork, cmSDK, forkActionService, widgetService }) => {
+      test.skip(!useFork, 'Test suite runs only on forked network');
+
+      snapshotId = await cmSDK.evmSnapshot();
+      let noId: number;
+
+      await test.step('Set up: add keys', async () => {
+        await widgetService.dashboardPage.open();
+        noId = await widgetService.extractNodeOperatorId();
+        await forkActionService.createOperatorGroup([
+          { id: noId, weight: 50 },
+          { id: noId - 1, weight: 50 },
+        ]);
+        await forkActionService.addKeys(noId, 10);
+      });
+    },
+  );
+
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
     await widgetService.dashboardPage.keysSection.expandKeysBreakdown();
+  });
+
+  test.afterAll(async ({ cmSDK }) => {
+    if (snapshotId) await cmSDK.evmRevert(snapshotId);
   });
 
   test(

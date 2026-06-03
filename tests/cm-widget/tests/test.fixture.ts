@@ -66,7 +66,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
   // fixture-methods
   browserWithWallet: [
-    async ({ secretPhrase, useFork, cmSDK }, use) => {
+    async ({ secretPhrase, useFork, cmSDK, forkActionService }, use) => {
       const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
       const rpcUrl = useFork
         ? forkRpcURL
@@ -85,7 +85,6 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
         nodeConfig: {
           ...widgetFullConfig.standConfig.nodeConfig,
           useExternalFork: true,
-          warmUpCallback: warmUpForkedNode.bind(null, cmSDK, secretPhrase),
         },
         browserOptions: {
           // headless: true,
@@ -96,9 +95,6 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
       await browserService.initWalletSetup(useFork);
 
-      // When using fork, BrowserService.setupWithNode() imports the node's pre-funded
-      // account (derived from Anvil's mnemonic) into MetaMask and makes it active,
-      // ignoring accountConfig.SECRET_PHRASE. Switch back to the intended account.
       if (
         useFork &&
         secretPhrase !== widgetFullConfig.accountConfig.SECRET_PHRASE
@@ -109,6 +105,17 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
           .changeWalletAccountByAddress?.(targetAddress);
       }
 
+      if (useFork) {
+        const targetAddress = mnemonicToAccount(secretPhrase).address;
+
+        await forkActionService.setGateAddrs(['po'], targetAddress);
+        await forkActionService.createCuratedOperator('po', targetAddress);
+
+        // Operator didn't exist during the initial warmup — re-run so
+        // operator-specific calls (getBondBalance, getStethPoolData, etc.)
+        // are pre-cached in Anvil before the browser starts.
+        await warmUpForkedNode(cmSDK, secretPhrase);
+      }
       await use(browserService);
 
       // We abort this request because we need to reduce the request count to the Elliptic api

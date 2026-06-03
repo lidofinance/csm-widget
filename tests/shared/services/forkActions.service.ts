@@ -224,6 +224,20 @@ export class ForkActionsService {
     idvtc: 'idvtc',
   } as const;
 
+  createCuratedOperator(gateSelector: GateSelector, address: `0x${string}`) {
+    return test.step(`[Fork] Create curated operator via gate "${gateSelector}" for ${address}`, () =>
+      this.run('create-curated-operator', gateSelector, address).catch(
+        (err: Error) => {
+          if (err.message.includes('AlreadyConsumed')) {
+            console.warn(
+              `[ForkActionsService] Operator ${address} already consumed gate "${gateSelector}", skipping`,
+            );
+            return;
+          }
+          throw err;
+        },
+      ));
+  }
   setGateAddrs(
     selector: GateSelector | GateSelector[],
     ...addresses: `0x${string}`[]

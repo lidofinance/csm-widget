@@ -3,16 +3,25 @@ import { LidoSDKClient as cmClient } from '../../cm-widget/services/cmSDK.client
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from '../consts/timeouts';
 
-const warmUpGates = (sdk: cmClient, address: `0x${string}`) => {
-  const gates = sdk.curatedGates.getAll();
-  return Promise.all(
-    gates.flatMap((gate) => [
-      gate.getCurveId(),
-      gate.isPaused(),
-      gate.getTreeConfig(),
-      gate.isConsumed(address),
-    ]),
-  );
+const SLOW_MS = 2000;
+const ts = () => new Date().toISOString().slice(11, 23);
+
+const track = async <T>(name: string, value: Promise<T> | T): Promise<T> => {
+  const startTs = ts();
+  const startMs = Date.now();
+  try {
+    const result = await value;
+    const ms = Date.now() - startMs;
+    console.info(
+      `${ms >= SLOW_MS ? '[warmUp ⚠]' : '[warmUp ✓]'} ${startTs}  ${name}  ${ms}ms`,
+    );
+    return result;
+  } catch (err) {
+    const ms = Date.now() - startMs;
+    const msg = ((err as Error)?.message ?? String(err)).split('\n')[0];
+    console.warn(`[warmUp ✗] ${startTs}  ${name}  ${ms}ms  ${msg}`);
+    throw err;
+  }
 };
 
 export const warmUpForkedNode = async (
@@ -25,23 +34,33 @@ export const warmUpForkedNode = async (
   while (Date.now() - started < FORK_WARM_UP_TIMEOUT) {
     try {
       const callStart = Date.now();
-      const warmUpTasks: Promise<unknown>[] = [
-        sdk.discovery.getAllNodeOperators(),
-        sdk.discovery.getNodeOperatorsByAddress(address),
-        sdk.discovery.getNodeOperatorsByProposedAddress(address),
-        sdk.module.getDigest(),
-        sdk.parameters.getAll(0n),
-      ];
-      if ('curatedGates' in sdk) {
-        warmUpTasks.push(warmUpGates(sdk, address));
-      }
-      await Promise.all(warmUpTasks);
-      console.info(`[warmUp] Fork warmed up in ${Date.now() - callStart}ms`);
+
+      await Promise.all([
+        track(
+          'getNodeOperatorsByAddress',
+          sdk.discovery.getNodeOperatorsByAddress(address),
+        ),
+        track('getAllNodeOperators', sdk.discovery.getAllNodeOperators()),
+        track(
+          'getNodeOperatorsByProposedAddress',
+          sdk.discovery.getNodeOperatorsByProposedAddress(address),
+        ),
+        ...('metaRegistry' in sdk
+          ? [
+              track(
+                'metaRegistry.getOperatorTargetStake',
+                sdk.metaRegistry.getOperatorTargetStake(1n),
+              ),
+            ]
+          : []),
+      ]);
+
+      console.info(`[warmUp] ${ts()}  done in ${Date.now() - callStart}ms`);
       return;
     } catch (error) {
       lastError = error;
-      // @ts-expect-error temp ingnore
-      console.error(`Error message: ${error?.message}`);
+      const msg = ((error as Error)?.message ?? String(error)).split('\n')[0];
+      console.error(`[warmUp] retry — ${msg}`);
     }
   }
   throw new Error(

@@ -29,5 +29,7 @@ export default async function globalSetup() {
     warmUpCallback: warmUpForkedNode.bind(null, cmSDK, secretPhrase),
   };
   const nodeService = new EthereumNodeService(nodeConfig);
-  await nodeService.startNode();
+  if (process.env.CI) {
+    await nodeService.startNode();
+  }
 }

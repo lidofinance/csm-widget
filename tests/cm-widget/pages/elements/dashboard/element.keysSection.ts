@@ -87,7 +87,7 @@ export class KeysSection extends BasePage {
       if (isExpanded) return;
 
       await this.keysBreakdownToggle.click();
-      await this.keysDepositableCount.waitFor({ state: 'visible' });
+      await this.keysActiveCount.waitFor({ state: 'visible' });
     });
   }
 }
