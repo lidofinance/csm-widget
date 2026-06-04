@@ -15,6 +15,8 @@ export class GroupSummaryCard extends BasePage {
   stakeColumnPotential: Locator;
   stakeColumnPotentialTooltip: Locator;
 
+  tooltipWrapper: Locator;
+
   constructor(page: Page) {
     super(page);
     this.root = this.page.getByTestId('groupSummaryCard');
@@ -33,5 +35,7 @@ export class GroupSummaryCard extends BasePage {
     this.stakeColumnPotential = this.root.getByTestId('stakeColumnPotential');
     this.stakeColumnPotentialTooltip =
       this.stakeColumnPotential.getByTestId('iconTooltip');
+
+    this.tooltipWrapper = this.page.getByTestId('tooltipWrapper');
   }
 }

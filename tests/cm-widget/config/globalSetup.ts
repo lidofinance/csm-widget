@@ -1,10 +1,22 @@
 import { EthereumNodeService } from '@lidofinance/wallets-testing-nodes';
 import { widgetFullConfig } from './';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
-import { LidoSDKCm } from '@lidofinance/lido-csm-sdk';
-import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
-import { createPublicClient, http } from 'viem';
-import { hoodi } from 'viem/chains';
+import { LidoSDKClient } from '../services/cmSDK.client';
+import { generateMnemonic } from 'viem/accounts';
+import { wordlist as english } from '@scure/bip39/wordlists/english.js';
+import {
+  WALLET_PRESET_DEFINITIONS,
+  type PresetName,
+} from './walletSetup/walletPresets';
+import { WalletStateService } from './walletSetup/walletStates';
+import {
+  writePresetsState,
+  type PresetsState,
+  STATE_FILE,
+} from './walletSetup/walletPresets.state';
+import { existsSync } from 'fs';
+
+const passthroughStep = <T>(_title: string, body: () => Promise<T>) => body();
 
 export default async function globalSetup() {
   if (process.env.USE_FORK !== 'true') {
@@ -14,22 +26,47 @@ export default async function globalSetup() {
   const secretPhrase = widgetFullConfig.accountConfig.SECRET_PHRASE;
   const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
 
-  const rpcProvider = createPublicClient({
-    chain: hoodi,
-    transport: http(forkRpcURL, { timeout: 120_000 }),
-  });
-  const core = new LidoSDKCore({
-    chainId: widgetFullConfig.standConfig.networkConfig.chainId,
-    rpcProvider,
-  });
-  const cmSDK = new LidoSDKCm({ core });
-  const nodeConfig = {
-    ...widgetFullConfig.standConfig.nodeConfig,
-    runOptions: [`--mnemonic=${secretPhrase}`],
-    warmUpCallback: warmUpForkedNode.bind(null, cmSDK, secretPhrase),
-  };
-  const nodeService = new EthereumNodeService(nodeConfig);
   if (process.env.CI) {
+    const cmSDK = new LidoSDKClient([forkRpcURL], {} as Record<string, string>);
+    const nodeConfig = {
+      ...widgetFullConfig.standConfig.nodeConfig,
+      runOptions: [`--mnemonic=${secretPhrase}`],
+      warmUpCallback: warmUpForkedNode.bind(null, cmSDK, secretPhrase),
+    };
+    const nodeService = new EthereumNodeService(nodeConfig);
     await nodeService.startNode();
   }
+
+  await setupPresetAccounts();
 }
+
+const setupPresetAccounts = async (): Promise<void> => {
+  if (existsSync(STATE_FILE)) {
+    console.info(
+      '[globalSetup] Preset accounts state already exists, skipping setup.',
+    );
+    return;
+  }
+
+  const walletService = new WalletStateService({
+    cwd: process.env.JUST_DIR || './community-staking-module',
+    step: passthroughStep,
+  });
+
+  const state = {} as PresetsState;
+
+  for (const [name, def] of Object.entries(WALLET_PRESET_DEFINITIONS)) {
+    const secretPhrase = generateMnemonic(english, 128);
+    const { noId } = await walletService.apply({ secretPhrase, ...def });
+    state[name as PresetName] = { secretPhrase, noId };
+  }
+
+  writePresetsState(state);
+
+  console.info(
+    '[globalSetup] Preset accounts ready:',
+    Object.fromEntries(
+      Object.entries(state).map(([name, { noId }]) => [name, { noId }]),
+    ),
+  );
+};

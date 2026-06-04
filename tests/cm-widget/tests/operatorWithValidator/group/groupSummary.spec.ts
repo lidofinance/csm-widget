@@ -3,33 +3,18 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
-const OPERATOR_0_WEIGHT = 50;
-const OPERATOR_1_WEIGHT = 50;
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
-test.describe('Group page. Group summary.', { tag: [Tags.forked] }, () => {
-  let snapshotId: string;
-  let noId: number;
-
+test.describe.only('Group page. Group summary.', { tag: [Tags.forked] }, () => {
   test.beforeAll(({ useFork }) => {
     test.skip(!useFork, 'Test suite runs only on forked network');
   });
 
-  test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
-    snapshotId = await cmSDK.evmSnapshot();
-
+  test.beforeAll(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
-    noId = await widgetService.extractNodeOperatorId();
-
-    await forkActionService.createOperatorGroup([
-      { id: noId, weight: OPERATOR_0_WEIGHT },
-      { id: noId - 1, weight: OPERATOR_1_WEIGHT },
-    ]);
     await widgetService.groupPage.open();
-  });
-
-  test.afterAll(async ({ cmSDK }) => {
-    if (snapshotId) await cmSDK.evmRevert(snapshotId);
   });
 
   test(
@@ -120,26 +105,28 @@ test.describe('Group page. Group summary.', { tag: [Tags.forked] }, () => {
     qase(210, 'Should show correct tooltips on stake columns'),
     async ({ widgetService }) => {
       const { summary } = widgetService.groupPage;
-      const { page } = widgetService;
 
       await test.step('"Active" column tooltip', async () => {
         await summary.stakeColumnActiveTooltip.hover();
-        await expect(page.getByRole('tooltip')).toContainText(
-          'Stake amount that already has ETH deposited by the Lido protocol and are currently active in the validator set',
+        await expect(summary.tooltipWrapper).toHaveCount(1);
+        await expect(summary.tooltipWrapper).toContainText(
+          'The amount of ETH currently staked by the Lido protocol with this Node Operator',
         );
       });
 
       await test.step('"Depositable" column tooltip', async () => {
         await summary.stakeColumnDepositableTooltip.hover();
-        await expect(page.getByRole('tooltip')).toContainText(
+        await expect(summary.tooltipWrapper).toHaveCount(1);
+        await expect(summary.tooltipWrapper).toContainText(
           'Available capacity ready to receive stake from the Lido protocol',
         );
       });
 
       await test.step('"Potential additional capacity" column tooltip', async () => {
         await summary.stakeColumnPotentialTooltip.hover();
-        await expect(page.getByRole('tooltip')).toContainText(
-          'The additional stake the Lido protocol could allocate based on current weight, assuming enough validator keys are available',
+        await expect(summary.tooltipWrapper).toHaveCount(1);
+        await expect(summary.tooltipWrapper).toContainText(
+          'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available.',
         );
       });
     },

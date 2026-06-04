@@ -66,7 +66,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
   // fixture-methods
   browserWithWallet: [
-    async ({ secretPhrase, useFork, cmSDK, forkActionService }, use) => {
+    async ({ secretPhrase, useFork, cmSDK }, use) => {
       const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
       const rpcUrl = useFork
         ? forkRpcURL
@@ -106,11 +106,6 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
       }
 
       if (useFork) {
-        const targetAddress = mnemonicToAccount(secretPhrase).address;
-
-        await forkActionService.setGateAddrs(['po'], targetAddress);
-        await forkActionService.createCuratedOperator('po', targetAddress);
-
         // Operator didn't exist during the initial warmup — re-run so
         // operator-specific calls (getBondBalance, getStethPoolData, etc.)
         // are pre-cached in Anvil before the browser starts.
