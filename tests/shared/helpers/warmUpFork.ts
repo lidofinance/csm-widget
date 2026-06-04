@@ -7,19 +7,18 @@ const SLOW_MS = 2000;
 const ts = () => new Date().toISOString().slice(11, 23);
 
 const track = async <T>(name: string, value: Promise<T> | T): Promise<T> => {
-  const startTs = ts();
   const startMs = Date.now();
   try {
     const result = await value;
     const ms = Date.now() - startMs;
     console.info(
-      `${ms >= SLOW_MS ? '[warmUp ⚠]' : '[warmUp ✓]'} ${startTs}  ${name}  ${ms}ms`,
+      `${ms >= SLOW_MS ? '[warmUp ⚠]' : '[warmUp ✓]'} ${ts()}  ${name}  ${ms}ms`,
     );
     return result;
   } catch (err) {
     const ms = Date.now() - startMs;
     const msg = ((err as Error)?.message ?? String(err)).split('\n')[0];
-    console.warn(`[warmUp ✗] ${startTs}  ${name}  ${ms}ms  ${msg}`);
+    console.warn(`[warmUp ✗] ${ts()}  ${name}  ${ms}ms  ${msg}`);
     throw err;
   }
 };

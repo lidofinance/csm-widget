@@ -15,11 +15,21 @@ export const writePresetsState = (state: PresetsState): void => {
   writeFileSync(STATE_FILE, JSON.stringify(state, null, 2));
 };
 
-const loadPresetsState = (): PresetsState => {
+const readStateFile = (): PresetsState => {
   if (!existsSync(STATE_FILE)) {
-    return {} as PresetsState;
+    throw new Error(
+      `[PRESETS] State file not found: ${STATE_FILE}\nRun tests with USE_FORK=true so globalSetup can generate preset accounts.`,
+    );
   }
   return JSON.parse(readFileSync(STATE_FILE, 'utf-8')) as PresetsState;
 };
 
-export const PRESETS = loadPresetsState();
+let _cache: PresetsState | undefined;
+
+// Lazy: reads the file only on first property access, not at import time.
+export const PRESETS = new Proxy({} as PresetsState, {
+  get: (_target, key) => {
+    if (!_cache) _cache = readStateFile();
+    return _cache[key as PresetName];
+  },
+});
