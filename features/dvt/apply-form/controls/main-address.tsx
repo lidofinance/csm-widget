@@ -1,8 +1,9 @@
 import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { FormTitle, InputAddress, Stack } from 'shared/components';
+import { FormTitle, IconTooltip, InputAddress, Stack } from 'shared/components';
 import { VerifiedChip } from 'shared/components/input-address/verified-chip';
 import { useApplyFormData } from '../context';
+import { MainAddressTooltipContent } from './main-address-tooltip-content';
 
 export const MainAddress: FC = () => {
   const { mainAddress } = useApplyFormData(true);
@@ -13,6 +14,7 @@ export const MainAddress: FC = () => {
         <FormTitle>Main address</FormTitle>
         <Text size="xs" color="secondary">
           You are requesting IDVTC operator type for the following address:
+          <IconTooltip inline tooltip={<MainAddressTooltipContent />} />
         </Text>
       </Stack>
       <InputAddress

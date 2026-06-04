@@ -306,9 +306,16 @@ export const SCORE_SOURCES: ScoreSource[] = [
               href="https://app.highsignal.xyz/p/lido/"
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsHighSignalLink}
             >
-              Lido or SSV High Signal space
-            </MatomoLink>
-            :
+              Lido
+            </MatomoLink>{' '}
+            or{' '}
+            <MatomoLink
+              href="https://app.highsignal.xyz/p/ssv/"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsHighSignalLink}
+            >
+              SSV
+            </MatomoLink>{' '}
+            High Signal space:
             <br />- 2 points if 30 ≤ High Signal score ≤ 40
             <br />- 3 points if 40 {'<'} High Signal score ≤ 60
             <br />- 4 points if 60 {'<'} High Signal score ≤ 80
