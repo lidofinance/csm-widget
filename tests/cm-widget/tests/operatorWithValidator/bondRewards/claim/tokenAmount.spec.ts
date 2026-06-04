@@ -5,6 +5,9 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 const BOND_EXCESS_ETH = '2';
 

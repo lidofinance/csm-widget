@@ -4,8 +4,10 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { mnemonicToAccount } from 'viem/accounts';
-import { formatEther } from 'viem';
 import { CLAIM_OPTION } from './claim.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 // 3-address split: 50% + 25% + 25% = 100% (totalShare = PERCENT_BASIS → all rewards split)
 const STANDARD_SPLITS = [{ share: '50' }, { share: '25' }, { share: '25' }];
@@ -163,7 +165,7 @@ test.describe(
         await test.step('Capture expected total from SDK', async () => {
           const rewards = await cmSDK.getRewards(noId);
           // totalShare = PERCENT_BASIS (100%) → splittableGross ≈ rewards.available
-          return parseFloat(formatEther(rewards.available));
+          return parseFloat(rewards.available);
         });
 
       await test.step('Total splitter amount matches rewards.available', async () => {

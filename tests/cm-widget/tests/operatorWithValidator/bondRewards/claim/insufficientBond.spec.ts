@@ -4,6 +4,9 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
 import { CLAIM_OPTION } from './claim.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 const ONE_ETH = 1_000_000_000_000_000_000n;
 
@@ -79,7 +82,8 @@ test.describe(
         ).toBeChecked();
 
         const expectedDescription =
-          bondBalance.delta >= rewards.available
+          parseFloat(formatEther(bondBalance.delta)) >=
+          parseFloat(rewards.available)
             ? 'All Rewards will compensate the Insufficient Bond'
             : 'Compensate the Insufficient Bond and claim Rewards';
         await expect(
@@ -115,7 +119,7 @@ test.describe(
     }) => {
       const { claim } = widgetService.bondRewardsPage;
       const rewards = await cmSDK.getRewards(noId);
-      const expected = parseFloat(formatEther(rewards.available));
+      const expected = parseFloat(rewards.available);
 
       await test.step('"Claim All" option is selected by default', async () => {
         await expect(

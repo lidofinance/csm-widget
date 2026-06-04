@@ -4,13 +4,37 @@ import { test } from '../../../test.fixture';
 import { USD_AMOUNT_REGEX } from '../../../../../shared/consts/regexp.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   'Dashboard. Bond & Rewards. Bond balance section.',
   { tag: [Tags.forked] },
   () => {
+    let snapshotId: string;
+    let noId: number;
+
+    test.beforeAll(
+      async ({ useFork, cmSDK, forkActionService, widgetService }) => {
+        test.skip(!useFork, 'Test suite runs only on forked network');
+
+        snapshotId = await cmSDK.evmSnapshot();
+
+        await test.step('Set up: add excess bond and report rewards', async () => {
+          await widgetService.dashboardPage.open();
+          noId = await widgetService.extractNodeOperatorId();
+          await forkActionService.addBond(noId, '2');
+        });
+      },
+    );
+
     test.beforeEach(async ({ widgetService }) => {
       await widgetService.dashboardPage.open();
+    });
+
+    test.afterAll(async ({ cmSDK }) => {
+      if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
     test(
@@ -18,9 +42,7 @@ test.describe(
       async ({ widgetService, cmSDK }) => {
         const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
 
-        const nodeOperatorId = await widgetService.extractNodeOperatorId();
-
-        const bondSummary = await cmSDK.getBondSummary(nodeOperatorId);
+        const bondSummary = await cmSDK.getBondSummary(noId);
 
         await test.step('Check "Bond balance" section', async () => {
           await expect(bondBalance.requiredBondBalance).toBeHidden();

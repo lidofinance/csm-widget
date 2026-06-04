@@ -1,31 +1,22 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
-import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe('Group page. Navigation.', { tag: [Tags.forked] }, () => {
-  let snapshotId: string;
   let noId: number;
 
   test.beforeAll(({ useFork }) => {
     test.skip(!useFork, 'Test suite runs only on forked network');
   });
 
-  test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
-    snapshotId = await cmSDK.evmSnapshot();
-
-    noId = await widgetService.extractNodeOperatorId();
-
-    await forkActionService.createOperatorGroup([
-      { id: noId, weight: 50 },
-      { id: noId - 1, weight: 50 },
-    ]);
+  test.beforeEach(async ({ widgetService }) => {
     await widgetService.groupPage.open();
-  });
-
-  test.afterAll(async ({ cmSDK }) => {
-    if (snapshotId) await cmSDK.evmRevert(snapshotId);
+    noId = await widgetService.extractNodeOperatorId();
   });
 
   test(
@@ -38,7 +29,7 @@ test.describe('Group page. Navigation.', { tag: [Tags.forked] }, () => {
 
       await dashboardPage.open();
       await expect(dashboardPage.operatorGroupLink).toBeVisible({
-        timeout: STAGE_WAIT_TIMEOUT,
+        timeout: PAGE_WAIT_TIMEOUT,
       });
       await dashboardPage.operatorGroupLink.click();
 
@@ -61,7 +52,7 @@ test.describe('Group page. Navigation.', { tag: [Tags.forked] }, () => {
       const op0 = widgetService.groupPage.operator(noId);
 
       await expect(op0.uploadKeysLink).toBeVisible({
-        timeout: STAGE_WAIT_TIMEOUT,
+        timeout: PAGE_WAIT_TIMEOUT,
       });
       await op0.uploadKeysLink.click();
       await expect(widgetService.page).toHaveURL(/\/keys\/submit/);

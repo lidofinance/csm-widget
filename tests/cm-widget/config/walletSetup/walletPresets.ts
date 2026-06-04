@@ -15,7 +15,7 @@ export const WALLET_PRESET_DEFINITIONS = {
 
   EMPTY_OPERATOR_WITH_ALL_GATES: {
     state: [],
-    gates: ['po', 'pto', 'pgo', 'do', 'eeo', 'iodc'],
+    gates: ['po', 'pto', 'pgo', 'do', 'eeo', 'iodc', 'iodcp'],
   },
 
   ONLY_OPERATOR: {
@@ -24,7 +24,7 @@ export const WALLET_PRESET_DEFINITIONS = {
   },
 
   FULL_OPERATOR: {
-    state: ['withOperator', 'withGroup', 'withKeys'],
+    state: ['withOperator', 'withGroup', 'withKeys', 'withDeposit'],
     gates: ['po'],
   },
 } satisfies Record<string, PresetDefinition>;

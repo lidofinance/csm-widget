@@ -5,6 +5,9 @@ import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { KeysGeneratorService } from '../../../../shared/services/keysGenerator.service';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
   'Operator with keys. Validation duplicated keys.',
@@ -39,7 +42,7 @@ test.describe(
       async () => {
         const duplicatedKey = keysGeneratorService.generateKeys();
         duplicatedKey[0].pubkey =
-          'aac44a76a4b3414e01105ef07861771c5e5c7f91c556b4b8bb6b07258ade39efdf673cbe0277d091cbade43196a7c9de';
+          '0x8f463da95c9e547cf43a21a19d3fad0ea4960fc4c99e5af8eea79415e1e644e47ace67e6cac701777be0dd900a3985b4';
         await keysPage.submitPage.fillKeys(duplicatedKey);
         await expect(keysPage.submitPage.validationInputError).toContainText(
           'Invalid deposit data',
@@ -87,7 +90,7 @@ test.describe(
             [duplicatedKey[0].pubkey]: Date.now(),
           }),
         );
-
+        await widgetService.page.reload();
         await keysPage.submitPage.fillKeys(duplicatedKey);
 
         await expect(keysPage.submitPage.validationInputError).toContainText(
@@ -142,7 +145,7 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'invalid signature',
+            'pubkey already submitted',
           );
           await expect(row.getByTestId('deposit-data-error')).toContainText(
             'pubkey was previously submitted',

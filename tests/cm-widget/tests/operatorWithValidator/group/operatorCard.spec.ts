@@ -3,34 +3,22 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
-const OPERATOR_WEIGHT = 50;
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
-  let snapshotId: string;
   let noId: number;
-  let companionId: number;
+  const companionId = 1;
 
   test.beforeAll(({ useFork }) => {
     test.skip(!useFork, 'Test suite runs only on forked network');
   });
 
-  test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
-    snapshotId = await cmSDK.evmSnapshot();
-
+  test.beforeAll(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
     noId = await widgetService.extractNodeOperatorId();
-    companionId = noId - 1;
-
-    await forkActionService.createOperatorGroup([
-      { id: noId, weight: OPERATOR_WEIGHT },
-      { id: companionId, weight: OPERATOR_WEIGHT },
-    ]);
     await widgetService.groupPage.open();
-  });
-
-  test.afterAll(async ({ cmSDK }) => {
-    if (snapshotId) await cmSDK.evmRevert(snapshotId);
   });
 
   test.describe('Header', () => {
@@ -190,7 +178,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
           await op0.stakeColumnPotentialTooltip.hover();
           await expect(op0.tooltipWrapper).toHaveCount(1);
           await expect(op0.tooltipWrapper).toContainText(
-            'The additional stake the Lido protocol could allocate based on current weight, assuming enough validator keys are available',
+            'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available.',
           );
         });
       },

@@ -3,7 +3,13 @@ import {
   ForkActionsService,
   type ForkActionsOptions,
 } from 'tests/shared/services/forkActions.service';
-import { withOperator, withGroup, withKeys, HANDLER_ORDER } from './handlers';
+import {
+  withOperator,
+  withGroup,
+  withKeys,
+  withDeposit,
+  HANDLER_ORDER,
+} from './handlers';
 import { type GateSelector, type StateCtx } from './handlers/types';
 
 export type WalletPreset = {
@@ -19,6 +25,7 @@ export class WalletStateService {
     withOperator: withOperator.bind(this),
     withGroup: withGroup.bind(this),
     withKeys: withKeys.bind(this),
+    withDeposit: withDeposit.bind(this),
   };
 
   constructor(options?: ForkActionsOptions) {

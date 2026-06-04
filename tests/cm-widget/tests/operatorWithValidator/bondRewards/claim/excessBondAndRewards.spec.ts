@@ -5,6 +5,9 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
 import { CLAIM_OPTION } from './claim.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 const BOND_EXCESS_ETH = '2';
 
@@ -45,7 +48,7 @@ test.describe(
         cmSDK.operator.getBondBalance(BigInt(noId)),
         cmSDK.getRewards(noId),
       ]);
-      const expectedRewards = parseFloat(formatEther(rewards.available));
+      const expectedRewards = parseFloat(rewards.available);
       const expectedBond = parseFloat(formatEther(bondBalance.delta));
 
       await test.step('Rewards balance card shows correct stETH amount from SDK', async () => {
@@ -129,7 +132,10 @@ test.describe(
         cmSDK.getRewards(noId),
       ]);
       const expected = parseFloat(
-        formatEther(bondBalance.delta + rewards.available),
+        (
+          parseFloat(formatEther(bondBalance.delta)) +
+          parseFloat(rewards.available)
+        ).toString(),
       );
 
       await test.step('Select "Claim All" option', async () => {
@@ -231,7 +237,7 @@ test.describe(
       const { claim } = widgetService.bondRewardsPage;
       const noId = await widgetService.extractNodeOperatorId();
       const rewards = await cmSDK.getRewards(noId);
-      const expected = parseFloat(formatEther(rewards.available));
+      const expected = parseFloat(rewards.available);
 
       await test.step('Select "Rewards to Bond" option', async () => {
         await claim.selectClaimOption(CLAIM_OPTION.REWARDS_TO_BOND);

@@ -3,8 +3,10 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
-import { formatEther } from 'viem';
 import { CLAIM_OPTION } from './claim.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   'Bond & Rewards. Claim. Rewards only — no excess bond, delta=0.',
@@ -81,7 +83,7 @@ test.describe(
     }) => {
       const { claim } = widgetService.bondRewardsPage;
       const rewards = await cmSDK.getRewards(noId);
-      const expected = parseFloat(formatEther(rewards.available));
+      const expected = parseFloat(rewards.available);
 
       await test.step('Select "Claim All" option', async () => {
         await claim.selectClaimOption(CLAIM_OPTION.ALL_TO_RA);
@@ -123,7 +125,7 @@ test.describe(
     }) => {
       const { claim } = widgetService.bondRewardsPage;
       const rewards = await cmSDK.getRewards(noId);
-      const expected = parseFloat(formatEther(rewards.available));
+      const expected = parseFloat(rewards.available);
 
       await test.step('Select "Rewards to Bond" option', async () => {
         await claim.selectClaimOption(CLAIM_OPTION.REWARDS_TO_BOND);

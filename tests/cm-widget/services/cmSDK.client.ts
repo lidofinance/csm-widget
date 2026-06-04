@@ -34,7 +34,11 @@ export class LidoSDKClient extends LidoSDKCm {
 
   async getRewards(nodeOperatorId: number) {
     return test.step(`Get rewards for #${nodeOperatorId} node`, async () => {
-      return this.rewards.getRewards(BigInt(nodeOperatorId));
+      const data = await this.rewards.getRewards(BigInt(nodeOperatorId));
+      return {
+        ...data,
+        available: formatEther(data.available),
+      };
     });
   }
 
