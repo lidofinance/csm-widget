@@ -31,6 +31,10 @@ export class WalletStateService {
       gates: preset.gates ?? [],
     };
 
+    if (ctx.gates.length > 0) {
+      await this.fork.setGateAddrs(ctx.gates, ctx.address);
+    }
+
     const sorted = [...preset.state].sort(
       (a, b) => HANDLER_ORDER.indexOf(a) - HANDLER_ORDER.indexOf(b),
     );

@@ -5,20 +5,13 @@ import { expect } from '@playwright/test';
 import { OPERATOR_TYPE_METADATA } from '../../../../shared/consts/operatorTypes.const';
 import { CreateOperatorStep1Page } from '../../../pages/tabs/createNodeOperator/step1.page';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { mnemonicToAccount } from 'viem/accounts';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 
 test.describe('Operator without keys. Step 1.', { tag: [Tags.forked] }, () => {
   let step1: CreateOperatorStep1Page;
-
-  test.beforeAll(async ({ forkActionService, secretPhrase }) => {
-    await forkActionService.setGateAddrs(
-      ['po', 'pto', 'pgo', 'do', 'eeo', 'iodc'],
-      mnemonicToAccount(secretPhrase).address,
-    );
-  });
 
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.createNodeOperatorPage.open();

@@ -1,11 +1,12 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../../test.fixture';
+import { Tags } from 'tests/shared/consts/common.const';
 
 const VALID_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
 const INVALID_ADDRESS = '0xinvalid';
 
-test.describe('Settings. Rewards claimer.', () => {
+test.describe('Settings. Rewards claimer.', { tag: [Tags.forked] }, () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.settingsPage.claimerPage.open();
   });

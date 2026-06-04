@@ -4,8 +4,9 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../test.fixture';
 import { mnemonicToAccount } from 'viem/accounts';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { Tags } from 'tests/shared/consts/common.const';
 
-test.describe('Dashboard. Roles.', () => {
+test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
   });

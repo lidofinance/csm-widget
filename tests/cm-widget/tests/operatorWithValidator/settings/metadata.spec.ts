@@ -2,8 +2,9 @@ import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../test.fixture';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { Tags } from 'tests/shared/consts/common.const';
 
-test.describe('Settings. Meta data.', () => {
+test.describe('Settings. Meta data.', { tag: [Tags.forked] }, () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.settingsPage.metadataPage.open();
   });

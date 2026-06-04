@@ -58,7 +58,12 @@ const setupPresetAccounts = async (): Promise<void> => {
   for (const [name, def] of Object.entries(WALLET_PRESET_DEFINITIONS)) {
     const secretPhrase = generateMnemonic(english, 128);
     const { noId } = await walletService.apply({ secretPhrase, ...def });
-    state[name as PresetName] = { secretPhrase, noId };
+    state[name as PresetName] = {
+      secretPhrase,
+      noId,
+      state: def.state,
+      gates: 'gates' in def ? def.gates : undefined,
+    };
   }
 
   writePresetsState(state);

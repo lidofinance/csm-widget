@@ -2,10 +2,11 @@ import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
 import { NavigationPage } from '../../pages/navigation.page';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { Tags } from 'tests/shared/consts/common.const';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
-test.describe('Navigation. Empty validator.', () => {
+test.describe('Navigation. Empty validator.', { tag: [Tags.forked] }, () => {
   let nav: NavigationPage;
 
   test.beforeEach(async ({ widgetService }) => {

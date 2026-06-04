@@ -5,6 +5,7 @@ import { CreateOperatorStep2Page } from '../../../pages/tabs/createNodeOperator'
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { mnemonicToAccount } from 'viem/accounts';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { Tags } from 'tests/shared/consts/common.const';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
@@ -60,7 +61,7 @@ const addressFields: AddressField[] = [
   },
 ];
 
-test.describe('Operator without keys. Step 2.', () => {
+test.describe('Operator without keys. Step 2.', { tag: [Tags.forked] }, () => {
   let step2: CreateOperatorStep2Page;
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.createNodeOperatorPage.open();

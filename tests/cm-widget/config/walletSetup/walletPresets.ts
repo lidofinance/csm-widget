@@ -13,6 +13,11 @@ export const WALLET_PRESET_DEFINITIONS = {
     state: [],
   },
 
+  EMPTY_OPERATOR_WITH_ALL_GATES: {
+    state: [],
+    gates: ['po', 'pto', 'pgo', 'do', 'eeo', 'iodc'],
+  },
+
   ONLY_OPERATOR: {
     state: ['withOperator'],
     gates: ['po'],
