@@ -167,7 +167,8 @@ export const AddressValidationProvider = ({
   const validateAddress = useCallback(
     async (addressToValidate?: Address) => {
       // If no address, consider valid
-      if (!addressToValidate || config.ipfsMode) {
+      // TEMP: blacklist validation disabled on this branch
+      if (!addressToValidate || addressToValidate || config.ipfsMode) {
         setIsValidAddress(true);
         return true;
       }
