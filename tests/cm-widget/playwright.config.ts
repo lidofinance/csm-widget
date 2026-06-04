@@ -17,6 +17,7 @@ const config: PlaywrightTestConfig = {
   globalSetup: './config/globalSetup.ts',
   globalTeardown: './config/globalTeardown.ts',
   testDir: './tests',
+  globalTimeout: process.env.CI ? 60 * 60 * 1000 : undefined, // 1h cap in CI
   timeout: 180 * 1000,
   expect: {
     timeout: 5000,
