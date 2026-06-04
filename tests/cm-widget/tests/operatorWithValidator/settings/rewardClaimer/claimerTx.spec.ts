@@ -6,6 +6,9 @@ import {
   PAGE_WAIT_TIMEOUT,
 } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 const VALID_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
 

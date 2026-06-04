@@ -3,6 +3,9 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../test.fixture';
 import { NavigationPage } from '../../pages/navigation.page';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 const SIDEBAR_ITEMS = [
   { name: 'Dashboard', url: '/' },

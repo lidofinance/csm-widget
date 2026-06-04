@@ -5,10 +5,11 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CreateOperatorStep3Page } from '../../../pages/tabs/createNodeOperator';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 
 const VALID_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
-
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
 test.describe('Operator without keys. Step 3.', { tag: [Tags.forked] }, () => {
   let step3: CreateOperatorStep3Page;
@@ -52,7 +53,7 @@ test.describe('Operator without keys. Step 3.', { tag: [Tags.forked] }, () => {
         step3.form,
         'Form should display description hint text',
       ).toContainText(
-        'A short blurb about your operator. Will be publicly visible on-chain.',
+        'A short blurb about your operator. This description will be publicly visible on-chain and can be updated later.BackContinue',
       );
     });
   });
@@ -154,7 +155,7 @@ test.describe('Operator without keys. Step 3.', { tag: [Tags.forked] }, () => {
         step3.form,
         'Form should display description hint text',
       ).toContainText(
-        'A short blurb about your operator. Will be publicly visible on-chain.',
+        'A short blurb about your operator. This description will be publicly visible on-chain and can be updated later.BackContinue',
       );
     });
   });

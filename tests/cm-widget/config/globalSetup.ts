@@ -2,7 +2,7 @@ import { EthereumNodeService } from '@lidofinance/wallets-testing-nodes';
 import { widgetFullConfig } from './';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { LidoSDKClient } from '../services/cmSDK.client';
-import { generateMnemonic } from 'viem/accounts';
+import { generateMnemonic, mnemonicToAccount } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import {
   WALLET_PRESET_DEFINITIONS,
@@ -16,7 +16,10 @@ import {
 } from './walletSetup/walletPresets.state';
 import { existsSync } from 'fs';
 
-const passthroughStep = <T>(_title: string, body: () => Promise<T>) => body();
+const passthroughStep = <T>(title: string, body: () => Promise<T>) => {
+  console.info(`[step] ${title}`);
+  return body();
+};
 
 export default async function globalSetup() {
   if (process.env.USE_FORK !== 'true') {
@@ -53,14 +56,26 @@ const setupPresetAccounts = async (): Promise<void> => {
     step: passthroughStep,
   });
 
-  const state = {} as PresetsState;
+  const entries = Object.entries(WALLET_PRESET_DEFINITIONS).map(
+    ([name, def]) => ({
+      name,
+      def,
+      secretPhrase: generateMnemonic(english, 128),
+    }),
+  );
 
-  for (const [name, def] of Object.entries(WALLET_PRESET_DEFINITIONS)) {
-    const secretPhrase = generateMnemonic(english, 128);
-    const { noId } = await walletService.apply({ secretPhrase, ...def });
+  const presets = entries.map(({ secretPhrase, def }) => ({
+    secretPhrase,
+    ...def,
+  }));
+  const results = await walletService.applyAll(presets);
+
+  const state = {} as PresetsState;
+  for (const [i, { name, def, secretPhrase }] of entries.entries()) {
     state[name as PresetName] = {
       secretPhrase,
-      noId,
+      address: mnemonicToAccount(secretPhrase).address,
+      noId: results[i].noId,
       state: def.state,
       gates: 'gates' in def ? def.gates : undefined,
     };

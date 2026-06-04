@@ -5,12 +5,13 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CreateOperatorStep4Page } from '../../../pages/tabs/createNodeOperator';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 
 const VALID_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
 const OPERATOR_NAME = 'Test Operator';
 const OPERATOR_DESCRIPTION = 'Test description';
-
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
 test.describe('Operator without keys. Step 4.', { tag: [Tags.forked] }, () => {
   let step4: CreateOperatorStep4Page;

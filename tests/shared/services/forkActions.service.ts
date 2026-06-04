@@ -307,7 +307,7 @@ export class ForkActionsService {
   ) {
     const selectors = Array.isArray(selector) ? selector : [selector];
     return this.step(
-      `[Fork] Set gate tree for [${selectors.join(', ')}]`,
+      `[Fork] Set gate tree for [${selectors.join(', ')}] → ${addresses.join(', ')}`,
       async () => {
         for (const selector of selectors) {
           const { stdout } = await this.run(

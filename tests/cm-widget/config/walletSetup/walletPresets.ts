@@ -20,7 +20,7 @@ export const WALLET_PRESET_DEFINITIONS = {
 
   ONLY_OPERATOR: {
     state: ['withOperator'],
-    gates: ['po'],
+    gates: ['po', 'pto'],
   },
 
   FULL_OPERATOR: {
