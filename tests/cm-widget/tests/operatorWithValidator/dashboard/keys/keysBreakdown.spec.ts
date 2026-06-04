@@ -6,7 +6,7 @@ import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state'
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
-test.describe.only('Dashboard. Keys Breakdown.', { tag: [Tags.forked] }, () => {
+test.describe('Dashboard. Keys Breakdown.', { tag: [Tags.forked] }, () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.dashboardPage.open();
     await widgetService.dashboardPage.keysSection.expandKeysBreakdown();

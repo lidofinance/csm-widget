@@ -5,6 +5,9 @@ import { test } from '../../test.fixture';
 import { mnemonicToAccount } from 'viem/accounts';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
   test.beforeEach(async ({ widgetService }) => {

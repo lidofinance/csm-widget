@@ -7,7 +7,7 @@ import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state'
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
-test.describe.only('Group page. Group summary.', { tag: [Tags.forked] }, () => {
+test.describe('Group page. Group summary.', { tag: [Tags.forked] }, () => {
   test.beforeAll(({ useFork }) => {
     test.skip(!useFork, 'Test suite runs only on forked network');
   });
