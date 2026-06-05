@@ -3,8 +3,9 @@ import { test } from '../test.fixture';
 import { NavigationPage } from '../../pages/navigation.page';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 
 test.describe('Navigation. Empty validator.', { tag: [Tags.forked] }, () => {
   let nav: NavigationPage;

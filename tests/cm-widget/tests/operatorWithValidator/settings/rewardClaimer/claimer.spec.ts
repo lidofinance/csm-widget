@@ -61,16 +61,17 @@ test.describe('Settings. Rewards claimer.', { tag: [Tags.forked] }, () => {
     },
   );
 
-  test('Should show tooltip for "Current Rewards claimer" info icon', async ({
-    widgetService,
-  }) => {
-    const { claimerPage } = widgetService.settingsPage;
+  test(
+    qase(350, 'Should show tooltip for "Current Rewards claimer" info icon'),
+    async ({ widgetService }) => {
+      const { claimerPage } = widgetService.settingsPage;
 
-    await claimerPage.currentClaimerTooltipIcon.hover();
-    await expect(claimerPage.tooltipWrapper).toContainText(
-      'Is an optional address authorized to trigger reward claims on your behalf. Unlike the Rewards Address, it does not receive the funds. It only initiates the claim transaction.',
-    );
-  });
+      await claimerPage.currentClaimerTooltipIcon.hover();
+      await expect(claimerPage.tooltipWrapper).toContainText(
+        'Is an optional address authorized to trigger reward claims on your behalf. Unlike the Rewards Address, it does not receive the funds. It only initiates the claim transaction.',
+      );
+    },
+  );
 
   test(
     qase(207, 'Should navigate back to Settings on "Back" button click'),
