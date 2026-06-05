@@ -14,45 +14,45 @@ export const useCuratedOperatorValidation = () => {
     CuratedOperatorFormInputType,
     CuratedOperatorFormNetworkData
   >(
-    'gateIndex',
+    'gateName',
     async (
-      { gateIndex, rewardAddress, managerAddress, name, description },
+      { gateName, rewardAddress, managerAddress, name, description },
       { availableGates },
       validate,
     ) => {
-      await validate('gateIndex', () => {
-        if (gateIndex === undefined) {
-          throw new ValidationError('gateIndex', 'Please select Operator Type');
+      await validate('gateName', () => {
+        if (gateName === undefined) {
+          throw new ValidationError('gateName', 'Please select Operator Type');
         }
 
         const selectedGate = availableGates.find(
-          (gate) => gate.gateIndex === gateIndex,
+          (gate) => gate.gateName === gateName,
         );
 
         if (!selectedGate) {
           throw new ValidationError(
-            'gateIndex',
+            'gateName',
             'Invalid Operator Type selected',
           );
         }
 
         if (selectedGate.isPaused) {
           throw new ValidationError(
-            'gateIndex',
+            'gateName',
             'This Operator Type is currently paused',
           );
         }
 
         if (selectedGate.isConsumed) {
           throw new ValidationError(
-            'gateIndex',
+            'gateName',
             'You have already used this Operator Type',
           );
         }
 
         if (!selectedGate.proof) {
           throw new ValidationError(
-            'gateIndex',
+            'gateName',
             'You are not eligible for this Operator Type',
           );
         }

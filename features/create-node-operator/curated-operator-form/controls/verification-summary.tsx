@@ -25,22 +25,21 @@ const SummaryRow: FC<
 
 export const VerificationSummary: FC = () => {
   const { availableGates = [] } = useCuratedOperatorFormData();
-  const [gateIndex, rewardAddress, managerAddress, name, description] =
-    useWatch<
-      CuratedOperatorFormInputType,
-      ['gateIndex', 'rewardAddress', 'managerAddress', 'name', 'description']
-    >({
-      name: [
-        'gateIndex',
-        'rewardAddress',
-        'managerAddress',
-        'name',
-        'description',
-      ],
-    });
+  const [gateName, rewardAddress, managerAddress, name, description] = useWatch<
+    CuratedOperatorFormInputType,
+    ['gateName', 'rewardAddress', 'managerAddress', 'name', 'description']
+  >({
+    name: [
+      'gateName',
+      'rewardAddress',
+      'managerAddress',
+      'name',
+      'description',
+    ],
+  });
 
   const selectedGate = availableGates.find(
-    (gate) => gate.gateIndex === gateIndex,
+    (gate) => gate.gateName === gateName,
   );
 
   const { data: parameters } = useCurveParameters(selectedGate?.curveId);

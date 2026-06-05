@@ -10,7 +10,7 @@ export const useCuratedOperatorDefaultValues = () => {
     CuratedOperatorFormNetworkData
   >(() => ({
     step: 1,
-    gateIndex: undefined,
+    gateName: undefined,
     rewardAddress: undefined,
     managerAddress: undefined,
     name: '',

@@ -8,13 +8,11 @@ const Page = () => {
 
   return (
     <GateLoaded additional={isPending}>
-      <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
-        <Gate
-          rule="EL_DELAYED_PENALTY_REPORTER"
-          fallback={<Navigate path={PATH.HOME} />}
-        >
-          <Navigate path={PATH.DELAYED_PENALTY_REPORT} />
-        </Gate>
+      <Gate
+        rule="EL_DELAYED_PENALTY_REPORTER"
+        fallback={<Navigate path={PATH.HOME} />}
+      >
+        <Navigate path={PATH.DELAYED_PENALTY_REPORT} />
       </Gate>
     </GateLoaded>
   );

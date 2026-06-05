@@ -39,18 +39,18 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
         action: 'create-operator' as const,
         submit: async () => {
           invariant(sdk, 'CM SDK not initialized');
-          invariant(input.gateIndex !== undefined, 'Gate not selected');
+          invariant(input.gateName !== undefined, 'Gate not selected');
           invariant(input.rewardAddress, 'Rewards Address required');
           invariant(input.managerAddress, 'Manager Address required');
 
           const selectedGate = data.availableGates.find(
-            (gate) => gate.gateIndex === input.gateIndex,
+            (gate) => gate.gateName === input.gateName,
           );
           invariant(selectedGate, 'Selected gate not found');
           invariant(selectedGate.proof, 'Proof not available');
 
           const { result } = await sdk.curatedGates.createNodeOperator({
-            gateIndex: input.gateIndex,
+            gateName: input.gateName,
             name: input.name,
             description: input.description,
             managerAddress: input.managerAddress,

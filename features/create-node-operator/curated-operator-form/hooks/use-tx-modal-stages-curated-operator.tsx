@@ -25,7 +25,7 @@ export const useTxModalStagesCuratedOperator = () =>
     NodeOperatorShortInfo
   >((transitStage, input, data) => {
     const selectedGate = data.availableGates.find(
-      (gate) => gate.gateIndex === input.gateIndex,
+      (gate) => gate.gateName === input.gateName,
     );
     const curveId = selectedGate?.curveId ?? 0n;
 

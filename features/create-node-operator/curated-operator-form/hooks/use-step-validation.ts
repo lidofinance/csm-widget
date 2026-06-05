@@ -5,7 +5,7 @@ import type { CuratedOperatorFormInputType } from '../context/types';
 type StepField = keyof CuratedOperatorFormInputType;
 
 const STEP_FIELDS: Record<number, StepField[]> = {
-  1: ['gateIndex'],
+  1: ['gateName'],
   2: ['managerAddress', 'rewardAddress'],
   3: ['name', 'description'],
   4: [],
