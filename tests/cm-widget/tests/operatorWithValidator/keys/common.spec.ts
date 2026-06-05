@@ -4,6 +4,9 @@ import { Tags, TokenSymbol } from '../../../../shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { KeysGeneratorService } from '../../../../shared/services/keysGenerator.service';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
   'Operator with keys. Common suite.',

@@ -7,6 +7,9 @@ import {
   KeysGeneratorService,
   DepositKey,
 } from '../../../../shared/services/keysGenerator.service';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 const omitField = <K extends keyof DepositKey>(
   obj: DepositKey,
@@ -15,16 +18,6 @@ const omitField = <K extends keyof DepositKey>(
   const { [field]: _removed, ...rest } = obj;
   return rest;
 };
-
-const invalidTextValidation = [
-  'withdrawal_credentials',
-  'amount',
-  'deposit_data_root',
-  'deposit_message_root',
-  'fork_version',
-  'pubkey',
-  'signature',
-];
 
 test.describe('Operator with keys. Validation keys json.', () => {
   let keysPage: KeysPage;
@@ -50,127 +43,6 @@ test.describe('Operator with keys. Validation keys json.', () => {
       );
     },
   );
-
-  invalidTextValidation.forEach((propertyName) => {
-    test(
-      qase(
-        104,
-        `Should display error if ${propertyName} does not passed for 1 key as object`,
-      ),
-      async () => {
-        qase.parameters({ propertyName });
-        const key = keysGeneratorService.generateKeys();
-        const newJson = omitField(key[0], propertyName as keyof DepositKey);
-
-        await keysPage.submitPage.fillKeys(
-          // @ts-expect-error negative test for validation
-          newJson,
-        );
-
-        await expect(keysPage.submitPage.validationInputError).toHaveText(
-          `Item at index 0 is missing required field: ${propertyName}`,
-        );
-
-        await test.step('Verify that other tabs and controls are disabled', async () => {
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parsed'),
-          ).toBeDisabled();
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parameters'),
-          ).toBeDisabled();
-
-          await expect(keysPage.submitPage.amountInput).toBeDisabled();
-          await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-          // @TODO: Fix it after bug fixed
-          // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
-        });
-      },
-    );
-  });
-
-  invalidTextValidation.forEach((propertyName) => {
-    test(
-      qase(
-        111,
-        `Should display error if ${propertyName} does not passed for array of keys`,
-      ),
-      async () => {
-        qase.parameters({ propertyName });
-        const key = keysGeneratorService.generateKeys();
-        const newJson = omitField(key[0], propertyName as keyof DepositKey);
-
-        await keysPage.submitPage.fillKeys(
-          // @ts-expect-error negative test for validation
-          [newJson],
-        );
-
-        await expect(keysPage.submitPage.validationInputError).toHaveText(
-          `Item at index 0 is missing required field: ${propertyName}`,
-        );
-
-        await test.step('Verify that other tabs and controls are disabled', async () => {
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parsed'),
-          ).toBeDisabled();
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parameters'),
-          ).toBeDisabled();
-
-          await expect(keysPage.submitPage.amountInput).toBeDisabled();
-          await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-          // @TODO: Uncomment it after bug fixed
-          // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
-        });
-      },
-    );
-  });
-
-  invalidTextValidation.forEach((propertyName) => {
-    test(
-      qase(
-        118,
-        `Should display error if ${propertyName} does not passed for index >0 in array of keys`,
-      ),
-      async () => {
-        qase.parameters({ propertyName });
-        const keys = keysGeneratorService.generateKeys(3);
-        // @ts-expect-error negative test for validation
-        keys[2] = omitField(keys[2], propertyName);
-
-        await keysPage.submitPage.fillKeys(keys);
-
-        await expect(keysPage.submitPage.validationInputError).toHaveText(
-          `Item at index 2 is missing required field: ${propertyName}`,
-        );
-
-        await test.step('Verify that other tabs and controls are disabled', async () => {
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parsed'),
-          ).toBeDisabled();
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parameters'),
-          ).toBeDisabled();
-
-          await expect(keysPage.submitPage.amountInput).toBeDisabled();
-          await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-          // @TODO: Uncomment it after bug fixed
-          // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
-        });
-      },
-    );
-  });
 
   test(
     qase(

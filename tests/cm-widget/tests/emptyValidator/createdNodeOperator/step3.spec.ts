@@ -103,8 +103,15 @@ test.describe('Operator without keys. Step 3.', { tag: [Tags.forked] }, () => {
       await test.step('Check required validation error is displayed', async () => {
         await expect(
           step3.nameError,
-          '"Name" should show "Operator name is required" error when empty',
-        ).toHaveText('Operator name is required');
+          'Input must not show error',
+        ).not.toBeVisible();
+      });
+
+      await test.step('Check disabled "Continue" button', async () => {
+        await expect(
+          step3.continueButton,
+          '"Continue" button should be disabled when name is empty',
+        ).toBeDisabled();
       });
     },
   );
@@ -171,8 +178,15 @@ test.describe('Operator without keys. Step 3.', { tag: [Tags.forked] }, () => {
       await test.step('Check required validation error is displayed', async () => {
         await expect(
           step3.descriptionError,
-          '"Description" should show "Description is required" error when empty',
-        ).toHaveText('Description is required');
+          '"Description" shouldn\'t show error when empty',
+        ).not.toBeVisible();
+      });
+
+      await test.step('Check disabled "Continue" button', async () => {
+        await expect(
+          step3.continueButton,
+          '"Continue" button should be disabled when name is empty',
+        ).toBeDisabled();
       });
     },
   );

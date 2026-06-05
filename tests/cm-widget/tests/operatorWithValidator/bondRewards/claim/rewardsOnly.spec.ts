@@ -50,7 +50,7 @@ test.describe(
         ).toBeChecked();
         await expect(
           claim.getClaimOptionDescription(CLAIM_OPTION.ALL_TO_RA),
-        ).toHaveText('Claim Rewards');
+        ).toHaveText('Claim both Excess Bond and Rewards');
       });
 
       await test.step('"Excess Bond" option is disabled (no excess to claim)', async () => {

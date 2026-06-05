@@ -87,7 +87,7 @@ test.describe(
     }) => {
       const { claim } = widgetService.bondRewardsPage;
 
-      await test.step('"Claim All" option is enabled, checked by default, description reads "Claim Rewards"', async () => {
+      await test.step('"Claim All" option is enabled, checked by default, description reads "Claim both Excess Bond and Rewards"', async () => {
         await expect(
           claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
         ).toBeEnabled({ timeout: PAGE_WAIT_TIMEOUT });
@@ -96,7 +96,7 @@ test.describe(
         ).toBeChecked();
         await expect(
           claim.getClaimOptionDescription(CLAIM_OPTION.ALL_TO_RA),
-        ).toHaveText('Claim Rewards');
+        ).toHaveText('Claim both Excess Bond and Rewards');
       });
 
       await test.step('"Excess Bond" option is disabled and not checked', async () => {

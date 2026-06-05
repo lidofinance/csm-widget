@@ -5,7 +5,7 @@ import { NavigationPage } from '../../pages/navigation.page';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
-test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 const SIDEBAR_ITEMS = [
   { name: 'Dashboard', url: '/' },

@@ -148,7 +148,7 @@ test.describe(
             'pubkey already submitted',
           );
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'pubkey was previously submitted',
+            'pubkey already submitted',
           );
         }
       },

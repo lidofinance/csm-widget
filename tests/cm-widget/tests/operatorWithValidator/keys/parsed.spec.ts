@@ -2,9 +2,56 @@ import { test } from '../../test.fixture';
 import { KeysPage } from '../../../pages';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { KeysGeneratorService } from '../../../../shared/services/keysGenerator.service';
+import {
+  KeysGeneratorService,
+  DepositKey,
+} from '../../../../shared/services/keysGenerator.service';
 import { randomBytes } from 'node:crypto';
 import { generateWithdrawalCredentials } from '../../../../shared/helpers/accountData';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+
+test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
+
+const omitField = <K extends keyof DepositKey>(
+  obj: DepositKey,
+  field: K,
+): Omit<DepositKey, K> => {
+  const { [field]: _removed, ...rest } = obj;
+  return rest;
+};
+
+const invalidTextValidation: {
+  key: keyof DepositKey;
+  expectedError: string;
+}[] = [
+  {
+    key: 'withdrawal_credentials',
+    expectedError:
+      'withdrawal_credentials is not a valid stringinvalid signature',
+  },
+  {
+    key: 'amount',
+    expectedError: 'amount is not equal to 32 ethinvalid signature',
+  },
+  {
+    key: 'deposit_data_root',
+    expectedError: 'deposit_data_root is not a valid string',
+  },
+  {
+    key: 'deposit_message_root',
+    expectedError:
+      'deposit_message_root is not a valid stringinvalid signature',
+  },
+  {
+    key: 'fork_version',
+    expectedError: 'fork_version is not equal to 10000910',
+  },
+  {
+    key: 'pubkey',
+    expectedError: 'pubkey is not a valid stringinvalid signature',
+  },
+  { key: 'signature', expectedError: 'signature is not a valid string' },
+];
 
 test.describe('Operator with keys. Validation keys json.', () => {
   let keysPage: KeysPage;
@@ -220,4 +267,111 @@ test.describe('Operator with keys. Validation keys json.', () => {
       }
     },
   );
+
+  invalidTextValidation.forEach(({ key: propertyName, expectedError }) => {
+    test(
+      qase(
+        104,
+        `Should display error if ${propertyName} does not passed for 1 key as object`,
+      ),
+      async () => {
+        qase.parameters({ propertyName });
+        const key = keysGeneratorService.generateKeys();
+        const newJson = omitField(key[0], propertyName);
+
+        await keysPage.submitPage.fillKeys(
+          // @ts-expect-error negative test for validation
+          newJson,
+        );
+
+        await test.step('Verify invalid deposit data error is shown', async () => {
+          await expect(keysPage.submitPage.validationInputError).toHaveText(
+            'Invalid deposit data',
+          );
+        });
+
+        await test.step('Verify Parsed tab shows per-key error', async () => {
+          await keysPage.submitPage.selectTab('Parsed');
+          await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
+          const row = keysPage.submitPage.depositDataRow.first();
+          await expect(row.getByTestId('deposit-data-error')).toContainText(
+            expectedError,
+          );
+        });
+      },
+    );
+  });
+
+  invalidTextValidation.forEach(({ key: propertyName, expectedError }) => {
+    test(
+      qase(
+        111,
+        `Should display error if ${propertyName} does not passed for array of keys`,
+      ),
+      async () => {
+        qase.parameters({ propertyName });
+        const key = keysGeneratorService.generateKeys();
+        const newJson = omitField(key[0], propertyName);
+
+        await keysPage.submitPage.fillKeys(
+          // @ts-expect-error negative test for validation
+          [newJson],
+        );
+
+        await test.step('Verify invalid deposit data error is shown', async () => {
+          await expect(keysPage.submitPage.validationInputError).toHaveText(
+            'Invalid deposit data',
+          );
+        });
+
+        await test.step('Verify Parsed tab shows per-key error', async () => {
+          await keysPage.submitPage.selectTab('Parsed');
+          await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
+          const row = keysPage.submitPage.depositDataRow.first();
+          await expect(row.getByTestId('deposit-data-error')).toContainText(
+            expectedError,
+          );
+        });
+      },
+    );
+  });
+
+  invalidTextValidation.forEach(({ key: propertyName, expectedError }) => {
+    test(
+      qase(
+        118,
+        `Should display error if ${propertyName} does not passed for index >0 in array of keys`,
+      ),
+      async () => {
+        qase.parameters({ propertyName });
+        const keys = keysGeneratorService.generateKeys(3);
+        // @ts-expect-error negative test for validation
+        keys[2] = omitField(keys[2], propertyName);
+
+        await keysPage.submitPage.fillKeys(keys);
+
+        await test.step('Verify invalid deposit data error is shown', async () => {
+          await expect(keysPage.submitPage.validationInputError).toHaveText(
+            'Invalid deposit data',
+          );
+        });
+
+        await test.step('Verify Parsed tab shows error only on key at index 2', async () => {
+          await keysPage.submitPage.selectTab('Parsed');
+          await expect(keysPage.submitPage.depositDataRow).toHaveCount(3);
+
+          const rows = await keysPage.submitPage.depositDataRow.all();
+          await expect(
+            rows[0].getByTestId('deposit-data-error'),
+          ).not.toBeVisible();
+          await expect(
+            rows[1].getByTestId('deposit-data-error'),
+          ).not.toBeVisible();
+          await expect(rows[2].getByTestId('deposit-data-error')).toContainText(
+            expectedError,
+          );
+        });
+      },
+    );
+  });
 });
