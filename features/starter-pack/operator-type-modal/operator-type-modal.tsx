@@ -44,7 +44,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
             </Text>
             <Text size="xxs">
               The simplest way to start validating in CSM. Upload keys under the
-              general parameters without any permission or verification. At any
+              general parameters without any permission or verification.At any
               point in the future, you may apply to become an Identified
               Community Staker to access more favorable parameters
             </Text>

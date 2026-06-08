@@ -13,11 +13,9 @@ import {
 import { FC } from 'react';
 import { Block, CompareParametersList, Stack } from 'shared/components';
 import { DefColumnBackground, IcsColumnBackground } from 'shared/components';
-import { IdvtcColumnBackground } from 'shared/components/parameters-list/styles';
 import { useShowFlags } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 
-// TODO: upgrade for idvtc
 export const TypeParameters: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: operatorType } = useOperatorType(nodeOperatorId);
@@ -29,9 +27,6 @@ export const TypeParameters: FC = () => {
   );
   const { data: icsParams } = useCurveParameters(
     OPERATOR_TYPE_CURVE_ID.CSM_ICS,
-  );
-  const { data: idvtcParams } = useCurveParameters(
-    OPERATOR_TYPE_CURVE_ID.CSM_IDVTC,
   );
 
   const canApply =
@@ -50,29 +45,17 @@ export const TypeParameters: FC = () => {
         <Stack direction="column" gap="xxl">
           <Block padding="none">
             <CompareParametersList
-              items={[
-                {
-                  parameters: defParams,
-                  title: OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_DEF].title,
-                },
-                {
-                  parameters: icsParams,
-                  title: OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS].title,
-                },
-
-                {
-                  parameters: idvtcParams,
-                  title: OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_IDVTC].title,
-                },
-              ]}
+              left={defParams}
+              right={icsParams}
+              leftTitle={OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_DEF].title}
+              rightTitle={OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS].title}
             >
-              <DefColumnBackground $index={0} />
-              <IcsColumnBackground $index={1} />
-              <IdvtcColumnBackground $index={2} />
+              <DefColumnBackground />
+              <IcsColumnBackground />
             </CompareParametersList>
           </Block>
           {CAN_CLAIM_ICS && (
-            <LocalLink href={PATH.TYPE_ICS_CLAIM}>
+            <LocalLink href={PATH.TYPE_CLAIM}>
               <Button fullwidth size="sm">
                 Go to claim
               </Button>
