@@ -1,16 +1,11 @@
-import { PATH } from 'consts';
-import { OperatorTypePage } from 'features/operator-type';
-import { FC } from 'react';
+import { PATH } from 'consts/urls';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
-const Page: FC = () => (
+const Page = () => (
   <GateLoaded>
-    <Gate
-      rule="ICS_APPLY_ENABLED"
-      fallback={<Navigate path={PATH.TYPE_PARAMETERS} />}
-    >
-      <OperatorTypePage />
+    <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
+      <Navigate path={PATH.TYPE_ICS_APPLY} />
     </Gate>
   </GateLoaded>
 );
