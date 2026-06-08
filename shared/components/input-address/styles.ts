@@ -65,10 +65,7 @@ export const StyledChip = styled.span<ChipProps>`
   font-weight: 700;
 `;
 
-export const VerifiedIcon = styled(Check).attrs({
-  width: 12,
-  height: 12,
-})<ChipProps>`
+export const Icon = styled(Check).attrs({ width: 12, height: 12 })<ChipProps>`
   border-radius: 90px;
   background: ${({ color = 'success' }) => `var(--lido-color-${color})`};
   color: rgba(255, 255, 255, 0.75);

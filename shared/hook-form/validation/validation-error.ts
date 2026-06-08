@@ -1,12 +1,10 @@
-import { values } from 'lodash';
+import { get, set, values } from 'lodash';
 import {
   FieldErrors,
   FieldName,
   FieldValues,
   MultipleFieldErrors,
   ResolverOptions,
-  get,
-  set,
 } from 'react-hook-form';
 import { ValidateFn } from './types';
 
@@ -71,11 +69,11 @@ export const initValidator = <T extends FieldValues>(
           }
         } else {
           console.warn(`Unhandled validation error in resolver`, error);
-          if (!get(errors, fallbackErrorField)) {
-            set(errors, fallbackErrorField, {
+          if (!errors[fallbackErrorField]) {
+            (errors[fallbackErrorField] as any) = {
               type: DefaultValidationErrorTypes.UNHANDLED,
               message: 'unknown validation error',
-            });
+            };
           }
         }
       }

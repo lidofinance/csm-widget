@@ -63,39 +63,33 @@ export const ParametersList: FC<{
   );
 };
 
-export type CompareParametersListItem = {
-  parameters?: CurveParameters;
-  title?: string;
-};
-
 type CompareParametersListProps = {
-  items: CompareParametersListItem[];
+  left?: CurveParameters;
+  right?: CurveParameters;
+  leftTitle?: string;
+  rightTitle?: string;
 };
 
 export const CompareParametersList: FC<
   PropsWithChildren<CompareParametersListProps>
-> = ({ items, children }) => {
+> = ({ left, right, leftTitle = 'Current', rightTitle = 'New', children }) => {
   return (
-    <CompareListStyle $columns={items.length}>
+    <CompareListStyle>
       {children}
       <CompareTitleStyle>
         <p></p>
-        {items.map((item, index) => (
-          <Text key={index} size="xs" weight={700}>
-            {item.title}
-          </Text>
-        ))}
+        <Text size="xs" weight={700}>
+          {leftTitle}
+        </Text>
+        <Text size="xs" weight={700}>
+          {rightTitle}
+        </Text>
       </CompareTitleStyle>
       {PARAMETERS.map(({ title, help, render }) => (
         <CompareRowStyle key={title}>
           <Title title={title} help={help} />
-          {items.map((item, index) => (
-            <ParametersValue
-              key={index}
-              loading={!item.parameters}
-              values={render(item.parameters)}
-            />
-          ))}
+          <ParametersValue loading={!left} values={render(left)} />
+          <ParametersValue loading={!right} values={render(right)} />
         </CompareRowStyle>
       ))}
     </CompareListStyle>
