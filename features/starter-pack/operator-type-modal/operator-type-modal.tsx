@@ -74,7 +74,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
               Obtain enhanced validation parameters by becoming recognized as an
               independent Community Staker. Please note that the verification
               process takes time and requires the submission of specific
-              supporting proofs.
+              supporting proofs
             </Text>
             <Divider />
           </Stack>
