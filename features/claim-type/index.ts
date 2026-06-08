@@ -1,4 +1,2 @@
-export * from './claim-ics-page';
-export * from './claim-ics';
-export * from './claim-idvtc-page';
-export * from './claim-idvtc';
+export * from './claim-type-page';
+export * from './claim-type';

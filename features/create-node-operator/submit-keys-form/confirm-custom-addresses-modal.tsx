@@ -114,7 +114,7 @@ const ExtendedManagerPermissions: FC = () => (
       </Text>
       <Text size="xs" color="secondary">
         These permissions can only be selected during Node Operator Creation,
-        and cannot be changed in the future.
+        and cannot be changed in the future
       </Text>
     </Stack>
 

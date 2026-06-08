@@ -1,9 +1,5 @@
-import {
-  getNodeOperatorRoles,
-  MODULE_NAME,
-  OPERATOR_TYPE,
-} from '@lidofinance/lido-csm-sdk';
-import { getModuleOperatorType, PATH } from 'consts';
+import { MODULE_NAME, getNodeOperatorRoles } from '@lidofinance/lido-csm-sdk';
+import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
@@ -75,20 +71,12 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             callback,
           };
 
-          const type = getModuleOperatorType(data.curveId);
-
-          const { result } =
-            type === OPERATOR_TYPE.CSM_ICS && data.proof
-              ? await sdk.icsGate.addNodeOperator({
-                  ...params,
-                  proof: data.proof,
-                })
-              : type === OPERATOR_TYPE.CSM_IDVTC && data.proof
-                ? await sdk.idvtcGate.addNodeOperator({
-                    ...params,
-                    proof: data.proof,
-                  })
-                : await sdk.permissionlessGate.addNodeOperator(params);
+          const { result } = data.proof
+            ? await sdk.icsGate.addNodeOperator({
+                ...params,
+                proof: data.proof,
+              })
+            : await sdk.permissionlessGate.addNodeOperator(params);
 
           if (result) {
             const roles = getNodeOperatorRoles(result, data.address);
