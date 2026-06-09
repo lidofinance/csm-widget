@@ -1,6 +1,7 @@
 import type { OperatorKey } from './types';
 
 export const endpoints = {
+  nonce: 'auth/nonce',
   signin: 'auth/signin',
   myDelegates: 'delegates/my',
 

@@ -1,6 +1,10 @@
 import { config } from 'config';
 import { getExternalLinks } from 'consts/external-links';
-import type { SiweSigninPayload, SiweSigninResponse } from 'modules/siwe';
+import type {
+  SiweNonceResponse,
+  SiweSigninPayload,
+  SiweSigninResponse,
+} from 'modules/siwe';
 import invariant from 'tiny-invariant';
 import { FetcherError } from 'utils/fetcher-error';
 import { standardFetcher } from 'utils/standard-fetcher';
@@ -74,6 +78,11 @@ export const surveysDelete = <T = void>(
   path: string,
   opts: SurveysFetchOptions = {},
 ): Promise<T> => surveysRequest<T>(path, { method: 'DELETE' }, opts);
+
+// Public nonce endpoint — accepts no token. Pass directly to <SiweAuthProvider getNonce={...}>.
+// Returns a server-issued, single-use nonce that must be embedded in the SIWE message.
+export const surveysGetNonce = (): Promise<SiweNonceResponse> =>
+  surveysGet<SiweNonceResponse>(endpoints.nonce);
 
 // Public signin endpoint — accepts no token. Pass directly to <SiweAuthProvider signin={...}>.
 export const surveysSignin = (

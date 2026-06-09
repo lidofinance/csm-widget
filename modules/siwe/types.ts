@@ -7,6 +7,10 @@ export type SiweSigninPayload = {
   signature: string;
 };
 
+export type SiweNonceResponse = {
+  nonce: string;
+};
+
 export type SiweSigninResponse = {
   access_token: string;
   token_type: string;

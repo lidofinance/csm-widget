@@ -9,6 +9,7 @@ import type { SiweOptions } from './types';
 const createSiweMessage = (
   address: string,
   statement: string,
+  nonce: string,
   chainId?: number,
 ) => {
   const scheme = window.location.protocol.slice(0, -1);
@@ -23,6 +24,7 @@ const createSiweMessage = (
     uri,
     version: '1',
     chainId,
+    nonce,
     expirationTime: addDays(new Date(), 1).toISOString(),
   });
   return message.prepareMessage();
@@ -32,13 +34,16 @@ export const useSiwe = ({ statement }: SiweOptions) => {
   const { address, chainId } = useDappStatus();
   const { mutateAsync: signMessageAsync } = useSignMessage();
 
-  return useCallback(async () => {
-    invariant(address, 'Signer is not available');
+  return useCallback(
+    async (nonce: string) => {
+      invariant(address, 'Signer is not available');
 
-    const message = createSiweMessage(address, statement, chainId);
-    const signature = await signMessageAsync({
-      message,
-    });
-    return { signature, message };
-  }, [address, chainId, signMessageAsync, statement]);
+      const message = createSiweMessage(address, statement, nonce, chainId);
+      const signature = await signMessageAsync({
+        message,
+      });
+      return { signature, message };
+    },
+    [address, chainId, signMessageAsync, statement],
+  );
 };

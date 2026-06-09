@@ -4,8 +4,8 @@ export {
   surveysDelete,
   surveysGet,
   surveysPost,
-  surveysSignin,
 } from './api/surveys-api';
+export { SurveysAuthProvider } from './surveys-auth-provider';
 export { operatorKey, parseOperatorKey } from './api/url';
 export { endpoints } from './api/endpoints';
 export { SurveysApiError, isAuthError } from './api/errors';

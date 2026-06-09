@@ -12,6 +12,7 @@ import {
   SURVEYS_API_BASE_URL,
   surveysDelete,
   surveysGet,
+  surveysGetNonce,
   surveysPost,
   surveysSignin,
 } from '../surveys-api';
@@ -110,6 +111,23 @@ describe('surveys-api', () => {
 
     const fetchMock = (global as unknown as { fetch: jest.Mock }).fetch;
     expect(lastFetchUrl(fetchMock)).toBe('https://surveys.test/auth/signin');
+    expect(
+      (lastFetchInit(fetchMock).headers as Record<string, string>)
+        .Authorization,
+    ).toBeUndefined();
+  });
+
+  it('surveysGetNonce GETs /auth/nonce without a token', async () => {
+    (global as unknown as { fetch: jest.Mock }).fetch = mockFetch(200, {
+      nonce: 'server-nonce',
+    });
+
+    const res = await surveysGetNonce();
+    expect(res.nonce).toBe('server-nonce');
+
+    const fetchMock = (global as unknown as { fetch: jest.Mock }).fetch;
+    expect(lastFetchUrl(fetchMock)).toBe('https://surveys.test/auth/nonce');
+    expect(lastFetchInit(fetchMock).method).toBe('GET');
     expect(
       (lastFetchInit(fetchMock).headers as Record<string, string>)
         .Authorization,

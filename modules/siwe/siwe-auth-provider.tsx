@@ -7,17 +7,23 @@ import { trackMatomoSiweEvent } from 'utils/track-matomo-event';
 import { SiweAuthContext } from './siwe-auth-context';
 import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
-import type { SiweSigninPayload, SiweSigninResponse } from './types';
+import type {
+  SiweNonceResponse,
+  SiweSigninPayload,
+  SiweSigninResponse,
+} from './types';
 
 const SIWE_STATEMENT =
   'The section you are attempting to access requires you to prove the address ownership.';
 
 type SiweAuthProviderProps = {
   signin: (payload: SiweSigninPayload) => Promise<SiweSigninResponse>;
+  getNonce: () => Promise<SiweNonceResponse>;
 };
 
 export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   signin,
+  getNonce,
   children,
 }) => {
   const { address } = useDappStatus();
@@ -39,8 +45,18 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
 
     modalStages.sign();
 
+    // The backend rejects any SIWE nonce it did not issue, and the nonce is
+    // short-lived (TTL-bound), so fetch a fresh one right before signing.
+    let nonce: string;
     try {
-      const payload = await siwe();
+      ({ nonce } = await getNonce());
+    } catch (err) {
+      modalStages.failed((err as Error).message);
+      return;
+    }
+
+    try {
+      const payload = await siwe(nonce);
 
       modalStages.pending();
       try {
@@ -57,6 +73,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   }, [
     address,
     closeModal,
+    getNonce,
     modalStages,
     setToken,
     signin,
