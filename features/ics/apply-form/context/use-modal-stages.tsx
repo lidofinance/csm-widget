@@ -24,7 +24,7 @@ export const useModalStages = () => {
         transitStage(
           <TxStageSuccess
             title="Your application has been submitted"
-            description="You can track your application's status on the Operator Type tab."
+            description="You can track your application's status on the Operator Type tab"
           />,
         ),
 

@@ -19,7 +19,7 @@ export const BannerOperatorCustomAddresses: FC = () => {
       To continue, connect to {moduleMeta.shortTitle} UI with the address you
       specified as Reward/Manager Address for{' '}
       <DescriptorId id={nodeOperatorId} /> or create a new Node Operator using
-      the currently connected address.
+      the currently connected address
     </Banner>
   );
 };

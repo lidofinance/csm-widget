@@ -30,6 +30,7 @@ export const SocialProof: FC = () => {
           >
             the guide
           </MatomoLink>
+          .
         </Text>
       </Stack>
 
@@ -43,7 +44,7 @@ export const SocialProof: FC = () => {
           <Stack direction="column" gap="sm" data-testid="twitterProofStep1">
             <Text size="xs">
               Step 1. Prove the ownership of the X account by posting a tweet
-              with the following text
+              with the following text.
             </Text>
 
             <Input
@@ -58,7 +59,7 @@ export const SocialProof: FC = () => {
           </Stack>
 
           <Stack direction="column" gap="sm" data-testid="twitterProofStep2">
-            <Text size="xs">Step 2. Paste the link to this post</Text>
+            <Text size="xs">Step 2. Paste the link to this post.</Text>
 
             <TextInputHookForm
               fieldName="twitterLink"
@@ -86,7 +87,8 @@ export const SocialProof: FC = () => {
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsDiscordChannelLink}
               >
                 the CSM channel
-              </MatomoLink>{' '}
+              </MatomoLink>
+              .{' '}
               <IconTooltip
                 inline
                 tooltip='If you cannot access the CSM channel, you may need to claim the "CSM Operator" role. To claim this role, follow the instructions in the "cs-get-started" channel.'
@@ -105,7 +107,7 @@ export const SocialProof: FC = () => {
           </Stack>
 
           <Stack direction="column" gap="sm" data-testid="discordProofStep2">
-            <Text size="xs">Step 2. Paste the link to this message</Text>
+            <Text size="xs">Step 2. Paste the link to this message.</Text>
 
             <TextInputHookForm
               fieldName="discordLink"

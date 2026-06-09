@@ -18,7 +18,7 @@ export const ConfirmEraseModal: ModalComponentType<ConfirmModalProps> = ({
           <Text size="xs" color="secondary">
             If the data is erased, it will be deleted from the database;
             however, the historic usage of the data for the compilation of
-            aggregate statistics will remain in the previous VaNOM reports.
+            aggregate statistics will remain in the previous VaNOM reports
           </Text>
         </Stack>
 

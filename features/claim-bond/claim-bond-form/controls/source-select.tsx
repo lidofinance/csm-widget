@@ -79,7 +79,7 @@ const SplittersTooltip: FC<{ feeSplits: FeeSplit[] }> = ({ feeSplits }) => (
   <Stack direction="column" gap="ms">
     <span>
       When you claim rewards, they will be distributed according to the
-      proportions below.
+      proportions below
     </span>
     <Stack direction="column" gap="xxs">
       {feeSplits.map((split) => (

@@ -18,7 +18,7 @@ export const ConfirmClaimTypeModal: ModalComponentType<ConfirmModalProps> = ({
           </Text>
           <Text size="xs" color="secondary">
             This action is irreversible, you will not be able to claim your
-            current operator type back.
+            current operator type back
           </Text>
         </Stack>
 

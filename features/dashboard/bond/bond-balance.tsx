@@ -57,7 +57,7 @@ export const BondBalance: FC = () => {
             title={BOND_EXCESS}
             loading={isBondLoading}
             amount={bond?.delta}
-            help="The bond amount available to claim without having to exit validators. Increases daily"
+            help="The bond amount available to claim without having to exit validators. Increases daily."
           />
         )}
         {!!bond?.debt && (

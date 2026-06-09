@@ -47,7 +47,7 @@ export const ScoreCategory: FC<ScoreCategoryProps> = ({
         {!isEnougth && (
           <TipWrapper data-testid="minScoreTip">
             You did not reach the minimum score of{' '}
-            <Points value={category.min} /> required for this category.
+            <Points value={category.min} /> required for this category
           </TipWrapper>
         )}
         <CategoryItemsWrapper data-testid="categoryItemsWrapper">

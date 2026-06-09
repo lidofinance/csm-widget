@@ -70,7 +70,7 @@ export const SurveyDelegates: FC = () => {
             variants={['delegate', 'delegates']}
             showValue
           />{' '}
-          allowed
+          allowed.
         </Text>
 
         <WhenLoaded loading={isLoading}>
@@ -86,7 +86,7 @@ export const SurveyDelegates: FC = () => {
 
             {delegates.length === 0 && (
               <Text size="xs" color="secondary">
-                No delegates added yet.
+                No delegates added yet
               </Text>
             )}
 
@@ -98,7 +98,7 @@ export const SurveyDelegates: FC = () => {
 
             {!canAddMore && (
               <Text size="xs" color="warning">
-                Maximum number of delegates reached.
+                Maximum number of delegates reached
               </Text>
             )}
           </Stack>

@@ -1,7 +1,7 @@
 import { type NodeOperatorShortInfo, ROLES } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { ROLES_METADATA } from 'consts/roles';
-import { Address as AddressComponent } from 'shared/components';
+import { Address as AddressComponent, Stack } from 'shared/components';
 import { type ChangeRoleMode, useChangeRoleMode } from 'shared/hooks';
 import {
   AfterAddressProposed,
@@ -30,23 +30,23 @@ const getTexts = (
         sign: {
           title: `You are changing ${ROLES_METADATA[data.role].capitalizedTitle} Address`,
           description: (
-            <>
-              New {ROLES_METADATA[data.role].capitalizedTitle} Address is{' '}
+            <Stack gap="xs" direction="column" as="span">
+              New {ROLES_METADATA[data.role].capitalizedTitle} Address is
               <Text size="xxs">
                 <AddressComponent address={address} showIcon />
               </Text>
-            </>
+            </Stack>
           ),
         },
         success: {
           title: `${ROLES_METADATA[data.role].capitalizedTitle} Address has been changed`,
           description: (
-            <>
-              New {ROLES_METADATA[data.role].capitalizedTitle} Address is{' '}
+            <Stack gap="xs" direction="column" as="span">
+              New {ROLES_METADATA[data.role].capitalizedTitle} Address is
               <Text size="xxs">
                 <AddressComponent address={address} showIcon />
               </Text>
-            </>
+            </Stack>
           ),
         },
       }
@@ -55,23 +55,23 @@ const getTexts = (
           sign: {
             title: `You are canceling request for ${ROLES_METADATA[data.role].capitalizedTitle} Address change`,
             description: (
-              <>
-                Address stays{' '}
+              <Stack gap="xs" direction="column" as="span">
+                Address stays
                 <Text size="xxs">
                   <AddressComponent address={data.currentAddress} showIcon />
                 </Text>
-              </>
+              </Stack>
             ),
           },
           success: {
             title: `Proposed request for ${ROLES_METADATA[data.role].capitalizedTitle} Address has been canceled`,
             description: (
-              <>
-                Address stays{' '}
+              <Stack gap="xs" direction="column" as="span">
+                Address stays
                 <Text size="xxs">
                   <AddressComponent address={data.currentAddress} showIcon />
                 </Text>
-              </>
+              </Stack>
             ),
           },
         }
@@ -79,12 +79,12 @@ const getTexts = (
           sign: {
             title: `You are proposing ${ROLES_METADATA[data.role].capitalizedTitle} Address change`,
             description: (
-              <>
-                Proposed address{' '}
+              <Stack gap="xs" direction="column" as="span">
+                Proposed address
                 <Text size="xxs">
                   <AddressComponent address={address} showIcon />
                 </Text>
-              </>
+              </Stack>
             ),
           },
           success: {

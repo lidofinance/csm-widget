@@ -43,7 +43,7 @@ export const ViewSplits: FC = () => {
         <WarningBlockStyle>
           <span>
             <b>Editing is disabled</b> while your first rewards have not been
-            distributed yet.
+            distributed yet
           </span>
         </WarningBlockStyle>
       ) : currentFeeSplits.length > 0 && rewards.available ? (

@@ -212,6 +212,12 @@ Used in navigation items (`use-nav-items.tsx`), page guards, and conditional UI.
 
 - When implementing UI from Figma designs, always use **exact texts** from the design. Do not rephrase, rewrite, or improvise copy — use the precise wording as shown in the Figma mockup.
 
+## Copy & Text
+
+- UI prose punctuation depends on sentence count: a single sentence has **no trailing dot**; two or more sentences end with a dot. Applies to descriptive copy — tooltips, descriptions, helper text, info/warning banners, error and toast messages — not button labels, titles, or short headings.
+- Only the trailing **dot** is governed: leave `?`, `!`, and `…` as-is. Commas, semicolons, abbreviations (e.g., etc.), decimals, and URLs do not split a sentence.
+- Examples: `"…Increases daily."` (2 sentences → dot); `"…part of your Excess Bond"` (1 sentence → no dot).
+
 ## Testing
 
 ### PageObject rules

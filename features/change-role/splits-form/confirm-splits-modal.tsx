@@ -54,7 +54,7 @@ export const ConfirmSplitsModal: ModalComponentType<
                 Are you sure you want to stop splitting rewards?
               </Text>
               <Text size="xs" color="secondary">
-                All rewards will be sent to the following address.
+                All rewards will be sent to the following address
               </Text>
             </>
           ) : (
@@ -70,12 +70,12 @@ export const ConfirmSplitsModal: ModalComponentType<
                 <Text as="div" size="xs" color="secondary">
                   <ul>
                     <li>
-                      Editing is disabled while you have unclaimed rewards.
+                      Editing is disabled while you have unclaimed rewards
                     </li>
-                    <li>Additional addresses receive rewards in stETH only.</li>
+                    <li>Additional addresses receive rewards in stETH only</li>
                     <li>
                       Claiming is permissionless: anyone can execute the claim,
-                      but rewards go to the configured addresses.
+                      but rewards go to the configured addresses
                     </li>
                   </ul>
                 </Text>

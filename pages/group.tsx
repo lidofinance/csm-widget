@@ -10,10 +10,12 @@ const Page = () => {
   const { isPending } = useOperatorGroup(nodeOperatorId);
 
   return (
-    <GateLoaded additional={isPending}>
+    <GateLoaded>
       <Gate rule="IS_CM" fallback={<Navigate path={PATH.HOME} />}>
         <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-          <GroupPage />
+          <GateLoaded additional={isPending}>
+            <GroupPage />
+          </GateLoaded>
         </Gate>
       </Gate>
     </GateLoaded>

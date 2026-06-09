@@ -74,7 +74,7 @@ export const AmountInput: React.FC = () => {
       )}
       {showExcessNote && (
         <Note>
-          Any unclaimed rewards will be automatically added to your Excess Bond.
+          Any unclaimed rewards will be automatically added to your Excess Bond
         </Note>
       )}
     </>

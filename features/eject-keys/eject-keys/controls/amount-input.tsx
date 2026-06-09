@@ -10,7 +10,7 @@ export const AmountInput = () => {
   return (
     <Stack direction="column" gap="xs">
       <DisabledInputAmount
-        isLocked="Key ejection cost is a network fee required to cover the cost to trigger withdrawal from the Execution layer."
+        isLocked="Key ejection cost is a network fee required to cover the cost to trigger withdrawal from the Execution layer"
         amount={feeAmount}
         token={TOKENS.eth}
         label="Estimated ejection cost"
@@ -21,7 +21,7 @@ export const AmountInput = () => {
         Will be deducted from your <b>wallet balance</b>{' '}
         <IconTooltip
           inline
-          tooltip="Any excess funds will be automatically refunded to your wallet after the withdrawal is triggered. This process may take some time"
+          tooltip="Any excess funds will be automatically refunded to your wallet after the withdrawal is triggered. This process may take some time."
         />
       </Text>
     </Stack>

@@ -2,7 +2,6 @@ import { Address } from 'viem';
 
 export type AddressValidationFile = {
   addresses: string[];
-  isBroken?: boolean;
 };
 
 export const validateAddressLocally = (

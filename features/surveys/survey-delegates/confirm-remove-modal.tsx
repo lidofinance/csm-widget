@@ -20,7 +20,7 @@ export const ConfirmRemoveDelegateModal: ModalComponentType<
           </Text>
           <Text size="xs" color="secondary">
             <Address address={address} symbols={0} /> will no longer have
-            delegate access.
+            delegate access
           </Text>
         </Stack>
 

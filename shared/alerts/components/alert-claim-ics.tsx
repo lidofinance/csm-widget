@@ -9,7 +9,7 @@ export const AlertClaimIcs: FC = () => (
   <Alert title="You have a new operator type to be claimed">
     <p>
       The Identified Community Staker type is now available to be claimed for
-      your node operator.
+      your node operator
     </p>
     <br />
     <LocalLink

@@ -26,17 +26,17 @@ export const DelegatorSetups: FC<DelegatorSetupsProps> = ({ operatorId }) => {
       <SurveySection
         title={`Setups for ${operatorId}`}
         subtitle="How this information will be used"
-        help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports"
+        help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
       >
         {!showSetups ? (
           <Text size="sm" color="secondary">
-            No keys available for this operator.
+            No keys available for this operator
           </Text>
         ) : (
           <>
             {keys && keys.filled > keys.total && (
               <Warning>
-                The number of keys has decreased. Please update the data
+                The number of keys has decreased. Please update the data.
               </Warning>
             )}
             {data?.map((setup) => (

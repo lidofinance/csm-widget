@@ -22,7 +22,7 @@ export const AcceptInviteFormLoader: FC<PropsWithChildren> = ({ children }) => {
             </Text>
             <CenteredText size="xs" color="secondary">
               When this wallet is proposed as a new Manager or Rewards address,
-              the request will appear here for you to review and accept.
+              the request will appear here for you to review and accept
             </CenteredText>
           </>
         )

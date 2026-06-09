@@ -17,7 +17,7 @@ export const SiweSignIn: FC = () => {
           </Text>
           <Text size="xs" color="secondary">
             To continue, please sign a message with your connected address to
-            prove ownership.
+            prove ownership
           </Text>
         </Stack>
         <Stack direction="column" gap="md">

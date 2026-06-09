@@ -43,7 +43,7 @@ export const SurveysOperatorHome: FC = () => {
       <SurveySection
         title="Your contact information"
         subtitle="How this information will be used"
-        help="Lido contributors will attempt to contact you in case you are offline or unresponsive to important matters on the Mainnet. However, we cannot guarantee that you will be notified"
+        help="Lido contributors will attempt to contact you in case you are offline or unresponsive to important matters on the Mainnet. However, we cannot guarantee that you will be notified."
       >
         <SurveyItem title="Contact information">
           <SurveyLink
@@ -58,7 +58,7 @@ export const SurveysOperatorHome: FC = () => {
       <SurveySection
         title="Your experience"
         subtitle="How this information will be used"
-        help="Information is voluntarily submitted and only retained for report building, UI/UX improvement, or feedback purposes. Information is aggregated. Information about your experience is utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports"
+        help="Information is voluntarily submitted and only retained for report building, UI/UX improvement, or feedback purposes. Information is aggregated. Information about your experience is utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
       >
         <SurveyItem title="How did you learn about CSM?">
           <SurveyLink
@@ -82,11 +82,11 @@ export const SurveysOperatorHome: FC = () => {
         <SurveySection
           title="Your setup"
           subtitle="How this information will be used"
-          help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports"
+          help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
         >
           {keys && keys.filled > keys.total && (
             <Warning>
-              The number of your keys has decreased. Please update the data
+              The number of your keys has decreased. Please update the data.
             </Warning>
           )}
           {data?.setups.map((setup) => (
@@ -140,7 +140,7 @@ export const SurveysOperatorHome: FC = () => {
       <SurveySection
         title="Manage delegates"
         subtitle="How delegates work"
-        help={`Delegates can only access and submit Setup surveys on your behalf. Contact and experience data remains private. Up to ${plural({ value: MAX_DELEGATES, variants: ['delegate', 'delegates'], showValue: true })} allowed`}
+        help={`Delegates can only access and submit Setup surveys on your behalf. Contact and experience data remains private. Up to ${plural({ value: MAX_DELEGATES, variants: ['delegate', 'delegates'], showValue: true })} allowed.`}
       >
         <SurveyItem
           // title="Delegates"

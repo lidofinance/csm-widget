@@ -18,7 +18,7 @@ export const ConfirmReproposeModal: ModalComponentType<ConfirmModalProps> = ({
           </Text>
           <Text size="xs" color="secondary">
             When you propose a new address for change - the previous change
-            proposal is voided.
+            proposal is voided
           </Text>
         </Stack>
 

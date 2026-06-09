@@ -104,7 +104,7 @@ export const AvailableToClaim: FC = () => {
               loading={isBondLoading}
               amount={bond.locked}
               token={TOKENS.eth}
-              help="Bond is locked because of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
+              help="Bond is locked because of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
             />
           </>
         )}

@@ -33,7 +33,7 @@ export const ClaimBondFormInfoSplitters: FC<Props> = ({
             <IconTooltip
               placement="bottomLeft"
               type="question"
-              tooltip="When you claim rewards, they will be distributed to the splitter recipients in stETH according to the configured shares."
+              tooltip="When you claim rewards, they will be distributed to the splitter recipients in stETH according to the configured shares"
             />
           </div>
           <Text size="xxs" data-testid="splittersTotalAmount">
