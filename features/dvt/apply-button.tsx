@@ -2,16 +2,47 @@ import { Button, ButtonProps } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
-import { DvtFormStatus, useDvtState } from './shared';
+import { DvtFormStatus, DvtTypeStatus, useDvtState } from './shared';
 
-const getButtonText = (status: DvtFormStatus | undefined): string => {
+type ButtonState = {
+  text: string;
+  variant: ButtonProps['variant'];
+  href: PATH;
+};
+
+const getButtonState = (
+  typeStatus: DvtTypeStatus,
+  status: DvtFormStatus | undefined,
+): ButtonState => {
+  if (typeStatus === 'CLAIMED') {
+    return {
+      text: 'View IDVTC status',
+      variant: 'translucent',
+      href: PATH.TYPE_DVT_APPLY,
+    };
+  }
+  if (typeStatus === 'ISSUED') {
+    return {
+      text: 'Claim IDVTC type',
+      variant: undefined,
+      href: PATH.TYPE_DVT_CLAIM,
+    };
+  }
   switch (status) {
     case 'APPROVED':
     case 'REJECTED':
     case 'REVIEW':
-      return 'View application';
+      return {
+        text: 'View application',
+        variant: 'translucent',
+        href: PATH.TYPE_DVT_APPLY,
+      };
     default:
-      return 'Apply for IDVTC';
+      return {
+        text: 'Apply for IDVTC',
+        variant: 'translucent',
+        href: PATH.TYPE_DVT_APPLY,
+      };
   }
 };
 
@@ -20,12 +51,13 @@ type Props = {
 };
 
 export const DvtApplyButton: FC<Props> = ({ size }) => {
-  const { data } = useDvtState();
+  const { typeStatus, data } = useDvtState();
+  const { text, variant, href } = getButtonState(typeStatus, data?.status);
 
   return (
-    <LocalLink href={PATH.TYPE_DVT_APPLY}>
-      <Button fullwidth size={size} variant="translucent">
-        {getButtonText(data?.status)}
+    <LocalLink href={href}>
+      <Button fullwidth size={size} variant={variant}>
+        {text}
       </Button>
     </LocalLink>
   );

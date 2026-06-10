@@ -6,24 +6,20 @@ import { SwitcherRoutes } from './types';
 
 const TYPE_ROUTES: SwitcherRoutes = [
   {
-    title: 'Score system',
-    path: PATH.TYPE_ICS_SYSTEM,
-    showRules: ['ICS_APPLY_ENABLED'],
-  },
-  {
-    title: 'Application form',
-    path: PATH.TYPE_ICS_APPLY,
-    showRules: ['ICS_APPLY_ENABLED'],
-  },
-  {
     title: 'Parameters',
     path: PATH.TYPE_PARAMETERS,
   },
   {
-    title: 'Claim',
+    title: 'Claim ICS',
     path: PATH.TYPE_ICS_CLAIM,
     showRules: ['CAN_CLAIM_ICS'],
     suffix: <CounterClaimType type={OPERATOR_TYPE.CSM_ICS} />,
+  },
+  {
+    title: 'Claim IDVTC',
+    path: PATH.TYPE_DVT_CLAIM,
+    showRules: ['CAN_CLAIM_IDVTC'],
+    suffix: <CounterClaimType type={OPERATOR_TYPE.CSM_IDVTC} />,
   },
 ];
 

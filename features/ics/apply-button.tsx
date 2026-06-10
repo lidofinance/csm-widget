@@ -7,6 +7,7 @@ import { IcsFormStatus, TypeStatus, useIcsState } from './shared';
 type ButtonState = {
   text: string;
   variant: ButtonProps['variant'];
+  href: PATH;
 };
 
 const getButtonState = (
@@ -14,18 +15,34 @@ const getButtonState = (
   status: IcsFormStatus | undefined,
 ): ButtonState => {
   if (typeStatus === 'CLAIMED') {
-    return { text: 'View ICS status', variant: 'translucent' };
+    return {
+      text: 'View ICS status',
+      variant: 'translucent',
+      href: PATH.TYPE_ICS_APPLY,
+    };
   }
   if (typeStatus === 'ISSUED') {
-    return { text: 'Claim ICS type', variant: undefined };
+    return {
+      text: 'Claim ICS type',
+      variant: undefined,
+      href: PATH.TYPE_ICS_CLAIM,
+    };
   }
   switch (status) {
     case 'APPROVED':
     case 'REJECTED':
     case 'REVIEW':
-      return { text: 'View application', variant: 'translucent' };
+      return {
+        text: 'View application',
+        variant: 'translucent',
+        href: PATH.TYPE_ICS_APPLY,
+      };
     default:
-      return { text: 'Apply for ICS', variant: 'translucent' };
+      return {
+        text: 'Apply for ICS',
+        variant: 'translucent',
+        href: PATH.TYPE_ICS_APPLY,
+      };
   }
 };
 
@@ -35,10 +52,10 @@ type Props = {
 
 export const IcsApplyButton: FC<Props> = ({ size }) => {
   const { typeStatus, data } = useIcsState();
-  const { text, variant } = getButtonState(typeStatus, data?.status);
+  const { text, variant, href } = getButtonState(typeStatus, data?.status);
 
   return (
-    <LocalLink href={PATH.TYPE_ICS_APPLY}>
+    <LocalLink href={href}>
       <Button fullwidth size={size} variant={variant}>
         {text}
       </Button>
