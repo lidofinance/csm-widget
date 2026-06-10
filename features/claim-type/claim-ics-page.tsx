@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { FAQ_OPERATOR_TYPE } from 'faq';
 import { Faq, TypeBackButton } from 'shared/components';
 import { Layout } from 'shared/layout';
-import { IcsPageSwitcher } from 'shared/navigate';
+import { Gate, IcsPageSwitcher, TypePageSwitcher } from 'shared/navigate';
 import { ClaimIcs } from './claim-ics';
 
 export const ClaimIcsPage: FC = () => (
@@ -13,7 +13,9 @@ export const ClaimIcsPage: FC = () => (
     pageName="ClaimIcs"
     mainPrefix={<TypeBackButton />}
   >
-    <IcsPageSwitcher />
+    <Gate rule="ICS_APPLY_ENABLED" fallback={<TypePageSwitcher />}>
+      <IcsPageSwitcher />
+    </Gate>
     <ClaimIcs />
     <Faq items={FAQ_OPERATOR_TYPE} />
   </Layout>

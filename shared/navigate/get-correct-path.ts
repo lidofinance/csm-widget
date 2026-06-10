@@ -73,6 +73,9 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
         : flags.ICS_APPLY_ENABLED
           ? PATH.TYPE_DVT_DESCRIPTION
           : PATH.TYPE_PARAMETERS;
+    case PATH.TYPE_ICS_PARAMETERS:
+    case PATH.TYPE_DVT_PARAMETERS:
+      return flags.ICS_APPLY_ENABLED ? path : PATH.TYPE_PARAMETERS;
 
     default:
       return path;

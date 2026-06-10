@@ -3,17 +3,17 @@ import { IcsProviders } from 'features/ics/shared';
 import { FC } from 'react';
 import { ExtraWidth, Faq, TypeBackButton } from 'shared/components';
 import { Layout } from 'shared/layout';
-import { IcsPageSwitcher } from 'shared/navigate';
+import { TypePageSwitcher } from 'shared/navigate';
 import { TypeParameters } from './type-parameters';
 
 export const TypeParametersPage: FC = () => (
   <Layout
     title="Operator Type Parameters"
     subtitle="Compare parameters"
-    pageName="TypeIcs"
+    pageName="TypeParametersIcs"
     mainPrefix={<TypeBackButton />}
   >
-    <IcsPageSwitcher />
+    <TypePageSwitcher />
     <ExtraWidth>
       <IcsProviders>
         <TypeParameters />

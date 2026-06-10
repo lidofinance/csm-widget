@@ -17,7 +17,7 @@ const TYPE_ROUTES: SwitcherRoutes = [
   },
   {
     title: 'Parameters',
-    path: PATH.TYPE_PARAMETERS,
+    path: PATH.TYPE_ICS_PARAMETERS,
   },
   {
     title: 'Claim',

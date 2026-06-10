@@ -17,7 +17,7 @@ const DVT_ROUTES: SwitcherRoutes = [
   },
   {
     title: 'Parameters',
-    path: PATH.TYPE_PARAMETERS,
+    path: PATH.TYPE_DVT_PARAMETERS,
   },
   {
     title: 'Claim',

@@ -2,7 +2,7 @@ import { FAQ_OPERATOR_TYPE } from 'faq';
 import { FC } from 'react';
 import { Faq, TypeBackButton } from 'shared/components';
 import { Layout } from 'shared/layout';
-import { DvtPageSwitcher } from 'shared/navigate';
+import { DvtPageSwitcher, Gate, TypePageSwitcher } from 'shared/navigate';
 import { ClaimIdvtc } from './claim-idvtc';
 
 export const ClaimIdvtcPage: FC = () => (
@@ -12,7 +12,9 @@ export const ClaimIdvtcPage: FC = () => (
     pageName="ClaimIdvtc"
     mainPrefix={<TypeBackButton />}
   >
-    <DvtPageSwitcher />
+    <Gate rule="ICS_APPLY_ENABLED" fallback={<TypePageSwitcher />}>
+      <DvtPageSwitcher />
+    </Gate>
     <ClaimIdvtc />
     <Faq items={FAQ_OPERATOR_TYPE} />
   </Layout>

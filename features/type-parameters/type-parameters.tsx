@@ -12,7 +12,6 @@ import { DefColumnBackground, IcsColumnBackground } from 'shared/components';
 import { IdvtcColumnBackground } from 'shared/components/parameters-list/styles';
 import { useShowFlags } from 'shared/hooks';
 
-// TODO: upgrade for idvtc
 export const TypeParameters: FC = () => {
   const { ICS_APPLY_ENABLED, CAN_CLAIM_ICS } = useShowFlags();
 

@@ -120,10 +120,13 @@ const routes: Route[] = [
     subPaths: [
       PATH.TYPE_ICS_SYSTEM,
       PATH.TYPE_ICS_APPLY,
+      PATH.TYPE_ICS_PARAMETERS,
       PATH.TYPE_ICS_CLAIM,
       PATH.TYPE_DVT_DESCRIPTION,
       PATH.TYPE_DVT_APPLY,
+      PATH.TYPE_DVT_PARAMETERS,
       PATH.TYPE_DVT_CLAIM,
+      PATH.TYPE_PARAMETERS,
     ],
     showRules: ['CAN_CLAIM_ICS', 'CAN_CLAIM_IDVTC', 'ICS_APPLY_ENABLED'],
     suffix: <CounterClaimType />,
