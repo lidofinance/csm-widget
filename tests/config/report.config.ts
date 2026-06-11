@@ -38,7 +38,6 @@ export const getReportConfig: () => ReporterDescription[] = function () {
           'GRAFANA_URL',
           'GRAFANA_API_KEY',
           'PREVIEW_STAND_PASSWORD',
-          'ARTIFACT_PASSWORD',
         ],
       },
     ],
