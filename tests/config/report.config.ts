@@ -17,7 +17,32 @@ export const getReportConfig: () => ReporterDescription[] = function () {
       reporterConfig.push(reporters.pgReporter);
     }
   }
-  return reporterConfig;
+  return [
+    [
+      '@lidofinance/secret-guard-reporter',
+      {
+        reporters: reporterConfig,
+        sensitiveEnvKeys: [
+          'RPC_URL',
+          'WALLET_SECRET_PHRASE',
+          'WALLET_PASSWORD',
+          'EMPTY_SECRET_PHRASE',
+          'EMPTY_NODE_SECRET_PHRASE',
+          'QASE_API_TOKEN',
+          'SLACK_WEBHOOK_URL',
+          'WC_PROJECT_ID',
+          'REFUSE_CF_BLOCK_VALUE',
+          'PUSHGATEWAY_URL',
+          'PUSHGATEWAY_USERNAME',
+          'PUSHGATEWAY_PASSWORD',
+          'GRAFANA_URL',
+          'GRAFANA_API_KEY',
+          'PREVIEW_STAND_PASSWORD',
+          'ARTIFACT_PASSWORD',
+        ],
+      },
+    ],
+  ];
 };
 
 export const getTestRunName = () => {
