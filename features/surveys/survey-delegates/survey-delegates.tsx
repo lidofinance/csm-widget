@@ -9,6 +9,7 @@ import { useConfirmRemoveDelegateModal } from './confirm-remove-modal';
 import { DelegateItem } from './delegate-item';
 import { AddDelegateForm } from './add-delegate-form';
 import { MAX_DELEGATES } from '../types';
+import { SurveysBackButton } from '../shared';
 
 type AddDelegateFormData = {
   address: string;
@@ -60,7 +61,7 @@ export const SurveyDelegates: FC = () => {
   );
 
   return (
-    <SectionBlock title="Manage Delegates">
+    <SectionBlock title="Manage Delegates" mainPrefix={<SurveysBackButton />}>
       <Stack direction="column" gap="lg">
         <Text size="xs" color="secondary">
           Delegates can only access and submit Setup surveys on your behalf.

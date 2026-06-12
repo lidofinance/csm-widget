@@ -15,6 +15,7 @@ import { useConfirmRemoveModal } from './confirm-remove-modal';
 import { useModalStages } from './use-modal-stages';
 import { Text } from '@lidofinance/lido-ui';
 import { Contact } from '../types';
+import { SurveysBackButton } from '../shared';
 
 export const SurveyContacts: FC = () => {
   const { data, mutate, remove } = useOperatorSurvey<Contact>('contacts');
@@ -58,7 +59,7 @@ export const SurveyContacts: FC = () => {
   }, [confirmRemove, modals, navigate, remove]);
 
   return (
-    <SectionBlock title="Contact info">
+    <SectionBlock title="Contact info" mainPrefix={<SurveysBackButton />}>
       <FormProvider {...formObject}>
         <WhenLoaded loading={formObject.formState.isLoading}>
           <Stack direction="column">

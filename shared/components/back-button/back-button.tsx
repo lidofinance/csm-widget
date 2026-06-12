@@ -4,6 +4,7 @@ import { ComponentProps, FC } from 'react';
 import { SecondaryLocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 import { StackStyle } from '../stack';
+import { useRouter } from 'next/router';
 
 type BackButtonProps = {
   href?: PATH;
@@ -15,6 +16,9 @@ export const BackButton: FC<BackButtonProps> = ({
   href = PATH.HOME,
   text = 'Back',
 }) => {
+  const { asPath } = useRouter();
+  if (asPath === href) return null;
+
   return (
     <SecondaryLocalLink href={href}>
       <Wrap>

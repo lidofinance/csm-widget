@@ -12,6 +12,7 @@ import { HowDidYouLearnCsm } from '../types';
 import { useModalStages } from './use-modal-stages';
 import { sources } from './sources';
 import { transformOutgoing } from './transform';
+import { SurveysBackButton } from '../shared';
 
 export const SurveyHowDidYouLearnCsm: FC = () => {
   const { data, mutate } = useOperatorSurvey<HowDidYouLearnCsm>(
@@ -52,7 +53,10 @@ export const SurveyHowDidYouLearnCsm: FC = () => {
   }, [formObject, sourceOne, sourceTwo]);
 
   return (
-    <SectionBlock title="How did you learn about CSM?">
+    <SectionBlock
+      title="How did you learn about CSM?"
+      mainPrefix={<SurveysBackButton />}
+    >
       <FormProvider {...formObject}>
         <WhenLoaded loading={formObject.formState.isLoading}>
           <Stack direction="column">

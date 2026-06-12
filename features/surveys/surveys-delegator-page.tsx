@@ -1,8 +1,6 @@
 import { FC } from 'react';
 import { NoSSRWrapper } from 'shared/components';
-import { BackButton } from './shared';
 import {
-  DelegatorBackButton,
   DelegatorHome,
   DelegatorSetupForm,
   DelegatorSetups,
@@ -21,34 +19,25 @@ export const SurveysDelegatorPage: FC<SurveysDelegatorPageProps> = ({
   // No operatorId means we're at the delegator home page (accessible to all)
   if (!operatorId) {
     return (
-      <>
-        <BackButton />
-        <NoSSRWrapper>
-          <DelegatorHome />
-        </NoSSRWrapper>
-      </>
+      <NoSSRWrapper>
+        <DelegatorHome />
+      </NoSSRWrapper>
     );
   }
 
   // operatorId but no setupId means we're viewing setups for an operator
   if (!setupId) {
     return (
-      <>
-        <SurveyDelegatorGate operatorId={operatorId}>
-          <DelegatorBackButton />
-          <DelegatorSetups operatorId={operatorId} />
-        </SurveyDelegatorGate>
-      </>
+      <SurveyDelegatorGate operatorId={operatorId}>
+        <DelegatorSetups operatorId={operatorId} />
+      </SurveyDelegatorGate>
     );
   }
 
   // Both operatorId and setupId means we're editing/adding a setup
   return (
-    <>
-      <SurveyDelegatorGate operatorId={operatorId}>
-        <DelegatorBackButton operatorId={operatorId} />
-        <DelegatorSetupForm operatorId={operatorId} setupId={setupId} />
-      </SurveyDelegatorGate>
-    </>
+    <SurveyDelegatorGate operatorId={operatorId}>
+      <DelegatorSetupForm operatorId={operatorId} setupId={setupId} />
+    </SurveyDelegatorGate>
   );
 };

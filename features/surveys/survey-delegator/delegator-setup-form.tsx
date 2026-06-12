@@ -38,6 +38,7 @@ import { SurveyButton } from '../components';
 import { Button } from '@lidofinance/lido-ui';
 import { Setup, SetupRaw, SetupsKeys } from '../types';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { DelegatorBackButton } from './back-button';
 
 const required = { required: true };
 
@@ -142,7 +143,10 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
   }, [formObject, keysLeft]);
 
   return (
-    <SectionBlock title={isEditMode ? `Setup #${data?.index}` : 'Add Setup'}>
+    <SectionBlock
+      title={isEditMode ? `Setup #${data?.index}` : 'Add Setup'}
+      mainPrefix={<DelegatorBackButton operatorId={operatorId} />}
+    >
       <FormProvider {...formObject}>
         <WhenLoaded loading={formObject.formState.isLoading} error={error}>
           <Stack direction="column">

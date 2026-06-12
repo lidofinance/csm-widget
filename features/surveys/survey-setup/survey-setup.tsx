@@ -37,6 +37,7 @@ import { Setup, SetupRaw, SetupsKeys } from '../types';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useSurveysFilled } from 'shared/hooks';
 import { useNodeOperatorId } from 'modules/web3';
+import { SurveysBackButton } from '../shared';
 
 const required = { required: true };
 
@@ -122,7 +123,10 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
   }, [formObject, keysLeft]);
 
   return (
-    <SectionBlock title={id ? `Setup #${data?.index}` : 'Add Setup'}>
+    <SectionBlock
+      title={id ? `Setup #${data?.index}` : 'Add Setup'}
+      mainPrefix={<SurveysBackButton />}
+    >
       <FormProvider {...formObject}>
         <WhenLoaded loading={formObject.formState.isLoading} error={error}>
           <Stack direction="column">

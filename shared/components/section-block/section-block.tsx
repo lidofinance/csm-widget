@@ -1,5 +1,5 @@
 import { Block } from '@lidofinance/lido-ui';
-import { ComponentProps } from 'react';
+import { ComponentProps, ReactNode } from 'react';
 import { Component } from 'types';
 import { SectionContentStyle, SectionStyle } from './styles';
 
@@ -9,7 +9,9 @@ import { SectionHeaderLink } from '../section-header-link';
 type SectionComponent = Component<
   'section',
   Omit<ComponentProps<typeof SectionTitle>, 'children'> &
-    Pick<ComponentProps<typeof SectionHeaderLink>, 'href' | 'matomoEvent'>
+    Pick<ComponentProps<typeof SectionHeaderLink>, 'href' | 'matomoEvent'> & {
+      mainPrefix?: ReactNode;
+    }
 >;
 
 export const SectionBlock: SectionComponent = ({
@@ -18,10 +20,12 @@ export const SectionBlock: SectionComponent = ({
   matomoEvent,
   middle,
   children,
+  mainPrefix,
   ...rest
 }) => (
   <Block>
     <SectionStyle {...rest}>
+      {mainPrefix}
       <SectionTitle
         middle={middle}
         extra={

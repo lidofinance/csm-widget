@@ -40,13 +40,13 @@ export const useDelegates = () => {
     },
   );
 
-  const addMutation = useSurveysMutation<
-    DelegatesResponse,
-    { delegates: Delegate[] }
-  >(() => endpoints.delegates(requireKey()), {
-    mutationKey: ['surveys-delegates-add', operatorKey],
-    invalidate,
-  });
+  const addMutation = useSurveysMutation<Delegate, Delegate>(
+    () => endpoints.delegates(requireKey()),
+    {
+      mutationKey: ['surveys-delegates-add', operatorKey],
+      invalidate,
+    },
+  );
 
   const removeMutation = useSurveysMutation<unknown, string>(
     (address) => endpoints.delegate(requireKey(), address),
@@ -58,7 +58,7 @@ export const useDelegates = () => {
   );
 
   const add = useCallback(
-    (address: string) => addMutation.mutateAsync({ delegates: [{ address }] }),
+    (address: string) => addMutation.mutateAsync({ address }),
     [addMutation],
   );
 

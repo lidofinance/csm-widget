@@ -6,6 +6,7 @@ import { formatDaysAgo } from 'utils';
 import { SurveyItem, SurveyLink, SurveySection, Warning } from '../components';
 import { parseOperatorKey, useOperatorSurvey } from 'modules/surveys-sdk';
 import { SetupRaw, SetupsKeys } from '../types';
+import { DelegatorBackButton } from './back-button';
 
 type DelegatorSetupsProps = {
   operatorId: string;
@@ -29,6 +30,7 @@ export const DelegatorSetups: FC<DelegatorSetupsProps> = ({ operatorId }) => {
         title={`Setups for ${operatorId}`}
         subtitle="How this information will be used"
         help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports"
+        mainPrefix={<DelegatorBackButton />}
       >
         {!showSetups ? (
           <Text size="sm" color="secondary">

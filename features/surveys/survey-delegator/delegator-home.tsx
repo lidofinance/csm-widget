@@ -4,6 +4,7 @@ import { FC } from 'react';
 import { Stack, WhenLoaded } from 'shared/components';
 import { SurveyItem, SurveyLink, SurveySection } from '../components';
 import { useSurveyContext } from '../surveys-provider';
+import { SurveysBackButton } from '../shared';
 
 export const DelegatorHome: FC = () => {
   const { delegatedOperators, isLoading } = useSurveyContext();
@@ -14,6 +15,7 @@ export const DelegatorHome: FC = () => {
         title="Delegated operators"
         subtitle="How delegation works"
         help="As a delegate, you can access and submit Setup surveys on behalf of node operators who have added you as their delegate."
+        mainPrefix={<SurveysBackButton />}
       >
         {delegatedOperators?.length === 0 ? (
           <Text size="sm" color="secondary">

@@ -16,6 +16,7 @@ import {
   transformOutgoing,
 } from './transform';
 import { useModalStages } from './use-modal-stages';
+import { SurveysBackButton } from '../shared';
 
 export const SurveyExperience: FC = () => {
   const { data, mutate } = useOperatorSurvey<ExperienceForm, Experience>(
@@ -49,7 +50,10 @@ export const SurveyExperience: FC = () => {
   );
 
   return (
-    <SectionBlock title="Your validation experience">
+    <SectionBlock
+      title="Your validation experience"
+      mainPrefix={<SurveysBackButton />}
+    >
       <FormProvider {...formObject}>
         <WhenLoaded loading={formObject.formState.isLoading}>
           <Stack direction="column">
