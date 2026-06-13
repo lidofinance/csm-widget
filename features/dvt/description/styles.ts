@@ -70,11 +70,11 @@ export const StepContent = styled.div`
 
 export const CriteriaAccordionStyle = styled(AccordionNavigatable)`
   margin: 0;
-  & > [type='button'] {
+  & > [role='button'] {
     padding: 0;
     min-height: 24px;
   }
-  & > [type='button'] + div > div {
+  & > [role='region'] > div {
     padding: 4px 0 0;
   }
 
