@@ -20,4 +20,7 @@ export type SiweAuthContextType = {
   token?: string;
   signIn: () => Promise<void>;
   logout: () => void;
+  // Decide auth recovery from the API error code: re-run signin on expiry,
+  // hard-logout on tamper/missing.
+  handleAuthError: (code?: string) => void;
 };

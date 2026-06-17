@@ -85,9 +85,24 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
     setToken(undefined);
   }, [setToken]);
 
+  const handleAuthError = useCallback(
+    (code?: string) => {
+      // Expired session: token is stale but the address is still valid — re-run
+      // the SIWE handshake in place. There is no refresh endpoint, so this
+      // prompts a fresh signature; queries refetch once the new token lands.
+      if (code === 'AUTH_JWT_EXPIRED') {
+        void signIn();
+        return;
+      }
+      // Tampered / not-yet-valid / missing — clear the token; do not auto-retry.
+      logout();
+    },
+    [signIn, logout],
+  );
+
   const value = useMemo(
-    () => ({ token, signIn, logout }),
-    [logout, signIn, token],
+    () => ({ token, signIn, logout, handleAuthError }),
+    [handleAuthError, logout, signIn, token],
   );
 
   return (

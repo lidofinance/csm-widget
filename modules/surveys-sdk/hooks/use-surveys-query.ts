@@ -24,7 +24,7 @@ export const useSurveysQuery = <T, S = T>(
   path: string,
   opts: UseSurveysQueryOptions<T, S> = {},
 ): UseQueryResult<S> => {
-  const { token, logout } = useSiweAuth();
+  const { token, handleAuthError } = useSiweAuth();
   const { address } = useDappStatus();
 
   const queryKey = useMemo<readonly unknown[]>(
@@ -38,7 +38,7 @@ export const useSurveysQuery = <T, S = T>(
   return useQuery<T, Error, S>({
     queryKey,
     queryFn: ({ signal }) =>
-      surveysGet<T>(path, { token, onAuthError: logout, signal }),
+      surveysGet<T>(path, { token, onAuthError: handleAuthError, signal }),
     enabled,
     select: opts.select,
     ...strategy,

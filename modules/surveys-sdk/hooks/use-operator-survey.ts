@@ -20,7 +20,7 @@ export const useOperatorSurvey = <T, R = T>(
   path: string,
   opts: UseOperatorSurveyOptions<T, R> = {},
 ) => {
-  const { token, logout } = useSiweAuth();
+  const { token, handleAuthError } = useSiweAuth();
   const queryClient = useQueryClient();
   const connectedKey = useOperatorKey();
   const effectiveKey = opts.operatorKey ?? connectedKey;
@@ -47,7 +47,7 @@ export const useOperatorSurvey = <T, R = T>(
     queryFn: async ({ signal }) => {
       const res = await surveysGet<R>(requireUrl(), {
         token,
-        onAuthError: logout,
+        onAuthError: handleAuthError,
         signal,
       });
       return res && transformIncoming
@@ -63,7 +63,7 @@ export const useOperatorSurvey = <T, R = T>(
       const payload = transformOutgoing ? transformOutgoing(data) : data;
       const res = await surveysPost<R, unknown>(requireUrl(), payload, {
         token,
-        onAuthError: logout,
+        onAuthError: handleAuthError,
       });
       return res && transformIncoming
         ? transformIncoming(res)
@@ -85,7 +85,10 @@ export const useOperatorSurvey = <T, R = T>(
 
   const deleteMutation = useMutation({
     mutationFn: async (): Promise<void> => {
-      await surveysDelete(requireUrl(), { token, onAuthError: logout });
+      await surveysDelete(requireUrl(), {
+        token,
+        onAuthError: handleAuthError,
+      });
     },
     onSuccess: () => {
       if (effectiveKey) {

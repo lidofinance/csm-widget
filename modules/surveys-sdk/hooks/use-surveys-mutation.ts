@@ -19,7 +19,7 @@ export const useSurveysMutation = <T = unknown, B = unknown>(
   path: string | ((vars: B) => string),
   opts: UseSurveysMutationOptions<T, B> = {},
 ): UseMutationResult<T, Error, B> => {
-  const { token, logout } = useSiweAuth();
+  const { token, handleAuthError } = useSiweAuth();
   const queryClient = useQueryClient();
   const method = opts.method ?? 'POST';
 
@@ -28,7 +28,7 @@ export const useSurveysMutation = <T = unknown, B = unknown>(
     mutationFn: async (vars: B) => {
       const resolvedPath = typeof path === 'function' ? path(vars) : path;
       invariant(resolvedPath, 'useSurveysMutation: path is empty');
-      const fetchOpts = { token, onAuthError: logout };
+      const fetchOpts = { token, onAuthError: handleAuthError };
       if (method === 'DELETE') {
         return surveysDelete<T>(resolvedPath, fetchOpts);
       }
