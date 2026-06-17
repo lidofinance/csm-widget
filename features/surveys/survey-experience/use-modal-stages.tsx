@@ -23,7 +23,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
       />,
     ),
 
-  failed: getFailedStage(transitStage, 'Sign in failed'),
+  failed: getFailedStage(transitStage, 'Submission failed'),
 });
 
 export const useModalStages = () => useTransactionModalStage(getModalStages);

@@ -18,7 +18,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
   success: () =>
     transitStage(<TxStageSuccess title="Form submitted" description="" />),
 
-  failed: getFailedStage(transitStage, 'Sign in failed'),
+  failed: getFailedStage(transitStage, 'Submission failed'),
 });
 
 export const useModalStages = () => useTransactionModalStage(getModalStages);

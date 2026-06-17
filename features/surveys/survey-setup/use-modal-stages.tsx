@@ -28,7 +28,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
   successRemove: () =>
     transitStage(<TxStageSuccess title="Setup deleted" description="" />),
 
-  failed: getFailedStage(transitStage, 'Sign in failed'),
+  failed: getFailedStage(transitStage, 'Submission failed'),
 });
 
 export const useModalStages = () => useTransactionModalStage(getModalStages);

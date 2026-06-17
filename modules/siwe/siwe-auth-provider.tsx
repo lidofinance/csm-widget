@@ -54,7 +54,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
     try {
       ({ nonce } = await getNonce());
     } catch (err) {
-      modalStages.failed((err as Error).message);
+      modalStages.failed(err);
       return;
     }
 
@@ -68,7 +68,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
         trackMatomoSiweEvent('success');
         closeModal();
       } catch (err) {
-        modalStages.failed((err as Error).message);
+        modalStages.failed(err);
       }
     } catch (_e) {
       modalStages.rejected();
