@@ -1,6 +1,6 @@
 module.exports = {
   transform: {
-    '^.+\\.(t|j)sx?$': 'ts-jest',
+    '^.+\\.(t|j)sx?$': ['ts-jest', { tsconfig: { jsx: 'react-jsx' } }],
   },
   moduleDirectories: ['node_modules', '<rootDir>'],
   modulePathIgnorePatterns: ['./test'],
