@@ -32,13 +32,17 @@ export const useOperatorSurvey = <T, R = T>(
 
   const url = effectiveKey ? `${effectiveKey}/${path}` : undefined;
 
-  const queryKey = useMemo<readonly unknown[]>(
-    () =>
-      effectiveKey
-        ? surveysKeys.path(effectiveKey, path)
-        : surveysKeys.pending(path),
-    [effectiveKey, path],
-  );
+  // Append the token as the LAST key segment so a re-auth (AUTH_JWT_EXPIRED →
+  // signIn sets a new token VALUE, same key/path) produces a new key and React
+  // Query refetches — there is no refresh endpoint to retry the errored query in
+  // place. Trailing position preserves prefix-based invalidation (summary /
+  // operator invalidations by the authPath prefix still match).
+  const queryKey = useMemo<readonly unknown[]>(() => {
+    const base = effectiveKey
+      ? surveysKeys.path(effectiveKey, path)
+      : surveysKeys.pending(path);
+    return token ? [...base, token] : base;
+  }, [effectiveKey, path, token]);
 
   const { transformIncoming, transformOutgoing, invalidateOnMutate } = opts;
 

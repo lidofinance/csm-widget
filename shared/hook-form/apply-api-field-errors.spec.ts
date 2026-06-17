@@ -2,7 +2,7 @@ import { SurveysApiError } from 'modules/surveys-sdk/api/errors';
 import { applyApiFieldErrors } from './apply-api-field-errors';
 
 describe('applyApiFieldErrors', () => {
-  it('calls setError for each detail field, returns true when applied', () => {
+  it('calls setError per field, returns true when every detail has a field', () => {
     const setError = jest.fn();
     const err = new SurveysApiError({
       message: 'Validation failed',
@@ -14,7 +14,6 @@ describe('applyApiFieldErrors', () => {
         details: [
           { field: 'items[0].signature', message: 'must be a string' },
           { field: 'name', message: 'required' },
-          { message: 'no field — skipped' },
         ],
       },
     });
@@ -28,7 +27,33 @@ describe('applyApiFieldErrors', () => {
       type: 'server',
       message: 'required',
     });
-    expect(setError).toHaveBeenCalledTimes(2); // detail without `field` skipped
+    expect(setError).toHaveBeenCalledTimes(2);
+  });
+
+  it('applies field errors but returns false when a detail lacks a field', () => {
+    const setError = jest.fn();
+    const err = new SurveysApiError({
+      message: 'Validation failed',
+      status: 400,
+      url: '/x',
+      body: {
+        code: 'VALIDATION_FAILED',
+        message: 'Validation failed',
+        details: [
+          { field: 'items[0].signature', message: 'must be a string' },
+          { message: 'no field — general message' },
+        ],
+      },
+    });
+    const applied = applyApiFieldErrors(err, setError as any);
+    // Suppressing the modal would drop the fieldless message, so show it.
+    expect(applied).toBe(false);
+    // Field detail still gets surfaced inline.
+    expect(setError).toHaveBeenCalledWith('items[0].signature', {
+      type: 'server',
+      message: 'must be a string',
+    });
+    expect(setError).toHaveBeenCalledTimes(1);
   });
 
   it('returns false for non-validation errors', () => {
