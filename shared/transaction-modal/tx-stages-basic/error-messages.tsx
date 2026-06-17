@@ -22,5 +22,22 @@ export const ErrorMessages: Record<ErrorCode, ReactNode> = {
       Try to change RPC url in your wallet.
     </>
   ),
-  [ErrorCode.REQUEST_TIMEOUT]: 'The request timed out. Please try again.',
+  [ErrorCode.BUNDLE_NOT_FOUND]:
+    'Could not locate the transaction. Please check your wallet for details.',
+  [ErrorCode.NETWORK_ERROR]:
+    'Network request failed, please check your connection',
+  [ErrorCode.CHAIN_MISMATCH]:
+    'Your wallet is connected to the wrong network. Switch to the correct network and try again.',
+  [ErrorCode.CONTRACT_ERROR]:
+    'The transaction cannot be completed. Please review the details and try again.',
+  [ErrorCode.EXECUTION_REVERTED]:
+    'The transaction would fail and was not sent. Please review the details and try again.',
+  [ErrorCode.DECODE_RESULT_ERROR]:
+    'Your transaction was confirmed on-chain, but the app could not read the result. Refresh to see the latest state.',
+  [ErrorCode.SESSION_EXPIRED]:
+    'Your session has expired. Please sign in again to continue.',
+  [ErrorCode.TOO_MANY_REQUESTS]:
+    'Too many requests. Please wait a moment and try again.',
+  [ErrorCode.SERVER_ERROR]:
+    'The server is temporarily unavailable. Please try again later.',
 };
