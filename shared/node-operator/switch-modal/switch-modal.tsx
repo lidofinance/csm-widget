@@ -2,6 +2,7 @@ import { ButtonIcon, Modal } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
 import {
+  MODULE_NAME,
   NodeOperatorId,
   NodeOperatorShortInfo,
   ROLES,
@@ -9,6 +10,7 @@ import {
 import { Plus } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import { isModuleCM } from 'consts/module';
+import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { Stack } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
@@ -19,13 +21,13 @@ import { StyledStack, StyledStackItem } from './styles';
 
 export const SwitchModal: ModalComponentType<{
   active: NodeOperatorShortInfo;
-  list: NodeOperatorShortInfo[];
+  list: ModuleNodeOperator[];
   canCreate: boolean;
-  onChange: (id: NodeOperatorId) => void;
+  onChange: (id: NodeOperatorId, module: MODULE_NAME) => void;
 }> = ({ onClose, active, list, onChange, canCreate, ...props }) => {
   const handleSwitch = useCallback(
-    (id: NodeOperatorId) => {
-      onChange(id);
+    (id: NodeOperatorId, module: MODULE_NAME) => {
+      onChange(id, module);
       onClose?.();
     },
     [onChange, onClose],
@@ -40,7 +42,7 @@ export const SwitchModal: ModalComponentType<{
           <Stack direction="column" gap="sm">
             {list.map((item) => (
               <OperatorRow
-                key={String(item.nodeOperatorId)}
+                key={`${String(item.nodeOperatorId)}-${item.module}`}
                 nodeOperatorId={item.nodeOperatorId}
                 shortInfo={item}
                 action={

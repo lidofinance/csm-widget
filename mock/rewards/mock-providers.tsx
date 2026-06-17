@@ -40,6 +40,7 @@ export const MockRewardsHistoryProvider: FC<
     nodeOperator: {
       id: BigInt(scenario.nodeOperatorId),
     } as any,
+    activeModule: undefined,
     switchNodeOperator: () => {},
   };
 

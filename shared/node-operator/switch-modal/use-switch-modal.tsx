@@ -1,4 +1,4 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { MATOMO_CLICK_EVENTS_TYPES, PATH } from 'consts';
 import { useAvailableOperators, useNodeOperator } from 'modules/web3';
 import { getUseModal } from 'providers/modal-provider';
@@ -15,9 +15,9 @@ export const useOpenOperatorSwitchModal = (path?: PATH) => {
   const navigate = useNavigate();
 
   const handleSwitchOperator = useCallback(
-    (id: NodeOperatorId) => {
+    (id: NodeOperatorId, module: MODULE_NAME) => {
       trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.switchNodeOperator);
-      switchNodeOperator(id);
+      switchNodeOperator(id, module);
       path && void navigate(path);
     },
     [navigate, path, switchNodeOperator],
