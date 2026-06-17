@@ -111,8 +111,14 @@ export const classifyErrorCode = (error: unknown): ErrorCode => {
   if (api) return api;
 
   const decoded = getDecodedRevert(error);
-  const sdkCode =
-    error instanceof SDKError ? error.code : classifyError(error, decoded);
+  // When decodedRevert is present, classifyError returns CONTRACT_REVERT
+  // unconditionally — prefer that over error.code which may be UNKNOWN_ERROR
+  // (set by SDKError constructor when no explicit code is provided).
+  const sdkCode = decoded
+    ? classifyError(error, decoded)
+    : error instanceof SDKError
+      ? error.code
+      : classifyError(error, undefined);
 
   if (sdkCode) {
     const widget = SDK_TO_WIDGET[sdkCode];
