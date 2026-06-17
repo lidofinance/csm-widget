@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
 import {
-  TxStageFail,
   TxStagePending,
   TxStageSuccess,
   useTransitStage,
 } from 'shared/transaction-modal';
-import { extractErrorMessage, getErrorCode } from 'utils';
+import { getFailedStage } from 'shared/transaction-modal/hooks';
 
 export const useModalStages = () => {
   const transitStage = useTransitStage();
@@ -28,37 +27,9 @@ export const useModalStages = () => {
           />,
         ),
 
-      failed: (error: unknown) => {
-        let errorContent;
-
-        if (typeof error === 'object' && error !== null && 'details' in error) {
-          const errorObj = error as { message: string; details: string[] };
-          errorContent = (
-            <>
-              <span>{errorObj.message}</span>
-              <br />
-              {errorObj.details.length > 0 && (
-                <ul>
-                  {errorObj.details.map((detail, index) => (
-                    <li key={index}>{detail}</li>
-                  ))}
-                </ul>
-              )}
-            </>
-          );
-        } else {
-          errorContent = extractErrorMessage(error);
-        }
-
-        return transitStage(
-          <TxStageFail
-            title="Submission failed"
-            error={errorContent}
-            code={getErrorCode(error)}
-          />,
-          { isClosableOnLedger: true },
-        );
-      },
+      failed: getFailedStage(transitStage, 'Submission failed', {
+        isClosableOnLedger: true,
+      }),
     }),
     [transitStage],
   );

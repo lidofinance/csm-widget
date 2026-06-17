@@ -1,10 +1,12 @@
 import { DvtApplyDto, DvtResponseDto, useDvtState } from 'features/dvt/shared';
 import { endpoints, useSurveysMutation } from 'modules/surveys-sdk';
 import { useCallback } from 'react';
+import { useFormContext } from 'react-hook-form';
 import type {
   Executable,
   FlowResolver,
 } from 'shared/hook-form/form-controller';
+import { applyApiFieldErrors } from 'shared/hook-form';
 import type { DvtApplyFormInputType, DvtApplyFormNetworkData } from './types';
 import { useModalStages } from './use-modal-stages';
 
@@ -32,6 +34,7 @@ export const useApplyFlowResolver = (
 ): FlowResolver<DvtApplyFormInputType, DvtApplyFormNetworkData, ApplyFlow> => {
   const { txModalStages: stages } = useModalStages();
   const { reset } = useDvtState();
+  const { setError } = useFormContext<DvtApplyFormInputType>();
   const mutation = useSurveysMutation<DvtResponseDto, DvtApplyDto>(
     endpoints.dvtApply,
     { mutationKey: ['dvt-apply'] },
@@ -50,28 +53,14 @@ export const useApplyFlowResolver = (
           reset(false);
           clearPersistedForm?.();
           stages.success();
-        } catch (error: any) {
-          let errorMessage = 'Something went wrong';
-          let errorDetails: string[] = [];
-
-          if (error?.response?.data?.message) {
-            const messages = error.response.data.message;
-            if (Array.isArray(messages)) {
-              errorDetails = messages;
-              errorMessage = `Validation failed: ${messages.length} error${messages.length > 1 ? 's' : ''}`;
-            } else if (typeof messages === 'string') {
-              errorMessage = messages;
-            }
-          } else if (error?.message) {
-            errorMessage = error.message;
-          }
-
+        } catch (error) {
           window.scrollTo({ top: 0 });
-          stages.failed({ message: errorMessage, details: errorDetails });
+          const handledInline = applyApiFieldErrors(error, setError);
+          if (!handledInline) stages.failed(error);
           throw error;
         }
       },
     }),
-    [clearPersistedForm, mutation, reset, stages],
+    [clearPersistedForm, mutation, reset, setError, stages],
   );
 };
