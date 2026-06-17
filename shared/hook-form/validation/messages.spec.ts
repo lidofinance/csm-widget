@@ -43,7 +43,6 @@ describe('VALIDATION_MESSAGES static strings', () => {
       'discordLinkRequired',
       'mustBeValidDiscordUrl',
       'mustConfirmApplication',
-      'maxAdditionalAddresses',
       'additionalAddressCannotBeMain',
       'mustBeValidTwitterUrl',
       'stakeLimitEthDeposits',

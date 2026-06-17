@@ -75,7 +75,6 @@ export const VALIDATION_MESSAGES = {
   discordLinkRequired: 'Discord message link is required',
   mustBeValidDiscordUrl: 'Must be a valid Discord message URL',
   mustConfirmApplication: 'You must confirm the application',
-  maxAdditionalAddresses: 'Maximum 5 additional addresses allowed',
   additionalAddressCannotBeMain:
     'Additional address cannot be the same as main address',
   mustBeValidTwitterUrl: 'Must be a valid Twitter/X status URL',
