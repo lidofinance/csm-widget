@@ -11,6 +11,7 @@ import { FetcherError } from 'utils/fetcher-error';
 import { standardFetcher } from 'utils/standard-fetcher';
 import { endpoints } from './endpoints';
 import { SurveysApiError } from './errors';
+import { getApiErrorCode } from './api-error';
 import type { SurveysFetchOptions } from './types';
 import { appendQuery, joinUrl } from './url';
 
@@ -54,8 +55,7 @@ const surveysRequest = async <T>(
   } catch (err) {
     if (err instanceof FetcherError) {
       if (opts.token && (err.status === 401 || err.status === 403)) {
-        const apiError = err.body as { code?: string } | undefined;
-        opts.onAuthError?.(apiError?.code);
+        opts.onAuthError?.(getApiErrorCode(err.body));
       }
       throw new SurveysApiError({
         message: err.message,

@@ -16,7 +16,7 @@ import {
   surveysPost,
   surveysSignin,
 } from '../surveys-api';
-import { SurveysApiError, isAuthError } from '../errors';
+import { SurveysApiError, isAuthError, authErrorKind } from '../errors';
 
 const mockFetch = (status: number, body?: unknown): jest.Mock => {
   const json = jest.fn().mockResolvedValue(body ?? { ok: true });
@@ -144,6 +144,20 @@ describe('surveys-api', () => {
       surveysGet('me', { token: 'tok', onAuthError }),
     ).rejects.toBeInstanceOf(SurveysApiError);
     expect(onAuthError).toHaveBeenCalledTimes(1);
+    expect(onAuthError).toHaveBeenCalledWith(undefined);
+  });
+
+  it('forwards the envelope code to onAuthError when body has code', async () => {
+    (global as unknown as { fetch: jest.Mock }).fetch = mockFetch(401, {
+      code: 'AUTH_JWT_EXPIRED',
+      message: 'Token expired',
+    });
+    const onAuthError = jest.fn();
+
+    await expect(
+      surveysGet('me', { token: 'tok', onAuthError }),
+    ).rejects.toBeInstanceOf(SurveysApiError);
+    expect(onAuthError).toHaveBeenCalledWith('AUTH_JWT_EXPIRED');
   });
 
   it('invokes onAuthError on 403', async () => {
@@ -190,7 +204,10 @@ describe('SurveysApiError envelope', () => {
       },
     });
     expect(err.code).toBe('VALIDATION_FAILED');
-    expect(err.details?.[0].field).toBe('name');
+    expect(err.details).toHaveLength(1);
+    expect(err.details).toEqual([
+      { field: 'name', message: 'required', code: undefined },
+    ]);
   });
 });
 
@@ -215,5 +232,43 @@ describe('isAuthError', () => {
   it('returns false for non-errors', () => {
     expect(isAuthError(new Error('plain'))).toBe(false);
     expect(isAuthError(null)).toBe(false);
+  });
+});
+
+describe('authErrorKind', () => {
+  const makeEnvelopeError = (code: string, status = 401) =>
+    new SurveysApiError({
+      message: 'auth error',
+      status,
+      url: 'u',
+      body: { code, message: 'auth error' },
+    });
+
+  it('returns reauth for AUTH_JWT_EXPIRED', () => {
+    expect(authErrorKind(makeEnvelopeError('AUTH_JWT_EXPIRED'))).toBe('reauth');
+  });
+
+  it('returns logout for AUTH_JWT_INVALID', () => {
+    expect(authErrorKind(makeEnvelopeError('AUTH_JWT_INVALID'))).toBe('logout');
+  });
+
+  it('returns logout for AUTH_JWT_MISSING', () => {
+    expect(authErrorKind(makeEnvelopeError('AUTH_JWT_MISSING'))).toBe('logout');
+  });
+
+  it('returns logout for 401 with no envelope code (status fallback)', () => {
+    expect(
+      authErrorKind(
+        new SurveysApiError({ message: 'x', status: 401, url: 'u' }),
+      ),
+    ).toBe('logout');
+  });
+
+  it('returns undefined for non-auth status (500)', () => {
+    expect(
+      authErrorKind(
+        new SurveysApiError({ message: 'x', status: 500, url: 'u' }),
+      ),
+    ).toBeUndefined();
   });
 });

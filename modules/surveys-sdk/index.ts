@@ -8,7 +8,8 @@ export {
 export { SurveysAuthProvider } from './surveys-auth-provider';
 export { operatorKey, parseOperatorKey } from './api/url';
 export { endpoints } from './api/endpoints';
-export { SurveysApiError, isAuthError } from './api/errors';
+export { SurveysApiError, isAuthError, authErrorKind } from './api/errors';
+export type { AuthErrorKind } from './api/errors';
 export type { OperatorKey, SurveysFetchOptions } from './api/types';
 export type { ApiError, ApiErrorDetail } from './api/api-error';
 export {
