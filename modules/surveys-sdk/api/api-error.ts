@@ -24,7 +24,7 @@ export const parseApiError = (body: unknown): ApiError | undefined => {
     return undefined;
   const out: ApiError = { code: body.code, message: body.message };
   if (Array.isArray(body.details)) {
-    out.details = body.details
+    const filtered = body.details
       .filter(isRecord)
       .filter((d) => typeof d.message === 'string')
       .map((d) => ({
@@ -32,6 +32,7 @@ export const parseApiError = (body: unknown): ApiError | undefined => {
         code: typeof d.code === 'string' ? d.code : undefined,
         message: d.message as string,
       }));
+    if (filtered.length > 0) out.details = filtered;
   }
   return out;
 };
@@ -40,4 +41,4 @@ export const getApiErrorCode = (e: unknown): string | undefined =>
   isRecord(e) && typeof e.code === 'string' ? e.code : undefined;
 
 export const isValidationError = (e: unknown): e is ApiError =>
-  getApiErrorCode(e) === 'VALIDATION_FAILED';
+  parseApiError(e)?.code === 'VALIDATION_FAILED';
