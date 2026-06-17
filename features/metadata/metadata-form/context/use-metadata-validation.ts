@@ -2,8 +2,8 @@ import {
   useFormValidation,
   validateLength,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
-import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import type { MetadataFormInputType, MetadataFormNetworkData } from './types';
 
 export const useMetadataValidation = () => {

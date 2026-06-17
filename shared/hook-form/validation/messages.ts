@@ -25,8 +25,8 @@ export const VALIDATION_MESSAGES = {
   noKeysSelected: 'No keys selected',
 
   // Address fields (submit-keys form)
-  specifyValidRewardsAddress: 'Specify valid Rewards Address',
-  specifyValidManagerAddress: 'Specify valid Manager Address',
+  specifyValidRewardsAddress: 'Specify a valid Rewards Address',
+  specifyValidManagerAddress: 'Specify a valid Manager Address',
 
   // Curated operator type
   selectOperatorType: 'Please select Operator Type',
@@ -53,9 +53,9 @@ export const VALIDATION_MESSAGES = {
   duplicateAddress: 'Duplicate address',
 
   // Claim type
-  proofNotProvided: 'proof is not provided',
-  claimAlreadyConsumed: 'claim has already been consumed',
-  onlyOwnerCanClaimType: 'only owner can claim type',
+  proofNotProvided: 'Proof is not provided',
+  claimAlreadyConsumed: 'Claim has already been consumed',
+  onlyOwnerCanClaimType: 'Only owner can claim type',
   icsPaused: 'ICS is paused',
   idvtcPaused: 'IDVTC is paused',
 

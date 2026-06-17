@@ -6,8 +6,8 @@ import {
   validateBondAmount,
   validateDepositData,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
-import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import { isAddress } from 'viem';
 import type {
   SubmitKeysFormInputType,

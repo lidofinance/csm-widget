@@ -3,8 +3,8 @@ import {
   validateAddress,
   validateLength,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
-import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import type {
   CuratedOperatorFormInputType,
   CuratedOperatorFormNetworkData,

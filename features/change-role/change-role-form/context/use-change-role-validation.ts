@@ -2,8 +2,8 @@ import { ROLES } from '@lidofinance/lido-csm-sdk';
 import {
   useFormValidation,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
-import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import { useChangeRoleMode } from 'shared/hooks';
 import { compareLowercase } from 'utils';
 import { isAddress } from 'viem';

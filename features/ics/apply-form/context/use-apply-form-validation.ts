@@ -1,8 +1,9 @@
 import {
   useFormValidation,
   ValidationError,
+  VALIDATION_MESSAGES,
+  validationMessage,
 } from 'shared/hook-form/validation';
-import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import { isAddress, isAddressEqual, isHex } from 'viem';
 import { useApplyFormData } from './apply-data-provider';
 import { MAX_ADDITIONAL_ADDRESSES } from './consts';
@@ -27,7 +28,9 @@ export const useApplyFormValidation = () => {
         if (additionalAddresses.length > MAX_ADDITIONAL_ADDRESSES) {
           throw new ValidationError(
             'additionalAddresses.4.address',
-            VALIDATION_MESSAGES.maxAdditionalAddresses,
+            validationMessage.maxAdditionalAddressesDynamic(
+              MAX_ADDITIONAL_ADDRESSES,
+            ),
           );
         }
       });

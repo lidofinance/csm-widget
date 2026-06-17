@@ -1,8 +1,10 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
-import { ValidationError } from 'shared/hook-form/validation';
-import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
+import {
+  ValidationError,
+  VALIDATION_MESSAGES,
+} from 'shared/hook-form/validation';
 import invariant from 'tiny-invariant';
 import { Address } from 'viem';
 

@@ -3,11 +3,9 @@ import {
   validateAddress,
   validatePercentShare,
   ValidationError,
-} from 'shared/hook-form/validation';
-import {
   VALIDATION_MESSAGES,
   validationMessage,
-} from 'shared/hook-form/validation/messages';
+} from 'shared/hook-form/validation';
 import { compareLowercase } from 'utils';
 import type { SplitsFormInputType, SplitsFormNetworkData } from './types';
 import {

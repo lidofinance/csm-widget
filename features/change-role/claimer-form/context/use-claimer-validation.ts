@@ -1,8 +1,8 @@
 import {
   useFormValidation,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
-import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import { compareLowercase } from 'utils';
 import { isAddress } from 'viem';
 import type { ClaimerFormInputType, ClaimerFormNetworkData } from './types';
