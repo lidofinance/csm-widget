@@ -8,6 +8,34 @@ import { extractReason, findInErrorTree } from './error-tree';
 import { FetcherError } from './fetcher-error';
 import { trackMatomoError } from './track-matomo-event';
 
+// Structural guard for SurveysApiError — avoids importing modules/surveys-sdk
+// which transitively loads Next.js runtime config (breaks Jest unit tests).
+// We check by name and read the typed fields structurally.
+type SurveysApiErrorLike = {
+  name: 'SurveysApiError';
+  status: number;
+  code?: string;
+  apiError?: { code?: string };
+};
+
+const isSurveysApiError = (err: unknown): err is SurveysApiErrorLike =>
+  typeof err === 'object' &&
+  err !== null &&
+  (err as Record<string, unknown>).name === 'SurveysApiError';
+
+// Classify the JWT auth kind from a SurveysApiError-like object.
+// Mirrors authErrorKind from modules/surveys-sdk/api/errors.ts.
+const surveyAuthKind = (
+  err: SurveysApiErrorLike,
+): 'reauth' | 'logout' | undefined => {
+  const code = err.apiError?.code ?? err.code;
+  if (code === 'AUTH_JWT_EXPIRED') return 'reauth';
+  if (code === 'AUTH_JWT_INVALID' || code === 'AUTH_JWT_MISSING')
+    return 'logout';
+  if (err.status === 401 || err.status === 403) return 'logout';
+  return undefined;
+};
+
 // Widget UX taxonomy: what affordance/copy to show. Derived from the SDK's
 // classification (ERROR_CODE) — NOT a duplicate of it. Includes widget-only
 // buckets for API/session (Phase 2) and vendor (Ledger) conditions the SDK
@@ -90,14 +118,25 @@ const detectVendor = (error: unknown): ErrorCode | undefined => {
     : ErrorCode.ENABLE_BLIND_SIGNING;
 };
 
-// API/session classification. Phase 2 replaces this body with envelope-`code`
-// branching; for now it keys off HTTP status carried by FetcherError.
+// API/session classification. Branches on the typed envelope code (SurveysApiError)
+// before falling back to HTTP status (FetcherError).
 const classifyApiError = (error: unknown): ErrorCode | undefined => {
-  if (!(error instanceof FetcherError)) return undefined;
-  if (error.status === 401 || error.status === 403)
-    return ErrorCode.SESSION_EXPIRED;
-  if (error.status === 429) return ErrorCode.TOO_MANY_REQUESTS;
-  if (error.status >= 500) return ErrorCode.SERVER_ERROR;
+  if (isSurveysApiError(error)) {
+    const kind = surveyAuthKind(error);
+    if (kind) return ErrorCode.SESSION_EXPIRED;
+    if (error.status === 429) return ErrorCode.TOO_MANY_REQUESTS;
+    if (error.status >= 500) return ErrorCode.SERVER_ERROR;
+    // Domain 4xx with a code → generic bucket; copy comes from the catalog in
+    // get-error-description. Use SOMETHING_WRONG so the static ERROR_META
+    // message is overridden by the resolved domain copy.
+    if (error.code) return ErrorCode.SOMETHING_WRONG;
+  }
+  if (error instanceof FetcherError) {
+    if (error.status === 401 || error.status === 403)
+      return ErrorCode.SESSION_EXPIRED;
+    if (error.status === 429) return ErrorCode.TOO_MANY_REQUESTS;
+    if (error.status >= 500) return ErrorCode.SERVER_ERROR;
+  }
   return undefined; // other 4xx: handled by domain copy / fallback
 };
 
