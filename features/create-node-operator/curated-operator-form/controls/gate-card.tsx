@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from 'react';
 import { useCurveParameters } from 'modules/web3';
+import { useLidoSDK } from 'modules/web3';
 import {
   formatPercentKeyIntervals,
   formatEthKeyIntervals,
@@ -25,10 +26,12 @@ type GateCardProps = {
 };
 
 export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
+  const { sm } = useLidoSDK();
   const { data: parameters } = useCurveParameters(curveId);
 
-  const metadata = getCurveMetadata(curveId);
-  const operatorType = getModuleOperatorType(curveId);
+  const moduleName = sm.core.moduleName;
+  const metadata = getCurveMetadata(moduleName, curveId);
+  const operatorType = getModuleOperatorType(moduleName, curveId);
   const loading = !parameters;
 
   return (

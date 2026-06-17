@@ -2,6 +2,7 @@ import {
   NodeOperatorInfo,
   OperatorMetadata,
   SubOperatorStakeSummary,
+  MODULE_NAME,
 } from '@lidofinance/lido-csm-sdk';
 import { Block, InlineLoader, Text } from '@lidofinance/lido-ui';
 import { getCurveMetadata } from 'consts/operator-type-metadata';
@@ -9,6 +10,7 @@ import {
   useOperatorCurveId,
   useOperatorInfo,
   useOperatorMetadata,
+  useLidoSDK,
 } from 'modules/web3';
 import { FC, useMemo } from 'react';
 import { Address, Stack } from 'shared/components';
@@ -23,6 +25,7 @@ export const OperatorCard: FC<SubOperatorStakeSummary> = ({
   nodeOperatorId,
   ...props
 }) => {
+  const { sm } = useLidoSDK();
   const { data: metadata } = useOperatorMetadata(nodeOperatorId);
   const { data: info } = useOperatorInfo(nodeOperatorId);
   const { data: curveId } = useOperatorCurveId(nodeOperatorId);
@@ -45,6 +48,7 @@ export const OperatorCard: FC<SubOperatorStakeSummary> = ({
             metadata,
             info,
             curveId,
+            module: sm.core.moduleName,
           }}
         />
         <StakeStats data={stakeAndKeys} />
@@ -65,8 +69,17 @@ const OperatorCardHeader: FC<
     info?: NodeOperatorInfo;
     curveId: bigint | undefined;
     stakeAndKeys: StakeAndKeysData | undefined;
+    module: MODULE_NAME;
   }
-> = ({ nodeOperatorId, weight, metadata, info, curveId, stakeAndKeys }) => (
+> = ({
+  nodeOperatorId,
+  weight,
+  metadata,
+  info,
+  curveId,
+  stakeAndKeys,
+  module,
+}) => (
   <Stack direction="column" gap="xs">
     <Stack center spaceBetween>
       <Stack center>
@@ -91,7 +104,7 @@ const OperatorCardHeader: FC<
         </Text>
         <DividerStyled />
         <Text size="xs" data-testid="operatorCurveName">
-          {getCurveMetadata(curveId).name}
+          {getCurveMetadata(module, curveId).name}
         </Text>
       </Stack>
     ) : (

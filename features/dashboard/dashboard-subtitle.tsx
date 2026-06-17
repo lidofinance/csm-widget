@@ -3,6 +3,7 @@ import { PATH } from 'consts';
 import { isModuleCM } from 'consts/module';
 import { getCurveMetadata } from 'consts/operator-type-metadata';
 import { useNodeOperator, useOperatorGroup } from 'modules/web3';
+import { useLidoSDK } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components/stack/stack';
 import { DescriptorId, formatGroupTitle } from 'shared/node-operator';
@@ -18,6 +19,7 @@ export const DashboardSubtitle: FC = () => {
 };
 
 const CmSubtitle: FC = () => {
+  const { sm } = useLidoSDK();
   const {
     nodeOperator: { nodeOperatorId, curveId },
   } = useNodeOperator<true>();
@@ -29,7 +31,9 @@ const CmSubtitle: FC = () => {
         <DescriptorId id={nodeOperatorId} flat />
       </Text>
       <DividerStyle />
-      <Text size="xxs">{getCurveMetadata(curveId).name}</Text>
+      <Text size="xxs">
+        {getCurveMetadata(sm.core.moduleName, curveId).name}
+      </Text>
       {group ? (
         <>
           <DividerStyle />
