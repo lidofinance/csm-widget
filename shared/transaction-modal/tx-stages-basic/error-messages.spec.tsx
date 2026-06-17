@@ -9,11 +9,11 @@ import { ErrorCode } from 'utils/get-error-code';
 import { ERROR_META } from './error-messages';
 
 describe('ERROR_META', () => {
-  it('has an entry for every ErrorCode', () => {
-    for (const code of Object.values(ErrorCode)) {
-      expect(ERROR_META[code]).toBeDefined();
-      expect(typeof ERROR_META[code].retryable).toBe('boolean');
-    }
+  it('marks retryable codes as retryable', () => {
+    expect(ERROR_META[ErrorCode.DENIED_SIG].retryable).toBe(true);
+    expect(ERROR_META[ErrorCode.NETWORK_ERROR].retryable).toBe(true);
+    expect(ERROR_META[ErrorCode.CHAIN_MISMATCH].retryable).toBe(true);
+    expect(ERROR_META[ErrorCode.SESSION_EXPIRED].retryable).toBe(true);
   });
 
   it('marks deterministic failures non-retryable', () => {

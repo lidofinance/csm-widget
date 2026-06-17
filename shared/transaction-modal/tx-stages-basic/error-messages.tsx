@@ -48,13 +48,12 @@ export const ERROR_META: Record<ErrorCode, ErrorMeta> = {
     actionLabel: 'Switch network',
   },
   [ErrorCode.CONTRACT_ERROR]: {
-    message:
-      'The transaction cannot be completed. Please review the details and try again.',
+    message: 'The transaction cannot be completed. Please review the details.',
     retryable: false, // deterministic revert — retrying repeats the failure
   },
   [ErrorCode.EXECUTION_REVERTED]: {
     message:
-      'The transaction would fail and was not sent. Please review the details and try again.',
+      'The transaction would fail and was not sent. Please review the details.',
     retryable: false, // simulation reverted — same call reverts again
   },
   [ErrorCode.TRANSACTION_REVERTED]: {
@@ -71,7 +70,7 @@ export const ERROR_META: Record<ErrorCode, ErrorMeta> = {
   },
   [ErrorCode.LIMIT_REACHED]: {
     message:
-      'Transaction could not be completed because stake limit is exhausted. Please wait until the stake limit restores and try again. Otherwise, you can swap your Ethereum on 1inch platform instantly.',
+      'Transaction could not be completed because stake limit is exhausted. Please wait until the stake limit restores. Otherwise, you can swap your Ethereum on 1inch platform instantly.',
     retryable: false, // limit must restore first
   },
   [ErrorCode.INVALID_SIGNATURE]: {
