@@ -54,12 +54,14 @@ const surveysRequest = async <T>(
   } catch (err) {
     if (err instanceof FetcherError) {
       if (opts.token && (err.status === 401 || err.status === 403)) {
-        opts.onAuthError?.();
+        const apiError = err.body as { code?: string } | undefined;
+        opts.onAuthError?.(apiError?.code);
       }
       throw new SurveysApiError({
         message: err.message,
         status: err.status,
         url,
+        body: err.body,
         cause: err,
       });
     }

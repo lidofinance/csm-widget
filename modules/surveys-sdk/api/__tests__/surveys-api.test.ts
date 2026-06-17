@@ -177,6 +177,23 @@ describe('surveys-api', () => {
   });
 });
 
+describe('SurveysApiError envelope', () => {
+  it('preserves the ApiError envelope and exposes code/details', () => {
+    const err = new SurveysApiError({
+      message: 'Validation failed',
+      status: 400,
+      url: '/x',
+      body: {
+        code: 'VALIDATION_FAILED',
+        message: 'Validation failed',
+        details: [{ field: 'name', message: 'required' }],
+      },
+    });
+    expect(err.code).toBe('VALIDATION_FAILED');
+    expect(err.details?.[0].field).toBe('name');
+  });
+});
+
 describe('isAuthError', () => {
   it('matches 401/403 on SurveysApiError', () => {
     expect(

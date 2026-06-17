@@ -9,8 +9,8 @@ export type SurveysFetchOptions = {
   // Bearer-style header value, e.g. `${token_type} ${access_token}`.
   // Required for authenticated requests.
   token?: string;
-  // Invoked on 401/403 before throwing.
-  onAuthError?: () => void;
+  // Invoked on an auth failure (401/403) before throwing, with the envelope code.
+  onAuthError?: (code?: string) => void;
   query?: Record<string, string | number | boolean | undefined>;
   signal?: AbortSignal;
 };
