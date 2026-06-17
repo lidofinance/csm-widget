@@ -19,10 +19,8 @@ it('resolves contract copy from decodedRevert for CONTRACT_ERROR', () => {
   expect(description).toMatch(/bond is still locked/i);
 });
 
-it('returns undefined description for codes covered by the static map', () => {
-  const { description } = resolveError({ code: 4001 }); // not classified here → SOMETHING_WRONG
-  // SOMETHING_WRONG falls back to extractErrorMessage; undefined for empty error
-  expect(description === undefined || typeof description === 'string').toBe(
-    true,
-  );
+it('returns undefined description when SOMETHING_WRONG error has no message', () => {
+  // Plain object with no message/reason/error → extractErrorMessage returns undefined
+  const { description } = resolveError({ code: 4001 });
+  expect(description).toBeUndefined();
 });
