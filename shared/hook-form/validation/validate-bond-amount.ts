@@ -1,4 +1,8 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import {
+  VALIDATION_MESSAGES,
+  validationMessage,
+} from 'shared/hook-form/validation/messages';
 import { ValidationError } from 'shared/hook-form/validation/validation-error';
 import { getTokenBalance, getTokenDisplayName } from 'utils';
 
@@ -23,7 +27,7 @@ export const validateBondAmount = ({
     if (token === TOKENS.eth && maxStakeEth < bondAmount) {
       throw new ValidationError(
         'bondAmount',
-        `Lido protocol has reached its stake limit for ETH deposits — use another token or try later`,
+        VALIDATION_MESSAGES.stakeLimitEthDeposits,
       );
     }
 
@@ -39,7 +43,7 @@ export const validateBondAmount = ({
     if (tokenBalance !== undefined && tokenBalance < bondAmount) {
       throw new ValidationError(
         'bondAmount',
-        `Not enough balance of ${getTokenDisplayName(token)}`,
+        validationMessage.notEnoughBalance(getTokenDisplayName(token)),
       );
     }
   }

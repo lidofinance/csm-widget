@@ -1,6 +1,7 @@
 import type { DepositData, DepositDataSDK } from '@lidofinance/lido-csm-sdk';
 import { groupBy, mapValues, uniqBy } from 'lodash';
 import { KEYS_UPLOAD_TX_LIMIT } from 'consts/keys';
+import { VALIDATION_MESSAGES, validationMessage } from './messages';
 import { ValidationError } from './validation-error';
 
 type ValidateDepositDataProps = {
@@ -33,7 +34,7 @@ export const validateDepositData = async ({
 
     throw new ValidationError(
       'depositData',
-      'Invalid deposit data',
+      VALIDATION_MESSAGES.invalidDepositData,
       undefined,
       undefined,
       types,
@@ -44,7 +45,7 @@ export const validateDepositData = async ({
   if (depositData.length > KEYS_UPLOAD_TX_LIMIT) {
     throw new ValidationError(
       'depositData',
-      `Too many keys in one transaction. Maximum allowed: ${KEYS_UPLOAD_TX_LIMIT}.`,
+      validationMessage.tooManyKeys(KEYS_UPLOAD_TX_LIMIT),
     );
   }
 
@@ -58,7 +59,7 @@ export const validateDepositData = async ({
         const availableSlots = Math.max(keysLimit - currentActiveKeys, 0);
         throw new ValidationError(
           'depositData',
-          `Keys limit exceeded. Allowed keys count to submit: ${availableSlots}.`,
+          validationMessage.keysLimitExceeded(availableSlots),
         );
       }
     } else {
@@ -66,7 +67,7 @@ export const validateDepositData = async ({
       if (keysCount > keysLimit) {
         throw new ValidationError(
           'depositData',
-          `Keys limit exceeded. Allowed keys count to submit: ${keysLimit}.`,
+          validationMessage.keysLimitExceeded(keysLimit),
         );
       }
     }

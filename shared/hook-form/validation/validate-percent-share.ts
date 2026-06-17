@@ -1,4 +1,5 @@
 import { PERCENT_BASIS } from '@lidofinance/lido-csm-sdk';
+import { VALIDATION_MESSAGES } from './messages';
 import { ValidationError } from './validation-error';
 
 export const validatePercentShare = (
@@ -6,9 +7,9 @@ export const validatePercentShare = (
   value: bigint | undefined,
 ) => {
   if (!value || value <= 0n) {
-    throw new ValidationError(field, 'Share must be greater than 0');
+    throw new ValidationError(field, VALIDATION_MESSAGES.shareGreaterThanZero);
   }
   if (value > PERCENT_BASIS) {
-    throw new ValidationError(field, 'Share must not exceed 100%');
+    throw new ValidationError(field, VALIDATION_MESSAGES.shareNotExceed100);
   }
 };
