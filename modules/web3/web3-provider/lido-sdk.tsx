@@ -28,7 +28,6 @@ import {
 import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
 import { useUserConfig } from 'config/user-config';
-import { isModuleCSM } from 'consts';
 
 import { overridedAddresses } from './devnet';
 
@@ -41,6 +40,8 @@ type LidoSDKContextValue = {
   wrap: LidoSDKWrap;
   withdraw: LidoSDKWithdraw;
   sm: LidoSDKCsm | LidoSDKCm;
+  csm: LidoSDKCsm;
+  cm: LidoSDKCm;
 };
 
 const chainId = config.defaultChain;
@@ -52,6 +53,11 @@ export const useLidoSDK = () => {
   const value = useContext(LidoSDKContext);
   invariant(value, 'useLidoSDK was used outside of LidoSDKProvider');
   return value;
+};
+
+export const useSmSDKByModule = (module: MODULE_NAME) => {
+  const { csm, cm } = useLidoSDK();
+  return module === MODULE_NAME.CSM ? csm : cm;
 };
 
 export function useSmSDK(): LidoSDKCsm | LidoSDKCm;
@@ -128,7 +134,9 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       overridedAddresses,
     };
 
-    const sm = isModuleCSM ? new LidoSDKCsm(smProps) : new LidoSDKCm(smProps);
+    const csm = new LidoSDKCsm(smProps);
+    const cm = new LidoSDKCm(smProps);
+    const sm = config.module === MODULE_NAME.CSM ? csm : cm;
 
     return {
       chainId: core.chainId,
@@ -139,6 +147,8 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       wrap,
       withdraw,
       sm,
+      csm,
+      cm,
     };
   }, [clApiUrl, ipfsGateways, publicClient, walletClient]);
   return (
