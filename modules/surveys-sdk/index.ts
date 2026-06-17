@@ -10,6 +10,12 @@ export { operatorKey, parseOperatorKey } from './api/url';
 export { endpoints } from './api/endpoints';
 export { SurveysApiError, isAuthError } from './api/errors';
 export type { OperatorKey, SurveysFetchOptions } from './api/types';
+export type { ApiError, ApiErrorDetail } from './api/api-error';
+export {
+  parseApiError,
+  getApiErrorCode,
+  isValidationError,
+} from './api/api-error';
 
 export { useOperatorKey } from './hooks/use-operator-key';
 export { useOperatorSurvey } from './hooks/use-operator-survey';

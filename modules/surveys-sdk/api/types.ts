@@ -1,5 +1,7 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 
+export type { ApiError, ApiErrorDetail } from './api-error';
+
 type Module = Lowercase<(typeof MODULE_NAME)[keyof typeof MODULE_NAME]>;
 
 // Branded namespaced key, e.g. 'csm-42'. Always built via `operatorKey()`.
