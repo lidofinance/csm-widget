@@ -24,10 +24,28 @@ export const useAvailableOperators = () => {
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(address);
-      const [csmOperators, cmOperators] = await Promise.all([
+      // Query both modules independently: a module that isn't deployed on the
+      // current chain (or a transient RPC error) must not hide the other
+      // module's operators. Only a TOTAL failure surfaces as a query error.
+      const [csmResult, cmResult] = await Promise.allSettled([
         csm.discovery.getNodeOperatorsByAddress(address),
         cm.discovery.getNodeOperatorsByAddress(address),
       ]);
+
+      if (csmResult.status === 'rejected' && cmResult.status === 'rejected') {
+        throw csmResult.reason;
+      }
+      if (csmResult.status === 'rejected') {
+        console.warn('CSM operator discovery failed', csmResult.reason);
+      }
+      if (cmResult.status === 'rejected') {
+        console.warn('CM operator discovery failed', cmResult.reason);
+      }
+
+      const csmOperators =
+        csmResult.status === 'fulfilled' ? csmResult.value : [];
+      const cmOperators = cmResult.status === 'fulfilled' ? cmResult.value : [];
+
       return mergeOperators(csmOperators, cmOperators);
     },
     enabled: !!address,
