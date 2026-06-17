@@ -1,4 +1,6 @@
 import {
+  SDKError,
+  ERROR_CODE,
   type TransactionCallback,
   TransactionCallbackStage,
 } from '@lidofinance/lido-csm-sdk';
@@ -40,9 +42,24 @@ export const buildTxCallback =
       case TransactionCallbackStage.MULTISIG_DONE:
         stages.successMultisig();
         break;
-      case TransactionCallbackStage.ERROR:
-        stages.failed(payload.error);
+      case TransactionCallbackStage.ERROR: {
+        const error = payload.error;
+        // DECODE_RESULT_ERROR: the tx was confirmed on-chain but the SDK's
+        // decodeResult callback threw. This is NOT a hard tx failure — the
+        // operation succeeded. The ERROR_META entry for this code shows
+        // non-alarming copy with a "Refresh" action instead of "Retry".
+        // TODO(errors): DECODE_RESULT_ERROR carries receipt+hash; route to
+        // success stage when the flow exposes an invalidation/confirmation hook.
+        if (
+          error instanceof SDKError &&
+          error.code === ERROR_CODE.DECODE_RESULT_ERROR
+        ) {
+          // No onConfirmation hook in this scope yet — fall through to failed()
+          // which renders the honest "confirmed, couldn't read result" copy.
+        }
+        stages.failed(error);
         break;
+      }
       case TransactionCallbackStage.PERMIT_SIGN:
         stages.signPermit?.();
         break;
