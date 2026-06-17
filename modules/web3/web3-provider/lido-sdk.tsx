@@ -55,6 +55,12 @@ export const useLidoSDK = () => {
   return value;
 };
 
+/**
+ * Returns the SDK for the requested module ALWAYS, regardless of the active
+ * module. Use for cross-module work (e.g. discovery across both modules).
+ * This deliberately bypasses the `config.module` guard that `useSmSDK(module)`
+ * enforces — `useSmSDK(module)` returns `undefined` on a module mismatch.
+ */
 export const useSmSDKByModule = (module: MODULE_NAME) => {
   const { csm, cm } = useLidoSDK();
   return module === MODULE_NAME.CSM ? csm : cm;
