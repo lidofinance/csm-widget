@@ -3,13 +3,14 @@
 // is English and may change) and are logged once so missing copy is noticed.
 // Source catalog: docs/api-errors-guide.md.
 export const SURVEY_API_COPY: Record<string, string> = {
-  // Auth
+  // Auth (non-JWT codes — JWT codes land in SESSION_EXPIRED bucket, handled by
+  // the static ERROR_META map in shared/transaction-modal; they must NOT appear
+  // here or getApiDescription would override the polished static copy).
   AUTH_SIWE_VERIFICATION_FAILED:
     'We could not verify your signature. Please try signing in again.',
   AUTH_CHAIN_ID_MISMATCH:
     'Your wallet is connected to the wrong network for this app',
   AUTH_NOT_AUTHORIZED: 'This address is not authorized',
-  AUTH_JWT_EXPIRED: 'Your session has expired. Refreshing…',
 
   // Operator access
   OPERATOR_ACCESS_DENIED:

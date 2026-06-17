@@ -75,6 +75,69 @@ describe('classifyErrorCode (API path)', () => {
   });
 });
 
+// Helper to build a plain object shaped like SurveysApiError (no import needed).
+const surveyError = (
+  status: number,
+  apiError?: { code?: string; message?: string },
+) => ({
+  name: 'SurveysApiError' as const,
+  status,
+  apiError: apiError ? { message: 'server msg', ...apiError } : undefined,
+  get code() {
+    return this.apiError?.code;
+  },
+});
+
+describe('classifyErrorCode (SurveysApiError path)', () => {
+  it('maps AUTH_JWT_EXPIRED to SESSION_EXPIRED', () => {
+    expect(
+      classifyErrorCode(surveyError(401, { code: 'AUTH_JWT_EXPIRED' })),
+    ).toBe(ErrorCode.SESSION_EXPIRED);
+  });
+
+  it('maps AUTH_JWT_INVALID to SESSION_EXPIRED', () => {
+    expect(
+      classifyErrorCode(surveyError(401, { code: 'AUTH_JWT_INVALID' })),
+    ).toBe(ErrorCode.SESSION_EXPIRED);
+  });
+
+  it('maps AUTH_JWT_MISSING to SESSION_EXPIRED', () => {
+    expect(
+      classifyErrorCode(surveyError(401, { code: 'AUTH_JWT_MISSING' })),
+    ).toBe(ErrorCode.SESSION_EXPIRED);
+  });
+
+  it('maps 401 without code to SESSION_EXPIRED (status fallback)', () => {
+    expect(classifyErrorCode(surveyError(401))).toBe(ErrorCode.SESSION_EXPIRED);
+  });
+
+  it('maps 403 without code to SESSION_EXPIRED (status fallback)', () => {
+    expect(classifyErrorCode(surveyError(403))).toBe(ErrorCode.SESSION_EXPIRED);
+  });
+
+  it('maps 429 to TOO_MANY_REQUESTS', () => {
+    expect(classifyErrorCode(surveyError(429))).toBe(
+      ErrorCode.TOO_MANY_REQUESTS,
+    );
+  });
+
+  it('maps 500 to SERVER_ERROR', () => {
+    expect(classifyErrorCode(surveyError(500))).toBe(ErrorCode.SERVER_ERROR);
+  });
+
+  it('maps 503 to SERVER_ERROR', () => {
+    expect(classifyErrorCode(surveyError(503))).toBe(ErrorCode.SERVER_ERROR);
+  });
+
+  it('maps domain 4xx with code to SOMETHING_WRONG', () => {
+    expect(
+      classifyErrorCode(
+        surveyError(422, { code: 'MEMBERS_DUPLICATE_ADDRESS' }),
+      ),
+    ).toBe(ErrorCode.SOMETHING_WRONG);
+  });
+});
+
 describe('getErrorCode (public export smoke test)', () => {
   it('returns an ErrorCode for an unknown error', () => {
     expect(Object.values(ErrorCode)).toContain(getErrorCode({ foo: 'bar' }));

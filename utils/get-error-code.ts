@@ -6,25 +6,16 @@ import {
 import { extractErrorMessage } from './extract-error-message';
 import { extractReason, findInErrorTree } from './error-tree';
 import { FetcherError } from './fetcher-error';
+import {
+  isSurveysApiError,
+  type SurveysApiErrorLike,
+} from './surveys-api-guard';
 import { trackMatomoError } from './track-matomo-event';
 
-// Structural guard for SurveysApiError — avoids importing modules/surveys-sdk
-// which transitively loads Next.js runtime config (breaks Jest unit tests).
-// We check by name and read the typed fields structurally.
-type SurveysApiErrorLike = {
-  name: 'SurveysApiError';
-  status: number;
-  code?: string;
-  apiError?: { code?: string };
-};
-
-const isSurveysApiError = (err: unknown): err is SurveysApiErrorLike =>
-  typeof err === 'object' &&
-  err !== null &&
-  (err as Record<string, unknown>).name === 'SurveysApiError';
-
 // Classify the JWT auth kind from a SurveysApiError-like object.
-// Mirrors authErrorKind from modules/surveys-sdk/api/errors.ts.
+// Mirrors authErrorKindFromCode from modules/surveys-sdk/api/errors.ts
+// (see authErrorKindFromCode lines 46-53, authErrorKind lines 55-70).
+// Kept structural (no import) to avoid Next.js runtime in Jest.
 const surveyAuthKind = (
   err: SurveysApiErrorLike,
 ): 'reauth' | 'logout' | undefined => {
