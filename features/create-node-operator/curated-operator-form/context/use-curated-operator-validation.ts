@@ -4,6 +4,7 @@ import {
   validateLength,
   ValidationError,
 } from 'shared/hook-form/validation';
+import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import type {
   CuratedOperatorFormInputType,
   CuratedOperatorFormNetworkData,
@@ -22,7 +23,10 @@ export const useCuratedOperatorValidation = () => {
     ) => {
       await validate('gateName', () => {
         if (gateName === undefined) {
-          throw new ValidationError('gateName', 'Please select Operator Type');
+          throw new ValidationError(
+            'gateName',
+            VALIDATION_MESSAGES.selectOperatorType,
+          );
         }
 
         const selectedGate = availableGates.find(
@@ -32,28 +36,28 @@ export const useCuratedOperatorValidation = () => {
         if (!selectedGate) {
           throw new ValidationError(
             'gateName',
-            'Invalid Operator Type selected',
+            VALIDATION_MESSAGES.invalidOperatorType,
           );
         }
 
         if (selectedGate.isPaused) {
           throw new ValidationError(
             'gateName',
-            'This Operator Type is currently paused',
+            VALIDATION_MESSAGES.operatorTypePaused,
           );
         }
 
         if (selectedGate.isConsumed) {
           throw new ValidationError(
             'gateName',
-            'You have already used this Operator Type',
+            VALIDATION_MESSAGES.operatorTypeAlreadyUsed,
           );
         }
 
         if (!selectedGate.proof) {
           throw new ValidationError(
             'gateName',
-            'You are not eligible for this Operator Type',
+            VALIDATION_MESSAGES.notEligibleForOperatorType,
           );
         }
       });

@@ -2,6 +2,7 @@ import {
   useFormValidation,
   ValidationError,
 } from 'shared/hook-form/validation';
+import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import { isAddress, isAddressEqual, isHex } from 'viem';
 import { useApplyFormData } from './apply-data-provider';
 import { MAX_ADDITIONAL_ADDRESSES } from './consts';
@@ -26,7 +27,7 @@ export const useApplyFormValidation = () => {
         if (additionalAddresses.length > MAX_ADDITIONAL_ADDRESSES) {
           throw new ValidationError(
             'additionalAddresses.4.address',
-            'Maximum 5 additional addresses allowed',
+            VALIDATION_MESSAGES.maxAdditionalAddresses,
           );
         }
       });
@@ -46,7 +47,7 @@ export const useApplyFormValidation = () => {
           if (isAddressEqual(address, mainAddress)) {
             throw new ValidationError(
               addressPath,
-              'Additional address cannot be the same as main address',
+              VALIDATION_MESSAGES.additionalAddressCannotBeMain,
             );
           }
 
@@ -60,7 +61,7 @@ export const useApplyFormValidation = () => {
           if (hasDuplicateAddresses) {
             throw new ValidationError(
               addressPath,
-              'Duplicate addresses are not allowed',
+              VALIDATION_MESSAGES.duplicateAddressesNotAllowed,
             );
           }
         });
@@ -82,13 +83,13 @@ export const useApplyFormValidation = () => {
             if (!isValid) {
               throw new ValidationError(
                 signaturePath,
-                'Invalid signature for this address and message',
+                VALIDATION_MESSAGES.invalidSignatureForAddress,
               );
             }
           } catch {
             throw new ValidationError(
               signaturePath,
-              'Invalid signature for this address and message',
+              VALIDATION_MESSAGES.invalidSignatureForAddress,
             );
           }
         });
@@ -98,7 +99,7 @@ export const useApplyFormValidation = () => {
         if (twitterLink && !twitterUrlRegex.test(twitterLink)) {
           throw new ValidationError(
             'twitterLink',
-            'Must be a valid Twitter/X status URL',
+            VALIDATION_MESSAGES.mustBeValidTwitterUrl,
           );
         }
       });
@@ -107,7 +108,7 @@ export const useApplyFormValidation = () => {
         if (discordLink && !discordMessageRegex.test(discordLink)) {
           throw new ValidationError(
             'discordLink',
-            'Must be a valid Discord message URL',
+            VALIDATION_MESSAGES.mustBeValidDiscordUrl,
           );
         }
       });

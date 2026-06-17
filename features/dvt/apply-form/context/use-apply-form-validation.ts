@@ -2,6 +2,7 @@ import {
   useFormValidation,
   ValidationError,
 } from 'shared/hook-form/validation';
+import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import { isAddress, isAddressEqual, isHex } from 'viem';
 import { useApplyFormData } from './apply-data-provider';
 import { CLUSTER_SIZE } from './consts';
@@ -45,7 +46,7 @@ export const useApplyFormValidation = () => {
               if (hasDuplicateAddresses) {
                 throw new ValidationError(
                   addressPath,
-                  'Duplicate addresses are not allowed',
+                  VALIDATION_MESSAGES.duplicateAddressesNotAllowed,
                 );
               }
 
@@ -69,13 +70,13 @@ export const useApplyFormValidation = () => {
                 if (!isValid) {
                   throw new ValidationError(
                     signaturePath,
-                    'Invalid signature for this address and message',
+                    VALIDATION_MESSAGES.invalidSignatureForAddress,
                   );
                 }
               } catch {
                 throw new ValidationError(
                   signaturePath,
-                  'Invalid signature for this address and message',
+                  VALIDATION_MESSAGES.invalidSignatureForAddress,
                 );
               }
             });
@@ -86,14 +87,14 @@ export const useApplyFormValidation = () => {
         if (!discordLink) {
           throw new ValidationError(
             'discordLink',
-            'Discord message link is required',
+            VALIDATION_MESSAGES.discordLinkRequired,
           );
         }
 
         if (!discordMessageRegex.test(discordLink)) {
           throw new ValidationError(
             'discordLink',
-            'Must be a valid Discord message URL',
+            VALIDATION_MESSAGES.mustBeValidDiscordUrl,
           );
         }
       });
@@ -102,7 +103,7 @@ export const useApplyFormValidation = () => {
         if (!confirmed) {
           throw new ValidationError(
             'confirmed',
-            'You must confirm the application',
+            VALIDATION_MESSAGES.mustConfirmApplication,
           );
         }
       });

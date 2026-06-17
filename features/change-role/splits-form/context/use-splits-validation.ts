@@ -4,6 +4,10 @@ import {
   validatePercentShare,
   ValidationError,
 } from 'shared/hook-form/validation';
+import {
+  VALIDATION_MESSAGES,
+  validationMessage,
+} from 'shared/hook-form/validation/messages';
 import { compareLowercase } from 'utils';
 import type { SplitsFormInputType, SplitsFormNetworkData } from './types';
 import {
@@ -27,14 +31,16 @@ export const useSplitsValidation = () => {
         if (splitsEqual(feeSplits, currentFeeSplits)) {
           throw new ValidationError(
             'feeSplits',
-            'No changes were made to the additional addresses',
+            VALIDATION_MESSAGES.noChangesAdditionalAddresses,
           );
         }
 
         if (feeSplits.length > MAX_FEE_SPLITS_COUNT) {
           throw new ValidationError(
             'feeSplits',
-            `Maximum ${MAX_FEE_SPLITS_COUNT} additional addresses`,
+            validationMessage.maxAdditionalAddressesDynamic(
+              MAX_FEE_SPLITS_COUNT,
+            ),
           );
         }
       });
@@ -43,7 +49,7 @@ export const useSplitsValidation = () => {
         if (totalShare > PERCENT_BASIS) {
           throw new ValidationError(
             'totalShare',
-            "You've exceeded 100% of the total share",
+            VALIDATION_MESSAGES.exceededTotalShare,
           );
         }
       });
@@ -60,7 +66,7 @@ export const useSplitsValidation = () => {
           if (duplicate >= 0) {
             throw new ValidationError(
               `feeSplits.${i}.recipient`,
-              'Duplicate address',
+              VALIDATION_MESSAGES.duplicateAddress,
             );
           }
         });

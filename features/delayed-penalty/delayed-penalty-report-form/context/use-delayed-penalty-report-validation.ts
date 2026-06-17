@@ -5,6 +5,7 @@ import {
   validateNodeOperatorId,
   ValidationError,
 } from 'shared/hook-form/validation';
+import { VALIDATION_MESSAGES } from 'shared/hook-form/validation/messages';
 import type {
   DelayedPenaltyReportFormInputType,
   DelayedPenaltyReportFormNetworkData,
@@ -32,9 +33,15 @@ export const useDelayedPenaltyReportValidation = () => {
       await validate('amount', () => {
         if (amount === undefined) throw new ValidationError('amount', '');
         if (amount <= 0n)
-          throw new ValidationError('amount', 'Enter amount greater than 0');
+          throw new ValidationError(
+            'amount',
+            VALIDATION_MESSAGES.enterAmountGreaterThanZero,
+          );
         if (amount > maxUint256)
-          throw new ValidationError('amount', 'Amount is not valid');
+          throw new ValidationError(
+            'amount',
+            VALIDATION_MESSAGES.amountNotValid,
+          );
       });
 
       await validate('penaltyType', () => {
@@ -43,7 +50,7 @@ export const useDelayedPenaltyReportValidation = () => {
         if (!Number.isInteger(penaltyType) || penaltyType <= 0)
           throw new ValidationError(
             'penaltyType',
-            'Enter penalty type greater than 0',
+            VALIDATION_MESSAGES.enterPenaltyTypeGreaterThanZero,
           );
       });
 
