@@ -1,7 +1,6 @@
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { getCurveMetadata } from 'consts/operator-type-metadata';
-import { useLidoSDK } from 'modules/web3/';
-import { useCurveParameters } from 'modules/web3/';
+import { useCurveParameters, useLidoSDK } from 'modules/web3';
 import { type ComponentPropsWithoutRef, type FC, type ReactNode } from 'react';
 import { useWatch } from 'react-hook-form';
 import { Address } from 'shared/components';

@@ -5,8 +5,7 @@ import {
   type FC,
   type ReactNode,
 } from 'react';
-import { useCurveParameters } from 'modules/web3';
-import { useLidoSDK } from 'modules/web3';
+import { useCurveParameters, useLidoSDK } from 'modules/web3';
 import {
   formatPercentKeyIntervals,
   formatEthKeyIntervals,
