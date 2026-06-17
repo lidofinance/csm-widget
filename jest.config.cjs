@@ -6,9 +6,15 @@ module.exports = {
   modulePathIgnorePatterns: ['./test'],
   moduleNameMapper: {
     // @lidofinance/lido-csm-sdk's main index.cjs bundles deposit-data-sdk which
-    // pulls in @chainsafe/ssz (ESM-only). Redirect to the common sub-bundle which
-    // has SDKError, ERROR_CODE, classifyError, decodeRevertData, ContractErrorName,
-    // and DecodedRevert without the heavy ESM-only deps.
+    // pulls in @chainsafe/ssz (ESM-only). Redirect to the common sub-bundle,
+    // which provides the runtime error exports unit tests need: SDKError,
+    // ERROR_CODE, classifyError, decodeRevertData, formatDecodedRevert.
+    // (ContractErrorName / DecodedRevert are types — no runtime presence.)
+    // CAUTION: common.cjs does NOT export TransactionCallbackStage (that lives
+    // in index.cjs only). Do not unit-test shared/hook-form/form-controller/
+    // build-tx-callback.ts without mocking TransactionCallbackStage — under
+    // this redirect it resolves to `undefined` and the ERROR-stage switch
+    // silently falls through.
     '^@lidofinance/lido-csm-sdk$':
       '<rootDir>/node_modules/@lidofinance/lido-csm-sdk/dist/common.cjs',
     // @lidofinance/lido-ethereum-sdk pulls in ESM-only packages (multiformats,
