@@ -1,12 +1,7 @@
 import { ButtonIcon, Modal } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
-import {
-  MODULE_NAME,
-  NodeOperatorId,
-  NodeOperatorShortInfo,
-  ROLES,
-} from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, NodeOperatorId, ROLES } from '@lidofinance/lido-csm-sdk';
 import { Plus } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import { isModuleCM } from 'consts/module';
@@ -20,7 +15,7 @@ import { OperatorRow } from './operator-row';
 import { StyledStack, StyledStackItem } from './styles';
 
 export const SwitchModal: ModalComponentType<{
-  active: NodeOperatorShortInfo;
+  active: ModuleNodeOperator;
   list: ModuleNodeOperator[];
   canCreate: boolean;
   onChange: (id: NodeOperatorId, module: MODULE_NAME) => void;
@@ -46,7 +41,8 @@ export const SwitchModal: ModalComponentType<{
                 nodeOperatorId={item.nodeOperatorId}
                 shortInfo={item}
                 action={
-                  item.nodeOperatorId === active.nodeOperatorId
+                  item.nodeOperatorId === active.nodeOperatorId &&
+                  item.module === active.module
                     ? 'current'
                     : 'switch'
                 }

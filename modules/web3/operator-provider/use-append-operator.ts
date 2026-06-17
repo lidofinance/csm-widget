@@ -5,6 +5,7 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
+import invariant from 'tiny-invariant';
 import { useDappStatus } from '../hooks';
 import { useNodeOperator } from './node-operator-provider';
 import { CachedOperatorRef } from './types';
@@ -35,7 +36,11 @@ export const useAppendOperator = (
         [...KEY_OPERATORS, { address }],
         (prev = []) => appendNodeOperator(prev, data),
       );
-      if (switchOperator && module !== undefined) {
+      if (switchOperator) {
+        invariant(
+          module !== undefined,
+          'useAppendOperator: module is required when switchOperator is true',
+        );
         pendingSwitchRef.current = { id: data.nodeOperatorId, module };
       }
     },

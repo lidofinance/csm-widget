@@ -1,8 +1,4 @@
-import {
-  MODULE_NAME,
-  NodeOperatorId,
-  NodeOperatorShortInfo,
-} from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { InlineLoader, Text } from '@lidofinance/lido-ui';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC, useMemo } from 'react';
@@ -12,7 +8,7 @@ import { OperatorRow } from './operator-row';
 import { useGroupedOperators } from './use-grouped-operators';
 
 type CmSwitchListProps = {
-  active: NodeOperatorShortInfo;
+  active: ModuleNodeOperator;
   list: ModuleNodeOperator[];
   onSwitch: (id: NodeOperatorId, module: MODULE_NAME) => void;
 };
@@ -58,7 +54,8 @@ export const CmSwitchList: FC<CmSwitchListProps> = ({
               nodeOperatorId={op.nodeOperatorId}
               shortInfo={op}
               action={
-                op.nodeOperatorId === active.nodeOperatorId
+                op.nodeOperatorId === active.nodeOperatorId &&
+                op.module === active.module
                   ? 'current'
                   : 'switch'
               }
