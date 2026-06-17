@@ -4,7 +4,9 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { useSiweAuth } from 'modules/siwe';
+import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
+import { authErrorKindFromCode } from '../api/errors';
 import { surveysDelete, surveysPost } from '../api/surveys-api';
 
 type UseSurveysMutationOptions<T, B> = {
@@ -22,13 +24,17 @@ export const useSurveysMutation = <T = unknown, B = unknown>(
   const { token, handleAuthError } = useSiweAuth();
   const queryClient = useQueryClient();
   const method = opts.method ?? 'POST';
+  const onAuthError = useCallback(
+    (code?: string) => handleAuthError(authErrorKindFromCode(code)),
+    [handleAuthError],
+  );
 
   return useMutation<T, Error, B>({
     mutationKey: opts.mutationKey,
     mutationFn: async (vars: B) => {
       const resolvedPath = typeof path === 'function' ? path(vars) : path;
       invariant(resolvedPath, 'useSurveysMutation: path is empty');
-      const fetchOpts = { token, onAuthError: handleAuthError };
+      const fetchOpts = { token, onAuthError };
       if (method === 'DELETE') {
         return surveysDelete<T>(resolvedPath, fetchOpts);
       }

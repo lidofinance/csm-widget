@@ -1,13 +1,14 @@
 import { useDappStatus } from 'modules/web3';
 import { useAddressValidation } from 'providers/address-validation-provider';
 import { useModalActions } from 'providers/modal-provider';
-import { FC, PropsWithChildren, useCallback, useMemo } from 'react';
+import { FC, PropsWithChildren, useCallback, useMemo, useRef } from 'react';
 import { useSessionStorage } from 'shared/hooks';
 import { trackMatomoSiweEvent } from 'utils/track-matomo-event';
 import { SiweAuthContext } from './siwe-auth-context';
 import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
 import type {
+  SiweAuthErrorKind,
   SiweNonceResponse,
   SiweSigninPayload,
   SiweSigninResponse,
@@ -32,6 +33,8 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
     `siwe-token-${address}`,
     undefined,
   );
+  // Prevents concurrent signIn() calls when multiple queries expire simultaneously.
+  const isSigningInRef = useRef(false);
 
   const { txModalStages: modalStages } = useModalStages();
   const { closeModal } = useModalActions();
@@ -86,15 +89,20 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   }, [setToken]);
 
   const handleAuthError = useCallback(
-    (code?: string) => {
-      // Expired session: token is stale but the address is still valid — re-run
-      // the SIWE handshake in place. There is no refresh endpoint, so this
-      // prompts a fresh signature; queries refetch once the new token lands.
-      if (code === 'AUTH_JWT_EXPIRED') {
-        void signIn();
+    (kind?: SiweAuthErrorKind) => {
+      if (kind === 'reauth') {
+        // Expired session: token is stale but the address is still valid —
+        // re-run the SIWE handshake. No refresh endpoint exists; a fresh
+        // signature is required. Guard against concurrent calls: multiple
+        // in-flight queries can each fire onAuthError when the token expires.
+        if (isSigningInRef.current) return;
+        isSigningInRef.current = true;
+        void signIn().finally(() => {
+          isSigningInRef.current = false;
+        });
         return;
       }
-      // Tampered / not-yet-valid / missing — clear the token; do not auto-retry.
+      // 'logout' or undefined (unexpected code): clear the token, no retry.
       logout();
     },
     [signIn, logout],

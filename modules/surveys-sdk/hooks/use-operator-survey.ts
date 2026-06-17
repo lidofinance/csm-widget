@@ -3,6 +3,7 @@ import { STRATEGY_LAZY } from 'consts';
 import { useSiweAuth } from 'modules/siwe';
 import { useCallback, useMemo } from 'react';
 import invariant from 'tiny-invariant';
+import { authErrorKindFromCode } from '../api/errors';
 import { surveysDelete, surveysGet, surveysPost } from '../api/surveys-api';
 import type { OperatorKey } from '../api/types';
 import { useOperatorKey } from './use-operator-key';
@@ -24,6 +25,10 @@ export const useOperatorSurvey = <T, R = T>(
   const queryClient = useQueryClient();
   const connectedKey = useOperatorKey();
   const effectiveKey = opts.operatorKey ?? connectedKey;
+  const onAuthError = useCallback(
+    (code?: string) => handleAuthError(authErrorKindFromCode(code)),
+    [handleAuthError],
+  );
 
   const url = effectiveKey ? `${effectiveKey}/${path}` : undefined;
 
@@ -47,7 +52,7 @@ export const useOperatorSurvey = <T, R = T>(
     queryFn: async ({ signal }) => {
       const res = await surveysGet<R>(requireUrl(), {
         token,
-        onAuthError: handleAuthError,
+        onAuthError,
         signal,
       });
       return res && transformIncoming
@@ -63,7 +68,7 @@ export const useOperatorSurvey = <T, R = T>(
       const payload = transformOutgoing ? transformOutgoing(data) : data;
       const res = await surveysPost<R, unknown>(requireUrl(), payload, {
         token,
-        onAuthError: handleAuthError,
+        onAuthError,
       });
       return res && transformIncoming
         ? transformIncoming(res)
@@ -87,7 +92,7 @@ export const useOperatorSurvey = <T, R = T>(
     mutationFn: async (): Promise<void> => {
       await surveysDelete(requireUrl(), {
         token,
-        onAuthError: handleAuthError,
+        onAuthError,
       });
     },
     onSuccess: () => {

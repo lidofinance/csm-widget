@@ -3,6 +3,7 @@ import { STRATEGY_LAZY } from 'consts';
 import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
 import { useMemo } from 'react';
+import { authErrorKindFromCode } from '../api/errors';
 import { surveysGet } from '../api/surveys-api';
 import { surveysKeys } from './query-keys';
 
@@ -38,7 +39,11 @@ export const useSurveysQuery = <T, S = T>(
   return useQuery<T, Error, S>({
     queryKey,
     queryFn: ({ signal }) =>
-      surveysGet<T>(path, { token, onAuthError: handleAuthError, signal }),
+      surveysGet<T>(path, {
+        token,
+        onAuthError: (code) => handleAuthError(authErrorKindFromCode(code)),
+        signal,
+      }),
     enabled,
     select: opts.select,
     ...strategy,

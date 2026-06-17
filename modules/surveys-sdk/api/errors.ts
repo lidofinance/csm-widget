@@ -39,13 +39,25 @@ export class SurveysApiError extends Error {
 //   undefined → not an auth error
 export type AuthErrorKind = 'reauth' | 'logout';
 
+// Classify a raw API error code string to an auth recovery kind.
+// This is the single authoritative mapping between server codes and widget
+// actions. Called by authErrorKind (full error object) and by the surveys hooks
+// (which receive only the code string via onAuthError).
+export const authErrorKindFromCode = (
+  code?: string,
+): AuthErrorKind | undefined => {
+  if (code === 'AUTH_JWT_EXPIRED') return 'reauth';
+  if (code === 'AUTH_JWT_INVALID' || code === 'AUTH_JWT_MISSING')
+    return 'logout';
+  return undefined;
+};
+
 export const authErrorKind = (err: unknown): AuthErrorKind | undefined => {
   const code = getApiErrorCode(
     err instanceof SurveysApiError ? err.apiError : err,
   );
-  if (code === 'AUTH_JWT_EXPIRED') return 'reauth';
-  if (code === 'AUTH_JWT_INVALID' || code === 'AUTH_JWT_MISSING')
-    return 'logout';
+  const fromCode = authErrorKindFromCode(code);
+  if (fromCode !== undefined) return fromCode;
   // Fallback for endpoints that 401/403 without a code (defensive: hard logout).
   if (
     err instanceof SurveysApiError &&

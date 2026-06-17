@@ -16,11 +16,16 @@ export type SiweSigninResponse = {
   token_type: string;
 };
 
+// Mirrors surveys-sdk AuthErrorKind — kept local to avoid a circular import
+// (surveys-sdk → siwe → surveys-sdk). Both definitions must stay in sync.
+export type SiweAuthErrorKind = 'reauth' | 'logout';
+
 export type SiweAuthContextType = {
   token?: string;
   signIn: () => Promise<void>;
   logout: () => void;
-  // Decide auth recovery from the API error code: re-run signin on expiry,
-  // hard-logout on tamper/missing.
-  handleAuthError: (code?: string) => void;
+  // Decide auth recovery from the resolved auth kind: re-run signin on expiry,
+  // hard-logout on tamper/missing. Callers must map raw API codes to a kind
+  // (e.g. via authErrorKindFromCode) before invoking.
+  handleAuthError: (kind?: SiweAuthErrorKind) => void;
 };
