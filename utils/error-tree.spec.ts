@@ -6,13 +6,18 @@ describe('findInErrorTree', () => {
       message: 'outer',
       cause: { error: { name: 'LockedDeviceError' } },
     };
-    const hit = findInErrorTree(err, (e) => e?.name === 'LockedDeviceError');
+    const hit = findInErrorTree(
+      err,
+      (e) => (e as { name?: string })?.name === 'LockedDeviceError',
+    );
     expect((hit as { name?: string })?.name).toBe('LockedDeviceError');
   });
 
   it('returns undefined when nothing matches within depth', () => {
     const err = { cause: { cause: { cause: { cause: { name: 'x' } } } } };
-    expect(findInErrorTree(err, (e) => e?.name === 'x')).toBeUndefined();
+    expect(
+      findInErrorTree(err, (e) => (e as { name?: string })?.name === 'x'),
+    ).toBeUndefined();
   });
 });
 
@@ -24,5 +29,11 @@ describe('extractReason', () => {
 
   it('returns empty string when no reason-like text exists', () => {
     expect(extractReason({ code: 4001 })).toBe('');
+  });
+
+  it('collects reason via .error link', () => {
+    expect(extractReason({ error: { reason: 'STAKE_LIMIT' } })).toContain(
+      'STAKE_LIMIT',
+    );
   });
 });
