@@ -7,6 +7,7 @@ jest.mock('./track-matomo-event', () => ({
 
 import { SDKError, ERROR_CODE } from '@lidofinance/lido-csm-sdk';
 import { ErrorCode, getErrorCode } from './get-error-code';
+import { FetcherError } from './fetcher-error';
 
 const sdk = (code: ERROR_CODE, extra: Record<string, unknown> = {}) =>
   Object.assign(new SDKError({ code, message: 'x' }), extra);
@@ -45,5 +46,21 @@ describe('getErrorCode (SDK typed path)', () => {
 
   it('falls back to SOMETHING_WRONG for a plain unknown error', () => {
     expect(getErrorCode({ foo: 'bar' })).toBe(ErrorCode.SOMETHING_WRONG);
+  });
+});
+
+describe('getErrorCode (API path)', () => {
+  it('maps 401/403 to SESSION_EXPIRED', () => {
+    expect(getErrorCode(new FetcherError('nope', 401))).toBe(
+      ErrorCode.SESSION_EXPIRED,
+    );
+  });
+  it('maps 429 to TOO_MANY_REQUESTS and 5xx to SERVER_ERROR', () => {
+    expect(getErrorCode(new FetcherError('x', 429))).toBe(
+      ErrorCode.TOO_MANY_REQUESTS,
+    );
+    expect(getErrorCode(new FetcherError('x', 503))).toBe(
+      ErrorCode.SERVER_ERROR,
+    );
   });
 });
