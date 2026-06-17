@@ -1,5 +1,10 @@
 import { SDKError } from '@lidofinance/lido-csm-sdk';
-import { getContractErrorCopy, getDecodedRevert } from './contract-errors';
+import {
+  getContractErrorCopy,
+  getDecodedRevert,
+  trackUnmappedContractError,
+} from './contract-errors';
+import { trackMatomoError } from './track-matomo-event';
 
 // track-matomo-event imports consts/matomo-click-events → config → next.js
 // runtime which is unavailable in Jest. Stub the whole module.
@@ -15,6 +20,12 @@ describe('getDecodedRevert', () => {
       decodedRevert: { name: 'BondLockNotExpired', args: [] } as any,
     });
     expect(getDecodedRevert(e)?.name).toBe('BondLockNotExpired');
+  });
+
+  it('returns undefined for a non-SDKError value (fallback path)', () => {
+    expect(getDecodedRevert(null)).toBeUndefined();
+    expect(getDecodedRevert(undefined)).toBeUndefined();
+    expect(getDecodedRevert(new Error('plain'))).toBeUndefined();
   });
 });
 
@@ -33,5 +44,32 @@ describe('getContractErrorCopy', () => {
       decodedRevert: { name: 'SomeOracleInternalError', args: [] } as any,
     });
     expect(getContractErrorCopy(e)).toBeUndefined();
+  });
+});
+
+describe('trackUnmappedContractError', () => {
+  beforeEach(() => {
+    (trackMatomoError as jest.Mock).mockClear();
+  });
+
+  it('fires telemetry when the decoded name has no friendly copy', () => {
+    const e = new SDKError({
+      message: 'SomeOracleInternalError',
+      decodedRevert: { name: 'SomeOracleInternalError', args: [] } as any,
+    });
+    trackUnmappedContractError(e);
+    expect(trackMatomoError).toHaveBeenCalledWith(
+      'SomeOracleInternalError',
+      'UNMAPPED_CONTRACT_ERROR',
+    );
+  });
+
+  it('does NOT fire telemetry for a mapped name', () => {
+    const e = new SDKError({
+      message: 'BondLockNotExpired',
+      decodedRevert: { name: 'BondLockNotExpired', args: [] } as any,
+    });
+    trackUnmappedContractError(e);
+    expect(trackMatomoError).not.toHaveBeenCalled();
   });
 });

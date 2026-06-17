@@ -6,6 +6,13 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { trackMatomoError } from './track-matomo-event';
 
+// Shared copy constants — two ABI names intentionally map to the same string;
+// using a named const makes future copy edits atomic and the intent explicit.
+const PROOF_INVALID_COPY =
+  'Your eligibility proof is no longer valid. Please refresh the page and try again.';
+const SAME_ADDRESS_COPY =
+  'The new address must be different from the current one';
+
 // Friendly, operator-facing copy for decodable contract custom errors, keyed by
 // the SDK's `ContractErrorName` (derived from CONTRACT_BASE_ABI via abitype).
 // Typed as Partial<Record<…>>: a typo or removed ABI error fails to compile,
@@ -55,10 +62,8 @@ export const CONTRACT_ERROR_MESSAGES: Partial<
 
   // Gates (ICS / curated / vetted)
   AlreadyConsumed: 'You have already claimed through this gate',
-  InvalidProof:
-    'Your eligibility proof is no longer valid. Please refresh the page and try again.',
-  MerkleProofInvalidMultiproof:
-    'Your eligibility proof is no longer valid. Please refresh the page and try again.',
+  InvalidProof: PROOF_INVALID_COPY,
+  MerkleProofInvalidMultiproof: PROOF_INVALID_COPY,
   NotAllowedToClaim: 'This address is not allowed to claim',
   SenderIsNotEligible: 'This address is not eligible for this action',
 
@@ -72,8 +77,8 @@ export const CONTRACT_ERROR_MESSAGES: Partial<
   SenderIsNotProposedAddress:
     'Only the proposed address can confirm this change',
   AlreadyProposed: 'This change has already been proposed',
-  AddressCannotBeSame: 'The new address must be different from the current one',
-  SameAddress: 'The new address must be different from the current one',
+  AddressCannotBeSame: SAME_ADDRESS_COPY,
+  SameAddress: SAME_ADDRESS_COPY,
   AddressCannotBeZero: 'The address cannot be the zero address',
   NodeOperatorDoesNotExist: 'This node operator does not exist',
   OwnerEditsRestricted: 'Editing is restricted for this operator',

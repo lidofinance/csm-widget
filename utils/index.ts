@@ -18,6 +18,7 @@ export * from './format-percent';
 export * from './get-array-sum';
 export * from './get-percent';
 export * from './get-based-hash-href';
+export * from './contract-errors';
 export * from './get-error-code';
 export * from './get-etherscan-link';
 export * from './get-first-param';
