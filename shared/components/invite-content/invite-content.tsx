@@ -2,7 +2,7 @@ import { NodeOperatorInviteInfo } from '@lidofinance/lido-csm-sdk';
 import { Tooltip } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { RoleActionsList } from 'shared/components/role-actions';
-import { ROLES_METADATA } from 'consts';
+import { isModuleCM, ROLES_METADATA } from 'consts';
 import { DescriptorId } from 'shared/node-operator';
 import { Badge, InviteContentStyle } from './style';
 
@@ -18,6 +18,7 @@ export const InviteContent: FC<{ invite: NodeOperatorInviteInfo }> = ({
           <RoleActionsList
             role={invite.role}
             extendedManagerPermissions={invite.extendedManagerPermissions}
+            isCM={isModuleCM}
           />
         }
       >
