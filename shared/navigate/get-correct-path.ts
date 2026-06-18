@@ -1,4 +1,3 @@
-import { isModuleCM, isModuleCSM } from 'consts';
 import { PATH } from 'consts/urls';
 import { ShowFlags } from 'shared/hooks';
 
@@ -16,11 +15,11 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
     case PATH.SETTINGS_SPLITS:
       return hasRole ? path : PATH.SETTINGS_INBOX;
     case PATH.SETTINGS_METADATA:
-      return isModuleCM ? path : PATH.SETTINGS;
+      return flags.IS_CM ? path : PATH.SETTINGS;
 
     // Create — operators already have keys
     case PATH.CREATE:
-      return isModuleCSM && hasRole ? PATH.KEYS_VIEW : path; // TODO: rework for dvt
+      return flags.IS_CSM && hasRole ? PATH.KEYS_VIEW : path; // TODO: rework for dvt
 
     // Keys
     case PATH.KEYS:

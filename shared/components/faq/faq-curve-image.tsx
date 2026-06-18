@@ -5,7 +5,7 @@ import { FC } from 'react';
 import { useCurrentCurveId } from 'shared/hooks';
 
 import { getModuleOperatorType } from 'consts';
-import { useLidoSDK } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import curveDefDark from 'faq/images/curve-def-dark.png';
 import curveDef from 'faq/images/curve-def.png';
 import curveIcsDark from 'faq/images/curve-ics-dark.png';
@@ -20,7 +20,7 @@ const isIcs = (type?: OPERATOR_TYPE) =>
 export const FaqCurveImage: FC<{ type?: OPERATOR_TYPE }> = ({
   type: _type,
 }) => {
-  const { sm } = useLidoSDK();
+  const sm = useSmSDK();
   const curveId = useCurrentCurveId();
   const type = _type ?? getModuleOperatorType(sm.core.moduleName, curveId);
   const { themeName } = useThemeToggle();

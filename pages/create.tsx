@@ -2,13 +2,17 @@ import { PATH } from 'consts/urls';
 import { CreateNodeOperatorPage } from 'features/create-node-operator';
 import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { useCuratedGatesEligibility, useIcsProof } from 'modules/web3';
-import { isModuleCSM } from 'consts';
+import {
+  useCuratedGatesEligibility,
+  useIcsProof,
+  useModule,
+} from 'modules/web3';
 
 const Page = () => {
+  const { isCSM } = useModule();
   const { isPending: isPendingCM } = useCuratedGatesEligibility();
   const { isPending: isPendingCSM } = useIcsProof(); // TODO: add dvt
-  const isPending = isModuleCSM ? isPendingCSM : isPendingCM;
+  const isPending = isCSM ? isPendingCSM : isPendingCM;
 
   return (
     <GateLoaded>

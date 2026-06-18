@@ -5,7 +5,7 @@ import {
   NodeOperatorShortInfo,
 } from '@lidofinance/lido-csm-sdk';
 import { getModuleOperatorType } from 'consts';
-import { useDappStatus, useLidoSDK } from 'modules/web3';
+import { useDappStatus, useSmSDK } from 'modules/web3';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { RoleBadge } from '../role-badge/role-badge';
 import { DescriptorId } from './descriptor-id';
@@ -17,7 +17,7 @@ type DescriptorProps = {
 };
 
 export const Descriptor: FC<DescriptorProps> = ({ nodeOperator, hideType }) => {
-  const { sm } = useLidoSDK();
+  const sm = useSmSDK();
   const type = getModuleOperatorType(sm.core.moduleName, nodeOperator.curveId);
   const { address } = useDappStatus();
   const roles = getNodeOperatorRoles(nodeOperator, address);

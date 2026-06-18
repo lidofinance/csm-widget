@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { MODULE_NAME, NodeOperatorId, ROLES } from '@lidofinance/lido-csm-sdk';
 import { Plus } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
-import { isModuleCM } from 'consts/module';
+import { useModule } from 'modules/web3';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { Stack } from 'shared/components';
@@ -20,6 +20,7 @@ export const SwitchModal: ModalComponentType<{
   canCreate: boolean;
   onChange: (id: NodeOperatorId, module: MODULE_NAME) => void;
 }> = ({ onClose, active, list, onChange, canCreate, ...props }) => {
+  const { isCM } = useModule();
   const handleSwitch = useCallback(
     (id: NodeOperatorId, module: MODULE_NAME) => {
       onChange(id, module);
@@ -31,7 +32,7 @@ export const SwitchModal: ModalComponentType<{
   return (
     <Modal title="Switch Node Operator" onClose={onClose} {...props}>
       <Stack direction="column" gap="lg">
-        {isModuleCM ? (
+        {isCM ? (
           <CmSwitchList active={active} list={list} onSwitch={handleSwitch} />
         ) : (
           <Stack direction="column" gap="sm">

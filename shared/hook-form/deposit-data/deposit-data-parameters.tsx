@@ -4,7 +4,7 @@ import {
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { FC, useMemo } from 'react';
-import { isModuleCM, isModuleCSM } from 'consts/module';
+import { useModule } from 'modules/web3';
 import { IconTooltip } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import {
@@ -35,6 +35,7 @@ export const DepositDataParameters: FC = () => {
   });
 
   const { operatorInfo, curveParameters } = useFormData<FormData>();
+  const { isCSM, isCM } = useModule();
 
   const keyData = useMemo(() => {
     if (!curveParameters) return [];
@@ -57,7 +58,7 @@ export const DepositDataParameters: FC = () => {
           curveParameters.rewardsConfig,
           existsKeysCount,
         ),
-        queueType: isModuleCSM
+        queueType: isCSM
           ? getQueueTypeForKey(
               keyNumber,
               curveParameters.queueConfig,
@@ -66,10 +67,10 @@ export const DepositDataParameters: FC = () => {
           : undefined,
       };
     });
-  }, [curveParameters, depositData.length, operatorInfo]);
+  }, [curveParameters, depositData.length, operatorInfo, isCSM]);
 
   return (
-    <TableContainer $equal $short={isModuleCM}>
+    <TableContainer $equal $short={isCM}>
       <TableHeader>
         <HeaderCell>Key number</HeaderCell>
         <HeaderCell>
@@ -79,7 +80,7 @@ export const DepositDataParameters: FC = () => {
             placement="bottomRight"
           />
         </HeaderCell>
-        {isModuleCSM && (
+        {isCSM && (
           <HeaderCell>
             Queue
             <IconTooltip
@@ -101,7 +102,7 @@ export const DepositDataParameters: FC = () => {
         <TableRow key={keyNumber}>
           <DataCell>#{keyNumber}</DataCell>
           <DataCell>{formatPercent(feePercentage)}</DataCell>
-          {isModuleCSM && <DataCell>{queueType}</DataCell>}
+          {isCSM && <DataCell>{queueType}</DataCell>}
           <DataCell>
             <FormatToken amount={bondAmount} token={TOKENS.eth} />
           </DataCell>

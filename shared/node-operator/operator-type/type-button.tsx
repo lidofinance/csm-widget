@@ -3,7 +3,7 @@ import { FC, useCallback } from 'react';
 
 import { getModuleOperatorType } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { useLidoSDK, useCurveParameters } from 'modules/web3';
+import { useSmSDK, useCurveParameters } from 'modules/web3';
 import { trackMatomoEvent } from 'utils';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { useParametersModal } from '../parameters-modal';
@@ -18,7 +18,7 @@ export const TypeButton: FC<TypeButtonBaseProps> = ({
   onClick,
   ...rest
 }) => {
-  const { sm } = useLidoSDK();
+  const sm = useSmSDK();
   const { openModal } = useParametersModal();
   useCurveParameters(curveId); // pre-fetching
   const type = getModuleOperatorType(sm.core.moduleName, curveId);

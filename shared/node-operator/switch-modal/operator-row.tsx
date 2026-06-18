@@ -10,7 +10,6 @@ import { STAKE_COLORS } from 'features/group/shared/stake-stats';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import {
   useDappStatus,
-  useLidoSDK,
   useOperatorCurveId,
   useOperatorInfo,
   useOperatorMetadata,
@@ -46,7 +45,6 @@ export const OperatorRow: FC<OperatorRowProps> = ({
   action,
   onSwitch,
 }) => {
-  const { sm } = useLidoSDK();
   const { address } = useDappStatus();
 
   // Fetch curveId only for non-available operators (no shortInfo)
@@ -54,7 +52,11 @@ export const OperatorRow: FC<OperatorRowProps> = ({
     shortInfo ? undefined : nodeOperatorId,
   );
   const curveId = shortInfo?.curveId ?? fetchedCurveId;
-  const operatorType = getModuleOperatorType(sm.core.moduleName, curveId);
+  // Use the row's own module, not the active operator's module.
+  const operatorType = getModuleOperatorType(
+    shortInfo?.module ?? MODULE_NAME.CM,
+    curveId,
+  );
 
   // Roles only for available operators
   const roles = shortInfo ? getNodeOperatorRoles(shortInfo, address) : [];
