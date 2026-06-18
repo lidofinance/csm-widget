@@ -9,7 +9,7 @@ import {
   useIdvtcProof,
 } from 'modules/web3';
 import { useMemo } from 'react';
-import { useShowFlags } from 'shared/hooks';
+import { getOperatorTypeQuery, useShowFlags } from 'shared/hooks';
 
 export type VisibleType = {
   type: OPERATOR_TYPE;
@@ -36,7 +36,7 @@ const buildApplyEntry = (
     ? {
         type,
         href: PATH.CREATE,
-        query: { type: short.toLocaleLowerCase() },
+        query: getOperatorTypeQuery(type),
         label: `Create ${short} operator`,
         matomoEvent: createEvent,
         primary: true,

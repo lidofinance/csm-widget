@@ -1,4 +1,4 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { NodeOperatorId, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import {
@@ -15,6 +15,7 @@ import {
 } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
+import { getOperatorTypeQuery } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { isAddressEqual } from 'viem';
 import { ScoreChip } from './score-chip';
@@ -88,7 +89,10 @@ const useHint = (
           </Text>
 
           <div>
-            <LocalLink href={PATH.CREATE}>
+            <LocalLink
+              href={PATH.CREATE}
+              query={getOperatorTypeQuery(OPERATOR_TYPE.CSM_IDVTC)}
+            >
               <Button size="xs">Go to create Node Operator</Button>
             </LocalLink>
           </div>

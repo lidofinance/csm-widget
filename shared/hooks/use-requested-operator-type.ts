@@ -2,10 +2,23 @@ import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 
-const TYPE_QUERY_MAP: Record<string, OPERATOR_TYPE> = {
-  ics: OPERATOR_TYPE.CSM_ICS,
-  idvtc: OPERATOR_TYPE.CSM_IDVTC,
-  def: OPERATOR_TYPE.CSM_DEF,
+const OPERATOR_TYPE_QUERY: Partial<Record<OPERATOR_TYPE, string>> = {
+  [OPERATOR_TYPE.CSM_ICS]: 'ics',
+  [OPERATOR_TYPE.CSM_IDVTC]: 'idvtc',
+  [OPERATOR_TYPE.CSM_DEF]: 'def',
+};
+
+const TYPE_QUERY_MAP = Object.fromEntries(
+  Object.entries(OPERATOR_TYPE_QUERY).map(([type, key]) => [key, type]),
+) as Record<string, OPERATOR_TYPE>;
+
+// Builds the `?type=` query that preselects an operator type (and its curve)
+// on the create page. Returns undefined for types without a create flow.
+export const getOperatorTypeQuery = (
+  type: OPERATOR_TYPE,
+): Record<string, string> | undefined => {
+  const key = OPERATOR_TYPE_QUERY[type];
+  return key ? { type: key } : undefined;
 };
 
 export type RequestedOperatorType =

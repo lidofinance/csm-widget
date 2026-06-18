@@ -1,8 +1,10 @@
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Button } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import { FC, PropsWithChildren } from 'react';
 import { EmptyState } from 'shared/components';
 import { FormLoader } from 'shared/hook-form/form-controller';
+import { getOperatorTypeQuery } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { ClaimIdvtcSuccess } from './claim-idvtc-success';
 import { useClaimIdvtcFlow, useClaimIdvtcFormData } from './context';
@@ -27,7 +29,10 @@ const ClaimIdvtcFormGate: FC<PropsWithChildren> = ({ children }) => {
       <>
         <ClaimedWithProofInfo />
         <Parameters />
-        <LocalLink href={PATH.CREATE}>
+        <LocalLink
+          href={PATH.CREATE}
+          query={getOperatorTypeQuery(OPERATOR_TYPE.CSM_IDVTC)}
+        >
           <Button fullwidth>Create IDVTC operator</Button>
         </LocalLink>
       </>
