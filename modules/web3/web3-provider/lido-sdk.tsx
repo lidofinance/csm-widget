@@ -60,14 +60,22 @@ export const useLidoSDK = () => {
 
 /**
  * Returns the SDK for the requested module ALWAYS, regardless of the active
- * module. Use for cross-module work (e.g. discovery across both modules).
+ * module. Use for cross-module work (e.g. discovery across both modules) and
+ * for the /create flow, where there is no active operator yet.
  * This deliberately bypasses the `config.module` guard that `useSmSDK(module)`
  * enforces — `useSmSDK(module)` returns `undefined` on a module mismatch.
+ * Overloads narrow the return type to the concrete SDK for the requested
+ * module so callers can reach module-specific surfaces (e.g. `permissionlessGate`,
+ * `curatedGates`).
  */
-export const useSmSDKByModule = (module: MODULE_NAME) => {
+export function useSmSDKByModule(module: MODULE_NAME.CSM): LidoSDKCsm;
+export function useSmSDKByModule(module: MODULE_NAME.CM): LidoSDKCm;
+export function useSmSDKByModule(module: MODULE_NAME): LidoSDKCsm | LidoSDKCm;
+// eslint-disable-next-line func-style
+export function useSmSDKByModule(module: MODULE_NAME) {
   const { csm, cm } = useLidoSDK();
   return module === MODULE_NAME.CSM ? csm : cm;
-};
+}
 
 export function useSmSDK(): LidoSDKCsm | LidoSDKCm;
 export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;

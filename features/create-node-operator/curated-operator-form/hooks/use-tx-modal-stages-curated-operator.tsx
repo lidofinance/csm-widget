@@ -1,10 +1,11 @@
 import {
+  MODULE_NAME,
   type NodeOperatorShortInfo,
   ROLES,
   getNodeOperatorRoles,
 } from '@lidofinance/lido-csm-sdk';
 import { getCurveMetadata } from 'consts';
-import { useSmSDK } from 'modules/web3';
+import { useSmSDKByModule } from 'modules/web3';
 import {
   TxStagePending,
   TxStageSign,
@@ -20,7 +21,7 @@ import { CuratedOperatorCustomAddressActions } from '../custom-address-actions';
 import { CuratedOperatorSuccessActions } from '../success-actions';
 
 export const useTxModalStagesCuratedOperator = () => {
-  const sm = useSmSDK();
+  const sm = useSmSDKByModule(MODULE_NAME.CM);
   const moduleName = sm.core.moduleName;
 
   return useTxStages<

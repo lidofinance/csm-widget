@@ -1,7 +1,7 @@
 import { MODULE_NAME, getNodeOperatorRoles } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
-import { useAppendOperator, useSmSDK } from 'modules/web3';
+import { useAppendOperator, useSmSDKByModule } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -23,7 +23,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFormNetworkData,
   SubmitKeysFlow
 > => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
+  const sdk = useSmSDKByModule(MODULE_NAME.CSM);
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();

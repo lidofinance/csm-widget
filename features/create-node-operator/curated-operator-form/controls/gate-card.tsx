@@ -5,7 +5,8 @@ import {
   type FC,
   type ReactNode,
 } from 'react';
-import { useCurveParameters, useSmSDK } from 'modules/web3';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { useCurveParameters, useSmSDKByModule } from 'modules/web3';
 import {
   formatPercentKeyIntervals,
   formatEthKeyIntervals,
@@ -25,7 +26,7 @@ type GateCardProps = {
 };
 
 export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
-  const sm = useSmSDK();
+  const sm = useSmSDKByModule(MODULE_NAME.CM);
   const { data: parameters } = useCurveParameters(curveId);
 
   const moduleName = sm.core.moduleName;

@@ -1,6 +1,7 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
 import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
-import { useSmSDK } from 'modules/web3';
+import { useSmSDKByModule } from 'modules/web3';
 import {
   useFormValidation,
   validateBondAmount,
@@ -14,7 +15,7 @@ import type {
 } from './types';
 
 export const useSubmitKeysValidation = () => {
-  const { depositData: sdk } = useSmSDK();
+  const { depositData: sdk } = useSmSDKByModule(MODULE_NAME.CSM);
   const featureFlags = useFeatureFlags();
 
   return useFormValidation<SubmitKeysFormInputType, SubmitKeysFormNetworkData>(

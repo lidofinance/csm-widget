@@ -1,6 +1,7 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { getCurveMetadata } from 'consts/operator-type-metadata';
-import { useCurveParameters, useSmSDK } from 'modules/web3';
+import { useCurveParameters, useSmSDKByModule } from 'modules/web3';
 import { type ComponentPropsWithoutRef, type FC, type ReactNode } from 'react';
 import { useWatch } from 'react-hook-form';
 import { Address } from 'shared/components';
@@ -24,7 +25,7 @@ const SummaryRow: FC<
 );
 
 export const VerificationSummary: FC = () => {
-  const sm = useSmSDK();
+  const sm = useSmSDKByModule(MODULE_NAME.CM);
   const { availableGates = [] } = useCuratedOperatorFormData();
   const [gateName, rewardAddress, managerAddress, name, description] = useWatch<
     CuratedOperatorFormInputType,
