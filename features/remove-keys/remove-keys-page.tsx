@@ -8,19 +8,23 @@ import {
 } from 'shared/navigate';
 import { RemoveKeys } from './remove-keys';
 import { Faq, FormBlock } from 'shared/components';
-import { FAQ_KEYS } from 'faq';
+import { useFaq } from 'faq';
 
-export const RemoveKeysPage: FC = () => (
-  <Layout
-    title="Delete validator keys"
-    subtitle="Remove or eject your validator keys"
-    pageName="RemoveKeys"
-  >
-    <KeysPageSwitcher />
-    <FormBlock>
-      <DeleteKeysSwitcher active={DeleteKeysSwitcherRoutes.REMOVE} />
-      <RemoveKeys />
-    </FormBlock>
-    <Faq items={FAQ_KEYS} />
-  </Layout>
-);
+export const RemoveKeysPage: FC = () => {
+  const { FAQ_KEYS } = useFaq();
+
+  return (
+    <Layout
+      title="Delete validator keys"
+      subtitle="Remove or eject your validator keys"
+      pageName="RemoveKeys"
+    >
+      <KeysPageSwitcher />
+      <FormBlock>
+        <DeleteKeysSwitcher active={DeleteKeysSwitcherRoutes.REMOVE} />
+        <RemoveKeys />
+      </FormBlock>
+      <Faq items={FAQ_KEYS} />
+    </Layout>
+  );
+};

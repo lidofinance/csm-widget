@@ -1,4 +1,4 @@
-import { FAQ_ROLES } from 'faq';
+import { useFaq } from 'faq';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
@@ -9,6 +9,7 @@ import { ClaimerForm } from './claimer-form';
 
 export const ClaimerPage: FC = () => {
   const key = useWeb3Key();
+  const { FAQ_ROLES } = useFaq();
 
   return (
     <Layout

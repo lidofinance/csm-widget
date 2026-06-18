@@ -4,20 +4,24 @@ import { Layout } from 'shared/layout';
 import { KeysPageSwitcher } from 'shared/navigate';
 import { AddKeys } from './add-keys';
 import { Faq } from 'shared/components';
-import { FAQ_KEYS } from 'faq';
+import { useFaq } from 'faq';
 import { useNodeOperatorId, useOperatorInfo } from 'modules/web3';
 
-export const AddKeysPage: FC = () => (
-  <Layout
-    title="Submit validator keys"
-    subtitle={<Subtitle />}
-    pageName="AddKeys"
-  >
-    <KeysPageSwitcher />
-    <AddKeys />
-    <Faq items={FAQ_KEYS} />
-  </Layout>
-);
+export const AddKeysPage: FC = () => {
+  const { FAQ_KEYS } = useFaq();
+
+  return (
+    <Layout
+      title="Submit validator keys"
+      subtitle={<Subtitle />}
+      pageName="AddKeys"
+    >
+      <KeysPageSwitcher />
+      <AddKeys />
+      <Faq items={FAQ_KEYS} />
+    </Layout>
+  );
+};
 
 const Subtitle: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
