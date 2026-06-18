@@ -15,10 +15,13 @@ export const useBondNextKeysCount = ({
   token,
   keysCount = 0,
 }: Props) => {
-  const { accounting } = useSmSDK();
+  const { accounting, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['getBondForNextKeysPerToken', { keysCount, nodeOperatorId }],
+    queryKey: [
+      'getBondForNextKeysPerToken',
+      { keysCount, nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(nodeOperatorId !== undefined);

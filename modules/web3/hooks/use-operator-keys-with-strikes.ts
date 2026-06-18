@@ -17,7 +17,10 @@ export const useOperatorKeysWithStrikes = <TData = KeyWithStrikes[]>(
   const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_STRIKES, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_STRIKES,
+      { nodeOperatorId, module: MODULE_NAME.CSM },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(sdk);

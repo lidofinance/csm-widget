@@ -18,7 +18,10 @@ export const useOperatorMetadata = <TData = OperatorMetadata>(
   const sdk = useSmSDK(MODULE_NAME.CM);
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_METADATA, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_METADATA,
+      { nodeOperatorId, module: MODULE_NAME.CM },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(nodeOperatorId !== undefined);

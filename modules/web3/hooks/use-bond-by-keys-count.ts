@@ -15,10 +15,13 @@ export const useBondByKeysCount = ({
   curveId,
   token = TOKENS.steth,
 }: Props) => {
-  const { accounting } = useSmSDK();
+  const { accounting, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['getBondAmountByKeysCountPerToken', { keysCount, curveId }],
+    queryKey: [
+      'getBondAmountByKeysCountPerToken',
+      { keysCount, curveId, module: core.moduleName },
+    ],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(curveId !== undefined);

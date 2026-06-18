@@ -6,10 +6,10 @@ import { useSmSDK } from '../web3-provider';
 export const KEY_OPERATORS_WITH_LOCKED_BOND = ['operators-with-locked-bond'];
 
 export const useOperatorsWithLockedBond = () => {
-  const { delayedPenalty } = useSmSDK();
+  const { delayedPenalty, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_OPERATORS_WITH_LOCKED_BOND],
+    queryKey: [...KEY_OPERATORS_WITH_LOCKED_BOND, { module: core.moduleName }],
     ...STRATEGY_CONSTANT,
     queryFn: () => delayedPenalty.getOperatorsWithLockedBond(),
     select: (data) =>

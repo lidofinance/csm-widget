@@ -6,10 +6,10 @@ import { ReportTimestamps } from '@lidofinance/lido-csm-sdk';
 export const useLastReportTimestamps = <TData = ReportTimestamps | undefined>(
   select?: (data: ReportTimestamps | undefined) => TData,
 ) => {
-  const { rewards } = useSmSDK();
+  const { rewards, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['last-report-timestamps'],
+    queryKey: ['last-report-timestamps', { module: core.moduleName }],
     ...STRATEGY_CONSTANT,
     queryFn: () => rewards.getLastReportTimestamps(),
     select,

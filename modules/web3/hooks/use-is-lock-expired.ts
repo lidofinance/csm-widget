@@ -9,10 +9,13 @@ export const KEY_IS_LOCK_EXPIRED = ['is-lock-expired'];
 export const useIsLockExpired = (
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
-  const { operator } = useSmSDK();
+  const { operator, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_IS_LOCK_EXPIRED, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_IS_LOCK_EXPIRED,
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(nodeOperatorId !== undefined);

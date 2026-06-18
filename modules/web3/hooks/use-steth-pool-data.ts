@@ -8,10 +8,10 @@ export const KEY_STETH_POOL_DATA = ['steth-pool-data'];
 export const useStethPoolData = <TData = StethPoolData>(
   select?: (data: StethPoolData) => TData,
 ) => {
-  const { accounting } = useSmSDK();
+  const { accounting, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_STETH_POOL_DATA],
+    queryKey: [...KEY_STETH_POOL_DATA, { module: core.moduleName }],
     ...STRATEGY_CONSTANT,
     queryFn: () => accounting.getStethPoolData(),
     select,

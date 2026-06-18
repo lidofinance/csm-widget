@@ -8,10 +8,10 @@ export const useCurveParameters = <TData = CurveParameters>(
   curveId: bigint | undefined,
   select?: (data: CurveParameters) => TData,
 ) => {
-  const { parameters } = useSmSDK();
+  const { parameters, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['curve-parameters', { curveId }],
+    queryKey: ['curve-parameters', { curveId, module: core.moduleName }],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(curveId !== undefined);

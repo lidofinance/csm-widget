@@ -3,10 +3,10 @@ import { STRATEGY_CONSTANT } from 'consts';
 import { useSmSDK } from '../web3-provider';
 
 export const useSmStatus = () => {
-  const { module } = useSmSDK();
+  const { module, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['sm-status'],
+    queryKey: ['sm-status', { module: core.moduleName }],
     ...STRATEGY_CONSTANT,
     queryFn: () => module.getStatus(),
     select: (data) => ({
@@ -17,10 +17,10 @@ export const useSmStatus = () => {
 };
 
 export const useSmVersionSupported = () => {
-  const { module } = useSmSDK();
+  const { module, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['sm-version'],
+    queryKey: ['sm-version', { module: core.moduleName }],
     ...STRATEGY_CONSTANT,
     queryFn: async () => module.isVersionsSupported(),
   });

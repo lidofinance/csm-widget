@@ -7,10 +7,13 @@ import { useSmSDK } from '../web3-provider';
 export const useOperatorLastRewards = (
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
-  const { rewards } = useSmSDK();
+  const { rewards, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['operator-last-rewards', { nodeOperatorId }],
+    queryKey: [
+      'operator-last-rewards',
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(nodeOperatorId !== undefined);

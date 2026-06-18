@@ -12,7 +12,7 @@ export const useShareLimit = <TData = ShareLimitInfo>(
   const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
-    queryKey: [...KEY_SHARE_LIMIT],
+    queryKey: [...KEY_SHARE_LIMIT, { module: MODULE_NAME.CSM }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(sdk);
