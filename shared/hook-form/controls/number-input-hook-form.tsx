@@ -2,6 +2,7 @@ import { useController, UseControllerProps } from 'react-hook-form';
 
 import { InputNumber } from 'shared/components';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
+import { hasFieldValue } from './has-field-value';
 import { testableError } from './testable-error';
 
 type NumberInputHookFormProps = Partial<
@@ -30,10 +31,10 @@ export const NumberInputHookForm = ({
     fieldState: { error, isTouched },
   } = useController({ name: fieldName, rules });
   const hasErrorHighlight =
-    (isTouched || rules?.required) &&
+    (isTouched || hasFieldValue(field.value) || rules?.required) &&
     (isValidationErrorTypeValidate(error?.type) || error?.type === 'required');
   // allows to show error state without message
-  const errorMessage = hasErrorHighlight || error?.message;
+  const errorMessage = hasErrorHighlight && (error?.message || true);
 
   return (
     <InputNumber

@@ -4,6 +4,7 @@ import { InputAmount } from 'shared/components/input-amount';
 
 import { getTokenDisplayName } from 'utils';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
+import { hasFieldValue } from './has-field-value';
 import { testableError } from './testable-error';
 
 type TokenAmountInputHookFormProps = Partial<
@@ -32,7 +33,7 @@ export const TokenAmountInputHookForm = ({
     fieldState: { error, isTouched },
   } = useController({ name: fieldName, rules });
   const hasErrorHighlight =
-    (isTouched || rules?.required) &&
+    (isTouched || hasFieldValue(field.value) || rules?.required) &&
     (isValidationErrorTypeValidate(error?.type) || error?.type === 'required');
   // allows to show error state without message
   const errorMessage = hasErrorHighlight && (error?.message || true);
