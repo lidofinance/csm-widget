@@ -1,5 +1,6 @@
 export * from './descriptor/descriptor';
 export * from './descriptor/descriptor-id';
+export * from './module-badge/module-badge';
 export * from './operator-type';
 export * from './parameters-modal';
 export * from './role-badge/role-badge';
