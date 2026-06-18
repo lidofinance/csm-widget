@@ -1,7 +1,7 @@
 import { DataTable, DataTableRow, Divider } from '@lidofinance/lido-ui';
+import { useModule } from 'modules/web3';
 import { useWatch } from 'react-hook-form';
 import { AddKeysFormInputType, useAddKeysFormData } from './context';
-import { isModuleCM } from 'consts';
 
 export const AddKeysFormInfo = () => {
   const [depositData] = useWatch<AddKeysFormInputType, ['depositData']>({
@@ -9,10 +9,11 @@ export const AddKeysFormInfo = () => {
   });
 
   const { shareLimit } = useAddKeysFormData(true);
+  const { isCM } = useModule();
 
   return (
     <DataTable data-testid="submitKeysFormInfo">
-      {!isModuleCM && (
+      {!isCM && (
         <>
           <DataTableRow title="Number of keys">
             {depositData.length}

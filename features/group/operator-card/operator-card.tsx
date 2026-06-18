@@ -10,7 +10,7 @@ import {
   useOperatorCurveId,
   useOperatorInfo,
   useOperatorMetadata,
-  useLidoSDK,
+  useSmSDK,
 } from 'modules/web3';
 import { FC, useMemo } from 'react';
 import { Address, Stack } from 'shared/components';
@@ -25,7 +25,7 @@ export const OperatorCard: FC<SubOperatorStakeSummary> = ({
   nodeOperatorId,
   ...props
 }) => {
-  const { sm } = useLidoSDK();
+  const sm = useSmSDK();
   const { data: metadata } = useOperatorMetadata(nodeOperatorId);
   const { data: info } = useOperatorInfo(nodeOperatorId);
   const { data: curveId } = useOperatorCurveId(nodeOperatorId);

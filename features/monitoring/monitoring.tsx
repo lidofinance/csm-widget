@@ -1,19 +1,21 @@
+import { useModule } from 'modules/web3';
 import { FC } from 'react';
 import { NoSSRWrapper } from 'shared/components';
 import { ExternalSection } from './external-section';
 import { NotificationToolsSection } from './notification-tools-section';
 import { StrikesSection } from './strikes-section';
 import { AttestationRateSection } from './attestation-rate-section';
-import { isModuleCSM } from 'consts';
 
 export const Monitoring: FC = () => {
+  const { isCSM } = useModule();
+
   return (
     <>
       <NoSSRWrapper>
-        {isModuleCSM && <AttestationRateSection />}
-        {isModuleCSM && <StrikesSection />}
+        {isCSM && <AttestationRateSection />}
+        {isCSM && <StrikesSection />}
         <ExternalSection />
-        {isModuleCSM && <NotificationToolsSection />}
+        {isCSM && <NotificationToolsSection />}
       </NoSSRWrapper>
     </>
   );
