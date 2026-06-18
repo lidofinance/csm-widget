@@ -4,9 +4,10 @@ import {
   NodeOperatorShortInfo,
 } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
+import { config } from 'config';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK, useSmSDKByModule } from '../web3-provider';
+import { useSmSDKByModule } from '../web3-provider';
 import { KEY_OPERATOR_INFO } from './use-operator-info';
 
 export const useOperatorShortInfo = <TData = NodeOperatorShortInfo>(
@@ -14,8 +15,7 @@ export const useOperatorShortInfo = <TData = NodeOperatorShortInfo>(
   select?: (data: NodeOperatorShortInfo) => TData,
   module?: MODULE_NAME,
 ) => {
-  const active = useSmSDK();
-  const targetModule = module ?? active.core.moduleName;
+  const targetModule = module ?? (config.module as MODULE_NAME);
   const { operator } = useSmSDKByModule(targetModule);
 
   return useQuery({

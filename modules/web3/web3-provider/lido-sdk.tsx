@@ -29,6 +29,9 @@ import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
 import { useUserConfig } from 'config/user-config';
 
+// Safe runtime import cycle (web3-provider ↔ operator-provider): only referenced
+// inside useSmSDK's body at render time, never at module top-level.
+import { useNodeOperator } from '../operator-provider/node-operator-provider';
 import { overridedAddresses } from './devnet';
 
 type LidoSDKContextValue = {
@@ -71,11 +74,17 @@ export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
 export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
 // eslint-disable-next-line func-style
 export function useSmSDK(module?: MODULE_NAME) {
-  const { sm } = useLidoSDK();
-  if (module && module !== config.module) {
-    return undefined;
+  const { csm, cm } = useLidoSDK();
+  // Active module comes from the resolved operator (operator-provider). Safe
+  // runtime cycle: only read here, at render time, never at module init.
+  const { activeModule } = useNodeOperator();
+  if (module) {
+    if (module !== activeModule) return undefined;
+    return module === MODULE_NAME.CSM ? csm : cm;
   }
-  return sm;
+  // No active operator yet → default to the CSM SDK so below-provider reads
+  // that don't pass a module still resolve a client.
+  return activeModule === MODULE_NAME.CM ? cm : csm;
 }
 
 export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
