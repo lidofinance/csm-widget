@@ -1,8 +1,8 @@
-import { isModuleCM } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   SHARE_LIMIT_STATUS,
   useHasPriorityQueueSpots,
+  useModule,
   useShareLimit,
   useShareLimitStatus,
 } from 'modules/web3';
@@ -74,8 +74,9 @@ export const ShareLimitBanner: FC = () => {
   const { data } = useShareLimit();
   const { data: status } = useShareLimitStatus();
   const { data: hasPrioritySpots } = useHasPriorityQueueSpots();
+  const { isCM } = useModule();
 
-  if (!data || !status || isModuleCM) {
+  if (!data || !status || isCM) {
     return null;
   }
 

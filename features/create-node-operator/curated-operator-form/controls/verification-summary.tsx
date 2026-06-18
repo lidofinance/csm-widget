@@ -1,6 +1,6 @@
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { getCurveMetadata } from 'consts/operator-type-metadata';
-import { useCurveParameters, useLidoSDK } from 'modules/web3';
+import { useCurveParameters, useSmSDK } from 'modules/web3';
 import { type ComponentPropsWithoutRef, type FC, type ReactNode } from 'react';
 import { useWatch } from 'react-hook-form';
 import { Address } from 'shared/components';
@@ -24,7 +24,7 @@ const SummaryRow: FC<
 );
 
 export const VerificationSummary: FC = () => {
-  const { sm } = useLidoSDK();
+  const sm = useSmSDK();
   const { availableGates = [] } = useCuratedOperatorFormData();
   const [gateName, rewardAddress, managerAddress, name, description] = useWatch<
     CuratedOperatorFormInputType,

@@ -5,7 +5,7 @@ import {
   type FC,
   type ReactNode,
 } from 'react';
-import { useCurveParameters, useLidoSDK } from 'modules/web3';
+import { useCurveParameters, useSmSDK } from 'modules/web3';
 import {
   formatPercentKeyIntervals,
   formatEthKeyIntervals,
@@ -25,7 +25,7 @@ type GateCardProps = {
 };
 
 export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
-  const { sm } = useLidoSDK();
+  const sm = useSmSDK();
   const { data: parameters } = useCurveParameters(curveId);
 
   const moduleName = sm.core.moduleName;
