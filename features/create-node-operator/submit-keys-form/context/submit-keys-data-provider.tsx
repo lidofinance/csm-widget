@@ -97,7 +97,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
     data: {
       address,
       isPaused: status?.isPaused,
-      proof,
+      proof: proof?.proof,
       stethBalance,
       wstethBalance,
       ethBalance,
