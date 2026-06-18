@@ -1,5 +1,6 @@
 import { Button, ButtonProps } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
+import { useNodeOperatorId } from 'modules/web3';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { IcsFormStatus, TypeStatus, useIcsState } from './shared';
@@ -13,6 +14,7 @@ type ButtonState = {
 const getButtonState = (
   typeStatus: TypeStatus,
   status: IcsFormStatus | undefined,
+  hasOperator: boolean,
 ): ButtonState => {
   if (typeStatus === 'CLAIMED') {
     return {
@@ -22,6 +24,15 @@ const getButtonState = (
     };
   }
   if (typeStatus === 'ISSUED') {
+    // Claiming a type writes onto an existing operator, so without an
+    // active one the only meaningful action is to create it.
+    if (!hasOperator) {
+      return {
+        text: 'Create ICS operator',
+        variant: undefined,
+        href: PATH.CREATE,
+      };
+    }
     return {
       text: 'Claim ICS type',
       variant: undefined,
@@ -52,7 +63,12 @@ type Props = {
 
 export const IcsApplyButton: FC<Props> = ({ size }) => {
   const { typeStatus, data } = useIcsState();
-  const { text, variant, href } = getButtonState(typeStatus, data?.status);
+  const nodeOperatorId = useNodeOperatorId();
+  const { text, variant, href } = getButtonState(
+    typeStatus,
+    data?.status,
+    nodeOperatorId !== undefined,
+  );
 
   return (
     <LocalLink href={href}>

@@ -93,7 +93,7 @@ const useHint = (
 
           <div>
             <LocalLink href={PATH.CREATE}>
-              <Button size="xs">Go to create Node Operator</Button>
+              <Button size="xs">Create ICS operator</Button>
             </LocalLink>
           </div>
         </>
