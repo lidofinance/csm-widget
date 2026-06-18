@@ -1,8 +1,12 @@
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
-import { isModuleCM } from 'consts/module';
 import { getCurveMetadata } from 'consts/operator-type-metadata';
-import { useNodeOperator, useOperatorGroup, useLidoSDK } from 'modules/web3';
+import {
+  useModule,
+  useNodeOperator,
+  useOperatorGroup,
+  useSmSDK,
+} from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components/stack/stack';
 import { DescriptorId, formatGroupTitle } from 'shared/node-operator';
@@ -12,13 +16,15 @@ import { TextLocalLink } from 'shared/navigate';
 import { ReactComponent as ArrowRight } from 'assets/icons/arrow-forward.svg';
 
 export const DashboardSubtitle: FC = () => {
-  if (isModuleCM) return <CmSubtitle />;
+  const { isCM } = useModule();
+
+  if (isCM) return <CmSubtitle />;
 
   return <>Dashboard</>;
 };
 
 const CmSubtitle: FC = () => {
-  const { sm } = useLidoSDK();
+  const sm = useSmSDK();
   const {
     nodeOperator: { nodeOperatorId, curveId },
   } = useNodeOperator<true>();

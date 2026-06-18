@@ -7,11 +7,11 @@ import {
   Tooltip,
 } from '@lidofinance/lido-ui';
 import { LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE } from 'consts/external-links';
-import { isModuleCM } from 'consts/module';
 import {
   useFrameInfo,
   useLastReportTimestamps,
   useLastReportTxHash,
+  useModule,
   useNodeOperatorId,
   useOperatorInfo,
   useOperatorLastRewards,
@@ -141,10 +141,11 @@ const LastReportStats: FC = () => {
   const { data: lastRewards, isPending: isLoading } =
     useOperatorLastRewards(nodeOperatorId);
   const { data: txHash, isPending: isTxLoading } = useLastReportTxHash();
+  const { isCM } = useModule();
 
   return (
     <RowBody data-testid="lastRewardsInfo">
-      {!isModuleCM &&
+      {!isCM &&
         (!lastRewards || lastRewards.validatorsCount ? (
           <TextBlock
             title="Keys over threshold"
