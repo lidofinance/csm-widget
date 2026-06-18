@@ -31,6 +31,7 @@ type ApplyApplicationMockResponse = {
     sdvtMainnet: number | null;
     humanPassport: number | null;
     circles: number | null;
+    ssvHumanity: number | null;
     discord: number | null;
     twitter: number | null;
     aragonVotes: number | null;
@@ -70,6 +71,7 @@ export const applyApplicationMockResponse: ApplyApplicationMockResponse = {
     sdvtMainnet: null,
     humanPassport: null,
     circles: null,
+    ssvHumanity: null,
     discord: null,
     twitter: null,
     aragonVotes: null,

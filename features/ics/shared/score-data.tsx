@@ -211,6 +211,14 @@ export const SCORE_SOURCES: ScoreSource[] = [
         ),
       },
       {
+        id: 'ssvHumanity',
+        name: 'SSV Verified operators',
+        icon: <IconStyle src={SSVIcon.src} />,
+        points: 3,
+        description:
+          'Submitted address is present in the SSV Verified Operators list and does not belong to a professional operator',
+      },
+      {
         id: 'discord',
         name: 'Discord',
         icon: <IconStyle src={DiscordIcon.src} />,
@@ -293,7 +301,7 @@ export const SCORE_SOURCES: ScoreSource[] = [
       },
       {
         id: 'highSignal',
-        name: 'Lido High Signal score',
+        name: 'High Signal score',
         icon: <IconStyle src={HighSignalIcon.src} />,
         points: '2-5',
         description: (
@@ -304,13 +312,23 @@ export const SCORE_SOURCES: ScoreSource[] = [
               href="https://app.highsignal.xyz/p/lido/"
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsHighSignalLink}
             >
-              Lido High Signal space
-            </MatomoLink>
-            :
+              Lido
+            </MatomoLink>{' '}
+            or{' '}
+            <MatomoLink
+              href="https://app.highsignal.xyz/p/ssv/"
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsHighSignalLink}
+            >
+              SSV
+            </MatomoLink>{' '}
+            High Signal space:
             <br />- 2 points if 30 ≤ High Signal score ≤ 40
             <br />- 3 points if 40 {'<'} High Signal score ≤ 60
             <br />- 4 points if 60 {'<'} High Signal score ≤ 80
             <br />- 5 points if High Signal score {'>'} 80
+            <br />
+            Lido and SSV scores are not added together. The higher score is
+            used.
             <br />
             For more details, follow{' '}
             <MatomoLink

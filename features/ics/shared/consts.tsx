@@ -15,7 +15,22 @@ export const ICS_ROUNDS: IcsRound[] = [
   {
     round: 5,
     start: new Date(`2026-04-14`),
-    assessedDate: `late Q2, or Q3 2026`,
+    assessedDate: `June\u00A008, 2026`,
+  },
+  {
+    round: 6,
+    start: new Date(`2026-06-08`),
+    assessedDate: `September\u00A007, 2026`,
+  },
+  {
+    round: 7,
+    start: new Date(`2026-09-07`),
+    assessedDate: `December\u00A007, 2026`,
+  },
+  {
+    round: 8,
+    start: new Date(`2026-12-07`),
+    assessedDate: `late Q4 2026, or Q1 2027`,
   },
 ];
 

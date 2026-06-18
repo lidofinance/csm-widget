@@ -26,6 +26,7 @@ export type IcsScoresDto = {
   sdvtMainnet?: number;
   humanPassport?: number;
   circles?: number;
+  ssvHumanity?: number;
   discord?: number;
   twitter?: number;
   aragonVotes?: number;

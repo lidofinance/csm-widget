@@ -406,7 +406,13 @@ test.describe('Operator with keys. ICS. Apply application. Submit', async () => 
           .getByTestId('scoreItem')
           .all();
 
-        const expectedLabels = ['Human passport', 'Circles', 'Discord', 'X'];
+        const expectedLabels = [
+          'Human passport',
+          'Circles',
+          'SSV Verified operators',
+          'Discord',
+          'X',
+        ];
         expect(scoreItems).toHaveLength(expectedLabels.length);
 
         for (const [i, item] of scoreItems.entries()) {
@@ -472,7 +478,7 @@ test.describe('Operator with keys. ICS. Apply application. Submit', async () => 
           'Participation in Aragon Votes',
           'Participation in Snapshot Votes',
           'Lido Galxe score',
-          'Lido High Signal score',
+          'High Signal score',
           'GitPOAPs',
         ];
         expect(scoreItems).toHaveLength(expectedLabels.length);
