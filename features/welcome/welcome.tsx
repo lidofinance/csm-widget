@@ -1,18 +1,20 @@
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { useModule } from 'modules/web3';
 import { Stack, WelcomeSection } from 'shared/components';
 import { Connect } from 'shared/wallet';
 import styled from 'styled-components';
 import { LandingBlock } from './landing';
-import { isModuleCSM } from 'consts';
 
 export const Welcome: FC = () => {
+  const { isCSM } = useModule();
+
   return (
     <>
-      {isModuleCSM && <LandingBlock />}
+      {isCSM && <LandingBlock />}
       <WelcomeSection>
-        {isModuleCSM ? (
+        {isCSM ? (
           <Stack wrap>
             <ConnectStyle
               fullwidth
