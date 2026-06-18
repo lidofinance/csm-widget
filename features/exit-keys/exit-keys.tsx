@@ -1,6 +1,7 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { moduleMeta } from 'consts/module';
+import { MATOMO_CLICK_EVENTS_TYPES, MODULE_METADATA } from 'consts';
+import { useModule } from 'modules/web3';
 import {
   FormTitle,
   MatomoLink,
@@ -10,6 +11,8 @@ import {
 import { Gate } from 'shared/navigate';
 
 export const ExitKeys = () => {
+  const { module } = useModule();
+  const meta = MODULE_METADATA[module ?? MODULE_NAME.CSM];
   return (
     <>
       <Gate rule="IS_CSM">
@@ -97,8 +100,7 @@ export const ExitKeys = () => {
         </WarningBlock>
       </Gate>
       <WarningBlock type="notice">
-        This action should be performed{' '}
-        <b>outside the {moduleMeta.shortName} UI</b>
+        This action should be performed <b>outside the {meta.shortName} UI</b>
       </WarningBlock>
     </>
   );

@@ -19,11 +19,15 @@ import {
   useChangeRoleFormData,
 } from '../context';
 import { useRole } from '../hooks/use-role';
-import { moduleMeta } from 'consts';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { MODULE_METADATA } from 'consts';
+import { useModule } from 'modules/web3';
 
 export const Info: FC = () => {
   const roleTitle = useRole();
   const flow = useChangeRoleFlow();
+  const { module } = useModule();
+  const meta = MODULE_METADATA[module ?? MODULE_NAME.CSM];
   const {
     currentAddress,
     proposedAddress,
@@ -111,8 +115,7 @@ export const Info: FC = () => {
             <Text as="div" size="xxs">
               <ol>
                 <li>
-                  Connect to {moduleMeta.shortTitle} UI with the proposed
-                  address
+                  Connect to {meta.shortTitle} UI with the proposed address
                 </li>
                 <li>
                   Go to Settings tab → Inbox requests to confirm the change
