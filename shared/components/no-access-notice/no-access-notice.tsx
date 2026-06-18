@@ -36,7 +36,7 @@ export const NoAccessNotice: FC<NoAccessNoticeProps> = ({ access }) => {
   if (access.level === AccessLevel.ANYONE) {
     return (
       <WarningBlock type="notice">
-        Please connect your wallet to perform this action.
+        Please connect your wallet to perform this action
       </WarningBlock>
     );
   }
@@ -44,7 +44,7 @@ export const NoAccessNotice: FC<NoAccessNoticeProps> = ({ access }) => {
   if (access.level === AccessLevel.PROTOCOL_ROLE) {
     return (
       <WarningBlock type="notice">
-        This action requires a protocol-level permission.
+        This action requires a protocol-level permission
       </WarningBlock>
     );
   }
@@ -52,7 +52,7 @@ export const NoAccessNotice: FC<NoAccessNoticeProps> = ({ access }) => {
   return (
     <WarningBlock type="notice">
       This action can only be performed by the <b>{roleLabel}</b> Address of the
-      Node Operator.
+      Node Operator
     </WarningBlock>
   );
 };

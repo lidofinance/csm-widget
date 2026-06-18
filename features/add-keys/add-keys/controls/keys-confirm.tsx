@@ -14,7 +14,7 @@ export const KeysConfirm: FC = () => {
       {isModuleCM ? (
         <Text size="xxs" color="secondary" as="div">
           I confirm that my nodes are synced, running, and ready for the
-          validator activation.
+          validator activation
         </Text>
       ) : (
         <Text size="xxs" color="secondary" as="div">

@@ -20,7 +20,7 @@ export const OperatorInfoInputs: FC = () => {
           }}
         />
         <Text size="xxs" color="secondary">
-          This name will be publicly visible on-chain
+          This name will be publicly visible on-chain. You can update it later.
         </Text>
       </Stack>
 
@@ -37,7 +37,8 @@ export const OperatorInfoInputs: FC = () => {
           }}
         />
         <Text size="xxs" color="secondary">
-          A short blurb about your operator. Will be publicly visible on-chain.
+          A short blurb about your operator. This description will be publicly
+          visible on-chain and can be updated later.
         </Text>
       </Stack>
     </Stack>

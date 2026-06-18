@@ -39,7 +39,7 @@ export const RewardsAddressTypeSelect: FC = () => {
           <Text color="secondary" size="xxs">
             By choosing this option you will grant <b>Rewards Address</b> the
             ultimate control over the Node Operator. Further changes of
-            addresses will be two-phased (proposal and confirmation)
+            addresses will be two-phased (proposal and confirmation).
           </Text>
           <ul>
             <li>Rewards Address can reset the Manager Address</li>
@@ -63,7 +63,7 @@ export const RewardsAddressTypeSelect: FC = () => {
           <Text color="secondary" size="xxs">
             By choosing this option you will grant <b>Manager Address</b> the
             ultimate control over the Node Operator, while rewards&nbsp;address
-            is only used to receive rewards.
+            is only used to receive rewards
           </Text>
           <ul>
             <li>Rewards Address cannot reset the Manager Address</li>

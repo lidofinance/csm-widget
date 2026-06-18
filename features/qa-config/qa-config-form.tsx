@@ -173,7 +173,7 @@ export const QaConfigForm = () => {
           <p>
             The IPFS gateway is tried before the default public gateways and may
             include a <code>{'{cid}'}</code> placeholder; otherwise the CID is
-            appended to the URL.
+            appended to the URL
           </p>
           <p>
             Values are stored in <code>localStorage</code> under{' '}
@@ -182,7 +182,7 @@ export const QaConfigForm = () => {
           </p>
           <p>
             <strong>Reload the page after saving</strong> for the new endpoints
-            to be picked up everywhere.
+            to be picked up everywhere
           </p>
         </Description>
       </Block>

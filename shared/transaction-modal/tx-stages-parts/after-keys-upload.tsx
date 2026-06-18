@@ -22,7 +22,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
       <b>What is next: </b>
       <br />
       <ol>
-        <li>Wait for your keys to be deposited to through the protocol.</li>
+        <li>Wait for your keys to be deposited to through the protocol</li>
         <li>
           Once your keys become active (you can check their statuses on the{' '}
           <LocalLink

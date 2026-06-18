@@ -33,7 +33,7 @@ export const ClaimBondFormInfo = () => {
       {includesRewards && debtBurned > 0n && (
         <DataTableRow
           title="Bond debt covered"
-          help="Outstanding bond debt is automatically burned from the bond on every rewards distribution and deposit."
+          help="Outstanding bond debt is automatically burned from the bond on every rewards distribution and deposit"
         >
           <FormatToken amount={debtBurned} token={TOKENS.steth} />
         </DataTableRow>
@@ -41,7 +41,7 @@ export const ClaimBondFormInfo = () => {
       {debtRemain > 0n && (
         <DataTableRow
           title="Bond debt remaining"
-          help="Bond debt that cannot be covered yet — it will be paid down by future rewards or deposits."
+          help="Bond debt that cannot be covered yet — it will be paid down by future rewards or deposits"
         >
           <FormatToken amount={debtRemain} token={TOKENS.steth} />
         </DataTableRow>
@@ -67,7 +67,7 @@ export const ClaimBondFormInfo = () => {
               ) will receive
             </>
           }
-          help="The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab"
+          help="The recipient of the claim is the Rewards Address. You can change the Rewards Address on the Settings tab."
         >
           <FormatToken amount={toRAToken} token={token} />
         </DataTableRow>

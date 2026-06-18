@@ -44,7 +44,7 @@ export const validateDepositData = async ({
   if (depositData.length > KEYS_UPLOAD_TX_LIMIT) {
     throw new ValidationError(
       'depositData',
-      `Too many keys in one transaction. Maximum allowed: ${KEYS_UPLOAD_TX_LIMIT}`,
+      `Too many keys in one transaction. Maximum allowed: ${KEYS_UPLOAD_TX_LIMIT}.`,
     );
   }
 
@@ -58,7 +58,7 @@ export const validateDepositData = async ({
         const availableSlots = Math.max(keysLimit - currentActiveKeys, 0);
         throw new ValidationError(
           'depositData',
-          `Keys limit exceeded. Allowed keys count to submit: ${availableSlots}`,
+          `Keys limit exceeded. Allowed keys count to submit: ${availableSlots}.`,
         );
       }
     } else {
@@ -66,7 +66,7 @@ export const validateDepositData = async ({
       if (keysCount > keysLimit) {
         throw new ValidationError(
           'depositData',
-          `Keys limit exceeded. Allowed keys count to submit: ${keysLimit}`,
+          `Keys limit exceeded. Allowed keys count to submit: ${keysLimit}.`,
         );
       }
     }

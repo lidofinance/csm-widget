@@ -54,7 +54,7 @@ export const Info: FC = () => {
             address={currentClaimerAddress}
           />
         ) : (
-          <TitledValue title={title} value="not set" />
+          <TitledValue title={title} value="Not set" />
         )}
       </Latice>
     </>

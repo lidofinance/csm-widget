@@ -1,5 +1,5 @@
 import { Text } from '@lidofinance/lido-ui';
-import { Address as AddressComponent } from 'shared/components';
+import { Address as AddressComponent, Stack } from 'shared/components';
 import {
   TxStagePending,
   TxStageSign,
@@ -29,23 +29,23 @@ const getTexts = (input: ClaimerFormInputType) => {
         sign: {
           title: 'You are setting Rewards Claimer Address',
           description: (
-            <>
-              New Rewards Claimer Address is{' '}
+            <Stack gap="xs" direction="column" as="span">
+              New Rewards Claimer Address is
               <Text size="xxs">
                 <AddressComponent address={claimerAddress} showIcon />
               </Text>
-            </>
+            </Stack>
           ),
         },
         success: {
           title: 'Rewards Claimer Address has been set',
           description: (
-            <>
-              New Rewards Claimer Address is{' '}
+            <Stack gap="xs" direction="column" as="span">
+              New Rewards Claimer Address is
               <Text size="xxs">
                 <AddressComponent address={claimerAddress} showIcon />
               </Text>
-            </>
+            </Stack>
           ),
         },
       };

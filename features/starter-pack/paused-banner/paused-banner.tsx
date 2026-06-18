@@ -8,7 +8,7 @@ export const PausedBanner: FC = () => {
       <BannerHeader>CSM is paused</BannerHeader>
       <p>
         This means that uploading new keys is currently not possible, but Node
-        Operator stats can be viewed.
+        Operator stats can be viewed
       </p>
     </BlockStyled>
   );

@@ -10,7 +10,7 @@ export const UnsupportedPage: FC = () => (
       title={`${moduleMeta.shortName} is currently being upgraded`}
       variant="secondary"
     >
-      <Text size="sm">A new version of the widget will be available soon.</Text>
+      <Text size="sm">A new version of the widget will be available soon</Text>
     </Banner>
     <WelcomeSection />
   </Layout>

@@ -12,7 +12,7 @@ export const CompensatingAmount: FC = () => {
   return (
     <Stack direction="column" gap="xs">
       <DisabledInputAmount
-        isLocked="Penalty compensation is deducted from the node operator's bond and cannot exceed the excess bond."
+        isLocked="Penalty compensation is deducted from the node operator's bond and cannot exceed the excess bond"
         amount={compensationAmount}
         token={TOKENS.steth}
         label="Compensating amount"

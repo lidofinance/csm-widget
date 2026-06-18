@@ -25,7 +25,7 @@ const IcsApplyContent: FC = () => {
               Connect your wallet
             </Text>
             <Text size="xs" color="secondary">
-              Connect your wallet and sign a verification message to continue.
+              Connect your wallet and sign a verification message to continue
             </Text>
           </Stack>
           <Connect size="sm" fullwidth />

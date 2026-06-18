@@ -12,7 +12,13 @@ export enum ErrorCode {
   INVALID_SIGNATURE = 'INVALID_SIGNATURE',
   BALANCE_EXCEEDED = 'BALANCE_EXCEEDED',
   WALLET_RPC = 'WALLET_RPC',
+  REQUEST_TIMEOUT = 'REQUEST_TIMEOUT',
 }
+
+const isTimeoutMessage = (message: string): boolean => {
+  const normalized = message.toLowerCase();
+  return normalized.includes('timed out') || normalized.includes('timeout');
+};
 
 export const getErrorCode = (error: unknown): ErrorCode => {
   try {
@@ -34,6 +40,9 @@ export const getErrorCode = (error: unknown): ErrorCode => {
       break;
     case -32603:
       errorCode = ErrorCode.WALLET_RPC;
+      break;
+    case 'REQUEST_TIMEOUT':
+      errorCode = ErrorCode.REQUEST_TIMEOUT;
       break;
     // intentional fallthrough
     case 3:
@@ -109,6 +118,7 @@ export const extractCodeFromError = (
       normalizedMessage.includes('transaction declined')
     )
       return 'ACTION_REJECTED';
+    if (isTimeoutMessage(error.message)) return 'REQUEST_TIMEOUT';
   }
 
   // SDK errors use errorMessage instead of message
@@ -118,6 +128,7 @@ export const extractCodeFromError = (
     if (error.errorMessage.includes('STAKE_LIMIT')) return 'LIMIT_REACHED';
     if (error.errorMessage.includes('INVALID_SIGNATURE'))
       return 'INVALID_SIGNATURE';
+    if (isTimeoutMessage(error.errorMessage)) return 'REQUEST_TIMEOUT';
   }
 
   // Ledger live errors

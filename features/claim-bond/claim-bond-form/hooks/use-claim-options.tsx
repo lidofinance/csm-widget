@@ -59,7 +59,7 @@ const CLAIM_EXCESS_BOND: Meta = {
       Excess Bond → Rewards Address
     </>
   ),
-  description: 'Claim only Excess Bond. Rewards remain unclaimed',
+  description: 'Claim only Excess Bond. Rewards remain unclaimed.',
 };
 
 const CLAIM_EXCESS_BOND_WITH_PENDING_SPLIT: Meta = {
@@ -83,7 +83,7 @@ const REWARDS_TO_EXCESS_BOND: Meta = {
       <RewardsIcon /> Rewards → <BondIcon /> Excess Bond
     </>
   ),
-  description: 'Move all rewards to the bond. Best for uploading more keys',
+  description: 'Move all rewards to the bond. Best for uploading more keys.',
 };
 
 const SPLIT_REWARDS_ONLY: Meta = {

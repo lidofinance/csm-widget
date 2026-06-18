@@ -23,7 +23,7 @@ export const Info: FC = () => {
             }
             help={
               bond?.isInsufficient
-                ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol'
+                ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol.'
                 : undefined
             }
             amount={bond?.delta}
@@ -40,7 +40,7 @@ export const Info: FC = () => {
               <br />
               Top up the bond by submitting the required difference to be able
               to claim new rewards and to prevent your validator becoming
-              unbonded and being requested to exit.
+              unbonded and being requested to exit
             </p>
           ) : (
             <p>
@@ -55,10 +55,10 @@ export const Info: FC = () => {
               >
                 unbonded
               </MatomoLink>{' '}
-              and being requested to exit in case of applied penalties.
+              and being requested to exit in case of applied penalties
               <br />
               Supplied bond will be stored as stETH, which also garners staking
-              rewards.
+              rewards
             </p>
           )}
         </Stack>

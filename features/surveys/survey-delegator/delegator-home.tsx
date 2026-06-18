@@ -14,12 +14,12 @@ export const DelegatorHome: FC = () => {
       <SurveySection
         title="Delegated operators"
         subtitle="How delegation works"
-        help="As a delegate, you can access and submit Setup surveys on behalf of node operators who have added you as their delegate."
+        help="As a delegate, you can access and submit Setup surveys on behalf of node operators who have added you as their delegate"
         mainPrefix={<SurveysBackButton />}
       >
         {delegatedOperators?.length === 0 ? (
           <Text size="sm" color="secondary">
-            You are not a delegate for any node operator yet.
+            You are not a delegate for any node operator yet
           </Text>
         ) : (
           <Stack direction="column" gap="md">

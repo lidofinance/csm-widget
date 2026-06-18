@@ -11,11 +11,11 @@ export const EditInfo: FC = () => {
       </Text>
 
       <ul>
-        <li>Split rewards across up to 10 additional addresses.</li>
-        <li>Additional addresses receive rewards in stETH only.</li>
+        <li>Split rewards across up to 10 additional addresses</li>
+        <li>Additional addresses receive rewards in stETH only</li>
         <li>
           Claiming is permissionless: anyone can execute the claim, but rewards
-          go only to the configured addresses.
+          go only to the configured addresses
         </li>
       </ul>
 
@@ -23,7 +23,7 @@ export const EditInfo: FC = () => {
         <BondRow />
 
         <Text size="xxs" color="secondary">
-          This share decreases as you allocate shares to the addresses below.
+          This share decreases as you allocate shares to the addresses below
         </Text>
       </Stack>
     </>

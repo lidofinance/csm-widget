@@ -26,7 +26,7 @@ export const Info: FC = () => {
           <TitledAmount
             warning={!isExpired}
             title="Locked bond"
-            help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations"
+            help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
             chip={
               isExpired &&
               !!bond?.locked && (
@@ -54,11 +54,11 @@ export const Info: FC = () => {
                 <ul>
                   <li>
                     Compensate the penalty amount to prevent the related portion
-                    of your bond from being burned.
+                    of your bond from being burned
                   </li>
                   <li>
                     Review the penalty details and fix the underlying issue to
-                    avoid additional penalties.
+                    avoid additional penalties
                   </li>
                 </ul>
               </div>

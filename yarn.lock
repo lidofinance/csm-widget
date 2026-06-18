@@ -2578,32 +2578,6 @@
     "@ethersproject/properties" "^5.8.0"
     "@ethersproject/strings" "^5.8.0"
 
-"@ganache/console.log@^0.4.2":
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/@ganache/console.log/-/console.log-0.4.2.tgz#f6a9373899d541d57ee857766eeade6625a71c45"
-  integrity sha512-yku2quyaPsCcSENkLwhFbdHQf3R4C7t37eADcF6x42kcaHCEPF+XwShqwmCJzpID3fTcgGg+9WeBhzPMe/Xasw==
-  dependencies:
-    "@ganache/utils" "0.9.2"
-
-"@ganache/secp256k1@0.5.2":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@ganache/secp256k1/-/secp256k1-0.5.2.tgz#fda0afc9f3e272248c5eb74f7829f8e54930dc65"
-  integrity sha512-TkSyNkHllTQoDZnrZeH5/2IhFRP7gLz3sOQ/pJO+xmuc3gUNOwFxryX/u1gA7A6gZUTv/encCdrQMQDu/b6Ayg==
-  dependencies:
-    node-gyp-build "4.5.0"
-    secp256k1 "4.0.3"
-
-"@ganache/utils@0.9.2":
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/@ganache/utils/-/utils-0.9.2.tgz#743401cf8c1377a38bb184195f6b51fb9e3a932b"
-  integrity sha512-OWPkdk+cTQtIDKcmy++HNWlK8/fM0m/i9fCkmjSwz8SRezKTFW9mwXZ5Sk7dOWkCNkDUAXa9rf+hCItN3a+XHA==
-  dependencies:
-    "@ganache/secp256k1" "0.5.2"
-    "@trufflesuite/bigint-buffer" "1.1.10"
-    emittery "0.10.0"
-    keccak "3.0.2"
-    seedrandom "3.0.5"
-
 "@gemini-wallet/core@~0.3.1":
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/@gemini-wallet/core/-/core-0.3.2.tgz#fd6fd2df91d50be6c1a832c46379453e933a352e"
@@ -3162,14 +3136,14 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.47.0.tgz#2367eec1c8363516bde48b632a6fbe32aec33a1e"
   integrity sha512-6xx2O89OhWAxaob+SqXEX2xtrumG4MCUrclooCIvAhz64Lp3Wa0Hzt2lgJyFMhJxpDPMj3LmYNbuB15lwEQKwg==
 
-"@lidofinance/browser-service@1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.9.0.tgz#98e232e563cc96d97ae77a2f5af8f90d62dd7c9a"
-  integrity sha512-0rmSIbU/Mv2x2C/FsY4waaY5BF8IA3panOY7rmMH+SfDMDyJpFHorxgDHqhqQ0igXUYz6wpxTnB8YCYNn3S50g==
+"@lidofinance/browser-service@1.11.1":
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.11.1.tgz#89a99f69aeefd88a28addbc0edfaee2e85117492"
+  integrity sha512-fs3CM76kEDhihWzuOuRXj3jsdhi3QqO/Yt3LffwaXVWf6Kvf0f5kttNraEcS/8FlKx68X0D5nJFMvtH7FES8Ng==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.3.1"
-    "@lidofinance/wallets-testing-nodes" "1.8.0"
-    "@lidofinance/wallets-testing-wallets" "1.48.0"
+    "@lidofinance/wallets-testing-nodes" "1.10.0"
+    "@lidofinance/wallets-testing-wallets" "1.49.1"
 
 "@lidofinance/chat-reporter@1.7.0":
   version "1.7.0"
@@ -3290,6 +3264,13 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/satanizer/-/satanizer-0.47.0.tgz#e6d6af704a7a111bca1bdea70e89f1089b646bff"
   integrity sha512-oB62ld2W0XKxC3YFvRd2ZzAh5MY28ZLs01Jo9Cp8HOFvWvxnF5GrThm8Op3D/urq+cCmZODiUiMI9BMZuymDog==
 
+"@lidofinance/secret-guard-reporter@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/secret-guard-reporter/-/secret-guard-reporter-1.1.0.tgz#c15f70d4af7bd5bacbabe2fb1a3368ed6ed2cc96"
+  integrity sha512-QdBe2x2sPaLo25OWilQrF6xIp+BI/mScrW/usZcaAwJVPtomRPBLjEva7dClB8TUsb2fuSHruQE2EuffzqatfQ==
+  dependencies:
+    jszip "^3.10.1"
+
 "@lidofinance/theme@2.7.0":
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/@lidofinance/theme/-/theme-2.7.0.tgz#b8af6238d305b63ba9c90b384475672f01c760a5"
@@ -3311,22 +3292,20 @@
     rxjs "^7.5.6"
     unzipper "^0.10.11"
 
-"@lidofinance/wallets-testing-nodes@1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-nodes/-/wallets-testing-nodes-1.8.0.tgz#44d8e0037d98b38bd182e3f4f4be895dabf0fe2d"
-  integrity sha512-DDTe03TE/9/VVRMDQD63/VVm4qqChBA0b7yYizIluhqXBxFeSJcQ2MH9cTnhWjpE0G43iy7Sshv/3gL3BOqJ3w==
+"@lidofinance/wallets-testing-nodes@1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-nodes/-/wallets-testing-nodes-1.10.0.tgz#bd217af4250283670100dd5f9a9545bc2bcac17d"
+  integrity sha512-Ea6kn8O0Woy5AbMQSCKjNQHkK/xn6JY+f5ksvvAru9twlbYccVNcVornslWEd+rC3siotZ8mO3m7xKydcXqGrQ==
   dependencies:
-    "@ganache/console.log" "^0.4.2"
     "@nestjs/common" "^10.0.0"
-    axios "^1.10.0"
     ethers "^5.8.0"
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.48.0":
-  version "1.48.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.48.0.tgz#ba9b1a80e665f8174705da63612cceeb721833bd"
-  integrity sha512-VvEAzZjrB5lAO8nJdwGGIRoTfVeFDWtm9W/PnswvhaFYpSSdy4zHjeEdprBdvwH1LidrfiWsO9Q0PdsUoej1Sg==
+"@lidofinance/wallets-testing-wallets@1.49.1":
+  version "1.49.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.49.1.tgz#903b7f90ae59bb7ed38e7b434a0e53d97ee98c4a"
+  integrity sha512-j+E4kwinKYkmBjQelEv3D/7kQLyYwSLCIVoFalDvknxEQBWSHKfy87Umgwa5jcbb6XHSv8Ahcu0VGPso/FJ5lw==
   dependencies:
     "@walletconnect/sign-client" "2.23.4"
     big.js "^6.2.1"
@@ -3748,35 +3727,10 @@
   dependencies:
     "@noble/hashes" "1.8.0"
 
-"@noble/hashes@1.4.0", "@noble/hashes@~1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.4.0.tgz#45814aa329f30e4fe0ba49426f49dfccdd066426"
-  integrity sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==
-
-"@noble/hashes@1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.7.0.tgz#5d9e33af2c7d04fee35de1519b80c958b2e35e39"
-  integrity sha512-HXydb0DgzTpDPwbVeDGCG1gIu7X6+AuU6Zl6av/E/KG8LMsvPntvq+w17CHRpKBmN6Ybdrt1eP3k4cj8DJa78w==
-
-"@noble/hashes@1.7.2", "@noble/hashes@^1.3.1", "@noble/hashes@^1.5.0", "@noble/hashes@~1.7.1":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.7.2.tgz#d53c65a21658fb02f3303e7ee3ba89d6754c64b4"
-  integrity sha512-biZ0NUSxyjLLqo6KxEJ1b+C2NAx0wtDoFvCaXHGgUkeHzf3Xc1xKumFKREuT7f7DARNZ/slvYUwFG6B0f2b6hQ==
-
-"@noble/hashes@1.8.0", "@noble/hashes@^1.3.0", "@noble/hashes@^1.4.0", "@noble/hashes@^1.8.0", "@noble/hashes@~1.8.0":
+"@noble/hashes@1.4.0", "@noble/hashes@1.7.0", "@noble/hashes@1.7.2", "@noble/hashes@1.8.0", "@noble/hashes@2.0.1", "@noble/hashes@^1.1.2", "@noble/hashes@^1.3.0", "@noble/hashes@^1.3.1", "@noble/hashes@^1.4.0", "@noble/hashes@^1.5.0", "@noble/hashes@^1.8.0", "@noble/hashes@~1.4.0", "@noble/hashes@~1.7.1", "@noble/hashes@~1.8.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.8.0.tgz#cee43d801fcef9644b11b8194857695acd5f815a"
   integrity sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==
-
-"@noble/hashes@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-2.0.1.tgz#fc1a928061d1232b0a52bb754393c37a5216c89e"
-  integrity sha512-XlOlEbQcE9fmuXxrVTXCTlG2nlRXa9Rj3rr5Ue/+tX+nmkgbX720YHh0VR3hBF9xDvwnb8D2shVGOwNx+ulArw==
-
-"@noble/hashes@^1.1.2":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.7.1.tgz#5738f6d765710921e7a751e00c20ae091ed8db0f"
-  integrity sha512-B8XBPsn4vT/KJAGqDzbwztd+6Yte3P4V7iafm24bxgDe/mlRuK6xmWPuCNrKt2vDafZ8MfJLlchDG/vYafQEjQ==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -4984,13 +4938,6 @@
   integrity sha512-0Lu6y5t+tvlTJMTO7oh5NSpJfpg/5D41LlThfepTixPYkJ0sE2Jj0m0f6yYqujBwIXlId87e234+MxG3D3g7kg==
   dependencies:
     "@tanstack/query-core" "5.90.20"
-
-"@trufflesuite/bigint-buffer@1.1.10":
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/@trufflesuite/bigint-buffer/-/bigint-buffer-1.1.10.tgz#a1d9ca22d3cad1a138b78baaf15543637a3e1692"
-  integrity sha512-pYIQC5EcMmID74t26GCC67946mgTJFiLXOT/BYozgrd4UEY2JHEGLhWi9cMiQCt5BSqFEvKkCHNnoj82SRjiEw==
-  dependencies:
-    node-gyp-build "4.4.0"
 
 "@types/babel__core@^7.1.14":
   version "7.20.5"
@@ -7516,11 +7463,6 @@ elliptic@6.5.4, elliptic@6.6.1, elliptic@^6.5.7, elliptic@^6.6.1:
     minimalistic-assert "^1.0.1"
     minimalistic-crypto-utils "^1.0.1"
 
-emittery@0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.10.0.tgz#bb373c660a9d421bb44706ec4967ed50c02a8026"
-  integrity sha512-AGvFfs+d0JKCJQ4o01ASQLGPmSCxgfU9RFXvzPvZdjKK8oscynksuJhWrSTSw7j7Ep/sZct5b5ZhYCi8S/t0HQ==
-
 emittery@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/emittery/-/emittery-0.13.1.tgz#c04b8c3457490e0847ae51fced3af52d338e3dad"
@@ -8834,6 +8776,11 @@ ignore@^5.2.0, ignore@^5.2.4:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.3.1.tgz#5073e554cd42c5b33b394375f538b8593e34d4ef"
   integrity sha512-5Fytz/IraMjqpwfd34ke28PTVMjZjJG2MPn5t7OE4eUCUNf8BAa7b5WUS9/Qvr6mwOQS7Mk6vdsMno5he+T8Xw==
 
+immediate@~3.0.5:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
+  integrity sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==
+
 import-fresh@^3.2.1, import-fresh@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -9963,14 +9910,15 @@ jsonschema@^1.4.1:
     object.assign "^4.1.4"
     object.values "^1.1.6"
 
-keccak@3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/keccak/-/keccak-3.0.2.tgz#4c2c6e8c54e04f2670ee49fa734eb9da152206e0"
-  integrity sha512-PyKKjkH53wDMLGrvmRGSNWgmSxZOUqbnXwKL9tmgbFYA1iAYqW21kfR7mZXV0MlESiefxQQE9X9fTa3X+2MPDQ==
+jszip@^3.10.1:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/jszip/-/jszip-3.10.1.tgz#34aee70eb18ea1faec2f589208a157d1feb091c2"
+  integrity sha512-xXDvecyTpGLrqFrvkrUSoxxfJI5AH7U8zxxtVclpsUtMCq4JQ290LY8AW5c7Ggnr/Y/oK+bQMbqK2qmtk3pN4g==
   dependencies:
-    node-addon-api "^2.0.0"
-    node-gyp-build "^4.2.0"
-    readable-stream "^3.6.0"
+    lie "~3.3.0"
+    pako "~1.0.2"
+    readable-stream "~2.3.6"
+    setimmediate "^1.0.5"
 
 keccak@^3.0.3:
   version "3.0.4"
@@ -10027,6 +9975,13 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+lie@~3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/lie/-/lie-3.3.0.tgz#dcf82dee545f46074daf200c7c1c5a08e0f40f6a"
+  integrity sha512-UaiMJzeWRlEujzAuw5LokY1L5ecNQYZKfmyZ9L7wDHb/p5etKaxXhohBcrw0EYby+G/NA52vRSN4N39dxHAIwQ==
+  dependencies:
+    immediate "~3.0.5"
 
 lilconfig@2.1.0:
   version "2.1.0"
@@ -10518,16 +10473,6 @@ node-fetch@^2.6.1, node-fetch@^2.7.0:
   dependencies:
     whatwg-url "^5.0.0"
 
-node-gyp-build@4.4.0:
-  version "4.4.0"
-  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.4.0.tgz#42e99687ce87ddeaf3a10b99dc06abc11021f3f4"
-  integrity sha512-amJnQCcgtRVw9SvoebO3BKGESClrfXGCUTX9hSn1OuGQTQBOZmVd0Z0OlecpuRksKvbsUqALE8jls/ErClAPuQ==
-
-node-gyp-build@4.5.0:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.5.0.tgz#7a64eefa0b21112f89f58379da128ac177f20e40"
-  integrity sha512-2iGbaQBV+ITgCz76ZEjmhUKAKVf7xfY1sRl4UiKQspfZMH2h06SyhNsnSVy50cwkFQDGLyif6m/6uFXHkOZ6rg==
-
 node-gyp-build@^4.2.0, node-gyp-build@^4.3.0:
   version "4.8.4"
   resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.8.4.tgz#8a70ee85464ae52327772a90d66c6077a900cfc8"
@@ -10911,6 +10856,11 @@ p-try@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
+
+pako@~1.0.2:
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.11.tgz#6c9599d340d54dfd3946380252a35705a6b992bf"
+  integrity sha512-4hLB8Py4zZce5s4yd9XzopqwVv/yGNhV1Bl8NTmCq1763HeK2+EwVTv+leGeL13Dnh2wfbqowVPXCIO0z4taYw==
 
 parent-module@^1.0.0:
   version "1.0.1"
@@ -11844,7 +11794,7 @@ scrypt-js@3.0.1:
   resolved "https://registry.yarnpkg.com/scrypt-js/-/scrypt-js-3.0.1.tgz#d314a57c2aef69d1ad98a138a21fe9eafa9ee312"
   integrity sha512-cdwTTnqPu0Hyvf5in5asVdZocVDTNRmR7XEcJuIzMjJeSHybHl7vpB66AzwTaIg6CLSbtjcxc8fqcySfnTkccA==
 
-secp256k1@4.0.3, secp256k1@^4.0.4:
+secp256k1@^4.0.4:
   version "4.0.4"
   resolved "https://registry.yarnpkg.com/secp256k1/-/secp256k1-4.0.4.tgz#58f0bfe1830fe777d9ca1ffc7574962a8189f8ab"
   integrity sha512-6JfvwvjUOn8F/jUoBY2Q1v5WY5XS+rj8qSe0v8Y4ezH4InLgTEeOOPQsRll9OV429Pvo6BCHGavIyJfr3TAhsw==
@@ -11852,11 +11802,6 @@ secp256k1@4.0.3, secp256k1@^4.0.4:
     elliptic "^6.5.7"
     node-addon-api "^5.0.0"
     node-gyp-build "^4.2.0"
-
-seedrandom@3.0.5:
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/seedrandom/-/seedrandom-3.0.5.tgz#54edc85c95222525b0c7a6f6b3543d8e0b3aa0a7"
-  integrity sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==
 
 "semver@2 || 3 || 4 || 5":
   version "5.7.2"
@@ -11924,7 +11869,7 @@ set-function-name@^2.0.1, set-function-name@^2.0.2:
     functions-have-names "^1.2.3"
     has-property-descriptors "^1.0.2"
 
-setimmediate@~1.0.4:
+setimmediate@^1.0.5, setimmediate@~1.0.4:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/setimmediate/-/setimmediate-1.0.5.tgz#290cbb232e306942d7d7ea9b83732ab7856f8285"
   integrity sha512-MATJdZp8sLqDl/68LfQmbP8zKPLQNV6BIZoIgrscFDQ+RsvK/BxeDQOgyxKKoh0y/8h3BqVFnCqQ/gd+reiIXA==

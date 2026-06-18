@@ -11,7 +11,7 @@ export const AlertUnsupportedChain: FC = () => {
       <Text size="xs" weight="bold">
         Unsupported chain
       </Text>
-      <p>Please switch to {chainName} in your wallet.</p>
+      <p>Please switch to {chainName} in your wallet</p>
     </AlertRed>
   );
 };

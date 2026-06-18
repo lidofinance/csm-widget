@@ -23,7 +23,7 @@ export const TryCsmTestnet: FC = () => {
       </StyledStack>
       <Text color="secondary" size="xs">
         CSM uses Hoodi as a testnet playground for those who want to try the
-        module in action in a test environment.
+        module in action in a test environment
       </Text>
     </StyledBlock>
   );

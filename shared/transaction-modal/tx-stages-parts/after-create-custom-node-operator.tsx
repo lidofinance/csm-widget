@@ -29,7 +29,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
             Connect to {moduleMeta.shortTitle} UI with the address you specified
             as Reward/Manager Address
           </li>
-          <li>Wait for your keys to be deposited to through the protocol.</li>
+          <li>Wait for your keys to be deposited to through the protocol</li>
           <li>
             Once your keys become active (
             {beaconchain && (

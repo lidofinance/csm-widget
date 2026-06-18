@@ -19,7 +19,7 @@ export const ApplicationTip: FC<Props> = ({ comments }) => {
         <Text size="xs">
           If you believe that these address(es) were incorrectly flagged, you
           may submit an appeal on the Lido Research Forum for review by the CSM
-          Committee.
+          Committee
         </Text>
       </Stack>
     </BlockStyled>

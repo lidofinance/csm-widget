@@ -105,6 +105,11 @@ export const RolesSection: FC = () => {
                 </Button>
               </LocalLink>
             )}
+            {claimerAddress === zeroAddress && !canEditClaimer && (
+              <Text size="xs" color="secondary" data-testid="claimerNotSet">
+                Not set
+              </Text>
+            )}
           </Stack>
         </RoleRowStyle>
 
@@ -127,6 +132,11 @@ export const RolesSection: FC = () => {
                   Set up
                 </Button>
               </LocalLink>
+            )}
+            {feeSplits?.length === 0 && !canEditSplits && (
+              <Text size="xs" color="secondary" data-testid="splitsNotSet">
+                Not set
+              </Text>
             )}
           </Stack>
         </RoleRowStyle>

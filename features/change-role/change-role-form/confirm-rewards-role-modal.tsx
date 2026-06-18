@@ -31,7 +31,7 @@ export const ConfirmRewardsRoleModal: ModalComponentType<
           {isProposal && (
             <Text size="xxs" color="secondary">
               The change doesn’t apply immediately. To complete the address
-              change, the owner of the new address must confirm the change
+              change, the owner of the new address must confirm the change.
             </Text>
           )}
         </Stack>

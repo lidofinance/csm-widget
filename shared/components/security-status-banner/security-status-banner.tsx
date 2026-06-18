@@ -15,7 +15,7 @@ export const SecurityStatusBanner = () => {
         <BannerWrapper>
           <Stack direction="column" center>
             <WarningIcon />
-            <Text size="sm">Sorry, access is currently unavailable.</Text>
+            <Text size="sm">Sorry, access is currently unavailable</Text>
           </Stack>
         </BannerWrapper>
       </Modal>

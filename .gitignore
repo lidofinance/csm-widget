@@ -55,3 +55,4 @@ yarn-error.log*
 /keys-generator-bin/
 deposit_data.json
 local_fork_config.json
+.walletPresets.state.json

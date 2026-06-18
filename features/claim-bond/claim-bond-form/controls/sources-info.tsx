@@ -82,7 +82,7 @@ export const SourcesInfo: FC = () => {
               <>
                 Rewards balance
                 <IconTooltip
-                  tooltip={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected ${nextDistribution}`}
+                  tooltip={`The rewards amount available to claim, obtained from all active validators of the Node Operator. Next rewards distribution is expected ${nextDistribution}.`}
                   type="calendar"
                 />
               </>
@@ -118,8 +118,8 @@ export const SourcesInfo: FC = () => {
                     bond.isInsufficient
                       ? "Insufficient bond is the missing amount of stETH required to cover all operator's keys"
                       : bond.locked > 0n
-                        ? 'Locked bond has not been burned yet but cannot be claimed, so it is not displayed as part of your Excess Bond.'
-                        : 'The bond amount available to claim without having to exit validators. Increases daily'
+                        ? 'Locked bond has not been burned yet but cannot be claimed, so it is not displayed as part of your Excess Bond'
+                        : 'The bond amount available to claim without having to exit validators. Increases daily.'
                   }
                 />
               </>

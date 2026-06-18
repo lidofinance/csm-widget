@@ -31,7 +31,7 @@ export const Step2: FC = () => {
         <Text size="xs" color="secondary" data-testid="stepDescription">
           <b>Manager Address</b> will have the ultimate control over the Node
           Operator, while <b>Rewards Address</b> is mainly used to receive
-          rewards.
+          rewards
         </Text>
         <ul>
           <li>
@@ -51,7 +51,7 @@ export const Step2: FC = () => {
         <Stack direction="column" gap="md">
           <ManagerAddressInput />
           <Text size="xs" color="secondary">
-            Has the ultimate control over the Node Operator. Must be a multisig{' '}
+            Has the ultimate control over the Node Operator. Must be a multisig.{' '}
             <IconTooltip
               inline
               tooltip={
@@ -68,7 +68,7 @@ export const Step2: FC = () => {
           <RewardAddressInput />
           <Text size="xs" color="secondary">
             Used for receiving rewards. Must be a multisig or smart contract
-            address{' '}
+            address.{' '}
             <IconTooltip
               inline
               tooltip={
