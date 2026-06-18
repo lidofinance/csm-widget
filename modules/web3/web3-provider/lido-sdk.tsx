@@ -29,9 +29,9 @@ import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
 import { useUserConfig } from 'config/user-config';
 
-// Safe runtime import cycle (web3-provider ↔ operator-provider): only referenced
-// inside useSmSDK's body at render time, never at module top-level.
-import { useNodeOperator } from '../operator-provider/node-operator-provider';
+// Safe runtime import cycle (web3-provider ↔ operator-provider): the context is
+// only read inside useSmSDK's body at render time, never at module top-level.
+import { NodeOperatorContext } from '../operator-provider/node-operator-provider';
 import { overridedAddresses } from './devnet';
 
 type LidoSDKContextValue = {
@@ -83,15 +83,17 @@ export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
 // eslint-disable-next-line func-style
 export function useSmSDK(module?: MODULE_NAME) {
   const { csm, cm } = useLidoSDK();
-  // Active module comes from the resolved operator (operator-provider). Safe
-  // runtime cycle: only read here, at render time, never at module init.
-  const { activeModule } = useNodeOperator();
+  // Read the operator context WITHOUT throwing: useSmSDK is also called ABOVE
+  // NodeOperatorProvider (e.g. GateSupported → useSmVersionSupported). With no
+  // active operator (above the provider, or none resolved yet) fall back to the
+  // deploy module — matching the original config.module-based semantics.
+  const operatorCtx = useContext(NodeOperatorContext);
+  const activeModule =
+    operatorCtx?.activeModule ?? (config.module as MODULE_NAME);
   if (module) {
     if (module !== activeModule) return undefined;
     return module === MODULE_NAME.CSM ? csm : cm;
   }
-  // No active operator yet → default to the CSM SDK so below-provider reads
-  // that don't pass a module still resolve a client.
   return activeModule === MODULE_NAME.CM ? cm : csm;
 }
 
