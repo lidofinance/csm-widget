@@ -1,6 +1,5 @@
 import { MODULE_NAME, NodeOperatorShortInfo } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { config, useConfig } from 'config';
 import { useFeatureFlags } from 'config/feature-flags';
 import {
   ICS_APPLY_FORM,
@@ -11,6 +10,7 @@ import {
   useDappStatus,
   useHasReportDelayedPenaltyRole,
   useInvites,
+  useModule,
   useNodeOperator,
   useOperatorBalance,
   useOperatorInfo,
@@ -88,9 +88,7 @@ export const useShowFlags = (): ShowFlags => {
   const canCreateNO = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
-  const {
-    config: { module },
-  } = useConfig();
+  const { module } = useModule();
 
   return useMemo(
     () => ({
@@ -155,11 +153,12 @@ export type ShowRuleProps = {
 
 export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
   const check = useShowRule();
+  const { module: activeModule } = useModule();
 
   return useMemo(
     () =>
       items
-        .filter(({ module }) => !module || module === config.module)
+        .filter(({ module }) => !module || module === activeModule)
         .filter(
           ({ showRules }) =>
             !showRules?.length ||
@@ -167,6 +166,6 @@ export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
               Array.isArray(rule) ? rule.every(check) : check(rule),
             ),
         ),
-    [check, items],
+    [check, items, activeModule],
   );
 };
