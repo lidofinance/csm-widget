@@ -3,7 +3,7 @@ import { Text } from '@lidofinance/lido-ui';
 import { FC, PropsWithChildren, useState } from 'react';
 import { IconTooltip } from '../icon-tooltip/icon-tooltip';
 import { Stack } from '../stack/stack';
-import { PARAMETERS } from './parameters';
+import { useParameters } from './parameters';
 import { ParametersValue } from './parameters-value';
 import {
   ArrowStyle,
@@ -28,6 +28,7 @@ const Title: FC<{ title: string; help?: string }> = ({ title, help }) => (
 export const ParametersList: FC<{
   parameters?: CurveParameters;
 }> = ({ parameters }) => {
+  const PARAMETERS = useParameters();
   const [more, setMore] = useState(false);
   const toggleMore = () => setMore((prev) => !prev);
 
@@ -73,6 +74,8 @@ type CompareParametersListProps = {
 export const CompareParametersList: FC<
   PropsWithChildren<CompareParametersListProps>
 > = ({ left, right, leftTitle = 'Current', rightTitle = 'New', children }) => {
+  const PARAMETERS = useParameters();
+
   return (
     <CompareListStyle>
       {children}
