@@ -3,6 +3,7 @@ import {
   CONTRACT_BASE_ABI,
   CONTRACT_NAMES,
   MODULE_CONFIG,
+  MODULE_NAME,
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
 import { CHAINS, LidoLocatorAbi } from '@lidofinance/lido-ethereum-sdk';
@@ -65,7 +66,8 @@ const STATIC_ADDRESSES: {
 
 const CONTRACT_ADDRESSES = {
   ...COMMON_ADDRESSES[config.defaultChain],
-  ...MODULE_CONFIG[config.module][config.defaultChain]?.contractAddresses,
+  ...MODULE_CONFIG[MODULE_NAME.CSM][config.defaultChain]?.contractAddresses,
+  ...MODULE_CONFIG[MODULE_NAME.CM][config.defaultChain]?.contractAddresses,
   ...overridedAddresses,
 };
 

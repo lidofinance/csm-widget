@@ -1,6 +1,10 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
 
+export const WIDGET_TITLE = 'Lido Node Operator';
+export const WIDGET_DESCRIPTION =
+  'Manage your Lido node operator across Community Staking and Curated modules.';
+
 export const MODULE_METADATA = {
   [MODULE_NAME.CSM]: {
     title: 'Community Staking Module',
