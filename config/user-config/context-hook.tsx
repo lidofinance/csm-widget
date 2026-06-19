@@ -2,16 +2,12 @@ import { useMemo, useState, useCallback } from 'react';
 
 import { getUserConfigDefault } from './utils';
 import { UserConfigDefaultType } from './types';
+import {
+  STORAGE_USER_CONFIG,
+  DEFAULT_SAVED_USER_CONFIG as DEFAULT_STATE,
+  SavedUserConfig,
+} from './saved-config';
 import { useLocalStorage } from 'shared/hooks/use-local-storage';
-import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
-
-const STORAGE_USER_CONFIG = 'lido-user-config';
-
-type SavedUserConfig = {
-  rpcUrls: Partial<Record<SUPPORTED_CHAINS, string>>;
-  clApiUrls: Partial<Record<SUPPORTED_CHAINS, string>>;
-  ipfsGateways: string[];
-};
 
 export type UserConfigContextType = UserConfigDefaultType & {
   savedUserConfig: SavedUserConfig;
@@ -19,12 +15,6 @@ export type UserConfigContextType = UserConfigDefaultType & {
   resetSavedUserConfig: () => void;
   isWalletConnectionAllowed: boolean;
   setIsWalletConnectionAllowed: (isAllowed: boolean) => void;
-};
-
-const DEFAULT_STATE: SavedUserConfig = {
-  rpcUrls: {},
-  clApiUrls: {},
-  ipfsGateways: [],
 };
 
 export const useUserConfigContext = () => {

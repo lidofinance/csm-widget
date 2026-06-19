@@ -23,6 +23,7 @@ type ChainRow = {
 const rpcKey = (chainId: SUPPORTED_CHAINS) => `rpc_${chainId}`;
 const clKey = (chainId: SUPPORTED_CHAINS) => `cl_${chainId}`;
 const IPFS_GATEWAYS_KEY = 'ipfsGateways';
+const SURVEY_API_URL_KEY = 'surveyApiUrl';
 
 const validateUrl = (value: string) =>
   !value || isUrl(value) || 'Not a valid URL';
@@ -73,6 +74,7 @@ export const QaConfigForm = () => {
       }
     }
     values[IPFS_GATEWAYS_KEY] = savedUserConfig.ipfsGateways.join(', ');
+    values[SURVEY_API_URL_KEY] = savedUserConfig.surveyApiUrl ?? '';
     return values;
   }, [rows, savedUserConfig]);
 
@@ -96,8 +98,9 @@ export const QaConfigForm = () => {
       }
 
       const ipfsGateways = parseGateways(values[IPFS_GATEWAYS_KEY] ?? '');
+      const surveyApiUrl = values[SURVEY_API_URL_KEY]?.trim() || undefined;
 
-      setSavedUserConfig({ rpcUrls, clApiUrls, ipfsGateways });
+      setSavedUserConfig({ rpcUrls, clApiUrls, ipfsGateways, surveyApiUrl });
       ToastSuccess('QA endpoints saved. Reload the page to apply.');
     },
     [rows, setSavedUserConfig],
@@ -142,6 +145,13 @@ export const QaConfigForm = () => {
             error={formState.errors[IPFS_GATEWAYS_KEY]?.message}
             {...register(IPFS_GATEWAYS_KEY, { validate: validateGateways })}
           />
+          <Input
+            fullwidth
+            label="Surveys API URL"
+            placeholder="https://csm-surveys-api-mainnet.up.railway.app"
+            error={formState.errors[SURVEY_API_URL_KEY]?.message}
+            {...register(SURVEY_API_URL_KEY, { validate: validateUrl })}
+          />
           <Stack>
             <Button
               fullwidth
@@ -166,9 +176,9 @@ export const QaConfigForm = () => {
       <Block>
         <Description>
           <p>
-            Override the JSON-RPC endpoint, Consensus Layer API base URL, and
-            IPFS gateway used by the widget. Intended for QA against custom
-            forks or staging backends — not for end users.
+            Override the JSON-RPC endpoint, Consensus Layer API base URL, IPFS
+            gateway, and Surveys API base URL used by the widget. Intended for
+            QA against custom forks or staging backends — not for end users.
           </p>
           <p>
             The IPFS gateway is tried before the default public gateways and may
