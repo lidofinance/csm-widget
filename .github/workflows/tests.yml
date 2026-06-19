@@ -2,6 +2,10 @@ name: Test CSM-widget
 run-name: CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
+  # TEMP (remove before merge): allow running this workflow from the feature branch
+  push:
+    branches:
+      - tests/add-cm-schedule
   schedule:
     - cron: "0 6 * * *" # Every day at 6 AM UTC
   workflow_dispatch:
