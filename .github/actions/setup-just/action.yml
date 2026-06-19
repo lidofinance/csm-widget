@@ -1,0 +1,34 @@
+name: 'Setup just'
+description: 'Install the just command runner, cached in ~/.cargo/bin across runs'
+
+inputs:
+  version:
+    description: 'just version to install'
+    required: false
+    default: '1.24.0'
+
+runs:
+  using: composite
+  steps:
+    - name: Build cache params
+      id: cache
+      shell: bash
+      env:
+        CACHE_PATH: |
+          ~/.cargo/bin/
+        KEY_INPUT: |
+          just:${{ inputs.version }}
+      run: |
+        echo "path=$CACHE_PATH" >> "$GITHUB_OUTPUT"
+        echo "$KEY_INPUT" | md5sum | awk '{print $1}' | xargs -I% echo "key=cargobin-%-${RUNNER_OS}" >> "$GITHUB_OUTPUT"
+
+    - uses: actions/cache@v5
+      id: get-cache
+      with:
+        path: ${{ steps.cache.outputs.path }}
+        key: ${{ steps.cache.outputs.key }}
+
+    - name: Install just
+      if: steps.get-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: cargo install "just@${{ inputs.version }}"

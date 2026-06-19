@@ -1,0 +1,95 @@
+name: 'Run e2e tests'
+description: 'Shared steps for CSM/CM Playwright e2e suites: install deps, run tests, encrypt and upload the report, notify on broken scheduled runs.'
+
+# All configuration (secrets, Qase, stand type, tags, preview stand, etc.) is read
+# from the calling job's `env:` — only the module-specific knob is an input here.
+# The caller is responsible for the checkout / node / fork setup steps that must
+# run before this action.
+
+inputs:
+  module:
+    description: 'Module under test (csm | cm). Selects the `yarn test:<module>:e2e` script.'
+    required: false
+    default: csm
+  preview-stand-url:
+    description: 'Preview stand url. When STAND_TYPE=preview it must be non-empty.'
+    required: false
+    default: ''
+  preview-stand-env:
+    description: 'Preview stand env'
+    required: false
+    default: ''
+  preview-stand-login:
+    description: 'Preview stand basic-auth login (secret)'
+    required: false
+    default: ''
+  preview-stand-password:
+    description: 'Preview stand basic-auth password (secret)'
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: yarn install --immutable
+
+    - name: Install Playwright Browsers
+      shell: bash
+      run: yarn playwright install chromium --with-deps
+
+    - name: Download keys generator binary
+      shell: bash
+      run: bash ./tests/scripts/set_up_keys_generator.sh
+
+    - name: Set up preview-stand credentials
+      if: ${{ env.STAND_TYPE == 'preview' }}
+      shell: bash
+      run: |
+        if [ -n "${{ inputs.preview-stand-url }}" ]; then
+          echo "Setting login and password for preview stand"
+          echo "PREVIEW_STAND_LOGIN=${{ inputs.preview-stand-login }}" >> $GITHUB_ENV
+          echo "PREVIEW_STAND_PASSWORD=${{ inputs.preview-stand-password }}" >> $GITHUB_ENV
+          echo "PREVIEW_STAND_URL=${{ inputs.preview-stand-url }}" >> $GITHUB_ENV
+          echo "PREVIEW_STAND_ENV=${{ inputs.preview-stand-env }}" >> $GITHUB_ENV
+        else
+          echo "PREVIEW_STAND_URL not provided for preview environment"
+          exit 1
+        fi
+
+    - name: Run tests based on suite input
+      id: run-tests
+      shell: bash
+      run: |
+        echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+        echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
+        echo -e "🧪 Test Tags: \033[1;34m$TEST_TAGS\033[0m"
+        echo -e "🌱 Branch: \033[1;34m${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\033[0m"
+        echo -e "🔗 Test Plan: \033[1;34m${QASE_PLAN_ID}\033[0m"
+        echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+
+        xvfb-run --auto-servernum -- yarn test:${{ inputs.module }}:e2e
+
+    - name: Encrypt Playwright report
+      if: always()
+      shell: bash
+      run: |
+        if [ -d playwright-report ]; then
+          tar -czf - playwright-report/ | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -pass env:ARTIFACT_PASSWORD -out playwright-report.tar.gz.enc
+        fi
+
+    - uses: actions/upload-artifact@v7
+      if: always()
+      with:
+        name: playwright-report-${{ inputs.module }}
+        path: playwright-report.tar.gz.enc
+        retention-days: 1
+
+    - name: Notify Slack about broken workflow
+      if: always() && github.event_name == 'schedule' && (steps.run-tests.conclusion == 'skipped' || steps.run-tests.conclusion == 'cancelled')
+      uses: ./.github/actions/notify-broken-tests
+      with:
+        webhook-url: ${{ env.SLACK_WEBHOOK_URL }}
+        duty-tag: ${{ env.SLACK_DUTY_TAG }}
+        test-tags: ${{ env.TEST_TAGS }}
