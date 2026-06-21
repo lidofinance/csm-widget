@@ -100,6 +100,33 @@ Each module version has its own set of features and pages. The module type deter
 
 Module constants and titles are defined in `consts/module.ts`.
 
+#### Current Branch: `feat/unified-module-widget`
+
+**Goal**: collapse the two single-`MODULE`-env deployments into ONE widget that
+discovers a wallet's operators across BOTH CSM and CM and applies the **active
+operator's** module rules everywhere. Out of scope: creating operators, switching-
+operator UX.
+
+**Model**: `module` becomes **reactive state derived from the active operator** —
+`undefined` when there is no active operator (unified, module-agnostic UI; never
+defaulted). Operator identity becomes a `(module, id)` pair. Module lives in
+operator-context, exposed via a new `useModule()` hook.
+
+**Two-zone rule** (the spine of the work — easy to violate):
+
+- **Operator-facing screens** (gated `IS_NODE_OPERATOR`, an operator is active) use
+  REACTIVE access: `useModule()`, `useSmSDK()`, `IS_CSM`/`IS_CM`.
+- **Pre-operator screens** (welcome, `/create`, starter-pack, accept-invite — no
+  operator yet) use STATIC access: `isModuleCSM`/`isModuleCM` + `useSmSDKByModule(MODULE.X)`.
+  Reactive hooks resolve to the deploy module / `undefined` here, so using them
+  renders the wrong module's form, FAQ, and tooltips.
+
+Branding is unified to **"Lido Node Operator"** (header `<title>`/OG/manifest); the
+active module is still shown as a CSM/CM badge next to the operator id.
+
+Spec: `docs/superpowers/specs/2026-06-17-unified-module-widget-design.md`
+Plan: `docs/superpowers/plans/2026-06-17-unified-module-widget.md`
+
 ### Key Technologies
 
 - **Next.js 12** with Pages Router (not App Router)

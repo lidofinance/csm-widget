@@ -42,7 +42,6 @@ type LidoSDKContextValue = {
   wstETH: LidoSDKwstETH;
   wrap: LidoSDKWrap;
   withdraw: LidoSDKWithdraw;
-  sm: LidoSDKCsm | LidoSDKCm;
   csm: LidoSDKCsm;
   cm: LidoSDKCm;
 };
@@ -62,7 +61,7 @@ export const useLidoSDK = () => {
  * Returns the SDK for the requested module ALWAYS, regardless of the active
  * module. Use for cross-module work (e.g. discovery across both modules) and
  * for the /create flow, where there is no active operator yet.
- * This deliberately bypasses the `config.module` guard that `useSmSDK(module)`
+ * This deliberately bypasses the active-module guard that `useSmSDK(module)`
  * enforces — `useSmSDK(module)` returns `undefined` on a module mismatch.
  * Overloads narrow the return type to the concrete SDK for the requested
  * module so callers can reach module-specific surfaces (e.g. `permissionlessGate`,
@@ -85,11 +84,10 @@ export function useSmSDK(module?: MODULE_NAME) {
   const { csm, cm } = useLidoSDK();
   // Read the operator context WITHOUT throwing: useSmSDK is also called ABOVE
   // NodeOperatorProvider (e.g. GateSupported → useSmVersionSupported). With no
-  // active operator (above the provider, or none resolved yet) fall back to the
-  // deploy module — matching the original config.module-based semantics.
+  // active operator (above the provider, or none resolved yet) fall back to
+  // CSM (MVP). TODO(unified): make this undefined-aware per the spec.
   const operatorCtx = useContext(NodeOperatorContext);
-  const activeModule =
-    operatorCtx?.activeModule ?? (config.module as MODULE_NAME);
+  const activeModule = operatorCtx?.activeModule ?? MODULE_NAME.CSM;
   if (module) {
     if (module !== activeModule) return undefined;
     return module === MODULE_NAME.CSM ? csm : cm;
@@ -161,7 +159,6 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
 
     const csm = new LidoSDKCsm(smProps);
     const cm = new LidoSDKCm(smProps);
-    const sm = config.module === MODULE_NAME.CSM ? csm : cm;
 
     return {
       chainId: core.chainId,
@@ -171,7 +168,6 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       wstETH,
       wrap,
       withdraw,
-      sm,
       csm,
       cm,
     };

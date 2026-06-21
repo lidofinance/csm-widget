@@ -7,18 +7,8 @@ import {
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
 import { CHAINS, LidoLocatorAbi } from '@lidofinance/lido-ethereum-sdk';
-import {
-  fromPairs,
-  invert,
-  isUndefined,
-  keys,
-  mapValues,
-  memoize,
-  omitBy,
-  pickBy,
-  uniq,
-} from 'lodash';
-import { Abi, Address } from 'viem';
+import { fromPairs, keys, mapValues, memoize, pickBy, uniq } from 'lodash';
+import { Abi, Address, getAddress } from 'viem';
 import { mainnet } from 'viem/chains';
 
 import { ENSUniversalResolverAbi } from 'abi/ens-universal-resolver-abi';
@@ -64,31 +54,35 @@ const STATIC_ADDRESSES: {
   },
 };
 
-const CONTRACT_ADDRESSES = {
-  ...COMMON_ADDRESSES[config.defaultChain],
-  ...MODULE_CONFIG[MODULE_NAME.CSM][config.defaultChain]?.contractAddresses,
-  ...MODULE_CONFIG[MODULE_NAME.CM][config.defaultChain]?.contractAddresses,
-  ...overridedAddresses,
-};
-
-const getContractAddress = (
-  name: AlL_CONTRACT_NAMES,
+// Address sources for a chain, mirroring the SDK's prepareCoreProps composition
+// (COMMON + per-module config + devnet overrides) but for BOTH modules at once.
+const getAddressSources = (
   chainId: SUPPORTED_CHAINS,
-) =>
-  STATIC_ADDRESSES[chainId]?.[name] ??
-  CONTRACT_ADDRESSES?.[name as CONTRACT_NAMES];
+): (Partial<Record<AlL_CONTRACT_NAMES, Address>> | undefined)[] => [
+  STATIC_ADDRESSES[chainId],
+  COMMON_ADDRESSES[chainId],
+  MODULE_CONFIG[MODULE_NAME.CSM][chainId]?.contractAddresses,
+  MODULE_CONFIG[MODULE_NAME.CM][chainId]?.contractAddresses,
+  // devnet overrides only apply to the deploy chain
+  chainId === config.defaultChain ? overridedAddresses : undefined,
+];
+
+// Reverse map address -> contractName, PER chain. Built directly rather than via
+// a name-keyed merge + invert, because CSM and CM share contract names
+// (accounting, ejector, feeOracle, …) at DIFFERENT addresses — a name-keyed
+// merge would drop one module's address and the RPC proxy would then block its
+// calls. Here each module's address becomes its own key, both labeled by name.
 export const METRIC_CONTRACT_ADDRESSES = fromPairs(
-  supportedChainsWithMainnet.map((chainId) => [
-    chainId,
-    invert(
-      omitBy(
-        mapValues(AlL_CONTRACT_NAMES, (name) =>
-          getContractAddress(name, chainId),
-        ),
-        isUndefined,
-      ),
-    ),
-  ]),
+  supportedChainsWithMainnet.map((chainId) => {
+    const map: Record<Address, AlL_CONTRACT_NAMES> = {};
+    for (const source of getAddressSources(chainId)) {
+      if (!source) continue;
+      for (const [name, address] of Object.entries(source)) {
+        if (address) map[getAddress(address)] = name as AlL_CONTRACT_NAMES;
+      }
+    }
+    return [chainId, map];
+  }),
 ) as Record<SUPPORTED_CHAINS, Record<Address, AlL_CONTRACT_NAMES>>;
 
 const CONTRACT_LIST_LOGS: AlL_CONTRACT_NAMES[] = [

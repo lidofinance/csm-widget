@@ -1036,3 +1036,38 @@ git commit -m "test: add dual-module discovery e2e scenario"
 - **Spec coverage:** identity `(module,id)` → 1.2/1.4; dual SDK → 1.1; discovery both → 1.3; operator-context owns module → 1.5/2.1; `useModule()` nullable → 2.1; migration buckets → 2.4 (render) / 3.2 (branding, metrics) / 0.1 (pure helper); show-rules+routing → 2.2/2.5; query keys → 2.3; UI states+badge → 2.5/3.1/3.2; verification → 3.3.
 - **Known unknowns resolved by spike:** `core.moduleId`/`moduleName` on a shared core (Task 1.0) gates the dual-SDK strategy; `useLocalStorage` object serialization (Task 1.4 Step 1) must be verified for bigint round-trip.
 - **Out of scope (unchanged):** creating operators; switching-operator UX (only the call signature is updated in 1.5).
+
+---
+
+## Dropping `MODULE` env / `config.module` (follow-up)
+
+Goal: remove the deploy-time `MODULE` env entirely. `process.env.MODULE` → `config.module`
+is a single chain, so "drop MODULE" = "remove every `config.module` read".
+
+**MVP decisions (2026-06-21):**
+
+- **`/create` is the CSM path only** (direct, no module picker / route param / gate
+  selection this iteration). So every deploy-module fallback in a pre-operator / no-operator
+  code path becomes a literal `MODULE_NAME.CSM` — no behavior change vs today's CSM deploy
+  (`config.module` already defaulted to `csm`).
+- Unified widget = CSM-primary for branding/links/analytics until CM is released.
+
+**Done (Steps 0–2):**
+
+- Removed dead `sm` field from `LidoSDKContext` (`lido-sdk.tsx`).
+- `matomo-click-events.ts`: single app identity (`CSM_Widget` / `csm_widget`).
+- `external-links.ts`: `landing`/`feedbackForm` pinned to CSM links; dropped `isModuleCSM/CM`.
+- `use-operator-short-info.ts`, `use-other-module.ts`, `useSmSDK()` no-arg fallback
+  (`lido-sdk.tsx:92`): `?? config.module` → `MODULE_NAME.CSM`.
+
+**Remaining `config.module` reads (Step 3 — needs unified pre-operator UI):**
+
+- `consts/module.ts` — `moduleMeta`, `isModuleCSM`, `isModuleCM` (+ ~27 consumers across
+  `welcome*`, `/create` chain, `starter-pack`, `accept-invite`). Keep `MODULE_METADATA.shortName`
+  (badge) + `WIDGET_TITLE/DESCRIPTION`.
+- `shared/components/welcome-section/{welcome-section.tsx,styles.ts}` — `DESCRIPTIONS`/`LOGOS`.
+- TODO(unified): make `useSmSDK()` no-arg `undefined`-aware (spec: no silent CSM).
+
+**Step 4 — delete plumbing** once Step 3 lands: `next.config.mjs` (`moduleMode`,
+`publicRuntimeConfig.module`), runtime-config type in `global.d.ts`, `config` `module` export,
+`.env.example:19` (`MODULE=csm`).

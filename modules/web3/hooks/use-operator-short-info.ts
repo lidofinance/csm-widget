@@ -4,7 +4,6 @@ import {
   NodeOperatorShortInfo,
 } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
-import { config } from 'config';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { useSmSDKByModule } from '../web3-provider';
@@ -15,7 +14,9 @@ export const useOperatorShortInfo = <TData = NodeOperatorShortInfo>(
   select?: (data: NodeOperatorShortInfo) => TData,
   module?: MODULE_NAME,
 ) => {
-  const targetModule = module ?? (config.module as MODULE_NAME);
+  // No module passed ⇒ no operator yet ⇒ query is disabled (id undefined),
+  // so the picked SDK is never used; default to CSM (MVP).
+  const targetModule = module ?? MODULE_NAME.CSM;
   const { operator } = useSmSDKByModule(targetModule);
 
   return useQuery({

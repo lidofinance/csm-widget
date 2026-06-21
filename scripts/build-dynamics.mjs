@@ -8,7 +8,7 @@ this allows developer to keep in mind that only client-side has access there.
 */
 import { resolve, dirname } from 'node:path';
 import { ensureDirSync } from 'fs-extra';
-import { copyFileSync, writeFileSync } from 'fs';
+import { writeFileSync } from 'fs';
 import * as dynamics from '../env-dynamics.mjs';
 
 export default () => {
@@ -18,12 +18,6 @@ export default () => {
   const path = resolve('./public/runtime/window-env.js');
   ensureDirSync(dirname(path));
   writeFileSync(path, `window.__env__=${JSON.stringify(dynamics)}`);
-
-  const moduleMode = (process.env.MODULE || 'csm').toLowerCase();
-  copyFileSync(
-    resolve(`./public/manifest-${moduleMode}.json`),
-    resolve('./public/manifest.json'),
-  );
 
   console.info('created runtime files');
 };
