@@ -37,6 +37,7 @@ on:
         options:
           - testnet
           - infra
+
   workflow_call:
     inputs:
       preview_stand_url:
@@ -59,64 +60,13 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 90
-    env:
-      # Required envs
-      RPC_URL: ${{ secrets.RPC_URL }}
-      WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
-      WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
-      EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
-      EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
-      STAND_TYPE: ${{ inputs.stand_type || github.event.inputs.STAND_TYPE || 'testnet' }}
-
-      # Common envs
-      QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
-      QASE_PROJECT_ID: "CSM"
-      QASE_PLAN_ID: "${{ inputs.qase_plan_id || (github.event_name == 'schedule' && 7) || '' }}"
-      GH_ACTION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-      GH_BRANCH_REF_NAME: ${{ github.ref_name }}
-      GH_EVENT_NAME: ${{ github.event_name }}
-      NODE_OPTIONS: --max-old-space-size=4096
-      TEST_TAGS: ${{ inputs.tags || github.event.inputs.tags || '!forked'}}
-      TEST_BRANCH: ${{ github.event.inputs.branch }}
-      REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
-      SLACK_DUTY_TAG: "S09H269H2TT"
-      WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
-      ARTIFACT_PASSWORD: ${{ secrets.ARTIFACT_PASSWORD }}
-
-      # Optional envs
-      REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
-      REFUSE_CF_BLOCK_VALUE: ${{ secrets.REFUSE_CF_BLOCK_VALUE }}
-      PUSHGATEWAY_URL: ${{ secrets.PUSHGATEWAY_URL }}
-      PUSHGATEWAY_USERNAME: ${{ secrets.PUSHGATEWAY_USERNAME }}
-      PUSHGATEWAY_PASSWORD: ${{ secrets.PUSHGATEWAY_PASSWORD }}
-      GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
-      GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          persist-credentials: false
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: "yarn"
-
-      - name: Restore yarn cache
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Run e2e tests
-        uses: ./.github/actions/run-e2e-tests
-        with:
-          module: csm
-          preview-stand-url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}
-          preview-stand-env: ${{ github.event.inputs.preview_stand_env }}
-          preview-stand-login: ${{ secrets.PREVIEW_STAND_LOGIN }}
-          preview-stand-password: ${{ secrets.PREVIEW_STAND_PASSWORD }}
+    uses: ./.github/workflows/e2e-tests.yml
+    secrets: inherit
+    with:
+      module: csm
+      stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
+      test_tags: ${{ inputs.tags || github.event.inputs.tags || '!forked' }}
+      qase_project_id: CSM
+      qase_plan_id: ${{ inputs.qase_plan_id || (github.event_name == 'schedule' && '7') || '' }}
+      preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
+      preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
