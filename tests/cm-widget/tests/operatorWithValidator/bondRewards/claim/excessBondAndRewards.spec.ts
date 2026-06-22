@@ -117,7 +117,7 @@ test.describe(
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toHaveText(
-            'Move all rewards to the bond. Best for uploading more keys',
+            'Move all rewards to the bond. Best for uploading more keys.',
           );
         });
       },

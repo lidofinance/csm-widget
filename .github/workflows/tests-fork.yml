@@ -29,6 +29,7 @@ on:
 
 jobs:
   test:
+    name: CSM widget (fork)
     uses: ./.github/workflows/e2e-tests.yml
     secrets: inherit
     with:
@@ -38,7 +39,7 @@ jobs:
       test_tags: forked
       qase_project_id: CSM
       qase_plan_id: "8"
-      csm_ref: main
+      staking_modules_ref: main
       deploy_config: ./artifacts/hoodi/deploy-hoodi.json
       chain: hoodi
       artifacts_dir: ./artifacts/hoodi/

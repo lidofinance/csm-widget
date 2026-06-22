@@ -29,6 +29,7 @@ on:
 
 jobs:
   test:
+    name: CM widget (fork)
     uses: ./.github/workflows/e2e-tests.yml
     secrets: inherit
     with:
@@ -37,7 +38,7 @@ jobs:
       stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
       test_tags: forked
       qase_project_id: CM
-      csm_ref: test/local-scripts
+      staking_modules_ref: test/local-scripts
       deploy_config: ./artifacts/hoodi/curated/deploy-hoodi.json
       chain: hoodi
       artifacts_dir: ./artifacts/hoodi/

@@ -45,8 +45,8 @@ on:
         required: false
         type: number
         default: 90
-      csm_ref:
-        description: "community-staking-module ref to checkout (fork only)."
+      staking_modules_ref:
+        description: "staking-modules ref to checkout (fork only)."
         required: false
         type: string
         default: main
@@ -78,6 +78,7 @@ on:
 
 jobs:
   test:
+    name: Run e2e tests
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ inputs.timeout_minutes }}
     env:
@@ -133,13 +134,13 @@ jobs:
           cache: "yarn"
 
       # --- Fork-only setup ---
-      - name: Checkout community-staking-module
+      - name: Checkout staking-modules
         if: ${{ inputs.use_fork }}
         uses: actions/checkout@v6
         with:
-          repository: lidofinance/community-staking-module
-          path: community-staking-module
-          ref: ${{ inputs.csm_ref }}
+          repository: lidofinance/staking-modules
+          path: staking-modules
+          ref: ${{ inputs.staking_modules_ref }}
 
       - name: Setup just
         if: ${{ inputs.use_fork }}
@@ -159,11 +160,11 @@ jobs:
 
       - name: Install contracts dependencies
         if: ${{ inputs.use_fork }}
-        run: cd community-staking-module && yarn install --immutable
+        run: cd staking-modules && yarn install --immutable
 
       - name: Build fork
         if: ${{ inputs.use_fork }}
-        run: cd community-staking-module && just deps && just build
+        run: cd staking-modules && just deps && just build
 
       # --- Test run ---
       - name: Install dependencies
