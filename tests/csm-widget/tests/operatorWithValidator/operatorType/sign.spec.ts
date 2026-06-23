@@ -67,7 +67,7 @@ test.describe('Operator with keys. ICS. Sign in', async () => {
       await test.step('Verify sign in form text', async () => {
         await expect(applicationForm.signInForm.form).toContainText('Sign in');
         await expect(applicationForm.signInForm.form).toContainText(
-          'To continue, please sign a message with your connected address to prove ownership.',
+          'To continue, please sign a message with your connected address to prove ownership',
         );
         await expect(applicationForm.signInForm.form).toContainText(
           'You are requesting ICS operator type for the following address:',

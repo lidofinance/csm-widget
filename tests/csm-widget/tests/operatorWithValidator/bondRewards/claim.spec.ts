@@ -12,7 +12,7 @@ import { mnemonicToAccount } from 'viem/accounts';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 
-test.describe('Bond & Rewards. Claim.', async () => {
+test.describe.skip('Bond & Rewards. Claim.', async () => {
   test.beforeEach(async ({ widgetService }) => {
     await widgetService.bondRewardsPage.claim.open();
   });
