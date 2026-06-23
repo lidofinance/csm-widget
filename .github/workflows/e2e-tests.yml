@@ -123,7 +123,7 @@ jobs:
       CHAIN: ${{ inputs.chain }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
@@ -136,7 +136,7 @@ jobs:
       # --- Fork-only setup ---
       - name: Checkout staking-modules
         if: ${{ inputs.use_fork }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: lidofinance/staking-modules
           path: staking-modules
