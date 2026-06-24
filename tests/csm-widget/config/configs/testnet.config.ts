@@ -26,7 +26,7 @@ export class TestnetConfig extends BaseConfig {
       },
       mockConfig: {
         urls: {
-          csmSurveysApi: 'https://csm-surveys-api-testnet.up.railway.app',
+          csmSurveysApi: 'https://csm-survey-api-hoodi.lido.tools',
         },
       },
       monitoringConfig: {

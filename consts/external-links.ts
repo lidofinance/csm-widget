@@ -83,7 +83,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     migalabsDashboard: 'https://migalabs.io/entities',
     migalabs: 'https://migalabs.io',
     keysApi: 'https://keys-api.lido.fi',
-    surveyApi: 'https://csm-surveys-api-mainnet.up.railway.app',
+    surveyApi: 'https://csm-survey-api.lido.tools',
   },
   [CHAINS.Hoodi]: {
     rewardsTree:
@@ -101,7 +101,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     migalabsDashboard: '',
     migalabs: 'https://migalabs.io',
     keysApi: 'https://keys-api-hoodi.testnet.fi',
-    surveyApi: 'https://csm-surveys-api-testnet.up.railway.app',
+    surveyApi: 'https://csm-survey-api-hoodi.lido.tools',
   },
 };
 
