@@ -1,4 +1,4 @@
-import { test } from '../../../test.fixture';
+import { test } from '../../../../test.fixture';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';

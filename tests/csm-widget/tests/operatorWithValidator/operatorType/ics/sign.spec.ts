@@ -1,4 +1,4 @@
-import { test } from '../../test.fixture';
+import { test } from '../../../test.fixture';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { mnemonicToAccount } from 'viem/accounts';

@@ -1,8 +1,8 @@
 import { Page, test } from '@playwright/test';
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
-import { SignInForm } from './applicationFormStates/signInForm.page';
-import { SubmitApplicationForm } from './applicationFormStates/submitApplicationForm.page';
-import { ApplicationFormStatus } from './applicationFormStates/applicationFormStatus.page';
+import { SignInForm } from '../shared/signInForm.page';
+import { SubmitApplicationForm } from './submitApplicationForm.page';
+import { ApplicationFormStatus } from './applicationFormStatus.page';
 
 export class ApplicationForm {
   page: Page;
