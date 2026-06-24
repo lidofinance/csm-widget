@@ -125,7 +125,7 @@ test.describe(
           ).toHaveText('Excess Bond → Rewards Address');
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.BOND_TO_RA),
-          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed');
+          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed.');
         });
 
         await test.step('"Rewards to Bond" option', async () => {

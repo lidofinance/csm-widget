@@ -37,6 +37,7 @@ on:
         options:
           - testnet
           - infra
+
   workflow_call:
     inputs:
       preview_stand_url:
@@ -59,113 +60,14 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-24.04
-    env:
-      # Required envs
-      RPC_URL: ${{ secrets.RPC_URL }}
-      WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
-      WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
-      EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
-      EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
-      STAND_TYPE: ${{ inputs.stand_type || github.event.inputs.STAND_TYPE || 'testnet' }}
-
-      # Common envs
-      QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
-      QASE_PROJECT_ID: "CSM"
-      QASE_PLAN_ID: "${{ inputs.qase_plan_id || (github.event_name == 'schedule' && 7) || '' }}"
-      GH_ACTION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-      GH_BRANCH_REF_NAME: ${{ github.ref_name }}
-      GH_EVENT_NAME: ${{ github.event_name }}
-      NODE_OPTIONS: --max-old-space-size=4096
-      TEST_TAGS: ${{ inputs.tags || github.event.inputs.tags || '!forked'}}
-      TEST_BRANCH: ${{ github.event.inputs.branch }}
-      REPORT_ENABLED: "${{ github.event_name == 'schedule' && 'true' || 'false' }}"
-      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL}}
-      SLACK_DUTY_TAG: "S09H269H2TT"
-      WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
-
-      # Optional envs
-      REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
-      REFUSE_CF_BLOCK_VALUE: ${{ secrets.REFUSE_CF_BLOCK_VALUE }}
-      PUSHGATEWAY_URL: ${{ secrets.PUSHGATEWAY_URL }}
-      PUSHGATEWAY_USERNAME: ${{ secrets.PUSHGATEWAY_USERNAME }}
-      PUSHGATEWAY_PASSWORD: ${{ secrets.PUSHGATEWAY_PASSWORD }}
-      GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
-      GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
-
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          persist-credentials: false
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "24"
-          cache: "yarn"
-
-      - name: Restore yarn cache
-        uses: actions/cache@v5
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Install dependencies
-        run: yarn install --immutable
-
-      - name: Install Playwright Browsers
-        run: yarn playwright install chromium --with-deps
-
-      - name: Download keys generator binary
-        run: bash ./tests/scripts/set_up_keys_generator.sh
-
-      - name: Set up preview-stand credentials
-        if: ${{ inputs.stand_type  == 'preview' || github.event.inputs.stand_type == 'preview' }}
-        run: |
-          if [ -n "${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" ]; then
-            echo "Setting login and password for preview stand"
-            echo "PREVIEW_STAND_LOGIN=${{ secrets.PREVIEW_STAND_LOGIN }}" >> $GITHUB_ENV
-            echo "PREVIEW_STAND_PASSWORD=${{ secrets.PREVIEW_STAND_PASSWORD }}" >> $GITHUB_ENV
-            echo "PREVIEW_STAND_URL=${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url }}" >> $GITHUB_ENV
-            echo "PREVIEW_STAND_ENV=${{ github.event.inputs.preview_stand_env }}" >> $GITHUB_ENV
-          else
-            echo "PREVIEW_STAND_URL not provided for preview environment"
-            exit 1
-          fi
-
-      - name: Run tests based on suite input
-        id: run-tests
-        timeout-minutes: 90
-        run: |
-          echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-          echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
-          echo -e "🧪 Test Tags: \033[1;34m$TEST_TAGS\033[0m"
-          echo -e "🌱 Branch: \033[1;34m${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\033[0m"
-          echo -e "🔗 Test Plan: \033[1;34m${QASE_PLAN_ID}\033[0m"
-          echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
-
-          xvfb-run --auto-servernum -- yarn test:csm:e2e
-
-      - name: Encrypt Playwright report
-        if: always()
-        env:
-          ARTIFACT_PASSWORD: ${{ secrets.ARTIFACT_PASSWORD }}
-        run: |
-          if [ -d playwright-report ]; then
-            tar -czf - playwright-report/ | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -pass env:ARTIFACT_PASSWORD -out playwright-report.tar.gz.enc
-          fi
-
-      - uses: actions/upload-artifact@v7
-        if: always()
-        with:
-          name: playwright-report
-          path: playwright-report.tar.gz.enc
-          retention-days: 1
-
-      - name: Notify Slack about broken workflow
-        if: always() && github.event_name == 'schedule' && (steps.run-tests.conclusion == 'skipped' || steps.run-tests.conclusion == 'cancelled')
-        uses: ./.github/actions/notify-broken-tests
-        with:
-          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          duty-tag: ${{ env.SLACK_DUTY_TAG }}
-          test-tags: ${{ env.TEST_TAGS }}
+    name: CSM widget
+    uses: ./.github/workflows/e2e-tests.yml
+    secrets: inherit
+    with:
+      module: csm
+      stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
+      test_tags: ${{ inputs.tags || github.event.inputs.tags || '!forked' }}
+      qase_project_id: CSM
+      qase_plan_id: ${{ inputs.qase_plan_id || (github.event_name == 'schedule' && '7') || '' }}
+      preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
+      preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}

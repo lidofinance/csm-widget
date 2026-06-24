@@ -53,7 +53,7 @@ test.describe(
           ).toBeChecked();
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.BOND_TO_RA),
-          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed');
+          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed.');
         });
 
         await test.step('"Claim All" is disabled and unchecked', async () => {
@@ -78,7 +78,7 @@ test.describe(
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toHaveText(
-            'Move all rewards to the bond. Best for uploading more keys',
+            'Move all rewards to the bond. Best for uploading more keys.',
           );
         });
       },

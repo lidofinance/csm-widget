@@ -92,7 +92,7 @@ test.describe('Operator without keys. Step 2.', { tag: [Tags.forked] }, () => {
         step2.stepDescription,
         'Step description should display correct hint text',
       ).toHaveText(
-        'Manager Address will have the ultimate control over the Node Operator, while Rewards Address is mainly used to receive rewards.',
+        'Manager Address will have the ultimate control over the Node Operator, while Rewards Address is mainly used to receive rewards',
       );
     });
 

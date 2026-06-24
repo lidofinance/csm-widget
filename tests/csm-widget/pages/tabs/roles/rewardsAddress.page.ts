@@ -61,7 +61,7 @@ export class RewardsAddressPage extends BasePage {
 
   async open() {
     await test.step('Open Rewards Address tab', async () => {
-      await this.page.goto('/roles/reward-address');
+      await this.page.goto('/settings/rewards-address');
       await this.currentAddress.waitFor({ state: 'visible' });
     });
   }

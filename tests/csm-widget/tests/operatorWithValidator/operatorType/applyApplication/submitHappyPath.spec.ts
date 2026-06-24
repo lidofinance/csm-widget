@@ -52,7 +52,7 @@ test.describe('Operator with keys. ICS. Apply application. Submit Happy Path', a
       await expect(
         widgetService.operatorType.txModal.description,
       ).toContainText(
-        'You can track your application’s status on the Operator Type tab.',
+        "You can track your application's status on the Operator Type tab",
       );
 
       await widgetService.operatorType.txModal.closeModal();

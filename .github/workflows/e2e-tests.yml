@@ -1,0 +1,227 @@
+name: E2E Tests (reusable)
+
+# Reusable workflow that runs the CSM/CM Playwright e2e suite.
+#
+# Unlike a composite action (whose internal steps collapse into a single
+# UI node), every step below shows up as its own top-level step in the run.
+# Callers parameterise it through `inputs` and pass secrets via
+# `secrets: inherit`. Fork-only setup is gated behind `use_fork`.
+
+on:
+  workflow_call:
+    inputs:
+      module:
+        description: "Module under test (csm | cm). Selects `yarn test:<module>:e2e`."
+        required: false
+        type: string
+        default: csm
+      use_fork:
+        description: "Run against a local fork (adds contract checkout + build steps)."
+        required: false
+        type: boolean
+        default: false
+      stand_type:
+        description: "Stand type (testnet | preview | staging | prod)."
+        required: false
+        type: string
+        default: testnet
+      test_tags:
+        description: "Playwright tag filter passed as TEST_TAGS."
+        required: false
+        type: string
+        default: "!forked"
+      qase_project_id:
+        description: "Qase project ID (CSM | CM)."
+        required: false
+        type: string
+        default: CSM
+      qase_plan_id:
+        description: "Qase plan ID (string; empty disables plan reporting)."
+        required: false
+        type: string
+        default: ""
+      timeout_minutes:
+        description: "Job timeout in minutes."
+        required: false
+        type: number
+        default: 90
+      staking_modules_ref:
+        description: "staking-modules ref to checkout (fork only)."
+        required: false
+        type: string
+        default: main
+      deploy_config:
+        description: "DEPLOY_CONFIG path (fork only)."
+        required: false
+        type: string
+        default: ""
+      chain:
+        description: "CHAIN name (fork only)."
+        required: false
+        type: string
+        default: ""
+      artifacts_dir:
+        description: "ARTIFACTS_DIR path (fork only)."
+        required: false
+        type: string
+        default: ""
+      preview_stand_url:
+        description: "Preview stand url. When stand_type=preview it must be non-empty."
+        required: false
+        type: string
+        default: ""
+      preview_stand_env:
+        description: "Preview stand env."
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  test:
+    name: Run e2e tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: ${{ inputs.timeout_minutes }}
+    env:
+      # Required envs
+      RPC_URL: ${{ secrets.RPC_URL }}
+      WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
+      WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
+      EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
+      EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
+      WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
+      MODULE: ${{ inputs.module }}
+      STAND_TYPE: ${{ inputs.stand_type }}
+
+      # Common envs
+      QASE_API_TOKEN: ${{ secrets.QASE_API_TOKEN }}
+      QASE_PROJECT_ID: ${{ inputs.qase_project_id }}
+      QASE_PLAN_ID: ${{ inputs.qase_plan_id }}
+      GH_ACTION_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      GH_BRANCH_REF_NAME: ${{ github.ref_name }}
+      GH_EVENT_NAME: ${{ github.event_name }}
+      NODE_OPTIONS: --max-old-space-size=4096
+      TEST_TAGS: ${{ inputs.test_tags }}
+      REPORT_ENABLED: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      SLACK_DUTY_TAG: "S09H269H2TT"
+      ARTIFACT_PASSWORD: ${{ secrets.ARTIFACT_PASSWORD }}
+
+      # Optional envs
+      REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
+      REFUSE_CF_BLOCK_VALUE: ${{ secrets.REFUSE_CF_BLOCK_VALUE }}
+      PUSHGATEWAY_URL: ${{ secrets.PUSHGATEWAY_URL }}
+      PUSHGATEWAY_USERNAME: ${{ secrets.PUSHGATEWAY_USERNAME }}
+      PUSHGATEWAY_PASSWORD: ${{ secrets.PUSHGATEWAY_PASSWORD }}
+      GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
+      GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+      PINATA_API_KEY: ${{ secrets.QA_PINATA_API_KEY }}
+      PINATA_API_SECRET: ${{ secrets.QA_PINATA_API_SECRET }}
+
+      # Fork envs (ignored unless use_fork=true)
+      USE_FORK: ${{ inputs.use_fork }}
+      DEPLOY_CONFIG: ${{ inputs.deploy_config }}
+      CHAIN: ${{ inputs.chain }}
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "yarn"
+
+      # --- Fork-only setup ---
+      - name: Checkout staking-modules
+        if: ${{ inputs.use_fork }}
+        uses: actions/checkout@v6
+        with:
+          repository: lidofinance/staking-modules
+          path: staking-modules
+          ref: ${{ inputs.staking_modules_ref }}
+
+      - name: Setup just
+        if: ${{ inputs.use_fork }}
+        uses: ./.github/actions/setup-just
+
+      - name: Install Foundry
+        if: ${{ inputs.use_fork }}
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: v1.7.1
+
+      - name: Restore yarn cache
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install contracts dependencies
+        if: ${{ inputs.use_fork }}
+        run: cd staking-modules && yarn install --immutable
+
+      - name: Build fork
+        if: ${{ inputs.use_fork }}
+        run: cd staking-modules && just deps && just build
+
+      # --- Test run ---
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Install Playwright Browsers
+        run: yarn playwright install chromium --with-deps
+
+      - name: Download keys generator binary
+        run: bash ./tests/scripts/set_up_keys_generator.sh
+
+      - name: Set up preview-stand credentials
+        if: ${{ inputs.stand_type == 'preview' }}
+        run: |
+          if [ -n "${{ inputs.preview_stand_url }}" ]; then
+            echo "Setting login and password for preview stand"
+            echo "PREVIEW_STAND_LOGIN=${{ secrets.PREVIEW_STAND_LOGIN }}" >> $GITHUB_ENV
+            echo "PREVIEW_STAND_PASSWORD=${{ secrets.PREVIEW_STAND_PASSWORD }}" >> $GITHUB_ENV
+            echo "PREVIEW_STAND_URL=${{ inputs.preview_stand_url }}" >> $GITHUB_ENV
+            echo "PREVIEW_STAND_ENV=${{ inputs.preview_stand_env }}" >> $GITHUB_ENV
+          else
+            echo "PREVIEW_STAND_URL not provided for preview environment"
+            exit 1
+          fi
+
+      - name: Run tests
+        id: run-tests
+        run: |
+          echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+          echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"
+          echo -e "🧪 Test Tags: \033[1;34m$TEST_TAGS\033[0m"
+          echo -e "🌱 Branch: \033[1;34m${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}\033[0m"
+          echo -e "🔗 Test Plan: \033[1;34m${QASE_PLAN_ID}\033[0m"
+          echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
+
+          xvfb-run --auto-servernum -- yarn test:${{ inputs.module }}:e2e
+
+      - name: Encrypt Playwright report
+        if: always()
+        run: |
+          if [ -d playwright-report ]; then
+            tar -czf - playwright-report/ | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -pass env:ARTIFACT_PASSWORD -out playwright-report.tar.gz.enc
+          fi
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: playwright-report-${{ inputs.module }}
+          path: playwright-report.tar.gz.enc
+          retention-days: 1
+
+      - name: Notify Slack about broken workflow
+        if: always() && github.event_name == 'schedule' && (steps.run-tests.conclusion == 'skipped' || steps.run-tests.conclusion == 'cancelled')
+        uses: ./.github/actions/notify-broken-tests
+        env:
+          ARTIFACTS_DIR: ${{ inputs.artifacts_dir }}
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          duty-tag: ${{ env.SLACK_DUTY_TAG }}
+          test-tags: ${{ env.TEST_TAGS }}

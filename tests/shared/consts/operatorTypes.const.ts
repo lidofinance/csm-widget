@@ -52,7 +52,7 @@ export const OPERATOR_TYPE_METADATA: Record<
     short: 'PTO',
     title: 'Professional Trusted Operator (PTO)',
     description:
-      'This type represents professional operators with a proven track record of strong performance, operational reliability, and ongoing adherence to the Lido protocol standards.',
+      'This type represents professional operators with a proven track record of strong performance, operational reliability, and ongoing adherence to the Lido protocol standards',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_PTO,
   },
   [OPERATOR_TYPE.CM_PO]: {
@@ -60,7 +60,7 @@ export const OPERATOR_TYPE_METADATA: Record<
     short: 'PO',
     title: 'Professional Operator (PO)',
     description:
-      'This type serves as an initial stage in the validation journey of professional staking organizations, entering the Lido protocol validation as part of the Curated Module v2.',
+      'This type serves as an initial stage in the validation journey of professional staking organizations, entering the Lido protocol validation as part of the Curated Module v2',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_PO,
   },
   [OPERATOR_TYPE.CM_PGO]: {
@@ -68,7 +68,7 @@ export const OPERATOR_TYPE_METADATA: Record<
     short: 'PGO',
     title: 'Public Good Operator (PGO)',
     description:
-      'This type acknowledges entities that strengthen the Ethereum ecosystem through client development, their financial support, or contributing to the broader public infrastructure.',
+      'This type acknowledges entities that strengthen the Ethereum ecosystem through client development, their financial support, or contributing to the broader public infrastructure',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_PGO,
   },
   [OPERATOR_TYPE.CM_DO]: {
@@ -76,7 +76,7 @@ export const OPERATOR_TYPE_METADATA: Record<
     short: 'DO',
     title: 'Decentralization Operator (DO)',
     description:
-      'This type recognizes entities that advance Ethereum decentralization by operating nodes in underrepresented regions or running unique client and infrastructure combinations.',
+      'This type recognizes entities that advance Ethereum decentralization by operating nodes in underrepresented regions or running unique client and infrastructure combinations',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_DO,
   },
   [OPERATOR_TYPE.CM_EEO]: {
@@ -84,7 +84,7 @@ export const OPERATOR_TYPE_METADATA: Record<
     short: 'EEO',
     title: 'Extra Effort Operator (EEO)',
     description:
-      'This type is for entities that demonstrate strong alignment with the Lido protocol through impactful contributions, such as governance participation and stVaults adoption.',
+      'This type is for entities that demonstrate strong alignment with the Lido protocol through impactful contributions, such as governance participation and stVaults adoption',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_EEO,
   },
   [OPERATOR_TYPE.CM_IODC]: {
@@ -92,7 +92,7 @@ export const OPERATOR_TYPE_METADATA: Record<
     short: 'IODC',
     title: 'Intra-Operator DVT Cluster (IODC)',
     description:
-      'This type is designed for distributed validator clusters operated by a single entity, leveraging DVT to enhance validator security, redundancy, and operational reliability.',
+      'This type is designed for distributed validator clusters operated by a single entity, leveraging DVT to enhance validator security, redundancy, and operational reliability',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_IODC,
   },
   [OPERATOR_TYPE.CM_IODCP]: {
@@ -100,7 +100,7 @@ export const OPERATOR_TYPE_METADATA: Record<
     short: 'IODC+',
     title: 'Intra-Operator DVT Cluster Plus (IODC+)',
     description:
-      'This type is designed for distributed validator clusters operated by a single entity, leveraging DVT to enhance validator security, redundancy, and operational reliability.',
+      'This type is designed for distributed validator clusters operated by a single entity, leveraging DVT to enhance validator security, redundancy, and operational reliability',
     curveId: OPERATOR_TYPE_CURVE_ID.CM_IODC,
   },
   [OPERATOR_TYPE.CC]: {

@@ -1,5 +1,5 @@
-name: Forked Test CSM-widget
-run-name: Forked CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
+name: Forked Test CM-widget
+run-name: Forked CM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
   schedule:
@@ -29,18 +29,17 @@ on:
 
 jobs:
   test:
-    name: CSM widget (fork)
+    name: CM widget (fork)
     uses: ./.github/workflows/e2e-tests.yml
     secrets: inherit
     with:
-      module: csm
+      module: cm
       use_fork: true
       stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
       test_tags: forked
-      qase_project_id: CSM
-      qase_plan_id: "8"
-      staking_modules_ref: main
-      deploy_config: ./artifacts/hoodi/deploy-hoodi.json
+      qase_project_id: CM
+      staking_modules_ref: test/local-scripts
+      deploy_config: ./artifacts/hoodi/curated/deploy-hoodi.json
       chain: hoodi
       artifacts_dir: ./artifacts/hoodi/
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}

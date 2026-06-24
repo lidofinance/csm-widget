@@ -52,7 +52,7 @@ const setupPresetAccounts = async (): Promise<void> => {
   }
 
   const walletService = new WalletStateService({
-    cwd: process.env.JUST_DIR || './community-staking-module',
+    cwd: process.env.JUST_DIR || './staking-modules',
     step: passthroughStep,
   });
 

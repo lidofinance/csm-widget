@@ -98,7 +98,7 @@ test.describe(
           ).toBeDisabled();
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.BOND_TO_RA),
-          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed');
+          ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed.');
         });
 
         await test.step('"Rewards to Bond" is enabled, not checked, description reads "Compensate the Insufficient Bond"', async () => {

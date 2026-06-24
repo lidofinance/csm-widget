@@ -42,7 +42,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   forkActionService: [
     async ({}, use) => {
       const svc = new ForkActionsService({
-        cwd: process.env.JUST_DIR || './community-staking-module',
+        cwd: process.env.JUST_DIR || './staking-modules',
       });
       await use(svc);
     },
