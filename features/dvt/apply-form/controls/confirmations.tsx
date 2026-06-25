@@ -6,7 +6,7 @@ import { ConfirmationList } from '../styles';
 
 export const Confirmations: FC = () => {
   return (
-    <Stack align="start">
+    <Stack align="start" data-testid="confirmationsSection">
       <CheckboxHookForm fieldName="confirmed" data-testid="confirmCheckbox" />
       <Text size="xxs" color="secondary" as="div">
         I confirm that:

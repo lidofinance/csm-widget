@@ -120,12 +120,14 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
             Cluster member #{index + 1}
           </Text>
           {verified ? (
-            <SquaredChip variant="primary">
+            <SquaredChip variant="primary" data-testid="verifiedChip">
               Verified
               <VerifiedIcon color="primary" />
             </SquaredChip>
           ) : (
-            <SquaredChip variant="secondary">Unverified</SquaredChip>
+            <SquaredChip variant="secondary" data-testid="unverifiedChip">
+              Unverified
+            </SquaredChip>
           )}
         </Stack>
 
