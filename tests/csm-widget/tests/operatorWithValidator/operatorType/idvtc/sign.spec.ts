@@ -1,6 +1,7 @@
 import { test } from '../../../test.fixture';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount } from 'viem/accounts';
+import { Tags } from 'tests/shared/consts/common.const';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
@@ -19,29 +20,30 @@ test.describe('Operator with keys. IDVTC. Sign in', async () => {
     });
   });
 
-  test('Should show apply form and save token when signed in', async ({
-    widgetService,
-    secretPhrase,
-  }) => {
-    const { signInForm, applyForm } =
-      widgetService.operatorType.dvtApplicationForm;
-    await widgetService.operatorType.dvtApplicationForm.open();
+  test(
+    'Should show apply form and save token when signed in',
+    { tag: [Tags.smoke] },
+    async ({ widgetService, secretPhrase }) => {
+      const { signInForm, applyForm } =
+        widgetService.operatorType.dvtApplicationForm;
+      await widgetService.operatorType.dvtApplicationForm.open();
 
-    await signInForm.signIn();
+      await signInForm.signIn();
 
-    await test.step('Verify apply form sections are shown', async () => {
-      await expect(applyForm.form).toBeVisible();
-      await expect(applyForm.mainAddressSection).toBeVisible();
-    });
+      await test.step('Verify apply form sections are shown', async () => {
+        await expect(applyForm.form).toBeVisible();
+        await expect(applyForm.mainAddressSection).toBeVisible();
+      });
 
-    await test.step('Verify SIWE token saved to Session Storage', async () => {
-      const address = mnemonicToAccount(secretPhrase).address;
-      const siweToken = await signInForm.getSessionStorageData(
-        `siwe-token-${address}`,
-      );
-      expect(siweToken).not.toBeNull();
-    });
-  });
+      await test.step('Verify SIWE token saved to Session Storage', async () => {
+        const address = mnemonicToAccount(secretPhrase).address;
+        const siweToken = await signInForm.getSessionStorageData(
+          `siwe-token-${address}`,
+        );
+        expect(siweToken).not.toBeNull();
+      });
+    },
+  );
 
   test('Should sign out when token removed from Session Storage', async ({
     widgetService,

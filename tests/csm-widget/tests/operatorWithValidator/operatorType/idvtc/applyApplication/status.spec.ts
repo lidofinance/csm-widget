@@ -6,6 +6,7 @@ import {
   buildDvtStatusResponse,
   dvtApplicationStatus,
 } from 'tests/shared/services/mockResponses/dvtApplication.mock';
+import { Tags } from 'tests/shared/consts/common.const';
 
 const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
@@ -119,70 +120,71 @@ test.describe('Operator with keys. IDVTC. Application status', async () => {
     });
   });
 
-  test('Should show submitted form fields', async ({
-    widgetService,
-    httpMockerService,
-  }) => {
-    const status =
-      widgetService.operatorType.dvtApplicationForm.applicationFormStatus;
-    const response = buildDvtStatusResponse({
-      form: {
-        mainAddress: '0xbc441b7c650f2dc3514cb5f39fb8efb3cc03cb22',
-        discordLink: 'https://discord.com/channels/123/456/789',
-        telegramUsername: 'main_tg',
-        clusterMembers: [
-          {
-            address: '0x2c71755ed6c5be0d35a893cfab253f5291a512d8',
-            discordHandle: 'member_discord',
-            telegramUsername: 'member_tg',
-          },
-          { address: '0xa6fc0e8ec1be92b5786baf4f5ecb9a453d527067' },
-          { address: '0x134ca9328f6b4b2564d58af2904804c73385d015' },
-          { address: '0x649d105904ea2f14073bc34a173486644705aada' },
-        ],
-      },
-    });
+  test(
+    'Should show submitted form fields',
+    { tag: [Tags.smoke] },
+    async ({ widgetService, httpMockerService }) => {
+      const status =
+        widgetService.operatorType.dvtApplicationForm.applicationFormStatus;
+      const response = buildDvtStatusResponse({
+        form: {
+          mainAddress: '0xbc441b7c650f2dc3514cb5f39fb8efb3cc03cb22',
+          discordLink: 'https://discord.com/channels/123/456/789',
+          telegramUsername: 'main_tg',
+          clusterMembers: [
+            {
+              address: '0x2c71755ed6c5be0d35a893cfab253f5291a512d8',
+              discordHandle: 'member_discord',
+              telegramUsername: 'member_tg',
+            },
+            { address: '0xa6fc0e8ec1be92b5786baf4f5ecb9a453d527067' },
+            { address: '0x134ca9328f6b4b2564d58af2904804c73385d015' },
+            { address: '0x649d105904ea2f14073bc34a173486644705aada' },
+          ],
+        },
+      });
 
-    await test.step('Open application and expand details', async () => {
-      await httpMockerService.mockDvtStatus(response);
-      await widgetService.page.reload();
-      await status.form.waitFor({ state: 'visible' });
-      await status.expand();
-    });
+      await test.step('Open application and expand details', async () => {
+        await httpMockerService.mockDvtStatus(response);
+        await widgetService.page.reload();
+        await status.form.waitFor({ state: 'visible' });
+        await status.expand();
+      });
 
-    await test.step('Main address and socials are shown', async () => {
-      await expect(status.mainAddressInput).toHaveValue(
-        response.form.mainAddress,
-      );
-      await expect(status.mainAddressInput).toBeDisabled();
-      await expect(status.discordLinkInput).toHaveValue(
-        response.form.discordLink ?? '',
-      );
-      await expect(status.telegramUsernameInput).toHaveValue('main_tg');
-    });
-
-    await test.step('All cluster members are shown', async () => {
-      await expect(status.clusterMembersTitle).toContainText(
-        'Cluster member addresses',
-      );
-      for (const [index, member] of response.form.clusterMembers.entries()) {
-        const addressText = await status
-          .getClusterMemberAddress(index)
-          .innerText();
-        expect(addressText.toLowerCase()).toContain(
-          member.address.toLowerCase(),
+      await test.step('Main address and socials are shown', async () => {
+        await expect(status.mainAddressInput).toHaveValue(
+          response.form.mainAddress,
         );
-      }
-    });
+        await expect(status.mainAddressInput).toBeDisabled();
+        await expect(status.discordLinkInput).toHaveValue(
+          response.form.discordLink ?? '',
+        );
+        await expect(status.telegramUsernameInput).toHaveValue('main_tg');
+      });
 
-    await test.step('Optional member contacts are shown', async () => {
-      const member0 = status.getClusterMemberInfo(0);
-      await expect(member0).toContainText('Discord:');
-      await expect(member0).toContainText('member_discord');
-      await expect(member0).toContainText('Telegram:');
-      await expect(member0).toContainText('member_tg');
-    });
-  });
+      await test.step('All cluster members are shown', async () => {
+        await expect(status.clusterMembersTitle).toContainText(
+          'Cluster member addresses',
+        );
+        for (const [index, member] of response.form.clusterMembers.entries()) {
+          const addressText = await status
+            .getClusterMemberAddress(index)
+            .innerText();
+          expect(addressText.toLowerCase()).toContain(
+            member.address.toLowerCase(),
+          );
+        }
+      });
+
+      await test.step('Optional member contacts are shown', async () => {
+        const member0 = status.getClusterMemberInfo(0);
+        await expect(member0).toContainText('Discord:');
+        await expect(member0).toContainText('member_discord');
+        await expect(member0).toContainText('Telegram:');
+        await expect(member0).toContainText('member_tg');
+      });
+    },
+  );
 
   test('Should show committee comments on fields', async ({
     widgetService,
