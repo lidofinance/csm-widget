@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { BasePage } from '../../../../../shared/pages/base.page';
 import { ClusterMemberPage } from './clusterMember.page';
@@ -29,7 +29,6 @@ export class DvtApplyForm extends BasePage {
 
   // Confirmations + submit
   confirmationsSection: Locator;
-  confirmCheckbox: Locator;
   confirmCheckboxInput: Locator;
   submitBtn: Locator;
 
@@ -78,12 +77,34 @@ export class DvtApplyForm extends BasePage {
 
     // confirmations + submit
     this.confirmationsSection = this.form.getByTestId('confirmationsSection');
-    this.confirmCheckbox = this.form.getByTestId('confirmCheckbox');
-    this.confirmCheckboxInput = this.confirmCheckbox.getByRole('checkbox');
+    this.confirmCheckboxInput = this.form.getByTestId('confirmCheckbox');
     this.submitBtn = this.form.getByTestId('submitBtn');
   }
 
   getClusterMember(index: number) {
     return new ClusterMemberPage(this.page, index, this.clusterMembersSection);
+  }
+
+  async clearPersisted() {
+    await this.page.evaluate(() => {
+      Object.keys(localStorage)
+        .filter((key) => key.startsWith('dvt-apply-'))
+        .forEach((key) => localStorage.removeItem(key));
+    });
+  }
+
+  // The form persists to localStorage with a 1s debounce — wait until the
+  // freshly entered value actually lands in storage before reloading.
+  async waitForPersisted(value: string) {
+    await expect
+      .poll(async () =>
+        this.page.evaluate(() => {
+          const key = Object.keys(localStorage).find((k) =>
+            k.startsWith('dvt-apply-'),
+          );
+          return key ? (localStorage.getItem(key) ?? '') : '';
+        }),
+      )
+      .toContain(value);
   }
 }

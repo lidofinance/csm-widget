@@ -38,4 +38,18 @@ export class HttpMockerService {
       });
     });
   }
+
+  async mockDvtStatus(response: Record<string, any>) {
+    const mockUrl = `${this.config.urls.csmSurveysApi}/dvt/status`;
+
+    await test.step('Mock DVT Status request', async () => {
+      await this.page.route(mockUrl, async (route) => {
+        await route.fulfill({
+          status: 200,
+          contentType: 'application/json',
+          body: JSON.stringify(response),
+        });
+      });
+    });
+  }
 }
