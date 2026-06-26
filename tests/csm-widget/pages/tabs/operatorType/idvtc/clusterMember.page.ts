@@ -1,4 +1,4 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, expect } from '@playwright/test';
 
 export class ClusterMemberPage {
   card: Locator;
@@ -14,6 +14,7 @@ export class ClusterMemberPage {
   step2: Locator;
   signatureInput: Locator;
   verifySignatureBtn: Locator;
+  verifyingIndicator: Locator;
 
   // Optional contacts
   discordHandleInput: Locator;
@@ -52,6 +53,7 @@ export class ClusterMemberPage {
       `input[name="clusterMembers.${index}.signature"]`,
     );
     this.verifySignatureBtn = this.card.getByTestId('verifySignatureBtn');
+    this.verifyingIndicator = this.card.getByText('Verifying...');
 
     // Optional contacts
     this.discordHandleInput = this.card.locator(
@@ -66,8 +68,20 @@ export class ClusterMemberPage {
     this.unverifiedChip = this.card.getByTestId('unverifiedChip');
     this.clearBtn = this.card.getByTestId('clearBtn');
 
-    // Errors
-    this.addressError = this.step1.getByTestId('inputMessageError');
-    this.signatureError = this.step2.getByTestId('inputMessageError');
+    // Errors — bound to their own input (the verified layout drops step1/step2,
+    // but the disabled address input and its error stay), so scope by input.
+    this.addressError = this.addressInput
+      .locator('xpath=ancestor::label[1]')
+      .getByTestId('inputMessageError');
+    this.signatureError = this.signatureInput
+      .locator('xpath=ancestor::label[1]')
+      .getByTestId('inputMessageError');
+  }
+
+  async enterAddress(address: string) {
+    await this.addressInput.fill(address);
+    await expect(this.messageToSignInput).toHaveValue(
+      new RegExp(address.toLowerCase()),
+    );
   }
 }

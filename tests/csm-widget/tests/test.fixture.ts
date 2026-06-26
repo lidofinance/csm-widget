@@ -94,6 +94,23 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
       await browserService.initWalletSetup(useFork);
 
+      if (
+        useFork &&
+        secretPhrase !== widgetFullConfig.accountConfig.SECRET_PHRASE
+      ) {
+        const targetAddress = mnemonicToAccount(secretPhrase).address;
+        await browserService
+          .getWalletPage()
+          .changeWalletAccountByAddress?.(targetAddress);
+      }
+
+      if (useFork) {
+        // Operator didn't exist during the initial warmup — re-run so
+        // operator-specific calls (getBondBalance, getStethPoolData, etc.)
+        // are pre-cached in Anvil before the browser starts.
+        await warmUpForkedNode(csmSDK, secretPhrase);
+      }
+
       await use(browserService);
 
       // We abort this request because we need to reduce the request count to the Elliptic api

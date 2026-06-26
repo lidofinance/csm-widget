@@ -43,7 +43,7 @@ test.describe('Operator with keys. IDVTC. Apply application. Persistence', async
       await member1.addressInput.fill(address1);
       await applyForm.discordLinkInput.fill(discordLink);
       await applyForm.telegramUsernameInput.fill(telegram);
-      await applyForm.confirmCheckboxInput.check();
+      await applyForm.confirmCheckboxInput.check({ force: true });
       await expect(applyForm.confirmCheckboxInput).toBeChecked();
     });
 
