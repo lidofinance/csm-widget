@@ -93,9 +93,6 @@ export const useTxModalStagesClaimBond = () =>
                 }
               />
             ),
-            {
-              isClosableOnLedger: true,
-            },
           ),
       };
     },

@@ -1,9 +1,11 @@
+import { type FC } from 'react';
 import styled from 'styled-components';
 
 import { InlineLoader } from '@lidofinance/lido-ui';
 import { TxAmount } from '../tx-stages-parts/tx-amount';
 import { SuccessText } from '../tx-stages-parts/success-text';
 import { TxStageSuccess } from '../tx-stages-basic';
+import type { ClosableOnLedgerStage } from '../is-closable-on-ledger';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const SkeletonBalance = styled(InlineLoader).attrs({
@@ -20,12 +22,13 @@ type TxStageOperationSucceedBalanceShownProps = {
   txHash?: string;
 };
 
-export const TxStageOperationSucceedBalanceShown = ({
+export const TxStageOperationSucceedBalanceShown: FC<TxStageOperationSucceedBalanceShownProps> &
+  ClosableOnLedgerStage = ({
   balance,
   balanceToken,
   operationText,
   txHash,
-}: TxStageOperationSucceedBalanceShownProps) => {
+}) => {
   const balanceEl = !!balance && (
     <TxAmount amount={balance} token={balanceToken} />
   );
@@ -46,3 +49,7 @@ export const TxStageOperationSucceedBalanceShown = ({
     />
   );
 };
+
+// Terminal stage: dismissible even on Ledger (modal is otherwise locked while
+// a signature is pending).
+TxStageOperationSucceedBalanceShown.isClosableOnLedger = true;
