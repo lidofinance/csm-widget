@@ -3,6 +3,7 @@ import { FC, ReactNode, useCallback, useState } from 'react';
 import { Loader } from '@lidofinance/lido-ui';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import { useModalRetry } from 'shared/transaction-modal/transaction-modal';
+import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
 import { StageIconFail } from './icons';
 import { LoaderWrapper, RetryButtonStyled } from './styles';
 import { ErrorCode } from 'utils';
@@ -14,7 +15,7 @@ type TxStageFailProps = {
   error?: ReactNode;
 };
 
-export const TxStageFail: FC<TxStageFailProps> = ({
+export const TxStageFail: FC<TxStageFailProps> & ClosableOnLedgerStage = ({
   code = ErrorCode.SOMETHING_WRONG,
   title = 'Transaction Failed',
   error,
@@ -44,3 +45,7 @@ export const TxStageFail: FC<TxStageFailProps> = ({
     />
   );
 };
+
+// Terminal stage: dismissible even on Ledger (modal is otherwise locked while
+// a signature is pending).
+TxStageFail.isClosableOnLedger = true;

@@ -3,24 +3,25 @@ import { Modal } from '@lidofinance/lido-ui';
 import { useConnectorInfo } from 'reef-knot/core-react';
 import { getUseModal, ModalComponentType } from 'providers/modal-provider';
 import { getFormRetry } from 'shared/hook-form/form-controller/form-retry';
+import { isClosableOnLedgerStage } from './is-closable-on-ledger';
 
 const ModalRetryContext = createContext<(() => void) | undefined>(undefined);
 export const useModalRetry = () => useContext(ModalRetryContext);
 
 type TransactionModalProps = {
-  isClosableOnLedger?: boolean;
   children?: React.ReactNode;
 };
 
 export const TransactionModal: ModalComponentType<TransactionModalProps> = ({
   open,
-  isClosableOnLedger,
   onClose,
   children,
   ...props
 }) => {
   const { isLedger } = useConnectorInfo();
-  const isClosable = !isLedger || isClosableOnLedger;
+  // Terminal stages (success / fail) mark themselves dismissible; every other
+  // stage keeps the modal locked while a Ledger signature is pending.
+  const isClosable = !isLedger || isClosableOnLedgerStage(children);
   const onRetry = getFormRetry();
 
   return (

@@ -1,5 +1,7 @@
+import { type FC } from 'react';
 import { TxLinkEtherscan } from 'shared/components/tx-link-etherscan';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
+import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
 import { StageIconSuccess } from './icons';
 
 type TxStageSuccessProps = {
@@ -10,13 +12,14 @@ type TxStageSuccessProps = {
   showEtherscan?: boolean;
 };
 
-export const TxStageSuccess = ({
+export const TxStageSuccess: FC<TxStageSuccessProps> &
+  ClosableOnLedgerStage = ({
   txHash,
   description,
   title,
   footer,
   showEtherscan = true,
-}: TxStageSuccessProps) => {
+}) => {
   return (
     <TransactionModalContent
       icon={<StageIconSuccess />}
@@ -29,3 +32,7 @@ export const TxStageSuccess = ({
     />
   );
 };
+
+// Terminal stage: dismissible even on Ledger (modal is otherwise locked while
+// a signature is pending).
+TxStageSuccess.isClosableOnLedger = true;

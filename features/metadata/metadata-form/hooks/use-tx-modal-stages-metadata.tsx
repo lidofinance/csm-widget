@@ -34,7 +34,6 @@ export const useTxModalStagesMetadata = () =>
             description="Name and description have been updated"
             txHash={txHash}
           />,
-          { isClosableOnLedger: true },
         ),
     }),
   );
