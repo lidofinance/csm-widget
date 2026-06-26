@@ -44,7 +44,6 @@ export const useTxModalStagesRemoveKeys = () =>
             }
             description=""
           />,
-          { isClosableOnLedger: true },
         ),
     }),
   );

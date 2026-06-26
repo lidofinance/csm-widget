@@ -62,7 +62,6 @@ export const useTxModalStagesClaimer = () =>
       success: (_result: undefined, txHash) =>
         transitStage(
           <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
-          { isClosableOnLedger: true },
         ),
     }),
   );

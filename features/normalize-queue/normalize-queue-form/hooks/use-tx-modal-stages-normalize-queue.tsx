@@ -39,7 +39,6 @@ export const useTxModalStagesNormalizeQueue = () =>
               title="Queue has been normalized"
               description={`You have ${keysCount} keys(s) in depositing queue`}
             />,
-            { isClosableOnLedger: true },
           ),
       };
     },

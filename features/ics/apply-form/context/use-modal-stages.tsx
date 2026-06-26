@@ -56,7 +56,6 @@ export const useModalStages = () => {
             error={errorContent}
             code={getErrorCode(error)}
           />,
-          { isClosableOnLedger: true },
         );
       },
     }),

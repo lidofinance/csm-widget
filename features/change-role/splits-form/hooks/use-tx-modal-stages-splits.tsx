@@ -40,7 +40,6 @@ export const useTxModalStagesSplits = () =>
       success: (_result: undefined, txHash) =>
         transitStage(
           <TxStageSuccess txHash={txHash} {...getTexts(input).success} />,
-          { isClosableOnLedger: true },
         ),
     }),
   );
