@@ -12,7 +12,6 @@ const CLUSTER_SIZE = 4;
 const clusterMemberMessage = (memberAddress: string, mainAddress: string) =>
   `Verify ownership of address ${memberAddress.toLowerCase()} for DVT cluster with main address ${mainAddress.toLowerCase()}`;
 
-// Cluster members we control (to sign with) and make ICS-approved on the fork.
 const memberAccounts = Array.from({ length: CLUSTER_SIZE }, () =>
   mnemonicToAccount(generateMnemonic(english, 128)),
 );

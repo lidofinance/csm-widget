@@ -68,8 +68,6 @@ export class ClusterMemberPage {
     this.unverifiedChip = this.card.getByTestId('unverifiedChip');
     this.clearBtn = this.card.getByTestId('clearBtn');
 
-    // Errors — bound to their own input (the verified layout drops step1/step2,
-    // but the disabled address input and its error stay), so scope by input.
     this.addressError = this.addressInput
       .locator('xpath=ancestor::label[1]')
       .getByTestId('inputMessageError');

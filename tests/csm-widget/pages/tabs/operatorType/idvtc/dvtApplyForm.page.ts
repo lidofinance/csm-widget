@@ -93,8 +93,6 @@ export class DvtApplyForm extends BasePage {
     });
   }
 
-  // The form persists to localStorage with a 1s debounce — wait until the
-  // freshly entered value actually lands in storage before reloading.
   async waitForPersisted(value: string) {
     await expect
       .poll(async () =>
