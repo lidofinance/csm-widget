@@ -72,7 +72,7 @@ test.describe('Roles. Rewards Address. Transactions. Reproposed Address', () => 
           );
 
           await expect(settingsPage.modalRoot.paragraphs.first()).toContainText(
-            'When you propose a new address for change - the previous change proposal is voided.',
+            'When you propose a new address for change - the previous change proposal is voided',
           );
 
           await expect(settingsPage.modalRoot.continueButton).toBeVisible();
