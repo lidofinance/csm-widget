@@ -1,5 +1,7 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
-import { moduleMeta } from 'consts';
+import { MODULE_METADATA } from 'consts';
+import { useModule } from 'modules/web3';
 import { FC } from 'react';
 import { Address } from 'shared/components';
 import styled from 'styled-components';
@@ -9,13 +11,15 @@ type Props = {
 };
 
 export const AfterAddressProposed: FC<Props> = ({ address }) => {
+  const { module } = useModule();
+  const meta = MODULE_METADATA[module ?? MODULE_NAME.CSM];
   return (
     <BlockStyled color="background">
       <b>What is next: </b>
       <br />
       <ol>
         <li>
-          Connect to {moduleMeta.shortTitle} UI with the proposed address
+          Connect to {meta.shortTitle} UI with the proposed address
           <Text size="xxs">
             <Address address={address} showIcon />
           </Text>

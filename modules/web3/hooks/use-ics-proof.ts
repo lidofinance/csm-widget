@@ -14,7 +14,7 @@ export const useIcsProof = (customAddress?: Address) => {
   const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
-    queryKey: [...KEY_ICS_PROOF, { address }],
+    queryKey: [...KEY_ICS_PROOF, { address, module: MODULE_NAME.CSM }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(sdk);

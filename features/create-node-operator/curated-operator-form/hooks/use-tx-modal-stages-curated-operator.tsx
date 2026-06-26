@@ -1,9 +1,11 @@
 import {
+  MODULE_NAME,
   type NodeOperatorShortInfo,
   ROLES,
   getNodeOperatorRoles,
 } from '@lidofinance/lido-csm-sdk';
 import { getCurveMetadata } from 'consts';
+import { useSmSDKByModule } from 'modules/web3';
 import {
   TxStagePending,
   TxStageSign,
@@ -18,8 +20,11 @@ import {
 import { CuratedOperatorCustomAddressActions } from '../custom-address-actions';
 import { CuratedOperatorSuccessActions } from '../success-actions';
 
-export const useTxModalStagesCuratedOperator = () =>
-  useTxStages<
+export const useTxModalStagesCuratedOperator = () => {
+  const sm = useSmSDKByModule(MODULE_NAME.CM);
+  const moduleName = sm.core.moduleName;
+
+  return useTxStages<
     CuratedOperatorFormInputType,
     CuratedOperatorFormNetworkData,
     NodeOperatorShortInfo
@@ -36,7 +41,8 @@ export const useTxModalStagesCuratedOperator = () =>
             title="Creating Curated Node Operator"
             description={
               <>
-                Creating operator for <b>{getCurveMetadata(curveId).name}</b>
+                Creating operator for{' '}
+                <b>{getCurveMetadata(moduleName, curveId).name}</b>
               </>
             }
           />,
@@ -48,7 +54,8 @@ export const useTxModalStagesCuratedOperator = () =>
             title="Creating Curated Node Operator"
             description={
               <>
-                Creating operator for <b>{getCurveMetadata(curveId).name}</b>
+                Creating operator for{' '}
+                <b>{getCurveMetadata(moduleName, curveId).name}</b>
               </>
             }
           />,
@@ -90,6 +97,7 @@ export const useTxModalStagesCuratedOperator = () =>
       },
     };
   });
+};
 
 const WrapperSpan = styled.span`
   display: block;

@@ -1,5 +1,6 @@
 import { CurveParameters, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { isModuleCM, moduleMeta } from 'consts';
+import { moduleMeta } from 'consts';
+import { useModule } from 'modules/web3';
 import { ReactNode } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { plural } from 'utils';
@@ -142,6 +143,10 @@ const ALL_PARAMETERS: Parameter[] = [
   },
 ];
 
-export const PARAMETERS: Parameter[] = isModuleCM
-  ? ALL_PARAMETERS.filter((p) => !p.csmOnly)
-  : ALL_PARAMETERS;
+// Selects the parameter list by the active operator's module.
+// `undefined` module (no active operator) falls back to the CSM baseline.
+export const useParameters = (): Parameter[] => {
+  const { isCM } = useModule();
+
+  return isCM ? ALL_PARAMETERS.filter((p) => !p.csmOnly) : ALL_PARAMETERS;
+};

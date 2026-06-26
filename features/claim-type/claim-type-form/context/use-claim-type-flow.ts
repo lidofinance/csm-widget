@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useSmSDKByModule } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -23,8 +23,7 @@ export const useClaimTypeFlowResolver = (): FlowResolver<
   ClaimTypeFormNetworkData,
   ClaimTypeFlow
 > => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
-  invariant(sdk, 'CSM SDK is required for this operation');
+  const sdk = useSmSDKByModule(MODULE_NAME.CSM);
   const confirmClaimtype = useConfirmClaimTypeModal();
   const buildCallback = useTxModalStagesClaimType();
 

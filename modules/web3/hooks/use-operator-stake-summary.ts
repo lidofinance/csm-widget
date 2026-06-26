@@ -17,7 +17,10 @@ export const useOperatorStakeSummary = <TData = OperatorStakeSummary>(
   const sdk = useSmSDK(MODULE_NAME.CM);
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_STAKE_INFO, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_STAKE_INFO,
+      { nodeOperatorId, module: MODULE_NAME.CM },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(sdk);

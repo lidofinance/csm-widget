@@ -1,17 +1,21 @@
 import { Text } from '@lidofinance/lido-ui';
-import { isModuleCM } from 'consts';
-import { SHARE_LIMIT_STATUS, useShareLimitStatus } from 'modules/web3';
+import {
+  SHARE_LIMIT_STATUS,
+  useModule,
+  useShareLimitStatus,
+} from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { CheckboxHookForm } from 'shared/hook-form/controls';
 
 export const KeysConfirm: FC = () => {
   const { data: status } = useShareLimitStatus();
+  const { isCM } = useModule();
 
   return (
-    <Stack align={isModuleCM ? 'center' : 'start'}>
+    <Stack align={isCM ? 'center' : 'start'}>
       <CheckboxHookForm fieldName="confirmKeysReady" />
-      {isModuleCM ? (
+      {isCM ? (
         <Text size="xxs" color="secondary" as="div">
           I confirm that my nodes are synced, running, and ready for the
           validator activation

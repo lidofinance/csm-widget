@@ -12,7 +12,7 @@ import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 
 import { config } from 'config';
 import { contentSecurityPolicy } from 'config/csp';
-import { moduleMeta } from 'consts/module';
+import { moduleMeta, WIDGET_TITLE, WIDGET_DESCRIPTION } from 'consts/module';
 import { FiraCodeFont } from 'styles';
 
 let host: string = moduleMeta.host;
@@ -57,11 +57,11 @@ export default class MyDocument extends Document {
   }
 
   get metaTitle(): string {
-    return `${moduleMeta.title} | Lido`;
+    return `${WIDGET_TITLE} | Lido`;
   }
 
   get metaDescription(): string {
-    return moduleMeta.description;
+    return WIDGET_DESCRIPTION;
   }
 
   get metaPreviewImgUrl(): string {

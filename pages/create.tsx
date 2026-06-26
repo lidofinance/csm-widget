@@ -1,9 +1,9 @@
+import { isModuleCSM } from 'consts';
 import { PATH } from 'consts/urls';
 import { CreateNodeOperatorPage } from 'features/create-node-operator';
 import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { useCuratedGatesEligibility, useIcsProof } from 'modules/web3';
-import { isModuleCSM } from 'consts';
 
 const Page = () => {
   const { isPending: isPendingCM } = useCuratedGatesEligibility();

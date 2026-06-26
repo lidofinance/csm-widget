@@ -12,6 +12,7 @@ import {
   useOperatorBalance,
   useOperatorCurveId,
   useOperatorInfo,
+  useModule,
   useShareLimit,
   useStakeLimit,
   useStethBalance,
@@ -24,12 +25,12 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
-import { isModuleCSM } from 'consts';
 import { type AddKeysFormNetworkData } from './types';
 
 const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
   const { data: status, isPending: isStatusLoading } = useSmStatus();
   const nodeOperatorId = useNodeOperatorId();
+  const { isCSM } = useModule();
 
   const ethBalanceQuery = useEthereumBalance();
   const stethBalanceQuery = useStethBalance();
@@ -100,7 +101,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
     isCurveParametersLoading ||
     isBondLoading ||
     isStatusLoading ||
-    (isModuleCSM && isShareLimitLoading) ||
+    (isCSM && isShareLimitLoading) ||
     isCurveIdLoading ||
     isOperatorInfoLoading;
 

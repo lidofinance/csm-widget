@@ -1,5 +1,6 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
+import { isModuleCM } from 'consts';
 import { type FC } from 'react';
 import { useFormContext, useWatch } from 'react-hook-form';
 import {
@@ -58,6 +59,7 @@ export const Step2: FC = () => {
                 <RoleActionsList
                   role={ROLES.MANAGER}
                   extendedManagerPermissions
+                  isCM={isModuleCM}
                 />
               }
             />
@@ -75,6 +77,7 @@ export const Step2: FC = () => {
                 <RoleActionsList
                   role={ROLES.REWARDS}
                   extendedManagerPermissions
+                  isCM={isModuleCM}
                 />
               }
             />

@@ -2,10 +2,10 @@ import { FC, memo } from 'react';
 
 import { SubmitKeysFormProvider } from './context';
 
+import { isModuleCSM } from 'consts';
 import { DepositQueue } from 'features/view-keys/deposit-queue';
 import { FormBlock } from 'shared/components';
 import { Form, FormLoader } from 'shared/hook-form/form-controller';
-import { Gate } from 'shared/navigate';
 import { SubmitKeysDataProvider } from './context';
 import { AmountInput } from './controls/amount-input';
 import { CustomAddressesSection } from './controls/custom-addresses-section';
@@ -35,9 +35,7 @@ export const SubmitKeysForm: FC = memo(() => (
           <SubmitKeysFormInfo />
         </FormLoader>
       </FormBlock>
-      <Gate rule="IS_CSM">
-        <DepositQueue />
-      </Gate>
+      {isModuleCSM && <DepositQueue />}
     </SubmitKeysFormProvider>
   </SubmitKeysDataProvider>
 ));

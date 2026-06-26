@@ -28,8 +28,10 @@ import {
 import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
 import { useUserConfig } from 'config/user-config';
-import { isModuleCSM } from 'consts';
 
+// Safe runtime import cycle (web3-provider ↔ operator-provider): the context is
+// only read inside useSmSDK's body at render time, never at module top-level.
+import { NodeOperatorContext } from '../operator-provider/node-operator-provider';
 import { overridedAddresses } from './devnet';
 
 type LidoSDKContextValue = {
@@ -40,7 +42,8 @@ type LidoSDKContextValue = {
   wstETH: LidoSDKwstETH;
   wrap: LidoSDKWrap;
   withdraw: LidoSDKWithdraw;
-  sm: LidoSDKCsm | LidoSDKCm;
+  csm: LidoSDKCsm;
+  cm: LidoSDKCm;
 };
 
 const chainId = config.defaultChain;
@@ -54,16 +57,42 @@ export const useLidoSDK = () => {
   return value;
 };
 
+/**
+ * Returns the SDK for the requested module ALWAYS, regardless of the active
+ * module. Use for cross-module work (e.g. discovery across both modules) and
+ * for the /create flow, where there is no active operator yet.
+ * This deliberately bypasses the active-module guard that `useSmSDK(module)`
+ * enforces — `useSmSDK(module)` returns `undefined` on a module mismatch.
+ * Overloads narrow the return type to the concrete SDK for the requested
+ * module so callers can reach module-specific surfaces (e.g. `permissionlessGate`,
+ * `curatedGates`).
+ */
+export function useSmSDKByModule(module: MODULE_NAME.CSM): LidoSDKCsm;
+export function useSmSDKByModule(module: MODULE_NAME.CM): LidoSDKCm;
+export function useSmSDKByModule(module: MODULE_NAME): LidoSDKCsm | LidoSDKCm;
+// eslint-disable-next-line func-style
+export function useSmSDKByModule(module: MODULE_NAME) {
+  const { csm, cm } = useLidoSDK();
+  return module === MODULE_NAME.CSM ? csm : cm;
+}
+
 export function useSmSDK(): LidoSDKCsm | LidoSDKCm;
 export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
 export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
 // eslint-disable-next-line func-style
 export function useSmSDK(module?: MODULE_NAME) {
-  const { sm } = useLidoSDK();
-  if (module && module !== config.module) {
-    return undefined;
+  const { csm, cm } = useLidoSDK();
+  // Read the operator context WITHOUT throwing: useSmSDK is also called ABOVE
+  // NodeOperatorProvider (e.g. GateSupported → useSmVersionSupported). With no
+  // active operator (above the provider, or none resolved yet) fall back to
+  // CSM (MVP). TODO(unified): make this undefined-aware per the spec.
+  const operatorCtx = useContext(NodeOperatorContext);
+  const activeModule = operatorCtx?.activeModule ?? MODULE_NAME.CSM;
+  if (module) {
+    if (module !== activeModule) return undefined;
+    return module === MODULE_NAME.CSM ? csm : cm;
   }
-  return sm;
+  return activeModule === MODULE_NAME.CM ? cm : csm;
 }
 
 export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
@@ -128,7 +157,8 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       overridedAddresses,
     };
 
-    const sm = isModuleCSM ? new LidoSDKCsm(smProps) : new LidoSDKCm(smProps);
+    const csm = new LidoSDKCsm(smProps);
+    const cm = new LidoSDKCm(smProps);
 
     return {
       chainId: core.chainId,
@@ -138,7 +168,8 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       wstETH,
       wrap,
       withdraw,
-      sm,
+      csm,
+      cm,
     };
   }, [clApiUrl, ipfsGateways, publicClient, walletClient]);
   return (

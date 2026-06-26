@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
+import { isModuleCSM } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { Stack, WelcomeSection } from 'shared/components';
 import { Connect } from 'shared/wallet';
 import styled from 'styled-components';
 import { LandingBlock } from './landing';
-import { isModuleCSM } from 'consts';
 
 export const Welcome: FC = () => {
   return (

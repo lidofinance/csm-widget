@@ -1,24 +1,18 @@
 import { MatomoEventType } from '@lidofinance/analytics-matomo';
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
 
-export const MATOMO_APP_NAME = {
-  [MODULE_NAME.CSM]: 'CSM_Widget',
-  [MODULE_NAME.CM]: 'CM_Widget',
-};
-export const MATOMO_APP_PREFIX = {
-  [MODULE_NAME.CSM]: 'csm_widget',
-  [MODULE_NAME.CM]: 'cm_widget',
-};
+// Unified single-deployment widget: one Matomo app identity (keeps the live
+// CSM widget's analytics continuity). MVP — revisit if CM needs its own app.
+const MATOMO_APP_NAME = 'CSM_Widget';
+const MATOMO_APP_PREFIX = 'csm_widget';
 
 // Helper functions to reduce duplication in event definitions
 export const createEvent = (
   description: string,
   eventKey: string,
 ): MatomoEventType => [
-  MATOMO_APP_NAME[config.module],
+  MATOMO_APP_NAME,
   description,
-  `${MATOMO_APP_PREFIX[config.module]}_${eventKey.toLowerCase()}`,
+  `${MATOMO_APP_PREFIX}_${eventKey.toLowerCase()}`,
 ];
 
 export const enum MATOMO_CLICK_EVENTS_TYPES {

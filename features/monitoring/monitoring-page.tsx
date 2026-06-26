@@ -2,9 +2,11 @@ import { FC } from 'react';
 import { Layout } from 'shared/layout';
 import { Monitoring } from './monitoring';
 import { Faq } from 'shared/components';
-import { FAQ_MONITORING } from 'faq';
+import { useFaq } from 'faq';
 
 export const MonitoringPage: FC = () => {
+  const { FAQ_MONITORING } = useFaq();
+
   return (
     <Layout
       title="Monitoring"

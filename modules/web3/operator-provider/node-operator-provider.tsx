@@ -1,7 +1,4 @@
-import {
-  NodeOperatorId,
-  NodeOperatorShortInfo,
-} from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import {
   createContext,
   FC,
@@ -13,15 +10,18 @@ import {
 import invariant from 'tiny-invariant';
 import { useActiveNodeOperator } from './use-active-node-operator';
 import { useAvailableOperators } from './use-available-operators';
+import { ModuleNodeOperator } from './types';
 
 export type NodeOperatorContextValue = {
   isPending: boolean;
-  nodeOperator: NodeOperatorShortInfo | undefined;
-  switchNodeOperator: (id: NodeOperatorId) => void;
+  nodeOperator: ModuleNodeOperator | undefined;
+  activeModule: MODULE_NAME | undefined;
+  switchNodeOperator: (id: NodeOperatorId, module: MODULE_NAME) => void;
 };
 
 export type NodeOperatorDefinedContextValue = NodeOperatorContextValue & {
-  nodeOperator: NodeOperatorShortInfo;
+  nodeOperator: ModuleNodeOperator;
+  activeModule: MODULE_NAME;
 };
 
 export const NodeOperatorContext =
@@ -56,17 +56,22 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
   const [active, setActive] = useActiveNodeOperator(list);
 
   const switchNodeOperator = useCallback(
-    (id: NodeOperatorId) => {
-      const newActive = list?.find((item) => item.nodeOperatorId === id);
-      if (newActive) {
-        setActive(newActive);
-      }
+    (id: NodeOperatorId, module: MODULE_NAME) => {
+      const newActive = list?.find(
+        (item) => item.nodeOperatorId === id && item.module === module,
+      );
+      if (newActive) setActive(newActive);
     },
     [list, setActive],
   );
 
   const value = useMemo(
-    () => ({ isPending, nodeOperator: active, switchNodeOperator }),
+    () => ({
+      isPending,
+      nodeOperator: active,
+      activeModule: active?.module,
+      switchNodeOperator,
+    }),
     [active, isPending, switchNodeOperator],
   );
 

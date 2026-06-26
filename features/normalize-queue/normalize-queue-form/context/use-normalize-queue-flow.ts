@@ -1,12 +1,11 @@
 import { type MethodAccess, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useSmSDKByModule } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
-import invariant from 'tiny-invariant';
 import { useTxModalStagesNormalizeQueue } from '../hooks/use-tx-modal-stages-normalize-queue';
 import { useNormalizeQueueFormData } from './normalize-queue-data-provider';
 import {
@@ -24,8 +23,7 @@ export const useNormalizeQueueFlowResolver = (): FlowResolver<
   NormalizeQueueFormNetworkData,
   NormalizeQueueFlow
 > => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
-  invariant(sdk, 'CSM SDK is required');
+  const sdk = useSmSDKByModule(MODULE_NAME.CSM);
   const [canNormalize, access] = useCanPerform(sdk.depositQueue, 'normalize');
   const buildCallback = useTxModalStagesNormalizeQueue();
 

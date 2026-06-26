@@ -2,11 +2,12 @@ import { Text } from '@lidofinance/lido-ui';
 import { useCurveParameters } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { PARAMETERS } from 'shared/components/parameters-list/parameters';
+import { useParameters } from 'shared/components/parameters-list/parameters';
 import { ParametersValue } from 'shared/components/parameters-list/parameters-value';
 
 export const Parameters: FC<{ curveId: bigint }> = ({ curveId }) => {
   const { data: parameters } = useCurveParameters(curveId);
+  const PARAMETERS = useParameters();
 
   return (
     <Stack direction="column">

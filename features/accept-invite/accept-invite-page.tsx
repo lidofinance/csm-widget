@@ -1,11 +1,13 @@
 import { FC } from 'react';
 
-import { FAQ_ROLES } from 'faq';
+import { isModuleCM } from 'consts';
+import { FAQ_ROLES_CM, FAQ_ROLES_CSM } from 'faq';
 import { Faq } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { SettingsPageSwitcher } from 'shared/navigate';
 import { AcceptInvite } from './accept-invite';
 
+// Invitee has no active operator → branch on the STATIC deploy module.
 export const AcceptInvitePage: FC = () => {
   return (
     <Layout
@@ -15,7 +17,7 @@ export const AcceptInvitePage: FC = () => {
     >
       <SettingsPageSwitcher />
       <AcceptInvite />
-      <Faq items={FAQ_ROLES} />
+      <Faq items={isModuleCM ? FAQ_ROLES_CM : FAQ_ROLES_CSM} />
     </Layout>
   );
 };

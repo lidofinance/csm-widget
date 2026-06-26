@@ -79,6 +79,7 @@ export const MockDepositQueueProvider: FC<
       id: BigInt(scenario.nodeOperatorId),
       // Add other required properties if needed
     } as any,
+    activeModule: undefined,
     switchNodeOperator: () => {}, // Mock function
   };
 

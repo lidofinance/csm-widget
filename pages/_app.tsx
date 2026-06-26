@@ -3,7 +3,7 @@ import 'utils/zod-jitless';
 import { ToastContainer } from '@lidofinance/lido-ui';
 import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
-import { moduleMeta } from 'consts/module';
+import { WIDGET_TITLE } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
@@ -44,7 +44,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
           name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
-        <title>{moduleMeta.shortTitle} | Lido</title>
+        <title>{WIDGET_TITLE} | Lido</title>
       </Head>
       <BackgroundGradient
         width={1560}

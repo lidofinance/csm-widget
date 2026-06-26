@@ -12,7 +12,9 @@ import { useClaimBondFormData } from '../context';
 
 import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
 import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
-import { moduleMeta } from 'consts';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { MODULE_METADATA } from 'consts';
+import { useModule } from 'modules/web3';
 import { Balance } from 'features/dashboard/bond/balance';
 
 const LOCKED_TOOLTIP_CSM =
@@ -33,6 +35,8 @@ type BondNegativeProps = {
 
 const useBondNegativeMetadata = () => {
   const check = useShowRule();
+  const { module } = useModule();
+  const meta = MODULE_METADATA[module ?? MODULE_NAME.CSM];
 
   return {
     locked: {
@@ -42,7 +46,7 @@ const useBondNegativeMetadata = () => {
     },
     pendingToSplit: {
       title: 'Splitter debt:',
-      tooltip: `Is the amount that has not been split due to insufficient bond or locked bond that occurred earlier. When claiming rewards ${moduleMeta.shortName} will try to split this amount from excess bond.`,
+      tooltip: `Is the amount that has not been split due to insufficient bond or locked bond that occurred earlier. When claiming rewards ${meta.shortName} will try to split this amount from excess bond.`,
       token: TOKENS.steth,
     },
     debt: {

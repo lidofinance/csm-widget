@@ -1,24 +1,30 @@
 import {
   appendNodeOperator,
-  NodeOperatorId,
+  MODULE_NAME,
   NodeOperatorShortInfo,
 } from '@lidofinance/lido-csm-sdk';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
+import invariant from 'tiny-invariant';
 import { useDappStatus } from '../hooks';
 import { useNodeOperator } from './node-operator-provider';
+import { CachedOperatorRef } from './types';
 import { KEY_OPERATORS } from './use-available-operators';
 
-export const useAppendOperator = (switchOperator?: boolean) => {
+export const useAppendOperator = (
+  switchOperator?: boolean,
+  module?: MODULE_NAME,
+) => {
   const queryClient = useQueryClient();
   const { address } = useDappStatus();
   const { switchNodeOperator } = useNodeOperator();
-  const pendingSwitchRef = useRef<NodeOperatorId>();
+  const pendingSwitchRef = useRef<CachedOperatorRef>();
 
   // Deferred switch: fires after React re-renders with updated operator list
   useEffect(() => {
     if (pendingSwitchRef.current !== undefined) {
-      switchNodeOperator(pendingSwitchRef.current);
+      const { id, module: mod } = pendingSwitchRef.current;
+      switchNodeOperator(id, mod);
       pendingSwitchRef.current = undefined;
     }
   }, [switchNodeOperator]);
@@ -31,7 +37,11 @@ export const useAppendOperator = (switchOperator?: boolean) => {
         (prev = []) => appendNodeOperator(prev, data),
       );
       if (switchOperator) {
-        pendingSwitchRef.current = data.nodeOperatorId;
+        invariant(
+          module !== undefined,
+          'useAppendOperator: module is required when switchOperator is true',
+        );
+        pendingSwitchRef.current = { id: data.nodeOperatorId, module };
       }
     },
   });

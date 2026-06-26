@@ -1,12 +1,13 @@
 import {
   getNodeOperatorRoles,
+  MODULE_NAME,
   NodeOperatorId,
-  NodeOperatorShortInfo,
   SubOperatorStakeSummary,
 } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
 import { getModuleOperatorType } from 'consts';
 import { STAKE_COLORS } from 'features/group/shared/stake-stats';
+import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import {
   useDappStatus,
   useOperatorCurveId,
@@ -31,10 +32,10 @@ export type OperatorAction = 'current' | 'switch' | 'view';
 
 type OperatorRowProps = {
   nodeOperatorId: NodeOperatorId;
-  shortInfo?: NodeOperatorShortInfo;
+  shortInfo?: ModuleNodeOperator;
   stakeSummary?: SubOperatorStakeSummary;
   action: OperatorAction;
-  onSwitch: (id: NodeOperatorId) => void;
+  onSwitch: (id: NodeOperatorId, module: MODULE_NAME) => void;
 };
 
 export const OperatorRow: FC<OperatorRowProps> = ({
@@ -51,7 +52,11 @@ export const OperatorRow: FC<OperatorRowProps> = ({
     shortInfo ? undefined : nodeOperatorId,
   );
   const curveId = shortInfo?.curveId ?? fetchedCurveId;
-  const operatorType = getModuleOperatorType(curveId);
+  // Use the row's own module, not the active operator's module.
+  const operatorType = getModuleOperatorType(
+    shortInfo?.module ?? MODULE_NAME.CM,
+    curveId,
+  );
 
   // Roles only for available operators
   const roles = shortInfo ? getNodeOperatorRoles(shortInfo, address) : [];
@@ -89,7 +94,9 @@ export const OperatorRow: FC<OperatorRowProps> = ({
           </CmRowDescriptor>
           <ActionButton
             action={action}
-            onSwitch={() => onSwitch(nodeOperatorId)}
+            onSwitch={() =>
+              shortInfo && onSwitch(nodeOperatorId, shortInfo.module)
+            }
           />
         </Stack>
 

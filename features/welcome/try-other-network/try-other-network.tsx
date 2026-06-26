@@ -1,6 +1,6 @@
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { getConfig } from 'config';
-import { isModuleCM } from 'consts/module';
+import { isModuleCM } from 'consts';
 import { FC } from 'react';
 import { TryCsmMainnet } from './try-csm-mainnet';
 import { TryCsmTestnet } from './try-csm-testnet';

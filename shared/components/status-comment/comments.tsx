@@ -1,4 +1,3 @@
-import { isModuleCM } from 'consts';
 import {
   HOW_TO_EXIT_VALIDATOR_LINK,
   PERFORMANCE_TIPS_LINK,
@@ -8,12 +7,13 @@ import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { MatomoLink } from '../matomo-link/matomo-link';
-import { SHARE_LIMIT_STATUS, useShareLimitStatus } from 'modules/web3';
+import {
+  SHARE_LIMIT_STATUS,
+  useModule,
+  useShareLimitStatus,
+} from 'modules/web3';
 
 const VALIDATOR_ACTIVE_ANCHOR = '#when-does-a-validator-become-active';
-const STAKE_SHARE_LIMIT_ANCHOR = isModuleCM
-  ? '#what-are-the-possible-key-statuses'
-  : '#what-is-the-csm-stake-share-limit';
 
 // TODO: check role
 export const CommentExitRequested: FC = () => (
@@ -110,6 +110,12 @@ export const CommentWithStrikes: FC = () => {
 
 export const CommentDepositable: FC = () => {
   const { data: status } = useShareLimitStatus();
+  const { isCM } = useModule();
+
+  // `undefined` module (no active operator) falls back to the CSM baseline.
+  const stakeShareLimitAnchor = isCM
+    ? '#what-are-the-possible-key-statuses'
+    : '#what-is-the-csm-stake-share-limit';
 
   return status === SHARE_LIMIT_STATUS.REACHED ? (
     <>
@@ -117,7 +123,7 @@ export const CommentDepositable: FC = () => {
       reached its{' '}
       <LocalLink
         href={PATH.KEYS_VIEW}
-        anchor={STAKE_SHARE_LIMIT_ANCHOR}
+        anchor={stakeShareLimitAnchor}
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment}
       >
         stake share limit

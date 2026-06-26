@@ -6,10 +6,13 @@ import { useDappStatus } from './use-dapp-status';
 
 export const useHasReportDelayedPenaltyRole = () => {
   const { address } = useDappStatus();
-  const { delayedPenalty } = useSmSDK();
+  const { delayedPenalty, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['has-report-delayed-penalty-role', { address }],
+    queryKey: [
+      'has-report-delayed-penalty-role',
+      { address, module: core.moduleName },
+    ],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(address);
