@@ -2,7 +2,12 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { countCalendarDaysLeft, formatDate } from 'utils/format-date';
+import { formatBalance } from 'utils/format-balance';
+import {
+  countCalendarDaysLeft,
+  formatDate,
+  isDayInPast,
+} from 'utils/format-date';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', async () => {
@@ -16,23 +21,52 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
       const latestRewardsDistribution =
         widgetService.dashboardPage.bondRewards.latestRewardsDistribution;
 
+      const nodeOperatorId = await widgetService.extractNodeOperatorId();
+      const lastRewards = await csmSDK.rewards.getOperatorRewardsInLastReport(
+        BigInt(nodeOperatorId),
+      );
+      test.skip(
+        !lastRewards,
+        'No rewards in the last report for this operator',
+      );
+
       await expect(latestRewardsDistribution.rowHeader).toContainText(
         'Latest rewards distribution',
       );
 
-      const lastRewardInfoFromContract = await csmSDK.getLastRewards();
       await test.step('Verify report frame information', async () => {
-        const expectedRateFrame = `Report frame: ${formatDate(lastRewardInfoFromContract?.prevRewards)} — ${formatDate(lastRewardInfoFromContract?.lastRewards)}`;
+        const timestamps = await csmSDK.rewards.getLastReportTimestamps();
+        const { lastReport } = await csmSDK.frame.getInfo();
+        const expectedFrame = `Report frame: ${formatDate(timestamps?.start)} — ${formatDate(lastReport)}`;
         await expect(latestRewardsDistribution.rowHeader).toContainText(
-          expectedRateFrame,
+          expectedFrame,
         );
       });
 
       await test.step('Verify latest reward amount', async () => {
+        // @ts-expect-error lastRewards is checked by test.skip
+        const expectedBalance = `${formatBalance(lastRewards.distributed).trimmed}\u00A0stETH`;
         const commonBalance =
           await latestRewardsDistribution.commonBalance_Text.textContent();
-        expect(commonBalance).toEqual('0.0 stETH');
+        expect(commonBalance).toEqual(expectedBalance);
       });
+    },
+  );
+
+  test(
+    qase(432, 'Should show "Why" modal when operator got no rewards'),
+    async ({ widgetService, csmSDK }) => {
+      const latestRewardsDistribution =
+        widgetService.dashboardPage.bondRewards.latestRewardsDistribution;
+
+      const nodeOperatorId = await widgetService.extractNodeOperatorId();
+      const lastRewards = await csmSDK.rewards.getOperatorRewardsInLastReport(
+        BigInt(nodeOperatorId),
+      );
+      test.skip(
+        !lastRewards || lastRewards.distributed !== 0n,
+        'Operator did not have zero rewards in the last report',
+      );
 
       await test.step('Verify "Why" link', async () => {
         await latestRewardsDistribution.commonBalance_SubText.click();
@@ -55,9 +89,15 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
 
   test(
     qase(188, 'Should correctly open etherscan by link'),
-    async ({ widgetService, widgetConfig }) => {
+    async ({ widgetService, widgetConfig, csmSDK }) => {
       const latestRewardsDistribution =
         widgetService.dashboardPage.bondRewards.latestRewardsDistribution;
+
+      const txHash = await csmSDK.rewards.getLastReportTransactionHash();
+      test.skip(
+        !txHash,
+        'Latest rewards distribution transaction hash is not available',
+      );
 
       await latestRewardsDistribution.expand();
       const [etherscanPage] = await Promise.all([
@@ -76,19 +116,21 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
     qase(143, 'Tooltip verification for "Keys over threshold" field'),
     async () => {},
   );
-  test.skip(
-    qase(144, 'Tooltip verification for "Stuck keys found" field'),
-    async () => {},
-  );
   test(
     qase(137, 'Upcoming Rewards Distribution Verification'),
     async ({ widgetService, csmSDK }) => {
       const latestRewardsDistribution =
         widgetService.dashboardPage.bondRewards.latestRewardsDistribution;
 
+      const { lastReport, nextReport } = await csmSDK.frame.getInfo();
+      const timestamps = await csmSDK.rewards.getLastReportTimestamps();
+      test.skip(
+        !timestamps || isDayInPast(nextReport),
+        'No report yet or oracle report is delayed',
+      );
+
       await latestRewardsDistribution.expand();
 
-      const lastRewardInfoFromContract = await csmSDK.getLastRewards();
       await test.step('Verify "Next rewards distribution" info', async () => {
         await expect(
           latestRewardsDistribution.nextRewardsInfo.getByText(
@@ -97,29 +139,26 @@ test.describe('Dashboard. Bond & Rewards. Latest reward distribution section.', 
         ).toBeVisible();
 
         await test.step('Verify report frame information', async () => {
-          const expectedRateFrame = `Report frame: ${formatDate(lastRewardInfoFromContract?.lastRewards)} — ${formatDate(lastRewardInfoFromContract?.nextRewards)}`;
+          const expectedFrame = `Report frame: ${formatDate(lastReport)} — ${formatDate(nextReport)}`;
           await expect(latestRewardsDistribution.reportFrame).toContainText(
-            expectedRateFrame,
+            expectedFrame,
           );
         });
       });
 
       await test.step('Verify expected days for reward', async () => {
-        const expectedDays = countCalendarDaysLeft(
-          lastRewardInfoFromContract?.nextRewards,
-        );
+        const expectedDays = countCalendarDaysLeft(nextReport);
+        const expectedDaysText =
+          expectedDays === 0
+            ? 'Today'
+            : `in ${expectedDays} ${expectedDays === 1 ? 'day' : 'days'}`;
+
+        await expect(
+          latestRewardsDistribution.nextRewardsInfo.getByText('Expected'),
+        ).toBeVisible();
         await expect(latestRewardsDistribution.expectedDays).toContainText(
-          `Expected`,
+          expectedDaysText,
         );
-        if (expectedDays === 0) {
-          await expect(latestRewardsDistribution.expectedDays).toContainText(
-            `Today`,
-          );
-        } else {
-          await expect(latestRewardsDistribution.expectedDays).toContainText(
-            `in ${expectedDays} day`,
-          );
-        }
       });
     },
   );

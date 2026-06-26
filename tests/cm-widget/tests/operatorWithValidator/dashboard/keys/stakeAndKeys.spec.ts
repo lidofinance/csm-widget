@@ -98,7 +98,7 @@ test.describe('Dashboard. Stake & Keys.', { tag: [Tags.forked] }, () => {
           tooltipIcon: keysSection.stakeColumnPotentialTooltip,
           label: 'Potential additional capacity',
           tooltip:
-            'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available.',
+            'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available',
         },
       ];
 

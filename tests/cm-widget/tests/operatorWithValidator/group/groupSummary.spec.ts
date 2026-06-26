@@ -126,7 +126,7 @@ test.describe('Group page. Group summary.', { tag: [Tags.forked] }, () => {
         await summary.stakeColumnPotentialTooltip.hover();
         await expect(summary.tooltipWrapper).toHaveCount(1);
         await expect(summary.tooltipWrapper).toContainText(
-          'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available.',
+          'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available',
         );
       });
     },
