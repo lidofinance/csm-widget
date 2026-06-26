@@ -33,7 +33,7 @@ export class AddBondPage extends BasePage {
     this.formInfo = this.form.getByTestId('formInfo');
     this.titledAmount = this.formInfo.getByTestId('titledAmount');
     this.titledAmountBalance = this.titledAmount.locator('div > span');
-    this.formInfoText = this.formInfo.locator('p');
+    this.formInfoText = this.formInfo.getByTestId('formInfoText');
 
     // Enter token amount
     this.amountInput = this.form.locator('input[name="bondAmount"]');

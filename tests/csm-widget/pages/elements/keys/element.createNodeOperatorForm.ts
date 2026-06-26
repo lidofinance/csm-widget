@@ -52,11 +52,11 @@ export class CreateNodeOperatorForm {
 
     this.customRewardAddressCurrentButton = this.formBlock
       .locator('xpath=//input[@name="rewardsAddress"]/ancestor::label')
-      .getByRole('button', { name: 'Current' });
+      .getByRole('button', { name: 'Connected address' });
 
     this.customManagerAddressCurrentButton = this.formBlock
       .locator('xpath=//input[@name="managerAddress"]/ancestor::label')
-      .getByRole('button', { name: 'Current' });
+      .getByRole('button', { name: 'Connected address' });
 
     // Parsed tab
     this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');

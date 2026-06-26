@@ -69,7 +69,7 @@ test.describe('Welcome page without connected wallet', async () => {
         homePage.waitForPage(PAGE_WAIT_TIMEOUT),
         matomoEventService.waitForEvent(
           'e_n',
-          'csm_widget_welcome_csm_detailed_link',
+          'csm_widget_welcome_module_detailed_link',
         ),
         homePage.welcomeSection.detailedLink.click(),
       ]);

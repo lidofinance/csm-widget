@@ -19,7 +19,8 @@
     "test:setup:fork": "./tests/scripts/install_foundry.sh",
     "test:cm:e2e": "playwright test --config=./tests/cm-widget/playwright.config.ts",
     "test:csm:e2e": "playwright test --config=./tests/csm-widget/playwright.config.ts",
-    "test:ui": "playwright test --ui"
+    "test:csm:ui": "playwright test --ui --config=./tests/csm-widget/playwright.config.ts",
+    "test:cm:ui": "playwright test --ui --config=./tests/cm-widget/playwright.config.ts"
   },
   "dependencies": {
     "@base-org/account": "^2.5.1",

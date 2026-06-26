@@ -178,7 +178,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
           await op0.stakeColumnPotentialTooltip.hover();
           await expect(op0.tooltipWrapper).toHaveCount(1);
           await expect(op0.tooltipWrapper).toContainText(
-            'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available.',
+            'The additional stake the Lido protocol could allocate to this Node Operator based on its current weight, assuming enough validator keys are available',
           );
         });
       },

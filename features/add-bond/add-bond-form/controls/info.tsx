@@ -31,7 +31,7 @@ export const Info: FC = () => {
             data-testid="titledAmount"
           />
           {bond?.isInsufficient ? (
-            <p>
+            <p data-testid="formInfoText">
               Your Node Operator has an Insufficient bond because of the penalty
               applied. Now your Node Operator&apos;s bond is less than required
               to cover the Node Operator&apos;s current validators.
@@ -43,7 +43,7 @@ export const Info: FC = () => {
               unbonded and being requested to exit
             </p>
           ) : (
-            <p>
+            <p data-testid="formInfoText">
               <b>Why you might need to add bond:</b>
               <br />
               Adding a bond serves as a voluntary security measure for your Node
