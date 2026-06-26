@@ -46,10 +46,15 @@ test.describe(
     test.beforeEach(async ({ widgetService }) => {
       await test.step('Reset persisted form and reopen', async () => {
         const dvtForm = widgetService.operatorType.dvtApplicationForm;
+        await dvtForm.open();
         await dvtForm.applyForm.clearPersisted();
         await dvtForm.open();
         await dvtForm.applyForm.form.waitFor({ state: 'visible' });
       });
+    });
+
+    test.afterEach(async ({ widgetService }) => {
+      await widgetService.operatorType.dvtApplicationForm.applyForm.clearPersisted();
     });
 
     test.afterAll(async ({ csmSDK, widgetService }) => {
@@ -150,8 +155,13 @@ test.describe(
         });
       }
       await test.step('Submit the application', async () => {
+        await expect(applyForm.clusterProgress).toContainText('4 / 4 verified');
+        await expect(applyForm.discordLinkInput).toHaveValue(discordLink);
+
         await applyForm.confirmCheckboxInput.check({ force: true });
-        await expect(applyForm.submitBtn).toBeEnabled({ timeout: 15000 });
+        await expect(applyForm.confirmCheckboxInput).toBeChecked();
+
+        await expect(applyForm.submitBtn).toBeEnabled();
         await applyForm.submitBtn.click();
       });
 

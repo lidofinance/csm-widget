@@ -19,6 +19,10 @@ test.describe('Operator with keys. IDVTC. Apply application. Appearance', async 
     await widgetService.operatorType.dvtApplicationForm.open();
   });
 
+  test.afterEach(async ({ widgetService }) => {
+    await widgetService.operatorType.dvtApplicationForm.applyForm.clearPersisted();
+  });
+
   test.afterAll(async ({ widgetService }) => {
     await test.step('Clear storage and disable flag', async () => {
       await widgetService.page.evaluate(() => sessionStorage.clear());
