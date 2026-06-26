@@ -55,10 +55,10 @@ export const Info: FC = () => {
               >
                 unbonded
               </MatomoLink>{' '}
-              and being requested to exit in case of applied penalties
+              and being requested to exit in case of applied penalties.
               <br />
               Supplied bond will be stored as stETH, which also garners staking
-              rewards
+              rewards.
             </p>
           )}
         </Stack>

@@ -9,7 +9,7 @@ export const AlertNomalizeQueue: FC = () => (
   <Alert title="You have unqueued keys">
     <p>
       You have keys that were not included in the deposit queue. To include them
-      in the queue - upload new keys, or normalize the queue
+      in the queue - upload new keys, or normalize the queue.
     </p>
     <br />
     <LocalLink
