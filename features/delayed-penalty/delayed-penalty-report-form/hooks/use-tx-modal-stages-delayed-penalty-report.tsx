@@ -59,6 +59,5 @@ export const useTxModalStagesDelayedPenaltyReport = () =>
             </>
           }
         />,
-        { isClosableOnLedger: true },
       ),
   }));

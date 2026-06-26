@@ -30,7 +30,6 @@ export const useTxModalStagesClaimIdvtc = () =>
             title="IDVTC type has been successfully claimed"
             description=""
           />,
-          { isClosableOnLedger: true },
         ),
     }),
   );

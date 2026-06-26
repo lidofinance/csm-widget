@@ -83,9 +83,6 @@ export const useTxModalStagesCuratedOperator = () =>
               )
             }
           />,
-          {
-            isClosableOnLedger: true,
-          },
         );
       },
     };

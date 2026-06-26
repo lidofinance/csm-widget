@@ -30,7 +30,6 @@ export const useTxModalStagesClaimIcs = () =>
             title="ICS type has been successfully claimed"
             description=""
           />,
-          { isClosableOnLedger: true },
         ),
     }),
   );

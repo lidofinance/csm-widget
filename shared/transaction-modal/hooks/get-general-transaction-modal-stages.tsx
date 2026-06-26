@@ -30,18 +30,13 @@ export const getGeneralTransactionModalStages = (
         txHash={txHash}
       />,
     ),
-  successMultisig: () =>
-    transitStage(<TxStageSuccessMultisig />, {
-      isClosableOnLedger: true,
-    }),
+  successMultisig: () => transitStage(<TxStageSuccessMultisig />),
   failed: (error: unknown) => {
     const code = getErrorCode(error);
     const errorMessage =
       code === ErrorCode.SOMETHING_WRONG
         ? extractErrorMessage(error)
         : undefined;
-    return transitStage(<TxStageFail code={code} error={errorMessage} />, {
-      isClosableOnLedger: true,
-    });
+    return transitStage(<TxStageFail code={code} error={errorMessage} />);
   },
 });

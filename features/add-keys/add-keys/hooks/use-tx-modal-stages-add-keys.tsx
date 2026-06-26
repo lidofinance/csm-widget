@@ -51,9 +51,6 @@ export const useTxModalStagesAddKeys = () =>
               </>
             }
           />,
-          {
-            isClosableOnLedger: true,
-          },
         ),
     }),
   );
