@@ -4,13 +4,18 @@ import { SHARE_LIMIT_STATUS, useShareLimitStatus } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { CheckboxHookForm } from 'shared/hook-form/controls';
+import { useDepositDataValid } from 'shared/hook-form/deposit-data';
 
 export const KeysConfirm: FC = () => {
   const { data: status } = useShareLimitStatus();
+  const isDepositDataValid = useDepositDataValid();
 
   return (
     <Stack align={isModuleCM ? 'center' : 'start'}>
-      <CheckboxHookForm fieldName="confirmKeysReady" />
+      <CheckboxHookForm
+        fieldName="confirmKeysReady"
+        disabled={!isDepositDataValid}
+      />
       {isModuleCM ? (
         <Text size="xxs" color="secondary" as="div">
           I confirm that my nodes are synced, running, and ready for the
