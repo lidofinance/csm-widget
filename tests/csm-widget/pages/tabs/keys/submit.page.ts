@@ -10,6 +10,7 @@ export class SubmitPage {
   formBlock: Locator;
   rawDepositData: Locator;
   confirmKeysReady: Locator;
+  confirmKeysReadyInput: Locator;
   submitKeysButton: Locator;
   amountInput: Locator;
   amountInputText: Locator;
@@ -26,6 +27,9 @@ export class SubmitPage {
     this.confirmKeysReady = this.formBlock
       .locator('label:has([name="confirmKeysReady"])')
       .locator('svg');
+    this.confirmKeysReadyInput = this.formBlock.locator(
+      '[name="confirmKeysReady"]',
+    );
     this.submitKeysButton = this.formBlock
       .getByRole('button')
       .getByText('Submit keys');
