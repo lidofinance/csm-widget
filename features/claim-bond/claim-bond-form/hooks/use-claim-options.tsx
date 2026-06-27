@@ -186,6 +186,15 @@ const describe = (
       };
 
     case CLAIM_OPTION.REWARDS_TO_BOND: {
+      // Rewards don't cover the insufficient bond (rewardsRemainder === 0): the
+      // whole amount compensates the bond, nothing is split and nothing reaches
+      // excess — so use the compensation copy even with splitters configured.
+      if (isKeysInsufficient && rewardsRemainder === 0n) {
+        return {
+          ...COMPENSATE_INSUFFICIENT,
+          submitLabel: rewardsToBondSubmit(rewardsRemainder),
+        };
+      }
       if (hasSplits) {
         return {
           ...SPLIT_REWARDS_TO_BOND,
