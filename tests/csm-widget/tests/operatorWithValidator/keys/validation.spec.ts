@@ -86,8 +86,9 @@ test.describe('Operator with keys. Validation keys json.', async () => {
 
           await expect(keysPage.submitPage.amountInput).toBeDisabled();
           await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-          // @TODO: Fix it after bug fixed
-          // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
+          await expect(
+            keysPage.submitPage.confirmKeysReadyInput,
+          ).toBeDisabled();
         });
       },
     );
@@ -126,8 +127,9 @@ test.describe('Operator with keys. Validation keys json.', async () => {
 
           await expect(keysPage.submitPage.amountInput).toBeDisabled();
           await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-          // @TODO: Uncomment it after bug fixed
-          // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
+          await expect(
+            keysPage.submitPage.confirmKeysReadyInput,
+          ).toBeDisabled();
         });
       },
     );
@@ -164,8 +166,9 @@ test.describe('Operator with keys. Validation keys json.', async () => {
 
           await expect(keysPage.submitPage.amountInput).toBeDisabled();
           await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-          // @TODO: Uncomment it after bug fixed
-          // await expect(keysPage.submitPage.confirmKeysReady).toBeDisabled();
+          await expect(
+            keysPage.submitPage.confirmKeysReadyInput,
+          ).toBeDisabled();
         });
       },
     );
