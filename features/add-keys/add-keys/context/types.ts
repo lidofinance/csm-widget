@@ -7,6 +7,7 @@ import {
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { DepositDataInputType } from 'shared/hook-form/deposit-data';
+import { KeysAvailable } from 'shared/hooks';
 
 export type AddKeysFormInputType = {
   token: TOKENS;
@@ -25,5 +26,5 @@ export type AddKeysFormNetworkData = {
   isPaused: boolean;
   maxStakeEth: bigint;
   shareLimit?: ShareLimitInfo;
-  // keysAvailable: KeysAvailable;
+  keysAvailable?: KeysAvailable;
 };

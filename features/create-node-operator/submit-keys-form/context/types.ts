@@ -6,6 +6,7 @@ import {
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { DepositDataInputType } from 'shared/hook-form/deposit-data';
+import { KeysAvailable } from 'shared/hooks';
 import { Address } from 'viem';
 
 export type SubmitKeysFormInputType = {
@@ -31,5 +32,5 @@ export type SubmitKeysFormNetworkData = {
   proof?: Proof;
   shareLimit: ShareLimitInfo;
   shareLimitStatus: ShareLimitStatus;
-  // keysAvailable: KeysAvailable;
+  keysAvailable?: KeysAvailable;
 };
