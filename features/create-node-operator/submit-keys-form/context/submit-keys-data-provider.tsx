@@ -20,7 +20,11 @@ import {
   NetworkData,
   useFormData,
 } from 'shared/hook-form/form-controller';
-import { useCreateCurveId, useInvalidate } from 'shared/hooks';
+import {
+  useCreateCurveId,
+  useInvalidate,
+  useKeysAvailable,
+} from 'shared/hooks';
 import { type SubmitKeysFormNetworkData } from './types';
 
 const useSubmitKeysFormNetworkData: NetworkData<
@@ -56,12 +60,12 @@ const useSubmitKeysFormNetworkData: NetworkData<
 
   const { data: shareLimitStatus } = useShareLimitStatus();
 
-  // const { data: keysAvailable } = useKeysAvailable({
-  //   curveId,
-  //   ethBalance,
-  //   stethBalance,
-  //   wstethBalance,
-  // });
+  const keysAvailable = useKeysAvailable({
+    curveId,
+    ethBalance,
+    stethBalance,
+    wstethBalance,
+  });
 
   const invalidate = useInvalidate();
 
@@ -106,7 +110,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
       maxStakeEth,
       shareLimit,
       shareLimitStatus,
-      // keysAvailable,
+      keysAvailable,
     } as SubmitKeysFormNetworkData,
     isPending,
     revalidate,
