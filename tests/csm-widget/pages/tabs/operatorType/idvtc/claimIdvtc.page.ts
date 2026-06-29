@@ -7,6 +7,8 @@ export class ClaimIdvtcPage {
   formTitle: Locator;
   parameterChanges: Locator;
   claimButton: Locator;
+  confirmModal: Locator;
+  confirmContinueButton: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,6 +20,12 @@ export class ClaimIdvtcPage {
     });
     this.claimButton = this.page.getByRole('button', {
       name: 'Claim operator type',
+    });
+    this.confirmModal = this.page.locator('div[role="dialog"]', {
+      hasText: 'You are claiming the Identified DVT Cluster operator type',
+    });
+    this.confirmContinueButton = this.confirmModal.getByRole('button', {
+      name: 'Continue',
     });
   }
 

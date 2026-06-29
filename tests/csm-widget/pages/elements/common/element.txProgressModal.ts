@@ -8,6 +8,7 @@ export class TxModal {
   description: Locator;
   footerHint: Locator;
   footer: Locator;
+  etherscanLink: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -17,6 +18,9 @@ export class TxModal {
     this.description = this.modalContent.getByTestId('description');
     this.footerHint = this.modalContent.getByTestId('footerHint');
     this.footer = this.modalContent.getByTestId('footer');
+    this.etherscanLink = this.modalContent.getByRole('link', {
+      name: 'View on Etherscan',
+    });
   }
 
   async closeModal() {

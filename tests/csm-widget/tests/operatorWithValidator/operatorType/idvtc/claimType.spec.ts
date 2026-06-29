@@ -160,5 +160,23 @@ test.describe(
         }
       });
     });
+
+    test('Should show the claim confirmation modal', async ({
+      widgetService,
+    }) => {
+      const claim = widgetService.operatorType.claimIdvtc;
+      await claim.open();
+
+      await claim.claimButton.click();
+
+      await expect(claim.confirmModal).toBeVisible();
+      await expect(claim.confirmModal).toContainText(
+        'You are claiming the Identified DVT Cluster operator type',
+      );
+      await expect(claim.confirmModal).toContainText(
+        'This action is irreversible, you will not be able to claim your current operator type back.',
+      );
+      await expect(claim.confirmContinueButton).toBeVisible();
+    });
   },
 );
