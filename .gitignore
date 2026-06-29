@@ -45,7 +45,8 @@ yarn-error.log*
 #ide
 .vscode
 .idea
-.claude
+.claude/*
+!.claude/skills/
 .mcp.json
 .qodo
 **/.browser_context**
