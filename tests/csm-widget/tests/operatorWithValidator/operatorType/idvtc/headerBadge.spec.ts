@@ -69,10 +69,10 @@ test.describe(
     let snapshotId: string;
 
     test.beforeAll(
-      async ({ useFork, csmSDK, forkActionService, secretPhrase }) => {
+      async ({ useFork, evmNode, forkActionService, secretPhrase }) => {
         test.skip(!useFork, 'Test suite runs only on forked network');
 
-        snapshotId = await csmSDK.evmSnapshot();
+        snapshotId = await evmNode.snapshot();
 
         await test.step('Issue IDVTC status to the connected address', async () => {
           await forkActionService.setGateAddrs(
@@ -83,8 +83,8 @@ test.describe(
       },
     );
 
-    test.afterAll(async ({ csmSDK }) => {
-      if (snapshotId) await csmSDK.evmRevert(snapshotId);
+    test.afterAll(async ({ evmNode }) => {
+      if (snapshotId) await evmNode.revert(snapshotId);
     });
 
     test('Should show the IDVTC badge in the header on the create operator page', async ({

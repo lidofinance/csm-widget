@@ -113,10 +113,17 @@ export class WidgetService {
     }
 
     await this.walletPage.confirmTx();
-    await this.page.waitForSelector(
-      `text=Uploading operation was successful.`,
-      { timeout: STAGE_WAIT_TIMEOUT },
-    );
+
+    if (isNewOperator) {
+      await this.page.waitForSelector(`text=Node Operator has been created`, {
+        timeout: STAGE_WAIT_TIMEOUT,
+      });
+    } else {
+      await this.page.waitForSelector(
+        `text=Uploading operation was successful.`,
+        { timeout: STAGE_WAIT_TIMEOUT },
+      );
+    }
   }
 
   async removeKeys(keysToRemove: string[]) {

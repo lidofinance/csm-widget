@@ -23,10 +23,10 @@ test.describe(
     let snapshotId: string;
 
     test.beforeAll(
-      async ({ useFork, csmSDK, forkActionService, widgetService }) => {
+      async ({ useFork, evmNode, forkActionService, widgetService }) => {
         test.skip(!useFork, 'Test suite runs only on forked network');
 
-        snapshotId = await csmSDK.evmSnapshot();
+        snapshotId = await evmNode.snapshot();
 
         await test.step('Make cluster member addresses ICS-approved', async () => {
           await forkActionService.setGateAddrs(
@@ -56,11 +56,11 @@ test.describe(
       await widgetService.operatorType.dvtApplicationForm.applyForm.clearPersisted();
     });
 
-    test.afterAll(async ({ csmSDK, widgetService }) => {
+    test.afterAll(async ({ evmNode, widgetService }) => {
       await test.step('Clear storage, disable flag and revert fork', async () => {
         await widgetService.page.evaluate(() => sessionStorage.clear());
         await widgetService.setFeatureFlag('icsApplyForm', false);
-        if (snapshotId) await csmSDK.evmRevert(snapshotId);
+        if (snapshotId) await evmNode.revert(snapshotId);
       });
     });
 
