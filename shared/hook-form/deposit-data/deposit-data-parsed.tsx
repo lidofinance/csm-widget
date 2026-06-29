@@ -1,4 +1,5 @@
 import { Text } from '@lidofinance/lido-ui';
+import { DATA_UNAVAILABLE } from 'consts';
 import { useSmSDK } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
@@ -72,7 +73,10 @@ export const DepositDataParsed: FC = () => {
         return (
           <TableRow key={pubkey} data-testid="deposit-data-row">
             <DataCell $error={hasError} data-testid="deposit-data-pubkey">
-              <Pubkey pubkey={pubkey} color={hasError ? 'error' : 'default'} />
+              <Pubkey
+                pubkey={pubkey || DATA_UNAVAILABLE}
+                color={hasError ? 'error' : 'default'}
+              />
             </DataCell>
             <DataCell $error={hasError} data-testid="deposit-data-index">
               #{index + 1}
