@@ -17,6 +17,8 @@ import {
   SettingsPage,
 } from '../pages';
 import { ElementController } from '../pages/elements/controller';
+import { Header } from '../pages/elements/common/element.header';
+import { ParametersModal } from '../pages/elements/common/element.parametersModal';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
 
 type FeatureFlagName = keyof FeatureFlagsType;
@@ -29,6 +31,8 @@ export class WidgetService {
   public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
   public operatorType: OperatorTypePage;
+  public header: Header;
+  public parametersModal: ParametersModal;
 
   constructor(
     public page: Page,
@@ -41,6 +45,8 @@ export class WidgetService {
     this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
     this.operatorType = new OperatorTypePage(this.page, this.walletPage);
+    this.header = new Header(this.page);
+    this.parametersModal = new ParametersModal(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {

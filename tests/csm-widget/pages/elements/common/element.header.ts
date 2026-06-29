@@ -5,6 +5,7 @@ export class Header {
   header: Locator;
   accountSection: Locator;
   connectWalletBtn: Locator;
+  operatorTypeBadge: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -12,6 +13,9 @@ export class Header {
     this.accountSection = this.header.getByTestId('accountSectionHeader');
 
     this.connectWalletBtn = this.header.getByText('Connect').first();
+    this.operatorTypeBadge = this.header.getByTestId(
+      'header-operator-type-button',
+    );
   }
 
   async isAccountSectionVisible() {
