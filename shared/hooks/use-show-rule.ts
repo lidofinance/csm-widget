@@ -89,7 +89,7 @@ export const useShowFlags = (): ShowFlags => {
   const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
-  const canCreateNO = useCanCreateNodeOperator();
+  const { canCreate: canCreateNO } = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
   const {
