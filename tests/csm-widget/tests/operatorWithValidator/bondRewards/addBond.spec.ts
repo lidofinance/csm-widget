@@ -22,7 +22,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
         await test.step('Verify bond balance', async () => {
           await expect(
             bondRewardsPage.addBond.titledAmount.locator('div').first(),
-          ).toContainText('Bond balance');
+          ).toContainText('Excess bond');
           const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
           await expect(bondRewardsPage.addBond.titledAmountBalance).toHaveText(

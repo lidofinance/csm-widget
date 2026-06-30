@@ -30,7 +30,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
     for (const row of await keysPage.submitPage.depositDataRow.all()) {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'amount is not equal to 32 ethinvalid signature',
+        'amount is not equal to 32 ETHsignature failed BLS verification',
       );
     }
   });
@@ -47,7 +47,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
     for (const row of await keysPage.submitPage.depositDataRow.all()) {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'invalid signature',
+        'signature failed BLS verification',
       );
     }
   });
@@ -66,10 +66,10 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'invalid signature',
+          'signature failed BLS verification',
         );
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'pubkey is not valid string',
+          'pubkey is not a valid hex string',
         );
       }
     },
@@ -89,7 +89,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'invalid signature',
+          'signature failed BLS verification',
         );
       }
     },
@@ -109,10 +109,10 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'invalid signature',
+          'signature failed BLS verification',
         );
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'deposit_message_root is not a valid string',
+          'deposit_message_root is not a valid hex string',
         );
       }
     },
@@ -133,7 +133,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'withdrawal_credentials is not the Lido Withdrawal Vaultinvalid signature',
+          'withdrawal_credentials is not the Lido Withdrawal Vaultsignature failed BLS verification',
         );
       }
     },
@@ -154,10 +154,10 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'invalid signature',
+          'signature failed BLS verification',
         );
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'withdrawal_credentials is not a valid string',
+          'withdrawal_credentials is not a valid hex string',
         );
       }
     },
@@ -199,7 +199,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          `network_name or eth2_network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
+          `network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
         );
       }
     },
