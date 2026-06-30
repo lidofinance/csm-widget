@@ -3171,23 +3171,23 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.47.0.tgz#186d6e2695c9470cc171d111dac352da5106e681"
   integrity sha512-dF8eUUnK35CNCVa3Z++INtlxlRlYKGx2//eLz7nyFkqwPoOGI0PmVW0qgGiGY9TrGAqkJuXlERszclH8eunYCw==
 
-"@lidofinance/lido-csm-sdk@^2.0.0-alpha.59":
-  version "2.0.0-alpha.59"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.0.0-alpha.59.tgz#d8e2015d5bc9d765ed1eba308b4eca7de7924731"
-  integrity sha512-wV4PU3eSdJBbY0DF53+Y1QNL/BKg9cbply55Ht1J/KtrKIusFz2VxnoHRKEZcHwK6PEKa0mK2VZoxHqsTumfmQ==
+"@lidofinance/lido-csm-sdk@2.0.0-alpha.66":
+  version "2.0.0-alpha.66"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.0.0-alpha.66.tgz#fc179bb2e552decc93c166ab44a6676d5e7e9223"
+  integrity sha512-harUzjcdf30NPbCUH5OejrrlSA3rVcK4tuDPTq4DaXriYILhxFK9vYumMtHyk8SIBtdOvWxpPyE3rnU38tUJrQ==
   dependencies:
     "@chainsafe/ssz" "^1.3.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
+    abitype "^1.2.3"
     bls-eth-wasm "^1.4.0"
     json-with-bigint "^3.5.8"
     zod "^4.3.6"
 
-"@lidofinance/lido-ethereum-sdk@^4.7.0":
-  version "4.7.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-ethereum-sdk/-/lido-ethereum-sdk-4.7.0.tgz#1843cdcdea5d29c138b912a239a2087697f8a69f"
-  integrity sha512-mw4SyclQzYTxsGa43thBM/WiaWnP/0urfXOkasOJvWd18Oxc1Bd+WXo9YQfqk5T5k5qZqofbdJb4zsrCgP1ZjQ==
+"@lidofinance/lido-ethereum-sdk@^4.8.0":
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-ethereum-sdk/-/lido-ethereum-sdk-4.8.0.tgz#190ff16c004b08d9618fb96c1507729140bde66c"
+  integrity sha512-KjU0opfkc4D92tUXB8H6bsnBuC5/JEEGydJ418CNf5/ib2H6YzTTzG+MQF3gFNYN1ho21Qa4tyEXY1ipWHfcag==
   dependencies:
-    "@ethersproject/bytes" "^5.7.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
     blockstore-core "^5.0.4"
     graphql "^16.8.1"
