@@ -5,11 +5,13 @@ import { TxModal } from './elements/common/element.txProgressModal';
 import { ApplicationForm } from './tabs/operatorType/ics/applicationForm.page';
 import { DvtApplicationForm } from './tabs/operatorType/idvtc/dvtApplicationForm.page';
 import { ClaimIdvtcPage } from './tabs/operatorType/idvtc/claimIdvtc.page';
+import { ClaimIcsPage } from './tabs/operatorType/ics/claimIcs.page';
 
 export class OperatorTypePage extends BasePage {
   applicationForm: ApplicationForm;
   dvtApplicationForm: DvtApplicationForm;
   claimIdvtc: ClaimIdvtcPage;
+  claimIcs: ClaimIcsPage;
   txModal: TxModal;
 
   idvtcApplyButton: Locator;
@@ -27,6 +29,7 @@ export class OperatorTypePage extends BasePage {
     this.applicationForm = new ApplicationForm(page, walletPage);
     this.dvtApplicationForm = new DvtApplicationForm(page, walletPage);
     this.claimIdvtc = new ClaimIdvtcPage(page);
+    this.claimIcs = new ClaimIcsPage(page);
     this.txModal = new TxModal(page);
 
     this.idvtcApplyButton = this.page.getByTestId('dvtApplyButton');
