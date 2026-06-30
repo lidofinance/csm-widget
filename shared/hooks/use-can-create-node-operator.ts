@@ -14,21 +14,21 @@ import {
 
 export const useCanCreateNodeOperator = () => {
   const { isAccountActive } = useDappStatus();
-  const { nodeOperator } = useNodeOperator();
-  const { data: status } = useSmStatus();
+  const { nodeOperator, isPending: isNodeOperatorPending } = useNodeOperator();
+  const { data: status, isPending: isStatusPending } = useSmStatus();
 
-  const { data: gatesCount } = useCuratedGatesEligibility(
-    undefined,
-    (data) => data.length,
-  );
+  const { data: gatesCount, isPending: isGatesPending } =
+    useCuratedGatesEligibility(undefined, (data) => data.length);
 
-  const { data: icsProof } = useIcsProof();
-  const { data: isIcsPaused } = useIcsPaused();
-  const { data: icsCurveId } = useIcsCurveId();
+  const { data: icsProof, isPending: isIcsProofPending } = useIcsProof();
+  const { data: isIcsPaused, isPending: isIcsPausedPending } = useIcsPaused();
+  const { data: icsCurveId, isPending: isIcsCurveIdPending } = useIcsCurveId();
 
-  const { data: idvtcProof } = useIdvtcProof();
-  const { data: isIdvtcPaused } = useIdvtcPaused();
-  const { data: idvtcCurveId } = useIdvtcCurveId();
+  const { data: idvtcProof, isPending: isIdvtcProofPending } = useIdvtcProof();
+  const { data: isIdvtcPaused, isPending: isIdvtcPausedPending } =
+    useIdvtcPaused();
+  const { data: idvtcCurveId, isPending: isIdvtcCurveIdPending } =
+    useIdvtcCurveId();
 
   const canCreateIdvtc =
     !isIdvtcPaused &&
@@ -52,5 +52,19 @@ export const useCanCreateNodeOperator = () => {
       canCreateIcs
     : gatesCount !== undefined && gatesCount > 0;
 
-  return Boolean(isAccountActive && !status?.isPaused && condition);
+  const isPending =
+    isStatusPending ||
+    (isAccountActive && isNodeOperatorPending) ||
+    (isModuleCSM
+      ? isIcsProofPending ||
+        isIcsPausedPending ||
+        isIcsCurveIdPending ||
+        isIdvtcProofPending ||
+        isIdvtcPausedPending ||
+        isIdvtcCurveIdPending
+      : isGatesPending);
+
+  const canCreate = Boolean(isAccountActive && !status?.isPaused && condition);
+
+  return { canCreate, isPending };
 };
