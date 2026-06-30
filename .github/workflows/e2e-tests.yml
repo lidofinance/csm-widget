@@ -190,6 +190,27 @@ jobs:
             exit 1
           fi
 
+      - name: Verify Pinata credentials (fork)
+        if: ${{ inputs.use_fork }}
+        env:
+          PINATA_API_KEY: ${{ secrets.QA_PINATA_API_KEY }}
+          PINATA_API_SECRET: ${{ secrets.QA_PINATA_API_SECRET }}
+        run: |
+          if [ -z "$PINATA_API_KEY" ] || [ -z "$PINATA_API_SECRET" ]; then
+            echo "::error::PINATA_API_KEY/PINATA_API_SECRET are empty — set QA_PINATA_API_KEY/QA_PINATA_API_SECRET secrets"
+            exit 1
+          fi
+          code=$(curl -s -o /tmp/pinata.json -w "%{http_code}" \
+            https://api.pinata.cloud/data/testAuthentication \
+            -H "pinata_api_key: $PINATA_API_KEY" \
+            -H "pinata_secret_api_key: $PINATA_API_SECRET")
+          echo "Pinata testAuthentication -> HTTP $code"
+          cat /tmp/pinata.json; echo
+          if [ "$code" != "200" ]; then
+            echo "::error::Pinata auth failed (HTTP $code). set-gate-addrs needs a valid legacy API Key + API Secret (NOT a JWT) with pinJSONToIPFS permission."
+            exit 1
+          fi
+
       - name: Run tests
         id: run-tests
         run: |
