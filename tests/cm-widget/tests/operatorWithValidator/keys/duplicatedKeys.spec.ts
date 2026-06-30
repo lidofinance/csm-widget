@@ -51,10 +51,10 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'invalid signature',
+            'signature failed BLS verification',
           );
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'pubkey already exists as validator on CL',
+            'pubkey already exists as a validator on CL',
           );
         }
       },
@@ -100,7 +100,7 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toHaveText(
-            'pubkey already exists in cache',
+            'pubkey already submitted',
           );
         }
       },
