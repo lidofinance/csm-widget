@@ -326,20 +326,10 @@ export class ForkActionsService {
       execFile(
         'just',
         args,
-        { cwd: this.cwd, env: this.baseEnv, maxBuffer: 10 * 1024 * 1024 },
+        { cwd: this.cwd, env: this.baseEnv },
         (error, stdout, stderr) => {
           if (error) {
-            reject(
-              new Error(
-                [
-                  `just ${args.join(' ')} failed (exit ${error.code ?? '?'})`,
-                  '----- stderr -----',
-                  stderr.trim() || '(empty)',
-                  '----- stdout -----',
-                  stdout.trim() || '(empty)',
-                ].join('\n'),
-              ),
-            );
+            reject(error);
             return;
           }
           resolve({ stdout, stderr, code: 0 });
