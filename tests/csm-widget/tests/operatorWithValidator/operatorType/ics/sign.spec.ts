@@ -32,11 +32,11 @@ test.describe('Operator with keys. ICS. Sign in', async () => {
       ).toBeVisible();
 
       const address = mnemonicToAccount(secretPhrase).address;
-      const icsToken = await applicationForm.signInForm.getSessionStorageData(
-        `ics-token-${address}`,
+      const siweToken = await applicationForm.signInForm.getSessionStorageData(
+        `siwe-token-${address}`,
       );
 
-      expect(icsToken).not.toBeNull();
+      expect(siweToken).not.toBeNull();
     },
   );
 
@@ -50,7 +50,7 @@ test.describe('Operator with keys. ICS. Sign in', async () => {
 
       const address = mnemonicToAccount(secretPhrase).address;
       await applicationForm.signInForm.removeKeyFromSessionStorage(
-        `ics-token-${address}`,
+        `siwe-token-${address}`,
       );
 
       await widgetService.page.reload();
