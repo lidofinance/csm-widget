@@ -1,4 +1,5 @@
 import { test } from '../../../test.fixture';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
@@ -68,89 +69,91 @@ test.describe(
       if (snapshotId) await evmNode.revert(snapshotId);
     });
 
-    test('Should overwrite IDVTC with ICS when claimed', async ({
-      widgetService,
-    }) => {
-      const claim = widgetService.operatorType.claimIcs;
-      const txModal = widgetService.operatorType.txModal;
-      const header = widgetService.header;
+    test(
+      qase(466, 'Should overwrite IDVTC with ICS when claimed'),
+      async ({ widgetService }) => {
+        const claim = widgetService.operatorType.claimIcs;
+        const txModal = widgetService.operatorType.txModal;
+        const header = widgetService.header;
 
-      await test.step('Operator type is IDVTC before claiming', async () => {
-        await widgetService.operatorType.openTypePage();
-        await expect(header.operatorTypeCurve).toContainText('IDVTC');
-      });
+        await test.step('Operator type is IDVTC before claiming', async () => {
+          await widgetService.operatorType.openTypePage();
+          await expect(header.operatorTypeCurve).toContainText('IDVTC');
+        });
 
-      await claim.open();
+        await claim.open();
 
-      await test.step('Confirm and submit the ICS claim transaction', async () => {
-        await claim.claimButton.click();
-        await expect(claim.confirmModal).toContainText(
-          'You are claiming the Identified Community Staker operator type',
-        );
-        await claim.confirmContinueButton.click();
-        await widgetService.page.waitForSelector(
-          'text=Please confirm this transaction in your wallet',
-          { timeout: STAGE_WAIT_TIMEOUT },
-        );
-        await widgetService.walletPage.confirmTx();
-      });
+        await test.step('Confirm and submit the ICS claim transaction', async () => {
+          await claim.claimButton.click();
+          await expect(claim.confirmModal).toContainText(
+            'You are claiming the Identified Community Staker operator type',
+          );
+          await claim.confirmContinueButton.click();
+          await widgetService.page.waitForSelector(
+            'text=Please confirm this transaction in your wallet',
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
+          await widgetService.walletPage.confirmTx();
+        });
 
-      await test.step('Claim transaction succeeds', async () => {
-        await expect(txModal.title).toContainText(
-          'ICS type has been successfully claimed',
-          { timeout: STAGE_WAIT_TIMEOUT },
-        );
-        await txModal.closeModal();
-        await expect(
-          widgetService.page.getByText(
-            'You have claimed the Identified Community Staker operator type',
-          ),
-        ).toBeVisible();
-      });
+        await test.step('Claim transaction succeeds', async () => {
+          await expect(txModal.title).toContainText(
+            'ICS type has been successfully claimed',
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
+          await txModal.closeModal();
+          await expect(
+            widgetService.page.getByText(
+              'You have claimed the Identified Community Staker operator type',
+            ),
+          ).toBeVisible();
+        });
 
-      await test.step('Header shows only ICS, IDVTC overwritten', async () => {
-        await expect(header.operatorTypeCurve).toContainText('ICS');
-        await expect(header.operatorTypeCurve).not.toContainText('IDVTC');
-      });
-    });
+        await test.step('Header shows only ICS, IDVTC overwritten', async () => {
+          await expect(header.operatorTypeCurve).toContainText('ICS');
+          await expect(header.operatorTypeCurve).not.toContainText('IDVTC');
+        });
+      },
+    );
 
-    test('Should keep IDVTC and add an ICS operator when created', async ({
-      widgetService,
-    }) => {
-      const form = widgetService.keysPage.createNodeOperatorForm;
-      const header = widgetService.header;
-      const keys = new KeysGeneratorService().generateKeys(1);
+    test(
+      qase(437, 'Should keep IDVTC and add an ICS operator when created'),
+      async ({ widgetService }) => {
+        const form = widgetService.keysPage.createNodeOperatorForm;
+        const header = widgetService.header;
+        const keys = new KeysGeneratorService().generateKeys(1);
 
-      await test.step('Create a new ICS operator on the create page', async () => {
-        await widgetService.keysPage.goto();
-        await form.getBondTokenElement(TokenSymbol.ETH).click();
-        await form.fillKeys(keys);
-        await expect(form.amountInput).toHaveValue('1.5');
-        await form.confirmKeysReady.click();
-        await form.submitKeysButton.click();
-        await widgetService.walletPage.confirmTx();
-        await widgetService.page.waitForSelector(
-          'text=Node Operator has been created',
-          { timeout: STAGE_WAIT_TIMEOUT },
-        );
-      });
+        await test.step('Create a new ICS operator on the create page', async () => {
+          await widgetService.keysPage.goto();
+          await form.getBondTokenElement(TokenSymbol.ETH).click();
+          await form.fillKeys(keys);
+          await expect(form.amountInput).toHaveValue('1.5');
+          await form.confirmKeysReady.click();
+          await form.submitKeysButton.click();
+          await widgetService.walletPage.confirmTx();
+          await widgetService.page.waitForSelector(
+            'text=Node Operator has been created',
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
+        });
 
-      await test.step('Header switch panel shows two operators', async () => {
-        await widgetService.operatorType.openTypePage();
-        await expect(header.switchOperatorButton).toBeVisible();
-        await header.switchOperatorButton.click();
-        await expect(header.operatorSwitchModal).toBeVisible();
-        await expect(header.switchModalRows).toHaveCount(2);
-      });
+        await test.step('Header switch panel shows two operators', async () => {
+          await widgetService.operatorType.openTypePage();
+          await expect(header.switchOperatorButton).toBeVisible();
+          await header.switchOperatorButton.click();
+          await expect(header.operatorSwitchModal).toBeVisible();
+          await expect(header.switchModalRows).toHaveCount(2);
+        });
 
-      await test.step('Both IDVTC and ICS operators are listed', async () => {
-        await expect(
-          header.switchModalRows.filter({ hasText: 'IDVTC' }),
-        ).toBeVisible();
-        await expect(
-          header.switchModalRows.filter({ hasText: 'ICS' }),
-        ).toBeVisible();
-      });
-    });
+        await test.step('Both IDVTC and ICS operators are listed', async () => {
+          await expect(
+            header.switchModalRows.filter({ hasText: 'IDVTC' }),
+          ).toBeVisible();
+          await expect(
+            header.switchModalRows.filter({ hasText: 'ICS' }),
+          ).toBeVisible();
+        });
+      },
+    );
   },
 );

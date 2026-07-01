@@ -1,4 +1,5 @@
 import { test } from '../../../../test.fixture';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
@@ -40,57 +41,59 @@ test.describe('Operator with keys. IDVTC. Apply application. Socials', async () 
     });
   });
 
-  test('Should generate and copy the Discord proof message', async ({
-    widgetService,
-    secretPhrase,
-  }) => {
-    const applyForm = widgetService.operatorType.dvtApplicationForm.applyForm;
-    const address = mnemonicToAccount(secretPhrase).address;
+  test(
+    qase(479, 'Should generate and copy the Discord proof message'),
+    async ({ widgetService, secretPhrase }) => {
+      const applyForm = widgetService.operatorType.dvtApplicationForm.applyForm;
+      const address = mnemonicToAccount(secretPhrase).address;
 
-    await test.step('Verify generated Discord message', async () => {
-      await expect(applyForm.discordProofStep1Input).toHaveValue(
-        discordMessage(address),
-      );
-    });
+      await test.step('Verify generated Discord message', async () => {
+        await expect(applyForm.discordProofStep1Input).toHaveValue(
+          discordMessage(address),
+        );
+      });
 
-    await test.step('Copy Discord message', async () => {
-      await applyForm.discordProofStep1CopyBtn.click();
-      const clipboard = await widgetService.page.evaluate(() =>
-        navigator.clipboard.readText(),
-      );
-      expect(clipboard).toBe(discordMessage(address));
-    });
-  });
+      await test.step('Copy Discord message', async () => {
+        await applyForm.discordProofStep1CopyBtn.click();
+        const clipboard = await widgetService.page.evaluate(() =>
+          navigator.clipboard.readText(),
+        );
+        expect(clipboard).toBe(discordMessage(address));
+      });
+    },
+  );
 
-  test('Should validate the Discord message link', async ({
-    widgetService,
-  }) => {
-    const applyForm = widgetService.operatorType.dvtApplicationForm.applyForm;
+  test(
+    qase(461, 'Should validate the Discord message link'),
+    async ({ widgetService }) => {
+      const applyForm = widgetService.operatorType.dvtApplicationForm.applyForm;
 
-    await test.step('Invalid link shows an error', async () => {
-      await applyForm.discordLinkInput.fill(
-        'https://discord.com/channels/123/456',
-      );
-      await expect(applyForm.discordLinkError).toContainText(
-        'Must be a valid Discord message URL',
-      );
-      await expect(applyForm.submitBtn).toBeDisabled();
-    });
+      await test.step('Invalid link shows an error', async () => {
+        await applyForm.discordLinkInput.fill(
+          'https://discord.com/channels/123/456',
+        );
+        await expect(applyForm.discordLinkError).toContainText(
+          'Must be a valid Discord message URL',
+        );
+        await expect(applyForm.submitBtn).toBeDisabled();
+      });
 
-    await test.step('Valid link clears the error', async () => {
-      await applyForm.discordLinkInput.fill(
-        'https://discord.com/channels/123/456/789',
-      );
-      await expect(applyForm.discordLinkError).toBeHidden();
-    });
-  });
+      await test.step('Valid link clears the error', async () => {
+        await applyForm.discordLinkInput.fill(
+          'https://discord.com/channels/123/456/789',
+        );
+        await expect(applyForm.discordLinkError).toBeHidden();
+      });
+    },
+  );
 
-  test('Should accept optional Telegram username', async ({
-    widgetService,
-  }) => {
-    const applyForm = widgetService.operatorType.dvtApplicationForm.applyForm;
+  test(
+    qase(462, 'Should accept optional Telegram username'),
+    async ({ widgetService }) => {
+      const applyForm = widgetService.operatorType.dvtApplicationForm.applyForm;
 
-    await applyForm.telegramUsernameInput.fill('@operator_tg');
-    await expect(applyForm.telegramUsernameInput).toHaveValue('@operator_tg');
-  });
+      await applyForm.telegramUsernameInput.fill('@operator_tg');
+      await expect(applyForm.telegramUsernameInput).toHaveValue('@operator_tg');
+    },
+  );
 });

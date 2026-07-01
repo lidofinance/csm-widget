@@ -1,4 +1,5 @@
 import { test } from '../../../test.fixture';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
@@ -87,80 +88,87 @@ test.describe(
       if (snapshotId) await evmNode.revert(snapshotId);
     });
 
-    test('Should show the IDVTC badge in the header on the create operator page', async ({
-      widgetService,
-    }) => {
-      await widgetService.keysPage.goto();
-
-      await expect(widgetService.header.operatorTypeBadge).toBeVisible();
-      await expect(widgetService.header.operatorTypeBadge).toContainText(
-        'IDVTC',
-      );
-    });
-
-    test('Should hide the IDVTC badge outside the create operator page', async ({
-      widgetService,
-    }) => {
-      await test.step('Badge is shown on the create operator page', async () => {
+    test(
+      qase(
+        470,
+        'Should show the IDVTC badge in the header on the create operator page',
+      ),
+      async ({ widgetService }) => {
         await widgetService.keysPage.goto();
+
         await expect(widgetService.header.operatorTypeBadge).toBeVisible();
-      });
+        await expect(widgetService.header.operatorTypeBadge).toContainText(
+          'IDVTC',
+        );
+      },
+    );
 
-      await test.step('Badge is gone on the main page', async () => {
-        await widgetService.mainPage.goto();
-        await expect(widgetService.header.operatorTypeBadge).toBeHidden();
-      });
-    });
+    test(
+      qase(445, 'Should hide the IDVTC badge outside the create operator page'),
+      async ({ widgetService }) => {
+        await test.step('Badge is shown on the create operator page', async () => {
+          await widgetService.keysPage.goto();
+          await expect(widgetService.header.operatorTypeBadge).toBeVisible();
+        });
 
-    test('Should open a parameters modal with a toggle from the badge', async ({
-      widgetService,
-    }) => {
-      const modal = widgetService.parametersModal;
-      await widgetService.keysPage.goto();
+        await test.step('Badge is gone on the main page', async () => {
+          await widgetService.mainPage.goto();
+          await expect(widgetService.header.operatorTypeBadge).toBeHidden();
+        });
+      },
+    );
 
-      await test.step('Open the modal from the header badge', async () => {
+    test(
+      qase(446, 'Should open a parameters modal with a toggle from the badge'),
+      async ({ widgetService }) => {
+        const modal = widgetService.parametersModal;
+        await widgetService.keysPage.goto();
+
+        await test.step('Open the modal from the header badge', async () => {
+          await widgetService.header.operatorTypeBadge.click();
+          await expect(modal.modal).toBeVisible();
+          await expect(modal.modal).toContainText(IDVTC_TITLE);
+        });
+
+        await test.step('Show more reveals the folded parameters', async () => {
+          await expect(modal.foldableSection).toBeHidden();
+          await expect(modal.showMoreToggle).toContainText('Show more');
+
+          await modal.showMoreToggle.click();
+          await expect(modal.foldableSection).toBeVisible();
+          await expect(modal.showMoreToggle).toContainText('Show less');
+        });
+
+        await test.step('Show less folds them again', async () => {
+          await modal.showMoreToggle.click();
+          await expect(modal.foldableSection).toBeHidden();
+          await expect(modal.showMoreToggle).toContainText('Show more');
+        });
+      },
+    );
+
+    test(
+      qase(447, 'Should show the label and help tooltip for every parameter'),
+      async ({ widgetService }) => {
+        const modal = widgetService.parametersModal;
+        await widgetService.keysPage.goto();
         await widgetService.header.operatorTypeBadge.click();
         await expect(modal.modal).toBeVisible();
         await expect(modal.modal).toContainText(IDVTC_TITLE);
-      });
 
-      await test.step('Show more reveals the folded parameters', async () => {
-        await expect(modal.foldableSection).toBeHidden();
-        await expect(modal.showMoreToggle).toContainText('Show more');
-
-        await modal.showMoreToggle.click();
-        await expect(modal.foldableSection).toBeVisible();
-        await expect(modal.showMoreToggle).toContainText('Show less');
-      });
-
-      await test.step('Show less folds them again', async () => {
-        await modal.showMoreToggle.click();
-        await expect(modal.foldableSection).toBeHidden();
-        await expect(modal.showMoreToggle).toContainText('Show more');
-      });
-    });
-
-    test('Should show the label and help tooltip for every parameter', async ({
-      widgetService,
-    }) => {
-      const modal = widgetService.parametersModal;
-      await widgetService.keysPage.goto();
-      await widgetService.header.operatorTypeBadge.click();
-      await expect(modal.modal).toBeVisible();
-      await expect(modal.modal).toContainText(IDVTC_TITLE);
-
-      await test.step('Reveal all parameters', async () => {
-        await modal.showMoreToggle.click();
-      });
-
-      for (const { title, help } of PARAMETERS) {
-        await test.step(`Parameter "${title}" shows its label and help`, async () => {
-          await expect(modal.getParameter(title)).toBeVisible();
-
-          await modal.getParameterTooltipIcon(title).hover();
-          await expect(modal.getTooltipText(help)).toBeVisible();
+        await test.step('Reveal all parameters', async () => {
+          await modal.showMoreToggle.click();
         });
-      }
-    });
+
+        for (const { title, help } of PARAMETERS) {
+          await test.step(`Parameter "${title}" shows its label and help`, async () => {
+            await expect(modal.getParameter(title)).toBeVisible();
+
+            await modal.getParameterTooltipIcon(title).hover();
+            await expect(modal.getTooltipText(help)).toBeVisible();
+          });
+        }
+      },
+    );
   },
 );

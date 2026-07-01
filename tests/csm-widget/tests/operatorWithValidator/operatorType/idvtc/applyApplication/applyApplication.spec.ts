@@ -1,4 +1,5 @@
 import { test } from '../../../../test.fixture';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
@@ -64,116 +65,130 @@ test.describe(
       });
     });
 
-    test('Should verify a cluster member and update progress', async ({
-      widgetService,
-      secretPhrase,
-    }) => {
-      const applyForm = widgetService.operatorType.dvtApplicationForm.applyForm;
-      const member = applyForm.getClusterMember(0);
-      const mainAddress = mnemonicToAccount(secretPhrase).address;
-      const account = memberAccounts[0];
+    test(
+      qase(451, 'Should verify a cluster member and update progress'),
+      async ({ widgetService, secretPhrase }) => {
+        const applyForm =
+          widgetService.operatorType.dvtApplicationForm.applyForm;
+        const member = applyForm.getClusterMember(0);
+        const mainAddress = mnemonicToAccount(secretPhrase).address;
+        const account = memberAccounts[0];
 
-      await test.step('Fill ICS-approved address and sign the message', async () => {
-        await member.enterAddress(account.address);
-        await expect(member.addressError).toBeHidden();
-
-        const message = clusterMemberMessage(account.address, mainAddress);
-        const signature = await account.signMessage({ message });
-        await member.signatureInput.fill(signature);
-      });
-
-      await test.step('Verify marks the member verified', async () => {
-        await expect(applyForm.clusterProgress).toContainText('0 / 4 verified');
-        await member.verifySignatureBtn.click();
-
-        await expect(member.verifiedChip).toBeVisible();
-        await expect(member.addressInput).toBeDisabled();
-        await expect(member.addressInput).toHaveValue(account.address);
-        await expect(applyForm.clusterProgress).toContainText('1 / 4 verified');
-      });
-
-      await test.step('Clear resets the member to unverified', async () => {
-        await member.clearBtn.click();
-        await expect(member.unverifiedChip).toBeVisible();
-        await expect(member.addressInput).toHaveValue('');
-        await expect(applyForm.clusterProgress).toContainText('0 / 4 verified');
-      });
-    });
-
-    test('Should verify all cluster members', async ({
-      widgetService,
-      secretPhrase,
-    }) => {
-      const applyForm = widgetService.operatorType.dvtApplicationForm.applyForm;
-      const mainAddress = mnemonicToAccount(secretPhrase).address;
-
-      for (const [index, account] of memberAccounts.entries()) {
-        await test.step(`Verify cluster member #${index + 1}`, async () => {
-          const member = applyForm.getClusterMember(index);
-
+        await test.step('Fill ICS-approved address and sign the message', async () => {
           await member.enterAddress(account.address);
           await expect(member.addressError).toBeHidden();
 
           const message = clusterMemberMessage(account.address, mainAddress);
           const signature = await account.signMessage({ message });
           await member.signatureInput.fill(signature);
+        });
+
+        await test.step('Verify marks the member verified', async () => {
+          await expect(applyForm.clusterProgress).toContainText(
+            '0 / 4 verified',
+          );
           await member.verifySignatureBtn.click();
 
           await expect(member.verifiedChip).toBeVisible();
+          await expect(member.addressInput).toBeDisabled();
+          await expect(member.addressInput).toHaveValue(account.address);
           await expect(applyForm.clusterProgress).toContainText(
-            `${index + 1} / 4 verified`,
+            '1 / 4 verified',
           );
         });
-      }
 
-      await expect(applyForm.clusterProgress).toContainText('4 / 4 verified');
-    });
-
-    test('Should submit successfully after verifying all cluster members', async ({
-      widgetService,
-      secretPhrase,
-    }) => {
-      const applyForm = widgetService.operatorType.dvtApplicationForm.applyForm;
-      const mainAddress = mnemonicToAccount(secretPhrase).address;
-      const discordLink = 'https://discord.com/channels/123/456/789';
-      await applyForm.discordLinkInput.fill(discordLink);
-
-      for (const [index, account] of memberAccounts.entries()) {
-        await test.step(`Verify cluster member #${index + 1}`, async () => {
-          const member = applyForm.getClusterMember(index);
-
-          await member.enterAddress(account.address);
-          await expect(member.addressError).toBeHidden();
-
-          const message = clusterMemberMessage(account.address, mainAddress);
-          const signature = await account.signMessage({ message });
-          await member.signatureInput.fill(signature);
-          await member.verifySignatureBtn.click();
-
-          await expect(member.verifiedChip).toBeVisible();
+        await test.step('Clear resets the member to unverified', async () => {
+          await member.clearBtn.click();
+          await expect(member.unverifiedChip).toBeVisible();
+          await expect(member.addressInput).toHaveValue('');
+          await expect(applyForm.clusterProgress).toContainText(
+            '0 / 4 verified',
+          );
         });
-      }
-      await test.step('Submit the application', async () => {
+      },
+    );
+
+    test(
+      qase(435, 'Should verify all cluster members'),
+      async ({ widgetService, secretPhrase }) => {
+        const applyForm =
+          widgetService.operatorType.dvtApplicationForm.applyForm;
+        const mainAddress = mnemonicToAccount(secretPhrase).address;
+
+        for (const [index, account] of memberAccounts.entries()) {
+          await test.step(`Verify cluster member #${index + 1}`, async () => {
+            const member = applyForm.getClusterMember(index);
+
+            await member.enterAddress(account.address);
+            await expect(member.addressError).toBeHidden();
+
+            const message = clusterMemberMessage(account.address, mainAddress);
+            const signature = await account.signMessage({ message });
+            await member.signatureInput.fill(signature);
+            await member.verifySignatureBtn.click();
+
+            await expect(member.verifiedChip).toBeVisible();
+            await expect(applyForm.clusterProgress).toContainText(
+              `${index + 1} / 4 verified`,
+            );
+          });
+        }
+
         await expect(applyForm.clusterProgress).toContainText('4 / 4 verified');
-        await expect(applyForm.discordLinkInput).toHaveValue(discordLink);
+      },
+    );
 
-        await applyForm.confirmCheckboxInput.check({ force: true });
-        await expect(applyForm.confirmCheckboxInput).toBeChecked();
+    test(
+      qase(
+        436,
+        'Should submit successfully after verifying all cluster members',
+      ),
+      async ({ widgetService, secretPhrase }) => {
+        const applyForm =
+          widgetService.operatorType.dvtApplicationForm.applyForm;
+        const mainAddress = mnemonicToAccount(secretPhrase).address;
+        const discordLink = 'https://discord.com/channels/123/456/789';
+        await applyForm.discordLinkInput.fill(discordLink);
 
-        await expect(applyForm.submitBtn).toBeEnabled();
-        await applyForm.submitBtn.click();
-      });
+        for (const [index, account] of memberAccounts.entries()) {
+          await test.step(`Verify cluster member #${index + 1}`, async () => {
+            const member = applyForm.getClusterMember(index);
 
-      await test.step('Submission succeeds', async () => {
-        const txModal = widgetService.operatorType.txModal;
-        await txModal.modal.waitFor({ state: 'visible' });
-        await expect(txModal.title).toContainText(
-          'Your application has been submitted',
-        );
-        await expect(txModal.description).toContainText(
-          "You can track your application's status on the Operator Type tab.",
-        );
-      });
-    });
+            await member.enterAddress(account.address);
+            await expect(member.addressError).toBeHidden();
+
+            const message = clusterMemberMessage(account.address, mainAddress);
+            const signature = await account.signMessage({ message });
+            await member.signatureInput.fill(signature);
+            await member.verifySignatureBtn.click();
+
+            await expect(member.verifiedChip).toBeVisible();
+          });
+        }
+        await test.step('Submit the application', async () => {
+          await expect(applyForm.clusterProgress).toContainText(
+            '4 / 4 verified',
+          );
+          await expect(applyForm.discordLinkInput).toHaveValue(discordLink);
+
+          await applyForm.confirmCheckboxInput.check({ force: true });
+          await expect(applyForm.confirmCheckboxInput).toBeChecked();
+
+          await expect(applyForm.submitBtn).toBeEnabled();
+          await applyForm.submitBtn.click();
+        });
+
+        await test.step('Submission succeeds', async () => {
+          const txModal = widgetService.operatorType.txModal;
+          await txModal.modal.waitFor({ state: 'visible' });
+          await expect(txModal.title).toContainText(
+            'Your application has been submitted',
+          );
+          await expect(txModal.description).toContainText(
+            "You can track your application's status on the Operator Type tab.",
+          );
+        });
+      },
+    );
   },
 );
