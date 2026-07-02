@@ -7,7 +7,7 @@ import {
   Tooltip,
 } from '@lidofinance/lido-ui';
 import { LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE } from 'consts/external-links';
-import { isModuleCM } from 'consts/module';
+import { isModuleCM, moduleMeta } from 'consts/module';
 import {
   useFrameInfo,
   useLastReportTimestamps,
@@ -202,11 +202,13 @@ export const WhyModal: ModalComponentType = ({ ...props }) => (
       <p>There are main reason of you getting no reward within a frame:</p>
       <ol>
         <li>
-          If your validator’s performance was below the threshold within the CSM
-          Performance Oracle frame the validator does not receive rewards for
-          the given frame. Read more about{' '}
+          If your validator’s performance was below the threshold within the{' '}
+          {moduleMeta.shortName} Performance Oracle frame the validator does not
+          receive rewards for the given frame. Read more about{' '}
+          {/* TODO: temporary CSM Performance Oracle link; replace with a CM
+              operator portal link (LIDO_OPERATOR_PORTAL_CM) once CM has one. */}
           <FaqLink href={LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE}>
-            the CSM Performance Oracle
+            the {moduleMeta.shortName} Performance Oracle
           </FaqLink>
           .
         </li>
