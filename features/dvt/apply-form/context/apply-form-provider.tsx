@@ -5,6 +5,7 @@ import {
   useFlowSubmit,
   useFormDefaultValues,
 } from 'shared/hook-form/form-controller';
+import { useDvtState } from 'features/dvt/shared';
 import { CLUSTER_SIZE } from './consts';
 import type { ClusterMember, DvtApplyFormInputType } from './types';
 import { useApplyFormData } from './apply-data-provider';
@@ -22,7 +23,11 @@ const createEmptyMembers = (): ClusterMember[] =>
 
 export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
   const { mainAddress } = useApplyFormData(true);
-  const { stored, save, clear } = useFormPersist(mainAddress);
+  const { data } = useDvtState();
+  const submittedAt = data
+    ? new Date(data.updatedAt ?? data.createdAt).getTime()
+    : undefined;
+  const { draft, save, clear } = useFormPersist(mainAddress, submittedAt);
   const resolver = useApplyFormValidation();
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -34,7 +39,9 @@ export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
       confirmed: false,
     };
 
-    if (!stored) return emptyDefaults;
+    if (!draft) return emptyDefaults;
+
+    const { savedAt: _savedAt, ...stored } = draft;
 
     return {
       ...emptyDefaults,
