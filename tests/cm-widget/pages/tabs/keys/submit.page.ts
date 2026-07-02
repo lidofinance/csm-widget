@@ -10,13 +10,20 @@ export class SubmitPage {
   formBlock: Locator;
   rawDepositData: Locator;
   confirmKeysReady: Locator;
+  confirmKeysReadyInput: Locator;
   submitKeysButton: Locator;
   amountInput: Locator;
   amountInputText: Locator;
   validationInputError: Locator;
 
+  // Tabs
+  jsonTab: Locator;
+  parsedTab: Locator;
+  parametersTab: Locator;
+
   // Parsed tab
   depositDataRow: Locator;
+  parsedTabCounter: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -26,6 +33,9 @@ export class SubmitPage {
     this.confirmKeysReady = this.formBlock
       .locator('label:has([name="confirmKeysReady"])')
       .locator('svg');
+    this.confirmKeysReadyInput = this.formBlock.locator(
+      '[name="confirmKeysReady"]',
+    );
     this.submitKeysButton = this.formBlock
       .getByRole('button')
       .getByText('Submit keys');
@@ -35,8 +45,16 @@ export class SubmitPage {
       'input-message-error',
     );
 
+    // Tabs
+    this.jsonTab = this.formBlock.getByTestId('tab-button-JSON');
+    this.parsedTab = this.formBlock.getByTestId('tab-button-Parsed');
+    this.parametersTab = this.formBlock.getByTestId('tab-button-Parameters');
+
     // Parsed tab
     this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');
+    this.parsedTabCounter = this.formBlock.getByTestId(
+      'depositDataErrorsCounter',
+    );
   }
 
   async open() {
@@ -47,8 +65,7 @@ export class SubmitPage {
 
   async selectTab(tabName: 'JSON' | 'Parsed' | 'Parameters') {
     return test.step(`Select "${tabName}" tab`, async () => {
-      const tab = this.formBlock.getByRole('button').getByText(tabName);
-      await tab.click();
+      await this.formBlock.getByTestId(`tab-button-${tabName}`).click();
     });
   }
 
@@ -60,6 +77,12 @@ export class SubmitPage {
     await test.step('Fill deposit key data', async () => {
       const value = JSON.stringify(keys);
       await this.rawDepositData.fill(value);
+    });
+  }
+
+  async fillRawKeys(raw: string) {
+    await test.step('Fill raw deposit key data', async () => {
+      await this.rawDepositData.fill(raw);
     });
   }
 

@@ -24,8 +24,11 @@ export const DepositDataHookForm: FC = () => {
   });
   const error = errors.rawDepositData || errors.depositData;
 
-  const a = errors['depositData']?.types;
-  const errorsCount = hasKeys && a ? Object.keys(a).length : 0;
+  const depositDataErrorTypes = errors['depositData']?.types;
+  const errorsCount =
+    hasKeys && depositDataErrorTypes
+      ? Object.keys(depositDataErrorTypes).length
+      : 0;
 
   const hasErrorHighlight = isValidationErrorTypeValidate(error?.type);
   // allows to show error state without message
@@ -44,7 +47,13 @@ export const DepositDataHookForm: FC = () => {
             },
             {
               title: 'Parsed',
-              extra: <Counter count={errorsCount} warning />,
+              extra: (
+                <Counter
+                  count={errorsCount}
+                  warning
+                  data-testid="depositDataErrorsCounter"
+                />
+              ),
               disabled: !hasKeys,
               content: <DepositDataParsed />,
             },
