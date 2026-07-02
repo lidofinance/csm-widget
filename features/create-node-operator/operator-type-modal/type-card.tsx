@@ -12,7 +12,9 @@ export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
   const metadata = OPERATOR_TYPE_METADATA[type.type];
 
   return (
-    <OptionCard>
+    <OptionCard
+      data-testid={`operatorTypeCard-${metadata.short.toLowerCase()}`}
+    >
       <Stack direction="column">
         <CurveBadge type={type.type} inline />
         <Text size="sm" weight={700}>

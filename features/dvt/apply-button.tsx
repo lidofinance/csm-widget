@@ -76,7 +76,12 @@ export const DvtApplyButton: FC<Props> = ({ size }) => {
 
   return (
     <LocalLink href={href} query={query}>
-      <Button fullwidth size={size} variant={variant}>
+      <Button
+        fullwidth
+        size={size}
+        variant={variant}
+        data-testid="dvtApplyButton"
+      >
         {text}
       </Button>
     </LocalLink>

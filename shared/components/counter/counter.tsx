@@ -11,6 +11,11 @@ type CounterProps = {
 export const Counter: FC<CounterProps> = ({ warning, count, type }) =>
   count ? (
     <InverseThemeProvider>
-      <CounterStyle $variant={warning ? 'warning' : type}>{count}</CounterStyle>
+      <CounterStyle
+        $variant={warning ? 'warning' : type}
+        data-testid="navCounter"
+      >
+        {count}
+      </CounterStyle>
     </InverseThemeProvider>
   ) : null;
