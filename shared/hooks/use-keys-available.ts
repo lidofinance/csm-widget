@@ -19,9 +19,11 @@ export type KeysAvailable = Record<TOKENS, AvailableForToken>;
 
 /**
  * How many keys the wallet balances can fund, per token, with the bond amount
- * each option would cost. Informational only — the actual key count comes from
- * the uploaded deposit data. The curve math is reconstructed client-side from
- * `bondConfig` (see `utils/bond-curve`); no extra on-chain reads.
+ * each option would cost. Capped by the per-transaction upload limit and the
+ * curve's `keysLimit` (max non-withdrawn keys). Informational only — the
+ * actual key count comes from the uploaded deposit data. The curve math is
+ * reconstructed client-side from `bondConfig` (see `utils/bond-curve`); no
+ * extra on-chain reads.
  */
 export const useKeysAvailable = ({
   curveId,
@@ -36,7 +38,13 @@ export const useKeysAvailable = ({
 
   return useMemo(() => {
     const intervals = curve?.bondConfig;
-    if (!intervals || intervals.length === 0 || !rates) {
+    const keysLimit = curve?.keysLimit;
+    if (
+      !intervals ||
+      intervals.length === 0 ||
+      keysLimit === undefined ||
+      !rates
+    ) {
       return undefined;
     }
 
@@ -53,6 +61,7 @@ export const useKeysAvailable = ({
       const limited = Math.min(
         fundable,
         nonWithdrawnKeys + KEYS_UPLOAD_TX_LIMIT,
+        keysLimit,
       );
 
       const count = Math.max(limited - nonWithdrawnKeys, 0);
