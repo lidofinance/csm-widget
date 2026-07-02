@@ -1,5 +1,10 @@
 import { ReactNode } from 'react';
-import { BondBalance, FeeSplit, TOKENS } from '@lidofinance/lido-csm-sdk';
+import {
+  BondBalance,
+  FeeSplit,
+  STETH_ROUNDING_THRESHOLD,
+  TOKENS,
+} from '@lidofinance/lido-csm-sdk';
 import { useWatch } from 'react-hook-form';
 import styled, { css } from 'styled-components';
 
@@ -151,7 +156,7 @@ const describe = (
   // Locked/debt absorb rewards into bond too, but the operator does not see
   // "Insufficient bond" in sources-info, so the Claim variants are used and
   // the breakdown panel reflects the actual on-chain effect.
-  const isKeysInsufficient = keysInsufficient > 0n;
+  const isKeysInsufficient = keysInsufficient > STETH_ROUNDING_THRESHOLD;
 
   switch (option) {
     case CLAIM_OPTION.ALL_TO_RA: {
