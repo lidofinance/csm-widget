@@ -1,4 +1,5 @@
 import {
+  STETH_ROUNDING_THRESHOLD,
   type BondBalance,
   type FeeSplit,
   type FrameInfo,
@@ -41,20 +42,27 @@ export type RawBond = {
    * every touch, so debt > 0 only ever coexists with current === 0. */
   debt?: number;
   pendingToSplit?: number;
+  /** Wei shaved off `current` to model a sub-precision forKeys deficit (e.g. 5
+   * → current sits 5 wei below forKeys). The SDK clamps such share-rounding
+   * dust to Excess Bond 0.0; used to check no "compensate" copy leaks through. */
+  deficitWei?: number;
 };
 
-// Mirrors calcBondBalance output semantics: required = forKeys,
-// delta = |current - forKeys|, isInsufficient = current < forKeys.
+// Mirrors calcBondBalance output semantics: required = forKeys, delta =
+// |current - forKeys| clamped to 0 within STETH_ROUNDING_THRESHOLD (share-
+// rounding dust), isInsufficient = current < forKeys beyond that threshold.
 export const makeBond = ({
   current,
   forKeys,
   locked = 0,
   debt = 0,
   pendingToSplit = 0,
+  deficitWei = 0,
 }: RawBond): BondBalance => {
-  const c = eth(current);
+  const c = eth(current) - BigInt(deficitWei);
   const required = eth(forKeys);
-  const delta = c - required;
+  const raw = c - required;
+  const delta = raw < 0n && raw > -STETH_ROUNDING_THRESHOLD ? 0n : raw;
   return {
     required,
     current: c,
