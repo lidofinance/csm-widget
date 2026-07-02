@@ -16,6 +16,7 @@ export { WarningBlock } from './warning-block/warning-block';
 export { NoAccessNotice } from './no-access-notice/no-access-notice';
 export { AmountWithPrice } from './amount-with-price/amount-with-price';
 export { FormBlock } from './form-block/form-block';
+export { Tooltip, type TooltipProps } from './tooltip/tooltip';
 export { IconTooltip } from './icon-tooltip/icon-tooltip';
 export { StepIndicator } from './step-indicator/step-indicator';
 export { KeysAvailable } from './keys-available/keys-available';

@@ -1,5 +1,5 @@
 import { NodeOperatorInviteInfo } from '@lidofinance/lido-csm-sdk';
-import { Tooltip } from '@lidofinance/lido-ui';
+import { Tooltip } from '../tooltip/tooltip';
 import { FC } from 'react';
 import { RoleActionsList } from 'shared/components/role-actions';
 import { ROLES_METADATA } from 'consts';
