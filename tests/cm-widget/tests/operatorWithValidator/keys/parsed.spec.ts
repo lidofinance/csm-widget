@@ -10,6 +10,7 @@ import {
 import { randomBytes } from 'node:crypto';
 import { generateWithdrawalCredentials } from '../../../../shared/helpers/accountData';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { SubmitPage } from 'tests/cm-widget/pages/tabs/keys/submit.page';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
@@ -20,6 +21,17 @@ const omitField = <K extends keyof DepositKey>(
   const { [field]: _removed, ...rest } = obj;
   return rest;
 };
+
+// Unparseable JSON keeps depositData empty, so the Parsed/Parameters tabs and
+// downstream controls must stay locked.
+const expectFormLocked = (submitPage: SubmitPage) =>
+  test.step('Verify Parsed/Parameters tabs and controls are disabled', async () => {
+    await expect(submitPage.parsedTab).toBeDisabled();
+    await expect(submitPage.parametersTab).toBeDisabled();
+    await expect(submitPage.amountInput).toBeDisabled();
+    await expect(submitPage.submitKeysButton).toBeDisabled();
+    await expect(submitPage.confirmKeysReadyInput).toBeDisabled();
+  });
 
 // Omitting any of these required fields makes the SDK parser reject the JSON
 // before per-key validation runs, surfacing a "missing required field" error.
@@ -54,6 +66,13 @@ test.describe(
       await expect(keysPage.submitPage.validationInputError).toContainText(
         'Invalid deposit data',
       );
+
+      await test.step('Verify Parsed tab is available with error counter', async () => {
+        await expect(keysPage.submitPage.parsedTab).toBeEnabled();
+        await expect(keysPage.submitPage.parametersTab).toBeEnabled();
+        await expect(keysPage.submitPage.parsedTabCounter).toHaveText('1');
+      });
+
       await keysPage.submitPage.selectTab('Parsed');
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
@@ -257,6 +276,48 @@ test.describe(
       },
     );
 
+    test('Should count only invalid keys when some keys are valid', async () => {
+      const keys = keysGeneratorService.generateKeys(3);
+      keys[0].amount = 1;
+      keys[2].amount = 1;
+
+      await keysPage.submitPage.fillKeys(keys);
+      await expect(keysPage.submitPage.validationInputError).toContainText(
+        'Invalid deposit data',
+      );
+
+      await test.step('Verify counter reflects only the invalid keys', async () => {
+        await expect(keysPage.submitPage.parsedTab).toBeEnabled();
+        await expect(keysPage.submitPage.parsedTabCounter).toHaveText('2');
+      });
+
+      await keysPage.submitPage.selectTab('Parsed');
+      await expect(keysPage.submitPage.depositDataRow).toHaveCount(3);
+
+      await test.step('Verify per-row error detection', async () => {
+        const rows = keysPage.submitPage.depositDataRow;
+        await expect(
+          rows.nth(0).getByTestId('deposit-data-error-detected'),
+        ).toHaveText('Yes');
+        await expect(
+          rows.nth(1).getByTestId('deposit-data-error-detected'),
+        ).toHaveText('No');
+        await expect(
+          rows.nth(2).getByTestId('deposit-data-error-detected'),
+        ).toHaveText('Yes');
+
+        await expect(
+          rows.nth(0).getByTestId('deposit-data-error'),
+        ).toContainText('amount is not equal to 32 ETH');
+        await expect(
+          rows.nth(1).getByTestId('deposit-data-error'),
+        ).toBeHidden();
+        await expect(
+          rows.nth(2).getByTestId('deposit-data-error'),
+        ).toContainText('amount is not equal to 32 ETH');
+      });
+    });
+
     requiredFields.forEach((propertyName) => {
       test(
         qase(
@@ -276,6 +337,8 @@ test.describe(
           await expect(keysPage.submitPage.validationInputError).toHaveText(
             `Item at index 0 is missing required field: ${propertyName}`,
           );
+
+          await expectFormLocked(keysPage.submitPage);
         },
       );
     });
@@ -299,6 +362,8 @@ test.describe(
           await expect(keysPage.submitPage.validationInputError).toHaveText(
             `Item at index 0 is missing required field: ${propertyName}`,
           );
+
+          await expectFormLocked(keysPage.submitPage);
         },
       );
     });
@@ -320,6 +385,8 @@ test.describe(
           await expect(keysPage.submitPage.validationInputError).toHaveText(
             `Item at index 2 is missing required field: ${propertyName}`,
           );
+
+          await expectFormLocked(keysPage.submitPage);
         },
       );
     });
