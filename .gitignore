@@ -33,9 +33,8 @@ tsconfig.tsbuildinfo
 dev-cm
 
 # env
-.env.local
-.env.production
-.env.development
+.env*
+!.env.example
 
 # debug
 npm-debug.log*

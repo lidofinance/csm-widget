@@ -1,20 +1,21 @@
 import type { DepositData, DepositDataSDK } from '@lidofinance/lido-csm-sdk';
 import { groupBy, mapValues, uniqBy } from 'lodash';
 import { KEYS_UPLOAD_TX_LIMIT } from 'consts/keys';
+import { pluralKeys } from 'utils';
 import { ValidationError } from './validation-error';
 
 type ValidateDepositDataProps = {
   depositData: DepositData[];
   sdk: DepositDataSDK;
   keysLimit?: number;
-  currentActiveKeys?: number;
+  nonWithdrawnKeys?: number;
 };
 
 export const validateDepositData = async ({
   depositData,
   sdk,
   keysLimit,
-  currentActiveKeys,
+  nonWithdrawnKeys,
 }: ValidateDepositDataProps) => {
   if (!depositData?.length) return;
 
@@ -52,13 +53,15 @@ export const validateDepositData = async ({
   if (keysLimit !== undefined) {
     const keysCount = depositData.length;
 
-    if (currentActiveKeys !== undefined) {
-      // Add-keys flow: check total keys after adding
-      if (currentActiveKeys + keysCount > keysLimit) {
-        const availableSlots = Math.max(keysLimit - currentActiveKeys, 0);
+    if (nonWithdrawnKeys !== undefined) {
+      // Add-keys flow: check total non-withdrawn keys after adding
+      if (nonWithdrawnKeys + keysCount > keysLimit) {
+        const availableSlots = Math.max(keysLimit - nonWithdrawnKeys, 0);
         throw new ValidationError(
           'depositData',
-          `Keys limit exceeded. Allowed keys count to submit: ${availableSlots}.`,
+          availableSlots === 0
+            ? `Keys limit of ${keysLimit} non-withdrawn ${pluralKeys({ value: keysLimit })} reached. New keys can't be uploaded.`
+            : `Keys limit of ${keysLimit} non-withdrawn ${pluralKeys({ value: keysLimit })} exceeded. Only ${availableSlots} more ${pluralKeys({ value: availableSlots })} can be uploaded.`,
         );
       }
     } else {
@@ -66,7 +69,7 @@ export const validateDepositData = async ({
       if (keysCount > keysLimit) {
         throw new ValidationError(
           'depositData',
-          `Keys limit exceeded. Allowed keys count to submit: ${keysLimit}.`,
+          `Keys limit exceeded. Up to ${pluralKeys({ value: keysLimit, showValue: true })} can be uploaded.`,
         );
       }
     }

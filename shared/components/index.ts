@@ -19,6 +19,7 @@ export { FormBlock } from './form-block/form-block';
 export { IconTooltip } from './icon-tooltip/icon-tooltip';
 export { StepIndicator } from './step-indicator/step-indicator';
 export { KeysAvailable } from './keys-available/keys-available';
+export { KeysLimitWarning } from './keys-limit-warning/keys-limit-warning';
 export { YouWillReceive } from './you-will-receive/you-will-receive';
 export { InverseThemeProvider } from './inverse-theme-provider/inverse-theme-provider';
 export * from './logos/logos';

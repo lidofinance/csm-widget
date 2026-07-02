@@ -103,7 +103,7 @@ const ALL_PARAMETERS: Parameter[] = [
   },
   {
     title: 'Keys limit',
-    help: 'A maximum number of active keys a Node Operator can have',
+    help: 'A maximum number of non-withdrawn keys a Node Operator can upload',
     render: (parameters) => formatKeysLimit(parameters?.keysLimit),
   },
   {
