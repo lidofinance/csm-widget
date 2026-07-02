@@ -1,4 +1,5 @@
-import { InlineLoader, Tooltip } from '@lidofinance/lido-ui';
+import { InlineLoader } from '@lidofinance/lido-ui';
+import { Tooltip } from 'shared/components';
 import { FC, ReactNode } from 'react';
 import { CountStyled, ItemStyled } from './styles';
 
