@@ -103,7 +103,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   useAlertWatcher({
     component: AlertClaimIdvtc,
     shouldShow:
-      canClaimIDVTC && route !== PATH.TYPE_DVT_CLAIM && route !== PATH.CREATE,
+      canClaimIDVTC && route !== PATH.TYPE_IDVTC_CLAIM && route !== PATH.CREATE,
   });
 
   useAlertWatcher({

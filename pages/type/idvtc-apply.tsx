@@ -1,19 +1,19 @@
 import { PATH } from 'consts';
-import { DvtApplyPage } from 'features/dvt';
+import { IdvtcApplyPage } from 'features/idvtc';
 import { FC } from 'react';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
-const DvtApply: FC = () => {
+const IdvtcApply: FC = () => {
   return (
     <GateLoaded>
       <Gate rule="ICS_APPLY_ENABLED" fallback={<Navigate path={PATH.HOME} />}>
-        <DvtApplyPage />
+        <IdvtcApplyPage />
       </Gate>
     </GateLoaded>
   );
 };
 
-export default DvtApply;
+export default IdvtcApply;
 
 export const getServerSideProps = getProps();

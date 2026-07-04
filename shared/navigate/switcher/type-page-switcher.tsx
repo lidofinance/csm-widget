@@ -17,7 +17,7 @@ const TYPE_ROUTES: SwitcherRoutes = [
   },
   {
     title: 'Claim IDVTC',
-    path: PATH.TYPE_DVT_CLAIM,
+    path: PATH.TYPE_IDVTC_CLAIM,
     showRules: ['CAN_CLAIM_IDVTC'],
     suffix: <CounterClaimType type={OPERATOR_TYPE.CSM_IDVTC} />,
   },

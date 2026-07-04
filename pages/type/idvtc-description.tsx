@@ -1,4 +1,4 @@
-import { DvtDescriptionPage } from 'features/dvt';
+import { IdvtcDescriptionPage } from 'features/idvtc';
 import { FC } from 'react';
 import { GateLoaded } from 'shared/navigate';
 import { getProps } from 'utilsApi';
@@ -6,7 +6,7 @@ import { getProps } from 'utilsApi';
 const Page: FC = () => {
   return (
     <GateLoaded>
-      <DvtDescriptionPage />
+      <IdvtcDescriptionPage />
     </GateLoaded>
   );
 };
