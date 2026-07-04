@@ -38,7 +38,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   partnerEthdocker = 'partnerEthdocker',
   starterPackCSMLink = 'starterPackCSMLink',
   starterPackBondLink = 'starterPackBondLink',
-  starterPackHadwareLink = 'starterPackHadwareLink',
+  starterPackHardwareLink = 'starterPackHardwareLink',
   starterPackSetupValidatorLink = 'starterPackSetupValidatorLink',
   starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
   operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
@@ -50,7 +50,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   depositDataLearnMore = 'depositDataLearnMore',
   howToClaimEth = 'howToClaimEth',
   customAddressDescription = 'customAddressDescription',
-  managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
+  managerAddressPermissionTypeDescription = 'managerAddressPermissionTypeDescription',
   createSuccessKeysTab = 'createSuccessKeysTab',
   createSuccessBeaconchainDashboard = 'createSuccessBeaconchainDashboard',
   createSuccessBeaconchain = 'createSuccessBeaconchain',
@@ -130,7 +130,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Exit Keys
   exitKeysDappnodeLink = 'exitKeysDappnodeLink',
   exitKeysSedgeLink = 'exitKeysSedgeLink',
-  exitKeysSteureumLink = 'exitKeysSteureumLink',
+  exitKeysStereumLink = 'exitKeysStereumLink',
   exitKeysEthpillarLink = 'exitKeysEthpillarLink',
   exitKeysEthdockerLink = 'exitKeysEthdockerLink',
   exitKeysSystemdLink = 'exitKeysSystemdLink',
@@ -171,7 +171,7 @@ export const MATOMO_CLICK_EVENTS: Record<
     'connect_wallet',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.disconnectWallet]: createEvent(
-    'Push «Disonnect» button',
+    'Push «Disconnect» button',
     'disconnect_wallet',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.clickShowMoreWallets]: createEvent(
@@ -191,7 +191,7 @@ export const MATOMO_CLICK_EVENTS: Record<
     'connect_wallet_to_become_no',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink]: createEvent(
-    'Click on Deailed description about Module link',
+    'Click on Detailed description about Module link',
     'welcome_module_detailed_link',
   ),
   // Starter Pack
@@ -209,7 +209,7 @@ export const MATOMO_CLICK_EVENTS: Record<
   ),
   [MATOMO_CLICK_EVENTS_TYPES.partnerStereum]: createEvent(
     'Click partner «Stereum» link on StarterPack screen',
-    'starterpack_partner_stereu_link',
+    'starterpack_partner_stereum_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.partnerEthdocker]: createEvent(
     'Click partner «Eth Docker» link on StarterPack screen',
@@ -220,10 +220,10 @@ export const MATOMO_CLICK_EVENTS: Record<
     'starterpack_csm_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.starterPackBondLink]: createEvent(
-    'Click «Lear about Bond» link on StarterPack screen',
+    'Click «Learn about Bond» link on StarterPack screen',
     'starterpack_bond_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackHadwareLink]: createEvent(
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackHardwareLink]: createEvent(
     'Click «Run hardware» link on StarterPack screen',
     'starterpack_hardware_link',
   ),
@@ -258,7 +258,7 @@ export const MATOMO_CLICK_EVENTS: Record<
   // Forms
   [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: createEvent(
     'Click «Upload Deposit Data learn more» link on Upload form',
-    'deposti_data_learn_more_link',
+    'deposit_data_learn_more_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.howToClaimEth]: createEvent(
     'Click «Follow FAQ (ETH)» link on Claim form',
@@ -266,9 +266,9 @@ export const MATOMO_CLICK_EVENTS: Record<
   ),
   [MATOMO_CLICK_EVENTS_TYPES.customAddressDescription]: createEvent(
     'Click «Detailed description of custom addresses» link on Create NO form',
-    'cusstom_address_description_link',
+    'custom_address_description_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription]:
+  [MATOMO_CLICK_EVENTS_TYPES.managerAddressPermissionTypeDescription]:
     createEvent(
       'Click «Detailed description of manager permission type» link on Create NO form',
       'manager_address_permission_type_link',
@@ -278,7 +278,7 @@ export const MATOMO_CLICK_EVENTS: Record<
     'create_success_keys_tab_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard]: createEvent(
-    'Click «beaconcha.in bashboard» link after Create NO',
+    'Click «beaconcha.in dashboard» link after Create NO',
     'create_success_beaconchain_dashboard_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain]: createEvent(
@@ -347,7 +347,7 @@ export const MATOMO_CLICK_EVENTS: Record<
   // Alerts
   [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: createEvent(
     'Click «How to exit» link on Request To Exit alert',
-    'how_to_exit_link_requset_to_exit_alert',
+    'how_to_exit_link_request_to_exit_alert',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: createEvent(
     'Click «Normalize queue» link on Normalize Queue alert',
@@ -557,7 +557,7 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Sedge» exit guide link',
     'exit_keys_sedge_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.exitKeysSteureumLink]: createEvent(
+  [MATOMO_CLICK_EVENTS_TYPES.exitKeysStereumLink]: createEvent(
     'Click «Stereum» exit guide link',
     'exit_keys_stereum_link',
   ),

@@ -14,7 +14,7 @@ export const RolesPage: FC = () => {
     <Layout
       title="Settings"
       subtitle="Manage your operator"
-      pageName="Settings"
+      pageName="SettingsRoles"
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>
