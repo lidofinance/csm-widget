@@ -1,6 +1,7 @@
 import {
   useFormValidation,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
 import { compareLowercase } from 'utils';
 import { isAddress } from 'viem';
@@ -14,7 +15,10 @@ export const useClaimerValidation = () => {
 
       await validate('address', () => {
         if (!isAddress(address ?? '')) {
-          throw new ValidationError('address', 'Specify a valid address');
+          throw new ValidationError(
+            'address',
+            VALIDATION_MESSAGES.specifyValidAddress,
+          );
         }
       });
 
@@ -22,7 +26,7 @@ export const useClaimerValidation = () => {
         if (compareLowercase(address, currentClaimerAddress)) {
           throw new ValidationError(
             'address',
-            'Should not be same as current claimer',
+            VALIDATION_MESSAGES.notSameAsCurrentClaimer,
           );
         }
       });

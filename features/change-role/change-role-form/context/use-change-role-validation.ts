@@ -2,6 +2,7 @@ import { ROLES } from '@lidofinance/lido-csm-sdk';
 import {
   useFormValidation,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
 import { useChangeRoleMode } from 'shared/hooks';
 import { compareLowercase } from 'utils';
@@ -25,7 +26,10 @@ export const useChangeRoleValidation = (role: ROLES) => {
 
       await validate('address', () => {
         if (isSubmit && !isAddress(address ?? '')) {
-          throw new ValidationError('address', 'Specify a valid address');
+          throw new ValidationError(
+            'address',
+            VALIDATION_MESSAGES.specifyValidAddress,
+          );
         }
       });
 
@@ -37,7 +41,7 @@ export const useChangeRoleValidation = (role: ROLES) => {
         ) {
           throw new ValidationError(
             'address',
-            'Should not be same as current address',
+            VALIDATION_MESSAGES.notSameAsCurrentAddress,
           );
         }
       });
@@ -50,7 +54,7 @@ export const useChangeRoleValidation = (role: ROLES) => {
         ) {
           throw new ValidationError(
             'address',
-            'Should not be same as proposed address',
+            VALIDATION_MESSAGES.notSameAsProposedAddress,
           );
         }
       });

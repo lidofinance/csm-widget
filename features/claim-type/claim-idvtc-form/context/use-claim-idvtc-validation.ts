@@ -1,6 +1,7 @@
 import {
   useFormValidation,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
 import type {
   ClaimIdvtcFormInputType,
@@ -13,7 +14,10 @@ export const useClaimIdvtcValidation = () => {
     async (_, { canClaimCurve, proof, idvtcPaused }, validate) => {
       await validate('curveId', () => {
         if (!proof.proof) {
-          throw new ValidationError('curveId', 'proof is not provided');
+          throw new ValidationError(
+            'curveId',
+            VALIDATION_MESSAGES.proofNotProvided,
+          );
         }
       });
 
@@ -21,17 +25,20 @@ export const useClaimIdvtcValidation = () => {
         if (proof.isConsumed) {
           throw new ValidationError(
             'curveId',
-            'claim has already been consumed',
+            VALIDATION_MESSAGES.claimAlreadyConsumed,
           );
         }
       });
 
       await validate('curveId', () => {
         if (idvtcPaused) {
-          throw new ValidationError('curveId', 'IDVTC is paused');
+          throw new ValidationError('curveId', VALIDATION_MESSAGES.idvtcPaused);
         }
         if (!canClaimCurve) {
-          throw new ValidationError('curveId', 'only owner can claim type');
+          throw new ValidationError(
+            'curveId',
+            VALIDATION_MESSAGES.onlyOwnerCanClaimType,
+          );
         }
       });
     },

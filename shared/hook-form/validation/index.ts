@@ -1,3 +1,4 @@
+export * from './messages';
 export * from './types';
 export * from './use-form-validation';
 export * from './validate-address';

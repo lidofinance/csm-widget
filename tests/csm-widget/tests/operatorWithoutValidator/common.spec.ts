@@ -85,7 +85,7 @@ test.describe('Operator without keys. Common suite.', async () => {
       await createKeysPage.createNodeOperatorForm.fillKeys(overTheLimitKeys);
       await expect(
         createKeysPage.createNodeOperatorForm.validationInputError,
-      ).toContainText('Too many keys in one transaction. Maximum allowed: 25');
+      ).toContainText('Too many keys in one transaction, maximum allowed: 25');
     },
   );
 });

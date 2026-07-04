@@ -46,7 +46,7 @@ test.describe('Operator with keys. Common suite.', async () => {
       const overTheLimitKeys = keysGeneratorService.generateKeys(26);
       await keysPage.submitPage.fillKeys(overTheLimitKeys);
       await expect(keysPage.submitPage.validationInputError).toContainText(
-        'Too many keys in one transaction. Maximum allowed: 25',
+        'Too many keys in one transaction, maximum allowed: 25',
       );
     },
   );
