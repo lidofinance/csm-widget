@@ -5,7 +5,8 @@ import {
   TxStagePermit,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { ErrorCode, extractErrorMessage, getErrorCode } from 'utils';
+import { getFailedStage } from 'shared/transaction-modal/hooks';
+import { ErrorCode } from 'utils';
 
 const getModalStages = (transitStage: TransactionModalTransitStage) => ({
   sign: () => transitStage(<TxStagePermit />),
@@ -18,14 +19,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
       />,
     ),
 
-  failed: (error: unknown) =>
-    transitStage(
-      <TxStageFail
-        title="Sign in failed"
-        error={extractErrorMessage(error)}
-        code={getErrorCode(error)}
-      />,
-    ),
+  failed: getFailedStage(transitStage, 'Sign in failed'),
 
   rejected: () =>
     transitStage(
