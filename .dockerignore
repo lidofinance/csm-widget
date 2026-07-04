@@ -8,9 +8,6 @@
 # testing
 /coverage
 
-# generated
-/generated
-
 # next.js
 /.next/
 /out/

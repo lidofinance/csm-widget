@@ -1,13 +1,20 @@
 import {
-  endpoints,
+  callSurvey,
   OperatorKey,
+  surveyRequest,
   surveysKeys,
   useOperatorKey,
-  useSurveysMutation,
-  useSurveysQuery,
+  useSurveyMutation,
+  useSurveyQuery,
 } from 'modules/surveys-sdk';
+import {
+  delegatesAdd,
+  delegatesList,
+  delegatesRemove,
+} from 'modules/surveys-sdk/generated';
 import { useCallback, useMemo } from 'react';
 import invariant from 'tiny-invariant';
+import type { AddDelegateDto } from 'modules/surveys-sdk/generated';
 import { Delegate, DelegatesResponse, MAX_DELEGATES } from '../types';
 
 export const useDelegates = () => {
@@ -32,26 +39,42 @@ export const useDelegates = () => {
     [operatorKey, queryKey],
   );
 
-  const query = useSurveysQuery<DelegatesResponse>(
-    operatorKey ? endpoints.delegates(operatorKey) : '',
-    {
-      queryKey,
-      enabled: operatorKey !== undefined,
-    },
+  const query = useSurveyQuery<DelegatesResponse>(
+    queryKey,
+    ({ token, signal }) =>
+      callSurvey(() =>
+        delegatesList({
+          ...surveyRequest(token, signal),
+          path: { nodeOperatorId: requireKey() },
+        }),
+      ),
+    { enabled: operatorKey !== undefined },
   );
 
-  const addMutation = useSurveysMutation<Delegate, Delegate>(
-    () => endpoints.delegates(requireKey()),
+  const addMutation = useSurveyMutation<Delegate, AddDelegateDto>(
+    (body, { token }) =>
+      callSurvey(() =>
+        delegatesAdd({
+          ...surveyRequest(token),
+          path: { nodeOperatorId: requireKey() },
+          body,
+        }),
+      ),
     {
       mutationKey: ['surveys-delegates-add', operatorKey],
       invalidate,
     },
   );
 
-  const removeMutation = useSurveysMutation<unknown, string>(
-    (address) => endpoints.delegate(requireKey(), address),
+  const removeMutation = useSurveyMutation<unknown, string>(
+    (address, { token }) =>
+      callSurvey(() =>
+        delegatesRemove({
+          ...surveyRequest(token),
+          path: { nodeOperatorId: requireKey(), address },
+        }),
+      ),
     {
-      method: 'DELETE',
       mutationKey: ['surveys-delegates-remove', operatorKey],
       invalidate,
     },

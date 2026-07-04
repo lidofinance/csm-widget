@@ -8,12 +8,19 @@ const DEFAULT_PARAMS = {
   },
 };
 
-export const extractError = async (response: Response) => {
+// Parse the error body once: return both a display message and the raw body so
+// the FetcherError can carry the full ApiError envelope downstream.
+const readError = async (
+  response: Response,
+): Promise<{ message: string; body: unknown }> => {
   try {
-    const error = await response.json();
-    return extractErrorMessage(error) ?? 'An error occurred';
-  } catch (error) {
-    return 'An error occurred while fetching the data';
+    const body = await response.json();
+    return { message: extractErrorMessage(body) ?? 'An error occurred', body };
+  } catch {
+    return {
+      message: 'An error occurred while fetching the data',
+      body: undefined,
+    };
   }
 };
 
@@ -29,7 +36,8 @@ export const standardFetcher: StandardFetcher = async (url, params) => {
   });
 
   if (!response.ok) {
-    throw new FetcherError(await extractError(response), response.status);
+    const { message, body } = await readError(response);
+    throw new FetcherError(message, response.status, body);
   }
 
   if (

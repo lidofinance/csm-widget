@@ -20,7 +20,9 @@
     "test:cm:e2e": "playwright test --config=./tests/cm-widget/playwright.config.ts",
     "test:csm:e2e": "playwright test --config=./tests/csm-widget/playwright.config.ts",
     "test:csm:ui": "playwright test --ui --config=./tests/csm-widget/playwright.config.ts",
-    "test:cm:ui": "playwright test --ui --config=./tests/cm-widget/playwright.config.ts"
+    "test:cm:ui": "playwright test --ui --config=./tests/cm-widget/playwright.config.ts",
+    "survey:codegen": "openapi-ts",
+    "survey:openapi:pull": "node scripts/pull-survey-openapi.mjs"
   },
   "dependencies": {
     "@base-org/account": "^2.5.1",
@@ -81,6 +83,7 @@
     "@commitlint/cli": "^21",
     "@commitlint/config-conventional": "^21",
     "@commitlint/prompt": "^21",
+    "@hey-api/openapi-ts": "0.98.2",
     "@lidofinance/browser-service": "1.11.2",
     "@lidofinance/chat-reporter": "1.9.0",
     "@lidofinance/eslint-config": "^0.59.0",

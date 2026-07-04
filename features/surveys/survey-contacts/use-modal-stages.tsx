@@ -1,11 +1,10 @@
 import {
   TransactionModalTransitStage,
-  TxStageFail,
   TxStagePending,
   TxStageSuccess,
   useTransactionModalStage,
 } from 'shared/transaction-modal';
-import { extractErrorMessage, getErrorCode } from 'utils';
+import { getFailedStage } from 'shared/transaction-modal/hooks';
 
 const getModalStages = (transitStage: TransactionModalTransitStage) => ({
   pending: () =>
@@ -36,14 +35,7 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
       <TxStageSuccess title="Contact info deleted" description="" />,
     ),
 
-  failed: (error: unknown) =>
-    transitStage(
-      <TxStageFail
-        title="Sign in failed"
-        error={extractErrorMessage(error)}
-        code={getErrorCode(error)}
-      />,
-    ),
+  failed: getFailedStage(transitStage, 'Submission failed'),
 });
 
 export const useModalStages = () => useTransactionModalStage(getModalStages);

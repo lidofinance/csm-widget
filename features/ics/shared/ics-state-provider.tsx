@@ -5,7 +5,12 @@ import {
   useOperatorOwner,
   useOperatorType,
 } from 'modules/web3';
-import { endpoints, useSurveysQuery } from 'modules/surveys-sdk';
+import {
+  callSurvey,
+  surveyRequest,
+  useSurveyStatus,
+} from 'modules/surveys-sdk';
+import { icsGetStatus } from 'modules/surveys-sdk/generated';
 import {
   createContext,
   FC,
@@ -47,8 +52,10 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data: ownerProofData, isPending: isOwnerTypePending } = useIcsProof(
     owner?.address,
   );
-  const { data, isPending } = useSurveysQuery<IcsResponseDto>(
-    endpoints.icsStatus,
+  const { data, isPending } = useSurveyStatus<IcsResponseDto>(
+    'ics/status',
+    ({ token, signal }) =>
+      callSurvey(() => icsGetStatus(surveyRequest(token, signal))),
   );
 
   const [manualReset, setManualReset] = useState(false);

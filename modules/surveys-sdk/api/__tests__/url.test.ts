@@ -1,4 +1,4 @@
-import { appendQuery, joinUrl, operatorKey, parseOperatorKey } from '../url';
+import { operatorKey, parseOperatorKey } from '../url';
 
 // Inline MODULE_NAME values to avoid pulling the full csm-sdk into the jest
 // environment (which transitively resolves lido-ethereum-sdk ipfs deps).
@@ -43,49 +43,5 @@ describe('parseOperatorKey', () => {
 
   it('rejects unknown module', () => {
     expect(parseOperatorKey('xyz-1')).toBeNull();
-  });
-});
-
-describe('joinUrl', () => {
-  it('joins base and path with single slash', () => {
-    expect(joinUrl('https://api.example.com', 'foo')).toBe(
-      'https://api.example.com/foo',
-    );
-  });
-
-  it('strips trailing slash from base', () => {
-    expect(joinUrl('https://api.example.com/', 'foo')).toBe(
-      'https://api.example.com/foo',
-    );
-  });
-
-  it('strips leading slash from path', () => {
-    expect(joinUrl('https://api.example.com', '/foo')).toBe(
-      'https://api.example.com/foo',
-    );
-  });
-
-  it('strips both leading and trailing slashes', () => {
-    expect(joinUrl('https://api.example.com/', '/foo/bar')).toBe(
-      'https://api.example.com/foo/bar',
-    );
-  });
-});
-
-describe('appendQuery', () => {
-  it('returns url unchanged when no query', () => {
-    expect(appendQuery('https://x.test/a')).toBe('https://x.test/a');
-  });
-
-  it('appends single param', () => {
-    expect(appendQuery('https://x.test/a', { k: 'v' })).toBe(
-      'https://x.test/a?k=v',
-    );
-  });
-
-  it('skips undefined values', () => {
-    expect(appendQuery('https://x.test/a', { a: '1', b: undefined })).toBe(
-      'https://x.test/a?a=1',
-    );
   });
 });
