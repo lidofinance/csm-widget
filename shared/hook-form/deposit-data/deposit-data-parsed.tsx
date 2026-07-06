@@ -19,14 +19,15 @@ import { DepositDataInputType } from './use-parse-deposit-data';
 export const DepositDataParsed: FC = () => {
   const { depositData: sdk } = useSmSDK();
 
-  const {
-    setValue,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useFormContext<DepositDataInputType>();
+  const { setValue, setError, clearErrors } =
+    useFormContext<DepositDataInputType>();
 
-  const { isValidating, isSubmitting } = useFormState();
+  // Subscribe to errors here — reading them off useFormContext() is not
+  // reactive in a child, leaving the row stale after async validation.
+  const { errors, isValidating, isSubmitting } =
+    useFormState<DepositDataInputType>({
+      name: ['depositData', 'rawDepositData'],
+    });
 
   const depositDataErrors = errors.depositData?.types;
 
