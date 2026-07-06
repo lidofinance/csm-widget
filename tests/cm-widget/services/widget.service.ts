@@ -20,6 +20,7 @@ import { GroupPage } from '../pages/group.page';
 import { ElementController } from '../pages/elements/controller';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
 import { NavBlockElement } from '../../shared/pages/elements';
+import { FooterElement } from '../pages/elements/common/element.footer';
 
 type FeatureFlagName = keyof FeatureFlagsType;
 
@@ -35,6 +36,7 @@ export class WidgetService {
 
   // common elements
   public navBlockElement: NavBlockElement;
+  public footerElement: FooterElement;
 
   constructor(
     public page: Page,
@@ -51,6 +53,7 @@ export class WidgetService {
 
     // common elements
     this.navBlockElement = new NavBlockElement(this.page);
+    this.footerElement = new FooterElement(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {
