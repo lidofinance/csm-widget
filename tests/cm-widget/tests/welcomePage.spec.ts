@@ -3,8 +3,15 @@ import { test } from './test.fixture';
 import { PAGE_WAIT_TIMEOUT } from '../../shared/consts/timeouts';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.describe('Welcome page without connected wallet', () => {
+  let matomoEventService: MatomoService;
+
+  test.beforeEach(async ({ page, widgetConfig }) => {
+    matomoEventService = new MatomoService(page, widgetConfig);
+  });
+
   test(
     qase(1, 'Should open connect modal after click to "Connect wallet"'),
     async ({ page }) => {
@@ -18,8 +25,11 @@ test.describe('Welcome page without connected wallet', () => {
         ).toContainText('Connect wallet');
       });
 
-      await test.step('Click "Connect wallet" and check modal appears', async () => {
-        await homePage.welcomeSection.connectWallet.click();
+      await test.step('Click "Connect wallet", check Matomo event and modal', async () => {
+        await Promise.all([
+          matomoEventService.waitForEvent('e_n', 'cm_widget_connect_wallet'),
+          homePage.welcomeSection.connectWallet.click(),
+        ]);
         await expect(
           homePage.connectWalletModal.modal,
           'Connect wallet modal should be visible after click',
@@ -92,9 +102,13 @@ test.describe('Welcome page without connected wallet', () => {
       const homePage = new WelcomePage(page);
       await homePage.goto();
 
-      await test.step('Click "the link" in description and check new tab URL', async () => {
+      await test.step('Click "the link", check Matomo event and new tab URL', async () => {
         const [detailedPage] = await Promise.all([
           homePage.waitForPage(PAGE_WAIT_TIMEOUT),
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_welcome_module_detailed_link',
+          ),
           homePage.welcomeSection.detailedLink.click(),
         ]);
 
