@@ -1,5 +1,4 @@
 import { Divider, Text } from '@lidofinance/lido-ui';
-import { getCurveMetadata } from 'consts/operator-type-metadata';
 import { useCurveParameters } from 'modules/web3/';
 import { type ComponentPropsWithoutRef, type FC, type ReactNode } from 'react';
 import { useWatch } from 'react-hook-form';
@@ -8,6 +7,7 @@ import {
   formatEthKeyIntervals,
   formatPercentKeyIntervals,
 } from 'shared/components/parameters-list/format';
+import { useCurveMetadata } from 'shared/hooks';
 import styled from 'styled-components';
 import type { CuratedOperatorFormInputType } from '../context/';
 import { useCuratedOperatorFormData } from '../context/';
@@ -43,13 +43,12 @@ export const VerificationSummary: FC = () => {
   );
 
   const { data: parameters } = useCurveParameters(selectedGate?.curveId);
+  const metadata = useCurveMetadata(selectedGate?.curveId);
 
   return (
     <ListStyle>
       <SummaryRow label="Node Operator type:" data-testid="summaryOperatorType">
-        <Text size="xs">
-          {getCurveMetadata(selectedGate?.curveId)?.name ?? '—'}
-        </Text>
+        <Text size="xs">{metadata?.name ?? '—'}</Text>
       </SummaryRow>
       <SummaryRow label="Name:" data-testid="summaryName">
         <Text size="xs">{name}</Text>

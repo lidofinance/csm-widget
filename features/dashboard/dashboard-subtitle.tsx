@@ -1,10 +1,10 @@
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import { isModuleCM } from 'consts/module';
-import { getCurveMetadata } from 'consts/operator-type-metadata';
 import { useNodeOperator, useOperatorGroup } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components/stack/stack';
+import { useCurveMetadata } from 'shared/hooks';
 import { DescriptorId, formatGroupTitle } from 'shared/node-operator';
 import styled from 'styled-components';
 import { TextLocalLink } from 'shared/navigate';
@@ -22,6 +22,7 @@ const CmSubtitle: FC = () => {
     nodeOperator: { nodeOperatorId, curveId },
   } = useNodeOperator<true>();
   const { data: group } = useOperatorGroup(nodeOperatorId);
+  const metadata = useCurveMetadata(curveId);
 
   return (
     <Stack center gap="ms" selfJustify="center">
@@ -29,7 +30,7 @@ const CmSubtitle: FC = () => {
         <DescriptorId id={nodeOperatorId} flat />
       </Text>
       <DividerStyle />
-      <Text size="xxs">{getCurveMetadata(curveId).name}</Text>
+      <Text size="xxs">{metadata?.name}</Text>
       {group ? (
         <>
           <DividerStyle />

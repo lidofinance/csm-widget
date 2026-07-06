@@ -3,7 +3,7 @@ import {
   ROLES,
   getNodeOperatorRoles,
 } from '@lidofinance/lido-csm-sdk';
-import { getCurveMetadata } from 'consts';
+import { useCurveMetadataGetter } from 'shared/hooks';
 import {
   TxStagePending,
   TxStageSign,
@@ -18,8 +18,10 @@ import {
 import { CuratedOperatorCustomAddressActions } from '../custom-address-actions';
 import { CuratedOperatorSuccessActions } from '../success-actions';
 
-export const useTxModalStagesCuratedOperator = () =>
-  useTxStages<
+export const useTxModalStagesCuratedOperator = () => {
+  const getCurveMetadata = useCurveMetadataGetter();
+
+  return useTxStages<
     CuratedOperatorFormInputType,
     CuratedOperatorFormNetworkData,
     NodeOperatorShortInfo
@@ -27,7 +29,7 @@ export const useTxModalStagesCuratedOperator = () =>
     const selectedGate = data.availableGates.find(
       (gate) => gate.gateName === input.gateName,
     );
-    const curveId = selectedGate?.curveId ?? 0n;
+    const metadata = getCurveMetadata(selectedGate?.curveId);
 
     return {
       sign: () =>
@@ -36,7 +38,7 @@ export const useTxModalStagesCuratedOperator = () =>
             title="Creating Curated Node Operator"
             description={
               <>
-                Creating operator for <b>{getCurveMetadata(curveId).name}</b>
+                Creating operator for <b>{metadata?.name}</b>
               </>
             }
           />,
@@ -48,7 +50,7 @@ export const useTxModalStagesCuratedOperator = () =>
             title="Creating Curated Node Operator"
             description={
               <>
-                Creating operator for <b>{getCurveMetadata(curveId).name}</b>
+                Creating operator for <b>{metadata?.name}</b>
               </>
             }
           />,
@@ -87,6 +89,7 @@ export const useTxModalStagesCuratedOperator = () =>
       },
     };
   });
+};
 
 const WrapperSpan = styled.span`
   display: block;

@@ -1,5 +1,5 @@
 import { Modal } from '@lidofinance/lido-ui';
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { DisplayOperatorType } from 'consts';
 import { ComponentProps } from 'react';
 import styled from 'styled-components';
 import { CURVE_VARIANTS } from '../curve-badge/styles';
@@ -7,7 +7,7 @@ import { CURVE_VARIANTS } from '../curve-badge/styles';
 export const StyledModal = styled((props: ComponentProps<typeof Modal>) => (
   <Modal {...props} />
 ))<{
-  $variant?: OPERATOR_TYPE;
+  $variant?: DisplayOperatorType;
 }>`
   > div {
     width: 544px;

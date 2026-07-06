@@ -1,13 +1,12 @@
 import {
   CurveParameters,
   OPERATOR_TYPE,
-  getCurveIdByOperatorType,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { useCurveParameters } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { FormatToken } from 'shared/formatters';
-import { useCurrentCurveId } from 'shared/hooks';
+import { useCurrentCurveId, useOperatorTypeCurveId } from 'shared/hooks';
 import { ShortInlineLoader } from './styles';
 
 type Props = {
@@ -17,7 +16,8 @@ type Props = {
 
 export const FaqBondAmount: FC<Props> = ({ type, second }) => {
   const _curveId = useCurrentCurveId();
-  const curveId = type ? getCurveIdByOperatorType(type) : _curveId;
+  const typeCurveId = useOperatorTypeCurveId(type);
+  const curveId = type ? typeCurveId : _curveId;
 
   const select = useCallback(
     ({ bondConfig }: CurveParameters) => {

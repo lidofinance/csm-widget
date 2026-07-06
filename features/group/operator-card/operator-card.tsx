@@ -4,7 +4,6 @@ import {
   SubOperatorStakeSummary,
 } from '@lidofinance/lido-csm-sdk';
 import { Block, InlineLoader, Text } from '@lidofinance/lido-ui';
-import { getCurveMetadata } from 'consts/operator-type-metadata';
 import {
   useOperatorCurveId,
   useOperatorInfo,
@@ -12,6 +11,7 @@ import {
 } from 'modules/web3';
 import { FC, useMemo } from 'react';
 import { Address, Stack } from 'shared/components';
+import { useCurveMetadata } from 'shared/hooks';
 import { DescriptorId } from 'shared/node-operator';
 import { computeStakeData, StakeAndKeysData } from 'utils';
 import { KeyLimit, MoreKeysChip, StakeStats } from '../shared';
@@ -42,7 +42,7 @@ export const OperatorCard: FC<SubOperatorStakeSummary> = ({
             nodeOperatorId,
             ...props,
             stakeAndKeys,
-            metadata,
+            operatorMetadata: metadata,
             info,
             curveId,
           }}
@@ -61,57 +61,76 @@ export const OperatorCard: FC<SubOperatorStakeSummary> = ({
 
 const OperatorCardHeader: FC<
   SubOperatorStakeSummary & {
-    metadata?: OperatorMetadata;
+    operatorMetadata?: OperatorMetadata;
     info?: NodeOperatorInfo;
     curveId: bigint | undefined;
     stakeAndKeys: StakeAndKeysData | undefined;
   }
-> = ({ nodeOperatorId, weight, metadata, info, curveId, stakeAndKeys }) => (
-  <Stack direction="column" gap="xs">
-    <Stack center spaceBetween>
-      <Stack center>
-        <Text as="h4" size="sm" weight={700}>
-          <DescriptorId id={nodeOperatorId} />
-        </Text>
-        <WeightChip weight={weight} data-testid="operatorWeight" />
+> = ({
+  nodeOperatorId,
+  weight,
+  operatorMetadata,
+  info,
+  curveId,
+  stakeAndKeys,
+}) => {
+  const curveMetadata = useCurveMetadata(curveId);
+
+  return (
+    <Stack direction="column" gap="xs">
+      <Stack center spaceBetween>
+        <Stack center>
+          <Text as="h4" size="sm" weight={700}>
+            <DescriptorId id={nodeOperatorId} />
+          </Text>
+          <WeightChip weight={weight} data-testid="operatorWeight" />
+        </Stack>
+
+        {info && (
+          <MoreKeysChip
+            more={!!stakeAndKeys?.potentialAdditionalKeys}
+            empty={!info?.totalAddedKeys}
+          />
+        )}
       </Stack>
 
-      {info && (
-        <MoreKeysChip
-          more={!!stakeAndKeys?.potentialAdditionalKeys}
-          empty={!info?.totalAddedKeys}
-        />
+      {operatorMetadata && info && curveId !== undefined ? (
+        <Stack center gap="sm">
+          <Text size="xs" data-testid="operatorMetadataName">
+            {operatorMetadata.name}
+          </Text>
+          <DividerStyled />
+          <Text size="xs" data-testid="operatorCurveName">
+            {curveMetadata?.name}
+          </Text>
+        </Stack>
+      ) : (
+        <InlineLoader />
+      )}
+
+      {info ? (
+        <Stack center gap="sm">
+          <Text
+            size="xxs"
+            color="secondary"
+            data-testid="operatorRewardsAddress"
+          >
+            Rewards:{' '}
+            <Address address={info.rewardsAddress} symbols={4} size="xxs" />
+          </Text>
+          <DividerStyled />
+          <Text
+            size="xxs"
+            color="secondary"
+            data-testid="operatorManagerAddress"
+          >
+            Manager:{' '}
+            <Address address={info.managerAddress} symbols={4} size="xxs" />
+          </Text>
+        </Stack>
+      ) : (
+        <InlineLoader />
       )}
     </Stack>
-
-    {metadata && info && curveId !== undefined ? (
-      <Stack center gap="sm">
-        <Text size="xs" data-testid="operatorMetadataName">
-          {metadata.name}
-        </Text>
-        <DividerStyled />
-        <Text size="xs" data-testid="operatorCurveName">
-          {getCurveMetadata(curveId).name}
-        </Text>
-      </Stack>
-    ) : (
-      <InlineLoader />
-    )}
-
-    {info ? (
-      <Stack center gap="sm">
-        <Text size="xxs" color="secondary" data-testid="operatorRewardsAddress">
-          Rewards:{' '}
-          <Address address={info.rewardsAddress} symbols={4} size="xxs" />
-        </Text>
-        <DividerStyled />
-        <Text size="xxs" color="secondary" data-testid="operatorManagerAddress">
-          Manager:{' '}
-          <Address address={info.managerAddress} symbols={4} size="xxs" />
-        </Text>
-      </Stack>
-    ) : (
-      <InlineLoader />
-    )}
-  </Stack>
-);
+  );
+};

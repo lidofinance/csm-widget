@@ -14,7 +14,11 @@ export class GateCard {
     public form: Locator,
     public shortName: string,
   ) {
-    this.input = this.form.getByTestId(`gateCard${this.shortName}`);
+    // Keep in sync with gate-card.tsx: testids replace '+' in
+    // metadata.short with 'Plus' (e.g. 'IODC+' -> 'gateCardIODCPlus')
+    this.input = this.form.getByTestId(
+      `gateCard${this.shortName.replace(/\+/g, 'Plus')}`,
+    );
 
     this.card = this.input.locator('..');
 

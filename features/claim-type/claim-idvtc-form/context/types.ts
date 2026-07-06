@@ -19,7 +19,7 @@ export type ClaimIdvtcFormNetworkData = {
   idvtcPaused: boolean;
   canClaimCurve: boolean;
   currentCurveId: bigint;
-  currentOperatorType: OPERATOR_TYPE;
+  currentOperatorType?: OPERATOR_TYPE;
   isCurrentIcs: boolean;
   currentParameters: CurveParameters;
   newCurveId: bigint;

@@ -1,7 +1,4 @@
-import {
-  OPERATOR_TYPE,
-  OPERATOR_TYPE_CURVE_ID,
-} from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { IcsApplyButton } from 'features/ics/apply-button';
@@ -10,19 +7,19 @@ import { FC } from 'react';
 import { Block, CompareParametersList, Stack } from 'shared/components';
 import { DefColumnBackground, IcsColumnBackground } from 'shared/components';
 import { IdvtcColumnBackground } from 'shared/components/parameters-list/styles';
-import { useShowFlags } from 'shared/hooks';
+import { useOperatorTypeCurveId, useShowFlags } from 'shared/hooks';
 
 export const TypeParameters: FC = () => {
   const { ICS_APPLY_ENABLED, CAN_CLAIM_ICS } = useShowFlags();
 
   const { data: defParams } = useCurveParameters(
-    OPERATOR_TYPE_CURVE_ID.CSM_DEF,
+    useOperatorTypeCurveId(OPERATOR_TYPE.CSM_DEF),
   );
   const { data: icsParams } = useCurveParameters(
-    OPERATOR_TYPE_CURVE_ID.CSM_ICS,
+    useOperatorTypeCurveId(OPERATOR_TYPE.CSM_ICS),
   );
   const { data: idvtcParams } = useCurveParameters(
-    OPERATOR_TYPE_CURVE_ID.CSM_IDVTC,
+    useOperatorTypeCurveId(OPERATOR_TYPE.CSM_IDVTC),
   );
 
   return (
