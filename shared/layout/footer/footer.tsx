@@ -15,6 +15,7 @@ export const Footer: FC = () => (
       <FooterLink
         href="https://lido.fi/terms-of-use"
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerTermsOfUse}
+        data-testid="footerTermsOfUseLink"
       >
         Terms of Use
       </FooterLink>
@@ -22,6 +23,7 @@ export const Footer: FC = () => (
       <FooterLink
         href="https://lido.fi/privacy-notice"
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerPrivacyNotice}
+        data-testid="footerPrivacyNoticeLink"
       >
         Privacy Notice
       </FooterLink>
@@ -29,6 +31,7 @@ export const Footer: FC = () => (
       <FooterLink
         href={feedbackForm}
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm}
+        data-testid="footerFeedbackFormLink"
       >
         Feedback form
       </FooterLink>
@@ -36,6 +39,7 @@ export const Footer: FC = () => (
       <FooterLink
         href="https://discord.com/invite/lido"
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerDiscord}
+        data-testid="footerDiscordLink"
       >
         Discord
       </FooterLink>

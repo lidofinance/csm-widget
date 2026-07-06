@@ -44,6 +44,7 @@ export const Version: FC = () => (
     href={link}
     title={title}
     matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerVersion}
+    data-testid="footerVersionLink"
   >
     {label}
   </VersionLink>
