@@ -2,6 +2,7 @@ import { Button, Divider, Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
+import { useOperatorTypeCurveId } from 'shared/hooks';
 import { CurveBadge } from 'shared/node-operator/curve-badge/curve-badge';
 import { LocalLink } from 'shared/navigate';
 import { Parameters } from './parameters';
@@ -10,6 +11,7 @@ import { VisibleType } from './use-visible-types';
 
 export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
   const metadata = OPERATOR_TYPE_METADATA[type.type];
+  const curveId = useOperatorTypeCurveId(type.type);
 
   return (
     <OptionCard
@@ -26,9 +28,7 @@ export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
         <Divider />
       </Stack>
       <Stack direction="column">
-        {metadata.curveId !== undefined && (
-          <Parameters curveId={metadata.curveId} />
-        )}
+        {curveId !== undefined && <Parameters curveId={curveId} />}
         <LocalLink
           href={type.href}
           query={type.query}

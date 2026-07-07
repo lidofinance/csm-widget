@@ -30,7 +30,6 @@ export const useTxModalStagesUnlockExpired = () =>
             title="Expired bond lock has been unlocked"
             description={undefined}
           />,
-          { isClosableOnLedger: true },
         ),
     }),
   );

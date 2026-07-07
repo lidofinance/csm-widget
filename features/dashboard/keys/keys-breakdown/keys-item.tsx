@@ -1,4 +1,4 @@
-import { Tooltip } from '@lidofinance/lido-ui';
+import { Tooltip } from 'shared/components';
 import { ComponentPropsWithoutRef, FC, ReactNode } from 'react';
 import { ShortInlineLoader, Stack } from 'shared/components';
 import { TitleStyle, VARIANTS, WrapperStyle } from './styles';

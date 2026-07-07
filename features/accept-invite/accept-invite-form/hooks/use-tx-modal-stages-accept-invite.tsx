@@ -67,9 +67,6 @@ export const buildAcceptInviteStages = (
           </>
         }
       />,
-      {
-        isClosableOnLedger: true,
-      },
     ),
 });
 

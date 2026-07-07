@@ -59,7 +59,7 @@ export const useAddKeysValidation = () => {
             depositData,
             sdk,
             keysLimit: curveParameters?.keysLimit,
-            currentActiveKeys:
+            nonWithdrawnKeys:
               operatorInfo &&
               operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys,
           });

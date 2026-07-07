@@ -1,9 +1,6 @@
-import {
-  OPERATOR_TYPE,
-  OPERATOR_TYPE_CURVE_ID,
-} from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
-import { getCurveMetadata, OPERATOR_TYPE_METADATA } from 'consts';
+import { OPERATOR_TYPE_METADATA } from 'consts';
 import {
   useCurveParameters,
   useNodeOperatorId,
@@ -13,6 +10,7 @@ import { FC, ReactNode } from 'react';
 import { Block, CompareParametersList, Stack } from 'shared/components';
 import { DefColumnBackground, IcsColumnBackground } from 'shared/components';
 import { IdvtcColumnBackground } from 'shared/components/parameters-list/styles';
+import { useCurveMetadata, useOperatorTypeCurveId } from 'shared/hooks';
 
 type SingleTypeParametersProps = {
   type: OPERATOR_TYPE.CSM_ICS | OPERATOR_TYPE.CSM_IDVTC;
@@ -26,19 +24,20 @@ export const SingleTypeParameters: FC<SingleTypeParametersProps> = ({
   const nodeOperatorId = useNodeOperatorId();
   const { data: operatorCurveId } = useOperatorCurveId(nodeOperatorId);
 
-  const typeCurveId = OPERATOR_TYPE_METADATA[type].curveId;
+  const typeCurveId = useOperatorTypeCurveId(type);
+  const defCurveId = useOperatorTypeCurveId(OPERATOR_TYPE.CSM_DEF);
 
   const currentCurveId =
     nodeOperatorId !== undefined &&
     operatorCurveId !== undefined &&
     operatorCurveId !== typeCurveId
       ? operatorCurveId
-      : OPERATOR_TYPE_CURVE_ID.CSM_DEF;
+      : defCurveId;
 
   const { data: currentParams } = useCurveParameters(currentCurveId);
   const { data: typeParams } = useCurveParameters(typeCurveId);
 
-  const currentTitle = getCurveMetadata(currentCurveId).title;
+  const currentTitle = useCurveMetadata(currentCurveId)?.title ?? '';
 
   const TypeColumnBackground =
     type === OPERATOR_TYPE.CSM_ICS

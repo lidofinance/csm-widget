@@ -47,6 +47,20 @@ test.describe(
       },
     );
 
+    test('Should disable Parsed tab for unparseable json', async () => {
+      await keysPage.submitPage.fillRawKeys('{ this is not valid json');
+
+      await test.step('Verify parse error is shown', async () => {
+        await expect(keysPage.submitPage.validationInputError).toBeVisible();
+      });
+
+      await test.step('Verify Parsed/Parameters tabs and parsed data are unavailable', async () => {
+        await expect(keysPage.submitPage.parsedTab).toBeDisabled();
+        await expect(keysPage.submitPage.parametersTab).toBeDisabled();
+        await expect(keysPage.submitPage.depositDataRow).toHaveCount(0);
+      });
+    });
+
     test(
       qase(
         125,

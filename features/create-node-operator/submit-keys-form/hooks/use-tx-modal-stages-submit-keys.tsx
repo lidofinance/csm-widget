@@ -91,9 +91,6 @@ export const useTxModalStagesSubmitKeys = () =>
               ) : undefined
             }
           />,
-          {
-            isClosableOnLedger: true,
-          },
         );
       },
     };

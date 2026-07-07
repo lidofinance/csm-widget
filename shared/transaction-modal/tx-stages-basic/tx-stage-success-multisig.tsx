@@ -1,7 +1,9 @@
+import { type FC } from 'react';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
+import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
 import { StageIconSuccess } from './icons';
 
-export const TxStageSuccessMultisig = () => {
+export const TxStageSuccessMultisig: FC & ClosableOnLedgerStage = () => {
   return (
     <TransactionModalContent
       icon={<StageIconSuccess />}
@@ -10,3 +12,7 @@ export const TxStageSuccessMultisig = () => {
     />
   );
 };
+
+// Terminal stage: dismissible even on Ledger (modal is otherwise locked while
+// a signature is pending).
+TxStageSuccessMultisig.isClosableOnLedger = true;

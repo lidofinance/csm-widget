@@ -1,5 +1,6 @@
 export * from './address-validation';
 export * from './bigint-utils';
+export * from './bond-curve';
 export * from './calculate-available-to-claim';
 export * from './compare-lowercase';
 export * from './compare-with-router-path';

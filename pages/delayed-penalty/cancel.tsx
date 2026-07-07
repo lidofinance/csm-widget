@@ -8,12 +8,16 @@ const Page = () => {
   const { isPending } = useHasReportDelayedPenaltyRole();
 
   return (
-    <GateLoaded additional={isPending}>
-      <Gate
-        rule="EL_DELAYED_PENALTY_REPORTER"
-        fallback={<Navigate path={PATH.HOME} />}
-      >
-        <DelayedPenaltyCancelPage />
+    <GateLoaded>
+      <Gate rule="IS_CONNECTED_WALLET" fallback={<Navigate path={PATH.HOME} />}>
+        <GateLoaded additional={isPending}>
+          <Gate
+            rule="EL_DELAYED_PENALTY_REPORTER"
+            fallback={<Navigate path={PATH.HOME} />}
+          >
+            <DelayedPenaltyCancelPage />
+          </Gate>
+        </GateLoaded>
       </Gate>
     </GateLoaded>
   );

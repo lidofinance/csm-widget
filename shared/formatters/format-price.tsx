@@ -1,4 +1,4 @@
-import { Tooltip } from '@lidofinance/lido-ui';
+import { Tooltip } from 'shared/components/tooltip/tooltip';
 import { DATA_UNAVAILABLE } from 'consts/text';
 
 import { config } from 'config';

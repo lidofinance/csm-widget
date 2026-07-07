@@ -2,7 +2,7 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { UNBONDED_VALIDATORS_LINK } from 'consts/external-links';
-import { BOND_INSUFFICIENT } from 'consts/text';
+import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { FC } from 'react';
 import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
 import { useAddBondFormData } from '../context';
@@ -18,7 +18,7 @@ export const Info: FC = () => {
             warning={bond?.isInsufficient}
             title={
               <Text size="xxs" weight={700}>
-                {bond?.isInsufficient ? BOND_INSUFFICIENT : 'Bond balance'}
+                {bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
               </Text>
             }
             help={
@@ -55,10 +55,10 @@ export const Info: FC = () => {
               >
                 unbonded
               </MatomoLink>{' '}
-              and being requested to exit in case of applied penalties
+              and being requested to exit in case of applied penalties.
               <br />
               Supplied bond will be stored as stETH, which also garners staking
-              rewards
+              rewards.
             </p>
           )}
         </Stack>

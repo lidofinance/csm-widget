@@ -10,6 +10,7 @@ import {
 import { randomBytes } from 'node:crypto';
 import { generateWithdrawalCredentials } from '../../../../shared/helpers/accountData';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { SubmitPage } from 'tests/cm-widget/pages/tabs/keys/submit.page';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
@@ -21,37 +22,27 @@ const omitField = <K extends keyof DepositKey>(
   return rest;
 };
 
-const invalidTextValidation: {
-  key: keyof DepositKey;
-  expectedError: string;
-}[] = [
-  {
-    key: 'withdrawal_credentials',
-    expectedError:
-      'withdrawal_credentials is not a valid stringinvalid signature',
-  },
-  {
-    key: 'amount',
-    expectedError: 'amount is not equal to 32 ethinvalid signature',
-  },
-  {
-    key: 'deposit_data_root',
-    expectedError: 'deposit_data_root is not a valid string',
-  },
-  {
-    key: 'deposit_message_root',
-    expectedError:
-      'deposit_message_root is not a valid stringinvalid signature',
-  },
-  {
-    key: 'fork_version',
-    expectedError: 'fork_version is not equal to 10000910',
-  },
-  {
-    key: 'pubkey',
-    expectedError: 'pubkey is not a valid stringinvalid signature',
-  },
-  { key: 'signature', expectedError: 'signature is not a valid string' },
+// Unparseable JSON keeps depositData empty, so the Parsed/Parameters tabs and
+// downstream controls must stay locked.
+const expectFormLocked = (submitPage: SubmitPage) =>
+  test.step('Verify Parsed/Parameters tabs and controls are disabled', async () => {
+    await expect(submitPage.parsedTab).toBeDisabled();
+    await expect(submitPage.parametersTab).toBeDisabled();
+    await expect(submitPage.amountInput).toBeDisabled();
+    await expect(submitPage.submitKeysButton).toBeDisabled();
+    await expect(submitPage.confirmKeysReadyInput).toBeDisabled();
+  });
+
+// Omitting any of these required fields makes the SDK parser reject the JSON
+// before per-key validation runs, surfacing a "missing required field" error.
+const requiredFields: (keyof DepositKey)[] = [
+  'withdrawal_credentials',
+  'amount',
+  'deposit_data_root',
+  'deposit_message_root',
+  'fork_version',
+  'pubkey',
+  'signature',
 ];
 
 test.describe(
@@ -75,11 +66,18 @@ test.describe(
       await expect(keysPage.submitPage.validationInputError).toContainText(
         'Invalid deposit data',
       );
+
+      await test.step('Verify Parsed tab is available with error counter', async () => {
+        await expect(keysPage.submitPage.parsedTab).toBeEnabled();
+        await expect(keysPage.submitPage.parametersTab).toBeEnabled();
+        await expect(keysPage.submitPage.parsedTabCounter).toHaveText('1');
+      });
+
       await keysPage.submitPage.selectTab('Parsed');
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'amount is not equal to 32 ethinvalid signature',
+          'amount is not equal to 32 ETHsignature failed BLS verification',
         );
       }
     });
@@ -96,7 +94,7 @@ test.describe(
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'invalid signature',
+          'signature failed BLS verification',
         );
       }
     });
@@ -115,10 +113,10 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'invalid signature',
+            'signature failed BLS verification',
           );
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'pubkey is not valid string',
+            'pubkey is not a valid hex string',
           );
         }
       },
@@ -138,7 +136,7 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toHaveText(
-            'invalid signature',
+            'signature failed BLS verification',
           );
         }
       },
@@ -158,10 +156,10 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'invalid signature',
+            'signature failed BLS verification',
           );
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'deposit_message_root is not a valid string',
+            'deposit_message_root is not a valid hex string',
           );
         }
       },
@@ -182,7 +180,7 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toHaveText(
-            'withdrawal_credentials is not the Lido Withdrawal Vaultinvalid signature',
+            'withdrawal_credentials is not the Lido Withdrawal Vaultsignature failed BLS verification',
           );
         }
       },
@@ -201,7 +199,7 @@ test.describe(
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'wrong key type: only 0x02 withdrawal credentials are supportedinvalid signature',
+          'wrong key type: only 0x02 withdrawal credentials are supportedsignature failed BLS verification',
         );
       }
     });
@@ -224,10 +222,10 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'invalid signature',
+            'signature failed BLS verification',
           );
           await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'withdrawal_credentials is not a valid string',
+            'withdrawal_credentials is not a valid hex string',
           );
         }
       },
@@ -272,13 +270,55 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toHaveText(
-            `network_name or eth2_network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
+            `network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
           );
         }
       },
     );
 
-    invalidTextValidation.forEach(({ key: propertyName, expectedError }) => {
+    test('Should count only invalid keys when some keys are valid', async () => {
+      const keys = keysGeneratorService.generateKeys(3);
+      keys[0].amount = 1;
+      keys[2].amount = 1;
+
+      await keysPage.submitPage.fillKeys(keys);
+      await expect(keysPage.submitPage.validationInputError).toContainText(
+        'Invalid deposit data',
+      );
+
+      await test.step('Verify counter reflects only the invalid keys', async () => {
+        await expect(keysPage.submitPage.parsedTab).toBeEnabled();
+        await expect(keysPage.submitPage.parsedTabCounter).toHaveText('2');
+      });
+
+      await keysPage.submitPage.selectTab('Parsed');
+      await expect(keysPage.submitPage.depositDataRow).toHaveCount(3);
+
+      await test.step('Verify per-row error detection', async () => {
+        const rows = keysPage.submitPage.depositDataRow;
+        await expect(
+          rows.nth(0).getByTestId('deposit-data-error-detected'),
+        ).toHaveText('Yes');
+        await expect(
+          rows.nth(1).getByTestId('deposit-data-error-detected'),
+        ).toHaveText('No');
+        await expect(
+          rows.nth(2).getByTestId('deposit-data-error-detected'),
+        ).toHaveText('Yes');
+
+        await expect(
+          rows.nth(0).getByTestId('deposit-data-error'),
+        ).toContainText('amount is not equal to 32 ETH');
+        await expect(
+          rows.nth(1).getByTestId('deposit-data-error'),
+        ).toBeHidden();
+        await expect(
+          rows.nth(2).getByTestId('deposit-data-error'),
+        ).toContainText('amount is not equal to 32 ETH');
+      });
+    });
+
+    requiredFields.forEach((propertyName) => {
       test(
         qase(
           104,
@@ -294,25 +334,16 @@ test.describe(
             newJson,
           );
 
-          await test.step('Verify invalid deposit data error is shown', async () => {
-            await expect(keysPage.submitPage.validationInputError).toHaveText(
-              'Invalid deposit data',
-            );
-          });
+          await expect(keysPage.submitPage.validationInputError).toHaveText(
+            `Item at index 0 is missing required field: ${propertyName}`,
+          );
 
-          await test.step('Verify Parsed tab shows per-key error', async () => {
-            await keysPage.submitPage.selectTab('Parsed');
-            await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
-            const row = keysPage.submitPage.depositDataRow.first();
-            await expect(row.getByTestId('deposit-data-error')).toContainText(
-              expectedError,
-            );
-          });
+          await expectFormLocked(keysPage.submitPage);
         },
       );
     });
 
-    invalidTextValidation.forEach(({ key: propertyName, expectedError }) => {
+    requiredFields.forEach((propertyName) => {
       test(
         qase(
           111,
@@ -328,25 +359,16 @@ test.describe(
             [newJson],
           );
 
-          await test.step('Verify invalid deposit data error is shown', async () => {
-            await expect(keysPage.submitPage.validationInputError).toHaveText(
-              'Invalid deposit data',
-            );
-          });
+          await expect(keysPage.submitPage.validationInputError).toHaveText(
+            `Item at index 0 is missing required field: ${propertyName}`,
+          );
 
-          await test.step('Verify Parsed tab shows per-key error', async () => {
-            await keysPage.submitPage.selectTab('Parsed');
-            await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
-            const row = keysPage.submitPage.depositDataRow.first();
-            await expect(row.getByTestId('deposit-data-error')).toContainText(
-              expectedError,
-            );
-          });
+          await expectFormLocked(keysPage.submitPage);
         },
       );
     });
 
-    invalidTextValidation.forEach(({ key: propertyName, expectedError }) => {
+    requiredFields.forEach((propertyName) => {
       test(
         qase(
           118,
@@ -360,27 +382,11 @@ test.describe(
 
           await keysPage.submitPage.fillKeys(keys);
 
-          await test.step('Verify invalid deposit data error is shown', async () => {
-            await expect(keysPage.submitPage.validationInputError).toHaveText(
-              'Invalid deposit data',
-            );
-          });
+          await expect(keysPage.submitPage.validationInputError).toHaveText(
+            `Item at index 2 is missing required field: ${propertyName}`,
+          );
 
-          await test.step('Verify Parsed tab shows error only on key at index 2', async () => {
-            await keysPage.submitPage.selectTab('Parsed');
-            await expect(keysPage.submitPage.depositDataRow).toHaveCount(3);
-
-            const rows = await keysPage.submitPage.depositDataRow.all();
-            await expect(
-              rows[0].getByTestId('deposit-data-error'),
-            ).not.toBeVisible();
-            await expect(
-              rows[1].getByTestId('deposit-data-error'),
-            ).not.toBeVisible();
-            await expect(
-              rows[2].getByTestId('deposit-data-error'),
-            ).toContainText(expectedError);
-          });
+          await expectFormLocked(keysPage.submitPage);
         },
       );
     });

@@ -39,7 +39,6 @@ export const useTxModalStagesAddBond = () =>
             balance={result.current}
             balanceToken={TOKENS.steth}
           />,
-          { isClosableOnLedger: true },
         ),
     }),
   );

@@ -5,7 +5,6 @@ import {
   SubOperatorStakeSummary,
 } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
-import { getModuleOperatorType } from 'consts';
 import { STAKE_COLORS } from 'features/group/shared/stake-stats';
 import {
   useDappStatus,
@@ -51,7 +50,6 @@ export const OperatorRow: FC<OperatorRowProps> = ({
     shortInfo ? undefined : nodeOperatorId,
   );
   const curveId = shortInfo?.curveId ?? fetchedCurveId;
-  const operatorType = getModuleOperatorType(curveId);
 
   // Roles only for available operators
   const roles = shortInfo ? getNodeOperatorRoles(shortInfo, address) : [];
@@ -80,7 +78,7 @@ export const OperatorRow: FC<OperatorRowProps> = ({
         <Stack gap="sm" center spaceBetween>
           <CmRowDescriptor>
             <DescriptorId id={nodeOperatorId} />
-            <CurveBadge type={operatorType} inline />
+            <CurveBadge curveId={curveId} inline />
             <DescriptorRolesStyle>
               {roles.map((role) => (
                 <RoleBadge role={role} key={role} />
