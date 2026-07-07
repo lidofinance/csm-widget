@@ -15,7 +15,7 @@ export const ManagerAddressPage: FC = () => {
     <Layout
       title="Settings"
       subtitle="Manage your operator"
-      pageName="Settings"
+      pageName="SettingsManagerAddress"
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>

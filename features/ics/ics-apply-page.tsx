@@ -10,7 +10,7 @@ export const IcsApplyPage: FC = () => (
   <Layout
     title="Apply for Identified Community Stakers List"
     subtitle="Get verified as an Identified Community Staker"
-    pageName="TypeIcs"
+    pageName="TypeIcsApply"
     mainPrefix={<TypeBackButton />}
   >
     <IcsPageSwitcher />

@@ -41,7 +41,7 @@ export const CustomAddressesSection: FC = () => {
           $inline
           href={EXTENDED_MODE_LINK}
           matomoEvent={
-            MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription
+            MATOMO_CLICK_EVENTS_TYPES.managerAddressPermissionTypeDescription
           }
         >
           detailed explanation of the options

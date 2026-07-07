@@ -41,7 +41,7 @@ export const ExitKeys = () => {
             <MatomoLink
               icon="external"
               href="https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores#stereum"
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysSteureumLink}
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.exitKeysStereumLink}
             >
               Guide for Stereum
             </MatomoLink>

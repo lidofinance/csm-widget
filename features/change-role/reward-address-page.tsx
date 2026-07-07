@@ -15,7 +15,7 @@ export const RewardAddressPage: FC = () => {
     <Layout
       title="Settings"
       subtitle="Manage your operator"
-      pageName="Settings"
+      pageName="SettingsRewardsAddress"
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>

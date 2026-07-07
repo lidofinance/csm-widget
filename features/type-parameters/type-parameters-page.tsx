@@ -10,7 +10,7 @@ export const TypeParametersPage: FC = () => (
   <Layout
     title="Operator Type Parameters"
     subtitle="Compare parameters"
-    pageName="TypeParametersIcs"
+    pageName="TypeParameters"
     mainPrefix={<TypeBackButton />}
   >
     <TypePageSwitcher />
