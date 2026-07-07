@@ -11,6 +11,7 @@ import { AmountInput } from './controls/amount-input';
 import { CustomAddressesSection } from './controls/custom-addresses-section';
 import { KeysConfirm } from './controls/keys-confirm';
 import { KeysInput } from './controls/keys-input';
+import { KeysLimitWarning } from './controls/keys-limit-warning';
 import { ReferrerInput } from './controls/referrer-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
@@ -25,6 +26,7 @@ export const SubmitKeysForm: FC = memo(() => (
           <HeaderOperatorTypeButton />
           <Form>
             <TokenSelect />
+            <KeysLimitWarning />
             <KeysInput />
             <AmountInput />
             <KeysConfirm />

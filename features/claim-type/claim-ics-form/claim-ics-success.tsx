@@ -50,10 +50,10 @@ export const ClaimIcsSuccess: FC = () => {
           Congratulations!
         </Text>
         <Text size="xs">
-          You have claimed the Identified Community Staker operator type
+          You have claimed the Identified Community Staker operator type.
           <br />
           You can see the new parameters for your Node Operator by clicking the
-          ICS badge at the top of the screen
+          ICS badge at the top of the screen.
         </Text>
       </Stack>
       <StyledButton fullwidth onClick={fire}>

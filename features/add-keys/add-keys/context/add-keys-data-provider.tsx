@@ -23,7 +23,7 @@ import {
   NetworkData,
   useFormData,
 } from 'shared/hook-form/form-controller';
-import { useInvalidate } from 'shared/hooks';
+import { useInvalidate, useKeysAvailable } from 'shared/hooks';
 import { isModuleCSM } from 'consts';
 import { type AddKeysFormNetworkData } from './types';
 
@@ -60,16 +60,18 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
   const { data: operatorInfo, isPending: isOperatorInfoLoading } =
     useOperatorInfo(nodeOperatorId);
 
-  // const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(`${nodeOperatorId}`);
+  const nonWithdrawnKeys = operatorInfo
+    ? operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys
+    : undefined;
 
-  // const { data: keysAvailable } = useKeysAvailable({
-  //   curveId,
-  //   nonWithdrawnKeys,
-  //   bond,
-  //   ethBalance,
-  //   stethBalance,
-  //   wstethBalance,
-  // });
+  const keysAvailable = useKeysAvailable({
+    curveId,
+    nonWithdrawnKeys,
+    bond,
+    ethBalance,
+    stethBalance,
+    wstethBalance,
+  });
 
   const invalidate = useInvalidate();
 
@@ -117,6 +119,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
       maxStakeEth,
       shareLimit,
       isPaused: status?.isPaused,
+      keysAvailable,
     } as AddKeysFormNetworkData,
     isPending,
     revalidate,

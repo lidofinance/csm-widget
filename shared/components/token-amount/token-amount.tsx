@@ -1,4 +1,5 @@
-import { InlineLoader, Tooltip } from '@lidofinance/lido-ui';
+import { InlineLoader } from '@lidofinance/lido-ui';
+import { Tooltip } from '../tooltip/tooltip';
 import { DATA_UNAVAILABLE } from 'consts/text';
 import { FC } from 'react';
 import {

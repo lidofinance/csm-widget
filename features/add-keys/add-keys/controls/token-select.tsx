@@ -6,7 +6,7 @@ import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { PATH } from 'consts/urls';
 import {
   FormTitle,
-  // KeysAvailable,
+  KeysAvailable,
   MatomoLink,
   Stack,
   TitledAmount,
@@ -17,13 +17,8 @@ import { LocalLink } from 'shared/navigate';
 import { useAddKeysFormData } from '../context';
 
 export const TokenSelect: React.FC = () => {
-  const {
-    ethBalance,
-    stethBalance,
-    wstethBalance,
-    // keysAvailable,
-    bond,
-  } = useAddKeysFormData(true);
+  const { ethBalance, stethBalance, wstethBalance, keysAvailable, bond } =
+    useAddKeysFormData(true);
 
   return (
     <>
@@ -54,19 +49,28 @@ export const TokenSelect: React.FC = () => {
           [TOKENS.eth]: (
             <Stack direction="column">
               <TokenAmount token={TOKENS.eth} amount={ethBalance} />
-              {/* <KeysAvailable {...keysAvailable?.ETH} token={TOKENS.ETH} /> */}
+              <KeysAvailable
+                {...keysAvailable?.[TOKENS.eth]}
+                token={TOKENS.eth}
+              />
             </Stack>
           ),
           [TOKENS.steth]: (
             <Stack direction="column">
               <TokenAmount token={TOKENS.steth} amount={stethBalance} />
-              {/* <KeysAvailable {...keysAvailable?.STETH} token={TOKENS.STETH} /> */}
+              <KeysAvailable
+                {...keysAvailable?.[TOKENS.steth]}
+                token={TOKENS.steth}
+              />
             </Stack>
           ),
           [TOKENS.wsteth]: (
             <Stack direction="column">
               <TokenAmount token={TOKENS.wsteth} amount={wstethBalance} />
-              {/* <KeysAvailable {...keysAvailable?.WSTETH} token={TOKENS.WSTETH} /> */}
+              <KeysAvailable
+                {...keysAvailable?.[TOKENS.wsteth]}
+                token={TOKENS.wsteth}
+              />
             </Stack>
           ),
         }}

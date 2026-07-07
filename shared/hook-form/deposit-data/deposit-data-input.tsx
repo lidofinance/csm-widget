@@ -28,6 +28,7 @@ export const DepositDataInput: FC<DepositKeysInputHookFormProps> = ({
         disabled={props.disabled || field.disabled}
         label={label}
         rows={6}
+        spellCheck={false}
         fullwidth
       />
       <Placeholder>

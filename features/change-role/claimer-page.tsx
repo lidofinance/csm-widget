@@ -14,7 +14,7 @@ export const ClaimerPage: FC = () => {
     <Layout
       title="Settings"
       subtitle="Manage your operator"
-      pageName="Settings"
+      pageName="SettingsClaimer"
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>

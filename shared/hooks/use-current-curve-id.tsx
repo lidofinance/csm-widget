@@ -1,5 +1,4 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { getModuleOperatorType } from 'consts';
 import {
   useDefaultCurveId,
   useIcsCurveId,
@@ -11,6 +10,7 @@ import {
   useNodeOperatorId,
   useOperatorCurveId,
 } from 'modules/web3';
+import { useModuleOperatorType } from './use-operator-type-metadata';
 import { useRequestedOperatorType } from './use-requested-operator-type';
 
 export const useCurrentCurveId = () => {
@@ -18,7 +18,7 @@ export const useCurrentCurveId = () => {
   const { data: operatorCurveId } = useOperatorCurveId(nodeOperatorId);
   const { data: createData } = useCreateCurveId();
 
-  if (nodeOperatorId) {
+  if (nodeOperatorId !== undefined) {
     return operatorCurveId;
   }
   return createData?.curveId;
@@ -64,10 +64,7 @@ export const useCreateCurveId = () => {
         ? icsCurveId
         : defCurveId;
 
-  const type =
-    curveId !== undefined
-      ? getModuleOperatorType(curveId) || undefined
-      : undefined;
+  const type = useModuleOperatorType(curveId);
 
   const proof =
     type === OPERATOR_TYPE.CSM_IDVTC

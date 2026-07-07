@@ -44,7 +44,7 @@ export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
         <MatomoLink
           $inline
           href={PREPARE_HARDWARE_LINK}
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackHadwareLink}
+          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.starterPackHardwareLink}
         >
           your own hardware
         </MatomoLink>{' '}

@@ -52,7 +52,6 @@ const getModalStages = (transitStage: TransactionModalTransitStage) => ({
         error={errorContent}
         code={getErrorCode(error)}
       />,
-      { isClosableOnLedger: true },
     );
   },
 });

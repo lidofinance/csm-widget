@@ -1,5 +1,6 @@
 import { KeyStrikes } from '@lidofinance/lido-csm-sdk';
-import { Box, Text, Tooltip } from '@lidofinance/lido-ui';
+import { Box, Text } from '@lidofinance/lido-ui';
+import { Tooltip } from 'shared/components';
 import {
   useCurveParameters,
   useNodeOperatorId,
