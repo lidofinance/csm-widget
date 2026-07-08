@@ -224,7 +224,10 @@ export const testScenarios: ClaimBondScenario[] = [
     title: 'Sub-threshold deficit (nothing to compensate)',
     description:
       'forKeys short by a few wei — SDK clamps to Excess Bond 0.0. No "compensate" copy or note should appear despite pending rewards.',
-    data: { bond: { current: 32, forKeys: 32, deficitWei: 5 }, rewards: 1.4779 },
+    data: {
+      bond: { current: 32, forKeys: 32, deficitWei: 5 },
+      rewards: 1.4779,
+    },
     expectOptions: [ALL, R2B],
   },
 ];
