@@ -6,11 +6,15 @@ import { mnemonicToAccount } from 'viem/accounts';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
-  test.beforeEach(async ({ widgetService }) => {
+  let matomoEventService: MatomoService;
+
+  test.beforeEach(async ({ widgetConfig, widgetService }) => {
+    matomoEventService = new MatomoService(widgetService.page, widgetConfig);
     await widgetService.dashboardPage.open();
   });
 
@@ -34,9 +38,13 @@ test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
         ).toContainText(currentAddress);
       });
 
-      await test.step('Check reward address etherscan link', async () => {
+      await test.step('Check reward address etherscan link and Matomo event', async () => {
         const [etherscanPage] = await Promise.all([
           widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_etherscan_address_link',
+          ),
           rewardAddressRow.getByTestId('etherscanLink').click(),
         ]);
         expect(etherscanPage.url()).toContain(
@@ -64,9 +72,13 @@ test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
         ).toContainText(currentAddress);
       });
 
-      await test.step('Check manager address etherscan link', async () => {
+      await test.step('Check manager address etherscan link and Matomo event', async () => {
         const [etherscanPage] = await Promise.all([
           widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_etherscan_address_link',
+          ),
           managerAddressRow.getByTestId('etherscanLink').click(),
         ]);
         expect(etherscanPage.url()).toContain(
@@ -104,8 +116,8 @@ test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
     async ({ widgetService }) => {
       const feeSplitsRow =
         widgetService.dashboardPage.rolesSection.feeSplitsRow;
-      await test.step('Check reward claimer information', async () => {
-        await expect(feeSplitsRow.locator('p')).toContainText(
+      await test.step('Check reward splitter information', async () => {
+        await expect(feeSplitsRow.locator('p').first()).toContainText(
           'Rewards splitter',
         );
         await expect(
@@ -121,4 +133,27 @@ test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
       });
     },
   );
+
+  test('Should navigate to roles settings on header link click', async ({
+    widgetService,
+  }) => {
+    const { rolesSection } = widgetService.dashboardPage;
+
+    await test.step('Click section header link and check Matomo event', async () => {
+      await Promise.all([
+        matomoEventService.waitForEvent(
+          'e_n',
+          'cm_widget_dashboard_roles_section',
+        ),
+        rolesSection.sectionHeaderLink.click(),
+      ]);
+    });
+
+    await test.step('Check navigation to roles settings page', async () => {
+      await expect(
+        widgetService.page,
+        'Should navigate to roles settings page',
+      ).toHaveURL(/\/settings\/roles/);
+    });
+  });
 });

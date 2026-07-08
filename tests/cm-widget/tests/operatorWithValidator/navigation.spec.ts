@@ -4,6 +4,7 @@ import { test } from '../test.fixture';
 import { NavigationPage } from '../../pages/navigation.page';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -23,15 +24,39 @@ const KEYS_TABS = [
 ];
 
 const BOND_TABS = [
-  { title: 'Claim', url: '/bond/claim' },
-  { title: 'Add Bond', url: '/bond/add' },
-  { title: 'Rewards history', url: '/bond/rewards-history' },
+  {
+    title: 'Add Bond',
+    url: '/bond/add',
+    event: 'cm_widget_view_add_bond_page',
+  },
+  {
+    title: 'Claim',
+    url: '/bond/claim',
+    event: 'cm_widget_view_claim_bond_page',
+  },
+  {
+    title: 'Rewards history',
+    url: '/bond/rewards-history',
+    event: 'cm_widget_view_rewards_history_page',
+  },
 ];
 
 const SETTINGS_TABS = [
-  { title: 'Roles', url: '/settings/roles' },
-  { title: 'Meta data', url: '/settings/metadata' },
-  { title: 'Inbox requests', url: '/settings/inbox' },
+  {
+    title: 'Meta data',
+    url: '/settings/metadata',
+    event: 'cm_widget_view_settings_metadata_page',
+  },
+  {
+    title: 'Roles',
+    url: '/settings/roles',
+    event: 'cm_widget_view_settings_roles_page',
+  },
+  {
+    title: 'Inbox requests',
+    url: '/settings/inbox',
+    event: 'cm_widget_view_inbox_requests_page',
+  },
 ];
 
 const DELETE_KEYS_CARDS = [
@@ -45,8 +70,10 @@ test.describe(
   { tag: [Tags.forked] },
   () => {
     let navigation: NavigationPage;
+    let matomoEventService: MatomoService;
 
-    test.beforeEach(async ({ widgetService }) => {
+    test.beforeEach(async ({ widgetConfig, widgetService }) => {
+      matomoEventService = new MatomoService(widgetService.page, widgetConfig);
       await widgetService.dashboardPage.open();
       navigation = new NavigationPage(widgetService.page);
     });
@@ -111,9 +138,12 @@ test.describe(
           }
         });
 
-        for (const { title, url } of BOND_TABS) {
-          await test.step(`Navigate to "${title}" tab`, async () => {
-            await navigation.switcherTab(title).click();
+        for (const { title, url, event } of BOND_TABS) {
+          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+            await Promise.all([
+              matomoEventService.waitForEvent('e_n', event),
+              navigation.switcherTab(title).click(),
+            ]);
             await expect(widgetService.page).toHaveURL(new RegExp(url));
           });
         }
@@ -135,9 +165,12 @@ test.describe(
           }
         });
 
-        for (const { title, url } of SETTINGS_TABS) {
-          await test.step(`Navigate to "${title}" tab`, async () => {
-            await navigation.switcherTab(title).click();
+        for (const { title, url, event } of SETTINGS_TABS) {
+          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+            await Promise.all([
+              matomoEventService.waitForEvent('e_n', event),
+              navigation.switcherTab(title).click(),
+            ]);
             await expect(widgetService.page).toHaveURL(new RegExp(url));
           });
         }

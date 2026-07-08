@@ -10,6 +10,7 @@ type SplitEntry = { address: string; share: string };
 
 export class SplitsPage extends BasePage {
   form: Locator;
+  bondRow: Locator;
   splitsActionButton: Locator;
   addSplitButton: Locator;
   saveSplitsButton: Locator;
@@ -20,6 +21,7 @@ export class SplitsPage extends BasePage {
   ) {
     super(page);
     this.form = this.page.getByTestId('splitsForm');
+    this.bondRow = this.form.getByTestId('splitsBondRow');
     this.splitsActionButton = this.form.getByTestId('splitsActionButton');
     this.addSplitButton = this.form.getByTestId('addSplitButton');
     this.saveSplitsButton = this.form.getByRole('button', {
@@ -30,7 +32,7 @@ export class SplitsPage extends BasePage {
 
   async open() {
     await test.step('Open Splits settings page', async () => {
-      await this.openWithRetry('/settings/splits', this.form);
+      await this.openWithRetry('/settings/splits', this.bondRow);
     });
   }
 

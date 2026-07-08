@@ -60,7 +60,7 @@ export const BondRowView: FC<BondRowProps> = ({
   share,
 }) => {
   return (
-    <Stack direction="row" gap="sm">
+    <Stack direction="row" gap="sm" data-testid="splitsBondRow">
       <AddressColumn>
         <InputStyled disabled label={title} value={description} fullwidth />
       </AddressColumn>

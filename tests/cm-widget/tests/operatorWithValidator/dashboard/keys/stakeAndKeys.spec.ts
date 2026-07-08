@@ -3,11 +3,15 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../../test.fixture';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 import { Tags } from 'tests/shared/consts/common.const';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe('Dashboard. Stake & Keys.', { tag: [Tags.forked] }, () => {
-  test.beforeEach(async ({ widgetService }) => {
+  let matomoEventService: MatomoService;
+
+  test.beforeEach(async ({ widgetConfig, widgetService }) => {
+    matomoEventService = new MatomoService(widgetService.page, widgetConfig);
     await widgetService.dashboardPage.open();
   });
 
@@ -136,8 +140,14 @@ test.describe('Dashboard. Stake & Keys.', { tag: [Tags.forked] }, () => {
     async ({ widgetService }) => {
       const { keysSection } = widgetService.dashboardPage;
 
-      await test.step('Click section header link', async () => {
-        await keysSection.sectionHeaderLink.click();
+      await test.step('Click section header link and check Matomo event', async () => {
+        await Promise.all([
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_dashboard_keys_section',
+          ),
+          keysSection.sectionHeaderLink.click(),
+        ]);
       });
 
       await test.step('Check navigation to keys page', async () => {
