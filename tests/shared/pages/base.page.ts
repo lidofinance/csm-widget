@@ -12,12 +12,16 @@ export class BasePage {
   header: Header;
   connectWalletModal: ConnectWalletModal;
   tooltipWrapper: Locator;
+  pageTitle: Locator;
+  pageSubtitle: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.header = new Header(this.page);
     this.connectWalletModal = new ConnectWalletModal(this.page);
     this.tooltipWrapper = this.page.getByTestId('tooltipWrapper');
+    this.pageTitle = this.page.getByTestId('pageTitle');
+    this.pageSubtitle = this.page.getByTestId('pageSubtitle');
   }
 
   async getClipboardText() {

@@ -1,4 +1,4 @@
-import { Tooltip } from '@lidofinance/lido-ui';
+import { Tooltip } from '../tooltip/tooltip';
 import { FC } from 'react';
 import { StyledPriorityChip } from './styles';
 

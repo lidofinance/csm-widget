@@ -12,7 +12,7 @@ export const MetadataPage: FC = () => {
     <Layout
       title="Settings"
       subtitle="Manage your operator"
-      pageName="Settings"
+      pageName="SettingsMetadata"
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>

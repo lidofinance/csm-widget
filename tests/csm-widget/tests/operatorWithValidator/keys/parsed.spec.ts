@@ -26,11 +26,18 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     await expect(keysPage.submitPage.validationInputError).toContainText(
       'Invalid deposit data',
     );
+
+    await test.step('Verify Parsed tab is available with error counter', async () => {
+      await expect(keysPage.submitPage.parsedTab).toBeEnabled();
+      await expect(keysPage.submitPage.parametersTab).toBeEnabled();
+      await expect(keysPage.submitPage.parsedTabCounter).toHaveText('1');
+    });
+
     await keysPage.submitPage.selectTab('Parsed');
     await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
     for (const row of await keysPage.submitPage.depositDataRow.all()) {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'amount is not equal to 32 ethinvalid signature',
+        'amount is not equal to 32 ETHsignature failed BLS verification',
       );
     }
   });
@@ -47,7 +54,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
     for (const row of await keysPage.submitPage.depositDataRow.all()) {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'invalid signature',
+        'signature failed BLS verification',
       );
     }
   });
@@ -66,10 +73,10 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'invalid signature',
+          'signature failed BLS verification',
         );
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'pubkey is not valid string',
+          'pubkey is not a valid hex string',
         );
       }
     },
@@ -89,7 +96,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'invalid signature',
+          'signature failed BLS verification',
         );
       }
     },
@@ -109,10 +116,10 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'invalid signature',
+          'signature failed BLS verification',
         );
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'deposit_message_root is not a valid string',
+          'deposit_message_root is not a valid hex string',
         );
       }
     },
@@ -133,7 +140,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'withdrawal_credentials is not the Lido Withdrawal Vaultinvalid signature',
+          'withdrawal_credentials is not the Lido Withdrawal Vaultsignature failed BLS verification',
         );
       }
     },
@@ -154,10 +161,10 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'invalid signature',
+          'signature failed BLS verification',
         );
         await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'withdrawal_credentials is not a valid string',
+          'withdrawal_credentials is not a valid hex string',
         );
       }
     },
@@ -199,9 +206,49 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          `network_name or eth2_network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
+          `network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
         );
       }
     },
   );
+
+  test('Should count only invalid keys when some keys are valid', async () => {
+    const keys = keysGeneratorService.generateKeys(3);
+    keys[0].amount = 1;
+    keys[2].amount = 1;
+
+    await keysPage.submitPage.fillKeys(keys);
+    await expect(keysPage.submitPage.validationInputError).toContainText(
+      'Invalid deposit data',
+    );
+
+    await test.step('Verify counter reflects only the invalid keys', async () => {
+      await expect(keysPage.submitPage.parsedTab).toBeEnabled();
+      await expect(keysPage.submitPage.parsedTabCounter).toHaveText('2');
+    });
+
+    await keysPage.submitPage.selectTab('Parsed');
+    await expect(keysPage.submitPage.depositDataRow).toHaveCount(3);
+
+    await test.step('Verify per-row error detection', async () => {
+      const rows = keysPage.submitPage.depositDataRow;
+      await expect(
+        rows.nth(0).getByTestId('deposit-data-error-detected'),
+      ).toHaveText('Yes');
+      await expect(
+        rows.nth(1).getByTestId('deposit-data-error-detected'),
+      ).toHaveText('No');
+      await expect(
+        rows.nth(2).getByTestId('deposit-data-error-detected'),
+      ).toHaveText('Yes');
+
+      await expect(rows.nth(0).getByTestId('deposit-data-error')).toContainText(
+        'amount is not equal to 32 ETH',
+      );
+      await expect(rows.nth(1).getByTestId('deposit-data-error')).toBeHidden();
+      await expect(rows.nth(2).getByTestId('deposit-data-error')).toContainText(
+        'amount is not equal to 32 ETH',
+      );
+    });
+  });
 });

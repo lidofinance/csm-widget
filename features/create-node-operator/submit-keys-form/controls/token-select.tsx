@@ -4,7 +4,7 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
 import {
   FormTitle,
-  // KeysAvailable,
+  KeysAvailable,
   MatomoLink,
   Stack,
   TokenAmount,
@@ -15,7 +15,8 @@ import { useSubmitKeysFormData } from '../context';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TokenSelect: React.FC = () => {
-  const { ethBalance, stethBalance, wstethBalance } = useSubmitKeysFormData();
+  const { ethBalance, stethBalance, wstethBalance, keysAvailable } =
+    useSubmitKeysFormData();
 
   return (
     <>
@@ -46,19 +47,28 @@ export const TokenSelect: React.FC = () => {
           [TOKENS.eth]: (
             <Stack direction="column">
               <TokenAmount token={TOKENS.eth} amount={ethBalance} />
-              {/* <KeysAvailable {...keysAvailable?.ETH} token={TOKENS.eth} /> */}
+              <KeysAvailable
+                {...keysAvailable?.[TOKENS.eth]}
+                token={TOKENS.eth}
+              />
             </Stack>
           ),
           [TOKENS.steth]: (
             <Stack direction="column">
               <TokenAmount token={TOKENS.steth} amount={stethBalance} />
-              {/* <KeysAvailable {...keysAvailable?.STETH} token={TOKENS.steth} /> */}
+              <KeysAvailable
+                {...keysAvailable?.[TOKENS.steth]}
+                token={TOKENS.steth}
+              />
             </Stack>
           ),
           [TOKENS.wsteth]: (
             <Stack direction="column">
               <TokenAmount token={TOKENS.wsteth} amount={wstethBalance} />
-              {/* <KeysAvailable {...keysAvailable?.WSTETH} token={TOKENS.wsteth} /> */}
+              <KeysAvailable
+                {...keysAvailable?.[TOKENS.wsteth]}
+                token={TOKENS.wsteth}
+              />
             </Stack>
           ),
         }}

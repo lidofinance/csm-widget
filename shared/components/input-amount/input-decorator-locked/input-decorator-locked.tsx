@@ -1,5 +1,6 @@
 import { FC } from 'react';
-import { LockSmall, Tooltip, TooltipProps } from '@lidofinance/lido-ui';
+import { LockSmall } from '@lidofinance/lido-ui';
+import { Tooltip, TooltipProps } from '../../tooltip/tooltip';
 import { LockWrapper } from './styles';
 
 export const InputDecoratorLocked: FC<Partial<TooltipProps>> = (props) => (

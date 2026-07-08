@@ -1,4 +1,4 @@
-import { Tooltip } from '@lidofinance/lido-ui';
+import { Tooltip } from 'shared/components';
 import { FC, useCallback } from 'react';
 import { useGraphInteraction } from './hover-provider';
 import { PartStyle } from './style';

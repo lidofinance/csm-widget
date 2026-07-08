@@ -5,15 +5,16 @@ import {
   type FC,
   type ReactNode,
 } from 'react';
+import { CUSTOM_CURVE, OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
 import {
   formatPercentKeyIntervals,
   formatEthKeyIntervals,
 } from 'shared/components/parameters-list/format';
 import { RadioButton, Stack } from 'shared/components';
+import { useDisplayOperatorType } from 'shared/hooks';
 import { CurveBadge } from 'shared/node-operator/curve-badge/curve-badge';
 import styled from 'styled-components';
-import { getCurveMetadata, getModuleOperatorType } from 'consts';
 
 type GateCardProps = {
   curveId: bigint;
@@ -27,36 +28,32 @@ type GateCardProps = {
 export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
   const { data: parameters } = useCurveParameters(curveId);
 
-  const metadata = getCurveMetadata(curveId);
-  const operatorType = getModuleOperatorType(curveId);
+  // curveId is a defined bigint, so the display type is always resolvable;
+  // the CUSTOM_CURVE fallback only narrows the type for TypeScript.
+  const type = useDisplayOperatorType(curveId) ?? CUSTOM_CURVE;
+  const metadata = OPERATOR_TYPE_METADATA[type];
   const loading = !parameters;
 
   return (
     <RadioButton
       small
       {...fieldProps}
-      data-testid={`gateCard${metadata.short}`}
+      data-testid={`gateCard${metadata.short.replace(/\+/g, 'Plus')}`}
     >
       <Stack gap="xs">
         <CardLayout>
           <Stack direction="column" gap="sm">
-            <CurveBadge
-              data-testid="gateCardBadge"
-              type={operatorType}
-              inline
-            />
+            <CurveBadge data-testid="gateCardBadge" type={type} inline />
             <Text size="xs" weight={700} data-testid="gateCardTitle">
               {metadata.name}
             </Text>
-            {metadata.description && (
-              <Description
-                color="secondary"
-                size="xxs"
-                data-testid="gateCardDescription"
-              >
-                {metadata.description}
-              </Description>
-            )}
+            <Description
+              color="secondary"
+              size="xxs"
+              data-testid="gateCardDescription"
+            >
+              {metadata.description}
+            </Description>
           </Stack>
           <Divider type="vertical" />
           <Stack direction="column" gap="md">

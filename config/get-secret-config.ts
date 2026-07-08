@@ -1,5 +1,10 @@
 import getConfigNext from 'next/config';
-import { type Modify, parseUrlList, toBoolean } from './helpers';
+import {
+  type Modify,
+  parseDefaultChain,
+  parseUrlList,
+  toBoolean,
+} from './helpers';
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 const { serverRuntimeConfig } = getConfigNext();
@@ -31,8 +36,7 @@ export const getSecretConfig = (): SecretConfigType => {
   return {
     ...serverRuntimeConfig,
 
-    // Keep fallback as in 'env-dynamics.mjs'
-    defaultChain: Number(serverRuntimeConfig.defaultChain) || 560048,
+    defaultChain: parseDefaultChain(serverRuntimeConfig.defaultChain),
 
     // Hack: in the current implementation we can treat an empty array as a "tuple" (conditionally)
     rpcUrls_1: parseUrlList(serverRuntimeConfig.rpcUrls_1) as [

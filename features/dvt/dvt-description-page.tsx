@@ -17,7 +17,7 @@ export const DvtDescriptionPage: FC = () => (
   <Layout
     title="Apply for Identified DVT Cluster"
     subtitle="Get verified as an Independent DVT Cluster"
-    pageName="TypeDvt"
+    pageName="TypeDvtDescription"
     mainPrefix={<TypeBackButton />}
   >
     <DvtPageSwitcher />

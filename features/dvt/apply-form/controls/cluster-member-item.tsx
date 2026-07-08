@@ -42,7 +42,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
     name: `clusterMembers.${index}.verified` as const,
   });
 
-  const { getValues, setError, clearErrors, setValue } =
+  const { getValues, setError, clearErrors, setValue, trigger } =
     useFormContext<DvtApplyFormInputType>();
 
   const message = useClusterMemberMessage(watchedAddress);
@@ -76,6 +76,9 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
     setIsVerifying(true);
 
     try {
+      const isAddressValid = await trigger(`clusterMembers.${index}.address`);
+      if (!isAddressValid) return;
+
       const isValid = await verifyMessage({ address, signature });
 
       if (isValid) {
@@ -100,6 +103,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
     getValues,
     index,
     setError,
+    trigger,
     verifyMessage,
     isVerifying,
     verified,
@@ -120,12 +124,14 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
             Cluster member #{index + 1}
           </Text>
           {verified ? (
-            <SquaredChip variant="primary">
+            <SquaredChip variant="primary" data-testid="verifiedChip">
               Verified
               <VerifiedIcon color="primary" />
             </SquaredChip>
           ) : (
-            <SquaredChip variant="secondary">Unverified</SquaredChip>
+            <SquaredChip variant="secondary" data-testid="unverifiedChip">
+              Unverified
+            </SquaredChip>
           )}
         </Stack>
 

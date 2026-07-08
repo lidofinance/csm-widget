@@ -7,10 +7,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useChangeRoleMode } from 'shared/hooks';
 import { zeroAddress } from 'viem';
-import {
-  useConfirmReproposeModal,
-  useConfirmRewardsRoleModal,
-} from '../hooks/use-confirm-modal';
+import { useConfirmChangeRoleModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesChangeRole } from '../hooks/use-tx-modal-stages-change-role';
 import { useChangeRoleFormData } from './change-role-data-provider';
 import { ChangeRoleFormInputType, ChangeRoleFormNetworkData } from './types';
@@ -31,8 +28,7 @@ export const useChangeRoleFlowResolver = (
 > => {
   const sdk = useSmSDK();
   const appendNO = useAppendOperator();
-  const confirmRepropose = useConfirmReproposeModal();
-  const confirmRewardsRole = useConfirmRewardsRoleModal();
+  const confirm = useConfirmChangeRoleModal();
   const mode = useChangeRoleMode(role);
   const buildCallback = useTxModalStagesChangeRole(role);
 
@@ -65,22 +61,20 @@ export const useChangeRoleFlowResolver = (
       return {
         action,
         confirm: async () => {
-          if (input.intent === 'submit' && data.role === ROLES.REWARDS) {
-            if (action === 'propose' || action === 'rewards-change') {
-              const confirmed = await confirmRewardsRole({
-                isProposal: action === 'propose',
-              });
-              if (!confirmed) return false;
-            }
-            if (
-              action === 'propose' &&
-              data.proposedAddress &&
-              !(await confirmRepropose({}))
-            ) {
-              return false;
-            }
-          }
-          return true;
+          if (input.intent !== 'submit') return true;
+
+          const showRewards =
+            data.role === ROLES.REWARDS &&
+            (action === 'propose' || action === 'rewards-change');
+          const showRepropose = action === 'propose' && !!data.proposedAddress;
+
+          if (!showRewards && !showRepropose) return true;
+
+          return confirm({
+            showRewards,
+            isProposal: action === 'propose',
+            showRepropose,
+          });
         },
         submit: async () => {
           const address =
@@ -119,7 +113,7 @@ export const useChangeRoleFlowResolver = (
         },
       };
     },
-    [sdk, appendNO, confirmRepropose, confirmRewardsRole, mode, buildCallback],
+    [sdk, appendNO, confirm, mode, buildCallback],
   );
 };
 

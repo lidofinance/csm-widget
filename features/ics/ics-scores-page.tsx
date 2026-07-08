@@ -14,7 +14,7 @@ export const IcsScoresPage: FC = () => (
   <Layout
     title="Apply for Identified Community Stakers List"
     subtitle="Get verified as an Identified Community Staker"
-    pageName="TypeIcs"
+    pageName="TypeIcsSystem"
     mainPrefix={<TypeBackButton />}
   >
     <IcsPageSwitcher />

@@ -1,5 +1,7 @@
-import { Tooltip, Question } from '@lidofinance/lido-ui';
+import { Question } from '@lidofinance/lido-ui';
 import { ComponentProps, FC, ReactNode } from 'react';
+
+import { Tooltip } from '../tooltip/tooltip';
 
 import { ReactComponent as InfoIcon } from 'assets/icons/info.svg';
 import { ReactComponent as CalendarIcon } from 'assets/icons/info-calendar.svg';

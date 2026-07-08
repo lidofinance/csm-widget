@@ -1,4 +1,4 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { STETH_ROUNDING_THRESHOLD, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useWatch } from 'react-hook-form';
 import { FormTitle, Note } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
@@ -55,7 +55,7 @@ export const AmountInput: React.FC = () => {
         maxValue={maxAmount}
         disabled={!maxAmount}
       />
-      {coverAmount > 0n && (
+      {coverAmount > STETH_ROUNDING_THRESHOLD && (
         <Note>
           <FormatToken amount={coverAmount} token={TOKENS.steth} /> of Rewards
           will compensate for the Insufficient Bond (

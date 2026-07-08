@@ -12,6 +12,7 @@ import { FORK_WARM_UP_TIMEOUT } from 'tests/shared/consts/timeouts';
 import ForkActionsService from 'tests/shared/services/forkActions.service';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { HttpMockerService } from 'tests/shared/services/httpMocker.service';
+import { EvmNodeService } from 'tests/shared/services/evmNode.service';
 
 type WorkerFixtures = {
   // fixture-options
@@ -25,6 +26,7 @@ type WorkerFixtures = {
   ethereumSDK: SdkService;
   forkActionService: ForkActionsService;
   httpMockerService: HttpMockerService;
+  evmNode: EvmNodeService;
 };
 
 export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
@@ -94,6 +96,23 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
       await browserService.initWalletSetup(useFork);
 
+      if (
+        useFork &&
+        secretPhrase !== widgetFullConfig.accountConfig.SECRET_PHRASE
+      ) {
+        const targetAddress = mnemonicToAccount(secretPhrase).address;
+        await browserService
+          .getWalletPage()
+          .changeWalletAccountByAddress?.(targetAddress);
+      }
+
+      if (useFork) {
+        // Operator didn't exist during the initial warmup — re-run so
+        // operator-specific calls (getBondBalance, getStethPoolData, etc.)
+        // are pre-cached in Anvil before the browser starts.
+        await warmUpForkedNode(csmSDK, secretPhrase);
+      }
+
       await use(browserService);
 
       // We abort this request because we need to reduce the request count to the Elliptic api
@@ -127,6 +146,17 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
         : widgetFullConfig.standConfig.networkConfig.rpcUrl;
 
       await use(new LidoSDKClient([rpcUrl]));
+    },
+    { scope: 'worker' },
+  ],
+  evmNode: [
+    async ({ useFork }, use) => {
+      const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
+      const rpcUrl = useFork
+        ? forkRpcURL
+        : widgetFullConfig.standConfig.networkConfig.rpcUrl;
+
+      await use(new EvmNodeService(rpcUrl));
     },
     { scope: 'worker' },
   ],

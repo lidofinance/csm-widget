@@ -46,6 +46,7 @@ export class KeysPage extends BasePage {
   }
 
   async isNewOperator() {
+    await this.base.header.accountSection.waitFor({ state: 'visible' });
     return (
       (await this.headerTitle.isVisible()) &&
       (await this.headerSubTitle.isVisible())

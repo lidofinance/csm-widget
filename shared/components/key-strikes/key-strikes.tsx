@@ -1,4 +1,4 @@
-import { Tooltip } from '@lidofinance/lido-ui';
+import { Tooltip } from '../tooltip/tooltip';
 import { FC, useCallback } from 'react';
 import { useStrikeDates } from 'shared/hooks';
 import { formatDate } from 'utils';

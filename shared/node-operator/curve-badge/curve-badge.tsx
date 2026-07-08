@@ -1,21 +1,27 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
+import { useDisplayOperatorType } from 'shared/hooks';
 import { DescriptorCurveStyle } from './styles';
-import { OPERATOR_TYPE_METADATA } from 'consts';
+import { DisplayOperatorType, OPERATOR_TYPE_METADATA } from 'consts';
 
-type Props = { type?: OPERATOR_TYPE; noStyle?: boolean; inline?: boolean };
+type Props = {
+  type?: DisplayOperatorType;
+  curveId?: bigint;
+  noStyle?: boolean;
+  inline?: boolean;
+};
 
-export const CurveBadge: FC<Props> = ({ type, noStyle, inline }) => {
-  const title = type ? OPERATOR_TYPE_METADATA[type]?.short : null;
+export const CurveBadge: FC<Props> = ({ type, curveId, noStyle, inline }) => {
+  const typeFromCurveId = useDisplayOperatorType(curveId);
+  const resolved = type ?? typeFromCurveId;
 
-  if (!title) return null;
+  if (!resolved) return null;
 
   return (
     <DescriptorCurveStyle
-      $variant={noStyle ? undefined : type}
+      $variant={noStyle ? undefined : resolved}
       $inline={inline}
     >
-      {title}
+      {OPERATOR_TYPE_METADATA[resolved].short}
     </DescriptorCurveStyle>
   );
 };

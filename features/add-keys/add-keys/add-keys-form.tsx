@@ -11,6 +11,7 @@ import { AddKeysFormLoader } from './add-keys-form-loader';
 import { AmountInput } from './controls/amount-input';
 import { KeysConfirm } from './controls/keys-confirm';
 import { KeysInput } from './controls/keys-input';
+import { KeysLimitWarning } from './controls/keys-limit-warning';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 
@@ -22,6 +23,7 @@ export const AddKeysForm: FC = memo(() => {
           <AddKeysFormLoader>
             <Form>
               <TokenSelect />
+              <KeysLimitWarning />
               <KeysInput />
               <AmountInput />
               <KeysConfirm />

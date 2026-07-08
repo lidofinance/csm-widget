@@ -14,7 +14,7 @@ export const SplitsPage: FC = () => {
     <Layout
       title="Settings"
       subtitle="Manage your operator"
-      pageName="Settings"
+      pageName="SettingsSplits"
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>

@@ -44,7 +44,6 @@ export const useTxModalStagesEjectKeys = () =>
             }
             description=""
           />,
-          { isClosableOnLedger: true },
         ),
     }),
   );

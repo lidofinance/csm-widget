@@ -3,7 +3,7 @@ import {
   MODULE_NAME,
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
-import { getModuleOperatorType, PATH } from 'consts';
+import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
@@ -11,6 +11,7 @@ import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
+import { useModuleOperatorTypeGetter } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import invariant from 'tiny-invariant';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
@@ -19,8 +20,7 @@ import { useSubmitKeysFormData } from './submit-keys-data-provider';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
 export type SubmitKeysFlow =
-  | { action: 'cannot-submit' }
-  | ({ action: 'submit-keys' } & Executable);
+  { action: 'cannot-submit' } | ({ action: 'submit-keys' } & Executable);
 
 export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFormInputType,
@@ -28,6 +28,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFlow
 > => {
   const sdk = useSmSDK(MODULE_NAME.CSM);
+  const getOperatorType = useModuleOperatorTypeGetter();
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
@@ -75,7 +76,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             callback,
           };
 
-          const type = getModuleOperatorType(data.curveId);
+          const type = getOperatorType(data.curveId);
 
           const { result } =
             type === OPERATOR_TYPE.CSM_ICS && data.proof
@@ -104,6 +105,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
     },
     [
       sdk,
+      getOperatorType,
       appendNO,
       setOperatorCustomAddresses,
       n,

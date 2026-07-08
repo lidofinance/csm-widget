@@ -22,7 +22,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
         await test.step('Verify bond balance', async () => {
           await expect(
             bondRewardsPage.addBond.titledAmount.locator('div').first(),
-          ).toContainText('Bond balance');
+          ).toContainText('Excess bond');
           const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
 
           await expect(bondRewardsPage.addBond.titledAmountBalance).toHaveText(
@@ -32,7 +32,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
 
         await test.step('Verify text', async () => {
           const expectedText =
-            'Why you might need to add bond:Adding a bond serves as a voluntary security measure for your Node Operator to prevent your validators from becoming unbonded and being requested to exit in case of applied penaltiesSupplied bond will be stored as stETH, which also garners staking rewards';
+            'Why you might need to add bond:Adding a bond serves as a voluntary security measure for your Node Operator to prevent your validators from becoming unbonded and being requested to exit in case of applied penalties. Supplied bond will be stored as stETH, which also garners staking rewards.';
           await expect(bondRewardsPage.addBond.formInfoText).toContainText(
             expectedText,
           );

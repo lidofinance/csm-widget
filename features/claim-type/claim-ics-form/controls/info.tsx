@@ -1,7 +1,7 @@
 import { Accordion, Text } from '@lidofinance/lido-ui';
-import { getModuleOperatorType, OPERATOR_TYPE_METADATA } from 'consts';
 import { FC } from 'react';
 import { CompareParametersList, FormTitle } from 'shared/components';
+import { useCurveMetadata } from 'shared/hooks';
 import styled from 'styled-components';
 import { useClaimIcsFormData } from '../context';
 
@@ -9,8 +9,8 @@ export const Info: FC = () => {
   const { currentParameters, newParameters, currentCurveId, newCurveId } =
     useClaimIcsFormData();
 
-  const currentOperatorType = getModuleOperatorType(currentCurveId);
-  const newOperatorType = getModuleOperatorType(newCurveId);
+  const currentMetadata = useCurveMetadata(currentCurveId);
+  const newMetadata = useCurveMetadata(newCurveId);
   return (
     <>
       <FormTitle>Claim Identified Community Staker operator type</FormTitle>
@@ -24,11 +24,11 @@ export const Info: FC = () => {
           items={[
             {
               parameters: currentParameters,
-              title: `Current (${OPERATOR_TYPE_METADATA[currentOperatorType].short})`,
+              title: `Current (${currentMetadata?.short ?? ''})`,
             },
             {
               parameters: newParameters,
-              title: `New (${OPERATOR_TYPE_METADATA[newOperatorType].short})`,
+              title: `New (${newMetadata?.short ?? ''})`,
             },
           ]}
         />

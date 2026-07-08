@@ -98,4 +98,13 @@ export class CreateNodeOperatorForm {
       await this.submitKeysButton.click();
     });
   }
+
+  async submitNewKeys(keys: DepositKey[], tokenSymbol: TokenSymbol) {
+    await test.step('Create operator with new key(s)', async () => {
+      await this.getBondTokenElement(tokenSymbol).click();
+      await this.fillKeys(keys);
+      await this.confirmKeysReady.click();
+      await this.submitKeysButton.click();
+    });
+  }
 }

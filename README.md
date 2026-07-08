@@ -8,7 +8,7 @@ More on CSM in the [docs](https://docs.lido.fi/staking-modules/csm/intro).
 
 ## Prerequisites
 
-- Node.js v20+
+- Node.js v24 (`>=24.0.0 <25.0.0`)
 - Yarn package manager v1
 
 This project requires an `.env` file which is distributed via private communication channels. A sample can be found in `.env.example`
@@ -39,7 +39,7 @@ Step 5. Open [http://localhost:3000](http://localhost:3000) with your browser to
 
 ### Environment variables
 
-This project uses `publicRuntimeConfig` in the [next.config.js](./next.config.js) and `getServerSideProps` on the pages (function may be empty, but it forces Next.js to switch to Server-Side Rendering mode). This is necessary to quickly start the docker container without rebuilding the application.
+This project uses `publicRuntimeConfig` in the [next.config.mjs](./next.config.mjs) and `getServerSideProps` on the pages (function may be empty, but it forces Next.js to switch to Server-Side Rendering mode). This is necessary to quickly start the docker container without rebuilding the application.
 
 Read more about [runtime configuration](https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration) and [automatic static optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
 
@@ -81,13 +81,14 @@ Install browser:
 yarn playwright install chromium --with-deps
 ```
 
-To execute the tests, simply run:
+To execute the tests, run the suite for the module you want:
 
 ```sh
-yarn test
+yarn test:csm:e2e   # CSM widget
+yarn test:cm:e2e    # CM widget
 ```
 
-This will load your .env.local file and run all configured test scripts.
+Append `:ui` (`yarn test:csm:ui` / `yarn test:cm:ui`) to run Playwright in interactive UI mode. This loads your `.env.local` file and runs the configured test scripts.
 
 ## Release flow
 

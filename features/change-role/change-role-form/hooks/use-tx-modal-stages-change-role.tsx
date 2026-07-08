@@ -132,7 +132,6 @@ export const useTxModalStagesChangeRole = (role: ROLES) => {
               txHash={txHash}
               {...getTexts(input, data, mode).success}
             />,
-            { isClosableOnLedger: true },
           ),
       };
     },

@@ -1,4 +1,5 @@
 import { Text } from '@lidofinance/lido-ui';
+import { DATA_UNAVAILABLE } from 'consts';
 import { useSmSDK } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
@@ -18,14 +19,15 @@ import { DepositDataInputType } from './use-parse-deposit-data';
 export const DepositDataParsed: FC = () => {
   const { depositData: sdk } = useSmSDK();
 
-  const {
-    setValue,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useFormContext<DepositDataInputType>();
+  const { setValue, setError, clearErrors } =
+    useFormContext<DepositDataInputType>();
 
-  const { isValidating, isSubmitting } = useFormState();
+  // Subscribe to errors here — reading them off useFormContext() is not
+  // reactive in a child, leaving the row stale after async validation.
+  const { errors, isValidating, isSubmitting } =
+    useFormState<DepositDataInputType>({
+      name: ['depositData', 'rawDepositData'],
+    });
 
   const depositDataErrors = errors.depositData?.types;
 
@@ -72,7 +74,10 @@ export const DepositDataParsed: FC = () => {
         return (
           <TableRow key={pubkey} data-testid="deposit-data-row">
             <DataCell $error={hasError} data-testid="deposit-data-pubkey">
-              <Pubkey pubkey={pubkey} color={hasError ? 'error' : 'default'} />
+              <Pubkey
+                pubkey={pubkey || DATA_UNAVAILABLE}
+                color={hasError ? 'error' : 'default'}
+              />
             </DataCell>
             <DataCell $error={hasError} data-testid="deposit-data-index">
               #{index + 1}

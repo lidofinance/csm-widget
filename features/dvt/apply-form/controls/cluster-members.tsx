@@ -23,7 +23,7 @@ export const ClusterMembers: FC = () => {
         </Text>
       </Stack>
 
-      <ProgressBar>
+      <ProgressBar data-testid="clusterProgress">
         <ProgressBarTrack>
           <ProgressBarFill $progress={verifiedCount / CLUSTER_SIZE} />
         </ProgressBarTrack>

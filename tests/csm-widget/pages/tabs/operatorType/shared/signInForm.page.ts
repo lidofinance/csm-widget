@@ -5,6 +5,7 @@ import { BasePage } from '../../../../../shared/pages/base.page';
 
 export class SignInForm extends BasePage {
   form: Locator;
+  signInButton: Locator;
   mainAddressInput: Locator;
   mainAddressLabel: Locator;
 
@@ -14,6 +15,7 @@ export class SignInForm extends BasePage {
   ) {
     super(page);
     this.form = page.getByTestId('signInForm');
+    this.signInButton = this.form.getByRole('button', { name: 'Sign in' });
     this.mainAddressInput = this.form.locator('input[name="mainAddress"]');
     this.mainAddressLabel = this.form.locator(
       'xpath=//input[@name="mainAddress"]/ancestor::label',
@@ -22,9 +24,7 @@ export class SignInForm extends BasePage {
 
   async signIn() {
     await test.step('Sign in a message to prove ownership', async () => {
-      const signInButton = this.form.getByRole('button', { name: 'Sign in' });
-
-      await signInButton.click();
+      await this.signInButton.click();
       await this.page.waitForSelector(`text=Please sign the message`, {
         timeout: STAGE_WAIT_TIMEOUT,
       });

@@ -10,8 +10,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Lint**: `yarn lint` - Runs ESLint on TypeScript files
 - **Lint fix**: `yarn lint:fix` - Runs ESLint with auto-fix
 - **Type check**: `yarn types` - Runs TypeScript compiler type checking
-- **Tests**: `yarn test` - Runs Playwright e2e tests (same as `yarn test:e2e`)
+- **E2E tests**: `yarn test:csm:e2e` (CSM) or `yarn test:cm:e2e` (CM) - Runs Playwright e2e tests; append `:ui` (`test:csm:ui` / `test:cm:ui`) for interactive mode
 - **Unit tests**: `yarn test:unit` - Runs Jest unit tests
+- **Test setup**: `yarn test:setup` - Installs Chromium, keys generator, and Foundry fork tooling
 
 ## Environment Setup
 
@@ -19,7 +20,7 @@ The project requires an `.env.local` file with environment variables. Copy from 
 
 - `MODULE` - Set to `csm` (default) or `cm` to choose the module version
 - RPC provider URLs and CL API URLs with keys
-- For testing, also set `STAND_TYPE`, `WALLET_SECRET_PHRASE`, `WALLET_PASSWORD`, `RPC_URL_TOKEN`
+- For testing, also set `STAND_TYPE`, `WALLET_SECRET_PHRASE`, `WALLET_PASSWORD`
 
 Install Playwright browser for tests: `yarn playwright install chromium --with-deps`
 
@@ -43,8 +44,8 @@ The active version is controlled by the `MODULE` environment variable:
 
 The module value is:
 
-1. Read from `process.env.MODULE` in `next.config.mjs` (line 21)
-2. Exposed via `publicRuntimeConfig.module` (line 201)
+1. Read from `process.env.MODULE` in `next.config.mjs` (uppercased to `moduleMode`)
+2. Exposed via `publicRuntimeConfig.module`, then mapped to the `MODULE_NAME` enum in `config/get-preconfig.ts`
 3. Accessible throughout the app via `useConfig()` hook: `config.module`
 
 #### Detecting Module Version in Code
@@ -57,7 +58,7 @@ import { useConfig } from 'config';
 const {
   config: { module },
 } = useConfig();
-// module === 'csm' or 'cm'
+// module === 'CSM' or 'CM' (MODULE_NAME enum values, uppercase)
 ```
 
 **Show Rules (for conditional rendering):**
@@ -105,7 +106,7 @@ Module constants and titles are defined in `consts/module.ts`.
 - **Next.js 12** with Pages Router (not App Router)
 - **React 18** with TypeScript
 - **Styled Components** for styling
-- **Wagmi v2** + **Reef-Knot** for Web3 wallet connections
+- **Wagmi v3** + **Reef-Knot** for Web3 wallet connections
 - **Lido SDKs** (`@lidofinance/lido-csm-sdk`, `@lidofinance/lido-ethereum-sdk`)
 - **React Query** for data fetching
 - **React Hook Form** for form management
