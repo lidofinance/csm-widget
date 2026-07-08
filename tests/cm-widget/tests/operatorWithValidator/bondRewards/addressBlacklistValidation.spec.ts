@@ -30,7 +30,6 @@ test.describe(
           await widgetService.bondRewardsPage.claim.open();
           const noId = await widgetService.extractNodeOperatorId();
           await forkActionService.addBond(noId, BOND_EXCESS_ETH);
-          await forkActionService.reportRewards();
         });
 
         await test.step('Mock blacklisted wallet address', async () => {
