@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Tags } from 'tests/shared/consts/common.const';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
@@ -43,48 +44,50 @@ test.describe(
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
-    test('Should show access denied modal when bond is added', async ({
-      widgetService,
-    }) => {
-      const { addBond } = widgetService.bondRewardsPage;
+    test(
+      qase(453, 'Should show access denied modal when bond is added'),
+      async ({ widgetService }) => {
+        const { addBond } = widgetService.bondRewardsPage;
 
-      await test.step('Open the Add Bond page', async () => {
-        await addBond.open();
-      });
-
-      await test.step('Choose ETH, fill amount and add bond', async () => {
-        await addBond.selectBondToken(TOKENS.eth).click();
-        await addBond.amountInput.fill('0.0001');
-        await expect(addBond.addBondButton).toBeEnabled();
-        await addBond.addBondButton.click();
-      });
-
-      await test.step('Access denied modal is shown', async () => {
-        await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
-      });
-    });
-
-    test('Should show access denied modal when bond is claimed', async ({
-      widgetService,
-    }) => {
-      const { claim } = widgetService.bondRewardsPage;
-
-      await test.step('Open the Claim page', async () => {
-        await claim.open();
-      });
-
-      await test.step('Select stETH, fill max amount and claim', async () => {
-        await claim.selectBondToken(TOKENS.steth);
-        await claim.maxBtn.click();
-        await expect(claim.claimButton).toBeEnabled({
-          timeout: PAGE_WAIT_TIMEOUT,
+        await test.step('Open the Add Bond page', async () => {
+          await addBond.open();
         });
-        await claim.claimButton.click();
-      });
 
-      await test.step('Access denied modal is shown', async () => {
-        await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
-      });
-    });
+        await test.step('Choose ETH, fill amount and add bond', async () => {
+          await addBond.selectBondToken(TOKENS.eth).click();
+          await addBond.amountInput.fill('0.0001');
+          await expect(addBond.addBondButton).toBeEnabled();
+          await addBond.addBondButton.click();
+        });
+
+        await test.step('Access denied modal is shown', async () => {
+          await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
+        });
+      },
+    );
+
+    test(
+      qase(454, 'Should show access denied modal when bond is claimed'),
+      async ({ widgetService }) => {
+        const { claim } = widgetService.bondRewardsPage;
+
+        await test.step('Open the Claim page', async () => {
+          await claim.open();
+        });
+
+        await test.step('Select stETH, fill max amount and claim', async () => {
+          await claim.selectBondToken(TOKENS.steth);
+          await claim.maxBtn.click();
+          await expect(claim.claimButton).toBeEnabled({
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
+          await claim.claimButton.click();
+        });
+
+        await test.step('Access denied modal is shown', async () => {
+          await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
+        });
+      },
+    );
   },
 );

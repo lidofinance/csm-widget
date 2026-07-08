@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
@@ -40,45 +41,47 @@ test.describe(
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
-    test('Should show access denied modal when keys are submitted', async ({
-      widgetService,
-    }) => {
-      const { submitPage } = widgetService.keysPage;
+    test(
+      qase(455, 'Should show access denied modal when keys are submitted'),
+      async ({ widgetService }) => {
+        const { submitPage } = widgetService.keysPage;
 
-      await test.step('Open the submit keys page', async () => {
-        await submitPage.open();
-      });
-
-      await test.step('Fill valid keys and submit', async () => {
-        const keys = new KeysGeneratorService({ isCM: true }).generateKeys();
-        await submitPage.submitKeys(keys, TokenSymbol.ETH);
-      });
-
-      await test.step('Access denied modal is shown', async () => {
-        await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
-      });
-    });
-
-    test('Should show access denied modal when keys are removed', async ({
-      widgetService,
-    }) => {
-      const { removePage } = widgetService.keysPage;
-
-      await test.step('Open the remove keys page', async () => {
-        await removePage.open();
-      });
-
-      await test.step('Select a key and remove', async () => {
-        await removePage.keyCheckbox.first().click();
-        await expect(removePage.removeKeysButton).toBeEnabled({
-          timeout: PAGE_WAIT_TIMEOUT,
+        await test.step('Open the submit keys page', async () => {
+          await submitPage.open();
         });
-        await removePage.removeKeysButton.click();
-      });
 
-      await test.step('Access denied modal is shown', async () => {
-        await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
-      });
-    });
+        await test.step('Fill valid keys and submit', async () => {
+          const keys = new KeysGeneratorService({ isCM: true }).generateKeys();
+          await submitPage.submitKeys(keys, TokenSymbol.ETH);
+        });
+
+        await test.step('Access denied modal is shown', async () => {
+          await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
+        });
+      },
+    );
+
+    test(
+      qase(456, 'Should show access denied modal when keys are removed'),
+      async ({ widgetService }) => {
+        const { removePage } = widgetService.keysPage;
+
+        await test.step('Open the remove keys page', async () => {
+          await removePage.open();
+        });
+
+        await test.step('Select a key and remove', async () => {
+          await removePage.keyCheckbox.first().click();
+          await expect(removePage.removeKeysButton).toBeEnabled({
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
+          await removePage.removeKeysButton.click();
+        });
+
+        await test.step('Access denied modal is shown', async () => {
+          await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
+        });
+      },
+    );
   },
 );
