@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Tags } from 'tests/shared/consts/common.const';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
@@ -30,31 +31,35 @@ test.describe(
       await widgetService.page.unrouteAll();
     });
 
-    test('Should show access denied modal when Node Operator is created', async ({
-      widgetService,
-    }) => {
-      const { createNodeOperatorPage } = widgetService;
+    test(
+      qase(
+        457,
+        'Should show access denied modal when Node Operator is created',
+      ),
+      async ({ widgetService }) => {
+        const { createNodeOperatorPage } = widgetService;
 
-      await test.step('Go through the creation wizard', async () => {
-        await createNodeOperatorPage.open();
-        await createNodeOperatorPage.step1.fillForm(OPERATOR_TYPE.CM_PTO);
-        await createNodeOperatorPage.step2.fillForm(
-          VALID_ADDRESS,
-          VALID_ADDRESS,
-        );
-        await createNodeOperatorPage.step3.fillForm(
-          OPERATOR_NAME,
-          OPERATOR_DESCRIPTION,
-        );
-      });
+        await test.step('Go through the creation wizard', async () => {
+          await createNodeOperatorPage.open();
+          await createNodeOperatorPage.step1.fillForm(OPERATOR_TYPE.CM_PTO);
+          await createNodeOperatorPage.step2.fillForm(
+            VALID_ADDRESS,
+            VALID_ADDRESS,
+          );
+          await createNodeOperatorPage.step3.fillForm(
+            OPERATOR_NAME,
+            OPERATOR_DESCRIPTION,
+          );
+        });
 
-      await test.step('Click "Create Node Operator"', async () => {
-        await createNodeOperatorPage.step4.createButton.click();
-      });
+        await test.step('Click "Create Node Operator"', async () => {
+          await createNodeOperatorPage.step4.createButton.click();
+        });
 
-      await test.step('Access denied modal is shown', async () => {
-        await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
-      });
-    });
+        await test.step('Access denied modal is shown', async () => {
+          await expect(txModal.modal).toContainText(OFAC_MODAL_TEXT);
+        });
+      },
+    );
   },
 );

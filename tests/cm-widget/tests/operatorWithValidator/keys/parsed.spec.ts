@@ -276,47 +276,50 @@ test.describe(
       },
     );
 
-    test('Should count only invalid keys when some keys are valid', async () => {
-      const keys = keysGeneratorService.generateKeys(3);
-      keys[0].amount = 1;
-      keys[2].amount = 1;
+    test(
+      qase(365, 'Should count only invalid keys when some keys are valid'),
+      async () => {
+        const keys = keysGeneratorService.generateKeys(3);
+        keys[0].amount = 1;
+        keys[2].amount = 1;
 
-      await keysPage.submitPage.fillKeys(keys);
-      await expect(keysPage.submitPage.validationInputError).toContainText(
-        'Invalid deposit data',
-      );
+        await keysPage.submitPage.fillKeys(keys);
+        await expect(keysPage.submitPage.validationInputError).toContainText(
+          'Invalid deposit data',
+        );
 
-      await test.step('Verify counter reflects only the invalid keys', async () => {
-        await expect(keysPage.submitPage.parsedTab).toBeEnabled();
-        await expect(keysPage.submitPage.parsedTabCounter).toHaveText('2');
-      });
+        await test.step('Verify counter reflects only the invalid keys', async () => {
+          await expect(keysPage.submitPage.parsedTab).toBeEnabled();
+          await expect(keysPage.submitPage.parsedTabCounter).toHaveText('2');
+        });
 
-      await keysPage.submitPage.selectTab('Parsed');
-      await expect(keysPage.submitPage.depositDataRow).toHaveCount(3);
+        await keysPage.submitPage.selectTab('Parsed');
+        await expect(keysPage.submitPage.depositDataRow).toHaveCount(3);
 
-      await test.step('Verify per-row error detection', async () => {
-        const rows = keysPage.submitPage.depositDataRow;
-        await expect(
-          rows.nth(0).getByTestId('deposit-data-error-detected'),
-        ).toHaveText('Yes');
-        await expect(
-          rows.nth(1).getByTestId('deposit-data-error-detected'),
-        ).toHaveText('No');
-        await expect(
-          rows.nth(2).getByTestId('deposit-data-error-detected'),
-        ).toHaveText('Yes');
+        await test.step('Verify per-row error detection', async () => {
+          const rows = keysPage.submitPage.depositDataRow;
+          await expect(
+            rows.nth(0).getByTestId('deposit-data-error-detected'),
+          ).toHaveText('Yes');
+          await expect(
+            rows.nth(1).getByTestId('deposit-data-error-detected'),
+          ).toHaveText('No');
+          await expect(
+            rows.nth(2).getByTestId('deposit-data-error-detected'),
+          ).toHaveText('Yes');
 
-        await expect(
-          rows.nth(0).getByTestId('deposit-data-error'),
-        ).toContainText('amount is not equal to 32 ETH');
-        await expect(
-          rows.nth(1).getByTestId('deposit-data-error'),
-        ).toBeHidden();
-        await expect(
-          rows.nth(2).getByTestId('deposit-data-error'),
-        ).toContainText('amount is not equal to 32 ETH');
-      });
-    });
+          await expect(
+            rows.nth(0).getByTestId('deposit-data-error'),
+          ).toContainText('amount is not equal to 32 ETH');
+          await expect(
+            rows.nth(1).getByTestId('deposit-data-error'),
+          ).toBeHidden();
+          await expect(
+            rows.nth(2).getByTestId('deposit-data-error'),
+          ).toContainText('amount is not equal to 32 ETH');
+        });
+      },
+    );
 
     requiredFields.forEach((propertyName) => {
       test(
