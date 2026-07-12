@@ -2,7 +2,7 @@ import { PATH } from 'consts/urls';
 import type { ShowFlags, ShowFlagsState, ShowRule } from 'shared/hooks';
 import { evalGuards, ROUTE_GUARDS } from '../route-guards';
 import { hasRole } from '../route-resolution';
-import { resolveTerminal } from '../route-terminal';
+import { HOP_CAP, resolveTerminal } from '../route-terminal';
 
 // Section-index pages whose pages/*/index.tsx renders <StubRedirect>: they hold
 // no content and forward via resolvePath. Only the browser simulator needs this
@@ -40,8 +40,8 @@ export const makeFlags = (overrides: Partial<ShowFlags> = {}): ShowFlags => ({
   ...overrides,
 });
 
-export const HOP_CAP = 10;
-
+// simulateLoad bounds real browser pushes (not resolveTerminal's internal hops),
+// but reuses the same runaway backstop so the two never drift apart.
 export type LoadResult = { terminal: PATH; pushes: number; looped: boolean };
 
 // What a freshly-loaded page renders, mirroring the components exactly:
