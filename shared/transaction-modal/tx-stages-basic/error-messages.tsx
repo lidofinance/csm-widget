@@ -24,13 +24,49 @@ export const ERROR_META: Record<ErrorCode, ErrorMeta> = {
     retryable: false, // wallet must be funded first
   },
   [ErrorCode.WALLET_RPC]: {
+    // Generalized: the WALLET_RPC bucket covers any wallet RPC fault. Genuine
+    // rate-limiting is now RATE_LIMITED → TOO_MANY_REQUESTS, so this copy no
+    // longer claims "Too many requests".
     message: (
       <>
-        Wallet RPC provider returns &quot;Too many requests&quot;. <br />
-        Try to change RPC url in your wallet.
+        Your wallet&apos;s RPC provider returned an error. <br />
+        Try changing the RPC URL in your wallet.
       </>
     ),
     retryable: true,
+  },
+  [ErrorCode.WALLET_TIMEOUT]: {
+    message: 'Your wallet took too long to respond. Please try again.',
+    retryable: true,
+  },
+  [ErrorCode.WALLET_UNAUTHORIZED]: {
+    message:
+      'Your wallet has not authorized this action. Reconnect your wallet and try again.',
+    retryable: true,
+  },
+  [ErrorCode.WALLET_UNSUPPORTED]: {
+    message: 'Your wallet does not support this operation',
+    retryable: false, // wallet capability — retrying repeats the failure
+  },
+  [ErrorCode.NONCE_ERROR]: {
+    message:
+      "Your wallet's transaction nonce is out of sync. Reset the account activity in your wallet and try again.",
+    retryable: true,
+  },
+  [ErrorCode.FEE_ERROR]: {
+    message:
+      'The transaction fee is set too high or too low. Adjust the fee in your wallet and try again.',
+    retryable: true,
+  },
+  [ErrorCode.GAS_ERROR]: {
+    message:
+      'The transaction gas limit is invalid. Adjust the gas limit in your wallet and try again.',
+    retryable: true,
+  },
+  [ErrorCode.SMART_ACCOUNT_ERROR]: {
+    message:
+      'Your smart account could not process this transaction. Please review the details.',
+    retryable: false, // AA validation/paymaster revert — deterministic
   },
   [ErrorCode.BUNDLE_NOT_FOUND]: {
     message:
