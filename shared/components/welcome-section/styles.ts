@@ -1,6 +1,8 @@
 import { Block, ThemeName } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
+import { isModuleCM } from 'consts';
+import LogoCmLight from 'assets/cm-light.png';
 import LogoDark from 'assets/csm-dark.png';
 import LogoLight from 'assets/csm-light.png';
 
@@ -47,9 +49,13 @@ export const BlockStyled = styled(Block)`
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
 `;
 
-export const CSMLogo = styled.img.attrs(({ theme }) => ({
+export const ModuleLogo = styled.img.attrs(({ theme }) => ({
   alt: '',
-  src: theme.name === ThemeName.light ? LogoLight.src : LogoDark.src,
+  src: isModuleCM
+    ? LogoCmLight.src
+    : theme.name === ThemeName.light
+      ? LogoLight.src
+      : LogoDark.src,
 }))`
   width: 55%;
   display: flex;
