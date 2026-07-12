@@ -1,16 +1,12 @@
 import { PATH } from 'consts/urls';
 import { NormalizeQueuePage } from 'features/normalize-queue';
 import { getProps } from 'utilsApi';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 
 const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <Gate rule="IS_CSM" fallback={<Navigate path={PATH.KEYS} />}>
-        <NormalizeQueuePage />
-      </Gate>
-    </Gate>
-  </GateLoaded>
+  <PageGate path={PATH.KEYS_NORMALIZE}>
+    <NormalizeQueuePage />
+  </PageGate>
 );
 
 export default Page;

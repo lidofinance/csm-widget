@@ -50,6 +50,32 @@
       }
     ]
   },
+  "overrides": [
+    {
+      "files": ["pages/**"],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "paths": [
+              {
+                "name": "shared/navigate",
+                "importNames": ["Gate"],
+                "message": "Use PageGate/StubRedirect for page access control"
+              }
+            ],
+            "patterns": [
+              {
+                "group": ["shared/navigate/*"],
+                "importNames": ["Gate"],
+                "message": "Use PageGate/StubRedirect for page access control"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
   "settings": {
     "react": {
       "version": "detect"

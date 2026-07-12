@@ -1,13 +1,14 @@
+import { PATH } from 'consts/urls';
 import { DvtDescriptionPage } from 'features/dvt';
 import { FC } from 'react';
-import { GateLoaded } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
 const Page: FC = () => {
   return (
-    <GateLoaded>
+    <PageGate path={PATH.TYPE_DVT_DESCRIPTION}>
       <DvtDescriptionPage />
-    </GateLoaded>
+    </PageGate>
   );
 };
 

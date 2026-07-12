@@ -1,14 +1,12 @@
 import { PATH } from 'consts/urls';
 import { ExitKeysPage } from 'features/exit-keys';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
 const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <ExitKeysPage />
-    </Gate>
-  </GateLoaded>
+  <PageGate path={PATH.KEYS_EXIT}>
+    <ExitKeysPage />
+  </PageGate>
 );
 
 export default Page;

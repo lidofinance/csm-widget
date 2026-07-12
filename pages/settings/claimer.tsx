@@ -1,14 +1,12 @@
 import { PATH } from 'consts/urls';
 import { ClaimerPage } from 'features/change-role';
 import { getProps } from 'utilsApi';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 
 const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <ClaimerPage />
-    </Gate>
-  </GateLoaded>
+  <PageGate path={PATH.SETTINGS_CLAIMER}>
+    <ClaimerPage />
+  </PageGate>
 );
 
 export default Page;

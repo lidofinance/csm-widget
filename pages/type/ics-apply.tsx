@@ -1,18 +1,14 @@
 import { PATH } from 'consts';
 import { IcsApplyPage } from 'features/ics';
 import { FC } from 'react';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
 const ScoresPage: FC = () => {
   return (
-    <GateLoaded>
-      <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
-        <Gate rule="ICS_APPLY_ENABLED" fallback={<Navigate path={PATH.HOME} />}>
-          <IcsApplyPage />
-        </Gate>
-      </Gate>
-    </GateLoaded>
+    <PageGate path={PATH.TYPE_ICS_APPLY}>
+      <IcsApplyPage />
+    </PageGate>
   );
 };
 

@@ -1,14 +1,12 @@
 import { PATH } from 'consts/urls';
 import { AddBondPage } from 'features/add-bond';
 import { getProps } from 'utilsApi';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 
 const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <AddBondPage />
-    </Gate>
-  </GateLoaded>
+  <PageGate path={PATH.BOND_ADD}>
+    <AddBondPage />
+  </PageGate>
 );
 
 export default Page;

@@ -1,14 +1,12 @@
 import { PATH } from 'consts/urls';
 import { EjectKeysPage } from 'features/eject-keys';
 import { getProps } from 'utilsApi';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 
 const Page = () => (
-  <GateLoaded>
-    <Gate rule="HAS_OWNER_ROLE" fallback={<Navigate path={PATH.KEYS} />}>
-      <EjectKeysPage />
-    </Gate>
-  </GateLoaded>
+  <PageGate path={PATH.KEYS_EJECT}>
+    <EjectKeysPage />
+  </PageGate>
 );
 
 export default Page;

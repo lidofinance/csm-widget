@@ -1,27 +1,13 @@
 import { PATH } from 'consts/urls';
 import { DelayedPenaltyCancelPage } from 'features/delayed-penalty';
-import { useHasReportDelayedPenaltyRole } from 'modules/web3';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
-const Page = () => {
-  const { isPending } = useHasReportDelayedPenaltyRole();
-
-  return (
-    <GateLoaded>
-      <Gate rule="IS_CONNECTED_WALLET" fallback={<Navigate path={PATH.HOME} />}>
-        <GateLoaded additional={isPending}>
-          <Gate
-            rule="EL_DELAYED_PENALTY_REPORTER"
-            fallback={<Navigate path={PATH.HOME} />}
-          >
-            <DelayedPenaltyCancelPage />
-          </Gate>
-        </GateLoaded>
-      </Gate>
-    </GateLoaded>
-  );
-};
+const Page = () => (
+  <PageGate path={PATH.DELAYED_PENALTY_CANCEL}>
+    <DelayedPenaltyCancelPage />
+  </PageGate>
+);
 
 export default Page;
 

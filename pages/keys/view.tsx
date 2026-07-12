@@ -1,14 +1,12 @@
 import { PATH } from 'consts/urls';
 import { ViewKeysPage } from 'features/view-keys';
 import { getProps } from 'utilsApi';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 
 const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <ViewKeysPage />
-    </Gate>
-  </GateLoaded>
+  <PageGate path={PATH.KEYS_VIEW}>
+    <ViewKeysPage />
+  </PageGate>
 );
 
 export default Page;

@@ -1,14 +1,12 @@
 import { PATH } from 'consts/urls';
 import { RewardAddressPage } from 'features/change-role';
 import { getProps } from 'utilsApi';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 
 const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <RewardAddressPage />
-    </Gate>
-  </GateLoaded>
+  <PageGate path={PATH.SETTINGS_REWARDS_ADDRESS}>
+    <RewardAddressPage />
+  </PageGate>
 );
 
 export default Page;

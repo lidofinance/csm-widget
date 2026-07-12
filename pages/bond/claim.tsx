@@ -1,14 +1,12 @@
 import { PATH } from 'consts/urls';
 import { ClaimBondPage } from 'features/claim-bond';
 import { getProps } from 'utilsApi';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 
 const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-      <ClaimBondPage />
-    </Gate>
-  </GateLoaded>
+  <PageGate path={PATH.BOND_CLAIM}>
+    <ClaimBondPage />
+  </PageGate>
 );
 
 export default Page;

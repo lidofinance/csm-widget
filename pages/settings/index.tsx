@@ -1,12 +1,8 @@
 import { PATH } from 'consts/urls';
-import { GateLoaded, Navigate } from 'shared/navigate';
+import { StubRedirect } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
-const Page = () => (
-  <GateLoaded>
-    <Navigate path={PATH.SETTINGS_ROLES} />
-  </GateLoaded>
-);
+const Page = () => <StubRedirect path={PATH.SETTINGS} />;
 
 export default Page;
 

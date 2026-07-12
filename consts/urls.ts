@@ -54,6 +54,7 @@ export const PATH = <const>{
 
   GROUP: '/group',
 
+  WRAPPED: '/wrapped-2025',
   WRAPPED_SHARE: '/wrapped-2025/share',
 
   QA_CONFIG: '/qa-config',

@@ -1,16 +1,12 @@
 import { PATH } from 'consts/urls';
 import { getProps } from 'utilsApi';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 import { ClaimIcsPage } from 'features/claim-type';
 
 const Page = () => (
-  <GateLoaded>
-    <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
-      <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
-        <ClaimIcsPage />
-      </Gate>
-    </Gate>
-  </GateLoaded>
+  <PageGate path={PATH.TYPE_ICS_CLAIM}>
+    <ClaimIcsPage />
+  </PageGate>
 );
 
 export default Page;

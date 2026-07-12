@@ -1,7 +1,7 @@
 import { PATH } from 'consts/urls';
 import { SurveysPage } from 'features/surveys';
 import { useRouter } from 'next/router';
-import { Gate, GateLoaded, Navigate } from 'shared/navigate';
+import { PageGate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
 const Page = () => {
@@ -9,11 +9,9 @@ const Page = () => {
   const slug = router.query.slug as string[] | undefined;
 
   return (
-    <GateLoaded>
-      <Gate rule="IS_SURVEYS_ACTIVE" fallback={<Navigate path={PATH.HOME} />}>
-        <SurveysPage slug={slug} />
-      </Gate>
-    </GateLoaded>
+    <PageGate path={PATH.SURVEYS}>
+      <SurveysPage slug={slug} />
+    </PageGate>
   );
 };
 
