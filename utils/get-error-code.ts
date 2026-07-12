@@ -23,13 +23,25 @@ export enum ErrorCode {
   DENIED_SIG = 'DENIED_SIG',
   NOT_ENOUGH_ETHER = 'NOT_ENOUGH_ETHER',
   WALLET_RPC = 'WALLET_RPC',
+  WALLET_TIMEOUT = 'WALLET_TIMEOUT',
+  WALLET_UNAUTHORIZED = 'WALLET_UNAUTHORIZED',
+  // Wallet-capability faults (SDK METHOD_NOT_SUPPORTED + BATCH_NOT_ATOMIC): the
+  // wallet cannot perform the requested op — one shared bucket, retry pointless.
+  WALLET_UNSUPPORTED = 'WALLET_UNSUPPORTED',
   BUNDLE_NOT_FOUND = 'BUNDLE_NOT_FOUND',
   NETWORK_ERROR = 'NETWORK_ERROR',
   CHAIN_MISMATCH = 'CHAIN_MISMATCH',
+  // Tx-parameter faults the user can fix in their wallet.
+  NONCE_ERROR = 'NONCE_ERROR',
+  FEE_ERROR = 'FEE_ERROR',
+  GAS_ERROR = 'GAS_ERROR',
   CONTRACT_ERROR = 'CONTRACT_ERROR',
   EXECUTION_REVERTED = 'EXECUTION_REVERTED',
   TRANSACTION_REVERTED = 'TRANSACTION_REVERTED',
   DECODE_RESULT_ERROR = 'DECODE_RESULT_ERROR',
+  // Smart-account (EIP-4337/5792) validation + paymaster faults (SDK
+  // AA_VALIDATION_ERROR + AA_PAYMASTER_ERROR) — one shared bucket.
+  SMART_ACCOUNT_ERROR = 'SMART_ACCOUNT_ERROR',
   // Lido require-string reverts (no ABI selector)
   LIMIT_REACHED = 'LIMIT_REACHED',
   INVALID_SIGNATURE = 'INVALID_SIGNATURE',
@@ -53,13 +65,28 @@ const SDK_TO_WIDGET: Partial<Record<ERROR_CODE, ErrorCode>> = {
   [ERROR_CODE.USER_REJECTED]: ErrorCode.DENIED_SIG,
   [ERROR_CODE.INSUFFICIENT_FUNDS]: ErrorCode.NOT_ENOUGH_ETHER,
   [ERROR_CODE.WALLET_RPC_ERROR]: ErrorCode.WALLET_RPC,
+  [ERROR_CODE.WALLET_TIMEOUT]: ErrorCode.WALLET_TIMEOUT,
+  // Genuine wallet rate-limiting now has its own SDK code — it, not WALLET_RPC,
+  // is the real "Too many requests" case, so it reuses the API rate-limit copy.
+  [ERROR_CODE.RATE_LIMITED]: ErrorCode.TOO_MANY_REQUESTS,
+  [ERROR_CODE.WALLET_UNAUTHORIZED]: ErrorCode.WALLET_UNAUTHORIZED,
+  [ERROR_CODE.METHOD_NOT_SUPPORTED]: ErrorCode.WALLET_UNSUPPORTED,
+  [ERROR_CODE.BATCH_NOT_ATOMIC]: ErrorCode.WALLET_UNSUPPORTED,
   [ERROR_CODE.BUNDLE_NOT_FOUND]: ErrorCode.BUNDLE_NOT_FOUND,
+  // A duplicate bundle id means the batch is already in flight — same
+  // non-retryable "check your wallet" outcome as a missing bundle.
+  [ERROR_CODE.DUPLICATE_BUNDLE_ID]: ErrorCode.BUNDLE_NOT_FOUND,
   [ERROR_CODE.NETWORK_ERROR]: ErrorCode.NETWORK_ERROR,
   [ERROR_CODE.CHAIN_MISMATCH]: ErrorCode.CHAIN_MISMATCH,
+  [ERROR_CODE.NONCE_ERROR]: ErrorCode.NONCE_ERROR,
+  [ERROR_CODE.FEE_ERROR]: ErrorCode.FEE_ERROR,
+  [ERROR_CODE.GAS_ERROR]: ErrorCode.GAS_ERROR,
   [ERROR_CODE.CONTRACT_REVERT]: ErrorCode.CONTRACT_ERROR,
   [ERROR_CODE.EXECUTION_REVERTED]: ErrorCode.EXECUTION_REVERTED,
   [ERROR_CODE.TRANSACTION_REVERTED]: ErrorCode.TRANSACTION_REVERTED,
   [ERROR_CODE.DECODE_RESULT_ERROR]: ErrorCode.DECODE_RESULT_ERROR,
+  [ERROR_CODE.AA_VALIDATION_ERROR]: ErrorCode.SMART_ACCOUNT_ERROR,
+  [ERROR_CODE.AA_PAYMASTER_ERROR]: ErrorCode.SMART_ACCOUNT_ERROR,
 };
 
 // Codes whose revert may actually be a Lido `require`-string (no ABI selector),
@@ -224,6 +251,7 @@ const BENIGN_LOG_CODES = new Set<ErrorCode>([
   ErrorCode.SESSION_EXPIRED,
   ErrorCode.TOO_MANY_REQUESTS,
   ErrorCode.NETWORK_ERROR,
+  ErrorCode.WALLET_TIMEOUT, // transient + retryable — debug, not error noise
 ]);
 
 export const getErrorCode = (
