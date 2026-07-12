@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`nav visibility vs routing reachability should document visible nav items that land outside their own section 1`] = `[]`;

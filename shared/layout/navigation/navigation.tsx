@@ -38,26 +38,35 @@ export const Navigation: FC<{ desktopHidden?: boolean }> = memo(
       >
         <NavContainer data-testid="navBlockMain">
           <NavBlock title={moduleMeta.title}>
-            {routes.map(({ name, path, subPaths, icon, suffix, colored }) => {
-              const isActive = getIsActivePath(pathname, path, subPaths);
+            {routes.map(
+              ({
+                name,
+                path,
+                subPaths,
+                icon: Icon,
+                suffix: Suffix,
+                colored,
+              }) => {
+                const isActive = getIsActivePath(pathname, path, subPaths);
 
-              return (
-                <LocalLink
-                  key={path}
-                  href={path}
-                  onClick={toggleExpanded}
-                  data-testid="navItem"
-                >
-                  <NavLink $active={isActive} $colored={colored}>
-                    {icon}
-                    <Stack gap="sm" center>
-                      <span>{name}</span>
-                      {suffix}
-                    </Stack>
-                  </NavLink>
-                </LocalLink>
-              );
-            })}
+                return (
+                  <LocalLink
+                    key={path}
+                    href={path}
+                    onClick={toggleExpanded}
+                    data-testid="navItem"
+                  >
+                    <NavLink $active={isActive} $colored={colored}>
+                      <Icon />
+                      <Stack gap="sm" center>
+                        <span>{name}</span>
+                        {Suffix && <Suffix />}
+                      </Stack>
+                    </NavLink>
+                  </LocalLink>
+                );
+              },
+            )}
           </NavBlock>
           <NavBlock title="Settings" onlyMobile>
             {/* Use ThemeToggleButton instead of NavLink */}
