@@ -8,8 +8,8 @@ type CounterClaimTypeProps = {
 };
 
 export const CounterClaimType: FC<CounterClaimTypeProps> = ({ type }) => {
-  const canClaimIcs = useCanClaimICS();
-  const canClaimIdvtc = useCanClaimIDVTC();
+  const { canClaim: canClaimIcs } = useCanClaimICS();
+  const { canClaim: canClaimIdvtc } = useCanClaimIDVTC();
 
   if (type === OPERATOR_TYPE.CSM_IDVTC || (!type && canClaimIdvtc)) {
     return (

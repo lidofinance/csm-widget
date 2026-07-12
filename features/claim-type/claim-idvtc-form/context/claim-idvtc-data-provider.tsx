@@ -45,7 +45,7 @@ const useClaimIdvtcFormNetworkData: NetworkData<
   const isProofLoading = proofQuery.isPending;
 
   const { isPending: isIsOwnerLoading } = useOperatorIsOwner(nodeOperatorId);
-  const canClaimCurve = useCanClaimIDVTC();
+  const { canClaim: canClaimCurve } = useCanClaimIDVTC();
 
   const { data: currentOperatorType, isPending: isCurrentOperatorTypeLoading } =
     useOperatorType(nodeOperatorId);

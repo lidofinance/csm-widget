@@ -22,6 +22,7 @@ import {
   useCanClaimIDVTC,
   useCanCreateNodeOperator,
 } from 'shared/hooks';
+import { coerceShowFlags, evaluateShowRules } from 'utils';
 import { Address, isAddressEqual } from 'viem';
 
 export type ShowRule =
@@ -46,6 +47,9 @@ export type ShowRule =
   | 'IS_CM';
 
 export type ShowFlags = Record<ShowRule, boolean>;
+
+// `undefined` = the data backing the rule is still loading
+export type ShowFlagsState = Record<ShowRule, boolean | undefined>;
 
 const isManagerRole = (
   nodeOperator: NodeOperatorShortInfo | undefined,
@@ -80,41 +84,72 @@ const isOwnerRole = (
     : isRewardsRole(nodeOperator, address);
 };
 
-export const useShowFlags = (): ShowFlags => {
+const pendingGate = (pending: boolean, value: boolean): boolean | undefined =>
+  pending ? undefined : value;
+
+export const useShowFlagsState = (): ShowFlagsState => {
   const { isAccountActive, address, chainId } = useDappStatus();
-  const { nodeOperator } = useNodeOperator();
+  const { nodeOperator, isPending: isOperatorPending } = useNodeOperator();
   const { data: invites } = useInvites();
-  const { data: isReportingRole } = useHasReportDelayedPenaltyRole();
+  const { data: isReportingRole, isPending: isReportingRolePending } =
+    useHasReportDelayedPenaltyRole();
   const { data: balance } = useOperatorBalance(nodeOperator?.nodeOperatorId);
-  const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
-  const canClaimICS = useCanClaimICS();
-  const canClaimIDVTC = useCanClaimIDVTC();
-  const { canCreate: canCreateNO } = useCanCreateNodeOperator();
+  const { data: info, isLoading: isInfoLoading } = useOperatorInfo(
+    nodeOperator?.nodeOperatorId,
+  );
+  const { canClaim: icsCanClaim, isPending: icsIsPending } = useCanClaimICS();
+  const { canClaim: idvtcCanClaim, isPending: idvtcIsPending } =
+    useCanClaimIDVTC();
+  const { canCreate: canCreateNO, isPending: isCanCreatePending } =
+    useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
   const {
     config: { module },
   } = useConfig();
 
+  // operator identity (and roles derived from it) is unknown until loaded
+  const isOperatorUnknown = isAccountActive && isOperatorPending;
+
   return useMemo(
     () => ({
       ['IS_MAINNET']: chainId === CHAINS.Mainnet,
       ['IS_CONNECTED_WALLET']: isAccountActive,
-      ['NOT_NODE_OPERATOR']: !nodeOperator,
-      ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
-      ['CAN_CREATE']: !!canCreateNO,
-      ['HAS_KEYS']: !!info?.totalAddedKeys,
-      ['HAS_MANAGER_ROLE']:
+      ['NOT_NODE_OPERATOR']: pendingGate(isOperatorUnknown, !nodeOperator),
+      ['IS_NODE_OPERATOR']: pendingGate(
+        isOperatorUnknown,
+        isAccountActive && !!nodeOperator,
+      ),
+      ['CAN_CREATE']: pendingGate(isCanCreatePending, canCreateNO),
+      // isLoading (not isPending): a disabled query must read as definite false
+      ['HAS_KEYS']: pendingGate(isInfoLoading, !!info?.totalAddedKeys),
+      ['HAS_MANAGER_ROLE']: pendingGate(
+        isOperatorUnknown,
         isAccountActive && isManagerRole(nodeOperator, address),
-      ['HAS_REWARDS_ROLE']:
+      ),
+      ['HAS_REWARDS_ROLE']: pendingGate(
+        isOperatorUnknown,
         isAccountActive && isRewardsRole(nodeOperator, address),
-      ['HAS_OWNER_ROLE']: isAccountActive && isOwnerRole(nodeOperator, address),
+      ),
+      ['HAS_OWNER_ROLE']: pendingGate(
+        isOperatorUnknown,
+        isAccountActive && isOwnerRole(nodeOperator, address),
+      ),
       ['HAS_INVITES']: !!invites?.length,
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
-      ['EL_DELAYED_PENALTY_REPORTER']: !!isReportingRole,
-      ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
-      ['CAN_CLAIM_IDVTC']: !!canClaimIDVTC && isAccountActive,
+      ['EL_DELAYED_PENALTY_REPORTER']: pendingGate(
+        isAccountActive && isReportingRolePending,
+        !!isReportingRole,
+      ),
+      ['CAN_CLAIM_ICS']: pendingGate(
+        isAccountActive && icsIsPending,
+        !!icsCanClaim && isAccountActive,
+      ),
+      ['CAN_CLAIM_IDVTC']: pendingGate(
+        isAccountActive && idvtcIsPending,
+        !!idvtcCanClaim && isAccountActive,
+      ),
       ['ICS_APPLY_ENABLED']:
         !!featureFlags?.[ICS_APPLY_FORM] && module === MODULE_NAME.CSM,
       ['IS_SURVEYS_ACTIVE']:
@@ -127,20 +162,32 @@ export const useShowFlags = (): ShowFlags => {
     [
       chainId,
       isAccountActive,
+      isOperatorUnknown,
       nodeOperator,
       canCreateNO,
+      isCanCreatePending,
       info?.totalAddedKeys,
+      isInfoLoading,
       address,
       invites?.length,
       balance?.locked,
       referrer,
       isReportingRole,
-      canClaimICS,
-      canClaimIDVTC,
+      isReportingRolePending,
+      icsCanClaim,
+      icsIsPending,
+      idvtcCanClaim,
+      idvtcIsPending,
       featureFlags,
       module,
     ],
   );
+};
+
+export const useShowFlags = (): ShowFlags => {
+  const state = useShowFlagsState();
+
+  return useMemo(() => coerceShowFlags(state), [state]);
 };
 
 export const useShowRule = () => {
@@ -166,13 +213,7 @@ export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
     () =>
       items
         .filter(({ module }) => !module || module === config.module)
-        .filter(
-          ({ showRules }) =>
-            !showRules?.length ||
-            showRules.some((rule) =>
-              Array.isArray(rule) ? rule.every(check) : check(rule),
-            ),
-        ),
+        .filter(({ showRules }) => evaluateShowRules(showRules, check)),
     [check, items],
   );
 };

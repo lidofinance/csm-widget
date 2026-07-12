@@ -1,21 +1,4 @@
-import {
-  useDappStatus,
-  useIcsProof,
-  useNodeOperatorId,
-  useOperatorIsOwner,
-} from 'modules/web3';
+import { useIcsProof } from 'modules/web3';
+import { useCanClaimCurve } from './use-can-claim-curve';
 
-export const useCanClaimICS = () => {
-  const nodeOperatorId = useNodeOperatorId();
-  const { address } = useDappStatus();
-  const { data: proof } = useIcsProof();
-  const { data: isOwner } = useOperatorIsOwner(nodeOperatorId);
-
-  return Boolean(
-    nodeOperatorId !== undefined &&
-      address &&
-      isOwner &&
-      proof?.proof &&
-      !proof.isConsumed,
-  );
-};
+export const useCanClaimICS = () => useCanClaimCurve(useIcsProof());

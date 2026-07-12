@@ -31,8 +31,8 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { isSupportedChain } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
   const { data: info } = useOperatorInfo(nodeOperatorId);
-  const canClaimICS = useCanClaimICS();
-  const canClaimIDVTC = useCanClaimIDVTC();
+  const { canClaim: canClaimICS } = useCanClaimICS();
+  const { canClaim: canClaimIDVTC } = useCanClaimIDVTC();
   const { route } = useRouter();
 
   const normalizeQueue = useMemo(() => {
