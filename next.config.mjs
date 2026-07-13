@@ -20,6 +20,7 @@ const basePath = process.env.BASE_PATH;
 const developmentMode = process.env.NODE_ENV === 'development';
 const isIPFSMode = !!process.env.IPFS_MODE;
 const maintenance = !!process.env.MAINTENANCE; // TODO: load from runtime config
+const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
@@ -219,5 +220,6 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
+    module: moduleMode,
   },
 });

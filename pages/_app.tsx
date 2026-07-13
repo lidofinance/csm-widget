@@ -3,6 +3,7 @@ import 'utils/zod-jitless';
 import { ToastContainer } from '@lidofinance/lido-ui';
 import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
+import { isModuleCM } from 'consts';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
@@ -10,6 +11,7 @@ import { Providers } from 'providers';
 import { memo } from 'react';
 import { BackgroundGradient, SecurityStatusBanner } from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
+import { UnsupportedPage } from 'shared/navigate/inner-pages';
 import { AddressValidationFile, nprogress } from 'utils';
 
 // Visualize route changes
@@ -33,7 +35,9 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
 
   return (
     <Providers
-      dummy={props.pageProps?.maintenance || props.pageProps?.isError}
+      dummy={
+        isModuleCM || props.pageProps?.maintenance || props.pageProps?.isError
+      }
       skipWatcher={props.pageProps?.isError}
       validationFile={props.pageProps?.validationFile}
     >
@@ -54,7 +58,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       />
       <SVGGradientDefs />
       <ToastContainer />
-      <MemoApp {...rest} />
+      {isModuleCM ? <UnsupportedPage /> : <MemoApp {...rest} />}
       <SecurityStatusBanner />
     </Providers>
   );
