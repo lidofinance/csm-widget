@@ -5,7 +5,7 @@ inputs:
   version:
     description: 'just version to install'
     required: false
-    default: '1.24.0'
+    default: '1.42.4'
 
 runs:
   using: composite
@@ -31,4 +31,4 @@ runs:
     - name: Install just
       if: steps.get-cache.outputs.cache-hit != 'true'
       shell: bash
-      run: cargo install "just@${{ inputs.version }}"
+      run: cargo install --locked "just@${{ inputs.version }}"

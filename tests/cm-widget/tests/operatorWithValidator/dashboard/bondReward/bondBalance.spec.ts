@@ -5,6 +5,7 @@ import { USD_AMOUNT_REGEX } from '../../../../../shared/consts/regexp.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -14,6 +15,7 @@ test.describe(
   () => {
     let snapshotId: string;
     let noId: number;
+    let matomoEventService: MatomoService;
 
     test.beforeAll(
       async ({ useFork, cmSDK, forkActionService, widgetService }) => {
@@ -29,7 +31,8 @@ test.describe(
       },
     );
 
-    test.beforeEach(async ({ widgetService }) => {
+    test.beforeEach(async ({ widgetConfig, widgetService }) => {
+      matomoEventService = new MatomoService(widgetService.page, widgetConfig);
       await widgetService.dashboardPage.open();
     });
 
@@ -150,5 +153,28 @@ test.describe(
         });
       },
     );
+
+    test('Should navigate to bond page on header link click', async ({
+      widgetService,
+    }) => {
+      const { bondRewards } = widgetService.dashboardPage;
+
+      await test.step('Click section header link and check Matomo event', async () => {
+        await Promise.all([
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_dashboard_bond_section',
+          ),
+          bondRewards.sectionHeaderLink.click(),
+        ]);
+      });
+
+      await test.step('Check navigation to bond page', async () => {
+        await expect(
+          widgetService.page,
+          'Should navigate to bond page',
+        ).toHaveURL(/\/bond/);
+      });
+    });
   },
 );

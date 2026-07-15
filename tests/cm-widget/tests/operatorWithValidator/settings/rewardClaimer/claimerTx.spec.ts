@@ -7,6 +7,7 @@ import {
 } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
@@ -17,12 +18,14 @@ test.describe(
   { tag: [Tags.performTX, Tags.forked] },
   () => {
     let snapshotId: string;
+    let matomoEventService: MatomoService;
 
     test.beforeAll(({ useFork }) => {
       test.skip(!useFork, 'Test suite runs only on forked network');
     });
 
-    test.beforeEach(async ({ cmSDK, widgetService }) => {
+    test.beforeEach(async ({ cmSDK, widgetConfig, widgetService }) => {
+      matomoEventService = new MatomoService(widgetService.page, widgetConfig);
       snapshotId = await cmSDK.evmSnapshot();
       await widgetService.settingsPage.claimerPage.open();
     });
@@ -36,16 +39,29 @@ test.describe(
       async ({ widgetService }) => {
         const { claimerPage, txModal } = widgetService.settingsPage;
 
-        await test.step('Set new Rewards claimer address', async () => {
-          await claimerPage.setAddress(VALID_ADDRESS);
+        await test.step('Set new Rewards claimer address and check Matomo start event', async () => {
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_submit_form_claimer_start',
+            ),
+            claimerPage.setAddress(VALID_ADDRESS),
+          ]);
         });
 
-        await test.step('Confirm transaction in wallet', async () => {
+        await test.step('Confirm transaction and check Matomo success event', async () => {
           await widgetService.page.waitForSelector(
             'text=You are setting Rewards claimer address',
             { timeout: STAGE_WAIT_TIMEOUT },
           );
-          await widgetService.walletPage.confirmTx();
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_submit_form_claimer_success',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            ),
+            widgetService.walletPage.confirmTx(),
+          ]);
         });
 
         await test.step('Success modal is shown', async () => {

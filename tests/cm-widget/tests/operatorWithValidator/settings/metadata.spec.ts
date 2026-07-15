@@ -4,11 +4,15 @@ import { test } from '../../test.fixture';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe('Settings. Meta data.', { tag: [Tags.forked] }, () => {
-  test.beforeEach(async ({ widgetService }) => {
+  let matomoEventService: MatomoService;
+
+  test.beforeEach(async ({ widgetConfig, widgetService }) => {
+    matomoEventService = new MatomoService(widgetService.page, widgetConfig);
     await widgetService.settingsPage.metadataPage.open();
   });
 
@@ -173,19 +177,32 @@ test.describe('Settings. Meta data.', { tag: [Tags.forked] }, () => {
       const newName = `Test ${uid} !@#$`;
       const newDescription = `Desc ${uid} 123`;
 
-      await test.step('Fill new name and description, then submit', async () => {
+      await test.step('Fill new name and description, submit and check Matomo start event', async () => {
         await metadataPage.nameInput.fill(newName);
         await metadataPage.descriptionInput.fill(newDescription);
         await expect(metadataPage.saveButton).toBeEnabled();
-        await metadataPage.saveButton.click();
+        await Promise.all([
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_submit_form_metadata_start',
+          ),
+          metadataPage.saveButton.click(),
+        ]);
       });
 
-      await test.step('Confirm transaction in wallet', async () => {
+      await test.step('Confirm transaction and check Matomo success event', async () => {
         await widgetService.page.waitForSelector(
           'text=You are updating metadata',
           { timeout: STAGE_WAIT_TIMEOUT },
         );
-        await widgetService.walletPage.confirmTx();
+        await Promise.all([
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_submit_form_metadata_success',
+            { timeout: STAGE_WAIT_TIMEOUT },
+          ),
+          widgetService.walletPage.confirmTx(),
+        ]);
       });
 
       await test.step('Success modal shows correct message', async () => {

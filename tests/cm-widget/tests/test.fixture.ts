@@ -12,6 +12,7 @@ import { FORK_WARM_UP_TIMEOUT } from 'tests/shared/consts/timeouts';
 import ForkActionsService from 'tests/shared/services/forkActions.service';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { HttpMockerService } from 'tests/shared/services/httpMocker.service';
+import { EvmNodeService } from 'tests/shared/services/evmNode.service';
 import { LidoSDKClient } from '../services/cmSDK.client';
 import path from 'path';
 
@@ -24,6 +25,7 @@ type WorkerFixtures = {
   browserWithWallet: BrowserService;
   widgetService: WidgetService;
   cmSDK: LidoSDKClient;
+  evmNode: EvmNodeService;
   ethereumSDK: SdkService;
   forkActionService: ForkActionsService;
   httpMockerService: HttpMockerService;
@@ -87,7 +89,7 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
           useExternalFork: true,
         },
         browserOptions: {
-          // headless: true,
+          headless: false,
           reducedMotion: 'reduce',
           cookies: REFUSE_CF_BLOCK_COOKIE,
         },
@@ -159,6 +161,17 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
       }
 
       await use(new LidoSDKClient([rpcUrl], devnetAddresses));
+    },
+    { scope: 'worker' },
+  ],
+  evmNode: [
+    async ({ useFork }, use) => {
+      const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
+      const rpcUrl = useFork
+        ? forkRpcURL
+        : widgetFullConfig.standConfig.networkConfig.rpcUrl;
+
+      await use(new EvmNodeService(rpcUrl));
     },
     { scope: 'worker' },
   ],

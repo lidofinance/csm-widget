@@ -1,5 +1,7 @@
 import { test, Page } from '@playwright/test';
-import { IConfig } from '../../csm-widget/config/configs/base.config';
+
+// Minimal config shape shared by CSM and CM widget configs
+type MatomoConfig = { standConfig: { matomoUrl: string } };
 
 const red = (s: string) => `\u001B[31m${s}\u001B[0m`;
 const gray = (s: string) => `\u001B[90m${s}\u001B[0m`;
@@ -9,7 +11,7 @@ export class MatomoService {
 
   constructor(
     page: Page,
-    private config: IConfig,
+    private config: MatomoConfig,
   ) {
     this.page = page;
   }

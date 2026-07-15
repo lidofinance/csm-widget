@@ -7,6 +7,7 @@ import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -18,6 +19,7 @@ test.describe(
   () => {
     let snapshotId: string;
     let noId: number;
+    let matomoEventService: MatomoService;
 
     test.beforeAll(({ useFork }) => {
       test.skip(!useFork, 'Test suite runs only on forked network');
@@ -30,7 +32,8 @@ test.describe(
       await forkActionService.addBond(noId, BOND_EXCESS_ETH);
     });
 
-    test.beforeEach(async ({ widgetService }) => {
+    test.beforeEach(async ({ widgetConfig, widgetService }) => {
+      matomoEventService = new MatomoService(widgetService.page, widgetConfig);
       await widgetService.bondRewardsPage.claim.open();
     });
 
@@ -107,13 +110,19 @@ test.describe(
           });
 
           if (tokenName === TOKENS.eth) {
-            await test.step('Note about manual ETH claim is shown with FAQ link', async () => {
+            await test.step('Note about manual ETH claim is shown with FAQ link and Matomo event', async () => {
               await expect(claim.ethNote).toContainText(
                 'note: After receiving NFT you will need to claim ETH manually. Follow FAQ for more details.',
               );
-              await expect(
-                claim.ethNote.getByRole('link', { name: 'FAQ' }),
-              ).toBeVisible();
+              const faqLink = claim.ethNote.getByRole('link', { name: 'FAQ' });
+              await expect(faqLink).toBeVisible();
+              await Promise.all([
+                matomoEventService.waitForEvent(
+                  'e_n',
+                  'cm_widget_how_to_claim_eth',
+                ),
+                faqLink.click(),
+              ]);
             });
           }
 

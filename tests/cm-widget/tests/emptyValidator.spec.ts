@@ -6,6 +6,7 @@ import { PAGE_WAIT_TIMEOUT } from '../../shared/consts/timeouts';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: generateMnemonic(english, 128) });
 
@@ -13,6 +14,12 @@ test.describe(
   'Welcome page with connected wallet without operator',
   { tag: [Tags.forked] },
   () => {
+    let matomoEventService: MatomoService;
+
+    test.beforeEach(async ({ widgetConfig, widgetService }) => {
+      matomoEventService = new MatomoService(widgetService.page, widgetConfig);
+    });
+
     test(
       qase(10, 'Should display correct text content in not eligible section'),
       async ({ widgetService }) => {
@@ -207,8 +214,14 @@ test.describe(
         const { notEligiblePage } = widgetService;
         const welcomePage = new WelcomePage(notEligiblePage.page);
 
-        await test.step('Click "Disconnect" button', async () => {
-          await notEligiblePage.disconnectBtn.click();
+        await test.step('Click "Disconnect" and check Matomo event', async () => {
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_disconnect_wallet',
+            ),
+            notEligiblePage.disconnectBtn.click(),
+          ]);
         });
 
         await test.step('Check "Connect wallet" button is visible after disconnect', async () => {
