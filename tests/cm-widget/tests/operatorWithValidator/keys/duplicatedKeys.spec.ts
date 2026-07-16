@@ -40,19 +40,29 @@ test.describe(
     test(
       qase(91, 'Should failed if uploaded deposit data with existing pubkey'),
       async () => {
-        const duplicatedKey = keysGeneratorService.generateKeys();
-        duplicatedKey[0].pubkey =
-          '0x8f463da95c9e547cf43a21a19d3fad0ea4960fc4c99e5af8eea79415e1e644e47ace67e6cac701777be0dd900a3985b4';
-        await keysPage.submitPage.fillKeys(duplicatedKey);
+        const existsValidatorKey = {
+          pubkey:
+            'b3bdd2660984a2e754358b0155cce4f29f676386798a19ce38281c7fb6e36c68660b37ed63a32e04959609a44b9ca3ac',
+          withdrawal_credentials:
+            '0200000000000000000000004473dcddbf77679a643bdb654dbd86d67f8d32f2',
+          amount: 32000000000,
+          signature:
+            '8b483bbef13858a1b525b086031c3512970802c7ad95e3802eea74e4e8f24d6861bb5fe9b0b82af648bf21b9eb143a451685faccb7473bac8f70e080c9d97c17b86ae8c49edcd4c5621fbdeeeae94ee02f360f50db662b07b793379fe98ffd50',
+          deposit_message_root:
+            '575acd3eaa182e87bbb77331220b98e90101d4ba315403bc9123326698a70750',
+          deposit_data_root:
+            '2aa20cd60cee21607f854ca68a308ab4912bef82dba913ebe7990a9d02425e68',
+          fork_version: '10000910',
+          network_name: 'hoodi',
+          deposit_cli_version: '1.3.0',
+        };
+        await keysPage.submitPage.fillKeys([existsValidatorKey]);
         await expect(keysPage.submitPage.validationInputError).toContainText(
           'Invalid deposit data',
         );
         await keysPage.submitPage.selectTab('Parsed');
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
-          await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'signature failed BLS verification',
-          );
           await expect(row.getByTestId('deposit-data-error')).toContainText(
             'pubkey already exists as a validator on CL',
           );
