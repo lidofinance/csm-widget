@@ -23,7 +23,7 @@ test.describe(
     });
 
     test(qase(87, 'Should failed if uploaded duplicate keys'), async () => {
-      const duplicatedKey = keysGeneratorService.generateKeys();
+      const duplicatedKey = await keysGeneratorService.generateKeys();
       await keysPage.submitPage.fillKeys([...duplicatedKey, ...duplicatedKey]);
       await expect(keysPage.submitPage.validationInputError).toContainText(
         'Invalid deposit data',
@@ -40,7 +40,7 @@ test.describe(
     test(
       qase(91, 'Should failed if uploaded deposit data with existing pubkey'),
       async () => {
-        const duplicatedKey = keysGeneratorService.generateKeys();
+        const duplicatedKey = await keysGeneratorService.generateKeys();
         duplicatedKey[0].pubkey =
           '0x8f463da95c9e547cf43a21a19d3fad0ea4960fc4c99e5af8eea79415e1e644e47ace67e6cac701777be0dd900a3985b4';
         await keysPage.submitPage.fillKeys(duplicatedKey);
@@ -66,7 +66,7 @@ test.describe(
         'Should not display duplicate error if previous tx was canceled',
       ),
       async ({ widgetService }) => {
-        const duplicatedKey = keysGeneratorService.generateKeys();
+        const duplicatedKey = await keysGeneratorService.generateKeys();
 
         await keysPage.submitPage.submitKeys(duplicatedKey, TokenSymbol.ETH);
         await widgetService.walletPage.cancelTx();
@@ -83,7 +83,7 @@ test.describe(
     test(
       qase(89, 'Should display error if key in cache'),
       async ({ widgetService }) => {
-        const duplicatedKey = keysGeneratorService.generateKeys();
+        const duplicatedKey = await keysGeneratorService.generateKeys();
         await widgetService.keysPage.setStorageData(
           'lido-keys-cache-560048',
           JSON.stringify({
@@ -109,7 +109,7 @@ test.describe(
     test(
       qase(90, 'Should not display error if key in cache oldest than 2 weeks'),
       async ({ widgetService }) => {
-        const duplicatedKey = keysGeneratorService.generateKeys();
+        const duplicatedKey = await keysGeneratorService.generateKeys();
         await widgetService.keysPage.setStorageData(
           'lido-keys-cache-560048',
           JSON.stringify({
@@ -126,7 +126,7 @@ test.describe(
     test(
       qase(92, 'Should display error if key already submitted'),
       async ({ widgetService }) => {
-        const duplicatedKey = keysGeneratorService.generateKeys();
+        const duplicatedKey = await keysGeneratorService.generateKeys();
 
         await keysPage.submitPage.submitKeys(duplicatedKey, TokenSymbol.ETH);
 

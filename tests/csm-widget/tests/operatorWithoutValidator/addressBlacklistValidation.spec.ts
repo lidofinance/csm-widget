@@ -31,7 +31,7 @@ test.describe('Operator without validator. Address blacklist validation.', async
       const submitPage = keysPage.createNodeOperatorForm;
 
       const keysGeneratorService = new KeysGeneratorService();
-      const keys = keysGeneratorService.generateKeys();
+      const keys = await keysGeneratorService.generateKeys();
 
       await test.step('Submit keys with extended manager permissions', async () => {
         const bondTokenElement = keysPage.submitPage.getBondTokenElement(

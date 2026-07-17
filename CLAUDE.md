@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Type check**: `yarn types` - Runs TypeScript compiler type checking
 - **E2E tests**: `yarn test:csm:e2e` (CSM) or `yarn test:cm:e2e` (CM) - Runs Playwright e2e tests; append `:ui` (`test:csm:ui` / `test:cm:ui`) for interactive mode
 - **Unit tests**: `yarn test:unit` - Runs Jest unit tests
-- **Test setup**: `yarn test:setup` - Installs Chromium, keys generator, and Foundry fork tooling
+- **Test setup**: `yarn test:setup` - Installs Chromium (fork state/keys tooling now ships as `@sm-lab/*` npm deps; local fork runs need your own `anvil --fork-url $RPC_URL`)
 
 ## Environment Setup
 

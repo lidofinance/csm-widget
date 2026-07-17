@@ -31,7 +31,7 @@ test.describe(
         await evmNode.setBalance(mnemonicToAccount(secretPhrase).address, 1000);
 
         await test.step('Create a node operator via UI', async () => {
-          const keys = new KeysGeneratorService().generateKeys(1);
+          const keys = await new KeysGeneratorService().generateKeys(1);
           await widgetService.keysPage.goto();
           await widgetService.submitKeys(keys, TokenSymbol.ETH);
         });

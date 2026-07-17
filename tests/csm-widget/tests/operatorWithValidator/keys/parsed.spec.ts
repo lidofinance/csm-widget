@@ -19,7 +19,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   });
 
   test(qase(326, 'Should display error for invalid amount'), async () => {
-    const key = keysGeneratorService.generateKeys();
+    const key = await keysGeneratorService.generateKeys();
     key[0].amount = 1;
 
     await keysPage.submitPage.fillKeys(key);
@@ -43,7 +43,8 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   });
 
   test(qase(327, 'Should display error for invalid hex pubkey'), async () => {
-    const key = keysGeneratorService.generateKeys();
+    const key = await keysGeneratorService.generateKeys();
+    // @ts-expect-error negative test for validation
     key[0].pubkey = randomBytes(48).toString('hex');
 
     await keysPage.submitPage.fillKeys(key);
@@ -62,7 +63,8 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   test(
     qase(392, 'Should display error for invalid pubkey with random symbols'),
     async () => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
+      // @ts-expect-error negative test for validation
       key[0].pubkey = 'asdfgh';
 
       await keysPage.submitPage.fillKeys(key);
@@ -85,7 +87,8 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   test(
     qase(328, 'Should display error for invalid deposit_message_root'),
     async () => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
+      // @ts-expect-error negative test for validation
       key[0].deposit_message_root = randomBytes(32).toString('hex');
 
       await keysPage.submitPage.fillKeys(key);
@@ -105,7 +108,8 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   test(
     qase(386, 'Should display error for invalid string deposit_message_root'),
     async () => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
+      // @ts-expect-error negative test for validation
       key[0].deposit_message_root = 'asdsd';
 
       await keysPage.submitPage.fillKeys(key);
@@ -128,8 +132,9 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   test(
     qase(329, 'Should display error for invalid withdrawal_credentials'),
     async () => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
 
+      // @ts-expect-error negative test for validation
       key[0].withdrawal_credentials = generateWithdrawalCredentials();
 
       await keysPage.submitPage.fillKeys(key);
@@ -149,8 +154,9 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   test(
     qase(387, 'Should display error for invalid string withdrawal_credentials'),
     async () => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
 
+      // @ts-expect-error negative test for validation
       key[0].withdrawal_credentials = 'dasdasd';
 
       await keysPage.submitPage.fillKeys(key);
@@ -171,8 +177,9 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   );
 
   test(qase(330, 'Should display error for invalid fork_version'), async () => {
-    const key = keysGeneratorService.generateKeys();
+    const key = await keysGeneratorService.generateKeys();
 
+    // @ts-expect-error negative test for validation
     key[0].fork_version = '10000920';
 
     await keysPage.submitPage.fillKeys(key);
@@ -194,8 +201,9 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       'Should display error for invalid network_name for current chain',
     ),
     async ({ widgetConfig }) => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
 
+      // @ts-expect-error negative test for validation
       key[0].network_name = 'invalid_network_name';
 
       await keysPage.submitPage.fillKeys(key);
@@ -213,7 +221,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   );
 
   test('Should count only invalid keys when some keys are valid', async () => {
-    const keys = keysGeneratorService.generateKeys(3);
+    const keys = await keysGeneratorService.generateKeys(3);
     keys[0].amount = 1;
     keys[2].amount = 1;
 

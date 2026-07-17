@@ -43,9 +43,8 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   ],
   forkActionService: [
     async ({}, use) => {
-      const svc = new ForkActionsService({
-        cwd: process.env.JUST_DIR || './staking-modules',
-      });
+      const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
+      const svc = new ForkActionsService({ module: 'cm', rpcUrl: forkRpcURL });
       await use(svc);
     },
     { scope: 'worker' },

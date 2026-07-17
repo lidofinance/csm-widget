@@ -51,7 +51,9 @@ test.describe(
         });
 
         await test.step('Fill valid keys and submit', async () => {
-          const keys = new KeysGeneratorService({ isCM: true }).generateKeys();
+          const keys = await new KeysGeneratorService({
+            isCM: true,
+          }).generateKeys();
           await submitPage.submitKeys(keys, TokenSymbol.ETH);
         });
 

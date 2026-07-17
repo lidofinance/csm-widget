@@ -28,7 +28,7 @@ export class WalletStateService {
     withDeposit: withDeposit.bind(this),
   };
 
-  constructor(options?: ForkActionsOptions) {
+  constructor(options: ForkActionsOptions) {
     this.fork = new ForkActionsService(options);
   }
 
