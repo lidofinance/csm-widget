@@ -29,6 +29,15 @@ export class TestnetConfig extends BaseConfig {
           logToConsole: false,
         },
       },
+      mockConfig: {
+        clHost: '127.0.0.1',
+        clPort: 5052,
+        clUpstreamUrl: process.env.CL_API_URLS_560048?.split(',')[0],
+        clUrlToMock: [`.*/api/cl/.*`],
+        ipfsHost: '127.0.0.1',
+        ipfsPort: 5001,
+        ipfsUpstreamGateway: process.env.IPFS_UPSTREAM_GATEWAY,
+      },
     };
   }
 }

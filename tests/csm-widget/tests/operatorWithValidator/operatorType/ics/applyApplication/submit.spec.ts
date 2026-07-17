@@ -32,7 +32,7 @@ test.describe('Operator with keys. ICS. Apply application. Submit', async () => 
         sessionStorage.clear();
       });
       await widgetService.page.unroute(
-        `${widgetConfig.standConfig.mockConfig?.urls.csmSurveysApi}/ics/status`,
+        `${widgetConfig.standConfig.mockConfig.urls?.csmSurveysApi}/ics/status`,
       );
       await widgetService.setFeatureFlag('icsApplyForm', false);
     });

@@ -96,6 +96,49 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
 
       await browserService.initWalletSetup(useFork);
 
+      if (useFork && process.env.CL_MOCK_URL) {
+        // Mirrors the EL rpcUrlToMock proxy that BrowserService installs
+        // internally (RpcProxyService.mockRoute): same clUrlToMock config
+        // seam (Task 1), same context-level route, but a URL redirect
+        // instead of a JSON-RPC proxy since the CL mock is a plain REST API.
+        const { clUrlToMock } = widgetFullConfig.standConfig.mockConfig;
+        await browserService
+          .getBrowserContextPage()
+          .context()
+          .route(new RegExp(clUrlToMock.join('|')), async (route) => {
+            const url = new URL(route.request().url());
+            // strip "/api/cl/{chainId}" — the cl-mock serves the beacon
+            // endpoints directly (no chainId segment), see pages/api/cl/[[...method]].ts
+            const target = `${process.env.CL_MOCK_URL}${url.pathname.replace(/^\/api\/cl\/[^/]+/, '')}${url.search}`;
+            await route.continue({ url: target });
+          });
+      }
+
+      if (useFork && process.env.IPFS_API_URL) {
+        // Seeds the saved-user-config localStorage entry (config/user-config,
+        // key STORAGE_USER_CONFIG = "lido-user-config") so the widget's IPFS
+        // gateway resolution (CoreSDK.getIpfsUrls, wired in
+        // modules/web3/web3-provider/lido-sdk.tsx) prefers the local
+        // ipfs-mock over the public gateways during fork runs. Registered
+        // before the first navigation so it applies to the widget's document.
+        await browserService
+          .getBrowserContextPage()
+          .context()
+          .addInitScript((gatewayUrl) => {
+            const key = 'lido-user-config';
+            let current: Record<string, unknown> = {};
+            try {
+              current = JSON.parse(window.localStorage.getItem(key) || '{}');
+            } catch {
+              current = {};
+            }
+            window.localStorage.setItem(
+              key,
+              JSON.stringify({ ...current, ipfsGateways: [gatewayUrl] }),
+            );
+          }, `${process.env.IPFS_API_URL}/ipfs/`);
+      }
+
       if (
         useFork &&
         secretPhrase !== widgetFullConfig.accountConfig.SECRET_PHRASE

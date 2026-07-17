@@ -17,7 +17,12 @@ export type ForkActionsOptions = {
   step?: StepFn;
 };
 
-/** Pin trees only when an IPFS/Pinata endpoint is actually configured; otherwise skip with fake CIDs (parity with the just-recipes flow, whose CIDs were unresolvable without PINATA_* too). */
+/**
+ * Pin trees only when an IPFS/Pinata endpoint is actually configured; otherwise skip with fake CIDs
+ * (parity with the just-recipes flow, whose CIDs were unresolvable without PINATA_* too).
+ * `IPFS_API_URL` is set by globalSetup to the local ipfs-mock URL when the mock lifecycle runs (USE_FORK),
+ * so `reportRewards`/`setGateAddrs` pin real CIDs there automatically without any fork-test changes.
+ */
 const pinningConfigured = () =>
   Boolean(
     process.env.IPFS_API_URL ||
@@ -46,6 +51,7 @@ export class ForkActionsService {
     this.ctxPromise ??= recipes.connect({
       module: this.module,
       rpcUrl: this.rpcUrl,
+      clMockUrl: process.env.CL_MOCK_URL,
     });
     return this.ctxPromise;
   }

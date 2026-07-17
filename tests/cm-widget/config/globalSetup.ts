@@ -5,6 +5,7 @@ import {
   startForkNode,
   assertForkReachable,
 } from 'tests/shared/services/forkNode.service';
+import { startMocks } from 'tests/shared/services/mocks.lifecycle';
 import { generateMnemonic, mnemonicToAccount } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import {
@@ -43,6 +44,11 @@ export default async function globalSetup() {
     });
   }
   await assertForkReachable(forkRpcURL);
+
+  const { mockConfig } = widgetFullConfig.standConfig;
+  await startMocks(mockConfig);
+  process.env.CL_MOCK_URL = `http://${mockConfig.clHost}:${mockConfig.clPort}`;
+  process.env.IPFS_API_URL = `http://${mockConfig.ipfsHost}:${mockConfig.ipfsPort}`;
 
   const cmSDK = new LidoSDKClient([forkRpcURL], {} as Record<string, string>);
   await warmUpForkedNode(cmSDK, secretPhrase);
