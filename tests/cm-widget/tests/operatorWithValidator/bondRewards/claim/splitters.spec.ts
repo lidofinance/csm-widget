@@ -77,7 +77,7 @@ test.describe(
             timeout: PAGE_WAIT_TIMEOUT,
           });
           await expect(claim.tooltipWrapper).toContainText(
-            'When you claim rewards, they will be distributed according to the proportions below.',
+            'When you claim rewards, they will be distributed according to the proportions below',
           );
 
           const rows = claim.tooltipWrapper.getByTestId('splittersTooltipRow');
