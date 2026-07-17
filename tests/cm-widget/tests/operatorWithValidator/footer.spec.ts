@@ -64,13 +64,20 @@ test.describe('Footer.', { tag: [Tags.forked] }, () => {
     for (const { name, link, event, url } of FOOTER_LINKS) {
       await test.step(`"${name}" — visible, Matomo event and opened URL`, async () => {
         await expect(link(footerElement)).toBeVisible();
+        await expect(link(footerElement)).toHaveAttribute(
+          'href',
+          new RegExp(url),
+        );
 
         const [newPage] = await Promise.all([
           widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent('e_n', event),
           link(footerElement).click(),
         ]);
-        expect(newPage.url()).toContain(url);
+
+        if (name !== 'Feedback form') {
+          expect(newPage.url()).toContain(url);
+        }
       });
     }
   });

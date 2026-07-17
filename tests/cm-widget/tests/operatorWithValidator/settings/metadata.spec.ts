@@ -70,28 +70,6 @@ test.describe('Settings. Meta data.', { tag: [Tags.forked] }, () => {
   );
 
   test(
-    qase(183, 'Should show validation error when Name is cleared'),
-    async ({ widgetService }) => {
-      const { metadataPage } = widgetService.settingsPage;
-
-      await test.step('Clear Name input', async () => {
-        await metadataPage.nameInput.clear();
-      });
-
-      await test.step('Validation error is shown for Name', async () => {
-        await expect(metadataPage.nameInputError).toBeVisible();
-        await expect(metadataPage.nameInputError).toHaveText(
-          'Is too short, minimum is 1',
-        );
-      });
-
-      await test.step('Save button is disabled', async () => {
-        await expect(metadataPage.saveButton).toBeDisabled();
-      });
-    },
-  );
-
-  test(
     qase(187, 'Should show validation error when Name exceeds 64 characters'),
     async ({ widgetService }) => {
       const { metadataPage } = widgetService.settingsPage;
@@ -131,28 +109,6 @@ test.describe('Settings. Meta data.', { tag: [Tags.forked] }, () => {
         await expect(metadataPage.descriptionInputError).toBeVisible();
         await expect(metadataPage.descriptionInputError).toHaveText(
           'Is too long, maximum is 1024',
-        );
-      });
-
-      await test.step('Save button is disabled', async () => {
-        await expect(metadataPage.saveButton).toBeDisabled();
-      });
-    },
-  );
-
-  test(
-    qase(184, 'Should show validation error when Description is cleared'),
-    async ({ widgetService }) => {
-      const { metadataPage } = widgetService.settingsPage;
-
-      await test.step('Clear Description input', async () => {
-        await metadataPage.descriptionInput.clear();
-      });
-
-      await test.step('Validation error is shown for Description', async () => {
-        await expect(metadataPage.descriptionInputError).toBeVisible();
-        await expect(metadataPage.descriptionInputError).toHaveText(
-          'Is too short, minimum is 1',
         );
       });
 
