@@ -16,7 +16,7 @@ on:
         type: string
         default: csm
       use_fork:
-        description: "Run against a local fork (adds contract checkout + build steps)."
+        description: "Run against a local fork (starts a prool-managed anvil fork)."
         required: false
         type: boolean
         default: false
@@ -45,21 +45,6 @@ on:
         required: false
         type: number
         default: 90
-      staking_modules_ref:
-        description: "staking-modules ref to checkout (fork only)."
-        required: false
-        type: string
-        default: main
-      deploy_config:
-        description: "DEPLOY_CONFIG path (fork only)."
-        required: false
-        type: string
-        default: ""
-      chain:
-        description: "CHAIN name (fork only)."
-        required: false
-        type: string
-        default: ""
       artifacts_dir:
         description: "ARTIFACTS_DIR path (fork only)."
         required: false
@@ -119,8 +104,6 @@ jobs:
 
       # Fork envs (ignored unless use_fork=true)
       USE_FORK: ${{ inputs.use_fork }}
-      DEPLOY_CONFIG: ${{ inputs.deploy_config }}
-      CHAIN: ${{ inputs.chain }}
 
     steps:
       - uses: actions/checkout@v7
@@ -134,18 +117,6 @@ jobs:
           cache: "yarn"
 
       # --- Fork-only setup ---
-      - name: Checkout staking-modules
-        if: ${{ inputs.use_fork }}
-        uses: actions/checkout@v7
-        with:
-          repository: lidofinance/staking-modules
-          path: staking-modules
-          ref: ${{ inputs.staking_modules_ref }}
-
-      - name: Setup just
-        if: ${{ inputs.use_fork }}
-        uses: ./.github/actions/setup-just
-
       - name: Install Foundry
         if: ${{ inputs.use_fork }}
         uses: foundry-rs/foundry-toolchain@v1
@@ -158,23 +129,12 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
 
-      - name: Install contracts dependencies
-        if: ${{ inputs.use_fork }}
-        run: cd staking-modules && yarn install --immutable
-
-      - name: Build fork
-        if: ${{ inputs.use_fork }}
-        run: cd staking-modules && just deps && just build
-
       # --- Test run ---
       - name: Install dependencies
         run: yarn install --immutable
 
       - name: Install Playwright Browsers
         run: yarn playwright install chromium --with-deps
-
-      - name: Download keys generator binary
-        run: bash ./tests/scripts/set_up_keys_generator.sh
 
       - name: Set up preview-stand credentials
         if: ${{ inputs.stand_type == 'preview' }}

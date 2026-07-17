@@ -14,7 +14,10 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "baseUrl": ".",
-    "incremental": true
+    "incremental": true,
+    "paths": {
+      "@sm-lab/recipes/cm": ["./node_modules/@sm-lab/recipes/dist/cm.d.mts"]
+    }
   },
   "include": ["**/*"],
   "exclude": ["node_modules"]

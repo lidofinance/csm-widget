@@ -36,7 +36,7 @@ test.describe(
         await widgetService.setFeatureFlag('icsApplyForm', true);
 
         await test.step('Create an IDVTC operator by adding a key', async () => {
-          const keys = new KeysGeneratorService().generateKeys(1);
+          const keys = await new KeysGeneratorService().generateKeys(1);
           await widgetService.keysPage.goto();
           await widgetService.keysPage.createNodeOperatorForm.submitNewKeys(
             keys,
@@ -121,7 +121,7 @@ test.describe(
       async ({ widgetService }) => {
         const form = widgetService.keysPage.createNodeOperatorForm;
         const header = widgetService.header;
-        const keys = new KeysGeneratorService().generateKeys(1);
+        const keys = await new KeysGeneratorService().generateKeys(1);
 
         await test.step('Create a new ICS operator on the create page', async () => {
           await widgetService.keysPage.goto();

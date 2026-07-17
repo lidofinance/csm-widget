@@ -25,7 +25,7 @@ test.describe('Operator with keys. IDVTC. Application status', async () => {
     await test.step('Clear storage, unroute and disable flag', async () => {
       await widgetService.page.evaluate(() => sessionStorage.clear());
       await widgetService.page.unroute(
-        `${widgetConfig.standConfig.mockConfig?.urls.csmSurveysApi}/dvt/status`,
+        `${widgetConfig.standConfig.mockConfig.urls?.csmSurveysApi}/dvt/status`,
       );
       await widgetService.setFeatureFlag('icsApplyForm', false);
     });

@@ -16,7 +16,7 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
   });
 
   test(qase(18, 'Should failed if uploaded duplicate keys'), async () => {
-    const duplicatedKey = keysGeneratorService.generateKeys();
+    const duplicatedKey = await keysGeneratorService.generateKeys();
     await keysPage.submitPage.fillKeys([...duplicatedKey, ...duplicatedKey]);
     await expect(keysPage.submitPage.validationInputError).toContainText(
       'Invalid deposit data',
@@ -33,7 +33,8 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
   test(
     qase(388, 'Should failed if uploaded deposit data with existing pubkey'),
     async () => {
-      const duplicatedKey = keysGeneratorService.generateKeys();
+      const duplicatedKey = await keysGeneratorService.generateKeys();
+      // @ts-expect-error negative test for validation
       duplicatedKey[0].pubkey =
         'aac44a76a4b3414e01105ef07861771c5e5c7f91c556b4b8bb6b07258ade39efdf673cbe0277d091cbade43196a7c9de';
       await keysPage.submitPage.fillKeys(duplicatedKey);
@@ -56,7 +57,7 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
   test(
     qase(332, 'Should not display duplicate error if previous tx was canceled'),
     async ({ widgetService }) => {
-      const duplicatedKey = keysGeneratorService.generateKeys();
+      const duplicatedKey = await keysGeneratorService.generateKeys();
 
       await keysPage.submitPage.submitKeys(duplicatedKey, TokenSymbol.ETH);
       await widgetService.walletPage.cancelTx();
@@ -71,7 +72,7 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
   test(
     qase(389, 'Should display error if key in cache'),
     async ({ widgetService }) => {
-      const duplicatedKey = keysGeneratorService.generateKeys();
+      const duplicatedKey = await keysGeneratorService.generateKeys();
       await widgetService.keysPage.setStorageData(
         'lido-keys-cache-560048',
         JSON.stringify({
@@ -97,7 +98,7 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
   test(
     qase(390, 'Should not display error if key in cache oldest than 2 weeks'),
     async ({ widgetService }) => {
-      const duplicatedKey = keysGeneratorService.generateKeys();
+      const duplicatedKey = await keysGeneratorService.generateKeys();
       await widgetService.keysPage.setStorageData(
         'lido-keys-cache-560048',
         JSON.stringify({
@@ -117,7 +118,7 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
   test(
     qase(391, 'Should display error if key already submitted'),
     async ({ widgetService, csmSDK }) => {
-      const duplicatedKey = keysGeneratorService.generateKeys();
+      const duplicatedKey = await keysGeneratorService.generateKeys();
       const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
       const allKeys = await csmSDK.getAllKeys(BigInt(nodeOperatorId));

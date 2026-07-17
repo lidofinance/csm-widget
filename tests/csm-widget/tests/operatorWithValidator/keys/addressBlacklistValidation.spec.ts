@@ -30,7 +30,7 @@ test.describe('Operator with validator. Keys. Address blacklist validation', asy
         await keysPage.submitPage.open();
         const keysGeneratorService = new KeysGeneratorService();
 
-        const keys = keysGeneratorService.generateKeys();
+        const keys = await keysGeneratorService.generateKeys();
 
         const bondTokenElement = keysPage.submitPage.getBondTokenElement(
           TokenSymbol.ETH,

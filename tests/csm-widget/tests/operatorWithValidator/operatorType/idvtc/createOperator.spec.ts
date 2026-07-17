@@ -78,7 +78,7 @@ test.describe(
       qase(444, 'Should require a 1.5 ETH bond for the first key'),
       async ({ widgetService }) => {
         const form = widgetService.keysPage.createNodeOperatorForm;
-        const keys = new KeysGeneratorService().generateKeys(1);
+        const keys = await new KeysGeneratorService().generateKeys(1);
 
         await widgetService.keysPage.goto();
 

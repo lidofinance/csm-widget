@@ -59,7 +59,7 @@ test.describe(
     });
 
     test(qase(93, 'Should display error for invalid amount'), async () => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
       key[0].amount = 1;
 
       await keysPage.submitPage.fillKeys(key);
@@ -83,7 +83,8 @@ test.describe(
     });
 
     test(qase(94, 'Should display error for invalid hex pubkey'), async () => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
+      // @ts-expect-error negative test for validation
       key[0].pubkey = randomBytes(48).toString('hex');
 
       await keysPage.submitPage.fillKeys(key);
@@ -102,7 +103,8 @@ test.describe(
     test(
       qase(95, 'Should display error for invalid pubkey with random symbols'),
       async () => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
+        // @ts-expect-error negative test for validation
         key[0].pubkey = 'asdfgh';
 
         await keysPage.submitPage.fillKeys(key);
@@ -125,7 +127,8 @@ test.describe(
     test(
       qase(96, 'Should display error for invalid deposit_message_root'),
       async () => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
+        // @ts-expect-error negative test for validation
         key[0].deposit_message_root = randomBytes(32).toString('hex');
 
         await keysPage.submitPage.fillKeys(key);
@@ -145,7 +148,8 @@ test.describe(
     test(
       qase(97, 'Should display error for invalid string deposit_message_root'),
       async () => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
+        // @ts-expect-error negative test for validation
         key[0].deposit_message_root = 'asdsd';
 
         await keysPage.submitPage.fillKeys(key);
@@ -168,8 +172,9 @@ test.describe(
     test(
       qase(98, 'Should display error for invalid withdrawal_credentials'),
       async () => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
 
+        // @ts-expect-error negative test for validation
         key[0].withdrawal_credentials = generateWithdrawalCredentials(true);
 
         await keysPage.submitPage.fillKeys(key);
@@ -187,8 +192,9 @@ test.describe(
     );
 
     test(qase(99, 'Should display error for wrong key type'), async () => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
 
+      // @ts-expect-error negative test for validation
       key[0].withdrawal_credentials = generateWithdrawalCredentials();
 
       await keysPage.submitPage.fillKeys(key);
@@ -210,8 +216,9 @@ test.describe(
         'Should display error for invalid string withdrawal_credentials',
       ),
       async () => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
 
+        // @ts-expect-error negative test for validation
         key[0].withdrawal_credentials = 'dasdasd';
 
         await keysPage.submitPage.fillKeys(key);
@@ -234,8 +241,9 @@ test.describe(
     test(
       qase(101, 'Should display error for invalid fork_version'),
       async () => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
 
+        // @ts-expect-error negative test for validation
         key[0].fork_version = '10000920';
 
         await keysPage.submitPage.fillKeys(key);
@@ -258,8 +266,9 @@ test.describe(
         'Should display error for invalid network_name for current chain',
       ),
       async ({ widgetConfig }) => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
 
+        // @ts-expect-error negative test for validation
         key[0].network_name = 'invalid_network_name';
 
         await keysPage.submitPage.fillKeys(key);
@@ -279,7 +288,7 @@ test.describe(
     test(
       qase(365, 'Should count only invalid keys when some keys are valid'),
       async () => {
-        const keys = keysGeneratorService.generateKeys(3);
+        const keys = await keysGeneratorService.generateKeys(3);
         keys[0].amount = 1;
         keys[2].amount = 1;
 
@@ -329,7 +338,7 @@ test.describe(
         ),
         async () => {
           qase.parameters({ propertyName });
-          const key = keysGeneratorService.generateKeys();
+          const key = await keysGeneratorService.generateKeys();
           const newJson = omitField(key[0], propertyName);
 
           await keysPage.submitPage.fillKeys(
@@ -354,7 +363,7 @@ test.describe(
         ),
         async () => {
           qase.parameters({ propertyName });
-          const key = keysGeneratorService.generateKeys();
+          const key = await keysGeneratorService.generateKeys();
           const newJson = omitField(key[0], propertyName);
 
           await keysPage.submitPage.fillKeys(
@@ -379,7 +388,7 @@ test.describe(
         ),
         async () => {
           qase.parameters({ propertyName });
-          const keys = keysGeneratorService.generateKeys(3);
+          const keys = await keysGeneratorService.generateKeys(3);
           // @ts-expect-error negative test for validation
           keys[2] = omitField(keys[2], propertyName);
 

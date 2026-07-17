@@ -25,6 +25,15 @@ export class ProdConfig extends BaseConfig {
         host: '127.0.0.1',
         port: 8545,
       },
+      mockConfig: {
+        clHost: '127.0.0.1',
+        clPort: 5052,
+        clUpstreamUrl: process.env.CL_API_URLS_1?.split(',')[0],
+        clUrlToMock: [`.*/api/cl/.*`],
+        ipfsHost: '127.0.0.1',
+        ipfsPort: 5001,
+        ipfsUpstreamGateway: process.env.IPFS_UPSTREAM_GATEWAY,
+      },
     };
   }
 }

@@ -74,7 +74,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
         `Should display error if ${propertyName} does not passed for 1 key as object`,
       ),
       async () => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
         const newJson = omitField(key[0], propertyName as keyof DepositKey);
 
         await keysPage.submitPage.fillKeys(
@@ -115,7 +115,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
         `Should display error if ${propertyName} does not passed for array of keys`,
       ),
       async () => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
         const newJson = omitField(key[0], propertyName as keyof DepositKey);
 
         await keysPage.submitPage.fillKeys(
@@ -156,7 +156,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
         `Should display error if ${propertyName} does not passed for index >0 in array of keys`,
       ),
       async () => {
-        const keys = keysGeneratorService.generateKeys(3);
+        const keys = await keysGeneratorService.generateKeys(3);
         // @ts-expect-error negative test for validation
         keys[2] = omitField(keys[2], propertyName);
 
@@ -194,7 +194,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       'Shouldnt display error for valid eth2_network_name for current chain',
     ),
     async ({ widgetConfig }) => {
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
       const propertyName = 'network_name';
       const newJson = omitField(key[0], propertyName as keyof DepositKey);
 
@@ -212,7 +212,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     qase(355, 'Should ignore validation for optional deposit_cli_version'),
     async () => {
       const propertyName = 'deposit_cli_version';
-      const key = keysGeneratorService.generateKeys();
+      const key = await keysGeneratorService.generateKeys();
       const newJson = omitField(key[0], propertyName as keyof DepositKey);
 
       await keysPage.submitPage.fillKeys(

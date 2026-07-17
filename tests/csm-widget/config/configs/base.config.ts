@@ -8,6 +8,18 @@ import {
 
 import { z } from 'zod';
 
+export type MockConfig = {
+  clHost: string;
+  clPort: number;
+  /** real testnet CL base URL the cl-mock proxies to on miss (from CL_API_URLS_* server env). */
+  clUpstreamUrl?: string;
+  clUrlToMock: string[];
+  ipfsHost: string;
+  ipfsPort: number;
+  /** real upstream IPFS gateway the ipfs-mock proxies to on miss. */
+  ipfsUpstreamGateway?: string;
+};
+
 export type StandConfig = {
   standType: string;
   standUrl: string;
@@ -16,8 +28,8 @@ export type StandConfig = {
     host: string;
   };
   matomoUrl: string;
-  mockConfig?: {
-    urls: {
+  mockConfig: MockConfig & {
+    urls?: {
       csmSurveysApi: string;
     };
   };

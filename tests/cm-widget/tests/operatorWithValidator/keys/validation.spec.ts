@@ -70,7 +70,7 @@ test.describe(
         'Shouldnt display error for valid eth2_network_name for current chain',
       ),
       async ({ widgetConfig }) => {
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
         const propertyName = 'network_name';
         const newJson = omitField(key[0], propertyName as keyof DepositKey);
 
@@ -88,7 +88,7 @@ test.describe(
       qase(126, 'Should ignore validation for optional deposit_cli_version'),
       async () => {
         const propertyName = 'deposit_cli_version';
-        const key = keysGeneratorService.generateKeys();
+        const key = await keysGeneratorService.generateKeys();
         const newJson = omitField(key[0], propertyName as keyof DepositKey);
 
         await keysPage.submitPage.fillKeys(

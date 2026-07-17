@@ -31,7 +31,9 @@ test.describe(
 
     test('Should add keys successfully', async ({ widgetService }) => {
       const { submitPage } = widgetService.keysPage;
-      const keys = new KeysGeneratorService({ isCM: true }).generateKeys();
+      const keys = await new KeysGeneratorService({
+        isCM: true,
+      }).generateKeys();
 
       await test.step('Submit keys and check Matomo start event', async () => {
         await Promise.all([
