@@ -1,14 +1,13 @@
-import { Block, Text } from '@lidofinance/lido-ui';
+import { Block } from '@lidofinance/lido-ui';
 import { useSiweAuth } from 'modules/siwe';
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
-import { NoSSRWrapper, Stack, WhenLoaded } from 'shared/components';
-import { Connect } from 'shared/wallet';
+import { NoSSRWrapper, WhenLoaded } from 'shared/components';
+import { SiweConnect, SiweSignInAddress } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status/form-status';
 import { ProofStatus } from './form-status/proof-status';
 import { IdvtcProviders, useIdvtcState } from './shared';
-import { SiweSignIn } from './siwe-sign-in/siwe-sign-in';
 
 const IdvtcApplyContent: FC = () => {
   const { isAccountActive } = useDappStatus();
@@ -18,19 +17,7 @@ const IdvtcApplyContent: FC = () => {
 
   if (!isAccountActive) {
     return (
-      <Block>
-        <Stack direction="column" gap="lg">
-          <Stack direction="column" gap="md">
-            <Text as="h3" size="lg" weight="bold">
-              Connect your wallet
-            </Text>
-            <Text size="xs" color="secondary">
-              Connect your wallet and sign a verification message to continue.
-            </Text>
-          </Stack>
-          <Connect size="sm" fullwidth />
-        </Stack>
-      </Block>
+      <SiweConnect description="Connect your wallet and sign a verification message to continue" />
     );
   }
 
@@ -47,7 +34,7 @@ const IdvtcApplyContent: FC = () => {
   }
 
   if (!token) {
-    return <SiweSignIn />;
+    return <SiweSignInAddress operatorType="IDVTC" />;
   }
 
   if (isPending) {

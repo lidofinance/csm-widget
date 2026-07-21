@@ -63,7 +63,7 @@ export const FileName = styled(Text).attrs({ size: 'xs' })<{
   opacity: ${({ $inactive }) => ($inactive ? 0.5 : 1)};
 `;
 
-export const EmptyState = styled.div`
+export const EmptyStateBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

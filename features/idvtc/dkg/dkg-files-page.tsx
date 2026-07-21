@@ -1,16 +1,8 @@
 import { FC, useCallback } from 'react';
-import { Text } from '@lidofinance/lido-ui';
-import { SiweAuthGate } from 'modules/siwe';
-import {
-  Block,
-  Counter,
-  NoSSRWrapper,
-  SectionTitle,
-  Stack,
-} from 'shared/components';
+import { Loader, Text } from '@lidofinance/lido-ui';
+import { Block, Counter, SectionTitle, Stack } from 'shared/components';
 import { useShowRule } from 'shared/hooks';
-import { Layout } from 'shared/layout';
-import { IdvtcClusterSwitcher } from 'shared/navigate';
+import { IdvtcSiwePage } from '../idvtc-siwe-page';
 import { DkgAddFileButton } from './components/dkg-add-file-button';
 import { DkgDropArea } from './components/dkg-drop-area';
 import { DkgEmptyState } from './components/dkg-empty-state';
@@ -67,7 +59,7 @@ const DkgFilesContent: FC = () => {
       </SectionTitle>
 
       {isLoading ? (
-        <Text size="xs">Loading…</Text>
+        <Loader />
       ) : files && files.length > 0 ? (
         <DkgFilesTable files={files} canManage={canManage} />
       ) : (
@@ -98,12 +90,7 @@ const DkgFilesContent: FC = () => {
 };
 
 export const DkgFilesPage: FC = () => (
-  <Layout title="DKG" pageName="DKG">
-    <IdvtcClusterSwitcher />
-    <NoSSRWrapper>
-      <SiweAuthGate fallback={<DkgSignInPage />}>
-        <DkgFilesContent />
-      </SiweAuthGate>
-    </NoSSRWrapper>
-  </Layout>
+  <IdvtcSiwePage title="DKG" pageName="DKG" fallback={<DkgSignInPage />}>
+    <DkgFilesContent />
+  </IdvtcSiwePage>
 );

@@ -31,7 +31,7 @@ export const useMemberVerification = () => {
         return false;
       }
       if (otherAddresses.some((a) => compareLowercase(a, address))) {
-        setError('This address is already an active member');
+        setError('This address is already used by another member');
         return false;
       }
       if (!isHex(signature)) {

@@ -1,10 +1,14 @@
 import { Block, Button, Text } from '@lidofinance/lido-ui';
-import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
-import { InputAddress, Stack } from 'shared/components';
+import { useDappStatus } from 'modules/web3';
 import { useSiweAuth } from 'modules/siwe';
+import { InputAddress, Stack } from 'shared/components';
 
-export const SiweSignIn: FC = () => {
+// Sign-in step that also confirms the connected address as the operator's main
+// address, used by the ICS / IDVTC apply flows.
+export const SiweSignInAddress: FC<{ operatorType: string }> = ({
+  operatorType,
+}) => {
   const { address } = useDappStatus();
   const { signIn } = useSiweAuth();
 
@@ -22,7 +26,8 @@ export const SiweSignIn: FC = () => {
         </Stack>
         <Stack direction="column" gap="md">
           <Text size="xs" color="secondary">
-            You are requesting IDVTC operator type for the following address:
+            You are requesting {operatorType} operator type for the following
+            address:
           </Text>
           <InputAddress
             disabled

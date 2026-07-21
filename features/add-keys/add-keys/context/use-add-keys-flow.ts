@@ -47,8 +47,8 @@ export const useAddKeysFlowResolver = (): FlowResolver<
           try {
             const op = operatorKey(config.module, data.nodeOperatorId);
             invariant(op, 'nodeOperatorId is required to upload DKG files');
-            await ensureAuth(dkgFiles);
-            await uploadStaged(op, dkgFiles);
+            const authToken = await ensureAuth(dkgFiles);
+            await uploadStaged(op, dkgFiles, authToken);
             return true;
           } catch (error) {
             handleTxError(error);

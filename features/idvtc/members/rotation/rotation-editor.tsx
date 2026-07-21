@@ -8,31 +8,40 @@ import {
   buildRotationBody,
   countChangedSlots,
   MEMBERS_COUNT,
+  validateInitDraft,
   validateRotationDraft,
   type SlotDraft,
 } from '../utils/rotation';
 import { RotationSlotRow } from './rotation-slot-row';
 
-const emptyDraft = (): SlotDraft => ({
-  changed: false,
+const emptyDraft = (changed = false): SlotDraft => ({
+  changed,
   newAddress: '',
   signature: '',
   verified: false,
 });
 
 type RotationEditorProps = {
+  // 'init' defines all four members from zero; 'rotate' replaces a subset of
+  // active members. Defaults to 'rotate'.
+  mode?: 'init' | 'rotate';
   activeMembers: MemberDto[];
+  // Whether the Cancel button is shown (there is somewhere to return to).
+  cancelable?: boolean;
   onDone: () => void;
 };
 
 export const RotationEditor: FC<RotationEditorProps> = ({
+  mode = 'rotate',
   activeMembers,
+  cancelable = true,
   onDone,
 }) => {
+  const isInit = mode === 'init';
   const stages = useMembersModalStages();
   const submit = useSubmitRotation();
   const [slots, setSlots] = useState<SlotDraft[]>(() =>
-    Array.from({ length: MEMBERS_COUNT }, emptyDraft),
+    Array.from({ length: MEMBERS_COUNT }, () => emptyDraft(isInit)),
   );
 
   const activeAddresses = useMemo(
@@ -46,7 +55,9 @@ export const RotationEditor: FC<RotationEditorProps> = ({
     );
 
   const changedCount = countChangedSlots(slots);
-  const validationError = validateRotationDraft(slots, activeAddresses);
+  const validationError = isInit
+    ? validateInitDraft(slots)
+    : validateRotationDraft(slots, activeAddresses);
 
   const onSubmit = async () => {
     try {
@@ -62,26 +73,36 @@ export const RotationEditor: FC<RotationEditorProps> = ({
   return (
     <Stack direction="column" gap="xl" data-testid="rotationEditor">
       <Text size="sm" weight="bold">
-        Select the members to replace
+        {isInit ? 'Add your cluster members' : 'Select the members to replace'}
       </Text>
       {slots.map((draft, index) => (
         <RotationSlotRow
           key={activeMembers[index]?.address ?? index}
           index={index}
+          mandatory={isInit}
           currentAddress={activeMembers[index]?.address ?? ''}
           draft={draft}
-          otherAddresses={activeAddresses}
+          otherAddresses={
+            isInit
+              ? slots
+                  .filter((_, i) => i !== index)
+                  .map((s) => s.newAddress)
+                  .filter(Boolean)
+              : activeAddresses
+          }
           onChange={(patch) => patchSlot(index, patch)}
         />
       ))}
       <Stack direction="row" gap="md">
-        <Button
-          variant="translucent"
-          onClick={onDone}
-          data-testid="cancelRotationButton"
-        >
-          Cancel
-        </Button>
+        {cancelable && (
+          <Button
+            variant="translucent"
+            onClick={onDone}
+            data-testid="cancelRotationButton"
+          >
+            Cancel
+          </Button>
+        )}
         <Button
           fullwidth
           disabled={!!validationError || submit.isPending}
@@ -89,8 +110,11 @@ export const RotationEditor: FC<RotationEditorProps> = ({
           onClick={() => void onSubmit()}
           data-testid="submitRotationButton"
         >
-          Submit rotation request
-          {changedCount > 0 ? ` (${changedCount})` : ''}
+          {isInit
+            ? 'Submit for review'
+            : `Submit rotation request${
+                changedCount > 0 ? ` (${changedCount})` : ''
+              }`}
         </Button>
       </Stack>
     </Stack>

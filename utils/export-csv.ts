@@ -1,3 +1,5 @@
+import { downloadBlob } from './download-blob';
+
 /**
  * Escapes a CSV field value by wrapping it in quotes if needed
  */
@@ -40,17 +42,8 @@ export const exportToCsv = <T extends Record<string, unknown>>(
 
   const csv = [headerRow, ...rows].join('\n');
 
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-
-  const link = document.createElement('a');
-  link.href = url;
-  link.download = `${filename}.csv`;
-  link.style.display = 'none';
-
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-
-  URL.revokeObjectURL(url);
+  downloadBlob(
+    `${filename}.csv`,
+    new Blob([csv], { type: 'text/csv;charset=utf-8;' }),
+  );
 };

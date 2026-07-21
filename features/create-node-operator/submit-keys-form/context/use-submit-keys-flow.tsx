@@ -59,6 +59,11 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
         dkgFiles = [],
       } = input;
 
+      // The node operator doesn't exist yet, so the DKG auth token (a signature,
+      // not gas) is obtained up-front in `confirm` — before the tx — and
+      // threaded through to the post-tx upload in `submit`.
+      let dkgAuthToken: string | undefined;
+
       return {
         action: 'submit-keys' as const,
         confirm: async () => {
@@ -73,7 +78,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
 
           if (dkgFiles.length > 0) {
             try {
-              await ensureAuth(dkgFiles);
+              dkgAuthToken = await ensureAuth(dkgFiles);
             } catch (error) {
               handleTxError(error);
               return false;
@@ -118,7 +123,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             const keys = depositData.map((k) => k.pubkey);
             const runUpload = async () => {
               invariant(op, 'operator key required for DKG upload');
-              await uploadStaged(op, dkgFiles);
+              await uploadStaged(op, dkgFiles, dkgAuthToken);
             };
             try {
               await runUpload();
