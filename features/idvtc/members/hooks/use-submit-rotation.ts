@@ -15,7 +15,7 @@ import { membersBaseKey, rotationBaseKey } from './members-keys';
 export const useSubmitRotation = () => {
   const op = useOperatorKey();
   return useSurveyMutation<
-    RotationRequestDto | undefined,
+    RotationRequestDto | null | undefined,
     SubmitRotationRequestDto
   >(
     (body, { token }) => {

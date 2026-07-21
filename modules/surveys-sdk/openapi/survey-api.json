@@ -1826,11 +1826,18 @@
         },
         "responses": {
           "200": {
-            "description": "Submitted rotation request",
+            "description": "Merged rotation request state after applying the patch, or null when the pending request was fully canceled",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RotationRequestDto"
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/RotationRequestDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
                 }
               }
             }
@@ -3919,16 +3926,48 @@
         "type": "object",
         "properties": {
           "slot1": {
-            "$ref": "#/components/schemas/SubmitRotationSlotDto"
+            "description": "Tri-state: omit to keep the pending rotation for this slot, null to cancel it, object to set/replace it.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubmitRotationSlotDto"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "slot2": {
-            "$ref": "#/components/schemas/SubmitRotationSlotDto"
+            "description": "Tri-state: omit to keep the pending rotation for this slot, null to cancel it, object to set/replace it.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubmitRotationSlotDto"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "slot3": {
-            "$ref": "#/components/schemas/SubmitRotationSlotDto"
+            "description": "Tri-state: omit to keep the pending rotation for this slot, null to cancel it, object to set/replace it.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubmitRotationSlotDto"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "slot4": {
-            "$ref": "#/components/schemas/SubmitRotationSlotDto"
+            "description": "Tri-state: omit to keep the pending rotation for this slot, null to cancel it, object to set/replace it.",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SubmitRotationSlotDto"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         }
       },

@@ -27,7 +27,7 @@ import {
   useVerifyMessage,
   type IdvtcApplyFormInputType,
 } from '../context';
-import { ClusterMemberCard } from '../styles';
+import { ClusterMemberCard } from '../../shared';
 
 type ClusterMemberItemProps = {
   index: number;

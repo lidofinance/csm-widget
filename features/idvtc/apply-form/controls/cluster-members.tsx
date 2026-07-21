@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import { FormTitle, Stack } from 'shared/components';
 import { CLUSTER_SIZE, type IdvtcApplyFormInputType } from '../context';
-import { ProgressBar, ProgressBarFill, ProgressBarTrack } from '../styles';
+import { ProgressBar, ProgressBarFill, ProgressBarTrack } from '../../shared';
 import { ClusterMemberItem } from './cluster-member-item';
 
 export const ClusterMembers: FC = () => {

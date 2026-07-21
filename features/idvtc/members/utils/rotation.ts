@@ -6,7 +6,6 @@ import type {
 export const MEMBERS_COUNT = 4;
 
 export type SlotDraft = {
-  changed: boolean;
   newAddress: string;
   signature: string;
   discordHandle?: string;
@@ -15,11 +14,16 @@ export type SlotDraft = {
 };
 
 export type RotationValidationError =
-  | 'NO_SLOTS'
-  | 'DUPLICATE_ADDRESS'
-  | 'ALREADY_ACTIVE'
-  | 'UNVERIFIED'
-  | 'INCOMPLETE';
+  'INCOMPLETE' | 'UNVERIFIED' | 'DUPLICATE_ADDRESS' | 'ALREADY_ACTIVE';
+
+export const emptySlotDraft = (): SlotDraft => ({
+  newAddress: '',
+  signature: '',
+  verified: false,
+});
+
+const slotKey = (index: number) =>
+  `slot${index + 1}` as keyof SubmitRotationRequestDto;
 
 const toSlot = (d: SlotDraft): SubmitRotationSlotDto => ({
   newAddress: d.newAddress,
@@ -30,39 +34,46 @@ const toSlot = (d: SlotDraft): SubmitRotationSlotDto => ({
     : undefined),
 });
 
-export const countChangedSlots = (slots: SlotDraft[]): number =>
-  slots.filter((s) => s.changed).length;
+// The submit endpoint is a JSON merge-patch: omitted slots carry over the
+// pending rotation server-side, null cancels a slot, an object sets/replaces
+// it. The widget never resubmits untouched slots.
+export const buildSlotPatch = (
+  index: number,
+  draft: SlotDraft,
+): SubmitRotationRequestDto => ({ [slotKey(index)]: toSlot(draft) });
 
-export const buildRotationBody = (
-  slots: SlotDraft[],
-): SubmitRotationRequestDto => {
-  const body: SubmitRotationRequestDto = {};
-  slots.forEach((s, i) => {
-    if (s.changed) {
-      body[`slot${i + 1}` as keyof SubmitRotationRequestDto] = toSlot(s);
-    }
-  });
-  return body;
-};
+export const buildCancelPatch = (index: number): SubmitRotationRequestDto => ({
+  [slotKey(index)]: null,
+});
 
-export const validateRotationDraft = (
+export const buildCancelAllPatch = (): SubmitRotationRequestDto => ({
+  slot1: null,
+  slot2: null,
+  slot3: null,
+  slot4: null,
+});
+
+export const buildInitBody = (
   slots: SlotDraft[],
-  activeAddresses: string[],
+): SubmitRotationRequestDto => ({
+  slot1: toSlot(slots[0]),
+  slot2: toSlot(slots[1]),
+  slot3: toSlot(slots[2]),
+  slot4: toSlot(slots[3]),
+});
+
+// takenAddresses = current active members + other slots' pending proposals —
+// the server rejects a merged request colliding with either (ALREADY_ACTIVE /
+// DUPLICATE_SLOT_ADDRESS / UNCHANGED), so the CTA stays disabled until clean.
+export const validateSlotDraft = (
+  draft: SlotDraft,
+  takenAddresses: string[],
 ): RotationValidationError | null => {
-  const changed = slots.map((s, i) => ({ s, i })).filter(({ s }) => s.changed);
-
-  if (changed.length === 0) return 'NO_SLOTS';
-  if (changed.some(({ s }) => !s.verified)) return 'UNVERIFIED';
-
-  const proposed = changed.map(({ s }) => s.newAddress.toLowerCase());
-  if (new Set(proposed).size !== proposed.length) return 'DUPLICATE_ADDRESS';
-
-  // A proposed address must not equal ANY current active member — the same rule
-  // the verify-time guard (useMemberVerification) enforces, so the two agree.
-  // Covers the server's MEMBERS_ADDRESS_ALREADY_ACTIVE and MEMBERS_ADDRESS_UNCHANGED.
-  const active = activeAddresses.map((a) => a.toLowerCase());
-  if (proposed.some((p) => active.includes(p))) return 'ALREADY_ACTIVE';
-
+  if (!draft.newAddress || !draft.signature) return 'INCOMPLETE';
+  if (!draft.verified) return 'UNVERIFIED';
+  const proposed = draft.newAddress.toLowerCase();
+  if (takenAddresses.some((a) => a.toLowerCase() === proposed))
+    return 'ALREADY_ACTIVE';
   return null;
 };
 

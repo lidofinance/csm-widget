@@ -23,6 +23,7 @@ type SignOwnershipFieldsProps = {
   discordHandle?: string;
   telegramUsername?: string;
   disableAddress?: boolean;
+  onClear?: () => void;
   onAddressChange: (value: string) => void;
   onSignatureChange: (value: string) => void;
   onDiscordChange: (value: string) => void;
@@ -40,6 +41,7 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
   discordHandle,
   telegramUsername,
   disableAddress,
+  onClear,
   onAddressChange,
   onSignatureChange,
   onDiscordChange,
@@ -67,7 +69,26 @@ export const SignOwnershipFields: FC<SignOwnershipFieldsProps> = ({
         )}
       </Stack>
 
-      {!verified && (
+      {verified ? (
+        <Input
+          label={title}
+          value={address}
+          readOnly
+          rightDecorator={
+            onClear && (
+              <Button
+                size="xs"
+                variant="translucent"
+                color="error"
+                onClick={onClear}
+                data-testid="clearMemberBtn"
+              >
+                Clear
+              </Button>
+            )
+          }
+        />
+      ) : (
         <>
           <Stack direction="column" gap="sm" data-testid="signStep1">
             <Text size="xs">

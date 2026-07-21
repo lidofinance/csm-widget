@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import type { RotationRequestDto } from 'modules/surveys-sdk/generated';
-import { RotationEditor } from '../rotation/rotation-editor';
-import { RotationStatus } from '../rotation/rotation-status';
 import { InitButton } from './init-button';
+import { InitEditor } from './init-editor';
+import { InitRequestStatus } from './init-request-status';
 import { NotInitializedInfo } from './not-initialized-info';
 
 type NotInitializedProps = {
@@ -13,8 +13,8 @@ type NotInitializedProps = {
 
 // No active members yet. A manager/reward either binds an approved IDVTC form
 // (InitButton, instant) or defines all four members from scratch via an init
-// rotation request (RotationEditor mode="init" → REVIEW). The two are mutually
-// exclusive by state; a pending/rejected from-scratch request takes priority.
+// rotation request (InitEditor → REVIEW). The two are mutually exclusive by
+// state; a pending/rejected from-scratch request takes priority.
 export const NotInitialized: FC<NotInitializedProps> = ({
   request,
   canManage,
@@ -31,9 +31,7 @@ export const NotInitialized: FC<NotInitializedProps> = ({
 
   if (editing || (!pendingRequest && !isBindable)) {
     return (
-      <RotationEditor
-        mode="init"
-        activeMembers={[]}
+      <InitEditor
         cancelable={!!pendingRequest}
         onDone={() => setEditing(false)}
       />
@@ -42,10 +40,10 @@ export const NotInitialized: FC<NotInitializedProps> = ({
 
   if (pendingRequest) {
     return (
-      <RotationStatus
+      <InitRequestStatus
         request={pendingRequest}
         canManage={canManage}
-        onReplace={() => setEditing(true)}
+        onNewRequest={() => setEditing(true)}
       />
     );
   }

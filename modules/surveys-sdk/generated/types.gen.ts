@@ -679,10 +679,22 @@ export type SubmitRotationSlotDto = {
 };
 
 export type SubmitRotationRequestDto = {
-    slot1?: SubmitRotationSlotDto;
-    slot2?: SubmitRotationSlotDto;
-    slot3?: SubmitRotationSlotDto;
-    slot4?: SubmitRotationSlotDto;
+    /**
+     * Tri-state: omit to keep the pending rotation for this slot, null to cancel it, object to set/replace it.
+     */
+    slot1?: SubmitRotationSlotDto | null;
+    /**
+     * Tri-state: omit to keep the pending rotation for this slot, null to cancel it, object to set/replace it.
+     */
+    slot2?: SubmitRotationSlotDto | null;
+    /**
+     * Tri-state: omit to keep the pending rotation for this slot, null to cancel it, object to set/replace it.
+     */
+    slot3?: SubmitRotationSlotDto | null;
+    /**
+     * Tri-state: omit to keep the pending rotation for this slot, null to cancel it, object to set/replace it.
+     */
+    slot4?: SubmitRotationSlotDto | null;
 };
 
 export type SetupResponseDto = {
@@ -1836,9 +1848,9 @@ export type MembersSubmitRotationRequestError = MembersSubmitRotationRequestErro
 
 export type MembersSubmitRotationRequestResponses = {
     /**
-     * Submitted rotation request
+     * Merged rotation request state after applying the patch, or null when the pending request was fully canceled
      */
-    200: RotationRequestDto;
+    200: RotationRequestDto | null;
 };
 
 export type MembersSubmitRotationRequestResponse = MembersSubmitRotationRequestResponses[keyof MembersSubmitRotationRequestResponses];

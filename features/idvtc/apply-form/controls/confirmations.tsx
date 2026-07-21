@@ -2,7 +2,7 @@ import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { CheckboxHookForm } from 'shared/hook-form/controls';
-import { ConfirmationList } from '../styles';
+import { ConfirmationList } from '../../shared';
 
 export const Confirmations: FC = () => {
   return (
