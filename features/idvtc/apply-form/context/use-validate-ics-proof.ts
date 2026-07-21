@@ -1,28 +1,25 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
+import { useCheckIcsProof } from 'features/idvtc/shared';
 import {
   ValidationError,
   VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
-import invariant from 'tiny-invariant';
 import { Address } from 'viem';
 
 export const useValidateIcsProof = () => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
+  const checkIcsProof = useCheckIcsProof();
 
   return useCallback(
     async (address: Address, fieldPath: string) => {
-      invariant(sdk, 'CSM SDK is required for ICS proof validation');
-      const proof = await sdk.icsGate.getProof(address);
+      const approved = await checkIcsProof(address);
 
-      if (!proof) {
+      if (!approved) {
         throw new ValidationError(
           fieldPath,
           VALIDATION_MESSAGES.addressNotIcsApproved,
         );
       }
     },
-    [sdk],
+    [checkIcsProof],
   );
 };

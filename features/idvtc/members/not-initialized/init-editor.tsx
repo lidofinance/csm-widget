@@ -1,6 +1,6 @@
 import { Button, Text } from '@lidofinance/lido-ui';
 import { FC, useState } from 'react';
-import { Stack } from 'shared/components';
+import { FormBlock, Stack } from 'shared/components';
 import {
   ClusterMemberCard,
   ProgressBar,
@@ -109,7 +109,7 @@ export const InitEditor: FC<InitEditorProps> = ({ cancelable, onDone }) => {
   };
 
   return (
-    <Stack direction="column" gap="md" data-testid="initEditor">
+    <FormBlock $gap="md" data-testid="initEditor">
       <Stack direction="column" gap="xxs">
         <Text as="h5" size="sm" weight="bold">
           Cluster member addresses
@@ -162,6 +162,6 @@ export const InitEditor: FC<InitEditorProps> = ({ cancelable, onDone }) => {
           Submit for review
         </Button>
       </Stack>
-    </Stack>
+    </FormBlock>
   );
 };

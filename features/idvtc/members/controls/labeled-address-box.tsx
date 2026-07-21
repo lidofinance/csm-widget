@@ -23,6 +23,6 @@ export const LabeledAddressBox: FC<LabeledAddressBoxProps> = ({
     <Text size="xxs" color="secondary" as="div">
       {label}
     </Text>
-    <Address address={address} showIcon />
+    <Address address={address} showIcon={false} link={false} symbols={90} />
   </BoxStyle>
 );

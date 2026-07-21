@@ -1,6 +1,6 @@
 import { Text } from '@lidofinance/lido-ui';
 import { FC, useMemo, useState } from 'react';
-import { Stack } from 'shared/components';
+import { FormBlock, Stack } from 'shared/components';
 import type {
   MemberDto,
   RotationRequestDto,
@@ -29,14 +29,10 @@ export const MembersSection: FC<MembersSectionProps> = ({
   );
 
   return (
-    <Stack direction="column" gap="md" data-testid="membersSection">
+    <FormBlock $gap="md" data-testid="membersSection">
       <Stack direction="column" gap="xxs">
         <Text as="h5" size="sm" weight="bold">
           Cluster member addresses
-        </Text>
-        <Text size="xs" color="secondary">
-          Verify ownership of 4 additional Ethereum addresses in your validator
-          cluster.
         </Text>
       </Stack>
 
@@ -57,6 +53,6 @@ export const MembersSection: FC<MembersSectionProps> = ({
           onDone={() => setEditingIndex(null)}
         />
       ))}
-    </Stack>
+    </FormBlock>
   );
 };

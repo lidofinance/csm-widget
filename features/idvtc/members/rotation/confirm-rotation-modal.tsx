@@ -1,14 +1,9 @@
-import {
-  ArrowBottom,
-  Button,
-  Checkbox,
-  Modal,
-  Text,
-} from '@lidofinance/lido-ui';
+import { ArrowBack, Button, Checkbox, Modal, Text } from '@lidofinance/lido-ui';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { useState } from 'react';
 import { Stack } from 'shared/components';
 import { ConfirmModalProps, getUseConfirmModal } from 'shared/hooks';
+import styled from 'styled-components';
 import { ConfirmationList } from '../../shared';
 import { LabeledAddressBox } from '../controls/labeled-address-box';
 
@@ -16,6 +11,14 @@ type ConfirmRotationModalProps = {
   currentAddress: string;
   newAddress: string;
 };
+
+const ArrowIcon = styled(ArrowBack).attrs({
+  width: 20,
+  height: 20,
+})`
+  color: var(--lido-color-textSecondary);
+  transform: rotate(-90deg);
+`;
 
 const ConfirmRotationModal: ModalComponentType<
   ConfirmModalProps & ConfirmRotationModalProps
@@ -44,7 +47,7 @@ const ConfirmRotationModal: ModalComponentType<
             address={currentAddress}
           />
           <Stack justify="center">
-            <ArrowBottom color="var(--lido-color-textSecondary)" />
+            <ArrowIcon />
           </Stack>
           <LabeledAddressBox
             label="New cluster member address"

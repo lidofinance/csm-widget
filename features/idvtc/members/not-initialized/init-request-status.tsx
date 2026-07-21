@@ -1,6 +1,6 @@
 import { Button, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
+import { FormBlock } from 'shared/components';
 import type { RotationRequestDto } from 'modules/surveys-sdk/generated';
 import { ClusterMemberCard } from '../../shared';
 import { useMembersModalStages } from '../hooks/use-members-modal-stages';
@@ -37,16 +37,10 @@ export const InitRequestStatus: FC<InitRequestStatusProps> = ({
   };
 
   return (
-    <Stack direction="column" gap="md" data-testid="initRequestStatus">
-      <Stack direction="column" gap="xxs">
-        <Text as="h5" size="sm" weight="bold">
-          Cluster member addresses
-        </Text>
-        <Text size="xs" color="secondary">
-          Verify ownership of 4 additional Ethereum addresses in your validator
-          cluster.
-        </Text>
-      </Stack>
+    <FormBlock $gap="md" data-testid="initRequestStatus">
+      <Text as="h5" size="sm" weight="bold">
+        Cluster member addresses
+      </Text>
 
       {request.slots.map((proposed, index) =>
         proposed.newAddress ? (
@@ -92,6 +86,6 @@ export const InitRequestStatus: FC<InitRequestStatusProps> = ({
             Cancel rotation
           </Button>
         ))}
-    </Stack>
+    </FormBlock>
   );
 };

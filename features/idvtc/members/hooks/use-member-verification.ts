@@ -1,3 +1,7 @@
+import { useFeatureFlags } from 'config/feature-flags';
+import { DISABLE_ICS_PROOF_VALIDATION } from 'config/feature-flags/types';
+import { useCheckIcsProof } from 'features/idvtc/shared';
+import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
 import { useCallback, useState } from 'react';
 import { compareLowercase } from 'utils';
 import { isAddress, isHex } from 'viem';
@@ -14,8 +18,12 @@ type VerifyArgs = {
 // Owns the transient verification state (isVerifying/error) and the validation
 // gauntlet shared by the manual-init rows and the rotate editor. The caller owns
 // where the verified flag and the address/signature live (local state vs RHF).
+// Matches the apply-form's per-member rules: no duplicates, ICS-approved (unless
+// the proof-validation flag is off), and a valid ownership signature.
 export const useMemberVerification = () => {
   const verifyOwnership = useVerifyMemberOwnership();
+  const checkIcsProof = useCheckIcsProof();
+  const featureFlags = useFeatureFlags();
   const [isVerifying, setIsVerifying] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
@@ -40,6 +48,13 @@ export const useMemberVerification = () => {
       }
       setIsVerifying(true);
       try {
+        if (!featureFlags?.[DISABLE_ICS_PROOF_VALIDATION]) {
+          const approved = await checkIcsProof(address);
+          if (!approved) {
+            setError(VALIDATION_MESSAGES.addressNotIcsApproved);
+            return false;
+          }
+        }
         const ok = await verifyOwnership({ address, signature });
         setError(
           ok ? undefined : 'Invalid signature for this address and message',
@@ -52,7 +67,7 @@ export const useMemberVerification = () => {
         setIsVerifying(false);
       }
     },
-    [isVerifying, verifyOwnership],
+    [isVerifying, verifyOwnership, checkIcsProof, featureFlags],
   );
 
   return { isVerifying, error, verify, setError } as const;
