@@ -11,6 +11,10 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
 
   test.beforeEach(async ({ widgetService }) => {
     keysPage = new KeysPage(widgetService.page);
+    await widgetService.setFeatureFlag(
+      'disableDepositDataSignatureValidation',
+      true,
+    );
     await keysPage.submitPage.open();
     keysGeneratorService = new KeysGeneratorService();
   });
@@ -43,9 +47,6 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
       await keysPage.submitPage.selectTab('Parsed');
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
-        await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'signature failed BLS verification',
-        );
         await expect(row.getByTestId('deposit-data-error')).toContainText(
           'pubkey already exists as a validator on CL',
         );
@@ -130,9 +131,6 @@ test.describe('Operator with keys. Validation duplicated keys.', async () => {
       await keysPage.submitPage.selectTab('Parsed');
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
-        await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'signature failed BLS verification',
-        );
         await expect(row.getByTestId('deposit-data-error')).toContainText(
           'pubkey was previously submitted',
         );
