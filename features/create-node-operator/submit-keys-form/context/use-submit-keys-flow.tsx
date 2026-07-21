@@ -8,6 +8,11 @@ import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
 import { TxStageDkgUploadFailed } from 'features/idvtc/dkg/tx-stages/tx-stage-dkg-upload-failed';
+import { useMembersInFlowInit } from 'features/idvtc/members/hooks/use-members-in-flow-init';
+import { TxStageMembersInitFailed } from 'features/idvtc/members/tx-stages/tx-stage-members-init-failed';
+import { TxStageMembersSignin } from 'features/idvtc/members/tx-stages/tx-stage-members-signin';
+import { keepsManageRole } from 'features/idvtc/members/utils/keeps-manage-role';
+import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
 import { operatorKey } from 'modules/surveys-sdk';
 import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
@@ -40,7 +45,9 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   const n = useNavigate();
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
   const buildCallback = useTxModalStagesSubmitKeys();
-  const { ensureAuth, uploadStaged } = useDkgInFlowUpload();
+  const surveyAuth = useSurveyInFlowAuth();
+  const { ensureAuth, uploadStaged } = useDkgInFlowUpload(surveyAuth);
+  const { checkBindable, initStaged } = useMembersInFlowInit(surveyAuth);
   const transitStage = useTransitStage();
 
   return useCallback(
@@ -59,6 +66,14 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
         dkgFiles = [],
       } = input;
 
+      const type = getOperatorType(data.curveId);
+      const isIdvtc = type === OPERATOR_TYPE.CSM_IDVTC;
+      // Auto-init is possible only while the connected address keeps a
+      // manager/rewards role on the new operator (survey API requirement).
+      const mayInitMembers = isIdvtc && keepsManageRole(input, data.address);
+      // Resolved in confirm() once the SIWE token exists; consumed in submit()
+      let willInitMembers = false;
+
       return {
         action: 'submit-keys' as const,
         confirm: async () => {
@@ -71,12 +86,24 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             }));
           if (!okAddresses) return false;
 
-          if (dkgFiles.length > 0) {
+          if (dkgFiles.length > 0 || mayInitMembers) {
             try {
-              await ensureAuth(dkgFiles);
+              if (dkgFiles.length > 0) {
+                await ensureAuth(dkgFiles);
+              } else {
+                await surveyAuth.ensureAuth(<TxStageMembersSignin />);
+              }
             } catch (error) {
-              handleTxError(error);
-              return false;
+              // Staged DKG files must not be lost — abort. A declined sign-in
+              // for auto-init alone must not block creating the operator.
+              if (dkgFiles.length > 0) {
+                handleTxError(error);
+                return false;
+              }
+              return true;
+            }
+            if (mayInitMembers) {
+              willInitMembers = await checkBindable();
             }
           }
           return true;
@@ -84,7 +111,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
         submit: async () => {
           invariant(amount !== undefined, 'BondAmount is not defined');
 
-          const callback = buildCallback(input, data);
+          const callback = buildCallback(input, { ...data, willInitMembers });
 
           const params = {
             token,
@@ -97,8 +124,6 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             referrer: referrer || undefined,
             callback,
           };
-
-          const type = getOperatorType(data.curveId);
 
           const { result } =
             type === OPERATOR_TYPE.CSM_ICS && data.proof
@@ -113,32 +138,50 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
                   })
                 : await sdk.permissionlessGate.addNodeOperator(params);
 
-          if (result && dkgFiles.length > 0) {
+          if (result && (dkgFiles.length > 0 || willInitMembers)) {
             const op = operatorKey(config.module, result.nodeOperatorId);
             const keys = depositData.map((k) => k.pubkey);
-            const runUpload = async () => {
-              invariant(op, 'operator key required for DKG upload');
-              await uploadStaged(op, dkgFiles);
+
+            const runInit = async (): Promise<void> => {
+              invariant(op, 'operator key required for members init');
+              try {
+                await initStaged(op);
+                renderCreateSuccess(transitStage, result, data, keys);
+              } catch (error) {
+                console.warn('[members] in-flow init failed', error);
+                transitStage(
+                  <TxStageMembersInitFailed
+                    title="Node Operator created — cluster members not initialized"
+                    onRetry={() => void runInit()}
+                  />,
+                );
+              }
             };
-            try {
+
+            const runUpload = async (): Promise<void> => {
+              invariant(op, 'operator key required for DKG upload');
+              try {
+                await uploadStaged(op, dkgFiles);
+              } catch (error) {
+                transitStage(
+                  <TxStageDkgUploadFailed
+                    nodeOperatorId={result.nodeOperatorId}
+                    onRetry={() => void runUpload()}
+                  />,
+                );
+                return;
+              }
+              if (willInitMembers) {
+                await runInit();
+              } else {
+                renderCreateSuccess(transitStage, result, data, keys);
+              }
+            };
+
+            if (dkgFiles.length > 0) {
               await runUpload();
-              renderCreateSuccess(transitStage, result, data, keys);
-            } catch (error) {
-              transitStage(
-                <TxStageDkgUploadFailed
-                  nodeOperatorId={result.nodeOperatorId}
-                  onRetry={() => {
-                    void (async () => {
-                      try {
-                        await runUpload();
-                        renderCreateSuccess(transitStage, result, data, keys);
-                      } catch (e) {
-                        handleTxError(e);
-                      }
-                    })();
-                  }}
-                />,
-              );
+            } else {
+              await runInit();
             }
           }
 
@@ -162,8 +205,11 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
       n,
       confirmCustomAddresses,
       buildCallback,
+      surveyAuth,
       ensureAuth,
       uploadStaged,
+      checkBindable,
+      initStaged,
       transitStage,
     ],
   );

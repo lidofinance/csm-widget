@@ -1,3 +1,4 @@
+import { TxStageMembersInitializing } from 'features/idvtc/members/tx-stages/tx-stage-members-initializing';
 import {
   TxStagePending,
   TxStageSign,
@@ -11,7 +12,7 @@ import {
 
 export const useTxModalStagesClaimIdvtc = () =>
   useTxStages<ClaimIdvtcFormInputType, ClaimIdvtcFormNetworkData>(
-    (transitStage) => ({
+    (transitStage, _input, data) => ({
       sign: () =>
         transitStage(
           <TxStageSign
@@ -23,13 +24,20 @@ export const useTxModalStagesClaimIdvtc = () =>
         transitStage(
           <TxStagePending title="Claiming IDVTC type" txHash={txHash} />,
         ),
-      success: (_result: undefined, txHash) =>
-        transitStage(
+      // When a members init is planned, hand off to its holding stage — the
+      // flow runs the init after claimCurve resolves and renders the final
+      // success (or the failed+retry stage) once it settles.
+      success: (_result: undefined, txHash) => {
+        if (data.willInitMembers) {
+          return transitStage(<TxStageMembersInitializing />);
+        }
+        return transitStage(
           <TxStageSuccess
             txHash={txHash}
             title="IDVTC type has been successfully claimed"
             description=""
           />,
-        ),
+        );
+      },
     }),
   );

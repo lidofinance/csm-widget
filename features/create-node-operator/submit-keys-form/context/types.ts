@@ -35,4 +35,8 @@ export type SubmitKeysFormNetworkData = {
   shareLimit: ShareLimitInfo;
   shareLimitStatus: ShareLimitStatus;
   keysAvailable?: KeysAvailable;
+  // Injected by the flow at buildCallback time (not fetched by the data
+  // provider): tells the tx success stage to hand off to the members-init
+  // stage instead of the final success screen.
+  willInitMembers?: boolean;
 };

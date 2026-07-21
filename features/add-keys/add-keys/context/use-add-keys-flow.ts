@@ -2,6 +2,7 @@ import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
 import { PATH } from 'consts/urls';
 import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
+import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
 import { operatorKey } from 'modules/surveys-sdk';
 import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
@@ -30,7 +31,8 @@ export const useAddKeysFlowResolver = (): FlowResolver<
   const [canAddKeys, addKeysAccess] = useCanPerform(keysSDK, 'addKeys');
   const n = useNavigate();
   const buildCallback = useTxModalStagesAddKeys();
-  const { ensureAuth, uploadStaged } = useDkgInFlowUpload();
+  const surveyAuth = useSurveyInFlowAuth();
+  const { ensureAuth, uploadStaged } = useDkgInFlowUpload(surveyAuth);
 
   return useCallback(
     (input, data) => {
