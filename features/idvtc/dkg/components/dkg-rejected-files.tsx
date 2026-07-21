@@ -13,8 +13,8 @@ export const DkgRejectedFiles: FC<{
         {rejected.length} file(s) were not uploaded:
       </Text>
       <ul>
-        {rejected.map((r) => (
-          <li key={r.name}>
+        {rejected.map((r, i) => (
+          <li key={`${r.name}-${i}`}>
             <Text size="xs" color="error">
               {r.name} — {r.reason}
             </Text>

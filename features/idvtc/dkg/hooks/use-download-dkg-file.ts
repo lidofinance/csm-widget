@@ -1,4 +1,5 @@
 import { callSurvey, surveyRequest, useOperatorKey } from 'modules/surveys-sdk';
+import { dispatchAuthError } from 'modules/surveys-sdk/api/errors';
 import { useSiweAuth } from 'modules/siwe';
 import {
   filesGetOne,
@@ -9,7 +10,7 @@ import { downloadJson } from '../utils/download-file';
 
 export const useDownloadDkgFile = () => {
   const op = useOperatorKey();
-  const { token } = useSiweAuth();
+  const { token, handleAuthError } = useSiweAuth();
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
@@ -27,12 +28,13 @@ export const useDownloadDkgFile = () => {
         );
         if (full) downloadJson(full.name, full.content);
       } catch (e) {
+        dispatchAuthError(e, token, handleAuthError);
         setError(e as Error);
       } finally {
         setDownloadingId(null);
       }
     },
-    [op, token],
+    [op, token, handleAuthError],
   );
 
   return { download, downloadingId, error };

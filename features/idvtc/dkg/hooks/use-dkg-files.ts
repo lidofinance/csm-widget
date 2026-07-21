@@ -5,11 +5,13 @@ import {
   useSurveyQuery,
 } from 'modules/surveys-sdk';
 import { filesList, type FileMetadataDto } from 'modules/surveys-sdk/generated';
+import { useSiweAuth } from 'modules/siwe';
 import invariant from 'tiny-invariant';
 import { dkgFilesKey } from './dkg-keys';
 
 export const useDkgFiles = () => {
   const op = useOperatorKey();
+  const { token } = useSiweAuth();
   return useSurveyQuery<FileMetadataDto[]>(
     dkgFilesKey(op),
     ({ token, signal }) => {
@@ -21,6 +23,6 @@ export const useDkgFiles = () => {
         }),
       );
     },
-    { enabled: !!op },
+    { enabled: !!op && !!token },
   );
 };

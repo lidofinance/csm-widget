@@ -5,6 +5,9 @@ export const COUNTER_VARIANTS = {
   default: css`
     background: var(--lido-color-backgroundSecondary);
   `,
+  secondary: css`
+    background: var(--lido-color-backgroundDarken);
+  `,
   warning: css`
     background: var(--lido-color-error);
   `,

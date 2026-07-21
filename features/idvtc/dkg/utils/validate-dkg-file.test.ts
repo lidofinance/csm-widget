@@ -48,4 +48,44 @@ describe('validateDkgFile', () => {
       reason: expect.stringMatching(/64|large|size/i),
     });
   });
+
+  it('rejects a top-level array', () => {
+    const r = validateDkgFile('a.json', '[1,2,3]');
+    expect(r).toMatchObject({
+      ok: false,
+      reason: 'Not a valid DKG file',
+    });
+  });
+
+  it('rejects a top-level number', () => {
+    const r = validateDkgFile('a.json', '42');
+    expect(r).toMatchObject({
+      ok: false,
+      reason: 'Not a valid DKG file',
+    });
+  });
+
+  it('rejects a top-level string', () => {
+    const r = validateDkgFile('a.json', '"hello"');
+    expect(r).toMatchObject({
+      ok: false,
+      reason: 'Not a valid DKG file',
+    });
+  });
+
+  it('rejects a top-level null', () => {
+    const r = validateDkgFile('a.json', 'null');
+    expect(r).toMatchObject({
+      ok: false,
+      reason: 'Not a valid DKG file',
+    });
+  });
+
+  it('rejects a top-level boolean', () => {
+    const r = validateDkgFile('a.json', 'true');
+    expect(r).toMatchObject({
+      ok: false,
+      reason: 'Not a valid DKG file',
+    });
+  });
 });

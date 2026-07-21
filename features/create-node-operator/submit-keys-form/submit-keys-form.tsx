@@ -30,10 +30,10 @@ export const SubmitKeysForm: FC = memo(() => (
             <KeysLimitWarning />
             <KeysInput />
             <AmountInput />
-            <KeysConfirm />
             <DkgFilesSection />
             <CustomAddressesSection />
             <ReferrerInput />
+            <KeysConfirm />
             <SubmitButton />
           </Form>
           <SubmitKeysFormInfo />

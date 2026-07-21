@@ -1,7 +1,7 @@
 // POST {op}/files body item
 export type DkgFileUploadItem = {
   name: string;
-  content: unknown;
+  content: Record<string, unknown>;
 };
 
 // A file rejected during client-side validation

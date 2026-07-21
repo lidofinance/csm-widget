@@ -8,15 +8,18 @@ import {
   type FileUploadItemDto,
 } from 'modules/surveys-sdk/generated';
 import { useSiweAuth } from 'modules/siwe';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useTransitStage } from 'shared/transaction-modal';
 import { getGeneralTransactionModalStages } from 'shared/transaction-modal/hooks/get-general-transaction-modal-stages';
 import { TxStageDkgSignin } from '../tx-stages/tx-stage-dkg-signin';
 import { TxStageDkgUploading } from '../tx-stages/tx-stage-dkg-uploading';
+import { dkgFilesKey } from './dkg-keys';
 
 export const useDkgInFlowUpload = () => {
   const { token, authenticate } = useSiweAuth();
   const transitStage = useTransitStage();
+  const queryClient = useQueryClient();
 
   // Returns a usable token. Signs in only if there are files and no token yet.
   // authenticate() drives NO modal and THROWS on reject/fail, so we show the
@@ -51,8 +54,9 @@ export const useDkgInFlowUpload = () => {
           body: files,
         }),
       );
+      await queryClient.invalidateQueries({ queryKey: dkgFilesKey(op) });
     },
-    [token, transitStage],
+    [token, transitStage, queryClient],
   );
 
   return { ensureAuth, uploadStaged };
