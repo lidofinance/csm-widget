@@ -39,10 +39,10 @@ export const PATH = <const>{
   TYPE_ICS_PARAMETERS: '/type/ics-parameters',
   TYPE_PARAMETERS: '/type/parameters',
 
-  TYPE_DVT_DESCRIPTION: '/type/idvtc-description',
-  TYPE_DVT_APPLY: '/type/idvtc-apply',
-  TYPE_DVT_PARAMETERS: '/type/idvtc-parameters',
-  TYPE_DVT_CLAIM: '/type/idvtc-claim',
+  TYPE_IDVTC_DESCRIPTION: '/type/idvtc-description',
+  TYPE_IDVTC_APPLY: '/type/idvtc-apply',
+  TYPE_IDVTC_PARAMETERS: '/type/idvtc-parameters',
+  TYPE_IDVTC_CLAIM: '/type/idvtc-claim',
 
   SURVEYS: '/surveys',
   SURVEYS_CONTACTS: '/surveys/contacts',

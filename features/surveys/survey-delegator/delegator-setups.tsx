@@ -4,8 +4,15 @@ import { FC } from 'react';
 import { Plural, Stack, WhenLoaded } from 'shared/components';
 import { formatDaysAgo } from 'utils';
 import { SurveyItem, SurveyLink, SurveySection, Warning } from '../components';
-import { parseOperatorKey, useOperatorSurvey } from 'modules/surveys-sdk';
-import { SetupRaw, SetupsKeys } from '../types';
+import {
+  callSurvey,
+  parseOperatorKey,
+  surveyRequest,
+  useOperatorSurvey,
+} from 'modules/surveys-sdk';
+import { setupFindAll } from 'modules/surveys-sdk/generated';
+import { SetupRaw } from '../types';
+import { useSetupsKeys } from '../survey-setup/use-setups-keys';
 import { DelegatorBackButton } from './back-button';
 
 type DelegatorSetupsProps = {
@@ -17,10 +24,15 @@ export const DelegatorSetups: FC<DelegatorSetupsProps> = ({ operatorId }) => {
 
   const { data, isLoading } = useOperatorSurvey<SetupRaw[]>('setups', {
     operatorKey,
+    get: ({ nodeOperatorId, token, signal }) =>
+      callSurvey(() =>
+        setupFindAll({
+          ...surveyRequest(token, signal),
+          path: { nodeOperatorId },
+        }),
+      ),
   });
-  const { data: keys } = useOperatorSurvey<SetupsKeys>('setups/keys', {
-    operatorKey,
-  });
+  const { data: keys } = useSetupsKeys(operatorKey);
 
   const showSetups = !!(keys && (keys.total > 0 || keys.filled > 0));
 

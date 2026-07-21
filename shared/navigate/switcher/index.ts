@@ -7,5 +7,5 @@ export * from './delayed-penalty-page-switcher';
 export * from './switcher';
 export * from './type-page-switcher';
 export * from './ics-page-switcher';
-export * from './dvt-page-switcher';
+export * from './idvtc-page-switcher';
 export * from './types';

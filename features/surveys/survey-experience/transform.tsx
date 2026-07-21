@@ -26,6 +26,7 @@ export const transformIncoming = (data: Experience): ExperienceForm => ({
   ...data,
   professional: data.professional ? 'on' : 'off',
   validatedBefore: data.validatedBefore ? 'on' : 'off',
+  otherValidatorsCount: data.otherValidatorsCount ?? 0,
   otherModules: data.fromCurated || data.fromSDVT ? 'on' : 'off',
   modules:
     data.fromCurated && data.fromSDVT

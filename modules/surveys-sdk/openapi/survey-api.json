@@ -1,0 +1,4255 @@
+{
+  "openapi": "3.1.0",
+  "paths": {
+    "/auth/nonce": {
+      "get": {
+        "operationId": "auth_getNonce",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "issue a single-use SIWE nonce to embed in the sign-in message",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthNonceDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "operationId": "auth_signIn",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthPersonalSignDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "sign in with ethereum (siwe) and return JWT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthSignInDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/auth/verify": {
+      "get": {
+        "operationId": "auth_verify",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "verify JWT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthPayloadDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/contacts": {
+      "get": {
+        "operationId": "contacts_findOne",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get filled contacts (null if not yet submitted)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ContactResponseDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Contacts"
+        ]
+      },
+      "post": {
+        "operationId": "contacts_update",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "create or update contacts (idempotent upsert)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Contacts"
+        ]
+      },
+      "delete": {
+        "operationId": "contacts_deleteOne",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete stored contacts"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Contacts"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/delegates": {
+      "get": {
+        "operationId": "delegates_list",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List all delegates for the node operator",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DelegatesListResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Delegates"
+        ]
+      },
+      "post": {
+        "operationId": "delegates_add",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddDelegateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Add a delegate to the node operator",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DelegateResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - Invalid delegate address"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "409": {
+            "description": "Conflict - Delegate already added or maximum number of delegates reached"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Delegates"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/delegates/{address}": {
+      "delete": {
+        "operationId": "delegates_remove",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Remove a delegate from the node operator"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "404": {
+            "description": "Not found - Delegate does not exist for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Delegates"
+        ]
+      }
+    },
+    "/delegates/my": {
+      "get": {
+        "operationId": "delegatesMy_getMyDelegations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List node operator IDs the user is a delegate for",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyDelegationsDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - My Delegates"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/experience": {
+      "get": {
+        "operationId": "experience_findOne",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get filled experience (null if not yet submitted)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ExperienceResponseDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Experience"
+        ]
+      },
+      "post": {
+        "operationId": "experience_update",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperienceDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "create or update experience (idempotent upsert)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExperienceResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Experience"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/files": {
+      "post": {
+        "operationId": "files_upload",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/FileUploadItemDto"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Files created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileMetadataDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed or empty array"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied"
+          },
+          "413": {
+            "description": "Payload too large"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "IDVTC - Files"
+        ]
+      },
+      "get": {
+        "operationId": "files_list",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of files (metadata only)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FileMetadataDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "IDVTC - Files"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/files/{id}": {
+      "get": {
+        "operationId": "files_getOne",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File with content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied"
+          },
+          "404": {
+            "description": "File not found"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "IDVTC - Files"
+        ]
+      },
+      "patch": {
+        "operationId": "files_setActive",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetFileActiveDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Active flag updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileMetadataDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied"
+          },
+          "404": {
+            "description": "File not found"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Set the active state of a file (idempotent)",
+        "tags": [
+          "IDVTC - Files"
+        ]
+      },
+      "delete": {
+        "operationId": "files_remove",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "File deleted"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied"
+          },
+          "404": {
+            "description": "File not found"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "IDVTC - Files"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/how-did-you-learn-csm": {
+      "get": {
+        "operationId": "howDidYouLearnCsm_findOne",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get filled HowDidYouLearn (null if not yet submitted)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/HowDidYouLearnCsmResponseDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - How Did You Learn CSM"
+        ]
+      },
+      "post": {
+        "operationId": "howDidYouLearnCsm_update",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HowDidYouLearnCsmDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "create or update HowDidYouLearn (idempotent upsert)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HowDidYouLearnCsmResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - How Did You Learn CSM"
+        ]
+      }
+    },
+    "/ics/apply": {
+      "post": {
+        "operationId": "ics_apply",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IcsApplyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Submit or update ICS form",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IcsResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Cannot submit form - existing form is not rejected"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Forms - ICS"
+        ]
+      }
+    },
+    "/ics/status": {
+      "get": {
+        "operationId": "ics_getStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Get status of latest ICS form",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IcsResponseDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Forms - ICS"
+        ]
+      }
+    },
+    "/idvtc/apply": {
+      "post": {
+        "operationId": "idvtc_apply",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IdvtcApplyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Submit or update IDVTC form",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IdvtcResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Cannot submit form - existing form is not rejected"
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Forms - IDVTC"
+        ]
+      }
+    },
+    "/idvtc/status": {
+      "get": {
+        "operationId": "idvtc_getStatus",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Get status of latest IDVTC form",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/IdvtcResponseDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Forms - IDVTC"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/members": {
+      "get": {
+        "operationId": "members_list",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Active members for operator, or null if uninitialized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/ActiveMembersDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "IDVTC - Members"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/members/rotation-request": {
+      "get": {
+        "operationId": "members_getRotationRequest",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Latest non-superseded REVIEW or REJECTED request, or null",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/RotationRequestDto"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "IDVTC - Members"
+        ]
+      },
+      "post": {
+        "operationId": "members_submitRotationRequest",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitRotationRequestDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Submitted rotation request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RotationRequestDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid slot / signature / address collision"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "IDVTC - Members"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/members/init": {
+      "post": {
+        "operationId": "members_initFromIdvtc",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Initialized from approved IDVTC form",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActiveMembersDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No bindable form / already initialized"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "IDVTC - Members"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/setups": {
+      "get": {
+        "operationId": "setup_findAll",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get filled setups",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SetupResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Setup"
+        ]
+      },
+      "post": {
+        "operationId": "setup_create",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "create setup",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetupResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Setup"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/setups/{index}": {
+      "get": {
+        "operationId": "setup_findOne",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "get one setup",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetupResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "404": {
+            "description": "Setup not found at this index"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Setup"
+        ]
+      },
+      "post": {
+        "operationId": "setup_update",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "update setup",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SetupResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Setup"
+        ]
+      },
+      "delete": {
+        "operationId": "setup_deleteOne",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "index",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Delete one setup. Remaining setups are re-indexed, so clients should refetch the list."
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Setup"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/setups/keys": {
+      "get": {
+        "operationId": "setup_keys",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get keys count for setups",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KeysDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Setup"
+        ]
+      }
+    },
+    "/{nodeOperatorId}/summary": {
+      "get": {
+        "operationId": "summary_findOne",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Survey status summary for the node operator",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Summary"
+        ]
+      },
+      "delete": {
+        "operationId": "summary_delete",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Erase all node operator's data; returns the now-empty summary",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SummaryDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized - Invalid or missing JWT token"
+          },
+          "403": {
+            "description": "Forbidden - Access denied for this node operator"
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "tags": [
+          "Survey - Summary"
+        ]
+      }
+    },
+    "/open/{nodeOperatorId}": {
+      "get": {
+        "operationId": "open_index",
+        "parameters": [
+          {
+            "name": "nodeOperatorId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Check if keys are filled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilledDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Open"
+        ]
+      }
+    },
+    "/version": {
+      "get": {
+        "operationId": "version_index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Application version and chain information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VersionDto"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            },
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds to wait before retrying after the rate limit is exceeded.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error (ApiError envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiErrorDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Version"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "CSM Survey API",
+    "description": "",
+    "version": "0.7.0",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "Open",
+      "description": ""
+    },
+    {
+      "name": "Authentication",
+      "description": ""
+    },
+    {
+      "name": "Survey - Contacts",
+      "description": ""
+    },
+    {
+      "name": "Survey - Experience",
+      "description": ""
+    },
+    {
+      "name": "Survey - How Did You Learn CSM",
+      "description": ""
+    },
+    {
+      "name": "Survey - Setup",
+      "description": ""
+    },
+    {
+      "name": "Survey - Delegates",
+      "description": ""
+    },
+    {
+      "name": "Survey - My Delegates",
+      "description": ""
+    },
+    {
+      "name": "Survey - Summary",
+      "description": ""
+    },
+    {
+      "name": "Forms - ICS",
+      "description": ""
+    },
+    {
+      "name": "Forms - IDVTC",
+      "description": ""
+    },
+    {
+      "name": "IDVTC - Members",
+      "description": ""
+    },
+    {
+      "name": "IDVTC - Files",
+      "description": ""
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "ApiErrorDetailDto": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "description": "Field path this detail refers to (present for per-field validation errors).",
+            "example": "name"
+          },
+          "code": {
+            "type": "string",
+            "description": "Machine-readable sub-code for this detail (e.g. the failing validation rule).",
+            "example": "isNotEmpty"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable explanation of this detail.",
+            "example": "name should not be empty"
+          }
+        },
+        "required": [
+          "message"
+        ]
+      },
+      "ApiErrorDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Stable, machine-readable error code. Consumers switch on this rather than parsing `message`. See ERROR_CODES / GENERIC_ERROR_CODES for the published catalog.",
+            "example": "VALIDATION_FAILED"
+          },
+          "message": {
+            "type": "string",
+            "description": "Human-readable English fallback message. Wording may change; do not parse it.",
+            "example": "Validation failed"
+          },
+          "details": {
+            "description": "Per-field details, populated for VALIDATION_FAILED and similar multi-field errors.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiErrorDetailDto"
+            }
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "AuthNonceDto": {
+        "type": "object",
+        "properties": {
+          "nonce": {
+            "type": "string",
+            "description": "server-issued SIWE nonce to embed in the message"
+          }
+        },
+        "required": [
+          "nonce"
+        ]
+      },
+      "AuthPersonalSignDto": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "siwe message"
+          },
+          "signature": {
+            "type": "string",
+            "description": "signature of siwe message",
+            "example": "0x0"
+          }
+        },
+        "required": [
+          "message",
+          "signature"
+        ]
+      },
+      "AuthSignInDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "JWT access token (OAuth-style; send as `Authorization: Bearer <access_token>`)"
+          },
+          "token_type": {
+            "type": "string",
+            "description": "Token type",
+            "enum": [
+              "Bearer"
+            ],
+            "example": "Bearer"
+          }
+        },
+        "required": [
+          "access_token",
+          "token_type"
+        ]
+      },
+      "AuthPayloadDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Authenticated Ethereum address (the JWT subject)",
+            "example": "0x742d35cc6634c0532925a3b8d39c4c17f03434cc",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          }
+        },
+        "required": [
+          "address"
+        ]
+      },
+      "ContactResponseDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Node Operator name",
+            "example": "my name",
+            "maxLength": 255
+          },
+          "discord": {
+            "type": "string",
+            "description": "Node Operator discord handler",
+            "example": "@discord",
+            "maxLength": 255
+          },
+          "telegram": {
+            "type": "string",
+            "description": "Node Operator telegram handler",
+            "example": "@telegram",
+            "maxLength": 255
+          },
+          "twitter": {
+            "type": "string",
+            "description": "Node Operator twitter handler",
+            "example": "@twitter",
+            "maxLength": 255
+          },
+          "allowShare": {
+            "type": "boolean",
+            "description": "Node Operator allows to share his contacts",
+            "default": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When contacts were created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When contacts were last updated"
+          }
+        },
+        "required": [
+          "name",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ContactDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Node Operator name",
+            "example": "my name",
+            "maxLength": 255
+          },
+          "discord": {
+            "type": "string",
+            "description": "Node Operator discord handler",
+            "example": "@discord",
+            "maxLength": 255
+          },
+          "telegram": {
+            "type": "string",
+            "description": "Node Operator telegram handler",
+            "example": "@telegram",
+            "maxLength": 255
+          },
+          "twitter": {
+            "type": "string",
+            "description": "Node Operator twitter handler",
+            "example": "@twitter",
+            "maxLength": 255
+          },
+          "allowShare": {
+            "type": "boolean",
+            "description": "Node Operator allows to share his contacts",
+            "default": false
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "DelegateResponseDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Delegate Ethereum address",
+            "example": "0x742d35cc6634c0532925a3b8d39c4c17f03434cc",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the delegate was added",
+            "example": "2024-01-01T00:00:00.000Z"
+          }
+        },
+        "required": [
+          "address",
+          "createdAt"
+        ]
+      },
+      "DelegatesListResponseDto": {
+        "type": "object",
+        "properties": {
+          "delegates": {
+            "description": "List of delegates for the node operator",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DelegateResponseDto"
+            }
+          }
+        },
+        "required": [
+          "delegates"
+        ]
+      },
+      "AddDelegateDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Ethereum address to add as delegate",
+            "example": "0x742d35cc6634c0532925a3b8d39c4c17f03434cc"
+          }
+        },
+        "required": [
+          "address"
+        ]
+      },
+      "MyDelegationsDto": {
+        "type": "object",
+        "properties": {
+          "nodeOperatorIds": {
+            "description": "List of node operator IDs the user is a delegate for",
+            "example": [
+              "csm-1",
+              "csm-42"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "nodeOperatorIds"
+        ]
+      },
+      "ExperienceResponseDto": {
+        "type": "object",
+        "properties": {
+          "professional": {
+            "type": "boolean",
+            "description": "Are you a professional validator?",
+            "default": true
+          },
+          "validatedBefore": {
+            "type": "boolean",
+            "default": true
+          },
+          "fromCurated": {
+            "type": "boolean",
+            "default": true
+          },
+          "fromSDVT": {
+            "type": "boolean",
+            "default": true
+          },
+          "nameInModules": {
+            "type": "string",
+            "description": "What is the name of your organization in the other Lido modules?",
+            "maxLength": 255
+          },
+          "otherValidatorsCount": {
+            "type": "integer",
+            "description": "How many other mainnet validators do you run outside of Lido CSM?",
+            "default": 0,
+            "maximum": 999999999
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the experience answers were created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the experience answers were last updated"
+          }
+        },
+        "required": [
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ExperienceDto": {
+        "type": "object",
+        "properties": {
+          "professional": {
+            "type": "boolean",
+            "description": "Are you a professional validator?",
+            "default": true
+          },
+          "validatedBefore": {
+            "type": "boolean",
+            "default": true
+          },
+          "fromCurated": {
+            "type": "boolean",
+            "default": true
+          },
+          "fromSDVT": {
+            "type": "boolean",
+            "default": true
+          },
+          "nameInModules": {
+            "type": "string",
+            "description": "What is the name of your organization in the other Lido modules?",
+            "maxLength": 255
+          },
+          "otherValidatorsCount": {
+            "type": "integer",
+            "description": "How many other mainnet validators do you run outside of Lido CSM?",
+            "default": 0,
+            "maximum": 999999999
+          }
+        }
+      },
+      "FileUploadItemDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "description": "File name (operator-defined, not unique)"
+          },
+          "content": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Arbitrary JSON-serializable content (≤ 64 KB after JSON.stringify). Typically a JSON object."
+          }
+        },
+        "required": [
+          "name",
+          "content"
+        ]
+      },
+      "FileMetadataDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "File id (unique within the node operator)",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Operator-defined file name (not unique)",
+            "example": "deposit-data.json"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether this file is currently active"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the file was created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the file was last updated"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "active",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "FileDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "File id (unique within the node operator)",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Operator-defined file name (not unique)",
+            "example": "deposit-data.json"
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Whether this file is currently active"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the file was created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the file was last updated"
+          },
+          "content": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Stored JSON-serializable content for this file."
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "active",
+          "createdAt",
+          "updatedAt",
+          "content"
+        ]
+      },
+      "SetFileActiveDto": {
+        "type": "object",
+        "properties": {
+          "active": {
+            "type": "boolean",
+            "description": "Desired active state for the file"
+          }
+        },
+        "required": [
+          "active"
+        ]
+      },
+      "HowDidYouLearnCsmResponseDto": {
+        "type": "object",
+        "properties": {
+          "sourceOne": {
+            "type": "string"
+          },
+          "sourceTwo": {
+            "type": "string"
+          },
+          "other": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the answer was created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the answer was last updated"
+          }
+        },
+        "required": [
+          "sourceOne",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "HowDidYouLearnCsmDto": {
+        "type": "object",
+        "properties": {
+          "sourceOne": {
+            "type": "string"
+          },
+          "sourceTwo": {
+            "type": "string"
+          },
+          "other": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "sourceOne"
+        ]
+      },
+      "IcsAdditionalAddressDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Additional Ethereum address",
+            "example": "0x742d35cc6634c0532925a3b8d39c4c17f03434cc"
+          },
+          "signature": {
+            "type": "string",
+            "description": "Cryptographic signature for address verification",
+            "example": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12"
+          }
+        },
+        "required": [
+          "address",
+          "signature"
+        ]
+      },
+      "IcsApplyDto": {
+        "type": "object",
+        "properties": {
+          "mainAddress": {
+            "type": "string",
+            "description": "Main Ethereum address",
+            "example": "0x742d35cc6634c0532925a3b8d39c4c17f03434cc",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "additionalAddresses": {
+            "description": "Additional addresses with signatures (max 5)",
+            "maxItems": 5,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IcsAdditionalAddressDto"
+            }
+          },
+          "twitterLink": {
+            "type": "string",
+            "description": "Twitter message link",
+            "example": "https://twitter.com/user/status/1234567890123456789"
+          },
+          "discordLink": {
+            "type": "string",
+            "description": "Discord message link",
+            "example": "https://discord.com/channels/123/456/1234567890123456789"
+          }
+        },
+        "required": [
+          "mainAddress"
+        ]
+      },
+      "IcsFormDataDto": {
+        "type": "object",
+        "properties": {
+          "mainAddress": {
+            "type": "string",
+            "description": "Main Ethereum address",
+            "example": "0x742d35cc6634c0532925a3b8d39c4c17f03434cc",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "twitterLink": {
+            "type": "string",
+            "description": "Twitter message link",
+            "example": "https://twitter.com/user/status/1234567890123456789"
+          },
+          "discordLink": {
+            "type": "string",
+            "description": "Discord message link",
+            "example": "https://discord.com/channels/123/456/1234567890123456789"
+          },
+          "additionalAddresses": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$"
+            },
+            "description": "Additional Ethereum addresses",
+            "example": [
+              "0x742d35cc6634c0532925a3b8d39c4c17f03434cc"
+            ]
+          }
+        },
+        "required": [
+          "mainAddress"
+        ]
+      },
+      "IcsFormStatus": {
+        "type": "string",
+        "enum": [
+          "REVIEW",
+          "APPROVED",
+          "REJECTED"
+        ],
+        "description": "ICS form review status"
+      },
+      "IcsCommentsDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "Optional reason explaining why the form was rejected or other general review notes",
+            "example": "Your application earned 5 out of the 15 points required to qualify."
+          },
+          "mainAddress": {
+            "type": "string",
+            "description": "Review comment for main address field"
+          },
+          "twitterLink": {
+            "type": "string",
+            "description": "Review comment for Twitter link field"
+          },
+          "discordLink": {
+            "type": "string",
+            "description": "Review comment for Discord link field"
+          },
+          "additionalAddresses": {
+            "type": "array",
+            "description": "Review comments for additional addresses, positionally aligned with the submitted addresses. An entry is null when that address has no comment.",
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "example": [
+              "Comment for first address",
+              null
+            ]
+          }
+        }
+      },
+      "IcsScoresDto": {
+        "type": "object",
+        "properties": {
+          "ethStaker": {
+            "type": "integer",
+            "description": "EthStaker solo-stakers list points"
+          },
+          "stakeCat": {
+            "type": "integer",
+            "description": "StakeCat solo-stakers list points"
+          },
+          "obolTechne": {
+            "type": "integer",
+            "description": "Obol Techne credential points"
+          },
+          "ssvVerified": {
+            "type": "integer",
+            "description": "SSV Verified operators points"
+          },
+          "csmTestnet": {
+            "type": "integer",
+            "description": "CSM testnet participation points"
+          },
+          "csmMainnet": {
+            "type": "integer",
+            "description": "CSM mainnet participation points"
+          },
+          "sdvtTestnet": {
+            "type": "integer",
+            "description": "SDVTM testnet participation points"
+          },
+          "sdvtMainnet": {
+            "type": "integer",
+            "description": "SDVTM mainnet participation points"
+          },
+          "humanPassport": {
+            "type": "integer",
+            "description": "Human passport points"
+          },
+          "circles": {
+            "type": "integer",
+            "description": "Circles verification points"
+          },
+          "discord": {
+            "type": "integer",
+            "description": "Discord verification points"
+          },
+          "twitter": {
+            "type": "integer",
+            "description": "X/Twitter verification points"
+          },
+          "ssvHumanity": {
+            "type": "integer",
+            "description": "SSV verified operators humanity points"
+          },
+          "aragonVotes": {
+            "type": "integer",
+            "description": "Aragon votes participation points"
+          },
+          "snapshotVotes": {
+            "type": "integer",
+            "description": "Snapshot votes participation points"
+          },
+          "lidoGalxe": {
+            "type": "integer",
+            "description": "Lido Galxe score points"
+          },
+          "highSignal": {
+            "type": "integer",
+            "description": "Lido High Signal score points"
+          },
+          "gitPoaps": {
+            "type": "integer",
+            "description": "GitPOAPs points"
+          }
+        }
+      },
+      "IcsResponseDto": {
+        "type": "object",
+        "properties": {
+          "form": {
+            "description": "Original submitted form data",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IcsFormDataDto"
+              }
+            ]
+          },
+          "status": {
+            "description": "ICS form review status",
+            "example": "REVIEW",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IcsFormStatus"
+              }
+            ]
+          },
+          "comments": {
+            "description": "Review comments for form fields",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IcsCommentsDto"
+              }
+            ]
+          },
+          "scores": {
+            "description": "Calculated scores for scoring criteria",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IcsScoresDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the form was submitted",
+            "example": "2024-01-15T10:30:00Z"
+          },
+          "updatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Date when the review was last updated",
+            "example": "2024-01-16T14:45:00Z"
+          }
+        },
+        "required": [
+          "form",
+          "status",
+          "comments",
+          "scores",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "IdvtcClusterMemberDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Cluster member Ethereum address",
+            "example": "0x742d35cc6634c0532925a3b8d39c4c17f03434cc"
+          },
+          "signature": {
+            "type": "string",
+            "description": "Cryptographic signature for address verification",
+            "example": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12"
+          },
+          "discordHandle": {
+            "type": "string",
+            "description": "Discord handle of the cluster member",
+            "example": "user#1234"
+          },
+          "telegramUsername": {
+            "type": "string",
+            "description": "Telegram username of the cluster member",
+            "example": "@username"
+          }
+        },
+        "required": [
+          "address",
+          "signature"
+        ]
+      },
+      "IdvtcApplyDto": {
+        "type": "object",
+        "properties": {
+          "mainAddress": {
+            "type": "string",
+            "description": "Main Ethereum address",
+            "example": "0x742d35cc6634c0532925a3b8d39c4c17f03434cc"
+          },
+          "discordLink": {
+            "type": "string",
+            "description": "Discord message link (required)",
+            "example": "https://discord.com/channels/123/456/1234567890123456789"
+          },
+          "telegramUsername": {
+            "type": "string",
+            "description": "Telegram username",
+            "example": "@username"
+          },
+          "clusterMembers": {
+            "description": "Exactly 4 cluster members with signatures",
+            "minItems": 4,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdvtcClusterMemberDto"
+            }
+          }
+        },
+        "required": [
+          "mainAddress",
+          "discordLink",
+          "clusterMembers"
+        ]
+      },
+      "IdvtcClusterMemberDataDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Cluster member Ethereum address",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "discordHandle": {
+            "type": "string",
+            "description": "Discord handle"
+          },
+          "telegramUsername": {
+            "type": "string",
+            "description": "Telegram username"
+          }
+        },
+        "required": [
+          "address"
+        ]
+      },
+      "IdvtcFormDataDto": {
+        "type": "object",
+        "properties": {
+          "mainAddress": {
+            "type": "string",
+            "description": "Main Ethereum address",
+            "example": "0x742d35cc6634c0532925a3b8d39c4c17f03434cc",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "discordLink": {
+            "type": "string",
+            "description": "Discord message link",
+            "example": "https://discord.com/channels/123/456/1234567890123456789"
+          },
+          "telegramUsername": {
+            "type": "string",
+            "description": "Telegram username"
+          },
+          "clusterMembers": {
+            "description": "Cluster members (addresses and contact info)",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/IdvtcClusterMemberDataDto"
+            }
+          }
+        },
+        "required": [
+          "mainAddress",
+          "discordLink",
+          "clusterMembers"
+        ]
+      },
+      "IdvtcFormStatus": {
+        "type": "string",
+        "enum": [
+          "REVIEW",
+          "APPROVED",
+          "REJECTED"
+        ],
+        "description": "IDVTC form review status"
+      },
+      "IdvtcCommentsDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "description": "General review notes or rejection reason",
+            "example": "Your application does not meet the requirements."
+          },
+          "mainAddress": {
+            "type": "string",
+            "description": "Review comment for main address"
+          },
+          "discordLink": {
+            "type": "string",
+            "description": "Review comment for Discord link"
+          },
+          "telegramUsername": {
+            "type": "string",
+            "description": "Review comment for Telegram username"
+          },
+          "clusterMembers": {
+            "type": "array",
+            "description": "Review comments for the 4 cluster members, positionally aligned. An entry is null when that member has no comment.",
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "maxItems": 4,
+            "example": [
+              "Comment for first member",
+              null,
+              null,
+              null
+            ]
+          }
+        }
+      },
+      "IdvtcResponseDto": {
+        "type": "object",
+        "properties": {
+          "form": {
+            "description": "Original submitted form data",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IdvtcFormDataDto"
+              }
+            ]
+          },
+          "status": {
+            "description": "IDVTC form review status",
+            "example": "REVIEW",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IdvtcFormStatus"
+              }
+            ]
+          },
+          "boundToNodeOperatorId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Node operator this form has been bound to via members init; null when not yet bound"
+          },
+          "comments": {
+            "description": "Review comments for form fields",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/IdvtcCommentsDto"
+              }
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date when the form was submitted"
+          },
+          "updatedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time",
+            "description": "Date when the review was last updated"
+          }
+        },
+        "required": [
+          "form",
+          "status",
+          "comments",
+          "createdAt"
+        ]
+      },
+      "MemberDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Member Ethereum address (lowercased)"
+          },
+          "discordHandle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "telegramUsername": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "address"
+        ]
+      },
+      "ActiveMembersDto": {
+        "type": "object",
+        "properties": {
+          "nodeOperatorId": {
+            "type": "string"
+          },
+          "members": {
+            "minItems": 4,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MemberDto"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "nodeOperatorId",
+          "members",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "ProposedSlotDto": {
+        "type": "object",
+        "properties": {
+          "newAddress": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "discordHandle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "telegramUsername": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "RotationRequestStatus": {
+        "type": "string",
+        "enum": [
+          "REVIEW",
+          "APPROVED",
+          "REJECTED"
+        ]
+      },
+      "RotationRequestCommentsDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "slots": {
+            "type": "array",
+            "description": "Per-slot review comments (4), positionally aligned with slots. An entry is null when that slot has no comment.",
+            "minItems": 4,
+            "maxItems": 4,
+            "items": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "required": [
+          "slots"
+        ]
+      },
+      "RotationRequestDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "nodeOperatorId": {
+            "type": "string"
+          },
+          "submitterAddress": {
+            "type": "string",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "slots": {
+            "minItems": 4,
+            "maxItems": 4,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProposedSlotDto"
+            }
+          },
+          "status": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/RotationRequestStatus"
+              }
+            ]
+          },
+          "superseded": {
+            "type": "boolean"
+          },
+          "comments": {
+            "$ref": "#/components/schemas/RotationRequestCommentsDto"
+          },
+          "lastReviewer": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reviewedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "id",
+          "nodeOperatorId",
+          "submitterAddress",
+          "slots",
+          "status",
+          "superseded",
+          "comments",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "SubmitRotationSlotDto": {
+        "type": "object",
+        "properties": {
+          "newAddress": {
+            "type": "string",
+            "description": "New address for this slot"
+          },
+          "signature": {
+            "type": "string",
+            "description": "Ownership signature for newAddress"
+          },
+          "discordHandle": {
+            "type": "string"
+          },
+          "telegramUsername": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "newAddress",
+          "signature"
+        ]
+      },
+      "SubmitRotationRequestDto": {
+        "type": "object",
+        "properties": {
+          "slot1": {
+            "$ref": "#/components/schemas/SubmitRotationSlotDto"
+          },
+          "slot2": {
+            "$ref": "#/components/schemas/SubmitRotationSlotDto"
+          },
+          "slot3": {
+            "$ref": "#/components/schemas/SubmitRotationSlotDto"
+          },
+          "slot4": {
+            "$ref": "#/components/schemas/SubmitRotationSlotDto"
+          }
+        }
+      },
+      "SetupResponseDto": {
+        "type": "object",
+        "properties": {
+          "keysCount": {
+            "type": "integer",
+            "description": "Keys count in this setup",
+            "minimum": 0,
+            "maximum": 999999999
+          },
+          "dvt": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "installationTool": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "elClient": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "clClient": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "clientsServerType": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "clientsCountry": {
+            "type": "string",
+            "maxLength": 255,
+            "default": ""
+          },
+          "validatorClient": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "validatorServerType": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "validatorCountry": {
+            "type": "string",
+            "maxLength": 255,
+            "default": ""
+          },
+          "validatorSameAsCl": {
+            "type": "boolean"
+          },
+          "remoteSigner": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "mevMinBidWei": {
+            "type": "string",
+            "maxLength": 255,
+            "pattern": "^[0-9]+$",
+            "description": "Minimum MEV bid, denominated in wei (string to avoid bigint precision loss). Omitted when unset.",
+            "example": "30000000000000000"
+          },
+          "index": {
+            "type": "integer",
+            "description": "1-based position of this setup for the node operator",
+            "example": 1
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the setup was created"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the setup was last updated"
+          }
+        },
+        "required": [
+          "dvt",
+          "installationTool",
+          "elClient",
+          "clClient",
+          "clientsServerType",
+          "validatorSameAsCl",
+          "remoteSigner",
+          "index",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "SetupDto": {
+        "type": "object",
+        "properties": {
+          "keysCount": {
+            "type": "integer",
+            "description": "Keys count in this setup",
+            "minimum": 0,
+            "maximum": 999999999
+          },
+          "dvt": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "installationTool": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "elClient": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "clClient": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "clientsServerType": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "clientsCountry": {
+            "type": "string",
+            "maxLength": 255,
+            "default": ""
+          },
+          "validatorClient": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "validatorServerType": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "validatorCountry": {
+            "type": "string",
+            "maxLength": 255,
+            "default": ""
+          },
+          "validatorSameAsCl": {
+            "type": "boolean"
+          },
+          "remoteSigner": {
+            "type": "string",
+            "maxLength": 255
+          },
+          "mevMinBidWei": {
+            "type": "string",
+            "maxLength": 255,
+            "pattern": "^[0-9]+$",
+            "description": "Minimum MEV bid, denominated in wei (string to avoid bigint precision loss). Omitted when unset.",
+            "example": "30000000000000000"
+          }
+        },
+        "required": [
+          "dvt",
+          "installationTool",
+          "elClient",
+          "clClient",
+          "clientsServerType",
+          "validatorSameAsCl",
+          "remoteSigner"
+        ]
+      },
+      "KeysDto": {
+        "type": "object",
+        "properties": {
+          "filled": {
+            "type": "integer",
+            "description": "Filled keys count"
+          },
+          "total": {
+            "type": "integer",
+            "description": "Total keys count"
+          }
+        },
+        "required": [
+          "filled",
+          "total"
+        ]
+      },
+      "SummarySetupsDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "All setups for the operator",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SetupResponseDto"
+            }
+          },
+          "keys": {
+            "description": "Aggregate key counts (folds in the former GET /setups/keys call)",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/KeysDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "items",
+          "keys"
+        ]
+      },
+      "SummaryDelegatesDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "Delegates for the operator",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DelegateResponseDto"
+            }
+          },
+          "max": {
+            "type": "integer",
+            "description": "Server-enforced maximum number of delegates",
+            "example": 5
+          }
+        },
+        "required": [
+          "items",
+          "max"
+        ]
+      },
+      "SummaryDto": {
+        "type": "object",
+        "properties": {
+          "contacts": {
+            "description": "Contacts, or null if not yet submitted",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ContactResponseDto"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "experience": {
+            "description": "Experience answers, or null if not yet submitted",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExperienceResponseDto"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "howDidYouLearnCsm": {
+            "description": "How-did-you-learn answer, or null if not yet submitted",
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/HowDidYouLearnCsmResponseDto"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "setups": {
+            "$ref": "#/components/schemas/SummarySetupsDto"
+          },
+          "delegates": {
+            "$ref": "#/components/schemas/SummaryDelegatesDto"
+          },
+          "hasAnyData": {
+            "type": "boolean",
+            "description": "True if any of contacts, experience, howDidYouLearnCsm, setups, or delegates has data",
+            "example": true
+          }
+        },
+        "required": [
+          "contacts",
+          "experience",
+          "howDidYouLearnCsm",
+          "setups",
+          "delegates",
+          "hasAnyData"
+        ]
+      },
+      "FilledDto": {
+        "type": "object",
+        "properties": {
+          "isFilled": {
+            "type": "boolean",
+            "description": "Indicates if the keys are filled"
+          }
+        },
+        "required": [
+          "isFilled"
+        ]
+      },
+      "VersionDto": {
+        "type": "object",
+        "properties": {
+          "appName": {
+            "type": "string",
+            "description": "Application name",
+            "example": "csm-survey-api"
+          },
+          "version": {
+            "type": "string",
+            "description": "Application version",
+            "example": "1.0.0"
+          },
+          "chainId": {
+            "type": "number",
+            "description": "Ethereum chain ID the application is connected to",
+            "example": 1
+          }
+        },
+        "required": [
+          "appName",
+          "version",
+          "chainId"
+        ]
+      }
+    }
+  }
+}

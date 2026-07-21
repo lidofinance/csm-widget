@@ -3,6 +3,7 @@ import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Text } from '@lidofinance/lido-ui';
 import { Plural, SectionBlock, Stack, WhenLoaded } from 'shared/components';
+import { isAuthError } from 'modules/surveys-sdk';
 import { useDelegates } from './use-delegates';
 import { useModalStages } from './use-modal-stages';
 import { useConfirmRemoveDelegateModal } from './confirm-remove-modal';
@@ -36,7 +37,7 @@ export const SurveyDelegates: FC = () => {
         trackMatomoFormEvent('surveyDelegates', 'success');
         modals.success();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     },
     [add, formObject, modals],
@@ -51,7 +52,7 @@ export const SurveyDelegates: FC = () => {
           await remove(address);
           modals.successRemove();
         } catch (e) {
-          modals.failed(e);
+          if (!isAuthError(e)) modals.failed(e);
         } finally {
           setRemovingAddress(null);
         }

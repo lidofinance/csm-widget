@@ -57,7 +57,7 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
         return flags.CAN_CLAIM_ICS && hasRole
           ? PATH.TYPE_ICS_CLAIM
           : flags.CAN_CLAIM_IDVTC && hasRole
-            ? PATH.TYPE_DVT_CLAIM
+            ? PATH.TYPE_IDVTC_CLAIM
             : PATH.TYPE_PARAMETERS;
       }
       return path;
@@ -67,14 +67,14 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
         : flags.ICS_APPLY_ENABLED
           ? PATH.TYPE_ICS_SYSTEM
           : PATH.TYPE_PARAMETERS;
-    case PATH.TYPE_DVT_CLAIM:
+    case PATH.TYPE_IDVTC_CLAIM:
       return hasRole
         ? path
         : flags.ICS_APPLY_ENABLED
-          ? PATH.TYPE_DVT_DESCRIPTION
+          ? PATH.TYPE_IDVTC_DESCRIPTION
           : PATH.TYPE_PARAMETERS;
     case PATH.TYPE_ICS_PARAMETERS:
-    case PATH.TYPE_DVT_PARAMETERS:
+    case PATH.TYPE_IDVTC_PARAMETERS:
       return flags.ICS_APPLY_ENABLED ? path : PATH.TYPE_PARAMETERS;
 
     default:

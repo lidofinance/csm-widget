@@ -7,7 +7,16 @@ import {
   SubmitButtonHookForm,
   TextInputHookForm,
 } from 'shared/hook-form/controls';
-import { useOperatorSurvey } from 'modules/surveys-sdk';
+import {
+  callSurvey,
+  isAuthError,
+  surveyRequest,
+  useOperatorSurvey,
+} from 'modules/surveys-sdk';
+import {
+  howDidYouLearnCsmFindOne,
+  howDidYouLearnCsmUpdate,
+} from 'modules/surveys-sdk/generated';
 import { HowDidYouLearnCsm } from '../types';
 import { useModalStages } from './use-modal-stages';
 import { sources } from './sources';
@@ -17,7 +26,24 @@ import { SurveysBackButton } from '../shared';
 export const SurveyHowDidYouLearnCsm: FC = () => {
   const { data, mutate } = useOperatorSurvey<HowDidYouLearnCsm>(
     'how-did-you-learn-csm',
-    { transformOutgoing },
+    {
+      transformOutgoing,
+      get: ({ nodeOperatorId, token, signal }) =>
+        callSurvey(() =>
+          howDidYouLearnCsmFindOne({
+            ...surveyRequest(token, signal),
+            path: { nodeOperatorId },
+          }),
+        ),
+      update: (body, { nodeOperatorId, token }) =>
+        callSurvey(() =>
+          howDidYouLearnCsmUpdate({
+            ...surveyRequest(token),
+            path: { nodeOperatorId },
+            body,
+          }),
+        ),
+    },
   );
   const { txModalStages: modals } = useModalStages();
 
@@ -34,7 +60,7 @@ export const SurveyHowDidYouLearnCsm: FC = () => {
         trackMatomoFormEvent('surveyLearnCsm', 'success');
         modals.success();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     },
     [modals, mutate],

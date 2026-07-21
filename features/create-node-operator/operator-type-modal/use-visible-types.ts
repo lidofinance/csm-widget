@@ -70,7 +70,7 @@ export const useVisibleTypes = (): VisibleType[] => {
     );
     const idvtc = buildApplyEntry(
       OPERATOR_TYPE.CSM_IDVTC,
-      PATH.TYPE_DVT_APPLY,
+      PATH.TYPE_IDVTC_APPLY,
       MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIdvtc,
       MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIdvtc,
       idvtcProof,

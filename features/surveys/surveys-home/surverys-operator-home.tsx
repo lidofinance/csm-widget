@@ -3,7 +3,13 @@ import { PATH } from 'consts/urls';
 import { FC, useCallback } from 'react';
 import { Plural, Stack, WhenLoaded } from 'shared/components';
 import { formatDaysAgo, plural } from 'utils';
-import { useOperatorSurvey } from 'modules/surveys-sdk';
+import {
+  callSurvey,
+  surveyRequest,
+  useOperatorSurvey,
+} from 'modules/surveys-sdk';
+import { summaryDelete, summaryFindOne } from 'modules/surveys-sdk/generated';
+import type { SummaryDto } from 'modules/surveys-sdk/generated';
 import {
   SurveyButton,
   SurveyItem,
@@ -12,13 +18,31 @@ import {
   Warning,
 } from '../components';
 import { useSurveyContext } from '../surveys-provider';
-import { MAX_DELEGATES, SetupsKeys, Summary } from '../types';
+import { MAX_DELEGATES } from '../types';
+import { useSetupsKeys } from '../survey-setup/use-setups-keys';
 import { useConfirmEraseModal } from './confirm-erase-modal';
 
 export const SurveysOperatorHome: FC = () => {
-  const { data, isLoading, remove } = useOperatorSurvey<Summary>('summary');
-  const { data: keys, mutate: mutateKeys } =
-    useOperatorSurvey<SetupsKeys>('setups/keys');
+  const { data, isLoading, remove } = useOperatorSurvey<SummaryDto>('summary', {
+    get: ({ nodeOperatorId, token, signal }) =>
+      callSurvey(() =>
+        summaryFindOne({
+          ...surveyRequest(token, signal),
+          path: { nodeOperatorId },
+        }),
+      ),
+    // summaryDelete returns the now-empty SummaryDto (200, not 204); the hook's
+    // delete contract is void, so discard the body.
+    remove: async ({ nodeOperatorId, token }) => {
+      await callSurvey(() =>
+        summaryDelete({
+          ...surveyRequest(token),
+          path: { nodeOperatorId },
+        }),
+      );
+    },
+  });
+  const { data: keys, mutate: mutateKeys } = useSetupsKeys();
   const { delegatedOperators } = useSurveyContext();
 
   const confirmModal = useConfirmEraseModal();
@@ -34,7 +58,7 @@ export const SurveysOperatorHome: FC = () => {
     data?.contacts ||
     data?.experience ||
     data?.howDidYouLearnCsm ||
-    (data?.setups && data.setups.length > 0)
+    (data?.setups && data.setups.items.length > 0)
   );
   const showSetups = !!(keys && (keys.total > 0 || keys.filled > 0));
 
@@ -89,7 +113,7 @@ export const SurveysOperatorHome: FC = () => {
               The number of your keys has decreased. Please update the data.
             </Warning>
           )}
-          {data?.setups.map((setup) => (
+          {data?.setups.items.map((setup) => (
             <SurveyItem
               key={setup.index}
               title={
@@ -148,7 +172,7 @@ export const SurveysOperatorHome: FC = () => {
             <Stack>
               Delegates
               <Text as="span" size="sm" color="secondary">
-                {data?.delegates.length}
+                {data?.delegates.items.length}
               </Text>
             </Stack>
           }

@@ -9,7 +9,17 @@ import {
   TextInputHookForm,
 } from 'shared/hook-form/controls';
 import { useNavigate } from 'shared/navigate';
-import { useOperatorSurvey } from 'modules/surveys-sdk';
+import {
+  callSurvey,
+  isAuthError,
+  surveyRequest,
+  useOperatorSurvey,
+} from 'modules/surveys-sdk';
+import {
+  contactsDeleteOne,
+  contactsFindOne,
+  contactsUpdate,
+} from 'modules/surveys-sdk/generated';
 import { SurveyButton } from '../components';
 import { useConfirmRemoveModal } from './confirm-remove-modal';
 import { useModalStages } from './use-modal-stages';
@@ -18,7 +28,31 @@ import { Contact } from '../types';
 import { SurveysBackButton } from '../shared';
 
 export const SurveyContacts: FC = () => {
-  const { data, mutate, remove } = useOperatorSurvey<Contact>('contacts');
+  const { data, mutate, remove } = useOperatorSurvey<Contact>('contacts', {
+    get: ({ nodeOperatorId, token, signal }) =>
+      callSurvey(() =>
+        contactsFindOne({
+          ...surveyRequest(token, signal),
+          path: { nodeOperatorId },
+        }),
+      ),
+    update: (body, { nodeOperatorId, token }) =>
+      callSurvey(() =>
+        contactsUpdate({
+          ...surveyRequest(token),
+          path: { nodeOperatorId },
+          body,
+        }),
+      ),
+    remove: async ({ nodeOperatorId, token }) => {
+      await callSurvey(() =>
+        contactsDeleteOne({
+          ...surveyRequest(token),
+          path: { nodeOperatorId },
+        }),
+      );
+    },
+  });
   const { txModalStages: modals } = useModalStages();
   const confirmRemove = useConfirmRemoveModal();
   const navigate = useNavigate();
@@ -39,7 +73,7 @@ export const SurveyContacts: FC = () => {
         trackMatomoFormEvent('surveyContacts', 'success');
         modals.success();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     },
     [modals, mutate],
@@ -53,7 +87,7 @@ export const SurveyContacts: FC = () => {
         void navigate(PATH.SURVEYS);
         modals.successRemove();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     }
   }, [confirmRemove, modals, navigate, remove]);

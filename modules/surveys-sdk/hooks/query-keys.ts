@@ -1,6 +1,6 @@
 import type { OperatorKey } from '../api/types';
 
-// Authed paths (`auth/...`, `ics/status`, `dvt/status`, `delegates/my`) are
+// Authed paths (`auth/...`, `ics/status`, `idvtc/status`, `delegates/my`) are
 // namespaced by wallet address so logout / account switch invalidates the
 // cache without keying on the rotating access token.
 export const surveysKeys = {
@@ -16,3 +16,13 @@ export const surveysKeys = {
       ? (['surveys', 'auth', address, path] as const)
       : (['surveys', 'auth', path] as const),
 };
+
+// Append the token as the LAST key segment so a re-auth (AUTH_JWT_EXPIRED →
+// signIn sets a new token VALUE, same path/address/key) produces a new key and
+// React Query refetches — there is no refresh endpoint to retry the errored
+// query in place. Trailing position preserves prefix-based invalidation
+// (mutations invalidating by the base prefix still match).
+export const withAuthToken = (
+  base: readonly unknown[],
+  token?: string,
+): readonly unknown[] => (token ? [...base, token] : base);
