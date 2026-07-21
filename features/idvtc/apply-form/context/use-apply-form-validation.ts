@@ -1,3 +1,5 @@
+import { useFeatureFlags } from 'config/feature-flags';
+import { DISABLE_ICS_PROOF_VALIDATION } from 'config/feature-flags/types';
 import {
   useFormValidation,
   ValidationError,
@@ -19,6 +21,7 @@ export const useApplyFormValidation = () => {
   const { mainAddress } = useApplyFormData(true);
   const verifyMessage = useRawVerifyMessage(mainAddress);
   const validateIcsProof = useValidateIcsProof();
+  const featureFlags = useFeatureFlags();
 
   return useFormValidation<IdvtcApplyFormInputType, IdvtcApplyFormNetworkData>(
     'clusterMembers',
@@ -53,7 +56,9 @@ export const useApplyFormValidation = () => {
                 );
               }
 
-              await validateIcsProof(address, addressPath);
+              if (!featureFlags?.[DISABLE_ICS_PROOF_VALIDATION]) {
+                await validateIcsProof(address, addressPath);
+              }
             });
 
             await validate(signaturePath, async () => {
@@ -111,6 +116,6 @@ export const useApplyFormValidation = () => {
         }
       });
     },
-    [verifyMessage, validateIcsProof],
+    [verifyMessage, validateIcsProof, featureFlags],
   );
 };

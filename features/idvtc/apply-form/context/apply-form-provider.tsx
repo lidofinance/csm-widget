@@ -75,7 +75,9 @@ export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
     };
   }, [watch, save]);
 
-  const submitter = useFlowSubmit(useApplyFlowResolver(clear));
+  const submitter = useFlowSubmit(
+    useApplyFlowResolver(formObject.setError, clear),
+  );
 
   return (
     <FormProvider {...formObject}>

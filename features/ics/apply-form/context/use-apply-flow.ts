@@ -7,7 +7,7 @@ import {
 } from 'modules/surveys-sdk';
 import { icsApply } from 'modules/surveys-sdk/generated';
 import { useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
+import type { UseFormSetError } from 'react-hook-form';
 import type {
   Executable,
   FlowResolver,
@@ -28,14 +28,11 @@ const transformFormDataToApiPayload = (
   discordLink: form.discordLink || undefined,
 });
 
-export const useApplyFlowResolver = (): FlowResolver<
-  ApplyFormInputType,
-  ApplyFormNetworkData,
-  ApplyFlow
-> => {
+export const useApplyFlowResolver = (
+  setError: UseFormSetError<ApplyFormInputType>,
+): FlowResolver<ApplyFormInputType, ApplyFormNetworkData, ApplyFlow> => {
   const stages = useModalStages();
   const { reset } = useIcsState();
-  const { setError, getValues } = useFormContext<ApplyFormInputType>();
   const mutation = useSurveyMutation<IcsResponseDto, IcsApplyDto>(
     (body, { token }) =>
       callSurvey(() => icsApply({ ...surveyRequest(token), body })),
@@ -59,13 +56,13 @@ export const useApplyFlowResolver = (): FlowResolver<
           const handledInline = applyApiFieldErrors(
             error,
             setError,
-            Object.keys(getValues()),
+            Object.keys(input),
           );
           if (!handledInline && !isAuthError(error)) stages.failed(error);
           throw error;
         }
       },
     }),
-    [getValues, mutation, reset, setError, stages],
+    [mutation, reset, setError, stages],
   );
 };

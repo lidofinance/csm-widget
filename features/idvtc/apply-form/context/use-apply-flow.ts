@@ -11,7 +11,7 @@ import {
 } from 'modules/surveys-sdk';
 import { idvtcApply } from 'modules/surveys-sdk/generated';
 import { useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
+import type { UseFormSetError } from 'react-hook-form';
 import type {
   Executable,
   FlowResolver,
@@ -51,6 +51,7 @@ const transformFormDataToApiPayload = (
 };
 
 export const useApplyFlowResolver = (
+  setError: UseFormSetError<IdvtcApplyFormInputType>,
   clearPersistedForm?: () => void,
 ): FlowResolver<
   IdvtcApplyFormInputType,
@@ -59,7 +60,6 @@ export const useApplyFlowResolver = (
 > => {
   const { txModalStages: stages } = useModalStages();
   const { reset } = useIdvtcState();
-  const { setError, getValues } = useFormContext<IdvtcApplyFormInputType>();
   const mutation = useSurveyMutation<IdvtcResponseDto, IdvtcApplyDto>(
     (body, { token }) =>
       callSurvey(() => idvtcApply({ ...surveyRequest(token), body })),
@@ -81,16 +81,17 @@ export const useApplyFlowResolver = (
           stages.success();
         } catch (error) {
           window.scrollTo({ top: 0 });
+          // TODO: refactor this to use a more generic error handling approach
           const handledInline = applyApiFieldErrors(
             error,
             setError,
-            Object.keys(getValues()),
+            Object.keys(input),
           );
           if (!handledInline && !isAuthError(error)) stages.failed(error);
           throw error;
         }
       },
     }),
-    [clearPersistedForm, getValues, mutation, reset, setError, stages],
+    [clearPersistedForm, mutation, reset, setError, stages],
   );
 };

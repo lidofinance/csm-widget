@@ -24,7 +24,7 @@ export const ApplyFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useApplyFlowResolver());
+  const submitter = useFlowSubmit(useApplyFlowResolver(formObject.setError));
 
   return (
     <FormProvider {...formObject}>

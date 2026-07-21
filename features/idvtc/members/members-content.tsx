@@ -6,8 +6,7 @@ import { useCanManageMembers } from './hooks/use-can-manage-members';
 import { useOperatorMembers } from './hooks/use-operator-members';
 import { useRotationRequest } from './hooks/use-rotation-request';
 import { MembersList } from './initialized/members-list';
-import { InitButton } from './not-initialized/init-button';
-import { NotInitializedInfo } from './not-initialized/not-initialized-info';
+import { NotInitialized } from './not-initialized/not-initialized';
 import { RotationEditor } from './rotation/rotation-editor';
 import { RotationStatus } from './rotation/rotation-status';
 
@@ -16,17 +15,19 @@ export const MembersContent: FC = () => {
   const canManage = useCanManageMembers();
   const { isBindable, isPending: formPending } = useApprovedUnboundForm();
   const hasMembers = !!data && data.members.length > 0;
-  const { data: request, isPending: rotationPending } =
-    useRotationRequest(hasMembers);
+  const { data: request, isPending: rotationPending } = useRotationRequest(
+    hasMembers || canManage,
+  );
   const [editing, setEditing] = useState(false);
 
-  // Wait for the rotation request too (only relevant once members exist) so an
-  // operator with a pending request never flashes the "Request rotation" button.
-  // Wait for the form status too when it decides the init button below, so a
-  // manager without members never flashes Init before Info (or vice versa).
+  // Wait for the rotation request whenever it drives the render: for members
+  // (Request rotation vs status), and for a manager without members (a pending
+  // from-scratch request must show its status, not the init editor). Wait for
+  // the form status too when it gates the no-members init path, so a manager
+  // never flashes bind ↔ from-scratch.
   if (
     isPending ||
-    (hasMembers && rotationPending) ||
+    ((hasMembers || canManage) && rotationPending) ||
     (!hasMembers && canManage && formPending)
   ) {
     return <Loader />;
@@ -42,6 +43,7 @@ export const MembersContent: FC = () => {
         <MembersList members={data.members} />
         {editing ? (
           <RotationEditor
+            mode="rotate"
             activeMembers={data.members}
             onDone={() => setEditing(false)}
           />
@@ -66,5 +68,11 @@ export const MembersContent: FC = () => {
     );
   }
 
-  return canManage && isBindable ? <InitButton /> : <NotInitializedInfo />;
+  return (
+    <NotInitialized
+      request={request ?? null}
+      canManage={canManage}
+      isBindable={isBindable}
+    />
+  );
 };
