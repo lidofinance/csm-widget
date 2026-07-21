@@ -3,8 +3,12 @@ import {
   MODULE_NAME,
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
+import { config } from 'config';
 import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
+import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
+import { TxStageDkgUploadFailed } from 'features/idvtc/dkg/tx-stages/tx-stage-dkg-upload-failed';
+import { operatorKey } from 'modules/surveys-sdk';
 import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
@@ -13,7 +17,9 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useModuleOperatorTypeGetter } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
+import { handleTxError, useTransitStage } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
+import { renderCreateSuccess } from '../hooks/create-success-stage';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { useSubmitKeysFormData } from './submit-keys-data-provider';
@@ -34,6 +40,8 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   const n = useNavigate();
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
   const buildCallback = useTxModalStagesSubmitKeys();
+  const { ensureAuth, uploadStaged } = useDkgInFlowUpload();
+  const transitStage = useTransitStage();
 
   return useCallback(
     (input, data) => {
@@ -50,15 +58,34 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
         extendedManagerPermissions,
       } = input;
 
+      // The node operator doesn't exist yet, so the DKG auth token (which needs
+      // a signature, not gas) is obtained up-front in `confirm` — before the
+      // tx — and threaded through to the post-tx upload in `submit`.
+      let dkgAuthToken: string | undefined;
+
       return {
         action: 'submit-keys' as const,
-        confirm: async () =>
-          !specifyCustomAddresses ||
-          confirmCustomAddresses({
-            managerAddress,
-            rewardsAddress,
-            extendedManagerPermissions,
-          }),
+        confirm: async () => {
+          const okAddresses =
+            !specifyCustomAddresses ||
+            (await confirmCustomAddresses({
+              managerAddress,
+              rewardsAddress,
+              extendedManagerPermissions,
+            }));
+          if (!okAddresses) return false;
+
+          const files = input.dkgFiles ?? [];
+          if (files.length > 0) {
+            try {
+              dkgAuthToken = await ensureAuth(files);
+            } catch (error) {
+              handleTxError(error);
+              return false;
+            }
+          }
+          return true;
+        },
         submit: async () => {
           invariant(amount !== undefined, 'BondAmount is not defined');
 
@@ -91,6 +118,39 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
                   })
                 : await sdk.permissionlessGate.addNodeOperator(params);
 
+          // The node operator ID only exists now — run the deferred DKG
+          // upload (the tx callback's `success` already switched to the
+          // "uploading" stage) and render the final success/failed stage.
+          const files = input.dkgFiles ?? [];
+          if (result && files.length > 0) {
+            const op = operatorKey(config.module, result.nodeOperatorId);
+            const keys = depositData.map((k) => k.pubkey);
+            const runUpload = async () => {
+              invariant(op, 'operator key required for DKG upload');
+              await uploadStaged(op, files, dkgAuthToken);
+            };
+            try {
+              await runUpload();
+              renderCreateSuccess(transitStage, result, data, keys);
+            } catch (error) {
+              transitStage(
+                <TxStageDkgUploadFailed
+                  nodeOperatorId={result.nodeOperatorId}
+                  onRetry={() => {
+                    void (async () => {
+                      try {
+                        await runUpload();
+                        renderCreateSuccess(transitStage, result, data, keys);
+                      } catch (e) {
+                        handleTxError(e);
+                      }
+                    })();
+                  }}
+                />,
+              );
+            }
+          }
+
           if (result) {
             const roles = getNodeOperatorRoles(result, data.address);
             if (roles.length > 0) {
@@ -111,6 +171,9 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
       n,
       confirmCustomAddresses,
       buildCallback,
+      ensureAuth,
+      uploadStaged,
+      transitStage,
     ],
   );
 };

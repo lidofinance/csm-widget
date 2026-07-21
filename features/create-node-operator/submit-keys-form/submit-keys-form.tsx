@@ -9,6 +9,7 @@ import { Gate } from 'shared/navigate';
 import { SubmitKeysDataProvider } from './context';
 import { AmountInput } from './controls/amount-input';
 import { CustomAddressesSection } from './controls/custom-addresses-section';
+import { DkgFilesSection } from './controls/dkg-files-section';
 import { KeysConfirm } from './controls/keys-confirm';
 import { KeysInput } from './controls/keys-input';
 import { KeysLimitWarning } from './controls/keys-limit-warning';
@@ -30,6 +31,7 @@ export const SubmitKeysForm: FC = memo(() => (
             <KeysInput />
             <AmountInput />
             <KeysConfirm />
+            <DkgFilesSection />
             <CustomAddressesSection />
             <ReferrerInput />
             <SubmitButton />

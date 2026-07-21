@@ -1,4 +1,8 @@
-import { MODULE_NAME, NodeOperatorShortInfo } from '@lidofinance/lido-csm-sdk';
+import {
+  MODULE_NAME,
+  NodeOperatorShortInfo,
+  OPERATOR_TYPE,
+} from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config, useConfig } from 'config';
 import { useFeatureFlags } from 'config/feature-flags';
@@ -15,6 +19,7 @@ import {
   useOperatorBalance,
   useOperatorInfo,
 } from 'modules/web3';
+import { useOperatorType } from 'modules/web3/hooks/use-operator-type';
 import { useModifyContext } from 'providers/modify-provider';
 import { useCallback, useMemo } from 'react';
 import {
@@ -43,7 +48,8 @@ export type ShowRule =
   | 'ICS_APPLY_ENABLED'
   | 'IS_SURVEYS_ACTIVE'
   | 'IS_CSM'
-  | 'IS_CM';
+  | 'IS_CM'
+  | 'IS_IDVTC';
 
 export type ShowFlags = Record<ShowRule, boolean>;
 
@@ -89,6 +95,7 @@ export const useShowFlags = (): ShowFlags => {
   const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
+  const { data: operatorType } = useOperatorType(nodeOperator?.nodeOperatorId);
   const { canCreate: canCreateNO } = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
@@ -123,6 +130,10 @@ export const useShowFlags = (): ShowFlags => {
         module === MODULE_NAME.CSM,
       ['IS_CSM']: module === MODULE_NAME.CSM,
       ['IS_CM']: module === MODULE_NAME.CM,
+      ['IS_IDVTC']:
+        isAccountActive &&
+        !!nodeOperator &&
+        operatorType === OPERATOR_TYPE.CSM_IDVTC,
     }),
     [
       chainId,
@@ -139,6 +150,7 @@ export const useShowFlags = (): ShowFlags => {
       canClaimIDVTC,
       featureFlags,
       module,
+      operatorType,
     ],
   );
 };

@@ -114,6 +114,13 @@ const routes: Route[] = [
     suffix: <CounterSurveys />,
   },
   {
+    name: 'DVT',
+    path: PATH.IDVTC_DKG,
+    icon: <UserIcon />,
+    subPaths: [PATH.IDVTC_MEMBERS],
+    showRules: ['IS_IDVTC'],
+  },
+  {
     name: 'Operator Type',
     path: PATH.TYPE,
     icon: <UserIcon />,

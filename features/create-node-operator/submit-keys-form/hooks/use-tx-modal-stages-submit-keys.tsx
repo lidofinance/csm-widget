@@ -1,21 +1,17 @@
-import {
-  type NodeOperatorShortInfo,
-  getNodeOperatorRoles,
-} from '@lidofinance/lido-csm-sdk';
+import { type NodeOperatorShortInfo } from '@lidofinance/lido-csm-sdk';
+import { TxStageDkgUploading } from 'features/idvtc/dkg/tx-stages/tx-stage-dkg-uploading';
 import { Plural } from 'shared/components';
 import {
-  AfterCreateCustomNodeOperator,
-  AfterKeysUpload,
   TxAmount,
   TxStagePending,
   TxStageSign,
-  TxStageSuccess,
   useTxStages,
 } from 'shared/transaction-modal';
 import {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from '../context/types';
+import { renderCreateSuccess } from './create-success-stage';
 
 export const useTxModalStagesSubmitKeys = () =>
   useTxStages<
@@ -65,33 +61,19 @@ export const useTxModalStagesSubmitKeys = () =>
             }
           />,
         ),
+      // The node operator ID (needed for the DKG upload path) only exists once
+      // the tx is confirmed, which is exactly when this fires. When files were
+      // staged, hand off to the "uploading" stage instead of the final success
+      // screen — the flow itself uploads after this resolves and renders
+      // `renderCreateSuccess` (or the failed+retry stage) once that settles.
       success: (result, txHash) => {
-        const keys = input.depositData.map((key) => key.pubkey);
-        const hasAnyRole = result
-          ? getNodeOperatorRoles(result, data.address).length > 0
-          : false;
+        const stagedCount = input.dkgFiles?.length ?? 0;
+        if (stagedCount > 0) {
+          return transitStage(<TxStageDkgUploading count={stagedCount} />);
+        }
 
-        return transitStage(
-          <TxStageSuccess
-            txHash={txHash}
-            title="Node Operator has been created"
-            description={
-              result?.nodeOperatorId !== undefined ? (
-                <>
-                  Your Node Operator ID is{' '}
-                  <b>{result.nodeOperatorId.toString()}</b>
-                  <br />
-                  <br />
-                  {hasAnyRole ? (
-                    <AfterKeysUpload keys={keys} />
-                  ) : (
-                    <AfterCreateCustomNodeOperator keys={keys} />
-                  )}
-                </>
-              ) : undefined
-            }
-          />,
-        );
+        const keys = input.depositData.map((key) => key.pubkey);
+        return renderCreateSuccess(transitStage, result, data, keys, txHash);
       },
     };
   });

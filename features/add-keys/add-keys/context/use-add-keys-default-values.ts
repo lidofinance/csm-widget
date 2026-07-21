@@ -14,6 +14,7 @@ export const useAddKeysDefaultValues = () => {
       depositData: [],
       rawDepositData: '',
       confirmKeysReady: false,
+      dkgFiles: [],
     }),
   );
 };

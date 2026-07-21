@@ -3,6 +3,7 @@ import { useAddressValidation } from 'providers/address-validation-provider';
 import { useModalActions } from 'providers/modal-provider';
 import { FC, PropsWithChildren, useCallback, useMemo, useRef } from 'react';
 import { useSessionStorage } from 'shared/hooks';
+import invariant from 'tiny-invariant';
 import { trackMatomoSiweEvent } from 'utils/track-matomo-event';
 import { SiweAuthContext } from './siwe-auth-context';
 import { useModalStages } from './use-modal-stages';
@@ -84,6 +85,21 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
     validateAddress,
   ]);
 
+  // Raw counterpart to `signIn`: no modal stages, no Matomo — the caller owns
+  // the UI (e.g. an in-flow tx-stage) and must handle a thrown rejection/failure
+  // itself instead of relying on the managed modal.
+  const authenticate = useCallback(async (): Promise<string | undefined> => {
+    const result = await validateAddress(address);
+    invariant(result, `Address validation failed for ${address}`);
+
+    const { nonce } = await getNonce();
+    const payload = await siwe(nonce);
+    const data = await signin(payload);
+    const newToken = `${data.token_type} ${data.access_token}`;
+    setToken(newToken);
+    return newToken;
+  }, [address, getNonce, setToken, signin, siwe, validateAddress]);
+
   const logout = useCallback(() => {
     setToken(undefined);
   }, [setToken]);
@@ -112,8 +128,8 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   );
 
   const value = useMemo(
-    () => ({ token, signIn, logout, handleAuthError }),
-    [handleAuthError, logout, signIn, token],
+    () => ({ token, signIn, authenticate, logout, handleAuthError }),
+    [authenticate, handleAuthError, logout, signIn, token],
   );
 
   return (

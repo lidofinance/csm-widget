@@ -25,6 +25,9 @@ export type SiweAuthErrorKind = AuthErrorKind;
 export type SiweAuthContextType = {
   token?: string;
   signIn: () => Promise<void>;
+  // Caller-driven auth for embedded flows: no managed modal, resolves the token
+  // or THROWS on user rejection (so a tx flow can show its own failed stage).
+  authenticate: () => Promise<string | undefined>;
   logout: () => void;
   // Decide auth recovery from the resolved auth kind: re-run signin on expiry,
   // hard-logout on tamper/missing. Callers must map raw API codes to a kind

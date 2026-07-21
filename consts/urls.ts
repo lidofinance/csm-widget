@@ -44,6 +44,9 @@ export const PATH = <const>{
   TYPE_IDVTC_PARAMETERS: '/type/idvtc-parameters',
   TYPE_IDVTC_CLAIM: '/type/idvtc-claim',
 
+  IDVTC_DKG: '/idvtc/dkg',
+  IDVTC_MEMBERS: '/idvtc/members',
+
   SURVEYS: '/surveys',
   SURVEYS_CONTACTS: '/surveys/contacts',
   SURVEYS_EXPERIENCE: '/surveys/experience',

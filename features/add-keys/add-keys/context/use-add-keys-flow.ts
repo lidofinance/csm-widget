@@ -1,5 +1,8 @@
 import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
+import { config } from 'config';
 import { PATH } from 'consts/urls';
+import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
+import { operatorKey } from 'modules/surveys-sdk';
 import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
@@ -8,6 +11,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
+import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
 import { useAddKeysFormData } from './add-keys-data-provider';
@@ -26,6 +30,7 @@ export const useAddKeysFlowResolver = (): FlowResolver<
   const [canAddKeys, addKeysAccess] = useCanPerform(keysSDK, 'addKeys');
   const n = useNavigate();
   const buildCallback = useTxModalStagesAddKeys();
+  const { ensureAuth, uploadStaged } = useDkgInFlowUpload();
 
   return useCallback(
     (input, data) => {
@@ -35,6 +40,22 @@ export const useAddKeysFlowResolver = (): FlowResolver<
 
       return {
         action: 'add-keys' as const,
+        // The operator already exists, so auth + upload both happen here
+        // (before the tx) rather than being split like the create flow.
+        confirm: async () => {
+          const files = input.dkgFiles ?? [];
+          if (files.length === 0) return true;
+          try {
+            const op = operatorKey(config.module, data.nodeOperatorId);
+            invariant(op, 'nodeOperatorId is required to upload DKG files');
+            const authToken = await ensureAuth(files);
+            await uploadStaged(op, files, authToken);
+            return true;
+          } catch (error) {
+            handleTxError(error);
+            return false;
+          }
+        },
         submit: async () => {
           invariant(amount !== undefined, 'BondAmount is not defined');
 
@@ -50,7 +71,15 @@ export const useAddKeysFlowResolver = (): FlowResolver<
         },
       };
     },
-    [keysSDK, canAddKeys, addKeysAccess, n, buildCallback],
+    [
+      keysSDK,
+      canAddKeys,
+      addKeysAccess,
+      n,
+      buildCallback,
+      ensureAuth,
+      uploadStaged,
+    ],
   );
 };
 
