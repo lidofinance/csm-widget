@@ -1,6 +1,7 @@
 import {
   useFormValidation,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
 import type {
   AcceptInviteFormInputType,
@@ -13,7 +14,10 @@ export const useAcceptInviteValidation = () => {
     AcceptInviteFormNetworkData
   >('invite', async ({ invite }) => {
     if (!invite) {
-      throw new ValidationError('invite', 'Please select an invite');
+      throw new ValidationError(
+        'invite',
+        VALIDATION_MESSAGES.pleaseSelectInvite,
+      );
     }
   });
 };

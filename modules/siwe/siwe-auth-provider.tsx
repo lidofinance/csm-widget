@@ -1,13 +1,14 @@
 import { useDappStatus } from 'modules/web3';
 import { useAddressValidation } from 'providers/address-validation-provider';
 import { useModalActions } from 'providers/modal-provider';
-import { FC, PropsWithChildren, useCallback, useMemo } from 'react';
+import { FC, PropsWithChildren, useCallback, useMemo, useRef } from 'react';
 import { useSessionStorage } from 'shared/hooks';
 import { trackMatomoSiweEvent } from 'utils/track-matomo-event';
 import { SiweAuthContext } from './siwe-auth-context';
 import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
 import type {
+  SiweAuthErrorKind,
   SiweNonceResponse,
   SiweSigninPayload,
   SiweSigninResponse,
@@ -32,6 +33,8 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
     `siwe-token-${address}`,
     undefined,
   );
+  // Prevents concurrent signIn() calls when multiple queries expire simultaneously.
+  const isSigningInRef = useRef(false);
 
   const { txModalStages: modalStages } = useModalStages();
   const { closeModal } = useModalActions();
@@ -51,7 +54,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
     try {
       ({ nonce } = await getNonce());
     } catch (err) {
-      modalStages.failed((err as Error).message);
+      modalStages.failed(err);
       return;
     }
 
@@ -65,7 +68,7 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
         trackMatomoSiweEvent('success');
         closeModal();
       } catch (err) {
-        modalStages.failed((err as Error).message);
+        modalStages.failed(err);
       }
     } catch (_e) {
       modalStages.rejected();
@@ -85,9 +88,32 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
     setToken(undefined);
   }, [setToken]);
 
+  const handleAuthError = useCallback(
+    (kind?: SiweAuthErrorKind) => {
+      if (kind === 'reauth') {
+        // Expired session: token is stale but the address is still valid —
+        // re-run the SIWE handshake. No refresh endpoint exists; a fresh
+        // signature is required. Guard against concurrent calls: multiple
+        // in-flight queries can each fire onAuthError when the token expires.
+        if (isSigningInRef.current) return;
+        isSigningInRef.current = true;
+        void signIn().finally(() => {
+          isSigningInRef.current = false;
+        });
+      } else if (kind === 'logout') {
+        // Tampered / missing session: clear the token, no retry.
+        logout();
+      }
+      // undefined is a no-op: callers now resolve the kind upstream and only
+      // invoke this on a genuine session failure. A domain 401/403 (e.g.
+      // OPERATOR_ACCESS_DENIED) never reaches here and must not wipe the token.
+    },
+    [signIn, logout],
+  );
+
   const value = useMemo(
-    () => ({ token, signIn, logout }),
-    [logout, signIn, token],
+    () => ({ token, signIn, logout, handleAuthError }),
+    [handleAuthError, logout, signIn, token],
   );
 
   return (

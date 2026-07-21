@@ -40,9 +40,13 @@ export const buildTxCallback =
       case TransactionCallbackStage.MULTISIG_DONE:
         stages.successMultisig();
         break;
-      case TransactionCallbackStage.ERROR:
+      case TransactionCallbackStage.ERROR: {
+        // DECODE_RESULT_ERROR: tx is confirmed on-chain; failed() renders honest
+        // 'confirmed, couldn't read result' copy (see ERROR_META). TODO: route to
+        // success stage once an invalidation hook is available.
         stages.failed(payload.error);
         break;
+      }
       case TransactionCallbackStage.PERMIT_SIGN:
         stages.signPermit?.();
         break;
