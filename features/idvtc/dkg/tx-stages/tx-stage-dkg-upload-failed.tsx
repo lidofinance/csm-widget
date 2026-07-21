@@ -7,13 +7,11 @@ import { StageIconLimit } from 'shared/transaction-modal/tx-stages-basic/icons';
 
 type Props = {
   nodeOperatorId: bigint;
-  retrying?: boolean;
   onRetry: () => void;
 };
 
 export const TxStageDkgUploadFailed: FC<Props> = ({
   nodeOperatorId,
-  retrying,
   onRetry,
 }) => (
   <TransactionModalContent
@@ -27,7 +25,7 @@ export const TxStageDkgUploadFailed: FC<Props> = ({
     }
     footer={
       <>
-        <Button fullwidth onClick={onRetry} loading={retrying}>
+        <Button fullwidth onClick={onRetry}>
           Retry upload
         </Button>
         <LocalLink href={PATH.IDVTC_DKG}>Manage DKG files</LocalLink>
