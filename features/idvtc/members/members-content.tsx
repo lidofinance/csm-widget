@@ -1,6 +1,7 @@
 import { Button, Loader } from '@lidofinance/lido-ui';
 import { FC, useState } from 'react';
 import { Stack } from 'shared/components';
+import { useApprovedUnboundForm } from './hooks/use-approved-unbound-form';
 import { useCanManageMembers } from './hooks/use-can-manage-members';
 import { useOperatorMembers } from './hooks/use-operator-members';
 import { useRotationRequest } from './hooks/use-rotation-request';
@@ -13,6 +14,7 @@ import { RotationStatus } from './rotation/rotation-status';
 export const MembersContent: FC = () => {
   const { data, isPending } = useOperatorMembers();
   const canManage = useCanManageMembers();
+  const { isBindable, isPending: formPending } = useApprovedUnboundForm();
   const hasMembers = !!data && data.members.length > 0;
   const { data: request, isPending: rotationPending } =
     useRotationRequest(hasMembers);
@@ -20,7 +22,13 @@ export const MembersContent: FC = () => {
 
   // Wait for the rotation request too (only relevant once members exist) so an
   // operator with a pending request never flashes the "Request rotation" button.
-  if (isPending || (hasMembers && rotationPending)) {
+  // Wait for the form status too when it decides the init button below, so a
+  // manager without members never flashes Init before Info (or vice versa).
+  if (
+    isPending ||
+    (hasMembers && rotationPending) ||
+    (!hasMembers && canManage && formPending)
+  ) {
     return <Loader />;
   }
 
@@ -58,5 +66,5 @@ export const MembersContent: FC = () => {
     );
   }
 
-  return canManage ? <InitButton /> : <NotInitializedInfo />;
+  return canManage && isBindable ? <InitButton /> : <NotInitializedInfo />;
 };
