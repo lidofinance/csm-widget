@@ -1,9 +1,8 @@
 import { Text } from '@lidofinance/lido-ui';
 import type { FileUploadItemDto } from 'modules/surveys-sdk/generated';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
-import { FormTitle } from 'shared/components';
-import type { RejectedDkgFile } from '../types';
+import { FormTitle, Stack } from 'shared/components';
 import { useDkgUploadZone } from '../hooks/use-dkg-upload-zone';
 import { mergeDkgFiles } from '../utils/merge-dkg-files';
 import { DkgAddFileButton } from './dkg-add-file-button';
@@ -19,33 +18,36 @@ export const DkgFilesField: FC<{ name?: string }> = ({ name = 'dkgFiles' }) => {
     control,
   });
   const staged: FileUploadItemDto[] = field.value ?? [];
-  const [rejected, setRejected] = useState<RejectedDkgFile[]>([]);
 
   const zone = useDkgUploadZone({
-    onAccepted: (items) =>
-      field.onChange(mergeDkgFiles(staged, items as FileUploadItemDto[])),
-    onRejected: (r) => setRejected(r),
+    onAccepted: (items) => field.onChange(mergeDkgFiles(staged, items)),
   });
 
   return (
     <>
-      <FormTitle>Upload DKG files</FormTitle>
-      <Text size="xxs" color="secondary">
-        Upload a DKG file with all the keys you&apos;ve generated (even if
-        you&apos;re not uploading all of them)
-      </Text>
       <DkgDropArea zone={zone}>
-        <DkgStagedTable
-          items={staged}
-          onRemove={(index) =>
-            field.onChange(staged.filter((_, idx) => idx !== index))
-          }
-        />
-        <AddButtonRow $align="start">
-          <DkgAddFileButton onClick={zone.open} />
-        </AddButtonRow>
+        <Stack direction="column" gap="xs">
+          <FormTitle>Upload DKG files</FormTitle>
+          <Text size="xxs" color="secondary">
+            Upload a DKG file with all the keys you&apos;ve generated (even if
+            you&apos;re not uploading all of them)
+          </Text>
+          <DkgStagedTable
+            items={staged}
+            onRemove={(index) =>
+              field.onChange(staged.filter((_, idx) => idx !== index))
+            }
+          />
+          <AddButtonRow>
+            <DkgAddFileButton onClick={zone.open} />
+          </AddButtonRow>
+        </Stack>
       </DkgDropArea>
-      <DkgRejectedFiles rejected={rejected} onDismiss={() => setRejected([])} />
+
+      <DkgRejectedFiles
+        rejected={zone.rejected}
+        onDismiss={zone.dismissRejected}
+      />
     </>
   );
 };

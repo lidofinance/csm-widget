@@ -1,35 +1,34 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useProcessDkgFiles } from './use-process-dkg-files';
+import { processDkgFiles } from '../utils/process-dkg-files';
 import type { DkgFileUploadItem, RejectedDkgFile } from '../types';
 
 type UseDkgUploadZoneArgs = {
   disabled?: boolean;
   onAccepted: (items: DkgFileUploadItem[]) => void;
-  onRejected: (rejected: RejectedDkgFile[]) => void;
 };
 
 // Wraps react-dropzone + DKG file processing into a single, presentation-free
 // hook so the drop area, the "Add new file" button and the surrounding layout
-// can be composed freely by the page and the in-flow form field.
+// can be composed freely by the page and the in-flow form field. Owns the
+// rejected-files state so both surfaces render <DkgRejectedFiles> identically.
 export const useDkgUploadZone = ({
   disabled,
   onAccepted,
-  onRejected,
 }: UseDkgUploadZoneArgs) => {
-  const process = useProcessDkgFiles();
+  const [rejected, setRejected] = useState<RejectedDkgFile[]>([]);
 
   const handleFiles = useCallback(
     async (files: File[], preRejected: RejectedDkgFile[] = []) => {
       try {
-        const { valid, rejected } = await process(files);
-        const allRejected = [...preRejected, ...rejected];
-        if (allRejected.length > 0) onRejected(allRejected);
+        const { valid, rejected: newlyRejected } = await processDkgFiles(files);
+        const allRejected = [...preRejected, ...newlyRejected];
+        if (allRejected.length > 0) setRejected(allRejected);
         if (valid.length > 0) onAccepted(valid);
       } catch {
         // readFiles() is a Promise.all over FileReaders and rejects on the
         // first read error; surface every file in this batch as unreadable.
-        onRejected([
+        setRejected([
           ...preRejected,
           ...files.map((f) => ({
             name: f.name,
@@ -38,7 +37,7 @@ export const useDkgUploadZone = ({
         ]);
       }
     },
-    [process, onAccepted, onRejected],
+    [onAccepted],
   );
 
   const { getRootProps, getInputProps, open, isDragAccept } = useDropzone({
@@ -57,5 +56,14 @@ export const useDkgUploadZone = ({
     accept: { 'application/json': ['.json'], 'text/json': ['.json'] },
   });
 
-  return { getRootProps, getInputProps, open, isDragAccept };
+  const dismissRejected = useCallback(() => setRejected([]), []);
+
+  return {
+    getRootProps,
+    getInputProps,
+    open,
+    isDragAccept,
+    rejected,
+    dismissRejected,
+  };
 };

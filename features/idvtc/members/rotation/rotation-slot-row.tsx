@@ -12,6 +12,9 @@ type RotationSlotRowProps = {
   draft: SlotDraft;
   // Addresses a proposed member must not collide with (verify-time UX guard).
   otherAddresses: string[];
+  // Init mode: no current member to keep/replace — the slot is always an
+  // editable, required member definition.
+  mandatory?: boolean;
   onChange: (patch: Partial<SlotDraft>) => void;
 };
 
@@ -20,6 +23,7 @@ export const RotationSlotRow: FC<RotationSlotRowProps> = ({
   currentAddress,
   draft,
   otherAddresses,
+  mandatory = false,
   onChange,
 }) => {
   const { isVerifying, error, verify, setError } = useMemberVerification();
@@ -63,42 +67,43 @@ export const RotationSlotRow: FC<RotationSlotRowProps> = ({
         <Text size="xs" weight="bold">
           Cluster member #{index + 1}
         </Text>
-        {draft.changed ? (
-          <Button
-            size="xs"
-            variant="translucent"
-            color="error"
-            onClick={() =>
-              onChange({
-                changed: false,
-                newAddress: '',
-                signature: '',
-                verified: false,
-                discordHandle: undefined,
-                telegramUsername: undefined,
-              })
-            }
-            data-testid={`keepMemberButton${index}`}
-          >
-            Keep
-          </Button>
-        ) : (
-          <Button
-            size="xs"
-            variant="translucent"
-            onClick={() => onChange({ changed: true })}
-            data-testid={`replaceMemberButton${index}`}
-          >
-            Replace
-          </Button>
-        )}
+        {!mandatory &&
+          (draft.changed ? (
+            <Button
+              size="xs"
+              variant="translucent"
+              color="error"
+              onClick={() =>
+                onChange({
+                  changed: false,
+                  newAddress: '',
+                  signature: '',
+                  verified: false,
+                  discordHandle: undefined,
+                  telegramUsername: undefined,
+                })
+              }
+              data-testid={`keepMemberButton${index}`}
+            >
+              Keep
+            </Button>
+          ) : (
+            <Button
+              size="xs"
+              variant="translucent"
+              onClick={() => onChange({ changed: true })}
+              data-testid={`replaceMemberButton${index}`}
+            >
+              Replace
+            </Button>
+          ))}
       </Stack>
 
-      <Address address={currentAddress} showIcon />
+      {!mandatory && <Address address={currentAddress} showIcon />}
 
-      {draft.changed && (
+      {(mandatory || draft.changed) && (
         <SignOwnershipFields
-          title="New member address"
+          title={mandatory ? 'Member address' : 'New member address'}
           address={draft.newAddress}
           signature={draft.signature}
           verified={draft.verified}

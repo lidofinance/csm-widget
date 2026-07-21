@@ -56,12 +56,8 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
         rewardsAddress,
         managerAddress,
         extendedManagerPermissions,
+        dkgFiles = [],
       } = input;
-
-      // The node operator doesn't exist yet, so the DKG auth token (which needs
-      // a signature, not gas) is obtained up-front in `confirm` — before the
-      // tx — and threaded through to the post-tx upload in `submit`.
-      let dkgAuthToken: string | undefined;
 
       return {
         action: 'submit-keys' as const,
@@ -75,10 +71,9 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             }));
           if (!okAddresses) return false;
 
-          const files = input.dkgFiles ?? [];
-          if (files.length > 0) {
+          if (dkgFiles.length > 0) {
             try {
-              dkgAuthToken = await ensureAuth(files);
+              await ensureAuth(dkgFiles);
             } catch (error) {
               handleTxError(error);
               return false;
@@ -118,16 +113,12 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
                   })
                 : await sdk.permissionlessGate.addNodeOperator(params);
 
-          // The node operator ID only exists now — run the deferred DKG
-          // upload (the tx callback's `success` already switched to the
-          // "uploading" stage) and render the final success/failed stage.
-          const files = input.dkgFiles ?? [];
-          if (result && files.length > 0) {
+          if (result && dkgFiles.length > 0) {
             const op = operatorKey(config.module, result.nodeOperatorId);
             const keys = depositData.map((k) => k.pubkey);
             const runUpload = async () => {
               invariant(op, 'operator key required for DKG upload');
-              await uploadStaged(op, files, dkgAuthToken);
+              await uploadStaged(op, dkgFiles);
             };
             try {
               await runUpload();

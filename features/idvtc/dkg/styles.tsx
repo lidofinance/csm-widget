@@ -16,10 +16,9 @@ export const DropArea = styled.div<{ $dragActive?: boolean }>`
     `}
 `;
 
-export const AddButtonRow = styled.div<{ $align?: 'start' | 'end' }>`
+export const AddButtonRow = styled.div`
   display: flex;
-  justify-content: ${({ $align }) =>
-    $align === 'start' ? 'flex-start' : 'flex-end'};
+  justify-content: flex-start;
 `;
 
 export const DkgTable = styled.div`

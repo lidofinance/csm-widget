@@ -1,7 +1,6 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback } from 'react';
 import { Text } from '@lidofinance/lido-ui';
 import { SiweAuthGate } from 'modules/siwe';
-import type { FileUploadItemDto } from 'modules/surveys-sdk/generated';
 import {
   Block,
   Counter,
@@ -22,7 +21,7 @@ import { useDkgFiles } from './hooks/use-dkg-files';
 import { useDkgUploadZone } from './hooks/use-dkg-upload-zone';
 import { useUploadDkgFiles } from './hooks/use-upload-dkg-files';
 import { DropArea } from './styles';
-import type { DkgFileUploadItem, RejectedDkgFile } from './types';
+import type { DkgFileUploadItem } from './types';
 
 const DkgFilesContent: FC = () => {
   const check = useShowRule();
@@ -30,33 +29,16 @@ const DkgFilesContent: FC = () => {
   const canManage = check('HAS_MANAGER_ROLE') || check('HAS_REWARDS_ROLE');
   const { data: files, isLoading } = useDkgFiles();
   const upload = useUploadDkgFiles();
-  const [rejected, setRejected] = useState<RejectedDkgFile[]>([]);
 
   const onAccepted = useCallback(
-    (items: DkgFileUploadItem[]) => {
-      // POST semantics are append-only, so names already stored would collide.
-      const existing = new Set((files ?? []).map((f) => f.name));
-      const duplicates = items.filter((i) => existing.has(i.name));
-      const fresh = items.filter((i) => !existing.has(i.name));
-      if (duplicates.length > 0) {
-        setRejected((prev) => [
-          ...prev,
-          ...duplicates.map((d) => ({
-            name: d.name,
-            reason: 'File with this name already uploaded',
-          })),
-        ]);
-      }
-      if (fresh.length > 0) upload.mutate(fresh as FileUploadItemDto[]);
-    },
-    [files, upload],
+    (items: DkgFileUploadItem[]) => upload.mutate(items),
+    [upload],
   );
 
   const zone = useDkgUploadZone({
     // A second drop while a POST is in flight fires a duplicate upload.
     disabled: !canManage || upload.isPending,
     onAccepted,
-    onRejected: (r) => setRejected(r),
   });
 
   const content = (
@@ -92,7 +74,10 @@ const DkgFilesContent: FC = () => {
         <DkgEmptyState />
       )}
 
-      <DkgRejectedFiles rejected={rejected} onDismiss={() => setRejected([])} />
+      <DkgRejectedFiles
+        rejected={zone.rejected}
+        onDismiss={zone.dismissRejected}
+      />
       {upload.error && (
         <Text size="xs" color="error">
           Upload failed: {upload.error.message}

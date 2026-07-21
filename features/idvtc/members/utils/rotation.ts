@@ -15,7 +15,11 @@ export type SlotDraft = {
 };
 
 export type RotationValidationError =
-  'NO_SLOTS' | 'DUPLICATE_ADDRESS' | 'ALREADY_ACTIVE' | 'UNVERIFIED';
+  | 'NO_SLOTS'
+  | 'DUPLICATE_ADDRESS'
+  | 'ALREADY_ACTIVE'
+  | 'UNVERIFIED'
+  | 'INCOMPLETE';
 
 const toSlot = (d: SlotDraft): SubmitRotationSlotDto => ({
   newAddress: d.newAddress,
@@ -59,5 +63,21 @@ export const validateRotationDraft = (
   const active = activeAddresses.map((a) => a.toLowerCase());
   if (proposed.some((p) => active.includes(p))) return 'ALREADY_ACTIVE';
 
+  return null;
+};
+
+// Init-from-scratch: every one of the MEMBERS_COUNT slots must be a fully
+// defined, verified, unique member (there are no active members to inherit).
+export const validateInitDraft = (
+  slots: SlotDraft[],
+): RotationValidationError | null => {
+  if (
+    slots.length !== MEMBERS_COUNT ||
+    slots.some((s) => !s.newAddress || !s.signature)
+  )
+    return 'INCOMPLETE';
+  if (slots.some((s) => !s.verified)) return 'UNVERIFIED';
+  const proposed = slots.map((s) => s.newAddress.toLowerCase());
+  if (new Set(proposed).size !== proposed.length) return 'DUPLICATE_ADDRESS';
   return null;
 };

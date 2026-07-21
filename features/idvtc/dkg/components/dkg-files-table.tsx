@@ -18,6 +18,23 @@ import {
 import { ReactComponent as DownloadIcon } from 'assets/icons/download-2.svg';
 import { ReactComponent as Trash } from 'assets/icons/trash.svg';
 
+const DkgDeleteButton: FC<{ onClick: () => void; disabled?: boolean }> = ({
+  onClick,
+  disabled,
+}) => (
+  <ButtonIcon
+    icon={<Trash />}
+    variant="ghost"
+    size="xxs"
+    color="error"
+    type="button"
+    disabled={disabled}
+    onClick={onClick}
+    aria-label="Delete"
+    title="Delete"
+  />
+);
+
 type Props = { files: FileMetadataDto[]; canManage: boolean };
 
 // Managed variant: toggle · filename · download + delete. Read-only viewers
@@ -100,16 +117,9 @@ export const DkgFilesTable: FC<Props> = ({ files, canManage }) => {
                   title="Download"
                 />
                 {canManage && (
-                  <ButtonIcon
-                    icon={<Trash />}
-                    variant="ghost"
-                    size="xxs"
-                    color="error"
-                    type="button"
+                  <DkgDeleteButton
                     disabled={busy}
                     onClick={() => void onDelete(file)}
-                    aria-label="Delete"
-                    title="Delete"
                   />
                 )}
               </RowActions>
@@ -139,16 +149,7 @@ export const DkgStagedTable: FC<StagedProps> = ({ items, onRemove }) => (
       <DkgRow key={`${item.name}-${index}`} $columns="1fr auto">
         <FileName>{item.name}</FileName>
         <RowActions>
-          <ButtonIcon
-            icon={<Trash />}
-            variant="ghost"
-            size="xxs"
-            color="error"
-            type="button"
-            onClick={() => onRemove(index)}
-            aria-label="Delete"
-            title="Delete"
-          />
+          <DkgDeleteButton onClick={() => onRemove(index)} />
         </RowActions>
       </DkgRow>
     ))}

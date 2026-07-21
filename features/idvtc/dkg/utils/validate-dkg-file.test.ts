@@ -49,12 +49,9 @@ describe('validateDkgFile', () => {
     });
   });
 
-  it('rejects a top-level array', () => {
+  it('accepts a top-level array', () => {
     const r = validateDkgFile('a.json', '[1,2,3]');
-    expect(r).toMatchObject({
-      ok: false,
-      reason: 'Not a valid DKG file',
-    });
+    expect(r).toMatchObject({ ok: true });
   });
 
   it('rejects a top-level number', () => {

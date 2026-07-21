@@ -11,8 +11,9 @@ const encoder = typeof TextEncoder !== 'undefined' ? new TextEncoder() : null;
 const byteLength = (s: string): number =>
   encoder ? encoder.encode(s).byteLength : Buffer.byteLength(s, 'utf8');
 
-const isPlainObject = (value: unknown): value is Record<string, unknown> =>
-  typeof value === 'object' && value !== null && !Array.isArray(value);
+// TODO: fix types of content
+const isObjectOrArray = (value: unknown): value is Record<string, unknown> =>
+  (typeof value === 'object' && value !== null) || Array.isArray(value);
 
 export const validateDkgFile = (name: string, text: string): ValidateResult => {
   if (name.length > MAX_NAME_LENGTH) {
@@ -29,7 +30,7 @@ export const validateDkgFile = (name: string, text: string): ValidateResult => {
     return { ok: false, reason: 'Not valid JSON' };
   }
 
-  if (!isPlainObject(content)) {
+  if (!isObjectOrArray(content)) {
     return { ok: false, reason: 'Not a valid DKG file' };
   }
 

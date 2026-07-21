@@ -36,20 +36,19 @@ export const useAddKeysFlowResolver = (): FlowResolver<
     (input, data) => {
       if (!canAddKeys) return { action: 'no-access', access: addKeysAccess };
 
-      const { depositData, token, bondAmount: amount } = input;
+      const { depositData, token, bondAmount: amount, dkgFiles = [] } = input;
 
       return {
         action: 'add-keys' as const,
         // The operator already exists, so auth + upload both happen here
         // (before the tx) rather than being split like the create flow.
         confirm: async () => {
-          const files = input.dkgFiles ?? [];
-          if (files.length === 0) return true;
+          if (dkgFiles.length === 0) return true;
           try {
             const op = operatorKey(config.module, data.nodeOperatorId);
             invariant(op, 'nodeOperatorId is required to upload DKG files');
-            const authToken = await ensureAuth(files);
-            await uploadStaged(op, files, authToken);
+            await ensureAuth(dkgFiles);
+            await uploadStaged(op, dkgFiles);
             return true;
           } catch (error) {
             handleTxError(error);

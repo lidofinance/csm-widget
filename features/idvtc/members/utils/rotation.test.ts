@@ -1,6 +1,7 @@
 import {
   buildRotationBody,
   countChangedSlots,
+  validateInitDraft,
   validateRotationDraft,
   SlotDraft,
 } from './rotation';
@@ -121,6 +122,70 @@ describe('rotation draft logic', () => {
         ],
         active,
       ),
+    ).toBeNull();
+  });
+});
+
+describe('validateInitDraft', () => {
+  const A = '0xaaa0000000000000000000000000000000000001';
+  const B = '0xbbb0000000000000000000000000000000000002';
+  const C = '0xccc0000000000000000000000000000000000003';
+  const D = '0xddd0000000000000000000000000000000000004';
+
+  const initSlot = (
+    newAddress: string,
+    over: Partial<SlotDraft> = {},
+  ): SlotDraft =>
+    base({
+      changed: true,
+      newAddress,
+      signature: '0xsig',
+      verified: true,
+      ...over,
+    });
+
+  it('rejects when fewer than 4 slots are fully defined', () => {
+    expect(
+      validateInitDraft([
+        initSlot(A),
+        initSlot(B),
+        initSlot(C),
+        base({ changed: true }),
+      ]),
+    ).toBe('INCOMPLETE');
+  });
+
+  it('rejects a slot missing its signature', () => {
+    expect(
+      validateInitDraft([
+        initSlot(A),
+        initSlot(B),
+        initSlot(C),
+        initSlot(D, { signature: '' }),
+      ]),
+    ).toBe('INCOMPLETE');
+  });
+
+  it('rejects unverified slots', () => {
+    expect(
+      validateInitDraft([
+        initSlot(A),
+        initSlot(B),
+        initSlot(C),
+        initSlot(D, { verified: false }),
+      ]),
+    ).toBe('UNVERIFIED');
+  });
+
+  it('rejects duplicate proposed addresses', () => {
+    expect(
+      validateInitDraft([initSlot(A), initSlot(A), initSlot(C), initSlot(D)]),
+    ).toBe('DUPLICATE_ADDRESS');
+  });
+
+  it('passes when all 4 are defined, verified, and unique', () => {
+    expect(
+      validateInitDraft([initSlot(A), initSlot(B), initSlot(C), initSlot(D)]),
     ).toBeNull();
   });
 });

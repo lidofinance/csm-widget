@@ -21,9 +21,6 @@ export const useDkgInFlowUpload = () => {
   const transitStage = useTransitStage();
   const queryClient = useQueryClient();
 
-  // Returns a usable token. Signs in only if there are files and no token yet.
-  // authenticate() drives NO modal and THROWS on reject/fail, so we show the
-  // standard failed stage and re-throw so the flow's catch aborts the tx.
   const ensureAuth = useCallback(
     async (files: FileUploadItemDto[]): Promise<string | undefined> => {
       if (files.length === 0) return undefined;
@@ -40,16 +37,12 @@ export const useDkgInFlowUpload = () => {
   );
 
   const uploadStaged = useCallback(
-    async (
-      op: OperatorKey,
-      files: FileUploadItemDto[],
-      authToken?: string,
-    ): Promise<void> => {
+    async (op: OperatorKey, files: FileUploadItemDto[]): Promise<void> => {
       if (files.length === 0) return;
       transitStage(<TxStageDkgUploading count={files.length} />);
       await callSurvey(() =>
         filesUpload({
-          ...surveyRequest(authToken ?? token),
+          ...surveyRequest(token),
           path: { nodeOperatorId: op },
           body: files,
         }),
