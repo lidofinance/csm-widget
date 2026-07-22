@@ -33,7 +33,7 @@
     "@lidofinance/api-rpc": "^0.59.0",
     "@lidofinance/eth-api-providers": "^0.59.0",
     "@lidofinance/eth-providers": "^0.59.0",
-    "@lidofinance/lido-csm-sdk": "^2.0.0-alpha.70",
+    "@lidofinance/lido-csm-sdk": "^2.0.0-alpha.73",
     "@lidofinance/lido-ethereum-sdk": "^4.8.0",
     "@lidofinance/lido-ui": "^3.42.1",
     "@lidofinance/next-api-wrapper": "^0.59.0",
