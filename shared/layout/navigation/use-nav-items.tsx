@@ -9,6 +9,7 @@ import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
+import { ReactComponent as DvtIcon } from 'assets/icons/file-2.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import {
@@ -114,13 +115,6 @@ const routes: Route[] = [
     suffix: <CounterSurveys />,
   },
   {
-    name: 'DVT',
-    path: PATH.IDVTC_DKG,
-    icon: <UserIcon />,
-    subPaths: [PATH.IDVTC_MEMBERS],
-    showRules: ['IS_IDVTC'],
-  },
-  {
     name: 'Operator Type',
     path: PATH.TYPE,
     icon: <UserIcon />,
@@ -137,6 +131,13 @@ const routes: Route[] = [
     ],
     showRules: ['CAN_CLAIM_ICS', 'CAN_CLAIM_IDVTC', 'ICS_APPLY_ENABLED'],
     suffix: <CounterClaimType />,
+  },
+  {
+    name: 'DVT',
+    path: PATH.IDVTC_DKG,
+    icon: <DvtIcon />,
+    subPaths: [PATH.IDVTC_MEMBERS],
+    showRules: ['IS_IDVTC'],
   },
 ];
 
