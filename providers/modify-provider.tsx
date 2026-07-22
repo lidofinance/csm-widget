@@ -5,6 +5,7 @@ import {
   SURVEYS_SETUP_ENABLED,
   DISABLE_DEPOSIT_DATA_VALIDATION,
   DISABLE_ICS_PROOF_VALIDATION,
+  DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
 } from 'config/feature-flags/types';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { REF_MAPPING } from 'consts/ref-mapping';
@@ -33,6 +34,8 @@ const FEATURE_FLAG_QUERY_MAPPING: Record<string, keyof FeatureFlagsType> = {
   'survey-setup': SURVEYS_SETUP_ENABLED,
   'disable-deposit-validation': DISABLE_DEPOSIT_DATA_VALIDATION,
   'disable-ics-proof-validation': DISABLE_ICS_PROOF_VALIDATION,
+  'disable-deposit-signature-validation':
+    DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
 };
 
 const ModifyContext = createContext<ModifyContextValue | null>(null);

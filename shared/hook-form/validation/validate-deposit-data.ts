@@ -9,6 +9,7 @@ type ValidateDepositDataProps = {
   sdk: DepositDataSDK;
   keysLimit?: number;
   nonWithdrawnKeys?: number;
+  skipSignature?: boolean;
 };
 
 export const validateDepositData = async ({
@@ -16,11 +17,12 @@ export const validateDepositData = async ({
   sdk,
   keysLimit,
   nonWithdrawnKeys,
+  skipSignature,
 }: ValidateDepositDataProps) => {
   if (!depositData?.length) return;
 
   // 1. SDK validation of deposit data structure
-  const errors = await sdk.validateDepositData(depositData);
+  const errors = await sdk.validateDepositData(depositData, { skipSignature });
 
   if (errors?.length) {
     const types = mapValues(groupBy(errors, 'index'), (errors) => {

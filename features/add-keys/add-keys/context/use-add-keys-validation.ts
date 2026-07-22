@@ -1,5 +1,8 @@
 import { useFeatureFlags } from 'config/feature-flags';
-import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
+import {
+  DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
+  DISABLE_DEPOSIT_DATA_VALIDATION,
+} from 'config/feature-flags/types';
 import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
@@ -63,6 +66,8 @@ export const useAddKeysValidation = () => {
             nonWithdrawnKeys:
               operatorInfo &&
               operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys,
+            skipSignature:
+              featureFlags?.[DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION],
           });
         }
       });

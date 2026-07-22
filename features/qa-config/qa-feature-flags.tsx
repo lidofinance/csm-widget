@@ -4,6 +4,7 @@ import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { Checkbox, Text } from '@lidofinance/lido-ui';
 
 import {
+  DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
   DISABLE_DEPOSIT_DATA_VALIDATION,
   DISABLE_ICS_PROOF_VALIDATION,
   FeatureFlagsType,
@@ -20,6 +21,8 @@ const FLAG_LABELS: Record<keyof FeatureFlagsType, string> = {
   [SURVEYS_SETUP_ENABLED]: 'Surveys (setup & delegation)',
   [DISABLE_DEPOSIT_DATA_VALIDATION]: 'Disable deposit data validation',
   [DISABLE_ICS_PROOF_VALIDATION]: 'Disable ICS proof validation',
+  [DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION]:
+    'Disable deposit data signature validation',
 };
 
 const FLAGS = Object.keys(getFeatureFlagsDefault()) as Array<
