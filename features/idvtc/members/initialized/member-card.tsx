@@ -21,7 +21,7 @@ type MemberCardProps = {
   canManage: boolean;
   takenAddresses: string[];
   onRotate: () => void;
-  // Editing finished: header Cancel rotation (discard) or successful submit.
+  // Editing finished: header Cancel (discard) or successful submit.
   onDone: () => void;
 };
 
@@ -56,7 +56,7 @@ export const MemberCard: FC<MemberCardProps> = ({
       onClick={onDone}
       data-testid={`cancelRotationButton${index}`}
     >
-      Cancel rotation
+      Cancel
     </Button>
   ) : state.kind === 'pending' ? (
     <Button
