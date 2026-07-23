@@ -10,7 +10,7 @@ type Props = {
 export const KeyLimit: FC<Props> = ({ info }) => {
   if (!info?.targetLimit) return null;
 
-  const keys = info.totalAddedKeys - info.totalWithdrawnKeys;
+  const keys = info.totalDepositedKeys;
   const limitText = pluralKeys({ value: info.targetLimit, showValue: true });
 
   return (
