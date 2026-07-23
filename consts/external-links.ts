@@ -72,7 +72,9 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   [CHAINS.Mainnet]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
-    feedbackForm: 'https://forms.gle/GL9RYeV2g4px58Sv8',
+    feedbackForm: isModuleCM
+      ? 'https://forms.gle/4oRG7XwhNJszhJvv6'
+      : 'https://forms.gle/GL9RYeV2g4px58Sv8',
     stakeWidget: 'https://stake.lido.fi',
     landing: isModuleCSM ? 'https://lido.fi/csm' : LIDO_OPERATOR_PORTAL_CM,
 
