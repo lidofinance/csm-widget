@@ -1,6 +1,12 @@
+import { Text } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
-import { Loader, Text } from '@lidofinance/lido-ui';
-import { Block, Counter, SectionTitle, Stack } from 'shared/components';
+import {
+  Block,
+  Counter,
+  SectionTitle,
+  Stack,
+  WhenLoaded,
+} from 'shared/components';
 import { useShowRule } from 'shared/hooks';
 import { IdvtcSiwePage } from '../idvtc-siwe-page';
 import { DkgAddFileButton } from './components/dkg-add-file-button';
@@ -58,9 +64,7 @@ const DkgFilesContent: FC = () => {
         </Stack>
       </SectionTitle>
 
-      {isLoading ? (
-        <Loader />
-      ) : files && files.length > 0 ? (
+      {files && files.length > 0 ? (
         <DkgFilesTable files={files} canManage={canManage} />
       ) : (
         <DkgEmptyState />
@@ -80,11 +84,13 @@ const DkgFilesContent: FC = () => {
 
   return (
     <Block>
-      {canManage ? (
-        <DkgDropArea zone={zone}>{content}</DkgDropArea>
-      ) : (
-        <DropArea>{content}</DropArea>
-      )}
+      <WhenLoaded loading={isLoading} morePadding>
+        {canManage ? (
+          <DkgDropArea zone={zone}>{content}</DkgDropArea>
+        ) : (
+          <DropArea>{content}</DropArea>
+        )}
+      </WhenLoaded>
     </Block>
   );
 };
