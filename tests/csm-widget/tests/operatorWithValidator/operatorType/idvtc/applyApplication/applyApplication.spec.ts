@@ -185,7 +185,7 @@ test.describe(
             'Your application has been submitted',
           );
           await expect(txModal.description).toContainText(
-            "You can track your application's status on the Operator Type tab.",
+            "You can track your application's status on the Operator Type tab",
           );
         });
       },

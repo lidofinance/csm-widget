@@ -40,7 +40,7 @@ export class HttpMockerService {
   }
 
   async mockDvtStatus(response: Record<string, any>) {
-    const mockUrl = `${this.config.urls.csmSurveysApi}/dvt/status`;
+    const mockUrl = `${this.config.urls.csmSurveysApi}/idvtc/status`;
 
     await test.step('Mock DVT Status request', async () => {
       await this.page.route(mockUrl, async (route) => {
