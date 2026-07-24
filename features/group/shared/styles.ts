@@ -11,8 +11,8 @@ export const StakeRow = styled.div`
 `;
 
 export const StakeColumn = styled.div`
-  min-width: 20%;
-  flex: 1 0 auto;
+  min-width: 0;
+  flex: 1 1 20%;
   display: flex;
   flex-direction: column;
   gap: 4px;

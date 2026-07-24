@@ -7,6 +7,10 @@ export const GroupGrid = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: ${({ theme }) => theme.spaceMap.xl}px;
 
+  > * {
+    min-width: 0;
+  }
+
   > :first-child {
     grid-column: 1 / -1;
   }

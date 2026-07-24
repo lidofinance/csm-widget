@@ -7,7 +7,11 @@ const MetadataFormGate: FC<PropsWithChildren> = ({ children }) => {
   const flow = useMetadataFlow();
   const isReadOnly =
     flow.action === 'no-access' || flow.action === 'restricted';
-  return isReadOnly ? <Info /> : <>{children}</>;
+  return isReadOnly ? (
+    <Info restricted={flow.action === 'restricted'} />
+  ) : (
+    <>{children}</>
+  );
 };
 
 export const MetadataFormLoader: FC<PropsWithChildren> = ({ children }) => (
