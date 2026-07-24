@@ -23,5 +23,6 @@ export const useSubmitKeysDefaultValues = () => {
     specifyCustomAddresses: false,
     specifyReferrrer: false,
     referrer,
+    dkgFiles: [],
   }));
 };

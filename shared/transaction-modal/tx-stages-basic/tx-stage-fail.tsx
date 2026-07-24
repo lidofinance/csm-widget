@@ -1,13 +1,12 @@
 import { FC, ReactNode, useCallback, useState } from 'react';
-
 import { Loader } from '@lidofinance/lido-ui';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import { useModalRetry } from 'shared/transaction-modal/transaction-modal';
 import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
+import { ErrorCode } from 'utils';
 import { StageIconFail } from './icons';
 import { LoaderWrapper, RetryButtonStyled } from './styles';
-import { ErrorCode } from 'utils';
-import { ErrorMessages } from './error-messages';
+import { ERROR_META } from './error-messages';
 
 type TxStageFailProps = {
   code?: ErrorCode;
@@ -26,16 +25,21 @@ export const TxStageFail: FC<TxStageFailProps> & ClosableOnLedgerStage = ({
     setLoading(true);
     onRetry?.();
   }, [onRetry]);
+
+  const meta = ERROR_META[code];
+  const showAction = meta.retryable && !!onRetry;
+
   return (
     <TransactionModalContent
       title={title}
       icon={<StageIconFail />}
-      description={error ?? ErrorMessages[code]}
+      description={error ?? meta.message}
       footerHint={
-        code !== ErrorCode.NOT_ENOUGH_ETHER &&
-        onRetry &&
+        showAction &&
         (!isLoading ? (
-          <RetryButtonStyled onClick={handleRetry}>Retry</RetryButtonStyled>
+          <RetryButtonStyled onClick={handleRetry}>
+            {meta.actionLabel ?? 'Retry'}
+          </RetryButtonStyled>
         ) : (
           <LoaderWrapper>
             <Loader size="small" />

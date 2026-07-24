@@ -1,6 +1,7 @@
 import {
   useFormValidation,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
 import type { ClaimIcsFormInputType, ClaimIcsFormNetworkData } from './types';
 
@@ -10,7 +11,10 @@ export const useClaimIcsValidation = () => {
     async (_, { canClaimCurve, proof, icsPaused }, validate) => {
       await validate('curveId', () => {
         if (!proof.proof) {
-          throw new ValidationError('curveId', 'proof is not provided');
+          throw new ValidationError(
+            'curveId',
+            VALIDATION_MESSAGES.proofNotProvided,
+          );
         }
       });
 
@@ -18,17 +22,20 @@ export const useClaimIcsValidation = () => {
         if (proof.isConsumed) {
           throw new ValidationError(
             'curveId',
-            'claim has already been consumed',
+            VALIDATION_MESSAGES.claimAlreadyConsumed,
           );
         }
       });
 
       await validate('curveId', () => {
         if (!canClaimCurve) {
-          throw new ValidationError('curveId', 'only owner can claim type');
+          throw new ValidationError(
+            'curveId',
+            VALIDATION_MESSAGES.onlyOwnerCanClaimType,
+          );
         }
         if (icsPaused) {
-          throw new ValidationError('curveId', 'ICS is paused');
+          throw new ValidationError('curveId', VALIDATION_MESSAGES.icsPaused);
         }
       });
     },

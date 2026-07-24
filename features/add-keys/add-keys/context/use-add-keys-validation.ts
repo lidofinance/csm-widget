@@ -9,6 +9,7 @@ import {
   validateBondAmount,
   validateDepositData,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
 import type { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
@@ -75,7 +76,7 @@ export const useAddKeysValidation = () => {
         if (!confirmKeysReady) {
           throw new ValidationError(
             'confirmKeysReady',
-            'Please confirm that the keys are ready',
+            VALIDATION_MESSAGES.confirmKeysReady,
           );
         }
       });

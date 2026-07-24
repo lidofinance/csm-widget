@@ -1,6 +1,7 @@
 import { createContext, FC, PropsWithChildren, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useFormContext } from 'react-hook-form';
+import { readFileAsText } from 'utils/read-file-as-text';
 import { DropzoneStyle } from './styles';
 import { NOOP } from '@lidofinance/lido-ethereum-sdk';
 
@@ -24,20 +25,15 @@ export const DepositDataDrop: FC<
         return;
       }
 
-      const file = acceptedFiles[0];
-      const reader = new FileReader();
-
-      // read file as text file
-      reader.onloadend = () => {
-        const { result: resultAsText } = reader;
-
-        setValue(fieldName, resultAsText, {
-          shouldValidate: false,
-          shouldDirty: true,
-          shouldTouch: true,
-        });
-      };
-      reader.readAsText(file);
+      void readFileAsText(acceptedFiles[0])
+        .then((text) =>
+          setValue(fieldName, text, {
+            shouldValidate: false,
+            shouldDirty: true,
+            shouldTouch: true,
+          }),
+        )
+        .catch(() => undefined);
     },
     [fieldName, setValue],
   );

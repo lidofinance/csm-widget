@@ -6,6 +6,7 @@ import { Checkbox, Text } from '@lidofinance/lido-ui';
 import {
   DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
   DISABLE_DEPOSIT_DATA_VALIDATION,
+  DISABLE_ICS_PROOF_VALIDATION,
   FeatureFlagsType,
   getFeatureFlagsDefault,
   ICS_APPLY_FORM,
@@ -19,6 +20,7 @@ const FLAG_LABELS: Record<keyof FeatureFlagsType, string> = {
   [ICS_APPLY_FORM]: 'Operator type applications (ICS, IDVTC)',
   [SURVEYS_SETUP_ENABLED]: 'Surveys (setup & delegation)',
   [DISABLE_DEPOSIT_DATA_VALIDATION]: 'Disable deposit data validation',
+  [DISABLE_ICS_PROOF_VALIDATION]: 'Disable ICS proof validation',
   [DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION]:
     'Disable deposit data signature validation',
 };

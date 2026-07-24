@@ -1,14 +1,18 @@
 import { Text } from '@lidofinance/lido-ui';
-import { DvtApplyButton } from 'features/dvt/apply-button';
-import { ScoreChip } from 'features/dvt/form-status/components/score-chip';
-import { DvtFormStatus, DvtTypeStatus, useDvtState } from 'features/dvt/shared';
+import { IdvtcApplyButton } from 'features/idvtc/apply-button';
+import { ScoreChip } from 'features/idvtc/form-status/components/score-chip';
+import {
+  IdvtcFormStatus,
+  IdvtcTypeStatus,
+  useIdvtcState,
+} from 'features/idvtc/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { OptionCard, TypeBadge } from './styles';
 
 const renderStatusChip = (
-  typeStatus: DvtTypeStatus,
-  status: DvtFormStatus | undefined,
+  typeStatus: IdvtcTypeStatus,
+  status: IdvtcFormStatus | undefined,
 ) => {
   if (typeStatus === 'CLAIMED') {
     return <ScoreChip type="default">Claimed</ScoreChip>;
@@ -29,7 +33,7 @@ const renderStatusChip = (
 };
 
 export const IdvtcTypeCard: FC = () => {
-  const { typeStatus, data } = useDvtState();
+  const { typeStatus, data } = useIdvtcState();
   const chip = renderStatusChip(typeStatus, data?.status);
 
   return (
@@ -50,7 +54,7 @@ export const IdvtcTypeCard: FC = () => {
           </Text>
         </Stack>
       </Stack>
-      <DvtApplyButton />
+      <IdvtcApplyButton />
     </OptionCard>
   );
 };

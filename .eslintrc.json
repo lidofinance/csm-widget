@@ -46,7 +46,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["tests/**"]
+        "devDependencies": ["tests/**", "openapi-ts.config.ts"]
       }
     ]
   },

@@ -5,6 +5,7 @@ import { FC, PropsWithChildren } from 'react';
 import { ConfigProvider } from 'config';
 import { GlobalStyle } from 'styles';
 
+import { SurveysAuthProvider } from 'modules/surveys-sdk';
 import { NodeOperatorProvider, Web3Provider } from 'modules/web3';
 import { AlertProvider, AlertsWatcherProvider } from 'shared/alerts';
 import { GateSupported } from 'shared/navigate';
@@ -52,13 +53,15 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                       <GateSupported>
                         <NodeOperatorProvider>
                           <ModalProvider>
-                            {skipWatcher ? (
-                              children
-                            ) : (
-                              <AlertsWatcherProvider>
-                                {children}
-                              </AlertsWatcherProvider>
-                            )}
+                            <SurveysAuthProvider>
+                              {skipWatcher ? (
+                                children
+                              ) : (
+                                <AlertsWatcherProvider>
+                                  {children}
+                                </AlertsWatcherProvider>
+                              )}
+                            </SurveysAuthProvider>
                           </ModalProvider>
                         </NodeOperatorProvider>
                       </GateSupported>

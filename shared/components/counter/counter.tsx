@@ -6,6 +6,8 @@ type CounterProps = {
   count: number | undefined;
   warning?: boolean;
   type?: COUNTER_VARIANTS;
+  inverse?: boolean;
+  showZero?: boolean;
   'data-testid'?: string;
 };
 
@@ -13,15 +15,24 @@ export const Counter: FC<CounterProps> = ({
   warning,
   count,
   type,
+  inverse = true,
+  showZero = false,
   'data-testid': dataTestid = 'navCounter',
-}) =>
-  count ? (
-    <InverseThemeProvider>
-      <CounterStyle
-        $variant={warning ? 'warning' : type}
-        data-testid={dataTestid}
-      >
-        {count}
-      </CounterStyle>
-    </InverseThemeProvider>
-  ) : null;
+}) => {
+  if (!count && !showZero) return null;
+
+  const content = (
+    <CounterStyle
+      $variant={warning ? 'warning' : type}
+      data-testid={dataTestid}
+    >
+      {count}
+    </CounterStyle>
+  );
+
+  return inverse ? (
+    <InverseThemeProvider>{content}</InverseThemeProvider>
+  ) : (
+    content
+  );
+};

@@ -5,6 +5,7 @@ import {
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
   DISABLE_DEPOSIT_DATA_VALIDATION,
+  DISABLE_ICS_PROOF_VALIDATION,
   DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
 } from './types';
 
@@ -16,6 +17,7 @@ export const getFeatureFlagsDefault = (): FeatureFlagsType => {
     [ICS_APPLY_FORM]: isMainnet,
     [SURVEYS_SETUP_ENABLED]: isMainnet,
     [DISABLE_DEPOSIT_DATA_VALIDATION]: false,
+    [DISABLE_ICS_PROOF_VALIDATION]: false,
     [DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION]: false,
   };
 };

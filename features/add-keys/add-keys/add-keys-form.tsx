@@ -2,6 +2,7 @@ import { FC, memo } from 'react';
 
 import { AddKeysDataProvider, AddKeysFormProvider } from './context';
 
+import { DkgFilesField } from 'features/idvtc/dkg/components/dkg-files-field';
 import { DepositQueue } from 'features/view-keys/deposit-queue';
 import { FormBlock } from 'shared/components';
 import { Form } from 'shared/hook-form/form-controller';
@@ -26,6 +27,9 @@ export const AddKeysForm: FC = memo(() => {
               <KeysLimitWarning />
               <KeysInput />
               <AmountInput />
+              <Gate rule="IS_IDVTC">
+                <DkgFilesField />
+              </Gate>
               <KeysConfirm />
               <SubmitButton />
             </Form>

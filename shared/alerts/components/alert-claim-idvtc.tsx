@@ -16,7 +16,7 @@ export const AlertClaimIdvtc: FC = () => (
     </p>
     <br />
     <LocalLink
-      href={PATH.TYPE_DVT_CLAIM}
+      href={PATH.TYPE_IDVTC_CLAIM}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.claimIdvtcLinkAlert}
     >
       <AlertButton>Go to Claim page</AlertButton>

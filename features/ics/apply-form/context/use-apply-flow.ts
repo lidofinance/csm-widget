@@ -1,10 +1,18 @@
 import { IcsApplyDto, IcsResponseDto, useIcsState } from 'features/ics/shared';
-import { endpoints, useSurveysMutation } from 'modules/surveys-sdk';
+import {
+  callSurvey,
+  isAuthError,
+  surveyRequest,
+  useSurveyMutation,
+} from 'modules/surveys-sdk';
+import { icsApply } from 'modules/surveys-sdk/generated';
 import { useCallback } from 'react';
+import type { UseFormSetError } from 'react-hook-form';
 import type {
   Executable,
   FlowResolver,
 } from 'shared/hook-form/form-controller';
+import { applyApiFieldErrors } from 'shared/hook-form';
 import type { ApplyFormInputType, ApplyFormNetworkData } from './types';
 import { useModalStages } from './use-modal-stages';
 
@@ -20,15 +28,14 @@ const transformFormDataToApiPayload = (
   discordLink: form.discordLink || undefined,
 });
 
-export const useApplyFlowResolver = (): FlowResolver<
-  ApplyFormInputType,
-  ApplyFormNetworkData,
-  ApplyFlow
-> => {
+export const useApplyFlowResolver = (
+  setError: UseFormSetError<ApplyFormInputType>,
+): FlowResolver<ApplyFormInputType, ApplyFormNetworkData, ApplyFlow> => {
   const stages = useModalStages();
   const { reset } = useIcsState();
-  const mutation = useSurveysMutation<IcsResponseDto, IcsApplyDto>(
-    endpoints.icsApply,
+  const mutation = useSurveyMutation<IcsResponseDto, IcsApplyDto>(
+    (body, { token }) =>
+      callSurvey(() => icsApply({ ...surveyRequest(token), body })),
     { mutationKey: ['ics-apply'] },
   );
 
@@ -44,28 +51,18 @@ export const useApplyFlowResolver = (): FlowResolver<
           window.scrollTo({ top: 0 });
           reset(false);
           stages.success();
-        } catch (error: any) {
-          let errorMessage = 'Something went wrong';
-          let errorDetails: string[] = [];
-
-          if (error?.response?.data?.message) {
-            const messages = error.response.data.message;
-            if (Array.isArray(messages)) {
-              errorDetails = messages;
-              errorMessage = `Validation failed: ${messages.length} error${messages.length > 1 ? 's' : ''}`;
-            } else if (typeof messages === 'string') {
-              errorMessage = messages;
-            }
-          } else if (error?.message) {
-            errorMessage = error.message;
-          }
-
+        } catch (error) {
           window.scrollTo({ top: 0 });
-          stages.failed({ message: errorMessage, details: errorDetails });
+          const handledInline = applyApiFieldErrors(
+            error,
+            setError,
+            Object.keys(input),
+          );
+          if (!handledInline && !isAuthError(error)) stages.failed(error);
           throw error;
         }
       },
     }),
-    [mutation, reset, stages],
+    [mutation, reset, setError, stages],
   );
 };

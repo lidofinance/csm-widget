@@ -3,6 +3,9 @@
 /.pnp
 /lido-csm-sdk
 
+# generated (hey-api openapi-ts types)
+/modules/surveys-sdk/generated
+
 # testing
 /coverage
 
@@ -13,9 +16,6 @@
 # production
 /build
 /public
-
-# generated
-/generated
 
 **/.browser_context**
 

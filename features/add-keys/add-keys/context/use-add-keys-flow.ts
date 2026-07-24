@@ -1,5 +1,9 @@
 import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
+import { config } from 'config';
 import { PATH } from 'consts/urls';
+import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
+import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
+import { operatorKey } from 'modules/surveys-sdk';
 import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
@@ -8,6 +12,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
+import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
 import { useAddKeysFormData } from './add-keys-data-provider';
@@ -26,15 +31,32 @@ export const useAddKeysFlowResolver = (): FlowResolver<
   const [canAddKeys, addKeysAccess] = useCanPerform(keysSDK, 'addKeys');
   const n = useNavigate();
   const buildCallback = useTxModalStagesAddKeys();
+  const surveyAuth = useSurveyInFlowAuth();
+  const { ensureAuth, uploadStaged } = useDkgInFlowUpload(surveyAuth);
 
   return useCallback(
     (input, data) => {
       if (!canAddKeys) return { action: 'no-access', access: addKeysAccess };
 
-      const { depositData, token, bondAmount: amount } = input;
+      const { depositData, token, bondAmount: amount, dkgFiles = [] } = input;
 
       return {
         action: 'add-keys' as const,
+        // The operator already exists, so auth + upload both happen here
+        // (before the tx) rather than being split like the create flow.
+        confirm: async () => {
+          if (dkgFiles.length === 0) return true;
+          try {
+            const op = operatorKey(config.module, data.nodeOperatorId);
+            invariant(op, 'nodeOperatorId is required to upload DKG files');
+            await ensureAuth(dkgFiles);
+            await uploadStaged(op, dkgFiles);
+            return true;
+          } catch (error) {
+            handleTxError(error);
+            return false;
+          }
+        },
         submit: async () => {
           invariant(amount !== undefined, 'BondAmount is not defined');
 
@@ -50,7 +72,15 @@ export const useAddKeysFlowResolver = (): FlowResolver<
         },
       };
     },
-    [keysSDK, canAddKeys, addKeysAccess, n, buildCallback],
+    [
+      keysSDK,
+      canAddKeys,
+      addKeysAccess,
+      n,
+      buildCallback,
+      ensureAuth,
+      uploadStaged,
+    ],
   );
 };
 

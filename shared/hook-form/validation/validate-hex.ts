@@ -1,4 +1,5 @@
 import { isHexadecimalString } from 'utils';
+import { VALIDATION_MESSAGES } from './messages';
 import { ValidationError } from './validation-error';
 
 export const validateHex = (field: string, value?: string) => {
@@ -9,9 +10,9 @@ export const validateHex = (field: string, value?: string) => {
   const rest = val.slice(2);
 
   if (!val.startsWith('0x')) {
-    throw new ValidationError(field, 'Should start with "0x"');
+    throw new ValidationError(field, VALIDATION_MESSAGES.hexMustStartWith0x);
   }
 
   if (rest && !isHexadecimalString(rest))
-    throw new ValidationError(field, 'Is not hexadecimal string');
+    throw new ValidationError(field, VALIDATION_MESSAGES.hexNotHexadecimal);
 };

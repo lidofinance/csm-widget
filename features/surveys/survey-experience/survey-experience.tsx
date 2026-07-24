@@ -8,7 +8,16 @@ import {
   SubmitButtonHookForm,
   TextInputHookForm,
 } from 'shared/hook-form/controls';
-import { useOperatorSurvey } from 'modules/surveys-sdk';
+import {
+  callSurvey,
+  isAuthError,
+  surveyRequest,
+  useOperatorSurvey,
+} from 'modules/surveys-sdk';
+import {
+  experienceFindOne,
+  experienceUpdate,
+} from 'modules/surveys-sdk/generated';
 import { Experience } from '../types';
 import {
   ExperienceForm,
@@ -24,6 +33,21 @@ export const SurveyExperience: FC = () => {
     {
       transformIncoming,
       transformOutgoing,
+      get: ({ nodeOperatorId, token, signal }) =>
+        callSurvey(() =>
+          experienceFindOne({
+            ...surveyRequest(token, signal),
+            path: { nodeOperatorId },
+          }),
+        ),
+      update: (body, { nodeOperatorId, token }) =>
+        callSurvey(() =>
+          experienceUpdate({
+            ...surveyRequest(token),
+            path: { nodeOperatorId },
+            body,
+          }),
+        ),
     },
   );
   const { txModalStages: modals } = useModalStages();
@@ -43,7 +67,7 @@ export const SurveyExperience: FC = () => {
         trackMatomoFormEvent('surveyExperience', 'success');
         modals.success();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     },
     [modals, mutate],

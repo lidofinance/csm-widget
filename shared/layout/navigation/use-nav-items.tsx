@@ -9,6 +9,7 @@ import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
+import { ReactComponent as DvtIcon } from 'assets/icons/file-2.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import {
@@ -122,14 +123,21 @@ const routes: Route[] = [
       PATH.TYPE_ICS_APPLY,
       PATH.TYPE_ICS_PARAMETERS,
       PATH.TYPE_ICS_CLAIM,
-      PATH.TYPE_DVT_DESCRIPTION,
-      PATH.TYPE_DVT_APPLY,
-      PATH.TYPE_DVT_PARAMETERS,
-      PATH.TYPE_DVT_CLAIM,
+      PATH.TYPE_IDVTC_DESCRIPTION,
+      PATH.TYPE_IDVTC_APPLY,
+      PATH.TYPE_IDVTC_PARAMETERS,
+      PATH.TYPE_IDVTC_CLAIM,
       PATH.TYPE_PARAMETERS,
     ],
     showRules: ['CAN_CLAIM_ICS', 'CAN_CLAIM_IDVTC', 'ICS_APPLY_ENABLED'],
     suffix: <CounterClaimType />,
+  },
+  {
+    name: 'DVT',
+    path: PATH.IDVTC_DKG,
+    icon: <DvtIcon />,
+    subPaths: [PATH.IDVTC_MEMBERS],
+    showRules: ['IS_IDVTC'],
   },
 ];
 

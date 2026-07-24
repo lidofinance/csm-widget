@@ -9,6 +9,7 @@ import {
   validateBondAmount,
   validateDepositData,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
 import { isAddress } from 'viem';
 import type {
@@ -78,7 +79,7 @@ export const useSubmitKeysValidation = () => {
         if (!confirmKeysReady) {
           throw new ValidationError(
             'confirmKeysReady',
-            'Please confirm that the keys are ready',
+            VALIDATION_MESSAGES.confirmKeysReady,
           );
         }
       });
@@ -87,7 +88,7 @@ export const useSubmitKeysValidation = () => {
         if (specifyCustomAddresses && !isAddress(rewardsAddress ?? '')) {
           throw new ValidationError(
             'rewardsAddress',
-            'Specify valid Rewards Address',
+            VALIDATION_MESSAGES.specifyValidRewardsAddress,
           );
         }
       });
@@ -96,7 +97,7 @@ export const useSubmitKeysValidation = () => {
         if (specifyCustomAddresses && !isAddress(managerAddress ?? '')) {
           throw new ValidationError(
             'managerAddress',
-            'Specify valid Manager Address',
+            VALIDATION_MESSAGES.specifyValidManagerAddress,
           );
         }
       });

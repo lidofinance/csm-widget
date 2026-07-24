@@ -1,4 +1,5 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { VALIDATION_MESSAGES, validationMessage } from './messages';
 import { ValidationError } from './validation-error';
 
 export const validateNodeOperatorId = (
@@ -10,13 +11,16 @@ export const validateNodeOperatorId = (
 
   try {
     if (value < 0n) {
-      throw new ValidationError(field, 'Invalid ID');
+      throw new ValidationError(field, VALIDATION_MESSAGES.invalidId);
     }
 
     if (max !== undefined && max <= value)
-      throw new ValidationError(field, `Max Node Operator ID is ${max - 1n}`);
+      throw new ValidationError(
+        field,
+        validationMessage.maxNodeOperatorId(max - 1n),
+      );
   } catch (e) {
     if (e instanceof ValidationError) return e;
-    throw new ValidationError(field, 'Invalid ID');
+    throw new ValidationError(field, VALIDATION_MESSAGES.invalidId);
   }
 };

@@ -1,13 +1,18 @@
 import {
-  endpoints,
+  callSurvey,
+  surveyRequest,
+  surveysKeys,
   useOperatorKey,
-  useSurveysQuery,
+  useSurveyQuery,
 } from 'modules/surveys-sdk';
+import { delegatesMyGetMyDelegations } from 'modules/surveys-sdk/generated';
+import { useDappStatus } from 'modules/web3';
 import { useCallback } from 'react';
 import { DelegatedOperatorsResponse } from '../types';
 
 export const useDelegatedOperators = (nodeOperatorId?: bigint) => {
   const excludeId = useOperatorKey(nodeOperatorId);
+  const { address } = useDappStatus();
 
   const select = useCallback(
     (data: DelegatedOperatorsResponse) =>
@@ -15,8 +20,12 @@ export const useDelegatedOperators = (nodeOperatorId?: bigint) => {
     [excludeId],
   );
 
-  return useSurveysQuery<DelegatedOperatorsResponse, string[]>(
-    endpoints.myDelegates,
+  return useSurveyQuery<DelegatedOperatorsResponse, string[]>(
+    surveysKeys.authPath('delegates/my', address),
+    ({ token, signal }) =>
+      callSurvey(() =>
+        delegatesMyGetMyDelegations(surveyRequest(token, signal)),
+      ),
     { select },
   );
 };

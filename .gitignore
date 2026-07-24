@@ -17,10 +17,6 @@ tsconfig.tsbuildinfo
 # testing
 /coverage
 
-# generated
-/generated
-/modules/web3/generated.ts
-
 # next.js
 /.next/
 /out/
