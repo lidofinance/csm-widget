@@ -23,9 +23,7 @@ class Metrics {
       prefix: METRICS_PREFIX,
       registry: this.registry,
       defaultChain: `${config.defaultChain}`,
-      supportedChains: config.supportedChains.map(
-        (chain: number) => `${chain}`,
-      ),
+      supportedChains: [`${config.defaultChain}`],
       version: buildInfoJson.version,
       commit: buildInfoJson.commit,
       branch: buildInfoJson.branch,

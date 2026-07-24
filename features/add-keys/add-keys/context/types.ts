@@ -6,11 +6,14 @@ import {
   ShareLimitInfo,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
+import type { FileUploadItemDto } from 'modules/surveys-sdk/generated';
 import { DepositDataInputType } from 'shared/hook-form/deposit-data';
+import { KeysAvailable } from 'shared/hooks';
 
 export type AddKeysFormInputType = {
   token: TOKENS;
   bondAmount?: bigint;
+  dkgFiles: FileUploadItemDto[];
 } & DepositDataInputType;
 
 export type AddKeysFormNetworkData = {
@@ -24,6 +27,6 @@ export type AddKeysFormNetworkData = {
   bond: BondBalance;
   isPaused: boolean;
   maxStakeEth: bigint;
-  shareLimit: ShareLimitInfo;
-  // keysAvailable: KeysAvailable;
+  shareLimit?: ShareLimitInfo;
+  keysAvailable?: KeysAvailable;
 };

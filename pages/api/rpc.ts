@@ -60,7 +60,7 @@ const rpc = rpcFactory({
     allowedLogsAddresses,
     maxBatchCount: config.PROVIDER_MAX_BATCH,
     blockEmptyAddressGetLogs: true,
-    maxGetLogsRange: 1_000_000, // only 20k blocks size historical queries // FIXME: limit to 20K
+    maxGetLogsRange: 1_000_000, // only 20k blocks size historical queries
     maxResponseSize: 1_000_000, // 1mb max response
   },
 });

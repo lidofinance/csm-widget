@@ -1,5 +1,6 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import {
+  KEY_INVITES,
   KEY_OPERATOR_INFO,
   KEY_OPERATOR_IS_OWNER,
   useDappStatus,
@@ -12,10 +13,10 @@ import {
   NetworkData,
   useFormData,
 } from 'shared/hook-form/form-controller';
-import { useInvalidate } from 'shared/hooks';
+import { useChangeRoleMode, useInvalidate } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { compareLowercase } from 'utils';
 import { type ChangeRoleFormNetworkData } from './types';
+import { isAddressEqual } from 'viem';
 
 const useChangeRoleFormNetworkData: NetworkData<
   ChangeRoleFormNetworkData,
@@ -33,7 +34,7 @@ const useChangeRoleFormNetworkData: NetworkData<
   const invalidate = useInvalidate();
 
   const revalidate = useCallback(() => {
-    invalidate([KEY_OPERATOR_INFO, KEY_OPERATOR_IS_OWNER]);
+    invalidate([KEY_OPERATOR_INFO, KEY_OPERATOR_IS_OWNER, KEY_INVITES]);
   }, [invalidate]);
 
   const currentAddress =
@@ -43,23 +44,17 @@ const useChangeRoleFormNetworkData: NetworkData<
       ? info?.proposedRewardsAddress
       : info?.proposedManagerAddress;
 
-  const isManagerReset =
-    role === ROLES.MANAGER &&
-    !info?.extendedManagerPermissions &&
-    compareLowercase(info?.rewardsAddress, address) &&
-    !compareLowercase(info?.managerAddress, address);
-
-  const isRewardsChange =
-    role === ROLES.REWARDS &&
-    !!info?.extendedManagerPermissions &&
-    compareLowercase(info.managerAddress, address);
-
-  const isPropose =
-    !isManagerReset &&
-    !isRewardsChange &&
-    compareLowercase(currentAddress, address);
-
+  const mode = useChangeRoleMode(role);
+  const canEdit = mode !== 'view';
   const extendedManagerPermissions = info?.extendedManagerPermissions;
+
+  const invite =
+    proposedAddress && isAddressEqual(proposedAddress, address)
+      ? {
+          nodeOperatorId,
+          role,
+        }
+      : null;
 
   return {
     data: {
@@ -68,10 +63,9 @@ const useChangeRoleFormNetworkData: NetworkData<
       currentAddress,
       proposedAddress,
       nodeOperatorId,
-      isManagerReset,
-      isRewardsChange,
-      isPropose,
+      canEdit,
       extendedManagerPermissions,
+      invite,
     } as ChangeRoleFormNetworkData,
     isPending: isInfoLoading,
     revalidate,

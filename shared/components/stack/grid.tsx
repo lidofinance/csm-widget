@@ -1,7 +1,10 @@
 import styled from 'styled-components';
+import { type StackStyleProps, getGap } from './style';
 
-export const Grid = styled.div`
+type GridProps = Pick<StackStyleProps, '$gap'>;
+
+export const Grid = styled.div<GridProps>`
   display: grid;
-  gap: ${({ theme }) => theme.spaceMap.md}px;
+  gap: ${({ $gap = 'md', theme }) => getGap($gap, theme)}px;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 `;

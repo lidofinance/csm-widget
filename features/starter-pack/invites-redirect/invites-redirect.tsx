@@ -15,7 +15,7 @@ export const InvitesRedirect: FC = () => {
   useEffect(() => {
     if (invites?.length && !skipRedirect) {
       setSkipRedirect(true);
-      void navigate(PATH.ROLES_INBOX);
+      void navigate(PATH.SETTINGS_INBOX);
     }
   }, [invites?.length, navigate, setSkipRedirect, skipRedirect]);
 

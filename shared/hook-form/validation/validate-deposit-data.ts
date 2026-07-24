@@ -1,25 +1,28 @@
 import type { DepositData, DepositDataSDK } from '@lidofinance/lido-csm-sdk';
 import { groupBy, mapValues, uniqBy } from 'lodash';
 import { KEYS_UPLOAD_TX_LIMIT } from 'consts/keys';
+import { VALIDATION_MESSAGES, validationMessage } from './messages';
 import { ValidationError } from './validation-error';
 
 type ValidateDepositDataProps = {
   depositData: DepositData[];
   sdk: DepositDataSDK;
   keysLimit?: number;
-  currentActiveKeys?: number;
+  nonWithdrawnKeys?: number;
+  skipSignature?: boolean;
 };
 
 export const validateDepositData = async ({
   depositData,
   sdk,
   keysLimit,
-  currentActiveKeys,
+  nonWithdrawnKeys,
+  skipSignature,
 }: ValidateDepositDataProps) => {
   if (!depositData?.length) return;
 
   // 1. SDK validation of deposit data structure
-  const errors = await sdk.validateDepositData(depositData);
+  const errors = await sdk.validateDepositData(depositData, { skipSignature });
 
   if (errors?.length) {
     const types = mapValues(groupBy(errors, 'index'), (errors) => {
@@ -33,7 +36,7 @@ export const validateDepositData = async ({
 
     throw new ValidationError(
       'depositData',
-      'Invalid deposit data',
+      VALIDATION_MESSAGES.invalidDepositData,
       undefined,
       undefined,
       types,
@@ -44,7 +47,7 @@ export const validateDepositData = async ({
   if (depositData.length > KEYS_UPLOAD_TX_LIMIT) {
     throw new ValidationError(
       'depositData',
-      `Too many keys in one transaction. Maximum allowed: ${KEYS_UPLOAD_TX_LIMIT}`,
+      validationMessage.tooManyKeys(KEYS_UPLOAD_TX_LIMIT),
     );
   }
 
@@ -52,13 +55,15 @@ export const validateDepositData = async ({
   if (keysLimit !== undefined) {
     const keysCount = depositData.length;
 
-    if (currentActiveKeys !== undefined) {
-      // Add-keys flow: check total keys after adding
-      if (currentActiveKeys + keysCount > keysLimit) {
-        const availableSlots = Math.max(keysLimit - currentActiveKeys, 0);
+    if (nonWithdrawnKeys !== undefined) {
+      // Add-keys flow: check total non-withdrawn keys after adding
+      if (nonWithdrawnKeys + keysCount > keysLimit) {
+        const availableSlots = Math.max(keysLimit - nonWithdrawnKeys, 0);
         throw new ValidationError(
           'depositData',
-          `Keys limit exceeded. Allowed keys count to submit: ${availableSlots}`,
+          availableSlots === 0
+            ? validationMessage.addKeysLimitReached(keysLimit)
+            : validationMessage.addKeysLimitExceeded(keysLimit, availableSlots),
         );
       }
     } else {
@@ -66,7 +71,7 @@ export const validateDepositData = async ({
       if (keysCount > keysLimit) {
         throw new ValidationError(
           'depositData',
-          `Keys limit exceeded. Allowed keys count to submit: ${keysLimit}`,
+          validationMessage.submitKeysLimitExceeded(keysLimit),
         );
       }
     }

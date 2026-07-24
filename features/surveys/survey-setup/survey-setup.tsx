@@ -15,7 +15,7 @@ import {
   SubmitButtonHookForm,
   TokenAmountInputHookForm,
 } from 'shared/hook-form/controls';
-import { useSurveysSWR } from '../shared/use-surveys-swr';
+import { isAuthError } from 'modules/surveys-sdk';
 import {
   CL_CLIENT_OPTIONS,
   COUNTRY_OPTIONS,
@@ -26,36 +26,30 @@ import {
   TOOL_OPTIONS,
   VALIDATOR_CLIENT_OPTIONS,
 } from './options';
-import { transformIncoming, transformOutcoming } from './transform';
+import { useOperatorSetup } from './use-operator-setup';
+import { useSetupsKeys } from './use-setups-keys';
 import { useModalStages } from './use-modal-stages';
 import { useConfirmRemoveModal } from './confirm-remove-modal';
 import { useNavigate } from 'shared/navigate';
 import { PATH } from 'consts/urls';
 import { SurveyButton } from '../components';
 import { Button } from '@lidofinance/lido-ui';
-import { Setup, SetupRaw, SetupsKeys } from '../types';
+import { Setup } from '../types';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useSurveysFilled } from 'shared/hooks';
 import { useNodeOperatorId } from 'modules/web3';
+import { SurveysBackButton } from '../shared';
 
 const required = { required: true };
 
 export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
-  const {
-    data: filled,
-    error,
-    mutate,
-    remove,
-  } = useSurveysSWR<Setup, SetupRaw>(`setups${id ? '/' + id : ''}`, {
-    skipFetching: !id,
-    transformIncoming,
-    transformOutcoming,
-  });
+  const index = id ? Number(id) : undefined;
+
+  const { data: filled, error, mutate, remove } = useOperatorSetup(index);
 
   const data = useMemo(() => (id ? filled : undefined), [id, filled]);
 
-  const { data: keys, mutate: mutateKeys } =
-    useSurveysSWR<SetupsKeys>('setups/keys');
+  const { data: keys, mutate: mutateKeys } = useSetupsKeys();
 
   const nodeOperatorId = useNodeOperatorId();
   const { refetch } = useSurveysFilled(nodeOperatorId);
@@ -97,7 +91,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
         trackMatomoFormEvent('surveySetup', 'success');
         modals.success();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     },
     [modals, mutate, mutateKeys, refetch, id, navigate],
@@ -112,7 +106,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
         void navigate(PATH.SURVEYS);
         modals.successRemove();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     }
   }, [confirmRemove, modals, mutateKeys, navigate, remove]);
@@ -122,7 +116,10 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
   }, [formObject, keysLeft]);
 
   return (
-    <SectionBlock title={id ? `Setup #${data?.index}` : 'Add Setup'}>
+    <SectionBlock
+      title={id ? `Setup #${data?.index}` : 'Add Setup'}
+      mainPrefix={<SurveysBackButton />}
+    >
       <FormProvider {...formObject}>
         <WhenLoaded loading={formObject.formState.isLoading} error={error}>
           <Stack direction="column">
@@ -213,7 +210,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                     What type of servers are your EL and CL nodes running on?
                   </FormTitle>
                   <SelectHookForm
-                    fieldName="clinetsServerType"
+                    fieldName="clientsServerType"
                     options={SERVER_TYPE_OPTIONS}
                     rules={required}
                   />
@@ -284,7 +281,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
                 <Stack direction="column">
                   <FormTitle>What is your MEV-boost min-bid value?</FormTitle>
                   <TokenAmountInputHookForm
-                    fieldName="mevMinBid"
+                    fieldName="mevMinBidWei"
                     label="Min bid"
                     token={TOKENS.eth}
                   />

@@ -1,24 +1,28 @@
-import { Button, Modal } from '@lidofinance/lido-ui';
+import { ButtonIcon, Modal } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
-import type { ModalComponentType } from 'providers/modal-provider';
-import { Descriptor } from '../descriptor/descriptor';
-import { RoleBadge } from '../role-badge/role-badge';
 import {
-  ActionsStyle,
-  ContentStyle,
-  ListStyle,
-  RowStyle,
-  StyledStack,
-  StyledStackItem,
-} from './styles';
-import { NodeOperator, NodeOperatorId, ROLES } from '@lidofinance/lido-csm-sdk';
+  NodeOperatorId,
+  NodeOperatorShortInfo,
+  ROLES,
+} from '@lidofinance/lido-csm-sdk';
+import { Plus } from '@lidofinance/lido-ui';
+import { PATH } from 'consts';
+import { isModuleCM } from 'consts/module';
+import type { ModalComponentType } from 'providers/modal-provider';
+import { Stack } from 'shared/components';
+import { LocalLink } from 'shared/navigate';
+import { RoleBadge } from '../role-badge/role-badge';
+import { CmSwitchList } from './cm-switch-list';
+import { OperatorRow } from './operator-row';
+import { StyledStack, StyledStackItem } from './styles';
 
 export const SwitchModal: ModalComponentType<{
-  active: NodeOperator;
-  list: NodeOperator[];
+  active: NodeOperatorShortInfo;
+  list: NodeOperatorShortInfo[];
+  canCreate: boolean;
   onChange: (id: NodeOperatorId) => void;
-}> = ({ onClose, active, list, onChange, ...props }) => {
+}> = ({ onClose, active, list, onChange, canCreate, ...props }) => {
   const handleSwitch = useCallback(
     (id: NodeOperatorId) => {
       onChange(id);
@@ -29,30 +33,34 @@ export const SwitchModal: ModalComponentType<{
 
   return (
     <Modal title="Switch Node Operator" onClose={onClose} {...props}>
-      <ListStyle>
-        {list.map((item) => (
-          <RowStyle key={item.id.toString()}>
-            <ContentStyle>
-              <Descriptor nodeOperator={item} />
-            </ContentStyle>
-            <ActionsStyle>
-              {active?.id === item.id ? (
-                <Button size="xs" variant="ghost" disabled>
-                  Current
-                </Button>
-              ) : (
-                <Button
-                  size="xs"
-                  variant="outlined"
-                  onClick={() => handleSwitch(item.id)}
-                >
-                  Switch
-                </Button>
-              )}
-            </ActionsStyle>
-          </RowStyle>
-        ))}
-      </ListStyle>
+      <Stack direction="column" gap="lg">
+        {isModuleCM ? (
+          <CmSwitchList active={active} list={list} onSwitch={handleSwitch} />
+        ) : (
+          <Stack direction="column" gap="sm">
+            {list.map((item) => (
+              <OperatorRow
+                key={String(item.nodeOperatorId)}
+                nodeOperatorId={item.nodeOperatorId}
+                shortInfo={item}
+                action={
+                  item.nodeOperatorId === active.nodeOperatorId
+                    ? 'current'
+                    : 'switch'
+                }
+                onSwitch={handleSwitch}
+              />
+            ))}
+          </Stack>
+        )}
+        {canCreate && (
+          <LocalLink href={PATH.CREATE}>
+            <ButtonIcon icon={<Plus />} fullwidth size="sm" variant="outlined">
+              Create a new Node Operator
+            </ButtonIcon>
+          </LocalLink>
+        )}
+      </Stack>
       <StyledStack>
         <StyledStackItem>
           <RoleBadge role={ROLES.REWARDS} /> Rewards Address role
@@ -60,9 +68,6 @@ export const SwitchModal: ModalComponentType<{
         <StyledStackItem>
           <RoleBadge role={ROLES.MANAGER} /> Manager Address role
         </StyledStackItem>
-        {/* <StyledStackItem>
-          <CurveBadge type={CURVE_TYPE.CUSTOM} /> Custom Curve
-        </StyledStackItem> */}
       </StyledStack>
     </Modal>
   );

@@ -1,16 +1,24 @@
 import { MatomoEventType } from '@lidofinance/analytics-matomo';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { config } from 'config';
 
-export const MATOMO_APP_NAME = 'CSM_Widget';
-export const MATOMO_APP_PREFIX = 'csm_widget';
+export const MATOMO_APP_NAME = {
+  [MODULE_NAME.CSM]: 'CSM_Widget',
+  [MODULE_NAME.CM]: 'CM_Widget',
+};
+export const MATOMO_APP_PREFIX = {
+  [MODULE_NAME.CSM]: 'csm_widget',
+  [MODULE_NAME.CM]: 'cm_widget',
+};
 
 // Helper functions to reduce duplication in event definitions
 export const createEvent = (
   description: string,
   eventKey: string,
 ): MatomoEventType => [
-  MATOMO_APP_NAME,
+  MATOMO_APP_NAME[config.module],
   description,
-  `${MATOMO_APP_PREFIX}_${eventKey.toLowerCase()}`,
+  `${MATOMO_APP_PREFIX[config.module]}_${eventKey.toLowerCase()}`,
 ];
 
 export const enum MATOMO_CLICK_EVENTS_TYPES {
@@ -30,16 +38,19 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   partnerEthdocker = 'partnerEthdocker',
   starterPackCSMLink = 'starterPackCSMLink',
   starterPackBondLink = 'starterPackBondLink',
-  starterPackHadwareLink = 'starterPackHadwareLink',
+  starterPackHardwareLink = 'starterPackHardwareLink',
   starterPackSetupValidatorLink = 'starterPackSetupValidatorLink',
   starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
   operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
   operatorTypeModalApplyIcs = 'operatorTypeModalApplyIcs',
+  operatorTypeModalApplyIdvtc = 'operatorTypeModalApplyIdvtc',
+  operatorTypeModalCreateIcs = 'operatorTypeModalCreateIcs',
+  operatorTypeModalCreateIdvtc = 'operatorTypeModalCreateIdvtc',
   // Forms
   depositDataLearnMore = 'depositDataLearnMore',
   howToClaimEth = 'howToClaimEth',
   customAddressDescription = 'customAddressDescription',
-  managerAdressPermissionTypeDescription = 'managerAdressPermissionTypeDescription',
+  managerAddressPermissionTypeDescription = 'managerAddressPermissionTypeDescription',
   createSuccessKeysTab = 'createSuccessKeysTab',
   createSuccessBeaconchainDashboard = 'createSuccessBeaconchainDashboard',
   createSuccessBeaconchain = 'createSuccessBeaconchain',
@@ -51,7 +62,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   etherscanAddressLink = 'etherscanAddressLink',
   beaconchainPubkeyLink = 'beaconchainPubkeyLink',
   migalabsPubkeyLink = 'migalabsPubkeyLink',
-  tryCsmOtherNetworkLink = 'tryCsmOtherNetworkLink',
+  tryOtherNetworkLink = 'tryOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
   faqItemLink = 'faqItemLink',
   // Key status comment
@@ -62,9 +73,10 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Alerts
   howToExitLinkRequestToExitAlert = 'howToExitLinkRequestToExitAlert',
   normalizeQueueLinkAlert = 'normalizeQueueLinkAlert',
-  transferKeysLinkAlert = 'transferKeysLinkAlert',
   unlockBondLinkAlert = 'unlockBondLinkAlert',
+  expiredLockedBondLinkAlert = 'expiredLockedBondLinkAlert',
   claimIcsLinkAlert = 'claimIcsLinkAlert',
+  claimIdvtcLinkAlert = 'claimIdvtcLinkAlert',
   feeRecipientDocsLink = 'feeRecipientDocsLink',
   feeRecipientDismissButton = 'feeRecipientDismissButton',
   wrappedAlertClose = 'wrappedAlertClose',
@@ -89,6 +101,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   dashboardNotificationSentinelLink = 'dashboardNotificationSentinelLink',
   // Actions
   switchNodeOperator = 'switchNodeOperator',
+  groupSwitchOperator = 'groupSwitchOperator',
   // Rewards History
   rewardsHistoryExport = 'rewardsHistoryExport',
   // modifiers
@@ -110,14 +123,14 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   icsDiscordChannelLink = 'icsDiscordChannelLink',
   icsEtherscanSignaturesLink = 'icsEtherscanSignaturesLink',
   icsGithubAddressesLink = 'icsGithubAddressesLink',
-  // DVT
-  dvtYoutubeGuideLink = 'dvtYoutubeGuideLink',
-  dvtDiscordChannelLink = 'dvtDiscordChannelLink',
-  dvtEtherscanSignaturesLink = 'dvtEtherscanSignaturesLink',
+  // IDVTC (keys renamed; string values frozen for Matomo metric continuity)
+  idvtcYoutubeGuideLink = 'dvtYoutubeGuideLink',
+  idvtcDiscordChannelLink = 'dvtDiscordChannelLink',
+  idvtcEtherscanSignaturesLink = 'dvtEtherscanSignaturesLink',
   // Exit Keys
   exitKeysDappnodeLink = 'exitKeysDappnodeLink',
   exitKeysSedgeLink = 'exitKeysSedgeLink',
-  exitKeysSteureumLink = 'exitKeysSteureumLink',
+  exitKeysStereumLink = 'exitKeysStereumLink',
   exitKeysEthpillarLink = 'exitKeysEthpillarLink',
   exitKeysEthdockerLink = 'exitKeysEthdockerLink',
   exitKeysSystemdLink = 'exitKeysSystemdLink',
@@ -158,7 +171,7 @@ export const MATOMO_CLICK_EVENTS: Record<
     'connect_wallet',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.disconnectWallet]: createEvent(
-    'Push «Disonnect» button',
+    'Push «Disconnect» button',
     'disconnect_wallet',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.clickShowMoreWallets]: createEvent(
@@ -178,8 +191,8 @@ export const MATOMO_CLICK_EVENTS: Record<
     'connect_wallet_to_become_no',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink]: createEvent(
-    'Click on Deailed description about CSM link',
-    'welcome_csm_detailed_link',
+    'Click on Detailed description about Module link',
+    'welcome_module_detailed_link',
   ),
   // Starter Pack
   [MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator]: createEvent(
@@ -196,7 +209,7 @@ export const MATOMO_CLICK_EVENTS: Record<
   ),
   [MATOMO_CLICK_EVENTS_TYPES.partnerStereum]: createEvent(
     'Click partner «Stereum» link on StarterPack screen',
-    'starterpack_partner_stereu_link',
+    'starterpack_partner_stereum_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.partnerEthdocker]: createEvent(
     'Click partner «Eth Docker» link on StarterPack screen',
@@ -207,10 +220,10 @@ export const MATOMO_CLICK_EVENTS: Record<
     'starterpack_csm_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.starterPackBondLink]: createEvent(
-    'Click «Lear about Bond» link on StarterPack screen',
+    'Click «Learn about Bond» link on StarterPack screen',
     'starterpack_bond_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackHadwareLink]: createEvent(
+  [MATOMO_CLICK_EVENTS_TYPES.starterPackHardwareLink]: createEvent(
     'Click «Run hardware» link on StarterPack screen',
     'starterpack_hardware_link',
   ),
@@ -230,10 +243,22 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Push «Apply for ICS» button on Operator Type modal',
     'operator_type_modal_apply_ics',
   ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIdvtc]: createEvent(
+    'Push «Apply for IDVTC» button on Operator Type modal',
+    'operator_type_modal_apply_idvtc',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIcs]: createEvent(
+    'Push «Create ICS operator» button on Operator Type modal',
+    'operator_type_modal_create_ics',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIdvtc]: createEvent(
+    'Push «Create IDVTC operator» button on Operator Type modal',
+    'operator_type_modal_create_idvtc',
+  ),
   // Forms
   [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: createEvent(
     'Click «Upload Deposit Data learn more» link on Upload form',
-    'deposti_data_learn_more_link',
+    'deposit_data_learn_more_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.howToClaimEth]: createEvent(
     'Click «Follow FAQ (ETH)» link on Claim form',
@@ -241,9 +266,9 @@ export const MATOMO_CLICK_EVENTS: Record<
   ),
   [MATOMO_CLICK_EVENTS_TYPES.customAddressDescription]: createEvent(
     'Click «Detailed description of custom addresses» link on Create NO form',
-    'cusstom_address_description_link',
+    'custom_address_description_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.managerAdressPermissionTypeDescription]:
+  [MATOMO_CLICK_EVENTS_TYPES.managerAddressPermissionTypeDescription]:
     createEvent(
       'Click «Detailed description of manager permission type» link on Create NO form',
       'manager_address_permission_type_link',
@@ -253,7 +278,7 @@ export const MATOMO_CLICK_EVENTS: Record<
     'create_success_keys_tab_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard]: createEvent(
-    'Click «beaconcha.in bashboard» link after Create NO',
+    'Click «beaconcha.in dashboard» link after Create NO',
     'create_success_beaconchain_dashboard_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain]: createEvent(
@@ -289,9 +314,9 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «View on migalabs.io» link on pubkey',
     'migalabs_pubkey_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.tryCsmOtherNetworkLink]: createEvent(
-    'Click «Join CSM» in other network link',
-    'try_csm_link',
+  [MATOMO_CLICK_EVENTS_TYPES.tryOtherNetworkLink]: createEvent(
+    'Click «Join» in other network link',
+    'try_other_link',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner]: createEvent(
     'Click «stake share limit» link on banner',
@@ -322,23 +347,27 @@ export const MATOMO_CLICK_EVENTS: Record<
   // Alerts
   [MATOMO_CLICK_EVENTS_TYPES.howToExitLinkRequestToExitAlert]: createEvent(
     'Click «How to exit» link on Request To Exit alert',
-    'how_to_exit_link_requset_to_exit_alert',
+    'how_to_exit_link_request_to_exit_alert',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.normalizeQueueLinkAlert]: createEvent(
     'Click «Normalize queue» link on Normalize Queue alert',
     'normalize_queue_link_alert',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.transferKeysLinkAlert]: createEvent(
-    'Click «Transfer keys» link on Transfer Keys alert',
-    'transfer_keys_link_alert',
-  ),
   [MATOMO_CLICK_EVENTS_TYPES.unlockBondLinkAlert]: createEvent(
     'Click «Unlock bond» link on Locked Bond alert',
     'unlock_bond_link_alert',
   ),
+  [MATOMO_CLICK_EVENTS_TYPES.expiredLockedBondLinkAlert]: createEvent(
+    'Click «Unlock bond» link on Expired Locked Bond alert',
+    'expired_locked_bond_link_alert',
+  ),
   [MATOMO_CLICK_EVENTS_TYPES.claimIcsLinkAlert]: createEvent(
     'Click «Claim ICS» link on Claim ICS alert',
     'claim_ics_link_alert',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.claimIdvtcLinkAlert]: createEvent(
+    'Click «Claim IDVTC» link on Claim IDVTC alert',
+    'claim_idvtc_link_alert',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.feeRecipientDocsLink]: createEvent(
     'Click «How to change feeRecipient» link on Wrong Fee Recipient alert',
@@ -430,6 +459,10 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Switch Node Operator',
     'switch_node_operator',
   ),
+  [MATOMO_CLICK_EVENTS_TYPES.groupSwitchOperator]: createEvent(
+    'Click «Switch to this operator» on Group page',
+    'group_switch_operator',
+  ),
   // Rewards History
   [MATOMO_CLICK_EVENTS_TYPES.rewardsHistoryExport]: createEvent(
     'Push «Export all to CSV» button on Rewards History page',
@@ -502,16 +535,16 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click GitHub ICS addresses link on ICS page',
     'ics_github_addresses_link',
   ),
-  // DVT
-  [MATOMO_CLICK_EVENTS_TYPES.dvtYoutubeGuideLink]: createEvent(
+  // IDVTC (tracked string values frozen for Matomo metric continuity)
+  [MATOMO_CLICK_EVENTS_TYPES.idvtcYoutubeGuideLink]: createEvent(
     'Click YouTube guide link on DVT page',
     'dvt_youtube_guide_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.dvtDiscordChannelLink]: createEvent(
+  [MATOMO_CLICK_EVENTS_TYPES.idvtcDiscordChannelLink]: createEvent(
     'Click Discord CSM channel link on DVT page',
     'dvt_discord_channel_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.dvtEtherscanSignaturesLink]: createEvent(
+  [MATOMO_CLICK_EVENTS_TYPES.idvtcEtherscanSignaturesLink]: createEvent(
     'Click Etherscan verified signatures link on DVT page',
     'dvt_etherscan_signatures_link',
   ),
@@ -524,7 +557,7 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click «Sedge» exit guide link',
     'exit_keys_sedge_link',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.exitKeysSteureumLink]: createEvent(
+  [MATOMO_CLICK_EVENTS_TYPES.exitKeysStereumLink]: createEvent(
     'Click «Stereum» exit guide link',
     'exit_keys_stereum_link',
   ),

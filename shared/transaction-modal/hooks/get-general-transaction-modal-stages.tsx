@@ -1,11 +1,10 @@
 import {
-  TxStageFail,
   TxStagePermit,
   TxStageSuccessMultisig,
 } from 'shared/transaction-modal/tx-stages-basic';
-import { ErrorCode, extractErrorMessage, getErrorCode } from 'utils';
 import { TxStageSignOperationAmount } from '../tx-stages-composed';
 import type { TransactionModalTransitStage } from './use-transaction-modal-stage';
+import { getFailedStage } from './get-failed-stage';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const getGeneralTransactionModalStages = (
@@ -30,20 +29,6 @@ export const getGeneralTransactionModalStages = (
         txHash={txHash}
       />,
     ),
-  successMultisig: () =>
-    transitStage(<TxStageSuccessMultisig />, {
-      isClosableOnLedger: true,
-    }),
-  failed: (error: unknown, onRetry?: () => void) => {
-    const code = getErrorCode(error);
-    // Only show raw error message for unknown errors
-    const errorMessage =
-      code === ErrorCode.SOMETHING_WRONG
-        ? extractErrorMessage(error)
-        : undefined;
-    return transitStage(
-      <TxStageFail code={code} error={errorMessage} onRetry={onRetry} />,
-      { isClosableOnLedger: true },
-    );
-  },
+  successMultisig: () => transitStage(<TxStageSuccessMultisig />),
+  failed: getFailedStage(transitStage),
 });

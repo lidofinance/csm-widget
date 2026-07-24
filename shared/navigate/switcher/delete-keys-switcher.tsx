@@ -3,7 +3,7 @@ import { PATH } from 'consts';
 import { FC, ReactNode } from 'react';
 import { Chip, Grid, RadioLocalLink, Stack } from 'shared/components';
 import { CounterInvalidKeys } from 'shared/counters';
-import { ShowRule, useFilterShowRules } from 'shared/hooks';
+import { ShowRuleProps, useFilterShowRules } from 'shared/hooks';
 
 export enum DeleteKeysSwitcherRoutes {
   REMOVE = 'REMOVE',
@@ -11,12 +11,11 @@ export enum DeleteKeysSwitcherRoutes {
   EJECT = 'EJECT',
 }
 
-type Item = {
+type Item = ShowRuleProps & {
   title: string;
   value: DeleteKeysSwitcherRoutes;
   route: PATH;
   suffix?: ReactNode;
-  showRules?: ShowRule[];
   description: ReactNode;
 };
 
@@ -69,7 +68,12 @@ export const DeleteKeysSwitcher: FC<Props> = ({ active }) => {
   return (
     <Grid>
       {filteredItems.map(({ value, route, suffix, title, description }) => (
-        <RadioLocalLink key={value} $active={active === value} href={route}>
+        <RadioLocalLink
+          key={value}
+          $active={active === value}
+          href={route}
+          data-testid="deleteKeysCard"
+        >
           <Stack direction="column" gap="md">
             <Stack gap="sm" center>
               <Text size="xs" weight={700}>

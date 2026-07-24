@@ -1,7 +1,8 @@
 /* eslint-disable no-console */
 /* eslint-disable no-prototype-builtins */
 export const openKeys = [
-  'SUPPORTED_CHAINS',
+  'MODULE',
+
   'DEFAULT_CHAIN',
 
   'CSP_TRUSTED_HOSTS',
@@ -14,14 +15,13 @@ export const openKeys = [
   'MATOMO_URL',
   'WALLETCONNECT_PROJECT_ID',
   'VALIDATION_FILE_PATH',
+  'DEVNET_ADDRESSES_FILE_PATH',
 ];
 
 export const secretKeys = [
   'EL_RPC_URLS_1',
-  'EL_RPC_URLS_17000',
   'EL_RPC_URLS_560048',
   'CL_API_URLS_1',
-  'CL_API_URLS_17000',
   'CL_API_URLS_560048',
   'ETHSEER_API_URL',
   'ETHSEER_API_TOKEN',
@@ -50,24 +50,20 @@ export const logSecretEnvironmentVariables = () => {
   console.log('Log secret environment variables:');
   console.log('---------------------------------------------');
 
-  if (!process.env['SUPPORTED_CHAINS']) {
-    console.warn('SUPPORTED_CHAINS is not defined in process.env!');
+  const defaultChain = process.env['DEFAULT_CHAIN']?.trim();
+  if (!defaultChain) {
+    console.warn('DEFAULT_CHAIN is not defined in process.env!');
     console.warn('Skip the logSecretEnvironmentVariables check!');
     return;
   }
 
-  const supportedChains = process.env['SUPPORTED_CHAINS']
-    .split(',')
-    .map((s) => s.trim());
-
   for (const key of secretKeys) {
     if (key.startsWith('EL_RPC_URLS_')) {
       const chainId = key.replace('EL_RPC_URLS_', '');
-      if (!supportedChains.includes(chainId)) {
+      if (chainId !== defaultChain) {
         console.info(
-          `Secret ${key} - skipped (${chainId} isn't in the SUPPORTED_CHAINS)!`,
+          `Secret ${key} - skipped (${chainId} isn't the DEFAULT_CHAIN)`,
         );
-        // Skip check if chainId isn't in the SUPPORTED_CHAINS
         continue;
       }
     }

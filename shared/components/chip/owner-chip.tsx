@@ -6,7 +6,7 @@ export const OwnerChip = forwardRef<
   ComponentPropsWithoutRef<'span'>
 >((props, ref) => {
   return (
-    <StyledOwnerChip ref={ref} {...props}>
+    <StyledOwnerChip ref={ref} data-testid="ownerChip" {...props}>
       Owner
     </StyledOwnerChip>
   );

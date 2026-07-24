@@ -2,26 +2,19 @@ import { useMemo, useState, useCallback } from 'react';
 
 import { getUserConfigDefault } from './utils';
 import { UserConfigDefaultType } from './types';
+import {
+  STORAGE_USER_CONFIG,
+  DEFAULT_SAVED_USER_CONFIG as DEFAULT_STATE,
+  SavedUserConfig,
+} from './saved-config';
 import { useLocalStorage } from 'shared/hooks/use-local-storage';
-import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
-
-const STORAGE_USER_CONFIG = 'lido-user-config';
-
-type SavedUserConfig = {
-  rpcUrls: Partial<Record<CSM_SUPPORTED_CHAINS, string>>;
-  clApiUrls: Partial<Record<CSM_SUPPORTED_CHAINS, string>>;
-};
 
 export type UserConfigContextType = UserConfigDefaultType & {
   savedUserConfig: SavedUserConfig;
   setSavedUserConfig: (config: SavedUserConfig) => void;
+  resetSavedUserConfig: () => void;
   isWalletConnectionAllowed: boolean;
   setIsWalletConnectionAllowed: (isAllowed: boolean) => void;
-};
-
-const DEFAULT_STATE: SavedUserConfig = {
-  rpcUrls: {},
-  clApiUrls: {},
 };
 
 export const useUserConfigContext = () => {
@@ -33,8 +26,10 @@ export const useUserConfigContext = () => {
   const [isWalletConnectionAllowed, setIsWalletConnectionAllowed] =
     useState(true);
 
-  const [savedUserConfig, setSavedUserConfig] =
-    useState<SavedUserConfig>(restoredSettings);
+  const [savedUserConfig, setSavedUserConfig] = useState<SavedUserConfig>({
+    ...DEFAULT_STATE,
+    ...restoredSettings,
+  });
 
   const setSavedConfigAndRemember = useCallback(
     (config: SavedUserConfig) => {
@@ -44,6 +39,11 @@ export const useUserConfigContext = () => {
     [setLocalStorage],
   );
 
+  const resetSavedUserConfig = useCallback(() => {
+    setLocalStorage(DEFAULT_STATE);
+    setSavedUserConfig(DEFAULT_STATE);
+  }, [setLocalStorage]);
+
   return useMemo(() => {
     const userConfigDefault = getUserConfigDefault();
 
@@ -51,8 +51,14 @@ export const useUserConfigContext = () => {
       ...userConfigDefault,
       savedUserConfig,
       setSavedUserConfig: setSavedConfigAndRemember,
+      resetSavedUserConfig,
       isWalletConnectionAllowed,
       setIsWalletConnectionAllowed,
     };
-  }, [isWalletConnectionAllowed, savedUserConfig, setSavedConfigAndRemember]);
+  }, [
+    isWalletConnectionAllowed,
+    savedUserConfig,
+    setSavedConfigAndRemember,
+    resetSavedUserConfig,
+  ]);
 };

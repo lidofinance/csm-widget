@@ -1,61 +1,107 @@
-import { ROLES } from '@lidofinance/lido-csm-sdk';
+import {
+  MODULE_NAME,
+  NodeOperatorShortInfo,
+  OPERATOR_TYPE,
+} from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
+import { config, useConfig } from 'config';
 import { useFeatureFlags } from 'config/feature-flags';
 import {
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
 } from 'config/feature-flags/types';
-import { getExternalLinks } from 'consts/external-links';
+import { isSurveysApiConfigured } from 'modules/surveys-sdk';
 import {
   useDappStatus,
-  useHasReportStealingRole,
+  useHasReportDelayedPenaltyRole,
   useInvites,
   useNodeOperator,
   useOperatorBalance,
-  useOperatorIsOwner,
-  useOperatorKeysToMigrate,
+  useOperatorInfo,
 } from 'modules/web3';
+import { useOperatorType } from 'modules/web3/hooks/use-operator-type';
 import { useModifyContext } from 'providers/modify-provider';
 import { useCallback, useMemo } from 'react';
-import { useCanClaimICS, useCanCreateNodeOperator } from 'shared/hooks';
+import {
+  useCanClaimICS,
+  useCanClaimIDVTC,
+  useCanCreateNodeOperator,
+} from 'shared/hooks';
+import { Address, isAddressEqual } from 'viem';
 
 export type ShowRule =
   | 'IS_MAINNET'
   | 'IS_CONNECTED_WALLET'
   | 'NOT_NODE_OPERATOR'
   | 'IS_NODE_OPERATOR'
+  | 'CAN_CREATE'
+  | 'HAS_KEYS'
   | 'HAS_INVITES'
-  | 'HAS_KEYS_TO_TRANSFER'
   | 'HAS_MANAGER_ROLE'
   | 'HAS_REWARDS_ROLE'
   | 'HAS_OWNER_ROLE'
   | 'HAS_LOCKED_BOND'
   | 'HAS_REFERRER'
-  | 'CAN_CREATE'
+  | 'EL_DELAYED_PENALTY_REPORTER'
   | 'CAN_CLAIM_ICS'
+  | 'CAN_CLAIM_IDVTC'
   | 'ICS_APPLY_ENABLED'
-  | 'EL_STEALING_REPORTER'
-  | 'IS_SURVEYS_ACTIVE';
+  | 'IS_SURVEYS_ACTIVE'
+  | 'IS_CSM'
+  | 'IS_CM'
+  | 'IS_IDVTC';
 
 export type ShowFlags = Record<ShowRule, boolean>;
 
-const { surveyApi } = getExternalLinks();
+const isManagerRole = (
+  nodeOperator: NodeOperatorShortInfo | undefined,
+  address: Address | undefined,
+) => {
+  return (
+    (nodeOperator &&
+      address &&
+      isAddressEqual(nodeOperator.managerAddress, address)) ||
+    false
+  );
+};
+
+const isRewardsRole = (
+  nodeOperator: NodeOperatorShortInfo | undefined,
+  address: Address | undefined,
+) => {
+  return (
+    (nodeOperator &&
+      address &&
+      isAddressEqual(nodeOperator.rewardsAddress, address)) ||
+    false
+  );
+};
+
+const isOwnerRole = (
+  nodeOperator: NodeOperatorShortInfo | undefined,
+  address: Address | undefined,
+) => {
+  return nodeOperator?.extendedManagerPermissions
+    ? isManagerRole(nodeOperator, address)
+    : isRewardsRole(nodeOperator, address);
+};
 
 export const useShowFlags = (): ShowFlags => {
   const { isAccountActive, address, chainId } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
-  const { data: isReportingRole } = useHasReportStealingRole();
-  const { data: balance } = useOperatorBalance(nodeOperator?.id);
-  const { data: keysToTransfer } = useOperatorKeysToMigrate(nodeOperator?.id);
+  const { data: isReportingRole } = useHasReportDelayedPenaltyRole();
+  const { data: balance } = useOperatorBalance(nodeOperator?.nodeOperatorId);
+  const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
   const canClaimICS = useCanClaimICS();
-  const canCreateNO = useCanCreateNodeOperator();
+  const canClaimIDVTC = useCanClaimIDVTC();
+  const { data: operatorType } = useOperatorType(nodeOperator?.nodeOperatorId);
+  const { canCreate: canCreateNO } = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
-  const { data: isOwner } = useOperatorIsOwner({
-    address,
-    nodeOperatorId: nodeOperator?.id,
-  });
   const featureFlags = useFeatureFlags();
+  const {
+    config: { module },
+  } = useConfig();
 
   return useMemo(
     () => ({
@@ -64,32 +110,47 @@ export const useShowFlags = (): ShowFlags => {
       ['NOT_NODE_OPERATOR']: !nodeOperator,
       ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
       ['CAN_CREATE']: !!canCreateNO,
-      ['HAS_MANAGER_ROLE']: !!nodeOperator?.roles?.includes(ROLES.MANAGER),
-      ['HAS_REWARDS_ROLE']: !!nodeOperator?.roles?.includes(ROLES.REWARDS),
-      ['HAS_OWNER_ROLE']: isAccountActive && !!isOwner,
+      ['HAS_KEYS']: !!info?.totalAddedKeys,
+      ['HAS_MANAGER_ROLE']:
+        isAccountActive && isManagerRole(nodeOperator, address),
+      ['HAS_REWARDS_ROLE']:
+        isAccountActive && isRewardsRole(nodeOperator, address),
+      ['HAS_OWNER_ROLE']: isAccountActive && isOwnerRole(nodeOperator, address),
       ['HAS_INVITES']: !!invites?.length,
-      ['HAS_KEYS_TO_TRANSFER']: !!keysToTransfer,
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
+      ['EL_DELAYED_PENALTY_REPORTER']: !!isReportingRole,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
-      ['ICS_APPLY_ENABLED']: !!featureFlags?.[ICS_APPLY_FORM],
-      ['EL_STEALING_REPORTER']: !!isReportingRole,
+      ['CAN_CLAIM_IDVTC']: !!canClaimIDVTC && isAccountActive,
+      ['ICS_APPLY_ENABLED']:
+        !!featureFlags?.[ICS_APPLY_FORM] && module === MODULE_NAME.CSM,
       ['IS_SURVEYS_ACTIVE']:
-        !!surveyApi && !!featureFlags?.[SURVEYS_SETUP_ENABLED],
+        isSurveysApiConfigured &&
+        !!featureFlags?.[SURVEYS_SETUP_ENABLED] &&
+        module === MODULE_NAME.CSM,
+      ['IS_CSM']: module === MODULE_NAME.CSM,
+      ['IS_CM']: module === MODULE_NAME.CM,
+      ['IS_IDVTC']:
+        isAccountActive &&
+        !!nodeOperator &&
+        operatorType === OPERATOR_TYPE.CSM_IDVTC,
     }),
     [
       chainId,
       isAccountActive,
       nodeOperator,
       canCreateNO,
-      isOwner,
+      info?.totalAddedKeys,
+      address,
       invites?.length,
-      keysToTransfer,
       balance?.locked,
       referrer,
-      canClaimICS,
-      featureFlags,
       isReportingRole,
+      canClaimICS,
+      canClaimIDVTC,
+      featureFlags,
+      module,
+      operatorType,
     ],
   );
 };
@@ -105,16 +166,25 @@ export const useShowRule = () => {
   );
 };
 
-export const useFilterShowRules = <T extends { showRules?: ShowRule[] }>(
-  items: T[],
-) => {
+export type ShowRuleProps = {
+  showRules?: (ShowRule | ShowRule[])[];
+  module?: MODULE_NAME;
+};
+
+export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
   const check = useShowRule();
 
   return useMemo(
     () =>
-      items.filter(
-        ({ showRules }) => !showRules?.length || showRules.some(check),
-      ),
+      items
+        .filter(({ module }) => !module || module === config.module)
+        .filter(
+          ({ showRules }) =>
+            !showRules?.length ||
+            showRules.some((rule) =>
+              Array.isArray(rule) ? rule.every(check) : check(rule),
+            ),
+        ),
     [check, items],
   );
 };

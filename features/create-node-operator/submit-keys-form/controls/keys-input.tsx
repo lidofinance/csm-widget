@@ -1,3 +1,4 @@
+import { isModuleCM } from 'consts';
 import { UPLOAD_DEPOSIT_DATA_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FormTitle, MatomoLink } from 'shared/components';
@@ -8,12 +9,14 @@ export const KeysInput = () => {
     <>
       <FormTitle
         extra={
-          <MatomoLink
-            href={UPLOAD_DEPOSIT_DATA_LINK}
-            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
-          >
-            Learn more
-          </MatomoLink>
+          isModuleCM ? null : (
+            <MatomoLink
+              href={UPLOAD_DEPOSIT_DATA_LINK}
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
+            >
+              Learn more
+            </MatomoLink>
+          )
         }
       >
         Upload deposit data

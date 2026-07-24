@@ -50,7 +50,7 @@ export const BadgeWrapper = styled.div<{ $same?: boolean }>`
 
   border-radius: 14px;
   border: 2px solid rgba(var(--lido-rgb-foreground), 0.8);
-  ${CURVE_VARIANTS[OPERATOR_TYPE.ICS]}
+  ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_ICS]}
   background-origin: border-box;
 
   ${({ $same }) =>
@@ -63,7 +63,7 @@ export const BadgeWrapper = styled.div<{ $same?: boolean }>`
     content: '';
     filter: blur(38px);
     opacity: 0.8;
-    ${CURVE_VARIANTS[OPERATOR_TYPE.ICS]}
+    ${CURVE_VARIANTS[OPERATOR_TYPE.CSM_ICS]}
     position: absolute;
     left: 0;
     top: 0;

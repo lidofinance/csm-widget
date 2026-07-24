@@ -1,18 +1,31 @@
-import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_LAZY } from 'consts';
-import { useSurveysFetcher } from '../shared/use-surveys-fetcher';
+import {
+  callSurvey,
+  surveyRequest,
+  surveysKeys,
+  useOperatorKey,
+  useSurveyQuery,
+} from 'modules/surveys-sdk';
+import { delegatesMyGetMyDelegations } from 'modules/surveys-sdk/generated';
+import { useDappStatus } from 'modules/web3';
+import { useCallback } from 'react';
 import { DelegatedOperatorsResponse } from '../types';
 
 export const useDelegatedOperators = (nodeOperatorId?: bigint) => {
-  const excludeId =
-    nodeOperatorId !== undefined ? `csm-${nodeOperatorId}` : undefined;
+  const excludeId = useOperatorKey(nodeOperatorId);
+  const { address } = useDappStatus();
 
-  const [fetcher] = useSurveysFetcher<DelegatedOperatorsResponse>();
+  const select = useCallback(
+    (data: DelegatedOperatorsResponse) =>
+      data.nodeOperatorIds.filter((id) => id !== excludeId),
+    [excludeId],
+  );
 
-  return useQuery({
-    queryKey: ['surveys', 'delegates/my'],
-    queryFn: () => fetcher('delegates/my'),
-    ...STRATEGY_LAZY,
-    select: (data) => data.nodeOperatorIds.filter((id) => id !== excludeId),
-  });
+  return useSurveyQuery<DelegatedOperatorsResponse, string[]>(
+    surveysKeys.authPath('delegates/my', address),
+    ({ token, signal }) =>
+      callSurvey(() =>
+        delegatesMyGetMyDelegations(surveyRequest(token, signal)),
+      ),
+    { select },
+  );
 };

@@ -3,10 +3,9 @@ import {
   KEY_OPERATOR_BALANCE,
   KEY_OPERATOR_INFO,
   KEY_OPERATOR_KEYS,
-  KEY_OPERATOR_KEYS_TO_MIGRATE,
   KEY_SHARE_LIMIT,
   KEY_STAKE_LIMIT,
-  useCsmStatus,
+  useSmStatus,
   useCurveParameters,
   useEthereumBalance,
   useNodeOperatorId,
@@ -24,11 +23,12 @@ import {
   NetworkData,
   useFormData,
 } from 'shared/hook-form/form-controller';
-import { useInvalidate } from 'shared/hooks';
+import { useInvalidate, useKeysAvailable } from 'shared/hooks';
+import { isModuleCSM } from 'consts';
 import { type AddKeysFormNetworkData } from './types';
 
 const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
-  const { data: status, isPending: isStatusLoading } = useCsmStatus();
+  const { data: status, isPending: isStatusLoading } = useSmStatus();
   const nodeOperatorId = useNodeOperatorId();
 
   const ethBalanceQuery = useEthereumBalance();
@@ -60,16 +60,18 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
   const { data: operatorInfo, isPending: isOperatorInfoLoading } =
     useOperatorInfo(nodeOperatorId);
 
-  // const { data: nonWithdrawnKeys } = useNonWithdrawnKeysCount(`${nodeOperatorId}`);
+  const nonWithdrawnKeys = operatorInfo
+    ? operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys
+    : undefined;
 
-  // const { data: keysAvailable } = useKeysAvailable({
-  //   curveId,
-  //   nonWithdrawnKeys,
-  //   bond,
-  //   ethBalance,
-  //   stethBalance,
-  //   wstethBalance,
-  // });
+  const keysAvailable = useKeysAvailable({
+    curveId,
+    nonWithdrawnKeys,
+    bond,
+    ethBalance,
+    stethBalance,
+    wstethBalance,
+  });
 
   const invalidate = useInvalidate();
 
@@ -83,7 +85,6 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
       KEY_STAKE_LIMIT,
       KEY_OPERATOR_INFO,
       KEY_OPERATOR_KEYS,
-      KEY_OPERATOR_KEYS_TO_MIGRATE,
       KEY_DEPOSIT_QUEUE_BATCHES,
     ]);
   }, [
@@ -101,7 +102,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
     isCurveParametersLoading ||
     isBondLoading ||
     isStatusLoading ||
-    isShareLimitLoading ||
+    (isModuleCSM && isShareLimitLoading) ||
     isCurveIdLoading ||
     isOperatorInfoLoading;
 
@@ -118,6 +119,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
       maxStakeEth,
       shareLimit,
       isPaused: status?.isPaused,
+      keysAvailable,
     } as AddKeysFormNetworkData,
     isPending,
     revalidate,

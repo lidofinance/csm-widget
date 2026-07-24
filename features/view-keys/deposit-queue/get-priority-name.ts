@@ -23,7 +23,7 @@ export const getPriorityName = (type: GraphPart) => {
     case 'priority3':
       return 'Priority 4 queue';
     case 'priority4':
-      return 'Legacy queue';
+      return 'Priority 5 queue';
     case 'priority5':
       return 'General queue';
     case 'priority0OverLimit':
@@ -35,7 +35,7 @@ export const getPriorityName = (type: GraphPart) => {
     case 'priority3OverLimit':
       return 'Priority 4 queue (over limit)';
     case 'priority4OverLimit':
-      return 'Legacy queue (over limit)';
+      return 'Priority 5 queue (over limit)';
     case 'priority5OverLimit':
       return 'General queue (over limit)';
     default:

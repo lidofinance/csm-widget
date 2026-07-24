@@ -35,6 +35,7 @@ export const AdditionalAddresses: FC = () => {
           achievements are stored. To prove you own each address, sign a message
           on Etherscan. For more info see{' '}
           <MatomoLink
+            $inline
             href="https://www.youtube.com/watch?v=yUX34iCbCWE"
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.icsYoutubeGuideLink}
           >

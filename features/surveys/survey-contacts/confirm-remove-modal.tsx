@@ -17,7 +17,7 @@ export const ConfirmRemoveModal: ModalComponentType<ConfirmModalProps> = ({
             Are you sure you want to delete the provided contact information?
           </Text>
           <Text size="xs" color="secondary">
-            If deleted, the data will be permanently removed from the database.
+            If deleted, the data will be permanently removed from the database
           </Text>
         </Stack>
 

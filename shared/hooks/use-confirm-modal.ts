@@ -13,7 +13,7 @@ export const useConfirmModal = <T>(
 
   return useCallback(
     async (props: T) => {
-      return new Promise((resolve) => {
+      return new Promise<boolean>((resolve) => {
         m.openModal({
           ...props,
           onConfirm: () => {

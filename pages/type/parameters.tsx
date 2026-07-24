@@ -1,12 +1,15 @@
+import { PATH } from 'consts/urls';
 import { TypeParametersPage } from 'features/type-parameters';
 import { FC } from 'react';
-import { GateLoaded } from 'shared/navigate';
+import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
 const Page: FC = () => {
   return (
     <GateLoaded>
-      <TypeParametersPage />
+      <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
+        <TypeParametersPage />
+      </Gate>
     </GateLoaded>
   );
 };

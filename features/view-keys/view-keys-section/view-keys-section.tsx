@@ -17,7 +17,7 @@ export const ViewKeysSection: FC = () => {
       defaultSort={{ column: 'statuses', direction: 'asc' }}
     >
       <Stack direction="column" gap="xl">
-        <Block paddingLess data-testid="viewKeysBlock">
+        <Block paddingLess overflowHidden data-testid="viewKeysBlock">
           <WhenLoaded
             loading={loading}
             empty={!keys?.length && 'There are no keys to display'}

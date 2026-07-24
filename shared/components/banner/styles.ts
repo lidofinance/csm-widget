@@ -13,10 +13,16 @@ export const BannerHeader = styled.h3`
   color: var(--lido-color-text);
 `;
 
-export const BannerContent = styled.div`
+export const BannerContent = styled.div<{ $center?: boolean }>`
   color: var(--lido-color-text);
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
+
+  ${({ $center }) =>
+    $center &&
+    css`
+      text-align: center;
+    `}
 `;
 
 const VARIANTS = {
@@ -34,15 +40,11 @@ const VARIANTS = {
   `,
   sunset: css`
     background: radial-gradient(
-        1435.85% 196.07% at 95.46% -44.7%,
-        rgba(34, 56, 255, 0.8) 0%,
-        rgba(235, 0, 255, 0.4) 100%
+        114.67% 199.49% at 51.78% 123.98%,
+        #ef81f9 0%,
+        rgba(249, 129, 183, 0) 100%
       ),
-      linear-gradient(102deg, #bae6fd -8.89%, #93c5fd 105.62%);
-
-    ${BannerHeader} {
-      text-align: center;
-    }
+      linear-gradient(97deg, #00a3ff 36.36%, #2238ff 99.58%);
   `,
   secondary: css`
     background: ${({ theme }) =>

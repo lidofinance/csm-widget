@@ -17,10 +17,6 @@ tsconfig.tsbuildinfo
 # testing
 /coverage
 
-# generated
-/generated
-/modules/web3/generated.ts
-
 # next.js
 /.next/
 /out/
@@ -30,11 +26,11 @@ tsconfig.tsbuildinfo
 
 # misc
 .DS_Store
+dev-cm
 
 # env
-.env.local
-.env.production
-.env.development
+.env*
+!.env.example
 
 # debug
 npm-debug.log*
@@ -44,12 +40,21 @@ yarn-error.log*
 #ide
 .vscode
 .idea
-.claude
+.claude/*
+!.claude/skills/
 .mcp.json
 .qodo
 **/.browser_context**
 
 /public/runtime/
+/public/manifest.json
+/public/favicon.ico
+/public/favicon-16x16.png
+/public/favicon-32x32.png
+/public/favicon-192x192.png
+/public/favicon-512x512.png
+/public/apple-touch-icon.png
 /keys-generator-bin/
 deposit_data.json
 local_fork_config.json
+.walletPresets.state.json

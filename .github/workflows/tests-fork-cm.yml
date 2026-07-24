@@ -1,0 +1,46 @@
+name: Forked Test CM-widget
+run-name: Forked CM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # Every day at 6 AM UTC
+  workflow_dispatch:
+    inputs:
+      stand_type:
+        description: "Stand type"
+        required: true
+        type: choice
+        default: testnet
+        options:
+          - testnet
+          - preview
+      preview_stand_url:
+        description: 'Preview stand url (only if "Stand type" is "preview")'
+        required: false
+        type: string
+      preview_stand_env:
+        description: 'Preview stand env (only if "Stand type" is "preview")'
+        required: false
+        type: choice
+        default: testnet
+        options:
+          - testnet
+          - infra
+
+jobs:
+  test:
+    name: CM widget (fork)
+    uses: ./.github/workflows/e2e-tests.yml
+    secrets: inherit
+    with:
+      module: cm
+      use_fork: true
+      stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
+      test_tags: forked
+      qase_project_id: CM
+      staking_modules_ref: test/local-scripts
+      deploy_config: ./artifacts/hoodi/curated/deploy-hoodi.json
+      chain: hoodi
+      artifacts_dir: ./artifacts/hoodi/
+      preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
+      preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}

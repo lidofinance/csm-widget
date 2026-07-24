@@ -3,7 +3,6 @@ import {
   FC,
   PropsWithChildren,
   useContext,
-  useEffect,
   useMemo,
 } from 'react';
 import {
@@ -11,7 +10,6 @@ import {
   WagmiProvider,
   createConfig,
   fallback,
-  useConnections,
   usePublicClient,
 } from 'wagmi';
 import * as wagmiChains from 'wagmi/chains';
@@ -28,8 +26,6 @@ import { useThemeToggle } from '@lidofinance/lido-ui';
 import { config } from 'config';
 import { useGetRpcUrlByChainId } from 'config/rpc';
 import { useUserConfig } from 'config/user-config';
-import { useFeatureFlags } from 'config/feature-flags';
-import { USE_WALLET_RPC } from 'config/feature-flags/types';
 import { walletMetricProps } from 'consts/matomo-wallets-events';
 
 import { useWeb3Transport } from './use-web3-transport';
@@ -37,7 +33,6 @@ import { LidoSDKProvider } from './lido-sdk';
 import { http, PublicClient } from 'viem';
 import invariant from 'tiny-invariant';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 type ChainsList = [wagmiChains.Chain, ...wagmiChains.Chain[]];
 
@@ -73,45 +68,26 @@ export const useMainnetOnlyWagmi = () => {
 export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
   const {
     defaultChain: defaultChainId,
-    supportedChainIds,
     walletconnectProjectId,
     isWalletConnectionAllowed,
   } = useUserConfig();
   const { themeName } = useThemeToggle();
-  const featureFlags = useFeatureFlags();
-  const useWalletRpc = featureFlags?.[USE_WALLET_RPC] ?? false;
 
   const { supportedChains, defaultChain } = useMemo(() => {
-    // must preserve order of supportedChainIds
-    const supportedChains = supportedChainIds
-      .map((id) => wagmiChainMap[id])
-      .filter((chain) => chain) as ChainsList;
-
-    const defaultChain = wagmiChainMap[defaultChainId] || supportedChains[0];
+    const defaultChain = wagmiChainMap[defaultChainId];
     return {
-      supportedChains,
+      supportedChains: [defaultChain] as ChainsList,
       defaultChain,
     };
-  }, [defaultChainId, supportedChainIds]);
+  }, [defaultChainId]);
 
   const getRpcUrlByChainId = useGetRpcUrlByChainId();
 
   const backendRPC: Record<number, string> = useMemo(
-    () =>
-      supportedChainIds.reduce(
-        (res, curr) => ({
-          ...res,
-          [curr]: getRpcUrlByChainId(curr as CSM_SUPPORTED_CHAINS),
-        }),
-        {},
-      ),
-    [supportedChainIds, getRpcUrlByChainId],
+    () => ({ [defaultChainId]: getRpcUrlByChainId(defaultChainId) }),
+    [defaultChainId, getRpcUrlByChainId],
   );
-  const { transportMap, onActiveConnection } = useWeb3Transport(
-    supportedChains,
-    backendRPC,
-    useWalletRpc,
-  );
+  const transportMap = useWeb3Transport(supportedChains, backendRPC);
 
   const mainnetConfig = useMemo(() => {
     const batchConfig = {
@@ -181,12 +157,6 @@ export const Web3Provider: FC<PropsWithChildren> = ({ children }) => {
     isWalletConnectionAllowed,
     transportMap,
   ]);
-
-  const [activeConnection] = useConnections({ config: wagmiConfig });
-
-  useEffect(() => {
-    void onActiveConnection(activeConnection ?? null);
-  }, [activeConnection, onActiveConnection]);
 
   return (
     <Web3ProviderContext.Provider

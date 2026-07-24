@@ -6,7 +6,7 @@ export const SurveysEmpty: FC = () => (
   <SurveySection title="No surveys available">
     <Text size="sm" color="secondary">
       You are not a node operator and have not been added as a delegate for any
-      operators.
+      operators
     </Text>
   </SurveySection>
 );

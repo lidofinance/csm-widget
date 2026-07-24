@@ -1,24 +1,57 @@
 import {
   BondBalance,
+  FeeSplit,
   NodeOperatorId,
+  PerToken,
   Rewards,
+  StethPoolData,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
-import { MaxValues } from './use-max-values';
+
+export type MaxValues = PerToken<[bigint, bigint]>;
+
+export const CLAIM_OPTION = {
+  /** Claim available bond (excess) + rewards → Rewards Address. */
+  ALL_TO_RA: 'all-to-ra',
+  /** Claim only Excess Bond → Rewards Address. Requires excess bond > 0. */
+  BOND_TO_RA: 'bond-to-ra',
+  /** Move rewards to the bond. */
+  REWARDS_TO_BOND: 'rewards-to-bond',
+} as const;
+
+export type CLAIM_OPTION = (typeof CLAIM_OPTION)[keyof typeof CLAIM_OPTION];
 
 export type ClaimBondFormInputType = {
   token: TOKENS;
   amount?: bigint;
-  claimRewards: boolean;
+  claimOption: CLAIM_OPTION;
   unlockedClaimTokens: boolean;
+};
+
+export type ClaimBondCalculation = {
+  claimableBond: bigint;
+  claimableBondAndRewards: bigint;
+  claimableMaxValues: MaxValues;
+  // forKeys-only deficit. Drives "Insufficient bond" wording in UI labels and
+  // mirrors `bond.isInsufficient` shown by sources-info.
+  keysInsufficient: bigint;
+  // forKeys + locked + debt deficit. Used to size how much of the rewards is
+  // absorbed by bond before excess flows to the Rewards Address.
+  realInsufficient: bigint;
+  realExcess: bigint;
+  rewardsRemainder: bigint;
+  totalShare: bigint;
 };
 
 export type ClaimBondFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   bond: BondBalance;
   rewards: Rewards;
-  maxValues: MaxValues;
+  poolData: StethPoolData;
   rewardsAddress: string;
   isContract: boolean;
   isPaused: boolean;
+  availableOptions: CLAIM_OPTION[];
+  feeSplits: FeeSplit[];
+  calculation: ClaimBondCalculation;
 };

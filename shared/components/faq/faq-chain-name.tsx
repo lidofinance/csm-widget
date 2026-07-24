@@ -1,10 +1,11 @@
-import { CSM_CONTRACT_ADDRESSES } from '@lidofinance/lido-csm-sdk';
+import { CONTRACT_NAMES } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { useDappStatus } from 'modules/web3';
+import { useDappStatus, useLidoSDK } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
 import { useChainName } from 'shared/hooks';
-import { FaqLink } from './faq-link';
 import { getEtherscanAddressLink } from 'utils';
+import { CopyLink } from '../copy-button';
+import { FaqLink } from './faq-link';
 
 export const FaqChainName: FC = () => {
   const chainName = useChainName(false);
@@ -31,26 +32,34 @@ export const FaqOnlyTestnet: FC<PropsWithChildren> = ({ children }) => {
 
 export const FaqWithdrawalVault: FC = () => {
   const { chainId } = useDappStatus();
-  const address = CSM_CONTRACT_ADDRESSES[chainId]?.withdrawalVault;
+  const { sm } = useLidoSDK();
+  const address = sm.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
   if (!address) return null;
 
   const url = getEtherscanAddressLink(chainId, address);
   return (
-    <FaqLink href={url}>
-      <code>{address}</code>
-    </FaqLink>
+    <>
+      <FaqLink href={url}>
+        <code>{address}</code>
+      </FaqLink>
+      <CopyLink text={address} />
+    </>
   );
 };
 
 export const FaqLidoRewardsVault: FC = () => {
   const { chainId } = useDappStatus();
-  const address = CSM_CONTRACT_ADDRESSES[chainId]?.lidoRewardsVault;
+  const { sm } = useLidoSDK();
+  const address = sm.core.getContractAddress(CONTRACT_NAMES.lidoRewardsVault);
   if (!address) return null;
 
   const url = getEtherscanAddressLink(chainId, address);
   return (
-    <FaqLink href={url}>
-      <code>{address}</code>
-    </FaqLink>
+    <>
+      <FaqLink href={url}>
+        <code>{address}</code>
+      </FaqLink>
+      <CopyLink text={address} />
+    </>
   );
 };

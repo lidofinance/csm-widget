@@ -1,12 +1,16 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useFormDefaultValues } from 'shared/hook-form/form-controller';
-import { ClaimBondFormInputType, ClaimBondFormNetworkData } from './types';
+import {
+  CLAIM_OPTION,
+  ClaimBondFormInputType,
+  ClaimBondFormNetworkData,
+} from './types';
 
 export const useClaimBondDefaultValues = () => {
   return useFormDefaultValues<ClaimBondFormInputType, ClaimBondFormNetworkData>(
     (data) => ({
       token: data.isContract ? TOKENS.wsteth : TOKENS.steth,
-      claimRewards: data.rewards.available > 0n,
+      claimOption: data.availableOptions[0] || CLAIM_OPTION.BOND_TO_RA,
       unlockedClaimTokens: false,
     }),
   );

@@ -1,12 +1,15 @@
-import { FC, PropsWithChildren } from 'react';
+import { ElementType, FC, PropsWithChildren } from 'react';
 import { StackStyle, StackStyleProps } from './style';
 
 type Props = {
+  as?: ElementType;
   direction?: 'row' | 'column';
   gap?: StackStyleProps['$gap'];
   center?: boolean;
   align?: StackStyleProps['$align'];
   justify?: StackStyleProps['$justify'];
+  selfAlign?: StackStyleProps['$selfAlign'];
+  selfJustify?: StackStyleProps['$selfJustify'];
   spaceBetween?: boolean;
   wrap?: boolean;
 };
@@ -20,6 +23,8 @@ export const Stack: FC<PropsWithChildren<Props>> = ({
   justify,
   spaceBetween,
   wrap,
+  selfAlign,
+  selfJustify,
   ...props
 }) => (
   <StackStyle
@@ -28,6 +33,8 @@ export const Stack: FC<PropsWithChildren<Props>> = ({
     $direction={direction}
     $align={center ? 'center' : align}
     $justify={spaceBetween ? 'space-between' : justify}
+    $selfAlign={selfAlign}
+    $selfJustify={selfJustify}
     $wrap={wrap}
   >
     {children}

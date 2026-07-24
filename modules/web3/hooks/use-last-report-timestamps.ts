@@ -1,13 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
-import { useLidoSDK } from '../web3-provider';
+import { useSmSDK } from '../web3-provider';
+import { ReportTimestamps } from '@lidofinance/lido-csm-sdk';
 
-export const useLastReportTimestamps = () => {
-  const { csm } = useLidoSDK();
+export const useLastReportTimestamps = <TData = ReportTimestamps | undefined>(
+  select?: (data: ReportTimestamps | undefined) => TData,
+) => {
+  const { rewards } = useSmSDK();
 
   return useQuery({
     queryKey: ['last-report-timestamps'],
     ...STRATEGY_CONSTANT,
-    queryFn: () => csm.rewards.getLastReportTimestamps(),
+    queryFn: () => rewards.getLastReportTimestamps(),
+    select,
   });
 };

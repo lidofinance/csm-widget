@@ -10,9 +10,10 @@ import {
 } from 'features/ics/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
+import { getOperatorTypeQuery } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { NodeOperatorId, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
   NodeOperatorOwner,
   useDappStatus,
@@ -80,7 +81,7 @@ const useHint = (
           <Text size="xs">You&apos;re already eligible to claim ICS type</Text>
           <Text size="xs">
             To claim your current address should be set as your Node Operator
-            owner.
+            owner
           </Text>
         </>
       );
@@ -92,8 +93,11 @@ const useHint = (
           </Text>
 
           <div>
-            <LocalLink href={PATH.CREATE}>
-              <Button size="xs">Go to create Node Operator</Button>
+            <LocalLink
+              href={PATH.CREATE}
+              query={getOperatorTypeQuery(OPERATOR_TYPE.CSM_ICS)}
+            >
+              <Button size="xs">Create ICS operator</Button>
             </LocalLink>
           </div>
         </>
@@ -106,7 +110,7 @@ const useHint = (
           </Text>
 
           <div>
-            <LocalLink href={PATH.TYPE_CLAIM}>
+            <LocalLink href={PATH.TYPE_ICS_CLAIM}>
               <Button size="xs">Go to claim</Button>
             </LocalLink>
           </div>
@@ -155,7 +159,7 @@ const useHint = (
       return (
         <Text size="xs">
           The application will be evaluated in {ICS_ROUND.assessedDate}. You
-          cannot change the application while it is being reviewed
+          cannot change the application while it is being reviewed.
         </Text>
       );
     case status === 'APPROVED':

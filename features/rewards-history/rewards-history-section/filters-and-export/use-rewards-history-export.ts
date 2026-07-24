@@ -1,5 +1,5 @@
 import { ValidatorRewardsEntity } from '@lidofinance/lido-csm-sdk';
-import { useNodeOperatorId } from 'modules/web3';
+import { useOperatorKey } from 'modules/surveys-sdk';
 import { useTable } from 'providers/table-provider';
 import { useState } from 'react';
 import { exportToCsv, formatDate, formatPercent } from 'utils';
@@ -41,7 +41,7 @@ const transformData = (data: ValidatorRewardsEntity[]): CsvRow[] => {
 };
 
 export const useRewardsHistoryExport = () => {
-  const nodeOperatorId = useNodeOperatorId();
+  const operatorKey = useOperatorKey();
   const { rawData } = useTable<ValidatorRewardsEntity>();
   const [isExporting, setIsExporting] = useState(false);
 
@@ -50,8 +50,7 @@ export const useRewardsHistoryExport = () => {
       setIsExporting(true);
 
       const csvData = transformData(rawData);
-      const operator =
-        nodeOperatorId !== undefined ? `csm-${nodeOperatorId}` : '';
+      const operator = operatorKey ?? '';
       const date = formatDate(Date.now(), 'yyyy-MM-dd');
       const filename = ['rewards-history', operator, date]
         .filter(Boolean)

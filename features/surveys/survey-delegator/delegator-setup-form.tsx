@@ -15,7 +15,7 @@ import {
   SubmitButtonHookForm,
   TokenAmountInputHookForm,
 } from 'shared/hook-form/controls';
-import { useSurveysSWR } from '../shared/use-surveys-swr';
+import { isAuthError, parseOperatorKey } from 'modules/surveys-sdk';
 import {
   CL_CLIENT_OPTIONS,
   COUNTRY_OPTIONS,
@@ -26,18 +26,17 @@ import {
   TOOL_OPTIONS,
   VALIDATOR_CLIENT_OPTIONS,
 } from '../survey-setup/options';
-import {
-  transformIncoming,
-  transformOutcoming,
-} from '../survey-setup/transform';
+import { useOperatorSetup } from '../survey-setup/use-operator-setup';
+import { useSetupsKeys } from '../survey-setup/use-setups-keys';
 import { useModalStages } from '../survey-setup/use-modal-stages';
 import { useConfirmRemoveModal } from '../survey-setup/confirm-remove-modal';
 import { useNavigate } from 'shared/navigate';
 import { PATH } from 'consts/urls';
 import { SurveyButton } from '../components';
 import { Button } from '@lidofinance/lido-ui';
-import { Setup, SetupRaw, SetupsKeys } from '../types';
+import { Setup } from '../types';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { DelegatorBackButton } from './back-button';
 
 const required = { required: true };
 
@@ -51,32 +50,22 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
   setupId,
 }) => {
   const isEditMode = !!setupId && setupId !== 'new';
+  const operatorKey = parseOperatorKey(operatorId) ?? undefined;
+  const index = isEditMode ? Number(setupId) : undefined;
 
   const {
     data: filled,
     error,
     mutate,
     remove,
-  } = useSurveysSWR<Setup, SetupRaw>(
-    `setups${isEditMode ? '/' + setupId : ''}`,
-    {
-      operatorId,
-      skipFetching: !isEditMode,
-      invalidateOnMutate: true,
-      transformIncoming,
-      transformOutcoming,
-    },
-  );
+  } = useOperatorSetup(index, { operatorKey, invalidateOnMutate: true });
 
   const data = useMemo(
     () => (isEditMode ? filled : undefined),
     [isEditMode, filled],
   );
 
-  const { data: keys, mutate: mutateKeys } = useSurveysSWR<SetupsKeys>(
-    'setups/keys',
-    { operatorId },
-  );
+  const { data: keys, mutate: mutateKeys } = useSetupsKeys(operatorKey);
 
   const filledWitoutCurrent = Math.max(
     0,
@@ -116,7 +105,7 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
         trackMatomoFormEvent('surveyDelegatorSetup', 'success');
         modals.success();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     },
     [modals, mutate, mutateKeys, isEditMode, navigate, operatorId],
@@ -131,7 +120,7 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
         void navigate(`${PATH.SURVEYS_DELEGATOR}/${operatorId}` as PATH);
         modals.successRemove();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     }
   }, [confirmRemove, modals, mutateKeys, navigate, remove, operatorId]);
@@ -141,7 +130,10 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
   }, [formObject, keysLeft]);
 
   return (
-    <SectionBlock title={isEditMode ? `Setup #${data?.index}` : 'Add Setup'}>
+    <SectionBlock
+      title={isEditMode ? `Setup #${data?.index}` : 'Add Setup'}
+      mainPrefix={<DelegatorBackButton operatorId={operatorId} />}
+    >
       <FormProvider {...formObject}>
         <WhenLoaded loading={formObject.formState.isLoading} error={error}>
           <Stack direction="column">
@@ -232,7 +224,7 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
                     What type of servers are your EL and CL nodes running on?
                   </FormTitle>
                   <SelectHookForm
-                    fieldName="clinetsServerType"
+                    fieldName="clientsServerType"
                     options={SERVER_TYPE_OPTIONS}
                     rules={required}
                   />
@@ -303,7 +295,7 @@ export const DelegatorSetupForm: FC<DelegatorSetupFormProps> = ({
                 <Stack direction="column">
                   <FormTitle>What is your MEV-boost min-bid value?</FormTitle>
                   <TokenAmountInputHookForm
-                    fieldName="mevMinBid"
+                    fieldName="mevMinBidWei"
                     label="Min bid"
                     token={TOKENS.eth}
                   />

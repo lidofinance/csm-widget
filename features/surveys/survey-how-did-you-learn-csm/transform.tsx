@@ -1,6 +1,6 @@
 import { HowDidYouLearnCsm } from '../types';
 
-export const transformOutcoming = (
+export const transformOutgoing = (
   data: HowDidYouLearnCsm,
 ): HowDidYouLearnCsm => ({
   ...data,

@@ -46,6 +46,7 @@ export const AttestationRateSection: FC = () => {
             <div>
               Data Source:{' '}
               <MatomoLink
+                $inline
                 href="https://migalabs.io"
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.monitoringMigalabsLink}
               >
@@ -54,7 +55,7 @@ export const AttestationRateSection: FC = () => {
             </div>
             <IconTooltip
               placement="bottomRight"
-              tooltip="This is aggregated data for your Node Operator obtained from the third-party source, while the actual performance for rewards distribution is calculated per key by the CSM Performance Oracle at the end of each frame. "
+              tooltip="This is aggregated data for your Node Operator obtained from the third-party source, while the actual performance for rewards distribution is calculated per key by the CSM Performance Oracle at the end of each frame"
             />
           </Stack>
         </Stack>

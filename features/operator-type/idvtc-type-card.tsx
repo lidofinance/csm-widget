@@ -1,12 +1,25 @@
 import { Text } from '@lidofinance/lido-ui';
-import { DvtApplyButton } from 'features/dvt/apply-button';
-import { ScoreChip } from 'features/dvt/form-status/components/score-chip';
-import { DvtFormStatus, useDvtState } from 'features/dvt/shared';
+import { IdvtcApplyButton } from 'features/idvtc/apply-button';
+import { ScoreChip } from 'features/idvtc/form-status/components/score-chip';
+import {
+  IdvtcFormStatus,
+  IdvtcTypeStatus,
+  useIdvtcState,
+} from 'features/idvtc/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { OptionCard, TypeBadge } from './styles';
 
-const renderStatusChip = (status: DvtFormStatus | undefined) => {
+const renderStatusChip = (
+  typeStatus: IdvtcTypeStatus,
+  status: IdvtcFormStatus | undefined,
+) => {
+  if (typeStatus === 'CLAIMED') {
+    return <ScoreChip type="default">Claimed</ScoreChip>;
+  }
+  if (typeStatus === 'ISSUED') {
+    return <ScoreChip type="success">Issued</ScoreChip>;
+  }
   switch (status) {
     case 'APPROVED':
       return <ScoreChip type="success">Approved</ScoreChip>;
@@ -20,14 +33,15 @@ const renderStatusChip = (status: DvtFormStatus | undefined) => {
 };
 
 export const IdvtcTypeCard: FC = () => {
-  const { data } = useDvtState();
+  const { typeStatus, data } = useIdvtcState();
+  const chip = renderStatusChip(typeStatus, data?.status);
 
   return (
     <OptionCard>
       <Stack direction="column" gap="md">
         <Stack direction="row" spaceBetween align="center">
           <TypeBadge $variant="IDVTC">IDVTC</TypeBadge>
-          {renderStatusChip(data?.status)}
+          {chip}
         </Stack>
         <Stack direction="column" gap="xs">
           <Text as="h3" size="sm" weight={700}>
@@ -40,7 +54,7 @@ export const IdvtcTypeCard: FC = () => {
           </Text>
         </Stack>
       </Stack>
-      <DvtApplyButton />
+      <IdvtcApplyButton />
     </OptionCard>
   );
 };

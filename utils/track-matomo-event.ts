@@ -5,6 +5,7 @@ import {
   createEvent,
 } from 'consts/matomo-click-events';
 import { snakeCase } from 'lodash';
+import { extractErrorMessage } from './extract-error-message';
 
 export type WithMatomoEvent<P = unknown> = P & {
   matomoEvent?: MATOMO_CLICK_EVENTS_TYPES | undefined;
@@ -21,6 +22,21 @@ export const trackMatomoFaqEvent = (faqId?: string) => {
 
 export const trackMatomoError = (description: string, tag: string) => {
   trackEvent(...createEvent(`ERROR: ${description}`, `error_${tag}`));
+};
+
+export const trackMatomoRawError = (tag: string, error: unknown) => {
+  trackMatomoError(`${extractErrorMessage(error)}`, tag);
+};
+
+export const trackMatomoSurveySigninDenied = (
+  flow: 'create_idvtc' | 'claim_idvtc',
+) => {
+  trackEvent(
+    ...createEvent(
+      `Declined surveys sign-in during ${flow}`,
+      `surveys_signin_denied_${flow}`,
+    ),
+  );
 };
 
 export const trackMatomoFormEvent = (

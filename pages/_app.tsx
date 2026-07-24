@@ -3,7 +3,7 @@ import 'utils/zod-jitless';
 import { ToastContainer } from '@lidofinance/lido-ui';
 import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
-import { isModuleCM } from 'consts';
+import { moduleMeta } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
@@ -11,7 +11,6 @@ import { Providers } from 'providers';
 import { memo } from 'react';
 import { BackgroundGradient, SecurityStatusBanner } from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
-import { UnsupportedPage } from 'shared/navigate/inner-pages';
 import { AddressValidationFile, nprogress } from 'utils';
 
 // Visualize route changes
@@ -35,9 +34,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
 
   return (
     <Providers
-      dummy={
-        isModuleCM || props.pageProps?.maintenance || props.pageProps?.isError
-      }
+      dummy={props.pageProps?.maintenance || props.pageProps?.isError}
       skipWatcher={props.pageProps?.isError}
       validationFile={props.pageProps?.validationFile}
     >
@@ -47,7 +44,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
           name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
-        <title>CSM | Lido</title>
+        <title>{moduleMeta.shortTitle} | Lido</title>
       </Head>
       <BackgroundGradient
         width={1560}
@@ -58,7 +55,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       />
       <SVGGradientDefs />
       <ToastContainer />
-      {isModuleCM ? <UnsupportedPage /> : <MemoApp {...rest} />}
+      <MemoApp {...rest} />
       <SecurityStatusBanner />
     </Providers>
   );

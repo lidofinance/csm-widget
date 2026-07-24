@@ -5,13 +5,15 @@ import { ReactComponent as Radio } from 'assets/icons/radio.svg';
 
 export const RadioIconStyle = styled(Radio)`
   align-self: center;
-  height: 24px;
-  width: 24px;
-  border-radius: 24px;
+  height: 20px;
+  width: 20px;
+  margin: 2px;
+  border-radius: 100%;
   transition:
     box-shadow 0.1s ease,
     background-color 0.1s ease;
-  fill: var(--lido-color-primaryContrast);
+  fill: var(--lido-color-controlBg);
+  flex: 0 0 auto;
 
   background-color: var(--lido-color-controlBg);
   box-shadow: inset 0 0 0 1px var(--lido-color-border);

@@ -19,7 +19,7 @@ import {
 export { DefColumnBackground, IcsColumnBackground } from './styles';
 
 const Title: FC<{ title: string; help?: string }> = ({ title, help }) => (
-  <Text size="xs" weight={700}>
+  <Text size="xs" weight={700} data-testid="parameterTitle">
     {title}
     <IconTooltip tooltip={help} placement="bottomLeft" inline />
   </Text>
@@ -44,7 +44,7 @@ export const ParametersList: FC<{
           </RowStyle>
         ))}
       </ListStyle>
-      <FoldableListStyle $folded={!more}>
+      <FoldableListStyle $folded={!more} data-testid="foldableParameters">
         {PARAMETERS.slice(3).map(({ title, help, render }) => (
           <RowStyle key={title}>
             <Title title={title} help={help} />
@@ -55,7 +55,7 @@ export const ParametersList: FC<{
           </RowStyle>
         ))}
       </FoldableListStyle>
-      <MoreStyle onClick={toggleMore}>
+      <MoreStyle onClick={toggleMore} data-testid="parametersShowMore">
         {more ? 'Show less' : 'Show more'}
         <ArrowStyle $expanded={more} />
       </MoreStyle>
@@ -63,33 +63,39 @@ export const ParametersList: FC<{
   );
 };
 
+export type CompareParametersListItem = {
+  parameters?: CurveParameters;
+  title?: string;
+};
+
 type CompareParametersListProps = {
-  left?: CurveParameters;
-  right?: CurveParameters;
-  leftTitle?: string;
-  rightTitle?: string;
+  items: CompareParametersListItem[];
 };
 
 export const CompareParametersList: FC<
   PropsWithChildren<CompareParametersListProps>
-> = ({ left, right, leftTitle = 'Current', rightTitle = 'New', children }) => {
+> = ({ items, children }) => {
   return (
-    <CompareListStyle>
+    <CompareListStyle $columns={items.length}>
       {children}
       <CompareTitleStyle>
         <p></p>
-        <Text size="xs" weight={700}>
-          {leftTitle}
-        </Text>
-        <Text size="xs" weight={700}>
-          {rightTitle}
-        </Text>
+        {items.map((item, index) => (
+          <Text key={index} size="xs" weight={700}>
+            {item.title}
+          </Text>
+        ))}
       </CompareTitleStyle>
       {PARAMETERS.map(({ title, help, render }) => (
         <CompareRowStyle key={title}>
           <Title title={title} help={help} />
-          <ParametersValue loading={!left} values={render(left)} />
-          <ParametersValue loading={!right} values={render(right)} />
+          {items.map((item, index) => (
+            <ParametersValue
+              key={index}
+              loading={!item.parameters}
+              values={render(item.parameters)}
+            />
+          ))}
         </CompareRowStyle>
       ))}
     </CompareListStyle>

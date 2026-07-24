@@ -1,16 +1,16 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { useSmSDK } from 'modules/web3/web3-provider';
 import { useCallback } from 'react';
-import { useLidoSDK } from 'modules/web3/web3-provider';
 
 type InvalidationScope = 'operator' | 'address' | 'operatorAndAddress';
 
 export const useInvalidateOperatorCache = () => {
   const queryClient = useQueryClient();
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK();
 
   return useCallback(
     (scope: InvalidationScope = 'operatorAndAddress') => {
-      csm.core.invalidateCache();
+      sdk.core.invalidateCache();
       void queryClient.invalidateQueries({
         predicate: (query) =>
           query.queryKey.some((part) => {
@@ -21,6 +21,6 @@ export const useInvalidateOperatorCache = () => {
           }),
       });
     },
-    [csm.core, queryClient],
+    [sdk.core, queryClient],
   );
 };

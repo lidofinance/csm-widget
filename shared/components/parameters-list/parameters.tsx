@@ -1,20 +1,24 @@
 import { CurveParameters, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { isModuleCM, moduleMeta } from 'consts';
 import { ReactNode } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { plural } from 'utils';
 import {
-  formatPercentKeyIntervals,
   formatEthKeyIntervals,
-  formatQueues,
   formatKeysLimit,
+  formatPercentKeyIntervals,
+  formatQueues,
   formatSecondsDuration,
 } from './format';
 
-export const PARAMETERS: {
+type Parameter = {
   title: string;
   help: string;
   render: (parameters?: CurveParameters) => ReactNode[];
-}[] = [
+  csmOnly?: boolean;
+};
+
+const ALL_PARAMETERS: Parameter[] = [
   {
     title: 'Node Operator reward',
     help: 'A share of the Consensus and Execution layers rewards',
@@ -23,13 +27,14 @@ export const PARAMETERS: {
   },
   {
     title: 'Bond',
-    help: 'A security collateral that Node Operators must submit before uploading validator keys into CSM',
+    help: `A security collateral that Node Operators must submit before uploading validator keys into ${moduleMeta.shortName}`,
     render: (parameters) => formatEthKeyIntervals(parameters?.bondConfig),
   },
   {
     title: 'Priority queue',
     help: 'A queue that stays ahead of the general queue',
     render: (parameters) => formatQueues(parameters?.queueConfig),
+    csmOnly: true,
   },
   {
     title: 'Removal fee',
@@ -46,10 +51,11 @@ export const PARAMETERS: {
     help: 'A value that is deducted from the network average performance to determine the threshold for the key',
     render: (parameters) =>
       formatPercentKeyIntervals(parameters?.performanceLeewayConfig),
+    csmOnly: true,
   },
   {
-    title: 'EL stealing penalty',
-    help: 'A fine charged in case of EL rewards stealing event settled',
+    title: 'Penalty fee',
+    help: 'An additional amount that is levied for violations committed by a Node Operator',
     render: (parameters) => [
       <>
         <FormatToken
@@ -80,6 +86,7 @@ export const PARAMETERS: {
         })}
       </>,
     ],
+    csmOnly: true,
   },
   {
     title: 'Bad performance penalty',
@@ -92,10 +99,11 @@ export const PARAMETERS: {
         />
       </>,
     ],
+    csmOnly: true,
   },
   {
     title: 'Keys limit',
-    help: 'A maximum number of keys a node operator can have during its lifetime',
+    help: 'A maximum number of non-withdrawn keys a Node Operator can upload',
     render: (parameters) => formatKeysLimit(parameters?.keysLimit),
   },
   {
@@ -133,3 +141,7 @@ export const PARAMETERS: {
     ],
   },
 ];
+
+export const PARAMETERS: Parameter[] = isModuleCM
+  ? ALL_PARAMETERS.filter((p) => !p.csmOnly)
+  : ALL_PARAMETERS;

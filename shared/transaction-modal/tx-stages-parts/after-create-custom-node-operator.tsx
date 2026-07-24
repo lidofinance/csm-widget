@@ -1,4 +1,5 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { isModuleCSM, moduleMeta } from 'consts';
 import { getExternalLinks, SUBSCRIBE_EVENTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useModalActions } from 'providers/modal-provider';
@@ -25,16 +26,17 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
         <br />
         <ol>
           <li>
-            Connect to CSM UI with the address you specified as Reward/Manager
-            Address
+            Connect to {moduleMeta.shortTitle} UI with the address you specified
+            as Reward/Manager Address
           </li>
-          <li>Wait for your keys to be deposited to through the protocol.</li>
+          <li>Wait for your keys to be deposited to through the protocol</li>
           <li>
             Once your keys become active (
             {beaconchain && (
               <>
                 you can check their statuses on{' '}
                 <MatomoLink
+                  $inline
                   matomoEvent={
                     MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain
                   }
@@ -45,20 +47,26 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
                 or{' '}
               </>
             )}
-            subscribe to the{' '}
-            <MatomoLink
-              matomoEvent={
-                MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents
-              }
-              href={SUBSCRIBE_EVENTS_LINK}
-            >
-              CSM events notifications
-            </MatomoLink>
+            {isModuleCSM && (
+              <>
+                subscribe to the{' '}
+                <MatomoLink
+                  $inline
+                  matomoEvent={
+                    MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents
+                  }
+                  href={SUBSCRIBE_EVENTS_LINK}
+                >
+                  CSM events notifications
+                </MatomoLink>
+              </>
+            )}
             ) make sure your validators are producing attestations{' '}
             {beaconchainDashboardLink && (
               <>
                 (you can use the{' '}
                 <MatomoLink
+                  $inline
                   matomoEvent={
                     MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
                   }

@@ -3,12 +3,14 @@ import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Text } from '@lidofinance/lido-ui';
 import { Plural, SectionBlock, Stack, WhenLoaded } from 'shared/components';
+import { isAuthError } from 'modules/surveys-sdk';
 import { useDelegates } from './use-delegates';
 import { useModalStages } from './use-modal-stages';
 import { useConfirmRemoveDelegateModal } from './confirm-remove-modal';
 import { DelegateItem } from './delegate-item';
 import { AddDelegateForm } from './add-delegate-form';
 import { MAX_DELEGATES } from '../types';
+import { SurveysBackButton } from '../shared';
 
 type AddDelegateFormData = {
   address: string;
@@ -35,7 +37,7 @@ export const SurveyDelegates: FC = () => {
         trackMatomoFormEvent('surveyDelegates', 'success');
         modals.success();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     },
     [add, formObject, modals],
@@ -50,7 +52,7 @@ export const SurveyDelegates: FC = () => {
           await remove(address);
           modals.successRemove();
         } catch (e) {
-          modals.failed(e);
+          if (!isAuthError(e)) modals.failed(e);
         } finally {
           setRemovingAddress(null);
         }
@@ -60,7 +62,7 @@ export const SurveyDelegates: FC = () => {
   );
 
   return (
-    <SectionBlock title="Manage Delegates">
+    <SectionBlock title="Manage Delegates" mainPrefix={<SurveysBackButton />}>
       <Stack direction="column" gap="lg">
         <Text size="xs" color="secondary">
           Delegates can only access and submit Setup surveys on your behalf.
@@ -70,7 +72,7 @@ export const SurveyDelegates: FC = () => {
             variants={['delegate', 'delegates']}
             showValue
           />{' '}
-          allowed
+          allowed.
         </Text>
 
         <WhenLoaded loading={isLoading}>
@@ -86,7 +88,7 @@ export const SurveyDelegates: FC = () => {
 
             {delegates.length === 0 && (
               <Text size="xs" color="secondary">
-                No delegates added yet.
+                No delegates added yet
               </Text>
             )}
 
@@ -98,7 +100,7 @@ export const SurveyDelegates: FC = () => {
 
             {!canAddMore && (
               <Text size="xs" color="warning">
-                Maximum number of delegates reached.
+                Maximum number of delegates reached
               </Text>
             )}
           </Stack>

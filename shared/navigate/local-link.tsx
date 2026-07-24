@@ -14,6 +14,7 @@ type LocalLinkProps = Omit<LinkProps, 'href'> & {
   anchor?: `#${string}`;
   'data-testid'?: string;
   query?: Record<string, string>;
+  title?: string;
 };
 
 export const LocalLink: FC<

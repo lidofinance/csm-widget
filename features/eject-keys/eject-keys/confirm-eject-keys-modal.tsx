@@ -19,12 +19,12 @@ export const ConfirmEjectKeysModal: ModalComponentType<ConfirmModalProps> = ({
           <Text size="xs" color="secondary">
             Triggering the validator exit from the Execution Layer incurs
             network fees and serves as a last resort measure to exit the
-            validator.{' '}
+            validator{' '}
           </Text>
           <Text size="xs" color="secondary">
             Remember that validators exits don’t happen immediately and require
             some time to be processed, and that the bond is only released once
-            the full withdrawal has been completed.
+            the full withdrawal has been completed
           </Text>
         </Stack>
 

@@ -1,5 +1,6 @@
+import { extractErrorMessage } from './extract-error-message';
 import { FetcherError } from './fetcher-error';
-import { StandardFetcher, extractError } from './standard-fetcher';
+import type { StandardFetcher } from './standard-fetcher';
 
 const DEFAULT_PARAMS = {
   method: 'GET',
@@ -19,7 +20,14 @@ export const rewardsTreeFetcher: StandardFetcher = async (url, params) => {
   });
 
   if (!response.ok) {
-    throw new FetcherError(await extractError(response), response.status);
+    let message = 'An error occurred while fetching the data';
+    try {
+      const body = await response.json();
+      message = extractErrorMessage(body) ?? 'An error occurred';
+    } catch {
+      // keep default message
+    }
+    throw new FetcherError(message, response.status);
   }
 
   const text = await response.text();

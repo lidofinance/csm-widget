@@ -1,5 +1,6 @@
 import { Text } from '@lidofinance/lido-ui';
-import { useLidoSDK } from 'modules/web3';
+import { DATA_UNAVAILABLE } from 'consts';
+import { useSmSDK } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { Pubkey } from 'shared/components';
@@ -14,16 +15,19 @@ import {
 } from './styles';
 import { DepositDataInputType } from './use-parse-deposit-data';
 
+// TODO: refactor to separate component and hook
 export const DepositDataParsed: FC = () => {
-  const { csm } = useLidoSDK();
-  const {
-    setValue,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useFormContext<DepositDataInputType>();
+  const { depositData: sdk } = useSmSDK();
 
-  const { isValidating, isSubmitting } = useFormState();
+  const { setValue, setError, clearErrors } =
+    useFormContext<DepositDataInputType>();
+
+  // Subscribe to errors here — reading them off useFormContext() is not
+  // reactive in a child, leaving the row stale after async validation.
+  const { errors, isValidating, isSubmitting } =
+    useFormState<DepositDataInputType>({
+      name: ['depositData', 'rawDepositData'],
+    });
 
   const depositDataErrors = errors.depositData?.types;
 
@@ -36,7 +40,7 @@ export const DepositDataParsed: FC = () => {
 
   const remove = useCallback(
     (index: number) => {
-      const result = csm.depositData.removeKey(rawDepositData ?? '', index);
+      const result = sdk.removeKey(rawDepositData ?? '', index);
 
       if (result.success && result.json !== undefined) {
         clearErrors('rawDepositData');
@@ -51,7 +55,7 @@ export const DepositDataParsed: FC = () => {
         });
       }
     },
-    [csm.depositData, rawDepositData, setValue, setError, clearErrors],
+    [sdk, rawDepositData, setValue, setError, clearErrors],
   );
 
   return (
@@ -70,7 +74,10 @@ export const DepositDataParsed: FC = () => {
         return (
           <TableRow key={pubkey} data-testid="deposit-data-row">
             <DataCell $error={hasError} data-testid="deposit-data-pubkey">
-              <Pubkey pubkey={pubkey} color={hasError ? 'error' : 'default'} />
+              <Pubkey
+                pubkey={pubkey || DATA_UNAVAILABLE}
+                color={hasError ? 'error' : 'default'}
+              />
             </DataCell>
             <DataCell $error={hasError} data-testid="deposit-data-index">
               #{index + 1}

@@ -8,21 +8,46 @@ import {
   SubmitButtonHookForm,
   TextInputHookForm,
 } from 'shared/hook-form/controls';
-import { useSurveysSWR } from '../shared/use-surveys-swr';
+import {
+  callSurvey,
+  isAuthError,
+  surveyRequest,
+  useOperatorSurvey,
+} from 'modules/surveys-sdk';
+import {
+  experienceFindOne,
+  experienceUpdate,
+} from 'modules/surveys-sdk/generated';
 import { Experience } from '../types';
 import {
   ExperienceForm,
   transformIncoming,
-  transformOutcoming,
+  transformOutgoing,
 } from './transform';
 import { useModalStages } from './use-modal-stages';
+import { SurveysBackButton } from '../shared';
 
 export const SurveyExperience: FC = () => {
-  const { data, mutate } = useSurveysSWR<ExperienceForm, Experience>(
+  const { data, mutate } = useOperatorSurvey<ExperienceForm, Experience>(
     'experience',
     {
       transformIncoming,
-      transformOutcoming,
+      transformOutgoing,
+      get: ({ nodeOperatorId, token, signal }) =>
+        callSurvey(() =>
+          experienceFindOne({
+            ...surveyRequest(token, signal),
+            path: { nodeOperatorId },
+          }),
+        ),
+      update: (body, { nodeOperatorId, token }) =>
+        callSurvey(() =>
+          experienceUpdate({
+            ...surveyRequest(token),
+            path: { nodeOperatorId },
+            body,
+          }),
+        ),
     },
   );
   const { txModalStages: modals } = useModalStages();
@@ -42,14 +67,17 @@ export const SurveyExperience: FC = () => {
         trackMatomoFormEvent('surveyExperience', 'success');
         modals.success();
       } catch (e) {
-        modals.failed(e);
+        if (!isAuthError(e)) modals.failed(e);
       }
     },
     [modals, mutate],
   );
 
   return (
-    <SectionBlock title="Your validation experience">
+    <SectionBlock
+      title="Your validation experience"
+      mainPrefix={<SurveysBackButton />}
+    >
       <FormProvider {...formObject}>
         <WhenLoaded loading={formObject.formState.isLoading}>
           <Stack direction="column">

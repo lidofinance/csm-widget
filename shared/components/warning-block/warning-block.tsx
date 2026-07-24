@@ -1,11 +1,11 @@
-import { FC, PropsWithChildren } from 'react';
+import { FC, HTMLAttributes, PropsWithChildren } from 'react';
 import { WarningBlockStyle, NoteTypeStyle, BlockVariant } from './style';
 
-export const WarningBlock: FC<PropsWithChildren<{ type?: BlockVariant }>> = ({
-  children,
-  type = 'warning',
-}) => (
-  <WarningBlockStyle $variant={type}>
+// TODO: refactor
+export const WarningBlock: FC<
+  PropsWithChildren<{ type?: BlockVariant } & HTMLAttributes<HTMLDivElement>>
+> = ({ children, type = 'warning', ...props }) => (
+  <WarningBlockStyle $variant={type} {...props}>
     <NoteTypeStyle>{type}:</NoteTypeStyle> {children}
   </WarningBlockStyle>
 );

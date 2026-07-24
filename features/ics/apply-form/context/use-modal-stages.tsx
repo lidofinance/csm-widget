@@ -1,60 +1,34 @@
+import { useMemo } from 'react';
 import {
-  TransactionModalTransitStage,
-  TxStageFail,
   TxStagePending,
   TxStageSuccess,
-  useTransactionModalStage,
+  useTransitStage,
 } from 'shared/transaction-modal';
-import { extractErrorMessage, getErrorCode } from 'utils';
+import { getFailedStage } from 'shared/transaction-modal/hooks';
 
-const getModalStages = (transitStage: TransactionModalTransitStage) => ({
-  pending: () =>
-    transitStage(
-      <TxStagePending
-        title="Submitting your application form"
-        description="sending to server"
-      />,
-    ),
+export const useModalStages = () => {
+  const transitStage = useTransitStage();
 
-  success: () =>
-    transitStage(
-      <TxStageSuccess
-        title="Your application has been submitted"
-        description="You can track your application’s status on the Operator Type tab."
-      />,
-    ),
+  return useMemo(
+    () => ({
+      pending: () =>
+        transitStage(
+          <TxStagePending
+            title="Submitting your application form"
+            description="sending to server"
+          />,
+        ),
 
-  failed: (error: unknown, onRetry?: () => void) => {
-    let errorContent;
+      success: () =>
+        transitStage(
+          <TxStageSuccess
+            title="Your application has been submitted"
+            description="You can track your application's status on the Operator Type tab"
+          />,
+        ),
 
-    if (typeof error === 'object' && error !== null && 'details' in error) {
-      const errorObj = error as { message: string; details: string[] };
-      errorContent = (
-        <>
-          <span>{errorObj.message}</span>
-          <br />
-          {errorObj.details.length > 0 && (
-            <ul>
-              {errorObj.details.map((detail, index) => (
-                <li key={index}>{detail}</li>
-              ))}
-            </ul>
-          )}
-        </>
-      );
-    } else {
-      errorContent = extractErrorMessage(error);
-    }
-
-    return transitStage(
-      <TxStageFail
-        title="Submission failed"
-        error={errorContent}
-        code={getErrorCode(error)}
-        onRetry={onRetry}
-      />,
-    );
-  },
-});
-
-export const useModalStages = () => useTransactionModalStage(getModalStages);
+      failed: getFailedStage(transitStage, 'Submission failed'),
+    }),
+    [transitStage],
+  );
+};

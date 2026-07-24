@@ -1,4 +1,4 @@
-import { PATH } from 'consts';
+import { isModuleCM, PATH } from 'consts';
 import { FormTitle, WarningBlock } from 'shared/components';
 import { EjectKeysSelectorHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
@@ -16,7 +16,12 @@ export const KeysSelector = () => {
         You might need to use this method in case you don’t have an ability to
         access your validator keys. If you can exit your keys normally, please
         proceed with{' '}
-        <LocalLink href={PATH.KEYS_EXIT}>the regular exit flow</LocalLink>.
+        {isModuleCM ? (
+          'the regular exit flow'
+        ) : (
+          <LocalLink href={PATH.KEYS_EXIT}>the regular exit flow</LocalLink>
+        )}
+        .
       </WarningBlock>
       <FormTitle>Choose keys to eject</FormTitle>
       <EjectKeysSelectorHookForm options={keys} />

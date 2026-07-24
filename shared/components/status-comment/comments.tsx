@@ -1,3 +1,4 @@
+import { isModuleCM } from 'consts';
 import {
   HOW_TO_EXIT_VALIDATOR_LINK,
   PERFORMANCE_TIPS_LINK,
@@ -9,6 +10,11 @@ import { LocalLink } from 'shared/navigate';
 import { MatomoLink } from '../matomo-link/matomo-link';
 import { SHARE_LIMIT_STATUS, useShareLimitStatus } from 'modules/web3';
 
+const VALIDATOR_ACTIVE_ANCHOR = '#when-does-a-validator-become-active';
+const STAKE_SHARE_LIMIT_ANCHOR = isModuleCM
+  ? '#what-are-the-possible-key-statuses'
+  : '#what-is-the-csm-stake-share-limit';
+
 // TODO: check role
 export const CommentExitRequested: FC = () => (
   <MatomoLink
@@ -17,6 +23,10 @@ export const CommentExitRequested: FC = () => (
   >
     Exit the key from the CL
   </MatomoLink>
+);
+
+export const CommentTriggeredEjection: FC = () => (
+  <>The key has been triggered to be ejected</>
 );
 
 export const CommentUnbonded: FC = () => (
@@ -51,9 +61,9 @@ export const CommentUnbondedNonQueued: FC = () => (
 
 export const CommentNonQueued: FC = () => (
   <>
-    If you have <b>Unbonded</b> keys — resolve the issues with them <br />
+    If you have <b>Unbonded</b> keys — resolve the issues with them. <br />
     If there are no <b>Unbonded</b> keys — put this key back to the queue (
-    <LocalLink href={PATH.KEYS_NORMALIZE}>Normalize queue</LocalLink>)
+    <LocalLink href={PATH.KEYS_NORMALIZE}>Normalize queue</LocalLink>).
   </>
 );
 
@@ -73,7 +83,7 @@ export const CommentActivationPending: FC = () => {
   return (
     <LocalLink
       href={PATH.KEYS_VIEW}
-      anchor="#when-does-a-validator-become-active"
+      anchor={VALIDATOR_ACTIVE_ANCHOR}
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
       }
@@ -107,7 +117,7 @@ export const CommentDepositable: FC = () => {
       reached its{' '}
       <LocalLink
         href={PATH.KEYS_VIEW}
-        anchor="#what-is-the-csm-stake-share-limit"
+        anchor={STAKE_SHARE_LIMIT_ANCHOR}
         matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkComment}
       >
         stake share limit
@@ -116,7 +126,7 @@ export const CommentDepositable: FC = () => {
   ) : (
     <LocalLink
       href={PATH.KEYS_VIEW}
-      anchor="#when-does-a-validator-become-active"
+      anchor={VALIDATOR_ACTIVE_ANCHOR}
       matomoEvent={
         MATOMO_CLICK_EVENTS_TYPES.whenValidatorBecomeActiveLinkComment
       }

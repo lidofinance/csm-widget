@@ -14,7 +14,7 @@ export const ScoreSources: FC = () => {
       <Text size="xs" color="secondary">
         To be included in the list, applicants must obtain a sufficient score in
         each category below as well as an overall score across all the
-        categories.
+        categories
       </Text>
       <Stack justify="space-between">
         <Text size="sm" weight={700}>

@@ -1,10 +1,10 @@
-import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { useUserConfig } from 'config/user-config';
 import { Address } from 'viem';
 import { useConnection } from 'wagmi';
 
 type Result = {
-  chainId: CSM_SUPPORTED_CHAINS;
+  chainId: SUPPORTED_CHAINS;
   isSupportedChain: boolean;
   isAccountActive: boolean;
   isWalletConnected: boolean;
@@ -18,17 +18,9 @@ export const useDappStatus = (): Result => {
     isConnected: isWalletConnected,
   } = useConnection();
 
-  const { supportedChainIds, defaultChain: defaultChainId } = useUserConfig();
+  const { defaultChain: chainId } = useUserConfig();
 
-  const chainId = (
-    walletChainId && supportedChainIds.includes(walletChainId)
-      ? walletChainId
-      : defaultChainId
-  ) as CSM_SUPPORTED_CHAINS;
-
-  const isSupportedChain = walletChainId
-    ? supportedChainIds.includes(walletChainId)
-    : true;
+  const isSupportedChain = walletChainId ? walletChainId === chainId : true;
 
   const isAccountActive = walletChainId
     ? isWalletConnected && isSupportedChain

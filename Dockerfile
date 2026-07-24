@@ -11,17 +11,17 @@ COPY . .
 RUN NODE_NO_BUILD_DYNAMICS=true yarn typechain && yarn build
 # public/runtime is used to inject runtime vars; it should exist and user node should have write access there for it
 RUN rm -rf /app/public/runtime && mkdir /app/public/runtime && chown node /app/public/runtime
+# public/manifest.json and favicons are regenerated at server start based on MODULE; user node needs write access
+RUN chown -R node /app/public
 
 # final image
 FROM node:24-alpine as base
 
 ARG BASE_PATH=""
-ARG SUPPORTED_CHAINS="1"
 ARG DEFAULT_CHAIN="1"
 
 ENV NEXT_TELEMETRY_DISABLED=1 \
   BASE_PATH=$BASE_PATH \
-  SUPPORTED_CHAINS=$SUPPORTED_CHAINS \
   DEFAULT_CHAIN=$DEFAULT_CHAIN
 
 WORKDIR /app

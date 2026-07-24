@@ -1,4 +1,4 @@
-import { MatomoLink } from 'shared/components';
+import { MatomoLink } from 'shared/components/matomo-link/matomo-link';
 import styled from 'styled-components';
 
 import { NAV_MOBILE_MEDIA } from 'styles/constants';
@@ -70,7 +70,7 @@ export const LinkDivider = styled.div`
   margin: 2px 16px;
 `;
 
-export const Version = styled(FooterLink)`
+export const VersionLink = styled(FooterLink)`
   margin-left: auto;
   padding: 2px 5px;
   border-radius: ${({ theme }) => theme.borderRadiusesMap.xs}px;

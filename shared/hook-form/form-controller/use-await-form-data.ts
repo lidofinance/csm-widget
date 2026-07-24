@@ -6,15 +6,18 @@ import { useAwaiter } from 'shared/hooks';
 // should be enough to load token balances/tvl/max&min amounts and other contract data
 export const VALIDATION_CONTEXT_TIMEOUT = 30000;
 
-export const useAwaitFormData = <T extends object>(
-  timeout = VALIDATION_CONTEXT_TIMEOUT,
-) => {
-  const { data, isPending } = useFormDataContext<T>();
+export const useAwaitFormData = <C extends object, T = C>(options?: {
+  select?: (data: C) => T;
+  timeout?: number;
+}) => {
+  const { data, isPending } = useFormDataContext<C>();
+  const { select, timeout = VALIDATION_CONTEXT_TIMEOUT } = options ?? {};
 
-  const loadedData = useMemo(
-    () => (isPending ? undefined : data),
-    [isPending, data],
+  const value = useMemo(
+    () =>
+      isPending ? undefined : select ? select(data) : (data as unknown as T),
+    [isPending, data, select],
   );
 
-  return useAwaiter(loadedData, timeout).awaiter;
+  return useAwaiter(value, timeout);
 };

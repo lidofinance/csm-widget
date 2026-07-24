@@ -1,0 +1,123 @@
+import { Divider, Text } from '@lidofinance/lido-ui';
+import { useCurveParameters } from 'modules/web3/';
+import { type ComponentPropsWithoutRef, type FC, type ReactNode } from 'react';
+import { useWatch } from 'react-hook-form';
+import { Address } from 'shared/components';
+import {
+  formatEthKeyIntervals,
+  formatPercentKeyIntervals,
+} from 'shared/components/parameters-list/format';
+import { useCurveMetadata } from 'shared/hooks';
+import styled from 'styled-components';
+import type { CuratedOperatorFormInputType } from '../context/';
+import { useCuratedOperatorFormData } from '../context/';
+
+const SummaryRow: FC<
+  ComponentPropsWithoutRef<'div'> & { label: string; children: ReactNode }
+> = ({ label, children, ...rest }) => (
+  <RowStyle {...rest}>
+    <Text size="xs" color="secondary">
+      {label}
+    </Text>
+    <div>{children}</div>
+  </RowStyle>
+);
+
+export const VerificationSummary: FC = () => {
+  const { availableGates = [] } = useCuratedOperatorFormData();
+  const [gateName, rewardAddress, managerAddress, name, description] = useWatch<
+    CuratedOperatorFormInputType,
+    ['gateName', 'rewardAddress', 'managerAddress', 'name', 'description']
+  >({
+    name: [
+      'gateName',
+      'rewardAddress',
+      'managerAddress',
+      'name',
+      'description',
+    ],
+  });
+
+  const selectedGate = availableGates.find(
+    (gate) => gate.gateName === gateName,
+  );
+
+  const { data: parameters } = useCurveParameters(selectedGate?.curveId);
+  const metadata = useCurveMetadata(selectedGate?.curveId);
+
+  return (
+    <ListStyle>
+      <SummaryRow label="Node Operator type:" data-testid="summaryOperatorType">
+        <Text size="xs">{metadata?.name ?? '—'}</Text>
+      </SummaryRow>
+      <SummaryRow label="Name:" data-testid="summaryName">
+        <Text size="xs">{name}</Text>
+      </SummaryRow>
+      <SummaryRow label="Description:" data-testid="summaryDescription">
+        <Text size="xs">{description}</Text>
+      </SummaryRow>
+      <DividerStyle type="horizontal" />
+      <SummaryRow label="Manager Address:" data-testid="summaryManagerAddress">
+        <Address monospace address={managerAddress} symbols={0} size="xxs" />
+      </SummaryRow>
+      <SummaryRow label="Rewards Address:" data-testid="summaryRewardsAddress">
+        <Address address={rewardAddress} symbols={0} size="xxs" />
+      </SummaryRow>
+
+      <DividerStyle />
+
+      <SummaryRow label="Node Operator reward:">
+        <ParamValues
+          items={formatPercentKeyIntervals(parameters?.rewardsConfig)}
+        />
+      </SummaryRow>
+      <SummaryRow label="Bond:">
+        <ParamValues items={formatEthKeyIntervals(parameters?.bondConfig)} />
+      </SummaryRow>
+    </ListStyle>
+  );
+};
+
+const ListStyle = styled.div`
+  display: grid;
+  grid-template-columns: 1fr minmax(auto, 364px);
+  column-gap: ${({ theme }) => theme.spaceMap.sm}px;
+  row-gap: ${({ theme }) => theme.spaceMap.xl}px;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const RowStyle = styled.div`
+  position: relative;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: start;
+`;
+
+const DividerStyle = styled(Divider)`
+  grid-column: 1 / -1;
+`;
+
+const ParamList = styled.ul`
+  margin: 4px 0 0;
+  padding-left: 16px;
+  list-style: disc;
+  color: var(--lido-color-text);
+
+  li {
+    margin-bottom: 2px;
+  }
+`;
+
+export const ParamValues: FC<{ items: ReactNode[] }> = ({ items }) => (
+  <ParamList>
+    {items.map((item, i) => (
+      <li key={i}>
+        <Text size="xs">{item}</Text>
+      </li>
+    ))}
+  </ParamList>
+);

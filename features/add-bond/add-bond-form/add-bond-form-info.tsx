@@ -1,13 +1,12 @@
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { convertSharesToEth, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { DataTable, DataTableRow } from '@lidofinance/lido-ui';
 import { ONE_ETH } from 'consts/tokens';
 import { useWatch } from 'react-hook-form';
 import { FormatToken } from 'shared/formatters';
-import { useExchangeRate } from 'shared/hooks';
-import { AddBondFormInputType } from './context';
-import { useReceiveAmount } from './hooks/use-receive-amount';
+import { AddBondFormInputType, useAddBondFormData } from './context';
 
 export const AddBondFormInfo = () => {
+  const { poolData } = useAddBondFormData(true);
   const [token, bondAmount] = useWatch<
     AddBondFormInputType,
     ['token', 'bondAmount']
@@ -15,26 +14,24 @@ export const AddBondFormInfo = () => {
     name: ['token', 'bondAmount'],
   });
 
-  const receive = useReceiveAmount(bondAmount, token);
-  const { data: exchange, isPending: isExchangeLoading } = useExchangeRate();
+  const toSteth = (amount: bigint) =>
+    token === TOKENS.wsteth ? convertSharesToEth(amount, poolData) : amount;
+
+  const receiveAmount = toSteth(bondAmount ?? 0n);
+  const rate = toSteth(ONE_ETH);
 
   return (
     <DataTable data-testid="addBondTokenInfo">
       <DataTableRow
         title="Bond balance will receive"
-        loading={receive.loading}
         data-testid="balanceWillReceive"
       >
-        <FormatToken amount={receive.amount} token={TOKENS.steth} />
+        <FormatToken amount={receiveAmount} token={TOKENS.steth} />
       </DataTableRow>
       {token !== TOKENS.steth && (
-        <DataTableRow
-          title="Exchange rate"
-          loading={isExchangeLoading}
-          data-testid="exchangeRate"
-        >
+        <DataTableRow title="Exchange rate" data-testid="exchangeRate">
           <FormatToken amount={ONE_ETH} token={token} /> ={' '}
-          <FormatToken amount={exchange?.[token]} token={TOKENS.steth} />
+          <FormatToken amount={rate} token={TOKENS.steth} />
         </DataTableRow>
       )}
     </DataTable>

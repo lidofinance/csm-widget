@@ -2,15 +2,20 @@ import { Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { CheckboxHookForm } from 'shared/hook-form/controls';
+import { useDepositDataValid } from 'shared/hook-form/deposit-data';
 import { useSubmitKeysFormData } from '../context';
 import { SHARE_LIMIT_STATUS } from 'modules/web3';
 
 export const KeysConfirm: FC = () => {
   const { shareLimitStatus } = useSubmitKeysFormData();
+  const isDepositDataValid = useDepositDataValid();
 
   return (
     <Stack align="start">
-      <CheckboxHookForm fieldName="confirmKeysReady" />
+      <CheckboxHookForm
+        fieldName="confirmKeysReady"
+        disabled={!isDepositDataValid}
+      />
       <Text size="xxs" color="secondary" as="div">
         I confirm that:
         <ul>

@@ -1,13 +1,19 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
-import { useLidoSDK } from '../web3-provider';
+import invariant from 'tiny-invariant';
+import { useSmSDK } from '../web3-provider';
 
 export const useIcsPaused = () => {
-  const { csm } = useLidoSDK();
+  const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
     queryKey: ['ics-paused'],
     ...STRATEGY_CONSTANT,
-    queryFn: () => csm.icsGate.isPaused(),
+    queryFn: () => {
+      invariant(sdk);
+      return sdk.icsGate.isPaused();
+    },
+    enabled: !!sdk,
   });
 };

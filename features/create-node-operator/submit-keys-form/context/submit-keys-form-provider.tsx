@@ -1,10 +1,13 @@
 import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FormControllerProvider } from 'shared/hook-form/form-controller';
+import {
+  FormControllerProvider,
+  useFlowSubmit,
+} from 'shared/hook-form/form-controller';
 import { SubmitKeysUpdater } from './submit-keys-updater';
 import { type SubmitKeysFormInputType } from './types';
+import { useSubmitKeysFlowResolver } from './use-submit-keys-flow';
 import { useSubmitKeysDefaultValues } from './use-submit-keys-default-values';
-import { useSubmitKeysSubmit } from './use-submit-keys-submit';
 import { useSubmitKeysValidation } from './use-submit-keys-validation';
 
 export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -17,7 +20,7 @@ export const SubmitKeysFormProvider: FC<PropsWithChildren> = ({ children }) => {
     mode: 'onChange',
   });
 
-  const submitter = useSubmitKeysSubmit();
+  const submitter = useFlowSubmit(useSubmitKeysFlowResolver());
 
   return (
     <FormProvider {...formObject}>

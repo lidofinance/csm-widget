@@ -9,12 +9,12 @@ import { UserConfigDefaultType } from './types';
 
 export const getUserConfigDefault = (): UserConfigDefaultType => {
   return {
-    defaultChain: Number(config.defaultChain),
-    supportedChainIds: config.supportedChains,
+    defaultChain: config.defaultChain,
     prefillUnsafeElRpcUrls: {
       [CHAINS.Mainnet]: config.prefillUnsafeElRpcUrls1,
       [CHAINS.Hoodi]: config.prefillUnsafeElRpcUrls560048,
     },
     walletconnectProjectId: config.walletconnectProjectId,
+    defaultIpfsGateways: config.ipfsGateways,
   };
 };

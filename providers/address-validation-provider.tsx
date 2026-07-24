@@ -36,95 +36,15 @@ export const useAddressValidation = () => {
   return value;
 };
 
-/*
- * ADDRESS VALIDATION PROVIDER LOGIC
- *
- * APPROACH: Manual function calls (not automatic useQuery)
- * - validateAddress(address) is called manually when user performs action
- * - Uses queryClient.fetchQuery() for caching
- * - Sequential execution: API first, then file validation as fallback
- *
- * ┌─────────────────────────────────────────────────────────────────────┐
- * │        User action triggers validateAddress(address)                │
- * │        (e.g. submit button click before form submission)            │
- * └─────────────────────┬───────────────────────────────────────────────┘
- *                       │
- *                       ▼
- *           ┌───────────────────────────┐
- *           │ !addressToValidate ||     │
- *           │ config.ipfsMode?          │
- *           └───┬───────────────────┬───┘
- *               │ YES               │ NO
- *               ▼                   ▼
- *        ┌─────────────┐    ┌──────────────────────────┐
- *        │ set=true    │    │ addressApi               │
- *        │ return true │    │ ValidationEnabled?       │
- *        └─────────────┘    └──────┬───────────────────┘
- *                                  │
- *                   ┌──────────────┴──────────────┐
- *                   │ TRUE                        │ FALSE
- *                   ▼                             ▼
- *      ┌────────────────────────┐    ┌────────────────────────┐
- *      │ await validateAddress  │    │ validationFile?        │
- *      │ API(address)           │    └────┬───────────────┬───┘
- *      └────────┬───────────────┘         │ NO            │ YES
- *               │                         ▼               ▼
- *               ▼                   ┌──────────┐    ┌─────────────────┐
- *    ┌──────────────────────┐      │ set=true │    │ await validate  │
- *    │ Result type?         │      │ return   │    │ AddressFile()   │
- *    └──┬───────────────┬───┘      │ true     │    │ ┌─────────────┐ │
- *       │               │          └──────────┘    │ │queryFn:     │ │
- *       │ !== null &&   │ === null                 │ │ if broken → │ │
- *       │ has isValid   │                          │ │   false     │ │
- *       ▼               ▼                          │ │ else →      │ │
- *  ┌──────────┐  ┌──────────────┐                 │ │ validateLoc-│ │
- *  │ set=API  │  │ validationFi-│                 │ │ ally()      │ │
- *  │ .isValid │  │ le?          │                 │ └─────────────┘ │
- *  │ return   │  └──┬────────┬──┘                 └────────┬────────┘
- *  │ API      │     │ NO     │ YES                         │
- *  │ .isValid │     ▼        ▼                             ▼
- *  └──────────┘  ┌──────┐ ┌─────────────────┐      ┌──────────────┐
- *                │set=  │ │ await validate  │      │ set=file     │
- *                │true  │ │ AddressFile()   │      │ .isValid     │
- *                │return│ │ ┌─────────────┐ │      │ return file  │
- *                │true  │ │ │queryFn:     │ │      │ .isValid     │
- *                └──────┘ │ │ if broken → │ │      └──────────────┘
- *                         │ │   false     │ │
- *                         │ │ else →      │ │
- *                         │ │ validateLoc-│ │
- *                         │ │ ally()      │ │
- *                         │ └─────────────┘ │
- *                         └────────┬────────┘
- *                                  │
- *                                  ▼
- *                          ┌──────────────┐
- *                          │ set=file     │
- *                          │ .isValid     │
- *                          │ return file  │
- *                          │ .isValid     │
- *                          └──────────────┘
- *
- * ALL POSSIBLE OUTCOMES:
- * 1. No address / ipfsMode → return true
- * 2. API enabled + success → return API.isValid
- * 3. API enabled + error + file exists → return file.isValid
- * 4. API enabled + error + NO file → return true (DEFAULT)
- * 5. API disabled + file exists → return file.isValid
- * 6. API disabled + NO file → return true (DEFAULT)
- *
- * PRIORITY ORDER:
- * 1. API result (when enabled & successful: result !== null && isValid defined)
- * 2. File validation (fallback when API error, or when API disabled)
- *    - If file.isBroken = true → { isValid: false }
- *    - Otherwise → validateAddressLocally()
- * 3. Default: true (when no validation sources available)
- *
- * CACHING (via queryClient.fetchQuery):
- * - API validation: cached per address for 1 minute
- * - File validation: cached per address + file metadata for 1 minute
- * - Repeated calls use cached results
- */
-
+// Resolution priority:
+//   1. No address or ipfsMode  → valid
+//   2. API enabled + responded → use API.isValid
+//   3. validationFile present  → check against deny-list locally
+//   4. Otherwise               → valid
+//
+// The server-side loader returns an empty deny-list when the file is
+// missing/unreadable/malformed, so a broken file lets all addresses
+// through and surfaces via logs + Prom metrics rather than blocking users.
 export const AddressValidationProvider = ({
   children,
   validationFile,
@@ -148,14 +68,9 @@ export const AddressValidationProvider = ({
           'address-validation-file',
           addressToValidate,
           validationFile?.addresses?.length,
-          validationFile?.isBroken,
         ],
-        queryFn: async () => {
-          // If validation file is broken, consider all addresses invalid
-          if (validationFile.isBroken) return { isValid: false };
-
-          return validateAddressLocally(addressToValidate, validationFile);
-        },
+        queryFn: async () =>
+          validateAddressLocally(addressToValidate, validationFile),
         staleTime: 1 * 60 * 1000, // 1 minute
       });
 

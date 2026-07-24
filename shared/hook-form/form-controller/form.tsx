@@ -2,9 +2,10 @@ import { useDappStatus } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback, useEffect, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useAddressValidation } from 'providers/address-validation-provider';
+import { EventSubsciption } from 'utils';
 import { trackMatomoFormEvent } from 'utils/track-matomo-event';
 import { useFormControllerContext } from './form-controller-context';
-import { useFormData } from './form-data-context';
+import { useFormData, useFormDataContext } from './form-data-context';
 
 type FormControllerProps = React.ComponentProps<'form'>;
 
@@ -15,18 +16,24 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
   const { isAccountActive, address } = useDappStatus();
   const { validateAddress } = useAddressValidation();
   const { handleSubmit, reset: resetDefault } = useFormContext();
-  const { onSubmit, onReset, retryEvent, onConfirm, onRetry, formName } =
-    useFormControllerContext();
+  const { onSubmit, onReset, formName } = useFormControllerContext();
+  const { revalidate } = useFormDataContext();
   const data = useFormData();
+
+  const retryEvent = useMemo(() => new EventSubsciption(), []);
+  const onRetry = useCallback(() => retryEvent.fire(), [retryEvent]);
 
   const baseSubmit = useMemo(
     () =>
       handleSubmit(async (args) => {
-        // Validate address before submit - if address is not valid, don't submit
+        // @note Validate address before submit - if address is not valid, don't submit
         const result = await validateAddress(address);
         if (!result) return;
 
-        const success = await onSubmit(args, data, { onConfirm, onRetry });
+        const success = await onSubmit(args, data, {
+          onConfirm: revalidate,
+          onRetry,
+        });
         if (success) {
           trackMatomoFormEvent(formName, 'success');
           onReset ? onReset(args) : resetDefault();
@@ -37,11 +44,11 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
       data,
       formName,
       handleSubmit,
-      onConfirm,
       onReset,
       onRetry,
       onSubmit,
       resetDefault,
+      revalidate,
       validateAddress,
     ],
   );
@@ -63,9 +70,7 @@ export const Form: FC<PropsWithChildren<FormControllerProps>> = ({
   );
 
   // Bind retry callback
-  useEffect(() => {
-    return retryEvent.subscribe(doRetry);
-  }, [retryEvent, doRetry]);
+  useEffect(() => retryEvent.subscribe(doRetry), [retryEvent, doRetry]);
 
   // Reset form amount after disconnect wallet
   useEffect(() => {

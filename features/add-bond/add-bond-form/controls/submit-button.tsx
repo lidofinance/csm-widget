@@ -1,10 +1,10 @@
 import { PausedButton, SubmitButtonHookForm } from 'shared/hook-form/controls';
-import { useAddBondFormData } from '../context';
+import { useAddBondFlow } from '../context';
 
 export const SubmitButton = () => {
-  const { isPaused } = useAddBondFormData();
+  const flow = useAddBondFlow();
 
-  if (isPaused) {
+  if (flow.action === 'paused') {
     return <PausedButton type="Accounting" />;
   }
 

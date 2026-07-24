@@ -15,17 +15,25 @@ import {
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { getTokenDisplayName } from 'utils';
-import { ClaimBondFormInputType, useClaimBondFormData } from '../context';
+import {
+  ClaimBondFormInputType,
+  useClaimBondFlow,
+  useClaimBondFormData,
+} from '../context';
 import { useWithdrawalWaitingTime } from '../hooks/use-withdrawal-waiting-time';
 
 export const TokenSelect: React.FC = () => {
-  const [token, claimRewards] = useWatch<
-    ClaimBondFormInputType,
-    ['token', 'claimRewards']
-  >({ name: ['token', 'claimRewards'] });
-  const { maxValues, isContract } = useClaimBondFormData(true);
+  const [token] = useWatch<ClaimBondFormInputType, ['token']>({
+    name: ['token'],
+  });
+  const {
+    isContract,
+    feeSplits,
+    calculation: { claimableMaxValues },
+  } = useClaimBondFormData(true);
+  const flow = useClaimBondFlow();
 
-  const maxEthAmount = maxValues?.[TOKENS.eth]?.[1];
+  const maxEthAmount = claimableMaxValues?.[TOKENS.eth]?.[1];
   const {
     data: { text: waitingTimeValue } = {},
     isPending: isWaitingTimeLoading,
@@ -38,9 +46,18 @@ export const TokenSelect: React.FC = () => {
     name: 'unlockedClaimTokens',
   });
 
+  if (flow.action !== 'claim' || !flow.showAmount) return null;
+  const maxIdx = flow.maxValueIndex;
+
   return (
     <>
       <FormTitle>Choose a token to claim</FormTitle>
+      {flow.includeRewards && feeSplits.length > 0 && (
+        <Note>
+          Splitter addresses receive stETH. Choose the token for your Rewards
+          Address.
+        </Note>
+      )}
       {isContract && (
         <WarningBlock>
           The Rewards Address of your Node Operator seems to be a smart
@@ -51,7 +68,7 @@ export const TokenSelect: React.FC = () => {
       )}
       <TokenButtonsHookForm
         disabled={
-          !maxValues?.[TOKENS.eth][Number(claimRewards)] ||
+          !claimableMaxValues?.[TOKENS.eth][maxIdx] ||
           (isContract && !unlockField.value)
         }
         options={{
@@ -59,7 +76,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.eth}
-                amount={maxValues[TOKENS.eth][Number(claimRewards)]}
+                amount={claimableMaxValues[TOKENS.eth][maxIdx]}
               />
               <YouWillReceive
                 waitingTime={
@@ -73,7 +90,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.steth}
-                amount={maxValues[TOKENS.steth][Number(claimRewards)]}
+                amount={claimableMaxValues[TOKENS.steth][maxIdx]}
               />
               <YouWillReceive
                 waitingTime={INSTANT_WAITING_TIME}
@@ -85,7 +102,7 @@ export const TokenSelect: React.FC = () => {
             <Stack direction="column">
               <TokenAmount
                 token={TOKENS.wsteth}
-                amount={maxValues[TOKENS.wsteth][Number(claimRewards)]}
+                amount={claimableMaxValues[TOKENS.wsteth][maxIdx]}
               />
               <YouWillReceive
                 waitingTime={INSTANT_WAITING_TIME}
@@ -96,7 +113,7 @@ export const TokenSelect: React.FC = () => {
         }}
       />
       {token === TOKENS.eth && (
-        <Note>
+        <Note data-testid="ethNote">
           After receiving NFT you will need to claim ETH manually. Follow{' '}
           <LocalLink
             href={PATH.BOND_CLAIM}

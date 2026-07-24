@@ -4,8 +4,9 @@ import {
   FeatureFlagsType,
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
-  USE_WALLET_RPC,
   DISABLE_DEPOSIT_DATA_VALIDATION,
+  DISABLE_ICS_PROOF_VALIDATION,
+  DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
 } from './types';
 
 const { defaultChain } = getConfig();
@@ -13,9 +14,10 @@ const isMainnet = defaultChain === CHAINS.Mainnet;
 
 export const getFeatureFlagsDefault = (): FeatureFlagsType => {
   return {
-    [USE_WALLET_RPC]: false,
     [ICS_APPLY_FORM]: isMainnet,
     [SURVEYS_SETUP_ENABLED]: isMainnet,
     [DISABLE_DEPOSIT_DATA_VALIDATION]: false,
+    [DISABLE_ICS_PROOF_VALIDATION]: false,
+    [DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION]: false,
   };
 };

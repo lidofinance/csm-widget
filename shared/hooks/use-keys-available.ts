@@ -1,13 +1,9 @@
 import { useMemo } from 'react';
-import {
-  TOKENS,
-  BondBalance,
-  KeyNumberValueInterval,
-} from '@lidofinance/lido-csm-sdk';
-import { ONE_ETH } from 'consts/tokens';
-import { KEYS_UPLOAD_TX_LIMIT } from 'consts';
+import { BondBalance, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { KEYS_UPLOAD_TX_LIMIT, ONE_ETH } from 'consts';
 import { useExchangeRate } from 'shared/hooks';
 import { useCurveParameters } from 'modules/web3/hooks/use-curve-parameters';
+import { bondForKeys, convert, maxKeysForBond } from 'utils';
 
 type Props = {
   curveId?: bigint;
@@ -18,158 +14,76 @@ type Props = {
   wstethBalance?: bigint;
 };
 
-export type KeysAvailable = Record<TOKENS, ReturnType<typeof calc>>;
+type AvailableForToken = { count: number; amount: bigint };
+export type KeysAvailable = Record<TOKENS, AvailableForToken>;
 
+/**
+ * How many keys the wallet balances can fund, per token, with the bond amount
+ * each option would cost. Capped by the per-transaction upload limit and the
+ * curve's `keysLimit` (max non-withdrawn keys). Informational only — the
+ * actual key count comes from the uploaded deposit data. The curve math is
+ * reconstructed client-side from `bondConfig` (see `utils/bond-curve`); no
+ * extra on-chain reads.
+ */
 export const useKeysAvailable = ({
   curveId,
-  nonWithdrawnKeys,
   bond,
+  nonWithdrawnKeys = 0,
   ethBalance,
   stethBalance,
   wstethBalance,
-}: Props) => {
+}: Props): KeysAvailable | undefined => {
   const { data: curve } = useCurveParameters(curveId);
   const { data: rates } = useExchangeRate();
 
   return useMemo(() => {
-    if (!curve || !rates) {
+    const intervals = curve?.bondConfig;
+    const keysLimit = curve?.keysLimit;
+    if (
+      !intervals ||
+      intervals.length === 0 ||
+      keysLimit === undefined ||
+      !rates
+    ) {
       return undefined;
     }
 
-    // Extract bond config from the parameters structure
-    const bondConfig = curve.bondConfig;
-    if (!bondConfig || bondConfig.length === 0) {
-      return undefined;
-    }
+    const currentBond = bond?.current ?? 0n;
+
+    const calc = (
+      balance: bigint | undefined,
+      rate: bigint,
+    ): AvailableForToken => {
+      if (balance === undefined) return { count: 0, amount: 0n };
+
+      const balanceInSteth = convert(balance, rate);
+      const fundable = maxKeysForBond(intervals, currentBond + balanceInSteth);
+      const limited = Math.min(
+        fundable,
+        nonWithdrawnKeys + KEYS_UPLOAD_TX_LIMIT,
+        keysLimit,
+      );
+
+      const count = Math.max(limited - nonWithdrawnKeys, 0);
+      const neededSteth = bondForKeys(intervals, limited) - currentBond;
+      const amount =
+        neededSteth > 0n ? convert(neededSteth, ONE_ETH, rate) : 0n;
+
+      return { count, amount };
+    };
 
     return {
-      [TOKENS.eth]: calc(
-        ethBalance,
-        rates[TOKENS.eth],
-        bond?.current,
-        KEYS_UPLOAD_TX_LIMIT,
-        nonWithdrawnKeys,
-        bondConfig,
-      ),
-      [TOKENS.steth]: calc(
-        stethBalance,
-        rates[TOKENS.steth],
-        bond?.current,
-        KEYS_UPLOAD_TX_LIMIT,
-        nonWithdrawnKeys,
-        bondConfig,
-      ),
-      [TOKENS.wsteth]: calc(
-        wstethBalance,
-        rates[TOKENS.wsteth],
-        bond?.current,
-        KEYS_UPLOAD_TX_LIMIT,
-        nonWithdrawnKeys,
-        bondConfig,
-      ),
+      [TOKENS.eth]: calc(ethBalance, rates[TOKENS.eth]),
+      [TOKENS.steth]: calc(stethBalance, rates[TOKENS.steth]),
+      [TOKENS.wsteth]: calc(wstethBalance, rates[TOKENS.wsteth]),
     } as KeysAvailable;
   }, [
     curve,
     rates,
-    ethBalance,
     bond,
     nonWithdrawnKeys,
+    ethBalance,
     stethBalance,
     wstethBalance,
   ]);
-};
-
-const calc = (
-  balance?: bigint,
-  rate?: bigint,
-  bond = 0n,
-  keysUploadLimit?: number,
-  nonWithdrawnKeys = 0,
-  bondConfig?: KeyNumberValueInterval[],
-) => {
-  if (keysUploadLimit === undefined || !bondConfig || !balance || !rate) return;
-
-  const amountInSTETH = convert(balance, rate, ONE_ETH);
-  const totalAmount = amountInSTETH + bond;
-
-  const maxCount = getMaxKeys(bondConfig, totalAmount);
-
-  const limitedMaxCount = Math.min(
-    maxCount,
-    nonWithdrawnKeys + keysUploadLimit,
-  );
-
-  const keysAmount = getAmountByKeys(bondConfig, limitedMaxCount) - bond;
-  const count = Math.max(limitedMaxCount - nonWithdrawnKeys, 0);
-  const amount = keysAmount > 0n ? convert(keysAmount, ONE_ETH, rate) : 0n;
-
-  return {
-    count,
-    amount,
-  };
-};
-
-const convert = (value: bigint, rate: bigint, base: bigint) => {
-  return (value * rate) / base;
-};
-
-const getMaxKeys = (bondConfig: KeyNumberValueInterval[], amount: bigint) => {
-  let currentAmount = 0n;
-  let currentKeys = 0;
-
-  for (let i = 0; i < bondConfig.length; i++) {
-    const interval = bondConfig[i];
-    const nextInterval = bondConfig[i + 1];
-
-    // Determine the end of this interval
-    const intervalEnd = nextInterval ? nextInterval.minKeyNumber : Infinity;
-
-    // Calculate how many keys we can afford in this interval
-    const remainingAmount = amount - currentAmount;
-    const keysInInterval = Number(remainingAmount / interval.value);
-
-    if (currentKeys + keysInInterval >= intervalEnd) {
-      // Move to next interval
-      const keysToAdd = intervalEnd - currentKeys;
-      currentAmount += BigInt(keysToAdd) * interval.value;
-      currentKeys = intervalEnd;
-
-      if (currentAmount >= amount) {
-        return currentKeys;
-      }
-    } else {
-      // We can't afford to fill this interval completely
-      return currentKeys + keysInInterval;
-    }
-  }
-
-  return currentKeys;
-};
-
-const getAmountByKeys = (
-  bondConfig: KeyNumberValueInterval[],
-  count: number,
-) => {
-  let totalAmount = 0n;
-  let currentKeys = 0;
-
-  for (let i = 0; i < bondConfig.length && currentKeys < count; i++) {
-    const interval = bondConfig[i];
-    const nextInterval = bondConfig[i + 1];
-
-    // Determine the end of this interval
-    const intervalEnd = nextInterval ? nextInterval.minKeyNumber : count;
-
-    // Calculate how many keys to process in this interval
-    const keysInThisInterval = Math.min(
-      count - currentKeys,
-      intervalEnd - currentKeys,
-    );
-
-    // Add the cost for these keys
-    totalAmount += BigInt(keysInThisInterval) * interval.value;
-    currentKeys += keysInThisInterval;
-  }
-
-  return totalAmount;
 };

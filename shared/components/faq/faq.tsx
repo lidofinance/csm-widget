@@ -7,6 +7,8 @@ import { AccordionNavigatable } from '../accordion-navigatable';
 export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
   const items = useFilterShowRules(_items);
 
+  if (items.length === 0) return null;
+
   return (
     <Section title="FAQ">
       {items.map(({ title, anchor, content }, index) => {

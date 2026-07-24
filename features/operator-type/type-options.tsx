@@ -1,4 +1,4 @@
-import { DvtProviders } from 'features/dvt/shared';
+import { IdvtcProviders } from 'features/idvtc/shared';
 import { IcsProviders } from 'features/ics/shared';
 import { FC } from 'react';
 import { IcsTypeCard } from './ics-type-card';
@@ -10,8 +10,8 @@ export const TypeOptions: FC = () => (
     <IcsProviders>
       <IcsTypeCard />
     </IcsProviders>
-    <DvtProviders>
+    <IdvtcProviders>
       <IdvtcTypeCard />
-    </DvtProviders>
+    </IdvtcProviders>
   </OptionsWrap>
 );

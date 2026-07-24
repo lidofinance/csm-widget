@@ -1,7 +1,10 @@
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import {
   useFormValidation,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
+import { useChangeRoleMode } from 'shared/hooks';
 import { compareLowercase } from 'utils';
 import { isAddress } from 'viem';
 import type {
@@ -9,42 +12,49 @@ import type {
   ChangeRoleFormNetworkData,
 } from './types';
 
-export const useChangeRoleValidation = () => {
+export const useChangeRoleValidation = (role: ROLES) => {
+  const mode = useChangeRoleMode(role);
+
   return useFormValidation<ChangeRoleFormInputType, ChangeRoleFormNetworkData>(
     'address',
     async (
-      { address, isRevoke },
-      { currentAddress, proposedAddress, isPropose },
+      { address, intent },
+      { currentAddress, proposedAddress },
       validate,
     ) => {
-      await validate('address', () => {
-        if (!isRevoke && !isAddress(address ?? '')) {
-          throw new ValidationError('address', 'Specify a valid address');
-        }
-      });
+      const isSubmit = intent === 'submit';
 
       await validate('address', () => {
-        if (
-          !isRevoke &&
-          isPropose &&
-          compareLowercase(address, currentAddress)
-        ) {
+        if (isSubmit && !isAddress(address ?? '')) {
           throw new ValidationError(
             'address',
-            'Should not be same as current address',
+            VALIDATION_MESSAGES.specifyValidAddress,
           );
         }
       });
 
       await validate('address', () => {
         if (
-          !isRevoke &&
-          isPropose &&
+          isSubmit &&
+          (mode === 'propose' || mode === 'rewardsChange') &&
+          compareLowercase(address, currentAddress)
+        ) {
+          throw new ValidationError(
+            'address',
+            VALIDATION_MESSAGES.notSameAsCurrentAddress,
+          );
+        }
+      });
+
+      await validate('address', () => {
+        if (
+          isSubmit &&
+          mode === 'propose' &&
           compareLowercase(address, proposedAddress)
         ) {
           throw new ValidationError(
             'address',
-            'Should not be same as proposed address',
+            VALIDATION_MESSAGES.notSameAsProposedAddress,
           );
         }
       });

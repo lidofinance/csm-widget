@@ -4,20 +4,35 @@ import { FC } from 'react';
 import { Plural, Stack, WhenLoaded } from 'shared/components';
 import { formatDaysAgo } from 'utils';
 import { SurveyItem, SurveyLink, SurveySection, Warning } from '../components';
-import { useSurveysSWR } from '../shared/use-surveys-swr';
-import { SetupRaw, SetupsKeys } from '../types';
+import {
+  callSurvey,
+  parseOperatorKey,
+  surveyRequest,
+  useOperatorSurvey,
+} from 'modules/surveys-sdk';
+import { setupFindAll } from 'modules/surveys-sdk/generated';
+import { SetupRaw } from '../types';
+import { useSetupsKeys } from '../survey-setup/use-setups-keys';
+import { DelegatorBackButton } from './back-button';
 
 type DelegatorSetupsProps = {
   operatorId: string;
 };
 
 export const DelegatorSetups: FC<DelegatorSetupsProps> = ({ operatorId }) => {
-  const { data, isLoading } = useSurveysSWR<SetupRaw[]>('setups', {
-    operatorId,
+  const operatorKey = parseOperatorKey(operatorId) ?? undefined;
+
+  const { data, isLoading } = useOperatorSurvey<SetupRaw[]>('setups', {
+    operatorKey,
+    get: ({ nodeOperatorId, token, signal }) =>
+      callSurvey(() =>
+        setupFindAll({
+          ...surveyRequest(token, signal),
+          path: { nodeOperatorId },
+        }),
+      ),
   });
-  const { data: keys } = useSurveysSWR<SetupsKeys>('setups/keys', {
-    operatorId,
-  });
+  const { data: keys } = useSetupsKeys(operatorKey);
 
   const showSetups = !!(keys && (keys.total > 0 || keys.filled > 0));
 
@@ -26,17 +41,18 @@ export const DelegatorSetups: FC<DelegatorSetupsProps> = ({ operatorId }) => {
       <SurveySection
         title={`Setups for ${operatorId}`}
         subtitle="How this information will be used"
-        help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports"
+        help="Information is voluntarily submitted and only retained for report building. Information is aggregated and utilized in the compilation of the Validator and Node Operator Metrics (VaNOM) reports."
+        mainPrefix={<DelegatorBackButton />}
       >
         {!showSetups ? (
           <Text size="sm" color="secondary">
-            No keys available for this operator.
+            No keys available for this operator
           </Text>
         ) : (
           <>
             {keys && keys.filled > keys.total && (
               <Warning>
-                The number of keys has decreased. Please update the data
+                The number of keys has decreased. Please update the data.
               </Warning>
             )}
             {data?.map((setup) => (

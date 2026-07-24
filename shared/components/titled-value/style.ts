@@ -1,7 +1,7 @@
 import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
 
-export const TitledAmountStyle = styled(StackStyle)<{ $warning?: boolean }>`
+export const TitledValueStyle = styled(StackStyle)<{ $warning?: boolean }>`
   justify-content: space-between;
   align-items: center;
 
@@ -12,9 +12,7 @@ export const TitledAmountStyle = styled(StackStyle)<{ $warning?: boolean }>`
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
 `;
 
-export const AmountStyle = styled.div`
+export const ValueStyle = styled.div`
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
-  line-height: ${({ theme }) => theme.fontSizesMap.xl}px;
-
-  font-weight: 700;
+  line-height: 1.6;
 `;

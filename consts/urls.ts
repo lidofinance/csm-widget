@@ -8,7 +8,6 @@ export const PATH = <const>{
   KEYS_EJECT: '/keys/eject',
   KEYS_EXIT: '/keys/exit',
   KEYS_VIEW: '/keys/view',
-  KEYS_TRANSFER: '/keys/transfer',
   KEYS_NORMALIZE: '/keys/normalize',
 
   MONITORING: '/monitoring',
@@ -20,23 +19,33 @@ export const PATH = <const>{
   BOND_REBASE_HISTORY: '/bond/rebase-history',
   BOND_UNLOCK: '/bond/unlock',
 
-  ROLES: '/roles',
-  ROLES_REWARDS: '/roles/reward-address',
-  ROLES_MANAGER: '/roles/manager-address',
-  ROLES_INBOX: '/roles/inbox',
+  SETTINGS: '/settings',
+  SETTINGS_ROLES: '/settings/roles',
+  SETTINGS_REWARDS_ADDRESS: '/settings/rewards-address',
+  SETTINGS_MANAGER_ADDRESS: '/settings/manager-address',
+  SETTINGS_CLAIMER: '/settings/claimer',
+  SETTINGS_SPLITS: '/settings/splits',
+  SETTINGS_INBOX: '/settings/inbox',
+  SETTINGS_METADATA: '/settings/metadata',
 
-  STEALING: '/stealing',
-  STEALING_REPORT: '/stealing/report',
-  STEALING_CANCEL: '/stealing/cancel',
+  DELAYED_PENALTY: '/delayed-penalty',
+  DELAYED_PENALTY_REPORT: '/delayed-penalty/report',
+  DELAYED_PENALTY_CANCEL: '/delayed-penalty/cancel',
 
   TYPE: '/type',
-  TYPE_CLAIM: '/type/claim',
+  TYPE_ICS_CLAIM: '/type/ics-claim',
   TYPE_ICS_SYSTEM: '/type/ics-system',
   TYPE_ICS_APPLY: '/type/ics-apply',
+  TYPE_ICS_PARAMETERS: '/type/ics-parameters',
   TYPE_PARAMETERS: '/type/parameters',
 
-  TYPE_DVT_DESCRIPTION: '/type/idvtc-description',
-  TYPE_DVT_APPLY: '/type/idvtc-apply',
+  TYPE_IDVTC_DESCRIPTION: '/type/idvtc-description',
+  TYPE_IDVTC_APPLY: '/type/idvtc-apply',
+  TYPE_IDVTC_PARAMETERS: '/type/idvtc-parameters',
+  TYPE_IDVTC_CLAIM: '/type/idvtc-claim',
+
+  IDVTC_DKG: '/idvtc/dkg',
+  IDVTC_MEMBERS: '/idvtc/members',
 
   SURVEYS: '/surveys',
   SURVEYS_CONTACTS: '/surveys/contacts',
@@ -46,7 +55,11 @@ export const PATH = <const>{
   SURVEYS_DELEGATES: '/surveys/delegates',
   SURVEYS_DELEGATOR: '/surveys/delegator',
 
+  GROUP: '/group',
+
   WRAPPED_SHARE: '/wrapped-2025/share',
+
+  QA_CONFIG: '/qa-config',
 };
 
 export type PATH = (typeof PATH)[keyof typeof PATH];

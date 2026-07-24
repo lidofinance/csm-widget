@@ -1,9 +1,12 @@
-import { CSM_SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
+import { isModuleCM, isModuleCSM } from './module';
 
 export const CSM_MAINNET_LINK = 'https://csm.lido.fi/';
 export const CSM_TESTNET_LINK = 'https://csm.testnet.fi/';
+export const CM_MAINNET_LINK = 'https://cm.lido.fi/';
+export const CM_TESTNET_LINK = 'https://cm.testnet.fi/';
 
 // Documentation links
 export const EXTENDED_MODE_LINK =
@@ -28,6 +31,8 @@ export const SUBSCRIBE_EVENTS_LINK =
   'https://docs.lido.fi/run-on-lido/csm/alerts-and-monitoring/expert-custom-alerts';
 export const OPERATOR_TYPES_LINK =
   'https://docs.lido.fi/staking-modules/csm/join-csm/#node-operator-types';
+export const CM_BOND_AMOUNTS_LINK =
+  'https://docs.lido.fi/run-on-lido/cm-v2/bond-and-key-management#bond-amounts';
 export const FEE_RECIPIENT_LINK =
   'https://docs.lido.fi/run-on-lido/csm/troubleshooting/setting-the-fee-recipient-for-csm-validators/#change-fee-recipient-on-existing-validator-keys';
 
@@ -61,15 +66,17 @@ type ExternalLinksConstants = {
 };
 
 export const EXTERNAL_LINKS_BY_NETWORK: Record<
-  CSM_SUPPORTED_CHAINS,
+  SUPPORTED_CHAINS,
   ExternalLinksConstants
 > = {
   [CHAINS.Mainnet]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
-    feedbackForm: 'https://forms.gle/GL9RYeV2g4px58Sv8',
+    feedbackForm: isModuleCM
+      ? 'https://forms.gle/4oRG7XwhNJszhJvv6'
+      : 'https://forms.gle/GL9RYeV2g4px58Sv8',
     stakeWidget: 'https://stake.lido.fi',
-    landing: 'https://lido.fi/csm',
+    landing: isModuleCSM ? 'https://lido.fi/csm' : LIDO_OPERATOR_PORTAL_CM,
 
     feesMonitoring: 'https://fees-monitoring.lido.fi',
     operatorsWidget: 'https://operators.lido.fi',
@@ -83,9 +90,11 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   [CHAINS.Hoodi]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
-    feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
+    feedbackForm: isModuleCM
+      ? 'https://forms.gle/Lhh4fGXvx7Gwcd6e7'
+      : 'https://forms.gle/ZBUqbykaZokJLf4M7',
     stakeWidget: 'https://stake-hoodi.testnet.fi',
-    landing: 'https://testnet.fi/csm',
+    landing: isModuleCSM ? 'https://testnet.fi/csm' : 'https://testnet.fi/cm',
 
     feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
     operatorsWidget: 'https://operators-hoodi.testnet.fi',
@@ -98,9 +107,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   },
 };
 
-export const getExternalLinks = (
-  chainId = config.defaultChain as CSM_SUPPORTED_CHAINS,
-) => {
+export const getExternalLinks = (chainId = config.defaultChain) => {
   const links = EXTERNAL_LINKS_BY_NETWORK[chainId];
   if (!links) {
     throw new Error(`ExternalLinks for chain [${chainId}] are not specified`);

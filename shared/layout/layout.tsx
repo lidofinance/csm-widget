@@ -20,12 +20,14 @@ type Props = {
   subtitle?: ReactNode;
   dummy?: boolean | 'semi';
   pageName?: string;
+  fullwidth?: boolean;
   mainPrefix?: ReactNode;
 };
 
 export const Layout: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
+  fullwidth,
   title,
   subtitle,
   pageName,
@@ -45,17 +47,23 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
         <DummyHeader />
       ) : (
         <>
-          <Navigation />
+          <Navigation desktopHidden={fullwidth} />
           <Header />
-          <AlertContainer />
+          {!fullwidth && <AlertContainer />}
         </>
       )}
 
       <Main>
         {mainPrefix}
         <Heading $titlesCount={titlesCount}>
-          {title && <LayoutTitleStyle>{title}</LayoutTitleStyle>}
-          {subtitle && <LayoutSubTitleStyle>{subtitle}</LayoutSubTitleStyle>}
+          {title && (
+            <LayoutTitleStyle data-testid="pageTitle">{title}</LayoutTitleStyle>
+          )}
+          {subtitle && (
+            <LayoutSubTitleStyle data-testid="pageSubtitle">
+              {subtitle}
+            </LayoutSubTitleStyle>
+          )}
         </Heading>
         <Content>{children}</Content>
         {!dummy && <LegalDisclaimer />}

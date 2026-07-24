@@ -1,27 +1,29 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_LAZY } from 'consts';
-import { getExternalLinks } from 'consts/external-links';
-import invariant from 'tiny-invariant';
-import { standardFetcher } from 'utils';
-
-const { surveyApi } = getExternalLinks();
+import {
+  callSurvey,
+  surveyRequest,
+  useOperatorKey,
+  usePublicSurvey,
+} from 'modules/surveys-sdk';
+import { openIndex } from 'modules/surveys-sdk/generated';
+import type { FilledDto } from 'modules/surveys-sdk/generated';
 
 export const useSurveysFilled = (
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
-  const url =
-    nodeOperatorId !== undefined
-      ? `${surveyApi}/open/csm-${nodeOperatorId}`
-      : null;
+  const operatorKey = useOperatorKey(nodeOperatorId);
+  // Public cache key discriminator. Preserves the string the retired
+  // `endpoints.publicSummary(operatorKey)` produced (`open/${operatorKey}`),
+  // so the `surveysKeys.public(path)` cache identity is unchanged. The request
+  // itself routes through the generated `openIndex` call.
+  const path = operatorKey ? `open/${operatorKey}` : null;
 
-  return useQuery({
-    queryKey: ['surveys-filled', url],
-    queryFn: () => {
-      invariant(url);
-      return standardFetcher<{ isFilled: boolean }>(url);
-    },
-    enabled: !!url,
-    ...STRATEGY_LAZY,
-  });
+  return usePublicSurvey<FilledDto>(path, ({ signal }) =>
+    callSurvey(() =>
+      openIndex({
+        ...surveyRequest(undefined, signal),
+        path: { nodeOperatorId: operatorKey as string },
+      }),
+    ),
+  );
 };

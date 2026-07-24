@@ -1,18 +1,20 @@
-import { useLidoSDK } from 'modules/web3';
+import { useFeatureFlags } from 'config/feature-flags';
+import {
+  DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
+  DISABLE_DEPOSIT_DATA_VALIDATION,
+} from 'config/feature-flags/types';
+import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
   validateBondAmount,
   validateDepositData,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
-import { useFeatureFlags } from 'config/feature-flags';
-import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
 import type { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
 
 export const useAddKeysValidation = () => {
-  const {
-    csm: { depositData: sdk },
-  } = useLidoSDK();
+  const { depositData: sdk } = useSmSDK();
   const featureFlags = useFeatureFlags();
 
   return useFormValidation<AddKeysFormInputType, AddKeysFormNetworkData>(
@@ -61,9 +63,11 @@ export const useAddKeysValidation = () => {
             depositData,
             sdk,
             keysLimit: curveParameters?.keysLimit,
-            currentActiveKeys:
+            nonWithdrawnKeys:
               operatorInfo &&
               operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys,
+            skipSignature:
+              featureFlags?.[DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION],
           });
         }
       });
@@ -72,7 +76,7 @@ export const useAddKeysValidation = () => {
         if (!confirmKeysReady) {
           throw new ValidationError(
             'confirmKeysReady',
-            'Please confirm that the keys are ready',
+            VALIDATION_MESSAGES.confirmKeysReady,
           );
         }
       });

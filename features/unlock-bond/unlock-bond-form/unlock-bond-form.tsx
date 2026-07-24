@@ -1,11 +1,11 @@
 import { FC, memo } from 'react';
-import { UnlockBondDataProvider, UnlockBondFormProvider } from './context';
-import { UnlockBondFormInfo } from './unlock-bond-form-info';
-import { AmountInput } from './controls/amount-input';
-import { SubmitButton } from './controls/submit-button';
 import { FormBlock } from 'shared/components';
 import { Form } from 'shared/hook-form/form-controller';
+import { UnlockBondDataProvider, UnlockBondFormProvider } from './context';
+import { CompensatingAmount } from './controls/compensating-amount';
 import { Info } from './controls/info';
+import { SubmitButton } from './controls/submit-button';
+import { UnlockBondFormInfo } from './unlock-bond-form-info';
 import { UnlockBondFormLoader } from './unlock-bond-form-loader';
 
 export const UnlockBondForm: FC = memo(() => {
@@ -16,7 +16,7 @@ export const UnlockBondForm: FC = memo(() => {
           <UnlockBondFormLoader>
             <Form>
               <Info />
-              <AmountInput />
+              <CompensatingAmount />
               <SubmitButton />
             </Form>
             <UnlockBondFormInfo />

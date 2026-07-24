@@ -1,22 +1,24 @@
-import { useLidoSDK } from 'modules/web3';
+import { useFeatureFlags } from 'config/feature-flags';
+import {
+  DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
+  DISABLE_DEPOSIT_DATA_VALIDATION,
+} from 'config/feature-flags/types';
+import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
   validateBondAmount,
   validateDepositData,
   ValidationError,
+  VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
 import { isAddress } from 'viem';
-import { useFeatureFlags } from 'config/feature-flags';
-import { DISABLE_DEPOSIT_DATA_VALIDATION } from 'config/feature-flags/types';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
 
 export const useSubmitKeysValidation = () => {
-  const {
-    csm: { depositData: sdk },
-  } = useLidoSDK();
+  const { depositData: sdk } = useSmSDK();
   const featureFlags = useFeatureFlags();
 
   return useFormValidation<SubmitKeysFormInputType, SubmitKeysFormNetworkData>(
@@ -67,6 +69,8 @@ export const useSubmitKeysValidation = () => {
             depositData,
             sdk,
             keysLimit: curveParameters?.keysLimit,
+            skipSignature:
+              featureFlags?.[DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION],
           });
         }
       });
@@ -75,7 +79,7 @@ export const useSubmitKeysValidation = () => {
         if (!confirmKeysReady) {
           throw new ValidationError(
             'confirmKeysReady',
-            'Please confirm that the keys are ready',
+            VALIDATION_MESSAGES.confirmKeysReady,
           );
         }
       });
@@ -84,7 +88,7 @@ export const useSubmitKeysValidation = () => {
         if (specifyCustomAddresses && !isAddress(rewardsAddress ?? '')) {
           throw new ValidationError(
             'rewardsAddress',
-            'Specify valid Rewards Address',
+            VALIDATION_MESSAGES.specifyValidRewardsAddress,
           );
         }
       });
@@ -93,7 +97,7 @@ export const useSubmitKeysValidation = () => {
         if (specifyCustomAddresses && !isAddress(managerAddress ?? '')) {
           throw new ValidationError(
             'managerAddress',
-            'Specify valid Manager Address',
+            VALIDATION_MESSAGES.specifyValidManagerAddress,
           );
         }
       });

@@ -23,21 +23,23 @@ export const DepositQueue: FC = () => (
           The time to deposit a validator is unpredictable and depends on
           factors such as total stake inflows and outflows, gas considerations,
           module shares, CSM deposit queue size, and the Node Operator&apos;s
-          place in the queue.
+          place in the queue
         </p>
         <p>
           You can subscribe to{' '}
           <MatomoLink
+            $inline
             href={SUBSCRIBE_EVENTS_LINK}
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.subscribeEventsLink}
           >
             the important CSM events
           </MatomoLink>{' '}
-          to stay notified about your validator being deposited to.
+          to stay notified about your validator being deposited to
         </p>
         <p>
           Read more information about{' '}
           <MatomoLink
+            $inline
             href={LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW}
             matomoEvent={
               MATOMO_CLICK_EVENTS_TYPES.operatorPortalDepositsFlowLink
@@ -45,7 +47,6 @@ export const DepositQueue: FC = () => (
           >
             the deposits flow
           </MatomoLink>
-          .
         </p>
       </div>
     </Stack>

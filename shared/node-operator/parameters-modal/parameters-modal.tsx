@@ -1,23 +1,20 @@
-import { OPERATOR_TYPE_TITLE } from 'consts';
+import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { ParametersList } from 'shared/components';
-import { getOperatorType } from 'utils';
+import { useDisplayOperatorType } from 'shared/hooks';
 import { StyledModal } from './styles';
 
 export const ParametersModal: ModalComponentType<{
   curveId: bigint;
 }> = ({ open, onClose, curveId }) => {
   const { data: parameters } = useCurveParameters(curveId);
-  const type = getOperatorType(curveId);
-
-  if (!type) {
-    return null;
-  }
+  const type = useDisplayOperatorType(curveId);
+  const metadata = type ? OPERATOR_TYPE_METADATA[type] : undefined;
 
   return (
     <StyledModal
-      title={OPERATOR_TYPE_TITLE[type]}
+      title={metadata?.title ?? ''}
       onClose={onClose}
       open={open}
       $variant={type}

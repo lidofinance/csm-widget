@@ -1,7 +1,8 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { UNBONDED_VALIDATORS_LINK } from 'consts/external-links';
-import { BOND_INSUFFICIENT } from 'consts/text';
+import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { FC } from 'react';
 import { Latice, MatomoLink, Stack, TitledAmount } from 'shared/components';
 import { useAddBondFormData } from '../context';
@@ -15,10 +16,14 @@ export const Info: FC = () => {
         <Stack direction="column" gap="sm" data-testid="formInfo">
           <TitledAmount
             warning={bond?.isInsufficient}
-            title={bond?.isInsufficient ? BOND_INSUFFICIENT : 'Bond balance'}
+            title={
+              <Text size="xxs" weight={700}>
+                {bond?.isInsufficient ? BOND_INSUFFICIENT : BOND_EXCESS}
+              </Text>
+            }
             help={
               bond?.isInsufficient
-                ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol'
+                ? 'Insufficient bond is the missing amount of stETH required to cover all operator’s keys.  In case of a bond insufficient, "unbonded" validators are requested for exit by the protocol.'
                 : undefined
             }
             amount={bond?.delta}
@@ -26,7 +31,7 @@ export const Info: FC = () => {
             data-testid="titledAmount"
           />
           {bond?.isInsufficient ? (
-            <p>
+            <p data-testid="formInfoText">
               Your Node Operator has an Insufficient bond because of the penalty
               applied. Now your Node Operator&apos;s bond is less than required
               to cover the Node Operator&apos;s current validators.
@@ -35,15 +40,16 @@ export const Info: FC = () => {
               <br />
               Top up the bond by submitting the required difference to be able
               to claim new rewards and to prevent your validator becoming
-              unbonded and being requested to exit.
+              unbonded and being requested to exit
             </p>
           ) : (
-            <p>
+            <p data-testid="formInfoText">
               <b>Why you might need to add bond:</b>
               <br />
               Adding a bond serves as a voluntary security measure for your Node
               Operator to prevent your validators from becoming{' '}
               <MatomoLink
+                $inline
                 href={UNBONDED_VALIDATORS_LINK}
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.unbondedValidatorsLink}
               >

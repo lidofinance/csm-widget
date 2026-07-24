@@ -16,6 +16,7 @@ export type AddressProps = {
   link?: ReactNode;
   name?: string;
   avatar?: string;
+  noStyle?: boolean;
 } & Pick<ComponentProps<typeof Text>, 'weight' | 'size' | 'color'> &
   Partial<BaseAddressProps>;
 
@@ -28,30 +29,54 @@ export const AddressInner: FC<AddressProps> = ({
   size = 'xs',
   color,
   monospace = false,
+  noStyle = false,
   link,
   avatar,
   name,
 }) => {
-  const component = (
-    <Text as="span" weight={weight} size={size} color={color}>
-      {name ?? (
-        <AddressComponent
-          address={address}
-          symbols={!symbols ? 90 : symbols}
-          as="span"
-        />
-      )}
+  const content = name ?? (
+    <AddressComponent
+      address={address}
+      symbols={!symbols ? 90 : symbols}
+      as="span"
+    />
+  );
+
+  const component = noStyle ? (
+    <span data-testid="addressText">{content}</span>
+  ) : (
+    <Text
+      as="span"
+      weight={weight}
+      size={size}
+      color={color}
+      data-testid="addressText"
+    >
+      {content}
     </Text>
   );
+
   return (
     <>
       {address && (
-        <AddressContainerStyle $big={big} $monospace={monospace}>
+        <AddressContainerStyle
+          $big={big}
+          $monospace={monospace}
+          data-testid="addressContainer"
+        >
           {showIcon &&
             (avatar ? (
-              <Avatar src={avatar} diameter={big ? 24 : 20} />
+              <Avatar
+                src={avatar}
+                diameter={big ? 24 : 20}
+                data-testid="avatar"
+              />
             ) : (
-              <Identicon address={address} diameter={big ? 24 : 20} />
+              <Identicon
+                address={address}
+                diameter={big ? 24 : 20}
+                data-testid="identicon"
+              />
             ))}
           {symbols === 0 && !name ? (
             component
@@ -60,11 +85,18 @@ export const AddressInner: FC<AddressProps> = ({
               placement="top"
               title={address}
               style={{ wordWrap: 'break-word', maxWidth: '300px' }}
+              data-testid="addressTooltip"
             >
               {component}
             </Tooltip>
           )}
-          {link ?? <EtherscanAddressLink $secondary={!big} address={address} />}
+          {link ?? (
+            <EtherscanAddressLink
+              $secondary={!big}
+              address={address}
+              data-testid="etherscanLink"
+            />
+          )}
         </AddressContainerStyle>
       )}
     </>

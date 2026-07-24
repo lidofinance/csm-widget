@@ -1,13 +1,13 @@
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
-import { useNormalizeQueueFormData } from '../context';
+import { useNormalizeQueueFlow } from '../context';
 import { Note } from 'shared/components';
 
 export const SubmitButton = () => {
-  const { unqueuedCount } = useNormalizeQueueFormData();
+  const flow = useNormalizeQueueFlow();
 
   return (
     <>
-      {unqueuedCount ? (
+      {flow.action === 'normalize' ? (
         <>
           <SubmitButtonHookForm>Normalizing queue</SubmitButtonHookForm>
 
