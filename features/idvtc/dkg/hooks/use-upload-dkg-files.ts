@@ -4,6 +4,7 @@ import type {
   FileUploadItemDto,
 } from 'modules/surveys-sdk/generated';
 import invariant from 'tiny-invariant';
+import { trackMatomoRawError } from 'utils/track-matomo-event';
 import { dkgFilesKey } from './dkg-keys';
 import { uploadDkgFilesRequest } from './upload-dkg-files-request';
 
@@ -14,6 +15,9 @@ export const useUploadDkgFiles = () => {
       invariant(op);
       return uploadDkgFilesRequest(op, body, token);
     },
-    { invalidate: [dkgFilesKey(op)] },
+    {
+      invalidate: [dkgFilesKey(op)],
+      onError: (err) => trackMatomoRawError('dkg_upload_page', err),
+    },
   );
 };

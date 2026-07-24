@@ -4,6 +4,7 @@ import { PATH } from 'consts/urls';
 import { LocalLink } from 'shared/navigate';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import { StageIconLimit } from 'shared/transaction-modal/tx-stages-basic/icons';
+import { Stack } from 'shared/components';
 
 type Props = {
   nodeOperatorId: bigint;
@@ -24,12 +25,17 @@ export const TxStageDkgUploadFailed: FC<Props> = ({
       </>
     }
     footer={
-      <>
-        <Button fullwidth onClick={onRetry}>
+      <Stack direction="column" gap="sm">
+        <Button fullwidth onClick={onRetry} size="sm">
           Retry upload
         </Button>
-        <LocalLink href={PATH.IDVTC_DKG}>Manage DKG files</LocalLink>
-      </>
+
+        <LocalLink href={PATH.IDVTC_DKG}>
+          <Button fullwidth size="sm" variant="translucent">
+            Manage DKG files
+          </Button>
+        </LocalLink>
+      </Stack>
     }
   />
 );
