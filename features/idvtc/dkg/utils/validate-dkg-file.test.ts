@@ -45,7 +45,7 @@ describe('validateDkgFile', () => {
     expect(r.ok).toBe(false);
     expect(r).toMatchObject({
       ok: false,
-      reason: expect.stringMatching(/64|large|size/i),
+      reason: expect.stringMatching(/large|size/i),
     });
   });
 

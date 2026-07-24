@@ -207,7 +207,7 @@ export type FileUploadItemDto = {
      */
     name: string;
     /**
-     * Arbitrary JSON-serializable content (≤ 64 KB after JSON.stringify). Typically a JSON object.
+     * Arbitrary JSON-serializable content (≤ 5 MiB after JSON.stringify). Typically a JSON object.
      */
     content: {
         [key: string]: unknown;
