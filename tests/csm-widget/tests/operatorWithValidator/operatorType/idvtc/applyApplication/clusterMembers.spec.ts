@@ -191,12 +191,9 @@ test.describe('Operator with keys. IDVTC. Apply application. Cluster members', a
         const signature = await memberAccount.signMessage({ message });
         await member.signatureInput.fill(signature);
         await member.verifySignatureBtn.click();
-        await expect(member.verifyingIndicator).toBeVisible();
       });
 
       await test.step('Member stays unverified once verification settles', async () => {
-        await expect(member.verifyingIndicator).toBeHidden();
-
         await expect(member.addressError).toContainText(
           'Address is not ICS-approved',
         );

@@ -63,6 +63,12 @@ test.describe(
           await claim.claimButton.click();
           await claim.confirmContinueButton.click();
           await widgetService.page.waitForSelector(
+            'text=Sign the message to set up your cluster members after the transaction',
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
+          await widgetService.walletPage.confirmTx();
+
+          await widgetService.page.waitForSelector(
             'text=Please confirm this transaction in your wallet',
             { timeout: STAGE_WAIT_TIMEOUT },
           );
