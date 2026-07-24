@@ -25,5 +25,17 @@ export default () => {
     resolve('./public/manifest.json'),
   );
 
+  const favicons = [
+    ['favicon.ico', `favicon-${moduleMode}.ico`],
+    ['favicon-16x16.png', `favicon-${moduleMode}-16x16.png`],
+    ['favicon-32x32.png', `favicon-${moduleMode}-32x32.png`],
+    ['favicon-192x192.png', `favicon-${moduleMode}-192x192.png`],
+    ['favicon-512x512.png', `favicon-${moduleMode}-512x512.png`],
+    ['apple-touch-icon.png', `apple-touch-icon-${moduleMode}.png`],
+  ];
+  favicons.forEach(([target, source]) => {
+    copyFileSync(resolve(`./public/${source}`), resolve(`./public/${target}`));
+  });
+
   console.info('created runtime files');
 };

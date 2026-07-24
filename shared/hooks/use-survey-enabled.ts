@@ -46,7 +46,10 @@ export const useSurveyEnabled = (skipClosed = false) => {
 
   return {
     enabled:
-      IS_SURVEYS_ACTIVE && variant !== null && (!isDismissed || skipClosed),
+      IS_SURVEYS_ACTIVE &&
+      isActive &&
+      variant !== null &&
+      (!isDismissed || skipClosed),
     variant,
     onClose,
   };

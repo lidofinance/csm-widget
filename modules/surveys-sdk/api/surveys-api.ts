@@ -8,8 +8,8 @@ import { getExternalLinks } from 'consts/external-links';
 // only after a page reload, matching the qa-config form's behavior.
 // May be undefined when surveys are disabled in this env; transport invariants.
 export const SURVEYS_API_BASE_URL: string | undefined =
-  readSavedUserConfig().surveyApiUrl ??
-  config.surveysApiUrl ??
+  readSavedUserConfig().surveyApiUrl ||
+  config.surveysApiUrl ||
   getExternalLinks().surveyApi;
 
 export const isSurveysApiConfigured = Boolean(SURVEYS_API_BASE_URL);
