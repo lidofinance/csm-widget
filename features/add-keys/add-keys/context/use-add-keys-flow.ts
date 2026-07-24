@@ -14,6 +14,8 @@ import { useCanPerform } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
+import { classifyErrorCode, ErrorCode } from 'utils/get-error-code';
+import { trackMatomoRawError } from 'utils/track-matomo-event';
 import { useTxModalStagesAddKeys } from '../hooks/use-tx-modal-stages-add-keys';
 import { useAddKeysFormData } from './add-keys-data-provider';
 import { AddKeysFormInputType, AddKeysFormNetworkData } from './types';
@@ -53,6 +55,9 @@ export const useAddKeysFlowResolver = (): FlowResolver<
             await uploadStaged(op, dkgFiles);
             return true;
           } catch (error) {
+            if (classifyErrorCode(error) !== ErrorCode.DENIED_SIG) {
+              trackMatomoRawError('dkg_upload_add_keys', error);
+            }
             handleTxError(error);
             return false;
           }

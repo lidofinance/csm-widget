@@ -24,6 +24,11 @@ import { useModuleOperatorTypeGetter } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import { handleTxError, useTransitStage } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
+import { classifyErrorCode, ErrorCode } from 'utils/get-error-code';
+import {
+  trackMatomoRawError,
+  trackMatomoSurveySigninDenied,
+} from 'utils/track-matomo-event';
 import { renderCreateSuccess } from '../hooks/create-success-stage';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
@@ -94,6 +99,9 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
                 await surveyAuth.ensureAuth(<TxStageMembersSignin />);
               }
             } catch (error) {
+              if (classifyErrorCode(error) === ErrorCode.DENIED_SIG) {
+                trackMatomoSurveySigninDenied('create_idvtc');
+              }
               // Staged DKG files must not be lost — abort. A declined sign-in
               // for auto-init alone must not block creating the operator.
               if (dkgFiles.length > 0) {
@@ -148,6 +156,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
                 await initStaged(op);
                 renderCreateSuccess(transitStage, result, data, keys);
               } catch (error) {
+                trackMatomoRawError('members_init', error);
                 console.warn('[members] in-flow init failed', error);
                 transitStage(
                   <TxStageMembersInitFailed
@@ -163,6 +172,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
               try {
                 await uploadStaged(op, dkgFiles);
               } catch (error) {
+                trackMatomoRawError('dkg_upload_create', error);
                 transitStage(
                   <TxStageDkgUploadFailed
                     nodeOperatorId={result.nodeOperatorId}

@@ -14,6 +14,11 @@ import {
 } from 'shared/hook-form/form-controller';
 import { TxStageSuccess, useTransitStage } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
+import { classifyErrorCode, ErrorCode } from 'utils/get-error-code';
+import {
+  trackMatomoRawError,
+  trackMatomoSurveySigninDenied,
+} from 'utils/track-matomo-event';
 import { useConfirmClaimIdvtcModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesClaimIdvtc } from '../hooks/use-tx-modal-stages-claim-idvtc';
 import { useClaimIdvtcFormData } from './claim-idvtc-data-provider';
@@ -75,7 +80,10 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
           if (canManage) {
             try {
               await surveyAuth.ensureAuth(<TxStageMembersSignin />);
-            } catch {
+            } catch (error) {
+              if (classifyErrorCode(error) === ErrorCode.DENIED_SIG) {
+                trackMatomoSurveySigninDenied('claim_idvtc');
+              }
               // Declined sign-in must not block claiming — skip auto-init
               return true;
             }
@@ -110,6 +118,7 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
                   />,
                 );
               } catch (error) {
+                trackMatomoRawError('members_init', error);
                 console.warn('[members] in-flow init failed', error);
                 transitStage(
                   <TxStageMembersInitFailed
