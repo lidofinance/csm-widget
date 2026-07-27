@@ -37,7 +37,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
     await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
     for (const row of await keysPage.submitPage.depositDataRow.all()) {
       await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'amount is not equal to 32 ETHsignature failed BLS verification',
+        'amount is not equal to 32 ETH',
       );
     }
   });
@@ -72,10 +72,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await keysPage.submitPage.selectTab('Parsed');
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
-        await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'signature failed BLS verification',
-        );
-        await expect(row.getByTestId('deposit-data-error')).toContainText(
+        await expect(row.getByTestId('deposit-data-error')).toHaveText(
           'pubkey is not a valid hex string',
         );
       }
@@ -115,10 +112,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await keysPage.submitPage.selectTab('Parsed');
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
-        await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'signature failed BLS verification',
-        );
-        await expect(row.getByTestId('deposit-data-error')).toContainText(
+        await expect(row.getByTestId('deposit-data-error')).toHaveText(
           'deposit_message_root is not a valid hex string',
         );
       }
@@ -140,7 +134,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'withdrawal_credentials is not the Lido Withdrawal Vaultsignature failed BLS verification',
+          'withdrawal_credentials is not the Lido Withdrawal Vault',
         );
       }
     },
@@ -160,10 +154,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
       await keysPage.submitPage.selectTab('Parsed');
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
-        await expect(row.getByTestId('deposit-data-error')).toContainText(
-          'signature failed BLS verification',
-        );
-        await expect(row.getByTestId('deposit-data-error')).toContainText(
+        await expect(row.getByTestId('deposit-data-error')).toHaveText(
           'withdrawal_credentials is not a valid hex string',
         );
       }

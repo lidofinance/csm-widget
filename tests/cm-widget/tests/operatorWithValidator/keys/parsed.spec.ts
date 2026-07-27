@@ -112,10 +112,7 @@ test.describe(
         await keysPage.submitPage.selectTab('Parsed');
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
-          await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'signature failed BLS verification',
-          );
-          await expect(row.getByTestId('deposit-data-error')).toContainText(
+          await expect(row.getByTestId('deposit-data-error')).toHaveText(
             'pubkey is not a valid hex string',
           );
         }
@@ -155,10 +152,7 @@ test.describe(
         await keysPage.submitPage.selectTab('Parsed');
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
-          await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'signature failed BLS verification',
-          );
-          await expect(row.getByTestId('deposit-data-error')).toContainText(
+          await expect(row.getByTestId('deposit-data-error')).toHaveText(
             'deposit_message_root is not a valid hex string',
           );
         }
@@ -221,10 +215,7 @@ test.describe(
         await keysPage.submitPage.selectTab('Parsed');
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
-          await expect(row.getByTestId('deposit-data-error')).toContainText(
-            'signature failed BLS verification',
-          );
-          await expect(row.getByTestId('deposit-data-error')).toContainText(
+          await expect(row.getByTestId('deposit-data-error')).toHaveText(
             'withdrawal_credentials is not a valid hex string',
           );
         }
@@ -233,10 +224,15 @@ test.describe(
 
     test(
       qase(101, 'Should display error for invalid fork_version'),
-      async () => {
+      async ({ widgetConfig }) => {
         const key = keysGeneratorService.generateKeys();
 
         key[0].fork_version = '10000920';
+
+        const expectedForkVersion =
+          widgetConfig.standConfig.standType === 'prod'
+            ? '00000000'
+            : '10000910';
 
         await keysPage.submitPage.fillKeys(key);
         await expect(keysPage.submitPage.validationInputError).toContainText(
@@ -246,7 +242,7 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toHaveText(
-            'fork_version is not equal to 10000910',
+            `fork_version is not equal to ${expectedForkVersion}`,
           );
         }
       },
@@ -270,7 +266,7 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toHaveText(
-            `network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
+            `network_name is not equal to ${widgetConfig.standConfig.keysGeneratorConfig.chain.toLowerCase()}`,
           );
         }
       },
