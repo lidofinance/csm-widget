@@ -266,7 +266,7 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toHaveText(
-            `network_name is not equal to ${widgetConfig.standConfig.keysGeneratorConfig.chain.toLowerCase()}`,
+            `network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
           );
         }
       },

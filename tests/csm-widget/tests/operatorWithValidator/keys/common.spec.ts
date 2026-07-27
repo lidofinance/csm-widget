@@ -47,7 +47,6 @@ test.describe('Operator with keys. Common suite.', async () => {
       await keysPage.submitPage.fillKeys(overTheLimitKeys);
       await expect(keysPage.submitPage.validationInputError).toContainText(
         'Too many keys in one transaction, maximum allowed: 75',
-        { timeout: 35000 },
       );
     },
   );
