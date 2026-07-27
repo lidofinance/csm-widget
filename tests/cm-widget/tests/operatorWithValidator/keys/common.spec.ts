@@ -50,7 +50,7 @@ test.describe(
         const overTheLimitKeys = keysGeneratorService.generateKeys(76);
         await keysPage.submitPage.fillKeys(overTheLimitKeys);
         await expect(keysPage.submitPage.validationInputError).toContainText(
-          'Too many keys in one transaction, maximum allowed: 76',
+          'Too many keys in one transaction, maximum allowed: 75',
         );
       },
     );
