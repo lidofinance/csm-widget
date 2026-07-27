@@ -1,1 +1,1 @@
-export const KEYS_UPLOAD_TX_LIMIT = 25;
+export const KEYS_UPLOAD_TX_LIMIT = 75;
