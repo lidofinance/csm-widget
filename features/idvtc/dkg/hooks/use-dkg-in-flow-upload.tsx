@@ -37,7 +37,16 @@ export const useDkgInFlowUpload = ({
     async (op: OperatorKey, files: FileUploadItemDto[]): Promise<void> => {
       if (files.length === 0) return;
       transitStage(<TxStageDkgUploading count={files.length} />);
-      await uploadDkgFilesRequest(op, files, getToken());
+      // We just set a non-terminal pending stage above, so this hook owns
+      // the terminal failure state too — a caller's catch may only run
+      // `handleTxError`, a predicate that transits nothing, leaving the
+      // modal stuck on the spinner forever.
+      try {
+        await uploadDkgFilesRequest(op, files, getToken());
+      } catch (error) {
+        getGeneralTransactionModalStages(transitStage).failed(error);
+        throw error;
+      }
       await queryClient.invalidateQueries({ queryKey: dkgFilesKey(op) });
     },
     [transitStage, queryClient, getToken],

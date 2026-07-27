@@ -1,7 +1,10 @@
 import type { DkgFileUploadItem } from '../types';
 
 export const MAX_NAME_LENGTH = 255;
-export const MAX_CONTENT_BYTES = 5 * 1024 * 1024; // 5 MiB after JSON.stringify
+// 4 MB after JSON.stringify — deliberately stricter than the API's own 5 MiB
+// per-file cap, so an oversized file is rejected client-side before the
+// server ever sees it.
+export const MAX_CONTENT_BYTES = 4 * 1024 * 1024;
 
 export type ValidateResult =
   { ok: true; item: DkgFileUploadItem } | { ok: false; reason: string };
@@ -35,7 +38,7 @@ export const validateDkgFile = (name: string, text: string): ValidateResult => {
   }
 
   if (byteLength(JSON.stringify(content)) > MAX_CONTENT_BYTES) {
-    return { ok: false, reason: 'File is larger than 5 MB' };
+    return { ok: false, reason: 'File is larger than 4 MB' };
   }
 
   return { ok: true, item: { name, content } };

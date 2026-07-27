@@ -325,5 +325,26 @@ describe('survey-client / callSurvey', () => {
       expect(err).toBeInstanceOf(SurveysApiError);
       expect(authErrorKind(err)).toBeUndefined();
     });
+
+    it('surfaces a rejected fetch (CORS/network failure) — probing the interceptor comment', async () => {
+      // A CORS-blocked response (e.g. a 413 with no Access-Control-Allow-Origin
+      // header) or a genuine network outage makes the browser's `fetch` reject
+      // outright — no Response ever exists. This proves what actually reaches
+      // the caller in that case.
+      const networkError = new TypeError('Failed to fetch');
+      (globalThis as unknown as { fetch: jest.Mock }).fetch = jest
+        .fn()
+        .mockRejectedValue(networkError);
+
+      const err = await captureError(() =>
+        callSurvey(() =>
+          openIndex({ ...surveyRequest(), path: { nodeOperatorId: 'csm-1' } }),
+        ),
+      );
+
+      expect(err).toBeInstanceOf(SurveysApiError);
+      expect(err.status).toBe(0);
+      expect(err.cause).toBe(networkError);
+    });
   });
 });
