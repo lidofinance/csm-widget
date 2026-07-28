@@ -9,6 +9,7 @@ import { pluralKeys } from 'utils/plural';
 export const VALIDATION_MESSAGES = {
   // Deposit data
   invalidDepositData: 'Invalid deposit data',
+  keyExceedsTxLimit: 'Exceeds the keys per transaction limit',
 
   // Address / hex
   invalidAddress: 'Enter a valid Ethereum address',
