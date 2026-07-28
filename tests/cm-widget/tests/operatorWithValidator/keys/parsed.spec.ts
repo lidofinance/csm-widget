@@ -77,7 +77,7 @@ test.describe(
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'amount is not equal to 32 ETHsignature failed BLS verification',
+          'amount is not equal to 32 ETH',
         );
       }
     });
@@ -174,7 +174,7 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toHaveText(
-            'withdrawal_credentials is not the Lido Withdrawal Vaultsignature failed BLS verification',
+            'withdrawal_credentials is not the Lido Withdrawal Vault',
           );
         }
       },
@@ -193,7 +193,7 @@ test.describe(
       await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
       for (const row of await keysPage.submitPage.depositDataRow.all()) {
         await expect(row.getByTestId('deposit-data-error')).toHaveText(
-          'wrong key type: only 0x02 withdrawal credentials are supportedsignature failed BLS verification',
+          'wrong key type: only 0x02 withdrawal credentials are supported',
         );
       }
     });
