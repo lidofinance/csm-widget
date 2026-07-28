@@ -60,14 +60,14 @@ test.describe('Operator without keys. Common suite.', async () => {
   });
 
   test(
-    qase(48, 'Should open transaction page after added 25 keys'),
+    qase(48, 'Should open transaction page after added 75 keys'),
     async ({ widgetService }) => {
       await mainPage.starterPackSection.createNodeOperatorBtn.click();
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
       });
       await createKeysPage.createNodeOperatorForm.addNewKeys(
-        keysGeneratorService.generateKeys(25),
+        keysGeneratorService.generateKeys(75),
         TokenSymbol.ETH,
       );
       await widgetService.walletPage.cancelTx();
@@ -75,17 +75,17 @@ test.describe('Operator without keys. Common suite.', async () => {
   );
 
   test(
-    qase(49, 'Should failed if uploaded over the limit (26) keys'),
+    qase(49, 'Should failed if uploaded over the limit (76) keys'),
     async () => {
       await mainPage.starterPackSection.createNodeOperatorBtn.click();
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
       });
-      const overTheLimitKeys = keysGeneratorService.generateKeys(26);
+      const overTheLimitKeys = keysGeneratorService.generateKeys(76);
       await createKeysPage.createNodeOperatorForm.fillKeys(overTheLimitKeys);
       await expect(
         createKeysPage.createNodeOperatorForm.validationInputError,
-      ).toContainText('Too many keys in one transaction, maximum allowed: 25');
+      ).toContainText('Too many keys in one transaction, maximum allowed: 75');
     },
   );
 });

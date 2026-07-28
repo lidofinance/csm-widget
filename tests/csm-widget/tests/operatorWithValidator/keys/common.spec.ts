@@ -30,10 +30,10 @@ test.describe('Operator with keys. Common suite.', async () => {
   );
 
   test(
-    qase(19, 'Should open transaction page after added 25 keys'),
+    qase(19, 'Should open transaction page after added 75 keys'),
     async ({ widgetService }) => {
       await keysPage.submitPage.submitKeys(
-        keysGeneratorService.generateKeys(25),
+        keysGeneratorService.generateKeys(75),
         TokenSymbol.ETH,
       );
       await widgetService.walletPage.cancelTx();
@@ -41,12 +41,12 @@ test.describe('Operator with keys. Common suite.', async () => {
   );
 
   test(
-    qase(20, 'Should failed if uploaded over the limit (26) keys'),
+    qase(20, 'Should failed if uploaded over the limit (76) keys'),
     async () => {
-      const overTheLimitKeys = keysGeneratorService.generateKeys(26);
+      const overTheLimitKeys = keysGeneratorService.generateKeys(76);
       await keysPage.submitPage.fillKeys(overTheLimitKeys);
       await expect(keysPage.submitPage.validationInputError).toContainText(
-        'Too many keys in one transaction, maximum allowed: 25',
+        'Too many keys in one transaction, maximum allowed: 75',
       );
     },
   );

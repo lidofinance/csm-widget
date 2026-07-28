@@ -21,37 +21,49 @@ export const validateDepositData = async ({
 }: ValidateDepositDataProps) => {
   if (!depositData?.length) return;
 
-  // 1. SDK validation of deposit data structure
-  const errors = await sdk.validateDepositData(depositData, { skipSignature });
+  const exceedsTxLimit = depositData.length > KEYS_UPLOAD_TX_LIMIT;
 
-  if (errors?.length) {
-    const types = mapValues(groupBy(errors, 'index'), (errors) => {
-      const withField = errors.filter((e) => e.field);
-      const withoutField = errors.filter((e) => !e.field);
-      const uniqueWithField = uniqBy(withField, 'field');
-      return [...uniqueWithField, ...withoutField].map(
-        (error) => error.message,
-      );
-    });
+  // 1. SDK validation of deposit data structure.
+  // Keys beyond the tx limit are not sent to the SDK — signature checks are
+  // expensive and the submission is rejected anyway; they get a per-row error.
+  const errors = await sdk.validateDepositData(
+    exceedsTxLimit ? depositData.slice(0, KEYS_UPLOAD_TX_LIMIT) : depositData,
+    { skipSignature },
+  );
+
+  if (errors?.length || exceedsTxLimit) {
+    const types: Record<string, string[]> = mapValues(
+      groupBy(errors, 'index'),
+      (errors) => {
+        const withField = errors.filter((e) => e.field);
+        const withoutField = errors.filter((e) => !e.field);
+        const uniqueWithField = uniqBy(withField, 'field');
+        return [...uniqueWithField, ...withoutField].map(
+          (error) => error.message,
+        );
+      },
+    );
+
+    for (
+      let index = KEYS_UPLOAD_TX_LIMIT;
+      index < depositData.length;
+      index++
+    ) {
+      types[index] = [VALIDATION_MESSAGES.keyExceedsTxLimit];
+    }
 
     throw new ValidationError(
       'depositData',
-      VALIDATION_MESSAGES.invalidDepositData,
+      exceedsTxLimit
+        ? validationMessage.tooManyKeys(KEYS_UPLOAD_TX_LIMIT)
+        : VALIDATION_MESSAGES.invalidDepositData,
       undefined,
       undefined,
       types,
     );
   }
 
-  // 2. Transaction limit check (25 keys per transaction)
-  if (depositData.length > KEYS_UPLOAD_TX_LIMIT) {
-    throw new ValidationError(
-      'depositData',
-      validationMessage.tooManyKeys(KEYS_UPLOAD_TX_LIMIT),
-    );
-  }
-
-  // 3. Operator keys limit check
+  // 2. Operator keys limit check
   if (keysLimit !== undefined) {
     const keysCount = depositData.length;
 
