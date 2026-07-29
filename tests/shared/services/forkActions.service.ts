@@ -322,10 +322,15 @@ export class ForkActionsService {
   }
 
   private execJust(args: string[]): Promise<RunResult> {
+    // Fork repo env file, e.g. JUST_DOTENV=.env.hoodi-cm; without it `just`
+    // uses the repo's own `.env`.
+    const dotenv = process.env.JUST_DOTENV
+      ? ['-E', process.env.JUST_DOTENV]
+      : [];
     return new Promise((resolve, reject) => {
       execFile(
         'just',
-        args,
+        [...dotenv, ...args],
         { cwd: this.cwd, env: this.baseEnv },
         (error, stdout, stderr) => {
           if (error) {
