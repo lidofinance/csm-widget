@@ -8,6 +8,12 @@ import {
 
 import { z } from 'zod';
 
+export type KeysGeneratorConfig = {
+  chain: string;
+  withdrawalCredentials: string;
+  password: string;
+};
+
 export type StandConfig = {
   standType: string;
   standUrl: string;
@@ -16,6 +22,7 @@ export type StandConfig = {
     host: string;
   };
   matomoUrl: string;
+  keysGeneratorConfig: KeysGeneratorConfig;
   mockConfig?: {
     urls: {
       csmSurveysApi: string;

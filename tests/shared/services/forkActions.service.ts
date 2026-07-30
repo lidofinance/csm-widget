@@ -8,10 +8,14 @@ type GateSelector =
 
 type StepFn = <T>(title: string, body: () => Promise<T>) => Promise<T>;
 
+type JustEnv = Pick<
+  NodeJS.ProcessEnv,
+  'CHAIN' | 'DEPLOY_CONFIG' | 'ARTIFACTS_DIR' | 'RPC_URL'
+>;
+
 export interface ForkActionsOptions {
   cwd?: string;
-  env?: NodeJS.ProcessEnv;
-  chain?: string;
+  env?: JustEnv;
   /** Override test.step — pass passthroughStep when running outside test context (e.g. globalSetup). */
   step?: StepFn;
 }
@@ -25,13 +29,11 @@ export interface RunResult {
 export class ForkActionsService {
   private cwd?: string;
   private readonly baseEnv: NodeJS.ProcessEnv;
-  private readonly chain?: string;
   private readonly step: StepFn;
 
   constructor(options: ForkActionsOptions = {}) {
     this.cwd = options.cwd;
     this.baseEnv = { ...process.env, ...options.env };
-    this.chain = options.chain;
     this.step = options.step ?? test.step;
     this.assertReady();
   }

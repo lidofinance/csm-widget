@@ -40,6 +40,11 @@ export class TestnetConfig extends BaseConfig {
         },
         stakingModuleIndex: 4,
       },
+      keysGeneratorConfig: {
+        chain: 'hoodi',
+        withdrawalCredentials: '0x4473dCDDbf77679A643BdB654dbd86D67F8d32f2',
+        password: 'testtest',
+      },
     };
   }
 }

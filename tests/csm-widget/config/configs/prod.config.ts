@@ -39,6 +39,11 @@ export class ProdConfig extends BaseConfig {
         },
         stakingModuleIndex: 4,
       },
+      keysGeneratorConfig: {
+        chain: 'mainnet',
+        withdrawalCredentials: '0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f',
+        password: 'testtest',
+      },
     };
   }
 }

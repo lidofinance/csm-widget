@@ -24,12 +24,19 @@ interface DepositData {
   private_keys: string[];
 }
 
+export type KeysGeneratorOptions = {
+  isCM?: boolean;
+  chain: string;
+  withdrawalCredentials: string;
+  password: string;
+};
+
 export class KeysGeneratorService {
   private depositData: DepositData | null = null;
   private readonly depositDataPath: string;
   private readonly binPath: string;
 
-  constructor(private options?: { isCM?: boolean }) {
+  constructor(private options: KeysGeneratorOptions) {
     this.depositDataPath = path.join(process.cwd(), 'deposit_data.json');
     this.binPath = path.join(
       process.cwd(),
@@ -39,23 +46,23 @@ export class KeysGeneratorService {
   }
 
   /**
-   * Generates keys for CSM using eth-staking-smith
+   * Generates keys for CSM/CM using eth-staking-smith
    * @param numValidators - number of validators (default 1)
-   * @param chain - network (default 'hoodi')
-   * @param withdrawalCredentials - withdrawal credentials
-   * @param password - keystore password (default 'testtest')
+   * @param chain - network (defaults to the value from options/config)
+   * @param withdrawalCredentials - withdrawal credentials (defaults to the value from options/config)
+   * @param password - keystore password (defaults to the value from options/config)
    * @returns KeysGeneratorService instance for chaining
    * @throws Error if key generation fails or validation fails
    */
   generateKeys(
     numValidators = 1,
-    chain = 'hoodi',
-    withdrawalCredentials = '0x4473dCDDbf77679A643BdB654dbd86D67F8d32f2',
-    password = 'testtest',
+    chain = this.options.chain,
+    withdrawalCredentials = this.options.withdrawalCredentials,
+    password = this.options.password,
   ): DepositKey[] {
     let command = `${this.binPath} new-mnemonic --chain ${chain} --keystore_password ${password} --num_validators ${numValidators} --withdrawal_credentials "${withdrawalCredentials}"`;
 
-    if (this.options?.isCM) {
+    if (this.options.isCM) {
       command = command.concat(' --compounding');
     }
     command = command.concat(`  > ${this.depositDataPath}`);

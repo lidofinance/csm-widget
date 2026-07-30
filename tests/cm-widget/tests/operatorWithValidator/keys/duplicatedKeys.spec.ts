@@ -16,15 +16,17 @@ test.describe(
     let keysPage: KeysPage;
     let keysGeneratorService: KeysGeneratorService;
 
-    test.beforeEach(async ({ widgetService }) => {
-      keysPage = new KeysPage(widgetService.page);
-      await widgetService.setFeatureFlag(
-        'disableDepositDataSignatureValidation',
-        true,
-      );
-      await keysPage.submitPage.open();
-      keysGeneratorService = new KeysGeneratorService({ isCM: true });
-    });
+    test.beforeEach(
+      async ({ widgetService, keysGeneratorService: keysGenerator }) => {
+        keysPage = new KeysPage(widgetService.page);
+        await widgetService.setFeatureFlag(
+          'disableDepositDataSignatureValidation',
+          true,
+        );
+        await keysPage.submitPage.open();
+        keysGeneratorService = keysGenerator;
+      },
+    );
 
     test(qase(87, 'Should failed if uploaded duplicate keys'), async () => {
       const duplicatedKey = keysGeneratorService.generateKeys();

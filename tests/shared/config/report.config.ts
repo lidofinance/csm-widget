@@ -23,7 +23,7 @@ export const getReportConfig: () => ReporterDescription[] = function () {
       {
         reporters: reporterConfig,
         sensitiveEnvKeys: [
-          'RPC_URL',
+          'RPC_URL_TOKEN',
           'WALLET_SECRET_PHRASE',
           'WALLET_PASSWORD',
           'EMPTY_SECRET_PHRASE',

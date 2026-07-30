@@ -55,11 +55,6 @@ on:
         required: false
         type: string
         default: ""
-      chain:
-        description: "CHAIN name (fork only)."
-        required: false
-        type: string
-        default: ""
       artifacts_dir:
         description: "ARTIFACTS_DIR path (fork only)."
         required: false
@@ -120,7 +115,8 @@ jobs:
       # Fork envs (ignored unless use_fork=true)
       USE_FORK: ${{ inputs.use_fork }}
       DEPLOY_CONFIG: ${{ inputs.deploy_config }}
-      CHAIN: ${{ inputs.chain }}
+      # prod/staging → mainnet, testnet/preview → hoodi
+      CHAIN: ${{ (inputs.stand_type == 'prod' || inputs.stand_type == 'staging') && 'mainnet' || 'hoodi' }}
 
     steps:
       - uses: actions/checkout@v7
