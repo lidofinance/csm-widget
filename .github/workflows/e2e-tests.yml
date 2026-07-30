@@ -114,7 +114,6 @@ jobs:
 
       # Fork envs (ignored unless use_fork=true)
       USE_FORK: ${{ inputs.use_fork }}
-      DEPLOY_CONFIG: ${{ inputs.deploy_config }}
       # prod/staging → mainnet, testnet/preview → hoodi
       CHAIN: ${{ (inputs.stand_type == 'prod' || inputs.stand_type == 'staging') && 'mainnet' || 'hoodi' }}
 

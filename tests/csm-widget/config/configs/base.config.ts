@@ -14,6 +14,12 @@ export type KeysGeneratorConfig = {
   password: string;
 };
 
+export type JustConfig = {
+  chain: NonNullable<NodeJS.ProcessEnv['CHAIN']>;
+  deployConfig: string;
+  artifactsDir: string;
+};
+
 export type StandConfig = {
   standType: string;
   standUrl: string;
@@ -40,6 +46,7 @@ export type StandConfig = {
     };
     stakingModuleIndex: number;
   };
+  justConfig: JustConfig;
 };
 
 export type IConfig = {
@@ -47,6 +54,11 @@ export type IConfig = {
   walletConfig: CommonWalletConfig;
   accountConfig: AccountConfig;
   getFullInfo(): string;
+};
+
+export const rpcUrlByStandType: Record<string, string> = {
+  prod: `https://lb.drpc.org/ogrpc?network=ethereum`,
+  testnet: `https://lb.drpc.org/ogrpc?network=hoodi`,
 };
 
 export const ConfigSchema = z.object({
@@ -69,5 +81,30 @@ export class BaseConfig implements IConfig {
 
   getFullInfo(): string {
     throw new Error('Method not implemented.');
+  }
+
+  getRpcUrl(standType: string): string {
+    if (process.env.RPC_URL && process.env.RPC_URL_TOKEN) {
+      throw new Error(
+        'Both RPC_URL and RPC_URL_TOKEN are defined in the environment variables. Please define only one of them.',
+      );
+    }
+
+    if (process.env.RPC_URL) {
+      return process.env.RPC_URL;
+    }
+
+    if (!process.env.RPC_URL_TOKEN) {
+      throw new Error(
+        'RPC_URL_TOKEN is not defined in the environment variables.',
+      );
+    }
+
+    const rpcUrl = rpcUrlByStandType[standType];
+    if (!rpcUrl) {
+      throw new Error(`No default RPC URL found for stand type: ${standType}`);
+    }
+
+    return `${rpcUrl}&dkey=${process.env.RPC_URL_TOKEN}`;
   }
 }

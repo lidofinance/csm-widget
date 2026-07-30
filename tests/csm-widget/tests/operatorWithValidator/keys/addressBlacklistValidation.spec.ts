@@ -2,7 +2,6 @@ import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { KeysPage } from 'tests/csm-widget/pages';
-import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { TxModal } from 'tests/csm-widget/pages/elements/common/element.txProgressModal';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
@@ -24,11 +23,10 @@ test.describe('Operator with validator. Keys. Address blacklist validation', asy
 
   test(
     qase(289, 'Should open access denied modal after added 1 key'),
-    async ({ widgetService }) => {
+    async ({ widgetService, keysGeneratorService }) => {
       await test.step('Submit keys', async () => {
         const keysPage = new KeysPage(widgetService.page);
         await keysPage.submitPage.open();
-        const keysGeneratorService = new KeysGeneratorService();
 
         const keys = keysGeneratorService.generateKeys();
 

@@ -4,7 +4,6 @@ import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
-import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 const secretPhrase = generateMnemonic(english, 128);
@@ -23,6 +22,7 @@ test.describe(
         forkActionService,
         widgetService,
         secretPhrase,
+        keysGeneratorService,
       }) => {
         test.skip(!useFork, 'Test suite runs only on forked network');
 
@@ -31,7 +31,7 @@ test.describe(
         await evmNode.setBalance(mnemonicToAccount(secretPhrase).address, 1000);
 
         await test.step('Create a node operator via UI', async () => {
-          const keys = new KeysGeneratorService().generateKeys(1);
+          const keys = keysGeneratorService.generateKeys(1);
           await widgetService.keysPage.goto();
           await widgetService.submitKeys(keys, TokenSymbol.ETH);
         });

@@ -4,7 +4,6 @@ import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
-import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 const secretPhrase = generateMnemonic(english, 128);
@@ -23,6 +22,7 @@ test.describe(
         forkActionService,
         widgetService,
         secretPhrase,
+        keysGeneratorService,
       }) => {
         test.skip(!useFork, 'Test suite runs only on forked network');
         const address = mnemonicToAccount(secretPhrase).address;
@@ -36,17 +36,32 @@ test.describe(
         await widgetService.setFeatureFlag('icsApplyForm', true);
 
         await test.step('Create an IDVTC operator by adding a key', async () => {
-          const keys = new KeysGeneratorService().generateKeys(1);
+          const keys = keysGeneratorService.generateKeys(1);
           await widgetService.keysPage.goto();
           await widgetService.keysPage.createNodeOperatorForm.submitNewKeys(
             keys,
             TokenSymbol.ETH,
           );
-          await widgetService.walletPage.confirmTx();
-          await widgetService.page.waitForSelector(
-            'text=Node Operator has been created',
-            { timeout: STAGE_WAIT_TIMEOUT },
-          );
+          await test.step('Sign the message to set up your cluster members', async () => {
+            await widgetService.page.waitForSelector(
+              'text=Sign the message to set up your cluster members after the transaction',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            );
+            await widgetService.walletPage.confirmTx();
+          });
+
+          await test.step('Confirm tx for creating operator', async () => {
+            await widgetService.page.waitForSelector(
+              'text=Creating Node Operator',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            );
+
+            await widgetService.walletPage.confirmTx();
+            await widgetService.page.waitForSelector(
+              'text=Node Operator has been created',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            );
+          });
         });
 
         await test.step('Issue ICS status to the same address', async () => {
@@ -118,10 +133,10 @@ test.describe(
 
     test(
       qase(437, 'Should keep IDVTC and add an ICS operator when created'),
-      async ({ widgetService }) => {
+      async ({ widgetService, keysGeneratorService }) => {
         const form = widgetService.keysPage.createNodeOperatorForm;
         const header = widgetService.header;
-        const keys = new KeysGeneratorService().generateKeys(1);
+        const keys = keysGeneratorService.generateKeys(1);
 
         await test.step('Create a new ICS operator on the create page', async () => {
           await widgetService.keysPage.goto();
