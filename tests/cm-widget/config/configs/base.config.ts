@@ -15,7 +15,6 @@ export type KeysGeneratorConfig = {
 };
 
 export type JustConfig = {
-  /** Same values as the CHAIN env var (see tests/shared/types/env.d.ts) */
   chain: NonNullable<NodeJS.ProcessEnv['CHAIN']>;
   deployConfig: string;
   artifactsDir: string;

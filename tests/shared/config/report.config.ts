@@ -1,6 +1,24 @@
 import { ReporterDescription } from '@playwright/test';
 import { widgetFullConfig } from '../../csm-widget/config';
 
+export const SENSITIVE_ENV_KEYS = [
+  'RPC_URL_TOKEN',
+  'WALLET_SECRET_PHRASE',
+  'WALLET_PASSWORD',
+  'EMPTY_SECRET_PHRASE',
+  'EMPTY_NODE_SECRET_PHRASE',
+  'QASE_API_TOKEN',
+  'SLACK_WEBHOOK_URL',
+  'WC_PROJECT_ID',
+  'REFUSE_CF_BLOCK_VALUE',
+  'PUSHGATEWAY_URL',
+  'PUSHGATEWAY_USERNAME',
+  'PUSHGATEWAY_PASSWORD',
+  'GRAFANA_URL',
+  'GRAFANA_API_KEY',
+  'PREVIEW_STAND_PASSWORD',
+];
+
 export const getReportConfig: () => ReporterDescription[] = function () {
   const reporterConfig: ReporterDescription[] = [
     reporters.htmlReporter,
@@ -22,25 +40,10 @@ export const getReportConfig: () => ReporterDescription[] = function () {
       '@lidofinance/secret-guard-reporter',
       {
         reporters: reporterConfig,
-        sensitiveEnvKeys: [
-          'RPC_URL_TOKEN',
-          'WALLET_SECRET_PHRASE',
-          'WALLET_PASSWORD',
-          'EMPTY_SECRET_PHRASE',
-          'EMPTY_NODE_SECRET_PHRASE',
-          'QASE_API_TOKEN',
-          'SLACK_WEBHOOK_URL',
-          'WC_PROJECT_ID',
-          'REFUSE_CF_BLOCK_VALUE',
-          'PUSHGATEWAY_URL',
-          'PUSHGATEWAY_USERNAME',
-          'PUSHGATEWAY_PASSWORD',
-          'GRAFANA_URL',
-          'GRAFANA_API_KEY',
-          'PREVIEW_STAND_PASSWORD',
-        ],
+        sensitiveEnvKeys: SENSITIVE_ENV_KEYS,
       },
     ],
+    ['../shared/config/fatal-error.reporter.ts'],
   ];
 };
 
