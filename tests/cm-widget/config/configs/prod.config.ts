@@ -23,9 +23,7 @@ export class ProdConfig extends BaseConfig {
         rpcUrl: this.getRpcUrl('prod'),
         derivationPath: "m/44'/60'/0'/0",
         host: '127.0.0.1',
-        port: process.env.ANVIL_PORT
-          ? parseInt(process.env.ANVIL_PORT)
-          : undefined,
+        port: process.env.ANVIL_PORT ? parseInt(process.env.ANVIL_PORT) : 8545,
         forkLog: {
           enabled: false,
           logToFile: true,
