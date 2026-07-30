@@ -43,7 +43,6 @@ export const getReportConfig: () => ReporterDescription[] = function () {
         sensitiveEnvKeys: SENSITIVE_ENV_KEYS,
       },
     ],
-    ['../shared/config/fatal-error.reporter.ts'],
   ];
 };
 
