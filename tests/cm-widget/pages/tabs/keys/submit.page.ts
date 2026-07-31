@@ -61,7 +61,7 @@ export class SubmitPage extends BasePage {
 
   async open() {
     await test.step('Open submit tab for Keys page', async () => {
-      await this.openWithRetry('/keys/submit', this.rawDepositData);
+      await this.openWithRetry('/keys/submit', this.submitKeysButton);
     });
   }
 
