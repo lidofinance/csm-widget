@@ -1,5 +1,5 @@
 import { Text } from '@lidofinance/lido-ui';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useState } from 'react';
 import {
   Block,
   Counter,
@@ -20,6 +20,7 @@ import { useDkgUploadZone } from './hooks/use-dkg-upload-zone';
 import { useUploadDkgFiles } from './hooks/use-upload-dkg-files';
 import { DropArea } from './styles';
 import type { DkgFileUploadItem } from './types';
+import { validateDkgBatch } from './utils/validate-dkg-batch';
 
 const DkgFilesContent: FC = () => {
   const check = useShowRule();
@@ -27,9 +28,18 @@ const DkgFilesContent: FC = () => {
   const canManage = check('HAS_MANAGER_ROLE') || check('HAS_REWARDS_ROLE');
   const { data: files, isLoading } = useDkgFiles();
   const upload = useUploadDkgFiles();
+  const [batchError, setBatchError] = useState<string>();
 
   const onAccepted = useCallback(
-    (items: DkgFileUploadItem[]) => upload.mutate(items),
+    (items: DkgFileUploadItem[]) => {
+      const error = validateDkgBatch(items);
+      if (error) {
+        setBatchError(error);
+        return;
+      }
+      setBatchError(undefined);
+      upload.mutate(items);
+    },
     [upload],
   );
 
@@ -74,6 +84,11 @@ const DkgFilesContent: FC = () => {
         rejected={zone.rejected}
         onDismiss={zone.dismissRejected}
       />
+      {batchError && (
+        <Text size="xs" color="error">
+          {batchError}
+        </Text>
+      )}
       {upload.error && (
         <Text size="xs" color="error">
           Upload failed: {upload.error.message}

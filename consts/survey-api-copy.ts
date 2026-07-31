@@ -31,10 +31,7 @@ export const SURVEY_API_COPY: Record<string, string> = {
     'You have reached your 100 MB storage limit for DKG files',
   FILES_COUNT_EXCEEDED: 'You have reached the maximum number of DKG files',
   // NOT part of the backend's catalog — synthesized client-side in
-  // upload-dkg-files-request.ts. The server's real 413 for an oversized batch
-  // carries no Access-Control-Allow-Origin header, so the browser blocks it
-  // and the client never sees an HTTP status to key off; we detect the
-  // opaque transport failure ourselves and fabricate this code/copy.
+  // upload-dkg-files-request.ts.
   FILES_PAYLOAD_TOO_LARGE:
     'This batch is too large to upload. Try uploading fewer files at once.',
 

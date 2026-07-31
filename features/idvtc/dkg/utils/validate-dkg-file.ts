@@ -1,9 +1,7 @@
 import type { DkgFileUploadItem } from '../types';
 
 export const MAX_NAME_LENGTH = 255;
-// 4 MB after JSON.stringify — deliberately stricter than the API's own 5 MiB
-// per-file cap, so an oversized file is rejected client-side before the
-// server ever sees it.
+// Mirrors the API's own per-file cap (MAX_CONTENT_BYTES in is-valid-json-content.validator.ts).
 export const MAX_CONTENT_BYTES = 4 * 1024 * 1024;
 
 export type ValidateResult =
@@ -11,7 +9,7 @@ export type ValidateResult =
 
 const encoder = typeof TextEncoder !== 'undefined' ? new TextEncoder() : null;
 
-const byteLength = (s: string): number =>
+export const byteLength = (s: string): number =>
   encoder ? encoder.encode(s).byteLength : Buffer.byteLength(s, 'utf8');
 
 // TODO: fix types of content

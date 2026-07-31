@@ -135,4 +135,7 @@ export const validationMessage = {
   // Splits: max additional addresses (dynamic count)
   maxAdditionalAddressesDynamic: (max: number): string =>
     `Maximum ${max} additional addresses`,
+
+  dkgBatchTooLarge: (maxLabel: string): string =>
+    `Total size of DKG files exceeds ${maxLabel}`,
 } as const;
