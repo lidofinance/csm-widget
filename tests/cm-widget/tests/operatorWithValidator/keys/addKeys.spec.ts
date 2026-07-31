@@ -4,6 +4,7 @@ import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../test.fixture';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { attachRpcLogger } from 'tests/shared/helpers/rpcLogger';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
@@ -18,26 +19,15 @@ test.describe(
       test.skip(!useFork, 'Test suite runs only on forked network');
     });
 
-    test.beforeEach(
-      async ({ cmSDK, widgetConfig, widgetService }, testInfo) => {
-        matomoEventService = new MatomoService(
-          widgetService.page,
-          widgetConfig,
-        );
-        snapshotId = await cmSDK.evmSnapshot();
-        await widgetService.page
-          .context()
-          .tracing.startHar(testInfo.outputPath('network.har.zip'), {
-            mode: 'full',
-            content: 'attach',
-          });
-        await widgetService.keysPage.submitPage.open();
-      },
-    );
+    test.beforeEach(async ({ cmSDK, widgetConfig, widgetService }) => {
+      matomoEventService = new MatomoService(widgetService.page, widgetConfig);
+      snapshotId = await cmSDK.evmSnapshot();
+      attachRpcLogger(widgetService.page);
+      await widgetService.keysPage.submitPage.open();
+    });
 
-    test.afterEach(async ({ cmSDK, widgetService }) => {
+    test.afterEach(async ({ cmSDK }) => {
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
-      await widgetService.page.context().tracing.stopHar();
     });
 
     test.only('Should add keys successfully', async ({
