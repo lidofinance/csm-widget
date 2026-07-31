@@ -1,6 +1,6 @@
 import { test, Page } from '@playwright/test';
-import { type BaseConfig as CMBaseConfig } from 'tests/cm-widget/config/configs/base.config';
-import { type BaseConfig as CSMBaseConfig } from 'tests/csm-widget/config/configs/base.config';
+import { type IConfig as CMBaseConfig } from 'tests/cm-widget/config/configs/base.config';
+import { type IConfig as CSMBaseConfig } from 'tests/csm-widget/config/configs/base.config';
 
 // Minimal config shape shared by CSM and CM widget configs
 type MatomoConfig = CMBaseConfig | CSMBaseConfig;

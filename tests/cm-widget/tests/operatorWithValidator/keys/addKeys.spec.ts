@@ -18,17 +18,29 @@ test.describe(
       test.skip(!useFork, 'Test suite runs only on forked network');
     });
 
-    test.beforeEach(async ({ cmSDK, widgetConfig, widgetService }) => {
-      matomoEventService = new MatomoService(widgetService.page, widgetConfig);
-      snapshotId = await cmSDK.evmSnapshot();
-      await widgetService.keysPage.submitPage.open();
-    });
+    test.beforeEach(
+      async ({ cmSDK, widgetConfig, widgetService }, testInfo) => {
+        matomoEventService = new MatomoService(
+          widgetService.page,
+          widgetConfig,
+        );
+        snapshotId = await cmSDK.evmSnapshot();
+        await widgetService.page
+          .context()
+          .tracing.startHar(testInfo.outputPath('network.har.zip'), {
+            mode: 'full',
+            content: 'attach',
+          });
+        await widgetService.keysPage.submitPage.open();
+      },
+    );
 
-    test.afterEach(async ({ cmSDK }) => {
+    test.afterEach(async ({ cmSDK, widgetService }) => {
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
+      await widgetService.page.context().tracing.stopHar();
     });
 
-    test('Should add keys successfully', async ({
+    test.only('Should add keys successfully', async ({
       widgetService,
       keysGeneratorService,
     }) => {

@@ -211,6 +211,21 @@ jobs:
           path: playwright-report.tar.gz.enc
           retention-days: 1
 
+      - name: Encrypt test results
+        if: always()
+        run: |
+          if [ -d test-results ]; then
+            tar -czf - test-results/ | openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -pass env:ARTIFACT_PASSWORD -out test-results.tar.gz.enc
+          fi
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: test-results-${{ inputs.module }}
+          path: test-results.tar.gz.enc
+          retention-days: 1
+          if-no-files-found: ignore
+
       - name: Notify Slack about broken workflow
         if: always() && github.event_name == 'schedule' && (steps.run-tests.conclusion == 'skipped' || steps.run-tests.conclusion == 'cancelled')
         uses: ./.github/actions/notify-broken-tests
