@@ -192,18 +192,30 @@ const createDecoder = (contracts: Record<string, string>) => {
   };
 };
 
+// The batch id ties every call of one POST to a single shared duration
+const prefix = (id: number, details: string[]) =>
+  details.length > 1 ? `#${id}/${details.length}` : `#${id}`;
+
 export const attachRpcLogger = (
   page: Page,
   chainId: CHAINS = CHAINS.Mainnet,
 ) => {
   const decodeBody = createDecoder(buildContractMap(chainId));
-  const pending = new Map<object, { details: string[]; startMs: number }>();
+  const pending = new Map<
+    object,
+    { details: string[]; startMs: number; id: number }
+  >();
+  const attachedMs = Date.now();
+  let seq = 0;
+
+  // Seconds since attach — lets you line up starts with completions
+  const at = (ms: number) => `@${((ms - attachedMs) / 1000).toFixed(1)}s`;
 
   page.on('request', (req) => {
     if (req.method() !== 'POST') return;
     const details = decodeBody(req.postData() ?? '');
     if (details.length === 0) return;
-    pending.set(req, { details, startMs: Date.now() });
+    pending.set(req, { details, startMs: Date.now(), id: ++seq });
   });
 
   page.on('response', (res) => {
@@ -212,8 +224,9 @@ export const attachRpcLogger = (
     pending.delete(res.request());
     const ms = Date.now() - entry.startMs;
     const tag = ms > 500 ? `⚠ ${ms}ms` : `${ms}ms`;
+    const head = `${prefix(entry.id, entry.details)} ${at(entry.startMs)}`;
     for (const detail of entry.details) {
-      console.info(`[RPC] ${detail}  ${tag}`);
+      console.info(`[RPC ${head}] ${detail}  ${tag}`);
     }
   });
 
@@ -222,12 +235,27 @@ export const attachRpcLogger = (
     pending.delete(req);
     const details = entry?.details ?? decodeBody(req.postData() ?? '');
     if (details.length === 0) return;
+    const head = entry
+      ? `${prefix(entry.id, details)} ${at(entry.startMs)}`
+      : '#?';
     const ms = entry ? `${Date.now() - entry.startMs}ms  ` : '';
     for (const detail of details) {
       console.warn(
-        `[RPC CANCELLED] ${detail}  ${ms}${req.failure()?.errorText ?? ''}`,
+        `[RPC CANCELLED ${head}] ${detail}  ${ms}${req.failure()?.errorText ?? ''}`,
       );
     }
+  });
+
+  page.on('close', () => {
+    for (const entry of pending.values()) {
+      const head = `${prefix(entry.id, entry.details)} ${at(entry.startMs)}`;
+      for (const detail of entry.details) {
+        console.warn(
+          `[RPC IN FLIGHT ${head}] ${detail}  ${Date.now() - entry.startMs}ms and never answered`,
+        );
+      }
+    }
+    pending.clear();
   });
 
   void page.route('**/*', async (route) => {
