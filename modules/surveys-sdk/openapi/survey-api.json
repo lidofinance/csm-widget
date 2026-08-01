@@ -2660,7 +2660,7 @@
   "info": {
     "title": "CSM Survey API",
     "description": "",
-    "version": "0.7.0",
+    "version": "0.7.2",
     "contact": {}
   },
   "tags": [
@@ -3086,7 +3086,7 @@
           "content": {
             "type": "object",
             "additionalProperties": true,
-            "description": "Arbitrary JSON-serializable content (≤ 64 KB after JSON.stringify). Typically a JSON object."
+            "description": "Arbitrary JSON-serializable content (≤ 5 MiB after JSON.stringify). Typically a JSON object."
           }
         },
         "required": [

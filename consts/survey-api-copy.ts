@@ -27,6 +27,13 @@ export const SURVEY_API_COPY: Record<string, string> = {
   // Files
   FILES_EMPTY_PAYLOAD: 'No file was uploaded',
   FILES_NOT_FOUND: 'The requested file does not exist',
+  FILES_QUOTA_EXCEEDED:
+    'You have reached your 100 MB storage limit for DKG files',
+  FILES_COUNT_EXCEEDED: 'You have reached the maximum number of DKG files',
+  // NOT part of the backend's catalog — synthesized client-side in
+  // upload-dkg-files-request.ts.
+  FILES_PAYLOAD_TOO_LARGE:
+    'This batch is too large to upload. Try uploading fewer files at once.',
 
   // Members
   MEMBERS_NO_BINDABLE_FORM:
