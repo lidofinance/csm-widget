@@ -43,6 +43,7 @@ export const getReportConfig: () => ReporterDescription[] = function () {
         sensitiveEnvKeys: SENSITIVE_ENV_KEYS,
       },
     ],
+    ['../shared/config/skipper.reporter.ts'],
   ];
 };
 

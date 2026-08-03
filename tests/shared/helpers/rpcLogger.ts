@@ -196,9 +196,19 @@ const createDecoder = (contracts: Record<string, string>) => {
 const prefix = (id: number, details: string[]) =>
   details.length > 1 ? `#${id}/${details.length}` : `#${id}`;
 
+type RpcLoggerOptions = {
+  chainId?: CHAINS;
+  /**
+   * Diagnostic mode: split every JSON-RPC batch into one request per call, so a
+   * hanging call can be named. Costs one HTTP request per call and changes how
+   * the RPC provider sees the load — for debugging a stall, not for normal runs.
+   */
+  unbatch?: boolean;
+};
+
 export const attachRpcLogger = (
   page: Page,
-  chainId: CHAINS = CHAINS.Mainnet,
+  { chainId = CHAINS.Mainnet, unbatch = false }: RpcLoggerOptions = {},
 ) => {
   const decodeBody = createDecoder(buildContractMap(chainId));
   const pending = new Map<
@@ -211,9 +221,22 @@ export const attachRpcLogger = (
   // Seconds since attach — lets you line up starts with completions
   const at = (ms: number) => `@${((ms - attachedMs) / 1000).toFixed(1)}s`;
 
+  // In unbatch mode the route handler logs each call itself
+  const isSplitBatch = (body: string) => {
+    if (!unbatch) return false;
+    try {
+      const parsed = JSON.parse(body);
+      return Array.isArray(parsed) && parsed.length > 1 && !!parsed[0]?.method;
+    } catch {
+      return false;
+    }
+  };
+
   page.on('request', (req) => {
     if (req.method() !== 'POST') return;
-    const details = decodeBody(req.postData() ?? '');
+    const body = req.postData() ?? '';
+    if (isSplitBatch(body)) return;
+    const details = decodeBody(body);
     if (details.length === 0) return;
     pending.set(req, { details, startMs: Date.now(), id: ++seq });
   });
@@ -259,6 +282,51 @@ export const attachRpcLogger = (
   });
 
   void page.route('**/*', async (route) => {
-    await route.fallback();
+    const req = route.request();
+    if (!unbatch || req.method() !== 'POST') return route.fallback();
+
+    let calls: Record<string, unknown>[];
+    try {
+      calls = JSON.parse(req.postData() ?? '');
+    } catch {
+      return route.fallback();
+    }
+    if (!Array.isArray(calls) || calls.length < 2 || !calls[0]?.method) {
+      return route.fallback();
+    }
+
+    const id = ++seq;
+    const headers = await req.allHeaders();
+    delete headers['content-length'];
+
+    const results = await Promise.all(
+      calls.map(async (call, index) => {
+        const [detail = String(call.method)] = decodeBody(JSON.stringify(call));
+        const head = `#${id}.${index + 1}/${calls.length} ${at(Date.now())}`;
+        const startMs = Date.now();
+        try {
+          const res = await page.request.post(req.url(), {
+            headers,
+            data: call,
+          });
+          const ms = Date.now() - startMs;
+          const tag = ms > 500 ? `⚠ ${ms}ms` : `${ms}ms`;
+          console.info(`[RPC ${head}] ${detail}  ${tag}`);
+          return await res.json();
+        } catch (error) {
+          const ms = Date.now() - startMs;
+          console.warn(
+            `[RPC FAILED ${head}] ${detail}  ${ms}ms  ${String(error)}`,
+          );
+          return { jsonrpc: '2.0', id: call.id, error: { code: -32603 } };
+        }
+      }),
+    );
+
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(results),
+    });
   });
 };
