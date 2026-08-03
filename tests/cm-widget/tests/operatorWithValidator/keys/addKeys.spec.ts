@@ -4,7 +4,6 @@ import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../test.fixture';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
-import { attachRpcLogger } from 'tests/shared/helpers/rpcLogger';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
@@ -22,7 +21,6 @@ test.describe(
     test.beforeEach(async ({ cmSDK, widgetConfig, widgetService }) => {
       matomoEventService = new MatomoService(widgetService.page, widgetConfig);
       snapshotId = await cmSDK.evmSnapshot();
-      attachRpcLogger(widgetService.page);
       await widgetService.keysPage.submitPage.open();
     });
 
