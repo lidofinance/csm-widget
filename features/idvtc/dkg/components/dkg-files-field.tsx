@@ -5,6 +5,12 @@ import { useController, useFormContext } from 'react-hook-form';
 import { FormTitle, Stack } from 'shared/components';
 import { useDkgUploadZone } from '../hooks/use-dkg-upload-zone';
 import { mergeDkgFiles } from '../utils/merge-dkg-files';
+import {
+  dkgBatchBytes,
+  formatMegabytes,
+  formatMegabytesFloor,
+  MAX_TOTAL_BYTES,
+} from '../utils/validate-dkg-batch';
 import { DkgAddFileButton } from './dkg-add-file-button';
 import { DkgDropArea } from './dkg-drop-area';
 import { DkgStagedTable } from './dkg-files-table';
@@ -13,7 +19,9 @@ import { AddButtonRow } from '../styles';
 
 export const DkgFilesField: FC<{ name?: string }> = ({ name = 'dkgFiles' }) => {
   const { control } = useFormContext();
-  const { field } = useController<Record<string, FileUploadItemDto[]>>({
+  const { field, fieldState } = useController<
+    Record<string, FileUploadItemDto[]>
+  >({
     name,
     control,
   });
@@ -22,6 +30,9 @@ export const DkgFilesField: FC<{ name?: string }> = ({ name = 'dkgFiles' }) => {
   const zone = useDkgUploadZone({
     onAccepted: (items) => field.onChange(mergeDkgFiles(staged, items)),
   });
+
+  const bytes = dkgBatchBytes(staged);
+  const isOverCap = bytes > MAX_TOTAL_BYTES;
 
   return (
     <>
@@ -38,6 +49,17 @@ export const DkgFilesField: FC<{ name?: string }> = ({ name = 'dkgFiles' }) => {
               field.onChange(staged.filter((_, idx) => idx !== index))
             }
           />
+          {staged.length > 0 && (
+            <Text size="xxs" color={isOverCap ? 'error' : 'secondary'}>
+              Total {formatMegabytes(bytes)} /{' '}
+              {formatMegabytesFloor(MAX_TOTAL_BYTES)}
+            </Text>
+          )}
+          {fieldState.error?.message && (
+            <Text size="xxs" color="error">
+              {fieldState.error.message}
+            </Text>
+          )}
           <AddButtonRow>
             <DkgAddFileButton onClick={zone.open} />
           </AddButtonRow>
