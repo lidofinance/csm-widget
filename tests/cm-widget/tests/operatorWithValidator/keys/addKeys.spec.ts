@@ -28,7 +28,7 @@ test.describe(
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
-    test.only('Should add keys successfully', async ({
+    test('Should add keys successfully', async ({
       widgetService,
       keysGeneratorService,
     }) => {
