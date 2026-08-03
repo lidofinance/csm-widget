@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 import { createRequire } from 'node:module';
-import { toFunctionSelector } from 'viem';
+import { toEventSelector, toFunctionSelector } from 'viem';
 import { CHAINS, LIDO_LOCATOR_BY_CHAIN } from '@lidofinance/lido-ethereum-sdk';
 import {
   COMMON_ADDRESSES,
@@ -59,12 +59,41 @@ const buildContractMap = (chainId: CHAINS): Record<string, string> => {
   return map;
 };
 
-const TOPICS: Record<string, string> = {
-  '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef':
-    'Transfer',
-  '0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925':
-    'Approval',
+type AbiItem = { type: string; name: string };
+
+const loadSdkAbis = (): readonly AbiItem[][] => {
+  const sdkAbi = _require('@lidofinance/lido-csm-sdk/abi') as Record<
+    string,
+    readonly AbiItem[]
+  >;
+  return Object.values(sdkAbi).filter(Array.isArray);
 };
+
+const buildTopicMap = (): Record<string, string> => {
+  const map: Record<string, string> = {
+    // ERC20
+    '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef':
+      'Transfer',
+    '0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925':
+      'Approval',
+  };
+
+  for (const abi of loadSdkAbis()) {
+    for (const item of abi) {
+      if (item.type !== 'event') continue;
+      try {
+        const topic = toEventSelector(item as never);
+        if (!map[topic]) map[topic] = item.name;
+      } catch {
+        // skip unparseable items
+      }
+    }
+  }
+
+  return map;
+};
+
+const TOPICS = buildTopicMap();
 
 // Lido core / multicall functions that aren't in the CSM SDK ABIs
 const EXTRA_SIGNATURES = [
@@ -91,12 +120,6 @@ const EXTRA_SIGNATURES = [
 ];
 
 const buildSelectorMap = (): Record<string, string> => {
-  const sdkAbi = _require('@lidofinance/lido-csm-sdk/abi') as Record<
-    string,
-    readonly { type: string; name: string }[]
-  >;
-  const abis = Object.values(sdkAbi).filter(Array.isArray);
-
   const map: Record<string, string> = {
     // ERC20
     '0x70a08231': 'balanceOf',
@@ -116,7 +139,7 @@ const buildSelectorMap = (): Record<string, string> => {
     }
   }
 
-  for (const abi of abis) {
+  for (const abi of loadSdkAbis()) {
     for (const item of abi) {
       if (item.type !== 'function') continue;
       try {
@@ -162,7 +185,16 @@ const createDecoder = (contracts: Record<string, string>) => {
     const event = topic0
       ? (TOPICS[topic0.toLowerCase()] ?? topic0.slice(0, 10))
       : '';
-    return [addrs ? `${addrs}` : '', event ? `::${event}` : '']
+    // A wide range is the usual reason a getLogs stalls on a fork
+    const from = filter.fromBlock as string | undefined;
+    const to = filter.toBlock as string | undefined;
+    const span =
+      from?.startsWith('0x') && to?.startsWith('0x')
+        ? `, ${(BigInt(to) - BigInt(from)).toLocaleString('en-US')} blocks`
+        : from || to
+          ? `, ${from ?? '?'}→${to ?? '?'}`
+          : '';
+    return [addrs ? `${addrs}` : '', event ? `::${event}` : '', span]
       .filter(Boolean)
       .join('');
   };
