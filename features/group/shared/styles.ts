@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 export const StakeRow = styled.div`
-  padding: 12px 16px;
   display: flex;
   gap: 12px;
 
