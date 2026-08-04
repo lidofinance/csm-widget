@@ -2,8 +2,7 @@ import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
 
 export const Row = styled.div`
-  padding: 12px 16px;
-
+  padding: 12px 0;
   display: flex;
   gap: 12px;
 `;
@@ -25,12 +24,6 @@ export const ItemStyled = styled(StackStyle).attrs({
   justify-content: start;
 
   flex-direction: column-reverse;
-  gap: 0px;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    flex-direction: row-reverse;
-    justify-content: space-between;
-  }
 `;
 
 export const CountStyled = styled.b`

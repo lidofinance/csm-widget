@@ -3,6 +3,7 @@ import {
   DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
   DISABLE_DEPOSIT_DATA_VALIDATION,
 } from 'config/feature-flags/types';
+import { validateDkgBatch } from 'features/idvtc/dkg/utils/validate-dkg-batch';
 import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
@@ -29,6 +30,7 @@ export const useSubmitKeysValidation = () => {
         bondAmount,
         depositData,
         rawDepositData,
+        dkgFiles,
         specifyCustomAddresses,
         rewardsAddress,
         managerAddress,
@@ -73,6 +75,11 @@ export const useSubmitKeysValidation = () => {
               featureFlags?.[DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION],
           });
         }
+      });
+
+      await validate('dkgFiles', () => {
+        const error = validateDkgBatch(dkgFiles ?? []);
+        if (error) throw new ValidationError('dkgFiles', error);
       });
 
       await validate('confirmKeysReady', () => {
