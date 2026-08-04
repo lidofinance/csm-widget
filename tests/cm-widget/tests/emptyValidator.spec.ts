@@ -159,7 +159,9 @@ test.describe(
           await expect(
             notEligiblePage.navigateCMv1Section,
             'CM v1 section should display the host link',
-          ).toContainText(widgetConfig.linkTargets.operatorsLidoLink);
+          ).toContainText(
+            widgetConfig.linkTargets.operatorsLidoLink.replace('https://', ''),
+          );
         });
       },
     );
