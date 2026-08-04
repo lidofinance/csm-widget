@@ -192,7 +192,7 @@ test.describe(
           const hostLink = notEligiblePage.navigateCMv1Section.getByRole(
             'link',
             {
-              name: /testnet\.fi/i,
+              name: /operators/i,
             },
           );
           const [cmv1] = await Promise.all([
