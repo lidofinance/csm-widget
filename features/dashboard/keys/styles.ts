@@ -2,6 +2,7 @@ import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
 
 export const Row = styled.div`
+  padding: 12px 0;
   display: flex;
   gap: 12px;
 `;
