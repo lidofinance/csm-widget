@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useLocalStorage } from 'shared/hooks/use-local-storage';
 import { FeatureFlagsType } from './types';
-import { getFeatureFlagsDefault } from './utils';
+import { getFeatureFlagsDefault, isMainnet } from './utils';
 
 const STORAGE_FEATURE_FLAGS = 'lido-feature-flags';
 
@@ -21,11 +21,14 @@ export const useFeatureFlagsContext = () => {
   );
 
   useEffect(() => {
+    // turn off feature flags on mainnet
+    if (isMainnet) return;
     setFeatureFlagsState(featureFlagsLocalStorage);
   }, [featureFlagsLocalStorage]);
 
   const setFeatureFlag = useCallback(
     (featureFlag: keyof FeatureFlagsType, value: boolean) => {
+      if (isMainnet) return;
       const newFlags = {
         ...featureFlagsState,
         [featureFlag]: value,

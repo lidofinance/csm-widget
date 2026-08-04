@@ -32,6 +32,9 @@ const FLAGS = Object.keys(getFeatureFlagsDefault()) as Array<
 const TESTNET_ONLY_FLAGS: Array<keyof FeatureFlagsType> = [
   ICS_APPLY_FORM,
   SURVEYS_SETUP_ENABLED,
+  DISABLE_DEPOSIT_DATA_VALIDATION,
+  DISABLE_ICS_PROOF_VALIDATION,
+  DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
 ];
 
 export const QaFeatureFlags: FC = () => {
@@ -46,7 +49,7 @@ export const QaFeatureFlags: FC = () => {
     [defaultChain],
   );
 
-  if (!featureFlags) return null;
+  if (!featureFlags || flags.length === 0) return null;
 
   return (
     <FormBlock>
