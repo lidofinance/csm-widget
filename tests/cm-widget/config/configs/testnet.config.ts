@@ -41,5 +41,9 @@ export class TestnetConfig extends BaseConfig {
         artifactsDir: './artifacts/hoodi',
       },
     };
+    this.linkTargets = {
+      csmLink: 'https://csm.testnet.fi/',
+      operatorsLidoLink: 'https://operators-hoodi.testnet.fi',
+    };
   }
 }

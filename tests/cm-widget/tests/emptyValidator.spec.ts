@@ -109,7 +109,7 @@ test.describe(
 
     test(
       qase(9, 'Should open a new tab after click to "Join CSM"'),
-      async ({ widgetService }) => {
+      async ({ widgetService, widgetConfig }) => {
         const { notEligiblePage } = widgetService;
 
         await test.step('Click "Join CSM" and check new tab URL', async () => {
@@ -121,7 +121,7 @@ test.describe(
           expect(
             csmPage.url().toLowerCase(),
             'New tab should open CSM widget',
-          ).toContain('https://csm.testnet.fi/');
+          ).toContain(widgetConfig.linkTargets.csmLink);
         });
       },
     );
@@ -131,7 +131,7 @@ test.describe(
         11,
         'Should display correct text content in navigate to CM v1 section',
       ),
-      async ({ widgetService }) => {
+      async ({ widgetService, widgetConfig }) => {
         const { notEligiblePage } = widgetService;
 
         await test.step('Check heading text', async () => {
@@ -159,14 +159,14 @@ test.describe(
           await expect(
             notEligiblePage.navigateCMv1Section,
             'CM v1 section should display the host link',
-          ).toContainText('operators-hoodi.testnet.fi');
+          ).toContainText(widgetConfig.linkTargets.operatorsLidoLink);
         });
       },
     );
 
     test(
       qase(12, 'Should open cm v1 tab after click to "Open CM v1 widget"'),
-      async ({ widgetService }) => {
+      async ({ widgetService, widgetConfig }) => {
         const { notEligiblePage } = widgetService;
 
         await test.step('Click "Open CM v1 widget" and check new tab URL', async () => {
@@ -178,14 +178,14 @@ test.describe(
           expect(
             cmv1.url().toLowerCase(),
             'New tab should open CM v1 widget',
-          ).toContain('operators-hoodi.testnet.fi');
+          ).toContain(widgetConfig.linkTargets.operatorsLidoLink);
         });
       },
     );
 
     test(
       qase(14, 'Should open cm v1 tab after click to host link in description'),
-      async ({ widgetService }) => {
+      async ({ widgetService, widgetConfig }) => {
         const { notEligiblePage } = widgetService;
 
         await test.step('Click host link in CM v1 section description and check new tab URL', async () => {
@@ -203,7 +203,7 @@ test.describe(
           expect(
             cmv1.url().toLowerCase(),
             'New tab should open CM v1 widget',
-          ).toContain('operators-hoodi.testnet.fi');
+          ).toContain(widgetConfig.linkTargets.operatorsLidoLink);
         });
       },
     );

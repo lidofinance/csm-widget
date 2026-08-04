@@ -41,5 +41,10 @@ export class ProdConfig extends BaseConfig {
         artifactsDir: './artifacts/mainnet',
       },
     };
+
+    this.linkTargets = {
+      csmLink: 'https://csm.lido.fi/',
+      operatorsLidoLink: 'https://operators.lido.fi',
+    };
   }
 }

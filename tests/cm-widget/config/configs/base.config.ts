@@ -32,10 +32,17 @@ export type StandConfig = {
   justConfig: JustConfig;
 };
 
+export type LinkTargets = {
+  csmLink: string;
+  operatorsLidoLink: string;
+};
+
 export type IConfig = {
   standConfig: StandConfig;
   walletConfig: CommonWalletConfig;
   accountConfig: AccountConfig;
+  linkTargets: LinkTargets;
+
   getFullInfo(): string;
 };
 
@@ -53,6 +60,7 @@ export class BaseConfig implements IConfig {
   public standConfig!: StandConfig;
   public walletConfig: CommonWalletConfig;
   public accountConfig: AccountConfig;
+  public linkTargets!: LinkTargets;
 
   constructor() {
     this.accountConfig = {
