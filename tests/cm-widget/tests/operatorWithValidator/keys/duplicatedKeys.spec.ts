@@ -11,7 +11,7 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
   'Operator with keys. Validation duplicated keys.',
-  { tag: [Tags.forked] },
+  { tag: [Tags.forked, Tags.noStaging, Tags.noProd] },
   () => {
     let keysPage: KeysPage;
     let keysGeneratorService: KeysGeneratorService;

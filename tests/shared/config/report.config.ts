@@ -44,6 +44,8 @@ export const getReportConfig: () => ReporterDescription[] = function () {
       },
     ],
     ['../shared/config/skipper.reporter.ts'],
+    // must stay outside secret-guard: it swallows errors thrown before onBegin
+    ['../shared/config/globalError.reporter.ts'],
   ];
 };
 
