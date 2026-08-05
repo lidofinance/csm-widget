@@ -49,7 +49,7 @@ export class OperatorTypePage extends BasePage {
 
   async openTypePage() {
     await test.step('Open the Operator Type page', async () => {
-      await this.page.goto('/type');
+      await this.openWithRetry('/type', this.idvtcApplyButton);
     });
   }
 }

@@ -143,6 +143,7 @@ test.describe(
         436,
         'Should submit successfully after verifying all cluster members',
       ),
+      { tag: [Tags.noStaging, Tags.noProd] },
       async ({ widgetService, secretPhrase }) => {
         const applyForm =
           widgetService.operatorType.dvtApplicationForm.applyForm;

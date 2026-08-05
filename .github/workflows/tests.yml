@@ -12,8 +12,6 @@ on:
         type: choice
         default: testnet
         options:
-          - prod
-          - staging
           - testnet
           - preview
       tags:

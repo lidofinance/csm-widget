@@ -1,6 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
+import { BasePage } from 'tests/shared/pages/base.page';
 
-export class ClaimIdvtcPage {
+export class ClaimIdvtcPage extends BasePage {
   page: Page;
   title: Locator;
   subtitle: Locator;
@@ -11,6 +12,7 @@ export class ClaimIdvtcPage {
   confirmContinueButton: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
     this.title = this.page.getByTestId('pageTitle');
     this.subtitle = this.page.getByTestId('pageSubtitle');
@@ -31,7 +33,7 @@ export class ClaimIdvtcPage {
 
   async open() {
     await test.step('Open the IDVTC claim page', async () => {
-      await this.page.goto('/type/idvtc-claim');
+      await this.openWithRetry('/type/idvtc-claim', this.claimButton);
     });
   }
 

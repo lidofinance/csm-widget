@@ -11,20 +11,22 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
   'Operator with keys. Validation duplicated keys.',
-  { tag: [Tags.forked] },
+  { tag: [Tags.forked, Tags.noStaging, Tags.noProd] },
   () => {
     let keysPage: KeysPage;
     let keysGeneratorService: KeysGeneratorService;
 
-    test.beforeEach(async ({ widgetService }) => {
-      keysPage = new KeysPage(widgetService.page);
-      await widgetService.setFeatureFlag(
-        'disableDepositDataSignatureValidation',
-        true,
-      );
-      await keysPage.submitPage.open();
-      keysGeneratorService = new KeysGeneratorService({ isCM: true });
-    });
+    test.beforeEach(
+      async ({ widgetService, keysGeneratorService: keysGenerator }) => {
+        keysPage = new KeysPage(widgetService.page);
+        await widgetService.setFeatureFlag(
+          'disableDepositDataSignatureValidation',
+          true,
+        );
+        await keysPage.submitPage.open();
+        keysGeneratorService = keysGenerator;
+      },
+    );
 
     test(qase(87, 'Should failed if uploaded duplicate keys'), async () => {
       const duplicatedKey = keysGeneratorService.generateKeys();

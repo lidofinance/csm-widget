@@ -1,9 +1,6 @@
 import { Locator, Page, test } from '@playwright/test';
 import { Header } from '../../cm-widget/pages/elements/common/element.header';
-import {
-  RPC_WAIT_TIMEOUT,
-  WALLET_PAGE_TIMEOUT_WAITER,
-} from 'tests/shared/consts/timeouts';
+import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { ConnectWalletModal } from '../../cm-widget/pages/elements/common/element.connectWalletModal';
 import { waitForCallback } from 'tests/shared/helpers/tests';
 
@@ -44,7 +41,7 @@ export class BasePage {
         } else {
           await this.waitForTextContent(
             textLocatorForWaiting,
-            WALLET_PAGE_TIMEOUT_WAITER,
+            RPC_WAIT_TIMEOUT,
           );
         }
       });

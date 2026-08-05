@@ -1,7 +1,9 @@
 import { test, Page } from '@playwright/test';
+import { type IConfig as CMBaseConfig } from 'tests/cm-widget/config/configs/base.config';
+import { type IConfig as CSMBaseConfig } from 'tests/csm-widget/config/configs/base.config';
 
 // Minimal config shape shared by CSM and CM widget configs
-type MatomoConfig = { standConfig: { matomoUrl: string } };
+type MatomoConfig = CMBaseConfig | CSMBaseConfig;
 
 const red = (s: string) => `\u001B[31m${s}\u001B[0m`;
 const gray = (s: string) => `\u001B[90m${s}\u001B[0m`;
@@ -24,7 +26,11 @@ export class MatomoService {
     const matomoUrl = this.config.standConfig.matomoUrl;
     const timeoutMs = timeout?.timeout ?? 10_000;
 
-    await test.step(`Wait for Matomo request with ${propertyName}=${propertyValue}`, async () => {
+    await test.step(`Wait for Matomo request with ${propertyName}=${propertyValue}`, async (step) => {
+      if (this.config.standConfig.standType === 'staging') {
+        // Staging environment does not have Matomo tracking enabled, so we skip the check
+        step.skip();
+      }
       try {
         await this.page.waitForRequest(
           (request) =>

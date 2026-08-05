@@ -14,6 +14,8 @@ on:
         options:
           - testnet
           - preview
+          - prod
+          - staging
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
         required: false
@@ -39,8 +41,5 @@ jobs:
       test_tags: forked
       qase_project_id: CM
       staking_modules_ref: test/local-scripts
-      deploy_config: ./artifacts/hoodi/curated/deploy-hoodi.json
-      chain: hoodi
-      artifacts_dir: ./artifacts/hoodi/
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
       preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}

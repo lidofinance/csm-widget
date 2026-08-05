@@ -28,7 +28,7 @@ test.describe('Operator with keys. ICS. Apply application. Submit Happy Path', a
       'Should successfully verify signature with 1 additional addresses and socials',
     ),
     {
-      tag: [Tags.smoke],
+      tag: [Tags.smoke, Tags.noStaging, Tags.noProd],
     },
     async ({ widgetService, secretPhrase }) => {
       const applicationForm = widgetService.operatorType.applicationForm;

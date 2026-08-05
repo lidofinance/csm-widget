@@ -4,7 +4,7 @@ import { BasePage } from '../../../../shared/pages/base.page';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { DepositKey } from 'tests/shared/services/keysGenerator.service';
 
-export class SubmitPage {
+export class SubmitPage extends BasePage {
   page: Page;
   base: BasePage;
   formBlock: Locator;
@@ -26,6 +26,8 @@ export class SubmitPage {
   parsedTabCounter: Locator;
 
   constructor(page: Page) {
+    super(page);
+
     this.page = page;
     this.base = new BasePage(page);
     this.formBlock = this.page.getByTestId('submitKeysForm');
@@ -59,7 +61,7 @@ export class SubmitPage {
 
   async open() {
     await test.step('Open submit tab for Keys page', async () => {
-      await this.page.goto('/keys/submit');
+      await this.openWithRetry('/keys/submit', this.submitKeysButton);
     });
   }
 

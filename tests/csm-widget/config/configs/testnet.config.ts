@@ -3,6 +3,7 @@ import { BaseConfig } from './base.config';
 export class TestnetConfig extends BaseConfig {
   constructor() {
     super();
+
     this.standConfig = {
       standType: 'testnet',
       standUrl: 'https://csm.testnet.fi/',
@@ -11,7 +12,7 @@ export class TestnetConfig extends BaseConfig {
         chainId: 560048,
         tokenSymbol: 'ETH',
         chainName: 'Hoodi',
-        rpcUrl: process.env.RPC_URL as string,
+        rpcUrl: this.getRpcUrl('testnet'),
         scan: 'https://hoodi.etherscan.io/',
       },
       nodeConfig: {
@@ -19,10 +20,10 @@ export class TestnetConfig extends BaseConfig {
           mockEnabled: true,
           rpcUrlToMock: [`.*/api/rpc\\?chainId=560048`],
         },
-        rpcUrl: process.env.RPC_URL as string,
+        rpcUrl: this.getRpcUrl('testnet'),
         derivationPath: "m/44'/60'/0'/0",
         host: '127.0.0.1',
-        port: 8545,
+        port: process.env.ANVIL_PORT ? parseInt(process.env.ANVIL_PORT) : 8545,
       },
       mockConfig: {
         urls: {
@@ -37,6 +38,16 @@ export class TestnetConfig extends BaseConfig {
           csmSentinel: 'https://github.com/skhomuti/csm-sentinel',
         },
         stakingModuleIndex: 4,
+      },
+      keysGeneratorConfig: {
+        chain: 'hoodi',
+        withdrawalCredentials: '0x4473dCDDbf77679A643BdB654dbd86D67F8d32f2',
+        password: 'testtest',
+      },
+      justConfig: {
+        chain: 'hoodi',
+        deployConfig: './artifacts/hoodi/csm/upgrade-v3-hoodi.json',
+        artifactsDir: './artifacts/hoodi',
       },
     };
   }

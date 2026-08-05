@@ -32,11 +32,13 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   let keysPage: KeysPage;
   let keysGeneratorService: KeysGeneratorService;
 
-  test.beforeEach(async ({ widgetService }) => {
-    keysPage = new KeysPage(widgetService.page);
-    await keysPage.submitPage.open();
-    keysGeneratorService = new KeysGeneratorService();
-  });
+  test.beforeEach(
+    async ({ widgetService, keysGeneratorService: keysGenerator }) => {
+      keysPage = new KeysPage(widgetService.page);
+      await keysPage.submitPage.open();
+      keysGeneratorService = keysGenerator;
+    },
+  );
 
   test(
     qase(308, 'Should display error for empty keys json'),

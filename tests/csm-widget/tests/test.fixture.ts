@@ -13,6 +13,7 @@ import ForkActionsService from 'tests/shared/services/forkActions.service';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { HttpMockerService } from 'tests/shared/services/httpMocker.service';
 import { EvmNodeService } from 'tests/shared/services/evmNode.service';
+import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 
 type WorkerFixtures = {
   // fixture-options
@@ -29,7 +30,10 @@ type WorkerFixtures = {
   evmNode: EvmNodeService;
 };
 
-export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
+export const test = base.extend<
+  { widgetConfig: IConfig; keysGeneratorService: KeysGeneratorService },
+  WorkerFixtures
+>({
   // fixture-options
   useFork: [
     async ({}, use) => {
@@ -43,6 +47,12 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
     async ({}, use) => {
       const svc = new ForkActionsService({
         cwd: process.env.JUST_DIR || './staking-modules',
+        env: {
+          CHAIN: widgetFullConfig.standConfig.justConfig.chain,
+          DEPLOY_CONFIG: widgetFullConfig.standConfig.justConfig.deployConfig,
+          ARTIFACTS_DIR: widgetFullConfig.standConfig.justConfig.artifactsDir,
+          RPC_URL: widgetFullConfig.standConfig.networkConfig.rpcUrl,
+        },
       });
       await use(svc);
     },
@@ -62,6 +72,13 @@ export const test = base.extend<{ widgetConfig: IConfig }, WorkerFixtures>({
   ],
   widgetConfig: async ({}, use) => {
     await use(widgetFullConfig);
+  },
+  keysGeneratorService: async ({}, use) => {
+    await use(
+      new KeysGeneratorService(
+        widgetFullConfig.standConfig.keysGeneratorConfig,
+      ),
+    );
   },
 
   // fixture-methods

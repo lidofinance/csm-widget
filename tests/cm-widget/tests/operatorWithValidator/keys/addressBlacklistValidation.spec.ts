@@ -3,7 +3,6 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
-import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { TxModal } from 'tests/cm-widget/pages/elements/common/element.txProgressModal';
 import { test } from '../../test.fixture';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
@@ -43,7 +42,7 @@ test.describe(
 
     test(
       qase(455, 'Should show access denied modal when keys are submitted'),
-      async ({ widgetService }) => {
+      async ({ widgetService, keysGeneratorService }) => {
         const { submitPage } = widgetService.keysPage;
 
         await test.step('Open the submit keys page', async () => {
@@ -51,7 +50,7 @@ test.describe(
         });
 
         await test.step('Fill valid keys and submit', async () => {
-          const keys = new KeysGeneratorService({ isCM: true }).generateKeys();
+          const keys = keysGeneratorService.generateKeys();
           await submitPage.submitKeys(keys, TokenSymbol.ETH);
         });
 
