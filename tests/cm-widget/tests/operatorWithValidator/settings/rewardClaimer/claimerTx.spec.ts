@@ -12,7 +12,7 @@ import { generateAddress } from 'tests/shared/helpers/accountData';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
-const VALID_ADDRESS = generateAddress();
+const VALID_ADDRESS = generateAddress(true);
 
 test.describe(
   'Settings. Rewards claimer. Transactions.',
