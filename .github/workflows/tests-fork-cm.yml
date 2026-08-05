@@ -16,6 +16,14 @@ on:
           - preview
           - prod
           - staging
+      tags:
+        description: "Tags for running test suite"
+        required: false
+        type: choice
+        default: "forked"
+        options:
+          - forked
+          - smoke
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
         required: false
@@ -29,6 +37,22 @@ on:
           - testnet
           - infra
 
+  workflow_call:
+    inputs:
+      preview_stand_url:
+        required: false
+        type: string
+        description: Stand url
+      stand_type:
+        description: "Stand type"
+        required: true
+        type: string
+      tags:
+        required: false
+        type: string
+        default: "forked"
+        description: "Test tags"
+
 jobs:
   test:
     name: CM widget (fork)
@@ -38,7 +62,7 @@ jobs:
       module: cm
       use_fork: true
       stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
-      test_tags: forked
+      test_tags: ${{ inputs.tags || github.event.inputs.tags || 'forked' }}
       qase_project_id: CM
       staking_modules_ref: test/local-scripts
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}

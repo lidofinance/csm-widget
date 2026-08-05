@@ -1,0 +1,45 @@
+name: CI Dev Hoodi (test)
+
+# Copy of ci-dev.yml used to debug the pipeline itself.
+# Differences from the original:
+#   - deploy does NOT dispatch the real workflow in infra-mainnet, it only
+#     prints what it would have done;
+#   - triggered by a push to the debug branch, with no paths-ignore, so that
+#     changes under .github/** also start a run.
+# Everything else (needs, permissions, the tests.yml / tests-fork-cm.yml calls,
+# secrets: inherit, inputs) is identical to ci-dev.yml.
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - tests/run-tests-on-dev
+
+permissions: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Build and deploy (dry run)
+    steps:
+      - name: Testnet deploy (dry run)
+        run: |
+          echo "DRY RUN — no real deploy is performed."
+          echo "The original step would have called lidofinance/dispatch-workflow@v1 with:"
+
+  csm-tests:
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/tests.yml
+    with:
+      stand_type: "testnet"
+      tags: "smoke"
+      qase_plan_id: 3 # Smoke test Plan
+
+  cm-tests:
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/tests-fork-cm.yml
+    with:
+      stand_type: "testnet"
+      tags: "smoke"
