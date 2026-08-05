@@ -42,6 +42,7 @@ test.describe(
 
     test(
       qase(134, 'Should correctly expand and display the balance'),
+      { tag: [Tags.smoke] },
       async ({ widgetService, cmSDK }) => {
         const bondBalance = widgetService.dashboardPage.bondRewards.bondBalance;
 

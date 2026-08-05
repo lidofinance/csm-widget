@@ -39,6 +39,7 @@ test.describe(
     });
     test(
       qase(131, 'Should correctly expand and display the balance'),
+      { tag: [Tags.smoke] },
       async ({ widgetService, cmSDK }) => {
         const availableToClaim =
           widgetService.dashboardPage.bondRewards.availableToClaim;

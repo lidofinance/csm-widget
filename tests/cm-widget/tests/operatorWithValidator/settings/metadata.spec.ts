@@ -123,6 +123,7 @@ test.describe('Settings. Meta data.', { tag: [Tags.forked] }, () => {
       186,
       'Should update metadata on the page and dashboard after transaction',
     ),
+    { tag: [Tags.smoke] },
     async ({ widgetService }) => {
       const { metadataPage } = widgetService.settingsPage;
       const { txModal } = widgetService.settingsPage;

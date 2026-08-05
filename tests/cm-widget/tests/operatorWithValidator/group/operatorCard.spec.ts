@@ -104,6 +104,7 @@ test.describe('Group page. Operator card.', { tag: [Tags.forked] }, () => {
         222,
         'Should display all three stake columns with labels in each card',
       ),
+      { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { groupPage } = widgetService;
 

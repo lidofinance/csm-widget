@@ -37,6 +37,7 @@ test.describe(
 
     test(
       qase(203, 'Should set Rewards claimer address and show success'),
+      { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { claimerPage, txModal } = widgetService.settingsPage;
 
