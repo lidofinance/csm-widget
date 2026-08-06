@@ -75,10 +75,13 @@ on:
         required: false
         type: boolean
         default: false
+      job_custom_name:
+        description: "Human-readable name of the calling job, used as the Slack report title. Job names are not exposed to called workflows, so every caller has to pass it explicitly."
+        required: true
+        type: string
 
 jobs:
   test:
-    name: Run e2e tests
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ inputs.timeout_minutes }}
     env:
@@ -102,6 +105,7 @@ jobs:
       NODE_OPTIONS: --max-old-space-size=4096
       TEST_TAGS: ${{ inputs.test_tags }}
       REPORT_ENABLED: ${{ (github.event_name == 'schedule' || inputs.report_enabled) && 'true' || 'false' }}
+      JOB_CUSTOM_NAME: ${{ inputs.job_custom_name }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       SLACK_DUTY_TAG: "S09H269H2TT"
       ARTIFACT_PASSWORD: ${{ secrets.ARTIFACT_PASSWORD }}

@@ -36,6 +36,7 @@ jobs:
       tags: "smoke"
       qase_plan_id: 3 # Smoke test Plan
       report_enabled: true
+      job_custom_name: "Post-deploy CSM smoke"
 
   cm-smoke-tests:
     name: Post-deploy CM smoke
@@ -46,3 +47,4 @@ jobs:
       stand_type: "testnet"
       tags: "smoke"
       report_enabled: true
+      job_custom_name: "Post-deploy CM smoke"

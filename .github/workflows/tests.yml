@@ -60,6 +60,11 @@ on:
         required: false
         type: boolean
         default: false
+      job_custom_name:
+        description: "Human-readable name of the calling job, used as the Slack report title."
+        required: false
+        type: string
+        default: ""
 
 jobs:
   test:
@@ -75,3 +80,4 @@ jobs:
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
       preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
       report_enabled: ${{ inputs.report_enabled || false }}
+      job_custom_name: ${{ inputs.job_custom_name || 'CSM widget' }}
