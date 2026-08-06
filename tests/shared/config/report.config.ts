@@ -115,8 +115,8 @@ const reporters: {
     '@lidofinance/chat-reporter',
     {
       enabled: process.env.REPORT_ENABLED,
-      customDescription: `- Stand type: \`${process.env.STAND_TYPE}\``,
-      customTitle: process.env.GITHUB_WORKFLOW,
+      customDescription: `- Stand type: \`${process.env.STAND_TYPE}\`\n`,
+      customTitle: process.env.JOB_CUSTOM_NAME,
       ciRunUrl: `${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
 
       // ───── Slack settings ─────
