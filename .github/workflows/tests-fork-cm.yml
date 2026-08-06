@@ -52,6 +52,11 @@ on:
         type: string
         default: "forked"
         description: "Test tags"
+      report_enabled:
+        description: "Enable slack report."
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   test:
@@ -67,3 +72,4 @@ jobs:
       staking_modules_ref: test/local-scripts
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
       preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
+      report_enabled: ${{ inputs.report_enabled || false }}

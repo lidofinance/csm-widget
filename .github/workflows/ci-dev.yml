@@ -26,6 +26,7 @@ jobs:
           TARGET: "develop"
 
   csm-smoke-tests:
+    name: Post-deploy CSM smoke
     needs: deploy
     secrets: inherit
     uses: ./.github/workflows/tests.yml
@@ -33,11 +34,14 @@ jobs:
       stand_type: "testnet"
       tags: "smoke"
       qase_plan_id: 3 # Smoke test Plan
+      report_enabled: true
 
   cm-smoke-tests:
+    name: Post-deploy CM smoke
     needs: deploy
     secrets: inherit
     uses: ./.github/workflows/tests-fork-cm.yml
     with:
       stand_type: "testnet"
       tags: "smoke"
+      report_enabled: true

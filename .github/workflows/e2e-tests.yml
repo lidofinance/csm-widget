@@ -70,6 +70,11 @@ on:
         required: false
         type: string
         default: ""
+      report_enabled:
+        description: "Enable slack report."
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   test:
@@ -96,7 +101,7 @@ jobs:
       GH_EVENT_NAME: ${{ github.event_name }}
       NODE_OPTIONS: --max-old-space-size=4096
       TEST_TAGS: ${{ inputs.test_tags }}
-      REPORT_ENABLED: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
+      REPORT_ENABLED: ${{ (github.event_name == 'schedule' || inputs.report_enabled) && 'true' || 'false' }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       SLACK_DUTY_TAG: "S09H269H2TT"
       ARTIFACT_PASSWORD: ${{ secrets.ARTIFACT_PASSWORD }}
