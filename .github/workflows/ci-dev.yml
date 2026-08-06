@@ -11,9 +11,6 @@ on:
 permissions: {}
 
 jobs:
-  # test:
-  #   ...
-
   deploy:
     runs-on: ubuntu-latest
     # needs: test
@@ -27,3 +24,20 @@ jobs:
           TARGET_REPO: "lidofinance/infra-mainnet"
           TARGET_WORKFLOW: "deploy_hoodi_testnet_csm_widget.yaml"
           TARGET: "develop"
+
+  csm-smoke-tests:
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/tests.yml
+    with:
+      stand_type: "testnet"
+      tags: "smoke"
+      qase_plan_id: 3 # Smoke test Plan
+
+  cm-smoke-tests:
+    needs: deploy
+    secrets: inherit
+    uses: ./.github/workflows/tests-fork-cm.yml
+    with:
+      stand_type: "testnet"
+      tags: "smoke"

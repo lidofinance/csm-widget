@@ -163,6 +163,7 @@ test.describe(
 
     test(
       qase(98, 'Should display error for invalid withdrawal_credentials'),
+      { tag: [Tags.smoke] },
       async () => {
         const key = keysGeneratorService.generateKeys();
 

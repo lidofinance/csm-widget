@@ -22,6 +22,7 @@ test.describe(
 
     test(
       qase(10, 'Should display correct text content in not eligible section'),
+      { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { notEligiblePage } = widgetService;
 

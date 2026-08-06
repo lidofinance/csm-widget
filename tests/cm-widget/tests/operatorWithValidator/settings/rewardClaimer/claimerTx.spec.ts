@@ -12,7 +12,7 @@ import { generateAddress } from 'tests/shared/helpers/accountData';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
-const VALID_ADDRESS = generateAddress();
+const VALID_ADDRESS = generateAddress(true);
 
 test.describe(
   'Settings. Rewards claimer. Transactions.',
@@ -37,6 +37,7 @@ test.describe(
 
     test(
       qase(203, 'Should set Rewards claimer address and show success'),
+      { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { claimerPage, txModal } = widgetService.settingsPage;
 

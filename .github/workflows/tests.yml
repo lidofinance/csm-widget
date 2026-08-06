@@ -39,7 +39,7 @@ on:
   workflow_call:
     inputs:
       preview_stand_url:
-        required: true
+        required: false
         type: string
         description: Stand url
       stand_type:
