@@ -156,7 +156,7 @@
     "@babel/plugin-transform-modules-systemjs": "^7.29.4",
     "yaml": "^2.8.3",
     "h3": "^1.15.9",
-    "hono": "^4.12.27",
+    "hono": "^4.13.1",
     "axios": "^1.16.0",
     "micromatch": "^4.0.8",
     "uuid": "^14.0.0",
