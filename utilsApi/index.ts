@@ -1,5 +1,7 @@
 export * from './clApiUrls';
+export * from './collect-request-address-metric';
 export * from './contractAddressesMetricsMap';
+export * from './get-function-name-from-abi';
 export * from './getClient';
 export * from './getCurrentFrame';
 export * from './getPerformance';
