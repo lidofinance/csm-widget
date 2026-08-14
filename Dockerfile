@@ -50,7 +50,7 @@ COPY --from=build /app/.next ./.next
 # next.config.mjs is re-evaluated on server start: it regenerates public/runtime,
 # manifest.json and the favicons from MODULE, so user node must own public/
 COPY --from=build --chown=node:node /app/public ./public
-COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json ./
+COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json /app/server.mjs ./
 COPY --from=build /app/scripts ./scripts
 
 USER node

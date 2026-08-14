@@ -43,7 +43,7 @@ export const CACHE_CONTROL_PAGES = [
   '/runtime/window-env.js',
 ];
 export const CACHE_CONTROL_VALUE =
-  'public, max-age=15, s-max-age=30, stale-if-error=604800, stale-while-revalidate=172800';
+  'public, max-age=15, s-maxage=30, stale-if-error=86400, stale-while-revalidate=60';
 
 // devDependency, absent from the production image where this config is re-evaluated on boot
 const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
