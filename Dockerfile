@@ -1,12 +1,23 @@
-# build env
-FROM node:24-alpine as build
+# dependencies for the build
+FROM node:24-alpine AS deps
 
 WORKDIR /app
 
 RUN apk add --no-cache git=~2
 COPY package.json yarn.lock ./
-
 RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts && yarn cache clean
+
+# runtime-only dependencies, kept apart so the final image never sees devDependencies
+FROM node:24-alpine AS prod-deps
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts --production && yarn cache clean
+
+# build env
+FROM deps AS build
+
 COPY . .
 
 # Runtime build metadata (surfaced in the footer + /api metrics). The reusable
@@ -21,14 +32,10 @@ RUN if [ -n "$BUILD_COMMIT" ]; then \
         "$BUILD_VERSION" "$BUILD_BRANCH" "$BUILD_COMMIT" > build-info.json; \
     fi
 
-RUN NODE_NO_BUILD_DYNAMICS=true yarn typechain && yarn build
-# public/runtime is used to inject runtime vars; it should exist and user node should have write access there for it
-RUN rm -rf /app/public/runtime && mkdir /app/public/runtime && chown node /app/public/runtime
-# public/manifest.json and favicons are regenerated at server start based on MODULE; user node needs write access
-RUN chown -R node /app/public
+RUN NODE_NO_BUILD_DYNAMICS=true yarn build
 
 # final image
-FROM node:24-alpine as base
+FROM node:24-alpine AS base
 
 ARG BASE_PATH=""
 ARG DEFAULT_CHAIN="1"
@@ -39,7 +46,14 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
 
 WORKDIR /app
 RUN apk add --no-cache curl=~8
-COPY --from=build /app /app
+
+COPY --from=prod-deps /app/node_modules ./node_modules
+COPY --from=build /app/.next ./.next
+# next.config.mjs is re-evaluated on server start: it regenerates public/runtime,
+# manifest.json and the favicons from MODULE, so user node must own public/
+COPY --from=build --chown=node:node /app/public ./public
+COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json ./
+COPY --from=build /app/scripts ./scripts
 
 USER node
 EXPOSE 3000

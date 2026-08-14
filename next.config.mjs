@@ -1,7 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import NextBundleAnalyzer from '@next/bundle-analyzer';
 import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
 import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
@@ -47,9 +45,11 @@ export const CACHE_CONTROL_PAGES = [
 export const CACHE_CONTROL_VALUE =
   'public, max-age=15, s-max-age=30, stale-if-error=604800, stale-while-revalidate=172800';
 
-const withBundleAnalyzer = NextBundleAnalyzer({
-  enabled: process.env.ANALYZE_BUNDLE ?? false,
-});
+// devDependency, absent from the production image where this config is re-evaluated on boot
+const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
+  ? // eslint-disable-next-line import/no-extraneous-dependencies
+    (await import('@next/bundle-analyzer')).default({ enabled: true })
+  : (config) => config;
 
 export default withBundleAnalyzer({
   basePath,
