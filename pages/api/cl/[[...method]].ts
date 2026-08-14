@@ -1,4 +1,7 @@
-import { wrapRequest as wrapNextRequest } from '@lidofinance/next-api-wrapper';
+import {
+  wrapRequest as wrapNextRequest,
+  cacheControl,
+} from '@lidofinance/next-api-wrapper';
 
 import { config as appConfig } from 'config';
 import { API_ROUTES } from 'consts/api';
@@ -35,6 +38,7 @@ export default wrapNextRequest([
   httpMethodGuard([HttpMethod.GET, HttpMethod.POST]),
   rateLimit,
   responseTimeMetric(Metrics.request.apiTimings, API_ROUTES.CL),
+  cacheControl({ headers: appConfig.CACHE_CL_HEADERS }),
   defaultErrorHandler,
 ])(api);
 
