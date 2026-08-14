@@ -8,6 +8,19 @@ COPY package.json yarn.lock ./
 
 RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts && yarn cache clean
 COPY . .
+
+# Runtime build metadata (surfaced in the footer + /api metrics). The reusable
+# Harbor workflow passes these as build-args; regenerate build-info.json from
+# them so the bundled values reflect the actual build. Local builds without
+# these args keep the tracked REPLACE_WITH_* placeholders untouched.
+ARG BUILD_VERSION
+ARG BUILD_BRANCH
+ARG BUILD_COMMIT
+RUN if [ -n "$BUILD_COMMIT" ]; then \
+      printf '{"version":"%s","branch":"%s","commit":"%s"}\n' \
+        "$BUILD_VERSION" "$BUILD_BRANCH" "$BUILD_COMMIT" > build-info.json; \
+    fi
+
 RUN NODE_NO_BUILD_DYNAMICS=true yarn typechain && yarn build
 # public/runtime is used to inject runtime vars; it should exist and user node should have write access there for it
 RUN rm -rf /app/public/runtime && mkdir /app/public/runtime && chown node /app/public/runtime
