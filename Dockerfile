@@ -3,7 +3,6 @@ FROM node:24-alpine AS deps
 
 WORKDIR /app
 
-RUN apk add --no-cache git=~2
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts && yarn cache clean
 
@@ -45,7 +44,6 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
   DEFAULT_CHAIN=$DEFAULT_CHAIN
 
 WORKDIR /app
-RUN apk add --no-cache curl=~8
 
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/.next ./.next
@@ -59,6 +57,6 @@ USER node
 EXPOSE 3000
 
 HEALTHCHECK --interval=10s --timeout=3s \
-  CMD curl -f http://localhost:3000/api/health || exit 1
+  CMD wget -q -O /dev/null http://localhost:3000/api/health || exit 1
 
 CMD ["yarn", "start"]
