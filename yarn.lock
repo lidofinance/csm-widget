@@ -2433,36 +2433,36 @@
     "@lidofinance/theme" "2.7.0"
     "@lidofinance/utils" "1.3.2"
 
-"@lidofinance/analytics-matomo@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/analytics-matomo/-/analytics-matomo-0.61.0.tgz#33d65d87222e9a372f10b37f69bb9ccc89710cd6"
-  integrity sha512-e+MzemV+euVpgAz/8FRTi2AuB6Ze9AwVVwkNdPHSgh7RZPux/+DDAcyxpKUwMbE0xvEdP5hguP6iDCCMF5dpRw==
+"@lidofinance/analytics-matomo@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/analytics-matomo/-/analytics-matomo-0.63.0.tgz#1885e0a6b29e5908f285caa415a4dbcc632e8a78"
+  integrity sha512-YJvDNkwerxbA2FhqSWUG90lILhT3EG7k9myMic6G1oTNzYiLOTKUBlpAwqGARr19+Qr16k95tE6tUmoShN0ATg==
 
-"@lidofinance/api-logger@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/api-logger/-/api-logger-0.61.0.tgz#cb878b0caf70ce2dc832d1619106fa8eca0edc1b"
-  integrity sha512-ktPv752U5SUwmHJ1ErlWAn5KrkWAJ3BAU6E5X9JIczy95hFHr3ui1BrnYmGvxX8K2ykj7SfAhd15on1E/901Aw==
+"@lidofinance/api-logger@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/api-logger/-/api-logger-0.63.0.tgz#495f86b02ee92b8e1b5ddc8897112d4f63963792"
+  integrity sha512-g1RxCV+IQU665rKk0GF/OAWFRzR0wn8zoVqA80p2gLCLe5nP9ASJOwU1lHjZxp4rWspz3yVty4Ei8CfI+HTfDg==
   dependencies:
-    "@lidofinance/satanizer" "~0.61.0"
+    "@lidofinance/satanizer" "~0.63.0"
 
-"@lidofinance/api-metrics@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/api-metrics/-/api-metrics-0.61.0.tgz#d134e58665a774fbeb368c3c639aeaa17c06ca46"
-  integrity sha512-aZal49800d8zUMklVRKwBC4YMnAnW+IBsYK43Tqol8XaTbo5nk2iw1IS7WVPCvb7SD9kCT7Ht7xhDUhtbH4Bqw==
+"@lidofinance/api-metrics@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/api-metrics/-/api-metrics-0.63.0.tgz#c57164b3556186b5c0997aecb5d55106b56fd7dc"
+  integrity sha512-n9dI7Fm09/h2VwiQAG3+/ot/yaFKJd6buAdLWIzXfanfsbyCiZCh6CVZ/c8AyzUyMP8ObS7rBt2Had8XXPgXAg==
 
-"@lidofinance/api-rpc@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.61.0.tgz#c859036e85dc9197fa1af9ded7e3bcd327ffe7ab"
-  integrity sha512-Ie8BQ1goYEGBUVM+8PxGZOlcAFCi/fAWOIe4pAJf7CAxGF+TnQ26uy2sVqvqasbJs9PwbtOUCIN1J5fqzvkyNQ==
+"@lidofinance/api-rpc@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.63.0.tgz#1a46bab7f035bf4516ae59eb44da77ec963015cf"
+  integrity sha512-P2qG//DW87AowTc5jQGDdeBesmSdrVnInSBKPr5FO0CE1I7sMmilC/rrovGJ8QHoffXmmHplX6o8FKipbg/hbA==
 
-"@lidofinance/browser-service@1.11.2":
-  version "1.11.2"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.11.2.tgz#0846913e0ff3cd6177b7ec5b48d3d07ee99c6036"
-  integrity sha512-DhPpsXeTuBMg7MEeRG6drtwsJH34eEyNDxFsy7vDBCo33GEhCbxOursIxg4ar0JbJKGiTFVDz4bqCQTsrgjJIA==
+"@lidofinance/browser-service@1.11.5":
+  version "1.11.5"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.11.5.tgz#3cf0c3085bb5b5a0daaf6fdf372e1ca8a1611efc"
+  integrity sha512-dQ/HBXdSwhihywEjtLUeT3PjgVai+PP2qHct92o4noUzqN1gs1G1tZNyIMDGrV47i5NMpIK43FojGNrlDHv/4g==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.3.1"
     "@lidofinance/wallets-testing-nodes" "1.10.0"
-    "@lidofinance/wallets-testing-wallets" "1.49.2"
+    "@lidofinance/wallets-testing-wallets" "1.51.1"
 
 "@lidofinance/chat-reporter@1.10.0":
   version "1.10.0"
@@ -2473,27 +2473,27 @@
     axios "^1.10.0"
     reflect-metadata "^0.1.13"
 
-"@lidofinance/eslint-config@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/eslint-config/-/eslint-config-0.61.0.tgz#ba7fd9832cc1de9f68b55097a9220bde3949f6f6"
-  integrity sha512-heOIQrYMuW01y2bVEzDPgO+i+oHOQERlfh1WcazjDYOIwBPWsSB9JjlSfmyq4feIxrtzJSqAW8ja20ZMEC5yiA==
+"@lidofinance/eslint-config@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/eslint-config/-/eslint-config-0.63.0.tgz#bf5e6d66d1b3cf56aef8e668c3fcd491eb74e4ed"
+  integrity sha512-sAok7CEl2QWFZmPjIF3W8XEEoGKzHFkB3HieC9tLZyw8NPo5UqY1Xui461US4JelSUOiJdAgfsW0kGCM2hEnrA==
   dependencies:
     typescript "^4.7"
 
-"@lidofinance/eth-api-providers@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/eth-api-providers/-/eth-api-providers-0.61.0.tgz#6cf0a3863326dfb87292e498fa1316d17ca54b20"
-  integrity sha512-zO0PjgvkkCXiNwSFbUGQNaHcKxPfkmYtmi7WRlU/x8ScELWimpM0skZudzrx+mCNa6s/B6X/Nnf2cPFhMeMgUg==
+"@lidofinance/eth-api-providers@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/eth-api-providers/-/eth-api-providers-0.63.0.tgz#4cb2c501290c709c6a473a72b27e306a470b07c9"
+  integrity sha512-dxpQCkTw/QzUsqLvGKi1Uc0VrCXG1NVy72CItc7+VUtYsSp3exbt+eYp3+TFGpDpXtVVORQrkjCI8e/B9fHVAg==
 
-"@lidofinance/eth-providers@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.61.0.tgz#4e26bcf239b1afb7971d80fcda97bb683a7badef"
-  integrity sha512-tRy/I9egYHcg7gTMrEnhLS799yhO9IjwrQmmXvM9+gRAw3AZJUzj1lYK4sgClxtV8kGZU6XejOk8OkRTmryUAg==
+"@lidofinance/eth-providers@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.63.0.tgz#48a4a901656fc5d3af294669a86d885ab965c25a"
+  integrity sha512-jbWshE2ohU8vkK9p0KNo0bcdY2Nf5joqAHeCY7feGH79E1NAX4aNd78ypZBS/w97SfTcdgrXoI4x50Rcdi3Mag==
 
-"@lidofinance/lido-csm-sdk@2.0.0-alpha.76":
-  version "2.0.0-alpha.76"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.0.0-alpha.76.tgz#c7c0c5bceb5329893ccf66c7a89b7f97ea391b47"
-  integrity sha512-2HzG0IGcCh5J6Kt7zIJllolAQaYRR4XCBHqB1PvozIJUTLe2UT18sUSSIrD7cYxXHKoNKTePPzQI+lgNt4X7eg==
+"@lidofinance/lido-csm-sdk@2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.2.1.tgz#08127ea32e6b77888642aea1bd2479ad5b15830f"
+  integrity sha512-2SijT9bT39s3OTKKjPcTKDaXEGRGYCPsdHYRxGKXkGon3+oBZw+ixk+WfNCht6L5pgkeyIQOohh+omr/6j9/ug==
   dependencies:
     "@chainsafe/ssz" "^1.3.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
@@ -2514,7 +2514,7 @@
     ipfs-unixfs-importer "^15.4.0"
     multiformats "^13.4.0"
 
-"@lidofinance/lido-ui@^3.18.0", "@lidofinance/lido-ui@^3.42.1":
+"@lidofinance/lido-ui@^3.18.0":
   version "3.42.1"
   resolved "https://registry.yarnpkg.com/@lidofinance/lido-ui/-/lido-ui-3.42.1.tgz#1e88fc056cd4d5d16b105bacbf76058c6410e527"
   integrity sha512-Za+YkM+mu0MeIVKtV6vEMW9nnPkynH16E7XRmHwqqw+jH/epqELlW2rrFu7qhe3HRyLghMdwnJQfuWUh35pKiw==
@@ -2528,22 +2528,36 @@
     ua-parser-js "^1.0.35"
     use-callback-ref "1.2.5"
 
-"@lidofinance/next-api-wrapper@^0.61.0", "@lidofinance/next-api-wrapper@~0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/next-api-wrapper/-/next-api-wrapper-0.61.0.tgz#9e4d2dbbfebd30b7a5790de43bdd8b4dc47f5722"
-  integrity sha512-DbC7EEzTbZms7SsRg+m1sNEZ/4kfIY2KI25q6KNm6eFj3eNgm5whRBpMaG3l4VnRNWeBtOxpeWrgtj9xIyyE1Q==
-
-"@lidofinance/next-ip-rate-limit@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/next-ip-rate-limit/-/next-ip-rate-limit-0.61.0.tgz#612542c8579b5a32307235a4a1ffdaac52ce79c7"
-  integrity sha512-r8QEMdjsv/xPY81TKL642Jdt5ivch1hPJ+W7/gZzdH6Lnv3eBTyqqzsM14HfWt4f90boTaArD7jiLS0EjECLPA==
+"@lidofinance/lido-ui@^3.43.0":
+  version "3.43.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-ui/-/lido-ui-3.43.0.tgz#5c72d523fa4e4f9c3239632bba32d3df26593e24"
+  integrity sha512-SBUvm6C7EVqjimiCZDpQ2/pOceBfiLroLsKo3Qx3y+nrjnvx6UN+OQU9FIN1OJQ42PdGkaPh96Xl52RTSGgeCw==
   dependencies:
-    "@lidofinance/next-api-wrapper" "~0.61.0"
+    "@styled-system/should-forward-prop" "5.1.5"
+    react-collapsed "4.2.0"
+    react-jazzicon "^1.0.4"
+    react-toastify "7.0.4"
+    react-transition-group "4"
+    styled-system "5.1.5"
+    ua-parser-js "^1.0.35"
+    use-callback-ref "1.2.5"
 
-"@lidofinance/next-pages@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/next-pages/-/next-pages-0.61.0.tgz#aaf44a90bb7608b521e92c6a2e7a0a154339c29c"
-  integrity sha512-6wBKPmJZZkDzDhDlHljFibA1b/7GgkHUHCt82SLSyyPeJG6/6pv2mRwBLf1VXBxgv5oVPaZUnVIaurNqGVVmXA==
+"@lidofinance/next-api-wrapper@^0.63.0", "@lidofinance/next-api-wrapper@~0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/next-api-wrapper/-/next-api-wrapper-0.63.0.tgz#d54a25e51627f1bc358817771da6b0d0b39cc27d"
+  integrity sha512-MuKrd+bhfWgI4XoUa8zyD4C/7XkzoYHRfQykaE8YO5Dr4AEe2qljmccqOEoDMY3xa3nox+ElUV/MFpIidUe4MA==
+
+"@lidofinance/next-ip-rate-limit@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/next-ip-rate-limit/-/next-ip-rate-limit-0.63.0.tgz#bae108fefed731d9ce99ed5f12fffc633e7a2e58"
+  integrity sha512-oU4wln6kaClWL1SB8YRPtk2CpSW+vuIQNCHDlxbbxk3IjfX/GLHf0RAhTxAf3+jfgicUV54CCsodHbYvmmyixQ==
+  dependencies:
+    "@lidofinance/next-api-wrapper" "~0.63.0"
+
+"@lidofinance/next-pages@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/next-pages/-/next-pages-0.63.0.tgz#c008a5b7e21bc8238888d8df3575e9e5e1c02731"
+  integrity sha512-WnpoprsrNjre87QbBsMJdKUduKP3QLtcI7Frfre6AjpSYGGRE0gs645SRZJVxiwf4Whkd/sgU1JjeVV3gqFPxg==
   dependencies:
     memory-cache "^0.2.0"
 
@@ -2557,17 +2571,17 @@
     prom-client "^15.1.3"
     uuid "^13.0.0"
 
-"@lidofinance/rpc@^0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/rpc/-/rpc-0.61.0.tgz#210456e375521b9374cf954ddaf721faecd6a141"
-  integrity sha512-NhbEOJWsr3V6jJf6mzNVszqyoWJyYYYWE+iwTPZIldhonuu09mr/ovf9S7eCWrLJrDurVWi+7tLdlmCGJbdIXg==
+"@lidofinance/rpc@^0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/rpc/-/rpc-0.63.0.tgz#8e31cef60d590216d2f00b308e9716fda34e9591"
+  integrity sha512-/XO454pPh4Mv3mGU2BYLtE1tTFUL14ZkgrsA/8M5+rQ94uSE24XKvMDLFy6V/fl+8nnVf+nXLUElwmdtaHfc7w==
   dependencies:
     isomorphic-fetch "^3.0.0"
 
-"@lidofinance/satanizer@^0.61.0", "@lidofinance/satanizer@~0.61.0":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/satanizer/-/satanizer-0.61.0.tgz#f5d207a94e5ed3e1da781ecb92bafbb69c1fc814"
-  integrity sha512-AUfySRAcBpCVECc/AqPSPiD1Xx+Z9C4WKEgWrY/YeSeWl7OiNfB/hTkFnXtucFctBEh8KY6t6lc+xj/XrOL6bA==
+"@lidofinance/satanizer@^0.63.0", "@lidofinance/satanizer@~0.63.0":
+  version "0.63.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/satanizer/-/satanizer-0.63.0.tgz#c7cba6e41bc90a4f76555bd945f4169647157170"
+  integrity sha512-7SttOvEYz+qYh05VlRzLQzeNzb95NuYoMWuQpFwqKAiWlefpPJSMQxml9I6OL9Zba/ug+kNKmY2jrd9BcH+c0Q==
 
 "@lidofinance/secret-guard-reporter@^1.1.0":
   version "1.1.0"
@@ -2607,10 +2621,10 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.49.2":
-  version "1.49.2"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.49.2.tgz#a793deb997352e642c83ce1749826f944ffa2728"
-  integrity sha512-KVHioZVmWQxWcXeSyFNh0fqHMRRnibTd/lXMib2PXV6JLHaOfhyl2JfcdnsUBh/aA3PcNDYLq5iVt6otFA1UVw==
+"@lidofinance/wallets-testing-wallets@1.51.1":
+  version "1.51.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.51.1.tgz#02d8ec5dd3d10ba9b2b1d7ae01b165f3578ad695"
+  integrity sha512-G0FoFQ0jela9v7dIPk0Ay3V5t9HMcxS3tQUx09xB0U8Z4H6O72kOijn6q/HAqlyNW8jlOHv4SJUtLAREHVF+sg==
   dependencies:
     "@walletconnect/sign-client" "2.23.4"
     big.js "^6.2.1"
@@ -5714,10 +5728,10 @@ bowser@^2.9.0:
   resolved "https://registry.yarnpkg.com/bowser/-/bowser-2.14.1.tgz#4ea39bf31e305184522d7ad7bfd91389e4f0cb79"
   integrity sha512-tzPjzCxygAKWFOJP011oxFHs57HzIhOEracIgAePE4pqB3LikALKnSzUyU4MGs9/iCEUuHlAJTjTc5M+u7YEGg==
 
-brace-expansion@^1.1.7:
-  version "1.1.15"
-  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.15.tgz#a6d90d54067236e5f42570a3b7378d594d9b7738"
-  integrity sha512-EwOCDEex4quD37XhqM3omwtMoJjr//isUZz1JopUNWms+4Z2ViyM/k1YIRePpoVNnQhENnxtFjLaxNHrT7xIUg==
+brace-expansion@^1.1.16, brace-expansion@^1.1.7:
+  version "1.1.18"
+  resolved "https://registry.yarnpkg.com/brace-expansion/-/brace-expansion-1.1.18.tgz#3ce74d89885136be1535341f8c3d4425c29a5cab"
+  integrity sha512-Edep/X9fGqVNmzKBVsDYIOtD+z1tuezV70LBjdCst9Tqu76lsnvRiZ6oTic1n+/BIwX6QDGAO94PN4N2SADvtw==
   dependencies:
     balanced-match "^1.0.0"
     concat-map "0.0.1"
@@ -7380,10 +7394,10 @@ fast-safe-stringify@^2.0.6:
   resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz#c406a83b6e70d9e35ce3b30a81141df30aeba884"
   integrity sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==
 
-fast-uri@^3.0.1, fast-uri@^3.1.2:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.1.3.tgz#f695a40f006aba505631573a0021ddb21194ad11"
-  integrity sha512-i70LwGWUduXqzicKXWshooq+sWL1K3WUU5rKZNG/0i3a1OSoX3HqhH5WbWwTmqWfor4urUakGPiRQcleRZTwOg==
+fast-uri@^3.0.1, fast-uri@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.1.5.tgz#610f37419a030270430cecd68d74e3d4d96725d0"
+  integrity sha512-gHwA1O9LDIcKunMKhObS/HimwtehO1nPUECKAu5TpKgaO19fcWEl4bliWe1jWxVFvIXztJjjQ4L8XQ1EU9f7Jw==
 
 fastq@^1.6.0:
   version "1.20.1"
@@ -7900,10 +7914,10 @@ hoist-non-react-statics@^3.0.0, hoist-non-react-statics@^3.3.0:
   dependencies:
     react-is "^16.7.0"
 
-hono@^4.10.3, hono@^4.12.27:
-  version "4.12.27"
-  resolved "https://registry.yarnpkg.com/hono/-/hono-4.12.27.tgz#d9527b2c6e1da331731610889d1ddaea2c1d2b40"
-  integrity sha512-1yrb/+w6HWQJrUCLkJ2IF5jNIPvvFkblV5RNOYl6bV+OA6p9GLcMpHFFGTosSvHvcAUibuUukRqhlYI4z32C7Q==
+hono@^4.10.3, hono@^4.13.2:
+  version "4.13.2"
+  resolved "https://registry.yarnpkg.com/hono/-/hono-4.13.2.tgz#692d400d2a0ea086e3eec5c73aa3207cb53f97b5"
+  integrity sha512-JydRilDRkYBQMt9qR9U92mXxmbGqsqSn/IKOrh4e7/gEbn+0zSr8igTu0obwJoNGN4sez28DIql7FBHWydoJpA==
 
 hosted-git-info@^2.1.4:
   version "2.8.9"
@@ -8988,10 +9002,10 @@ js-sha3@0.8.0, js-sha3@^0.8.0:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
-js-yaml@4.1.1, js-yaml@^3.13.1, js-yaml@^4.1.0, js-yaml@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.3.0.tgz#d1900572a7f7cf0b5f540c83673e60bad3436592"
-  integrity sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q==
+js-yaml@4.1.1, js-yaml@^3.13.1, js-yaml@^4.1.0, js-yaml@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.3.1.tgz#01216c001d67f48e2cd560d708c7af21090a3848"
+  integrity sha512-CY6crGq313MX8GkwvB7tzgp99vjQxY1++5y10/BKN/GUfHqWaOGQMNZkBvqSzsZKWk/ijwHlWzzkLulsGHhjWQ==
   dependencies:
     argparse "^2.0.1"
 
@@ -9530,10 +9544,10 @@ mute-stream@1.0.0:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-1.0.0.tgz#e31bd9fe62f0aed23520aa4324ea6671531e013e"
   integrity sha512-avsJQhyd+680gKXyG/sQc0nXaC6rBkPOfyHYcFb9+hdkqQkR9bdnkJ0AMZhke0oesPqIO+mFFJ+IdBc7mst4IA==
 
-nanoid@^3.3.12:
-  version "3.3.15"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.15.tgz#36c490fad8c6e86c824c940dfdde999b69ed4316"
-  integrity sha512-y7Wygv/7mEOvxTuEQDB8StXdMRBWf1kR/tlhAzBRUFkB2jfcLOAxO/SHmOO2zgz1pVgK29/kyupn059/bCHdjA==
+nanoid@^3.3.17, nanoid@^3.3.18:
+  version "3.3.18"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.18.tgz#f66a2de1199ffde0fcf21c8a5f13106b1c081913"
+  integrity sha512-DTg4MJbGMWkfi6VZFdNt2/caMbQy4Ou+Op/hJQvGEWcnVfoA1QA+xzRKAzw9jD6+GVOOeYr/mIcuDSdug6F6+w==
 
 napi-postinstall@^0.3.4:
   version "0.3.4"
@@ -10214,12 +10228,12 @@ postcss-value-parser@^4.0.2:
   resolved "https://registry.yarnpkg.com/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz#723c09920836ba6d3e5af019f92bc0971c02e514"
   integrity sha512-1NNCs6uurfkVbeXG4S8JFT9t19m45ICnif8zWLd5oPSZ50QnwMfK+H3jv408d4jw/7Bttv5axS5IiHoLaVNHeQ==
 
-postcss@8.4.14, postcss@^8.5.10:
-  version "8.5.16"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.5.16.tgz#1230ce0b5df354c24c0ea45f99ce5f6a88279d28"
-  integrity sha512-vuwillviilfKZsg0VGj5R/YwwcHx4SLsIOI/7K6mQkWx+l5cUHTjj5g0AasTBcyXsbfTgrwsUNmVUb5xVwyPwg==
+postcss@8.4.14, postcss@^8.5.26:
+  version "8.5.26"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.5.26.tgz#6e75135780c7e10df3433bf2266c552d35c8c620"
+  integrity sha512-u82N74LFzG8ca+dD8puPnplTXoGH4fTPpVGuIbt36G3qvNlkvfD0lEAZSxaly3KX8TS/L1A1gsCEmvKmBcVbkQ==
   dependencies:
-    nanoid "^3.3.12"
+    nanoid "^3.3.17"
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
@@ -10496,7 +10510,7 @@ react-hook-form@^7.60.0:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.80.0.tgz#028e142324d592239599ab7cf1c0d82167696194"
   integrity sha512-4P+fk6oXsxY+6xSj7Euhc2sumQD8zQqCuVHoJwoyp9EchP+IUW9OESB7uHFJOKsIBQ4MQqYE84INJFqUCYNoOg==
 
-"react-is-18@npm:react-is@^18.3.1":
+"react-is-18@npm:react-is@^18.3.1", react-is@^18.0.0:
   version "18.3.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
@@ -10510,11 +10524,6 @@ react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
-
-react-is@^18.0.0:
-  version "18.3.1"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
-  integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
 react-jazzicon@^1.0.4:
   version "1.0.4"
@@ -11147,10 +11156,10 @@ socket.io-client@^4.5.1:
     engine.io-client "~6.6.1"
     socket.io-parser "~4.2.4"
 
-socket.io-parser@~4.2.4:
-  version "4.2.6"
-  resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-4.2.6.tgz#19156bf179af3931abd05260cfb1491822578a6f"
-  integrity sha512-asJqbVBDsBCJx0pTqw3WfesSY0iRX+2xzWEWzrpcH7L6fLzrhyF8WPI8UaeM4YCuDfpwA/cgsdugMsmtz8EJeg==
+socket.io-parser@^4.2.7, socket.io-parser@~4.2.4:
+  version "4.2.7"
+  resolved "https://registry.yarnpkg.com/socket.io-parser/-/socket.io-parser-4.2.7.tgz#679e51fe24d1c81df90fc5f7efe4a5f432fe99c0"
+  integrity sha512-IH/iSeO9T6gz1KkFleGDWkG9N3dl4jXVYUtMhIqH10Md0ttMer8nUNWiP1DKuNrybD2xBrixLJdCC9J6ECoYkg==
   dependencies:
     "@socket.io/component-emitter" "~3.1.0"
     debug "~4.4.1"
@@ -11273,16 +11282,7 @@ string-replace-loader@^3.3.0:
   dependencies:
     schema-utils "^4"
 
-"string-width-cjs@npm:string-width@^4.2.0":
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
-  integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
-  dependencies:
-    emoji-regex "^8.0.0"
-    is-fullwidth-code-point "^3.0.0"
-    strip-ansi "^6.0.1"
-
-string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
+"string-width-cjs@npm:string-width@^4.2.0", string-width@^4.1.0, string-width@^4.2.0, string-width@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/string-width/-/string-width-4.2.3.tgz#269c7117d27b05ad2e536830a8ec895ef9c6d010"
   integrity sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g==
@@ -11400,14 +11400,7 @@ string_decoder@~1.1.1:
   dependencies:
     safe-buffer "~5.1.0"
 
-"strip-ansi-cjs@npm:strip-ansi@^6.0.1":
-  version "6.0.1"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
-  integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
-  dependencies:
-    ansi-regex "^5.0.1"
-
-strip-ansi@^6.0.0, strip-ansi@^6.0.1:
+"strip-ansi-cjs@npm:strip-ansi@^6.0.1", strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-6.0.1.tgz#9e26c63d30f53443e9489495b2105d37b67a85d9"
   integrity sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A==
@@ -11531,10 +11524,10 @@ svg-parser@^2.0.4:
   resolved "https://registry.yarnpkg.com/svg-parser/-/svg-parser-2.0.4.tgz#fdc2e29e13951736140b76cb122c8ee6630eb6b5"
   integrity sha512-e4hG1hRwoOdRb37cIMSgzNsxyzKfayW6VOflrwvR+/bzrkyxY/31WkbgnQpgtrNp1SdpJvpUAGTa/ZoiPNDuRQ==
 
-svgo@^3.0.2:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/svgo/-/svgo-3.3.3.tgz#8246aee0b08791fde3b0ed22b5661b471fadf58e"
-  integrity sha512-+wn7I4p7YgJhHs38k2TNjy1vCfPIfLIJWR5MnCStsN8WuuTcBnRKcMHQLMM2ijxGZmDoZwNv8ipl5aTTen62ng==
+svgo@^3.0.2, svgo@^3.3.4:
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/svgo/-/svgo-3.3.4.tgz#fd2aa10ff585b3bd2b83ce3602f5582bc0718bb5"
+  integrity sha512-GsNRis4e8jxn2Y9ENz/8lbJ93CstG8svtMnuRaHbiF2LTJ5tK0/q3t/URPq9Zc7zVWBJnNnJMIp6bevK7bSmNg==
   dependencies:
     commander "^7.2.0"
     css-select "^5.1.0"
@@ -12392,16 +12385,7 @@ wordwrapjs@^4.0.0:
     reduce-flatten "^2.0.0"
     typical "^5.2.0"
 
-"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0":
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
-  integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
-  dependencies:
-    ansi-styles "^4.0.0"
-    string-width "^4.1.0"
-    strip-ansi "^6.0.0"
-
-wrap-ansi@7.0.0, wrap-ansi@^10.0.0, wrap-ansi@^6.2.0, wrap-ansi@^7.0.0, wrap-ansi@^8.1.0, wrap-ansi@^9.0.0:
+"wrap-ansi-cjs@npm:wrap-ansi@^7.0.0", wrap-ansi@7.0.0, wrap-ansi@^10.0.0, wrap-ansi@^6.2.0, wrap-ansi@^7.0.0, wrap-ansi@^8.1.0, wrap-ansi@^9.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-7.0.0.tgz#67e145cff510a6a6984bdf1152911d69d2eb9e43"
   integrity sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==
