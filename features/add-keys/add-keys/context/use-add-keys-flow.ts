@@ -12,6 +12,7 @@ import {
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
+import { useConfirmOperatorModal } from 'shared/node-operator';
 import { handleTxError } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { classifyErrorCode, ErrorCode } from 'utils/get-error-code';
@@ -35,6 +36,7 @@ export const useAddKeysFlowResolver = (): FlowResolver<
   const buildCallback = useTxModalStagesAddKeys();
   const surveyAuth = useSurveyInFlowAuth();
   const { ensureAuth, uploadStaged } = useDkgInFlowUpload(surveyAuth);
+  const confirmOperator = useConfirmOperatorModal();
 
   return useCallback(
     (input, data) => {
@@ -47,6 +49,7 @@ export const useAddKeysFlowResolver = (): FlowResolver<
         // The operator already exists, so auth + upload both happen here
         // (before the tx) rather than being split like the create flow.
         confirm: async () => {
+          if (!(await confirmOperator())) return false;
           if (dkgFiles.length === 0) return true;
           try {
             const op = operatorKey(config.module, data.nodeOperatorId);
@@ -85,6 +88,7 @@ export const useAddKeysFlowResolver = (): FlowResolver<
       buildCallback,
       ensureAuth,
       uploadStaged,
+      confirmOperator,
     ],
   );
 };

@@ -1,3 +1,5 @@
+export * from './confirm-operator-modal/confirm-operator-modal';
+export * from './confirm-operator-modal/use-confirm-operator-modal';
 export * from './descriptor/descriptor';
 export * from './descriptor/descriptor-id';
 export * from './operator-type';
