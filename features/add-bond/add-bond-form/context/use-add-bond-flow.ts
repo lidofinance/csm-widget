@@ -6,6 +6,7 @@ import {
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import { useCanPerform } from 'shared/hooks';
+import { useConfirmOperatorModal } from 'shared/node-operator';
 import invariant from 'tiny-invariant';
 import { useTxModalStagesAddBond } from '../hooks/use-tx-modal-stages-add-bond';
 import { useAddBondFormData } from './add-bond-data-provider';
@@ -24,6 +25,7 @@ export const useAddBondFlowResolver = (): FlowResolver<
   const { bond: bondSDK } = useSmSDK();
   const [canAddBond, addBondAccess] = useCanPerform(bondSDK, 'addBond');
   const buildCallback = useTxModalStagesAddBond();
+  const confirmOperator = useConfirmOperatorModal();
 
   return useCallback(
     (input, data) => {
@@ -32,6 +34,7 @@ export const useAddBondFlowResolver = (): FlowResolver<
 
       return {
         action: 'add-bond' as const,
+        confirm: () => confirmOperator(),
         submit: () => {
           invariant(
             input.bondAmount !== undefined,
@@ -46,7 +49,7 @@ export const useAddBondFlowResolver = (): FlowResolver<
         },
       };
     },
-    [bondSDK, canAddBond, addBondAccess, buildCallback],
+    [bondSDK, canAddBond, addBondAccess, buildCallback, confirmOperator],
   );
 };
 
