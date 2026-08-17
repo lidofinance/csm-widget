@@ -12,7 +12,7 @@ import { Stack } from 'shared/components';
 import { useDisconnectWallet } from 'shared/wallet';
 import { trackMatomoEvent } from 'utils';
 import { RoleBadge } from '../role-badge/role-badge';
-import { OperatorRow } from './operator-row';
+import { SelectRow } from './select-row';
 import { StyledStack, StyledStackItem } from './styles';
 
 export const SelectModal: ModalComponentType<{
@@ -37,12 +37,10 @@ export const SelectModal: ModalComponentType<{
         </Text>
         <Stack direction="column" gap="sm">
           {list.map((item) => (
-            <OperatorRow
+            <SelectRow
               key={String(item.nodeOperatorId)}
-              nodeOperatorId={item.nodeOperatorId}
               shortInfo={item}
-              action="select"
-              onSwitch={onChange}
+              onSelect={onChange}
             />
           ))}
         </Stack>

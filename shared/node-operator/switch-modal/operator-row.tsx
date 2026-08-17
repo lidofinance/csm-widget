@@ -26,7 +26,7 @@ import {
   CompactBarSegment,
 } from './cm-styles';
 
-export type OperatorAction = 'current' | 'switch' | 'view' | 'select';
+export type OperatorAction = 'current' | 'switch' | 'view';
 
 type OperatorRowProps = {
   nodeOperatorId: NodeOperatorId;
@@ -137,12 +137,6 @@ const ActionButton: FC<{
       return (
         <Button size="xs" variant="ghost" onClick={onSwitch}>
           Switch
-        </Button>
-      );
-    case 'select':
-      return (
-        <Button size="xs" variant="ghost" onClick={onSwitch}>
-          Select
         </Button>
       );
     case 'view':
