@@ -28,6 +28,7 @@ export type StandConfig = {
     host: string;
   };
   matomoUrl: string;
+  stakeWidgetUrl: string;
   keysGeneratorConfig: KeysGeneratorConfig;
   mockConfig?: {
     urls: {

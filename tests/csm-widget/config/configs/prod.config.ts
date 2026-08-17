@@ -8,6 +8,7 @@ export class ProdConfig extends BaseConfig {
       standType: 'prod',
       standUrl: 'https://csm.lido.fi',
       matomoUrl: 'https://matomo.lido.fi/matomo.php',
+      stakeWidgetUrl: 'https://stake.lido.fi',
       networkConfig: {
         chainId: 1,
         tokenSymbol: 'ETH',

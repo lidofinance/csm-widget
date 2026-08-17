@@ -1,6 +1,8 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../shared/pages/base.page';
 import { CreateNodeOperatorForm } from './elements/keys/element.createNodeOperatorForm';
+import { NextStepsBlock } from './elements/common/element.nextStepsBlock';
+import { TxModal } from './elements/common/element.txProgressModal';
 import { RemovePage } from './tabs/keys/remove.page';
 import { SubmitPage } from './tabs/keys/submit.page';
 import { KeysViewPage } from './tabs/keys/keysView.page';
@@ -10,6 +12,8 @@ export class KeysPage extends BasePage {
 
   // Own elements
   createNodeOperatorForm: CreateNodeOperatorForm;
+  txModal: TxModal;
+  nextStepsBlock: NextStepsBlock;
   headerTitle: Locator;
   headerSubTitle: Locator;
 
@@ -25,6 +29,8 @@ export class KeysPage extends BasePage {
     this.submitPage = new SubmitPage(page);
     this.keysView = new KeysViewPage(page);
     this.createNodeOperatorForm = new CreateNodeOperatorForm(this.page);
+    this.txModal = new TxModal(page);
+    this.nextStepsBlock = new NextStepsBlock(page);
     this.headerTitle = this.page.getByText('Create a Node Operator');
     this.headerSubTitle = this.page.getByText('Upload your first key(s)');
   }

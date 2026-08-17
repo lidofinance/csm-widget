@@ -21,7 +21,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
 
   return (
     <>
-      <BlockStyled color="background">
+      <BlockStyled color="background" data-testid="nextStepsBlock">
         <b>What is next: </b>
         <br />
         <ol>
@@ -37,6 +37,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
                 you can check their statuses on{' '}
                 <MatomoLink
                   $inline
+                  data-testid="createSuccessBeaconchainLink"
                   matomoEvent={
                     MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain
                   }
@@ -52,6 +53,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
                 subscribe to the{' '}
                 <MatomoLink
                   $inline
+                  data-testid="createSuccessSubscribeEventsLink"
                   matomoEvent={
                     MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents
                   }
@@ -67,6 +69,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
                 (you can use the{' '}
                 <MatomoLink
                   $inline
+                  data-testid="createSuccessBeaconchainDashboardLink"
                   matomoEvent={
                     MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
                   }

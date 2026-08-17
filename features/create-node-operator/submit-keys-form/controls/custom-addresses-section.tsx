@@ -22,6 +22,7 @@ export const CustomAddressesSection: FC = () => {
         the{' '}
         <MatomoLink
           $inline
+          data-testid="customAddressDescriptionLink"
           href={EXTENDED_MODE_LINK}
           matomoEvent={MATOMO_CLICK_EVENTS_TYPES.customAddressDescription}
         >
@@ -39,6 +40,7 @@ export const CustomAddressesSection: FC = () => {
         It can not be changed later on. Please check the{' '}
         <MatomoLink
           $inline
+          data-testid="managerAddressPermissionTypeLink"
           href={EXTENDED_MODE_LINK}
           matomoEvent={
             MATOMO_CLICK_EVENTS_TYPES.managerAddressPermissionTypeDescription

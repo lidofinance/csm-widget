@@ -2,10 +2,12 @@ import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import {
+  beaconchainDashboardPattern,
+  escapeRegex,
+} from 'tests/shared/helpers/matomoLinks';
 
 const normalizeBaseUrl = (url: string) => url.replace(/\/+$/, '');
-const escapeRegex = (value: string) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const isProdOrStaging = (standType: string) =>
   standType === 'prod' || standType === 'staging';
 
@@ -21,12 +23,8 @@ test.describe('Monitoring. External links', async () => {
     widgetService,
     widgetConfig,
   }) => {
-    const beaconchainBaseUrl = normalizeBaseUrl(
+    const beaconchainUrlPattern = beaconchainDashboardPattern(
       widgetConfig.standConfig.monitoringConfig.urls.beaconchain,
-    );
-    const beaconchainUrlPattern = new RegExp(
-      `^${escapeRegex(beaconchainBaseUrl)}/dashboard(?:\\?validators=[^#]*|/[A-Za-z0-9]+(?:\\?validators=[^#]*)?#summary)$`,
-      'i',
     );
 
     const [beaconchainPage] = await Promise.all([
