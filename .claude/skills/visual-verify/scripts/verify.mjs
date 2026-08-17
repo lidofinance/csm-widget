@@ -14,12 +14,15 @@
 //   node scripts/verify.mjs --operator 4 --json                     # machine-readable result on stdout
 //   node scripts/verify.mjs --operator 4 --selector '[data-testid="accountSectionHeader"]'  # one element
 //   node scripts/verify.mjs --no-connect --route /                  # disconnected/welcome state, no wallet
+//   node scripts/verify.mjs --address 0x028913…e8de --select-prompt  # the mandatory Select Node Operator modal
+//                                                                   # (clears the cached pick so it reappears)
 //   node scripts/verify.mjs --operator 12 --headed --keep-open     # watch it live, leave open
 //
 // The module (csm/cm) and chain are auto-detected from whatever --url points at; override only if needed.
 // Flags: --url <origin> | --operator N | --address 0x.. | --role manager|rewards|owner | --route /path
 //        --theme light|dark | --viewport mobile|tablet|desktop|WxH | --selector <css> (shoot one element)
-//        --no-connect (capture without a wallet) | --out file.png
+//        --no-connect (capture without a wallet) | --select-prompt (capture the operator-selection modal)
+//        --out file.png
 //        --json (structured result to stdout; logs to stderr) | --chain 560048 | --module csm|cm
 //        --headed | --keep-open | --full
 import { mkdirSync } from 'node:fs';
@@ -64,11 +67,16 @@ const main = async () => {
   const operatorId = flag('operator');
   const address = flag('address');
   const noConnect = has('no-connect');
+  const selectPrompt = has('select-prompt');
   const selector = flag('selector');
   const jsonMode = has('json');
   if (jsonMode) setQuietLogs(true); // keep stdout clean for the JSON payload
   if (!noConnect && !operatorId && !address) {
     console.error('Provide --operator <id> or --address <0x…> (or --no-connect). See header of this file for examples.');
+    process.exit(2);
+  }
+  if (selectPrompt && noConnect) {
+    console.error('--select-prompt needs a connected wallet: pass --address <0x…> or --operator <id> instead of --no-connect.');
     process.exit(2);
   }
   const route = flag('route', '/');
@@ -90,6 +98,7 @@ const main = async () => {
       theme: flag('theme'), // light|dark, undefined -> app default
       viewport: flag('viewport'), // mobile|tablet|desktop|WxH, undefined -> default
       connect: !noConnect, // --no-connect -> capture the disconnected/welcome state
+      selectPrompt, // --select-prompt -> leave the operator-selection modal open instead of resolving it
       onPage: (p, c) => {
         page = p;
         context = c;
@@ -106,13 +115,14 @@ const main = async () => {
       mkdirSync(SHOTS, { recursive: true });
       const who = noConnect ? 'disconnected' : operatorId ? `op${operatorId}-${flag('role', 'manager')}` : `addr-${address.slice(0, 8)}`;
       const selSlug = selector ? 'el_' + selector.replace(/[^a-z0-9]+/gi, '').slice(0, 20) : '';
-      const variant = [theme, viewport, selSlug].filter(Boolean).join('-');
+      const variant = [theme, viewport, selSlug, selectPrompt ? 'selectprompt' : ''].filter(Boolean).join('-');
       out = join(SHOTS, `${module}-${who}${route.replace(/[^a-z0-9]+/gi, '_')}${variant ? '-' + variant : ''}.png`);
     }
 
     const state = await readState(page);
     log('STATE', JSON.stringify(state));
-    if (!noConnect && operatorId != null) {
+    // With --select-prompt the modal hides the header, so there is no active operator to confirm.
+    if (!noConnect && !selectPrompt && operatorId != null) {
       const shown = (state.operator || '').match(/#(\d+)/)?.[1];
       log(shown === String(operatorId) ? `confirmed operator #${operatorId} is active` : `WARN: requested #${operatorId} but showing #${shown}`);
     }
