@@ -58,6 +58,7 @@ const MockOperatorProvider: FC<
   const operatorCtx: NodeOperatorContextValue = useMemo(
     () => ({
       isPending: false,
+      needsSelection: false,
       nodeOperator: {
         nodeOperatorId,
         managerAddress: address ?? MOCK_CLAIMER,
