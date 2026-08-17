@@ -19,6 +19,7 @@ const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
 const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
+const moduleName = moduleMode.toLowerCase();
 const isIPFSMode = !!process.env.IPFS_MODE;
 const maintenance = !!process.env.MAINTENANCE; // TODO: load from runtime config
 
@@ -197,6 +198,22 @@ export default withBundleAnalyzer({
         source: page,
         headers: [{ key: CACHE_CONTROL_HEADER, value: CACHE_CONTROL_VALUE }],
       })),
+    ];
+  },
+  // serves the module-specific assets shipped in public/ under the canonical
+  // paths Gnosis Safe Apps and browsers expect (/manifest.json, /favicon.ico)
+  async rewrites() {
+    return [
+      { source: '/manifest.json', destination: `/manifest-${moduleName}.json` },
+      { source: '/favicon.ico', destination: `/favicon-${moduleName}.ico` },
+      {
+        source: '/favicon-:size(16x16|32x32|192x192|512x512).png',
+        destination: `/favicon-${moduleName}-:size.png`,
+      },
+      {
+        source: '/apple-touch-icon.png',
+        destination: `/apple-touch-icon-${moduleName}.png`,
+      },
     ];
   },
 

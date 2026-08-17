@@ -68,8 +68,8 @@ describe('cache-control headers', () => {
 });
 
 describe('sentinel header agreement between next.config.mjs and server.mjs', () => {
-  // Read as text, not import: next.config.mjs regenerates public/runtime and
-  // the favicons on evaluation, and both files have module-level side effects.
+  // Read as text, not import: next.config.mjs regenerates public/runtime on
+  // evaluation, and both files have module-level side effects.
   const nextConfigSource = fs.readFileSync(
     path.resolve(__dirname, '../../next.config.mjs'),
     'utf-8',
