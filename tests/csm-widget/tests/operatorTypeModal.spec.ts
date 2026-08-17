@@ -3,12 +3,18 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { OPERATOR_TYPE_METADATA } from 'tests/shared/consts/operatorTypes.const';
+import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
 const DEF = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_DEF];
 const ICS = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS];
 const IDVTC = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_IDVTC];
+
+const OPERATOR_TYPES_DOCS_URL =
+  'https://docs.lido.fi/staking-modules/csm/join-csm/';
+const OPERATOR_TYPES_DOCS_ANCHOR = '#node-operator-types';
 
 test.describe('New operator. Operator type modal', async () => {
   test.beforeAll(async ({ widgetService }) => {
@@ -93,4 +99,34 @@ test.describe('New operator. Operator type modal', async () => {
       });
     },
   );
+
+  test('Should open operator types docs after click', async ({
+    widgetService,
+    widgetConfig,
+  }) => {
+    const modal = widgetService.mainPage.operatorTypeModal;
+    const matomoEventService = new MatomoService(
+      widgetService.page,
+      widgetConfig,
+    );
+
+    await widgetService.mainPage.openOperatorTypeModal();
+
+    await expect(modal.parametersDocsLink).toBeVisible();
+    await expect(modal.parametersDocsLink).toHaveAttribute(
+      'href',
+      `${OPERATOR_TYPES_DOCS_URL}${OPERATOR_TYPES_DOCS_ANCHOR}`,
+    );
+
+    const [docsPage] = await Promise.all([
+      widgetService.mainPage.waitForPage(PAGE_WAIT_TIMEOUT),
+      matomoEventService.waitForEvent(
+        'e_n',
+        'csm_widget_operator_types_docs_link',
+      ),
+      modal.parametersDocsLink.click(),
+    ]);
+
+    expect(docsPage.url()).toContain(OPERATOR_TYPES_DOCS_URL);
+  });
 });

@@ -10,6 +10,7 @@ export const LegalDisclaimer: FC = () => (
     For more info read{' '}
     <MatomoLink
       $inline
+      data-testid="legalPrivacyNoticeLink"
       href="https://lido.fi/privacy-notice"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.legalPrivacyNoticeLink}
     >
