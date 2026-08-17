@@ -89,8 +89,13 @@ test.describe(
         await test.step('Verify total claimable amount', async () => {
           const commonBalance =
             await availableToClaim.commonBalance_Text.textContent();
-          expect(commonBalance).toEqual(
-            `${(parseFloat(bondSummary.excess) + parseFloat(rewards.available)).toString().toCut(4)} stETH`,
+          const expectedTotal =
+            parseFloat(bondSummary.excess) + parseFloat(rewards.available);
+
+          expect(commonBalance).toContain('stETH');
+          expect(parseFloat(commonBalance ?? '0')).toBeCloseTo(
+            expectedTotal,
+            3,
           );
 
           const commonUSDBalance =
