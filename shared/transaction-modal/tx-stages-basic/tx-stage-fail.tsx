@@ -42,7 +42,7 @@ export const TxStageFail: FC<TxStageFailProps> & ClosableOnLedgerStage = ({
           </RetryButtonStyled>
         ) : (
           <LoaderWrapper>
-            <Loader size="small" />
+            <Loader size="small" data-testid="loader" />
           </LoaderWrapper>
         ))
       }
