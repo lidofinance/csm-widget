@@ -70,7 +70,6 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.60.0",
     "reef-knot": "8.3.0",
-    "siwe": "^3.0.0",
     "styled-components": "^5.3.5",
     "tiny-invariant": "^1.1.0",
     "uuid": "^14.0.0",
