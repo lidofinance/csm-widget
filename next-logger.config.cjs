@@ -9,16 +9,26 @@ const loadEnvConfig = require('@next/env').loadEnvConfig;
 const projectDir = process.cwd();
 loadEnvConfig(projectDir);
 
+// Secret env vars holding comma-separated URL lists (keys are embedded in the URLs).
+// Prefix-scanned so new chain ids need no change here.
+const URL_LIST_ENV_PREFIXES = ['EL_RPC_URLS_', 'CL_API_URLS_'];
+
+// Comma-split so each URL becomes its own pattern; otherwise satanizer only
+// matches the full concatenation, never a single URL as it appears in logs.
+const urlListPatterns = Object.entries(process.env)
+  .filter(([key]) => URL_LIST_ENV_PREFIXES.some((p) => key.startsWith(p)))
+  .flatMap(([, value]) =>
+    (value || '')
+      .split(',')
+      .map((url) => url.trim())
+      .filter(Boolean),
+  );
+
 const patterns = [
   ...commonPatterns,
-  process.env.INFURA_API_KEY,
-  process.env.ALCHEMY_API_KEY,
-  process.env.ETHPLORER_API_KEY,
-  // TODO: Delete this ENV
-  process.env.CLOUDFLARE_API_TOKEN,
-  process.env.CLOUDFLARE_ACCOUNT_ID,
-  process.env.CLOUDFLARE_KV_NAMESPACE_ID,
-];
+  ...urlListPatterns,
+  process.env.ETHSEER_API_TOKEN,
+].filter(Boolean);
 const mask = satanizer(patterns);
 
 const logger = (defaultConfig) =>
