@@ -93,7 +93,7 @@ test.describe(
             [duplicatedKey[0].pubkey]: Date.now(),
           }),
         );
-        await widgetService.page.reload();
+        await widgetService.keysPage.submitPage.open();
         await keysPage.submitPage.fillKeys(duplicatedKey);
 
         await expect(keysPage.submitPage.validationInputError).toContainText(
