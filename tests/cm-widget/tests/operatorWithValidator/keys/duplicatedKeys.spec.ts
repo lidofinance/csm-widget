@@ -48,7 +48,7 @@ test.describe(
       async () => {
         const existsValidatorKey = keysGeneratorService.generateKeys();
         existsValidatorKey[0].pubkey =
-          'b7937dc00d4e21e54bab83b6eaa15c408f1726315e1fdac9c8cd77c793be2fa4fd2529147d637910f79f0664457375ab';
+          '80000924ccc68dd017bb3d2dc85c6d3c87a28d140907f546467bb4528b0441357e7704ebebcac9e4876e5b7bb3a96c4a';
         await keysPage.submitPage.fillKeys([...existsValidatorKey]);
         await expect(keysPage.submitPage.validationInputError).toContainText(
           'Invalid deposit data',
