@@ -2,9 +2,8 @@ import { trimAddress } from '@lidofinance/address';
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../../../shared/pages/base.page';
 
-export class RemovePage {
+export class RemovePage extends BasePage {
   page: Page;
-  base: BasePage;
   removeKeysForm: Locator;
   keyCheckbox: Locator;
   numberOfKeysToRemove: Locator;
@@ -19,8 +18,8 @@ export class RemovePage {
   removeKeysButton: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
-    this.base = new BasePage(page);
     this.removeKeysForm = this.page.getByTestId('removeKeysForm');
     this.keyCheckbox = this.removeKeysForm.locator('label >> svg');
     this.numberOfKeysToRemove = this.removeKeysForm.getByTestId(

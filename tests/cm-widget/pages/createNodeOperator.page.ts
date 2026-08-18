@@ -26,7 +26,7 @@ export class CreateNodeOperatorPage extends BasePage {
 
   async open() {
     await test.step('Open the Create Node Operator page', async () => {
-      await this.page.goto('/create');
+      await this.openWithRetry('/create', this.curatedOperatorForm);
     });
   }
 }

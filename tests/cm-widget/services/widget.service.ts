@@ -107,6 +107,14 @@ export class WidgetService {
           console.error('Wallet is not connected');
         }
       }
+
+      await test.step('Waiting for connect wallet modal is hidden', async () => {
+        await this.page.getByTestId('w3m-modal-card').waitFor({
+          state: 'hidden',
+          timeout: RPC_WAIT_TIMEOUT,
+        });
+      });
+
       await test.step('Waiting for load widget after login', async () => {
         await this.welcomePage.welcomeSection.loader.waitFor({
           state: 'detached',
