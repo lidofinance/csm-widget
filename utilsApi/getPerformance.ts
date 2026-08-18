@@ -1,8 +1,10 @@
 import ms from 'ms';
 
 import { config, secretConfig } from 'config';
+import { API_ROUTES } from 'consts/api';
 import { UnifiedPerformance } from 'types';
 import { standardFetcher } from 'utils';
+import { responseTimeExternalMetricWrapper } from './external-metrics';
 import { getCurrentFrame } from './getCurrentFrame';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
@@ -51,16 +53,16 @@ const fetchPerformance = async (
     Math.max(countEpochs, MIN_NUMBER_EPOCHS),
   );
 
-  const controller = new AbortController();
-  const TIMEOUT = ms('5s');
-  const timeoutId = setTimeout(() => controller.abort(), TIMEOUT);
-
   const url = `${apiUrl}?operator_number=${nodeOperatorId}&number_epochs=${numberEpochs}&network=mainnet`;
-  const response = await standardFetcher<MigaLabsApiResponse>(url, {
-    signal: controller.signal,
-    headers: { 'X-Api-Key': apiToken },
-  });
 
-  clearTimeout(timeoutId);
-  return response;
+  return responseTimeExternalMetricWrapper({
+    target: apiUrl,
+    route: API_ROUTES.PERFORMANCE,
+    entity: 'migalabs',
+    request: () =>
+      standardFetcher<MigaLabsApiResponse>(url, {
+        signal: AbortSignal.timeout(ms('5s')),
+        headers: { 'X-Api-Key': apiToken },
+      }),
+  });
 };
