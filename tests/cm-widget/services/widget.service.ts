@@ -6,7 +6,10 @@ import {
 import { expect, Page, test } from '@playwright/test';
 import { FeatureFlagsType } from 'config/feature-flags/types';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
-import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import {
+  RPC_WAIT_TIMEOUT,
+  STAGE_WAIT_TIMEOUT,
+} from 'tests/shared/consts/timeouts';
 import { BondRewardsPage } from '../pages/bondRewards.page';
 import {
   DashboardPage,
@@ -15,6 +18,7 @@ import {
   NotEligiblePage,
   SettingsPage,
   CreateNodeOperatorPage,
+  WelcomePage,
 } from '../pages';
 import { GroupPage } from '../pages/group.page';
 import { ElementController } from '../pages/elements/controller';
@@ -33,6 +37,7 @@ export class WidgetService {
   public settingsPage: SettingsPage;
   public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
+  public welcomePage: WelcomePage;
 
   // common elements
   public navBlockElement: NavBlockElement;
@@ -50,6 +55,7 @@ export class WidgetService {
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
     this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
+    this.welcomePage = new WelcomePage(this.page);
 
     // common elements
     this.navBlockElement = new NavBlockElement(this.page);
@@ -58,7 +64,7 @@ export class WidgetService {
 
   async connectWallet(expectConnectionState = true) {
     await test.step('Open default page for connect.', async () => {
-      await this.page.goto('/?survey-setup=1');
+      await this.welcomePage.goto('/?survey-setup=1');
     });
     await test.step('Connect wallet to widget', async () => {
       const element = new ElementController(this.page);
@@ -101,6 +107,20 @@ export class WidgetService {
           console.error('Wallet is not connected');
         }
       }
+
+      await test.step('Waiting for connect wallet modal is hidden', async () => {
+        await this.page.getByTestId('w3m-modal-card').waitFor({
+          state: 'hidden',
+          timeout: RPC_WAIT_TIMEOUT,
+        });
+      });
+
+      await test.step('Waiting for load widget after login', async () => {
+        await this.welcomePage.welcomeSection.loader.waitFor({
+          state: 'detached',
+          timeout: RPC_WAIT_TIMEOUT,
+        });
+      });
 
       expect(
         await this.isConnectedWallet(),

@@ -15,17 +15,16 @@ export class TableRow {
   }
 }
 
-export class KeysViewPage {
+export class KeysViewPage extends BasePage {
   page: Page;
-  base: BasePage;
   viewKeysBlock: Locator;
   table: Locator;
   tableRows: Locator;
   loader: Locator;
 
   constructor(page: Page) {
+    super(page);
     this.page = page;
-    this.base = new BasePage(page);
     this.viewKeysBlock = this.page.locator('[data-testid="viewKeysBlock"]');
     this.table = this.viewKeysBlock.locator('tbody');
     this.tableRows = this.viewKeysBlock.locator('tbody >> tr');
@@ -53,7 +52,7 @@ export class KeysViewPage {
 
   async open() {
     await test.step('Open keys view tab for Keys page', async () => {
-      await this.page.goto('/keys/view');
+      await this.openWithRetry('/keys/view', this.viewKeysBlock);
     });
   }
 }

@@ -7,6 +7,7 @@ export class WelcomeSection {
   connectWallet: Locator;
   navigateToCMv1Btn: Locator;
   detailedLink: Locator;
+  loader: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -19,5 +20,6 @@ export class WelcomeSection {
     this.navigateCMv1Section = this.page.getByTestId('navigateCMv1Section');
     this.navigateToCMv1Btn =
       this.navigateCMv1Section.getByTestId('navigateToCMv1Btn');
+    this.loader = this.welcomeSection.getByTestId('loader');
   }
 }
