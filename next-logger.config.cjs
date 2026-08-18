@@ -15,14 +15,21 @@ const URL_LIST_ENV_PREFIXES = ['EL_RPC_URLS_', 'CL_API_URLS_'];
 
 // Comma-split so each URL becomes its own pattern; otherwise satanizer only
 // matches the full concatenation, never a single URL as it appears in logs.
-const urlListPatterns = Object.entries(process.env)
-  .filter(([key]) => URL_LIST_ENV_PREFIXES.some((p) => key.startsWith(p)))
-  .flatMap(([, value]) =>
-    (value || '')
-      .split(',')
-      .map((url) => url.trim())
-      .filter(Boolean),
-  );
+// Both the raw and trailing-slash-stripped forms are masked: satanizer matches
+// literally, and `parseUrlList` in config/helpers.ts strips the trailing slash
+// before the URL ever reaches a log line.
+const urlListPatterns = [
+  ...new Set(
+    Object.entries(process.env)
+      .filter(([key]) => URL_LIST_ENV_PREFIXES.some((p) => key.startsWith(p)))
+      .flatMap(([, value]) =>
+        (value || '')
+          .split(',')
+          .flatMap((url) => [url.trim(), url.trim().replace(/\/+$/, '')])
+          .filter(Boolean),
+      ),
+  ),
+];
 
 const patterns = [
   ...commonPatterns,
