@@ -64,7 +64,7 @@ export class WidgetService {
 
   async connectWallet(expectConnectionState = true) {
     await test.step('Open default page for connect.', async () => {
-      await this.welcomePage.goto('/?survey-setup=1');
+      await this.welcomePage.goto('/');
     });
     await test.step('Connect wallet to widget', async () => {
       const element = new ElementController(this.page);
