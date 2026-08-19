@@ -122,6 +122,7 @@ const reporters: {
       // ───── Slack settings ─────
       slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
       slackDutyTag: process.env.SLACK_DUTY_TAG,
+      qaseProjectId: process.env.QASE_PROJECT_ID,
     },
   ],
   qaseReporter: [
