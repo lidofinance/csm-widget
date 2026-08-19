@@ -18,7 +18,7 @@ test.describe('Operator without keys. Step 4.', { tag: [Tags.forked] }, () => {
   let step4: CreateOperatorStep4Page;
 
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.page.goto('/');
+    await widgetService.createNodeOperatorPage.open();
     step4 = widgetService.createNodeOperatorPage.step4;
     await widgetService.createNodeOperatorPage.step1.fillForm(
       OPERATOR_TYPE.CM_PTO,
