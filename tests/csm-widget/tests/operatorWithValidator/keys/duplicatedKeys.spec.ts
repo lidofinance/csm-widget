@@ -4,6 +4,7 @@ import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
+import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.describe(
   'Operator with keys. Validation duplicated keys.',
@@ -137,6 +138,7 @@ test.describe(
 
         await expect(keysPage.submitPage.validationInputError).toContainText(
           'Invalid deposit data',
+          { timeout: RPC_WAIT_TIMEOUT },
         );
         await keysPage.submitPage.selectTab('Parsed');
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
