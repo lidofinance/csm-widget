@@ -7,7 +7,10 @@ import { expect, Page, test } from '@playwright/test';
 import { FeatureFlagsType } from 'config/feature-flags/types';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
-import { SelectOperatorModalElement } from 'tests/shared/pages/elements';
+import {
+  ConfirmOperatorModalElement,
+  SelectOperatorModalElement,
+} from 'tests/shared/pages/elements';
 import { BondRewardsPage } from 'tests/csm-widget/pages/bondRewards.page';
 import { OperatorTypePage } from 'tests/csm-widget/pages/operatorType.page';
 import {
@@ -35,6 +38,7 @@ export class WidgetService {
   public header: Header;
   public parametersModal: ParametersModal;
   public selectOperatorModal: SelectOperatorModalElement;
+  public confirmOperatorModal: ConfirmOperatorModalElement;
 
   constructor(
     public page: Page,
@@ -50,6 +54,7 @@ export class WidgetService {
     this.header = new Header(this.page);
     this.parametersModal = new ParametersModal(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);
+    this.confirmOperatorModal = new ConfirmOperatorModalElement(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {
@@ -160,6 +165,7 @@ export class WidgetService {
       });
       await this.bondRewardsPage.addBond.amountInput.fill(amount);
       await this.bondRewardsPage.addBond.addBondButton.click();
+      await this.confirmOperatorModal.confirm();
 
       if (tokenName !== TOKENS.eth) {
         await this.bondRewardsPage.page.waitForSelector(

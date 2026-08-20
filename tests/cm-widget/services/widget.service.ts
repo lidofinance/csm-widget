@@ -20,6 +20,7 @@ import { GroupPage } from '../pages/group.page';
 import { ElementController } from '../pages/elements/controller';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
 import {
+  ConfirmOperatorModalElement,
   NavBlockElement,
   SelectOperatorModalElement,
 } from '../../shared/pages/elements';
@@ -41,6 +42,7 @@ export class WidgetService {
   public navBlockElement: NavBlockElement;
   public footerElement: FooterElement;
   public selectOperatorModal: SelectOperatorModalElement;
+  public confirmOperatorModal: ConfirmOperatorModalElement;
 
   constructor(
     public page: Page,
@@ -59,6 +61,7 @@ export class WidgetService {
     this.navBlockElement = new NavBlockElement(this.page);
     this.footerElement = new FooterElement(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);
+    this.confirmOperatorModal = new ConfirmOperatorModalElement(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {
@@ -162,6 +165,7 @@ export class WidgetService {
       });
       await this.bondRewardsPage.addBond.amountInput.fill(amount);
       await this.bondRewardsPage.addBond.addBondButton.click();
+      await this.confirmOperatorModal.confirm();
 
       if (tokenName !== TOKENS.eth) {
         await this.bondRewardsPage.page.waitForSelector(

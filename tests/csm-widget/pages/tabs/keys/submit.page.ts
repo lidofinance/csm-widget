@@ -3,6 +3,7 @@ import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { BasePage } from '../../../../shared/pages/base.page';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { DepositKey } from 'tests/shared/services/keysGenerator.service';
+import { ConfirmOperatorModalElement } from 'tests/shared/pages/elements';
 
 export class SubmitPage {
   page: Page;
@@ -15,6 +16,7 @@ export class SubmitPage {
   amountInput: Locator;
   amountInputText: Locator;
   validationInputError: Locator;
+  confirmOperatorModal: ConfirmOperatorModalElement;
 
   // Tabs
   jsonTab: Locator;
@@ -44,6 +46,7 @@ export class SubmitPage {
     this.validationInputError = this.formBlock.getByTestId(
       'input-message-error',
     );
+    this.confirmOperatorModal = new ConfirmOperatorModalElement(page);
 
     // Tabs
     this.jsonTab = this.formBlock.getByTestId('tab-button-JSON');
@@ -89,6 +92,7 @@ export class SubmitPage {
   async submitKeys(
     keys: DepositKey[] | DepositKey,
     tokenSymbol = TokenSymbol.STETH,
+    { confirmOperator = true }: { confirmOperator?: boolean } = {},
   ) {
     await test.step('Submit keys', async () => {
       const bondTokenElement = this.getBondTokenElement(tokenSymbol);
@@ -97,6 +101,7 @@ export class SubmitPage {
       await this.page.waitForTimeout(LOW_TIMEOUT);
       await this.confirmKeysReady.click();
       await this.submitKeysButton.click();
+      if (confirmOperator) await this.confirmOperatorModal.confirm();
     });
   }
 }

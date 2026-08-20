@@ -15,7 +15,7 @@ export const ConfirmOperatorModal: ModalComponentType<
 > = ({ nodeOperator, onConfirm, onReject, ...props }) => {
   return (
     <Modal {...props} center onClose={onReject}>
-      <Stack direction="column" gap="xxl">
+      <Stack direction="column" gap="xxl" data-testid="confirmOperatorModal">
         <Stack direction="column" gap="sm">
           <Text as="h5" size="sm" weight={700}>
             Confirm your Node Operator
@@ -28,7 +28,11 @@ export const ConfirmOperatorModal: ModalComponentType<
 
         <DescriptorId id={nodeOperator.nodeOperatorId} />
 
-        <Button fullwidth onClick={onConfirm}>
+        <Button
+          fullwidth
+          onClick={onConfirm}
+          data-testid="confirmOperatorButton"
+        >
           Continue
         </Button>
       </Stack>

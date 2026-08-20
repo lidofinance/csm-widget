@@ -51,7 +51,9 @@ test.describe(
 
         await test.step('Fill valid keys and submit', async () => {
           const keys = keysGeneratorService.generateKeys();
-          await submitPage.submitKeys(keys, TokenSymbol.ETH);
+          await submitPage.submitKeys(keys, TokenSymbol.ETH, {
+            confirmOperator: false,
+          });
         });
 
         await test.step('Access denied modal is shown', async () => {
