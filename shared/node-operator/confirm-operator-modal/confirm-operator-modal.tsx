@@ -21,8 +21,8 @@ export const ConfirmOperatorModal: ModalComponentType<
             Confirm your Node Operator
           </Text>
           <Text size="xs" color="secondary">
-            You have multiple Node Operators. Check that the one below is the
-            one you intend to use before proceeding.
+            Check that the Node Operator below is the one you intend to use
+            before proceeding
           </Text>
         </Stack>
 
