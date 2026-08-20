@@ -4,6 +4,7 @@ import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
+import { operatorIdPattern } from 'tests/shared/helpers/tests';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 const secretPhrase = generateMnemonic(english, 128);
@@ -137,6 +138,7 @@ test.describe(
         const form = widgetService.keysPage.createNodeOperatorForm;
         const header = widgetService.header;
         const keys = keysGeneratorService.generateKeys(1);
+        const idvtcOperatorId = await widgetService.extractNodeOperatorId();
 
         await test.step('Create a new ICS operator on the create page', async () => {
           await widgetService.keysPage.goto();
@@ -149,6 +151,38 @@ test.describe(
           await widgetService.page.waitForSelector(
             'text=Node Operator has been created',
             { timeout: STAGE_WAIT_TIMEOUT },
+          );
+        });
+
+        const txModal = widgetService.operatorType.txModal;
+        const description = await txModal.description.innerText();
+        const idMatch = description.match(/Node Operator ID is (\d+)/);
+        expect(
+          idMatch,
+          `success description must name the new operator, got: ${description}`,
+        ).not.toBeNull();
+        const icsOperatorId = Number(idMatch?.[1]);
+
+        await test.step('The created operator is a new one', async () => {
+          expect(icsOperatorId).not.toBe(idvtcOperatorId);
+        });
+
+        await test.step('Success screen offers a switch to it', async () => {
+          await expect(txModal.switchToOperatorBtn).toHaveText(
+            `Switch to Node Operator #${icsOperatorId}`,
+          );
+        });
+
+        await test.step('The IDVTC operator stays active until the switch', async () => {
+          expect(await widgetService.extractNodeOperatorId()).toBe(
+            idvtcOperatorId,
+          );
+        });
+
+        await test.step('Switch to the created ICS operator', async () => {
+          await txModal.switchToOperatorBtn.click();
+          await expect(header.switchOperatorButton).toContainText(
+            operatorIdPattern(icsOperatorId),
           );
         });
 

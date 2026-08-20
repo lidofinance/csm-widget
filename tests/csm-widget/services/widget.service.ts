@@ -7,6 +7,7 @@ import { expect, Page, test } from '@playwright/test';
 import { FeatureFlagsType } from 'config/feature-flags/types';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { SelectOperatorModalElement } from 'tests/shared/pages/elements';
 import { BondRewardsPage } from 'tests/csm-widget/pages/bondRewards.page';
 import { OperatorTypePage } from 'tests/csm-widget/pages/operatorType.page';
 import {
@@ -33,6 +34,7 @@ export class WidgetService {
   public operatorType: OperatorTypePage;
   public header: Header;
   public parametersModal: ParametersModal;
+  public selectOperatorModal: SelectOperatorModalElement;
 
   constructor(
     public page: Page,
@@ -47,6 +49,7 @@ export class WidgetService {
     this.operatorType = new OperatorTypePage(this.page, this.walletPage);
     this.header = new Header(this.page);
     this.parametersModal = new ParametersModal(this.page);
+    this.selectOperatorModal = new SelectOperatorModalElement(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {
@@ -55,6 +58,7 @@ export class WidgetService {
     });
     await test.step('Connect wallet to widget', async () => {
       const element = new ElementController(this.page);
+      await this.selectOperatorModal.selectOperatorIfPrompted();
       if (await this.isConnectedWallet()) return;
       await element.header.connectWalletBtn.click();
       await element.termAndPrivacy.confirmConditionWalletModal();
@@ -93,6 +97,10 @@ export class WidgetService {
         } catch {
           console.error('Wallet is not connected');
         }
+      }
+
+      if (expectConnectionState) {
+        await this.selectOperatorModal.selectOperatorIfPrompted();
       }
 
       expect(

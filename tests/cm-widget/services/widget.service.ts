@@ -19,7 +19,10 @@ import {
 import { GroupPage } from '../pages/group.page';
 import { ElementController } from '../pages/elements/controller';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
-import { NavBlockElement } from '../../shared/pages/elements';
+import {
+  NavBlockElement,
+  SelectOperatorModalElement,
+} from '../../shared/pages/elements';
 import { FooterElement } from '../pages/elements/common/element.footer';
 
 type FeatureFlagName = keyof FeatureFlagsType;
@@ -37,6 +40,7 @@ export class WidgetService {
   // common elements
   public navBlockElement: NavBlockElement;
   public footerElement: FooterElement;
+  public selectOperatorModal: SelectOperatorModalElement;
 
   constructor(
     public page: Page,
@@ -54,6 +58,7 @@ export class WidgetService {
     // common elements
     this.navBlockElement = new NavBlockElement(this.page);
     this.footerElement = new FooterElement(this.page);
+    this.selectOperatorModal = new SelectOperatorModalElement(this.page);
   }
 
   async connectWallet(expectConnectionState = true) {
@@ -62,6 +67,7 @@ export class WidgetService {
     });
     await test.step('Connect wallet to widget', async () => {
       const element = new ElementController(this.page);
+      await this.selectOperatorModal.selectOperatorIfPrompted();
       if (await this.isConnectedWallet()) return;
       await element.header.connectWalletBtn.click();
       await element.termAndPrivacy.confirmConditionWalletModal();
@@ -100,6 +106,10 @@ export class WidgetService {
         } catch {
           console.error('Wallet is not connected');
         }
+      }
+
+      if (expectConnectionState) {
+        await this.selectOperatorModal.selectOperatorIfPrompted();
       }
 
       expect(
