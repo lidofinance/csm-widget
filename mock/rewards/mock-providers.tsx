@@ -37,6 +37,7 @@ export const MockRewardsHistoryProvider: FC<
   // Mock node operator context value
   const mockNodeOperatorContextValue: NodeOperatorContextValue = {
     isPending: false,
+    needsSelection: false,
     nodeOperator: {
       id: BigInt(scenario.nodeOperatorId),
     } as any,

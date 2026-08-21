@@ -2,6 +2,7 @@ import {
   type NodeOperatorShortInfo,
   getNodeOperatorRoles,
 } from '@lidofinance/lido-csm-sdk';
+import { SwitchToOperatorButton } from 'shared/node-operator';
 import {
   AfterCreateCustomNodeOperator,
   AfterKeysUpload,
@@ -40,6 +41,11 @@ export const renderCreateSuccess = (
               <AfterCreateCustomNodeOperator keys={keys} />
             )}
           </>
+        ) : undefined
+      }
+      footer={
+        hasAnyRole && result?.nodeOperatorId !== undefined ? (
+          <SwitchToOperatorButton nodeOperatorId={result.nodeOperatorId} />
         ) : undefined
       }
     />,

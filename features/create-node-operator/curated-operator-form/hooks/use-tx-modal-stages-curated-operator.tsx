@@ -73,8 +73,9 @@ export const useTxModalStagesCuratedOperator = () => {
               ) : undefined
             }
             footer={
-              hasAnyRole ? (
+              hasAnyRole && result?.nodeOperatorId !== undefined ? (
                 <CuratedOperatorSuccessActions
+                  nodeOperatorId={result.nodeOperatorId}
                   availableGatesCount={data.availableGates.length}
                   hasManagerRole={hasManagerRole}
                 />
