@@ -91,11 +91,11 @@ export class SubmitPage extends BasePage {
     });
   }
 
-  async fillAndSubmit(
+  async fillAndClickSubmit(
     keys: DepositKey[] | DepositKey,
     tokenSymbol = TokenSymbol.STETH,
   ) {
-    await test.step('Submit keys', async () => {
+    await test.step('Fill keys and click Submit', async () => {
       const bondTokenElement = this.getBondTokenElement(tokenSymbol);
       await bondTokenElement.click();
       await this.fillKeys(keys);
@@ -109,7 +109,7 @@ export class SubmitPage extends BasePage {
     keys: DepositKey[] | DepositKey,
     tokenSymbol = TokenSymbol.STETH,
   ) {
-    await this.fillAndSubmit(keys, tokenSymbol);
+    await this.fillAndClickSubmit(keys, tokenSymbol);
     await this.confirmOperatorModal.confirm();
   }
 }

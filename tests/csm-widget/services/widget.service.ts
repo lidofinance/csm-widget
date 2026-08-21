@@ -104,9 +104,7 @@ export class WidgetService {
         }
       }
 
-      if (expectConnectionState) {
-        await this.selectOperatorModal.selectOperatorIfPrompted();
-      }
+      await this.selectOperatorModal.selectOperatorIfPrompted();
 
       expect(
         await this.isConnectedWallet(),
