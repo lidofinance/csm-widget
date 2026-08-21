@@ -82,6 +82,3 @@ export const waitForCallback = async <T>(
     } sec.\nCallback result: ${result}`,
   );
 };
-
-export const operatorIdPattern = (nodeOperatorId: number) =>
-  new RegExp(`#${nodeOperatorId}(?!\\d)`);
