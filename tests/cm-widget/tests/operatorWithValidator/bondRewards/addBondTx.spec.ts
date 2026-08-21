@@ -51,6 +51,8 @@ test.describe(
           ]);
         });
 
+        await widgetService.confirmOperatorModal.confirm();
+
         await test.step('Confirm transaction and check Matomo success event', async () => {
           await widgetService.page.waitForSelector(
             'text=Confirm this transaction in your wallet',
