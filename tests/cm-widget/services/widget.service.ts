@@ -70,7 +70,6 @@ export class WidgetService {
     });
     await test.step('Connect wallet to widget', async () => {
       const element = new ElementController(this.page);
-      await this.selectOperatorModal.selectOperatorIfPrompted();
       if (await this.isConnectedWallet()) return;
       await element.header.connectWalletBtn.click();
       await element.termAndPrivacy.confirmConditionWalletModal();
