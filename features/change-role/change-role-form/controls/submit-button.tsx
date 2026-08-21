@@ -24,7 +24,10 @@ export const SubmitButton = () => {
 
   return (
     <>
-      <SubmitButtonHookForm disableIfClean onClick={clickHandle}>
+      <SubmitButtonHookForm
+        disableIfClean={flow.action !== 'manager-reset'}
+        onClick={clickHandle}
+      >
         {title}
       </SubmitButtonHookForm>
       {flow.action === 'propose' && (
