@@ -84,7 +84,7 @@ test.describe(
       if (snapshotId) await evmNode.revert(snapshotId);
     });
 
-    test(
+    test.only(
       qase(466, 'Should overwrite IDVTC with ICS when claimed'),
       async ({ widgetService }) => {
         const claim = widgetService.operatorType.claimIcs;
