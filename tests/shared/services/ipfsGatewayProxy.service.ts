@@ -20,7 +20,7 @@ export class IpfsGatewayProxyService {
           if (!response.ok) {
             return this.fail(route, cidPath, `${response.status}`);
           }
-          console.info(`${target} reponse ok`);
+
           await route.fulfill({
             status: 200,
             body: Buffer.from(await response.arrayBuffer()),

@@ -131,7 +131,6 @@ export const test = base.extend<
         // are pre-cached in Anvil before the browser starts.
         await warmUpForkedNode(cmSDK, secretPhrase);
       }
-      await use(browserService);
 
       // We abort this request because we need to reduce the request count to the Elliptic api
       await browserService
@@ -140,6 +139,8 @@ export const test = base.extend<
         .route(new RegExp('.*/api/validation\\?.*'), async (route) => {
           await route.abort();
         });
+
+      await use(browserService);
 
       await browserService.teardown();
     },
