@@ -107,7 +107,7 @@ export const test = base.extend<
           warmUpCallback: warmUpForkedNode.bind(null, csmSDK, secretPhrase),
         },
         browserOptions: {
-          headless: false,
+          headless: true,
           reducedMotion: 'reduce',
           cookies: REFUSE_CF_BLOCK_COOKIE,
         },
