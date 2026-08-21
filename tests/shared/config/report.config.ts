@@ -140,6 +140,13 @@ const reporters: {
           complete: true,
           title: getTestRunName(),
           description: getTestRunDescription(),
+          tags: [
+            `suite:${process.env.TEST_SUITE || 'ALL'}`,
+            `stand:${process.env.STAND_TYPE || '-'}`,
+            `tags:${process.env.TEST_TAGS || '-'}`,
+            `branch:${getBranchName()}`,
+            `wallet:${process.env.WALLET_NAME || 'metamask'}`,
+          ],
         },
         plan: {
           id: process.env.QASE_PLAN_ID,

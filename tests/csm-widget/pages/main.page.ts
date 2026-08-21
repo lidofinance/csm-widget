@@ -15,7 +15,10 @@ export class MainPage extends BasePage {
 
   async goto() {
     await test.step('Open the Main page', async () => {
-      await this.page.goto('/');
+      await this.openWithRetry(
+        '/',
+        this.starterPackSection.createNodeOperatorBtn,
+      );
     });
   }
 

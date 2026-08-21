@@ -2464,10 +2464,10 @@
     "@lidofinance/wallets-testing-nodes" "1.10.0"
     "@lidofinance/wallets-testing-wallets" "1.49.2"
 
-"@lidofinance/chat-reporter@1.9.0":
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/chat-reporter/-/chat-reporter-1.9.0.tgz#8b03af70f4afd834189d8ad9bda9194c6289a63f"
-  integrity sha512-F14VB7T+PCcO6Slh1saagCq9i2U36XdCIDnVMdXCw8zcyTeYTP6OrVhl12t8IaSPVMLnuIEa8EpIzMQcUsCMIw==
+"@lidofinance/chat-reporter@1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/chat-reporter/-/chat-reporter-1.10.0.tgz#3092a2794edb54bc7d9daf13f5a832b8e3a9e82a"
+  integrity sha512-fL/OtuzK9YxqAsTSG0eRfx3HIqyOqPhKRDS7utbB2qfu1iW+QGh0QEcG5tj9uZ/jqGl9ELyqoa7f8HBkpF7G9Q==
   dependencies:
     "@nestjs/common" "^10.0.0"
     axios "^1.10.0"
@@ -5482,7 +5482,7 @@ axios-retry@^4.5.0:
   dependencies:
     is-retry-allowed "^2.2.0"
 
-axios@1.12.2, axios@1.13.5, axios@1.16.0, axios@^1.10.0, axios@^1.16.0, axios@^1.8.2:
+axios@1.12.2, axios@1.13.5, axios@1.16.0, axios@^1.10.0, axios@^1.16.0, axios@^1.18.1, axios@^1.8.2:
   version "1.18.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.18.1.tgz#d63f9863bcd8938815c86f9e2abd380189d96dfe"
   integrity sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==
@@ -10160,12 +10160,12 @@ playwright-core@1.62.1:
   resolved "https://registry.yarnpkg.com/playwright-core/-/playwright-core-1.62.1.tgz#120f67a19181bfd183c60fa903c0d99330b56785"
   integrity sha512-wPYSwEBJY9GHraISXqyqtx0na0LpO3XEX7jNDhntbex7tzUS7kLnZsOlFruFJB4Hi/rhDMjXGqHewDZ68nYZVw==
 
-playwright-qase-reporter@^2.5.7:
-  version "2.5.7"
-  resolved "https://registry.yarnpkg.com/playwright-qase-reporter/-/playwright-qase-reporter-2.5.7.tgz#ce752513b7a35065cc2862cbfcbcf49f429d639a"
-  integrity sha512-K6mlIy8pL/MzpMxIdkqvB40Wjq0kXtiZJAWzaXesLDswyfgmedcCQ/9m9rhoBqNuRFlUQ5rWrFdSEAIeUTRoug==
+playwright-qase-reporter@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/playwright-qase-reporter/-/playwright-qase-reporter-2.6.0.tgz#5d906741e5fe18c0b02dab4b78b7ca92673cc388"
+  integrity sha512-K8t522SmtUaGrn8Dj1hFkWpmU9C6Td2s7cWhpqgu/f4D+Ssb9m11smbdACtn9uOKcxcytgHiSbrBWAyyb+eXuw==
   dependencies:
-    qase-javascript-commons "~2.7.6"
+    qase-javascript-commons "~2.8.0"
     uuid "11.1.1"
 
 playwright@1.62.1:
@@ -10360,18 +10360,18 @@ qase-api-client@~1.1.9:
     axios "^1.16.0"
     axios-retry "^4.5.0"
 
-qase-api-v2-client@~1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/qase-api-v2-client/-/qase-api-v2-client-1.0.9.tgz#491cacad2207efde1fac93e8a5109c0920329270"
-  integrity sha512-Xw+jivNicP5t5Uq3HOCMRss0P3t27NGJl7VQHfWcS/YiiFKdRqHmedx8aDfCYed4lObMVYGXOn/c1XImLRKLNQ==
+qase-api-v2-client@~1.0.10:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/qase-api-v2-client/-/qase-api-v2-client-1.0.10.tgz#a43a59e5f6f54ed62bd51e8cf06b6fb6b852288f"
+  integrity sha512-ab9SwmWcL7QUFzL99k90P093RCleWvMUdXt2DT2Olrqdx2s/K21xjUvn0gibItB11W/W6lg/EHHMdAL5tAQHUw==
   dependencies:
-    axios "^1.16.0"
+    axios "^1.18.1"
     axios-retry "^4.5.0"
 
-qase-javascript-commons@^2.7.6, qase-javascript-commons@~2.7.6:
-  version "2.7.6"
-  resolved "https://registry.yarnpkg.com/qase-javascript-commons/-/qase-javascript-commons-2.7.6.tgz#3baba6cb46429af701d77004b2dbbc1046c1841d"
-  integrity sha512-Mo8pbxJlyiqAv+wpTRfJOdOYTMwLgXCv0PQL/d2MZBiR8R5OR7oy1AQ7Cv5qU01oOvR0n+fy9c0NVcmVkSFQ/A==
+qase-javascript-commons@^2.8.1, qase-javascript-commons@~2.8.0:
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/qase-javascript-commons/-/qase-javascript-commons-2.8.1.tgz#7226ad796686a0724f6884025fb8d86f0861d42a"
+  integrity sha512-Hi2rPc57Zb9GE6y5eExUPYEuSYf5HVcpg9DV1nSQkQKQ+BREAIdUPDtjW3J0L2CsxSaHx/fdJJstJWaBFAmOrw==
   dependencies:
     ajv "^8.18.0"
     async-mutex "~0.5.0"
@@ -10382,7 +10382,7 @@ qase-javascript-commons@^2.7.6, qase-javascript-commons@~2.7.6:
     lodash.mergewith "^4.6.2"
     mime-types "^2.1.35"
     qase-api-client "~1.1.9"
-    qase-api-v2-client "~1.0.9"
+    qase-api-v2-client "~1.0.10"
     strip-ansi "^6.0.1"
     uuid "11.1.1"
 
