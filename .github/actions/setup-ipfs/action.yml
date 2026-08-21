@@ -1,0 +1,55 @@
+name: 'Setup IPFS'
+description: 'Install the Kubo IPFS binary, cached in ~/.local/bin across runs'
+
+# Installs the binary only. Repo init, config and daemon start-up are handled by
+# the test setup, so that a local run and a CI run go through the same code path.
+
+inputs:
+  version:
+    description: 'Kubo version to install'
+    required: false
+    default: '0.43.0'
+
+runs:
+  using: composite
+  steps:
+    - name: Build cache params
+      id: cache
+      shell: bash
+      env:
+        CACHE_PATH: |
+          ~/.local/bin/
+        KEY_INPUT: |
+          kubo:${{ inputs.version }}
+      run: |
+        echo "path=$CACHE_PATH" >> "$GITHUB_OUTPUT"
+        echo "$KEY_INPUT" | md5sum | awk '{print $1}' | xargs -I% echo "key=localbin-%-${RUNNER_OS}" >> "$GITHUB_OUTPUT"
+
+    - uses: actions/cache@v6
+      id: get-cache
+      with:
+        path: ${{ steps.cache.outputs.path }}
+        key: ${{ steps.cache.outputs.key }}
+
+    - name: Install Kubo
+      if: steps.get-cache.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        set -euo pipefail
+        mkdir -p ~/.local/bin
+        tmp="$(mktemp -d)"
+        curl -fsSL "https://dist.ipfs.tech/kubo/v${VERSION}/kubo_v${VERSION}_linux-amd64.tar.gz" \
+          | tar -xzf - -C "$tmp"
+        mv "$tmp/kubo/ipfs" ~/.local/bin/ipfs
+        chmod +x ~/.local/bin/ipfs
+        rm -rf "$tmp"
+
+    - name: Add Kubo to PATH
+      shell: bash
+      run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+    - name: Verify installation
+      shell: bash
+      run: ipfs --version

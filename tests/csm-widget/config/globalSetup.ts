@@ -2,8 +2,17 @@ import { EthereumNodeService } from '@lidofinance/wallets-testing-nodes';
 import { widgetFullConfig } from './';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { LidoSDKClient } from 'tests/csm-widget/services/csmSDK.client';
+import { IpfsNodeService } from 'tests/shared/services/ipfsNode.service';
 
 export default async function globalSetup() {
+  if (process.env.CI) {
+    await new IpfsNodeService().start();
+  } else if (!process.env.CI) {
+    console.info(
+      `[globalSetup] You are using local IPFS node, make sure you have it running on ${widgetFullConfig.standConfig.ipfsConfig.gateway}`,
+    );
+  }
+
   if (process.env.USE_FORK !== 'true') {
     return;
   }
