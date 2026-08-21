@@ -89,10 +89,9 @@ export class SubmitPage {
     });
   }
 
-  async submitKeys(
+  async fillAndSubmit(
     keys: DepositKey[] | DepositKey,
     tokenSymbol = TokenSymbol.STETH,
-    { confirmOperator = true }: { confirmOperator?: boolean } = {},
   ) {
     await test.step('Submit keys', async () => {
       const bondTokenElement = this.getBondTokenElement(tokenSymbol);
@@ -101,7 +100,14 @@ export class SubmitPage {
       await this.page.waitForTimeout(LOW_TIMEOUT);
       await this.confirmKeysReady.click();
       await this.submitKeysButton.click();
-      if (confirmOperator) await this.confirmOperatorModal.confirm();
     });
+  }
+
+  async submitKeys(
+    keys: DepositKey[] | DepositKey,
+    tokenSymbol = TokenSymbol.STETH,
+  ) {
+    await this.fillAndSubmit(keys, tokenSymbol);
+    await this.confirmOperatorModal.confirm();
   }
 }
