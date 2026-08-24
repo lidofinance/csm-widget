@@ -15,6 +15,8 @@ import { HttpMockerService } from 'tests/shared/services/httpMocker.service';
 import { EvmNodeService } from 'tests/shared/services/evmNode.service';
 import { LidoSDKClient } from '../services/cmSDK.client';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
+import { IpfsGatewayProxyService } from 'tests/shared/services/ipfsGatewayProxy.service';
+
 import path from 'path';
 
 type WorkerFixtures = {
@@ -30,6 +32,7 @@ type WorkerFixtures = {
   ethereumSDK: SdkService;
   forkActionService: ForkActionsService;
   httpMockerService: HttpMockerService;
+  ipfsGatewayProxy: IpfsGatewayProxyService;
 };
 
 export const test = base.extend<
@@ -86,7 +89,7 @@ export const test = base.extend<
 
   // fixture-methods
   browserWithWallet: [
-    async ({ secretPhrase, useFork, cmSDK }, use) => {
+    async ({ secretPhrase, useFork, cmSDK, ipfsGatewayProxy }, use) => {
       const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
       const rpcUrl = useFork
         ? forkRpcURL
@@ -131,6 +134,10 @@ export const test = base.extend<
         // are pre-cached in Anvil before the browser starts.
         await warmUpForkedNode(cmSDK, secretPhrase);
       }
+
+      await ipfsGatewayProxy.install(
+        browserService.getBrowserContextPage().context(),
+      );
 
       // We abort this request because we need to reduce the request count to the Elliptic api
       await browserService
@@ -212,6 +219,16 @@ export const test = base.extend<
           widgetService.page,
           // @ts-expect-error may be null
           widgetFullConfig.standConfig.mockConfig,
+        ),
+      );
+    },
+    { scope: 'worker' },
+  ],
+  ipfsGatewayProxy: [
+    async ({}, use) => {
+      await use(
+        new IpfsGatewayProxyService(
+          widgetFullConfig.standConfig.ipfsConfig.gateway,
         ),
       );
     },

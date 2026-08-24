@@ -142,6 +142,7 @@ const reporters: {
           title: getTestRunName(),
           description: getTestRunDescription(),
           tags: [
+            `ci_event:${process.env.GH_EVENT_NAME || 'none'}`,
             `suite:${process.env.TEST_SUITE || 'ALL'}`,
             `stand:${process.env.STAND_TYPE || '-'}`,
             `tags:${process.env.TEST_TAGS || '-'}`,
