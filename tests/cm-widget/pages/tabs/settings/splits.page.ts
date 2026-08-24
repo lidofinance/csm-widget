@@ -1,6 +1,7 @@
-import { Locator, Page, test } from '@playwright/test';
+import { expect, Locator, Page, test } from '@playwright/test';
 import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import {
+  LOW_TIMEOUT,
   PAGE_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
 } from 'tests/shared/consts/timeouts';
@@ -59,21 +60,31 @@ export class SplitsPage extends BasePage {
       await this.addSplitButton.click();
       const addressInput = this.getAddressInput(index);
       await addressInput.fill(address);
-      await addressInput.blur();
       const shareInput = this.getShareInput(index);
       await shareInput.fill(share);
-      await shareInput.blur();
+      await expect(this.saveSplitsButton).toBeEnabled({
+        timeout: PAGE_WAIT_TIMEOUT,
+      });
     });
   }
 
   async submitAndConfirm() {
     await test.step('Submit splits configuration', async () => {
-      await this.saveSplitsButton.click();
+      const confirmButton = this.page.getByRole('button', {
+        name: 'Confirm',
+        exact: true,
+      });
+
+      // a submit that races the debounce above is rejected by validation
+      // without any visible feedback — retry until the confirm modal opens
+      await expect(async () => {
+        if (await confirmButton.isVisible()) return;
+        await this.saveSplitsButton.click({ timeout: 2 * LOW_TIMEOUT });
+        await expect(confirmButton).toBeVisible({ timeout: LOW_TIMEOUT });
+      }).toPass({ timeout: PAGE_WAIT_TIMEOUT });
 
       await test.step('Confirm in modal', async () => {
-        await this.page
-          .getByRole('button', { name: 'Confirm', exact: true })
-          .click();
+        await confirmButton.click();
       });
 
       await test.step('Confirm wallet transaction', async () => {

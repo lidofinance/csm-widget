@@ -11,11 +11,13 @@ test.describe('Operator with keys. Common suite.', async () => {
   let keysPage: KeysPage;
   let keysGeneratorService: KeysGeneratorService;
 
-  test.beforeEach(async ({ widgetService }) => {
-    keysPage = new KeysPage(widgetService.page);
-    await keysPage.submitPage.open();
-    keysGeneratorService = new KeysGeneratorService();
-  });
+  test.beforeEach(
+    async ({ widgetService, keysGeneratorService: keysGenerator }) => {
+      keysPage = new KeysPage(widgetService.page);
+      await keysPage.submitPage.open();
+      keysGeneratorService = keysGenerator;
+    },
+  );
 
   test(
     qase(17, 'Should open transaction page after added 1 key'),

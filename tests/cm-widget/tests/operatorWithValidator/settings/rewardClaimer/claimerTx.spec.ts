@@ -8,10 +8,11 @@ import {
 import { test } from '../../../test.fixture';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 import { MatomoService } from 'tests/shared/services/matomo.service';
+import { generateAddress } from 'tests/shared/helpers/accountData';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
-const VALID_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
+const VALID_ADDRESS = generateAddress(true);
 
 test.describe(
   'Settings. Rewards claimer. Transactions.',
@@ -36,6 +37,7 @@ test.describe(
 
     test(
       qase(203, 'Should set Rewards claimer address and show success'),
+      { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { claimerPage, txModal } = widgetService.settingsPage;
 

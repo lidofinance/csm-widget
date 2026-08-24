@@ -4,7 +4,6 @@ import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
-import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 const secretPhrase = generateMnemonic(english, 128);
@@ -23,6 +22,7 @@ test.describe(
         forkActionService,
         widgetService,
         secretPhrase,
+        keysGeneratorService,
       }) => {
         test.skip(!useFork, 'Test suite runs only on forked network');
         const address = mnemonicToAccount(secretPhrase).address;
@@ -36,17 +36,32 @@ test.describe(
         await widgetService.setFeatureFlag('icsApplyForm', true);
 
         await test.step('Create an IDVTC operator by adding a key', async () => {
-          const keys = new KeysGeneratorService().generateKeys(1);
+          const keys = keysGeneratorService.generateKeys(1);
           await widgetService.keysPage.goto();
           await widgetService.keysPage.createNodeOperatorForm.submitNewKeys(
             keys,
             TokenSymbol.ETH,
           );
-          await widgetService.walletPage.confirmTx();
-          await widgetService.page.waitForSelector(
-            'text=Node Operator has been created',
-            { timeout: STAGE_WAIT_TIMEOUT },
-          );
+          await test.step('Sign the message to set up your cluster members', async () => {
+            await widgetService.page.waitForSelector(
+              'text=Sign the message to set up your cluster members after the transaction',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            );
+            await widgetService.walletPage.confirmTx();
+          });
+
+          await test.step('Confirm tx for creating operator', async () => {
+            await widgetService.page.waitForSelector(
+              'text=Creating Node Operator',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            );
+
+            await widgetService.walletPage.confirmTx();
+            await widgetService.page.waitForSelector(
+              'text=Node Operator has been created',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            );
+          });
         });
 
         await test.step('Issue ICS status to the same address', async () => {
@@ -117,11 +132,58 @@ test.describe(
     );
 
     test(
+      qase(510, 'Should offer a switch to the new operator on success'),
+      async ({ widgetService, keysGeneratorService }) => {
+        const form = widgetService.keysPage.createNodeOperatorForm;
+        const txModal = widgetService.operatorType.txModal;
+        const keys = keysGeneratorService.generateKeys(1);
+        const idvtcOperatorId = await widgetService.extractNodeOperatorId();
+
+        await test.step('Create a new ICS operator on the create page', async () => {
+          await widgetService.keysPage.goto();
+          await form.getBondTokenElement(TokenSymbol.ETH).click();
+          await form.fillKeys(keys);
+          await form.confirmKeysReady.click();
+          await form.submitKeysButton.click();
+          await widgetService.walletPage.confirmTx();
+          await widgetService.page.waitForSelector(
+            'text=Node Operator has been created',
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
+        });
+
+        const description = await txModal.description.innerText();
+        const idMatch = description.match(/Node Operator ID is (\d+)/);
+        expect(
+          idMatch,
+          `success description must name the new operator, got: ${description}`,
+        ).not.toBeNull();
+        const icsOperatorId = Number(idMatch?.[1]);
+
+        await test.step('The created operator is a new one', async () => {
+          expect(icsOperatorId).not.toBe(idvtcOperatorId);
+        });
+
+        await test.step('Success screen offers a switch to it', async () => {
+          await expect(txModal.switchToOperatorBtn).toHaveText(
+            `Switch to Node Operator #${icsOperatorId}`,
+          );
+        });
+
+        await test.step('The IDVTC operator stays active until the switch', async () => {
+          expect(await widgetService.extractNodeOperatorId()).toBe(
+            idvtcOperatorId,
+          );
+        });
+      },
+    );
+
+    test(
       qase(437, 'Should keep IDVTC and add an ICS operator when created'),
-      async ({ widgetService }) => {
+      async ({ widgetService, keysGeneratorService }) => {
         const form = widgetService.keysPage.createNodeOperatorForm;
         const header = widgetService.header;
-        const keys = new KeysGeneratorService().generateKeys(1);
+        const keys = keysGeneratorService.generateKeys(1);
 
         await test.step('Create a new ICS operator on the create page', async () => {
           await widgetService.keysPage.goto();
@@ -135,6 +197,10 @@ test.describe(
             'text=Node Operator has been created',
             { timeout: STAGE_WAIT_TIMEOUT },
           );
+        });
+
+        await test.step('Switch to the created ICS operator', async () => {
+          await widgetService.operatorType.txModal.switchToOperatorBtn.click();
         });
 
         await test.step('Header switch panel shows two operators', async () => {

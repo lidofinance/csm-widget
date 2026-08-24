@@ -53,6 +53,12 @@ const setupPresetAccounts = async (): Promise<void> => {
 
   const walletService = new WalletStateService({
     cwd: process.env.JUST_DIR || './staking-modules',
+    env: {
+      CHAIN: widgetFullConfig.standConfig.justConfig.chain,
+      DEPLOY_CONFIG: widgetFullConfig.standConfig.justConfig.deployConfig,
+      ARTIFACTS_DIR: widgetFullConfig.standConfig.justConfig.artifactsDir,
+      RPC_URL: widgetFullConfig.standConfig.networkConfig.rpcUrl,
+    },
     step: passthroughStep,
   });
 

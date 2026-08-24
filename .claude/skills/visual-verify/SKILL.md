@@ -55,6 +55,9 @@ node .claude/skills/visual-verify/scripts/verify.mjs --operator 4 --selector '[d
 # The disconnected/welcome state — no wallet at all (operator/address not required)
 node .claude/skills/visual-verify/scripts/verify.mjs --no-connect --route /
 
+# The mandatory "Select Node Operator" modal itself (clears the cached pick so it reappears)
+node .claude/skills/visual-verify/scripts/verify.mjs --address 0x028913…e8de --select-prompt
+
 # Watch it happen live, and leave the browser open to poke around
 node .claude/skills/visual-verify/scripts/verify.mjs --operator 12 --headed --keep-open
 ```
@@ -77,7 +80,8 @@ so they don't collide); override with `--out path.png` (relative paths resolve t
 `--url <origin>` (default `$APP_ORIGIN` / `localhost:3000`) | `--operator N` | `--address 0x…` |
 `--role manager|rewards|owner` (default `manager`) | `--route /path` | `--theme light|dark` |
 `--viewport mobile|tablet|desktop|WxH` | `--selector <css>` (shoot one element) |
-`--no-connect` (capture with no wallet; operator/address not required) | `--json` |
+`--no-connect` (capture with no wallet; operator/address not required) |
+`--select-prompt` (capture the operator-selection modal instead of resolving it) | `--json` |
 `--module csm|cm` | `--chain 560048` | `--headed` | `--keep-open` | `--full` (full-page) |
 `--out file.png`. **`--module` and `--chain` are auto-detected from the target URL** — only pass them to override.
 
@@ -118,6 +122,12 @@ These quirks are already handled in `scripts/lib.mjs`; understand them before wr
 - **The header chip re-renders asynchronously** after any navigation, reload, or account change (wagmi
   reconnects, balances fetch). Always wait for the header to settle into connected-or-disconnected
   before reading state or screenshotting, or you capture a blank chip. `settle()` does this.
+- **A multi-operator wallet must pick an operator before the app renders.** When the connected address
+  manages 2+ operators and no cached pick matches one of them, the app opens a mandatory selection modal
+  and shows only a splash behind it — no account chip, no operator header, no connect button. `connectAs`
+  resolves it automatically (landing on `--operator N` when you gave one, else the first row), and
+  navigation readiness accepts the modal as "app rendered" for exactly this reason. Pass `--select-prompt`
+  to capture the modal instead of resolving it.
 - **Wallet account vs active operator are two layers.** One address can manage many operators; the app's
   switcher (`data-testid="nodeOperatorHeader"`) changes the active operator with no wallet event. The
   in-app operator selection is connection-scoped — it resets to the default operator on reconnect/reload,
@@ -145,7 +155,8 @@ await context.close();
 
 `connectAs(...)` returns Playwright's `context`/`page` plus the dev-wallet `wallet` controller, and (for
 `operatorId`) guarantees that operator is active. Helpers: `ensureOperator(page, id)` (in-app switch +
-verify), `currentOperatorId(page)`, `readState`, `settle`, `connectModal`. Key `wallet` methods:
+verify), `resolveOperatorSelection(page, id?)` (pick in the selection modal; no-op when it isn't open),
+`currentOperatorId(page)`, `readState`, `settle`, `connectModal`. Key `wallet` methods:
 `switchAccount(page, addr)`, `switchNetwork(page, chainId)`, `disconnect(page)`,
 `selectOperator(page, id, role)`, `refreshOperators(page, chainId, module)`, `getOperator(page, id, …)`.
 Full controller API, the underlying `wallet_test*` RPC primitives (for drivers that can't use the
@@ -162,6 +173,9 @@ helper), and a **dev-browser fallback** (for headed/persistent sessions) are in
 - Header testids: `accountSectionHeader` (wallet chip), `nodeOperatorHeader` (active operator + switcher),
   `connectBtn` (shown only when disconnected). Account modal: `disconnectBtn`, `connectedAddress`.
   Operator switcher rows: `switchModalOperatorRow`, with a "Switch" button per non-current row.
+- Selection modal rows: `selectModalOperatorRow` (the whole row is the click target — no per-row button),
+  `selectModalOperatorName`. The pick is cached in `localStorage` under `sm-<moduleId>-no-<address>`;
+  clearing the `sm-`-prefixed keys makes the modal appear again.
 - Routes are normal Next.js paths: `/`, `/keys`, `/settings` (redirects to a sub-tab like
   `/settings/roles`), etc. Use whatever the app's nav exposes.
 - `MODULE` (csm/cm) is set by the server env; pass `--module` to match if you've switched it.
@@ -175,4 +189,7 @@ helper), and a **dev-browser fallback** (for headed/persistent sessions) are in
   app-shell wait, 3 attempts). If it still reports "never became ready", the server is stuck — restart `yarn dev`.
 - **Operator resolve fails** → `/api/rpc` proxy unreachable or the id doesn't exist on this chain; try
   `operators.mjs` to list valid ids.
+- **"never became ready" on a multi-operator wallet** → the selection modal was open, and the app hides
+  its shell while it is. Expected only on an outdated `lib.mjs`: readiness must accept
+  `selectModalOperatorRow`. Pass `--select-prompt` if the modal is what you wanted to capture.
 - **Chromium missing** → run `yarn playwright install chromium` (the repo's documented setup step).

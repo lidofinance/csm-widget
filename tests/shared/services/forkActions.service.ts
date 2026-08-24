@@ -8,10 +8,14 @@ type GateSelector =
 
 type StepFn = <T>(title: string, body: () => Promise<T>) => Promise<T>;
 
+type JustEnv = Pick<
+  NodeJS.ProcessEnv,
+  'CHAIN' | 'DEPLOY_CONFIG' | 'ARTIFACTS_DIR' | 'RPC_URL'
+>;
+
 export interface ForkActionsOptions {
   cwd?: string;
-  env?: NodeJS.ProcessEnv;
-  chain?: string;
+  env?: JustEnv;
   /** Override test.step — pass passthroughStep when running outside test context (e.g. globalSetup). */
   step?: StepFn;
 }
@@ -25,13 +29,11 @@ export interface RunResult {
 export class ForkActionsService {
   private cwd?: string;
   private readonly baseEnv: NodeJS.ProcessEnv;
-  private readonly chain?: string;
   private readonly step: StepFn;
 
   constructor(options: ForkActionsOptions = {}) {
     this.cwd = options.cwd;
     this.baseEnv = { ...process.env, ...options.env };
-    this.chain = options.chain;
     this.step = options.step ?? test.step;
     this.assertReady();
   }
@@ -322,10 +324,15 @@ export class ForkActionsService {
   }
 
   private execJust(args: string[]): Promise<RunResult> {
+    // Fork repo env file, e.g. JUST_DOTENV=.env.hoodi-cm; without it `just`
+    // uses the repo's own `.env`.
+    const dotenv = process.env.JUST_DOTENV
+      ? ['-E', process.env.JUST_DOTENV]
+      : [];
     return new Promise((resolve, reject) => {
       execFile(
         'just',
-        args,
+        [...dotenv, ...args],
         { cwd: this.cwd, env: this.baseEnv },
         (error, stdout, stderr) => {
           if (error) {

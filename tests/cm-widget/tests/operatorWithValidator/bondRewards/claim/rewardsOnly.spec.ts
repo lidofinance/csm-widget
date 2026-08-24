@@ -16,22 +16,22 @@ test.describe(
     let snapshotId: string;
     let noId: number;
 
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
+    test.beforeAll(
+      async ({ cmSDK, useFork, forkActionService, widgetService }) => {
+        test.skip(!useFork, 'Test suite runs only on forked network');
 
-    test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
-      snapshotId = await cmSDK.evmSnapshot();
+        snapshotId = await cmSDK.evmSnapshot();
 
-      await test.step('Set up: report rewards only (no addBond — delta stays 0)', async () => {
+        await test.step('Set up: report rewards only (no addBond — delta stays 0)', async () => {
+          await widgetService.bondRewardsPage.claim.open();
+          noId = await widgetService.extractNodeOperatorId();
+          // No addBond → delta = 0 (neither excess nor insufficient)
+          await forkActionService.reportRewards();
+        });
+
         await widgetService.bondRewardsPage.claim.open();
-        noId = await widgetService.extractNodeOperatorId();
-        // No addBond → delta = 0 (neither excess nor insufficient)
-        await forkActionService.reportRewards();
-      });
-
-      await widgetService.bondRewardsPage.claim.open();
-    });
+      },
+    );
 
     test.afterAll(async ({ cmSDK }) => {
       if (snapshotId) await cmSDK.evmRevert(snapshotId);

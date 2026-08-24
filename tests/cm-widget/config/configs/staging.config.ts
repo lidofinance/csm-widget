@@ -7,7 +7,7 @@ export class StagingConfig extends ProdConfig {
     this.standConfig = {
       ...this.standConfig,
       standType: 'staging',
-      standUrl: 'https://csm.infra-staging.org',
+      standUrl: 'https://cm.infra-staging.org',
     };
   }
 }

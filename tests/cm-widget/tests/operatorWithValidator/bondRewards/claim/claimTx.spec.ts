@@ -42,52 +42,54 @@ test.describe(
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
-    test('Should claim and send Matomo form events', async ({
-      widgetService,
-    }) => {
-      const { claim } = widgetService.bondRewardsPage;
+    test(
+      'Should claim and send Matomo form events',
+      { tag: [Tags.smoke] },
+      async ({ widgetService }) => {
+        const { claim } = widgetService.bondRewardsPage;
 
-      await test.step('Select stETH and fill max amount', async () => {
-        await claim.selectBondToken(TOKENS.steth);
-        await claim.amountInput.fill('0.0005');
-        await expect(claim.claimButton).toBeEnabled({
-          timeout: PAGE_WAIT_TIMEOUT,
+        await test.step('Select stETH and fill max amount', async () => {
+          await claim.selectBondToken(TOKENS.steth);
+          await claim.amountInput.fill('0.0005');
+          await expect(claim.claimButton).toBeEnabled({
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
         });
-      });
 
-      await test.step('Claim and check Matomo start event', async () => {
-        await Promise.all([
-          matomoEventService.waitForEvent(
-            'e_n',
-            'cm_widget_submit_form_claim_bond_start',
-          ),
-          claim.claimButton.click(),
-        ]);
-      });
+        await test.step('Claim and check Matomo start event', async () => {
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_submit_form_claim_bond_start',
+            ),
+            claim.claimButton.click(),
+          ]);
+        });
 
-      await test.step('Confirm transaction and check Matomo success event', async () => {
-        await widgetService.page.waitForSelector(
-          'text=Confirm this transaction in your wallet',
-          { timeout: PAGE_WAIT_TIMEOUT },
-        );
-        await Promise.all([
-          matomoEventService.waitForEvent(
-            'e_n',
-            'cm_widget_submit_form_claim_bond_success',
-            { timeout: STAGE_WAIT_TIMEOUT },
-          ),
-          widgetService.walletPage.confirmTx(),
-        ]);
-      });
+        await test.step('Confirm transaction and check Matomo success event', async () => {
+          await widgetService.page.waitForSelector(
+            'text=Confirm this transaction in your wallet',
+            { timeout: PAGE_WAIT_TIMEOUT },
+          );
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_submit_form_claim_bond_success',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            ),
+            widgetService.walletPage.confirmTx(),
+          ]);
+        });
 
-      await test.step('Success message is shown', async () => {
-        await expect(
-          widgetService.page.getByText(
-            'Requested amount has been successfully claimed',
-          ),
-        ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
-      });
-    });
+        await test.step('Success message is shown', async () => {
+          await expect(
+            widgetService.page.getByText(
+              'Requested amount has been successfully claimed',
+            ),
+          ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
+        });
+      },
+    );
 
     test('Should send Matomo events on ETH withdrawal success modal links', async ({
       widgetService,

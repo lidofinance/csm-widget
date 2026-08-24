@@ -119,6 +119,7 @@ test.describe('Dashboard. Stake & Keys.', { tag: [Tags.forked] }, () => {
 
   test(
     qase(153, 'Should display correct depositable keys count from chain'),
+    { tag: [Tags.smoke] },
     async ({ widgetService, cmSDK }) => {
       const { keysSection } = widgetService.dashboardPage;
 

@@ -3,8 +3,9 @@ import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { BasePage } from '../../../../shared/pages/base.page';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { DepositKey } from 'tests/shared/services/keysGenerator.service';
+import { ConfirmOperatorModalElement } from 'tests/shared/pages/elements';
 
-export class SubmitPage {
+export class SubmitPage extends BasePage {
   page: Page;
   base: BasePage;
   formBlock: Locator;
@@ -15,6 +16,7 @@ export class SubmitPage {
   amountInput: Locator;
   amountInputText: Locator;
   validationInputError: Locator;
+  confirmOperatorModal: ConfirmOperatorModalElement;
 
   // Tabs
   jsonTab: Locator;
@@ -26,6 +28,8 @@ export class SubmitPage {
   parsedTabCounter: Locator;
 
   constructor(page: Page) {
+    super(page);
+
     this.page = page;
     this.base = new BasePage(page);
     this.formBlock = this.page.getByTestId('submitKeysForm');
@@ -44,6 +48,7 @@ export class SubmitPage {
     this.validationInputError = this.formBlock.getByTestId(
       'input-message-error',
     );
+    this.confirmOperatorModal = new ConfirmOperatorModalElement(page);
 
     // Tabs
     this.jsonTab = this.formBlock.getByTestId('tab-button-JSON');
@@ -59,7 +64,7 @@ export class SubmitPage {
 
   async open() {
     await test.step('Open submit tab for Keys page', async () => {
-      await this.page.goto('/keys/submit');
+      await this.openWithRetry('/keys/submit', this.submitKeysButton);
     });
   }
 
@@ -86,11 +91,11 @@ export class SubmitPage {
     });
   }
 
-  async submitKeys(
+  async fillAndClickSubmit(
     keys: DepositKey[] | DepositKey,
     tokenSymbol = TokenSymbol.STETH,
   ) {
-    await test.step('Submit keys', async () => {
+    await test.step('Fill keys and click Submit', async () => {
       const bondTokenElement = this.getBondTokenElement(tokenSymbol);
       await bondTokenElement.click();
       await this.fillKeys(keys);
@@ -98,5 +103,13 @@ export class SubmitPage {
       await this.confirmKeysReady.click();
       await this.submitKeysButton.click();
     });
+  }
+
+  async submitKeys(
+    keys: DepositKey[] | DepositKey,
+    tokenSymbol = TokenSymbol.STETH,
+  ) {
+    await this.fillAndClickSubmit(keys, tokenSymbol);
+    await this.confirmOperatorModal.confirm();
   }
 }

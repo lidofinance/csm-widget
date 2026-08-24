@@ -52,11 +52,13 @@ test.describe(
     let keysPage: KeysPage;
     let keysGeneratorService: KeysGeneratorService;
 
-    test.beforeEach(async ({ widgetService }) => {
-      keysPage = new KeysPage(widgetService.page);
-      await keysPage.submitPage.open();
-      keysGeneratorService = new KeysGeneratorService({ isCM: true });
-    });
+    test.beforeEach(
+      async ({ widgetService, keysGeneratorService: keysGenerator }) => {
+        keysPage = new KeysPage(widgetService.page);
+        await keysPage.submitPage.open();
+        keysGeneratorService = keysGenerator;
+      },
+    );
 
     test(qase(93, 'Should display error for invalid amount'), async () => {
       const key = keysGeneratorService.generateKeys();
@@ -161,6 +163,7 @@ test.describe(
 
     test(
       qase(98, 'Should display error for invalid withdrawal_credentials'),
+      { tag: [Tags.smoke] },
       async () => {
         const key = keysGeneratorService.generateKeys();
 
@@ -266,7 +269,7 @@ test.describe(
         await expect(keysPage.submitPage.depositDataRow).toHaveCount(1);
         for (const row of await keysPage.submitPage.depositDataRow.all()) {
           await expect(row.getByTestId('deposit-data-error')).toHaveText(
-            `network_name is not equal to ${widgetConfig.standConfig.networkConfig.chainName.toLowerCase()}`,
+            `network_name is not equal to ${widgetConfig.standConfig.keysGeneratorConfig.chain.toLowerCase()}`,
           );
         }
       },

@@ -22,12 +22,16 @@ test.describe(
     let snapshotId: string;
     let noId: number;
 
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
-
     test.beforeAll(
-      async ({ cmSDK, forkActionService, widgetService, secretPhrase }) => {
+      async ({
+        cmSDK,
+        forkActionService,
+        widgetService,
+        secretPhrase,
+        useFork,
+      }) => {
+        test.skip(!useFork, 'Test suite runs only on forked network');
+
         snapshotId = await cmSDK.evmSnapshot();
 
         await widgetService.bondRewardsPage.claim.open();

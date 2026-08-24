@@ -1,6 +1,7 @@
 import { LidoSDKClient as csmClient } from '../../csm-widget/services/csmSDK.client';
 import { LidoSDKClient as cmClient } from '../../cm-widget/services/cmSDK.client';
 import { mnemonicToAccount } from 'viem/accounts';
+import { type NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { FORK_WARM_UP_TIMEOUT } from '../consts/timeouts';
 
 const SLOW_MS = 2000;
@@ -23,6 +24,27 @@ const track = async <T>(name: string, value: Promise<T> | T): Promise<T> => {
   }
 };
 
+const warmUpKeysEvents = async (
+  sdk: csmClient | cmClient,
+  nodeOperatorId: NodeOperatorId,
+) => {
+  const options = { maxBlocksDepth: undefined };
+  await Promise.all([
+    track(
+      `events.getWithdrawalSubmittedKeys(#${nodeOperatorId})`,
+      sdk.events.getWithdrawalSubmittedKeys(nodeOperatorId, options),
+    ),
+    track(
+      `events.getRequestedToExitKeys(#${nodeOperatorId})`,
+      sdk.events.getRequestedToExitKeys(nodeOperatorId, options),
+    ),
+    track(
+      `events.getTriggeredEjectionKeys(#${nodeOperatorId})`,
+      sdk.events.getTriggeredEjectionKeys(nodeOperatorId, options),
+    ),
+  ]);
+};
+
 export const warmUpForkedNode = async (
   sdk: csmClient | cmClient,
   secretPhrase: string,
@@ -34,7 +56,7 @@ export const warmUpForkedNode = async (
     try {
       const callStart = Date.now();
 
-      await Promise.all([
+      const [operators] = await Promise.all([
         track(
           'getNodeOperatorsByAddress',
           sdk.discovery.getNodeOperatorsByAddress(address),
@@ -53,6 +75,16 @@ export const warmUpForkedNode = async (
             ]
           : []),
       ]);
+
+      // Same operator ids the widget queries, so the topic filters match
+      console.info(
+        `[warmUp] ${ts()}  keys events for ${operators.length} operator(s)`,
+      );
+      await Promise.all(
+        operators.map(({ nodeOperatorId }) =>
+          warmUpKeysEvents(sdk, nodeOperatorId),
+        ),
+      );
 
       console.info(`[warmUp] ${ts()}  done in ${Date.now() - callStart}ms`);
       return;

@@ -7,7 +7,7 @@ export const SplashPage: FC = () => (
   <Layout dummy="semi">
     <WelcomeSection>
       <Stack align="center" justify="center">
-        <Loader size="large" />
+        <Loader size="large" data-testid="loader" />
       </Stack>
     </WelcomeSection>
   </Layout>

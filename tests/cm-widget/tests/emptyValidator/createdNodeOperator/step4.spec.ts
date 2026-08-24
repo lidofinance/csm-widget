@@ -6,10 +6,11 @@ import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CreateOperatorStep4Page } from '../../../pages/tabs/createNodeOperator';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { generateAddress } from 'tests/shared/helpers/accountData';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 
-const VALID_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
+const VALID_ADDRESS = generateAddress();
 const OPERATOR_NAME = 'Test Operator';
 const OPERATOR_DESCRIPTION = 'Test description';
 
@@ -17,7 +18,7 @@ test.describe('Operator without keys. Step 4.', { tag: [Tags.forked] }, () => {
   let step4: CreateOperatorStep4Page;
 
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.page.goto('/');
+    await widgetService.createNodeOperatorPage.open();
     step4 = widgetService.createNodeOperatorPage.step4;
     await widgetService.createNodeOperatorPage.step1.fillForm(
       OPERATOR_TYPE.CM_PTO,

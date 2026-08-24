@@ -26,7 +26,7 @@ export const MembersContent: FC = () => {
     ((hasMembers || canManage) && rotationPending) ||
     (!hasMembers && canManage && formPending)
   ) {
-    return <Loader />;
+    return <Loader data-testid="loader" />;
   }
 
   if (data && data.members.length > 0) {

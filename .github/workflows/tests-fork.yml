@@ -14,6 +14,8 @@ on:
         options:
           - testnet
           - preview
+          - prod
+          - staging
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
         required: false
@@ -40,8 +42,6 @@ jobs:
       qase_project_id: CSM
       qase_plan_id: "8"
       staking_modules_ref: test/local-scripts
-      deploy_config: ./artifacts/hoodi/csm/upgrade-v3-hoodi.json
-      chain: hoodi
-      artifacts_dir: ./artifacts/hoodi/csm/
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
       preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
+      job_custom_name: "CSM widget (fork)"

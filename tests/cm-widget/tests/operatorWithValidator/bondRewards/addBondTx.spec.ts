@@ -29,47 +29,53 @@ test.describe(
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
     });
 
-    test('Should add bond and send Matomo form events', async ({
-      widgetService,
-    }) => {
-      const { addBond } = widgetService.bondRewardsPage;
+    test(
+      'Should add bond and send Matomo form events',
+      { tag: [Tags.smoke] },
+      async ({ widgetService }) => {
+        const { addBond } = widgetService.bondRewardsPage;
 
-      await test.step('Choose ETH and fill amount', async () => {
-        await addBond.selectBondToken(TOKENS.eth).click();
-        await addBond.amountInput.fill('0.1');
-        await expect(addBond.addBondButton).toBeEnabled();
-      });
+        await test.step('Choose ETH and fill amount', async () => {
+          await addBond.selectBondToken(TOKENS.eth).click();
+          await addBond.amountInput.fill('0.1');
+          await expect(addBond.addBondButton).toBeEnabled();
+        });
 
-      await test.step('Add bond and check Matomo start event', async () => {
-        await Promise.all([
-          matomoEventService.waitForEvent(
-            'e_n',
-            'cm_widget_submit_form_add_bond_start',
-          ),
-          addBond.addBondButton.click(),
-        ]);
-      });
+        await test.step('Add bond and check Matomo start event', async () => {
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_submit_form_add_bond_start',
+            ),
+            addBond.addBondButton.click(),
+          ]);
+        });
 
-      await test.step('Confirm transaction and check Matomo success event', async () => {
-        await widgetService.page.waitForSelector(
-          'text=Confirm this transaction in your wallet',
-          { timeout: STAGE_WAIT_TIMEOUT },
-        );
-        await Promise.all([
-          matomoEventService.waitForEvent(
-            'e_n',
-            'cm_widget_submit_form_add_bond_success',
+        await widgetService.confirmOperatorModal.confirm();
+
+        await test.step('Confirm transaction and check Matomo success event', async () => {
+          await widgetService.page.waitForSelector(
+            'text=Confirm this transaction in your wallet',
             { timeout: STAGE_WAIT_TIMEOUT },
-          ),
-          widgetService.walletPage.confirmTx(),
-        ]);
-      });
+          );
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_submit_form_add_bond_success',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            ),
+            widgetService.walletPage.confirmTx(),
+          ]);
+        });
 
-      await test.step('Success message is shown', async () => {
-        await expect(
-          widgetService.page.getByText('Adding Bond operation was successful'),
-        ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
-      });
-    });
+        await test.step('Success message is shown', async () => {
+          await expect(
+            widgetService.page.getByText(
+              'Adding Bond operation was successful',
+            ),
+          ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
+        });
+      },
+    );
   },
 );

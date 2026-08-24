@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
-import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { TxModal } from 'tests/csm-widget/pages/elements/common/element.txProgressModal';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
@@ -25,12 +24,11 @@ test.describe('Operator without validator. Address blacklist validation.', async
 
   test(
     qase(273, 'Should open access denied modal after added extended key'),
-    async ({ widgetService }) => {
+    async ({ widgetService, keysGeneratorService }) => {
       const keysPage = widgetService.keysPage;
       await keysPage.goto();
       const submitPage = keysPage.createNodeOperatorForm;
 
-      const keysGeneratorService = new KeysGeneratorService();
       const keys = keysGeneratorService.generateKeys();
 
       await test.step('Submit keys with extended manager permissions', async () => {

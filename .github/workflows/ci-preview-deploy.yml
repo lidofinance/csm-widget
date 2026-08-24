@@ -77,3 +77,4 @@ jobs:
       stand_type: "preview"
       tags: "smoke"
       qase_plan_id: 5 # Smoke Preview Plan
+      job_custom_name: "Preview CSM smoke"

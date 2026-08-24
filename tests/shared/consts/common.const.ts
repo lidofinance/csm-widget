@@ -11,4 +11,8 @@ export enum Tags {
   smoke = '@smoke',
   performTX = '@performTX',
   forked = '@forked',
+  noProd = '@noProd',
+  noStaging = '@noStaging',
+  noTestnet = '@noTestnet',
+  noPreview = '@noPreview',
 }

@@ -1,7 +1,17 @@
 import { randomBytes } from 'crypto';
+import { getAddress } from 'viem';
 
-export const generateAddress = () => {
-  return '0x' + randomBytes(20).toString('hex');
+/**
+ * Generates a random address.
+ *
+ * Pass `checksum = true` when the address is compared against what the UI
+ * renders after reading it back from chain: the widget shows such addresses in
+ * EIP-55 checksum form, and Playwright text assertions are case-sensitive.
+ * For filling inputs the default lowercase form is fine — viem accepts it.
+ */
+export const generateAddress = (checksum = false) => {
+  const address = '0x' + randomBytes(20).toString('hex');
+  return checksum ? getAddress(address) : address;
 };
 
 export const generateWithdrawalCredentials = (isCM = false) => {

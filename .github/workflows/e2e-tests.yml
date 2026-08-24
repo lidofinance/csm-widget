@@ -55,11 +55,6 @@ on:
         required: false
         type: string
         default: ""
-      chain:
-        description: "CHAIN name (fork only)."
-        required: false
-        type: string
-        default: ""
       artifacts_dir:
         description: "ARTIFACTS_DIR path (fork only)."
         required: false
@@ -75,15 +70,23 @@ on:
         required: false
         type: string
         default: ""
+      report_enabled:
+        description: "Enable slack report."
+        required: false
+        type: boolean
+        default: false
+      job_custom_name:
+        description: "Human-readable name of the calling job, used as the Slack report title. Job names are not exposed to called workflows, so every caller has to pass it explicitly."
+        required: true
+        type: string
 
 jobs:
   test:
-    name: Run e2e tests
     runs-on: ubuntu-24.04
     timeout-minutes: ${{ inputs.timeout_minutes }}
     env:
       # Required envs
-      RPC_URL: ${{ secrets.RPC_URL }}
+      RPC_URL_TOKEN: ${{ secrets.RPC_URL_TOKEN }}
       WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
       WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
       EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
@@ -101,10 +104,12 @@ jobs:
       GH_EVENT_NAME: ${{ github.event_name }}
       NODE_OPTIONS: --max-old-space-size=4096
       TEST_TAGS: ${{ inputs.test_tags }}
-      REPORT_ENABLED: ${{ github.event_name == 'schedule' && 'true' || 'false' }}
+      REPORT_ENABLED: ${{ (github.event_name == 'schedule' || inputs.report_enabled) && 'true' || 'false' }}
+      JOB_CUSTOM_NAME: ${{ inputs.job_custom_name }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       SLACK_DUTY_TAG: "S09H269H2TT"
       ARTIFACT_PASSWORD: ${{ secrets.ARTIFACT_PASSWORD }}
+      REPORT_FORMAT: v3
 
       # Optional envs
       REFUSE_CF_BLOCK_NAME: ${{ secrets.REFUSE_CF_BLOCK_NAME }}
@@ -119,8 +124,8 @@ jobs:
 
       # Fork envs (ignored unless use_fork=true)
       USE_FORK: ${{ inputs.use_fork }}
-      DEPLOY_CONFIG: ${{ inputs.deploy_config }}
-      CHAIN: ${{ inputs.chain }}
+      # prod/staging → mainnet, testnet/preview → hoodi
+      CHAIN: ${{ (inputs.stand_type == 'prod' || inputs.stand_type == 'staging') && 'mainnet' || 'hoodi' }}
 
     steps:
       - uses: actions/checkout@v7

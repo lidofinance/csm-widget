@@ -12,7 +12,7 @@ export class ProdConfig extends BaseConfig {
         chainId: 1,
         tokenSymbol: 'ETH',
         chainName: 'Ethereum Mainnet',
-        rpcUrl: process.env.RPC_URL as string,
+        rpcUrl: this.getRpcUrl('prod'),
         scan: 'https://etherscan.io/',
       },
       nodeConfig: {
@@ -20,10 +20,10 @@ export class ProdConfig extends BaseConfig {
           mockEnabled: true,
           rpcUrlToMock: [`.*/api/rpc\\?chainId=1`],
         },
-        rpcUrl: process.env.RPC_URL as string,
+        rpcUrl: this.getRpcUrl('prod'),
         derivationPath: "m/44'/60'/0'/0",
         host: '127.0.0.1',
-        port: 8545,
+        port: process.env.ANVIL_PORT ? parseInt(process.env.ANVIL_PORT) : 8545,
       },
       monitoringConfig: {
         urls: {
@@ -36,6 +36,16 @@ export class ProdConfig extends BaseConfig {
           migaLabs: 'https://migalabs.io/entities',
         },
         stakingModuleIndex: 4,
+      },
+      keysGeneratorConfig: {
+        chain: 'mainnet',
+        withdrawalCredentials: '0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f',
+        password: 'testtest',
+      },
+      justConfig: {
+        chain: 'mainnet',
+        deployConfig: './artifacts/mainnet/csm/upgrade-v3-mainnet.json',
+        artifactsDir: './artifacts/mainnet',
       },
     };
   }
