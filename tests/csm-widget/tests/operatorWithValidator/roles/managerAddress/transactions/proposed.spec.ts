@@ -11,12 +11,16 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
     await widgetService.settingsPage.managerAddressPage.open();
   });
 
-  test.afterEach(async ({ widgetService }) => {
+  test.afterEach(async ({ widgetService, csmSDK }) => {
     await test.step('Revoke proposal role', async () => {
       // @todo: need to add cancel all tx before.
       await widgetService.settingsPage.managerAddressPage.open();
       await widgetService.page.waitForTimeout(1000);
-      await widgetService.settingsPage.managerAddressPage.revokePendingRole();
+
+      const noId = await widgetService.extractNodeOperatorId();
+      if (await csmSDK.isPendingRole(noId, 'manager')) {
+        await widgetService.settingsPage.managerAddressPage.revokePendingRole();
+      }
     });
   });
 
