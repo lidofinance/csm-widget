@@ -40,6 +40,11 @@ export class ProdConfig extends BaseConfig {
         deployConfig: './artifacts/mainnet/curated/deploy-mainnet.json',
         artifactsDir: './artifacts/mainnet',
       },
+      ipfsConfig: {
+        gateway:
+          (process.env.IPFS_GATEWAY as `${string}/ipfs/`) ||
+          'http://127.0.0.1:8080/ipfs/',
+      },
     };
 
     this.linkTargets = {

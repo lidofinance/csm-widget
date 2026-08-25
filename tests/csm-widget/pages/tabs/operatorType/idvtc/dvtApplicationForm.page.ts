@@ -3,6 +3,7 @@ import { WalletPage } from '@lidofinance/wallets-testing-wallets';
 import { SignInForm } from '../shared/signInForm.page';
 import { DvtApplyForm } from './dvtApplyForm.page';
 import { DvtApplicationFormStatus } from './dvtApplicationFormStatus.page';
+import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 export class DvtApplicationForm {
   page: Page;
@@ -25,7 +26,10 @@ export class DvtApplicationForm {
   async open() {
     await test.step('Open IDVTC Application Form tab for Operator Type page', async () => {
       await this.page.goto('/type/idvtc-apply');
-      await this.loader.waitFor({ state: 'detached' });
+      await this.loader.waitFor({
+        state: 'detached',
+        timeout: RPC_WAIT_TIMEOUT,
+      });
     });
   }
 }

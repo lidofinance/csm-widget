@@ -14,6 +14,7 @@ import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { HttpMockerService } from 'tests/shared/services/httpMocker.service';
 import { EvmNodeService } from 'tests/shared/services/evmNode.service';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
+import { IpfsGatewayProxyService } from 'tests/shared/services/ipfsGatewayProxy.service';
 
 type WorkerFixtures = {
   // fixture-options
@@ -28,6 +29,7 @@ type WorkerFixtures = {
   forkActionService: ForkActionsService;
   httpMockerService: HttpMockerService;
   evmNode: EvmNodeService;
+  ipfsGatewayProxy: IpfsGatewayProxyService;
 };
 
 export const test = base.extend<
@@ -83,7 +85,7 @@ export const test = base.extend<
 
   // fixture-methods
   browserWithWallet: [
-    async ({ secretPhrase, useFork, csmSDK }, use) => {
+    async ({ secretPhrase, useFork, csmSDK, ipfsGatewayProxy }, use) => {
       const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
       const rpcUrl = useFork
         ? forkRpcURL
@@ -130,7 +132,9 @@ export const test = base.extend<
         await warmUpForkedNode(csmSDK, secretPhrase);
       }
 
-      await use(browserService);
+      await ipfsGatewayProxy.install(
+        browserService.getBrowserContextPage().context(),
+      );
 
       // We abort this request because we need to reduce the request count to the Elliptic api
       await browserService
@@ -139,6 +143,8 @@ export const test = base.extend<
         .route(new RegExp('.*/api/validation\\?.*'), async (route) => {
           await route.abort();
         });
+
+      await use(browserService);
 
       await browserService.teardown();
     },
@@ -195,6 +201,16 @@ export const test = base.extend<
           widgetService.page,
           // @ts-expect-error may be null
           widgetFullConfig.standConfig.mockConfig,
+        ),
+      );
+    },
+    { scope: 'worker' },
+  ],
+  ipfsGatewayProxy: [
+    async ({}, use) => {
+      await use(
+        new IpfsGatewayProxyService(
+          widgetFullConfig.standConfig.ipfsConfig.gateway,
         ),
       );
     },

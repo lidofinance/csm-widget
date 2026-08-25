@@ -7,4 +7,6 @@ export * from './parameters-modal';
 export * from './role-badge/role-badge';
 export * from './switch-operator-button/switch-operator-button';
 export * from './switch-modal';
+export * from './switch-to-operator-button';
+export * from './use-switch-operator';
 export * from './utils';

@@ -144,9 +144,12 @@ export const detectAppConfig = async (origin) => {
 // can hang past `domcontentloaded` (the event never fires) or briefly serve 404 chunks — a single
 // plain goto then just times out. Instead: `commit` the navigation (resolves as soon as the response
 // starts, not blocked on a slow/stuck load), then wait for the app shell to actually render (the
-// connect button or the account chip). On failure, retry the whole navigation — a fresh goto picks up
-// freshly-compiled chunks once the server settles. Used for the first load and every route change.
-const APP_READY = '[data-testid="connectBtn"], [data-testid="accountSectionHeader"]';
+// connect button, the account chip, or — when a connected wallet manages 2+ operators and no cached
+// pick matches one of them — the mandatory operator-selection prompt, since the app shell is
+// deliberately hidden while that prompt is open). On failure, retry the whole navigation — a fresh
+// goto picks up freshly-compiled chunks once the server settles. Used for the first load and every
+// route change.
+const APP_READY = '[data-testid="connectBtn"], [data-testid="accountSectionHeader"], [data-testid="selectModalOperatorRow"]';
 export const gotoReady = async (page, url, { attempts = 3, navTimeout = 25000, readyTimeout = 25000 } = {}) => {
   let lastErr;
   for (let i = 1; i <= attempts; i++) {
@@ -211,8 +214,10 @@ export const diagnosticsSummary = (d) => {
 
 // Open the app already connected as `address` (or as operator #`operatorId`'s `role` address).
 // `origin` may be any instance (defaults to localhost:3000 / $APP_ORIGIN). module/chainId auto-detect
-// from the app unless given. Returns { context, wallet, page, diagnostics, address, operator, origin,
-// module, chainId, theme, viewport }. Caller is responsible for context.close().
+// from the app unless given. `selectPrompt: true` captures the mandatory operator-selection prompt
+// instead of resolving it — see the flag's own comment below. Returns { context, wallet, page,
+// diagnostics, address, operator, origin, module, chainId, theme, viewport }. Caller is responsible
+// for context.close().
 export const connectAs = async ({
   address,
   operatorId,
@@ -225,6 +230,7 @@ export const connectAs = async ({
   theme,
   viewport,
   connect = true,
+  selectPrompt = false, // capture the operator-selection prompt instead of auto-resolving it
   onPage, // invoked (page, context, diagnostics) as soon as the page exists — lets callers
   //         screenshot the failure point even if a later step throws.
 } = {}) => {
@@ -262,6 +268,20 @@ export const connectAs = async ({
   if (target) {
     await wallet.setup({ origin, network: chainId, account: target }); // eth_accounts returns it from boot
     await seedConnection(context, { address: target, chainId });
+  }
+  if (selectPrompt) {
+    // Force the prompt to reappear even if an earlier run cached a pick for this address: clear only
+    // the `sm-`-prefixed keys the app writes the selection under, leaving the wagmi/reef-knot keys
+    // seedConnection just wrote intact — otherwise the app wouldn't reconnect at all.
+    await context.addInitScript(() => {
+      try {
+        Object.keys(localStorage)
+          .filter((k) => k.startsWith('sm-'))
+          .forEach((k) => localStorage.removeItem(k));
+      } catch {
+        /* localStorage unavailable on this page — harmless */
+      }
+    });
   }
   await gotoReady(page, origin);
 
@@ -301,10 +321,15 @@ export const connectAs = async ({
       await wallet.switchAccount(page, target);
       await connectModal(page);
     }
+
+    // Only now is the wallet definitely connected, so the selection prompt (if this wallet needs one)
+    // has had its chance to render — resolving any earlier races the operators query.
+    if (!selectPrompt) await resolveOperatorSelection(page, operatorId);
   }
 
   if (route && route !== '/') {
     await gotoReady(page, origin + route);
+    if (connect && !selectPrompt) await resolveOperatorSelection(page, operatorId);
   }
   await settle(page);
 
@@ -313,7 +338,7 @@ export const connectAs = async ({
   // switch the in-app operator selection to N and confirm. Done last, on the final route page,
   // because the selection is connection-scoped and a fresh navigation resets it to the default.
   let operator = null;
-  if (connect) {
+  if (connect && !selectPrompt) {
     operator = await currentOperatorId(page);
     if (operatorId != null && operator !== String(operatorId)) {
       operator = (await ensureOperator(page, operatorId)).operator;
@@ -339,12 +364,26 @@ export const connectModal = async (page) => {
   }
   await page.waitForTimeout(300);
   await page.locator('button, [role="button"], a').filter({ hasText: /^Browser/ }).first().click();
-  await page.getByTestId('accountSectionHeader').first().waitFor({ state: 'visible', timeout: 20000 });
+  if (!(await isConnected(page, 20000))) {
+    throw new Error('connect modal did not produce a connected session (no account chip, no operator-selection prompt)');
+  }
 };
 
-// Is a wallet currently connected? (header account chip present). Used to confirm a seeded reconnect.
-export const isConnected = (page, timeout = 8000) =>
-  page.getByTestId('accountSectionHeader').first().isVisible({ timeout }).catch(() => false);
+// Is a wallet currently connected? Used to confirm a seeded reconnect. True for the normal shell
+// (header account chip) AND for a pending operator-selection prompt — that prompt replaces the shell
+// while it is open, so waiting only for the chip would read a connected wallet as disconnected.
+export const isConnected = (page, timeout = 15000) =>
+  page
+    .waitForFunction(
+      () =>
+        !!(
+          document.querySelector('[data-testid="accountSectionHeader"]') ||
+          document.querySelector('[data-testid="selectModalOperatorRow"]')
+        ),
+      { timeout },
+    )
+    .then(() => true)
+    .catch(() => false);
 
 // Seed the EXACT localStorage that wagmi + reef-knot persist after a real connect (captured from a live
 // session), so the app auto-reconnects the injected "browserExtension" connector on the next load —
@@ -405,6 +444,7 @@ export const readState = (page) =>
       connected: !document.querySelector('[data-testid="connectBtn"]'),
       account: t('accountSectionHeader'),
       operator: t('nodeOperatorHeader'),
+      selectPrompt: !!document.querySelector('[data-testid="selectModalOperatorRow"]'),
     };
   });
 
@@ -415,12 +455,47 @@ export const currentOperatorId = (page) =>
     return m ? m[1] : null;
   });
 
+// Resolve the mandatory "Select Node Operator" prompt the app opens when the connected wallet
+// manages 2+ operators and no cached pick matches one of them. The whole row is the click target
+// (there is no per-row button). Picks #operatorId when given, else the first row; no-op when no
+// prompt is open, so it is safe to call after every navigation.
+export const resolveOperatorSelection = async (page, operatorId) => {
+  const rows = page.getByTestId('selectModalOperatorRow');
+  if (!(await rows.first().isVisible({ timeout: 3000 }).catch(() => false))) {
+    return { prompted: false, selected: null };
+  }
+
+  let target = rows.first();
+  if (operatorId != null) {
+    const want = String(operatorId);
+    // `#318(?!\d)` so #31 / #3 don't match #318, and #318 doesn't match #3180.
+    const match = rows.filter({ hasText: new RegExp(`#${want}(?!\\d)`) });
+    if ((await match.count()) === 0) {
+      const available = (await rows.allInnerTexts().catch(() => [])).map((t) => t.replace(/\s+/g, ' ').trim());
+      throw new Error(`Operator #${want} not available for the connected address. Selection prompt shows: ${JSON.stringify(available)}`);
+    }
+    target = match.first();
+  }
+
+  const picked = (await target.innerText().catch(() => '')).match(/#(\d+)/)?.[1] ?? null;
+  await target.click();
+  await rows.first().waitFor({ state: 'detached', timeout: 10000 }).catch(() => {});
+  await settle(page);
+  log(`selected operator #${picked} in the selection prompt`);
+  return { prompted: true, selected: picked };
+};
+
 // Make the app's ACTIVE operator be #operatorId by driving the in-app switcher. No-op if it's
 // already active. This changes only the app-level operator selection, not the wallet account —
 // the connected address must manage that operator (else the switcher won't list it and we throw).
 export const ensureOperator = async (page, operatorId) => {
   const want = String(operatorId);
   if ((await currentOperatorId(page)) === want) return { switched: false, operator: want };
+
+  // The switcher lives in the header, which is hidden while the selection prompt is open — resolve
+  // that first, and skip the switcher entirely when the prompt already landed on the wanted operator.
+  const { selected } = await resolveOperatorSelection(page, operatorId);
+  if (selected === want) return { switched: true, operator: want };
 
   const header = page.getByTestId('nodeOperatorHeader').first();
   if (!(await header.isVisible({ timeout: 5000 }).catch(() => false))) {
