@@ -75,6 +75,7 @@ export const MockDepositQueueProvider: FC<
   // Mock node operator context value
   const mockNodeOperatorContextValue: NodeOperatorContextValue = {
     isPending: false,
+    needsSelection: false,
     nodeOperator: {
       id: BigInt(scenario.nodeOperatorId),
       // Add other required properties if needed

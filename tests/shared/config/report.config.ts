@@ -58,7 +58,7 @@ export const getTestRunName = () => {
     `[st:@${process.env.STAND_TYPE || '-'}] ` +
     `[t:${process.env.TEST_TAGS || '-'}] ` +
     `[b:${getBranchName()}]` +
-    `[w:${process.env.WALLET_NAME || 'metamask'}]`
+    `[w:${process.env.WALLET_NAME || 'walletconnect'}]`
   );
 };
 
@@ -122,6 +122,7 @@ const reporters: {
       // ───── Slack settings ─────
       slackWebhookUrl: process.env.SLACK_WEBHOOK_URL,
       slackDutyTag: process.env.SLACK_DUTY_TAG,
+      qaseProjectId: process.env.QASE_PROJECT_ID,
     },
   ],
   qaseReporter: [
@@ -140,6 +141,14 @@ const reporters: {
           complete: true,
           title: getTestRunName(),
           description: getTestRunDescription(),
+          tags: [
+            `ci_event:${process.env.GH_EVENT_NAME || 'none'}`,
+            `suite:${process.env.TEST_SUITE || 'ALL'}`,
+            `stand:${process.env.STAND_TYPE || '-'}`,
+            `tags:${process.env.TEST_TAGS || '-'}`,
+            `branch:${getBranchName()}`,
+            `wallet:${process.env.WALLET_NAME || 'walletconnect'}`,
+          ],
         },
         plan: {
           id: process.env.QASE_PLAN_ID,

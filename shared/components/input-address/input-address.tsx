@@ -89,7 +89,7 @@ export const InputAddress = forwardRef<
           (!simple && (
             <IdenticonSlot>
               {isLoading ? (
-                <Loader size="small" />
+                <Loader size="small" data-testid="loader" />
               ) : (
                 address && <Identicon address={address} />
               )}

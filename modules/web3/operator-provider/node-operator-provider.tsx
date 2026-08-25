@@ -11,12 +11,14 @@ import {
   useMemo,
 } from 'react';
 import invariant from 'tiny-invariant';
+import { useRegisterForgetCachedOperator } from './forget-cached-operator';
 import { useActiveNodeOperator } from './use-active-node-operator';
 import { useAvailableOperators } from './use-available-operators';
 
 export type NodeOperatorContextValue = {
   isPending: boolean;
   nodeOperator: NodeOperatorShortInfo | undefined;
+  needsSelection: boolean;
   switchNodeOperator: (id: NodeOperatorId) => void;
 };
 
@@ -52,8 +54,13 @@ export const useNodeOperatorId = <
 };
 
 export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
+  useRegisterForgetCachedOperator();
   const { data: list, isPending } = useAvailableOperators();
-  const [active, setActive] = useActiveNodeOperator(list);
+  const {
+    nodeOperator: active,
+    setActive,
+    needsSelection,
+  } = useActiveNodeOperator(list);
 
   const switchNodeOperator = useCallback(
     (id: NodeOperatorId) => {
@@ -66,8 +73,15 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 
   const value = useMemo(
-    () => ({ isPending, nodeOperator: active, switchNodeOperator }),
-    [active, isPending, switchNodeOperator],
+    // needsSelection folds into isPending so GateLoaded keeps a SplashPage under the modal
+    // instead of flashing StarterPackPage/CmWelcomePage and redirecting via NOT_NODE_OPERATOR
+    () => ({
+      isPending: isPending || needsSelection,
+      nodeOperator: active,
+      needsSelection,
+      switchNodeOperator,
+    }),
+    [active, isPending, needsSelection, switchNodeOperator],
   );
 
   return (

@@ -1,37 +1,52 @@
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { Button } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { useModalActions } from 'providers/modal-provider';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { LocalLink, useNavigate } from 'shared/navigate';
+import {
+  SwitchToOperatorButton,
+  useNeedsOperatorSwitch,
+  useSwitchOperator,
+} from 'shared/node-operator';
+import { useNavigate } from 'shared/navigate';
 
 type Props = {
+  nodeOperatorId: NodeOperatorId;
   availableGatesCount: number;
   hasManagerRole: boolean;
 };
 
 export const CuratedOperatorSuccessActions: FC<Props> = ({
+  nodeOperatorId,
   availableGatesCount,
   hasManagerRole,
 }) => {
   const n = useNavigate();
   const { closeModal } = useModalActions();
+  const switchToKeysSubmit = useSwitchOperator(PATH.KEYS_SUBMIT);
+  const needsSwitch = useNeedsOperatorSwitch(nodeOperatorId);
 
   const handleCreateAnother = async () => {
     closeModal();
     void n(PATH.CREATE);
   };
 
+  // no auto-switch on create, so Add keys must switch to the new operator before opening the keys-submit form
+  const handleAddKeys = () => {
+    closeModal();
+    switchToKeysSubmit(nodeOperatorId);
+  };
+
   const showCreateAnother = availableGatesCount > 1;
 
   return (
     <Stack direction="column" gap="sm">
+      <SwitchToOperatorButton nodeOperatorId={nodeOperatorId} />
       {hasManagerRole && (
-        <LocalLink href={PATH.KEYS_SUBMIT}>
-          <Button fullwidth size="sm">
-            Add keys
-          </Button>
-        </LocalLink>
+        <Button fullwidth size="sm" onClick={handleAddKeys}>
+          {needsSwitch ? 'Switch and Add keys' : 'Add keys'}
+        </Button>
       )}
       {showCreateAnother && (
         <Button
