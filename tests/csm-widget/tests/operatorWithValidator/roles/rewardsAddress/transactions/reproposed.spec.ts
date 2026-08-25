@@ -134,7 +134,7 @@ test.describe('Roles. Rewards Address. Transactions. Reproposed Address', () => 
       209,
       'Should success complete transaction of repropose a new Rewards Address',
     ),
-    { tag: [Tags.smoke, Tags.performTX] },
+    { tag: [Tags.smoke] },
     async ({ widgetService }) => {
       const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
       const accountForSecondRolesChanged = generateAddress();

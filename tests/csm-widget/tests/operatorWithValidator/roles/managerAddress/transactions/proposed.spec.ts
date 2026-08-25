@@ -61,7 +61,7 @@ test.describe('Roles. Manager Address. Transactions. Proposed Address', () => {
 
   test(
     qase(77, 'Propose a new Manager Address with valid input'),
-    { tag: [Tags.smoke, Tags.performTX] },
+    { tag: [Tags.smoke] },
     async ({ widgetService }) => {
       const managerAddressPage = widgetService.settingsPage.managerAddressPage;
 

@@ -58,7 +58,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
 
   test(
     qase(156, 'Should success complete revoke Reward role changes'),
-    { tag: [Tags.smoke, Tags.performTX] },
+    { tag: [Tags.smoke] },
     async ({ widgetService, secretPhrase }) => {
       const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
       const currentAddress = mnemonicToAccount(secretPhrase).address;

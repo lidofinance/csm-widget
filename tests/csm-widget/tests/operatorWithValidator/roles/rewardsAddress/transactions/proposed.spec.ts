@@ -105,7 +105,7 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
       74,
       'Should success complete transaction of propose a new Rewards Address',
     ),
-    { tag: [Tags.smoke, Tags.performTX] },
+    { tag: [Tags.smoke] },
     async ({ widgetService }) => {
       const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
       const settingsPage = widgetService.settingsPage;

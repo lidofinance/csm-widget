@@ -16,7 +16,7 @@ const VALID_ADDRESS = generateAddress(true);
 
 test.describe(
   'Settings. Rewards claimer. Transactions.',
-  { tag: [Tags.performTX, Tags.forked] },
+  { tag: [Tags.forked] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
