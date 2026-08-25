@@ -30,6 +30,9 @@ export type StandConfig = {
   matomoUrl: string;
   keysGeneratorConfig: KeysGeneratorConfig;
   justConfig: JustConfig;
+  ipfsConfig: {
+    gateway: `${string}/ipfs/`;
+  };
 };
 
 export type LinkTargets = {

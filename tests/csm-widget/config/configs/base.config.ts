@@ -47,6 +47,9 @@ export type StandConfig = {
     stakingModuleIndex: number;
   };
   justConfig: JustConfig;
+  ipfsConfig: {
+    gateway: `${string}/ipfs/`;
+  };
 };
 
 export type IConfig = {

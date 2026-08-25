@@ -15,6 +15,7 @@ import {
   STATE_FILE,
 } from './walletSetup/walletPresets.state';
 import { existsSync } from 'fs';
+import { IpfsNodeService } from 'tests/shared/services/ipfsNode.service';
 
 const passthroughStep = <T>(title: string, body: () => Promise<T>) => {
   console.info(`[step] ${title}`);
@@ -22,6 +23,14 @@ const passthroughStep = <T>(title: string, body: () => Promise<T>) => {
 };
 
 export default async function globalSetup() {
+  if (process.env.CI) {
+    await new IpfsNodeService().start();
+  } else {
+    console.info(
+      `[globalSetup] You are using local IPFS node, make sure you have it running on ${widgetFullConfig.standConfig.ipfsConfig.gateway}`,
+    );
+  }
+
   if (process.env.USE_FORK !== 'true') {
     return;
   }
