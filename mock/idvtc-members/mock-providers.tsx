@@ -23,6 +23,7 @@ const mockSiweAuth: SiweAuthContextType = {
 
 const mockNodeOperator: NodeOperatorContextValue = {
   isPending: false,
+  needsSelection: false,
   nodeOperator: {
     nodeOperatorId: MOCK_OPERATOR_ID,
   } as NodeOperatorShortInfo,

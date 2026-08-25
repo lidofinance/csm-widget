@@ -11,7 +11,7 @@ test.describe('Navigation. Empty validator.', { tag: [Tags.forked] }, () => {
   let nav: NavigationPage;
 
   test.beforeEach(async ({ widgetService }) => {
-    await widgetService.page.goto('/');
+    await widgetService.welcomePage.goto();
     nav = new NavigationPage(widgetService.page);
   });
 

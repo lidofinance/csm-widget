@@ -35,7 +35,7 @@ test.describe(
       });
 
       await test.step('Go through the creation wizard', async () => {
-        await widgetService.page.goto('/');
+        await widgetService.createNodeOperatorPage.open();
         await widgetService.createNodeOperatorPage.step1.fillForm(
           OPERATOR_TYPE.CM_PTO,
         );

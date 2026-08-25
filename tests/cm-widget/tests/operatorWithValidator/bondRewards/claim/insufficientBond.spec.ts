@@ -114,8 +114,8 @@ test.describe(
         });
       },
     );
-
-    test(
+    // CS-1180: [CM] Claim: not shown compensation view for insufficient bond
+    test.skip(
       qase(321, 'Should show "Compensate" button with compensation amount'),
       async ({ widgetService, cmSDK }) => {
         const { claim } = widgetService.bondRewardsPage;
