@@ -49,6 +49,11 @@ export class TestnetConfig extends BaseConfig {
         deployConfig: './artifacts/hoodi/csm/upgrade-v3-hoodi.json',
         artifactsDir: './artifacts/hoodi',
       },
+      ipfsConfig: {
+        gateway:
+          (process.env.IPFS_GATEWAY as `${string}/ipfs/`) ||
+          'http://127.0.0.1:8080/ipfs/',
+      },
     };
   }
 }
