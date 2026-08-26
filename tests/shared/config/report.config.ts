@@ -1,3 +1,4 @@
+import path from 'path';
 import { ReporterDescription } from '@playwright/test';
 import { widgetFullConfig } from '../../csm-widget/config';
 
@@ -94,7 +95,7 @@ const reporters: {
   consoleReporter: ['list'],
   githubReporter: ['github'],
   githubSummaryReporter: [
-    '../shared/config/githubSummary.reporter.ts',
+    path.resolve(__dirname, 'githubSummary.reporter.ts'),
     { qaseProjectName: process.env.QASE_PROJECT_ID },
   ],
   pgReporter: [
