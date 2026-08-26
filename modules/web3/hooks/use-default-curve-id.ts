@@ -8,7 +8,7 @@ export const useDefaultCurveId = () => {
   const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
-    queryKey: ['default-curve-id'],
+    queryKey: ['default-curve-id', { module: MODULE_NAME.CSM }],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(sdk);

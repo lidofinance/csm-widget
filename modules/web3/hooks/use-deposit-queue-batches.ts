@@ -12,7 +12,7 @@ export const useDepositQueueBatches = <TData = DepositQueueBatch[][]>(
   const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
-    queryKey: [...KEY_DEPOSIT_QUEUE_BATCHES],
+    queryKey: [...KEY_DEPOSIT_QUEUE_BATCHES, { module: MODULE_NAME.CSM }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(sdk);

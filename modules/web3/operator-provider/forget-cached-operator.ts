@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { useDappStatus } from '../hooks';
-import { useSmSDK } from '../web3-provider';
-import { clearCachedOperatorId } from './use-cached-id';
+import { clearCachedOperator } from './use-cached-id';
 
 let forget: (() => void) | undefined;
 
@@ -16,18 +15,15 @@ export const forgetCachedOperator = () => forget?.();
 // and inferring a disconnect from those silently deleted the selection.
 export const useRegisterForgetCachedOperator = () => {
   const { address } = useDappStatus();
-  const {
-    core: { moduleId },
-  } = useSmSDK();
 
   useEffect(() => {
     if (!address) return;
 
-    const clear = () => clearCachedOperatorId(moduleId, address);
+    const clear = () => clearCachedOperator(address);
     forget = clear;
 
     return () => {
       if (forget === clear) forget = undefined;
     };
-  }, [address, moduleId]);
+  }, [address]);
 };

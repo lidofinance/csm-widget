@@ -2,6 +2,7 @@ export * from './use-balance';
 export * from './use-bond-by-keys-count';
 export * from './use-bond-next-keys-count';
 export * from './use-curated-gates-eligibility';
+export * from './use-csm02-default-curve-id';
 export * from './use-curve-parameters';
 export * from './use-custom-rewards-claimer';
 export * from './use-dapp-status';

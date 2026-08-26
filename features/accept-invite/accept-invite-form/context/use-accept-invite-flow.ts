@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { PATH } from 'consts/urls';
-import { useAppendOperator, useSmSDK } from 'modules/web3';
+import { useAppendOperator, useModule, useSmSDK } from 'modules/web3';
 import {
   type Executable,
   type FlowResolver,
@@ -16,8 +16,7 @@ import {
 } from './types';
 
 export type AcceptInviteFlow =
-  | { action: 'no-invite' }
-  | ({ action: 'accept' } & Executable);
+  { action: 'no-invite' } | ({ action: 'accept' } & Executable);
 
 export const useAcceptInviteFlowResolver = (): FlowResolver<
   AcceptInviteFormInputType,
@@ -25,7 +24,8 @@ export const useAcceptInviteFlowResolver = (): FlowResolver<
   AcceptInviteFlow
 > => {
   const sdk = useSmSDK();
-  const appendNO = useAppendOperator();
+  const { module } = useModule();
+  const appendNO = useAppendOperator(module);
   const n = useNavigate();
   const buildCallback = useTxModalStagesAcceptInvite();
 

@@ -13,6 +13,7 @@ import {
   NodeOperatorContext,
   NodeOperatorContextValue,
 } from 'modules/web3/operator-provider/node-operator-provider';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { STRATEGY_IMMUTABLE } from 'consts';
 import {
   KEY_DEPOSIT_QUEUE_BATCHES,
@@ -80,6 +81,7 @@ export const MockDepositQueueProvider: FC<
       id: BigInt(scenario.nodeOperatorId),
       // Add other required properties if needed
     } as any,
+    activeModule: MODULE_NAME.CSM,
     switchNodeOperator: () => {}, // Mock function
   };
 

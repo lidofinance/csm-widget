@@ -1,10 +1,11 @@
 import {
   getNodeOperatorRoles,
+  MODULE_NAME,
   NodeOperatorId,
-  NodeOperatorShortInfo,
 } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { useDappStatus, useOperatorMetadata } from 'modules/web3';
+import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { CurveBadge } from '../curve-badge/curve-badge';
@@ -14,19 +15,19 @@ import { RoleBadge } from '../role-badge/role-badge';
 import { CmRowButtonStyle, CmRowDescriptor } from './cm-styles';
 
 type SelectRowProps = {
-  shortInfo: NodeOperatorShortInfo;
-  onSelect: (id: NodeOperatorId) => void;
+  shortInfo: ModuleNodeOperator;
+  onSelect: (id: NodeOperatorId, module: MODULE_NAME) => void;
 };
 
 export const SelectRow: FC<SelectRowProps> = ({ shortInfo, onSelect }) => {
   const { address } = useDappStatus();
-  const { nodeOperatorId, curveId } = shortInfo;
+  const { nodeOperatorId, curveId, module } = shortInfo;
   const roles = getNodeOperatorRoles(shortInfo, address);
   const { data: metadata } = useOperatorMetadata(nodeOperatorId);
 
   return (
     <CmRowButtonStyle
-      onClick={() => onSelect(nodeOperatorId)}
+      onClick={() => onSelect(nodeOperatorId, module)}
       data-testid="selectModalOperatorRow"
     >
       <Stack direction="column" gap="none">
@@ -44,7 +45,7 @@ export const SelectRow: FC<SelectRowProps> = ({ shortInfo, onSelect }) => {
         )}
       </Stack>
       <CmRowDescriptor>
-        <CurveBadge curveId={curveId} inline />
+        <CurveBadge curveId={curveId} module={module} inline />
         <DescriptorRolesStyle>
           {roles.map((role) => (
             <RoleBadge role={role} key={role} />

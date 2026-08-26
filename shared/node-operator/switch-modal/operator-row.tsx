@@ -1,7 +1,7 @@
 import {
   getNodeOperatorRoles,
+  MODULE_NAME,
   NodeOperatorId,
-  NodeOperatorShortInfo,
   SubOperatorStakeSummary,
 } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
@@ -12,6 +12,7 @@ import {
   useOperatorInfo,
   useOperatorMetadata,
 } from 'modules/web3';
+import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC, useMemo } from 'react';
 import { Stack } from 'shared/components';
 import { computeStakeData, getPercent } from 'utils';
@@ -30,10 +31,10 @@ export type OperatorAction = 'current' | 'switch' | 'view';
 
 type OperatorRowProps = {
   nodeOperatorId: NodeOperatorId;
-  shortInfo?: NodeOperatorShortInfo;
+  shortInfo?: ModuleNodeOperator;
   stakeSummary?: SubOperatorStakeSummary;
   action: OperatorAction;
-  onSwitch: (id: NodeOperatorId) => void;
+  onSwitch: (id: NodeOperatorId, module: MODULE_NAME) => void;
 };
 
 export const OperatorRow: FC<OperatorRowProps> = ({
@@ -78,7 +79,7 @@ export const OperatorRow: FC<OperatorRowProps> = ({
         <Stack gap="sm" center spaceBetween>
           <CmRowDescriptor>
             <DescriptorId id={nodeOperatorId} />
-            <CurveBadge curveId={curveId} inline />
+            <CurveBadge curveId={curveId} module={shortInfo?.module} inline />
             <DescriptorRolesStyle>
               {roles.map((role) => (
                 <RoleBadge role={role} key={role} />
@@ -87,7 +88,9 @@ export const OperatorRow: FC<OperatorRowProps> = ({
           </CmRowDescriptor>
           <ActionButton
             action={action}
-            onSwitch={() => onSwitch(nodeOperatorId)}
+            onSwitch={() =>
+              shortInfo && onSwitch(nodeOperatorId, shortInfo.module)
+            }
           />
         </Stack>
 

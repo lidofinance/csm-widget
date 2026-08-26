@@ -10,10 +10,10 @@ export const KEY_INVITES = ['invites'];
 export const useInvites = (customAddress?: Address) => {
   const { address: dappAddress } = useDappStatus();
   const address = customAddress ?? dappAddress;
-  const { discovery } = useSmSDK();
+  const { discovery, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_INVITES, { address }],
+    queryKey: [...KEY_INVITES, { address, module: core.moduleName }],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(address);
