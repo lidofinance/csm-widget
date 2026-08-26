@@ -1,4 +1,3 @@
-import path from 'path';
 import { ReporterDescription } from '@playwright/test';
 import { widgetFullConfig } from '../../csm-widget/config';
 
@@ -28,7 +27,6 @@ export const getReportConfig: () => ReporterDescription[] = function () {
   if (process.env.CI) {
     reporterConfig.push(
       reporters.githubReporter,
-      reporters.githubSummaryReporter,
       reporters.qaseReporter,
       reporters.chatReporter,
     );
@@ -48,6 +46,10 @@ export const getReportConfig: () => ReporterDescription[] = function () {
     ['../shared/config/skipper.reporter.ts'],
     // must stay outside secret-guard: it swallows errors thrown before onBegin
     ['../shared/config/globalError.reporter.ts'],
+    [
+      '../shared/config/githubSummary.reporter.ts',
+      { qaseProjectName: process.env.QASE_PROJECT_ID },
+    ],
   ];
 };
 
@@ -86,7 +88,6 @@ const reporters: {
   htmlReporter: ReporterDescription;
   consoleReporter: ReporterDescription;
   githubReporter: ReporterDescription;
-  githubSummaryReporter: ReporterDescription;
   chatReporter: ReporterDescription;
   pgReporter: ReporterDescription;
   qaseReporter: ReporterDescription;
@@ -94,10 +95,6 @@ const reporters: {
   htmlReporter: ['html', { open: 'never' }],
   consoleReporter: ['list'],
   githubReporter: ['github'],
-  githubSummaryReporter: [
-    path.resolve(__dirname, 'githubSummary.reporter.ts'),
-    { qaseProjectName: process.env.QASE_PROJECT_ID },
-  ],
   pgReporter: [
     '@lidofinance/pg-reporter',
     {
