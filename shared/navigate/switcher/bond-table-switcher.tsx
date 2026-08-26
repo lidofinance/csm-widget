@@ -5,7 +5,7 @@ import { Chip, TabItem, TabsHeader } from 'shared/components';
 type Item = {
   title: string;
   route: PATH;
-  suffix?: ReactNode;
+  suffix?: () => ReactNode;
   disabled?: boolean;
 };
 
@@ -17,7 +17,7 @@ const routes: Item[] = [
   {
     route: PATH.BOND_REBASE_HISTORY,
     title: 'Bond rebase',
-    suffix: <Chip>Coming soon</Chip>,
+    suffix: () => <Chip>Coming soon</Chip>,
     disabled: true,
   },
 ];
@@ -30,7 +30,7 @@ export const BondTableSwitcher: FC = () => {
           key={item.title}
           href={item.route}
           disabled={item.disabled}
-          extra={item.suffix}
+          extra={item.suffix?.()}
         >
           {item.title}
         </TabItem>
