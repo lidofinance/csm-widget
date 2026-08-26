@@ -11,6 +11,7 @@ import {
 import {
   LidoSDKCm,
   LidoSDKCsm,
+  LidoSDKCsm02,
   MODULE_NAME,
   SdkProps,
 } from '@lidofinance/lido-csm-sdk';
@@ -28,9 +29,17 @@ import {
 import { config } from 'config';
 import { useClApiUrl } from 'config/rpc/cl';
 import { useUserConfig } from 'config/user-config';
-import { isModuleCSM } from 'consts';
+import { deployedModules } from 'consts';
 
+// Safe runtime import cycle (web3-provider ↔ operator-provider): the context is
+// only read inside useSmSDK's body at render time, never at module top-level.
+import { NodeOperatorContext } from '../operator-provider/node-operator-provider';
 import { overridedAddresses } from './devnet';
+
+export type SmSDK = LidoSDKCsm | LidoSDKCsm02 | LidoSDKCm;
+export type CsmFamilySDK = LidoSDKCsm | LidoSDKCsm02;
+
+type SmSdkMap = Partial<Record<MODULE_NAME, SmSDK>>;
 
 type LidoSDKContextValue = {
   chainId: CHAINS;
@@ -40,10 +49,35 @@ type LidoSDKContextValue = {
   wstETH: LidoSDKwstETH;
   wrap: LidoSDKWrap;
   withdraw: LidoSDKWithdraw;
-  sm: LidoSDKCsm | LidoSDKCm;
+  sm: SmSdkMap;
 };
 
 const chainId = config.defaultChain;
+
+const SM_SDK_CONSTRUCTORS = {
+  [MODULE_NAME.CSM]: LidoSDKCsm,
+  [MODULE_NAME.CM]: LidoSDKCm,
+  [MODULE_NAME.CSM_02]: LidoSDKCsm02,
+} as const;
+
+// The primary module must construct — a throw here is fatal by design. Secondary
+// modules are dropped from the runtime set instead, so an availability/SDK
+// mismatch on rollout fails closed rather than crashing the app.
+const buildSmSdkMap = (smProps: SdkProps): SmSdkMap => {
+  const map: SmSdkMap = {};
+  for (const mod of deployedModules) {
+    if (mod === config.module) {
+      map[mod] = new SM_SDK_CONSTRUCTORS[mod](smProps);
+    } else {
+      try {
+        map[mod] = new SM_SDK_CONSTRUCTORS[mod](smProps);
+      } catch (error) {
+        console.error(`[lido-sdk] dropping module ${mod}:`, error);
+      }
+    }
+  }
+  return map;
+};
 
 const LidoSDKContext = createContext<LidoSDKContextValue | null>(null);
 LidoSDKContext.displayName = 'LidoSDKContext';
@@ -54,16 +88,40 @@ export const useLidoSDK = () => {
   return value;
 };
 
-export function useSmSDK(): LidoSDKCsm | LidoSDKCm;
+/**
+ * Returns the requested module's SDK regardless of which module is active,
+ * deliberately bypassing the active-module guard that `useSmSDK(module)` enforces.
+ */
+export function useSmSDKByModule(
+  module: MODULE_NAME.CSM,
+): LidoSDKCsm | undefined;
+export function useSmSDKByModule(
+  module: MODULE_NAME.CSM_02,
+): LidoSDKCsm02 | undefined;
+export function useSmSDKByModule(module: MODULE_NAME.CM): LidoSDKCm | undefined;
+export function useSmSDKByModule(module: MODULE_NAME): SmSDK | undefined;
+// eslint-disable-next-line func-style
+export function useSmSDKByModule(module: MODULE_NAME) {
+  const { sm } = useLidoSDK();
+  return sm[module];
+}
+
+export function useSmSDK(): SmSDK;
 export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
+export function useSmSDK(module: MODULE_NAME.CSM_02): LidoSDKCsm02 | undefined;
 export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
 // eslint-disable-next-line func-style
 export function useSmSDK(module?: MODULE_NAME) {
   const { sm } = useLidoSDK();
-  if (module && module !== config.module) {
-    return undefined;
+  // Read without throwing: useSmSDK is also called above NodeOperatorProvider
+  // (e.g. GateSupported), where falling back to the primary avoids the #526 SSR 500.
+  const operatorCtx = useContext(NodeOperatorContext);
+  const activeModule = operatorCtx?.activeModule ?? config.module;
+  if (module) {
+    if (module !== activeModule) return undefined;
+    return sm[module];
   }
-  return sm;
+  return sm[activeModule];
 }
 
 export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
@@ -128,7 +186,7 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       overridedAddresses,
     };
 
-    const sm = isModuleCSM ? new LidoSDKCsm(smProps) : new LidoSDKCm(smProps);
+    const sm = buildSmSdkMap(smProps);
 
     return {
       chainId: core.chainId,

@@ -5,10 +5,12 @@ import { config } from 'config';
 export const MATOMO_APP_NAME = {
   [MODULE_NAME.CSM]: 'CSM_Widget',
   [MODULE_NAME.CM]: 'CM_Widget',
+  [MODULE_NAME.CSM_02]: 'CSM_Widget',
 };
 export const MATOMO_APP_PREFIX = {
   [MODULE_NAME.CSM]: 'csm_widget',
   [MODULE_NAME.CM]: 'cm_widget',
+  [MODULE_NAME.CSM_02]: 'csm_widget',
 };
 
 // Helper functions to reduce duplication in event definitions
@@ -42,6 +44,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   starterPackSetupValidatorLink = 'starterPackSetupValidatorLink',
   starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
   operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
+  operatorTypeModalJoinCsm02 = 'operatorTypeModalJoinCsm02',
   operatorTypeModalApplyIcs = 'operatorTypeModalApplyIcs',
   operatorTypeModalApplyIdvtc = 'operatorTypeModalApplyIdvtc',
   operatorTypeModalCreateIcs = 'operatorTypeModalCreateIcs',
@@ -238,6 +241,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless]: createEvent(
     'Push «Join permissionlessly» button on Operator Type modal',
     'operator_type_modal_join_permissionless',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinCsm02]: createEvent(
+    'Push «Join with 0x02» button on Operator Type modal',
+    'operator_type_modal_join_csm02',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalApplyIcs]: createEvent(
     'Push «Apply for ICS» button on Operator Type modal',
