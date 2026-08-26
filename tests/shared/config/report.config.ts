@@ -27,6 +27,7 @@ export const getReportConfig: () => ReporterDescription[] = function () {
   if (process.env.CI) {
     reporterConfig.push(
       reporters.githubReporter,
+      reporters.githubSummaryReporter,
       reporters.qaseReporter,
       reporters.chatReporter,
     );
@@ -84,6 +85,7 @@ const reporters: {
   htmlReporter: ReporterDescription;
   consoleReporter: ReporterDescription;
   githubReporter: ReporterDescription;
+  githubSummaryReporter: ReporterDescription;
   chatReporter: ReporterDescription;
   pgReporter: ReporterDescription;
   qaseReporter: ReporterDescription;
@@ -91,6 +93,10 @@ const reporters: {
   htmlReporter: ['html', { open: 'never' }],
   consoleReporter: ['list'],
   githubReporter: ['github'],
+  githubSummaryReporter: [
+    '../shared/config/githubSummary.reporter.ts',
+    { qaseProjectName: process.env.QASE_PROJECT_ID },
+  ],
   pgReporter: [
     '@lidofinance/pg-reporter',
     {
