@@ -1,4 +1,5 @@
 import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
+import { useModule } from 'modules/web3';
 import { SortButton, useTable } from 'providers/table-provider';
 import { FC } from 'react';
 import {
@@ -10,17 +11,20 @@ import {
   StatusComment,
 } from 'shared/components';
 import { useMaxPriorityKeyIndex } from 'shared/hooks';
-import { Gate } from 'shared/navigate';
 import { BalanceCell } from './balance-cell';
 import { StrikesCount } from './strikes-counts';
 import { TableStyle } from './styles';
 
 export const KeysTable: FC = () => {
   const maxPriorityKeyIndex = useMaxPriorityKeyIndex();
+  const { isCsmFamily, isCSM02, isCM } = useModule();
   const { data } = useTable<KeyWithStatus>();
 
+  const showStrikes = isCsmFamily;
+  const showBalance = isCSM02 || isCM;
+
   return (
-    <TableStyle>
+    <TableStyle $strikes={showStrikes} $balance={showBalance}>
       <thead>
         <tr>
           <th>
@@ -29,16 +33,16 @@ export const KeysTable: FC = () => {
           <th>
             <SortButton column="statuses">Status</SortButton>
           </th>
-          <Gate rule="IS_CSM">
+          {showStrikes && (
             <th>
               <SortButton column="strikes">Strikes</SortButton>
             </th>
-          </Gate>
-          <Gate rule="IS_CM">
+          )}
+          {showBalance && (
             <th>
               <SortButton column="effectiveBalance">Balance</SortButton>
             </th>
-          </Gate>
+          )}
           <th>Comment</th>
         </tr>
       </thead>
@@ -64,16 +68,16 @@ export const KeysTable: FC = () => {
                 ))}
               </Stack>
             </td>
-            <Gate rule="IS_CSM">
+            {showStrikes && (
               <td data-testid="strikesCountCell">
                 <StrikesCount strikes={key.strikes} />
               </td>
-            </Gate>
-            <Gate rule="IS_CM">
+            )}
+            {showBalance && (
               <td data-testid="balanceCell">
                 <BalanceCell effectiveBalance={key.effectiveBalance} />
               </td>
-            </Gate>
+            )}
             <td data-testid="statusCommentCell">
               <StatusComment statuses={key.statuses} />
             </td>
