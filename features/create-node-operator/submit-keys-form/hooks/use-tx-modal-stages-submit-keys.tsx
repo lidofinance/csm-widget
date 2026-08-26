@@ -12,10 +12,13 @@ import {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from '../context/types';
+import { useTargetModule } from '../context/use-target-module';
 import { renderCreateSuccess } from './create-success-stage';
 
-export const useTxModalStagesSubmitKeys = () =>
-  useTxStages<
+export const useTxModalStagesSubmitKeys = () => {
+  const targetModule = useTargetModule();
+
+  return useTxStages<
     SubmitKeysFormInputType,
     SubmitKeysFormNetworkData,
     NodeOperatorShortInfo
@@ -78,7 +81,15 @@ export const useTxModalStagesSubmitKeys = () =>
         }
 
         const keys = input.depositData.map((key) => key.pubkey);
-        return renderCreateSuccess(transitStage, result, data, keys, txHash);
+        return renderCreateSuccess(
+          transitStage,
+          result,
+          data,
+          keys,
+          targetModule,
+          txHash,
+        );
       },
     };
   });
+};

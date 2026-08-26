@@ -1,4 +1,5 @@
 import {
+  type MODULE_NAME,
   type NodeOperatorShortInfo,
   getNodeOperatorRoles,
 } from '@lidofinance/lido-csm-sdk';
@@ -19,6 +20,7 @@ export const renderCreateSuccess = (
   result: NodeOperatorShortInfo | undefined,
   data: SubmitKeysFormNetworkData,
   keys: string[],
+  module: MODULE_NAME,
   txHash?: string,
 ) => {
   const hasAnyRole = result
@@ -45,7 +47,10 @@ export const renderCreateSuccess = (
       }
       footer={
         hasAnyRole && result?.nodeOperatorId !== undefined ? (
-          <SwitchToOperatorButton nodeOperatorId={result.nodeOperatorId} />
+          <SwitchToOperatorButton
+            nodeOperatorId={result.nodeOperatorId}
+            module={module}
+          />
         ) : undefined
       }
     />,

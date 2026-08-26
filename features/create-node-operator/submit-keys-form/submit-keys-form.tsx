@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC, memo } from 'react';
 
 import { SubmitKeysFormProvider } from './context';
@@ -5,8 +6,8 @@ import { SubmitKeysFormProvider } from './context';
 import { DepositQueue } from 'features/view-keys/deposit-queue';
 import { FormBlock } from 'shared/components';
 import { Form, FormLoader } from 'shared/hook-form/form-controller';
-import { Gate } from 'shared/navigate';
 import { SubmitKeysDataProvider } from './context';
+import { useTargetModule } from './context/use-target-module';
 import { AmountInput } from './controls/amount-input';
 import { CustomAddressesSection } from './controls/custom-addresses-section';
 import { DkgFilesSection } from './controls/dkg-files-section';
@@ -19,29 +20,33 @@ import { TokenSelect } from './controls/token-select';
 import { HeaderOperatorTypeButton } from './header-operator-type-button';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
 
-export const SubmitKeysForm: FC = memo(() => (
-  <SubmitKeysDataProvider>
-    <SubmitKeysFormProvider>
-      <FormBlock data-testid="submitKeysForm">
-        <FormLoader>
-          <HeaderOperatorTypeButton />
-          <Form>
-            <TokenSelect />
-            <KeysLimitWarning />
-            <KeysInput />
-            <AmountInput />
-            <DkgFilesSection />
-            <CustomAddressesSection />
-            <ReferrerInput />
-            <KeysConfirm />
-            <SubmitButton />
-          </Form>
-          <SubmitKeysFormInfo />
-        </FormLoader>
-      </FormBlock>
-      <Gate rule="IS_CSM">
-        <DepositQueue />
-      </Gate>
-    </SubmitKeysFormProvider>
-  </SubmitKeysDataProvider>
-));
+export const SubmitKeysForm: FC = memo(() => {
+  // Gate on the form's target module: on /create there is no active operator,
+  // so the IS_CSM show rule would answer for the deployment's primary module.
+  const targetModule = useTargetModule();
+
+  return (
+    <SubmitKeysDataProvider>
+      <SubmitKeysFormProvider>
+        <FormBlock data-testid="submitKeysForm">
+          <FormLoader>
+            <HeaderOperatorTypeButton />
+            <Form>
+              <TokenSelect />
+              <KeysLimitWarning />
+              <KeysInput />
+              <AmountInput />
+              <DkgFilesSection />
+              <CustomAddressesSection />
+              <ReferrerInput />
+              <KeysConfirm />
+              <SubmitButton />
+            </Form>
+            <SubmitKeysFormInfo />
+          </FormLoader>
+        </FormBlock>
+        {targetModule === MODULE_NAME.CSM && <DepositQueue />}
+      </SubmitKeysFormProvider>
+    </SubmitKeysDataProvider>
+  );
+});

@@ -6,6 +6,7 @@ const OPERATOR_TYPE_QUERY: Partial<Record<OPERATOR_TYPE, string>> = {
   [OPERATOR_TYPE.CSM_ICS]: 'ics',
   [OPERATOR_TYPE.CSM_IDVTC]: 'idvtc',
   [OPERATOR_TYPE.CSM_DEF]: 'def',
+  [OPERATOR_TYPE.CSM2_DEF]: '0x02',
 };
 
 const TYPE_QUERY_MAP = Object.fromEntries(

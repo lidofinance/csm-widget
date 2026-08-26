@@ -1,9 +1,9 @@
 import {
   getNodeOperatorRoles,
+  type LidoSDKCsm,
   MODULE_NAME,
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
 import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
@@ -14,7 +14,11 @@ import { TxStageMembersSignin } from 'features/idvtc/members/tx-stages/tx-stage-
 import { keepsManageRole } from 'features/idvtc/members/utils/keeps-manage-role';
 import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
 import { operatorKey } from 'modules/surveys-sdk';
-import { useAppendOperator, useSmSDK } from 'modules/web3';
+import {
+  type CsmFamilySDK,
+  useAppendOperator,
+  useSmSDKByModule,
+} from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -34,6 +38,7 @@ import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { useSubmitKeysFormData } from './submit-keys-data-provider';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
+import { useTargetModule } from './use-target-module';
 
 export type SubmitKeysFlow =
   { action: 'cannot-submit' } | ({ action: 'submit-keys' } & Executable);
@@ -43,9 +48,14 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFormNetworkData,
   SubmitKeysFlow
 > => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
-  const getOperatorType = useModuleOperatorTypeGetter();
-  const appendNO = useAppendOperator();
+  const targetModule = useTargetModule();
+  // useTargetModule narrows to CSM | CSM_02, but the overloads only discriminate
+  // on literal module arguments.
+  const sdk = useSmSDKByModule(targetModule) as CsmFamilySDK | undefined;
+  // A curveId means a different operator type per module, so resolve against
+  // the module being created.
+  const getOperatorType = useModuleOperatorTypeGetter(targetModule);
+  const appendNO = useAppendOperator(targetModule);
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
@@ -133,28 +143,35 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             callback,
           };
 
+          const isCsm = targetModule === MODULE_NAME.CSM;
           const { result } =
-            type === OPERATOR_TYPE.CSM_ICS && data.proof
-              ? await sdk.icsGate.addNodeOperator({
+            isCsm && type === OPERATOR_TYPE.CSM_ICS && data.proof
+              ? await (sdk as LidoSDKCsm).icsGate.addNodeOperator({
                   ...params,
                   proof: data.proof,
                 })
-              : type === OPERATOR_TYPE.CSM_IDVTC && data.proof
-                ? await sdk.idvtcGate.addNodeOperator({
+              : isCsm && type === OPERATOR_TYPE.CSM_IDVTC && data.proof
+                ? await (sdk as LidoSDKCsm).idvtcGate.addNodeOperator({
                     ...params,
                     proof: data.proof,
                   })
                 : await sdk.permissionlessGate.addNodeOperator(params);
 
           if (result && (dkgFiles.length > 0 || willInitMembers)) {
-            const op = operatorKey(config.module, result.nodeOperatorId);
+            const op = operatorKey(targetModule, result.nodeOperatorId);
             const keys = depositData.map((k) => k.pubkey);
 
             const runInit = async (): Promise<void> => {
               invariant(op, 'operator key required for members init');
               try {
                 await initStaged(op);
-                renderCreateSuccess(transitStage, result, data, keys);
+                renderCreateSuccess(
+                  transitStage,
+                  result,
+                  data,
+                  keys,
+                  targetModule,
+                );
               } catch (error) {
                 trackMatomoRawError('members_init', error);
                 console.warn('[members] in-flow init failed', error);
@@ -184,7 +201,13 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
               if (willInitMembers) {
                 await runInit();
               } else {
-                renderCreateSuccess(transitStage, result, data, keys);
+                renderCreateSuccess(
+                  transitStage,
+                  result,
+                  data,
+                  keys,
+                  targetModule,
+                );
               }
             };
 
@@ -209,6 +232,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
     },
     [
       sdk,
+      targetModule,
       getOperatorType,
       appendNO,
       setOperatorCustomAddresses,

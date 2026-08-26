@@ -14,7 +14,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
     <StyledModal
       open={open}
       onClose={onClose}
-      $compact={types.length <= 2}
+      $columns={types.length}
       title={
         <Stack direction="column" gap="xs">
           <Text as="h3" size="lg" weight={700}>

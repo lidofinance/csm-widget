@@ -25,7 +25,7 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
   CuratedOperatorFlow
 > => {
   const sdk = useSmSDK(MODULE_NAME.CM);
-  const appendNO = useAppendOperator();
+  const appendNO = useAppendOperator(MODULE_NAME.CM);
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
   const buildCallback = useTxModalStagesCuratedOperator();

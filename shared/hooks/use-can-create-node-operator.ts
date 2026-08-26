@@ -1,5 +1,8 @@
-import { isModuleCSM } from 'consts';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { config } from 'config';
+import { deployedModules, isModuleDeployed } from 'consts';
 import {
+  useAvailableOperators,
   useCuratedGatesEligibility,
   useDappStatus,
   useIcsCurveId,
@@ -14,7 +17,9 @@ import {
 
 export const useCanCreateNodeOperator = () => {
   const { isAccountActive } = useDappStatus();
-  const { nodeOperator, isPending: isNodeOperatorPending } = useNodeOperator();
+  const { nodeOperator } = useNodeOperator();
+  const { data: operators, isPending: isOperatorsPending } =
+    useAvailableOperators();
   const { data: status, isPending: isStatusPending } = useSmStatus();
 
   const { data: gatesCount, isPending: isGatesPending } =
@@ -46,16 +51,23 @@ export const useCanCreateNodeOperator = () => {
     idvtcCurveId !== undefined &&
     nodeOperator?.curveId === idvtcCurveId;
 
-  const condition = isModuleCSM
-    ? nodeOperator?.nodeOperatorId === undefined ||
-      canCreateIdvtc ||
-      canCreateIcs
-    : gatesCount !== undefined && gatesCount > 0;
+  const hasOperatorIn = (module: MODULE_NAME) =>
+    !!operators?.some((operator) => operator.module === module);
+
+  const creatableModules = deployedModules.filter((module) => {
+    if (module === MODULE_NAME.CM) {
+      return gatesCount !== undefined && gatesCount > 0;
+    }
+    if (module === MODULE_NAME.CSM) {
+      return !hasOperatorIn(MODULE_NAME.CSM) || canCreateIdvtc || canCreateIcs;
+    }
+    return isModuleDeployed(module) && !hasOperatorIn(module);
+  });
 
   const isPending =
     isStatusPending ||
-    (isAccountActive && isNodeOperatorPending) ||
-    (isModuleCSM
+    (isAccountActive && isOperatorsPending) ||
+    (config.module === MODULE_NAME.CSM
       ? isIcsProofPending ||
         isIcsPausedPending ||
         isIcsCurveIdPending ||
@@ -64,7 +76,9 @@ export const useCanCreateNodeOperator = () => {
         isIdvtcCurveIdPending
       : isGatesPending);
 
-  const canCreate = Boolean(isAccountActive && !status?.isPaused && condition);
+  const canCreate = Boolean(
+    isAccountActive && !status?.isPaused && creatableModules.length > 0,
+  );
 
-  return { canCreate, isPending };
+  return { canCreate, creatableModules, isPending };
 };
