@@ -7,11 +7,12 @@ import {
   Tooltip,
 } from '@lidofinance/lido-ui';
 import { LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE } from 'consts/external-links';
-import { isModuleCM, moduleMeta } from 'consts/module';
+import { MODULE_METADATA } from 'consts/module';
 import {
   useFrameInfo,
   useLastReportTimestamps,
   useLastReportTxHash,
+  useModule,
   useNodeOperatorId,
   useOperatorInfo,
   useOperatorLastRewards,
@@ -137,6 +138,7 @@ export const LastRewards: FC = () => {
 };
 
 const LastReportStats: FC = () => {
+  const { isCsmFamily } = useModule();
   const nodeOperatorId = useNodeOperatorId();
   const { data: lastRewards, isPending: isLoading } =
     useOperatorLastRewards(nodeOperatorId);
@@ -144,7 +146,7 @@ const LastReportStats: FC = () => {
 
   return (
     <RowBody data-testid="lastRewardsInfo">
-      {!isModuleCM &&
+      {isCsmFamily &&
         (!lastRewards || lastRewards.validatorsCount ? (
           <TextBlock
             title="Keys over threshold"
@@ -196,23 +198,28 @@ const Why: FC = () => {
   );
 };
 
-export const WhyModal: ModalComponentType = ({ ...props }) => (
-  <Modal {...props} title="Why didn’t I get rewards?" data-testid="whyModal">
-    <FaqElement>
-      <p>There are main reason of you getting no reward within a frame:</p>
-      <ol>
-        <li>
-          If your validator’s performance was below the threshold within the{' '}
-          {moduleMeta.shortName} Performance Oracle frame the validator does not
-          receive rewards for the given frame. Read more about{' '}
-          {/* TODO: temporary CSM Performance Oracle link; replace with a CM
-              operator portal link (LIDO_OPERATOR_PORTAL_CM) once CM has one. */}
-          <FaqLink href={LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE}>
-            the {moduleMeta.shortName} Performance Oracle
-          </FaqLink>
-          .
-        </li>
-      </ol>
-    </FaqElement>
-  </Modal>
-);
+export const WhyModal: ModalComponentType = ({ ...props }) => {
+  const { module } = useModule();
+  const { shortName } = MODULE_METADATA[module];
+
+  return (
+    <Modal {...props} title="Why didn’t I get rewards?" data-testid="whyModal">
+      <FaqElement>
+        <p>There are main reason of you getting no reward within a frame:</p>
+        <ol>
+          <li>
+            If your validator’s performance was below the threshold within the{' '}
+            {shortName} Performance Oracle frame the validator does not receive
+            rewards for the given frame. Read more about{' '}
+            {/* TODO: temporary CSM Performance Oracle link; replace with a CM
+                operator portal link (LIDO_OPERATOR_PORTAL_CM) once CM has one. */}
+            <FaqLink href={LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE}>
+              the {shortName} Performance Oracle
+            </FaqLink>
+            .
+          </li>
+        </ol>
+      </FaqElement>
+    </Modal>
+  );
+};
