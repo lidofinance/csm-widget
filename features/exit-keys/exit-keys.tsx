@@ -12,7 +12,7 @@ import { Gate } from 'shared/navigate';
 export const ExitKeys = () => {
   return (
     <>
-      <Gate rule="IS_CSM">
+      <Gate rule="IS_CSM_FAMILY">
         <FormTitle>Follow the instuctions</FormTitle>
         <Text size="xs">
           Sign and broadcast an exit message for each validator key you want to
