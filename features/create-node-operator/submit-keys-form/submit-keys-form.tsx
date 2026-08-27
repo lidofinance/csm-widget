@@ -1,4 +1,3 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC, memo } from 'react';
 
 import { SubmitKeysFormProvider } from './context';
@@ -21,8 +20,8 @@ import { HeaderOperatorTypeButton } from './header-operator-type-button';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
 
 export const SubmitKeysForm: FC = memo(() => {
-  // Gate on the form's target module: on /create there is no active operator,
-  // so the IS_CSM show rule would answer for the deployment's primary module.
+  // The graph must read the module being created, not the active operator's
+  // module — on /create there is no active operator to fall back on.
   const targetModule = useTargetModule();
 
   return (
@@ -45,7 +44,7 @@ export const SubmitKeysForm: FC = memo(() => {
             <SubmitKeysFormInfo />
           </FormLoader>
         </FormBlock>
-        {targetModule === MODULE_NAME.CSM && <DepositQueue />}
+        <DepositQueue module={targetModule} />
       </SubmitKeysFormProvider>
     </SubmitKeysDataProvider>
   );

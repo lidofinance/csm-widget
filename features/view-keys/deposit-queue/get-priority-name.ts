@@ -1,9 +1,10 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { GraphPart } from './types';
 
-export const getPriorityName = (type: GraphPart) => {
+export const getPriorityName = (type: GraphPart, module?: MODULE_NAME) => {
   switch (type) {
     case 'active':
-      return 'Active keys';
+      return module === MODULE_NAME.CSM_02 ? 'Active' : 'Active keys';
     case 'batch':
       return 'Your queued keys';
     case 'added':

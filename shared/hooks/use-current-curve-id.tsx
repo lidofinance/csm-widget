@@ -1,5 +1,6 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
+  useCsm02DefaultCurveId,
   useDefaultCurveId,
   useIcsCurveId,
   useIcsPaused,
@@ -7,21 +8,27 @@ import {
   useIdvtcCurveId,
   useIdvtcPaused,
   useIdvtcProof,
+  useModule,
   useNodeOperatorId,
   useOperatorCurveId,
 } from 'modules/web3';
 import { useModuleOperatorType } from './use-operator-type-metadata';
 import { useRequestedOperatorType } from './use-requested-operator-type';
 
-export const useCurrentCurveId = () => {
+export const useCurrentCurveId = (module?: MODULE_NAME) => {
+  const { module: activeModule } = useModule();
+  const targetModule = module ?? activeModule;
   const nodeOperatorId = useNodeOperatorId();
   const { data: operatorCurveId } = useOperatorCurveId(nodeOperatorId);
   const { data: createData } = useCreateCurveId();
+  const { data: csm02CurveId } = useCsm02DefaultCurveId();
 
-  if (nodeOperatorId !== undefined) {
+  if (targetModule === activeModule && nodeOperatorId !== undefined) {
     return operatorCurveId;
   }
-  return createData?.curveId;
+  return targetModule === MODULE_NAME.CSM_02
+    ? csm02CurveId
+    : createData?.curveId;
 };
 
 export const useCreateCurveId = () => {

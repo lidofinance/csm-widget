@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { InlineLoader } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
@@ -12,8 +13,8 @@ import { Part } from './part';
 import { LegendsStyle, LineStyle } from './style';
 
 const Graph: FC = () => {
-  const { fullView } = useGraphInteraction();
-  const { data, isLoading } = useDepositQueueGraph(fullView);
+  const { fullView, module } = useGraphInteraction();
+  const { data, isLoading } = useDepositQueueGraph(fullView, module);
 
   if (isLoading || !data) {
     return <InlineLoader />;
@@ -50,8 +51,8 @@ const Graph: FC = () => {
   );
 };
 
-export const DepositQueueGraph: FC = () => (
-  <GraphInteractionProvider>
+export const DepositQueueGraph: FC<{ module?: MODULE_NAME }> = ({ module }) => (
+  <GraphInteractionProvider module={module}>
     <Graph />
   </GraphInteractionProvider>
 );

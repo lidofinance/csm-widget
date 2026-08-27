@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useMemo } from 'react';
 import type { UseDepositQueueGraphResult } from './enhanced-types';
 import { createMultiQueueVisualization } from './use-multi-queue';
@@ -6,9 +7,10 @@ import { createSingleQueueVisualization } from './use-single-queue';
 
 export const useDepositQueueGraph = (
   fullView = false,
+  module?: MODULE_NAME,
 ): UseDepositQueueGraphResult => {
   const { shareLimit, queueAnalysis, submittingAllocation, isLoading } =
-    useQueueData();
+    useQueueData(module);
 
   return useMemo((): UseDepositQueueGraphResult => {
     if (isLoading || !shareLimit) {

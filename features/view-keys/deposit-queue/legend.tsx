@@ -12,7 +12,7 @@ type LegendProps = {
 };
 
 export const Legend: FC<LegendProps> = ({ type, keysCount, hide = false }) => {
-  const { setHover } = useGraphInteraction();
+  const { setHover, module } = useGraphInteraction();
 
   const handleHover = useCallback(() => {
     setHover(type);
@@ -25,7 +25,7 @@ export const Legend: FC<LegendProps> = ({ type, keysCount, hide = false }) => {
     return null;
   }
 
-  const title = getPriorityName(type);
+  const title = getPriorityName(type, module);
 
   if (!keysCount && !['limit', 'active'].includes(type)) {
     return null;
