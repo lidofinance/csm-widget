@@ -14,7 +14,7 @@ const OPERATOR_DESCRIPTION = 'Test description';
 
 test.describe(
   'Create curated operator. Transaction.',
-  { tag: [Tags.forked, Tags.performTX, Tags.smoke] },
+  { tag: [Tags.forked, Tags.smoke] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;

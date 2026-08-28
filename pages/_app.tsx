@@ -1,6 +1,5 @@
 import 'utils/zod-jitless';
 
-import { ToastContainer } from '@lidofinance/lido-ui';
 import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
 import { moduleMeta } from 'consts/module';
@@ -9,7 +8,11 @@ import Head from 'next/head';
 import 'nprogress/nprogress.css';
 import { Providers } from 'providers';
 import { memo } from 'react';
-import { BackgroundGradient, SecurityStatusBanner } from 'shared/components';
+import {
+  BackgroundGradient,
+  SecurityStatusBanner,
+  ToastContainer,
+} from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
 import { AddressValidationFile, nprogress } from 'utils';
 

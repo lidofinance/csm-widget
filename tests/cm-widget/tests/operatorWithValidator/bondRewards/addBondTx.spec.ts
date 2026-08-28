@@ -10,7 +10,7 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
   'Bond & Rewards. Add bond. Transaction.',
-  { tag: [Tags.forked, Tags.performTX] },
+  { tag: [Tags.forked] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
