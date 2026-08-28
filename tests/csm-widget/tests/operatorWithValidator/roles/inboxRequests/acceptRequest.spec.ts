@@ -10,7 +10,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 test.describe(
   'Roles. Inbox Rewards. Accept rewards ',
   {
-    tag: [Tags.performTX, Tags.forked],
+    tag: [Tags.forked],
   },
   () => {
     let randomId: number;
