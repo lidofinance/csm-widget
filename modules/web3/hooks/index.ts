@@ -45,6 +45,7 @@ export * from './use-operator-reward';
 export * from './use-operator-rewards-history';
 export * from './use-operator-short-info';
 export * from './use-operator-stake-summary';
+export * from './use-operator-top-up-queue';
 export * from './use-operator-type';
 export * from './use-operator-weight';
 export * from './use-operators-count';
