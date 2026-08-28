@@ -62,7 +62,10 @@ export const useSurveyQuery = <T, S = T>(
       try {
         return (await makeRequest({ token, signal })) as T;
       } catch (error) {
-        dispatchAuthError(error, token, handleAuthError);
+        // Render-driven read: never pop the signature modal on page visit.
+        dispatchAuthError(error, token, handleAuthError, {
+          interactive: false,
+        });
         throw error;
       }
     },

@@ -9,6 +9,7 @@ import { SiweAuthContext } from './siwe-auth-context';
 import { useModalStages } from './use-modal-stages';
 import { useSiwe } from './use-siwe';
 import type {
+  HandleAuthErrorOptions,
   SiweAuthErrorKind,
   SiweNonceResponse,
   SiweSigninPayload,
@@ -105,12 +106,20 @@ export const SiweAuthProvider: FC<PropsWithChildren<SiweAuthProviderProps>> = ({
   }, [setToken]);
 
   const handleAuthError = useCallback(
-    (kind?: SiweAuthErrorKind) => {
+    (
+      kind?: SiweAuthErrorKind,
+      { interactive = true }: HandleAuthErrorOptions = {},
+    ) => {
       if (kind === 'reauth') {
-        // Expired session: token is stale but the address is still valid —
-        // re-run the SIWE handshake. No refresh endpoint exists; a fresh
-        // signature is required. Guard against concurrent calls: multiple
-        // in-flight queries can each fire onAuthError when the token expires.
+        // Expired session, address still valid. Non-interactive (e.g. a
+        // background read) must not ambush the user with a signature modal —
+        // just drop the stale token. Interactive callers re-run the SIWE
+        // handshake, guarded against concurrent calls: multiple in-flight
+        // queries can each fire onAuthError when the token expires.
+        if (!interactive) {
+          logout();
+          return;
+        }
         if (isSigningInRef.current) return;
         isSigningInRef.current = true;
         void signIn().finally(() => {

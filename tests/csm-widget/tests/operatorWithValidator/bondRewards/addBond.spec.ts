@@ -52,7 +52,7 @@ test.describe('Bond & Rewards. Add bond.', async () => {
   );
 
   [TOKENS.eth, TOKENS.steth, TOKENS.wsteth].forEach((tokenName) => {
-    const tag = [Tags.performTX];
+    const tag = [];
     if (tokenName === TOKENS.steth) tag.push(Tags.smoke);
 
     test(

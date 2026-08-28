@@ -1,18 +1,19 @@
 import { BrowserContext, Route } from '@playwright/test';
 
 const IPFS_PATH = '/ipfs/';
+// subdomain gateways: https://<cid>.ipfs.<host>/<path>
+const SUBDOMAIN_CID = /^([^.]+)\.ipfs\./;
 
 export class IpfsGatewayProxyService {
   constructor(private readonly localGateway: `${string}/ipfs/`) {}
 
   async install(context: BrowserContext): Promise<void> {
     await context.route(
-      (url) => url.pathname.includes(IPFS_PATH),
+      (url) => this.extractCidPath(url) !== null,
       async (route) => {
-        const { pathname } = new URL(route.request().url());
-        const cidPath = pathname.slice(
-          pathname.indexOf(IPFS_PATH) + IPFS_PATH.length,
-        );
+        const cidPath = this.extractCidPath(new URL(route.request().url()));
+        if (cidPath === null) return route.fallback();
+
         const target = `${this.localGateway}${cidPath}`;
 
         try {
@@ -40,6 +41,23 @@ export class IpfsGatewayProxyService {
     await context.route('https://raw.githubusercontent.com/**', (route) =>
       route.abort('failed'),
     );
+  }
+
+  /**
+   * Both gateway layouts the SDK builds from DEFAULT_IPFS_GATEWAYS:
+   * `<host>/ipfs/<cid>/<path>` and `<cid>.ipfs.<host>/<path>`.
+   */
+  private extractCidPath(url: URL): string | null {
+    const subdomain = url.hostname.match(SUBDOMAIN_CID);
+    if (subdomain) {
+      const subPath = url.pathname === '/' ? '' : url.pathname;
+      return `${subdomain[1]}${subPath}`;
+    }
+
+    const pathIndex = url.pathname.indexOf(IPFS_PATH);
+    if (pathIndex === -1) return null;
+
+    return url.pathname.slice(pathIndex + IPFS_PATH.length);
   }
 
   private async fail(
