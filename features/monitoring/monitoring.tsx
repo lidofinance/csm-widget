@@ -15,7 +15,7 @@ export const Monitoring: FC = () => {
         {isCsmFamily && <AttestationRateSection />}
         {isCsmFamily && <StrikesSection />}
         <ExternalSection />
-        {isCsmFamily && <NotificationToolsSection />}
+        <NotificationToolsSection />
       </NoSSRWrapper>
     </>
   );

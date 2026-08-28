@@ -138,7 +138,7 @@ const ActionButton: FC<{
       );
     case 'switch':
       return (
-        <Button size="xs" variant="ghost" onClick={onSwitch}>
+        <Button size="xs" variant="outlined" onClick={onSwitch}>
           Switch
         </Button>
       );

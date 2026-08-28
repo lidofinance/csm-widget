@@ -3,7 +3,6 @@ import {
   type NodeOperatorShortInfo,
   getNodeOperatorRoles,
 } from '@lidofinance/lido-csm-sdk';
-import { SwitchToOperatorButton } from 'shared/node-operator';
 import {
   AfterCreateCustomNodeOperator,
   AfterKeysUpload,
@@ -11,6 +10,7 @@ import {
   TxStageSuccess,
 } from 'shared/transaction-modal';
 import { type SubmitKeysFormNetworkData } from '../context/types';
+import { SubmitKeysSuccessActions } from '../success-actions';
 
 // Shared between the tx callback's `success` handler (no staged DKG files) and
 // the flow's post-upload path (staged files, upload resolved) — both render
@@ -47,7 +47,7 @@ export const renderCreateSuccess = (
       }
       footer={
         hasAnyRole && result?.nodeOperatorId !== undefined ? (
-          <SwitchToOperatorButton
+          <SubmitKeysSuccessActions
             nodeOperatorId={result.nodeOperatorId}
             module={module}
           />

@@ -224,8 +224,8 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
               appendNO(result);
             } else {
               setOperatorCustomAddresses(result.nodeOperatorId);
-              void n(PATH.HOME);
             }
+            void n(PATH.HOME);
           }
         },
       };
