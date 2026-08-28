@@ -3,7 +3,6 @@ import { test } from '../../../../test.fixture';
 import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/shared/helpers/accountData';
-import { Tags } from 'tests/shared/consts/common.const';
 import { trimAddress } from '@lidofinance/address';
 import { mnemonicToAccount } from 'viem/accounts';
 
@@ -17,12 +16,16 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
     await widgetService.page.waitForTimeout(LOW_TIMEOUT);
   });
 
-  test.afterAll(async ({ widgetService }) => {
+  test.afterAll(async ({ widgetService, csmSDK }) => {
     await test.step('Revoke proposal role', async () => {
       // @todo: need to add cancel all tx before.
       await widgetService.settingsPage.managerAddressPage.open();
       await widgetService.page.waitForTimeout(1000);
-      await widgetService.settingsPage.managerAddressPage.revokePendingRole();
+
+      const noId = await widgetService.extractNodeOperatorId();
+      if (await csmSDK.isPendingRole(noId, 'manager')) {
+        await widgetService.settingsPage.managerAddressPage.revokePendingRole();
+      }
     });
   });
 
@@ -60,7 +63,6 @@ test.describe('Roles. Manager Address. Transactions. Revoke Manager role changes
 
   test(
     qase(208, 'Should success complete transacrion revoke Manager role change'),
-    { tag: [Tags.performTX] },
     async ({ widgetService, secretPhrase }) => {
       const managerAddressPage = widgetService.settingsPage.managerAddressPage;
       const currentAddress = mnemonicToAccount(secretPhrase).address;
