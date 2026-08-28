@@ -9,8 +9,14 @@ export const useDepositQueueGraph = (
   fullView = false,
   module?: MODULE_NAME,
 ): UseDepositQueueGraphResult => {
-  const { shareLimit, queueAnalysis, submittingAllocation, isLoading } =
-    useQueueData(module);
+  const {
+    shareLimit,
+    queueAnalysis,
+    submittingAllocation,
+    unit,
+    scale,
+    isLoading,
+  } = useQueueData(module);
 
   return useMemo((): UseDepositQueueGraphResult => {
     if (isLoading || !shareLimit) {
@@ -23,16 +29,28 @@ export const useDepositQueueGraph = (
           shareLimit,
           submittingAllocation,
           fullView,
+          unit,
+          scale,
         )
       : createSingleQueueVisualization(
           shareLimit,
           submittingAllocation,
           fullView,
+          unit,
+          scale,
         );
 
     return {
       isLoading: false,
       data,
     };
-  }, [isLoading, shareLimit, queueAnalysis, submittingAllocation, fullView]);
+  }, [
+    isLoading,
+    shareLimit,
+    queueAnalysis,
+    submittingAllocation,
+    fullView,
+    unit,
+    scale,
+  ]);
 };

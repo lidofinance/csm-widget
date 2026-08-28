@@ -1,4 +1,4 @@
-import type { OperatorInfo, SubmittingAllocation } from './enhanced-types';
+import type { OperatorInfo } from './enhanced-types';
 
 const FALLBACK_LOWEST_PRIORITY = 5;
 
@@ -8,11 +8,18 @@ type QueueConfig = {
   lowestPriority: number;
 };
 
+// Key counts only — compares against queueConfig.maxDeposits, a key count.
+// Callers scale this into the graph's unit.
+export type PriorityPlacement = {
+  keysCount: bigint;
+  allocation: [number, bigint][];
+};
+
 export const calculatePriorityPlacement = (
   operatorInfo: OperatorInfo | undefined,
   queueConfig: QueueConfig | undefined,
   submittingCount: number | undefined,
-): SubmittingAllocation | undefined => {
+): PriorityPlacement | undefined => {
   if (submittingCount === undefined) {
     return undefined;
   }

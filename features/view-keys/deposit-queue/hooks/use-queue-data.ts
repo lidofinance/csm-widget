@@ -1,4 +1,8 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import {
+  MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI,
+  MODULE_NAME,
+  ShareLimitInfo,
+} from '@lidofinance/lido-csm-sdk';
 import {
   useCurveParameters,
   useDepositQueueBatches,
@@ -7,8 +11,10 @@ import {
   useOperatorInfo,
   useShareLimit,
 } from 'modules/web3';
+import { useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { DepositDataInputType } from 'shared/hook-form/deposit-data';
+import { QueueUnit } from '../types';
 import { calculateAndSelectByOperator } from './calculate-and-select-by-operator';
 import type {
   ShareLimit,
@@ -26,8 +32,25 @@ export type QueueDataResult = {
   shareLimit: ShareLimit | undefined;
   queueAnalysis: DepositQueueAnalysis | undefined;
   submittingAllocation: SubmittingAllocation | undefined;
+  unit: QueueUnit;
+  scale: bigint;
   isLoading: boolean;
 };
+
+const toShareLimit = (data: ShareLimitInfo, unit: QueueUnit): ShareLimit =>
+  unit === 'eth'
+    ? {
+        active: data.activeWei,
+        activeLeft: data.activeLeftWei,
+        capacity: data.capacityWei,
+        queue: data.queueWei,
+      }
+    : {
+        active: data.active,
+        activeLeft: data.activeLeft,
+        capacity: data.capacity,
+        queue: data.queue,
+      };
 
 export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
   const { module: activeModule } = useModule();
@@ -38,10 +61,22 @@ export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
   const nodeOperatorId =
     targetModule === activeModule ? activeOperatorId : undefined;
 
+  const unit: QueueUnit = targetModule === MODULE_NAME.CSM_02 ? 'eth' : 'keys';
+  const scale = unit === 'eth' ? MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI : 1n;
+
   const { data: operatorInfo } = useOperatorInfo(nodeOperatorId);
-  const { data: shareLimit } = useShareLimit(undefined, targetModule);
+  const { data: shareLimitInfo } = useShareLimit(undefined, targetModule);
+  const shareLimit = useMemo(
+    () => shareLimitInfo && toShareLimit(shareLimitInfo, unit),
+    [shareLimitInfo, unit],
+  );
+  // query select is only reused across renders when its reference is stable
+  const selectByOperator = useMemo(
+    () => calculateAndSelectByOperator(nodeOperatorId, scale),
+    [nodeOperatorId, scale],
+  );
   const { data: queueAnalysis } = useDepositQueueBatches(
-    calculateAndSelectByOperator(nodeOperatorId),
+    selectByOperator,
     targetModule,
   );
 
@@ -55,11 +90,24 @@ export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
   const form = useFormContext<DepositDataInputType>();
   const submittingCount = form?.getValues('depositData')?.length;
 
-  const submittingAllocation = calculatePriorityPlacement(
-    operatorInfo,
-    queueConfig,
-    submittingCount,
-  );
+  const submittingAllocation: SubmittingAllocation | undefined = useMemo(() => {
+    const placement = calculatePriorityPlacement(
+      operatorInfo,
+      queueConfig,
+      submittingCount,
+    );
+    return (
+      placement && {
+        amount: placement.keysCount * scale,
+        allocation: placement.allocation.map(
+          ([priority, keysCount]): [number, bigint] => [
+            priority,
+            keysCount * scale,
+          ],
+        ),
+      }
+    );
+  }, [operatorInfo, queueConfig, submittingCount, scale]);
 
   return {
     nodeOperatorId,
@@ -67,6 +115,8 @@ export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
     shareLimit,
     queueAnalysis,
     submittingAllocation,
+    unit,
+    scale,
     isLoading: !shareLimit,
   };
 };
@@ -77,6 +127,6 @@ export const isMultiQueue = (
   return Boolean(
     queueAnalysis &&
     queueAnalysis.queueAnalysis &&
-    queueAnalysis.queueAnalysis.some((q) => q.totalKeysInQueue > 0n),
+    queueAnalysis.queueAnalysis.some((q) => q.totalAmountInQueue > 0n),
   );
 };

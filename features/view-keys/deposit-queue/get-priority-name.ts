@@ -1,10 +1,20 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { GraphPart } from './types';
 
+const CSM_02_NAMES: Partial<Record<GraphPart, string>> = {
+  active: 'Active stake',
+  queue: 'Queued stake',
+  queueOverLimit: 'Queued stake (over limit)',
+};
+
 export const getPriorityName = (type: GraphPart, module?: MODULE_NAME) => {
+  if (module === MODULE_NAME.CSM_02 && CSM_02_NAMES[type]) {
+    return CSM_02_NAMES[type];
+  }
+
   switch (type) {
     case 'active':
-      return module === MODULE_NAME.CSM_02 ? 'Active' : 'Active keys';
+      return 'Active keys';
     case 'batch':
       return 'Your queued keys';
     case 'added':

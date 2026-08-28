@@ -25,26 +25,27 @@ const Graph: FC = () => {
       <LineWrapper farAway={data.farAway}>
         <LineStyle>
           {data.parts.map((part, index) => (
-            <Part key={`${part.type}-${index}`} {...part} />
+            <Part key={`${part.type}-${index}`} unit={data.unit} {...part} />
           ))}
           {data.operator?.batches.map((batch, index) => (
-            <Part key={index} type="batch" {...batch} />
+            <Part key={index} type="batch" unit={data.unit} {...batch} />
           ))}
         </LineStyle>
-        <Part type="limit" offset={data.limit.offset} />
+        <Part type="limit" offset={data.limit.offset} unit={data.unit} />
       </LineWrapper>
       <LegendsStyle>
         {data.parts
           .filter((part) => part.type !== 'added')
           .map((part, index) => (
-            <Legend key={`${part.type}-${index}`} {...part} />
+            <Legend key={`${part.type}-${index}`} unit={data.unit} {...part} />
           ))}
-        <Legend type="limit" {...data.limit} />
-        <Legend type="batch" {...data.operator} />
+        <Legend type="limit" unit={data.unit} {...data.limit} />
+        <Legend type="batch" unit={data.unit} {...data.operator} />
         <Legend
           type="added"
-          keysCount={data.submittingKeysCount}
-          hide={data.submittingKeysCount === undefined}
+          unit={data.unit}
+          amount={data.submittingAmount}
+          hide={data.submittingAmount === undefined}
         />
       </LegendsStyle>
     </Stack>
