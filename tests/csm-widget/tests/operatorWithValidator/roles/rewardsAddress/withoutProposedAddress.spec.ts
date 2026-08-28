@@ -8,9 +8,13 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 
 test.describe('Roles. Rewards Address. Verify UI Without Proposed Address', () => {
-  test.beforeEach(async ({ widgetService }) => {
+  test.beforeEach(async ({ widgetService, csmSDK }) => {
     await widgetService.settingsPage.rewardsAddressPage.open();
-    await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
+
+    const noId = await widgetService.extractNodeOperatorId();
+    if (await csmSDK.isPendingRole(noId, 'rewards')) {
+      await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
+    }
   });
 
   test(

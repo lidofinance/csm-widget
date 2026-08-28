@@ -16,12 +16,16 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
     await widgetService.page.waitForTimeout(LOW_TIMEOUT);
   });
 
-  test.afterAll(async ({ widgetService }) => {
+  test.afterAll(async ({ widgetService, csmSDK }) => {
     await test.step('Revoke proposal role', async () => {
       // @todo: need to add cancel all tx before.
       await widgetService.settingsPage.rewardsAddressPage.open();
       await widgetService.page.waitForTimeout(LOW_TIMEOUT);
-      await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
+
+      const noId = await widgetService.extractNodeOperatorId();
+      if (await csmSDK.isPendingRole(noId, 'rewards')) {
+        await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
+      }
     });
   });
 
@@ -58,7 +62,7 @@ test.describe('Roles. Rewards Address. Transactions. Revoke role changes', () =>
 
   test(
     qase(156, 'Should success complete revoke Reward role changes'),
-    { tag: [Tags.smoke, Tags.performTX] },
+    { tag: [Tags.smoke] },
     async ({ widgetService, secretPhrase }) => {
       const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
       const currentAddress = mnemonicToAccount(secretPhrase).address;
