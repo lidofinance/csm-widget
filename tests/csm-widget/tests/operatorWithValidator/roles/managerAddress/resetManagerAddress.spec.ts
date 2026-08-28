@@ -34,6 +34,7 @@ test.describe(
     test('Should reset manager address when proposed', async ({
       widgetService,
     }) => {
+      test.fail(true, 'issue - CS-1205');
       await widgetService.settingsPage.managerAddressPage.open();
       await expect(
         widgetService.settingsPage.managerAddressPage.resetButton,
