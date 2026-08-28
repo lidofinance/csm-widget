@@ -46,6 +46,10 @@ export const getReportConfig: () => ReporterDescription[] = function () {
     ['../shared/config/skipper.reporter.ts'],
     // must stay outside secret-guard: it swallows errors thrown before onBegin
     ['../shared/config/globalError.reporter.ts'],
+    [
+      '../shared/config/githubSummary.reporter.ts',
+      { qaseProjectName: process.env.QASE_PROJECT_ID },
+    ],
   ];
 };
 
