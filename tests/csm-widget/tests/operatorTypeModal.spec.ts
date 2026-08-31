@@ -1,7 +1,8 @@
 import { test } from './test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { expect } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { Tags } from 'tests/shared/consts/common.const';
 import { OPERATOR_TYPE_METADATA } from 'tests/shared/consts/operatorTypes.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
@@ -14,9 +15,10 @@ const IDVTC = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_IDVTC];
 
 const OPERATOR_TYPES_DOCS_URL =
   'https://docs.lido.fi/staking-modules/csm/join-csm/';
-const OPERATOR_TYPES_DOCS_ANCHOR = '#node-operator-types';
 
 test.describe('New operator. Operator type modal', async () => {
+  let openedPage: Page | undefined;
+
   test.beforeAll(async ({ widgetService }) => {
     await test.step('Enable applications feature flag', async () => {
       await widgetService.setFeatureFlag('icsApplyForm', true);
@@ -25,6 +27,10 @@ test.describe('New operator. Operator type modal', async () => {
 
   test.afterAll(async ({ widgetService }) => {
     await widgetService.setFeatureFlag('icsApplyForm', false);
+  });
+
+  test.afterEach(async () => {
+    await openedPage?.close();
   });
 
   test(
@@ -100,33 +106,35 @@ test.describe('New operator. Operator type modal', async () => {
     },
   );
 
-  test('Should open operator types docs after click', async ({
-    widgetService,
-    widgetConfig,
-  }) => {
-    const modal = widgetService.mainPage.operatorTypeModal;
-    const matomoEventService = new MatomoService(
-      widgetService.page,
-      widgetConfig,
-    );
+  test(
+    'Should open operator types docs after click',
+    { tag: [Tags.matomo] },
+    async ({ widgetService, widgetConfig }) => {
+      const modal = widgetService.mainPage.operatorTypeModal;
+      const matomoEventService = new MatomoService(
+        widgetService.page,
+        widgetConfig,
+      );
 
-    await widgetService.mainPage.openOperatorTypeModal();
+      await widgetService.mainPage.openOperatorTypeModal();
 
-    await expect(modal.parametersDocsLink).toBeVisible();
-    await expect(modal.parametersDocsLink).toHaveAttribute(
-      'href',
-      `${OPERATOR_TYPES_DOCS_URL}${OPERATOR_TYPES_DOCS_ANCHOR}`,
-    );
+      await expect(modal.parametersDocsLink).toBeVisible();
+      await expect(modal.parametersDocsLink).toHaveAttribute(
+        'href',
+        `${OPERATOR_TYPES_DOCS_URL}#node-operator-types`,
+      );
 
-    const [docsPage] = await Promise.all([
-      widgetService.mainPage.waitForPage(PAGE_WAIT_TIMEOUT),
-      matomoEventService.waitForEvent(
-        'e_n',
-        'csm_widget_operator_types_docs_link',
-      ),
-      modal.parametersDocsLink.click(),
-    ]);
+      const [newPage] = await Promise.all([
+        widgetService.mainPage.waitForPage(PAGE_WAIT_TIMEOUT),
+        matomoEventService.waitForEvent(
+          'e_n',
+          'csm_widget_operator_types_docs_link',
+        ),
+        modal.parametersDocsLink.click(),
+      ]);
+      openedPage = newPage;
 
-    expect(docsPage.url()).toContain(OPERATOR_TYPES_DOCS_URL);
-  });
+      expect(newPage.url()).toContain(OPERATOR_TYPES_DOCS_URL);
+    },
+  );
 });

@@ -138,6 +138,7 @@ test.describe('Dashboard. Stake & Keys.', { tag: [Tags.forked] }, () => {
 
   test(
     qase(154, 'Should navigate to keys page on header link click'),
+    { tag: [Tags.matomo] },
     async ({ widgetService }) => {
       const { keysSection } = widgetService.dashboardPage;
 

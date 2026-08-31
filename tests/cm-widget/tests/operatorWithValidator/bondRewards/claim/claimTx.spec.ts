@@ -13,7 +13,7 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   'Bond & Rewards. Claim. Transaction.',
-  { tag: [Tags.forked] },
+  { tag: [Tags.forked, Tags.matomo] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -43,7 +43,7 @@ test.describe(
     });
 
     test(
-      'Should claim and send Matomo form events',
+      'Should claim and send form events',
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { claim } = widgetService.bondRewardsPage;
@@ -91,7 +91,7 @@ test.describe(
       },
     );
 
-    test('Should send Matomo events on ETH withdrawal success modal links', async ({
+    test('Should send events on ETH withdrawal success modal links', async ({
       widgetService,
     }) => {
       const { claim } = widgetService.bondRewardsPage;

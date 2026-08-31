@@ -14,7 +14,7 @@ const OPERATOR_DESCRIPTION = 'Test description';
 
 test.describe(
   'Create curated operator. Transaction.',
-  { tag: [Tags.forked, Tags.smoke] },
+  { tag: [Tags.forked, Tags.smoke, Tags.matomo] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -54,7 +54,7 @@ test.describe(
       if (snapshotId) await evmNode.revert(snapshotId);
     });
 
-    test('Should create curated operator and send Matomo form events', async ({
+    test('Should create curated operator and send form events', async ({
       widgetService,
     }) => {
       const { step4 } = widgetService.createNodeOperatorPage;

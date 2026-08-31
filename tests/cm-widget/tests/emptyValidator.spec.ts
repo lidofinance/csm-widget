@@ -213,6 +213,7 @@ test.describe(
 
     test(
       qase(13, 'Should disconnect wallet after click to "Disconnect"'),
+      { tag: [Tags.matomo] },
       async ({ widgetService }) => {
         const { notEligiblePage } = widgetService;
         const welcomePage = new WelcomePage(notEligiblePage.page);

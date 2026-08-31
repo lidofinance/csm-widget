@@ -18,6 +18,7 @@ test.describe(
 
     test(
       qase(1, 'Should open connect modal after click to "Connect wallet"'),
+      { tag: [Tags.matomo] },
       async ({ page }) => {
         const homePage = new WelcomePage(page);
         await homePage.goto();
@@ -102,6 +103,7 @@ test.describe(
 
     test(
       qase(4, 'Should open a new tab after click to "the link" in description'),
+      { tag: [Tags.matomo] },
       async ({ page }) => {
         const homePage = new WelcomePage(page);
         await homePage.goto();

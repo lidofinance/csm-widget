@@ -1,4 +1,5 @@
-import { expect, Locator } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
+import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { FooterElement } from 'tests/csm-widget/pages/elements/common/element.footer';
@@ -50,40 +51,41 @@ const FOOTER_LINKS: FooterLinkCase[] = [
   },
 ];
 
-test.describe('Footer.', async () => {
+test.describe('Footer. Links.', { tag: [Tags.matomo] }, async () => {
   let matomoEventService: MatomoService;
+  let openedPage: Page | undefined;
 
   test.beforeEach(async ({ widgetService, widgetConfig }) => {
     matomoEventService = new MatomoService(widgetService.page, widgetConfig);
     await widgetService.dashboardPage.open();
   });
 
-  test('Should display footer links, send Matomo events and open correct URLs', async ({
-    widgetService,
-  }) => {
-    const { footerElement } = widgetService;
+  test.afterEach(async () => {
+    await openedPage?.close();
+  });
 
-    for (const { name, link, event, url } of FOOTER_LINKS) {
-      await test.step(`"${name}" — visible, Matomo event and opened URL`, async () => {
-        await expect(link(footerElement)).toBeVisible();
-        await expect(link(footerElement)).toHaveAttribute(
-          'href',
-          new RegExp(url),
-        );
+  FOOTER_LINKS.forEach(({ name, link, event, url }) => {
+    test(`Should open "${name}"`, async ({ widgetService }) => {
+      const footerLink = link(widgetService.footerElement);
 
+      await test.step('Link is visible with correct href', async () => {
+        await expect(footerLink).toBeVisible();
+        await expect(footerLink).toHaveAttribute('href', new RegExp(url));
+      });
+
+      await test.step('Click sends event and opens URL', async () => {
         const [newPage] = await Promise.all([
           widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent('e_n', event),
-          link(footerElement).click(),
+          footerLink.click(),
         ]);
+        openedPage = newPage;
 
         // Feedback form is a forms.gle short link, it lands on docs.google.com
         if (name !== 'Feedback form') {
           expect(newPage.url()).toContain(url);
         }
-
-        await newPage.close();
       });
-    }
+    });
   });
 });

@@ -10,7 +10,7 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
   'Bond & Rewards. Add bond. Transaction.',
-  { tag: [Tags.forked] },
+  { tag: [Tags.forked, Tags.matomo] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -30,7 +30,7 @@ test.describe(
     });
 
     test(
-      'Should add bond and send Matomo form events',
+      'Should add bond and send form events',
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { addBond } = widgetService.bondRewardsPage;

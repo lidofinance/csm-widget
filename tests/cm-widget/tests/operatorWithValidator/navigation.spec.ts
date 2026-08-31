@@ -125,6 +125,7 @@ test.describe(
 
     test(
       qase(175, 'Should display Bond & Rewards tabs and navigate correctly'),
+      { tag: [Tags.matomo] },
       async ({ widgetService }) => {
         await navigation.navItem('Bond & Rewards').click();
         await widgetService.page.waitForURL(/\/bond/);
@@ -152,6 +153,7 @@ test.describe(
 
     test(
       qase(176, 'Should display Settings tabs and navigate correctly'),
+      { tag: [Tags.matomo] },
       async ({ widgetService }) => {
         await navigation.navItem('Settings').click();
         await widgetService.page.waitForURL(/\/settings/);

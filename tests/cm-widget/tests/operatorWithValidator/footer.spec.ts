@@ -48,7 +48,7 @@ const FOOTER_LINKS: FooterLinkCase[] = [
   },
 ];
 
-test.describe('Footer.', { tag: [Tags.forked] }, () => {
+test.describe('Footer.', { tag: [Tags.forked, Tags.matomo] }, () => {
   let matomoEventService: MatomoService;
 
   test.beforeEach(async ({ widgetConfig, widgetService }) => {
@@ -56,7 +56,7 @@ test.describe('Footer.', { tag: [Tags.forked] }, () => {
     await widgetService.dashboardPage.open();
   });
 
-  test('Should display footer links, send Matomo events and open correct URLs', async ({
+  test('Should display footer links, send events and open correct URLs', async ({
     widgetService,
   }) => {
     const { footerElement } = widgetService;

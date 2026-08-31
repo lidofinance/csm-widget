@@ -9,7 +9,7 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
   'Operator with validator. Keys. Add keys.',
-  { tag: [Tags.forked] },
+  { tag: [Tags.forked, Tags.matomo] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;

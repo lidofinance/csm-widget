@@ -1,12 +1,14 @@
-import { expect } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
+import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../test.fixture';
 
 const VANOM_DASHBOARD_URL = 'app.hex.tech';
 
-test.describe('Surveys. Sign in', async () => {
+test.describe('Surveys. Sign in', { tag: [Tags.matomo] }, async () => {
   let matomoEventService: MatomoService;
+  let openedPage: Page | undefined;
 
   test.beforeAll(async ({ widgetService }) => {
     await test.step('Enable surveys feature flag', async () => {
@@ -19,6 +21,10 @@ test.describe('Surveys. Sign in', async () => {
     await widgetService.surveysPage.open();
   });
 
+  test.afterEach(async () => {
+    await openedPage?.close();
+  });
+
   test('Should open VaNOM dashboard after click', async ({ widgetService }) => {
     const { surveysPage } = widgetService;
 
@@ -28,12 +34,13 @@ test.describe('Surveys. Sign in', async () => {
       new RegExp(VANOM_DASHBOARD_URL),
     );
 
-    const [vanomPage] = await Promise.all([
+    const [newPage] = await Promise.all([
       surveysPage.waitForPage(PAGE_WAIT_TIMEOUT),
       matomoEventService.waitForEvent('e_n', 'csm_widget_vanom_dashboard_link'),
       surveysPage.vanomDashboardLink.click(),
     ]);
+    openedPage = newPage;
 
-    expect(vanomPage.url()).toContain(VANOM_DASHBOARD_URL);
+    expect(newPage.url()).toContain(VANOM_DASHBOARD_URL);
   });
 });

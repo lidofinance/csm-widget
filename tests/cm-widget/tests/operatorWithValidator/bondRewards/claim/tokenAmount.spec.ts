@@ -61,6 +61,7 @@ test.describe(
           338,
           `Should show correct name, converted amount and hint for ${tokenName}`,
         ),
+        { tag: [Tags.matomo] },
         async ({ widgetService, cmSDK }) => {
           const { claim } = widgetService.bondRewardsPage;
           const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));

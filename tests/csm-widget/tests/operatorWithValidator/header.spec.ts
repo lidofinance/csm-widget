@@ -1,8 +1,9 @@
 import { expect } from '@playwright/test';
+import { Tags } from 'tests/shared/consts/common.const';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../test.fixture';
 
-test.describe('Header. Actions', async () => {
+test.describe('Header. Actions', { tag: [Tags.matomo] }, async () => {
   let matomoEventService: MatomoService;
 
   test.beforeEach(async ({ widgetService, widgetConfig }) => {
