@@ -36,6 +36,7 @@
     "@lidofinance/eth-providers": "^0.63.0",
     "@lidofinance/lido-csm-sdk": "2.2.2",
     "@lidofinance/lido-ethereum-sdk": "^4.8.0",
+    "@lidofinance/lido-shared-ui": "^1.1.3",
     "@lidofinance/lido-ui": "^3.43.0",
     "@lidofinance/next-api-wrapper": "^0.63.0",
     "@lidofinance/next-ip-rate-limit": "^0.63.0",
