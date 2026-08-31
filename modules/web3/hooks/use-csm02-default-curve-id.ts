@@ -10,7 +10,7 @@ export const useCsm02DefaultCurveId = () => {
   const sdk = useSmSDKByModule(MODULE_NAME.CSM_02);
 
   return useQuery({
-    queryKey: ['default-curve-id', { module: MODULE_NAME.CSM_02 }],
+    queryKey: ['default-curve-id-csm-02', { module: MODULE_NAME.CSM_02 }],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
       invariant(sdk);
