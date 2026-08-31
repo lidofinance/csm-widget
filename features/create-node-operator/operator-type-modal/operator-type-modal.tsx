@@ -2,8 +2,8 @@ import { Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPES_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { getUseModal, ModalComponentType } from 'providers/modal-provider';
-import { Grid, MatomoLink, Stack } from 'shared/components';
-import { StyledModal } from './styles';
+import { MatomoLink, Stack } from 'shared/components';
+import { CardsGrid, StyledModal } from './styles';
 import { TypeCard } from './type-card';
 import { useVisibleTypes } from './use-visible-types';
 
@@ -34,11 +34,11 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
         </Stack>
       }
     >
-      <Grid>
+      <CardsGrid $columns={types.length}>
         {types.map((type) => (
           <TypeCard key={type.type} type={type} />
         ))}
-      </Grid>
+      </CardsGrid>
     </StyledModal>
   );
 };
