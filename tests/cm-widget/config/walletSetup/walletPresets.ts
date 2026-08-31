@@ -27,4 +27,9 @@ export const WALLET_PRESET_DEFINITIONS = {
     state: ['withOperator', 'withGroup', 'withKeys', 'withDeposit'],
     gates: ['po', 'pto'],
   },
+
+  MULTI_OPERATOR: {
+    state: ['withOperator', 'withSecondOperator'],
+    gates: ['po', 'pto'],
+  },
 } satisfies Record<string, PresetDefinition>;

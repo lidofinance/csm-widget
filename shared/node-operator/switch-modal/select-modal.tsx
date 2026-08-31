@@ -29,9 +29,18 @@ export const SelectModal: ModalComponentType<{
   }, [disconnect, onClose]);
 
   return (
-    <Modal title="Select Node Operator" onClose={handleClose} {...props}>
+    <Modal
+      title="Select Node Operator"
+      onClose={handleClose}
+      data-testid="selectOperatorModal"
+      {...props}
+    >
       <Stack direction="column" gap="lg">
-        <Text size="xs" color="secondary">
+        <Text
+          size="xs"
+          color="secondary"
+          data-testid="selectOperatorDescription"
+        >
           Your wallet manages several Node Operators. Choose the one to work
           with.
         </Text>
@@ -46,10 +55,10 @@ export const SelectModal: ModalComponentType<{
         </Stack>
       </Stack>
       <StyledStack>
-        <StyledStackItem>
+        <StyledStackItem data-testid="selectOperatorLegendRewards">
           <RoleBadge role={ROLES.REWARDS} /> Rewards Address role
         </StyledStackItem>
-        <StyledStackItem>
+        <StyledStackItem data-testid="selectOperatorLegendManager">
           <RoleBadge role={ROLES.MANAGER} /> Manager Address role
         </StyledStackItem>
       </StyledStack>

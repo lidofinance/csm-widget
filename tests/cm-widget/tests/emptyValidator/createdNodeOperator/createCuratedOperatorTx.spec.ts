@@ -50,8 +50,10 @@ test.describe(
       });
     });
 
-    test.afterEach(async ({ evmNode }) => {
+    test.afterEach(async ({ evmNode, widgetService }) => {
       if (snapshotId) await evmNode.revert(snapshotId);
+      // the fork rollback does not reach the browser
+      await widgetService.selectOperatorModal.forgetSelectionAndReload();
     });
 
     test('Should create curated operator and send Matomo form events', async ({
@@ -88,6 +90,63 @@ test.describe(
         await expect(
           widgetService.page.getByText('Node Operator has been created'),
         ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
+      });
+    });
+
+    test('Should not offer a switch for the first operator', async ({
+      widgetService,
+    }) => {
+      const txModal = widgetService.txModal;
+
+      await test.step('Walk the wizard keeping our own addresses', async () => {
+        await widgetService.createNodeOperatorPage.open();
+        await widgetService.createNodeOperatorPage.step1.fillForm(
+          OPERATOR_TYPE.CM_PTO,
+        );
+        await widgetService.createNodeOperatorPage.step2.managerAddressConnectedButton.click();
+        await widgetService.createNodeOperatorPage.step2.rewardAddressConnectedButton.click();
+        await widgetService.createNodeOperatorPage.step2.continueButton.click();
+        await widgetService.createNodeOperatorPage.step3.fillForm(
+          OPERATOR_NAME,
+          OPERATOR_DESCRIPTION,
+        );
+      });
+
+      await test.step('Send the create transaction', async () => {
+        await widgetService.createNodeOperatorPage.step4.createButton.click();
+        await widgetService.page.waitForSelector(
+          'text=Creating Curated Node Operator',
+          { timeout: STAGE_WAIT_TIMEOUT },
+        );
+        await widgetService.walletPage.confirmTx();
+        await widgetService.page.waitForSelector(
+          'text=Node Operator has been created',
+          { timeout: STAGE_WAIT_TIMEOUT },
+        );
+      });
+
+      await test.step('The success screen offers no switch', async () => {
+        await expect(txModal.switchToOperatorBtn).toBeHidden();
+      });
+
+      await test.step('Add keys carries no Switch prefix', async () => {
+        await expect(
+          txModal.footer.getByRole('button', { name: 'Add keys', exact: true }),
+        ).toBeVisible();
+      });
+
+      await test.step('The created operator is already active', async () => {
+        const description = await txModal.description.innerText();
+        const idMatch = description.match(/Node Operator ID is (\d+)/);
+        expect(
+          idMatch,
+          `success description must name the new operator, got: ${description}`,
+        ).not.toBeNull();
+
+        await txModal.closeModal();
+        expect(await widgetService.extractNodeOperatorId()).toBe(
+          Number(idMatch?.[1]),
+        );
       });
     });
   },

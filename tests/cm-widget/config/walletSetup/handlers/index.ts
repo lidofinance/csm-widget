@@ -1,4 +1,5 @@
 export { withOperator } from './withOperator';
+export { withSecondOperator } from './withSecondOperator';
 export { withGroup } from './withGroup';
 export { withKeys } from './withKeys';
 export { withDeposit } from './withDeposit';
@@ -9,6 +10,7 @@ export { withDeposit } from './withDeposit';
  */
 export const HANDLER_ORDER = [
   'withOperator',
+  'withSecondOperator',
   'withGroup',
   'withKeys',
   'withDeposit',

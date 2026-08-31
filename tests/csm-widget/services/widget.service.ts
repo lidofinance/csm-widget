@@ -6,7 +6,10 @@ import {
 import { expect, Page, test } from '@playwright/test';
 import { FeatureFlagsType } from 'config/feature-flags/types';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
-import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import {
+  RPC_WAIT_TIMEOUT,
+  STAGE_WAIT_TIMEOUT,
+} from 'tests/shared/consts/timeouts';
 import {
   ConfirmOperatorModalElement,
   SelectOperatorModalElement,
@@ -22,6 +25,7 @@ import {
 } from '../pages';
 import { ElementController } from '../pages/elements/controller';
 import { Header } from '../pages/elements/common/element.header';
+import { TxModal } from '../pages/elements/common/element.txProgressModal';
 import { ParametersModal } from '../pages/elements/common/element.parametersModal';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
 
@@ -39,6 +43,7 @@ export class WidgetService {
   public parametersModal: ParametersModal;
   public selectOperatorModal: SelectOperatorModalElement;
   public confirmOperatorModal: ConfirmOperatorModalElement;
+  public txModal: TxModal;
 
   constructor(
     public page: Page,
@@ -55,9 +60,17 @@ export class WidgetService {
     this.parametersModal = new ParametersModal(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);
     this.confirmOperatorModal = new ConfirmOperatorModalElement(this.page);
+    this.txModal = new TxModal(this.page);
   }
 
-  async connectWallet(expectConnectionState = true) {
+  async connectWallet(
+    options: {
+      expectConnectionState?: boolean;
+      keepOperatorPrompt?: boolean;
+    } = {},
+  ) {
+    const { expectConnectionState = true, keepOperatorPrompt = false } =
+      options;
     await test.step('Open default page for connect.', async () => {
       await this.page.goto('/?survey-setup=1');
     });
@@ -102,6 +115,15 @@ export class WidgetService {
           console.error('Wallet is not connected');
         }
       }
+
+      await test.step('Waiting for the widget to settle after login', async () => {
+        await this.selectOperatorModal.connectedOrPrompted.waitFor({
+          state: 'visible',
+          timeout: RPC_WAIT_TIMEOUT,
+        });
+      });
+
+      if (keepOperatorPrompt) return;
 
       await this.selectOperatorModal.selectOperatorIfPrompted();
 

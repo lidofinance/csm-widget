@@ -7,6 +7,7 @@ export type StateCtx = {
   address: `0x${string}`;
   gates: GateSelector[];
   noId?: number;
+  noIds?: number[];
 };
 
 export type HandlerThis = { fork: ForkActionsService };

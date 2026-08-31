@@ -5,6 +5,7 @@ import {
 } from 'tests/shared/services/forkActions.service';
 import {
   withOperator,
+  withSecondOperator,
   withGroup,
   withKeys,
   withDeposit,
@@ -23,6 +24,7 @@ export class WalletStateService {
 
   readonly handlers = {
     withOperator: withOperator.bind(this),
+    withSecondOperator: withSecondOperator.bind(this),
     withGroup: withGroup.bind(this),
     withKeys: withKeys.bind(this),
     withDeposit: withDeposit.bind(this),
@@ -32,7 +34,9 @@ export class WalletStateService {
     this.fork = new ForkActionsService(options);
   }
 
-  async applyAll(presets: WalletPreset[]): Promise<{ noId?: number }[]> {
+  async applyAll(
+    presets: WalletPreset[],
+  ): Promise<{ noId?: number; noIds?: number[] }[]> {
     // Batch gate setup: group all addresses by gate, call setGateAddrs once per gate
     const gateMap = new Map<GateSelector, `0x${string}`[]>();
     for (const preset of presets) {
@@ -49,14 +53,16 @@ export class WalletStateService {
       await this.fork.setGateAddrs([gate], ...addresses);
     }
 
-    const results: { noId?: number }[] = [];
+    const results: { noId?: number; noIds?: number[] }[] = [];
     for (const preset of presets) {
       results.push(await this.apply(preset));
     }
     return results;
   }
 
-  async apply(preset: WalletPreset): Promise<{ noId?: number }> {
+  async apply(
+    preset: WalletPreset,
+  ): Promise<{ noId?: number; noIds?: number[] }> {
     let ctx: StateCtx = {
       address: mnemonicToAccount(preset.secretPhrase).address,
       gates: preset.gates ?? [],
@@ -76,7 +82,7 @@ export class WalletStateService {
       ctx = { ...ctx, ...patch };
     }
 
-    console.info(`[WalletState] done  noId=${ctx.noId}`);
-    return { noId: ctx.noId };
+    console.info(`[WalletState] done  noId=${ctx.noId} noIds=${ctx.noIds}`);
+    return { noId: ctx.noId, noIds: ctx.noIds };
   }
 }

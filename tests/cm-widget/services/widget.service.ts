@@ -22,6 +22,8 @@ import {
 } from '../pages';
 import { GroupPage } from '../pages/group.page';
 import { ElementController } from '../pages/elements/controller';
+import { Header } from '../pages/elements/common/element.header';
+import { TxModal } from '../pages/elements/common/element.txProgressModal';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
 import {
   ConfirmOperatorModalElement,
@@ -44,10 +46,12 @@ export class WidgetService {
   public welcomePage: WelcomePage;
 
   // common elements
+  public header: Header;
   public navBlockElement: NavBlockElement;
   public footerElement: FooterElement;
   public selectOperatorModal: SelectOperatorModalElement;
   public confirmOperatorModal: ConfirmOperatorModalElement;
+  public txModal: TxModal;
 
   constructor(
     public page: Page,
@@ -64,15 +68,24 @@ export class WidgetService {
     this.welcomePage = new WelcomePage(this.page);
 
     // common elements
+    this.header = new Header(this.page);
     this.navBlockElement = new NavBlockElement(this.page);
     this.footerElement = new FooterElement(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);
     this.confirmOperatorModal = new ConfirmOperatorModalElement(this.page);
+    this.txModal = new TxModal(this.page);
   }
 
-  async connectWallet(expectConnectionState = true) {
+  async connectWallet(
+    options: {
+      expectConnectionState?: boolean;
+      keepOperatorPrompt?: boolean;
+    } = {},
+  ) {
+    const { expectConnectionState = true, keepOperatorPrompt = false } =
+      options;
     await test.step('Open default page for connect.', async () => {
-      await this.welcomePage.goto('/');
+      await this.page.goto('/');
     });
     await test.step('Connect wallet to widget', async () => {
       const element = new ElementController(this.page);
@@ -123,12 +136,14 @@ export class WidgetService {
         });
       });
 
-      await test.step('Waiting for load widget after login', async () => {
-        await this.welcomePage.welcomeSection.loader.waitFor({
-          state: 'detached',
+      await test.step('Waiting for the widget to settle after login', async () => {
+        await this.selectOperatorModal.connectedOrPrompted.waitFor({
+          state: 'visible',
           timeout: RPC_WAIT_TIMEOUT,
         });
       });
+
+      if (keepOperatorPrompt) return;
 
       await this.selectOperatorModal.selectOperatorIfPrompted();
 

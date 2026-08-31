@@ -8,6 +8,7 @@ export type PresetRuntime = {
   secretPhrase: string;
   address: `0x${string}`;
   noId?: number;
+  noIds?: number[];
   state: string[];
   gates?: string[];
 };

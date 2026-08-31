@@ -91,6 +91,7 @@ const setupPresetAccounts = async (): Promise<void> => {
       secretPhrase,
       address: mnemonicToAccount(secretPhrase).address,
       noId: results[i].noId,
+      noIds: results[i].noIds,
       state: def.state,
       gates: 'gates' in def ? def.gates : undefined,
     };
@@ -101,7 +102,10 @@ const setupPresetAccounts = async (): Promise<void> => {
   console.info(
     '[globalSetup] Preset accounts ready:',
     Object.fromEntries(
-      Object.entries(state).map(([name, { noId }]) => [name, { noId }]),
+      Object.entries(state).map(([name, { noId, noIds }]) => [
+        name,
+        { noId, noIds },
+      ]),
     ),
   );
 };

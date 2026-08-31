@@ -1,10 +1,11 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, test } from '@playwright/test';
 
 export class Header {
   page: Page;
   header: Locator;
   accountSection: Locator;
   connectWalletBtn: Locator;
+  disconnectBtn: Locator;
   operatorTypeBadge: Locator;
   operatorTypeCurve: Locator;
   switchOperatorButton: Locator;
@@ -22,10 +23,18 @@ export class Header {
     );
     this.operatorTypeCurve = this.header.getByTestId('nodeOperatorCurve');
     this.switchOperatorButton = this.header.getByTestId('nodeOperatorHeader');
-    this.operatorSwitchModal = this.page.locator('[role=dialog]', {
-      hasText: 'Switch Node Operator',
-    });
+    this.operatorSwitchModal = this.page.getByTestId('switchOperatorModal');
     this.switchModalRows = this.page.getByTestId('switchModalOperatorRow');
+    this.disconnectBtn = this.page
+      .locator('[role=dialog]')
+      .getByTestId('disconnectBtn');
+  }
+
+  async disconnectWallet() {
+    await test.step('Disconnect the wallet from the account modal', async () => {
+      await this.accountSection.click();
+      await this.disconnectBtn.click();
+    });
   }
 
   async isAccountSectionVisible() {

@@ -32,7 +32,12 @@ export const SwitchModal: ModalComponentType<{
   );
 
   return (
-    <Modal title="Switch Node Operator" onClose={onClose} {...props}>
+    <Modal
+      title="Switch Node Operator"
+      onClose={onClose}
+      data-testid="switchOperatorModal"
+      {...props}
+    >
       <Stack direction="column" gap="lg">
         {isModuleCM ? (
           <CmSwitchList active={active} list={list} onSwitch={handleSwitch} />
