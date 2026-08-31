@@ -31,7 +31,10 @@ export class KeysPage extends BasePage {
 
   async goto() {
     await test.step('Open the Keys page to create new node operator', async () => {
-      await this.page.goto('/create');
+      await this.openWithRetry(
+        '/create',
+        this.createNodeOperatorForm.formBlock,
+      );
     });
   }
 

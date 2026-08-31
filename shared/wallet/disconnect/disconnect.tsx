@@ -1,9 +1,9 @@
 import { Button, ButtonProps } from '@lidofinance/lido-ui';
 import { FC, MouseEventHandler, PropsWithChildren, useCallback } from 'react';
-import { useDisconnect } from 'reef-knot/core-react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
+import { useDisconnectWallet } from '../use-disconnect-wallet';
 
 export const Disconnect: FC<
   PropsWithChildren<WithMatomoEvent<ButtonProps>>
@@ -13,12 +13,12 @@ export const Disconnect: FC<
   onClick,
   ...rest
 }) => {
-  const { disconnect } = useDisconnect();
+  const disconnect = useDisconnectWallet();
 
   const handleClick: MouseEventHandler<HTMLButtonElement> = useCallback(
     (e) => {
       trackMatomoEvent(matomoEvent);
-      disconnect?.();
+      disconnect();
       onClick?.(e);
     },
     [disconnect, matomoEvent, onClick],

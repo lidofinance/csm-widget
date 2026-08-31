@@ -17,8 +17,7 @@ import {
 } from './types';
 
 export type CuratedOperatorFlow =
-  | { action: 'no-gates' }
-  | ({ action: 'create-operator' } & Executable);
+  { action: 'no-gates' } | ({ action: 'create-operator' } & Executable);
 
 export const useCuratedOperatorFlowResolver = (): FlowResolver<
   CuratedOperatorFormInputType,
@@ -26,7 +25,7 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
   CuratedOperatorFlow
 > => {
   const sdk = useSmSDK(MODULE_NAME.CM);
-  const appendNO = useAppendOperator(true);
+  const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
   const buildCallback = useTxModalStagesCuratedOperator();

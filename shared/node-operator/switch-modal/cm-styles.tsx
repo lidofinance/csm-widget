@@ -33,6 +33,32 @@ export const CmRowStyle = styled.div`
   }
 `;
 
+export const CmRowButtonStyle = styled(CmRowStyle).attrs({
+  as: 'button',
+  type: 'button',
+})`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: ${({ theme }) => theme.spaceMap.sm}px;
+  width: 100%;
+  border: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover,
+  &:focus-visible {
+    background-color: color-mix(
+      in srgb,
+      var(--lido-color-primary) 12%,
+      transparent
+    );
+  }
+`;
+
 export const CmRowDescriptor = styled.div`
   display: flex;
   align-items: center;

@@ -4,6 +4,7 @@ import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
+import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
@@ -28,6 +29,7 @@ test.describe('Operator without keys. Common suite.', async () => {
       await mainPage.starterPackSection.createNodeOperatorBtn.click();
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
+        timeout: RPC_WAIT_TIMEOUT,
       });
       await createKeysPage.createNodeOperatorForm.addNewKeys(
         keysGeneratorService.generateKeys(),

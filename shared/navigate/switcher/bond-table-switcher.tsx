@@ -1,6 +1,7 @@
 import { PATH } from 'consts';
 import { FC, ReactNode } from 'react';
-import { Chip, TabItem, TabsHeader } from 'shared/components';
+import { TabItem, TabsHeader } from 'shared/components';
+import { Chip } from 'shared/components/chip';
 
 type Item = {
   title: string;

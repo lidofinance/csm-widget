@@ -1,5 +1,5 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
-import { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren, useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
   FormControllerProvider,
@@ -39,9 +39,17 @@ export const ChangeRoleFormProvider: FC<
   const resolve = useChangeRoleFlowResolver(role);
   const submitter = useFlowSubmit(resolve);
 
+  const handleReset = useCallback(() => {
+    formObject.reset({ intent: 'submit', address: undefined });
+  }, [formObject]);
+
   return (
     <FormProvider {...formObject}>
-      <FormControllerProvider submitter={submitter} formName="changeRole">
+      <FormControllerProvider
+        submitter={submitter}
+        formName="changeRole"
+        onReset={handleReset}
+      >
         {children}
       </FormControllerProvider>
     </FormProvider>

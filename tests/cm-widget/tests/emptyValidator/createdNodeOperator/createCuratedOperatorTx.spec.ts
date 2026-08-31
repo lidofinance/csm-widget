@@ -14,7 +14,7 @@ const OPERATOR_DESCRIPTION = 'Test description';
 
 test.describe(
   'Create curated operator. Transaction.',
-  { tag: [Tags.forked, Tags.performTX, Tags.smoke] },
+  { tag: [Tags.forked, Tags.smoke] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -35,7 +35,7 @@ test.describe(
       });
 
       await test.step('Go through the creation wizard', async () => {
-        await widgetService.page.goto('/');
+        await widgetService.createNodeOperatorPage.open();
         await widgetService.createNodeOperatorPage.step1.fillForm(
           OPERATOR_TYPE.CM_PTO,
         );

@@ -13,7 +13,7 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   'Bond & Rewards. Claim. Transaction.',
-  { tag: [Tags.forked, Tags.performTX] },
+  { tag: [Tags.forked] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;

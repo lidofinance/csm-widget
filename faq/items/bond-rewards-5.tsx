@@ -1,6 +1,9 @@
 import React from 'react';
 import { Faq } from 'types';
 import { FaqLink } from 'shared/components';
+import { getExternalLinks } from 'consts/external-links';
+
+const { stakeWidget } = getExternalLinks();
 
 export const BondRewards5: Faq = {
   title: 'How to claim ETH using a withdrawal NFT',
@@ -26,7 +29,7 @@ export const BondRewards5: Faq = {
           </FaqLink>
           . To know if your ETH is ready to be claimed you, can check its status
           on the{' '}
-          <FaqLink href="https://stake.lido.fi/withdrawals/claim">
+          <FaqLink href={`${stakeWidget}/withdrawals/claim`}>
             Claim page
           </FaqLink>
           . If your request is marked as &quot;<strong>Ready to claim</strong>

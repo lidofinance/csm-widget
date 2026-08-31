@@ -10,7 +10,7 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
   'Bond & Rewards. Add bond. Transaction.',
-  { tag: [Tags.forked, Tags.performTX] },
+  { tag: [Tags.forked] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -50,6 +50,8 @@ test.describe(
             addBond.addBondButton.click(),
           ]);
         });
+
+        await widgetService.confirmOperatorModal.confirm();
 
         await test.step('Confirm transaction and check Matomo success event', async () => {
           await widgetService.page.waitForSelector(
