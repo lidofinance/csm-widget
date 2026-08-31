@@ -18,6 +18,7 @@ export * from './use-ics-proof';
 export * from './use-idvtc-curve-id';
 export * from './use-idvtc-paused';
 export * from './use-idvtc-proof';
+export * from './merge-invites';
 export * from './use-invites';
 export * from './use-is-contract';
 export * from './use-is-lock-expired';

@@ -25,7 +25,7 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
   CuratedOperatorFlow
 > => {
   const sdk = useSmSDK(MODULE_NAME.CM);
-  const appendNO = useAppendOperator(MODULE_NAME.CM);
+  const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
   const buildCallback = useTxModalStagesCuratedOperator();
@@ -61,7 +61,7 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
           if (result) {
             const roles = getNodeOperatorRoles(result, data.address);
             if (roles.length > 0) {
-              appendNO(result);
+              appendNO({ ...result, module: MODULE_NAME.CM });
               void n(PATH.HOME);
             } else {
               setOperatorCustomAddresses(result.nodeOperatorId);

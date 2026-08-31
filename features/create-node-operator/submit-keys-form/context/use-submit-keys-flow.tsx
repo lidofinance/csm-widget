@@ -55,7 +55,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   // A curveId means a different operator type per module, so resolve against
   // the module being created.
   const getOperatorType = useModuleOperatorTypeGetter(targetModule);
-  const appendNO = useAppendOperator(targetModule);
+  const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
@@ -221,7 +221,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
           if (result) {
             const roles = getNodeOperatorRoles(result, data.address);
             if (roles.length > 0) {
-              appendNO(result);
+              appendNO({ ...result, module: targetModule });
             } else {
               setOperatorCustomAddresses(result.nodeOperatorId);
             }

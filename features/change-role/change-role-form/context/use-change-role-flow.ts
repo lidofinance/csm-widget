@@ -28,7 +28,7 @@ export const useChangeRoleFlowResolver = (
 > => {
   const sdk = useSmSDK();
   const { module } = useModule();
-  const appendNO = useAppendOperator(module);
+  const appendNO = useAppendOperator();
   const confirm = useConfirmChangeRoleModal();
   const mode = useChangeRoleMode(role);
   const buildCallback = useTxModalStagesChangeRole(role);
@@ -44,7 +44,7 @@ export const useChangeRoleFlowResolver = (
               role: data.role,
               callback: buildCallback(input, data),
             });
-            if (result) appendNO(result);
+            if (result) appendNO({ ...result, module });
           },
         };
       }
@@ -109,12 +109,12 @@ export const useChangeRoleFlowResolver = (
           }
 
           if (result) {
-            appendNO(result);
+            appendNO({ ...result, module });
           }
         },
       };
     },
-    [sdk, appendNO, confirm, mode, buildCallback],
+    [sdk, appendNO, module, confirm, mode, buildCallback],
   );
 };
 

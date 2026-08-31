@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { PATH } from 'consts/urls';
-import { useAppendOperator, useModule, useSmSDK } from 'modules/web3';
+import { useAppendOperator, useLidoSDK } from 'modules/web3';
 import {
   type Executable,
   type FlowResolver,
@@ -23,9 +23,8 @@ export const useAcceptInviteFlowResolver = (): FlowResolver<
   AcceptInviteFormNetworkData,
   AcceptInviteFlow
 > => {
-  const sdk = useSmSDK();
-  const { module } = useModule();
-  const appendNO = useAppendOperator(module);
+  const { sm } = useLidoSDK();
+  const appendNO = useAppendOperator();
   const n = useNavigate();
   const buildCallback = useTxModalStagesAcceptInvite();
 
@@ -40,13 +39,16 @@ export const useAcceptInviteFlowResolver = (): FlowResolver<
         submit: async () => {
           invariant(invite !== undefined, 'Invite is not defined');
 
+          const sdk = sm[invite.module];
+          invariant(sdk, `${invite.module} SDK not initialized`);
+
           const { result } = await sdk.roles.confirmAddress({
             nodeOperatorId: invite.nodeOperatorId,
             role: invite.role,
             callback: buildCallback(input, data),
           });
 
-          if (result) appendNO(result);
+          if (result) appendNO({ ...result, module: invite.module });
 
           if (data.nodeOperatorId === undefined && data.invites.length <= 1) {
             void n(PATH.HOME);
@@ -54,7 +56,7 @@ export const useAcceptInviteFlowResolver = (): FlowResolver<
         },
       };
     },
-    [sdk.roles, appendNO, n, buildCallback],
+    [sm, appendNO, n, buildCallback],
   );
 };
 
