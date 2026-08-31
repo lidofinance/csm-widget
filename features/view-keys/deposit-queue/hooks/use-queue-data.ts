@@ -12,7 +12,7 @@ import {
   useShareLimit,
 } from 'modules/web3';
 import { useMemo } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { createFormControl, useFormContext, useWatch } from 'react-hook-form';
 import { DepositDataInputType } from 'shared/hook-form/deposit-data';
 import { QueueUnit } from '../types';
 import { calculateAndSelectByOperator } from './calculate-and-select-by-operator';
@@ -52,6 +52,10 @@ const toShareLimit = (data: ShareLimitInfo, unit: QueueUnit): ShareLimit =>
         queue: data.queue,
       };
 
+// The graph also renders outside any form (View Keys page); useWatch needs a
+// control to bind to, and a detached one simply never emits.
+const DETACHED_CONTROL = createFormControl<DepositDataInputType>().control;
+
 export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
   const { module: activeModule } = useModule();
   const targetModule = useDepositQueueModule(module);
@@ -88,7 +92,10 @@ export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
   );
 
   const form = useFormContext<DepositDataInputType>();
-  const submittingCount = form?.getValues('depositData')?.length;
+  const submittingCount = useWatch<DepositDataInputType, 'depositData'>({
+    control: form?.control ?? DETACHED_CONTROL,
+    name: 'depositData',
+  })?.length;
 
   const submittingAllocation: SubmittingAllocation | undefined = useMemo(() => {
     const placement = calculatePriorityPlacement(
