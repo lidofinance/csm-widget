@@ -34,17 +34,21 @@ test.describe('Visit with referrer', { tag: [Tags.matomo] }, async () => {
   });
 
   REFERRER_CASES.forEach(({ name, ref, expectedAddress }) => {
-    test(`Should send event when passed as ${name}`, async ({ page }) => {
+    test(`Should store referrer when passed as ${name}`, async ({ page }) => {
       const homePage = new WelcomePage(page);
 
-      await Promise.all([
-        matomoEventService.waitForEvent('e_n', 'csm_widget_visit_referrer'),
-        homePage.goto(`/?ref=${ref}`),
-      ]);
+      await test.step('Open widget with referrer', async () => {
+        await Promise.all([
+          matomoEventService.waitForEvent('e_n', 'csm_widget_visit_referrer'),
+          homePage.goto(`/?ref=${ref}`),
+        ]);
+      });
 
-      expect(await homePage.getSessionStorageData('referrer')).toBe(
-        JSON.stringify(expectedAddress),
-      );
+      await test.step('Referrer address is stored in session storage', async () => {
+        expect(await homePage.getSessionStorageData('referrer')).toBe(
+          JSON.stringify(expectedAddress),
+        );
+      });
     });
   });
 });

@@ -41,7 +41,7 @@ test.describe(
       async ({ widgetService }) => {
         const { claimerPage, txModal } = widgetService.settingsPage;
 
-        await test.step('Set new Rewards claimer address and check Matomo start event', async () => {
+        await test.step('Set new Rewards claimer address', async () => {
           await Promise.all([
             matomoEventService.waitForEvent(
               'e_n',
@@ -51,7 +51,7 @@ test.describe(
           ]);
         });
 
-        await test.step('Confirm transaction and check Matomo success event', async () => {
+        await test.step('Confirm transaction', async () => {
           await widgetService.page.waitForSelector(
             'text=You are setting Rewards claimer address',
             { timeout: STAGE_WAIT_TIMEOUT },

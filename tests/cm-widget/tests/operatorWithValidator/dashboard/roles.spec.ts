@@ -39,7 +39,7 @@ test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
         ).toContainText(currentAddress);
       });
 
-      await test.step('Check reward address etherscan link and Matomo event', async () => {
+      await test.step('Click to etherscan link and waiting for open resource', async () => {
         const [etherscanPage] = await Promise.all([
           widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
@@ -74,7 +74,7 @@ test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
         ).toContainText(currentAddress);
       });
 
-      await test.step('Check manager address etherscan link and Matomo event', async () => {
+      await test.step('Click to etherscan link and waiting for open resource', async () => {
         const [etherscanPage] = await Promise.all([
           widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
@@ -142,7 +142,7 @@ test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
     async ({ widgetService }) => {
       const { rolesSection } = widgetService.dashboardPage;
 
-      await test.step('Click section header link and check Matomo event', async () => {
+      await test.step('Click section header link', async () => {
         await Promise.all([
           matomoEventService.waitForEvent(
             'e_n',

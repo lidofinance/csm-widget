@@ -28,19 +28,26 @@ test.describe('Surveys. Sign in', { tag: [Tags.matomo] }, async () => {
   test('Should open VaNOM dashboard after click', async ({ widgetService }) => {
     const { surveysPage } = widgetService;
 
-    await expect(surveysPage.vanomDashboardLink).toBeVisible();
-    await expect(surveysPage.vanomDashboardLink).toHaveAttribute(
-      'href',
-      new RegExp(VANOM_DASHBOARD_URL),
-    );
+    await test.step('Link is visible with correct href', async () => {
+      await expect(surveysPage.vanomDashboardLink).toBeVisible();
+      await expect(surveysPage.vanomDashboardLink).toHaveAttribute(
+        'href',
+        new RegExp(VANOM_DASHBOARD_URL),
+      );
+    });
 
-    const [newPage] = await Promise.all([
-      surveysPage.waitForPage(PAGE_WAIT_TIMEOUT),
-      matomoEventService.waitForEvent('e_n', 'csm_widget_vanom_dashboard_link'),
-      surveysPage.vanomDashboardLink.click(),
-    ]);
-    openedPage = newPage;
+    await test.step('Click to link and waiting for open resource', async () => {
+      const [newPage] = await Promise.all([
+        surveysPage.waitForPage(PAGE_WAIT_TIMEOUT),
+        matomoEventService.waitForEvent(
+          'e_n',
+          'csm_widget_vanom_dashboard_link',
+        ),
+        surveysPage.vanomDashboardLink.click(),
+      ]);
+      openedPage = newPage;
 
-    expect(newPage.url()).toContain(VANOM_DASHBOARD_URL);
+      expect(newPage.url()).toContain(VANOM_DASHBOARD_URL);
+    });
   });
 });

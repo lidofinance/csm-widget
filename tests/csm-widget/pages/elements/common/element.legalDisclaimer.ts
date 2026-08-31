@@ -7,7 +7,7 @@ export class LegalDisclaimerElement {
 
   constructor(page: Page) {
     this.page = page;
-    this.root = this.page.getByTestId('legal-disclaimer');
+    this.root = this.page.getByTestId('legalDisclaimer');
     this.privacyNoticeLink = this.root.getByTestId('legalPrivacyNoticeLink');
   }
 }

@@ -73,7 +73,7 @@ test.describe('Footer. Links.', { tag: [Tags.matomo] }, async () => {
         await expect(footerLink).toHaveAttribute('href', new RegExp(url));
       });
 
-      await test.step('Click sends event and opens URL', async () => {
+      await test.step('Click to link and waiting for open resource', async () => {
         const [newPage] = await Promise.all([
           widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent('e_n', event),

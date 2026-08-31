@@ -118,23 +118,27 @@ test.describe('New operator. Operator type modal', async () => {
 
       await widgetService.mainPage.openOperatorTypeModal();
 
-      await expect(modal.parametersDocsLink).toBeVisible();
-      await expect(modal.parametersDocsLink).toHaveAttribute(
-        'href',
-        `${OPERATOR_TYPES_DOCS_URL}#node-operator-types`,
-      );
+      await test.step('Link is visible with correct href', async () => {
+        await expect(modal.parametersDocsLink).toBeVisible();
+        await expect(modal.parametersDocsLink).toHaveAttribute(
+          'href',
+          `${OPERATOR_TYPES_DOCS_URL}#node-operator-types`,
+        );
+      });
 
-      const [newPage] = await Promise.all([
-        widgetService.mainPage.waitForPage(PAGE_WAIT_TIMEOUT),
-        matomoEventService.waitForEvent(
-          'e_n',
-          'csm_widget_operator_types_docs_link',
-        ),
-        modal.parametersDocsLink.click(),
-      ]);
-      openedPage = newPage;
+      await test.step('Click to link and waiting for open resource', async () => {
+        const [newPage] = await Promise.all([
+          widgetService.mainPage.waitForPage(PAGE_WAIT_TIMEOUT),
+          matomoEventService.waitForEvent(
+            'e_n',
+            'csm_widget_operator_types_docs_link',
+          ),
+          modal.parametersDocsLink.click(),
+        ]);
+        openedPage = newPage;
 
-      expect(newPage.url()).toContain(OPERATOR_TYPES_DOCS_URL);
+        expect(newPage.url()).toContain(OPERATOR_TYPES_DOCS_URL);
+      });
     },
   );
 });

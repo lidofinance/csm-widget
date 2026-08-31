@@ -161,7 +161,7 @@ test.describe(
       async ({ widgetService }) => {
         const { bondRewards } = widgetService.dashboardPage;
 
-        await test.step('Click section header link and check Matomo event', async () => {
+        await test.step('Click section header link', async () => {
           await Promise.all([
             matomoEventService.waitForEvent(
               'e_n',

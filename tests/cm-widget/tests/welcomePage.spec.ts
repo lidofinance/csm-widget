@@ -30,7 +30,7 @@ test.describe(
           ).toContainText('Connect wallet');
         });
 
-        await test.step('Click "Connect wallet", check Matomo event and modal', async () => {
+        await test.step('Click "Connect wallet" and check modal', async () => {
           await Promise.all([
             matomoEventService.waitForEvent('e_n', 'cm_widget_connect_wallet'),
             homePage.welcomeSection.connectWallet.click(),
@@ -108,7 +108,7 @@ test.describe(
         const homePage = new WelcomePage(page);
         await homePage.goto();
 
-        await test.step('Click "the link", check Matomo event and new tab URL', async () => {
+        await test.step('Click to link and waiting for open resource', async () => {
           const [detailedPage] = await Promise.all([
             homePage.waitForPage(PAGE_WAIT_TIMEOUT),
             matomoEventService.waitForEvent(

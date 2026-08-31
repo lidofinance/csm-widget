@@ -140,7 +140,7 @@ test.describe(
         });
 
         for (const { title, url, event } of BOND_TABS) {
-          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+          await test.step(`Navigate to "${title}" tab`, async () => {
             await Promise.all([
               matomoEventService.waitForEvent('e_n', event),
               navigation.switcherTab(title).click(),
@@ -168,7 +168,7 @@ test.describe(
         });
 
         for (const { title, url, event } of SETTINGS_TABS) {
-          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+          await test.step(`Navigate to "${title}" tab`, async () => {
             await Promise.all([
               matomoEventService.waitForEvent('e_n', event),
               navigation.switcherTab(title).click(),

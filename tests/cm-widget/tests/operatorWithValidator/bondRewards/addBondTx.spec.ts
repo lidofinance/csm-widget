@@ -30,7 +30,7 @@ test.describe(
     });
 
     test(
-      'Should add bond and send form events',
+      'Should add bond in ETH',
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { addBond } = widgetService.bondRewardsPage;
@@ -41,7 +41,7 @@ test.describe(
           await expect(addBond.addBondButton).toBeEnabled();
         });
 
-        await test.step('Add bond and check Matomo start event', async () => {
+        await test.step('Add bond', async () => {
           await Promise.all([
             matomoEventService.waitForEvent(
               'e_n',
@@ -53,7 +53,7 @@ test.describe(
 
         await widgetService.confirmOperatorModal.confirm();
 
-        await test.step('Confirm transaction and check Matomo success event', async () => {
+        await test.step('Confirm transaction', async () => {
           await widgetService.page.waitForSelector(
             'text=Confirm this transaction in your wallet',
             { timeout: STAGE_WAIT_TIMEOUT },

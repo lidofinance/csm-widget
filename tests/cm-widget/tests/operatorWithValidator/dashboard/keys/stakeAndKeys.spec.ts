@@ -142,7 +142,7 @@ test.describe('Dashboard. Stake & Keys.', { tag: [Tags.forked] }, () => {
     async ({ widgetService }) => {
       const { keysSection } = widgetService.dashboardPage;
 
-      await test.step('Click section header link and check Matomo event', async () => {
+      await test.step('Click section header link', async () => {
         await Promise.all([
           matomoEventService.waitForEvent(
             'e_n',

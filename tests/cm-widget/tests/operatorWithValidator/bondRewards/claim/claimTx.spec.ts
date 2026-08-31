@@ -43,7 +43,7 @@ test.describe(
     });
 
     test(
-      'Should claim and send form events',
+      'Should claim in stETH',
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { claim } = widgetService.bondRewardsPage;
@@ -56,7 +56,7 @@ test.describe(
           });
         });
 
-        await test.step('Claim and check Matomo start event', async () => {
+        await test.step('Claim', async () => {
           await Promise.all([
             matomoEventService.waitForEvent(
               'e_n',
@@ -66,7 +66,7 @@ test.describe(
           ]);
         });
 
-        await test.step('Confirm transaction and check Matomo success event', async () => {
+        await test.step('Confirm transaction', async () => {
           await widgetService.page.waitForSelector(
             'text=Confirm this transaction in your wallet',
             { timeout: PAGE_WAIT_TIMEOUT },
@@ -91,7 +91,7 @@ test.describe(
       },
     );
 
-    test('Should send events on ETH withdrawal success modal links', async ({
+    test('Should open links on ETH withdrawal success modal', async ({
       widgetService,
     }) => {
       const { claim } = widgetService.bondRewardsPage;
@@ -119,7 +119,7 @@ test.describe(
         ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
       });
 
-      await test.step('"Claim tab" link opens Staking Widget and sends Matomo event', async () => {
+      await test.step('Click to "Claim tab" link and waiting for open resource', async () => {
         await Promise.all([
           widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
           matomoEventService.waitForEvent(
@@ -132,7 +132,7 @@ test.describe(
         ]);
       });
 
-      await test.step('"This guide" link sends Matomo event', async () => {
+      await test.step('Click to "This guide" link', async () => {
         await Promise.all([
           matomoEventService.waitForEvent(
             'e_n',

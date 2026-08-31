@@ -44,7 +44,7 @@ test.describe(
     });
 
     test(
-      'Should save splits and send form events',
+      'Should save single 100% split',
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { splitsPage } = widgetService.settingsPage;
@@ -59,7 +59,7 @@ test.describe(
           await widgetService.page.waitForTimeout(LOW_TIMEOUT);
         });
 
-        await test.step('Save splits and check Matomo start event', async () => {
+        await test.step('Save splits', async () => {
           await expect(splitsPage.saveSplitsButton).toBeEnabled();
           await Promise.all([
             matomoEventService.waitForEvent(
@@ -76,7 +76,7 @@ test.describe(
             .click();
         });
 
-        await test.step('Confirm transaction and check Matomo success event', async () => {
+        await test.step('Confirm transaction', async () => {
           await widgetService.page.waitForSelector(
             'text=Confirm this transaction in your wallet',
             { timeout: PAGE_WAIT_TIMEOUT },

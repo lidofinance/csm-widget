@@ -218,7 +218,7 @@ test.describe(
         const { notEligiblePage } = widgetService;
         const welcomePage = new WelcomePage(notEligiblePage.page);
 
-        await test.step('Click "Disconnect" and check Matomo event', async () => {
+        await test.step('Click "Disconnect"', async () => {
           await Promise.all([
             matomoEventService.waitForEvent(
               'e_n',

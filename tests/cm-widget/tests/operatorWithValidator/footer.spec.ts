@@ -56,13 +56,11 @@ test.describe('Footer.', { tag: [Tags.forked, Tags.matomo] }, () => {
     await widgetService.dashboardPage.open();
   });
 
-  test('Should display footer links, send events and open correct URLs', async ({
-    widgetService,
-  }) => {
+  test('Should open footer links', async ({ widgetService }) => {
     const { footerElement } = widgetService;
 
     for (const { name, link, event, url } of FOOTER_LINKS) {
-      await test.step(`"${name}" — visible, Matomo event and opened URL`, async () => {
+      await test.step(`Click to "${name}" link and waiting for open resource`, async () => {
         await expect(link(footerElement)).toBeVisible();
         await expect(link(footerElement)).toHaveAttribute(
           'href',
