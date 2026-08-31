@@ -57,12 +57,12 @@ export const useCreateCurveId = () => {
     !idvtcPaused && idvtcProof?.proof && !idvtcProof.isConsumed;
   const isIcsEligible = !icsPaused && icsProof?.proof && !icsProof.isConsumed;
 
-  const { isRequested, type: requestedType } = useRequestedOperatorType();
+  const requestedType = useRequestedOperatorType();
 
-  const curveId = isRequested
-    ? requestedType === OPERATOR_TYPE.CSM_IDVTC && isIdvtcEligible
+  const curveId = requestedType
+    ? requestedType === OPERATOR_TYPE.CSM_IDVTC
       ? idvtcCurveId
-      : requestedType === OPERATOR_TYPE.CSM_ICS && isIcsEligible
+      : requestedType === OPERATOR_TYPE.CSM_ICS
         ? icsCurveId
         : defCurveId
     : isIdvtcEligible

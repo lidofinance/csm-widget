@@ -1,4 +1,4 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
 import { deployedModules, isModuleDeployed } from 'consts';
 import {
@@ -35,18 +35,19 @@ export const useCanCreateNodeOperator = () => {
   const { data: idvtcCurveId, isPending: isIdvtcCurveIdPending } =
     useIdvtcCurveId();
 
+  const isIcsEligible =
+    !isIcsPaused && !!icsProof?.proof && !icsProof.isConsumed;
+  const isIdvtcEligible =
+    !isIdvtcPaused && !!idvtcProof?.proof && !idvtcProof.isConsumed;
+
   const canCreateIdvtc =
-    !isIdvtcPaused &&
-    !!idvtcProof?.proof &&
-    !idvtcProof.isConsumed &&
+    isIdvtcEligible &&
     idvtcCurveId !== undefined &&
     icsCurveId !== undefined &&
     nodeOperator?.curveId === icsCurveId;
 
   const canCreateIcs =
-    !isIcsPaused &&
-    !!icsProof?.proof &&
-    !icsProof.isConsumed &&
+    isIcsEligible &&
     icsCurveId !== undefined &&
     idvtcCurveId !== undefined &&
     nodeOperator?.curveId === idvtcCurveId;
@@ -80,5 +81,14 @@ export const useCanCreateNodeOperator = () => {
     isAccountActive && !status?.isPaused && creatableModules.length > 0,
   );
 
-  return { canCreate, creatableModules, isPending };
+  const isCsmCreatable = creatableModules.includes(MODULE_NAME.CSM);
+
+  const creatableTypes = [
+    isCsmCreatable && !hasOperatorIn(MODULE_NAME.CSM) && OPERATOR_TYPE.CSM_DEF,
+    isCsmCreatable && isIcsEligible && OPERATOR_TYPE.CSM_ICS,
+    isCsmCreatable && isIdvtcEligible && OPERATOR_TYPE.CSM_IDVTC,
+    creatableModules.includes(MODULE_NAME.CSM_02) && OPERATOR_TYPE.CSM2_DEF,
+  ].filter((type): type is OPERATOR_TYPE => !!type);
+
+  return { canCreate, creatableModules, creatableTypes, isPending };
 };

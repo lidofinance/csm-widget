@@ -8,7 +8,7 @@ const CSM_FAMILY: MODULE_NAME[] = [MODULE_NAME.CSM, MODULE_NAME.CSM_02];
 
 // CM creates go through curated-operator-form; this form is CSM-family only.
 export const useTargetModule = (): MODULE_NAME.CSM | MODULE_NAME.CSM_02 => {
-  const { type } = useRequestedOperatorType();
+  const type = useRequestedOperatorType();
   const { creatableModules } = useCanCreateNodeOperator();
 
   if (type) {
