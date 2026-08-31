@@ -49,7 +49,7 @@ export const BadgeText = styled(Text)`
   font-weight: 700;
   font-size: 36px;
   letter-spacing: -0.5pt;
-  color: var(--lido-color-foreground);
+  color: var(--lido-color-primaryContrast);
 `;
 
 export const canvasStyles: CSSProperties = {

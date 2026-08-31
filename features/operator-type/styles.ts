@@ -18,7 +18,7 @@ export const OptionCard = styled(Block)`
 
 export const TypeBadge = styled(BadgeStyle)<{ $variant: 'ICS' | 'IDVTC' }>`
   font-weight: 700;
-  color: var(--lido-color-foreground);
+  color: var(--lido-color-primaryContrast);
   padding-inline: 6px;
 
   ${({ $variant }) =>
