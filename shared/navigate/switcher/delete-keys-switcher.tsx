@@ -1,7 +1,8 @@
 import { Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import { FC, ReactNode } from 'react';
-import { Chip, Grid, RadioLocalLink, Stack } from 'shared/components';
+import { Grid, RadioLocalLink, Stack } from 'shared/components';
+import { Chip } from 'shared/components/chip';
 import { CounterInvalidKeys } from 'shared/counters';
 import { ShowRuleProps, useFilterShowRules } from 'shared/hooks';
 

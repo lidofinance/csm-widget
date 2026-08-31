@@ -26,9 +26,11 @@ import { surveysKeys, withAuthToken } from './query-keys';
 //   • Token + auth-error callback come from `useSiweAuth()`. The configured survey
 //     client no longer fires `onAuthError`, so we reproduce it here via the shared
 //     `dispatchAuthError` helper: on a thrown error it classifies and calls
-//     `handleAuthError(kind)` — but only when a token was actually sent — before
-//     we rethrow (React Query / callers still see the original error). This
-//     matches `useSurveyQuery`/`useSurveyMutation`.
+//     `handleAuthError(kind, opts)` — but only when a token was actually sent —
+//     before we rethrow (React Query / callers still see the original error).
+//     This matches `useSurveyQuery`/`useSurveyMutation`, except the GET query
+//     dispatches non-interactively (no signature modal on a background read);
+//     the update/delete mutations stay interactive (the default).
 //   • transformIncoming/transformOutgoing, `skipFetching`/enabled gating,
 //     `initialLoading`, summary-invalidation on update, operator-invalidation on
 //     delete, `invalidateOnMutate`, and the `{ data, error, isLoading,
@@ -100,11 +102,11 @@ export const useOperatorSurvey = <T, R = T>(
 
   // Reproduce the transport's old onAuthError dispatch around every operation.
   const withAuthErrorDispatch = useCallback(
-    async <V>(run: () => Promise<V>): Promise<V> => {
+    async <V>(run: () => Promise<V>, interactive = true): Promise<V> => {
       try {
         return await run();
       } catch (error) {
-        dispatchAuthError(error, token, handleAuthError);
+        dispatchAuthError(error, token, handleAuthError, { interactive });
         throw error;
       }
     },
@@ -121,7 +123,7 @@ export const useOperatorSurvey = <T, R = T>(
         return res && transformIncoming
           ? transformIncoming(res)
           : (res as unknown as T);
-      }),
+      }, false),
     enabled: !opts.skipFetching && effectiveKey !== undefined && !!token,
     ...STRATEGY_LAZY,
   });

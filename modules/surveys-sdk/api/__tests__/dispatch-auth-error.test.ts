@@ -27,7 +27,7 @@ describe('dispatchAuthError', () => {
       handleAuthError,
     );
     expect(handleAuthError).toHaveBeenCalledTimes(1);
-    expect(handleAuthError).toHaveBeenCalledWith('logout');
+    expect(handleAuthError).toHaveBeenCalledWith('logout', undefined);
   });
 
   it('fires handleAuthError("reauth") on AUTH_JWT_EXPIRED when a token was sent', () => {
@@ -37,7 +37,20 @@ describe('dispatchAuthError', () => {
       TOKEN,
       handleAuthError,
     );
-    expect(handleAuthError).toHaveBeenCalledWith('reauth');
+    expect(handleAuthError).toHaveBeenCalledWith('reauth', undefined);
+  });
+
+  it('forwards the interactive option to handleAuthError', () => {
+    const handleAuthError = jest.fn();
+    dispatchAuthError(
+      makeError(401, { code: 'AUTH_JWT_EXPIRED', message: 'expired' }),
+      TOKEN,
+      handleAuthError,
+      { interactive: false },
+    );
+    expect(handleAuthError).toHaveBeenCalledWith('reauth', {
+      interactive: false,
+    });
   });
 
   it('does not fire on a 401 when no token was sent', () => {
