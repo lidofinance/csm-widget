@@ -22,15 +22,16 @@ export const useModuleOperatorTypeGetter = (module?: MODULE_NAME) => {
   );
 };
 
-export const useCurveMetadataGetter = () => {
+export const useCurveMetadataGetter = (module?: MODULE_NAME) => {
   const {
     config: { defaultChain },
   } = useConfig();
-  const { module } = useModule();
+  const { module: activeModule } = useModule();
+  const targetModule = module ?? activeModule;
   return useCallback(
     (curveId: bigint | undefined) =>
-      getCurveMetadata(defaultChain, module, curveId),
-    [defaultChain, module],
+      getCurveMetadata(defaultChain, targetModule, curveId),
+    [defaultChain, targetModule],
   );
 };
 
@@ -53,8 +54,11 @@ export const useDisplayOperatorType = (
   return getDisplayOperatorType(defaultChain, targetModule, curveId);
 };
 
-export const useCurveMetadata = (curveId: bigint | undefined) => {
-  const getMetadata = useCurveMetadataGetter();
+export const useCurveMetadata = (
+  curveId: bigint | undefined,
+  module?: MODULE_NAME,
+) => {
+  const getMetadata = useCurveMetadataGetter(module);
   return getMetadata(curveId);
 };
 

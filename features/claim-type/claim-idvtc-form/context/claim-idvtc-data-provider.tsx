@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
   KEY_IDVTC_PROOF,
   KEY_OPERATOR_BALANCE,
@@ -10,6 +10,7 @@ import {
   useIdvtcCurveId,
   useIdvtcPaused,
   useIdvtcProof,
+  useModule,
   useNodeOperatorId,
   useOperatorCurveId,
   useOperatorIsOwner,
@@ -31,11 +32,15 @@ const useClaimIdvtcFormNetworkData: NetworkData<
 
   const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
-  const hasOperator = nodeOperatorId !== undefined;
+
+  // A type can only be claimed onto an operator of the module that owns it.
+  const { isCSM } = useModule();
+  const csmOperatorId = isCSM ? nodeOperatorId : undefined;
+  const hasOperator = csmOperatorId !== undefined;
 
   const { data: idvtcPaused, isPending: isIdvtcPausedLoading } =
     useIdvtcPaused();
-  const currentCurveIdQuery = useOperatorCurveId(nodeOperatorId);
+  const currentCurveIdQuery = useOperatorCurveId(csmOperatorId);
   const proofQuery = useIdvtcProof();
 
   const currentCurveId = currentCurveIdQuery.data;
@@ -48,15 +53,15 @@ const useClaimIdvtcFormNetworkData: NetworkData<
   const canClaimCurve = useCanClaimIDVTC();
 
   const { data: currentOperatorType, isPending: isCurrentOperatorTypeLoading } =
-    useOperatorType(nodeOperatorId);
+    useOperatorType(csmOperatorId);
   const isCurrentIcs = currentOperatorType === OPERATOR_TYPE.CSM_ICS;
 
   const { data: newCurveId, isPending: isNewCurveIdLoading } =
     useIdvtcCurveId();
   const { data: currentParameters, isPending: isCurrentParametersLoading } =
-    useCurveParameters(currentCurveId);
+    useCurveParameters(currentCurveId, undefined, MODULE_NAME.CSM);
   const { data: newParameters, isPending: isNewParametersLoading } =
-    useCurveParameters(newCurveId);
+    useCurveParameters(newCurveId, undefined, MODULE_NAME.CSM);
 
   const invalidate = useInvalidate();
 

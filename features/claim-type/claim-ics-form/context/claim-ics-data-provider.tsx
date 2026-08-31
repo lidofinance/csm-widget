@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import {
   KEY_ICS_PROOF,
   KEY_OPERATOR_BALANCE,
@@ -9,6 +10,7 @@ import {
   useIcsCurveId,
   useIcsPaused,
   useIcsProof,
+  useModule,
   useNodeOperatorId,
   useOperatorCurveId,
   useOperatorIsOwner,
@@ -28,8 +30,12 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
   const { address } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId<true>();
 
+  // A type can only be claimed onto an operator of the module that owns it.
+  const { isCSM } = useModule();
+  const csmOperatorId = isCSM ? nodeOperatorId : undefined;
+
   const { data: icsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
-  const currentCurveIdQuery = useOperatorCurveId(nodeOperatorId);
+  const currentCurveIdQuery = useOperatorCurveId(csmOperatorId);
   const proofQuery = useIcsProof();
 
   const currentCurveId = currentCurveIdQuery.data;
@@ -43,9 +49,9 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
 
   const { data: newCurveId, isPending: isNewCurveIdLoading } = useIcsCurveId();
   const { data: currentParameters, isPending: isCurrentParametersLoading } =
-    useCurveParameters(currentCurveId);
+    useCurveParameters(currentCurveId, undefined, MODULE_NAME.CSM);
   const { data: newParameters, isPending: isNewParametersLoading } =
-    useCurveParameters(newCurveId);
+    useCurveParameters(newCurveId, undefined, MODULE_NAME.CSM);
 
   const invalidate = useInvalidate();
 
@@ -64,8 +70,8 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
   const isPending =
     isIcsPausedLoading ||
     isIsOwnerLoading ||
-    isCurrentCurveIdLoading ||
-    isCurrentParametersLoading ||
+    (isCSM && isCurrentCurveIdLoading) ||
+    (isCSM && isCurrentParametersLoading) ||
     isNewCurveIdLoading ||
     isNewParametersLoading ||
     isProofLoading;
