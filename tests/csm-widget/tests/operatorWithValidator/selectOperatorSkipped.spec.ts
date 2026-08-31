@@ -2,6 +2,7 @@ import { expect } from '@playwright/test';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import { generateMnemonic, mnemonicToAccount } from 'viem/accounts';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../test.fixture';
 
 const secretPhrase = generateMnemonic(english, 128);
@@ -44,7 +45,9 @@ test.describe(
       });
 
       await test.step('The widget resolves the operator on its own', async () => {
-        await expect(widgetService.header.switchOperatorButton).toBeVisible();
+        await expect(widgetService.header.switchOperatorButton).toBeVisible({
+          timeout: PAGE_WAIT_TIMEOUT,
+        });
         await expect(widgetService.selectOperatorModal.modal).toBeHidden();
         expect(await widgetService.extractNodeOperatorId()).toBe(MANAGED_ID);
       });

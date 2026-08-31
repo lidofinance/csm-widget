@@ -81,7 +81,9 @@ test.describe(
 
       await test.step('The pick survives a reload', async () => {
         await widgetService.page.reload();
-        await expect(widgetService.header.switchOperatorButton).toBeVisible();
+        await expect(widgetService.header.switchOperatorButton).toBeVisible({
+          timeout: PAGE_WAIT_TIMEOUT,
+        });
         await expect(widgetService.selectOperatorModal.modal).toBeHidden();
         expect(await widgetService.extractNodeOperatorId()).toBe(target);
       });

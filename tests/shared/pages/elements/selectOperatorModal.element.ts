@@ -1,5 +1,8 @@
 import { Locator, Page, test } from '@playwright/test';
-import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import {
+  PAGE_WAIT_TIMEOUT,
+  RPC_WAIT_TIMEOUT,
+} from 'tests/shared/consts/timeouts';
 
 export class SelectOperatorModalElement {
   page: Page;
@@ -78,6 +81,10 @@ export class SelectOperatorModalElement {
           .forEach((key) => window.localStorage.removeItem(key));
       });
       await this.page.reload();
+      await this.settledState.waitFor({
+        state: 'visible',
+        timeout: RPC_WAIT_TIMEOUT,
+      });
     });
   }
 

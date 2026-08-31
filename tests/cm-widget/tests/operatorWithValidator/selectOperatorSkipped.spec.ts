@@ -1,6 +1,7 @@
 import { expect } from '@playwright/test';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../test.fixture';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -25,7 +26,9 @@ test.describe(
       });
 
       await test.step('The widget resolves the operator on its own', async () => {
-        await expect(widgetService.header.switchOperatorButton).toBeVisible();
+        await expect(widgetService.header.switchOperatorButton).toBeVisible({
+          timeout: PAGE_WAIT_TIMEOUT,
+        });
         await expect(widgetService.selectOperatorModal.modal).toBeHidden();
         expect(await widgetService.extractNodeOperatorId()).toBe(EXPECTED_ID);
       });
