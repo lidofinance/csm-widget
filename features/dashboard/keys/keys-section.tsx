@@ -7,6 +7,7 @@ import { CsmKeys } from './csm-keys';
 import { KeysBreakdown } from './keys-breakdown/keys-breakdown';
 import { NoGroupBanner } from './no-group-banner';
 import { StakeAndKeys } from './stake-and-keys';
+import { Divider } from '@lidofinance/lido-ui';
 
 export const KeysSection: FC = () => {
   const { isCM } = useModule();
@@ -22,6 +23,7 @@ export const KeysSection: FC = () => {
       >
         <Stack direction="column" gap="sm">
           {isCM ? <StakeAndKeys /> : <CsmKeys />}
+          <Divider />
           <KeysBreakdown />
         </Stack>
       </SectionBlock>
