@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import {
@@ -14,8 +15,8 @@ export const Parameters: FC = () => {
 
   const mode = useWatch<ClaimIdvtcFormInputType, 'mode'>({ name: 'mode' });
 
-  const currentMetadata = useCurveMetadata(currentCurveId);
-  const newMetadata = useCurveMetadata(newCurveId);
+  const currentMetadata = useCurveMetadata(currentCurveId, MODULE_NAME.CSM);
+  const newMetadata = useCurveMetadata(newCurveId, MODULE_NAME.CSM);
 
   const items: CompareParametersListItem[] = [
     {

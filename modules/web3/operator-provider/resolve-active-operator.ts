@@ -1,25 +1,27 @@
 // import type only: the SDK barrel pulls ESM deps that jest cannot load
-import type {
-  NodeOperatorId,
-  NodeOperatorShortInfo,
-} from '@lidofinance/lido-csm-sdk';
+import type { CachedOperatorRef, ModuleNodeOperator } from './types';
+
+const matches = (item: ModuleNodeOperator, ref: CachedOperatorRef) =>
+  item.nodeOperatorId === ref.id && item.module === ref.module;
+
+const toRef = (operator: ModuleNodeOperator): CachedOperatorRef => ({
+  id: operator.nodeOperatorId,
+  module: operator.module,
+});
 
 export const resolveActiveOperator = (
-  list: NodeOperatorShortInfo[] | undefined,
-  cachedId: NodeOperatorId | undefined,
-  active: NodeOperatorShortInfo | undefined,
+  list: ModuleNodeOperator[] | undefined,
+  cachedRef: CachedOperatorRef | undefined,
+  active: ModuleNodeOperator | undefined,
 ): {
-  operator: NodeOperatorShortInfo | undefined;
+  operator: ModuleNodeOperator | undefined;
   needsSelection: boolean;
 } => {
   const fromActive =
-    active &&
-    list?.find((item) => item.nodeOperatorId === active.nodeOperatorId);
+    active && list?.find((item) => matches(item, toRef(active)));
   if (fromActive) return { operator: fromActive, needsSelection: false };
 
-  const fromCache =
-    cachedId !== undefined &&
-    list?.find((item) => item.nodeOperatorId === cachedId);
+  const fromCache = cachedRef && list?.find((item) => matches(item, cachedRef));
   if (fromCache) return { operator: fromCache, needsSelection: false };
 
   if (list?.length === 1) return { operator: list[0], needsSelection: false };

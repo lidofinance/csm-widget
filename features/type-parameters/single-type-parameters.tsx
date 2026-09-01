@@ -1,8 +1,9 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import {
   useCurveParameters,
+  useModule,
   useNodeOperatorId,
   useOperatorCurveId,
 } from 'modules/web3';
@@ -10,7 +11,11 @@ import { FC, ReactNode } from 'react';
 import { Block, CompareParametersList, Stack } from 'shared/components';
 import { DefColumnBackground, IcsColumnBackground } from 'shared/components';
 import { IdvtcColumnBackground } from 'shared/components/parameters-list/styles';
-import { useCurveMetadata, useOperatorTypeCurveId } from 'shared/hooks';
+import {
+  useCurveMetadata,
+  useOperatorTypeCurveId,
+  useOperatorTypeParameters,
+} from 'shared/hooks';
 
 type SingleTypeParametersProps = {
   type: OPERATOR_TYPE.CSM_ICS | OPERATOR_TYPE.CSM_IDVTC;
@@ -21,23 +26,31 @@ export const SingleTypeParameters: FC<SingleTypeParametersProps> = ({
   type,
   action,
 }) => {
+  // ICS/IDVTC live in CSM only, so the whole comparison stays CSM-scoped:
+  // an operator from another module contributes nothing but the DEF baseline.
+  const { isCSM } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: operatorCurveId } = useOperatorCurveId(nodeOperatorId);
+  const { data: operatorCurveId } = useOperatorCurveId(
+    isCSM ? nodeOperatorId : undefined,
+  );
 
   const typeCurveId = useOperatorTypeCurveId(type);
   const defCurveId = useOperatorTypeCurveId(OPERATOR_TYPE.CSM_DEF);
 
   const currentCurveId =
-    nodeOperatorId !== undefined &&
-    operatorCurveId !== undefined &&
-    operatorCurveId !== typeCurveId
+    operatorCurveId !== undefined && operatorCurveId !== typeCurveId
       ? operatorCurveId
       : defCurveId;
 
-  const { data: currentParams } = useCurveParameters(currentCurveId);
-  const { data: typeParams } = useCurveParameters(typeCurveId);
+  const { data: currentParams } = useCurveParameters(
+    currentCurveId,
+    undefined,
+    MODULE_NAME.CSM,
+  );
+  const { data: typeParams } = useOperatorTypeParameters(type);
 
-  const currentTitle = useCurveMetadata(currentCurveId)?.title ?? '';
+  const currentTitle =
+    useCurveMetadata(currentCurveId, MODULE_NAME.CSM)?.title ?? '';
 
   const TypeColumnBackground =
     type === OPERATOR_TYPE.CSM_ICS

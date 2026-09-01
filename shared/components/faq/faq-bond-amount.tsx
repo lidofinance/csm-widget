@@ -1,6 +1,7 @@
 import {
   CurveParameters,
   OPERATOR_TYPE,
+  OPERATOR_TYPE_MODULE,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { useCurveParameters } from 'modules/web3';
@@ -27,7 +28,13 @@ export const FaqBondAmount: FC<Props> = ({ type, second }) => {
     [second],
   );
 
-  const { data, isPending } = useCurveParameters(curveId, select);
+  // A type-scoped curve id only exists in that type's own module: reading it
+  // against the active operator's module reverts (e.g. CSM ICS curve on CSM_02).
+  const { data, isPending } = useCurveParameters(
+    curveId,
+    select,
+    type && OPERATOR_TYPE_MODULE[type],
+  );
 
   return isPending ? (
     <ShortInlineLoader />

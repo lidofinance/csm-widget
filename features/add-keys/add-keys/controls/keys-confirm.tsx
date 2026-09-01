@@ -1,27 +1,26 @@
 import { Text } from '@lidofinance/lido-ui';
-import { isModuleCM } from 'consts';
-import { SHARE_LIMIT_STATUS, useShareLimitStatus } from 'modules/web3';
+import {
+  SHARE_LIMIT_STATUS,
+  useModule,
+  useShareLimitStatus,
+} from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { CheckboxHookForm } from 'shared/hook-form/controls';
 import { useDepositDataValid } from 'shared/hook-form/deposit-data';
 
 export const KeysConfirm: FC = () => {
+  const { isCsmFamily } = useModule();
   const { data: status } = useShareLimitStatus();
   const isDepositDataValid = useDepositDataValid();
 
   return (
-    <Stack align={isModuleCM ? 'center' : 'start'}>
+    <Stack align={isCsmFamily ? 'start' : 'center'}>
       <CheckboxHookForm
         fieldName="confirmKeysReady"
         disabled={!isDepositDataValid}
       />
-      {isModuleCM ? (
-        <Text size="xxs" color="secondary" as="div">
-          I confirm that my nodes are synced, running, and ready for the
-          validator activation
-        </Text>
-      ) : (
+      {isCsmFamily ? (
         <Text size="xxs" color="secondary" as="div">
           I confirm that:
           <ul>
@@ -47,6 +46,11 @@ export const KeysConfirm: FC = () => {
               a removal fee
             </li>
           </ul>
+        </Text>
+      ) : (
+        <Text size="xxs" color="secondary" as="div">
+          I confirm that my nodes are synced, running, and ready for the
+          validator activation
         </Text>
       )}
     </Stack>

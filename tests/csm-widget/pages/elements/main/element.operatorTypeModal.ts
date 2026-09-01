@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test';
 
-export type OperatorTypeCard = 'def' | 'ics' | 'idvtc';
+export type OperatorTypeCard = 'def' | 'ics' | 'idvtc' | '0x02';
 
 export class OperatorTypeModal {
   page: Page;

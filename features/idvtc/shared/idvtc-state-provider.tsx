@@ -1,6 +1,7 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
   useIdvtcProof,
+  useModule,
   useNodeOperatorId,
   useOperatorOwner,
   useOperatorType,
@@ -44,8 +45,12 @@ export const useIdvtcState = () => {
 };
 
 export const IdvtcStateProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { isCSM } = useModule();
   const operatorId = useNodeOperatorId();
-  const { data: operatorType } = useOperatorType(operatorId);
+  // The type only exists in CSM: an operator of another module never holds it.
+  const { data: operatorType } = useOperatorType(
+    isCSM ? operatorId : undefined,
+  );
   const { data: owner } = useOperatorOwner(operatorId);
 
   const { data: proofData, isPending: isTypePending } = useIdvtcProof();

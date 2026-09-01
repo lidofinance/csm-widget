@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useModule, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -12,6 +12,7 @@ import { useClaimIcsFormData } from './claim-ics-data-provider';
 import { ClaimIcsFormInputType, ClaimIcsFormNetworkData } from './types';
 
 export type ClaimIcsFlow =
+  | { action: 'wrong-module' }
   | { action: 'paused' }
   | { action: 'claimed' }
   | { action: 'claimed-with-proof' }
@@ -26,11 +27,14 @@ export const useClaimIcsFlowResolver = (): FlowResolver<
 > => {
   const sdk = useSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required for this operation');
+  const { isCSM } = useModule();
   const confirmClaimIcs = useConfirmClaimIcsModal();
   const buildCallback = useTxModalStagesClaimIcs();
 
   return useCallback(
     (input, data) => {
+      // ICS is a CSM type: it cannot be claimed onto an operator of another module
+      if (!isCSM) return { action: 'wrong-module' };
       if (data.icsPaused) return { action: 'paused' };
 
       const isEmpty = !data.proof?.proof || data.proof.isConsumed;
@@ -61,7 +65,7 @@ export const useClaimIcsFlowResolver = (): FlowResolver<
         },
       };
     },
-    [sdk, confirmClaimIcs, buildCallback],
+    [isCSM, sdk, confirmClaimIcs, buildCallback],
   );
 };
 

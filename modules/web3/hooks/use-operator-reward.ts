@@ -9,10 +9,13 @@ export const KEY_OPERATOR_REWARDS = ['operator-rewards'];
 export const useOperatorRewards = (
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
-  const { rewards } = useSmSDK();
+  const { rewards, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_REWARDS, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_REWARDS,
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(nodeOperatorId !== undefined);

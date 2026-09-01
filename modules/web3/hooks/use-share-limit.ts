@@ -1,18 +1,21 @@
 import { MODULE_NAME, ShareLimitInfo } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
-import { STRATEGY_CONSTANT } from 'consts';
-import { useSmSDK } from 'modules/web3';
+import { isCsmFamilyModule, STRATEGY_CONSTANT } from 'consts';
+import { useModule, useTargetSmSDK } from 'modules/web3';
 import invariant from 'tiny-invariant';
 
 export const KEY_SHARE_LIMIT = ['share-limit'];
 
 export const useShareLimit = <TData = ShareLimitInfo>(
   select?: (data: ShareLimitInfo) => TData,
+  module?: MODULE_NAME,
 ) => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
+  const { module: activeModule } = useModule();
+  const { targetModule, sdk: moduleSdk } = useTargetSmSDK(module);
+  const sdk = module || isCsmFamilyModule(activeModule) ? moduleSdk : undefined;
 
   return useQuery({
-    queryKey: [...KEY_SHARE_LIMIT],
+    queryKey: [...KEY_SHARE_LIMIT, { module: targetModule }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(sdk);

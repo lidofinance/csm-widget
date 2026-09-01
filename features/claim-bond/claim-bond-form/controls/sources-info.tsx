@@ -37,7 +37,7 @@ const useBondNegativeMetadata = () => {
   return {
     locked: {
       title: 'Locked:',
-      tooltip: check('IS_CSM') ? LOCKED_TOOLTIP_CSM : LOCKED_TOOLTIP_CM,
+      tooltip: check('IS_CSM_FAMILY') ? LOCKED_TOOLTIP_CSM : LOCKED_TOOLTIP_CM,
       token: TOKENS.steth,
     },
     pendingToSplit: {

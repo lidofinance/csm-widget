@@ -17,7 +17,7 @@ export const useCuratedGatesEligibility = <TData = GateItemEligibility[]>(
   const sdk = useSmSDK(MODULE_NAME.CM);
 
   return useQuery({
-    queryKey: [...KEY_CURATED_GATES_PROOF, { address }],
+    queryKey: [...KEY_CURATED_GATES_PROOF, { address, module: MODULE_NAME.CM }],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(sdk);

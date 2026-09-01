@@ -61,7 +61,7 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
           if (result) {
             const roles = getNodeOperatorRoles(result, data.address);
             if (roles.length > 0) {
-              appendNO(result);
+              appendNO({ ...result, module: MODULE_NAME.CM });
               void n(PATH.HOME);
             } else {
               setOperatorCustomAddresses(result.nodeOperatorId);

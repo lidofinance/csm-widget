@@ -1,4 +1,4 @@
-import { GraphPart } from '../types';
+import { GraphPart, QueueUnit } from '../types';
 import type { DepositQueueAnalysis } from './calculate-and-select-by-operator';
 import type {
   QueueGraphData,
@@ -24,9 +24,11 @@ export const createMultiQueueVisualization = (
   shareLimit: ShareLimit,
   submittingAllocation: SubmittingAllocation | undefined,
   fullView: boolean,
+  unit: QueueUnit,
+  scale: bigint,
 ): QueueGraphData => {
   const { active, queue, capacity, activeLeft } = shareLimit;
-  const added = submittingAllocation?.keysCount || 0n;
+  const added = submittingAllocation?.amount || 0n;
 
   // Calculate graph bounds and coordinates
   const bounds = calculateGraphBounds({
@@ -35,6 +37,7 @@ export const createMultiQueueVisualization = (
     capacity,
     added,
     fullView,
+    scale,
   });
 
   // Calculate segment sizes
@@ -51,8 +54,8 @@ export const createMultiQueueVisualization = (
   let cumulativeAddedKeys = 0n;
 
   queues.forEach((queueData) => {
-    if (queueData.totalKeysInQueue > 0n) {
-      const keysInQueue = queueData.totalKeysInQueue;
+    if (queueData.totalAmountInQueue > 0n) {
+      const keysInQueue = queueData.totalAmountInQueue;
 
       // Calculate queue segments
       const queueUnderLimit =
@@ -80,12 +83,12 @@ export const createMultiQueueVisualization = (
       priorityQueues.push(
         {
           type: getPriorityType(queueData.queueIndex, false),
-          keysCount: queueUnderLimit,
+          amount: queueUnderLimit,
           width: underLimitSize,
         },
         {
           type: getPriorityType(queueData.queueIndex, true),
-          keysCount: queueOverLimit,
+          amount: queueOverLimit,
           width: overLimitSize,
         },
       );
@@ -107,11 +110,11 @@ export const createMultiQueueVisualization = (
 
       priorityQueues.push({
         type: 'added',
-        keysCount: submitting,
+        amount: submitting,
         width: addedPrioritySize,
         metadata: [
           {
-            keysCount: submitting,
+            amount: submitting,
             position: cumulativeKeys + cumulativeAddedKeys,
             priority: queueData.queueIndex,
           },
@@ -130,16 +133,17 @@ export const createMultiQueueVisualization = (
   });
 
   return {
+    unit,
     parts: [
-      { type: 'active', width: activeSize, keysCount: active },
+      { type: 'active', width: activeSize, amount: active },
       ...priorityQueues,
     ],
     limit: {
       offset: limitOffset,
-      keysCount: capacity,
+      amount: capacity,
     },
     operator: operatorData,
     farAway: bounds.farAway,
-    submittingKeysCount: submittingAllocation?.keysCount,
+    submittingAmount: submittingAllocation?.amount,
   };
 };

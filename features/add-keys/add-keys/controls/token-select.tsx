@@ -1,9 +1,9 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { isModuleCM } from 'consts';
 import { CM_BOND_AMOUNTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { PATH } from 'consts/urls';
+import { useModule } from 'modules/web3';
 import {
   FormTitle,
   KeysAvailable,
@@ -17,6 +17,7 @@ import { LocalLink } from 'shared/navigate';
 import { useAddKeysFormData } from '../context';
 
 export const TokenSelect: React.FC = () => {
+  const { isCsmFamily } = useModule();
   const { ethBalance, stethBalance, wstethBalance, keysAvailable, bond } =
     useAddKeysFormData(true);
 
@@ -24,14 +25,7 @@ export const TokenSelect: React.FC = () => {
     <>
       <FormTitle
         extra={
-          isModuleCM ? (
-            <MatomoLink
-              href={CM_BOND_AMOUNTS_LINK}
-              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
-            >
-              How bond is calculated
-            </MatomoLink>
-          ) : (
+          isCsmFamily ? (
             <LocalLink
               href={PATH.KEYS_SUBMIT}
               anchor="#how-much-bond-is-needed"
@@ -39,6 +33,13 @@ export const TokenSelect: React.FC = () => {
             >
               How bond is calculated
             </LocalLink>
+          ) : (
+            <MatomoLink
+              href={CM_BOND_AMOUNTS_LINK}
+              matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}
+            >
+              How bond is calculated
+            </MatomoLink>
           )
         }
       >
