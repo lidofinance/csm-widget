@@ -47,13 +47,6 @@ yarn-error.log*
 **/.browser_context**
 
 /public/runtime/
-/public/manifest.json
-/public/favicon.ico
-/public/favicon-16x16.png
-/public/favicon-32x32.png
-/public/favicon-192x192.png
-/public/favicon-512x512.png
-/public/apple-touch-icon.png
 /keys-generator-bin/
 deposit_data.json
 local_fork_config.json
