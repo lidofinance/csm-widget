@@ -4,7 +4,7 @@ import {
   DISABLE_DEPOSIT_DATA_VALIDATION,
 } from 'config/feature-flags/types';
 import { validateDkgBatch } from 'features/idvtc/dkg/utils/validate-dkg-batch';
-import { useSmSDK } from 'modules/web3';
+import { useSmSDKByModule } from 'modules/web3';
 import {
   useFormValidation,
   validateBondAmount,
@@ -12,14 +12,18 @@ import {
   ValidationError,
   VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
+import invariant from 'tiny-invariant';
 import { isAddress } from 'viem';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
+import { useTargetModule } from './use-target-module';
 
 export const useSubmitKeysValidation = () => {
-  const { depositData: sdk } = useSmSDK();
+  const targetModule = useTargetModule();
+  const targetSdk = useSmSDKByModule(targetModule);
+  const sdk = targetSdk?.depositData;
   const featureFlags = useFeatureFlags();
 
   return useFormValidation<SubmitKeysFormInputType, SubmitKeysFormNetworkData>(
@@ -39,6 +43,8 @@ export const useSubmitKeysValidation = () => {
       { curveParameters, maxStakeEth, ethBalance, stethBalance, wstethBalance },
       validate,
     ) => {
+      invariant(sdk, 'submit-keys validation: no SDK for the target module');
+
       // FIXME: validate on submit that token, bondAmount and depositData.length are defined
 
       await validate(['token', 'bondAmount'], () =>

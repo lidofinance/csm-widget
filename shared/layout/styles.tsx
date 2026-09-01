@@ -9,7 +9,7 @@ export const LayoutStyle = styled(Container)`
   --layout-side-width: 170px;
 
   position: relative;
-  min-height: 100vh;
+  min-height: calc(100vh - var(--test-env-banner-height, 0px));
   display: grid;
   grid-template-columns: var(--layout-side-width) 1fr var(--layout-side-width);
   grid-template-rows: auto 1fr auto;

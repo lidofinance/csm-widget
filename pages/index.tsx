@@ -23,7 +23,7 @@ const Page: FC<PageProps> = ({ maintenance }) => {
               <Gate rule="IS_CM">
                 <CmWelcomePage />
               </Gate>
-              <Gate rule="IS_CSM">
+              <Gate rule="IS_CSM_FAMILY">
                 <StarterPackPage />
               </Gate>
             </>

@@ -13,9 +13,11 @@ import {
   NodeOperatorContext,
   NodeOperatorContextValue,
 } from 'modules/web3/operator-provider/node-operator-provider';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { STRATEGY_IMMUTABLE } from 'consts';
 import {
   KEY_DEPOSIT_QUEUE_BATCHES,
+  KEY_OPERATOR_CURVE_ID,
   KEY_OPERATOR_INFO,
   KEY_SHARE_LIMIT,
 } from 'modules/web3';
@@ -47,12 +49,24 @@ export const MockDepositQueueProvider: FC<
   });
 
   // Pre-populate the query cache with mock data
-  queryClient.setQueryData(KEY_SHARE_LIMIT, mockShareLimit);
   queryClient.setQueryData(
-    [...KEY_OPERATOR_INFO, { nodeOperatorId: BigInt(scenario.nodeOperatorId) }],
+    [...KEY_SHARE_LIMIT, { module: MODULE_NAME.CSM }],
+    mockShareLimit,
+  );
+  queryClient.setQueryData(
+    [
+      ...KEY_OPERATOR_INFO,
+      {
+        nodeOperatorId: BigInt(scenario.nodeOperatorId),
+        module: MODULE_NAME.CSM,
+      },
+    ],
     mockOperatorInfo,
   );
-  queryClient.setQueryData(KEY_DEPOSIT_QUEUE_BATCHES, mockDepositQueueBatches);
+  queryClient.setQueryData(
+    [...KEY_DEPOSIT_QUEUE_BATCHES, { module: MODULE_NAME.CSM }],
+    mockDepositQueueBatches,
+  );
 
   // Mock curve parameters if provided
   if (mockCurveParams) {
@@ -60,14 +74,17 @@ export const MockDepositQueueProvider: FC<
     // Mock operator curve ID
     queryClient.setQueryData(
       [
-        'operator-curve-id',
-        { nodeOperatorId: BigInt(scenario.nodeOperatorId) },
+        ...KEY_OPERATOR_CURVE_ID,
+        {
+          nodeOperatorId: BigInt(scenario.nodeOperatorId),
+          module: MODULE_NAME.CSM,
+        },
       ],
       mockCurveId,
     );
     // Mock curve parameters
     queryClient.setQueryData(
-      ['curve-parameters', { curveId: mockCurveId }],
+      ['curve-parameters', { curveId: mockCurveId, module: MODULE_NAME.CSM }],
       mockCurveParams,
     );
   }
@@ -80,6 +97,7 @@ export const MockDepositQueueProvider: FC<
       id: BigInt(scenario.nodeOperatorId),
       // Add other required properties if needed
     } as any,
+    activeModule: MODULE_NAME.CSM,
     switchNodeOperator: () => {}, // Mock function
   };
 

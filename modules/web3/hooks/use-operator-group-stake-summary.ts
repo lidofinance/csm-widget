@@ -12,7 +12,10 @@ export const useOperatorGroupStakeSummary = (
   const sdk = useSmSDK(MODULE_NAME.CM);
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_GROUP_SUMMARY, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_GROUP_SUMMARY,
+      { nodeOperatorId, module: MODULE_NAME.CM },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(sdk);

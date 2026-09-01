@@ -2,14 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import { useMemo } from 'react';
 import invariant from 'tiny-invariant';
+import { fetchAcrossModules } from '../fetch-across-modules';
 import { useDappStatus } from '../hooks';
-import { useSmSDK } from '../web3-provider';
+import { useLidoSDK } from '../web3-provider';
 import { useCachedNodeOperator } from './use-cached-node-operator';
+import { ModuleNodeOperator } from './types';
 
 export const KEY_OPERATORS = ['node-operators'];
 
 export const useAvailableOperators = () => {
-  const { discovery } = useSmSDK();
+  const { sm } = useLidoSDK();
   const { address } = useDappStatus();
 
   const { data: cached } = useCachedNodeOperator();
@@ -23,7 +25,9 @@ export const useAvailableOperators = () => {
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(address);
-      return discovery.getNodeOperatorsByAddress(address);
+      return fetchAcrossModules(sm, 'operator discovery', (sdk) =>
+        sdk.discovery.getNodeOperatorsByAddress(address),
+      ) as Promise<ModuleNodeOperator[]>;
     },
     enabled: !!address,
     placeholderData,

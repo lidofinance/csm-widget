@@ -16,6 +16,7 @@ import {
   useStakeLimit,
   useStethBalance,
   useWstethBalance,
+  useModule,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
 import {
@@ -24,10 +25,10 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate, useKeysAvailable } from 'shared/hooks';
-import { isModuleCSM } from 'consts';
 import { type AddKeysFormNetworkData } from './types';
 
 const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
+  const { isCsmFamily } = useModule();
   const { data: status, isPending: isStatusLoading } = useSmStatus();
   const nodeOperatorId = useNodeOperatorId();
 
@@ -102,7 +103,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
     isCurveParametersLoading ||
     isBondLoading ||
     isStatusLoading ||
-    (isModuleCSM && isShareLimitLoading) ||
+    (isCsmFamily && isShareLimitLoading) ||
     isCurveIdLoading ||
     isOperatorInfoLoading;
 

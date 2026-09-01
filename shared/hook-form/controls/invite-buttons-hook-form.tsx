@@ -1,4 +1,4 @@
-import { NodeOperatorInviteInfo } from '@lidofinance/lido-csm-sdk';
+import { ModuleInvite } from 'modules/web3';
 import { FC, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import {
@@ -11,7 +11,7 @@ import { getInviteId } from 'shared/node-operator/utils';
 
 type Props = {
   fieldName?: string;
-  options: NodeOperatorInviteInfo[];
+  options: ModuleInvite[];
 };
 
 export const InviteButtonsHookForm: FC<Props> = ({
@@ -21,13 +21,13 @@ export const InviteButtonsHookForm: FC<Props> = ({
   const {
     field,
     formState: { defaultValues },
-  } = useController<Record<string, NodeOperatorInviteInfo>>({
+  } = useController<Record<string, ModuleInvite>>({
     name: fieldName,
   });
   const defaultInvite = useMemo(() => {
     const value = defaultValues?.[fieldName];
     return value?.nodeOperatorId !== undefined && value.role
-      ? getInviteId(value as NodeOperatorInviteInfo)
+      ? getInviteId(value as ModuleInvite)
       : undefined;
   }, [defaultValues, fieldName]);
 

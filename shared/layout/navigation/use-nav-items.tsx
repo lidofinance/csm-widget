@@ -36,7 +36,7 @@ const routes: Route[] = [
     path: PATH.HOME,
     icon: <HomeIcon />,
     showRules: ['NOT_NODE_OPERATOR'],
-    module: MODULE_NAME.CSM,
+    modules: [MODULE_NAME.CSM],
   },
   {
     name: 'Dashboard',

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BondBalance, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { BondBalance, MODULE_NAME, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { KEYS_UPLOAD_TX_LIMIT, ONE_ETH } from 'consts';
 import { useExchangeRate } from 'shared/hooks';
 import { useCurveParameters } from 'modules/web3/hooks/use-curve-parameters';
@@ -12,6 +12,7 @@ type Props = {
   ethBalance?: bigint;
   stethBalance?: bigint;
   wstethBalance?: bigint;
+  module?: MODULE_NAME;
 };
 
 type AvailableForToken = { count: number; amount: bigint };
@@ -32,8 +33,9 @@ export const useKeysAvailable = ({
   ethBalance,
   stethBalance,
   wstethBalance,
+  module,
 }: Props): KeysAvailable | undefined => {
-  const { data: curve } = useCurveParameters(curveId);
+  const { data: curve } = useCurveParameters(curveId, undefined, module);
   const { data: rates } = useExchangeRate();
 
   return useMemo(() => {

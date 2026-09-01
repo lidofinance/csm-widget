@@ -93,8 +93,10 @@ export default withBundleAnalyzer({
   webpack(config) {
     config.module.rules.push(
       // Teach webpack to import svg and md files
+      // `issuer` keeps svgr off SVGs referenced from CSS (e.g. @lidofinance/lido-shared-ui)
       {
         test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
         use: [
           {
             loader: '@svgr/webpack',

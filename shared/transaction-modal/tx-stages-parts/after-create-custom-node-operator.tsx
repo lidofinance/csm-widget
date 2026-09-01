@@ -1,7 +1,8 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { isModuleCSM, moduleMeta } from 'consts';
+import { MODULE_METADATA } from 'consts';
 import { getExternalLinks, SUBSCRIBE_EVENTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { useModule } from 'modules/web3';
 import { useModalActions } from 'providers/modal-provider';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
+  const { module, isCsmFamily } = useModule();
   const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
   const { beaconchain } = getExternalLinks();
   const { closeModal } = useModalActions();
@@ -26,8 +28,8 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
         <br />
         <ol>
           <li>
-            Connect to {moduleMeta.shortTitle} UI with the address you specified
-            as Reward/Manager Address
+            Connect to {MODULE_METADATA[module].shortTitle} UI with the address
+            you specified as Reward/Manager Address
           </li>
           <li>Wait for your keys to be deposited to through the protocol</li>
           <li>
@@ -47,7 +49,7 @@ export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
                 or{' '}
               </>
             )}
-            {isModuleCSM && (
+            {isCsmFamily && (
               <>
                 subscribe to the{' '}
                 <MatomoLink

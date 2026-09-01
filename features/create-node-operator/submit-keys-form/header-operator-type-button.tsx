@@ -9,11 +9,15 @@ import { useSubmitKeysFormData } from './context';
  * Uses React Portal to render into the header's custom actions slot.
  */
 export const HeaderOperatorTypeButton: FC = () => {
-  const { curveId, address } = useSubmitKeysFormData();
+  const { curveId, address, targetModule } = useSubmitKeysFormData();
 
   return useHeaderCustomActions(
     address && curveId !== undefined ? (
-      <TypeButton curveId={curveId} data-testid="header-operator-type-button" />
+      <TypeButton
+        curveId={curveId}
+        module={targetModule}
+        data-testid="header-operator-type-button"
+      />
     ) : null,
   );
 };

@@ -3,6 +3,6 @@ import { useVisibleTypes } from './use-visible-types';
 
 export const useShouldShowTypeModal = () => {
   const types = useVisibleTypes();
-  const { isRequested } = useRequestedOperatorType();
-  return !isRequested && types.length > 1;
+  const requestedType = useRequestedOperatorType();
+  return !requestedType && types.length > 1;
 };

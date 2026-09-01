@@ -1,7 +1,7 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Button, ButtonProps } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
-import { useNodeOperatorId } from 'modules/web3';
+import { useModule, useNodeOperatorId } from 'modules/web3';
 import { FC } from 'react';
 import { getOperatorTypeQuery } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
@@ -17,6 +17,7 @@ type ButtonState = {
 const getButtonState = (
   typeStatus: TypeStatus,
   status: IcsFormStatus | undefined,
+  // Only a CSM operator can receive the type, so anything else must create one.
   hasOperator: boolean,
 ): ButtonState => {
   if (typeStatus === 'CLAIMED') {
@@ -67,11 +68,12 @@ type Props = {
 
 export const IcsApplyButton: FC<Props> = ({ size }) => {
   const { typeStatus, data } = useIcsState();
+  const { isCSM } = useModule();
   const nodeOperatorId = useNodeOperatorId();
   const { text, variant, href, query } = getButtonState(
     typeStatus,
     data?.status,
-    nodeOperatorId !== undefined,
+    isCSM && nodeOperatorId !== undefined,
   );
 
   return (

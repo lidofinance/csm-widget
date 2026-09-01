@@ -1,7 +1,6 @@
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
-import { isModuleCM } from 'consts/module';
-import { useNodeOperator, useOperatorGroup } from 'modules/web3';
+import { useModule, useNodeOperator, useOperatorGroup } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components/stack/stack';
 import { useCurveMetadata } from 'shared/hooks';
@@ -12,7 +11,9 @@ import { TextLocalLink } from 'shared/navigate';
 import { ReactComponent as ArrowRight } from 'assets/icons/arrow-forward.svg';
 
 export const DashboardSubtitle: FC = () => {
-  if (isModuleCM) return <CmSubtitle />;
+  const { isCM } = useModule();
+
+  if (isCM) return <CmSubtitle />;
 
   return <>Dashboard</>;
 };
