@@ -26,7 +26,11 @@ test.describe('Operator without keys. Common suite.', async () => {
     qase(47, 'Should open transaction page after added 1 key'),
     { tag: Tags.smoke },
     async ({ widgetService }) => {
-      await mainPage.starterPackSection.createNodeOperatorBtn.click();
+      const modal = widgetService.mainPage.operatorTypeModal;
+
+      await widgetService.mainPage.openOperatorTypeModal();
+      await modal.getCardButton('def').click();
+
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
         timeout: RPC_WAIT_TIMEOUT,
@@ -39,34 +43,45 @@ test.describe('Operator without keys. Common suite.', async () => {
     },
   );
 
-  test(qase(177, 'Should failed if uploaded duplicate keys'), async () => {
-    await mainPage.starterPackSection.createNodeOperatorBtn.click();
-    await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
-      state: 'visible',
-    });
-    const duplicatedKey = keysGeneratorService.generateKeys();
-    await createKeysPage.createNodeOperatorForm.fillKeys([
-      ...duplicatedKey,
-      ...duplicatedKey,
-    ]);
-    await expect(
-      createKeysPage.createNodeOperatorForm.validationInputError,
-    ).toContainText('Invalid deposit data');
-    await createKeysPage.createNodeOperatorForm.selectTab('Parsed');
-    await expect(
-      createKeysPage.createNodeOperatorForm.depositDataRow,
-    ).toHaveCount(2);
-    for (const row of await createKeysPage.createNodeOperatorForm.depositDataRow.all()) {
-      await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'pubkey is duplicated in deposit data',
-      );
-    }
-  });
+  test(
+    qase(177, 'Should failed if uploaded duplicate keys'),
+    async ({ widgetService }) => {
+      const modal = widgetService.mainPage.operatorTypeModal;
+
+      await widgetService.mainPage.openOperatorTypeModal();
+      await modal.getCardButton('def').click();
+
+      await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
+        state: 'visible',
+      });
+      const duplicatedKey = keysGeneratorService.generateKeys();
+      await createKeysPage.createNodeOperatorForm.fillKeys([
+        ...duplicatedKey,
+        ...duplicatedKey,
+      ]);
+      await expect(
+        createKeysPage.createNodeOperatorForm.validationInputError,
+      ).toContainText('Invalid deposit data');
+      await createKeysPage.createNodeOperatorForm.selectTab('Parsed');
+      await expect(
+        createKeysPage.createNodeOperatorForm.depositDataRow,
+      ).toHaveCount(2);
+      for (const row of await createKeysPage.createNodeOperatorForm.depositDataRow.all()) {
+        await expect(row.getByTestId('deposit-data-error')).toHaveText(
+          'pubkey is duplicated in deposit data',
+        );
+      }
+    },
+  );
 
   test(
     qase(48, 'Should open transaction page after added 75 keys'),
     async ({ widgetService }) => {
-      await mainPage.starterPackSection.createNodeOperatorBtn.click();
+      const modal = widgetService.mainPage.operatorTypeModal;
+
+      await widgetService.mainPage.openOperatorTypeModal();
+      await modal.getCardButton('def').click();
+
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
       });
@@ -80,8 +95,11 @@ test.describe('Operator without keys. Common suite.', async () => {
 
   test(
     qase(49, 'Should failed if uploaded over the limit (76) keys'),
-    async () => {
-      await mainPage.starterPackSection.createNodeOperatorBtn.click();
+    async ({ widgetService }) => {
+      const modal = widgetService.mainPage.operatorTypeModal;
+
+      await widgetService.mainPage.openOperatorTypeModal();
+      await modal.getCardButton('def').click();
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
       });
