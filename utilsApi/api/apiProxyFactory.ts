@@ -49,8 +49,8 @@ export const apiFactory = ({
 
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-      // Accept only GET requests
-      if (req.method !== 'GET') {
+      // Accept only GET and POST requests
+      if (req.method !== 'GET' && req.method !== 'POST') {
         // We don't care about tracking blocked requests here
         throw new UnsupportedHTTPMethodError();
       }
@@ -73,10 +73,21 @@ export const apiFactory = ({
         throw new Error(`Api method ${method} isn't allowed`);
       }
 
+      // Serialize once so the same payload is replayed across every provider url
+      const body =
+        req.method === 'POST' ? JSON.stringify(req.body ?? {}) : undefined;
+
       const requested = await iterateUrls(
         providers[chainId],
         // TODO: consider adding verification that body is actually matches FetchRpcInitBody
-        (url) => fetchApi(url, method, chainId, params),
+        (url) =>
+          fetchApi(
+            url,
+            method,
+            chainId,
+            params,
+            body !== undefined ? { method: 'POST', body } : undefined,
+          ),
         serverLogger.error,
       );
 
@@ -84,12 +95,11 @@ export const apiFactory = ({
         'Content-Type',
         requested.headers.get('Content-Type') ?? 'application/json',
       );
+      res.status(requested.status);
       if (requested.body) {
         Readable.fromWeb(requested.body as ReadableStream).pipe(res);
       } else {
-        res
-          .status(requested.status)
-          .json('There are a problems with Api provider');
+        res.json('There are a problems with Api provider');
       }
     } catch (error) {
       if (error instanceof Error) {
