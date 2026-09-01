@@ -1,15 +1,20 @@
 import 'utils/zod-jitless';
 
-import { ToastContainer } from '@lidofinance/lido-ui';
 import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
 import { moduleMeta } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
+import '@lidofinance/lido-shared-ui/index.css';
 import { Providers } from 'providers';
 import { memo } from 'react';
-import { BackgroundGradient, SecurityStatusBanner } from 'shared/components';
+import {
+  BackgroundGradient,
+  SecurityStatusBanner,
+  TestEnvBanner,
+  ToastContainer,
+} from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
 import { AddressValidationFile, nprogress } from 'utils';
 
@@ -55,6 +60,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       />
       <SVGGradientDefs />
       <ToastContainer />
+      <TestEnvBanner />
       <MemoApp {...rest} />
       <SecurityStatusBanner />
     </Providers>

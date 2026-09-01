@@ -22,6 +22,13 @@ import type { AuthErrorKind } from 'modules/surveys-sdk/api/auth-error-kind';
 
 export type SiweAuthErrorKind = AuthErrorKind;
 
+export type HandleAuthErrorOptions = {
+  // Default true. Background/render-driven reads pass false: an expired
+  // session is cleared silently instead of ambushing the user with a
+  // signature modal they did not ask for.
+  interactive?: boolean;
+};
+
 export type SiweAuthContextType = {
   token?: string;
   signIn: () => Promise<void>;
@@ -31,6 +38,10 @@ export type SiweAuthContextType = {
   logout: () => void;
   // Decide auth recovery from the resolved auth kind: re-run signin on expiry,
   // hard-logout on tamper/missing. Callers must map raw API codes to a kind
-  // (e.g. via authErrorKindFromCode) before invoking.
-  handleAuthError: (kind?: SiweAuthErrorKind) => void;
+  // (e.g. via authErrorKindFromCode) before invoking. 'reauth' only re-prompts
+  // for interactive callers (default); non-interactive callers get a silent logout.
+  handleAuthError: (
+    kind?: SiweAuthErrorKind,
+    opts?: HandleAuthErrorOptions,
+  ) => void;
 };

@@ -11,12 +11,16 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
     await widgetService.settingsPage.rewardsAddressPage.open();
   });
 
-  test.afterEach(async ({ widgetService }) => {
+  test.afterEach(async ({ widgetService, csmSDK }) => {
     await test.step('Revoke proposal role', async () => {
       // @todo: need to add cancel all tx before.
       await widgetService.settingsPage.rewardsAddressPage.open();
       await widgetService.page.waitForTimeout(LOW_TIMEOUT);
-      await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
+
+      const noId = await widgetService.extractNodeOperatorId();
+      if (await csmSDK.isPendingRole(noId, 'rewards')) {
+        await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
+      }
     });
   });
 
@@ -105,7 +109,7 @@ test.describe('Roles. Rewards Address. Transactions. Proposed Address', () => {
       74,
       'Should success complete transaction of propose a new Rewards Address',
     ),
-    { tag: [Tags.smoke, Tags.performTX] },
+    { tag: [Tags.smoke] },
     async ({ widgetService }) => {
       const rewardsAddressPage = widgetService.settingsPage.rewardsAddressPage;
       const settingsPage = widgetService.settingsPage;

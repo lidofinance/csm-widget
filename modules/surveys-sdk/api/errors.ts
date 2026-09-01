@@ -58,12 +58,18 @@ export const isAuthError = (err: unknown): boolean =>
 // actually sent. A token-less request that 401s — or a domain 401/403 carrying a
 // non-JWT code — must never wipe a valid session. The hooks (useSurveyQuery,
 // useSurveyMutation, useOperatorSurvey) share this single implementation.
+// `opts.interactive` (default true, see HandleAuthErrorOptions) is forwarded
+// as-is so a background read can request a silent logout instead of a re-sign.
 export const dispatchAuthError = (
   error: unknown,
   token: string | undefined,
-  handleAuthError: (kind: AuthErrorKind) => void,
+  handleAuthError: (
+    kind: AuthErrorKind,
+    opts?: { interactive?: boolean },
+  ) => void,
+  opts?: { interactive?: boolean },
 ): void => {
   if (!token) return;
   const kind = authErrorKind(error);
-  if (kind) handleAuthError(kind);
+  if (kind) handleAuthError(kind, opts);
 };

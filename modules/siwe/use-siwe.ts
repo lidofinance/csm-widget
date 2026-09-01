@@ -1,22 +1,23 @@
 import { addDays } from 'date-fns';
 import { useDappStatus } from 'modules/web3';
 import { useCallback } from 'react';
-import { SiweMessage } from 'siwe';
 import invariant from 'tiny-invariant';
+import type { Address } from 'viem';
+import { createSiweMessage } from 'viem/siwe';
 import { useSignMessage } from 'wagmi';
 import type { SiweOptions } from './types';
 
-const createSiweMessage = (
-  address: string,
+const buildSiweMessage = (
+  address: Address,
   statement: string,
   nonce: string,
-  chainId?: number,
+  chainId: number,
 ) => {
   const scheme = window.location.protocol.slice(0, -1);
   const domain = window.location.host;
   const uri = window.location.origin;
 
-  const message = new SiweMessage({
+  return createSiweMessage({
     scheme,
     domain,
     address,
@@ -25,9 +26,8 @@ const createSiweMessage = (
     version: '1',
     chainId,
     nonce,
-    expirationTime: addDays(new Date(), 1).toISOString(),
+    expirationTime: addDays(new Date(), 1),
   });
-  return message.prepareMessage();
 };
 
 export const useSiwe = ({ statement }: SiweOptions) => {
@@ -38,7 +38,7 @@ export const useSiwe = ({ statement }: SiweOptions) => {
     async (nonce: string) => {
       invariant(address, 'Signer is not available');
 
-      const message = createSiweMessage(address, statement, nonce, chainId);
+      const message = buildSiweMessage(address, statement, nonce, chainId);
       const signature = await signMessageAsync({
         message,
       });

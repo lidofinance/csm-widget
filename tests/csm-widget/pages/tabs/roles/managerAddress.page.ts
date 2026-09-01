@@ -22,6 +22,7 @@ export class ManagerAddressPage extends BasePage {
   validationInputTooltip: Locator;
   addressValidIcon: Locator;
   proposeButton: Locator;
+  resetButton: Locator;
   note: Locator;
 
   constructor(
@@ -52,6 +53,9 @@ export class ManagerAddressPage extends BasePage {
     this.addressValidIcon = this.inputLabel.locator('svg');
     this.proposeButton = this.form.getByRole('button', {
       name: 'Propose a new manager address',
+    });
+    this.resetButton = this.form.getByRole('button', {
+      name: 'Reset Manager Address',
     });
     this.note = this.form.getByTestId('noteText');
   }
