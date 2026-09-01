@@ -7,10 +7,10 @@ import { formatDate, isDayInPast } from 'utils';
 export const useFrameInfo = <TData = FrameInfo>(
   select?: (data: FrameInfo) => TData,
 ) => {
-  const { frame } = useSmSDK();
+  const { frame, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['frame-info'],
+    queryKey: ['frame-info', { module: core.moduleName }],
     ...STRATEGY_CONSTANT,
     queryFn: () => frame.getInfo(),
     select,

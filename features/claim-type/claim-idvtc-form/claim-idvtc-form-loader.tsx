@@ -13,6 +13,9 @@ import { Info } from './controls/info';
 import { Parameters } from './controls/parameters';
 
 const EMPTY_STATE: Record<string, React.ReactNode> = {
+  'wrong-module': (
+    <>The IDVTC operator type is not available for the selected operator</>
+  ),
   paused: <>IDVTC claiming is currently paused</>,
   claimed: <>You have already claimed the IDVTC operator type</>,
   'not-eligible': <>You are not eligible to claim the IDVTC operator type</>,

@@ -1,8 +1,6 @@
-import {
-  NodeOperatorId,
-  NodeOperatorShortInfo,
-} from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
+import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { GroupCardsStyle } from './cm-styles';
@@ -15,8 +13,8 @@ import { formatGroupTitle } from 'shared/node-operator/utils';
 type GroupSectionProps = {
   group: OperatorGroupData;
   activeId: NodeOperatorId;
-  availableMap: Map<bigint, NodeOperatorShortInfo>;
-  onSwitch: (id: NodeOperatorId) => void;
+  availableMap: Map<bigint, ModuleNodeOperator>;
+  onSwitch: (id: NodeOperatorId, module: MODULE_NAME) => void;
 };
 
 const getAction = (

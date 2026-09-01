@@ -10,10 +10,13 @@ export const useOperatorBalance = <TData = BondBalance>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: BondBalance) => TData,
 ) => {
-  const { operator } = useSmSDK();
+  const { operator, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_BALANCE, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_BALANCE,
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(nodeOperatorId !== undefined);

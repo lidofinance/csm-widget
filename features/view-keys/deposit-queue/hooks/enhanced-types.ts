@@ -46,9 +46,9 @@ export type OperatorInfo = {
 };
 
 export type SubmittingAllocation = {
-  keysCount: bigint;
+  amount: bigint;
   allocation: [number, bigint][];
-}; // queue priority, keys count
+}; // queue priority, amount
 
 export type ProcessedBatches = {
   batches: BatchPart[];
@@ -67,6 +67,7 @@ export type GraphCalculationParams = {
   added: bigint;
   capacity: bigint;
   fullView: boolean;
+  scale: bigint;
 };
 
 // Re-export original types

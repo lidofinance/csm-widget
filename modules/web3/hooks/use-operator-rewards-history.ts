@@ -13,10 +13,13 @@ export const useOperatorRewardsHistory = <TData = OperatorRewardsHistory>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: OperatorRewardsHistory) => TData,
 ) => {
-  const { rewards } = useSmSDK();
+  const { rewards, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_REWARDS_HISTORY, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_REWARDS_HISTORY,
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(nodeOperatorId !== undefined);

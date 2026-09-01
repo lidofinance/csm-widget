@@ -27,6 +27,7 @@ export * from './chip';
 export * from './logos/logos';
 export * from './status-chip';
 export * from './security-status-banner';
+export * from './test-env-banner';
 export * from './plurals';
 export * from './counter';
 export * from './status-comment';

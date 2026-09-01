@@ -10,10 +10,13 @@ export const useOperatorCurveId = <TData = bigint>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: bigint) => TData,
 ) => {
-  const { operator } = useSmSDK();
+  const { operator, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_CURVE_ID, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_CURVE_ID,
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(nodeOperatorId !== undefined);

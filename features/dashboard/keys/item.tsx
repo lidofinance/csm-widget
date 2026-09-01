@@ -1,11 +1,12 @@
 import { InlineLoader } from '@lidofinance/lido-ui';
 import { Tooltip } from 'shared/components';
 import { FC, ReactNode } from 'react';
-import { CountStyled, ItemStyled } from './styles';
+import { BalanceStyled, CountStyled, ItemStyled } from './styles';
 
 type ItemProps = {
   title: string;
   count?: number | string | ReactNode;
+  balance?: ReactNode;
   tooltip?: string;
   variant?: 'secondary';
 };
@@ -14,6 +15,7 @@ export const Item: FC<ItemProps> = ({
   title,
   tooltip,
   count,
+  balance,
   variant,
   ...params
 }) => {
@@ -22,10 +24,11 @@ export const Item: FC<ItemProps> = ({
 
   const body = (
     <ItemStyled $secondary={secondary} {...params}>
+      {title}
       <CountStyled>
         {count === undefined ? <InlineLoader /> : count}
       </CountStyled>
-      {title}
+      {balance !== undefined && <BalanceStyled>{balance}</BalanceStyled>}
     </ItemStyled>
   );
 

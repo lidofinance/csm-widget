@@ -1,4 +1,3 @@
-import { isModuleCM } from 'consts';
 import {
   HOW_TO_EXIT_VALIDATOR_LINK,
   PERFORMANCE_TIPS_LINK,
@@ -8,12 +7,13 @@ import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { MatomoLink } from '../matomo-link/matomo-link';
-import { SHARE_LIMIT_STATUS, useShareLimitStatus } from 'modules/web3';
+import {
+  SHARE_LIMIT_STATUS,
+  useModule,
+  useShareLimitStatus,
+} from 'modules/web3';
 
 const VALIDATOR_ACTIVE_ANCHOR = '#when-does-a-validator-become-active';
-const STAKE_SHARE_LIMIT_ANCHOR = isModuleCM
-  ? '#what-are-the-possible-key-statuses'
-  : '#what-is-the-csm-stake-share-limit';
 
 // TODO: check role
 export const CommentExitRequested: FC = () => (
@@ -109,7 +109,11 @@ export const CommentWithStrikes: FC = () => {
 };
 
 export const CommentDepositable: FC = () => {
+  const { isCsmFamily } = useModule();
   const { data: status } = useShareLimitStatus();
+  const STAKE_SHARE_LIMIT_ANCHOR = isCsmFamily
+    ? '#what-is-the-csm-stake-share-limit'
+    : '#what-are-the-possible-key-statuses';
 
   return status === SHARE_LIMIT_STATUS.REACHED ? (
     <>

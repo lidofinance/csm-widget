@@ -1,4 +1,4 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { Button } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { useModalActions } from 'providers/modal-provider';
@@ -25,7 +25,7 @@ export const CuratedOperatorSuccessActions: FC<Props> = ({
   const n = useNavigate();
   const { closeModal } = useModalActions();
   const switchToKeysSubmit = useSwitchOperator(PATH.KEYS_SUBMIT);
-  const needsSwitch = useNeedsOperatorSwitch(nodeOperatorId);
+  const needsSwitch = useNeedsOperatorSwitch(nodeOperatorId, MODULE_NAME.CM);
 
   const handleCreateAnother = async () => {
     closeModal();
@@ -35,14 +35,17 @@ export const CuratedOperatorSuccessActions: FC<Props> = ({
   // no auto-switch on create, so Add keys must switch to the new operator before opening the keys-submit form
   const handleAddKeys = () => {
     closeModal();
-    switchToKeysSubmit(nodeOperatorId);
+    switchToKeysSubmit(nodeOperatorId, MODULE_NAME.CM);
   };
 
   const showCreateAnother = availableGatesCount > 1;
 
   return (
     <Stack direction="column" gap="sm">
-      <SwitchToOperatorButton nodeOperatorId={nodeOperatorId} />
+      <SwitchToOperatorButton
+        nodeOperatorId={nodeOperatorId}
+        module={MODULE_NAME.CM}
+      />
       {hasManagerRole && (
         <Button fullwidth size="sm" onClick={handleAddKeys}>
           {needsSwitch ? 'Switch and Add keys' : 'Add keys'}

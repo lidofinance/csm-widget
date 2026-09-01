@@ -7,11 +7,11 @@ export const NOTIFICATION_TOOLS_BUTTONS: ComponentProps<
   typeof ExternalButtonLink
 >[] = [
   {
-    title: 'CSM Sentinel',
+    title: 'SM Sentinel',
     'data-testid': 'monitoringCsmSentinelLink',
     icon: <CsmIcon />,
-    href: 'https://github.com/skhomuti/csm-sentinel',
+    href: 'https://github.com/lidofinance/sm-sentinel',
     matomoEvent: MATOMO_CLICK_EVENTS_TYPES.dashboardNotificationSentinelLink,
-    children: 'Provides your CSM Node Operator events to the telegram chats',
+    children: 'Provides your Node Operator events to the telegram chats',
   },
 ];

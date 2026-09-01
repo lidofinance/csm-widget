@@ -7,7 +7,12 @@ import {
 } from 'modules/web3';
 import { FC, useMemo } from 'react';
 import { computeStakeData } from 'utils';
-import { StakeStats, KeyLimit, StakeRow } from 'features/group/shared';
+import {
+  StakeStats,
+  KeyLimit,
+  StakeRow,
+  WrapperStyle,
+} from 'features/group/shared';
 
 export const StakeAndKeys: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
@@ -23,10 +28,10 @@ export const StakeAndKeys: FC = () => {
   }, [stakeSummary, info, keys]);
 
   return data ? (
-    <>
+    <WrapperStyle>
       <StakeStats data={data} />
       <KeyLimit info={info} />
-    </>
+    </WrapperStyle>
   ) : (
     <StakeRow>
       <InlineLoader />

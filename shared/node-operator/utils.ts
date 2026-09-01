@@ -1,8 +1,8 @@
-import { NodeOperatorInviteInfo } from '@lidofinance/lido-csm-sdk';
 import { ROLES_METADATA } from 'consts';
+import { ModuleInvite } from 'modules/web3/hooks/types';
 
-export const getInviteId = (invite: NodeOperatorInviteInfo) =>
-  `${ROLES_METADATA[invite.role].short}-${invite.nodeOperatorId}` as const;
+export const getInviteId = (invite: ModuleInvite) =>
+  `${invite.module}-${ROLES_METADATA[invite.role].short}-${invite.nodeOperatorId}` as const;
 
 export const formatGroupTitle = ({
   name,

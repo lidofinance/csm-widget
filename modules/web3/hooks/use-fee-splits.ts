@@ -7,10 +7,10 @@ import { useSmSDK } from '../web3-provider';
 export const KEY_FEE_SPLITS = ['fee-splits'];
 
 export const useFeeSplits = (nodeOperatorId: NodeOperatorId | undefined) => {
-  const { operator } = useSmSDK();
+  const { operator, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_FEE_SPLITS, { nodeOperatorId }],
+    queryKey: [...KEY_FEE_SPLITS, { nodeOperatorId, module: core.moduleName }],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(nodeOperatorId !== undefined);

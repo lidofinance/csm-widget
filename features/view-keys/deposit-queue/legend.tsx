@@ -3,16 +3,23 @@ import { Stack } from 'shared/components';
 import { useGraphInteraction } from './hover-provider';
 import { ChipStyle, CircleStyle, LegendStyle, PartStyle } from './style';
 import { getPriorityName } from './get-priority-name';
-import { GraphPart } from './types';
+import { QueueAmount } from './queue-amount';
+import { GraphPart, QueueUnit } from './types';
 
 type LegendProps = {
   type: GraphPart;
-  keysCount?: number | bigint;
+  amount?: bigint;
+  unit: QueueUnit;
   hide?: boolean;
 };
 
-export const Legend: FC<LegendProps> = ({ type, keysCount, hide = false }) => {
-  const { setHover } = useGraphInteraction();
+export const Legend: FC<LegendProps> = ({
+  type,
+  amount,
+  unit,
+  hide = false,
+}) => {
+  const { setHover, module } = useGraphInteraction();
 
   const handleHover = useCallback(() => {
     setHover(type);
@@ -25,9 +32,9 @@ export const Legend: FC<LegendProps> = ({ type, keysCount, hide = false }) => {
     return null;
   }
 
-  const title = getPriorityName(type);
+  const title = getPriorityName(type, module);
 
-  if (!keysCount && !['limit', 'active'].includes(type)) {
+  if (!amount && !['limit', 'active'].includes(type)) {
     return null;
   }
 
@@ -38,8 +45,10 @@ export const Legend: FC<LegendProps> = ({ type, keysCount, hide = false }) => {
           <PartStyle $type={type} />
         </CircleStyle>
         <span>{title}</span>
-        {(keysCount !== undefined && (
-          <ChipStyle $type={type}>{keysCount.toString()}</ChipStyle>
+        {(amount !== undefined && (
+          <ChipStyle $type={type}>
+            <QueueAmount amount={amount} unit={unit} />
+          </ChipStyle>
         )) ||
           null}
       </Stack>
