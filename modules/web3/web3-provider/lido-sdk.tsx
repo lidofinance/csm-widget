@@ -66,14 +66,11 @@ const SM_SDK_CONSTRUCTORS = {
 const buildSmSdkMap = (smProps: SdkProps): SmSdkMap => {
   const map: SmSdkMap = {};
   for (const mod of deployedModules) {
-    if (mod === config.module) {
+    try {
       map[mod] = new SM_SDK_CONSTRUCTORS[mod](smProps);
-    } else {
-      try {
-        map[mod] = new SM_SDK_CONSTRUCTORS[mod](smProps);
-      } catch (error) {
-        console.error(`[lido-sdk] dropping module ${mod}:`, error);
-      }
+    } catch (error) {
+      if (mod === config.module) throw error;
+      console.error(`[lido-sdk] dropping module ${mod}:`, error);
     }
   }
   return map;
@@ -105,6 +102,14 @@ export function useSmSDKByModule(module: MODULE_NAME) {
   const { sm } = useLidoSDK();
   return sm[module];
 }
+
+/** Resolves the SDK for `module`, falling back to the active module. */
+export const useTargetSmSDK = (module?: MODULE_NAME) => {
+  const activeSdk = useSmSDK();
+  const targetModule = module ?? activeSdk.core.moduleName;
+  const sdk = useSmSDKByModule(targetModule);
+  return { targetModule, sdk };
+};
 
 export function useSmSDK(): SmSDK;
 export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;

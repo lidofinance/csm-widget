@@ -6,7 +6,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { CsmFamilySDK, useSmSDK, useSmSDKByModule } from '../web3-provider';
+import { CsmFamilySDK, useSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_TOP_UP_QUEUE = ['operator-top-up-queue'];
 
@@ -14,15 +14,15 @@ export const useOperatorTopUpQueue = <TData = OperatorTopUpQueue>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: OperatorTopUpQueue) => TData,
 ) => {
-  const { core } = useSmSDK();
-  const sdk = useSmSDKByModule(core.moduleName) as CsmFamilySDK | undefined;
+  const sdk = useSmSDK() as CsmFamilySDK;
   const enabled =
-    TOPUP_QUEUE_MODULES.has(core.moduleName) && nodeOperatorId !== undefined;
+    TOPUP_QUEUE_MODULES.has(sdk.core.moduleName) &&
+    nodeOperatorId !== undefined;
 
   return useQuery({
     queryKey: [
       ...KEY_OPERATOR_TOP_UP_QUEUE,
-      { nodeOperatorId, module: core.moduleName },
+      { nodeOperatorId, module: sdk.core.moduleName },
     ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {

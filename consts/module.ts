@@ -1,16 +1,18 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
 
+const CSM_METADATA = {
+  title: 'Community Staking Module',
+  shortTitle: 'CSM',
+  shortName: 'CSM',
+  description:
+    'The Community Staking Module is a permissionless staking module aimed at attracting community stakers to participate in the Lido on Ethereum protocol as Node Operators',
+  host: 'https://csm.lido.fi',
+  previewFile: 'csm-preview.png',
+} as const;
+
 export const MODULE_METADATA = {
-  [MODULE_NAME.CSM]: {
-    title: 'Community Staking Module',
-    shortTitle: 'CSM',
-    shortName: 'CSM',
-    description:
-      'The Community Staking Module is a permissionless staking module aimed at attracting community stakers to participate in the Lido on Ethereum protocol as Node Operators',
-    host: 'https://csm.lido.fi',
-    previewFile: 'csm-preview.png',
-  },
+  [MODULE_NAME.CSM]: CSM_METADATA,
   [MODULE_NAME.CM]: {
     title: 'Curated Module',
     shortTitle: 'CM v2',
@@ -20,15 +22,7 @@ export const MODULE_METADATA = {
     host: 'https://cm.testnet.fi', // TODO: replace to lido.fi when CM will be released
     previewFile: 'cm-preview.png',
   },
-  [MODULE_NAME.CSM_02]: {
-    title: 'Community Staking Module',
-    shortTitle: 'CSM',
-    shortName: 'CSM',
-    description:
-      'The Community Staking Module is a permissionless staking module aimed at attracting community stakers to participate in the Lido on Ethereum protocol as Node Operators',
-    host: 'https://csm.lido.fi',
-    previewFile: 'csm-preview.png',
-  },
+  [MODULE_NAME.CSM_02]: CSM_METADATA,
 } as const;
 
 export const moduleMeta = MODULE_METADATA[config.module];

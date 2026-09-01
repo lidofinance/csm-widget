@@ -1,6 +1,7 @@
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
-import { deployedModules, isModuleDeployed } from 'consts';
+import { deployedModules } from 'consts';
+import { useMemo } from 'react';
 import {
   useAvailableOperators,
   useCuratedGatesEligibility,
@@ -55,15 +56,22 @@ export const useCanCreateNodeOperator = () => {
   const hasOperatorIn = (module: MODULE_NAME) =>
     !!operators?.some((operator) => operator.module === module);
 
-  const creatableModules = deployedModules.filter((module) => {
-    if (module === MODULE_NAME.CM) {
-      return gatesCount !== undefined && gatesCount > 0;
-    }
-    if (module === MODULE_NAME.CSM) {
-      return !hasOperatorIn(MODULE_NAME.CSM) || canCreateIdvtc || canCreateIcs;
-    }
-    return isModuleDeployed(module) && !hasOperatorIn(module);
-  });
+  const creatableModules = useMemo(
+    () =>
+      deployedModules.filter((module) => {
+        if (module === MODULE_NAME.CM) {
+          return gatesCount !== undefined && gatesCount > 0;
+        }
+        if (module === MODULE_NAME.CSM) {
+          return (
+            !hasOperatorIn(MODULE_NAME.CSM) || canCreateIdvtc || canCreateIcs
+          );
+        }
+        return !hasOperatorIn(module);
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [operators, gatesCount, canCreateIdvtc, canCreateIcs],
+  );
 
   const isPending =
     isStatusPending ||
@@ -83,12 +91,28 @@ export const useCanCreateNodeOperator = () => {
 
   const isCsmCreatable = creatableModules.includes(MODULE_NAME.CSM);
 
-  const creatableTypes = [
-    isCsmCreatable && !hasOperatorIn(MODULE_NAME.CSM) && OPERATOR_TYPE.CSM_DEF,
-    isCsmCreatable && isIcsEligible && OPERATOR_TYPE.CSM_ICS,
-    isCsmCreatable && isIdvtcEligible && OPERATOR_TYPE.CSM_IDVTC,
-    creatableModules.includes(MODULE_NAME.CSM_02) && OPERATOR_TYPE.CSM2_DEF,
-  ].filter((type): type is OPERATOR_TYPE => !!type);
+  const creatableTypes = useMemo(
+    () =>
+      [
+        isCsmCreatable &&
+          !hasOperatorIn(MODULE_NAME.CSM) &&
+          OPERATOR_TYPE.CSM_DEF,
+        isCsmCreatable && isIcsEligible && OPERATOR_TYPE.CSM_ICS,
+        isCsmCreatable && isIdvtcEligible && OPERATOR_TYPE.CSM_IDVTC,
+        creatableModules.includes(MODULE_NAME.CSM_02) && OPERATOR_TYPE.CSM2_DEF,
+      ].filter((type): type is OPERATOR_TYPE => !!type),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      creatableModules,
+      isCsmCreatable,
+      isIcsEligible,
+      isIdvtcEligible,
+      operators,
+    ],
+  );
 
-  return { canCreate, creatableModules, creatableTypes, isPending };
+  return useMemo(
+    () => ({ canCreate, creatableModules, creatableTypes, isPending }),
+    [canCreate, creatableModules, creatableTypes, isPending],
+  );
 };

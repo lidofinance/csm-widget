@@ -5,4 +5,5 @@ export {
   useLidoSDK,
   useSmSDK,
   useSmSDKByModule,
+  useTargetSmSDK,
 } from './lido-sdk';

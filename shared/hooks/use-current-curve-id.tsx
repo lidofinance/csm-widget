@@ -1,6 +1,5 @@
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
-  useCsm02DefaultCurveId,
   useDefaultCurveId,
   useIcsCurveId,
   useIcsPaused,
@@ -21,7 +20,7 @@ export const useCurrentCurveId = (module?: MODULE_NAME) => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: operatorCurveId } = useOperatorCurveId(nodeOperatorId);
   const { data: createData } = useCreateCurveId();
-  const { data: csm02CurveId } = useCsm02DefaultCurveId();
+  const { data: csm02CurveId } = useDefaultCurveId(MODULE_NAME.CSM_02);
 
   if (targetModule === activeModule && nodeOperatorId !== undefined) {
     return operatorCurveId;

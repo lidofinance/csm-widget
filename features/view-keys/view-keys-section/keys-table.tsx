@@ -1,4 +1,5 @@
 import {
+  ALLOCATED_BALANCE_MODULES,
   KEY_STATUS,
   KeyWithStatus,
   OperatorTopUpQueue,
@@ -31,7 +32,7 @@ const selectTopUpPositions = ({ total, keys }: OperatorTopUpQueue) => ({
 
 export const KeysTable: FC = () => {
   const maxPriorityKeyIndex = useMaxPriorityKeyIndex();
-  const { isCsmFamily, isCSM02, isCM } = useModule();
+  const { module, isCsmFamily } = useModule();
   const { data } = useTable<KeyWithStatus>();
   const nodeOperatorId = useNodeOperatorId();
   const { data: topUpQueue } = useOperatorTopUpQueue(
@@ -40,7 +41,7 @@ export const KeysTable: FC = () => {
   );
 
   const showStrikes = isCsmFamily;
-  const showBalance = isCSM02 || isCM;
+  const showBalance = ALLOCATED_BALANCE_MODULES.has(module);
 
   return (
     <TableStyle $strikes={showStrikes} $balance={showBalance}>
@@ -101,17 +102,13 @@ export const KeysTable: FC = () => {
                 </td>
               )}
               <td data-testid="statusCommentCell">
-                {topUpPosition !== undefined ? (
-                  <Stack direction="column" gap="xs">
-                    <TopUpQueuePosition
-                      position={topUpPosition}
-                      total={topUpQueue?.total}
-                    />
-                    <StatusComment statuses={key.statuses} />
-                  </Stack>
-                ) : (
+                <Stack direction="column" gap="xs">
+                  <TopUpQueuePosition
+                    position={topUpPosition}
+                    total={topUpQueue?.total}
+                  />
                   <StatusComment statuses={key.statuses} />
-                )}
+                </Stack>
               </td>
             </tr>
           );

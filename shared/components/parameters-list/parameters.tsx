@@ -1,5 +1,9 @@
-import { CurveParameters, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { MODULE_METADATA } from 'consts';
+import {
+  CurveParameters,
+  MODULE_NAME,
+  TOKENS,
+} from '@lidofinance/lido-csm-sdk';
+import { MODULE_METADATA, isCsmFamilyModule } from 'consts';
 import { useModule } from 'modules/web3';
 import { ReactNode } from 'react';
 import { FormatToken } from 'shared/formatters';
@@ -151,8 +155,15 @@ const buildAllParameters = (shortName: string): Parameter[] => [
   },
 ];
 
-export const useParameters = (): Parameter[] => {
-  const { module, isCsmFamily } = useModule();
-  const allParameters = buildAllParameters(MODULE_METADATA[module].shortName);
-  return isCsmFamily ? allParameters : allParameters.filter((p) => !p.csmOnly);
-};
+const PARAMETERS_BY_MODULE = Object.fromEntries(
+  Object.values(MODULE_NAME).map((module) => {
+    const all = buildAllParameters(MODULE_METADATA[module].shortName);
+    return [
+      module,
+      isCsmFamilyModule(module) ? all : all.filter((p) => !p.csmOnly),
+    ];
+  }),
+) as Record<MODULE_NAME, Parameter[]>;
+
+export const useParameters = (): Parameter[] =>
+  PARAMETERS_BY_MODULE[useModule().module];

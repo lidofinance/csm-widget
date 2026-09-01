@@ -2,7 +2,7 @@ import { MODULE_NAME, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_IMMUTABLE } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK, useSmSDKByModule } from '../web3-provider';
+import { useTargetSmSDK } from '../web3-provider';
 
 type Props = {
   curveId: bigint | undefined;
@@ -17,10 +17,7 @@ export const useBondByKeysCount = ({
   token = TOKENS.steth,
   module,
 }: Props) => {
-  const activeSdk = useSmSDK();
-  const targetModule = module ?? activeSdk.core.moduleName;
-  const byModuleSdk = useSmSDKByModule(targetModule);
-  const sdk = module ? byModuleSdk : activeSdk;
+  const { targetModule, sdk } = useTargetSmSDK(module);
 
   return useQuery({
     queryKey: [

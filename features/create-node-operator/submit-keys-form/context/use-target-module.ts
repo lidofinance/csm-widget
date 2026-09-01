@@ -4,8 +4,6 @@ import {
   useRequestedOperatorType,
 } from 'shared/hooks';
 
-const CSM_FAMILY: MODULE_NAME[] = [MODULE_NAME.CSM, MODULE_NAME.CSM_02];
-
 // CM creates go through curated-operator-form; this form is CSM-family only.
 export const useTargetModule = (): MODULE_NAME.CSM | MODULE_NAME.CSM_02 => {
   const type = useRequestedOperatorType();
@@ -17,11 +15,8 @@ export const useTargetModule = (): MODULE_NAME.CSM | MODULE_NAME.CSM_02 => {
       : MODULE_NAME.CSM;
   }
 
-  const creatableCsmFamily = creatableModules.filter((module) =>
-    CSM_FAMILY.includes(module),
-  );
-  return creatableCsmFamily.length === 1 &&
-    creatableCsmFamily[0] === MODULE_NAME.CSM_02
+  return !creatableModules.includes(MODULE_NAME.CSM) &&
+    creatableModules.includes(MODULE_NAME.CSM_02)
     ? MODULE_NAME.CSM_02
     : MODULE_NAME.CSM;
 };

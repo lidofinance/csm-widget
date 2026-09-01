@@ -2,7 +2,6 @@ import { FC } from 'react';
 import { useHeaderCustomActions } from 'shared/layout/header';
 import { TypeButton } from 'shared/node-operator/operator-type';
 import { useSubmitKeysFormData } from './context';
-import { useTargetModule } from './context/use-target-module';
 
 /**
  * Operator type button that appears in the header on the create node operator page.
@@ -10,8 +9,7 @@ import { useTargetModule } from './context/use-target-module';
  * Uses React Portal to render into the header's custom actions slot.
  */
 export const HeaderOperatorTypeButton: FC = () => {
-  const { curveId, address } = useSubmitKeysFormData();
-  const targetModule = useTargetModule();
+  const { curveId, address, targetModule } = useSubmitKeysFormData();
 
   return useHeaderCustomActions(
     address && curveId !== undefined ? (

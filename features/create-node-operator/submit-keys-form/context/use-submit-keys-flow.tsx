@@ -165,13 +165,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
               invariant(op, 'operator key required for members init');
               try {
                 await initStaged(op);
-                renderCreateSuccess(
-                  transitStage,
-                  result,
-                  data,
-                  keys,
-                  targetModule,
-                );
+                renderCreateSuccess(transitStage, result, data, keys);
               } catch (error) {
                 trackMatomoRawError('members_init', error);
                 console.warn('[members] in-flow init failed', error);
@@ -201,13 +195,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
               if (willInitMembers) {
                 await runInit();
               } else {
-                renderCreateSuccess(
-                  transitStage,
-                  result,
-                  data,
-                  keys,
-                  targetModule,
-                );
+                renderCreateSuccess(transitStage, result, data, keys);
               }
             };
 

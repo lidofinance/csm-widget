@@ -5,9 +5,9 @@ import {
   KEY_IDVTC_PROOF,
   KEY_SHARE_LIMIT,
   KEY_STAKE_LIMIT,
-  useCsm02DefaultCurveId,
   useCurveParameters,
   useDappStatus,
+  useDefaultCurveId,
   useEthereumBalance,
   useShareLimit,
   useShareLimitStatus,
@@ -63,7 +63,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
   const { data: csmCreateData, isPending: isCsmCurveIdPending } =
     useCreateCurveId();
   const { data: csm02CurveId, isPending: isCsm02CurveIdPending } =
-    useCsm02DefaultCurveId();
+    useDefaultCurveId(MODULE_NAME.CSM_02);
 
   const curveId = isCsm02 ? csm02CurveId : csmCreateData?.curveId;
   const proof = isCsm02 ? undefined : csmCreateData?.proof;

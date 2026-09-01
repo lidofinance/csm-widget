@@ -9,5 +9,10 @@ export const deployedModules: MODULE_NAME[] = resolveDeployedModules(
   config.defaultChain,
 );
 
-export const isModuleDeployed = (module: MODULE_NAME): boolean =>
-  deployedModules.includes(module);
+export const CSM_FAMILY_MODULES: MODULE_NAME[] = [
+  MODULE_NAME.CSM,
+  MODULE_NAME.CSM_02,
+];
+
+export const isCsmFamilyModule = (module: MODULE_NAME): boolean =>
+  CSM_FAMILY_MODULES.includes(module);
