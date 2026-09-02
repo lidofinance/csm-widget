@@ -24,9 +24,9 @@ export const OPERATOR_TYPE_METADATA: Record<
   OperatorTypeMetadata
 > = {
   [OPERATOR_TYPE.CSM_DEF]: {
-    name: 'Default',
-    short: 'DEF',
-    title: 'Default (DEF)',
+    name: 'CSM 0x01',
+    short: '0x01',
+    title: 'CSM 0x01',
     description:
       'The simplest way to start validating in CSM. Upload keys under the general parameters without any permission or verification. At any point in the future, you may apply to become an Identified Community Staker to access more favorable parameters.',
     capitalMultiplier: 'up to 1.75x',
@@ -39,7 +39,7 @@ export const OPERATOR_TYPE_METADATA: Record<
       'Unlock the power of 0x02 withdrawal credentials to run validators with balances of up to 2048 ETH.',
     descriptionNote: {
       lead: 'Run 0x02 alongside any other type ',
-      rest: '(Default, ICS, or IDVTC) to stack their benefits.',
+      rest: '(0x01, ICS, or IDVTC) to stack their benefits.',
     },
     capitalMultiplier: 'up to 2.6x',
   },

@@ -5,10 +5,7 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
-import {
-  ICS_APPLY_FORM,
-  SURVEYS_SETUP_ENABLED,
-} from 'config/feature-flags/types';
+import { SURVEYS_SETUP_ENABLED } from 'config/feature-flags/types';
 import { isSurveysApiConfigured } from 'modules/surveys-sdk';
 import {
   useDappStatus,
@@ -26,6 +23,7 @@ import {
   useCanClaimICS,
   useCanClaimIDVTC,
   useCanCreateNodeOperator,
+  useIcsApplyEnabled,
 } from 'shared/hooks';
 import { Address, isAddressEqual } from 'viem';
 
@@ -35,6 +33,10 @@ export type ShowRule =
   | 'NOT_NODE_OPERATOR'
   | 'IS_NODE_OPERATOR'
   | 'CAN_CREATE'
+  | 'CAN_CREATE_0X01'
+  | 'CAN_CREATE_ICS'
+  | 'CAN_CREATE_IDVTC'
+  | 'CAN_CREATE_0X02'
   | 'HAS_KEYS'
   | 'HAS_INVITES'
   | 'HAS_MANAGER_ROLE'
@@ -46,6 +48,7 @@ export type ShowRule =
   | 'CAN_CLAIM_ICS'
   | 'CAN_CLAIM_IDVTC'
   | 'ICS_APPLY_ENABLED'
+  | 'HAS_APPLY_OPTIONS'
   | 'IS_SURVEYS_ACTIVE'
   | 'IS_CSM'
   | 'IS_CSM_02'
@@ -98,10 +101,15 @@ export const useShowFlags = (): ShowFlags => {
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
   const { data: operatorType } = useOperatorType(nodeOperator?.nodeOperatorId);
-  const { canCreate: canCreateNO } = useCanCreateNodeOperator();
+  const {
+    canCreate: canCreateNO,
+    creatableTypes,
+    createOptions,
+  } = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
   const { module, isCsmFamily } = useModule();
+  const icsApplyEnabled = useIcsApplyEnabled();
 
   return useMemo(
     () => ({
@@ -110,6 +118,10 @@ export const useShowFlags = (): ShowFlags => {
       ['NOT_NODE_OPERATOR']: !nodeOperator,
       ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
       ['CAN_CREATE']: !!canCreateNO,
+      ['CAN_CREATE_0X01']: creatableTypes.includes(OPERATOR_TYPE.CSM_DEF),
+      ['CAN_CREATE_ICS']: creatableTypes.includes(OPERATOR_TYPE.CSM_ICS),
+      ['CAN_CREATE_IDVTC']: creatableTypes.includes(OPERATOR_TYPE.CSM_IDVTC),
+      ['CAN_CREATE_0X02']: creatableTypes.includes(OPERATOR_TYPE.CSM2_DEF),
       ['HAS_KEYS']: !!info?.totalAddedKeys,
       ['HAS_MANAGER_ROLE']:
         isAccountActive && isManagerRole(nodeOperator, address),
@@ -122,8 +134,8 @@ export const useShowFlags = (): ShowFlags => {
       ['EL_DELAYED_PENALTY_REPORTER']: !!isReportingRole,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
       ['CAN_CLAIM_IDVTC']: !!canClaimIDVTC && isAccountActive,
-      ['ICS_APPLY_ENABLED']:
-        !!featureFlags?.[ICS_APPLY_FORM] && module === MODULE_NAME.CSM,
+      ['ICS_APPLY_ENABLED']: icsApplyEnabled,
+      ['HAS_APPLY_OPTIONS']: createOptions.some(({ kind }) => kind === 'apply'),
       ['IS_SURVEYS_ACTIVE']:
         isSurveysApiConfigured &&
         !!featureFlags?.[SURVEYS_SETUP_ENABLED] &&
@@ -142,6 +154,7 @@ export const useShowFlags = (): ShowFlags => {
       isAccountActive,
       nodeOperator,
       canCreateNO,
+      creatableTypes,
       info?.totalAddedKeys,
       address,
       invites?.length,
@@ -154,6 +167,8 @@ export const useShowFlags = (): ShowFlags => {
       module,
       operatorType,
       isCsmFamily,
+      icsApplyEnabled,
+      createOptions,
     ],
   );
 };

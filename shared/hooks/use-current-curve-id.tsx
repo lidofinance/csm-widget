@@ -1,86 +1,40 @@
-import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import {
   useDefaultCurveId,
-  useIcsCurveId,
-  useIcsPaused,
-  useIcsProof,
-  useIdvtcCurveId,
-  useIdvtcPaused,
-  useIdvtcProof,
   useModule,
   useNodeOperatorId,
   useOperatorCurveId,
 } from 'modules/web3';
-import { useModuleOperatorType } from './use-operator-type-metadata';
-import { useRequestedOperatorType } from './use-requested-operator-type';
+import { useOptionalCreateType } from 'providers/create-type-provider';
+
+// The module a curve id was read against — pair the two when passing either
+// downstream, curve ids are only meaningful within their own module.
+export const useCurrentCurveModule = () => {
+  const { module: activeModule } = useModule();
+  const createType = useOptionalCreateType();
+  return createType?.module ?? activeModule;
+};
 
 export const useCurrentCurveId = (module?: MODULE_NAME) => {
   const { module: activeModule } = useModule();
   const targetModule = module ?? activeModule;
   const nodeOperatorId = useNodeOperatorId();
   const { data: operatorCurveId } = useOperatorCurveId(nodeOperatorId);
-  const { data: createData } = useCreateCurveId();
-  const { data: csm02CurveId } = useDefaultCurveId(MODULE_NAME.CSM_02);
+  const createType = useOptionalCreateType();
+  // useDefaultCurveId only covers the CSM family; CM has no permissionless
+  // gate to fall back to, so pass CSM here and ignore the result for CM.
+  const { data: defaultCurveId } = useDefaultCurveId(
+    targetModule === MODULE_NAME.CSM_02 ? MODULE_NAME.CSM_02 : MODULE_NAME.CSM,
+  );
+
+  if (createType)
+    return module && module !== createType.module
+      ? undefined
+      : createType.curveId;
 
   if (targetModule === activeModule && nodeOperatorId !== undefined) {
     return operatorCurveId;
   }
-  return targetModule === MODULE_NAME.CSM_02
-    ? csm02CurveId
-    : createData?.curveId;
-};
 
-export const useCreateCurveId = () => {
-  const { data: defCurveId, isPending: isPendingDef } = useDefaultCurveId();
-
-  const { data: icsCurveId, isPending: isPendingIcsCurveId } = useIcsCurveId();
-  const { data: icsProof, isPending: isPendingIcsProof } = useIcsProof();
-  const { data: icsPaused, isPending: isPendingIcsPaused } = useIcsPaused();
-
-  const { data: idvtcCurveId, isPending: isPendingIdvtcCurveId } =
-    useIdvtcCurveId();
-  const { data: idvtcProof, isPending: isPendingIdvtcProof } = useIdvtcProof();
-  const { data: idvtcPaused, isPending: isPendingIdvtcPaused } =
-    useIdvtcPaused();
-
-  const isPending =
-    isPendingDef ||
-    isPendingIcsCurveId ||
-    isPendingIcsProof ||
-    isPendingIcsPaused ||
-    isPendingIdvtcCurveId ||
-    isPendingIdvtcProof ||
-    isPendingIdvtcPaused;
-
-  const isIdvtcEligible =
-    !idvtcPaused && idvtcProof?.proof && !idvtcProof.isConsumed;
-  const isIcsEligible = !icsPaused && icsProof?.proof && !icsProof.isConsumed;
-
-  const requestedType = useRequestedOperatorType();
-
-  const curveId = requestedType
-    ? requestedType === OPERATOR_TYPE.CSM_IDVTC
-      ? idvtcCurveId
-      : requestedType === OPERATOR_TYPE.CSM_ICS
-        ? icsCurveId
-        : defCurveId
-    : isIdvtcEligible
-      ? idvtcCurveId
-      : isIcsEligible
-        ? icsCurveId
-        : defCurveId;
-
-  const type = useModuleOperatorType(curveId);
-
-  const proof =
-    type === OPERATOR_TYPE.CSM_IDVTC
-      ? idvtcProof
-      : type === OPERATOR_TYPE.CSM_ICS
-        ? icsProof
-        : undefined;
-
-  return {
-    data: curveId !== undefined ? { curveId, type, proof } : undefined,
-    isPending,
-  };
+  return targetModule === MODULE_NAME.CM ? undefined : defaultCurveId;
 };

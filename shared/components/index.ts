@@ -19,6 +19,7 @@ export { FormBlock } from './form-block/form-block';
 export { Tooltip, type TooltipProps } from './tooltip/tooltip';
 export { IconTooltip } from './icon-tooltip/icon-tooltip';
 export { StepIndicator } from './step-indicator/step-indicator';
+export { StepTrack } from './step-indicator/step-track';
 export { KeysAvailable } from './keys-available/keys-available';
 export { KeysLimitWarning } from './keys-limit-warning/keys-limit-warning';
 export { YouWillReceive } from './you-will-receive/you-will-receive';

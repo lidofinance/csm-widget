@@ -1,5 +1,8 @@
-import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
+import {
+  AddressProof,
+  MODULE_NAME,
+  OPERATOR_TYPE,
+} from '@lidofinance/lido-csm-sdk';
 import { deployedModules } from 'consts';
 import { useMemo } from 'react';
 import {
@@ -15,16 +18,39 @@ import {
   useNodeOperator,
   useSmStatus,
 } from 'modules/web3';
+import { getCreatableTypes } from './create-operator-rules';
+import type {
+  ApplicableOperatorType,
+  CreateOption,
+} from './use-create-options';
+import { useIcsApplyEnabled } from './use-ics-apply-enabled';
+
+const isDeployed = (module: MODULE_NAME) => deployedModules.includes(module);
+
+const buildApplyOption = (
+  type: ApplicableOperatorType,
+  proof: AddressProof | undefined,
+  paused: boolean | undefined,
+  canCreate: boolean,
+): CreateOption | null => {
+  if (paused || proof?.isConsumed) return null;
+  return { type, kind: canCreate ? 'create' : 'apply' };
+};
 
 export const useCanCreateNodeOperator = () => {
   const { isAccountActive } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: operators, isPending: isOperatorsPending } =
     useAvailableOperators();
-  const { data: status, isPending: isStatusPending } = useSmStatus();
+
+  const csmStatus = useSmStatus(MODULE_NAME.CSM);
+  const csm02Status = useSmStatus(MODULE_NAME.CSM_02);
+  const cmStatus = useSmStatus(MODULE_NAME.CM);
 
   const { data: gatesCount, isPending: isGatesPending } =
     useCuratedGatesEligibility(undefined, (data) => data.length);
+
+  const icsApplyEnabled = useIcsApplyEnabled();
 
   const { data: icsProof, isPending: isIcsProofPending } = useIcsProof();
   const { data: isIcsPaused, isPending: isIcsPausedPending } = useIcsPaused();
@@ -36,83 +62,113 @@ export const useCanCreateNodeOperator = () => {
   const { data: idvtcCurveId, isPending: isIdvtcCurveIdPending } =
     useIdvtcCurveId();
 
-  const isIcsEligible =
-    !isIcsPaused && !!icsProof?.proof && !icsProof.isConsumed;
-  const isIdvtcEligible =
-    !isIdvtcPaused && !!idvtcProof?.proof && !idvtcProof.isConsumed;
-
-  const canCreateIdvtc =
-    isIdvtcEligible &&
-    idvtcCurveId !== undefined &&
-    icsCurveId !== undefined &&
-    nodeOperator?.curveId === icsCurveId;
-
-  const canCreateIcs =
-    isIcsEligible &&
-    icsCurveId !== undefined &&
-    idvtcCurveId !== undefined &&
-    nodeOperator?.curveId === idvtcCurveId;
-
-  const hasOperatorIn = (module: MODULE_NAME) =>
-    !!operators?.some((operator) => operator.module === module);
-
-  const creatableModules = useMemo(
+  const creatableTypes = useMemo(
     () =>
-      deployedModules.filter((module) => {
-        if (module === MODULE_NAME.CM) {
-          return gatesCount !== undefined && gatesCount > 0;
-        }
-        if (module === MODULE_NAME.CSM) {
-          return (
-            !hasOperatorIn(MODULE_NAME.CSM) || canCreateIdvtc || canCreateIcs
-          );
-        }
-        return !hasOperatorIn(module);
+      getCreatableTypes({
+        isAccountActive,
+        deployedModules,
+        pausedModules: {
+          [MODULE_NAME.CSM]: csmStatus.data?.isPaused,
+          [MODULE_NAME.CSM_02]: csm02Status.data?.isPaused,
+        },
+        operatorModules: operators?.map(({ module }) => module) ?? [],
+        activeOperatorCurveId: nodeOperator?.curveId,
+        icsEligible: !isIcsPaused && !!icsProof?.proof && !icsProof.isConsumed,
+        idvtcEligible:
+          !isIdvtcPaused && !!idvtcProof?.proof && !idvtcProof.isConsumed,
+        icsCurveId,
+        idvtcCurveId,
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [operators, gatesCount, canCreateIdvtc, canCreateIcs],
+    [
+      isAccountActive,
+      csmStatus.data,
+      csm02Status.data,
+      operators,
+      nodeOperator?.curveId,
+      isIcsPaused,
+      icsProof,
+      isIdvtcPaused,
+      idvtcProof,
+      icsCurveId,
+      idvtcCurveId,
+    ],
   );
 
+  const canCreateCurated =
+    isAccountActive &&
+    isDeployed(MODULE_NAME.CM) &&
+    !cmStatus.data?.isPaused &&
+    !!gatesCount;
+
+  // Steer a wallet holding an unconsumed ICS/IDVTC proof towards its better
+  // curve instead of DEF — deliberately ignores the paused flags.
+  const hasUnconsumedProof = Boolean(
+    (icsProof?.proof && !icsProof.isConsumed) ||
+    (idvtcProof?.proof && !idvtcProof.isConsumed),
+  );
+
+  const createOptions = useMemo(() => {
+    const def: CreateOption | null =
+      creatableTypes.includes(OPERATOR_TYPE.CSM_DEF) && !hasUnconsumedProof
+        ? { type: OPERATOR_TYPE.CSM_DEF, kind: 'create' }
+        : null;
+
+    const csm02: CreateOption | null = creatableTypes.includes(
+      OPERATOR_TYPE.CSM2_DEF,
+    )
+      ? { type: OPERATOR_TYPE.CSM2_DEF, kind: 'create' }
+      : null;
+
+    if (!icsApplyEnabled) {
+      return [def, csm02].filter((x): x is NonNullable<typeof x> => x !== null);
+    }
+
+    const ics = buildApplyOption(
+      OPERATOR_TYPE.CSM_ICS,
+      icsProof,
+      isIcsPaused,
+      creatableTypes.includes(OPERATOR_TYPE.CSM_ICS),
+    );
+    const idvtc = buildApplyOption(
+      OPERATOR_TYPE.CSM_IDVTC,
+      idvtcProof,
+      isIdvtcPaused,
+      creatableTypes.includes(OPERATOR_TYPE.CSM_IDVTC),
+    );
+
+    return [def, ics, idvtc, csm02].filter(
+      (x): x is CreateOption => x !== null,
+    );
+  }, [
+    creatableTypes,
+    hasUnconsumedProof,
+    icsApplyEnabled,
+    icsProof,
+    isIcsPaused,
+    idvtcProof,
+    isIdvtcPaused,
+  ]);
+
+  // A disabled react-query stays `isPending: true` forever, so every term is
+  // guarded by the module that owns it actually being deployed.
+  const isCsmDeployed = isDeployed(MODULE_NAME.CSM);
   const isPending =
-    isStatusPending ||
     (isAccountActive && isOperatorsPending) ||
-    (config.module === MODULE_NAME.CSM
-      ? isIcsProofPending ||
+    (isCsmDeployed && csmStatus.isPending) ||
+    (isDeployed(MODULE_NAME.CSM_02) && csm02Status.isPending) ||
+    (isDeployed(MODULE_NAME.CM) && (cmStatus.isPending || isGatesPending)) ||
+    (isCsmDeployed &&
+      (isIcsProofPending ||
         isIcsPausedPending ||
         isIcsCurveIdPending ||
         isIdvtcProofPending ||
         isIdvtcPausedPending ||
-        isIdvtcCurveIdPending
-      : isGatesPending);
+        isIdvtcCurveIdPending));
 
-  const canCreate = Boolean(
-    isAccountActive && !status?.isPaused && creatableModules.length > 0,
-  );
-
-  const isCsmCreatable = creatableModules.includes(MODULE_NAME.CSM);
-
-  const creatableTypes = useMemo(
-    () =>
-      [
-        isCsmCreatable &&
-          !hasOperatorIn(MODULE_NAME.CSM) &&
-          OPERATOR_TYPE.CSM_DEF,
-        isCsmCreatable && isIcsEligible && OPERATOR_TYPE.CSM_ICS,
-        isCsmCreatable && isIdvtcEligible && OPERATOR_TYPE.CSM_IDVTC,
-        creatableModules.includes(MODULE_NAME.CSM_02) && OPERATOR_TYPE.CSM2_DEF,
-      ].filter((type): type is OPERATOR_TYPE => !!type),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      creatableModules,
-      isCsmCreatable,
-      isIcsEligible,
-      isIdvtcEligible,
-      operators,
-    ],
-  );
+  const canCreate = creatableTypes.length > 0 || canCreateCurated;
 
   return useMemo(
-    () => ({ canCreate, creatableModules, creatableTypes, isPending }),
-    [canCreate, creatableModules, creatableTypes, isPending],
+    () => ({ canCreate, creatableTypes, createOptions, isPending }),
+    [canCreate, creatableTypes, createOptions, isPending],
   );
 };

@@ -1,4 +1,3 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import {
   KEY_DEPOSIT_QUEUE_BATCHES,
   KEY_ICS_PROOF,
@@ -7,7 +6,6 @@ import {
   KEY_STAKE_LIMIT,
   useCurveParameters,
   useDappStatus,
-  useDefaultCurveId,
   useEthereumBalance,
   useShareLimit,
   useShareLimitStatus,
@@ -22,19 +20,19 @@ import {
   NetworkData,
   useFormData,
 } from 'shared/hook-form/form-controller';
-import {
-  useCreateCurveId,
-  useInvalidate,
-  useKeysAvailable,
-} from 'shared/hooks';
+import { useInvalidate, useKeysAvailable } from 'shared/hooks';
+import { useCreateType } from 'providers/create-type-provider';
 import { type SubmitKeysFormNetworkData } from './types';
-import { useTargetModule } from './use-target-module';
 
 const useSubmitKeysFormNetworkData: NetworkData<
   SubmitKeysFormNetworkData
 > = () => {
-  const targetModule = useTargetModule();
-  const isCsm02 = targetModule === MODULE_NAME.CSM_02;
+  const {
+    module: targetModule,
+    curveId,
+    proof,
+    isPending: isCurveIdPending,
+  } = useCreateType();
 
   const { data: status, isPending: isStatusLoading } =
     useSmStatus(targetModule);
@@ -58,18 +56,6 @@ const useSubmitKeysFormNetworkData: NetworkData<
   const isMaxStakeEtherLoading = maxStakeEthQuery.isPending;
 
   const { address } = useDappStatus();
-
-  // CSM_02 has no gates: always the module's single default curve.
-  const { data: csmCreateData, isPending: isCsmCurveIdPending } =
-    useCreateCurveId();
-  const { data: csm02CurveId, isPending: isCsm02CurveIdPending } =
-    useDefaultCurveId(MODULE_NAME.CSM_02);
-
-  const curveId = isCsm02 ? csm02CurveId : csmCreateData?.curveId;
-  const proof = isCsm02 ? undefined : csmCreateData?.proof;
-  const isCurveIdPending = isCsm02
-    ? isCsm02CurveIdPending
-    : isCsmCurveIdPending;
 
   const { data: curveParameters, isPending: isCurveParametersLoading } =
     useCurveParameters(curveId, undefined, targetModule);
@@ -119,7 +105,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
       targetModule,
       address,
       isPaused: status?.isPaused,
-      proof: proof?.proof,
+      proof,
       stethBalance,
       wstethBalance,
       ethBalance,
