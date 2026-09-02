@@ -79,7 +79,7 @@ test.describe(
         const form = widgetService.keysPage.createNodeOperatorForm;
         const keys = keysGeneratorService.generateKeys(1);
 
-        await widgetService.keysPage.goto();
+        await widgetService.keysPage.goto('idvtc');
 
         await test.step('Select ETH bond token and add one key', async () => {
           await form.getBondTokenElement(TokenSymbol.ETH).click();

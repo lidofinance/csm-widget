@@ -6,7 +6,6 @@ import { DepositQueue } from 'features/view-keys/deposit-queue';
 import { FormBlock } from 'shared/components';
 import { Form, FormLoader } from 'shared/hook-form/form-controller';
 import { SubmitKeysDataProvider } from './context';
-import { useTargetModule } from './context/use-target-module';
 import { AmountInput } from './controls/amount-input';
 import { CustomAddressesSection } from './controls/custom-addresses-section';
 import { DkgFilesSection } from './controls/dkg-files-section';
@@ -16,20 +15,19 @@ import { KeysLimitWarning } from './controls/keys-limit-warning';
 import { ReferrerInput } from './controls/referrer-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
-import { HeaderOperatorTypeButton } from './header-operator-type-button';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
+import { useCreateType } from '../create-type-context';
 
 export const SubmitKeysForm: FC = memo(() => {
   // The graph must read the module being created, not the active operator's
   // module — on /create there is no active operator to fall back on.
-  const targetModule = useTargetModule();
+  const { module: targetModule } = useCreateType();
 
   return (
     <SubmitKeysDataProvider>
       <SubmitKeysFormProvider>
         <FormBlock data-testid="submitKeysForm">
           <FormLoader>
-            <HeaderOperatorTypeButton />
             <Form>
               <TokenSelect />
               <KeysLimitWarning />

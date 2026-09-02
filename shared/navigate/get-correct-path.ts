@@ -19,12 +19,18 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
       return isModuleCM ? path : PATH.SETTINGS;
 
     // Create
-    case PATH.CREATE:
-      return isModuleCSM
-        ? hasRole && !flags.CAN_CREATE
-          ? PATH.KEYS_VIEW
-          : path
-        : path;
+    case PATH.CREATE: {
+      if (isModuleCSM && hasRole && !flags.CAN_CREATE) return PATH.KEYS_VIEW;
+      const creatable = (
+        [
+          [flags.CAN_CREATE_DEF, PATH.CREATE_DEF],
+          [flags.CAN_CREATE_ICS, PATH.CREATE_ICS],
+          [flags.CAN_CREATE_IDVTC, PATH.CREATE_IDVTC],
+          [flags.CAN_CREATE_0X02, PATH.CREATE_0x02],
+        ] as const
+      ).filter(([can]) => can);
+      return creatable.length === 1 ? creatable[0][1] : path;
+    }
 
     // Keys
     case PATH.KEYS:

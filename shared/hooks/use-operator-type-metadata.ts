@@ -35,8 +35,11 @@ export const useCurveMetadataGetter = (module?: MODULE_NAME) => {
   );
 };
 
-export const useModuleOperatorType = (curveId: bigint | undefined) => {
-  const getOperatorType = useModuleOperatorTypeGetter();
+export const useModuleOperatorType = (
+  curveId: bigint | undefined,
+  module?: MODULE_NAME,
+) => {
+  const getOperatorType = useModuleOperatorTypeGetter(module);
   return getOperatorType(curveId);
 };
 

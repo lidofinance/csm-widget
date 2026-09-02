@@ -36,9 +36,9 @@ import {
 import { renderCreateSuccess } from '../hooks/create-success-stage';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
+import { useCreateType } from '../../create-type-context';
 import { useSubmitKeysFormData } from './submit-keys-data-provider';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
-import { useTargetModule } from './use-target-module';
 
 export type SubmitKeysFlow =
   { action: 'cannot-submit' } | ({ action: 'submit-keys' } & Executable);
@@ -48,8 +48,8 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFormNetworkData,
   SubmitKeysFlow
 > => {
-  const targetModule = useTargetModule();
-  // useTargetModule narrows to CSM | CSM_02, but the overloads only discriminate
+  const { module: targetModule } = useCreateType();
+  // targetModule narrows to CSM | CSM_02, but the overloads only discriminate
   // on literal module arguments.
   const sdk = useSmSDKByModule(targetModule) as CsmFamilySDK | undefined;
   // A curveId means a different operator type per module, so resolve against

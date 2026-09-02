@@ -94,7 +94,7 @@ test.describe(
         'Should show the IDVTC badge in the header on the create operator page',
       ),
       async ({ widgetService }) => {
-        await widgetService.keysPage.goto();
+        await widgetService.keysPage.goto('idvtc');
 
         await expect(widgetService.header.operatorTypeBadge).toBeVisible();
         await expect(widgetService.header.operatorTypeBadge).toContainText(
@@ -107,7 +107,7 @@ test.describe(
       qase(445, 'Should hide the IDVTC badge outside the create operator page'),
       async ({ widgetService }) => {
         await test.step('Badge is shown on the create operator page', async () => {
-          await widgetService.keysPage.goto();
+          await widgetService.keysPage.goto('idvtc');
           await expect(widgetService.header.operatorTypeBadge).toBeVisible();
         });
 
@@ -122,7 +122,7 @@ test.describe(
       qase(446, 'Should open a parameters modal with a toggle from the badge'),
       async ({ widgetService }) => {
         const modal = widgetService.parametersModal;
-        await widgetService.keysPage.goto();
+        await widgetService.keysPage.goto('idvtc');
 
         await test.step('Open the modal from the header badge', async () => {
           await widgetService.header.operatorTypeBadge.click();
@@ -151,7 +151,7 @@ test.describe(
       qase(447, 'Should show the label and help tooltip for every parameter'),
       async ({ widgetService }) => {
         const modal = widgetService.parametersModal;
-        await widgetService.keysPage.goto();
+        await widgetService.keysPage.goto('idvtc');
         await widgetService.header.operatorTypeBadge.click();
         await expect(modal.modal).toBeVisible();
         await expect(modal.modal).toContainText(IDVTC_TITLE);

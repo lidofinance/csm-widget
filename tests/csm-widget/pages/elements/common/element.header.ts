@@ -17,7 +17,8 @@ export class Header {
     this.accountSection = this.header.getByTestId('accountSectionHeader');
 
     this.connectWalletBtn = this.header.getByText('Connect').first();
-    this.operatorTypeBadge = this.header.getByTestId(
+    // Renders in the create page title, not inside <header> — page-scoped.
+    this.operatorTypeBadge = this.page.getByTestId(
       'header-operator-type-button',
     );
     this.operatorTypeCurve = this.header.getByTestId('nodeOperatorCurve');

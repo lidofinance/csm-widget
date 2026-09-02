@@ -37,7 +37,7 @@ test.describe(
 
         await test.step('Create an IDVTC operator by adding a key', async () => {
           const keys = keysGeneratorService.generateKeys(1);
-          await widgetService.keysPage.goto();
+          await widgetService.keysPage.goto('idvtc');
           await widgetService.keysPage.createNodeOperatorForm.submitNewKeys(
             keys,
             TokenSymbol.ETH,
@@ -140,7 +140,7 @@ test.describe(
         const idvtcOperatorId = await widgetService.extractNodeOperatorId();
 
         await test.step('Create a new ICS operator on the create page', async () => {
-          await widgetService.keysPage.goto();
+          await widgetService.keysPage.goto('ics');
           await form.getBondTokenElement(TokenSymbol.ETH).click();
           await form.fillKeys(keys);
           await form.confirmKeysReady.click();
@@ -186,7 +186,7 @@ test.describe(
         const keys = keysGeneratorService.generateKeys(1);
 
         await test.step('Create a new ICS operator on the create page', async () => {
-          await widgetService.keysPage.goto();
+          await widgetService.keysPage.goto('ics');
           await form.getBondTokenElement(TokenSymbol.ETH).click();
           await form.fillKeys(keys);
           await expect(form.amountInput).toHaveValue('1.5');

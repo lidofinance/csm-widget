@@ -1,3 +1,5 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { isCsmFamilyModule } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   SHARE_LIMIT_STATUS,
@@ -9,6 +11,7 @@ import {
 import { FC } from 'react';
 import { Banner } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
+import { useOptionalCreateType } from '../create-type-context';
 
 type Props = { activeLeft: string; queue: string };
 
@@ -85,12 +88,15 @@ const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
 );
 
 export const ShareLimitBanner: FC = () => {
-  const { isCsmFamily, isCSM02 } = useModule();
-  const { data } = useShareLimit();
-  const { data: status } = useShareLimitStatus();
+  const createType = useOptionalCreateType();
+  const { module: activeModule } = useModule();
+  const targetModule = createType?.module ?? activeModule;
+  const isCSM02 = targetModule === MODULE_NAME.CSM_02;
+  const { data } = useShareLimit(undefined, targetModule);
+  const { data: status } = useShareLimitStatus(targetModule);
   const { data: hasPrioritySpots } = useHasPriorityQueueSpots();
 
-  if (!data || !status || !isCsmFamily) {
+  if (!data || !status || !isCsmFamilyModule(targetModule)) {
     return null;
   }
 

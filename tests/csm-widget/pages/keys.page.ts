@@ -25,14 +25,18 @@ export class KeysPage extends BasePage {
     this.submitPage = new SubmitPage(page);
     this.keysView = new KeysViewPage(page);
     this.createNodeOperatorForm = new CreateNodeOperatorForm(this.page);
-    this.headerTitle = this.page.getByText('Create a Node Operator');
+    // The title text is interpolated with a type badge that renders `null`
+    // until its curve id loads — match the stable testid instead.
+    this.headerTitle = this.page.getByTestId('createOperatorPageTitle');
     this.headerSubTitle = this.page.getByText('Upload your first key(s)');
   }
 
-  async goto() {
-    await test.step('Open the Keys page to create new node operator', async () => {
+  // `/create` is the type-selection page for wallets with 2+ creatable
+  // types, so we go straight to the per-type route the test needs.
+  async goto(type: 'def' | 'ics' | 'idvtc' | '0x02' = 'def') {
+    await test.step(`Open the Keys page to create a new ${type} node operator`, async () => {
       await this.openWithRetry(
-        '/create',
+        `/create/${type}`,
         this.createNodeOperatorForm.formBlock,
       );
     });
