@@ -1,7 +1,14 @@
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+
 export const PATH = <const>{
   HOME: '/',
 
   CREATE: '/create',
+  CREATE_DEF: '/create/def',
+  CREATE_ICS: '/create/ics',
+  CREATE_IDVTC: '/create/idvtc',
+  CREATE_0x02: '/create/0x02',
+
   KEYS: '/keys',
   KEYS_SUBMIT: '/keys/submit',
   KEYS_REMOVE: '/keys/remove',
@@ -63,3 +70,10 @@ export const PATH = <const>{
 };
 
 export type PATH = (typeof PATH)[keyof typeof PATH];
+
+export const CREATE_PATH_BY_TYPE = {
+  [OPERATOR_TYPE.CSM_DEF]: PATH.CREATE_DEF,
+  [OPERATOR_TYPE.CSM_ICS]: PATH.CREATE_ICS,
+  [OPERATOR_TYPE.CSM_IDVTC]: PATH.CREATE_IDVTC,
+  [OPERATOR_TYPE.CSM2_DEF]: PATH.CREATE_0x02,
+} satisfies Partial<Record<OPERATOR_TYPE, PATH>>;

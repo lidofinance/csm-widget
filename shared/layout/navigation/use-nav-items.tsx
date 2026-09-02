@@ -48,6 +48,12 @@ const routes: Route[] = [
     name: 'Create Operator',
     path: PATH.CREATE,
     icon: <PlusIcon />,
+    subPaths: [
+      PATH.CREATE_DEF,
+      PATH.CREATE_ICS,
+      PATH.CREATE_IDVTC,
+      PATH.CREATE_0x02,
+    ],
     showRules: ['CAN_CREATE'],
   },
   {

@@ -1,5 +1,4 @@
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
 import { deployedModules } from 'consts';
 import { useMemo } from 'react';
 import {
@@ -15,13 +14,19 @@ import {
   useNodeOperator,
   useSmStatus,
 } from 'modules/web3';
+import { getCreatableTypes } from './create-operator-rules';
+
+const isDeployed = (module: MODULE_NAME) => deployedModules.includes(module);
 
 export const useCanCreateNodeOperator = () => {
   const { isAccountActive } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: operators, isPending: isOperatorsPending } =
     useAvailableOperators();
-  const { data: status, isPending: isStatusPending } = useSmStatus();
+
+  const csmStatus = useSmStatus(MODULE_NAME.CSM);
+  const csm02Status = useSmStatus(MODULE_NAME.CSM_02);
+  const cmStatus = useSmStatus(MODULE_NAME.CM);
 
   const { data: gatesCount, isPending: isGatesPending } =
     useCuratedGatesEligibility(undefined, (data) => data.length);
@@ -36,83 +41,88 @@ export const useCanCreateNodeOperator = () => {
   const { data: idvtcCurveId, isPending: isIdvtcCurveIdPending } =
     useIdvtcCurveId();
 
-  const isIcsEligible =
-    !isIcsPaused && !!icsProof?.proof && !icsProof.isConsumed;
-  const isIdvtcEligible =
-    !isIdvtcPaused && !!idvtcProof?.proof && !idvtcProof.isConsumed;
-
-  const canCreateIdvtc =
-    isIdvtcEligible &&
-    idvtcCurveId !== undefined &&
-    icsCurveId !== undefined &&
-    nodeOperator?.curveId === icsCurveId;
-
-  const canCreateIcs =
-    isIcsEligible &&
-    icsCurveId !== undefined &&
-    idvtcCurveId !== undefined &&
-    nodeOperator?.curveId === idvtcCurveId;
-
-  const hasOperatorIn = (module: MODULE_NAME) =>
-    !!operators?.some((operator) => operator.module === module);
-
-  const creatableModules = useMemo(
+  const creatableTypes = useMemo(
     () =>
-      deployedModules.filter((module) => {
-        if (module === MODULE_NAME.CM) {
-          return gatesCount !== undefined && gatesCount > 0;
-        }
-        if (module === MODULE_NAME.CSM) {
-          return (
-            !hasOperatorIn(MODULE_NAME.CSM) || canCreateIdvtc || canCreateIcs
-          );
-        }
-        return !hasOperatorIn(module);
+      getCreatableTypes({
+        isAccountActive,
+        deployedModules,
+        pausedModules: {
+          [MODULE_NAME.CSM]: csmStatus.data?.isPaused,
+          [MODULE_NAME.CSM_02]: csm02Status.data?.isPaused,
+        },
+        operatorModules: operators?.map(({ module }) => module) ?? [],
+        activeOperatorCurveId: nodeOperator?.curveId,
+        icsEligible: !isIcsPaused && !!icsProof?.proof && !icsProof.isConsumed,
+        idvtcEligible:
+          !isIdvtcPaused && !!idvtcProof?.proof && !idvtcProof.isConsumed,
+        icsCurveId,
+        idvtcCurveId,
       }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [operators, gatesCount, canCreateIdvtc, canCreateIcs],
+    [
+      isAccountActive,
+      csmStatus.data,
+      csm02Status.data,
+      operators,
+      nodeOperator?.curveId,
+      isIcsPaused,
+      icsProof,
+      isIdvtcPaused,
+      idvtcProof,
+      icsCurveId,
+      idvtcCurveId,
+    ],
   );
 
+  const canCreateCurated =
+    isAccountActive &&
+    isDeployed(MODULE_NAME.CM) &&
+    !cmStatus.data?.isPaused &&
+    !!gatesCount;
+
+  const byType = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.values(OPERATOR_TYPE).map((type) => [
+          type,
+          creatableTypes.includes(type),
+        ]),
+      ) as Record<OPERATOR_TYPE, boolean>,
+    [creatableTypes],
+  );
+
+  const creatableModules = useMemo(() => {
+    const modules = new Set<MODULE_NAME>();
+    if (
+      byType[OPERATOR_TYPE.CSM_DEF] ||
+      byType[OPERATOR_TYPE.CSM_ICS] ||
+      byType[OPERATOR_TYPE.CSM_IDVTC]
+    )
+      modules.add(MODULE_NAME.CSM);
+    if (byType[OPERATOR_TYPE.CSM2_DEF]) modules.add(MODULE_NAME.CSM_02);
+    if (canCreateCurated) modules.add(MODULE_NAME.CM);
+    return [...modules];
+  }, [byType, canCreateCurated]);
+
+  // A disabled react-query stays `isPending: true` forever, so every term is
+  // guarded by the module that owns it actually being deployed.
+  const isCsmDeployed = isDeployed(MODULE_NAME.CSM);
   const isPending =
-    isStatusPending ||
     (isAccountActive && isOperatorsPending) ||
-    (config.module === MODULE_NAME.CSM
-      ? isIcsProofPending ||
+    (isCsmDeployed && csmStatus.isPending) ||
+    (isDeployed(MODULE_NAME.CSM_02) && csm02Status.isPending) ||
+    (isDeployed(MODULE_NAME.CM) && (cmStatus.isPending || isGatesPending)) ||
+    (isCsmDeployed &&
+      (isIcsProofPending ||
         isIcsPausedPending ||
         isIcsCurveIdPending ||
         isIdvtcProofPending ||
         isIdvtcPausedPending ||
-        isIdvtcCurveIdPending
-      : isGatesPending);
+        isIdvtcCurveIdPending));
 
-  const canCreate = Boolean(
-    isAccountActive && !status?.isPaused && creatableModules.length > 0,
-  );
-
-  const isCsmCreatable = creatableModules.includes(MODULE_NAME.CSM);
-
-  const creatableTypes = useMemo(
-    () =>
-      [
-        isCsmCreatable &&
-          !hasOperatorIn(MODULE_NAME.CSM) &&
-          OPERATOR_TYPE.CSM_DEF,
-        isCsmCreatable && isIcsEligible && OPERATOR_TYPE.CSM_ICS,
-        isCsmCreatable && isIdvtcEligible && OPERATOR_TYPE.CSM_IDVTC,
-        creatableModules.includes(MODULE_NAME.CSM_02) && OPERATOR_TYPE.CSM2_DEF,
-      ].filter((type): type is OPERATOR_TYPE => !!type),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      creatableModules,
-      isCsmCreatable,
-      isIcsEligible,
-      isIdvtcEligible,
-      operators,
-    ],
-  );
+  const canCreate = creatableTypes.length > 0 || canCreateCurated;
 
   return useMemo(
-    () => ({ canCreate, creatableModules, creatableTypes, isPending }),
-    [canCreate, creatableModules, creatableTypes, isPending],
+    () => ({ canCreate, creatableModules, creatableTypes, byType, isPending }),
+    [canCreate, creatableModules, creatableTypes, byType, isPending],
   );
 };

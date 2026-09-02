@@ -35,6 +35,10 @@ export type ShowRule =
   | 'NOT_NODE_OPERATOR'
   | 'IS_NODE_OPERATOR'
   | 'CAN_CREATE'
+  | 'CAN_CREATE_DEF'
+  | 'CAN_CREATE_ICS'
+  | 'CAN_CREATE_IDVTC'
+  | 'CAN_CREATE_0X02'
   | 'HAS_KEYS'
   | 'HAS_INVITES'
   | 'HAS_MANAGER_ROLE'
@@ -98,7 +102,8 @@ export const useShowFlags = (): ShowFlags => {
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
   const { data: operatorType } = useOperatorType(nodeOperator?.nodeOperatorId);
-  const { canCreate: canCreateNO } = useCanCreateNodeOperator();
+  const { canCreate: canCreateNO, byType: canCreateByType } =
+    useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
   const { module, isCsmFamily } = useModule();
@@ -110,6 +115,10 @@ export const useShowFlags = (): ShowFlags => {
       ['NOT_NODE_OPERATOR']: !nodeOperator,
       ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
       ['CAN_CREATE']: !!canCreateNO,
+      ['CAN_CREATE_DEF']: canCreateByType[OPERATOR_TYPE.CSM_DEF],
+      ['CAN_CREATE_ICS']: canCreateByType[OPERATOR_TYPE.CSM_ICS],
+      ['CAN_CREATE_IDVTC']: canCreateByType[OPERATOR_TYPE.CSM_IDVTC],
+      ['CAN_CREATE_0X02']: canCreateByType[OPERATOR_TYPE.CSM2_DEF],
       ['HAS_KEYS']: !!info?.totalAddedKeys,
       ['HAS_MANAGER_ROLE']:
         isAccountActive && isManagerRole(nodeOperator, address),
@@ -142,6 +151,7 @@ export const useShowFlags = (): ShowFlags => {
       isAccountActive,
       nodeOperator,
       canCreateNO,
+      canCreateByType,
       info?.totalAddedKeys,
       address,
       invites?.length,
