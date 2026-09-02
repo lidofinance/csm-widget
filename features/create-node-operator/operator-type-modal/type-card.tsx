@@ -37,11 +37,7 @@ export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
         {curveId !== undefined && (
           <Parameters curveId={curveId} type={type.type} />
         )}
-        <LocalLink
-          href={type.href}
-          query={type.query}
-          matomoEvent={type.matomoEvent}
-        >
+        <LocalLink href={type.href} matomoEvent={type.matomoEvent}>
           <Button
             fullwidth
             size="sm"

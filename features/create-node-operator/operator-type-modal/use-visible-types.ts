@@ -1,7 +1,7 @@
-import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { PATH } from 'consts/urls';
+import { CREATE_PATH_BY_TYPE, PATH } from 'consts/urls';
 import {
   useIcsPaused,
   useIcsProof,
@@ -10,15 +10,14 @@ import {
 } from 'modules/web3';
 import { useMemo } from 'react';
 import {
-  getOperatorTypeQuery,
   useCanCreateNodeOperator,
+  useHasUnconsumedProof,
   useShowFlags,
 } from 'shared/hooks';
 
 export type VisibleType = {
   type: OPERATOR_TYPE;
   href: PATH;
-  query?: Record<string, string>;
   label: string;
   matomoEvent: MATOMO_CLICK_EVENTS_TYPES;
   primary: boolean;
@@ -26,21 +25,21 @@ export type VisibleType = {
 
 type ProofData = { proof?: unknown; isConsumed?: boolean } | undefined;
 
-const buildApplyEntry = (
-  type: OPERATOR_TYPE,
+const buildApplyEntry = <T extends keyof typeof CREATE_PATH_BY_TYPE>(
+  type: T,
   applyPath: PATH,
   applyEvent: MATOMO_CLICK_EVENTS_TYPES,
   createEvent: MATOMO_CLICK_EVENTS_TYPES,
   proof: ProofData,
   paused: boolean | undefined,
+  canCreate: boolean,
 ): VisibleType | null => {
   if (paused || proof?.isConsumed) return null;
   const { short } = OPERATOR_TYPE_METADATA[type];
-  return proof?.proof
+  return proof?.proof && canCreate
     ? {
         type,
-        href: PATH.CREATE,
-        query: getOperatorTypeQuery(type),
+        href: CREATE_PATH_BY_TYPE[type],
         label: `Create ${short} operator`,
         matomoEvent: createEvent,
         primary: true,
@@ -60,37 +59,33 @@ export const useVisibleTypes = (): VisibleType[] => {
   const { data: idvtcProof } = useIdvtcProof();
   const { data: icsPaused } = useIcsPaused();
   const { data: idvtcPaused } = useIdvtcPaused();
-  const { creatableModules } = useCanCreateNodeOperator();
-
-  const isCsm02Creatable = creatableModules.includes(MODULE_NAME.CSM_02);
-  const isCsmCreatable = creatableModules.includes(MODULE_NAME.CSM);
+  const { byType } = useCanCreateNodeOperator();
+  const hasUnconsumedProof = useHasUnconsumedProof();
 
   return useMemo(() => {
-    const csm02: VisibleType | null = isCsm02Creatable
+    const csm02: VisibleType | null = byType[OPERATOR_TYPE.CSM2_DEF]
       ? {
           type: OPERATOR_TYPE.CSM2_DEF,
-          href: PATH.CREATE,
-          query: getOperatorTypeQuery(OPERATOR_TYPE.CSM2_DEF),
+          href: CREATE_PATH_BY_TYPE[OPERATOR_TYPE.CSM2_DEF],
           label: 'Join now',
           matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinCsm02,
           primary: true,
         }
       : null;
 
-    const hasAnyProof = Boolean(icsProof?.proof || idvtcProof?.proof);
     const def: VisibleType | null =
-      hasAnyProof || !isCsmCreatable
-        ? null
-        : {
+      byType[OPERATOR_TYPE.CSM_DEF] && !hasUnconsumedProof
+        ? {
             type: OPERATOR_TYPE.CSM_DEF,
-            href: PATH.CREATE,
+            href: CREATE_PATH_BY_TYPE[OPERATOR_TYPE.CSM_DEF],
             label: 'Join now',
             matomoEvent:
               MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless,
             primary: true,
-          };
+          }
+        : null;
 
-    if (!ICS_APPLY_ENABLED || !isCsmCreatable) {
+    if (!ICS_APPLY_ENABLED) {
       return [def, csm02].filter((x): x is VisibleType => x !== null);
     }
 
@@ -101,6 +96,7 @@ export const useVisibleTypes = (): VisibleType[] => {
       MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIcs,
       icsProof,
       icsPaused,
+      byType[OPERATOR_TYPE.CSM_ICS],
     );
     const idvtc = buildApplyEntry(
       OPERATOR_TYPE.CSM_IDVTC,
@@ -109,6 +105,7 @@ export const useVisibleTypes = (): VisibleType[] => {
       MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIdvtc,
       idvtcProof,
       idvtcPaused,
+      byType[OPERATOR_TYPE.CSM_IDVTC],
     );
 
     return [def, ics, idvtc, csm02].filter((x): x is VisibleType => x !== null);
@@ -118,7 +115,7 @@ export const useVisibleTypes = (): VisibleType[] => {
     idvtcProof,
     icsPaused,
     idvtcPaused,
-    isCsm02Creatable,
-    isCsmCreatable,
+    byType,
+    hasUnconsumedProof,
   ]);
 };
