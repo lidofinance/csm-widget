@@ -1,20 +1,39 @@
-import { Grid, StackStyle } from 'shared/components';
+import { Divider } from '@lidofinance/lido-ui';
 import styled from 'styled-components';
 
-const CARD_MIN_WIDTH = 220;
-
-export const CardsGrid = styled(Grid)`
-  grid-template-columns: repeat(auto-fit, minmax(${CARD_MIN_WIDTH}px, 1fr));
-`;
-
-export const OptionCard = styled(StackStyle).attrs({
-  $direction: 'column',
-  $justify: 'space-between',
-})`
+export const OptionCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${({ theme }) => theme.spaceMap.xl}px;
   padding: 16px;
   border-radius: 10px;
   border: 1px solid var(--lido-color-border);
   background-color: var(--lido-color-accentControlBg);
+`;
+
+export const CardBody = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: column;
+    align-items: stretch;
+  }
+`;
+
+export const CardColumn = styled.div`
+  flex: 1 1 0;
+  min-width: 0;
+`;
+
+export const CardDivider = styled(Divider).attrs({ type: 'vertical' })`
+  ${({ theme }) => theme.mediaQueries.md} {
+    border-left: none;
+    border-top: 1px solid currentcolor;
+    width: 100%;
+    height: 0;
+  }
 `;
 
 export const ParameterRowStyle = styled.div`

@@ -27,7 +27,7 @@ export class KeysPage extends BasePage {
     this.keysView = new KeysViewPage(page);
     this.createNodeOperatorForm = new CreateNodeOperatorForm(this.page);
     this.headerTitle = this.pageTitle;
-    this.headerSubTitle = this.page.getByText('Upload your first key(s)');
+    this.headerSubTitle = this.page.getByTestId('pageSubtitle');
   }
 
   // `/create` is the type-selection page for wallets with 2+ creatable

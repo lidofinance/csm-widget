@@ -21,6 +21,7 @@ import {
 import invariant from 'tiny-invariant';
 
 export type CreateTypeValue = {
+  type: OPERATOR_TYPE;
   module: MODULE_NAME.CSM | MODULE_NAME.CSM_02;
   curveId: bigint | undefined;
   proof: Proof | undefined;
@@ -60,12 +61,13 @@ export const CreateTypeProvider: FC<
 
   const value = useMemo<CreateTypeValue>(
     () => ({
+      type,
       module: targetModule,
       curveId: curve.data,
       proof: proof ?? undefined,
       isPending: curve.isPending || isProofPending,
     }),
-    [targetModule, curve.data, curve.isPending, proof, isProofPending],
+    [type, targetModule, curve.data, curve.isPending, proof, isProofPending],
   );
 
   return (

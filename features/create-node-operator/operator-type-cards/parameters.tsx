@@ -26,7 +26,7 @@ export const Parameters: FC<{ curveId: bigint; type: OPERATOR_TYPE }> = ({
   const PARAMETERS = useParameters().filter((p) => p.renderRows);
 
   return (
-    <Stack direction="column">
+    <Stack direction="column" gap="sm">
       {PARAMETERS.map(({ title: paramTitle, renderRows }) => (
         <Stack direction="column" key={paramTitle} gap="xs">
           <Text size="xxs" weight={700}>

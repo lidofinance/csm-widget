@@ -1,4 +1,3 @@
-import { OPERATOR_TYPE_METADATA } from 'consts';
 import { FAQ_KEYS } from 'faq';
 import { CreateTypeProvider } from 'providers/create-type-provider';
 import { FC } from 'react';
@@ -12,9 +11,7 @@ export const CreateOperatorPage: FC<{ type: CreatableOperatorType }> = ({
 }) => (
   <CreateTypeProvider type={type}>
     <Layout
-      title={
-        OPERATOR_TYPE_METADATA[type].createTitle ?? 'Create a Node Operator'
-      }
+      title="Create a Node Operator"
       subtitle="Upload your first key(s)"
       pageName="CreateNodeOperator"
     >

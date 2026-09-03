@@ -17,7 +17,6 @@ export type OperatorTypeMetadata = {
   description: string;
   descriptionNote?: { lead: string; rest: string };
   capitalMultiplier?: string;
-  createTitle?: string;
 };
 
 export const OPERATOR_TYPE_METADATA: Record<
@@ -31,7 +30,6 @@ export const OPERATOR_TYPE_METADATA: Record<
     description:
       'The simplest way to start validating in CSM. Upload keys under the general parameters without any permission or verification. At any point in the future, you may apply to become an Identified Community Staker to access more favorable parameters.',
     capitalMultiplier: 'up to 1.75x',
-    createTitle: 'Create a CSM 0x01 Node Operator',
   },
   [OPERATOR_TYPE.CSM2_DEF]: {
     name: 'CSM 0x02',
@@ -44,7 +42,6 @@ export const OPERATOR_TYPE_METADATA: Record<
       rest: '(0x01, ICS, or IDVTC) to stack their benefits.',
     },
     capitalMultiplier: 'up to 2.6x',
-    createTitle: 'Create a CSM 0x02 Node Operator',
   },
   [OPERATOR_TYPE.CSM_LEA]: {
     name: 'Legacy Early Adopter',
@@ -60,7 +57,6 @@ export const OPERATOR_TYPE_METADATA: Record<
     description:
       'Access enhanced validation parameters by becoming a recognized independent Community Staker. Please note that the assessment process takes time and requires qualifying under certain categories.',
     capitalMultiplier: 'up to 2.36x',
-    createTitle: 'Create an ICS Node Operator',
   },
   [OPERATOR_TYPE.CSM_IDVTC]: {
     name: 'Identified DVT Cluster',
@@ -69,7 +65,6 @@ export const OPERATOR_TYPE_METADATA: Record<
     description:
       'Unlock a more resilient and capital-efficient validation path by creating a verified DVT cluster of independent Community Stakers. Approval requires meeting criteria and completing verification.',
     capitalMultiplier: 'up to 3x',
-    createTitle: 'Create an IDVTC Node Operator',
   },
   [OPERATOR_TYPE.CM_PTO]: {
     name: 'Professional Trusted Operator',

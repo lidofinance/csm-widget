@@ -7,6 +7,7 @@ import { FormBlock } from 'shared/components';
 import { Form, FormLoader } from 'shared/hook-form/form-controller';
 import { SubmitKeysDataProvider } from './context';
 import { AmountInput } from './controls/amount-input';
+import { CreateTypeHeader } from './controls/create-type-header';
 import { CustomAddressesSection } from './controls/custom-addresses-section';
 import { DkgFilesSection } from './controls/dkg-files-section';
 import { KeysConfirm } from './controls/keys-confirm';
@@ -29,6 +30,7 @@ export const SubmitKeysForm: FC = memo(() => {
         <FormBlock data-testid="submitKeysForm">
           <FormLoader>
             <Form>
+              <CreateTypeHeader />
               <TokenSelect />
               <KeysLimitWarning />
               <KeysInput />
