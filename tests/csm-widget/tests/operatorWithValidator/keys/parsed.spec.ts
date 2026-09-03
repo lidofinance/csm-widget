@@ -206,7 +206,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
   );
 
   test('Should count only invalid keys when some keys are valid', async () => {
-    const keys = keysGeneratorService.generateKeys(3);
+    const keys = keysGeneratorService.generateKeys({ numValidators: 3 });
     keys[0].amount = 1;
     keys[2].amount = 1;
 

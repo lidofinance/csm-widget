@@ -23,12 +23,23 @@ interface DepositData {
   };
   private_keys: string[];
 }
+export type WcType = '0x01' | '0x02';
 
 export type KeysGeneratorOptions = {
-  isCM?: boolean;
   chain: string;
   withdrawalCredentials: string;
   password: string;
+  /** Default key format for the whole suite; override per call in generateKeys. */
+  wcType?: WcType;
+};
+
+/** Per-call overrides; anything omitted falls back to the service options. */
+export type GenerateKeysParams = {
+  numValidators?: number;
+  wcType?: WcType;
+  chain?: string;
+  withdrawalCredentials?: string;
+  password?: string;
 };
 
 export class KeysGeneratorService {
@@ -47,22 +58,24 @@ export class KeysGeneratorService {
 
   /**
    * Generates keys for CSM/CM using eth-staking-smith
-   * @param numValidators - number of validators (default 1)
-   * @param chain - network (defaults to the value from options/config)
-   * @param withdrawalCredentials - withdrawal credentials (defaults to the value from options/config)
-   * @param password - keystore password (defaults to the value from options/config)
-   * @returns KeysGeneratorService instance for chaining
+   * @param params.numValidators - number of validators (default 1)
+   * @param params.wcType - withdrawal credentials type of the generated keys (defaults to the value from options, or 0x01)
+   * @param params.chain - network (defaults to the value from options/config)
+   * @param params.withdrawalCredentials - withdrawal credentials (defaults to the value from options/config)
+   * @param params.password - keystore password (defaults to the value from options/config)
+   * @returns generated deposit keys
    * @throws Error if key generation fails or validation fails
    */
-  generateKeys(
+  generateKeys({
     numValidators = 1,
+    wcType = this.options.wcType ?? '0x01',
     chain = this.options.chain,
     withdrawalCredentials = this.options.withdrawalCredentials,
     password = this.options.password,
-  ): DepositKey[] {
+  }: GenerateKeysParams = {}): DepositKey[] {
     let command = `${this.binPath} new-mnemonic --chain ${chain} --keystore_password ${password} --num_validators ${numValidators} --withdrawal_credentials "${withdrawalCredentials}"`;
 
-    if (this.options.isCM) {
+    if (wcType === '0x02') {
       command = command.concat(' --compounding');
     }
     command = command.concat(`  > ${this.depositDataPath}`);

@@ -11,6 +11,7 @@ export class OperatorTypeModal {
   defCard: Locator;
   icsCard: Locator;
   idvtcCard: Locator;
+  wc02Card: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -25,6 +26,7 @@ export class OperatorTypeModal {
     this.defCard = this.getCard('def');
     this.icsCard = this.getCard('ics');
     this.idvtcCard = this.getCard('idvtc');
+    this.wc02Card = this.getCard('0x02');
   }
 
   getCard(type: OperatorTypeCard): Locator {
