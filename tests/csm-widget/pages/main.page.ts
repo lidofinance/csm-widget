@@ -1,16 +1,16 @@
 import { Page, test } from '@playwright/test';
 import { BasePage } from '../../shared/pages/base.page';
 import { StarterPackSection } from './elements/main/element.starterPackSection';
-import { OperatorTypeModal } from './elements/main/element.operatorTypeModal';
+import { OperatorTypeCards } from './elements/main/element.operatorTypeCards';
 
 export class MainPage extends BasePage {
   starterPackSection: StarterPackSection;
-  operatorTypeModal: OperatorTypeModal;
+  operatorTypeCards: OperatorTypeCards;
 
   constructor(page: Page) {
     super(page);
     this.starterPackSection = new StarterPackSection(this.page);
-    this.operatorTypeModal = new OperatorTypeModal(this.page);
+    this.operatorTypeCards = new OperatorTypeCards(this.page);
   }
 
   async goto() {
@@ -22,11 +22,14 @@ export class MainPage extends BasePage {
     });
   }
 
-  async openOperatorTypeModal() {
-    await test.step('Open the operator type modal', async () => {
+  async openCreateOperator() {
+    await test.step('Open the create operator page', async () => {
       await this.goto();
       await this.starterPackSection.createNodeOperatorBtn.click();
-      await this.operatorTypeModal.modal.waitFor({ state: 'visible' });
+      await this.operatorTypeCards.csm01Card
+        .or(this.operatorTypeCards.icsCard)
+        .first()
+        .waitFor({ state: 'visible' });
     });
   }
 

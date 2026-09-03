@@ -4,7 +4,7 @@ export type CreateOperatorRulesInput = {
   isAccountActive: boolean;
   /** Modules this deployment actually talks to. */
   deployedModules: MODULE_NAME[];
-  pausedModules: Partial<Record<MODULE_NAME, boolean | undefined>>;
+  pausedModules: Partial<Record<MODULE_NAME, boolean>>;
   /** Modules the wallet already holds an operator in. */
   operatorModules: MODULE_NAME[];
   /** Curve id of the currently selected operator, if any. */

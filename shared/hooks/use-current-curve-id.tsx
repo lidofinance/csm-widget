@@ -1,14 +1,11 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-// Deep import on purpose: the feature barrel pulls in pages that import
-// shared/hooks, and this file lives in shared/hooks — importing the barrel
-// would close the cycle.
-import { useOptionalCreateType } from 'features/create-node-operator/create-type-context';
 import {
   useDefaultCurveId,
   useModule,
   useNodeOperatorId,
   useOperatorCurveId,
 } from 'modules/web3';
+import { useOptionalCreateType } from 'providers/create-type-provider';
 
 // The module a curve id was read against — pair the two when passing either
 // downstream, curve ids are only meaningful within their own module.
@@ -30,11 +27,10 @@ export const useCurrentCurveId = (module?: MODULE_NAME) => {
     targetModule === MODULE_NAME.CSM_02 ? MODULE_NAME.CSM_02 : MODULE_NAME.CSM,
   );
 
-  if (createType) {
-    return module === undefined || module === createType.module
-      ? createType.curveId
-      : undefined;
-  }
+  if (createType)
+    return module && module !== createType.module
+      ? undefined
+      : createType.curveId;
 
   if (targetModule === activeModule && nodeOperatorId !== undefined) {
     return operatorCurveId;

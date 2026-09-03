@@ -21,7 +21,6 @@ import {
 import invariant from 'tiny-invariant';
 
 export type CreateTypeValue = {
-  type: OPERATOR_TYPE;
   module: MODULE_NAME.CSM | MODULE_NAME.CSM_02;
   curveId: bigint | undefined;
   proof: Proof | undefined;
@@ -44,44 +43,30 @@ export const CreateTypeProvider: FC<
   const { data: icsProof, isPending: isIcsProofPending } = useIcsProof();
   const { data: idvtcProof, isPending: isIdvtcProofPending } = useIdvtcProof();
 
-  const value = useMemo<CreateTypeValue>(() => {
-    if (type === OPERATOR_TYPE.CSM_ICS)
-      return {
-        type,
-        module: targetModule,
-        curveId: icsCurve.data,
-        proof: icsProof?.proof ?? undefined,
-        isPending: icsCurve.isPending || isIcsProofPending,
-      };
-    if (type === OPERATOR_TYPE.CSM_IDVTC)
-      return {
-        type,
-        module: targetModule,
-        curveId: idvtcCurve.data,
-        proof: idvtcProof?.proof ?? undefined,
-        isPending: idvtcCurve.isPending || isIdvtcProofPending,
-      };
-    return {
-      type,
+  const { curve, proof, isProofPending } =
+    type === OPERATOR_TYPE.CSM_ICS
+      ? {
+          curve: icsCurve,
+          proof: icsProof?.proof,
+          isProofPending: isIcsProofPending,
+        }
+      : type === OPERATOR_TYPE.CSM_IDVTC
+        ? {
+            curve: idvtcCurve,
+            proof: idvtcProof?.proof,
+            isProofPending: isIdvtcProofPending,
+          }
+        : { curve: defCurve, proof: undefined, isProofPending: false };
+
+  const value = useMemo<CreateTypeValue>(
+    () => ({
       module: targetModule,
-      curveId: defCurve.data,
-      proof: undefined,
-      isPending: defCurve.isPending,
-    };
-  }, [
-    type,
-    targetModule,
-    defCurve.data,
-    defCurve.isPending,
-    icsCurve.data,
-    icsCurve.isPending,
-    idvtcCurve.data,
-    idvtcCurve.isPending,
-    icsProof,
-    isIcsProofPending,
-    idvtcProof,
-    isIdvtcProofPending,
-  ]);
+      curveId: curve.data,
+      proof: proof ?? undefined,
+      isPending: curve.isPending || isProofPending,
+    }),
+    [targetModule, curve.data, curve.isPending, proof, isProofPending],
+  );
 
   return (
     <CreateTypeContext.Provider value={value}>

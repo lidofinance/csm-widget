@@ -1,6 +1,7 @@
 import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../shared/pages/base.page';
 import { CreateNodeOperatorForm } from './elements/keys/element.createNodeOperatorForm';
+import { OperatorTypeCard } from './elements/main/element.operatorTypeCards';
 import { RemovePage } from './tabs/keys/remove.page';
 import { SubmitPage } from './tabs/keys/submit.page';
 import { KeysViewPage } from './tabs/keys/keysView.page';
@@ -25,15 +26,13 @@ export class KeysPage extends BasePage {
     this.submitPage = new SubmitPage(page);
     this.keysView = new KeysViewPage(page);
     this.createNodeOperatorForm = new CreateNodeOperatorForm(this.page);
-    // The title text is interpolated with a type badge that renders `null`
-    // until its curve id loads — match the stable testid instead.
-    this.headerTitle = this.page.getByTestId('createOperatorPageTitle');
+    this.headerTitle = this.pageTitle;
     this.headerSubTitle = this.page.getByText('Upload your first key(s)');
   }
 
   // `/create` is the type-selection page for wallets with 2+ creatable
   // types, so we go straight to the per-type route the test needs.
-  async goto(type: 'def' | 'ics' | 'idvtc' | '0x02' = 'def') {
+  async goto(type: OperatorTypeCard = '0x01') {
     await test.step(`Open the Keys page to create a new ${type} node operator`, async () => {
       await this.openWithRetry(
         `/create/${type}`,

@@ -14,7 +14,7 @@ import {
 } from 'shared/hook-form/validation';
 import invariant from 'tiny-invariant';
 import { isAddress } from 'viem';
-import { useCreateType } from '../../create-type-context';
+import { useCreateType } from 'providers/create-type-provider';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,

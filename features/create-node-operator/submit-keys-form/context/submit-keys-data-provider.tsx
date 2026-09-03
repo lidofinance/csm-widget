@@ -21,7 +21,7 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate, useKeysAvailable } from 'shared/hooks';
-import { useCreateType } from '../../create-type-context';
+import { useCreateType } from 'providers/create-type-provider';
 import { type SubmitKeysFormNetworkData } from './types';
 
 const useSubmitKeysFormNetworkData: NetworkData<

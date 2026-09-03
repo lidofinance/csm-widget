@@ -1,10 +1,10 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 
-export const PATH = <const>{
+export const PATH = {
   HOME: '/',
 
   CREATE: '/create',
-  CREATE_DEF: '/create/def',
+  CREATE_0x01: '/create/0x01',
   CREATE_ICS: '/create/ics',
   CREATE_IDVTC: '/create/idvtc',
   CREATE_0x02: '/create/0x02',
@@ -67,13 +67,20 @@ export const PATH = <const>{
   WRAPPED_SHARE: '/wrapped-2025/share',
 
   QA_CONFIG: '/qa-config',
-};
+} as const;
 
 export type PATH = (typeof PATH)[keyof typeof PATH];
 
 export const CREATE_PATH_BY_TYPE = {
-  [OPERATOR_TYPE.CSM_DEF]: PATH.CREATE_DEF,
+  [OPERATOR_TYPE.CSM_DEF]: PATH.CREATE_0x01,
   [OPERATOR_TYPE.CSM_ICS]: PATH.CREATE_ICS,
   [OPERATOR_TYPE.CSM_IDVTC]: PATH.CREATE_IDVTC,
   [OPERATOR_TYPE.CSM2_DEF]: PATH.CREATE_0x02,
-} satisfies Partial<Record<OPERATOR_TYPE, PATH>>;
+} as const;
+
+export const CREATE_RULE_BY_TYPE = {
+  [OPERATOR_TYPE.CSM_DEF]: 'CAN_CREATE_0X01',
+  [OPERATOR_TYPE.CSM_ICS]: 'CAN_CREATE_ICS',
+  [OPERATOR_TYPE.CSM_IDVTC]: 'CAN_CREATE_IDVTC',
+  [OPERATOR_TYPE.CSM2_DEF]: 'CAN_CREATE_0X02',
+} as const;

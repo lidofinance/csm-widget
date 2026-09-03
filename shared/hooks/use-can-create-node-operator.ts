@@ -1,4 +1,8 @@
-import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import {
+  AddressProof,
+  MODULE_NAME,
+  OPERATOR_TYPE,
+} from '@lidofinance/lido-csm-sdk';
 import { deployedModules } from 'consts';
 import { useMemo } from 'react';
 import {
@@ -15,8 +19,23 @@ import {
   useSmStatus,
 } from 'modules/web3';
 import { getCreatableTypes } from './create-operator-rules';
+import type {
+  ApplicableOperatorType,
+  CreateOption,
+} from './use-create-options';
+import { useIcsApplyEnabled } from './use-ics-apply-enabled';
 
 const isDeployed = (module: MODULE_NAME) => deployedModules.includes(module);
+
+const buildApplyOption = (
+  type: ApplicableOperatorType,
+  proof: AddressProof | undefined,
+  paused: boolean | undefined,
+  canCreate: boolean,
+): CreateOption | null => {
+  if (paused || proof?.isConsumed) return null;
+  return { type, kind: canCreate ? 'create' : 'apply' };
+};
 
 export const useCanCreateNodeOperator = () => {
   const { isAccountActive } = useDappStatus();
@@ -30,6 +49,8 @@ export const useCanCreateNodeOperator = () => {
 
   const { data: gatesCount, isPending: isGatesPending } =
     useCuratedGatesEligibility(undefined, (data) => data.length);
+
+  const icsApplyEnabled = useIcsApplyEnabled();
 
   const { data: icsProof, isPending: isIcsProofPending } = useIcsProof();
   const { data: isIcsPaused, isPending: isIcsPausedPending } = useIcsPaused();
@@ -79,29 +100,54 @@ export const useCanCreateNodeOperator = () => {
     !cmStatus.data?.isPaused &&
     !!gatesCount;
 
-  const byType = useMemo(
-    () =>
-      Object.fromEntries(
-        Object.values(OPERATOR_TYPE).map((type) => [
-          type,
-          creatableTypes.includes(type),
-        ]),
-      ) as Record<OPERATOR_TYPE, boolean>,
-    [creatableTypes],
+  // Steer a wallet holding an unconsumed ICS/IDVTC proof towards its better
+  // curve instead of DEF — deliberately ignores the paused flags.
+  const hasUnconsumedProof = Boolean(
+    (icsProof?.proof && !icsProof.isConsumed) ||
+    (idvtcProof?.proof && !idvtcProof.isConsumed),
   );
 
-  const creatableModules = useMemo(() => {
-    const modules = new Set<MODULE_NAME>();
-    if (
-      byType[OPERATOR_TYPE.CSM_DEF] ||
-      byType[OPERATOR_TYPE.CSM_ICS] ||
-      byType[OPERATOR_TYPE.CSM_IDVTC]
+  const createOptions = useMemo(() => {
+    const def: CreateOption | null =
+      creatableTypes.includes(OPERATOR_TYPE.CSM_DEF) && !hasUnconsumedProof
+        ? { type: OPERATOR_TYPE.CSM_DEF, kind: 'create' }
+        : null;
+
+    const csm02: CreateOption | null = creatableTypes.includes(
+      OPERATOR_TYPE.CSM2_DEF,
     )
-      modules.add(MODULE_NAME.CSM);
-    if (byType[OPERATOR_TYPE.CSM2_DEF]) modules.add(MODULE_NAME.CSM_02);
-    if (canCreateCurated) modules.add(MODULE_NAME.CM);
-    return [...modules];
-  }, [byType, canCreateCurated]);
+      ? { type: OPERATOR_TYPE.CSM2_DEF, kind: 'create' }
+      : null;
+
+    if (!icsApplyEnabled) {
+      return [def, csm02].filter((x): x is NonNullable<typeof x> => x !== null);
+    }
+
+    const ics = buildApplyOption(
+      OPERATOR_TYPE.CSM_ICS,
+      icsProof,
+      isIcsPaused,
+      creatableTypes.includes(OPERATOR_TYPE.CSM_ICS),
+    );
+    const idvtc = buildApplyOption(
+      OPERATOR_TYPE.CSM_IDVTC,
+      idvtcProof,
+      isIdvtcPaused,
+      creatableTypes.includes(OPERATOR_TYPE.CSM_IDVTC),
+    );
+
+    return [def, ics, idvtc, csm02].filter(
+      (x): x is CreateOption => x !== null,
+    );
+  }, [
+    creatableTypes,
+    hasUnconsumedProof,
+    icsApplyEnabled,
+    icsProof,
+    isIcsPaused,
+    idvtcProof,
+    isIdvtcPaused,
+  ]);
 
   // A disabled react-query stays `isPending: true` forever, so every term is
   // guarded by the module that owns it actually being deployed.
@@ -122,7 +168,7 @@ export const useCanCreateNodeOperator = () => {
   const canCreate = creatableTypes.length > 0 || canCreateCurated;
 
   return useMemo(
-    () => ({ canCreate, creatableModules, creatableTypes, byType, isPending }),
-    [canCreate, creatableModules, creatableTypes, byType, isPending],
+    () => ({ canCreate, creatableTypes, createOptions, isPending }),
+    [canCreate, creatableTypes, createOptions, isPending],
   );
 };

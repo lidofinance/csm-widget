@@ -36,7 +36,7 @@ import {
 import { renderCreateSuccess } from '../hooks/create-success-stage';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
-import { useCreateType } from '../../create-type-context';
+import { useCreateType } from 'providers/create-type-provider';
 import { useSubmitKeysFormData } from './submit-keys-data-provider';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 

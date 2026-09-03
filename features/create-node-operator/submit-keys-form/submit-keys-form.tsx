@@ -16,7 +16,7 @@ import { ReferrerInput } from './controls/referrer-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
-import { useCreateType } from '../create-type-context';
+import { useCreateType } from 'providers/create-type-provider';
 
 export const SubmitKeysForm: FC = memo(() => {
   // The graph must read the module being created, not the active operator's

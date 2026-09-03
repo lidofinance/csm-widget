@@ -21,15 +21,16 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
     // Create
     case PATH.CREATE: {
       if (isModuleCSM && hasRole && !flags.CAN_CREATE) return PATH.KEYS_VIEW;
-      const creatable = (
-        [
-          [flags.CAN_CREATE_DEF, PATH.CREATE_DEF],
-          [flags.CAN_CREATE_ICS, PATH.CREATE_ICS],
-          [flags.CAN_CREATE_IDVTC, PATH.CREATE_IDVTC],
-          [flags.CAN_CREATE_0X02, PATH.CREATE_0x02],
-        ] as const
-      ).filter(([can]) => can);
-      return creatable.length === 1 ? creatable[0][1] : path;
+      // an apply card turns a single creatable type into a real choice
+      if (flags.HAS_APPLY_OPTIONS) return path;
+      const candidates: (PATH | false)[] = [
+        flags.CAN_CREATE_0X01 && PATH.CREATE_0x01,
+        flags.CAN_CREATE_ICS && PATH.CREATE_ICS,
+        flags.CAN_CREATE_IDVTC && PATH.CREATE_IDVTC,
+        flags.CAN_CREATE_0X02 && PATH.CREATE_0x02,
+      ];
+      const creatable = candidates.filter((p): p is PATH => !!p);
+      return creatable.length === 1 ? creatable[0] : path;
     }
 
     // Keys

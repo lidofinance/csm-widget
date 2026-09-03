@@ -9,10 +9,11 @@ import { getCorrectPath } from './get-correct-path';
 const flags = (patch: Partial<ShowFlags>): ShowFlags =>
   ({
     CAN_CREATE: true,
-    CAN_CREATE_DEF: false,
+    CAN_CREATE_0X01: false,
     CAN_CREATE_ICS: false,
     CAN_CREATE_IDVTC: false,
     CAN_CREATE_0X02: false,
+    HAS_APPLY_OPTIONS: false,
     HAS_MANAGER_ROLE: false,
     HAS_REWARDS_ROLE: false,
     ...patch,
@@ -29,8 +30,8 @@ describe('getCorrectPath(PATH.CREATE)', () => {
   });
 
   it('jumps straight to the only creatable type', () => {
-    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_DEF: true }))).toBe(
-      PATH.CREATE_DEF,
+    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_0X01: true }))).toBe(
+      PATH.CREATE_0x01,
     );
     expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_ICS: true }))).toBe(
       PATH.CREATE_ICS,
@@ -47,12 +48,21 @@ describe('getCorrectPath(PATH.CREATE)', () => {
     expect(
       getCorrectPath(
         PATH.CREATE,
-        flags({ CAN_CREATE_DEF: true, CAN_CREATE_0X02: true }),
+        flags({ CAN_CREATE_0X01: true, CAN_CREATE_0X02: true }),
       ),
     ).toBe(PATH.CREATE);
   });
 
   it('keeps the selection page when no per-type flag is set', () => {
     expect(getCorrectPath(PATH.CREATE, flags({}))).toBe(PATH.CREATE);
+  });
+
+  it('keeps the selection page when an apply card makes it a real choice', () => {
+    expect(
+      getCorrectPath(
+        PATH.CREATE,
+        flags({ CAN_CREATE_0X01: true, HAS_APPLY_OPTIONS: true }),
+      ),
+    ).toBe(PATH.CREATE);
   });
 });

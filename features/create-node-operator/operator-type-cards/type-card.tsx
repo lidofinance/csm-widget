@@ -1,9 +1,10 @@
+import { OPERATOR_TYPE_MODULE } from '@lidofinance/lido-csm-sdk';
 import { Button, Divider, Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { useOperatorTypeCurveId } from 'shared/hooks';
-import { CurveBadge } from 'shared/node-operator/curve-badge/curve-badge';
+import { TypeBadgeButton } from 'shared/node-operator/operator-type';
 import { LocalLink } from 'shared/navigate';
 import { Parameters } from './parameters';
 import { OptionCard } from './styles';
@@ -18,7 +19,12 @@ export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
       data-testid={`operatorTypeCard-${metadata.short.toLowerCase()}`}
     >
       <Stack direction="column">
-        <CurveBadge type={type.type} inline />
+        <TypeBadgeButton
+          displayType={type.type}
+          curveId={curveId}
+          module={OPERATOR_TYPE_MODULE[type.type]}
+          data-testid="operatorTypeCardBadge"
+        />
         <Text size="sm" weight={700}>
           {metadata.name}
         </Text>

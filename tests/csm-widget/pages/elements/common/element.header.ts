@@ -5,7 +5,6 @@ export class Header {
   header: Locator;
   accountSection: Locator;
   connectWalletBtn: Locator;
-  operatorTypeBadge: Locator;
   operatorTypeCurve: Locator;
   switchOperatorButton: Locator;
   operatorSwitchModal: Locator;
@@ -17,10 +16,6 @@ export class Header {
     this.accountSection = this.header.getByTestId('accountSectionHeader');
 
     this.connectWalletBtn = this.header.getByText('Connect').first();
-    // Renders in the create page title, not inside <header> — page-scoped.
-    this.operatorTypeBadge = this.page.getByTestId(
-      'header-operator-type-button',
-    );
     this.operatorTypeCurve = this.header.getByTestId('nodeOperatorCurve');
     this.switchOperatorButton = this.header.getByTestId('nodeOperatorHeader');
     this.operatorSwitchModal = this.page.locator('[role=dialog]', {

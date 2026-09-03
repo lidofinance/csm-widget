@@ -1,4 +1,4 @@
-import { PATH } from 'consts/urls';
+import { CREATE_PATH_BY_TYPE, PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
@@ -48,12 +48,7 @@ const routes: Route[] = [
     name: 'Create Operator',
     path: PATH.CREATE,
     icon: <PlusIcon />,
-    subPaths: [
-      PATH.CREATE_DEF,
-      PATH.CREATE_ICS,
-      PATH.CREATE_IDVTC,
-      PATH.CREATE_0x02,
-    ],
+    subPaths: Object.values(CREATE_PATH_BY_TYPE),
     showRules: ['CAN_CREATE'],
   },
   {

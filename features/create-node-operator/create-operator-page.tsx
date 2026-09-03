@@ -1,37 +1,20 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE_METADATA } from 'consts';
 import { FAQ_KEYS } from 'faq';
+import { CreateTypeProvider } from 'providers/create-type-provider';
 import { FC } from 'react';
-import { Faq, Stack } from 'shared/components';
+import { Faq } from 'shared/components';
+import { CreatableOperatorType } from 'shared/hooks';
 import { Layout } from 'shared/layout';
-import { TypeButton } from 'shared/node-operator/operator-type';
 import { CreateNodeOperator } from './create-node-operator';
-import { CreateTypeProvider, useCreateType } from './create-type-context';
 
-const PageTitle: FC = () => {
-  const { curveId, module } = useCreateType();
-
-  return (
-    <Stack
-      gap="sm"
-      align="center"
-      direction="row"
-      data-testid="createOperatorPageTitle"
-    >
-      Create a
-      <TypeButton
-        curveId={curveId}
-        module={module}
-        data-testid="header-operator-type-button"
-      />
-      Node Operator
-    </Stack>
-  );
-};
-
-export const CreateOperatorPage: FC<{ type: OPERATOR_TYPE }> = ({ type }) => (
+export const CreateOperatorPage: FC<{ type: CreatableOperatorType }> = ({
+  type,
+}) => (
   <CreateTypeProvider type={type}>
     <Layout
-      title={<PageTitle />}
+      title={
+        OPERATOR_TYPE_METADATA[type].createTitle ?? 'Create a Node Operator'
+      }
       subtitle="Upload your first key(s)"
       pageName="CreateNodeOperator"
     >

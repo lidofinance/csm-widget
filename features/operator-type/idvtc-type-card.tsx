@@ -1,3 +1,4 @@
+import { OPERATOR_TYPE, OPERATOR_TYPE_MODULE } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { IdvtcApplyButton } from 'features/idvtc/apply-button';
 import { ScoreChip } from 'features/idvtc/form-status/components/score-chip';
@@ -8,7 +9,9 @@ import {
 } from 'features/idvtc/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { OptionCard, TypeBadge } from './styles';
+import { useOperatorTypeCurveId } from 'shared/hooks';
+import { TypeBadgeButton } from 'shared/node-operator/operator-type';
+import { OptionCard } from './styles';
 
 const renderStatusChip = (
   typeStatus: IdvtcTypeStatus,
@@ -35,12 +38,18 @@ const renderStatusChip = (
 export const IdvtcTypeCard: FC = () => {
   const { typeStatus, data } = useIdvtcState();
   const chip = renderStatusChip(typeStatus, data?.status);
+  const curveId = useOperatorTypeCurveId(OPERATOR_TYPE.CSM_IDVTC);
 
   return (
     <OptionCard>
       <Stack direction="column" gap="md">
         <Stack direction="row" spaceBetween align="center">
-          <TypeBadge $variant="IDVTC">IDVTC</TypeBadge>
+          <TypeBadgeButton
+            displayType={OPERATOR_TYPE.CSM_IDVTC}
+            curveId={curveId}
+            module={OPERATOR_TYPE_MODULE[OPERATOR_TYPE.CSM_IDVTC]}
+            data-testid="operatorTypeBadge-idvtc"
+          />
           {chip}
         </Stack>
         <Stack direction="column" gap="xs">

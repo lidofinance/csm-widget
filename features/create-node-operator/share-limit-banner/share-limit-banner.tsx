@@ -4,14 +4,13 @@ import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   SHARE_LIMIT_STATUS,
   useHasPriorityQueueSpots,
-  useModule,
   useShareLimit,
   useShareLimitStatus,
 } from 'modules/web3';
 import { FC } from 'react';
 import { Banner } from 'shared/components';
+import { useCurrentCurveModule } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
-import { useOptionalCreateType } from '../create-type-context';
 
 type Props = { activeLeft: string; queue: string };
 
@@ -88,9 +87,7 @@ const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
 );
 
 export const ShareLimitBanner: FC = () => {
-  const createType = useOptionalCreateType();
-  const { module: activeModule } = useModule();
-  const targetModule = createType?.module ?? activeModule;
+  const targetModule = useCurrentCurveModule();
   const isCSM02 = targetModule === MODULE_NAME.CSM_02;
   const { data } = useShareLimit(undefined, targetModule);
   const { data: status } = useShareLimitStatus(targetModule);
