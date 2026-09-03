@@ -10,7 +10,7 @@ test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 const DEF = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_DEF];
 const ICS = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS];
 const IDVTC = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_IDVTC];
-// @todo: add 0x02 operator type metadata when it will be available in the SDK
+const WC02 = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM2_DEF];
 
 const CARDS = ['def', 'ics', 'idvtc', '0x02'] as const;
 
@@ -91,8 +91,8 @@ test.describe('New operator. Operator type modal', async () => {
 
       await test.step('Verify 0x02 card', async () => {
         await expect(modal.wc02Card).toBeVisible();
-        await expect(modal.wc02Card).toContainText('0x02');
-        await expect(modal.wc02Card).toContainText('CSM 0x02');
+        await expect(modal.wc02Card).toContainText(WC02.short);
+        await expect(modal.wc02Card).toContainText(WC02.name);
         await expect(modal.getCardButton('0x02')).toContainText('Join now');
       });
     },
@@ -141,7 +141,7 @@ test.describe('New operator. Operator type modal', async () => {
           widgetService.page.getByText('Choose bond token'),
         ).toBeVisible();
         await expect(widgetService.header.operatorTypeBadge).toContainText(
-          '0x02',
+          WC02.short,
         );
       });
     },
@@ -154,16 +154,14 @@ test.describe('New operator. Operator type modal', async () => {
 
     await test.step('Verify badge and name', async () => {
       await expect(modal.wc02Card).toBeVisible();
-      await expect(modal.wc02Card).toContainText('0x02');
-      await expect(modal.wc02Card).toContainText('CSM 0x02');
+      await expect(modal.wc02Card).toContainText(WC02.short);
+      await expect(modal.wc02Card).toContainText(WC02.name);
     });
 
     await test.step('Verify description', async () => {
+      await expect(modal.wc02Card).toContainText(WC02.description);
       await expect(modal.wc02Card).toContainText(
-        'Unlock the power of 0x02 withdrawal credentials to run validators with balances of up to 2048 ETH.',
-      );
-      await expect(modal.wc02Card).toContainText(
-        'Run 0x02 alongside any other type (Default, ICS, or IDVTC) to stack their benefits.',
+        `${WC02.descriptionNote?.lead}${WC02.descriptionNote?.rest}`,
       );
     });
 

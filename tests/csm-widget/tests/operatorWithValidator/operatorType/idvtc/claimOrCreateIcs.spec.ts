@@ -36,7 +36,7 @@ test.describe(
         await widgetService.setFeatureFlag('icsApplyForm', true);
 
         await test.step('Create an IDVTC operator by adding a key', async () => {
-          const keys = keysGeneratorService.generateKeys(1);
+          const keys = keysGeneratorService.generateKeys();
           await widgetService.keysPage.goto();
           await widgetService.keysPage.createNodeOperatorForm.submitNewKeys(
             keys,
@@ -136,7 +136,7 @@ test.describe(
       async ({ widgetService, keysGeneratorService }) => {
         const form = widgetService.keysPage.createNodeOperatorForm;
         const txModal = widgetService.operatorType.txModal;
-        const keys = keysGeneratorService.generateKeys(1);
+        const keys = keysGeneratorService.generateKeys();
         const idvtcOperatorId = await widgetService.extractNodeOperatorId();
 
         await test.step('Create a new ICS operator on the create page', async () => {
@@ -183,7 +183,7 @@ test.describe(
       async ({ widgetService, keysGeneratorService }) => {
         const form = widgetService.keysPage.createNodeOperatorForm;
         const header = widgetService.header;
-        const keys = keysGeneratorService.generateKeys(1);
+        const keys = keysGeneratorService.generateKeys();
 
         await test.step('Create a new ICS operator on the create page', async () => {
           await widgetService.keysPage.goto();

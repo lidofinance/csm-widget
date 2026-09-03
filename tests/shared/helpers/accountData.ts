@@ -1,5 +1,6 @@
 import { randomBytes } from 'crypto';
 import { getAddress } from 'viem';
+import { WcType } from '../services/keysGenerator.service';
 
 /**
  * Generates a random address.
@@ -14,8 +15,6 @@ export const generateAddress = (checksum = false) => {
   return checksum ? getAddress(address) : address;
 };
 
-export const generateWithdrawalCredentials = (isCM = false) => {
-  const keyType = isCM ? '0x02' : '0x01';
-  // Withdrawal credentials start with 0x01 followed by 11 zero bytes and then the 20-byte address
-  return keyType + '00'.repeat(11) + randomBytes(20).toString('hex');
-};
+export const generateWithdrawalCredentials = (wcType: WcType = '0x01') =>
+  // Credentials start with the type byte, then 11 zero bytes, then the 20-byte address
+  wcType + '00'.repeat(11) + randomBytes(20).toString('hex');

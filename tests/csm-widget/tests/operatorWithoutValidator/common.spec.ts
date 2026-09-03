@@ -86,7 +86,7 @@ test.describe('Operator without keys. Common suite.', async () => {
         state: 'visible',
       });
       await createKeysPage.createNodeOperatorForm.addNewKeys(
-        keysGeneratorService.generateKeys(75),
+        keysGeneratorService.generateKeys({ numValidators: 75 }),
         TokenSymbol.ETH,
       );
       await widgetService.walletPage.cancelTx();
@@ -103,7 +103,9 @@ test.describe('Operator without keys. Common suite.', async () => {
       await createKeysPage.createNodeOperatorForm.formBlock.waitFor({
         state: 'visible',
       });
-      const overTheLimitKeys = keysGeneratorService.generateKeys(76);
+      const overTheLimitKeys = keysGeneratorService.generateKeys({
+        numValidators: 76,
+      });
       await createKeysPage.createNodeOperatorForm.fillKeys(overTheLimitKeys);
       await expect(
         createKeysPage.createNodeOperatorForm.validationInputError,
