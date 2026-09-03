@@ -72,7 +72,7 @@ export class SelectOperatorModalElement {
     await test.step('Forget the cached Node Operator selection', async () => {
       await this.page.evaluate(() => {
         Object.keys(window.localStorage)
-          .filter((key) => /^sm-\d+-no-0x/.test(key))
+          .filter((key) => /^sm-no-0x/.test(key))
           .forEach((key) => window.localStorage.removeItem(key));
       });
       await this.page.reload();
