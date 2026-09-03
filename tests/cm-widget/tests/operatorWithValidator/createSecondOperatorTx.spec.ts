@@ -9,34 +9,23 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 const OPERATOR_NAME = 'Second Operator';
 const OPERATOR_DESCRIPTION = 'Created by the second operator test';
+const FIRST_OPERATOR_ID = PRESETS.ONLY_OPERATOR.noIds[0];
 
 test.describe(
-  'Operator with free gates. Create a second operator (forked)',
-  { tag: [Tags.forked, Tags.performTX] },
+  'Operator with free gates. Create a second operator.',
+  { tag: [Tags.forked] },
   () => {
     let snapshotId: string;
-    let firstOperatorId: number;
     let secondOperatorId: number;
 
-    test.beforeAll(async ({ useFork, evmNode, cmSDK }) => {
+    test.beforeAll(async ({ useFork, evmNode }) => {
       test.skip(!useFork, 'Test suite runs only on forked network');
       snapshotId = await evmNode.snapshot();
       await evmNode.setBalance(PRESETS.ONLY_OPERATOR.address, 100);
-
-      const operators = await cmSDK.getNodeOperatorsByAddress(
-        PRESETS.ONLY_OPERATOR.address,
-      );
-      const ids = operators.map((operator) => Number(operator.nodeOperatorId));
-      expect(
-        ids,
-        'ONLY_OPERATOR preset must own exactly one operator',
-      ).toHaveLength(1);
-      firstOperatorId = ids[0];
     });
 
-    test.afterAll(async ({ evmNode, widgetService }) => {
+    test.afterAll(async ({ evmNode }) => {
       if (snapshotId) await evmNode.revert(snapshotId);
-      await widgetService.selectOperatorModal.forgetSelectionAndReload();
     });
 
     test('Should offer and perform a switch to the created operator', async ({
@@ -44,9 +33,9 @@ test.describe(
       cmSDK,
     }) => {
       const txModal = widgetService.txModal;
-      const header = widgetService.header;
+      const switchModal = widgetService.switchOperatorModal;
 
-      await test.step('Walk the wizard keeping our own addresses', async () => {
+      await test.step('Fill the creation form with the connected addresses', async () => {
         await widgetService.createNodeOperatorPage.open();
         await widgetService.createNodeOperatorPage.step1.fillForm(
           OPERATOR_TYPE.CM_PTO,
@@ -80,7 +69,7 @@ test.describe(
         const ids = operators.map((operator) =>
           Number(operator.nodeOperatorId),
         );
-        const created = ids.filter((id) => id !== firstOperatorId);
+        const created = ids.filter((id) => id !== FIRST_OPERATOR_ID);
         expect(
           created,
           `the create must add exactly one operator, wallet owns ${ids.join(', ')}`,
@@ -92,13 +81,10 @@ test.describe(
         );
       });
 
-      await test.step('It offers a switch to that operator', async () => {
+      await test.step('The success screen offers a switch to it, and Add keys is prefixed with Switch', async () => {
         await expect(txModal.switchToOperatorBtn).toHaveText(
           `Switch to Node Operator #${secondOperatorId}`,
         );
-      });
-
-      await test.step('Add keys is prefixed with Switch', async () => {
         await expect(
           txModal.footer.getByRole('button', { name: 'Switch and Add keys' }),
         ).toBeVisible();
@@ -106,11 +92,11 @@ test.describe(
 
       await test.step('The first operator stays active until the switch', async () => {
         expect(await widgetService.extractNodeOperatorId()).toBe(
-          firstOperatorId,
+          FIRST_OPERATOR_ID,
         );
       });
 
-      await test.step('Take the offer', async () => {
+      await test.step('Switching closes the modal and activates the new operator', async () => {
         await txModal.switchToOperatorBtn.click();
         await expect(txModal.modal).toBeHidden();
         expect(await widgetService.extractNodeOperatorId()).toBe(
@@ -119,18 +105,16 @@ test.describe(
       });
 
       await test.step('Both operators are listed in the switch modal', async () => {
-        await header.switchOperatorButton.click();
-        await expect(header.operatorSwitchModal).toBeVisible();
-        await expect(header.switchModalRows).toHaveCount(2);
-        await expect(header.switchModalRowById(firstOperatorId)).toBeVisible();
-        await expect(header.switchModalRowById(secondOperatorId)).toBeVisible();
+        await widgetService.header.switchOperatorButton.click();
+        await expect(switchModal.modal).toBeVisible();
+        await expect(switchModal.rows).toHaveCount(2);
+        await expect(switchModal.rowById(FIRST_OPERATOR_ID)).toBeVisible();
+        await expect(switchModal.rowById(secondOperatorId)).toBeVisible();
       });
 
       await test.step('The active one is marked as current', async () => {
         await expect(
-          header.switchModalRowById(secondOperatorId).getByRole('button', {
-            name: 'Current',
-          }),
+          switchModal.currentBadgeById(secondOperatorId),
         ).toBeVisible();
       });
     });

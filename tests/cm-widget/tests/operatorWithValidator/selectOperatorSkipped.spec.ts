@@ -4,20 +4,16 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../test.fixture';
 
-test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
+test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
-const EXPECTED_ID = PRESETS.FULL_OPERATOR.noId;
+const EXPECTED_ID = PRESETS.ONLY_OPERATOR.noIds[0];
 
 test.describe(
-  'Operator with validator. Select modal (forked)',
+  'Operator with validator. Select modal.',
   { tag: [Tags.forked] },
   () => {
     test.beforeAll(({ useFork }) => {
       test.skip(!useFork, 'Test suite runs only on forked network');
-      expect(
-        EXPECTED_ID,
-        'FULL_OPERATOR preset must record its operator id',
-      ).toBeDefined();
     });
 
     test('Should skip operator selection', async ({ widgetService }) => {

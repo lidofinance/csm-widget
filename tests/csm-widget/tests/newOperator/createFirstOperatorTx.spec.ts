@@ -9,8 +9,8 @@ const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
 
 test.describe(
-  'Address without operators. Create the first one (forked)',
-  { tag: [Tags.forked, Tags.performTX] },
+  'Address without operators. Create the first one.',
+  { tag: [Tags.forked] },
   () => {
     let snapshotId: string;
 
@@ -20,9 +20,8 @@ test.describe(
       await evmNode.setBalance(mnemonicToAccount(secretPhrase).address, 1000);
     });
 
-    test.afterAll(async ({ evmNode, widgetService }) => {
+    test.afterAll(async ({ evmNode }) => {
       if (snapshotId) await evmNode.revert(snapshotId);
-      await widgetService.selectOperatorModal.forgetSelectionAndReload();
     });
 
     test('Should not offer a switch', async ({
@@ -67,6 +66,7 @@ test.describe(
         );
 
         await txModal.closeModal();
+        await expect(txModal.modal).toBeHidden();
         expect(await widgetService.extractNodeOperatorId()).toBe(ids[0]);
       });
     });

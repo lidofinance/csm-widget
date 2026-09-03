@@ -9,8 +9,6 @@ export class Header {
   operatorTypeBadge: Locator;
   operatorTypeCurve: Locator;
   switchOperatorButton: Locator;
-  operatorSwitchModal: Locator;
-  switchModalRows: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -23,8 +21,6 @@ export class Header {
     );
     this.operatorTypeCurve = this.header.getByTestId('nodeOperatorCurve');
     this.switchOperatorButton = this.header.getByTestId('nodeOperatorHeader');
-    this.operatorSwitchModal = this.page.getByTestId('switchOperatorModal');
-    this.switchModalRows = this.page.getByTestId('switchModalOperatorRow');
     this.disconnectBtn = this.page
       .locator('[role=dialog]')
       .getByTestId('disconnectBtn');

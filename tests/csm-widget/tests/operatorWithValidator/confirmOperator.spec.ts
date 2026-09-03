@@ -2,7 +2,6 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { expect } from '@playwright/test';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import {
-  COMMON_ACTION_TIMEOUT,
   PAGE_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
 } from 'tests/shared/consts/timeouts';
@@ -11,28 +10,32 @@ import { test } from '../test.fixture';
 const BOND_AMOUNT = '0.1';
 
 test.describe(
-  'Operator with validator. Confirm operator modal',
-  { tag: [Tags.forked, Tags.performTX] },
+  'Operator with validator. Confirm operator modal.',
+  { tag: [Tags.forked] },
   () => {
     let snapshotId: string;
     let activeOperatorId: number;
 
-    test.beforeAll(async ({ useFork, evmNode, widgetService }) => {
+    test.beforeAll(async ({ useFork, widgetService }) => {
       test.skip(!useFork, 'Test suite runs only on forked network');
-      snapshotId = await evmNode.snapshot();
       activeOperatorId = await widgetService.extractNodeOperatorId();
     });
 
-    test.afterAll(async ({ evmNode, widgetService }) => {
-      if (snapshotId) await evmNode.revert(snapshotId);
-      await widgetService.selectOperatorModal.forgetSelectionAndReload();
+    test.beforeEach(async ({ evmNode }) => {
+      snapshotId = await evmNode.snapshot();
     });
 
-    test('Should name the active operator before Add bond', async ({
+    test.afterEach(async ({ evmNode }) => {
+      if (snapshotId) await evmNode.revert(snapshotId);
+    });
+
+    test('Should display the active operator and add bond to it', async ({
       widgetService,
+      csmSDK,
     }) => {
       const addBond = widgetService.bondRewardsPage.addBond;
-      const modal = widgetService.confirmOperatorModal;
+      const confirmModal = widgetService.confirmOperatorModal;
+      const bondBefore = await csmSDK.getBondSummary(activeOperatorId);
 
       await test.step('Fill the Add bond form with ETH', async () => {
         await addBond.open();
@@ -41,35 +44,45 @@ test.describe(
         await addBond.addBondButton.click();
       });
 
-      await test.step('The modal names the active operator', async () => {
-        await expect(modal.modal).toBeVisible({
+      await test.step('Confirm modal shows the active operator', async () => {
+        await expect(confirmModal.modal).toBeVisible({
           timeout: PAGE_WAIT_TIMEOUT,
         });
-        await expect(modal.title).toContainText('Confirm your Node Operator');
-        await expect(modal.description).toContainText(
+        await expect(confirmModal.title).toContainText(
+          'Confirm your Node Operator',
+        );
+        await expect(confirmModal.description).toContainText(
           'Check that the Node Operator below is the one you intend to use before proceeding',
         );
-        await expect(modal.operatorId).toContainText(
-          new RegExp(`Node Operator #${activeOperatorId}$`),
+        await expect(confirmModal.operatorId).toHaveText(
+          `Node Operator #${activeOperatorId}`,
         );
       });
 
-      await test.step('Continue proceeds to the transaction', async () => {
-        await modal.continueButton.click();
+      await test.step('Continue sends the transaction', async () => {
+        await confirmModal.continueButton.click();
         await widgetService.page.waitForSelector(
           'text=Confirm this transaction in your wallet',
           { timeout: STAGE_WAIT_TIMEOUT },
         );
+        await widgetService.walletPage.confirmTx();
+        await expect(
+          widgetService.page.getByText('Adding Bond operation was successful'),
+        ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
       });
 
-      await test.step('Dispose of the wallet request', async () => {
-        await widgetService.walletPage.cancelTx();
-        await expect(widgetService.txModal.title).toContainText(
-          'Transaction Failed',
-          { timeout: PAGE_WAIT_TIMEOUT },
-        );
-        await widgetService.txModal.closeModal();
-        await expect(widgetService.txModal.modalContent).toBeHidden();
+      await test.step('The bond lands on the confirmed operator', async () => {
+        const expected =
+          parseFloat(bondBefore.current) + parseFloat(BOND_AMOUNT);
+        await expect
+          .poll(
+            async () =>
+              parseFloat(
+                (await csmSDK.getBondSummary(activeOperatorId)).current,
+              ),
+            { timeout: PAGE_WAIT_TIMEOUT },
+          )
+          .toBeCloseTo(expected, 3);
       });
     });
 
@@ -77,11 +90,11 @@ test.describe(
       widgetService,
     }) => {
       const addBond = widgetService.bondRewardsPage.addBond;
-      const modal = widgetService.confirmOperatorModal;
+      const confirmModal = widgetService.confirmOperatorModal;
       const dismissals: [string, () => Promise<void>][] = [
-        ['the cross', () => modal.clickCross()],
-        ['Escape', () => modal.pressEscape()],
-        ['the backdrop', () => modal.clickBackdrop()],
+        ['the cross', () => confirmModal.clickCross()],
+        ['Escape', () => confirmModal.pressEscape()],
+        ['the backdrop', () => confirmModal.clickBackdrop()],
       ];
 
       await test.step('Fill the Add bond form with ETH', async () => {
@@ -91,67 +104,75 @@ test.describe(
       });
 
       for (const [name, dismiss] of dismissals) {
-        await test.step(`Dismissing by ${name} keeps the transaction unsent`, async () => {
+        await test.step(`Dismissing by ${name} closes the modal`, async () => {
           await addBond.addBondButton.click();
           await dismiss();
+          await expect(confirmModal.modal).toBeHidden({
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
+        });
 
-          await widgetService.page.waitForTimeout(COMMON_ACTION_TIMEOUT);
-
+        await test.step(`The form survives dismissal by ${name} and nothing is sent`, async () => {
+          await expect(addBond.amountInput).toHaveValue(BOND_AMOUNT);
+          await expect(addBond.addBondButton).toBeEnabled();
           await expect(
             widgetService.txModal.modalContent,
             'the transaction flow must not start',
           ).toBeHidden();
         });
-
-        await test.step(`The form survives dismissal by ${name}`, async () => {
-          await expect(addBond.amountInput).toHaveValue(BOND_AMOUNT);
-          await expect(addBond.addBondButton).toBeEnabled();
-        });
       }
     });
 
-    test('Should name the active operator before Add keys', async ({
+    test('Should display the active operator and add keys to it', async ({
       widgetService,
       keysGeneratorService,
+      csmSDK,
     }) => {
       const submit = widgetService.keysPage.submitPage;
-      const modal = widgetService.confirmOperatorModal;
+      const confirmModal = widgetService.confirmOperatorModal;
       const keys = keysGeneratorService.generateKeys(1);
+      const keysBefore = await csmSDK.getAllKeys(BigInt(activeOperatorId));
 
       await test.step('Fill the Add keys form with ETH', async () => {
         await submit.open();
         await submit.fillAndClickSubmit(keys, TokenSymbol.ETH);
       });
 
-      await test.step('The modal names the active operator', async () => {
-        await expect(modal.modal).toBeVisible({
+      await test.step('Confirm modal shows the active operator', async () => {
+        await expect(confirmModal.modal).toBeVisible({
           timeout: PAGE_WAIT_TIMEOUT,
         });
-        await expect(modal.title).toContainText('Confirm your Node Operator');
-        await expect(modal.description).toContainText(
+        await expect(confirmModal.title).toContainText(
+          'Confirm your Node Operator',
+        );
+        await expect(confirmModal.description).toContainText(
           'Check that the Node Operator below is the one you intend to use before proceeding',
         );
-        await expect(modal.operatorId).toContainText(
-          new RegExp(`Node Operator #${activeOperatorId}$`),
+        await expect(confirmModal.operatorId).toHaveText(
+          `Node Operator #${activeOperatorId}`,
         );
       });
 
-      await test.step('Continue proceeds to the transaction', async () => {
-        await modal.continueButton.click();
+      await test.step('Continue sends the transaction', async () => {
+        await confirmModal.continueButton.click();
         await widgetService.page.waitForSelector(
           'text=Confirm this transaction in your wallet',
           { timeout: STAGE_WAIT_TIMEOUT },
         );
+        await widgetService.walletPage.confirmTx();
+        await expect(
+          widgetService.page.getByText('Uploading operation was successful.'),
+        ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
       });
 
-      await test.step('Dispose of the wallet request', async () => {
-        await widgetService.walletPage.cancelTx();
-        await expect(widgetService.txModal.title).toContainText(
-          'Transaction Failed',
-          { timeout: PAGE_WAIT_TIMEOUT },
-        );
-        await widgetService.txModal.closeModal();
-        await expect(widgetService.txModal.modalContent).toBeHidden();
+      await test.step('The key lands on the confirmed operator', async () => {
+        await expect
+          .poll(
+            async () =>
+              (await csmSDK.getAllKeys(BigInt(activeOperatorId))).length,
+            { timeout: PAGE_WAIT_TIMEOUT },
+          )
+          .toBe(keysBefore.length + keys.length);
       });
     });
   },

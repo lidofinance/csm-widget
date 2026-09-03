@@ -6,13 +6,11 @@ import {
 import { expect, Page, test } from '@playwright/test';
 import { FeatureFlagsType } from 'config/feature-flags/types';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
-import {
-  RPC_WAIT_TIMEOUT,
-  STAGE_WAIT_TIMEOUT,
-} from 'tests/shared/consts/timeouts';
+import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import {
   ConfirmOperatorModalElement,
   SelectOperatorModalElement,
+  SwitchOperatorModalElement,
 } from 'tests/shared/pages/elements';
 import { BondRewardsPage } from 'tests/csm-widget/pages/bondRewards.page';
 import { OperatorTypePage } from 'tests/csm-widget/pages/operatorType.page';
@@ -43,6 +41,7 @@ export class WidgetService {
   public parametersModal: ParametersModal;
   public selectOperatorModal: SelectOperatorModalElement;
   public confirmOperatorModal: ConfirmOperatorModalElement;
+  public switchOperatorModal: SwitchOperatorModalElement;
   public txModal: TxModal;
 
   constructor(
@@ -60,17 +59,22 @@ export class WidgetService {
     this.parametersModal = new ParametersModal(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);
     this.confirmOperatorModal = new ConfirmOperatorModalElement(this.page);
+    this.switchOperatorModal = new SwitchOperatorModalElement(this.page);
     this.txModal = new TxModal(this.page);
   }
 
-  async connectWallet(
-    options: {
-      expectConnectionState?: boolean;
-      keepOperatorPrompt?: boolean;
-    } = {},
+  async connectWallet(expectConnectionState = true) {
+    await this.connectWalletFlow(expectConnectionState, false);
+  }
+
+  async connectWalletWithoutSelectingOperator() {
+    await this.connectWalletFlow(true, true);
+  }
+
+  private async connectWalletFlow(
+    expectConnectionState: boolean,
+    skipOperatorSelection: boolean,
   ) {
-    const { expectConnectionState = true, keepOperatorPrompt = false } =
-      options;
     await test.step('Open default page for connect.', async () => {
       await this.page.goto('/?survey-setup=1');
     });
@@ -116,16 +120,9 @@ export class WidgetService {
         }
       }
 
-      await test.step('Waiting for the widget to settle after login', async () => {
-        await this.selectOperatorModal.connectedOrPrompted.waitFor({
-          state: 'visible',
-          timeout: RPC_WAIT_TIMEOUT,
-        });
-      });
+      if (skipOperatorSelection) return;
 
-      if (keepOperatorPrompt) return;
-
-      await this.selectOperatorModal.selectOperatorIfPrompted();
+      await this.selectOperatorModal.selectOperatorIfModalShown();
 
       expect(
         await this.isConnectedWallet(),

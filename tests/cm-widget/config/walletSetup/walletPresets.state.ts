@@ -7,8 +7,7 @@ export const STATE_FILE = path.join(process.cwd(), '.walletPresets.state.json');
 export type PresetRuntime = {
   secretPhrase: string;
   address: `0x${string}`;
-  noId?: number;
-  noIds?: number[];
+  noIds: number[];
   state: string[];
   gates?: string[];
 };

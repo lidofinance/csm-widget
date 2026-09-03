@@ -50,10 +50,8 @@ test.describe(
       });
     });
 
-    test.afterEach(async ({ evmNode, widgetService }) => {
+    test.afterEach(async ({ evmNode }) => {
       if (snapshotId) await evmNode.revert(snapshotId);
-      // the fork rollback does not reach the browser
-      await widgetService.selectOperatorModal.forgetSelectionAndReload();
     });
 
     test('Should create curated operator and send Matomo form events', async ({
@@ -98,7 +96,7 @@ test.describe(
     }) => {
       const txModal = widgetService.txModal;
 
-      await test.step('Walk the wizard keeping our own addresses', async () => {
+      await test.step('Fill the creation form with the connected addresses', async () => {
         await widgetService.createNodeOperatorPage.open();
         await widgetService.createNodeOperatorPage.step1.fillForm(
           OPERATOR_TYPE.CM_PTO,
@@ -125,11 +123,8 @@ test.describe(
         );
       });
 
-      await test.step('The success screen offers no switch', async () => {
+      await test.step('The success screen offers no switch, and Add keys carries no Switch prefix', async () => {
         await expect(txModal.switchToOperatorBtn).toBeHidden();
-      });
-
-      await test.step('Add keys carries no Switch prefix', async () => {
         await expect(
           txModal.footer.getByRole('button', { name: 'Add keys', exact: true }),
         ).toBeVisible();
@@ -144,6 +139,7 @@ test.describe(
         ).not.toBeNull();
 
         await txModal.closeModal();
+        await expect(txModal.modal).toBeHidden();
         expect(await widgetService.extractNodeOperatorId()).toBe(
           Number(idMatch?.[1]),
         );

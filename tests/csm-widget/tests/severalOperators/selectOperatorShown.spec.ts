@@ -12,7 +12,7 @@ test.use({ secretPhrase });
 const MANAGED_IDS = [0, 1];
 
 test.describe(
-  'Wallet manages several Node Operators. Select modal (forked)',
+  'Wallet manages several Node Operators. Select modal.',
   { tag: [Tags.forked] },
   () => {
     let snapshotId: string;
@@ -49,32 +49,40 @@ test.describe(
     });
 
     test('Should list every managed operator', async ({ widgetService }) => {
-      const modal = widgetService.selectOperatorModal;
+      const selectModal = widgetService.selectOperatorModal;
 
       await test.step('The prompt explains why it is shown', async () => {
-        await expect(modal.modal).toBeVisible({ timeout: PAGE_WAIT_TIMEOUT });
-        await expect(modal.title).toBeVisible();
-        await expect(modal.description).toContainText(
+        await expect(selectModal.modal).toBeVisible({
+          timeout: PAGE_WAIT_TIMEOUT,
+        });
+        await expect(selectModal.title).toBeVisible();
+        await expect(selectModal.description).toContainText(
           'Your wallet manages several Node Operators. Choose the one to work with.',
         );
       });
 
       await test.step('Every managed operator has its own row', async () => {
-        await expect(modal.rows).toHaveCount(MANAGED_IDS.length);
+        await expect(selectModal.rows).toHaveCount(MANAGED_IDS.length);
         for (const noId of MANAGED_IDS) {
-          await expect(modal.rowById(noId)).toBeVisible();
+          await expect(selectModal.rowById(noId)).toBeVisible();
         }
       });
 
       await test.step('Each row shows the roles the wallet holds', async () => {
         for (const noId of MANAGED_IDS) {
-          await expect(modal.roleBadgesById(noId)).toHaveText(expectedBadges);
+          await expect(selectModal.roleBadgesById(noId)).toHaveText(
+            expectedBadges,
+          );
         }
       });
 
       await test.step('Both role legends are shown', async () => {
-        await expect(modal.legendManager).toContainText('Manager Address role');
-        await expect(modal.legendRewards).toContainText('Rewards Address role');
+        await expect(selectModal.legendManager).toContainText(
+          'Manager Address role',
+        );
+        await expect(selectModal.legendRewards).toContainText(
+          'Rewards Address role',
+        );
       });
 
       await test.step('The app shell stays hidden behind the prompt', async () => {
@@ -104,16 +112,18 @@ test.describe(
     test('Should disconnect when the prompt is closed', async ({
       widgetService,
     }) => {
-      const modal = widgetService.selectOperatorModal;
+      const selectModal = widgetService.selectOperatorModal;
       const closings: [string, () => Promise<void>][] = [
-        ['the cross', () => modal.clickCross()],
-        ['Escape', () => modal.pressEscape()],
-        ['the backdrop', () => modal.clickBackdrop()],
+        ['the cross', () => selectModal.clickCross()],
+        ['Escape', () => selectModal.pressEscape()],
+        ['the backdrop', () => selectModal.clickBackdrop()],
       ];
 
       for (const [name, close] of closings) {
         await test.step(`Closing by ${name} disconnects the wallet`, async () => {
-          await expect(modal.modal).toBeVisible({ timeout: PAGE_WAIT_TIMEOUT });
+          await expect(selectModal.modal).toBeVisible({
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
           await close();
           await expect(widgetService.header.connectWalletBtn).toBeVisible({
             timeout: PAGE_WAIT_TIMEOUT,
@@ -122,8 +132,10 @@ test.describe(
         });
 
         await test.step(`Reconnecting after ${name} asks again`, async () => {
-          await widgetService.connectWallet({ keepOperatorPrompt: true });
-          await expect(modal.modal).toBeVisible({ timeout: PAGE_WAIT_TIMEOUT });
+          await widgetService.connectWalletWithoutSelectingOperator();
+          await expect(selectModal.modal).toBeVisible({
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
         });
       }
     });
@@ -131,10 +143,10 @@ test.describe(
     test('Should ask again after a deliberate disconnect', async ({
       widgetService,
     }) => {
-      const modal = widgetService.selectOperatorModal;
+      const selectModal = widgetService.selectOperatorModal;
 
       await test.step('Pick the first operator', async () => {
-        await modal.selectOperator(MANAGED_IDS[0]);
+        await selectModal.selectOperator(MANAGED_IDS[0]);
         expect(await widgetService.extractNodeOperatorId()).toBe(
           MANAGED_IDS[0],
         );
@@ -142,8 +154,10 @@ test.describe(
 
       await test.step('Disconnecting forgets the pick', async () => {
         await widgetService.header.disconnectWallet();
-        await widgetService.connectWallet({ keepOperatorPrompt: true });
-        await expect(modal.modal).toBeVisible({ timeout: PAGE_WAIT_TIMEOUT });
+        await widgetService.connectWalletWithoutSelectingOperator();
+        await expect(selectModal.modal).toBeVisible({
+          timeout: PAGE_WAIT_TIMEOUT,
+        });
       });
     });
   },

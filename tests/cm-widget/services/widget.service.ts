@@ -29,6 +29,7 @@ import {
   ConfirmOperatorModalElement,
   NavBlockElement,
   SelectOperatorModalElement,
+  SwitchOperatorModalElement,
 } from '../../shared/pages/elements';
 import { FooterElement } from '../pages/elements/common/element.footer';
 
@@ -51,6 +52,7 @@ export class WidgetService {
   public footerElement: FooterElement;
   public selectOperatorModal: SelectOperatorModalElement;
   public confirmOperatorModal: ConfirmOperatorModalElement;
+  public switchOperatorModal: SwitchOperatorModalElement;
   public txModal: TxModal;
 
   constructor(
@@ -73,17 +75,22 @@ export class WidgetService {
     this.footerElement = new FooterElement(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);
     this.confirmOperatorModal = new ConfirmOperatorModalElement(this.page);
+    this.switchOperatorModal = new SwitchOperatorModalElement(this.page);
     this.txModal = new TxModal(this.page);
   }
 
-  async connectWallet(
-    options: {
-      expectConnectionState?: boolean;
-      keepOperatorPrompt?: boolean;
-    } = {},
+  async connectWallet(expectConnectionState = true) {
+    await this.connectWalletFlow(expectConnectionState, false);
+  }
+
+  async connectWalletWithoutSelectingOperator() {
+    await this.connectWalletFlow(true, true);
+  }
+
+  private async connectWalletFlow(
+    expectConnectionState: boolean,
+    skipOperatorSelection: boolean,
   ) {
-    const { expectConnectionState = true, keepOperatorPrompt = false } =
-      options;
     await test.step('Open default page for connect.', async () => {
       await this.page.goto('/');
     });
@@ -136,16 +143,9 @@ export class WidgetService {
         });
       });
 
-      await test.step('Waiting for the widget to settle after login', async () => {
-        await this.selectOperatorModal.connectedOrPrompted.waitFor({
-          state: 'visible',
-          timeout: RPC_WAIT_TIMEOUT,
-        });
-      });
+      if (skipOperatorSelection) return;
 
-      if (keepOperatorPrompt) return;
-
-      await this.selectOperatorModal.selectOperatorIfPrompted();
+      await this.selectOperatorModal.selectOperatorIfModalShown();
 
       expect(
         await this.isConnectedWallet(),

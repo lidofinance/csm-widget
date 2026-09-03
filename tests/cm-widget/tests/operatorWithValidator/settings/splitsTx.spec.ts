@@ -55,7 +55,6 @@ test.describe(
             address: generateAddress(),
             share: '100',
           });
-          // share is stored as bigint and totalShare recomputed in async effect
           await widgetService.page.waitForTimeout(LOW_TIMEOUT);
         });
 

@@ -6,8 +6,6 @@ export class Header {
   accountSection: Locator;
   connectWalletBtn: Locator;
   switchOperatorButton: Locator;
-  operatorSwitchModal: Locator;
-  switchModalRows: Locator;
   disconnectBtn: Locator;
 
   constructor(page: Page) {
@@ -17,19 +15,9 @@ export class Header {
 
     this.connectWalletBtn = this.header.getByText('Connect').first();
     this.switchOperatorButton = this.header.getByTestId('nodeOperatorHeader');
-    this.operatorSwitchModal = this.page.getByTestId('switchOperatorModal');
-    this.switchModalRows = this.page.getByTestId('switchModalOperatorRow');
     this.disconnectBtn = this.page
       .locator('[role=dialog]')
       .getByTestId('disconnectBtn');
-  }
-
-  switchModalRowById(nodeOperatorId: number) {
-    return this.switchModalRows.filter({
-      has: this.page
-        .getByTestId('descriptorId')
-        .filter({ hasText: new RegExp(`Node Operator #${nodeOperatorId}$`) }),
-    });
   }
 
   async isAccountSectionVisible() {

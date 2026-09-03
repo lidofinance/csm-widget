@@ -11,7 +11,7 @@ test.use({ secretPhrase });
 const MANAGED_ID = 0;
 
 test.describe(
-  'Wallet manages a single Node Operator. Select modal (forked)',
+  'Wallet manages a single Node Operator. Select modal.',
   { tag: [Tags.forked] },
   () => {
     let snapshotId: string;

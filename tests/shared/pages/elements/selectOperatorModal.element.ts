@@ -14,7 +14,6 @@ export class SelectOperatorModalElement {
   rows: Locator;
   closeButton: Locator;
   settledState: Locator;
-  connectedOrPrompted: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -30,17 +29,13 @@ export class SelectOperatorModalElement {
       .or(this.page.getByTestId('accountSectionHeader'))
       .or(this.rows)
       .first();
-    this.connectedOrPrompted = this.page
-      .getByTestId('accountSectionHeader')
-      .or(this.rows)
-      .first();
   }
 
   rowById(nodeOperatorId: number) {
     return this.rows.filter({
       has: this.page
         .getByTestId('descriptorId')
-        .filter({ hasText: new RegExp(`Node Operator #${nodeOperatorId}$`) }),
+        .getByText(String(nodeOperatorId), { exact: true }),
     });
   }
 
@@ -88,10 +83,10 @@ export class SelectOperatorModalElement {
     });
   }
 
-  async selectOperatorIfPrompted() {
-    await test.step('Select a Node Operator if the widget asks', async () => {
+  async selectOperatorIfModalShown() {
+    await test.step('Select a Node Operator if the modal is shown', async () => {
       await this.settledState
-        .waitFor({ state: 'visible', timeout: PAGE_WAIT_TIMEOUT })
+        .waitFor({ state: 'visible', timeout: RPC_WAIT_TIMEOUT })
         .catch(() => undefined);
 
       if (!(await this.rows.first().isVisible())) return;
