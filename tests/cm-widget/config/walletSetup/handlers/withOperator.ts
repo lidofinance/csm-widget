@@ -5,5 +5,7 @@ export const withOperator = async function (
   ctx: StateCtx,
 ): Promise<Partial<StateCtx>> {
   const noId = await this.fork.createCuratedOperator(ctx.gates[0], ctx.address);
-  return { noId };
+  if (noId === undefined)
+    throw new Error(`Operator was not created via gate "${ctx.gates[0]}"`);
+  return { noIds: [...ctx.noIds, noId] };
 };

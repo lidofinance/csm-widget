@@ -1,10 +1,12 @@
-import { Locator, Page } from '@playwright/test';
+import { Locator, Page, test } from '@playwright/test';
 
 export class Header {
   page: Page;
   header: Locator;
   accountSection: Locator;
   connectWalletBtn: Locator;
+  switchOperatorButton: Locator;
+  disconnectBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -12,6 +14,10 @@ export class Header {
     this.accountSection = this.header.getByTestId('accountSectionHeader');
 
     this.connectWalletBtn = this.header.getByText('Connect').first();
+    this.switchOperatorButton = this.header.getByTestId('nodeOperatorHeader');
+    this.disconnectBtn = this.page
+      .locator('[role=dialog]')
+      .getByTestId('disconnectBtn');
   }
 
   async isAccountSectionVisible() {
@@ -26,5 +32,12 @@ export class Header {
         );
       });
     return this.accountSection.isVisible();
+  }
+
+  async disconnectWallet() {
+    await test.step('Disconnect the wallet from the account modal', async () => {
+      await this.accountSection.click();
+      await this.disconnectBtn.click();
+    });
   }
 }

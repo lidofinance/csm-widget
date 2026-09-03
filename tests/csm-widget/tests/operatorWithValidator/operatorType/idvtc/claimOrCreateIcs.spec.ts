@@ -183,6 +183,7 @@ test.describe(
       async ({ widgetService, keysGeneratorService }) => {
         const form = widgetService.keysPage.createNodeOperatorForm;
         const header = widgetService.header;
+        const switchModal = widgetService.switchOperatorModal;
         const keys = keysGeneratorService.generateKeys(1);
 
         await test.step('Create a new ICS operator on the create page', async () => {
@@ -207,16 +208,16 @@ test.describe(
           await widgetService.operatorType.openTypePage();
           await expect(header.switchOperatorButton).toBeVisible();
           await header.switchOperatorButton.click();
-          await expect(header.operatorSwitchModal).toBeVisible();
-          await expect(header.switchModalRows).toHaveCount(2);
+          await expect(switchModal.modal).toBeVisible();
+          await expect(switchModal.rows).toHaveCount(2);
         });
 
         await test.step('Both IDVTC and ICS operators are listed', async () => {
           await expect(
-            header.switchModalRows.filter({ hasText: 'IDVTC' }),
+            switchModal.rows.filter({ hasText: 'IDVTC' }),
           ).toBeVisible();
           await expect(
-            header.switchModalRows.filter({ hasText: 'ICS' }),
+            switchModal.rows.filter({ hasText: 'ICS' }),
           ).toBeVisible();
         });
       },

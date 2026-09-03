@@ -9,4 +9,8 @@ export type RoleBadgeProps = {
 };
 
 export const RoleBadge: FC<RoleBadgeProps> = ({ role }) =>
-  role ? <BadgeRoleStyle>{ROLES_METADATA[role].short}</BadgeRoleStyle> : null;
+  role ? (
+    <BadgeRoleStyle data-testid="roleBadge">
+      {ROLES_METADATA[role].short}
+    </BadgeRoleStyle>
+  ) : null;
