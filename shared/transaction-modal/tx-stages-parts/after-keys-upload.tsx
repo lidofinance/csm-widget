@@ -19,7 +19,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
   const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
   const { beaconchain } = getExternalLinks();
   return (
-    <BlockStyled color="background">
+    <BlockStyled color="background" data-testid="nextStepsBlock">
       <b>What is next: </b>
       <br />
       <ol>
@@ -27,6 +27,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
         <li>
           Once your keys become active (you can check their statuses on the{' '}
           <LocalLink
+            data-testid="createSuccessKeysTabLink"
             matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessKeysTab}
             href={PATH.KEYS_VIEW}
           >
@@ -37,6 +38,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
               , on{' '}
               <MatomoLink
                 $inline
+                data-testid="createSuccessBeaconchainLink"
                 matomoEvent={MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchain}
                 href={beaconchain}
               >
@@ -50,6 +52,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
               or subscribe to the{' '}
               <MatomoLink
                 $inline
+                data-testid="createSuccessSubscribeEventsLink"
                 matomoEvent={
                   MATOMO_CLICK_EVENTS_TYPES.createSuccessSubscribeEvents
                 }
@@ -65,6 +68,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
               (you can use the{' '}
               <MatomoLink
                 $inline
+                data-testid="createSuccessBeaconchainDashboardLink"
                 matomoEvent={
                   MATOMO_CLICK_EVENTS_TYPES.createSuccessBeaconchainDashboard
                 }

@@ -56,6 +56,7 @@ export const useTxModalStagesClaimBond = () =>
                     sent. Check{' '}
                     <MatomoLink
                       $inline
+                      data-testid="claimWithdrawalsLink"
                       href={`${stakeWidget}/withdrawals/claim`}
                       matomoEvent={
                         MATOMO_CLICK_EVENTS_TYPES.claimWithdrawalsLink
@@ -70,6 +71,7 @@ export const useTxModalStagesClaimBond = () =>
                     Add NFT to your wallet to monitor the status of your
                     request.
                     <LocalLink
+                      data-testid="howToClaimEthSuccessLink"
                       href={PATH.BOND_CLAIM}
                       anchor="#how-to-claim-eth-using-a-withdrawal-nft"
                       matomoEvent={

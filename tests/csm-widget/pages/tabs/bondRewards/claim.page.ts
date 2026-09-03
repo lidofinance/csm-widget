@@ -2,9 +2,14 @@ import { Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../../../shared/pages/base.page';
 import { SourceSelect } from 'tests/csm-widget/pages/elements/bondRewards/claim/sourceSelect.element';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { TxModal } from 'tests/csm-widget/pages/elements/common/element.txProgressModal';
 
 export class ClaimPage extends BasePage {
   form: Locator;
+
+  // Balance cards
+  rewardsBalanceCard: Locator;
+  bondBalanceCard: Locator;
 
   // Source select
   availableToClaimBalance: Locator;
@@ -31,9 +36,18 @@ export class ClaimPage extends BasePage {
   claimBondFormInfoTitle: Locator;
   willReceiveAmount: Locator;
 
+  // ETH withdrawal request success modal
+  txModal: TxModal;
+  claimWithdrawalsLink: Locator;
+  howToClaimEthGuideLink: Locator;
+
   constructor(public page: Page) {
     super(page);
     this.form = this.page.getByTestId('claimBondForm');
+
+    // Balance cards
+    this.rewardsBalanceCard = this.page.getByTestId('rewardsBalanceCard');
+    this.bondBalanceCard = this.page.getByTestId('bondBalanceCard');
 
     // Source select
     this.availableToClaimBalance = this.form.getByTestId(
@@ -58,11 +72,15 @@ export class ClaimPage extends BasePage {
     this.maxBtn = this.amountLabel.getByTestId('maxBtn');
 
     // Button
+    // Full label varies with the selected option and token, see
+    // features/claim-bond/claim-bond-form/hooks/use-claim-options.tsx
     this.claimButton = this.form.getByRole('button', {
-      name: 'Claim to the Rewards Address',
+      name: 'Claim',
+      exact: true,
     });
     this.requestWithdrawalButton = this.form.getByRole('button', {
-      name: 'Request withdrawal to the Rewards Address',
+      name: 'Request withdrawal',
+      exact: true,
     });
 
     // Claim info
@@ -71,11 +89,20 @@ export class ClaimPage extends BasePage {
       'claimBondFormInfoTitle',
     );
     this.willReceiveAmount = this.claimBondFormInfo.getByTestId('tokenAmount');
+
+    // ETH withdrawal request success modal
+    this.txModal = new TxModal(page);
+    this.claimWithdrawalsLink = this.txModal.description.getByTestId(
+      'claimWithdrawalsLink',
+    );
+    this.howToClaimEthGuideLink = this.txModal.description.getByTestId(
+      'howToClaimEthSuccessLink',
+    );
   }
 
   async open() {
     await test.step('Open the Bond & Rewards page', async () => {
-      await this.openWithRetry('/bond/claim', this.titledTokenBalance);
+      await this.openWithRetry('/bond/claim', this.rewardsBalanceCard);
     });
   }
 
