@@ -35,7 +35,7 @@ export const DepositDataInput: FC<DepositKeysInputHookFormProps> = ({
         <br />
         Paste JSON with deposit data or drag and drop the file
         <br />
-        <Gate rule="IS_CSM">
+        <Gate rule="IS_CSM_FAMILY">
           Please make sure you followed the key generation guide provided in FAQ
           <br />
         </Gate>

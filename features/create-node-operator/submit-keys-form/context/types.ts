@@ -1,5 +1,6 @@
 import {
   CurveParameters,
+  MODULE_NAME,
   Proof,
   ShareLimitInfo,
   ShareLimitStatus,
@@ -23,6 +24,7 @@ export type SubmitKeysFormInputType = {
 } & DepositDataInputType;
 
 export type SubmitKeysFormNetworkData = {
+  targetModule: MODULE_NAME.CSM | MODULE_NAME.CSM_02;
   address: Address;
   ethBalance: bigint;
   stethBalance: bigint;

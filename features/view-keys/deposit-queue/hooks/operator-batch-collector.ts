@@ -6,7 +6,7 @@ import { normalizeToGraphCoordinate } from './graph-calculations';
 const MAX_TOOLTIP_ITEMS = 2;
 
 type BatchInfo = {
-  keysCount: bigint;
+  amount: bigint;
   absoluteOffset: bigint; // Position from the begining of active keys
   queueOffset: bigint; // Position from the start of all queues
   batchOffset: bigint; // Offset within its own queue
@@ -36,14 +36,13 @@ export const collectOperatorBatches = ({
 
   // Collect all batch information
   queueDataList.forEach((queueData) => {
-    const keysCountInQueue = queueData.totalKeysInQueue;
+    const amountInQueue = queueData.totalAmountInQueue;
 
     queueData.operatorBatches.forEach((batch) => {
-      const batchKeysCount = BigInt(batch.keysCount);
       const batchOffset = batch.offset;
 
       allBatchInfos.push({
-        keysCount: batchKeysCount,
+        amount: batch.amount,
         absoluteOffset:
           activeKeys + cumulativeKeys + submittingKeys + batchOffset,
         queueOffset: cumulativeKeys + submittingKeys + batchOffset,
@@ -52,7 +51,7 @@ export const collectOperatorBatches = ({
       });
     });
 
-    cumulativeKeys += keysCountInQueue;
+    cumulativeKeys += amountInQueue;
 
     // Include submitting keys for this priority in cumulative position
     const submittingKeysInPriority =
@@ -66,14 +65,14 @@ export const collectOperatorBatches = ({
   const graphBatches = convertToGraphBatches(allBatchInfos, bounds);
   const combinedBatches = combineAdjacentBatches(graphBatches);
 
-  // Sum operator batch keys only (not total queue keys)
-  const operatorKeysCount = allBatchInfos.reduce(
-    (sum, batch) => sum + batch.keysCount,
+  // Sum operator batch amount only (not total queue amount)
+  const operatorAmount = allBatchInfos.reduce(
+    (sum, batch) => sum + batch.amount,
     0n,
   );
 
   return {
-    keysCount: operatorKeysCount,
+    amount: operatorAmount,
     batches: combinedBatches,
   };
 };
@@ -93,7 +92,7 @@ const convertToGraphBatches = (
       bounds,
     );
     const endPos = normalizeToGraphCoordinate(
-      batchInfo.absoluteOffset + batchInfo.keysCount,
+      batchInfo.absoluteOffset + batchInfo.amount,
       bounds,
     );
 
@@ -104,7 +103,7 @@ const convertToGraphBatches = (
       width: size,
       metadata: [
         {
-          keysCount: batchInfo.keysCount,
+          amount: batchInfo.amount,
           position: batchInfo.queueOffset,
           priority: batchInfo.priority,
         },
@@ -125,13 +124,13 @@ const mergeMetadataArrays = (
     const firstMeta = second[0];
 
     const isConsecutive =
-      lastMeta.position + lastMeta.keysCount === firstMeta.position &&
+      lastMeta.position + lastMeta.amount === firstMeta.position &&
       lastMeta.priority === firstMeta.priority;
 
     if (isConsecutive) {
       const mergedMeta = {
         position: lastMeta.position,
-        keysCount: lastMeta.keysCount + firstMeta.keysCount,
+        amount: lastMeta.amount + firstMeta.amount,
         priority: lastMeta.priority,
       };
       return [...first.slice(0, -1), mergedMeta, ...second.slice(1)];
@@ -147,8 +146,8 @@ const mergeMetadataArrays = (
  */
 const ensureMetadataWithinTooltipLimit = (batch: BatchPart): BatchPart => {
   if (batch.metadata.length > MAX_TOOLTIP_ITEMS) {
-    const totalKeysCount = batch.metadata.reduce(
-      (sum, meta) => sum + meta.keysCount,
+    const totalAmount = batch.metadata.reduce(
+      (sum, meta) => sum + meta.amount,
       0n,
     );
     const firstMeta = batch.metadata[0];
@@ -157,7 +156,7 @@ const ensureMetadataWithinTooltipLimit = (batch: BatchPart): BatchPart => {
       ...batch,
       metadata: [
         {
-          keysCount: totalKeysCount,
+          amount: totalAmount,
           position: firstMeta.position,
           priority: firstMeta.priority,
           combined: true,

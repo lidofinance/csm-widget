@@ -4,7 +4,6 @@ import {
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { config, useConfig } from 'config';
 import { useFeatureFlags } from 'config/feature-flags';
 import {
   ICS_APPLY_FORM,
@@ -15,6 +14,7 @@ import {
   useDappStatus,
   useHasReportDelayedPenaltyRole,
   useInvites,
+  useModule,
   useNodeOperator,
   useOperatorBalance,
   useOperatorInfo,
@@ -48,6 +48,8 @@ export type ShowRule =
   | 'ICS_APPLY_ENABLED'
   | 'IS_SURVEYS_ACTIVE'
   | 'IS_CSM'
+  | 'IS_CSM_02'
+  | 'IS_CSM_FAMILY'
   | 'IS_CM'
   | 'IS_IDVTC';
 
@@ -99,9 +101,7 @@ export const useShowFlags = (): ShowFlags => {
   const { canCreate: canCreateNO } = useCanCreateNodeOperator();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
-  const {
-    config: { module },
-  } = useConfig();
+  const { module, isCsmFamily } = useModule();
 
   return useMemo(
     () => ({
@@ -129,6 +129,8 @@ export const useShowFlags = (): ShowFlags => {
         !!featureFlags?.[SURVEYS_SETUP_ENABLED] &&
         module === MODULE_NAME.CSM,
       ['IS_CSM']: module === MODULE_NAME.CSM,
+      ['IS_CSM_02']: module === MODULE_NAME.CSM_02,
+      ['IS_CSM_FAMILY']: isCsmFamily,
       ['IS_CM']: module === MODULE_NAME.CM,
       ['IS_IDVTC']:
         isAccountActive &&
@@ -151,6 +153,7 @@ export const useShowFlags = (): ShowFlags => {
       featureFlags,
       module,
       operatorType,
+      isCsmFamily,
     ],
   );
 };
@@ -168,16 +171,17 @@ export const useShowRule = () => {
 
 export type ShowRuleProps = {
   showRules?: (ShowRule | ShowRule[])[];
-  module?: MODULE_NAME;
+  modules?: MODULE_NAME[];
 };
 
 export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
   const check = useShowRule();
+  const { module } = useModule();
 
   return useMemo(
     () =>
       items
-        .filter(({ module }) => !module || module === config.module)
+        .filter(({ modules }) => !modules || modules.includes(module))
         .filter(
           ({ showRules }) =>
             !showRules?.length ||
@@ -185,6 +189,6 @@ export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
               Array.isArray(rule) ? rule.every(check) : check(rule),
             ),
         ),
-    [check, items],
+    [check, items, module],
   );
 };

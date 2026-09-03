@@ -6,7 +6,7 @@ import { TxStageMembersInitFailed } from 'features/idvtc/members/tx-stages/tx-st
 import { TxStageMembersSignin } from 'features/idvtc/members/tx-stages/tx-stage-members-signin';
 import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
 import { operatorKey } from 'modules/surveys-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useModule, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -25,6 +25,7 @@ import { useClaimIdvtcFormData } from './claim-idvtc-data-provider';
 import { ClaimIdvtcFormInputType, ClaimIdvtcFormNetworkData } from './types';
 
 export type ClaimIdvtcFlow =
+  | { action: 'wrong-module' }
   | { action: 'paused' }
   | { action: 'claimed' }
   | { action: 'claimed-with-proof' }
@@ -40,6 +41,7 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
 > => {
   const sdk = useSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required for this operation');
+  const { isCSM } = useModule();
   const confirmClaimIdvtc = useConfirmClaimIdvtcModal();
   const buildCallback = useTxModalStagesClaimIdvtc();
   const surveyAuth = useSurveyInFlowAuth();
@@ -49,6 +51,8 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
 
   return useCallback(
     (input, data) => {
+      // IDVTC is a CSM type: it cannot be claimed onto an operator of another module
+      if (!isCSM) return { action: 'wrong-module' };
       if (data.idvtcPaused) return { action: 'paused' };
 
       const isEmpty = !data.proof?.proof || data.proof.isConsumed;
@@ -137,6 +141,7 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
       };
     },
     [
+      isCSM,
       sdk,
       confirmClaimIdvtc,
       buildCallback,

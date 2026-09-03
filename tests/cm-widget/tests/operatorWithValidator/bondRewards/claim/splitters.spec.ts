@@ -17,7 +17,7 @@ const BOND_EXCESS_ETH = '2';
 
 test.describe(
   'Bond & Rewards. Claim. Splitters.',
-  { tag: [Tags.forked, Tags.performTX] },
+  { tag: [Tags.forked] },
   () => {
     let snapshotId: string;
     let noId: number;

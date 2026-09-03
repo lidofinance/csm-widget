@@ -5,8 +5,10 @@ import { useModuleOperatorTypeGetter } from 'shared/hooks';
 import { useSubmitKeysFormData } from '../context';
 
 export const DkgFilesSection: FC = () => {
-  const { curveId } = useSubmitKeysFormData();
-  const getOperatorType = useModuleOperatorTypeGetter();
+  const { curveId, targetModule } = useSubmitKeysFormData();
+  // A curveId maps to a different type per module — must match the resolution
+  // in useSubmitKeysFlowResolver, or the flow expects files this never asked for.
+  const getOperatorType = useModuleOperatorTypeGetter(targetModule);
 
   if (getOperatorType(curveId) !== OPERATOR_TYPE.CSM_IDVTC) return null;
 

@@ -1,33 +1,37 @@
 import {
   getCurveIdByOperatorType,
   getOperatorTypeByCurveId,
+  MODULE_NAME,
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
 import { useConfig } from 'config';
 import { getCurveMetadata, getDisplayOperatorType } from 'consts';
+import { useModule } from 'modules/web3';
 import { useCallback } from 'react';
 
-// Stable getter bound to the active chain & module. Prefer it for query
-// selects and tx-stage callbacks where identity matters across renders.
-export const useModuleOperatorTypeGetter = () => {
+export const useModuleOperatorTypeGetter = (module?: MODULE_NAME) => {
   const {
-    config: { defaultChain, module },
+    config: { defaultChain },
   } = useConfig();
+  const { module: activeModule } = useModule();
+  const targetModule = module ?? activeModule;
   return useCallback(
     (curveId: bigint | undefined) =>
-      getOperatorTypeByCurveId(defaultChain, module, curveId),
-    [defaultChain, module],
+      getOperatorTypeByCurveId(defaultChain, targetModule, curveId),
+    [defaultChain, targetModule],
   );
 };
 
-export const useCurveMetadataGetter = () => {
+export const useCurveMetadataGetter = (module?: MODULE_NAME) => {
   const {
-    config: { defaultChain, module },
+    config: { defaultChain },
   } = useConfig();
+  const { module: activeModule } = useModule();
+  const targetModule = module ?? activeModule;
   return useCallback(
     (curveId: bigint | undefined) =>
-      getCurveMetadata(defaultChain, module, curveId),
-    [defaultChain, module],
+      getCurveMetadata(defaultChain, targetModule, curveId),
+    [defaultChain, targetModule],
   );
 };
 
@@ -38,15 +42,23 @@ export const useModuleOperatorType = (curveId: bigint | undefined) => {
 
 // Display variant: unmapped-but-defined curve ids classify as CUSTOM_CURVE.
 // Use the strict useModuleOperatorType for logic branches.
-export const useDisplayOperatorType = (curveId: bigint | undefined) => {
+export const useDisplayOperatorType = (
+  curveId: bigint | undefined,
+  module?: MODULE_NAME,
+) => {
   const {
-    config: { defaultChain, module },
+    config: { defaultChain },
   } = useConfig();
-  return getDisplayOperatorType(defaultChain, module, curveId);
+  const { module: activeModule } = useModule();
+  const targetModule = module ?? activeModule;
+  return getDisplayOperatorType(defaultChain, targetModule, curveId);
 };
 
-export const useCurveMetadata = (curveId: bigint | undefined) => {
-  const getMetadata = useCurveMetadataGetter();
+export const useCurveMetadata = (
+  curveId: bigint | undefined,
+  module?: MODULE_NAME,
+) => {
+  const getMetadata = useCurveMetadataGetter(module);
   return getMetadata(curveId);
 };
 

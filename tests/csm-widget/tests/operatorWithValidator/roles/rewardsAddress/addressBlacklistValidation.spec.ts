@@ -16,11 +16,15 @@ test.describe('Roles. Rewards Address. Address blacklist validation', async () =
     await widgetService.mockValidationAddressRequest();
   });
 
-  test.afterAll(async ({ widgetService }) => {
+  test.afterAll(async ({ widgetService, csmSDK }) => {
     await widgetService.page.unrouteAll();
     await widgetService.page.reload();
     await widgetService.page.waitForTimeout(1000);
-    await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
+
+    const noId = await widgetService.extractNodeOperatorId();
+    if (await csmSDK.isPendingRole(noId, 'rewards')) {
+      await widgetService.settingsPage.rewardsAddressPage.revokePendingRole();
+    }
   });
 
   test(

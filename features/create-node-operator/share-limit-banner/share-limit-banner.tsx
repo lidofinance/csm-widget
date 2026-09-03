@@ -1,8 +1,8 @@
-import { isModuleCM } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   SHARE_LIMIT_STATUS,
   useHasPriorityQueueSpots,
+  useModule,
   useShareLimit,
   useShareLimitStatus,
 } from 'modules/web3';
@@ -51,6 +51,20 @@ const ExhaustedBanner: FC<Props> = ({ activeLeft, queue }) => (
   </Banner>
 );
 
+const TopUpsExceedBanner: FC = () => (
+  <Banner variant="wary-dangerous" title="Top ups exceed the stake share limit">
+    Your keys will still be queued for initial activation, but they are unlikely
+    to be filled up to 2048 ETH in the near future
+    <br />
+    <LocalLink
+      anchor="#what-is-the-csm-stake-share-limit"
+      matomoEvent={MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner}
+    >
+      Read more in the FAQ section
+    </LocalLink>
+  </Banner>
+);
+
 const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
   <Banner variant="wary" title="CSM is approaching its stake share limit">
     Currently, <b>{activeLeft}</b> more keys can be activated in CSM before it
@@ -71,11 +85,12 @@ const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
 );
 
 export const ShareLimitBanner: FC = () => {
+  const { isCsmFamily, isCSM02 } = useModule();
   const { data } = useShareLimit();
   const { data: status } = useShareLimitStatus();
   const { data: hasPrioritySpots } = useHasPriorityQueueSpots();
 
-  if (!data || !status || isModuleCM) {
+  if (!data || !status || !isCsmFamily) {
     return null;
   }
 
@@ -84,10 +99,14 @@ export const ShareLimitBanner: FC = () => {
       {status === SHARE_LIMIT_STATUS.REACHED ? (
         <ReachedBanner />
       ) : status === SHARE_LIMIT_STATUS.EXHAUSTED && !hasPrioritySpots ? (
-        <ExhaustedBanner
-          activeLeft={data.activeLeft.toString()}
-          queue={data.queue.toString()}
-        />
+        isCSM02 ? (
+          <TopUpsExceedBanner />
+        ) : (
+          <ExhaustedBanner
+            activeLeft={data.activeLeft.toString()}
+            queue={data.queue.toString()}
+          />
+        )
       ) : status === SHARE_LIMIT_STATUS.APPROACHING ? (
         <ApproachingBanner
           activeLeft={data.activeLeft.toString()}

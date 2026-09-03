@@ -22,7 +22,7 @@ test.describe('New operator. Operator type modal', async () => {
   });
 
   test(
-    qase(471, 'Should show three type cards with correct content'),
+    qase(471, 'Should show type cards with correct content'),
     async ({ widgetService }) => {
       const modal = widgetService.mainPage.operatorTypeModal;
       await widgetService.mainPage.openOperatorTypeModal();

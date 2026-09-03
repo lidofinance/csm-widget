@@ -25,6 +25,7 @@ export * from './use-keys-available';
 export * from './use-local-storage';
 export * from './use-max-priority-key-index';
 export * from './use-operator-type-metadata';
+export * from './use-operator-type-parameters';
 export * from './use-prefixed-history';
 export * from './use-requested-operator-type';
 export * from './use-router-path';

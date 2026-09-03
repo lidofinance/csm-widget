@@ -16,6 +16,10 @@ const LOGOS = {
     [ThemeName.dark]: LogoCmLight.src,
     [ThemeName.light]: LogoCmLight.src,
   },
+  [MODULE_NAME.CSM_02]: {
+    [ThemeName.dark]: LogoCsmDark.src,
+    [ThemeName.light]: LogoCsmLight.src,
+  },
 };
 
 export const Header = styled.h1`

@@ -1,5 +1,6 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { ROLES_METADATA } from 'consts';
+import { useModule } from 'modules/web3';
 import { FC } from 'react';
 import { getRoleActions } from './role-actions';
 
@@ -11,13 +12,19 @@ type Props = {
 export const RoleActionsList: FC<Props> = ({
   role,
   extendedManagerPermissions,
-}) => (
-  <>
-    The {ROLES_METADATA[role].capitalizedTitle} Address is used for:
-    <ul>
-      {getRoleActions(role, extendedManagerPermissions).map((label) => (
-        <li key={label}>{label}</li>
-      ))}
-    </ul>
-  </>
-);
+}) => {
+  const { isCsmFamily } = useModule();
+
+  return (
+    <>
+      The {ROLES_METADATA[role].capitalizedTitle} Address is used for:
+      <ul>
+        {getRoleActions(role, extendedManagerPermissions, isCsmFamily).map(
+          (label) => (
+            <li key={label}>{label}</li>
+          ),
+        )}
+      </ul>
+    </>
+  );
+};

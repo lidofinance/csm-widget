@@ -20,7 +20,7 @@ const ROLE_ROUTES: SwitcherRoutes = [
     title: 'Meta data',
     path: PATH.SETTINGS_METADATA,
     showRules: ['IS_NODE_OPERATOR'],
-    module: MODULE_NAME.CM,
+    modules: [MODULE_NAME.CM],
   },
   {
     title: 'Inbox requests',

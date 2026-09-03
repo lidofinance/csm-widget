@@ -1,3 +1,4 @@
+import type { QueueUnit } from '../types';
 import type {
   SubmittingAllocation,
   QueueGraphData,
@@ -13,9 +14,11 @@ export const createSingleQueueVisualization = (
   shareLimit: ShareLimit,
   submittingAllocation: SubmittingAllocation | undefined,
   fullView: boolean,
+  unit: QueueUnit,
+  scale: bigint,
 ): QueueGraphData => {
   const { active, queue, capacity, activeLeft } = shareLimit;
-  const added = submittingAllocation?.keysCount || 0n;
+  const added = submittingAllocation?.amount || 0n;
 
   // Calculate graph bounds and coordinates
   const bounds = calculateGraphBounds({
@@ -24,6 +27,7 @@ export const createSingleQueueVisualization = (
     capacity,
     added,
     fullView,
+    scale,
   });
 
   // Calculate segment sizes
@@ -51,21 +55,22 @@ export const createSingleQueueVisualization = (
   );
 
   return {
+    unit,
     parts: [
-      { type: 'active', width: activeSize, keysCount: active },
-      { type: 'queue', width: queueUnderLimitSize, keysCount: queueUnderLimit },
+      { type: 'active', width: activeSize, amount: active },
+      { type: 'queue', width: queueUnderLimitSize, amount: queueUnderLimit },
       {
         type: 'queueOverLimit',
         width: queueOverLimitSize,
-        keysCount: queueOverLimit,
+        amount: queueOverLimit,
       },
-      { type: 'added', width: addedSize, keysCount: added },
+      { type: 'added', width: addedSize, amount: added },
     ],
     limit: {
       offset: limitOffset,
-      keysCount: capacity,
+      amount: capacity,
     },
     farAway: bounds.farAway,
-    submittingKeysCount: submittingAllocation?.keysCount,
+    submittingAmount: submittingAllocation?.amount,
   };
 };

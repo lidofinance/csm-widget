@@ -93,8 +93,10 @@ export default withBundleAnalyzer({
   webpack(config) {
     config.module.rules.push(
       // Teach webpack to import svg and md files
+      // `issuer` keeps svgr off SVGs referenced from CSS (e.g. @lidofinance/lido-shared-ui)
       {
         test: /\.svg$/,
+        issuer: /\.[jt]sx?$/,
         use: [
           {
             loader: '@svgr/webpack',
@@ -154,11 +156,24 @@ export default withBundleAnalyzer({
     );
 
     // Fixes warning about missing dependency @react-native-async-storage/async-storage,
-    // which comes from @metamask/sdk v0.33.1
+    // which comes from @metamask/connect-multichain and @walletconnect/keyvaluestorage
     // See https://github.com/MetaMask/metamask-sdk/issues/1376
     config.resolve.fallback = {
       '@react-native-async-storage/async-storage': false,
+      // Tempo Accounts SDK, optional peer dep of @wagmi/connectors v8 reachable only via
+      // @wagmi/core's unused `tempo` export; not installed, Next 12 webpack resolves it eagerly
+      accounts: false,
     };
+
+    // Same unused `ox` tempo path: it builds an import specifier at runtime, which webpack
+    // can only report as a critical dependency
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings ?? []),
+      {
+        module: /node_modules\/ox\/_esm\/tempo\//,
+        message: /Critical dependency: the request of a dependency is an expression/,
+      },
+    ];
 
     return config;
   },

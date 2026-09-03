@@ -54,6 +54,18 @@ export class LidoSDKClient extends LidoSDKCsm {
     });
   }
 
+  async isPendingRole(nodeOperatorNumber: number, role: 'manager' | 'rewards') {
+    return test.step(`Check if ${role} address role is pending for #${nodeOperatorNumber} node`, async () => {
+      const info = await this.operator.getInfo(BigInt(nodeOperatorNumber));
+
+      return Boolean(
+        role === 'manager'
+          ? info.proposedManagerAddress
+          : info.proposedRewardsAddress,
+      );
+    });
+  }
+
   async getAllKeys(nodeOperatorNumber: bigint) {
     return test.step(`Get all keys for node operator #${nodeOperatorNumber}`, async () => {
       const operators = await this.operator.getKeys(nodeOperatorNumber);

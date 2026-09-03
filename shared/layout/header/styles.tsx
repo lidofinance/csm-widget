@@ -25,6 +25,17 @@ export const HeaderWrapper = styled.div`
 
   padding: 0 32px;
   margin: 0 -32px;
+
+  transition:
+    box-shadow 0.3s ease,
+    background 0.3s ease-out;
+
+  // the background belongs on this bleeding wrapper, not the inset HeaderStyle:
+  // otherwise content scrolling under shows through the 32px side gutters
+  html:is([data-scrolldown='true']) & {
+    background: var(--lido-color-background);
+    box-shadow: 0px 3px 3px -3px var(--lido-color-shadowDark);
+  }
 `;
 
 export const HeaderStyle = styled.header`
@@ -35,22 +46,6 @@ export const HeaderStyle = styled.header`
   gap: 8px;
   width: 100%;
   padding: 18px 0;
-
-  transition:
-    box-shadow 0.3s ease,
-    background 0.3s ease-out;
-
-  html:is([data-scrolldown='true']) & {
-    background: var(--lido-color-background);
-    box-shadow: 0px 3px 3px -3px var(--lido-color-shadowDark);
-  }
-
-  ${NAV_MOBILE_MEDIA} {
-    nav[aria-expanded='true'] + & {
-      background: none !important;
-      box-shadow: none !important;
-    }
-  }
 `;
 
 export const HeaderActionsStyle = styled.div`

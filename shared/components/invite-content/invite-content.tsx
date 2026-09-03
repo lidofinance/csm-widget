@@ -1,17 +1,16 @@
-import { NodeOperatorInviteInfo } from '@lidofinance/lido-csm-sdk';
+import { ModuleInvite } from 'modules/web3';
 import { Tooltip } from '../tooltip/tooltip';
 import { FC } from 'react';
 import { RoleActionsList } from 'shared/components/role-actions';
 import { ROLES_METADATA } from 'consts';
-import { DescriptorId } from 'shared/node-operator';
+import { CurveBadge, DescriptorId } from 'shared/node-operator';
 import { Badge, InviteContentStyle } from './style';
 
-export const InviteContent: FC<{ invite: NodeOperatorInviteInfo }> = ({
-  invite,
-}) => {
+export const InviteContent: FC<{ invite: ModuleInvite }> = ({ invite }) => {
   return (
     <InviteContentStyle>
       <DescriptorId id={invite.nodeOperatorId} />
+      <CurveBadge curveId={invite.curveId} module={invite.module} inline />
       <Tooltip
         placement="bottomLeft"
         title={

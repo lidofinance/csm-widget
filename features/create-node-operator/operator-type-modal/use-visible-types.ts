@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
@@ -9,7 +9,11 @@ import {
   useIdvtcProof,
 } from 'modules/web3';
 import { useMemo } from 'react';
-import { getOperatorTypeQuery, useShowFlags } from 'shared/hooks';
+import {
+  getOperatorTypeQuery,
+  useCanCreateNodeOperator,
+  useShowFlags,
+} from 'shared/hooks';
 
 export type VisibleType = {
   type: OPERATOR_TYPE;
@@ -56,9 +60,39 @@ export const useVisibleTypes = (): VisibleType[] => {
   const { data: idvtcProof } = useIdvtcProof();
   const { data: icsPaused } = useIcsPaused();
   const { data: idvtcPaused } = useIdvtcPaused();
+  const { creatableModules } = useCanCreateNodeOperator();
+
+  const isCsm02Creatable = creatableModules.includes(MODULE_NAME.CSM_02);
+  const isCsmCreatable = creatableModules.includes(MODULE_NAME.CSM);
 
   return useMemo(() => {
-    if (!ICS_APPLY_ENABLED) return [];
+    const csm02: VisibleType | null = isCsm02Creatable
+      ? {
+          type: OPERATOR_TYPE.CSM2_DEF,
+          href: PATH.CREATE,
+          query: getOperatorTypeQuery(OPERATOR_TYPE.CSM2_DEF),
+          label: 'Join now',
+          matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinCsm02,
+          primary: true,
+        }
+      : null;
+
+    const hasAnyProof = Boolean(icsProof?.proof || idvtcProof?.proof);
+    const def: VisibleType | null =
+      hasAnyProof || !isCsmCreatable
+        ? null
+        : {
+            type: OPERATOR_TYPE.CSM_DEF,
+            href: PATH.CREATE,
+            label: 'Join now',
+            matomoEvent:
+              MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless,
+            primary: true,
+          };
+
+    if (!ICS_APPLY_ENABLED || !isCsmCreatable) {
+      return [def, csm02].filter((x): x is VisibleType => x !== null);
+    }
 
     const ics = buildApplyEntry(
       OPERATOR_TYPE.CSM_ICS,
@@ -77,18 +111,14 @@ export const useVisibleTypes = (): VisibleType[] => {
       idvtcPaused,
     );
 
-    const hasAnyProof = Boolean(icsProof?.proof || idvtcProof?.proof);
-    const def: VisibleType | null = hasAnyProof
-      ? null
-      : {
-          type: OPERATOR_TYPE.CSM_DEF,
-          href: PATH.CREATE,
-          label: 'Join now',
-          matomoEvent:
-            MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless,
-          primary: true,
-        };
-
-    return [def, ics, idvtc].filter((x): x is VisibleType => x !== null);
-  }, [ICS_APPLY_ENABLED, icsProof, idvtcProof, icsPaused, idvtcPaused]);
+    return [def, ics, idvtc, csm02].filter((x): x is VisibleType => x !== null);
+  }, [
+    ICS_APPLY_ENABLED,
+    icsProof,
+    idvtcProof,
+    icsPaused,
+    idvtcPaused,
+    isCsm02Creatable,
+    isCsmCreatable,
+  ]);
 };

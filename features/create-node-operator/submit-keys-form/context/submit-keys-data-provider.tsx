@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import {
   KEY_DEPOSIT_QUEUE_BATCHES,
   KEY_ICS_PROOF,
@@ -6,6 +7,7 @@ import {
   KEY_STAKE_LIMIT,
   useCurveParameters,
   useDappStatus,
+  useDefaultCurveId,
   useEthereumBalance,
   useShareLimit,
   useShareLimitStatus,
@@ -26,16 +28,21 @@ import {
   useKeysAvailable,
 } from 'shared/hooks';
 import { type SubmitKeysFormNetworkData } from './types';
+import { useTargetModule } from './use-target-module';
 
 const useSubmitKeysFormNetworkData: NetworkData<
   SubmitKeysFormNetworkData
 > = () => {
-  const { data: status, isPending: isStatusLoading } = useSmStatus();
+  const targetModule = useTargetModule();
+  const isCsm02 = targetModule === MODULE_NAME.CSM_02;
+
+  const { data: status, isPending: isStatusLoading } =
+    useSmStatus(targetModule);
 
   const ethBalanceQuery = useEthereumBalance();
   const stethBalanceQuery = useStethBalance();
   const wstethBalanceQuery = useWstethBalance();
-  const shareLimitQuery = useShareLimit();
+  const shareLimitQuery = useShareLimit(undefined, targetModule);
   const maxStakeEthQuery = useStakeLimit();
 
   const ethBalance = ethBalanceQuery.data;
@@ -52,19 +59,29 @@ const useSubmitKeysFormNetworkData: NetworkData<
 
   const { address } = useDappStatus();
 
-  const { data: createData, isPending: isCurveIdPending } = useCreateCurveId();
-  const { curveId, proof } = createData ?? {};
+  // CSM_02 has no gates: always the module's single default curve.
+  const { data: csmCreateData, isPending: isCsmCurveIdPending } =
+    useCreateCurveId();
+  const { data: csm02CurveId, isPending: isCsm02CurveIdPending } =
+    useDefaultCurveId(MODULE_NAME.CSM_02);
+
+  const curveId = isCsm02 ? csm02CurveId : csmCreateData?.curveId;
+  const proof = isCsm02 ? undefined : csmCreateData?.proof;
+  const isCurveIdPending = isCsm02
+    ? isCsm02CurveIdPending
+    : isCsmCurveIdPending;
 
   const { data: curveParameters, isPending: isCurveParametersLoading } =
-    useCurveParameters(curveId);
+    useCurveParameters(curveId, undefined, targetModule);
 
-  const { data: shareLimitStatus } = useShareLimitStatus();
+  const { data: shareLimitStatus } = useShareLimitStatus(targetModule);
 
   const keysAvailable = useKeysAvailable({
     curveId,
     ethBalance,
     stethBalance,
     wstethBalance,
+    module: targetModule,
   });
 
   const invalidate = useInvalidate();
@@ -99,6 +116,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
 
   return {
     data: {
+      targetModule,
       address,
       isPaused: status?.isPaused,
       proof: proof?.proof,

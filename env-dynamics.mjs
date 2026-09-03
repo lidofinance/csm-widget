@@ -25,6 +25,9 @@ export const walletconnectProjectId = process.env.WALLETCONNECT_PROJECT_ID;
 /** @type boolean */
 export const ipfsMode = toBoolean(process.env.IPFS_MODE);
 
+/** @type boolean */
+export const isTestEnv = !toBoolean(process.env.IS_PROD);
+
 // Parse comma-separated URL list: trim whitespace, strip trailing slashes,
 // drop empty entries. Trailing `/` breaks some RPC providers (e.g. Infura).
 const parseUrlList = (val) =>
