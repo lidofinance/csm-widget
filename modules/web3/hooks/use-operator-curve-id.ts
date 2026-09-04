@@ -1,28 +1,35 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { CurveRef } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK } from '../web3-provider';
+import { OperatorRef } from '../operator-provider/types';
+import { useSmSDKByModule } from '../web3-provider';
 
 export const KEY_OPERATOR_CURVE_ID = ['operator-curve-id'];
 
-export const useOperatorCurveId = <TData = bigint>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: bigint) => TData,
+export const useOperatorCurveId = <TData = CurveRef>(
+  operator: OperatorRef | undefined,
+  select?: (data: CurveRef) => TData,
 ) => {
-  const { operator, core } = useSmSDK();
+  const sdk = useSmSDKByModule(operator?.module);
 
   return useQuery({
     queryKey: [
       ...KEY_OPERATOR_CURVE_ID,
-      { nodeOperatorId, module: core.moduleName },
+      operator && {
+        nodeOperatorId: operator.nodeOperatorId,
+        module: operator.module,
+      },
     ],
     ...STRATEGY_CONSTANT,
-    queryFn: () => {
-      invariant(nodeOperatorId !== undefined);
-      return operator.getCurveId(nodeOperatorId);
+    queryFn: async () => {
+      invariant(operator && sdk);
+      const curveId = await sdk.operator.getCurveId(operator.nodeOperatorId);
+      // Tag from the instance that answered, not from the argument.
+      const ref: CurveRef = { curveId, module: sdk.core.moduleName };
+      return ref;
     },
-    enabled: nodeOperatorId !== undefined,
+    enabled: !!operator && !!sdk,
     select,
   });
 };

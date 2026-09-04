@@ -18,7 +18,7 @@ export const GateSelector: FC = () => {
         return (
           <GateCard
             key={gate.gateName}
-            curveId={gate.curveId}
+            curve={gate.curve}
             checked={field.value === gate.gateName}
             name={field.name}
             value={gate.gateName}

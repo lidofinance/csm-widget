@@ -1,7 +1,9 @@
 import {
+  CurveRef,
   MODULE_NAME,
   OPERATOR_TYPE,
   OPERATOR_TYPE_INFO,
+  OperatorTypeOfModule,
   Proof,
 } from '@lidofinance/lido-csm-sdk';
 import {
@@ -20,10 +22,12 @@ import {
 } from 'react';
 import invariant from 'tiny-invariant';
 
+export type CreatableModule = MODULE_NAME.CSM | MODULE_NAME.CSM_02;
+export type CreatableType = OperatorTypeOfModule<CreatableModule>;
+
 export type CreateTypeValue = {
-  type: OPERATOR_TYPE;
-  module: MODULE_NAME.CSM | MODULE_NAME.CSM_02;
-  curveId: bigint | undefined;
+  type: CreatableType;
+  curve: CurveRef<CreatableModule> | undefined;
   proof: Proof | undefined;
   isPending: boolean;
 };
@@ -31,14 +35,9 @@ export type CreateTypeValue = {
 const CreateTypeContext = createContext<CreateTypeValue | undefined>(undefined);
 
 export const CreateTypeProvider: FC<
-  PropsWithChildren<{ type: OPERATOR_TYPE }>
+  PropsWithChildren<{ type: CreatableType }>
 > = ({ type, children }) => {
-  const targetModule =
-    OPERATOR_TYPE_INFO[type].module === MODULE_NAME.CSM_02
-      ? MODULE_NAME.CSM_02
-      : MODULE_NAME.CSM;
-
-  const defCurve = useDefaultCurveId(targetModule);
+  const defCurve = useDefaultCurveId(OPERATOR_TYPE_INFO[type].module);
   const icsCurve = useIcsCurveId();
   const idvtcCurve = useIdvtcCurveId();
   const { data: icsProof, isPending: isIcsProofPending } = useIcsProof();
@@ -62,12 +61,11 @@ export const CreateTypeProvider: FC<
   const value = useMemo<CreateTypeValue>(
     () => ({
       type,
-      module: targetModule,
-      curveId: curve.data,
+      curve: curve.data,
       proof: proof ?? undefined,
       isPending: curve.isPending || isProofPending,
     }),
-    [type, targetModule, curve.data, curve.isPending, proof, isProofPending],
+    [type, curve.data, curve.isPending, proof, isProofPending],
   );
 
   return (
@@ -84,3 +82,7 @@ export const useCreateType = (): CreateTypeValue => {
   invariant(value, 'useCreateType must be used inside CreateTypeProvider');
   return value;
 };
+
+/** Module of the type being created — every creatable type belongs to exactly one. */
+export const useCreateTypeModule = (): CreatableModule =>
+  OPERATOR_TYPE_INFO[useCreateType().type].module;

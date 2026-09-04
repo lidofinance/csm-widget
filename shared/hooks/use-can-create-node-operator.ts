@@ -67,12 +67,12 @@ export const useCanCreateNodeOperator = () => {
 
   const { data: icsProof, isPending: isIcsProofPending } = useIcsProof();
   const { data: isIcsPaused, isPending: isIcsPausedPending } = useIcsPaused();
-  const { data: icsCurveId, isPending: isIcsCurveIdPending } = useIcsCurveId();
+  const { data: icsCurve, isPending: isIcsCurveIdPending } = useIcsCurveId();
 
   const { data: idvtcProof, isPending: isIdvtcProofPending } = useIdvtcProof();
   const { data: isIdvtcPaused, isPending: isIdvtcPausedPending } =
     useIdvtcPaused();
-  const { data: idvtcCurveId, isPending: isIdvtcCurveIdPending } =
+  const { data: idvtcCurve, isPending: isIdvtcCurveIdPending } =
     useIdvtcCurveId();
 
   const creatableTypes = useMemo(
@@ -85,12 +85,17 @@ export const useCanCreateNodeOperator = () => {
           [MODULE_NAME.CSM_02]: csm02Status.data?.isPaused,
         },
         operatorModules: operators?.map(({ module }) => module) ?? [],
-        activeOperatorCurveId: nodeOperator?.curveId,
+        // The pairing rule compares CSM curve ids; an operator of another
+        // module must not collide with them.
+        activeOperatorCurveId:
+          nodeOperator?.module === MODULE_NAME.CSM
+            ? nodeOperator.curveId
+            : undefined,
         icsEligible: !isIcsPaused && !!icsProof?.proof && !icsProof.isConsumed,
         idvtcEligible:
           !isIdvtcPaused && !!idvtcProof?.proof && !idvtcProof.isConsumed,
-        icsCurveId,
-        idvtcCurveId,
+        icsCurveId: icsCurve?.curveId,
+        idvtcCurveId: idvtcCurve?.curveId,
       }),
     [
       isAccountActive,
@@ -98,13 +103,14 @@ export const useCanCreateNodeOperator = () => {
       csmStatus.data,
       csm02Status.data,
       operators,
+      nodeOperator?.module,
       nodeOperator?.curveId,
       isIcsPaused,
       icsProof,
       isIdvtcPaused,
       idvtcProof,
-      icsCurveId,
-      idvtcCurveId,
+      icsCurve,
+      idvtcCurve,
     ],
   );
 

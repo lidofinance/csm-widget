@@ -100,7 +100,7 @@ export const useShowFlags = (): ShowFlags => {
   const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
-  const { data: operatorType } = useOperatorType(nodeOperator?.nodeOperatorId);
+  const { data: operatorType } = useOperatorType(nodeOperator);
   const {
     canCreate: canCreateNO,
     creatableTypes,

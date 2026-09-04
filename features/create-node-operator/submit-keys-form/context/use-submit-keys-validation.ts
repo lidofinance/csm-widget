@@ -14,14 +14,14 @@ import {
 } from 'shared/hook-form/validation';
 import invariant from 'tiny-invariant';
 import { isAddress } from 'viem';
-import { useCreateType } from 'providers/create-type-provider';
+import { useCreateTypeModule } from 'providers/create-type-provider';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
 
 export const useSubmitKeysValidation = () => {
-  const { module: targetModule } = useCreateType();
+  const targetModule = useCreateTypeModule();
   const targetSdk = useSmSDKByModule(targetModule);
   const sdk = targetSdk?.depositData;
   const featureFlags = useFeatureFlags();

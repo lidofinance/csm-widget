@@ -1,4 +1,5 @@
-import { CURATED_GATES, GateItemEligibility } from '@lidofinance/lido-csm-sdk';
+import { CURATED_GATES } from '@lidofinance/lido-csm-sdk';
+import { CuratedGateEligibility } from 'modules/web3';
 import type { Address } from 'viem';
 
 export type CuratedOperatorFormInputType = {
@@ -13,6 +14,6 @@ export type CuratedOperatorFormInputType = {
 export type CuratedOperatorFormNetworkData = {
   ethBalance: bigint;
   address: Address;
-  availableGates: GateItemEligibility[];
+  availableGates: CuratedGateEligibility[];
   isPaused: boolean;
 };

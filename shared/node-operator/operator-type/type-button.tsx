@@ -1,27 +1,22 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { CurveRef } from '@lidofinance/lido-csm-sdk';
 import { ButtonProps } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-
 import { useCurveParameters } from 'modules/web3';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { ButtonStyle } from './styles';
 import { useOperatorTypeModalTrigger } from './use-operator-type-modal-trigger';
 
-export type TypeButtonBaseProps = ButtonProps & {
-  curveId: bigint | undefined;
-  module?: MODULE_NAME;
-};
+export type TypeButtonBaseProps = ButtonProps & { curve: CurveRef | undefined };
 
 export const TypeButton: FC<TypeButtonBaseProps> = ({
-  curveId,
-  module,
+  curve,
   onClick,
   ...rest
 }) => {
-  const { type, handleClick } = useOperatorTypeModalTrigger(curveId, module);
-  useCurveParameters(curveId, undefined, module); // pre-fetching
+  const { type, handleClick } = useOperatorTypeModalTrigger(curve);
+  useCurveParameters(curve); // pre-fetching
 
-  if (curveId === undefined) return null;
+  if (!curve) return null;
 
   return (
     <ButtonStyle onClick={handleClick} $variant={type} {...rest}>

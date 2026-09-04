@@ -1,11 +1,11 @@
-import { OPERATOR_TYPE, OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { IcsApplyButton } from 'features/ics/apply-button';
 import { ScoreChip } from 'features/ics/form-status/components/score-chip';
 import { IcsFormStatus, TypeStatus, useIcsState } from 'features/ics/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { useOperatorTypeCurveId } from 'shared/hooks';
+import { useOperatorTypeCurve } from 'shared/hooks';
 import { TypeBadgeButton } from 'shared/node-operator/operator-type';
 import { OptionCard } from './styles';
 
@@ -34,7 +34,7 @@ const renderStatusChip = (
 export const IcsTypeCard: FC = () => {
   const { typeStatus, data } = useIcsState();
   const chip = renderStatusChip(typeStatus, data?.status);
-  const curveId = useOperatorTypeCurveId(OPERATOR_TYPE.CSM_ICS);
+  const curve = useOperatorTypeCurve(OPERATOR_TYPE.CSM_ICS);
 
   return (
     <OptionCard>
@@ -42,8 +42,7 @@ export const IcsTypeCard: FC = () => {
         <Stack direction="row" spaceBetween align="center">
           <TypeBadgeButton
             displayType={OPERATOR_TYPE.CSM_ICS}
-            curveId={curveId}
-            module={OPERATOR_TYPE_INFO[OPERATOR_TYPE.CSM_ICS].module}
+            curve={curve}
             data-testid="operatorTypeBadge-ics"
           />
           {chip}

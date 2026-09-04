@@ -21,18 +21,17 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate, useKeysAvailable } from 'shared/hooks';
-import { useCreateType } from 'providers/create-type-provider';
+import {
+  useCreateType,
+  useCreateTypeModule,
+} from 'providers/create-type-provider';
 import { type SubmitKeysFormNetworkData } from './types';
 
 const useSubmitKeysFormNetworkData: NetworkData<
   SubmitKeysFormNetworkData
 > = () => {
-  const {
-    module: targetModule,
-    curveId,
-    proof,
-    isPending: isCurveIdPending,
-  } = useCreateType();
+  const { curve, proof, isPending: isCurveIdPending } = useCreateType();
+  const targetModule = useCreateTypeModule();
 
   const { data: status, isPending: isStatusLoading } =
     useSmStatus(targetModule);
@@ -58,16 +57,15 @@ const useSubmitKeysFormNetworkData: NetworkData<
   const { address } = useDappStatus();
 
   const { data: curveParameters, isPending: isCurveParametersLoading } =
-    useCurveParameters(curveId, undefined, targetModule);
+    useCurveParameters(curve);
 
   const { data: shareLimitStatus } = useShareLimitStatus(targetModule);
 
   const keysAvailable = useKeysAvailable({
-    curveId,
+    curve,
     ethBalance,
     stethBalance,
     wstethBalance,
-    module: targetModule,
   });
 
   const invalidate = useInvalidate();
@@ -109,7 +107,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
       stethBalance,
       wstethBalance,
       ethBalance,
-      curveId,
+      curve,
       curveParameters,
       maxStakeEth,
       shareLimit,

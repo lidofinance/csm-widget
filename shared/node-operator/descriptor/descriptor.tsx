@@ -1,17 +1,14 @@
 import { FC } from 'react';
 
-import {
-  getNodeOperatorRoles,
-  NodeOperatorShortInfo,
-} from '@lidofinance/lido-csm-sdk';
-import { useDappStatus } from 'modules/web3';
+import { getNodeOperatorRoles } from '@lidofinance/lido-csm-sdk';
+import { ModuleNodeOperator, useDappStatus } from 'modules/web3';
 import { CurveBadge } from '../curve-badge/curve-badge';
 import { RoleBadge } from '../role-badge/role-badge';
 import { DescriptorId } from './descriptor-id';
 import { DescriptorRolesStyle, DescriptorStyle } from './styles';
 
 type DescriptorProps = {
-  nodeOperator: NodeOperatorShortInfo;
+  nodeOperator: ModuleNodeOperator;
   hideType?: boolean;
 };
 
@@ -22,7 +19,7 @@ export const Descriptor: FC<DescriptorProps> = ({ nodeOperator, hideType }) => {
   return (
     <DescriptorStyle>
       <DescriptorId id={nodeOperator.nodeOperatorId} />
-      {!hideType && <CurveBadge curveId={nodeOperator.curveId} />}
+      {!hideType && <CurveBadge curve={nodeOperator} />}
       <DescriptorRolesStyle>
         {roles.map((role) => (
           <RoleBadge role={role} key={role} />

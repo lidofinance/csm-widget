@@ -40,8 +40,8 @@ export const useClaimIcsFlowResolver = (): FlowResolver<
       const isEmpty = !data.proof?.proof || data.proof.isConsumed;
 
       const isClaimed =
-        data.currentCurveId === data.newCurveId &&
-        data.currentCurveId !== undefined;
+        data.currentCurve?.curveId === data.newCurve?.curveId &&
+        !!data.currentCurve;
       if (isClaimed) {
         return { action: isEmpty ? 'claimed' : 'claimed-with-proof' };
       }

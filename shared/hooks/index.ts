@@ -15,7 +15,7 @@ export * from './use-confirm-modal';
 export * from './use-copy-to-clipboard';
 export * from './use-create-options';
 export * from './use-csm-constants';
-export * from './use-current-curve-id';
+export * from './use-current-curve';
 export * from './use-dismiss';
 export * from './use-eth-usd';
 export * from './use-exchange-rate';

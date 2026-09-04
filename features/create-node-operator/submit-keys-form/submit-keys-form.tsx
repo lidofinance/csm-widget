@@ -17,12 +17,12 @@ import { ReferrerInput } from './controls/referrer-input';
 import { SubmitButton } from './controls/submit-button';
 import { TokenSelect } from './controls/token-select';
 import { SubmitKeysFormInfo } from './submit-keys-form-info';
-import { useCreateType } from 'providers/create-type-provider';
+import { useCreateTypeModule } from 'providers/create-type-provider';
 
 export const SubmitKeysForm: FC = memo(() => {
   // The graph must read the module being created, not the active operator's
   // module — on /create there is no active operator to fall back on.
-  const { module: targetModule } = useCreateType();
+  const targetModule = useCreateTypeModule();
 
   return (
     <SubmitKeysDataProvider>

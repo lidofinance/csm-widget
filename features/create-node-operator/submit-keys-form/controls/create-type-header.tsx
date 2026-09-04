@@ -7,7 +7,7 @@ import { useCreateOptions } from 'shared/hooks';
 import { TypeBadgeButton } from 'shared/node-operator/operator-type';
 
 export const CreateTypeHeader: FC = () => {
-  const { type, curveId, module } = useCreateType();
+  const { type, curve } = useCreateType();
   const hasSteps = useCreateOptions().length > 1;
 
   return (
@@ -25,8 +25,7 @@ export const CreateTypeHeader: FC = () => {
         <Text size="xs">Node operator type:</Text>
         <TypeBadgeButton
           displayType={type}
-          curveId={curveId}
-          module={module}
+          curve={curve}
           data-testid="createTypeBadge"
         />
       </Stack>

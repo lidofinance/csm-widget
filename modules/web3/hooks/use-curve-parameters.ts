@@ -1,24 +1,26 @@
-import { CurveParameters, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { CurveParameters, CurveRef } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_IMMUTABLE } from 'consts';
 import invariant from 'tiny-invariant';
-import { useTargetSmSDK } from '../web3-provider';
+import { useSmSDKByModule } from '../web3-provider';
 
 export const useCurveParameters = <TData = CurveParameters>(
-  curveId: bigint | undefined,
+  curve: CurveRef | undefined,
   select?: (data: CurveParameters) => TData,
-  module?: MODULE_NAME,
 ) => {
-  const { targetModule, sdk } = useTargetSmSDK(module);
+  const sdk = useSmSDKByModule(curve?.module);
 
   return useQuery({
-    queryKey: ['curve-parameters', { curveId, module: targetModule }],
+    queryKey: [
+      'curve-parameters',
+      curve && { curveId: curve.curveId, module: curve.module },
+    ],
     ...STRATEGY_IMMUTABLE,
     queryFn: () => {
-      invariant(curveId !== undefined && sdk);
-      return sdk.parameters.getAll(curveId);
+      invariant(curve && sdk);
+      return sdk.parameters.getAll(curve.curveId);
     },
-    enabled: curveId !== undefined && !!sdk,
+    enabled: !!curve && !!sdk,
     select,
   });
 };

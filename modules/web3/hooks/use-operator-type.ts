@@ -1,8 +1,8 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useModuleOperatorTypeGetter } from 'shared/hooks';
+import { OperatorRef } from '../operator-provider/types';
 import { useOperatorCurveId } from './use-operator-curve-id';
 
-export const useOperatorType = (id: NodeOperatorId | undefined) => {
+export const useOperatorType = (operator: OperatorRef | undefined) => {
   const getOperatorType = useModuleOperatorTypeGetter();
-  return useOperatorCurveId(id, getOperatorType);
+  return useOperatorCurveId(operator, getOperatorType);
 };

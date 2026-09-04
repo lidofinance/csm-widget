@@ -19,11 +19,10 @@ export const DashboardSubtitle: FC = () => {
 };
 
 const CmSubtitle: FC = () => {
-  const {
-    nodeOperator: { nodeOperatorId, curveId },
-  } = useNodeOperator<true>();
+  const { nodeOperator } = useNodeOperator<true>();
+  const { nodeOperatorId } = nodeOperator;
   const { data: group } = useOperatorGroup(nodeOperatorId);
-  const metadata = useCurveMetadata(curveId);
+  const metadata = useCurveMetadata(nodeOperator);
 
   return (
     <Stack center gap="ms" selfJustify="center">

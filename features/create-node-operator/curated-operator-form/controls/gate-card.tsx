@@ -1,3 +1,4 @@
+import { CurveRef } from '@lidofinance/lido-csm-sdk';
 import { Check, Divider, InlineLoader, Text } from '@lidofinance/lido-ui';
 import {
   type ChangeEvent,
@@ -17,7 +18,7 @@ import { CurveBadge } from 'shared/node-operator/curve-badge/curve-badge';
 import styled from 'styled-components';
 
 type GateCardProps = {
-  curveId: bigint;
+  curve: CurveRef;
   checked: boolean;
   name: string;
   value: string;
@@ -25,12 +26,12 @@ type GateCardProps = {
   onBlur?: () => void;
 };
 
-export const GateCard: FC<GateCardProps> = ({ curveId, ...fieldProps }) => {
-  const { data: parameters } = useCurveParameters(curveId);
+export const GateCard: FC<GateCardProps> = ({ curve, ...fieldProps }) => {
+  const { data: parameters } = useCurveParameters(curve);
 
-  // curveId is a defined bigint, so the display type is always resolvable;
+  // curve is defined, so the display type is always resolvable;
   // the CUSTOM_CURVE fallback only narrows the type for TypeScript.
-  const type = useDisplayOperatorType(curveId) ?? CUSTOM_CURVE;
+  const type = useDisplayOperatorType(curve) ?? CUSTOM_CURVE;
   const metadata = OPERATOR_TYPE_METADATA[type];
   const loading = !parameters;
 

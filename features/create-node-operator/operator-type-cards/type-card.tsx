@@ -1,9 +1,8 @@
-import { OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { useOperatorTypeCurveId } from 'shared/hooks';
+import { useOperatorTypeCurve } from 'shared/hooks';
 import { TypeBadgeButton } from 'shared/node-operator/operator-type';
 import { LocalLink } from 'shared/navigate';
 import { Parameters } from './parameters';
@@ -12,7 +11,7 @@ import { VisibleType } from './use-visible-types';
 
 export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
   const metadata = OPERATOR_TYPE_METADATA[type.type];
-  const curveId = useOperatorTypeCurveId(type.type);
+  const curve = useOperatorTypeCurve(type.type);
 
   return (
     <OptionCard
@@ -23,8 +22,7 @@ export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
           <Stack direction="column" gap="md">
             <TypeBadgeButton
               displayType={type.type}
-              curveId={curveId}
-              module={OPERATOR_TYPE_INFO[type.type].module}
+              curve={curve}
               data-testid="operatorTypeCardBadge"
             />
             <Stack direction="column" gap="sm">
@@ -42,11 +40,7 @@ export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
           </Stack>
         </CardColumn>
         <CardDivider />
-        <CardColumn>
-          {curveId !== undefined && (
-            <Parameters curveId={curveId} type={type.type} />
-          )}
-        </CardColumn>
+        <CardColumn>{curve && <Parameters type={type.type} />}</CardColumn>
       </CardBody>
       <LocalLink href={type.href} matomoEvent={type.matomoEvent}>
         <Button

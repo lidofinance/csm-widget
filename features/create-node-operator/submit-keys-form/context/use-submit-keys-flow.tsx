@@ -36,7 +36,7 @@ import {
 import { renderCreateSuccess } from '../hooks/create-success-stage';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
-import { useCreateType } from 'providers/create-type-provider';
+import { useCreateTypeModule } from 'providers/create-type-provider';
 import { useSubmitKeysFormData } from './submit-keys-data-provider';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
@@ -48,13 +48,11 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFormNetworkData,
   SubmitKeysFlow
 > => {
-  const { module: targetModule } = useCreateType();
+  const targetModule = useCreateTypeModule();
   // targetModule narrows to CSM | CSM_02, but the overloads only discriminate
   // on literal module arguments.
   const sdk = useSmSDKByModule(targetModule) as CsmFamilySDK | undefined;
-  // A curveId means a different operator type per module, so resolve against
-  // the module being created.
-  const getOperatorType = useModuleOperatorTypeGetter(targetModule);
+  const getOperatorType = useModuleOperatorTypeGetter();
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
@@ -81,7 +79,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
         dkgFiles = [],
       } = input;
 
-      const type = getOperatorType(data.curveId);
+      const type = getOperatorType(data.curve);
       const isIdvtc = type === OPERATOR_TYPE.CSM_IDVTC;
       // Auto-init is possible only while the connected address keeps a
       // manager/rewards role on the new operator (survey API requirement).

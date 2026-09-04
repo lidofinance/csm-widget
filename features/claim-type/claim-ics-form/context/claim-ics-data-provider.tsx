@@ -10,8 +10,7 @@ import {
   useIcsCurveId,
   useIcsPaused,
   useIcsProof,
-  useModule,
-  useNodeOperatorId,
+  useNodeOperator,
   useOperatorCurveId,
   useOperatorIsOwner,
 } from 'modules/web3';
@@ -28,30 +27,32 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
   const [justClaimed, setJustClaimed] = useState(false);
 
   const { address } = useDappStatus();
-  const nodeOperatorId = useNodeOperatorId<true>();
+  const { nodeOperator } = useNodeOperator<true>();
+  const { nodeOperatorId } = nodeOperator;
 
   // A type can only be claimed onto an operator of the module that owns it.
-  const { isCSM } = useModule();
-  const csmOperatorId = isCSM ? nodeOperatorId : undefined;
+  const csmOperator =
+    nodeOperator.module === MODULE_NAME.CSM ? nodeOperator : undefined;
+  const isCSM = !!csmOperator;
 
   const { data: icsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
-  const currentCurveIdQuery = useOperatorCurveId(csmOperatorId);
+  const currentCurveQuery = useOperatorCurveId(csmOperator);
   const proofQuery = useIcsProof();
 
-  const currentCurveId = currentCurveIdQuery.data;
+  const currentCurve = currentCurveQuery.data;
   const proof = proofQuery.data;
 
-  const isCurrentCurveIdLoading = currentCurveIdQuery.isPending;
+  const isCurrentCurveIdLoading = currentCurveQuery.isPending;
   const isProofLoading = proofQuery.isPending;
 
   const { isPending: isIsOwnerLoading } = useOperatorIsOwner(nodeOperatorId);
   const canClaimCurve = useCanClaimICS();
 
-  const { data: newCurveId, isPending: isNewCurveIdLoading } = useIcsCurveId();
+  const { data: newCurve, isPending: isNewCurveIdLoading } = useIcsCurveId();
   const { data: currentParameters, isPending: isCurrentParametersLoading } =
-    useCurveParameters(currentCurveId, undefined, MODULE_NAME.CSM);
+    useCurveParameters(currentCurve);
   const { data: newParameters, isPending: isNewParametersLoading } =
-    useCurveParameters(newCurveId, undefined, MODULE_NAME.CSM);
+    useCurveParameters(newCurve);
 
   const invalidate = useInvalidate();
 
@@ -81,9 +82,9 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
       nodeOperatorId,
       address,
       icsPaused,
-      currentCurveId,
+      currentCurve,
       currentParameters,
-      newCurveId,
+      newCurve,
       newParameters,
       proof,
       canClaimCurve,

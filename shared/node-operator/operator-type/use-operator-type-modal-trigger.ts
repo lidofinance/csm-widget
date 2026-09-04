@@ -1,23 +1,19 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { CurveRef } from '@lidofinance/lido-csm-sdk';
 import { useCallback } from 'react';
-
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useDisplayOperatorType } from 'shared/hooks';
 import { trackMatomoEvent } from 'utils';
 import { useParametersModal } from '../parameters-modal';
 
-export const useOperatorTypeModalTrigger = (
-  curveId: bigint | undefined,
-  module: MODULE_NAME | undefined,
-) => {
+export const useOperatorTypeModalTrigger = (curve: CurveRef | undefined) => {
   const { openModal } = useParametersModal();
-  const type = useDisplayOperatorType(curveId, module);
+  const type = useDisplayOperatorType(curve);
 
   const handleClick = useCallback(() => {
-    if (curveId === undefined) return;
+    if (!curve) return;
     trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.clickOperatorTypeButton);
-    openModal({ curveId, module });
-  }, [openModal, curveId, module]);
+    openModal({ curve });
+  }, [openModal, curve]);
 
   return { type, handleClick };
 };

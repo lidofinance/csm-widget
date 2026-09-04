@@ -10,7 +10,7 @@ export const InviteContent: FC<{ invite: ModuleInvite }> = ({ invite }) => {
   return (
     <InviteContentStyle>
       <DescriptorId id={invite.nodeOperatorId} />
-      <CurveBadge curveId={invite.curveId} module={invite.module} inline />
+      <CurveBadge curve={invite} inline />
       <Tooltip
         placement="bottomLeft"
         title={

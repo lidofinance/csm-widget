@@ -1,5 +1,9 @@
-import { AddressProof, CurveParameters } from '@lidofinance/lido-csm-sdk';
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import {
+  AddressProof,
+  CurveParameters,
+  CurveRef,
+  NodeOperatorId,
+} from '@lidofinance/lido-csm-sdk';
 import { Address } from 'viem';
 
 export type ClaimIcsFormInputType = {
@@ -11,9 +15,9 @@ export type ClaimIcsFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   icsPaused: boolean;
   canClaimCurve: boolean;
-  currentCurveId: bigint;
+  currentCurve: CurveRef;
   currentParameters: CurveParameters;
-  newCurveId: bigint;
+  newCurve: CurveRef;
   newParameters: CurveParameters;
   proof: AddressProof;
   justClaimed?: boolean;

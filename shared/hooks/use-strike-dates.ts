@@ -1,7 +1,7 @@
 import {
   useCurveParameters,
   useFrameInfo,
-  useNodeOperatorId,
+  useNodeOperator,
   useOperatorCurveId,
 } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
@@ -18,9 +18,9 @@ type StrikeDatesGetter = (strikeIndex: number) => StrikeDates;
 export const useStrikeDates = <T extends number | undefined>(
   strikeIndex: T,
 ): T extends number ? StrikeDates : StrikeDatesGetter => {
-  const nodeOperatorId = useNodeOperatorId();
-  const { data: curveId } = useOperatorCurveId(nodeOperatorId);
-  const { data: params } = useCurveParameters(curveId);
+  const { nodeOperator } = useNodeOperator();
+  const { data: curve } = useOperatorCurveId(nodeOperator);
+  const { data: params } = useCurveParameters(curve);
   const { data: info } = useFrameInfo();
 
   const getDates: StrikeDatesGetter = useCallback(

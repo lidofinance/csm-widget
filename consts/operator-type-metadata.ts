@@ -1,6 +1,6 @@
 import {
+  CurveRef,
   getOperatorTypeByCurveId,
-  MODULE_NAME,
   OPERATOR_TYPE,
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
@@ -123,27 +123,22 @@ export const OPERATOR_TYPE_METADATA: Record<
   },
 };
 
-// Classify a curve id for display: gate-owned curves resolve to their
-// operator type, any other defined curve id is a Custom Curve.
+// Classify a curve for display: gate-owned curves resolve to their operator
+// type, any other defined curve is a Custom Curve.
 export const getDisplayOperatorType = (
   chainId: SUPPORTED_CHAINS,
-  moduleName: MODULE_NAME,
-  curveId: bigint | undefined,
+  curve: CurveRef | undefined,
 ): DisplayOperatorType | undefined => {
-  if (curveId === undefined) return undefined;
-  return (
-    getOperatorTypeByCurveId(chainId, { curveId, module: moduleName }) ??
-    CUSTOM_CURVE
-  );
+  if (!curve) return undefined;
+  return getOperatorTypeByCurveId(chainId, curve) ?? CUSTOM_CURVE;
 };
 
 // For components prefer the hooks from shared/hooks (useCurveMetadata et al.);
 // this pure variant is for non-reactive contexts like tx-stage callbacks.
 export const getCurveMetadata = (
   chainId: SUPPORTED_CHAINS,
-  moduleName: MODULE_NAME,
-  curveId: bigint | undefined,
+  curve: CurveRef | undefined,
 ) => {
-  const operatorType = getDisplayOperatorType(chainId, moduleName, curveId);
+  const operatorType = getDisplayOperatorType(chainId, curve);
   return operatorType ? OPERATOR_TYPE_METADATA[operatorType] : undefined;
 };

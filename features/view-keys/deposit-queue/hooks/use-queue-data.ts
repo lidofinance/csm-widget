@@ -5,6 +5,7 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import {
   useCurveParameters,
+  useDefaultCurveId,
   useDepositQueueBatches,
   useModule,
   useNodeOperatorId,
@@ -22,7 +23,7 @@ import type {
   SubmittingAllocation,
 } from './enhanced-types';
 import type { DepositQueueAnalysis } from './calculate-and-select-by-operator';
-import { useCurrentCurveId } from 'shared/hooks';
+import { useCurrentCurve } from 'shared/hooks';
 import { calculatePriorityPlacement } from './calculate-priority-placement';
 import { useDepositQueueModule } from './use-deposit-queue-module';
 
@@ -84,11 +85,20 @@ export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
     targetModule,
   );
 
-  const curveId = useCurrentCurveId(targetModule);
+  const currentCurve = useCurrentCurve();
+  // Viewing another module's queue: no operator there, so its default curve.
+  const { data: targetDefaultCurve } = useDefaultCurveId(
+    targetModule === MODULE_NAME.CSM_02 ? MODULE_NAME.CSM_02 : MODULE_NAME.CSM,
+  );
+  const curve =
+    currentCurve?.module === targetModule
+      ? currentCurve
+      : targetModule === MODULE_NAME.CM
+        ? undefined
+        : targetDefaultCurve;
   const { data: queueConfig } = useCurveParameters(
-    curveId,
+    curve,
     (params) => params.queueConfig,
-    targetModule,
   );
 
   const form = useFormContext<DepositDataInputType>();

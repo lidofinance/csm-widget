@@ -1,4 +1,4 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { CurveRef, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_IMMUTABLE } from 'consts';
 import invariant from 'tiny-invariant';
@@ -10,9 +10,14 @@ export const useIcsCurveId = () => {
   return useQuery({
     queryKey: ['ics-curve-id', { module: MODULE_NAME.CSM }],
     ...STRATEGY_IMMUTABLE,
-    queryFn: () => {
+    queryFn: async () => {
       invariant(sdk);
-      return sdk.icsGate.getCurveId();
+      const curveId = await sdk.icsGate.getCurveId();
+      const ref: CurveRef<MODULE_NAME.CSM> = {
+        curveId,
+        module: MODULE_NAME.CSM,
+      };
+      return ref;
     },
     enabled: !!sdk,
   });

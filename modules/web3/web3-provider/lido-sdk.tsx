@@ -97,10 +97,13 @@ export function useSmSDKByModule(
 ): LidoSDKCsm02 | undefined;
 export function useSmSDKByModule(module: MODULE_NAME.CM): LidoSDKCm | undefined;
 export function useSmSDKByModule(module: MODULE_NAME): SmSDK | undefined;
+export function useSmSDKByModule(
+  module: MODULE_NAME | undefined,
+): SmSDK | undefined;
 // eslint-disable-next-line func-style
-export function useSmSDKByModule(module: MODULE_NAME) {
+export function useSmSDKByModule(module: MODULE_NAME | undefined) {
   const { sm } = useLidoSDK();
-  return sm[module];
+  return module ? sm[module] : undefined;
 }
 
 /** Resolves the SDK for `module`, falling back to the active module. */
