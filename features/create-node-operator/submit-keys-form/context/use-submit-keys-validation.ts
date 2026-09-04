@@ -4,7 +4,7 @@ import {
   DISABLE_DEPOSIT_DATA_VALIDATION,
 } from 'config/feature-flags/types';
 import { validateDkgBatch } from 'features/idvtc/dkg/utils/validate-dkg-batch';
-import { useSmSDKByModule } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
   validateBondAmount,
@@ -22,7 +22,7 @@ import type {
 
 export const useSubmitKeysValidation = () => {
   const { targetModule } = useSubmitKeysFormData();
-  const targetSdk = useSmSDKByModule(targetModule);
+  const targetSdk = useSmSDK(targetModule);
   const sdk = targetSdk?.depositData;
   const featureFlags = useFeatureFlags();
 

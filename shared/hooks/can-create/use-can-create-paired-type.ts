@@ -1,6 +1,5 @@
 import { AddressProof, CurveRef, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { deployedModules } from 'consts';
-import { useDappStatus, useNodeOperator } from 'modules/web3';
+import { useDappStatus, useNodeOperator, useSmSDK } from 'modules/web3';
 import { useMemo } from 'react';
 import { canCreatePairedType, hasUnconsumedProof } from './rules';
 import { useHasOperatorIn } from './use-has-operator-in';
@@ -25,6 +24,7 @@ export const useCanCreatePairedType = ({
   const { nodeOperator } = useNodeOperator();
   const csm = useModuleOpen(MODULE_NAME.CSM);
   const csmOperator = useHasOperatorIn(MODULE_NAME.CSM);
+  const csmSdk = useSmSDK(MODULE_NAME.CSM);
 
   const canCreate =
     isAccountActive &&
@@ -45,7 +45,7 @@ export const useCanCreatePairedType = ({
   const isPending =
     csm.isPending ||
     csmOperator.isPending ||
-    (deployedModules.includes(MODULE_NAME.CSM) &&
+    (!!csmSdk &&
       (proof.isPending ||
         paused.isPending ||
         curve.isPending ||

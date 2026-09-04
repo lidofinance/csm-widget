@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { OperatorRef } from '../operator-provider/types';
-import { useSmSDKByModule } from '../web3-provider';
+import { useSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_CURVE_ID = ['operator-curve-id'];
 
@@ -11,7 +11,7 @@ export const useOperatorCurveId = <TData = CurveRef>(
   operator: OperatorRef | undefined,
   select?: (data: CurveRef) => TData,
 ) => {
-  const sdk = useSmSDKByModule(operator?.module);
+  const sdk = useSmSDK(operator?.module);
 
   return useQuery({
     queryKey: [

@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { config } from 'config';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDKByModule } from '../web3-provider';
+import { useSmSDK } from '../web3-provider';
 import { KEY_OPERATOR_INFO } from './use-operator-info';
 
 export const useOperatorShortInfo = <TData = NodeOperatorShortInfo>(
@@ -16,7 +16,7 @@ export const useOperatorShortInfo = <TData = NodeOperatorShortInfo>(
   module?: MODULE_NAME,
 ) => {
   const targetModule = module ?? config.module;
-  const sdk = useSmSDKByModule(targetModule);
+  const sdk = useSmSDK(targetModule);
 
   return useQuery({
     queryKey: [

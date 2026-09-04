@@ -1,5 +1,4 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { deployedModules } from 'consts';
 import { SmSDK } from './web3-provider';
 
 // Queried per module so one module's RPC failure cannot hide the others'
@@ -9,10 +8,9 @@ export const fetchAcrossModules = async <T>(
   label: string,
   fetch: (sdk: SmSDK) => Promise<T[]>,
 ): Promise<(T & { module: MODULE_NAME })[]> => {
-  const entries = deployedModules.flatMap((module) => {
-    const sdk = sm[module];
-    return sdk ? [{ module, sdk }] : [];
-  });
+  const entries = (Object.entries(sm) as [MODULE_NAME, SmSDK][])
+    .filter(([, sdk]) => !!sdk)
+    .map(([module, sdk]) => ({ module, sdk }));
   const settled = await Promise.allSettled(
     entries.map(({ sdk }) => fetch(sdk)),
   );

@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { Address } from 'viem';
-import { useSmSDK } from '../web3-provider';
+import { useActiveSmSDK } from '../web3-provider';
 import { CuratedGateEligibility } from './types';
 import { useDappStatus } from './use-dapp-status';
 
@@ -15,7 +15,7 @@ export const useCuratedGatesEligibility = <TData = CuratedGateEligibility[]>(
 ) => {
   const { address: dappAddress } = useDappStatus();
   const address = customAddress ?? dappAddress;
-  const sdk = useSmSDK(MODULE_NAME.CM);
+  const sdk = useActiveSmSDK(MODULE_NAME.CM);
 
   return useQuery({
     queryKey: [...KEY_CURATED_GATES_PROOF, { address, module: MODULE_NAME.CM }],

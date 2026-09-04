@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useModule, useSmSDK } from 'modules/web3';
+import { useActiveSmSDK, useModule } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -25,7 +25,7 @@ export const useClaimIcsFlowResolver = (): FlowResolver<
   ClaimIcsFormNetworkData,
   ClaimIcsFlow
 > => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
+  const sdk = useActiveSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required for this operation');
   const { isCSM } = useModule();
   const confirmClaimIcs = useConfirmClaimIcsModal();

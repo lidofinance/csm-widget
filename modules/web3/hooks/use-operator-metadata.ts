@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 
 import invariant from 'tiny-invariant';
-import { useSmSDK } from '../web3-provider';
+import { useActiveSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_METADATA = ['operator-metadata'];
 
@@ -15,7 +15,7 @@ export const useOperatorMetadata = <TData = OperatorMetadata>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: OperatorMetadata) => TData,
 ) => {
-  const sdk = useSmSDK(MODULE_NAME.CM);
+  const sdk = useActiveSmSDK(MODULE_NAME.CM);
 
   return useQuery({
     queryKey: [

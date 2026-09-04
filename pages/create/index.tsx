@@ -1,5 +1,6 @@
+import { config } from 'config';
 import { PATH } from 'consts/urls';
-import { deployedModules, isCsmFamilyModule } from 'consts/modules';
+import { isCsmFamilyModule } from 'consts/modules';
 import {
   CreateNodeOperatorPage,
   SelectTypePage,
@@ -14,8 +15,7 @@ import { getProps } from 'utilsApi';
 const CreateIndex = () => {
   const correctPath = useCorrectPath(PATH.CREATE);
 
-  if (!deployedModules.some(isCsmFamilyModule))
-    return <CreateNodeOperatorPage />;
+  if (!isCsmFamilyModule(config.module)) return <CreateNodeOperatorPage />;
   // A hard load of /create bypasses the LocalLink/useNavigate redirect, so
   // send a wallet with exactly one creatable type straight to it here too.
   if (correctPath !== PATH.CREATE) return <Navigate path={correctPath} />;
