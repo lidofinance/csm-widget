@@ -11,6 +11,11 @@ export const ROLES_METADATA = {
     title: 'manager',
     capitalizedTitle: 'Manager',
   },
+  [ROLES.CLAIMER]: {
+    short: 'C',
+    title: 'claimer',
+    capitalizedTitle: 'Claimer',
+  },
 };
 
 export const getRoleTitle = (role: ROLES, capitalized = false) => {
