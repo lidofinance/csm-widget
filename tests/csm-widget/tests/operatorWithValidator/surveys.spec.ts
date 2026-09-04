@@ -25,7 +25,7 @@ test.describe('Surveys. Sign in', { tag: [Tags.matomo] }, async () => {
     await openedPage?.close();
   });
 
-  test('Should open VaNOM dashboard after click', async ({ widgetService }) => {
+  test('Should open VaNOM dashboard', async ({ widgetService }) => {
     const { surveysPage } = widgetService;
 
     await test.step('Link is visible with correct href', async () => {

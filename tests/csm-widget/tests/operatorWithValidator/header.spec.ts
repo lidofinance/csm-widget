@@ -11,7 +11,7 @@ test.describe('Header. Buttons.', { tag: [Tags.matomo] }, async () => {
     await widgetService.dashboardPage.open();
   });
 
-  test('Should open parameters modal after click to operator type button', async ({
+  test('Should open parameters modal from operator type button', async ({
     widgetService,
   }) => {
     const { header, parametersModal } = widgetService;
@@ -33,7 +33,7 @@ test.describe('Header. Buttons.', { tag: [Tags.matomo] }, async () => {
     });
   });
 
-  test('Should open switch modal after click to switch operator button', async ({
+  test('Should open switch modal from switch operator button', async ({
     widgetService,
   }) => {
     const { header } = widgetService;
@@ -55,7 +55,7 @@ test.describe('Header. Buttons.', { tag: [Tags.matomo] }, async () => {
     });
   });
 
-  test('Should open account modal after click to wallet button', async ({
+  test('Should open account modal from wallet button', async ({
     widgetService,
   }) => {
     const { header, walletModal } = widgetService;

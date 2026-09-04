@@ -19,7 +19,7 @@ test.describe('Legal disclaimer.', { tag: [Tags.matomo] }, async () => {
     await openedPage?.close();
   });
 
-  test('Should open Privacy Notice after click', async ({ widgetService }) => {
+  test('Should open Privacy Notice', async ({ widgetService }) => {
     const { legalDisclaimerElement } = widgetService;
 
     await test.step('Link is visible with correct href', async () => {

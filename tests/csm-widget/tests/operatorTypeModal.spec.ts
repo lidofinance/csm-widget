@@ -107,7 +107,7 @@ test.describe('New operator. Operator type modal', async () => {
   );
 
   test(
-    'Should open operator types docs after click',
+    'Should open operator types docs',
     { tag: [Tags.matomo] },
     async ({ widgetService, widgetConfig }) => {
       const modal = widgetService.mainPage.operatorTypeModal;
