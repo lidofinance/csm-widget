@@ -4,6 +4,7 @@ export class FooterElement {
   page: Page;
   root: Locator;
 
+  lidoHomeLink: Locator;
   termsOfUseLink: Locator;
   privacyNoticeLink: Locator;
   feedbackFormLink: Locator;
@@ -14,6 +15,7 @@ export class FooterElement {
     this.page = page;
     this.root = this.page.locator('footer');
 
+    this.lidoHomeLink = this.root.getByTestId('lidoHomeLink');
     this.termsOfUseLink = this.root.getByTestId('footerTermsOfUseLink');
     this.privacyNoticeLink = this.root.getByTestId('footerPrivacyNoticeLink');
     this.feedbackFormLink = this.root.getByTestId('footerFeedbackFormLink');

@@ -14,7 +14,7 @@ const OPERATOR_DESCRIPTION = 'Test description';
 
 test.describe(
   'Create curated operator. Transaction.',
-  { tag: [Tags.forked, Tags.smoke] },
+  { tag: [Tags.forked, Tags.smoke, Tags.matomo] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -54,12 +54,12 @@ test.describe(
       if (snapshotId) await evmNode.revert(snapshotId);
     });
 
-    test('Should create curated operator and send Matomo form events', async ({
+    test('Should create operator and show success', async ({
       widgetService,
     }) => {
       const { step4 } = widgetService.createNodeOperatorPage;
 
-      await test.step('Click "Create Node Operator" and check Matomo start event', async () => {
+      await test.step('Click "Create Node Operator"', async () => {
         await Promise.all([
           matomoEventService.waitForEvent(
             'e_n',
@@ -69,7 +69,7 @@ test.describe(
         ]);
       });
 
-      await test.step('Confirm transaction and check Matomo success event', async () => {
+      await test.step('Confirm transaction', async () => {
         await widgetService.page.waitForSelector(
           'text=Creating Curated Node Operator',
           { timeout: STAGE_WAIT_TIMEOUT },

@@ -123,7 +123,7 @@ test.describe('Settings. Meta data.', { tag: [Tags.forked] }, () => {
       186,
       'Should update metadata on the page and dashboard after transaction',
     ),
-    { tag: [Tags.smoke] },
+    { tag: [Tags.smoke, Tags.matomo] },
     async ({ widgetService }) => {
       const { metadataPage } = widgetService.settingsPage;
       const { txModal } = widgetService.settingsPage;
@@ -134,7 +134,7 @@ test.describe('Settings. Meta data.', { tag: [Tags.forked] }, () => {
       const newName = `Test ${uid} !@#$`;
       const newDescription = `Desc ${uid} 123`;
 
-      await test.step('Fill new name and description, submit and check Matomo start event', async () => {
+      await test.step('Fill new name and description and submit', async () => {
         await metadataPage.nameInput.fill(newName);
         await metadataPage.descriptionInput.fill(newDescription);
         await expect(metadataPage.saveButton).toBeEnabled();
@@ -147,7 +147,7 @@ test.describe('Settings. Meta data.', { tag: [Tags.forked] }, () => {
         ]);
       });
 
-      await test.step('Confirm transaction and check Matomo success event', async () => {
+      await test.step('Confirm transaction', async () => {
         await widgetService.page.waitForSelector(
           'text=You are updating metadata',
           { timeout: STAGE_WAIT_TIMEOUT },

@@ -125,6 +125,7 @@ test.describe(
 
     test(
       qase(175, 'Should display Bond & Rewards tabs and navigate correctly'),
+      { tag: [Tags.matomo] },
       async ({ widgetService }) => {
         await navigation.navItem('Bond & Rewards').click();
         await widgetService.page.waitForURL(/\/bond/);
@@ -139,7 +140,7 @@ test.describe(
         });
 
         for (const { title, url, event } of BOND_TABS) {
-          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+          await test.step(`Navigate to "${title}" tab`, async () => {
             await Promise.all([
               matomoEventService.waitForEvent('e_n', event),
               navigation.switcherTab(title).click(),
@@ -152,6 +153,7 @@ test.describe(
 
     test(
       qase(176, 'Should display Settings tabs and navigate correctly'),
+      { tag: [Tags.matomo] },
       async ({ widgetService }) => {
         await navigation.navItem('Settings').click();
         await widgetService.page.waitForURL(/\/settings/);
@@ -166,7 +168,7 @@ test.describe(
         });
 
         for (const { title, url, event } of SETTINGS_TABS) {
-          await test.step(`Navigate to "${title}" tab and check Matomo event`, async () => {
+          await test.step(`Navigate to "${title}" tab`, async () => {
             await Promise.all([
               matomoEventService.waitForEvent('e_n', event),
               navigation.switcherTab(title).click(),

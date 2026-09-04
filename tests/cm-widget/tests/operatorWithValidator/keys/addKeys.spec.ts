@@ -9,7 +9,7 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
   'Operator with validator. Keys. Add keys.',
-  { tag: [Tags.forked] },
+  { tag: [Tags.forked, Tags.matomo] },
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -35,7 +35,7 @@ test.describe(
         const { submitPage } = widgetService.keysPage;
         const keys = keysGeneratorService.generateKeys();
 
-        await test.step('Submit keys and check Matomo start event', async () => {
+        await test.step('Submit keys', async () => {
           await Promise.all([
             matomoEventService.waitForEvent(
               'e_n',
@@ -45,7 +45,7 @@ test.describe(
           ]);
         });
 
-        await test.step('Confirm transaction and check Matomo success event', async () => {
+        await test.step('Confirm transaction', async () => {
           await Promise.all([
             matomoEventService.waitForEvent(
               'e_n',

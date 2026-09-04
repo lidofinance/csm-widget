@@ -18,6 +18,7 @@ export const FiltersAndExport: FC = () => {
   return (
     <SectionWrapper>
       <ButtonIcon
+        data-testid="rewardsHistoryExportButton"
         icon={<DownloadIcon />}
         size="xs"
         variant="outlined"

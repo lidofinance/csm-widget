@@ -2,11 +2,8 @@ import { expect, Locator, Page } from '@playwright/test';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
+import { FooterElement } from 'tests/csm-widget/pages/elements/common/element.footer';
 import { test } from '../test.fixture';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
-import { FooterElement } from 'tests/cm-widget/pages/elements/common/element.footer';
-
-test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 type FooterLinkCase = {
   name: string;
@@ -17,42 +14,48 @@ type FooterLinkCase = {
 
 const FOOTER_LINKS: FooterLinkCase[] = [
   {
+    name: 'Lido logo',
+    link: (f) => f.lidoHomeLink,
+    event: 'csm_widget_lido_home_link',
+    url: 'lido.fi',
+  },
+  {
     name: 'Terms of Use',
     link: (f) => f.termsOfUseLink,
-    event: 'cm_widget_footer_terms_of_use_link',
+    event: 'csm_widget_footer_terms_of_use_link',
     url: 'lido.fi/terms-of-use',
   },
   {
     name: 'Privacy Notice',
     link: (f) => f.privacyNoticeLink,
-    event: 'cm_widget_footer_privacy_notice_link',
+    event: 'csm_widget_footer_privacy_notice_link',
     url: 'lido.fi/privacy-notice',
   },
   {
     name: 'Feedback form',
     link: (f) => f.feedbackFormLink,
-    event: 'cm_widget_footer_feedback_form_link',
+    event: 'csm_widget_footer_feedback_form_link',
     url: 'forms.gle',
   },
   {
     name: 'Discord',
     link: (f) => f.discordLink,
-    event: 'cm_widget_footer_discord_link',
+    event: 'csm_widget_footer_discord_link',
     url: 'discord.com/invite/lido',
   },
   {
     name: 'version',
     link: (f) => f.versionLink,
-    event: 'cm_widget_footer_version_link',
+    event: 'csm_widget_footer_version_link',
     url: 'github.com/lidofinance/csm-widget',
   },
 ];
 
-test.describe('Footer. Links.', { tag: [Tags.forked, Tags.matomo] }, () => {
+test.describe('Footer. Links.', { tag: [Tags.matomo] }, async () => {
   let matomoEventService: MatomoService;
   let openedPage: Page | undefined;
 
-  test.beforeEach(async ({ widgetConfig, widgetService }) => {
+  test.beforeEach(async ({ widgetService, widgetConfig }) => {
     matomoEventService = new MatomoService(widgetService.page, widgetConfig);
     await widgetService.dashboardPage.open();
   });

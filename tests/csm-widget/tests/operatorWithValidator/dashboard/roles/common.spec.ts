@@ -1,8 +1,9 @@
 import { test } from '../../../test.fixture';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { Tags } from 'tests/shared/consts/common.const';
 
-test.describe('Dashboard. Roles', async () => {
+test.describe('Dashboard. Roles', { tag: [Tags.matomo] }, async () => {
   let matomoEventService: MatomoService;
 
   test.beforeEach(async ({ widgetService, widgetConfig }) => {
