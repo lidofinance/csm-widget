@@ -1,15 +1,15 @@
-import { CREATE_PATH_BY_TYPE, PATH } from 'consts/urls';
+import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Eth as EthIcon, Plus as PlusIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
+import { ReactComponent as DvtIcon } from 'assets/icons/file-2.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
-import { ReactComponent as DvtIcon } from 'assets/icons/file-2.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import {
@@ -48,7 +48,12 @@ const routes: Route[] = [
     name: 'Create Operator',
     path: PATH.CREATE,
     icon: <PlusIcon />,
-    subPaths: Object.values(CREATE_PATH_BY_TYPE),
+    subPaths: [
+      PATH.CREATE_0x01,
+      PATH.CREATE_ICS,
+      PATH.CREATE_IDVTC,
+      PATH.CREATE_0x02,
+    ],
     showRules: ['CAN_CREATE'],
   },
   {

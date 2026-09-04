@@ -22,7 +22,12 @@ import { useCallback, useMemo } from 'react';
 import {
   useCanClaimICS,
   useCanClaimIDVTC,
+  useCanCreate0x01,
+  useCanCreate0x02,
+  useCanCreateICS,
+  useCanCreateIDVTC,
   useCanCreateNodeOperator,
+  useCreateOptions,
   useIcsApplyEnabled,
 } from 'shared/hooks';
 import { Address, isAddressEqual } from 'viem';
@@ -101,11 +106,12 @@ export const useShowFlags = (): ShowFlags => {
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
   const { data: operatorType } = useOperatorType(nodeOperator);
-  const {
-    canCreate: canCreateNO,
-    creatableTypes,
-    createOptions,
-  } = useCanCreateNodeOperator();
+  const { canCreate: canCreateNO } = useCanCreateNodeOperator();
+  const { canCreate: canCreate0x01 } = useCanCreate0x01();
+  const { canCreate: canCreate0x02 } = useCanCreate0x02();
+  const { canCreate: canCreateICS } = useCanCreateICS();
+  const { canCreate: canCreateIDVTC } = useCanCreateIDVTC();
+  const createOptions = useCreateOptions();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
   const { module, isCsmFamily } = useModule();
@@ -118,10 +124,10 @@ export const useShowFlags = (): ShowFlags => {
       ['NOT_NODE_OPERATOR']: !nodeOperator,
       ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
       ['CAN_CREATE']: !!canCreateNO,
-      ['CAN_CREATE_0X01']: creatableTypes.includes(OPERATOR_TYPE.CSM_DEF),
-      ['CAN_CREATE_ICS']: creatableTypes.includes(OPERATOR_TYPE.CSM_ICS),
-      ['CAN_CREATE_IDVTC']: creatableTypes.includes(OPERATOR_TYPE.CSM_IDVTC),
-      ['CAN_CREATE_0X02']: creatableTypes.includes(OPERATOR_TYPE.CSM2_DEF),
+      ['CAN_CREATE_0X01']: canCreate0x01,
+      ['CAN_CREATE_ICS']: canCreateICS,
+      ['CAN_CREATE_IDVTC']: canCreateIDVTC,
+      ['CAN_CREATE_0X02']: canCreate0x02,
       ['HAS_KEYS']: !!info?.totalAddedKeys,
       ['HAS_MANAGER_ROLE']:
         isAccountActive && isManagerRole(nodeOperator, address),
@@ -154,7 +160,10 @@ export const useShowFlags = (): ShowFlags => {
       isAccountActive,
       nodeOperator,
       canCreateNO,
-      creatableTypes,
+      canCreate0x01,
+      canCreate0x02,
+      canCreateICS,
+      canCreateIDVTC,
       info?.totalAddedKeys,
       address,
       invites?.length,
