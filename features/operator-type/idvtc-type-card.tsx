@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE, OPERATOR_TYPE_MODULE } from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE, OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { IdvtcApplyButton } from 'features/idvtc/apply-button';
 import { ScoreChip } from 'features/idvtc/form-status/components/score-chip';
@@ -47,7 +47,7 @@ export const IdvtcTypeCard: FC = () => {
           <TypeBadgeButton
             displayType={OPERATOR_TYPE.CSM_IDVTC}
             curveId={curveId}
-            module={OPERATOR_TYPE_MODULE[OPERATOR_TYPE.CSM_IDVTC]}
+            module={OPERATOR_TYPE_INFO[OPERATOR_TYPE.CSM_IDVTC].module}
             data-testid="operatorTypeBadge-idvtc"
           />
           {chip}

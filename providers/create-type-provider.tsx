@@ -1,7 +1,7 @@
 import {
   MODULE_NAME,
   OPERATOR_TYPE,
-  OPERATOR_TYPE_MODULE,
+  OPERATOR_TYPE_INFO,
   Proof,
 } from '@lidofinance/lido-csm-sdk';
 import {
@@ -34,7 +34,7 @@ export const CreateTypeProvider: FC<
   PropsWithChildren<{ type: OPERATOR_TYPE }>
 > = ({ type, children }) => {
   const targetModule =
-    OPERATOR_TYPE_MODULE[type] === MODULE_NAME.CSM_02
+    OPERATOR_TYPE_INFO[type].module === MODULE_NAME.CSM_02
       ? MODULE_NAME.CSM_02
       : MODULE_NAME.CSM;
 

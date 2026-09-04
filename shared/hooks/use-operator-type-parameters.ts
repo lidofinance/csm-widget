@@ -1,7 +1,7 @@
 import {
   CurveParameters,
   OPERATOR_TYPE,
-  OPERATOR_TYPE_MODULE,
+  OPERATOR_TYPE_INFO,
 } from '@lidofinance/lido-csm-sdk';
 import { useCurveParameters } from 'modules/web3';
 import { useOperatorTypeCurveId } from './use-operator-type-metadata';
@@ -14,5 +14,5 @@ export const useOperatorTypeParameters = <TData = CurveParameters>(
   useCurveParameters(
     useOperatorTypeCurveId(type),
     select,
-    type && OPERATOR_TYPE_MODULE[type],
+    type && OPERATOR_TYPE_INFO[type].module,
   );

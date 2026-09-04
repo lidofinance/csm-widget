@@ -17,7 +17,12 @@ export const useModuleOperatorTypeGetter = (module?: MODULE_NAME) => {
   const targetModule = module ?? activeModule;
   return useCallback(
     (curveId: bigint | undefined) =>
-      getOperatorTypeByCurveId(defaultChain, targetModule, curveId),
+      curveId === undefined
+        ? undefined
+        : getOperatorTypeByCurveId(defaultChain, {
+            curveId,
+            module: targetModule,
+          }),
     [defaultChain, targetModule],
   );
 };

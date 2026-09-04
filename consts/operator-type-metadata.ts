@@ -131,7 +131,10 @@ export const getDisplayOperatorType = (
   curveId: bigint | undefined,
 ): DisplayOperatorType | undefined => {
   if (curveId === undefined) return undefined;
-  return getOperatorTypeByCurveId(chainId, moduleName, curveId) ?? CUSTOM_CURVE;
+  return (
+    getOperatorTypeByCurveId(chainId, { curveId, module: moduleName }) ??
+    CUSTOM_CURVE
+  );
 };
 
 // For components prefer the hooks from shared/hooks (useCurveMetadata et al.);

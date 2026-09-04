@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE_MODULE } from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { FC } from 'react';
@@ -24,7 +24,7 @@ export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
             <TypeBadgeButton
               displayType={type.type}
               curveId={curveId}
-              module={OPERATOR_TYPE_MODULE[type.type]}
+              module={OPERATOR_TYPE_INFO[type.type].module}
               data-testid="operatorTypeCardBadge"
             />
             <Stack direction="column" gap="sm">

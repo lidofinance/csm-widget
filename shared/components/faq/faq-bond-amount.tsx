@@ -1,7 +1,7 @@
 import {
   CurveParameters,
   OPERATOR_TYPE,
-  OPERATOR_TYPE_MODULE,
+  OPERATOR_TYPE_INFO,
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { useCurveParameters } from 'modules/web3';
@@ -33,7 +33,7 @@ export const FaqBondAmount: FC<Props> = ({ type, second }) => {
   const { data, isPending } = useCurveParameters(
     curveId,
     select,
-    type && OPERATOR_TYPE_MODULE[type],
+    type && OPERATOR_TYPE_INFO[type].module,
   );
 
   return isPending ? (

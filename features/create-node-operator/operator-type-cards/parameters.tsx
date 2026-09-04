@@ -1,7 +1,7 @@
 import {
   MODULE_NAME,
   OPERATOR_TYPE,
-  OPERATOR_TYPE_MODULE,
+  OPERATOR_TYPE_INFO,
 } from '@lidofinance/lido-csm-sdk';
 import { InlineLoader, Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
@@ -16,7 +16,7 @@ export const Parameters: FC<{ curveId: bigint; type: OPERATOR_TYPE }> = ({
   type,
 }) => {
   const metadata = OPERATOR_TYPE_METADATA[type];
-  const targetModule = OPERATOR_TYPE_MODULE[type] ?? MODULE_NAME.CSM;
+  const targetModule = OPERATOR_TYPE_INFO[type].module;
   const wcType = targetModule === MODULE_NAME.CSM_02 ? '0x02' : '0x01';
   const { data: parameters } = useCurveParameters(
     curveId,

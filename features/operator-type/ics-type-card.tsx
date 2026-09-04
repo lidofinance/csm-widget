@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE, OPERATOR_TYPE_MODULE } from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE, OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { IcsApplyButton } from 'features/ics/apply-button';
 import { ScoreChip } from 'features/ics/form-status/components/score-chip';
@@ -43,7 +43,7 @@ export const IcsTypeCard: FC = () => {
           <TypeBadgeButton
             displayType={OPERATOR_TYPE.CSM_ICS}
             curveId={curveId}
-            module={OPERATOR_TYPE_MODULE[OPERATOR_TYPE.CSM_ICS]}
+            module={OPERATOR_TYPE_INFO[OPERATOR_TYPE.CSM_ICS].module}
             data-testid="operatorTypeBadge-ics"
           />
           {chip}
