@@ -14,7 +14,12 @@ import {
 } from 'modules/web3/hooks';
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren, useMemo } from 'react';
-import { useCanClaimICS, useCanClaimIDVTC, useDismiss } from 'shared/hooks';
+import {
+  useCanClaimICS,
+  useCanClaimIDVTC,
+  useDismiss,
+  useShowFlags,
+} from 'shared/hooks';
 import { useAlertActions } from './alert-provider';
 import { AlertClaimIcs } from './components/alert-claim-ics';
 import { AlertClaimIdvtc } from './components/alert-claim-idvtc';
@@ -29,6 +34,7 @@ import { useAlertWatcher } from './use-alert-watcher';
 export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { closeAlert } = useAlertActions();
   const { isCsmFamily } = useModule();
+  const { IS_NODE_OPERATOR } = useShowFlags();
 
   const { isSupportedChain } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
@@ -72,30 +78,37 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useAlertWatcher({
     component: AlertRequestToExit,
-    shouldShow: !!hasRequestsToExit,
+    shouldShow: IS_NODE_OPERATOR && !!hasRequestsToExit,
     loading: isKeysLoading,
   });
 
   useAlertWatcher({
     component: AlertNomalizeQueue,
-    shouldShow: isCsmFamily && !!normalizeQueue,
+    shouldShow: IS_NODE_OPERATOR && isCsmFamily && !!normalizeQueue,
   });
 
   useAlertWatcher({
     component: AlertLockedBond,
     shouldShow:
-      !!balance?.locked && !isLockExpired && route !== PATH.BOND_UNLOCK,
+      IS_NODE_OPERATOR &&
+      !!balance?.locked &&
+      !isLockExpired &&
+      route !== PATH.BOND_UNLOCK,
   });
 
   useAlertWatcher({
     component: AlertExpiredLockedBond,
     shouldShow:
-      !!balance?.locked && !!isLockExpired && route !== PATH.BOND_UNLOCK,
+      IS_NODE_OPERATOR &&
+      !!balance?.locked &&
+      !!isLockExpired &&
+      route !== PATH.BOND_UNLOCK,
   });
 
   useAlertWatcher({
     component: AlertClaimIcs,
     shouldShow:
+      IS_NODE_OPERATOR &&
       canClaimICS &&
       !canClaimIDVTC &&
       route !== PATH.TYPE_ICS_CLAIM &&
@@ -105,13 +118,18 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   useAlertWatcher({
     component: AlertClaimIdvtc,
     shouldShow:
-      canClaimIDVTC && route !== PATH.TYPE_IDVTC_CLAIM && route !== PATH.CREATE,
+      IS_NODE_OPERATOR &&
+      canClaimIDVTC &&
+      route !== PATH.TYPE_IDVTC_CLAIM &&
+      route !== PATH.CREATE,
   });
 
   useAlertWatcher({
     component: AlertWrongFeeRecipient,
     shouldShow:
-      !!keysWithWrongFeeRecipient?.length && !isFeeRecipientAlertDismissed,
+      IS_NODE_OPERATOR &&
+      !!keysWithWrongFeeRecipient?.length &&
+      !isFeeRecipientAlertDismissed,
     props: useMemo(
       () => ({
         pubkeys: keysWithWrongFeeRecipient || [],

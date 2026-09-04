@@ -103,7 +103,10 @@ const routes: Route[] = [
     name: 'Inbox Requests',
     path: PATH.SETTINGS_INBOX,
     icon: <GearIcon />,
-    showRules: [['HAS_INVITES', 'NOT_NODE_OPERATOR']],
+    showRules: [
+      ['HAS_INVITES', 'NOT_NODE_OPERATOR'],
+      ['HAS_INVITES', 'HAS_CLAIMER_ROLE'],
+    ],
     suffix: <CounterInvites />,
   },
   {

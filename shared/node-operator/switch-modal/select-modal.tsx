@@ -50,6 +50,9 @@ export const SelectModal: ModalComponentType<{
         <StyledStackItem>
           <RoleBadge role={ROLES.MANAGER} /> Manager Address role
         </StyledStackItem>
+        <StyledStackItem>
+          <RoleBadge role={ROLES.CLAIMER} /> Rewards claimer role
+        </StyledStackItem>
       </StyledStack>
     </Modal>
   );

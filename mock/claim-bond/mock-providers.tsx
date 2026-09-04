@@ -37,7 +37,7 @@ import { type ClaimBondScenarioData } from './scenarios';
 // Auto-connects the mock connector on mount so useDappStatus() reports a
 // connected address. Renders nothing until connected to avoid a "no-access"
 // flash and any SSR/client hydration mismatch (server render is unconnected).
-export const AutoConnect: FC<PropsWithChildren> = ({ children }) => {
+const AutoConnect: FC<PropsWithChildren> = ({ children }) => {
   const { isConnected } = useConnection();
   const { connect, connectors } = useConnect();
   useEffect(() => {
@@ -50,7 +50,7 @@ export const AutoConnect: FC<PropsWithChildren> = ({ children }) => {
 
 // Mirrors the connected address onto `claimerAddress` (not manager/rewards) so
 // the stand exercises the CLAIMER access path end to end.
-export const MockOperatorProvider: FC<
+const MockOperatorProvider: FC<
   PropsWithChildren<{ nodeOperatorId: bigint }>
 > = ({ nodeOperatorId, children }) => {
   const { address } = useDappStatus();
@@ -102,7 +102,7 @@ export const MockClaimBondProvider: FC<
         },
       },
     });
-    const idKey = { nodeOperatorId };
+    const idKey = { nodeOperatorId, module: config.module };
     client.setQueryData(
       [...KEY_OPERATOR_BALANCE, idKey],
       makeBond(scenario.bond),
@@ -119,13 +119,7 @@ export const MockClaimBondProvider: FC<
       [...KEY_FEE_SPLITS, idKey],
       scenario.feeSplits ? makeFeeSplits(...scenario.feeSplits) : [],
     );
-    client.setQueryData(
-      [
-        ...KEY_CUSTOM_REWARDS_CLAIMER,
-        { nodeOperatorId, module: config.module },
-      ],
-      MOCK_CLAIMER,
-    );
+    client.setQueryData([...KEY_CUSTOM_REWARDS_CLAIMER, idKey], MOCK_CLAIMER);
     client.setQueryData([...KEY_STETH_POOL_DATA], MOCK_POOL_DATA);
     client.setQueryData(['sm-status'], {
       isPausedModule: false,
