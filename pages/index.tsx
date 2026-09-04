@@ -17,7 +17,7 @@ const Page: FC<PageProps> = ({ maintenance }) => {
     <GateLoaded>
       <Gate rule="IS_CONNECTED_WALLET" fallback={<WelcomePage />}>
         <Gate
-          rule="IS_NODE_OPERATOR"
+          rule="HAS_ANY_ROLE"
           fallback={
             <>
               <Gate rule="IS_CM">
