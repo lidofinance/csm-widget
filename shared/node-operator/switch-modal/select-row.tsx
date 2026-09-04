@@ -44,7 +44,11 @@ export const SelectRow: FC<SelectRowProps> = ({ shortInfo, onSelect }) => {
         <CurveBadge curve={shortInfo} inline />
         <DescriptorRolesStyle>
           {roles.map((role) => (
-            <RoleBadge role={role} key={role} />
+            <RoleBadge
+              role={role}
+              key={role}
+              extendedManagerPermissions={shortInfo.extendedManagerPermissions}
+            />
           ))}
         </DescriptorRolesStyle>
       </CmRowDescriptor>

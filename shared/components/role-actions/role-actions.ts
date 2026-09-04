@@ -16,28 +16,33 @@ export const getRoleActions = (
 
   const ownerCommonActions = buildOwnerCommonActions(isCsmFamily);
 
-  if (role === ROLES.MANAGER) {
-    return [
-      'Adding new keys',
-      'Removing existing keys',
-      'Adding extra bond amount',
-      'Claiming bond and rewards to the Rewards Address',
-      'Covering locked bond',
-      'Proposing a new Manager Address',
-      ...(isOwner ? ['Changing Rewards Address', ...ownerCommonActions] : []),
-    ];
+  switch (role) {
+    case ROLES.MANAGER:
+      return [
+        'Adding new keys',
+        'Removing existing keys',
+        'Adding extra bond amount',
+        'Claiming bond and rewards to the Rewards Address',
+        'Covering locked bond',
+        'Proposing a new Manager Address',
+        ...(isOwner ? ['Changing Rewards Address', ...ownerCommonActions] : []),
+      ];
+    case ROLES.REWARDS:
+      return [
+        'Claiming bond and rewards',
+        'Adding extra bond amount',
+        'Covering locked bond',
+        'Proposing a new Rewards Address',
+        ...(isOwner
+          ? [
+              'Resetting the Manager Address to the current Rewards Address',
+              ...ownerCommonActions,
+            ]
+          : []),
+      ];
+    case ROLES.CLAIMER:
+      return ['Claiming bond and rewards to the Rewards Address'];
+    default:
+      return [];
   }
-
-  return [
-    'Claiming bond and rewards',
-    'Adding extra bond amount',
-    'Covering locked bond',
-    'Proposing a new Rewards Address',
-    ...(isOwner
-      ? [
-          'Resetting the Manager Address to the current Rewards Address',
-          ...ownerCommonActions,
-        ]
-      : []),
-  ];
 };
