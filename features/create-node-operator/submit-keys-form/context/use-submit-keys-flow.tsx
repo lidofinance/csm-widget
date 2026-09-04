@@ -1,7 +1,6 @@
 import {
   getNodeOperatorRoles,
   type LidoSDKCsm,
-  MODULE_NAME,
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts';
@@ -24,7 +23,6 @@ import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { useModuleOperatorTypeGetter } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import { handleTxError, useTransitStage } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
@@ -36,7 +34,6 @@ import {
 import { renderCreateSuccess } from '../hooks/create-success-stage';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
-import { useCreateTypeModule } from 'providers/create-type-provider';
 import { useSubmitKeysFormData } from './submit-keys-data-provider';
 import { SubmitKeysFormInputType, SubmitKeysFormNetworkData } from './types';
 
@@ -48,11 +45,10 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFormNetworkData,
   SubmitKeysFlow
 > => {
-  const targetModule = useCreateTypeModule();
-  // targetModule narrows to CSM | CSM_02, but the overloads only discriminate
+  const { targetModule } = useSubmitKeysFormData();
+  // targetModule is a CSM | CSM_02 union; the overloads only discriminate
   // on literal module arguments.
   const sdk = useSmSDKByModule(targetModule) as CsmFamilySDK | undefined;
-  const getOperatorType = useModuleOperatorTypeGetter();
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
@@ -79,8 +75,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
         dkgFiles = [],
       } = input;
 
-      const type = getOperatorType(data.curve);
-      const isIdvtc = type === OPERATOR_TYPE.CSM_IDVTC;
+      const isIdvtc = data.type === OPERATOR_TYPE.CSM_IDVTC;
       // Auto-init is possible only while the connected address keeps a
       // manager/rewards role on the new operator (survey API requirement).
       const mayInitMembers = isIdvtc && keepsManageRole(input, data.address);
@@ -141,22 +136,28 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             callback,
           };
 
-          const isCsm = targetModule === MODULE_NAME.CSM;
-          const { result } =
-            isCsm && type === OPERATOR_TYPE.CSM_ICS && data.proof
-              ? await (sdk as LidoSDKCsm).icsGate.addNodeOperator({
-                  ...params,
-                  proof: data.proof,
-                })
-              : isCsm && type === OPERATOR_TYPE.CSM_IDVTC && data.proof
-                ? await (sdk as LidoSDKCsm).idvtcGate.addNodeOperator({
-                    ...params,
-                    proof: data.proof,
-                  })
-                : await sdk.permissionlessGate.addNodeOperator(params);
+          const addNodeOperator = async () => {
+            if (data.type === OPERATOR_TYPE.CSM_ICS) {
+              invariant(data.proof, 'ICS proof is required to create');
+              return (sdk as LidoSDKCsm).icsGate.addNodeOperator({
+                ...params,
+                proof: data.proof,
+              });
+            }
+            if (data.type === OPERATOR_TYPE.CSM_IDVTC) {
+              invariant(data.proof, 'IDVTC proof is required to create');
+              return (sdk as LidoSDKCsm).idvtcGate.addNodeOperator({
+                ...params,
+                proof: data.proof,
+              });
+            }
+            return sdk.permissionlessGate.addNodeOperator(params);
+          };
+
+          const { result } = await addNodeOperator();
 
           if (result && (dkgFiles.length > 0 || willInitMembers)) {
-            const op = operatorKey(targetModule, result.nodeOperatorId);
+            const op = operatorKey(data.targetModule, result.nodeOperatorId);
             const keys = depositData.map((k) => k.pubkey);
 
             const runInit = async (): Promise<void> => {
@@ -207,7 +208,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
           if (result) {
             const roles = getNodeOperatorRoles(result, data.address);
             if (roles.length > 0) {
-              appendNO({ ...result, module: targetModule });
+              appendNO({ ...result, module: data.targetModule });
             } else {
               setOperatorCustomAddresses(result.nodeOperatorId);
             }
@@ -218,8 +219,6 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
     },
     [
       sdk,
-      targetModule,
-      getOperatorType,
       appendNO,
       setOperatorCustomAddresses,
       n,

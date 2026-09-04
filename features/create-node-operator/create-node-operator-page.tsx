@@ -5,8 +5,8 @@ import { Faq } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { CreateCuratedNodeOperator } from './create-curated-node-operator';
 
-// CM-only: the CSM family goes through CreateOperatorPage, which threads a
-// CreateTypeProvider that CreateNodeOperator's SubmitKeysForm requires.
+// CM-only: the CSM family goes through CreateOperatorPage, which needs the
+// operator type.
 export const CreateNodeOperatorPage: FC = () => (
   <Layout
     title="Create a Node Operator"

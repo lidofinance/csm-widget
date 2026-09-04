@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { OPERATOR_TYPE, OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import { CREATE_PATH_BY_TYPE } from 'consts/urls';
 import { useMemo } from 'react';
 import { useIcsApplyEnabled } from '../use-ics-apply-enabled';
@@ -9,6 +9,8 @@ import { useCanCreateICS } from './use-can-create-ics';
 import { useCanCreateIDVTC } from './use-can-create-idvtc';
 
 export type CreatableOperatorType = keyof typeof CREATE_PATH_BY_TYPE;
+export type CreatableModule =
+  (typeof OPERATOR_TYPE_INFO)[CreatableOperatorType]['module'];
 export type ApplicableOperatorType =
   OPERATOR_TYPE.CSM_ICS | OPERATOR_TYPE.CSM_IDVTC;
 

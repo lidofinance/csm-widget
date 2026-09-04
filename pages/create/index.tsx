@@ -10,7 +10,7 @@ import { getProps } from 'utilsApi';
 
 // Only a CSM-family deployment has multiple types to choose between. Branch on
 // this build-time deployment fact, not the active-module show rule — a
-// mismatch would render the CSM form with no CreateTypeProvider.
+// mismatch would render the wrong module's form.
 const CreateIndex = () => {
   const correctPath = useCorrectPath(PATH.CREATE);
 

@@ -15,7 +15,7 @@ export const CreateOperatorPage: FC<{ type: CreatableOperatorType }> = ({
       subtitle="Upload your first key(s)"
       pageName="CreateNodeOperator"
     >
-      <CreateNodeOperator />
+      <CreateNodeOperator type={type} />
       <Faq items={FAQ_KEYS} />
     </Layout>
   </CreateTypeProvider>

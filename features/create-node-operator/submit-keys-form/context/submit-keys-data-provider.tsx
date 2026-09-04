@@ -1,3 +1,4 @@
+import { OPERATOR_TYPE, OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import {
   KEY_DEPOSIT_QUEUE_BATCHES,
   KEY_ICS_PROOF,
@@ -7,6 +8,8 @@ import {
   useCurveParameters,
   useDappStatus,
   useEthereumBalance,
+  useIcsProof,
+  useIdvtcProof,
   useShareLimit,
   useShareLimitStatus,
   useSmStatus,
@@ -20,18 +23,39 @@ import {
   NetworkData,
   useFormData,
 } from 'shared/hook-form/form-controller';
-import { useInvalidate, useKeysAvailable } from 'shared/hooks';
 import {
-  useCreateType,
-  useCreateTypeModule,
-} from 'providers/create-type-provider';
+  CreatableOperatorType,
+  useInvalidate,
+  useKeysAvailable,
+  useOperatorTypeCurve,
+} from 'shared/hooks';
 import { type SubmitKeysFormNetworkData } from './types';
 
+type Props = { type: CreatableOperatorType };
+
+// Both queries run unconditionally (hook rules); the irrelevant one is discarded.
+const useCreateProof = (type: CreatableOperatorType) => {
+  const ics = useIcsProof();
+  const idvtc = useIdvtcProof();
+  const source =
+    type === OPERATOR_TYPE.CSM_ICS
+      ? ics
+      : type === OPERATOR_TYPE.CSM_IDVTC
+        ? idvtc
+        : undefined;
+  return {
+    proof: source?.data?.proof ?? undefined,
+    isPending: !!source && source.isPending,
+  };
+};
+
 const useSubmitKeysFormNetworkData: NetworkData<
-  SubmitKeysFormNetworkData
-> = () => {
-  const { curve, proof, isPending: isCurveIdPending } = useCreateType();
-  const targetModule = useCreateTypeModule();
+  SubmitKeysFormNetworkData,
+  Props
+> = ({ type }) => {
+  const targetModule = OPERATOR_TYPE_INFO[type].module;
+  const curve = useOperatorTypeCurve(type);
+  const { proof, isPending: isProofPending } = useCreateProof(type);
 
   const { data: status, isPending: isStatusLoading } =
     useSmStatus(targetModule);
@@ -95,11 +119,12 @@ const useSubmitKeysFormNetworkData: NetworkData<
     isMaxStakeEtherLoading ||
     isStatusLoading ||
     isShareLimitLoading ||
-    isCurveIdPending ||
+    isProofPending ||
     isCurveParametersLoading;
 
   return {
     data: {
+      type,
       targetModule,
       address,
       isPaused: status?.isPaused,
@@ -121,8 +146,11 @@ const useSubmitKeysFormNetworkData: NetworkData<
 
 export const useSubmitKeysFormData = useFormData<SubmitKeysFormNetworkData>;
 
-export const SubmitKeysDataProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useSubmitKeysFormNetworkData();
+export const SubmitKeysDataProvider: FC<PropsWithChildren<Props>> = ({
+  type,
+  children,
+}) => {
+  const networkData = useSubmitKeysFormNetworkData({ type });
 
   return (
     <FormDataContext.Provider value={networkData}>
