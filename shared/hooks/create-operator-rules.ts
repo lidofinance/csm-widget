@@ -2,8 +2,8 @@ import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 
 export type CreateOperatorRulesInput = {
   isAccountActive: boolean;
-  /** Modules this deployment actually talks to. */
-  deployedModules: MODULE_NAME[];
+  /** Configured modules that StakingRouter currently lists. */
+  registeredModules: MODULE_NAME[];
   pausedModules: Partial<Record<MODULE_NAME, boolean>>;
   /** Modules the wallet already holds an operator in. */
   operatorModules: MODULE_NAME[];
@@ -20,7 +20,7 @@ export const getCreatableTypes = (
 ): OPERATOR_TYPE[] => {
   const {
     isAccountActive,
-    deployedModules,
+    registeredModules,
     pausedModules,
     operatorModules,
     activeOperatorCurveId,
@@ -33,7 +33,7 @@ export const getCreatableTypes = (
   if (!isAccountActive) return [];
 
   const isModuleOpen = (module: MODULE_NAME) =>
-    deployedModules.includes(module) && !pausedModules[module];
+    registeredModules.includes(module) && !pausedModules[module];
 
   const noCsmOperator = !operatorModules.includes(MODULE_NAME.CSM);
   const noCsm02Operator = !operatorModules.includes(MODULE_NAME.CSM_02);

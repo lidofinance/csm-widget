@@ -10,7 +10,7 @@ const IDVTC_CURVE = 3n;
 
 const base: CreateOperatorRulesInput = {
   isAccountActive: true,
-  deployedModules: [MODULE_NAME.CSM, MODULE_NAME.CSM_02],
+  registeredModules: [MODULE_NAME.CSM, MODULE_NAME.CSM_02],
   pausedModules: {},
   operatorModules: [],
   activeOperatorCurveId: undefined,
@@ -37,9 +37,9 @@ describe('getCreatableTypes', () => {
     expect(getCreatableTypes(input({ isAccountActive: false }))).toEqual([]);
   });
 
-  it('drops types of modules that are not deployed', () => {
+  it('drops types of modules that are not registered', () => {
     expect(
-      getCreatableTypes(input({ deployedModules: [MODULE_NAME.CSM] })),
+      getCreatableTypes(input({ registeredModules: [MODULE_NAME.CSM] })),
     ).toEqual([OPERATOR_TYPE.CSM_DEF]);
   });
 

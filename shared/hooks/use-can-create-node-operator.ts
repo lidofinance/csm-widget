@@ -25,8 +25,6 @@ import type {
 } from './use-create-options';
 import { useIcsApplyEnabled } from './use-ics-apply-enabled';
 
-const isDeployed = (module: MODULE_NAME) => deployedModules.includes(module);
-
 const buildApplyOption = (
   type: ApplicableOperatorType,
   proof: AddressProof | undefined,
@@ -47,6 +45,21 @@ export const useCanCreateNodeOperator = () => {
   const csm02Status = useSmStatus(MODULE_NAME.CSM_02);
   const cmStatus = useSmStatus(MODULE_NAME.CM);
 
+  // Indexed by every MODULE_NAME member — tsc fails here if the enum grows.
+  const statusByModule: Record<MODULE_NAME, typeof csmStatus> = {
+    [MODULE_NAME.CSM]: csmStatus,
+    [MODULE_NAME.CSM_02]: csm02Status,
+    [MODULE_NAME.CM]: cmStatus,
+  };
+  const registeredModules = useMemo(
+    () =>
+      deployedModules.filter(
+        (module) => statusByModule[module].data?.registered,
+      ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [csmStatus.data, csm02Status.data, cmStatus.data],
+  );
+
   const { data: gatesCount, isPending: isGatesPending } =
     useCuratedGatesEligibility(undefined, (data) => data.length);
 
@@ -66,7 +79,7 @@ export const useCanCreateNodeOperator = () => {
     () =>
       getCreatableTypes({
         isAccountActive,
-        deployedModules,
+        registeredModules,
         pausedModules: {
           [MODULE_NAME.CSM]: csmStatus.data?.isPaused,
           [MODULE_NAME.CSM_02]: csm02Status.data?.isPaused,
@@ -81,6 +94,7 @@ export const useCanCreateNodeOperator = () => {
       }),
     [
       isAccountActive,
+      registeredModules,
       csmStatus.data,
       csm02Status.data,
       operators,
@@ -96,8 +110,8 @@ export const useCanCreateNodeOperator = () => {
 
   const canCreateCurated =
     isAccountActive &&
-    isDeployed(MODULE_NAME.CM) &&
-    !cmStatus.data?.isPaused &&
+    !!cmStatus.data?.registered &&
+    !cmStatus.data.isPaused &&
     !!gatesCount;
 
   // Steer a wallet holding an unconsumed ICS/IDVTC proof towards its better
@@ -150,14 +164,16 @@ export const useCanCreateNodeOperator = () => {
   ]);
 
   // A disabled react-query stays `isPending: true` forever, so every term is
-  // guarded by the module that owns it actually being deployed.
-  const isCsmDeployed = isDeployed(MODULE_NAME.CSM);
+  // guarded by the module that owns it actually being configured.
+  const isConfigured = (module: MODULE_NAME) =>
+    deployedModules.includes(module);
+  const isCsmConfigured = isConfigured(MODULE_NAME.CSM);
   const isPending =
     (isAccountActive && isOperatorsPending) ||
-    (isCsmDeployed && csmStatus.isPending) ||
-    (isDeployed(MODULE_NAME.CSM_02) && csm02Status.isPending) ||
-    (isDeployed(MODULE_NAME.CM) && (cmStatus.isPending || isGatesPending)) ||
-    (isCsmDeployed &&
+    (isCsmConfigured && csmStatus.isPending) ||
+    (isConfigured(MODULE_NAME.CSM_02) && csm02Status.isPending) ||
+    (isConfigured(MODULE_NAME.CM) && (cmStatus.isPending || isGatesPending)) ||
+    (isCsmConfigured &&
       (isIcsProofPending ||
         isIcsPausedPending ||
         isIcsCurveIdPending ||
