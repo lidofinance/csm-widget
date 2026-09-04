@@ -4,6 +4,7 @@ import { ShowFlags } from 'shared/hooks';
 
 export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
   const hasRole = flags.HAS_MANAGER_ROLE || flags.HAS_REWARDS_ROLE;
+  const canClaim = flags.HAS_ANY_ROLE;
 
   switch (path) {
     // Settings pages — non-operators → inbox
@@ -50,13 +51,14 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
     case PATH.KEYS_VIEW:
       return hasRole ? path : PATH.HOME;
 
-    // Bond
+    // Bond — a claimer-only wallet is kept inside the claim page
     case PATH.BOND:
-      return hasRole ? PATH.BOND_CLAIM : PATH.HOME;
+      return canClaim ? PATH.BOND_CLAIM : PATH.HOME;
     case PATH.BOND_CLAIM:
+      return canClaim ? path : PATH.HOME;
     case PATH.BOND_ADD:
     case PATH.BOND_UNLOCK:
-      return hasRole ? path : PATH.HOME;
+      return hasRole ? path : canClaim ? PATH.BOND_CLAIM : PATH.HOME;
 
     // Type/ICS — flag-based
     case PATH.TYPE:
