@@ -5,6 +5,7 @@ import { STRATEGY_IMMUTABLE } from 'consts';
 import { ClaimBondForm } from 'features/claim-bond/claim-bond-form';
 import { ClaimBondDataProvider } from 'features/claim-bond/claim-bond-form/context';
 import {
+  KEY_CUSTOM_REWARDS_CLAIMER,
   KEY_FEE_SPLITS,
   KEY_OPERATOR_BALANCE,
   KEY_OPERATOR_INFO,
@@ -26,6 +27,7 @@ import {
   makeRewards,
   MOCK_CLAIMER,
   MOCK_FRAME,
+  MOCK_MANAGER,
   MOCK_POOL_DATA,
   MOCK_REWARDS_ADDRESS,
 } from './mock-data';
@@ -35,7 +37,7 @@ import { type ClaimBondScenarioData } from './scenarios';
 // Auto-connects the mock connector on mount so useDappStatus() reports a
 // connected address. Renders nothing until connected to avoid a "no-access"
 // flash and any SSR/client hydration mismatch (server render is unconnected).
-const AutoConnect: FC<PropsWithChildren> = ({ children }) => {
+export const AutoConnect: FC<PropsWithChildren> = ({ children }) => {
   const { isConnected } = useConnection();
   const { connect, connectors } = useConnect();
   useEffect(() => {
@@ -46,12 +48,9 @@ const AutoConnect: FC<PropsWithChildren> = ({ children }) => {
   return isConnected ? <>{children}</> : null;
 };
 
-// Supplies the node operator context for the stand. Must live inside the
-// WagmiProvider so it can read the actually-connected address: it mirrors that
-// address onto `managerAddress` so the CLAIMER access gate passes whoever is
-// connected — the mock account or a real wallet leaked in from another page
-// (wagmi auto-discovers injected wallets and reconnects them from storage).
-const MockOperatorProvider: FC<
+// Mirrors the connected address onto `claimerAddress` (not manager/rewards) so
+// the stand exercises the CLAIMER access path end to end.
+export const MockOperatorProvider: FC<
   PropsWithChildren<{ nodeOperatorId: bigint }>
 > = ({ nodeOperatorId, children }) => {
   const { address } = useDappStatus();
@@ -62,10 +61,11 @@ const MockOperatorProvider: FC<
       needsSelection: false,
       nodeOperator: {
         nodeOperatorId,
-        managerAddress: address ?? MOCK_CLAIMER,
+        managerAddress: MOCK_MANAGER,
         rewardsAddress: MOCK_REWARDS_ADDRESS,
         extendedManagerPermissions: false,
         curveId: 0n,
+        claimerAddress: address ?? MOCK_CLAIMER,
         module: config.module,
       },
       activeModule: config.module,
@@ -118,6 +118,13 @@ export const MockClaimBondProvider: FC<
     client.setQueryData(
       [...KEY_FEE_SPLITS, idKey],
       scenario.feeSplits ? makeFeeSplits(...scenario.feeSplits) : [],
+    );
+    client.setQueryData(
+      [
+        ...KEY_CUSTOM_REWARDS_CLAIMER,
+        { nodeOperatorId, module: config.module },
+      ],
+      MOCK_CLAIMER,
     );
     client.setQueryData([...KEY_STETH_POOL_DATA], MOCK_POOL_DATA);
     client.setQueryData(['sm-status'], {
