@@ -69,8 +69,8 @@ test.describe(
         await widgetService.mainPage.openCreateOperator();
 
         await cards.getCardButton('idvtc').click();
-        await expect(widgetService.page).toHaveURL(/\/create/);
-        await expect(widgetService.keysPage.headerTitle).toContainText('IDVTC');
+        await expect(widgetService.page).toHaveURL(/\/create\/idvtc/);
+        await expect(widgetService.keysPage.typeBadge).toContainText('IDVTC');
       },
     );
 

@@ -13,6 +13,7 @@ export class KeysPage extends BasePage {
   createNodeOperatorForm: CreateNodeOperatorForm;
   headerTitle: Locator;
   headerSubTitle: Locator;
+  typeBadge: Locator;
 
   // Tabs
   removePage: RemovePage;
@@ -28,6 +29,7 @@ export class KeysPage extends BasePage {
     this.createNodeOperatorForm = new CreateNodeOperatorForm(this.page);
     this.headerTitle = this.pageTitle;
     this.headerSubTitle = this.page.getByTestId('pageSubtitle');
+    this.typeBadge = this.page.getByTestId('createTypeBadge');
   }
 
   // `/create` is the type-selection page for wallets with 2+ creatable
