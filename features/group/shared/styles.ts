@@ -1,4 +1,12 @@
+import { StackStyle } from 'shared/components/stack/style';
 import styled from 'styled-components';
+
+export const WrapperStyle = styled(StackStyle).attrs({
+  $direction: 'column',
+  $gap: 'sm',
+})`
+  margin-bottom: 12px;
+`;
 
 export const StakeRow = styled.div`
   padding: 12px 0;

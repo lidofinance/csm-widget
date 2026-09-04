@@ -9,10 +9,13 @@ export const KEY_CUSTOM_REWARDS_CLAIMER = ['custom-rewards-claimer'];
 export const useCustomRewardsClaimer = (
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
-  const { operator } = useSmSDK();
+  const { operator, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_CUSTOM_REWARDS_CLAIMER, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_CUSTOM_REWARDS_CLAIMER,
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(nodeOperatorId !== undefined);

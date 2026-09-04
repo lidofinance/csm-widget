@@ -25,10 +25,18 @@ export const TypeCard: FC<{ type: VisibleType }> = ({ type }) => {
         <Text size="xxs" color="secondary">
           {metadata.description}
         </Text>
+        {metadata.descriptionNote && (
+          <Text size="xxs" color="secondary">
+            <b>{metadata.descriptionNote.lead}</b>
+            {metadata.descriptionNote.rest}
+          </Text>
+        )}
         <Divider />
       </Stack>
       <Stack direction="column">
-        {curveId !== undefined && <Parameters curveId={curveId} />}
+        {curveId !== undefined && (
+          <Parameters curveId={curveId} type={type.type} />
+        )}
         <LocalLink
           href={type.href}
           query={type.query}

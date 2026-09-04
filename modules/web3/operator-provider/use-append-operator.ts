@@ -1,9 +1,7 @@
-import {
-  appendNodeOperator,
-  NodeOperatorShortInfo,
-} from '@lidofinance/lido-csm-sdk';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDappStatus } from '../hooks';
+import { appendModuleOperator } from './merge-operators';
+import { ModuleNodeOperator } from './types';
 import { KEY_OPERATORS } from './use-available-operators';
 
 export const useAppendOperator = () => {
@@ -11,11 +9,11 @@ export const useAppendOperator = () => {
   const { address } = useDappStatus();
 
   const { mutate } = useMutation({
-    mutationFn: async (value: NodeOperatorShortInfo) => value,
-    onSuccess: (data) => {
-      queryClient.setQueryData<NodeOperatorShortInfo[]>(
+    mutationFn: async (value: ModuleNodeOperator) => value,
+    onSuccess: (tagged) => {
+      queryClient.setQueryData<ModuleNodeOperator[]>(
         [...KEY_OPERATORS, { address }],
-        (prev = []) => appendNodeOperator(prev, data),
+        (prev = []) => appendModuleOperator(prev, tagged),
       );
     },
   });

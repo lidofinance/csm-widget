@@ -9,21 +9,19 @@ import { FormatToken } from 'shared/formatters';
 import { formatPercent, pluralKeys } from 'utils';
 import { maxUint128 } from 'viem';
 
-export const formatPercentKeyIntervals = (
-  intervals: KeyNumberValueInterval[] = [],
-) => formatKeyIntervals(intervals, ({ value }) => formatPercent(value));
+export type ParameterRow = { label: string; value: ReactNode };
 
-export const formatEthKeyIntervals = (
-  intervals: KeyNumberValueInterval[] = [],
-) =>
-  formatKeyIntervals(intervals, ({ value }) => (
-    <FormatToken amount={value} token={TOKENS.eth} />
+export const fuseParameterRows = (rows: ParameterRow[]): ReactNode[] =>
+  rows.map(({ label, value }) => (
+    <>
+      {value} for {label.toLowerCase()}
+    </>
   ));
 
-const formatKeyIntervals = <T extends { minKeyNumber: number }>(
+export const formatKeyIntervalRows = <T extends { minKeyNumber: number }>(
   intervals: T[],
   format: (item: T) => string | ReactNode,
-): ReactNode[] =>
+): ParameterRow[] =>
   intervals.map((item, index, array) => {
     const isFirst = index === 0;
     const isLast = index === array.length - 1;
@@ -36,12 +34,30 @@ const formatKeyIntervals = <T extends { minKeyNumber: number }>(
           : isFirst
             ? `first ${pluralKeys({ value, showValue: value > 1 })}`
             : `next ${pluralKeys({ value, showValue: true })}`;
-    return (
-      <>
-        {format(item)} for {countText}
-      </>
-    );
+    return {
+      label: countText.charAt(0).toUpperCase() + countText.slice(1),
+      value: format(item),
+    };
   });
+
+export const formatPercentKeyIntervalRows = (
+  intervals: KeyNumberValueInterval[] = [],
+) => formatKeyIntervalRows(intervals, ({ value }) => formatPercent(value));
+
+export const formatEthKeyIntervalRows = (
+  intervals: KeyNumberValueInterval[] = [],
+) =>
+  formatKeyIntervalRows(intervals, ({ value }) => (
+    <FormatToken amount={value} token={TOKENS.eth} />
+  ));
+
+export const formatPercentKeyIntervals = (
+  intervals: KeyNumberValueInterval[] = [],
+): ReactNode[] => fuseParameterRows(formatPercentKeyIntervalRows(intervals));
+
+export const formatEthKeyIntervals = (
+  intervals: KeyNumberValueInterval[] = [],
+): ReactNode[] => fuseParameterRows(formatEthKeyIntervalRows(intervals));
 
 export const formatQueues = (config?: QueueConfig): ReactNode[] =>
   !config || config.priority >= config.lowestPriority

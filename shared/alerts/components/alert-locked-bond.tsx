@@ -8,10 +8,9 @@ import { AlertButton } from './styles';
 export const AlertLockedBond: FC = () => (
   <Alert title="Your bond is locked">
     <p>
-      Bond may be locked in the case of an MEV stealing event reported by a
-      dedicated committee. To unlock the bond, the penalty amount, which
-      includes the stolen amount and a fixed stealing fine, must be compensated
-      on the &quot;Locked bond&quot; tab.
+      Penalties have been applied to your Node Operator. If they aren’t covered,
+      the corresponding amount of your bond may be burned. See details in the
+      Locked Bond tab.
     </p>
     <br />
     <LocalLink

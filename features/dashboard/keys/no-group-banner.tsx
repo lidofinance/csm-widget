@@ -1,6 +1,6 @@
 import { Text } from '@lidofinance/lido-ui';
-import { isModuleCM } from 'consts';
 import {
+  useModule,
   useNodeOperatorId,
   useOperatorGroupId,
   useOperatorWeight,
@@ -9,13 +9,14 @@ import { FC } from 'react';
 import { HatBlock, Stack } from 'shared/components';
 
 export const NoGroupBanner: FC = () => {
+  const { isCM } = useModule();
   const nodeOperatorId = useNodeOperatorId();
   const { data: groupId, isPending: isGroupPending } =
     useOperatorGroupId(nodeOperatorId);
   const { data: weight, isPending: isWeightPending } =
     useOperatorWeight(nodeOperatorId);
 
-  if (!isModuleCM || isGroupPending || isWeightPending) return null;
+  if (!isCM || isGroupPending || isWeightPending) return null;
 
   if (!!groupId && !!weight) return null;
 

@@ -14,12 +14,13 @@ export const SubmitKeysUpdater: FC = () => {
 
   const { trigger, setValue } = useFormContext<SubmitKeysFormInputType>();
 
-  const { curveId } = useSubmitKeysFormData();
+  const { curveId, targetModule } = useSubmitKeysFormData();
 
   const { data: bondAmount } = useBondByKeysCount({
     keysCount,
     token,
     curveId,
+    module: targetModule,
   });
 
   useEffect(() => {

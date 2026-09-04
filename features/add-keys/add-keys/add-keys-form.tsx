@@ -36,7 +36,7 @@ export const AddKeysForm: FC = memo(() => {
             <AddKeysFormInfo />
           </AddKeysFormLoader>
         </FormBlock>
-        <Gate rule="IS_CSM">
+        <Gate rule="IS_CSM_FAMILY">
           <DepositQueue />
         </Gate>
       </AddKeysFormProvider>

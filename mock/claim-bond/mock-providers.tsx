@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { config } from 'config';
 import { useUserConfig } from 'config/user-config';
 import { STRATEGY_IMMUTABLE } from 'consts';
 import { ClaimBondForm } from 'features/claim-bond/claim-bond-form';
@@ -65,7 +66,9 @@ const MockOperatorProvider: FC<
         rewardsAddress: MOCK_REWARDS_ADDRESS,
         extendedManagerPermissions: false,
         curveId: 0n,
+        module: config.module,
       },
+      activeModule: config.module,
       switchNodeOperator: () => {},
     }),
     [nodeOperatorId, address],

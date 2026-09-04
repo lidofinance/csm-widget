@@ -1,11 +1,13 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+
+import { useCanCreateNodeOperator } from './use-can-create-node-operator';
 
 const OPERATOR_TYPE_QUERY: Partial<Record<OPERATOR_TYPE, string>> = {
   [OPERATOR_TYPE.CSM_ICS]: 'ics',
   [OPERATOR_TYPE.CSM_IDVTC]: 'idvtc',
   [OPERATOR_TYPE.CSM_DEF]: 'def',
+  [OPERATOR_TYPE.CSM2_DEF]: '0x02',
 };
 
 const TYPE_QUERY_MAP = Object.fromEntries(
@@ -21,16 +23,16 @@ export const getOperatorTypeQuery = (
   return key ? { type: key } : undefined;
 };
 
-export type RequestedOperatorType =
-  | { isRequested: false; type?: undefined }
-  | { isRequested: true; type: OPERATOR_TYPE | undefined };
-
-export const useRequestedOperatorType = (): RequestedOperatorType => {
+/** Operator type preselected via `?type=`, honored only when that type is actually creatable. */
+export const useRequestedOperatorType = (): OPERATOR_TYPE | undefined => {
   const { query } = useRouter();
-  const raw = query.type;
+  const { creatableTypes } = useCanCreateNodeOperator();
 
-  return useMemo(() => {
-    if (typeof raw !== 'string') return { isRequested: false };
-    return { isRequested: true, type: TYPE_QUERY_MAP[raw.toLowerCase()] };
-  }, [raw]);
+  const raw = query.type;
+  const requested =
+    typeof raw === 'string' ? TYPE_QUERY_MAP[raw.toLowerCase()] : undefined;
+
+  return requested && creatableTypes.includes(requested)
+    ? requested
+    : undefined;
 };
