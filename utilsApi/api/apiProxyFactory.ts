@@ -7,7 +7,7 @@ import { ReadableStream } from 'node:stream/web';
 import { Counter, Registry } from 'prom-client';
 import type { TrackedFetchApi } from './trackedFetchApiFactory';
 import {
-  HEALTHY_RPC_SERVICES_ARE_OVER,
+  MissingRequestBodyError,
   UnsupportedChainIdError,
   UnsupportedHTTPMethodError,
 } from './errors';
@@ -74,8 +74,21 @@ export const apiFactory = ({
       }
 
       // Serialize once so the same payload is replayed across every provider url
-      const body =
-        req.method === 'POST' ? JSON.stringify(req.body ?? {}) : undefined;
+      let body: string | undefined;
+      if (req.method === 'POST') {
+        if (typeof req.body === 'string') {
+          body = req.body;
+        } else if (Buffer.isBuffer(req.body)) {
+          body = req.body.toString();
+        } else if (req.body != null && typeof req.body === 'object') {
+          body = JSON.stringify(req.body);
+        }
+
+        // an empty body would fetch the full, uncapped upstream collection (e.g. all validators)
+        if (!body) {
+          throw new MissingRequestBodyError();
+        }
+      }
 
       const requested = await iterateUrls(
         providers[chainId],
@@ -91,6 +104,11 @@ export const apiFactory = ({
         serverLogger.error,
       );
 
+      if (!requested.ok) {
+        // an upstream failure must not inherit the route's public cache headers
+        res.setHeader('Cache-Control', 'no-store');
+      }
+
       res.setHeader(
         'Content-Type',
         requested.headers.get('Content-Type') ?? 'application/json',
@@ -105,10 +123,8 @@ export const apiFactory = ({
       if (error instanceof Error) {
         // TODO: check if there are errors duplication with iterateUrls
         serverLogger.error(error.message ?? DEFAULT_API_ERROR_MESSAGE);
-        res.status(500).json(error.message ?? DEFAULT_API_ERROR_MESSAGE);
-      } else {
-        res.status(500).json(HEALTHY_RPC_SERVICES_ARE_OVER);
       }
+      throw error;
     }
   };
 };
