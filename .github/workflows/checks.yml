@@ -4,6 +4,24 @@ on:
   pull_request:
 
 jobs:
+  unit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+
+      - run: yarn install --frozen-lockfile --ignore-scripts
+
+      - run: yarn test:unit
+
   security:
     uses: lidofinance/linters/.github/workflows/security.yml@master
     permissions:

@@ -22,7 +22,12 @@ const overrideSetHeader = (res) => {
       return setHeader.call(this, 'Cache-Control', value);
     }
 
-    if (header.toLowerCase() === 'cache-control' && cacheControlOverwritten) {
+    // no-store must win over the overwritten value: Next's renderError sets it on SSR error pages
+    if (
+      header.toLowerCase() === 'cache-control' &&
+      cacheControlOverwritten &&
+      !/no-store/i.test(String(value))
+    ) {
       return this;
     }
 
@@ -30,26 +35,42 @@ const overrideSetHeader = (res) => {
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-app.prepare().then(() => {
-  const server = createServer(async (req, res) => {
-    // Be sure to pass `true` as the second argument to `url.parse`.
-    // This tells it to parse the query portion of the URL.
-    const parsedUrl = parse(req.url, true);
+app
+  .prepare()
+  .then(() => {
+    const server = createServer(async (req, res) => {
+      try {
+        // Be sure to pass `true` as the second argument to `url.parse`.
+        // This tells it to parse the query portion of the URL.
+        const parsedUrl = parse(req.url, true);
 
-    overrideSetHeader(res);
+        overrideSetHeader(res);
 
-    await handle(req, res, parsedUrl);
-  })
-    .once('error', (err) => {
-      console.error(err);
-      process.exit(1);
+        await handle(req, res, parsedUrl);
+      } catch (err) {
+        // an unhandled rejection here kills the process (--unhandled-rejections=throw); url.parse throws on e.g. `GET http://[ HTTP/1.1`
+        console.error(err);
+        if (!res.headersSent) {
+          res.statusCode = 500;
+          res.end();
+        } else {
+          res.destroy();
+        }
+      }
     })
-    .listen(port, () => {
-      console.debug(`> Ready on http://${hostname}:${port}`);
-    });
-  // prevents malicious client from slowly sending headers and rest of request
-  server.headersTimeout = 10_000;
-  server.requestTimeout = 30_000;
-  server.maxHeadersCount = 50;
-});
+      .once('error', (err) => {
+        console.error(err);
+        process.exit(1);
+      })
+      .listen(port, () => {
+        console.debug(`> Ready on http://${hostname}:${port}`);
+      });
+    // prevents malicious client from slowly sending headers and rest of request
+    server.headersTimeout = 10_000;
+    server.requestTimeout = 30_000;
+    server.maxHeadersCount = 50;
+  })
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
