@@ -17,23 +17,24 @@ const URL_LIST_ENV_PREFIXES = ['EL_RPC_URLS_', 'CL_API_URLS_'];
 // matches the full concatenation, never a single URL as it appears in logs.
 // Both the raw and trailing-slash-stripped forms are masked: satanizer matches
 // literally, and `parseUrlList` in config/helpers.ts strips the trailing slash
-// before the URL ever reaches a log line.
+// before the URL ever reaches a log line. Same applies to the single-URL envs
+// VALIDATION_SERVICE_BASE_PATH and ETHSEER_API_URL below.
+const urlVariants = (url) =>
+  [url.trim(), url.trim().replace(/\/+$/, '')].filter(Boolean);
+
 const urlListPatterns = [
   ...new Set(
     Object.entries(process.env)
       .filter(([key]) => URL_LIST_ENV_PREFIXES.some((p) => key.startsWith(p)))
-      .flatMap(([, value]) =>
-        (value || '')
-          .split(',')
-          .flatMap((url) => [url.trim(), url.trim().replace(/\/+$/, '')])
-          .filter(Boolean),
-      ),
+      .flatMap(([, value]) => (value || '').split(',').flatMap(urlVariants)),
   ),
 ];
 
 const patterns = [
   ...commonPatterns,
   ...urlListPatterns,
+  ...urlVariants(process.env.VALIDATION_SERVICE_BASE_PATH || ''),
+  ...urlVariants(process.env.ETHSEER_API_URL || ''),
   process.env.ETHSEER_API_TOKEN,
 ].filter(Boolean);
 const mask = satanizer(patterns);
