@@ -11,14 +11,14 @@ import invariant from 'tiny-invariant';
 import { useRegisterForgetCachedOperator } from './forget-cached-operator';
 import { useActiveNodeOperator } from './use-active-node-operator';
 import { useAvailableOperators } from './use-available-operators';
-import { ModuleNodeOperator } from './types';
+import { ModuleNodeOperator, OperatorRef } from './types';
 
 export type NodeOperatorContextValue = {
   isPending: boolean;
   nodeOperator: ModuleNodeOperator | undefined;
   activeModule: MODULE_NAME | undefined;
   needsSelection: boolean;
-  switchNodeOperator: (id: NodeOperatorId, module: MODULE_NAME) => void;
+  switchNodeOperator: (operator: OperatorRef) => void;
 };
 
 export type NodeOperatorDefinedContextValue = NodeOperatorContextValue & {
@@ -63,9 +63,10 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
   } = useActiveNodeOperator(list);
 
   const switchNodeOperator = useCallback(
-    (id: NodeOperatorId, module: MODULE_NAME) => {
+    ({ nodeOperatorId, module }: OperatorRef) => {
       const newActive = list?.find(
-        (item) => item.nodeOperatorId === id && item.module === module,
+        (item) =>
+          item.nodeOperatorId === nodeOperatorId && item.module === module,
       );
       if (newActive) setActive(newActive);
     },

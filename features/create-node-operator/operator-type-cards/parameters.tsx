@@ -1,7 +1,7 @@
 import {
   MODULE_NAME,
   OPERATOR_TYPE,
-  OPERATOR_TYPE_MODULE,
+  OPERATOR_TYPE_INFO,
 } from '@lidofinance/lido-csm-sdk';
 import { InlineLoader, Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
@@ -9,24 +9,18 @@ import { useCurveParameters } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { useParameters } from 'shared/components/parameters-list/parameters';
+import { useOperatorTypeCurve } from 'shared/hooks';
 import { ParameterRowStyle } from './styles';
 
-export const Parameters: FC<{ curveId: bigint; type: OPERATOR_TYPE }> = ({
-  curveId,
-  type,
-}) => {
+export const Parameters: FC<{ type: OPERATOR_TYPE }> = ({ type }) => {
   const metadata = OPERATOR_TYPE_METADATA[type];
-  const targetModule = OPERATOR_TYPE_MODULE[type] ?? MODULE_NAME.CSM;
-  const wcType = targetModule === MODULE_NAME.CSM_02 ? '0x02' : '0x01';
-  const { data: parameters } = useCurveParameters(
-    curveId,
-    undefined,
-    targetModule,
-  );
+  const wcType =
+    OPERATOR_TYPE_INFO[type].module === MODULE_NAME.CSM_02 ? '0x02' : '0x01';
+  const { data: parameters } = useCurveParameters(useOperatorTypeCurve(type));
   const PARAMETERS = useParameters().filter((p) => p.renderRows);
 
   return (
-    <Stack direction="column">
+    <Stack direction="column" gap="sm">
       {PARAMETERS.map(({ title: paramTitle, renderRows }) => (
         <Stack direction="column" key={paramTitle} gap="xs">
           <Text size="xxs" weight={700}>

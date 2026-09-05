@@ -2,8 +2,8 @@ export { Web3Provider } from './web3-provider';
 export {
   type CsmFamilySDK,
   type SmSDK,
+  useActiveSmSDK,
   useLidoSDK,
   useSmSDK,
-  useSmSDKByModule,
   useTargetSmSDK,
 } from './lido-sdk';

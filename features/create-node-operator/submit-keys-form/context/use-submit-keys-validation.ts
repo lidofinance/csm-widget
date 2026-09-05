@@ -4,7 +4,7 @@ import {
   DISABLE_DEPOSIT_DATA_VALIDATION,
 } from 'config/feature-flags/types';
 import { validateDkgBatch } from 'features/idvtc/dkg/utils/validate-dkg-batch';
-import { useSmSDKByModule } from 'modules/web3';
+import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
   validateBondAmount,
@@ -14,15 +14,15 @@ import {
 } from 'shared/hook-form/validation';
 import invariant from 'tiny-invariant';
 import { isAddress } from 'viem';
+import { useSubmitKeysFormData } from './submit-keys-data-provider';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
-import { useTargetModule } from './use-target-module';
 
 export const useSubmitKeysValidation = () => {
-  const targetModule = useTargetModule();
-  const targetSdk = useSmSDKByModule(targetModule);
+  const { targetModule } = useSubmitKeysFormData();
+  const targetSdk = useSmSDK(targetModule);
   const sdk = targetSdk?.depositData;
   const featureFlags = useFeatureFlags();
 

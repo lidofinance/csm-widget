@@ -3,7 +3,7 @@ import { CHAINS } from '@lidofinance/lido-ethereum-sdk/common';
 import { resolveDeployedModules } from './resolve-deployed-modules';
 
 describe('resolveDeployedModules', () => {
-  it('CSM deployment includes CSM_02 on Hoodi but not on Mainnet', () => {
+  it('secondary modules are filtered by MODULE_CONFIG', () => {
     expect(resolveDeployedModules(MODULE_NAME.CSM, CHAINS.Mainnet)).toEqual([
       MODULE_NAME.CSM,
     ]);
@@ -19,8 +19,14 @@ describe('resolveDeployedModules', () => {
     ]);
   });
 
+  it('CSM_02 deployment is always exactly [CSM_02], even without a MODULE_CONFIG entry', () => {
+    expect(resolveDeployedModules(MODULE_NAME.CSM_02, CHAINS.Mainnet)).toEqual([
+      MODULE_NAME.CSM_02,
+    ]);
+  });
+
   it('primary module is always first and always present', () => {
     const result = resolveDeployedModules(MODULE_NAME.CSM, 999999);
-    expect(result[0]).toBe(MODULE_NAME.CSM);
+    expect(result).toEqual([MODULE_NAME.CSM]);
   });
 });

@@ -43,21 +43,21 @@ test.describe(
     });
 
     test(
-      qase(469, 'Should offer only ICS and IDVTC types without DEF'),
+      qase(469, 'Should offer only ICS and IDVTC types without 0x01'),
       async ({ widgetService }) => {
-        const modal = widgetService.mainPage.operatorTypeModal;
-        await widgetService.mainPage.openOperatorTypeModal();
+        const cards = widgetService.mainPage.operatorTypeCards;
+        await widgetService.mainPage.openCreateOperator();
 
         await test.step('ICS and IDVTC cards are shown', async () => {
-          await expect(modal.icsCard).toBeVisible();
-          await expect(modal.idvtcCard).toBeVisible();
-          await expect(modal.getCardButton('idvtc')).toContainText(
+          await expect(cards.icsCard).toBeVisible();
+          await expect(cards.idvtcCard).toBeVisible();
+          await expect(cards.getCardButton('idvtc')).toContainText(
             'Create IDVTC operator',
           );
         });
 
-        await test.step('DEF card is not offered', async () => {
-          await expect(modal.defCard).toBeHidden();
+        await test.step('0x01 card is not offered', async () => {
+          await expect(cards.csm01Card).toBeHidden();
         });
       },
     );
@@ -65,11 +65,12 @@ test.describe(
     test(
       qase(443, 'Should open the create operator page from the IDVTC card'),
       async ({ widgetService }) => {
-        const modal = widgetService.mainPage.operatorTypeModal;
-        await widgetService.mainPage.openOperatorTypeModal();
+        const cards = widgetService.mainPage.operatorTypeCards;
+        await widgetService.mainPage.openCreateOperator();
 
-        await modal.getCardButton('idvtc').click();
-        await expect(widgetService.page).toHaveURL(/\/create/);
+        await cards.getCardButton('idvtc').click();
+        await expect(widgetService.page).toHaveURL(/\/create\/idvtc/);
+        await expect(widgetService.keysPage.typeBadge).toContainText('IDVTC');
       },
     );
 
@@ -79,7 +80,7 @@ test.describe(
         const form = widgetService.keysPage.createNodeOperatorForm;
         const keys = keysGeneratorService.generateKeys(1);
 
-        await widgetService.keysPage.goto();
+        await widgetService.keysPage.goto('idvtc');
 
         await test.step('Select ETH bond token and add one key', async () => {
           await form.getBondTokenElement(TokenSymbol.ETH).click();

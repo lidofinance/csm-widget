@@ -1,8 +1,7 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
   useIcsProof,
-  useModule,
-  useNodeOperatorId,
+  useNodeOperator,
   useOperatorOwner,
   useOperatorType,
 } from 'modules/web3';
@@ -45,11 +44,11 @@ export const useIcsState = () => {
 };
 
 export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { isCSM } = useModule();
-  const operatorId = useNodeOperatorId();
+  const { nodeOperator } = useNodeOperator();
+  const operatorId = nodeOperator?.nodeOperatorId;
   // The type only exists in CSM: an operator of another module never holds it.
   const { data: operatorType } = useOperatorType(
-    isCSM ? operatorId : undefined,
+    nodeOperator?.module === MODULE_NAME.CSM ? nodeOperator : undefined,
   );
   const { data: owner } = useOperatorOwner(operatorId);
 

@@ -1,13 +1,16 @@
 import styled from 'styled-components';
 
-export const StepsWrapper = styled.div<{ $backSolid?: boolean }>`
+export const StepsWrapper = styled.div<{
+  $backSolid?: boolean;
+  $halfGap?: boolean;
+}>`
   --back-opacity: ${({ $backSolid }) => ($backSolid ? 1 : 0.4)};
   --current-opacity: 1;
   --next-opacity: 0.1;
 
   display: flex;
   flex-direction: 'row';
-  gap: 24px;
+  gap: ${({ $halfGap }) => ($halfGap ? '12px' : '24px')};
   align-self: center;
 `;
 

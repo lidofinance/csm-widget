@@ -6,7 +6,7 @@ import { TxStageMembersInitFailed } from 'features/idvtc/members/tx-stages/tx-st
 import { TxStageMembersSignin } from 'features/idvtc/members/tx-stages/tx-stage-members-signin';
 import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
 import { operatorKey } from 'modules/surveys-sdk';
-import { useModule, useSmSDK } from 'modules/web3';
+import { useActiveSmSDK, useModule } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -39,7 +39,7 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
   ClaimIdvtcFormNetworkData,
   ClaimIdvtcFlow
 > => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
+  const sdk = useActiveSmSDK(MODULE_NAME.CSM);
   invariant(sdk, 'CSM SDK is required for this operation');
   const { isCSM } = useModule();
   const confirmClaimIdvtc = useConfirmClaimIdvtcModal();
@@ -58,8 +58,8 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
       const isEmpty = !data.proof?.proof || data.proof.isConsumed;
 
       const isClaimed =
-        data.currentCurveId === data.newCurveId &&
-        data.currentCurveId !== undefined;
+        data.currentCurve?.curveId === data.newCurve?.curveId &&
+        !!data.currentCurve;
       if (isClaimed) {
         return { action: isEmpty ? 'claimed' : 'claimed-with-proof' };
       }

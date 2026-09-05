@@ -1,6 +1,6 @@
 import {
+  CurveRef,
   getOperatorTypeByCurveId,
-  MODULE_NAME,
   OPERATOR_TYPE,
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
@@ -24,9 +24,9 @@ export const OPERATOR_TYPE_METADATA: Record<
   OperatorTypeMetadata
 > = {
   [OPERATOR_TYPE.CSM_DEF]: {
-    name: 'Default',
-    short: 'DEF',
-    title: 'Default (DEF)',
+    name: 'CSM 0x01',
+    short: '0x01',
+    title: 'CSM 0x01',
     description:
       'The simplest way to start validating in CSM. Upload keys under the general parameters without any permission or verification. At any point in the future, you may apply to become an Identified Community Staker to access more favorable parameters.',
     capitalMultiplier: 'up to 1.75x',
@@ -39,7 +39,7 @@ export const OPERATOR_TYPE_METADATA: Record<
       'Unlock the power of 0x02 withdrawal credentials to run validators with balances of up to 2048 ETH.',
     descriptionNote: {
       lead: 'Run 0x02 alongside any other type ',
-      rest: '(Default, ICS, or IDVTC) to stack their benefits.',
+      rest: '(0x01, ICS, or IDVTC) to stack their benefits.',
     },
     capitalMultiplier: 'up to 2.6x',
   },
@@ -123,24 +123,22 @@ export const OPERATOR_TYPE_METADATA: Record<
   },
 };
 
-// Classify a curve id for display: gate-owned curves resolve to their
-// operator type, any other defined curve id is a Custom Curve.
+// Classify a curve for display: gate-owned curves resolve to their operator
+// type, any other defined curve is a Custom Curve.
 export const getDisplayOperatorType = (
   chainId: SUPPORTED_CHAINS,
-  moduleName: MODULE_NAME,
-  curveId: bigint | undefined,
+  curve: CurveRef | undefined,
 ): DisplayOperatorType | undefined => {
-  if (curveId === undefined) return undefined;
-  return getOperatorTypeByCurveId(chainId, moduleName, curveId) ?? CUSTOM_CURVE;
+  if (!curve) return undefined;
+  return getOperatorTypeByCurveId(chainId, curve) ?? CUSTOM_CURVE;
 };
 
 // For components prefer the hooks from shared/hooks (useCurveMetadata et al.);
 // this pure variant is for non-reactive contexts like tx-stage callbacks.
 export const getCurveMetadata = (
   chainId: SUPPORTED_CHAINS,
-  moduleName: MODULE_NAME,
-  curveId: bigint | undefined,
+  curve: CurveRef | undefined,
 ) => {
-  const operatorType = getDisplayOperatorType(chainId, moduleName, curveId);
+  const operatorType = getDisplayOperatorType(chainId, curve);
   return operatorType ? OPERATOR_TYPE_METADATA[operatorType] : undefined;
 };

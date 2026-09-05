@@ -1,7 +1,7 @@
 import { CONTRACT_NAMES } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
-import { useDappStatus, useSmSDKByModule } from 'modules/web3';
+import { useDappStatus, useSmSDK } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
 import { useChainName } from 'shared/hooks';
 import { getEtherscanAddressLink } from 'utils';
@@ -33,7 +33,7 @@ export const FaqOnlyTestnet: FC<PropsWithChildren> = ({ children }) => {
 
 export const FaqWithdrawalVault: FC = () => {
   const { chainId } = useDappStatus();
-  const sm = useSmSDKByModule(config.module);
+  const sm = useSmSDK(config.module);
   const address = sm?.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
   if (!address) return null;
 
@@ -50,7 +50,7 @@ export const FaqWithdrawalVault: FC = () => {
 
 export const FaqLidoRewardsVault: FC = () => {
   const { chainId } = useDappStatus();
-  const sm = useSmSDKByModule(config.module);
+  const sm = useSmSDK(config.module);
   const address = sm?.core.getContractAddress(CONTRACT_NAMES.lidoRewardsVault);
   if (!address) return null;
 

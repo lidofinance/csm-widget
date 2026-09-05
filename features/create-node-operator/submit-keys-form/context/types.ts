@@ -1,6 +1,6 @@
 import {
   CurveParameters,
-  MODULE_NAME,
+  CurveRef,
   Proof,
   ShareLimitInfo,
   ShareLimitStatus,
@@ -8,7 +8,11 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import type { FileUploadItemDto } from 'modules/surveys-sdk/generated';
 import { DepositDataInputType } from 'shared/hook-form/deposit-data';
-import { KeysAvailable } from 'shared/hooks';
+import {
+  CreatableModule,
+  CreatableOperatorType,
+  KeysAvailable,
+} from 'shared/hooks';
 import { Address } from 'viem';
 
 export type SubmitKeysFormInputType = {
@@ -24,12 +28,13 @@ export type SubmitKeysFormInputType = {
 } & DepositDataInputType;
 
 export type SubmitKeysFormNetworkData = {
-  targetModule: MODULE_NAME.CSM | MODULE_NAME.CSM_02;
+  type: CreatableOperatorType;
+  targetModule: CreatableModule;
   address: Address;
   ethBalance: bigint;
   stethBalance: bigint;
   wstethBalance: bigint;
-  curveId: bigint;
+  curve: CurveRef<CreatableModule>;
   curveParameters: CurveParameters;
   maxStakeEth: bigint;
   isPaused: boolean;

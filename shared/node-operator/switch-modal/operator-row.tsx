@@ -7,6 +7,7 @@ import {
 import { Button, Text } from '@lidofinance/lido-ui';
 import { STAKE_COLORS } from 'features/group/shared/stake-stats';
 import {
+  OperatorRef,
   useDappStatus,
   useOperatorCurveId,
   useOperatorInfo,
@@ -34,7 +35,7 @@ type OperatorRowProps = {
   shortInfo?: ModuleNodeOperator;
   stakeSummary?: SubOperatorStakeSummary;
   action: OperatorAction;
-  onSwitch: (id: NodeOperatorId, module: MODULE_NAME) => void;
+  onSwitch: (operator: OperatorRef) => void;
 };
 
 export const OperatorRow: FC<OperatorRowProps> = ({
@@ -46,11 +47,12 @@ export const OperatorRow: FC<OperatorRowProps> = ({
 }) => {
   const { address } = useDappStatus();
 
-  // Fetch curveId only for non-available operators (no shortInfo)
-  const { data: fetchedCurveId } = useOperatorCurveId(
-    shortInfo ? undefined : nodeOperatorId,
+  // Fetch the curve only for non-available operators (no shortInfo); rows in
+  // this list are always CM (groups are CM-only).
+  const { data: fetchedCurve } = useOperatorCurveId(
+    shortInfo ? undefined : { nodeOperatorId, module: MODULE_NAME.CM },
   );
-  const curveId = shortInfo?.curveId ?? fetchedCurveId;
+  const curve = shortInfo ?? fetchedCurve;
 
   // Roles only for available operators
   const roles = shortInfo ? getNodeOperatorRoles(shortInfo, address) : [];
@@ -79,7 +81,7 @@ export const OperatorRow: FC<OperatorRowProps> = ({
         <Stack gap="sm" center spaceBetween>
           <CmRowDescriptor>
             <DescriptorId id={nodeOperatorId} />
-            <CurveBadge curveId={curveId} module={shortInfo?.module} inline />
+            <CurveBadge curve={curve} inline />
             <DescriptorRolesStyle>
               {roles.map((role) => (
                 <RoleBadge role={role} key={role} />
@@ -88,9 +90,7 @@ export const OperatorRow: FC<OperatorRowProps> = ({
           </CmRowDescriptor>
           <ActionButton
             action={action}
-            onSwitch={() =>
-              shortInfo && onSwitch(nodeOperatorId, shortInfo.module)
-            }
+            onSwitch={() => shortInfo && onSwitch(shortInfo)}
           />
         </Stack>
 
