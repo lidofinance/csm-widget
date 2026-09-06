@@ -39,7 +39,7 @@ test.describe(
       qase(85, 'Should open transaction page after added 75 keys'),
       async ({ widgetService }) => {
         await keysPage.submitPage.submitKeys(
-          keysGeneratorService.generateKeys(75),
+          keysGeneratorService.generateKeys({ numValidators: 75 }),
           TokenSymbol.ETH,
         );
         await widgetService.walletPage.cancelTx();
@@ -49,7 +49,9 @@ test.describe(
     test(
       qase(86, 'Should failed if uploaded over the limit (76) keys'),
       async () => {
-        const overTheLimitKeys = keysGeneratorService.generateKeys(76);
+        const overTheLimitKeys = keysGeneratorService.generateKeys({
+          numValidators: 76,
+        });
         await keysPage.submitPage.fillKeys(overTheLimitKeys);
         await expect(keysPage.submitPage.validationInputError).toContainText(
           'Too many keys in one transaction, maximum allowed: 75',

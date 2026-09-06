@@ -81,7 +81,7 @@ export const test = base.extend<
   keysGeneratorService: async ({}, use) => {
     await use(
       new KeysGeneratorService({
-        isCM: true,
+        wcType: '0x02',
         ...widgetFullConfig.standConfig.keysGeneratorConfig,
       }),
     );

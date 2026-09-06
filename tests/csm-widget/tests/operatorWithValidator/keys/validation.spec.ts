@@ -158,7 +158,7 @@ test.describe('Operator with keys. Validation keys json.', async () => {
         `Should display error if ${propertyName} does not passed for index >0 in array of keys`,
       ),
       async () => {
-        const keys = keysGeneratorService.generateKeys(3);
+        const keys = keysGeneratorService.generateKeys({ numValidators: 3 });
         // @ts-expect-error negative test for validation
         keys[2] = omitField(keys[2], propertyName);
 

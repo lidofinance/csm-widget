@@ -167,7 +167,7 @@ test.describe(
       async () => {
         const key = keysGeneratorService.generateKeys();
 
-        key[0].withdrawal_credentials = generateWithdrawalCredentials(true);
+        key[0].withdrawal_credentials = generateWithdrawalCredentials('0x02');
 
         await keysPage.submitPage.fillKeys(key);
         await expect(keysPage.submitPage.validationInputError).toContainText(
@@ -278,7 +278,7 @@ test.describe(
     test(
       qase(365, 'Should count only invalid keys when some keys are valid'),
       async () => {
-        const keys = keysGeneratorService.generateKeys(3);
+        const keys = keysGeneratorService.generateKeys({ numValidators: 3 });
         keys[0].amount = 1;
         keys[2].amount = 1;
 
@@ -378,7 +378,7 @@ test.describe(
         ),
         async () => {
           qase.parameters({ propertyName });
-          const keys = keysGeneratorService.generateKeys(3);
+          const keys = keysGeneratorService.generateKeys({ numValidators: 3 });
           // @ts-expect-error negative test for validation
           keys[2] = omitField(keys[2], propertyName);
 
