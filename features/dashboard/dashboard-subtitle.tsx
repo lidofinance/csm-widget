@@ -3,7 +3,7 @@ import { PATH } from 'consts';
 import { useModule, useNodeOperator, useOperatorGroup } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components/stack/stack';
-import { useCurveMetadata, useShowFlags } from 'shared/hooks';
+import { useCurveMetadata } from 'shared/hooks';
 import { DescriptorId, formatGroupTitle } from 'shared/node-operator';
 import styled from 'styled-components';
 import { TextLocalLink } from 'shared/navigate';
@@ -23,7 +23,6 @@ const CmSubtitle: FC = () => {
   const { nodeOperatorId } = nodeOperator;
   const { data: group } = useOperatorGroup(nodeOperatorId);
   const metadata = useCurveMetadata(nodeOperator);
-  const { IS_NODE_OPERATOR } = useShowFlags();
 
   return (
     <Stack center gap="ms" selfJustify="center">
@@ -32,7 +31,7 @@ const CmSubtitle: FC = () => {
       </Text>
       <DividerStyle />
       <Text size="xxs">{metadata?.name}</Text>
-      {group && IS_NODE_OPERATOR ? (
+      {group ? (
         <>
           <DividerStyle />
           <TextLocalLink

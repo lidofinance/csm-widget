@@ -6,7 +6,7 @@ import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 const Page = () => (
   <GateLoaded>
     <Gate rule="IS_CM" fallback={<Navigate path={PATH.HOME} />}>
-      <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
+      <Gate rule="HAS_ANY_ROLE" fallback={<Navigate path={PATH.HOME} />}>
         <MetadataPage />
       </Gate>
     </Gate>

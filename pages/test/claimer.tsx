@@ -18,8 +18,9 @@ const Container = styled.div`
 `;
 
 // Connected mock account is the operator's custom rewards claimer only.
-// Expect: Bond + Roles sections (no Keys/Surveys), "You" chip on the claimer
-// row, no Roles header link, HAS_CLAIMER_ROLE=true, IS_NODE_OPERATOR=false.
+// Expect: full dashboard (Keys + Bond + Roles, no Surveys CTA), "You" chip on
+// the claimer row, Roles header link present, HAS_CLAIMER_ROLE=true,
+// IS_NODE_OPERATOR=false.
 const ClaimerTestPage: FC = () => (
   <Layout dummy title="Claimer Shell Test">
     <Container>

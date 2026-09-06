@@ -14,12 +14,12 @@ const ROLE_ROUTES: SwitcherRoutes = [
       PATH.SETTINGS_CLAIMER,
       PATH.SETTINGS_SPLITS,
     ],
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['HAS_ANY_ROLE'],
   },
   {
     title: 'Meta data',
     path: PATH.SETTINGS_METADATA,
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['HAS_ANY_ROLE'],
     modules: [MODULE_NAME.CM],
   },
   {

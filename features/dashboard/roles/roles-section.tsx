@@ -36,12 +36,8 @@ export const RolesSection: FC = () => {
   const { data: info } = useOperatorInfo(nodeOperatorId);
   const { data: claimerAddress } = useCustomRewardsClaimer(nodeOperatorId);
   const { data: feeSplits } = useFeeSplits(nodeOperatorId);
-  const {
-    HAS_MANAGER_ROLE,
-    HAS_REWARDS_ROLE,
-    HAS_CLAIMER_ROLE,
-    IS_NODE_OPERATOR,
-  } = useShowFlags();
+  const { HAS_MANAGER_ROLE, HAS_REWARDS_ROLE, HAS_CLAIMER_ROLE } =
+    useShowFlags();
   const canEditClaimer = useCanEditClaimer();
   const canEditSplits = useCanEditSplits();
 
@@ -50,7 +46,7 @@ export const RolesSection: FC = () => {
   return (
     <SectionBlock
       title="Roles"
-      href={IS_NODE_OPERATOR ? PATH.SETTINGS_ROLES : undefined}
+      href={PATH.SETTINGS_ROLES}
       data-testid="dashboardRolesSection"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink}
     >

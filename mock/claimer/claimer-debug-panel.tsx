@@ -33,14 +33,21 @@ const FLAGS: ShowRule[] = [
 const PATHS: [PATH, PATH][] = [
   [PATH.BOND, PATH.BOND_CLAIM],
   [PATH.BOND_CLAIM, PATH.BOND_CLAIM],
-  [PATH.BOND_ADD, PATH.BOND_CLAIM],
-  [PATH.BOND_UNLOCK, PATH.BOND_CLAIM],
-  [PATH.KEYS, PATH.CREATE],
-  [PATH.KEYS_VIEW, PATH.HOME],
-  [PATH.SETTINGS, PATH.SETTINGS_INBOX],
+  [PATH.BOND_ADD, PATH.BOND_ADD],
+  [PATH.BOND_UNLOCK, PATH.BOND_UNLOCK],
+  [PATH.KEYS, PATH.KEYS_VIEW],
+  [PATH.KEYS_VIEW, PATH.KEYS_VIEW],
+  [PATH.SETTINGS, PATH.SETTINGS_ROLES],
 ];
 
-const EXPECTED_NAV = ['Dashboard', 'Create Operator', 'Bond & Rewards'];
+const EXPECTED_NAV = [
+  'Dashboard',
+  'Create Operator',
+  'Keys',
+  'Monitoring',
+  'Bond & Rewards',
+  'Settings',
+];
 
 export const ClaimerDebugPanel: FC = () => {
   const flags = useShowFlags();

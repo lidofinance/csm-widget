@@ -10,7 +10,6 @@ import { OperatorGroupData } from './use-grouped-operators';
 import { LocalLink } from 'shared/navigate';
 import { PATH } from 'consts';
 import { formatGroupTitle } from 'shared/node-operator/utils';
-import { useShowFlags } from 'shared/hooks';
 
 type GroupSectionProps = {
   group: OperatorGroupData;
@@ -35,14 +34,13 @@ export const GroupSection: FC<GroupSectionProps> = ({
   availableMap,
   onSwitch,
 }) => {
-  const { IS_NODE_OPERATOR } = useShowFlags();
   return (
     <Stack direction="column" gap="sm">
       <Stack center spaceBetween>
         <Text size="xs" weight={700}>
           {formatGroupTitle(group)}
         </Text>
-        {IS_NODE_OPERATOR && group.allOperatorIds.includes(activeId) && (
+        {group.allOperatorIds.includes(activeId) && (
           <LocalLink href={PATH.GROUP}>
             <Button size="xs" variant="ghost">
               View

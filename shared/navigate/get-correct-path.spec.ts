@@ -25,7 +25,11 @@ describe('getCorrectPath(PATH.CREATE)', () => {
     expect(
       getCorrectPath(
         PATH.CREATE,
-        flags({ CAN_CREATE: false, HAS_MANAGER_ROLE: true }),
+        flags({
+          CAN_CREATE: false,
+          HAS_MANAGER_ROLE: true,
+          HAS_ANY_ROLE: true,
+        }),
       ),
     ).toBe(PATH.KEYS_VIEW);
   });
@@ -68,26 +72,53 @@ describe('getCorrectPath(PATH.CREATE)', () => {
   });
 });
 
-describe('getCorrectPath — bond pages', () => {
+describe('getCorrectPath — claimer-only wallet', () => {
   const claimer = flags({ HAS_ANY_ROLE: true });
   const operator = flags({ HAS_MANAGER_ROLE: true, HAS_ANY_ROLE: true });
+  const nobody = flags({});
 
-  it('keeps a claimer-only wallet inside the claim page', () => {
+  it('gives a claimer full access to the bond pages', () => {
     expect(getCorrectPath(PATH.BOND, claimer)).toBe(PATH.BOND_CLAIM);
     expect(getCorrectPath(PATH.BOND_CLAIM, claimer)).toBe(PATH.BOND_CLAIM);
-    expect(getCorrectPath(PATH.BOND_ADD, claimer)).toBe(PATH.BOND_CLAIM);
-    expect(getCorrectPath(PATH.BOND_UNLOCK, claimer)).toBe(PATH.BOND_CLAIM);
+    expect(getCorrectPath(PATH.BOND_ADD, claimer)).toBe(PATH.BOND_ADD);
+    expect(getCorrectPath(PATH.BOND_UNLOCK, claimer)).toBe(PATH.BOND_UNLOCK);
   });
 
-  it('leaves an operator on the requested bond page', () => {
-    expect(getCorrectPath(PATH.BOND, operator)).toBe(PATH.BOND_CLAIM);
+  it('gives a claimer full access to the keys pages', () => {
+    expect(getCorrectPath(PATH.KEYS, claimer)).toBe(PATH.KEYS_VIEW);
+    expect(getCorrectPath(PATH.KEYS_VIEW, claimer)).toBe(PATH.KEYS_VIEW);
+    expect(getCorrectPath(PATH.KEYS_SUBMIT, claimer)).toBe(PATH.KEYS_VIEW);
+    expect(getCorrectPath(PATH.KEYS_EXIT, claimer)).toBe(PATH.KEYS_EXIT);
+  });
+
+  it('gives a claimer full access to the settings pages', () => {
+    expect(getCorrectPath(PATH.SETTINGS, claimer)).toBe(PATH.SETTINGS_ROLES);
+    expect(getCorrectPath(PATH.SETTINGS_ROLES, claimer)).toBe(
+      PATH.SETTINGS_ROLES,
+    );
+  });
+
+  it('keeps the ICS claim type page operator-only for a claimer', () => {
+    expect(
+      getCorrectPath(
+        PATH.TYPE_ICS_CLAIM,
+        flags({
+          HAS_ANY_ROLE: true,
+          CAN_CLAIM_ICS: true,
+          ICS_APPLY_ENABLED: false,
+        }),
+      ),
+    ).toBe(PATH.TYPE_PARAMETERS);
+  });
+
+  it('leaves an operator on the requested bond and keys pages', () => {
     expect(getCorrectPath(PATH.BOND_ADD, operator)).toBe(PATH.BOND_ADD);
-    expect(getCorrectPath(PATH.BOND_UNLOCK, operator)).toBe(PATH.BOND_UNLOCK);
+    expect(getCorrectPath(PATH.KEYS_SUBMIT, operator)).toBe(PATH.KEYS_SUBMIT);
   });
 
-  it('sends a wallet with no role home', () => {
-    expect(getCorrectPath(PATH.BOND, flags({}))).toBe(PATH.HOME);
-    expect(getCorrectPath(PATH.BOND_CLAIM, flags({}))).toBe(PATH.HOME);
-    expect(getCorrectPath(PATH.BOND_ADD, flags({}))).toBe(PATH.HOME);
+  it('sends a wallet with no role to the fallback pages', () => {
+    expect(getCorrectPath(PATH.BOND, nobody)).toBe(PATH.HOME);
+    expect(getCorrectPath(PATH.KEYS, nobody)).toBe(PATH.CREATE);
+    expect(getCorrectPath(PATH.SETTINGS, nobody)).toBe(PATH.SETTINGS_INBOX);
   });
 });

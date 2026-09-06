@@ -78,31 +78,25 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
 
   useAlertWatcher({
     component: AlertRequestToExit,
-    shouldShow: IS_NODE_OPERATOR && !!hasRequestsToExit,
+    shouldShow: !!hasRequestsToExit,
     loading: isKeysLoading,
   });
 
   useAlertWatcher({
     component: AlertNomalizeQueue,
-    shouldShow: IS_NODE_OPERATOR && isCsmFamily && !!normalizeQueue,
+    shouldShow: isCsmFamily && !!normalizeQueue,
   });
 
   useAlertWatcher({
     component: AlertLockedBond,
     shouldShow:
-      IS_NODE_OPERATOR &&
-      !!balance?.locked &&
-      !isLockExpired &&
-      route !== PATH.BOND_UNLOCK,
+      !!balance?.locked && !isLockExpired && route !== PATH.BOND_UNLOCK,
   });
 
   useAlertWatcher({
     component: AlertExpiredLockedBond,
     shouldShow:
-      IS_NODE_OPERATOR &&
-      !!balance?.locked &&
-      !!isLockExpired &&
-      route !== PATH.BOND_UNLOCK,
+      !!balance?.locked && !!isLockExpired && route !== PATH.BOND_UNLOCK,
   });
 
   useAlertWatcher({
@@ -127,9 +121,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   useAlertWatcher({
     component: AlertWrongFeeRecipient,
     shouldShow:
-      IS_NODE_OPERATOR &&
-      !!keysWithWrongFeeRecipient?.length &&
-      !isFeeRecipientAlertDismissed,
+      !!keysWithWrongFeeRecipient?.length && !isFeeRecipientAlertDismissed,
     props: useMemo(
       () => ({
         pubkeys: keysWithWrongFeeRecipient || [],

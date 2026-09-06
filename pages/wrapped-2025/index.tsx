@@ -7,7 +7,7 @@ const Page = () => (
   <GateLoaded>
     <Gate rule="IS_CSM" fallback={<Navigate path={PATH.HOME} />}>
       <Gate rule="IS_MAINNET" fallback={<Navigate path={PATH.HOME} />}>
-        <Gate rule="IS_NODE_OPERATOR" fallback={<Navigate path={PATH.HOME} />}>
+        <Gate rule="HAS_ANY_ROLE" fallback={<Navigate path={PATH.HOME} />}>
           <WrappedPage />
         </Gate>
       </Gate>

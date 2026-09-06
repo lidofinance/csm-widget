@@ -10,8 +10,8 @@ export const Dashboard: FC = () => {
     <>
       <Gate rule="IS_NODE_OPERATOR">
         <SurveysCta />
-        <KeysSection />
       </Gate>
+      <KeysSection />
       <BondSection />
       <RolesSection />
     </>

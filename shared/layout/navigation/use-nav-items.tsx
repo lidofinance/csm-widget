@@ -67,14 +67,14 @@ const routes: Route[] = [
       PATH.KEYS_EXIT,
       PATH.KEYS_VIEW,
     ],
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['HAS_ANY_ROLE'],
     suffix: <CounterInvalidKeys />,
   },
   {
     name: 'Monitoring',
     path: PATH.MONITORING,
     icon: <MeterIcon />,
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['HAS_ANY_ROLE'],
   },
   {
     name: 'Bond & Rewards',
@@ -96,17 +96,14 @@ const routes: Route[] = [
       PATH.SETTINGS_INBOX,
       PATH.SETTINGS_METADATA,
     ],
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['HAS_ANY_ROLE'],
     suffix: <CounterInvites />,
   },
   {
     name: 'Inbox Requests',
     path: PATH.SETTINGS_INBOX,
     icon: <GearIcon />,
-    showRules: [
-      ['HAS_INVITES', 'NOT_NODE_OPERATOR'],
-      ['HAS_INVITES', 'HAS_CLAIMER_ROLE'],
-    ],
+    showRules: [['HAS_INVITES', 'NOT_NODE_OPERATOR']],
     suffix: <CounterInvites />,
   },
   {
