@@ -10,6 +10,7 @@ export const SurveysSignInPage: FC = () => (
     be used for report building (
     <MatomoLink
       $inline
+      data-testid="vanomDashboardLink"
       href="https://app.hex.tech/8dedcd99-17f4-49d8-944e-4857a355b90a/app/3f7d6967-3ef6-4e69-8f7b-d02d903f045b/latest"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.vanomDashboardLink}
     >

@@ -24,6 +24,7 @@ export const OperatorTypeModal: ModalComponentType = ({ open, onClose }) => {
             Check out details about{' '}
             <MatomoLink
               $inline
+              data-testid="operatorTypesDocsLink"
               href={OPERATOR_TYPES_LINK}
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.operatorTypesDocsLink}
             >

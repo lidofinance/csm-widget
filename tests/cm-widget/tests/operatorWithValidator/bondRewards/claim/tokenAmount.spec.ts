@@ -61,6 +61,7 @@ test.describe(
           338,
           `Should show correct name, converted amount and hint for ${tokenName}`,
         ),
+        { tag: [Tags.matomo] },
         async ({ widgetService, cmSDK }) => {
           const { claim } = widgetService.bondRewardsPage;
           const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));
@@ -110,7 +111,7 @@ test.describe(
           });
 
           if (tokenName === TOKENS.eth) {
-            await test.step('Note about manual ETH claim is shown with FAQ link and Matomo event', async () => {
+            await test.step('Check note about manual ETH claim and click to FAQ link', async () => {
               await expect(claim.ethNote).toContainText(
                 'note: After receiving NFT you will need to claim ETH manually. Follow FAQ for more details.',
               );

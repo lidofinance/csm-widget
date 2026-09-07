@@ -155,27 +155,29 @@ test.describe(
       },
     );
 
-    test('Should navigate to bond page on header link click', async ({
-      widgetService,
-    }) => {
-      const { bondRewards } = widgetService.dashboardPage;
+    test(
+      'Should navigate to bond page on header link click',
+      { tag: [Tags.matomo] },
+      async ({ widgetService }) => {
+        const { bondRewards } = widgetService.dashboardPage;
 
-      await test.step('Click section header link and check Matomo event', async () => {
-        await Promise.all([
-          matomoEventService.waitForEvent(
-            'e_n',
-            'cm_widget_dashboard_bond_section',
-          ),
-          bondRewards.sectionHeaderLink.click(),
-        ]);
-      });
+        await test.step('Click section header link', async () => {
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_dashboard_bond_section',
+            ),
+            bondRewards.sectionHeaderLink.click(),
+          ]);
+        });
 
-      await test.step('Check navigation to bond page', async () => {
-        await expect(
-          widgetService.page,
-          'Should navigate to bond page',
-        ).toHaveURL(/\/bond/);
-      });
-    });
+        await test.step('Check navigation to bond page', async () => {
+          await expect(
+            widgetService.page,
+            'Should navigate to bond page',
+          ).toHaveURL(/\/bond/);
+        });
+      },
+    );
   },
 );

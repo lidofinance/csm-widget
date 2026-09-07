@@ -18,9 +18,7 @@ export class OperatorTypeModal {
       hasText: 'Choose operator type',
     });
     this.title = this.modal.getByText('Choose operator type');
-    this.parametersDocsLink = this.modal.getByRole('link', {
-      name: 'operator types and parameters',
-    });
+    this.parametersDocsLink = this.modal.getByTestId('operatorTypesDocsLink');
 
     this.defCard = this.getCard('def');
     this.icsCard = this.getCard('ics');

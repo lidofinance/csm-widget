@@ -11,7 +11,7 @@ export const RewardsHistoryTable: FC = () => {
   const { data } = useTable<ValidatorRewardsEntity>();
 
   return (
-    <TableStyle>
+    <TableStyle data-testid="rewardsHistoryTable">
       <thead>
         <tr>
           <th>
@@ -36,7 +36,7 @@ export const RewardsHistoryTable: FC = () => {
       </thead>
       <tbody>
         {data.map((record, index) => (
-          <tr key={index}>
+          <tr key={index} data-testid="rewardsHistoryRow">
             <td>
               <DatesWrapper>
                 <Date timestamp={record.startTimestamp} format="yyyy, MMM dd" />{' '}
