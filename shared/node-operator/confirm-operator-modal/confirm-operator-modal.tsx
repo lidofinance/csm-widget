@@ -14,13 +14,27 @@ export const ConfirmOperatorModal: ModalComponentType<
   ConfirmOperatorModalProps
 > = ({ nodeOperator, onConfirm, onReject, ...props }) => {
   return (
-    <Modal {...props} center onClose={onReject}>
-      <Stack direction="column" gap="xxl" data-testid="confirmOperatorModal">
+    <Modal
+      {...props}
+      center
+      onClose={onReject}
+      data-testid="confirmOperatorModal"
+    >
+      <Stack direction="column" gap="xxl">
         <Stack direction="column" gap="sm">
-          <Text as="h5" size="sm" weight={700}>
+          <Text
+            as="h5"
+            size="sm"
+            weight={700}
+            data-testid="confirmOperatorTitle"
+          >
             Confirm your Node Operator
           </Text>
-          <Text size="xs" color="secondary">
+          <Text
+            size="xs"
+            color="secondary"
+            data-testid="confirmOperatorDescription"
+          >
             Check that the Node Operator below is the one you intend to use
             before proceeding
           </Text>

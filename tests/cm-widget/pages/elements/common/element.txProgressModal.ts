@@ -8,6 +8,7 @@ export class TxModal {
   description: Locator;
   footerHint: Locator;
   footer: Locator;
+  switchToOperatorBtn: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -17,9 +18,10 @@ export class TxModal {
     this.description = this.modalContent.getByTestId('description');
     this.footerHint = this.modalContent.getByTestId('footerHint');
     this.footer = this.modalContent.getByTestId('footer');
+    this.switchToOperatorBtn = this.footer.getByTestId('switchToOperatorBtn');
   }
 
   async closeModal() {
-    await this.modal.locator('[type="button"]').first().click();
+    await this.modal.locator('button').first().click();
   }
 }

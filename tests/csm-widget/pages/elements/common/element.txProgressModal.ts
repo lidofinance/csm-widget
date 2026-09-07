@@ -26,6 +26,6 @@ export class TxModal {
   }
 
   async closeModal() {
-    await this.modal.locator('[type="button"]').first().click();
+    await this.modal.locator('button').first().click();
   }
 }
