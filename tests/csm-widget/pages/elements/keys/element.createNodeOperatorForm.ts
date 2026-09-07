@@ -21,6 +21,14 @@ export class CreateNodeOperatorForm {
   extendedManagerPermissionsRadio: Locator;
   customRewardAddressCurrentButton: Locator;
   customManagerAddressCurrentButton: Locator;
+  customAddressDescriptionLink: Locator;
+  managerAddressPermissionTypeLink: Locator;
+  rewardsAddressInput: Locator;
+  managerAddressInput: Locator;
+
+  // Confirmation modal
+  confirmAddressesModal: Locator;
+  confirmAddressesContinueButton: Locator;
 
   // Parsed tab
   depositDataRow: Locator;
@@ -57,6 +65,29 @@ export class CreateNodeOperatorForm {
     this.customManagerAddressCurrentButton = this.formBlock
       .locator('xpath=//input[@name="managerAddress"]/ancestor::label')
       .getByRole('button', { name: 'Connected address' });
+
+    this.customAddressDescriptionLink = this.formBlock.getByTestId(
+      'customAddressDescriptionLink',
+    );
+    this.managerAddressPermissionTypeLink = this.formBlock.getByTestId(
+      'managerAddressPermissionTypeLink',
+    );
+
+    this.rewardsAddressInput = this.formBlock.locator(
+      'input[name="rewardsAddress"]',
+    );
+    this.managerAddressInput = this.formBlock.locator(
+      'input[name="managerAddress"]',
+    );
+
+    // Confirmation modal
+    this.confirmAddressesModal = this.page.locator('div[role="dialog"]', {
+      hasText: 'Confirm addresses configuration',
+    });
+    this.confirmAddressesContinueButton = this.confirmAddressesModal.getByRole(
+      'button',
+      { name: 'Continue' },
+    );
 
     // Parsed tab
     this.depositDataRow = this.formBlock.getByTestId('deposit-data-row');

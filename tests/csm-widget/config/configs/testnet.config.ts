@@ -8,6 +8,7 @@ export class TestnetConfig extends BaseConfig {
       standType: 'testnet',
       standUrl: 'https://csm.testnet.fi/',
       matomoUrl: 'https://matomo.testnet.fi/matomo.php',
+      stakeWidgetUrl: 'https://stake-hoodi.testnet.fi',
       networkConfig: {
         chainId: 560048,
         tokenSymbol: 'ETH',
