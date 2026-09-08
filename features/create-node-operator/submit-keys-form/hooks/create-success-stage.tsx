@@ -46,8 +46,10 @@ export const renderCreateSuccess = (
       footer={
         hasAnyRole && result?.nodeOperatorId !== undefined ? (
           <SubmitKeysSuccessActions
-            nodeOperatorId={result.nodeOperatorId}
-            module={data.targetModule}
+            operator={{
+              nodeOperatorId: result.nodeOperatorId,
+              module: data.targetModule,
+            }}
           />
         ) : undefined
       }

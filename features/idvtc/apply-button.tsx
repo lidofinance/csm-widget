@@ -1,9 +1,7 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Button, ButtonProps } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
 import { useModule, useNodeOperatorId } from 'modules/web3';
 import { FC } from 'react';
-import { getOperatorTypeQuery } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { IdvtcFormStatus, IdvtcTypeStatus, useIdvtcState } from './shared';
 
@@ -11,7 +9,6 @@ type ButtonState = {
   text: string;
   variant: ButtonProps['variant'];
   href: PATH;
-  query?: Record<string, string>;
 };
 
 const getButtonState = (
@@ -34,8 +31,7 @@ const getButtonState = (
       return {
         text: 'Create IDVTC operator',
         variant: undefined,
-        href: PATH.CREATE,
-        query: getOperatorTypeQuery(OPERATOR_TYPE.CSM_IDVTC),
+        href: PATH.CREATE_IDVTC,
       };
     }
     return {
@@ -70,14 +66,14 @@ export const IdvtcApplyButton: FC<Props> = ({ size }) => {
   const { typeStatus, data } = useIdvtcState();
   const { isCSM } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { text, variant, href, query } = getButtonState(
+  const { text, variant, href } = getButtonState(
     typeStatus,
     data?.status,
     isCSM && nodeOperatorId !== undefined,
   );
 
   return (
-    <LocalLink href={href} query={query}>
+    <LocalLink href={href}>
       <Button
         fullwidth
         size={size}

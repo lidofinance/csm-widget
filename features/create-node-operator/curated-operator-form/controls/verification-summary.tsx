@@ -42,8 +42,8 @@ export const VerificationSummary: FC = () => {
     (gate) => gate.gateName === gateName,
   );
 
-  const { data: parameters } = useCurveParameters(selectedGate?.curveId);
-  const metadata = useCurveMetadata(selectedGate?.curveId);
+  const { data: parameters } = useCurveParameters(selectedGate?.curve);
+  const metadata = useCurveMetadata(selectedGate?.curve);
 
   return (
     <ListStyle>

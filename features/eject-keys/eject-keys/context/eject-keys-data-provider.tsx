@@ -4,7 +4,7 @@ import {
   KEY_OPERATOR_KEYS,
   useEthereumBalance,
   useKeyEjectFee,
-  useNodeOperatorId,
+  useNodeOperator,
   useOperatorCurveId,
   useOperatorInfo,
   useOperatorKeysWithStatus,
@@ -23,7 +23,8 @@ const useEjectKeysFormNetworkData: NetworkData<
   EjectKeysFormNetworkData
 > = () => {
   const ethBalanceQuery = useEthereumBalance();
-  const nodeOperatorId = useNodeOperatorId();
+  const { nodeOperator } = useNodeOperator();
+  const nodeOperatorId = nodeOperator?.nodeOperatorId;
   const infoQuery = useOperatorInfo(nodeOperatorId);
   const keysQuery = useOperatorKeysWithStatus(nodeOperatorId, (keys) =>
     keys.filter(hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING])),
@@ -37,8 +38,8 @@ const useEjectKeysFormNetworkData: NetworkData<
   const isInfoLoading = infoQuery.isPending;
   const isKeysLoading = keysQuery.isPending;
 
-  const { data: curveId, isPending: isCurveIdLoading } =
-    useOperatorCurveId(nodeOperatorId);
+  const { data: curve, isPending: isCurveIdLoading } =
+    useOperatorCurveId(nodeOperator);
   const { data: ejectKeyFee, isPending: isEjectKeyFeeLoading } =
     useKeyEjectFee();
 
@@ -63,7 +64,7 @@ const useEjectKeysFormNetworkData: NetworkData<
     data: {
       ethBalance,
       nodeOperatorId,
-      curveId,
+      curve,
       ejectKeyFee,
       keys,
       info,

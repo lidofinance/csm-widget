@@ -5,10 +5,7 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
-import {
-  ICS_APPLY_FORM,
-  SURVEYS_SETUP_ENABLED,
-} from 'config/feature-flags/types';
+import { SURVEYS_SETUP_ENABLED } from 'config/feature-flags/types';
 import { isSurveysApiConfigured } from 'modules/surveys-sdk';
 import {
   useDappStatus,
@@ -25,7 +22,13 @@ import { useCallback, useMemo } from 'react';
 import {
   useCanClaimICS,
   useCanClaimIDVTC,
+  useCanCreate0x01,
+  useCanCreate0x02,
+  useCanCreateICS,
+  useCanCreateIDVTC,
   useCanCreateNodeOperator,
+  useCreateOptions,
+  useIcsApplyEnabled,
 } from 'shared/hooks';
 import { Address, isAddressEqual } from 'viem';
 
@@ -35,6 +38,10 @@ export type ShowRule =
   | 'NOT_NODE_OPERATOR'
   | 'IS_NODE_OPERATOR'
   | 'CAN_CREATE'
+  | 'CAN_CREATE_0X01'
+  | 'CAN_CREATE_ICS'
+  | 'CAN_CREATE_IDVTC'
+  | 'CAN_CREATE_0X02'
   | 'HAS_KEYS'
   | 'HAS_INVITES'
   | 'HAS_MANAGER_ROLE'
@@ -46,6 +53,7 @@ export type ShowRule =
   | 'CAN_CLAIM_ICS'
   | 'CAN_CLAIM_IDVTC'
   | 'ICS_APPLY_ENABLED'
+  | 'HAS_APPLY_OPTIONS'
   | 'IS_SURVEYS_ACTIVE'
   | 'IS_CSM'
   | 'IS_CSM_02'
@@ -97,11 +105,17 @@ export const useShowFlags = (): ShowFlags => {
   const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
-  const { data: operatorType } = useOperatorType(nodeOperator?.nodeOperatorId);
+  const { data: operatorType } = useOperatorType(nodeOperator);
   const { canCreate: canCreateNO } = useCanCreateNodeOperator();
+  const { canCreate: canCreate0x01 } = useCanCreate0x01();
+  const { canCreate: canCreate0x02 } = useCanCreate0x02();
+  const { canCreate: canCreateICS } = useCanCreateICS();
+  const { canCreate: canCreateIDVTC } = useCanCreateIDVTC();
+  const createOptions = useCreateOptions();
   const { referrer } = useModifyContext();
   const featureFlags = useFeatureFlags();
   const { module, isCsmFamily } = useModule();
+  const icsApplyEnabled = useIcsApplyEnabled();
 
   return useMemo(
     () => ({
@@ -110,6 +124,10 @@ export const useShowFlags = (): ShowFlags => {
       ['NOT_NODE_OPERATOR']: !nodeOperator,
       ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
       ['CAN_CREATE']: !!canCreateNO,
+      ['CAN_CREATE_0X01']: canCreate0x01,
+      ['CAN_CREATE_ICS']: canCreateICS,
+      ['CAN_CREATE_IDVTC']: canCreateIDVTC,
+      ['CAN_CREATE_0X02']: canCreate0x02,
       ['HAS_KEYS']: !!info?.totalAddedKeys,
       ['HAS_MANAGER_ROLE']:
         isAccountActive && isManagerRole(nodeOperator, address),
@@ -122,8 +140,8 @@ export const useShowFlags = (): ShowFlags => {
       ['EL_DELAYED_PENALTY_REPORTER']: !!isReportingRole,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
       ['CAN_CLAIM_IDVTC']: !!canClaimIDVTC && isAccountActive,
-      ['ICS_APPLY_ENABLED']:
-        !!featureFlags?.[ICS_APPLY_FORM] && module === MODULE_NAME.CSM,
+      ['ICS_APPLY_ENABLED']: icsApplyEnabled,
+      ['HAS_APPLY_OPTIONS']: createOptions.some(({ kind }) => kind === 'apply'),
       ['IS_SURVEYS_ACTIVE']:
         isSurveysApiConfigured &&
         !!featureFlags?.[SURVEYS_SETUP_ENABLED] &&
@@ -142,6 +160,10 @@ export const useShowFlags = (): ShowFlags => {
       isAccountActive,
       nodeOperator,
       canCreateNO,
+      canCreate0x01,
+      canCreate0x02,
+      canCreateICS,
+      canCreateIDVTC,
       info?.totalAddedKeys,
       address,
       invites?.length,
@@ -154,6 +176,8 @@ export const useShowFlags = (): ShowFlags => {
       module,
       operatorType,
       isCsmFamily,
+      icsApplyEnabled,
+      createOptions,
     ],
   );
 };

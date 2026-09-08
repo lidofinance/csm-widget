@@ -12,3 +12,8 @@ export type CachedOperatorRef = {
   id: NodeOperatorId;
   module: MODULE_NAME;
 };
+
+export type OperatorRef = {
+  nodeOperatorId: NodeOperatorId;
+  module: MODULE_NAME;
+};

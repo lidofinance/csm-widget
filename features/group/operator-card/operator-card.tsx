@@ -1,4 +1,6 @@
 import {
+  CurveRef,
+  MODULE_NAME,
   NodeOperatorInfo,
   OperatorMetadata,
   SubOperatorStakeSummary,
@@ -25,7 +27,10 @@ export const OperatorCard: FC<SubOperatorStakeSummary> = ({
 }) => {
   const { data: metadata } = useOperatorMetadata(nodeOperatorId);
   const { data: info } = useOperatorInfo(nodeOperatorId);
-  const { data: curveId } = useOperatorCurveId(nodeOperatorId);
+  const { data: curve } = useOperatorCurveId({
+    nodeOperatorId,
+    module: MODULE_NAME.CM,
+  });
 
   const stakeAndKeys = useMemo(
     () => (info ? computeStakeData(props, info) : undefined),
@@ -44,7 +49,7 @@ export const OperatorCard: FC<SubOperatorStakeSummary> = ({
             stakeAndKeys,
             operatorMetadata: metadata,
             info,
-            curveId,
+            curve,
           }}
         />
         <StakeStats data={stakeAndKeys} />
@@ -63,7 +68,7 @@ const OperatorCardHeader: FC<
   SubOperatorStakeSummary & {
     operatorMetadata?: OperatorMetadata;
     info?: NodeOperatorInfo;
-    curveId: bigint | undefined;
+    curve: CurveRef | undefined;
     stakeAndKeys: StakeAndKeysData | undefined;
   }
 > = ({
@@ -71,10 +76,10 @@ const OperatorCardHeader: FC<
   weight,
   operatorMetadata,
   info,
-  curveId,
+  curve,
   stakeAndKeys,
 }) => {
-  const curveMetadata = useCurveMetadata(curveId);
+  const curveMetadata = useCurveMetadata(curve);
 
   return (
     <Stack direction="column" gap="xs">
@@ -94,7 +99,7 @@ const OperatorCardHeader: FC<
         )}
       </Stack>
 
-      {operatorMetadata && info && curveId !== undefined ? (
+      {operatorMetadata && info && curve ? (
         <Stack center gap="sm">
           <Text size="xs" data-testid="operatorMetadataName">
             {operatorMetadata.name}

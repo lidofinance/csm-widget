@@ -10,7 +10,7 @@ test.describe('Main page', async () => {
       await widgetService.page
         .getByText('CSM node operator starter pack')
         .waitFor({ state: 'visible' });
-      await widgetService.page.getByText('Create Node Operator').click();
+      await widgetService.mainPage.openCreateForm();
 
       await widgetService.page
         .getByText('Choose bond token')

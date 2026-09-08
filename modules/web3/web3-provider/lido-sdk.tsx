@@ -60,9 +60,8 @@ const SM_SDK_CONSTRUCTORS = {
   [MODULE_NAME.CSM_02]: LidoSDKCsm02,
 } as const;
 
-// The primary module must construct — a throw here is fatal by design. Secondary
-// modules are dropped from the runtime set instead, so an availability/SDK
-// mismatch on rollout fails closed rather than crashing the app.
+// The primary module must construct — a throw here is fatal by design. A
+// secondary module whose SDK constructor throws is dropped from the runtime set.
 const buildSmSdkMap = (smProps: SdkProps): SmSdkMap => {
   const map: SmSdkMap = {};
   for (const mod of deployedModules) {
@@ -86,48 +85,53 @@ export const useLidoSDK = () => {
 };
 
 /**
- * Returns the requested module's SDK regardless of which module is active,
- * deliberately bypassing the active-module guard that `useSmSDK(module)` enforces.
+ * Returns the requested module's SDK only while it is the active operator's
+ * module — operator-scoped queries use the `undefined` to stay disabled.
  */
-export function useSmSDKByModule(
-  module: MODULE_NAME.CSM,
-): LidoSDKCsm | undefined;
-export function useSmSDKByModule(
+export function useActiveSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
+export function useActiveSmSDK(
   module: MODULE_NAME.CSM_02,
 ): LidoSDKCsm02 | undefined;
-export function useSmSDKByModule(module: MODULE_NAME.CM): LidoSDKCm | undefined;
-export function useSmSDKByModule(module: MODULE_NAME): SmSDK | undefined;
+export function useActiveSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
 // eslint-disable-next-line func-style
-export function useSmSDKByModule(module: MODULE_NAME) {
+export function useActiveSmSDK(module: MODULE_NAME) {
   const { sm } = useLidoSDK();
-  return sm[module];
+  // Read without throwing: also called above NodeOperatorProvider
+  // (e.g. GateSupported), where falling back to the primary avoids the #526 SSR 500.
+  const operatorCtx = useContext(NodeOperatorContext);
+  const activeModule = operatorCtx?.activeModule ?? config.module;
+  return module === activeModule ? sm[module] : undefined;
+}
+
+/**
+ * Active module's SDK, or — with `module` — that module's SDK whether or
+ * not it is active.
+ */
+export function useSmSDK(): SmSDK;
+export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
+export function useSmSDK(module: MODULE_NAME.CSM_02): LidoSDKCsm02 | undefined;
+export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
+export function useSmSDK(module: MODULE_NAME): SmSDK | undefined;
+export function useSmSDK(module: MODULE_NAME | undefined): SmSDK | undefined;
+// eslint-disable-next-line func-style
+export function useSmSDK(...args: [module?: MODULE_NAME]) {
+  const { sm } = useLidoSDK();
+  // Read without throwing: also called above NodeOperatorProvider
+  // (e.g. GateSupported), where falling back to the primary avoids the #526 SSR 500.
+  const operatorCtx = useContext(NodeOperatorContext);
+  // Only the zero-arg form means "active module"; an explicit undefined means "no module".
+  if (args.length === 0) return sm[operatorCtx?.activeModule ?? config.module];
+  const [module] = args;
+  return module ? sm[module] : undefined;
 }
 
 /** Resolves the SDK for `module`, falling back to the active module. */
 export const useTargetSmSDK = (module?: MODULE_NAME) => {
   const activeSdk = useSmSDK();
   const targetModule = module ?? activeSdk.core.moduleName;
-  const sdk = useSmSDKByModule(targetModule);
+  const sdk = useSmSDK(targetModule);
   return { targetModule, sdk };
 };
-
-export function useSmSDK(): SmSDK;
-export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
-export function useSmSDK(module: MODULE_NAME.CSM_02): LidoSDKCsm02 | undefined;
-export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
-// eslint-disable-next-line func-style
-export function useSmSDK(module?: MODULE_NAME) {
-  const { sm } = useLidoSDK();
-  // Read without throwing: useSmSDK is also called above NodeOperatorProvider
-  // (e.g. GateSupported), where falling back to the primary avoids the #526 SSR 500.
-  const operatorCtx = useContext(NodeOperatorContext);
-  const activeModule = operatorCtx?.activeModule ?? config.module;
-  if (module) {
-    if (module !== activeModule) return undefined;
-    return sm[module];
-  }
-  return sm[activeModule];
-}
 
 export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
   const { data: walletClient } = useWalletClient({ chainId });

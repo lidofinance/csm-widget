@@ -7,7 +7,7 @@ import { getProps } from 'utilsApi';
 
 const Page = () => {
   const { nodeOperator } = useNodeOperator();
-  const { isPending } = useOperatorType(nodeOperator?.nodeOperatorId);
+  const { isPending } = useOperatorType(nodeOperator);
 
   return (
     <GateLoaded>

@@ -6,7 +6,6 @@ import HeaderNodeOperator from './components/header-node-operator';
 import HeaderTheme from './components/header-theme';
 import HeaderWallet from './components/header-wallet';
 import { Logos } from './components/logos';
-import { HeaderCustomActionsSlot } from './header-custom-actions-slot';
 import { HeaderActionsStyle, HeaderStyle, HeaderWrapper } from './styles';
 
 export const Header: FC = () => (
@@ -15,7 +14,6 @@ export const Header: FC = () => (
       <Logos />
       <HeaderActionsStyle>
         <HeaderChain />
-        <HeaderCustomActionsSlot />
         <HeaderNodeOperator />
         <HeaderWallet />
         <HeaderTheme />

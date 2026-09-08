@@ -5,13 +5,13 @@ import { useRemoveKeysFormData } from '../context';
 import { calcBondBalance } from '@lidofinance/lido-csm-sdk';
 
 export const useBondBalanceAfterRemoveKeys = (count = 0) => {
-  const { info, bond, removalFee, curveId } = useRemoveKeysFormData(true);
+  const { info, bond, removalFee, curve } = useRemoveKeysFormData(true);
 
   const nextKeysCount = info.totalAddedKeys - info.totalWithdrawnKeys - count;
 
   const { data: bondRequiredAfter } = useBondByKeysCount({
     keysCount: nextKeysCount,
-    curveId,
+    curve,
   });
 
   const bondAfter = bond.current - removalFee * BigInt(count);

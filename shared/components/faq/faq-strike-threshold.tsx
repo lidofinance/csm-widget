@@ -1,14 +1,14 @@
 import { useCurveParameters } from 'modules/web3';
 import { FC } from 'react';
-import { useCurrentCurveId } from 'shared/hooks';
+import { useCurrentCurve } from 'shared/hooks';
 import { Plural } from '../plurals';
 import { ShortInlineLoader } from './styles';
 
 export const FaqStrikeThreshold: FC = () => {
-  const curveId = useCurrentCurveId();
+  const curve = useCurrentCurve();
 
   const { data } = useCurveParameters(
-    curveId,
+    curve,
     (params) => params.strikesConfig.threshold,
   );
 

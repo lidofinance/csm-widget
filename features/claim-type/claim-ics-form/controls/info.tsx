@@ -1,4 +1,3 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Accordion, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { CompareParametersList, FormTitle } from 'shared/components';
@@ -7,11 +6,11 @@ import styled from 'styled-components';
 import { useClaimIcsFormData } from '../context';
 
 export const Info: FC = () => {
-  const { currentParameters, newParameters, currentCurveId, newCurveId } =
+  const { currentParameters, newParameters, currentCurve, newCurve } =
     useClaimIcsFormData();
 
-  const currentMetadata = useCurveMetadata(currentCurveId, MODULE_NAME.CSM);
-  const newMetadata = useCurveMetadata(newCurveId, MODULE_NAME.CSM);
+  const currentMetadata = useCurveMetadata(currentCurve);
+  const newMetadata = useCurveMetadata(newCurve);
   return (
     <>
       <FormTitle>Claim Identified Community Staker operator type</FormTitle>

@@ -10,9 +10,13 @@ export const useSmStatus = (module?: MODULE_NAME) => {
   return useQuery({
     queryKey: ['sm-status', { module: targetModule }],
     ...STRATEGY_CONSTANT,
-    queryFn: () => {
+    queryFn: async () => {
       invariant(sdk);
-      return sdk.module.getStatus();
+      const [status, registration] = await Promise.all([
+        sdk.module.getStatus(),
+        sdk.module.getRegistration(),
+      ]);
+      return { ...status, ...registration };
     },
     enabled: !!sdk,
     select: (data) => ({

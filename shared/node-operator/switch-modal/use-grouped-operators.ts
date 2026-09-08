@@ -6,7 +6,7 @@ import { useQueries } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { useMemo } from 'react';
-import { useSmSDK } from 'modules/web3/web3-provider';
+import { useActiveSmSDK } from 'modules/web3/web3-provider';
 import { KEY_OPERATOR_GROUP_ID } from 'modules/web3/hooks/use-operator-group-id';
 import { KEY_OPERATOR_GROUP_SUMMARY } from 'modules/web3/hooks/use-operator-group-stake-summary';
 
@@ -27,7 +27,7 @@ export type GroupedOperatorsResult = {
 export const useGroupedOperators = (
   list: ModuleNodeOperator[],
 ): GroupedOperatorsResult => {
-  const sdk = useSmSDK(MODULE_NAME.CM);
+  const sdk = useActiveSmSDK(MODULE_NAME.CM);
 
   // Stage 1: fetch groupId per operator
   const groupIdResults = useQueries({

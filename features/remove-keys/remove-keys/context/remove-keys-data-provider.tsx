@@ -5,7 +5,7 @@ import {
   KEY_OPERATOR_INFO,
   KEY_OPERATOR_KEYS,
   useKeyRemovalFee,
-  useNodeOperatorId,
+  useNodeOperator,
   useOperatorBalance,
   useOperatorCurveId,
   useOperatorInfo,
@@ -24,7 +24,8 @@ import { type RemoveKeysFormNetworkData } from './types';
 const useRemoveKeysFormNetworkData: NetworkData<
   RemoveKeysFormNetworkData
 > = () => {
-  const nodeOperatorId = useNodeOperatorId();
+  const { nodeOperator } = useNodeOperator();
+  const nodeOperatorId = nodeOperator?.nodeOperatorId;
   const bondQuery = useOperatorBalance(nodeOperatorId);
   const infoQuery = useOperatorInfo(nodeOperatorId);
   const keysQuery = useOperatorKeysWithStatus(nodeOperatorId, (keys) =>
@@ -47,10 +48,10 @@ const useRemoveKeysFormNetworkData: NetworkData<
   const isInfoLoading = infoQuery.isPending;
   const isKeysLoading = keysQuery.isPending;
 
-  const { data: curveId, isPending: isCurveIdLoading } =
-    useOperatorCurveId(nodeOperatorId);
+  const { data: curve, isPending: isCurveIdLoading } =
+    useOperatorCurveId(nodeOperator);
   const { data: removalFee, isPending: isRemovalFeeLoading } =
-    useKeyRemovalFee(curveId);
+    useKeyRemovalFee(curve);
 
   const invalidate = useInvalidate();
 
@@ -73,7 +74,7 @@ const useRemoveKeysFormNetworkData: NetworkData<
   return {
     data: {
       nodeOperatorId,
-      curveId,
+      curve,
       removalFee,
       bond,
       keys,
