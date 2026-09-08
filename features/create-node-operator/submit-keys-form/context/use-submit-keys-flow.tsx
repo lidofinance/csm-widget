@@ -202,13 +202,15 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
           }
 
           if (result) {
+            // Leave the page before appending: the flipped CAN_CREATE_* gate
+            // would otherwise push /create and cancel this navigation.
+            await n(PATH.HOME);
             const roles = getNodeOperatorRoles(result, data.address);
             if (roles.length > 0) {
               appendNO({ ...result, module: data.targetModule });
             } else {
               setOperatorCustomAddresses(result.nodeOperatorId);
             }
-            void n(PATH.HOME);
           }
         },
       };
