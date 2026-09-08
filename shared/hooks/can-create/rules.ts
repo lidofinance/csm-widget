@@ -27,3 +27,24 @@ export const canCreatePairedType = ({
   curveId !== undefined &&
   (!hasCsmOperator ||
     (pairedCurveId !== undefined && activeOperatorCurveId === pairedCurveId));
+
+export const holdsUnconsumedProof = (...proofs: (AddressProof | undefined)[]) =>
+  proofs.some(hasUnconsumedProof);
+
+export type PairedOptionState = {
+  canCreate: boolean;
+  proof: AddressProof | undefined;
+  isPaused: boolean | undefined;
+};
+export type PairedOptionKind = 'create' | 'apply' | null;
+
+// Creating from a held proof never depends on the apply-form flag; only the
+// "go apply" fallback does.
+export const resolvePairedOptionKind = (
+  { canCreate, proof, isPaused }: PairedOptionState,
+  applyEnabled: boolean,
+): PairedOptionKind => {
+  if (canCreate) return 'create';
+  if (!applyEnabled || isPaused || proof?.isConsumed) return null;
+  return 'apply';
+};
