@@ -61,8 +61,9 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
           if (result) {
             const roles = getNodeOperatorRoles(result, data.address);
             if (roles.length > 0) {
+              // Leave the page before appending, see use-submit-keys-flow
+              await n(PATH.HOME);
               appendNO({ ...result, module: MODULE_NAME.CM });
-              void n(PATH.HOME);
             } else {
               setOperatorCustomAddresses(result.nodeOperatorId);
             }
