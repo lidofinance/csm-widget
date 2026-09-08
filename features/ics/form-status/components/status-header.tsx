@@ -16,9 +16,9 @@ import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import {
   NodeOperatorOwner,
   useDappStatus,
-  useNodeOperatorId,
   useOperatorOwner,
 } from 'modules/web3';
+import { useOperatedNodeOperator } from 'shared/hooks';
 import { isAddressEqual } from 'viem';
 import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';
@@ -176,7 +176,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   scores,
 }) => {
   const { address } = useDappStatus();
-  const nodeOperatorId = useNodeOperatorId();
+  const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
   const { data: owner } = useOperatorOwner(nodeOperatorId);
 
   const otherOwner =

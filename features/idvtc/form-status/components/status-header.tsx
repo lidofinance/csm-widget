@@ -10,11 +10,11 @@ import {
 import {
   NodeOperatorOwner,
   useDappStatus,
-  useNodeOperatorId,
   useOperatorOwner,
 } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
+import { useOperatedNodeOperator } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { isAddressEqual } from 'viem';
 import { ScoreChip } from './score-chip';
@@ -158,7 +158,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   comments,
 }) => {
   const { address } = useDappStatus();
-  const nodeOperatorId = useNodeOperatorId();
+  const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
   const { data: owner } = useOperatorOwner(nodeOperatorId);
 
   const otherOwner =

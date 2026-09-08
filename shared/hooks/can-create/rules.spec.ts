@@ -1,6 +1,11 @@
-import type { AddressProof } from '@lidofinance/lido-csm-sdk';
+import type {
+  AddressProof,
+  NodeOperatorShortInfo,
+} from '@lidofinance/lido-csm-sdk';
+import type { Address } from 'viem';
 import {
   canCreatePairedType,
+  hasOperatorRole,
   hasUnconsumedProof,
   holdsUnconsumedProof,
   PairedOptionState,
@@ -59,6 +64,41 @@ describe('canCreatePairedType', () => {
         input({ hasCsmOperator: true, pairedCurveId: undefined }),
       ),
     ).toBe(false);
+  });
+});
+
+describe('hasOperatorRole', () => {
+  const MANAGER: Address = '0x0000000000000000000000000000000000000001';
+  const REWARDS: Address = '0x0000000000000000000000000000000000000002';
+  const CLAIMER: Address = '0x0000000000000000000000000000000000000003';
+
+  const operator: Pick<
+    NodeOperatorShortInfo,
+    'managerAddress' | 'rewardsAddress'
+  > = {
+    managerAddress: MANAGER,
+    rewardsAddress: REWARDS,
+  };
+
+  it('is true for the manager address', () => {
+    expect(hasOperatorRole(operator, MANAGER)).toBe(true);
+  });
+
+  it('is true for the rewards address', () => {
+    expect(hasOperatorRole(operator, REWARDS)).toBe(true);
+  });
+
+  it('is false for an address that is only claimer', () => {
+    expect(hasOperatorRole(operator, CLAIMER)).toBe(false);
+  });
+
+  it('is false when address is undefined', () => {
+    expect(hasOperatorRole(operator, undefined)).toBe(false);
+  });
+
+  it('matches case-insensitively', () => {
+    const upperCased: Address = `0x${MANAGER.slice(2).toUpperCase()}`;
+    expect(hasOperatorRole(operator, upperCased)).toBe(true);
   });
 });
 

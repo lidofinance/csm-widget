@@ -1,7 +1,8 @@
 import { Button, ButtonProps } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
-import { useModule, useNodeOperatorId } from 'modules/web3';
+import { useModule } from 'modules/web3';
 import { FC } from 'react';
+import { useOperatedNodeOperator } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { IdvtcFormStatus, IdvtcTypeStatus, useIdvtcState } from './shared';
 
@@ -65,7 +66,7 @@ type Props = {
 export const IdvtcApplyButton: FC<Props> = ({ size }) => {
   const { typeStatus, data } = useIdvtcState();
   const { isCSM } = useModule();
-  const nodeOperatorId = useNodeOperatorId();
+  const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
   const { text, variant, href } = getButtonState(
     typeStatus,
     data?.status,

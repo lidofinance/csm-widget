@@ -1,7 +1,11 @@
 import { AddressProof, CurveRef, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useDappStatus, useNodeOperator, useSmSDK } from 'modules/web3';
 import { useMemo } from 'react';
-import { canCreatePairedType, hasUnconsumedProof } from './rules';
+import {
+  canCreatePairedType,
+  hasOperatorRole,
+  hasUnconsumedProof,
+} from './rules';
 import { useHasOperatorIn } from './use-has-operator-in';
 import { useModuleOpen } from './use-module-open';
 
@@ -20,7 +24,7 @@ export const useCanCreatePairedType = ({
   curve,
   pairedCurve,
 }: PairedTypeQueries) => {
-  const { isAccountActive } = useDappStatus();
+  const { isAccountActive, address } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const csm = useModuleOpen(MODULE_NAME.CSM);
   const csmOperator = useHasOperatorIn(MODULE_NAME.CSM);
@@ -34,10 +38,11 @@ export const useCanCreatePairedType = ({
       curveId: curve.data?.curveId,
       pairedCurveId: pairedCurve.data?.curveId,
       hasCsmOperator: csmOperator.hasOperator,
-      // The pairing rule compares CSM curve ids; an operator of another
-      // module must not collide with them.
+      // The pairing rule compares CSM curve ids; an operator of another module,
+      // or one the wallet merely claims for, must not collide with them.
       activeOperatorCurveId:
-        nodeOperator?.module === MODULE_NAME.CSM
+        nodeOperator?.module === MODULE_NAME.CSM &&
+        hasOperatorRole(nodeOperator, address)
           ? nodeOperator.curveId
           : undefined,
     });
