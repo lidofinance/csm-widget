@@ -17,11 +17,7 @@ import { AccordionStyle } from './styles';
 export const KeysBreakdown: FC = () => {
   const { isCM, isCsmFamily } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const {
-    data,
-    isPending: isKeysPending,
-    isError: isKeysError,
-  } = useKeysBreakdown({ nodeOperatorId });
+  const { data, isError: isKeysError } = useKeysBreakdown({ nodeOperatorId });
   const { data: stakeSummary } = useOperatorStakeSummary({ nodeOperatorId });
   const { data: info } = useOperatorInfo({ nodeOperatorId });
 
@@ -47,7 +43,7 @@ export const KeysBreakdown: FC = () => {
             {hasAnyKey && (
               <IssuesChip
                 issues={data?.issuesCount}
-                unavailable={isKeysError || (!isKeysPending && !data)}
+                unavailable={isKeysError || data === undefined}
               />
             )}
           </Stack>

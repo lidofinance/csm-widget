@@ -14,17 +14,18 @@ import { StrikesTable } from './strikes-table';
 
 type WithStrikes = KeyWithStatus & Required<Pick<KeyWithStatus, 'strikes'>>;
 
+const selectKeysWithStrikes = (keys: KeyWithStatus[]) =>
+  keys
+    .filter(hasStatus(KEY_STATUS.WITH_STRIKES))
+    .filter(
+      hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING]),
+    ) as WithStrikes[];
+
 export const StrikesSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { data: keys, isError } = useOperatorKeysWithStatus({
     nodeOperatorId,
-    select: (data) => {
-      return data
-        .filter(hasStatus(KEY_STATUS.WITH_STRIKES))
-        .filter(
-          hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING]),
-        ) as WithStrikes[];
-    },
+    select: selectKeysWithStrikes,
   });
 
   if (isError) {
