@@ -47,7 +47,14 @@ export const buildCspDirectives = ({
     frameAncestors: ['*'],
     reportURI: reportUri,
   }),
+  // frame-src wins over child-src in modern browsers; child-src kept as fallback
+  frameSrc: ["'self'", ...WALLETCONNECT_HOSTS],
   childSrc: ["'self'", ...WALLETCONNECT_HOSTS],
   workerSrc: ["'none'"],
+  objectSrc: ["'none'"],
+  mediaSrc: ["'none'"],
+  manifestSrc: ["'self'"],
+  formAction: ["'self'"],
+  'script-src-attr': ["'none'"],
   'base-uri': ipfsMode ? undefined : ["'none'"],
 });

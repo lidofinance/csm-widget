@@ -47,4 +47,35 @@ describe('buildCspDirectives', () => {
   it('keeps worker-src none (nothing spawns workers)', () => {
     expect(build().workerSrc).toEqual(["'none'"]);
   });
+
+  it('blocks plugins, media and inline event handlers', () => {
+    const d = build();
+    expect(d.objectSrc).toEqual(["'none'"]);
+    expect(d.mediaSrc).toEqual(["'none'"]);
+    expect(d['script-src-attr']).toEqual(["'none'"]);
+  });
+
+  it('restricts form submission and manifest to self', () => {
+    const d = build();
+    expect(d.formAction).toEqual(["'self'"]);
+    expect(d.manifestSrc).toEqual(["'self'"]);
+  });
+
+  it('allows WalletConnect iframes via frame-src with child-src fallback', () => {
+    const d = build();
+    const expected = [
+      "'self'",
+      'https://*.walletconnect.org',
+      'https://*.walletconnect.com',
+    ];
+    expect(d.frameSrc).toEqual(expected);
+    expect(d.childSrc).toEqual(expected);
+  });
+
+  it('applies the baseline in IPFS mode too', () => {
+    const d = build({ ipfsMode: true });
+    expect(d.objectSrc).toEqual(["'none'"]);
+    expect(d.formAction).toEqual(["'self'"]);
+    expect(d['script-src-attr']).toEqual(["'none'"]);
+  });
 });
