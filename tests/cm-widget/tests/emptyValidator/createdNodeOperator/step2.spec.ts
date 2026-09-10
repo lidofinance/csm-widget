@@ -226,8 +226,8 @@ test.describe('Operator without keys. Step 2.', { tag: [Tags.forked] }, () => {
           await test.step('Check validation error is displayed', async () => {
             await expect(
               getError(step2),
-              `"${label}" should show "Enter a valid Ethereum address" error for invalid input`,
-            ).toHaveText('Enter a valid Ethereum address');
+              `"${label}" should show "Enter a valid address or ENS name" error for invalid input`,
+            ).toHaveText('Enter a valid address or ENS name');
           });
         },
       );
@@ -248,8 +248,8 @@ test.describe('Operator without keys. Step 2.', { tag: [Tags.forked] }, () => {
           await test.step('Check validation error is displayed', async () => {
             await expect(
               getError(step2),
-              `"${label}" should show "Enter a valid Ethereum address" error after clearing`,
-            ).toHaveText('Enter a valid Ethereum address');
+              `"${label}" should show "Enter a valid address or ENS name" error after clearing`,
+            ).toHaveText('Enter a valid address or ENS name');
           });
         },
       );

@@ -21,6 +21,7 @@ import {
   AddressInputHookForm,
   TextInputHookForm,
 } from 'shared/hook-form/controls';
+import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
 import { isAddress, isHex } from 'viem';
 import {
   useClusterMemberMessage,
@@ -60,7 +61,7 @@ export const ClusterMemberItem: FC<ClusterMemberItemProps> = ({ index }) => {
     if (!isAddress(address)) {
       setError(`clusterMembers.${index}.address`, {
         type: 'manual',
-        message: 'Invalid Ethereum address',
+        message: VALIDATION_MESSAGES.invalidAddress,
       });
       return;
     }

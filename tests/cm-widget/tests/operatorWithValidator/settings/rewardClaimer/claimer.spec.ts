@@ -108,7 +108,7 @@ test.describe('Settings. Rewards claimer.', { tag: [Tags.forked] }, () => {
       await test.step('Validation error is shown', async () => {
         await expect(claimerPage.addressInputError).toBeVisible();
         await expect(claimerPage.addressInputError).toHaveText(
-          'Specify a valid address',
+          'Specify a valid address or ENS name',
         );
       });
 

@@ -12,7 +12,7 @@ export const VALIDATION_MESSAGES = {
   keyExceedsTxLimit: 'Exceeds the keys per transaction limit',
 
   // Address / hex
-  invalidAddress: 'Enter a valid Ethereum address',
+  invalidAddress: 'Enter a valid address or ENS name',
   hexMustStartWith0x: 'Should start with "0x"',
   hexNotHexadecimal: 'Is not hexadecimal string',
 
@@ -28,8 +28,8 @@ export const VALIDATION_MESSAGES = {
   noKeysSelected: 'No keys selected',
 
   // Address fields (submit-keys form)
-  specifyValidRewardsAddress: 'Specify a valid Rewards Address',
-  specifyValidManagerAddress: 'Specify a valid Manager Address',
+  specifyValidRewardsAddress: 'Specify a valid Rewards Address or ENS name',
+  specifyValidManagerAddress: 'Specify a valid Manager Address or ENS name',
 
   // Curated operator type
   selectOperatorType: 'Please select Operator Type',
@@ -44,7 +44,7 @@ export const VALIDATION_MESSAGES = {
   enterPenaltyTypeGreaterThanZero: 'Enter penalty type greater than 0',
 
   // Address change forms
-  specifyValidAddress: 'Specify a valid address',
+  specifyValidAddress: 'Specify a valid address or ENS name',
   notSameAsCurrentClaimer: 'Should not be same as current claimer',
   notSameAsCurrentAddress: 'Should not be same as current address',
   notSameAsProposedAddress: 'Should not be same as proposed address',

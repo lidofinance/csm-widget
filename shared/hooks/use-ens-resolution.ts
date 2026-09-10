@@ -10,6 +10,8 @@ const isValidEns = (value: string) => ENS_REGEX.test(value);
 type ResolvedAddress = {
   value?: string;
   isEns: boolean;
+  /** Raw text the resolution was computed from */
+  input: string;
 };
 
 export type EnsResolution = {
@@ -31,10 +33,14 @@ export type EnsResolution = {
 
 export const useEnsResolution = (): EnsResolution => {
   const [inputValue, setInputValue] = useState('');
-  const [resolved, setResolved] = useState<ResolvedAddress>({ isEns: false });
-  const [isLoading, setIsLoading] = useState(false);
+  const [resolved, setResolved] = useState<ResolvedAddress>({
+    isEns: false,
+    input: '',
+  });
   const { publicClientMainnet, mainnetConfig } = useMainnetOnlyWagmi();
   const mountedRef = useRef(true);
+  // Read after await: the closure can't see current inputValue state
+  const latestInputRef = useRef('');
 
   useEffect(() => {
     mountedRef.current = true;
@@ -45,17 +51,13 @@ export const useEnsResolution = (): EnsResolution => {
 
   const resolveEns = useCallback(
     async (name: string) => {
-      try {
-        setIsLoading(true);
-        const result = await publicClientMainnet?.getEnsAddress({ name });
-        if (!mountedRef.current) return;
-        setResolved({ value: result ?? undefined, isEns: true });
-      } catch {
-        if (!mountedRef.current) return;
-        setResolved({ value: undefined, isEns: true });
-      } finally {
-        if (mountedRef.current) setIsLoading(false);
-      }
+      const value =
+        (await publicClientMainnet
+          ?.getEnsAddress({ name })
+          .catch(() => null)) ?? undefined;
+      // viem has no abort signal, so a stale lookup is dropped rather than cancelled
+      if (!mountedRef.current || latestInputRef.current !== name) return;
+      setResolved({ value, isEns: true, input: name });
     },
     [publicClientMainnet],
   );
@@ -66,11 +68,9 @@ export const useEnsResolution = (): EnsResolution => {
         if (isValidEns(raw)) {
           void resolveEns(raw);
         } else if (isAddress(raw)) {
-          setResolved({ value: raw, isEns: false });
-        } else if (raw) {
-          setResolved({ value: undefined, isEns: false });
+          setResolved({ value: raw, isEns: false, input: raw });
         } else {
-          setResolved({ value: undefined, isEns: false });
+          setResolved({ value: undefined, isEns: false, input: raw });
         }
       }, 200),
     [resolveEns],
@@ -78,10 +78,22 @@ export const useEnsResolution = (): EnsResolution => {
 
   const handleChange = useCallback(
     (value: string) => {
+      latestInputRef.current = value;
       setInputValue(value);
       void resolve(value);
     },
     [resolve],
+  );
+
+  const isLoading = isValidEns(inputValue) && resolved.input !== inputValue;
+
+  // A resolved address must not outlive the input it came from — the form value would disagree with the field
+  const resolution = useMemo(
+    () =>
+      resolved.value && resolved.input !== inputValue
+        ? { value: undefined, isEns: isValidEns(inputValue), input: inputValue }
+        : resolved,
+    [resolved, inputValue],
   );
 
   // Reverse resolution: address → ENS name
@@ -102,6 +114,6 @@ export const useEnsResolution = (): EnsResolution => {
     isEns: resolved.isEns,
     isLoading,
     handleChange,
-    resolution: resolved,
+    resolution,
   };
 };
