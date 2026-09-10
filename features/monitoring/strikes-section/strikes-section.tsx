@@ -16,7 +16,7 @@ type WithStrikes = KeyWithStatus & Required<Pick<KeyWithStatus, 'strikes'>>;
 
 export const StrikesSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: keys } = useOperatorKeysWithStatus({
+  const { data: keys, isError } = useOperatorKeysWithStatus({
     nodeOperatorId,
     select: (data) => {
       return data
@@ -26,6 +26,16 @@ export const StrikesSection: FC = () => {
         ) as WithStrikes[];
     },
   });
+
+  if (isError) {
+    return (
+      <SectionBlock title="Keys with Strikes">
+        <Text size="xs" color="secondary">
+          Strikes data is currently unavailable
+        </Text>
+      </SectionBlock>
+    );
+  }
 
   if (!keys?.length) return null;
 
