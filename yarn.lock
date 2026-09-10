@@ -1102,10 +1102,10 @@
     "@chainsafe/hashtree" "1.0.2"
     "@noble/hashes" "^1.3.0"
 
-"@chainsafe/ssz@^1.3.0":
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/@chainsafe/ssz/-/ssz-1.6.0.tgz#8eadb7baa17d2f3e8c02ef100d75d157039cd110"
-  integrity sha512-pcvxGRIGpuDaaNEbR0VIJJ89xUstPjh6dDcaOHoIcgZkNyb4xEeMm75vaKBn4XFVgUnWgz9fEbLbMXjasILRdA==
+"@chainsafe/ssz@^1.7.0":
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/@chainsafe/ssz/-/ssz-1.7.0.tgz#a4ba64a854f3a2db0a502b62dcc80c70b669dc0b"
+  integrity sha512-Eed+kdc6Esu64yFXhTIBvx/6ZCVJ5RZTJcwX4NcnemoYM6XjDSi59sW2PTTlU+D35tiR3WNdNziw98BbDzVFVA==
   dependencies:
     "@chainsafe/as-sha256" ""
     "@chainsafe/persistent-merkle-tree" ""
@@ -2482,17 +2482,17 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.63.0.tgz#48a4a901656fc5d3af294669a86d885ab965c25a"
   integrity sha512-jbWshE2ohU8vkK9p0KNo0bcdY2Nf5joqAHeCY7feGH79E1NAX4aNd78ypZBS/w97SfTcdgrXoI4x50Rcdi3Mag==
 
-"@lidofinance/lido-csm-sdk@2.3.0-alpha.9":
-  version "2.3.0-alpha.9"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.3.0-alpha.9.tgz#88e6b6fcba66ddd310b86775a68793d8257441bd"
-  integrity sha512-710xGf51B+ESK59R3nwRzL/oXzNzQx1P6urx/b4RDRgJxsa++WrtlspAW2hICG+VKH/5PS1JatOD5ChWp+bjJQ==
+"@lidofinance/lido-csm-sdk@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-2.3.0.tgz#7fe0f181b629e6dedb260b0f2817a8344de56078"
+  integrity sha512-hmyie9RtsPocaa+4WRxZkxbJgTlnc0ZJFqQBaj6DFjilYR9vOyWCnfa+TdpSzE9GAFr/x/Q71yH1gdm8jaS2zg==
   dependencies:
-    "@chainsafe/ssz" "^1.3.0"
+    "@chainsafe/ssz" "^1.7.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
-    abitype "^1.2.3"
-    bls-eth-wasm "^1.4.0"
-    json-with-bigint "^3.5.8"
-    zod "^4.3.6"
+    abitype "^1.3.0"
+    bls-eth-wasm "^1.5.0"
+    json-with-bigint "^3.5.12"
+    zod "^4.5.4"
 
 "@lidofinance/lido-ethereum-sdk@^4.8.0":
   version "4.8.0"
@@ -5138,6 +5138,11 @@ abitype@^1.0.6, abitype@^1.0.9, abitype@^1.2.3:
   resolved "https://registry.yarnpkg.com/abitype/-/abitype-1.2.4.tgz#8aab72949bcad4107031862ae998e5bd20eec76e"
   integrity sha512-dpKH+N27vRjarMVTFFkeY445VTKftzGWpL0FiT7xmVmzQRKazZexzC5uHG0f6XKsVLAuUlndnbGau6lRejClxg==
 
+abitype@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/abitype/-/abitype-1.3.0.tgz#39de89010dd7390ece44d5242a3aa80901cc193d"
+  integrity sha512-fk6Te+bojIFrMvMZrnOO+SxCB+RUksTGOzq/60ZRvs1L+BVzvi2bqt9L3W/17ZLdZsyM1FuYf65P5nlmoiH1Bg==
+
 abort-controller@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/abort-controller/-/abort-controller-3.0.0.tgz#eaf54d53b62bae4138e809ca225c8439a6efb392"
@@ -5666,7 +5671,7 @@ blockstore-core@^5.0.4:
     it-merge "^3.0.11"
     multiformats "^13.3.6"
 
-bls-eth-wasm@^1.4.0:
+bls-eth-wasm@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/bls-eth-wasm/-/bls-eth-wasm-1.5.0.tgz#c5876a919694cf85aee9df4eab9204ad1e0960ab"
   integrity sha512-7X5mj8d3/e5MGKpMye80gN6KCgatSEF7FNpl+yfUycIFw+vuw/y48RnuOV2urc0VqjFP13EY8FGZ19T+WzABvQ==
@@ -8958,10 +8963,10 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "https://registry.yarnpkg.com/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==
 
-json-with-bigint@^3.5.8:
-  version "3.5.8"
-  resolved "https://registry.yarnpkg.com/json-with-bigint/-/json-with-bigint-3.5.8.tgz#1b1edb55a1bc4816ca87ac684297591acd822383"
-  integrity sha512-eq/4KP6K34kwa7TcFdtvnftvHCD9KvHOGGICWwMFc4dOOKF5t4iYqnfLK8otCRCRv06FXOzGGyqE8h8ElMvvdw==
+json-with-bigint@^3.5.12:
+  version "3.5.12"
+  resolved "https://registry.yarnpkg.com/json-with-bigint/-/json-with-bigint-3.5.12.tgz#9f6bf722a9847ed72fa9b217b2b66181227c454c"
+  integrity sha512-uwbF/wSSuOgC7qqlq27Xp5B6a2MHVug3t0idZdTqu0JnlFvgJuH7ju+KAk/J06C7GfhoYy2gnb9wz2INqcne7w==
 
 json5@^1.0.2:
   version "1.0.2"
@@ -12391,10 +12396,15 @@ zod@^3.25.76:
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
   integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
 
-zod@^4.1.12, zod@^4.1.5, zod@^4.3.6:
+zod@^4.1.12, zod@^4.1.5:
   version "4.4.3"
   resolved "https://registry.yarnpkg.com/zod/-/zod-4.4.3.tgz#b680f172885d18bbebf21a834ea25e55a1bbf356"
   integrity sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==
+
+zod@^4.5.4:
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/zod/-/zod-4.5.4.tgz#e215c62420c528dd7951e31fb52c5438f1fd184a"
+  integrity sha512-sC95tT5iHHH9gtpj6A81kh+NEaRAUFN+qlUPDUbRfOMvNf5QCBqsb3WgvnpVtK5Y+4UfA6KqufotuTvMGiTlsA==
 
 zustand@5.0.0:
   version "5.0.0"

@@ -84,7 +84,13 @@ export const OperatorRow: FC<OperatorRowProps> = ({
             <CurveBadge curve={curve} inline />
             <DescriptorRolesStyle>
               {roles.map((role) => (
-                <RoleBadge role={role} key={role} />
+                <RoleBadge
+                  role={role}
+                  key={role}
+                  extendedManagerPermissions={
+                    shortInfo?.extendedManagerPermissions
+                  }
+                />
               ))}
             </DescriptorRolesStyle>
           </CmRowDescriptor>

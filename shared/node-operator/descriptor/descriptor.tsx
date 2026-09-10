@@ -22,7 +22,11 @@ export const Descriptor: FC<DescriptorProps> = ({ nodeOperator, hideType }) => {
       {!hideType && <CurveBadge curve={nodeOperator} />}
       <DescriptorRolesStyle>
         {roles.map((role) => (
-          <RoleBadge role={role} key={role} />
+          <RoleBadge
+            role={role}
+            key={role}
+            extendedManagerPermissions={nodeOperator.extendedManagerPermissions}
+          />
         ))}
       </DescriptorRolesStyle>
     </DescriptorStyle>

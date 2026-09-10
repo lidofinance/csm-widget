@@ -16,6 +16,7 @@ const flags = (patch: Partial<ShowFlags>): ShowFlags =>
     HAS_APPLY_OPTIONS: false,
     HAS_MANAGER_ROLE: false,
     HAS_REWARDS_ROLE: false,
+    HAS_ANY_ROLE: false,
     ...patch,
   }) as ShowFlags;
 
@@ -64,5 +65,29 @@ describe('getCorrectPath(PATH.CREATE)', () => {
         flags({ CAN_CREATE_0X01: true, HAS_APPLY_OPTIONS: true }),
       ),
     ).toBe(PATH.CREATE);
+  });
+});
+
+describe('getCorrectPath — bond pages', () => {
+  const claimer = flags({ HAS_ANY_ROLE: true });
+  const operator = flags({ HAS_MANAGER_ROLE: true, HAS_ANY_ROLE: true });
+
+  it('keeps a claimer-only wallet inside the claim page', () => {
+    expect(getCorrectPath(PATH.BOND, claimer)).toBe(PATH.BOND_CLAIM);
+    expect(getCorrectPath(PATH.BOND_CLAIM, claimer)).toBe(PATH.BOND_CLAIM);
+    expect(getCorrectPath(PATH.BOND_ADD, claimer)).toBe(PATH.BOND_CLAIM);
+    expect(getCorrectPath(PATH.BOND_UNLOCK, claimer)).toBe(PATH.BOND_CLAIM);
+  });
+
+  it('leaves an operator on the requested bond page', () => {
+    expect(getCorrectPath(PATH.BOND, operator)).toBe(PATH.BOND_CLAIM);
+    expect(getCorrectPath(PATH.BOND_ADD, operator)).toBe(PATH.BOND_ADD);
+    expect(getCorrectPath(PATH.BOND_UNLOCK, operator)).toBe(PATH.BOND_UNLOCK);
+  });
+
+  it('sends a wallet with no role home', () => {
+    expect(getCorrectPath(PATH.BOND, flags({}))).toBe(PATH.HOME);
+    expect(getCorrectPath(PATH.BOND_CLAIM, flags({}))).toBe(PATH.HOME);
+    expect(getCorrectPath(PATH.BOND_ADD, flags({}))).toBe(PATH.HOME);
   });
 });

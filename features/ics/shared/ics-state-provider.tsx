@@ -1,7 +1,7 @@
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
   useIcsProof,
-  useNodeOperator,
+  useOperatedNodeOperator,
   useOperatorOwner,
   useOperatorType,
 } from 'modules/web3';
@@ -44,7 +44,8 @@ export const useIcsState = () => {
 };
 
 export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { nodeOperator } = useNodeOperator();
+  // A claimer-only wallet applies for itself, not for the operator it claims for.
+  const nodeOperator = useOperatedNodeOperator();
   const operatorId = nodeOperator?.nodeOperatorId;
   // The type only exists in CSM: an operator of another module never holds it.
   const { data: operatorType } = useOperatorType(

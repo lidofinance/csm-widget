@@ -42,7 +42,7 @@ const routes: Route[] = [
     name: 'Dashboard',
     path: PATH.HOME,
     icon: <DashboardIcon />,
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['HAS_ANY_ROLE'],
   },
   {
     name: 'Create Operator',
@@ -81,7 +81,7 @@ const routes: Route[] = [
     path: PATH.BOND,
     icon: <WalletIcon />,
     subPaths: [PATH.BOND_ADD, PATH.BOND_CLAIM, PATH.BOND_UNLOCK],
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['HAS_ANY_ROLE'],
     suffix: <CounterLockedBond />,
   },
   {
@@ -103,7 +103,10 @@ const routes: Route[] = [
     name: 'Inbox Requests',
     path: PATH.SETTINGS_INBOX,
     icon: <GearIcon />,
-    showRules: [['HAS_INVITES', 'NOT_NODE_OPERATOR']],
+    showRules: [
+      ['HAS_INVITES', 'NOT_NODE_OPERATOR'],
+      ['HAS_INVITES', 'HAS_CLAIMER_ROLE'],
+    ],
     suffix: <CounterInvites />,
   },
   {

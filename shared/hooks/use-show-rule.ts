@@ -46,6 +46,8 @@ export type ShowRule =
   | 'HAS_INVITES'
   | 'HAS_MANAGER_ROLE'
   | 'HAS_REWARDS_ROLE'
+  | 'HAS_CLAIMER_ROLE'
+  | 'HAS_ANY_ROLE'
   | 'HAS_OWNER_ROLE'
   | 'HAS_LOCKED_BOND'
   | 'HAS_REFERRER'
@@ -87,6 +89,18 @@ const isRewardsRole = (
   );
 };
 
+const isClaimerRole = (
+  nodeOperator: NodeOperatorShortInfo | undefined,
+  address: Address | undefined,
+) => {
+  return (
+    (nodeOperator?.claimerAddress &&
+      address &&
+      isAddressEqual(nodeOperator.claimerAddress, address)) ||
+    false
+  );
+};
+
 const isOwnerRole = (
   nodeOperator: NodeOperatorShortInfo | undefined,
   address: Address | undefined,
@@ -117,22 +131,30 @@ export const useShowFlags = (): ShowFlags => {
   const { module, isCsmFamily } = useModule();
   const icsApplyEnabled = useIcsApplyEnabled();
 
+  const hasManagerRole =
+    isAccountActive && isManagerRole(nodeOperator, address);
+  const hasRewardsRole =
+    isAccountActive && isRewardsRole(nodeOperator, address);
+  const hasClaimerRole =
+    isAccountActive && isClaimerRole(nodeOperator, address);
+  const isNodeOperator = hasManagerRole || hasRewardsRole;
+
   return useMemo(
     () => ({
       ['IS_MAINNET']: chainId === CHAINS.Mainnet,
       ['IS_CONNECTED_WALLET']: isAccountActive,
       ['NOT_NODE_OPERATOR']: !nodeOperator,
-      ['IS_NODE_OPERATOR']: isAccountActive && !!nodeOperator,
+      ['IS_NODE_OPERATOR']: isNodeOperator,
       ['CAN_CREATE']: !!canCreateNO,
       ['CAN_CREATE_0X01']: canCreate0x01,
       ['CAN_CREATE_ICS']: canCreateICS,
       ['CAN_CREATE_IDVTC']: canCreateIDVTC,
       ['CAN_CREATE_0X02']: canCreate0x02,
       ['HAS_KEYS']: !!info?.totalAddedKeys,
-      ['HAS_MANAGER_ROLE']:
-        isAccountActive && isManagerRole(nodeOperator, address),
-      ['HAS_REWARDS_ROLE']:
-        isAccountActive && isRewardsRole(nodeOperator, address),
+      ['HAS_MANAGER_ROLE']: hasManagerRole,
+      ['HAS_REWARDS_ROLE']: hasRewardsRole,
+      ['HAS_CLAIMER_ROLE']: hasClaimerRole,
+      ['HAS_ANY_ROLE']: isNodeOperator || hasClaimerRole,
       ['HAS_OWNER_ROLE']: isAccountActive && isOwnerRole(nodeOperator, address),
       ['HAS_INVITES']: !!invites?.length,
       ['HAS_LOCKED_BOND']: !!balance?.locked,
@@ -150,15 +172,16 @@ export const useShowFlags = (): ShowFlags => {
       ['IS_CSM_02']: module === MODULE_NAME.CSM_02,
       ['IS_CSM_FAMILY']: isCsmFamily,
       ['IS_CM']: module === MODULE_NAME.CM,
-      ['IS_IDVTC']:
-        isAccountActive &&
-        !!nodeOperator &&
-        operatorType === OPERATOR_TYPE.CSM_IDVTC,
+      ['IS_IDVTC']: isNodeOperator && operatorType === OPERATOR_TYPE.CSM_IDVTC,
     }),
     [
       chainId,
       isAccountActive,
       nodeOperator,
+      hasManagerRole,
+      hasRewardsRole,
+      hasClaimerRole,
+      isNodeOperator,
       canCreateNO,
       canCreate0x01,
       canCreate0x02,

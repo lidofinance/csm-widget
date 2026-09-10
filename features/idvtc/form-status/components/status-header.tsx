@@ -10,7 +10,7 @@ import {
 import {
   NodeOperatorOwner,
   useDappStatus,
-  useNodeOperatorId,
+  useOperatedNodeOperator,
   useOperatorOwner,
 } from 'modules/web3';
 import { FC } from 'react';
@@ -158,7 +158,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   comments,
 }) => {
   const { address } = useDappStatus();
-  const nodeOperatorId = useNodeOperatorId();
+  const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
   const { data: owner } = useOperatorOwner(nodeOperatorId);
 
   const otherOwner =

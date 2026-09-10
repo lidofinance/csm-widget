@@ -1,6 +1,6 @@
 import { Button, ButtonProps } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
-import { useModule, useNodeOperatorId } from 'modules/web3';
+import { useModule, useOperatedNodeOperator } from 'modules/web3';
 import { FC } from 'react';
 import { LocalLink } from 'shared/navigate';
 import { IcsFormStatus, TypeStatus, useIcsState } from './shared';
@@ -65,7 +65,7 @@ type Props = {
 export const IcsApplyButton: FC<Props> = ({ size }) => {
   const { typeStatus, data } = useIcsState();
   const { isCSM } = useModule();
-  const nodeOperatorId = useNodeOperatorId();
+  const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
   const { text, variant, href } = getButtonState(
     typeStatus,
     data?.status,
