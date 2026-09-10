@@ -3,7 +3,7 @@ import { Cache } from 'memory-cache';
 import type { NextApiRequest } from 'next';
 import { FetcherError } from 'utils/fetcher-error';
 import { standardFetcher } from 'utils/standard-fetcher';
-import Metrics from './metrics/metrics';
+import { responseTimeExternalMetricWrapper } from './external-metrics';
 
 type ProxyOptions = {
   proxyUrl: string | ((req: NextApiRequest) => string);
@@ -12,39 +12,6 @@ type ProxyOptions = {
   ignoreParams?: boolean;
   transformData?: (data: any) => any;
   metricsHost?: string;
-};
-
-// Simple wrapper for external metrics tracking
-const responseTimeExternalMetricWrapper = async <T>({
-  payload,
-  request,
-}: {
-  payload: string;
-  request: () => Promise<T>;
-}): Promise<T> => {
-  const endMetric = Metrics.request.apiTimingsExternal.startTimer({
-    hostname: new URL(payload).hostname,
-    route: 'cached-proxy',
-    entity: 'external',
-    status: '2xx',
-  });
-
-  try {
-    const result = await request();
-    endMetric({ status: '2xx' });
-    return result;
-  } catch (error) {
-    let status = '5xx';
-    if (
-      error instanceof FetcherError &&
-      error.status >= 400 &&
-      error.status < 500
-    ) {
-      status = '4xx';
-    }
-    endMetric({ status });
-    throw error;
-  }
 };
 
 export const createCachedProxy = ({
@@ -85,7 +52,8 @@ export const createCachedProxy = ({
 
     try {
       const data = await responseTimeExternalMetricWrapper({
-        payload: metricsHost || proxyUrlString,
+        target: metricsHost || proxyUrlString,
+        route: 'cached-proxy',
         request: () =>
           standardFetcher(url, {
             signal: AbortSignal.timeout(timeout),
