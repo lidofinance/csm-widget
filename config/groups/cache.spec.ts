@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import {
   CACHE_MIGALABS_RATE_HEADERS,
-  CACHE_DEFAULT_HEADERS,
   CACHE_VALIDATION_HEADERS,
   CACHE_CL_HEADERS,
   CACHE_NO_STORE_HEADERS,
@@ -54,7 +53,6 @@ const getMalformedValueDirectives = (header: string) =>
 describe('cache-control headers', () => {
   it.each([
     ['CACHE_MIGALABS_RATE_HEADERS', CACHE_MIGALABS_RATE_HEADERS],
-    ['CACHE_DEFAULT_HEADERS', CACHE_DEFAULT_HEADERS],
     ['CACHE_VALIDATION_HEADERS', CACHE_VALIDATION_HEADERS],
     ['CACHE_CL_HEADERS', CACHE_CL_HEADERS],
     ['CACHE_NO_STORE_HEADERS', CACHE_NO_STORE_HEADERS],
