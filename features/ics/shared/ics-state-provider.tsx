@@ -1,5 +1,6 @@
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
+  OperatorTypeStatus,
   resolveTypeStatus,
   useDappStatus,
   useIcsProof,
@@ -25,7 +26,7 @@ import invariant from 'tiny-invariant';
 import { isAddressEqual } from 'viem';
 import { IcsResponseDto } from './types';
 
-export type TypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
+export type TypeStatus = OperatorTypeStatus;
 
 type IcsStateContextType = {
   typeStatus: TypeStatus;
@@ -72,17 +73,13 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
 
-  const typeStatus: TypeStatus = useMemo(
-    () =>
-      resolveTypeStatus({
-        operatorType,
-        targetType: OPERATOR_TYPE.CSM_ICS,
-        isOwner,
-        proof: proofData,
-        ownerProof: ownerProofData,
-      }),
-    [operatorType, isOwner, proofData, ownerProofData],
-  );
+  const typeStatus = resolveTypeStatus({
+    operatorType,
+    targetType: OPERATOR_TYPE.CSM_ICS,
+    isOwner,
+    proof: proofData,
+    ownerProof: ownerProofData,
+  });
 
   const value: IcsStateContextType = useMemo(
     () => ({

@@ -1,5 +1,6 @@
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
+  OperatorTypeStatus,
   resolveTypeStatus,
   useDappStatus,
   useIdvtcProof,
@@ -25,7 +26,7 @@ import invariant from 'tiny-invariant';
 import { isAddressEqual } from 'viem';
 import { IdvtcResponseDto } from './types';
 
-export type IdvtcTypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
+export type IdvtcTypeStatus = OperatorTypeStatus;
 
 type IdvtcStateContextType = {
   typeStatus: IdvtcTypeStatus;
@@ -72,17 +73,13 @@ export const IdvtcStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
 
-  const typeStatus: IdvtcTypeStatus = useMemo(
-    () =>
-      resolveTypeStatus({
-        operatorType,
-        targetType: OPERATOR_TYPE.CSM_IDVTC,
-        isOwner,
-        proof: proofData,
-        ownerProof: ownerProofData,
-      }),
-    [operatorType, isOwner, proofData, ownerProofData],
-  );
+  const typeStatus = resolveTypeStatus({
+    operatorType,
+    targetType: OPERATOR_TYPE.CSM_IDVTC,
+    isOwner,
+    proof: proofData,
+    ownerProof: ownerProofData,
+  });
 
   const value: IdvtcStateContextType = useMemo(
     () => ({
