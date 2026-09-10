@@ -68,8 +68,8 @@ describe('cache-control headers', () => {
 });
 
 describe('sentinel header agreement between next.config.mjs and server.mjs', () => {
-  // Read as text, not import: next.config.mjs regenerates public/runtime and
-  // the favicons on evaluation, and both files have module-level side effects.
+  // Read as text, not import: next.config.mjs regenerates public/runtime on
+  // evaluation, and both files have module-level side effects.
   const nextConfigSource = fs.readFileSync(
     path.resolve(__dirname, '../../next.config.mjs'),
     'utf-8',
@@ -107,5 +107,59 @@ describe('sentinel header agreement between next.config.mjs and server.mjs', () 
     expect(getMalformedValueDirectives(cacheControlValue as string)).toEqual(
       [],
     );
+  });
+});
+
+describe('CACHE_CONTROL_PAGES covers every route in pages/', () => {
+  const nextConfigSource = fs.readFileSync(
+    path.resolve(__dirname, '../../next.config.mjs'),
+    'utf-8',
+  );
+
+  const cacheControlPagesBody =
+    nextConfigSource.match(/CACHE_CONTROL_PAGES\s*=\s*\[([\s\S]*?)\];/)?.[1] ??
+    '';
+  const entries = (cacheControlPagesBody.match(/'([^']*)'/g) ?? []).map((s) =>
+    s.slice(1, -1),
+  );
+
+  it('extracted at least one entry', () => {
+    expect(entries.length).toBeGreaterThan(0);
+  });
+
+  // api/test/error pages set their own policy; qa-config is getStaticProps
+  const UNCACHED_ROUTES = new Set([
+    'api',
+    'test',
+    'qa-config',
+    '_app',
+    '_document',
+    '404',
+    '500',
+  ]);
+
+  const dirents = fs.readdirSync(path.resolve(__dirname, '../../pages'), {
+    withFileTypes: true,
+  });
+
+  const routes: [string, string][] = dirents
+    .map((dirent): [string, string] | undefined => {
+      const name = dirent.isDirectory()
+        ? dirent.name
+        : dirent.name.replace(/\.tsx$/, '');
+
+      if (UNCACHED_ROUTES.has(name)) return undefined;
+
+      if (dirent.isDirectory()) return [name, `/${name}/:path*`];
+      if (name === 'index') return [name, '/'];
+      return [name, `/${name}`];
+    })
+    .filter((route): route is [string, string] => route !== undefined);
+
+  it.each(routes)('%s -> %s is present in CACHE_CONTROL_PAGES', (
+    _name,
+    expectedEntry,
+  ) => {
+    expect(entries).toContain(expectedEntry);
   });
 });
