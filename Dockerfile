@@ -48,8 +48,9 @@ WORKDIR /app
 
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/.next ./.next
-# next.config.mjs is re-evaluated on server start: it regenerates only
-# public/runtime/window-env.js, so user node only needs to own that directory
+# next.config.mjs is re-evaluated on server start and writes only
+# public/runtime/window-env.js. It is the sole runtime-writable path: under
+# readOnlyRootFilesystem mount an emptyDir at /app/public/runtime (uid 1000)
 COPY --from=build /app/public ./public
 RUN rm -rf public/runtime && mkdir public/runtime && chown node public/runtime
 COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json /app/server.mjs ./
