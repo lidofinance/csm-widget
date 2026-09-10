@@ -1,5 +1,7 @@
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
+  resolveTypeStatus,
+  useDappStatus,
   useIcsProof,
   useOperatedNodeOperator,
   useOperatorOwner,
@@ -20,6 +22,7 @@ import {
   useState,
 } from 'react';
 import invariant from 'tiny-invariant';
+import { isAddressEqual } from 'viem';
 import { IcsResponseDto } from './types';
 
 export type TypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
@@ -52,6 +55,9 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
     nodeOperator?.module === MODULE_NAME.CSM ? nodeOperator : undefined,
   );
   const { data: owner } = useOperatorOwner({ nodeOperatorId: operatorId });
+  const { address } = useDappStatus();
+  const isOwner =
+    !!owner?.address && !!address && isAddressEqual(owner.address, address);
 
   const { data: proofData, isPending: isTypePending } = useIcsProof();
   const { data: ownerProofData, isPending: isOwnerTypePending } = useIcsProof(
@@ -66,18 +72,17 @@ export const IcsStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
 
-  const typeStatus: TypeStatus = useMemo(() => {
-    if (operatorType === OPERATOR_TYPE.CSM_ICS || proofData?.isConsumed)
-      return 'CLAIMED';
-    if (proofData?.proof) return 'ISSUED';
-    if (ownerProofData?.proof) return 'OWNER_ISSUED';
-    return 'PENDING';
-  }, [
-    operatorType,
-    ownerProofData?.proof,
-    proofData?.isConsumed,
-    proofData?.proof,
-  ]);
+  const typeStatus: TypeStatus = useMemo(
+    () =>
+      resolveTypeStatus({
+        operatorType,
+        targetType: OPERATOR_TYPE.CSM_ICS,
+        isOwner,
+        proof: proofData,
+        ownerProof: ownerProofData,
+      }),
+    [operatorType, isOwner, proofData, ownerProofData],
+  );
 
   const value: IcsStateContextType = useMemo(
     () => ({
