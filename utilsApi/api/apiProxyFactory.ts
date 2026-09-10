@@ -7,7 +7,7 @@ import { ReadableStream } from 'node:stream/web';
 import { Counter, Registry } from 'prom-client';
 import type { TrackedFetchApi } from './trackedFetchApiFactory';
 import {
-  HEALTHY_RPC_SERVICES_ARE_OVER,
+  MissingRequestBodyError,
   UnsupportedChainIdError,
   UnsupportedHTTPMethodError,
 } from './errors';
@@ -49,8 +49,8 @@ export const apiFactory = ({
 
   return async (req: NextApiRequest, res: NextApiResponse): Promise<void> => {
     try {
-      // Accept only GET requests
-      if (req.method !== 'GET') {
+      // Accept only GET and POST requests
+      if (req.method !== 'GET' && req.method !== 'POST') {
         // We don't care about tracking blocked requests here
         throw new UnsupportedHTTPMethodError();
       }
@@ -73,32 +73,58 @@ export const apiFactory = ({
         throw new Error(`Api method ${method} isn't allowed`);
       }
 
+      // Serialize once so the same payload is replayed across every provider url
+      let body: string | undefined;
+      if (req.method === 'POST') {
+        if (typeof req.body === 'string') {
+          body = req.body;
+        } else if (Buffer.isBuffer(req.body)) {
+          body = req.body.toString();
+        } else if (req.body != null && typeof req.body === 'object') {
+          body = JSON.stringify(req.body);
+        }
+
+        // an empty body would fetch the full, uncapped upstream collection (e.g. all validators)
+        if (!body) {
+          throw new MissingRequestBodyError();
+        }
+      }
+
       const requested = await iterateUrls(
         providers[chainId],
         // TODO: consider adding verification that body is actually matches FetchRpcInitBody
-        (url) => fetchApi(url, method, chainId, params),
+        (url) =>
+          fetchApi(
+            url,
+            method,
+            chainId,
+            params,
+            body !== undefined ? { method: 'POST', body } : undefined,
+          ),
         serverLogger.error,
       );
+
+      if (!requested.ok) {
+        // an upstream failure must not inherit the route's public cache headers
+        res.setHeader('Cache-Control', 'no-store');
+      }
 
       res.setHeader(
         'Content-Type',
         requested.headers.get('Content-Type') ?? 'application/json',
       );
+      res.status(requested.status);
       if (requested.body) {
         Readable.fromWeb(requested.body as ReadableStream).pipe(res);
       } else {
-        res
-          .status(requested.status)
-          .json('There are a problems with Api provider');
+        res.json('There are a problems with Api provider');
       }
     } catch (error) {
       if (error instanceof Error) {
         // TODO: check if there are errors duplication with iterateUrls
         serverLogger.error(error.message ?? DEFAULT_API_ERROR_MESSAGE);
-        res.status(500).json(error.message ?? DEFAULT_API_ERROR_MESSAGE);
-      } else {
-        res.status(500).json(HEALTHY_RPC_SERVICES_ARE_OVER);
       }
+      throw error;
     }
   };
 };
