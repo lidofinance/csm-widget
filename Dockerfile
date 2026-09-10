@@ -1,5 +1,7 @@
+FROM node:24-alpine AS node-base
+
 # dependencies for the build
-FROM node:24-alpine AS deps
+FROM node-base AS deps
 
 WORKDIR /app
 
@@ -7,7 +9,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts && yarn cache clean
 
 # runtime-only dependencies, kept apart so the final image never sees devDependencies
-FROM node:24-alpine AS prod-deps
+FROM node-base AS prod-deps
 
 WORKDIR /app
 
@@ -34,8 +36,8 @@ RUN if [ -n "$BUILD_COMMIT" ]; then \
     && NODE_NO_BUILD_DYNAMICS=true yarn build \
     && rm -rf .next/cache
 
-# final image
-FROM node:24-alpine AS base
+# runtime image
+FROM node-base AS runner
 
 ARG BASE_PATH=""
 ARG DEFAULT_CHAIN="1"
@@ -61,7 +63,8 @@ COPY --from=build /app/utilsApi ./utilsApi
 USER node
 EXPOSE 3000
 
-HEALTHCHECK --interval=10s --timeout=3s \
-  CMD wget -q -O /dev/null http://localhost:3000/api/health || exit 1
+# start-period covers app.prepare(); k8s ignores this and uses its own probes
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
+  CMD wget -q -O /dev/null "http://localhost:${PORT:-3000}/api/health" || exit 1
 
 CMD ["yarn", "start"]
