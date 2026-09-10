@@ -155,7 +155,7 @@ jobs:
         if: ${{ inputs.use_fork }}
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: v1.7.1
+          version: v1.8.1
 
       - name: Restore yarn cache
         uses: actions/cache@v6
