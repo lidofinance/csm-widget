@@ -6,6 +6,7 @@ import {
   AddressInputHookForm,
   SubmitButtonHookForm,
 } from 'shared/hook-form/controls';
+import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
 
 type AddDelegateFormData = {
   address: string;
@@ -37,9 +38,9 @@ export const AddDelegateForm: FC<AddDelegateFormProps> = ({
       if (!isAddress(data.address)) {
         setError('address', {
           type: 'manual',
-          message: 'Invalid Ethereum address',
+          message: VALIDATION_MESSAGES.invalidAddress,
         });
-        setValidationError('Invalid Ethereum address');
+        setValidationError(VALIDATION_MESSAGES.invalidAddress);
         return;
       }
       onSubmit(data);

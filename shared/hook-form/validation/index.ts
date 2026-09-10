@@ -9,5 +9,6 @@ export * from './validate-ether-amount';
 export * from './validate-hex';
 export * from './validate-length';
 export * from './validate-node-operator-id';
+export * from './validate-optional-address';
 export * from './validate-percent-share';
 export * from './validation-error';

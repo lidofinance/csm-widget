@@ -12,6 +12,7 @@ export const CustomAddressesSection: FC = () => {
     <OptionalSectionHookForm
       fieldName="specifyCustomAddresses"
       titles={['Specify custom addresses', 'Do not specify custom addresses']}
+      dependentFields={['rewardsAddress', 'managerAddress']}
     >
       <FormTitle>Specify custom addresses</FormTitle>
       <WarningBlock>

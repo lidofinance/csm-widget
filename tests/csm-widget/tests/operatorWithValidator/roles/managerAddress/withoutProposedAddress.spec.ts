@@ -96,7 +96,7 @@ test.describe('Roles. Manager Address. Verify UI Without Proposed Address', () =
       await managerAddressPage.addressInput.fill(`${generateAddress()}1`);
       await managerAddressPage.addressInput.blur();
 
-      const expectedTooltipError = 'Specify a valid address';
+      const expectedTooltipError = 'Specify a valid address or ENS name';
       await expect(managerAddressPage.validationInputTooltip).toContainText(
         expectedTooltipError,
       );
