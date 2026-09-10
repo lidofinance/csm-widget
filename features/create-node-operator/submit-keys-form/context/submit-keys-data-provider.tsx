@@ -1,5 +1,6 @@
 import { OPERATOR_TYPE, OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import {
+  KEY_BOND_BY_KEYS_COUNT,
   KEY_DEPOSIT_QUEUE_BATCHES,
   KEY_ICS_PROOF,
   KEY_IDVTC_PROOF,
@@ -104,6 +105,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
       KEY_ICS_PROOF,
       KEY_IDVTC_PROOF,
       KEY_DEPOSIT_QUEUE_BATCHES,
+      KEY_BOND_BY_KEYS_COUNT,
     ]);
   }, [
     invalidate,
