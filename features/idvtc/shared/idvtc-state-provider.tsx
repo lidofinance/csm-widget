@@ -1,5 +1,10 @@
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { useIdvtcProof, useOperatorOwner, useOperatorType } from 'modules/web3';
+import {
+  useIdvtcProof,
+  useOperatedNodeOperator,
+  useOperatorOwner,
+  useOperatorType,
+} from 'modules/web3';
 import {
   callSurvey,
   surveyRequest,
@@ -14,7 +19,6 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useOperatedNodeOperator } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { IdvtcResponseDto } from './types';
 

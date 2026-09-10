@@ -16,9 +16,9 @@ import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import {
   NodeOperatorOwner,
   useDappStatus,
+  useOperatedNodeOperator,
   useOperatorOwner,
 } from 'modules/web3';
-import { useOperatedNodeOperator } from 'shared/hooks';
 import { isAddressEqual } from 'viem';
 import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';

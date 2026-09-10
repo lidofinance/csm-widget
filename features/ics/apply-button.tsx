@@ -1,8 +1,7 @@
 import { Button, ButtonProps } from '@lidofinance/lido-ui';
 import { PATH } from 'consts/urls';
-import { useModule } from 'modules/web3';
+import { useModule, useOperatedNodeOperator } from 'modules/web3';
 import { FC } from 'react';
-import { useOperatedNodeOperator } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { IcsFormStatus, TypeStatus, useIcsState } from './shared';
 

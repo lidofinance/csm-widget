@@ -1,6 +1,9 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useAvailableOperators, useDappStatus } from 'modules/web3';
-import { hasOperatorRole } from './rules';
+import {
+  hasOperatorRole,
+  useAvailableOperators,
+  useDappStatus,
+} from 'modules/web3';
 
 export const useHasOperatorIn = (module: MODULE_NAME) => {
   const { isAccountActive, address } = useDappStatus();

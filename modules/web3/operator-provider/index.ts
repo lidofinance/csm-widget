@@ -5,3 +5,5 @@ export * from './use-append-operator';
 export * from './types';
 export * from './use-module';
 export * from './merge-operators';
+export * from './has-operator-role';
+export * from './use-operated-node-operator';
