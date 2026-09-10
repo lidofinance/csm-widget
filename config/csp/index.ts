@@ -23,6 +23,13 @@ export const contentSecurityPolicy: ContentSecurityPolicyOption = {
 export const withCsp = (app: FC<AppProps>): FC =>
   withSecureHeaders({
     contentSecurityPolicy,
+    // non-CSP headers are owned by next.config.mjs headers()
     frameGuard: false,
-    referrerPolicy: 'same-origin',
+    forceHTTPSRedirect: false,
+    noopen: false,
+    expectCT: false,
+    nosniff: false,
+    referrerPolicy: false,
+    // cannot be disabled in next-secure-headers 2.2.0; keep equal to next.config.mjs
+    xssProtection: 'block-rendering',
   })(app);
