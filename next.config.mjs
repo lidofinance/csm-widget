@@ -183,24 +183,45 @@ export default withBundleAnalyzer({
         // Apply these headers to all routes in your application.
         source: '/(.*)',
         headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          // Overwritten by Cloudflare; 1 year is the hstspreload.org minimum
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
+            value: 'max-age=31536000; includeSubDomains; preload',
           },
-          {
-            key: 'Referrer-Policy',
-            value: 'same-origin',
-          },
-          {
-            key: 'x-content-type-options',
-            value: 'nosniff',
-          },
-          { key: 'x-xss-protection', value: '1' },
+          { key: 'Referrer-Policy', value: 'same-origin' },
+          { key: 'x-content-type-options', value: 'nosniff' },
+          { key: 'x-xss-protection', value: '1; mode=block' },
           { key: 'x-download-options', value: 'noopen' },
+          { key: 'x-permitted-cross-domain-policies', value: 'none' },
+          {
+            key: 'cross-origin-opener-policy',
+            value: 'same-origin-allow-popups',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: [
+              'camera=()',
+              'microphone=()',
+              'geolocation=()',
+              'payment=()',
+              'accelerometer=()',
+              'gyroscope=()',
+              'magnetometer=()',
+              'display-capture=()',
+              'encrypted-media=()',
+              'serial=()',
+              'xr-spatial-tracking=()',
+              'browsing-topics=()',
+              // hardware wallets (Ledger/Trezor) via WebUSB/WebHID/Bluetooth
+              'usb=(self)',
+              'bluetooth=(self)',
+              'hid=(self)',
+              'autoplay=(self)',
+              'fullscreen=(self)',
+              'picture-in-picture=(self)',
+            ].join(', '),
+          },
         ],
       },
       {
