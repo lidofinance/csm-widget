@@ -1,21 +1,43 @@
-# build env
-FROM node:24-alpine as build
+FROM node:24-alpine AS node-base
+
+# dependencies for the build
+FROM node-base AS deps
 
 WORKDIR /app
 
-RUN apk add --no-cache git=~2
 COPY package.json yarn.lock ./
-
 RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts && yarn cache clean
-COPY . .
-RUN NODE_NO_BUILD_DYNAMICS=true yarn typechain && yarn build
-# public/runtime is used to inject runtime vars; it should exist and user node should have write access there for it
-RUN rm -rf /app/public/runtime && mkdir /app/public/runtime && chown node /app/public/runtime
-# public/manifest.json and favicons are regenerated at server start based on MODULE; user node needs write access
-RUN chown -R node /app/public
 
-# final image
-FROM node:24-alpine as base
+# runtime-only dependencies, kept apart so the final image never sees devDependencies
+FROM node-base AS prod-deps
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts --production && yarn cache clean
+
+# build env
+FROM deps AS build
+
+COPY . .
+
+# Runtime build metadata (surfaced in the footer + /api metrics). The reusable
+# Harbor workflow passes these as build-args; regenerate build-info.json from
+# them so the bundled values reflect the actual build. Local builds without
+# these args keep the tracked REPLACE_WITH_* placeholders untouched.
+ARG BUILD_VERSION
+ARG BUILD_BRANCH
+ARG BUILD_COMMIT
+# .next/cache is a multi-hundred-MB webpack FS cache; it must not leak into COPY --from=build below
+RUN if [ -n "$BUILD_COMMIT" ]; then \
+      printf '{"version":"%s","branch":"%s","commit":"%s"}\n' \
+        "$BUILD_VERSION" "$BUILD_BRANCH" "$BUILD_COMMIT" > build-info.json; \
+    fi \
+    && NODE_NO_BUILD_DYNAMICS=true yarn build \
+    && rm -rf .next/cache
+
+# runtime image
+FROM node-base AS runner
 
 ARG BASE_PATH=""
 ARG DEFAULT_CHAIN="1"
@@ -25,13 +47,31 @@ ENV NEXT_TELEMETRY_DISABLED=1 \
   DEFAULT_CHAIN=$DEFAULT_CHAIN
 
 WORKDIR /app
-RUN apk add --no-cache curl=~8
-COPY --from=build /app /app
+
+COPY --from=prod-deps /app/node_modules ./node_modules
+COPY --from=build /app/.next ./.next
+# next.config.mjs is re-evaluated on server start and writes only
+# public/runtime/window-env.js. It is the sole runtime-writable path: under
+# readOnlyRootFilesystem mount an emptyDir at /app/public/runtime (uid 1000)
+COPY --from=build /app/public ./public
+RUN rm -rf public/runtime && mkdir public/runtime && chown node public/runtime
+COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json /app/server.mjs ./
+COPY --from=build /app/scripts ./scripts
+# next-logger.config.cjs preloads ./utilsApi/*.cjs at runtime
+COPY --from=build /app/utilsApi ./utilsApi
+
+# ARG does not cross stages; re-declared here so the labels resolve
+ARG BUILD_VERSION
+ARG BUILD_COMMIT
+LABEL org.opencontainers.image.source="https://github.com/lidofinance/csm-widget" \
+      org.opencontainers.image.version="$BUILD_VERSION" \
+      org.opencontainers.image.revision="$BUILD_COMMIT"
 
 USER node
 EXPOSE 3000
 
-HEALTHCHECK --interval=10s --timeout=3s \
-  CMD curl -f http://localhost:3000/api/health || exit 1
+# start-period covers app.prepare(); k8s ignores this and uses its own probes
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
+  CMD wget -q -O /dev/null "http://localhost:${PORT:-3000}/api/health" || exit 1
 
 CMD ["yarn", "start"]
