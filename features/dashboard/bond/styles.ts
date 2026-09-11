@@ -11,6 +11,10 @@ export const RowTitle = styled.h4`
   gap: ${({ theme }) => theme.spaceMap.sm}px;
 `;
 
+export const NoWrap = styled.span`
+  white-space: nowrap;
+`;
+
 export const RowHeader = styled(StackStyle)`
   justify-content: space-between;
   align-items: center;
@@ -79,5 +83,7 @@ export const BadgeStyle = styled.div<{ $variant?: keyof typeof badgeVariants }>`
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
   font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
   ${(props) => badgeVariants[props.$variant || 'default']}
 `;

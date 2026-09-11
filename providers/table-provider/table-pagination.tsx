@@ -1,10 +1,11 @@
-import { Option } from '@lidofinance/lido-ui';
+import { Option, useBreakpoint } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { useTable } from './context';
 import { PaginationStyled, SelectStyle, Wrapper } from './styles';
 
 export const TablePagination: FC = () => {
   const { page, pages, pageSize, setPage, setPageSize } = useTable();
+  const isMobile = useBreakpoint('md');
 
   if (pages < 1) {
     return null;
@@ -16,7 +17,7 @@ export const TablePagination: FC = () => {
         pagesCount={pages}
         activePage={page + 1}
         onItemClick={(page) => setPage(page - 1)}
-        siblingCount={1}
+        siblingCount={isMobile ? 0 : 1}
       />
       <SelectStyle
         arrow="small"
