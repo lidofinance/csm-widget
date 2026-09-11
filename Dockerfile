@@ -60,6 +60,13 @@ COPY --from=build /app/scripts ./scripts
 # next-logger.config.cjs preloads ./utilsApi/*.cjs at runtime
 COPY --from=build /app/utilsApi ./utilsApi
 
+# ARG does not cross stages; re-declared here so the labels resolve
+ARG BUILD_VERSION
+ARG BUILD_COMMIT
+LABEL org.opencontainers.image.source="https://github.com/lidofinance/csm-widget" \
+      org.opencontainers.image.version="$BUILD_VERSION" \
+      org.opencontainers.image.revision="$BUILD_COMMIT"
+
 USER node
 EXPOSE 3000
 
