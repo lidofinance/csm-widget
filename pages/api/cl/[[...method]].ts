@@ -1,4 +1,8 @@
-import { wrapRequest as wrapNextRequest } from '@lidofinance/next-api-wrapper';
+import {
+  wrapRequest as wrapNextRequest,
+  cacheControl,
+  RequestWrapper,
+} from '@lidofinance/next-api-wrapper';
 
 import { config as appConfig } from 'config';
 import { API_ROUTES } from 'consts/api';
@@ -31,10 +35,21 @@ const api = apiFactory({
   providers: clApiUrls,
 });
 
+// POST results are per-request; only GET responses are safe for shared caches
+const clCacheControl: RequestWrapper = (req, res, next) =>
+  cacheControl({
+    headers:
+      req.method === 'GET'
+        ? appConfig.CACHE_CL_HEADERS
+        : appConfig.CACHE_NO_STORE_HEADERS,
+    errorHeaders: appConfig.CACHE_NO_STORE_HEADERS,
+  })(req, res, next);
+
 export default wrapNextRequest([
   httpMethodGuard([HttpMethod.GET, HttpMethod.POST]),
   rateLimit,
   responseTimeMetric(Metrics.request.apiTimings, API_ROUTES.CL),
+  clCacheControl,
   defaultErrorHandler,
 ])(api);
 
