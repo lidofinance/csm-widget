@@ -79,6 +79,7 @@ export default withBundleAnalyzer({
     styledComponents: true,
   },
   images: {
+    unoptimized: true,
     loader: 'custom',
   },
   experimental: {
