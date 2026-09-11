@@ -10,9 +10,15 @@ export const TitledValueStyle = styled(StackStyle)<{ $warning?: boolean }>`
   );
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   line-height: ${({ theme }) => theme.fontSizesMap.lg}px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-wrap: wrap;
+    row-gap: ${({ theme }) => theme.spaceMap.xs}px;
+  }
 `;
 
 export const ValueStyle = styled.div`
   font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
   line-height: 1.6;
+  min-width: 0;
 `;
