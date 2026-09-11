@@ -1,4 +1,5 @@
 import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
+import { useBreakpoint } from '@lidofinance/lido-ui';
 import { ChangeEventHandler, FC, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import {
@@ -29,6 +30,7 @@ export const RemoveKeysSelectorHookForm: FC<Props> = ({
   const { setValue, watch, trigger } =
     useFormContext<Record<string, { start: number; count: number }>>();
   const { start, count } = watch(fieldName);
+  const isMobile = useBreakpoint('md');
 
   const onChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -75,7 +77,7 @@ export const RemoveKeysSelectorHookForm: FC<Props> = ({
             key={pubkey}
             label={
               <Stack center spaceBetween>
-                <Pubkey pubkey={pubkey} symbols={16} />
+                <Pubkey pubkey={pubkey} symbols={isMobile ? 6 : 16} />
 
                 {statuses
                   .filter((status) => BAD_STATUSES.includes(status))

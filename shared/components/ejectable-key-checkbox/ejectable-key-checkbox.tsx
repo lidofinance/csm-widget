@@ -10,11 +10,13 @@ type EjectableKeyCheckboxProps = {
   name: string;
   checked: boolean;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  symbols?: number;
 };
 
 export const EjectableKeyCheckbox: FC<EjectableKeyCheckboxProps> = ({
   statuses,
   pubkey,
+  symbols = 14,
   ...props
 }) => {
   const disabled = !statuses.includes(KEY_STATUS.EJECTABLE);
@@ -24,7 +26,7 @@ export const EjectableKeyCheckbox: FC<EjectableKeyCheckboxProps> = ({
       {...props}
       label={
         <Stack center spaceBetween>
-          <Pubkey pubkey={pubkey} symbols={14} />
+          <Pubkey pubkey={pubkey} symbols={symbols} />
 
           <Stack center gap="sm">
             <StatusesWrapper>
