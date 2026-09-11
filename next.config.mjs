@@ -80,6 +80,7 @@ export default withBundleAnalyzer({
   },
   images: {
     unoptimized: true,
+    loader: 'custom',
   },
   experimental: {
     // Fixes a build error with importing Pure ESM modules, e.g. reef-knot
@@ -171,7 +172,8 @@ export default withBundleAnalyzer({
       ...(config.ignoreWarnings ?? []),
       {
         module: /node_modules\/ox\/_esm\/tempo\//,
-        message: /Critical dependency: the request of a dependency is an expression/,
+        message:
+          /Critical dependency: the request of a dependency is an expression/,
       },
     ];
 
