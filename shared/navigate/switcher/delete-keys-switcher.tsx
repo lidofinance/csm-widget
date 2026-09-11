@@ -67,7 +67,7 @@ export const DeleteKeysSwitcher: FC<Props> = ({ active }) => {
   const filteredItems = useFilterShowRules(items);
 
   return (
-    <Grid>
+    <Grid $stackOnMobile>
       {filteredItems.map(({ value, route, suffix, title, description }) => (
         <RadioLocalLink
           key={value}

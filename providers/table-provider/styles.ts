@@ -3,6 +3,8 @@ import styled from 'styled-components';
 
 export const PaginationStyled = styled(Pagination)`
   align-self: center;
+  flex-wrap: wrap;
+  justify-content: center;
 `;
 
 export const SortButtonStyled = styled(Button).attrs({
@@ -40,6 +42,13 @@ export const Wrapper = styled.div`
   & > *:first-child {
     grid-column: 2 / 3;
     justify-self: center;
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: ${({ theme }) => theme.spaceMap.md}px;
   }
 `;
 

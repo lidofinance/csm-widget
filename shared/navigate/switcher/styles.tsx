@@ -1,30 +1,46 @@
 import styled from 'styled-components';
 import { LocalLink } from '../local-link';
 
-export const SwitchWrapper = styled.div<{ $count: number }>`
-  width: ${({ $count }) => `${$count * 134}px`} !important;
+export const SwitchWrapper = styled.div`
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  // bleeds into the layout gutters so the track can scroll edge to edge;
+  // width must stay auto for the negative margins to widen rather than shift it
+  margin-inline: calc(-1 * var(--layout-gutter, 20px));
+  padding-inline: var(--layout-gutter, 20px);
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const Track = styled.div`
+  position: relative;
+  width: max-content;
+  margin-inline: auto;
   height: 44px;
   background-color: var(--lido-color-backgroundDarken);
   border-radius: 22px;
-  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+
   :hover {
     cursor: pointer;
   }
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  user-select: none;
 `;
 
-export const Handle = styled.div<{ $active: number }>`
-  width: 130px;
+export const Handle = styled.div`
   height: 40px;
   background-color: var(--lido-color-foreground);
   border-radius: 20px;
   position: absolute;
-  left: ${({ $active }) => `calc(2px + ${$active * 134}px)`};
-  transition: left 0.3s ease;
   top: 2px;
+  transition:
+    left 0.3s ease,
+    width 0.3s ease;
   z-index: 1;
 `;
 
@@ -39,7 +55,7 @@ export const SwitchItemStyled = styled(LocalLink)<{
   margin: 0;
   opacity: ${({ $active }) => ($active ? 1 : 0.5)};
   transition: opacity 0.3s ease;
-  flex: 1;
+  flex: 0 0 134px;
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -65,5 +81,11 @@ export const SwitchItemStyled = styled(LocalLink)<{
   &:visited {
     color: ${({ $warning }) =>
       $warning ? `var(--lido-color-error)` : `var(--lido-color-text)`};
+  }
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex: 0 0 auto;
+    padding-inline: 24px;
+    white-space: nowrap;
   }
 `;

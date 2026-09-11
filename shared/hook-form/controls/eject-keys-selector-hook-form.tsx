@@ -1,4 +1,5 @@
 import { KeyWithStatus } from '@lidofinance/lido-csm-sdk';
+import { useBreakpoint } from '@lidofinance/lido-ui';
 import { ChangeEventHandler, FC, useCallback, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { EjectableKeyCheckbox, Latice } from 'shared/components';
@@ -15,6 +16,7 @@ export const EjectKeysSelectorHookForm: FC<Props> = ({
   const { setValue, watch, trigger } =
     useFormContext<Record<string, number[]>>();
   const selected = watch(fieldName);
+  const isMobile = useBreakpoint('md');
 
   const onChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -49,6 +51,7 @@ export const EjectKeysSelectorHookForm: FC<Props> = ({
           name={`keys.${index}.checked`}
           checked={selected.includes(index)}
           onChange={onChange}
+          symbols={isMobile ? 6 : 14}
         />
       ))}
     </Latice>

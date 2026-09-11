@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { NAV_MOBILE_MEDIA } from 'styles/constants';
+
 export const LogoLidoStyle = styled.div`
   overflow: hidden;
   display: flex;
@@ -8,7 +10,7 @@ export const LogoLidoStyle = styled.div`
   flex-shrink: 0;
   cursor: pointer;
 
-  ${({ theme }) => theme.mediaQueries.lg} {
+  ${NAV_MOBILE_MEDIA} {
     width: 14px;
     justify-content: flex-start;
   }
