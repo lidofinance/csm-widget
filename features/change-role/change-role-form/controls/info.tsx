@@ -84,6 +84,7 @@ export const Info: FC = () => {
                       fullwidth={false}
                       onClick={revokeHandle}
                       noDisableOnError
+                      secondaryAction
                     >
                       Cancel
                     </SubmitButtonHookForm>
@@ -95,6 +96,7 @@ export const Info: FC = () => {
                         fullwidth={false}
                         onClick={acceptHandle}
                         noDisableOnError
+                        secondaryAction
                       >
                         Accept
                       </SubmitButtonHookForm>

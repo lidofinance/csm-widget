@@ -44,6 +44,7 @@ export const Info: FC = () => {
                     fullwidth={false}
                     onClick={unsetHandle}
                     noDisableOnError
+                    secondaryAction
                     data-testid="unsetClaimerButton"
                   >
                     Unset
