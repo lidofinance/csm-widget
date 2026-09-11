@@ -11,12 +11,16 @@ type SubmitButtonHookFormProps = Partial<
   isLocked?: boolean;
   noDisableOnError?: boolean;
   disableIfClean?: boolean;
+  /** Submits on click instead of being a `type="submit"` button, so it cannot win the form's implicit submit over the primary action. */
+  secondaryAction?: boolean;
 };
 
 export const SubmitButtonHookForm: React.FC<SubmitButtonHookFormProps> = ({
   isLocked,
   icon,
   disabled: disabledProp,
+  secondaryAction,
+  onClick,
   ...props
 }) => {
   const { isAccountActive } = useDappStatus();
@@ -29,14 +33,20 @@ export const SubmitButtonHookForm: React.FC<SubmitButtonHookFormProps> = ({
 
   if (!isAccountActive) return <Connect fullwidth />;
 
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+    onClick?.(event);
+    if (secondaryAction) event.currentTarget.form?.requestSubmit();
+  };
+
   return (
     <ButtonIcon
       fullwidth
-      type="submit"
       loading={isValidating || isSubmitting}
       disabled={disabled}
       icon={icon || isLocked ? <Lock /> : <></>}
       {...props}
+      type={secondaryAction ? 'button' : 'submit'}
+      onClick={handleClick}
     />
   );
 };
