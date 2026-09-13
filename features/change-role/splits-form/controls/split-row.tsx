@@ -1,23 +1,12 @@
 import { ButtonIcon, Close, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
-import { Stack } from 'shared/components';
 import {
   AddressInputHookForm,
   PercentInputHookForm,
 } from 'shared/hook-form/controls';
-import styled from 'styled-components';
 import { SplitsFormInputType } from '../context/types';
-
-const AddressColumn = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const ShareColumn = styled.div`
-  width: 90px;
-  flex-shrink: 0;
-`;
+import { AddressColumn, RowStyle, ShareColumn } from './styles';
 
 type SplitRowProps = {
   index: number;
@@ -48,7 +37,7 @@ export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
 
   return (
     <div>
-      <Stack gap="sm" center>
+      <RowStyle>
         <AddressColumn>
           <AddressInputHookForm
             fieldName={`feeSplits.${index}.recipient`}
@@ -76,7 +65,7 @@ export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
           onClick={() => onRemove(index)}
           aria-label="Remove"
         />
-      </Stack>
+      </RowStyle>
       {errorMessage && (
         <Text size="xxs" color="error">
           {errorMessage}
