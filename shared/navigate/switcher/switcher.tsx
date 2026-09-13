@@ -19,6 +19,7 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [handleRect, setHandleRect] = useState<HandleRect | null>(null);
+  const [fade, setFade] = useState({ start: false, end: false });
 
   const filteredRoutes = useFilterShowRules(routes);
 
@@ -76,10 +77,40 @@ export const Switcher: FC<SwitchProps> = ({ routes }) => {
     }
   }, [activePathIndex]);
 
+  useIsomorphicLayoutEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+
+    const update = () => {
+      const { scrollLeft, scrollWidth, clientWidth } = wrapper;
+      const start = scrollLeft > 1;
+      const end = scrollLeft + clientWidth < scrollWidth - 1;
+      setFade((prev) =>
+        prev.start === start && prev.end === end ? prev : { start, end },
+      );
+    };
+
+    update();
+
+    wrapper.addEventListener('scroll', update, { passive: true });
+    const observer = new ResizeObserver(update);
+    observer.observe(wrapper);
+
+    return () => {
+      wrapper.removeEventListener('scroll', update);
+      observer.disconnect();
+    };
+  }, [filteredRoutes.length]);
+
   if (filteredRoutes.length <= 1) return null;
 
   return (
-    <SwitchWrapper ref={wrapperRef} data-testid="pageSwitcher">
+    <SwitchWrapper
+      ref={wrapperRef}
+      data-testid="pageSwitcher"
+      $fadeStart={fade.start}
+      $fadeEnd={fade.end}
+    >
       <Track ref={trackRef}>
         {filteredRoutes.map((route, index) => (
           <SwitcherItem

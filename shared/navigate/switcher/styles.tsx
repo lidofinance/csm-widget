@@ -1,15 +1,35 @@
 import styled from 'styled-components';
 import { LocalLink } from '../local-link';
 
-export const SwitchWrapper = styled.div`
+export const SwitchWrapper = styled.div<{
+  $fadeStart: boolean;
+  $fadeEnd: boolean;
+}>`
   position: relative;
   overflow-x: auto;
   scrollbar-width: none;
 
-  // bleeds into the layout gutters so the track can scroll edge to edge;
-  // width must stay auto for the negative margins to widen rather than shift it
-  margin-inline: calc(-1 * var(--layout-gutter, 20px));
   padding-inline: var(--layout-gutter, 20px);
+  // bleeds into the layout gutters so the track can scroll edge to edge
+  margin-inline: calc(-1 * var(--layout-gutter, 20px));
+
+  --fade: 48px;
+  --fade-start: ${({ $fadeStart }) => ($fadeStart ? 'var(--fade)' : '0px')};
+  --fade-end: ${({ $fadeEnd }) => ($fadeEnd ? 'var(--fade)' : '0px')};
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
 
   &::-webkit-scrollbar {
     display: none;
