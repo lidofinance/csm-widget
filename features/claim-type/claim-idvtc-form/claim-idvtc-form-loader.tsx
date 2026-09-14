@@ -1,10 +1,8 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Button } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import { FC, PropsWithChildren } from 'react';
 import { EmptyState } from 'shared/components';
 import { FormLoader } from 'shared/hook-form/form-controller';
-import { getOperatorTypeQuery } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 import { ClaimIdvtcSuccess } from './claim-idvtc-success';
 import { useClaimIdvtcFlow, useClaimIdvtcFormData } from './context';
@@ -13,6 +11,9 @@ import { Info } from './controls/info';
 import { Parameters } from './controls/parameters';
 
 const EMPTY_STATE: Record<string, React.ReactNode> = {
+  'wrong-module': (
+    <>The IDVTC operator type is not available for the selected operator</>
+  ),
   paused: <>IDVTC claiming is currently paused</>,
   claimed: <>You have already claimed the IDVTC operator type</>,
   'not-eligible': <>You are not eligible to claim the IDVTC operator type</>,
@@ -29,10 +30,7 @@ const ClaimIdvtcFormGate: FC<PropsWithChildren> = ({ children }) => {
       <>
         <ClaimedWithProofInfo />
         <Parameters />
-        <LocalLink
-          href={PATH.CREATE}
-          query={getOperatorTypeQuery(OPERATOR_TYPE.CSM_IDVTC)}
-        >
+        <LocalLink href={PATH.CREATE_IDVTC}>
           <Button fullwidth>Create IDVTC operator</Button>
         </LocalLink>
       </>

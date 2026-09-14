@@ -1,58 +1,55 @@
 import {
-  getCurveIdByOperatorType,
+  CurveRef,
+  getCurveRefByOperatorType,
   getOperatorTypeByCurveId,
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
 import { useConfig } from 'config';
 import { getCurveMetadata, getDisplayOperatorType } from 'consts';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
-// Stable getter bound to the active chain & module. Prefer it for query
-// selects and tx-stage callbacks where identity matters across renders.
-export const useModuleOperatorTypeGetter = () => {
+const useDefaultChain = () => {
   const {
-    config: { defaultChain, module },
+    config: { defaultChain },
   } = useConfig();
+  return defaultChain;
+};
+
+export const useModuleOperatorTypeGetter = () => {
+  const defaultChain = useDefaultChain();
   return useCallback(
-    (curveId: bigint | undefined) =>
-      getOperatorTypeByCurveId(defaultChain, module, curveId),
-    [defaultChain, module],
+    (curve: CurveRef | undefined) =>
+      getOperatorTypeByCurveId(defaultChain, curve),
+    [defaultChain],
   );
 };
 
 export const useCurveMetadataGetter = () => {
-  const {
-    config: { defaultChain, module },
-  } = useConfig();
+  const defaultChain = useDefaultChain();
   return useCallback(
-    (curveId: bigint | undefined) =>
-      getCurveMetadata(defaultChain, module, curveId),
-    [defaultChain, module],
+    (curve: CurveRef | undefined) => getCurveMetadata(defaultChain, curve),
+    [defaultChain],
   );
 };
 
-export const useModuleOperatorType = (curveId: bigint | undefined) => {
-  const getOperatorType = useModuleOperatorTypeGetter();
-  return getOperatorType(curveId);
-};
+export const useModuleOperatorType = (curve: CurveRef | undefined) =>
+  useModuleOperatorTypeGetter()(curve);
 
-// Display variant: unmapped-but-defined curve ids classify as CUSTOM_CURVE.
+// Display variant: unmapped-but-defined curves classify as CUSTOM_CURVE.
 // Use the strict useModuleOperatorType for logic branches.
-export const useDisplayOperatorType = (curveId: bigint | undefined) => {
-  const {
-    config: { defaultChain, module },
-  } = useConfig();
-  return getDisplayOperatorType(defaultChain, module, curveId);
-};
+export const useDisplayOperatorType = (curve: CurveRef | undefined) =>
+  getDisplayOperatorType(useDefaultChain(), curve);
 
-export const useCurveMetadata = (curveId: bigint | undefined) => {
-  const getMetadata = useCurveMetadataGetter();
-  return getMetadata(curveId);
-};
+export const useCurveMetadata = (curve: CurveRef | undefined) =>
+  useCurveMetadataGetter()(curve);
 
-export const useOperatorTypeCurveId = (type: OPERATOR_TYPE | undefined) => {
-  const {
-    config: { defaultChain },
-  } = useConfig();
-  return type ? getCurveIdByOperatorType(defaultChain, type) : undefined;
+/** The type's own curve on the default chain; `undefined` while the gate is not deployed there. */
+export const useOperatorTypeCurve = <T extends OPERATOR_TYPE>(
+  type: T | undefined,
+) => {
+  const defaultChain = useDefaultChain();
+  return useMemo(
+    () => (type ? getCurveRefByOperatorType(defaultChain, type) : undefined),
+    [defaultChain, type],
+  );
 };

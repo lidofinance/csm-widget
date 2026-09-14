@@ -1,10 +1,9 @@
 import { Divider, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
-import { isModuleCM } from 'consts/module';
-import { useNodeOperator, useOperatorGroup } from 'modules/web3';
+import { useModule, useNodeOperator, useOperatorGroup } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components/stack/stack';
-import { useCurveMetadata } from 'shared/hooks';
+import { useCurveMetadata, useShowFlags } from 'shared/hooks';
 import { DescriptorId, formatGroupTitle } from 'shared/node-operator';
 import styled from 'styled-components';
 import { TextLocalLink } from 'shared/navigate';
@@ -12,17 +11,19 @@ import { TextLocalLink } from 'shared/navigate';
 import { ReactComponent as ArrowRight } from 'assets/icons/arrow-forward.svg';
 
 export const DashboardSubtitle: FC = () => {
-  if (isModuleCM) return <CmSubtitle />;
+  const { isCM } = useModule();
+
+  if (isCM) return <CmSubtitle />;
 
   return <>Dashboard</>;
 };
 
 const CmSubtitle: FC = () => {
-  const {
-    nodeOperator: { nodeOperatorId, curveId },
-  } = useNodeOperator<true>();
+  const { nodeOperator } = useNodeOperator<true>();
+  const { nodeOperatorId } = nodeOperator;
   const { data: group } = useOperatorGroup(nodeOperatorId);
-  const metadata = useCurveMetadata(curveId);
+  const metadata = useCurveMetadata(nodeOperator);
+  const { IS_NODE_OPERATOR } = useShowFlags();
 
   return (
     <Stack center gap="ms" selfJustify="center">
@@ -31,7 +32,7 @@ const CmSubtitle: FC = () => {
       </Text>
       <DividerStyle />
       <Text size="xxs">{metadata?.name}</Text>
-      {group ? (
+      {group && IS_NODE_OPERATOR ? (
         <>
           <DividerStyle />
           <TextLocalLink

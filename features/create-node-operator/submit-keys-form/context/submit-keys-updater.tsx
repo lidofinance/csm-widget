@@ -14,13 +14,9 @@ export const SubmitKeysUpdater: FC = () => {
 
   const { trigger, setValue } = useFormContext<SubmitKeysFormInputType>();
 
-  const { curveId } = useSubmitKeysFormData();
+  const { curve } = useSubmitKeysFormData();
 
-  const { data: bondAmount } = useBondByKeysCount({
-    keysCount,
-    token,
-    curveId,
-  });
+  const { data: bondAmount } = useBondByKeysCount({ keysCount, token, curve });
 
   useEffect(() => {
     void trigger('bondAmount');

@@ -14,8 +14,8 @@ import {
 } from '../context/types';
 import { renderCreateSuccess } from './create-success-stage';
 
-export const useTxModalStagesSubmitKeys = () =>
-  useTxStages<
+export const useTxModalStagesSubmitKeys = () => {
+  return useTxStages<
     SubmitKeysFormInputType,
     SubmitKeysFormNetworkData,
     NodeOperatorShortInfo
@@ -82,3 +82,4 @@ export const useTxModalStagesSubmitKeys = () =>
       },
     };
   });
+};

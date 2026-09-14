@@ -28,7 +28,21 @@ export const useLocalStorage = <T>(
     }
   }, [initialValue, key, readTransform]);
 
-  const [storedValue, setStoredValue] = useState(readValue);
+  const [stored, setStored] = useState(() => ({ key, value: readValue() }));
+
+  const sync = useCallback(() => {
+    setStored((current) => {
+      const value = readValue();
+      return current.key === key && Object.is(current.value, value)
+        ? current
+        : { key, value };
+    });
+  }, [key, readValue]);
+
+  // A key change (wallet switch) must land in the same render: serving the previous
+  // key's value even once lets consumers read — and overwrite — another account's entry.
+  if (stored.key !== key) sync();
+  const storedValue = stored.key === key ? stored.value : readValue();
 
   const saveToStorage = useCallback(
     (newValue: T) => {
@@ -57,35 +71,31 @@ export const useLocalStorage = <T>(
   const setValue = useCallback<Dispatch<SetStateAction<T>>>(
     (value) => {
       if (value instanceof Function) {
-        setStoredValue((current) => {
-          const newValue = value(current);
+        setStored((current) => {
+          const newValue = value(current.value);
           saveToStorage(newValue);
-          return newValue;
+          return { key, value: newValue };
         });
       } else {
         saveToStorage(value);
-        setStoredValue(value);
+        setStored({ key, value });
       }
     },
-    [saveToStorage],
+    [key, saveToStorage],
   );
 
   useEffect(() => {
-    setStoredValue(readValue());
-  }, [readValue]);
+    sync();
+  }, [sync]);
 
   useEffect(() => {
-    const handleStorageChange = () => {
-      setStoredValue(readValue());
-    };
-    window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('local-storage', handleStorageChange);
-
+    window.addEventListener('storage', sync);
+    window.addEventListener('local-storage', sync);
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('local-storage', handleStorageChange);
+      window.removeEventListener('storage', sync);
+      window.removeEventListener('local-storage', sync);
     };
-  }, [readValue]);
+  }, [sync]);
 
   return [storedValue, setValue];
 };

@@ -9,7 +9,7 @@ export const OperatorType2: Faq = {
       <p>Currently there are three Node Operator types:</p>
       <ul>
         <li>
-          Default operator - the default Node Operator type assigned to all new
+          CSM 0x01 operator - the default Node Operator type assigned to all new
           Node Operators joining CSM via the Default Gate;
         </li>
         <li>

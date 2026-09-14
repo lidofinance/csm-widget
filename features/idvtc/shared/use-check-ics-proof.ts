@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import invariant from 'tiny-invariant';
 import { Address } from 'viem';
@@ -8,7 +8,7 @@ import { Address } from 'viem';
 // by the IDVTC apply-form validation and the cluster-member rotation flow so
 // both gate new members on the same rule.
 export const useCheckIcsProof = () => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
+  const sdk = useActiveSmSDK(MODULE_NAME.CSM);
 
   return useCallback(
     async (address: Address): Promise<boolean> => {

@@ -7,6 +7,9 @@ import { ClaimedWithProofInfo } from './controls/claimed-with-proof-info';
 import { Info } from './controls/info';
 
 const EMPTY_STATE: Record<string, React.ReactNode> = {
+  'wrong-module': (
+    <>The ICS operator type is not available for the selected operator</>
+  ),
   paused: <>ICS claiming is currently paused</>,
   claimed: <>You have already claimed the ICS operator type</>,
   'not-eligible': <>You are not eligible to claim the ICS operator type</>,

@@ -26,9 +26,10 @@ export class InboxRequestsPage extends BasePage {
 
   getRequestLocator(noNumber: number, role: ROLES) {
     const requestId = `${SHORT_ROLES[role]}-${noNumber}`;
-    return this.page.locator(
-      `xpath=//input[@value="${requestId}"]/ancestor::label`,
-    );
+    // value is module-prefixed; leading "-" keeps "-M-5" from matching "-M-50"
+    return this.page
+      .locator(`input[value$="-${requestId}"]`)
+      .locator('xpath=ancestor::label');
   }
 
   async acceptRequest(noNumber: number, role: ROLES) {

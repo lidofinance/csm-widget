@@ -7,19 +7,23 @@ import { validateDkgBatch } from 'features/idvtc/dkg/utils/validate-dkg-batch';
 import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
+  validateAddress,
   validateBondAmount,
   validateDepositData,
   ValidationError,
   VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
-import { isAddress } from 'viem';
+import invariant from 'tiny-invariant';
+import { useSubmitKeysFormData } from './submit-keys-data-provider';
 import type {
   SubmitKeysFormInputType,
   SubmitKeysFormNetworkData,
 } from './types';
 
 export const useSubmitKeysValidation = () => {
-  const { depositData: sdk } = useSmSDK();
+  const { targetModule } = useSubmitKeysFormData();
+  const targetSdk = useSmSDK(targetModule);
+  const sdk = targetSdk?.depositData;
   const featureFlags = useFeatureFlags();
 
   return useFormValidation<SubmitKeysFormInputType, SubmitKeysFormNetworkData>(
@@ -39,6 +43,8 @@ export const useSubmitKeysValidation = () => {
       { curveParameters, maxStakeEth, ethBalance, stethBalance, wstethBalance },
       validate,
     ) => {
+      invariant(sdk, 'submit-keys validation: no SDK for the target module');
+
       // FIXME: validate on submit that token, bondAmount and depositData.length are defined
 
       await validate(['token', 'bondAmount'], () =>
@@ -92,18 +98,20 @@ export const useSubmitKeysValidation = () => {
       });
 
       await validate('rewardsAddress', () => {
-        if (specifyCustomAddresses && !isAddress(rewardsAddress ?? '')) {
-          throw new ValidationError(
+        if (specifyCustomAddresses) {
+          validateAddress(
             'rewardsAddress',
+            rewardsAddress,
             VALIDATION_MESSAGES.specifyValidRewardsAddress,
           );
         }
       });
 
       await validate('managerAddress', () => {
-        if (specifyCustomAddresses && !isAddress(managerAddress ?? '')) {
-          throw new ValidationError(
+        if (specifyCustomAddresses) {
+          validateAddress(
             'managerAddress',
+            managerAddress,
             VALIDATION_MESSAGES.specifyValidManagerAddress,
           );
         }

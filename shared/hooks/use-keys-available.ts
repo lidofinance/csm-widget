@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import { BondBalance, TOKENS } from '@lidofinance/lido-csm-sdk';
+import { BondBalance, CurveRef, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { KEYS_UPLOAD_TX_LIMIT, ONE_ETH } from 'consts';
 import { useExchangeRate } from 'shared/hooks';
 import { useCurveParameters } from 'modules/web3/hooks/use-curve-parameters';
 import { bondForKeys, convert, maxKeysForBond } from 'utils';
 
 type Props = {
-  curveId?: bigint;
+  curve?: CurveRef;
   bond?: BondBalance;
   nonWithdrawnKeys?: number;
   ethBalance?: bigint;
@@ -26,19 +26,19 @@ export type KeysAvailable = Record<TOKENS, AvailableForToken>;
  * extra on-chain reads.
  */
 export const useKeysAvailable = ({
-  curveId,
+  curve,
   bond,
   nonWithdrawnKeys = 0,
   ethBalance,
   stethBalance,
   wstethBalance,
 }: Props): KeysAvailable | undefined => {
-  const { data: curve } = useCurveParameters(curveId);
+  const { data: curveParameters } = useCurveParameters(curve);
   const { data: rates } = useExchangeRate();
 
   return useMemo(() => {
-    const intervals = curve?.bondConfig;
-    const keysLimit = curve?.keysLimit;
+    const intervals = curveParameters?.bondConfig;
+    const keysLimit = curveParameters?.keysLimit;
     if (
       !intervals ||
       intervals.length === 0 ||
@@ -78,7 +78,7 @@ export const useKeysAvailable = ({
       [TOKENS.wsteth]: calc(wstethBalance, rates[TOKENS.wsteth]),
     } as KeysAvailable;
   }, [
-    curve,
+    curveParameters,
     rates,
     bond,
     nonWithdrawnKeys,

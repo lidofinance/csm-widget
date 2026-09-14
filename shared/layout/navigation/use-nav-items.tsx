@@ -4,12 +4,12 @@ import { ReactNode } from 'react';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Eth as EthIcon, Plus as PlusIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
+import { ReactComponent as DvtIcon } from 'assets/icons/file-2.svg';
 import { ReactComponent as FileIcon } from 'assets/icons/file.svg';
 import { ReactComponent as GearIcon } from 'assets/icons/gear.svg';
 import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
-import { ReactComponent as DvtIcon } from 'assets/icons/file-2.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import {
@@ -36,18 +36,24 @@ const routes: Route[] = [
     path: PATH.HOME,
     icon: <HomeIcon />,
     showRules: ['NOT_NODE_OPERATOR'],
-    module: MODULE_NAME.CSM,
+    modules: [MODULE_NAME.CSM],
   },
   {
     name: 'Dashboard',
     path: PATH.HOME,
     icon: <DashboardIcon />,
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['HAS_ANY_ROLE'],
   },
   {
     name: 'Create Operator',
     path: PATH.CREATE,
     icon: <PlusIcon />,
+    subPaths: [
+      PATH.CREATE_0x01,
+      PATH.CREATE_ICS,
+      PATH.CREATE_IDVTC,
+      PATH.CREATE_0x02,
+    ],
     showRules: ['CAN_CREATE'],
   },
   {
@@ -75,7 +81,7 @@ const routes: Route[] = [
     path: PATH.BOND,
     icon: <WalletIcon />,
     subPaths: [PATH.BOND_ADD, PATH.BOND_CLAIM, PATH.BOND_UNLOCK],
-    showRules: ['IS_NODE_OPERATOR'],
+    showRules: ['HAS_ANY_ROLE'],
     suffix: <CounterLockedBond />,
   },
   {
@@ -97,7 +103,10 @@ const routes: Route[] = [
     name: 'Inbox Requests',
     path: PATH.SETTINGS_INBOX,
     icon: <GearIcon />,
-    showRules: [['HAS_INVITES', 'NOT_NODE_OPERATOR']],
+    showRules: [
+      ['HAS_INVITES', 'NOT_NODE_OPERATOR'],
+      ['HAS_INVITES', 'HAS_CLAIMER_ROLE'],
+    ],
     suffix: <CounterInvites />,
   },
   {

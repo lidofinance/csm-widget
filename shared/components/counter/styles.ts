@@ -35,7 +35,10 @@ export const CounterStyle = styled.span<Props>`
   align-items: center;
   align-self: center;
 
-  color: var(--lido-color-text);
+  color: ${({ $variant = 'default' }) =>
+    $variant in CURVE_VARIANTS
+      ? 'var(--lido-color-primaryContrast)'
+      : 'var(--lido-color-text)'};
   text-transform: capitalize;
 
   ${({ $variant = 'default' }) => ($variant ? COUNTER_VARIANTS[$variant] : '')}

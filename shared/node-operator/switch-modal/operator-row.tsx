@@ -1,17 +1,19 @@
 import {
   getNodeOperatorRoles,
+  MODULE_NAME,
   NodeOperatorId,
-  NodeOperatorShortInfo,
   SubOperatorStakeSummary,
 } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
 import { STAKE_COLORS } from 'features/group/shared/stake-stats';
 import {
+  OperatorRef,
   useDappStatus,
   useOperatorCurveId,
   useOperatorInfo,
   useOperatorMetadata,
 } from 'modules/web3';
+import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC, useMemo } from 'react';
 import { Stack } from 'shared/components';
 import { computeStakeData, getPercent } from 'utils';
@@ -30,10 +32,10 @@ export type OperatorAction = 'current' | 'switch' | 'view';
 
 type OperatorRowProps = {
   nodeOperatorId: NodeOperatorId;
-  shortInfo?: NodeOperatorShortInfo;
+  shortInfo?: ModuleNodeOperator;
   stakeSummary?: SubOperatorStakeSummary;
   action: OperatorAction;
-  onSwitch: (id: NodeOperatorId) => void;
+  onSwitch: (operator: OperatorRef) => void;
 };
 
 export const OperatorRow: FC<OperatorRowProps> = ({
@@ -45,11 +47,12 @@ export const OperatorRow: FC<OperatorRowProps> = ({
 }) => {
   const { address } = useDappStatus();
 
-  // Fetch curveId only for non-available operators (no shortInfo)
-  const { data: fetchedCurveId } = useOperatorCurveId(
-    shortInfo ? undefined : nodeOperatorId,
+  // Fetch the curve only for non-available operators (no shortInfo); rows in
+  // this list are always CM (groups are CM-only).
+  const { data: fetchedCurve } = useOperatorCurveId(
+    shortInfo ? undefined : { nodeOperatorId, module: MODULE_NAME.CM },
   );
-  const curveId = shortInfo?.curveId ?? fetchedCurveId;
+  const curve = shortInfo ?? fetchedCurve;
 
   // Roles only for available operators
   const roles = shortInfo ? getNodeOperatorRoles(shortInfo, address) : [];
@@ -78,16 +81,22 @@ export const OperatorRow: FC<OperatorRowProps> = ({
         <Stack gap="sm" center spaceBetween>
           <CmRowDescriptor>
             <DescriptorId id={nodeOperatorId} />
-            <CurveBadge curveId={curveId} inline />
+            <CurveBadge curve={curve} inline />
             <DescriptorRolesStyle>
               {roles.map((role) => (
-                <RoleBadge role={role} key={role} />
+                <RoleBadge
+                  role={role}
+                  key={role}
+                  extendedManagerPermissions={
+                    shortInfo?.extendedManagerPermissions
+                  }
+                />
               ))}
             </DescriptorRolesStyle>
           </CmRowDescriptor>
           <ActionButton
             action={action}
-            onSwitch={() => onSwitch(nodeOperatorId)}
+            onSwitch={() => shortInfo && onSwitch(shortInfo)}
           />
         </Stack>
 
@@ -135,7 +144,7 @@ const ActionButton: FC<{
       );
     case 'switch':
       return (
-        <Button size="xs" variant="ghost" onClick={onSwitch}>
+        <Button size="xs" variant="outlined" onClick={onSwitch}>
           Switch
         </Button>
       );

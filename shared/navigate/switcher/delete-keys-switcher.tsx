@@ -16,7 +16,7 @@ type Item = ShowRuleProps & {
   title: string;
   value: DeleteKeysSwitcherRoutes;
   route: PATH;
-  suffix?: ReactNode;
+  suffix?: () => ReactNode;
   description: ReactNode;
 };
 
@@ -25,7 +25,7 @@ const items: Item[] = [
     title: 'Remove',
     value: DeleteKeysSwitcherRoutes.REMOVE,
     route: PATH.KEYS_REMOVE,
-    suffix: <CounterInvalidKeys />,
+    suffix: () => <CounterInvalidKeys />,
     showRules: ['HAS_MANAGER_ROLE'],
     description: (
       <>
@@ -49,7 +49,7 @@ const items: Item[] = [
     value: DeleteKeysSwitcherRoutes.EJECT,
     route: PATH.KEYS_EJECT,
     showRules: ['HAS_OWNER_ROLE'],
-    suffix: <Chip>Emergency</Chip>,
+    suffix: () => <Chip>Emergency</Chip>,
     description: (
       <>
         Only keys that have been <b>active for at least 256 epochs</b> can be
@@ -80,7 +80,7 @@ export const DeleteKeysSwitcher: FC<Props> = ({ active }) => {
               <Text size="xs" weight={700}>
                 {title}
               </Text>
-              {suffix}
+              {suffix?.()}
             </Stack>
             <Text color="secondary" size="xxs">
               {description}

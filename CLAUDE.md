@@ -105,9 +105,10 @@ Module constants and titles are defined in `consts/module.ts`.
 
 Use `useSmSDK()` hook to access Lido SDK instances:
 
-- `useSmSDK()` - Returns module-agnostic SDK (CSM or CM based on MODULE env var)
-- `useSmSDK(MODULE.CSM)` - Returns CSM-specific SDK with type safety
-- `useSmSDK(MODULE.CM)` - Returns CM-specific SDK with type safety
+- `useSmSDK()` - Active module's SDK (falls back to the deployment's primary module)
+- `useSmSDK(MODULE_NAME.CSM)` - That module's SDK whether or not it is active; `undefined` if not deployed
+- `useActiveSmSDK(MODULE_NAME.CM)` - That module's SDK only while it is the active operator's module, else `undefined`. Use in operator-scoped queries as the `enabled` gate
+- `useTargetSmSDK(module?)` - `{ targetModule, sdk }` for `module`, defaulting to the active one
 
 Note: "SM" = Staking Module (module-agnostic terminology for code shared between CSM and CM).
 

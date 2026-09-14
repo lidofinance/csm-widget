@@ -8,7 +8,7 @@ export const useIdvtcPaused = () => {
   const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
-    queryKey: ['idvtc-paused'],
+    queryKey: ['idvtc-paused', { module: MODULE_NAME.CSM }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(sdk);

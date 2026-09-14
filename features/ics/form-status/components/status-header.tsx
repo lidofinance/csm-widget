@@ -10,14 +10,13 @@ import {
 } from 'features/ics/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { getOperatorTypeQuery } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 
-import { NodeOperatorId, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import {
   NodeOperatorOwner,
   useDappStatus,
-  useNodeOperatorId,
+  useOperatedNodeOperator,
   useOperatorOwner,
 } from 'modules/web3';
 import { isAddressEqual } from 'viem';
@@ -93,10 +92,7 @@ const useHint = (
           </Text>
 
           <div>
-            <LocalLink
-              href={PATH.CREATE}
-              query={getOperatorTypeQuery(OPERATOR_TYPE.CSM_ICS)}
-            >
+            <LocalLink href={PATH.CREATE_ICS}>
               <Button size="xs">Create ICS operator</Button>
             </LocalLink>
           </div>
@@ -180,7 +176,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   scores,
 }) => {
   const { address } = useDappStatus();
-  const nodeOperatorId = useNodeOperatorId();
+  const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
   const { data: owner } = useOperatorOwner(nodeOperatorId);
 
   const otherOwner =

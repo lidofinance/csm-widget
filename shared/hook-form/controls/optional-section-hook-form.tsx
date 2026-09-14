@@ -13,20 +13,23 @@ type FormInput = { [fieldName: string]: boolean };
 type FormOptionalProps = {
   titles: [string, string];
   fieldName: string;
+  dependentFields?: string[];
 };
 
 // TODO: styled checkbox
 // TODO: animated collapse
 export const OptionalSectionHookForm: FC<
   PropsWithChildren<FormOptionalProps>
-> = ({ titles, fieldName, children }) => {
-  const { watch, setValue } = useFormContext<FormInput>();
+> = ({ titles, fieldName, dependentFields, children }) => {
+  const { watch, setValue, trigger } = useFormContext<FormInput>();
 
   const showContent = watch(fieldName);
 
   const onClick = useCallback(() => {
     setValue(fieldName, !showContent);
-  }, [fieldName, setValue, showContent]);
+    // RHF only rewrites errors for triggered names; drop stale errors of the collapsed fields
+    if (dependentFields?.length) void trigger(dependentFields);
+  }, [fieldName, setValue, showContent, dependentFields, trigger]);
 
   return (
     <Stack gap="md" direction="column">

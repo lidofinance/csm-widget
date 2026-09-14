@@ -6,18 +6,15 @@ import {
 import { useCurveParameters } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { FormatToken } from 'shared/formatters';
-import { useCurrentCurveId, useOperatorTypeCurveId } from 'shared/hooks';
+import { useCurrentCurve, useOperatorTypeCurve } from 'shared/hooks';
 import { ShortInlineLoader } from './styles';
 
-type Props = {
-  type?: OPERATOR_TYPE;
-  second?: boolean;
-};
+type Props = { type?: OPERATOR_TYPE; second?: boolean };
 
 export const FaqBondAmount: FC<Props> = ({ type, second }) => {
-  const _curveId = useCurrentCurveId();
-  const typeCurveId = useOperatorTypeCurveId(type);
-  const curveId = type ? typeCurveId : _curveId;
+  const currentCurve = useCurrentCurve();
+  const typeCurve = useOperatorTypeCurve(type);
+  const curve = type ? typeCurve : currentCurve;
 
   const select = useCallback(
     ({ bondConfig }: CurveParameters) => {
@@ -27,7 +24,7 @@ export const FaqBondAmount: FC<Props> = ({ type, second }) => {
     [second],
   );
 
-  const { data, isPending } = useCurveParameters(curveId, select);
+  const { data, isPending } = useCurveParameters(curve, select);
 
   return isPending ? (
     <ShortInlineLoader />

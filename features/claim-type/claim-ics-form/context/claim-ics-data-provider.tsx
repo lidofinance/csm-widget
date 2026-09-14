@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import {
   KEY_ICS_PROOF,
   KEY_OPERATOR_BALANCE,
@@ -9,7 +10,7 @@ import {
   useIcsCurveId,
   useIcsPaused,
   useIcsProof,
-  useNodeOperatorId,
+  useNodeOperator,
   useOperatorCurveId,
   useOperatorIsOwner,
 } from 'modules/web3';
@@ -26,26 +27,32 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
   const [justClaimed, setJustClaimed] = useState(false);
 
   const { address } = useDappStatus();
-  const nodeOperatorId = useNodeOperatorId<true>();
+  const { nodeOperator } = useNodeOperator<true>();
+  const { nodeOperatorId } = nodeOperator;
+
+  // A type can only be claimed onto an operator of the module that owns it.
+  const csmOperator =
+    nodeOperator.module === MODULE_NAME.CSM ? nodeOperator : undefined;
+  const isCSM = !!csmOperator;
 
   const { data: icsPaused, isPending: isIcsPausedLoading } = useIcsPaused();
-  const currentCurveIdQuery = useOperatorCurveId(nodeOperatorId);
+  const currentCurveQuery = useOperatorCurveId(csmOperator);
   const proofQuery = useIcsProof();
 
-  const currentCurveId = currentCurveIdQuery.data;
+  const currentCurve = currentCurveQuery.data;
   const proof = proofQuery.data;
 
-  const isCurrentCurveIdLoading = currentCurveIdQuery.isPending;
+  const isCurrentCurveIdLoading = currentCurveQuery.isPending;
   const isProofLoading = proofQuery.isPending;
 
   const { isPending: isIsOwnerLoading } = useOperatorIsOwner(nodeOperatorId);
   const canClaimCurve = useCanClaimICS();
 
-  const { data: newCurveId, isPending: isNewCurveIdLoading } = useIcsCurveId();
+  const { data: newCurve, isPending: isNewCurveIdLoading } = useIcsCurveId();
   const { data: currentParameters, isPending: isCurrentParametersLoading } =
-    useCurveParameters(currentCurveId);
+    useCurveParameters(currentCurve);
   const { data: newParameters, isPending: isNewParametersLoading } =
-    useCurveParameters(newCurveId);
+    useCurveParameters(newCurve);
 
   const invalidate = useInvalidate();
 
@@ -64,8 +71,8 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
   const isPending =
     isIcsPausedLoading ||
     isIsOwnerLoading ||
-    isCurrentCurveIdLoading ||
-    isCurrentParametersLoading ||
+    (isCSM && isCurrentCurveIdLoading) ||
+    (isCSM && isCurrentParametersLoading) ||
     isNewCurveIdLoading ||
     isNewParametersLoading ||
     isProofLoading;
@@ -75,9 +82,9 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
       nodeOperatorId,
       address,
       icsPaused,
-      currentCurveId,
+      currentCurve,
       currentParameters,
-      newCurveId,
+      newCurve,
       newParameters,
       proof,
       canClaimCurve,

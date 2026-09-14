@@ -1,4 +1,4 @@
-import type { NodeOperatorShortInfo } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC, PropsWithChildren } from 'react';
 import { SiweAuthContext } from 'modules/siwe/siwe-auth-context';
 import type { SiweAuthContextType } from 'modules/siwe/types';
@@ -6,6 +6,7 @@ import {
   NodeOperatorContext,
   NodeOperatorContextValue,
 } from 'modules/web3/operator-provider/node-operator-provider';
+import type { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { MOCK_OPERATOR_ID } from './data';
 
 // The members components read data via props, so no query-cache seeding is
@@ -26,7 +27,9 @@ const mockNodeOperator: NodeOperatorContextValue = {
   needsSelection: false,
   nodeOperator: {
     nodeOperatorId: MOCK_OPERATOR_ID,
-  } as NodeOperatorShortInfo,
+    module: MODULE_NAME.CSM,
+  } as ModuleNodeOperator,
+  activeModule: MODULE_NAME.CSM,
   switchNodeOperator: () => {},
 };
 

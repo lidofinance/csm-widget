@@ -1,4 +1,14 @@
-import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
+import {
+  ALLOCATED_BALANCE_MODULES,
+  KEY_STATUS,
+  KeyWithStatus,
+  OperatorTopUpQueue,
+} from '@lidofinance/lido-csm-sdk';
+import {
+  useModule,
+  useNodeOperatorId,
+  useOperatorTopUpQueue,
+} from 'modules/web3';
 import { SortButton, useTable } from 'providers/table-provider';
 import { FC } from 'react';
 import {
@@ -10,17 +20,31 @@ import {
   StatusComment,
 } from 'shared/components';
 import { useMaxPriorityKeyIndex } from 'shared/hooks';
-import { Gate } from 'shared/navigate';
 import { BalanceCell } from './balance-cell';
 import { StrikesCount } from './strikes-counts';
 import { TableStyle } from './styles';
+import { TopUpQueuePosition } from './top-up-queue-position';
+
+const selectTopUpPositions = ({ total, keys }: OperatorTopUpQueue) => ({
+  total,
+  positions: new Map(keys.map(({ index, position }) => [index, position])),
+});
 
 export const KeysTable: FC = () => {
   const maxPriorityKeyIndex = useMaxPriorityKeyIndex();
+  const { module, isCsmFamily } = useModule();
   const { data } = useTable<KeyWithStatus>();
+  const nodeOperatorId = useNodeOperatorId();
+  const { data: topUpQueue } = useOperatorTopUpQueue(
+    nodeOperatorId,
+    selectTopUpPositions,
+  );
+
+  const showStrikes = isCsmFamily;
+  const showBalance = ALLOCATED_BALANCE_MODULES.has(module);
 
   return (
-    <TableStyle>
+    <TableStyle $strikes={showStrikes} $balance={showBalance}>
       <thead>
         <tr>
           <th>
@@ -29,56 +53,66 @@ export const KeysTable: FC = () => {
           <th>
             <SortButton column="statuses">Status</SortButton>
           </th>
-          <Gate rule="IS_CSM">
+          {showStrikes && (
             <th>
               <SortButton column="strikes">Strikes</SortButton>
             </th>
-          </Gate>
-          <Gate rule="IS_CM">
+          )}
+          {showBalance && (
             <th>
               <SortButton column="effectiveBalance">Balance</SortButton>
             </th>
-          </Gate>
+          )}
           <th>Comment</th>
         </tr>
       </thead>
       <tbody>
-        {data.map((key) => (
-          <tr key={key.index}>
-            <td data-testid="pubkeyCell">
-              <Pubkey pubkey={key.pubkey} link={<PubkeyLinks {...key} />} />
-            </td>
-            <td data-testid="statusCell">
-              <Stack direction="column" gap="xs">
-                {key.statuses.map((status) => (
-                  <KeyStatusChip
-                    status={status}
-                    key={status}
-                    suffix={
-                      status === KEY_STATUS.DEPOSITABLE &&
-                      key.index <= maxPriorityKeyIndex ? (
-                        <PriorityChip />
-                      ) : null
-                    }
+        {data.map((key) => {
+          const topUpPosition = topUpQueue?.positions.get(key.index);
+
+          return (
+            <tr key={key.index}>
+              <td data-testid="pubkeyCell">
+                <Pubkey pubkey={key.pubkey} link={<PubkeyLinks {...key} />} />
+              </td>
+              <td data-testid="statusCell">
+                <Stack direction="column" gap="xs">
+                  {key.statuses.map((status) => (
+                    <KeyStatusChip
+                      status={status}
+                      key={status}
+                      suffix={
+                        status === KEY_STATUS.DEPOSITABLE &&
+                        key.index <= maxPriorityKeyIndex ? (
+                          <PriorityChip />
+                        ) : null
+                      }
+                    />
+                  ))}
+                </Stack>
+              </td>
+              {showStrikes && (
+                <td data-testid="strikesCountCell">
+                  <StrikesCount strikes={key.strikes} />
+                </td>
+              )}
+              {showBalance && (
+                <td data-testid="balanceCell">
+                  <BalanceCell effectiveBalance={key.effectiveBalance} />
+                </td>
+              )}
+              <td data-testid="statusCommentCell">
+                <Stack direction="column" gap="xs">
+                  <TopUpQueuePosition
+                    position={topUpPosition}
+                    total={topUpQueue?.total}
                   />
-                ))}
-              </Stack>
-            </td>
-            <Gate rule="IS_CSM">
-              <td data-testid="strikesCountCell">
-                <StrikesCount strikes={key.strikes} />
+                  <StatusComment statuses={key.statuses} />
+                </Stack>
               </td>
-            </Gate>
-            <Gate rule="IS_CM">
-              <td data-testid="balanceCell">
-                <BalanceCell effectiveBalance={key.effectiveBalance} />
-              </td>
-            </Gate>
-            <td data-testid="statusCommentCell">
-              <StatusComment statuses={key.statuses} />
-            </td>
-          </tr>
-        ))}
+            </tr>
+          );
+        })}
       </tbody>
     </TableStyle>
   );

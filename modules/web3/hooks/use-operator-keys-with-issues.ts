@@ -10,10 +10,13 @@ export const useOperatorKeysWithIssues = <TData = ValidatorInfoIssues[]>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: ValidatorInfoIssues[]) => TData,
 ) => {
-  const { feesMonitoring } = useSmSDK();
+  const { feesMonitoring, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_FEE_RECIPIENT_ISSUES, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_FEE_RECIPIENT_ISSUES,
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(nodeOperatorId !== undefined);

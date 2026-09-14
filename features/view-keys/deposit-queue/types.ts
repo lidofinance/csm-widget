@@ -18,22 +18,24 @@ export type GraphPart =
   | 'batch'
   | 'limit';
 
-type KeysCount = {
-  keysCount: bigint;
+export type QueueUnit = 'keys' | 'eth';
+
+type Amount = {
+  amount: bigint;
 };
 
 export type QueuePart = {
   width: number;
   type: GraphPart;
   metadata?: BatchMetadata;
-} & KeysCount;
+} & Amount;
 
 export type QueueLimit = {
   offset: number;
-} & KeysCount;
+} & Amount;
 
 export type BatchMetadata = Array<{
-  keysCount: bigint;
+  amount: bigint;
   position: bigint;
   priority: number;
   combined?: boolean;
@@ -47,14 +49,15 @@ export type BatchPart = {
 
 export type OperatorQueue = {
   batches: BatchPart[];
-} & KeysCount;
+} & Amount;
 
 export type QueueGraphData = {
+  unit: QueueUnit;
   limit: QueueLimit;
   parts: QueuePart[];
   operator?: OperatorQueue;
   farAway: boolean;
-  submittingKeysCount?: bigint;
+  submittingAmount?: bigint;
 };
 
 export type UseDepositQueueGraphResult = {

@@ -8,7 +8,7 @@ import {
   useSmStatus,
   useCurveParameters,
   useEthereumBalance,
-  useNodeOperatorId,
+  useNodeOperator,
   useOperatorBalance,
   useOperatorCurveId,
   useOperatorInfo,
@@ -16,6 +16,7 @@ import {
   useStakeLimit,
   useStethBalance,
   useWstethBalance,
+  useModule,
 } from 'modules/web3';
 import { FC, PropsWithChildren, useCallback } from 'react';
 import {
@@ -24,12 +25,13 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate, useKeysAvailable } from 'shared/hooks';
-import { isModuleCSM } from 'consts';
 import { type AddKeysFormNetworkData } from './types';
 
 const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
+  const { isCsmFamily } = useModule();
   const { data: status, isPending: isStatusLoading } = useSmStatus();
-  const nodeOperatorId = useNodeOperatorId();
+  const { nodeOperator } = useNodeOperator();
+  const nodeOperatorId = nodeOperator?.nodeOperatorId;
 
   const ethBalanceQuery = useEthereumBalance();
   const stethBalanceQuery = useStethBalance();
@@ -52,10 +54,10 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
   const isMaxStakeEthLoading = maxStakeEthQuery.isPending;
   const isShareLimitLoading = shareLimitQuery.isPending;
 
-  const { data: curveId, isPending: isCurveIdLoading } =
-    useOperatorCurveId(nodeOperatorId);
+  const { data: curve, isPending: isCurveIdLoading } =
+    useOperatorCurveId(nodeOperator);
   const { data: curveParameters, isPending: isCurveParametersLoading } =
-    useCurveParameters(curveId);
+    useCurveParameters(curve);
 
   const { data: operatorInfo, isPending: isOperatorInfoLoading } =
     useOperatorInfo(nodeOperatorId);
@@ -65,7 +67,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
     : undefined;
 
   const keysAvailable = useKeysAvailable({
-    curveId,
+    curve,
     nonWithdrawnKeys,
     bond,
     ethBalance,
@@ -102,14 +104,14 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
     isCurveParametersLoading ||
     isBondLoading ||
     isStatusLoading ||
-    (isModuleCSM && isShareLimitLoading) ||
+    (isCsmFamily && isShareLimitLoading) ||
     isCurveIdLoading ||
     isOperatorInfoLoading;
 
   return {
     data: {
       nodeOperatorId,
-      curveId,
+      curve,
       operatorInfo,
       curveParameters,
       stethBalance,

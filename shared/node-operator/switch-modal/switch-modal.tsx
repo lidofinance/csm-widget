@@ -1,14 +1,11 @@
 import { ButtonIcon, Modal } from '@lidofinance/lido-ui';
 import { useCallback } from 'react';
 
-import {
-  NodeOperatorId,
-  NodeOperatorShortInfo,
-  ROLES,
-} from '@lidofinance/lido-csm-sdk';
+import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { Plus } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
-import { isModuleCM } from 'consts/module';
+import { OperatorRef, useModule } from 'modules/web3';
+import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { Stack } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
@@ -18,14 +15,15 @@ import { OperatorRow } from './operator-row';
 import { StyledStack, StyledStackItem } from './styles';
 
 export const SwitchModal: ModalComponentType<{
-  active: NodeOperatorShortInfo;
-  list: NodeOperatorShortInfo[];
+  active: ModuleNodeOperator;
+  list: ModuleNodeOperator[];
   canCreate: boolean;
-  onChange: (id: NodeOperatorId) => void;
+  onChange: (operator: OperatorRef) => void;
 }> = ({ onClose, active, list, onChange, canCreate, ...props }) => {
+  const { isCM } = useModule();
   const handleSwitch = useCallback(
-    (id: NodeOperatorId) => {
-      onChange(id);
+    (operator: OperatorRef) => {
+      onChange(operator);
       onClose?.();
     },
     [onChange, onClose],
@@ -34,17 +32,18 @@ export const SwitchModal: ModalComponentType<{
   return (
     <Modal title="Switch Node Operator" onClose={onClose} {...props}>
       <Stack direction="column" gap="lg">
-        {isModuleCM ? (
+        {isCM ? (
           <CmSwitchList active={active} list={list} onSwitch={handleSwitch} />
         ) : (
           <Stack direction="column" gap="sm">
             {list.map((item) => (
               <OperatorRow
-                key={String(item.nodeOperatorId)}
+                key={`${String(item.nodeOperatorId)}-${item.module}`}
                 nodeOperatorId={item.nodeOperatorId}
                 shortInfo={item}
                 action={
-                  item.nodeOperatorId === active.nodeOperatorId
+                  item.nodeOperatorId === active.nodeOperatorId &&
+                  item.module === active.module
                     ? 'current'
                     : 'switch'
                 }
@@ -67,6 +66,9 @@ export const SwitchModal: ModalComponentType<{
         </StyledStackItem>
         <StyledStackItem>
           <RoleBadge role={ROLES.MANAGER} /> Manager Address role
+        </StyledStackItem>
+        <StyledStackItem>
+          <RoleBadge role={ROLES.CLAIMER} /> Rewards claimer role
         </StyledStackItem>
       </StyledStack>
     </Modal>

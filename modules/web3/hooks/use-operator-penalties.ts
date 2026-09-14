@@ -10,10 +10,13 @@ export const useOperatorPenalties = <TData = PenaltyRecord[]>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: PenaltyRecord[]) => TData,
 ) => {
-  const { events } = useSmSDK();
+  const { events, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_PENALTIES, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_PENALTIES,
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(nodeOperatorId !== undefined);

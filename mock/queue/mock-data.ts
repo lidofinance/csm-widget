@@ -1,4 +1,5 @@
 import {
+  MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI,
   ShareLimitInfo,
   NodeOperatorInfo,
   DepositQueueBatch,
@@ -63,6 +64,10 @@ export const createMockShareLimit = ({
     capacity: capacityBigInt,
     queue: queueBigInt,
     shareLimit: shareLimitBigInt,
+    activeWei: activeBigInt * MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI,
+    activeLeftWei: activeLeft * MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI,
+    capacityWei: capacityBigInt * MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI,
+    queueWei: queueBigInt * MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI,
   };
 };
 

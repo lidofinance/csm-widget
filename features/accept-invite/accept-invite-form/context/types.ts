@@ -1,15 +1,13 @@
-import {
-  NodeOperatorId,
-  NodeOperatorInviteInfo,
-} from '@lidofinance/lido-csm-sdk';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { ModuleInvite } from 'modules/web3';
 import { Address } from 'viem';
 
 export type AcceptInviteFormInputType = {
-  invite?: NodeOperatorInviteInfo;
+  invite?: ModuleInvite;
 };
 
 export type AcceptInviteFormNetworkData = {
   nodeOperatorId?: NodeOperatorId;
-  invites: NodeOperatorInviteInfo[];
+  invites: ModuleInvite[];
   address: Address;
 };

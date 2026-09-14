@@ -3,7 +3,7 @@ import { Box, Text } from '@lidofinance/lido-ui';
 import { Tooltip } from 'shared/components';
 import {
   useCurveParameters,
-  useNodeOperatorId,
+  useNodeOperator,
   useOperatorCurveId,
 } from 'modules/web3';
 import { FC, useCallback } from 'react';
@@ -11,10 +11,10 @@ import { useStrikeDates } from 'shared/hooks';
 import { formatDate, getArraySum } from 'utils';
 
 export const StrikesCount: FC<{ strikes?: KeyStrikes }> = ({ strikes }) => {
-  const id = useNodeOperatorId();
-  const { data: curveId } = useOperatorCurveId(id);
+  const { nodeOperator } = useNodeOperator();
+  const { data: curve } = useOperatorCurveId(nodeOperator);
   const { data: max } = useCurveParameters(
-    curveId,
+    curve,
     (params) => params.strikesConfig.threshold,
   );
 

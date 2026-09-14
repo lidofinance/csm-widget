@@ -4,6 +4,7 @@ import { ShowFlags } from 'shared/hooks';
 
 export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
   const hasRole = flags.HAS_MANAGER_ROLE || flags.HAS_REWARDS_ROLE;
+  const canClaim = flags.HAS_ANY_ROLE;
 
   switch (path) {
     // Settings pages — non-operators → inbox
@@ -19,12 +20,19 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
       return isModuleCM ? path : PATH.SETTINGS;
 
     // Create
-    case PATH.CREATE:
-      return isModuleCSM
-        ? hasRole && !flags.CAN_CREATE
-          ? PATH.KEYS_VIEW
-          : path
-        : path;
+    case PATH.CREATE: {
+      if (isModuleCSM && hasRole && !flags.CAN_CREATE) return PATH.KEYS_VIEW;
+      // an apply card turns a single creatable type into a real choice
+      if (flags.HAS_APPLY_OPTIONS) return path;
+      const candidates: (PATH | false)[] = [
+        flags.CAN_CREATE_0X01 && PATH.CREATE_0x01,
+        flags.CAN_CREATE_ICS && PATH.CREATE_ICS,
+        flags.CAN_CREATE_IDVTC && PATH.CREATE_IDVTC,
+        flags.CAN_CREATE_0X02 && PATH.CREATE_0x02,
+      ];
+      const creatable = candidates.filter((p): p is PATH => !!p);
+      return creatable.length === 1 ? creatable[0] : path;
+    }
 
     // Keys
     case PATH.KEYS:
@@ -43,13 +51,14 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
     case PATH.KEYS_VIEW:
       return hasRole ? path : PATH.HOME;
 
-    // Bond
+    // Bond — a claimer-only wallet is kept inside the claim page
     case PATH.BOND:
-      return hasRole ? PATH.BOND_CLAIM : PATH.HOME;
+      return canClaim ? PATH.BOND_CLAIM : PATH.HOME;
     case PATH.BOND_CLAIM:
+      return canClaim ? path : PATH.HOME;
     case PATH.BOND_ADD:
     case PATH.BOND_UNLOCK:
-      return hasRole ? path : PATH.HOME;
+      return hasRole ? path : canClaim ? PATH.BOND_CLAIM : PATH.HOME;
 
     // Type/ICS — flag-based
     case PATH.TYPE:

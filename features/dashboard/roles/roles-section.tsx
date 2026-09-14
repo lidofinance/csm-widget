@@ -36,7 +36,12 @@ export const RolesSection: FC = () => {
   const { data: info } = useOperatorInfo(nodeOperatorId);
   const { data: claimerAddress } = useCustomRewardsClaimer(nodeOperatorId);
   const { data: feeSplits } = useFeeSplits(nodeOperatorId);
-  const { HAS_MANAGER_ROLE, HAS_REWARDS_ROLE } = useShowFlags();
+  const {
+    HAS_MANAGER_ROLE,
+    HAS_REWARDS_ROLE,
+    HAS_CLAIMER_ROLE,
+    IS_NODE_OPERATOR,
+  } = useShowFlags();
   const canEditClaimer = useCanEditClaimer();
   const canEditSplits = useCanEditSplits();
 
@@ -45,7 +50,7 @@ export const RolesSection: FC = () => {
   return (
     <SectionBlock
       title="Roles"
-      href={PATH.SETTINGS_ROLES}
+      href={IS_NODE_OPERATOR ? PATH.SETTINGS_ROLES : undefined}
       data-testid="dashboardRolesSection"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.dashboardRolesLink}
     >
@@ -95,7 +100,10 @@ export const RolesSection: FC = () => {
         <DividerStyle />
 
         <RoleRowStyle data-testid="claimerAddressRow">
-          <Text size="xs">Rewards claimer</Text>
+          <Stack gap="sm" center>
+            <Text size="xs">Rewards claimer</Text>
+            {HAS_CLAIMER_ROLE && <YouChip />}
+          </Stack>
           <Stack direction="column" gap="md">
             {isClaimerSet && <Address address={claimerAddress} showIcon />}
             {!isClaimerSet && canEditClaimer && (

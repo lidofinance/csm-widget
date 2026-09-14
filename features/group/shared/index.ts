@@ -7,4 +7,5 @@ export {
   ColorDot,
   StakeBar,
   StakeBarSegment,
+  WrapperStyle,
 } from './styles';

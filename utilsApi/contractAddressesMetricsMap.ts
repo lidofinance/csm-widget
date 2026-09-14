@@ -3,17 +3,16 @@ import {
   CONTRACT_BASE_ABI,
   CONTRACT_NAMES,
   MODULE_CONFIG,
+  MODULE_NAME,
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
 import { CHAINS, LidoLocatorAbi } from '@lidofinance/lido-ethereum-sdk';
 import {
   fromPairs,
-  invert,
   isUndefined,
   keys,
   mapValues,
   memoize,
-  omitBy,
   pickBy,
   uniq,
 } from 'lodash';
@@ -22,6 +21,7 @@ import { mainnet } from 'viem/chains';
 
 import { ENSUniversalResolverAbi } from 'abi/ens-universal-resolver-abi';
 import { config } from 'config';
+import { resolveDeployedModules } from 'consts/modules/resolve-deployed-modules';
 import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 import { AggregatorAbi } from 'abi/aggregator-abi';
 
@@ -63,29 +63,48 @@ const STATIC_ADDRESSES: {
   },
 };
 
-const CONTRACT_ADDRESSES = {
-  ...COMMON_ADDRESSES[config.defaultChain],
-  ...MODULE_CONFIG[config.module][config.defaultChain]?.contractAddresses,
-  ...overridedAddresses,
+// CSM and CSM_02 share contract names on the same chain, so addresses are collected
+// per module rather than merged into one name -> address map before inverting.
+const getModuleAddresses = (
+  module: MODULE_NAME,
+  chainId: SUPPORTED_CHAINS,
+): Partial<Record<CONTRACT_NAMES, Address>> => ({
+  ...MODULE_CONFIG[module][chainId]?.contractAddresses,
+  ...(module === config.module && chainId === config.defaultChain
+    ? overridedAddresses
+    : undefined),
+});
+
+const getChainAddressEntries = (
+  chainId: SUPPORTED_CHAINS,
+): [Address, AlL_CONTRACT_NAMES][] => {
+  const staticAddresses = STATIC_ADDRESSES[chainId] ?? {};
+
+  const commonAndStaticEntries = Object.entries({
+    ...COMMON_ADDRESSES[chainId],
+    ...staticAddresses,
+  }) as [AlL_CONTRACT_NAMES, Address][];
+
+  const moduleEntries = resolveDeployedModules(config.module, chainId).flatMap(
+    (module) =>
+      Object.entries(getModuleAddresses(module, chainId)).map(
+        ([name, address]) =>
+          [name, staticAddresses[name as AlL_CONTRACT_NAMES] ?? address] as [
+            AlL_CONTRACT_NAMES,
+            Address,
+          ],
+      ),
+  );
+
+  return [...commonAndStaticEntries, ...moduleEntries]
+    .filter(([, address]) => !isUndefined(address))
+    .map(([name, address]) => [address, name]);
 };
 
-const getContractAddress = (
-  name: AlL_CONTRACT_NAMES,
-  chainId: SUPPORTED_CHAINS,
-) =>
-  STATIC_ADDRESSES[chainId]?.[name] ??
-  CONTRACT_ADDRESSES?.[name as CONTRACT_NAMES];
 export const METRIC_CONTRACT_ADDRESSES = fromPairs(
   supportedChainsWithMainnet.map((chainId) => [
     chainId,
-    invert(
-      omitBy(
-        mapValues(AlL_CONTRACT_NAMES, (name) =>
-          getContractAddress(name, chainId),
-        ),
-        isUndefined,
-      ),
-    ),
+    fromPairs(getChainAddressEntries(chainId)),
   ]),
 ) as Record<SUPPORTED_CHAINS, Record<Address, AlL_CONTRACT_NAMES>>;
 

@@ -10,10 +10,13 @@ export const useOperatorKeysWithStatus = <TData = KeyWithStatus[]>(
   nodeOperatorId: NodeOperatorId | undefined,
   select?: (data: KeyWithStatus[]) => TData,
 ) => {
-  const { keysWithStatus } = useSmSDK();
+  const { keysWithStatus, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_KEYS, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_KEYS,
+      { nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(nodeOperatorId !== undefined);

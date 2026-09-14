@@ -28,6 +28,7 @@ export const useCanPerform = <T extends CsmSDKModule>(
             managerAddress: nodeOperator.managerAddress,
             rewardsAddress: nodeOperator.rewardsAddress,
             extendedManagerPermissions: nodeOperator.extendedManagerPermissions,
+            customRewardsClaimer: nodeOperator.claimerAddress,
           }
         : undefined,
     }).allowed;

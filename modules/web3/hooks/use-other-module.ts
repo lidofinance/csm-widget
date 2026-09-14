@@ -7,10 +7,10 @@ import { Address } from 'viem';
 export const useOtherModule = (customAddress?: Address) => {
   const { address: dappAddress } = useDappStatus();
   const address = customAddress ?? dappAddress;
-  const { module } = useSmSDK();
+  const { module, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['other-module', { address }],
+    queryKey: ['other-module', { address, module: core.moduleName }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(address);

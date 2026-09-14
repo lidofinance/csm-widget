@@ -2,17 +2,20 @@ import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK } from '../web3-provider';
+import { useActiveSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_GROUP_ID = ['operator-group-id'];
 
 export const useOperatorGroupId = (
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
-  const sdk = useSmSDK(MODULE_NAME.CM);
+  const sdk = useActiveSmSDK(MODULE_NAME.CM);
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_GROUP_ID, { nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_GROUP_ID,
+      { nodeOperatorId, module: MODULE_NAME.CM },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(sdk);

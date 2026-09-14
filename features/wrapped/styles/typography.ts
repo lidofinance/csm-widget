@@ -45,7 +45,7 @@ export const BadgeWrapper = styled.div<{ $same?: boolean }>`
   font-weight: 700;
   font-size: 16px;
   letter-spacing: -0.5pt;
-  color: var(--lido-color-foreground);
+  color: var(--lido-color-primaryContrast);
   text-align: center;
 
   border-radius: 14px;

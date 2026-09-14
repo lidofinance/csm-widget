@@ -6,11 +6,11 @@ import styled from 'styled-components';
 import { useClaimIcsFormData } from '../context';
 
 export const Info: FC = () => {
-  const { currentParameters, newParameters, currentCurveId, newCurveId } =
+  const { currentParameters, newParameters, currentCurve, newCurve } =
     useClaimIcsFormData();
 
-  const currentMetadata = useCurveMetadata(currentCurveId);
-  const newMetadata = useCurveMetadata(newCurveId);
+  const currentMetadata = useCurveMetadata(currentCurve);
+  const newMetadata = useCurveMetadata(newCurve);
   return (
     <>
       <FormTitle>Claim Identified Community Staker operator type</FormTitle>

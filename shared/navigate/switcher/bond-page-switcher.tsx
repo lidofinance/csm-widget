@@ -5,12 +5,16 @@ import { SwitcherRoutes } from './types';
 
 const BOND_ROUTES: SwitcherRoutes = [
   { title: 'Claim', path: PATH.BOND_CLAIM },
-  { title: 'Add Bond', path: PATH.BOND_ADD },
-  { title: 'Rewards history', path: PATH.BOND_REWARDS_HISTORY },
+  { title: 'Add Bond', path: PATH.BOND_ADD, showRules: ['IS_NODE_OPERATOR'] },
+  {
+    title: 'Rewards history',
+    path: PATH.BOND_REWARDS_HISTORY,
+    showRules: ['IS_NODE_OPERATOR'],
+  },
   {
     title: 'Unlock Bond',
     path: PATH.BOND_UNLOCK,
-    showRules: ['HAS_LOCKED_BOND'],
+    showRules: [['HAS_LOCKED_BOND', 'IS_NODE_OPERATOR']],
     warning: true,
     suffix: <CounterLockedBond />,
   },

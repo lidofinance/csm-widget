@@ -1,9 +1,8 @@
 import {
   getNodeOperatorRoles,
-  MODULE_NAME,
+  type LidoSDKCsm,
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
 import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
@@ -14,13 +13,12 @@ import { TxStageMembersSignin } from 'features/idvtc/members/tx-stages/tx-stage-
 import { keepsManageRole } from 'features/idvtc/members/utils/keeps-manage-role';
 import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
 import { operatorKey } from 'modules/surveys-sdk';
-import { useAppendOperator, useSmSDK } from 'modules/web3';
+import { type CsmFamilySDK, useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { useModuleOperatorTypeGetter } from 'shared/hooks';
 import { useNavigate } from 'shared/navigate';
 import { handleTxError, useTransitStage } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
@@ -43,8 +41,10 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFormNetworkData,
   SubmitKeysFlow
 > => {
-  const sdk = useSmSDK(MODULE_NAME.CSM);
-  const getOperatorType = useModuleOperatorTypeGetter();
+  const { targetModule } = useSubmitKeysFormData();
+  // targetModule is a CSM | CSM_02 union; the overloads only discriminate
+  // on literal module arguments.
+  const sdk = useSmSDK(targetModule) as CsmFamilySDK | undefined;
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
@@ -71,8 +71,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
         dkgFiles = [],
       } = input;
 
-      const type = getOperatorType(data.curveId);
-      const isIdvtc = type === OPERATOR_TYPE.CSM_IDVTC;
+      const isIdvtc = data.type === OPERATOR_TYPE.CSM_IDVTC;
       // Auto-init is possible only while the connected address keeps a
       // manager/rewards role on the new operator (survey API requirement).
       const mayInitMembers = isIdvtc && keepsManageRole(input, data.address);
@@ -133,21 +132,28 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             callback,
           };
 
-          const { result } =
-            type === OPERATOR_TYPE.CSM_ICS && data.proof
-              ? await sdk.icsGate.addNodeOperator({
-                  ...params,
-                  proof: data.proof,
-                })
-              : type === OPERATOR_TYPE.CSM_IDVTC && data.proof
-                ? await sdk.idvtcGate.addNodeOperator({
-                    ...params,
-                    proof: data.proof,
-                  })
-                : await sdk.permissionlessGate.addNodeOperator(params);
+          const addNodeOperator = async () => {
+            if (data.type === OPERATOR_TYPE.CSM_ICS) {
+              invariant(data.proof, 'ICS proof is required to create');
+              return (sdk as LidoSDKCsm).icsGate.addNodeOperator({
+                ...params,
+                proof: data.proof,
+              });
+            }
+            if (data.type === OPERATOR_TYPE.CSM_IDVTC) {
+              invariant(data.proof, 'IDVTC proof is required to create');
+              return (sdk as LidoSDKCsm).idvtcGate.addNodeOperator({
+                ...params,
+                proof: data.proof,
+              });
+            }
+            return sdk.permissionlessGate.addNodeOperator(params);
+          };
+
+          const { result } = await addNodeOperator();
 
           if (result && (dkgFiles.length > 0 || willInitMembers)) {
-            const op = operatorKey(config.module, result.nodeOperatorId);
+            const op = operatorKey(data.targetModule, result.nodeOperatorId);
             const keys = depositData.map((k) => k.pubkey);
 
             const runInit = async (): Promise<void> => {
@@ -196,12 +202,14 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
           }
 
           if (result) {
+            // Leave the page before appending: the flipped CAN_CREATE_* gate
+            // would otherwise push /create and cancel this navigation.
+            await n(PATH.HOME);
             const roles = getNodeOperatorRoles(result, data.address);
             if (roles.length > 0) {
-              appendNO(result);
+              appendNO({ ...result, module: data.targetModule });
             } else {
               setOperatorCustomAddresses(result.nodeOperatorId);
-              void n(PATH.HOME);
             }
           }
         },
@@ -209,7 +217,6 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
     },
     [
       sdk,
-      getOperatorType,
       appendNO,
       setOperatorCustomAddresses,
       n,

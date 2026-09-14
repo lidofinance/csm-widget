@@ -22,12 +22,16 @@ export const ItemStyled = styled(StackStyle).attrs({
   );
   text-align: left;
   justify-content: start;
-
-  flex-direction: column-reverse;
 `;
 
 export const CountStyled = styled.b`
   font-size: 20px;
   font-weight: 700;
   line-height: 28px;
+`;
+
+export const BalanceStyled = styled.span`
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--lido-color-textSecondary);
 `;

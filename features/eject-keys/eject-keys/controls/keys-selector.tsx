@@ -1,10 +1,12 @@
-import { isModuleCM, PATH } from 'consts';
+import { PATH } from 'consts';
+import { useModule } from 'modules/web3';
 import { FormTitle, WarningBlock } from 'shared/components';
 import { EjectKeysSelectorHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { useEjectKeysFormData } from '../context';
 
 export const KeysSelector = () => {
+  const { isCsmFamily } = useModule();
   const { keys } = useEjectKeysFormData(true);
 
   return (
@@ -16,10 +18,10 @@ export const KeysSelector = () => {
         You might need to use this method in case you don’t have an ability to
         access your validator keys. If you can exit your keys normally, please
         proceed with{' '}
-        {isModuleCM ? (
-          'the regular exit flow'
-        ) : (
+        {isCsmFamily ? (
           <LocalLink href={PATH.KEYS_EXIT}>the regular exit flow</LocalLink>
+        ) : (
+          'the regular exit flow'
         )}
         .
       </WarningBlock>

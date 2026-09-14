@@ -1,3 +1,4 @@
+import { OPERATOR_TYPE, OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import {
   KEY_DEPOSIT_QUEUE_BATCHES,
   KEY_ICS_PROOF,
@@ -7,6 +8,8 @@ import {
   useCurveParameters,
   useDappStatus,
   useEthereumBalance,
+  useIcsProof,
+  useIdvtcProof,
   useShareLimit,
   useShareLimitStatus,
   useSmStatus,
@@ -21,21 +24,46 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import {
-  useCreateCurveId,
+  CreatableOperatorType,
   useInvalidate,
   useKeysAvailable,
+  useOperatorTypeCurve,
 } from 'shared/hooks';
 import { type SubmitKeysFormNetworkData } from './types';
 
+type Props = { type: CreatableOperatorType };
+
+// Both queries run unconditionally (hook rules); the irrelevant one is discarded.
+const useCreateProof = (type: CreatableOperatorType) => {
+  const ics = useIcsProof();
+  const idvtc = useIdvtcProof();
+  const source =
+    type === OPERATOR_TYPE.CSM_ICS
+      ? ics
+      : type === OPERATOR_TYPE.CSM_IDVTC
+        ? idvtc
+        : undefined;
+  return {
+    proof: source?.data?.proof ?? undefined,
+    isPending: !!source && source.isPending,
+  };
+};
+
 const useSubmitKeysFormNetworkData: NetworkData<
-  SubmitKeysFormNetworkData
-> = () => {
-  const { data: status, isPending: isStatusLoading } = useSmStatus();
+  SubmitKeysFormNetworkData,
+  Props
+> = ({ type }) => {
+  const targetModule = OPERATOR_TYPE_INFO[type].module;
+  const curve = useOperatorTypeCurve(type);
+  const { proof, isPending: isProofPending } = useCreateProof(type);
+
+  const { data: status, isPending: isStatusLoading } =
+    useSmStatus(targetModule);
 
   const ethBalanceQuery = useEthereumBalance();
   const stethBalanceQuery = useStethBalance();
   const wstethBalanceQuery = useWstethBalance();
-  const shareLimitQuery = useShareLimit();
+  const shareLimitQuery = useShareLimit(undefined, targetModule);
   const maxStakeEthQuery = useStakeLimit();
 
   const ethBalance = ethBalanceQuery.data;
@@ -52,16 +80,13 @@ const useSubmitKeysFormNetworkData: NetworkData<
 
   const { address } = useDappStatus();
 
-  const { data: createData, isPending: isCurveIdPending } = useCreateCurveId();
-  const { curveId, proof } = createData ?? {};
-
   const { data: curveParameters, isPending: isCurveParametersLoading } =
-    useCurveParameters(curveId);
+    useCurveParameters(curve);
 
-  const { data: shareLimitStatus } = useShareLimitStatus();
+  const { data: shareLimitStatus } = useShareLimitStatus(targetModule);
 
   const keysAvailable = useKeysAvailable({
-    curveId,
+    curve,
     ethBalance,
     stethBalance,
     wstethBalance,
@@ -94,18 +119,20 @@ const useSubmitKeysFormNetworkData: NetworkData<
     isMaxStakeEtherLoading ||
     isStatusLoading ||
     isShareLimitLoading ||
-    isCurveIdPending ||
+    isProofPending ||
     isCurveParametersLoading;
 
   return {
     data: {
+      type,
+      targetModule,
       address,
       isPaused: status?.isPaused,
-      proof: proof?.proof,
+      proof,
       stethBalance,
       wstethBalance,
       ethBalance,
-      curveId,
+      curve,
       curveParameters,
       maxStakeEth,
       shareLimit,
@@ -119,8 +146,11 @@ const useSubmitKeysFormNetworkData: NetworkData<
 
 export const useSubmitKeysFormData = useFormData<SubmitKeysFormNetworkData>;
 
-export const SubmitKeysDataProvider: FC<PropsWithChildren> = ({ children }) => {
-  const networkData = useSubmitKeysFormNetworkData();
+export const SubmitKeysDataProvider: FC<PropsWithChildren<Props>> = ({
+  type,
+  children,
+}) => {
+  const networkData = useSubmitKeysFormNetworkData({ type });
 
   return (
     <FormDataContext.Provider value={networkData}>

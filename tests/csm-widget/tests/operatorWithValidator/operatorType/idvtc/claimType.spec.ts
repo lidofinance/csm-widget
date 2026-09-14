@@ -152,7 +152,7 @@ test.describe(
         await claim.expandParameterChanges();
 
         await test.step('Current and new operator type columns', async () => {
-          await expect(claim.getColumn('Current (DEF)')).toBeVisible();
+          await expect(claim.getColumn('Current (0x01)')).toBeVisible();
           await expect(claim.getColumn('New (IDVTC)')).toBeVisible();
         });
 

@@ -4,20 +4,23 @@ import type { GraphBounds, GraphCalculationParams } from './enhanced-types';
 export const calculateGraphBounds = (
   params: GraphCalculationParams,
 ): GraphBounds => {
-  const { active, queue, capacity, fullView } = params;
+  const { active, queue, capacity, fullView, scale } = params;
   const { BACK_OFFSET, POTENTIAL_ADDED } = GRAPH_CONFIG.QUEUE;
   const { LEFT_MARGIN, RIGHT_MARGIN, FULL_WIDTH } = GRAPH_CONFIG.VIEW.BOUNDS;
 
+  const backOffset = BACK_OFFSET * scale;
+  const potentialAdded = POTENTIAL_ADDED * scale;
+
   const potential =
-    params.added < POTENTIAL_ADDED ? POTENTIAL_ADDED : params.added;
+    params.added < potentialAdded ? potentialAdded : params.added;
 
   // Calculate start position with back offset
-  const activeStart = active < BACK_OFFSET ? 0n : active;
+  const activeStart = active < backOffset ? 0n : active;
   const startPosition = fullView
     ? 0n
-    : activeStart - BACK_OFFSET < 0n
+    : activeStart - backOffset < 0n
       ? activeStart
-      : activeStart - BACK_OFFSET;
+      : activeStart - backOffset;
 
   // Calculate end position
   const endKeysPosition = active + queue + potential;

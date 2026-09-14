@@ -4,7 +4,7 @@ import {
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { FC, useMemo } from 'react';
-import { isModuleCM, isModuleCSM } from 'consts/module';
+import { useModule } from 'modules/web3';
 import { IconTooltip } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
 import {
@@ -30,6 +30,7 @@ type FormData = {
 };
 
 export const DepositDataParameters: FC = () => {
+  const { isCsmFamily } = useModule();
   const [depositData] = useWatch<DepositDataInputType, ['depositData']>({
     name: ['depositData'],
   });
@@ -57,7 +58,7 @@ export const DepositDataParameters: FC = () => {
           curveParameters.rewardsConfig,
           existsKeysCount,
         ),
-        queueType: isModuleCSM
+        queueType: isCsmFamily
           ? getQueueTypeForKey(
               keyNumber,
               curveParameters.queueConfig,
@@ -66,10 +67,10 @@ export const DepositDataParameters: FC = () => {
           : undefined,
       };
     });
-  }, [curveParameters, depositData.length, operatorInfo]);
+  }, [curveParameters, depositData.length, operatorInfo, isCsmFamily]);
 
   return (
-    <TableContainer $equal $short={isModuleCM}>
+    <TableContainer $equal $short={!isCsmFamily}>
       <TableHeader>
         <HeaderCell>Key number</HeaderCell>
         <HeaderCell>
@@ -79,7 +80,7 @@ export const DepositDataParameters: FC = () => {
             placement="bottomRight"
           />
         </HeaderCell>
-        {isModuleCSM && (
+        {isCsmFamily && (
           <HeaderCell>
             Queue
             <IconTooltip
@@ -101,7 +102,7 @@ export const DepositDataParameters: FC = () => {
         <TableRow key={keyNumber}>
           <DataCell>#{keyNumber}</DataCell>
           <DataCell>{formatPercent(feePercentage)}</DataCell>
-          {isModuleCSM && <DataCell>{queueType}</DataCell>}
+          {isCsmFamily && <DataCell>{queueType}</DataCell>}
           <DataCell>
             <FormatToken amount={bondAmount} token={TOKENS.eth} />
           </DataCell>

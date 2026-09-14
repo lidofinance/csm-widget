@@ -19,6 +19,7 @@ export const InputAddress = forwardRef<
       label,
       addressName,
       simple,
+      error,
       ...props
     },
     ref,
@@ -37,11 +38,10 @@ export const InputAddress = forwardRef<
     const initializedRef = useRef(false);
     const emittedRef = useRef('');
 
-    // Notify parent on every resolution pass (skip initial mount) so RHF
-    // validation fires even when successive resolves stay at `undefined`
-    // (e.g. user typing an incomplete address).
+    // Emit on every resolution pass (skip mount). Unresolvable text is emitted
+    // raw so resolvers can tell "invalid" from "empty".
     useEffect(() => {
-      const emitValue = resolution.value ?? '';
+      const emitValue = resolution.value ?? resolution.input;
       emittedRef.current = emitValue;
       if (!initializedRef.current) {
         initializedRef.current = true;
@@ -69,6 +69,7 @@ export const InputAddress = forwardRef<
     return (
       <StyledInput
         {...props}
+        error={isLoading ? undefined : error}
         label={
           <>
             {label}

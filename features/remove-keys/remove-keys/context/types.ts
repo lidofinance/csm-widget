@@ -1,5 +1,10 @@
-import { KeyWithStatus, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
-import { BondBalance, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import {
+  BondBalance,
+  CurveRef,
+  KeyWithStatus,
+  NodeOperatorId,
+  NodeOperatorInfo,
+} from '@lidofinance/lido-csm-sdk';
 
 export type RemoveKeysFormInputType = {
   selection: {
@@ -10,7 +15,7 @@ export type RemoveKeysFormInputType = {
 
 export type RemoveKeysFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
-  curveId: bigint;
+  curve: CurveRef;
   keys: KeyWithStatus[];
   info: NodeOperatorInfo;
   bond: BondBalance;

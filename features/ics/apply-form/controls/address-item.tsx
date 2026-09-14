@@ -15,6 +15,7 @@ import {
   AddressInputHookForm,
   TextInputHookForm,
 } from 'shared/hook-form/controls';
+import { VALIDATION_MESSAGES } from 'shared/hook-form/validation';
 import { isAddress, isHex } from 'viem';
 import {
   useAddressMessage,
@@ -68,7 +69,7 @@ export const AddressItem: FC<AddressItemProps> = ({
       if (!isAddress(address)) {
         setError(`additionalAddresses.${index}.address`, {
           type: 'manual',
-          message: 'Invalid Ethereum address',
+          message: VALIDATION_MESSAGES.invalidAddress,
         });
         return;
       }

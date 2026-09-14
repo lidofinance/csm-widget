@@ -1,8 +1,8 @@
 import { KEY_STATUS } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
-import { isModuleCM } from 'consts';
 import { MoreKeysChip } from 'features/group/shared';
 import {
+  useModule,
   useNodeOperatorId,
   useOperatorInfo,
   useOperatorStakeSummary,
@@ -15,6 +15,7 @@ import { AccordionStyle, Alert, Check } from './styles';
 import { useKeysBreakdown } from './use-keys-breakdown';
 
 export const KeysBreakdown: FC = () => {
+  const { isCM, isCsmFamily } = useModule();
   const nodeOperatorId = useNodeOperatorId();
   const { data } = useKeysBreakdown(nodeOperatorId);
   const { data: stakeSummary } = useOperatorStakeSummary(nodeOperatorId);
@@ -27,7 +28,7 @@ export const KeysBreakdown: FC = () => {
   }, [info, stakeSummary]);
 
   const hasAnyKey = !!info && info.totalAddedKeys > 0;
-  const hasWeight = isModuleCM && stakeSummary && stakeSummary.weight > 0;
+  const hasWeight = isCM && stakeSummary && stakeSummary.weight > 0;
 
   return (
     <AccordionStyle
@@ -45,7 +46,7 @@ export const KeysBreakdown: FC = () => {
       }
     >
       <Stack direction="column" gap="ms">
-        {isModuleCM && !hasWeight ? (
+        {isCM && !hasWeight ? (
           !!data?.counts.depositable && (
             <KeysItem
               data-testid="keysAddedCount"
@@ -94,7 +95,7 @@ export const KeysBreakdown: FC = () => {
           count={data?.counts.withdrawn}
           tooltip="Keys that have been exited and fully withdrawn"
         />
-        {!isModuleCM && (
+        {isCsmFamily && (
           <KeysItem
             data-testid="keysWithStrikesCount"
             type="error"
@@ -120,7 +121,7 @@ export const KeysBreakdown: FC = () => {
           tooltip="Keys for which an exit has been requested"
           comment={<StatusComment statuses={[KEY_STATUS.EXIT_REQUESTED]} />}
         />
-        {!isModuleCM && (
+        {isCsmFamily && (
           <KeysItem
             data-testid="keysNonQueuedCount"
             type="error"

@@ -8,7 +8,7 @@ export const useIcsPaused = () => {
   const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
-    queryKey: ['ics-paused'],
+    queryKey: ['ics-paused', { module: MODULE_NAME.CSM }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(sdk);

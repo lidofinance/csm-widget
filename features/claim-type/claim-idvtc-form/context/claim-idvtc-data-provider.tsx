@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
   KEY_IDVTC_PROOF,
   KEY_OPERATOR_BALANCE,
@@ -10,7 +10,7 @@ import {
   useIdvtcCurveId,
   useIdvtcPaused,
   useIdvtcProof,
-  useNodeOperatorId,
+  useNodeOperator,
   useOperatorCurveId,
   useOperatorIsOwner,
   useOperatorType,
@@ -30,33 +30,37 @@ const useClaimIdvtcFormNetworkData: NetworkData<
   const [justClaimed, setJustClaimed] = useState(false);
 
   const { address } = useDappStatus();
-  const nodeOperatorId = useNodeOperatorId();
-  const hasOperator = nodeOperatorId !== undefined;
+  const { nodeOperator } = useNodeOperator();
+  const nodeOperatorId = nodeOperator?.nodeOperatorId;
+
+  // A type can only be claimed onto an operator of the module that owns it.
+  const csmOperator =
+    nodeOperator?.module === MODULE_NAME.CSM ? nodeOperator : undefined;
+  const hasOperator = !!csmOperator;
 
   const { data: idvtcPaused, isPending: isIdvtcPausedLoading } =
     useIdvtcPaused();
-  const currentCurveIdQuery = useOperatorCurveId(nodeOperatorId);
+  const currentCurveQuery = useOperatorCurveId(csmOperator);
   const proofQuery = useIdvtcProof();
 
-  const currentCurveId = currentCurveIdQuery.data;
+  const currentCurve = currentCurveQuery.data;
   const proof = proofQuery.data;
 
-  const isCurrentCurveIdLoading = currentCurveIdQuery.isPending;
+  const isCurrentCurveIdLoading = currentCurveQuery.isPending;
   const isProofLoading = proofQuery.isPending;
 
   const { isPending: isIsOwnerLoading } = useOperatorIsOwner(nodeOperatorId);
   const canClaimCurve = useCanClaimIDVTC();
 
   const { data: currentOperatorType, isPending: isCurrentOperatorTypeLoading } =
-    useOperatorType(nodeOperatorId);
+    useOperatorType(csmOperator);
   const isCurrentIcs = currentOperatorType === OPERATOR_TYPE.CSM_ICS;
 
-  const { data: newCurveId, isPending: isNewCurveIdLoading } =
-    useIdvtcCurveId();
+  const { data: newCurve, isPending: isNewCurveIdLoading } = useIdvtcCurveId();
   const { data: currentParameters, isPending: isCurrentParametersLoading } =
-    useCurveParameters(currentCurveId);
+    useCurveParameters(currentCurve);
   const { data: newParameters, isPending: isNewParametersLoading } =
-    useCurveParameters(newCurveId);
+    useCurveParameters(newCurve);
 
   const invalidate = useInvalidate();
 
@@ -87,11 +91,11 @@ const useClaimIdvtcFormNetworkData: NetworkData<
       nodeOperatorId,
       address,
       idvtcPaused,
-      currentCurveId,
+      currentCurve,
       currentOperatorType,
       isCurrentIcs,
       currentParameters,
-      newCurveId,
+      newCurve,
       newParameters,
       proof,
       canClaimCurve,

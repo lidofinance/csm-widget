@@ -3,11 +3,11 @@ import { STRATEGY_CONSTANT } from 'consts';
 import { useSmSDK } from '../web3-provider';
 
 export const useLastReportTxHash = () => {
-  const { rewards } = useSmSDK();
+  const { rewards, core } = useSmSDK();
 
   return useQuery({
-    queryKey: ['last-report-tx-hash'],
+    queryKey: ['last-report-tx-hash', { module: core.moduleName }],
     ...STRATEGY_CONSTANT,
-    queryFn: () => rewards.getLastReportTransactionHash(),
+    queryFn: async () => (await rewards.getLastReportTransactionHash()) ?? null,
   });
 };

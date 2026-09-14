@@ -1,6 +1,6 @@
 import {
+  CurveRef,
   getOperatorTypeByCurveId,
-  MODULE_NAME,
   OPERATOR_TYPE,
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
@@ -15,6 +15,8 @@ export type OperatorTypeMetadata = {
   short: string;
   title: string;
   description: string;
+  descriptionNote?: { lead: string; rest: string };
+  capitalMultiplier?: string;
 };
 
 export const OPERATOR_TYPE_METADATA: Record<
@@ -22,11 +24,24 @@ export const OPERATOR_TYPE_METADATA: Record<
   OperatorTypeMetadata
 > = {
   [OPERATOR_TYPE.CSM_DEF]: {
-    name: 'Default',
-    short: 'DEF',
-    title: 'Default (DEF)',
+    name: 'CSM 0x01',
+    short: '0x01',
+    title: 'CSM 0x01',
     description:
       'The simplest way to start validating in CSM. Upload keys under the general parameters without any permission or verification. At any point in the future, you may apply to become an Identified Community Staker to access more favorable parameters.',
+    capitalMultiplier: 'up to 1.75x',
+  },
+  [OPERATOR_TYPE.CSM2_DEF]: {
+    name: 'CSM 0x02',
+    short: '0x02',
+    title: 'CSM 0x02',
+    description:
+      'Unlock the power of 0x02 withdrawal credentials to run validators with balances of up to 2048 ETH.',
+    descriptionNote: {
+      lead: 'Run 0x02 alongside any other type ',
+      rest: '(0x01, ICS, or IDVTC) to stack their benefits.',
+    },
+    capitalMultiplier: 'up to 2.6x',
   },
   [OPERATOR_TYPE.CSM_LEA]: {
     name: 'Legacy Early Adopter',
@@ -40,7 +55,8 @@ export const OPERATOR_TYPE_METADATA: Record<
     short: 'ICS',
     title: 'Identified Community Staker (ICS)',
     description:
-      'Obtain enhanced validation parameters by becoming recognized as an independent Community Staker. Please note that the verification process takes time and requires the submission of specific supporting proofs.',
+      'Access enhanced validation parameters by becoming a recognized independent Community Staker. Please note that the assessment process takes time and requires qualifying under certain categories.',
+    capitalMultiplier: 'up to 2.36x',
   },
   [OPERATOR_TYPE.CSM_IDVTC]: {
     name: 'Identified DVT Cluster',
@@ -48,6 +64,7 @@ export const OPERATOR_TYPE_METADATA: Record<
     title: 'Identified DVT Cluster (IDVTC)',
     description:
       'Unlock a more resilient and capital-efficient validation path by creating a verified DVT cluster of independent Community Stakers. Approval requires meeting criteria and completing verification.',
+    capitalMultiplier: 'up to 3x',
   },
   [OPERATOR_TYPE.CM_PTO]: {
     name: 'Professional Trusted Operator',
@@ -106,24 +123,22 @@ export const OPERATOR_TYPE_METADATA: Record<
   },
 };
 
-// Classify a curve id for display: gate-owned curves resolve to their
-// operator type, any other defined curve id is a Custom Curve.
+// Classify a curve for display: gate-owned curves resolve to their operator
+// type, any other defined curve is a Custom Curve.
 export const getDisplayOperatorType = (
   chainId: SUPPORTED_CHAINS,
-  moduleName: MODULE_NAME,
-  curveId: bigint | undefined,
+  curve: CurveRef | undefined,
 ): DisplayOperatorType | undefined => {
-  if (curveId === undefined) return undefined;
-  return getOperatorTypeByCurveId(chainId, moduleName, curveId) ?? CUSTOM_CURVE;
+  if (!curve) return undefined;
+  return getOperatorTypeByCurveId(chainId, curve) ?? CUSTOM_CURVE;
 };
 
 // For components prefer the hooks from shared/hooks (useCurveMetadata et al.);
 // this pure variant is for non-reactive contexts like tx-stage callbacks.
 export const getCurveMetadata = (
   chainId: SUPPORTED_CHAINS,
-  moduleName: MODULE_NAME,
-  curveId: bigint | undefined,
+  curve: CurveRef | undefined,
 ) => {
-  const operatorType = getDisplayOperatorType(chainId, moduleName, curveId);
+  const operatorType = getDisplayOperatorType(chainId, curve);
   return operatorType ? OPERATOR_TYPE_METADATA[operatorType] : undefined;
 };

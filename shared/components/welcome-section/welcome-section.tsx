@@ -17,23 +17,25 @@ import {
 } from './styles';
 
 export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
+  const csmDescription = (
+    <p>
+      The Community Staking Module (CSM) is a permissionless staking module
+      aimed at attracting community stakers to participate in the Lido on
+      Ethereum protocol as Node Operators. For a detailed description of the
+      module, follow the{' '}
+      <MatomoLink
+        $inline
+        href={LIDO_OPERATOR_PORTAL_BASE}
+        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
+      >
+        link
+      </MatomoLink>
+      .
+    </p>
+  );
   const DESCRIPTIONS: Record<MODULE_NAME, JSX.Element> = {
-    [MODULE_NAME.CSM]: (
-      <p>
-        The Community Staking Module (CSM) is a permissionless staking module
-        aimed at attracting community stakers to participate in the Lido on
-        Ethereum protocol as Node Operators. For a detailed description of the
-        module, follow the{' '}
-        <MatomoLink
-          $inline
-          href={LIDO_OPERATOR_PORTAL_BASE}
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
-        >
-          link
-        </MatomoLink>
-        .
-      </p>
-    ),
+    [MODULE_NAME.CSM]: csmDescription,
+    [MODULE_NAME.CSM_02]: csmDescription,
     [MODULE_NAME.CM]: (
       <p>
         The Curated Module v2 (CM) consists of allow-listed independent

@@ -11,7 +11,7 @@ export const ViewKeys = () => {
     <>
       <NoSSRWrapper>
         <ExtraWidth>
-          <Gate rule="IS_CSM">
+          <Gate rule="IS_CSM_FAMILY">
             <DepositQueue />
           </Gate>
           <ViewKeysSection key={key} />

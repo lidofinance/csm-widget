@@ -1,15 +1,21 @@
 import { Edit } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
-import { isModuleCM, moduleMeta } from 'consts/module';
-import { useNodeOperator, useOperatorMetadata } from 'modules/web3';
+import { MODULE_METADATA } from 'consts/module';
+import { useModule, useNodeOperator, useOperatorMetadata } from 'modules/web3';
 import { FC } from 'react';
+import { useShowFlags } from 'shared/hooks';
 import { SecondaryLocalLink } from 'shared/navigate';
 import styled from 'styled-components';
 
-const ModuleTitle: FC = () => <>{moduleMeta.title}</>;
+const ModuleTitle: FC = () => {
+  const { module } = useModule();
+  return <>{MODULE_METADATA[module].title}</>;
+};
 
 export const DashboardTitle: FC = () => {
-  if (isModuleCM) return <CmTitle />;
+  const { isCM } = useModule();
+
+  if (isCM) return <CmTitle />;
 
   return <ModuleTitle />;
 };
@@ -19,13 +25,14 @@ const CmTitle: FC = () => {
     nodeOperator: { nodeOperatorId },
   } = useNodeOperator<true>();
   const { data: metadata, isPending } = useOperatorMetadata(nodeOperatorId);
+  const { IS_NODE_OPERATOR } = useShowFlags();
 
   if (isPending) return <ModuleTitle />;
 
   return (
     <>
       <span data-testid="operatorName">{metadata?.name}</span>
-      {!metadata?.ownerEditsRestricted && (
+      {IS_NODE_OPERATOR && !metadata?.ownerEditsRestricted && (
         <InlineWrapper>
           <SecondaryLocalLink
             href={PATH.SETTINGS_METADATA}

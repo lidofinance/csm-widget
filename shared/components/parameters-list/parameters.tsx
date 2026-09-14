@@ -1,34 +1,47 @@
-import { CurveParameters, TOKENS } from '@lidofinance/lido-csm-sdk';
-import { isModuleCM, moduleMeta } from 'consts';
+import {
+  CurveParameters,
+  MODULE_NAME,
+  TOKENS,
+} from '@lidofinance/lido-csm-sdk';
+import { MODULE_METADATA, isCsmFamilyModule } from 'consts';
+import { useModule } from 'modules/web3';
 import { ReactNode } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { plural } from 'utils';
 import {
   formatEthKeyIntervals,
+  formatEthKeyIntervalRows,
   formatKeysLimit,
   formatPercentKeyIntervals,
+  formatPercentKeyIntervalRows,
   formatQueues,
   formatSecondsDuration,
+  ParameterRow,
 } from './format';
 
 type Parameter = {
   title: string;
   help: string;
   render: (parameters?: CurveParameters) => ReactNode[];
+  renderRows?: (parameters?: CurveParameters) => ParameterRow[];
   csmOnly?: boolean;
 };
 
-const ALL_PARAMETERS: Parameter[] = [
+const buildAllParameters = (shortName: string): Parameter[] => [
   {
     title: 'Node Operator reward',
     help: 'A share of the Consensus and Execution layers rewards',
     render: (parameters) =>
       formatPercentKeyIntervals(parameters?.rewardsConfig),
+    renderRows: (parameters) =>
+      formatPercentKeyIntervalRows(parameters?.rewardsConfig),
   },
   {
     title: 'Bond',
-    help: `A security collateral that Node Operators must submit before uploading validator keys into ${moduleMeta.shortName}`,
+    help: `A security collateral that Node Operators must submit before uploading validator keys into ${shortName}`,
     render: (parameters) => formatEthKeyIntervals(parameters?.bondConfig),
+    renderRows: (parameters) =>
+      formatEthKeyIntervalRows(parameters?.bondConfig),
   },
   {
     title: 'Priority queue',
@@ -142,6 +155,15 @@ const ALL_PARAMETERS: Parameter[] = [
   },
 ];
 
-export const PARAMETERS: Parameter[] = isModuleCM
-  ? ALL_PARAMETERS.filter((p) => !p.csmOnly)
-  : ALL_PARAMETERS;
+const PARAMETERS_BY_MODULE = Object.fromEntries(
+  Object.values(MODULE_NAME).map((module) => {
+    const all = buildAllParameters(MODULE_METADATA[module].shortName);
+    return [
+      module,
+      isCsmFamilyModule(module) ? all : all.filter((p) => !p.csmOnly),
+    ];
+  }),
+) as Record<MODULE_NAME, Parameter[]>;
+
+export const useParameters = (): Parameter[] =>
+  PARAMETERS_BY_MODULE[useModule().module];

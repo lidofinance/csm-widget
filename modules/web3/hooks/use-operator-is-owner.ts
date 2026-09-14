@@ -14,10 +14,13 @@ export const useOperatorIsOwner = (
 ) => {
   const { address: dappAddress } = useDappStatus();
   const address = customAddress ?? dappAddress;
-  const { operator } = useSmSDK();
+  const { operator, core } = useSmSDK();
 
   return useQuery({
-    queryKey: [...KEY_OPERATOR_IS_OWNER, { address, nodeOperatorId }],
+    queryKey: [
+      ...KEY_OPERATOR_IS_OWNER,
+      { address, nodeOperatorId, module: core.moduleName },
+    ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(address);

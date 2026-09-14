@@ -1,4 +1,5 @@
 export const GRAPH_CONFIG = {
+  // Key counts, not the graph's unit — callers scale these to match.
   QUEUE: {
     POTENTIAL_ADDED: 25n,
     BACK_OFFSET: 30n,

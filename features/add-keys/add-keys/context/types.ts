@@ -1,6 +1,7 @@
 import {
   BondBalance,
   CurveParameters,
+  CurveRef,
   NodeOperatorId,
   NodeOperatorInfo,
   ShareLimitInfo,
@@ -21,7 +22,7 @@ export type AddKeysFormNetworkData = {
   stethBalance: bigint;
   wstethBalance: bigint;
   nodeOperatorId: NodeOperatorId;
-  curveId: bigint;
+  curve: CurveRef;
   operatorInfo: NodeOperatorInfo;
   curveParameters: CurveParameters;
   bond: BondBalance;

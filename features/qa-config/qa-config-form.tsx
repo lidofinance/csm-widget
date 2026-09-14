@@ -24,6 +24,9 @@ const rpcKey = (chainId: SUPPORTED_CHAINS) => `rpc_${chainId}`;
 const clKey = (chainId: SUPPORTED_CHAINS) => `cl_${chainId}`;
 const IPFS_GATEWAYS_KEY = 'ipfsGateways';
 const SURVEY_API_URL_KEY = 'surveyApiUrl';
+const SAMPLE_CID = '1';
+
+const resolveGateway = (url: string) => url.replaceAll('{cid}', SAMPLE_CID);
 
 const validateUrl = (value: string) =>
   !value || isUrl(value) || 'Not a valid URL';
@@ -35,7 +38,9 @@ const parseGateways = (value: string): string[] =>
     .filter(Boolean);
 
 const validateGateways = (value: string) => {
-  const invalid = parseGateways(value).find((url) => !isUrl(url));
+  const invalid = parseGateways(value).find(
+    (url) => !isUrl(resolveGateway(url)),
+  );
   return !invalid || `Not a valid URL: ${invalid}`;
 };
 
@@ -141,7 +146,7 @@ export const QaConfigForm = () => {
           <Input
             fullwidth
             label="IPFS gateway"
-            placeholder="https://ipfs.io/ipfs/{cid}"
+            placeholder="https://ipfs.io/ipfs/{cid}, https://{cid}.ipfs.dweb.link"
             error={formState.errors[IPFS_GATEWAYS_KEY]?.message}
             {...register(IPFS_GATEWAYS_KEY, { validate: validateGateways })}
           />

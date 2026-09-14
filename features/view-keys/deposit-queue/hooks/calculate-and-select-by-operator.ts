@@ -1,58 +1,60 @@
 import { DepositQueueBatch } from '@lidofinance/lido-csm-sdk';
 
 type OperatorBatch = {
-  keysCount: number;
-  offset: bigint; // Keys count before this batch (from other operators)
+  amount: bigint;
+  offset: bigint; // Amount before this batch (from other operators)
 };
 
 export type QueueAnalysis = {
   queueIndex: number;
-  totalKeysInQueue: bigint;
+  totalAmountInQueue: bigint;
   operatorBatches: OperatorBatch[];
 };
 
 export type DepositQueueAnalysis = {
-  totalKeysCount: bigint;
+  totalAmount: bigint;
   queueAnalysis: QueueAnalysis[];
 };
 
 export const calculateAndSelectByOperator = (
   nodeOperatorId: bigint | undefined,
+  scale: bigint,
 ) => {
   return (allBatches: DepositQueueBatch[][]): DepositQueueAnalysis => {
-    let totalKeysCount = 0n;
+    let totalAmount = 0n;
     const queueAnalysis: QueueAnalysis[] = [];
 
     allBatches.forEach((batches, queueIndex) => {
-      let totalKeysInQueue = 0n;
+      let totalAmountInQueue = 0n;
       let runningOffset = 0n;
       const operatorBatches: OperatorBatch[] = [];
 
       batches.forEach((batch) => {
         const isOperatorBatch = batch.nodeOperatorId === nodeOperatorId;
+        const batchAmount = BigInt(batch.keysCount) * scale;
 
         if (isOperatorBatch) {
           operatorBatches.push({
-            keysCount: batch.keysCount,
+            amount: batchAmount,
             offset: runningOffset,
           });
         }
 
-        runningOffset += BigInt(batch.keysCount);
-        totalKeysInQueue += BigInt(batch.keysCount);
+        runningOffset += batchAmount;
+        totalAmountInQueue += batchAmount;
       });
 
-      totalKeysCount += totalKeysInQueue;
+      totalAmount += totalAmountInQueue;
 
       queueAnalysis.push({
         queueIndex,
-        totalKeysInQueue,
+        totalAmountInQueue,
         operatorBatches,
       });
     });
 
     return {
-      totalKeysCount,
+      totalAmount,
       queueAnalysis,
     };
   };

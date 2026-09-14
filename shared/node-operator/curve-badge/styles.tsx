@@ -17,6 +17,9 @@ export const CURVE_VARIANTS: Record<
       linear-gradient(78deg, #304352 -49.42%, #d7d2cc 157.87%),
       linear-gradient(79deg, #00a3ff -9.53%, #2238ff 202.88%);
   `,
+  [OPERATOR_TYPE.CSM2_DEF]: css`
+    background: linear-gradient(120deg, #2381e0 2.5%, #002e5d 100.1%);
+  `,
   [OPERATOR_TYPE.CSM_LEA]: css<InjectedProps>`
     background:
       radial-gradient(
@@ -44,25 +47,25 @@ export const CURVE_VARIANTS: Record<
     background: linear-gradient(93deg, #08d1ff -23.5%, #88f493 121.99%);
   `,
   [OPERATOR_TYPE.CM_PO]: css`
-    background: var(--lido-color-text);
+    background: var(--lido-color-textDark);
   `,
   [OPERATOR_TYPE.CM_PTO]: css`
-    background: var(--lido-color-text);
+    background: var(--lido-color-textDark);
   `,
   [OPERATOR_TYPE.CM_DO]: css`
-    background: var(--lido-color-text);
+    background: var(--lido-color-textDark);
   `,
   [OPERATOR_TYPE.CM_IODC]: css`
-    background: var(--lido-color-text);
+    background: var(--lido-color-textDark);
   `,
   [OPERATOR_TYPE.CM_IODCP]: css`
-    background: var(--lido-color-text);
+    background: var(--lido-color-textDark);
   `,
   [OPERATOR_TYPE.CM_EEO]: css`
-    background: var(--lido-color-text);
+    background: var(--lido-color-textDark);
   `,
   [OPERATOR_TYPE.CM_PGO]: css`
-    background: var(--lido-color-text);
+    background: var(--lido-color-textDark);
   `,
 };
 
@@ -71,7 +74,7 @@ export const DescriptorCurveStyle = styled(BadgeStyle)<{
   $inline?: boolean;
 }>`
   font-weight: 700;
-  color: var(--lido-color-foreground);
+  color: var(--lido-color-primaryContrast);
   padding-inline: ${({ $inline }) => ($inline ? '6px' : '0px')};
   width: max-content;
 

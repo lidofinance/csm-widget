@@ -1,4 +1,5 @@
 import {
+  CurveRef,
   KeyWithStatus,
   NodeOperatorId,
   NodeOperatorInfo,
@@ -11,7 +12,7 @@ export type EjectKeysFormInputType = {
 
 export type EjectKeysFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
-  curveId: bigint;
+  curve: CurveRef;
   ethBalance: bigint;
   keys: KeyWithStatus[];
   info: NodeOperatorInfo;

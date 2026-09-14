@@ -11,10 +11,11 @@ export const KEY_IDVTC_PROOF = ['idvtc-proof'];
 export const useIdvtcProof = (customAddress?: Address) => {
   const { address: dappAddress } = useDappStatus();
   const address = customAddress ?? dappAddress;
+  // IDVTC is CSM-only: resolve the CSM SDK even when a CSM_02 operator is active.
   const sdk = useSmSDK(MODULE_NAME.CSM);
 
   return useQuery({
-    queryKey: [...KEY_IDVTC_PROOF, { address }],
+    queryKey: [...KEY_IDVTC_PROOF, { address, module: MODULE_NAME.CSM }],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
       invariant(sdk);

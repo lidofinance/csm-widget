@@ -5,6 +5,7 @@ import {
   NodeOperatorContext,
   NodeOperatorContextValue,
 } from 'modules/web3/operator-provider/node-operator-provider';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { STRATEGY_IMMUTABLE } from 'consts';
 import { KEY_OPERATOR_REWARDS_HISTORY } from 'modules/web3';
 import { hashKey } from 'utils';
@@ -41,6 +42,7 @@ export const MockRewardsHistoryProvider: FC<
     nodeOperator: {
       id: BigInt(scenario.nodeOperatorId),
     } as any,
+    activeModule: MODULE_NAME.CSM,
     switchNodeOperator: () => {},
   };
 

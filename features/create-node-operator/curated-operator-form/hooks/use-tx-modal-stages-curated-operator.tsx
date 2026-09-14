@@ -29,7 +29,7 @@ export const useTxModalStagesCuratedOperator = () => {
     const selectedGate = data.availableGates.find(
       (gate) => gate.gateName === input.gateName,
     );
-    const metadata = getCurveMetadata(selectedGate?.curveId);
+    const metadata = getCurveMetadata(selectedGate?.curve);
 
     return {
       sign: () =>

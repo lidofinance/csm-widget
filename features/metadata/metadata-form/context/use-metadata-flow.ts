@@ -1,5 +1,5 @@
 import { type MethodAccess, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -21,7 +21,7 @@ export const useMetadataFlowResolver = (): FlowResolver<
   MetadataFormNetworkData,
   MetadataFlow
 > => {
-  const sdk = useSmSDK(MODULE_NAME.CM);
+  const sdk = useActiveSmSDK(MODULE_NAME.CM);
   invariant(sdk, 'CM SDK is required');
   const [canUpdate, updateAccess] = useCanPerform(
     sdk.metaRegistry,

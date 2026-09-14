@@ -1,8 +1,8 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { isModuleCSM } from 'consts';
 import { getExternalLinks, SUBSCRIBE_EVENTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
+import { useModule } from 'modules/web3';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 import { useBeaconchainDashboardLink } from 'shared/hooks';
@@ -15,6 +15,7 @@ type Props = {
 };
 
 export const AfterKeysUpload: FC<Props> = ({ keys }) => {
+  const { isCsmFamily } = useModule();
   const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
   const { beaconchain } = getExternalLinks();
   return (
@@ -43,7 +44,7 @@ export const AfterKeysUpload: FC<Props> = ({ keys }) => {
               </MatomoLink>
             </>
           )}
-          {isModuleCSM && (
+          {isCsmFamily && (
             <>
               {' '}
               or subscribe to the{' '}

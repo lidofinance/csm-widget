@@ -1,8 +1,7 @@
-import {
-  NodeOperatorId,
-  NodeOperatorShortInfo,
-} from '@lidofinance/lido-csm-sdk';
+import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
+import { OperatorRef } from 'modules/web3';
+import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { GroupCardsStyle } from './cm-styles';
@@ -11,12 +10,13 @@ import { OperatorGroupData } from './use-grouped-operators';
 import { LocalLink } from 'shared/navigate';
 import { PATH } from 'consts';
 import { formatGroupTitle } from 'shared/node-operator/utils';
+import { useShowFlags } from 'shared/hooks';
 
 type GroupSectionProps = {
   group: OperatorGroupData;
   activeId: NodeOperatorId;
-  availableMap: Map<bigint, NodeOperatorShortInfo>;
-  onSwitch: (id: NodeOperatorId) => void;
+  availableMap: Map<bigint, ModuleNodeOperator>;
+  onSwitch: (operator: OperatorRef) => void;
 };
 
 const getAction = (
@@ -35,13 +35,14 @@ export const GroupSection: FC<GroupSectionProps> = ({
   availableMap,
   onSwitch,
 }) => {
+  const { IS_NODE_OPERATOR } = useShowFlags();
   return (
     <Stack direction="column" gap="sm">
       <Stack center spaceBetween>
         <Text size="xs" weight={700}>
           {formatGroupTitle(group)}
         </Text>
-        {group.allOperatorIds.includes(activeId) && (
+        {IS_NODE_OPERATOR && group.allOperatorIds.includes(activeId) && (
           <LocalLink href={PATH.GROUP}>
             <Button size="xs" variant="ghost">
               View
