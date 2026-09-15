@@ -1,5 +1,7 @@
+FROM node:24-alpine AS node-base
+
 # dependencies for the build
-FROM node:24-alpine AS deps
+FROM node-base AS deps
 
 WORKDIR /app
 
@@ -7,7 +9,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --non-interactive --ignore-scripts && yarn cache clean
 
 # runtime-only dependencies, kept apart so the final image never sees devDependencies
-FROM node:24-alpine AS prod-deps
+FROM node-base AS prod-deps
 
 WORKDIR /app
 
@@ -34,8 +36,8 @@ RUN if [ -n "$BUILD_COMMIT" ]; then \
     && NODE_NO_BUILD_DYNAMICS=true yarn build \
     && rm -rf .next/cache
 
-# final image
-FROM node:24-alpine AS base
+# runtime image
+FROM node-base AS runner
 
 ARG BASE_PATH=""
 ARG DEFAULT_CHAIN="1"
@@ -48,8 +50,9 @@ WORKDIR /app
 
 COPY --from=prod-deps /app/node_modules ./node_modules
 COPY --from=build /app/.next ./.next
-# next.config.mjs is re-evaluated on server start: it regenerates only
-# public/runtime/window-env.js, so user node only needs to own that directory
+# next.config.mjs is re-evaluated on server start and writes only
+# public/runtime/window-env.js. It is the sole runtime-writable path: under
+# readOnlyRootFilesystem mount an emptyDir at /app/public/runtime (uid 1000)
 COPY --from=build /app/public ./public
 RUN rm -rf public/runtime && mkdir public/runtime && chown node public/runtime
 COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json /app/server.mjs ./
@@ -57,10 +60,18 @@ COPY --from=build /app/scripts ./scripts
 # next-logger.config.cjs preloads ./utilsApi/*.cjs at runtime
 COPY --from=build /app/utilsApi ./utilsApi
 
+# ARG does not cross stages; re-declared here so the labels resolve
+ARG BUILD_VERSION
+ARG BUILD_COMMIT
+LABEL org.opencontainers.image.source="https://github.com/lidofinance/csm-widget" \
+      org.opencontainers.image.version="$BUILD_VERSION" \
+      org.opencontainers.image.revision="$BUILD_COMMIT"
+
 USER node
 EXPOSE 3000
 
-HEALTHCHECK --interval=10s --timeout=3s \
-  CMD wget -q -O /dev/null http://localhost:3000/api/health || exit 1
+# start-period covers app.prepare(); k8s ignores this and uses its own probes
+HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
+  CMD wget -q -O /dev/null "http://localhost:${PORT:-3000}/api/health" || exit 1
 
 CMD ["yarn", "start"]
