@@ -1,7 +1,6 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { config } from 'config';
 import { useUserConfig } from 'config/user-config';
-import { STRATEGY_IMMUTABLE } from 'consts';
 import { ClaimBondForm } from 'features/claim-bond/claim-bond-form';
 import { ClaimBondDataProvider } from 'features/claim-bond/claim-bond-form/context';
 import {
@@ -17,9 +16,10 @@ import {
   NodeOperatorContext,
   type NodeOperatorContextValue,
 } from 'modules/web3/operator-provider/node-operator-provider';
-import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
-import { hashKey } from 'utils';
-import { WagmiProvider, useConnect, useConnection } from 'wagmi';
+import { FC, PropsWithChildren, useMemo } from 'react';
+import { WagmiProvider } from 'wagmi';
+import { AutoConnect } from '../shared/auto-connect';
+import { createMockQueryClient } from '../shared/create-mock-query-client';
 import {
   makeBond,
   makeFeeSplits,
@@ -33,20 +33,6 @@ import {
 } from './mock-data';
 import { createMockWagmiConfig } from './mock-wagmi';
 import { type ClaimBondScenarioData } from './scenarios';
-
-// Auto-connects the mock connector on mount so useDappStatus() reports a
-// connected address. Renders nothing until connected to avoid a "no-access"
-// flash and any SSR/client hydration mismatch (server render is unconnected).
-const AutoConnect: FC<PropsWithChildren> = ({ children }) => {
-  const { isConnected } = useConnection();
-  const { connect, connectors } = useConnect();
-  useEffect(() => {
-    if (!isConnected && connectors[0]) {
-      connect({ connector: connectors[0] });
-    }
-  }, [isConnected, connect, connectors]);
-  return isConnected ? <>{children}</> : null;
-};
 
 // Mirrors the connected address onto `claimerAddress` (not manager/rewards) so
 // the stand exercises the CLAIMER access path end to end.
@@ -93,15 +79,7 @@ export const MockClaimBondProvider: FC<
   );
 
   const queryClient = useMemo(() => {
-    const client = new QueryClient({
-      defaultOptions: {
-        queries: {
-          queryKeyHashFn: hashKey,
-          retry: false,
-          ...STRATEGY_IMMUTABLE,
-        },
-      },
-    });
+    const client = createMockQueryClient();
     const idKey = { nodeOperatorId, module: config.module };
     client.setQueryData(
       [...KEY_OPERATOR_BALANCE, idKey],

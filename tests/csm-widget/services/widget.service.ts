@@ -18,6 +18,7 @@ import {
   KeysPage,
   MainPage,
   MonitoringPage,
+  MyOperatorsPage,
   SettingsPage,
 } from '../pages';
 import { ElementController } from '../pages/elements/controller';
@@ -31,6 +32,7 @@ export class WidgetService {
   public mainPage: MainPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
+  public myOperatorsPage: MyOperatorsPage;
   public settingsPage: SettingsPage;
   public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
@@ -47,6 +49,7 @@ export class WidgetService {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
+    this.myOperatorsPage = new MyOperatorsPage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
     this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
