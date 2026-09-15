@@ -85,10 +85,19 @@ export class LidoSDKClient extends LidoSDKCsm {
 
   async evmRevert(snapshotId: string): Promise<void> {
     await test.step(`Revert EVM to snapshot ${snapshotId}`, async () => {
-      await this.core.publicClient.request({
+      const reverted = await this.core.publicClient.request({
         method: 'evm_revert' as never,
         params: [snapshotId] as never,
       });
+
+      // the node answers `false` when the snapshot is unknown or already
+      // consumed — the chain keeps the dirty state and every later spec
+      // silently inherits it, so fail loudly instead
+      if (reverted === false) {
+        throw new Error(
+          `evm_revert returned false for snapshot ${snapshotId}: chain state was NOT restored`,
+        );
+      }
     });
   }
 }

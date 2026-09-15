@@ -1,5 +1,6 @@
 import { trimAddress } from '@lidofinance/address';
 import { test } from '../../../test.fixture';
+import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { mnemonicToAccount } from 'viem/accounts';
@@ -7,159 +8,170 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 import { qase } from 'playwright-qase-reporter/playwright';
 
-test.describe('Roles. Manager Address. Verify UI With Proposed Address', () => {
-  let proposedAddress: string;
+test.describe(
+  ...qaseTree({
+    epic: EPIC.roles,
+    feature: 'Manager address',
+    story: 'With proposed address',
+  }),
+  () => {
+    let proposedAddress: string;
 
-  test.beforeAll(async ({ widgetService }) => {
-    await widgetService.settingsPage.managerAddressPage.open();
-    proposedAddress = generateAddress();
-    await widgetService.settingsPage.managerAddressPage.proposeNewAddress(
-      proposedAddress,
+    test.beforeAll(async ({ widgetService }) => {
+      await widgetService.settingsPage.managerAddressPage.open();
+      proposedAddress = generateAddress();
+      await widgetService.settingsPage.managerAddressPage.proposeNewAddress(
+        proposedAddress,
+      );
+    });
+
+    test.afterAll(async ({ widgetService, csmSDK }) => {
+      await widgetService.settingsPage.managerAddressPage.open();
+      await widgetService.page.waitForTimeout(1000);
+
+      const noId = await widgetService.extractNodeOperatorId();
+      if (await csmSDK.isPendingRole(noId, 'manager')) {
+        await widgetService.settingsPage.managerAddressPage.revokePendingRole();
+      }
+    });
+
+    test(
+      qase(219, 'Verify the addresses field with proposed address'),
+      async ({ widgetService, secretPhrase }) => {
+        const managerAddressPage =
+          widgetService.settingsPage.managerAddressPage;
+        const address = mnemonicToAccount(secretPhrase).address;
+
+        await test.step('Verify the "Current manager address" field', async () => {
+          await expect(managerAddressPage.currentTitledAddress).toBeVisible();
+          await expect(managerAddressPage.currentTitledAddress).toContainText(
+            'Current Manager Address',
+          );
+
+          await expect(managerAddressPage.currentAddress).toContainText(
+            trimAddress(address, 6),
+          );
+        });
+
+        await test.step('Verify that proposal address is visible', async () => {
+          await expect(managerAddressPage.proposedAddress).toBeVisible();
+
+          await expect(managerAddressPage.pendingTitledAddress).toContainText(
+            'Pending change',
+          );
+
+          await expect(
+            managerAddressPage.proposedAddress.locator('> p').nth(0),
+          ).toContainText('Action required');
+          await expect(
+            managerAddressPage.proposedAddress.locator('> div').nth(1),
+          ).toContainText('Connect to CSM UI with the proposed address');
+          await expect(
+            managerAddressPage.proposedAddress.locator('> div').nth(1),
+          ).toContainText(
+            'Go to Settings tab → Inbox requests to confirm the change',
+          );
+        });
+      },
     );
-  });
 
-  test.afterAll(async ({ widgetService, csmSDK }) => {
-    await widgetService.settingsPage.managerAddressPage.open();
-    await widgetService.page.waitForTimeout(1000);
-
-    const noId = await widgetService.extractNodeOperatorId();
-    if (await csmSDK.isPendingRole(noId, 'manager')) {
-      await widgetService.settingsPage.managerAddressPage.revokePendingRole();
-    }
-  });
-
-  test(
-    qase(219, 'Verify the addresses field with proposed address'),
-    async ({ widgetService, secretPhrase }) => {
+    test(qase(232, 'Verify input appearence'), async ({ widgetService }) => {
       const managerAddressPage = widgetService.settingsPage.managerAddressPage;
-      const address = mnemonicToAccount(secretPhrase).address;
 
-      await test.step('Verify the "Current manager address" field', async () => {
-        await expect(managerAddressPage.currentTitledAddress).toBeVisible();
-        await expect(managerAddressPage.currentTitledAddress).toContainText(
-          'Current Manager Address',
+      await test.step('Verify input', async () => {
+        await expect(managerAddressPage.addressInput).toBeVisible();
+        await expect(managerAddressPage.addressInput).toHaveAttribute(
+          'placeholder',
+          'Ethereum address or ENS name',
         );
-
-        await expect(managerAddressPage.currentAddress).toContainText(
-          trimAddress(address, 6),
-        );
-      });
-
-      await test.step('Verify that proposal address is visible', async () => {
-        await expect(managerAddressPage.proposedAddress).toBeVisible();
-
-        await expect(managerAddressPage.pendingTitledAddress).toContainText(
-          'Pending change',
-        );
-
-        await expect(
-          managerAddressPage.proposedAddress.locator('> p').nth(0),
-        ).toContainText('Action required');
-        await expect(
-          managerAddressPage.proposedAddress.locator('> div').nth(1),
-        ).toContainText('Connect to CSM UI with the proposed address');
-        await expect(
-          managerAddressPage.proposedAddress.locator('> div').nth(1),
-        ).toContainText(
-          'Go to Settings tab → Inbox requests to confirm the change',
+        await expect(managerAddressPage.inputLabel).toContainText(
+          'New Manager Address',
         );
       });
-    },
-  );
-
-  test(qase(232, 'Verify input appearence'), async ({ widgetService }) => {
-    const managerAddressPage = widgetService.settingsPage.managerAddressPage;
-
-    await test.step('Verify input', async () => {
-      await expect(managerAddressPage.addressInput).toBeVisible();
-      await expect(managerAddressPage.addressInput).toHaveAttribute(
-        'placeholder',
-        'Ethereum address or ENS name',
-      );
-      await expect(managerAddressPage.inputLabel).toContainText(
-        'New Manager Address',
-      );
-    });
-  });
-
-  test(qase(233, 'Verify button appearence'), async ({ widgetService }) => {
-    const managerAddressPage = widgetService.settingsPage.managerAddressPage;
-
-    await test.step('Verify button', async () => {
-      await expect(managerAddressPage.proposeButton).toBeVisible();
-      await expect(managerAddressPage.proposeButton).toContainText(
-        'Propose a new Manager Address',
-      );
     });
 
-    await test.step('Verify explanatory note below the button', async () => {
-      await expect(managerAddressPage.note).toBeVisible();
-      await expect(managerAddressPage.note).toContainText(
-        'To complete the address change, the owner of the new address must confirm the change',
-      );
+    test(qase(233, 'Verify button appearence'), async ({ widgetService }) => {
+      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
+
+      await test.step('Verify button', async () => {
+        await expect(managerAddressPage.proposeButton).toBeVisible();
+        await expect(managerAddressPage.proposeButton).toContainText(
+          'Propose a new Manager Address',
+        );
+      });
+
+      await test.step('Verify explanatory note below the button', async () => {
+        await expect(managerAddressPage.note).toBeVisible();
+        await expect(managerAddressPage.note).toContainText(
+          'To complete the address change, the owner of the new address must confirm the change',
+        );
+      });
     });
-  });
 
-  test(
-    qase(220, 'Should open etherscan for current manager address'),
-    async ({ widgetService, widgetConfig, secretPhrase }) => {
-      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
+    test(
+      qase(220, 'Should open etherscan for current manager address'),
+      async ({ widgetService, widgetConfig, secretPhrase }) => {
+        const managerAddressPage =
+          widgetService.settingsPage.managerAddressPage;
 
-      await test.step('Verify erherscan for current address', async () => {
-        const [etherscanPage] = await Promise.all([
-          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
-          managerAddressPage.currentAddressEtherscanLink.click(),
-        ]);
-        expect(etherscanPage.url().toLowerCase()).toContain(
-          `${widgetConfig.standConfig.networkConfig.scan}address/${mnemonicToAccount(secretPhrase).address.toLowerCase()}`,
+        await test.step('Verify erherscan for current address', async () => {
+          const [etherscanPage] = await Promise.all([
+            widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
+            managerAddressPage.currentAddressEtherscanLink.click(),
+          ]);
+          expect(etherscanPage.url().toLowerCase()).toContain(
+            `${widgetConfig.standConfig.networkConfig.scan}address/${mnemonicToAccount(secretPhrase).address.toLowerCase()}`,
+          );
+          await etherscanPage.close();
+          await widgetService.page.waitForTimeout(5000);
+        });
+
+        await test.step('Verify erherscan for pending address', async () => {
+          const [etherscanPageForPending] = await Promise.all([
+            widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
+            managerAddressPage.pendingAddressEtherscanLink.click(),
+          ]);
+          expect(etherscanPageForPending.url().toLowerCase()).toContain(
+            `${widgetConfig.standConfig.networkConfig.scan}address/${proposedAddress.toLowerCase()}`,
+          );
+        });
+      },
+    );
+
+    test(
+      qase(221, 'Propose a new Manager Address with invalid input'),
+      async ({ widgetService }) => {
+        const managerAddressPage =
+          widgetService.settingsPage.managerAddressPage;
+
+        await managerAddressPage.addressInput.fill(`${generateAddress()}1`);
+        await managerAddressPage.addressInput.blur();
+
+        const expectedTooltipError = 'Specify a valid address or ENS name';
+        await expect(managerAddressPage.validationInputTooltip).toContainText(
+          expectedTooltipError,
         );
-        await etherscanPage.close();
-        await widgetService.page.waitForTimeout(5000);
-      });
+        await expect(managerAddressPage.proposeButton).toBeDisabled();
+      },
+    );
 
-      await test.step('Verify erherscan for pending address', async () => {
-        const [etherscanPageForPending] = await Promise.all([
-          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
-          managerAddressPage.pendingAddressEtherscanLink.click(),
-        ]);
-        expect(etherscanPageForPending.url().toLowerCase()).toContain(
-          `${widgetConfig.standConfig.networkConfig.scan}address/${proposedAddress.toLowerCase()}`,
+    test(
+      qase(222, 'Propose a new Manager Address with same address'),
+      async ({ widgetService, secretPhrase }) => {
+        const managerAddressPage =
+          widgetService.settingsPage.managerAddressPage;
+
+        await managerAddressPage.addressInput.fill(
+          mnemonicToAccount(secretPhrase).address,
         );
-      });
-    },
-  );
+        await managerAddressPage.addressInput.blur();
 
-  test(
-    qase(221, 'Propose a new Manager Address with invalid input'),
-    async ({ widgetService }) => {
-      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
-
-      await managerAddressPage.addressInput.fill(`${generateAddress()}1`);
-      await managerAddressPage.addressInput.blur();
-
-      const expectedTooltipError = 'Specify a valid address or ENS name';
-      await expect(managerAddressPage.validationInputTooltip).toContainText(
-        expectedTooltipError,
-      );
-      await expect(managerAddressPage.proposeButton).toBeDisabled();
-    },
-  );
-
-  test(
-    qase(222, 'Propose a new Manager Address with same address'),
-    async ({ widgetService, secretPhrase }) => {
-      const managerAddressPage = widgetService.settingsPage.managerAddressPage;
-
-      await managerAddressPage.addressInput.fill(
-        mnemonicToAccount(secretPhrase).address,
-      );
-      await managerAddressPage.addressInput.blur();
-
-      const expectedTooltipError = 'Should not be same as current address';
-      await expect(managerAddressPage.validationInputTooltip).toContainText(
-        expectedTooltipError,
-      );
-      await expect(managerAddressPage.proposeButton).toBeDisabled();
-    },
-  );
-});
+        const expectedTooltipError = 'Should not be same as current address';
+        await expect(managerAddressPage.validationInputTooltip).toContainText(
+          expectedTooltipError,
+        );
+        await expect(managerAddressPage.proposeButton).toBeDisabled();
+      },
+    );
+  },
+);

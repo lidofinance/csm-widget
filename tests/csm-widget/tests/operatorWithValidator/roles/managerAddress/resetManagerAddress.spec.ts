@@ -1,4 +1,5 @@
 import { test } from '../../../test.fixture';
+import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { Tags } from 'tests/shared/consts/common.const';
@@ -6,10 +7,12 @@ import { generateAddress } from 'tests/shared/helpers/accountData';
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.describe(
-  'Roles. Manager Address. Reset manager address.',
-  {
+  ...qaseTree({
+    epic: EPIC.roles,
+    feature: 'Manager address',
+    story: 'Reset',
     tag: [Tags.forked],
-  },
+  }),
   () => {
     let snapshotId: string;
     let proposedAddress: string;

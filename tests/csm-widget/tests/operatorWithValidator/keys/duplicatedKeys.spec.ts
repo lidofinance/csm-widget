@@ -1,4 +1,5 @@
 import { test } from '../../test.fixture';
+import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
@@ -7,8 +8,12 @@ import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.servic
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.describe(
-  'Operator with keys. Validation duplicated keys.',
-  { tag: [Tags.noStaging, Tags.noProd] },
+  ...qaseTree({
+    epic: EPIC.keys,
+    feature: 'Submit keys',
+    story: 'Duplicated keys',
+    tag: [Tags.noStaging, Tags.noProd],
+  }),
   async () => {
     let keysPage: KeysPage;
     let keysGeneratorService: KeysGeneratorService;

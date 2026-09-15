@@ -1,20 +1,27 @@
 import { test } from './test.fixture';
+import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
-test.describe('Main page', async () => {
-  test(
-    qase(5, 'Should open keys page after click to "Create Node Operator"'),
-    async ({ widgetService }) => {
-      await widgetService.page
-        .getByText('CSM node operator starter pack')
-        .waitFor({ state: 'visible' });
-      await widgetService.mainPage.openCreateForm();
+test.describe(
+  ...qaseTree({
+    epic: EPIC.landing,
+    story: 'Main page',
+  }),
+  async () => {
+    test(
+      qase(5, 'Should open keys page after click to "Create Node Operator"'),
+      async ({ widgetService }) => {
+        await widgetService.page
+          .getByText('CSM node operator starter pack')
+          .waitFor({ state: 'visible' });
+        await widgetService.mainPage.openCreateForm();
 
-      await widgetService.page
-        .getByText('Choose bond token')
-        .waitFor({ state: 'visible' });
-    },
-  );
-});
+        await widgetService.page
+          .getByText('Choose bond token')
+          .waitFor({ state: 'visible' });
+      },
+    );
+  },
+);
