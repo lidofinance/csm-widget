@@ -1,4 +1,4 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
 import {
   callSurvey,
@@ -11,10 +11,11 @@ import type { FilledDto } from 'modules/surveys-sdk/generated';
 
 export const useSurveysFilled = (
   nodeOperatorId: NodeOperatorId | undefined,
+  module: MODULE_NAME = config.module,
 ) => {
   // Built directly instead of via `useOperatorKey`, which falls back to the
   // connected operator on `undefined` — callers pass `undefined` to disable.
-  const operatorKey = buildOperatorKey(config.module, nodeOperatorId);
+  const operatorKey = buildOperatorKey(module, nodeOperatorId);
   // Public cache key discriminator. Preserves the string the retired
   // `endpoints.publicSummary(operatorKey)` produced (`open/${operatorKey}`),
   // so the `surveysKeys.public(path)` cache identity is unchanged. The request

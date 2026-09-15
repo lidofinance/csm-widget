@@ -1,20 +1,6 @@
-import {
-  KEY_STATUS,
-  KeyWithStatus,
-  NodeOperatorId,
-} from '@lidofinance/lido-csm-sdk';
-import { useOperatorKeysWithStatus } from 'modules/web3';
-import { hasStatus, StatusFilter } from 'utils/has-status';
-
-const ISSUE_STATUSES: KEY_STATUS[] = [
-  KEY_STATUS.WITH_STRIKES,
-  KEY_STATUS.UNBONDED,
-  KEY_STATUS.DUPLICATED,
-  KEY_STATUS.INVALID,
-  KEY_STATUS.NON_QUEUED,
-  KEY_STATUS.UNCHECKED,
-  KEY_STATUS.EXIT_REQUESTED,
-];
+import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
+import { sumActiveKeysBalance } from './compute-stake-data';
+import { hasStatus, StatusFilter } from './has-status';
 
 const STATUS_GROUPS: Record<keyof KeysBreakdownCounts, StatusFilter> = {
   depositable: KEY_STATUS.DEPOSITABLE,
@@ -31,7 +17,17 @@ const STATUS_GROUPS: Record<keyof KeysBreakdownCounts, StatusFilter> = {
   unchecked: KEY_STATUS.UNCHECKED,
 };
 
-type KeysBreakdownCounts = {
+const ISSUE_GROUPS: (keyof KeysBreakdownCounts)[] = [
+  'withStrikes',
+  'unbonded',
+  'duplicated',
+  'invalid',
+  'nonQueued',
+  'unchecked',
+  'exitRequested',
+];
+
+export type KeysBreakdownCounts = {
   depositable: number;
   activationPending: number;
   active: number;
@@ -46,12 +42,15 @@ type KeysBreakdownCounts = {
   unchecked: number;
 };
 
-type KeysBreakdownData = {
+export type KeysBreakdownData = {
   counts: KeysBreakdownCounts;
   issuesCount: number;
+  activeBalance: bigint;
 };
 
-const selectKeysBreakdown = (keys: KeyWithStatus[]): KeysBreakdownData => {
+export const selectKeysBreakdown = (
+  keys: KeyWithStatus[],
+): KeysBreakdownData => {
   const counts = Object.fromEntries(
     Object.entries(STATUS_GROUPS).map(([key, filter]) => [
       key,
@@ -59,13 +58,11 @@ const selectKeysBreakdown = (keys: KeyWithStatus[]): KeysBreakdownData => {
     ]),
   ) as KeysBreakdownCounts;
 
-  const issuesCount = ISSUE_STATUSES.filter(
-    (status) => keys.filter(hasStatus(status)).length > 0,
-  ).length;
+  const issuesCount = ISSUE_GROUPS.filter((group) => counts[group] > 0).length;
 
-  return { counts, issuesCount };
-};
+  const activeBalance = sumActiveKeysBalance(
+    keys.filter(hasStatus(STATUS_GROUPS.active)),
+  );
 
-export const useKeysBreakdown = (id: NodeOperatorId | undefined) => {
-  return useOperatorKeysWithStatus(id, selectKeysBreakdown);
+  return { counts, issuesCount, activeBalance };
 };

@@ -23,6 +23,7 @@ export * from './use-ics-apply-enabled';
 export * from './use-initial-loading';
 export * from './use-invalidate';
 export * from './use-keys-available';
+export * from './use-keys-breakdown';
 export * from './use-local-storage';
 export * from './use-max-priority-key-index';
 export * from './use-operator-type-metadata';

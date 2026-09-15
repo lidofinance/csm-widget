@@ -1,32 +1,43 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { Address } from 'viem';
-import { useSmSDK } from '../web3-provider';
+import { SmSDK, useTargetSmSDK } from '../web3-provider';
 import { useDappStatus } from './use-dapp-status';
 
 export const KEY_OPERATOR_IS_OWNER = ['operator-is-owner'];
 
-export const useOperatorIsOwner = (
+export const operatorIsOwnerQueryOptions = (
+  sdk: SmSDK | undefined,
   nodeOperatorId: NodeOperatorId | undefined,
-  customAddress?: Address,
-) => {
-  const { address: dappAddress } = useDappStatus();
-  const address = customAddress ?? dappAddress;
-  const { operator, core } = useSmSDK();
-
-  return useQuery({
+  address: Address | undefined,
+) =>
+  queryOptions({
     queryKey: [
       ...KEY_OPERATOR_IS_OWNER,
-      { address, nodeOperatorId, module: core.moduleName },
+      { address, nodeOperatorId, module: sdk?.core.moduleName },
     ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
-      invariant(address);
-      invariant(nodeOperatorId !== undefined);
-      return operator.isOwner(nodeOperatorId, address);
+      invariant(sdk && address && nodeOperatorId !== undefined);
+      return sdk.operator.isOwner(nodeOperatorId, address);
     },
-    enabled: !!address && nodeOperatorId !== undefined,
+    enabled: !!sdk && !!address && nodeOperatorId !== undefined,
   });
+
+export const useOperatorIsOwner = (
+  nodeOperatorId: NodeOperatorId | undefined,
+  customAddress?: Address,
+  module?: MODULE_NAME,
+) => {
+  const { address: dappAddress } = useDappStatus();
+  const { sdk } = useTargetSmSDK(module);
+  return useQuery(
+    operatorIsOwnerQueryOptions(
+      sdk,
+      nodeOperatorId,
+      customAddress ?? dappAddress,
+    ),
+  );
 };

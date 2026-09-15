@@ -3,9 +3,7 @@ import {
   useAvailableOperators,
   useNodeOperator,
 } from 'modules/web3';
-
-const isSameOperator = (a: OperatorRef, b: OperatorRef | undefined) =>
-  !!b && a.nodeOperatorId === b.nodeOperatorId && a.module === b.module;
+import { isSameOperator } from '../utils';
 
 export const useNeedsOperatorSwitch = (operator: OperatorRef) => {
   const { nodeOperator } = useNodeOperator();

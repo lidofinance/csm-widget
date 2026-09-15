@@ -1,26 +1,32 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { queryOptions, useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK } from '../web3-provider';
+import { SmSDK, useTargetSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_REWARDS = ['operator-rewards'];
 
-export const useOperatorRewards = (
+export const operatorRewardsQueryOptions = (
+  sdk: SmSDK | undefined,
   nodeOperatorId: NodeOperatorId | undefined,
-) => {
-  const { rewards, core } = useSmSDK();
-
-  return useQuery({
+) =>
+  queryOptions({
     queryKey: [
       ...KEY_OPERATOR_REWARDS,
-      { nodeOperatorId, module: core.moduleName },
+      { nodeOperatorId, module: sdk?.core.moduleName },
     ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
-      invariant(nodeOperatorId !== undefined);
-      return rewards.getRewards(nodeOperatorId);
+      invariant(sdk && nodeOperatorId !== undefined);
+      return sdk.rewards.getRewards(nodeOperatorId);
     },
-    enabled: nodeOperatorId !== undefined,
+    enabled: !!sdk && nodeOperatorId !== undefined,
   });
+
+export const useOperatorRewards = (
+  nodeOperatorId: NodeOperatorId | undefined,
+  module?: MODULE_NAME,
+) => {
+  const { sdk } = useTargetSmSDK(module);
+  return useQuery(operatorRewardsQueryOptions(sdk, nodeOperatorId));
 };

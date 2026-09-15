@@ -5,7 +5,7 @@ import {
   NodeOperatorInfo,
   OperatorStakeSummary,
 } from '@lidofinance/lido-csm-sdk';
-import { bigMax, bigMin } from 'utils';
+import { bigMax, bigMin } from './bigint-utils';
 
 export type StakeAndKeysData = {
   activeStake: bigint;

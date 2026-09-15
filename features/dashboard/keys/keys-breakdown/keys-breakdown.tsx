@@ -8,11 +8,11 @@ import {
   useOperatorStakeSummary,
 } from 'modules/web3';
 import { FC, useMemo } from 'react';
-import { Plural, SquaredChip, Stack, StatusComment } from 'shared/components';
+import { IssuesChip, Stack, StatusComment } from 'shared/components';
+import { useKeysBreakdown } from 'shared/hooks';
 import { computeStakeData } from 'utils';
 import { KeysItem } from './keys-item';
-import { AccordionStyle, Alert, Check } from './styles';
-import { useKeysBreakdown } from './use-keys-breakdown';
+import { AccordionStyle } from './styles';
 
 export const KeysBreakdown: FC = () => {
   const { isCM, isCsmFamily } = useModule();
@@ -159,19 +159,3 @@ export const KeysBreakdown: FC = () => {
     </AccordionStyle>
   );
 };
-
-const IssuesChip: FC<{ issues?: number }> = ({ issues = 0 }) => (
-  <SquaredChip variant={issues > 0 ? 'error' : 'success'}>
-    {issues > 0 ? (
-      <>
-        <Alert />
-        <Plural value={issues} variants={['issue', 'issues']} showValue />
-      </>
-    ) : (
-      <>
-        <Check />
-        No issues
-      </>
-    )}
-  </SquaredChip>
-);
