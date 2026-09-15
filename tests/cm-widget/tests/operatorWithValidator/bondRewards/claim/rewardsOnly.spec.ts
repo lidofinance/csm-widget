@@ -5,13 +5,18 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { CLAIM_OPTION } from './claim.const';
+import { EPIC, FEATURE, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
-  'Bond & Rewards. Claim. Only Rewards.',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.bondRewards,
+    feature: FEATURE.claim,
+    story: 'Only rewards',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let noId: number;

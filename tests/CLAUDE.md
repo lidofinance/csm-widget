@@ -72,3 +72,65 @@ Always import from the shared file — never inline raw strings:
 import { CLAIM_OPTION } from './claim.const';
 // CLAIM_OPTION.ALL_TO_RA | CLAIM_OPTION.BOND_TO_RA | CLAIM_OPTION.REWARDS_TO_BOND
 ```
+
+## Qase
+
+Every test reports to Qase. Two rules, both enforced mechanically.
+
+### 1. Every test needs a Qase ID
+
+```typescript
+test(qase(315, 'Should show SDK amounts on balance cards'), ...)
+```
+
+A test without an ID makes the reporter create a new case on every run, in a folder derived from
+the file path. Never add IDs by hand — run the suite, let the reporter create the cases, then copy
+the assigned IDs back into the code.
+
+### 2. Every describe declares its place in the suite tree
+
+```typescript
+import { EPIC, FEATURE, STORY, qaseTree } from 'tests/cm-widget/consts/qase.const';
+
+test.describe(
+  'Bond & Rewards. Claim. Penalty state.',
+  qaseTree({
+    epic: EPIC.bondRewards,
+    feature: FEATURE.claim,
+    story: STORY.penalty,
+    tag: [Tags.forked],
+  }),
+  () => { ... },
+);
+```
+
+- Values come **only** from that module's map (`tests/<module>-widget/consts/qase.const.ts`).
+  A literal string does not compile. Need a new section — add it to the map; Qase creates the
+  folder on the first run.
+- Maps are per module: CSM and CM are separate Qase projects with separate trees.
+- `qaseTree` on `describe`, never `qase.suite()` in the test body — annotations win over it, and
+  the body does not run for a skipped test.
+
+### Epic / feature / story
+
+- **Epic** — product area (`Bond & Rewards`).
+- **Feature** — capability (`Claim`).
+- **Story** — the scenario a spec file covers, usually 1:1 with the file (`Penalty`).
+
+Three levels, no deeper. Story is not a place to encode operator type, role, or balance state as
+extra nesting — that multiplies the tree. When the same check runs against several contexts, the
+context is a **parameter**:
+
+```typescript
+qase.parameters({ token: tokenName });
+```
+
+Required whenever several tests share one Qase ID (a `forEach` loop, or two specs pointing at the
+same case) — without it the results overwrite each other in Qase.
+
+### Tags
+
+`{ tag: [Tags.smoke] }` is enough. The `reportTagsToQase` auto-fixture mirrors Playwright tags into
+Qase; the reporter itself never reads `test.tags`. Do not call `qase.tags()` by hand.
+
+The markup procedure, the story-vs-parameter rule and the reporter's traps are in `QASE.md`.

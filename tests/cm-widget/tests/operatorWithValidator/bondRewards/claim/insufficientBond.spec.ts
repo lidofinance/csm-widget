@@ -5,6 +5,7 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
 import { CLAIM_OPTION } from './claim.const';
+import { EPIC, FEATURE, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -12,8 +13,12 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 const ONE_ETH = 1_000_000_000_000_000_000n;
 
 test.describe(
-  'Bond & Rewards. Claim. Insufficient bond with rewards.',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.bondRewards,
+    feature: FEATURE.claim,
+    story: 'Insufficient bond',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let noId: number;

@@ -3,6 +3,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
+import { EPIC, FEATURE, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { formatEther } from 'viem';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
@@ -11,8 +12,12 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 const ONE_ETH = 1_000_000_000_000_000_000n;
 
 test.describe(
-  'Bond & Rewards. Claim. Nothing to claim. Base state.',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.bondRewards,
+    feature: FEATURE.claim,
+    story: 'Nothing to claim',
+    tag: [Tags.forked],
+  }),
   () => {
     test.beforeAll(({ useFork }) => {
       test.skip(!useFork, 'Test suite runs only on forked network');
@@ -100,8 +105,12 @@ test.describe(
 );
 
 test.describe(
-  'Bond & Rewards. Claim. Nothing to claim. Insufficient bond state.',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.bondRewards,
+    feature: FEATURE.claim,
+    story: 'Nothing to claim (insufficient bond)',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
 
