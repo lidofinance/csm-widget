@@ -134,26 +134,27 @@ test.describe('Dashboard. Roles.', { tag: [Tags.forked] }, () => {
     },
   );
 
-  test('Should navigate to roles settings on header link click', async ({
-    widgetService,
-  }) => {
-    const { rolesSection } = widgetService.dashboardPage;
+  test(
+    qase(465, 'Should navigate to roles settings on header link click'),
+    async ({ widgetService }) => {
+      const { rolesSection } = widgetService.dashboardPage;
 
-    await test.step('Click section header link and check Matomo event', async () => {
-      await Promise.all([
-        matomoEventService.waitForEvent(
-          'e_n',
-          'cm_widget_dashboard_roles_section',
-        ),
-        rolesSection.sectionHeaderLink.click(),
-      ]);
-    });
+      await test.step('Click section header link and check Matomo event', async () => {
+        await Promise.all([
+          matomoEventService.waitForEvent(
+            'e_n',
+            'cm_widget_dashboard_roles_section',
+          ),
+          rolesSection.sectionHeaderLink.click(),
+        ]);
+      });
 
-    await test.step('Check navigation to roles settings page', async () => {
-      await expect(
-        widgetService.page,
-        'Should navigate to roles settings page',
-      ).toHaveURL(/\/settings\/roles/);
-    });
-  });
+      await test.step('Check navigation to roles settings page', async () => {
+        await expect(
+          widgetService.page,
+          'Should navigate to roles settings page',
+        ).toHaveURL(/\/settings\/roles/);
+      });
+    },
+  );
 });

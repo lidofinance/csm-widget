@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import {
   LOW_TIMEOUT,
@@ -41,7 +42,7 @@ test.describe('Settings. Splits. Transaction.', { tag: [Tags.forked] }, () => {
   });
 
   test(
-    'Should save splits and send Matomo form events',
+    qase(473, 'Should save splits and send Matomo form events'),
     { tag: [Tags.smoke] },
     async ({ widgetService }) => {
       const { splitsPage } = widgetService.settingsPage;

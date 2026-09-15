@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
@@ -54,41 +55,42 @@ test.describe(
       if (snapshotId) await evmNode.revert(snapshotId);
     });
 
-    test('Should create curated operator and send Matomo form events', async ({
-      widgetService,
-    }) => {
-      const { step4 } = widgetService.createNodeOperatorPage;
+    test(
+      qase(463, 'Should create curated operator and send Matomo form events'),
+      async ({ widgetService }) => {
+        const { step4 } = widgetService.createNodeOperatorPage;
 
-      await test.step('Click "Create Node Operator" and check Matomo start event', async () => {
-        await Promise.all([
-          matomoEventService.waitForEvent(
-            'e_n',
-            'cm_widget_submit_form_create_curated_operator_start',
-          ),
-          step4.createButton.click(),
-        ]);
-      });
+        await test.step('Click "Create Node Operator" and check Matomo start event', async () => {
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_submit_form_create_curated_operator_start',
+            ),
+            step4.createButton.click(),
+          ]);
+        });
 
-      await test.step('Confirm transaction and check Matomo success event', async () => {
-        await widgetService.page.waitForSelector(
-          'text=Creating Curated Node Operator',
-          { timeout: STAGE_WAIT_TIMEOUT },
-        );
-        await Promise.all([
-          matomoEventService.waitForEvent(
-            'e_n',
-            'cm_widget_submit_form_create_curated_operator_success',
+        await test.step('Confirm transaction and check Matomo success event', async () => {
+          await widgetService.page.waitForSelector(
+            'text=Creating Curated Node Operator',
             { timeout: STAGE_WAIT_TIMEOUT },
-          ),
-          widgetService.walletPage.confirmTx(),
-        ]);
-      });
+          );
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_submit_form_create_curated_operator_success',
+              { timeout: STAGE_WAIT_TIMEOUT },
+            ),
+            widgetService.walletPage.confirmTx(),
+          ]);
+        });
 
-      await test.step('Success message is shown', async () => {
-        await expect(
-          widgetService.page.getByText('Node Operator has been created'),
-        ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
-      });
-    });
+        await test.step('Success message is shown', async () => {
+          await expect(
+            widgetService.page.getByText('Node Operator has been created'),
+          ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
+        });
+      },
+    );
   },
 );

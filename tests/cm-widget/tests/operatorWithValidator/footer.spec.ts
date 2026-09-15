@@ -1,4 +1,5 @@
 import { expect, Locator } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
@@ -56,29 +57,33 @@ test.describe('Footer.', { tag: [Tags.forked] }, () => {
     await widgetService.dashboardPage.open();
   });
 
-  test('Should display footer links, send Matomo events and open correct URLs', async ({
-    widgetService,
-  }) => {
-    const { footerElement } = widgetService;
+  test(
+    qase(
+      466,
+      'Should display footer links, send Matomo events and open correct URLs',
+    ),
+    async ({ widgetService }) => {
+      const { footerElement } = widgetService;
 
-    for (const { name, link, event, url } of FOOTER_LINKS) {
-      await test.step(`"${name}" — visible, Matomo event and opened URL`, async () => {
-        await expect(link(footerElement)).toBeVisible();
-        await expect(link(footerElement)).toHaveAttribute(
-          'href',
-          new RegExp(url),
-        );
+      for (const { name, link, event, url } of FOOTER_LINKS) {
+        await test.step(`"${name}" — visible, Matomo event and opened URL`, async () => {
+          await expect(link(footerElement)).toBeVisible();
+          await expect(link(footerElement)).toHaveAttribute(
+            'href',
+            new RegExp(url),
+          );
 
-        const [newPage] = await Promise.all([
-          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
-          matomoEventService.waitForEvent('e_n', event),
-          link(footerElement).click(),
-        ]);
+          const [newPage] = await Promise.all([
+            widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
+            matomoEventService.waitForEvent('e_n', event),
+            link(footerElement).click(),
+          ]);
 
-        if (name !== 'Feedback form') {
-          expect(newPage.url()).toContain(url);
-        }
-      });
-    }
-  });
+          if (name !== 'Feedback form') {
+            expect(newPage.url()).toContain(url);
+          }
+        });
+      }
+    },
+  );
 });

@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
@@ -30,7 +31,7 @@ test.describe(
     });
 
     test(
-      'Should add bond and send Matomo form events',
+      qase(464, 'Should add bond and send Matomo form events'),
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { addBond } = widgetService.bondRewardsPage;

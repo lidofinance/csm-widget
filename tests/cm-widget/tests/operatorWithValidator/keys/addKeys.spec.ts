@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
@@ -29,7 +30,7 @@ test.describe(
     });
 
     test(
-      'Should add keys successfully',
+      qase(467, 'Should add keys successfully'),
       { tag: [Tags.smoke] },
       async ({ widgetService, keysGeneratorService }) => {
         const { submitPage } = widgetService.keysPage;
