@@ -1,4 +1,5 @@
 import { test } from '../../../test.fixture';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.describe('Dashboard. Keys', async () => {
@@ -9,16 +10,17 @@ test.describe('Dashboard. Keys', async () => {
     await widgetService.dashboardPage.open();
   });
 
-  test('Should open Keys page after click to section arrow', async ({
-    widgetService,
-  }) => {
-    await Promise.all([
-      matomoEventService.waitForEvent(
-        'e_n',
-        'csm_widget_dashboard_keys_section',
-      ),
-      widgetService.page.waitForURL('**/keys/view'),
-      widgetService.dashboardPage.keysSection.sectionHeaderLink.click(),
-    ]);
-  });
+  test(
+    qase(422, 'Should open Keys page after click to section arrow'),
+    async ({ widgetService }) => {
+      await Promise.all([
+        matomoEventService.waitForEvent(
+          'e_n',
+          'csm_widget_dashboard_keys_section',
+        ),
+        widgetService.page.waitForURL('**/keys/view'),
+        widgetService.dashboardPage.keysSection.sectionHeaderLink.click(),
+      ]);
+    },
+  );
 });
