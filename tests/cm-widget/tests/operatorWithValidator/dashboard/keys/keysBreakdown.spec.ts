@@ -10,7 +10,7 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 test.describe(
   ...qaseTree({
     epic: EPIC.dashboard,
-    feature: 'Keys stats',
+    feature: 'Keys',
     story: 'Keys breakdown',
     tag: [Tags.forked],
   }),

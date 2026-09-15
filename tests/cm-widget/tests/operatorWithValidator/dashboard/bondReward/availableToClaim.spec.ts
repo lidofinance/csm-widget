@@ -12,7 +12,7 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 test.describe(
   ...qaseTree({
     epic: EPIC.dashboard,
-    feature: 'Bond stats',
+    feature: 'Bond & Rewards',
     story: 'Available to claim',
     tag: [Tags.forked],
   }),
