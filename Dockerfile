@@ -42,7 +42,8 @@ FROM node-base AS runner
 ARG BASE_PATH=""
 ARG DEFAULT_CHAIN="1"
 
-ENV NEXT_TELEMETRY_DISABLED=1 \
+ENV NODE_ENV=production \
+  NEXT_TELEMETRY_DISABLED=1 \
   BASE_PATH=$BASE_PATH \
   DEFAULT_CHAIN=$DEFAULT_CHAIN
 
@@ -74,4 +75,6 @@ EXPOSE 3000
 HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
   CMD wget -q -O /dev/null "http://localhost:${PORT:-3000}/api/health" || exit 1
 
-CMD ["yarn", "start"]
+# node must be PID 1 to receive SIGTERM and exit truthfully; yarn and `node --run`
+# both forward the signal but exit non-zero. Mirrors the `start` script — keep in sync.
+CMD ["node", "-r", "next-logger", "--no-warnings=ExperimentalWarning", "server.mjs"]
