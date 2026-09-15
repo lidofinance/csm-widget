@@ -1,4 +1,5 @@
 import { test } from '../../test.fixture';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { KeysPage } from '../../../pages';
 import { Tags, TokenSymbol } from '../../../../shared/consts/common.const';
 import { expect } from '@playwright/test';
@@ -9,8 +10,12 @@ import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state'
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
-  'Operator with keys. Common suite.',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.keys,
+    feature: 'Submit keys',
+    story: 'Upload limits',
+    tag: [Tags.forked],
+  }),
   () => {
     let keysPage: KeysPage;
     let keysGeneratorService: KeysGeneratorService;

@@ -3,7 +3,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
-import { EPIC, FEATURE, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { formatEther } from 'viem';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
@@ -14,7 +14,7 @@ const ONE_ETH = 1_000_000_000_000_000_000n;
 test.describe(
   ...qaseTree({
     epic: EPIC.bondRewards,
-    feature: FEATURE.claim,
+    feature: 'Claim',
     story: 'Nothing to claim',
     tag: [Tags.forked],
   }),
@@ -107,7 +107,7 @@ test.describe(
 test.describe(
   ...qaseTree({
     epic: EPIC.bondRewards,
-    feature: FEATURE.claim,
+    feature: 'Claim',
     story: 'Nothing to claim (insufficient bond)',
     tag: [Tags.forked],
   }),

@@ -4,13 +4,18 @@ import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../test.fixture';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
-  'Operator with validator. Keys. Add keys.',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.keys,
+    feature: 'Submit keys',
+    story: 'Transaction',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;

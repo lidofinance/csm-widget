@@ -5,7 +5,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 import { test } from '../../../test.fixture';
-import { EPIC, FEATURE, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { formatEther } from 'viem';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 import { MatomoService } from 'tests/shared/services/matomo.service';
@@ -17,7 +17,7 @@ const BOND_EXCESS_ETH = '2';
 test.describe(
   ...qaseTree({
     epic: EPIC.bondRewards,
-    feature: FEATURE.claim,
+    feature: 'Claim',
     story: 'Token & amount',
     tag: [Tags.forked],
   }),

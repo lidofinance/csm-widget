@@ -4,7 +4,8 @@ import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Tags } from 'tests/shared/consts/common.const';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { TxModal } from 'tests/cm-widget/pages/elements/common/element.txProgressModal';
-import { test } from '../test.fixture';
+import { test } from '../../test.fixture';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
@@ -14,8 +15,12 @@ const OPERATOR_NAME = 'Test Operator';
 const OPERATOR_DESCRIPTION = 'Test description';
 
 test.describe(
-  'Operator without validator. Address blacklist validation',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.createOperator,
+    feature: 'New operator',
+    story: 'Address blacklist',
+    tag: [Tags.forked],
+  }),
   () => {
     let txModal: TxModal;
 

@@ -1,6 +1,7 @@
 import { generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import { test } from './test.fixture';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { WelcomePage } from '../pages';
 import { PAGE_WAIT_TIMEOUT } from '../../shared/consts/timeouts';
 import { expect } from '@playwright/test';
@@ -11,8 +12,11 @@ import { MatomoService } from 'tests/shared/services/matomo.service';
 test.use({ secretPhrase: generateMnemonic(english, 128) });
 
 test.describe(
-  'Welcome page with connected wallet without operator',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.landing,
+    story: 'Wallet without operator',
+    tag: [Tags.forked],
+  }),
   () => {
     let matomoEventService: MatomoService;
 

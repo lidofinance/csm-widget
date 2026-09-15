@@ -1,4 +1,5 @@
 import { test } from '../../test.fixture';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { KeysPage } from '../../../pages';
 import { Tags } from '../../../../shared/consts/common.const';
 import { expect } from '@playwright/test';
@@ -20,8 +21,12 @@ const omitField = <K extends keyof DepositKey>(
 };
 
 test.describe(
-  'Operator with keys. Validation keys. JSON tab',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.keys,
+    feature: 'Submit keys',
+    story: 'JSON tab',
+    tag: [Tags.forked],
+  }),
   () => {
     let keysPage: KeysPage;
     let keysGeneratorService: KeysGeneratorService;

@@ -8,7 +8,7 @@ import {
 } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../../test.fixture';
-import { EPIC, FEATURE, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -16,7 +16,7 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 test.describe(
   ...qaseTree({
     epic: EPIC.bondRewards,
-    feature: FEATURE.claim,
+    feature: 'Claim',
     story: 'Transaction',
     tag: [Tags.forked],
   }),

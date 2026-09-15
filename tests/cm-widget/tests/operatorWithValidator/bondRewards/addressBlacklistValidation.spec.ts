@@ -6,6 +6,7 @@ import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { TxModal } from 'tests/cm-widget/pages/elements/common/element.txProgressModal';
 import { test } from '../../test.fixture';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -13,8 +14,13 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 const BOND_EXCESS_ETH = '2';
 
 test.describe(
-  'Bond & Rewards. Address blacklist validation',
-  { tag: [Tags.forked] },
+  ...qaseTree({
+    epic: EPIC.bondRewards,
+    // spans Add bond and Claim, so it belongs to the epic itself
+    feature: null,
+    story: 'Address blacklist',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let txModal: TxModal;

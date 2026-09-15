@@ -11,12 +11,12 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 const BOND_EXCESS_ETH = '2';
 
 import { CLAIM_OPTION } from './claim.const';
-import { EPIC, FEATURE, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
 
 test.describe(
   ...qaseTree({
     epic: EPIC.bondRewards,
-    feature: FEATURE.claim,
+    feature: 'Claim',
     story: 'Penalty',
     tag: [Tags.forked],
   }),
