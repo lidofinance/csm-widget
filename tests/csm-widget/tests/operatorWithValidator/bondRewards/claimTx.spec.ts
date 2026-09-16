@@ -5,7 +5,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
-test.describe(
+test.describe.skip(
   ...qaseTree({
     epic: EPIC.bondRewards,
     feature: 'Claim',

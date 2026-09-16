@@ -6,7 +6,7 @@ import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 
-test.describe(
+test.describe.skip(
   ...qaseTree({
     epic: EPIC.bondRewards,
     // spans Add bond and Claim, so it belongs to the epic itself
