@@ -1,12 +1,12 @@
 import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { TxModal } from 'tests/csm-widget/pages/elements/common/element.txProgressModal';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.operatorType,
     // covers ICS sign-in and surveys, so it belongs to the epic itself
     feature: null,

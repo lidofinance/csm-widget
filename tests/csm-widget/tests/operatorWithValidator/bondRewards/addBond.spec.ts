@@ -1,13 +1,13 @@
 /* eslint-disable no-irregular-whitespace */
 import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.bondRewards,
     feature: 'Add bond',
     story: 'Token & amount',

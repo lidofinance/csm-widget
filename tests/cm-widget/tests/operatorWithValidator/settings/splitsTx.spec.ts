@@ -9,13 +9,13 @@ import {
 import { generateAddress } from 'tests/shared/helpers/accountData';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.settings,
     feature: 'Splits',
     story: 'Transaction',

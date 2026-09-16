@@ -1,6 +1,6 @@
 import { trimAddress } from '@lidofinance/address';
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { mnemonicToAccount } from 'viem/accounts';
@@ -9,7 +9,7 @@ import { generateAddress } from 'tests/shared/helpers/accountData';
 import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.roles,
     feature: 'Rewards address',
     story: 'With proposed address',

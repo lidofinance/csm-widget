@@ -1,7 +1,7 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 
 const keysStatusesExpectedComments = [
@@ -30,7 +30,7 @@ const keysStatusesExpectedComments = [
 ];
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.keys,
     feature: 'View keys',
     story: 'Key statuses',

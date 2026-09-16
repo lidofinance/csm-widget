@@ -12,7 +12,17 @@ type SuiteDetails = {
   annotation: { type: string; description: string }[];
 };
 
-export const createQaseTree =
+/**
+ * Builds the two `test.describe` arguments from the suite tree:
+ * `{ epic: 'Bond & Rewards', feature: 'Claim', story: 'Penalty' }` becomes the
+ * title `'Bond & Rewards. Claim. Penalty.'` and one QaseSuite annotation per
+ * level, so it is spread into the describe:
+ *
+ * ```ts
+ * test.describe(...suite({ epic, feature, story }), () => { ... });
+ * ```
+ */
+export const createSuite =
   <Epics extends Record<string, EpicNode>>() =>
   <Epic extends Epics[keyof Epics]>(
     options: {

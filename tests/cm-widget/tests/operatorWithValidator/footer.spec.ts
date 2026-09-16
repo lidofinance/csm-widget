@@ -4,7 +4,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 import { FooterElement } from 'tests/cm-widget/pages/elements/common/element.footer';
 
@@ -51,7 +51,7 @@ const FOOTER_LINKS: FooterLinkCase[] = [
 ];
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.navigation,
     story: 'Footer',
     tag: [Tags.forked],

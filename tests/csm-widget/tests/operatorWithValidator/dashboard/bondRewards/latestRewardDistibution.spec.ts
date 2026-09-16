@@ -1,7 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { formatBalance } from 'utils/format-balance';
 import {
@@ -12,7 +12,7 @@ import {
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.dashboard,
     feature: 'Bond & Rewards',
     story: 'Latest reward distribution',

@@ -2,7 +2,7 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { mnemonicToAccount } from 'viem/accounts';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { Tags } from 'tests/shared/consts/common.const';
@@ -12,7 +12,7 @@ import { MatomoService } from 'tests/shared/services/matomo.service';
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.dashboard,
     feature: 'Roles',
     story: 'Views address',

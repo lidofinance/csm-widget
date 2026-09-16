@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { trimAddress } from '@lidofinance/address';
 import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
@@ -8,7 +8,7 @@ import { generateAddress } from 'tests/shared/helpers/accountData';
 import { Tags } from 'tests/shared/consts/common.const';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.roles,
     feature: 'Rewards address',
     story: 'Transaction. Propose',

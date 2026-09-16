@@ -5,7 +5,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
@@ -15,7 +15,7 @@ const OPERATOR_NAME = 'Test Operator';
 const OPERATOR_DESCRIPTION = 'Test description';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Curated operator transaction',

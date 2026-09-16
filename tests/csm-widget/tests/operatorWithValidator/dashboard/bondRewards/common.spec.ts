@@ -1,10 +1,10 @@
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.dashboard,
     feature: 'Bond & Rewards',
     story: 'Section navigation',

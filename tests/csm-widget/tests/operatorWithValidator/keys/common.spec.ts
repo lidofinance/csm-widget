@@ -1,5 +1,5 @@
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
@@ -9,7 +9,7 @@ import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.servic
 test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.keys,
     feature: 'Submit keys',
     story: 'Upload limits (empty operator)',

@@ -1,5 +1,5 @@
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
@@ -11,7 +11,7 @@ const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.operatorType,
     feature: 'IDVTC',
     story: 'Claim transaction',

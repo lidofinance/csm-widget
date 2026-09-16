@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
@@ -11,7 +11,7 @@ const VALID_ADDRESS = '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045';
 const INVALID_ADDRESS = '0xinvalid';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.settings,
     feature: 'Rewards claimer',
     story: 'Form',

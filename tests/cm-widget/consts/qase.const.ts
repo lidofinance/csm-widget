@@ -1,4 +1,4 @@
-import { createQaseTree } from 'tests/shared/helpers/qaseTree';
+import { createSuite } from 'tests/shared/helpers/suite';
 
 export const EPIC = {
   landing: {
@@ -35,4 +35,4 @@ export const EPIC = {
   },
 } as const;
 
-export const qaseTree = createQaseTree<typeof EPIC>();
+export const suite = createSuite<typeof EPIC>();

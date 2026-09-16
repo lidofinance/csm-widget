@@ -1,5 +1,5 @@
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { mnemonicToAccount } from 'viem/accounts';
@@ -7,7 +7,7 @@ import { mnemonicToAccount } from 'viem/accounts';
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.operatorType,
     feature: 'ICS',
     story: 'Sign in',

@@ -93,10 +93,10 @@ tree before a test has an ID creates a second case instead of moving the first.
 ### 2. Every describe declares its place in the suite tree
 
 ```typescript
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Penalty',
@@ -106,10 +106,15 @@ test.describe(
 );
 ```
 
-`qaseTree` is **spread** into `describe`: it returns `[title, details]` and derives the title from
+`suite` is **spread** into `describe`: it returns `[title, details]` and derives the title from
 the levels — `'Bond & Rewards. Claim. Penalty.'`. Never write the title by hand; there is nothing
 to keep in sync that way. Two describes in one file therefore need two distinct stories, otherwise
 they generate the same title.
+
+A plain `test.describe('Header', ...)` is for grouping **inside** a tree describe: those nested
+titles are not tree levels. A top-level describe that does not spread `suite(...)` is an ESLint
+error (`no-restricted-syntax` in `.eslintrc.json`, scoped to `tests/**/*.spec.ts`), so a spec
+cannot silently fall out of the tree.
 
 - `epic` and `feature` come **only** from that module's map
   (`tests/<module>-widget/consts/qase.const.ts`). Each epic carries its own `features`, so
@@ -123,7 +128,7 @@ they generate the same title.
   right parent and is obvious in Qase; a typo in an epic or feature would silently scatter many
   files, which is why those stay typed.
 - Maps are per module: CSM and CM are separate Qase projects with separate trees.
-- `qaseTree` on `describe`, never `qase.suite()` in the test body — annotations win over it, and
+- `suite` on `describe`, never `qase.suite()` in the test body — annotations win over it, and
   the body does not run for a skipped test.
 
 ### Epic / feature / story

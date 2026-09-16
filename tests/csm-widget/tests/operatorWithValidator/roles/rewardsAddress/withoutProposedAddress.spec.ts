@@ -1,6 +1,6 @@
 import { trimAddress } from '@lidofinance/address';
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -9,7 +9,7 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.roles,
     feature: 'Rewards address',
     story: 'Without proposed address',

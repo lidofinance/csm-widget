@@ -1,7 +1,7 @@
 /* eslint-disable no-empty-pattern */
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 import { OPERATOR_TYPE_METADATA } from '../../../../shared/consts/operatorTypes.const';
 import { CreateOperatorStep1Page } from '../../../pages/tabs/createNodeOperator/step1.page';
@@ -12,7 +12,7 @@ import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state'
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Step 1. Operator type',

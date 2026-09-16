@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { TxModal } from 'tests/csm-widget/pages/elements/common/element.txProgressModal';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
@@ -10,7 +10,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.keys,
     feature: 'Submit keys',
     story: 'Address blacklist (no operator)',

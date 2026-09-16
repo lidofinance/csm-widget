@@ -1,5 +1,5 @@
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 
 import { mnemonicToAccount } from 'viem/accounts';
@@ -9,7 +9,7 @@ import { InboxRequestsPage } from 'tests/csm-widget/pages/tabs/roles';
 import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.roles,
     feature: 'Inbox requests',
     story: 'Accept request',

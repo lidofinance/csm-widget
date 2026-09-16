@@ -1,5 +1,5 @@
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { KeysPage } from '../../../pages';
 import { TokenSymbol } from '../../../../shared/consts/common.const';
 import { expect } from '@playwright/test';
@@ -12,7 +12,7 @@ import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.keys,
     feature: 'Submit keys',
     story: 'Duplicated keys',

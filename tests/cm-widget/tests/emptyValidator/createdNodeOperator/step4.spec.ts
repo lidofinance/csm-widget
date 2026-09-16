@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
@@ -16,7 +16,7 @@ const OPERATOR_NAME = 'Test Operator';
 const OPERATOR_DESCRIPTION = 'Test description';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Step 4. Summary',

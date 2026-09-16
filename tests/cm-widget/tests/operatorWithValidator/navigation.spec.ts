@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { NavigationPage } from '../../pages/navigation.page';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
@@ -67,7 +67,7 @@ const DELETE_KEYS_CARDS = [
 ];
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.navigation,
     story: 'Operator with validator',
     tag: [Tags.forked],

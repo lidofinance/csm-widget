@@ -1,13 +1,13 @@
 import { WelcomePage } from 'tests/csm-widget/pages';
 import { test } from './test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { expect } from '@playwright/test';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.landing,
     story: 'Without wallet',
   }),

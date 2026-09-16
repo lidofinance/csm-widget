@@ -6,7 +6,7 @@ import {
   PAGE_WAIT_TIMEOUT,
 } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { generateAddress } from 'tests/shared/helpers/accountData';
@@ -16,7 +16,7 @@ test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 const VALID_ADDRESS = generateAddress(true);
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.settings,
     feature: 'Rewards claimer',
     story: 'Transaction',

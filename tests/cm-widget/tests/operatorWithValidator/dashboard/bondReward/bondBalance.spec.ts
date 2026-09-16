@@ -1,7 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { USD_AMOUNT_REGEX } from '../../../../../shared/consts/regexp.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
@@ -11,7 +11,7 @@ import { MatomoService } from 'tests/shared/services/matomo.service';
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.dashboard,
     feature: 'Bond & Rewards',
     story: 'Bond balance',

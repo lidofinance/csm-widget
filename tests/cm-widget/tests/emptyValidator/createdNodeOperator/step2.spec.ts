@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { expect, Locator } from '@playwright/test';
 import { CreateOperatorStep2Page } from '../../../pages/tabs/createNodeOperator';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
@@ -64,7 +64,7 @@ const addressFields: AddressField[] = [
 ];
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Step 2. Addresses',

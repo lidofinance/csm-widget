@@ -1,12 +1,12 @@
 import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 
 test.describe.skip(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Transaction',

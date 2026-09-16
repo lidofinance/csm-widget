@@ -1,5 +1,5 @@
 import { test } from '../../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
@@ -10,7 +10,7 @@ const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase: secretPhrase });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.operatorType,
     feature: 'ICS',
     story: 'Apply. Socials',

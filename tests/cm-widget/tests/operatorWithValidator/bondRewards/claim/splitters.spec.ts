@@ -6,7 +6,7 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { mnemonicToAccount } from 'viem/accounts';
 import { CLAIM_OPTION } from './claim.const';
-import { EPIC, qaseTree } from 'tests/cm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -17,7 +17,7 @@ const STANDARD_SPLITS = [{ share: '50' }, { share: '25' }, { share: '25' }];
 const BOND_EXCESS_ETH = '2';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Splitters',

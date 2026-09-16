@@ -1,5 +1,5 @@
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { Tags } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
@@ -30,7 +30,7 @@ const invalidTextValidation = [
 ];
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.keys,
     feature: 'Submit keys',
     story: 'JSON tab',

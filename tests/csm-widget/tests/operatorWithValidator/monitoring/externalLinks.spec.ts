@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
@@ -12,7 +12,7 @@ const isProdOrStaging = (standType: string) =>
   standType === 'prod' || standType === 'staging';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.monitoring,
     story: 'External links',
   }),

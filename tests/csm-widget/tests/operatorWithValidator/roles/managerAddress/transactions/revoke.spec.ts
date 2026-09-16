@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/shared/helpers/accountData';
@@ -8,7 +8,7 @@ import { trimAddress } from '@lidofinance/address';
 import { mnemonicToAccount } from 'viem/accounts';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.roles,
     feature: 'Manager address',
     story: 'Transaction. Revoke',

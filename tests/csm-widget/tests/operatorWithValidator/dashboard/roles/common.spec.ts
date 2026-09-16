@@ -1,10 +1,10 @@
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.dashboard,
     // a single spec on its own section, so no feature level
     feature: null,

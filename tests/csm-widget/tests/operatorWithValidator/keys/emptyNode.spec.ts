@@ -1,14 +1,14 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.keys,
     // spans Remove keys and View keys, so it belongs to the epic itself
     feature: null,

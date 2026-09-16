@@ -1,5 +1,5 @@
 import { test } from '../../../test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { Tags } from 'tests/shared/consts/common.const';
@@ -7,7 +7,7 @@ import { generateAddress } from 'tests/shared/helpers/accountData';
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.roles,
     feature: 'Manager address',
     story: 'Reset',

@@ -1,5 +1,5 @@
 import { test } from './test.fixture';
-import { EPIC, qaseTree } from 'tests/csm-widget/consts/qase.const';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
@@ -12,7 +12,7 @@ const ICS = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS];
 const IDVTC = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_IDVTC];
 
 test.describe(
-  ...qaseTree({
+  ...suite({
     epic: EPIC.operatorType,
     feature: null,
     story: 'Type cards',
