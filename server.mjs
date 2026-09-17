@@ -1,6 +1,7 @@
 import { createServer } from 'http';
 import { parse } from 'url';
 import next from 'next';
+import { registerShutdownSignals } from './scripts/shutdown.mjs';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -69,6 +70,7 @@ app
     server.headersTimeout = 10_000;
     server.requestTimeout = 30_000;
     server.maxHeadersCount = 50;
+    registerShutdownSignals(server);
   })
   .catch((err) => {
     console.error(err);

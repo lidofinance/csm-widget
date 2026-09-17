@@ -1,69 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getRPCCheckState } from '../../scripts/startup-checks/rpc.mjs';
 
-type RPCCheckResult = {
-  domain: string;
-  chainId: number;
-  success: boolean;
-};
+type ReadyResponse = { status: 'ready' };
 
-type ChainSummary = { ok: number; total: number };
-
-type StartingResponse = { status: 'starting' };
-type MisconfiguredResponse = { status: 'misconfigured'; reason: string };
-type ReadyResponse = {
-  status: 'ready' | 'degraded';
-  chains: Record<string, ChainSummary>;
-};
-
-type State = {
-  started: boolean;
-  resolved: boolean;
-  result: RPCCheckResult[] | null;
-  reason: string | null;
-};
-
-const summarize = (results: RPCCheckResult[]): Record<string, ChainSummary> => {
-  const chains: Record<string, ChainSummary> = {};
-  for (const { chainId, success } of results) {
-    const key = String(chainId);
-    const bucket = chains[key] ?? (chains[key] = { ok: 0, total: 0 });
-    bucket.total += 1;
-    if (success) bucket.ok += 1;
-  }
-  return chains;
-};
-
-const ready = (
-  _req: NextApiRequest,
-  res: NextApiResponse<
-    StartingResponse | MisconfiguredResponse | ReadyResponse
-  >,
-) => {
+// Readiness must reflect only this pod's health. Upstream RPC status is deliberately
+// excluded: it is identical across all replicas, so failing on it would drain the
+// whole deployment instead of degrading.
+const ready = (_req: NextApiRequest, res: NextApiResponse<ReadyResponse>) => {
   res.setHeader('Cache-Control', 'no-store');
-
-  const { started, resolved, result, reason }: State = getRPCCheckState();
-
-  if (!started || !resolved) {
-    res.status(503).json({ status: 'starting' });
-    return;
-  }
-
-  if (result === null) {
-    res.status(503).json({
-      status: 'misconfigured',
-      reason: reason ?? 'unknown',
-    });
-    return;
-  }
-
-  const chains = summarize(result);
-  const degraded = Object.values(chains).some((c) => c.ok === 0);
-
-  res.status(degraded ? 503 : 200).json({
-    status: degraded ? 'degraded' : 'ready',
-    chains,
-  });
+  res.status(200).json({ status: 'ready' });
 };
 
 export default ready;
