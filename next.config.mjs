@@ -38,14 +38,28 @@ if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
-  '/manifest.json',
-  '/manifest-cm.json',
-  '/favicon:size*',
+  // documents — every gSSP page returns the same props for every visitor
   '/',
+  '/group',
+  '/monitoring',
+  '/wrapped-2025/:path*',
+  '/bond/:path*',
+  '/create/:path*',
+  '/delayed-penalty/:path*',
+  '/idvtc/:path*',
+  '/keys/:path*',
+  '/settings/:path*',
+  '/surveys/:path*',
+  '/type/:path*',
+  // assets — unhashed, so they share the document TTL
+  '/manifest.json',
+  '/favicon:size*',
+  '/apple-touch-icon.png',
+  '/:module(csm|cm)-preview.png',
   '/runtime/window-env.js',
 ];
 export const CACHE_CONTROL_VALUE =
-  'public, max-age=15, s-max-age=30, stale-if-error=604800, stale-while-revalidate=172800';
+  'public, max-age=15, s-maxage=30, stale-if-error=86400, stale-while-revalidate=60';
 
 const withBundleAnalyzer = NextBundleAnalyzer({
   enabled: process.env.ANALYZE_BUNDLE ?? false,

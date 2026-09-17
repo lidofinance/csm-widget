@@ -9,7 +9,7 @@
     "dev:cm": "MODULE=cm next dev",
     "build": "next build",
     "build:analyze": "ANALYZE_BUNDLE=true next build",
-    "start": "NODE_OPTIONS='-r next-logger' next start",
+    "start": "NODE_ENV=production node -r next-logger --no-warnings=ExperimentalWarning server.mjs",
     "lint": "eslint --ext ts,tsx,js,mjs .",
     "lint:fix": "yarn lint --fix",
     "types": "tsc --noEmit",

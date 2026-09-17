@@ -4,14 +4,12 @@ import { type Abi, getAddress, toFunctionSelector } from 'viem';
 import { getStatusLabel } from '@lidofinance/api-metrics';
 import {
   RequestWrapper,
-  wrapRequest as wrapNextRequest,
-  cacheControl,
   DefaultErrorHandlerArgs,
   DEFAULT_API_ERROR_MESSAGE,
 } from '@lidofinance/next-api-wrapper';
 import { rateLimitWrapper } from '@lidofinance/next-ip-rate-limit';
 
-import { config, secretConfig } from 'config';
+import { secretConfig } from 'config';
 
 import {
   METRIC_CONTRACT_ADDRESSES,
@@ -250,15 +248,3 @@ export const nextDefaultErrorHandler =
   };
 
 export const defaultErrorHandler = nextDefaultErrorHandler();
-
-// ready wrapper types
-
-export const errorAndCacheDefaultWrappers = [
-  cacheControl({
-    headers: config.CACHE_DEFAULT_HEADERS,
-  }),
-  defaultErrorHandler,
-];
-export const defaultErrorAndCacheWrapper = wrapNextRequest([
-  ...errorAndCacheDefaultWrappers,
-]);
