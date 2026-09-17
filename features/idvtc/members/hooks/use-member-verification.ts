@@ -35,7 +35,7 @@ export const useMemberVerification = () => {
     }: VerifyArgs): Promise<boolean> => {
       if (isVerifying) return false;
       if (!isAddress(address)) {
-        setError('Invalid Ethereum address');
+        setError(VALIDATION_MESSAGES.invalidAddress);
         return false;
       }
       if (otherAddresses.some((a) => compareLowercase(a, address))) {

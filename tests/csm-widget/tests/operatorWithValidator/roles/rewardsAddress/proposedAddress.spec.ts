@@ -136,7 +136,7 @@ test.describe('Roles. Rewards Address. Verify UI With Proposed Address', () => {
       await rewardsAddressPage.addressInput.fill(`${generateAddress()}1`);
       await rewardsAddressPage.addressInput.blur();
 
-      const expectedTooltipError = 'Specify a valid address';
+      const expectedTooltipError = 'Specify a valid address or ENS name';
       await expect(rewardsAddressPage.validationInputTooltip).toContainText(
         expectedTooltipError,
       );

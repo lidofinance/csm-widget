@@ -7,13 +7,13 @@ import { validateDkgBatch } from 'features/idvtc/dkg/utils/validate-dkg-batch';
 import { useSmSDK } from 'modules/web3';
 import {
   useFormValidation,
+  validateAddress,
   validateBondAmount,
   validateDepositData,
   ValidationError,
   VALIDATION_MESSAGES,
 } from 'shared/hook-form/validation';
 import invariant from 'tiny-invariant';
-import { isAddress } from 'viem';
 import { useSubmitKeysFormData } from './submit-keys-data-provider';
 import type {
   SubmitKeysFormInputType,
@@ -98,18 +98,20 @@ export const useSubmitKeysValidation = () => {
       });
 
       await validate('rewardsAddress', () => {
-        if (specifyCustomAddresses && !isAddress(rewardsAddress ?? '')) {
-          throw new ValidationError(
+        if (specifyCustomAddresses) {
+          validateAddress(
             'rewardsAddress',
+            rewardsAddress,
             VALIDATION_MESSAGES.specifyValidRewardsAddress,
           );
         }
       });
 
       await validate('managerAddress', () => {
-        if (specifyCustomAddresses && !isAddress(managerAddress ?? '')) {
-          throw new ValidationError(
+        if (specifyCustomAddresses) {
+          validateAddress(
             'managerAddress',
+            managerAddress,
             VALIDATION_MESSAGES.specifyValidManagerAddress,
           );
         }
