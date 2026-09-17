@@ -1,15 +1,21 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../test.fixture';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
-  'Operator with validator. Keys. Add keys.',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.keys,
+    feature: 'Submit keys',
+    story: 'Transaction',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -29,7 +35,7 @@ test.describe(
     });
 
     test(
-      'Should add keys successfully',
+      qase(467, 'Should add keys successfully'),
       { tag: [Tags.smoke] },
       async ({ widgetService, keysGeneratorService }) => {
         const { submitPage } = widgetService.keysPage;

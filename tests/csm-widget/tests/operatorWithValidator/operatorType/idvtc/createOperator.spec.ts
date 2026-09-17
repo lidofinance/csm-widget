@@ -1,4 +1,5 @@
 import { test } from '../../../test.fixture';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
@@ -9,8 +10,12 @@ const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
 
 test.describe(
-  'Operator without keys. IDVTC issued. Create operator (forked)',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.operatorType,
+    feature: 'IDVTC',
+    story: 'Create operator',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
 

@@ -1,4 +1,5 @@
 import { test } from '../../test.fixture';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { KeysPage } from '../../../pages';
 import { Tags } from '../../../../shared/consts/common.const';
 import { expect } from '@playwright/test';
@@ -46,8 +47,12 @@ const requiredFields: (keyof DepositKey)[] = [
 ];
 
 test.describe(
-  'Operator with keys. Validation keys. Parsed tab',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.keys,
+    feature: 'Submit keys',
+    story: 'Parsed tab',
+    tag: [Tags.forked],
+  }),
   () => {
     let keysPage: KeysPage;
     let keysGeneratorService: KeysGeneratorService;

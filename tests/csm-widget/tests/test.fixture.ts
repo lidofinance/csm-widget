@@ -14,6 +14,7 @@ import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { HttpMockerService } from 'tests/shared/services/httpMocker.service';
 import { EvmNodeService } from 'tests/shared/services/evmNode.service';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
+import { reportTagsToQase } from 'tests/shared/helpers/qaseTags';
 import { IpfsGatewayProxyService } from 'tests/shared/services/ipfsGatewayProxy.service';
 
 type WorkerFixtures = {
@@ -33,9 +34,15 @@ type WorkerFixtures = {
 };
 
 export const test = base.extend<
-  { widgetConfig: IConfig; keysGeneratorService: KeysGeneratorService },
+  {
+    widgetConfig: IConfig;
+    keysGeneratorService: KeysGeneratorService;
+    qaseTags: void;
+  },
   WorkerFixtures
 >({
+  qaseTags: [reportTagsToQase, { auto: true }],
+
   // fixture-options
   useFork: [
     async ({}, use) => {

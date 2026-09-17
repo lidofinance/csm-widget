@@ -54,5 +54,19 @@
     "react": {
       "version": "detect"
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": ["tests/**/*.spec.ts"],
+      "rules": {
+        "no-restricted-syntax": [
+          "error",
+          {
+            "selector": "Program > ExpressionStatement > CallExpression:matches([callee.object.name='test'][callee.property.name='describe'],[callee.object.object.name='test'][callee.object.property.name='describe'],[callee.object.object.object.name='test'][callee.object.object.property.name='describe']):not([arguments.0.type='SpreadElement'])",
+            "message": "A top-level test.describe must declare its place in the suite tree: test.describe(...suite({ epic, feature, story }), () => { ... }). A plain title is only for grouping inside it."
+          }
+        ]
+      }
+    }
+  ]
 }

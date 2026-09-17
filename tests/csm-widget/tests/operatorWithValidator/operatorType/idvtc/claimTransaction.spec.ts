@@ -1,4 +1,5 @@
 import { test } from '../../../test.fixture';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
@@ -10,8 +11,12 @@ const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
 
 test.describe(
-  'Operator with keys. IDVTC issued. Claim transaction (forked)',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.operatorType,
+    feature: 'IDVTC',
+    story: 'Claim transaction',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
 

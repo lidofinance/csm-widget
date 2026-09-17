@@ -1,6 +1,7 @@
 /* eslint-disable no-irregular-whitespace */
 import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { USD_AMOUNT_REGEX } from '../../../../../shared/consts/regexp.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
@@ -9,8 +10,12 @@ import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state'
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
-  'Dashboard. Bond & Rewards. Available to claim section.',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.dashboard,
+    feature: 'Bond & Rewards',
+    story: 'Available to claim',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let noId: number;

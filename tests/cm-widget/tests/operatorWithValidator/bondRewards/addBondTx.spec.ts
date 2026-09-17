@@ -1,16 +1,22 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../test.fixture';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 test.describe(
-  'Bond & Rewards. Add bond. Transaction.',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.bondRewards,
+    feature: 'Add bond',
+    story: 'Transaction',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -30,7 +36,7 @@ test.describe(
     });
 
     test(
-      'Should add bond and send Matomo form events',
+      qase(464, 'Should add bond and send Matomo form events'),
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { addBond } = widgetService.bondRewardsPage;
