@@ -116,7 +116,7 @@ export const test = base.extend<
           useExternalFork: true,
         },
         browserOptions: {
-          headless: false,
+          headless: true,
           reducedMotion: 'reduce',
           cookies: REFUSE_CF_BLOCK_COOKIE,
         },
