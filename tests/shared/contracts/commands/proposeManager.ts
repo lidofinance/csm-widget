@@ -1,5 +1,5 @@
 import { parseEther } from 'viem';
-import { BaseModuleAbi } from '../abi/index.ts';
+import { BaseModuleAbi } from '@lidofinance/lido-csm-sdk/abi';
 import type { Hex } from '../constants.ts';
 import type { ForkActionsService } from '../forkActions.service.ts';
 

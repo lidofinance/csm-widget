@@ -1,5 +1,5 @@
 import { parseEther } from 'viem';
-import { CuratedGateAbi, VettedGateAbi } from '../abi/index.ts';
+import { CuratedGateAbi, VettedGateAbi } from '@lidofinance/lido-csm-sdk/abi';
 import type { GateSelector, Hex } from '../constants.ts';
 import { pinTree } from '../tree.ts';
 import type { ForkActionsService } from '../forkActions.service.ts';

@@ -1,6 +1,6 @@
 import { parseEther } from 'viem';
-import { BaseModuleAbi, StakingRouterAbi } from '../abi/index.ts';
-import { STAKING_ROUTER } from '../constants.ts';
+import { BaseModuleAbi, StakingRouterAbi } from '@lidofinance/lido-csm-sdk/abi';
+import { stakingRouter } from '../constants.ts';
 import type { ForkActionsService } from '../forkActions.service.ts';
 
 // mirrors @lidofinance/lido-csm-sdk calculateShareLimit + useShareLimitStatus
@@ -14,7 +14,7 @@ export type ShareLimitTarget = 'REACHED' | 'EXHAUSTED' | 'APPROACHING';
 
 const readDigests = (service: ForkActionsService) =>
   service.client.readContract({
-    address: STAKING_ROUTER[service.chain],
+    address: stakingRouter(service.chain),
     abi: StakingRouterAbi,
     functionName: 'getAllStakingModuleDigests',
   });
@@ -50,7 +50,7 @@ export const setShareLimit = async function (
   target: ShareLimitTarget,
 ): Promise<void> {
   await this.step(`[Contract] Set share limit status "${target}"`, async () => {
-    const stakingRouter = STAKING_ROUTER[this.chain];
+    const router = stakingRouter(this.chain);
 
     const [digests, totalStake] = await this.step('Read modules state', () =>
       Promise.all([
@@ -112,18 +112,18 @@ export const setShareLimit = async function (
 
     const [adminRole, shareRole] = await Promise.all([
       this.client.readContract({
-        address: stakingRouter,
+        address: router,
         abi: StakingRouterAbi,
         functionName: 'DEFAULT_ADMIN_ROLE',
       }),
       this.client.readContract({
-        address: stakingRouter,
+        address: router,
         abi: StakingRouterAbi,
         functionName: 'STAKING_MODULE_SHARE_MANAGE_ROLE',
       }),
     ]);
     const admin = await this.client.readContract({
-      address: stakingRouter,
+      address: router,
       abi: StakingRouterAbi,
       functionName: 'getRoleMember',
       args: [adminRole, 0n],
@@ -132,7 +132,7 @@ export const setShareLimit = async function (
 
     await this.sendAs(admin, () =>
       this.client.writeContract({
-        address: stakingRouter,
+        address: router,
         abi: StakingRouterAbi,
         functionName: 'grantRole',
         args: [shareRole, admin],
@@ -146,7 +146,7 @@ export const setShareLimit = async function (
       () =>
         this.sendAs(admin, () =>
           this.client.writeContract({
-            address: stakingRouter,
+            address: router,
             abi: StakingRouterAbi,
             functionName: 'updateModuleShares',
             args: [

@@ -7,7 +7,7 @@ import {
   toHex,
   type Address,
 } from 'viem';
-import { BaseModuleAbi } from './abi/index.ts';
+import { BaseModuleAbi } from '@lidofinance/lido-csm-sdk/abi';
 import {
   addBond,
   addKeys,
@@ -26,7 +26,7 @@ import {
   snapshot,
 } from './commands/index.ts';
 import {
-  ADDRESSES,
+  addresses as addressesFor,
   type Addresses,
   type ChainName,
   type Hex,
@@ -81,7 +81,7 @@ export class ForkActionsService {
   readonly step: StepFn;
 
   constructor({ rpcUrl, chain, module, step }: ForkActionsOptions) {
-    const addresses = ADDRESSES[chain][module];
+    const addresses = addressesFor(chain, module);
     if (!addresses) {
       throw new Error(`No addresses for module "${module}" on ${chain}`);
     }

@@ -11,7 +11,7 @@ import {
   FeeDistributorAbi,
   FeeOracleAbi,
   HashConsensusAbi,
-} from '../abi/index.ts';
+} from '@lidofinance/lido-csm-sdk/abi';
 import { makeRewardsReport } from '../rewards.ts';
 import type { ForkActionsService } from '../forkActions.service.ts';
 

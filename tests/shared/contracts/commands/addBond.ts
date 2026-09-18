@@ -1,5 +1,5 @@
 import { parseEther } from 'viem';
-import { AccountingAbi } from '../abi/index.ts';
+import { AccountingAbi } from '@lidofinance/lido-csm-sdk/abi';
 import type { ForkActionsService } from '../forkActions.service.ts';
 
 export const addBond = async function (

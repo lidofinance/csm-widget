@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { parseEther, toHex } from 'viem';
-import { AccountingAbi, BaseModuleAbi } from '../abi/index.ts';
+import { AccountingAbi, BaseModuleAbi } from '@lidofinance/lido-csm-sdk/abi';
 import type { ForkActionsService } from '../forkActions.service.ts';
 
 export const addKeys = async function (

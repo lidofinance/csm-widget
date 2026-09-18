@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { parseEther, toHex, zeroAddress } from 'viem';
-import { CuratedGateAbi } from '../abi/index.ts';
+import { CuratedGateAbi } from '@lidofinance/lido-csm-sdk/abi';
 import type { GateSelector, Hex } from '../constants.ts';
 import type { ForkActionsService } from '../forkActions.service.ts';
 import { pinTree } from '../tree.ts';

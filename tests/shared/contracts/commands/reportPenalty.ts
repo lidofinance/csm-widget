@@ -1,5 +1,5 @@
 import { keccak256, parseEther, toHex } from 'viem';
-import { BaseModuleAbi } from '../abi/index.ts';
+import { BaseModuleAbi } from '@lidofinance/lido-csm-sdk/abi';
 import type { ForkActionsService } from '../forkActions.service.ts';
 
 const PENALTY_TYPE = keccak256(toHex('fork-test-penalty'));

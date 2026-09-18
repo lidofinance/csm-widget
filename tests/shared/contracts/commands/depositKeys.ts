@@ -1,6 +1,6 @@
 import { maxUint256, parseEther } from 'viem';
-import { BaseModuleAbi } from '../abi/index.ts';
-import { STAKING_ROUTER } from '../constants.ts';
+import { BaseModuleAbi } from '@lidofinance/lido-csm-sdk/abi';
+import { stakingRouter } from '../constants.ts';
 import type { ForkActionsService } from '../forkActions.service.ts';
 
 export const depositKeys = async function (
@@ -8,17 +8,17 @@ export const depositKeys = async function (
   depositsCount: number,
 ): Promise<void> {
   await this.step(`[Contract] Deposit ${depositsCount} key(s)`, async () => {
-    const stakingRouter = STAKING_ROUTER[this.chain];
-    await this.fund(stakingRouter, parseEther('1'));
+    const router = stakingRouter(this.chain);
+    await this.fund(router, parseEther('1'));
 
     await this.step('Refresh deposit info', () =>
-      this.sendAs(stakingRouter, () =>
+      this.sendAs(router, () =>
         this.client.writeContract({
           address: this.addresses.module,
           abi: BaseModuleAbi,
           functionName: 'batchDepositInfoUpdate',
           args: [maxUint256],
-          account: stakingRouter,
+          account: router,
           chain: null,
         }),
       ),
@@ -38,13 +38,13 @@ export const depositKeys = async function (
     await this.step(
       `Obtain deposit data for ${count} of ${depositable} depositable key(s)`,
       () =>
-        this.sendAs(stakingRouter, () =>
+        this.sendAs(router, () =>
           this.client.writeContract({
             address: this.addresses.module,
             abi: BaseModuleAbi,
             functionName: 'obtainDepositData',
             args: [count, '0x'],
-            account: stakingRouter,
+            account: router,
             chain: null,
           }),
         ),
