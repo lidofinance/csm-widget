@@ -16,6 +16,7 @@ export const HeaderWrapper = styled.div`
   flex-direction: column;
   gap: 0;
   align-items: center;
+  min-width: 0;
 
   position: sticky;
   z-index: 250;
@@ -23,15 +24,15 @@ export const HeaderWrapper = styled.div`
   left: 0;
   right: 0;
 
-  padding: 0 32px;
-  margin: 0 -32px;
+  padding: 0 var(--layout-gutter, 20px);
+  margin: 0 calc(-1 * var(--layout-gutter, 20px));
 
   transition:
     box-shadow 0.3s ease,
     background 0.3s ease-out;
 
   // the background belongs on this bleeding wrapper, not the inset HeaderStyle:
-  // otherwise content scrolling under shows through the 32px side gutters
+  // otherwise content scrolling under shows through the side gutters
   html:is([data-scrolldown='true']) & {
     background: var(--lido-color-background);
     box-shadow: 0px 3px 3px -3px var(--lido-color-shadowDark);
@@ -63,6 +64,10 @@ export const HeaderActionsStyle = styled.div`
 export const HeaderWalletChainWrapper = styled.div`
   display: flex;
   align-items: center;
+
+  ${NAV_MOBILE_MEDIA} {
+    display: none;
+  }
 `;
 
 export const HeaderWalletChainStyle = styled.span<{ $color: string }>`
@@ -111,6 +116,7 @@ export const LogosStyle = styled(Link)`
   display: flex;
   gap: 12px;
   align-items: center;
+  flex-shrink: 0;
 
   height: 28px;
   margin-block: 8px;
@@ -118,7 +124,7 @@ export const LogosStyle = styled(Link)`
 
   white-space: nowrap;
 
-  ${({ theme }) => theme.mediaQueries.md} {
+  ${NAV_MOBILE_MEDIA} {
     > :not(:nth-child(1)) {
       display: none;
     }

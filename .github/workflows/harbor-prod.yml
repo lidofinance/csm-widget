@@ -1,0 +1,24 @@
+name: Harbor image (prod)
+
+run-name: Build and push csm-widget:${{ github.event.release.tag_name }} to prod
+
+# GitHub release published => prod cluster. Pushes
+# registry.prod.k8s-prod.org/team-csm/csm-widget:<tag>.
+on:
+  release:
+    types: [released]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-push:
+    uses: lidofinance/actions/.github/workflows/k8s-build-push-harbor.yml@c7b5b6c5d8013046347d728d748fa741eb214e28
+    with:
+      tag: ${{ github.event.release.tag_name }}
+      registry: registry.prod.k8s-prod.org
+      registry_username: ${{ vars.REGISTRY_USERNAME }}
+      image: team-csm/csm-widget
+      environment: harbor_prod_release
+    secrets:
+      registry_token: ${{ secrets.HARBOR_PROD_TOKEN }}

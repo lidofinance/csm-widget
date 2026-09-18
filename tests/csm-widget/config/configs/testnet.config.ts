@@ -35,7 +35,7 @@ export class TestnetConfig extends BaseConfig {
           beaconchain: 'https://hoodi.beaconcha.in',
           operators: 'https://operators-hoodi.testnet.fi',
           feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
-          csmSentinel: 'https://github.com/skhomuti/csm-sentinel',
+          csmSentinel: 'https://github.com/lidofinance/sm-sentinel',
         },
         stakingModuleIndex: 4,
       },

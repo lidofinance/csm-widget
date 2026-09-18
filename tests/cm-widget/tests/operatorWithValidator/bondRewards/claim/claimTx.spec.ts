@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Tags } from 'tests/shared/consts/common.const';
 import {
@@ -7,13 +8,18 @@ import {
 } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../../test.fixture';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
-  'Bond & Rewards. Claim. Transaction.',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.bondRewards,
+    feature: 'Claim',
+    story: 'Transaction',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
@@ -43,7 +49,7 @@ test.describe(
     });
 
     test(
-      'Should claim and send Matomo form events',
+      qase(470, 'Should claim and send Matomo form events'),
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { claim } = widgetService.bondRewardsPage;
@@ -91,56 +97,64 @@ test.describe(
       },
     );
 
-    test('Should send Matomo events on ETH withdrawal success modal links', async ({
-      widgetService,
-    }) => {
-      const { claim } = widgetService.bondRewardsPage;
+    test(
+      qase(
+        471,
+        'Should send Matomo events on ETH withdrawal success modal links',
+      ),
+      async ({ widgetService }) => {
+        const { claim } = widgetService.bondRewardsPage;
 
-      await test.step('Select ETH and fill max amount', async () => {
-        await claim.selectBondToken(TOKENS.eth);
-        await claim.amountInput.fill('0.0005');
-        await expect(claim.requestWithdrawalButton).toBeEnabled({
-          timeout: PAGE_WAIT_TIMEOUT,
+        await test.step('Select ETH and fill max amount', async () => {
+          await claim.selectBondToken(TOKENS.eth);
+          await claim.amountInput.fill('0.0005');
+          await expect(claim.requestWithdrawalButton).toBeEnabled({
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
         });
-      });
 
-      await test.step('Request withdrawal and confirm transaction', async () => {
-        await claim.requestWithdrawalButton.click();
-        await widgetService.page.waitForSelector(
-          'text=Confirm this transaction in your wallet',
-          { timeout: PAGE_WAIT_TIMEOUT },
-        );
-        await widgetService.walletPage.confirmTx();
-      });
+        await test.step('Request withdrawal and confirm transaction', async () => {
+          await claim.requestWithdrawalButton.click();
+          await widgetService.page.waitForSelector(
+            'text=Confirm this transaction in your wallet',
+            { timeout: PAGE_WAIT_TIMEOUT },
+          );
+          await widgetService.walletPage.confirmTx();
+        });
 
-      await test.step('Success modal shows "Withdrawal request has been sent"', async () => {
-        await expect(
-          widgetService.page.getByText('Withdrawal request has been sent'),
-        ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
-      });
+        await test.step('Success modal shows "Withdrawal request has been sent"', async () => {
+          await expect(
+            widgetService.page.getByText('Withdrawal request has been sent'),
+          ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
+        });
 
-      await test.step('"Claim tab" link opens Staking Widget and sends Matomo event', async () => {
-        await Promise.all([
-          widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
-          matomoEventService.waitForEvent(
-            'e_n',
-            'cm_widget_claim_withdrawals_link',
-          ),
-          widgetService.page
-            .getByRole('link', { name: 'Claim tab on the Lido Staking Widget' })
-            .click(),
-        ]);
-      });
+        await test.step('"Claim tab" link opens Staking Widget and sends Matomo event', async () => {
+          await Promise.all([
+            widgetService.dashboardPage.waitForPage(PAGE_WAIT_TIMEOUT),
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_claim_withdrawals_link',
+            ),
+            widgetService.page
+              .getByRole('link', {
+                name: 'Claim tab on the Lido Staking Widget',
+              })
+              .click(),
+          ]);
+        });
 
-      await test.step('"This guide" link sends Matomo event', async () => {
-        await Promise.all([
-          matomoEventService.waitForEvent(
-            'e_n',
-            'cm_widget_how_to_claim_eth_success_link',
-          ),
-          widgetService.page.getByRole('link', { name: 'This guide' }).click(),
-        ]);
-      });
-    });
+        await test.step('"This guide" link sends Matomo event', async () => {
+          await Promise.all([
+            matomoEventService.waitForEvent(
+              'e_n',
+              'cm_widget_how_to_claim_eth_success_link',
+            ),
+            widgetService.page
+              .getByRole('link', { name: 'This guide' })
+              .click(),
+          ]);
+        });
+      },
+    );
   },
 );

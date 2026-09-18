@@ -8,6 +8,7 @@ import { LocalLink } from 'shared/navigate';
 import { SplitsFormInputType, useSplitsFormData } from '../context';
 import { BondRow } from './bond-row';
 import { SplitRowView } from './split-row-view';
+import { WarningRow } from './styles';
 
 export const ViewSplits: FC = () => {
   const { setValue } = useFormContext<SplitsFormInputType>();
@@ -26,16 +27,18 @@ export const ViewSplits: FC = () => {
         </WarningBlockStyle>
       ) : canEdit && currentFeeSplits.length === 0 && rewards.available ? (
         <WarningBlockStyle>
-          <Stack gap="md" center>
-            You have unclaimed rewards. If you set up splitting now, unclaimed
-            rewards will be distributed using the new split settings. To keep
-            current distribution, claim your rewards first.
+          <WarningRow>
+            <span>
+              You have unclaimed rewards. If you set up splitting now, unclaimed
+              rewards will be distributed using the new split settings. To keep
+              current distribution, claim your rewards first.
+            </span>
             <LocalLink href={PATH.BOND_CLAIM}>
               <Button variant="outlined" size="sm">
                 Go to claim
               </Button>
             </LocalLink>
-          </Stack>
+          </WarningRow>
         </WarningBlockStyle>
       ) : null}
 
@@ -48,7 +51,7 @@ export const ViewSplits: FC = () => {
         </WarningBlockStyle>
       ) : currentFeeSplits.length > 0 && rewards.available ? (
         <WarningBlockStyle>
-          <Stack gap="md" center>
+          <WarningRow>
             <span>
               <b>Editing is disabled</b> while you have unclaimed rewards. Claim
               them in Bond & Rewards to continue. Unclaimed rewards will be
@@ -59,11 +62,11 @@ export const ViewSplits: FC = () => {
                 Go to claim
               </Button>
             </LocalLink>
-          </Stack>
+          </WarningRow>
         </WarningBlockStyle>
       ) : pendingToSplit ? (
         <WarningBlockStyle>
-          <Stack gap="md" center>
+          <WarningRow>
             <span>
               <b>Editing is disabled</b> while there are pending shares to
               distribute. Claim them in Bond & Rewards to continue.
@@ -73,7 +76,7 @@ export const ViewSplits: FC = () => {
                 Go to claim
               </Button>
             </LocalLink>
-          </Stack>
+          </WarningRow>
         </WarningBlockStyle>
       ) : null}
 

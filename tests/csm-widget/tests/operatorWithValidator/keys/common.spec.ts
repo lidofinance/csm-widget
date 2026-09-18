@@ -1,4 +1,5 @@
 import { test } from '../../test.fixture';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
@@ -7,49 +8,56 @@ import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.servic
 
 test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
 
-test.describe('Operator with keys. Common suite.', async () => {
-  let keysPage: KeysPage;
-  let keysGeneratorService: KeysGeneratorService;
+test.describe(
+  ...suite({
+    epic: EPIC.keys,
+    feature: 'Submit keys',
+    story: 'Upload limits (empty operator)',
+  }),
+  async () => {
+    let keysPage: KeysPage;
+    let keysGeneratorService: KeysGeneratorService;
 
-  test.beforeEach(
-    async ({ widgetService, keysGeneratorService: keysGenerator }) => {
-      keysPage = new KeysPage(widgetService.page);
-      await keysPage.submitPage.open();
-      keysGeneratorService = keysGenerator;
-    },
-  );
+    test.beforeEach(
+      async ({ widgetService, keysGeneratorService: keysGenerator }) => {
+        keysPage = new KeysPage(widgetService.page);
+        await keysPage.submitPage.open();
+        keysGeneratorService = keysGenerator;
+      },
+    );
 
-  test(
-    qase(17, 'Should open transaction page after added 1 key'),
-    { tag: Tags.smoke },
-    async ({ widgetService }) => {
-      await keysPage.submitPage.submitKeys(
-        keysGeneratorService.generateKeys(),
-        TokenSymbol.ETH,
-      );
-      await widgetService.walletPage.cancelTx();
-    },
-  );
+    test(
+      qase(17, 'Should open transaction page after added 1 key'),
+      { tag: Tags.smoke },
+      async ({ widgetService }) => {
+        await keysPage.submitPage.submitKeys(
+          keysGeneratorService.generateKeys(),
+          TokenSymbol.ETH,
+        );
+        await widgetService.walletPage.cancelTx();
+      },
+    );
 
-  test(
-    qase(19, 'Should open transaction page after added 75 keys'),
-    async ({ widgetService }) => {
-      await keysPage.submitPage.submitKeys(
-        keysGeneratorService.generateKeys(75),
-        TokenSymbol.ETH,
-      );
-      await widgetService.walletPage.cancelTx();
-    },
-  );
+    test(
+      qase(19, 'Should open transaction page after added 75 keys'),
+      async ({ widgetService }) => {
+        await keysPage.submitPage.submitKeys(
+          keysGeneratorService.generateKeys(75),
+          TokenSymbol.ETH,
+        );
+        await widgetService.walletPage.cancelTx();
+      },
+    );
 
-  test(
-    qase(20, 'Should failed if uploaded over the limit (76) keys'),
-    async () => {
-      const overTheLimitKeys = keysGeneratorService.generateKeys(76);
-      await keysPage.submitPage.fillKeys(overTheLimitKeys);
-      await expect(keysPage.submitPage.validationInputError).toContainText(
-        'Too many keys in one transaction, maximum allowed: 75',
-      );
-    },
-  );
-});
+    test(
+      qase(20, 'Should failed if uploaded over the limit (76) keys'),
+      async () => {
+        const overTheLimitKeys = keysGeneratorService.generateKeys(76);
+        await keysPage.submitPage.fillKeys(overTheLimitKeys);
+        await expect(keysPage.submitPage.validationInputError).toContainText(
+          'Too many keys in one transaction, maximum allowed: 75',
+        );
+      },
+    );
+  },
+);
