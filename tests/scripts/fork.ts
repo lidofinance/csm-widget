@@ -1,10 +1,16 @@
 import { parseArgs } from 'node:util';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import nextEnv from '@next/env';
 import {
   COMMANDS,
   ForkActionsService,
 } from '../shared/contracts/forkActions.service.ts';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import type { ChainName } from '../shared/contracts/constants.ts';
+import { forkPort } from '../shared/config/forkPorts.ts';
+
+// Same env as the tests use, so RPC URLs and the wallet come from .env.local.
+nextEnv.loadEnvConfig(process.cwd());
 
 const CHAINS: ChainName[] = ['hoodi', 'mainnet'];
 const MODULES = Object.values(MODULE_NAME);
@@ -92,7 +98,7 @@ const USAGE = `Usage: yarn fork <module> <chain> <command> [args...]
   chain    ${CHAINS.join(' | ')}
 
   --host   fork node host (default: 127.0.0.1)
-  --port   fork node port (default: $ANVIL_PORT or 8545)
+  --port   fork node port (default: the port of this module x chain)
   --rpc    full node URL, overrides --host and --port
 
 Arguments starting with [ or { are parsed as JSON, the rest stay strings.
@@ -150,10 +156,12 @@ const args = rest.map((arg) =>
   /^[[{]/.test(arg) ? (JSON.parse(arg) as unknown) : arg,
 );
 
+const rpcUrl =
+  values.rpc ??
+  `http://${values.host ?? '127.0.0.1'}:${values.port ?? forkPort(chain as ChainName, sdkModule)}`;
+
 const service = new ForkActionsService({
-  rpcUrl:
-    values.rpc ??
-    `http://${values.host ?? '127.0.0.1'}:${values.port ?? process.env.ANVIL_PORT ?? '8545'}`,
+  rpcUrl,
   chain: chain as ChainName,
   module: sdkModule,
   step: async (title, body) => {
@@ -161,6 +169,19 @@ const service = new ForkActionsService({
     return body();
   },
 });
+
+// Each module x chain has its own fork, so the usual mistake is talking to a
+// port nothing is listening on.
+try {
+  await service.client.getChainId();
+} catch {
+  const profile = `${chain}-${module.toLowerCase()}`;
+  console.error(
+    `No fork answering at ${rpcUrl}\n` +
+      `Start it: docker compose --env-file fork.env --profile ${profile} up -d --wait`,
+  );
+  process.exit(1);
+}
 
 const run = service[command as (typeof COMMANDS)[number]] as (
   ...params: unknown[]

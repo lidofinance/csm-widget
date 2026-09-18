@@ -1,0 +1,164 @@
+# Local anvil fork + public cloudflared tunnel, one profile per network x module.
+#
+#   docker compose --env-file fork.env --profile hoodi-cm up -d --wait   # start
+#   docker compose --env-file fork.env run --rm hoodi-cm-url             # local and public URLs
+#   docker compose --env-file fork.env --profile hoodi-cm logs -f        # follow logs
+#   docker compose --env-file fork.env --profile hoodi-cm down           # stop
+#   docker compose --env-file fork.env ps                                # every running fork
+#
+# The IPFS node the tests pin merkle trees to has its own profile, so it can be
+# started once and left running next to any fork:
+#
+#   docker compose --env-file fork.env --profile ipfs up -d --wait
+#   docker compose --env-file fork.env run --rm ipfs-url
+#
+# fork.env holds the ports; `export COMPOSE_ENV_FILES=fork.env` drops the flag.
+# The fork URL and the test wallet come from .env.local.
+#
+# Profiles: mainnet-csm, mainnet-cm, hoodi-csm, hoodi-cm, ipfs.
+# Each one also has a <profile>-url service printing its local and public URL.
+
+x-anvil: &anvil
+  image: ghcr.io/foundry-rs/foundry:${FOUNDRY_TAG:-v1.7.1}
+  restart: unless-stopped
+  env_file:
+    - path: .env.local
+      required: false
+  healthcheck:
+    test: ['CMD', 'cast', 'block-number', '--rpc-url', 'http://127.0.0.1:8545']
+    interval: 2s
+    timeout: 10s
+    retries: 60
+
+x-tunnel: &tunnel
+  image: cloudflare/cloudflared
+  restart: unless-stopped
+
+x-url: &url
+  image: curlimages/curl
+  restart: 'no'
+  entrypoint: ['sh', '-c']
+  command:
+    - |
+      until host=$$(curl -sf "http://$$TUNNEL:2000/quicktunnel" | cut -d'"' -f4); [ -n "$$host" ]; do sleep 1; done
+      echo ""
+      echo "  local:  http://127.0.0.1:$$PORT"
+      echo "  public: https://$$host"
+      echo ""
+
+services:
+  ipfs:
+    image: ipfs/kubo:${KUBO_TAG:-v0.43.0}
+    profiles: [ipfs]
+    restart: unless-stopped
+    ports:
+      - '4001:4001'
+      - '4001:4001/udp'
+      - '127.0.0.1:5001:5001'
+      - '127.0.0.1:8080:8080'
+    volumes:
+      - ipfs_data:/data/ipfs
+      - ipfs_staging:/export
+    healthcheck:
+      test: ['CMD', 'ipfs', '--api=/ip4/127.0.0.1/tcp/5001', 'id']
+      interval: 2s
+      timeout: 10s
+      retries: 60
+
+  # The gateway only: the API on 5001 is unauthenticated admin access to the node.
+  ipfs-tunnel:
+    <<: *tunnel
+    profiles: [ipfs]
+    depends_on: [ipfs]
+    command: tunnel --no-autoupdate --protocol http2 --metrics 0.0.0.0:2000 --url http://ipfs:8080
+
+  ipfs-url:
+    <<: *url
+    profiles: [ipfs-url]
+    environment:
+      TUNNEL: ipfs-tunnel
+      PORT: 8080
+
+  mainnet-csm:
+    <<: *anvil
+    profiles: [mainnet-csm]
+    ports: ['127.0.0.1:${MAINNET_CSM_PORT}:8545']
+    command:
+      - 'exec anvil --host 0.0.0.0 -f "$$EL_RPC_URLS_1" --mnemonic "$$WALLET_SECRET_PHRASE" --retries 15 --fork-retry-backoff 1000 --timeout 90000 $${ANVIL_ARGS:-}'
+
+  mainnet-csm-tunnel:
+    <<: *tunnel
+    profiles: [mainnet-csm]
+    depends_on: [mainnet-csm]
+    command: tunnel --no-autoupdate --protocol http2 --metrics 0.0.0.0:2000 --url http://mainnet-csm:8545
+
+  mainnet-csm-url:
+    <<: *url
+    profiles: [mainnet-csm-url]
+    environment:
+      TUNNEL: mainnet-csm-tunnel
+      PORT: ${MAINNET_CSM_PORT}
+
+  mainnet-cm:
+    <<: *anvil
+    profiles: [mainnet-cm]
+    ports: ['127.0.0.1:${MAINNET_CM_PORT}:8545']
+    command:
+      - 'exec anvil --host 0.0.0.0 -f "$$EL_RPC_URLS_1" --mnemonic "$$WALLET_SECRET_PHRASE" --retries 15 --fork-retry-backoff 1000 --timeout 90000 $${ANVIL_ARGS:-}'
+
+  mainnet-cm-tunnel:
+    <<: *tunnel
+    profiles: [mainnet-cm]
+    depends_on: [mainnet-cm]
+    command: tunnel --no-autoupdate --protocol http2 --metrics 0.0.0.0:2000 --url http://mainnet-cm:8545
+
+  mainnet-cm-url:
+    <<: *url
+    profiles: [mainnet-cm-url]
+    environment:
+      TUNNEL: mainnet-cm-tunnel
+      PORT: ${MAINNET_CM_PORT}
+
+  hoodi-csm:
+    <<: *anvil
+    profiles: [hoodi-csm]
+    ports: ['127.0.0.1:${HOODI_CSM_PORT}:8545']
+    command:
+      - 'exec anvil --host 0.0.0.0 -f "$$EL_RPC_URLS_560048" --mnemonic "$$WALLET_SECRET_PHRASE" --retries 15 --fork-retry-backoff 1000 --timeout 90000 $${ANVIL_ARGS:-}'
+
+  hoodi-csm-tunnel:
+    <<: *tunnel
+    profiles: [hoodi-csm]
+    depends_on: [hoodi-csm]
+    command: tunnel --no-autoupdate --protocol http2 --metrics 0.0.0.0:2000 --url http://hoodi-csm:8545
+
+  hoodi-csm-url:
+    <<: *url
+    profiles: [hoodi-csm-url]
+    environment:
+      TUNNEL: hoodi-csm-tunnel
+      PORT: ${HOODI_CSM_PORT}
+
+  hoodi-cm:
+    <<: *anvil
+    profiles: [hoodi-cm]
+    ports: ['127.0.0.1:${HOODI_CM_PORT}:8545']
+    command:
+      - 'exec anvil --host 0.0.0.0 -f "$$EL_RPC_URLS_560048" --mnemonic "$$WALLET_SECRET_PHRASE" --retries 15 --fork-retry-backoff 1000 --timeout 90000 $${ANVIL_ARGS:-}'
+
+  hoodi-cm-tunnel:
+    <<: *tunnel
+    profiles: [hoodi-cm]
+    depends_on: [hoodi-cm]
+    command: tunnel --no-autoupdate --protocol http2 --metrics 0.0.0.0:2000 --url http://hoodi-cm:8545
+
+  hoodi-cm-url:
+    <<: *url
+    profiles: [hoodi-cm-url]
+    environment:
+      TUNNEL: hoodi-cm-tunnel
+      PORT: ${HOODI_CM_PORT}
+
+volumes:
+  ipfs_data:
+  ipfs_staging:
