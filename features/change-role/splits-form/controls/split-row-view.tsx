@@ -1,18 +1,9 @@
 import { ButtonIcon, Input, LockSmall } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { InputAddress, InputPercent, Stack } from 'shared/components';
+import { InputAddress, InputPercent } from 'shared/components';
 import styled from 'styled-components';
 import { Address } from 'viem';
-
-const AddressColumn = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-const ShareColumn = styled.div`
-  width: 90px;
-  flex-shrink: 0;
-`;
+import { AddressColumn, RowStyle, ShareColumn } from './styles';
 
 type SplitRowProps = {
   title: string;
@@ -28,7 +19,7 @@ export const SplitRowView: FC<SplitRowProps> = ({
   locked,
 }) => {
   return (
-    <Stack direction="row" gap="sm">
+    <RowStyle>
       <AddressColumn>
         <InputAddress disabled simple label={title} value={address} fullwidth />
       </AddressColumn>
@@ -44,7 +35,7 @@ export const SplitRowView: FC<SplitRowProps> = ({
           size="xs"
         />
       )}
-    </Stack>
+    </RowStyle>
   );
 };
 
@@ -60,14 +51,14 @@ export const BondRowView: FC<BondRowProps> = ({
   share,
 }) => {
   return (
-    <Stack direction="row" gap="sm" data-testid="splitsBondRow">
+    <RowStyle data-testid="splitsBondRow">
       <AddressColumn>
         <InputStyled disabled label={title} value={description} fullwidth />
       </AddressColumn>
       <ShareColumn>
         <InputPercent disabled label="Share, %" value={share} fullwidth />
       </ShareColumn>
-    </Stack>
+    </RowStyle>
   );
 };
 

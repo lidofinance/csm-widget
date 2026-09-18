@@ -7,6 +7,7 @@ export const LayoutStyle = styled(Container)`
   --layout-base-width: 590px;
   --layout-main-width: var(--layout-base-width);
   --layout-side-width: 170px;
+  --layout-gutter: ${({ theme }) => theme.spaceMap.xxl}px;
 
   position: relative;
   min-height: calc(100vh - var(--test-env-banner-height, 0px));
@@ -61,6 +62,10 @@ export const LayoutStyle = styled(Container)`
       'alerts'
       'main'
       'footer';
+  }
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    --layout-gutter: ${({ theme }) => theme.spaceMap.lg}px;
   }
 `;
 
@@ -132,6 +137,7 @@ export const Main = styled.main`
   margin-bottom: ${({ theme }) => theme.spaceMap.xxl}px;
   padding: 0;
   width: 100%;
+  min-width: 0;
 
   max-width: var(--layout-main-width);
 `;

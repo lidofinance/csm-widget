@@ -5,6 +5,12 @@ export const RoleRowStyle = styled.div`
   gap: ${({ theme }) => theme.spaceMap.lg}px;
   align-items: flex-start;
   justify-content: flex-end;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-wrap: wrap;
+    row-gap: ${({ theme }) => theme.spaceMap.sm}px;
+    align-items: center;
+  }
 `;
 
 export const RoleNameColumn = styled.div`
@@ -14,6 +20,10 @@ export const RoleNameColumn = styled.div`
   width: 180px;
   flex-shrink: 0;
   flex-wrap: wrap;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: 100%;
+  }
 `;
 
 export const RoleAddressColumn = styled.div`
@@ -35,6 +45,11 @@ export const SplitterAddressRow = styled.div`
   display: flex;
   gap: ${({ theme }) => theme.spaceMap.lg}px;
   align-items: center;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-wrap: wrap;
+    row-gap: ${({ theme }) => theme.spaceMap.xs}px;
+  }
 `;
 
 export const SplitShare = styled.span`

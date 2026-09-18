@@ -4,9 +4,19 @@ import { config } from 'config';
 import { useDappStatus, useSmSDK } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
 import { useChainName } from 'shared/hooks';
+import styled from 'styled-components';
 import { getEtherscanAddressLink } from 'utils';
 import { CopyLink } from '../copy-button';
 import { FaqLink } from './faq-link';
+
+const AddressCode = styled.code`
+  word-break: break-all;
+`;
+
+const StyledCopy = styled(CopyLink)`
+  margin: -8px 0 -4px;
+  vertical-align: middle;
+`;
 
 export const FaqChainName: FC = () => {
   const chainName = useChainName(false);
@@ -31,36 +41,27 @@ export const FaqOnlyTestnet: FC<PropsWithChildren> = ({ children }) => {
   return !isMainnet ? <>{children}</> : null;
 };
 
-export const FaqWithdrawalVault: FC = () => {
+const FaqContractAddress: FC<{ name: CONTRACT_NAMES }> = ({ name }) => {
   const { chainId } = useDappStatus();
   const sm = useSmSDK(config.module);
-  const address = sm?.core.getContractAddress(CONTRACT_NAMES.withdrawalVault);
+  const address = sm?.core.getContractAddress(name);
   if (!address) return null;
 
   const url = getEtherscanAddressLink(chainId, address);
   return (
     <>
-      <FaqLink href={url}>
-        <code>{address}</code>
+      <FaqLink href={url} $inline>
+        <AddressCode>{address}</AddressCode>
       </FaqLink>
-      <CopyLink text={address} />
+      <StyledCopy text={address} />
     </>
   );
 };
 
-export const FaqLidoRewardsVault: FC = () => {
-  const { chainId } = useDappStatus();
-  const sm = useSmSDK(config.module);
-  const address = sm?.core.getContractAddress(CONTRACT_NAMES.lidoRewardsVault);
-  if (!address) return null;
+export const FaqWithdrawalVault: FC = () => (
+  <FaqContractAddress name={CONTRACT_NAMES.withdrawalVault} />
+);
 
-  const url = getEtherscanAddressLink(chainId, address);
-  return (
-    <>
-      <FaqLink href={url}>
-        <code>{address}</code>
-      </FaqLink>
-      <CopyLink text={address} />
-    </>
-  );
-};
+export const FaqLidoRewardsVault: FC = () => (
+  <FaqContractAddress name={CONTRACT_NAMES.lidoRewardsVault} />
+);
