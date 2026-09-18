@@ -15,6 +15,7 @@ import {
   STATE_FILE,
 } from './walletSetup/walletPresets.state';
 import { existsSync } from 'fs';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { IpfsNodeService } from 'tests/shared/services/ipfsNode.service';
 import type { ChainName } from 'tests/shared/contracts/constants';
 
@@ -65,7 +66,7 @@ const setupPresetAccounts = async (): Promise<void> => {
   const walletService = new WalletStateService({
     rpcUrl: `http://${nodeConfig.host}:${nodeConfig.port}`,
     chain: keysGeneratorConfig.chain as ChainName,
-    module: 'cm',
+    module: MODULE_NAME.CM,
     step: passthroughStep,
   });
 

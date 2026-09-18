@@ -9,6 +9,7 @@ import { SdkService } from 'tests/shared/services/ethereumSDK.client';
 import { WidgetService } from 'tests/csm-widget/services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { ForkActionsService } from 'tests/shared/contracts/forkActions.service';
 import type { ChainName } from 'tests/shared/contracts/constants';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
@@ -60,7 +61,7 @@ export const test = base.extend<
         new ForkActionsService({
           rpcUrl: `http://${nodeConfig.host}:${nodeConfig.port}`,
           chain: keysGeneratorConfig.chain as ChainName,
-          module: 'csm',
+          module: MODULE_NAME.CSM,
         }),
       );
     },

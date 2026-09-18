@@ -3,10 +3,12 @@ import {
   COMMANDS,
   ForkActionsService,
 } from '../shared/contracts/forkActions.service.ts';
-import type { ChainName, ModuleName } from '../shared/contracts/constants.ts';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import type { ChainName } from '../shared/contracts/constants.ts';
 
 const CHAINS: ChainName[] = ['hoodi', 'mainnet'];
-const MODULES: ModuleName[] = ['csm', 'cm', 'csm02'];
+const MODULES = Object.values(MODULE_NAME);
+const normalize = (value: string) => value.toUpperCase().replaceAll('_', '');
 
 const HELP: Record<
   (typeof COMMANDS)[number],
@@ -136,7 +138,9 @@ if (module === 'help') {
 }
 
 if (!module || !chain || !command) fail('Missing module, chain or command');
-if (!MODULES.includes(module as ModuleName)) fail(`Unknown module: ${module}`);
+const sdkModule =
+  MODULES.find((name) => normalize(name) === normalize(module ?? '')) ??
+  fail(`Unknown module: ${module}`);
 if (!CHAINS.includes(chain as ChainName)) fail(`Unknown chain: ${chain}`);
 if (!COMMANDS.includes(command as (typeof COMMANDS)[number])) {
   fail(`Unknown command: ${command}`);
@@ -151,7 +155,7 @@ const service = new ForkActionsService({
     values.rpc ??
     `http://${values.host ?? '127.0.0.1'}:${values.port ?? process.env.ANVIL_PORT ?? '8545'}`,
   chain: chain as ChainName,
-  module: module as ModuleName,
+  module: sdkModule,
   step: async (title, body) => {
     console.info(title);
     return body();

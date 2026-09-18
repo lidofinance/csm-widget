@@ -3,12 +3,13 @@ import {
   CONTRACT_NAMES,
   COMMON_ADDRESSES,
   MODULE_CONFIG,
+  MODULE_CONTRACT,
   MODULE_NAME,
 } from '@lidofinance/lido-csm-sdk';
 
 export type Hex = `0x${string}`;
 export type ChainName = 'hoodi' | 'mainnet';
-export type ModuleName = 'csm' | 'cm' | 'csm02';
+export type ModuleName = MODULE_NAME;
 
 export type GateSelector =
   'po' | 'pto' | 'pgo' | 'do' | 'eeo' | 'iodc' | 'iodcp' | 'ics' | 'idvtc';
@@ -24,12 +25,6 @@ const CHAIN_ID = {
   mainnet: CHAINS.Mainnet,
   hoodi: CHAINS.Hoodi,
 } as const satisfies Record<ChainName, CHAINS>;
-
-const SDK_MODULE: Record<ModuleName, MODULE_NAME> = {
-  csm: MODULE_NAME.CSM,
-  cm: MODULE_NAME.CM,
-  csm02: MODULE_NAME.CSM_02,
-};
 
 const GATE_CONTRACT: Record<GateSelector, CONTRACT_NAMES> = {
   ics: CONTRACT_NAMES.icsGate,
@@ -54,14 +49,10 @@ export const addresses = (
   chain: ChainName,
   module: ModuleName,
 ): Addresses | undefined => {
-  const contracts =
-    MODULE_CONFIG[SDK_MODULE[module]][CHAIN_ID[chain]]?.contractAddresses;
+  const contracts = MODULE_CONFIG[module][CHAIN_ID[chain]]?.contractAddresses;
   if (!contracts) return undefined;
 
-  const moduleAddress =
-    module === 'cm'
-      ? contracts[CONTRACT_NAMES.curatedModule]
-      : contracts[CONTRACT_NAMES.csModule];
+  const moduleAddress = contracts[MODULE_CONTRACT[module]];
 
   const accounting = contracts[CONTRACT_NAMES.accounting];
   if (!moduleAddress || !accounting) return undefined;

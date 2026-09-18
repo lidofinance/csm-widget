@@ -1,16 +1,20 @@
 import { parseEther } from 'viem';
+import {
+  MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI,
+  PERCENT_BASIS,
+  WEI_PER_GWEI,
+} from '@lidofinance/lido-csm-sdk';
 import { BaseModuleAbi, StakingRouterAbi } from '@lidofinance/lido-csm-sdk/abi';
+import { ShareLimitStatus, WCType } from '@lidofinance/lido-csm-sdk/module-sdk';
 import { stakingRouter } from '../constants.ts';
 import type { ForkActionsService } from '../forkActions.service.ts';
 
-// mirrors @lidofinance/lido-csm-sdk calculateShareLimit + useShareLimitStatus
-const PERCENT_BASIS = 10_000n;
-const MAX_EFFECTIVE_BALANCE_WEI = 32_000_000_000_000_000_000n;
-const WEI_PER_GWEI = 1_000_000_000n;
-const WC_TYPE_02 = 2;
 const APPROACHING_THRESHOLD = 200n;
 
-export type ShareLimitTarget = 'REACHED' | 'EXHAUSTED' | 'APPROACHING';
+export type ShareLimitTarget = Exclude<
+  (typeof ShareLimitStatus)[keyof typeof ShareLimitStatus],
+  'FAR'
+>;
 
 const readDigests = (service: ForkActionsService) =>
   service.client.readContract({
@@ -24,7 +28,7 @@ type Digest = Awaited<ReturnType<typeof readDigests>>[number];
 const activeStakeEquivalent = (digest: Digest, stakeWei?: bigint): bigint => {
   const { withdrawalCredentialsType, validatorsBalanceGwei } = digest.state;
 
-  if (withdrawalCredentialsType !== WC_TYPE_02) {
+  if (withdrawalCredentialsType !== WCType.TYPE_02) {
     const exited =
       digest.summary.totalExitedValidators > digest.state.exitedValidatorsCount
         ? digest.summary.totalExitedValidators
@@ -33,17 +37,20 @@ const activeStakeEquivalent = (digest: Digest, stakeWei?: bigint): bigint => {
   }
 
   const stake = stakeWei ?? validatorsBalanceGwei * WEI_PER_GWEI;
-  return (stake + MAX_EFFECTIVE_BALANCE_WEI - 1n) / MAX_EFFECTIVE_BALANCE_WEI;
+  return (
+    (stake + MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI - 1n) /
+    MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI
+  );
 };
 
 const statusOf = (activeLeft: bigint, queue: bigint) =>
   activeLeft <= 0n
-    ? 'REACHED'
+    ? ShareLimitStatus.REACHED
     : activeLeft - queue < 0n
-      ? 'EXHAUSTED'
+      ? ShareLimitStatus.EXHAUSTED
       : activeLeft - queue < APPROACHING_THRESHOLD
-        ? 'APPROACHING'
-        : 'FAR';
+        ? ShareLimitStatus.APPROACHING
+        : ShareLimitStatus.FAR;
 
 export const setShareLimit = async function (
   this: ForkActionsService,
@@ -83,7 +90,7 @@ export const setShareLimit = async function (
     );
     const queue = own.summary.depositableValidatorsCount;
 
-    if (target === 'EXHAUSTED' && queue < 2n) {
+    if (target === ShareLimitStatus.EXHAUSTED && queue < 2n) {
       throw new Error(
         `"EXHAUSTED" needs at least 2 depositable keys in the queue (got ${queue}) — add keys first`,
       );
@@ -91,14 +98,14 @@ export const setShareLimit = async function (
 
     // capacity = base * shareLimit / PERCENT_BASIS, activeLeft = capacity - active
     const wantedLeft =
-      target === 'REACHED'
+      target === ShareLimitStatus.REACHED
         ? 0n
-        : target === 'EXHAUSTED'
+        : target === ShareLimitStatus.EXHAUSTED
           ? queue - 1n
           : queue + APPROACHING_THRESHOLD / 2n;
     const wantedCapacity = active + wantedLeft;
     const shareLimit =
-      target === 'REACHED'
+      target === ShareLimitStatus.REACHED
         ? (wantedCapacity * PERCENT_BASIS) / base
         : (wantedCapacity * PERCENT_BASIS + base - 1n) / base;
 
