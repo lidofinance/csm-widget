@@ -2,7 +2,7 @@ import { mnemonicToAccount } from 'viem/accounts';
 import {
   ForkActionsService,
   type ForkActionsOptions,
-} from 'tests/shared/services/forkActions.service';
+} from 'tests/shared/contracts/forkActions.service';
 import {
   withOperator,
   withGroup,
@@ -28,7 +28,7 @@ export class WalletStateService {
     withDeposit: withDeposit.bind(this),
   };
 
-  constructor(options?: ForkActionsOptions) {
+  constructor(options: ForkActionsOptions) {
     this.fork = new ForkActionsService(options);
   }
 

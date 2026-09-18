@@ -16,6 +16,7 @@ import {
 } from './walletSetup/walletPresets.state';
 import { existsSync } from 'fs';
 import { IpfsNodeService } from 'tests/shared/services/ipfsNode.service';
+import type { ChainName } from 'tests/shared/contracts/constants';
 
 const passthroughStep = <T>(title: string, body: () => Promise<T>) => {
   console.info(`[step] ${title}`);
@@ -60,14 +61,11 @@ const setupPresetAccounts = async (): Promise<void> => {
     return;
   }
 
+  const { nodeConfig, keysGeneratorConfig } = widgetFullConfig.standConfig;
   const walletService = new WalletStateService({
-    cwd: process.env.JUST_DIR || './staking-modules',
-    env: {
-      CHAIN: widgetFullConfig.standConfig.justConfig.chain,
-      DEPLOY_CONFIG: widgetFullConfig.standConfig.justConfig.deployConfig,
-      ARTIFACTS_DIR: widgetFullConfig.standConfig.justConfig.artifactsDir,
-      RPC_URL: widgetFullConfig.standConfig.networkConfig.rpcUrl,
-    },
+    rpcUrl: `http://${nodeConfig.host}:${nodeConfig.port}`,
+    chain: keysGeneratorConfig.chain as ChainName,
+    module: 'cm',
     step: passthroughStep,
   });
 
