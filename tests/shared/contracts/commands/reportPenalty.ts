@@ -1,6 +1,6 @@
 import { keccak256, parseEther, toHex } from 'viem';
-import { BaseModuleAbi } from '../abi';
-import type { ForkActionsService } from '../forkActions.service';
+import { BaseModuleAbi } from '../abi/index.ts';
+import type { ForkActionsService } from '../forkActions.service.ts';
 
 const PENALTY_TYPE = keccak256(toHex('fork-test-penalty'));
 

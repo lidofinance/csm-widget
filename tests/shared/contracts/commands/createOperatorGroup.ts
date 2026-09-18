@@ -1,7 +1,7 @@
 import { parseEther } from 'viem';
-import { MetaRegistryAbi } from '../abi';
-import type { Hex } from '../constants';
-import type { ForkActionsService } from '../forkActions.service';
+import { MetaRegistryAbi } from '../abi/index.ts';
+import type { Hex } from '../constants.ts';
+import type { ForkActionsService } from '../forkActions.service.ts';
 
 export type GroupOperator = {
   id: number;

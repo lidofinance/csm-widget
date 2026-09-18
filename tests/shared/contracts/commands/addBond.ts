@@ -1,6 +1,6 @@
 import { parseEther } from 'viem';
-import { AccountingAbi } from '../abi';
-import type { ForkActionsService } from '../forkActions.service';
+import { AccountingAbi } from '../abi/index.ts';
+import type { ForkActionsService } from '../forkActions.service.ts';
 
 export const addBond = async function (
   this: ForkActionsService,

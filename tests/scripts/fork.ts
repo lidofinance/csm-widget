@@ -1,0 +1,171 @@
+import { parseArgs } from 'node:util';
+import {
+  COMMANDS,
+  ForkActionsService,
+} from '../shared/contracts/forkActions.service.ts';
+import type { ChainName, ModuleName } from '../shared/contracts/constants.ts';
+
+const CHAINS: ChainName[] = ['hoodi', 'mainnet'];
+const MODULES: ModuleName[] = ['csm', 'cm', 'csm02'];
+
+const HELP: Record<
+  (typeof COMMANDS)[number],
+  { args: string; example: string }
+> = {
+  snapshot: {
+    args: '',
+    example: 'yarn fork csm hoodi snapshot',
+  },
+  revert: {
+    args: '[snapshotId]',
+    example: 'yarn fork csm hoodi revert 0x2',
+  },
+  addBond: {
+    args: '<noId> <amountEth>',
+    example: 'yarn fork csm hoodi addBond 12 3',
+  },
+  addKeys: {
+    args: '<noId> <keysCount>',
+    example: 'yarn fork csm hoodi addKeys 12 5',
+  },
+  depositKeys: {
+    args: '<depositsCount>',
+    example: 'yarn fork csm hoodi depositKeys 10',
+  },
+  proposeManager: {
+    args: '<noId> <address>',
+    example:
+      'yarn fork csm hoodi proposeManager 12 0x1111111111111111111111111111111111111111',
+  },
+  confirmManager: {
+    args: '<noId>',
+    example: 'yarn fork csm hoodi confirmManager 12',
+  },
+  proposeReward: {
+    args: '<noId> <address>',
+    example:
+      'yarn fork csm hoodi proposeReward 12 0x1111111111111111111111111111111111111111',
+  },
+  reportPenalty: {
+    args: '<noId> <amountEth>',
+    example: 'yarn fork csm hoodi reportPenalty 12 1',
+  },
+  settlePenalty: {
+    args: '<noId>',
+    example: 'yarn fork csm hoodi settlePenalty 12',
+  },
+  reportRewards: {
+    args: '',
+    example: 'yarn fork csm hoodi reportRewards',
+  },
+  setGateAddrs: {
+    args: '<selector|[selectors]> <address...>',
+    example:
+      'yarn fork csm hoodi setGateAddrs ics 0x1111111111111111111111111111111111111111',
+  },
+  setShareLimit: {
+    args: '<REACHED|EXHAUSTED|APPROACHING>',
+    example: 'yarn fork csm hoodi setShareLimit REACHED',
+  },
+  createCuratedOperator: {
+    args: '<selector> <address>',
+    example:
+      'yarn fork cm hoodi createCuratedOperator po 0x1111111111111111111111111111111111111111',
+  },
+  createOperatorGroup: {
+    args: '<[{ id, weight }]>',
+    example: `yarn fork cm hoodi createOperatorGroup '[{"id":12,"weight":50},{"id":1,"weight":50}]'`,
+  },
+};
+
+const commandHelp = COMMANDS.map((name) => {
+  const { args, example } = HELP[name];
+  const signature = `${name} ${args}`.trimEnd();
+  return `  ${signature}\n    ${example}`;
+}).join('\n');
+
+const USAGE = `Usage: yarn fork <module> <chain> <command> [args...]
+
+  module   ${MODULES.join(' | ')}
+  chain    ${CHAINS.join(' | ')}
+
+  --host   fork node host (default: 127.0.0.1)
+  --port   fork node port (default: $ANVIL_PORT or 8545)
+  --rpc    full node URL, overrides --host and --port
+
+Arguments starting with [ or { are parsed as JSON, the rest stay strings.
+
+Commands:
+
+${commandHelp}
+`;
+
+const fail = (message: string): never => {
+  console.error(`${message}\n\n${USAGE}`);
+  process.exit(1);
+};
+
+const parsed = (() => {
+  try {
+    return parseArgs({
+      options: {
+        host: { type: 'string' },
+        port: { type: 'string' },
+        rpc: { type: 'string' },
+        help: { type: 'boolean', short: 'h' },
+      },
+      allowPositionals: true,
+    });
+  } catch (error) {
+    return fail((error as Error).message);
+  }
+})();
+
+const { values, positionals } = parsed;
+
+if (values.help) {
+  console.info(USAGE);
+  process.exit(0);
+}
+
+const [module, chain, command, ...rest] = positionals;
+
+if (module === 'help') {
+  console.info(USAGE);
+  process.exit(0);
+}
+
+if (!module || !chain || !command) fail('Missing module, chain or command');
+if (!MODULES.includes(module as ModuleName)) fail(`Unknown module: ${module}`);
+if (!CHAINS.includes(chain as ChainName)) fail(`Unknown chain: ${chain}`);
+if (!COMMANDS.includes(command as (typeof COMMANDS)[number])) {
+  fail(`Unknown command: ${command}`);
+}
+
+const args = rest.map((arg) =>
+  /^[[{]/.test(arg) ? (JSON.parse(arg) as unknown) : arg,
+);
+
+const service = new ForkActionsService({
+  rpcUrl:
+    values.rpc ??
+    `http://${values.host ?? '127.0.0.1'}:${values.port ?? process.env.ANVIL_PORT ?? '8545'}`,
+  chain: chain as ChainName,
+  module: module as ModuleName,
+  step: async (title, body) => {
+    console.info(title);
+    return body();
+  },
+});
+
+const run = service[command as (typeof COMMANDS)[number]] as (
+  ...params: unknown[]
+) => Promise<unknown>;
+
+try {
+  const result = await run(...args);
+  if (result !== undefined) console.info(result);
+} catch (error) {
+  console.error(`\n${(error as Error).message.split('\n')[0]}`);
+  process.exit(1);
+}

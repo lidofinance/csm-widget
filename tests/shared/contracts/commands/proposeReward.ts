@@ -1,7 +1,7 @@
 import { parseEther } from 'viem';
-import { BaseModuleAbi } from '../abi';
-import type { Hex } from '../constants';
-import type { ForkActionsService } from '../forkActions.service';
+import { BaseModuleAbi } from '../abi/index.ts';
+import type { Hex } from '../constants.ts';
+import type { ForkActionsService } from '../forkActions.service.ts';
 
 export const proposeReward = async function (
   this: ForkActionsService,

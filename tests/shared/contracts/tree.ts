@@ -1,5 +1,5 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
-import type { Hex } from './constants';
+import type { Hex } from './constants.ts';
 
 export const IPFS_API_URL = process.env.IPFS_API_URL ?? 'http://127.0.0.1:5001';
 export const IPFS_GATEWAY_URL =

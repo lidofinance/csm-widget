@@ -1,8 +1,8 @@
 import { parseEther } from 'viem';
-import { CuratedGateAbi, VettedGateAbi } from '../abi';
-import type { GateSelector, Hex } from '../constants';
-import { pinTree } from '../tree';
-import type { ForkActionsService } from '../forkActions.service';
+import { CuratedGateAbi, VettedGateAbi } from '../abi/index.ts';
+import type { GateSelector, Hex } from '../constants.ts';
+import { pinTree } from '../tree.ts';
+import type { ForkActionsService } from '../forkActions.service.ts';
 
 const VETTED_SELECTORS: GateSelector[] = ['ics', 'idvtc'];
 

@@ -11,9 +11,9 @@ import {
   FeeDistributorAbi,
   FeeOracleAbi,
   HashConsensusAbi,
-} from '../abi';
-import { makeRewardsReport } from '../rewards';
-import type { ForkActionsService } from '../forkActions.service';
+} from '../abi/index.ts';
+import { makeRewardsReport } from '../rewards.ts';
+import type { ForkActionsService } from '../forkActions.service.ts';
 
 const STETH_ABI = [
   {

@@ -1,9 +1,9 @@
 import { randomBytes } from 'node:crypto';
 import { parseEther, toHex, zeroAddress } from 'viem';
-import { CuratedGateAbi } from '../abi';
-import type { GateSelector, Hex } from '../constants';
-import type { ForkActionsService } from '../forkActions.service';
-import { pinTree } from '../tree';
+import { CuratedGateAbi } from '../abi/index.ts';
+import type { GateSelector, Hex } from '../constants.ts';
+import type { ForkActionsService } from '../forkActions.service.ts';
+import { pinTree } from '../tree.ts';
 
 export const createCuratedOperator = async function (
   this: ForkActionsService,

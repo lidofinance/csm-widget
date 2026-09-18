@@ -1,7 +1,7 @@
 import { maxUint256, parseEther } from 'viem';
-import { BaseModuleAbi } from '../abi';
-import { STAKING_ROUTER } from '../constants';
-import type { ForkActionsService } from '../forkActions.service';
+import { BaseModuleAbi } from '../abi/index.ts';
+import { STAKING_ROUTER } from '../constants.ts';
+import type { ForkActionsService } from '../forkActions.service.ts';
 
 export const depositKeys = async function (
   this: ForkActionsService,

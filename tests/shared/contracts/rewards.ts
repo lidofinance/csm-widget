@@ -1,9 +1,9 @@
 import { StandardMerkleTree } from '@openzeppelin/merkle-tree';
 import { parseEther, zeroHash } from 'viem';
-import { BaseModuleAbi, FeeDistributorAbi } from './abi';
-import type { Hex } from './constants';
-import type { ForkActionsService } from './forkActions.service';
-import { IPFS_GATEWAY_URL, pinJson } from './tree';
+import { BaseModuleAbi, FeeDistributorAbi } from './abi/index.ts';
+import type { Hex } from './constants.ts';
+import type { ForkActionsService } from './forkActions.service.ts';
+import { IPFS_GATEWAY_URL, pinJson } from './tree.ts';
 
 const REWARD_PER_KEY = parseEther('0.1');
 const PAD_NO_ID = (1n << 64n) - 1n;

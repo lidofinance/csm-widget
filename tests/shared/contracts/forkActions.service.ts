@@ -7,7 +7,7 @@ import {
   toHex,
   type Address,
 } from 'viem';
-import { BaseModuleAbi } from './abi';
+import { BaseModuleAbi } from './abi/index.ts';
 import {
   addBond,
   addKeys,
@@ -19,16 +19,19 @@ import {
   proposeReward,
   reportPenalty,
   reportRewards,
+  revert,
   setGateAddrs,
+  setShareLimit,
   settlePenalty,
-} from './commands';
+  snapshot,
+} from './commands/index.ts';
 import {
   ADDRESSES,
   type Addresses,
   type ChainName,
   type Hex,
   type ModuleName,
-} from './constants';
+} from './constants.ts';
 
 const commands = {
   addBond,
@@ -41,11 +44,16 @@ const commands = {
   proposeReward,
   reportPenalty,
   reportRewards,
+  revert,
   setGateAddrs,
+  setShareLimit,
   settlePenalty,
+  snapshot,
 };
 
 type Commands = typeof commands;
+
+export const COMMANDS = Object.keys(commands) as (keyof Commands)[];
 
 export type StepFn = <T>(title: string, body: () => Promise<T>) => Promise<T>;
 

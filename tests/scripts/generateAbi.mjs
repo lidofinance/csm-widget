@@ -31,7 +31,7 @@ const main = async () => {
 
   await write(
     'index.ts',
-    entries.map(([name]) => `export { ${name} } from './${name}';`).join('\n'),
+    entries.map(([name]) => `export { ${name} } from './${name}.ts';`).join('\n'),
   );
 
   console.info(
