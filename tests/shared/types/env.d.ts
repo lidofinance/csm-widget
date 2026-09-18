@@ -24,19 +24,12 @@ declare namespace NodeJS {
     REFUSE_CF_BLOCK_NAME?: string;
     REFUSE_CF_BLOCK_VALUE?: string;
 
-    /** Just recipes: target chain (must match a `script/Deploy*<Chain>.s.sol`) */
-    CHAIN?: 'hoodi' | 'mainnet';
-    /** Just recipes: path to the deploy artifacts JSON */
-    DEPLOY_CONFIG?: string;
-    /** Just recipes: artifacts directory */
-    ARTIFACTS_DIR?: string;
+    /** kubo RPC API of the IPFS node used to pin merkle trees */
+    IPFS_API_URL?: string;
 
     /** Forked tests: 'true' enables fork mode */
     USE_FORK?: 'true' | 'false';
-    /** Path to the fork-actions repo (the one with a Justfile) */
-    JUST_DIR?: string;
-    /** Env file inside JUST_DIR, e.g. `.env.hoodi-cm`. Empty — the repo's own `.env` */
-    JUST_DOTENV?: string;
+    /** Devnet deploy artifacts consumed by the CM SDK client */
     DEVNET_ADDRESSES_FILE_PATH?: string;
 
     TEST_TAGS?: string;

@@ -33,12 +33,6 @@ export class TestnetConfig extends BaseConfig {
       keysGeneratorConfig: {
         chain: 'hoodi',
         withdrawalCredentials: '0x4473dCDDbf77679A643BdB654dbd86D67F8d32f2',
-        password: 'testtest',
-      },
-      justConfig: {
-        chain: 'hoodi',
-        deployConfig: './artifacts/hoodi/curated/deploy-hoodi.json',
-        artifactsDir: './artifacts/hoodi',
       },
       ipfsConfig: {
         gateway:

@@ -1,8 +1,9 @@
+import { parseEther } from 'viem';
 import { mnemonicToAccount } from 'viem/accounts';
 import {
   ForkActionsService,
   type ForkActionsOptions,
-} from 'tests/shared/services/forkActions.service';
+} from 'tests/shared/contracts/forkActions.service';
 import {
   withOperator,
   withGroup,
@@ -11,6 +12,8 @@ import {
   HANDLER_ORDER,
 } from './handlers';
 import { type GateSelector, type StateCtx } from './handlers/types';
+
+const PRESET_BALANCE = parseEther('1000');
 
 export type WalletPreset = {
   secretPhrase: string;
@@ -28,7 +31,7 @@ export class WalletStateService {
     withDeposit: withDeposit.bind(this),
   };
 
-  constructor(options?: ForkActionsOptions) {
+  constructor(options: ForkActionsOptions) {
     this.fork = new ForkActionsService(options);
   }
 
@@ -65,6 +68,8 @@ export class WalletStateService {
     console.info(
       `[WalletState] address=${ctx.address} state=[${preset.state.join(', ')}] gates=[${ctx.gates.join(', ')}]`,
     );
+
+    await this.fork.fund(ctx.address, PRESET_BALANCE);
 
     const sorted = [...preset.state].sort(
       (a, b) => HANDLER_ORDER.indexOf(a) - HANDLER_ORDER.indexOf(b),

@@ -30,7 +30,7 @@ export class ProdConfig extends BaseConfig {
           beaconchain: 'https://beaconcha.in',
           operators: 'https://operators.lido.fi',
           feesMonitoring: 'https://fees-monitoring.lido.fi',
-          csmSentinel: 'https://github.com/skhomuti/csm-sentinel',
+          csmSentinel: 'https://github.com/lidofinance/sm-sentinel',
           beaconchainEntity: 'https://beaconcha.in',
           rated: 'https://explorer.rated.network',
           migaLabs: 'https://migalabs.io/entities',
@@ -40,12 +40,6 @@ export class ProdConfig extends BaseConfig {
       keysGeneratorConfig: {
         chain: 'mainnet',
         withdrawalCredentials: '0xB9D7934878B5FB9610B3fE8A5e441e8fad7E293f',
-        password: 'testtest',
-      },
-      justConfig: {
-        chain: 'mainnet',
-        deployConfig: './artifacts/mainnet/csm/upgrade-v3-mainnet.json',
-        artifactsDir: './artifacts/mainnet',
       },
       ipfsConfig: {
         gateway:

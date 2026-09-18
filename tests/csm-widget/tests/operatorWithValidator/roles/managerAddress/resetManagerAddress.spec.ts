@@ -15,7 +15,7 @@ test.describe(
   }),
   () => {
     let snapshotId: string;
-    let proposedAddress: string;
+    let proposedAddress: `0x${string}`;
 
     test.beforeAll(({ useFork }) => {
       test.skip(!useFork, 'Test suite runs only on forked network');
