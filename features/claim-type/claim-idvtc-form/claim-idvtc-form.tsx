@@ -8,6 +8,7 @@ import { Info } from './controls/info';
 import { ModeSelector } from './controls/mode-selector';
 import { Parameters } from './controls/parameters';
 import { SubmitButton } from './controls/submit-button';
+import { DkgRequiredCard } from './dkg-required-card';
 
 export const ClaimIdvtcForm: FC = memo(() => {
   return (
@@ -24,6 +25,7 @@ export const ClaimIdvtcForm: FC = memo(() => {
           </ClaimIdvtcFormLoader>
         </FormBlock>
       </ClaimIdvtcFormProvider>
+      <DkgRequiredCard />
     </ClaimIdvtcDataProvider>
   );
 });
