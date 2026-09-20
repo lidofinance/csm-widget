@@ -1,7 +1,6 @@
-import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { PerModule, SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
-import { isModuleCM, isModuleCSM } from './module';
 
 export const CSM_MAINNET_LINK = 'https://csm.lido.fi/';
 export const CSM_TESTNET_LINK = 'https://csm.testnet.fi/';
@@ -53,9 +52,9 @@ export const LIDO_REWARDS_VAULT_LINK =
 
 type ExternalLinksConstants = {
   rewardsTree: string;
-  feedbackForm: string;
+  feedbackForm: PerModule<string>;
   stakeWidget: string;
-  landing?: string;
+  landing: PerModule<string>;
 
   beaconchain: string;
   feesMonitoring: string;
@@ -74,11 +73,17 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   [CHAINS.Mainnet]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
-    feedbackForm: isModuleCM
-      ? 'https://forms.gle/4oRG7XwhNJszhJvv6'
-      : 'https://forms.gle/GL9RYeV2g4px58Sv8',
+    feedbackForm: {
+      CSM: 'https://forms.gle/GL9RYeV2g4px58Sv8',
+      CSM_02: 'https://forms.gle/GL9RYeV2g4px58Sv8',
+      CM: 'https://forms.gle/4oRG7XwhNJszhJvv6',
+    },
     stakeWidget: 'https://stake.lido.fi',
-    landing: isModuleCSM ? 'https://lido.fi/csm' : LIDO_OPERATOR_PORTAL_CM,
+    landing: {
+      CSM: 'https://lido.fi/csm',
+      CSM_02: 'https://lido.fi/csm',
+      CM: LIDO_OPERATOR_PORTAL_CM,
+    },
 
     feesMonitoring: 'https://fees-monitoring.lido.fi',
     operatorsWidget: 'https://operators.lido.fi',
@@ -92,11 +97,17 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   [CHAINS.Hoodi]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
-    feedbackForm: isModuleCM
-      ? 'https://forms.gle/Lhh4fGXvx7Gwcd6e7'
-      : 'https://forms.gle/ZBUqbykaZokJLf4M7',
+    feedbackForm: {
+      CSM: 'https://forms.gle/ZBUqbykaZokJLf4M7',
+      CSM_02: 'https://forms.gle/ZBUqbykaZokJLf4M7',
+      CM: 'https://forms.gle/Lhh4fGXvx7Gwcd6e7',
+    },
     stakeWidget: 'https://stake-hoodi.testnet.fi',
-    landing: isModuleCSM ? 'https://testnet.fi/csm' : 'https://testnet.fi/cm',
+    landing: {
+      CSM: 'https://testnet.fi/csm',
+      CSM_02: 'https://testnet.fi/csm',
+      CM: 'https://testnet.fi/cm',
+    },
 
     feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
     operatorsWidget: 'https://operators-hoodi.testnet.fi',

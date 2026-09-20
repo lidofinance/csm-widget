@@ -1,4 +1,4 @@
-import { FAQ_ROLES } from 'faq';
+import { useFaq } from 'faq';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
 import { useWeb3Key } from 'shared/hooks';
@@ -17,7 +17,7 @@ export const SplitsPage: FC = () => {
     >
       <SettingsPageSwitcher />
       <SplitsForm key={key} />
-      <Faq items={FAQ_ROLES} />
+      <Faq items={useFaq('ROLES')} />
     </Layout>
   );
 };

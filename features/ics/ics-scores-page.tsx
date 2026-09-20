@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { FAQ_OPERATOR_TYPE } from 'faq';
+import { useFaq } from 'faq';
 import { Faq, TypeBackButton } from 'shared/components';
 import { Layout } from 'shared/layout';
 import { IcsPageSwitcher } from 'shared/navigate';
@@ -27,6 +27,6 @@ export const IcsScoresPage: FC = () => (
         <IcsApplyButton />
       </BlockStyle>
     </IcsProviders>
-    <Faq items={FAQ_OPERATOR_TYPE} />
+    <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>
 );

@@ -1,5 +1,5 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
-import { FAQ_ROLES } from 'faq';
+import { useFaq } from 'faq';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
 import { useWeb3Key } from 'shared/hooks';
@@ -18,7 +18,7 @@ export const ManagerAddressPage: FC = () => {
     >
       <SettingsPageSwitcher />
       <ChangeRoleForm key={key} role={ROLES.MANAGER} />
-      <Faq items={FAQ_ROLES} />
+      <Faq items={useFaq('ROLES')} />
     </Layout>
   );
 };

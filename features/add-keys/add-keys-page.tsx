@@ -4,7 +4,7 @@ import { Layout } from 'shared/layout';
 import { KeysPageSwitcher } from 'shared/navigate';
 import { AddKeys } from './add-keys';
 import { Faq } from 'shared/components';
-import { FAQ_KEYS } from 'faq';
+import { useFaq } from 'faq';
 import { useNodeOperatorId, useOperatorInfo } from 'modules/web3';
 
 export const AddKeysPage: FC = () => (
@@ -15,7 +15,7 @@ export const AddKeysPage: FC = () => (
   >
     <KeysPageSwitcher />
     <AddKeys />
-    <Faq items={FAQ_KEYS} />
+    <Faq items={useFaq('KEYS')} />
   </Layout>
 );
 

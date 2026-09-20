@@ -1,12 +1,12 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
+import { MODULE_METADATA } from 'consts/module';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useOtherModule } from 'modules/web3';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
 import { StyledAccordion } from './styles';
-import { isModuleCSM, moduleMeta } from 'consts';
 
 const REPLACEMENTS: Record<string, string> = {
   'curated-onchain-v1': 'Lido Curated v1',
@@ -29,8 +29,8 @@ export const OtherModuleBanner: FC<{ module: MODULE_NAME }> = ({ module }) => {
       }
     >
       <Text size="xxs">
-        To become a Node Operator in {moduleMeta.shortTitle},{' '}
-        {isModuleCSM ? 'start by uploading your first key' : 'continue'} here.
+        To become a Node Operator in {MODULE_METADATA[module].shortTitle},
+        continue here.
         <br />
         If you want to upload keys to another module (Curated v1 or Simple DVT),
         navigate to{' '}

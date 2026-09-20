@@ -1,4 +1,4 @@
-import { FAQ_OPERATOR_TYPE } from 'faq';
+import { useFaq } from 'faq';
 import { IcsProviders } from 'features/ics/shared';
 import { FC } from 'react';
 import { ExtraWidth, Faq, TypeBackButton } from 'shared/components';
@@ -19,6 +19,6 @@ export const TypeParametersPage: FC = () => (
         <TypeParameters />
       </IcsProviders>
     </ExtraWidth>
-    <Faq items={FAQ_OPERATOR_TYPE} />
+    <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>
 );

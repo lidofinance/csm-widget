@@ -8,7 +8,7 @@ import {
 } from 'shared/navigate';
 import { RemoveKeys } from './remove-keys';
 import { Faq, FormBlock } from 'shared/components';
-import { FAQ_KEYS } from 'faq';
+import { useFaq } from 'faq';
 
 export const RemoveKeysPage: FC = () => (
   <Layout
@@ -21,6 +21,6 @@ export const RemoveKeysPage: FC = () => (
       <DeleteKeysSwitcher active={DeleteKeysSwitcherRoutes.REMOVE} />
       <RemoveKeys />
     </FormBlock>
-    <Faq items={FAQ_KEYS} />
+    <Faq items={useFaq('KEYS')} />
   </Layout>
 );

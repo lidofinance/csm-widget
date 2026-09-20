@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Layout } from 'shared/layout';
 import { IdvtcPageSwitcher } from 'shared/navigate';
 import { Faq, TypeBackButton } from 'shared/components';
-import { FAQ_OPERATOR_TYPE } from 'faq';
+import { useFaq } from 'faq';
 import { BlockStyle } from './description/styles';
 import {
   ApplicationFlow,
@@ -29,6 +29,6 @@ export const IdvtcDescriptionPage: FC = () => (
         <IdvtcApplyButton />
       </BlockStyle>
     </IdvtcProviders>
-    <Faq items={FAQ_OPERATOR_TYPE} />
+    <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>
 );

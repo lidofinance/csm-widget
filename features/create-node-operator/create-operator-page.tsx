@@ -1,4 +1,4 @@
-import { FAQ_KEYS } from 'faq';
+import { useFaq } from 'faq';
 import { CreateTypeProvider } from 'providers/create-type-provider';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
@@ -16,7 +16,7 @@ export const CreateOperatorPage: FC<{ type: CreatableOperatorType }> = ({
       pageName="CreateNodeOperator"
     >
       <CreateNodeOperator type={type} />
-      <Faq items={FAQ_KEYS} />
+      <Faq items={useFaq('KEYS')} />
     </Layout>
   </CreateTypeProvider>
 );

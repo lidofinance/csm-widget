@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Layout } from 'shared/layout';
 import { Monitoring } from './monitoring';
 import { Faq } from 'shared/components';
-import { FAQ_MONITORING } from 'faq';
+import { useFaq } from 'faq';
 
 export const MonitoringPage: FC = () => {
   return (
@@ -12,7 +12,7 @@ export const MonitoringPage: FC = () => {
       pageName="Monitoring"
     >
       <Monitoring />
-      <Faq items={FAQ_MONITORING} />
+      <Faq items={useFaq('MONITORING')} />
     </Layout>
   );
 };
