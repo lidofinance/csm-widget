@@ -34,7 +34,7 @@ import { deployedModules } from 'consts';
 // Safe runtime import cycle (web3-provider ↔ operator-provider): the context is
 // only read inside useSmSDK's body at render time, never at module top-level.
 import { NodeOperatorContext } from '../operator-provider/node-operator-provider';
-import { overridedAddresses } from './devnet';
+import { overridedAddressesByModule } from './devnet';
 
 export type SmSDK = LidoSDKCsm | LidoSDKCsm02 | LidoSDKCm;
 export type CsmFamilySDK = LidoSDKCsm | LidoSDKCsm02;
@@ -60,18 +60,23 @@ const SM_SDK_CONSTRUCTORS = {
   [MODULE_NAME.CSM_02]: LidoSDKCsm02,
 } as const;
 
-// The primary module must construct — a throw here is fatal by design. A
-// secondary module whose SDK constructor throws is dropped from the runtime set.
+// A module whose SDK constructor throws is dropped from the runtime set.
 const buildSmSdkMap = (smProps: SdkProps): SmSdkMap => {
   const map: SmSdkMap = {};
   for (const mod of deployedModules) {
     try {
-      map[mod] = new SM_SDK_CONSTRUCTORS[mod](smProps);
+      map[mod] = new SM_SDK_CONSTRUCTORS[mod]({
+        ...smProps,
+        overridedAddresses: overridedAddressesByModule?.[mod],
+      });
     } catch (error) {
-      if (mod === config.module) throw error;
       console.error(`[lido-sdk] dropping module ${mod}:`, error);
     }
   }
+  invariant(
+    Object.keys(map).length > 0,
+    'no staking module SDK could be constructed',
+  );
   return map;
 };
 
@@ -192,7 +197,6 @@ export const LidoSDKProvider = ({ children }: React.PropsWithChildren) => {
       keysApiUrl: config.keysApiUrl,
       feesMonitoringApiUrl: config.feesMonitoringApiUrl,
       ipfsGateways: ipfsGateways,
-      overridedAddresses,
     };
 
     const sm = buildSmSdkMap(smProps);

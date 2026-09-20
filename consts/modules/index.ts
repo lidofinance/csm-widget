@@ -5,7 +5,6 @@ import { resolveDeployedModules } from './resolve-deployed-modules';
 export { resolveDeployedModules } from './resolve-deployed-modules';
 
 export const deployedModules: MODULE_NAME[] = resolveDeployedModules(
-  config.module,
   config.defaultChain,
 );
 

@@ -22,7 +22,7 @@ import { mainnet } from 'viem/chains';
 import { ENSUniversalResolverAbi } from 'abi/ens-universal-resolver-abi';
 import { config } from 'config';
 import { resolveDeployedModules } from 'consts/modules/resolve-deployed-modules';
-import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
+import { overridedAddressesByModule } from 'modules/web3/web3-provider/devnet';
 import { AggregatorAbi } from 'abi/aggregator-abi';
 
 const AlL_CONTRACT_NAMES = {
@@ -70,8 +70,8 @@ const getModuleAddresses = (
   chainId: SUPPORTED_CHAINS,
 ): Partial<Record<CONTRACT_NAMES, Address>> => ({
   ...MODULE_CONFIG[module][chainId]?.contractAddresses,
-  ...(module === config.module && chainId === config.defaultChain
-    ? overridedAddresses
+  ...(chainId === config.defaultChain
+    ? overridedAddressesByModule?.[module]
     : undefined),
 });
 
@@ -85,15 +85,14 @@ const getChainAddressEntries = (
     ...staticAddresses,
   }) as [AlL_CONTRACT_NAMES, Address][];
 
-  const moduleEntries = resolveDeployedModules(config.module, chainId).flatMap(
-    (module) =>
-      Object.entries(getModuleAddresses(module, chainId)).map(
-        ([name, address]) =>
-          [name, staticAddresses[name as AlL_CONTRACT_NAMES] ?? address] as [
-            AlL_CONTRACT_NAMES,
-            Address,
-          ],
-      ),
+  const moduleEntries = resolveDeployedModules(chainId).flatMap((module) =>
+    Object.entries(getModuleAddresses(module, chainId)).map(
+      ([name, address]) =>
+        [name, staticAddresses[name as AlL_CONTRACT_NAMES] ?? address] as [
+          AlL_CONTRACT_NAMES,
+          Address,
+        ],
+    ),
   );
 
   return (
