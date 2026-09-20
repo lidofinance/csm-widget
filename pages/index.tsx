@@ -6,7 +6,6 @@ import { MaintenancePage } from 'features/welcome/maintenance-page';
 import { getProps } from 'utilsApi';
 import { FC } from 'react';
 import { Gate, GateLoaded } from 'shared/navigate';
-import { CmWelcomePage } from 'features/starter-pack/cm-welcome-page';
 
 type PageProps = Pick<SecretConfigType, 'maintenance' | 'defaultChain'>;
 
@@ -16,19 +15,7 @@ const Page: FC<PageProps> = ({ maintenance }) => {
   return (
     <GateLoaded>
       <Gate rule="IS_CONNECTED_WALLET" fallback={<WelcomePage />}>
-        <Gate
-          rule="HAS_ANY_ROLE"
-          fallback={
-            <>
-              <Gate rule="IS_CM">
-                <CmWelcomePage />
-              </Gate>
-              <Gate rule="IS_CSM_FAMILY">
-                <StarterPackPage />
-              </Gate>
-            </>
-          }
-        >
+        <Gate rule="HAS_ANY_ROLE" fallback={<StarterPackPage />}>
           <DashboardPage />
         </Gate>
       </Gate>

@@ -1,5 +1,4 @@
 import { DarkThemeProvider } from '@lidofinance/lido-ui';
-import { moduleMeta } from 'consts/module';
 import { FC } from 'react';
 import { useExternalLinks } from 'shared/hooks';
 import { MatomoLink } from 'shared/components';
@@ -12,7 +11,7 @@ export const LandingBlock: FC = () => {
     <BlockStyled>
       <DarkThemeProvider>
         <MatomoLink href={landing}>
-          Learn more about {moduleMeta.shortTitle} <ArrowStyled />
+          Learn more about Lido Node Operators <ArrowStyled />
         </MatomoLink>
       </DarkThemeProvider>
     </BlockStyled>

@@ -15,7 +15,7 @@ import {
 export const StarterPackSection: FC<PropsWithChildren> = ({ children }) => (
   <BlockStyled data-testid="starterPackSection">
     <Heading>
-      <h2>CSM node operator starter pack</h2>
+      <h2>Node Operator starter pack</h2>
       <p>
         Make sure you’ve completed all the basic steps before joining the{' '}
         <MatomoLink

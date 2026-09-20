@@ -2,7 +2,15 @@ import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useLidoSDK, useTargetSmSDK } from '../web3-provider';
+import { SmSDK, useLidoSDK, useTargetSmSDK } from '../web3-provider';
+
+export const fetchSmStatus = async (sdk: SmSDK) => {
+  const [status, registration] = await Promise.all([
+    sdk.module.getStatus(),
+    sdk.module.getRegistration(),
+  ]);
+  return { ...status, ...registration };
+};
 
 export const useSmStatus = (module?: MODULE_NAME) => {
   const { targetModule, sdk } = useTargetSmSDK(module);
@@ -10,13 +18,9 @@ export const useSmStatus = (module?: MODULE_NAME) => {
   return useQuery({
     queryKey: ['sm-status', { module: targetModule }],
     ...STRATEGY_CONSTANT,
-    queryFn: async () => {
+    queryFn: () => {
       invariant(sdk);
-      const [status, registration] = await Promise.all([
-        sdk.module.getStatus(),
-        sdk.module.getRegistration(),
-      ]);
-      return { ...status, ...registration };
+      return fetchSmStatus(sdk);
     },
     enabled: !!sdk,
     select: (data) => ({
