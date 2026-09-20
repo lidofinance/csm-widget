@@ -1,7 +1,8 @@
 import { Text } from '@lidofinance/lido-ui';
-import { moduleMeta } from 'consts';
+import { WIDGET_TITLE } from 'consts';
 import { FC } from 'react';
 import { Address } from 'shared/components';
+import { useModuleMeta } from 'shared/hooks';
 import styled from 'styled-components';
 
 type Props = {
@@ -9,13 +10,16 @@ type Props = {
 };
 
 export const AfterAddressProposed: FC<Props> = ({ address }) => {
+  const meta = useModuleMeta();
+
   return (
     <BlockStyled color="background">
       <b>What is next: </b>
       <br />
       <ol>
         <li>
-          Connect to {moduleMeta.shortTitle} UI with the proposed address
+          Connect to {meta?.shortTitle ?? WIDGET_TITLE} UI with the proposed
+          address
           <Text size="xxs">
             <Address address={address} showIcon />
           </Text>

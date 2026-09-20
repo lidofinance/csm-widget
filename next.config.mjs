@@ -30,14 +30,11 @@ export const CACHE_CONTROL_PAGES = [
   '/surveys/:path*',
   '/type/:path*',
   '/test/:path*',
-  // assets — unhashed, so they share the document TTL; header sources match
-  // pre-rewrite paths, so module-variant files are listed too
+  // assets — unhashed, so they share the document TTL
   '/manifest.json',
-  '/manifest-:module(csm|cm).json',
   '/favicon:suffix([-.a-z0-9]+)',
   '/apple-touch-icon.png',
-  '/apple-touch-icon-:module(csm|cm).png',
-  '/:module(csm|cm)-preview.png',
+  '/operators-preview.png',
 ];
 
 // devDependency, absent from the production image where this config is re-evaluated on boot
@@ -185,29 +182,13 @@ export default withBundleAnalyzer({
       },
       {
         // required for gnosis save apps
-        source: '/manifest:suffix(-[a-z]+)?.json',
+        source: '/manifest.json',
         headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }],
       },
       ...CACHE_CONTROL_PAGES.map((page) => ({
         source: page,
         headers: [{ key: CACHE_CONTROL_HEADER, value: CACHE_CONTROL_VALUE }],
       })),
-    ];
-  },
-  // serves the module-specific assets shipped in public/ under the canonical
-  // paths Gnosis Safe Apps and browsers expect (/manifest.json, /favicon.ico)
-  async rewrites() {
-    return [
-      { source: '/manifest.json', destination: `/manifest-${moduleName}.json` },
-      { source: '/favicon.ico', destination: `/favicon-${moduleName}.ico` },
-      {
-        source: '/favicon-:size(16x16|32x32|192x192|512x512).png',
-        destination: `/favicon-${moduleName}-:size.png`,
-      },
-      {
-        source: '/apple-touch-icon.png',
-        destination: `/apple-touch-icon-${moduleName}.png`,
-      },
     ];
   },
 });

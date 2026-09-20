@@ -10,7 +10,12 @@ import { ServerStyleSheet } from 'styled-components';
 import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 
 import { config } from 'config';
-import { moduleMeta } from 'consts/module';
+import {
+  WIDGET_DESCRIPTION,
+  WIDGET_HOST,
+  WIDGET_PREVIEW_FILE,
+  WIDGET_TITLE,
+} from 'consts/module';
 import { FiraCodeFont } from 'styles';
 
 export default class MyDocument extends Document {
@@ -44,15 +49,15 @@ export default class MyDocument extends Document {
   }
 
   get metaTitle(): string {
-    return `${moduleMeta.title} | Lido`;
+    return `${WIDGET_TITLE} | Lido`;
   }
 
   get metaDescription(): string {
-    return moduleMeta.description;
+    return WIDGET_DESCRIPTION;
   }
 
   get metaPreviewImgUrl(): string {
-    return `${moduleMeta.host}/${moduleMeta.previewFile}`;
+    return `${WIDGET_HOST}/${WIDGET_PREVIEW_FILE}`;
   }
 
   render(): JSX.Element {

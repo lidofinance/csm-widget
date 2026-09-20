@@ -14,10 +14,12 @@ import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { isAddressEqual } from 'viem';
 import { useChangeRoleFlow, useChangeRoleFormData } from '../context';
 import { useRole } from '../hooks/use-role';
-import { moduleMeta } from 'consts';
+import { WIDGET_TITLE } from 'consts';
+import { useModuleMeta } from 'shared/hooks';
 
 export const Info: FC = () => {
   const roleTitle = useRole();
+  const meta = useModuleMeta();
   const flow = useChangeRoleFlow();
   const {
     currentAddress,
@@ -97,8 +99,8 @@ export const Info: FC = () => {
             <Text as="div" size="xxs">
               <ol>
                 <li>
-                  Connect to {moduleMeta.shortTitle} UI with the proposed
-                  address
+                  Connect to {meta?.shortTitle ?? WIDGET_TITLE} UI with the
+                  proposed address
                 </li>
                 <li>
                   Go to Settings tab → Inbox requests to confirm the change
