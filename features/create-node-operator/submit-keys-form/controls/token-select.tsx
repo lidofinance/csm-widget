@@ -1,7 +1,7 @@
-import { isModuleCM } from 'consts';
 import { CM_BOND_AMOUNTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { PATH } from 'consts/urls';
+import { useTargetModule } from 'modules/web3';
 import {
   FormTitle,
   KeysAvailable,
@@ -12,17 +12,18 @@ import {
 import { TokenButtonsHookForm } from 'shared/hook-form/controls';
 import { LocalLink } from 'shared/navigate';
 import { useSubmitKeysFormData } from '../context';
-import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, TOKENS } from '@lidofinance/lido-csm-sdk';
 
 export const TokenSelect: React.FC = () => {
   const { ethBalance, stethBalance, wstethBalance, keysAvailable } =
     useSubmitKeysFormData();
+  const isCM = useTargetModule() === MODULE_NAME.CM;
 
   return (
     <>
       <FormTitle
         extra={
-          isModuleCM ? (
+          isCM ? (
             <MatomoLink
               href={CM_BOND_AMOUNTS_LINK}
               matomoEvent={MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore}

@@ -7,8 +7,6 @@ import {
 // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
 const basePath = process.env.BASE_PATH;
 
-const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
-const moduleName = moduleMode.toLowerCase();
 
 // cache control
 export const CACHE_CONTROL_PAGES = [
@@ -45,10 +43,7 @@ const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
 
 export default withBundleAnalyzer({
   basePath,
-  // re-evaluated on boot, so MODULE picks the matching build
-  distDir: `.next/${moduleName}`,
   env: {
-    MODULE: moduleMode,
     BASE_PATH: basePath ?? '',
   },
   generateBuildId,

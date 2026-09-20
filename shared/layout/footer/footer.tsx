@@ -1,14 +1,34 @@
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { useExternalLinks } from 'shared/hooks';
 import { LogoLidoLink, Stack } from 'shared/components';
+import { useExternalLinks } from 'shared/hooks';
 import { FooterLink, FooterStyle, LinkDivider } from './styles';
 import { Version } from './version';
 
-export const Footer: FC = () => {
+// only mounted when an operator context exists (dummy !== true): useExternalLinks()
+// reads the active module, which the provider-less error/maintenance tree can't supply
+const FeedbackFormLink: FC = () => {
   const { feedbackForm } = useExternalLinks();
+  return (
+    <>
+      <LinkDivider />
+      <FooterLink
+        href={feedbackForm}
+        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm}
+        data-testid="footerFeedbackFormLink"
+      >
+        Feedback form
+      </FooterLink>
+    </>
+  );
+};
 
+type Props = {
+  dummy?: boolean | 'semi';
+};
+
+export const Footer: FC<Props> = ({ dummy }) => {
   return (
     <FooterStyle data-testid="appFooter">
       <LogoLidoLink />
@@ -28,14 +48,7 @@ export const Footer: FC = () => {
         >
           Privacy Notice
         </FooterLink>
-        <LinkDivider />
-        <FooterLink
-          href={feedbackForm}
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerFeedbackForm}
-          data-testid="footerFeedbackFormLink"
-        >
-          Feedback form
-        </FooterLink>
+        {dummy !== true && <FeedbackFormLink />}
         <LinkDivider />
         <FooterLink
           href="https://discord.com/invite/lido"

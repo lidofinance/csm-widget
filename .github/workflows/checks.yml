@@ -40,7 +40,7 @@ jobs:
 
       - run: yarn install --frozen-lockfile --ignore-scripts
 
-      - run: yarn build:all
+      - run: yarn build
 
   security:
     uses: lidofinance/linters/.github/workflows/security.yml@master

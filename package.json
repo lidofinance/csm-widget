@@ -6,9 +6,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "NODE_ENV=development node server.mjs",
-    "dev:cm": "MODULE=cm NODE_ENV=development node server.mjs",
     "build": "next build",
-    "build:all": "MODULE=csm next build && MODULE=cm next build",
     "build:analyze": "ANALYZE_BUNDLE=true next build",
     "start": "NODE_ENV=production node -r next-logger --no-warnings=ExperimentalWarning server.mjs",
     "lint": "eslint --ext ts,tsx,js,mjs .",

@@ -68,7 +68,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
         <Content>{children}</Content>
         {!dummy && <LegalDisclaimer />}
       </Main>
-      <Footer />
+      <Footer dummy={dummy} />
     </LayoutStyle>
   );
 };
