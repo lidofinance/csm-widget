@@ -1,5 +1,5 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { FAQ_OPERATOR_TYPE } from 'faq';
+import { useFaq } from 'faq';
 import { IcsApplyButton } from 'features/ics/apply-button';
 import { IcsProviders } from 'features/ics/shared';
 import { FC } from 'react';
@@ -22,6 +22,6 @@ export const IcsParametersPage: FC = () => (
         action={<IcsApplyButton size="sm" />}
       />
     </IcsProviders>
-    <Faq items={FAQ_OPERATOR_TYPE} />
+    <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>
 );

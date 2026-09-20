@@ -4,7 +4,7 @@ import { Layout } from 'shared/layout';
 import { BondPageSwitcher } from 'shared/navigate';
 import { UnlockBond } from './unlock-bond';
 import { Faq } from 'shared/components';
-import { FAQ_LOCKED } from 'faq';
+import { useFaq } from 'faq';
 
 export const UnlockBondPage: FC = () => (
   <Layout
@@ -14,6 +14,6 @@ export const UnlockBondPage: FC = () => (
   >
     <BondPageSwitcher />
     <UnlockBond />
-    <Faq items={FAQ_LOCKED} />
+    <Faq items={useFaq('LOCKED')} />
   </Layout>
 );

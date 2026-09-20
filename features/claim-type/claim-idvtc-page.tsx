@@ -1,4 +1,4 @@
-import { FAQ_OPERATOR_TYPE } from 'faq';
+import { useFaq } from 'faq';
 import { FC } from 'react';
 import { Faq, TypeBackButton } from 'shared/components';
 import { Layout } from 'shared/layout';
@@ -16,6 +16,6 @@ export const ClaimIdvtcPage: FC = () => (
       <IdvtcPageSwitcher />
     </Gate>
     <ClaimIdvtc />
-    <Faq items={FAQ_OPERATOR_TYPE} />
+    <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>
 );

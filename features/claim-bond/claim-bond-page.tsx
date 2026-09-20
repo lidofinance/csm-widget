@@ -4,7 +4,7 @@ import { Layout } from 'shared/layout';
 import { BondPageSwitcher } from 'shared/navigate';
 import { ClaimBond } from './claim-bond';
 import { Faq } from 'shared/components';
-import { FAQ_BOND } from 'faq';
+import { useFaq } from 'faq';
 
 export const ClaimBondPage: FC = () => (
   <Layout
@@ -14,6 +14,6 @@ export const ClaimBondPage: FC = () => (
   >
     <BondPageSwitcher />
     <ClaimBond />
-    <Faq items={FAQ_BOND} />
+    <Faq items={useFaq('BOND')} />
   </Layout>
 );

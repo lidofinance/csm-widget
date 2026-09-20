@@ -1,4 +1,4 @@
-import { FAQ_ROLES } from 'faq';
+import { useFaq } from 'faq';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
@@ -20,7 +20,7 @@ export const SplitsPage: FC = () => {
       <NoSSRWrapper key={key}>
         <SplitsForm />
       </NoSSRWrapper>
-      <Faq items={FAQ_ROLES} />
+      <Faq items={useFaq('ROLES')} />
     </Layout>
   );
 };

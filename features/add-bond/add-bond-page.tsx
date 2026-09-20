@@ -4,7 +4,7 @@ import { Layout } from 'shared/layout';
 import { BondPageSwitcher } from 'shared/navigate';
 import { AddBond } from './add-bond';
 import { Faq } from 'shared/components';
-import { FAQ_BOND } from 'faq';
+import { useFaq } from 'faq';
 
 export const AddBondPage: FC = () => (
   <Layout
@@ -14,6 +14,6 @@ export const AddBondPage: FC = () => (
   >
     <BondPageSwitcher />
     <AddBond />
-    <Faq items={FAQ_BOND} />
+    <Faq items={useFaq('BOND')} />
   </Layout>
 );
