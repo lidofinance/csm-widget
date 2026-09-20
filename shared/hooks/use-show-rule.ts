@@ -123,7 +123,7 @@ export const useShowFlags = (): ShowFlags => {
     'ENABLE_TOP_UP_ALLOCATION_ROLE',
     MODULE_NAME.CM,
   );
-  const { data: isReportingRole } = useHasReportDelayedPenaltyRole();
+  const { data: reportingRoleModules } = useHasReportDelayedPenaltyRole();
   const { data: balance } = useOperatorBalance({
     nodeOperatorId: nodeOperator?.nodeOperatorId,
   });
@@ -175,7 +175,7 @@ export const useShowFlags = (): ShowFlags => {
       ['HAS_INVITES']: !!invites?.length,
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
-      ['EL_DELAYED_PENALTY_REPORTER']: !!isReportingRole,
+      ['EL_DELAYED_PENALTY_REPORTER']: (reportingRoleModules?.length ?? 0) > 0,
       ['EL_TOP_UP_ALLOCATION_ENABLER']:
         !!isTopUpEnablerRole && !!topUpSupported,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
@@ -209,7 +209,7 @@ export const useShowFlags = (): ShowFlags => {
       invites?.length,
       balance?.locked,
       referrer,
-      isReportingRole,
+      reportingRoleModules,
       isTopUpEnablerRole,
       canClaimICS,
       canClaimIDVTC,

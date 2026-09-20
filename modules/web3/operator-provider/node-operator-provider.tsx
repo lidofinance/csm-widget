@@ -75,7 +75,7 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const value = useMemo(
     // needsSelection folds into isPending so GateLoaded keeps a SplashPage under the modal
-    // instead of flashing StarterPackPage/CmWelcomePage and redirecting via NOT_NODE_OPERATOR
+    // instead of flashing the welcome page and redirecting via NOT_NODE_OPERATOR
     () => ({
       isPending: isPending || needsSelection,
       nodeOperator: active,

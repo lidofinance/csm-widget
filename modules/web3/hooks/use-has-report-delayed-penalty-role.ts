@@ -1,10 +1,11 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_IMMUTABLE } from 'consts';
 import invariant from 'tiny-invariant';
-import { useLidoSDK } from '../web3-provider';
+import { SmSDK, useLidoSDK } from '../web3-provider';
 import { useDappStatus } from './use-dapp-status';
 
-/** True if the address holds the role on any deployed module. */
+/** Modules where the address holds the delayed-penalty report role. */
 export const useHasReportDelayedPenaltyRole = () => {
   const { address } = useDappStatus();
   const { sm } = useLidoSDK();
@@ -15,20 +16,24 @@ export const useHasReportDelayedPenaltyRole = () => {
       { address, modules: Object.keys(sm) },
     ],
     ...STRATEGY_IMMUTABLE,
-    queryFn: async () => {
+    queryFn: async (): Promise<MODULE_NAME[]> => {
       invariant(address);
+      const entries = Object.entries(sm) as [MODULE_NAME, SmSDK][];
       // one module's RPC failure must not hide a role granted on another
       const results = await Promise.allSettled(
-        Object.values(sm).map((sdk) =>
-          sdk
-            ? sdk.module.hasProtocolRole(
-                'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
-                address,
-              )
-            : Promise.resolve(false),
+        entries.map(([, sdk]) =>
+          sdk.module.hasProtocolRole(
+            'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
+            address,
+          ),
         ),
       );
-      return results.some((r) => r.status === 'fulfilled' && r.value);
+      return entries
+        .filter(
+          (_, index) =>
+            results[index].status === 'fulfilled' && results[index].value,
+        )
+        .map(([module]) => module);
     },
     enabled: !!address,
   });

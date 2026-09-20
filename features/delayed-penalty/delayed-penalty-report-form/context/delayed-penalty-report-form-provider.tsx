@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC, PropsWithChildren } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import {
@@ -8,9 +9,9 @@ import { type DelayedPenaltyReportFormInputType } from './types';
 import { useDelayedPenaltyReportFlowResolver } from './use-delayed-penalty-report-flow';
 import { useDelayedPenaltyReportValidation } from './use-delayed-penalty-report-validation';
 
-export const DelayedPenaltyReportFormProvider: FC<PropsWithChildren> = ({
-  children,
-}) => {
+export const DelayedPenaltyReportFormProvider: FC<
+  PropsWithChildren<{ module?: MODULE_NAME }>
+> = ({ children, module }) => {
   const resolver = useDelayedPenaltyReportValidation();
 
   const formObject = useForm<DelayedPenaltyReportFormInputType>({
@@ -21,7 +22,7 @@ export const DelayedPenaltyReportFormProvider: FC<PropsWithChildren> = ({
     mode: 'onChange',
   });
 
-  const submitter = useFlowSubmit(useDelayedPenaltyReportFlowResolver());
+  const submitter = useFlowSubmit(useDelayedPenaltyReportFlowResolver(module));
 
   return (
     <FormProvider {...formObject}>

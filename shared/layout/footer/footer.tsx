@@ -6,8 +6,7 @@ import { useExternalLinks } from 'shared/hooks';
 import { FooterLink, FooterStyle, LinkDivider } from './styles';
 import { Version } from './version';
 
-// only mounted when an operator context exists (dummy !== true): useExternalLinks()
-// reads the active module, which the provider-less error/maintenance tree can't supply
+// dummy===true pages (404/500/qa-config) render outside Web3Provider entirely; useExternalLinks needs wagmi context
 const FeedbackFormLink: FC = () => {
   const { feedbackForm } = useExternalLinks();
   return (
