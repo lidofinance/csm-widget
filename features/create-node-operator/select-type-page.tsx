@@ -27,7 +27,7 @@ export const SelectTypePage: FC = () => {
           </Stack>
           <Stack direction="column" gap="xl">
             {types.map((type) => (
-              <TypeCard key={type.type} type={type} />
+              <TypeCard key={type.key} type={type} />
             ))}
           </Stack>
         </Stack>

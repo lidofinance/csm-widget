@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 
 import { useFaq } from 'faq';
@@ -14,6 +15,6 @@ export const CreateNodeOperatorPage: FC = () => (
     pageName="CreateNodeOperator"
   >
     <CreateCuratedNodeOperator />
-    <Faq items={useFaq('KEYS')} />
+    <Faq items={useFaq('KEYS', MODULE_NAME.CM)} />
   </Layout>
 );
