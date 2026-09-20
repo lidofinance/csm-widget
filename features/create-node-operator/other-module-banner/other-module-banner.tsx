@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
@@ -11,9 +12,9 @@ const REPLACEMENTS: Record<string, string> = {
   'curated-onchain-v1': 'Lido Curated v1',
 };
 
-export const OtherModuleBanner: FC = () => {
+export const OtherModuleBanner: FC<{ module: MODULE_NAME }> = ({ module }) => {
   const { operatorsWidget } = getExternalLinks();
-  const { data } = useOtherModule();
+  const { data } = useOtherModule(undefined, module);
   const moduleName = (data && REPLACEMENTS[data]) ?? data;
 
   if (!moduleName) return null;

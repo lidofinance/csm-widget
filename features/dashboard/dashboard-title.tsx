@@ -9,6 +9,7 @@ import styled from 'styled-components';
 
 const ModuleTitle: FC = () => {
   const { module } = useModule();
+  if (!module) return null;
   return <>{MODULE_METADATA[module].title}</>;
 };
 

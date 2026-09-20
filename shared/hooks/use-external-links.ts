@@ -42,20 +42,18 @@ export const useBeaconchainEntityLink = () => {
 export const useFeesMonitoningLink = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { feesMonitoring } = useExternalLinks();
-  const {
-    core: { moduleId },
-  } = useSmSDK();
-  if (!feesMonitoring) return null;
+  const sdk = useSmSDK();
+  if (!feesMonitoring || !sdk || nodeOperatorId === undefined) return null;
+  const { moduleId } = sdk.core;
   return `${feesMonitoring}/operatorInfo?stakingModuleIndex=${moduleId}&operatorIndex=${nodeOperatorId}`;
 };
 
 export const useOperatorPortalLink = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const {
-    core: { moduleId },
-  } = useSmSDK();
+  const sdk = useSmSDK();
   const { operatorsWidget } = useExternalLinks();
-  if (!operatorsWidget) return null;
+  if (!operatorsWidget || !sdk || nodeOperatorId === undefined) return null;
+  const { moduleId } = sdk.core;
   return `${operatorsWidget}/module/${moduleId}/${nodeOperatorId}`;
 };
 

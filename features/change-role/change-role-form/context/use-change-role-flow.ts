@@ -1,5 +1,5 @@
 import { type NodeOperatorShortInfo, ROLES } from '@lidofinance/lido-csm-sdk';
-import { useAppendOperator, useModule, useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK, useAppendOperator } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -26,8 +26,8 @@ export const useChangeRoleFlowResolver = (
   ChangeRoleFormNetworkData,
   ChangeRoleFlow
 > => {
-  const sdk = useSmSDK();
-  const { module } = useModule();
+  const sdk = useActiveOperatorSDK();
+  const moduleName = sdk.core.moduleName;
   const appendNO = useAppendOperator();
   const confirm = useConfirmChangeRoleModal();
   const mode = useChangeRoleMode(role);
@@ -44,7 +44,7 @@ export const useChangeRoleFlowResolver = (
               role: data.role,
               callback: buildCallback(input, data),
             });
-            if (result) appendNO({ ...result, module });
+            if (result) appendNO({ ...result, module: moduleName });
           },
         };
       }
@@ -109,12 +109,12 @@ export const useChangeRoleFlowResolver = (
           }
 
           if (result) {
-            appendNO({ ...result, module });
+            appendNO({ ...result, module: moduleName });
           }
         },
       };
     },
-    [sdk, appendNO, module, confirm, mode, buildCallback],
+    [sdk, appendNO, moduleName, confirm, mode, buildCallback],
   );
 };
 

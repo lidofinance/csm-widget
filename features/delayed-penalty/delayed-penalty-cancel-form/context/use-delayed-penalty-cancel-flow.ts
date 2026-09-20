@@ -1,4 +1,4 @@
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -18,7 +18,7 @@ export const useDelayedPenaltyCancelFlowResolver = (): FlowResolver<
   DelayedPenaltyCancelFormNetworkData,
   DelayedPenaltyCancelFlow
 > => {
-  const { delayedPenalty } = useSmSDK();
+  const { delayedPenalty } = useActiveOperatorSDK();
   const buildCallback = useTxModalStagesDelayedPenaltyCancel();
 
   return useCallback(

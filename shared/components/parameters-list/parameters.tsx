@@ -4,7 +4,8 @@ import {
   TOKENS,
 } from '@lidofinance/lido-csm-sdk';
 import { MODULE_METADATA, isCsmFamilyModule } from 'consts';
-import { useModule } from 'modules/web3';
+import { useTargetModule } from 'modules/web3';
+import invariant from 'tiny-invariant';
 import { ReactNode } from 'react';
 import { FormatToken } from 'shared/formatters';
 import { plural } from 'utils';
@@ -165,5 +166,9 @@ const PARAMETERS_BY_MODULE = Object.fromEntries(
   }),
 ) as Record<MODULE_NAME, Parameter[]>;
 
-export const useParameters = (): Parameter[] =>
-  PARAMETERS_BY_MODULE[useModule().module];
+export const useParameters = (module?: MODULE_NAME): Parameter[] => {
+  const targetModule = useTargetModule();
+  const target = module ?? targetModule;
+  invariant(target, 'useParameters needs a target module');
+  return PARAMETERS_BY_MODULE[target];
+};

@@ -1,8 +1,7 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { MODULE_METADATA } from 'consts';
+import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
+import { isCsmFamilyModule, MODULE_METADATA } from 'consts';
 import { getExternalLinks, SUBSCRIBE_EVENTS_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { useModule } from 'modules/web3';
 import { useModalActions } from 'providers/modal-provider';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
@@ -13,10 +12,11 @@ import styled from 'styled-components';
 type Props = {
   nodeOperatorId?: NodeOperatorId;
   keys: string[];
+  module: MODULE_NAME;
 };
 
-export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys }) => {
-  const { module, isCsmFamily } = useModule();
+export const AfterCreateCustomNodeOperator: FC<Props> = ({ keys, module }) => {
+  const isCsmFamily = isCsmFamilyModule(module);
   const beaconchainDashboardLink = useBeaconchainDashboardLink(keys);
   const { beaconchain } = getExternalLinks();
   const { closeModal } = useModalActions();

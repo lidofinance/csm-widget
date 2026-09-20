@@ -17,20 +17,20 @@ export const useOperatorTopUpQueue = <TData = OperatorTopUpQueue>({
   nodeOperatorId: NodeOperatorId | undefined;
   select?: (data: OperatorTopUpQueue) => TData;
 }) => {
-  const sdk = useSmSDK() as CsmFamilySDK;
+  const sdk = useSmSDK() as CsmFamilySDK | undefined;
   const enabled =
+    !!sdk &&
     TOPUP_QUEUE_MODULES.has(sdk.core.moduleName) &&
     nodeOperatorId !== undefined;
 
   return useQuery({
     queryKey: [
       ...KEY_OPERATOR_TOP_UP_QUEUE,
-      { nodeOperatorId, module: sdk.core.moduleName },
+      { nodeOperatorId, module: sdk?.core.moduleName },
     ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
-      invariant(sdk);
-      invariant(nodeOperatorId !== undefined);
+      invariant(sdk && nodeOperatorId !== undefined);
       return sdk.depositQueue.getOperatorTopUpQueue(nodeOperatorId);
     },
     select,

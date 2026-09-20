@@ -2,7 +2,7 @@ import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK, useTargetSmSDK } from '../web3-provider';
+import { useLidoSDK, useTargetSmSDK } from '../web3-provider';
 
 export const useSmStatus = (module?: MODULE_NAME) => {
   const { targetModule, sdk } = useTargetSmSDK(module);
@@ -26,12 +26,25 @@ export const useSmStatus = (module?: MODULE_NAME) => {
   });
 };
 
-export const useSmVersionSupported = () => {
-  const { module, core } = useSmSDK();
+/** No module → supported only if every deployed module is. */
+export const useSmVersionSupported = (module?: MODULE_NAME) => {
+  const { sm } = useLidoSDK();
+  const target = module ? [sm[module]] : Object.values(sm);
 
   return useQuery({
-    queryKey: ['sm-version', { module: core.moduleName }],
+    queryKey: [
+      'sm-version',
+      { modules: target.map((s) => s?.core.moduleName) },
+    ],
     ...STRATEGY_CONSTANT,
-    queryFn: async () => module.isVersionsSupported(),
+    queryFn: async () => {
+      const results = await Promise.all(
+        target.map((s) => {
+          invariant(s);
+          return s.module.isVersionsSupported();
+        }),
+      );
+      return results.every(Boolean);
+    },
   });
 };

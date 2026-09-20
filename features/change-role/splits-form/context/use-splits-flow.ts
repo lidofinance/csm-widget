@@ -1,5 +1,5 @@
 import { FeeSplit } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -12,8 +12,7 @@ import { useSplitsFormData } from './splits-data-provider';
 import { SplitsFormInputType, SplitsFormNetworkData } from './types';
 
 export type SplitsFlow =
-  | { action: 'view' }
-  | ({ action: 'set-splits' } & Executable);
+  { action: 'view' } | ({ action: 'set-splits' } & Executable);
 
 // eslint-disable-next-line func-style
 function assertFeeSplits(
@@ -30,7 +29,7 @@ export const useSplitsFlowResolver = (): FlowResolver<
   SplitsFormNetworkData,
   SplitsFlow
 > => {
-  const sdk = useSmSDK();
+  const sdk = useActiveOperatorSDK();
   const confirmSplits = useConfirmSplitsModal();
   const buildCallback = useTxModalStagesSplits();
 

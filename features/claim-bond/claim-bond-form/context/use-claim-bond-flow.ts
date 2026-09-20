@@ -1,5 +1,5 @@
 import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -30,7 +30,7 @@ export const useClaimBondFlowResolver = (): FlowResolver<
   ClaimBondFormNetworkData,
   ClaimBondFlow
 > => {
-  const { bond: bondSDK } = useSmSDK();
+  const { bond: bondSDK } = useActiveOperatorSDK();
   const [canClaim, claimAccess] = useCanPerform(bondSDK, 'claimBond');
   const buildCallback = useTxModalStagesClaimBond();
 

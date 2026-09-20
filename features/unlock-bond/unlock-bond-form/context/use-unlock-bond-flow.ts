@@ -1,5 +1,5 @@
 import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -23,7 +23,7 @@ export const useUnlockBondFlowResolver = (): FlowResolver<
   UnlockBondFormNetworkData,
   UnlockBondFlow
 > => {
-  const { bond: bondSDK } = useSmSDK();
+  const { bond: bondSDK } = useActiveOperatorSDK();
   const [canCompensate, compensateAccess] = useCanPerform(
     bondSDK,
     'compensateLockedBond',

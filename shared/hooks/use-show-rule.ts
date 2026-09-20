@@ -8,6 +8,7 @@ import { useFeatureFlags } from 'config/feature-flags';
 import {
   useDappStatus,
   useHasProtocolRole,
+  useHasReportDelayedPenaltyRole,
   useInvites,
   useModule,
   useNodeOperator,
@@ -120,9 +121,7 @@ export const useShowFlags = (): ShowFlags => {
     'ENABLE_TOP_UP_ALLOCATION_ROLE',
     MODULE_NAME.CM,
   );
-  const { data: isReportingRole } = useHasProtocolRole(
-    'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
-  );
+  const { data: isReportingRole } = useHasReportDelayedPenaltyRole();
   const { data: balance } = useOperatorBalance({
     nodeOperatorId: nodeOperator?.nodeOperatorId,
   });
@@ -243,7 +242,10 @@ export const useFilterShowRules = <T extends ShowRuleProps>(items: T[]) => {
   return useMemo(
     () =>
       items
-        .filter(({ modules }) => !modules || modules.includes(module))
+        .filter(
+          ({ modules }) =>
+            !modules || (module !== undefined && modules.includes(module)),
+        )
         .filter(
           ({ showRules }) =>
             !showRules?.length ||

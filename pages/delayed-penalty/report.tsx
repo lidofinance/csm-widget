@@ -1,13 +1,11 @@
 import { PATH } from 'consts/urls';
 import { DelayedPenaltyReportPage } from 'features/delayed-penalty';
-import { useHasProtocolRole } from 'modules/web3';
+import { useHasReportDelayedPenaltyRole } from 'modules/web3';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { getProps } from 'utilsApi';
 
 const Page = () => {
-  const { isPending } = useHasProtocolRole(
-    'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
-  );
+  const { isPending } = useHasReportDelayedPenaltyRole();
 
   return (
     <GateLoaded>

@@ -17,7 +17,9 @@ export const Parameters: FC<{ type: OPERATOR_TYPE }> = ({ type }) => {
   const wcType =
     OPERATOR_TYPE_INFO[type].module === MODULE_NAME.CSM_02 ? '0x02' : '0x01';
   const { data: parameters } = useCurveParameters(useOperatorTypeCurve(type));
-  const PARAMETERS = useParameters().filter((p) => p.renderRows);
+  const PARAMETERS = useParameters(OPERATOR_TYPE_INFO[type].module).filter(
+    (p) => p.renderRows,
+  );
 
   return (
     <Stack direction="column" gap="sm">

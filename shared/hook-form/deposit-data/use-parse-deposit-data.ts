@@ -1,7 +1,8 @@
 import type { DepositData } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useSmSDK, useTargetModule } from 'modules/web3';
 import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
+import invariant from 'tiny-invariant';
 
 export type DepositDataInputType = {
   rawDepositData: string | undefined;
@@ -10,7 +11,8 @@ export type DepositDataInputType = {
 };
 
 export const useParseDepositData = () => {
-  const { depositData } = useSmSDK();
+  const targetModule = useTargetModule();
+  const sdk = useSmSDK(targetModule);
 
   const { watch, getFieldState, setValue, clearErrors, setError } =
     useFormContext<DepositDataInputType>();
@@ -19,7 +21,8 @@ export const useParseDepositData = () => {
 
   useEffect(() => {
     if (!rawDepositData && !isTouched) return;
-    const result = depositData.parseDepositData(rawDepositData || '');
+    invariant(sdk, 'deposit data needs a target module');
+    const result = sdk.depositData.parseDepositData(rawDepositData || '');
 
     if (result.success && result.data) {
       clearErrors('depositData');
@@ -33,5 +36,5 @@ export const useParseDepositData = () => {
         message: result.error || 'Failed to parse deposit data',
       });
     }
-  }, [clearErrors, isTouched, rawDepositData, setError, setValue, depositData]);
+  }, [clearErrors, isTouched, rawDepositData, setError, setValue, sdk]);
 };
