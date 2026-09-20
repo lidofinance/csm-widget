@@ -1,6 +1,10 @@
 import { Address, isAddress } from 'viem';
 
-import { CONTRACT_NAMES, CURATED_GATES } from '@lidofinance/lido-csm-sdk';
+import {
+  CONTRACT_NAMES,
+  CURATED_GATES,
+  MODULE_NAME,
+} from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
 
 type DevnetJson = Record<string, unknown>;
@@ -50,6 +54,26 @@ export const parseDevnetAddresses = (
   return result;
 };
 
-export const overridedAddresses = config.devnetAddresses
-  ? parseDevnetAddresses(config.devnetAddresses)
+const moduleOfArtifacts = (json: DevnetJson): MODULE_NAME | undefined =>
+  'CuratedModule' in json
+    ? MODULE_NAME.CM
+    : 'CSModule' in json
+      ? MODULE_NAME.CSM
+      : undefined;
+
+type AddressesByModule = Partial<
+  Record<MODULE_NAME, Partial<Record<CONTRACT_NAMES, Address>>>
+>;
+
+export const devnetAddressesByModule = (
+  json: DevnetJson,
+): AddressesByModule | undefined => {
+  const artifactsModule = moduleOfArtifacts(json);
+  return artifactsModule
+    ? { [artifactsModule]: parseDevnetAddresses(json) }
+    : undefined;
+};
+
+export const overridedAddressesByModule = config.devnetAddresses
+  ? devnetAddressesByModule(config.devnetAddresses)
   : undefined;

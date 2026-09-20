@@ -22,7 +22,7 @@ import { mainnet } from 'viem/chains';
 import { ENSUniversalResolverAbi } from 'abi/ens-universal-resolver-abi';
 import { config } from 'config';
 import { resolveDeployedModules } from 'consts/modules/resolve-deployed-modules';
-import { parseDevnetAddresses } from 'modules/web3/web3-provider/devnet';
+import { devnetAddressesByModule } from 'modules/web3/web3-provider/devnet';
 import { getServerConfig } from './server-config';
 import { AggregatorAbi } from 'abi/aggregator-abi';
 
@@ -66,7 +66,7 @@ const STATIC_ADDRESSES: {
 
 const { devnetAddresses } = getServerConfig();
 const devnetOverrides = devnetAddresses
-  ? parseDevnetAddresses(devnetAddresses)
+  ? devnetAddressesByModule(devnetAddresses)
   : undefined;
 
 // CSM and CSM_02 share contract names on the same chain, so addresses are collected
@@ -76,8 +76,8 @@ const getModuleAddresses = (
   chainId: SUPPORTED_CHAINS,
 ): Partial<Record<CONTRACT_NAMES, Address>> => ({
   ...MODULE_CONFIG[module][chainId]?.contractAddresses,
-  ...(module === config.module && chainId === config.defaultChain
-    ? devnetOverrides
+  ...(chainId === config.defaultChain
+    ? devnetOverrides?.[module]
     : undefined),
 });
 
@@ -91,15 +91,14 @@ const getChainAddressEntries = (
     ...staticAddresses,
   }) as [AlL_CONTRACT_NAMES, Address][];
 
-  const moduleEntries = resolveDeployedModules(config.module, chainId).flatMap(
-    (module) =>
-      Object.entries(getModuleAddresses(module, chainId)).map(
-        ([name, address]) =>
-          [name, staticAddresses[name as AlL_CONTRACT_NAMES] ?? address] as [
-            AlL_CONTRACT_NAMES,
-            Address,
-          ],
-      ),
+  const moduleEntries = resolveDeployedModules(chainId).flatMap((module) =>
+    Object.entries(getModuleAddresses(module, chainId)).map(
+      ([name, address]) =>
+        [name, staticAddresses[name as AlL_CONTRACT_NAMES] ?? address] as [
+          AlL_CONTRACT_NAMES,
+          Address,
+        ],
+    ),
   );
 
   return (

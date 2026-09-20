@@ -3,34 +3,20 @@ import { CHAINS } from '@lidofinance/lido-ethereum-sdk/common';
 import { resolveDeployedModules } from './resolve-deployed-modules';
 
 describe('resolveDeployedModules', () => {
-  it('secondary modules are filtered by MODULE_CONFIG', () => {
-    expect(resolveDeployedModules(MODULE_NAME.CSM, CHAINS.Mainnet)).toEqual([
+  it('returns every module configured on the chain, CSM first', () => {
+    expect(resolveDeployedModules(CHAINS.Mainnet)).toEqual([
       MODULE_NAME.CSM,
       MODULE_NAME.CSM_02,
+      MODULE_NAME.CM,
     ]);
-    expect(resolveDeployedModules(MODULE_NAME.CSM, CHAINS.Hoodi)).toEqual([
+    expect(resolveDeployedModules(CHAINS.Hoodi)).toEqual([
       MODULE_NAME.CSM,
       MODULE_NAME.CSM_02,
-    ]);
-    expect(resolveDeployedModules(MODULE_NAME.CSM, 999999)).toEqual([
-      MODULE_NAME.CSM,
-    ]);
-  });
-
-  it('CM deployment is always exactly [CM]', () => {
-    expect(resolveDeployedModules(MODULE_NAME.CM, CHAINS.Hoodi)).toEqual([
       MODULE_NAME.CM,
     ]);
   });
 
-  it('CSM_02 deployment is always exactly [CSM_02], even without a MODULE_CONFIG entry', () => {
-    expect(resolveDeployedModules(MODULE_NAME.CSM_02, 999999)).toEqual([
-      MODULE_NAME.CSM_02,
-    ]);
-  });
-
-  it('primary module is always first and always present', () => {
-    const result = resolveDeployedModules(MODULE_NAME.CSM, 999999);
-    expect(result).toEqual([MODULE_NAME.CSM]);
+  it('returns an empty list for an unknown chain', () => {
+    expect(resolveDeployedModules(999999)).toEqual([]);
   });
 });
