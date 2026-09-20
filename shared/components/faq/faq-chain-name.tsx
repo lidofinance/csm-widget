@@ -1,6 +1,5 @@
 import { CONTRACT_NAMES, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { config } from 'config';
 import { useDappStatus, useModule, useSmSDK } from 'modules/web3';
 import { FC, PropsWithChildren } from 'react';
 import { useChainName } from 'shared/hooks';
@@ -56,7 +55,7 @@ export const FaqModuleName: FC = () => {
 
 const FaqContractAddress: FC<{ name: CONTRACT_NAMES }> = ({ name }) => {
   const { chainId } = useDappStatus();
-  const sm = useSmSDK(config.module);
+  const sm = useSmSDK(MODULE_NAME.CSM);
   const address = sm?.core.getContractAddress(name);
   if (!address) return null;
 

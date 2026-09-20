@@ -1,8 +1,6 @@
-# Lido Community Staking Module Widget
+# Lido Operators Widget
 
-A widget for participating in Lido CSM based on [Lido Frontend Template](https://github.com/lidofinance/lido-frontend-template).
-
-Lido Community Staking Module (CSM) is a permissionless module allowing community stakers to operate Ethereum validators with lower entry costs. Stakers provide stETH bonds, serving as security collateral, and receive rewards in the form of bond rebase and staking rewards (including execution layer rewards), which are socialized across Lido’s staking modules.
+A widget for Lido Node Operators based on [Lido Frontend Template](https://github.com/lidofinance/lido-frontend-template). One deployment serves every staking module: the Community Staking Module (CSM), a permissionless module allowing community stakers to operate Ethereum validators with lower entry costs, and the Curated Module v2 (CM), for allow-listed professional operators.
 
 More on CSM in the [docs](https://docs.lido.fi/staking-modules/csm/intro).
 

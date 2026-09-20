@@ -1,13 +1,12 @@
 import getConfigNext from 'next/config';
 import { default as dynamics } from './dynamics';
-import { MODULE_NAME, SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { parseDefaultChain } from './helpers';
 
 const { publicRuntimeConfig, serverRuntimeConfig } = getConfigNext();
 
-export type PreConfigType = Omit<typeof publicRuntimeConfig, 'module'> &
+export type PreConfigType = typeof publicRuntimeConfig &
   typeof dynamics & {
-    module: MODULE_NAME;
     defaultChain: SUPPORTED_CHAINS;
     BASE_PATH_ASSET: string;
   };
@@ -24,7 +23,6 @@ export const getPreConfig = (): PreConfigType => {
     BASE_PATH_ASSET,
 
     ...publicRuntimeConfig,
-    module: MODULE_NAME[publicRuntimeConfig.module],
 
     ...(typeof window !== 'undefined' ? window.__env__ : dynamics),
   };

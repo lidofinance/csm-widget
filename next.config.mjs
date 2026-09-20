@@ -12,7 +12,6 @@ buildDynamics();
 const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
-const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
 const isIPFSMode = toBoolean(process.env.IPFS_MODE);
 const maintenance = toBoolean(process.env.MAINTENANCE); // TODO: load from runtime config
 
@@ -280,7 +279,6 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
-    module: moduleMode,
     devnetAddresses,
   },
 });

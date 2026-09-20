@@ -137,8 +137,8 @@ describe('logging missing env vars', () => {
     );
   });
 
-  it('reports missing MODULE as optional', () => {
+  it('reports missing BASE_PATH as optional', () => {
     const out = run('logOpenEnvironmentVariables', {});
-    expect(out).toContain('MODULE - not set (optional)');
+    expect(out).toContain('BASE_PATH - not set (optional)');
   });
 });

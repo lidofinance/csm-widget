@@ -6,7 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 The project requires an `.env.local` file with environment variables. Copy from `.env.example` and configure:
 
-- `MODULE` - Set to `csm` (default) or `cm` to choose the module version
 - RPC provider URLs and CL API URLs with keys
 - For testing, also set `STAND_TYPE`, `WALLET_SECRET_PHRASE`, `WALLET_PASSWORD`
 
@@ -14,39 +13,24 @@ Install Playwright browser for tests: `yarn playwright install chromium --with-d
 
 ## Architecture Overview
 
-This is a Next.js React application for Lido's Community Staking Module (CSM) widget, built on the Lido Frontend Template.
+This is a Next.js React application for the unified Lido "Operators" widget, built on the Lido Frontend Template. One deployment serves every staking module — CSM, CSM_02 and CM — there is no `MODULE` env or "primary" module.
 
 ### Module Versions
 
-**IMPORTANT**: This application has two distinct versions that share the same codebase:
+`deployedModules` (`consts/modules`) lists the modules configured for the current chain (CSM first). Which module a screen is about is never static — it comes from the active node operator:
 
-- **CSM (Community Staking Module)** - Fully implemented and production-ready
-- **CM (Curated Module v2)** - Currently in development
-
-#### Configuration
-
-The active version is controlled by the `MODULE` environment variable:
-
-- Set `MODULE=csm` (default) for Community Staking Module
-- Set `MODULE=cm` for Curated Module
-
-The module value is:
-
-1. Read from `process.env.MODULE` in `next.config.mjs` (uppercased to `moduleMode`)
-2. Exposed via `publicRuntimeConfig.module`, then mapped to the `MODULE_NAME` enum in `config/get-preconfig.ts`
-3. Accessible throughout the app via `useConfig()` hook: `config.module`
+- **Two-zone rule**: operator-facing code (dashboard, keys, bond, claim, …) reads the module reactively via `useModule()` / `useSmSDK()` / `useModuleMeta()`. Pre-operator code (welcome, starter pack, `/create`) has no active module yet and passes an explicit `MODULE_NAME` where one is needed (e.g. `/create/cm` passes `MODULE_NAME.CM`). Never silently default to CSM in operator-facing code.
+- `useModule()` returns `{ module: MODULE_NAME | undefined, isCSM, isCSM02, isCsmFamily, isCM }` — `module` is `undefined` until an operator is active, and all booleans are `false` in that state.
 
 #### Detecting Module Version in Code
 
-**Config-based detection:**
+**Reactive (operator-facing) detection:**
 
 ```typescript
-import { useConfig } from 'config';
+import { useModule } from 'modules/web3';
 
-const {
-  config: { module },
-} = useConfig();
-// module === 'CSM' or 'CM' (MODULE_NAME enum values, uppercase)
+const { module, isCSM, isCM } = useModule();
+// module is MODULE_NAME.CSM / CSM_02 / CM, or undefined pre-operator
 ```
 
 **Show Rules (for conditional rendering):**
@@ -80,14 +64,14 @@ For CM module, gates control operator access levels:
 
 #### Module-Specific Features
 
-Each module version has its own set of features and pages. The module type determines:
+The active operator's module determines:
 
 - Available navigation routes
 - Feature accessibility
 - UI components and workflows specific to that module type
 - Permission gates (CM only)
 
-Module constants and titles are defined in `consts/module.ts`.
+Module constants and titles are defined in `consts/module.ts`; the widget brand (`WIDGET_TITLE`, etc.) is module-neutral.
 
 ### Project Structure
 
@@ -105,10 +89,10 @@ Module constants and titles are defined in `consts/module.ts`.
 
 Use `useSmSDK()` hook to access Lido SDK instances:
 
-- `useSmSDK()` - Active module's SDK (falls back to the deployment's primary module)
+- `useSmSDK()` - Active operator's SDK, or `undefined` when no operator is active
 - `useSmSDK(MODULE_NAME.CSM)` - That module's SDK whether or not it is active; `undefined` if not deployed
 - `useActiveSmSDK(MODULE_NAME.CM)` - That module's SDK only while it is the active operator's module, else `undefined`. Use in operator-scoped queries as the `enabled` gate
-- `useTargetSmSDK(module?)` - `{ targetModule, sdk }` for `module`, defaulting to the active one
+- `useTargetSmSDK(module?)` - `{ targetModule, sdk }` for `module`, defaulting to the active one, else `undefined`
 
 Note: "SM" = Staking Module (module-agnostic terminology for code shared between CSM and CM).
 

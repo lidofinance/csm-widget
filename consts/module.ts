@@ -1,5 +1,4 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
 
 export const WIDGET_TITLE = 'Operators';
 export const WIDGET_DESCRIPTION =
@@ -26,8 +25,3 @@ export const MODULE_METADATA = {
   },
   [MODULE_NAME.CSM_02]: CSM_METADATA,
 } as const;
-
-export const moduleMeta = MODULE_METADATA[config.module];
-
-export const isModuleCSM = config.module === MODULE_NAME.CSM;
-export const isModuleCM = config.module === MODULE_NAME.CM;
