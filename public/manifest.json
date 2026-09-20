@@ -1,7 +1,7 @@
 {
   "name": "Operators | Lido",
   "short_name": "Operators | Lido",
-  "description": "The Community Staking Module is a permissionless staking module aimed at attracting community stakers to participate in the Lido on Ethereum protocol as Node Operators.",
+  "description": "Manage your Lido Node Operator across the Community Staking and Curated modules",
   "iconPath": "favicon-512x512.png",
   "icons": [
     {

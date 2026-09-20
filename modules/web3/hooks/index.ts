@@ -6,6 +6,7 @@ export * from './use-curve-parameters';
 export * from './use-custom-rewards-claimer';
 export * from './use-dapp-status';
 export * from './use-default-curve-id';
+export * from './use-delayed-penalty-module';
 export * from './use-deployed-modules-status';
 export * from './use-deposit-queue-batches';
 export * from './use-fee-splits';

@@ -1,4 +1,5 @@
-import { useActiveOperatorSDK } from 'modules/web3';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -14,18 +15,21 @@ import {
 
 export type DelayedPenaltyReportFlow = { action: 'report' } & Executable;
 
-export const useDelayedPenaltyReportFlowResolver = (): FlowResolver<
+export const useDelayedPenaltyReportFlowResolver = (
+  module: MODULE_NAME | undefined,
+): FlowResolver<
   DelayedPenaltyReportFormInputType,
   DelayedPenaltyReportFormNetworkData,
   DelayedPenaltyReportFlow
 > => {
-  const { delayedPenalty } = useActiveOperatorSDK();
+  const sdk = useSmSDK(module);
   const buildCallback = useTxModalStagesDelayedPenaltyReport();
 
   return useCallback(
     (input, data) => ({
       action: 'report' as const,
       submit: () => {
+        invariant(sdk, 'Delayed penalty module is not resolved');
         invariant(input.amount !== undefined, 'Amount is not defined');
         invariant(
           input.nodeOperatorId !== undefined,
@@ -33,7 +37,7 @@ export const useDelayedPenaltyReportFlowResolver = (): FlowResolver<
         );
         invariant(input.penaltyType, 'PenaltyType is not defined');
 
-        return delayedPenalty.report({
+        return sdk.delayedPenalty.report({
           nodeOperatorId: input.nodeOperatorId,
           amount: input.amount,
           penaltyType: pad(input.penaltyType, { size: 32 }),
@@ -42,6 +46,6 @@ export const useDelayedPenaltyReportFlowResolver = (): FlowResolver<
         });
       },
     }),
-    [delayedPenalty, buildCallback],
+    [sdk, buildCallback],
   );
 };

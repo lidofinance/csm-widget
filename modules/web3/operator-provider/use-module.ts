@@ -1,8 +1,10 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useNodeOperator } from './node-operator-provider';
+import { useContext } from 'react';
+import { NodeOperatorContext } from './node-operator-provider';
 
 export const useModule = () => {
-  const { activeModule: module } = useNodeOperator();
+  // Non-throwing: also rendered above NodeOperatorProvider (GateSupported fallbacks), where "no module" is the right answer.
+  const { activeModule: module } = useContext(NodeOperatorContext) ?? {};
   return {
     module,
     isCSM: module === MODULE_NAME.CSM,

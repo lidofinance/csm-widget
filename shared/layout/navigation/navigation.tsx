@@ -21,13 +21,13 @@ import { useNavItems } from './use-nav-items';
 export const Navigation: FC<{ desktopHidden?: boolean }> = memo(
   ({ desktopHidden }) => {
     const isLoading = useInitialLoading();
-    const isSupported = useSmVersionSupported();
+    const { data: isSupported } = useSmVersionSupported();
     const { themeName, toggleTheme } = useThemeToggle();
     const { expanded, toggleExpanded } = useInpageNavigation();
     const routes = useNavItems();
     const pathname = useRouterPath();
 
-    const hidden = isLoading || !isSupported || routes.length === 0;
+    const hidden = isLoading || isSupported === false || routes.length === 0;
 
     return (
       <Nav

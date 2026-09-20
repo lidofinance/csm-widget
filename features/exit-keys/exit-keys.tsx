@@ -100,7 +100,7 @@ export const ExitKeys = () => {
       </Gate>
       <WarningBlock type="notice">
         This action should be performed{' '}
-        <b>outside the {meta?.shortName ?? 'the module'} UI</b>
+        <b>outside the {meta?.shortName ?? 'module'} UI</b>
       </WarningBlock>
     </>
   );
