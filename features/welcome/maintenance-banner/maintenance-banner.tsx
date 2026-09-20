@@ -1,12 +1,12 @@
 import { FC } from 'react';
 
 import { BannerHeader, BlockStyled } from './styles';
-import { moduleMeta } from 'consts';
+import { WIDGET_TITLE } from 'consts';
 
 export const MaintenanceBanner: FC = () => {
   return (
     <BlockStyled>
-      <BannerHeader>{moduleMeta.shortTitle} is under maintenance</BannerHeader>
+      <BannerHeader>{WIDGET_TITLE} is under maintenance</BannerHeader>
       <p>Come back a while</p>
     </BlockStyled>
   );

@@ -12,10 +12,15 @@ import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 
 import { config } from 'config';
 import { contentSecurityPolicy } from 'config/csp';
-import { moduleMeta } from 'consts/module';
+import {
+  WIDGET_DESCRIPTION,
+  WIDGET_HOST,
+  WIDGET_PREVIEW_FILE,
+  WIDGET_TITLE,
+} from 'consts/module';
 import { FiraCodeFont } from 'styles';
 
-let host: string = moduleMeta.host;
+let host: string = WIDGET_HOST;
 
 const secureHeaders = createHeadersObject({ contentSecurityPolicy });
 const cspMetaTagContent =
@@ -57,15 +62,15 @@ export default class MyDocument extends Document {
   }
 
   get metaTitle(): string {
-    return `${moduleMeta.title} | Lido`;
+    return `${WIDGET_TITLE} | Lido`;
   }
 
   get metaDescription(): string {
-    return moduleMeta.description;
+    return WIDGET_DESCRIPTION;
   }
 
   get metaPreviewImgUrl(): string {
-    return `${host}/${moduleMeta.previewFile}`;
+    return `${host}/${WIDGET_PREVIEW_FILE}`;
   }
 
   render(): JSX.Element {

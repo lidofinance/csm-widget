@@ -6,13 +6,12 @@ import { FC, Fragment, ReactNode } from 'react';
 import { useFormState } from 'react-hook-form';
 import { Block, Grid, IconTooltip, Stack } from 'shared/components';
 import { FormatToken } from 'shared/formatters';
-import { useShowRule } from 'shared/hooks';
+import { useModuleMeta, useShowRule } from 'shared/hooks';
 import styled from 'styled-components';
 import { useClaimBondFormData } from '../context';
 
 import { ReactComponent as BondIcon } from 'assets/balance/bond.svg';
 import { ReactComponent as RewardsIcon } from 'assets/balance/rewards.svg';
-import { moduleMeta } from 'consts';
 import { Balance } from 'features/dashboard/bond/balance';
 
 const LOCKED_TOOLTIP_CSM =
@@ -33,6 +32,7 @@ type BondNegativeProps = {
 
 const useBondNegativeMetadata = () => {
   const check = useShowRule();
+  const meta = useModuleMeta();
 
   return {
     locked: {
@@ -42,7 +42,7 @@ const useBondNegativeMetadata = () => {
     },
     pendingToSplit: {
       title: 'Splitter debt:',
-      tooltip: `Is the amount that has not been split due to insufficient bond or locked bond that occurred earlier. When claiming rewards ${moduleMeta.shortName} will try to split this amount from excess bond.`,
+      tooltip: `Is the amount that has not been split due to insufficient bond or locked bond that occurred earlier. When claiming rewards ${meta?.shortName ?? 'the module'} will try to split this amount from excess bond.`,
       token: TOKENS.steth,
     },
     debt: {

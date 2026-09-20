@@ -26,6 +26,7 @@ export * from './use-keys-available';
 export * from './use-keys-breakdown';
 export * from './use-local-storage';
 export * from './use-max-priority-key-index';
+export * from './use-module-meta';
 export * from './use-my-operators';
 export * from './use-my-operators-issues';
 export * from './use-my-operators-overview';

@@ -1,7 +1,7 @@
 {
-  "name": "Curated Module | Lido",
-  "short_name": "CM v2 | Lido",
-  "description": "The Curated Module v2 consists of allow-listed independent professional staking organizations and Ethereum client teams, which operate validators using the protocol.",
+  "name": "Operators | Lido",
+  "short_name": "Operators | Lido",
+  "description": "The Community Staking Module is a permissionless staking module aimed at attracting community stakers to participate in the Lido on Ethereum protocol as Node Operators.",
   "iconPath": "favicon-512x512.png",
   "icons": [
     {
