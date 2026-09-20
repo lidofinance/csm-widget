@@ -1,66 +1,31 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
-import {
-  LIDO_OPERATOR_PORTAL_BASE,
-  LIDO_OPERATOR_PORTAL_CM,
-} from 'consts/external-links';
+import { LIDO_OPERATOR_PORTAL_BASE, WIDGET_TITLE } from 'consts';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { moduleMeta } from 'consts/module';
 import { FC, PropsWithChildren } from 'react';
 import { MatomoLink } from 'shared/components';
-import {
-  BlockStyled,
-  ContentWrapper,
-  Header,
-  Heading,
-  ModuleLogo,
-} from './styles';
+import { BlockStyled, ContentWrapper, Header, Heading } from './styles';
 
 export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
-  const csmDescription = (
-    <p>
-      The Community Staking Module (CSM) is a permissionless staking module
-      aimed at attracting community stakers to participate in the Lido on
-      Ethereum protocol as Node Operators. For a detailed description of the
-      module, follow the{' '}
-      <MatomoLink
-        $inline
-        href={LIDO_OPERATOR_PORTAL_BASE}
-        matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
-      >
-        link
-      </MatomoLink>
-      .
-    </p>
-  );
-  const DESCRIPTIONS: Record<MODULE_NAME, JSX.Element> = {
-    [MODULE_NAME.CSM]: csmDescription,
-    [MODULE_NAME.CSM_02]: csmDescription,
-    [MODULE_NAME.CM]: (
-      <p>
-        The Curated Module v2 (CM) consists of allow-listed independent
-        professional staking organizations and Ethereum client teams, which
-        operate validators using the protocol. For a detailed description of the
-        module, follow{' '}
-        <MatomoLink
-          $inline
-          href={LIDO_OPERATOR_PORTAL_CM}
-          matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
-        >
-          the link
-        </MatomoLink>
-        .
-      </p>
-    ),
-  };
-
   return (
     <BlockStyled data-testid="welcomeSection">
       <Heading>
-        <ModuleLogo />
-        <Header>{moduleMeta.title}</Header>
+        <Header>{WIDGET_TITLE}</Header>
       </Heading>
-      <ContentWrapper>{DESCRIPTIONS[config.module]}</ContentWrapper>
+      <ContentWrapper>
+        <p>
+          Lido Node Operators run validators in the Community Staking Module
+          (CSM), a permissionless module for community stakers, and in the
+          Curated Module v2 (CM), for allow-listed professional operators. For a
+          detailed description of the modules, follow the{' '}
+          <MatomoLink
+            $inline
+            href={LIDO_OPERATOR_PORTAL_BASE}
+            matomoEvent={MATOMO_CLICK_EVENTS_TYPES.welcomeDetailedLink}
+          >
+            link
+          </MatomoLink>
+          .
+        </p>
+      </ContentWrapper>
       {children}
     </BlockStyled>
   );
