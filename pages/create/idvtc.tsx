@@ -11,16 +11,14 @@ const Page = () => {
   return (
     <GateLoaded>
       <Gate rule="IS_CONNECTED_WALLET" fallback={<Navigate path={PATH.HOME} />}>
-        <Gate rule="IS_CSM_FAMILY" fallback={<Navigate path={PATH.CREATE} />}>
-          <GateLoaded additional={isPending}>
-            <Gate
-              rule="CAN_CREATE_IDVTC"
-              fallback={<Navigate path={PATH.CREATE} />}
-            >
-              <CreateOperatorPage type={OPERATOR_TYPE.CSM_IDVTC} />
-            </Gate>
-          </GateLoaded>
-        </Gate>
+        <GateLoaded additional={isPending}>
+          <Gate
+            rule="CAN_CREATE_IDVTC"
+            fallback={<Navigate path={PATH.CREATE} />}
+          >
+            <CreateOperatorPage type={OPERATOR_TYPE.CSM_IDVTC} />
+          </Gate>
+        </GateLoaded>
       </Gate>
     </GateLoaded>
   );

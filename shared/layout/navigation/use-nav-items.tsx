@@ -2,7 +2,6 @@ import { CSM_FAMILY_MODULES } from 'consts';
 import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Eth as EthIcon, Plus as PlusIcon } from '@lidofinance/lido-ui';
 import { ReactComponent as DashboardIcon } from 'assets/icons/dashboard.svg';
 import { ReactComponent as DvtIcon } from 'assets/icons/file-2.svg';
@@ -39,7 +38,6 @@ const routes: Route[] = [
     path: PATH.HOME,
     icon: <HomeIcon />,
     showRules: ['NOT_NODE_OPERATOR'],
-    modules: [MODULE_NAME.CSM],
   },
   {
     name: 'Dashboard',
@@ -56,6 +54,7 @@ const routes: Route[] = [
       PATH.CREATE_ICS,
       PATH.CREATE_IDVTC,
       PATH.CREATE_0x02,
+      PATH.CREATE_CM,
     ],
     showRules: ['CAN_CREATE'],
   },

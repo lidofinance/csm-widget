@@ -49,6 +49,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   operatorTypeModalApplyIdvtc = 'operatorTypeModalApplyIdvtc',
   operatorTypeModalCreateIcs = 'operatorTypeModalCreateIcs',
   operatorTypeModalCreateIdvtc = 'operatorTypeModalCreateIdvtc',
+  operatorTypeModalCreateCm = 'operatorTypeModalCreateCm',
   // Forms
   depositDataLearnMore = 'depositDataLearnMore',
   howToClaimEth = 'howToClaimEth',
@@ -266,6 +267,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateIdvtc]: createEvent(
     'Push «Create IDVTC operator» button on Operator Type modal',
     'operator_type_modal_create_idvtc',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateCm]: createEvent(
+    'Push «Continue» for Curated Module on Operator Type modal',
+    'operator_type_modal_create_cm',
   ),
   // Forms
   [MATOMO_CLICK_EVENTS_TYPES.depositDataLearnMore]: createEvent(

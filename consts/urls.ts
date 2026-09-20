@@ -8,6 +8,7 @@ export const PATH = {
   CREATE_ICS: '/create/ics',
   CREATE_IDVTC: '/create/idvtc',
   CREATE_0x02: '/create/0x02',
+  CREATE_CM: '/create/cm',
 
   KEYS: '/keys',
   KEYS_SUBMIT: '/keys/submit',

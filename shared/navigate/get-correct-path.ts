@@ -1,4 +1,3 @@
-import { isModuleCM, isModuleCSM } from 'consts';
 import { PATH } from 'consts/urls';
 import { ShowFlags } from 'shared/hooks';
 
@@ -18,11 +17,11 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
       return hasRole ? path : PATH.SETTINGS_INBOX;
     case PATH.SETTINGS_GENERAL:
     case PATH.SETTINGS_METADATA:
-      return isModuleCM ? path : PATH.SETTINGS;
+      return flags.IS_CM ? path : PATH.SETTINGS;
 
     // Create
     case PATH.CREATE: {
-      if (isModuleCSM && hasRole && !flags.CAN_CREATE) return PATH.KEYS_VIEW;
+      if (hasRole && !flags.CAN_CREATE) return PATH.KEYS_VIEW;
       // an apply card turns a single creatable type into a real choice
       if (flags.HAS_APPLY_OPTIONS) return path;
       const candidates: (PATH | false)[] = [
@@ -30,6 +29,7 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
         flags.CAN_CREATE_ICS && PATH.CREATE_ICS,
         flags.CAN_CREATE_IDVTC && PATH.CREATE_IDVTC,
         flags.CAN_CREATE_0X02 && PATH.CREATE_0x02,
+        flags.CAN_CREATE_CM && PATH.CREATE_CM,
       ];
       const creatable = candidates.filter((p): p is PATH => !!p);
       return creatable.length === 1 ? creatable[0] : path;
