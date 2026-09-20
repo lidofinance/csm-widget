@@ -1,4 +1,4 @@
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -19,7 +19,7 @@ export const useDelayedPenaltyReportFlowResolver = (): FlowResolver<
   DelayedPenaltyReportFormNetworkData,
   DelayedPenaltyReportFlow
 > => {
-  const { delayedPenalty } = useSmSDK();
+  const { delayedPenalty } = useActiveOperatorSDK();
   const buildCallback = useTxModalStagesDelayedPenaltyReport();
 
   return useCallback(

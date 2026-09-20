@@ -1,9 +1,10 @@
 import { Text } from '@lidofinance/lido-ui';
 import { DATA_UNAVAILABLE } from 'consts';
-import { useSmSDK } from 'modules/web3';
+import { useSmSDK, useTargetModule } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { useFormContext, useFormState, useWatch } from 'react-hook-form';
 import { Pubkey } from 'shared/components';
+import invariant from 'tiny-invariant';
 import {
   DataCell,
   DataError,
@@ -17,7 +18,8 @@ import { DepositDataInputType } from './use-parse-deposit-data';
 
 // TODO: refactor to separate component and hook
 export const DepositDataParsed: FC = () => {
-  const { depositData: sdk } = useSmSDK();
+  const targetModule = useTargetModule();
+  const sm = useSmSDK(targetModule);
 
   const { setValue, setError, clearErrors } =
     useFormContext<DepositDataInputType>();
@@ -40,7 +42,8 @@ export const DepositDataParsed: FC = () => {
 
   const remove = useCallback(
     (index: number) => {
-      const result = sdk.removeKey(rawDepositData ?? '', index);
+      invariant(sm, 'deposit data needs a target module');
+      const result = sm.depositData.removeKey(rawDepositData ?? '', index);
 
       if (result.success && result.json !== undefined) {
         clearErrors('rawDepositData');
@@ -55,7 +58,7 @@ export const DepositDataParsed: FC = () => {
         });
       }
     },
-    [sdk, rawDepositData, setValue, setError, clearErrors],
+    [sm, rawDepositData, setValue, setError, clearErrors],
   );
 
   return (

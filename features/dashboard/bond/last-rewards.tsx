@@ -19,6 +19,7 @@ import {
 } from 'modules/web3';
 import { ModalComponentType, useModal } from 'providers/modal-provider';
 import { FC, useCallback } from 'react';
+import invariant from 'tiny-invariant';
 import {
   FaqLink,
   GrayText,
@@ -208,6 +209,7 @@ const Why: FC = () => {
 
 export const WhyModal: ModalComponentType = ({ ...props }) => {
   const { module } = useModule();
+  invariant(module);
   const { shortName } = MODULE_METADATA[module];
 
   return (

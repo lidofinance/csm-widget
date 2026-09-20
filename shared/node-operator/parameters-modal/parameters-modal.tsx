@@ -22,7 +22,7 @@ export const ParametersModal: ModalComponentType<{ curve: CurveRef }> = ({
       open={open}
       $variant={type}
     >
-      <ParametersList parameters={parameters} />
+      <ParametersList parameters={parameters} module={curve.module} />
     </StyledModal>
   );
 };

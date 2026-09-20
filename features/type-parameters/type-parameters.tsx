@@ -1,4 +1,4 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { IcsApplyButton } from 'features/ics/apply-button';
@@ -28,6 +28,7 @@ export const TypeParameters: FC = () => {
         <Stack direction="column" gap="xxl">
           <Block padding="none">
             <CompareParametersList
+              module={MODULE_NAME.CSM}
               items={[
                 {
                   parameters: defParams,

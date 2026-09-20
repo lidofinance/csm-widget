@@ -16,7 +16,7 @@ export const RewardsHistoryTable: FC = () => {
   const { module } = useModule();
   const { data } = useTable<ValidatorRewardsEntity>();
 
-  const showBalance = ALLOCATED_BALANCE_MODULES.has(module);
+  const showBalance = !!module && ALLOCATED_BALANCE_MODULES.has(module);
 
   return (
     <TableStyle $balance={showBalance}>

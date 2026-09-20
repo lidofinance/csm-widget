@@ -1,6 +1,6 @@
 import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
 import { HIGH_EJECTION_COST_THRESHOLD } from 'consts';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -24,7 +24,7 @@ export const useEjectKeysFlowResolver = (): FlowResolver<
   EjectKeysFormNetworkData,
   EjectKeysFlow
 > => {
-  const { keys: keysSDK } = useSmSDK();
+  const { keys: keysSDK } = useActiveOperatorSDK();
   const [canEjectKeys, access] = useCanPerform(keysSDK, 'ejectKeys');
   const confirmEject = useConfirmEjectKeysModal();
   const confirmHighCost = useConfirmHighCostModal();

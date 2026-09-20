@@ -1,5 +1,5 @@
 import { type MethodAccess } from '@lidofinance/lido-csm-sdk';
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -20,7 +20,7 @@ export const useRemoveKeysFlowResolver = (): FlowResolver<
   RemoveKeysFormNetworkData,
   RemoveKeysFlow
 > => {
-  const { keys: keysSDK } = useSmSDK();
+  const { keys: keysSDK } = useActiveOperatorSDK();
   const [canRemoveKeys, access] = useCanPerform(keysSDK, 'removeKeys');
   const buildCallback = useTxModalStagesRemoveKeys();
 

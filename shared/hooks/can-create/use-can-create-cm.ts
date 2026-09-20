@@ -1,6 +1,6 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import {
-  useActiveSmSDK,
+  useSmSDK,
   useCuratedGatesEligibility,
   useDappStatus,
 } from 'modules/web3';
@@ -9,7 +9,7 @@ import { useModuleOpen } from './use-module-open';
 export const useCanCreateCM = () => {
   const { isAccountActive } = useDappStatus();
   const cm = useModuleOpen(MODULE_NAME.CM);
-  const cmSdk = useActiveSmSDK(MODULE_NAME.CM);
+  const cmSdk = useSmSDK(MODULE_NAME.CM);
   const { data: gatesCount, isPending: isGatesPending } =
     useCuratedGatesEligibility(undefined, (data) => data.length);
   return {

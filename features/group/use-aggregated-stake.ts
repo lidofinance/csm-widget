@@ -2,12 +2,12 @@ import { SubOperatorStakeSummary } from '@lidofinance/lido-csm-sdk';
 import { useQueries } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import { useMemo } from 'react';
-import { useSmSDK } from 'modules/web3/web3-provider';
+import { useActiveOperatorSDK } from 'modules/web3/web3-provider';
 import { KEY_OPERATOR_INFO } from 'modules/web3/hooks/use-operator-info';
 import { computeStakeData, StakeAndKeysData } from 'utils';
 
 export const useAggregatedStake = (operators: SubOperatorStakeSummary[]) => {
-  const { operator } = useSmSDK();
+  const { operator } = useActiveOperatorSDK();
 
   const infoQueries = useQueries({
     queries: operators.map((op) => ({

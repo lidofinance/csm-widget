@@ -61,6 +61,7 @@ export const SingleTypeParameters: FC<SingleTypeParametersProps> = ({
         <Stack direction="column" gap="xxl">
           <Block padding="none">
             <CompareParametersList
+              module={MODULE_NAME.CSM}
               items={[
                 {
                   parameters: currentParams,

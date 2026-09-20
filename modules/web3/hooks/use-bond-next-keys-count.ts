@@ -17,22 +17,22 @@ export const useBondNextKeysCount = ({
   token,
   keysCount = 0,
 }: Props) => {
-  const { accounting, core } = useSmSDK();
+  const sdk = useSmSDK();
 
   return useQuery({
     queryKey: [
       ...KEY_BOND_NEXT_KEYS_COUNT,
-      { keysCount, nodeOperatorId, module: core.moduleName },
+      { keysCount, nodeOperatorId, module: sdk?.core.moduleName },
     ],
     ...STRATEGY_CONSTANT,
     queryFn: () => {
-      invariant(nodeOperatorId !== undefined);
-      return accounting.getBondForNextKeysPerToken({
+      invariant(nodeOperatorId !== undefined && sdk);
+      return sdk.accounting.getBondForNextKeysPerToken({
         keysCount: BigInt(keysCount),
         nodeOperatorId,
       });
     },
-    enabled: keysCount > 0 && nodeOperatorId !== undefined,
+    enabled: keysCount > 0 && nodeOperatorId !== undefined && !!sdk,
     select: (data) => data[token],
   });
 };

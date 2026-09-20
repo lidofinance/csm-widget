@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { BannerOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
 import { useWeb3Key } from 'shared/hooks';
 
@@ -9,7 +10,7 @@ export const CreateCuratedNodeOperator = () => {
 
   return (
     <>
-      <OtherModuleBanner />
+      <OtherModuleBanner module={MODULE_NAME.CM} />
       <BannerOperatorCustomAddresses />
       <CuratedOperatorForm key={key} />
     </>

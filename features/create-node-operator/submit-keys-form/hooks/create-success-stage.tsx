@@ -38,7 +38,10 @@ export const renderCreateSuccess = (
             {hasAnyRole ? (
               <AfterKeysUpload keys={keys} />
             ) : (
-              <AfterCreateCustomNodeOperator keys={keys} />
+              <AfterCreateCustomNodeOperator
+                keys={keys}
+                module={data.targetModule}
+              />
             )}
           </>
         ) : undefined

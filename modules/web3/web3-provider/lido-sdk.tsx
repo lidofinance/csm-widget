@@ -101,18 +101,16 @@ export function useActiveSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
 // eslint-disable-next-line func-style
 export function useActiveSmSDK(module: MODULE_NAME) {
   const { sm } = useLidoSDK();
-  // Read without throwing: also called above NodeOperatorProvider
-  // (e.g. GateSupported), where falling back to the primary avoids the #526 SSR 500.
+  // Read without throwing: also called above NodeOperatorProvider (e.g. GateSupported).
   const operatorCtx = useContext(NodeOperatorContext);
-  const activeModule = operatorCtx?.activeModule ?? config.module;
-  return module === activeModule ? sm[module] : undefined;
+  return module === operatorCtx?.activeModule ? sm[module] : undefined;
 }
 
 /**
- * Active module's SDK, or — with `module` — that module's SDK whether or
+ * Active operator's SDK, or — with `module` — that module's SDK whether or
  * not it is active.
  */
-export function useSmSDK(): SmSDK;
+export function useSmSDK(): SmSDK | undefined;
 export function useSmSDK(module: MODULE_NAME.CSM): LidoSDKCsm | undefined;
 export function useSmSDK(module: MODULE_NAME.CSM_02): LidoSDKCsm02 | undefined;
 export function useSmSDK(module: MODULE_NAME.CM): LidoSDKCm | undefined;
@@ -121,19 +119,28 @@ export function useSmSDK(module: MODULE_NAME | undefined): SmSDK | undefined;
 // eslint-disable-next-line func-style
 export function useSmSDK(...args: [module?: MODULE_NAME]) {
   const { sm } = useLidoSDK();
-  // Read without throwing: also called above NodeOperatorProvider
-  // (e.g. GateSupported), where falling back to the primary avoids the #526 SSR 500.
+  // Read without throwing: also called above NodeOperatorProvider (e.g. GateSupported).
   const operatorCtx = useContext(NodeOperatorContext);
   // Only the zero-arg form means "active module"; an explicit undefined means "no module".
-  if (args.length === 0) return sm[operatorCtx?.activeModule ?? config.module];
+  if (args.length === 0) {
+    const active = operatorCtx?.activeModule;
+    return active ? sm[active] : undefined;
+  }
   const [module] = args;
   return module ? sm[module] : undefined;
 }
 
-/** Resolves the SDK for `module`, falling back to the active module. */
+/** Active operator's SDK. Throws outside an operator-scoped tree. */
+export const useActiveOperatorSDK = (): SmSDK => {
+  const sdk = useSmSDK();
+  invariant(sdk, 'useActiveOperatorSDK requires an active node operator');
+  return sdk;
+};
+
+/** Resolves the SDK for `module`, falling back to the active operator's module. */
 export const useTargetSmSDK = (module?: MODULE_NAME) => {
-  const activeSdk = useSmSDK();
-  const targetModule = module ?? activeSdk.core.moduleName;
+  const active = useSmSDK();
+  const targetModule = module ?? active?.core.moduleName;
   const sdk = useSmSDK(targetModule);
   return { targetModule, sdk };
 };

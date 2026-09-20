@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { useWatch } from 'react-hook-form';
 import {
@@ -31,6 +32,7 @@ export const Parameters: FC = () => {
   return (
     <AccordionStyle summary="Parameter changes">
       <CompareParametersList
+        module={MODULE_NAME.CSM}
         items={mode === 'create' ? items.slice(1) : items}
       />
     </AccordionStyle>

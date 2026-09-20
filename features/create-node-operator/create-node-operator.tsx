@@ -1,3 +1,4 @@
+import { OPERATOR_TYPE_INFO } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { CreatableOperatorType, useWeb3Key } from 'shared/hooks';
 
@@ -13,7 +14,7 @@ export const CreateNodeOperator: FC<{ type: CreatableOperatorType }> = ({
   return (
     <>
       <ShareLimitBanner />
-      <OtherModuleBanner />
+      <OtherModuleBanner module={OPERATOR_TYPE_INFO[type].module} />
       <SubmitKeysForm key={key} type={type} />
     </>
   );

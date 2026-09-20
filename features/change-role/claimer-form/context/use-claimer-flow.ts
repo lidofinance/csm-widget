@@ -1,4 +1,4 @@
-import { useSmSDK } from 'modules/web3';
+import { useActiveOperatorSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -17,7 +17,7 @@ export const useClaimerFlowResolver = (): FlowResolver<
   ClaimerFormNetworkData,
   ClaimerFlow
 > => {
-  const sdk = useSmSDK();
+  const sdk = useActiveOperatorSDK();
   const buildCallback = useTxModalStagesClaimer();
 
   return useCallback(

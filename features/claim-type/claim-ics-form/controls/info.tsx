@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Accordion, Text } from '@lidofinance/lido-ui';
 import { FC } from 'react';
 import { CompareParametersList, FormTitle } from 'shared/components';
@@ -21,6 +22,7 @@ export const Info: FC = () => {
       </Text>
       <AccordionStyle summary="Parameter changes">
         <CompareParametersList
+          module={MODULE_NAME.CSM}
           items={[
             {
               parameters: currentParameters,
