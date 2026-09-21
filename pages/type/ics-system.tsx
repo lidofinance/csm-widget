@@ -16,4 +16,4 @@ const Page: FC = () => {
 
 export default Page;
 
-export const getServerSideProps = getProps();
+export const getStaticProps = getProps();

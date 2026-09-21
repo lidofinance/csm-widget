@@ -90,4 +90,4 @@ const ClaimBondTestPage: FC = () => {
 
 export default ClaimBondTestPage;
 
-export const getServerSideProps = getTestProps;
+export const getStaticProps = getTestProps;

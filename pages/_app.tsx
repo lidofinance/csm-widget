@@ -1,6 +1,6 @@
 import 'utils/zod-jitless';
 
-import { config, SecretConfigType } from 'config';
+import { config } from 'config';
 import { withCsp } from 'config/csp';
 import { WIDGET_TITLE } from 'consts/module';
 import { AppProps } from 'next/app';
@@ -16,7 +16,9 @@ import {
   ToastContainer,
 } from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
+import { useIsClient } from 'shared/hooks';
 import { AddressValidationFile, nprogress } from 'utils';
+import { MaintenancePage } from 'features/welcome/maintenance-page';
 
 // Visualize route changes
 nprogress();
@@ -29,17 +31,28 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
-type AppParams = Partial<Pick<SecretConfigType, 'maintenance'>> & {
+type AppParams = {
   validationFile?: AddressValidationFile;
   isError?: boolean;
+  dummy?: boolean;
 };
 
 const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const { ...rest } = props;
 
+  const isClient = useIsClient();
+  // client-only: maintenance comes from window.__env__; prerendered HTML is built with it unset
+  const isMaintenance =
+    isClient &&
+    config.maintenance &&
+    !props.pageProps?.isError &&
+    !props.pageProps?.dummy;
+
   return (
     <Providers
-      dummy={props.pageProps?.maintenance || props.pageProps?.isError}
+      dummy={
+        isMaintenance || props.pageProps?.isError || props.pageProps?.dummy
+      }
       skipWatcher={props.pageProps?.isError}
       validationFile={props.pageProps?.validationFile}
     >
@@ -61,7 +74,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       <SVGGradientDefs />
       <ToastContainer />
       <TestEnvBanner />
-      <MemoApp {...rest} />
+      {isMaintenance ? <MaintenancePage /> : <MemoApp {...rest} />}
       <SecurityStatusBanner />
     </Providers>
   );

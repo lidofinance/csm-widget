@@ -12,7 +12,6 @@ const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
 const isIPFSMode = toBoolean(process.env.IPFS_MODE);
-const maintenance = toBoolean(process.env.MAINTENANCE); // TODO: load from runtime config
 
 const devnetArtifacts = process.env.DEVNET_ADDRESSES_FILE_PATH
   ? loadDevnetArtifacts(process.env.DEVNET_ADDRESSES_FILE_PATH)
@@ -245,7 +244,6 @@ export default withBundleAnalyzer({
     // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
     basePath,
     developmentMode,
-    maintenance,
 
     defaultChain: process.env.DEFAULT_CHAIN,
 

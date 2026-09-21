@@ -16,4 +16,4 @@ const IdvtcApply: FC = () => {
 
 export default IdvtcApply;
 
-export const getServerSideProps = getProps();
+export const getStaticProps = getProps();

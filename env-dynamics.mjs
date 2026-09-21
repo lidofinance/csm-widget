@@ -13,6 +13,9 @@ export const ipfsMode = toBoolean(process.env.IPFS_MODE);
 /** @type boolean */
 export const isTestEnv = !toBoolean(process.env.IS_PROD);
 
+/** @type boolean */
+export const maintenance = toBoolean(process.env.MAINTENANCE);
+
 // Parse comma-separated URL list: trim whitespace, strip trailing slashes,
 // drop empty entries. Trailing `/` breaks some RPC providers (e.g. Infura).
 const parseUrlList = (val) =>

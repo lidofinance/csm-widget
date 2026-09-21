@@ -25,7 +25,6 @@ declare module 'next/config' {
     serverRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
-      maintenance: boolean;
 
       defaultChain: string;
 

@@ -18,4 +18,4 @@ const ScoresPage: FC = () => {
 
 export default ScoresPage;
 
-export const getServerSideProps = getProps();
+export const getStaticProps = getProps();
