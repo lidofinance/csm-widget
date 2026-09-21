@@ -1,5 +1,4 @@
 import { PATH } from 'consts/urls';
-import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { useHasReportDelayedPenaltyRole } from 'modules/web3';
 
@@ -24,4 +23,3 @@ const Page = () => {
 
 export default Page;
 
-export const getStaticProps = getProps();

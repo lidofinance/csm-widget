@@ -1,7 +1,6 @@
 import 'utils/zod-jitless';
 
 import { config } from 'config';
-import { withCsp } from 'config/csp';
 import { WIDGET_TITLE } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -17,7 +16,7 @@ import {
 } from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
 import { useIsClient } from 'shared/hooks';
-import { AddressValidationFile, nprogress } from 'utils';
+import { nprogress } from 'utils';
 import { MaintenancePage } from 'features/welcome/maintenance-page';
 
 // Visualize route changes
@@ -32,7 +31,6 @@ const App = (props: AppProps) => {
 const MemoApp = memo(App);
 
 type AppParams = {
-  validationFile?: AddressValidationFile;
   isError?: boolean;
   dummy?: boolean;
 };
@@ -54,7 +52,6 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
         isMaintenance || props.pageProps?.isError || props.pageProps?.dummy
       }
       skipWatcher={props.pageProps?.isError}
-      validationFile={props.pageProps?.validationFile}
     >
       {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
       <Head>
@@ -80,6 +77,4 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   );
 };
 
-export default config.ipfsMode || process.env.NODE_ENV === 'development'
-  ? AppWrapper
-  : withCsp(AppWrapper);
+export default AppWrapper;

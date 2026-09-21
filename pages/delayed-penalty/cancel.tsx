@@ -2,7 +2,6 @@ import { PATH } from 'consts/urls';
 import { DelayedPenaltyCancelPage } from 'features/delayed-penalty';
 import { useHasReportDelayedPenaltyRole } from 'modules/web3';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => {
   const { isPending } = useHasReportDelayedPenaltyRole();
@@ -25,4 +24,3 @@ const Page = () => {
 
 export default Page;
 
-export const getStaticProps = getProps();

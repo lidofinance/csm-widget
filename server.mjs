@@ -1,10 +1,15 @@
 import { createServer } from 'http';
 import { parse } from 'url';
 import next from 'next';
+import nextSecureHeaders from 'next-secure-headers';
 import { registerShutdownSignals } from './scripts/shutdown.mjs';
 import { toBoolean } from './scripts/to-boolean.mjs';
 import { startupCheckRPCs } from './scripts/startup-checks/rpc.mjs';
 import { startupCheckValidationFile } from './scripts/startup-checks/validation-file.mjs';
+import {
+  buildContentSecurityPolicy,
+  cspOptionsFromEnv,
+} from './config/csp/policy.mjs';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -14,6 +19,23 @@ const app = next({ dev, hostname, port });
 const handle = app.getRequestHandler();
 // cannot import from next.config.mjs because this will break env load
 const CACHE_CONTROL_HEADER = 'x-cache-control';
+
+const isAssetOrApi = (pathname) =>
+  pathname?.startsWith('/api/') || pathname?.startsWith('/_next/');
+
+// CSP comes from runtime env, so it cannot live in next.config headers() (baked at build)
+const cspHeader = (() => {
+  const options = cspOptionsFromEnv(process.env);
+  if (dev || options.ipfsMode) return null;
+  const headers = nextSecureHeaders.createHeadersObject({
+    contentSecurityPolicy: buildContentSecurityPolicy(options),
+  });
+  return (
+    Object.entries(headers).find(([name]) =>
+      name.startsWith('Content-Security-Policy'),
+    ) ?? null
+  );
+})();
 
 // allows us to override cache-control header
 const overrideSetHeader = (res) => {
@@ -56,6 +78,10 @@ app
         const parsedUrl = parse(req.url, true);
 
         overrideSetHeader(res);
+
+        if (cspHeader && !isAssetOrApi(parsedUrl.pathname)) {
+          res.setHeader(cspHeader[0], cspHeader[1]);
+        }
 
         await handle(req, res, parsedUrl);
       } catch (err) {

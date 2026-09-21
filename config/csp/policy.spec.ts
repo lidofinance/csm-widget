@@ -1,4 +1,6 @@
-import { buildCspDirectives, CspBuildOptions } from './build-directives';
+import { buildCspDirectives } from './policy.mjs';
+
+type CspBuildOptions = Parameters<typeof buildCspDirectives>[0];
 
 const base: CspBuildOptions = {
   ipfsMode: false,

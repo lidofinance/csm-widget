@@ -2,7 +2,6 @@ import { PATH } from 'consts';
 import { OperatorTypePage } from 'features/operator-type';
 import { FC } from 'react';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page: FC = () => (
   <GateLoaded>
@@ -17,4 +16,3 @@ const Page: FC = () => (
 
 export default Page;
 
-export const getStaticProps = getProps();

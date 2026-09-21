@@ -1,7 +1,6 @@
 import { DashboardPage } from 'features/dashboard';
 import { StarterPackPage } from 'features/starter-pack';
 import { WelcomePage } from 'features/welcome';
-import { getProps } from 'utilsApi';
 import { FC } from 'react';
 import { Gate, GateLoaded } from 'shared/navigate';
 
@@ -19,4 +18,3 @@ const Page: FC = () => {
 
 export default Page;
 
-export const getStaticProps = getProps();

@@ -1,5 +1,4 @@
 import { PATH } from 'consts/urls';
-import { getProps } from 'utilsApi';
 import { GateLoaded, Navigate } from 'shared/navigate';
 
 const Page = () => (
@@ -10,4 +9,3 @@ const Page = () => (
 
 export default Page;
 
-export const getStaticProps = getProps();

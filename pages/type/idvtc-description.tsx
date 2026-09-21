@@ -1,7 +1,6 @@
 import { IdvtcDescriptionPage } from 'features/idvtc';
 import { FC } from 'react';
 import { GateLoaded } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page: FC = () => {
   return (
@@ -13,4 +12,3 @@ const Page: FC = () => {
 
 export default Page;
 
-export const getStaticProps = getProps();

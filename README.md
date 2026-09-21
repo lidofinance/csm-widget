@@ -37,7 +37,7 @@ Step 5. Open [http://localhost:3000](http://localhost:3000) with your browser to
 
 ### Environment variables
 
-Pages are statically prerendered at build time with ISR (`getStaticProps`, 60s revalidation), not rendered per request. Runtime Docker env still reaches the client without a rebuild: `next.config.mjs` evaluates `env-dynamics.mjs` at server start and writes `public/runtime/window-env.js`, which the browser loads as `window.__env__`.
+Pages are statically prerendered at build time (no `getServerSideProps` / `getStaticProps`), never rendered per request. Runtime Docker env still reaches the client without a rebuild: `next.config.mjs` evaluates `env-dynamics.mjs` at server start and writes `public/runtime/window-env.js`, which the browser loads as `window.__env__`. The address deny-list (`VALIDATION_FILE_PATH`) is served by `/api/validation-file` and fetched client-side. The `Content-Security-Policy` header is built from `CSP_*` env by `server.mjs` at startup, so it is a runtime setting too.
 
 Read more about [runtime configuration](https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration) and [automatic static optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
 

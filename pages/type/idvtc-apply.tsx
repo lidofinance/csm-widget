@@ -2,7 +2,6 @@ import { PATH } from 'consts';
 import { IdvtcApplyPage } from 'features/idvtc';
 import { FC } from 'react';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const IdvtcApply: FC = () => {
   return (
@@ -16,4 +15,3 @@ const IdvtcApply: FC = () => {
 
 export default IdvtcApply;
 
-export const getStaticProps = getProps();

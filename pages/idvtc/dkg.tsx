@@ -3,7 +3,6 @@ import { DkgFilesPage } from 'features/idvtc/dkg';
 import { useNodeOperator } from 'modules/web3/operator-provider/node-operator-provider';
 import { useOperatorType } from 'modules/web3/hooks/use-operator-type';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => {
   const { nodeOperator } = useNodeOperator();
@@ -24,4 +23,3 @@ const Page = () => {
 
 export default Page;
 
-export const getStaticProps = getProps();

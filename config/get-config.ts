@@ -4,7 +4,6 @@ import * as ipfs from './groups/ipfs';
 import * as locale from './groups/locale';
 import * as stake from './groups/stake';
 import * as web3 from './groups/web3';
-import * as revalidation from './groups/revalidation';
 
 export type ConfigType = {
   isClientSide: boolean;
@@ -14,7 +13,6 @@ export type ConfigType = {
   typeof locale &
   typeof stake &
   typeof web3 &
-  typeof revalidation &
   PreConfigType;
 
 export const getConfig = (): ConfigType => {
@@ -27,7 +25,6 @@ export const getConfig = (): ConfigType => {
     ...locale,
     ...stake,
     ...web3,
-    ...revalidation,
 
     // highest priority
     ...getPreConfig(),

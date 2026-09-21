@@ -20,8 +20,7 @@ const devnetArtifacts = process.env.DEVNET_ADDRESSES_FILE_PATH
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
-  // documents — same HTML for every visitor; uncovered, gSSP pages get the
-  // default no-store and gSP pages a 1-year s-maxage that outlives build chunk hashes
+  // documents — statically prerendered, identical for every visitor
   '/',
   '/group',
   '/monitoring',

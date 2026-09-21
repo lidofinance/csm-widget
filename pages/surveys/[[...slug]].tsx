@@ -1,9 +1,7 @@
 import { PATH } from 'consts/urls';
 import { SurveysPage } from 'features/surveys';
-import type { GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => {
   const router = useRouter();
@@ -19,10 +17,3 @@ const Page = () => {
 };
 
 export default Page;
-
-export const getStaticProps = getProps();
-
-export const getStaticPaths: GetStaticPaths = () => ({
-  paths: [{ params: { slug: [] } }],
-  fallback: 'blocking',
-});
