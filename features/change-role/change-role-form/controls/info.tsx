@@ -1,8 +1,7 @@
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { ROLES_METADATA } from 'consts/roles';
-import { FC, useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FC } from 'react';
 import {
   IconTooltip,
   Latice,
@@ -13,11 +12,7 @@ import {
 } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
 import { isAddressEqual } from 'viem';
-import {
-  type ChangeRoleFormInputType,
-  useChangeRoleFlow,
-  useChangeRoleFormData,
-} from '../context';
+import { useChangeRoleFlow, useChangeRoleFormData } from '../context';
 import { useRole } from '../hooks/use-role';
 import { moduleMeta } from 'consts';
 
@@ -32,15 +27,6 @@ export const Info: FC = () => {
     role,
     invite,
   } = useChangeRoleFormData(true);
-  const { setValue } = useFormContext<ChangeRoleFormInputType>();
-
-  const revokeHandle = useCallback(() => {
-    setValue('intent', 'revoke');
-  }, [setValue]);
-
-  const acceptHandle = useCallback(() => {
-    setValue('intent', 'accept');
-  }, [setValue]);
 
   return (
     <>
@@ -82,9 +68,8 @@ export const Info: FC = () => {
                       variant="outlined"
                       size="xs"
                       fullwidth={false}
-                      onClick={revokeHandle}
                       noDisableOnError
-                      secondaryAction
+                      intent="revoke"
                     >
                       Cancel
                     </SubmitButtonHookForm>
@@ -94,9 +79,8 @@ export const Info: FC = () => {
                         variant="outlined"
                         size="xs"
                         fullwidth={false}
-                        onClick={acceptHandle}
                         noDisableOnError
-                        secondaryAction
+                        intent="accept"
                       >
                         Accept
                       </SubmitButtonHookForm>
