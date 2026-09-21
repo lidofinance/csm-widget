@@ -90,6 +90,48 @@ yarn test:cm:e2e    # CM widget
 
 Append `:ui` (`yarn test:csm:ui` / `yarn test:cm:ui`) to run Playwright in interactive UI mode. This loads your `.env.local` file and runs the configured test scripts.
 
+### Local fork
+
+Forked tests run against a local anvil fork started by `compose.yaml`. There is one
+profile per network and module — `mainnet-csm`, `mainnet-cm`, `hoodi-csm`,
+`hoodi-cm` — so forks can run side by side:
+
+```sh
+docker compose --env-file fork.env --profile hoodi-cm up -d --wait   # start, waits until the fork answers
+docker compose --env-file fork.env run --rm hoodi-cm-url             # print the local and public URLs
+docker compose --env-file fork.env --profile hoodi-cm logs -f        # follow logs
+docker compose --env-file fork.env --profile hoodi-cm down           # stop and remove
+docker compose --env-file fork.env ps                                # every running fork
+```
+
+`export COMPOSE_ENV_FILES=fork.env` once in your shell and the flag can be dropped.
+
+The fork is made from `EL_RPC_URLS_1` / `EL_RPC_URLS_560048` and funds the
+`WALLET_SECRET_PHRASE` accounts, both taken from `.env.local`. Every fork also
+gets a cloudflared quick tunnel, so it can be reached from outside — the `-url`
+service prints that address.
+
+The tests also need an IPFS node to pin merkle trees to. It has its own profile
+and can be started once and left running next to any fork:
+
+```sh
+docker compose --env-file fork.env --profile ipfs up -d --wait
+docker compose --env-file fork.env run --rm ipfs-url   # gateway URLs, local and public
+```
+
+It gets a tunnel of its own, so the gateway is reachable from outside. Only the
+gateway — the API on 5001 is unauthenticated admin access to the node.
+
+The ports live in [fork.env](./fork.env) — the only place they are written down.
+The tests and the contract commands read the same file, so nothing has to be
+switched by hand between forks (in CI, where a job runs a single fork, they all
+use the plain 8545):
+
+```sh
+yarn fork csm hoodi addKeys 12 5   # hits the hoodi-csm fork; `yarn fork help` lists every command
+USE_FORK=true yarn test:cm:e2e     # hits the hoodi-cm fork (STAND_TYPE=testnet)
+```
+
 ## Release flow
 
 To create a new release:

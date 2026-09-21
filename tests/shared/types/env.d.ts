@@ -15,7 +15,6 @@ declare namespace NodeJS {
     WALLET_PASSWORD?: string;
 
     RPC_URL?: string;
-    ANVIL_PORT?: string;
 
     PREVIEW_STAND_URL?: string;
     PREVIEW_STAND_LOGIN?: string;
