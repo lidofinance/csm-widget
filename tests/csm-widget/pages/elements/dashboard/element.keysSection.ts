@@ -22,6 +22,7 @@ export class KeysSection extends BasePage {
     this.keysDepositableCount = this.section.getByTestId(
       'keysDepositableCount',
     );
-    this.keysDepositableCountValue = this.keysDepositableCount.locator('> b');
+    this.keysDepositableCountValue =
+      this.keysDepositableCount.getByTestId('itemCount');
   }
 }
