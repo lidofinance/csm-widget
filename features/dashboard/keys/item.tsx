@@ -25,7 +25,7 @@ export const Item: FC<ItemProps> = ({
   const head = (
     <HeadStyled>
       {title}
-      <CountStyled>
+      <CountStyled data-testid="itemCount">
         {count === undefined ? <InlineLoader /> : count}
       </CountStyled>
     </HeadStyled>
