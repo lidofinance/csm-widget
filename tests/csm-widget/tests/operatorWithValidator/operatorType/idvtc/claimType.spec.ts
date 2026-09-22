@@ -4,7 +4,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
-import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
+import { Tags } from 'tests/shared/consts/common.const';
 
 const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
@@ -20,25 +20,16 @@ test.describe(
     let snapshotId: string;
 
     test.beforeAll(
-      async ({
-        useFork,
-        evmNode,
-        forkActionService,
-        widgetService,
-        secretPhrase,
-        keysGeneratorService,
-      }) => {
+      async ({ useFork, evmNode, forkActionService, secretPhrase }) => {
         test.skip(!useFork, 'Test suite runs only on forked network');
 
         snapshotId = await evmNode.snapshot();
 
         await evmNode.setBalance(mnemonicToAccount(secretPhrase).address, 1000);
 
-        await test.step('Create a node operator via UI', async () => {
-          const keys = keysGeneratorService.generateKeys(1);
-          await widgetService.keysPage.goto();
-          await widgetService.submitKeys(keys, TokenSymbol.ETH);
-        });
+        await forkActionService.createPermissionlessOperator(
+          mnemonicToAccount(secretPhrase).address,
+        );
 
         await test.step('Issue IDVTC status to the operator owner', async () => {
           await forkActionService.setGateAddrs(
