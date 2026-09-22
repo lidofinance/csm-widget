@@ -5,6 +5,10 @@ export const EPIC = {
     name: 'Landing page',
     features: [],
   },
+  cache: {
+    name: 'Cache',
+    features: [],
+  },
   keys: {
     name: 'Keys',
     features: ['Submit keys', 'Remove keys', 'View keys'],

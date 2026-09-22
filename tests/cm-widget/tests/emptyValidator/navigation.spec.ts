@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { test } from '../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { NavigationPage } from '../../pages/navigation.page';
+import { NavBlockElement } from 'tests/shared/pages/elements';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
@@ -15,17 +15,17 @@ test.describe(
     tag: [Tags.forked],
   }),
   () => {
-    let nav: NavigationPage;
+    let nav: NavBlockElement;
 
     test.beforeEach(async ({ widgetService }) => {
       await widgetService.welcomePage.goto();
-      nav = new NavigationPage(widgetService.page);
+      nav = widgetService.navBlockElement;
     });
 
     test(
       qase(189, 'Should display only Create Operator nav item in sidebar'),
       async ({ widgetService }) => {
-        const allNavItems = nav.nav.getByTestId('navItem');
+        const allNavItems = nav.navBlockMain.getByTestId('navItem');
 
         await test.step('Only one nav item is visible', async () => {
           await expect(allNavItems).toHaveCount(1);
