@@ -3,6 +3,7 @@ export * from './addKeys.ts';
 export * from './confirmManager.ts';
 export * from './createCuratedOperator.ts';
 export * from './createOperatorGroup.ts';
+export * from './createPermissionlessOperator.ts';
 export * from './depositKeys.ts';
 export * from './proposeManager.ts';
 export * from './proposeReward.ts';

@@ -18,6 +18,7 @@ export type Addresses = {
   module: Hex;
   accounting: Hex;
   metaRegistry?: Hex;
+  permissionlessGate?: Hex;
   gates: Partial<Record<GateSelector, Hex>>;
 };
 
@@ -61,6 +62,7 @@ export const addresses = (
     module: moduleAddress,
     accounting,
     metaRegistry: contracts[CONTRACT_NAMES.metaRegistry],
+    permissionlessGate: contracts[CONTRACT_NAMES.permissionlessGate],
     gates: Object.fromEntries(
       Object.entries(GATE_CONTRACT)
         .map(([selector, name]) => [selector, contracts[name]])
