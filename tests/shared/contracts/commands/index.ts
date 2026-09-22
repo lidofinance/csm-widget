@@ -11,6 +11,7 @@ export * from './reportPenalty.ts';
 export * from './reportRewards.ts';
 export * from './revert.ts';
 export * from './setGateAddrs.ts';
+export * from './setRewardsClaimer.ts';
 export * from './setShareLimit.ts';
 export * from './settlePenalty.ts';
 export * from './snapshot.ts';

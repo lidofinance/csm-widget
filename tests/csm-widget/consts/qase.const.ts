@@ -15,7 +15,12 @@ export const EPIC = {
   },
   roles: {
     name: 'Roles',
-    features: ['Manager address', 'Rewards address', 'Inbox requests'],
+    features: [
+      'Manager address',
+      'Rewards address',
+      'Inbox requests',
+      'Rewards claimer',
+    ],
   },
   operatorType: {
     name: 'Operator type',
