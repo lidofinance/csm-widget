@@ -34,8 +34,8 @@ const useClaimBondFormNetworkData: NetworkData<
 > = () => {
   const nodeOperatorId = useNodeOperatorId();
 
-  const bondQuery = useOperatorBalance(nodeOperatorId);
-  const rewardsQuery = useOperatorRewards(nodeOperatorId);
+  const bondQuery = useOperatorBalance({ nodeOperatorId });
+  const rewardsQuery = useOperatorRewards({ nodeOperatorId });
 
   const bond = bondQuery.data;
   const rewards = rewardsQuery.data;
@@ -45,8 +45,9 @@ const useClaimBondFormNetworkData: NetworkData<
 
   const { data: poolData, isPending: isPoolDataLoading } = useStethPoolData();
 
-  const { data: nodeOperator, isPending: isInfoLoading } =
-    useOperatorInfo(nodeOperatorId);
+  const { data: nodeOperator, isPending: isInfoLoading } = useOperatorInfo({
+    nodeOperatorId,
+  });
 
   const rewardsAddress = nodeOperator?.rewardsAddress;
 
@@ -55,8 +56,9 @@ const useClaimBondFormNetworkData: NetworkData<
 
   const { data: status, isPending: isStatusLoading } = useSmStatus();
 
-  const { data: feeSplits, isPending: isFeeSplitsLoading } =
-    useFeeSplits(nodeOperatorId);
+  const { data: feeSplits, isPending: isFeeSplitsLoading } = useFeeSplits({
+    nodeOperatorId,
+  });
 
   const invalidate = useInvalidate();
 

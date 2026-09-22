@@ -9,10 +9,13 @@ import {
 import { openIndex } from 'modules/surveys-sdk/generated';
 import type { FilledDto } from 'modules/surveys-sdk/generated';
 
-export const useSurveysFilled = (
-  nodeOperatorId: NodeOperatorId | undefined,
-  module: MODULE_NAME = config.module,
-) => {
+export const useSurveysFilled = ({
+  nodeOperatorId,
+  module = config.module,
+}: {
+  nodeOperatorId: NodeOperatorId | undefined;
+  module?: MODULE_NAME;
+}) => {
   // Built directly instead of via `useOperatorKey`, which falls back to the
   // connected operator on `undefined` — callers pass `undefined` to disable.
   const operatorKey = buildOperatorKey(module, nodeOperatorId);

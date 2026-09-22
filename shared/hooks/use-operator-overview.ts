@@ -13,21 +13,20 @@ export const useOperatorOverview = ({
   nodeOperatorId,
   module,
 }: OperatorRef) => {
-  const { data: keys, isPending: isKeysPending } = useKeysBreakdown(
+  const { data: keys, isPending: isKeysPending } = useKeysBreakdown({
     nodeOperatorId,
     module,
-  );
-  const { data: bond, isPending: isBondPending } = useOperatorBalance(
-    nodeOperatorId,
-    undefined,
-    module,
-  );
-  const { data: rewards, isPending: isRewardsPending } = useOperatorRewards(
+  });
+  const { data: bond, isPending: isBondPending } = useOperatorBalance({
     nodeOperatorId,
     module,
-  );
-  const { data: feeSplits } = useFeeSplits(nodeOperatorId, module);
-  const { data: info } = useOperatorInfo(nodeOperatorId, undefined, module);
+  });
+  const { data: rewards, isPending: isRewardsPending } = useOperatorRewards({
+    nodeOperatorId,
+    module,
+  });
+  const { data: feeSplits } = useFeeSplits({ nodeOperatorId, module });
+  const { data: info } = useOperatorInfo({ nodeOperatorId, module });
   const { data: curve } = useOperatorCurveId({ nodeOperatorId, module });
 
   const availableToClaim = bond

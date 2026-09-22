@@ -22,7 +22,7 @@ const minDepositStake = (keys: KeyWithStatus[]) =>
 export const CsmKeys: FC = () => {
   const id = useNodeOperatorId();
   const { isCSM02 } = useModule();
-  const { data: keys } = useOperatorKeysWithStatus(id);
+  const { data: keys } = useOperatorKeysWithStatus({ nodeOperatorId: id });
 
   const stats = useCallback(
     (filter: StatusFilter, sumBalance = sumActiveKeysBalance) => {

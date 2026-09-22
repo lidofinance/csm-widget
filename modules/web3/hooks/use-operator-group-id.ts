@@ -6,9 +6,11 @@ import { useActiveSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_GROUP_ID = ['operator-group-id'];
 
-export const useOperatorGroupId = (
-  nodeOperatorId: NodeOperatorId | undefined,
-) => {
+export const useOperatorGroupId = ({
+  nodeOperatorId,
+}: {
+  nodeOperatorId: NodeOperatorId | undefined;
+}) => {
   const sdk = useActiveSmSDK(MODULE_NAME.CM);
 
   return useQuery({

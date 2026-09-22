@@ -11,10 +11,12 @@ import { HatBlock, Stack } from 'shared/components';
 export const NoGroupBanner: FC = () => {
   const { isCM } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: groupId, isPending: isGroupPending } =
-    useOperatorGroupId(nodeOperatorId);
-  const { data: weight, isPending: isWeightPending } =
-    useOperatorWeight(nodeOperatorId);
+  const { data: groupId, isPending: isGroupPending } = useOperatorGroupId({
+    nodeOperatorId,
+  });
+  const { data: weight, isPending: isWeightPending } = useOperatorWeight({
+    nodeOperatorId,
+  });
 
   if (!isCM || isGroupPending || isWeightPending) return null;
 

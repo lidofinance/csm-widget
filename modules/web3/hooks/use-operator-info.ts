@@ -1,19 +1,19 @@
-import {
-  MODULE_NAME,
-  NodeOperatorId,
-  NodeOperatorInfo,
-} from '@lidofinance/lido-csm-sdk';
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
+import { queryOptions } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { SmSDK, useTargetSmSDK } from '../web3-provider';
+import {
+  OperatorHookArgs,
+  OperatorQueryArgs,
+  useOperatorQuery,
+} from './use-operator-query';
 
 export const KEY_OPERATOR_INFO = ['operator-info'];
 
-export const operatorInfoQueryOptions = (
-  sdk: SmSDK | undefined,
-  nodeOperatorId: NodeOperatorId | undefined,
-) =>
+export const operatorInfoQueryOptions = ({
+  sdk,
+  nodeOperatorId,
+}: OperatorQueryArgs) =>
   queryOptions({
     queryKey: [
       ...KEY_OPERATOR_INFO,
@@ -28,13 +28,5 @@ export const operatorInfoQueryOptions = (
   });
 
 export const useOperatorInfo = <TData = NodeOperatorInfo>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: NodeOperatorInfo) => TData,
-  module?: MODULE_NAME,
-) => {
-  const { sdk } = useTargetSmSDK(module);
-  return useQuery({
-    ...operatorInfoQueryOptions(sdk, nodeOperatorId),
-    select,
-  });
-};
+  args: OperatorHookArgs<NodeOperatorInfo, TData>,
+) => useOperatorQuery(operatorInfoQueryOptions, args);

@@ -114,8 +114,12 @@ export const useShowFlags = (): ShowFlags => {
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
   const { data: isReportingRole } = useHasReportDelayedPenaltyRole();
-  const { data: balance } = useOperatorBalance(nodeOperator?.nodeOperatorId);
-  const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
+  const { data: balance } = useOperatorBalance({
+    nodeOperatorId: nodeOperator?.nodeOperatorId,
+  });
+  const { data: info } = useOperatorInfo({
+    nodeOperatorId: nodeOperator?.nodeOperatorId,
+  });
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
   const { data: operatorType } = useOperatorType(nodeOperator);

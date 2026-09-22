@@ -21,21 +21,22 @@ export const useSurveyEnabled = (skipClosed = false) => {
   const { IS_SURVEYS_ACTIVE } = useShowFlags();
 
   const nodeOperatorId = useNodeOperatorId();
-  const { data: hasNonWithdrawnKeys } = useOperatorInfo(
+  const { data: hasNonWithdrawnKeys } = useOperatorInfo({
     nodeOperatorId,
-    (info) => info.totalAddedKeys - info.totalWithdrawnKeys > 0,
-  );
+    select: (info) => info.totalAddedKeys - info.totalWithdrawnKeys > 0,
+  });
 
   const { isDismissed, dismiss: onClose } = useDismiss(
     `surveys-cta-closed-${nodeOperatorId}`,
     end,
   );
 
-  const { data: filled } = useSurveysFilled(
-    IS_SURVEYS_ACTIVE && isActive && (!isDismissed || skipClosed)
-      ? nodeOperatorId
-      : undefined,
-  );
+  const { data: filled } = useSurveysFilled({
+    nodeOperatorId:
+      IS_SURVEYS_ACTIVE && isActive && (!isDismissed || skipClosed)
+        ? nodeOperatorId
+        : undefined,
+  });
 
   const variant: SurveyVariant | null =
     filled?.isFilled === false

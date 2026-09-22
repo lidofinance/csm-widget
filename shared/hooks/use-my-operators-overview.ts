@@ -21,22 +21,34 @@ export const useMyOperatorsOverview = () => {
 
   const keys = useQueries({
     queries: operators.map((op) =>
-      operatorKeysQueryOptions(sm[op.module], op.nodeOperatorId),
+      operatorKeysQueryOptions({
+        sdk: sm[op.module],
+        nodeOperatorId: op.nodeOperatorId,
+      }),
     ),
   });
   const bonds = useQueries({
     queries: operators.map((op) =>
-      operatorBalanceQueryOptions(sm[op.module], op.nodeOperatorId),
+      operatorBalanceQueryOptions({
+        sdk: sm[op.module],
+        nodeOperatorId: op.nodeOperatorId,
+      }),
     ),
   });
   const rewards = useQueries({
     queries: operators.map((op) =>
-      operatorRewardsQueryOptions(sm[op.module], op.nodeOperatorId),
+      operatorRewardsQueryOptions({
+        sdk: sm[op.module],
+        nodeOperatorId: op.nodeOperatorId,
+      }),
     ),
   });
   const feeSplits = useQueries({
     queries: operators.map((op) =>
-      operatorFeeSplitsQueryOptions(sm[op.module], op.nodeOperatorId),
+      operatorFeeSplitsQueryOptions({
+        sdk: sm[op.module],
+        nodeOperatorId: op.nodeOperatorId,
+      }),
     ),
   });
 

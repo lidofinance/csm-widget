@@ -1,15 +1,19 @@
-import { MODULE_NAME, NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { Rewards } from '@lidofinance/lido-csm-sdk';
+import { queryOptions } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { SmSDK, useTargetSmSDK } from '../web3-provider';
+import {
+  OperatorHookArgs,
+  OperatorQueryArgs,
+  useOperatorQuery,
+} from './use-operator-query';
 
 export const KEY_OPERATOR_REWARDS = ['operator-rewards'];
 
-export const operatorRewardsQueryOptions = (
-  sdk: SmSDK | undefined,
-  nodeOperatorId: NodeOperatorId | undefined,
-) =>
+export const operatorRewardsQueryOptions = ({
+  sdk,
+  nodeOperatorId,
+}: OperatorQueryArgs) =>
   queryOptions({
     queryKey: [
       ...KEY_OPERATOR_REWARDS,
@@ -23,10 +27,6 @@ export const operatorRewardsQueryOptions = (
     enabled: !!sdk && nodeOperatorId !== undefined,
   });
 
-export const useOperatorRewards = (
-  nodeOperatorId: NodeOperatorId | undefined,
-  module?: MODULE_NAME,
-) => {
-  const { sdk } = useTargetSmSDK(module);
-  return useQuery(operatorRewardsQueryOptions(sdk, nodeOperatorId));
-};
+export const useOperatorRewards = <TData = Rewards>(
+  args: OperatorHookArgs<Rewards, TData>,
+) => useOperatorQuery(operatorRewardsQueryOptions, args);

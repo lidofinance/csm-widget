@@ -21,7 +21,7 @@ export const DashboardSubtitle: FC = () => {
 const CmSubtitle: FC = () => {
   const { nodeOperator } = useNodeOperator<true>();
   const { nodeOperatorId } = nodeOperator;
-  const { data: group } = useOperatorGroup(nodeOperatorId);
+  const { data: group } = useOperatorGroup({ nodeOperatorId });
   const metadata = useCurveMetadata(nodeOperator);
   const { IS_NODE_OPERATOR } = useShowFlags();
 

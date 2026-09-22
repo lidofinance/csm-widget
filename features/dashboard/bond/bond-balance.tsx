@@ -9,7 +9,9 @@ import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 export const BondBalance: FC = () => {
   const id = useNodeOperatorId();
 
-  const { data: bond, isPending: isBondLoading } = useOperatorBalance(id);
+  const { data: bond, isPending: isBondLoading } = useOperatorBalance({
+    nodeOperatorId: id,
+  });
   const totalBond = (bond?.current ?? 0n) - (bond?.debt ?? 0n);
 
   return (

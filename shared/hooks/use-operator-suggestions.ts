@@ -48,21 +48,20 @@ export const useOperatorSuggestions = ({
   module,
 }: OperatorRef) => {
   const isCsm = module === MODULE_NAME.CSM;
-  const { data: isOwner } = useOperatorIsOwner(
-    isCsm ? nodeOperatorId : undefined,
-    undefined,
+  const { data: isOwner } = useOperatorIsOwner({
+    nodeOperatorId: isCsm ? nodeOperatorId : undefined,
     module,
-  );
+  });
   const { data: ics } = useIcsProof();
   const { data: idvtc } = useIdvtcProof();
 
   const featureFlags = useFeatureFlags();
   const surveysActive =
     isSurveysAvailable(module, featureFlags) && getSurveyDates().isActive;
-  const { data: filled } = useSurveysFilled(
-    surveysActive ? nodeOperatorId : undefined,
+  const { data: filled } = useSurveysFilled({
+    nodeOperatorId: surveysActive ? nodeOperatorId : undefined,
     module,
-  );
+  });
 
   const list: Suggestion[] = [];
   if (isCsm && isOwner && ics?.proof && !ics.isConsumed) list.push(ICS_CLAIM);

@@ -1,19 +1,19 @@
-import {
-  BondBalance,
-  MODULE_NAME,
-  NodeOperatorId,
-} from '@lidofinance/lido-csm-sdk';
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { BondBalance } from '@lidofinance/lido-csm-sdk';
+import { queryOptions } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { SmSDK, useTargetSmSDK } from '../web3-provider';
+import {
+  OperatorHookArgs,
+  OperatorQueryArgs,
+  useOperatorQuery,
+} from './use-operator-query';
 
 export const KEY_OPERATOR_BALANCE = ['operator-balance'];
 
-export const operatorBalanceQueryOptions = (
-  sdk: SmSDK | undefined,
-  nodeOperatorId: NodeOperatorId | undefined,
-) =>
+export const operatorBalanceQueryOptions = ({
+  sdk,
+  nodeOperatorId,
+}: OperatorQueryArgs) =>
   queryOptions({
     queryKey: [
       ...KEY_OPERATOR_BALANCE,
@@ -28,13 +28,5 @@ export const operatorBalanceQueryOptions = (
   });
 
 export const useOperatorBalance = <TData = BondBalance>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: BondBalance) => TData,
-  module?: MODULE_NAME,
-) => {
-  const { sdk } = useTargetSmSDK(module);
-  return useQuery({
-    ...operatorBalanceQueryOptions(sdk, nodeOperatorId),
-    select,
-  });
-};
+  args: OperatorHookArgs<BondBalance, TData>,
+) => useOperatorQuery(operatorBalanceQueryOptions, args);

@@ -41,6 +41,7 @@ export * from './use-operator-last-rewards';
 export * from './use-operator-metadata';
 export * from './use-operator-owner';
 export * from './use-operator-penalties';
+export * from './use-operator-query';
 export * from './use-operator-reward';
 export * from './use-operator-rewards-history';
 export * from './use-operator-short-info';

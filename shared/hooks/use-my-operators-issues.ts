@@ -15,7 +15,10 @@ export const useMyOperatorsIssues = () => {
   const { data: operators = EMPTY } = useMyOperators();
   return useQueries({
     queries: operators.map((op) => ({
-      ...operatorKeysQueryOptions(sm[op.module], op.nodeOperatorId),
+      ...operatorKeysQueryOptions({
+        sdk: sm[op.module],
+        nodeOperatorId: op.nodeOperatorId,
+      }),
       select: hasIssues,
     })),
     combine: (results) => operators.filter((_, i) => results[i]?.data),

@@ -177,7 +177,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
 }) => {
   const { address } = useDappStatus();
   const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
-  const { data: owner } = useOperatorOwner(nodeOperatorId);
+  const { data: owner } = useOperatorOwner({ nodeOperatorId });
 
   const otherOwner =
     owner && address && !isAddressEqual(owner.address, address)

@@ -17,13 +17,15 @@ import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 export const AvailableToClaim: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
 
-  const { data: bond, isPending: isBondLoading } =
-    useOperatorBalance(nodeOperatorId);
+  const { data: bond, isPending: isBondLoading } = useOperatorBalance({
+    nodeOperatorId,
+  });
 
-  const { data: rewards, isPending: isRewardsLoading } =
-    useOperatorRewards(nodeOperatorId);
+  const { data: rewards, isPending: isRewardsLoading } = useOperatorRewards({
+    nodeOperatorId,
+  });
 
-  const { data: feeSplits } = useFeeSplits(nodeOperatorId);
+  const { data: feeSplits } = useFeeSplits({ nodeOperatorId });
 
   const { data: nextDistribution } = useFrameInfo(getNextDistribution);
 

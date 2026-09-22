@@ -7,7 +7,7 @@ import { OperatorCard } from './operator-card';
 
 export const Group: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data, isPending } = useOperatorGroupStakeSummary(nodeOperatorId);
+  const { data, isPending } = useOperatorGroupStakeSummary({ nodeOperatorId });
 
   return (
     <WhenLoaded loading={isPending} empty={!data && <>No Group</>}>

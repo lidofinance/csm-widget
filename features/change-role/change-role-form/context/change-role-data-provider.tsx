@@ -26,7 +26,7 @@ const useChangeRoleFormNetworkData: NetworkData<
   invariant(address);
 
   const nodeOperatorId = useNodeOperatorId();
-  const infoQuery = useOperatorInfo(nodeOperatorId);
+  const infoQuery = useOperatorInfo({ nodeOperatorId });
 
   const info = infoQuery.data;
   const isInfoLoading = infoQuery.isPending;

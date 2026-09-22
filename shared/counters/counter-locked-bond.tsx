@@ -4,7 +4,7 @@ import { Counter } from 'shared/components';
 
 export const CounterLockedBond: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: balance } = useOperatorBalance(nodeOperatorId);
+  const { data: balance } = useOperatorBalance({ nodeOperatorId });
 
   const count = balance?.locked ? 1 : 0;
 

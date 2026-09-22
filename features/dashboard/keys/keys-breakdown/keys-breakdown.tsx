@@ -17,9 +17,9 @@ import { AccordionStyle } from './styles';
 export const KeysBreakdown: FC = () => {
   const { isCM, isCsmFamily } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { data } = useKeysBreakdown(nodeOperatorId);
-  const { data: stakeSummary } = useOperatorStakeSummary(nodeOperatorId);
-  const { data: info } = useOperatorInfo(nodeOperatorId);
+  const { data } = useKeysBreakdown({ nodeOperatorId });
+  const { data: stakeSummary } = useOperatorStakeSummary({ nodeOperatorId });
+  const { data: info } = useOperatorInfo({ nodeOperatorId });
 
   const moreKeys = useMemo(() => {
     const stakeAndKeys =

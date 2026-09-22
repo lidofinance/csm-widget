@@ -11,9 +11,10 @@ import type { MetadataFormNetworkData } from './types';
 
 const useMetadataFormNetworkData = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: metadata, isPending } = useOperatorMetadata(nodeOperatorId);
-  const { data: isOwner, isPending: isOwnerPending } =
-    useOperatorIsOwner(nodeOperatorId);
+  const { data: metadata, isPending } = useOperatorMetadata({ nodeOperatorId });
+  const { data: isOwner, isPending: isOwnerPending } = useOperatorIsOwner({
+    nodeOperatorId,
+  });
 
   const invalidate = useInvalidate();
 
