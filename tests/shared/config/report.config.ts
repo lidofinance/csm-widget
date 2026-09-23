@@ -78,8 +78,7 @@ export const getBranchName = () => {
 export const getTestRunDescription = () => {
   return (
     `Github run link: ${process.env.GH_ACTION_URL}\n` +
-    `Stand url: ${widgetFullConfig.standConfig.standUrl}\n` +
-    `Env: ${process.env.STAND_TYPE}`
+    `Stand url: ${widgetFullConfig.standConfig.standUrl}`
   );
 };
 
