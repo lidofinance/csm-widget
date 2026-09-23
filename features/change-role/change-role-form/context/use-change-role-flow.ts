@@ -62,7 +62,7 @@ export const useChangeRoleFlowResolver = (
       return {
         action,
         confirm: async () => {
-          if (input.intent !== 'submit') return true;
+          if (input.intent) return true;
 
           const showRewards =
             data.role === ROLES.REWARDS &&

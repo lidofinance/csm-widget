@@ -1,5 +1,4 @@
-import { FC, useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FC } from 'react';
 import {
   IconTooltip,
   Latice,
@@ -8,16 +7,11 @@ import {
   TitledValue,
 } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
-import { ClaimerFormInputType, useClaimerFormData } from '../context';
+import { useClaimerFormData } from '../context';
 import { Text } from '@lidofinance/lido-ui';
 
 export const Info: FC = () => {
   const { currentClaimerAddress, canEdit } = useClaimerFormData(true);
-  const { setValue } = useFormContext<ClaimerFormInputType>();
-
-  const unsetHandle = useCallback(() => {
-    setValue('isUnset', true);
-  }, [setValue]);
 
   const title = (
     <Stack center gap="xs">
@@ -42,8 +36,8 @@ export const Info: FC = () => {
                     variant="outlined"
                     size="xs"
                     fullwidth={false}
-                    onClick={unsetHandle}
                     noDisableOnError
+                    intent="unset"
                     data-testid="unsetClaimerButton"
                   >
                     Unset
