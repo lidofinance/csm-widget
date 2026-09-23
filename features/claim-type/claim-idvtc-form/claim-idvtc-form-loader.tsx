@@ -1,7 +1,7 @@
 import { Button } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
 import { FC, PropsWithChildren } from 'react';
-import { EmptyState } from 'shared/components';
+import { EmptyState, NoAccessNotice } from 'shared/components';
 import { FormLoader } from 'shared/hook-form/form-controller';
 import { LocalLink } from 'shared/navigate';
 import { ClaimIdvtcSuccess } from './claim-idvtc-success';
@@ -24,7 +24,13 @@ const ClaimIdvtcFormGate: FC<PropsWithChildren> = ({ children }) => {
   const flow = useClaimIdvtcFlow();
 
   if (justClaimed) return <ClaimIdvtcSuccess />;
-  if (flow.action === 'no-access') return <Info />;
+  if (flow.action === 'no-access')
+    return (
+      <>
+        <Info />
+        <NoAccessNotice access={flow.access} />
+      </>
+    );
   if (flow.action === 'claimed-with-proof') {
     return (
       <>
