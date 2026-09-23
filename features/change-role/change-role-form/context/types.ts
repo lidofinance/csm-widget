@@ -18,6 +18,7 @@ export type ChangeRoleFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   extendedManagerPermissions: boolean;
   currentAddress: Address;
+  otherRoleAddress: Address;
   proposedAddress: Address;
   canEdit: boolean;
   invite: Pick<NodeOperatorInviteInfo, 'nodeOperatorId' | 'role'> | null;
