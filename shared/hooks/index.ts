@@ -31,6 +31,7 @@ export * from './use-my-operators-issues';
 export * from './use-my-operators-overview';
 export * from './use-operator-overview';
 export * from './use-operator-suggestions';
+export * from './use-other-operators-claimable';
 export * from './use-operator-type-metadata';
 export * from './use-operator-type-parameters';
 export * from './use-prefixed-history';
