@@ -19,6 +19,7 @@ export default class GithubSummaryReporter implements Reporter {
   private readonly runInfo = {
     passed: 0,
     failed: 0,
+    xFail: 0,
     flaky: 0,
     skipped: 0,
   };
@@ -34,6 +35,10 @@ export default class GithubSummaryReporter implements Reporter {
       case 'failed':
       case 'timedOut':
       case 'interrupted':
+        if (test.outcome() === 'expected') {
+          this.runInfo.xFail++;
+          break;
+        }
         if (result.retry === test.retries) this.runInfo.failed++;
         break;
       case 'skipped':
@@ -59,6 +64,7 @@ export default class GithubSummaryReporter implements Reporter {
     const lines = [
       { icon: '✅', title: 'passed', count: this.runInfo.passed },
       { icon: '🛑', title: 'failed', count: this.runInfo.failed },
+      { icon: '🚩', title: 'xfail', count: this.runInfo.xFail },
       { icon: '⚠️', title: 'flaky', count: this.runInfo.flaky },
       { icon: '⏭️', title: 'skipped', count: this.runInfo.skipped },
     ]

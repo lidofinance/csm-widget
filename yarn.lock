@@ -2456,10 +2456,10 @@
     "@lidofinance/wallets-testing-nodes" "1.10.0"
     "@lidofinance/wallets-testing-wallets" "1.53.0-alpha-send-xfail.1"
 
-"@lidofinance/chat-reporter@1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/chat-reporter/-/chat-reporter-1.10.0.tgz#3092a2794edb54bc7d9daf13f5a832b8e3a9e82a"
-  integrity sha512-fL/OtuzK9YxqAsTSG0eRfx3HIqyOqPhKRDS7utbB2qfu1iW+QGh0QEcG5tj9uZ/jqGl9ELyqoa7f8HBkpF7G9Q==
+"@lidofinance/chat-reporter@1.11.0-alpha-send-xfail.1":
+  version "1.11.0-alpha-send-xfail.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/chat-reporter/-/chat-reporter-1.11.0-alpha-send-xfail.1.tgz#9f254320aa0de99e5f66cd4e8c2f9b4489ff0cd9"
+  integrity sha512-lLKsagSFobVYTAC4Go+7IrMU6u7SHnVE4nCtMK3aL05W/uyMeVMUkhvBwZBndNbmXSYinz1z+UUqLfywetVmHw==
   dependencies:
     "@nestjs/common" "^10.0.0"
     axios "^1.10.0"
@@ -2621,7 +2621,7 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.52.1-alpha-send-xfail.2", "@lidofinance/wallets-testing-wallets@1.53.0-alpha-send-xfail.1":
+"@lidofinance/wallets-testing-wallets@1.53.0-alpha-send-xfail.1":
   version "1.53.0-alpha-send-xfail.1"
   resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.53.0-alpha-send-xfail.1.tgz#80f6fef538c2ec2439184314080c8dfe921874f0"
   integrity sha512-71SKDwGEmX3TwvG1Br+UGRFHnd2baKwn/V/NeN1aoRReFe3F4TpRyqZKEdB2Epd0mpfE3QbB84v5Zg4WxTJfdQ==
