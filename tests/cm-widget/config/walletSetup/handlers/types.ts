@@ -1,7 +1,7 @@
-import { ForkActionsService } from 'tests/shared/services/forkActions.service';
+import type { GateSelector } from 'tests/shared/contracts/constants';
+import type { ForkActionsService } from 'tests/shared/contracts/forkActions.service';
 
-export type GateSelector =
-  (typeof ForkActionsService.GATE_SELECTOR)[keyof typeof ForkActionsService.GATE_SELECTOR];
+export type { GateSelector };
 
 export type StateCtx = {
   address: `0x${string}`;

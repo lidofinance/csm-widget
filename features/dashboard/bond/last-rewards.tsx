@@ -39,6 +39,7 @@ import {
   AccordionStyle,
   BadgeStyle,
   DoubleColumnStyle,
+  NoWrap,
   RowBody,
   RowHeader,
   RowTitle,
@@ -77,8 +78,10 @@ export const LastRewards: FC = () => {
             <RowTitle>Latest rewards distribution</RowTitle>
             {prevDistribution && rewardsFrame && (
               <GrayText data-testid="reportFrame">
-                Report frame: {prevDistribution} —{' '}
-                {rewardsFrame.lastDistribution}
+                Report frame:{' '}
+                <NoWrap>
+                  {prevDistribution} — {rewardsFrame.lastDistribution}
+                </NoWrap>
               </GrayText>
             )}
           </Stack>
@@ -102,8 +105,11 @@ export const LastRewards: FC = () => {
             </Text>
             {rewardsFrame ? (
               <GrayText data-testid="reportFrame">
-                Report frame: {rewardsFrame.lastDistribution} —{' '}
-                {rewardsFrame.nextDistribution}
+                Report frame:{' '}
+                <NoWrap>
+                  {rewardsFrame.lastDistribution} —{' '}
+                  {rewardsFrame.nextDistribution}
+                </NoWrap>
               </GrayText>
             ) : (
               <InlineLoader />

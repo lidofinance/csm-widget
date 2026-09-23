@@ -1,7 +1,8 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../test.fixture';
-import { NavigationPage } from '../../pages/navigation.page';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
+import { NavBlockElement } from 'tests/shared/pages/elements';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 import { MatomoService } from 'tests/shared/services/matomo.service';
@@ -66,16 +67,19 @@ const DELETE_KEYS_CARDS = [
 ];
 
 test.describe(
-  'Navigation. Operator with validator.',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.navigation,
+    story: 'Operator with validator',
+    tag: [Tags.forked],
+  }),
   () => {
-    let navigation: NavigationPage;
+    let navigation: NavBlockElement;
     let matomoEventService: MatomoService;
 
     test.beforeEach(async ({ widgetConfig, widgetService }) => {
       matomoEventService = new MatomoService(widgetService.page, widgetConfig);
       await widgetService.dashboardPage.open();
-      navigation = new NavigationPage(widgetService.page);
+      navigation = widgetService.navBlockElement;
     });
 
     test(

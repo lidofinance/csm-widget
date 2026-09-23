@@ -9,12 +9,15 @@ import { SdkService } from 'tests/shared/services/ethereumSDK.client';
 import { WidgetService } from '../services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from 'tests/shared/consts/timeouts';
-import ForkActionsService from 'tests/shared/services/forkActions.service';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { ForkActionsService } from 'tests/shared/contracts/forkActions.service';
+import type { ChainName } from 'tests/shared/contracts/constants';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { HttpMockerService } from 'tests/shared/services/httpMocker.service';
 import { EvmNodeService } from 'tests/shared/services/evmNode.service';
 import { LidoSDKClient } from '../services/cmSDK.client';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
+import { reportTagsToQase } from 'tests/shared/helpers/qaseTags';
 import { IpfsGatewayProxyService } from 'tests/shared/services/ipfsGatewayProxy.service';
 
 import path from 'path';
@@ -36,9 +39,15 @@ type WorkerFixtures = {
 };
 
 export const test = base.extend<
-  { widgetConfig: IConfig; keysGeneratorService: KeysGeneratorService },
+  {
+    widgetConfig: IConfig;
+    keysGeneratorService: KeysGeneratorService;
+    qaseTags: void;
+  },
   WorkerFixtures
 >({
+  qaseTags: [reportTagsToQase, { auto: true }],
+
   // fixture-options
   useFork: [
     async ({}, use) => {
@@ -50,16 +59,14 @@ export const test = base.extend<
   ],
   forkActionService: [
     async ({}, use) => {
-      const svc = new ForkActionsService({
-        cwd: process.env.JUST_DIR || './staking-modules',
-        env: {
-          CHAIN: widgetFullConfig.standConfig.justConfig.chain,
-          DEPLOY_CONFIG: widgetFullConfig.standConfig.justConfig.deployConfig,
-          ARTIFACTS_DIR: widgetFullConfig.standConfig.justConfig.artifactsDir,
-          RPC_URL: widgetFullConfig.standConfig.networkConfig.rpcUrl,
-        },
-      });
-      await use(svc);
+      const { nodeConfig, keysGeneratorConfig } = widgetFullConfig.standConfig;
+      await use(
+        new ForkActionsService({
+          rpcUrl: `http://${nodeConfig.host}:${nodeConfig.port}`,
+          chain: keysGeneratorConfig.chain as ChainName,
+          module: MODULE_NAME.CM,
+        }),
+      );
     },
     { scope: 'worker' },
   ],
@@ -110,7 +117,7 @@ export const test = base.extend<
           useExternalFork: true,
         },
         browserOptions: {
-          headless: false,
+          headless: true,
           reducedMotion: 'reduce',
           cookies: REFUSE_CF_BLOCK_COOKIE,
         },

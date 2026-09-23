@@ -10,6 +10,8 @@ export class ClaimIdvtcPage extends BasePage {
   claimButton: Locator;
   confirmModal: Locator;
   confirmContinueButton: Locator;
+  dkgRequiredCard: Locator;
+  dkgUploadFilesButton: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -28,6 +30,10 @@ export class ClaimIdvtcPage extends BasePage {
     });
     this.confirmContinueButton = this.confirmModal.getByRole('button', {
       name: 'Continue',
+    });
+    this.dkgRequiredCard = this.page.getByTestId('dkgRequiredCard');
+    this.dkgUploadFilesButton = this.dkgRequiredCard.getByRole('button', {
+      name: 'Upload files',
     });
   }
 

@@ -74,7 +74,7 @@ export const SourcesInfo: FC = () => {
   }
 
   return (
-    <Grid $gap="ms">
+    <Grid $gap="ms" $stackOnMobile>
       <Block data-testid="rewardsBalanceCard" padding="none" overflowHidden>
         <ContentPadding gap="sm" center spaceBetween>
           <Balance
@@ -174,6 +174,11 @@ const BondNegative: FC<BondNegativeProps> = ({
 const ContentPadding = styled(Stack)`
   padding: ${({ theme }) => theme.spaceMap.md}px
     ${({ theme }) => theme.spaceMap.xxl}px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding-left: ${({ theme }) => theme.spaceMap.lg}px;
+    padding-right: ${({ theme }) => theme.spaceMap.lg}px;
+  }
 `;
 
 const FooterStyle = styled.div`

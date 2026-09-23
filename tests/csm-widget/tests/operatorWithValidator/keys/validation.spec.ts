@@ -1,4 +1,5 @@
 import { test } from '../../test.fixture';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { Tags } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
@@ -28,95 +29,201 @@ const invalidTextValidation = [
   'signature',
 ];
 
-test.describe('Operator with keys. Validation keys json.', async () => {
-  let keysPage: KeysPage;
-  let keysGeneratorService: KeysGeneratorService;
+test.describe(
+  ...suite({
+    epic: EPIC.keys,
+    feature: 'Submit keys',
+    story: 'JSON tab',
+  }),
+  async () => {
+    let keysPage: KeysPage;
+    let keysGeneratorService: KeysGeneratorService;
 
-  test.beforeEach(
-    async ({ widgetService, keysGeneratorService: keysGenerator }) => {
-      keysPage = new KeysPage(widgetService.page);
-      await keysPage.submitPage.open();
-      keysGeneratorService = keysGenerator;
-    },
-  );
+    test.beforeEach(
+      async ({ widgetService, keysGeneratorService: keysGenerator }) => {
+        keysPage = new KeysPage(widgetService.page);
+        await keysPage.submitPage.open();
+        keysGeneratorService = keysGenerator;
+      },
+    );
 
-  test(
-    qase(308, 'Should display error for empty keys json'),
-    { tag: Tags.smoke },
-    async () => {
-      await keysPage.submitPage.fillKeys(
-        // @ts-expect-error negative test for validation
-        [{}],
-      );
-
-      await expect(keysPage.submitPage.validationInputError).toHaveText(
-        'Item at index 0 is missing required field: pubkey',
-      );
-    },
-  );
-
-  test('Should disable Parsed tab for unparseable json', async () => {
-    await keysPage.submitPage.fillRawKeys('{ this is not valid json');
-
-    await test.step('Verify parse error is shown', async () => {
-      await expect(keysPage.submitPage.validationInputError).toBeVisible();
-    });
-
-    await test.step('Verify Parsed/Parameters tabs and parsed data are unavailable', async () => {
-      await expect(keysPage.submitPage.parsedTab).toBeDisabled();
-      await expect(keysPage.submitPage.parametersTab).toBeDisabled();
-      await expect(keysPage.submitPage.depositDataRow).toHaveCount(0);
-    });
-  });
-
-  invalidTextValidation.forEach((propertyName) => {
     test(
-      qase(
-        333,
-        `Should display error if ${propertyName} does not passed for 1 key as object`,
-      ),
+      qase(308, 'Should display error for empty keys json'),
+      { tag: Tags.smoke },
       async () => {
-        const key = keysGeneratorService.generateKeys();
-        const newJson = omitField(key[0], propertyName as keyof DepositKey);
-
         await keysPage.submitPage.fillKeys(
           // @ts-expect-error negative test for validation
-          newJson,
+          [{}],
         );
 
         await expect(keysPage.submitPage.validationInputError).toHaveText(
-          `Item at index 0 is missing required field: ${propertyName}`,
+          'Item at index 0 is missing required field: pubkey',
         );
+      },
+    );
 
-        await test.step('Verify that other tabs and controls are disabled', async () => {
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parsed'),
-          ).toBeDisabled();
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parameters'),
-          ).toBeDisabled();
+    test(
+      qase(482, 'Should disable Parsed tab for unparseable json'),
+      async () => {
+        await keysPage.submitPage.fillRawKeys('{ this is not valid json');
 
-          await expect(keysPage.submitPage.amountInput).toBeDisabled();
-          await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-          await expect(
-            keysPage.submitPage.confirmKeysReadyInput,
-          ).toBeDisabled();
+        await test.step('Verify parse error is shown', async () => {
+          await expect(keysPage.submitPage.validationInputError).toBeVisible();
+        });
+
+        await test.step('Verify Parsed/Parameters tabs and parsed data are unavailable', async () => {
+          await expect(keysPage.submitPage.parsedTab).toBeDisabled();
+          await expect(keysPage.submitPage.parametersTab).toBeDisabled();
+          await expect(keysPage.submitPage.depositDataRow).toHaveCount(0);
         });
       },
     );
-  });
 
-  invalidTextValidation.forEach((propertyName) => {
+    invalidTextValidation.forEach((propertyName) => {
+      test(
+        qase(
+          333,
+          `Should display error if ${propertyName} does not passed for 1 key as object`,
+        ),
+        async () => {
+          const key = keysGeneratorService.generateKeys();
+          const newJson = omitField(key[0], propertyName as keyof DepositKey);
+
+          await keysPage.submitPage.fillKeys(
+            // @ts-expect-error negative test for validation
+            newJson,
+          );
+
+          await expect(keysPage.submitPage.validationInputError).toHaveText(
+            `Item at index 0 is missing required field: ${propertyName}`,
+          );
+
+          await test.step('Verify that other tabs and controls are disabled', async () => {
+            await expect(
+              keysPage.submitPage.formBlock
+                .getByRole('button')
+                .getByText('Parsed'),
+            ).toBeDisabled();
+            await expect(
+              keysPage.submitPage.formBlock
+                .getByRole('button')
+                .getByText('Parameters'),
+            ).toBeDisabled();
+
+            await expect(keysPage.submitPage.amountInput).toBeDisabled();
+            await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
+            await expect(
+              keysPage.submitPage.confirmKeysReadyInput,
+            ).toBeDisabled();
+          });
+        },
+      );
+    });
+
+    invalidTextValidation.forEach((propertyName) => {
+      test(
+        qase(
+          340,
+          `Should display error if ${propertyName} does not passed for array of keys`,
+        ),
+        async () => {
+          const key = keysGeneratorService.generateKeys();
+          const newJson = omitField(key[0], propertyName as keyof DepositKey);
+
+          await keysPage.submitPage.fillKeys(
+            // @ts-expect-error negative test for validation
+            [newJson],
+          );
+
+          await expect(keysPage.submitPage.validationInputError).toHaveText(
+            `Item at index 0 is missing required field: ${propertyName}`,
+          );
+
+          await test.step('Verify that other tabs and controls are disabled', async () => {
+            await expect(
+              keysPage.submitPage.formBlock
+                .getByRole('button')
+                .getByText('Parsed'),
+            ).toBeDisabled();
+            await expect(
+              keysPage.submitPage.formBlock
+                .getByRole('button')
+                .getByText('Parameters'),
+            ).toBeDisabled();
+
+            await expect(keysPage.submitPage.amountInput).toBeDisabled();
+            await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
+            await expect(
+              keysPage.submitPage.confirmKeysReadyInput,
+            ).toBeDisabled();
+          });
+        },
+      );
+    });
+
+    invalidTextValidation.forEach((propertyName) => {
+      test(
+        qase(
+          347,
+          `Should display error if ${propertyName} does not passed for index >0 in array of keys`,
+        ),
+        async () => {
+          const keys = keysGeneratorService.generateKeys(3);
+          // @ts-expect-error negative test for validation
+          keys[2] = omitField(keys[2], propertyName);
+
+          await keysPage.submitPage.fillKeys(keys);
+
+          await expect(keysPage.submitPage.validationInputError).toHaveText(
+            `Item at index 2 is missing required field: ${propertyName}`,
+          );
+
+          await test.step('Verify that other tabs and controls are disabled', async () => {
+            await expect(
+              keysPage.submitPage.formBlock
+                .getByRole('button')
+                .getByText('Parsed'),
+            ).toBeDisabled();
+            await expect(
+              keysPage.submitPage.formBlock
+                .getByRole('button')
+                .getByText('Parameters'),
+            ).toBeDisabled();
+
+            await expect(keysPage.submitPage.amountInput).toBeDisabled();
+            await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
+            await expect(
+              keysPage.submitPage.confirmKeysReadyInput,
+            ).toBeDisabled();
+          });
+        },
+      );
+    });
+
     test(
       qase(
-        340,
-        `Should display error if ${propertyName} does not passed for array of keys`,
+        354,
+        'Shouldnt display error for valid eth2_network_name for current chain',
       ),
+      async ({ widgetConfig }) => {
+        const key = keysGeneratorService.generateKeys();
+        const propertyName = 'network_name';
+        const newJson = omitField(key[0], propertyName as keyof DepositKey);
+
+        // @ts-expect-error negative test for validation
+        newJson.eth2_network_name =
+          widgetConfig.standConfig.networkConfig.chainName.toLowerCase();
+
+        // @ts-expect-error negative test for validation
+        await keysPage.submitPage.fillKeys([newJson]);
+        await expect(keysPage.submitPage.validationInputError).toBeHidden();
+      },
+    );
+
+    test(
+      qase(355, 'Should ignore validation for optional deposit_cli_version'),
       async () => {
+        const propertyName = 'deposit_cli_version';
         const key = keysGeneratorService.generateKeys();
         const newJson = omitField(key[0], propertyName as keyof DepositKey);
 
@@ -125,104 +232,8 @@ test.describe('Operator with keys. Validation keys json.', async () => {
           [newJson],
         );
 
-        await expect(keysPage.submitPage.validationInputError).toHaveText(
-          `Item at index 0 is missing required field: ${propertyName}`,
-        );
-
-        await test.step('Verify that other tabs and controls are disabled', async () => {
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parsed'),
-          ).toBeDisabled();
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parameters'),
-          ).toBeDisabled();
-
-          await expect(keysPage.submitPage.amountInput).toBeDisabled();
-          await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-          await expect(
-            keysPage.submitPage.confirmKeysReadyInput,
-          ).toBeDisabled();
-        });
+        await expect(keysPage.submitPage.validationInputError).toBeHidden();
       },
     );
-  });
-
-  invalidTextValidation.forEach((propertyName) => {
-    test(
-      qase(
-        347,
-        `Should display error if ${propertyName} does not passed for index >0 in array of keys`,
-      ),
-      async () => {
-        const keys = keysGeneratorService.generateKeys(3);
-        // @ts-expect-error negative test for validation
-        keys[2] = omitField(keys[2], propertyName);
-
-        await keysPage.submitPage.fillKeys(keys);
-
-        await expect(keysPage.submitPage.validationInputError).toHaveText(
-          `Item at index 2 is missing required field: ${propertyName}`,
-        );
-
-        await test.step('Verify that other tabs and controls are disabled', async () => {
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parsed'),
-          ).toBeDisabled();
-          await expect(
-            keysPage.submitPage.formBlock
-              .getByRole('button')
-              .getByText('Parameters'),
-          ).toBeDisabled();
-
-          await expect(keysPage.submitPage.amountInput).toBeDisabled();
-          await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
-          await expect(
-            keysPage.submitPage.confirmKeysReadyInput,
-          ).toBeDisabled();
-        });
-      },
-    );
-  });
-
-  test(
-    qase(
-      354,
-      'Shouldnt display error for valid eth2_network_name for current chain',
-    ),
-    async ({ widgetConfig }) => {
-      const key = keysGeneratorService.generateKeys();
-      const propertyName = 'network_name';
-      const newJson = omitField(key[0], propertyName as keyof DepositKey);
-
-      // @ts-expect-error negative test for validation
-      newJson.eth2_network_name =
-        widgetConfig.standConfig.networkConfig.chainName.toLowerCase();
-
-      // @ts-expect-error negative test for validation
-      await keysPage.submitPage.fillKeys([newJson]);
-      await expect(keysPage.submitPage.validationInputError).toBeHidden();
-    },
-  );
-
-  test(
-    qase(355, 'Should ignore validation for optional deposit_cli_version'),
-    async () => {
-      const propertyName = 'deposit_cli_version';
-      const key = keysGeneratorService.generateKeys();
-      const newJson = omitField(key[0], propertyName as keyof DepositKey);
-
-      await keysPage.submitPage.fillKeys(
-        // @ts-expect-error negative test for validation
-        [newJson],
-      );
-
-      await expect(keysPage.submitPage.validationInputError).toBeHidden();
-    },
-  );
-});
+  },
+);

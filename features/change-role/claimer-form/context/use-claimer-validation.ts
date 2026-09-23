@@ -10,8 +10,8 @@ import type { ClaimerFormInputType, ClaimerFormNetworkData } from './types';
 export const useClaimerValidation = () => {
   return useFormValidation<ClaimerFormInputType, ClaimerFormNetworkData>(
     'address',
-    async ({ address, isUnset }, { currentClaimerAddress }, validate) => {
-      if (isUnset) return;
+    async ({ address, intent }, { currentClaimerAddress }, validate) => {
+      if (intent === 'unset') return;
 
       await validate('address', () => {
         if (!isAddress(address ?? '')) {

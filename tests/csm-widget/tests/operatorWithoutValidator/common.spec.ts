@@ -1,5 +1,6 @@
 import { MainPage, KeysPage } from 'tests/csm-widget/pages';
 import { test } from '../test.fixture';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
@@ -7,75 +8,84 @@ import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.servic
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
-test.describe('Operator without keys. Common suite.', async () => {
-  let mainPage: MainPage;
-  let createKeysPage: KeysPage;
-  let keysGeneratorService: KeysGeneratorService;
+test.describe(
+  ...suite({
+    epic: EPIC.keys,
+    feature: 'Submit keys',
+    story: 'Upload limits (no operator)',
+  }),
+  async () => {
+    let mainPage: MainPage;
+    let createKeysPage: KeysPage;
+    let keysGeneratorService: KeysGeneratorService;
 
-  test.beforeEach(
-    async ({ widgetService, keysGeneratorService: keysGenerator }) => {
-      mainPage = new MainPage(widgetService.page);
-      createKeysPage = new KeysPage(widgetService.page);
-      await mainPage.goto();
-      keysGeneratorService = keysGenerator;
-    },
-  );
+    test.beforeEach(
+      async ({ widgetService, keysGeneratorService: keysGenerator }) => {
+        mainPage = new MainPage(widgetService.page);
+        createKeysPage = new KeysPage(widgetService.page);
+        await mainPage.goto();
+        keysGeneratorService = keysGenerator;
+      },
+    );
 
-  test(
-    qase(47, 'Should open transaction page after added 1 key'),
-    { tag: Tags.smoke },
-    async ({ widgetService }) => {
+    test(
+      qase(47, 'Should open transaction page after added 1 key'),
+      { tag: Tags.smoke },
+      async ({ widgetService }) => {
+        await mainPage.openCreateForm();
+        await createKeysPage.createNodeOperatorForm.addNewKeys(
+          keysGeneratorService.generateKeys(),
+          TokenSymbol.ETH,
+        );
+        await widgetService.walletPage.cancelTx();
+      },
+    );
+
+    test(qase(177, 'Should failed if uploaded duplicate keys'), async () => {
       await mainPage.openCreateForm();
-      await createKeysPage.createNodeOperatorForm.addNewKeys(
-        keysGeneratorService.generateKeys(),
-        TokenSymbol.ETH,
-      );
-      await widgetService.walletPage.cancelTx();
-    },
-  );
-
-  test(qase(177, 'Should failed if uploaded duplicate keys'), async () => {
-    await mainPage.openCreateForm();
-    const duplicatedKey = keysGeneratorService.generateKeys();
-    await createKeysPage.createNodeOperatorForm.fillKeys([
-      ...duplicatedKey,
-      ...duplicatedKey,
-    ]);
-    await expect(
-      createKeysPage.createNodeOperatorForm.validationInputError,
-    ).toContainText('Invalid deposit data');
-    await createKeysPage.createNodeOperatorForm.selectTab('Parsed');
-    await expect(
-      createKeysPage.createNodeOperatorForm.depositDataRow,
-    ).toHaveCount(2);
-    for (const row of await createKeysPage.createNodeOperatorForm.depositDataRow.all()) {
-      await expect(row.getByTestId('deposit-data-error')).toHaveText(
-        'pubkey is duplicated in deposit data',
-      );
-    }
-  });
-
-  test(
-    qase(48, 'Should open transaction page after added 75 keys'),
-    async ({ widgetService }) => {
-      await mainPage.openCreateForm();
-      await createKeysPage.createNodeOperatorForm.addNewKeys(
-        keysGeneratorService.generateKeys(75),
-        TokenSymbol.ETH,
-      );
-      await widgetService.walletPage.cancelTx();
-    },
-  );
-
-  test(
-    qase(49, 'Should failed if uploaded over the limit (76) keys'),
-    async () => {
-      await mainPage.openCreateForm();
-      const overTheLimitKeys = keysGeneratorService.generateKeys(76);
-      await createKeysPage.createNodeOperatorForm.fillKeys(overTheLimitKeys);
+      const duplicatedKey = keysGeneratorService.generateKeys();
+      await createKeysPage.createNodeOperatorForm.fillKeys([
+        ...duplicatedKey,
+        ...duplicatedKey,
+      ]);
       await expect(
         createKeysPage.createNodeOperatorForm.validationInputError,
-      ).toContainText('Too many keys in one transaction, maximum allowed: 75');
-    },
-  );
-});
+      ).toContainText('Invalid deposit data');
+      await createKeysPage.createNodeOperatorForm.selectTab('Parsed');
+      await expect(
+        createKeysPage.createNodeOperatorForm.depositDataRow,
+      ).toHaveCount(2);
+      for (const row of await createKeysPage.createNodeOperatorForm.depositDataRow.all()) {
+        await expect(row.getByTestId('deposit-data-error')).toHaveText(
+          'pubkey is duplicated in deposit data',
+        );
+      }
+    });
+
+    test(
+      qase(48, 'Should open transaction page after added 75 keys'),
+      async ({ widgetService }) => {
+        await mainPage.openCreateForm();
+        await createKeysPage.createNodeOperatorForm.addNewKeys(
+          keysGeneratorService.generateKeys(75),
+          TokenSymbol.ETH,
+        );
+        await widgetService.walletPage.cancelTx();
+      },
+    );
+
+    test(
+      qase(49, 'Should failed if uploaded over the limit (76) keys'),
+      async () => {
+        await mainPage.openCreateForm();
+        const overTheLimitKeys = keysGeneratorService.generateKeys(76);
+        await createKeysPage.createNodeOperatorForm.fillKeys(overTheLimitKeys);
+        await expect(
+          createKeysPage.createNodeOperatorForm.validationInputError,
+        ).toContainText(
+          'Too many keys in one transaction, maximum allowed: 75',
+        );
+      },
+    );
+  },
+);

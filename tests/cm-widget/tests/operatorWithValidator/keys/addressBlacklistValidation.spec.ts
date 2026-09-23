@@ -5,13 +5,19 @@ import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { TxModal } from 'tests/cm-widget/pages/elements/common/element.txProgressModal';
 import { test } from '../../test.fixture';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
-  'Operator with validator. Keys. Address blacklist validation',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.keys,
+    // spans Submit keys and Remove keys, so it belongs to the epic itself
+    feature: null,
+    story: 'Address blacklist',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let txModal: TxModal;

@@ -9,6 +9,7 @@ export * from './use-default-curve-id';
 export * from './use-deposit-queue-batches';
 export * from './use-fee-splits';
 export * from './use-frame-info';
+export * from './use-has-non-withdrawn-keys';
 export * from './use-has-priority-queue-spots';
 export * from './use-has-report-delayed-penalty-role';
 export * from './use-ics-curve-id';

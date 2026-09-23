@@ -5,6 +5,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 import { test } from '../../../test.fixture';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { formatEther } from 'viem';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 import { MatomoService } from 'tests/shared/services/matomo.service';
@@ -14,8 +15,12 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 const BOND_EXCESS_ETH = '2';
 
 test.describe(
-  'Bond & Rewards. Claim. Token select & amount.',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.bondRewards,
+    feature: 'Claim',
+    story: 'Token & amount',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let noId: number;
@@ -62,6 +67,8 @@ test.describe(
           `Should show correct name, converted amount and hint for ${tokenName}`,
         ),
         async ({ widgetService, cmSDK }) => {
+          qase.parameters({ token: tokenName });
+
           const { claim } = widgetService.bondRewardsPage;
           const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));
           // claimable = current - required - locked - debt (matches UI computation)
@@ -154,6 +161,8 @@ test.describe(
           `Should fill amount with Max and enable submit for ${tokenName}`,
         ),
         async ({ widgetService, cmSDK }) => {
+          qase.parameters({ token: tokenName });
+
           const { claim } = widgetService.bondRewardsPage;
           const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));
           const claimable =
@@ -218,6 +227,8 @@ test.describe(
           `Should show validation error when ${tokenName} amount exceeds balance`,
         ),
         async ({ widgetService }) => {
+          qase.parameters({ token: tokenName });
+
           const { claim } = widgetService.bondRewardsPage;
 
           await claim.selectBondToken(tokenName);

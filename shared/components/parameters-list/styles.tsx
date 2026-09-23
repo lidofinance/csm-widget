@@ -36,6 +36,10 @@ export const CompareListStyle = styled.div<{ $columns: number }>`
     );
   column-gap: ${({ theme }) => theme.spaceMap.sm}px;
   row-gap: ${({ theme }) => theme.spaceMap.xl}px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    grid-template-columns: repeat(var(--columns), minmax(0, 1fr));
+  }
 `;
 
 export const ColumnBackground = styled.div<{ $index: number }>`
@@ -52,6 +56,10 @@ export const ColumnBackground = styled.div<{ $index: number }>`
   pointer-events: none;
   opacity: 0.6;
   z-index: 0;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    display: none;
+  }
 
   &:before {
     --offset: 2px;
@@ -133,6 +141,25 @@ export const CompareRowStyle = styled(RowStyle)`
   & > :not(:first-child) {
     padding-right: 10px;
   }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    row-gap: ${({ theme }) => theme.spaceMap.xs}px;
+    column-gap: ${({ theme }) => theme.spaceMap.sm}px;
+
+    & > * {
+      min-width: 0;
+      overflow-wrap: break-word;
+      padding-right: 0;
+    }
+
+    & > :first-child {
+      grid-column: 1 / -1;
+    }
+
+    ul {
+      padding-inline-start: 1.1em;
+    }
+  }
 `;
 
 export const CompareTitleStyle = styled(CompareRowStyle)`
@@ -142,5 +169,11 @@ export const CompareTitleStyle = styled(CompareRowStyle)`
 
   p {
     padding-left: 1em;
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    & > p:first-child {
+      display: none;
+    }
   }
 `;

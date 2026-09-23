@@ -10,6 +10,7 @@ export const CheckboxStyled = styled(Checkbox)`
 
   svg + div {
     width: 100%;
+    min-width: 0;
   }
 
   :has(input:disabled) {

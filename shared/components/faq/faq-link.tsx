@@ -1,16 +1,11 @@
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { FC, ReactNode } from 'react';
+import { ComponentProps, FC } from 'react';
 import { MatomoLink } from '../matomo-link/matomo-link';
 
-type FaqLinkProps = {
+type FaqLinkProps = Omit<ComponentProps<typeof MatomoLink>, 'matomoEvent'> & {
   href: string;
-  children: ReactNode;
 };
 
-export const FaqLink: FC<FaqLinkProps> = ({ href, children }) => {
-  return (
-    <MatomoLink href={href} matomoEvent={MATOMO_CLICK_EVENTS_TYPES.faqItemLink}>
-      {children}
-    </MatomoLink>
-  );
-};
+export const FaqLink: FC<FaqLinkProps> = (props) => (
+  <MatomoLink {...props} matomoEvent={MATOMO_CLICK_EVENTS_TYPES.faqItemLink} />
+);

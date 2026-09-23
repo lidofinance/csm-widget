@@ -22,7 +22,7 @@ export const useChangeRoleValidation = (role: ROLES) => {
       { currentAddress, proposedAddress },
       validate,
     ) => {
-      const isSubmit = intent === 'submit';
+      const isSubmit = !intent;
 
       await validate('address', () => {
         if (isSubmit && !isAddress(address ?? '')) {

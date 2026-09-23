@@ -29,6 +29,7 @@ import {
   SelectOperatorModalElement,
 } from '../../shared/pages/elements';
 import { FooterElement } from '../pages/elements/common/element.footer';
+import { Header } from '../pages/elements/common/element.header';
 
 type FeatureFlagName = keyof FeatureFlagsType;
 
@@ -44,6 +45,7 @@ export class WidgetService {
   public welcomePage: WelcomePage;
 
   // common elements
+  public header: Header;
   public navBlockElement: NavBlockElement;
   public footerElement: FooterElement;
   public selectOperatorModal: SelectOperatorModalElement;
@@ -64,6 +66,7 @@ export class WidgetService {
     this.welcomePage = new WelcomePage(this.page);
 
     // common elements
+    this.header = new Header(this.page);
     this.navBlockElement = new NavBlockElement(this.page);
     this.footerElement = new FooterElement(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);

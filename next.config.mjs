@@ -1,7 +1,5 @@
 import fs from 'fs';
 import path from 'path';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import NextBundleAnalyzer from '@next/bundle-analyzer';
 import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
 import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
@@ -21,6 +19,7 @@ const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
 const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
+const moduleName = moduleMode.toLowerCase();
 const isIPFSMode = !!process.env.IPFS_MODE;
 const maintenance = !!process.env.MAINTENANCE; // TODO: load from runtime config
 
@@ -38,18 +37,34 @@ if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
-  '/manifest.json',
-  '/manifest-cm.json',
-  '/favicon:size*',
+  // documents — every gSSP page returns the same props for every visitor
   '/',
+  '/group',
+  '/monitoring',
+  '/wrapped-2025/:path*',
+  '/bond/:path*',
+  '/create/:path*',
+  '/delayed-penalty/:path*',
+  '/idvtc/:path*',
+  '/keys/:path*',
+  '/settings/:path*',
+  '/surveys/:path*',
+  '/type/:path*',
+  // assets — unhashed, so they share the document TTL
+  '/manifest.json',
+  '/favicon:size*',
+  '/apple-touch-icon.png',
+  '/:module(csm|cm)-preview.png',
   '/runtime/window-env.js',
 ];
 export const CACHE_CONTROL_VALUE =
-  'public, max-age=15, s-max-age=30, stale-if-error=604800, stale-while-revalidate=172800';
+  'public, max-age=15, s-maxage=30, stale-if-error=86400, stale-while-revalidate=60';
 
-const withBundleAnalyzer = NextBundleAnalyzer({
-  enabled: process.env.ANALYZE_BUNDLE ?? false,
-});
+// devDependency, absent from the production image where this config is re-evaluated on boot
+const withBundleAnalyzer = process.env.ANALYZE_BUNDLE
+  ? // eslint-disable-next-line import/no-extraneous-dependencies
+    (await import('@next/bundle-analyzer')).default({ enabled: true })
+  : (config) => config;
 
 export default withBundleAnalyzer({
   basePath,
@@ -80,6 +95,7 @@ export default withBundleAnalyzer({
   },
   images: {
     unoptimized: true,
+    loader: 'custom',
   },
   experimental: {
     // Fixes a build error with importing Pure ESM modules, e.g. reef-knot
@@ -171,7 +187,8 @@ export default withBundleAnalyzer({
       ...(config.ignoreWarnings ?? []),
       {
         module: /node_modules\/ox\/_esm\/tempo\//,
-        message: /Critical dependency: the request of a dependency is an expression/,
+        message:
+          /Critical dependency: the request of a dependency is an expression/,
       },
     ];
 
@@ -212,6 +229,22 @@ export default withBundleAnalyzer({
         source: page,
         headers: [{ key: CACHE_CONTROL_HEADER, value: CACHE_CONTROL_VALUE }],
       })),
+    ];
+  },
+  // serves the module-specific assets shipped in public/ under the canonical
+  // paths Gnosis Safe Apps and browsers expect (/manifest.json, /favicon.ico)
+  async rewrites() {
+    return [
+      { source: '/manifest.json', destination: `/manifest-${moduleName}.json` },
+      { source: '/favicon.ico', destination: `/favicon-${moduleName}.ico` },
+      {
+        source: '/favicon-:size(16x16|32x32|192x192|512x512).png',
+        destination: `/favicon-${moduleName}-:size.png`,
+      },
+      {
+        source: '/apple-touch-icon.png',
+        destination: `/apple-touch-icon-${moduleName}.png`,
+      },
     ];
   },
 

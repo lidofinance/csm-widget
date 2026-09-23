@@ -11,10 +11,15 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 const BOND_EXCESS_ETH = '2';
 
 import { CLAIM_OPTION } from './claim.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 
 test.describe(
-  'Bond & Rewards. Claim. Penalty state.',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.bondRewards,
+    feature: 'Claim',
+    story: 'Penalty',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
 

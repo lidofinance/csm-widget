@@ -1,30 +1,66 @@
 import styled from 'styled-components';
 import { LocalLink } from '../local-link';
 
-export const SwitchWrapper = styled.div<{ $count: number }>`
-  width: ${({ $count }) => `${$count * 134}px`} !important;
+export const SwitchWrapper = styled.div<{
+  $fadeStart: boolean;
+  $fadeEnd: boolean;
+}>`
+  position: relative;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  padding-inline: var(--layout-gutter, 20px);
+  // bleeds into the layout gutters so the track can scroll edge to edge
+  margin-inline: calc(-1 * var(--layout-gutter, 20px));
+
+  --fade: 48px;
+  --fade-start: ${({ $fadeStart }) => ($fadeStart ? 'var(--fade)' : '0px')};
+  --fade-end: ${({ $fadeEnd }) => ($fadeEnd ? 'var(--fade)' : '0px')};
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--fade-start),
+    #000 calc(100% - var(--fade-end)),
+    transparent
+  );
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const Track = styled.div`
+  position: relative;
+  width: max-content;
+  margin-inline: auto;
   height: 44px;
   background-color: var(--lido-color-backgroundDarken);
   border-radius: 22px;
-  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+
   :hover {
     cursor: pointer;
   }
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  user-select: none;
 `;
 
-export const Handle = styled.div<{ $active: number }>`
-  width: 130px;
+export const Handle = styled.div`
   height: 40px;
   background-color: var(--lido-color-foreground);
   border-radius: 20px;
   position: absolute;
-  left: ${({ $active }) => `calc(2px + ${$active * 134}px)`};
-  transition: left 0.3s ease;
   top: 2px;
+  transition:
+    left 0.3s ease,
+    width 0.3s ease;
   z-index: 1;
 `;
 
@@ -39,7 +75,7 @@ export const SwitchItemStyled = styled(LocalLink)<{
   margin: 0;
   opacity: ${({ $active }) => ($active ? 1 : 0.5)};
   transition: opacity 0.3s ease;
-  flex: 1;
+  flex: 0 0 134px;
   display: flex;
   align-items: center;
   text-decoration: none;
@@ -65,5 +101,11 @@ export const SwitchItemStyled = styled(LocalLink)<{
   &:visited {
     color: ${({ $warning }) =>
       $warning ? `var(--lido-color-error)` : `var(--lido-color-text)`};
+  }
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex: 0 0 auto;
+    padding-inline: 24px;
+    white-space: nowrap;
   }
 `;

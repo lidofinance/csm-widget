@@ -1,4 +1,5 @@
 import { test } from '../../../test.fixture';
+import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 
 import { mnemonicToAccount } from 'viem/accounts';
@@ -8,10 +9,12 @@ import { InboxRequestsPage } from 'tests/csm-widget/pages/tabs/roles';
 import { qase } from 'playwright-qase-reporter/playwright';
 
 test.describe(
-  'Roles. Inbox Rewards. Accept rewards ',
-  {
+  ...suite({
+    epic: EPIC.roles,
+    feature: 'Inbox requests',
+    story: 'Accept request',
     tag: [Tags.forked],
-  },
+  }),
   () => {
     let randomId: number;
     let inboxRequestsPage: InboxRequestsPage;

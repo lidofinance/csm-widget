@@ -5,6 +5,7 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
 import { CLAIM_OPTION } from './claim.const';
+import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -12,8 +13,12 @@ test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 const ONE_ETH = 1_000_000_000_000_000_000n;
 
 test.describe(
-  'Bond & Rewards. Claim. Insufficient bond with rewards.',
-  { tag: [Tags.forked] },
+  ...suite({
+    epic: EPIC.bondRewards,
+    feature: 'Claim',
+    story: 'Insufficient bond',
+    tag: [Tags.forked],
+  }),
   () => {
     let snapshotId: string;
     let noId: number;
@@ -69,27 +74,18 @@ test.describe(
 
     test(
       qase(320, 'Should show correct option descriptions'),
-      async ({ widgetService, cmSDK }) => {
+      async ({ widgetService }) => {
         const { claim } = widgetService.bondRewardsPage;
-        const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));
-        const rewards = await cmSDK.getRewards(noId);
 
-        await test.step('"Claim All" is enabled, selected by default, description reflects deficit vs rewards', async () => {
+        // The deficit exceeds the reported rewards, so nothing reaches the
+        // Rewards Address and "Claim All" stays disabled.
+        await test.step('"Claim All" option is disabled', async () => {
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
-          ).toBeEnabled({ timeout: PAGE_WAIT_TIMEOUT });
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
-          ).toBeChecked();
-
-          const expectedDescription =
-            parseFloat(formatEther(bondBalance.delta)) >=
-            parseFloat(rewards.available)
-              ? 'All Rewards will compensate the Insufficient Bond'
-              : 'Compensate the Insufficient Bond and claim Rewards';
+          ).toBeDisabled({ timeout: PAGE_WAIT_TIMEOUT });
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.ALL_TO_RA),
-          ).toHaveText(expectedDescription);
+          ).toHaveText('Claim both Excess Bond and Rewards');
         });
 
         await test.step('"Excess Bond" option is disabled (no excess to claim)', async () => {
@@ -101,13 +97,13 @@ test.describe(
           ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed.');
         });
 
-        await test.step('"Rewards to Bond" is enabled, not checked, description reads "Compensate the Insufficient Bond"', async () => {
+        await test.step('"Rewards to Bond" is enabled and selected by default', async () => {
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toBeEnabled();
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
-          ).not.toBeChecked();
+          ).toBeChecked();
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toHaveText('Compensate the Insufficient Bond');
