@@ -14,6 +14,7 @@ import { generateAddress } from 'tests/shared/helpers/accountData';
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
 const VALID_ADDRESS = generateAddress(true);
+const ANOTHER_ADDRESS = generateAddress(true);
 
 test.describe(
   ...suite({
@@ -196,6 +197,58 @@ test.describe(
 
         await test.step('"Unset" button is no longer visible', async () => {
           await expect(claimerPage.unsetButton).not.toBeVisible();
+        });
+      },
+    );
+
+    test(
+      qase(512, 'Should set the new address when Enter pressed'),
+      async ({ widgetService, forkActionService }) => {
+        const { claimerPage, txModal } = widgetService.settingsPage;
+
+        await test.step('Set initial claimer address via contract', async () => {
+          const noId = await widgetService.extractNodeOperatorId();
+          await forkActionService.setRewardsClaimer(noId, VALID_ADDRESS);
+        });
+
+        await test.step('Reopen page to load fresh form with updated claimer', async () => {
+          await claimerPage.open();
+          await expect(claimerPage.unsetButton).toBeVisible({
+            timeout: STAGE_WAIT_TIMEOUT,
+          });
+        });
+
+        await test.step('Type another address and press Enter', async () => {
+          await claimerPage.addressInput.fill(ANOTHER_ADDRESS);
+          // The submit button leaves the disabled state once validation settles
+          await expect(claimerPage.submitButton).toBeEnabled({
+            timeout: PAGE_WAIT_TIMEOUT,
+          });
+          await claimerPage.addressInput.press('Enter');
+        });
+
+        await test.step('Setting flow starts instead of unsetting', async () => {
+          await expect(
+            widgetService.page.getByText(
+              'You are setting Rewards claimer address',
+            ),
+          ).toBeVisible({ timeout: STAGE_WAIT_TIMEOUT });
+          await expect(
+            widgetService.page.getByText('You are unsetting Rewards claimer'),
+          ).not.toBeVisible();
+        });
+
+        await test.step('Confirm transaction and check the new address is set', async () => {
+          await widgetService.walletPage.confirmTx();
+          await expect(txModal.title).toHaveText(
+            'Rewards Claimer Address has been set',
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
+          await txModal.closeModal();
+          await expect(claimerPage.currentClaimerTitle).toContainText(
+            ANOTHER_ADDRESS,
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
         });
       },
     );

@@ -9,6 +9,7 @@ import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import {
   ConfirmOperatorModalElement,
+  NavBlockElement,
   SelectOperatorModalElement,
 } from 'tests/shared/pages/elements';
 import { BondRewardsPage } from 'tests/csm-widget/pages/bondRewards.page';
@@ -37,6 +38,7 @@ export class WidgetService {
   public operatorType: OperatorTypePage;
   public header: Header;
   public parametersModal: ParametersModal;
+  public navBlockElement: NavBlockElement;
   public selectOperatorModal: SelectOperatorModalElement;
   public confirmOperatorModal: ConfirmOperatorModalElement;
 
@@ -53,6 +55,7 @@ export class WidgetService {
     this.operatorType = new OperatorTypePage(this.page, this.walletPage);
     this.header = new Header(this.page);
     this.parametersModal = new ParametersModal(this.page);
+    this.navBlockElement = new NavBlockElement(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);
     this.confirmOperatorModal = new ConfirmOperatorModalElement(this.page);
   }

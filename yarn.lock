@@ -2447,19 +2447,19 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.63.0.tgz#1a46bab7f035bf4516ae59eb44da77ec963015cf"
   integrity sha512-P2qG//DW87AowTc5jQGDdeBesmSdrVnInSBKPr5FO0CE1I7sMmilC/rrovGJ8QHoffXmmHplX6o8FKipbg/hbA==
 
-"@lidofinance/browser-service@1.11.5":
-  version "1.11.5"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.11.5.tgz#3cf0c3085bb5b5a0daaf6fdf372e1ca8a1611efc"
-  integrity sha512-dQ/HBXdSwhihywEjtLUeT3PjgVai+PP2qHct92o4noUzqN1gs1G1tZNyIMDGrV47i5NMpIK43FojGNrlDHv/4g==
+"@lidofinance/browser-service@1.12.0":
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.12.0.tgz#55fbcffc5e72e43f331d5eed077f19aa3a285ce4"
+  integrity sha512-BeuyNvIePsUngwravUWLwslinuP75wO8huKp1EpDzGTjfUnLqFsn9xnyXW0Rj/kVj/M6wfgmcGwPoc//YKyJsg==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.3.1"
     "@lidofinance/wallets-testing-nodes" "1.10.0"
-    "@lidofinance/wallets-testing-wallets" "1.51.1"
+    "@lidofinance/wallets-testing-wallets" "1.53.0"
 
-"@lidofinance/chat-reporter@1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/chat-reporter/-/chat-reporter-1.10.0.tgz#3092a2794edb54bc7d9daf13f5a832b8e3a9e82a"
-  integrity sha512-fL/OtuzK9YxqAsTSG0eRfx3HIqyOqPhKRDS7utbB2qfu1iW+QGh0QEcG5tj9uZ/jqGl9ELyqoa7f8HBkpF7G9Q==
+"@lidofinance/chat-reporter@1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/chat-reporter/-/chat-reporter-1.11.0.tgz#860a207cae9d48212b6b120dd8944e52519ee1de"
+  integrity sha512-j/4KQ4OSEKz52yltjo3Bma/SLqBL2MpkWQAvGqafi6stECRp8HRilKmFNDodnahIfru8aSNAflyzA8hyQNC9tw==
   dependencies:
     "@nestjs/common" "^10.0.0"
     axios "^1.10.0"
@@ -2621,10 +2621,10 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.51.1":
-  version "1.51.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.51.1.tgz#02d8ec5dd3d10ba9b2b1d7ae01b165f3578ad695"
-  integrity sha512-G0FoFQ0jela9v7dIPk0Ay3V5t9HMcxS3tQUx09xB0U8Z4H6O72kOijn6q/HAqlyNW8jlOHv4SJUtLAREHVF+sg==
+"@lidofinance/wallets-testing-wallets@1.53.0":
+  version "1.53.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.53.0.tgz#fbe92d9863790356a7bbf13c3cf715c656a42d14"
+  integrity sha512-uoEg2SZl4SN27G2UU5ainqlpoFVxIMr4mXvs0AThFL7LkoNLtYg8AGaveCAE/d2VtenmWjIKV5bebgp63BJqzw==
   dependencies:
     "@walletconnect/sign-client" "2.23.4"
     big.js "^6.2.1"
