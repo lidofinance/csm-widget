@@ -7,16 +7,10 @@ import {
   IdvtcFormStatus,
   IdvtcTypeStatus,
 } from 'features/idvtc/shared';
-import {
-  NodeOperatorOwner,
-  useDappStatus,
-  useOperatedNodeOperator,
-  useOperatorOwner,
-} from 'modules/web3';
+import { useOperatedNodeOperator } from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
-import { isAddressEqual } from 'viem';
 import { ScoreChip } from './score-chip';
 
 type StatusHeaderProps = {
@@ -50,6 +44,7 @@ const getProofStatus = (typeStatus: IdvtcTypeStatus) => {
     case 'CLAIMED':
       return <ScoreChip type="default">Claimed</ScoreChip>;
     case 'ISSUED':
+    case 'ISSUED_NOT_OWNER':
       return <ScoreChip type="success">Issued</ScoreChip>;
     case 'OWNER_ISSUED':
       return <ScoreChip type="success">Approved</ScoreChip>;
@@ -62,13 +57,12 @@ const useHint = (
   status: IdvtcFormStatus | undefined,
   typeStatus: IdvtcTypeStatus,
   comments: IdvtcCommentsDto | undefined,
-  owner: NodeOperatorOwner | undefined,
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
   switch (true) {
     case typeStatus === 'CLAIMED':
       return <Text size="xs">You successfully claimed your Operator type</Text>;
-    case typeStatus === 'ISSUED' && !!owner:
+    case typeStatus === 'ISSUED_NOT_OWNER':
       return (
         <>
           <Text size="xs">
@@ -157,24 +151,11 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   typeStatus,
   comments,
 }) => {
-  const { address } = useDappStatus();
   const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
-  const { data: owner } = useOperatorOwner({ nodeOperatorId });
-
-  const otherOwner =
-    owner && address && !isAddressEqual(owner.address, address)
-      ? owner
-      : undefined;
 
   const statusChip = getStatus(status, typeStatus);
   const proofChip = getProofStatus(typeStatus);
-  const hint = useHint(
-    status,
-    typeStatus,
-    comments,
-    otherOwner,
-    nodeOperatorId,
-  );
+  const hint = useHint(status, typeStatus, comments, nodeOperatorId);
 
   return (
     <Stack direction="column" gap="md">

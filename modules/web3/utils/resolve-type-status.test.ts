@@ -11,6 +11,7 @@ const resolve = (params: Partial<Params>) =>
     operatorType: undefined,
     targetType: TARGET,
     isOwner: false,
+    hasOperator: true,
     proof: undefined,
     ownerProof: undefined,
     ...params,
@@ -21,9 +22,24 @@ describe('resolveTypeStatus', () => {
     expect(resolve({ operatorType: OTHER })).toBe('PENDING');
   });
 
-  it('returns ISSUED for an own unconsumed proof', () => {
+  it('returns ISSUED for an own unconsumed proof without an operator', () => {
+    expect(
+      resolve({
+        hasOperator: false,
+        proof: { proof: ['0x1'], isConsumed: false },
+      }),
+    ).toBe('ISSUED');
+  });
+
+  it('returns ISSUED for the owner of an operator with an own unconsumed proof', () => {
+    expect(
+      resolve({ isOwner: true, proof: { proof: ['0x1'], isConsumed: false } }),
+    ).toBe('ISSUED');
+  });
+
+  it('returns ISSUED_NOT_OWNER for a non-owner own proof when the operator exists', () => {
     expect(resolve({ proof: { proof: ['0x1'], isConsumed: false } })).toBe(
-      'ISSUED',
+      'ISSUED_NOT_OWNER',
     );
   });
 
@@ -41,13 +57,13 @@ describe('resolveTypeStatus', () => {
     expect(resolve({ operatorType: TARGET })).toBe('PENDING');
   });
 
-  it('keeps a non-owner own proof visible on an already typed operator', () => {
+  it('returns ISSUED_NOT_OWNER for a non-owner own proof on an already typed operator', () => {
     expect(
       resolve({
         operatorType: TARGET,
         proof: { proof: ['0x1'], isConsumed: false },
       }),
-    ).toBe('ISSUED');
+    ).toBe('ISSUED_NOT_OWNER');
   });
 
   it('returns OWNER_ISSUED for an unconsumed owner proof', () => {
@@ -65,6 +81,7 @@ describe('resolveTypeStatus', () => {
   it('prefers an own proof over a consumed owner proof', () => {
     expect(
       resolve({
+        isOwner: true,
         proof: { proof: ['0x1'], isConsumed: false },
         ownerProof: { proof: ['0x2'], isConsumed: true },
       }),
