@@ -38,62 +38,65 @@ test.describe(
       await csmSDK.evmRevert(snapshotId);
     });
 
-    test('Should show an invite received while another wallet was connected', async ({
-      widgetService,
-      forkActionService,
-      csmSDK,
-    }) => {
-      const { header, walletPage } = widgetService;
-      const { inboxRequestsPage } = widgetService.settingsPage;
-      const navBlock = widgetService.navBlockElement;
-      const invitesCounter = navBlock.navCounter('Settings');
-      let invitedNoId: number;
-      let invitesBefore: number;
+    test(
+      qase(
+        561,
+        'Should show an invite received while another wallet was connected',
+      ),
+      async ({ widgetService, forkActionService, csmSDK }) => {
+        const { header, walletPage } = widgetService;
+        const { inboxRequestsPage } = widgetService.settingsPage;
+        const navBlock = widgetService.navBlockElement;
+        const invitesCounter = navBlock.navCounter('Settings');
+        let invitedNoId: number;
+        let invitesBefore: number;
 
-      await test.step('Pick an operator the wallet does not own', async () => {
-        const owned = await csmSDK.getNodeOperatorsByAddress(operatorAddress);
-        const ownedIds = owned.map((operator) =>
-          Number(operator.nodeOperatorId),
-        );
-        invitedNoId = Array.from({ length: 200 }, (_, index) => index + 1).find(
-          (id) => !ownedIds.includes(id),
-        ) as number;
-        invitesBefore = (await invitesCounter.isVisible())
-          ? Number(await invitesCounter.textContent())
-          : 0;
-      });
-
-      await test.step('Switch to another wallet', async () => {
-        await walletPage.importKey(OTHER_WALLET_KEY);
-        await expect(
-          widgetService.mainPage.starterPackSection.section,
-        ).toBeVisible({ timeout: RPC_WAIT_TIMEOUT });
-      });
-
-      await test.step('Propose the operator wallet as a rewards address', async () => {
-        await forkActionService.proposeReward(invitedNoId, operatorAddress);
-      });
-
-      await test.step('Switch back to the operator wallet', async () => {
-        await walletPage.importKey(operatorKey);
-        await expect(header.switchOperatorButton).toBeVisible({
-          timeout: RPC_WAIT_TIMEOUT,
+        await test.step('Pick an operator the wallet does not own', async () => {
+          const owned = await csmSDK.getNodeOperatorsByAddress(operatorAddress);
+          const ownedIds = owned.map((operator) =>
+            Number(operator.nodeOperatorId),
+          );
+          invitedNoId = Array.from(
+            { length: 200 },
+            (_, index) => index + 1,
+          ).find((id) => !ownedIds.includes(id)) as number;
+          invitesBefore = (await invitesCounter.isVisible())
+            ? Number(await invitesCounter.textContent())
+            : 0;
         });
-      });
 
-      await test.step('Settings counts the new invite without a reload', async () => {
-        await expect(invitesCounter).toHaveText(String(invitesBefore + 1), {
-          timeout: RPC_WAIT_TIMEOUT,
+        await test.step('Switch to another wallet', async () => {
+          await walletPage.importKey(OTHER_WALLET_KEY);
+          await expect(
+            widgetService.mainPage.starterPackSection.section,
+          ).toBeVisible({ timeout: RPC_WAIT_TIMEOUT });
         });
-      });
 
-      await test.step('Inbox requests lists the new invite', async () => {
-        await navBlock.navItem('Settings').click();
-        await navBlock.switcherTab('Inbox requests').click();
-        await expect(
-          inboxRequestsPage.getRequestLocator(invitedNoId, ROLES.REWARDS),
-        ).toBeVisible({ timeout: RPC_WAIT_TIMEOUT });
-      });
-    });
+        await test.step('Propose the operator wallet as a rewards address', async () => {
+          await forkActionService.proposeReward(invitedNoId, operatorAddress);
+        });
+
+        await test.step('Switch back to the operator wallet', async () => {
+          await walletPage.importKey(operatorKey);
+          await expect(header.switchOperatorButton).toBeVisible({
+            timeout: RPC_WAIT_TIMEOUT,
+          });
+        });
+
+        await test.step('Settings counts the new invite without a reload', async () => {
+          await expect(invitesCounter).toHaveText(String(invitesBefore + 1), {
+            timeout: RPC_WAIT_TIMEOUT,
+          });
+        });
+
+        await test.step('Inbox requests lists the new invite', async () => {
+          await navBlock.navItem('Settings').click();
+          await navBlock.switcherTab('Inbox requests').click();
+          await expect(
+            inboxRequestsPage.getRequestLocator(invitedNoId, ROLES.REWARDS),
+          ).toBeVisible({ timeout: RPC_WAIT_TIMEOUT });
+        });
+      },
+    );
   },
 );
