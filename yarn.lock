@@ -2447,19 +2447,19 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.63.0.tgz#1a46bab7f035bf4516ae59eb44da77ec963015cf"
   integrity sha512-P2qG//DW87AowTc5jQGDdeBesmSdrVnInSBKPr5FO0CE1I7sMmilC/rrovGJ8QHoffXmmHplX6o8FKipbg/hbA==
 
-"@lidofinance/browser-service@1.12.0-alpha-send-xfail.1":
-  version "1.12.0-alpha-send-xfail.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.12.0-alpha-send-xfail.1.tgz#15b4dbed437b4f1c5062c9b92816a71eca09cb73"
-  integrity sha512-3QLFy+CTSV3eUUHi8aH/AkQTKQcRq0z7r2kUZEuVKsixGoPQ9/bFSgsbze74/HfE+8Yyk5oGuUJeOG+X7vzLLg==
+"@lidofinance/browser-service@1.12.0":
+  version "1.12.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/browser-service/-/browser-service-1.12.0.tgz#55fbcffc5e72e43f331d5eed077f19aa3a285ce4"
+  integrity sha512-BeuyNvIePsUngwravUWLwslinuP75wO8huKp1EpDzGTjfUnLqFsn9xnyXW0Rj/kVj/M6wfgmcGwPoc//YKyJsg==
   dependencies:
     "@lidofinance/wallets-testing-extensions" "1.3.1"
     "@lidofinance/wallets-testing-nodes" "1.10.0"
-    "@lidofinance/wallets-testing-wallets" "1.53.0-alpha-send-xfail.1"
+    "@lidofinance/wallets-testing-wallets" "1.53.0"
 
-"@lidofinance/chat-reporter@1.11.0-alpha-send-xfail.1":
-  version "1.11.0-alpha-send-xfail.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/chat-reporter/-/chat-reporter-1.11.0-alpha-send-xfail.1.tgz#9f254320aa0de99e5f66cd4e8c2f9b4489ff0cd9"
-  integrity sha512-lLKsagSFobVYTAC4Go+7IrMU6u7SHnVE4nCtMK3aL05W/uyMeVMUkhvBwZBndNbmXSYinz1z+UUqLfywetVmHw==
+"@lidofinance/chat-reporter@1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/chat-reporter/-/chat-reporter-1.11.0.tgz#860a207cae9d48212b6b120dd8944e52519ee1de"
+  integrity sha512-j/4KQ4OSEKz52yltjo3Bma/SLqBL2MpkWQAvGqafi6stECRp8HRilKmFNDodnahIfru8aSNAflyzA8hyQNC9tw==
   dependencies:
     "@nestjs/common" "^10.0.0"
     axios "^1.10.0"
@@ -2621,10 +2621,10 @@
     reflect-metadata "^0.1.13"
     rxjs "^7.5.6"
 
-"@lidofinance/wallets-testing-wallets@1.53.0-alpha-send-xfail.1":
-  version "1.53.0-alpha-send-xfail.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.53.0-alpha-send-xfail.1.tgz#80f6fef538c2ec2439184314080c8dfe921874f0"
-  integrity sha512-71SKDwGEmX3TwvG1Br+UGRFHnd2baKwn/V/NeN1aoRReFe3F4TpRyqZKEdB2Epd0mpfE3QbB84v5Zg4WxTJfdQ==
+"@lidofinance/wallets-testing-wallets@1.53.0":
+  version "1.53.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/wallets-testing-wallets/-/wallets-testing-wallets-1.53.0.tgz#fbe92d9863790356a7bbf13c3cf715c656a42d14"
+  integrity sha512-uoEg2SZl4SN27G2UU5ainqlpoFVxIMr4mXvs0AThFL7LkoNLtYg8AGaveCAE/d2VtenmWjIKV5bebgp63BJqzw==
   dependencies:
     "@walletconnect/sign-client" "2.23.4"
     big.js "^6.2.1"
