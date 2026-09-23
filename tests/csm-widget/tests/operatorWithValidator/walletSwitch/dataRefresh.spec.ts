@@ -6,6 +6,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { ROLES } from 'tests/shared/consts/roles';
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
+import { qase } from 'playwright-qase-reporter/playwright';
 
 const OTHER_WALLET_KEY = generatePrivateKey();
 

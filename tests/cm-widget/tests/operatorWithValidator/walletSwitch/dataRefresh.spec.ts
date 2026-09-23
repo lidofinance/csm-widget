@@ -7,6 +7,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { ROLES } from 'tests/shared/consts/roles';
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
+import { qase } from 'playwright-qase-reporter/playwright';
 
 // any address the widget has never seen: it never signs, so it needs no funding
 const OTHER_WALLET_KEY = generatePrivateKey();
