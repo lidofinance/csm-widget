@@ -17,7 +17,7 @@ const getButtonState = (
   // Only a CSM operator can receive the type, so anything else must create one.
   hasOperator: boolean,
 ): ButtonState => {
-  if (typeStatus === 'CLAIMED') {
+  if (typeStatus === 'CLAIMED' || typeStatus === 'ISSUED_NOT_OWNER') {
     return {
       text: 'View ICS status',
       variant: 'translucent',

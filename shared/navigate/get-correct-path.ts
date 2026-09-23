@@ -71,13 +71,13 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
       }
       return path;
     case PATH.TYPE_ICS_CLAIM:
-      return hasRole
+      return flags.CAN_CLAIM_ICS
         ? path
         : flags.ICS_APPLY_ENABLED
           ? PATH.TYPE_ICS_SYSTEM
           : PATH.TYPE_PARAMETERS;
     case PATH.TYPE_IDVTC_CLAIM:
-      return hasRole
+      return flags.CAN_CLAIM_IDVTC
         ? path
         : flags.ICS_APPLY_ENABLED
           ? PATH.TYPE_IDVTC_DESCRIPTION

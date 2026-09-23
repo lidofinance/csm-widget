@@ -52,8 +52,9 @@ export const IdvtcStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const nodeOperator = useOperatedNodeOperator();
   const operatorId = nodeOperator?.nodeOperatorId;
   // The type only exists in CSM: an operator of another module never holds it.
+  const hasOperator = nodeOperator?.module === MODULE_NAME.CSM;
   const { data: operatorType } = useOperatorType(
-    nodeOperator?.module === MODULE_NAME.CSM ? nodeOperator : undefined,
+    hasOperator ? nodeOperator : undefined,
   );
   const { data: owner } = useOperatorOwner({ nodeOperatorId: operatorId });
   const { address } = useDappStatus();
@@ -77,6 +78,7 @@ export const IdvtcStateProvider: FC<PropsWithChildren> = ({ children }) => {
     operatorType,
     targetType: OPERATOR_TYPE.CSM_IDVTC,
     isOwner,
+    hasOperator,
     proof: proofData,
     ownerProof: ownerProofData,
   });

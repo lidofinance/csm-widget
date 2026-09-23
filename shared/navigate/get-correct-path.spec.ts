@@ -91,3 +91,59 @@ describe('getCorrectPath — bond pages', () => {
     expect(getCorrectPath(PATH.BOND_ADD, flags({}))).toBe(PATH.HOME);
   });
 });
+
+describe('getCorrectPath — type claim pages', () => {
+  it('keeps an owner eligible to claim on the claim page', () => {
+    expect(
+      getCorrectPath(PATH.TYPE_ICS_CLAIM, flags({ CAN_CLAIM_ICS: true })),
+    ).toBe(PATH.TYPE_ICS_CLAIM);
+    expect(
+      getCorrectPath(PATH.TYPE_IDVTC_CLAIM, flags({ CAN_CLAIM_IDVTC: true })),
+    ).toBe(PATH.TYPE_IDVTC_CLAIM);
+  });
+
+  it('redirects a non-owner manager off the claim page even with a role', () => {
+    expect(
+      getCorrectPath(
+        PATH.TYPE_ICS_CLAIM,
+        flags({ HAS_MANAGER_ROLE: true, CAN_CLAIM_ICS: false }),
+      ),
+    ).not.toBe(PATH.TYPE_ICS_CLAIM);
+    expect(
+      getCorrectPath(
+        PATH.TYPE_IDVTC_CLAIM,
+        flags({ HAS_MANAGER_ROLE: true, CAN_CLAIM_IDVTC: false }),
+      ),
+    ).not.toBe(PATH.TYPE_IDVTC_CLAIM);
+  });
+
+  it('falls back to the type system page when apply is enabled', () => {
+    expect(
+      getCorrectPath(
+        PATH.TYPE_ICS_CLAIM,
+        flags({ CAN_CLAIM_ICS: false, ICS_APPLY_ENABLED: true }),
+      ),
+    ).toBe(PATH.TYPE_ICS_SYSTEM);
+    expect(
+      getCorrectPath(
+        PATH.TYPE_IDVTC_CLAIM,
+        flags({ CAN_CLAIM_IDVTC: false, ICS_APPLY_ENABLED: true }),
+      ),
+    ).toBe(PATH.TYPE_IDVTC_DESCRIPTION);
+  });
+
+  it('falls back to type parameters when apply is disabled', () => {
+    expect(
+      getCorrectPath(
+        PATH.TYPE_ICS_CLAIM,
+        flags({ CAN_CLAIM_ICS: false, ICS_APPLY_ENABLED: false }),
+      ),
+    ).toBe(PATH.TYPE_PARAMETERS);
+    expect(
+      getCorrectPath(
+        PATH.TYPE_IDVTC_CLAIM,
+        flags({ CAN_CLAIM_IDVTC: false, ICS_APPLY_ENABLED: false }),
+      ),
+    ).toBe(PATH.TYPE_PARAMETERS);
+  });
+});
