@@ -20,7 +20,7 @@ const renderStatusChip = (
   if (typeStatus === 'CLAIMED') {
     return <ScoreChip type="default">Claimed</ScoreChip>;
   }
-  if (typeStatus === 'ISSUED') {
+  if (typeStatus === 'ISSUED' || typeStatus === 'ISSUED_NOT_OWNER') {
     return <ScoreChip type="success">Issued</ScoreChip>;
   }
   switch (status) {

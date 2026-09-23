@@ -13,13 +13,7 @@ import { Stack } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
 
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import {
-  NodeOperatorOwner,
-  useDappStatus,
-  useOperatedNodeOperator,
-  useOperatorOwner,
-} from 'modules/web3';
-import { isAddressEqual } from 'viem';
+import { useOperatedNodeOperator } from 'modules/web3';
 import { calculateScores, isMinScoresReached } from '../utils';
 import { ScoreChip } from './score-chip';
 
@@ -55,6 +49,7 @@ const getProofStatus = (typeStatus: TypeStatus) => {
     case 'CLAIMED':
       return <ScoreChip type="default">Claimed</ScoreChip>;
     case 'ISSUED':
+    case 'ISSUED_NOT_OWNER':
       return <ScoreChip type="success">Issued</ScoreChip>;
     case 'OWNER_ISSUED':
       return <ScoreChip type="success">Approved</ScoreChip>;
@@ -68,13 +63,12 @@ const useHint = (
   typeStatus: TypeStatus,
   comments: IcsCommentsDto | undefined,
   scores: IcsScoresDto | undefined,
-  owner: NodeOperatorOwner | undefined,
   nodeOperatorId: NodeOperatorId | undefined,
 ) => {
   switch (true) {
     case typeStatus === 'CLAIMED':
       return <Text size="xs">You successfully claimed your Operator type</Text>;
-    case typeStatus === 'ISSUED' && !!owner:
+    case typeStatus === 'ISSUED_NOT_OWNER':
       return (
         <>
           <Text size="xs">You&apos;re already eligible to claim ICS type</Text>
@@ -175,25 +169,11 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
   comments,
   scores,
 }) => {
-  const { address } = useDappStatus();
   const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
-  const { data: owner } = useOperatorOwner({ nodeOperatorId });
-
-  const otherOwner =
-    owner && address && !isAddressEqual(owner.address, address)
-      ? owner
-      : undefined;
 
   const statusChip = getStatus(status, typeStatus);
   const proofChip = getProofStatus(typeStatus);
-  const hint = useHint(
-    status,
-    typeStatus,
-    comments,
-    scores,
-    otherOwner,
-    nodeOperatorId,
-  );
+  const hint = useHint(status, typeStatus, comments, scores, nodeOperatorId);
 
   return (
     <Stack direction="column" gap="md">
