@@ -25,6 +25,10 @@ const sortByRewards: SortCriteria<ValidatorRewardsEntity> = (item) => [
   item.receivedRewards,
 ];
 
+const sortByBalance: SortCriteria<ValidatorRewardsEntity> = (item) => [
+  item.effectiveBalance ?? 0n,
+];
+
 export const sortFunctions: SortFunctions<ValidatorRewardsEntity> = {
   startTimestamp: sortByDate,
   pubkey: sortByPubkey,
@@ -32,4 +36,5 @@ export const sortFunctions: SortFunctions<ValidatorRewardsEntity> = {
   performance: sortByPerformance,
   threshold: sortByThreshold,
   receivedRewards: sortByRewards,
+  effectiveBalance: sortByBalance,
 };

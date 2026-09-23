@@ -4,10 +4,23 @@ import { PubkeyContainerStyle } from 'shared/components/address/styles';
 import styled, { css } from 'styled-components';
 import { MEDIA_QUERY_XXL } from 'styles';
 
-export const TableStyle = styled(Table)`
-  grid-template-columns: 2fr 3fr 1fr 1fr 1fr 2fr;
+type TableStyleProps = {
+  $balance?: boolean;
+};
+
+export const TableStyle = styled(Table)<TableStyleProps>`
+  grid-template-columns:
+    2fr 3fr 1fr 1fr 1fr 2fr
+    ${({ $balance }) => ($balance ? '2fr' : '')};
 
   tr {
+    ${({ $balance }) =>
+      $balance &&
+      css`
+        padding-inline: 16px;
+        gap: 12px;
+      `}
+
     ${MEDIA_QUERY_XXL} {
       padding-inline: 16px;
       gap: 12px;
@@ -18,8 +31,14 @@ export const TableStyle = styled(Table)`
     }
   }
 
-  th:nth-child(n + 3):nth-child(-n + 6),
-  td:nth-child(n + 3):nth-child(-n + 6) {
+  th {
+    display: flex;
+    align-items: center;
+    gap: ${({ theme }) => theme.spaceMap.xs}px;
+  }
+
+  th:nth-child(n + 3):nth-child(-n + 7),
+  td:nth-child(n + 3):nth-child(-n + 7) {
     justify-self: right;
     text-align: right;
   }

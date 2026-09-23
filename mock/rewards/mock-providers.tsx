@@ -11,8 +11,8 @@ import { KEY_OPERATOR_REWARDS_HISTORY } from 'modules/web3';
 import { hashKey } from 'utils';
 
 export const MockRewardsHistoryProvider: FC<
-  PropsWithChildren<{ scenario: MockScenarioData }>
-> = ({ children, scenario }) => {
+  PropsWithChildren<{ scenario: MockScenarioData; module?: MODULE_NAME }>
+> = ({ children, scenario, module = MODULE_NAME.CSM }) => {
   const mockRewardsHistory = createMockRewardsHistory(scenario.rewardsHistory);
 
   // Create a unique QueryClient for this scenario to avoid cache conflicts
@@ -30,7 +30,7 @@ export const MockRewardsHistoryProvider: FC<
   queryClient.setQueryData(
     [
       ...KEY_OPERATOR_REWARDS_HISTORY,
-      { nodeOperatorId: BigInt(scenario.nodeOperatorId) },
+      { nodeOperatorId: BigInt(scenario.nodeOperatorId), module },
     ],
     mockRewardsHistory,
   );
@@ -40,9 +40,10 @@ export const MockRewardsHistoryProvider: FC<
     isPending: false,
     needsSelection: false,
     nodeOperator: {
-      id: BigInt(scenario.nodeOperatorId),
+      nodeOperatorId: BigInt(scenario.nodeOperatorId),
+      module,
     } as any,
-    activeModule: MODULE_NAME.CSM,
+    activeModule: module,
     switchNodeOperator: () => {},
   };
 
