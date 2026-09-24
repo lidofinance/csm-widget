@@ -71,6 +71,11 @@ const HELP: Record<
     example:
       'yarn fork csm hoodi setGateAddrs ics 0x1111111111111111111111111111111111111111',
   },
+  setRewardsClaimer: {
+    args: '<noId> <address>',
+    example:
+      'yarn fork csm hoodi setRewardsClaimer 12 0x1111111111111111111111111111111111111111',
+  },
   setShareLimit: {
     args: '<REACHED|EXHAUSTED|APPROACHING>',
     example: 'yarn fork csm hoodi setShareLimit REACHED',
@@ -79,6 +84,11 @@ const HELP: Record<
     args: '<selector> <address>',
     example:
       'yarn fork cm hoodi createCuratedOperator po 0x1111111111111111111111111111111111111111',
+  },
+  createPermissionlessOperator: {
+    args: '<address> [keysCount]',
+    example:
+      'yarn fork csm hoodi createPermissionlessOperator 0x1111111111111111111111111111111111111111 3',
   },
   createOperatorGroup: {
     args: '<[{ id, weight }]>',
@@ -98,7 +108,7 @@ const USAGE = `Usage: yarn fork <module> <chain> <command> [args...]
   chain    ${CHAINS.join(' | ')}
 
   --host   fork node host (default: 127.0.0.1)
-  --port   fork node port (default: the port of this module x chain)
+  --port   fork node port (default: the port of this chain)
   --rpc    full node URL, overrides --host and --port
 
 Arguments starting with [ or { are parsed as JSON, the rest stay strings.
@@ -158,7 +168,7 @@ const args = rest.map((arg) =>
 
 const rpcUrl =
   values.rpc ??
-  `http://${values.host ?? '127.0.0.1'}:${values.port ?? forkPort(chain as ChainName, sdkModule)}`;
+  `http://${values.host ?? '127.0.0.1'}:${values.port ?? forkPort(chain as ChainName)}`;
 
 const service = new ForkActionsService({
   rpcUrl,
@@ -170,15 +180,14 @@ const service = new ForkActionsService({
   },
 });
 
-// Each module x chain has its own fork, so the usual mistake is talking to a
-// port nothing is listening on.
+// Each chain has its own fork, so the usual mistake is talking to a port
+// nothing is listening on.
 try {
   await service.client.getChainId();
 } catch {
-  const profile = `${chain}-${module.toLowerCase()}`;
   console.error(
     `No fork answering at ${rpcUrl}\n` +
-      `Start it: docker compose --env-file fork.env --profile ${profile} up -d --wait`,
+      `Start it: docker compose --env-file fork.env --profile ${chain} up -d --wait`,
   );
   process.exit(1);
 }

@@ -93,18 +93,26 @@ Append `:ui` (`yarn test:csm:ui` / `yarn test:cm:ui`) to run Playwright in inter
 ### Local fork
 
 Forked tests run against a local anvil fork started by `compose.yaml`. There is one
-profile per network and module — `mainnet-csm`, `mainnet-cm`, `hoodi-csm`,
-`hoodi-cm` — so forks can run side by side:
+profile per network — `mainnet`, `hoodi` — so both forks can run side by side:
 
 ```sh
-docker compose --env-file fork.env --profile hoodi-cm up -d --wait   # start, waits until the fork answers
-docker compose --env-file fork.env run --rm hoodi-cm-url             # print the local and public URLs
-docker compose --env-file fork.env --profile hoodi-cm logs -f        # follow logs
-docker compose --env-file fork.env --profile hoodi-cm down           # stop and remove
-docker compose --env-file fork.env ps                                # every running fork
+docker compose --env-file fork.env --profile hoodi up -d --wait   # start, waits until the fork answers
+docker compose --env-file fork.env run --rm hoodi-url             # print the local and public URLs
+docker compose --env-file fork.env --profile hoodi logs -f        # follow logs
+docker compose --env-file fork.env --profile hoodi down           # stop and remove
+docker compose --env-file fork.env ps                             # every running fork
 ```
 
+Every module of a network (CSM, CSM_02, CM) is already deployed in that network,
+so one fork serves them all — the module a command or a suite works with only
+decides which contract addresses the calls go to.
+
 `export COMPOSE_ENV_FILES=fork.env` once in your shell and the flag can be dropped.
+
+The compose project is named `csm-widget-forks` and the containers are named
+`hoodi-fork`, `mainnet-fork`, `ipfs` (each with its `-tunnel`), so they read the
+same in `docker ps` and stay the same from any checkout of the repo — a second
+worktree talks to the running forks instead of starting its own.
 
 The fork is made from `EL_RPC_URLS_1` / `EL_RPC_URLS_560048` and funds the
 `WALLET_SECRET_PHRASE` accounts, both taken from `.env.local`. Every fork also
@@ -124,13 +132,16 @@ gateway — the API on 5001 is unauthenticated admin access to the node.
 
 The ports live in [fork.env](./fork.env) — the only place they are written down.
 The tests and the contract commands read the same file, so nothing has to be
-switched by hand between forks (in CI, where a job runs a single fork, they all
-use the plain 8545):
+switched by hand between forks (in CI they all use the plain 8545):
 
 ```sh
-yarn fork csm hoodi addKeys 12 5   # hits the hoodi-csm fork; `yarn fork help` lists every command
-USE_FORK=true yarn test:cm:e2e     # hits the hoodi-cm fork (STAND_TYPE=testnet)
+yarn fork csm hoodi addKeys 12 5   # hits the hoodi fork as CSM; `yarn fork help` lists every command
+USE_FORK=true yarn test:cm:e2e     # hits the hoodi fork as CM (STAND_TYPE=testnet)
 ```
+
+A fork is shared state: `evm_snapshot` / `evm_revert` cover the whole node, so
+two suites running against the same fork at once will roll back each other's
+setup. Run them one after another.
 
 ## Release flow
 
