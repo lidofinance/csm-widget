@@ -1,5 +1,13 @@
-import { BondBalance, Rewards } from '@lidofinance/lido-csm-sdk';
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
+import { BondBalance, Rewards, TOKENS } from '@lidofinance/lido-csm-sdk';
+import {
+  BOND_DEBT,
+  BOND_DEBT_HELP,
+  BOND_EXCESS,
+  BOND_INSUFFICIENT,
+  BOND_INSUFFICIENT_HELP,
+  BOND_LOCKED,
+  BOND_LOCKED_HELP,
+} from 'consts/text';
 import { Balance } from 'features/dashboard/bond/balance';
 import { FC } from 'react';
 import { BondRowStyle } from './styles';
@@ -33,7 +41,7 @@ export const BondRow: FC<Props> = ({
           data-testid="insufficientBondBalance"
           warning
           title={BOND_INSUFFICIENT}
-          help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys"
+          help={BOND_INSUFFICIENT_HELP}
           loading={isBondPending}
           amount={bond.delta}
           approx
@@ -56,6 +64,32 @@ export const BondRow: FC<Props> = ({
           approx
         />
       </>
+    )}
+    {!!bond?.locked && (
+      <Balance
+        data-testid="lockedBondBalance"
+        warning
+        sign="minus"
+        title={BOND_LOCKED}
+        help={BOND_LOCKED_HELP}
+        loading={isBondPending}
+        amount={bond.locked}
+        token={TOKENS.eth}
+        approx
+      />
+    )}
+    {!!bond?.debt && (
+      <Balance
+        data-testid="debtBalance"
+        warning
+        sign="minus"
+        title={BOND_DEBT}
+        help={BOND_DEBT_HELP}
+        loading={isBondPending}
+        amount={bond.debt}
+        token={TOKENS.steth}
+        approx
+      />
     )}
   </BondRowStyle>
 );
