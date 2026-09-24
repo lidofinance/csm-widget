@@ -1,8 +1,16 @@
 import { MockScenarioData } from './mock-data';
 import { data as _data } from './data';
 import { OperatorRewardsHistory } from '@lidofinance/lido-csm-sdk';
+import { parseEther } from 'viem';
 
 const data = _data as OperatorRewardsHistory;
+
+const balanceRows = [
+  parseEther('32'),
+  parseEther('64'),
+  parseEther('2048'),
+  undefined,
+].map((effectiveBalance, i) => ({ ...data[i], effectiveBalance }));
 
 export type TestScenario = {
   title: string;
@@ -83,6 +91,15 @@ export const testScenarios: TestScenario[] = [
     data: {
       nodeOperatorId: 1,
       rewardsHistory: data.filter((record) => record.pubkey === data[0].pubkey),
+    },
+  },
+  {
+    title: 'Balance Column (CM / CSM_02)',
+    description:
+      'Effective balance values of 32, 64, and 2048 ETH, plus one record with no balance data',
+    data: {
+      nodeOperatorId: 1,
+      rewardsHistory: balanceRows,
     },
   },
 ];
