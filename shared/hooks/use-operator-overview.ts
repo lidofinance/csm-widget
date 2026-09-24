@@ -35,7 +35,7 @@ export const useOperatorOverview = ({
 
   return {
     keys,
-    activeBalance: keys?.activeBalance,
+    balances: keys?.balances,
     bond,
     rewards,
     availableToClaim,

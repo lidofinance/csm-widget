@@ -16,7 +16,7 @@ export type StakeAndKeysData = {
   potentialAdditionalKeys: number;
 };
 
-export const sumActiveKeysBalance = (keys: KeyWithStatus[]): bigint =>
+export const sumKeysBalance = (keys: KeyWithStatus[]): bigint =>
   keys.reduce((acc, k) => acc + (k.effectiveBalance ?? 0n), 0n);
 
 export const computeStakeData = (
@@ -30,7 +30,7 @@ export const computeStakeData = (
   // Fall back to the sum of key effective balances in that case.
   const activeStake =
     summary.currentStake === 0n && keys
-      ? sumActiveKeysBalance(keys)
+      ? sumKeysBalance(keys)
       : bigMax(summary.currentStake - summary.externalStake, 0n);
   const targetStake = bigMax(summary.targetStake - summary.externalStake, 0n);
 

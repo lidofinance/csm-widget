@@ -7,7 +7,7 @@ import { useNavigate } from 'shared/navigate';
 import { useSwitchOperator } from 'shared/node-operator/use-switch-operator';
 import { isSameOperator } from 'shared/node-operator/utils';
 import { trackMatomoEvent } from 'utils';
-import { SuggestionButton, SuggestionStyle } from './styles';
+import { SuggestionButton, SuggestionStyle, SuggestionText } from './styles';
 
 export const SuggestionsList: FC<{ operator: OperatorRef }> = ({
   operator,
@@ -34,10 +34,10 @@ export const SuggestionsList: FC<{ operator: OperatorRef }> = ({
     <Stack direction="column" gap="sm" data-testid="operatorSuggestions">
       {suggestions.map((s) => (
         <SuggestionStyle key={s.id} data-testid={`suggestion-${s.id}`}>
-          <span>
+          <SuggestionText>
             {s.text}
             {s.tooltip && <IconTooltip tooltip={s.tooltip} inline />}
-          </span>
+          </SuggestionText>
           <SuggestionButton type="button" onClick={() => follow(s)}>
             {s.cta}
           </SuggestionButton>

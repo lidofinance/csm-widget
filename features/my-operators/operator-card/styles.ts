@@ -12,6 +12,7 @@ export const TitleRow = styled.div`
   display: flex;
   align-items: center;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
+  color: var(--lido-color-text);
   font-size: ${({ theme }) => theme.fontSizesMap.md}px;
   font-weight: 700;
   line-height: 28px;
@@ -75,19 +76,30 @@ export const SuggestionStyle = styled.div`
   justify-content: space-between;
   gap: ${({ theme }) => theme.spaceMap.sm}px;
   padding: 12px 16px;
-  border-radius: ${({ theme }) => theme.borderRadiusesMap.lg}px;
+  border-radius: 16px;
   border: 1px solid
     color-mix(in srgb, var(--lido-color-primary) 20%, transparent);
   background: color-mix(in srgb, var(--lido-color-primary) 5%, transparent);
+  color: var(--lido-color-text);
   font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
   font-weight: 700;
   line-height: 20px;
 `;
 
+export const SuggestionText = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+`;
+
 export const SuggestionButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 28px;
   border: 0;
   cursor: pointer;
-  padding: 4px 12px;
+  padding: 6px 12px;
   border-radius: ${({ theme }) => theme.borderRadiusesMap.sm}px;
   background: color-mix(in srgb, var(--lido-color-primary) 10%, transparent);
   color: var(--lido-color-primary);

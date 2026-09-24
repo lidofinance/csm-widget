@@ -29,12 +29,11 @@ export const aggregateOperatorsOverview = (
   items.reduce<MyOperatorsSummary>(
     (acc, { keys, bond, rewards, feeSplits }) => {
       if (keys) {
-        const { counts, issuesCount, activeBalance } =
-          selectKeysBreakdown(keys);
+        const { counts, issuesCount, balances } = selectKeysBreakdown(keys);
         acc.activeValidators += counts.active;
         acc.liveKeys +=
           counts.depositable + counts.activationPending + counts.active;
-        acc.activeBalance += activeBalance;
+        acc.activeBalance += balances.active;
         acc.totalIssues += issuesCount;
       }
       if (bond) {

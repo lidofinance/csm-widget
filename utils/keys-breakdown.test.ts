@@ -1,4 +1,8 @@
-import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
+import {
+  KEY_STATUS,
+  KeyWithStatus,
+  MIN_EFFECTIVE_BALANCE,
+} from '@lidofinance/lido-csm-sdk';
 import { selectKeysBreakdown } from './keys-breakdown';
 
 const key = (
@@ -41,13 +45,19 @@ describe('selectKeysBreakdown', () => {
     expect(selectKeysBreakdown([key([KEY_STATUS.ACTIVE])]).issuesCount).toBe(0);
   });
 
-  it('sums effective balance of active and exiting keys only', () => {
-    const { activeBalance } = selectKeysBreakdown([
+  it('sums balances for each bucket', () => {
+    const { balances } = selectKeysBreakdown([
+      key([KEY_STATUS.DEPOSITABLE]),
+      key([KEY_STATUS.DEPOSITABLE]),
+      key([KEY_STATUS.ACTIVATION_PENDING], 32n),
       key([KEY_STATUS.ACTIVE], 32n),
       key([KEY_STATUS.EXITING], 16n),
-      key([KEY_STATUS.DEPOSITABLE], 8n),
-      key([KEY_STATUS.WITHDRAWN], 4n),
+      key([KEY_STATUS.WITHDRAWAL_PENDING], 8n),
+      key([KEY_STATUS.WITHDRAWN]),
     ]);
-    expect(activeBalance).toBe(48n);
+    expect(balances.depositable).toBe(2n * MIN_EFFECTIVE_BALANCE);
+    expect(balances.activationPending).toBe(32n);
+    expect(balances.active).toBe(48n);
+    expect(balances.withdrawn).toBe(8n);
   });
 });

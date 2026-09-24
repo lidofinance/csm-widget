@@ -1,5 +1,9 @@
-import { KEY_STATUS, KeyWithStatus } from '@lidofinance/lido-csm-sdk';
-import { sumActiveKeysBalance } from './compute-stake-data';
+import {
+  KEY_STATUS,
+  KeyWithStatus,
+  MIN_EFFECTIVE_BALANCE,
+} from '@lidofinance/lido-csm-sdk';
+import { sumKeysBalance } from './compute-stake-data';
 import { hasStatus, StatusFilter } from './has-status';
 
 const STATUS_GROUPS: Record<keyof KeysBreakdownCounts, StatusFilter> = {
@@ -42,10 +46,17 @@ export type KeysBreakdownCounts = {
   unchecked: number;
 };
 
+export type KeysBreakdownBalances = {
+  depositable: bigint;
+  activationPending: bigint;
+  active: bigint;
+  withdrawn: bigint;
+};
+
 export type KeysBreakdownData = {
   counts: KeysBreakdownCounts;
   issuesCount: number;
-  activeBalance: bigint;
+  balances: KeysBreakdownBalances;
 };
 
 export const selectKeysBreakdown = (
@@ -60,9 +71,19 @@ export const selectKeysBreakdown = (
 
   const issuesCount = ISSUE_GROUPS.filter((group) => counts[group] > 0).length;
 
-  const activeBalance = sumActiveKeysBalance(
-    keys.filter(hasStatus(STATUS_GROUPS.active)),
-  );
+  const balances: KeysBreakdownBalances = {
+    // undeposited keys carry no CL balance yet — each is worth its initial deposit
+    depositable: BigInt(counts.depositable) * MIN_EFFECTIVE_BALANCE,
+    activationPending: sumKeysBalance(
+      keys.filter(hasStatus(STATUS_GROUPS.activationPending)),
+    ),
+    active: sumKeysBalance(keys.filter(hasStatus(STATUS_GROUPS.active))),
+    withdrawn: sumKeysBalance(
+      keys.filter(
+        hasStatus([KEY_STATUS.WITHDRAWAL_PENDING, KEY_STATUS.WITHDRAWN]),
+      ),
+    ),
+  };
 
-  return { counts, issuesCount, activeBalance };
+  return { counts, issuesCount, balances };
 };

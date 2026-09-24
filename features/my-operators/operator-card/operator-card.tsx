@@ -42,7 +42,7 @@ export const OperatorCard: FC<{ operator: ModuleNodeOperator }> = ({
           <KeysRow
             module={operator.module}
             keys={overview.keys}
-            activeBalance={overview.activeBalance}
+            balances={overview.balances}
           />
           <Divider />
           <BondRow

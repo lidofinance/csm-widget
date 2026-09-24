@@ -11,7 +11,7 @@ import {
 } from 'modules/web3';
 import { FC, useCallback } from 'react';
 import { FormatToken } from 'shared/formatters';
-import { hasStatus, StatusFilter, sumActiveKeysBalance } from 'utils';
+import { hasStatus, StatusFilter, sumKeysBalance } from 'utils';
 import { Item } from './item';
 import { Row } from './styles';
 
@@ -25,7 +25,7 @@ export const CsmKeys: FC = () => {
   const { data: keys } = useOperatorKeysWithStatus({ nodeOperatorId: id });
 
   const stats = useCallback(
-    (filter: StatusFilter, sumBalance = sumActiveKeysBalance) => {
+    (filter: StatusFilter, sumBalance = sumKeysBalance) => {
       const matched = keys?.filter(hasStatus(filter));
       return {
         count: matched?.length,
