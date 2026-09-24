@@ -1,4 +1,3 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { forkPort } from 'tests/shared/config/forkPorts';
 import { BaseConfig } from './base.config';
 
@@ -25,7 +24,7 @@ export class TestnetConfig extends BaseConfig {
         rpcUrl: this.getRpcUrl('testnet'),
         derivationPath: "m/44'/60'/0'/0",
         host: '127.0.0.1',
-        port: forkPort('hoodi', MODULE_NAME.CSM),
+        port: forkPort('hoodi'),
       },
       mockConfig: {
         urls: {
