@@ -18,7 +18,7 @@ import { PerformanceMetricMethodology } from './performance-metric-methodology';
 
 export const AttestationRateSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: info } = useOperatorInfo(nodeOperatorId);
+  const { data: info } = useOperatorInfo({ nodeOperatorId });
   const { data, error } = usePerformanceApi();
   const { chainId } = useDappStatus();
 

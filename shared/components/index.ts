@@ -60,3 +60,4 @@ export * from './pending-change';
 export * from './when-loaded';
 export * from './role-actions';
 export * from './toast-container';
+export * from './issues-chip';

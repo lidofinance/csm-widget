@@ -5,8 +5,6 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
-import { SURVEYS_SETUP_ENABLED } from 'config/feature-flags/types';
-import { isSurveysApiConfigured } from 'modules/surveys-sdk';
 import {
   useDappStatus,
   useHasReportDelayedPenaltyRole,
@@ -31,6 +29,7 @@ import {
   useIcsApplyEnabled,
 } from 'shared/hooks';
 import { Address, isAddressEqual } from 'viem';
+import { isSurveysAvailable } from './is-surveys-available';
 
 export type ShowRule =
   | 'IS_MAINNET'
@@ -115,8 +114,12 @@ export const useShowFlags = (): ShowFlags => {
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
   const { data: isReportingRole } = useHasReportDelayedPenaltyRole();
-  const { data: balance } = useOperatorBalance(nodeOperator?.nodeOperatorId);
-  const { data: info } = useOperatorInfo(nodeOperator?.nodeOperatorId);
+  const { data: balance } = useOperatorBalance({
+    nodeOperatorId: nodeOperator?.nodeOperatorId,
+  });
+  const { data: info } = useOperatorInfo({
+    nodeOperatorId: nodeOperator?.nodeOperatorId,
+  });
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
   const { data: operatorType } = useOperatorType(nodeOperator);
@@ -164,10 +167,7 @@ export const useShowFlags = (): ShowFlags => {
       ['CAN_CLAIM_IDVTC']: !!canClaimIDVTC && isAccountActive,
       ['ICS_APPLY_ENABLED']: icsApplyEnabled,
       ['HAS_APPLY_OPTIONS']: createOptions.some(({ kind }) => kind === 'apply'),
-      ['IS_SURVEYS_ACTIVE']:
-        isSurveysApiConfigured &&
-        !!featureFlags?.[SURVEYS_SETUP_ENABLED] &&
-        module === MODULE_NAME.CSM,
+      ['IS_SURVEYS_ACTIVE']: isSurveysAvailable(module, featureFlags),
       ['IS_CSM']: module === MODULE_NAME.CSM,
       ['IS_CSM_02']: module === MODULE_NAME.CSM_02,
       ['IS_CSM_FAMILY']: isCsmFamily,

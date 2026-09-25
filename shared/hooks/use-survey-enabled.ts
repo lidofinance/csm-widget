@@ -28,11 +28,12 @@ export const useSurveyEnabled = (skipClosed = false) => {
     end,
   );
 
-  const { data: filled } = useSurveysFilled(
-    IS_SURVEYS_ACTIVE && isActive && (!isDismissed || skipClosed)
-      ? nodeOperatorId
-      : undefined,
-  );
+  const { data: filled } = useSurveysFilled({
+    nodeOperatorId:
+      IS_SURVEYS_ACTIVE && isActive && (!isDismissed || skipClosed)
+        ? nodeOperatorId
+        : undefined,
+  });
 
   const variant: SurveyVariant | null =
     filled?.isFilled === false

@@ -38,7 +38,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const { isSupportedChain } = useDappStatus();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: info } = useOperatorInfo(nodeOperatorId);
+  const { data: info } = useOperatorInfo({ nodeOperatorId });
   const canClaimICS = useCanClaimICS();
   const canClaimIDVTC = useCanClaimIDVTC();
   const { route } = useRouter();
@@ -47,11 +47,11 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
     return info && info.enqueuedCount < info.depositableValidatorsCount;
   }, [info]);
 
-  const { data: balance } = useOperatorBalance(nodeOperatorId);
-  const { data: isLockExpired } = useIsLockExpired(nodeOperatorId);
+  const { data: balance } = useOperatorBalance({ nodeOperatorId });
+  const { data: isLockExpired } = useIsLockExpired({ nodeOperatorId });
 
   const { data: keysWithStatus, isPending: isKeysLoading } =
-    useOperatorKeysWithStatus(nodeOperatorId);
+    useOperatorKeysWithStatus({ nodeOperatorId });
   const hasRequestsToExit = useMemo(
     () =>
       keysWithStatus?.filter(({ statuses }) =>
@@ -61,7 +61,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 
   const { data: keysWithWrongFeeRecipient } =
-    useOperatorKeysWithWrongFeeRecipient(nodeOperatorId);
+    useOperatorKeysWithWrongFeeRecipient({ nodeOperatorId });
 
   const {
     isDismissed: isFeeRecipientAlertDismissed,

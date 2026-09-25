@@ -1,5 +1,11 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
+import {
+  BOND_DEBT,
+  BOND_DEBT_HELP,
+  BOND_EXCESS,
+  BOND_INSUFFICIENT,
+  BOND_INSUFFICIENT_HELP,
+} from 'consts/text';
 import { useNodeOperatorId, useOperatorBalance } from 'modules/web3';
 import { FC } from 'react';
 import { Counter } from 'shared/components';
@@ -9,7 +15,9 @@ import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 export const BondBalance: FC = () => {
   const id = useNodeOperatorId();
 
-  const { data: bond, isPending: isBondLoading } = useOperatorBalance(id);
+  const { data: bond, isPending: isBondLoading } = useOperatorBalance({
+    nodeOperatorId: id,
+  });
   const totalBond = (bond?.current ?? 0n) - (bond?.debt ?? 0n);
 
   return (
@@ -48,7 +56,7 @@ export const BondBalance: FC = () => {
             title={BOND_INSUFFICIENT}
             loading={isBondLoading}
             amount={bond?.delta}
-            help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys"
+            help={BOND_INSUFFICIENT_HELP}
           />
         ) : (
           <Balance
@@ -63,12 +71,12 @@ export const BondBalance: FC = () => {
         {!!bond?.debt && (
           <Balance
             warning
-            title="Debt"
+            title={BOND_DEBT}
             sign="minus"
             loading={isBondLoading}
             amount={bond.debt}
             token={TOKENS.steth}
-            help="Outstanding penalty that exceeded your bond balance. Top up your bond to clear it."
+            help={BOND_DEBT_HELP}
           />
         )}
       </RowBody>

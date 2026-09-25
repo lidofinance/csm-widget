@@ -27,9 +27,10 @@ const enrichPenalty = (record: PenaltyRecord): EnrichedPenalty => ({
 export const PenaltyHistory: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
 
-  const { data, isPending } = useOperatorPenalties(nodeOperatorId, (data) =>
-    data.map(enrichPenalty),
-  );
+  const { data, isPending } = useOperatorPenalties({
+    nodeOperatorId,
+    select: (data) => data.map(enrichPenalty),
+  });
 
   return (
     <AccordionStyle

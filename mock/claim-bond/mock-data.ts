@@ -91,11 +91,17 @@ export const makeFeeSplits = (...sharesPct: number[]): FeeSplit[] =>
     share: BigInt(Math.round(pct * 100)),
   }));
 
-export const makeOperatorInfo = ({
-  rewardsAddress,
-}: {
-  rewardsAddress: Address;
-}): NodeOperatorInfo =>
+export const makeOperatorInfo = (
+  overrides: Partial<
+    Pick<
+      NodeOperatorInfo,
+      | 'managerAddress'
+      | 'rewardsAddress'
+      | 'proposedManagerAddress'
+      | 'proposedRewardsAddress'
+    >
+  >,
+): NodeOperatorInfo =>
   ({
     totalAddedKeys: 10,
     totalWithdrawnKeys: 0,
@@ -108,7 +114,7 @@ export const makeOperatorInfo = ({
     totalExitedKeys: 0,
     enqueuedCount: 0,
     managerAddress: MOCK_CLAIMER,
-    rewardsAddress,
     extendedManagerPermissions: false,
     usedPriorityQueue: false,
+    ...overrides,
   }) as NodeOperatorInfo;

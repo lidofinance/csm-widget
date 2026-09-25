@@ -1,6 +1,5 @@
 import { FC } from 'react';
-import { SquaredChip } from 'shared/components';
-import { Alert, Check } from 'features/dashboard/keys/keys-breakdown/styles';
+import { Alert, Check, SquaredChip } from 'shared/components';
 
 type Props = {
   more: boolean;

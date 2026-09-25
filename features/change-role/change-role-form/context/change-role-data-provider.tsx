@@ -26,7 +26,7 @@ const useChangeRoleFormNetworkData: NetworkData<
   invariant(address);
 
   const nodeOperatorId = useNodeOperatorId();
-  const infoQuery = useOperatorInfo(nodeOperatorId);
+  const infoQuery = useOperatorInfo({ nodeOperatorId });
 
   const info = infoQuery.data;
   const isInfoLoading = infoQuery.isPending;
@@ -39,6 +39,8 @@ const useChangeRoleFormNetworkData: NetworkData<
 
   const currentAddress =
     role === ROLES.REWARDS ? info?.rewardsAddress : info?.managerAddress;
+  const otherRoleAddress =
+    role === ROLES.REWARDS ? info?.managerAddress : info?.rewardsAddress;
   const proposedAddress =
     role === ROLES.REWARDS
       ? info?.proposedRewardsAddress
@@ -61,6 +63,7 @@ const useChangeRoleFormNetworkData: NetworkData<
       address,
       role,
       currentAddress,
+      otherRoleAddress,
       proposedAddress,
       nodeOperatorId,
       canEdit,

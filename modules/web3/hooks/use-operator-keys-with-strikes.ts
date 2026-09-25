@@ -10,10 +10,13 @@ import { useActiveSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_STRIKES = ['operator-strikes'];
 
-export const useOperatorKeysWithStrikes = <TData = KeyWithStrikes[]>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: KeyWithStrikes[]) => TData,
-) => {
+export const useOperatorKeysWithStrikes = <TData = KeyWithStrikes[]>({
+  nodeOperatorId,
+  select,
+}: {
+  nodeOperatorId: NodeOperatorId | undefined;
+  select?: (data: KeyWithStrikes[]) => TData;
+}) => {
   const sdk = useActiveSmSDK(MODULE_NAME.CSM);
 
   return useQuery({

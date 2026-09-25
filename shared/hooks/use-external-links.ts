@@ -14,7 +14,7 @@ const DASHBOARD_KEYS_LIMIT = 20;
 
 export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: keys } = useOperatorKeysWithStatus(nodeOperatorId);
+  const { data: keys } = useOperatorKeysWithStatus({ nodeOperatorId });
   const { beaconchain } = useExternalLinks();
   const sortedKeys = useSortedKeys(keys);
 

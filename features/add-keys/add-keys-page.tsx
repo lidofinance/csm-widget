@@ -21,7 +21,7 @@ export const AddKeysPage: FC = () => (
 
 const Subtitle: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: info } = useOperatorInfo(nodeOperatorId);
+  const { data: info } = useOperatorInfo({ nodeOperatorId });
 
   if (info?.totalAddedKeys === 0) {
     return <>Upload new keys</>;

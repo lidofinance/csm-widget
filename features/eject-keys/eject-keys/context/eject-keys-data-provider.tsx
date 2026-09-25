@@ -25,10 +25,14 @@ const useEjectKeysFormNetworkData: NetworkData<
   const ethBalanceQuery = useEthereumBalance();
   const { nodeOperator } = useNodeOperator();
   const nodeOperatorId = nodeOperator?.nodeOperatorId;
-  const infoQuery = useOperatorInfo(nodeOperatorId);
-  const keysQuery = useOperatorKeysWithStatus(nodeOperatorId, (keys) =>
-    keys.filter(hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING])),
-  );
+  const infoQuery = useOperatorInfo({ nodeOperatorId });
+  const keysQuery = useOperatorKeysWithStatus({
+    nodeOperatorId,
+    select: (keys) =>
+      keys.filter(
+        hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING]),
+      ),
+  });
 
   const ethBalance = ethBalanceQuery.data;
   const info = infoQuery.data;

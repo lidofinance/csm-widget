@@ -7,7 +7,7 @@ import { useOperatorGroup } from 'modules/web3/hooks/use-operator-group';
 
 const Page = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { isPending } = useOperatorGroup(nodeOperatorId);
+  const { isPending } = useOperatorGroup({ nodeOperatorId });
 
   return (
     <GateLoaded>

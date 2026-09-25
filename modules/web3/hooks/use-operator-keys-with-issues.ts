@@ -1,28 +1,31 @@
-import { NodeOperatorId, ValidatorInfoIssues } from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { ValidatorInfoIssues } from '@lidofinance/lido-csm-sdk';
+import { queryOptions } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK } from '../web3-provider';
+import {
+  OperatorHookArgs,
+  OperatorQueryArgs,
+  useOperatorQuery,
+} from './use-operator-query';
 
 export const KEY_FEE_RECIPIENT_ISSUES = ['fee-recipient-issues'];
 
 export const useOperatorKeysWithIssues = <TData = ValidatorInfoIssues[]>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: ValidatorInfoIssues[]) => TData,
-) => {
-  const { feesMonitoring, core } = useSmSDK();
-
-  return useQuery({
-    queryKey: [
-      ...KEY_FEE_RECIPIENT_ISSUES,
-      { nodeOperatorId, module: core.moduleName },
-    ],
-    ...STRATEGY_CONSTANT,
-    queryFn: async () => {
-      invariant(nodeOperatorId !== undefined);
-      return feesMonitoring.getKeysWithIssues(nodeOperatorId);
-    },
-    enabled: nodeOperatorId !== undefined,
-    select,
-  });
-};
+  args: OperatorHookArgs<ValidatorInfoIssues[], TData>,
+) =>
+  useOperatorQuery(
+    ({ sdk, nodeOperatorId }: OperatorQueryArgs) =>
+      queryOptions({
+        queryKey: [
+          ...KEY_FEE_RECIPIENT_ISSUES,
+          { nodeOperatorId, module: sdk?.core.moduleName },
+        ],
+        ...STRATEGY_CONSTANT,
+        queryFn: async () => {
+          invariant(sdk && nodeOperatorId !== undefined);
+          return sdk.feesMonitoring.getKeysWithIssues(nodeOperatorId);
+        },
+        enabled: !!sdk && nodeOperatorId !== undefined,
+      }),
+    args,
+  );

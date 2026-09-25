@@ -9,7 +9,7 @@ import { useOperatorInfo } from './use-operator-info';
 export const useHasPriorityQueueSpots = () => {
   const nodeOperatorId = useNodeOperatorId();
   const curve = useCurrentCurve();
-  const { data: operatorInfo } = useOperatorInfo(nodeOperatorId);
+  const { data: operatorInfo } = useOperatorInfo({ nodeOperatorId });
 
   const selectHasPrioritySpots = useCallback(
     (curveParameters: CurveParameters) => {

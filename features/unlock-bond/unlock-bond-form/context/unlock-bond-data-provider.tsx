@@ -21,9 +21,9 @@ const useUnlockBondFormNetworkData: NetworkData<
 > = () => {
   const nodeOperatorId = useNodeOperatorId<true>();
 
-  const balanceQuery = useOperatorBalance(nodeOperatorId);
+  const balanceQuery = useOperatorBalance({ nodeOperatorId });
 
-  const isExpiredQuery = useIsLockExpired(nodeOperatorId);
+  const isExpiredQuery = useIsLockExpired({ nodeOperatorId });
 
   const bond = balanceQuery.data;
   const isExpired = !!isExpiredQuery.data;

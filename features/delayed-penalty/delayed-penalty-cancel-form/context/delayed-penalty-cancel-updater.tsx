@@ -12,10 +12,10 @@ export const DelayedPenaltyCancelUpdater: FC = () => {
   const { trigger, setValue } =
     useFormContext<DelayedPenaltyCancelFormInputType>();
 
-  const { data: maxAmount } = useOperatorBalance(
+  const { data: maxAmount } = useOperatorBalance({
     nodeOperatorId,
-    (data) => data.locked,
-  );
+    select: (data) => data.locked,
+  });
 
   useEffect(() => {
     void trigger('maxAmount');

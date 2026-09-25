@@ -105,6 +105,10 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   // Actions
   switchNodeOperator = 'switchNodeOperator',
   groupSwitchOperator = 'groupSwitchOperator',
+  myOperatorsSwitch = 'myOperatorsSwitch',
+  myOperatorsDashboard = 'myOperatorsDashboard',
+  myOperatorsCreate = 'myOperatorsCreate',
+  myOperatorsSuggestion = 'myOperatorsSuggestion',
   // Rewards History
   rewardsHistoryExport = 'rewardsHistoryExport',
   // modifiers
@@ -469,6 +473,22 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.groupSwitchOperator]: createEvent(
     'Click «Switch to this operator» on Group page',
     'group_switch_operator',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.myOperatorsSwitch]: createEvent(
+    'Switch operator from My operators',
+    'my_operators_switch',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.myOperatorsDashboard]: createEvent(
+    'Go to dashboard from My operators',
+    'my_operators_dashboard',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.myOperatorsCreate]: createEvent(
+    'Create another operator from My operators',
+    'my_operators_create',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.myOperatorsSuggestion]: createEvent(
+    'Follow suggestion from My operators',
+    'my_operators_suggestion',
   ),
   // Rewards History
   [MATOMO_CLICK_EVENTS_TYPES.rewardsHistoryExport]: createEvent(

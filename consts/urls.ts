@@ -64,6 +64,8 @@ export const PATH = {
 
   GROUP: '/group',
 
+  MY_OPERATORS: '/operators',
+
   WRAPPED_SHARE: '/wrapped-2025/share',
 
   QA_CONFIG: '/qa-config',
