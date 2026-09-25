@@ -6,7 +6,7 @@ import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { TxModal } from 'tests/cm-widget/pages/elements/common/element.txProgressModal';
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 

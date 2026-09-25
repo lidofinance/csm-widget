@@ -4,7 +4,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
-import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
+import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 
 const secretPhrase = generateMnemonic(english, 128);
@@ -15,21 +15,18 @@ test.describe(
     epic: EPIC.operatorType,
     feature: 'IDVTC',
     story: 'Claim or create ICS',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
 
     test.beforeAll(
       async ({
-        useFork,
         evmNode,
         forkActionService,
         widgetService,
         secretPhrase,
         keysGeneratorService,
       }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
         const address = mnemonicToAccount(secretPhrase).address;
 
         await evmNode.setBalance(address, 1000);

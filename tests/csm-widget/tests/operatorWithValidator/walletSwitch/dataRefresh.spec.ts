@@ -2,27 +2,27 @@ import { expect } from '@playwright/test';
 import { Address, Hex, toHex } from 'viem';
 import { generatePrivateKey, mnemonicToAccount } from 'viem/accounts';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
-import { Tags } from 'tests/shared/consts/common.const';
 import { ROLES } from 'tests/shared/consts/roles';
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
 const OTHER_WALLET_KEY = generatePrivateKey();
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
     epic: EPIC.cache,
     story: 'Account switch',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let operatorKey: Hex;
     let operatorAddress: Address;
 
-    test.beforeAll(async ({ useFork, csmSDK, secretPhrase }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ csmSDK, secretPhrase }) => {
       const operator = mnemonicToAccount(secretPhrase);
       operatorKey = toHex(operator.getHdKey().privateKey as Uint8Array);
       operatorAddress = operator.address;

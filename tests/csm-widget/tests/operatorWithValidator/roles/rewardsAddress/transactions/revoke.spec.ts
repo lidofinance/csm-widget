@@ -7,6 +7,9 @@ import { generateAddress } from 'tests/shared/helpers/accountData';
 import { Tags } from 'tests/shared/consts/common.const';
 import { mnemonicToAccount } from 'viem/accounts';
 import { trimAddress } from '@lidofinance/address';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({

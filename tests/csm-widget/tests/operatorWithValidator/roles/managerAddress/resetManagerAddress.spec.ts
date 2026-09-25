@@ -2,24 +2,21 @@ import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
-import { Tags } from 'tests/shared/consts/common.const';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
     epic: EPIC.roles,
     feature: 'Manager address',
     story: 'Reset',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let proposedAddress: `0x${string}`;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeEach(async ({ widgetService, csmSDK, forkActionService }) => {
       snapshotId = await csmSDK.evmSnapshot();

@@ -4,12 +4,15 @@ import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
 const normalizeBaseUrl = (url: string) => url.replace(/\/+$/, '');
 const escapeRegex = (value: string) =>
   value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const isProdOrStaging = (standType: string) =>
   standType === 'prod' || standType === 'staging';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({

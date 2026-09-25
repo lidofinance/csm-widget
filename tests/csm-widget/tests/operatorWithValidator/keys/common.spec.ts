@@ -5,8 +5,9 @@ import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
@@ -26,7 +27,7 @@ test.describe(
       },
     );
 
-    test(
+    test.only(
       qase(17, 'Should open transaction page after added 1 key'),
       { tag: Tags.smoke },
       async ({ widgetService }) => {

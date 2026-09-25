@@ -4,8 +4,9 @@ import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({

@@ -1,7 +1,11 @@
-export { withOperator } from './withOperator';
-export { withGroup } from './withGroup';
-export { withKeys } from './withKeys';
-export { withDeposit } from './withDeposit';
+import { withOperator } from './withOperator';
+import { withGroup } from './withGroup';
+import { withKeys } from './withKeys';
+import { withDeposit } from './withDeposit';
+
+export const HANDLERS = { withOperator, withGroup, withKeys, withDeposit };
+
+export type HandlerName = keyof typeof HANDLERS;
 
 /**
  * Default execution order for state handlers.
@@ -12,4 +16,4 @@ export const HANDLER_ORDER = [
   'withGroup',
   'withKeys',
   'withDeposit',
-] as const;
+] as const satisfies readonly HandlerName[];

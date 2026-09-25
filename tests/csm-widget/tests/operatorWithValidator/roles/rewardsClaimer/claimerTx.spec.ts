@@ -1,29 +1,29 @@
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
-import { Tags } from 'tests/shared/consts/common.const';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 import {
   PAGE_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
 } from 'tests/shared/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
 const CURRENT_ADDRESS = generateAddress(true);
 const ANOTHER_ADDRESS = generateAddress(true);
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
     epic: EPIC.roles,
     feature: 'Rewards claimer',
     story: 'Transaction',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
 
-    test.beforeAll(async ({ useFork, csmSDK }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ csmSDK }) => {
       snapshotId = await csmSDK.evmSnapshot();
     });
 

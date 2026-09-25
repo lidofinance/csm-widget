@@ -8,7 +8,7 @@ import {
   KeysGeneratorService,
   DepositKey,
 } from '../../../../shared/services/keysGenerator.service';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 

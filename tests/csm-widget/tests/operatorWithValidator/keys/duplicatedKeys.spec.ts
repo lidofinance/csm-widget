@@ -1,18 +1,20 @@
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
-import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
+import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
     epic: EPIC.keys,
     feature: 'Submit keys',
     story: 'Duplicated keys',
-    tag: [Tags.noStaging, Tags.noProd],
   }),
   async () => {
     let keysPage: KeysPage;

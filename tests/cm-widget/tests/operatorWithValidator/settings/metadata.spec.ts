@@ -4,7 +4,7 @@ import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { Tags } from 'tests/shared/consts/common.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });

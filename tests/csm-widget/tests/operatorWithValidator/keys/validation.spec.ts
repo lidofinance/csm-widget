@@ -8,8 +8,9 @@ import {
   KeysGeneratorService,
   DepositKey,
 } from 'tests/shared/services/keysGenerator.service';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR.secretPhrase });
 
 const omitField = <K extends keyof DepositKey>(
   obj: DepositKey,

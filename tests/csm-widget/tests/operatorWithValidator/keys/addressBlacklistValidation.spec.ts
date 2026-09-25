@@ -7,6 +7,9 @@ import { TxModal } from 'tests/csm-widget/pages/elements/common/element.txProgre
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
