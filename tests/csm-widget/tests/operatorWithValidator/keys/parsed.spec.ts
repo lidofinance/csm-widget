@@ -6,8 +6,9 @@ import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.servic
 import { randomBytes } from 'node:crypto';
 import { generateWithdrawalCredentials } from 'tests/shared/helpers/accountData';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({

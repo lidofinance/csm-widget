@@ -7,7 +7,7 @@ import { OPERATOR_TYPE_METADATA } from '../../../../shared/consts/operatorTypes.
 import { CreateOperatorStep1Page } from '../../../pages/tabs/createNodeOperator/step1.page';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 

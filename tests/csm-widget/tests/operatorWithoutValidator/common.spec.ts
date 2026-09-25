@@ -5,8 +5,9 @@ import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { KeysGeneratorService } from 'tests/shared/services/keysGenerator.service';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_ADDRESS.secretPhrase });
 
 test.describe(
   ...suite({

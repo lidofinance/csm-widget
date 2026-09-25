@@ -4,8 +4,9 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount } from 'viem/accounts';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_ADDRESS.secretPhrase });
 
 test.describe(
   ...suite({

@@ -6,6 +6,9 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 import { trimAddress } from '@lidofinance/address';
 import { mnemonicToAccount } from 'viem/accounts';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({

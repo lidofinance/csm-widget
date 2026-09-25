@@ -6,7 +6,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CreateOperatorStep4Page } from '../../../pages/tabs/createNodeOperator';
 import { Tags } from 'tests/shared/consts/common.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });

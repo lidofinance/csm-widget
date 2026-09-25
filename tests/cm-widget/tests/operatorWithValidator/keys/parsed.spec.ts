@@ -10,7 +10,7 @@ import {
 } from '../../../../shared/services/keysGenerator.service';
 import { randomBytes } from 'node:crypto';
 import { generateWithdrawalCredentials } from '../../../../shared/helpers/accountData';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { SubmitPage } from 'tests/cm-widget/pages/tabs/keys/submit.page';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });

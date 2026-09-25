@@ -3,7 +3,13 @@ import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { USD_AMOUNT_REGEX } from 'tests/shared/consts/regexp.const';
+import {
+  STETH_AMOUNT_REGEX,
+  USD_AMOUNT_REGEX,
+} from 'tests/shared/consts/regexp.const';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
@@ -12,6 +18,21 @@ test.describe(
     story: 'Available to claim',
   }),
   async () => {
+    let snapshotId: string;
+
+    test.beforeAll(async ({ csmSDK, forkActionService, widgetService }) => {
+      snapshotId = await csmSDK.evmSnapshot();
+
+      await test.step('Set up: report rewards', async () => {
+        await widgetService.dashboardPage.open();
+        await forkActionService.reportRewards();
+      });
+    });
+
+    test.afterAll(async ({ csmSDK }) => {
+      if (snapshotId) await csmSDK.evmRevert(snapshotId);
+    });
+
     test.beforeEach(async ({ widgetService }) => {
       await widgetService.dashboardPage.open();
     });
@@ -40,11 +61,11 @@ test.describe(
         await test.step('Verify "Rewards" stETH value', async () => {
           const rewardsBalance =
             await availableToClaim.rewardsBalance_Text.textContent();
-          expect(rewardsBalance).toEqual('0.0 stETH');
+          expect(rewardsBalance).toMatch(STETH_AMOUNT_REGEX);
 
           const rewardsUSDBalance =
             await availableToClaim.rewardsBalance_SubText.textContent();
-          expect(rewardsUSDBalance).toEqual('$0.00');
+          expect(rewardsUSDBalance).toMatch(USD_AMOUNT_REGEX);
         });
 
         await test.step('Verify "Excess bond" stETH value', async () => {
@@ -62,7 +83,7 @@ test.describe(
         await test.step('Verify total claimable amount', async () => {
           const commonBalance =
             await availableToClaim.commonBalance_Text.textContent();
-          expect(commonBalance).toEqual(`${bondSummary.excess.toCut(4)} stETH`);
+          expect(commonBalance).toMatch(STETH_AMOUNT_REGEX);
 
           const commonUSDBalance =
             await availableToClaim.commonBalance_SubText.textContent();

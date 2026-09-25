@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { Address, Hex, toHex } from 'viem';
 import { generatePrivateKey, mnemonicToAccount } from 'viem/accounts';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { Tags } from 'tests/shared/consts/common.const';
 import { ROLES } from 'tests/shared/consts/roles';

@@ -1,4 +1,7 @@
-import { type HandlerThis, type StateCtx } from './types';
+import {
+  type HandlerThis,
+  type StateCtx,
+} from 'tests/shared/config/walletSetup/types';
 
 export const withDeposit = async function (
   this: HandlerThis,

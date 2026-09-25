@@ -1,6 +1,7 @@
 name: Test CSM-widget
 run-name: CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
+
 on:
   schedule:
     - cron: "0 6 * * *" # Every day at 6 AM UTC
@@ -72,8 +73,9 @@ jobs:
     secrets: inherit
     with:
       module: csm
+      use_fork: true
       stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
-      test_tags: ${{ inputs.tags || github.event.inputs.tags || '!forked' }}
+      test_tags: ${{ inputs.tags || github.event.inputs.tags || '-' }}
       qase_project_id: CSM
       qase_plan_id: ${{ inputs.qase_plan_id || (github.event_name == 'schedule' && '7') || '' }}
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}

@@ -5,7 +5,6 @@ import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { Tags } from 'tests/shared/consts/common.const';
 import { OPERATOR_TYPE_METADATA } from 'tests/shared/consts/operatorTypes.const';
 
 const secretPhrase = generateMnemonic(english, 128);
@@ -69,25 +68,20 @@ test.describe(
     epic: EPIC.operatorType,
     feature: 'IDVTC',
     story: 'Create page type badge',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
 
-    test.beforeAll(
-      async ({ useFork, evmNode, forkActionService, secretPhrase }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ evmNode, forkActionService, secretPhrase }) => {
+      snapshotId = await evmNode.snapshot();
 
-        snapshotId = await evmNode.snapshot();
-
-        await test.step('Issue IDVTC status to the connected address', async () => {
-          await forkActionService.setGateAddrs(
-            'idvtc',
-            mnemonicToAccount(secretPhrase).address,
-          );
-        });
-      },
-    );
+      await test.step('Issue IDVTC status to the connected address', async () => {
+        await forkActionService.setGateAddrs(
+          'idvtc',
+          mnemonicToAccount(secretPhrase).address,
+        );
+      });
+    });
 
     test.afterAll(async ({ evmNode }) => {
       if (snapshotId) await evmNode.revert(snapshotId);

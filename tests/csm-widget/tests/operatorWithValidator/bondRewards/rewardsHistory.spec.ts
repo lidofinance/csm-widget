@@ -3,6 +3,9 @@ import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
@@ -12,6 +15,21 @@ test.describe(
     story: 'Rewards history',
   }),
   async () => {
+    let snapshotId: string;
+
+    test.beforeAll(async ({ csmSDK, forkActionService, widgetService }) => {
+      snapshotId = await csmSDK.evmSnapshot();
+
+      await test.step('Set up: report rewards', async () => {
+        await widgetService.page.goto('/bond/rewards-history');
+        await forkActionService.reportRewards();
+      });
+    });
+
+    test.afterAll(async ({ csmSDK }) => {
+      if (snapshotId) await csmSDK.evmRevert(snapshotId);
+    });
+
     let matomoEventService: MatomoService;
 
     test.beforeEach(async ({ widgetService, widgetConfig }) => {

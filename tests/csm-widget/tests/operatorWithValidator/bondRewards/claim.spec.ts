@@ -11,6 +11,9 @@ import { trimAddress } from '@lidofinance/address';
 import { mnemonicToAccount } from 'viem/accounts';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe.skip(
   ...suite({
@@ -19,6 +22,21 @@ test.describe.skip(
     story: 'Token & amount',
   }),
   async () => {
+    let snapshotId: string;
+
+    test.beforeAll(async ({ csmSDK, forkActionService, widgetService }) => {
+      snapshotId = await csmSDK.evmSnapshot();
+
+      await test.step('Set up: report rewards', async () => {
+        await widgetService.bondRewardsPage.claim.open();
+        await forkActionService.reportRewards();
+      });
+    });
+
+    test.afterAll(async ({ csmSDK }) => {
+      if (snapshotId) await csmSDK.evmRevert(snapshotId);
+    });
+
     test.beforeEach(async ({ widgetService }) => {
       await widgetService.bondRewardsPage.claim.open();
     });

@@ -5,7 +5,7 @@ import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { formatEther } from 'viem';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 

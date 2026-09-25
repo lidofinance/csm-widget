@@ -23,36 +23,31 @@ test.describe(
     epic: EPIC.operatorType,
     feature: 'IDVTC',
     story: 'Apply. Submit happy path',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
 
-    test.beforeAll(
-      async ({ useFork, evmNode, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ evmNode, forkActionService, widgetService }) => {
+      snapshotId = await evmNode.snapshot();
 
-        snapshotId = await evmNode.snapshot();
+      await test.step('Make cluster member addresses ICS-approved', async () => {
+        await forkActionService.setGateAddrs(
+          'ics',
+          ...memberAccounts.map((account) => account.address),
+        );
+      });
 
-        await test.step('Make cluster member addresses ICS-approved', async () => {
-          await forkActionService.setGateAddrs(
-            'ics',
-            ...memberAccounts.map((account) => account.address),
-          );
-        });
+      await widgetService.setFeatureFlag('icsApplyForm', true);
+      const dvtForm = widgetService.operatorType.dvtApplicationForm;
+      await dvtForm.open();
+      await dvtForm.signInForm.signIn();
 
-        await widgetService.setFeatureFlag('icsApplyForm', true);
-        const dvtForm = widgetService.operatorType.dvtApplicationForm;
+      await test.step('Reset persisted form and reopen', async () => {
+        await dvtForm.applyForm.clearPersisted();
         await dvtForm.open();
-        await dvtForm.signInForm.signIn();
-
-        await test.step('Reset persisted form and reopen', async () => {
-          await dvtForm.applyForm.clearPersisted();
-          await dvtForm.open();
-          await dvtForm.applyForm.form.waitFor({ state: 'visible' });
-        });
-      },
-    );
+        await dvtForm.applyForm.form.waitFor({ state: 'visible' });
+      });
+    });
 
     test.afterAll(async ({ evmNode, widgetService }) => {
       await test.step('Clear storage, disable flag and revert fork', async () => {

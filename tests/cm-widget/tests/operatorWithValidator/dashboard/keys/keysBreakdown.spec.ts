@@ -3,7 +3,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { Tags } from 'tests/shared/consts/common.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 

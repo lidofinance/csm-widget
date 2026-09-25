@@ -4,6 +4,9 @@ import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { Tags } from 'tests/shared/consts/common.const';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe.skip(
   ...suite({
@@ -12,6 +15,21 @@ test.describe.skip(
     story: 'Transaction',
   }),
   async () => {
+    let snapshotId: string;
+
+    test.beforeAll(async ({ csmSDK, forkActionService, widgetService }) => {
+      snapshotId = await csmSDK.evmSnapshot();
+
+      await test.step('Set up: report rewards', async () => {
+        await widgetService.bondRewardsPage.claim.open();
+        await forkActionService.reportRewards();
+      });
+    });
+
+    test.afterAll(async ({ csmSDK }) => {
+      if (snapshotId) await csmSDK.evmRevert(snapshotId);
+    });
+
     test.beforeEach(async ({ widgetService }) => {
       await widgetService.bondRewardsPage.claim.open();
     });

@@ -51,3 +51,4 @@ docs/superpowers/
 deposit_data.json
 local_fork_config.json
 .walletPresets.state.json
+.csmWalletPresets.state.json

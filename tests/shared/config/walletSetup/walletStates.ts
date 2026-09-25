@@ -5,44 +5,38 @@ import {
   type ForkActionsOptions,
 } from 'tests/shared/contracts/forkActions.service';
 import {
-  withOperator,
-  withGroup,
-  withKeys,
-  withDeposit,
-  HANDLER_ORDER,
-} from './handlers';
-import { type GateSelector, type StateCtx } from './handlers/types';
+  type GateSelector,
+  type Handler,
+  type PresetDefinition,
+  type StateCtx,
+} from './types';
 
 const PRESET_BALANCE = parseEther('1000');
 
-export type WalletPreset = {
-  secretPhrase: string;
-  state: (keyof WalletStateService['handlers'])[];
-  gates?: GateSelector[];
+export type WalletPreset = PresetDefinition & { secretPhrase: string };
+
+export type WalletStateOptions = ForkActionsOptions & {
+  handlers: Record<string, Handler>;
+  order: readonly string[];
 };
 
 export class WalletStateService {
-  fork: ForkActionsService;
+  readonly fork: ForkActionsService;
+  private readonly handlers: Record<string, Handler>;
+  private readonly order: readonly string[];
 
-  readonly handlers = {
-    withOperator: withOperator.bind(this),
-    withGroup: withGroup.bind(this),
-    withKeys: withKeys.bind(this),
-    withDeposit: withDeposit.bind(this),
-  };
-
-  constructor(options: ForkActionsOptions) {
-    this.fork = new ForkActionsService(options);
+  constructor({ handlers, order, ...forkOptions }: WalletStateOptions) {
+    this.fork = new ForkActionsService(forkOptions);
+    this.handlers = handlers;
+    this.order = order;
   }
 
   async applyAll(presets: WalletPreset[]): Promise<{ noId?: number }[]> {
-    // Batch gate setup: group all addresses by gate, call setGateAddrs once per gate
     const gateMap = new Map<GateSelector, `0x${string}`[]>();
     for (const preset of presets) {
       const address = mnemonicToAccount(preset.secretPhrase).address;
       for (const gate of preset.gates ?? []) {
-        const list = gateMap.get(gate) ?? [];
-        gateMap.set(gate, [...list, address]);
+        gateMap.set(gate, [...(gateMap.get(gate) ?? []), address]);
       }
     }
     for (const [gate, addresses] of gateMap) {
@@ -72,12 +66,14 @@ export class WalletStateService {
     await this.fork.fund(ctx.address, PRESET_BALANCE);
 
     const sorted = [...preset.state].sort(
-      (a, b) => HANDLER_ORDER.indexOf(a) - HANDLER_ORDER.indexOf(b),
+      (a, b) => this.order.indexOf(a) - this.order.indexOf(b),
     );
 
     for (const key of sorted) {
+      const handler = this.handlers[key];
+      if (!handler) throw new Error(`Unknown wallet state handler "${key}"`);
       console.info(`[WalletState] → ${key}`);
-      const patch = await this.handlers[key](ctx);
+      const patch = await handler.call(this, ctx);
       ctx = { ...ctx, ...patch };
     }
 

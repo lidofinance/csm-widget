@@ -4,7 +4,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
