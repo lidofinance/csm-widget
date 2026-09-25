@@ -27,7 +27,7 @@ test.describe(
       },
     );
 
-    test.only(
+    test(
       qase(17, 'Should open transaction page after added 1 key'),
       { tag: Tags.smoke },
       async ({ widgetService }) => {
