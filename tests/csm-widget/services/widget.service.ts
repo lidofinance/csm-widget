@@ -20,10 +20,14 @@ import {
   MainPage,
   MonitoringPage,
   SettingsPage,
+  SurveysPage,
 } from '../pages';
 import { ElementController } from '../pages/elements/controller';
 import { Header } from '../pages/elements/common/element.header';
 import { ParametersModal } from '../pages/elements/common/element.parametersModal';
+import { FooterElement } from '../pages/elements/common/element.footer';
+import { LegalDisclaimerElement } from '../pages/elements/common/element.legalDisclaimer';
+import { WalletModal } from '../pages/elements/common/element.walletModal';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
 
 type FeatureFlagName = keyof FeatureFlagsType;
@@ -36,8 +40,12 @@ export class WidgetService {
   public monitoringPage: MonitoringPage;
   public bondRewardsPage: BondRewardsPage;
   public operatorType: OperatorTypePage;
+  public surveysPage: SurveysPage;
   public header: Header;
   public parametersModal: ParametersModal;
+  public footerElement: FooterElement;
+  public legalDisclaimerElement: LegalDisclaimerElement;
+  public walletModal: WalletModal;
   public navBlockElement: NavBlockElement;
   public selectOperatorModal: SelectOperatorModalElement;
   public confirmOperatorModal: ConfirmOperatorModalElement;
@@ -53,8 +61,12 @@ export class WidgetService {
     this.monitoringPage = new MonitoringPage(this.page);
     this.bondRewardsPage = new BondRewardsPage(this.page);
     this.operatorType = new OperatorTypePage(this.page, this.walletPage);
+    this.surveysPage = new SurveysPage(this.page);
     this.header = new Header(this.page);
     this.parametersModal = new ParametersModal(this.page);
+    this.footerElement = new FooterElement(this.page);
+    this.legalDisclaimerElement = new LegalDisclaimerElement(this.page);
+    this.walletModal = new WalletModal(this.page);
     this.navBlockElement = new NavBlockElement(this.page);
     this.selectOperatorModal = new SelectOperatorModalElement(this.page);
     this.confirmOperatorModal = new ConfirmOperatorModalElement(this.page);

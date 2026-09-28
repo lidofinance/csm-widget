@@ -4,20 +4,27 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { OPERATOR_TYPE_METADATA } from 'tests/shared/consts/operatorTypes.const';
+import { Tags } from 'tests/shared/consts/common.const';
+import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
 
 const CSM01 = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_DEF];
 const ICS = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS];
 const IDVTC = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_IDVTC];
+const OPERATOR_TYPES_DOCS_URL = 'docs.lido.fi/staking-modules/csm/join-csm';
 
 test.describe(
   ...suite({
     epic: EPIC.operatorType,
+    // Cards cover all operator types, not a single feature
     feature: null,
     story: 'Type cards',
   }),
   async () => {
+    let matomoEventService: MatomoService;
+
     test.beforeAll(async ({ widgetService }) => {
       await test.step('Enable applications feature flag', async () => {
         await widgetService.setFeatureFlag('icsApplyForm', true);
@@ -26,6 +33,10 @@ test.describe(
 
     test.afterAll(async ({ widgetService }) => {
       await widgetService.setFeatureFlag('icsApplyForm', false);
+    });
+
+    test.beforeEach(async ({ widgetService, widgetConfig }) => {
+      matomoEventService = new MatomoService(widgetService.page, widgetConfig);
     });
 
     test(
@@ -98,6 +109,37 @@ test.describe(
           await expect(widgetService.operatorType.pageTitle).toHaveText(
             'Apply for Identified DVT Cluster',
           );
+        });
+      },
+    );
+
+    test(
+      'Should open operator types docs',
+      { tag: [Tags.matomo] },
+      async ({ widgetService }) => {
+        const cards = widgetService.mainPage.operatorTypeCards;
+
+        await widgetService.mainPage.openCreateOperator();
+
+        await test.step('Verify link', async () => {
+          await expect(cards.parametersDocsLink).toHaveAttribute(
+            'href',
+            new RegExp(OPERATOR_TYPES_DOCS_URL),
+          );
+        });
+
+        await test.step('Open resource and send tracking event', async () => {
+          const [openedPage] = await Promise.all([
+            widgetService.mainPage.waitForPage(PAGE_WAIT_TIMEOUT),
+            matomoEventService.waitForEvent(
+              'e_n',
+              'csm_widget_operator_types_docs_link',
+            ),
+            cards.parametersDocsLink.click(),
+          ]);
+
+          expect(openedPage.url()).toContain(OPERATOR_TYPES_DOCS_URL);
+          await openedPage.close();
         });
       },
     );
