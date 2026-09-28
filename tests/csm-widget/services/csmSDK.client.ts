@@ -10,7 +10,10 @@ export class LidoSDKClient extends LidoSDKCsm {
       chainId: widgetFullConfig.standConfig.networkConfig.chainId,
       rpcUrls,
     });
-    super({ core });
+    super({
+      core,
+      ipfsGateways: [`${widgetFullConfig.standConfig.ipfsConfig.gateway}{cid}`],
+    });
   }
 
   async getBondSummary(nodeOperatorNumber: number) {

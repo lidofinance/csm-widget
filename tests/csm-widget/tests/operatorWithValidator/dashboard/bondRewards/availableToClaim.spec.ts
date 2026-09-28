@@ -3,10 +3,7 @@ import { expect } from '@playwright/test';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { qase } from 'playwright-qase-reporter/playwright';
-import {
-  STETH_AMOUNT_REGEX,
-  USD_AMOUNT_REGEX,
-} from 'tests/shared/consts/regexp.const';
+import { USD_AMOUNT_REGEX } from 'tests/shared/consts/regexp.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -46,6 +43,10 @@ test.describe(
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
         const bondSummary = await csmSDK.getBondSummary(nodeOperatorId);
+        const rewards = await csmSDK.getRewards(nodeOperatorId);
+        const totalClaimable = (
+          Number(bondSummary.excess) + Number(rewards.available)
+        ).toString();
 
         await test.step('Check "Available to claim" section', async () => {
           await expect(availableToClaim.rewardsBalance).toBeHidden();
@@ -61,7 +62,7 @@ test.describe(
         await test.step('Verify "Rewards" stETH value', async () => {
           const rewardsBalance =
             await availableToClaim.rewardsBalance_Text.textContent();
-          expect(rewardsBalance).toMatch(STETH_AMOUNT_REGEX);
+          expect(rewardsBalance).toEqual(`${rewards.available.toCut(4)} stETH`);
 
           const rewardsUSDBalance =
             await availableToClaim.rewardsBalance_SubText.textContent();
@@ -83,7 +84,7 @@ test.describe(
         await test.step('Verify total claimable amount', async () => {
           const commonBalance =
             await availableToClaim.commonBalance_Text.textContent();
-          expect(commonBalance).toMatch(STETH_AMOUNT_REGEX);
+          expect(commonBalance).toEqual(`${totalClaimable.toCut(4)} stETH`);
 
           const commonUSDBalance =
             await availableToClaim.commonBalance_SubText.textContent();

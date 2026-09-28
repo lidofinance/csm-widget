@@ -12,7 +12,7 @@ import {
   FeeOracleAbi,
   HashConsensusAbi,
 } from '@lidofinance/lido-csm-sdk/abi';
-import { makeRewardsReport } from '../rewards.ts';
+import { makeRewardsReport, pinRewardsLog } from '../rewards.ts';
 import type { ForkActionsService } from '../forkActions.service.ts';
 
 const STETH_ABI = [
@@ -116,7 +116,7 @@ export const reportRewards = async function (
       );
     });
 
-    const refSlot = await this.step('Warp to the next ref slot', async () => {
+    const frame = await this.step('Warp to the next ref slot', async () => {
       const [slotsPerEpoch, secondsPerSlot, genesisTime] =
         await this.client.readContract({
           address: consensus,
@@ -154,8 +154,13 @@ export const reportRewards = async function (
         abi: HashConsensusAbi,
         functionName: 'getCurrentFrame',
       });
-      return next;
+      return { refSlot: next, slotsPerEpoch, epochsPerFrame };
     });
+    const { refSlot } = frame;
+
+    const logCid = await this.step('Pin the rewards report log', () =>
+      pinRewardsLog(this, report, frame),
+    );
 
     const consensusVersion = await this.client.readContract({
       address: oracle,
@@ -168,7 +173,7 @@ export const reportRewards = async function (
       refSlot,
       treeRoot: report.treeRoot,
       treeCid: report.treeCid,
-      logCid: report.logCid,
+      logCid,
       distributed,
       rebate,
       strikesTreeRoot: keccak256(toHex(`mock-strikes-${refSlot}`)),
