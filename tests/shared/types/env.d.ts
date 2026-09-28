@@ -10,8 +10,6 @@ declare namespace NodeJS {
     STAND_TYPE?: 'testnet' | 'prod' | 'staging' | 'preview' | 'local';
 
     WALLET_SECRET_PHRASE?: string;
-    EMPTY_SECRET_PHRASE?: string;
-    EMPTY_NODE_SECRET_PHRASE?: string;
     WALLET_PASSWORD?: string;
 
     RPC_URL?: string;
