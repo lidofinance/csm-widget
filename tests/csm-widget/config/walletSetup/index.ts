@@ -16,7 +16,12 @@ export const walletSetup = defineWalletSetup({
     },
 
     FULL_OPERATOR: {
-      state: ['withOperator', 'withDepositedKeys', 'withRemovableKeys'],
+      state: [
+        'withTokens',
+        'withOperator',
+        'withDepositedKeys',
+        'withRemovableKeys',
+      ],
     },
   },
 });

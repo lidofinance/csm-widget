@@ -189,12 +189,17 @@ export const test = base.extend<
     { scope: 'worker' },
   ],
   ethereumSDK: [
-    async ({ secretPhrase }, use) => {
+    async ({ secretPhrase, useFork }, use) => {
+      const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
+      const rpcUrl = useFork
+        ? forkRpcURL
+        : widgetFullConfig.standConfig.networkConfig.rpcUrl;
+
       await use(
-        new SdkService(
-          mnemonicToAccount(secretPhrase),
-          widgetFullConfig.standConfig.networkConfig,
-        ),
+        new SdkService(mnemonicToAccount(secretPhrase), {
+          ...widgetFullConfig.standConfig.networkConfig,
+          rpcUrl,
+        }),
       );
     },
     { scope: 'worker' },

@@ -11,7 +11,7 @@ import {
   type StateCtx,
 } from './types';
 
-const PRESET_BALANCE = parseEther('1000');
+const PRESET_BALANCE = parseEther('200');
 
 export type WalletPreset = PresetDefinition & { secretPhrase: string };
 

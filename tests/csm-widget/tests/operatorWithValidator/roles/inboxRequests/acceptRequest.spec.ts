@@ -19,6 +19,15 @@ test.describe(
   () => {
     let randomId: number;
     let inboxRequestsPage: InboxRequestsPage;
+    let snapshotId: string;
+
+    test.beforeAll(async ({ csmSDK }) => {
+      snapshotId = await csmSDK.evmSnapshot();
+    });
+
+    test.afterAll(async ({ csmSDK }) => {
+      if (snapshotId) await csmSDK.evmRevert(snapshotId);
+    });
 
     test.beforeEach(async ({ widgetService, secretPhrase, csmSDK }) => {
       const operators = await csmSDK.getNodeOperatorsByAddress(
