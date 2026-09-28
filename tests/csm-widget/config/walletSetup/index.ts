@@ -12,7 +12,7 @@ export const walletSetup = defineWalletSetup({
     },
 
     EMPTY_OPERATOR: {
-      state: ['withOperator', 'withDepositedKeys'],
+      state: ['withOperator', 'withoutKeys'],
     },
 
     FULL_OPERATOR: {

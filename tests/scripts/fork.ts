@@ -44,6 +44,10 @@ const HELP: Record<
     args: '<address> <amountEth>',
     example: 'yarn fork csm hoodi fundTokens 0xAbC... 10',
   },
+  removeKeys: {
+    args: '<noId> [startIndex] [keysCount]',
+    example: 'yarn fork csm hoodi removeKeys 12',
+  },
   proposeManager: {
     args: '<noId> <address>',
     example:

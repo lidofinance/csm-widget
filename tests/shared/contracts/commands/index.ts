@@ -9,6 +9,7 @@ export * from './fundTokens.ts';
 export * from './proposeManager.ts';
 export * from './proposeReward.ts';
 export * from './reportPenalty.ts';
+export * from './removeKeys.ts';
 export * from './reportRewards.ts';
 export * from './revert.ts';
 export * from './setGateAddrs.ts';
