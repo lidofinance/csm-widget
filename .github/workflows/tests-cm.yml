@@ -2,11 +2,6 @@ name: Test CM-widget
 run-name: CM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
 
 on:
-  # Temporary: fires the job on every push to the migration branch, so the new
-  # CM run can be seen without dispatching it by hand. Drop when it is proven.
-  push:
-    branches:
-      - feature/qa-5142-move-all-tests-of-csm-to-fork
   schedule:
     - cron: "0 6 * * *" # Every day at 6 AM UTC
   workflow_dispatch:
