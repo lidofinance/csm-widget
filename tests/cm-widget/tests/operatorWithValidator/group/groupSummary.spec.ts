@@ -1,6 +1,5 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
@@ -12,13 +11,8 @@ test.describe(
   ...suite({
     epic: EPIC.group,
     story: 'Group summary',
-    tag: [Tags.forked],
   }),
   () => {
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
-
     test.beforeAll(async ({ widgetService }) => {
       await widgetService.dashboardPage.open();
       await widgetService.groupPage.open();

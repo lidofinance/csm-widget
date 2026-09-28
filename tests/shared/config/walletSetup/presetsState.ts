@@ -42,7 +42,7 @@ export const readPreset = (module: ModuleName, name: string): PresetRuntime => {
   if (!runtime) {
     throw new Error(
       `[PRESETS] No "${name}" preset for ${module} in ${STATE_FILE}.\n` +
-        'Run the suite with USE_FORK=true so globalSetup can generate preset accounts.',
+        'globalSetup generates them — delete the state file to rebuild it.',
     );
   }
   return runtime;

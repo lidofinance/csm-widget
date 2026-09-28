@@ -73,7 +73,6 @@ jobs:
     secrets: inherit
     with:
       module: csm
-      use_fork: true
       stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
       test_tags: ${{ inputs.tags || github.event.inputs.tags || '-' }}
       qase_project_id: CSM

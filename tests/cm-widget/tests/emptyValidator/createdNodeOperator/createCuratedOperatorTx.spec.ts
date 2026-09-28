@@ -19,15 +19,11 @@ test.describe(
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Curated operator transaction',
-    tag: [Tags.forked, Tags.smoke],
+    tag: [Tags.smoke],
   }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeEach(async ({ evmNode, widgetConfig, widgetService }) => {
       matomoEventService = new MatomoService(widgetService.page, widgetConfig);

@@ -26,8 +26,6 @@ declare namespace NodeJS {
     /** kubo RPC API of the IPFS node used to pin merkle trees */
     IPFS_API_URL?: string;
 
-    /** Forked tests: 'true' enables fork mode */
-    USE_FORK?: 'true' | 'false';
     /** Devnet deploy artifacts consumed by the CM SDK client */
     DEVNET_ADDRESSES_FILE_PATH?: string;
 

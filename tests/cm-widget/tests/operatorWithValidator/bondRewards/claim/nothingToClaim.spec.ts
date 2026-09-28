@@ -1,5 +1,4 @@
 import { expect } from '@playwright/test';
-import { Tags } from 'tests/shared/consts/common.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
@@ -16,13 +15,8 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Nothing to claim',
-    tag: [Tags.forked],
   }),
   () => {
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
-
     test.beforeEach(async ({ widgetService }) => {
       await widgetService.bondRewardsPage.claim.open();
     });
@@ -109,14 +103,9 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Nothing to claim (insufficient bond)',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeEach(async ({ cmSDK, forkActionService, widgetService }) => {
       snapshotId = await cmSDK.evmSnapshot();

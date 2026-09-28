@@ -5,7 +5,6 @@ import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CreateOperatorStep4Page } from '../../../pages/tabs/createNodeOperator';
-import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 
@@ -20,7 +19,6 @@ test.describe(
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Step 4. Summary',
-    tag: [Tags.forked],
   }),
   () => {
     let step4: CreateOperatorStep4Page;

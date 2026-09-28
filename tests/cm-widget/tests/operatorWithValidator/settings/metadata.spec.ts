@@ -14,7 +14,6 @@ test.describe(
     epic: EPIC.settings,
     feature: 'Metadata',
     story: 'Form & transaction',
-    tag: [Tags.forked],
   }),
   () => {
     let matomoEventService: MatomoService;

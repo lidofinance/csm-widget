@@ -4,6 +4,7 @@ import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { LidoSDKClient } from '../services/cmSDK.client';
 import { IpfsNodeService } from 'tests/shared/services/ipfsNode.service';
 import { setupPresets } from 'tests/shared/config/walletSetup';
+import { assertForkAlive } from 'tests/shared/contracts/forkActions.service';
 import type { ChainName } from 'tests/shared/contracts/constants';
 import { walletSetup } from './walletSetup';
 
@@ -29,6 +30,8 @@ export default async function globalSetup() {
     });
     await nodeService.startNode();
   }
+
+  await assertForkAlive(forkRpcURL);
 
   await setupPresets(walletSetup, {
     rpcUrl: forkRpcURL,

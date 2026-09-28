@@ -51,7 +51,6 @@ test.describe(
     epic: EPIC.keys,
     feature: 'Submit keys',
     story: 'Parsed tab',
-    tag: [Tags.forked],
   }),
   () => {
     let keysPage: KeysPage;

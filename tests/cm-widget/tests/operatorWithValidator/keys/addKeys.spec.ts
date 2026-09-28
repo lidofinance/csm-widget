@@ -14,15 +14,10 @@ test.describe(
     epic: EPIC.keys,
     feature: 'Submit keys',
     story: 'Transaction',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeEach(async ({ cmSDK, widgetConfig, widgetService }) => {
       matomoEventService = new MatomoService(widgetService.page, widgetConfig);

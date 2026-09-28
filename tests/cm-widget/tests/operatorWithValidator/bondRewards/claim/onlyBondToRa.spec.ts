@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
@@ -18,27 +17,22 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Only excess bond',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let noId: number;
 
-    test.beforeAll(
-      async ({ cmSDK, useFork, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
+      snapshotId = await cmSDK.evmSnapshot();
 
-        snapshotId = await cmSDK.evmSnapshot();
-
-        await test.step('Set up: add excess bond (no rewards)', async () => {
-          await widgetService.bondRewardsPage.claim.open();
-          noId = await widgetService.extractNodeOperatorId();
-          await forkActionService.addBond(noId, BOND_EXCESS_ETH);
-        });
-
+      await test.step('Set up: add excess bond (no rewards)', async () => {
         await widgetService.bondRewardsPage.claim.open();
-      },
-    );
+        noId = await widgetService.extractNodeOperatorId();
+        await forkActionService.addBond(noId, BOND_EXCESS_ETH);
+      });
+
+      await widgetService.bondRewardsPage.claim.open();
+    });
 
     test.afterAll(async ({ cmSDK }) => {
       if (snapshotId) await cmSDK.evmRevert(snapshotId);

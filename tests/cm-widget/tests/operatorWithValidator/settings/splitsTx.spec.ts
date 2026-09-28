@@ -19,15 +19,10 @@ test.describe(
     epic: EPIC.settings,
     feature: 'Splits',
     story: 'Transaction',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
       snapshotId = await cmSDK.evmSnapshot();

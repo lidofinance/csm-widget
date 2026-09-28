@@ -1,6 +1,5 @@
 import { expect, Locator } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../test.fixture';
@@ -54,7 +53,6 @@ test.describe(
   ...suite({
     epic: EPIC.navigation,
     story: 'Footer',
-    tag: [Tags.forked],
   }),
   () => {
     let matomoEventService: MatomoService;

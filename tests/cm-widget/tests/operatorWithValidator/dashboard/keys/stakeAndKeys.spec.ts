@@ -13,7 +13,6 @@ test.describe(
     epic: EPIC.dashboard,
     feature: 'Keys',
     story: 'Stake & keys',
-    tag: [Tags.forked],
   }),
   () => {
     let matomoEventService: MatomoService;

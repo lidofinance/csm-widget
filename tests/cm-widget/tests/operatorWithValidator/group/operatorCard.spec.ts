@@ -12,15 +12,10 @@ test.describe(
   ...suite({
     epic: EPIC.group,
     story: 'Operator card',
-    tag: [Tags.forked],
   }),
   () => {
     let noId: number;
     const companionId = 1;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeAll(async ({ widgetService }) => {
       await widgetService.dashboardPage.open();

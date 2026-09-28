@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
+import { TokenSymbol } from 'tests/shared/consts/common.const';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { TxModal } from 'tests/cm-widget/pages/elements/common/element.txProgressModal';
@@ -16,30 +16,25 @@ test.describe(
     // spans Submit keys and Remove keys, so it belongs to the epic itself
     feature: null,
     story: 'Address blacklist',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let txModal: TxModal;
 
-    test.beforeAll(
-      async ({ useFork, cmSDK, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
+      snapshotId = await cmSDK.evmSnapshot();
+      txModal = new TxModal(widgetService.page);
 
-        snapshotId = await cmSDK.evmSnapshot();
-        txModal = new TxModal(widgetService.page);
+      await test.step('Set up: add a non-deposited key to remove', async () => {
+        await widgetService.keysPage.submitPage.open();
+        const noId = await widgetService.extractNodeOperatorId();
+        await forkActionService.addKeys(noId, 1);
+      });
 
-        await test.step('Set up: add a non-deposited key to remove', async () => {
-          await widgetService.keysPage.submitPage.open();
-          const noId = await widgetService.extractNodeOperatorId();
-          await forkActionService.addKeys(noId, 1);
-        });
-
-        await test.step('Mock blacklisted wallet address', async () => {
-          await widgetService.mockValidationAddressRequest();
-        });
-      },
-    );
+      await test.step('Mock blacklisted wallet address', async () => {
+        await widgetService.mockValidationAddressRequest();
+      });
+    });
 
     test.afterAll(async ({ cmSDK, widgetService }) => {
       await widgetService.page.unrouteAll();

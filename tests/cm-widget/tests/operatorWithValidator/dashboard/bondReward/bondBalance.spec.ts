@@ -15,26 +15,21 @@ test.describe(
     epic: EPIC.dashboard,
     feature: 'Bond & Rewards',
     story: 'Bond balance',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let noId: number;
     let matomoEventService: MatomoService;
 
-    test.beforeAll(
-      async ({ useFork, cmSDK, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
+      snapshotId = await cmSDK.evmSnapshot();
 
-        snapshotId = await cmSDK.evmSnapshot();
-
-        await test.step('Set up: add excess bond and report rewards', async () => {
-          await widgetService.dashboardPage.open();
-          noId = await widgetService.extractNodeOperatorId();
-          await forkActionService.addBond(noId, '2');
-        });
-      },
-    );
+      await test.step('Set up: add excess bond and report rewards', async () => {
+        await widgetService.dashboardPage.open();
+        noId = await widgetService.extractNodeOperatorId();
+        await forkActionService.addBond(noId, '2');
+      });
+    });
 
     test.beforeEach(async ({ widgetConfig, widgetService }) => {
       matomoEventService = new MatomoService(widgetService.page, widgetConfig);

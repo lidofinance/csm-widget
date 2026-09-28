@@ -16,7 +16,7 @@ test.describe(
     epic: EPIC.keys,
     feature: 'Submit keys',
     story: 'Duplicated keys',
-    tag: [Tags.forked, Tags.noStaging, Tags.noProd],
+    tag: [Tags.noStaging, Tags.noProd],
   }),
   () => {
     let keysPage: KeysPage;

@@ -1,7 +1,6 @@
 import { expect } from '@playwright/test';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { mnemonicToAccount } from 'viem/accounts';
@@ -21,22 +20,13 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Splitters',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let noId: number;
 
     test.beforeAll(
-      async ({
-        cmSDK,
-        forkActionService,
-        widgetService,
-        secretPhrase,
-        useFork,
-      }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
-
+      async ({ cmSDK, forkActionService, widgetService, secretPhrase }) => {
         snapshotId = await cmSDK.evmSnapshot();
 
         await widgetService.bondRewardsPage.claim.open();

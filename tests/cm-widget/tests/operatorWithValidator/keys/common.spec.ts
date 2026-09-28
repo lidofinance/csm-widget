@@ -14,7 +14,6 @@ test.describe(
     epic: EPIC.keys,
     feature: 'Submit keys',
     story: 'Upload limits',
-    tag: [Tags.forked],
   }),
   () => {
     let keysPage: KeysPage;

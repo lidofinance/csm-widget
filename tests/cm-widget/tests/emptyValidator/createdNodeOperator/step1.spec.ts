@@ -6,7 +6,6 @@ import { expect } from '@playwright/test';
 import { OPERATOR_TYPE_METADATA } from '../../../../shared/consts/operatorTypes.const';
 import { CreateOperatorStep1Page } from '../../../pages/tabs/createNodeOperator/step1.page';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
@@ -16,7 +15,6 @@ test.describe(
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Step 1. Operator type',
-    tag: [Tags.forked],
   }),
   () => {
     let step1: CreateOperatorStep1Page;

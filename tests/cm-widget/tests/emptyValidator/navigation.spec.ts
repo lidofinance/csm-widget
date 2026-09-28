@@ -3,7 +3,6 @@ import { test } from '../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { NavBlockElement } from 'tests/shared/pages/elements';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
@@ -12,7 +11,6 @@ test.describe(
   ...suite({
     epic: EPIC.navigation,
     story: 'Empty validator',
-    tag: [Tags.forked],
   }),
   () => {
     let nav: NavBlockElement;

@@ -3,7 +3,6 @@ import { Address, Hex, toHex } from 'viem';
 import { generatePrivateKey, mnemonicToAccount } from 'viem/accounts';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { Tags } from 'tests/shared/consts/common.const';
 import { ROLES } from 'tests/shared/consts/roles';
 import { RPC_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
@@ -18,15 +17,13 @@ test.describe(
   ...suite({
     epic: EPIC.cache,
     story: 'Account switch',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let operatorKey: Hex;
     let operatorAddress: Address;
 
-    test.beforeAll(async ({ useFork, cmSDK, secretPhrase }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ cmSDK, secretPhrase }) => {
       const operator = mnemonicToAccount(secretPhrase);
       operatorKey = toHex(operator.getHdKey().privateKey as Uint8Array);
       operatorAddress = operator.address;
