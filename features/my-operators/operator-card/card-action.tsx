@@ -32,7 +32,6 @@ export const CardAction: FC<{ operator: OperatorRef }> = ({ operator }) => {
   return (
     <SwitchToOperatorButton
       operator={operator}
-      path={PATH.HOME}
       variant="outlined"
       color="primary"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.myOperatorsSwitch}

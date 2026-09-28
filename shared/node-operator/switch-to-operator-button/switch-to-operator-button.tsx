@@ -25,7 +25,7 @@ export const SwitchToOperatorButton: FC<Props> = ({
   matomoEvent,
 }) => {
   const { closeModal } = useModalActions();
-  const switchOperator = useSwitchOperator(path ?? PATH.HOME);
+  const switchOperator = useSwitchOperator(path);
   const needsSwitch = useNeedsOperatorSwitch(operator);
 
   const handleClick = useCallback(() => {
