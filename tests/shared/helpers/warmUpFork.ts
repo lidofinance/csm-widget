@@ -1,3 +1,8 @@
+import { randomBytes } from 'node:crypto';
+import { toHex } from 'viem';
+import { AccountingAbi, BaseModuleAbi } from '@lidofinance/lido-csm-sdk/abi';
+import { KEYS_UPLOAD_TX_LIMIT } from 'consts/keys';
+import type { ForkActionsService } from '../contracts/forkActions.service';
 import { LidoSDKClient as csmClient } from '../../csm-widget/services/csmSDK.client';
 import { LidoSDKClient as cmClient } from '../../cm-widget/services/cmSDK.client';
 import { mnemonicToAccount } from 'viem/accounts';
@@ -96,5 +101,41 @@ export const warmUpForkedNode = async (
   }
   throw new Error(
     `Timeout (=${FORK_WARM_UP_TIMEOUT}ms) while warming up fork for ${address}. Last error: ${String(lastError)}`,
+  );
+};
+
+export const warmUpSubmitKeys = async (
+  fork: ForkActionsService,
+  address: `0x${string}`,
+  noId: number,
+) => {
+  const count = BigInt(KEYS_UPLOAD_TX_LIMIT);
+
+  const value = await track(
+    `getRequiredBondForNextKeys(#${noId}, ${KEYS_UPLOAD_TX_LIMIT})`,
+    fork.client.readContract({
+      address: fork.addresses.accounting,
+      abi: AccountingAbi,
+      functionName: 'getRequiredBondForNextKeys',
+      args: [BigInt(noId), count],
+    }),
+  );
+
+  await track(
+    `simulate addValidatorKeysETH(#${noId}, ${KEYS_UPLOAD_TX_LIMIT})`,
+    fork.client.simulateContract({
+      address: fork.addresses.module,
+      abi: BaseModuleAbi,
+      functionName: 'addValidatorKeysETH',
+      args: [
+        address,
+        BigInt(noId),
+        count,
+        toHex(randomBytes(48 * KEYS_UPLOAD_TX_LIMIT)),
+        toHex(randomBytes(96 * KEYS_UPLOAD_TX_LIMIT)),
+      ],
+      account: address,
+      value,
+    }),
   );
 };

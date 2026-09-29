@@ -1,13 +1,12 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { Tags } from 'tests/shared/consts/common.const';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { TxModal } from 'tests/cm-widget/pages/elements/common/element.txProgressModal';
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -19,30 +18,25 @@ test.describe(
     // spans Add bond and Claim, so it belongs to the epic itself
     feature: null,
     story: 'Address blacklist',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let txModal: TxModal;
 
-    test.beforeAll(
-      async ({ useFork, cmSDK, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
+      snapshotId = await cmSDK.evmSnapshot();
+      txModal = new TxModal(widgetService.page);
 
-        snapshotId = await cmSDK.evmSnapshot();
-        txModal = new TxModal(widgetService.page);
+      await test.step('Set up: add excess bond and report rewards', async () => {
+        await widgetService.bondRewardsPage.claim.open();
+        const noId = await widgetService.extractNodeOperatorId();
+        await forkActionService.addBond(noId, BOND_EXCESS_ETH);
+      });
 
-        await test.step('Set up: add excess bond and report rewards', async () => {
-          await widgetService.bondRewardsPage.claim.open();
-          const noId = await widgetService.extractNodeOperatorId();
-          await forkActionService.addBond(noId, BOND_EXCESS_ETH);
-        });
-
-        await test.step('Mock blacklisted wallet address', async () => {
-          await widgetService.mockValidationAddressRequest();
-        });
-      },
-    );
+      await test.step('Mock blacklisted wallet address', async () => {
+        await widgetService.mockValidationAddressRequest();
+      });
+    });
 
     test.afterAll(async ({ cmSDK, widgetService }) => {
       await widgetService.page.unrouteAll();

@@ -1,12 +1,11 @@
 import { expect } from '@playwright/test';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { CLAIM_OPTION } from './claim.const';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -15,28 +14,23 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Only rewards',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let noId: number;
 
-    test.beforeAll(
-      async ({ cmSDK, useFork, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
+      snapshotId = await cmSDK.evmSnapshot();
 
-        snapshotId = await cmSDK.evmSnapshot();
-
-        await test.step('Set up: report rewards only (no addBond — delta stays 0)', async () => {
-          await widgetService.bondRewardsPage.claim.open();
-          noId = await widgetService.extractNodeOperatorId();
-          // No addBond → delta = 0 (neither excess nor insufficient)
-          await forkActionService.reportRewards();
-        });
-
+      await test.step('Set up: report rewards only (no addBond — delta stays 0)', async () => {
         await widgetService.bondRewardsPage.claim.open();
-      },
-    );
+        noId = await widgetService.extractNodeOperatorId();
+        // No addBond → delta = 0 (neither excess nor insufficient)
+        await forkActionService.reportRewards();
+      });
+
+      await widgetService.bondRewardsPage.claim.open();
+    });
 
     test.afterAll(async ({ cmSDK }) => {
       if (snapshotId) await cmSDK.evmRevert(snapshotId);

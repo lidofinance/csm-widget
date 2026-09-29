@@ -15,7 +15,6 @@ test.describe(
   ...suite({
     epic: EPIC.landing,
     story: 'Wallet without operator',
-    tag: [Tags.forked],
   }),
   () => {
     let matomoEventService: MatomoService;

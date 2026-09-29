@@ -10,7 +10,10 @@ export class LidoSDKClient extends LidoSDKCsm {
       chainId: widgetFullConfig.standConfig.networkConfig.chainId,
       rpcUrls,
     });
-    super({ core });
+    super({
+      core,
+      ipfsGateways: [`${widgetFullConfig.standConfig.ipfsConfig.gateway}{cid}`],
+    });
   }
 
   async getBondSummary(nodeOperatorNumber: number) {
@@ -23,6 +26,16 @@ export class LidoSDKClient extends LidoSDKCsm {
         required: formatEther(bondSummary.required),
         current: formatEther(bondSummary.current),
         excess: formatEther(bondSummary.delta),
+      };
+    });
+  }
+
+  async getRewards(nodeOperatorId: number) {
+    return test.step(`Get rewards for #${nodeOperatorId} node`, async () => {
+      const data = await this.rewards.getRewards(BigInt(nodeOperatorId));
+      return {
+        ...data,
+        available: formatEther(data.available),
       };
     });
   }

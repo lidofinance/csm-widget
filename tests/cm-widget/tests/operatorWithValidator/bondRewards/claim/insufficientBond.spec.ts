@@ -1,12 +1,11 @@
 import { expect } from '@playwright/test';
-import { Tags } from 'tests/shared/consts/common.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
 import { CLAIM_OPTION } from './claim.const';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -17,32 +16,27 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Insufficient bond',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let noId: number;
 
-    test.beforeAll(
-      async ({ useFork, cmSDK, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
+      snapshotId = await cmSDK.evmSnapshot();
 
-        snapshotId = await cmSDK.evmSnapshot();
-
-        await test.step('Set up: report rewards, then make bond insufficient via penalty + settle', async () => {
-          await widgetService.bondRewardsPage.claim.open();
-          noId = await widgetService.extractNodeOperatorId();
-          await forkActionService.reportRewards();
-          const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));
-          // delta + 1 ETH ensures bond drops below required after settlement
-          const penaltyAmount = formatEther(bondBalance.delta + ONE_ETH);
-          await forkActionService.reportPenalty(noId, penaltyAmount);
-          await forkActionService.settlePenalty(noId);
-        });
-
+      await test.step('Set up: report rewards, then make bond insufficient via penalty + settle', async () => {
         await widgetService.bondRewardsPage.claim.open();
-      },
-    );
+        noId = await widgetService.extractNodeOperatorId();
+        await forkActionService.reportRewards();
+        const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));
+        // delta + 1 ETH ensures bond drops below required after settlement
+        const penaltyAmount = formatEther(bondBalance.delta + ONE_ETH);
+        await forkActionService.reportPenalty(noId, penaltyAmount);
+        await forkActionService.settlePenalty(noId);
+      });
+
+      await widgetService.bondRewardsPage.claim.open();
+    });
 
     test.afterAll(async ({ cmSDK }) => {
       if (snapshotId) await cmSDK.evmRevert(snapshotId);

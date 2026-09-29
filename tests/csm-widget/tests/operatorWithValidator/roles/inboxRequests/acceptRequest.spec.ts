@@ -3,24 +3,30 @@ import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 
 import { mnemonicToAccount } from 'viem/accounts';
-import { Tags } from 'tests/shared/consts/common.const';
 import { ROLES } from 'tests/shared/consts/roles';
 import { InboxRequestsPage } from 'tests/csm-widget/pages/tabs/roles';
 import { qase } from 'playwright-qase-reporter/playwright';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
     epic: EPIC.roles,
     feature: 'Inbox requests',
     story: 'Accept request',
-    tag: [Tags.forked],
   }),
   () => {
     let randomId: number;
     let inboxRequestsPage: InboxRequestsPage;
+    let snapshotId: string;
 
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ csmSDK }) => {
+      snapshotId = await csmSDK.evmSnapshot();
+    });
+
+    test.afterAll(async ({ csmSDK }) => {
+      if (snapshotId) await csmSDK.evmRevert(snapshotId);
     });
 
     test.beforeEach(async ({ widgetService, secretPhrase, csmSDK }) => {

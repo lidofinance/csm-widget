@@ -4,7 +4,6 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
-import { Tags } from 'tests/shared/consts/common.const';
 
 const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
@@ -14,31 +13,26 @@ test.describe(
     epic: EPIC.operatorType,
     feature: 'IDVTC',
     story: 'Claim operator type',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
 
-    test.beforeAll(
-      async ({ useFork, evmNode, forkActionService, secretPhrase }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ evmNode, forkActionService, secretPhrase }) => {
+      snapshotId = await evmNode.snapshot();
 
-        snapshotId = await evmNode.snapshot();
+      await evmNode.setBalance(mnemonicToAccount(secretPhrase).address, 1000);
 
-        await evmNode.setBalance(mnemonicToAccount(secretPhrase).address, 1000);
+      await forkActionService.createPermissionlessOperator(
+        mnemonicToAccount(secretPhrase).address,
+      );
 
-        await forkActionService.createPermissionlessOperator(
+      await test.step('Issue IDVTC status to the operator owner', async () => {
+        await forkActionService.setGateAddrs(
+          'idvtc',
           mnemonicToAccount(secretPhrase).address,
         );
-
-        await test.step('Issue IDVTC status to the operator owner', async () => {
-          await forkActionService.setGateAddrs(
-            'idvtc',
-            mnemonicToAccount(secretPhrase).address,
-          );
-        });
-      },
-    );
+      });
+    });
 
     test.beforeEach(async ({ widgetService }) => {
       await widgetService.setFeatureFlag('icsApplyForm', true);

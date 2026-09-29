@@ -16,9 +16,11 @@ import {
   createOperatorGroup,
   createPermissionlessOperator,
   depositKeys,
+  fundTokens,
   proposeManager,
   proposeReward,
   reportPenalty,
+  removeKeys,
   reportRewards,
   revert,
   setGateAddrs,
@@ -43,9 +45,11 @@ const commands = {
   createOperatorGroup,
   createPermissionlessOperator,
   depositKeys,
+  fundTokens,
   proposeManager,
   proposeReward,
   reportPenalty,
+  removeKeys,
   reportRewards,
   revert,
   setGateAddrs,
@@ -69,6 +73,20 @@ export type ForkActionsOptions = {
 };
 
 const RPC_TIMEOUT_MS = 300_000;
+
+export const assertForkAlive = async (rpcUrl: string): Promise<void> => {
+  await fetch(rpcUrl, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: '{"jsonrpc":"2.0","id":1,"method":"eth_chainId"}',
+    signal: AbortSignal.timeout(5_000),
+  }).catch(() => {
+    throw new Error(
+      `No fork at ${rpcUrl}. Start it with:\n` +
+        '  docker compose --env-file fork.env --profile hoodi up -d --wait',
+    );
+  });
+};
 
 const createForkClient = (rpcUrl: string) =>
   createWalletClient({

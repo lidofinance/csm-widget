@@ -5,13 +5,11 @@ import { PAGE_WAIT_TIMEOUT } from '../../shared/consts/timeouts';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { MatomoService } from 'tests/shared/services/matomo.service';
-import { Tags } from 'tests/shared/consts/common.const';
 
 test.describe(
   ...suite({
     epic: EPIC.landing,
     story: 'Without wallet',
-    tag: [Tags.forked],
   }),
   () => {
     let matomoEventService: MatomoService;

@@ -5,8 +5,7 @@ import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { CreateOperatorStep3Page } from '../../../pages/tabs/createNodeOperator';
-import { Tags } from 'tests/shared/consts/common.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 
@@ -17,7 +16,6 @@ test.describe(
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Step 3. Metadata',
-    tag: [Tags.forked],
   }),
   () => {
     let step3: CreateOperatorStep3Page;

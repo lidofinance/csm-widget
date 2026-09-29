@@ -6,8 +6,7 @@ import { CreateOperatorStep2Page } from '../../../pages/tabs/createNodeOperator'
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { mnemonicToAccount } from 'viem/accounts';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 
@@ -68,7 +67,6 @@ test.describe(
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Step 2. Addresses',
-    tag: [Tags.forked],
   }),
   () => {
     let step2: CreateOperatorStep2Page;

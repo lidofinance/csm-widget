@@ -41,7 +41,7 @@ jobs:
     name: Post-deploy CM smoke
     needs: deploy
     secrets: inherit
-    uses: ./.github/workflows/tests-fork-cm.yml
+    uses: ./.github/workflows/tests-cm.yml
     with:
       stand_type: "testnet"
       tags: "smoke"

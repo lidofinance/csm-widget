@@ -5,7 +5,7 @@ name: E2E Tests (reusable)
 # Unlike a composite action (whose internal steps collapse into a single
 # UI node), every step below shows up as its own top-level step in the run.
 # Callers parameterise it through `inputs` and pass secrets via
-# `secrets: inherit`. Fork-only setup is gated behind `use_fork`.
+# `secrets: inherit`. Every suite runs against a local fork.
 
 on:
   workflow_call:
@@ -15,11 +15,6 @@ on:
         required: false
         type: string
         default: csm
-      use_fork:
-        description: "Run against a local fork (adds contract checkout + build steps)."
-        required: false
-        type: boolean
-        default: false
       stand_type:
         description: "Stand type (testnet | preview | staging | prod)."
         required: false
@@ -29,7 +24,7 @@ on:
         description: "Playwright tag filter passed as TEST_TAGS."
         required: false
         type: string
-        default: "!forked"
+        default: "-"
       qase_project_id:
         description: "Qase project ID (CSM | CM)."
         required: false
@@ -74,8 +69,6 @@ jobs:
       RPC_URL_TOKEN: ${{ secrets.RPC_URL_TOKEN }}
       WALLET_SECRET_PHRASE: ${{ secrets.WALLET_SECRET_PHRASE }}
       WALLET_PASSWORD: ${{ secrets.WALLET_PASSWORD }}
-      EMPTY_SECRET_PHRASE: ${{ secrets.EMPTY_SECRET_PHRASE }}
-      EMPTY_NODE_SECRET_PHRASE: ${{ secrets.EMPTY_NODE_SECRET_PHRASE }}
       WC_PROJECT_ID: ${{ secrets.WC_PROJECT_ID }}
       MODULE: ${{ inputs.module }}
       STAND_TYPE: ${{ inputs.stand_type }}
@@ -107,8 +100,6 @@ jobs:
       PINATA_API_KEY: ${{ secrets.QA_PINATA_API_KEY }}
       PINATA_API_SECRET: ${{ secrets.QA_PINATA_API_SECRET }}
 
-      # Fork envs (ignored unless use_fork=true)
-      USE_FORK: ${{ inputs.use_fork }}
       # prod/staging → mainnet, testnet/preview → hoodi
       CHAIN: ${{ (inputs.stand_type == 'prod' || inputs.stand_type == 'staging') && 'mainnet' || 'hoodi' }}
 
@@ -123,9 +114,8 @@ jobs:
           node-version: "24"
           cache: "yarn"
 
-      # --- Fork-only setup ---
+      # anvil, which globalSetup starts the fork with
       - name: Install Foundry
-        if: ${{ inputs.use_fork }}
         uses: foundry-rs/foundry-toolchain@v1
         with:
           version: v1.8.1
