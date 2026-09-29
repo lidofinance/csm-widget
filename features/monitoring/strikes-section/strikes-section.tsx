@@ -16,12 +16,15 @@ type WithStrikes = KeyWithStatus & Required<Pick<KeyWithStatus, 'strikes'>>;
 
 export const StrikesSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: keys } = useOperatorKeysWithStatus(nodeOperatorId, (data) => {
-    return data
-      .filter(hasStatus(KEY_STATUS.WITH_STRIKES))
-      .filter(
-        hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING]),
-      ) as WithStrikes[];
+  const { data: keys } = useOperatorKeysWithStatus({
+    nodeOperatorId,
+    select: (data) => {
+      return data
+        .filter(hasStatus(KEY_STATUS.WITH_STRIKES))
+        .filter(
+          hasStatus([KEY_STATUS.ACTIVE, KEY_STATUS.ACTIVATION_PENDING]),
+        ) as WithStrikes[];
+    },
   });
 
   if (!keys?.length) return null;

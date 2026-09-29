@@ -1,5 +1,5 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
+import { BOND_EXCESS, BOND_INSUFFICIENT, BOND_LOCKED } from 'consts/text';
 import { FC } from 'react';
 import {
   Latice,
@@ -25,7 +25,7 @@ export const Info: FC = () => {
         <Stack direction="column" gap="sm">
           <TitledAmount
             warning={!isExpired}
-            title="Locked bond"
+            title={BOND_LOCKED}
             help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
             chip={
               isExpired &&

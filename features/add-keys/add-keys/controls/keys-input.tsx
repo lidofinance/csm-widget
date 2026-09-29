@@ -5,7 +5,7 @@ import { FormTitle, MatomoLink } from 'shared/components';
 import { DepositDataHookForm } from 'shared/hook-form/controls';
 
 export const KeysInput = () => {
-  const { isCsmFamily } = useModule();
+  const { isCsmFamily, module } = useModule();
 
   return (
     <>
@@ -24,7 +24,7 @@ export const KeysInput = () => {
         Upload deposit data
       </FormTitle>
 
-      <DepositDataHookForm />
+      <DepositDataHookForm module={module} />
     </>
   );
 };

@@ -20,11 +20,11 @@ export const useCachedNodeOperator = () => {
     [address, cachedRef],
   );
 
-  const result = useOperatorShortInfo<ModuleNodeOperator | undefined>(
-    cachedRef?.id,
+  const result = useOperatorShortInfo<ModuleNodeOperator | undefined>({
+    nodeOperatorId: cachedRef?.id,
     select,
-    cachedRef?.module,
-  );
+    module: cachedRef?.module,
+  });
 
   // react-query runs `select` during render, so the cached ref can only be
   // evicted afterwards.

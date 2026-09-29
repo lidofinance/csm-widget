@@ -16,6 +16,7 @@ import {
 } from '../context/types';
 import { computeClaimBreakdown } from './use-claim-breakdown';
 import { TxStageClaim } from './tx-stage-claim';
+import { OtherOperatorsClaimable } from './other-operators-claimable';
 
 const { stakeWidget } = getExternalLinks();
 
@@ -79,6 +80,7 @@ export const useTxModalStagesClaimBond = () =>
                       This guide
                     </LocalLink>{' '}
                     will help you to do this.
+                    <OtherOperatorsClaimable />
                   </>
                 }
               />
@@ -89,6 +91,7 @@ export const useTxModalStagesClaimBond = () =>
                   <>
                     Transaction can be viewed on{' '}
                     <TxLinkEtherscan txHash={txHash} text="Etherscan" />.
+                    <OtherOperatorsClaimable />
                   </>
                 }
               />

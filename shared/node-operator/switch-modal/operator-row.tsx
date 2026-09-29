@@ -58,10 +58,10 @@ export const OperatorRow: FC<OperatorRowProps> = ({
   const roles = shortInfo ? getNodeOperatorRoles(shortInfo, address) : [];
 
   // Metadata (CM-specific, cached)
-  const { data: metadata } = useOperatorMetadata(nodeOperatorId);
+  const { data: metadata } = useOperatorMetadata({ nodeOperatorId });
 
   // Operator info for stake computation
-  const { data: info } = useOperatorInfo(nodeOperatorId);
+  const { data: info } = useOperatorInfo({ nodeOperatorId });
 
   const stakeData = useMemo(
     () =>

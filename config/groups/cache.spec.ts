@@ -154,10 +154,10 @@ describe('CACHE_CONTROL_PAGES covers every route in pages/', () => {
     })
     .filter((route): route is [string, string] => route !== undefined);
 
-  it.each(routes)('%s -> %s is present in CACHE_CONTROL_PAGES', (
-    _name,
-    expectedEntry,
-  ) => {
-    expect(entries).toContain(expectedEntry);
-  });
+  it.each(routes)(
+    '%s -> %s is present in CACHE_CONTROL_PAGES',
+    (_name, expectedEntry) => {
+      expect(entries).toContain(expectedEntry);
+    },
+  );
 });

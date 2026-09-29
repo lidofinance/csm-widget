@@ -1,31 +1,31 @@
-import {
-  NodeOperatorId,
-  OperatorRewardsHistory,
-} from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { OperatorRewardsHistory } from '@lidofinance/lido-csm-sdk';
+import { queryOptions } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK } from '../web3-provider';
+import {
+  OperatorHookArgs,
+  OperatorQueryArgs,
+  useOperatorQuery,
+} from './use-operator-query';
 
 export const KEY_OPERATOR_REWARDS_HISTORY = ['operator-rewards-history'];
 
 export const useOperatorRewardsHistory = <TData = OperatorRewardsHistory>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: OperatorRewardsHistory) => TData,
-) => {
-  const { rewards, core } = useSmSDK();
-
-  return useQuery({
-    queryKey: [
-      ...KEY_OPERATOR_REWARDS_HISTORY,
-      { nodeOperatorId, module: core.moduleName },
-    ],
-    ...STRATEGY_CONSTANT,
-    queryFn: async () => {
-      invariant(nodeOperatorId !== undefined);
-      return rewards.getOperatorRewardsHistory(nodeOperatorId);
-    },
-    enabled: nodeOperatorId !== undefined,
-    select,
-  });
-};
+  args: OperatorHookArgs<OperatorRewardsHistory, TData>,
+) =>
+  useOperatorQuery(
+    ({ sdk, nodeOperatorId }: OperatorQueryArgs) =>
+      queryOptions({
+        queryKey: [
+          ...KEY_OPERATOR_REWARDS_HISTORY,
+          { nodeOperatorId, module: sdk?.core.moduleName },
+        ],
+        ...STRATEGY_CONSTANT,
+        queryFn: async () => {
+          invariant(sdk && nodeOperatorId !== undefined);
+          return sdk.rewards.getOperatorRewardsHistory(nodeOperatorId);
+        },
+        enabled: !!sdk && nodeOperatorId !== undefined,
+      }),
+    args,
+  );

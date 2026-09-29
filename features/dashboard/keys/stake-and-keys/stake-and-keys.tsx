@@ -16,9 +16,9 @@ import {
 
 export const StakeAndKeys: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: stakeSummary } = useOperatorStakeSummary(nodeOperatorId);
-  const { data: info } = useOperatorInfo(nodeOperatorId);
-  const { data: keys } = useOperatorKeysWithStatus(nodeOperatorId);
+  const { data: stakeSummary } = useOperatorStakeSummary({ nodeOperatorId });
+  const { data: info } = useOperatorInfo({ nodeOperatorId });
+  const { data: keys } = useOperatorKeysWithStatus({ nodeOperatorId });
 
   const data = useMemo(() => {
     if (stakeSummary && info) {

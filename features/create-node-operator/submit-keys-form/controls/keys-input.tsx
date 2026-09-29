@@ -3,8 +3,11 @@ import { UPLOAD_DEPOSIT_DATA_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FormTitle, MatomoLink } from 'shared/components';
 import { DepositDataHookForm } from 'shared/hook-form/controls';
+import { useSubmitKeysFormData } from '../context';
 
 export const KeysInput = () => {
+  const { targetModule } = useSubmitKeysFormData(true);
+
   return (
     <>
       <FormTitle
@@ -22,7 +25,7 @@ export const KeysInput = () => {
         Upload deposit data
       </FormTitle>
 
-      <DepositDataHookForm />
+      <DepositDataHookForm module={targetModule} />
     </>
   );
 };

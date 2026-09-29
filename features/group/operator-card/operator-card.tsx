@@ -25,8 +25,8 @@ export const OperatorCard: FC<SubOperatorStakeSummary> = ({
   nodeOperatorId,
   ...props
 }) => {
-  const { data: metadata } = useOperatorMetadata(nodeOperatorId);
-  const { data: info } = useOperatorInfo(nodeOperatorId);
+  const { data: metadata } = useOperatorMetadata({ nodeOperatorId });
+  const { data: info } = useOperatorInfo({ nodeOperatorId });
   const { data: curve } = useOperatorCurveId({
     nodeOperatorId,
     module: MODULE_NAME.CM,

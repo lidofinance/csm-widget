@@ -33,9 +33,9 @@ const formatShare = (share: bigint) => {
 
 export const RolesSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: info } = useOperatorInfo(nodeOperatorId);
-  const { data: claimerAddress } = useCustomRewardsClaimer(nodeOperatorId);
-  const { data: feeSplits } = useFeeSplits(nodeOperatorId);
+  const { data: info } = useOperatorInfo({ nodeOperatorId });
+  const { data: claimerAddress } = useCustomRewardsClaimer({ nodeOperatorId });
+  const { data: feeSplits } = useFeeSplits({ nodeOperatorId });
   const {
     HAS_MANAGER_ROLE,
     HAS_REWARDS_ROLE,
