@@ -15,7 +15,11 @@ export class LidoSDKClient extends LidoSDKCm {
     const overridedAddresses = devnetAddresses
       ? parseDevnetAddresses(devnetAddresses)
       : undefined;
-    super({ core, overridedAddresses });
+    super({
+      core,
+      overridedAddresses,
+      ipfsGateways: [`${widgetFullConfig.standConfig.ipfsConfig.gateway}{cid}`],
+    });
   }
 
   async getBondSummary(nodeOperatorNumber: number) {

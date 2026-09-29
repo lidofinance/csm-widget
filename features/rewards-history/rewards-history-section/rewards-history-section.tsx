@@ -9,7 +9,7 @@ import { FiltersAndExport } from './filters-and-export';
 
 export const RewardsHistorySection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data, isPending } = useOperatorRewardsHistory(nodeOperatorId);
+  const { data, isPending } = useOperatorRewardsHistory({ nodeOperatorId });
 
   return (
     <TableProvider

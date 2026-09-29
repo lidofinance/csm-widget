@@ -11,7 +11,7 @@ export const useCanClaimIDVTC = () => {
   const nodeOperatorId = useNodeOperatorId();
   const { address } = useDappStatus();
   const { data: proof } = useIdvtcProof();
-  const { data: isOwner } = useOperatorIsOwner(nodeOperatorId);
+  const { data: isOwner } = useOperatorIsOwner({ nodeOperatorId });
 
   return Boolean(
     isCSM &&

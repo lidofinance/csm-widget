@@ -1,13 +1,12 @@
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { OFAC_MODAL_TEXT } from 'tests/shared/consts/texts.const';
 import { LOW_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 import { TxModal } from 'tests/cm-widget/pages/elements/common/element.txProgressModal';
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
@@ -19,7 +18,6 @@ test.describe(
     // spans Metadata, Rewards claimer and Splits, so it belongs to the epic itself
     feature: null,
     story: 'Address blacklist',
-    tag: [Tags.forked],
   }),
   () => {
     let txModal: TxModal;

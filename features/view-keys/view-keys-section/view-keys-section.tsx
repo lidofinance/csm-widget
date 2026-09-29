@@ -7,8 +7,9 @@ import { sortFunctions } from './sort';
 
 export const ViewKeysSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: keys, isPending: loading } =
-    useOperatorKeysWithStatus(nodeOperatorId);
+  const { data: keys, isPending: loading } = useOperatorKeysWithStatus({
+    nodeOperatorId,
+  });
 
   return (
     <TableProvider

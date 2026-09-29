@@ -44,7 +44,7 @@ export const CuratedOperatorSuccessActions: FC<Props> = ({
 
   return (
     <Stack direction="column" gap="sm">
-      <SwitchToOperatorButton operator={operator} />
+      <SwitchToOperatorButton operator={operator} path={PATH.HOME} />
       {hasManagerRole && (
         <Button fullwidth size="sm" onClick={handleAddKeys}>
           {needsSwitch ? 'Switch and Add keys' : 'Add keys'}

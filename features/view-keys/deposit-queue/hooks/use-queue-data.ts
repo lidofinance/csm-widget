@@ -69,7 +69,7 @@ export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
   const unit: QueueUnit = targetModule === MODULE_NAME.CSM_02 ? 'eth' : 'keys';
   const scale = unit === 'eth' ? MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI : 1n;
 
-  const { data: operatorInfo } = useOperatorInfo(nodeOperatorId);
+  const { data: operatorInfo } = useOperatorInfo({ nodeOperatorId });
   const { data: shareLimitInfo } = useShareLimit(undefined, targetModule);
   const shareLimit = useMemo(
     () => shareLimitInfo && toShareLimit(shareLimitInfo, unit),

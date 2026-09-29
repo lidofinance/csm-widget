@@ -45,7 +45,9 @@ const useClaimIcsFormNetworkData: NetworkData<ClaimIcsFormNetworkData> = () => {
   const isCurrentCurveIdLoading = currentCurveQuery.isPending;
   const isProofLoading = proofQuery.isPending;
 
-  const { isPending: isIsOwnerLoading } = useOperatorIsOwner(nodeOperatorId);
+  const { isPending: isIsOwnerLoading } = useOperatorIsOwner({
+    nodeOperatorId,
+  });
   const canClaimCurve = useCanClaimICS();
 
   const { data: newCurve, isPending: isNewCurveIdLoading } = useIcsCurveId();

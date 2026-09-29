@@ -6,6 +6,9 @@ import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 import { Tags } from 'tests/shared/consts/common.const';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({

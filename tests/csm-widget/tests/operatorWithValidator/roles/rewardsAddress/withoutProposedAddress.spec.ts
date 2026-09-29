@@ -7,6 +7,9 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { mnemonicToAccount } from 'viem/accounts';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { generateAddress } from 'tests/shared/helpers/accountData';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({

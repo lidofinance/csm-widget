@@ -35,10 +35,10 @@ export const KeysTable: FC = () => {
   const { module, isCsmFamily } = useModule();
   const { data } = useTable<KeyWithStatus>();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: topUpQueue } = useOperatorTopUpQueue(
+  const { data: topUpQueue } = useOperatorTopUpQueue({
     nodeOperatorId,
-    selectTopUpPositions,
-  );
+    select: selectTopUpPositions,
+  });
 
   const showStrikes = isCsmFamily;
   const showBalance = ALLOCATED_BALANCE_MODULES.has(module);

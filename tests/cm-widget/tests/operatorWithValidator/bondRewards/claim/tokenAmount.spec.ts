@@ -1,13 +1,12 @@
 import { expect } from '@playwright/test';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { TOKEN_DISPLAY_NAMES } from 'utils/get-token-display-name';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
 import { formatEther } from 'viem';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -19,16 +18,11 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Token & amount',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let noId: number;
     let matomoEventService: MatomoService;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
       snapshotId = await cmSDK.evmSnapshot();

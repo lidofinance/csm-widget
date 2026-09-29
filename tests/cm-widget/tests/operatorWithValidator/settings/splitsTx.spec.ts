@@ -10,7 +10,7 @@ import { generateAddress } from 'tests/shared/helpers/accountData';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -19,15 +19,10 @@ test.describe(
     epic: EPIC.settings,
     feature: 'Splits',
     story: 'Transaction',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
       snapshotId = await cmSDK.evmSnapshot();

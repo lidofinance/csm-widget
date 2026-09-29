@@ -21,9 +21,15 @@ const stringify = (value: unknown) =>
 export type RewardsReport = {
   treeRoot: Hex;
   treeCid: string;
-  logCid: string;
   distributed: bigint;
   rebate: bigint;
+  active: Map<bigint, number>;
+};
+
+export type FrameConfig = {
+  refSlot: bigint;
+  slotsPerEpoch: bigint;
+  epochsPerFrame: bigint;
 };
 
 const activeKeysByOperator = async (service: ForkActionsService) => {
@@ -132,38 +138,60 @@ export const makeRewardsReport = async (
     return {
       treeRoot: zeroHash,
       treeCid: '',
-      logCid: '',
       distributed: 0n,
       rebate: 0n,
+      active,
     };
   }
 
   const tree = StandardMerkleTree.of(leaves, LEAF_ENCODING);
-  const block = await service.client.getBlock();
-  const log = {
-    blockstamp: {
-      block_hash: block.hash,
-      block_number: block.number,
-      block_timestamp: block.timestamp,
-    },
-    operators: Object.fromEntries(
-      [...active].map(([noId, keys]) => [
-        String(noId),
-        { distributed_rewards: REWARD_PER_KEY * BigInt(keys), keys },
-      ]),
-    ),
-  };
-
-  const [treeCid, logCid] = await Promise.all([
-    pinJson('merkle-tree.json', stringify(tree.dump())),
-    pinJson('report.json', stringify(log)),
-  ]);
+  const treeCid = await pinJson('merkle-tree.json', stringify(tree.dump()));
 
   return {
     treeRoot: tree.root as Hex,
     treeCid,
-    logCid,
     distributed,
     rebate: 0n,
+    active,
   };
+};
+
+export const pinRewardsLog = async (
+  service: ForkActionsService,
+  report: RewardsReport,
+  { refSlot, slotsPerEpoch, epochsPerFrame }: FrameConfig,
+): Promise<string> => {
+  const block = await service.client.getBlock();
+  const refEpoch = refSlot / slotsPerEpoch;
+
+  const log = {
+    blockstamp: {
+      block_hash: block.hash,
+      block_number: block.number,
+      block_timestamp: Number(block.timestamp),
+      ref_epoch: refEpoch,
+      ref_slot: refSlot,
+      slot_number: refSlot,
+      state_root: block.stateRoot,
+    },
+    distributable: report.distributed,
+    frame: [Number(refEpoch - epochsPerFrame + 1n), Number(refEpoch)],
+    threshold: 0,
+    operators: Object.fromEntries(
+      [...report.active].map(([noId, keys]) => [
+        String(noId),
+        {
+          distributed: REWARD_PER_KEY * BigInt(keys),
+          validators: Object.fromEntries(
+            Array.from({ length: Number(keys) }, (_unused, index) => [
+              String(index),
+              { perf: { assigned: 100, included: 100 }, slashed: false },
+            ]),
+          ),
+        },
+      ]),
+    ),
+  };
+
+  return pinJson('report.json', stringify(log));
 };

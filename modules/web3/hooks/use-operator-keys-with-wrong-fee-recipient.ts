@@ -1,5 +1,6 @@
 import {
   KEY_STATUS,
+  MODULE_NAME,
   NodeOperatorId,
   ValidatorInfoIssues,
 } from '@lidofinance/lido-csm-sdk';
@@ -9,10 +10,17 @@ import { useOperatorKeysWithIssues } from './use-operator-keys-with-issues';
 
 const ACTIVE_STATUSES = [KEY_STATUS.ACTIVE, KEY_STATUS.EXITING];
 
-export const useOperatorKeysWithWrongFeeRecipient = (
-  nodeOperatorId: NodeOperatorId | undefined,
-) => {
-  const { data: keysWithStatus } = useOperatorKeysWithStatus(nodeOperatorId);
+export const useOperatorKeysWithWrongFeeRecipient = ({
+  nodeOperatorId,
+  module,
+}: {
+  nodeOperatorId: NodeOperatorId | undefined;
+  module?: MODULE_NAME;
+}) => {
+  const { data: keysWithStatus } = useOperatorKeysWithStatus({
+    nodeOperatorId,
+    module,
+  });
 
   const isActive = useCallback(
     (data: ValidatorInfoIssues[]) =>
@@ -29,5 +37,9 @@ export const useOperatorKeysWithWrongFeeRecipient = (
     [keysWithStatus],
   );
 
-  return useOperatorKeysWithIssues(nodeOperatorId, isActive);
+  return useOperatorKeysWithIssues({
+    nodeOperatorId,
+    module,
+    select: isActive,
+  });
 };

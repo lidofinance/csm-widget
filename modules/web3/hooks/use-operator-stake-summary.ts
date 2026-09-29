@@ -10,10 +10,13 @@ import { useActiveSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_STAKE_INFO = ['operator-stake-info'];
 
-export const useOperatorStakeSummary = <TData = OperatorStakeSummary>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: OperatorStakeSummary) => TData,
-) => {
+export const useOperatorStakeSummary = <TData = OperatorStakeSummary>({
+  nodeOperatorId,
+  select,
+}: {
+  nodeOperatorId: NodeOperatorId | undefined;
+  select?: (data: OperatorStakeSummary) => TData;
+}) => {
   const sdk = useActiveSmSDK(MODULE_NAME.CM);
 
   return useQuery({

@@ -27,7 +27,7 @@ export const SubmitKeysSuccessActions: FC<Props> = ({ operator }) => {
 
   return (
     <Stack direction="column" gap="sm">
-      <SwitchToOperatorButton operator={operator} />
+      <SwitchToOperatorButton operator={operator} path={PATH.HOME} />
       <Button fullwidth size="sm" onClick={handleViewKeys}>
         {needsSwitch ? 'Switch and View keys' : 'View keys'}
       </Button>

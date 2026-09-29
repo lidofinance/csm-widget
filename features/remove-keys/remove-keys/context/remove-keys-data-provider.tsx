@@ -26,19 +26,21 @@ const useRemoveKeysFormNetworkData: NetworkData<
 > = () => {
   const { nodeOperator } = useNodeOperator();
   const nodeOperatorId = nodeOperator?.nodeOperatorId;
-  const bondQuery = useOperatorBalance(nodeOperatorId);
-  const infoQuery = useOperatorInfo(nodeOperatorId);
-  const keysQuery = useOperatorKeysWithStatus(nodeOperatorId, (keys) =>
-    keys.filter(
-      hasStatus([
-        KEY_STATUS.DEPOSITABLE,
-        KEY_STATUS.NON_QUEUED,
-        KEY_STATUS.UNCHECKED,
-        KEY_STATUS.DUPLICATED, // TODO: check active duplicated key is here?
-        KEY_STATUS.INVALID,
-      ]),
-    ),
-  );
+  const bondQuery = useOperatorBalance({ nodeOperatorId });
+  const infoQuery = useOperatorInfo({ nodeOperatorId });
+  const keysQuery = useOperatorKeysWithStatus({
+    nodeOperatorId,
+    select: (keys) =>
+      keys.filter(
+        hasStatus([
+          KEY_STATUS.DEPOSITABLE,
+          KEY_STATUS.NON_QUEUED,
+          KEY_STATUS.UNCHECKED,
+          KEY_STATUS.DUPLICATED, // TODO: check active duplicated key is here?
+          KEY_STATUS.INVALID,
+        ]),
+      ),
+  });
 
   const bond = bondQuery.data;
   const info = infoQuery.data;

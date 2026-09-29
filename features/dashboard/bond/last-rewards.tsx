@@ -48,9 +48,10 @@ import {
 export const LastRewards: FC = () => {
   const id = useNodeOperatorId();
 
-  const { data: info } = useOperatorInfo(id);
-  const { data: lastRewards, isPending: isLoading } =
-    useOperatorLastRewards(id);
+  const { data: info } = useOperatorInfo({ nodeOperatorId: id });
+  const { data: lastRewards, isPending: isLoading } = useOperatorLastRewards({
+    nodeOperatorId: id,
+  });
   const { data: rewardsFrame } = useFrameInfo((data) => ({
     lastDistribution: formatDate(data.lastReport),
     nextDistribution: formatDate(data.nextReport),
@@ -146,8 +147,9 @@ export const LastRewards: FC = () => {
 const LastReportStats: FC = () => {
   const { isCsmFamily } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: lastRewards, isPending: isLoading } =
-    useOperatorLastRewards(nodeOperatorId);
+  const { data: lastRewards, isPending: isLoading } = useOperatorLastRewards({
+    nodeOperatorId,
+  });
   const { data: txHash, isPending: isTxLoading } = useLastReportTxHash();
 
   return (

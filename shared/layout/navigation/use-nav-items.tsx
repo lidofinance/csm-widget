@@ -1,3 +1,4 @@
+import { CSM_FAMILY_MODULES } from 'consts';
 import { PATH } from 'consts/urls';
 import { ReactNode } from 'react';
 
@@ -11,12 +12,14 @@ import { ReactComponent as HomeIcon } from 'assets/icons/home.svg';
 import { ReactComponent as KeyIcon } from 'assets/icons/key.svg';
 import { ReactComponent as MeterIcon } from 'assets/icons/meter.svg';
 import { ReactComponent as UserIcon } from 'assets/icons/user.svg';
+import { ReactComponent as UsersIcon } from 'assets/icons/users-round.svg';
 import { ReactComponent as WalletIcon } from 'assets/icons/wallet.svg';
 import {
   CounterClaimType,
   CounterInvalidKeys,
   CounterInvites,
   CounterLockedBond,
+  CounterMyOperators,
   CounterSurveys,
 } from 'shared/counters';
 import { ShowRuleProps, useFilterShowRules } from 'shared/hooks';
@@ -140,6 +143,14 @@ const routes: Route[] = [
     ],
     showRules: ['CAN_CLAIM_ICS', 'CAN_CLAIM_IDVTC', 'ICS_APPLY_ENABLED'],
     suffix: <CounterClaimType />,
+  },
+  {
+    name: 'My operators',
+    path: PATH.MY_OPERATORS,
+    icon: <UsersIcon />,
+    showRules: ['IS_NODE_OPERATOR'],
+    modules: CSM_FAMILY_MODULES,
+    suffix: <CounterMyOperators />,
   },
   {
     name: 'DVT',

@@ -1,10 +1,9 @@
 import { expect } from '@playwright/test';
-import { Tags } from 'tests/shared/consts/common.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -18,14 +17,9 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Penalty',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
       snapshotId = await cmSDK.evmSnapshot();

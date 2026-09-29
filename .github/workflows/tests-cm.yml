@@ -1,9 +1,9 @@
-name: Forked Test CM-widget
-run-name: Forked CM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
-
+name: Test CM-widget
+run-name: CM-widget Tests. Env [${{ github.event.schedule == '0 5 * * *' && 'prod' || inputs.stand_type || 'testnet' }}]
 on:
   schedule:
-    - cron: "0 6 * * *" # Every day at 6 AM UTC
+    - cron: "0 5 * * *" # Every day at 5 AM UTC: prod + smoke
+    - cron: "0 6 * * *" # Every day at 6 AM UTC: testnet + "-"
   workflow_dispatch:
     inputs:
       stand_type:
@@ -20,9 +20,9 @@ on:
         description: "Tags for running test suite"
         required: false
         type: choice
-        default: "forked"
+        default: "-"
         options:
-          - forked
+          - "-"
           - smoke
       preview_stand_url:
         description: 'Preview stand url (only if "Stand type" is "preview")'
@@ -50,7 +50,7 @@ on:
       tags:
         required: false
         type: string
-        default: "forked"
+        default: "-"
         description: "Test tags"
       report_enabled:
         description: "Enable slack report."
@@ -65,16 +65,15 @@ on:
 
 jobs:
   test:
-    name: CM widget (fork)
+    name: CM widget
     uses: ./.github/workflows/e2e-tests.yml
     secrets: inherit
     with:
       module: cm
-      use_fork: true
-      stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
-      test_tags: ${{ inputs.tags || github.event.inputs.tags || 'forked' }}
+      stand_type: ${{ github.event.schedule == '0 5 * * *' && 'prod' || inputs.stand_type || 'testnet' }}
+      test_tags: ${{ github.event.schedule == '0 5 * * *' && 'smoke' || inputs.tags || '-' }}
       qase_project_id: CM
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
       preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
       report_enabled: ${{ inputs.report_enabled || false }}
-      job_custom_name: ${{ inputs.job_custom_name || 'CM widget (fork)' }}
+      job_custom_name: ${{ inputs.job_custom_name || 'CM widget' }}

@@ -1,28 +1,31 @@
-import { NodeOperatorId, PenaltyRecord } from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { PenaltyRecord } from '@lidofinance/lido-csm-sdk';
+import { queryOptions } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK } from '../web3-provider';
+import {
+  OperatorHookArgs,
+  OperatorQueryArgs,
+  useOperatorQuery,
+} from './use-operator-query';
 
 export const KEY_OPERATOR_PENALTIES = ['operator-penalties'];
 
 export const useOperatorPenalties = <TData = PenaltyRecord[]>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: PenaltyRecord[]) => TData,
-) => {
-  const { events, core } = useSmSDK();
-
-  return useQuery({
-    queryKey: [
-      ...KEY_OPERATOR_PENALTIES,
-      { nodeOperatorId, module: core.moduleName },
-    ],
-    ...STRATEGY_CONSTANT,
-    queryFn: () => {
-      invariant(nodeOperatorId !== undefined);
-      return events.getPenalties(nodeOperatorId);
-    },
-    enabled: nodeOperatorId !== undefined,
-    select,
-  });
-};
+  args: OperatorHookArgs<PenaltyRecord[], TData>,
+) =>
+  useOperatorQuery(
+    ({ sdk, nodeOperatorId }: OperatorQueryArgs) =>
+      queryOptions({
+        queryKey: [
+          ...KEY_OPERATOR_PENALTIES,
+          { nodeOperatorId, module: sdk?.core.moduleName },
+        ],
+        ...STRATEGY_CONSTANT,
+        queryFn: () => {
+          invariant(sdk && nodeOperatorId !== undefined);
+          return sdk.events.getPenalties(nodeOperatorId);
+        },
+        enabled: !!sdk && nodeOperatorId !== undefined,
+      }),
+    args,
+  );

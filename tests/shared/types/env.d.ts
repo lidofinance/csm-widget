@@ -10,8 +10,6 @@ declare namespace NodeJS {
     STAND_TYPE?: 'testnet' | 'prod' | 'staging' | 'preview' | 'local';
 
     WALLET_SECRET_PHRASE?: string;
-    EMPTY_SECRET_PHRASE?: string;
-    EMPTY_NODE_SECRET_PHRASE?: string;
     WALLET_PASSWORD?: string;
 
     RPC_URL?: string;
@@ -26,8 +24,6 @@ declare namespace NodeJS {
     /** kubo RPC API of the IPFS node used to pin merkle trees */
     IPFS_API_URL?: string;
 
-    /** Forked tests: 'true' enables fork mode */
-    USE_FORK?: 'true' | 'false';
     /** Devnet deploy artifacts consumed by the CM SDK client */
     DEVNET_ADDRESSES_FILE_PATH?: string;
 

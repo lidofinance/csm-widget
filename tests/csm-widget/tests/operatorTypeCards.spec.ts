@@ -7,8 +7,9 @@ import { OPERATOR_TYPE_METADATA } from 'tests/shared/consts/operatorTypes.const'
 import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_ADDRESS.secretPhrase });
 
 const CSM01 = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_DEF];
 const ICS = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS];

@@ -6,7 +6,7 @@ import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR_WITH_ALL_GATES.secretPhrase });
 
@@ -19,15 +19,11 @@ test.describe(
     epic: EPIC.createOperator,
     feature: 'New operator',
     story: 'Curated operator transaction',
-    tag: [Tags.forked, Tags.smoke],
+    tag: [Tags.smoke],
   }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeEach(async ({ evmNode, widgetConfig, widgetService }) => {
       matomoEventService = new MatomoService(widgetService.page, widgetConfig);

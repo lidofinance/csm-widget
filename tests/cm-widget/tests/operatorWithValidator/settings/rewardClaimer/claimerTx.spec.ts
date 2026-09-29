@@ -7,7 +7,7 @@ import {
 } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 
@@ -21,15 +21,10 @@ test.describe(
     epic: EPIC.settings,
     feature: 'Rewards claimer',
     story: 'Transaction',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let matomoEventService: MatomoService;
-
-    test.beforeAll(({ useFork }) => {
-      test.skip(!useFork, 'Test suite runs only on forked network');
-    });
 
     test.beforeEach(async ({ cmSDK, widgetConfig, widgetService }) => {
       matomoEventService = new MatomoService(widgetService.page, widgetConfig);

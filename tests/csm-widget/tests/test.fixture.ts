@@ -48,9 +48,7 @@ export const test = base.extend<
   // fixture-options
   useFork: [
     async ({}, use) => {
-      // You can set the parameter either in playwright.config.ts
-      // or directly in the test itself.
-      await use(false);
+      await use(true);
     },
     { scope: 'worker', option: true },
   ],
@@ -191,12 +189,17 @@ export const test = base.extend<
     { scope: 'worker' },
   ],
   ethereumSDK: [
-    async ({ secretPhrase }, use) => {
+    async ({ secretPhrase, useFork }, use) => {
+      const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
+      const rpcUrl = useFork
+        ? forkRpcURL
+        : widgetFullConfig.standConfig.networkConfig.rpcUrl;
+
       await use(
-        new SdkService(
-          mnemonicToAccount(secretPhrase),
-          widgetFullConfig.standConfig.networkConfig,
-        ),
+        new SdkService(mnemonicToAccount(secretPhrase), {
+          ...widgetFullConfig.standConfig.networkConfig,
+          rpcUrl,
+        }),
       );
     },
     { scope: 'worker' },

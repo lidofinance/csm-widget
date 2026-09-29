@@ -96,11 +96,13 @@ const getChainAddressEntries = (
       ),
   );
 
-  return [...commonAndStaticEntries, ...moduleEntries]
-    .filter(([, address]) => !isUndefined(address))
-    // Some STATIC_ADDRESSES entries are lowercase; the lookup key is always
-    // checksummed via getAddress(to), so normalize here to match.
-    .map(([name, address]) => [getAddress(address), name]);
+  return (
+    [...commonAndStaticEntries, ...moduleEntries]
+      .filter(([, address]) => !isUndefined(address))
+      // Some STATIC_ADDRESSES entries are lowercase; the lookup key is always
+      // checksummed via getAddress(to), so normalize here to match.
+      .map(([name, address]) => [getAddress(address), name])
+  );
 };
 
 export const METRIC_CONTRACT_ADDRESSES = fromPairs(

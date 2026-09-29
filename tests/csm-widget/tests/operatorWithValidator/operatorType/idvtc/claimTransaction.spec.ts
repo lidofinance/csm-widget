@@ -4,7 +4,6 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
-import { Tags } from 'tests/shared/consts/common.const';
 import {
   PAGE_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
@@ -18,21 +17,12 @@ test.describe(
     epic: EPIC.operatorType,
     feature: 'IDVTC',
     story: 'Claim transaction',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
 
     test.beforeAll(
-      async ({
-        useFork,
-        evmNode,
-        forkActionService,
-        widgetService,
-        secretPhrase,
-      }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
-
+      async ({ evmNode, forkActionService, widgetService, secretPhrase }) => {
         snapshotId = await evmNode.snapshot();
 
         await evmNode.setBalance(mnemonicToAccount(secretPhrase).address, 1000);
