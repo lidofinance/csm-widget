@@ -53,7 +53,7 @@ export class KeysViewPage {
 
   async open() {
     await test.step('Open keys view tab for Keys page', async () => {
-      await this.page.goto('/keys/view');
+      await this.base.openWithRetry('/keys/view', this.viewKeysBlock);
     });
   }
 }

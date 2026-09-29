@@ -62,7 +62,7 @@ export class SubmitPage {
 
   async open() {
     await test.step('Open submit tab for Keys page', async () => {
-      await this.page.goto('/keys/submit');
+      await this.base.openWithRetry('/keys/submit', this.submitKeysButton);
     });
   }
 

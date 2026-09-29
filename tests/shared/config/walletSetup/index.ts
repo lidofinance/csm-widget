@@ -16,7 +16,7 @@ import {
 import { WalletStateService } from './walletStates';
 
 export * from './types';
-export { STATE_FILE } from './presetsState';
+export { stateFile } from './presetsState';
 export { WalletStateService } from './walletStates';
 
 export type ModuleWalletSetup<
@@ -26,6 +26,7 @@ export type ModuleWalletSetup<
     PresetDefinition<H>
   >,
 > = {
+  chain: ChainName;
   module: ModuleName;
   handlers: Record<H, Handler>;
   order: readonly H[];
@@ -38,6 +39,7 @@ export const defineWalletSetup = <
   H extends string,
   D extends Record<string, PresetDefinition<H>>,
 >(setup: {
+  chain: ChainName;
   module: ModuleName;
   handlers: Record<H, Handler>;
   order: readonly H[];
@@ -45,9 +47,9 @@ export const defineWalletSetup = <
 }): ModuleWalletSetup<H, D> => ({
   ...setup,
   presets: new Proxy({} as Record<keyof D, PresetRuntime>, {
-    get: (_target, key) => readPreset(setup.module, key as string),
+    get: (_target, key) => readPreset(setup.chain, setup.module, key as string),
   }),
-  hasPresets: () => hasModulePresets(setup.module),
+  hasPresets: () => hasModulePresets(setup.chain, setup.module),
 });
 
 const passthroughStep: StepFn = (title, body) => {
@@ -60,9 +62,9 @@ export const setupPresets = async <
   D extends Record<string, PresetDefinition<H>>,
 >(
   setup: ModuleWalletSetup<H, D>,
-  { rpcUrl, chain }: { rpcUrl: string; chain: ChainName },
+  { rpcUrl }: { rpcUrl: string },
 ): Promise<void> => {
-  const { module, handlers, order, definitions } = setup;
+  const { chain, module, handlers, order, definitions } = setup;
 
   if (setup.hasPresets()) {
     console.info(
@@ -101,7 +103,7 @@ export const setupPresets = async <
     };
   }
 
-  writeModulePresets(module, presets);
+  writeModulePresets(chain, module, presets);
 
   console.info(
     `[globalSetup] ${module} preset accounts ready:`,

@@ -1,10 +1,10 @@
 name: Test CSM-widget
-run-name: CSM-widget Tests. Env [${{ github.event.inputs.stand_type || 'testnet' }}]
-
+run-name: CSM-widget Tests. Env [${{ github.event.schedule == '0 5 * * *' && 'prod' || inputs.stand_type || 'testnet' }}]
 
 on:
   schedule:
-    - cron: "0 6 * * *" # Every day at 6 AM UTC
+    - cron: "0 5 * * *" # Every day at 5 AM UTC: prod + smoke
+    - cron: "0 6 * * *" # Every day at 6 AM UTC: testnet + "-"  
   workflow_dispatch:
     inputs:
       stand_type:
@@ -15,6 +15,8 @@ on:
         options:
           - testnet
           - preview
+          - prod
+          - staging
       tags:
         description: "Tags for running test suite"
         required: false
@@ -73,10 +75,9 @@ jobs:
     secrets: inherit
     with:
       module: csm
-      stand_type: ${{ inputs.stand_type || github.event.inputs.stand_type || 'testnet' }}
-      test_tags: ${{ inputs.tags || github.event.inputs.tags || '-' }}
+      stand_type: ${{ github.event.schedule == '0 5 * * *' && 'prod' || inputs.stand_type || 'testnet' }}
+      test_tags: ${{ github.event.schedule == '0 5 * * *' && 'smoke' || inputs.tags || '-' }}
       qase_project_id: CSM
-      qase_plan_id: ${{ inputs.qase_plan_id || (github.event_name == 'schedule' && '7') || '' }}
       preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
       preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
       report_enabled: ${{ inputs.report_enabled || false }}

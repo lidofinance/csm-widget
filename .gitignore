@@ -50,4 +50,4 @@ docs/superpowers/
 /public/runtime/
 deposit_data.json
 local_fork_config.json
-.walletPresets.state.json
+*.walletPresets.state.json
