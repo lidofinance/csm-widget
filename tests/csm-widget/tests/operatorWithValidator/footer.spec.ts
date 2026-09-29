@@ -1,11 +1,14 @@
 import { expect, Locator } from '@playwright/test';
 import { widgetFullConfig } from 'tests/csm-widget/config';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { FooterElement } from 'tests/csm-widget/pages/elements/common/element.footer';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../test.fixture';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 type FooterLinkCase = {
   name: string;

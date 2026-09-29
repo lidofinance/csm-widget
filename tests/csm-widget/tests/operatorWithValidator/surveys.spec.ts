@@ -1,9 +1,12 @@
 import { expect } from '@playwright/test';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../test.fixture';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 const VANOM_DASHBOARD_URL =
   'https://app.hex.tech/8dedcd99-17f4-49d8-944e-4857a355b90a/app/3f7d6967-3ef6-4e69-8f7b-d02d903f045b/latest';

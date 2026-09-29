@@ -14,7 +14,11 @@ test.use({ secretPhrase: PRESETS.EMPTY_ADDRESS.secretPhrase });
 const CSM01 = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_DEF];
 const ICS = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_ICS];
 const IDVTC = OPERATOR_TYPE_METADATA[OPERATOR_TYPE.CSM_IDVTC];
-const OPERATOR_TYPES_DOCS_URL = 'docs.lido.fi/staking-modules/csm/join-csm';
+const OPERATOR_TYPES_DOCS_URL =
+  'https://docs.lido.fi/staking-modules/csm/join-csm/#node-operator-types';
+// Lido Docs redirects the legacy CSM page to the shared Node Operators page.
+const OPERATOR_TYPES_DOCS_DESTINATION =
+  /^https:\/\/docs\.lido\.fi\/staking-modules\/node-operators\/?#node-operator-types$/;
 
 test.describe(
   ...suite({
@@ -125,7 +129,7 @@ test.describe(
         await test.step('Verify link', async () => {
           await expect(cards.parametersDocsLink).toHaveAttribute(
             'href',
-            new RegExp(OPERATOR_TYPES_DOCS_URL),
+            OPERATOR_TYPES_DOCS_URL,
           );
         });
 
@@ -139,8 +143,11 @@ test.describe(
             cards.parametersDocsLink.click(),
           ]);
 
-          expect(openedPage.url()).toContain(OPERATOR_TYPES_DOCS_URL);
-          await openedPage.close();
+          try {
+            await expect(openedPage).toHaveURL(OPERATOR_TYPES_DOCS_DESTINATION);
+          } finally {
+            await openedPage.close();
+          }
         });
       },
     );

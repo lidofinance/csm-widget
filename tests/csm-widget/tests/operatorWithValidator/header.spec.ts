@@ -1,8 +1,11 @@
 import { expect } from '@playwright/test';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { Tags } from 'tests/shared/consts/common.const';
 import { MatomoService } from 'tests/shared/services/matomo.service';
 import { test } from '../test.fixture';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
