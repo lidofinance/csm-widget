@@ -30,6 +30,10 @@ export const EPIC = {
     name: 'Operator type',
     features: ['ICS', 'IDVTC'],
   },
+  myOperators: {
+    name: 'My operators',
+    features: [],
+  },
   dashboard: {
     name: 'Dashboard',
     /** sections of the page */
