@@ -6,17 +6,19 @@ module.exports = {
   modulePathIgnorePatterns: ['./test'],
   moduleNameMapper: {
     // @lidofinance/lido-csm-sdk's main index.cjs bundles deposit-data-sdk which
-    // pulls in @chainsafe/ssz (ESM-only). Redirect to the common sub-bundle,
-    // which provides the runtime error exports unit tests need: SDKError,
-    // ERROR_CODE, classifyError, decodeRevertData, formatDecodedRevert.
+    // pulls in @chainsafe/ssz (ESM-only). Redirect to a shim merging the
+    // common sub-bundle (runtime error exports: SDKError, ERROR_CODE,
+    // classifyError, decodeRevertData, formatDecodedRevert) with
+    // MIN/MAX_EFFECTIVE_BALANCE from keys-with-status-sdk — see
+    // __mocks__/@lidofinance/lido-csm-sdk.js for details.
     // (ContractErrorName / DecodedRevert are types — no runtime presence.)
-    // CAUTION: common.cjs does NOT export TransactionCallbackStage (that lives
+    // CAUTION: this shim does NOT export TransactionCallbackStage (that lives
     // in index.cjs only). Do not unit-test shared/hook-form/form-controller/
     // build-tx-callback.ts without mocking TransactionCallbackStage — under
     // this redirect it resolves to `undefined` and the ERROR-stage switch
     // silently falls through.
     '^@lidofinance/lido-csm-sdk$':
-      '<rootDir>/node_modules/@lidofinance/lido-csm-sdk/dist/common.cjs',
+      '<rootDir>/__mocks__/@lidofinance/lido-csm-sdk.js',
     // @lidofinance/lido-ethereum-sdk pulls in ESM-only packages (multiformats,
     // blockstore-core, ipfs-unixfs-importer) via its stvault IPFS utils.
     // Unit tests never exercise IPFS/vault functionality — stub the SDK.

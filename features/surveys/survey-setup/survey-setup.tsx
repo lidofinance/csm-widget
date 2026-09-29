@@ -52,7 +52,7 @@ export const SurveySetup: FC<{ id?: string }> = ({ id }) => {
   const { data: keys, mutate: mutateKeys } = useSetupsKeys();
 
   const nodeOperatorId = useNodeOperatorId();
-  const { refetch } = useSurveysFilled(nodeOperatorId);
+  const { refetch } = useSurveysFilled({ nodeOperatorId });
 
   const filledWitoutCurrent = Math.max(
     0,

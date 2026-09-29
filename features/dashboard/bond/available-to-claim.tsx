@@ -1,5 +1,11 @@
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
+import {
+  BOND_EXCESS,
+  BOND_INSUFFICIENT,
+  BOND_INSUFFICIENT_HELP,
+  BOND_LOCKED,
+  BOND_LOCKED_HELP,
+} from 'consts/text';
 import {
   getNextDistribution,
   useFeeSplits,
@@ -17,13 +23,15 @@ import { AccordionStyle, RowBody, RowHeader, RowTitle } from './styles';
 export const AvailableToClaim: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
 
-  const { data: bond, isPending: isBondLoading } =
-    useOperatorBalance(nodeOperatorId);
+  const { data: bond, isPending: isBondLoading } = useOperatorBalance({
+    nodeOperatorId,
+  });
 
-  const { data: rewards, isPending: isRewardsLoading } =
-    useOperatorRewards(nodeOperatorId);
+  const { data: rewards, isPending: isRewardsLoading } = useOperatorRewards({
+    nodeOperatorId,
+  });
 
-  const { data: feeSplits } = useFeeSplits(nodeOperatorId);
+  const { data: feeSplits } = useFeeSplits({ nodeOperatorId });
 
   const { data: nextDistribution } = useFrameInfo(getNextDistribution);
 
@@ -74,7 +82,7 @@ export const AvailableToClaim: FC = () => {
               warning
               sign="minus"
               title={BOND_INSUFFICIENT}
-              help="Insufficient bond is the missing amount of stETH required to cover all operator’s keys"
+              help={BOND_INSUFFICIENT_HELP}
               loading={isBondLoading}
               amount={bond.delta}
             />
@@ -100,11 +108,11 @@ export const AvailableToClaim: FC = () => {
             <Balance
               warning
               sign="minus"
-              title="Locked bond"
+              title={BOND_LOCKED}
               loading={isBondLoading}
               amount={bond.locked}
               token={TOKENS.eth}
-              help="Bond is locked because of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
+              help={BOND_LOCKED_HELP}
             />
           </>
         )}

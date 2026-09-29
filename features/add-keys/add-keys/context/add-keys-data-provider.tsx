@@ -37,7 +37,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
   const ethBalanceQuery = useEthereumBalance();
   const stethBalanceQuery = useStethBalance();
   const wstethBalanceQuery = useWstethBalance();
-  const bondQuery = useOperatorBalance(nodeOperatorId);
+  const bondQuery = useOperatorBalance({ nodeOperatorId });
   const maxStakeEthQuery = useStakeLimit();
   const shareLimitQuery = useShareLimit();
 
@@ -61,7 +61,7 @@ const useAddKeysFormNetworkData: NetworkData<AddKeysFormNetworkData> = () => {
     useCurveParameters(curve);
 
   const { data: operatorInfo, isPending: isOperatorInfoLoading } =
-    useOperatorInfo(nodeOperatorId);
+    useOperatorInfo({ nodeOperatorId });
 
   const nonWithdrawnKeys = operatorInfo
     ? operatorInfo.totalAddedKeys - operatorInfo.totalWithdrawnKeys

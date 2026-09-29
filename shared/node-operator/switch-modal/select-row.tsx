@@ -19,7 +19,7 @@ export const SelectRow: FC<SelectRowProps> = ({ shortInfo, onSelect }) => {
   const { address } = useDappStatus();
   const { nodeOperatorId } = shortInfo;
   const roles = getNodeOperatorRoles(shortInfo, address);
-  const { data: metadata } = useOperatorMetadata(nodeOperatorId);
+  const { data: metadata } = useOperatorMetadata({ nodeOperatorId });
 
   return (
     <CmRowButtonStyle

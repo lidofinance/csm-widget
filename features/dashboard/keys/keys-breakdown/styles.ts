@@ -1,19 +1,6 @@
-import { Accordion, Check as CheckIcon } from '@lidofinance/lido-ui';
+import { Accordion } from '@lidofinance/lido-ui';
 import { StackStyle } from 'shared/components';
 import styled, { css } from 'styled-components';
-
-import { ReactComponent as AlertIcon } from 'assets/icons/alert.svg';
-
-export const Alert = styled(AlertIcon)`
-  width: 12px;
-  height: 12px;
-`;
-
-export const Check = styled(CheckIcon)`
-  width: 20px;
-  height: 20px;
-  margin-inline: -4px;
-`;
 
 export const TitleStyle = styled(StackStyle).attrs({
   $direction: 'row',

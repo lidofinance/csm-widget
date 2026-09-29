@@ -51,7 +51,7 @@ export const IdvtcStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data: operatorType } = useOperatorType(
     nodeOperator?.module === MODULE_NAME.CSM ? nodeOperator : undefined,
   );
-  const { data: owner } = useOperatorOwner(operatorId);
+  const { data: owner } = useOperatorOwner({ nodeOperatorId: operatorId });
 
   const { data: proofData, isPending: isTypePending } = useIdvtcProof();
   const { data: ownerProofData, isPending: isOwnerTypePending } = useIdvtcProof(

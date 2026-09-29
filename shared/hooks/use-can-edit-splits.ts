@@ -9,12 +9,12 @@ import { useShowFlags } from './use-show-rule';
 export const useCanEditSplits = () => {
   const nodeOperatorId = useNodeOperatorId();
 
-  const { data: currentFeeSplits } = useFeeSplits(nodeOperatorId);
-  const { data: rewards } = useOperatorRewards(nodeOperatorId);
-  const { data: pendingToSplit } = useOperatorBalance(
+  const { data: currentFeeSplits } = useFeeSplits({ nodeOperatorId });
+  const { data: rewards } = useOperatorRewards({ nodeOperatorId });
+  const { data: pendingToSplit } = useOperatorBalance({
     nodeOperatorId,
-    (data) => data.pendingToSplit,
-  );
+    select: (data) => data.pendingToSplit,
+  });
   const { HAS_OWNER_ROLE } = useShowFlags();
 
   const canEditSplits =

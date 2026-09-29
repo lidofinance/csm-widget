@@ -22,11 +22,14 @@ const useSplitsFormNetworkData: NetworkData<SplitsFormNetworkData> = () => {
 
   const nodeOperatorId = useNodeOperatorId();
   const { data: currentFeeSplits, isPending: isFeeSplitsPending } =
-    useFeeSplits(nodeOperatorId);
+    useFeeSplits({ nodeOperatorId });
   const { data: rewards, isPending: isOperatorRewardsPending } =
-    useOperatorRewards(nodeOperatorId);
+    useOperatorRewards({ nodeOperatorId });
   const { data: pendingToSplit, isPending: isBalancePending } =
-    useOperatorBalance(nodeOperatorId, (data) => data.pendingToSplit);
+    useOperatorBalance({
+      nodeOperatorId,
+      select: (data) => data.pendingToSplit,
+    });
 
   const canEdit = useCanEditSplits();
   const { HAS_OWNER_ROLE: isOwner } = useShowFlags();

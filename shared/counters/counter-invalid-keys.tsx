@@ -4,7 +4,7 @@ import { Counter } from 'shared/components';
 
 export const CounterInvalidKeys: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: info } = useOperatorInfo(nodeOperatorId);
+  const { data: info } = useOperatorInfo({ nodeOperatorId });
 
   const count = info
     ? Math.min(info.totalAddedKeys - info.totalVettedKeys, 1)

@@ -23,7 +23,7 @@ export const GroupPage: FC = () => (
 
 const GroupTitle: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: group, isPending } = useOperatorGroup(nodeOperatorId);
+  const { data: group, isPending } = useOperatorGroup({ nodeOperatorId });
 
   return isPending ? (
     <ShortInlineLoader />
@@ -36,7 +36,7 @@ const GroupTitle: FC = () => {
 
 const GroupSubtitle: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: groupId } = useOperatorGroupId(nodeOperatorId);
+  const { data: groupId } = useOperatorGroupId({ nodeOperatorId });
 
   return groupId ? (
     <>View all of the sub-operators within your Node Operator Group</>

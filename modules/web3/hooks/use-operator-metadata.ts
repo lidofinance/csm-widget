@@ -11,10 +11,13 @@ import { useActiveSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_METADATA = ['operator-metadata'];
 
-export const useOperatorMetadata = <TData = OperatorMetadata>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: OperatorMetadata) => TData,
-) => {
+export const useOperatorMetadata = <TData = OperatorMetadata>({
+  nodeOperatorId,
+  select,
+}: {
+  nodeOperatorId: NodeOperatorId | undefined;
+  select?: (data: OperatorMetadata) => TData;
+}) => {
   const sdk = useActiveSmSDK(MODULE_NAME.CM);
 
   return useQuery({

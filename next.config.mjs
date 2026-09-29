@@ -41,6 +41,7 @@ export const CACHE_CONTROL_PAGES = [
   '/',
   '/group',
   '/monitoring',
+  '/operators',
   '/wrapped-2025/:path*',
   '/bond/:path*',
   '/create/:path*',

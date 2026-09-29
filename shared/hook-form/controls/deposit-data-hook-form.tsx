@@ -1,18 +1,30 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { FC } from 'react';
 import { useFormState, useWatch } from 'react-hook-form';
 import { Counter, Tabs } from 'shared/components';
 import { isValidationErrorTypeValidate } from 'shared/hook-form/validation/validation-error';
+import styled from 'styled-components';
 import {
   DepositDataDrop,
   DepositDataInput,
   DepositDataInputType,
   DepositDataParameters,
   DepositDataParsed,
+  useIsWcTypeMismatch,
   useParseDepositData,
+  WcTypeWarning,
 } from '../deposit-data';
 import { InputMessageStyle, InputWrapper } from '../deposit-data/styles';
 
-export const DepositDataHookForm: FC = () => {
+const WcTypeWarningWrapper = styled.div`
+  margin-top: 12px;
+`;
+
+type DepositDataHookFormProps = { module?: MODULE_NAME };
+
+export const DepositDataHookForm: FC<DepositDataHookFormProps> = ({
+  module,
+}) => {
   const [depositData] = useWatch<DepositDataInputType, ['depositData']>({
     name: ['depositData'],
   });
@@ -33,6 +45,8 @@ export const DepositDataHookForm: FC = () => {
   const hasErrorHighlight = isValidationErrorTypeValidate(error?.type);
   // allows to show error state without message
   const errorMessage = hasErrorHighlight && (error?.message || true);
+
+  const isWcTypeMismatch = useIsWcTypeMismatch(module);
 
   useParseDepositData();
 
@@ -65,10 +79,17 @@ export const DepositDataHookForm: FC = () => {
           ]}
         />
       </DepositDataDrop>
-      {errorMessage && typeof errorMessage === 'string' && (
-        <InputMessageStyle data-testid="input-message-error" $bordered>
-          {errorMessage}
-        </InputMessageStyle>
+      {isWcTypeMismatch ? (
+        <WcTypeWarningWrapper>
+          <WcTypeWarning />
+        </WcTypeWarningWrapper>
+      ) : (
+        errorMessage &&
+        typeof errorMessage === 'string' && (
+          <InputMessageStyle data-testid="input-message-error" $bordered>
+            {errorMessage}
+          </InputMessageStyle>
+        )
       )}
     </InputWrapper>
   );
