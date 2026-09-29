@@ -1,4 +1,4 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, type MethodAccess } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
 import { useCanManageMembers } from 'features/idvtc/members/hooks/use-can-manage-members';
 import { useMembersInFlowInit } from 'features/idvtc/members/hooks/use-members-in-flow-init';
@@ -12,6 +12,7 @@ import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
+import { useCanPerform } from 'shared/hooks';
 import { TxStageSuccess, useTransitStage } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { classifyErrorCode, ErrorCode } from 'utils/get-error-code';
@@ -30,7 +31,7 @@ export type ClaimIdvtcFlow =
   | { action: 'claimed' }
   | { action: 'claimed-with-proof' }
   | { action: 'not-eligible' }
-  | { action: 'no-access' }
+  | { action: 'no-access'; access: MethodAccess }
   | { action: 'create' }
   | ({ action: 'claim' } & Executable);
 
@@ -48,6 +49,7 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
   const { checkBindable, initStaged } = useMembersInFlowInit(surveyAuth);
   const canManage = useCanManageMembers();
   const transitStage = useTransitStage();
+  const [, claimAccess] = useCanPerform(sdk.idvtcGate, 'claimCurve');
 
   return useCallback(
     (input, data) => {
@@ -65,7 +67,8 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
       }
 
       if (isEmpty) return { action: 'not-eligible' };
-      if (!data.canClaimCurve) return { action: 'no-access' };
+      if (!data.canClaimCurve)
+        return { action: 'no-access', access: claimAccess };
 
       // 'create' is a navigation path (link), not a submit — don't run the tx
       if (data.isCurrentIcs && input.mode === 'create') {
@@ -150,6 +153,7 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
       initStaged,
       canManage,
       transitStage,
+      claimAccess,
     ],
   );
 };

@@ -1,10 +1,11 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, type MethodAccess } from '@lidofinance/lido-csm-sdk';
 import { useActiveSmSDK, useModule } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
+import { useCanPerform } from 'shared/hooks';
 import invariant from 'tiny-invariant';
 import { useTxModalStagesClaimIcs } from '../hooks/use-tx-modal-stages-claim-ics';
 import { useConfirmClaimIcsModal } from '../hooks/use-confirm-modal';
@@ -17,7 +18,7 @@ export type ClaimIcsFlow =
   | { action: 'claimed' }
   | { action: 'claimed-with-proof' }
   | { action: 'not-eligible' }
-  | { action: 'no-access' }
+  | { action: 'no-access'; access: MethodAccess }
   | ({ action: 'claim' } & Executable);
 
 export const useClaimIcsFlowResolver = (): FlowResolver<
@@ -30,6 +31,7 @@ export const useClaimIcsFlowResolver = (): FlowResolver<
   const { isCSM } = useModule();
   const confirmClaimIcs = useConfirmClaimIcsModal();
   const buildCallback = useTxModalStagesClaimIcs();
+  const [, claimAccess] = useCanPerform(sdk.icsGate, 'claimCurve');
 
   return useCallback(
     (input, data) => {
@@ -47,7 +49,8 @@ export const useClaimIcsFlowResolver = (): FlowResolver<
       }
 
       if (isEmpty) return { action: 'not-eligible' };
-      if (!data.canClaimCurve) return { action: 'no-access' };
+      if (!data.canClaimCurve)
+        return { action: 'no-access', access: claimAccess };
 
       return {
         action: 'claim' as const,
@@ -65,7 +68,7 @@ export const useClaimIcsFlowResolver = (): FlowResolver<
         },
       };
     },
-    [isCSM, sdk, confirmClaimIcs, buildCallback],
+    [isCSM, sdk, confirmClaimIcs, buildCallback, claimAccess],
   );
 };
 
