@@ -21,6 +21,7 @@ export type StandConfig = {
     host: string;
   };
   matomoUrl: string;
+  feedbackFormUrl: string;
   keysGeneratorConfig: KeysGeneratorConfig;
   mockConfig?: {
     urls: {
