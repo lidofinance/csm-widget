@@ -3,8 +3,9 @@ import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { mnemonicToAccount } from 'viem/accounts';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_ADDRESS.secretPhrase });
 
 test.describe(
   ...suite({

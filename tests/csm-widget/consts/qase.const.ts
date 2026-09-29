@@ -5,6 +5,10 @@ export const EPIC = {
     name: 'Landing page',
     features: [],
   },
+  cache: {
+    name: 'Cache',
+    features: [],
+  },
   keys: {
     name: 'Keys',
     features: ['Submit keys', 'Remove keys', 'View keys'],
@@ -15,11 +19,20 @@ export const EPIC = {
   },
   roles: {
     name: 'Roles',
-    features: ['Manager address', 'Rewards address', 'Inbox requests'],
+    features: [
+      'Manager address',
+      'Rewards address',
+      'Inbox requests',
+      'Rewards claimer',
+    ],
   },
   operatorType: {
     name: 'Operator type',
     features: ['ICS', 'IDVTC'],
+  },
+  myOperators: {
+    name: 'My operators',
+    features: [],
   },
   dashboard: {
     name: 'Dashboard',

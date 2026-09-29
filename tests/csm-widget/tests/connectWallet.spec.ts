@@ -1,8 +1,9 @@
 import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from './test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_ADDRESS.secretPhrase });
 
 test.describe(
   ...suite({

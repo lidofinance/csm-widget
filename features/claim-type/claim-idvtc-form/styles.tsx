@@ -1,5 +1,6 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Accordion, Button, Text } from '@lidofinance/lido-ui';
+import { ReactComponent as DkgFileWarning } from 'assets/illustrations/dkg-file-warning.svg';
 import { StackStyle } from 'shared/components';
 import { CURVE_VARIANTS } from 'shared/node-operator/curve-badge/styles';
 import styled, { CSSProperties } from 'styled-components';
@@ -68,4 +69,21 @@ export const AccordionStyle = styled(Accordion)`
   p {
     margin: 0;
   }
+`;
+
+export const DkgCardRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 40px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: column;
+  }
+`;
+
+export const DkgIllustration = styled(DkgFileWarning)`
+  flex-shrink: 0;
+  width: 93px;
+  height: 100px;
+  overflow: visible;
 `;

@@ -9,7 +9,9 @@ import { SdkService } from 'tests/shared/services/ethereumSDK.client';
 import { WidgetService } from 'tests/csm-widget/services/widget.service';
 import { mnemonicToAccount } from 'viem/accounts';
 import { FORK_WARM_UP_TIMEOUT } from 'tests/shared/consts/timeouts';
-import ForkActionsService from 'tests/shared/services/forkActions.service';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { ForkActionsService } from 'tests/shared/contracts/forkActions.service';
+import type { ChainName } from 'tests/shared/contracts/constants';
 import { warmUpForkedNode } from 'tests/shared/helpers/warmUpFork';
 import { HttpMockerService } from 'tests/shared/services/httpMocker.service';
 import { EvmNodeService } from 'tests/shared/services/evmNode.service';
@@ -46,24 +48,20 @@ export const test = base.extend<
   // fixture-options
   useFork: [
     async ({}, use) => {
-      // You can set the parameter either in playwright.config.ts
-      // or directly in the test itself.
-      await use(false);
+      await use(true);
     },
     { scope: 'worker', option: true },
   ],
   forkActionService: [
     async ({}, use) => {
-      const svc = new ForkActionsService({
-        cwd: process.env.JUST_DIR || './staking-modules',
-        env: {
-          CHAIN: widgetFullConfig.standConfig.justConfig.chain,
-          DEPLOY_CONFIG: widgetFullConfig.standConfig.justConfig.deployConfig,
-          ARTIFACTS_DIR: widgetFullConfig.standConfig.justConfig.artifactsDir,
-          RPC_URL: widgetFullConfig.standConfig.networkConfig.rpcUrl,
-        },
-      });
-      await use(svc);
+      const { nodeConfig, keysGeneratorConfig } = widgetFullConfig.standConfig;
+      await use(
+        new ForkActionsService({
+          rpcUrl: `http://${nodeConfig.host}:${nodeConfig.port}`,
+          chain: keysGeneratorConfig.chain as ChainName,
+          module: MODULE_NAME.CSM,
+        }),
+      );
     },
     { scope: 'worker' },
   ],
@@ -191,12 +189,17 @@ export const test = base.extend<
     { scope: 'worker' },
   ],
   ethereumSDK: [
-    async ({ secretPhrase }, use) => {
+    async ({ secretPhrase, useFork }, use) => {
+      const forkRpcURL = `http://${widgetFullConfig.standConfig.nodeConfig.host}:${widgetFullConfig.standConfig.nodeConfig.port}`;
+      const rpcUrl = useFork
+        ? forkRpcURL
+        : widgetFullConfig.standConfig.networkConfig.rpcUrl;
+
       await use(
-        new SdkService(
-          mnemonicToAccount(secretPhrase),
-          widgetFullConfig.standConfig.networkConfig,
-        ),
+        new SdkService(mnemonicToAccount(secretPhrase), {
+          ...widgetFullConfig.standConfig.networkConfig,
+          rpcUrl,
+        }),
       );
     },
     { scope: 'worker' },

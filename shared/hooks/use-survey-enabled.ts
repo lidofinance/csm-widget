@@ -9,7 +9,7 @@ import {
   subSeconds,
   subWeeks,
 } from 'date-fns';
-import { useNodeOperatorId, useOperatorInfo } from 'modules/web3';
+import { useHasNonWithdrawnKeys, useNodeOperatorId } from 'modules/web3';
 import { useDismiss } from './use-dismiss';
 import { useSurveysFilled } from './use-surveys-filled';
 import { useShowFlags } from './use-show-rule';
@@ -21,21 +21,19 @@ export const useSurveyEnabled = (skipClosed = false) => {
   const { IS_SURVEYS_ACTIVE } = useShowFlags();
 
   const nodeOperatorId = useNodeOperatorId();
-  const { data: hasNonWithdrawnKeys } = useOperatorInfo(
-    nodeOperatorId,
-    (info) => info.totalAddedKeys - info.totalWithdrawnKeys > 0,
-  );
+  const { data: hasNonWithdrawnKeys } = useHasNonWithdrawnKeys(nodeOperatorId);
 
   const { isDismissed, dismiss: onClose } = useDismiss(
     `surveys-cta-closed-${nodeOperatorId}`,
     end,
   );
 
-  const { data: filled } = useSurveysFilled(
-    IS_SURVEYS_ACTIVE && isActive && (!isDismissed || skipClosed)
-      ? nodeOperatorId
-      : undefined,
-  );
+  const { data: filled } = useSurveysFilled({
+    nodeOperatorId:
+      IS_SURVEYS_ACTIVE && isActive && (!isDismissed || skipClosed)
+        ? nodeOperatorId
+        : undefined,
+  });
 
   const variant: SurveyVariant | null =
     filled?.isFilled === false

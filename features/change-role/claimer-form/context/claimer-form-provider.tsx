@@ -16,7 +16,7 @@ export const ClaimerFormProvider: FC<PropsWithChildren> = ({ children }) => {
     ClaimerFormInputType,
     ClaimerFormNetworkData
   >(() => ({
-    isUnset: false,
+    intent: undefined,
     address: undefined,
   }));
 

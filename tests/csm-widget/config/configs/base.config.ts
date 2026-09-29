@@ -11,13 +11,6 @@ import { z } from 'zod';
 export type KeysGeneratorConfig = {
   chain: string;
   withdrawalCredentials: string;
-  password: string;
-};
-
-export type JustConfig = {
-  chain: NonNullable<NodeJS.ProcessEnv['CHAIN']>;
-  deployConfig: string;
-  artifactsDir: string;
 };
 
 export type StandConfig = {
@@ -46,7 +39,6 @@ export type StandConfig = {
     };
     stakingModuleIndex: number;
   };
-  justConfig: JustConfig;
   ipfsConfig: {
     gateway: `${string}/ipfs/`;
   };

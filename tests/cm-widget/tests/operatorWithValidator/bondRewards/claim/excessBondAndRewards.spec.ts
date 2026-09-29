@@ -1,13 +1,12 @@
 import { expect } from '@playwright/test';
 import { TOKENS } from '@lidofinance/lido-csm-sdk';
 import { qase } from 'playwright-qase-reporter/playwright';
-import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
 import { CLAIM_OPTION } from './claim.const';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -18,28 +17,23 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Excess bond & rewards',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let noId: number;
 
-    test.beforeAll(
-      async ({ useFork, cmSDK, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
+      snapshotId = await cmSDK.evmSnapshot();
 
-        snapshotId = await cmSDK.evmSnapshot();
-
-        await test.step('Set up: add excess bond and report rewards', async () => {
-          await widgetService.bondRewardsPage.claim.open();
-          noId = await widgetService.extractNodeOperatorId();
-          await forkActionService.addBond(noId, BOND_EXCESS_ETH);
-          await forkActionService.reportRewards();
-        });
-
+      await test.step('Set up: add excess bond and report rewards', async () => {
         await widgetService.bondRewardsPage.claim.open();
-      },
-    );
+        noId = await widgetService.extractNodeOperatorId();
+        await forkActionService.addBond(noId, BOND_EXCESS_ETH);
+        await forkActionService.reportRewards();
+      });
+
+      await widgetService.bondRewardsPage.claim.open();
+    });
 
     test.afterAll(async ({ cmSDK }) => {
       if (snapshotId) await cmSDK.evmRevert(snapshotId);

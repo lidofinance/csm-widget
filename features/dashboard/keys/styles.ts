@@ -24,6 +24,11 @@ export const ItemStyled = styled(StackStyle).attrs({
   justify-content: start;
 `;
 
+export const HeadStyled = styled(StackStyle).attrs({
+  $direction: 'column',
+  $gap: 'xs',
+})``;
+
 export const CountStyled = styled.b`
   font-size: 20px;
   font-weight: 700;

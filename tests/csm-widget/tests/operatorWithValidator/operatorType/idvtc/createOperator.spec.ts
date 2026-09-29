@@ -4,7 +4,7 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
-import { Tags, TokenSymbol } from 'tests/shared/consts/common.const';
+import { TokenSymbol } from 'tests/shared/consts/common.const';
 
 const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
@@ -14,21 +14,12 @@ test.describe(
     epic: EPIC.operatorType,
     feature: 'IDVTC',
     story: 'Create operator',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
 
     test.beforeAll(
-      async ({
-        useFork,
-        evmNode,
-        forkActionService,
-        widgetService,
-        secretPhrase,
-      }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
-
+      async ({ evmNode, forkActionService, widgetService, secretPhrase }) => {
         snapshotId = await evmNode.snapshot();
 
         await test.step('Issue IDVTC status to the connected address', async () => {

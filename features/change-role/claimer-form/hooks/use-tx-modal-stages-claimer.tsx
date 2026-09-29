@@ -10,11 +10,10 @@ import { zeroAddress } from 'viem';
 import { ClaimerFormInputType, ClaimerFormNetworkData } from '../context/types';
 
 const getTexts = (input: ClaimerFormInputType) => {
-  const claimerAddress = input.isUnset
-    ? zeroAddress
-    : (input.address ?? zeroAddress);
+  const claimerAddress =
+    input.intent === 'unset' ? zeroAddress : (input.address ?? zeroAddress);
 
-  return input.isUnset
+  return input.intent === 'unset'
     ? {
         sign: {
           title: 'You are unsetting Rewards claimer',

@@ -1,6 +1,6 @@
 import { PERCENT_BASIS, TOKENS } from '@lidofinance/lido-csm-sdk';
 import { Divider, Text } from '@lidofinance/lido-ui';
-import { BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
+import { BOND_DEBT_HELP, BOND_EXCESS, BOND_INSUFFICIENT } from 'consts/text';
 import { getNextDistribution, useFrameInfo } from 'modules/web3';
 import { FC, Fragment, ReactNode } from 'react';
 import { useFormState } from 'react-hook-form';
@@ -47,8 +47,7 @@ const useBondNegativeMetadata = () => {
     },
     debt: {
       title: 'Debt:',
-      tooltip:
-        'Outstanding penalty that exceeded your bond balance. Top up your bond to clear it.',
+      tooltip: BOND_DEBT_HELP,
       token: TOKENS.steth,
     },
   } as Record<

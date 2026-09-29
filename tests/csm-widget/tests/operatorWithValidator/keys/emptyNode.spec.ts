@@ -4,8 +4,9 @@ import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
-test.use({ secretPhrase: process.env.EMPTY_NODE_SECRET_PHRASE });
+test.use({ secretPhrase: PRESETS.EMPTY_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
@@ -38,10 +39,9 @@ test.describe(
       },
     );
 
-    test.skip(
+    test(
       qase(178, 'View keys page. Should present empty view for empty wallet'),
       async () => {
-        // !!! SKIPPED, BECAUSE RPC NOT STABLE FOR THIS CASE, SEE TICKET - CS-762
         await keysPage.keysView.open();
         await keysPage.keysView.page
           .getByText('View keys list')

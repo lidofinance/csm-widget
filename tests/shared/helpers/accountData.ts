@@ -9,8 +9,8 @@ import { getAddress } from 'viem';
  * EIP-55 checksum form, and Playwright text assertions are case-sensitive.
  * For filling inputs the default lowercase form is fine — viem accepts it.
  */
-export const generateAddress = (checksum = false) => {
-  const address = '0x' + randomBytes(20).toString('hex');
+export const generateAddress = (checksum = false): `0x${string}` => {
+  const address: `0x${string}` = `0x${randomBytes(20).toString('hex')}`;
   return checksum ? getAddress(address) : address;
 };
 

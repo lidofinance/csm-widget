@@ -1,7 +1,7 @@
 import { InlineLoader } from '@lidofinance/lido-ui';
 import { Tooltip } from 'shared/components';
 import { FC, ReactNode } from 'react';
-import { BalanceStyled, CountStyled, ItemStyled } from './styles';
+import { BalanceStyled, CountStyled, HeadStyled, ItemStyled } from './styles';
 
 type ItemProps = {
   title: string;
@@ -22,22 +22,25 @@ export const Item: FC<ItemProps> = ({
   const isEmptyCount = !count || typeof count === 'string';
   const secondary = variant === 'secondary' || isEmptyCount;
 
-  const body = (
-    <ItemStyled $secondary={secondary} {...params}>
+  const head = (
+    <HeadStyled>
       {title}
-      <CountStyled>
+      <CountStyled data-testid="itemCount">
         {count === undefined ? <InlineLoader /> : count}
       </CountStyled>
+    </HeadStyled>
+  );
+
+  return (
+    <ItemStyled $secondary={secondary} {...params}>
+      {tooltip ? (
+        <Tooltip placement="top" title={tooltip}>
+          {head}
+        </Tooltip>
+      ) : (
+        head
+      )}
       {balance !== undefined && <BalanceStyled>{balance}</BalanceStyled>}
     </ItemStyled>
   );
-
-  if (tooltip) {
-    return (
-      <Tooltip placement="top" title={tooltip}>
-        {body}
-      </Tooltip>
-    );
-  }
-  return body;
 };

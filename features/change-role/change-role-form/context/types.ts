@@ -5,11 +5,11 @@ import {
 } from '@lidofinance/lido-csm-sdk';
 import { Address } from 'viem';
 
-export type ChangeRoleIntent = 'submit' | 'revoke' | 'accept';
+export type ChangeRoleIntent = 'revoke' | 'accept';
 
 export type ChangeRoleFormInputType = {
   address?: Address;
-  intent: ChangeRoleIntent;
+  intent?: ChangeRoleIntent;
 };
 
 export type ChangeRoleFormNetworkData = {
@@ -18,6 +18,7 @@ export type ChangeRoleFormNetworkData = {
   nodeOperatorId: NodeOperatorId;
   extendedManagerPermissions: boolean;
   currentAddress: Address;
+  otherRoleAddress: Address;
   proposedAddress: Address;
   canEdit: boolean;
   invite: Pick<NodeOperatorInviteInfo, 'nodeOperatorId' | 'role'> | null;

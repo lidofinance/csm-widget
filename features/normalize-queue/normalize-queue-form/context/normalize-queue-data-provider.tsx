@@ -18,7 +18,7 @@ const useNormalizeQueueFormNetworkData: NetworkData<
 > = () => {
   const nodeOperatorId = useNodeOperatorId();
 
-  const infoQuery = useOperatorInfo(nodeOperatorId);
+  const infoQuery = useOperatorInfo({ nodeOperatorId });
   const ethBalanceQuery = useEthereumBalance();
 
   const info = infoQuery.data;

@@ -26,7 +26,7 @@ export const ChangeRoleFormProvider: FC<
     ChangeRoleFormInputType,
     ChangeRoleFormNetworkData
   >((data) => ({
-    intent: 'submit',
+    intent: undefined,
     address: mode === 'managerReset' ? data.address : undefined,
   }));
 
@@ -40,7 +40,7 @@ export const ChangeRoleFormProvider: FC<
   const submitter = useFlowSubmit(resolve);
 
   const handleReset = useCallback(() => {
-    formObject.reset({ intent: 'submit', address: undefined });
+    formObject.reset({ intent: undefined, address: undefined });
   }, [formObject]);
 
   return (

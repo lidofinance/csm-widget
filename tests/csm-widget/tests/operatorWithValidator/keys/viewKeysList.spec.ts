@@ -3,6 +3,7 @@ import { expect } from '@playwright/test';
 import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
 const keysStatusesExpectedComments = [
   {
@@ -28,6 +29,8 @@ const keysStatusesExpectedComments = [
   },
   // @TODO: Should to add more test data for other statuses
 ];
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({

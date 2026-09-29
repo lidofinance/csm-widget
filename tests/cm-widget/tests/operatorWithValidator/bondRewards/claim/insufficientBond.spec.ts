@@ -1,12 +1,11 @@
 import { expect } from '@playwright/test';
-import { Tags } from 'tests/shared/consts/common.const';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../../test.fixture';
 import { formatEther } from 'viem';
 import { CLAIM_OPTION } from './claim.const';
 import { EPIC, suite } from 'tests/cm-widget/consts/qase.const';
-import { PRESETS } from 'tests/cm-widget/config/walletSetup/walletPresets.state';
+import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -17,32 +16,27 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Insufficient bond',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
     let noId: number;
 
-    test.beforeAll(
-      async ({ useFork, cmSDK, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ cmSDK, forkActionService, widgetService }) => {
+      snapshotId = await cmSDK.evmSnapshot();
 
-        snapshotId = await cmSDK.evmSnapshot();
-
-        await test.step('Set up: report rewards, then make bond insufficient via penalty + settle', async () => {
-          await widgetService.bondRewardsPage.claim.open();
-          noId = await widgetService.extractNodeOperatorId();
-          await forkActionService.reportRewards();
-          const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));
-          // delta + 1 ETH ensures bond drops below required after settlement
-          const penaltyAmount = formatEther(bondBalance.delta + ONE_ETH);
-          await forkActionService.reportPenalty(noId, penaltyAmount);
-          await forkActionService.settlePenalty(noId);
-        });
-
+      await test.step('Set up: report rewards, then make bond insufficient via penalty + settle', async () => {
         await widgetService.bondRewardsPage.claim.open();
-      },
-    );
+        noId = await widgetService.extractNodeOperatorId();
+        await forkActionService.reportRewards();
+        const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));
+        // delta + 1 ETH ensures bond drops below required after settlement
+        const penaltyAmount = formatEther(bondBalance.delta + ONE_ETH);
+        await forkActionService.reportPenalty(noId, penaltyAmount);
+        await forkActionService.settlePenalty(noId);
+      });
+
+      await widgetService.bondRewardsPage.claim.open();
+    });
 
     test.afterAll(async ({ cmSDK }) => {
       if (snapshotId) await cmSDK.evmRevert(snapshotId);
@@ -74,27 +68,18 @@ test.describe(
 
     test(
       qase(320, 'Should show correct option descriptions'),
-      async ({ widgetService, cmSDK }) => {
+      async ({ widgetService }) => {
         const { claim } = widgetService.bondRewardsPage;
-        const bondBalance = await cmSDK.operator.getBondBalance(BigInt(noId));
-        const rewards = await cmSDK.getRewards(noId);
 
-        await test.step('"Claim All" is enabled, selected by default, description reflects deficit vs rewards', async () => {
+        // The deficit exceeds the reported rewards, so nothing reaches the
+        // Rewards Address and "Claim All" stays disabled.
+        await test.step('"Claim All" option is disabled', async () => {
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
-          ).toBeEnabled({ timeout: PAGE_WAIT_TIMEOUT });
-          await expect(
-            claim.getClaimOptionRadio(CLAIM_OPTION.ALL_TO_RA),
-          ).toBeChecked();
-
-          const expectedDescription =
-            parseFloat(formatEther(bondBalance.delta)) >=
-            parseFloat(rewards.available)
-              ? 'All Rewards will compensate the Insufficient Bond'
-              : 'Compensate the Insufficient Bond and claim Rewards';
+          ).toBeDisabled({ timeout: PAGE_WAIT_TIMEOUT });
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.ALL_TO_RA),
-          ).toHaveText(expectedDescription);
+          ).toHaveText('Claim both Excess Bond and Rewards');
         });
 
         await test.step('"Excess Bond" option is disabled (no excess to claim)', async () => {
@@ -106,13 +91,13 @@ test.describe(
           ).toHaveText('Claim only Excess Bond. Rewards remain unclaimed.');
         });
 
-        await test.step('"Rewards to Bond" is enabled, not checked, description reads "Compensate the Insufficient Bond"', async () => {
+        await test.step('"Rewards to Bond" is enabled and selected by default', async () => {
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toBeEnabled();
           await expect(
             claim.getClaimOptionRadio(CLAIM_OPTION.REWARDS_TO_BOND),
-          ).not.toBeChecked();
+          ).toBeChecked();
           await expect(
             claim.getClaimOptionDescription(CLAIM_OPTION.REWARDS_TO_BOND),
           ).toHaveText('Compensate the Insufficient Bond');

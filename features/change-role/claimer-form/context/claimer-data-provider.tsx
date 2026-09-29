@@ -15,7 +15,7 @@ import { type ClaimerFormNetworkData } from './types';
 
 const useClaimerFormNetworkData: NetworkData<ClaimerFormNetworkData> = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const claimerQuery = useCustomRewardsClaimer(nodeOperatorId);
+  const claimerQuery = useCustomRewardsClaimer({ nodeOperatorId });
   const canEdit = useCanEditClaimer();
 
   const currentClaimerAddress =

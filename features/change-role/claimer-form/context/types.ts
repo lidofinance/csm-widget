@@ -1,9 +1,11 @@
 import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
 import { Address } from 'viem';
 
+export type ClaimerIntent = 'unset';
+
 export type ClaimerFormInputType = {
   address?: Address;
-  isUnset: boolean;
+  intent?: ClaimerIntent;
 };
 
 export type ClaimerFormNetworkData = {

@@ -10,6 +10,9 @@ import {
   isDayInPast,
 } from 'utils/format-date';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
+import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+
+test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
 test.describe(
   ...suite({
@@ -18,6 +21,21 @@ test.describe(
     story: 'Latest reward distribution',
   }),
   async () => {
+    let snapshotId: string;
+
+    test.beforeAll(async ({ csmSDK, forkActionService, widgetService }) => {
+      snapshotId = await csmSDK.evmSnapshot();
+
+      await test.step('Set up: report rewards', async () => {
+        await widgetService.dashboardPage.open();
+        await forkActionService.reportRewards();
+      });
+    });
+
+    test.afterAll(async ({ csmSDK }) => {
+      if (snapshotId) await csmSDK.evmRevert(snapshotId);
+    });
+
     test.beforeEach(async ({ widgetService }) => {
       await widgetService.dashboardPage.open();
     });

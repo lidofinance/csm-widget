@@ -10,6 +10,7 @@ type Props = {
 
 export const DkgAddFileButton: FC<Props> = ({ onClick, loading, disabled }) => (
   <ButtonIcon
+    data-testid="dkgAddFileButton"
     icon={<Plus />}
     variant="translucent"
     size="xs"

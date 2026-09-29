@@ -1,26 +1,30 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { queryOptions } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK } from '../web3-provider';
+import {
+  OperatorHookArgs,
+  OperatorQueryArgs,
+  useOperatorQuery,
+} from './use-operator-query';
 
 export const KEY_IS_LOCK_EXPIRED = ['is-lock-expired'];
 
-export const useIsLockExpired = (
-  nodeOperatorId: NodeOperatorId | undefined,
-) => {
-  const { operator, core } = useSmSDK();
-
-  return useQuery({
-    queryKey: [
-      ...KEY_IS_LOCK_EXPIRED,
-      { nodeOperatorId, module: core.moduleName },
-    ],
-    ...STRATEGY_CONSTANT,
-    queryFn: () => {
-      invariant(nodeOperatorId !== undefined);
-      return operator.isLockExpired(nodeOperatorId);
-    },
-    enabled: nodeOperatorId !== undefined,
-  });
-};
+export const useIsLockExpired = <TData = boolean>(
+  args: OperatorHookArgs<boolean, TData>,
+) =>
+  useOperatorQuery(
+    ({ sdk, nodeOperatorId }: OperatorQueryArgs) =>
+      queryOptions({
+        queryKey: [
+          ...KEY_IS_LOCK_EXPIRED,
+          { nodeOperatorId, module: sdk?.core.moduleName },
+        ],
+        ...STRATEGY_CONSTANT,
+        queryFn: () => {
+          invariant(sdk && nodeOperatorId !== undefined);
+          return sdk.operator.isLockExpired(nodeOperatorId);
+        },
+        enabled: !!sdk && nodeOperatorId !== undefined,
+      }),
+    args,
+  );

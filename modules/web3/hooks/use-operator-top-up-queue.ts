@@ -10,10 +10,13 @@ import { CsmFamilySDK, useSmSDK } from '../web3-provider';
 
 export const KEY_OPERATOR_TOP_UP_QUEUE = ['operator-top-up-queue'];
 
-export const useOperatorTopUpQueue = <TData = OperatorTopUpQueue>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: OperatorTopUpQueue) => TData,
-) => {
+export const useOperatorTopUpQueue = <TData = OperatorTopUpQueue>({
+  nodeOperatorId,
+  select,
+}: {
+  nodeOperatorId: NodeOperatorId | undefined;
+  select?: (data: OperatorTopUpQueue) => TData;
+}) => {
   const sdk = useSmSDK() as CsmFamilySDK;
   const enabled =
     TOPUP_QUEUE_MODULES.has(sdk.core.moduleName) &&

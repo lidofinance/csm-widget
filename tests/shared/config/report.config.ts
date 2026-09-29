@@ -5,8 +5,6 @@ export const SENSITIVE_ENV_KEYS = [
   'RPC_URL_TOKEN',
   'WALLET_SECRET_PHRASE',
   'WALLET_PASSWORD',
-  'EMPTY_SECRET_PHRASE',
-  'EMPTY_NODE_SECRET_PHRASE',
   'QASE_API_TOKEN',
   'SLACK_WEBHOOK_URL',
   'WC_PROJECT_ID',
@@ -59,7 +57,6 @@ export const getTestRunName = () => {
       process.env.GH_EVENT_NAME === 'schedule' ? 'Schedule Run' : 'Auto Run'
     } ` +
     `[s:@${process.env.TEST_SUITE || 'ALL'}] ` +
-    `[st:@${process.env.STAND_TYPE || '-'}] ` +
     `[t:${process.env.TEST_TAGS || '-'}] ` +
     `[b:${getBranchName()}]` +
     `[w:${process.env.WALLET_NAME || 'walletconnect'}]`
@@ -79,8 +76,7 @@ export const getBranchName = () => {
 export const getTestRunDescription = () => {
   return (
     `Github run link: ${process.env.GH_ACTION_URL}\n` +
-    `Stand url: ${widgetFullConfig.standConfig.standUrl}\n` +
-    `Env: ${process.env.STAND_TYPE}`
+    `Stand url: ${widgetFullConfig.standConfig.standUrl}`
   );
 };
 
@@ -148,7 +144,6 @@ const reporters: {
           tags: [
             `ci_event:${process.env.GH_EVENT_NAME || 'none'}`,
             `suite:${process.env.TEST_SUITE || 'ALL'}`,
-            `stand:${process.env.STAND_TYPE || '-'}`,
             `tags:${process.env.TEST_TAGS || '-'}`,
             `branch:${getBranchName()}`,
             `wallet:${process.env.WALLET_NAME || 'walletconnect'}`,

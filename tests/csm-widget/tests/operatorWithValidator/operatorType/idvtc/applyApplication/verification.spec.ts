@@ -4,7 +4,6 @@ import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { mnemonicToAccount, generateMnemonic } from 'viem/accounts';
 import { wordlist as english } from '@scure/bip39/wordlists/english.js';
-import { Tags } from 'tests/shared/consts/common.const';
 
 const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
@@ -23,30 +22,25 @@ test.describe(
     epic: EPIC.operatorType,
     feature: 'IDVTC',
     story: 'Apply. Member verification',
-    tag: [Tags.forked],
   }),
   () => {
     let snapshotId: string;
 
-    test.beforeAll(
-      async ({ useFork, evmNode, forkActionService, widgetService }) => {
-        test.skip(!useFork, 'Test suite runs only on forked network');
+    test.beforeAll(async ({ evmNode, forkActionService, widgetService }) => {
+      snapshotId = await evmNode.snapshot();
 
-        snapshotId = await evmNode.snapshot();
+      await test.step('Make cluster member addresses ICS-approved', async () => {
+        await forkActionService.setGateAddrs(
+          'ics',
+          ...memberAccounts.map((account) => account.address),
+        );
+      });
 
-        await test.step('Make cluster member addresses ICS-approved', async () => {
-          await forkActionService.setGateAddrs(
-            'ics',
-            ...memberAccounts.map((account) => account.address),
-          );
-        });
-
-        await widgetService.setFeatureFlag('icsApplyForm', true);
-        const { signInForm } = widgetService.operatorType.dvtApplicationForm;
-        await widgetService.operatorType.dvtApplicationForm.open();
-        await signInForm.signIn();
-      },
-    );
+      await widgetService.setFeatureFlag('icsApplyForm', true);
+      const { signInForm } = widgetService.operatorType.dvtApplicationForm;
+      await widgetService.operatorType.dvtApplicationForm.open();
+      await signInForm.signIn();
+    });
 
     test.beforeEach(async ({ widgetService }) => {
       await test.step('Reset persisted form and reopen', async () => {

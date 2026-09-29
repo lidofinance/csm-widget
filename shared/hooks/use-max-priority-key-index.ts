@@ -20,7 +20,7 @@ export const useMaxPriorityKeyIndex = () => {
   const { data: priorityKeys } = useDepositQueueBatches(
     countPriorityKeys(nodeOperatorId),
   );
-  const { data: operatorInfo } = useOperatorInfo(nodeOperatorId);
+  const { data: operatorInfo } = useOperatorInfo({ nodeOperatorId });
 
   return (operatorInfo?.totalDepositedKeys ?? 0) + (priorityKeys ?? 0) - 1;
 };

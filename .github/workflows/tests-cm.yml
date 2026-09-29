@@ -1,0 +1,79 @@
+name: Test CM-widget
+run-name: CM-widget Tests. Env [${{ github.event.schedule == '0 5 * * *' && 'prod' || inputs.stand_type || 'testnet' }}]
+on:
+  schedule:
+    - cron: "0 5 * * *" # Every day at 5 AM UTC: prod + smoke
+    - cron: "0 6 * * *" # Every day at 6 AM UTC: testnet + "-"
+  workflow_dispatch:
+    inputs:
+      stand_type:
+        description: "Stand type"
+        required: true
+        type: choice
+        default: testnet
+        options:
+          - testnet
+          - preview
+          - prod
+          - staging
+      tags:
+        description: "Tags for running test suite"
+        required: false
+        type: choice
+        default: "-"
+        options:
+          - "-"
+          - smoke
+      preview_stand_url:
+        description: 'Preview stand url (only if "Stand type" is "preview")'
+        required: false
+        type: string
+      preview_stand_env:
+        description: 'Preview stand env (only if "Stand type" is "preview")'
+        required: false
+        type: choice
+        default: testnet
+        options:
+          - testnet
+          - infra
+
+  workflow_call:
+    inputs:
+      preview_stand_url:
+        required: false
+        type: string
+        description: Stand url
+      stand_type:
+        description: "Stand type"
+        required: true
+        type: string
+      tags:
+        required: false
+        type: string
+        default: "-"
+        description: "Test tags"
+      report_enabled:
+        description: "Enable slack report."
+        required: false
+        type: boolean
+        default: false
+      job_custom_name:
+        description: "Human-readable name of the calling job, used as the Slack report title."
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  test:
+    name: CM widget
+    uses: ./.github/workflows/e2e-tests.yml
+    secrets: inherit
+    with:
+      module: cm
+      stand_type: ${{ github.event.schedule == '0 5 * * *' && 'prod' || inputs.stand_type || 'testnet' }}
+      test_tags: ${{ github.event.schedule == '0 5 * * *' && 'smoke' || inputs.tags || '-' }}
+      qase_project_id: CM
+      preview_stand_url: ${{ inputs.preview_stand_url || github.event.inputs.preview_stand_url || '' }}
+      preview_stand_env: ${{ github.event.inputs.preview_stand_env || '' }}
+      report_enabled: ${{ inputs.report_enabled || false }}
+      job_custom_name: ${{ inputs.job_custom_name || 'CM widget' }}

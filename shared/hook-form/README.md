@@ -64,7 +64,7 @@ import {
 
 const useMyFormNetworkData: NetworkData<MyFormNetworkData> = () => {
   const ethBalanceQuery = useEthereumBalance();
-  const bondQuery = useOperatorBalance();
+  const bondQuery = useOperatorBalance({ nodeOperatorId });
 
   const revalidate = useCallback(() => {
     invalidate([ethBalanceQuery.queryKey, bondQuery.queryKey]);

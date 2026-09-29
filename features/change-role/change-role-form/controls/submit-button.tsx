@@ -1,19 +1,11 @@
-import { useCallback } from 'react';
-import { useFormContext } from 'react-hook-form';
 import { Note } from 'shared/components';
 import { SubmitButtonHookForm } from 'shared/hook-form/controls';
-import { type ChangeRoleFormInputType, useChangeRoleFlow } from '../context';
+import { useChangeRoleFlow } from '../context';
 import { useRole } from '../hooks/use-role';
 
 export const SubmitButton = () => {
   const role = useRole();
   const flow = useChangeRoleFlow();
-  const { setValue } = useFormContext<ChangeRoleFormInputType>();
-
-  // TODO: move this to somethere ?
-  const clickHandle = useCallback(() => {
-    setValue('intent', 'submit');
-  }, [setValue]);
 
   const title =
     flow.action === 'manager-reset'
@@ -24,10 +16,7 @@ export const SubmitButton = () => {
 
   return (
     <>
-      <SubmitButtonHookForm
-        disableIfClean={flow.action !== 'manager-reset'}
-        onClick={clickHandle}
-      >
+      <SubmitButtonHookForm disableIfClean={flow.action !== 'manager-reset'}>
         {title}
       </SubmitButtonHookForm>
       {flow.action === 'propose' && (

@@ -9,6 +9,10 @@ export const EPIC = {
     name: 'Navigation',
     features: [],
   },
+  cache: {
+    name: 'Cache',
+    features: [],
+  },
   createOperator: {
     name: 'Create operator',
     features: ['New operator', 'Additional operator'],

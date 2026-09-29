@@ -30,7 +30,7 @@ const config: PlaywrightTestConfig = {
     actionTimeout: 15000,
     screenshot: { fullPage: true, mode: 'only-on-failure' },
     baseURL: widgetFullConfig.standConfig.standUrl,
-    trace: 'on-first-retry',
+    trace: process.env.CI ? 'on-first-retry' : 'on',
     permissions: ['clipboard-read'],
     contextOptions: {
       reducedMotion: 'reduce',
@@ -44,7 +44,7 @@ const config: PlaywrightTestConfig = {
       grep: prepareGrep(process.env.TEST_TAGS),
       use: {
         // @ts-expect-error because pw doesnt have custom types
-        useFork: process.env.USE_FORK === 'true',
+        useFork: true,
       },
     },
   ],

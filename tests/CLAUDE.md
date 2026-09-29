@@ -100,7 +100,6 @@ test.describe(
     epic: EPIC.bondRewards,
     feature: 'Claim',
     story: 'Penalty',
-    tag: [Tags.forked],
   }),
   () => { ... },
 );
@@ -173,9 +172,9 @@ an epic, too broad for a generic leaf to lean on. Without a feature level the st
 the specifics itself: `Create operator / Curated operator transaction`.
 
 **A story names the scenario, never the environment.** `Apply. Cluster members on fork` said where
-the test runs; `tag: [Tags.forked]` already says that. Two files that differ only by environment
-differ by scenario too — the fork is what makes the positive path reachable — so name them by what
-they check: `Apply. Cluster members` (filling, validation, rejections) next to
+the test runs, which is noise: every suite runs against the fork, so there is no other environment
+to distinguish. Two files that differ only by environment differ by scenario too, so name them by
+what they check: `Apply. Cluster members` (filling, validation, rejections) next to
 `Apply. Member verification` (a member actually verified) and `Apply. Submit happy path`.
 
 **Split a form's own behaviour from its transaction.** A story called `Form` covers everything and
@@ -214,8 +213,7 @@ Qase; the reporter itself never reads `test.tags`. Do not call `qase.tags()` by 
 ### Traps
 
 - **Runtime calls are lost on skip.** `qase.tags()` / `qase.parameters()` / `qase.fields()` attach
-  metadata while the test body runs, so a test skipped in `beforeAll` (`test.skip(!useFork)`)
-  reports none of it. Suite levels survive — they are static annotations read at collection.
+  metadata while the test body runs, so a test skipped in `beforeAll` reports none of it. Suite levels survive — they are static annotations read at collection.
 - **No suite at all falls back to the file path.** Without annotations the reporter uses
   `test.titlePath()`, which is where the file-shaped tree in Qase comes from.
 - **Fixtures must destructure their first argument.** `async ({}, use) => {}`, never

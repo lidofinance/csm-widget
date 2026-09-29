@@ -25,7 +25,7 @@ const useAddBondFormNetworkData: NetworkData<AddBondFormNetworkData> = () => {
   const ethBalanceQuery = useEthereumBalance();
   const stethBalanceQuery = useStethBalance();
   const wstethBalanceQuery = useWstethBalance();
-  const bondQuery = useOperatorBalance(nodeOperatorId);
+  const bondQuery = useOperatorBalance({ nodeOperatorId });
   const maxStakeEthQuery = useStakeLimit();
 
   const ethBalance = ethBalanceQuery.data;

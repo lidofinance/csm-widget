@@ -1,4 +1,5 @@
 export * from './address-validation';
+export * from './aggregate-operators-overview';
 export * from './bigint-utils';
 export * from './bond-curve';
 export * from './calculate-available-to-claim';
@@ -35,6 +36,7 @@ export * from './hash-key';
 export * from './is-hexadecimal-string';
 export * from './is-truthy';
 export * from './is-url';
+export * from './keys-breakdown';
 export * from './logger';
 export * from './nprogress';
 export * from './path';

@@ -10,8 +10,7 @@ import { useClaimerFormData } from './claimer-data-provider';
 import { ClaimerFormInputType, ClaimerFormNetworkData } from './types';
 
 export type ClaimerFlow =
-  | { action: 'view' }
-  | ({ action: 'set-claimer' } & Executable);
+  { action: 'view' } | ({ action: 'set-claimer' } & Executable);
 
 export const useClaimerFlowResolver = (): FlowResolver<
   ClaimerFormInputType,
@@ -28,9 +27,10 @@ export const useClaimerFlowResolver = (): FlowResolver<
       return {
         action: 'set-claimer' as const,
         submit: () => {
-          const claimerAddress = input.isUnset
-            ? zeroAddress
-            : (input.address ?? zeroAddress);
+          const claimerAddress =
+            input.intent === 'unset'
+              ? zeroAddress
+              : (input.address ?? zeroAddress);
 
           return sdk.roles.setCustomRewardsClaimer({
             nodeOperatorId: data.nodeOperatorId,

@@ -1,28 +1,32 @@
-import { NodeOperatorId, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
+import { queryOptions } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { useSmSDK } from '../web3-provider';
+import {
+  OperatorHookArgs,
+  OperatorQueryArgs,
+  useOperatorQuery,
+} from './use-operator-query';
 
 export const KEY_OPERATOR_INFO = ['operator-info'];
 
-export const useOperatorInfo = <TData = NodeOperatorInfo>(
-  nodeOperatorId: NodeOperatorId | undefined,
-  select?: (data: NodeOperatorInfo) => TData,
-) => {
-  const { operator, core } = useSmSDK();
-
-  return useQuery({
+export const operatorInfoQueryOptions = ({
+  sdk,
+  nodeOperatorId,
+}: OperatorQueryArgs) =>
+  queryOptions({
     queryKey: [
       ...KEY_OPERATOR_INFO,
-      { nodeOperatorId, module: core.moduleName },
+      { nodeOperatorId, module: sdk?.core.moduleName },
     ],
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
-      invariant(nodeOperatorId !== undefined);
-      return await operator.getInfo(nodeOperatorId);
+      invariant(sdk && nodeOperatorId !== undefined);
+      return await sdk.operator.getInfo(nodeOperatorId);
     },
-    enabled: nodeOperatorId !== undefined,
-    select,
+    enabled: !!sdk && nodeOperatorId !== undefined,
   });
-};
+
+export const useOperatorInfo = <TData = NodeOperatorInfo>(
+  args: OperatorHookArgs<NodeOperatorInfo, TData>,
+) => useOperatorQuery(operatorInfoQueryOptions, args);
