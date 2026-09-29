@@ -26,6 +26,11 @@ export class ProdConfig extends BaseConfig {
         host: '127.0.0.1',
         port: forkPort('mainnet'),
       },
+      mockConfig: {
+        urls: {
+          csmSurveysApi: 'https://csm-survey-api.lido.tools',
+        },
+      },
       monitoringConfig: {
         urls: {
           beaconchain: 'https://beaconcha.in',

@@ -5,7 +5,6 @@ import { LidoSDKClient } from '../services/cmSDK.client';
 import { IpfsNodeService } from 'tests/shared/services/ipfsNode.service';
 import { setupPresets } from 'tests/shared/config/walletSetup';
 import { assertForkAlive } from 'tests/shared/contracts/forkActions.service';
-import type { ChainName } from 'tests/shared/contracts/constants';
 import { walletSetup } from './walletSetup';
 
 export default async function globalSetup() {
@@ -17,7 +16,7 @@ export default async function globalSetup() {
     );
   }
 
-  const { nodeConfig, keysGeneratorConfig } = widgetFullConfig.standConfig;
+  const { nodeConfig } = widgetFullConfig.standConfig;
   const forkRpcURL = `http://${nodeConfig.host}:${nodeConfig.port}`;
 
   if (process.env.CI) {
@@ -33,8 +32,5 @@ export default async function globalSetup() {
 
   await assertForkAlive(forkRpcURL);
 
-  await setupPresets(walletSetup, {
-    rpcUrl: forkRpcURL,
-    chain: keysGeneratorConfig.chain as ChainName,
-  });
+  await setupPresets(walletSetup, { rpcUrl: forkRpcURL });
 }
