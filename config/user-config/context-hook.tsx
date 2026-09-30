@@ -1,5 +1,6 @@
 import { useMemo, useState, useCallback } from 'react';
 
+import { qaToolsEnabled } from '../qa-tools';
 import { getUserConfigDefault } from './utils';
 import { UserConfigDefaultType } from './types';
 import {
@@ -19,7 +20,7 @@ export type UserConfigContextType = UserConfigDefaultType & {
 
 export const useUserConfigContext = () => {
   const [restoredSettings, setLocalStorage] = useLocalStorage(
-    STORAGE_USER_CONFIG,
+    qaToolsEnabled ? STORAGE_USER_CONFIG : undefined,
     DEFAULT_STATE,
   );
 
