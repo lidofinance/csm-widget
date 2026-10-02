@@ -1,7 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
-import { fetchAcrossModules } from '../fetch-across-modules';
 import { useLidoSDK } from '../web3-provider';
 import { useDappStatus } from './use-dapp-status';
 import { ModuleInvite } from './types';
@@ -19,9 +18,17 @@ export const useInvites = (customAddress?: Address) => {
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       invariant(address);
-      return fetchAcrossModules(sm, 'invite discovery', (sdk) =>
-        sdk.discovery.getNodeOperatorsByProposedAddress(address),
-      ) as Promise<ModuleInvite[]>;
+      const refs = await sm.discovery.getNodeOperatorsByProposedAddress(
+        address,
+        {
+          onModuleError: (module, error) =>
+            console.warn(`${module} invite discovery failed`, error),
+        },
+      );
+      return refs.map(({ module, invite }): ModuleInvite => ({
+        ...invite,
+        module,
+      }));
     },
     enabled: !!address,
   });

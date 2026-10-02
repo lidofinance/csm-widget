@@ -39,7 +39,7 @@ export const useAcceptInviteFlowResolver = (): FlowResolver<
         submit: async () => {
           invariant(invite !== undefined, 'Invite is not defined');
 
-          const sdk = sm[invite.module];
+          const sdk = sm.get(invite.module);
           invariant(sdk, `${invite.module} SDK not initialized`);
 
           const { result } = await sdk.roles.confirmAddress({

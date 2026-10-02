@@ -1,5 +1,4 @@
-import fs from 'fs';
-import path from 'path';
+import { loadDevnetArtifacts } from './devnet-artifacts.mjs';
 import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
 import { toBoolean } from './scripts/to-boolean.mjs';
@@ -15,16 +14,9 @@ const developmentMode = process.env.NODE_ENV === 'development';
 const isIPFSMode = toBoolean(process.env.IPFS_MODE);
 const maintenance = toBoolean(process.env.MAINTENANCE); // TODO: load from runtime config
 
-// Load devnet contract addresses from JSON file if specified
-let devnetAddresses = null;
-if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
-  try {
-    const filePath = path.resolve(process.env.DEVNET_ADDRESSES_FILE_PATH);
-    devnetAddresses = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  } catch (e) {
-    console.warn('Failed to load devnet addresses:', e.message);
-  }
-}
+const devnetArtifacts = process.env.DEVNET_ADDRESSES_FILE_PATH
+  ? loadDevnetArtifacts(process.env.DEVNET_ADDRESSES_FILE_PATH)
+  : null;
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
@@ -279,6 +271,6 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
-    devnetAddresses,
+    devnetArtifacts,
   },
 });

@@ -4,6 +4,7 @@ import {
   CONTRACT_NAMES,
   CURATED_GATES,
   MODULE_NAME,
+  OverridedAddresses,
 } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
 
@@ -61,12 +62,39 @@ const moduleOfArtifacts = (json: DevnetJson): MODULE_NAME | undefined =>
       ? MODULE_NAME.CSM
       : undefined;
 
-export const overridedAddressesByModule:
-  | Partial<Record<MODULE_NAME, Partial<Record<CONTRACT_NAMES, Address>>>>
-  | undefined = (() => {
-  if (!config.devnetAddresses) return undefined;
-  const artifactsModule = moduleOfArtifacts(config.devnetAddresses);
-  return artifactsModule
-    ? { [artifactsModule]: parseDevnetAddresses(config.devnetAddresses) }
-    : undefined;
-})();
+const isModuleName = (value: string): value is MODULE_NAME =>
+  (Object.values(MODULE_NAME) as string[]).includes(value);
+
+// CSM and CSM_02 artifacts both contain CSModule, so detection can't tell them apart
+const resolveModule = (
+  prefix: string | null,
+  artifacts: DevnetJson,
+): MODULE_NAME | undefined => {
+  if (prefix === null) return moduleOfArtifacts(artifacts);
+  return isModuleName(prefix) ? prefix : undefined;
+};
+
+const buildDevnetOverridedAddresses = (): OverridedAddresses | undefined => {
+  const result: OverridedAddresses = {};
+
+  for (const { module: prefix, artifacts } of config.devnetArtifacts ?? []) {
+    const moduleName = resolveModule(prefix, artifacts);
+    if (!moduleName) {
+      console.warn(
+        `Devnet addresses: no module for ${prefix ?? 'unprefixed'} entry, add a valid MODULE= prefix, skipped`,
+      );
+      continue;
+    }
+    if (result[moduleName]) {
+      console.warn(
+        `Devnet addresses: duplicate ${moduleName} entry, last one wins`,
+      );
+    }
+    result[moduleName] = parseDevnetAddresses(artifacts);
+  }
+
+  return Object.keys(result).length > 0 ? result : undefined;
+};
+
+export const devnetOverridedAddresses: OverridedAddresses | undefined =
+  buildDevnetOverridedAddresses();

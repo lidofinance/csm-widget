@@ -44,7 +44,6 @@ test.describe(
 
         const nodeOperatorId = await widgetService.extractNodeOperatorId();
 
-        cmSDK.core.invalidateCache();
         const bondSummary = await cmSDK.getBondSummary(nodeOperatorId);
         const rewards = await cmSDK.getRewards(nodeOperatorId);
 

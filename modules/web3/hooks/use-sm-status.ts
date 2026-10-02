@@ -33,7 +33,7 @@ export const useSmStatus = (module?: MODULE_NAME) => {
 /** No module → supported only if every deployed module is. */
 export const useSmVersionSupported = (module?: MODULE_NAME) => {
   const { sm } = useLidoSDK();
-  const target = module ? [sm[module]] : Object.values(sm);
+  const target = module ? [sm.get(module)] : [...sm.modules.values()];
 
   return useQuery({
     queryKey: [

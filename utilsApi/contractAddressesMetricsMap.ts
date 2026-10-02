@@ -2,8 +2,8 @@ import {
   COMMON_ADDRESSES,
   CONTRACT_BASE_ABI,
   CONTRACT_NAMES,
-  MODULE_CONFIG,
-  MODULE_NAME,
+  getContractAddresses,
+  getDeployedModules,
   SUPPORTED_CHAINS,
 } from '@lidofinance/lido-csm-sdk';
 import { CHAINS, LidoLocatorAbi } from '@lidofinance/lido-ethereum-sdk';
@@ -21,8 +21,7 @@ import { mainnet } from 'viem/chains';
 
 import { ENSUniversalResolverAbi } from 'abi/ens-universal-resolver-abi';
 import { config } from 'config';
-import { resolveDeployedModules } from 'consts/modules/resolve-deployed-modules';
-import { overridedAddressesByModule } from 'modules/web3/web3-provider/devnet';
+import { devnetOverridedAddresses } from 'modules/web3/web3-provider/devnet';
 import { AggregatorAbi } from 'abi/aggregator-abi';
 
 const AlL_CONTRACT_NAMES = {
@@ -63,18 +62,6 @@ const STATIC_ADDRESSES: {
   },
 };
 
-// CSM and CSM_02 share contract names on the same chain, so addresses are collected
-// per module rather than merged into one name -> address map before inverting.
-const getModuleAddresses = (
-  module: MODULE_NAME,
-  chainId: SUPPORTED_CHAINS,
-): Partial<Record<CONTRACT_NAMES, Address>> => ({
-  ...MODULE_CONFIG[module][chainId]?.contractAddresses,
-  ...(chainId === config.defaultChain
-    ? overridedAddressesByModule?.[module]
-    : undefined),
-});
-
 const getChainAddressEntries = (
   chainId: SUPPORTED_CHAINS,
 ): [Address, AlL_CONTRACT_NAMES][] => {
@@ -85,8 +72,17 @@ const getChainAddressEntries = (
     ...staticAddresses,
   }) as [AlL_CONTRACT_NAMES, Address][];
 
-  const moduleEntries = resolveDeployedModules(chainId).flatMap((module) =>
-    Object.entries(getModuleAddresses(module, chainId)).map(
+  const moduleEntries = getDeployedModules(chainId).flatMap((module) =>
+    Object.entries(
+      getContractAddresses({
+        moduleName: module,
+        chainId,
+        overridedAddresses:
+          chainId === config.defaultChain
+            ? devnetOverridedAddresses
+            : undefined,
+      }),
+    ).map(
       ([name, address]) =>
         [name, staticAddresses[name as AlL_CONTRACT_NAMES] ?? address] as [
           AlL_CONTRACT_NAMES,

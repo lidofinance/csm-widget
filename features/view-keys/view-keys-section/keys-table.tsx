@@ -1,5 +1,5 @@
 import {
-  ALLOCATED_BALANCE_MODULES,
+  MODULE_PROFILE,
   KEY_STATUS,
   KeyWithStatus,
   OperatorTopUpQueue,
@@ -43,7 +43,7 @@ export const KeysTable: FC = () => {
   });
 
   const showStrikes = isCsmFamily;
-  const showBalance = ALLOCATED_BALANCE_MODULES.has(module);
+  const showBalance = MODULE_PROFILE[module].allocatedBalance;
 
   return (
     <TableStyle $strikes={showStrikes} $balance={showBalance}>

@@ -50,7 +50,10 @@ declare module 'next/config' {
     publicRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
-      devnetAddresses: Record<string, unknown> | null;
+      devnetArtifacts: Array<{
+        module: string | null;
+        artifacts: Record<string, unknown>;
+      }> | null;
     };
   };
 

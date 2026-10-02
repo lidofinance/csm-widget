@@ -1,7 +1,7 @@
 import {
   NodeOperatorId,
   OperatorTopUpQueue,
-  TOPUP_QUEUE_MODULES,
+  MODULE_PROFILE,
 } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
@@ -20,7 +20,7 @@ export const useOperatorTopUpQueue = <TData = OperatorTopUpQueue>({
   const sdk = useSmSDK() as CsmFamilySDK | undefined;
   const enabled =
     !!sdk &&
-    TOPUP_QUEUE_MODULES.has(sdk.core.moduleName) &&
+    MODULE_PROFILE[sdk.core.moduleName].topUpQueue &&
     nodeOperatorId !== undefined;
 
   return useQuery({

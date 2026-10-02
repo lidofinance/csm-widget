@@ -6,7 +6,10 @@ import { formatEther } from 'viem';
 import { parseDevnetAddresses } from './devnet';
 
 export class LidoSDKClient extends LidoSDKCm {
-  constructor(rpcUrls: string[], devnetAddresses: Record<string, string>) {
+  constructor(
+    rpcUrls: string[],
+    devnetAddresses: Record<string, unknown> | null,
+  ) {
     const core = new LidoSDKCore({
       chainId: widgetFullConfig.standConfig.networkConfig.chainId,
       rpcUrls,
