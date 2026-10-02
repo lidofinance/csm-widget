@@ -22,7 +22,7 @@ export const useMyOperatorsOverview = () => {
   const keys = useQueries({
     queries: operators.map((op) =>
       operatorKeysQueryOptions({
-        sdk: sm[op.module],
+        sdk: sm.get(op.module),
         nodeOperatorId: op.nodeOperatorId,
       }),
     ),
@@ -30,7 +30,7 @@ export const useMyOperatorsOverview = () => {
   const bonds = useQueries({
     queries: operators.map((op) =>
       operatorBalanceQueryOptions({
-        sdk: sm[op.module],
+        sdk: sm.get(op.module),
         nodeOperatorId: op.nodeOperatorId,
       }),
     ),
@@ -38,7 +38,7 @@ export const useMyOperatorsOverview = () => {
   const rewards = useQueries({
     queries: operators.map((op) =>
       operatorRewardsQueryOptions({
-        sdk: sm[op.module],
+        sdk: sm.get(op.module),
         nodeOperatorId: op.nodeOperatorId,
       }),
     ),
@@ -46,7 +46,7 @@ export const useMyOperatorsOverview = () => {
   const feeSplits = useQueries({
     queries: operators.map((op) =>
       operatorFeeSplitsQueryOptions({
-        sdk: sm[op.module],
+        sdk: sm.get(op.module),
         nodeOperatorId: op.nodeOperatorId,
       }),
     ),

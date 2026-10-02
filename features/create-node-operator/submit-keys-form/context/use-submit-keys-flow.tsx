@@ -1,6 +1,6 @@
 import {
   getNodeOperatorRoles,
-  type LidoSDKCsm,
+  MODULE_NAME,
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts';
@@ -13,7 +13,7 @@ import { TxStageMembersSignin } from 'features/idvtc/members/tx-stages/tx-stage-
 import { keepsManageRole } from 'features/idvtc/members/utils/keeps-manage-role';
 import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
 import { operatorKey } from 'modules/surveys-sdk';
-import { type CsmFamilySDK, useAppendOperator, useSmSDK } from 'modules/web3';
+import { useAppendOperator, useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -42,9 +42,8 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   SubmitKeysFlow
 > => {
   const { targetModule } = useSubmitKeysFormData();
-  // targetModule is a CSM | CSM_02 union; the overloads only discriminate
-  // on literal module arguments.
-  const sdk = useSmSDK(targetModule) as CsmFamilySDK | undefined;
+  const sdk = useSmSDK(targetModule);
+  const csmSdk = useSmSDK(MODULE_NAME.CSM);
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
@@ -135,14 +134,16 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
           const addNodeOperator = async () => {
             if (data.type === OPERATOR_TYPE.CSM_ICS) {
               invariant(data.proof, 'ICS proof is required to create');
-              return (sdk as LidoSDKCsm).icsGate.addNodeOperator({
+              invariant(csmSdk, 'CSM SDK is required for ICS');
+              return csmSdk.icsGate.addNodeOperator({
                 ...params,
                 proof: data.proof,
               });
             }
             if (data.type === OPERATOR_TYPE.CSM_IDVTC) {
               invariant(data.proof, 'IDVTC proof is required to create');
-              return (sdk as LidoSDKCsm).idvtcGate.addNodeOperator({
+              invariant(csmSdk, 'CSM SDK is required for IDVTC');
+              return csmSdk.idvtcGate.addNodeOperator({
                 ...params,
                 proof: data.proof,
               });
@@ -217,6 +218,7 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
     },
     [
       sdk,
+      csmSdk,
       appendNO,
       setOperatorCustomAddresses,
       n,

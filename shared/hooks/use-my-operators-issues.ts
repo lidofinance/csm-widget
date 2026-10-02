@@ -16,7 +16,7 @@ export const useMyOperatorsIssues = () => {
   return useQueries({
     queries: operators.map((op) => ({
       ...operatorKeysQueryOptions({
-        sdk: sm[op.module],
+        sdk: sm.get(op.module),
         nodeOperatorId: op.nodeOperatorId,
       }),
       select: hasIssues,

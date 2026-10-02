@@ -33,7 +33,7 @@ export const useOtherOperatorsClaimable = (): OtherOperatorClaimable[] => {
   const bonds = useQueries({
     queries: others.map((op) =>
       operatorBalanceQueryOptions({
-        sdk: sm[op.module],
+        sdk: sm.get(op.module),
         nodeOperatorId: op.nodeOperatorId,
       }),
     ),
@@ -41,7 +41,7 @@ export const useOtherOperatorsClaimable = (): OtherOperatorClaimable[] => {
   const rewards = useQueries({
     queries: others.map((op) =>
       operatorRewardsQueryOptions({
-        sdk: sm[op.module],
+        sdk: sm.get(op.module),
         nodeOperatorId: op.nodeOperatorId,
       }),
     ),
@@ -49,7 +49,7 @@ export const useOtherOperatorsClaimable = (): OtherOperatorClaimable[] => {
   const feeSplits = useQueries({
     queries: others.map((op) =>
       operatorFeeSplitsQueryOptions({
-        sdk: sm[op.module],
+        sdk: sm.get(op.module),
         nodeOperatorId: op.nodeOperatorId,
       }),
     ),

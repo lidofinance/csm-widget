@@ -17,19 +17,19 @@ const UNSAFE_CHARS = /[<>&\u2028\u2029]/g;
  *   feesMonitoringApiUrl: string | undefined;
  *   surveysApiUrl: string | undefined;
  *   ipfsGateways: string[];
- *   devnetAddresses: Record<string, unknown> | null;
+ *   devnetArtifacts: import('../scripts/load-devnet-artifacts.mjs').DevnetArtifactsEntry[] | null;
  * }} ClientEnv
  */
 
 /**
  * Browser-visible config; server.mjs serves it as `window.__env__`.
  * @param {Record<string, string | undefined>} [env]
- * @param {{ devnetAddresses?: Record<string, unknown> | null }} [options]
+ * @param {{ devnetArtifacts?: ClientEnv['devnetArtifacts'] }} [options]
  * @returns {ClientEnv}
  */
 export const buildClientEnv = (
   env = process.env,
-  { devnetAddresses = null } = {},
+  { devnetArtifacts = null } = {},
 ) => ({
   matomoHost: env.MATOMO_URL,
   defaultChain: parseInt(env.DEFAULT_CHAIN, 10) || DEFAULT_CHAIN,
@@ -42,7 +42,7 @@ export const buildClientEnv = (
   feesMonitoringApiUrl: env.FEES_MONITORING_API_URL,
   surveysApiUrl: env.SURVEYS_API_URL,
   ipfsGateways: parseUrlList(env.IPFS_GATEWAYS),
-  devnetAddresses,
+  devnetArtifacts,
 });
 
 /**

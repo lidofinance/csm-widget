@@ -13,7 +13,7 @@ describe('buildClientEnv', () => {
       feesMonitoringApiUrl: undefined,
       surveysApiUrl: undefined,
       ipfsGateways: [],
-      devnetAddresses: null,
+      devnetArtifacts: null,
     });
   });
 
@@ -34,10 +34,10 @@ describe('buildClientEnv', () => {
     });
   });
 
-  it('passes devnet addresses through', () => {
-    const devnetAddresses = { CSModule: '0x01' };
-    expect(buildClientEnv({}, { devnetAddresses }).devnetAddresses).toBe(
-      devnetAddresses,
+  it('passes devnet artifacts through', () => {
+    const devnetArtifacts = [{ module: null, artifacts: { CSModule: '0x01' } }];
+    expect(buildClientEnv({}, { devnetArtifacts }).devnetArtifacts).toBe(
+      devnetArtifacts,
     );
   });
 

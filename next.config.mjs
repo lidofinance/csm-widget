@@ -7,7 +7,6 @@ import {
 // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
 const basePath = process.env.BASE_PATH;
 
-
 // cache control
 export const CACHE_CONTROL_PAGES = [
   // documents — statically prerendered, same HTML for every visitor; uncovered

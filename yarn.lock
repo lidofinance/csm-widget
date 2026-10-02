@@ -2322,10 +2322,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/github-summary-reporter/-/github-summary-reporter-1.0.0.tgz#12351a4bb3be8f2f189620e41fe579e5f98c2548"
   integrity sha512-i+OKGONoS8CH9SGAVlz/zmB/VLddldaCE9f8UH7KA5pzVtDQ++8LCHxac1HKwguqPzF5dllq3pTuXkbIH+spiw==
 
-"@lidofinance/lido-csm-sdk@3.0.2":
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-3.0.2.tgz#267e7314e596c7762f3c8d7be1d03012bfbd31ef"
-  integrity sha512-iQTqAutoAvKMyVCadADp3qLojhSgy6Qt4DOtX4CLXPMsY7JTfxb1KjAp4G3m1QLiG0b03A/K/iQV2GT13n2wHg==
+"@lidofinance/lido-csm-sdk@4.0.0-alpha.1":
+  version "4.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-4.0.0-alpha.1.tgz#06e0355f2eef02118b8b9da94b0811c33ef1c5fb"
+  integrity sha512-fayg2oJA1s5G53L8numT6I6eBA6J65nKN1rmHFA1BXVVrlAkD6zEv63yI4a/2wLjqeadQiBp35+2gilyu/Uavg==
   dependencies:
     "@chainsafe/ssz" "^1.7.0"
     "@openzeppelin/merkle-tree" "^1.0.8"

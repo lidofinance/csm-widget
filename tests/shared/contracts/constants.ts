@@ -3,7 +3,7 @@ import {
   CONTRACT_NAMES,
   COMMON_ADDRESSES,
   MODULE_CONFIG,
-  MODULE_CONTRACT,
+  MODULE_PROFILE,
   MODULE_NAME,
 } from '@lidofinance/lido-csm-sdk';
 
@@ -53,7 +53,7 @@ export const addresses = (
   const contracts = MODULE_CONFIG[module][CHAIN_ID[chain]]?.contractAddresses;
   if (!contracts) return undefined;
 
-  const moduleAddress = contracts[MODULE_CONTRACT[module]];
+  const moduleAddress = contracts[MODULE_PROFILE[module].moduleContract];
 
   const accounting = contracts[CONTRACT_NAMES.accounting];
   if (!moduleAddress || !accounting) return undefined;

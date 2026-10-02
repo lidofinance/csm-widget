@@ -1,6 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
-import invariant from 'tiny-invariant';
 import { useLidoSDK } from '../web3-provider';
 import { fetchSmStatus } from './use-sm-status';
 
@@ -9,14 +8,10 @@ export const useDeployedModulesStatus = () => {
   const { sm } = useLidoSDK();
 
   const results = useQueries({
-    queries: Object.entries(sm).map(([module, sdk]) => ({
+    queries: [...sm.modules].map(([module, sdk]) => ({
       queryKey: ['sm-status', { module }],
       ...STRATEGY_CONSTANT,
-      queryFn: () => {
-        invariant(sdk);
-        return fetchSmStatus(sdk);
-      },
-      enabled: !!sdk,
+      queryFn: () => fetchSmStatus(sdk),
     })),
   });
 
