@@ -3,7 +3,6 @@ import { useContext } from 'react';
 import { NodeOperatorContext } from './node-operator-provider';
 
 export const useModule = () => {
-  // Non-throwing: also rendered above NodeOperatorProvider (GateSupported fallbacks), where "no module" is the right answer.
   const { activeModule: module } = useContext(NodeOperatorContext) ?? {};
   return {
     module,

@@ -49,11 +49,11 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                 ) : (
                   <Web3Provider>
                     <AddressValidationProvider>
-                      <GateSupported>
-                        <NodeOperatorProvider>
-                          <ModalProvider>
-                            <SelectOperatorWatcher />
-                            <SurveysAuthProvider>
+                      <NodeOperatorProvider>
+                        <ModalProvider>
+                          <SelectOperatorWatcher />
+                          <SurveysAuthProvider>
+                            <GateSupported>
                               {skipWatcher ? (
                                 children
                               ) : (
@@ -61,10 +61,10 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                                   {children}
                                 </AlertsWatcherProvider>
                               )}
-                            </SurveysAuthProvider>
-                          </ModalProvider>
-                        </NodeOperatorProvider>
-                      </GateSupported>
+                            </GateSupported>
+                          </SurveysAuthProvider>
+                        </ModalProvider>
+                      </NodeOperatorProvider>
                     </AddressValidationProvider>
                   </Web3Provider>
                 )}

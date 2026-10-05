@@ -1,5 +1,6 @@
 import { InlineLoader } from '@lidofinance/lido-ui';
 import {
+  useModule,
   useNodeOperatorId,
   useOperatorInfo,
   useOperatorKeysWithStatus,
@@ -15,8 +16,12 @@ import {
 } from 'features/group/shared';
 
 export const StakeAndKeys: FC = () => {
+  const { module } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: stakeSummary } = useOperatorStakeSummary({ nodeOperatorId });
+  const { data: stakeSummary } = useOperatorStakeSummary({
+    nodeOperatorId,
+    module,
+  });
   const { data: info } = useOperatorInfo({ nodeOperatorId });
   const { data: keys } = useOperatorKeysWithStatus({ nodeOperatorId });
 

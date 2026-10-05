@@ -65,7 +65,10 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
               await n(PATH.HOME);
               appendNO({ ...result, module: MODULE_NAME.CM });
             } else {
-              setOperatorCustomAddresses(result.nodeOperatorId);
+              setOperatorCustomAddresses({
+                nodeOperatorId: result.nodeOperatorId,
+                module: MODULE_NAME.CM,
+              });
             }
           }
         },

@@ -15,10 +15,13 @@ import { KeysItem } from './keys-item';
 import { AccordionStyle } from './styles';
 
 export const KeysBreakdown: FC = () => {
-  const { isCM, isCsmFamily } = useModule();
+  const { module, isCM, isCsmFamily } = useModule();
   const nodeOperatorId = useNodeOperatorId();
   const { data } = useKeysBreakdown({ nodeOperatorId });
-  const { data: stakeSummary } = useOperatorStakeSummary({ nodeOperatorId });
+  const { data: stakeSummary } = useOperatorStakeSummary({
+    nodeOperatorId,
+    module,
+  });
   const { data: info } = useOperatorInfo({ nodeOperatorId });
 
   const moreKeys = useMemo(() => {

@@ -57,7 +57,6 @@ export const useActiveSmSDK = <M extends MODULE_NAME>(
   module: M,
 ): SmSDKFor<M> | undefined => {
   const { sm } = useLidoSDK();
-  // Read without throwing: also called above NodeOperatorProvider (e.g. GateSupported).
   const operatorCtx = useContext(NodeOperatorContext);
   return module === operatorCtx?.activeModule ? sm.get(module) : undefined;
 };
@@ -73,7 +72,6 @@ export function useSmSDK<M extends MODULE_NAME>(
 // eslint-disable-next-line func-style
 export function useSmSDK(...args: [module?: MODULE_NAME]) {
   const { sm } = useLidoSDK();
-  // Read without throwing: also called above NodeOperatorProvider (e.g. GateSupported).
   const operatorCtx = useContext(NodeOperatorContext);
   // Only the zero-arg form means "active module"; an explicit undefined means "no module".
   if (args.length === 0) {

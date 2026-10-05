@@ -4,14 +4,13 @@ import { useCallback } from 'react';
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { Plus } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
-import { OperatorRef, useModule } from 'modules/web3';
+import { OperatorRef } from 'modules/web3';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { Stack } from 'shared/components';
 import { LocalLink } from 'shared/navigate';
 import { RoleBadge } from '../role-badge/role-badge';
-import { CmSwitchList } from './cm-switch-list';
-import { OperatorRow } from './operator-row';
+import { SwitchList } from './switch-list';
 import { StyledStack, StyledStackItem } from './styles';
 
 export const SwitchModal: ModalComponentType<{
@@ -20,7 +19,6 @@ export const SwitchModal: ModalComponentType<{
   canCreate: boolean;
   onChange: (operator: OperatorRef) => void;
 }> = ({ onClose, active, list, onChange, canCreate, ...props }) => {
-  const { isCM } = useModule();
   const handleSwitch = useCallback(
     (operator: OperatorRef) => {
       onChange(operator);
@@ -32,26 +30,7 @@ export const SwitchModal: ModalComponentType<{
   return (
     <Modal title="Switch Node Operator" onClose={onClose} {...props}>
       <Stack direction="column" gap="lg">
-        {isCM ? (
-          <CmSwitchList active={active} list={list} onSwitch={handleSwitch} />
-        ) : (
-          <Stack direction="column" gap="sm">
-            {list.map((item) => (
-              <OperatorRow
-                key={`${String(item.nodeOperatorId)}-${item.module}`}
-                nodeOperatorId={item.nodeOperatorId}
-                shortInfo={item}
-                action={
-                  item.nodeOperatorId === active.nodeOperatorId &&
-                  item.module === active.module
-                    ? 'current'
-                    : 'switch'
-                }
-                onSwitch={handleSwitch}
-              />
-            ))}
-          </Stack>
-        )}
+        <SwitchList active={active} list={list} onSwitch={handleSwitch} />
         {canCreate && (
           <LocalLink href={PATH.CREATE}>
             <ButtonIcon icon={<Plus />} fullwidth size="sm" variant="outlined">

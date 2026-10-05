@@ -39,7 +39,6 @@ export * from './use-operator-info';
 export * from './use-operator-is-owner';
 export * from './use-operator-keys-with-issues';
 export * from './use-operator-keys-with-status';
-export * from './use-operator-keys-with-strikes';
 export * from './use-operator-keys-with-wrong-fee-recipient';
 export * from './use-operator-last-rewards';
 export * from './use-operator-metadata';

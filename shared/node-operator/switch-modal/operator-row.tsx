@@ -32,6 +32,7 @@ export type OperatorAction = 'current' | 'switch' | 'view';
 
 type OperatorRowProps = {
   nodeOperatorId: NodeOperatorId;
+  module: MODULE_NAME;
   shortInfo?: ModuleNodeOperator;
   stakeSummary?: SubOperatorStakeSummary;
   action: OperatorAction;
@@ -40,6 +41,7 @@ type OperatorRowProps = {
 
 export const OperatorRow: FC<OperatorRowProps> = ({
   nodeOperatorId,
+  module,
   shortInfo,
   stakeSummary,
   action,
@@ -47,10 +49,9 @@ export const OperatorRow: FC<OperatorRowProps> = ({
 }) => {
   const { address } = useDappStatus();
 
-  // Fetch the curve only for non-available operators (no shortInfo); rows in
-  // this list are always CM (groups are CM-only).
+  // Fetch the curve only for non-available operators (no shortInfo)
   const { data: fetchedCurve } = useOperatorCurveId(
-    shortInfo ? undefined : { nodeOperatorId, module: MODULE_NAME.CM },
+    shortInfo ? undefined : { nodeOperatorId, module },
   );
   const curve = shortInfo ?? fetchedCurve;
 
@@ -58,10 +59,10 @@ export const OperatorRow: FC<OperatorRowProps> = ({
   const roles = shortInfo ? getNodeOperatorRoles(shortInfo, address) : [];
 
   // Metadata (CM-specific, cached)
-  const { data: metadata } = useOperatorMetadata({ nodeOperatorId });
+  const { data: metadata } = useOperatorMetadata({ nodeOperatorId, module });
 
   // Operator info for stake computation
-  const { data: info } = useOperatorInfo({ nodeOperatorId });
+  const { data: info } = useOperatorInfo({ nodeOperatorId, module });
 
   const stakeData = useMemo(
     () =>
