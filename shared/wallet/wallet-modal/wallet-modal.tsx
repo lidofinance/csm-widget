@@ -45,7 +45,12 @@ export const WalletModal: ModalComponentType = ({ onClose, ...props }) => {
   if (!address) return null;
 
   return (
-    <Modal title="Account" onClose={onClose} {...props}>
+    <Modal
+      title="Account"
+      onClose={onClose}
+      data-testid="walletModal"
+      {...props}
+    >
       <WalletModalContentStyle>
         <WalletModalConnectedStyle>
           {connectorName && (

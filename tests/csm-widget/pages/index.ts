@@ -4,4 +4,5 @@ export * from './main.page';
 export * from './monitoring.page';
 export * from './welcome.page';
 export * from './settings.page';
+export * from './surveys.page';
 export * from './myOperators.page';
