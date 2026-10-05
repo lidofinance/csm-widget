@@ -1,20 +1,20 @@
-import { SubOperatorStakeSummary } from '@lidofinance/lido-csm-sdk';
+import {
+  MODULE_NAME,
+  SubOperatorStakeSummary,
+} from '@lidofinance/lido-csm-sdk';
 import { useQueries } from '@tanstack/react-query';
-import { STRATEGY_CONSTANT } from 'consts';
 import { useMemo } from 'react';
-import { useActiveOperatorSDK } from 'modules/web3/web3-provider';
-import { KEY_OPERATOR_INFO } from 'modules/web3/hooks/use-operator-info';
+import { useSmSDK } from 'modules/web3/web3-provider';
+import { operatorInfoQueryOptions } from 'modules/web3/hooks/use-operator-info';
 import { computeStakeData, StakeAndKeysData } from 'utils';
 
 export const useAggregatedStake = (operators: SubOperatorStakeSummary[]) => {
-  const { operator } = useActiveOperatorSDK();
+  const sdk = useSmSDK(MODULE_NAME.CM);
 
   const infoQueries = useQueries({
-    queries: operators.map((op) => ({
-      queryKey: [...KEY_OPERATOR_INFO, { nodeOperatorId: op.nodeOperatorId }],
-      ...STRATEGY_CONSTANT,
-      queryFn: () => operator.getInfo(op.nodeOperatorId),
-    })),
+    queries: operators.map((op) =>
+      operatorInfoQueryOptions({ sdk, nodeOperatorId: op.nodeOperatorId }),
+    ),
   });
 
   const isPending = infoQueries.some((q) => q.isPending);

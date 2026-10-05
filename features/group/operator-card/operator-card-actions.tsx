@@ -1,4 +1,8 @@
-import { NodeOperatorId, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
+import {
+  MODULE_NAME,
+  NodeOperatorId,
+  NodeOperatorInfo,
+} from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { PATH } from 'consts/urls';
@@ -6,6 +10,7 @@ import { useNodeOperator } from 'modules/web3';
 import { useDappStatus } from 'modules/web3/hooks/use-dapp-status';
 import { FC, useCallback } from 'react';
 import { LocalLink } from 'shared/navigate';
+import { isSameOperator } from 'shared/node-operator';
 import { useOpenOperatorSwitchModal } from 'shared/node-operator/switch-modal';
 import { trackMatomoEvent } from 'utils';
 import { isAddressEqual } from 'viem';
@@ -30,7 +35,10 @@ export const OperatorCardActions: FC<Props> = ({
     openModal();
   }, [openModal]);
 
-  const isCurrentOperator = nodeOperator?.nodeOperatorId === nodeOperatorId;
+  const isCurrentOperator = isSameOperator(
+    { nodeOperatorId, module: MODULE_NAME.CM },
+    nodeOperator,
+  );
 
   const isManagerByCurrentWallet =
     !!address && !!info && isAddressEqual(info.managerAddress, address);

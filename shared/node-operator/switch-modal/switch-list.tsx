@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { InlineLoader, Text } from '@lidofinance/lido-ui';
 import { OperatorRef } from 'modules/web3';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
@@ -7,21 +8,22 @@ import { GroupSection } from './group-section';
 import { OperatorRow } from './operator-row';
 import { useGroupedOperators } from './use-grouped-operators';
 
-type CmSwitchListProps = {
+type SwitchListProps = {
   active: ModuleNodeOperator;
   list: ModuleNodeOperator[];
   onSwitch: (operator: OperatorRef) => void;
 };
 
-export const CmSwitchList: FC<CmSwitchListProps> = ({
-  active,
-  list,
-  onSwitch,
-}) => {
+export const SwitchList: FC<SwitchListProps> = ({ active, list, onSwitch }) => {
   const { groups, ungrouped, isPending } = useGroupedOperators(list);
 
   const availableMap = useMemo(
-    () => new Map(list.map((op) => [op.nodeOperatorId, op])),
+    () =>
+      new Map(
+        list
+          .filter((op) => op.module === MODULE_NAME.CM)
+          .map((op) => [op.nodeOperatorId, op]),
+      ),
     [list],
   );
 
@@ -35,7 +37,7 @@ export const CmSwitchList: FC<CmSwitchListProps> = ({
         <GroupSection
           key={String(group.groupId)}
           group={group}
-          activeId={active.nodeOperatorId}
+          active={active}
           availableMap={availableMap}
           onSwitch={onSwitch}
         />
@@ -50,11 +52,13 @@ export const CmSwitchList: FC<CmSwitchListProps> = ({
           )}
           {ungrouped.map((op) => (
             <OperatorRow
-              key={String(op.nodeOperatorId)}
+              key={`${op.module}-${op.nodeOperatorId}`}
               nodeOperatorId={op.nodeOperatorId}
+              module={op.module}
               shortInfo={op}
               action={
-                op.nodeOperatorId === active.nodeOperatorId
+                op.nodeOperatorId === active.nodeOperatorId &&
+                op.module === active.module
                   ? 'current'
                   : 'switch'
               }

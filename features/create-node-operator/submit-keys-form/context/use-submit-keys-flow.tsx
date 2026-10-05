@@ -210,7 +210,10 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             if (roles.length > 0) {
               appendNO({ ...result, module: data.targetModule });
             } else {
-              setOperatorCustomAddresses(result.nodeOperatorId);
+              setOperatorCustomAddresses({
+                nodeOperatorId: result.nodeOperatorId,
+                module: data.targetModule,
+              });
             }
           }
         },

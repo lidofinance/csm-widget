@@ -1,5 +1,5 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { useDappStatus } from 'modules/web3';
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { OperatorRef, useDappStatus } from 'modules/web3';
 import { useCallback, useMemo } from 'react';
 import { useSessionStorage } from 'shared/hooks';
 import { Address, isAddressEqual } from 'viem';
@@ -9,6 +9,7 @@ const STORAGE_KEY = 'operator-custom-address';
 
 type StoredValue = {
   nodeOperatorId: string; // serialized bigint
+  module?: MODULE_NAME;
   address: Address;
   timestamp: number;
 };
@@ -21,21 +22,25 @@ export const useOperatorCustomAddresses = () => {
     undefined,
   );
 
-  const nodeOperatorId = useMemo(() => {
-    if (!stored?.nodeOperatorId) return undefined;
+  const operator = useMemo((): OperatorRef | undefined => {
+    if (!stored?.nodeOperatorId || !stored.module) return undefined;
     if (!walletAddress || !isAddressEqual(stored.address, walletAddress))
       return undefined;
     if (Date.now() - stored.timestamp > EXPIRY_MS) return undefined;
-    return BigInt(stored.nodeOperatorId);
+    return {
+      nodeOperatorId: BigInt(stored.nodeOperatorId),
+      module: stored.module,
+    };
   }, [stored, walletAddress]);
 
   const setOperatorCustomAddresses = useCallback(
-    (id: NodeOperatorId | undefined) => {
-      if (id === undefined || !walletAddress) {
+    (ref: OperatorRef | undefined) => {
+      if (!ref || !walletAddress) {
         setStored(undefined);
       } else {
         setStored({
-          nodeOperatorId: id.toString(),
+          nodeOperatorId: ref.nodeOperatorId.toString(),
+          module: ref.module,
           address: walletAddress,
           timestamp: Date.now(),
         });
@@ -44,5 +49,5 @@ export const useOperatorCustomAddresses = () => {
     [walletAddress, setStored],
   );
 
-  return [nodeOperatorId, setOperatorCustomAddresses] as const;
+  return [operator, setOperatorCustomAddresses] as const;
 };

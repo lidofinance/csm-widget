@@ -12,6 +12,7 @@ import {
   useDappStatus,
   useOperatorKeysWithWrongFeeRecipient,
 } from 'modules/web3/hooks';
+import { operatorKey } from 'modules/surveys-sdk/api/url';
 import { useRouter } from 'next/router';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import {
@@ -33,7 +34,7 @@ import { useAlertWatcher } from './use-alert-watcher';
 
 export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { closeAlert } = useAlertActions();
-  const { isCsmFamily } = useModule();
+  const { module, isCsmFamily } = useModule();
   const { IS_NODE_OPERATOR } = useShowFlags();
 
   const { isSupportedChain } = useDappStatus();
@@ -67,7 +68,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
     isDismissed: isFeeRecipientAlertDismissed,
     dismiss: dismissFeeRecipientAlert,
   } = useDismiss(
-    `alert-fee-recipient-dismissed-${nodeOperatorId}`,
+    `alert-fee-recipient-dismissed-${operatorKey(module, nodeOperatorId)}`,
     ALERT_FEE_RECIPIENT_DISMISS_HOURS,
   );
 

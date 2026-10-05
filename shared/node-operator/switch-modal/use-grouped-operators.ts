@@ -6,7 +6,7 @@ import { useQueries } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import { ModuleNodeOperator } from 'modules/web3/operator-provider/types';
 import { useMemo } from 'react';
-import { useActiveSmSDK } from 'modules/web3/web3-provider';
+import { useSmSDK } from 'modules/web3/web3-provider';
 import { KEY_OPERATOR_GROUP_ID } from 'modules/web3/hooks/use-operator-group-id';
 import { KEY_OPERATOR_GROUP_SUMMARY } from 'modules/web3/hooks/use-operator-group-stake-summary';
 
@@ -27,15 +27,21 @@ export type GroupedOperatorsResult = {
 export const useGroupedOperators = (
   list: ModuleNodeOperator[],
 ): GroupedOperatorsResult => {
-  const sdk = useActiveSmSDK(MODULE_NAME.CM);
+  const sdk = useSmSDK(MODULE_NAME.CM);
 
-  // Stage 1: fetch groupId per operator
+  // Groups exist only in CM; ids of other modules must not be looked up there
+  const cmOps = useMemo(
+    () => (sdk ? list.filter((op) => op.module === MODULE_NAME.CM) : []),
+    [sdk, list],
+  );
+
+  // Stage 1: fetch groupId per CM operator
   const groupIdResults = useQueries({
     queries: sdk
-      ? list.map((op) => ({
+      ? cmOps.map((op) => ({
           queryKey: [
             ...KEY_OPERATOR_GROUP_ID,
-            { nodeOperatorId: op.nodeOperatorId },
+            { nodeOperatorId: op.nodeOperatorId, module: MODULE_NAME.CM },
           ],
           ...STRATEGY_CONSTANT,
           queryFn: () => sdk.metaRegistry.getOperatorGroupId(op.nodeOperatorId),
@@ -48,7 +54,7 @@ export const useGroupedOperators = (
 
   // Derive unique groups and partition operators
   const { groupRepresentatives, ungroupedOps } = useMemo(() => {
-    if (stage1Pending || !sdk) {
+    if (stage1Pending) {
       return {
         groupRepresentatives: [] as {
           groupId: bigint;
@@ -61,8 +67,10 @@ export const useGroupedOperators = (
     const groupSet = new Map<bigint, bigint>(); // groupId → first operatorId
     const ungrouped: ModuleNodeOperator[] = [];
 
-    list.forEach((op, i) => {
-      const groupId = groupIdResults[i]?.data;
+    let cmIndex = 0;
+    list.forEach((op) => {
+      const isCm = !!sdk && op.module === MODULE_NAME.CM;
+      const groupId = isCm ? groupIdResults[cmIndex++]?.data : undefined;
       if (groupId) {
         if (!groupSet.has(groupId)) {
           groupSet.set(groupId, op.nodeOperatorId);
@@ -84,7 +92,7 @@ export const useGroupedOperators = (
       ungroupedOps: ungrouped,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stage1Pending, stage1UpdatedAt, sdk]);
+  }, [stage1Pending, stage1UpdatedAt, sdk, list]);
 
   // Stage 2: fetch group stake summaries for unique groups
   const groupSummaryResults = useQueries({
@@ -93,7 +101,10 @@ export const useGroupedOperators = (
         ? groupRepresentatives.map((rep) => ({
             queryKey: [
               ...KEY_OPERATOR_GROUP_SUMMARY,
-              { nodeOperatorId: rep.representativeId },
+              {
+                nodeOperatorId: rep.representativeId,
+                module: MODULE_NAME.CM,
+              },
             ],
             ...STRATEGY_CONSTANT,
             queryFn: () =>
@@ -113,7 +124,7 @@ export const useGroupedOperators = (
   const groups = useMemo(() => {
     if (stage1Pending || stage2Pending || !sdk) return [];
 
-    const availableIdSet = new Set(list.map((op) => op.nodeOperatorId));
+    const availableIdSet = new Set(cmOps.map((op) => op.nodeOperatorId));
 
     return groupRepresentatives
       .map((rep, i) => {
@@ -142,14 +153,12 @@ export const useGroupedOperators = (
       })
       .filter((g): g is OperatorGroupData => g !== undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stage1Pending, stage2Pending, stage2UpdatedAt, sdk]);
+  }, [stage1Pending, stage2Pending, stage2UpdatedAt, sdk, cmOps]);
 
   return {
     groups,
     ungrouped: ungroupedOps,
     isPending:
-      !sdk ||
-      stage1Pending ||
-      (groupRepresentatives.length > 0 && stage2Pending),
+      stage1Pending || (groupRepresentatives.length > 0 && stage2Pending),
   };
 };

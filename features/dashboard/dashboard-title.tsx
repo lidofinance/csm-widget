@@ -25,7 +25,11 @@ const CmTitle: FC = () => {
   const {
     nodeOperator: { nodeOperatorId },
   } = useNodeOperator<true>();
-  const { data: metadata, isPending } = useOperatorMetadata({ nodeOperatorId });
+  const { module } = useModule();
+  const { data: metadata, isPending } = useOperatorMetadata({
+    nodeOperatorId,
+    module,
+  });
   const { IS_NODE_OPERATOR } = useShowFlags();
 
   if (isPending) return <ModuleTitle />;

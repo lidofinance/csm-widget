@@ -1,4 +1,8 @@
-import { useNodeOperatorId, useOperatorGroupStakeSummary } from 'modules/web3';
+import {
+  useModule,
+  useNodeOperatorId,
+  useOperatorGroupStakeSummary,
+} from 'modules/web3';
 import { FC } from 'react';
 import { WhenLoaded } from 'shared/components';
 import { GroupSummary } from './group-summary';
@@ -6,8 +10,12 @@ import { GroupGrid } from './styles';
 import { OperatorCard } from './operator-card';
 
 export const Group: FC = () => {
+  const { module } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { data, isPending } = useOperatorGroupStakeSummary({ nodeOperatorId });
+  const { data, isPending } = useOperatorGroupStakeSummary({
+    nodeOperatorId,
+    module,
+  });
 
   return (
     <WhenLoaded loading={isPending} empty={!data && <>No Group</>}>
