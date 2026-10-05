@@ -1,18 +1,64 @@
 import { test } from '@playwright/test';
 import { widgetFullConfig } from '../config';
-import { LidoSDKCsm } from '@lidofinance/lido-csm-sdk';
+import {
+  LidoSDKCsm,
+  LidoSDKCsm02,
+  MODULE_CONFIG,
+  MODULE_NAME,
+  SUPPORTED_CHAINS,
+} from '@lidofinance/lido-csm-sdk';
 import { LidoSDKCore } from '@lidofinance/lido-ethereum-sdk';
-import { formatEther } from 'viem';
+import { formatEther, isAddressEqual, type Address } from 'viem';
 
 export class LidoSDKClient extends LidoSDKCsm {
+  private readonly sdkCore: LidoSDKCore;
+  private readonly ipfsGateways: string[];
+
   constructor(rpcUrls: string[]) {
     const core = new LidoSDKCore({
       chainId: widgetFullConfig.standConfig.networkConfig.chainId,
       rpcUrls,
     });
-    super({
-      core,
-      ipfsGateways: [`${widgetFullConfig.standConfig.ipfsConfig.gateway}{cid}`],
+    const ipfsGateways = [
+      `${widgetFullConfig.standConfig.ipfsConfig.gateway}{cid}`,
+    ];
+    super({ core, ipfsGateways });
+    this.sdkCore = core;
+    this.ipfsGateways = ipfsGateways;
+  }
+
+  async getMyOperatorsBond(address: Address): Promise<bigint> {
+    return test.step(`Get bond of every operator of ${address}`, async () => {
+      const chainId = widgetFullConfig.standConfig.networkConfig
+        .chainId as SUPPORTED_CHAINS;
+      const sdks: (LidoSDKCsm | LidoSDKCsm02)[] = [this];
+      if (MODULE_CONFIG[MODULE_NAME.CSM_02][chainId]) {
+        sdks.push(
+          new LidoSDKCsm02({
+            core: this.sdkCore,
+            ipfsGateways: this.ipfsGateways,
+          }),
+        );
+      }
+
+      let total = 0n;
+      for (const sdk of sdks) {
+        const operators =
+          await sdk.discovery.getNodeOperatorsByAddress(address);
+        for (const operator of operators) {
+          if (
+            !isAddressEqual(operator.managerAddress, address) &&
+            !isAddressEqual(operator.rewardsAddress, address)
+          ) {
+            continue;
+          }
+          const { current } = await sdk.operator.getBondBalance(
+            operator.nodeOperatorId,
+          );
+          total += current;
+        }
+      }
+      return total;
     });
   }
 

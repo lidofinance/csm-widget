@@ -4,6 +4,8 @@ import { BasePage } from '../../shared/pages/base.page';
 export class MyOperatorsPage extends BasePage {
   summary: Locator;
   summaryIssuesChip: Locator;
+  summaryBondBalance: Locator;
+  summaryBondBalance_Text: Locator;
   cards: Locator;
   navItem: Locator;
 
@@ -11,6 +13,9 @@ export class MyOperatorsPage extends BasePage {
     super(page);
     this.summary = this.page.getByTestId('myOperatorsSummary');
     this.summaryIssuesChip = this.summary.getByTestId('summaryIssuesChip');
+    this.summaryBondBalance = this.summary.getByTestId('summaryBondBalance');
+    this.summaryBondBalance_Text =
+      this.summaryBondBalance.getByTestId('textContent');
     this.cards = this.page.getByTestId('operatorCard');
     this.navItem = this.page.getByRole('link', { name: 'My operators' });
   }
