@@ -4,6 +4,7 @@ import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../test.fixture';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -24,7 +25,7 @@ test.describe(
       await widgetService.dashboardPage.open();
     });
 
-    test('Should open Privacy Notice', async ({ widgetService }) => {
+    test(qase(569, 'Should open Privacy Notice'), async ({ widgetService }) => {
       const { legalDisclaimerElement } = widgetService;
 
       await test.step('Verify link', async () => {

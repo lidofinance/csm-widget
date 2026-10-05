@@ -6,6 +6,7 @@ import { FooterElement } from 'tests/csm-widget/pages/elements/common/element.fo
 import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../test.fixture';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -70,7 +71,7 @@ test.describe(
       await widgetService.dashboardPage.open();
     });
 
-    test('Should open footer links', async ({ widgetService }) => {
+    test(qase(565, 'Should open footer links'), async ({ widgetService }) => {
       for (const { name, link, event, url } of FOOTER_LINKS) {
         await test.step(`Open "${name}" and send tracking event`, async () => {
           const footerLink = link(widgetService.footerElement);

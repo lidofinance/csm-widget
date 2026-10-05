@@ -119,7 +119,7 @@ test.describe(
     );
 
     test(
-      'Should open operator types docs',
+      qase(564, 'Should open operator types docs'),
       { tag: [Tags.matomo] },
       async ({ widgetService }) => {
         const cards = widgetService.mainPage.operatorTypeCards;
