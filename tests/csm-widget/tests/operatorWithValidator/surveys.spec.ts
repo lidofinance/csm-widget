@@ -4,6 +4,7 @@ import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { Tags } from 'tests/shared/consts/common.const';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { MatomoService } from 'tests/shared/services/matomo.service';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from '../test.fixture';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
@@ -36,29 +37,32 @@ test.describe(
       await widgetService.surveysPage.open();
     });
 
-    test('Should open VaNOM dashboard', async ({ widgetService }) => {
-      const { surveysPage } = widgetService;
+    test(
+      qase(570, 'Should open VaNOM dashboard'),
+      async ({ widgetService }) => {
+        const { surveysPage } = widgetService;
 
-      await test.step('Verify link', async () => {
-        await expect(surveysPage.vanomDashboardLink).toHaveAttribute(
-          'href',
-          VANOM_DASHBOARD_URL,
-        );
-      });
+        await test.step('Verify link', async () => {
+          await expect(surveysPage.vanomDashboardLink).toHaveAttribute(
+            'href',
+            VANOM_DASHBOARD_URL,
+          );
+        });
 
-      await test.step('Open resource and send tracking event', async () => {
-        const [openedPage] = await Promise.all([
-          surveysPage.waitForPage(PAGE_WAIT_TIMEOUT),
-          matomoEventService.waitForEvent(
-            'e_n',
-            'csm_widget_vanom_dashboard_link',
-          ),
-          surveysPage.vanomDashboardLink.click(),
-        ]);
+        await test.step('Open resource and send tracking event', async () => {
+          const [openedPage] = await Promise.all([
+            surveysPage.waitForPage(PAGE_WAIT_TIMEOUT),
+            matomoEventService.waitForEvent(
+              'e_n',
+              'csm_widget_vanom_dashboard_link',
+            ),
+            surveysPage.vanomDashboardLink.click(),
+          ]);
 
-        expect(openedPage.url()).toContain(VANOM_HOST);
-        await openedPage.close();
-      });
-    });
+          expect(openedPage.url()).toContain(VANOM_HOST);
+          await openedPage.close();
+        });
+      },
+    );
   },
 );

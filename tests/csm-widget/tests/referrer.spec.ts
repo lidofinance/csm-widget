@@ -3,6 +3,7 @@ import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { WelcomePage } from 'tests/csm-widget/pages';
 import { Tags } from 'tests/shared/consts/common.const';
 import { MatomoService } from 'tests/shared/services/matomo.service';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { test } from './test.fixture';
 
 const DAPPNODE_REF = 'dappnode';
@@ -42,7 +43,8 @@ test.describe(
     });
 
     REFERRER_CASES.forEach(({ name, referrer, expectedAddress }) => {
-      test(`Should store ${name}`, async ({ page }) => {
+      test(qase(571, `Should store ${name}`), async ({ page }) => {
+        qase.parameters({ referrer });
         const welcomePage = new WelcomePage(page);
 
         await test.step('Open widget and send tracking event', async () => {
