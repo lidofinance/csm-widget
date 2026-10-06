@@ -1,7 +1,8 @@
-import { maxUint256 } from 'viem';
+import { maxUint256, size } from 'viem';
 import {
   useFormValidation,
   validateLength,
+  validateHex,
   validateNodeOperatorId,
   ValidationError,
   VALIDATION_MESSAGES,
@@ -45,12 +46,17 @@ export const useDelayedPenaltyReportValidation = () => {
       });
 
       await validate('penaltyType', () => {
-        if (penaltyType === undefined || penaltyType === null)
-          throw new ValidationError('penaltyType', '');
-        if (!Number.isInteger(penaltyType) || penaltyType <= 0)
+        validateHex('penaltyType', penaltyType);
+        if (penaltyType === '0x') throw new ValidationError('penaltyType', '');
+        if (size(penaltyType) > 32)
           throw new ValidationError(
             'penaltyType',
-            VALIDATION_MESSAGES.enterPenaltyTypeGreaterThanZero,
+            VALIDATION_MESSAGES.penaltyTypeTooLong,
+          );
+        if (BigInt(penaltyType) === 0n)
+          throw new ValidationError(
+            'penaltyType',
+            VALIDATION_MESSAGES.penaltyTypeNotZero,
           );
       });
 
