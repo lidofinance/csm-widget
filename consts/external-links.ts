@@ -101,7 +101,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     beaconchain: 'https://hoodi.beaconcha.in',
     ratedExplorer: '',
     migalabsDashboard: '',
-    migalabs: 'https://migalabs.io',
+    migalabs: '',
     keysApi: 'https://keys-api-hoodi.testnet.fi',
     surveyApi: 'https://csm-survey-api-hoodi.lido.tools',
   },
