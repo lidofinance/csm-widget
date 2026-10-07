@@ -15,9 +15,17 @@ export const SENSITIVE_ENV_KEYS = [
   'GRAFANA_URL',
   'GRAFANA_API_KEY',
   'PREVIEW_STAND_PASSWORD',
+  'BOCHQA_PASSWORD',
 ];
 
-export const getReportConfig: () => ReporterDescription[] = function () {
+// ids from the bochqa.apps dictionary
+const BOCHQA_APP_IDS = { CSM: 1, CM: 2 } as const;
+
+type GetReportConfig = (
+  app: keyof typeof BOCHQA_APP_IDS,
+) => ReporterDescription[];
+
+export const getReportConfig: GetReportConfig = function (app) {
   const reporterConfig: ReporterDescription[] = [
     reporters.htmlReporter,
     reporters.consoleReporter,
@@ -47,6 +55,13 @@ export const getReportConfig: () => ReporterDescription[] = function () {
     [
       '../shared/config/githubSummary.reporter.ts',
       { qaseProjectName: process.env.QASE_PROJECT_ID },
+    ],
+    [
+      '../shared/config/bochqa.reporter.ts',
+      {
+        appId: BOCHQA_APP_IDS[app],
+        launchName: getTestRunName(),
+      },
     ],
   ];
 };
