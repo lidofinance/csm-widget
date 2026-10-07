@@ -58,8 +58,6 @@ COPY --from=build /app/public ./public
 RUN rm -rf public/runtime && mkdir public/runtime && chown node public/runtime
 COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json /app/server.mjs ./
 COPY --from=build /app/scripts ./scripts
-# next-logger.config.cjs preloads ./utilsApi/*.cjs at runtime
-COPY --from=build /app/utilsApi ./utilsApi
 
 # ARG does not cross stages; re-declared here so the labels resolve
 ARG BUILD_VERSION
