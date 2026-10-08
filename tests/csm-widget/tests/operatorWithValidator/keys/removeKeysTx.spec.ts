@@ -5,6 +5,7 @@ import { Tags } from 'tests/shared/consts/common.const';
 import { STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { TxModal } from 'tests/csm-widget/pages/elements/common/element.txProgressModal';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+import { qase } from 'playwright-qase-reporter/playwright';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -35,7 +36,7 @@ test.describe(
     });
 
     test(
-      'Should remove 1 key',
+      qase(574, 'Should remove 1 key'),
       { tag: [Tags.smoke] },
       async ({ widgetService }) => {
         const { removePage } = widgetService.keysPage;
