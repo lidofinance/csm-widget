@@ -4,6 +4,7 @@ import { test } from '../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { KeysPage } from 'tests/csm-widget/pages';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+import { Tags } from 'tests/shared/consts/common.const';
 
 const keysStatusesExpectedComments = [
   {
@@ -47,26 +48,30 @@ test.describe(
       await keysPage.keysView.table.waitFor({ state: 'visible' });
     });
 
-    test(qase(148, 'Verification of displayed key statuses'), async () => {
-      const keysList = await keysPage.keysView.getAllTableRows();
+    test(
+      qase(148, 'Verification of displayed key statuses'),
+      { tag: Tags.smoke },
+      async () => {
+        const keysList = await keysPage.keysView.getAllTableRows();
 
-      await test.step('Check each column for all keys', async () => {
-        for (const key of keysList) {
-          await expect(
-            key.pubkeyCell,
-            'Expected that value of pubkley cell wont be empty.',
-          ).not.toBeEmpty();
-          await expect(
-            key.statusCell,
-            'Expected that value of status cell wont be empty.',
-          ).not.toBeEmpty();
-          await expect(
-            key.strikesCountCell,
-            'Expected that strikes value  wont be empty.',
-          ).not.toBeEmpty();
-        }
-      });
-    });
+        await test.step('Check each column for all keys', async () => {
+          for (const key of keysList) {
+            await expect(
+              key.pubkeyCell,
+              'Expected that value of pubkley cell wont be empty.',
+            ).not.toBeEmpty();
+            await expect(
+              key.statusCell,
+              'Expected that value of status cell wont be empty.',
+            ).not.toBeEmpty();
+            await expect(
+              key.strikesCountCell,
+              'Expected that strikes value  wont be empty.',
+            ).not.toBeEmpty();
+          }
+        });
+      },
+    );
 
     keysStatusesExpectedComments.forEach((statusExpectedCommentData) => {
       test(

@@ -86,6 +86,7 @@ test.describe(
 
     test(
       qase(472, 'Should navigate to the correct flow from each card'),
+      { tag: Tags.smoke },
       async ({ widgetService }) => {
         const cards = widgetService.mainPage.operatorTypeCards;
 
