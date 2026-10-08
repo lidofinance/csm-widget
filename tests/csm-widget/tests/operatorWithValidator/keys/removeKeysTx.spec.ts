@@ -17,6 +17,7 @@ test.describe(
   }),
   () => {
     let snapshotId: string;
+    let noId: number;
     let pubkey: string;
 
     test.beforeAll(async ({ csmSDK, forkActionService, widgetService }) => {
@@ -24,7 +25,7 @@ test.describe(
 
       await test.step('Set up: add a non-deposited key to remove', async () => {
         await widgetService.keysPage.submitPage.open();
-        const noId = await widgetService.extractNodeOperatorId();
+        noId = await widgetService.extractNodeOperatorId();
         await forkActionService.addKeys(noId, 1);
         // the added key is appended to the end of the operator's key list
         pubkey = (await csmSDK.getAllKeys(BigInt(noId))).at(-1) as string;
@@ -38,7 +39,7 @@ test.describe(
     test(
       qase(574, 'Should remove 1 key'),
       { tag: [Tags.smoke] },
-      async ({ widgetService }) => {
+      async ({ widgetService, csmSDK }) => {
         const { removePage } = widgetService.keysPage;
         const txModal = new TxModal(widgetService.page);
 
@@ -63,9 +64,11 @@ test.describe(
           );
         });
 
-        await test.step('Key is gone from the remove list', async () => {
-          await txModal.closeModal();
-          await expect(keyCheckbox).toBeHidden();
+        await test.step('Key is removed on chain', async () => {
+          // getKeys is cached for 10s, so read past the cache
+          csmSDK.core.invalidateCache();
+          const keys = await csmSDK.getAllKeys(BigInt(noId));
+          expect(keys).not.toContain(pubkey);
         });
       },
     );
