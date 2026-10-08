@@ -34,7 +34,12 @@ export const SiweSignIn: FC<PropsWithChildren> = ({ children }) => {
     <Block>
       <Stack direction="column" gap="lg">
         <Text size="xs">{children}</Text>
-        <Button size="sm" onClick={signIn} fullwidth>
+        <Button
+          size="sm"
+          onClick={signIn}
+          fullwidth
+          data-testid="siweSignInButton"
+        >
           Sign in
         </Button>
       </Stack>
