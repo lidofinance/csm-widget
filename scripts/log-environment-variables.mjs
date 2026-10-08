@@ -16,6 +16,7 @@ export const openKeys = [
   'WALLETCONNECT_PROJECT_ID',
   'VALIDATION_FILE_PATH',
   'DEVNET_ADDRESSES_FILE_PATH',
+  'SHUTDOWN_DRAIN_MS',
 ];
 
 export const secretKeys = [

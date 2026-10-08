@@ -58,8 +58,6 @@ COPY --from=build /app/public ./public
 RUN rm -rf public/runtime && mkdir public/runtime && chown node public/runtime
 COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json /app/server.mjs ./
 COPY --from=build /app/scripts ./scripts
-# next-logger.config.cjs preloads ./utilsApi/*.cjs at runtime
-COPY --from=build /app/utilsApi ./utilsApi
 
 # ARG does not cross stages; re-declared here so the labels resolve
 ARG BUILD_VERSION
@@ -73,7 +71,7 @@ EXPOSE 3000
 
 # start-period covers app.prepare(); k8s ignores this and uses its own probes
 HEALTHCHECK --interval=10s --timeout=3s --start-period=30s --retries=3 \
-  CMD wget -q -O /dev/null "http://localhost:${PORT:-3000}/api/health" || exit 1
+  CMD wget -q -O /dev/null "http://localhost:${PORT:-3000}${BASE_PATH}/api/health" || exit 1
 
 # node must be PID 1 to receive SIGTERM and exit truthfully; yarn and `node --run`
 # both forward the signal but exit non-zero. Mirrors the `start` script — keep in sync.

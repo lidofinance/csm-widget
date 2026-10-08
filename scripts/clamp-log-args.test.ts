@@ -2,7 +2,7 @@ import { satanizer, commonPatterns } from '@lidofinance/satanizer';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { clampArgs, MAX_TOTAL_CHARS, MAX_STRING_LENGTH } =
-  require('../clamp-log-args.cjs') as {
+  require('./clamp-log-args.cjs') as {
     clampArgs: (args: unknown[]) => unknown[];
     MAX_TOTAL_CHARS: number;
     MAX_STRING_LENGTH: number;
