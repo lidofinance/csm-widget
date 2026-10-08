@@ -1,4 +1,5 @@
 export * from './dashboard.page';
+export * from './delayedPenalty.page';
 export * from './keys.page';
 export * from './main.page';
 export * from './monitoring.page';
