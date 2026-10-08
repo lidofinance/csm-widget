@@ -22,7 +22,7 @@ test.describe(
       snapshotId = await csmSDK.evmSnapshot();
 
       await test.step('Set up: add a non-deposited key to remove', async () => {
-        await widgetService.keysPage.removePage.open();
+        await widgetService.keysPage.submitPage.open();
         const noId = await widgetService.extractNodeOperatorId();
         await forkActionService.addKeys(noId, 1);
         // the added key is appended to the end of the operator's key list

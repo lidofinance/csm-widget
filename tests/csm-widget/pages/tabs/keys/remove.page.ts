@@ -6,6 +6,7 @@ export class RemovePage {
   page: Page;
   base: BasePage;
   removeKeysForm: Locator;
+  keyRow: Locator;
   keyCheckbox: Locator;
   numberOfKeysToRemove: Locator;
   numberOfKeysToRemoveValue: Locator;
@@ -22,6 +23,9 @@ export class RemovePage {
     this.page = page;
     this.base = new BasePage(page);
     this.removeKeysForm = this.page.getByTestId('removeKeysForm');
+    this.keyRow = this.removeKeysForm.locator('label', {
+      hasText: /0x[0-9a-fA-F]+/,
+    });
     this.keyCheckbox = this.removeKeysForm.locator('label >> svg');
     this.numberOfKeysToRemove = this.removeKeysForm.getByTestId(
       'numbersOfKeysToRemove',
@@ -49,7 +53,7 @@ export class RemovePage {
 
   async open() {
     await test.step('Open remove tab for Keys page', async () => {
-      await this.page.goto('/keys/remove');
+      await this.base.openWithRetry('/keys/remove', this.keyRow.first());
     });
   }
 
