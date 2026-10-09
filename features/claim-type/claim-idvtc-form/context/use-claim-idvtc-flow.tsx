@@ -1,5 +1,4 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
 import { useCanManageMembers } from 'features/idvtc/members/hooks/use-can-manage-members';
 import { useMembersInFlowInit } from 'features/idvtc/members/hooks/use-members-in-flow-init';
 import { TxStageMembersInitFailed } from 'features/idvtc/members/tx-stages/tx-stage-members-init-failed';
@@ -109,7 +108,7 @@ export const useClaimIdvtcFlowResolver = (): FlowResolver<
           });
 
           if (willInitMembers) {
-            const op = operatorKey(config.module, data.nodeOperatorId);
+            const op = operatorKey(MODULE_NAME.CSM, data.nodeOperatorId);
 
             const runInit = async (): Promise<void> => {
               invariant(op, 'operator key required for members init');

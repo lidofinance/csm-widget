@@ -19,8 +19,8 @@ export const OperatorType1: Faq = {
           deposit data record;
         </li>
         <li>
-          <code>elRewardsStealingAdditionalFine</code>&nbsp;- an additional fine
-          charged for each validator that has stolen EL rewards;
+          <code>generalDelayedPenaltyAdditionalFine</code>&nbsp;- an additional
+          fine charged for each validator that has stolen EL rewards;
         </li>
         <li>
           <code>keysLimit</code>&nbsp;- a limit on the number of active keys for
@@ -31,9 +31,10 @@ export const OperatorType1: Faq = {
           &nbsp;- parameters defining the priority queue for the Node Operator;
         </li>
         <li>
-          <code>rewardShare</code>&nbsp;- a share of the Node Operator rewards
-          that the Node Operator receives for each validator. Can be customized
-          depending on the key index in the Node Operator&apos;s keys storage;
+          <code>rewardShareData</code>&nbsp;- a share of the Node Operator
+          rewards that the Node Operator receives for each validator. Can be
+          customized depending on the key index in the Node Operator&apos;s keys
+          storage;
         </li>
         <li>
           <code>performanceLeeway</code>&nbsp;- a leeway for the Node
@@ -42,10 +43,11 @@ export const OperatorType1: Faq = {
           in the Node Operator&apos;s keys storage;
         </li>
         <li>
-          <code>strikesParams</code>&nbsp;- parameters defining the Node
-          Operator&apos;s strikes system, which is used to decide on the Node
-          Operator&apos;s validator&apos;s ejection due to systematic bad
-          performance;
+          <code>strikesLifetime</code>&nbsp;and&nbsp;
+          <code>strikesThreshold</code>
+          &nbsp;- parameters defining the Node Operator&apos;s strikes system,
+          which is used to decide on the Node Operator&apos;s validator&apos;s
+          ejection due to systematic bad performance;
         </li>
         <li>
           <code>badPerformancePenalty</code>&nbsp;- a penalty charged for each
@@ -63,14 +65,14 @@ export const OperatorType1: Faq = {
           moment it is actually initiated exit process;
         </li>
         <li>
-          <code>exitDelayPenalty</code>&nbsp;- a penalty charged for each
-          validator that has been requested to exit but has not exited within
-          the allowed delay;
+          <code>exitDelayFee</code>&nbsp;- a penalty charged for each validator
+          that has been requested to exit but has not exited within the allowed
+          delay;
         </li>
         <li>
-          <code>maxWithdrawalRequestFee</code>&nbsp;- a maximum fee charged for
-          each Node Operator&apos;s validator that has been forcefully ejected
-          using&nbsp;
+          <code>maxElWithdrawalRequestFee</code>&nbsp;- a maximum fee charged
+          for each Node Operator&apos;s validator that has been forcefully
+          ejected using&nbsp;
           <FaqLink href="https://eips.ethereum.org/EIPS/eip-7002">
             EIP-7002
           </FaqLink>

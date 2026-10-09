@@ -12,6 +12,7 @@ import {
   Keys13,
   Keys14,
   Keys15,
+  Keys16,
   Keys2,
   Keys3,
   Keys4,
@@ -43,6 +44,8 @@ import {
   Roles3,
   Roles4,
   Roles5,
+  Roles6,
+  Roles7,
 } from './items';
 import {
   CmBondRewards1,
@@ -77,7 +80,7 @@ import {
 const FAQ_OPERATOR_TYPE_CSM = [OperatorType1, OperatorType2];
 const FAQ_OPERATOR_TYPE_CM = [CmOperatorType1, CmOperatorType2];
 
-const FAQ_ROLES_CSM = [Roles1, Roles2, Roles3, Roles4, Roles5];
+const FAQ_ROLES_CSM = [Roles1, Roles2, Roles3, Roles4, Roles5, Roles6, Roles7];
 const FAQ_ROLES_CM = [CmRoles1, CmRoles2, CmRoles3, CmRoles4, CmRoles5];
 
 const FAQ_BOND_CSM = [
@@ -116,6 +119,7 @@ const FAQ_KEYS_CSM = [
   Keys4,
   Keys5,
   Keys6,
+  Keys16,
   Keys7,
   Keys8,
   Keys9,
