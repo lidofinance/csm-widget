@@ -8,9 +8,6 @@ export const defaultChain = parseInt(process.env.DEFAULT_CHAIN, 10) || 560048;
 export const walletconnectProjectId = process.env.WALLETCONNECT_PROJECT_ID;
 
 /** @type boolean */
-export const ipfsMode = toBoolean(process.env.IPFS_MODE);
-
-/** @type boolean */
 export const isTestEnv = !toBoolean(process.env.IS_PROD);
 
 /** @type boolean */

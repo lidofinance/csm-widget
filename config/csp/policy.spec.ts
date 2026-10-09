@@ -3,7 +3,6 @@ import { buildCspDirectives } from './policy.mjs';
 type CspBuildOptions = Parameters<typeof buildCspDirectives>[0];
 
 const base: CspBuildOptions = {
-  ipfsMode: false,
   developmentMode: false,
   trustedHosts: ['https://*.lido.fi'],
   reportUri: 'https://csm.lido.fi/api/csp-report',
@@ -30,16 +29,11 @@ describe('buildCspDirectives', () => {
     expect(build().connectSrc).not.toContain('ws:');
   });
 
-  it('sets frame-ancestors, report-uri and base-uri only outside IPFS mode', () => {
-    const http = build();
-    expect(http.frameAncestors).toEqual(['*']);
-    expect(http.reportURI).toBe(base.reportUri);
-    expect(http['base-uri']).toEqual(["'none'"]);
-
-    const ipfs = build({ ipfsMode: true });
-    expect(ipfs.frameAncestors).toBeUndefined();
-    expect(ipfs.reportURI).toBeUndefined();
-    expect(ipfs['base-uri']).toBeUndefined();
+  it('sets frame-ancestors, report-uri and base-uri', () => {
+    const d = build();
+    expect(d.frameAncestors).toEqual(['*']);
+    expect(d.reportURI).toBe(base.reportUri);
+    expect(d['base-uri']).toEqual(["'none'"]);
   });
 
   it('omits report-uri when none configured', () => {
@@ -72,12 +66,5 @@ describe('buildCspDirectives', () => {
     ];
     expect(d.frameSrc).toEqual(expected);
     expect(d.childSrc).toEqual(expected);
-  });
-
-  it('applies the baseline in IPFS mode too', () => {
-    const d = build({ ipfsMode: true });
-    expect(d.objectSrc).toEqual(["'none'"]);
-    expect(d.formAction).toEqual(["'self'"]);
-    expect(d['script-src-attr']).toEqual(["'none'"]);
   });
 });

@@ -11,7 +11,6 @@ import {
 } from 'react';
 import invariant from 'tiny-invariant';
 
-import { config } from 'config';
 import { debounce } from 'lodash';
 import { saveScrollDown } from 'utils';
 
@@ -29,7 +28,6 @@ const InpageNavigationContext =
   createContext<InpageNavigationContextValue | null>(null);
 InpageNavigationContext.displayName = 'InpageNavigationContext';
 
-// IPFS-compatible hash-based in-page navigation
 export const InpageNavigationProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
@@ -37,7 +35,6 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
   const [hashNav, setHash] = useState('');
 
   useEffect(() => {
-    if (config.ipfsMode) return; // Hash is reserved in ipfs mode, ignored here
     const hash = asPath.split('#')[1];
     setHash(hash);
   }, [asPath]);
@@ -62,21 +59,17 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
       // Perform animated scroll
       scrollToAnchor(hash);
 
-      // Change the hash for non-ipfs ui, without scrolling the page
+      // Change the hash without scrolling the page
       // We have done animated scroll already on next step
-      if (!config.ipfsMode) {
-        history.pushState({}, '', `#${hash}`);
-      }
+      history.pushState({}, '', `#${hash}`);
     },
     [scrollToAnchor],
   );
 
   const resetInpageAnchor = useCallback(() => {
     setHash('');
-    if (!config.ipfsMode) {
-      const hashTrimmed = asPath.split('#')[0];
-      history.pushState({}, '', hashTrimmed);
-    }
+    const hashTrimmed = asPath.split('#')[0];
+    history.pushState({}, '', hashTrimmed);
   }, [asPath]);
 
   const resetSpecificAnchor = useCallback(

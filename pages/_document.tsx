@@ -6,12 +6,10 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document';
-import { createHeadersObject } from 'next-secure-headers';
 import { ServerStyleSheet } from 'styled-components';
 import { Fonts, LidoUIHead } from '@lidofinance/lido-ui';
 
 import { config } from 'config';
-import { contentSecurityPolicy } from 'config/csp';
 import {
   WIDGET_DESCRIPTION,
   WIDGET_HOST,
@@ -21,11 +19,6 @@ import {
 import { FiraCodeFont } from 'styles';
 
 let host: string = WIDGET_HOST;
-
-const secureHeaders = createHeadersObject({ contentSecurityPolicy });
-const cspMetaTagContent =
-  secureHeaders['Content-Security-Policy'] ??
-  secureHeaders['Content-Security-Policy-Report-Only'];
 
 export default class MyDocument extends Document {
   static async getInitialProps(
@@ -77,12 +70,6 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {config.ipfsMode && (
-            <meta
-              httpEquiv="Content-Security-Policy"
-              content={cspMetaTagContent}
-            />
-          )}
           <link
             rel="manifest"
             href={`${config.BASE_PATH_ASSET}/manifest.json`}

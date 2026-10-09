@@ -37,10 +37,6 @@ declare module 'next/config' {
       migalabsApiUrl: string | undefined;
       migalabsApiToken: string | undefined;
 
-      cspTrustedHosts: string | undefined;
-      cspReportUri: string | undefined;
-      cspReportOnly: string | undefined;
-
       rateLimit: string;
       rateLimitTimeFrame: string;
 

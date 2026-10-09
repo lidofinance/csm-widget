@@ -26,7 +26,7 @@ const isAssetOrApi = (pathname) =>
 // CSP comes from runtime env, so it cannot live in next.config headers() (baked at build)
 const cspHeader = (() => {
   const options = cspOptionsFromEnv(process.env);
-  if (dev || options.ipfsMode) return null;
+  if (dev) return null;
   const headers = nextSecureHeaders.createHeadersObject({
     contentSecurityPolicy: buildContentSecurityPolicy(options),
   });

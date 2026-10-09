@@ -12,7 +12,7 @@ export const useApiAddressValidation = () => {
 
   const validateAddressAPI = useCallback(
     async (addressToValidate: Address) => {
-      if (!config.addressApiValidationEnabled || config.ipfsMode) {
+      if (!config.addressApiValidationEnabled) {
         return { isValid: true };
       }
 

@@ -36,7 +36,7 @@ export const useAddressValidation = () => {
 };
 
 // Resolution priority:
-//   1. No address or ipfsMode  → valid
+//   1. No address             → valid
 //   2. API enabled + responded → use API.isValid
 //   3. validationFile present  → check against deny-list locally
 //   4. Otherwise               → valid
@@ -69,7 +69,7 @@ export const AddressValidationProvider = ({
   const validateAddress = useCallback(
     async (addressToValidate?: Address) => {
       // If no address, consider valid
-      if (!addressToValidate || config.ipfsMode) {
+      if (!addressToValidate) {
         setIsValidAddress(true);
         return true;
       }

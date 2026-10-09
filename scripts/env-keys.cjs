@@ -17,7 +17,6 @@ module.exports = [
 
   { key: 'MAINTENANCE', optional: true },
   { key: 'IS_PROD', optional: true },
-  { key: 'IPFS_MODE', optional: true },
 
   { key: 'CSP_TRUSTED_HOSTS' },
   { key: 'CSP_REPORT_ONLY', optional: true },

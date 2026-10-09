@@ -8,7 +8,6 @@ export const WALLETCONNECT_HOSTS = [
 /**
  * @typedef {{
  *   developmentMode: boolean,
- *   ipfsMode: boolean,
  *   trustedHosts: string[],
  *   reportUri: string | undefined,
  * }} CspBuildOptions
@@ -20,7 +19,6 @@ export const WALLETCONNECT_HOSTS = [
  */
 export const buildCspDirectives = ({
   developmentMode,
-  ipfsMode,
   trustedHosts,
   reportUri,
 }) => ({
@@ -43,11 +41,8 @@ export const buildCspDirectives = ({
     'wss:',
     ...(developmentMode ? ['ws:'] : []), // HMR
   ],
-  // ignored when delivered via <meta> (IPFS mode)
-  ...(!ipfsMode && {
-    frameAncestors: ['*'],
-    reportURI: reportUri,
-  }),
+  frameAncestors: ['*'],
+  reportURI: reportUri,
   // frame-src wins over child-src in modern browsers; child-src kept as fallback
   frameSrc: ["'self'", ...WALLETCONNECT_HOSTS],
   childSrc: ["'self'", ...WALLETCONNECT_HOSTS],
@@ -57,7 +52,7 @@ export const buildCspDirectives = ({
   manifestSrc: ["'self'"],
   formAction: ["'self'"],
   'script-src-attr': ["'none'"],
-  'base-uri': ipfsMode ? undefined : ["'none'"],
+  'base-uri': ["'none'"],
 });
 
 /**
@@ -73,7 +68,6 @@ export const buildContentSecurityPolicy = ({ reportOnly, ...options }) => ({
  * @param {Record<string, string | undefined>} env
  * @returns {{
  *   developmentMode: boolean,
- *   ipfsMode: boolean,
  *   trustedHosts: string[],
  *   reportUri: string | undefined,
  *   reportOnly: boolean,
@@ -81,7 +75,6 @@ export const buildContentSecurityPolicy = ({ reportOnly, ...options }) => ({
  */
 export const cspOptionsFromEnv = (env) => ({
   developmentMode: env.NODE_ENV === 'development',
-  ipfsMode: toBoolean(env.IPFS_MODE),
   trustedHosts: env.CSP_TRUSTED_HOSTS ? env.CSP_TRUSTED_HOSTS.split(',') : [],
   reportUri: env.CSP_REPORT_URI,
   reportOnly: toBoolean(env.CSP_REPORT_ONLY),

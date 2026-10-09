@@ -14,10 +14,8 @@ export type PreConfigType = typeof publicRuntimeConfig &
 // `getPreConfig()` needs for internal using in 'config/groups/*'
 // Do not use `getPreConfig()` outside of 'config/groups/*'
 export const getPreConfig = (): PreConfigType => {
-  const BASE_PATH_ASSET = dynamics.ipfsMode
-    ? '.'
-    : (serverRuntimeConfig.basePath ?? '') ||
-      (publicRuntimeConfig.basePath ?? '');
+  const BASE_PATH_ASSET =
+    serverRuntimeConfig.basePath || publicRuntimeConfig.basePath || '';
 
   const config = {
     BASE_PATH_ASSET,

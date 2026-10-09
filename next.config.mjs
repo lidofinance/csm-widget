@@ -1,7 +1,6 @@
 import { loadDevnetArtifacts } from './devnet-artifacts.mjs';
 import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
-import { toBoolean } from './scripts/to-boolean.mjs';
 import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
 
 logEnvironmentVariables();
@@ -11,7 +10,6 @@ buildDynamics();
 const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
-const isIPFSMode = toBoolean(process.env.IPFS_MODE);
 
 const devnetArtifacts = process.env.DEVNET_ADDRESSES_FILE_PATH
   ? loadDevnetArtifacts(process.env.DEVNET_ADDRESSES_FILE_PATH)
@@ -64,15 +62,6 @@ export default withBundleAnalyzer({
     ignoreBuildErrors: true,
   },
 
-  // IPFS next.js configuration reference:
-  // https://github.com/Velenir/nextjs-ipfs-example
-  trailingSlash: isIPFSMode,
-  assetPrefix: isIPFSMode ? './' : undefined,
-
-  // IPFS version has hash-based routing,
-  // so we provide only index.html in ipfs version
-  exportPathMap: isIPFSMode ? () => ({ '/': { page: '/' } }) : undefined,
-
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -123,22 +112,6 @@ export default withBundleAnalyzer({
       {
         test: /\.md$/,
         use: 'raw-loader',
-      },
-
-      // Needs for `Conditional Compilation`,
-      // because we have differences in source code of IPFS widget and NOT IPFS widget
-      {
-        test: /\.(t|j)sx?$/,
-        use: [
-          {
-            loader: 'webpack-preprocessor-loader',
-            options: {
-              params: {
-                IPFS_MODE: isIPFSMode,
-              },
-            },
-          },
-        ],
       },
 
       // Handle JSON imports with 'with' assertions syntax from node_modules
@@ -254,10 +227,6 @@ export default withBundleAnalyzer({
 
     migalabsApiUrl: process.env.ETHSEER_API_URL,
     migalabsApiToken: process.env.ETHSEER_API_TOKEN,
-
-    cspTrustedHosts: process.env.CSP_TRUSTED_HOSTS,
-    cspReportUri: process.env.CSP_REPORT_URI,
-    cspReportOnly: process.env.CSP_REPORT_ONLY,
 
     rateLimit: process.env.RATE_LIMIT,
     rateLimitTimeFrame: process.env.RATE_LIMIT_TIME_FRAME,

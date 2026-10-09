@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { config } from 'config';
 import { API_ROUTES } from 'consts/api';
 import { STRATEGY_LAZY } from 'consts';
 import { AddressValidationFile, standardFetcher } from 'utils';
@@ -13,7 +12,6 @@ export const useValidationFile = () =>
         method: 'GET',
         headers: { 'Content-type': 'application/json' },
       }),
-    enabled: !config.ipfsMode,
     ...STRATEGY_LAZY,
     retry: 1,
   });
