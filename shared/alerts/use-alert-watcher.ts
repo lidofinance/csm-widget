@@ -10,6 +10,8 @@ type UseAlertWatcherOptions<P extends object> = {
   props?: P;
   /** If true, skip showing/closing until loading completes */
   loading?: boolean;
+  /** If true, the source data is indeterminate (e.g. errored); leave the alert as-is */
+  indeterminate?: boolean;
 };
 
 /**
@@ -20,16 +22,25 @@ export const useAlertWatcher = <P extends object = Record<string, never>>({
   shouldShow,
   props,
   loading = false,
+  indeterminate = false,
 }: UseAlertWatcherOptions<P>) => {
   const { showAlert, closeAlert } = useAlertActions();
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || indeterminate) return;
 
     if (shouldShow) {
       showAlert(component, props);
     } else {
       closeAlert(component);
     }
-  }, [shouldShow, component, props, loading, showAlert, closeAlert]);
+  }, [
+    shouldShow,
+    component,
+    props,
+    loading,
+    indeterminate,
+    showAlert,
+    closeAlert,
+  ]);
 };

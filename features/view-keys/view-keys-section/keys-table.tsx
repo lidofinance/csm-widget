@@ -31,7 +31,7 @@ const selectTopUpPositions = ({ total, keys }: OperatorTopUpQueue) => ({
 });
 
 export const KeysTable: FC = () => {
-  const maxPriorityKeyIndex = useMaxPriorityKeyIndex();
+  const { index: maxPriorityKeyIndex } = useMaxPriorityKeyIndex();
   const { module, isCsmFamily } = useModule();
   const { data } = useTable<KeyWithStatus>();
   const nodeOperatorId = useNodeOperatorId();
@@ -83,6 +83,7 @@ export const KeysTable: FC = () => {
                       key={status}
                       suffix={
                         status === KEY_STATUS.DEPOSITABLE &&
+                        maxPriorityKeyIndex !== undefined &&
                         key.index <= maxPriorityKeyIndex ? (
                           <PriorityChip />
                         ) : null
