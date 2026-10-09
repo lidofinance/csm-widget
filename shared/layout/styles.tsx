@@ -1,15 +1,32 @@
 import { Container, H1 } from '@lidofinance/lido-ui';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import { NAV_MOBILE_MEDIA } from 'styles/constants';
+export const Shell = styled.div`
+  display: flex;
+  align-items: flex-start;
+  min-width: 0;
+`;
 
-export const LayoutStyle = styled(Container)`
+export const Column = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+`;
+
+const SINGLE_COLUMN_MEDIA = '@media screen and (max-width: 1299px)';
+
+export const LayoutStyle = styled(Container)<{ $fullwidth?: boolean }>`
   --layout-base-width: 590px;
-  --layout-main-width: var(--layout-base-width);
+  --layout-main-width: ${({ $fullwidth }) =>
+    $fullwidth ? '1204px' : 'var(--layout-base-width)'};
   --layout-side-width: 170px;
   --layout-gutter: ${({ theme }) => theme.spaceMap.xxl}px;
 
   position: relative;
+  width: 100%;
+  flex: 1;
+  min-width: 0;
   min-height: calc(100vh - var(--test-env-banner-height, 0px));
   display: grid;
   grid-template-columns: var(--layout-side-width) 1fr var(--layout-side-width);
@@ -17,52 +34,30 @@ export const LayoutStyle = styled(Container)`
   grid-column-gap: 14px;
   grid-template-areas:
     'header header header'
-    'nav main alerts'
+    '. main alerts'
     'footer footer footer';
 
-  ${({ theme }) => theme.mediaQueries.xl} {
-    grid-template-columns: var(--layout-side-width) 1fr;
-    grid-template-rows:
-      auto auto 1fr
-      auto;
+  ${SINGLE_COLUMN_MEDIA} {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
     grid-template-areas:
-      'header header'
-      'nav alerts'
-      'nav main'
-      'footer footer';
+      'header'
+      'alerts'
+      'main'
+      'footer';
+  }
 
-    &:has(nav[hidden]),
-    &:not(:has(nav)) {
+  ${({ $fullwidth }) =>
+    $fullwidth &&
+    css`
       grid-template-columns: 1fr;
+      grid-template-rows: auto auto 1fr auto;
       grid-template-areas:
         'header'
         'alerts'
         'main'
         'footer';
-    }
-  }
-
-  &:has(nav[data-desktop-hidden]) {
-    --layout-main-width: 1204px;
-
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr auto;
-    grid-template-areas:
-      'header'
-      'alerts'
-      'main'
-      'footer';
-  }
-
-  ${NAV_MOBILE_MEDIA} {
-    grid-template-rows: auto auto 1fr auto;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'header'
-      'alerts'
-      'main'
-      'footer';
-  }
+    `}
 
   ${({ theme }) => theme.mediaQueries.lg} {
     --layout-gutter: ${({ theme }) => theme.spaceMap.lg}px;

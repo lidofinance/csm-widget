@@ -7,13 +7,13 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import 'nprogress/nprogress.css';
 import '@lidofinance/lido-shared-ui/index.css';
+import '@lidofinance/lido-app-ui/index.css';
 import { Providers } from 'providers';
 import { memo } from 'react';
 import {
   AppShellLoader,
   BackgroundGradient,
   SecurityStatusBanner,
-  TestEnvBanner,
   ToastContainer,
 } from 'shared/components';
 import { useIsClient } from 'shared/hooks';
@@ -69,7 +69,6 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
           />
           <SVGGradientDefs />
           <ToastContainer />
-          <TestEnvBanner />
           {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
           <SecurityStatusBanner />
         </Providers>

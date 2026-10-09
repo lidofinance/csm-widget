@@ -1,13 +1,16 @@
-import { Text } from '@lidofinance/lido-ui';
+import { Logo } from '@lidofinance/lido-app-ui';
+import { CSSProperties, FC } from 'react';
+
 import { WIDGET_TITLE } from 'consts';
-import { FC } from 'react';
-import { LogoLido } from 'shared/components';
-import { LogoDivider, LogosStyle } from '../styles';
+import { PATH } from 'consts/urls';
+import { LocalLink } from 'shared/navigate';
 
 export const Logos: FC = () => (
-  <LogosStyle href="/" target={undefined}>
-    <LogoLido />
-    <LogoDivider />
-    <Text as="span">{WIDGET_TITLE}</Text>
-  </LogosStyle>
+  <LocalLink href={PATH.HOME} asChild>
+    <Logo
+      variant="auto"
+      product={WIDGET_TITLE}
+      style={{ '--lido-app-ui-logo-breakpoint': '1063px' } as CSSProperties}
+    />
+  </LocalLink>
 );

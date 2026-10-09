@@ -5,12 +5,6 @@ import { MatomoLink } from '../matomo-link';
 
 import { LogoLidoStyle } from './styles';
 
-export const LogoLido: FC = () => (
-  <LogoLidoStyle>
-    <LidoLogo data-testid="lidoLogo" as="span" />
-  </LogoLidoStyle>
-);
-
 export const LogoLidoLink: FC = () => (
   <LogoLidoStyle>
     <MatomoLink

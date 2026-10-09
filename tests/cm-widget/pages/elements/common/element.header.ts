@@ -13,7 +13,7 @@ export class Header {
     this.accountSection = this.header.getByTestId('accountSectionHeader');
 
     this.connectWalletBtn = this.header.getByText('Connect').first();
-    this.switchOperatorButton = this.header.getByTestId('nodeOperatorHeader');
+    this.switchOperatorButton = this.page.getByTestId('nodeOperatorHeader');
   }
 
   async isAccountSectionVisible() {

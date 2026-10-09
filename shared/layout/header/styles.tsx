@@ -1,13 +1,7 @@
-import {
-  Button,
-  ButtonProps,
-  Divider,
-  Link,
-  ThemeToggler,
-} from '@lidofinance/lido-ui';
+import { Button, ButtonProps, ThemeToggler } from '@lidofinance/lido-ui';
 import styled, { keyframes } from 'styled-components';
 
-import { NAV_MOBILE_MEDIA } from 'styles/constants';
+import { NAV_MOBILE_MEDIA, SIDEBAR_DRAWER_MEDIA } from 'styles/constants';
 
 export const HeaderWrapper = styled.div`
   grid-area: header;
@@ -95,33 +89,9 @@ export const DotStyle = styled.p`
 export const ThemeTogglerStyle = styled(ThemeToggler)<{ $always?: boolean }>`
   margin: 0;
 
-  ${NAV_MOBILE_MEDIA} {
+  ${SIDEBAR_DRAWER_MEDIA} {
     display: ${({ $always }) => ($always ? 'inline-grid' : 'none')};
   }
-`;
-
-export const LogosStyle = styled(Link)`
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  flex-shrink: 0;
-
-  height: 28px;
-  margin-block: 8px;
-  align-self: start;
-
-  white-space: nowrap;
-
-  ${NAV_MOBILE_MEDIA} {
-    > :not(:nth-child(1)) {
-      display: none;
-    }
-  }
-`;
-
-export const LogoDivider = styled(Divider).attrs({ type: 'vertical' })`
-  opacity: 0.6;
-  color: var(--lido-color-text);
 `;
 
 export const HeaderButton = styled((props: ButtonProps) => (
@@ -166,5 +136,13 @@ export const ButtonGroup = styled.div`
 
   &:empty {
     display: none;
+  }
+`;
+
+export const HeaderLogo = styled.div`
+  display: none;
+
+  ${SIDEBAR_DRAWER_MEDIA} {
+    display: block;
   }
 `;

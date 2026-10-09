@@ -1,89 +1,111 @@
+import { Logo, SidebarGroup, SidebarItem } from '@lidofinance/lido-app-ui';
 import { Dark, Light, ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
 import { WIDGET_TITLE } from 'consts';
-import { useSmVersionSupported } from 'modules/web3';
+import { PATH } from 'consts/urls';
+import { useNodeOperator, useSmVersionSupported } from 'modules/web3';
+import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
 import { useInpageNavigation } from 'providers/inpage-navigation';
-import { FC, memo, PropsWithChildren } from 'react';
-import { Stack } from 'shared/components';
+import { FC, memo, useContext } from 'react';
+import { NoSSRWrapper } from 'shared/components';
 import { useInitialLoading, useRouterPath } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
+import { OperatorTypeButton, SwitchOperatorButton } from 'shared/node-operator';
 import { getIsActivePath } from 'utils';
-import {
-  Nav,
-  NavBlockStyle,
-  NavContainer,
-  NavItems,
-  NavLink, // Keep NavLink for other links
-  NavTitle,
-  ThemeToggleButton, // Import the new button
-} from './styles';
+import { MobileOnlyGroup, SidebarOperatorGroup, SidebarStyle } from './styles';
 import { useNavItems } from './use-nav-items';
 
-export const Navigation: FC<{ desktopHidden?: boolean }> = memo(
-  ({ desktopHidden }) => {
-    const isLoading = useInitialLoading();
-    const { data: isSupported } = useSmVersionSupported();
-    const { themeName, toggleTheme } = useThemeToggle();
-    const { expanded, toggleExpanded } = useInpageNavigation();
-    const routes = useNavItems();
-    const pathname = useRouterPath();
-
-    const hidden = isLoading || isSupported === false || routes.length === 0;
-
-    return (
-      <Nav
-        aria-expanded={expanded}
-        hidden={hidden}
-        data-desktop-hidden={desktopHidden || undefined}
-        $desktopHidden={desktopHidden}
-      >
-        <NavContainer data-testid="navBlockMain">
-          <NavBlock title={WIDGET_TITLE}>
-            {routes.map(({ name, path, subPaths, icon, suffix, colored }) => {
-              const isActive = getIsActivePath(pathname, path, subPaths);
-
-              return (
-                <LocalLink
-                  key={path}
-                  href={path}
-                  onClick={toggleExpanded}
-                  data-testid="navItem"
-                >
-                  <NavLink $active={isActive} $colored={colored}>
-                    {icon}
-                    <Stack gap="sm" center>
-                      <span>{name}</span>
-                      {suffix}
-                    </Stack>
-                  </NavLink>
-                </LocalLink>
-              );
-            })}
-          </NavBlock>
-          <NavBlock title="Settings" onlyMobile>
-            {/* Use ThemeToggleButton instead of NavLink */}
-            <ThemeToggleButton onClick={toggleTheme}>
-              {/* Wrap icon in a span to prevent prop forwarding */}
-              <span>
-                {themeName === ThemeName.light ? <Dark /> : <Light />}
-              </span>
-              <span>
-                {themeName === ThemeName.light ? 'Dark' : 'Light'} theme
-              </span>
-            </ThemeToggleButton>
-          </NavBlock>
-        </NavContainer>
-      </Nav>
-    );
-  },
+const SidebarLogo: FC = () => (
+  <LocalLink href={PATH.HOME} asChild>
+    <Logo variant="full" product={WIDGET_TITLE} />
+  </LocalLink>
 );
 
-const NavBlock: FC<
-  PropsWithChildren<{ title: string; onlyMobile?: boolean }>
-> = ({ children, title, onlyMobile }) => {
+const ThemeGroup: FC = () => {
+  const { themeName, toggleTheme } = useThemeToggle();
   return (
-    <NavBlockStyle $onlyMobile={onlyMobile}>
-      <NavTitle>{title}</NavTitle>
-      <NavItems>{children}</NavItems>
-    </NavBlockStyle>
+    <MobileOnlyGroup>
+      <SidebarItem
+        icon={themeName === ThemeName.light ? <Dark /> : <Light />}
+        onClick={toggleTheme}
+      >
+        {themeName === ThemeName.light ? 'Dark' : 'Light'} theme
+      </SidebarItem>
+    </MobileOnlyGroup>
   );
 };
+
+const ShellNavigation: FC = () => {
+  const { expanded, toggleExpanded } = useInpageNavigation();
+  return (
+    <SidebarStyle
+      open={expanded}
+      onClose={toggleExpanded}
+      logo={<SidebarLogo />}
+    >
+      <ThemeGroup />
+    </SidebarStyle>
+  );
+};
+
+const OperatorNavigation: FC = () => {
+  const isLoading = useInitialLoading();
+  const { data: isSupported } = useSmVersionSupported();
+  const { nodeOperator } = useNodeOperator();
+  const { expanded, toggleExpanded } = useInpageNavigation();
+  const routes = useNavItems();
+  const pathname = useRouterPath();
+
+  const hidden = isLoading || isSupported === false;
+  const closeDrawer = () => expanded && toggleExpanded();
+
+  return (
+    <SidebarStyle
+      open={expanded}
+      onClose={toggleExpanded}
+      logo={<SidebarLogo />}
+      footer={
+        hidden || !nodeOperator ? undefined : (
+          <NoSSRWrapper>
+            <SidebarOperatorGroup>
+              <OperatorTypeButton data-testid="nodeOperatorCurve" />
+              <SwitchOperatorButton data-testid="nodeOperatorHeader" />
+            </SidebarOperatorGroup>
+          </NoSSRWrapper>
+        )
+      }
+    >
+      {!hidden && (
+        <>
+          <SidebarGroup label="My node operator" data-testid="navBlockMain">
+            {routes.map(({ name, path, subPaths, icon, suffix }) => (
+              <LocalLink
+                key={path + name}
+                href={path}
+                asChild
+                data-testid="navItem"
+              >
+                <SidebarItem
+                  icon={icon}
+                  active={getIsActivePath(pathname, path, subPaths)}
+                  counter={suffix}
+                  onClick={closeDrawer}
+                >
+                  {name}
+                </SidebarItem>
+              </LocalLink>
+            ))}
+          </SidebarGroup>
+          <ThemeGroup />
+        </>
+      )}
+    </SidebarStyle>
+  );
+};
+
+export const Navigation: FC = memo(() =>
+  useContext(NodeOperatorContext) ? (
+    <OperatorNavigation />
+  ) : (
+    <ShellNavigation />
+  ),
+);

@@ -1,9 +1,7 @@
 import { TestEnvBanner } from '@lidofinance/lido-shared-ui';
 import styled, { createGlobalStyle } from 'styled-components';
 
-// Above the mobile nav overlay (z-index 98) so its backdrop-filter doesn't
-// blur the banner, below the sticky header (z-index 250) so the pinned
-// header still covers it when it overlaps.
+// z-index 100 keeps the banner above page content but under the sticky header (250), sidebar and scrim (300/290)
 export const BannerStyle = styled(TestEnvBanner)`
   position: relative;
   z-index: 100;

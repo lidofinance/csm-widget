@@ -34,7 +34,7 @@ export type Route = ShowRuleProps & {
 
 const routes: Route[] = [
   {
-    name: 'Main',
+    name: 'Validate with Lido',
     path: PATH.HOME,
     icon: <HomeIcon />,
     showRules: ['NOT_NODE_OPERATOR'],
@@ -44,19 +44,6 @@ const routes: Route[] = [
     path: PATH.HOME,
     icon: <DashboardIcon />,
     showRules: ['HAS_ANY_ROLE'],
-  },
-  {
-    name: 'Create Operator',
-    path: PATH.CREATE,
-    icon: <PlusIcon />,
-    subPaths: [
-      PATH.CREATE_0x01,
-      PATH.CREATE_ICS,
-      PATH.CREATE_IDVTC,
-      PATH.CREATE_0x02,
-      PATH.CREATE_CM,
-    ],
-    showRules: ['CAN_CREATE'],
   },
   {
     name: 'Keys',
@@ -71,12 +58,6 @@ const routes: Route[] = [
     ],
     showRules: ['IS_NODE_OPERATOR'],
     suffix: <CounterInvalidKeys />,
-  },
-  {
-    name: 'Monitoring',
-    path: PATH.MONITORING,
-    icon: <MeterIcon />,
-    showRules: ['IS_NODE_OPERATOR'],
   },
   {
     name: 'Bond & Rewards',
@@ -103,6 +84,40 @@ const routes: Route[] = [
     suffix: <CounterInvites />,
   },
   {
+    name: 'My Operators',
+    path: PATH.MY_OPERATORS,
+    icon: <UsersIcon />,
+    showRules: ['IS_NODE_OPERATOR'],
+    modules: CSM_FAMILY_MODULES,
+    suffix: <CounterMyOperators />,
+  },
+  {
+    name: 'Surveys',
+    path: PATH.SURVEYS,
+    icon: <FileIcon />,
+    showRules: ['IS_SURVEYS_ACTIVE'],
+    suffix: <CounterSurveys />,
+  },
+  {
+    name: 'Create Operator',
+    path: PATH.CREATE,
+    icon: <PlusIcon />,
+    subPaths: [
+      PATH.CREATE_0x01,
+      PATH.CREATE_ICS,
+      PATH.CREATE_IDVTC,
+      PATH.CREATE_0x02,
+      PATH.CREATE_CM,
+    ],
+    showRules: ['CAN_CREATE'],
+  },
+  {
+    name: 'Monitoring',
+    path: PATH.MONITORING,
+    icon: <MeterIcon />,
+    showRules: ['IS_NODE_OPERATOR'],
+  },
+  {
     name: 'Inbox Requests',
     path: PATH.SETTINGS_INBOX,
     icon: <GearIcon />,
@@ -126,13 +141,6 @@ const routes: Route[] = [
     showRules: ['EL_TOP_UP_ALLOCATION_ENABLER'],
   },
   {
-    name: 'Surveys',
-    path: PATH.SURVEYS,
-    icon: <FileIcon />,
-    showRules: ['IS_SURVEYS_ACTIVE'],
-    suffix: <CounterSurveys />,
-  },
-  {
     name: 'Operator Type',
     path: PATH.TYPE,
     icon: <UserIcon />,
@@ -149,14 +157,6 @@ const routes: Route[] = [
     ],
     showRules: ['CAN_CLAIM_ICS', 'CAN_CLAIM_IDVTC', 'ICS_APPLY_ENABLED'],
     suffix: <CounterClaimType />,
-  },
-  {
-    name: 'My operators',
-    path: PATH.MY_OPERATORS,
-    icon: <UsersIcon />,
-    showRules: ['IS_NODE_OPERATOR'],
-    modules: CSM_FAMILY_MODULES,
-    suffix: <CounterMyOperators />,
   },
   {
     name: 'DVT',

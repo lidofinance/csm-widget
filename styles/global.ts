@@ -29,7 +29,8 @@ const GlobalStyle = createGlobalStyle`
     overflow-x: hidden;
     padding-right: 0 !important;
   }
-  a {
+  /* lib (CSS-module) anchors own their colors */
+  a:not([class*='-module_']) {
     cursor: pointer;
     text-decoration: none;
     color: var(--lido-color-primary);
@@ -59,9 +60,6 @@ const GlobalStyle = createGlobalStyle`
   ${NAV_MOBILE_MEDIA} {
     body {
      overflow-x: inherit;
-    }
-    body:has(nav[aria-expanded=true]){
-      overflow: hidden;
     }
   }
 `;
