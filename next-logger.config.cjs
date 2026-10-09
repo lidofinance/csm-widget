@@ -5,7 +5,7 @@ const { satanizer, commonPatterns } = require('@lidofinance/satanizer');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const loadEnvConfig = require('@next/env').loadEnvConfig;
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { clampArgs } = require('./utilsApi/clamp-log-args.cjs');
+const { clampArgs } = require('./scripts/clamp-log-args.cjs');
 
 // Must load env first
 const projectDir = process.cwd();
@@ -52,7 +52,7 @@ const logger = (defaultConfig) =>
     },
     hooks: {
       // Cap arguments before masking — masking cost grows faster than linearly
-      // with payload size. See utilsApi/clamp-log-args.cjs for the limits.
+      // with payload size. See scripts/clamp-log-args.cjs for the limits.
       logMethod(inputArgs, method) {
         return method.apply(this, mask(clampArgs(inputArgs)));
       },

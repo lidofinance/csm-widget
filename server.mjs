@@ -2,6 +2,8 @@ import { createServer } from 'http';
 import { parse } from 'url';
 import next from 'next';
 import { registerShutdownSignals } from './scripts/shutdown.mjs';
+import { startupCheckRPCs } from './scripts/startup-checks/rpc.mjs';
+import { startupCheckValidationFile } from './scripts/startup-checks/validation-file.mjs';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -38,7 +40,14 @@ const overrideSetHeader = (res) => {
 
 app
   .prepare()
-  .then(() => {
+  .then(async () => {
+    // Next loads .env* inside prepare(), so checks must run after it; config errors
+    // throw before the port opens, RPC reachability is only logged
+    if (process.env.RUN_STARTUP_CHECKS === 'true') {
+      void startupCheckRPCs();
+      await startupCheckValidationFile();
+    }
+
     const server = createServer(async (req, res) => {
       try {
         // Be sure to pass `true` as the second argument to `url.parse`.

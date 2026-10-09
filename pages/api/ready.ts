@@ -1,13 +1,25 @@
+import {
+  wrapRequest as wrapNextRequest,
+  cacheControl,
+} from '@lidofinance/next-api-wrapper';
+import { config } from 'config';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { getReadiness } from '../../scripts/readiness.mjs';
 
-type ReadyResponse = { status: 'ready' };
+type ReadyResponse =
+  { status: 'ready' } | { status: 'not-ready'; reason?: string };
 
-// Readiness must reflect only this pod's health. Upstream RPC status is deliberately
-// excluded: it is identical across all replicas, so failing on it would drain the
-// whole deployment instead of degrading.
+// Readiness = this pod's lifecycle only; RPC status is excluded since it is shared
+// across replicas and failing on it would drain the whole deployment
 const ready = (_req: NextApiRequest, res: NextApiResponse<ReadyResponse>) => {
-  res.setHeader('Cache-Control', 'no-store');
-  res.status(200).json({ status: 'ready' });
+  const { ready: isReady, reason } = getReadiness();
+  if (isReady) {
+    res.status(200).json({ status: 'ready' });
+  } else {
+    res.status(503).json({ status: 'not-ready', reason });
+  }
 };
 
-export default ready;
+export default wrapNextRequest([
+  cacheControl({ headers: config.CACHE_NO_STORE_HEADERS }),
+])(ready);
