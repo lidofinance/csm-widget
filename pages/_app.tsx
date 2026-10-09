@@ -6,12 +6,12 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
 import '@lidofinance/lido-shared-ui/index.css';
+import '@lidofinance/lido-app-ui/index.css';
 import { Providers } from 'providers';
 import { memo } from 'react';
 import {
   BackgroundGradient,
   SecurityStatusBanner,
-  TestEnvBanner,
   ToastContainer,
 } from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
@@ -70,7 +70,6 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       />
       <SVGGradientDefs />
       <ToastContainer />
-      <TestEnvBanner />
       {isMaintenance ? <MaintenancePage /> : <MemoApp {...rest} />}
       <SecurityStatusBanner />
     </Providers>

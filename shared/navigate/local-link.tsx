@@ -1,11 +1,20 @@
 import Link, { LinkProps } from 'next/link';
 import { useRouter } from 'next/router';
-import React, { FC, PropsWithChildren, useCallback } from 'react';
+import React, {
+  Children,
+  cloneElement,
+  FC,
+  MouseEventHandler,
+  PropsWithChildren,
+  ReactElement,
+  useCallback,
+} from 'react';
 
 import { PATH } from 'consts/urls';
 import { useModalActions } from 'providers/modal-provider';
 import { trackMatomoEvent, WithMatomoEvent } from 'utils';
 import { useCorrectPath } from './use-correct-path';
+import { useForwardedQuery } from './use-forwarded-query';
 
 type LocalLinkProps = Omit<LinkProps, 'href'> & {
   href?: PATH;
@@ -13,13 +22,27 @@ type LocalLinkProps = Omit<LinkProps, 'href'> & {
   'data-testid'?: string;
   query?: Record<string, string>;
   title?: string;
+  asChild?: boolean;
 };
+
+type LinkChild = ReactElement<{
+  href?: string;
+  onClick?: MouseEventHandler<HTMLAnchorElement>;
+}>;
 
 export const LocalLink: FC<
   PropsWithChildren<WithMatomoEvent<LocalLinkProps>>
-> = ({ matomoEvent, href: path, query, anchor, onClick, ...restProps }) => {
+> = ({
+  matomoEvent,
+  href: path,
+  query,
+  anchor,
+  onClick,
+  asChild,
+  children,
+  ...restProps
+}) => {
   const router = useRouter();
-  const { ref, embed, app, theme } = router.query;
 
   const href = useCorrectPath(path ?? (router.pathname as PATH));
   const { closeModal } = useModalActions();
@@ -34,14 +57,32 @@ export const LocalLink: FC<
     [closeModal, matomoEvent, onClick],
   );
 
-  const extraQuery: Record<string, string> = query ?? {};
-  // Not support case: ?ref=01234&ref=56789
-  if (ref && typeof ref === 'string') extraQuery.ref = ref;
-  if (embed && typeof embed === 'string') extraQuery.embed = embed;
-  if (app && typeof app === 'string') extraQuery.app = app;
-  if (theme && typeof theme === 'string') extraQuery.theme = theme;
+  const extraQuery = useForwardedQuery(query);
 
   if (typeof href === 'string') {
+    if (asChild) {
+      const child = Children.only(children) as LinkChild;
+      const { 'data-testid': testId, title } = restProps;
+
+      return (
+        <Link
+          {...restProps}
+          href={{ pathname: href, query: extraQuery, hash: anchor }}
+          passHref
+          legacyBehavior
+        >
+          {cloneElement(child, {
+            ...(testId && { 'data-testid': testId }),
+            ...(title && { title }),
+            onClick: (event: React.MouseEvent<HTMLAnchorElement>) => {
+              onClickHandler(event);
+              child.props.onClick?.(event);
+            },
+          })}
+        </Link>
+      );
+    }
+
     return (
       <Link
         {...restProps}

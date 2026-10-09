@@ -1,7 +1,7 @@
 import { useInpageNavigation } from 'providers/inpage-navigation';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { NAV_MOBILE_MEDIA } from 'styles/constants';
+import { SIDEBAR_DRAWER_MEDIA } from 'styles/constants';
 import { HeaderButton } from '../styles';
 
 export const HeaderBurger: FC = () => {
@@ -42,7 +42,7 @@ export const BurgerButtonStyle = styled(HeaderButton)`
   justify-content: center;
   padding: 0;
 
-  ${NAV_MOBILE_MEDIA} {
+  ${SIDEBAR_DRAWER_MEDIA} {
     display: flex;
   }
 
