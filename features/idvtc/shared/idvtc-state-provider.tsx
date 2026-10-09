@@ -1,5 +1,8 @@
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
+  OperatorTypeStatus,
+  resolveTypeStatus,
+  useDappStatus,
   useIdvtcProof,
   useOperatedNodeOperator,
   useOperatorOwner,
@@ -20,9 +23,10 @@ import {
   useState,
 } from 'react';
 import invariant from 'tiny-invariant';
+import { isAddressEqual } from 'viem';
 import { IdvtcResponseDto } from './types';
 
-export type IdvtcTypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
+export type IdvtcTypeStatus = OperatorTypeStatus;
 
 type IdvtcStateContextType = {
   typeStatus: IdvtcTypeStatus;
@@ -48,10 +52,14 @@ export const IdvtcStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const nodeOperator = useOperatedNodeOperator();
   const operatorId = nodeOperator?.nodeOperatorId;
   // The type only exists in CSM: an operator of another module never holds it.
+  const hasOperator = nodeOperator?.module === MODULE_NAME.CSM;
   const { data: operatorType } = useOperatorType(
-    nodeOperator?.module === MODULE_NAME.CSM ? nodeOperator : undefined,
+    hasOperator ? nodeOperator : undefined,
   );
   const { data: owner } = useOperatorOwner({ nodeOperatorId: operatorId });
+  const { address } = useDappStatus();
+  const isOwner =
+    !!owner?.address && !!address && isAddressEqual(owner.address, address);
 
   const { data: proofData, isPending: isTypePending } = useIdvtcProof();
   const { data: ownerProofData, isPending: isOwnerTypePending } = useIdvtcProof(
@@ -66,18 +74,14 @@ export const IdvtcStateProvider: FC<PropsWithChildren> = ({ children }) => {
   const [manualReset, setManualReset] = useState(false);
   const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
 
-  const typeStatus: IdvtcTypeStatus = useMemo(() => {
-    if (operatorType === OPERATOR_TYPE.CSM_IDVTC || proofData?.isConsumed)
-      return 'CLAIMED';
-    if (proofData?.proof) return 'ISSUED';
-    if (ownerProofData?.proof) return 'OWNER_ISSUED';
-    return 'PENDING';
-  }, [
+  const typeStatus = resolveTypeStatus({
     operatorType,
-    ownerProofData?.proof,
-    proofData?.isConsumed,
-    proofData?.proof,
-  ]);
+    targetType: OPERATOR_TYPE.CSM_IDVTC,
+    isOwner,
+    hasOperator,
+    proof: proofData,
+    ownerProof: ownerProofData,
+  });
 
   const value: IdvtcStateContextType = useMemo(
     () => ({
