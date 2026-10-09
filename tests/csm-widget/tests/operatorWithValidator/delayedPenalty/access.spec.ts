@@ -3,7 +3,7 @@ import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { test } from '../../test.fixture';
-import { REPORT_GENERAL_DELAYED_PENALTY_ROLE } from './delayedPenalty.const';
+import { REPORT_GENERAL_DELAYED_PENALTY_ROLE } from '../../../consts/delayedPenalty.const';
 
 const NAV_ITEM = 'Delayed penalty';
 
