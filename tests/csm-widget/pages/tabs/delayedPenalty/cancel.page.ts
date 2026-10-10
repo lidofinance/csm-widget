@@ -29,7 +29,10 @@ export class DelayedPenaltyCancelPage extends BasePage {
 
   async open() {
     await test.step('Open Cancel delayed penalty page', async () => {
-      await this.openWithRetry('/delayed-penalty/cancel', this.form);
+      await this.openWithRetry('/delayed-penalty/cancel', [
+        this.form,
+        this.lockedRows.first(),
+      ]);
     });
   }
 
