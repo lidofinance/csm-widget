@@ -25,6 +25,7 @@ export const Info: FC = () => {
         <Stack direction="column" gap="sm">
           <TitledAmount
             warning={!isExpired}
+            data-testid="lockedBondAmount"
             title={BOND_LOCKED}
             help="Bond may be locked in the case of an MEV stealing event reported by a dedicated committee. This measure ensures that Node Operators are held accountable for any misbehavior or rule violations."
             chip={

@@ -9,6 +9,7 @@ export const REFUSE_CF_BLOCK_COOKIE =
           expires: -1,
           httpOnly: false,
           secure: false,
+          sameSite: 'Lax' as const,
         },
       ]
     : [];
