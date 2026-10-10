@@ -8,6 +8,7 @@ import {
   PAGE_WAIT_TIMEOUT,
   STAGE_WAIT_TIMEOUT,
 } from 'tests/shared/consts/timeouts';
+import { Tags } from 'tests/shared/consts/common.const';
 
 const secretPhrase = generateMnemonic(english, 128);
 test.use({ secretPhrase });
@@ -81,6 +82,7 @@ test.describe(
 
     test(
       qase(467, 'Should claim the IDVTC type successfully'),
+      { tag: Tags.smoke },
       async ({ widgetService }) => {
         const claim = widgetService.operatorType.claimIdvtc;
 
