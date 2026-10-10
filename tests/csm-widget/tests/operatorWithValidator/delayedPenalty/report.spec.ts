@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { test } from '../../test.fixture';
@@ -51,7 +52,7 @@ test.describe(
       await widgetService.delayedPenaltyPage.report.open();
     });
 
-    test('Should show empty form', async ({ widgetService }) => {
+    test(qase(582, 'Should show empty form'), async ({ widgetService }) => {
       const { report } = widgetService.delayedPenaltyPage;
 
       await test.step('Form titles are shown', async () => {
@@ -106,7 +107,7 @@ test.describe(
       });
     });
 
-    test('Should reject zero amount', async ({ widgetService }) => {
+    test(qase(583, 'Should reject zero amount'), async ({ widgetService }) => {
       const { report } = widgetService.delayedPenaltyPage;
 
       await test.step('Enter 0 as amount', async () => {
@@ -118,54 +119,59 @@ test.describe(
       });
     });
 
-    test('Should reject invalid penalty type', async ({ widgetService }) => {
-      const { report } = widgetService.delayedPenaltyPage;
+    test(
+      qase(584, 'Should reject invalid penalty type'),
+      async ({ widgetService }) => {
+        const { report } = widgetService.delayedPenaltyPage;
 
-      for (const { value, error } of INVALID_PENALTY_TYPES) {
-        await test.step(`"${value}" → "${error}"`, async () => {
-          await report.penaltyTypeInput.fill(value);
-          await expect(report.fieldError('penaltyType')).toHaveText(error);
+        for (const { value, error } of INVALID_PENALTY_TYPES) {
+          await test.step(`"${value}" → "${error}"`, async () => {
+            await report.penaltyTypeInput.fill(value);
+            await expect(report.fieldError('penaltyType')).toHaveText(error);
+            await expect(report.submitButton).toBeDisabled();
+          });
+        }
+      },
+    );
+
+    test(
+      qase(585, 'Should accept hex penalty type up to 32 bytes'),
+      async ({ widgetService }) => {
+        const { report } = widgetService.delayedPenaltyPage;
+
+        await test.step('Fill the other fields with valid values', async () => {
+          await report.nodeOperatorIdInput.fill(String(noId));
+          await report.amountInput.fill('0.1');
+        });
+
+        for (const value of VALID_PENALTY_TYPES) {
+          await test.step(`"${value}" is accepted`, async () => {
+            await report.penaltyTypeInput.fill(value);
+            await expect(report.fieldError('penaltyType')).toBeHidden();
+            await expect(report.submitButton).toBeEnabled();
+          });
+        }
+      },
+    );
+
+    test(
+      qase(586, 'Should reject details longer than 256 chars'),
+      async ({ widgetService }) => {
+        const { report } = widgetService.delayedPenaltyPage;
+
+        await test.step('256 chars are accepted', async () => {
+          await report.detailsInput.fill('a'.repeat(256));
+          await expect(report.fieldError('details')).toBeHidden();
+        });
+
+        await test.step('257 chars are rejected', async () => {
+          await report.detailsInput.fill('a'.repeat(257));
+          await expect(report.fieldError('details')).toHaveText(
+            'Is too long, maximum is 256',
+          );
           await expect(report.submitButton).toBeDisabled();
         });
-      }
-    });
-
-    test('Should accept hex penalty type up to 32 bytes', async ({
-      widgetService,
-    }) => {
-      const { report } = widgetService.delayedPenaltyPage;
-
-      await test.step('Fill the other fields with valid values', async () => {
-        await report.nodeOperatorIdInput.fill(String(noId));
-        await report.amountInput.fill('0.1');
-      });
-
-      for (const value of VALID_PENALTY_TYPES) {
-        await test.step(`"${value}" is accepted`, async () => {
-          await report.penaltyTypeInput.fill(value);
-          await expect(report.fieldError('penaltyType')).toBeHidden();
-          await expect(report.submitButton).toBeEnabled();
-        });
-      }
-    });
-
-    test('Should reject details longer than 256 chars', async ({
-      widgetService,
-    }) => {
-      const { report } = widgetService.delayedPenaltyPage;
-
-      await test.step('256 chars are accepted', async () => {
-        await report.detailsInput.fill('a'.repeat(256));
-        await expect(report.fieldError('details')).toBeHidden();
-      });
-
-      await test.step('257 chars are rejected', async () => {
-        await report.detailsInput.fill('a'.repeat(257));
-        await expect(report.fieldError('details')).toHaveText(
-          'Is too long, maximum is 256',
-        );
-        await expect(report.submitButton).toBeDisabled();
-      });
-    });
+      },
+    );
   },
 );

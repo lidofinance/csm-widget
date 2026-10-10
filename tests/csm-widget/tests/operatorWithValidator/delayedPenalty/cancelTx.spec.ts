@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import {
@@ -49,78 +50,82 @@ test.describe(
       if (snapshotId) await csmSDK.evmRevert(snapshotId);
     });
 
-    test('Should cancel part of penalty and show it to the operator', async ({
-      widgetService,
-      csmSDK,
-    }) => {
-      const { cancel, txModal } = widgetService.delayedPenaltyPage;
-      const { unlockBond } = widgetService.bondRewardsPage;
-      const lockedBefore = (await csmSDK.operator.getBondBalance(BigInt(noId)))
-        .locked;
+    test(
+      qase(581, 'Should cancel part of penalty and show it to the operator'),
+      async ({ widgetService, csmSDK }) => {
+        const { cancel, txModal } = widgetService.delayedPenaltyPage;
+        const { unlockBond } = widgetService.bondRewardsPage;
+        const lockedBefore = (
+          await csmSDK.operator.getBondBalance(BigInt(noId))
+        ).locked;
 
-      await test.step('Submit the cancel form', async () => {
-        await cancel.open();
-        await cancel.submit(noId, CANCEL_AMOUNT);
-      });
-
-      await test.step('Sign stage shows operator and amount', async () => {
-        await expect(txModal.title).toHaveText(
-          'You are canceling delayed penalty',
-          { timeout: STAGE_WAIT_TIMEOUT },
-        );
-        await expect(txModal.description).toContainText(
-          `Node Operator ID: ${noId}`,
-        );
-        await expect(txModal.description).toContainText(CANCEL_AMOUNT);
-      });
-
-      await test.step('Confirm transaction and wait for success', async () => {
-        await widgetService.walletPage.confirmTx();
-        await expect(txModal.title).toHaveText('Delayed penalty is canceled', {
-          timeout: STAGE_WAIT_TIMEOUT,
+        await test.step('Submit the cancel form', async () => {
+          await cancel.open();
+          await cancel.submit(noId, CANCEL_AMOUNT);
         });
-        await txModal.closeModal();
-      });
 
-      const { locked } = await csmSDK.operator.getBondBalance(BigInt(noId));
-
-      await test.step('Locked bond decreased by the cancelled amount', async () => {
-        expect(lockedBefore - locked).toBe(parseEther(CANCEL_AMOUNT));
-      });
-
-      await test.step('Locked table shows the remaining amount', async () => {
-        // the table refetches after the modal closes
-        await expect
-          .poll(
-            async () =>
-              parseAmount(
-                await cancel
-                  .lockedRow(noId)
-                  .getByTestId('lockedAmountCell')
-                  .textContent(),
-              ),
-            { timeout: PAGE_WAIT_TIMEOUT },
-          )
-          .toBeCloseTo(parseFloat(formatEther(locked)), 3);
-      });
-
-      await test.step('Penalty History lists the cancellation', async () => {
-        await unlockBond.open();
-        await unlockBond.expandPenaltyHistory();
-        const row = unlockBond.penaltyHistoryRows.filter({
-          has: widgetService.page
-            .getByTestId('typeCell')
-            .getByText('Cancelled'),
+        await test.step('Sign stage shows operator and amount', async () => {
+          await expect(txModal.title).toHaveText(
+            'You are canceling delayed penalty',
+            { timeout: STAGE_WAIT_TIMEOUT },
+          );
+          await expect(txModal.description).toContainText(
+            `Node Operator ID: ${noId}`,
+          );
+          await expect(txModal.description).toContainText(CANCEL_AMOUNT);
         });
-        // history is read from contract events, slow on the fork
-        await expect(row).toHaveCount(1, { timeout: RPC_WAIT_TIMEOUT });
-        const amount = parseAmount(
-          await row.getByTestId('amountCell').textContent(),
-        );
-        expect(Math.abs(amount - parseFloat(CANCEL_AMOUNT))).toBeLessThan(
-          AMOUNT_TOLERANCE,
-        );
-      });
-    });
+
+        await test.step('Confirm transaction and wait for success', async () => {
+          await widgetService.walletPage.confirmTx();
+          await expect(txModal.title).toHaveText(
+            'Delayed penalty is canceled',
+            {
+              timeout: STAGE_WAIT_TIMEOUT,
+            },
+          );
+          await txModal.closeModal();
+        });
+
+        const { locked } = await csmSDK.operator.getBondBalance(BigInt(noId));
+
+        await test.step('Locked bond decreased by the cancelled amount', async () => {
+          expect(lockedBefore - locked).toBe(parseEther(CANCEL_AMOUNT));
+        });
+
+        await test.step('Locked table shows the remaining amount', async () => {
+          // the table refetches after the modal closes
+          await expect
+            .poll(
+              async () =>
+                parseAmount(
+                  await cancel
+                    .lockedRow(noId)
+                    .getByTestId('lockedAmountCell')
+                    .textContent(),
+                ),
+              { timeout: PAGE_WAIT_TIMEOUT },
+            )
+            .toBeCloseTo(parseFloat(formatEther(locked)), 3);
+        });
+
+        await test.step('Penalty History lists the cancellation', async () => {
+          await unlockBond.open();
+          await unlockBond.expandPenaltyHistory();
+          const row = unlockBond.penaltyHistoryRows.filter({
+            has: widgetService.page
+              .getByTestId('typeCell')
+              .getByText('Cancelled'),
+          });
+          // history is read from contract events, slow on the fork
+          await expect(row).toHaveCount(1, { timeout: RPC_WAIT_TIMEOUT });
+          const amount = parseAmount(
+            await row.getByTestId('amountCell').textContent(),
+          );
+          expect(Math.abs(amount - parseFloat(CANCEL_AMOUNT))).toBeLessThan(
+            AMOUNT_TOLERANCE,
+          );
+        });
+      },
+    );
   },
 );
