@@ -30,11 +30,13 @@ if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
-  // documents — every gSSP page returns the same props for every visitor
+  // documents — same HTML for every visitor; uncovered, gSSP pages get the
+  // default no-store and gSP pages a 1-year s-maxage that outlives build chunk hashes
   '/',
   '/group',
   '/monitoring',
   '/operators',
+  '/qa-config',
   '/wrapped-2025/:path*',
   '/bond/:path*',
   '/create/:path*',
@@ -44,10 +46,13 @@ export const CACHE_CONTROL_PAGES = [
   '/settings/:path*',
   '/surveys/:path*',
   '/type/:path*',
-  // assets — unhashed, so they share the document TTL
+  // assets — unhashed, so they share the document TTL; header sources match
+  // pre-rewrite paths, so module-variant files are listed too
   '/manifest.json',
+  '/manifest-:module(csm|cm).json',
   '/favicon:size*',
   '/apple-touch-icon.png',
+  '/apple-touch-icon-:module(csm|cm).png',
   '/:module(csm|cm)-preview.png',
   '/runtime/window-env.js',
 ];
