@@ -6,6 +6,7 @@ export * from './createOperatorGroup.ts';
 export * from './createPermissionlessOperator.ts';
 export * from './depositKeys.ts';
 export * from './fundTokens.ts';
+export * from './grantRole.ts';
 export * from './proposeManager.ts';
 export * from './proposeReward.ts';
 export * from './reportPenalty.ts';

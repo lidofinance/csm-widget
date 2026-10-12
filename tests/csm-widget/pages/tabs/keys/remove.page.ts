@@ -7,6 +7,7 @@ export class RemovePage {
   base: BasePage;
   removeKeysForm: Locator;
   keyRow: Locator;
+  emptyState: Locator;
   keyCheckbox: Locator;
   numberOfKeysToRemove: Locator;
   numberOfKeysToRemoveValue: Locator;
@@ -26,6 +27,9 @@ export class RemovePage {
     this.keyRow = this.removeKeysForm.locator('label', {
       hasText: /0x[0-9a-fA-F]+/,
     });
+    this.emptyState = this.removeKeysForm.getByText(
+      'No keys available to remove',
+    );
     this.keyCheckbox = this.removeKeysForm.locator('label >> svg');
     this.numberOfKeysToRemove = this.removeKeysForm.getByTestId(
       'numbersOfKeysToRemove',
@@ -53,7 +57,11 @@ export class RemovePage {
 
   async open() {
     await test.step('Open remove tab for Keys page', async () => {
-      await this.base.openWithRetry('/keys/remove', this.keyRow.first());
+      // an empty operator has no key rows, so accept the empty state too
+      await this.base.openWithRetry(
+        '/keys/remove',
+        this.keyRow.first().or(this.emptyState).first(),
+      );
     });
   }
 

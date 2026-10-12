@@ -15,7 +15,7 @@ export const DelayedPenaltyCancelForm: FC = memo(() => {
   return (
     <DelayedPenaltyCancelDataProvider>
       <DelayedPenaltyCancelFormProvider>
-        <FormBlock>
+        <FormBlock data-testid="delayedPenaltyCancelForm">
           <FormLoader>
             <Form>
               <NodeOperatorInput />

@@ -16,6 +16,7 @@ import { BondRewardsPage } from 'tests/csm-widget/pages/bondRewards.page';
 import { OperatorTypePage } from 'tests/csm-widget/pages/operatorType.page';
 import {
   DashboardPage,
+  DelayedPenaltyPage,
   KeysPage,
   MainPage,
   MonitoringPage,
@@ -37,6 +38,7 @@ export class WidgetService {
   public mainPage: MainPage;
   public keysPage: KeysPage;
   public dashboardPage: DashboardPage;
+  public delayedPenaltyPage: DelayedPenaltyPage;
   public myOperatorsPage: MyOperatorsPage;
   public settingsPage: SettingsPage;
   public monitoringPage: MonitoringPage;
@@ -59,6 +61,7 @@ export class WidgetService {
     this.mainPage = new MainPage(this.page);
     this.keysPage = new KeysPage(this.page);
     this.dashboardPage = new DashboardPage(this.page);
+    this.delayedPenaltyPage = new DelayedPenaltyPage(this.page);
     this.myOperatorsPage = new MyOperatorsPage(this.page);
     this.settingsPage = new SettingsPage(this.page, this.walletPage);
     this.monitoringPage = new MonitoringPage(this.page);
