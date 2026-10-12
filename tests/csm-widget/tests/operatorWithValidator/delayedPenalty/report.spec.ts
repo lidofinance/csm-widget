@@ -81,31 +81,31 @@ test.describe(
       });
     });
 
-    test('Should reject invalid Node Operator ID', async ({
-      widgetService,
-      csmSDK,
-    }) => {
-      test.fail(true, 'issue - CS-1233');
+    test(
+      qase(588, 'Should reject invalid Node Operator ID'),
+      async ({ widgetService, csmSDK }) => {
+        test.fail(true, 'issue - CS-1233');
 
-      const { report } = widgetService.delayedPenaltyPage;
-      const count = await csmSDK.module.getOperatorsCount();
+        const { report } = widgetService.delayedPenaltyPage;
+        const count = await csmSDK.module.getOperatorsCount();
 
-      await test.step('ID above the last operator', async () => {
-        await report.nodeOperatorIdInput.fill(String(count + 10n));
-        await expect(report.fieldError('nodeOperatorId')).toHaveText(
-          `Max Node Operator ID is ${count - 1n}`,
-        );
-        await expect(report.submitButton).toBeDisabled();
-      });
+        await test.step('ID above the last operator', async () => {
+          await report.nodeOperatorIdInput.fill(String(count + 10n));
+          await expect(report.fieldError('nodeOperatorId')).toHaveText(
+            `Max Node Operator ID is ${count - 1n}`,
+          );
+          await expect(report.submitButton).toBeDisabled();
+        });
 
-      await test.step('Non-numeric ID', async () => {
-        await report.nodeOperatorIdInput.fill('abc');
-        await expect(report.fieldError('nodeOperatorId')).toHaveText(
-          'Invalid ID',
-        );
-        await expect(report.submitButton).toBeDisabled();
-      });
-    });
+        await test.step('Non-numeric ID', async () => {
+          await report.nodeOperatorIdInput.fill('abc');
+          await expect(report.fieldError('nodeOperatorId')).toHaveText(
+            'Invalid ID',
+          );
+          await expect(report.submitButton).toBeDisabled();
+        });
+      },
+    );
 
     test(qase(583, 'Should reject zero amount'), async ({ widgetService }) => {
       const { report } = widgetService.delayedPenaltyPage;
