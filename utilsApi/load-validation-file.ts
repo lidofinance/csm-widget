@@ -1,6 +1,5 @@
 import Metrics from 'utilsApi/metrics';
 import { promises as fs } from 'fs';
-import { config } from 'config';
 import getConfigNext from 'next/config';
 import type { AddressValidationFile } from 'utils';
 
@@ -39,9 +38,7 @@ const isValidValidationFile = (
 
 const getValidationFilePath = (): string | undefined => {
   return (
-    process.env.VALIDATION_FILE_PATH ||
-    config.validationFilePath ||
-    serverRuntimeConfig.validationFilePath
+    process.env.VALIDATION_FILE_PATH || serverRuntimeConfig.validationFilePath
   );
 };
 

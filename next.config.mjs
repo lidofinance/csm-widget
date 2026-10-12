@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
+import { toBoolean } from './scripts/to-boolean.mjs';
 import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
 
 logEnvironmentVariables();
@@ -13,8 +14,8 @@ const basePath = process.env.BASE_PATH;
 const developmentMode = process.env.NODE_ENV === 'development';
 const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
 const moduleName = moduleMode.toLowerCase();
-const isIPFSMode = !!process.env.IPFS_MODE;
-const maintenance = !!process.env.MAINTENANCE; // TODO: load from runtime config
+const isIPFSMode = toBoolean(process.env.IPFS_MODE);
+const maintenance = toBoolean(process.env.MAINTENANCE); // TODO: load from runtime config
 
 // Load devnet contract addresses from JSON file if specified
 let devnetAddresses = null;

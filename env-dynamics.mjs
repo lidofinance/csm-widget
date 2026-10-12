@@ -1,19 +1,4 @@
-/**
- * Convert to bool:
- * - true to true
- * - 'true' to true
- * - 1 to true
- * - '1' to true
- * - another values to false
- * @returns {Boolean}
- */
-const toBoolean = (dataStr) => {
-  return !!(
-    dataStr?.toLowerCase?.() === 'true' ||
-    dataStr === true ||
-    Number.parseInt(dataStr, 10) === 1
-  );
-};
+import { toBoolean } from './scripts/to-boolean.mjs';
 
 /** @type string */
 export const matomoHost = process.env.MATOMO_URL;
@@ -46,16 +31,9 @@ export const prefillUnsafeElRpcUrls560048 = parseUrlList(
   process.env.PREFILL_UNSAFE_EL_RPC_URLS_560048,
 );
 
-/** @type string */
-export const widgetApiBasePathForIpfs =
-  process.env.WIDGET_API_BASE_PATH_FOR_IPFS;
-
 /** @type boolean */
 export const addressApiValidationEnabled =
   !!process.env.VALIDATION_SERVICE_BASE_PATH;
-
-/** @type string */
-export const validationFilePath = process.env.VALIDATION_FILE_PATH;
 
 /** @type string */
 export const keysApiUrl = process.env.KEYS_API_URL;
