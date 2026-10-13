@@ -3,6 +3,10 @@ import { resolveTypeStatus } from './resolve-type-status';
 
 const TARGET = 'CSM_ICS' as OPERATOR_TYPE;
 const OTHER = 'CSM_IDVTC' as OPERATOR_TYPE;
+const DEF = 'CSM_DEF' as OPERATOR_TYPE;
+
+const LIVE = { proof: ['0x1'], isConsumed: false };
+const USED = { proof: ['0x1'], isConsumed: true };
 
 type Params = Parameters<typeof resolveTypeStatus>[0];
 
@@ -10,81 +14,103 @@ const resolve = (params: Partial<Params>) =>
   resolveTypeStatus({
     operatorType: undefined,
     targetType: TARGET,
-    isOwner: false,
+    pairedType: OTHER,
     hasOperator: true,
+    isOwner: false,
     proof: undefined,
-    ownerProof: undefined,
+    otherProof: undefined,
     ...params,
   });
 
 describe('resolveTypeStatus', () => {
-  it('returns PENDING without any proof', () => {
+  it('PENDING without proofs', () => {
     expect(resolve({ operatorType: OTHER })).toBe('PENDING');
   });
 
-  it('returns ISSUED for an own unconsumed proof without an operator', () => {
-    expect(
-      resolve({
-        hasOperator: false,
-        proof: { proof: ['0x1'], isConsumed: false },
-      }),
-    ).toBe('ISSUED');
+  it('PENDING without operator and proofs', () => {
+    expect(resolve({ hasOperator: false })).toBe('PENDING');
   });
 
-  it('returns ISSUED for the owner of an operator with an own unconsumed proof', () => {
-    expect(
-      resolve({ isOwner: true, proof: { proof: ['0x1'], isConsumed: false } }),
-    ).toBe('ISSUED');
-  });
-
-  it('returns ISSUED_NOT_OWNER for a non-owner own proof when the operator exists', () => {
-    expect(resolve({ proof: { proof: ['0x1'], isConsumed: false } })).toBe(
-      'ISSUED_NOT_OWNER',
-    );
-  });
-
-  it('returns CLAIMED for an own consumed proof', () => {
-    expect(resolve({ proof: { proof: ['0x1'], isConsumed: true } })).toBe(
-      'CLAIMED',
-    );
-  });
-
-  it('returns CLAIMED for the owner of an operator that already has the type', () => {
+  it('CLAIMED when the operator has the type', () => {
+    expect(resolve({ operatorType: TARGET })).toBe('CLAIMED');
     expect(resolve({ operatorType: TARGET, isOwner: true })).toBe('CLAIMED');
   });
 
-  it('ignores the operator type for a non-owner', () => {
-    expect(resolve({ operatorType: TARGET })).toBe('PENDING');
-  });
-
-  it('returns ISSUED_NOT_OWNER for a non-owner own proof on an already typed operator', () => {
-    expect(
-      resolve({
-        operatorType: TARGET,
-        proof: { proof: ['0x1'], isConsumed: false },
-      }),
-    ).toBe('ISSUED_NOT_OWNER');
-  });
-
-  it('returns OWNER_ISSUED for an unconsumed owner proof', () => {
-    expect(resolve({ ownerProof: { proof: ['0x1'], isConsumed: false } })).toBe(
-      'OWNER_ISSUED',
-    );
-  });
-
-  it('ignores a consumed owner proof', () => {
-    expect(resolve({ ownerProof: { proof: ['0x1'], isConsumed: true } })).toBe(
+  it('ignores operator type without an operator', () => {
+    expect(resolve({ operatorType: TARGET, hasOperator: false })).toBe(
       'PENDING',
     );
   });
 
-  it('prefers an own proof over a consumed owner proof', () => {
+  it('CLAIMED beats own live proof for a non-owner', () => {
+    expect(resolve({ operatorType: TARGET, proof: LIVE })).toBe('CLAIMED');
+  });
+
+  it('CLAIMED beats owner live proof', () => {
     expect(
-      resolve({
-        isOwner: true,
-        proof: { proof: ['0x1'], isConsumed: false },
-        ownerProof: { proof: ['0x2'], isConsumed: true },
-      }),
-    ).toBe('ISSUED');
+      resolve({ operatorType: TARGET, proof: LIVE, otherProof: LIVE }),
+    ).toBe('CLAIMED');
+  });
+
+  it('ISSUED for own live proof without an operator', () => {
+    expect(resolve({ hasOperator: false, proof: LIVE })).toBe('ISSUED');
+  });
+
+  it('ISSUED for the owner with own live proof', () => {
+    expect(resolve({ isOwner: true, proof: LIVE })).toBe('ISSUED');
+  });
+
+  it('ISSUED for the owner with own live proof beats other live proof', () => {
+    expect(resolve({ isOwner: true, proof: LIVE, otherProof: LIVE })).toBe(
+      'ISSUED',
+    );
+  });
+
+  it('ISSUED_NOT_OWNER for a non-owner live proof', () => {
+    expect(resolve({ proof: LIVE })).toBe('ISSUED_NOT_OWNER');
+  });
+
+  it('ISSUED_NOT_OWNER ignores a consumed other proof', () => {
+    expect(resolve({ proof: LIVE, otherProof: USED })).toBe('ISSUED_NOT_OWNER');
+  });
+
+  it('OWNER_ISSUED beats own live proof for a non-owner', () => {
+    expect(resolve({ proof: LIVE, otherProof: LIVE })).toBe('OWNER_ISSUED');
+  });
+
+  it('OWNER_ISSUED for a non-owner with a live owner proof only', () => {
+    expect(resolve({ otherProof: LIVE })).toBe('OWNER_ISSUED');
+  });
+
+  it('OTHER_ISSUED for the owner without own proof and other live proof', () => {
+    expect(resolve({ isOwner: true, otherProof: LIVE })).toBe('OTHER_ISSUED');
+  });
+
+  it('OTHER_ISSUED beats own consumed proof', () => {
+    expect(resolve({ isOwner: true, proof: USED, otherProof: LIVE })).toBe(
+      'OTHER_ISSUED',
+    );
+  });
+
+  it('OWNER_ISSUED beats own consumed proof', () => {
+    expect(resolve({ proof: USED, otherProof: LIVE })).toBe('OWNER_ISSUED');
+  });
+
+  it('PROOF_USED for own consumed proof when the operator has the paired type', () => {
+    expect(resolve({ operatorType: OTHER, proof: USED })).toBe('PROOF_USED');
+  });
+
+  it('PROOF_USED_ELSEWHERE for own consumed proof when the operator has another type', () => {
+    expect(resolve({ operatorType: DEF, proof: USED })).toBe(
+      'PROOF_USED_ELSEWHERE',
+    );
+  });
+
+  it('PROOF_USED for own consumed proof without an operator', () => {
+    expect(resolve({ hasOperator: false, proof: USED })).toBe('PROOF_USED');
+  });
+
+  it('ignores a consumed other proof', () => {
+    expect(resolve({ otherProof: USED })).toBe('PENDING');
   });
 });

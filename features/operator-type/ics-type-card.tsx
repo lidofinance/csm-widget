@@ -1,39 +1,16 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { IcsApplyButton } from 'features/ics/apply-button';
-import { ScoreChip } from 'features/ics/form-status/components/score-chip';
-import { IcsFormStatus, TypeStatus, useIcsState } from 'features/ics/shared';
+import { useIcsState } from 'features/ics/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { useOperatorTypeCurve } from 'shared/hooks';
 import { TypeBadgeButton } from 'shared/node-operator/operator-type';
+import { TypeCardChip } from 'shared/node-operator/type-status';
 import { OptionCard } from './styles';
 
-const renderStatusChip = (
-  typeStatus: TypeStatus,
-  status: IcsFormStatus | undefined,
-) => {
-  if (typeStatus === 'CLAIMED') {
-    return <ScoreChip type="default">Claimed</ScoreChip>;
-  }
-  if (typeStatus === 'ISSUED' || typeStatus === 'ISSUED_NOT_OWNER') {
-    return <ScoreChip type="success">Issued</ScoreChip>;
-  }
-  switch (status) {
-    case 'APPROVED':
-      return <ScoreChip type="success">Approved</ScoreChip>;
-    case 'REJECTED':
-      return <ScoreChip type="error">Rejected</ScoreChip>;
-    case 'REVIEW':
-      return <ScoreChip type="pending">Pending</ScoreChip>;
-    default:
-      return null;
-  }
-};
-
 export const IcsTypeCard: FC = () => {
-  const { typeStatus, data } = useIcsState();
-  const chip = renderStatusChip(typeStatus, data?.status);
+  const { typeStatus, data, isButtonPending } = useIcsState();
   const curve = useOperatorTypeCurve(OPERATOR_TYPE.CSM_ICS);
 
   return (
@@ -45,7 +22,9 @@ export const IcsTypeCard: FC = () => {
             curve={curve}
             data-testid="operatorTypeBadge-ics"
           />
-          {chip}
+          {!isButtonPending && (
+            <TypeCardChip typeStatus={typeStatus} formStatus={data?.status} />
+          )}
         </Stack>
         <Stack direction="column" gap="xs">
           <Text as="h3" size="sm" weight={700}>
