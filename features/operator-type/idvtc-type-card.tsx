@@ -1,43 +1,16 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { IdvtcApplyButton } from 'features/idvtc/apply-button';
-import { ScoreChip } from 'features/idvtc/form-status/components/score-chip';
-import {
-  IdvtcFormStatus,
-  IdvtcTypeStatus,
-  useIdvtcState,
-} from 'features/idvtc/shared';
+import { useIdvtcState } from 'features/idvtc/shared';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
 import { useOperatorTypeCurve } from 'shared/hooks';
 import { TypeBadgeButton } from 'shared/node-operator/operator-type';
+import { TypeCardChip } from 'shared/node-operator/type-status';
 import { OptionCard } from './styles';
 
-const renderStatusChip = (
-  typeStatus: IdvtcTypeStatus,
-  status: IdvtcFormStatus | undefined,
-) => {
-  if (typeStatus === 'CLAIMED') {
-    return <ScoreChip type="default">Claimed</ScoreChip>;
-  }
-  if (typeStatus === 'ISSUED' || typeStatus === 'ISSUED_NOT_OWNER') {
-    return <ScoreChip type="success">Issued</ScoreChip>;
-  }
-  switch (status) {
-    case 'APPROVED':
-      return <ScoreChip type="success">Approved</ScoreChip>;
-    case 'REJECTED':
-      return <ScoreChip type="error">Rejected</ScoreChip>;
-    case 'REVIEW':
-      return <ScoreChip type="pending">Pending</ScoreChip>;
-    default:
-      return null;
-  }
-};
-
 export const IdvtcTypeCard: FC = () => {
-  const { typeStatus, data } = useIdvtcState();
-  const chip = renderStatusChip(typeStatus, data?.status);
+  const { typeStatus, data, isButtonPending } = useIdvtcState();
   const curve = useOperatorTypeCurve(OPERATOR_TYPE.CSM_IDVTC);
 
   return (
@@ -49,7 +22,9 @@ export const IdvtcTypeCard: FC = () => {
             curve={curve}
             data-testid="operatorTypeBadge-idvtc"
           />
-          {chip}
+          {!isButtonPending && (
+            <TypeCardChip typeStatus={typeStatus} formStatus={data?.status} />
+          )}
         </Stack>
         <Stack direction="column" gap="xs">
           <Text as="h3" size="sm" weight={700}>

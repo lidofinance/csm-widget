@@ -6,7 +6,7 @@ import { NoSSRWrapper, WhenLoaded } from 'shared/components';
 import { SiweConnect, SiweSignInAddress } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status/form-status';
-import { ProofStatus } from './form-status/proof-status';
+import { StatusHeader } from './form-status/components';
 import { IdvtcProviders, useIdvtcState } from './shared';
 
 const IdvtcApplyContent: FC = () => {
@@ -29,8 +29,16 @@ const IdvtcApplyContent: FC = () => {
     );
   }
 
-  if (typeStatus === 'CLAIMED') {
-    return <ProofStatus typeStatus={typeStatus} />;
+  if (
+    typeStatus === 'CLAIMED' ||
+    typeStatus === 'PROOF_USED' ||
+    typeStatus === 'PROOF_USED_ELSEWHERE'
+  ) {
+    return (
+      <Block>
+        <StatusHeader />
+      </Block>
+    );
   }
 
   if (!token) {
@@ -46,11 +54,15 @@ const IdvtcApplyContent: FC = () => {
   }
 
   if (data && !applyMode) {
-    return <FormStatus data={data} typeStatus={typeStatus} reset={reset} />;
+    return <FormStatus data={data} reset={reset} />;
   }
 
-  if (!data && typeStatus !== 'PENDING') {
-    return <ProofStatus typeStatus={typeStatus} />;
+  if (typeStatus !== 'PENDING') {
+    return (
+      <Block>
+        <StatusHeader />
+      </Block>
+    );
   }
 
   return <ApplyForm />;
