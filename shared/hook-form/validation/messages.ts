@@ -41,7 +41,8 @@ export const VALIDATION_MESSAGES = {
   // Penalty report amounts
   enterAmountGreaterThanZero: 'Enter amount greater than 0',
   amountNotValid: 'Amount is not valid',
-  enterPenaltyTypeGreaterThanZero: 'Enter penalty type greater than 0',
+  penaltyTypeTooLong: 'Should be at most 32 bytes',
+  penaltyTypeNotZero: 'Penalty type should not be zero',
 
   // Address change forms
   specifyValidAddress: 'Specify a valid address or ENS name',

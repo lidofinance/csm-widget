@@ -7,6 +7,7 @@ import { ROLES } from 'tests/shared/consts/roles';
 import { InboxRequestsPage } from 'tests/csm-widget/pages/tabs/roles';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+import { Tags } from 'tests/shared/consts/common.const';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -42,6 +43,7 @@ test.describe(
 
     test(
       qase(309, 'Verify accept request for reward invite'),
+      { tag: Tags.smoke },
       async ({ forkActionService, secretPhrase }) => {
         await forkActionService.proposeReward(
           randomId,

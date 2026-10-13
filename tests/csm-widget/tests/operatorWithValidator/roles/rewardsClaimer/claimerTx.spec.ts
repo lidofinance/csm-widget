@@ -8,6 +8,7 @@ import {
 } from 'tests/shared/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
+import { Tags } from 'tests/shared/consts/common.const';
 
 const CURRENT_ADDRESS = generateAddress(true);
 const ANOTHER_ADDRESS = generateAddress(true);
@@ -33,6 +34,7 @@ test.describe(
 
     test(
       qase(562, 'Should set the new address when Enter pressed'),
+      { tag: Tags.smoke },
       async ({ widgetService, forkActionService }) => {
         const { claimerPage, txModal } = widgetService.settingsPage;
 

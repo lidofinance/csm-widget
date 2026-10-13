@@ -1,10 +1,6 @@
 import Metrics from 'utilsApi/metrics';
 import { promises as fs } from 'fs';
-import { config } from 'config';
-import getConfigNext from 'next/config';
 import type { AddressValidationFile } from 'utils';
-
-const { serverRuntimeConfig } = getConfigNext();
 
 const ERROR_BUCKET = {
   STAT_FAILED: 'stat_failed',
@@ -37,14 +33,6 @@ const isValidValidationFile = (
   );
 };
 
-const getValidationFilePath = (): string | undefined => {
-  return (
-    process.env.VALIDATION_FILE_PATH ||
-    config.validationFilePath ||
-    serverRuntimeConfig.validationFilePath
-  );
-};
-
 const messageOf = (error: unknown): string =>
   error instanceof Error ? error.message : String(error);
 
@@ -54,7 +42,7 @@ const reportError = (bucket: string, details: string) => {
 };
 
 export const loadValidationFile = async (): Promise<AddressValidationFile> => {
-  const filePath = getValidationFilePath();
+  const filePath = process.env.VALIDATION_FILE_PATH;
 
   if (!filePath) {
     console.warn(

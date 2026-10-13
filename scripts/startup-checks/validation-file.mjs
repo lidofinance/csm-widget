@@ -1,13 +1,6 @@
 import { promises as fs } from 'fs';
 
-export const VALIDATION_FILE_PATH = process.env.VALIDATION_FILE_PATH;
-
-// Safely initialize a global variable
-const globalStartupValidationFileChecks =
-  globalThis.__startupValidationFileChecks || {
-    promise: null,
-  };
-globalThis.__startupValidationFileChecks = globalStartupValidationFileChecks;
+const VALIDATION_FILE_TIMEOUT_MS = 10_000;
 
 const isValidValidationFile = (data) => {
   return (
@@ -70,52 +63,38 @@ const checkValidationFile = async (filePath) => {
   }
 };
 
-export const getValidationFileChecks = () =>
-  globalStartupValidationFileChecks.promise;
-
 export const startupCheckValidationFile = async () => {
   console.info(
     '[startupCheckValidationFile] Starting validation file checks...',
   );
 
-  if (globalStartupValidationFileChecks.promise) {
-    return globalStartupValidationFileChecks.promise;
+  const filePath = process.env.VALIDATION_FILE_PATH;
+  if (!filePath?.trim()) {
+    console.info(
+      '[startupCheckValidationFile] No VALIDATION_FILE_PATH specified - skipping validation file check',
+    );
+    return { success: true, skipped: true };
   }
 
-  globalStartupValidationFileChecks.promise = (async () => {
-    try {
-      // If no validation file path is specified, skip check
-      if (!VALIDATION_FILE_PATH) {
-        console.info(
-          '[startupCheckValidationFile] No VALIDATION_FILE_PATH specified - skipping validation file check',
-        );
-        return { success: true, skipped: true };
-      }
-
-      // If path is empty string, skip check
-      if (VALIDATION_FILE_PATH.trim() === '') {
-        console.info(
-          '[startupCheckValidationFile] Empty VALIDATION_FILE_PATH - skipping validation file check',
-        );
-        return { success: true, skipped: true };
-      }
-
-      const result = await checkValidationFile(VALIDATION_FILE_PATH);
-
-      if (!result.success) {
-        throw new Error(`Validation file check failed: ${result.error}`);
-      }
-
-      return result;
-    } catch (error) {
-      console.error(
-        '[startupCheckValidationFile] Critical error during validation file check:',
-        error.message,
+  let timer;
+  const timeout = new Promise((_resolve, reject) => {
+    timer = setTimeout(() => {
+      reject(
+        new Error(
+          `[startupCheckValidationFile] Validation file check timed out after ${VALIDATION_FILE_TIMEOUT_MS}ms`,
+        ),
       );
-      // Exit process to prevent build/start if validation file is invalid
-      process.exit(1);
-    }
-  })();
-
-  return globalStartupValidationFileChecks.promise;
+    }, VALIDATION_FILE_TIMEOUT_MS);
+    timer.unref();
+  });
+  const result = await Promise.race([
+    checkValidationFile(filePath),
+    timeout,
+  ]).finally(() => clearTimeout(timer));
+  if (!result.success) {
+    throw new Error(
+      `[startupCheckValidationFile] Validation file check failed: ${result.error}`,
+    );
+  }
+  return result;
 };
