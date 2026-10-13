@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
+import { toBoolean } from './scripts/to-boolean.mjs';
 import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
 
 logEnvironmentVariables();
@@ -13,8 +14,8 @@ const basePath = process.env.BASE_PATH;
 const developmentMode = process.env.NODE_ENV === 'development';
 const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
 const moduleName = moduleMode.toLowerCase();
-const isIPFSMode = !!process.env.IPFS_MODE;
-const maintenance = !!process.env.MAINTENANCE; // TODO: load from runtime config
+const isIPFSMode = toBoolean(process.env.IPFS_MODE);
+const maintenance = toBoolean(process.env.MAINTENANCE); // TODO: load from runtime config
 
 // Load devnet contract addresses from JSON file if specified
 let devnetAddresses = null;
@@ -30,11 +31,13 @@ if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
-  // documents — every gSSP page returns the same props for every visitor
+  // documents — same HTML for every visitor; uncovered, gSSP pages get the
+  // default no-store and gSP pages a 1-year s-maxage that outlives build chunk hashes
   '/',
   '/group',
   '/monitoring',
   '/operators',
+  '/qa-config',
   '/wrapped-2025/:path*',
   '/bond/:path*',
   '/create/:path*',
@@ -44,10 +47,13 @@ export const CACHE_CONTROL_PAGES = [
   '/settings/:path*',
   '/surveys/:path*',
   '/type/:path*',
-  // assets — unhashed, so they share the document TTL
+  // assets — unhashed, so they share the document TTL; header sources match
+  // pre-rewrite paths, so module-variant files are listed too
   '/manifest.json',
+  '/manifest-:module(csm|cm).json',
   '/favicon:size*',
   '/apple-touch-icon.png',
+  '/apple-touch-icon-:module(csm|cm).png',
   '/:module(csm|cm)-preview.png',
   '/runtime/window-env.js',
 ];
@@ -288,7 +294,6 @@ export default withBundleAnalyzer({
     rateLimit: process.env.RATE_LIMIT,
     rateLimitTimeFrame: process.env.RATE_LIMIT_TIME_FRAME,
     validationAPI: process.env.VALIDATION_SERVICE_BASE_PATH,
-    validationFilePath: process.env.VALIDATION_FILE_PATH,
   },
 
   // ATTENTION: If you add a new variable you should declare it in `global.d.ts`

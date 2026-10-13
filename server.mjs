@@ -2,6 +2,7 @@ import { createServer } from 'http';
 import { parse } from 'url';
 import next from 'next';
 import { registerShutdownSignals } from './scripts/shutdown.mjs';
+import { toBoolean } from './scripts/to-boolean.mjs';
 import { startupCheckRPCs } from './scripts/startup-checks/rpc.mjs';
 import { startupCheckValidationFile } from './scripts/startup-checks/validation-file.mjs';
 
@@ -43,7 +44,7 @@ app
   .then(async () => {
     // Next loads .env* inside prepare(), so checks must run after it; config errors
     // throw before the port opens, RPC reachability is only logged
-    if (process.env.RUN_STARTUP_CHECKS === 'true') {
+    if (toBoolean(process.env.RUN_STARTUP_CHECKS)) {
       void startupCheckRPCs();
       await startupCheckValidationFile();
     }
