@@ -3,7 +3,7 @@
  * @returns {boolean}
  */
 export const toBoolean = (dataStr) => {
-  return !!(
+  return (
     dataStr?.toLowerCase?.() === 'true' ||
     dataStr === true ||
     Number.parseInt(dataStr, 10) === 1
