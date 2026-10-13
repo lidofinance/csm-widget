@@ -43,13 +43,14 @@ export const getReportConfig: GetReportConfig = function (app) {
       reporters.githubReporter,
       reporters.qaseReporter,
       reporters.chatReporter,
+      [
+        BOCHQA_REPORTER_PATH,
+        { appId: BOCHQA_APP_IDS[app], launchName: getTestRunName() },
+      ],
     );
 
     if (process.env.GH_EVENT_NAME !== 'workflow_dispatch') {
-      reporterConfig.push(reporters.pgReporter, [
-        BOCHQA_REPORTER_PATH,
-        { appId: BOCHQA_APP_IDS[app], launchName: getTestRunName() },
-      ]);
+      reporterConfig.push(reporters.pgReporter);
     }
   }
   return [
