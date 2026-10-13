@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { ReporterDescription } from '@playwright/test';
 import { widgetFullConfig } from '../../csm-widget/config';
 
@@ -23,6 +24,11 @@ export const SENSITIVE_ENV_KEYS = [
 // ids from the bochqa.apps dictionary
 const BOCHQA_APP_IDS = { CSM: 1, CM: 2 } as const;
 
+// secret-guard resolves relative paths from testDir, not from the config
+const BOCHQA_REPORTER_PATH = fileURLToPath(
+  new URL('bochqa.reporter.ts', import.meta.url),
+);
+
 type GetReportConfig = (
   app: keyof typeof BOCHQA_APP_IDS,
 ) => ReporterDescription[];
@@ -40,7 +46,10 @@ export const getReportConfig: GetReportConfig = function (app) {
     );
 
     if (process.env.GH_EVENT_NAME !== 'workflow_dispatch') {
-      reporterConfig.push(reporters.pgReporter);
+      reporterConfig.push(reporters.pgReporter, [
+        BOCHQA_REPORTER_PATH,
+        { appId: BOCHQA_APP_IDS[app], launchName: getTestRunName() },
+      ]);
     }
   }
   return [
@@ -57,13 +66,6 @@ export const getReportConfig: GetReportConfig = function (app) {
     [
       '../shared/config/githubSummary.reporter.ts',
       { qaseProjectName: process.env.QASE_PROJECT_ID },
-    ],
-    [
-      '../shared/config/bochqa.reporter.ts',
-      {
-        appId: BOCHQA_APP_IDS[app],
-        launchName: getTestRunName(),
-      },
     ],
   ];
 };
