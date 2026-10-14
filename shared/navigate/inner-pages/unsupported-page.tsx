@@ -9,7 +9,7 @@ export const UnsupportedPage: FC = () => {
   const meta = useModuleMeta();
 
   return (
-    <Layout dummy="semi">
+    <Layout>
       <Banner
         title={`${meta?.shortName ?? WIDGET_TITLE} is currently being upgraded`}
         variant="secondary"

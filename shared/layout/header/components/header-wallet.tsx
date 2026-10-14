@@ -1,7 +1,7 @@
 import { useDappStatus } from 'modules/web3';
 import { FC } from 'react';
 import { NoSSRWrapper } from 'shared/components';
-import { Button, Connect } from 'shared/wallet';
+import { Button, ConnectAppButton } from 'shared/wallet';
 
 const HeaderWallet: FC = () => {
   const { isAccountActive } = useDappStatus();
@@ -11,7 +11,7 @@ const HeaderWallet: FC = () => {
       {isAccountActive ? (
         <Button data-testid="accountSectionHeader" />
       ) : (
-        <Connect size="sm" />
+        <ConnectAppButton />
       )}
     </NoSSRWrapper>
   );

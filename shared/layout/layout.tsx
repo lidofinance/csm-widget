@@ -1,14 +1,17 @@
-import { FC, PropsWithChildren, ReactNode, useEffect } from 'react';
+import { FC, PropsWithChildren, ReactNode, useContext, useEffect } from 'react';
 
+import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
 import { AlertContainer } from 'shared/alerts';
 import { LegalDisclaimer, TestEnvBanner } from 'shared/components';
 import { trackMatomoPageEvent } from 'utils';
 import { Footer } from './footer';
-import { DummyHeader, Header, SemiDummyHeader } from './header';
+import { Crumb, useCrumbs } from './crumbs';
+import { Header } from './header';
 import { Navigation } from './navigation';
 import {
   Column,
   Content,
+  CrumbsRowStyle,
   Heading,
   LayoutStyle,
   LayoutSubTitleStyle,
@@ -24,6 +27,7 @@ type Props = {
   pageName?: string;
   fullwidth?: boolean;
   mainPrefix?: ReactNode;
+  breadcrumbs?: Crumb[];
 };
 
 export const Layout: FC<PropsWithChildren<Props>> = ({
@@ -34,7 +38,10 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
   subtitle,
   pageName,
   mainPrefix,
+  breadcrumbs,
 }) => {
+  const mode = useContext(NodeOperatorContext) ? dummy : true;
+  const crumbs = useCrumbs(mode, title, breadcrumbs);
   const titlesCount = [title, subtitle].filter(Boolean).length;
 
   useEffect(() => {
@@ -47,17 +54,10 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
       <Shell>
         <Navigation />
         <Column>
+          <Header dummy={mode} crumbs={crumbs} />
           <LayoutStyle $fullwidth={fullwidth}>
-            {dummy === 'semi' ? (
-              <SemiDummyHeader />
-            ) : dummy ? (
-              <DummyHeader />
-            ) : (
-              <>
-                <Header />
-                {!fullwidth && <AlertContainer />}
-              </>
-            )}
+            {crumbs.length > 0 && <CrumbsRowStyle crumbs={crumbs} />}
+            {!mode && !fullwidth && <AlertContainer />}
 
             <Main>
               {mainPrefix}
@@ -74,9 +74,9 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
                 )}
               </Heading>
               <Content>{children}</Content>
-              {!dummy && <LegalDisclaimer />}
+              {!mode && <LegalDisclaimer />}
             </Main>
-            <Footer dummy={dummy} />
+            <Footer dummy={mode} />
           </LayoutStyle>
         </Column>
       </Shell>

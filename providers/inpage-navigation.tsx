@@ -11,9 +11,6 @@ import {
 } from 'react';
 import invariant from 'tiny-invariant';
 
-import { debounce } from 'lodash';
-import { saveScrollDown } from 'utils';
-
 export type InpageNavigationContextValue = {
   hashNav: string;
   navigateInpageAnchor: (e: React.MouseEvent<HTMLAnchorElement>) => void;
@@ -82,14 +79,6 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
 
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = useCallback(() => setExpanded((prev) => !prev), []);
-
-  useEffect(() => {
-    const handleScroll = debounce(saveScrollDown, 100, { leading: true });
-    window.addEventListener('scroll', saveScrollDown, false);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   const value = useMemo(
     () => ({

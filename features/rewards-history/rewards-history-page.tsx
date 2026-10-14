@@ -1,3 +1,4 @@
+import { PATH } from 'consts/urls';
 import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
@@ -11,6 +12,10 @@ export const RewardsHistoryPage: FC = () => (
     title="Rewards history"
     subtitle="View your rewards history"
     pageName="RewardsHistory"
+    breadcrumbs={[
+      { label: 'Bond & Rewards', href: PATH.BOND },
+      { label: 'Rewards history' },
+    ]}
   >
     <BondPageSwitcher />
     <RewardsHistory />

@@ -39,7 +39,6 @@ export * from './path';
 export * from './plural';
 export * from './read-file-as-text';
 export * from './rewards-tree-fetcher';
-export * from './scroll';
 export * from './serialize-bigint';
 export * from './standard-fetcher';
 export * from './track-matomo-event';

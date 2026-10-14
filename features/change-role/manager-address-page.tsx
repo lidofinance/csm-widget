@@ -1,3 +1,4 @@
+import { PATH } from 'consts/urls';
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { useFaq } from 'faq';
 import { FC } from 'react';
@@ -16,6 +17,10 @@ export const ManagerAddressPage: FC = () => {
       title="Settings"
       subtitle="Manage your operator"
       pageName="SettingsManagerAddress"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Manager address' },
+      ]}
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>

@@ -1,56 +1,34 @@
-import { InlineLoader, InlineLoaderProps } from '@lidofinance/lido-ui';
-import { Address } from 'shared/components';
-import { HeaderButton } from 'shared/layout/header/styles';
 import styled from 'styled-components';
-import { NAV_MOBILE_MEDIA } from 'styles/constants';
 
-export const WalledButtonStyle = styled(HeaderButton)`
-  --padding: 6px;
-`;
-
-export const WalledButtonBalanceStyle = styled.span`
-  margin-right: 12px;
-  margin-left: 4px;
-  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
-
-  ${NAV_MOBILE_MEDIA} {
-    display: none;
-  }
-`;
-
-export const WalledButtonLoaderStyle = styled((props: InlineLoaderProps) => (
-  <InlineLoader {...props} />
-))`
-  width: 60px;
-`;
-
-export const AddressBadgeStyle = styled.span`
-  border-radius: 1000px;
-  padding: 4px;
+export const WalletButtonStyle = styled.button`
   display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  box-sizing: border-box;
+  padding: 4px 12px 4px 4px;
 
-  background: var(--lido-color-background);
+  font-family: var(--lido-app-ui-font-family);
+  font-size: 14px;
+  font-weight: var(--lido-app-ui-font-weight-regular);
+  line-height: 24px;
+  color: var(--lido-app-ui-color-text-default);
 
-  & > * {
-    flex-direction: row-reverse;
-    gap: 0;
+  background: var(--lido-app-ui-color-background-surface);
+  border: 1px solid var(--lido-app-ui-color-border-default);
+  border-radius: 40px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 
-    & > :last-child {
-      padding-inline: 6px;
-      flex-shrink: 1;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+  &:hover {
+    background: var(--lido-app-ui-color-background-surface-hover);
+    border-color: var(--lido-app-ui-color-border-active);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--lido-app-ui-color-border-active);
+    outline-offset: 2px;
   }
 `;
-
-export const AddressStyle = styled((props) => (
-  <Address
-    big
-    showIcon
-    link={false}
-    color="secondary"
-    weight={400}
-    {...props}
-  />
-))``;

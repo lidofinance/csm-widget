@@ -1,6 +1,9 @@
 import { Container, H1 } from '@lidofinance/lido-ui';
 import styled, { css } from 'styled-components';
 
+import { CRUMBS_UNDER_MEDIA, HEADER_HEIGHT } from 'styles/constants';
+import { Crumbs } from './crumbs';
+
 export const Shell = styled.div`
   display: flex;
   align-items: flex-start;
@@ -27,13 +30,14 @@ export const LayoutStyle = styled(Container)<{ $fullwidth?: boolean }>`
   width: 100%;
   flex: 1;
   min-width: 0;
-  min-height: calc(100vh - var(--test-env-banner-height, 0px));
+  min-height: calc(
+    100vh - var(--test-env-banner-height, 0px) - ${HEADER_HEIGHT}px
+  );
   display: grid;
   grid-template-columns: var(--layout-side-width) 1fr var(--layout-side-width);
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr auto;
   grid-column-gap: 14px;
   grid-template-areas:
-    'header header header'
     '. main alerts'
     'footer footer footer';
 
@@ -41,7 +45,7 @@ export const LayoutStyle = styled(Container)<{ $fullwidth?: boolean }>`
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr auto;
     grid-template-areas:
-      'header'
+      'crumbs'
       'alerts'
       'main'
       'footer';
@@ -53,7 +57,7 @@ export const LayoutStyle = styled(Container)<{ $fullwidth?: boolean }>`
       grid-template-columns: 1fr;
       grid-template-rows: auto auto 1fr auto;
       grid-template-areas:
-        'header'
+        'crumbs'
         'alerts'
         'main'
         'footer';
@@ -61,6 +65,16 @@ export const LayoutStyle = styled(Container)<{ $fullwidth?: boolean }>`
 
   ${({ theme }) => theme.mediaQueries.lg} {
     --layout-gutter: ${({ theme }) => theme.spaceMap.lg}px;
+  }
+`;
+
+export const CrumbsRowStyle = styled(Crumbs)`
+  display: none;
+  grid-area: crumbs;
+  margin-top: 24px;
+
+  ${CRUMBS_UNDER_MEDIA} {
+    display: block;
   }
 `;
 

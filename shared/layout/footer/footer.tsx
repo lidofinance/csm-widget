@@ -6,7 +6,7 @@ import { useExternalLinks } from 'shared/hooks';
 import { FooterLink, FooterStyle, LinkDivider } from './styles';
 import { Version } from './version';
 
-// dummy===true pages (404/500/qa-config) render outside Web3Provider entirely; useExternalLinks needs wagmi context
+// bare pages (maintenance/qa-config/test, 500 fallback) render outside Web3Provider; useExternalLinks needs wagmi context
 const FeedbackFormLink: FC = () => {
   const { feedbackForm } = useExternalLinks();
   return (

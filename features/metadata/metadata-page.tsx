@@ -1,3 +1,4 @@
+import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks';
@@ -13,6 +14,10 @@ export const MetadataPage: FC = () => {
       title="Settings"
       subtitle="Manage your operator"
       pageName="SettingsMetadata"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Metadata' },
+      ]}
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>

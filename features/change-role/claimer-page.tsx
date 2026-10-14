@@ -1,3 +1,4 @@
+import { PATH } from 'consts/urls';
 import { useFaq } from 'faq';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
@@ -15,6 +16,10 @@ export const ClaimerPage: FC = () => {
       title="Settings"
       subtitle="Manage your operator"
       pageName="SettingsClaimer"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Claimer' },
+      ]}
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>
