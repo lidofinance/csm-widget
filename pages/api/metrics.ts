@@ -1,3 +1,4 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import {
   wrapRequest as wrapNextRequest,
   cacheControl,
@@ -9,9 +10,13 @@ import { responseTimeMetric, defaultErrorHandler, rateLimit } from 'utilsApi';
 import Metrics from 'utilsApi/metrics';
 import { metricsFactory } from '@lidofinance/next-pages';
 
-const metrics = metricsFactory({
-  registry: Metrics.registry,
-});
+const metricsHandler = metricsFactory({ registry: Metrics.registry });
+
+// metricsFactory sends a string with no Content-Type, and Next sets none for strings
+const metrics = (req: NextApiRequest, res: NextApiResponse) => {
+  res.setHeader('Content-Type', Metrics.registry.contentType);
+  return metricsHandler(req, res);
+};
 
 export default wrapNextRequest([
   rateLimit,
