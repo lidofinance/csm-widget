@@ -11,7 +11,5 @@ const HeaderWallet: FC = () => {
     <ConnectAppButton />
   );
 };
-  );
-};
 
 export default HeaderWallet;

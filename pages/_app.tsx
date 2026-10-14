@@ -13,6 +13,7 @@ import { memo } from 'react';
 import {
   AppShellLoader,
   BackgroundGradient,
+  ErrorBoundary,
   SecurityStatusBanner,
   ToastContainer,
 } from 'shared/components';
@@ -41,9 +42,37 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const { pageProps } = props;
   const { isReady } = useRouter();
   const isClient = useIsClient();
+  const isError = !!pageProps?.isError;
   // Next never marks the router ready on /404
-  const isMounted = isClient && (isReady || !!pageProps?.isError);
+  const isMounted = isClient && (isReady || isError);
   const isMaintenance = config.maintenance;
+
+  const renderApp = (dummy?: boolean) => (
+    <Providers dummy={dummy} skipWatcher={isError}>
+      <BackgroundGradient
+        width={1560}
+        height={784}
+        style={{
+          opacity: 'var(--lido-color-darkThemeOpacity)',
+        }}
+      />
+      <SVGGradientDefs />
+      <ToastContainer />
+      {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
+      <SecurityStatusBanner />
+    </Providers>
+  );
+
+  const renderContent = () => {
+    if (!isMounted) return <AppShellLoader />;
+    // error pages must still render if the wallet/SDK tree is what's failing
+    if (isError) {
+      return (
+        <ErrorBoundary fallback={renderApp(true)}>{renderApp()}</ErrorBoundary>
+      );
+    }
+    return renderApp(isMaintenance || pageProps?.dummy);
+  };
 
   return (
     <>
@@ -55,26 +84,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
         />
         <title>{WIDGET_TITLE} | Lido</title>
       </Head>
-      {isMounted ? (
-        <Providers
-          dummy={isMaintenance || pageProps?.isError || pageProps?.dummy}
-          skipWatcher={pageProps?.isError}
-        >
-          <BackgroundGradient
-            width={1560}
-            height={784}
-            style={{
-              opacity: 'var(--lido-color-darkThemeOpacity)',
-            }}
-          />
-          <SVGGradientDefs />
-          <ToastContainer />
-          {isMaintenance ? <MaintenancePage /> : <MemoApp {...props} />}
-          <SecurityStatusBanner />
-        </Providers>
-      ) : (
-        <AppShellLoader />
-      )}
+      {renderContent()}
     </>
   );
 };
