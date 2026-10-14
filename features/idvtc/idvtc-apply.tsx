@@ -15,6 +15,12 @@ const IdvtcApplyContent: FC = () => {
   const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
     useIdvtcState();
 
+  const status = (
+    <Block>
+      <StatusHeader />
+    </Block>
+  );
+
   if (!isAccountActive) {
     return (
       <SiweConnect description="Connect your wallet and sign a verification message to continue" />
@@ -34,15 +40,15 @@ const IdvtcApplyContent: FC = () => {
     typeStatus === 'PROOF_USED' ||
     typeStatus === 'PROOF_USED_ELSEWHERE'
   ) {
-    return (
-      <Block>
-        <StatusHeader />
-      </Block>
-    );
+    return status;
   }
 
   if (!token) {
-    return <SiweSignInAddress operatorType="IDVTC" />;
+    return typeStatus !== 'PENDING' ? (
+      status
+    ) : (
+      <SiweSignInAddress operatorType="IDVTC" />
+    );
   }
 
   if (isPending) {
@@ -58,11 +64,7 @@ const IdvtcApplyContent: FC = () => {
   }
 
   if (typeStatus !== 'PENDING') {
-    return (
-      <Block>
-        <StatusHeader />
-      </Block>
-    );
+    return status;
   }
 
   return <ApplyForm />;

@@ -15,6 +15,12 @@ const IcsApplyContent: FC = () => {
   const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
     useIcsState();
 
+  const status = (
+    <Block>
+      <StatusHeader />
+    </Block>
+  );
+
   if (!isAccountActive) {
     return (
       <SiweConnect description="Connect your wallet and sign a verification message to continue" />
@@ -34,15 +40,15 @@ const IcsApplyContent: FC = () => {
     typeStatus === 'PROOF_USED' ||
     typeStatus === 'PROOF_USED_ELSEWHERE'
   ) {
-    return (
-      <Block>
-        <StatusHeader />
-      </Block>
-    );
+    return status;
   }
 
   if (!token) {
-    return <SiweSignInAddress operatorType="ICS" />;
+    return typeStatus !== 'PENDING' ? (
+      status
+    ) : (
+      <SiweSignInAddress operatorType="ICS" />
+    );
   }
 
   if (isPending) {
@@ -58,11 +64,7 @@ const IcsApplyContent: FC = () => {
   }
 
   if (typeStatus !== 'PENDING') {
-    return (
-      <Block>
-        <StatusHeader />
-      </Block>
-    );
+    return status;
   }
 
   return <ApplyForm />;
