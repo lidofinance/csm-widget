@@ -11,6 +11,7 @@ import { Providers } from 'providers';
 import { memo } from 'react';
 import {
   BackgroundGradient,
+  ErrorBoundary,
   SecurityStatusBanner,
   ToastContainer,
 } from 'shared/components';
@@ -46,13 +47,10 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
     !props.pageProps?.isError &&
     !props.pageProps?.dummy;
 
-  return (
-    <Providers
-      dummy={
-        isMaintenance || props.pageProps?.isError || props.pageProps?.dummy
-      }
-      skipWatcher={props.pageProps?.isError}
-    >
+  const isError = props.pageProps?.isError;
+
+  const renderApp = (dummy?: boolean) => (
+    <Providers dummy={dummy} skipWatcher={isError}>
       {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
       <Head>
         <meta
@@ -73,6 +71,13 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       {isMaintenance ? <MaintenancePage /> : <MemoApp {...rest} />}
       <SecurityStatusBanner />
     </Providers>
+  );
+
+  // error pages must still render if the wallet/SDK tree is what's failing
+  return isError ? (
+    <ErrorBoundary fallback={renderApp(true)}>{renderApp()}</ErrorBoundary>
+  ) : (
+    renderApp(isMaintenance || props.pageProps?.dummy)
   );
 };
 

@@ -62,3 +62,4 @@ export * from './role-actions';
 export * from './toast-container';
 export * from './issues-chip';
 export * from './toggle';
+export * from './error-boundary';
