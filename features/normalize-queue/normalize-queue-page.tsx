@@ -1,3 +1,4 @@
+import { PATH } from 'consts/urls';
 import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
@@ -8,6 +9,10 @@ export const NormalizeQueuePage: FC = () => (
     title="Normalize queue"
     subtitle="Put keys to deposit queue"
     pageName="NormalizeQueue"
+    breadcrumbs={[
+      { label: 'Keys', href: PATH.KEYS },
+      { label: 'Normalize queue' },
+    ]}
   >
     <NormalizeQueue />
   </Layout>

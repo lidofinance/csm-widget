@@ -1,18 +1,24 @@
+import { IconButton, IconDay, IconNight } from '@lidofinance/lido-app-ui';
+import { ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
 import { useRouter } from 'next/router';
 import { FC } from 'react';
-import { ThemeTogglerStyle } from '../styles';
 
-const HeaderTheme: FC<{ showAlways?: boolean }> = ({ showAlways }) => {
+const HeaderTheme: FC = () => {
   const router = useRouter();
+  const { themeName, toggleTheme } = useThemeToggle();
 
-  const queryTheme = router?.query?.theme;
+  if (router?.query?.theme) return null;
+
+  const isLight = themeName === ThemeName.light;
 
   return (
-    <>
-      {!queryTheme && (
-        <ThemeTogglerStyle $always={showAlways} data-testid="themeToggler" />
-      )}
-    </>
+    <IconButton
+      variant="surface"
+      aria-label={isLight ? 'Switch to dark theme' : 'Switch to light theme'}
+      icon={isLight ? <IconNight /> : <IconDay />}
+      onClick={toggleTheme}
+      data-testid="themeToggler"
+    />
   );
 };
 

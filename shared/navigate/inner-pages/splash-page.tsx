@@ -4,7 +4,7 @@ import { Stack, WelcomeSection } from 'shared/components';
 import { Layout } from 'shared/layout';
 
 export const SplashPage: FC = () => (
-  <Layout dummy="semi">
+  <Layout>
     <WelcomeSection>
       <Stack align="center" justify="center">
         <Loader size="large" data-testid="loader" />

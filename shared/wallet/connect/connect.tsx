@@ -1,43 +1,20 @@
 import { Button, ButtonProps } from '@lidofinance/lido-ui';
-import { FC, PropsWithChildren, useCallback } from 'react';
-import { useConnect, useDisconnect } from 'reef-knot/core-react';
+import { FC, PropsWithChildren } from 'react';
 
-import { useUserConfig } from 'config/user-config';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { useDappStatus } from 'modules/web3';
-import { trackMatomoEvent, WithMatomoEvent } from 'utils';
+import { WithMatomoEvent } from 'utils';
+import { useConnectWallet } from './use-connect-wallet';
 
 export const Connect: FC<PropsWithChildren<WithMatomoEvent<ButtonProps>>> = ({
   children,
-  matomoEvent = MATOMO_CLICK_EVENTS_TYPES.connectWallet,
+  matomoEvent,
   onClick,
   ...rest
 }) => {
-  const { isSupportedChain, isWalletConnected } = useDappStatus();
-  const { isWalletConnectionAllowed } = useUserConfig();
-  const { connect } = useConnect();
-  const { disconnect } = useDisconnect();
-
-  const handleClick = useCallback(() => {
-    trackMatomoEvent(matomoEvent);
-    if (!isWalletConnectionAllowed) return;
-
-    if (isWalletConnected && !isSupportedChain) {
-      disconnect?.();
-    }
-    void connect();
-  }, [
-    connect,
-    disconnect,
-    isSupportedChain,
-    isWalletConnected,
-    isWalletConnectionAllowed,
-    matomoEvent,
-  ]);
+  const { handleClick, disabled } = useConnectWallet(matomoEvent);
 
   return (
     <Button
-      disabled={!isWalletConnectionAllowed}
+      disabled={disabled}
       onClick={handleClick}
       data-testid="connectBtn"
       {...rest}

@@ -1,96 +1,73 @@
-import { Button, ButtonProps, ThemeToggler } from '@lidofinance/lido-ui';
-import styled, { keyframes } from 'styled-components';
+import { Button, ButtonProps } from '@lidofinance/lido-ui';
+import styled from 'styled-components';
 
-import { NAV_MOBILE_MEDIA, SIDEBAR_DRAWER_MEDIA } from 'styles/constants';
+import {
+  CRUMBS_UNDER_MEDIA,
+  HEADER_HEIGHT,
+  HEADER_PHONE_MEDIA,
+  SIDEBAR_DRAWER_MEDIA,
+} from 'styles/constants';
+import { Crumbs } from '../crumbs';
 
-export const HeaderWrapper = styled.div`
-  grid-area: header;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  align-items: center;
-  min-width: 0;
-
+export const HeaderStyle = styled.header`
   position: sticky;
   z-index: 250;
   top: 0;
-  left: 0;
-  right: 0;
 
-  padding: 0 var(--layout-gutter, 20px);
-  margin: 0 calc(-1 * var(--layout-gutter, 20px));
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-sizing: border-box;
+  height: ${HEADER_HEIGHT}px;
+  padding: 16px 52px 15px;
 
-  transition:
-    box-shadow 0.3s ease,
-    background 0.3s ease-out;
+  background: var(--lido-color-background);
+  border-bottom: 1px solid var(--lido-app-ui-color-border-default);
 
-  // the background belongs on this bleeding wrapper, not the inset HeaderStyle:
-  // otherwise content scrolling under shows through the side gutters
-  html:is([data-scrolldown='true']) & {
-    background: var(--lido-color-background);
-    box-shadow: 0px 3px 3px -3px var(--lido-color-shadowDark);
+  ${SIDEBAR_DRAWER_MEDIA} {
+    justify-content: space-between;
+  }
+
+  ${HEADER_PHONE_MEDIA} {
+    padding-inline: 12px;
+    gap: 4px;
   }
 `;
 
-export const HeaderStyle = styled.header`
-  align-self: center;
-  display: flex;
+export const HeaderLeftStyle = styled.div`
+  display: none;
   align-items: center;
-  flex-wrap: nowrap;
-  gap: 8px;
-  width: 100%;
-  padding: 18px 0;
+  gap: 20px;
+  flex-shrink: 0;
+  min-width: 0;
+
+  ${SIDEBAR_DRAWER_MEDIA} {
+    display: flex;
+  }
 `;
 
-export const HeaderActionsStyle = styled.div`
-  position: relative;
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  flex-shrink: 1;
-  gap: ${({ theme }) => theme.spaceMap.sm}px;
+export const HeaderCrumbsStyle = styled(Crumbs)`
+  flex: 1;
+  min-width: 0;
 
-  flex-wrap: nowrap;
-  justify-content: end;
-`;
+  ${SIDEBAR_DRAWER_MEDIA} {
+    flex: 0 1 auto;
+  }
 
-export const HeaderWalletChainWrapper = styled.div`
-  display: flex;
-  align-items: center;
-
-  ${NAV_MOBILE_MEDIA} {
+  ${CRUMBS_UNDER_MEDIA} {
     display: none;
   }
 `;
 
-export const HeaderWalletChainStyle = styled.span<{ $color: string }>`
-  color: ${({ $color }) => $color};
-  line-height: 1.2em;
-`;
-
-const glimmer = keyframes`
-  0% { opacity: 0; }
-  50% { opacity: 1; }
-  60% { opacity: 1; }
-  100% { opacity: 0; }
-`;
-
-export const DotStyle = styled.p`
-  height: 6px;
-  width: 6px;
-  background-color: lightgreen;
-  border-radius: 50%;
-  animation: ${glimmer} 2s ease-in-out infinite;
-  margin-right: ${({ theme }) => theme.spaceMap.sm}px;
-  margin-left: ${({ theme }) => theme.spaceMap.sm}px;
-`;
-
-export const ThemeTogglerStyle = styled(ThemeToggler)<{ $always?: boolean }>`
-  margin: 0;
+export const HeaderActionsStyle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
 
   ${SIDEBAR_DRAWER_MEDIA} {
-    display: ${({ $always }) => ($always ? 'inline-grid' : 'none')};
+    margin-left: 0;
   }
 `;
 
@@ -102,7 +79,7 @@ export const HeaderButton = styled((props: ButtonProps) => (
   flex-shrink: 1;
   min-width: unset;
   overflow: hidden;
-  height: 44px; // header height
+  height: 44px;
   padding: 0 var(--padding);
 
   > span:first-of-type {
@@ -136,13 +113,5 @@ export const ButtonGroup = styled.div`
 
   &:empty {
     display: none;
-  }
-`;
-
-export const HeaderLogo = styled.div`
-  display: none;
-
-  ${SIDEBAR_DRAWER_MEDIA} {
-    display: block;
   }
 `;

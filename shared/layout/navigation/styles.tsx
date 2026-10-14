@@ -1,16 +1,8 @@
-import { Sidebar, SidebarGroup } from '@lidofinance/lido-app-ui';
+import { Sidebar } from '@lidofinance/lido-app-ui';
 import styled, { keyframes } from 'styled-components';
 
-import { SIDEBAR_DESKTOP_MEDIA, SIDEBAR_DRAWER_MEDIA } from 'styles/constants';
+import { SIDEBAR_DESKTOP_MEDIA } from 'styles/constants';
 import { ButtonGroup } from '../header/styles';
-
-export const MobileOnlyGroup = styled(SidebarGroup)`
-  display: none;
-
-  ${SIDEBAR_DRAWER_MEDIA} {
-    display: flex;
-  }
-`;
 
 export const SidebarOperatorGroup = styled(ButtonGroup)`
   width: 100%;

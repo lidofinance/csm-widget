@@ -1,24 +1,16 @@
-import { ButtonProps, useBreakpoint } from '@lidofinance/lido-ui';
+import { Identicon } from '@lidofinance/lido-ui';
+import { ButtonHTMLAttributes, FC, useCallback } from 'react';
+
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { useDappStatus, useEthereumBalance } from 'modules/web3';
-import { FC, useCallback } from 'react';
-import { FormatToken } from 'shared/formatters';
+import { useDappStatus } from 'modules/web3';
 import { trackMatomoEvent } from 'utils';
 import { useWalletModal } from '../wallet-modal/use-wallet-modal';
-import {
-  AddressBadgeStyle,
-  AddressStyle,
-  WalledButtonBalanceStyle,
-  WalledButtonLoaderStyle,
-  WalledButtonStyle,
-} from './styles';
+import { WalletButtonStyle } from './styles';
 
-export const Button: FC<ButtonProps> = (props) => {
-  const { onClick, ...rest } = props;
+export const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
+  const { onClick: _onClick, ...rest } = props;
   const { openModal } = useWalletModal();
   const { address } = useDappStatus();
-  const { data: balance, isPending } = useEthereumBalance();
-  const isMobile = useBreakpoint('md');
 
   const handleClick = useCallback(() => {
     trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.clickWalletButton);
@@ -26,17 +18,11 @@ export const Button: FC<ButtonProps> = (props) => {
   }, [openModal]);
 
   return (
-    <WalledButtonStyle onClick={handleClick} {...rest}>
-      <WalledButtonBalanceStyle>
-        {isPending ? (
-          <WalledButtonLoaderStyle />
-        ) : (
-          <FormatToken amount={balance} symbol="ETH" />
-        )}
-      </WalledButtonBalanceStyle>
-      <AddressBadgeStyle>
-        <AddressStyle address={address} symbols={isMobile ? 3 : 6} />
-      </AddressBadgeStyle>
-    </WalledButtonStyle>
+    <WalletButtonStyle type="button" onClick={handleClick} {...rest}>
+      <Identicon address={address ?? ''} diameter={28} />
+      <span title={address}>
+        {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ''}
+      </span>
+    </WalletButtonStyle>
   );
 };

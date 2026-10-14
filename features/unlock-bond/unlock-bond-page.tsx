@@ -1,3 +1,4 @@
+import { PATH } from 'consts/urls';
 import { FC } from 'react';
 
 import { Layout } from 'shared/layout';
@@ -11,6 +12,10 @@ export const UnlockBondPage: FC = () => (
     title="Manage Bond & Rewards"
     subtitle="Cover locked bond"
     pageName="UnlockBond"
+    breadcrumbs={[
+      { label: 'Bond & Rewards', href: PATH.BOND },
+      { label: 'Cover locked bond' },
+    ]}
   >
     <BondPageSwitcher />
     <UnlockBond />

@@ -1,60 +1,21 @@
+import { IconButton, IconMenu } from '@lidofinance/lido-app-ui';
 import { useInpageNavigation } from 'providers/inpage-navigation';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { SIDEBAR_DRAWER_MEDIA } from 'styles/constants';
-import { HeaderButton } from '../styles';
+
+const BurgerStyle = styled(IconButton)`
+  margin-inline: -8px;
+`;
 
 export const HeaderBurger: FC = () => {
   const { expanded, toggleExpanded } = useInpageNavigation();
   return (
-    <BurgerButtonStyle
+    <BurgerStyle
+      variant="ghost"
+      icon={<IconMenu />}
       aria-expanded={expanded}
       aria-label={expanded ? 'Close menu' : 'Open menu'}
       onClick={toggleExpanded}
-    >
-      <BurgerLine />
-      <BurgerLine />
-      <BurgerLine />
-    </BurgerButtonStyle>
+    />
   );
 };
-
-export const BurgerLine = styled.div`
-  width: 18px;
-  height: 2px;
-  border-radius: 2px;
-  margin-block: 4px;
-
-  background-color: var(--lido-color-text);
-  transition:
-    transform ease ${({ theme }) => theme.duration.norm},
-    opacity ease ${({ theme }) => theme.duration.norm};
-`;
-
-export const BurgerButtonStyle = styled(HeaderButton)`
-  display: none;
-
-  > span:first-of-type {
-    flex-direction: column;
-  }
-
-  width: 44px; // as header height
-  justify-content: center;
-  padding: 0;
-
-  ${SIDEBAR_DRAWER_MEDIA} {
-    display: flex;
-  }
-
-  &[aria-expanded='true'] ${BurgerLine} {
-    :nth-child(1) {
-      transform: translateY(10px) rotate(-45deg);
-    }
-    :nth-child(2) {
-      opacity: 0;
-    }
-    :nth-child(3) {
-      transform: translateY(-10px) rotate(45deg);
-    }
-  }
-`;

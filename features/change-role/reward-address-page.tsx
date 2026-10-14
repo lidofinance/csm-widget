@@ -1,3 +1,4 @@
+import { PATH } from 'consts/urls';
 import { ROLES } from '@lidofinance/lido-csm-sdk';
 import { useFaq } from 'faq';
 import { FC } from 'react';
@@ -15,6 +16,10 @@ export const RewardAddressPage: FC = () => {
       title="Settings"
       subtitle="Manage your operator"
       pageName="SettingsRewardsAddress"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Rewards address' },
+      ]}
     >
       <SettingsPageSwitcher />
       <ChangeRoleForm key={key} role={ROLES.REWARDS} />

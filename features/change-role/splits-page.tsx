@@ -1,3 +1,4 @@
+import { PATH } from 'consts/urls';
 import { useFaq } from 'faq';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
@@ -14,6 +15,10 @@ export const SplitsPage: FC = () => {
       title="Settings"
       subtitle="Manage your operator"
       pageName="SettingsSplits"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Splits' },
+      ]}
     >
       <SettingsPageSwitcher />
       <SplitsForm key={key} />

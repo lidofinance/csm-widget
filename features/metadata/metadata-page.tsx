@@ -1,3 +1,4 @@
+import { PATH } from 'consts/urls';
 import { FC } from 'react';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
@@ -12,6 +13,10 @@ export const MetadataPage: FC = () => {
       title="Settings"
       subtitle="Manage your operator"
       pageName="SettingsMetadata"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Metadata' },
+      ]}
     >
       <SettingsPageSwitcher />
       <MetadataForm key={key} />
