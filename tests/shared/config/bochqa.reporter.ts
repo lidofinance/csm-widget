@@ -133,7 +133,12 @@ const toStatus = (status: TestResult['status']) => {
 const insert = async (table: string, rows: Record<string, unknown>[]) => {
   if (rows.length === 0) return;
 
-  const url = new URL(env.BOCHQA_URL as string);
+  const { BOCHQA_URL, BOCHQA_USER, BOCHQA_PASSWORD } = env;
+  if (!BOCHQA_URL || !BOCHQA_USER || !BOCHQA_PASSWORD) {
+    throw new Error('BOCHQA_URL, BOCHQA_USER and BOCHQA_PASSWORD must be set');
+  }
+
+  const url = new URL(BOCHQA_URL);
   url.searchParams.set('query', `INSERT INTO ${table} FORMAT JSONEachRow`);
   // dates go as ISO UTC strings, ClickHouse converts them to the column timezone
   url.searchParams.set('date_time_input_format', 'best_effort');
@@ -141,8 +146,8 @@ const insert = async (table: string, rows: Record<string, unknown>[]) => {
   const response = await fetch(url, {
     method: 'POST',
     headers: {
-      'X-ClickHouse-User': env.BOCHQA_USER || 'default',
-      'X-ClickHouse-Key': env.BOCHQA_PASSWORD || '',
+      'X-ClickHouse-User': BOCHQA_USER,
+      'X-ClickHouse-Key': BOCHQA_PASSWORD,
     },
     body: rows.map((row) => JSON.stringify(row)).join('\n'),
   });
