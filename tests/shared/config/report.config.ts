@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import { ReporterDescription } from '@playwright/test';
 import { widgetFullConfig } from '../../csm-widget/config';
 
@@ -15,9 +16,24 @@ export const SENSITIVE_ENV_KEYS = [
   'GRAFANA_URL',
   'GRAFANA_API_KEY',
   'PREVIEW_STAND_PASSWORD',
+  'BOCHQA_URL',
+  'BOCHQA_USER',
+  'BOCHQA_PASSWORD',
 ];
 
-export const getReportConfig: () => ReporterDescription[] = function () {
+// ids from the bochqa.apps dictionary
+const BOCHQA_APP_IDS = { CSM: 1, CM: 2 } as const;
+
+// secret-guard resolves relative paths from testDir, not from the config
+const BOCHQA_REPORTER_PATH = fileURLToPath(
+  new URL('bochqa.reporter.ts', import.meta.url),
+);
+
+type GetReportConfig = (
+  app: keyof typeof BOCHQA_APP_IDS,
+) => ReporterDescription[];
+
+export const getReportConfig: GetReportConfig = function (app) {
   const reporterConfig: ReporterDescription[] = [
     reporters.htmlReporter,
     reporters.consoleReporter,
@@ -27,6 +43,10 @@ export const getReportConfig: () => ReporterDescription[] = function () {
       reporters.githubReporter,
       reporters.qaseReporter,
       reporters.chatReporter,
+      [
+        BOCHQA_REPORTER_PATH,
+        { appId: BOCHQA_APP_IDS[app], launchName: getTestRunName() },
+      ],
     );
 
     if (process.env.GH_EVENT_NAME !== 'workflow_dispatch') {
