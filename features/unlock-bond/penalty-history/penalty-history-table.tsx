@@ -32,7 +32,10 @@ export const PenaltyHistoryTable: FC = () => {
       </thead>
       <tbody>
         {data.map((record) => (
-          <tr key={`${record.transactionHash}-${record.type}`}>
+          <tr
+            key={`${record.transactionHash}-${record.type}`}
+            data-testid="penaltyHistoryRow"
+          >
             <td>
               <Stack center gap="xs">
                 {formatDate(record.timestamp, 'dd.MM.yyyy')}
@@ -43,7 +46,7 @@ export const PenaltyHistoryTable: FC = () => {
               </Stack>
               {/* {record.details && <RowDetails>{record.details}</RowDetails>} */}
             </td>
-            <td>{record.typeLabel}</td>
+            <td data-testid="typeCell">{record.typeLabel}</td>
             <td>
               {(record.additionalFine !== undefined && (
                 <Text size="xxs" color={'error'}>
@@ -54,7 +57,7 @@ export const PenaltyHistoryTable: FC = () => {
                 </Text>
               )) || <>&mdash;</>}
             </td>
-            <td>
+            <td data-testid="amountCell">
               <Text
                 size="xxs"
                 color={
@@ -68,7 +71,7 @@ export const PenaltyHistoryTable: FC = () => {
                 <FormatToken amount={record.amount} token={TOKENS.steth} />
               </Text>
             </td>
-            <td>
+            <td data-testid="detailsCell">
               {record.details && (
                 <Text color="secondary" size="xxs">
                   {record.details}

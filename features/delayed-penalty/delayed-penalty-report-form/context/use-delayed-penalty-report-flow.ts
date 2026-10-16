@@ -5,7 +5,7 @@ import {
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
 import invariant from 'tiny-invariant';
-import { toHex } from 'viem';
+import { pad } from 'viem';
 import { useTxModalStagesDelayedPenaltyReport } from '../hooks/use-tx-modal-stages-delayed-penalty-report';
 import {
   DelayedPenaltyReportFormInputType,
@@ -31,15 +31,12 @@ export const useDelayedPenaltyReportFlowResolver = (): FlowResolver<
           input.nodeOperatorId !== undefined,
           'NodeOperatorId is not defined',
         );
-        invariant(
-          input.penaltyType !== undefined && input.penaltyType > 0,
-          'PenaltyType is not valid',
-        );
+        invariant(input.penaltyType, 'PenaltyType is not defined');
 
         return delayedPenalty.report({
           nodeOperatorId: input.nodeOperatorId,
           amount: input.amount,
-          penaltyType: toHex(BigInt(input.penaltyType), { size: 32 }),
+          penaltyType: pad(input.penaltyType, { size: 32 }),
           details: input.details || '',
           callback: buildCallback(input, data),
         });

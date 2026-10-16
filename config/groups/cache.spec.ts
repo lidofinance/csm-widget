@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { getCustomRoute } from 'next/dist/server/server-route-utils';
 import {
   CACHE_MIGALABS_RATE_HEADERS,
   CACHE_VALIDATION_HEADERS,
@@ -108,7 +109,7 @@ describe('sentinel header agreement between next.config.mjs and server.mjs', () 
   });
 });
 
-describe('CACHE_CONTROL_PAGES covers every route in pages/', () => {
+describe('CACHE_CONTROL_PAGES covers every page and public asset', () => {
   const nextConfigSource = fs.readFileSync(
     path.resolve(__dirname, '../../next.config.mjs'),
     'utf-8',
@@ -117,47 +118,93 @@ describe('CACHE_CONTROL_PAGES covers every route in pages/', () => {
   const cacheControlPagesBody =
     nextConfigSource.match(/CACHE_CONTROL_PAGES\s*=\s*\[([\s\S]*?)\];/)?.[1] ??
     '';
-  const entries = (cacheControlPagesBody.match(/'([^']*)'/g) ?? []).map((s) =>
-    s.slice(1, -1),
-  );
+  const entries = (
+    cacheControlPagesBody.replace(/\/\/.*$/gm, '').match(/'([^']*)'/g) ?? []
+  ).map((s) => s.slice(1, -1));
 
   it('extracted at least one entry', () => {
     expect(entries.length).toBeGreaterThan(0);
   });
 
-  // api/test/error pages set their own policy; qa-config is getStaticProps
+  // api/test set their own policy or keep Next's private default; 404/500 are
+  // error renders; _app/_document aren't routes
   const UNCACHED_ROUTES = new Set([
     'api',
     'test',
-    'qa-config',
     '_app',
     '_document',
     '404',
     '500',
   ]);
 
-  const dirents = fs.readdirSync(path.resolve(__dirname, '../../pages'), {
-    withFileTypes: true,
-  });
+  const matchers = entries.map(
+    (source) =>
+      getCustomRoute({
+        type: 'header',
+        rule: { source, headers: [] },
+        restrictedRedirectPaths: [],
+      }).match,
+  );
+  const isCovered = (requestPath: string) =>
+    matchers.some((match) => match(requestPath) !== false);
 
-  const routes: [string, string][] = dirents
-    .map((dirent): [string, string] | undefined => {
+  const pagesDir = path.resolve(__dirname, '../../pages');
+
+  const toRequestPaths = (segments: string[]): string[] => {
+    const resolved: string[] = [];
+    const paths: string[] = [];
+    segments.forEach((segment) => {
+      if (/^\[\[\.\.\..+\]\]$/.test(segment)) {
+        paths.push(`/${resolved.join('/')}`);
+        resolved.push('sample');
+      } else if (/^\[.+\]$/.test(segment)) {
+        resolved.push('sample');
+      } else if (segment !== 'index') {
+        resolved.push(segment);
+      }
+    });
+    paths.push(`/${resolved.join('/')}`);
+    return paths;
+  };
+
+  const collectRoutes = (dir: string, prefix: string[] = []): string[] =>
+    fs.readdirSync(dir, { withFileTypes: true }).flatMap((dirent) => {
       const name = dirent.isDirectory()
         ? dirent.name
-        : dirent.name.replace(/\.tsx$/, '');
+        : dirent.name.replace(/\.tsx?$/, '');
+      if (prefix.length === 0 && UNCACHED_ROUTES.has(name)) return [];
+      if (dirent.isDirectory()) {
+        return collectRoutes(path.join(dir, dirent.name), [...prefix, name]);
+      }
+      return toRequestPaths([...prefix, name]);
+    });
 
-      if (UNCACHED_ROUTES.has(name)) return undefined;
+  const routes = collectRoutes(pagesDir);
 
-      if (dirent.isDirectory()) return [name, `/${name}/:path*`];
-      if (name === 'index') return [name, '/'];
-      return [name, `/${name}`];
-    })
-    .filter((route): route is [string, string] => route !== undefined);
+  it.each(routes)('page %s is covered by CACHE_CONTROL_PAGES', (route) => {
+    expect(isCovered(route)).toBe(true);
+  });
 
-  it.each(routes)(
-    '%s -> %s is present in CACHE_CONTROL_PAGES',
-    (_name, expectedEntry) => {
-      expect(entries).toContain(expectedEntry);
+  const publicDir = path.resolve(__dirname, '../../public');
+  const publicAssets = [
+    ...fs
+      .readdirSync(publicDir, { withFileTypes: true })
+      .filter((dirent) => dirent.isFile() && !dirent.name.startsWith('.'))
+      .map((dirent) => `/${dirent.name}`),
+    '/runtime/window-env.js',
+    '/manifest.json',
+    '/favicon.ico',
+    '/favicon-16x16.png',
+    '/favicon-32x32.png',
+    '/favicon-192x192.png',
+    '/favicon-512x512.png',
+    '/apple-touch-icon.png',
+  ];
+
+  it.each(publicAssets)(
+    'asset %s is covered by CACHE_CONTROL_PAGES',
+    (asset) => {
+      expect(isCovered(asset)).toBe(true);
     },
   );
 });

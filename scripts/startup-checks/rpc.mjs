@@ -5,12 +5,6 @@ export const BROKEN_URL = 'BROKEN_URL';
 export const RPC_TIMEOUT_MS = 10_000;
 export const MAX_RETRY_COUNT = 3;
 
-// Safely initialize a global variable
-const globalStartupRPCChecks = globalThis.__startupRPCChecks || {
-  promise: null,
-};
-globalThis.__startupRPCChecks = globalStartupRPCChecks;
-
 const parseUrlList = (val) =>
   val
     ?.split(',')
@@ -54,45 +48,31 @@ const checkRPC = async (url, chainId) => {
   }
 };
 
-export const startupCheckRPCs = async () => {
+export const startupCheckRPCs = () => {
   console.info('[startupCheckRPCs] Starting RPC checks...');
 
-  if (globalStartupRPCChecks.promise) {
-    return globalStartupRPCChecks.promise;
+  // Bad config crashloops new pods (halting the rollout); unreachable RPCs only log,
+  // since upstream state is shared across replicas
+  const defaultChain = parseInt(process.env.DEFAULT_CHAIN, 10);
+  if (!defaultChain) {
+    throw new Error('[startupCheckRPCs] DEFAULT_CHAIN is not configured!');
+  }
+  const rpcUrls = getRPCUrls(defaultChain);
+  if (rpcUrls.length === 0) {
+    throw new Error(
+      `[startupCheckRPCs] [chainId=${defaultChain}] No RPC URLs found!`,
+    );
   }
 
-  globalStartupRPCChecks.promise = (async () => {
-    try {
-      const defaultChain = parseInt(process.env.DEFAULT_CHAIN, 10);
-      if (!defaultChain) {
-        throw new Error('[startupCheckRPCs] DEFAULT_CHAIN is not configured!');
-      }
-
-      const results = [];
-
-      const rpcUrls = getRPCUrls(defaultChain);
-      if (!rpcUrls?.length) {
-        throw new Error(
-          `[startupCheckRPCs] [chainId=${defaultChain}] No RPC URLs found!`,
-        );
-      }
-
-      const chainCheckResults = await Promise.all(
-        rpcUrls.map((url) => checkRPC(url, defaultChain)),
-      );
-      results.push(...chainCheckResults);
-
+  return Promise.all(rpcUrls.map((url) => checkRPC(url, defaultChain))).then(
+    (chainCheckResults) => {
       const brokenRPCCount = chainCheckResults.filter(
         (result) => !result.success,
       ).length;
       console.info(
         `[startupCheckRPCs] [chainId=${defaultChain}] Working/Total RPCs: ${chainCheckResults.length - brokenRPCCount}/${chainCheckResults.length}`,
       );
-
-      return results;
-    } catch (err) {
-      console.error('[startupCheckRPCs] Error during RPC checks:', err);
-      return null;
-    }
-  })();
+      return chainCheckResults;
+    },
+  );
 };

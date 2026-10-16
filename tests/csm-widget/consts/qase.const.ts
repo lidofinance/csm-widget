@@ -51,6 +51,10 @@ export const EPIC = {
     name: 'Surveys',
     features: [],
   },
+  delayedPenalty: {
+    name: 'Delayed penalty',
+    features: ['Report', 'Cancel'],
+  },
 } as const;
 
 export const suite = createSuite<typeof EPIC>();

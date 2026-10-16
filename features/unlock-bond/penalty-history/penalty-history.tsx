@@ -34,6 +34,7 @@ export const PenaltyHistory: FC = () => {
 
   return (
     <AccordionStyle
+      data-testid="penaltyHistory"
       summary={
         <Text as="h4" size="sm" weight={700}>
           Penalty History

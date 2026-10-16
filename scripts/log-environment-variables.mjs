@@ -1,40 +1,23 @@
 /* eslint-disable no-console */
-/* eslint-disable no-prototype-builtins */
-export const openKeys = [
-  'MODULE',
+import envKeys from './env-keys.cjs';
+import { toBoolean } from './to-boolean.mjs';
 
-  'DEFAULT_CHAIN',
-
-  'CSP_TRUSTED_HOSTS',
-  'CSP_REPORT_ONLY',
-  'CSP_REPORT_URI',
-
-  'RATE_LIMIT',
-  'RATE_LIMIT_TIME_FRAME',
-
-  'MATOMO_URL',
-  'WALLETCONNECT_PROJECT_ID',
-  'VALIDATION_FILE_PATH',
-  'DEVNET_ADDRESSES_FILE_PATH',
-];
-
-export const secretKeys = [
-  'EL_RPC_URLS_1',
-  'EL_RPC_URLS_560048',
-  'CL_API_URLS_1',
-  'CL_API_URLS_560048',
-  'ETHSEER_API_URL',
-  'ETHSEER_API_TOKEN',
-];
+const logMissing = (key, optional, prefix = '') => {
+  if (optional) {
+    console.info(`${prefix}${key} - not set (optional)`);
+  } else {
+    console.error(`${prefix}${key} - ERROR (not exist in process.env)`);
+  }
+};
 
 export const logOpenEnvironmentVariables = () => {
   console.log('---------------------------------------------');
   console.log('Log environment variables (without secrets):');
   console.log('---------------------------------------------');
 
-  for (const key of openKeys) {
-    if (!process.env.hasOwnProperty(key)) {
-      console.error(`${key} - ERROR (not exist in process.env)`);
+  for (const { key, optional } of envKeys.filter(({ secret }) => !secret)) {
+    if (!(key in process.env)) {
+      logMissing(key, optional);
       continue;
     }
 
@@ -57,19 +40,20 @@ export const logSecretEnvironmentVariables = () => {
     return;
   }
 
-  for (const key of secretKeys) {
-    if (key.startsWith('EL_RPC_URLS_')) {
-      const chainId = key.replace('EL_RPC_URLS_', '');
-      if (chainId !== defaultChain) {
-        console.info(
-          `Secret ${key} - skipped (${chainId} isn't the DEFAULT_CHAIN)`,
-        );
-        continue;
-      }
+  for (const { key, optional, chain, requiredOn } of envKeys.filter(
+    ({ secret }) => secret,
+  )) {
+    if (chain && chain !== defaultChain) {
+      console.info(`Secret ${key} - skipped (only for DEFAULT_CHAIN=${chain})`);
+      continue;
     }
 
-    if (!process.env.hasOwnProperty(key)) {
-      console.error(`Secret ${key} - ERROR (not exist in process.env)`);
+    if (!(key in process.env)) {
+      logMissing(
+        key,
+        optional || (requiredOn !== undefined && requiredOn !== defaultChain),
+        'Secret ',
+      );
       continue;
     }
 
@@ -86,7 +70,7 @@ export const logSecretEnvironmentVariables = () => {
 export const logEnvironmentVariables = () => {
   logOpenEnvironmentVariables();
 
-  if (process.env.RUN_SECRET_ENV_LOGGING === 'true') {
+  if (toBoolean(process.env.RUN_SECRET_ENV_LOGGING)) {
     logSecretEnvironmentVariables();
   }
 };

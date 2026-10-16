@@ -7,6 +7,7 @@ import { mnemonicToAccount } from 'viem/accounts';
 import { PAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { PRESETS } from 'tests/cm-widget/config/walletSetup';
 import { MatomoService } from 'tests/shared/services/matomo.service';
+import { Tags } from 'tests/shared/consts/common.const';
 
 test.use({ secretPhrase: PRESETS.ONLY_OPERATOR.secretPhrase });
 
@@ -26,6 +27,7 @@ test.describe(
 
     test(
       qase(127, 'Should correct display reward address information'),
+      { tag: Tags.smoke },
       async ({ widgetService, widgetConfig, secretPhrase }) => {
         const rewardAddressRow =
           widgetService.dashboardPage.rolesSection.rewardAddressRow;

@@ -1,4 +1,4 @@
-import { parseArgs } from 'node:util';
+import { parseArgs, styleText } from 'node:util';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import nextEnv from '@next/env';
 import {
@@ -8,6 +8,7 @@ import {
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import type { ChainName } from '../shared/contracts/constants.ts';
 import { forkPort } from '../shared/config/forkPorts.ts';
+import { ROLES } from '../shared/contracts/commands/grantRole.ts';
 
 // Same env as the tests use, so RPC URLs and the wallet come from .env.local.
 nextEnv.loadEnvConfig(process.cwd());
@@ -43,6 +44,11 @@ const HELP: Record<
   fundTokens: {
     args: '<address> <amountEth>',
     example: 'yarn fork csm hoodi fundTokens 0xAbC... 10',
+  },
+  grantRole: {
+    args: '<role> <address>',
+    example:
+      'yarn fork csm hoodi grantRole REPORT_GENERAL_DELAYED_PENALTY_ROLE 0x1111111111111111111111111111111111111111',
   },
   removeKeys: {
     args: '<noId> [startIndex] [keysCount]',
@@ -98,34 +104,104 @@ const HELP: Record<
     example:
       'yarn fork csm hoodi createPermissionlessOperator 0x1111111111111111111111111111111111111111 3',
   },
+  keyTopup: {
+    args: '<noId> <keyIndex> <amountEth>',
+    example: 'yarn fork csm hoodi keyTopup 12 0 1',
+  },
+  topup: {
+    args: '<address> [amountEth]',
+    example: 'yarn fork csm hoodi topup 0xAbC... 100',
+  },
   createOperatorGroup: {
     args: '<[{ id, weight }]>',
     example: `yarn fork cm hoodi createOperatorGroup '[{"id":12,"weight":50},{"id":1,"weight":50}]'`,
   },
 };
 
-const commandHelp = COMMANDS.map((name) => {
+const heading = (text: string) => styleText(['bold', 'cyan'], text);
+const dim = (text: string) => styleText('gray', text);
+
+type Command = (typeof COMMANDS)[number];
+
+const CATEGORIES: Record<string, Command[]> = {
+  'Fork state': ['snapshot', 'revert'],
+  'Wallet & access': ['topup', 'fundTokens', 'grantRole'],
+  Operators: [
+    'createPermissionlessOperator',
+    'createCuratedOperator',
+    'createOperatorGroup',
+    'proposeManager',
+    'confirmManager',
+    'proposeReward',
+    'setRewardsClaimer',
+  ],
+  Keys: ['addKeys', 'removeKeys', 'depositKeys', 'keyTopup'],
+  'Bond & rewards': ['addBond', 'reportRewards'],
+  Penalties: ['reportPenalty', 'settlePenalty'],
+  Module: ['setGateAddrs', 'setShareLimit'],
+};
+
+const categorized = new Set(Object.values(CATEGORIES).flat());
+const uncategorized = COMMANDS.filter((name) => !categorized.has(name));
+if (uncategorized.length > 0) CATEGORIES.Other = uncategorized;
+
+const nameWidth = Math.max(...COMMANDS.map((name) => name.length));
+const formatCommand = (name: Command) => {
   const { args, example } = HELP[name];
-  const signature = `${name} ${args}`.trimEnd();
-  return `  ${signature}\n    ${example}`;
-}).join('\n');
+  const title = styleText(['bold', 'green'], name.padEnd(nameWidth));
+  const indent = ' '.repeat(nameWidth + 6);
+  return [
+    args ? `    ${title}  ${styleText('yellow', args)}` : `    ${title}`,
+    indent + dim('$ ' + example),
+  ].join('\n');
+};
+const commandHelp = Object.entries(CATEGORIES)
+  .map(([category, names]) =>
+    [
+      `  ${styleText(['bold', 'magenta'], category)}`,
+      ...names.map(formatCommand),
+    ].join('\n'),
+  )
+  .join('\n');
 
-const USAGE = `Usage: yarn fork <module> <chain> <command> [args...]
+const roleWidth = Math.max(...Object.keys(ROLES).map((role) => role.length));
+const roleHelp = [
+  ...new Set(Object.values(ROLES).map(([contract]) => contract)),
+]
+  .map((contract) => {
+    const rows = Object.entries(ROLES)
+      .filter(([, [owner]]) => owner === contract)
+      .map(
+        ([role, [, about]]) =>
+          `    ${styleText('green', role.padEnd(roleWidth))}  ${about}`,
+      );
+    return [`  ${styleText(['bold', 'magenta'], contract)}`, ...rows].join(
+      '\n',
+    );
+  })
+  .join('\n');
 
-  module   ${MODULES.join(' | ')}
-  chain    ${CHAINS.join(' | ')}
+const USAGE = `${heading('USAGE')}
 
-  --host   fork node host (default: 127.0.0.1)
-  --port   fork node port (default: the port of this chain)
-  --rpc    full node URL, overrides --host and --port
+  yarn fork ${styleText('yellow', '<module> <chain> <command> [args...]')}
 
-Arguments starting with [ or { are parsed as JSON, the rest stay strings.
+  ${styleText('green', 'module')}   ${MODULES.join(' | ')}
+  ${styleText('green', 'chain')}    ${CHAINS.join(' | ')}
 
-Commands:
+  ${styleText('green', '--host')}   fork node host ${dim('(default: 127.0.0.1)')}
+  ${styleText('green', '--port')}   fork node port ${dim('(default: the port of this chain)')}
+  ${styleText('green', '--rpc')}    full node URL, overrides --host and --port
+
+  ${dim('Arguments starting with [ or { are parsed as JSON, the rest stay strings.')}
+
+${heading('COMMANDS')}
 
 ${commandHelp}
-`;
 
+${heading('ROLES')} ${dim('for grantRole, grouped by contract')}
+
+${roleHelp}
+`;
 const fail = (message: string): never => {
   console.error(`${message}\n\n${USAGE}`);
   process.exit(1);
