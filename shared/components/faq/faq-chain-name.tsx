@@ -1,4 +1,4 @@
-import { CONTRACT_NAMES } from '@lidofinance/lido-csm-sdk';
+import { CONTRACT_NAMES, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
 import { useDappStatus, useSmSDK } from 'modules/web3';
@@ -39,6 +39,14 @@ export const FaqOnlyTestnet: FC<PropsWithChildren> = ({ children }) => {
   const { chainId } = useDappStatus();
   const isMainnet = chainId === CHAINS.Mainnet;
   return !isMainnet ? <>{children}</> : null;
+};
+
+export const FaqIfModule: FC<PropsWithChildren<{ module: MODULE_NAME }>> = ({
+  module,
+  children,
+}) => {
+  const sm = useSmSDK(module);
+  return sm ? <>{children}</> : null;
 };
 
 const FaqContractAddress: FC<{ name: CONTRACT_NAMES }> = ({ name }) => {

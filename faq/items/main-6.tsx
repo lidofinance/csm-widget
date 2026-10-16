@@ -37,8 +37,8 @@ export const Main6: Faq = {
         <li>
           <strong>Enhanced User Experience</strong>: Accessible through a
           multitude of options -- from a web UI to integrations with Dappnode,
-          Stereum, Eth-Docker, Sedge, Stereum, CoinPillar, etc., CSM offers a
-          leading user-friendly experience, with reduced gas fees for on-chain
+          Stereum, Eth-Docker, Sedge, EthPillar, etc., CSM offers a leading
+          user-friendly experience, with reduced gas fees for on-chain
           operations and simplified transactions for joining and claiming
           rewards.
         </li>

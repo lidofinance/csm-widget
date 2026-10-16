@@ -41,7 +41,8 @@ export const Keys1: Faq = {
             <FaqChainName />:
           </strong>{' '}
           <FaqWithdrawalVault />, specify the deposit amount of 32 ETH, and set
-          WC type to <code>0x01</code> (do <strong>NOT</strong> make a deposit)
+          WC type to <code>0x01</code> for 0x01 CSM or <code>0x02</code> for
+          0x02 CSM (do <strong>NOT</strong> make a deposit)
         </li>
         <li>
           <FaqLink href="https://dvt-homestaker.stakesaurus.com/native-solo-staking-setup/validator-client-setup">

@@ -28,6 +28,14 @@ export const OperatorType2: Faq = {
           aligning incentives for small independent operators who share
           validator rewards within a cluster.
         </li>
+        <li>
+          CSM 0x02 operator - the Node Operator type assigned to all Node
+          Operators joining 0x02 CSM, designed for validators with 0x02
+          withdrawal credentials and a balance of up to 2,048 ETH. Although it
+          is shown as a Node Operator type, 0x02 CSM is a separate module, so it
+          is possible to run validators in 0x01 CSM and 0x02 CSM at the same
+          time, with a separate Node Operator in each module.
+        </li>
       </ul>
     </div>
   ),
