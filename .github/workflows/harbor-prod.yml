@@ -1,21 +1,29 @@
 name: Harbor image (prod)
 
-run-name: Build and push csm-widget:${{ github.event.release.tag_name }} to prod
+run-name: Build and push csm-widget:${{ inputs.TAG || github.event.release.tag_name }} to prod
 
-# GitHub release published => prod cluster. Pushes
+# GitHub release published, or manual run on main. Pushes
 # registry.prod.k8s-prod.org/team-csm/csm-widget:<tag>.
+# Release runs are rejected until harbor_prod_release allows tags (it allows only main); use the manual run meanwhile.
 on:
   release:
     types: [released]
+  workflow_dispatch:
+    inputs:
+      TAG:
+        description: Release tag to build and push (e.g. 1.52.1)
+        required: true
+        type: string
 
 permissions:
   contents: read
 
 jobs:
   build-and-push:
+    if: github.event_name == 'release' || github.ref_name == 'main'
     uses: lidofinance/actions/.github/workflows/k8s-build-push-harbor.yml@c7b5b6c5d8013046347d728d748fa741eb214e28
     with:
-      tag: ${{ github.event.release.tag_name }}
+      tag: ${{ inputs.TAG || github.event.release.tag_name }}
       registry: registry.prod.k8s-prod.org
       registry_username: ${{ vars.REGISTRY_USERNAME }}
       image: team-csm/csm-widget
