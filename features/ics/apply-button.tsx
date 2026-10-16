@@ -1,82 +1,23 @@
-import { Button, ButtonProps } from '@lidofinance/lido-ui';
-import { PATH } from 'consts/urls';
-import { useModule, useOperatedNodeOperator } from 'modules/web3';
+import { ButtonProps } from '@lidofinance/lido-ui';
 import { FC } from 'react';
-import { LocalLink } from 'shared/navigate';
-import { IcsFormStatus, TypeStatus, useIcsState } from './shared';
-
-type ButtonState = {
-  text: string;
-  variant: ButtonProps['variant'];
-  href: PATH;
-};
-
-const getButtonState = (
-  typeStatus: TypeStatus,
-  status: IcsFormStatus | undefined,
-  // Only a CSM operator can receive the type, so anything else must create one.
-  hasOperator: boolean,
-): ButtonState => {
-  if (typeStatus === 'CLAIMED') {
-    return {
-      text: 'View ICS status',
-      variant: 'translucent',
-      href: PATH.TYPE_ICS_APPLY,
-    };
-  }
-  if (typeStatus === 'ISSUED') {
-    // Claiming a type writes onto an existing operator, so without an
-    // active one the only meaningful action is to create it.
-    if (!hasOperator) {
-      return {
-        text: 'Create ICS operator',
-        variant: undefined,
-        href: PATH.CREATE_ICS,
-      };
-    }
-    return {
-      text: 'Claim ICS type',
-      variant: undefined,
-      href: PATH.TYPE_ICS_CLAIM,
-    };
-  }
-  switch (status) {
-    case 'APPROVED':
-    case 'REJECTED':
-    case 'REVIEW':
-      return {
-        text: 'View application',
-        variant: 'translucent',
-        href: PATH.TYPE_ICS_APPLY,
-      };
-    default:
-      return {
-        text: 'Apply for ICS',
-        variant: 'translucent',
-        href: PATH.TYPE_ICS_APPLY,
-      };
-  }
-};
+import { TypeApplyButton } from 'shared/node-operator/type-status';
+import { useIcsState } from './shared';
 
 type Props = {
   size?: ButtonProps['size'];
 };
 
 export const IcsApplyButton: FC<Props> = ({ size }) => {
-  const { typeStatus, data } = useIcsState();
-  const { isCSM } = useModule();
-  const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
-  const { text, variant, href } = getButtonState(
-    typeStatus,
-    data?.status,
-    isCSM && nodeOperatorId !== undefined,
-  );
+  const { typeStatus, hasOperator, data, isButtonPending } = useIcsState();
 
   return (
-    <LocalLink href={href}>
-      <Button fullwidth size={size} variant={variant}>
-        {text}
-      </Button>
-    </LocalLink>
+    <TypeApplyButton
+      program="ICS"
+      typeStatus={typeStatus}
+      formStatus={data?.status}
+      hasOperator={hasOperator}
+      isPending={isButtonPending}
+      size={size}
+    />
   );
 };

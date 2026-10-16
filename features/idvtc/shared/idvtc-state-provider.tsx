@@ -1,37 +1,19 @@
-import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import {
-  useIdvtcProof,
-  useOperatedNodeOperator,
-  useOperatorOwner,
-  useOperatorType,
-} from 'modules/web3';
+import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import {
   callSurvey,
   surveyRequest,
   useSurveyStatus,
 } from 'modules/surveys-sdk';
 import { idvtcGetStatus } from 'modules/surveys-sdk/generated';
+import { createContext, FC, PropsWithChildren, useContext } from 'react';
 import {
-  createContext,
-  FC,
-  PropsWithChildren,
-  useContext,
-  useMemo,
-  useState,
-} from 'react';
+  TypeApplyState,
+  useTypeApplyState,
+} from 'shared/node-operator/type-status';
 import invariant from 'tiny-invariant';
 import { IdvtcResponseDto } from './types';
 
-export type IdvtcTypeStatus = 'PENDING' | 'ISSUED' | 'OWNER_ISSUED' | 'CLAIMED';
-
-type IdvtcStateContextType = {
-  typeStatus: IdvtcTypeStatus;
-  data?: IdvtcResponseDto;
-  isPending: boolean;
-  isTypePending: boolean;
-  applyMode: boolean;
-  reset: (value?: boolean) => void;
-};
+type IdvtcStateContextType = TypeApplyState<IdvtcResponseDto>;
 
 const IdvtcStateContext = createContext<IdvtcStateContextType>(
   {} as IdvtcStateContextType,
@@ -44,60 +26,12 @@ export const useIdvtcState = () => {
 };
 
 export const IdvtcStateProvider: FC<PropsWithChildren> = ({ children }) => {
-  // A claimer-only wallet applies for itself, not for the operator it claims for.
-  const nodeOperator = useOperatedNodeOperator();
-  const operatorId = nodeOperator?.nodeOperatorId;
-  // The type only exists in CSM: an operator of another module never holds it.
-  const { data: operatorType } = useOperatorType(
-    nodeOperator?.module === MODULE_NAME.CSM ? nodeOperator : undefined,
-  );
-  const { data: owner } = useOperatorOwner({ nodeOperatorId: operatorId });
-
-  const { data: proofData, isPending: isTypePending } = useIdvtcProof();
-  const { data: ownerProofData, isPending: isOwnerTypePending } = useIdvtcProof(
-    owner?.address,
-  );
-  const { data, isPending } = useSurveyStatus<IdvtcResponseDto>(
+  const surveyQuery = useSurveyStatus<IdvtcResponseDto>(
     'idvtc/status',
     ({ token, signal }) =>
       callSurvey(() => idvtcGetStatus(surveyRequest(token, signal))),
   );
-
-  const [manualReset, setManualReset] = useState(false);
-  const applyMode = useMemo(() => manualReset || !data, [data, manualReset]);
-
-  const typeStatus: IdvtcTypeStatus = useMemo(() => {
-    if (operatorType === OPERATOR_TYPE.CSM_IDVTC || proofData?.isConsumed)
-      return 'CLAIMED';
-    if (proofData?.proof) return 'ISSUED';
-    if (ownerProofData?.proof) return 'OWNER_ISSUED';
-    return 'PENDING';
-  }, [
-    operatorType,
-    ownerProofData?.proof,
-    proofData?.isConsumed,
-    proofData?.proof,
-  ]);
-
-  const value: IdvtcStateContextType = useMemo(
-    () => ({
-      typeStatus,
-      data,
-      isPending,
-      isTypePending: isTypePending || (!!owner?.address && isOwnerTypePending),
-      applyMode,
-      reset: (value = true) => setManualReset(value),
-    }),
-    [
-      typeStatus,
-      data,
-      isPending,
-      isTypePending,
-      owner?.address,
-      isOwnerTypePending,
-      applyMode,
-    ],
-  );
+  const value = useTypeApplyState(OPERATOR_TYPE.CSM_IDVTC, surveyQuery);
 
   return (
     <IdvtcStateContext.Provider value={value}>

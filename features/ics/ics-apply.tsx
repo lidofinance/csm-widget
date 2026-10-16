@@ -6,7 +6,7 @@ import { NoSSRWrapper, WhenLoaded } from 'shared/components';
 import { SiweConnect, SiweSignInAddress } from 'shared/wallet';
 import { ApplyForm } from './apply-form';
 import { FormStatus } from './form-status';
-import { ProofStatus } from './form-status/proof-status';
+import { StatusHeader } from './form-status/components';
 import { IcsProviders, useIcsState } from './shared';
 
 const IcsApplyContent: FC = () => {
@@ -14,6 +14,12 @@ const IcsApplyContent: FC = () => {
   const { token } = useSiweAuth();
   const { typeStatus, data, isPending, isTypePending, applyMode, reset } =
     useIcsState();
+
+  const status = (
+    <Block>
+      <StatusHeader />
+    </Block>
+  );
 
   if (!isAccountActive) {
     return (
@@ -29,12 +35,20 @@ const IcsApplyContent: FC = () => {
     );
   }
 
-  if (typeStatus === 'CLAIMED') {
-    return <ProofStatus typeStatus={typeStatus} />;
+  if (
+    typeStatus === 'CLAIMED' ||
+    typeStatus === 'PROOF_USED' ||
+    typeStatus === 'PROOF_USED_ELSEWHERE'
+  ) {
+    return status;
   }
 
   if (!token) {
-    return <SiweSignInAddress operatorType="ICS" />;
+    return typeStatus !== 'PENDING' ? (
+      status
+    ) : (
+      <SiweSignInAddress operatorType="ICS" />
+    );
   }
 
   if (isPending) {
@@ -46,11 +60,11 @@ const IcsApplyContent: FC = () => {
   }
 
   if (data && !applyMode) {
-    return <FormStatus data={data} typeStatus={typeStatus} reset={reset} />;
+    return <FormStatus data={data} reset={reset} />;
   }
 
-  if (!data && typeStatus !== 'PENDING') {
-    return <ProofStatus typeStatus={typeStatus} />;
+  if (typeStatus !== 'PENDING') {
+    return status;
   }
 
   return <ApplyForm />;

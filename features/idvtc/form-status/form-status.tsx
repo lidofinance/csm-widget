@@ -1,21 +1,17 @@
 import { Block, Button, Divider } from '@lidofinance/lido-ui';
+import { useIdvtcState } from 'features/idvtc/shared';
 import { FC, useCallback } from 'react';
 import { Stack } from 'shared/components';
-import { IdvtcTypeStatus } from '../shared';
 import { IdvtcResponseDto } from '../shared/types';
 import { Application, StatusHeader } from './components';
 
 type FormStatusProps = {
   data: IdvtcResponseDto;
-  typeStatus: IdvtcTypeStatus;
   reset: () => void;
 };
 
-export const FormStatus: FC<FormStatusProps> = ({
-  data,
-  typeStatus,
-  reset,
-}) => {
+export const FormStatus: FC<FormStatusProps> = ({ data, reset }) => {
+  const { typeStatus } = useIdvtcState();
   const { status, form, comments, createdAt } = data;
 
   const handle = useCallback(() => {
@@ -26,14 +22,10 @@ export const FormStatus: FC<FormStatusProps> = ({
   return (
     <Block data-testid="applicationFormStatus">
       <Stack direction="column" gap="xxl">
-        <StatusHeader
-          status={status}
-          typeStatus={typeStatus}
-          comments={comments}
-        />
+        <StatusHeader status={status} comments={comments} />
         <Divider type="horizontal" />
         <Application form={form} comments={comments} createdAt={createdAt} />
-        {status === 'REJECTED' && (
+        {status === 'REJECTED' && typeStatus === 'PENDING' && (
           <Button variant="outlined" fullwidth onClick={handle}>
             Apply again
           </Button>
