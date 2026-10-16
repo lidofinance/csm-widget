@@ -50,8 +50,11 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
   const { data: balance } = useOperatorBalance({ nodeOperatorId });
   const { data: isLockExpired } = useIsLockExpired({ nodeOperatorId });
 
-  const { data: keysWithStatus, isPending: isKeysLoading } =
-    useOperatorKeysWithStatus({ nodeOperatorId });
+  const {
+    data: keysWithStatus,
+    isPending: isKeysLoading,
+    isError: isKeysError,
+  } = useOperatorKeysWithStatus({ nodeOperatorId });
   const hasRequestsToExit = useMemo(
     () =>
       keysWithStatus?.filter(({ statuses }) =>
@@ -80,6 +83,7 @@ export const AlertsWatcherProvider: FC<PropsWithChildren> = ({ children }) => {
     component: AlertRequestToExit,
     shouldShow: IS_NODE_OPERATOR && !!hasRequestsToExit,
     loading: isKeysLoading,
+    indeterminate: isKeysError,
   });
 
   useAlertWatcher({

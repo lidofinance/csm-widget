@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 import invariant from 'tiny-invariant';
-import { v4 as uuid } from 'uuid';
+import { Alerts, removeAlert, upsertAlert } from './alerts-state';
 
 type EmptyObj = Record<string, never>;
 export type AlertProps<P extends object = EmptyObj> = P; // {} & P
@@ -23,11 +23,7 @@ export type AlertContextValue = {
     props?: P,
   ) => void;
   closeAlert: <P extends object>(component?: AlertComponentType<P>) => void;
-  alerts: {
-    component: React.ComponentType<any>;
-    props: any;
-    session: string;
-  }[];
+  alerts: Alerts;
 };
 export const AlertContext = createContext<AlertContextValue | null>(null);
 
@@ -38,37 +34,18 @@ export const useAlertActions = () => {
 };
 
 const AlertProviderRaw: FC<PropsWithChildren> = ({ children }) => {
-  const [alertsState, setAlertsState] = useState<AlertContextValue['alerts']>(
-    [],
-  );
+  const [alertsState, setAlertsState] = useState<Alerts>([]);
 
   const showAlert: AlertContextValue['showAlert'] = useCallback(
     (component, props) => {
-      setAlertsState((prev) => {
-        const index = prev.findIndex((alert) => alert.component === component);
-        return index >= 0
-          ? prev.splice(index, 1, {
-              component,
-              props,
-              session: prev[index].session,
-            })
-          : [...prev, { component, props, session: uuid() }];
-      });
+      setAlertsState((prev) => upsertAlert(prev, component, props));
     },
     [],
   );
 
   const closeAlert: AlertContextValue['closeAlert'] = useCallback(
     (component) => {
-      setAlertsState((prev) => {
-        const index = prev.findIndex((alert) => alert.component === component);
-        if (index >= 0) {
-          const next = Array.from(prev);
-          next.splice(index, 1);
-          return next;
-        }
-        return prev;
-      });
+      setAlertsState((prev) => removeAlert(prev, component));
     },
     [],
   );

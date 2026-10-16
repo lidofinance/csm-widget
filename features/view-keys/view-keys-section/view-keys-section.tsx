@@ -2,14 +2,19 @@ import { useNodeOperatorId, useOperatorKeysWithStatus } from 'modules/web3';
 import { TablePagination, TableProvider } from 'providers/table-provider';
 import { FC } from 'react';
 import { Block, Stack, WhenLoaded } from 'shared/components';
+import { useMaxPriorityKeyIndex } from 'shared/hooks';
 import { KeysTable } from './keys-table';
 import { sortFunctions } from './sort';
 
 export const ViewKeysSection: FC = () => {
   const nodeOperatorId = useNodeOperatorId();
-  const { data: keys, isPending: loading } = useOperatorKeysWithStatus({
-    nodeOperatorId,
-  });
+  const {
+    data: keys,
+    isPending: isKeysPending,
+    isError: isKeysError,
+  } = useOperatorKeysWithStatus({ nodeOperatorId });
+  const { isPending: isPriorityPending, isError: isPriorityError } =
+    useMaxPriorityKeyIndex();
 
   return (
     <TableProvider
@@ -20,7 +25,8 @@ export const ViewKeysSection: FC = () => {
       <Stack direction="column" gap="xl">
         <Block paddingLess overflowHidden data-testid="viewKeysBlock">
           <WhenLoaded
-            loading={loading}
+            loading={isKeysPending || isPriorityPending}
+            error={isKeysError || isPriorityError}
             empty={!keys?.length && 'There are no keys to display'}
             morePadding
           >
