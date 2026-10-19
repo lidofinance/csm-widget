@@ -26,7 +26,7 @@ export const OperatorType2: Faq = {
           operate validators collaboratively via DVT. This approach combines the
           trust properties of ICS with the operational resilience of DVT,
           aligning incentives for small independent operators who share
-          validator rewards within a cluster.
+          validator rewards within a cluster;
         </li>
         <li>
           CSM 0x02 operator - the Node Operator type assigned to all Node
