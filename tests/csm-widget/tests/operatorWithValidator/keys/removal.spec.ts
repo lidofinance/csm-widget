@@ -33,6 +33,7 @@ test.describe(
             .getByText('Choose keys to remove')
             .waitFor({ state: 'visible' });
 
+          await keysPage.removePage.keyRow.first().waitFor();
           const keysCheckboxes = await keysPage.removePage.keyCheckbox.all();
 
           await test.step(`Select ${keyLength} key(s) to remove`, async () => {

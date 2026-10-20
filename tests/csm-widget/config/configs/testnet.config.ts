@@ -9,6 +9,7 @@ export class TestnetConfig extends BaseConfig {
       standType: 'testnet',
       standUrl: 'https://csm.testnet.fi/',
       matomoUrl: 'https://matomo.testnet.fi/matomo.php',
+      feedbackFormUrl: 'https://forms.gle/ZBUqbykaZokJLf4M7',
       networkConfig: {
         chainId: 560048,
         tokenSymbol: 'ETH',

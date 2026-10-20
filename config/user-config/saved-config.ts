@@ -1,4 +1,5 @@
 import type { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { qaToolsEnabled } from '../qa-tools';
 
 // QA overrides persisted in localStorage under `lido-user-config`.
 // Shared by the writer (qa-config form via the user-config context) and by
@@ -20,11 +21,12 @@ export const DEFAULT_SAVED_USER_CONFIG: SavedUserConfig = {
 };
 
 // SSR-safe synchronous read of the saved QA overrides. Returns defaults during
-// SSR or when nothing is stored / parsing fails. Used by modules that resolve
-// their config once at load time — these pick up changes only after a reload,
-// matching the qa-config form's "Reload the page to apply" behavior.
+// SSR, on prod, or when nothing is stored / parsing fails. Used by modules
+// that resolve their config once at load time — these pick up changes only
+// after a reload, matching the qa-config form's "Reload the page to apply".
 export const readSavedUserConfig = (): SavedUserConfig => {
-  if (typeof window === 'undefined') return DEFAULT_SAVED_USER_CONFIG;
+  if (!qaToolsEnabled || typeof window === 'undefined')
+    return DEFAULT_SAVED_USER_CONFIG;
   try {
     const item = window.localStorage.getItem(STORAGE_USER_CONFIG);
     if (!item || item === 'undefined') return DEFAULT_SAVED_USER_CONFIG;

@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useLocalStorage } from 'shared/hooks/use-local-storage';
 import { FeatureFlagsType } from './types';
-import { getFeatureFlagsDefault, isMainnet } from './utils';
+import { qaToolsEnabled } from '../qa-tools';
+import { getFeatureFlagsDefault } from './utils';
 
 const STORAGE_FEATURE_FLAGS = 'lido-feature-flags';
 
@@ -14,21 +15,22 @@ export type FeatureFlagsContextType = FeatureFlagsType & {
 
 export const useFeatureFlagsContext = () => {
   const [featureFlagsLocalStorage, setFeatureFlagsLocalStorage] =
-    useLocalStorage(STORAGE_FEATURE_FLAGS, FEATURE_FLAGS_DEFAULT);
+    useLocalStorage(
+      qaToolsEnabled ? STORAGE_FEATURE_FLAGS : undefined,
+      FEATURE_FLAGS_DEFAULT,
+    );
 
   const [featureFlagsState, setFeatureFlagsState] = useState<FeatureFlagsType>(
     FEATURE_FLAGS_DEFAULT,
   );
 
   useEffect(() => {
-    // turn off feature flags on mainnet
-    if (isMainnet) return;
     setFeatureFlagsState(featureFlagsLocalStorage);
   }, [featureFlagsLocalStorage]);
 
   const setFeatureFlag = useCallback(
     (featureFlag: keyof FeatureFlagsType, value: boolean) => {
-      if (isMainnet) return;
+      if (!qaToolsEnabled) return;
       const newFlags = {
         ...featureFlagsState,
         [featureFlag]: value,

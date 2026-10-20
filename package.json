@@ -24,7 +24,7 @@
     "test:csm:ui": "playwright test --ui --config=./tests/csm-widget/playwright.config.ts",
     "test:cm:ui": "playwright test --ui --config=./tests/cm-widget/playwright.config.ts",
     "survey:codegen": "openapi-ts",
-    "survey:openapi:pull": "node scripts/pull-survey-openapi.mjs"
+    "survey:openapi:pull": "node modules/surveys-sdk/openapi/pull-spec.mjs"
   },
   "dependencies": {
     "@base-org/account": "^2.5.1",

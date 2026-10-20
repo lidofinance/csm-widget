@@ -97,6 +97,9 @@ jobs:
       PUSHGATEWAY_PASSWORD: ${{ secrets.PUSHGATEWAY_PASSWORD }}
       GRAFANA_URL: ${{ secrets.GRAFANA_URL }}
       GRAFANA_API_KEY: ${{ secrets.GRAFANA_API_KEY }}
+      BOCHQA_URL: ${{ secrets.BOCHQA_URL }}
+      BOCHQA_USER: ${{ secrets.BOCHQA_USER }}
+      BOCHQA_PASSWORD: ${{ secrets.BOCHQA_PASSWORD }}
       PINATA_API_KEY: ${{ secrets.QA_PINATA_API_KEY }}
       PINATA_API_SECRET: ${{ secrets.QA_PINATA_API_SECRET }}
 
@@ -152,6 +155,9 @@ jobs:
 
       - name: Run tests
         id: run-tests
+        env:
+          # job context is not available in job-level env
+          GH_JOB_ID: ${{ job.check_run_id }}
         run: |
           echo -e "\033[34m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m"
           echo -e "🚀 Running on Stand Type: \033[1;34m$STAND_TYPE\033[0m"

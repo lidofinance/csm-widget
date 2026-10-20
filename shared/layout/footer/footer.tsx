@@ -9,7 +9,7 @@ import { Version } from './version';
 const { feedbackForm } = getExternalLinks();
 
 export const Footer: FC = () => (
-  <FooterStyle>
+  <FooterStyle data-testid="appFooter">
     <LogoLidoLink />
     <Stack gap="none">
       <FooterLink

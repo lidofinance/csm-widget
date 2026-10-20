@@ -16,6 +16,7 @@ export const LogoLidoLink: FC = () => (
     <MatomoLink
       href="https://lido.fi"
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.lidoHomeLink}
+      data-testid="lidoHomeLink"
     >
       <LidoLogo data-testid="lidoLogo" as="span" />
     </MatomoLink>

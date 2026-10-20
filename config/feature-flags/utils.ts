@@ -10,7 +10,7 @@ import {
 } from './types';
 
 const { defaultChain } = getConfig();
-export const isMainnet = defaultChain === CHAINS.Mainnet;
+const isMainnet = defaultChain === CHAINS.Mainnet;
 
 export const getFeatureFlagsDefault = (): FeatureFlagsType => {
   return {

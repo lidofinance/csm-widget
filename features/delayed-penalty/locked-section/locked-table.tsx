@@ -26,7 +26,7 @@ export const LockedTable: FC = () => {
       </thead>
       <tbody>
         {data.map(({ nodeOperatorId, locked, until }) => (
-          <tr key={nodeOperatorId.toString()}>
+          <tr key={nodeOperatorId.toString()} data-testid="lockedRow">
             <td data-testid="nodeOperatorIdCell">
               {nodeOperatorId.toString()}
             </td>

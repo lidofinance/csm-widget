@@ -4,12 +4,13 @@
 //
 //   SURVEYS_OPENAPI_URL  override the source URL (default: local backend)
 //
-// Usage: `yarn survey:openapi:pull` (→ `node scripts/pull-survey-openapi.mjs`).
+// Usage: `yarn survey:openapi:pull` (→ `node modules/surveys-sdk/openapi/pull-spec.mjs`).
 import { mkdir, rename, unlink, writeFile } from 'node:fs/promises';
-import { dirname, relative, resolve } from 'node:path';
+import { dirname, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const DEFAULT_URL = 'http://localhost:3003/api-json';
-const OUTPUT = 'modules/surveys-sdk/openapi/survey-api.json';
+const OUTPUT = fileURLToPath(new URL('survey-api.json', import.meta.url));
 const TIMEOUT_MS = 10_000;
 
 const fail = (message, hint) => {
@@ -20,7 +21,7 @@ const fail = (message, hint) => {
 
 const main = async () => {
   const url = process.env.SURVEYS_OPENAPI_URL || DEFAULT_URL;
-  const outPath = resolve(OUTPUT);
+  const outPath = OUTPUT;
   const tmpPath = `${outPath}.tmp`;
 
   console.info(`Pulling survey OpenAPI spec from ${url}`);
@@ -62,7 +63,7 @@ const main = async () => {
     await rename(tmpPath, outPath);
   } catch (error) {
     await unlink(tmpPath).catch(() => {});
-    fail(`Failed to write ${OUTPUT}: ${error.message}`);
+    fail(`Failed to write ${relative(process.cwd(), outPath)}: ${error.message}`);
   }
 
   console.info(`✔ Saved OpenAPI ${spec.openapi} spec → ${relative(process.cwd(), outPath)}`);

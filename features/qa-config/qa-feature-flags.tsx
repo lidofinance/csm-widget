@@ -1,6 +1,5 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 
-import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { Checkbox, Text } from '@lidofinance/lido-ui';
 
 import {
@@ -13,7 +12,6 @@ import {
   SURVEYS_SETUP_ENABLED,
   useFeatureFlags,
 } from 'config/feature-flags';
-import { useUserConfig } from 'config/user-config';
 import { FormBlock, Stack } from 'shared/components';
 
 const FLAG_LABELS: Record<keyof FeatureFlagsType, string> = {
@@ -29,27 +27,10 @@ const FLAGS = Object.keys(getFeatureFlagsDefault()) as Array<
   keyof FeatureFlagsType
 >;
 
-const TESTNET_ONLY_FLAGS: Array<keyof FeatureFlagsType> = [
-  ICS_APPLY_FORM,
-  SURVEYS_SETUP_ENABLED,
-  DISABLE_DEPOSIT_DATA_VALIDATION,
-  DISABLE_ICS_PROOF_VALIDATION,
-  DISABLE_DEPOSIT_DATA_SIGNATURE_VALIDATION,
-];
-
 export const QaFeatureFlags: FC = () => {
   const featureFlags = useFeatureFlags();
-  const { defaultChain } = useUserConfig();
 
-  const flags = useMemo(
-    () =>
-      defaultChain === CHAINS.Mainnet
-        ? FLAGS.filter((flag) => !TESTNET_ONLY_FLAGS.includes(flag))
-        : FLAGS,
-    [defaultChain],
-  );
-
-  if (!featureFlags || flags.length === 0) return null;
+  if (!featureFlags) return null;
 
   return (
     <FormBlock>
@@ -57,7 +38,7 @@ export const QaFeatureFlags: FC = () => {
         Feature flags
       </Text>
       <Stack direction="column" gap="sm">
-        {flags.map((flag) => (
+        {FLAGS.map((flag) => (
           <Checkbox
             key={flag}
             label={FLAG_LABELS[flag] ?? flag}
