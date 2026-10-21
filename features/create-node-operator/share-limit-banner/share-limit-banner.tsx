@@ -1,18 +1,47 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { isCsmFamilyModule } from 'consts';
+import { PHASED_DEPOSIT_APPROACH_LINK } from 'consts/external-links';
+import { SEED_DEPOSIT_BANNERS, useFeatureFlags } from 'config/feature-flags';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   SHARE_LIMIT_STATUS,
   useHasPriorityQueueSpots,
   useShareLimit,
   useShareLimitStatus,
+  useTopUpQueueInfo,
 } from 'modules/web3';
 import { FC } from 'react';
-import { Banner } from 'shared/components';
+import { Banner, MatomoLink } from 'shared/components';
 import { useCurrentCurveModule } from 'shared/hooks';
 import { LocalLink } from 'shared/navigate';
 
 type Props = { activeLeft: string; queue: string };
+
+const PhasedDepositLink: FC = () => (
+  <MatomoLink
+    $inline
+    href={PHASED_DEPOSIT_APPROACH_LINK}
+    matomoEvent={MATOMO_CLICK_EVENTS_TYPES.phasedDepositApproachLinkBanner}
+  >
+    the phased deposit approach
+  </MatomoLink>
+);
+
+const SeedOnlyBanner: FC = () => (
+  <Banner variant="wary" title="CSM is currently allocating seed deposits only">
+    Each key uploaded now will be eligible for a seed deposit of 32 ETH only.
+    Top-ups will become available once the module’s stake share limit is
+    increased. For more details, see <PhasedDepositLink />.
+  </Banner>
+);
+
+const SeedQueueFullBanner: FC = () => (
+  <Banner variant="wary-dangerous" title="The seed deposit queue is full">
+    You can still upload keys, but they are unlikely to receive deposits in the
+    near term. The wait could last several months. For more details, see{' '}
+    <PhasedDepositLink />.
+  </Banner>
+);
 
 const ReachedBanner: FC = () => (
   <Banner
@@ -92,16 +121,28 @@ export const ShareLimitBanner: FC = () => {
   const { data } = useShareLimit(undefined, targetModule);
   const { data: status } = useShareLimitStatus(targetModule);
   const { data: hasPrioritySpots } = useHasPriorityQueueSpots();
+  const { data: topUpQueue } = useTopUpQueueInfo(undefined, targetModule);
+  const featureFlags = useFeatureFlags();
 
   if (!data || !status || !isCsmFamilyModule(targetModule)) {
     return null;
   }
 
+  if (status === SHARE_LIMIT_STATUS.REACHED) return <ReachedBanner />;
+
+  if (isCSM02 && featureFlags?.[SEED_DEPOSIT_BANNERS]) {
+    if (!topUpQueue) return null;
+
+    // Uploaded keys enter the top-up queue only after their seed deposit, so the contract caps seed deposits by remaining top-up capacity
+    const seedQueueFull =
+      topUpQueue.enabled && data.queue + topUpQueue.length >= topUpQueue.limit;
+
+    return seedQueueFull ? <SeedQueueFullBanner /> : <SeedOnlyBanner />;
+  }
+
   return (
     <>
-      {status === SHARE_LIMIT_STATUS.REACHED ? (
-        <ReachedBanner />
-      ) : status === SHARE_LIMIT_STATUS.EXHAUSTED && !hasPrioritySpots ? (
+      {status === SHARE_LIMIT_STATUS.EXHAUSTED && !hasPrioritySpots ? (
         isCSM02 ? (
           <TopUpsExceedBanner />
         ) : (

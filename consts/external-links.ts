@@ -44,6 +44,8 @@ export const LIDO_OPERATOR_PORTAL_CM =
 export const LIDO_OPERATOR_PORTAL_BONDS_INFO = `${LIDO_OPERATOR_PORTAL_BASE}#block-e4a6daadca12480d955524247f03f380`;
 export const LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE = `${LIDO_OPERATOR_PORTAL_BASE}#block-c6dc8d00f13243fcb17de3fa07ecc52c`;
 export const LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW = `${LIDO_OPERATOR_PORTAL_BASE}#block-90b8ff95edc64cf7a051584820219616`;
+export const PHASED_DEPOSIT_APPROACH_LINK =
+  'https://research.lido.fi/t/0x02-csm-landscape/11697/10';
 
 // Lido Execution Layer Rewards Vault
 export const LIDO_REWARDS_VAULT_LINK =
