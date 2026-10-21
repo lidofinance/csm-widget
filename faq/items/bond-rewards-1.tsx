@@ -14,8 +14,9 @@ export const BondRewards1: Faq = {
       <ul>
         <li>
           <strong>Node Operator rewards</strong>: a share of rewards from staker
-          locked stake amount, currently calculated pro-rata based on validators
-          operated as a share of total protocol validators, with{' '}
+          locked stake amount, currently calculated pro-rata based on the
+          effective balance of validators operated as a share of total protocol
+          stake, with{' '}
           <FaqLink href="https://operatorportal.lido.fi/modules/community-staking-module#block-c6dc8d00f13243fcb17de3fa07ecc52c">
             possible reductions for bad performance
           </FaqLink>

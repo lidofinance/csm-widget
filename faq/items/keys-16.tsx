@@ -7,7 +7,7 @@ export const Keys16: Faq = {
   content: (
     <div>
       <p>0x02 CSM validators receive stake in two steps:</p>
-      <ul>
+      <ol>
         <li>
           <strong>Seed deposit</strong>: Uploaded keys wait in the deposit queue
           for their initial 32 ETH deposit, the same way as in 0x01 CSM. This
@@ -22,7 +22,7 @@ export const Keys16: Faq = {
           top-up queue is full, new seed deposits wait until a validator is
           fully topped up and frees a seat.
         </li>
-      </ul>
+      </ol>
       <p>
         The time to fully top up a validator depends on factors such as total
         stake inflows and outflows, module shares, and the validator&apos;s
