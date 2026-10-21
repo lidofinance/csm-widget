@@ -6,7 +6,7 @@ export const OperatorType2: Faq = {
   anchor: 'what-operator-types-exist',
   content: (
     <div>
-      <p>Currently there are three Node Operator types:</p>
+      <p>Currently there are four Node Operator types:</p>
       <ul>
         <li>
           CSM 0x01 operator - the default Node Operator type assigned to all new

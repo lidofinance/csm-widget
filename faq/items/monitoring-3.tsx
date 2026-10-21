@@ -11,7 +11,7 @@ export const Monitoring3: Faq = {
         A strike is an indicator of the validator performing below the
         performance threshold in the given frame. Strikes have a lifetime — a
         time after which the strike is no longer considered valid and gets
-        removed form the strikes{' '}
+        removed from the strikes{' '}
         <FaqLink href="https://en.wikipedia.org/wiki/Merkle_tree">
           Merkle tree
         </FaqLink>{' '}
