@@ -60,5 +60,6 @@ export * from './use-sm-status';
 export * from './use-stETH-by-wstETH';
 export * from './use-stake-limit';
 export * from './use-steth-pool-data';
+export * from './use-top-up-queue-info';
 export * from './use-tx-confirmation';
 export * from './use-wstETH-by-stETH';

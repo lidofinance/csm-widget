@@ -6,10 +6,13 @@ import invariant from 'tiny-invariant';
 
 export const KEY_SHARE_LIMIT = ['share-limit'];
 
-export const useShareLimit = <TData = ShareLimitInfo>(
-  select?: (data: ShareLimitInfo) => TData,
-  module?: MODULE_NAME,
-) => {
+export const useShareLimit = <TData = ShareLimitInfo>({
+  module,
+  select,
+}: {
+  module?: MODULE_NAME;
+  select?: (data: ShareLimitInfo) => TData;
+} = {}) => {
   const { module: activeModule } = useModule();
   const { targetModule, sdk: moduleSdk } = useTargetSmSDK(module);
   const sdk = module || isCsmFamilyModule(activeModule) ? moduleSdk : undefined;
