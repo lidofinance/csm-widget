@@ -11,8 +11,8 @@ export const SHARE_LIMIT_STATUS = {
 export const SHARE_LIMIT_APPROACHING_THRESHOLD = 200n;
 
 export const useShareLimitStatus = (module?: MODULE_NAME) => {
-  return useShareLimit(
-    (data) =>
+  return useShareLimit({
+    select: (data) =>
       data.activeLeft <= 0
         ? SHARE_LIMIT_STATUS.REACHED
         : data.activeLeft - data.queue < 0
@@ -21,5 +21,5 @@ export const useShareLimitStatus = (module?: MODULE_NAME) => {
             ? SHARE_LIMIT_STATUS.APPROACHING
             : SHARE_LIMIT_STATUS.FAR,
     module,
-  );
+  });
 };

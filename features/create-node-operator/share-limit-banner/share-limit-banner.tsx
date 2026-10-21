@@ -118,10 +118,10 @@ const ApproachingBanner: FC<Props> = ({ activeLeft, queue }) => (
 export const ShareLimitBanner: FC = () => {
   const targetModule = useCurrentCurveModule();
   const isCSM02 = targetModule === MODULE_NAME.CSM_02;
-  const { data } = useShareLimit(undefined, targetModule);
+  const { data } = useShareLimit({ module: targetModule });
   const { data: status } = useShareLimitStatus(targetModule);
   const { data: hasPrioritySpots } = useHasPriorityQueueSpots();
-  const { data: topUpQueue } = useTopUpQueueInfo(undefined, targetModule);
+  const { data: topUpQueue } = useTopUpQueueInfo({ module: targetModule });
   const featureFlags = useFeatureFlags();
 
   if (!data || !status || !isCsmFamilyModule(targetModule)) {

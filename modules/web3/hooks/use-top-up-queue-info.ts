@@ -10,10 +10,13 @@ import { CsmFamilySDK, useTargetSmSDK } from '../web3-provider';
 
 export const KEY_TOP_UP_QUEUE_INFO = ['top-up-queue-info'];
 
-export const useTopUpQueueInfo = <TData = TopUpQueueInfo>(
-  select?: (data: TopUpQueueInfo) => TData,
-  module?: MODULE_NAME,
-) => {
+export const useTopUpQueueInfo = <TData = TopUpQueueInfo>({
+  module,
+  select,
+}: {
+  module?: MODULE_NAME;
+  select?: (data: TopUpQueueInfo) => TData;
+} = {}) => {
   const { targetModule, sdk: moduleSdk } = useTargetSmSDK(module);
   const sdk = TOPUP_QUEUE_MODULES.has(targetModule)
     ? (moduleSdk as CsmFamilySDK | undefined)

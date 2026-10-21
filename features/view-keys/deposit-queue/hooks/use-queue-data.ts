@@ -70,7 +70,7 @@ export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
   const scale = unit === 'eth' ? MAX_EFFECTIVE_BALANCE_WC_TYPE_01_WEI : 1n;
 
   const { data: operatorInfo } = useOperatorInfo({ nodeOperatorId });
-  const { data: shareLimitInfo } = useShareLimit(undefined, targetModule);
+  const { data: shareLimitInfo } = useShareLimit({ module: targetModule });
   const shareLimit = useMemo(
     () => shareLimitInfo && toShareLimit(shareLimitInfo, unit),
     [shareLimitInfo, unit],
@@ -80,10 +80,10 @@ export const useQueueData = (module?: MODULE_NAME): QueueDataResult => {
     () => calculateAndSelectByOperator(nodeOperatorId, scale),
     [nodeOperatorId, scale],
   );
-  const { data: queueAnalysis } = useDepositQueueBatches(
-    selectByOperator,
-    targetModule,
-  );
+  const { data: queueAnalysis } = useDepositQueueBatches({
+    select: selectByOperator,
+    module: targetModule,
+  });
 
   const currentCurve = useCurrentCurve();
   // Viewing another module's queue: no operator there, so its default curve.
