@@ -22,16 +22,20 @@ export const Keys2: Faq = {
         </li>
         <li>
           <strong>
-            The validator&apos;s withdrawal balance is less than 32 ETH
+            The validator&apos;s withdrawal balance is less than its highest
+            confirmed balance
           </strong>
           .{' '}
-          <code>Penalty amount = 32 - validator&apos;s withdrawal balance</code>
+          <code>
+            Penalty amount = (highest confirmed balance) - validator&apos;s
+            withdrawal balance
+          </code>
           ;
         </li>
         <li>
           <strong>The operator has not exited the validators in time.</strong>{' '}
-          Penalty amount = <code>exitDelayPenalty</code> (a fixed amount set by
-          the DAO);
+          Penalty amount = <code>exitDelayPenalty</code> (a fixed amount for
+          every 32 ETH of balance in the validator set by the DAO);
         </li>
         <li>
           <strong>
@@ -42,7 +46,7 @@ export const Keys2: Faq = {
             due to an excessive number of strikes.
           </strong>{' '}
           Penalty amount = <code>badPerformancePenalty</code> (a fixed amount
-          set by the DAO);
+          for every 32 ETH of balance in the validator set by the DAO);
         </li>
         <li>
           <strong>

@@ -6,10 +6,14 @@ describe('resolveDeployedModules', () => {
   it('secondary modules are filtered by MODULE_CONFIG', () => {
     expect(resolveDeployedModules(MODULE_NAME.CSM, CHAINS.Mainnet)).toEqual([
       MODULE_NAME.CSM,
+      MODULE_NAME.CSM_02,
     ]);
     expect(resolveDeployedModules(MODULE_NAME.CSM, CHAINS.Hoodi)).toEqual([
       MODULE_NAME.CSM,
       MODULE_NAME.CSM_02,
+    ]);
+    expect(resolveDeployedModules(MODULE_NAME.CSM, 999999)).toEqual([
+      MODULE_NAME.CSM,
     ]);
   });
 
@@ -20,7 +24,7 @@ describe('resolveDeployedModules', () => {
   });
 
   it('CSM_02 deployment is always exactly [CSM_02], even without a MODULE_CONFIG entry', () => {
-    expect(resolveDeployedModules(MODULE_NAME.CSM_02, CHAINS.Mainnet)).toEqual([
+    expect(resolveDeployedModules(MODULE_NAME.CSM_02, 999999)).toEqual([
       MODULE_NAME.CSM_02,
     ]);
   });

@@ -13,7 +13,12 @@ export const Keys4: Faq = {
         is a function that determines the amount of bond required for each
         subsequent validator operated by the node operator. For Identified
         Community Stakers (ICS), a unique bond curve function is applied to
-        independent stakers participation.
+        incentivize independent stakers participation.
+      </p>
+      <p>
+        The bond curve is based on the number of validators, not on their
+        balance, so no additional bond is required when a 0x02 validator is
+        topped up towards 2,048 ETH.
       </p>
       <p>
         For the <FaqChainName />, the values for the bond curve are the

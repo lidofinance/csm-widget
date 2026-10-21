@@ -8,6 +8,11 @@ export const Main5: Faq = {
   content: (
     <div>
       <p>
+        CSM consists of two permissionless modules: 0x01 CSM, for validators
+        with a balance of 32 ETH, and 0x02 CSM, for validators with a balance of
+        up to 2,048 ETH.
+      </p>
+      <p>
         Refer to{' '}
         <FaqLink href="https://operatorportal.lido.fi/modules/community-staking-module">
           the CSM page

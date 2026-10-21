@@ -9,4 +9,4 @@ export const isSurveysAvailable = (
 ) =>
   isSurveysApiConfigured &&
   !!featureFlags?.[SURVEYS_SETUP_ENABLED] &&
-  module === MODULE_NAME.CSM;
+  (module === MODULE_NAME.CSM || module === MODULE_NAME.CSM_02);
