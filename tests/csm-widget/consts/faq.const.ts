@@ -57,7 +57,7 @@ Based on the Lido DAO decision;`;
 
 const MEV_BOOST_LINE = IS_MAINNET
   ? 'Configure your MEV-Boost service. Min-bid may be configured either at MEV-Boost level or at the CL client, the current acceptable maximum value for min-bid is 0.07 based on community consensus and may change. Builder-boost-factor should be set to 100%, i.e. local and builder payloads should be treated with equal weights. The relay flags should be set to a list of values only using relays from the list of Vetted MEV-Boost Relays for Lido CSM. Note that at least one “must use” relay should be used. Relays not mentioned in the list are not allowed for use'
-  : `Configure your MEV-Boost service. Do not set the \`min-bid\` flag (or set 0) and set the \`relay\` flags only to the list of designated MEV relays for Lido CSM on ${NETWORK.name}`;
+  : `Configure your MEV-Boost service. Do not set the min-bid flag (or set 0) and set the relay flags only to the list of designated MEV relays for Lido CSM on ${NETWORK.name}`;
 
 const TECHNICAL_HELP = `For community assistance, join the "${NETWORK.discordChannel}" channel on the Lido Discord server to seek advice and guidance.`;
 
@@ -126,7 +126,6 @@ Higher Reward Potential: Node operators are potentially able to earn more reward
   {
     title: 'How much bond is needed?',
     text: `In 0x01 CSM, the bond is ${BOND.first} for the first validator (${BOND.firstIcs} for Identified Community Stakers) and ${BOND.second} for subsequent validators. In 0x02 CSM, it is ${BOND.first0x02} for the first validator and ${BOND.second0x02} for subsequent validators.
-The amount for the second and subsequent validators is ${BOND.second}
 For the ${NETWORK.name}, the values for the bond curve are the following:`,
     links: [],
   },
@@ -215,7 +214,7 @@ For the ${NETWORK.name}, the values for the bond curve are the following:`,
   },
   {
     title: 'Difference between bond types (ETH, stETH, wstETH)?',
-    text: `Bonds are stored in the form of stETH to so that participation as a Node Operator is more capital efficient than if the bond were un-staked (or could only be staked if sufficient deposits to fill the submitted validators were present). While node operators can submit bond in ETH, stETH, or wstETH, any token other than stETH is converted to stETH for consistency in bond format.`,
+    text: `Bonds are stored in the form of stETH so that participation as a Node Operator is more capital efficient than if the bond were un-staked (or could only be staked if sufficient deposits to fill the submitted validators were present). While node operators can submit bond in ETH, stETH, or wstETH, any token other than stETH is converted to stETH for consistency in bond format.`,
     links: [],
   },
   {
@@ -235,7 +234,7 @@ The time to fully top up a validator depends on factors such as total stake infl
   },
   {
     title: 'Why pay for key deletion?',
-    text: `Key deletion incurs a removal fee of ${KEY_REMOVAL_FEE}, which is deducted from the Node Operator's bond per each deleted key to cover the maximal possible operational costs associated with the queue processing. This fee is intended to protect the module from potential DoS attacks by malicious actors who could clog the queue with empty slots by adding and removing keys, and covers the maximal possible operational costs associated with the queue processing. The fee discourages misuse, keeping the system clear of invalid keys or keys that don't end up being deposited to.`,
+    text: `Key deletion incurs a removal fee of ${KEY_REMOVAL_FEE}, which is deducted from the Node Operator's bond per each deleted key to cover the maximal possible operational costs associated with the queue processing. This fee is intended to protect the module from potential DoS attacks by malicious actors who could clog the queue with empty slots by adding and removing keys. The fee discourages misuse, keeping the system clear of invalid keys or keys that don't end up being deposited to.`,
     links: [],
   },
   {
@@ -279,12 +278,12 @@ Finalization of Withdrawal: Once the withdrawable epoch is reached, the validato
     title: 'Why a key can get ejected?',
     text: `Validator ejection can be invoked from the Lido protocol side in the following cases:
 ${EJECTION_CASES}
-Also, Node Operators can voluntary eject their validators if they decide to so. In this case, the Node Operator is responsible for attaching a corresponding payment to cover TW fee.`,
+Also, Node Operators can voluntary eject their validators if they decide to do so. In this case, the Node Operator is responsible for attaching a corresponding payment to cover TW fee.`,
     links: [{ name: 'TW fee', url: EIP_7002 }],
   },
   {
     title: 'What is the CSM Stake Share Limit?',
-    text: `The stake share limit is a parameter defined for each Staking Module based on its risk profile. It determines the percentage of the total stake in the Lido Protocol that can be allocated to the module, 0x01 CSM and 0x02 CSM each have their own stake share limit. Currently, the stake share limit for 0x01 CSM is set at ${NETWORK.shareLimit}.
+    text: `The stake share limit is a parameter defined for each Staking Module based on its risk profile. It determines the percentage of the total stake in the Lido Protocol that can be allocated to the module, 0x01 CSM and 0x02 CSM each have their own stake share limit. Currently, the stake share limit for 0x01 CSM is set at ${NETWORK.shareLimit}. Once CSM reaches its stake share limit, new keys can still be uploaded, but deposits to these keys may take a very long time (e.g. months), if they are deposited to at all. These factors affect the possibility of new deposits to your uploaded keys:
 The number of keys already in the deposit queue, and the position of your keys in this queue
 The number of keys that will exit from CSM
 Changes in the total volume of stake in the Lido Protocol (both net flows as well as whether overall Lido protocol stake increases or not)
@@ -331,9 +330,9 @@ Bond rebase part of the rewards come from stETH being a rebasing token and the b
     text: `Submitting a bond serves as a risk mitigation measure for both the Ethereum network and the Lido protocol.
 There are several major reasons for a CSM Node Operator's bond to be penalized, including:
 The operator has stolen EL rewards (MEV). Penalty amount = amount stolen + fixed stealing fine;
-The validator's withdrawal balance is less than 32 ETH. Penalty amount = 32 - validator's withdrawal balance;
-The operator has not exited the validators in time. Penalty amount = exitDelayPenalty (a fixed amount set by the DAO);
-The validator has been ejected via EIP-7002 due to an excessive number of strikes. Penalty amount = badPerformancePenalty (a fixed amount set by the DAO);
+The validator's withdrawal balance is less than its highest confirmed balance. Penalty amount = (highest confirmed balance) - validator's withdrawal balance;
+The operator has not exited the validators in time. Penalty amount = exitDelayPenalty (a fixed amount for every 32 ETH of balance in the validator set by the DAO);
+The validator has been ejected via EIP-7002 due to an excessive number of strikes. Penalty amount = badPerformancePenalty (a fixed amount for every 32 ETH of balance in the validator set by the DAO);
 Force ejection via EIP-7002 was triggered for the validator. Penalty amount = min(actual TW fee paid, maxWithdrawalRequestFee).`,
     links: [{ name: 'EIP-7002', url: EIP_7002 }],
   },
@@ -453,7 +452,7 @@ maxElWithdrawalRequestFee - a maximum fee charged for each Node Operator's valid
   },
   {
     title: 'What operator types exist?',
-    text: `Currently there are three Node Operator types:
+    text: `Currently there are four Node Operator types:
 CSM 0x01 operator - the default Node Operator type assigned to all new Node Operators joining CSM via the Default Gate;
 Identified Community Staker - the custom Node Operator type assigned to the new Node Operators joining via the Identified Community Stakers Gate. This type can also be claimed by the Node Operators who have passed the identification process after joining CSM via the Default Gate;
 Identified DVT Clusters (IDVTC) - the custom Node Operator type designed for DVT Clusters and creates a more capital-efficient path for independent stakers who are willing to identify themselves and operate validators collaboratively via DVT. This approach combines the trust properties of ICS with the operational resilience of DVT, aligning incentives for small independent operators who share validator rewards within a cluster;
@@ -486,7 +485,7 @@ The frame for the Performance Oracle report is set to ${NETWORK.frame}. The Perf
   },
   {
     title: 'What is a strike?',
-    text: `A strike is an indicator of the validator performing below the performance threshold in the given frame. Strikes have a lifetime — a time after which the strike is no longer considered valid and gets removed form the strikes Merkle tree delivered by the Performance Oracle.`,
+    text: `A strike is an indicator of the validator performing below the performance threshold in the given frame. Strikes have a lifetime — a time after which the strike is no longer considered valid and gets removed from the strikes Merkle tree delivered by the Performance Oracle.`,
     links: [{ name: 'Merkle tree', url: MERKLE_TREE }],
   },
   {
@@ -496,7 +495,7 @@ The frame for the Performance Oracle report is set to ${NETWORK.frame}. The Perf
   },
   {
     title: 'What to do in case of a strike assigned?',
-    text: `Since a strike is an indicator of the validator performing below the performance threshold in the given frame, Node Operators should improve their validator's performance to avoid getting additional strikes. If the validator gets more than strikesThreshold strikes assigned, it will be ejected using EIP-7002. In case of ejection both badPerformancePenalty and min(actual TW fee paid, maxWithdrawalRequestFee)will be confiscated from the Node Operator's bond upon validator withdrawal reporting.
+    text: `Since a strike is an indicator of the validator performing below the performance threshold in the given frame, Node Operators should improve their validator's performance to avoid getting additional strikes. If the validator gets more than strikesThreshold strikes assigned, it will be ejected using EIP-7002. In case of ejection both badPerformancePenalty and min(actual TW fee paid, maxWithdrawalRequestFee) will be confiscated from the Node Operator's bond upon validator withdrawal reporting.
 If Node Operators are unable to maintain validator's performance above the performance threshold they should voluntary exit their validators immediately to avoid damaging overall protocol's performance and application of the corresponding penalties.`,
     links: [{ name: 'EIP-7002', url: EIP_7002 }],
   },
