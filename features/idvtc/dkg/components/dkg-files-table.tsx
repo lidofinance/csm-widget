@@ -1,12 +1,11 @@
 import { FC, useCallback, useState } from 'react';
 import { ButtonIcon, Text } from '@lidofinance/lido-ui';
 import type { FileMetadataDto } from 'modules/surveys-sdk/generated';
-import { Stack } from 'shared/components';
+import { Stack, Toggle } from 'shared/components';
 import { useToggleDkgFile } from '../hooks/use-toggle-dkg-file';
 import { useDeleteDkgFile } from '../hooks/use-delete-dkg-file';
 import { useDownloadDkgFile } from '../hooks/use-download-dkg-file';
 import { useDkgDeleteConfirm } from './dkg-delete-confirm-modal';
-import { DkgFileToggle } from './dkg-file-toggle';
 import {
   DkgRow,
   DkgTable,
@@ -98,10 +97,10 @@ export const DkgFilesTable: FC<Props> = ({ files, canManage }) => {
           const busy = busyId === file.id;
           return (
             <DkgRow key={file.id} $columns="auto 1fr auto">
-              <DkgFileToggle
-                on={file.active}
+              <Toggle
+                checked={file.active}
                 disabled={!canManage || busy}
-                onToggle={(active) => void onToggle(file, active)}
+                onChange={(active) => void onToggle(file, active)}
               />
               <FileName $inactive={!file.active}>{file.name}</FileName>
               <RowActions>

@@ -1,7 +1,6 @@
-import { FC } from 'react';
 import styled from 'styled-components';
 
-const Track = styled.button<{ $on: boolean }>`
+export const ToggleTrackStyle = styled.button<{ $on: boolean }>`
   position: relative;
   width: 36px;
   height: 20px;
@@ -15,7 +14,7 @@ const Track = styled.button<{ $on: boolean }>`
   flex-shrink: 0;
 `;
 
-const Knob = styled.span<{ $on: boolean }>`
+export const ToggleKnobStyle = styled.span<{ $on: boolean }>`
   position: absolute;
   top: 2px;
   left: ${({ $on }) => ($on ? '18px' : '2px')};
@@ -25,22 +24,3 @@ const Knob = styled.span<{ $on: boolean }>`
   background: #fff;
   transition: left 0.15s ease;
 `;
-
-type Props = {
-  on: boolean;
-  disabled?: boolean;
-  onToggle?: (active: boolean) => void;
-};
-
-export const DkgFileToggle: FC<Props> = ({ on, disabled, onToggle }) => (
-  <Track
-    type="button"
-    $on={on}
-    disabled={disabled}
-    role="switch"
-    aria-checked={on}
-    onClick={disabled ? undefined : () => onToggle?.(!on)}
-  >
-    <Knob $on={on} />
-  </Track>
-);
