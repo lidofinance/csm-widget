@@ -13,5 +13,6 @@ export * from './remove-keys-selector-hook-form';
 export * from './select-hook-form';
 export * from './submit-button-hook-form';
 export * from './text-input-hook-form';
+export * from './toggle-hook-form';
 export * from './token-amount-input-hook-form';
 export * from './token-buttons-hook-form';
