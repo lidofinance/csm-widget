@@ -7,7 +7,7 @@ import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
 import {
   useDappStatus,
-  useHasReportDelayedPenaltyRole,
+  useHasProtocolRole,
   useInvites,
   useModule,
   useNodeOperator,
@@ -115,7 +115,9 @@ export const useShowFlags = (): ShowFlags => {
   const { isAccountActive, address, chainId } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
-  const { data: isReportingRole } = useHasReportDelayedPenaltyRole();
+  const { data: isReportingRole } = useHasProtocolRole(
+    'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
+  );
   const { data: balance } = useOperatorBalance({
     nodeOperatorId: nodeOperator?.nodeOperatorId,
   });
