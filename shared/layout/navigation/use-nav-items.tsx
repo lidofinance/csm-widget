@@ -121,6 +121,12 @@ const routes: Route[] = [
     showRules: ['EL_DELAYED_PENALTY_REPORTER'],
   },
   {
+    name: 'Top-up allocation',
+    path: PATH.TOP_UP_ALLOCATION,
+    icon: <MeterIcon />,
+    showRules: ['EL_TOP_UP_ALLOCATION_ENABLER'],
+  },
+  {
     name: 'Surveys',
     path: PATH.SURVEYS,
     icon: <FileIcon />,

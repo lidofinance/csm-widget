@@ -40,6 +40,8 @@ export const PATH = {
   DELAYED_PENALTY_REPORT: '/delayed-penalty/report',
   DELAYED_PENALTY_CANCEL: '/delayed-penalty/cancel',
 
+  TOP_UP_ALLOCATION: '/top-up-allocation',
+
   TYPE: '/type',
   TYPE_ICS_CLAIM: '/type/ics-claim',
   TYPE_ICS_SYSTEM: '/type/ics-system',

@@ -52,6 +52,7 @@ export type ShowRule =
   | 'HAS_LOCKED_BOND'
   | 'HAS_REFERRER'
   | 'EL_DELAYED_PENALTY_REPORTER'
+  | 'EL_TOP_UP_ALLOCATION_ENABLER'
   | 'CAN_CLAIM_ICS'
   | 'CAN_CLAIM_IDVTC'
   | 'ICS_APPLY_ENABLED'
@@ -115,6 +116,10 @@ export const useShowFlags = (): ShowFlags => {
   const { isAccountActive, address, chainId } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
+  const { data: isTopUpEnablerRole } = useHasProtocolRole(
+    'ENABLE_TOP_UP_ALLOCATION_ROLE',
+    MODULE_NAME.CM,
+  );
   const { data: isReportingRole } = useHasProtocolRole(
     'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
   );
@@ -168,6 +173,8 @@ export const useShowFlags = (): ShowFlags => {
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
       ['EL_DELAYED_PENALTY_REPORTER']: !!isReportingRole,
+      ['EL_TOP_UP_ALLOCATION_ENABLER']:
+        !!isTopUpEnablerRole && !!topUpSupported,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
       ['CAN_CLAIM_IDVTC']: !!canClaimIDVTC && isAccountActive,
       ['ICS_APPLY_ENABLED']: icsApplyEnabled,
@@ -199,6 +206,7 @@ export const useShowFlags = (): ShowFlags => {
       balance?.locked,
       referrer,
       isReportingRole,
+      isTopUpEnablerRole,
       canClaimICS,
       canClaimIDVTC,
       featureFlags,

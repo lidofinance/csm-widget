@@ -44,6 +44,10 @@ export const VALIDATION_MESSAGES = {
   penaltyTypeTooLong: 'Should be at most 32 bytes',
   penaltyTypeNotZero: 'Penalty type should not be zero',
 
+  // Top-up allocation
+  topUpAllocationAlreadyEnabled:
+    'Top-up allocation is already enabled for this Node Operator',
+
   // Address change forms
   specifyValidAddress: 'Specify a valid address or ENS name',
   notSameAsCurrentClaimer: 'Should not be same as current claimer',
