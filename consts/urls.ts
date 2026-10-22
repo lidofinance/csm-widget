@@ -34,10 +34,13 @@ export const PATH = {
   SETTINGS_SPLITS: '/settings/splits',
   SETTINGS_INBOX: '/settings/inbox',
   SETTINGS_METADATA: '/settings/metadata',
+  SETTINGS_GENERAL: '/settings/general',
 
   DELAYED_PENALTY: '/delayed-penalty',
   DELAYED_PENALTY_REPORT: '/delayed-penalty/report',
   DELAYED_PENALTY_CANCEL: '/delayed-penalty/cancel',
+
+  TOP_UP_ALLOCATION: '/top-up-allocation',
 
   TYPE: '/type',
   TYPE_ICS_CLAIM: '/type/ics-claim',

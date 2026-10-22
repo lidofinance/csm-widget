@@ -98,6 +98,7 @@ const routes: Route[] = [
       PATH.SETTINGS_SPLITS,
       PATH.SETTINGS_INBOX,
       PATH.SETTINGS_METADATA,
+      PATH.SETTINGS_GENERAL,
     ],
     showRules: ['IS_NODE_OPERATOR'],
     suffix: <CounterInvites />,
@@ -118,6 +119,12 @@ const routes: Route[] = [
     icon: <EthIcon />,
     subPaths: [PATH.DELAYED_PENALTY_REPORT, PATH.DELAYED_PENALTY_CANCEL],
     showRules: ['EL_DELAYED_PENALTY_REPORTER'],
+  },
+  {
+    name: 'Top-up allocation',
+    path: PATH.TOP_UP_ALLOCATION,
+    icon: <MeterIcon />,
+    showRules: ['EL_TOP_UP_ALLOCATION_ENABLER'],
   },
   {
     name: 'Surveys',

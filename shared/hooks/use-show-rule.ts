@@ -7,11 +7,12 @@ import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
 import {
   useDappStatus,
-  useHasReportDelayedPenaltyRole,
+  useHasProtocolRole,
   useInvites,
   useModule,
   useNodeOperator,
   useOperatorBalance,
+  useIsTopUpAllocationSupported,
   useOperatorInfo,
 } from 'modules/web3';
 import { useOperatorType } from 'modules/web3/hooks/use-operator-type';
@@ -51,6 +52,7 @@ export type ShowRule =
   | 'HAS_LOCKED_BOND'
   | 'HAS_REFERRER'
   | 'EL_DELAYED_PENALTY_REPORTER'
+  | 'EL_TOP_UP_ALLOCATION_ENABLER'
   | 'CAN_CLAIM_ICS'
   | 'CAN_CLAIM_IDVTC'
   | 'ICS_APPLY_ENABLED'
@@ -60,6 +62,7 @@ export type ShowRule =
   | 'IS_CSM_02'
   | 'IS_CSM_FAMILY'
   | 'IS_CM'
+  | 'CAN_TOGGLE_TOP_UP'
   | 'IS_IDVTC';
 
 export type ShowFlags = Record<ShowRule, boolean>;
@@ -113,7 +116,13 @@ export const useShowFlags = (): ShowFlags => {
   const { isAccountActive, address, chainId } = useDappStatus();
   const { nodeOperator } = useNodeOperator();
   const { data: invites } = useInvites();
-  const { data: isReportingRole } = useHasReportDelayedPenaltyRole();
+  const { data: isTopUpEnablerRole } = useHasProtocolRole(
+    'ENABLE_TOP_UP_ALLOCATION_ROLE',
+    MODULE_NAME.CM,
+  );
+  const { data: isReportingRole } = useHasProtocolRole(
+    'REPORT_GENERAL_DELAYED_PENALTY_ROLE',
+  );
   const { data: balance } = useOperatorBalance({
     nodeOperatorId: nodeOperator?.nodeOperatorId,
   });
@@ -133,6 +142,7 @@ export const useShowFlags = (): ShowFlags => {
   const featureFlags = useFeatureFlags();
   const { module, isCsmFamily } = useModule();
   const icsApplyEnabled = useIcsApplyEnabled();
+  const { data: topUpSupported } = useIsTopUpAllocationSupported();
 
   const hasManagerRole =
     isAccountActive && isManagerRole(nodeOperator, address);
@@ -163,6 +173,8 @@ export const useShowFlags = (): ShowFlags => {
       ['HAS_LOCKED_BOND']: !!balance?.locked,
       ['HAS_REFERRER']: !!referrer,
       ['EL_DELAYED_PENALTY_REPORTER']: !!isReportingRole,
+      ['EL_TOP_UP_ALLOCATION_ENABLER']:
+        !!isTopUpEnablerRole && !!topUpSupported,
       ['CAN_CLAIM_ICS']: !!canClaimICS && isAccountActive,
       ['CAN_CLAIM_IDVTC']: !!canClaimIDVTC && isAccountActive,
       ['ICS_APPLY_ENABLED']: icsApplyEnabled,
@@ -172,6 +184,7 @@ export const useShowFlags = (): ShowFlags => {
       ['IS_CSM_02']: module === MODULE_NAME.CSM_02,
       ['IS_CSM_FAMILY']: isCsmFamily,
       ['IS_CM']: module === MODULE_NAME.CM,
+      ['CAN_TOGGLE_TOP_UP']: module === MODULE_NAME.CM && !!topUpSupported,
       ['IS_IDVTC']: isNodeOperator && operatorType === OPERATOR_TYPE.CSM_IDVTC,
     }),
     [
@@ -193,6 +206,7 @@ export const useShowFlags = (): ShowFlags => {
       balance?.locked,
       referrer,
       isReportingRole,
+      isTopUpEnablerRole,
       canClaimICS,
       canClaimIDVTC,
       featureFlags,
@@ -201,6 +215,7 @@ export const useShowFlags = (): ShowFlags => {
       isCsmFamily,
       icsApplyEnabled,
       createOptions,
+      topUpSupported,
     ],
   );
 };
