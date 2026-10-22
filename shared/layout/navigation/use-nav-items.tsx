@@ -98,6 +98,7 @@ const routes: Route[] = [
       PATH.SETTINGS_SPLITS,
       PATH.SETTINGS_INBOX,
       PATH.SETTINGS_METADATA,
+      PATH.SETTINGS_GENERAL,
     ],
     showRules: ['IS_NODE_OPERATOR'],
     suffix: <CounterInvites />,

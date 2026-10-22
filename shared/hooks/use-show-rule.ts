@@ -12,6 +12,7 @@ import {
   useModule,
   useNodeOperator,
   useOperatorBalance,
+  useIsTopUpAllocationSupported,
   useOperatorInfo,
 } from 'modules/web3';
 import { useOperatorType } from 'modules/web3/hooks/use-operator-type';
@@ -60,6 +61,7 @@ export type ShowRule =
   | 'IS_CSM_02'
   | 'IS_CSM_FAMILY'
   | 'IS_CM'
+  | 'CAN_TOGGLE_TOP_UP'
   | 'IS_IDVTC';
 
 export type ShowFlags = Record<ShowRule, boolean>;
@@ -133,6 +135,7 @@ export const useShowFlags = (): ShowFlags => {
   const featureFlags = useFeatureFlags();
   const { module, isCsmFamily } = useModule();
   const icsApplyEnabled = useIcsApplyEnabled();
+  const { data: topUpSupported } = useIsTopUpAllocationSupported();
 
   const hasManagerRole =
     isAccountActive && isManagerRole(nodeOperator, address);
@@ -172,6 +175,7 @@ export const useShowFlags = (): ShowFlags => {
       ['IS_CSM_02']: module === MODULE_NAME.CSM_02,
       ['IS_CSM_FAMILY']: isCsmFamily,
       ['IS_CM']: module === MODULE_NAME.CM,
+      ['CAN_TOGGLE_TOP_UP']: module === MODULE_NAME.CM && !!topUpSupported,
       ['IS_IDVTC']: isNodeOperator && operatorType === OPERATOR_TYPE.CSM_IDVTC,
     }),
     [
@@ -201,6 +205,7 @@ export const useShowFlags = (): ShowFlags => {
       isCsmFamily,
       icsApplyEnabled,
       createOptions,
+      topUpSupported,
     ],
   );
 };

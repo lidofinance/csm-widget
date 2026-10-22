@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { forwardRef } from 'react';
 import { ToggleKnobStyle, ToggleTrackStyle } from './styles';
 
 export type ToggleProps = {
@@ -7,15 +7,18 @@ export type ToggleProps = {
   onChange?: (checked: boolean) => void;
 };
 
-export const Toggle: FC<ToggleProps> = ({ checked, disabled, onChange }) => (
-  <ToggleTrackStyle
-    type="button"
-    $on={checked}
-    disabled={disabled}
-    role="switch"
-    aria-checked={checked}
-    onClick={disabled ? undefined : () => onChange?.(!checked)}
-  >
-    <ToggleKnobStyle $on={checked} />
-  </ToggleTrackStyle>
+export const Toggle = forwardRef<HTMLButtonElement, ToggleProps>(
+  ({ checked, disabled, onChange }, ref) => (
+    <ToggleTrackStyle
+      ref={ref}
+      type="button"
+      $on={checked}
+      disabled={disabled}
+      role="switch"
+      aria-checked={checked}
+      onClick={disabled ? undefined : () => onChange?.(!checked)}
+    >
+      <ToggleKnobStyle $on={checked} />
+    </ToggleTrackStyle>
+  ),
 );

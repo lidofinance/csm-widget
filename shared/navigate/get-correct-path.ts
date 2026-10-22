@@ -16,6 +16,7 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
     case PATH.SETTINGS_CLAIMER:
     case PATH.SETTINGS_SPLITS:
       return hasRole ? path : PATH.SETTINGS_INBOX;
+    case PATH.SETTINGS_GENERAL:
     case PATH.SETTINGS_METADATA:
       return isModuleCM ? path : PATH.SETTINGS;
 
