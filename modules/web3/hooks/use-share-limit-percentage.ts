@@ -1,5 +1,5 @@
 import { useShareLimit } from './use-share-limit';
 
 export const useShareLimitPercentage = () => {
-  return useShareLimit((data) => data.shareLimit);
+  return useShareLimit({ select: (data) => data.shareLimit });
 };

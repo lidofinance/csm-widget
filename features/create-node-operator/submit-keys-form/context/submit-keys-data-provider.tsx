@@ -64,7 +64,7 @@ const useSubmitKeysFormNetworkData: NetworkData<
   const ethBalanceQuery = useEthereumBalance();
   const stethBalanceQuery = useStethBalance();
   const wstethBalanceQuery = useWstethBalance();
-  const shareLimitQuery = useShareLimit(undefined, targetModule);
+  const shareLimitQuery = useShareLimit({ module: targetModule });
   const maxStakeEthQuery = useStakeLimit();
 
   const ethBalance = ethBalanceQuery.data;

@@ -67,6 +67,7 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   migalabsPubkeyLink = 'migalabsPubkeyLink',
   tryOtherNetworkLink = 'tryOtherNetworkLink',
   stakeShareLimitLinkBanner = 'stakeShareLimitLinkBanner',
+  phasedDepositApproachLinkBanner = 'phasedDepositApproachLinkBanner',
   faqItemLink = 'faqItemLink',
   // Key status comment
   howToExitLinkComment = 'howToExitLinkComment',
@@ -332,6 +333,10 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.stakeShareLimitLinkBanner]: createEvent(
     'Click «stake share limit» link on banner',
     'stake_share_limit_link_banner',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.phasedDepositApproachLinkBanner]: createEvent(
+    'Click «phased deposit approach» link on banner',
+    'phased_deposit_approach_link_banner',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.faqItemLink]: createEvent(
     'Click link in FAQ',

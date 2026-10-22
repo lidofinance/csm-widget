@@ -41,7 +41,8 @@ export const Keys1: Faq = {
             <FaqChainName />:
           </strong>{' '}
           <FaqWithdrawalVault />, specify the deposit amount of 32 ETH, and set
-          WC type to <code>0x01</code> (do <strong>NOT</strong> make a deposit)
+          WC type to <code>0x01</code> for 0x01 CSM or <code>0x02</code> for
+          0x02 CSM (do <strong>NOT</strong> make a deposit)
         </li>
         <li>
           <FaqLink href="https://dvt-homestaker.stakesaurus.com/native-solo-staking-setup/validator-client-setup">
@@ -60,8 +61,8 @@ export const Keys1: Faq = {
             <FaqLink href="https://dvt-homestaker.stakesaurus.com/keystore-generation-and-mev-boost/set-up-and-configure-mev-boost">
               Configure your MEV-Boost service
             </FaqLink>
-            . Do not set the `min-bid` flag (or set 0) and set the `relay` flags
-            only to{' '}
+            . Do not set the <code>min-bid</code> flag (or set 0) and set the{' '}
+            <code>relay</code> flags only to{' '}
             <FaqLink href="https://www.notion.so/6d369eb33f664487800b0dedfe32171e?pvs=21">
               the list of designated MEV relays for Lido CSM on <FaqChainName />
             </FaqLink>

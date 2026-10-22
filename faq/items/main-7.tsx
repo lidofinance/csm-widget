@@ -1,6 +1,11 @@
-import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import React from 'react';
-import { FaqBondAmount, FaqChainName, FaqCurveImage } from 'shared/components';
+import {
+  FaqBondAmount,
+  FaqChainName,
+  FaqCurveImage,
+  FaqIfModule,
+} from 'shared/components';
 import { Faq } from 'types';
 
 export const Main7: Faq = {
@@ -9,15 +14,18 @@ export const Main7: Faq = {
   content: (
     <div>
       <p>
-        The initial bond requirement for the first validator for the{' '}
-        <FaqChainName /> is <FaqBondAmount type={OPERATOR_TYPE.CSM_DEF} />.
-        However, for Identified Community Stakers (ICS), this amount is reduced
-        to <FaqBondAmount type={OPERATOR_TYPE.CSM_ICS} /> to incentivize
-        independent stakers participation.
-      </p>
-      <p>
-        The amount for the second and subsequent validators is{' '}
-        <FaqBondAmount type={OPERATOR_TYPE.CSM_DEF} second />
+        In 0x01 CSM, the bond is <FaqBondAmount type={OPERATOR_TYPE.CSM_DEF} />{' '}
+        for the first validator (<FaqBondAmount type={OPERATOR_TYPE.CSM_ICS} />{' '}
+        for Identified Community Stakers) and{' '}
+        <FaqBondAmount type={OPERATOR_TYPE.CSM_DEF} second /> for subsequent
+        validators.
+        <FaqIfModule module={MODULE_NAME.CSM_02}>
+          {' '}
+          In 0x02 CSM, it is <FaqBondAmount type={OPERATOR_TYPE.CSM2_DEF} /> for
+          the first validator and{' '}
+          <FaqBondAmount type={OPERATOR_TYPE.CSM2_DEF} second /> for subsequent
+          validators.
+        </FaqIfModule>
       </p>
       <p>
         For the <FaqChainName />, the values for the bond curve are the

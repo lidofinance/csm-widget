@@ -23,7 +23,7 @@ export const Keys12: Faq = {
       </ul>
       <p>
         Also, Node Operators can voluntary eject their validators if they decide
-        to so. In this case, the Node Operator is responsible for attaching a
+        to do so. In this case, the Node Operator is responsible for attaching a
         corresponding payment to cover{' '}
         <FaqLink href="https://eips.ethereum.org/EIPS/eip-7002">TW fee</FaqLink>
         .

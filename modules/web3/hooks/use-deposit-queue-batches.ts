@@ -10,10 +10,13 @@ import { CsmFamilySDK, useTargetSmSDK } from '../web3-provider';
 
 export const KEY_DEPOSIT_QUEUE_BATCHES = ['deposit-queue-batches'];
 
-export const useDepositQueueBatches = <TData = DepositQueueBatch[][]>(
-  select?: (data: DepositQueueBatch[][]) => TData,
-  module?: MODULE_NAME,
-) => {
+export const useDepositQueueBatches = <TData = DepositQueueBatch[][]>({
+  module,
+  select,
+}: {
+  module?: MODULE_NAME;
+  select?: (data: DepositQueueBatch[][]) => TData;
+} = {}) => {
   const { targetModule, sdk: moduleSdk } = useTargetSmSDK(module);
   const sdk = DEPOSIT_QUEUE_MODULES.has(targetModule)
     ? (moduleSdk as CsmFamilySDK | undefined)

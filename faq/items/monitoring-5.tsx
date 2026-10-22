@@ -17,7 +17,7 @@ export const Monitoring5: Faq = {
           EIP-7002
         </FaqLink>
         . In case of ejection both <code>badPerformancePenalty</code> and{' '}
-        <code>min(actual TW fee paid, maxWithdrawalRequestFee)</code>will be
+        <code>min(actual TW fee paid, maxWithdrawalRequestFee)</code> will be
         confiscated from the Node Operator&apos;s bond upon validator withdrawal
         reporting.{' '}
       </p>
