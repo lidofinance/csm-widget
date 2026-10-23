@@ -1,3 +1,4 @@
+export * from './use-aa';
 export * from './use-balance';
 export * from './use-bond-by-keys-count';
 export * from './use-bond-next-keys-count';
@@ -22,6 +23,7 @@ export * from './types';
 export * from './use-invites';
 export * from './use-is-contract';
 export * from './use-is-lock-expired';
+export * from './use-is-smart-account';
 export * from './use-key-eject-fee';
 export * from './use-key-removal-fee';
 export * from './use-last-report-timestamps';
