@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren } from 'react';
-import { EmptyState } from 'shared/components';
+import { EmptyState, NoAccessNotice } from 'shared/components';
 import { FormLoader } from 'shared/hook-form/form-controller';
 import { ClaimIcsSuccess } from './claim-ics-success';
 import { useClaimIcsFlow, useClaimIcsFormData } from './context';
@@ -20,7 +20,13 @@ const ClaimIcsFormGate: FC<PropsWithChildren> = ({ children }) => {
   const flow = useClaimIcsFlow();
 
   if (justClaimed) return <ClaimIcsSuccess />;
-  if (flow.action === 'no-access') return <Info />;
+  if (flow.action === 'no-access')
+    return (
+      <>
+        <Info />
+        <NoAccessNotice access={flow.access} />
+      </>
+    );
   if (flow.action === 'claimed-with-proof') return <ClaimedWithProofInfo />;
 
   const empty = EMPTY_STATE[flow.action];

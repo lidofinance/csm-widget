@@ -1,127 +1,29 @@
-import { NodeOperatorId } from '@lidofinance/lido-csm-sdk';
-import { Button, Text } from '@lidofinance/lido-ui';
-import { PATH } from 'consts';
+import { Text } from '@lidofinance/lido-ui';
 import {
   DVT_ASSESSED_DATE,
   IdvtcCommentsDto,
   IdvtcFormStatus,
-  IdvtcTypeStatus,
+  useIdvtcState,
 } from 'features/idvtc/shared';
-import {
-  NodeOperatorOwner,
-  useDappStatus,
-  useOperatedNodeOperator,
-  useOperatorOwner,
-} from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components';
-import { LocalLink } from 'shared/navigate';
-import { isAddressEqual } from 'viem';
-import { ScoreChip } from './score-chip';
+import {
+  ApplicationStatusChip,
+  TypeStatusChip,
+  TypeStatusHint,
+} from 'shared/node-operator/type-status';
 
 type StatusHeaderProps = {
-  typeStatus: IdvtcTypeStatus;
   status?: IdvtcFormStatus;
   comments?: IdvtcCommentsDto;
 };
 
-const getStatus = (
+const getApplicationHint = (
   status: IdvtcFormStatus | undefined,
-  typeStatus: IdvtcTypeStatus,
+  comments: IdvtcCommentsDto | undefined,
 ) => {
   switch (status) {
-    case 'APPROVED':
-      return (
-        <ScoreChip type={typeStatus === 'CLAIMED' ? 'default' : 'success'}>
-          Approved
-        </ScoreChip>
-      );
     case 'REJECTED':
-      return <ScoreChip type="error">Rejected</ScoreChip>;
-    case 'REVIEW':
-      return <ScoreChip type="pending">Pending</ScoreChip>;
-    default:
-      return null;
-  }
-};
-
-const getProofStatus = (typeStatus: IdvtcTypeStatus) => {
-  switch (typeStatus) {
-    case 'CLAIMED':
-      return <ScoreChip type="default">Claimed</ScoreChip>;
-    case 'ISSUED':
-      return <ScoreChip type="success">Issued</ScoreChip>;
-    case 'OWNER_ISSUED':
-      return <ScoreChip type="success">Approved</ScoreChip>;
-    default:
-      return <ScoreChip type="pending">Pending</ScoreChip>;
-  }
-};
-
-const useHint = (
-  status: IdvtcFormStatus | undefined,
-  typeStatus: IdvtcTypeStatus,
-  comments: IdvtcCommentsDto | undefined,
-  owner: NodeOperatorOwner | undefined,
-  nodeOperatorId: NodeOperatorId | undefined,
-) => {
-  switch (true) {
-    case typeStatus === 'CLAIMED':
-      return <Text size="xs">You successfully claimed your Operator type</Text>;
-    case typeStatus === 'ISSUED' && !!owner:
-      return (
-        <>
-          <Text size="xs">
-            You&apos;re already eligible to claim IDVTC type
-          </Text>
-          <Text size="xs">
-            To claim your current address should be set as your Node Operator
-            owner.
-          </Text>
-        </>
-      );
-    case typeStatus === 'ISSUED' && nodeOperatorId === undefined:
-      return (
-        <>
-          <Text size="xs">
-            Create a new Node Operator with IDVTC operator type
-          </Text>
-
-          <div>
-            <LocalLink href={PATH.CREATE_IDVTC}>
-              <Button size="xs">Go to create Node Operator</Button>
-            </LocalLink>
-          </div>
-        </>
-      );
-    case typeStatus === 'ISSUED':
-      return (
-        <>
-          <Text size="xs">
-            Claim your new operator type on the “Claim operator type” tab
-          </Text>
-
-          <div>
-            <LocalLink href={PATH.TYPE_IDVTC_CLAIM}>
-              <Button size="xs">Go to claim</Button>
-            </LocalLink>
-          </div>
-        </>
-      );
-    case typeStatus === 'OWNER_ISSUED':
-      return (
-        <>
-          <Text size="xs">
-            Node Operator&apos;s owner address is already eligible to claim
-            IDVTC type
-          </Text>
-          <Text size="xs">
-            Connect with your Node Operator&apos;s owner address to claim IDVTC
-            type
-          </Text>
-        </>
-      );
-    case status === 'REJECTED':
       if (comments?.reason) {
         return <Text size="xs">{comments.reason}</Text>;
       }
@@ -133,7 +35,7 @@ const useHint = (
           CSM Committee.
         </Text>
       );
-    case status === 'REVIEW':
+    case 'REVIEW':
       return (
         <Text size="xs">
           The application will be assessed after {DVT_ASSESSED_DATE} as of{' '}
@@ -141,7 +43,7 @@ const useHint = (
           being reviewed.
         </Text>
       );
-    case status === 'APPROVED':
+    case 'APPROVED':
       return (
         <Text size="xs">
           Please await issuance; this process typically takes up to three weeks.
@@ -152,28 +54,18 @@ const useHint = (
   }
 };
 
-export const StatusHeader: FC<StatusHeaderProps> = ({
-  status,
-  typeStatus,
-  comments,
-}) => {
-  const { address } = useDappStatus();
-  const nodeOperatorId = useOperatedNodeOperator()?.nodeOperatorId;
-  const { data: owner } = useOperatorOwner({ nodeOperatorId });
+export const StatusHeader: FC<StatusHeaderProps> = ({ status, comments }) => {
+  const { typeStatus, hasOperator } = useIdvtcState();
 
-  const otherOwner =
-    owner && address && !isAddressEqual(owner.address, address)
-      ? owner
-      : undefined;
-
-  const statusChip = getStatus(status, typeStatus);
-  const proofChip = getProofStatus(typeStatus);
-  const hint = useHint(
-    status,
-    typeStatus,
-    comments,
-    otherOwner,
-    nodeOperatorId,
+  const hasTypeStatus = typeStatus !== 'PENDING';
+  const hint = hasTypeStatus ? (
+    <TypeStatusHint
+      program="IDVTC"
+      typeStatus={typeStatus}
+      hasOperator={hasOperator}
+    />
+  ) : (
+    getApplicationHint(status, comments)
   );
 
   return (
@@ -188,10 +80,10 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
           <Text size="lg" weight={700}>
             Application
           </Text>
-          {statusChip}
+          <ApplicationStatusChip status={status} typeStatus={typeStatus} />
         </Stack>
       )}
-      {(!status || status === 'APPROVED') && (
+      {(!status || status === 'APPROVED' || hasTypeStatus) && (
         <Stack
           direction="row"
           justify="space-between"
@@ -201,7 +93,7 @@ export const StatusHeader: FC<StatusHeaderProps> = ({
           <Text size="lg" weight={700}>
             Operator type
           </Text>
-          {proofChip}
+          <TypeStatusChip typeStatus={typeStatus} />
         </Stack>
       )}
       {hint}
