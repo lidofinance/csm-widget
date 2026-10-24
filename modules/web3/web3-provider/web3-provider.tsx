@@ -21,7 +21,7 @@ import {
 import { ReefKnotProvider, getDefaultConfig } from 'reef-knot/core-react';
 import { WalletIdsEthereum, WalletsListEthereum } from 'reef-knot/wallets';
 
-import { useThemeToggle } from '@lidofinance/lido-ui';
+import { useThemeToggle } from '@lidofinance/lido-app-ui';
 
 import { config } from 'config';
 import { useGetRpcUrlByChainId } from 'config/rpc';
