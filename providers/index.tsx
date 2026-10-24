@@ -1,4 +1,3 @@
-import { CookieThemeProvider } from '@lidofinance/lido-ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { FC, PropsWithChildren } from 'react';
 
@@ -16,6 +15,7 @@ import { AppFlagProvider } from './app-flag';
 import { InpageNavigationProvider } from './inpage-navigation';
 import { ModalProvider } from './modal-provider';
 import { ModifyProvider } from './modify-provider';
+import { ThemeProvider } from './theme-provider';
 
 type Props = {
   dummy?: boolean;
@@ -40,7 +40,7 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
     <ConfigProvider>
       <AppFlagProvider>
         <ModifyProvider>
-          <CookieThemeProvider>
+          <ThemeProvider>
             <GlobalStyle />
             <InpageNavigationProvider>
               <AlertProvider>
@@ -70,7 +70,7 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                 )}
               </AlertProvider>
             </InpageNavigationProvider>
-          </CookieThemeProvider>
+          </ThemeProvider>
         </ModifyProvider>
       </AppFlagProvider>
     </ConfigProvider>

@@ -1,5 +1,5 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { ThemeName, useThemeToggle } from '@lidofinance/lido-ui';
+import { ThemeName, useThemeToggle } from '@lidofinance/lido-app-ui';
 import Image from 'next/image';
 import { FC } from 'react';
 import { useCurrentCurve, useModuleOperatorType } from 'shared/hooks';
