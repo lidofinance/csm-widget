@@ -1,6 +1,4 @@
-import { toBoolean } from '../../scripts/to-boolean.mjs';
-
-export const WALLETCONNECT_HOSTS = [
+const WALLETCONNECT_HOSTS = [
   'https://*.walletconnect.org',
   'https://*.walletconnect.com',
 ];
@@ -17,11 +15,7 @@ export const WALLETCONNECT_HOSTS = [
  * @param {CspBuildOptions} options
  * @returns {Exclude<import('next-secure-headers/lib/rules').ContentSecurityPolicyOption, false>['directives']}
  */
-export const buildCspDirectives = ({
-  developmentMode,
-  trustedHosts,
-  reportUri,
-}) => ({
+const buildCspDirectives = ({ developmentMode, trustedHosts, reportUri }) => ({
   'default-src': ["'self'"],
   styleSrc: ["'self'", "'unsafe-inline'"],
   fontSrc: ["'self'", 'data:', 'https://fonts.reown.com'],
@@ -59,23 +53,13 @@ export const buildCspDirectives = ({
  * @param {CspBuildOptions & { reportOnly: boolean }} options
  * @returns {import('next-secure-headers/lib/rules').ContentSecurityPolicyOption}
  */
-export const buildContentSecurityPolicy = ({ reportOnly, ...options }) => ({
+const buildContentSecurityPolicy = ({ reportOnly, ...options }) => ({
   directives: buildCspDirectives(options),
   reportOnly,
 });
 
-/**
- * @param {Record<string, string | undefined>} env
- * @returns {{
- *   developmentMode: boolean,
- *   trustedHosts: string[],
- *   reportUri: string | undefined,
- *   reportOnly: boolean,
- * }}
- */
-export const cspOptionsFromEnv = (env) => ({
-  developmentMode: env.NODE_ENV === 'development',
-  trustedHosts: env.CSP_TRUSTED_HOSTS ? env.CSP_TRUSTED_HOSTS.split(',') : [],
-  reportUri: env.CSP_REPORT_URI,
-  reportOnly: toBoolean(env.CSP_REPORT_ONLY),
-});
+module.exports = {
+  WALLETCONNECT_HOSTS,
+  buildCspDirectives,
+  buildContentSecurityPolicy,
+};

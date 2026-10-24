@@ -6,10 +6,7 @@ import { registerShutdownSignals } from './scripts/shutdown.mjs';
 import { toBoolean } from './scripts/to-boolean.mjs';
 import { startupCheckRPCs } from './scripts/startup-checks/rpc.mjs';
 import { startupCheckValidationFile } from './scripts/startup-checks/validation-file.mjs';
-import {
-  buildContentSecurityPolicy,
-  cspOptionsFromEnv,
-} from './config/csp/policy.mjs';
+import cspPolicy from './scripts/csp-policy.cjs';
 
 const dev = process.env.NODE_ENV !== 'production';
 const hostname = 'localhost';
@@ -25,10 +22,16 @@ const isAssetOrApi = (pathname) =>
 
 // CSP comes from runtime env, so it cannot live in next.config headers() (baked at build)
 const cspHeader = (() => {
-  const options = cspOptionsFromEnv(process.env);
   if (dev) return null;
   const headers = nextSecureHeaders.createHeadersObject({
-    contentSecurityPolicy: buildContentSecurityPolicy(options),
+    contentSecurityPolicy: cspPolicy.buildContentSecurityPolicy({
+      developmentMode: process.env.NODE_ENV === 'development',
+      trustedHosts: process.env.CSP_TRUSTED_HOSTS
+        ? process.env.CSP_TRUSTED_HOSTS.split(',')
+        : [],
+      reportUri: process.env.CSP_REPORT_URI,
+      reportOnly: toBoolean(process.env.CSP_REPORT_ONLY),
+    }),
   });
   return (
     Object.entries(headers).find(([name]) =>

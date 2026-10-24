@@ -1,6 +1,15 @@
-import { buildCspDirectives } from './policy.mjs';
+type CspBuildOptions = {
+  developmentMode: boolean;
+  trustedHosts: string[];
+  reportUri?: string;
+};
 
-type CspBuildOptions = Parameters<typeof buildCspDirectives>[0];
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { buildCspDirectives } = require('./csp-policy.cjs') as {
+  buildCspDirectives: (
+    options: CspBuildOptions,
+  ) => Record<string, string[] | string | undefined>;
+};
 
 const base: CspBuildOptions = {
   developmentMode: false,
