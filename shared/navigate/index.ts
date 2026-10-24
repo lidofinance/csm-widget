@@ -1,3 +1,4 @@
+export * from './app-link';
 export * from './local-link';
 export * from './navigate';
 export * from './use-correct-path';

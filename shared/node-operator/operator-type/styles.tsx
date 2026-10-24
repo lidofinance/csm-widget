@@ -1,5 +1,5 @@
 import { DisplayOperatorType } from 'consts';
-import { HeaderButton } from 'shared/layout/header/styles';
+import { HeaderButton } from 'shared/node-operator/styles';
 import styled from 'styled-components';
 import { CURVE_VARIANTS } from '../curve-badge/styles';
 

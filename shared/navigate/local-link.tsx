@@ -1,14 +1,6 @@
 import Link, { LinkProps } from 'next/link';
 import { useRouter } from 'next/router';
-import React, {
-  Children,
-  cloneElement,
-  FC,
-  MouseEventHandler,
-  PropsWithChildren,
-  ReactElement,
-  useCallback,
-} from 'react';
+import React, { FC, PropsWithChildren, useCallback } from 'react';
 
 import { PATH } from 'consts/urls';
 import { useModalActions } from 'providers/modal-provider';
@@ -22,13 +14,7 @@ type LocalLinkProps = Omit<LinkProps, 'href'> & {
   'data-testid'?: string;
   query?: Record<string, string>;
   title?: string;
-  asChild?: boolean;
 };
-
-type LinkChild = ReactElement<{
-  href?: string;
-  onClick?: MouseEventHandler<HTMLAnchorElement>;
-}>;
 
 export const LocalLink: FC<
   PropsWithChildren<WithMatomoEvent<LocalLinkProps>>
@@ -38,7 +24,6 @@ export const LocalLink: FC<
   query,
   anchor,
   onClick,
-  asChild,
   children,
   ...restProps
 }) => {
@@ -60,29 +45,6 @@ export const LocalLink: FC<
   const extraQuery = useForwardedQuery(query);
 
   if (typeof href === 'string') {
-    if (asChild) {
-      const child = Children.only(children) as LinkChild;
-      const { 'data-testid': testId, title } = restProps;
-
-      return (
-        <Link
-          {...restProps}
-          href={{ pathname: href, query: extraQuery, hash: anchor }}
-          passHref
-          legacyBehavior
-        >
-          {cloneElement(child, {
-            ...(testId && { 'data-testid': testId }),
-            ...(title && { title }),
-            onClick: (event: React.MouseEvent<HTMLAnchorElement>) => {
-              onClickHandler(event);
-              child.props.onClick?.(event);
-            },
-          })}
-        </Link>
-      );
-    }
-
     return (
       <Link
         {...restProps}

@@ -1,8 +1,9 @@
 import buildInfo from 'build-info.json';
+import { TextLink } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { VersionLink } from './styles';
+import { trackMatomoEvent } from 'utils';
 
 const getVersionInfo = () => {
   const { version, branch, commit } = buildInfo;
@@ -40,12 +41,14 @@ const getVersionInfo = () => {
 const { label, link, title } = getVersionInfo();
 
 export const Version: FC = () => (
-  <VersionLink
+  <TextLink
+    variant="secondary"
+    external
     href={link}
     title={title}
-    matomoEvent={MATOMO_CLICK_EVENTS_TYPES.footerVersion}
+    onClick={() => trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.footerVersion)}
     data-testid="footerVersionLink"
   >
     {label}
-  </VersionLink>
+  </TextLink>
 );
