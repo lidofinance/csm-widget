@@ -1,8 +1,19 @@
 import { Sidebar } from '@lidofinance/lido-app-ui';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
-import { SIDEBAR_DESKTOP_MEDIA } from 'styles/constants';
-import { ButtonGroup } from '../header/styles';
+import { ButtonGroup } from 'shared/node-operator/styles';
+
+// lib build puts the `animation` shorthand after `animation-timeline`, resetting it; re-apply until lido-app-ui ships longhands
+export const SidebarStyle = styled(Sidebar)`
+  @media (min-width: 1064px) {
+    @supports (animation-timeline: scroll()) {
+      && {
+        animation-timeline: scroll(root);
+        animation-range: 0 var(--local-offset);
+      }
+    }
+  }
+`;
 
 export const SidebarOperatorGroup = styled(ButtonGroup)`
   width: 100%;
@@ -18,26 +29,5 @@ export const SidebarOperatorGroup = styled(ButtonGroup)`
 
   > :last-child {
     flex: 1 1 0;
-  }
-`;
-
-const growToFullHeight = keyframes`
-  to {
-    height: 100dvh;
-  }
-`;
-
-// The sticky sidebar shrinks by the still-visible part of the scrolling banner; `&&` beats the lib's CSS-module class
-export const SidebarStyle = styled(Sidebar)`
-  ${SIDEBAR_DESKTOP_MEDIA} {
-    && {
-      height: calc(100dvh - var(--test-env-banner-height, 0px));
-
-      @supports (animation-timeline: scroll()) {
-        animation: ${growToFullHeight} linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0 var(--test-env-banner-height, 0px);
-      }
-    }
   }
 `;

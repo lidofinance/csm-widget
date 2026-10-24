@@ -7,39 +7,25 @@ import {
   useSmVersionSupported,
 } from 'modules/web3';
 import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
-import { useInpageNavigation } from 'providers/inpage-navigation';
 import { FC, memo, useContext } from 'react';
 import { NoSSRWrapper } from 'shared/components';
 import { useInitialLoading, useRouterPath } from 'shared/hooks';
-import { LocalLink } from 'shared/navigate';
 import { OperatorTypeButton, SwitchOperatorButton } from 'shared/node-operator';
 import { getIsActivePath } from 'utils';
 import { SidebarOperatorGroup, SidebarStyle } from './styles';
 import { useNavItems } from './use-nav-items';
 
 const SidebarLogo: FC = () => (
-  <LocalLink href={PATH.HOME} asChild>
-    <Logo variant="full" product={WIDGET_TITLE} />
-  </LocalLink>
+  <Logo variant="full" product={WIDGET_TITLE} href={PATH.HOME} />
 );
 
-const ShellNavigation: FC = () => {
-  const { expanded, toggleExpanded } = useInpageNavigation();
-  return (
-    <SidebarStyle
-      open={expanded}
-      onClose={toggleExpanded}
-      logo={<SidebarLogo />}
-    />
-  );
-};
+const ShellNavigation: FC = () => <SidebarStyle logo={<SidebarLogo />} />;
 
 const OperatorNavigation: FC = () => {
   const isLoading = useInitialLoading();
   const { module } = useModule();
   const { data: isSupported } = useSmVersionSupported(module);
   const { nodeOperator } = useNodeOperator();
-  const { expanded, toggleExpanded } = useInpageNavigation();
   const routes = useNavItems();
   const pathname = useRouterPath();
 
@@ -47,12 +33,9 @@ const OperatorNavigation: FC = () => {
   const showItems = !isLoading && !isUpgrading;
   // operator queries against an upgrading module may stay pending through retries; don't hold the footer on them
   const showFooter = !!nodeOperator && (isUpgrading || !isLoading);
-  const closeDrawer = () => expanded && toggleExpanded();
 
   return (
     <SidebarStyle
-      open={expanded}
-      onClose={toggleExpanded}
       logo={<SidebarLogo />}
       footer={
         !showFooter ? undefined : (
@@ -68,21 +51,16 @@ const OperatorNavigation: FC = () => {
       {showItems && (
         <SidebarGroup label="My node operator" data-testid="navBlockMain">
           {routes.map(({ name, path, subPaths, icon, suffix }) => (
-            <LocalLink
+            <SidebarItem
               key={path + name}
               href={path}
-              asChild
               data-testid="navItem"
+              icon={icon}
+              active={getIsActivePath(pathname, path, subPaths)}
+              counter={suffix}
             >
-              <SidebarItem
-                icon={icon}
-                active={getIsActivePath(pathname, path, subPaths)}
-                counter={suffix}
-                onClick={closeDrawer}
-              >
-                {name}
-              </SidebarItem>
-            </LocalLink>
+              {name}
+            </SidebarItem>
           ))}
         </SidebarGroup>
       )}

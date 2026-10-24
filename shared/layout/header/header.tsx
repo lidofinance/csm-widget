@@ -1,16 +1,10 @@
+import { Header as LibHeader, SidebarToggle } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 
-import { Crumb } from '../crumbs';
-import { HeaderBurger } from './components/header-burger';
+import { Crumb, Crumbs } from '../crumbs';
 import HeaderTheme from './components/header-theme';
 import HeaderWallet from './components/header-wallet';
 import { Logos } from './components/logos';
-import {
-  HeaderActionsStyle,
-  HeaderCrumbsStyle,
-  HeaderLeftStyle,
-  HeaderStyle,
-} from './styles';
 
 type Props = {
   dummy?: boolean | 'semi';
@@ -18,15 +12,16 @@ type Props = {
 };
 
 export const Header: FC<Props> = ({ dummy, crumbs }) => (
-  <HeaderStyle>
-    <HeaderLeftStyle>
-      <HeaderBurger />
-      <Logos />
-    </HeaderLeftStyle>
-    <HeaderCrumbsStyle crumbs={crumbs} />
-    <HeaderActionsStyle>
-      <HeaderTheme />
-      {dummy !== true && <HeaderWallet />}
-    </HeaderActionsStyle>
-  </HeaderStyle>
+  <LibHeader
+    sticky
+    actions={
+      <>
+        <HeaderTheme />
+        {dummy !== true && <HeaderWallet />}
+      </>
+    }
+  >
+    <SidebarToggle logo={<Logos />} />
+    <Crumbs crumbs={crumbs} />
+  </LibHeader>
 );

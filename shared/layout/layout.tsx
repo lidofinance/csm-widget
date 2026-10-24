@@ -1,3 +1,10 @@
+import {
+  Layout as LibLayout,
+  PageContent,
+  SidebarInset,
+  SidebarLayout,
+  SkipLink,
+} from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode, useContext, useEffect } from 'react';
 
 import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
@@ -9,15 +16,12 @@ import { Crumb, useCrumbs } from './crumbs';
 import { Header } from './header';
 import { Navigation } from './navigation';
 import {
-  Column,
   Content,
-  CrumbsRowStyle,
   Heading,
-  LayoutStyle,
   LayoutSubTitleStyle,
   LayoutTitleStyle,
-  Main,
-  Shell,
+  MainStyled,
+  PageBody,
 } from './styles';
 
 type Props = {
@@ -49,37 +53,38 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
   }, [pageName]);
 
   return (
-    <>
+    <LibLayout>
+      <SkipLink />
       <TestEnvBanner />
-      <Shell>
+      <SidebarLayout>
         <Navigation />
-        <Column>
+        <SidebarInset>
           <Header dummy={mode} crumbs={crumbs} />
-          <LayoutStyle $fullwidth={fullwidth}>
-            {crumbs.length > 0 && <CrumbsRowStyle crumbs={crumbs} />}
+          <MainStyled>
             {!mode && !fullwidth && <AlertContainer />}
-
-            <Main>
-              {mainPrefix}
-              <Heading $titlesCount={titlesCount}>
-                {title && (
-                  <LayoutTitleStyle data-testid="pageTitle">
-                    {title}
-                  </LayoutTitleStyle>
-                )}
-                {subtitle && (
-                  <LayoutSubTitleStyle data-testid="pageSubtitle">
-                    {subtitle}
-                  </LayoutSubTitleStyle>
-                )}
-              </Heading>
-              <Content>{children}</Content>
+            <PageContent variant={fullwidth ? 'default' : 'narrow'}>
+              <PageBody>
+                {mainPrefix}
+                <Heading $titlesCount={titlesCount}>
+                  {title && (
+                    <LayoutTitleStyle data-testid="pageTitle">
+                      {title}
+                    </LayoutTitleStyle>
+                  )}
+                  {subtitle && (
+                    <LayoutSubTitleStyle data-testid="pageSubtitle">
+                      {subtitle}
+                    </LayoutSubTitleStyle>
+                  )}
+                </Heading>
+                <Content>{children}</Content>
+              </PageBody>
               {!mode && <LegalDisclaimer />}
-            </Main>
-            <Footer dummy={mode} />
-          </LayoutStyle>
-        </Column>
-      </Shell>
-    </>
+            </PageContent>
+          </MainStyled>
+          <Footer dummy={mode} />
+        </SidebarInset>
+      </SidebarLayout>
+    </LibLayout>
   );
 };

@@ -17,8 +17,6 @@ export type InpageNavigationContextValue = {
   resetInpageAnchor: () => void;
   resetSpecificAnchor: (hash: string) => void;
   scrollToAnchor: (hash: string) => void;
-  expanded: boolean;
-  toggleExpanded: () => void;
 };
 
 const InpageNavigationContext =
@@ -77,27 +75,20 @@ export const InpageNavigationProvider: FC<PropsWithChildren> = ({
     [resetInpageAnchor, hashNav],
   );
 
-  const [expanded, setExpanded] = useState(false);
-  const toggleExpanded = useCallback(() => setExpanded((prev) => !prev), []);
-
   const value = useMemo(
     () => ({
       hashNav,
       navigateInpageAnchor,
       resetInpageAnchor,
       resetSpecificAnchor,
-      expanded,
-      toggleExpanded,
       scrollToAnchor,
     }),
     [
-      expanded,
       hashNav,
       navigateInpageAnchor,
       resetInpageAnchor,
       resetSpecificAnchor,
       scrollToAnchor,
-      toggleExpanded,
     ],
   );
 
