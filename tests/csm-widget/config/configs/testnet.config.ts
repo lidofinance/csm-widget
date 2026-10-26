@@ -29,7 +29,7 @@ export class TestnetConfig extends BaseConfig {
       },
       mockConfig: {
         urls: {
-          csmSurveysApi: 'https://csm-survey-api-hoodi.lido.tools',
+          csmSurveysApi: 'https://csm-survey-api.testnet.fi',
         },
       },
       monitoringConfig: {
