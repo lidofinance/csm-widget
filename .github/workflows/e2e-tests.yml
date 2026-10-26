@@ -121,7 +121,7 @@ jobs:
       - name: Install Foundry
         uses: foundry-rs/foundry-toolchain@v1
         with:
-          version: v1.8.1
+          version: v1.8.6
 
       - name: Restore yarn cache
         uses: actions/cache@v6

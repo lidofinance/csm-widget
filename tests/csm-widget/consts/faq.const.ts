@@ -1,6 +1,7 @@
 import { widgetFullConfig } from 'tests/csm-widget/config';
 
 export type FaqSection = {
+  qaseId: number;
   title: string;
   text: string;
   links: { name: string; url: string }[];
@@ -63,6 +64,7 @@ const TECHNICAL_HELP = `For community assistance, join the "${NETWORK.discordCha
 
 export const FAQ_GENERAL: FaqSection[] = [
   {
+    qaseId: 590,
     title: 'Why run an Ethereum validator?',
     text: `Running an Ethereum validator allows one to:
 Receive Staking Rewards: Validators get network rewards for performing their duties on the Ethereum blockchain (note: incorrectly or not performing duties incurs penalties).
@@ -71,6 +73,7 @@ Learn and Engage with the community: Operating a validator node provides valuabl
     links: [],
   },
   {
+    qaseId: 591,
     title: 'What is required to be a Node Operator in CSM?',
     text: `Node operation in CSM involves a long-term commitment to Ethereum's decentralization. Responsibilities include:
 Hardware Setup: Setting up a computer that meets the system requirements for running validator nodes.
@@ -80,6 +83,7 @@ Maintenance: Sustaining ongoing maintenance throughout the validator's lifespan,
     links: [],
   },
   {
+    qaseId: 592,
     title: 'What do node operators receive in CSM?',
     text: `Node operators benefit from:
 Daily Bond Rebase: The collateral for CSM NOs is eligible for rewards through stETH's rebase, even before validator activation.
@@ -92,6 +96,7 @@ Socialized Rewards: Rewards are smoothed across the largest validator set, mitig
     ],
   },
   {
+    qaseId: 593,
     title: 'What are the risks of running a validator?',
     text: `Node operators face several risks, including:
 Technical Risk: Maintaining reliable and secure hardware and software setups is essential. Any technical failure or vulnerability in the validator setup could lead to penalties.
@@ -103,12 +108,14 @@ Slashing Risk: Validators can be slashed, meaning they lose a portion of their s
     links: [],
   },
   {
+    qaseId: 594,
     title: 'How does CSM work?',
     text: `CSM consists of two permissionless modules: 0x01 CSM, for validators with a balance of 32 ETH, and 0x02 CSM, for validators with a balance of up to 2,048 ETH.
 Refer to the CSM page for a more detailed explanation of its mechanics and functionalities.`,
     links: [{ name: 'the CSM page', url: CSM_PORTAL }],
   },
   {
+    qaseId: 595,
     title: 'What makes CSM unique?',
     text: `CSM provides several unique features to attract and benefit community stakers:
 Rewards Smoothing: Rewards, including Execution Layer (EL) rewards and MEV, are smoothed with other modules to provide more stable rewards comparable to operating validators solo.
@@ -124,12 +131,14 @@ Higher Reward Potential: Node operators are potentially able to earn more reward
     ],
   },
   {
+    qaseId: 596,
     title: 'How much bond is needed?',
     text: `In 0x01 CSM, the bond is ${BOND.first} for the first validator (${BOND.firstIcs} for Identified Community Stakers) and ${BOND.second} for subsequent validators. In 0x02 CSM, it is ${BOND.first0x02} for the first validator and ${BOND.second0x02} for subsequent validators.
 For the ${NETWORK.name}, the values for the bond curve are the following:`,
     links: [],
   },
   {
+    qaseId: 597,
     title: 'How can I get help?',
     text: TECHNICAL_HELP,
     links: [{ name: 'Lido Discord server', url: DISCORD }],
@@ -139,6 +148,7 @@ For the ${NETWORK.name}, the values for the bond curve are the following:`,
 export const FAQ_KEYS: FaqSection[] = [
   {
     // the title ends with the network name
+    qaseId: 605,
     title: 'How to set up a validator for CSM',
     // the copy icon after an address is read as a line break, hence ` , specify`
     text: `A detailed guide on preparing all the validation tools for CSM can be found here.
@@ -184,6 +194,7 @@ Wait for your CSM validator keys to be deposited through the protocol and make s
     ],
   },
   {
+    qaseId: 606,
     title: 'Why upload a bond?',
     text: `Submitting a bond serves as a risk mitigation measure for both the Ethereum network and the Lido protocol.
 There are several major reasons for a CSM Node Operator's bond to be penalized, including:
@@ -195,12 +206,14 @@ Force ejection via EIP-7002 was triggered for the validator. Penalty amount = mi
     links: [{ name: 'EIP-7002', url: EIP_7002 }],
   },
   {
+    qaseId: 607,
     title: 'How much bond is needed?',
     text: `In 0x01 CSM, the bond is ${BOND.first} for the first validator (${BOND.firstIcs} for Identified Community Stakers) and ${BOND.second} for subsequent validators. In 0x02 CSM, it is ${BOND.first0x02} for the first validator and ${BOND.second0x02} for subsequent validators.
 For the ${NETWORK.name}, the values for the bond curve are the following:`,
     links: [],
   },
   {
+    qaseId: 608,
     title: 'What is the bond curve?',
     text: `The bond curve is a function that determines the amount of bond required for each subsequent validator operated by the node operator. For Identified Community Stakers (ICS), a unique bond curve function is applied to incentivize independent stakers participation.
 The bond curve is based on the number of validators, not on their balance, so no additional bond is required when a 0x02 validator is topped up towards 2,048 ETH.
@@ -213,11 +226,13 @@ For the ${NETWORK.name}, the values for the bond curve are the following:`,
     ],
   },
   {
+    qaseId: 609,
     title: 'Difference between bond types (ETH, stETH, wstETH)?',
     text: `Bonds are stored in the form of stETH so that participation as a Node Operator is more capital efficient than if the bond were un-staked (or could only be staked if sufficient deposits to fill the submitted validators were present). While node operators can submit bond in ETH, stETH, or wstETH, any token other than stETH is converted to stETH for consistency in bond format.`,
     links: [],
   },
   {
+    qaseId: 610,
     title: 'When does a validator become active?',
     text: `After key submission, and if keys have been successfully validated, two actions are required for a validator to be activated:
 Deposit by Lido Protocol: The time to deposit a validator is unpredictable and depends on factors such as total stake inflows and outflows, gas considerations, module shares, CSM deposit queue size, and the Node Operator's place in the queue.
@@ -225,6 +240,7 @@ Activation on Ethereum Network: Once deposited, the validator enters the Beacon 
     links: [],
   },
   {
+    qaseId: 611,
     title: 'How do seed deposits and top-ups work in 0x02 CSM?',
     text: `0x02 CSM validators receive stake in two steps:
 Seed deposit: Uploaded keys wait in the deposit queue for their initial 32 ETH deposit, the same way as in 0x01 CSM. This allows the validator to start the activation process without waiting for the full 2,048 ETH.
@@ -233,11 +249,13 @@ The time to fully top up a validator depends on factors such as total stake infl
     links: [],
   },
   {
+    qaseId: 612,
     title: 'Why pay for key deletion?',
     text: `Key deletion incurs a removal fee of ${KEY_REMOVAL_FEE}, which is deducted from the Node Operator's bond per each deleted key to cover the maximal possible operational costs associated with the queue processing. This fee is intended to protect the module from potential DoS attacks by malicious actors who could clog the queue with empty slots by adding and removing keys. The fee discourages misuse, keeping the system clear of invalid keys or keys that don't end up being deposited to.`,
     links: [],
   },
   {
+    qaseId: 613,
     title: "Can't see the key for deletion?",
     text: `Only keys that have not been deposited yet can be deleted. If a key has already been deposited, you can either exit the validator on the Consensus Layer (CL) or use the triggerable withdrawals mechanism to eject your validator (can be done on the "Keys" → "Delete" → "Eject" tab). Once withdrawn, the node operator can claim the excess bond.`,
     links: [
@@ -248,6 +266,7 @@ The time to fully top up a validator depends on factors such as total stake infl
     ],
   },
   {
+    qaseId: 614,
     title: 'How to stop validating in CSM?',
     text: `Exiting CSM validator keys works the same way as exiting solo staking validator keys. The guide on how to exit the validator can be found here.`,
     links: [
@@ -258,6 +277,7 @@ The time to fully top up a validator depends on factors such as total stake infl
     ],
   },
   {
+    qaseId: 615,
     title:
       'What is the difference between removing, exiting, and ejecting a key?',
     text: `Removing a key is an operation when the validator key is removed from the Node Operator on-chain keys storage in CSM. Only non-deposited keys can be removed. Due to associated queue maintenance costs keyRemovalCharge is charged from the Node Operator's bond for each removed key.
@@ -267,6 +287,7 @@ ${EJECTION_CASES}`,
     links: [{ name: 'TW fee', url: EIP_7002 }],
   },
   {
+    qaseId: 616,
     title: 'When does a validator become withdrawn?',
     text: `On the Ethereum network, a validator can be withdrawn after successfully exiting from the consensus layer, but the exact timing of withdrawal depends on several factors related to Ethereum protocol mechanics:
 Exit Queue: When a validator initiates an exit, it enters an exit queue. The time required to exit depends on the number of validators exiting and the churn limit (the number of validators allowed to exit or enter per epoch).
@@ -275,6 +296,7 @@ Finalization of Withdrawal: Once the withdrawable epoch is reached, the validato
     links: [],
   },
   {
+    qaseId: 617,
     title: 'Why a key can get ejected?',
     text: `Validator ejection can be invoked from the Lido protocol side in the following cases:
 ${EJECTION_CASES}
@@ -282,6 +304,7 @@ Also, Node Operators can voluntary eject their validators if they decide to do s
     links: [{ name: 'TW fee', url: EIP_7002 }],
   },
   {
+    qaseId: 618,
     title: 'What is the CSM Stake Share Limit?',
     text: `The stake share limit is a parameter defined for each Staking Module based on its risk profile. It determines the percentage of the total stake in the Lido Protocol that can be allocated to the module, 0x01 CSM and 0x02 CSM each have their own stake share limit. Currently, the stake share limit for 0x01 CSM is set at ${NETWORK.shareLimit}. Once CSM reaches its stake share limit, new keys can still be uploaded, but deposits to these keys may take a very long time (e.g. months), if they are deposited to at all. These factors affect the possibility of new deposits to your uploaded keys:
 The number of keys already in the deposit queue, and the position of your keys in this queue
@@ -295,6 +318,7 @@ While keys are awaiting deposit, Node Operators continue to receive daily bond r
     links: [],
   },
   {
+    qaseId: 619,
     title: 'What to do in case of technical issues?',
     text: TECHNICAL_HELP,
     links: [{ name: 'Lido Discord server', url: DISCORD }],
@@ -303,6 +327,7 @@ While keys are awaiting deposit, Node Operators continue to receive daily bond r
 
 export const FAQ_BOND_REWARDS: FaqSection[] = [
   {
+    qaseId: 599,
     title: 'What rewards do I get in CSM?',
     text: `When CSM operators use the Lido protocol to run validators, they can receive two types of rewards:
 Node Operator rewards: a share of rewards from staker locked stake amount, currently calculated pro-rata based on the effective balance of validators operated as a share of total protocol stake, with possible reductions for bad performance.
@@ -315,17 +340,20 @@ Bond rebase: staking rewards pertaining to the bonded tokens (stETH).`,
     ],
   },
   {
+    qaseId: 600,
     title: 'How often do I get rewards?',
     text: `Node Operator rewards on ${NETWORK.name} are calculated and made claimable by the CSM Oracle every ${NETWORK.frame}. Rewards do not have to be claimed during every reporting frame, and can be left to accumulate to be claimed later.
 Bond rebase part of the rewards come from stETH being a rebasing token and the bond being stored in stETH. After each Accounting Oracle report that happens on ${NETWORK.name} every ${NETWORK.rebase}, the share rate changes. Hence, the same amount of stETH shares will now be equal to a bigger stETH token balance.`,
     links: [],
   },
   {
+    qaseId: 601,
     title: 'Why didn’t I get rewards?',
     text: `If your validator's performance was below the threshold within the CSM Performance Oracle frame (${NETWORK.frame} for ${NETWORK.name}) the validator does not receive rewards for the given frame. Read more about the CSM Performance Oracle.`,
     links: [{ name: 'the CSM Performance Oracle', url: PERFORMANCE_ORACLE }],
   },
   {
+    qaseId: 602,
     title: 'Why add a bond?',
     text: `Submitting a bond serves as a risk mitigation measure for both the Ethereum network and the Lido protocol.
 There are several major reasons for a CSM Node Operator's bond to be penalized, including:
@@ -337,6 +365,7 @@ Force ejection via EIP-7002 was triggered for the validator. Penalty amount = mi
     links: [{ name: 'EIP-7002', url: EIP_7002 }],
   },
   {
+    qaseId: 603,
     title: 'How to claim ETH using a withdrawal NFT',
     text: `Claiming bond and rewards in a form of ETH constitutes an stETH withdrawal process (unstake).
 The withdrawal process consists of several steps you need to do:
@@ -358,11 +387,13 @@ For more information about withdrawals, follow the page.`,
 
 export const FAQ_LOCKED_BOND: FaqSection[] = [
   {
+    qaseId: 621,
     title: 'Why is the bond locked?',
     text: `Bond may be locked in the case of delayed penalties, typically for MEV stealing event reported by a dedicated committee. This measure ensures that node operators are held accountable for any misbehavior or rule violations.`,
     links: [],
   },
   {
+    qaseId: 622,
     title: 'How to unlock the bond?',
     text: `To unlock the bond, the penalty amount, which includes the stolen amount and a fixed stealing fine, must be compensated on the "Locked bond" tab. This action can be performed from the Manager Address of the Node Operator.
 If there are disputes regarding the penalty, node operators can start a public discussion about the penalty applied on the Lido research forum under the CSM Support category.`,
@@ -371,6 +402,7 @@ If there are disputes regarding the penalty, node operators can start a public d
     ],
   },
   {
+    qaseId: 623,
     title: 'Consequences of not compensating?',
     text: `In case of refusal to compensate the penalty, a protocol rule violation occurs which results in the reset of all node operator benefits. The locked bond is burned to compensate all stETH holders for the rewards stolen.`,
     links: [],
@@ -379,6 +411,7 @@ If there are disputes regarding the penalty, node operators can start a public d
 
 export const FAQ_ROLES: FaqSection[] = [
   {
+    qaseId: 634,
     title: 'What are rewards and manager addresses?',
     text: `There are two addresses associated with your Node Operator that have different scope of responsibilities for managing your Node Operator.
 The Rewards Address is used for:
@@ -399,33 +432,39 @@ Read more about addresses management here.`,
     links: [{ name: 'here', url: ADDRESSES_MANAGEMENT }],
   },
   {
+    qaseId: 635,
     title: 'Why should these addresses be different?',
     text: `It's recommended to use different addresses for security reasons. For example, a hot wallet may be used for the Manager Address to simplify daily operations, while a cold wallet (or something like a Safe) is preferable for the Rewards Address to enhance security.
 Read more about addresses management here.`,
     links: [{ name: 'here', url: ADDRESSES_MANAGEMENT }],
   },
   {
+    qaseId: 636,
     title: 'How to accept a change in address request?',
     text: `To accept a change in address request, connect to the CSM widget with the new address, navigate to the "Roles" → "Inbox requests" tab, select and accept the request, and confirm the transaction in your wallet. Changes are made once the transaction is processed.`,
     links: [],
   },
   {
+    qaseId: 637,
     title: 'What to do if the change is submitted to a wrong address?',
     text: `If a role change was submitted to the wrong address, the change can be revoked. For Rewards Address changes, navigate to "Roles" → "Rewards Address" → "Cancel". For Manager Address changes, go to "Roles" → "Manager address" → "Cancel"`,
     links: [],
   },
   {
+    qaseId: 638,
     title: 'What happens to rewards after changing the Rewards Address?',
     text: `Rewards claimed to the previous Rewards Address remain there. After changing the Rewards Address, all rewards and excess bond accumulated on the bond balance can be claimed to the new Rewards Address. In the event of validator withdrawal, upon claiming of the bond, it would also be returned to the new Rewards Address.`,
     links: [],
   },
   {
+    qaseId: 639,
     title: 'What is a Rewards Splitter?',
     text: `The Rewards Splitter allows distributing Node Operator rewards across up to 10 additional addresses, each receiving a set percentage in stETH. Split recipients receive their shares first, and the remaining part is sent to the Rewards Address when rewards are claimed. This can be used, for example, for infrastructure providers that charge a percentage of the rewards, or for opt-in donations.
 Splits apply to Node Operator rewards only, not to the bond rebase. They can only be changed when there are no claimable rewards, and the initial configuration can only be changed after the first rewards distribution, so make sure to review the recipient addresses carefully.`,
     links: [],
   },
   {
+    qaseId: 640,
     title: 'What is a Rewards Claimer?',
     text: `The Rewards Claimer is an optional address authorized to claim rewards on behalf of the Node Operator. It does not receive any funds, as claimed rewards are always sent to the Rewards Address. This is useful for automating reward claims without giving access to the Rewards or Manager Address.`,
     links: [],
@@ -434,6 +473,7 @@ Splits apply to Node Operator rewards only, not to the bond rebase. They can onl
 
 export const FAQ_OPERATOR_TYPES: FaqSection[] = [
   {
+    qaseId: 631,
     title: 'What is a Node Operator type?',
     text: `Node Operator type is a set of custom parameters values for a Node Operator in CSM. Node Operator type is determined based on the Node Operator's bond curve. The full list of parameters for the Node Operator is:
 keyRemovalCharge - a fee charged for each deleted deposit data record;
@@ -451,6 +491,7 @@ maxElWithdrawalRequestFee - a maximum fee charged for each Node Operator's valid
     links: [{ name: 'EIP-7002', url: EIP_7002 }],
   },
   {
+    qaseId: 632,
     title: 'What operator types exist?',
     text: `Currently there are four Node Operator types:
 CSM 0x01 operator - the default Node Operator type assigned to all new Node Operators joining CSM via the Default Gate;
@@ -463,6 +504,7 @@ CSM 0x02 operator - the Node Operator type assigned to all Node Operators joinin
 
 export const FAQ_MONITORING: FaqSection[] = [
   {
+    qaseId: 625,
     title: 'What is the performance threshold?',
     text: `The performance threshold is a relative variable determined as follows:
 CSM Performance threshold (%) = Average validator performance across the whole Ethereum network (%) - ${PERFORMANCE_LEEWAY}
@@ -470,6 +512,7 @@ A performance threshold is utilized to determine the allocation of the actual No
     links: [],
   },
   {
+    qaseId: 626,
     title: 'How does the CSM Performance Oracle work?',
     text: `The Performance Oracle calculates validators performance based on their attestation, block proposal, and sync committee participation effectiveness. The exact formulas for performance calculation can be found here. The Performance Oracle compares the performance of each validator with the performance threshold to determine whether the validator should or should not be included in the rewards distribution during the frame.
 The frame for the Performance Oracle report is set to ${NETWORK.frame}. The Performance Oracle creates a Merkle tree with the allocation of the Node Operator rewards and delivers the root on-chain. To make the original tree available to users, it is published on IPFS and GitHub.`,
@@ -484,16 +527,19 @@ The frame for the Performance Oracle report is set to ${NETWORK.frame}. The Perf
     ],
   },
   {
+    qaseId: 627,
     title: 'What is a strike?',
     text: `A strike is an indicator of the validator performing below the performance threshold in the given frame. Strikes have a lifetime — a time after which the strike is no longer considered valid and gets removed from the strikes Merkle tree delivered by the Performance Oracle.`,
     links: [{ name: 'Merkle tree', url: MERKLE_TREE }],
   },
   {
+    qaseId: 628,
     title: 'How are the strikes assigned?',
     text: `Strikes are assigned on per-validator basis. If the validator's performance within a Performance Oracle frame is below the threshold, a strike will be assigned and reported on-chain by the Performance Oracle using Merkle tree.`,
     links: [{ name: 'Merkle tree', url: MERKLE_TREE }],
   },
   {
+    qaseId: 629,
     title: 'What to do in case of a strike assigned?',
     text: `Since a strike is an indicator of the validator performing below the performance threshold in the given frame, Node Operators should improve their validator's performance to avoid getting additional strikes. If the validator gets more than strikesThreshold strikes assigned, it will be ejected using EIP-7002. In case of ejection both badPerformancePenalty and min(actual TW fee paid, maxWithdrawalRequestFee) will be confiscated from the Node Operator's bond upon validator withdrawal reporting.
 If Node Operators are unable to maintain validator's performance above the performance threshold they should voluntary exit their validators immediately to avoid damaging overall protocol's performance and application of the corresponding penalties.`,

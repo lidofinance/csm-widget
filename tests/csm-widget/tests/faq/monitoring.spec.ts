@@ -1,3 +1,4 @@
+import { qase } from 'playwright-qase-reporter/playwright';
 import { expect } from '@playwright/test';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { FAQ_MONITORING } from 'tests/csm-widget/consts/faq.const';
@@ -12,59 +13,65 @@ test.describe(...suite({ epic: EPIC.faq, story: 'Monitoring' }), () => {
     await widgetService.faq.waitForVisible();
   });
 
-  test('Should show sections in order', async ({ widgetService }) => {
-    const { faq } = widgetService;
+  test(
+    qase(624, 'Should show sections in order'),
+    async ({ widgetService }) => {
+      const { faq } = widgetService;
 
-    await test.step('Check section titles', async () => {
-      await expect(faq.titles).toHaveCount(FAQ_MONITORING.length);
-      await expect(faq.titles).toContainText(
-        FAQ_MONITORING.map((s) => s.title),
-      );
-    });
-
-    await test.step('Check only the first section is expanded', async () => {
-      for (const [index, section] of FAQ_MONITORING.entries()) {
-        await expect(
-          faq.getItem(section.title).toggle,
-          `"${section.title}" expanded state`,
-        ).toHaveAttribute('aria-expanded', String(index === 0));
-      }
-    });
-  });
-
-  FAQ_MONITORING.forEach((section) => {
-    test(`Should show "${section.title}" answer`, async ({ widgetService }) => {
-      const item = widgetService.faq.getItem(section.title);
-
-      await item.expand();
-
-      await test.step('Check section is expanded', async () => {
-        await expect(item.toggle).toHaveAttribute('aria-expanded', 'true');
-        await expect(item.content).toBeVisible();
+      await test.step('Check section titles', async () => {
+        await expect(faq.titles).toHaveCount(FAQ_MONITORING.length);
+        await expect(faq.titles).toContainText(
+          FAQ_MONITORING.map((s) => s.title),
+        );
       });
 
-      await test.step('Check answer text', async () => {
-        // innerText keeps a break between paragraphs, textContent glues them
-        await expect.soft(item.content).toHaveText(section.text, {
-          useInnerText: true,
-        });
-      });
-
-      await test.step('Check links', async () => {
-        for (const { name, url } of section.links) {
-          await expect(item.getLink(name), `"${name}" link`).toHaveAttribute(
-            'href',
-            url,
-          );
+      await test.step('Check only the first section is expanded', async () => {
+        for (const [index, section] of FAQ_MONITORING.entries()) {
+          await expect(
+            faq.getItem(section.title).toggle,
+            `"${section.title}" expanded state`,
+          ).toHaveAttribute('aria-expanded', String(index === 0));
         }
       });
+    },
+  );
 
-      await item.collapse();
+  FAQ_MONITORING.forEach((section) => {
+    test(
+      qase(section.qaseId, `Should show "${section.title}" answer`),
+      async ({ widgetService }) => {
+        const item = widgetService.faq.getItem(section.title);
 
-      await test.step('Check section is collapsed', async () => {
-        await expect(item.toggle).toHaveAttribute('aria-expanded', 'false');
-        await expect(item.content).not.toBeVisible();
-      });
-    });
+        await item.expand();
+
+        await test.step('Check section is expanded', async () => {
+          await expect(item.toggle).toHaveAttribute('aria-expanded', 'true');
+          await expect(item.content).toBeVisible();
+        });
+
+        await test.step('Check answer text', async () => {
+          // innerText keeps a break between paragraphs, textContent glues them
+          await expect.soft(item.content).toHaveText(section.text, {
+            useInnerText: true,
+          });
+        });
+
+        await test.step('Check links', async () => {
+          for (const { name, url } of section.links) {
+            await expect(item.getLink(name), `"${name}" link`).toHaveAttribute(
+              'href',
+              url,
+            );
+          }
+        });
+
+        await item.collapse();
+
+        await test.step('Check section is collapsed', async () => {
+          await expect(item.toggle).toHaveAttribute('aria-expanded', 'false');
+          await expect(item.content).not.toBeVisible();
+        });
+      },
+    );
   });
 });
