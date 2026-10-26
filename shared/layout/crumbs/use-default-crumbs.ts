@@ -10,7 +10,7 @@ const normalize = (path: string) =>
 export const useDefaultCrumbs = (title: ReactNode): Crumb[] => {
   const path = normalize(useRouterPath());
   const items = useNavItems();
-  const titleLabel = typeof title === 'string' ? title : undefined;
+  const titleLabel = title || undefined;
 
   const own = items.find((item) => item.path === path);
   if (own) return [{ label: own.name }];

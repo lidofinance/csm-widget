@@ -57,7 +57,7 @@ const OperatorNavigation: FC = () => {
               data-testid="navItem"
               icon={icon}
               active={getIsActivePath(pathname, path, subPaths)}
-              counter={suffix}
+              trailing={suffix}
             >
               {name}
             </SidebarItem>

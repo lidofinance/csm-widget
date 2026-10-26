@@ -1,4 +1,7 @@
-import { Header as LibHeader, SidebarToggle } from '@lidofinance/lido-app-ui';
+import {
+  Header as LibHeader,
+  SidebarHeaderStart,
+} from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 
 import { Crumb, Crumbs } from '../crumbs';
@@ -21,7 +24,8 @@ export const Header: FC<Props> = ({ dummy, crumbs }) => (
       </>
     }
   >
-    <SidebarToggle logo={<Logos />} />
-    <Crumbs crumbs={crumbs} />
+    <SidebarHeaderStart logo={<Logos />}>
+      <Crumbs crumbs={crumbs} />
+    </SidebarHeaderStart>
   </LibHeader>
 );

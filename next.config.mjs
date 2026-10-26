@@ -73,7 +73,7 @@ export default withBundleAnalyzer({
     if (imageRule) imageRule.exclude = /\.svg$/i;
 
     config.module.rules.push(
-      // `issuer` keeps both off SVGs referenced from CSS (e.g. @lidofinance/lido-shared-ui)
+      // `issuer` keeps both off SVGs referenced from CSS (e.g. @lidofinance/lido-app-ui)
       {
         test: /\.svg$/i,
         issuer: /\.[jt]sx?$/,

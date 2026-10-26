@@ -15,7 +15,7 @@ const Page404: FC = () => {
         <title>Lido | Page Not Found</title>
       </Head>
       <ErrorPage
-        variant="404"
+        code="404"
         action={
           <Button size="big" onClick={() => router.push(PATH.HOME)}>
             Back to dashboard

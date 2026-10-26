@@ -8,7 +8,7 @@ import { GlobalStyle } from 'styles';
 import { SurveysAuthProvider } from 'modules/surveys-sdk';
 import { NodeOperatorProvider, Web3Provider } from 'modules/web3';
 import { AlertProvider, AlertsWatcherProvider } from 'shared/alerts';
-import { AppLink, GateSupported } from 'shared/navigate';
+import { AppLink, ExternalLink, GateSupported } from 'shared/navigate';
 import { SelectOperatorWatcher } from 'shared/node-operator/switch-modal';
 import { hashKey } from 'utils';
 import { AddressValidationProvider } from './address-validation-provider';
@@ -47,14 +47,22 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
               <AlertProvider>
                 {dummy ? (
                   <ModalProvider>
-                    <LinkProvider component={AppLink}>{children}</LinkProvider>
+                    <LinkProvider
+                      component={AppLink}
+                      externalComponent={ExternalLink}
+                    >
+                      {children}
+                    </LinkProvider>
                   </ModalProvider>
                 ) : (
                   <Web3Provider>
                     <AddressValidationProvider>
                       <NodeOperatorProvider>
                         <ModalProvider>
-                          <LinkProvider component={AppLink}>
+                          <LinkProvider
+                            component={AppLink}
+                            externalComponent={ExternalLink}
+                          >
                             <SelectOperatorWatcher />
                             <SurveysAuthProvider>
                               <GateSupported>

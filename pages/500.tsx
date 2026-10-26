@@ -15,7 +15,7 @@ const Page500: FC = () => {
         <title>Lido | Internal Server Error</title>
       </Head>
       <ErrorPage
-        variant="500"
+        code="500"
         action={
           <Button size="big" onClick={() => router.push(PATH.HOME)}>
             Back to dashboard
