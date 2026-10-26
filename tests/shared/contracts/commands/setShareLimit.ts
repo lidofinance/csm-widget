@@ -101,7 +101,7 @@ export const setShareLimit = async function (
       target === ShareLimitStatus.REACHED
         ? 0n
         : target === ShareLimitStatus.EXHAUSTED
-          ? queue - 1n
+          ? 1n
           : queue + APPROACHING_THRESHOLD / 2n;
     const wantedCapacity = active + wantedLeft;
     const shareLimit =
