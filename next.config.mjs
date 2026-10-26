@@ -20,6 +20,7 @@ export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
   // documents — statically prerendered, identical for every visitor
   '/',
+  '/csm',
   '/group',
   '/monitoring',
   '/operators',

@@ -1,6 +1,6 @@
 import { MODULE_NAME, getNodeOperatorRoles } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts';
-import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
+import { useOperatorCustomAddresses } from 'features/create-node-operator/banner-operator-custom-addresses';
 import { useSmSDK, useAppendOperator } from 'modules/web3';
 import { useCallback } from 'react';
 import {

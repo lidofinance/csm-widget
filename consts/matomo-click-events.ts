@@ -19,20 +19,21 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   disconnectWallet = 'disconnectWallet',
   clickShowMoreWallets = 'clickShowMoreWallets',
   clickShowLessWallets = 'clickShowLessWallets',
-  connectAsNodeOperator = 'connectAsNodeOperator',
   connectToBecomeNodeOperator = 'connectToBecomeNodeOperator',
   welcomeDetailedLink = 'welcomeDetailedLink',
-  // Starter Pack
-  starterPackCreateNodeOperator = 'starterPackCreateNodeOperator',
-  partnerDappnode = 'partnerDappnode',
-  partnerSedge = 'partnerSedge',
-  partnerStereum = 'partnerStereum',
-  partnerEthdocker = 'partnerEthdocker',
-  starterPackCSMLink = 'starterPackCSMLink',
-  starterPackBondLink = 'starterPackBondLink',
-  starterPackHardwareLink = 'starterPackHardwareLink',
-  starterPackSetupValidatorLink = 'starterPackSetupValidatorLink',
-  starterPackGenerateKeysLink = 'starterPackGenerateKeysLink',
+  // Validate with Lido
+  validateJoinCsm = 'validateJoinCsm',
+  validateLearnMoreCsm = 'validateLearnMoreCsm',
+  validateLearnMoreSdvt = 'validateLearnMoreSdvt',
+  validateLearnMoreCurated = 'validateLearnMoreCurated',
+  validateLearnMoreCm = 'validateLearnMoreCm',
+  validateCreateCm = 'validateCreateCm',
+  csmCreateOperator = 'csmCreateOperator',
+  csmLearnMore = 'csmLearnMore',
+  csmHowItWorks = 'csmHowItWorks',
+  csmViewDetails = 'csmViewDetails',
+  csmJoinTestnet = 'csmJoinTestnet',
+  csmJoinMainnet = 'csmJoinMainnet',
   operatorTypeModalJoinPermissionless = 'operatorTypeModalJoinPermissionless',
   operatorTypeModalJoinCsm02 = 'operatorTypeModalJoinCsm02',
   operatorTypeModalApplyIcs = 'operatorTypeModalApplyIcs',
@@ -181,10 +182,6 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Push "Less wallets" on wallet modal',
     'less_wallets',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.connectAsNodeOperator]: createEvent(
-    'Push «I am a Node Operator» on Welcome screen',
-    'connect_wallet_as_no',
-  ),
   [MATOMO_CLICK_EVENTS_TYPES.connectToBecomeNodeOperator]: createEvent(
     'Push «Become a Node Operator» on Welcome screen',
     'connect_wallet_to_become_no',
@@ -193,46 +190,54 @@ export const MATOMO_CLICK_EVENTS: Record<
     'Click on Detailed description about Module link',
     'welcome_module_detailed_link',
   ),
-  // Starter Pack
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackCreateNodeOperator]: createEvent(
-    'Push «Create a Node Operator» on StarterPack screen',
-    'starterpack_create_node_operator',
+  // Validate with Lido
+  [MATOMO_CLICK_EVENTS_TYPES.validateJoinCsm]: createEvent(
+    'Push «Join CSM» on Validate with Lido screen',
+    'validate_join_csm',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.partnerDappnode]: createEvent(
-    'Click partner «Dappnode» link on StarterPack screen',
-    'starterpack_partner_dappnode_link',
+  [MATOMO_CLICK_EVENTS_TYPES.validateLearnMoreCsm]: createEvent(
+    'Click «Learn More» for CSM on Validate with Lido screen',
+    'validate_learn_more_csm',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.partnerSedge]: createEvent(
-    'Click partner «Sedge» link on StarterPack screen',
-    'starterpack_partner_sedge_link',
+  [MATOMO_CLICK_EVENTS_TYPES.validateLearnMoreSdvt]: createEvent(
+    'Click «Learn More» for Simple DVT on Validate with Lido screen',
+    'validate_learn_more_sdvt',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.partnerStereum]: createEvent(
-    'Click partner «Stereum» link on StarterPack screen',
-    'starterpack_partner_stereum_link',
+  [MATOMO_CLICK_EVENTS_TYPES.validateLearnMoreCurated]: createEvent(
+    'Click «Learn More» for Curated on Validate with Lido screen',
+    'validate_learn_more_curated',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.partnerEthdocker]: createEvent(
-    'Click partner «Eth Docker» link on StarterPack screen',
-    'starterpack_partner_ethdocker_link',
+  [MATOMO_CLICK_EVENTS_TYPES.validateLearnMoreCm]: createEvent(
+    'Click «Learn More» for Curated v2 on Validate with Lido screen',
+    'validate_learn_more_cm',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackCSMLink]: createEvent(
-    'Click «About CSM» link on StarterPack screen',
-    'starterpack_csm_link',
+  [MATOMO_CLICK_EVENTS_TYPES.validateCreateCm]: createEvent(
+    'Push «Create new NO» for Curated v2 on Validate with Lido screen',
+    'validate_create_cm',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackBondLink]: createEvent(
-    'Click «Learn about Bond» link on StarterPack screen',
-    'starterpack_bond_link',
+  [MATOMO_CLICK_EVENTS_TYPES.csmCreateOperator]: createEvent(
+    'Push «Create a Node Operator» on Community Staking screen',
+    'csm_create_operator',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackHardwareLink]: createEvent(
-    'Click «Run hardware» link on StarterPack screen',
-    'starterpack_hardware_link',
+  [MATOMO_CLICK_EVENTS_TYPES.csmLearnMore]: createEvent(
+    'Click «Learn more about CSM» on Community Staking screen',
+    'csm_learn_more',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackSetupValidatorLink]: createEvent(
-    'Click «Setup validator» link on StarterPack screen',
-    'starterpack_setup_validator_link',
+  [MATOMO_CLICK_EVENTS_TYPES.csmHowItWorks]: createEvent(
+    'Click «How it works» on Community Staking screen',
+    'csm_how_it_works',
   ),
-  [MATOMO_CLICK_EVENTS_TYPES.starterPackGenerateKeysLink]: createEvent(
-    'Click «Generation Keys guide» link on StarterPack screen',
-    'starterpack_generate_keys_link',
+  [MATOMO_CLICK_EVENTS_TYPES.csmViewDetails]: createEvent(
+    'Click «View details» in Simple Staking on Community Staking screen',
+    'csm_view_details',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.csmJoinTestnet]: createEvent(
+    'Click «Join CSM testnet» on Community Staking screen',
+    'csm_join_testnet',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.csmJoinMainnet]: createEvent(
+    'Click «Join CSM mainnet» on Community Staking screen',
+    'csm_join_mainnet',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalJoinPermissionless]: createEvent(
     'Push «Join permissionlessly» button on Operator Type modal',

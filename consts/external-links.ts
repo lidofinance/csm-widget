@@ -12,18 +12,13 @@ export const EXTENDED_MODE_LINK =
   'https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/operator-roles#extended-mode';
 export const UNBONDED_VALIDATORS_LINK =
   'https://docs.lido.fi/run-on-lido/csm/troubleshooting/unbonded-validators';
+export const CSM_DOCS_LINK = 'https://docs.lido.fi/run-on-lido/csm/';
 export const MEV_STEALING_LINK =
   'https://docs.lido.fi/run-on-lido/csm/troubleshooting/mev-stealing';
 export const PERFORMANCE_TIPS_LINK =
   'https://docs.lido.fi/run-on-lido/csm/best-practices/maximizing-uptime-and-performance/';
 export const HOW_TO_EXIT_VALIDATOR_LINK =
   'https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores';
-export const ABOUT_DEPOSIT_DATA_LINK =
-  'https://docs.lido.fi/run-on-lido/csm/node-setup/';
-export const HOW_TO_GENERATE_DEPOSIT_DATA_LINK =
-  'https://docs.lido.fi/run-on-lido/csm/generating-validator-keys/';
-export const PREPARE_HARDWARE_LINK =
-  'https://dvt-homestaker.stakesaurus.com/hardware-and-systems-setup/hardware-and-system-requirements';
 export const UPLOAD_DEPOSIT_DATA_LINK =
   'https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/upload-remove-view-validator-keys#upload-keys';
 export const SUBSCRIBE_EVENTS_LINK =
@@ -40,7 +35,10 @@ export const LIDO_OPERATOR_PORTAL_BASE =
   'https://operatorportal.lido.fi/modules/community-staking-module';
 export const LIDO_OPERATOR_PORTAL_CM =
   'https://operatorportal.lido.fi/modules/curated-module-v2-1';
-export const LIDO_OPERATOR_PORTAL_BONDS_INFO = `${LIDO_OPERATOR_PORTAL_BASE}#block-e4a6daadca12480d955524247f03f380`;
+export const LIDO_OPERATOR_PORTAL_SDVT =
+  'https://operatorportal.lido.fi/modules/simple-dvt-module';
+export const LIDO_OPERATOR_PORTAL_CURATED =
+  'https://operatorportal.lido.fi/modules/curated-module';
 export const LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE = `${LIDO_OPERATOR_PORTAL_BASE}#block-c6dc8d00f13243fcb17de3fa07ecc52c`;
 export const LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW = `${LIDO_OPERATOR_PORTAL_BASE}#block-90b8ff95edc64cf7a051584820219616`;
 export const PHASED_DEPOSIT_APPROACH_LINK =
@@ -64,6 +62,7 @@ type ExternalLinksConstants = {
   migalabs: string;
   keysApi: string;
   surveyApi: string;
+  ethApi: string;
 };
 
 export const EXTERNAL_LINKS_BY_NETWORK: Record<
@@ -93,6 +92,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     migalabs: 'https://migalabs.io',
     keysApi: 'https://keys-api.lido.fi',
     surveyApi: 'https://csm-survey-api.lido.tools',
+    ethApi: 'https://eth-api.lido.fi',
   },
   [CHAINS.Hoodi]: {
     rewardsTree:
@@ -117,6 +117,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     migalabs: '',
     keysApi: 'https://keys-api-hoodi.testnet.fi',
     surveyApi: 'https://csm-survey-api-hoodi.lido.tools',
+    ethApi: 'https://eth-api-hoodi.testnet.fi',
   },
 };
 

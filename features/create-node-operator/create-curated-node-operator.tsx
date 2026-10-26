@@ -1,5 +1,5 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { BannerOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
+import { BannerOperatorCustomAddresses } from 'features/create-node-operator/banner-operator-custom-addresses';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
 import { useWeb3Key } from 'shared/hooks';
 
