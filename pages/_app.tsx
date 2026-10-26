@@ -5,7 +5,6 @@ import { WIDGET_TITLE } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
-import '@lidofinance/lido-shared-ui/index.css';
 import '@lidofinance/lido-app-ui/index.css';
 import { Providers } from 'providers';
 import { memo } from 'react';

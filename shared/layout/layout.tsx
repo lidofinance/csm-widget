@@ -1,9 +1,11 @@
 import {
   Layout as LibLayout,
+  MobilePageTitle,
   PageContent,
   SidebarInset,
   SidebarLayout,
   SkipLink,
+  Stack as AppStack,
 } from '@lidofinance/lido-app-ui';
 import { FC, PropsWithChildren, ReactNode, useContext, useEffect } from 'react';
 
@@ -15,14 +17,7 @@ import { Footer } from './footer';
 import { Crumb, useCrumbs } from './crumbs';
 import { Header } from './header';
 import { Navigation } from './navigation';
-import {
-  Content,
-  Heading,
-  LayoutSubTitleStyle,
-  LayoutTitleStyle,
-  MainStyled,
-  PageBody,
-} from './styles';
+import { MainStyled, Subtitle } from './styles';
 
 type Props = {
   title?: ReactNode;
@@ -46,7 +41,6 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
 }) => {
   const mode = useContext(NodeOperatorContext) ? dummy : true;
   const crumbs = useCrumbs(mode, title, breadcrumbs);
-  const titlesCount = [title, subtitle].filter(Boolean).length;
 
   useEffect(() => {
     trackMatomoPageEvent(pageName);
@@ -63,22 +57,22 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
           <MainStyled>
             {!mode && !fullwidth && <AlertContainer />}
             <PageContent variant={fullwidth ? 'default' : 'narrow'}>
-              <PageBody>
+              <AppStack direction="column" gap={24} align="stretch">
                 {mainPrefix}
-                <Heading $titlesCount={titlesCount}>
-                  {title && (
-                    <LayoutTitleStyle data-testid="pageTitle">
-                      {title}
-                    </LayoutTitleStyle>
-                  )}
-                  {subtitle && (
-                    <LayoutSubTitleStyle data-testid="pageSubtitle">
-                      {subtitle}
-                    </LayoutSubTitleStyle>
-                  )}
-                </Heading>
-                <Content>{children}</Content>
-              </PageBody>
+                {(title || subtitle) && (
+                  <AppStack direction="column" gap={4}>
+                    {title && (
+                      <MobilePageTitle data-testid="pageTitle">
+                        {title}
+                      </MobilePageTitle>
+                    )}
+                    {subtitle && (
+                      <Subtitle data-testid="pageSubtitle">{subtitle}</Subtitle>
+                    )}
+                  </AppStack>
+                )}
+                {children}
+              </AppStack>
               {!mode && <LegalDisclaimer />}
             </PageContent>
           </MainStyled>

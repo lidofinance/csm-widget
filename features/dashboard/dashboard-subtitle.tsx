@@ -1,21 +1,58 @@
-import { Divider, Text } from '@lidofinance/lido-ui';
+import { Divider, Edit, Text } from '@lidofinance/lido-ui';
 import { PATH } from 'consts';
-import { useModule, useNodeOperator, useOperatorGroup } from 'modules/web3';
+import { MODULE_METADATA } from 'consts/module';
+import {
+  useModule,
+  useNodeOperator,
+  useOperatorGroup,
+  useOperatorMetadata,
+} from 'modules/web3';
 import { FC } from 'react';
 import { Stack } from 'shared/components/stack/stack';
 import { useCurveMetadata, useShowFlags } from 'shared/hooks';
 import { DescriptorId, formatGroupTitle } from 'shared/node-operator';
 import styled from 'styled-components';
-import { TextLocalLink } from 'shared/navigate';
+import { SecondaryLocalLink, TextLocalLink } from 'shared/navigate';
 
 import { ReactComponent as ArrowRight } from 'assets/icons/arrow-forward.svg';
 
 export const DashboardSubtitle: FC = () => {
-  const { isCM } = useModule();
+  const { module, isCM } = useModule();
 
   if (isCM) return <CmSubtitle />;
+  if (!module) return null;
 
-  return <>Dashboard</>;
+  return <>{MODULE_METADATA[module].title}</>;
+};
+
+const OperatorName: FC = () => {
+  const {
+    nodeOperator: { nodeOperatorId, module },
+  } = useNodeOperator<true>();
+  const { data: metadata, isPending } = useOperatorMetadata({
+    nodeOperatorId,
+    module,
+  });
+  const { IS_NODE_OPERATOR } = useShowFlags();
+
+  if (isPending) return <>{MODULE_METADATA[module].title}</>;
+
+  return (
+    <>
+      <span data-testid="operatorName">{metadata?.name}</span>
+      {IS_NODE_OPERATOR && !metadata?.ownerEditsRestricted && (
+        <InlineWrapper>
+          <SecondaryLocalLink
+            href={PATH.SETTINGS_METADATA}
+            title="Edit Operator Metadata"
+            data-testid="editMetadataLink"
+          >
+            <Edit />
+          </SecondaryLocalLink>
+        </InlineWrapper>
+      )}
+    </>
+  );
 };
 
 const CmSubtitle: FC = () => {
@@ -26,7 +63,11 @@ const CmSubtitle: FC = () => {
   const { IS_NODE_OPERATOR } = useShowFlags();
 
   return (
-    <Stack center gap="ms" selfJustify="center">
+    <Stack center gap="ms" wrap>
+      <Text size="xxs">
+        <OperatorName />
+      </Text>
+      <DividerStyle />
       <Text size="xxs">
         <DescriptorId id={nodeOperatorId} flat />
       </Text>
@@ -53,4 +94,10 @@ const CmSubtitle: FC = () => {
 
 const DividerStyle = styled(Divider).attrs({ type: 'vertical' })`
   opacity: 0.3;
+`;
+
+const InlineWrapper = styled.span`
+  display: inline-flex;
+  margin-left: 4px;
+  vertical-align: middle;
 `;
