@@ -3,6 +3,8 @@ import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 export const PATH = {
   HOME: '/',
 
+  CSM: '/csm',
+
   CREATE: '/create',
   CREATE_0x01: '/create/0x01',
   CREATE_ICS: '/create/ics',

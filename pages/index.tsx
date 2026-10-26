@@ -1,15 +1,12 @@
 import { DashboardPage } from 'features/dashboard';
-import { StarterPackPage } from 'features/starter-pack';
-import { WelcomePage } from 'features/welcome';
+import { ValidatePage } from 'features/validate-with-lido';
 import { FC } from 'react';
 import { Gate, GateLoaded } from 'shared/navigate';
 
 const Page: FC = () => (
   <GateLoaded>
-    <Gate rule="IS_CONNECTED_WALLET" fallback={<WelcomePage />}>
-      <Gate rule="HAS_ANY_ROLE" fallback={<StarterPackPage />}>
-        <DashboardPage />
-      </Gate>
+    <Gate rule="HAS_ANY_ROLE" fallback={<ValidatePage />}>
+      <DashboardPage />
     </Gate>
   </GateLoaded>
 );

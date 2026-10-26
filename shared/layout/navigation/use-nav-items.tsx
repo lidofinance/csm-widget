@@ -37,6 +37,7 @@ const routes: Route[] = [
     name: 'Validate with Lido',
     path: PATH.HOME,
     icon: <HomeIcon />,
+    subPaths: [PATH.CSM],
     showRules: ['NOT_NODE_OPERATOR'],
   },
   {

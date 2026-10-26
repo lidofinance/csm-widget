@@ -4,7 +4,7 @@ import {
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts';
-import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
+import { useOperatorCustomAddresses } from 'features/create-node-operator/banner-operator-custom-addresses';
 import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
 import { TxStageDkgUploadFailed } from 'features/idvtc/dkg/tx-stages/tx-stage-dkg-upload-failed';
 import { useMembersInFlowInit } from 'features/idvtc/members/hooks/use-members-in-flow-init';

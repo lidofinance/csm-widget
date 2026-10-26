@@ -12,6 +12,7 @@ export const CACHE_CONTROL_PAGES = [
   // documents — statically prerendered, same HTML for every visitor; uncovered
   // routes get Next's 1-year s-maxage, which outlives build chunk hashes
   '/',
+  '/csm',
   '/group',
   '/monitoring',
   '/operators',

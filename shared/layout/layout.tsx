@@ -25,6 +25,7 @@ type Props = {
   dummy?: boolean | 'semi';
   pageName?: string;
   fullwidth?: boolean;
+  wide?: boolean;
   mainPrefix?: ReactNode;
   breadcrumbs?: Crumb[];
 };
@@ -33,6 +34,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
   fullwidth,
+  wide,
   title,
   subtitle,
   pageName,
@@ -56,7 +58,7 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
           <Header dummy={mode} crumbs={crumbs} />
           <MainStyled>
             {!mode && !fullwidth && <AlertContainer />}
-            <PageContent variant={fullwidth ? 'default' : 'narrow'}>
+            <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
               <AppStack direction="column" gap={24} align="stretch">
                 {mainPrefix}
                 {(title || subtitle) && (
