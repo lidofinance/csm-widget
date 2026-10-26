@@ -78,7 +78,7 @@
     "uuid": "^14.0.0",
     "viem": "2.55.18",
     "wagmi": "3.7.6",
-    "zod": "^4.1.12"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^21",
