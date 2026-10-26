@@ -2,7 +2,6 @@ import { Footer as LibFooter, TextLink } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { LogoLidoLink } from 'shared/components';
 import { useExternalLinks } from 'shared/hooks';
 import { trackMatomoEvent } from 'utils';
 import { Version } from './version';
@@ -31,7 +30,6 @@ type Props = {
 
 export const Footer: FC<Props> = ({ dummy }) => (
   <LibFooter aside={<Version />} data-testid="appFooter">
-    <LogoLidoLink />
     <TextLink
       variant="secondary"
       external
