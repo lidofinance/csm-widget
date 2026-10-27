@@ -3,7 +3,6 @@ import { PATH } from 'consts/urls';
 import { CreateOperatorPage } from 'features/create-node-operator';
 import { useCanCreateNodeOperator } from 'shared/hooks';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => {
   const { isPending } = useCanCreateNodeOperator();
@@ -11,16 +10,14 @@ const Page = () => {
   return (
     <GateLoaded>
       <Gate rule="IS_CONNECTED_WALLET" fallback={<Navigate path={PATH.HOME} />}>
-        <Gate rule="IS_CSM_FAMILY" fallback={<Navigate path={PATH.CREATE} />}>
-          <GateLoaded additional={isPending}>
-            <Gate
-              rule="CAN_CREATE_ICS"
-              fallback={<Navigate path={PATH.CREATE} />}
-            >
-              <CreateOperatorPage type={OPERATOR_TYPE.CSM_ICS} />
-            </Gate>
-          </GateLoaded>
-        </Gate>
+        <GateLoaded additional={isPending}>
+          <Gate
+            rule="CAN_CREATE_ICS"
+            fallback={<Navigate path={PATH.CREATE} />}
+          >
+            <CreateOperatorPage type={OPERATOR_TYPE.CSM_ICS} />
+          </Gate>
+        </GateLoaded>
       </Gate>
     </GateLoaded>
   );
@@ -28,4 +25,3 @@ const Page = () => {
 
 export default Page;
 
-export const getServerSideProps = getProps();

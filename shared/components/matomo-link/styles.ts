@@ -1,4 +1,5 @@
-import { External, Link } from '@lidofinance/lido-ui';
+import { External } from '@lidofinance/lido-ui';
+import { TextLink } from '@lidofinance/lido-app-ui';
 import styled, { css } from 'styled-components';
 
 import { ReactComponent as Arrow } from 'assets/icons/arrow-right.svg';
@@ -17,32 +18,25 @@ type LinkStyledProps = {
   $likeText?: boolean;
 };
 
-export const LinkStyled = styled(Link)<LinkStyledProps>`
-  display: ${({ $inline }) => ($inline ? 'inline' : 'inline-flex')};
-  align-items: center;
+export const LinkStyled = styled(TextLink)<LinkStyledProps>`
+  && {
+    display: ${({ $inline }) => ($inline ? 'inline' : 'inline-flex')};
+    font: inherit;
+    letter-spacing: inherit;
 
-  ${({ $secondary }) =>
-    $secondary &&
-    css`
-      &,
-      &:visited {
-        color: var(--lido-color-textSecondary);
-      }
-      &:hover {
-        color: var(--lido-color-primaryHover);
-      }
-    `}
+    ${({ $secondary }) =>
+      $secondary &&
+      css`
+        --local-color: var(--lido-color-textSecondary);
+        --local-color-hover: var(--lido-color-primaryHover);
+      `}
 
-  ${({ $likeText }) =>
-    $likeText &&
-    css`
-      &,
-      &:visited {
-        color: var(--lido-color-text);
+    ${({ $likeText }) =>
+      $likeText &&
+      css`
+        --local-color: var(--lido-color-text);
+        --local-color-hover: var(--lido-color-textSecondary);
         text-decoration: underline;
-      }
-      &:hover {
-        color: var(--lido-color-textSecondary);
-      }
-    `}
+      `}
+  }
 `;

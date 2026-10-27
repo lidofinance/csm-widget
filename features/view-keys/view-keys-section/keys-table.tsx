@@ -1,5 +1,5 @@
 import {
-  ALLOCATED_BALANCE_MODULES,
+  MODULE_PROFILE,
   KEY_STATUS,
   KeyWithStatus,
   OperatorTopUpQueue,
@@ -20,6 +20,7 @@ import {
   StatusComment,
 } from 'shared/components';
 import { useMaxPriorityKeyIndex } from 'shared/hooks';
+import invariant from 'tiny-invariant';
 import { BalanceCell } from './balance-cell';
 import { StrikesCount } from './strikes-counts';
 import { TableStyle } from './styles';
@@ -33,6 +34,7 @@ const selectTopUpPositions = ({ total, keys }: OperatorTopUpQueue) => ({
 export const KeysTable: FC = () => {
   const maxPriorityKeyIndex = useMaxPriorityKeyIndex();
   const { module, isCsmFamily } = useModule();
+  invariant(module);
   const { data } = useTable<KeyWithStatus>();
   const nodeOperatorId = useNodeOperatorId();
   const { data: topUpQueue } = useOperatorTopUpQueue({
@@ -41,7 +43,7 @@ export const KeysTable: FC = () => {
   });
 
   const showStrikes = isCsmFamily;
-  const showBalance = ALLOCATED_BALANCE_MODULES.has(module);
+  const showBalance = MODULE_PROFILE[module].allocatedBalance;
 
   return (
     <TableStyle $strikes={showStrikes} $balance={showBalance}>

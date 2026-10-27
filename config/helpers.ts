@@ -19,14 +19,6 @@ export const parseDefaultChain = (val: unknown): SUPPORTED_CHAINS => {
   return FALLBACK_CHAIN;
 };
 
-export const toBoolean = (val: any) => {
-  return (
-    val?.toLowerCase?.() === 'true' ||
-    val === true ||
-    Number.parseInt(val, 10) === 1
-  );
-};
-
 // Parse a comma-separated list of URLs, trimming whitespace and stripping
 // trailing slashes. Some RPC/CL providers reject requests to paths ending in
 // `/` even though the URL is visually identical.

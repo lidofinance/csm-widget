@@ -1,5 +1,5 @@
 import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
-import { FAQ_OPERATOR_TYPE } from 'faq';
+import { useFaq } from 'faq';
 import { IdvtcApplyButton } from 'features/idvtc/apply-button';
 import { IdvtcProviders } from 'features/idvtc/shared';
 import { FC } from 'react';
@@ -22,6 +22,6 @@ export const IdvtcParametersPage: FC = () => (
         action={<IdvtcApplyButton size="sm" />}
       />
     </IdvtcProviders>
-    <Faq items={FAQ_OPERATOR_TYPE} />
+    <Faq items={useFaq('OPERATOR_TYPE')} />
   </Layout>
 );

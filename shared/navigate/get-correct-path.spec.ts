@@ -1,7 +1,3 @@
-// `consts` reaches config → next publicRuntimeConfig, which is undefined under
-// Jest. Only the two module booleans are used by the function under test.
-jest.mock('consts', () => ({ isModuleCM: false, isModuleCSM: true }));
-
 import { PATH } from 'consts/urls';
 import { ShowFlags } from 'shared/hooks';
 import { getCorrectPath } from './get-correct-path';
@@ -13,6 +9,8 @@ const flags = (patch: Partial<ShowFlags>): ShowFlags =>
     CAN_CREATE_ICS: false,
     CAN_CREATE_IDVTC: false,
     CAN_CREATE_0X02: false,
+    CAN_CREATE_CM: false,
+    IS_CM: false,
     HAS_APPLY_OPTIONS: false,
     HAS_MANAGER_ROLE: false,
     HAS_REWARDS_ROLE: false,
@@ -65,6 +63,32 @@ describe('getCorrectPath(PATH.CREATE)', () => {
         flags({ CAN_CREATE_0X01: true, HAS_APPLY_OPTIONS: true }),
       ),
     ).toBe(PATH.CREATE);
+  });
+
+  it('sends a CM-eligible wallet with no other option straight to /create/cm', () => {
+    expect(getCorrectPath(PATH.CREATE, flags({ CAN_CREATE_CM: true }))).toBe(
+      PATH.CREATE_CM,
+    );
+  });
+
+  it('keeps the picker when CM and 0x01 are both creatable', () => {
+    expect(
+      getCorrectPath(
+        PATH.CREATE,
+        flags({ CAN_CREATE_CM: true, CAN_CREATE_0X01: true }),
+      ),
+    ).toBe(PATH.CREATE);
+  });
+});
+
+describe('getCorrectPath — settings metadata', () => {
+  it('metadata settings stay for CM operators only', () => {
+    expect(getCorrectPath(PATH.SETTINGS_METADATA, flags({ IS_CM: true }))).toBe(
+      PATH.SETTINGS_METADATA,
+    );
+    expect(
+      getCorrectPath(PATH.SETTINGS_METADATA, flags({ IS_CM: false })),
+    ).toBe(PATH.SETTINGS);
   });
 });
 

@@ -18,6 +18,10 @@ export type NodeOperatorContextValue = {
   nodeOperator: ModuleNodeOperator | undefined;
   activeModule: MODULE_NAME | undefined;
   needsSelection: boolean;
+  /** Selection is pending but postponed (e.g. user went to create a new operator) */
+  selectionDismissed: boolean;
+  dismissSelection: () => void;
+  requestSelection: () => void;
   switchNodeOperator: (operator: OperatorRef) => void;
 };
 
@@ -60,6 +64,9 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
     nodeOperator: active,
     setActive,
     needsSelection,
+    selectionDismissed,
+    dismissSelection,
+    requestSelection,
   } = useActiveNodeOperator(list);
 
   const switchNodeOperator = useCallback(
@@ -75,15 +82,26 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const value = useMemo(
     // needsSelection folds into isPending so GateLoaded keeps a SplashPage under the modal
-    // instead of flashing StarterPackPage/CmWelcomePage and redirecting via NOT_NODE_OPERATOR
+    // instead of flashing the welcome page and redirecting via NOT_NODE_OPERATOR
     () => ({
       isPending: isPending || needsSelection,
       nodeOperator: active,
       activeModule: active?.module,
       needsSelection,
+      selectionDismissed,
+      dismissSelection,
+      requestSelection,
       switchNodeOperator,
     }),
-    [active, isPending, needsSelection, switchNodeOperator],
+    [
+      active,
+      isPending,
+      needsSelection,
+      selectionDismissed,
+      dismissSelection,
+      requestSelection,
+      switchNodeOperator,
+    ],
   );
 
   return (

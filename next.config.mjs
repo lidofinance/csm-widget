@@ -1,8 +1,6 @@
-import fs from 'fs';
-import path from 'path';
+import { loadDevnetArtifacts } from './devnet-artifacts.mjs';
 import buildDynamics from './scripts/build-dynamics.mjs';
 import generateBuildId from './scripts/generate-build-id.mjs';
-import { toBoolean } from './scripts/to-boolean.mjs';
 import { logEnvironmentVariables } from './scripts/log-environment-variables.mjs';
 
 logEnvironmentVariables();
@@ -12,28 +10,17 @@ buildDynamics();
 const basePath = process.env.BASE_PATH;
 
 const developmentMode = process.env.NODE_ENV === 'development';
-const moduleMode = (process.env.MODULE || 'csm').toUpperCase();
-const moduleName = moduleMode.toLowerCase();
-const isIPFSMode = toBoolean(process.env.IPFS_MODE);
-const maintenance = toBoolean(process.env.MAINTENANCE); // TODO: load from runtime config
 
-// Load devnet contract addresses from JSON file if specified
-let devnetAddresses = null;
-if (process.env.DEVNET_ADDRESSES_FILE_PATH) {
-  try {
-    const filePath = path.resolve(process.env.DEVNET_ADDRESSES_FILE_PATH);
-    devnetAddresses = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-  } catch (e) {
-    console.warn('Failed to load devnet addresses:', e.message);
-  }
-}
+const devnetArtifacts = process.env.DEVNET_ADDRESSES_FILE_PATH
+  ? loadDevnetArtifacts(process.env.DEVNET_ADDRESSES_FILE_PATH)
+  : null;
 
 // cache control
 export const CACHE_CONTROL_HEADER = 'x-cache-control';
 export const CACHE_CONTROL_PAGES = [
-  // documents — same HTML for every visitor; uncovered, gSSP pages get the
-  // default no-store and gSP pages a 1-year s-maxage that outlives build chunk hashes
+  // documents — statically prerendered, identical for every visitor
   '/',
+  '/csm',
   '/group',
   '/monitoring',
   '/operators',
@@ -48,14 +35,11 @@ export const CACHE_CONTROL_PAGES = [
   '/top-up-allocation',
   '/surveys/:path*',
   '/type/:path*',
-  // assets — unhashed, so they share the document TTL; header sources match
-  // pre-rewrite paths, so module-variant files are listed too
+  // assets — unhashed, so they share the document TTL
   '/manifest.json',
-  '/manifest-:module(csm|cm).json',
   '/favicon:size*',
   '/apple-touch-icon.png',
-  '/apple-touch-icon-:module(csm|cm).png',
-  '/:module(csm|cm)-preview.png',
+  '/operators-preview.png',
   '/runtime/window-env.js',
 ];
 export const CACHE_CONTROL_VALUE =
@@ -79,15 +63,6 @@ export default withBundleAnalyzer({
     ignoreBuildErrors: true,
   },
 
-  // IPFS next.js configuration reference:
-  // https://github.com/Velenir/nextjs-ipfs-example
-  trailingSlash: isIPFSMode,
-  assetPrefix: isIPFSMode ? './' : undefined,
-
-  // IPFS version has hash-based routing,
-  // so we provide only index.html in ipfs version
-  exportPathMap: isIPFSMode ? () => ({ '/': { page: '/' } }) : undefined,
-
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -110,7 +85,7 @@ export default withBundleAnalyzer({
   webpack(config) {
     config.module.rules.push(
       // Teach webpack to import svg and md files
-      // `issuer` keeps svgr off SVGs referenced from CSS (e.g. @lidofinance/lido-shared-ui)
+      // `issuer` keeps svgr off SVGs referenced from CSS (e.g. @lidofinance/lido-app-ui)
       {
         test: /\.svg$/,
         issuer: /\.[jt]sx?$/,
@@ -138,22 +113,6 @@ export default withBundleAnalyzer({
       {
         test: /\.md$/,
         use: 'raw-loader',
-      },
-
-      // Needs for `Conditional Compilation`,
-      // because we have differences in source code of IPFS widget and NOT IPFS widget
-      {
-        test: /\.(t|j)sx?$/,
-        use: [
-          {
-            loader: 'webpack-preprocessor-loader',
-            options: {
-              params: {
-                IPFS_MODE: isIPFSMode,
-              },
-            },
-          },
-        ],
       },
 
       // Handle JSON imports with 'with' assertions syntax from node_modules
@@ -244,7 +203,7 @@ export default withBundleAnalyzer({
       },
       {
         // required for gnosis save apps
-        source: '/manifest:suffix(-[a-z]+)?.json',
+        source: '/manifest.json',
         headers: [{ key: 'Access-Control-Allow-Origin', value: '*' }],
       },
       ...CACHE_CONTROL_PAGES.map((page) => ({
@@ -253,29 +212,11 @@ export default withBundleAnalyzer({
       })),
     ];
   },
-  // serves the module-specific assets shipped in public/ under the canonical
-  // paths Gnosis Safe Apps and browsers expect (/manifest.json, /favicon.ico)
-  async rewrites() {
-    return [
-      { source: '/manifest.json', destination: `/manifest-${moduleName}.json` },
-      { source: '/favicon.ico', destination: `/favicon-${moduleName}.ico` },
-      {
-        source: '/favicon-:size(16x16|32x32|192x192|512x512).png',
-        destination: `/favicon-${moduleName}-:size.png`,
-      },
-      {
-        source: '/apple-touch-icon.png',
-        destination: `/apple-touch-icon-${moduleName}.png`,
-      },
-    ];
-  },
-
   // ATTENTION: If you add a new variable you should declare it in `global.d.ts`
   serverRuntimeConfig: {
     // https://nextjs.org/docs/pages/api-reference/next-config-js/basePath
     basePath,
     developmentMode,
-    maintenance,
 
     defaultChain: process.env.DEFAULT_CHAIN,
 
@@ -288,10 +229,6 @@ export default withBundleAnalyzer({
     migalabsApiUrl: process.env.ETHSEER_API_URL,
     migalabsApiToken: process.env.ETHSEER_API_TOKEN,
 
-    cspTrustedHosts: process.env.CSP_TRUSTED_HOSTS,
-    cspReportUri: process.env.CSP_REPORT_URI,
-    cspReportOnly: process.env.CSP_REPORT_ONLY,
-
     rateLimit: process.env.RATE_LIMIT,
     rateLimitTimeFrame: process.env.RATE_LIMIT_TIME_FRAME,
     validationAPI: process.env.VALIDATION_SERVICE_BASE_PATH,
@@ -301,7 +238,6 @@ export default withBundleAnalyzer({
   publicRuntimeConfig: {
     basePath,
     developmentMode,
-    module: moduleMode,
-    devnetAddresses,
+    devnetArtifacts,
   },
 });

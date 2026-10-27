@@ -1,5 +1,5 @@
 import { useDappStatus, useSmStatus } from 'modules/web3';
-import { useNodeOperator } from 'modules/web3/operator-provider';
+import { useModule, useNodeOperator } from 'modules/web3/operator-provider';
 import { useAvailableOperators } from 'modules/web3/operator-provider/use-available-operators';
 import { useEffect } from 'react';
 import { useConnection } from 'wagmi';
@@ -7,6 +7,8 @@ import { useConnection } from 'wagmi';
 export const useInitialLoading = (externalLoading?: boolean) => {
   const { isConnecting } = useConnection();
   const { isAccountActive } = useDappStatus();
+  const { module } = useModule();
+  // no active operator → useSmStatus() has no target module and stays disabled forever
   const { isPending: isStatusLoading, error: statusError } = useSmStatus();
   const { isPending: isOperatorsLoading } = useNodeOperator();
   const { error: operatorsError } = useAvailableOperators();
@@ -25,7 +27,7 @@ export const useInitialLoading = (externalLoading?: boolean) => {
 
   return [
     isConnecting,
-    isStatusLoading,
+    !!module && isStatusLoading,
     isAccountActive && isOperatorsLoading,
     externalLoading,
   ].some((i) => i === true);

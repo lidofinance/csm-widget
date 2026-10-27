@@ -1,8 +1,6 @@
-# Lido Community Staking Module Widget
+# Lido Operators Widget
 
-A widget for participating in Lido CSM based on [Lido Frontend Template](https://github.com/lidofinance/lido-frontend-template).
-
-Lido Community Staking Module (CSM) is a permissionless module allowing community stakers to operate Ethereum validators with lower entry costs. Stakers provide stETH bonds, serving as security collateral, and receive rewards in the form of bond rebase and staking rewards (including execution layer rewards), which are socialized across Lido’s staking modules.
+A widget for Lido Node Operators based on [Lido Frontend Template](https://github.com/lidofinance/lido-frontend-template). One deployment serves every staking module: the Community Staking Module (CSM), a permissionless module allowing community stakers to operate Ethereum validators with lower entry costs, and the Curated Module v2 (CM), for allow-listed professional operators.
 
 More on CSM in the [docs](https://docs.lido.fi/staking-modules/csm/intro).
 
@@ -39,7 +37,7 @@ Step 5. Open [http://localhost:3000](http://localhost:3000) with your browser to
 
 ### Environment variables
 
-This project uses `publicRuntimeConfig` in the [next.config.mjs](./next.config.mjs) and `getServerSideProps` on the pages (function may be empty, but it forces Next.js to switch to Server-Side Rendering mode). This is necessary to quickly start the docker container without rebuilding the application.
+Pages are statically prerendered at build time (no `getServerSideProps` / `getStaticProps`), never rendered per request. Runtime Docker env still reaches the client without a rebuild: `next.config.mjs` evaluates `env-dynamics.mjs` at server start and writes `public/runtime/window-env.js`, which the browser loads as `window.__env__`. The address deny-list (`VALIDATION_FILE_PATH`) is served by `/api/validation-file` and fetched client-side. The `Content-Security-Policy` header is built from `CSP_*` env by `server.mjs` at startup, so it is a runtime setting too.
 
 Read more about [runtime configuration](https://nextjs.org/docs/api-reference/next.config.js/runtime-configuration) and [automatic static optimization](https://nextjs.org/docs/advanced-features/automatic-static-optimization)
 

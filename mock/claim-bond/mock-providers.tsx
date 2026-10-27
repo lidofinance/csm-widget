@@ -1,5 +1,5 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { QueryClientProvider } from '@tanstack/react-query';
-import { config } from 'config';
 import { useUserConfig } from 'config/user-config';
 import { ClaimBondForm } from 'features/claim-bond/claim-bond-form';
 import { ClaimBondDataProvider } from 'features/claim-bond/claim-bond-form/context';
@@ -45,6 +45,9 @@ const MockOperatorProvider: FC<
     () => ({
       isPending: false,
       needsSelection: false,
+      selectionDismissed: false,
+      dismissSelection: () => {},
+      requestSelection: () => {},
       nodeOperator: {
         nodeOperatorId,
         managerAddress: MOCK_MANAGER,
@@ -52,9 +55,9 @@ const MockOperatorProvider: FC<
         extendedManagerPermissions: false,
         curveId: 0n,
         claimerAddress: address ?? MOCK_CLAIMER,
-        module: config.module,
+        module: MODULE_NAME.CSM,
       },
-      activeModule: config.module,
+      activeModule: MODULE_NAME.CSM,
       switchNodeOperator: () => {},
     }),
     [nodeOperatorId, address],
@@ -80,7 +83,7 @@ export const MockClaimBondProvider: FC<
 
   const queryClient = useMemo(() => {
     const client = createMockQueryClient();
-    const idKey = { nodeOperatorId, module: config.module };
+    const idKey = { nodeOperatorId, module: MODULE_NAME.CSM };
     client.setQueryData(
       [...KEY_OPERATOR_BALANCE, idKey],
       makeBond(scenario.bond),

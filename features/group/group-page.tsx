@@ -1,4 +1,5 @@
 import {
+  useModule,
   useNodeOperatorId,
   useOperatorGroup,
   useOperatorGroupId,
@@ -22,8 +23,12 @@ export const GroupPage: FC = () => (
 );
 
 const GroupTitle: FC = () => {
+  const { module } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: group, isPending } = useOperatorGroup({ nodeOperatorId });
+  const { data: group, isPending } = useOperatorGroup({
+    nodeOperatorId,
+    module,
+  });
 
   return isPending ? (
     <ShortInlineLoader />
@@ -35,8 +40,9 @@ const GroupTitle: FC = () => {
 };
 
 const GroupSubtitle: FC = () => {
+  const { module } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { data: groupId } = useOperatorGroupId({ nodeOperatorId });
+  const { data: groupId } = useOperatorGroupId({ nodeOperatorId, module });
 
   return groupId ? (
     <>View all of the sub-operators within your Node Operator Group</>

@@ -3,7 +3,6 @@ import { MembersPage } from 'features/idvtc/members';
 import { useOperatorType } from 'modules/web3/hooks/use-operator-type';
 import { useNodeOperator } from 'modules/web3/operator-provider/node-operator-provider';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => {
   const { nodeOperator } = useNodeOperator();
@@ -24,4 +23,3 @@ const Page = () => {
 
 export default Page;
 
-export const getServerSideProps = getProps();

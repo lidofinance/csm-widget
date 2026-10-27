@@ -8,10 +8,13 @@ export const getInviteId = (invite: ModuleInvite) =>
 export const isSameOperator = (a: OperatorRef, b: OperatorRef | undefined) =>
   !!b && a.nodeOperatorId === b.nodeOperatorId && a.module === b.module;
 
-export const formatGroupTitle = ({
-  name,
-  groupId,
-}: {
+type GroupLike = {
   name: string;
   groupId: bigint;
-}) => name || `Operator Group #${groupId}`;
+};
+
+export const formatGroupTitle = ({ name, groupId }: GroupLike) =>
+  name || `Operator Group #${groupId}`;
+
+export const formatGroupLabel = (group: GroupLike) =>
+  group.name ? `${group.name} (#${group.groupId})` : formatGroupTitle(group);

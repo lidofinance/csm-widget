@@ -1,5 +1,6 @@
+import { PATH } from 'consts/urls';
 import { ROLES } from '@lidofinance/lido-csm-sdk';
-import { FAQ_ROLES } from 'faq';
+import { useFaq } from 'faq';
 import { FC } from 'react';
 import { Faq } from 'shared/components';
 import NoSSRWrapper from 'shared/components/no-ssr-wrapper';
@@ -16,12 +17,16 @@ export const ManagerAddressPage: FC = () => {
       title="Settings"
       subtitle="Manage your operator"
       pageName="SettingsManagerAddress"
+      breadcrumbs={[
+        { label: 'Settings', href: PATH.SETTINGS },
+        { label: 'Manager address' },
+      ]}
     >
       <SettingsPageSwitcher />
       <NoSSRWrapper key={key}>
         <ChangeRoleForm role={ROLES.MANAGER} />
       </NoSSRWrapper>
-      <Faq items={FAQ_ROLES} />
+      <Faq items={useFaq('ROLES')} />
     </Layout>
   );
 };

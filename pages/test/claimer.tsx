@@ -37,4 +37,4 @@ const ClaimerTestPage: FC = () => (
 
 export default ClaimerTestPage;
 
-export const getServerSideProps = getTestProps;
+export const getStaticProps = getTestProps;

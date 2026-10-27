@@ -1,24 +1,31 @@
+import {
+  Header as LibHeader,
+  SidebarHeaderStart,
+} from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 
-import { HeaderBurger } from './components/header-burger';
-import HeaderChain from './components/header-chain';
-import HeaderNodeOperator from './components/header-node-operator';
+import { Crumb, Crumbs } from '../crumbs';
 import HeaderTheme from './components/header-theme';
 import HeaderWallet from './components/header-wallet';
 import { Logos } from './components/logos';
-import { HeaderActionsStyle, HeaderStyle, HeaderWrapper } from './styles';
 
-export const Header: FC = () => (
-  <HeaderWrapper>
-    <HeaderStyle>
-      <Logos />
-      <HeaderActionsStyle>
-        <HeaderChain />
-        <HeaderNodeOperator />
-        <HeaderWallet />
+type Props = {
+  dummy?: boolean | 'semi';
+  crumbs: Crumb[];
+};
+
+export const Header: FC<Props> = ({ dummy, crumbs }) => (
+  <LibHeader
+    sticky
+    actions={
+      <>
         <HeaderTheme />
-        <HeaderBurger />
-      </HeaderActionsStyle>
-    </HeaderStyle>
-  </HeaderWrapper>
+        {dummy !== true && <HeaderWallet />}
+      </>
+    }
+  >
+    <SidebarHeaderStart logo={<Logos />}>
+      <Crumbs crumbs={crumbs} />
+    </SidebarHeaderStart>
+  </LibHeader>
 );

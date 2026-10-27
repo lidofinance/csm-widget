@@ -6,7 +6,6 @@ import { SectionHeaderLinkStyle } from './styles';
 type SectionHeaderLinkProps = ComponentProps<typeof LocalLink>;
 
 export const SectionHeaderLink: FC<SectionHeaderLinkProps> = ({
-  as,
   'data-testid': dataTestId = 'sectionHeaderLink',
   ...props
 }) => {

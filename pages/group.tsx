@@ -1,13 +1,14 @@
 import { PATH } from 'consts/urls';
 import { GroupPage } from 'features/group';
-import { getProps } from 'utilsApi';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
 import { useNodeOperatorId } from 'modules/web3/operator-provider/node-operator-provider';
+import { useModule } from 'modules/web3';
 import { useOperatorGroup } from 'modules/web3/hooks/use-operator-group';
 
 const Page = () => {
+  const { module } = useModule();
   const nodeOperatorId = useNodeOperatorId();
-  const { isPending } = useOperatorGroup({ nodeOperatorId });
+  const { isPending } = useOperatorGroup({ nodeOperatorId, module });
 
   return (
     <GateLoaded>
@@ -23,5 +24,3 @@ const Page = () => {
 };
 
 export default Page;
-
-export const getServerSideProps = getProps();

@@ -97,7 +97,7 @@ test.describe(
           ).toBeVisible();
           await expect(
             widgetService.page.getByText(
-              'You can see the new parameters for your Node Operator by clicking the IDVTC badge at the top of the screen',
+              'You can see the new parameters for your Node Operator by opening the operator switcher in the sidebar and clicking the IDVTC tag',
             ),
           ).toBeVisible();
           await expect(

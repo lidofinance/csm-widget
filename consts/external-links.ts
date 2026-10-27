@@ -1,7 +1,6 @@
-import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { PerModule, SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
-import { isModuleCM, isModuleCSM } from './module';
 
 export const CSM_MAINNET_LINK = 'https://csm.lido.fi/';
 export const CSM_TESTNET_LINK = 'https://csm.testnet.fi/';
@@ -13,18 +12,13 @@ export const EXTENDED_MODE_LINK =
   'https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/operator-roles#extended-mode';
 export const UNBONDED_VALIDATORS_LINK =
   'https://docs.lido.fi/run-on-lido/csm/troubleshooting/unbonded-validators';
+export const CSM_DOCS_LINK = 'https://docs.lido.fi/run-on-lido/csm/';
 export const MEV_STEALING_LINK =
   'https://docs.lido.fi/run-on-lido/csm/troubleshooting/mev-stealing';
 export const PERFORMANCE_TIPS_LINK =
   'https://docs.lido.fi/run-on-lido/csm/best-practices/maximizing-uptime-and-performance/';
 export const HOW_TO_EXIT_VALIDATOR_LINK =
   'https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/exiting-csm-validators/exit-using-validator-keystores';
-export const ABOUT_DEPOSIT_DATA_LINK =
-  'https://docs.lido.fi/run-on-lido/csm/node-setup/';
-export const HOW_TO_GENERATE_DEPOSIT_DATA_LINK =
-  'https://docs.lido.fi/run-on-lido/csm/generating-validator-keys/';
-export const PREPARE_HARDWARE_LINK =
-  'https://dvt-homestaker.stakesaurus.com/hardware-and-systems-setup/hardware-and-system-requirements';
 export const UPLOAD_DEPOSIT_DATA_LINK =
   'https://docs.lido.fi/run-on-lido/csm/lido-csm-widget/upload-remove-view-validator-keys#upload-keys';
 export const SUBSCRIBE_EVENTS_LINK =
@@ -41,7 +35,10 @@ export const LIDO_OPERATOR_PORTAL_BASE =
   'https://operatorportal.lido.fi/modules/community-staking-module';
 export const LIDO_OPERATOR_PORTAL_CM =
   'https://operatorportal.lido.fi/modules/curated-module-v2-1';
-export const LIDO_OPERATOR_PORTAL_BONDS_INFO = `${LIDO_OPERATOR_PORTAL_BASE}#block-e4a6daadca12480d955524247f03f380`;
+export const LIDO_OPERATOR_PORTAL_SDVT =
+  'https://operatorportal.lido.fi/modules/simple-dvt-module';
+export const LIDO_OPERATOR_PORTAL_CURATED =
+  'https://operatorportal.lido.fi/modules/curated-module';
 export const LIDO_OPERATOR_PORTAL_PERFORMANCE_ORACLE = `${LIDO_OPERATOR_PORTAL_BASE}#block-c6dc8d00f13243fcb17de3fa07ecc52c`;
 export const LIDO_OPERATOR_PORTAL_DEPOSITS_FLOW = `${LIDO_OPERATOR_PORTAL_BASE}#block-90b8ff95edc64cf7a051584820219616`;
 export const PHASED_DEPOSIT_APPROACH_LINK =
@@ -53,9 +50,9 @@ export const LIDO_REWARDS_VAULT_LINK =
 
 type ExternalLinksConstants = {
   rewardsTree: string;
-  feedbackForm: string;
+  feedbackForm: PerModule<string>;
   stakeWidget: string;
-  landing?: string;
+  landing: PerModule<string>;
 
   beaconchain: string;
   feesMonitoring: string;
@@ -65,6 +62,7 @@ type ExternalLinksConstants = {
   migalabs: string;
   keysApi: string;
   surveyApi: string;
+  ethApi: string;
 };
 
 export const EXTERNAL_LINKS_BY_NETWORK: Record<
@@ -74,11 +72,17 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   [CHAINS.Mainnet]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
-    feedbackForm: isModuleCM
-      ? 'https://forms.gle/4oRG7XwhNJszhJvv6'
-      : 'https://forms.gle/GL9RYeV2g4px58Sv8',
+    feedbackForm: {
+      CSM: 'https://forms.gle/GL9RYeV2g4px58Sv8',
+      CSM_02: 'https://forms.gle/GL9RYeV2g4px58Sv8',
+      CM: 'https://forms.gle/4oRG7XwhNJszhJvv6',
+    },
     stakeWidget: 'https://stake.lido.fi',
-    landing: isModuleCSM ? 'https://lido.fi/csm' : LIDO_OPERATOR_PORTAL_CM,
+    landing: {
+      CSM: 'https://lido.fi/csm',
+      CSM_02: 'https://lido.fi/csm',
+      CM: LIDO_OPERATOR_PORTAL_CM,
+    },
 
     feesMonitoring: 'https://fees-monitoring.lido.fi',
     operatorsWidget: 'https://operators.lido.fi',
@@ -88,15 +92,22 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     migalabs: 'https://migalabs.io',
     keysApi: 'https://keys-api.lido.fi',
     surveyApi: 'https://csm-survey-api.lido.tools',
+    ethApi: 'https://eth-api.lido.fi',
   },
   [CHAINS.Hoodi]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
-    feedbackForm: isModuleCM
-      ? 'https://forms.gle/Lhh4fGXvx7Gwcd6e7'
-      : 'https://forms.gle/ZBUqbykaZokJLf4M7',
+    feedbackForm: {
+      CSM: 'https://forms.gle/ZBUqbykaZokJLf4M7',
+      CSM_02: 'https://forms.gle/ZBUqbykaZokJLf4M7',
+      CM: 'https://forms.gle/Lhh4fGXvx7Gwcd6e7',
+    },
     stakeWidget: 'https://stake-hoodi.testnet.fi',
-    landing: isModuleCSM ? 'https://testnet.fi/csm' : 'https://testnet.fi/cm',
+    landing: {
+      CSM: 'https://testnet.fi/csm',
+      CSM_02: 'https://testnet.fi/csm',
+      CM: 'https://testnet.fi/cm',
+    },
 
     feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
     operatorsWidget: 'https://operators-hoodi.testnet.fi',
@@ -106,6 +117,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     migalabs: '',
     keysApi: 'https://keys-api-hoodi.testnet.fi',
     surveyApi: 'https://csm-survey-api-hoodi.lido.tools',
+    ethApi: 'https://eth-api-hoodi.testnet.fi',
   },
 };
 

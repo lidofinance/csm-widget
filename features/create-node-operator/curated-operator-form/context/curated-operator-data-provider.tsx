@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import {
   useSmStatus,
   useDappStatus,
@@ -17,7 +18,9 @@ import { type CuratedOperatorFormNetworkData } from './types';
 const useCuratedOperatorFormNetworkData: NetworkData<
   CuratedOperatorFormNetworkData
 > = () => {
-  const { data: status, isPending: isStatusLoading } = useSmStatus();
+  const { data: status, isPending: isStatusLoading } = useSmStatus(
+    MODULE_NAME.CM,
+  );
   const { address } = useDappStatus();
 
   const ethBalanceQuery = useEthereumBalance();

@@ -1,7 +1,6 @@
 import { PATH } from 'consts/urls';
 import { ClaimIdvtcPage } from 'features/claim-type';
 import { Gate, GateLoaded, Navigate } from 'shared/navigate';
-import { getProps } from 'utilsApi';
 
 const Page = () => (
   <GateLoaded>
@@ -15,4 +14,3 @@ const Page = () => (
 
 export default Page;
 
-export const getServerSideProps = getProps();

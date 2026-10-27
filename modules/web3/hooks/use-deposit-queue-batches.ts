@@ -1,7 +1,7 @@
 import {
-  DEPOSIT_QUEUE_MODULES,
   DepositQueueBatch,
   MODULE_NAME,
+  MODULE_PROFILE,
 } from '@lidofinance/lido-csm-sdk';
 import { useQuery } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
@@ -18,9 +18,10 @@ export const useDepositQueueBatches = <TData = DepositQueueBatch[][]>({
   select?: (data: DepositQueueBatch[][]) => TData;
 } = {}) => {
   const { targetModule, sdk: moduleSdk } = useTargetSmSDK(module);
-  const sdk = DEPOSIT_QUEUE_MODULES.has(targetModule)
-    ? (moduleSdk as CsmFamilySDK | undefined)
-    : undefined;
+  const sdk =
+    targetModule && MODULE_PROFILE[targetModule].depositQueue
+      ? (moduleSdk as CsmFamilySDK | undefined)
+      : undefined;
 
   return useQuery({
     queryKey: [...KEY_DEPOSIT_QUEUE_BATCHES, { module: targetModule }],

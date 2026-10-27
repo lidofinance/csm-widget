@@ -1,5 +1,5 @@
 import {
-  ALLOCATED_BALANCE_MODULES,
+  MODULE_PROFILE,
   TOKENS,
   ValidatorRewardsEntity,
 } from '@lidofinance/lido-csm-sdk';
@@ -16,7 +16,7 @@ export const RewardsHistoryTable: FC = () => {
   const { module } = useModule();
   const { data } = useTable<ValidatorRewardsEntity>();
 
-  const showBalance = ALLOCATED_BALANCE_MODULES.has(module);
+  const showBalance = !!module && MODULE_PROFILE[module].allocatedBalance;
 
   return (
     <TableStyle $balance={showBalance}>

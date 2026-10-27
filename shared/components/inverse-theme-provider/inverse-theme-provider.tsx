@@ -1,10 +1,5 @@
-import {
-  themeDark,
-  themeLight,
-  ThemeName,
-  ThemeProvider,
-  useThemeToggle,
-} from '@lidofinance/lido-ui';
+import { ThemeName, useThemeToggle } from '@lidofinance/lido-app-ui';
+import { themeDark, themeLight, ThemeProvider } from '@lidofinance/lido-ui';
 import { FC, PropsWithChildren } from 'react';
 
 export const InverseThemeProvider: FC<PropsWithChildren> = ({ children }) => {

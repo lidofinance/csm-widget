@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useDappStatus, useFrameInfo } from 'modules/web3';
 import { FC } from 'react';
 import { formatPercent } from 'utils';
@@ -5,8 +6,12 @@ import { ShortInlineLoader } from './styles';
 import { formatSecondsDuration } from '../parameters-list/format';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
+// FAQ items using this are CSM-only content (FAQ_BOND_CSM / FAQ_MONITORING_CSM).
 export const FaqFrameDuration: FC = () => {
-  const { data, isPending } = useFrameInfo((data) => data.frameDuration);
+  const { data, isPending } = useFrameInfo(
+    (data) => data.frameDuration,
+    MODULE_NAME.CSM,
+  );
 
   formatPercent;
   return isPending ? <ShortInlineLoader /> : <>{formatSecondsDuration(data)}</>;

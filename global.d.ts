@@ -25,7 +25,6 @@ declare module 'next/config' {
     serverRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
-      maintenance: boolean;
 
       defaultChain: string;
 
@@ -38,10 +37,6 @@ declare module 'next/config' {
       migalabsApiUrl: string | undefined;
       migalabsApiToken: string | undefined;
 
-      cspTrustedHosts: string | undefined;
-      cspReportUri: string | undefined;
-      cspReportOnly: string | undefined;
-
       rateLimit: string;
       rateLimitTimeFrame: string;
 
@@ -50,8 +45,10 @@ declare module 'next/config' {
     publicRuntimeConfig: {
       basePath: string | undefined;
       developmentMode: boolean;
-      module: 'CSM' | 'CM';
-      devnetAddresses: Record<string, unknown> | null;
+      devnetArtifacts: Array<{
+        module: string | null;
+        artifacts: Record<string, unknown>;
+      }> | null;
     };
   };
 

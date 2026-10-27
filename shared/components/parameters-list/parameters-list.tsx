@@ -1,4 +1,4 @@
-import { CurveParameters } from '@lidofinance/lido-csm-sdk';
+import { CurveParameters, MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { Text } from '@lidofinance/lido-ui';
 import { FC, PropsWithChildren, useState } from 'react';
 import { IconTooltip } from '../icon-tooltip/icon-tooltip';
@@ -27,8 +27,9 @@ const Title: FC<{ title: string; help?: string }> = ({ title, help }) => (
 
 export const ParametersList: FC<{
   parameters?: CurveParameters;
-}> = ({ parameters }) => {
-  const PARAMETERS = useParameters();
+  module?: MODULE_NAME;
+}> = ({ parameters, module }) => {
+  const PARAMETERS = useParameters(module);
   const [more, setMore] = useState(false);
   const toggleMore = () => setMore((prev) => !prev);
 
@@ -71,12 +72,13 @@ export type CompareParametersListItem = {
 
 type CompareParametersListProps = {
   items: CompareParametersListItem[];
+  module?: MODULE_NAME;
 };
 
 export const CompareParametersList: FC<
   PropsWithChildren<CompareParametersListProps>
-> = ({ items, children }) => {
-  const PARAMETERS = useParameters();
+> = ({ items, module, children }) => {
+  const PARAMETERS = useParameters(module);
 
   return (
     <CompareListStyle $columns={items.length}>

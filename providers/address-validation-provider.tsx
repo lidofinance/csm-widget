@@ -7,11 +7,10 @@ import {
   useState,
 } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query';
 import { config } from 'config';
-import { useApiAddressValidation } from 'shared/hooks';
+import { useApiAddressValidation, useValidationFile } from 'shared/hooks';
 import invariant from 'tiny-invariant';
-import { AddressValidationFile, validateAddressLocally } from 'utils';
+import { validateAddressLocally } from 'utils';
 import { Address } from 'viem';
 
 const AddressValidationContext = createContext<{
@@ -37,52 +36,40 @@ export const useAddressValidation = () => {
 };
 
 // Resolution priority:
-//   1. No address or ipfsMode  → valid
+//   1. No address             → valid
 //   2. API enabled + responded → use API.isValid
 //   3. validationFile present  → check against deny-list locally
 //   4. Otherwise               → valid
 //
-// The server-side loader returns an empty deny-list when the file is
+// The file comes from /api/validation-file; while it's loading or the fetch
+// fails, treat it as absent (valid) rather than blocking the UI. The
+// server-side loader behind it returns an empty deny-list when the file is
 // missing/unreadable/malformed, so a broken file lets all addresses
 // through and surfaces via logs + Prom metrics rather than blocking users.
 export const AddressValidationProvider = ({
   children,
-  validationFile,
 }: {
   children: ReactNode;
-  validationFile?: AddressValidationFile;
 }) => {
   const validateAddressAPI = useApiAddressValidation();
-  const queryClient = useQueryClient();
+  const { data: validationFile } = useValidationFile();
   const [isValidAddress, setIsValidAddress] = useState(true);
 
-  // File validation query (works independently of API settings)
   const validateAddressFile = useCallback(
-    async (addressToValidate: Address) => {
+    (addressToValidate: Address) => {
       if (!validationFile) {
         return { isValid: true };
       }
 
-      const result = await queryClient.fetchQuery({
-        queryKey: [
-          'address-validation-file',
-          addressToValidate,
-          validationFile?.addresses?.length,
-        ],
-        queryFn: async () =>
-          validateAddressLocally(addressToValidate, validationFile),
-        staleTime: 1 * 60 * 1000, // 1 minute
-      });
-
-      return result;
+      return validateAddressLocally(addressToValidate, validationFile);
     },
-    [validationFile, queryClient],
+    [validationFile],
   );
 
   const validateAddress = useCallback(
     async (addressToValidate?: Address) => {
       // If no address, consider valid
-      if (!addressToValidate || config.ipfsMode) {
+      if (!addressToValidate) {
         setIsValidAddress(true);
         return true;
       }
@@ -99,7 +86,7 @@ export const AddressValidationProvider = ({
 
       // Fallback to file validation if available
       if (validationFile) {
-        const fileResult = await validateAddressFile(addressToValidate);
+        const fileResult = validateAddressFile(addressToValidate);
         setIsValidAddress(fileResult.isValid);
         return fileResult.isValid;
       }

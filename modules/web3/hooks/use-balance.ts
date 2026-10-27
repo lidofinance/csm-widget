@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { useQuery, useQueryClient, type QueryKey } from '@tanstack/react-query';
+import { useQueryClient, type QueryKey } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   useConnection,
@@ -9,15 +8,13 @@ import {
 } from 'wagmi';
 
 import { config } from 'config';
-import { useDappStatus, useLidoSDK } from 'modules/web3';
-
+import { useDappStatus, useSmSDK } from 'modules/web3';
+import { CONTRACT_NAMES } from '@lidofinance/lido-csm-sdk';
+import { deployedModules } from 'consts/modules';
 import {
-  erc20abi,
-  type AbstractLidoSDKErc20,
-} from '@lidofinance/lido-ethereum-sdk/erc20';
-import { STRATEGY_IMMUTABLE } from 'consts';
-import {
+  erc20Abi,
   getAbiItem,
+  type Abi,
   type Address,
   type WatchContractEventOnLogsFn,
 } from 'viem';
@@ -39,9 +36,7 @@ export const useEthereumBalance = () => {
   });
 };
 
-type TokenContract = Awaited<
-  ReturnType<InstanceType<typeof AbstractLidoSDKErc20>['getContract']>
->;
+type TokenContract = { address: Address | undefined; abi: Abi };
 
 type TokenSubscriptionState = Record<
   Address,
@@ -62,7 +57,7 @@ type UseBalanceProps = {
 
 export const Erc20EventsAbi = [
   getAbiItem({
-    abi: erc20abi,
+    abi: erc20Abi,
     name: 'Transfer',
   }),
 ];
@@ -186,18 +181,17 @@ export const useTokenTransferSubscription = () => {
   return subscribe;
 };
 
-// NB: contract can be undefined but for better wagmi typings is casted as NoNNullable
 const useTokenBalance = (contract: TokenContract, shouldSubscribe = true) => {
   const { isAccountActive, address } = useDappStatus();
   const subscribe = useTokenTransferSubscription();
 
   const balanceQuery = useReadContract({
-    abi: contract?.abi,
-    address: contract?.address,
+    abi: erc20Abi,
+    address: contract.address,
     functionName: 'balanceOf',
     args: address && [address],
     query: {
-      enabled: isAccountActive,
+      enabled: isAccountActive && !!contract.address,
       // because we update on events we can have high staleTime
       // this prevents loader when changing pages
       // but safes us from laggy user RPCs
@@ -207,7 +201,7 @@ const useTokenBalance = (contract: TokenContract, shouldSubscribe = true) => {
   });
 
   useEffect(() => {
-    if (shouldSubscribe && isAccountActive && contract?.address) {
+    if (shouldSubscribe && isAccountActive && contract.address) {
       return subscribe({
         tokenAddress: contract.address,
         queryKey: balanceQuery.queryKey,
@@ -215,35 +209,31 @@ const useTokenBalance = (contract: TokenContract, shouldSubscribe = true) => {
     }
     // queryKey causes rerender
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAccountActive, contract?.address]);
+  }, [isAccountActive, contract.address]);
 
   return balanceQuery;
 };
 
+// stETH/wstETH are chain-wide: any deployed module's SDK resolves the same addresses
+const useTokenContract = (
+  name: CONTRACT_NAMES.stETH | CONTRACT_NAMES.wstETH,
+) => {
+  const sdk = useSmSDK(deployedModules[0]);
+  return { address: sdk?.core.getContractAddress(name), abi: erc20Abi };
+};
+
 export const useStethBalance = ({
   shouldSubscribeToUpdates = true,
-}: UseBalanceProps = {}) => {
-  const { stETH } = useLidoSDK();
-
-  const { data: contract } = useQuery({
-    queryKey: ['steth-contract'],
-    ...STRATEGY_IMMUTABLE,
-    queryFn: async () => stETH.getContract(),
-  });
-
-  return useTokenBalance(contract!, shouldSubscribeToUpdates);
-};
+}: UseBalanceProps = {}) =>
+  useTokenBalance(
+    useTokenContract(CONTRACT_NAMES.stETH),
+    shouldSubscribeToUpdates,
+  );
 
 export const useWstethBalance = ({
   shouldSubscribeToUpdates = true,
-}: UseBalanceProps = {}) => {
-  const { wstETH } = useLidoSDK();
-
-  const { data: contract } = useQuery({
-    queryKey: ['wsteth-contract'],
-    ...STRATEGY_IMMUTABLE,
-    queryFn: () => wstETH.getContract(),
-  });
-
-  return useTokenBalance(contract!, shouldSubscribeToUpdates);
-};
+}: UseBalanceProps = {}) =>
+  useTokenBalance(
+    useTokenContract(CONTRACT_NAMES.wstETH),
+    shouldSubscribeToUpdates,
+  );

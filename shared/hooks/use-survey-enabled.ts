@@ -9,7 +9,12 @@ import {
   subSeconds,
   subWeeks,
 } from 'date-fns';
-import { useHasNonWithdrawnKeys, useNodeOperatorId } from 'modules/web3';
+import { operatorKey } from 'modules/surveys-sdk/api/url';
+import {
+  useHasNonWithdrawnKeys,
+  useModule,
+  useNodeOperatorId,
+} from 'modules/web3';
 import { useDismiss } from './use-dismiss';
 import { useSurveysFilled } from './use-surveys-filled';
 import { useShowFlags } from './use-show-rule';
@@ -20,11 +25,12 @@ export const useSurveyEnabled = (skipClosed = false) => {
   const { end, isActive } = getSurveyDates();
   const { IS_SURVEYS_ACTIVE } = useShowFlags();
 
+  const { module } = useModule();
   const nodeOperatorId = useNodeOperatorId();
   const { data: hasNonWithdrawnKeys } = useHasNonWithdrawnKeys(nodeOperatorId);
 
   const { isDismissed, dismiss: onClose } = useDismiss(
-    `surveys-cta-closed-${nodeOperatorId}`,
+    `surveys-cta-closed-${operatorKey(module, nodeOperatorId)}`,
     end,
   );
 

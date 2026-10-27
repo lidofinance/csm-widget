@@ -12,5 +12,5 @@ const Page = () => (
 export default Page;
 
 export const getStaticProps: GetStaticProps = () => ({
-  props: { maintenance: true },
+  props: { dummy: true },
 });

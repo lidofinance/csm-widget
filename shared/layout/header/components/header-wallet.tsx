@@ -1,17 +1,29 @@
-import { useDappStatus } from 'modules/web3';
+import { AddressButton } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
+
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
+import { useDappStatus } from 'modules/web3';
 import { NoSSRWrapper } from 'shared/components';
-import { Button, Connect } from 'shared/wallet';
+import { ConnectAppButton, useWalletModal } from 'shared/wallet';
+import { trackMatomoEvent } from 'utils';
 
 const HeaderWallet: FC = () => {
-  const { isAccountActive } = useDappStatus();
+  const { isAccountActive, address } = useDappStatus();
+  const { openModal } = useWalletModal();
 
   return (
     <NoSSRWrapper>
       {isAccountActive ? (
-        <Button data-testid="accountSectionHeader" />
+        <AddressButton
+          address={address ?? ''}
+          data-testid="accountSectionHeader"
+          onClick={() => {
+            trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.clickWalletButton);
+            openModal({});
+          }}
+        />
       ) : (
-        <Connect size="sm" />
+        <ConnectAppButton />
       )}
     </NoSSRWrapper>
   );

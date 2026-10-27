@@ -15,7 +15,10 @@ export const useShareLimit = <TData = ShareLimitInfo>({
 } = {}) => {
   const { module: activeModule } = useModule();
   const { targetModule, sdk: moduleSdk } = useTargetSmSDK(module);
-  const sdk = module || isCsmFamilyModule(activeModule) ? moduleSdk : undefined;
+  const sdk =
+    module || (activeModule && isCsmFamilyModule(activeModule))
+      ? moduleSdk
+      : undefined;
 
   return useQuery({
     queryKey: [...KEY_SHARE_LIMIT, { module: targetModule }],

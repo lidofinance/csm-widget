@@ -4,7 +4,6 @@ module.exports = {
   matomoHost: undefined,
   defaultChain: 560048,
   walletconnectProjectId: undefined,
-  ipfsMode: false,
   isTestEnv: false,
   prefillUnsafeElRpcUrls1: [],
   prefillUnsafeElRpcUrls560048: [],

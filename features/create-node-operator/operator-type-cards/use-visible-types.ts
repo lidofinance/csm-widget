@@ -11,7 +11,8 @@ import {
 } from 'shared/hooks';
 
 export type VisibleType = {
-  type: OPERATOR_TYPE;
+  key: string;
+  type?: OPERATOR_TYPE;
   href: PATH;
   label: string;
   matomoEvent: MATOMO_CLICK_EVENTS_TYPES;
@@ -59,6 +60,7 @@ const toVisibleType = (option: CreateOption): VisibleType => {
   switch (option.kind) {
     case 'create':
       return {
+        key: option.type,
         type: option.type,
         href: CREATE_PATH_BY_TYPE[option.type],
         primary: true,
@@ -66,10 +68,19 @@ const toVisibleType = (option: CreateOption): VisibleType => {
       };
     case 'apply':
       return {
+        key: option.type,
         type: option.type,
         href: APPLY_PATH_BY_TYPE[option.type],
         primary: false,
         ...APPLY_PRESENTATION[option.type],
+      };
+    case 'create-cm':
+      return {
+        key: 'cm',
+        href: PATH.CREATE_CM,
+        primary: true,
+        label: 'Continue',
+        matomoEvent: MATOMO_CLICK_EVENTS_TYPES.operatorTypeModalCreateCm,
       };
   }
 };

@@ -1,15 +1,17 @@
 import { Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
-import { moduleMeta } from 'consts/module';
 import {
   FormTitle,
   MatomoLink,
   StackStyle,
   WarningBlock,
 } from 'shared/components';
+import { useModuleMeta } from 'shared/hooks';
 import { Gate } from 'shared/navigate';
 
 export const ExitKeys = () => {
+  const meta = useModuleMeta();
+
   return (
     <>
       <Gate rule="IS_CSM_FAMILY">
@@ -98,7 +100,7 @@ export const ExitKeys = () => {
       </Gate>
       <WarningBlock type="notice">
         This action should be performed{' '}
-        <b>outside the {moduleMeta.shortName} UI</b>
+        <b>outside the {meta?.shortName ?? 'module'} UI</b>
       </WarningBlock>
     </>
   );

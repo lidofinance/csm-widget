@@ -1,7 +1,7 @@
 import { MODULE_NAME, getNodeOperatorRoles } from '@lidofinance/lido-csm-sdk';
 import { PATH } from 'consts';
-import { useOperatorCustomAddresses } from 'features/starter-pack/banner-operator-custom-addresses';
-import { useActiveSmSDK, useAppendOperator } from 'modules/web3';
+import { useOperatorCustomAddresses } from 'features/create-node-operator/banner-operator-custom-addresses';
+import { useSmSDK, useAppendOperator } from 'modules/web3';
 import { useCallback } from 'react';
 import {
   type Executable,
@@ -24,7 +24,7 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
   CuratedOperatorFormNetworkData,
   CuratedOperatorFlow
 > => {
-  const sdk = useActiveSmSDK(MODULE_NAME.CM);
+  const sdk = useSmSDK(MODULE_NAME.CM);
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
   const n = useNavigate();
@@ -65,7 +65,10 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
               await n(PATH.HOME);
               appendNO({ ...result, module: MODULE_NAME.CM });
             } else {
-              setOperatorCustomAddresses(result.nodeOperatorId);
+              setOperatorCustomAddresses({
+                nodeOperatorId: result.nodeOperatorId,
+                module: MODULE_NAME.CM,
+              });
             }
           }
         },

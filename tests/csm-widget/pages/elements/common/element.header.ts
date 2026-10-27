@@ -8,6 +8,7 @@ export class Header {
   operatorTypeCurve: Locator;
   switchOperatorButton: Locator;
   operatorSwitchModal: Locator;
+  operatorPopupTypeTag: Locator;
   switchModalRows: Locator;
 
   constructor(page: Page) {
@@ -16,11 +17,10 @@ export class Header {
     this.accountSection = this.header.getByTestId('accountSectionHeader');
 
     this.connectWalletBtn = this.header.getByText('Connect').first();
-    this.operatorTypeCurve = this.header.getByTestId('nodeOperatorCurve');
-    this.switchOperatorButton = this.header.getByTestId('nodeOperatorHeader');
-    this.operatorSwitchModal = this.page.locator('[role=dialog]', {
-      hasText: 'Switch Node Operator',
-    });
+    this.switchOperatorButton = this.page.getByTestId('nodeOperatorHeader');
+    this.operatorTypeCurve = this.switchOperatorButton;
+    this.operatorSwitchModal = this.page.getByTestId('switchOperatorPopup');
+    this.operatorPopupTypeTag = this.page.getByTestId('switchPopupTypeTag');
     this.switchModalRows = this.page.getByTestId('switchModalOperatorRow');
   }
 

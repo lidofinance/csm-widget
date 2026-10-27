@@ -1,22 +1,23 @@
 import 'utils/zod-jitless';
 
-import { config, SecretConfigType } from 'config';
-import { withCsp } from 'config/csp';
-import { moduleMeta } from 'consts/module';
+import { config } from 'config';
+import { WIDGET_TITLE } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
-import '@lidofinance/lido-shared-ui/index.css';
+import '@lidofinance/lido-app-ui/index.css';
 import { Providers } from 'providers';
 import { memo } from 'react';
 import {
   BackgroundGradient,
+  ErrorBoundary,
   SecurityStatusBanner,
-  TestEnvBanner,
   ToastContainer,
 } from 'shared/components';
 import { SVGGradientDefs } from 'shared/components/svg-gradient-defs/svg-gradient-defs';
-import { AddressValidationFile, nprogress } from 'utils';
+import { useIsClient } from 'shared/hooks';
+import { nprogress } from 'utils';
+import { MaintenancePage } from 'features/welcome/maintenance-page';
 
 // Visualize route changes
 nprogress();
@@ -29,27 +30,28 @@ const App = (props: AppProps) => {
 
 const MemoApp = memo(App);
 
-type AppParams = Partial<Pick<SecretConfigType, 'maintenance'>> & {
-  validationFile?: AddressValidationFile;
+type AppParams = {
   isError?: boolean;
+  dummy?: boolean;
 };
 
 const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const { ...rest } = props;
+  const { isError, dummy } = props.pageProps ?? {};
 
-  return (
-    <Providers
-      dummy={props.pageProps?.maintenance || props.pageProps?.isError}
-      skipWatcher={props.pageProps?.isError}
-      validationFile={props.pageProps?.validationFile}
-    >
+  const isClient = useIsClient();
+  // client-only: maintenance comes from window.__env__; prerendered HTML is built with it unset
+  const isMaintenance = isClient && config.maintenance && !isError && !dummy;
+
+  const renderApp = (dummy?: boolean) => (
+    <Providers dummy={dummy} isError={isError}>
       {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
       <Head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
         />
-        <title>{moduleMeta.shortTitle} | Lido</title>
+        <title>{WIDGET_TITLE} | Lido</title>
       </Head>
       <BackgroundGradient
         width={1560}
@@ -60,13 +62,17 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
       />
       <SVGGradientDefs />
       <ToastContainer />
-      <TestEnvBanner />
-      <MemoApp {...rest} />
+      {isMaintenance ? <MaintenancePage /> : <MemoApp {...rest} />}
       <SecurityStatusBanner />
     </Providers>
   );
+
+  // error pages must still render if the wallet/SDK tree is what's failing
+  return isError ? (
+    <ErrorBoundary fallback={renderApp(true)}>{renderApp()}</ErrorBoundary>
+  ) : (
+    renderApp(isMaintenance || dummy)
+  );
 };
 
-export default config.ipfsMode || process.env.NODE_ENV === 'development'
-  ? AppWrapper
-  : withCsp(AppWrapper);
+export default AppWrapper;

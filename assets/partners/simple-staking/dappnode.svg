@@ -1,0 +1,18 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="12" fill="#fff"/>
+
+
+<rect x="19.5" y="4.5" width="15" height="7.5" rx="3.75" transform="rotate(90 19.5 4.5)" fill="#FB9D24"/>
+<rect x="12" y="4.5" width="15" height="7.5" rx="3.75" transform="rotate(90 12 4.5)" fill="#007CFB"/>
+<circle cx="8.25" cy="15.75" r="3.75" fill="#00B1F5"/>
+<circle cx="15.75" cy="8.25" r="3.75" fill="#FFB900"/>
+<path d="M5.60079 5.60079C7.06526 4.13632 9.43963 4.13632 10.9041 5.60079L18.4005 13.0972C19.865 14.5617 19.865 16.936 18.4005 18.4005C16.936 19.865 14.5617 19.865 13.0972 18.4005L5.60079 10.9041C4.13633 9.43963 4.13632 7.06526 5.60079 5.60079Z" fill="url(#paint0_linear_1901_9798)"/>
+<path d="M8.25 12C10.3211 12 12 13.6789 12 15.75C12 16.2127 11.9149 16.6553 11.7617 17.0645L6.93457 12.2373C7.3439 12.084 7.78714 12 8.25 12Z" fill="#00D7E7"/>
+<path d="M17.0645 11.7617C16.6553 11.9149 16.2127 12 15.75 12C13.6789 12 12 10.3211 12 8.25C12 7.78714 12.084 7.3439 12.2373 6.93457L17.0645 11.7617Z" fill="#FF397F"/>
+<defs>
+<linearGradient id="paint0_linear_1901_9798" x1="5.57132" y1="5.69819" x2="18.4567" y2="18.3721" gradientUnits="userSpaceOnUse">
+<stop stop-color="#5C2FC9"/>
+<stop offset="1" stop-color="#DC0BF3"/>
+</linearGradient>
+</defs>
+</svg>

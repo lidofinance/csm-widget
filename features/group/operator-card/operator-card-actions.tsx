@@ -1,12 +1,16 @@
-import { NodeOperatorId, NodeOperatorInfo } from '@lidofinance/lido-csm-sdk';
+import {
+  MODULE_NAME,
+  NodeOperatorId,
+  NodeOperatorInfo,
+} from '@lidofinance/lido-csm-sdk';
 import { Button, Text } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { PATH } from 'consts/urls';
 import { useNodeOperator } from 'modules/web3';
 import { useDappStatus } from 'modules/web3/hooks/use-dapp-status';
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 import { LocalLink } from 'shared/navigate';
-import { useOpenOperatorSwitchModal } from 'shared/node-operator/switch-modal';
+import { isSameOperator, useSwitchOperator } from 'shared/node-operator';
 import { trackMatomoEvent } from 'utils';
 import { isAddressEqual } from 'viem';
 
@@ -23,14 +27,19 @@ export const OperatorCardActions: FC<Props> = ({
 }) => {
   const { nodeOperator } = useNodeOperator();
   const { address } = useDappStatus();
-  const openModal = useOpenOperatorSwitchModal(PATH.HOME);
+  const switchOperator = useSwitchOperator(PATH.HOME);
 
-  const handleOpenSwitchModal = useCallback(() => {
+  const operatorRef = useMemo(
+    () => ({ nodeOperatorId, module: MODULE_NAME.CM }),
+    [nodeOperatorId],
+  );
+
+  const handleSwitch = useCallback(() => {
     trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.groupSwitchOperator);
-    openModal();
-  }, [openModal]);
+    switchOperator(operatorRef);
+  }, [operatorRef, switchOperator]);
 
-  const isCurrentOperator = nodeOperator?.nodeOperatorId === nodeOperatorId;
+  const isCurrentOperator = isSameOperator(operatorRef, nodeOperator);
 
   const isManagerByCurrentWallet =
     !!address && !!info && isAddressEqual(info.managerAddress, address);
@@ -57,7 +66,7 @@ export const OperatorCardActions: FC<Props> = ({
         fullwidth
         variant="outlined"
         color="warning"
-        onClick={handleOpenSwitchModal}
+        onClick={handleSwitch}
         data-testid="switchAndUploadButton"
       >
         Switch to this operator and upload keys
@@ -71,7 +80,7 @@ export const OperatorCardActions: FC<Props> = ({
         fullwidth
         variant="outlined"
         color="primary"
-        onClick={handleOpenSwitchModal}
+        onClick={handleSwitch}
         data-testid="switchOperatorButton"
       >
         Switch to this operator

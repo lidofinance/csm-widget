@@ -8,7 +8,7 @@ import {
 } from 'shared/navigate';
 import { EjectKeys } from './eject-keys';
 import { Faq, FormBlock } from 'shared/components';
-import { FAQ_KEYS } from 'faq';
+import { useFaq } from 'faq';
 
 export const EjectKeysPage: FC = () => (
   <Layout
@@ -21,6 +21,6 @@ export const EjectKeysPage: FC = () => (
       <DeleteKeysSwitcher active={DeleteKeysSwitcherRoutes.EJECT} />
       <EjectKeys />
     </FormBlock>
-    <Faq items={FAQ_KEYS} />
+    <Faq items={useFaq('KEYS')} />
   </Layout>
 );

@@ -1,19 +1,23 @@
-import { FC, PropsWithChildren, ReactNode, useEffect } from 'react';
+import {
+  Layout as LibLayout,
+  MobilePageTitle,
+  PageContent,
+  SidebarInset,
+  SidebarLayout,
+  SkipLink,
+  Stack as AppStack,
+} from '@lidofinance/lido-app-ui';
+import { FC, PropsWithChildren, ReactNode, useContext, useEffect } from 'react';
 
+import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
 import { AlertContainer } from 'shared/alerts';
-import { LegalDisclaimer } from 'shared/components';
+import { LegalDisclaimer, TestEnvBanner } from 'shared/components';
 import { trackMatomoPageEvent } from 'utils';
 import { Footer } from './footer';
-import { DummyHeader, Header, SemiDummyHeader } from './header';
+import { Crumb, useCrumbs } from './crumbs';
+import { Header } from './header';
 import { Navigation } from './navigation';
-import {
-  Content,
-  Heading,
-  LayoutStyle,
-  LayoutSubTitleStyle,
-  LayoutTitleStyle,
-  Main,
-} from './styles';
+import { MainStyled, Subtitle } from './styles';
 
 type Props = {
   title?: ReactNode;
@@ -21,54 +25,62 @@ type Props = {
   dummy?: boolean | 'semi';
   pageName?: string;
   fullwidth?: boolean;
+  wide?: boolean;
   mainPrefix?: ReactNode;
+  breadcrumbs?: Crumb[];
 };
 
 export const Layout: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
   fullwidth,
+  wide,
   title,
   subtitle,
   pageName,
   mainPrefix,
+  breadcrumbs,
 }) => {
-  const titlesCount = [title, subtitle].filter(Boolean).length;
+  const mode = useContext(NodeOperatorContext) ? dummy : true;
+  const crumbs = useCrumbs(mode, title, breadcrumbs);
 
   useEffect(() => {
     trackMatomoPageEvent(pageName);
   }, [pageName]);
 
   return (
-    <LayoutStyle>
-      {dummy === 'semi' ? (
-        <SemiDummyHeader />
-      ) : dummy ? (
-        <DummyHeader />
-      ) : (
-        <>
-          <Navigation desktopHidden={fullwidth} />
-          <Header />
-          {!fullwidth && <AlertContainer />}
-        </>
-      )}
-
-      <Main>
-        {mainPrefix}
-        <Heading $titlesCount={titlesCount}>
-          {title && (
-            <LayoutTitleStyle data-testid="pageTitle">{title}</LayoutTitleStyle>
-          )}
-          {subtitle && (
-            <LayoutSubTitleStyle data-testid="pageSubtitle">
-              {subtitle}
-            </LayoutSubTitleStyle>
-          )}
-        </Heading>
-        <Content>{children}</Content>
-        {!dummy && <LegalDisclaimer />}
-      </Main>
-      <Footer />
-    </LayoutStyle>
+    <LibLayout>
+      <SkipLink />
+      <TestEnvBanner />
+      <SidebarLayout>
+        <Navigation />
+        <SidebarInset>
+          <Header dummy={mode} crumbs={crumbs} />
+          <MainStyled>
+            {!mode && !fullwidth && <AlertContainer />}
+            <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
+              <AppStack direction="column" gap={24} align="stretch">
+                {mainPrefix}
+                {(title || subtitle) && (
+                  <AppStack direction="column" gap={4}>
+                    {title && (
+                      <MobilePageTitle data-testid="pageTitle">
+                        {title}
+                      </MobilePageTitle>
+                    )}
+                    {subtitle && (
+                      <Subtitle data-testid="pageSubtitle">{subtitle}</Subtitle>
+                    )}
+                  </AppStack>
+                )}
+                {children}
+              </AppStack>
+              {!mode && <LegalDisclaimer />}
+            </PageContent>
+          </MainStyled>
+          <Footer dummy={mode} />
+        </SidebarInset>
+      </SidebarLayout>
+    </LibLayout>
   );
 };

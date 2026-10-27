@@ -8,10 +8,10 @@ export const defaultChain = parseInt(process.env.DEFAULT_CHAIN, 10) || 560048;
 export const walletconnectProjectId = process.env.WALLETCONNECT_PROJECT_ID;
 
 /** @type boolean */
-export const ipfsMode = toBoolean(process.env.IPFS_MODE);
+export const isTestEnv = !toBoolean(process.env.IS_PROD);
 
 /** @type boolean */
-export const isTestEnv = !toBoolean(process.env.IS_PROD);
+export const maintenance = toBoolean(process.env.MAINTENANCE);
 
 // Parse comma-separated URL list: trim whitespace, strip trailing slashes,
 // drop empty entries. Trailing `/` breaks some RPC providers (e.g. Infura).

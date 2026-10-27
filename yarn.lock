@@ -1892,6 +1892,11 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
+"@inline-svg-unique-id/react@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@inline-svg-unique-id/react/-/react-1.2.3.tgz#7b682183d1d2a4cb9e1ace10569c1d4b45589604"
+  integrity sha512-Tf6u4pTdkeN4BLuh4aHNFDrKxUoiNbCglou3IDem7x0KRCt/rrhRgLljx85X2k5aAUdLvDhQcpeKVePFarF+8w==
+
 "@inquirer/external-editor@^1.0.2":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@inquirer/external-editor/-/external-editor-1.0.3.tgz#c23988291ee676290fdab3fd306e64010a6d13b8"
@@ -2482,10 +2487,19 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.63.0.tgz#48a4a901656fc5d3af294669a86d885ab965c25a"
   integrity sha512-jbWshE2ohU8vkK9p0KNo0bcdY2Nf5joqAHeCY7feGH79E1NAX4aNd78ypZBS/w97SfTcdgrXoI4x50Rcdi3Mag==
 
-"@lidofinance/lido-csm-sdk@3.0.0":
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-3.0.0.tgz#8cd6a3ca7c7fe44341902f9a6114672d28d717e7"
-  integrity sha512-1W1nDCUzXYBr1OLjdAgScfBwR/D+OktLNkM+oQoAanq5Xdr9mw4RFtmw0ggU7ByAA+OsejJ2O1sINqhZmVN57Q==
+"@lidofinance/lido-app-ui@npm:@exromany/lido-app-ui@0.0.1-pre.2":
+  version "0.0.1-pre.2"
+  resolved "https://registry.yarnpkg.com/@exromany/lido-app-ui/-/lido-app-ui-0.0.1-pre.2.tgz#94770a1ea05fa7e29246f030be4fc8707d9c6af5"
+  integrity sha512-BMvOVfEeYdhCRPc6qdfKm8sOZSqLh7po6UX+G5KWOLIkePY8uLR8FoC48uAJ6Xqy2p1PDhUZ5kUAakw5Jn3bAA==
+  dependencies:
+    "@lidofinance/lido-shared-ui" "^1.1.3"
+    classnames "2.5.1"
+    react-jazzicon "1.0.4"
+
+"@lidofinance/lido-csm-sdk@4.0.0-alpha.1":
+  version "4.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/@lidofinance/lido-csm-sdk/-/lido-csm-sdk-4.0.0-alpha.1.tgz#06e0355f2eef02118b8b9da94b0811c33ef1c5fb"
+  integrity sha512-fayg2oJA1s5G53L8numT6I6eBA6J65nKN1rmHFA1BXVVrlAkD6zEv63yI4a/2wLjqeadQiBp35+2gilyu/Uavg==
   dependencies:
     "@chainsafe/ssz" "^1.7.0"
     "@openzeppelin/merkle-tree" "^1.0.8"
@@ -10450,7 +10464,7 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
   integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
 
-react-jazzicon@^1.0.4:
+react-jazzicon@1.0.4, react-jazzicon@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/react-jazzicon/-/react-jazzicon-1.0.4.tgz#31e5f6908e042786ba93a9093b852dea1870e7a0"
   integrity sha512-/3kWv5vtAhI18GBFoqjpxRTtL+EImuB73PAC02r/zJQ6E+PAUmoBx8edYvTCIYHwS01uFf6N3elTDqSrVPwg4w==
@@ -12152,11 +12166,6 @@ webpack-bundle-analyzer@4.7.0:
     opener "^1.5.2"
     sirv "^1.0.7"
     ws "^7.3.1"
-
-webpack-preprocessor-loader@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/webpack-preprocessor-loader/-/webpack-preprocessor-loader-1.3.0.tgz#03d06fe8d8c6dbaf01fb5aa34fc960cc202e98ee"
-  integrity sha512-wvHkDvgU9lhKQ1OWIJsawPBT/0wr+J7dwC7DHy0KtmXR/thGOAWbKEErGeJ2aXGSpwgqQTolIRoETlwMzocK1g==
 
 whatwg-fetch@^3.4.1:
   version "3.6.20"

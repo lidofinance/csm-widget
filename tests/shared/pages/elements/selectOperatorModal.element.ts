@@ -10,7 +10,7 @@ export class SelectOperatorModalElement {
   constructor(page: Page) {
     this.page = page;
     this.modal = this.page.locator('[role=dialog]', {
-      hasText: 'Select Node Operator',
+      hasText: 'Choose a Node Operator',
     });
     this.rows = this.page.getByTestId('selectModalOperatorRow');
     this.settledState = this.page

@@ -1,10 +1,5 @@
 import getConfigNext from 'next/config';
-import {
-  type Modify,
-  parseDefaultChain,
-  parseUrlList,
-  toBoolean,
-} from './helpers';
+import { type Modify, parseDefaultChain, parseUrlList } from './helpers';
 import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 
 const { serverRuntimeConfig } = getConfigNext();
@@ -19,8 +14,6 @@ export type SecretConfigType = Modify<
 
     clApiUrls_1: [string, ...string[]];
     clApiUrls_560048: [string, ...string[]];
-
-    cspReportOnly: boolean;
 
     rateLimit: number;
     rateLimitTimeFrame: number;
@@ -56,8 +49,6 @@ export const getSecretConfig = (): SecretConfigType => {
       string,
       ...string[],
     ],
-
-    cspReportOnly: toBoolean(serverRuntimeConfig.cspReportOnly),
 
     rateLimit: Number(serverRuntimeConfig.rateLimit) || 100,
     rateLimitTimeFrame: Number(serverRuntimeConfig.rateLimitTimeFrame) || 60, // 1 minute;

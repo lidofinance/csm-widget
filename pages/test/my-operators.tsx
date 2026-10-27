@@ -61,4 +61,4 @@ const MyOperatorsTestPage: FC = () => (
 
 export default MyOperatorsTestPage;
 
-export const getServerSideProps = getTestProps;
+export const getStaticProps = getTestProps;

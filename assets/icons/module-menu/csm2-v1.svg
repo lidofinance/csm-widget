@@ -1,0 +1,13 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="13.9422" height="23.173" viewBox="0 0 13.9422 23.173" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Vector">
+<use xlink:href="#stroke0_0_11620" fill="#6822FF" fill-opacity="0.2"/>
+<use xlink:href="#stroke0_0_11620" fill="url(#paint0_radial_0_11620)"/>
+</g>
+<defs>
+<radialGradient id="paint0_radial_0_11620" cx="0" cy="0" r="1" gradientTransform="matrix(22.6383 -14.323 5.36639 17.8841 -5.30259 17.5404)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#2238FF"/>
+<stop offset="1" stop-color="#0047FF" stop-opacity="0"/>
+</radialGradient>
+<path id="stroke0_0_11620" d="M11.1912 19.0931C11.6042 20.2506 12.297 21.6965 13.4507 23.173C11.45 23.0166 4.0819 20.4101 1.32932 12.7705C-0.69976 7.13764 -0.32417 2.73419 1.89944 0.913214L2.75686 0.380098H2.75911C3.39282 0.0933233 4.12754 -0.0362118 4.95653 0.00871371C9.26084 0.242326 13.2831 4.809 13.9422 5.5922L12.5888 6.34545C12.2678 6.48547 12.0074 6.68165 11.7994 6.91975C11.783 6.90178 11.2188 6.29005 10.3794 5.70601C9.26084 4.92731 7.65524 4.19802 6.2075 4.98646C3.65618 6.37615 4.04898 11.6556 6.44093 15.2302C8.83288 18.804 11.1912 19.0931 11.1912 19.0931Z"/>
+</defs>
+</svg>

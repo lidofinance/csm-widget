@@ -1,3 +1,4 @@
+import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { useSmSDK } from 'modules/web3';
 import { useCallback } from 'react';
 import {
@@ -13,31 +14,34 @@ import {
 
 export type DelayedPenaltyCancelFlow = { action: 'cancel' } & Executable;
 
-export const useDelayedPenaltyCancelFlowResolver = (): FlowResolver<
+export const useDelayedPenaltyCancelFlowResolver = (
+  module: MODULE_NAME | undefined,
+): FlowResolver<
   DelayedPenaltyCancelFormInputType,
   DelayedPenaltyCancelFormNetworkData,
   DelayedPenaltyCancelFlow
 > => {
-  const { delayedPenalty } = useSmSDK();
+  const sdk = useSmSDK(module);
   const buildCallback = useTxModalStagesDelayedPenaltyCancel();
 
   return useCallback(
     (input, data) => ({
       action: 'cancel' as const,
       submit: () => {
+        invariant(sdk, 'Delayed penalty module is not resolved');
         invariant(input.amount !== undefined, 'Amount is not defined');
         invariant(
           input.nodeOperatorId !== undefined,
           'NodeOperatorId is not defined',
         );
 
-        return delayedPenalty.cancel({
+        return sdk.delayedPenalty.cancel({
           nodeOperatorId: input.nodeOperatorId,
           amount: input.amount,
           callback: buildCallback(input, data),
         });
       },
     }),
-    [delayedPenalty, buildCallback],
+    [sdk, buildCallback],
   );
 };
