@@ -10,7 +10,7 @@ const Page404: FC = () => {
   const router = useRouter();
 
   return (
-    <Layout pageName="404">
+    <Layout pageName="404" dummy="semi">
       <Head>
         <title>Lido | Page Not Found</title>
       </Head>

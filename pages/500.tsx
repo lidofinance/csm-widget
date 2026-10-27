@@ -10,7 +10,7 @@ const Page500: FC = () => {
   const router = useRouter();
 
   return (
-    <Layout pageName="500">
+    <Layout pageName="500" dummy="semi">
       <Head>
         <title>Lido | Internal Server Error</title>
       </Head>

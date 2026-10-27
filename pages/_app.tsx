@@ -47,7 +47,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const isMaintenance = config.maintenance;
 
   const renderApp = (dummy?: boolean) => (
-    <Providers dummy={dummy} skipWatcher={isError}>
+    <Providers dummy={dummy} isError={isError}>
       <BackgroundGradient
         width={1560}
         height={784}

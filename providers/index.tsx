@@ -20,7 +20,7 @@ import { ThemeProvider } from './theme-provider';
 
 type Props = {
   dummy?: boolean;
-  skipWatcher?: boolean;
+  isError?: boolean;
 };
 
 const queryClient = new QueryClient({
@@ -35,7 +35,7 @@ const queryClient = new QueryClient({
 export const Providers: FC<PropsWithChildren<Props>> = ({
   children,
   dummy,
-  skipWatcher,
+  isError,
 }) => (
   <QueryClientProvider client={queryClient}>
     <ConfigProvider>
@@ -65,15 +65,15 @@ export const Providers: FC<PropsWithChildren<Props>> = ({
                           >
                             <SelectOperatorWatcher />
                             <SurveysAuthProvider>
-                              <GateSupported>
-                                {skipWatcher ? (
-                                  children
-                                ) : (
+                              {isError ? (
+                                children
+                              ) : (
+                                <GateSupported>
                                   <AlertsWatcherProvider>
                                     {children}
                                   </AlertsWatcherProvider>
-                                )}
-                              </GateSupported>
+                                </GateSupported>
+                              )}
                             </SurveysAuthProvider>
                           </LinkProvider>
                         </ModalProvider>
