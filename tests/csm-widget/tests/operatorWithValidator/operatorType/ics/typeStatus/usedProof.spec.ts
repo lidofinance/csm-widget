@@ -1,6 +1,7 @@
 import { test } from '../../../../test.fixture';
 import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { expect } from '@playwright/test';
+import { qase } from 'playwright-qase-reporter/playwright';
 import { WidgetService } from 'tests/csm-widget/services/widget.service';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
@@ -50,58 +51,64 @@ test.describe(
       if (snapshotId) await evmNode.revert(snapshotId);
     });
 
-    test('Should show Used on another operator', async ({ widgetService }) => {
-      const operatorType = widgetService.operatorType;
-      const form = operatorType.applicationForm;
+    test(
+      qase(656, 'Should show Used on another operator'),
+      async ({ widgetService }) => {
+        const operatorType = widgetService.operatorType;
+        const form = operatorType.applicationForm;
 
-      await selectOperator(widgetService, defNoId);
-      await operatorType.openTypePage();
+        await selectOperator(widgetService, defNoId);
+        await operatorType.openTypePage();
 
-      await test.step('ICS card shows the used proof', async () => {
-        expect(await widgetService.extractNodeOperatorId()).toBe(defNoId);
-        await expect(operatorType.icsCardChip).toHaveText('Used');
-        await expect(operatorType.icsApplyButton).toHaveText('View ICS status');
-        await expect(operatorType.claimIcsAlert).toBeHidden();
-      });
+        await test.step('ICS card shows the used proof', async () => {
+          expect(await widgetService.extractNodeOperatorId()).toBe(defNoId);
+          await expect(operatorType.icsCardChip).toHaveText('Used');
+          await expect(operatorType.icsApplyButton).toHaveText(
+            'View ICS status',
+          );
+          await expect(operatorType.claimIcsAlert).toBeHidden();
+        });
 
-      await form.open();
+        await form.open();
 
-      await test.step('Hint says the proof went to another operator', async () => {
-        await expect(form.operatorTypeChip).toHaveText('Used');
-        await expect(
-          form.page.getByText(
-            'Your address has already used its ICS proof on another Node Operator',
-          ),
-        ).toBeVisible();
-        await expect(form.signInForm.form).toBeHidden();
-      });
-    });
+        await test.step('Hint says the proof went to another operator', async () => {
+          await expect(form.operatorTypeChip).toHaveText('Used');
+          await expect(
+            form.page.getByText(
+              'Your address has already used its ICS proof on another Node Operator',
+            ),
+          ).toBeVisible();
+          await expect(form.signInForm.form).toBeHidden();
+        });
+      },
+    );
 
-    test('Should show Claimed on the ICS operator', async ({
-      widgetService,
-    }) => {
-      const operatorType = widgetService.operatorType;
-      const form = operatorType.applicationForm;
+    test(
+      qase(657, 'Should show Claimed on the ICS operator'),
+      async ({ widgetService }) => {
+        const operatorType = widgetService.operatorType;
+        const form = operatorType.applicationForm;
 
-      await selectOperator(widgetService, icsNoId);
-      await operatorType.openTypePage();
+        await selectOperator(widgetService, icsNoId);
+        await operatorType.openTypePage();
 
-      await test.step('ICS card shows the claimed type', async () => {
-        expect(await widgetService.extractNodeOperatorId()).toBe(icsNoId);
-        await expect(operatorType.icsCardChip).toHaveText('Claimed');
-      });
+        await test.step('ICS card shows the claimed type', async () => {
+          expect(await widgetService.extractNodeOperatorId()).toBe(icsNoId);
+          await expect(operatorType.icsCardChip).toHaveText('Claimed');
+        });
 
-      await form.open();
+        await form.open();
 
-      await test.step('Apply page shows the claimed status', async () => {
-        await expect(form.operatorTypeChip).toHaveText('Claimed');
-        await expect(
-          form.page.getByText('Your Node Operator already has ICS type'),
-        ).toBeVisible();
-        await expect(
-          form.page.getByText(/already used its ICS proof/),
-        ).toBeHidden();
-      });
-    });
+        await test.step('Apply page shows the claimed status', async () => {
+          await expect(form.operatorTypeChip).toHaveText('Claimed');
+          await expect(
+            form.page.getByText('Your Node Operator already has ICS type'),
+          ).toBeVisible();
+          await expect(
+            form.page.getByText(/already used its ICS proof/),
+          ).toBeHidden();
+        });
+      },
+    );
   },
 );
