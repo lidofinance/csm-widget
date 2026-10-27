@@ -37,19 +37,14 @@ type AppParams = {
 
 const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const { ...rest } = props;
+  const { isError, dummy } = props.pageProps ?? {};
 
   const isClient = useIsClient();
   // client-only: maintenance comes from window.__env__; prerendered HTML is built with it unset
-  const isMaintenance =
-    isClient &&
-    config.maintenance &&
-    !props.pageProps?.isError &&
-    !props.pageProps?.dummy;
-
-  const isError = props.pageProps?.isError;
+  const isMaintenance = isClient && config.maintenance && !isError && !dummy;
 
   const renderApp = (dummy?: boolean) => (
-    <Providers dummy={dummy} skipWatcher={isError}>
+    <Providers dummy={dummy} isError={isError}>
       {/* see https://nextjs.org/docs/messages/no-document-viewport-meta */}
       <Head>
         <meta
@@ -76,7 +71,7 @@ const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   return isError ? (
     <ErrorBoundary fallback={renderApp(true)}>{renderApp()}</ErrorBoundary>
   ) : (
-    renderApp(isMaintenance || props.pageProps?.dummy)
+    renderApp(isMaintenance || dummy)
   );
 };
 
