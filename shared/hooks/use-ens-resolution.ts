@@ -51,9 +51,13 @@ export const useEnsResolution = (): EnsResolution => {
 
   const resolveEns = useCallback(
     async (name: string) => {
+      // viem doesn't normalize: a raw name hashes to a different, registrable node.
+      // Lazy: ENSIP-15 tables are heavy and only needed once an ENS name is typed
       const value =
-        (await publicClientMainnet
-          ?.getEnsAddress({ name })
+        (await import('viem/ens')
+          .then(({ normalize }) =>
+            publicClientMainnet?.getEnsAddress({ name: normalize(name) }),
+          )
           .catch(() => null)) ?? undefined;
       // viem has no abort signal, so a stale lookup is dropped rather than cancelled
       if (!mountedRef.current || latestInputRef.current !== name) return;
