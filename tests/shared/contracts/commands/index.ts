@@ -1,6 +1,5 @@
 export * from './addBond.ts';
 export * from './addKeys.ts';
-export * from './claimGateCurve.ts';
 export * from './confirmManager.ts';
 export * from './createCuratedOperator.ts';
 export * from './createOperatorGroup.ts';
