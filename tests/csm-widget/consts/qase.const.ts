@@ -51,6 +51,10 @@ export const EPIC = {
     name: 'Surveys',
     features: [],
   },
+  faq: {
+    name: 'FAQ',
+    features: [],
+  },
   delayedPenalty: {
     name: 'Delayed penalty',
     features: ['Report', 'Cancel'],
