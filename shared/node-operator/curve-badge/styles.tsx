@@ -2,7 +2,19 @@ import { OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { Theme } from '@lidofinance/lido-ui';
 import { CUSTOM_CURVE, DisplayOperatorType } from 'consts';
 import styled, { css } from 'styled-components';
-import { BadgeStyle } from '../role-badge/styles';
+
+const BadgeStyle = styled.span`
+  border-radius: ${({ theme }) => theme.borderRadiusesMap.md}px;
+  min-width: 28px;
+  height: 28px;
+  font-size: ${({ theme }) => theme.fontSizesMap.xs}px;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  text-transform: capitalize;
+`;
 
 type InjectedProps = {
   theme: Theme;

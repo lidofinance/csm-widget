@@ -9,7 +9,7 @@ import { SurveysAuthProvider } from 'modules/surveys-sdk';
 import { NodeOperatorProvider, Web3Provider } from 'modules/web3';
 import { AlertProvider, AlertsWatcherProvider } from 'shared/alerts';
 import { AppLink, ExternalLink, GateSupported } from 'shared/navigate';
-import { SelectOperatorWatcher } from 'shared/node-operator/switch-modal';
+import { SelectOperatorWatcher } from 'shared/node-operator/choose-operator-modal';
 import { hashKey } from 'utils';
 import { AddressValidationProvider } from './address-validation-provider';
 import { AppFlagProvider } from './app-flag';

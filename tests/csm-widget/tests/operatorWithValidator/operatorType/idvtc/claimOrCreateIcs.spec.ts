@@ -205,20 +205,18 @@ test.describe(
           await widgetService.operatorType.txModal.switchToOperatorBtn.click();
         });
 
-        await test.step('Header switch panel shows two operators', async () => {
+        await test.step('Header switch popup lists the other operator', async () => {
           await widgetService.operatorType.openTypePage();
           await expect(header.switchOperatorButton).toBeVisible();
           await header.switchOperatorButton.click();
           await expect(header.operatorSwitchModal).toBeVisible();
-          await expect(header.switchModalRows).toHaveCount(2);
+          await expect(header.switchModalRows).toHaveCount(1);
         });
 
-        await test.step('Both IDVTC and ICS operators are listed', async () => {
+        await test.step('Active ICS operator and other IDVTC operator are shown', async () => {
+          await expect(header.switchOperatorButton).toContainText('ICS');
           await expect(
             header.switchModalRows.filter({ hasText: 'IDVTC' }),
-          ).toBeVisible();
-          await expect(
-            header.switchModalRows.filter({ hasText: 'ICS' }),
           ).toBeVisible();
         });
       },

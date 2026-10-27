@@ -135,8 +135,6 @@ test.describe(
         const { metadataPage } = widgetService.settingsPage;
         const { txModal } = widgetService.settingsPage;
 
-        const nodeOperatorId = await widgetService.extractNodeOperatorId();
-
         const uid = crypto.randomUUID().slice(0, 8);
         const newName = `Test ${uid} !@#$`;
         const newDescription = `Desc ${uid} 123`;
@@ -194,23 +192,14 @@ test.describe(
           );
         });
 
-        await test.step('Operator name is updated in Switch Node Operator modal', async () => {
+        await test.step('Operator name is updated in the operator switch popup', async () => {
           await widgetService.page.getByTestId('nodeOperatorHeader').click();
 
-          const modal = widgetService.page.getByRole('dialog');
-          const currentRow = modal
-            .getByTestId('switchModalOperatorRow')
-            .filter({
-              has: widgetService.page
-                .getByTestId('descriptorId')
-                .filter({ hasText: `#${nodeOperatorId}` }),
-            });
-
           await expect(
-            currentRow.getByTestId('switchModalOperatorName'),
+            widgetService.page.getByTestId('switchPopupOperatorName'),
           ).toHaveText(newName);
 
-          await widgetService.settingsPage.closeModalWindow();
+          await widgetService.page.keyboard.press('Escape');
         });
       },
     );
