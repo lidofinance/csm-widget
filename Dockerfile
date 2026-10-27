@@ -56,7 +56,7 @@ COPY --from=build /app/.next ./.next
 # readOnlyRootFilesystem mount an emptyDir at /app/public/runtime (uid 1000)
 COPY --from=build /app/public ./public
 RUN rm -rf public/runtime && mkdir public/runtime && chown node public/runtime
-COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/build-info.json /app/server.mjs ./
+COPY --from=build /app/package.json /app/next.config.mjs /app/next-logger.config.cjs /app/env-dynamics.mjs /app/devnet-artifacts.mjs /app/build-info.json /app/server.mjs ./
 COPY --from=build /app/scripts ./scripts
 
 # ARG does not cross stages; re-declared here so the labels resolve
