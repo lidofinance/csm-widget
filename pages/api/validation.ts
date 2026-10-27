@@ -17,6 +17,7 @@ import {
 } from 'utilsApi';
 import Metrics from 'utilsApi/metrics';
 import { createCachedProxy } from 'utilsApi/cached-proxy';
+import { getClientRequestHeaders } from 'utilsApi/client-request-headers';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 
 // Validate address to prevent SSRF attacks
@@ -54,6 +55,7 @@ if (!secretConfig.validationAPI) {
     ignoreParams: true, // Address is in path, not query
     timeout: 10_000,
     metricsHost: secretConfig.validationAPI,
+    forwardHeaders: getClientRequestHeaders,
   });
 
   handler = (req: NextApiRequest, res: NextApiResponse) => {

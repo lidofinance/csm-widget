@@ -39,6 +39,7 @@ export const useAddressValidation = () => {
 // Resolution priority:
 //   1. No address or ipfsMode  → valid
 //   2. API enabled + responded → use API.isValid
+//      (any 429 = client over a rate limit: invalid, no fallback)
 //   3. validationFile present  → check against deny-list locally
 //   4. Otherwise               → valid
 //
