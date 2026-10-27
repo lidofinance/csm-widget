@@ -18,6 +18,7 @@ export const IcsApplyButton: FC<Props> = ({ size }) => {
       hasOperator={hasOperator}
       isPending={isButtonPending}
       size={size}
+      data-testid="icsApplyButton"
     />
   );
 };
