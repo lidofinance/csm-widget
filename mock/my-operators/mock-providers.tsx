@@ -142,6 +142,9 @@ const MockOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
     () => ({
       isPending: false,
       needsSelection: false,
+      selectionDismissed: false,
+      dismissSelection: () => {},
+      requestSelection: () => {},
       nodeOperator,
       activeModule: nodeOperator?.module,
       switchNodeOperator,

@@ -28,12 +28,13 @@ test.describe(
         const { header, parametersModal } = widgetService;
 
         await test.step('Open parameters modal and send tracking event', async () => {
+          await header.switchOperatorButton.click();
           await Promise.all([
             matomoEventService.waitForEvent(
               'e_n',
               'csm_widget_click_operator_type_button',
             ),
-            header.operatorTypeCurve.click(),
+            header.operatorPopupTypeTag.click(),
           ]);
         });
 

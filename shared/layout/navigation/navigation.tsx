@@ -10,9 +10,9 @@ import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operato
 import { FC, memo, useContext } from 'react';
 import { NoSSRWrapper } from 'shared/components';
 import { useInitialLoading, useRouterPath } from 'shared/hooks';
-import { OperatorTypeButton, SwitchOperatorButton } from 'shared/node-operator';
 import { getIsActivePath } from 'utils';
-import { SidebarOperatorGroup, SidebarStyle } from './styles';
+import { OperatorSwitcher } from './operator-switcher';
+import { SidebarStyle } from './styles';
 import { useNavItems } from './use-nav-items';
 
 const SidebarLogo: FC = () => (
@@ -25,14 +25,15 @@ const OperatorNavigation: FC = () => {
   const isLoading = useInitialLoading();
   const { module } = useModule();
   const { data: isSupported } = useSmVersionSupported(module);
-  const { nodeOperator } = useNodeOperator();
+  const { nodeOperator, selectionDismissed } = useNodeOperator();
   const routes = useNavItems();
   const pathname = useRouterPath();
 
   const isUpgrading = isSupported === false;
   const showItems = !isLoading && !isUpgrading;
   // operator queries against an upgrading module may stay pending through retries; don't hold the footer on them
-  const showFooter = !!nodeOperator && (isUpgrading || !isLoading);
+  const showFooter =
+    (!!nodeOperator || selectionDismissed) && (isUpgrading || !isLoading);
 
   return (
     <SidebarStyle
@@ -40,10 +41,7 @@ const OperatorNavigation: FC = () => {
       footer={
         !showFooter ? undefined : (
           <NoSSRWrapper>
-            <SidebarOperatorGroup>
-              <OperatorTypeButton data-testid="nodeOperatorCurve" />
-              <SwitchOperatorButton data-testid="nodeOperatorHeader" />
-            </SidebarOperatorGroup>
+            <OperatorSwitcher />
           </NoSSRWrapper>
         )
       }

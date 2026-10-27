@@ -18,6 +18,10 @@ export type NodeOperatorContextValue = {
   nodeOperator: ModuleNodeOperator | undefined;
   activeModule: MODULE_NAME | undefined;
   needsSelection: boolean;
+  /** Selection is pending but postponed (e.g. user went to create a new operator) */
+  selectionDismissed: boolean;
+  dismissSelection: () => void;
+  requestSelection: () => void;
   switchNodeOperator: (operator: OperatorRef) => void;
 };
 
@@ -60,6 +64,9 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
     nodeOperator: active,
     setActive,
     needsSelection,
+    selectionDismissed,
+    dismissSelection,
+    requestSelection,
   } = useActiveNodeOperator(list);
 
   const switchNodeOperator = useCallback(
@@ -81,9 +88,20 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
       nodeOperator: active,
       activeModule: active?.module,
       needsSelection,
+      selectionDismissed,
+      dismissSelection,
+      requestSelection,
       switchNodeOperator,
     }),
-    [active, isPending, needsSelection, switchNodeOperator],
+    [
+      active,
+      isPending,
+      needsSelection,
+      selectionDismissed,
+      dismissSelection,
+      requestSelection,
+      switchNodeOperator,
+    ],
   );
 
   return (
