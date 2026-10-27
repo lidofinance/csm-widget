@@ -11,7 +11,9 @@ import { BaseModuleAbi } from '@lidofinance/lido-csm-sdk/abi';
 import {
   addBond,
   addKeys,
+  claimGateCurve,
   confirmManager,
+  confirmReward,
   createCuratedOperator,
   createOperatorGroup,
   createPermissionlessOperator,
@@ -41,7 +43,9 @@ import {
 const commands = {
   addBond,
   addKeys,
+  claimGateCurve,
   confirmManager,
+  confirmReward,
   createCuratedOperator,
   createOperatorGroup,
   createPermissionlessOperator,

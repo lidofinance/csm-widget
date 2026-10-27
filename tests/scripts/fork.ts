@@ -17,10 +17,9 @@ const CHAINS: ChainName[] = ['hoodi', 'mainnet'];
 const MODULES = Object.values(MODULE_NAME);
 const normalize = (value: string) => value.toUpperCase().replaceAll('_', '');
 
-const HELP: Record<
-  (typeof COMMANDS)[number],
-  { args: string; example: string }
-> = {
+type Command = (typeof COMMANDS)[number];
+
+const HELP: Record<Command, { args: string; example: string }> = {
   snapshot: {
     args: '',
     example: 'yarn fork csm hoodi snapshot',
@@ -68,6 +67,10 @@ const HELP: Record<
     example:
       'yarn fork csm hoodi proposeReward 12 0x1111111111111111111111111111111111111111',
   },
+  confirmReward: {
+    args: '<noId>',
+    example: 'yarn fork csm hoodi confirmReward 12',
+  },
   reportPenalty: {
     args: '<noId> <amountEth>',
     example: 'yarn fork csm hoodi reportPenalty 12 1',
@@ -104,13 +107,10 @@ const HELP: Record<
     example:
       'yarn fork csm hoodi createPermissionlessOperator 0x1111111111111111111111111111111111111111 3',
   },
-  keyTopup: {
-    args: '<noId> <keyIndex> <amountEth>',
-    example: 'yarn fork csm hoodi keyTopup 12 0 1',
-  },
-  topup: {
-    args: '<address> [amountEth]',
-    example: 'yarn fork csm hoodi topup 0xAbC... 100',
+  claimGateCurve: {
+    args: '<ics|idvtc> <noId> <member> [[treeAddresses]]',
+    example:
+      'yarn fork csm hoodi claimGateCurve ics 12 0x1111111111111111111111111111111111111111',
   },
   createOperatorGroup: {
     args: '<[{ id, weight }]>',
@@ -121,11 +121,9 @@ const HELP: Record<
 const heading = (text: string) => styleText(['bold', 'cyan'], text);
 const dim = (text: string) => styleText('gray', text);
 
-type Command = (typeof COMMANDS)[number];
-
 const CATEGORIES: Record<string, Command[]> = {
   'Fork state': ['snapshot', 'revert'],
-  'Wallet & access': ['topup', 'fundTokens', 'grantRole'],
+  'Wallet & access': ['fundTokens', 'grantRole'],
   Operators: [
     'createPermissionlessOperator',
     'createCuratedOperator',
@@ -133,9 +131,11 @@ const CATEGORIES: Record<string, Command[]> = {
     'proposeManager',
     'confirmManager',
     'proposeReward',
+    'confirmReward',
     'setRewardsClaimer',
+    'claimGateCurve',
   ],
-  Keys: ['addKeys', 'removeKeys', 'depositKeys', 'keyTopup'],
+  Keys: ['addKeys', 'removeKeys', 'depositKeys'],
   'Bond & rewards': ['addBond', 'reportRewards'],
   Penalties: ['reportPenalty', 'settlePenalty'],
   Module: ['setGateAddrs', 'setShareLimit'],
@@ -242,7 +242,7 @@ const sdkModule =
   MODULES.find((name) => normalize(name) === normalize(module ?? '')) ??
   fail(`Unknown module: ${module}`);
 if (!CHAINS.includes(chain as ChainName)) fail(`Unknown chain: ${chain}`);
-if (!COMMANDS.includes(command as (typeof COMMANDS)[number])) {
+if (!COMMANDS.includes(command as Command)) {
   fail(`Unknown command: ${command}`);
 }
 
@@ -276,7 +276,7 @@ try {
   process.exit(1);
 }
 
-const run = service[command as (typeof COMMANDS)[number]] as (
+const run = service[command as Command] as (
   ...params: unknown[]
 ) => Promise<unknown>;
 
