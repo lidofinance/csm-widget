@@ -41,7 +41,7 @@ export const OPERATOR_TYPE_METADATA: Record<
       lead: 'Run 0x02 alongside any other type ',
       rest: '(0x01, ICS, or IDVTC) to stack their benefits.',
     },
-    capitalMultiplier: 'up to 2.6x',
+    capitalMultiplier: 'up to 2.26x',
   },
   [OPERATOR_TYPE.CSM_LEA]: {
     name: 'Legacy Early Adopter',
