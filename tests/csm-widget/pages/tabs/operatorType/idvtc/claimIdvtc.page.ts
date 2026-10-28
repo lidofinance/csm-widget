@@ -16,7 +16,9 @@ export class ClaimIdvtcPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.page = page;
-    this.title = this.page.getByTestId('pageTitle');
+    this.title = this.page
+      .getByTestId('pageTitle')
+      .locator('[aria-current="page"]');
     this.subtitle = this.page.getByTestId('pageSubtitle');
     this.formTitle = this.page.getByTestId('formTitle');
     this.parameterChanges = this.page.getByText('Parameter changes', {

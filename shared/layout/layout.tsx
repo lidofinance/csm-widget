@@ -1,6 +1,6 @@
 import {
+  Hidden,
   Layout as LibLayout,
-  MobilePageTitle,
   PageContent,
   SidebarInset,
   SidebarLayout,
@@ -14,7 +14,7 @@ import { AlertContainer } from 'shared/alerts';
 import { LegalDisclaimer, TestEnvBanner } from 'shared/components';
 import { trackMatomoPageEvent } from 'utils';
 import { Footer } from './footer';
-import { Crumb, useCrumbs } from './crumbs';
+import { Crumb, Crumbs, useCrumbs } from './crumbs';
 import { Header } from './header';
 import { Navigation } from './navigation';
 import { MainStyled, Subtitle } from './styles';
@@ -60,18 +60,12 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
             {!mode && !fullwidth && <AlertContainer />}
             <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
               <AppStack direction="column" gap={24} align="stretch">
+                <Hidden above="md" data-testid="pageTitle">
+                  <Crumbs crumbs={crumbs} />
+                </Hidden>
                 {mainPrefix}
-                {(title || subtitle) && (
-                  <AppStack direction="column" gap={4}>
-                    {title && (
-                      <MobilePageTitle data-testid="pageTitle">
-                        {title}
-                      </MobilePageTitle>
-                    )}
-                    {subtitle && (
-                      <Subtitle data-testid="pageSubtitle">{subtitle}</Subtitle>
-                    )}
-                  </AppStack>
+                {subtitle && (
+                  <Subtitle data-testid="pageSubtitle">{subtitle}</Subtitle>
                 )}
                 {children}
               </AppStack>

@@ -136,9 +136,11 @@ test.describe(
 
         await test.step('DKG page is opened', async () => {
           await expect(widgetService.page).toHaveURL(/\/idvtc\/dkg$/);
-          await expect(widgetService.page.getByTestId('pageTitle')).toHaveText(
-            'DKG',
-          );
+          await expect(
+            widgetService.page
+              .getByTestId('pageTitle')
+              .locator('[aria-current="page"]'),
+          ).toHaveText('DKG');
         });
 
         await test.step('DKG files section is loaded', async () => {

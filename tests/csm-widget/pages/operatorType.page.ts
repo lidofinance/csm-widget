@@ -52,7 +52,9 @@ export class OperatorTypePage extends BasePage {
       .getByTestId('navItem')
       .filter({ hasText: 'Operator Type' })
       .getByTestId('navCounter');
-    this.claimPageTitle = this.page.getByTestId('pageTitle');
+    this.claimPageTitle = this.page
+      .getByTestId('pageTitle')
+      .locator('[aria-current="page"]');
   }
 
   async openTypePage() {

@@ -17,7 +17,9 @@ export class BasePage {
     this.header = new Header(this.page);
     this.connectWalletModal = new ConnectWalletModal(this.page);
     this.tooltipWrapper = this.page.getByTestId('tooltipWrapper');
-    this.pageTitle = this.page.getByTestId('pageTitle');
+    this.pageTitle = this.page
+      .getByTestId('pageTitle')
+      .locator('[aria-current="page"]');
     this.pageSubtitle = this.page.getByTestId('pageSubtitle');
   }
 
