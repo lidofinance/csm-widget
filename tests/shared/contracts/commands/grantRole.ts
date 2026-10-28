@@ -37,6 +37,10 @@ export const ROLES = {
     'StakingRouter callbacks: deposits, exited counts, target limits',
   ],
   VERIFIER_ROLE: ['module', 'reportValidatorSlashing, reportValidatorBalance'],
+  ENABLE_TOP_UP_ALLOCATION_ROLE: [
+    'module',
+    'enableTopUpAllocation, opens /top-up-allocation in the widget (CM)',
+  ],
   MANAGE_BOND_CURVES_ROLE: ['accounting', 'addBondCurve, updateBondCurve'],
   SET_BOND_CURVE_ROLE: ['accounting', 'setBondCurve: change operator type'],
   MANAGE_OPERATOR_GROUPS_ROLE: [
