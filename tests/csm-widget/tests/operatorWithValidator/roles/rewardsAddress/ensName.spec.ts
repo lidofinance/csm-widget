@@ -5,6 +5,7 @@ import { expect } from '@playwright/test';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 import { generateAddress } from 'tests/shared/helpers/accountData';
 import { mockEns } from 'tests/shared/helpers/mockEns';
+import { qase } from 'playwright-qase-reporter/playwright';
 
 test.use({ secretPhrase: PRESETS.FULL_OPERATOR.secretPhrase });
 
@@ -49,11 +50,17 @@ test.describe(
       await widgetService.settingsPage.rewardsAddressPage.open();
     });
 
-    [ENS_NAME, 'Ensnametest.eth', 'ENSNAMETEST.eth', 'ENSNAMETEST.ETH'].forEach(
-      (name) => {
-        test(`Should resolve "${name}" to the normalized name's address`, async ({
-          widgetService,
-        }) => {
+    (
+      [
+        [641, ENS_NAME],
+        [642, 'Ensnametest.eth'],
+        [643, 'ENSNAMETEST.eth'],
+        [644, 'ENSNAMETEST.ETH'],
+      ] as const
+    ).forEach(([id, name]) => {
+      test(
+        qase(id, `Should resolve "${name}" to the normalized name's address`),
+        async ({ widgetService }) => {
           const page = widgetService.settingsPage.rewardsAddressPage;
 
           await page.addressInput.fill(name);
@@ -70,67 +77,70 @@ test.describe(
           await test.step('Propose button is enabled', async () => {
             await expect(page.proposeButton).toBeEnabled();
           });
+        },
+      );
+    });
+
+    (
+      [
+        [645, 'ensnametest@.eth'],
+        [646, 'unregistered-name-csm-e2e-404.eth'],
+      ] as const
+    ).forEach(([id, name]) => {
+      test(qase(id, `Should reject "${name}"`), async ({ widgetService }) => {
+        const page = widgetService.settingsPage.rewardsAddressPage;
+
+        await page.addressInput.fill(name);
+
+        await test.step('Validation error is shown', async () => {
+          await expect(page.validationInputTooltip).toContainText(
+            INVALID_ERROR,
+          );
+        });
+
+        await test.step('No address is resolved', async () => {
+          await expect(page.inputLabel).not.toContainText('0x');
+        });
+      });
+    });
+
+    test(
+      qase(647, 'Should show the ENS name for a raw address'),
+      async ({ widgetService }) => {
+        const page = widgetService.settingsPage.rewardsAddressPage;
+
+        await page.addressInput.fill(VITALIK_ADDRESS);
+
+        await test.step('Reverse-resolved name is shown in the label', async () => {
+          await expect(page.inputLabel).toContainText(VITALIK_NAME);
+        });
+
+        await test.step('Propose button is enabled', async () => {
+          await expect(page.proposeButton).toBeEnabled();
         });
       },
     );
 
-    ['ensnametest@.eth', 'unregistered-name-csm-e2e-404.eth'].forEach(
-      (name) => {
-        test(`Should reject "${name}"`, async ({ widgetService }) => {
-          const page = widgetService.settingsPage.rewardsAddressPage;
+    test(
+      qase(648, 'Should propose the normalized name address'),
+      async ({ widgetService, csmSDK, forkActionService }) => {
+        const page = widgetService.settingsPage.rewardsAddressPage;
+        const noId = await widgetService.extractNodeOperatorId();
+        if (await csmSDK.isPendingRole(noId, 'rewards')) {
+          await page.revokePendingRole();
+        }
 
-          await page.addressInput.fill(name);
+        await page.proposeNewAddress('Ensnametest.eth');
 
-          await test.step('Validation error is shown', async () => {
-            await expect(page.validationInputTooltip).toContainText(
-              INVALID_ERROR,
-            );
-          });
-
-          await test.step('No address is resolved', async () => {
-            await expect(page.inputLabel).not.toContainText('0x');
-          });
+        await test.step('Pending address is the normalized name one', async () => {
+          await expect(page.pendingAddress).toContainText(
+            trimAddress(OWNER_ADDRESS, 6),
+          );
+          expect(await forkActionService.getProposedRewardAddress(noId)).toBe(
+            OWNER_ADDRESS,
+          );
         });
       },
     );
-
-    test('Should show the ENS name for a raw address', async ({
-      widgetService,
-    }) => {
-      const page = widgetService.settingsPage.rewardsAddressPage;
-
-      await page.addressInput.fill(VITALIK_ADDRESS);
-
-      await test.step('Reverse-resolved name is shown in the label', async () => {
-        await expect(page.inputLabel).toContainText(VITALIK_NAME);
-      });
-
-      await test.step('Propose button is enabled', async () => {
-        await expect(page.proposeButton).toBeEnabled();
-      });
-    });
-
-    test('Should propose the normalized name address', async ({
-      widgetService,
-      csmSDK,
-      forkActionService,
-    }) => {
-      const page = widgetService.settingsPage.rewardsAddressPage;
-      const noId = await widgetService.extractNodeOperatorId();
-      if (await csmSDK.isPendingRole(noId, 'rewards')) {
-        await page.revokePendingRole();
-      }
-
-      await page.proposeNewAddress('Ensnametest.eth');
-
-      await test.step('Pending address is the normalized name one', async () => {
-        await expect(page.pendingAddress).toContainText(
-          trimAddress(OWNER_ADDRESS, 6),
-        );
-        expect(await forkActionService.getProposedRewardAddress(noId)).toBe(
-          OWNER_ADDRESS,
-        );
-      });
-    });
   },
 );
