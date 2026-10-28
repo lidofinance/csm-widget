@@ -45,6 +45,7 @@ export const CACHE_CONTROL_PAGES = [
   '/idvtc/:path*',
   '/keys/:path*',
   '/settings/:path*',
+  '/top-up-allocation',
   '/surveys/:path*',
   '/type/:path*',
   // assets — unhashed, so they share the document TTL; header sources match

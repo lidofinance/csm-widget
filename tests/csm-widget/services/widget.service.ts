@@ -28,6 +28,7 @@ import { ElementController } from '../pages/elements/controller';
 import { Header } from '../pages/elements/common/element.header';
 import { ParametersModal } from '../pages/elements/common/element.parametersModal';
 import { FooterElement } from '../pages/elements/common/element.footer';
+import { FaqElement } from '../pages/elements/common/element.faq';
 import { LegalDisclaimerElement } from '../pages/elements/common/element.legalDisclaimer';
 import { WalletModal } from '../pages/elements/common/element.walletModal';
 import { DepositKey } from '../../shared/services/keysGenerator.service';
@@ -48,6 +49,7 @@ export class WidgetService {
   public header: Header;
   public parametersModal: ParametersModal;
   public footerElement: FooterElement;
+  public faq: FaqElement;
   public legalDisclaimerElement: LegalDisclaimerElement;
   public walletModal: WalletModal;
   public navBlockElement: NavBlockElement;
@@ -71,6 +73,7 @@ export class WidgetService {
     this.header = new Header(this.page);
     this.parametersModal = new ParametersModal(this.page);
     this.footerElement = new FooterElement(this.page);
+    this.faq = new FaqElement(this.page);
     this.legalDisclaimerElement = new LegalDisclaimerElement(this.page);
     this.walletModal = new WalletModal(this.page);
     this.navBlockElement = new NavBlockElement(this.page);

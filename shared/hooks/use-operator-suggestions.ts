@@ -1,4 +1,4 @@
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { useFeatureFlags } from 'config/feature-flags';
 import { PATH } from 'consts';
 import {
@@ -6,6 +6,7 @@ import {
   useIcsProof,
   useIdvtcProof,
   useOperatorIsOwner,
+  useOperatorType,
 } from 'modules/web3';
 import { isSurveysAvailable } from './is-surveys-available';
 import { getSurveyDates } from './use-survey-enabled';
@@ -52,6 +53,9 @@ export const useOperatorSuggestions = ({
     nodeOperatorId: isCsm ? nodeOperatorId : undefined,
     module,
   });
+  const operatorTypeQuery = useOperatorType(
+    isCsm ? { nodeOperatorId, module } : undefined,
+  );
   const { data: ics } = useIcsProof();
   const { data: idvtc } = useIdvtcProof();
 
@@ -64,8 +68,23 @@ export const useOperatorSuggestions = ({
   });
 
   const list: Suggestion[] = [];
-  if (isCsm && isOwner && ics?.proof && !ics.isConsumed) list.push(ICS_CLAIM);
-  if (isCsm && isOwner && idvtc?.proof && !idvtc.isConsumed)
+  if (
+    isCsm &&
+    isOwner &&
+    operatorTypeQuery.isSuccess &&
+    operatorTypeQuery.data !== OPERATOR_TYPE.CSM_ICS &&
+    ics?.proof &&
+    !ics.isConsumed
+  )
+    list.push(ICS_CLAIM);
+  if (
+    isCsm &&
+    isOwner &&
+    operatorTypeQuery.isSuccess &&
+    operatorTypeQuery.data !== OPERATOR_TYPE.CSM_IDVTC &&
+    idvtc?.proof &&
+    !idvtc.isConsumed
+  )
     list.push(IDVTC_CLAIM);
   if (filled?.isFilled === false) list.push(SURVEY);
   return list;

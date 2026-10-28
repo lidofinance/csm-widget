@@ -106,6 +106,8 @@ export const InputAddress = forwardRef<
         }
         disabled={props.disabled || isLocked}
         spellCheck="false"
+        autoCapitalize="none"
+        autoCorrect="off"
       />
     );
   },

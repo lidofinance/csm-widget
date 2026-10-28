@@ -1,7 +1,7 @@
 import { Block, Button, Divider } from '@lidofinance/lido-ui';
+import { useIcsState } from 'features/ics/shared';
 import { FC, useCallback } from 'react';
 import { Stack } from 'shared/components';
-import { TypeStatus } from '../shared';
 import { IcsResponseDto } from '../shared/types';
 import {
   Application,
@@ -12,15 +12,11 @@ import {
 
 type FormStatusProps = {
   data: IcsResponseDto;
-  typeStatus: TypeStatus;
   reset: () => void;
 };
 
-export const FormStatus: FC<FormStatusProps> = ({
-  data,
-  typeStatus,
-  reset,
-}) => {
+export const FormStatus: FC<FormStatusProps> = ({ data, reset }) => {
+  const { typeStatus } = useIcsState();
   const { status, form, comments, createdAt, scores } = data;
 
   const handle = useCallback(() => {
@@ -33,17 +29,12 @@ export const FormStatus: FC<FormStatusProps> = ({
   return (
     <Block data-testid="applicationFormStatus">
       <Stack direction="column" gap="xxl">
-        <StatusHeader
-          status={status}
-          typeStatus={typeStatus}
-          comments={comments}
-          scores={scores}
-        />
+        <StatusHeader status={status} comments={comments} scores={scores} />
         {(status !== 'REVIEW' || haveScores) && <Divider type="horizontal" />}
         {haveScores && <ScorePoints scores={scores} status={status} />}
         {status === 'REJECTED' && <ApplicationTip comments={comments} />}
         <Application form={form} comments={comments} createdAt={createdAt} />
-        {status === 'REJECTED' && (
+        {status === 'REJECTED' && typeStatus === 'PENDING' && (
           <Button variant="outlined" fullwidth onClick={handle}>
             Apply again
           </Button>

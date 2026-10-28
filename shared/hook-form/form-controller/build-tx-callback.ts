@@ -28,6 +28,8 @@ export const buildTxCallback =
   ): TransactionCallback<TResult> =>
   async ({ stage, payload }) => {
     switch (stage) {
+      // Open the sign stage before gas estimation so there is no blank gap after submit
+      case TransactionCallbackStage.GAS_LIMIT:
       case TransactionCallbackStage.SIGN:
         stages.sign();
         break;

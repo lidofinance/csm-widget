@@ -5,7 +5,7 @@ import { FC } from 'react';
 import { SectionBlock, Stack } from 'shared/components';
 import { CsmKeys } from './csm-keys';
 import { KeysBreakdown } from './keys-breakdown/keys-breakdown';
-import { NoGroupBanner } from './no-group-banner';
+import { KeysBanner } from './keys-banner';
 import { StakeAndKeys } from './stake-and-keys';
 import { Divider } from '@lidofinance/lido-ui';
 
@@ -14,7 +14,7 @@ export const KeysSection: FC = () => {
 
   return (
     <>
-      <NoGroupBanner />
+      <KeysBanner />
       <SectionBlock
         title={isCM ? 'Stake & Keys' : 'Keys'}
         data-testid="dashboardKeysSection"

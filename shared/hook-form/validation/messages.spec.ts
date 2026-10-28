@@ -22,6 +22,7 @@ describe('VALIDATION_MESSAGES static strings', () => {
       'amountNotValid',
       'penaltyTypeTooLong',
       'penaltyTypeNotZero',
+      'topUpAllocationAlreadyEnabled',
       'specifyValidAddress',
       'notSameAsCurrentClaimer',
       'notSameAsCurrentAddress',

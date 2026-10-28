@@ -17,6 +17,11 @@ const ROLE_ROUTES: SwitcherRoutes = [
     showRules: ['IS_NODE_OPERATOR'],
   },
   {
+    title: 'General',
+    path: PATH.SETTINGS_GENERAL,
+    showRules: [['IS_NODE_OPERATOR', 'CAN_TOGGLE_TOP_UP']],
+  },
+  {
     title: 'Meta data',
     path: PATH.SETTINGS_METADATA,
     showRules: ['IS_NODE_OPERATOR'],

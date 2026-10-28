@@ -16,6 +16,7 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
     case PATH.SETTINGS_CLAIMER:
     case PATH.SETTINGS_SPLITS:
       return hasRole ? path : PATH.SETTINGS_INBOX;
+    case PATH.SETTINGS_GENERAL:
     case PATH.SETTINGS_METADATA:
       return isModuleCM ? path : PATH.SETTINGS;
 
@@ -71,13 +72,13 @@ export const getCorrectPath = (path: PATH, flags: ShowFlags): PATH => {
       }
       return path;
     case PATH.TYPE_ICS_CLAIM:
-      return hasRole
+      return flags.CAN_CLAIM_ICS
         ? path
         : flags.ICS_APPLY_ENABLED
           ? PATH.TYPE_ICS_SYSTEM
           : PATH.TYPE_PARAMETERS;
     case PATH.TYPE_IDVTC_CLAIM:
-      return hasRole
+      return flags.CAN_CLAIM_IDVTC
         ? path
         : flags.ICS_APPLY_ENABLED
           ? PATH.TYPE_IDVTC_DESCRIPTION

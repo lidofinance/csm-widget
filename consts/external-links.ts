@@ -105,7 +105,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
     migalabsDashboard: '',
     migalabs: '',
     keysApi: 'https://keys-api-hoodi.testnet.fi',
-    surveyApi: 'https://csm-survey-api-hoodi.lido.tools',
+    surveyApi: 'https://csm-survey-api.testnet.fi',
   },
 };
 

@@ -10,14 +10,15 @@ export const Faq: FC<{ items: FaqItem[] }> = ({ items: _items }) => {
   if (items.length === 0) return null;
 
   return (
-    <Section title="FAQ">
+    <Section title="FAQ" data-testid="faqSection">
       {items.map(({ title, anchor, content }, index) => {
         return (
           <AccordionNavigatable
             key={anchor}
             id={anchor}
-            summary={title}
+            summary={<span data-testid="faqItemTitle">{title}</span>}
             isFirst={index === 0}
+            data-testid="faqItem"
           >
             {content}
           </AccordionNavigatable>

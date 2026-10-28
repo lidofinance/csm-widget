@@ -3,9 +3,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { isAddress } from 'viem';
 import { useEnsName } from 'wagmi';
 import { useMainnetOnlyWagmi } from 'modules/web3/web3-provider/web3-provider';
-
-const ENS_REGEX = /^[-a-zA-Z0-9@._]{1,256}\.eth$/;
-const isValidEns = (value: string) => ENS_REGEX.test(value);
+import { isValidEns, resolveEnsAddress } from 'utils/ens';
 
 type ResolvedAddress = {
   value?: string;
@@ -51,10 +49,7 @@ export const useEnsResolution = (): EnsResolution => {
 
   const resolveEns = useCallback(
     async (name: string) => {
-      const value =
-        (await publicClientMainnet
-          ?.getEnsAddress({ name })
-          .catch(() => null)) ?? undefined;
+      const value = await resolveEnsAddress(publicClientMainnet, name);
       // viem has no abort signal, so a stale lookup is dropped rather than cancelled
       if (!mountedRef.current || latestInputRef.current !== name) return;
       setResolved({ value, isEns: true, input: name });
