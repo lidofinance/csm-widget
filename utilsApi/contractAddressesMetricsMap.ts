@@ -21,7 +21,10 @@ import { mainnet } from 'viem/chains';
 
 import { ENSUniversalResolverAbi } from 'abi/ens-universal-resolver-abi';
 import { config } from 'config';
-import { resolveDeployedModules } from 'consts/modules/resolve-deployed-modules';
+import {
+  DEPLOYMENT_MODULES,
+  resolveDeployedModules,
+} from 'consts/modules/resolve-deployed-modules';
 import { overridedAddresses } from 'modules/web3/web3-provider/devnet';
 import { AggregatorAbi } from 'abi/aggregator-abi';
 
@@ -75,6 +78,16 @@ const getModuleAddresses = (
     : undefined),
 });
 
+// The QA module override can point a test env at any deployment's modules.
+const getChainModules = (chainId: SUPPORTED_CHAINS): MODULE_NAME[] =>
+  config.isTestEnv
+    ? uniq(
+        DEPLOYMENT_MODULES.flatMap((primary) =>
+          resolveDeployedModules(primary, chainId),
+        ),
+      )
+    : resolveDeployedModules(config.module, chainId);
+
 const getChainAddressEntries = (
   chainId: SUPPORTED_CHAINS,
 ): [Address, AlL_CONTRACT_NAMES][] => {
@@ -85,15 +98,14 @@ const getChainAddressEntries = (
     ...staticAddresses,
   }) as [AlL_CONTRACT_NAMES, Address][];
 
-  const moduleEntries = resolveDeployedModules(config.module, chainId).flatMap(
-    (module) =>
-      Object.entries(getModuleAddresses(module, chainId)).map(
-        ([name, address]) =>
-          [name, staticAddresses[name as AlL_CONTRACT_NAMES] ?? address] as [
-            AlL_CONTRACT_NAMES,
-            Address,
-          ],
-      ),
+  const moduleEntries = getChainModules(chainId).flatMap((module) =>
+    Object.entries(getModuleAddresses(module, chainId)).map(
+      ([name, address]) =>
+        [name, staticAddresses[name as AlL_CONTRACT_NAMES] ?? address] as [
+          AlL_CONTRACT_NAMES,
+          Address,
+        ],
+    ),
   );
 
   return (
