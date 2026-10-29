@@ -14,7 +14,7 @@ export const IcsTypeCard: FC = () => {
   const curve = useOperatorTypeCurve(OPERATOR_TYPE.CSM_ICS);
 
   return (
-    <OptionCard>
+    <OptionCard data-testid="icsTypeCard">
       <Stack direction="column" gap="md">
         <Stack direction="row" spaceBetween align="center">
           <TypeBadgeButton
