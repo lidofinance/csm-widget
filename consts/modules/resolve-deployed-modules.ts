@@ -12,6 +12,12 @@ const MODULE_SET: PerModule<MODULE_NAME[]> = {
   [MODULE_NAME.CM]: [MODULE_NAME.CM],
 };
 
+// Values the MODULE env accepts: the primary of each deployment's module set.
+export const DEPLOYMENT_MODULES: MODULE_NAME[] = [
+  MODULE_NAME.CSM,
+  MODULE_NAME.CM,
+];
+
 export const resolveDeployedModules = (primary: MODULE_NAME, chainId: number) =>
   MODULE_SET[primary].filter(
     (module) =>

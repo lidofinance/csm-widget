@@ -1,10 +1,19 @@
 import { Fragment, useCallback, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 
-import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
-import { Block, Button, Input, ToastSuccess } from '@lidofinance/lido-ui';
+import {
+  Block,
+  Button,
+  Input,
+  Option,
+  Select,
+  ToastSuccess,
+} from '@lidofinance/lido-ui';
 
+import { config, useConfig } from 'config';
+import { getOverridableModules } from 'config/resolve-module-override';
 import { useUserConfig } from 'config/user-config';
 import { CHAIN_METADATA } from 'consts/chains';
 import { FormBlock, Stack } from 'shared/components';
@@ -24,6 +33,9 @@ const rpcKey = (chainId: SUPPORTED_CHAINS) => `rpc_${chainId}`;
 const clKey = (chainId: SUPPORTED_CHAINS) => `cl_${chainId}`;
 const IPFS_GATEWAYS_KEY = 'ipfsGateways';
 const SURVEY_API_URL_KEY = 'surveyApiUrl';
+const MODULE_KEY = 'module';
+const DEFAULT_MODULE_OPTION = 'default';
+const MODULE_OPTIONS = getOverridableModules(config.defaultChain);
 const SAMPLE_CID = '1';
 
 const resolveGateway = (url: string) => url.replaceAll('{cid}', SAMPLE_CID);
@@ -51,6 +63,10 @@ export const QaConfigForm = () => {
     resetSavedUserConfig,
     defaultChain,
   } = useUserConfig();
+
+  const {
+    config: { envModule },
+  } = useConfig();
 
   const rows = useMemo<ChainRow[]>(() => {
     const list: ChainRow[] = [
@@ -80,13 +96,18 @@ export const QaConfigForm = () => {
     }
     values[IPFS_GATEWAYS_KEY] = savedUserConfig.ipfsGateways.join(', ');
     values[SURVEY_API_URL_KEY] = savedUserConfig.surveyApiUrl ?? '';
+    values[MODULE_KEY] =
+      savedUserConfig.module && MODULE_OPTIONS.includes(savedUserConfig.module)
+        ? savedUserConfig.module
+        : DEFAULT_MODULE_OPTION;
     return values;
   }, [rows, savedUserConfig]);
 
-  const { register, handleSubmit, reset, formState } = useForm<FormValues>({
-    mode: 'onChange',
-    defaultValues,
-  });
+  const { register, control, handleSubmit, reset, formState } =
+    useForm<FormValues>({
+      mode: 'onChange',
+      defaultValues,
+    });
 
   const save = useCallback(
     (values: FormValues) => {
@@ -105,8 +126,20 @@ export const QaConfigForm = () => {
       const ipfsGateways = parseGateways(values[IPFS_GATEWAYS_KEY] ?? '');
       const surveyApiUrl = values[SURVEY_API_URL_KEY]?.trim() || undefined;
 
-      setSavedUserConfig({ rpcUrls, clApiUrls, ipfsGateways, surveyApiUrl });
-      ToastSuccess('QA endpoints saved. Reload the page to apply.');
+      const moduleValue = values[MODULE_KEY];
+      const moduleName =
+        moduleValue === DEFAULT_MODULE_OPTION
+          ? undefined
+          : (moduleValue as MODULE_NAME);
+
+      setSavedUserConfig({
+        rpcUrls,
+        clApiUrls,
+        ipfsGateways,
+        surveyApiUrl,
+        module: moduleName,
+      });
+      ToastSuccess('QA config saved. Reload the page to apply.');
     },
     [rows, setSavedUserConfig],
   );
@@ -116,9 +149,10 @@ export const QaConfigForm = () => {
 
     const empty: FormValues = {};
     for (const key of Object.keys(defaultValues)) empty[key] = '';
+    empty[MODULE_KEY] = DEFAULT_MODULE_OPTION;
     reset(empty);
 
-    ToastSuccess('QA endpoints reset to defaults');
+    ToastSuccess('QA config reset to defaults');
   }, [defaultValues, reset, resetSavedUserConfig]);
 
   return (
@@ -157,6 +191,28 @@ export const QaConfigForm = () => {
             error={formState.errors[SURVEY_API_URL_KEY]?.message}
             {...register(SURVEY_API_URL_KEY, { validate: validateUrl })}
           />
+          <Controller
+            control={control}
+            name={MODULE_KEY}
+            render={({ field }) => (
+              <Select
+                fullwidth
+                label="Module"
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+              >
+                <Option
+                  value={DEFAULT_MODULE_OPTION}
+                >{`Default (${envModule})`}</Option>
+                {MODULE_OPTIONS.map((name) => (
+                  <Option key={name} value={name}>
+                    {name}
+                  </Option>
+                ))}
+              </Select>
+            )}
+          />
           <Stack>
             <Button
               fullwidth
@@ -194,6 +250,12 @@ export const QaConfigForm = () => {
             Values are stored in <code>localStorage</code> under{' '}
             <code>lido-user-config</code> and persist across reloads. Leave a
             field empty to fall back to the default backend proxy.
+          </p>
+          <p>
+            The module override replaces the deployment&apos;s module for this
+            browser after a reload; <code>?module=cm</code> seeds it,{' '}
+            <code>?module=default</code> clears it. Server-rendered parts
+            (favicon, manifest, meta tags) keep the deployment&apos;s module.
           </p>
           <p>
             <strong>Reload the page after saving</strong> for the new endpoints

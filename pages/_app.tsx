@@ -2,13 +2,13 @@ import 'utils/zod-jitless';
 
 import { config, SecretConfigType } from 'config';
 import { withCsp } from 'config/csp';
-import { moduleMeta } from 'consts/module';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'nprogress/nprogress.css';
 import '@lidofinance/lido-shared-ui/index.css';
 import { Providers } from 'providers';
 import { memo } from 'react';
+import { useModuleMeta } from 'shared/hooks';
 import {
   BackgroundGradient,
   SecurityStatusBanner,
@@ -36,6 +36,7 @@ type AppParams = Partial<Pick<SecretConfigType, 'maintenance'>> & {
 
 const AppWrapper = (props: AppProps<AppParams>): JSX.Element => {
   const { ...rest } = props;
+  const moduleMeta = useModuleMeta();
 
   return (
     <Providers
