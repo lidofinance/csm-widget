@@ -2,7 +2,10 @@ import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
 import { config } from 'config';
 import { resolveDeployedModules } from './resolve-deployed-modules';
 
-export { resolveDeployedModules } from './resolve-deployed-modules';
+export {
+  DEPLOYMENT_MODULES,
+  resolveDeployedModules,
+} from './resolve-deployed-modules';
 
 export const deployedModules: MODULE_NAME[] = resolveDeployedModules(
   config.module,

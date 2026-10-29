@@ -1,13 +1,12 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { config } from 'config';
 import {
   LIDO_OPERATOR_PORTAL_BASE,
   LIDO_OPERATOR_PORTAL_CM,
 } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { moduleMeta } from 'consts/module';
 import { FC, PropsWithChildren } from 'react';
 import { MatomoLink } from 'shared/components';
+import { useModuleMeta, useRenderedModule } from 'shared/hooks/use-module-meta';
 import {
   BlockStyled,
   ContentWrapper,
@@ -17,6 +16,8 @@ import {
 } from './styles';
 
 export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
+  const renderedModule = useRenderedModule();
+  const { title } = useModuleMeta();
   const csmDescription = (
     <p>
       The Community Staking Module (CSM) is a permissionless staking module
@@ -57,10 +58,10 @@ export const WelcomeSection: FC<PropsWithChildren> = ({ children }) => {
   return (
     <BlockStyled data-testid="welcomeSection">
       <Heading>
-        <ModuleLogo />
-        <Header>{moduleMeta.title}</Header>
+        <ModuleLogo $module={renderedModule} />
+        <Header>{title}</Header>
       </Heading>
-      <ContentWrapper>{DESCRIPTIONS[config.module]}</ContentWrapper>
+      <ContentWrapper>{DESCRIPTIONS[renderedModule]}</ContentWrapper>
       {children}
     </BlockStyled>
   );

@@ -1,7 +1,6 @@
-import { SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
+import { MODULE_NAME, SUPPORTED_CHAINS } from '@lidofinance/lido-csm-sdk';
 import { CHAINS } from '@lidofinance/lido-ethereum-sdk';
 import { config } from 'config';
-import { isModuleCM, isModuleCSM } from './module';
 
 export const CSM_MAINNET_LINK = 'https://csm.lido.fi/';
 export const CSM_TESTNET_LINK = 'https://csm.testnet.fi/';
@@ -53,9 +52,7 @@ export const LIDO_REWARDS_VAULT_LINK =
 
 type ExternalLinksConstants = {
   rewardsTree: string;
-  feedbackForm: string;
   stakeWidget: string;
-  landing?: string;
 
   beaconchain: string;
   feesMonitoring: string;
@@ -67,6 +64,34 @@ type ExternalLinksConstants = {
   surveyApi: string;
 };
 
+type ModuleLinks = { feedbackForm: string; landing: string };
+
+const MODULE_LINKS: Record<
+  SUPPORTED_CHAINS,
+  Record<MODULE_NAME.CSM | MODULE_NAME.CM, ModuleLinks>
+> = {
+  [CHAINS.Mainnet]: {
+    [MODULE_NAME.CSM]: {
+      feedbackForm: 'https://forms.gle/GL9RYeV2g4px58Sv8',
+      landing: 'https://lido.fi/csm',
+    },
+    [MODULE_NAME.CM]: {
+      feedbackForm: 'https://forms.gle/4oRG7XwhNJszhJvv6',
+      landing: LIDO_OPERATOR_PORTAL_CM,
+    },
+  },
+  [CHAINS.Hoodi]: {
+    [MODULE_NAME.CSM]: {
+      feedbackForm: 'https://forms.gle/ZBUqbykaZokJLf4M7',
+      landing: 'https://testnet.fi/csm',
+    },
+    [MODULE_NAME.CM]: {
+      feedbackForm: 'https://forms.gle/Lhh4fGXvx7Gwcd6e7',
+      landing: 'https://testnet.fi/cm',
+    },
+  },
+};
+
 export const EXTERNAL_LINKS_BY_NETWORK: Record<
   SUPPORTED_CHAINS,
   ExternalLinksConstants
@@ -74,11 +99,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   [CHAINS.Mainnet]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/mainnet/tree.json',
-    feedbackForm: isModuleCM
-      ? 'https://forms.gle/4oRG7XwhNJszhJvv6'
-      : 'https://forms.gle/GL9RYeV2g4px58Sv8',
     stakeWidget: 'https://stake.lido.fi',
-    landing: isModuleCSM ? 'https://lido.fi/csm' : LIDO_OPERATOR_PORTAL_CM,
 
     feesMonitoring: 'https://fees-monitoring.lido.fi',
     operatorsWidget: 'https://operators.lido.fi',
@@ -92,11 +113,7 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   [CHAINS.Hoodi]: {
     rewardsTree:
       'https://raw.githubusercontent.com/lidofinance/csm-rewards/hoodi/tree.json',
-    feedbackForm: isModuleCM
-      ? 'https://forms.gle/Lhh4fGXvx7Gwcd6e7'
-      : 'https://forms.gle/ZBUqbykaZokJLf4M7',
     stakeWidget: 'https://stake-hoodi.testnet.fi',
-    landing: isModuleCSM ? 'https://testnet.fi/csm' : 'https://testnet.fi/cm',
 
     feesMonitoring: 'https://fees-monitoring-hoodi.testnet.fi',
     operatorsWidget: 'https://operators-hoodi.testnet.fi',
@@ -109,10 +126,18 @@ export const EXTERNAL_LINKS_BY_NETWORK: Record<
   },
 };
 
-export const getExternalLinks = (chainId = config.defaultChain) => {
+export const getExternalLinks = (
+  chainId = config.defaultChain,
+  module: MODULE_NAME = config.module,
+): ExternalLinksConstants & ModuleLinks => {
   const links = EXTERNAL_LINKS_BY_NETWORK[chainId];
   if (!links) {
     throw new Error(`ExternalLinks for chain [${chainId}] are not specified`);
   }
-  return links;
+  return {
+    ...links,
+    ...MODULE_LINKS[chainId][
+      module === MODULE_NAME.CM ? MODULE_NAME.CM : MODULE_NAME.CSM
+    ],
+  };
 };
