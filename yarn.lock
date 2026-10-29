@@ -2447,10 +2447,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/api-rpc/-/api-rpc-0.63.0.tgz#1a46bab7f035bf4516ae59eb44da77ec963015cf"
   integrity sha512-P2qG//DW87AowTc5jQGDdeBesmSdrVnInSBKPr5FO0CE1I7sMmilC/rrovGJ8QHoffXmmHplX6o8FKipbg/hbA==
 
-"@lidofinance/bochqa-reporter@1.0.0-alpha-add-reporters.1":
-  version "1.0.0-alpha-add-reporters.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/bochqa-reporter/-/bochqa-reporter-1.0.0-alpha-add-reporters.1.tgz#3673727fbf5facb7dd98b226a41e4f9f4c81457e"
-  integrity sha512-8yE/RzuUMmO5EbPJEDNtkwGtScP53H5R/uplq5hHcU64NvTbYrYX6uwIsqcazVMoTb34AbaWDAoGpD1myY9bnA==
+"@lidofinance/bochqa-reporter@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/bochqa-reporter/-/bochqa-reporter-1.0.0.tgz#edec7536954c60b466edbeee722352d52e2db094"
+  integrity sha512-ImSgyq0waZfmD+8Ok2P6mB+ZVhSwWyY+izlb3CLa0DHQ2I693DmOQs6JWQ0OgClz1lP3BI9uy/vJO2VNXo6iuw==
   dependencies:
     "@nestjs/common" "^10.0.0"
 
@@ -2489,10 +2489,10 @@
   resolved "https://registry.yarnpkg.com/@lidofinance/eth-providers/-/eth-providers-0.63.0.tgz#48a4a901656fc5d3af294669a86d885ab965c25a"
   integrity sha512-jbWshE2ohU8vkK9p0KNo0bcdY2Nf5joqAHeCY7feGH79E1NAX4aNd78ypZBS/w97SfTcdgrXoI4x50Rcdi3Mag==
 
-"@lidofinance/github-summary-reporter@1.0.0-alpha-add-reporters.1":
-  version "1.0.0-alpha-add-reporters.1"
-  resolved "https://registry.yarnpkg.com/@lidofinance/github-summary-reporter/-/github-summary-reporter-1.0.0-alpha-add-reporters.1.tgz#5e23a4796e55dbdbfc3938d1c1d11a342241fa1f"
-  integrity sha512-urqpoblCztwIAe1UANpIPwV22vkbFmeJk8U8ZP33/ELv0j8fO7hXYNsXyAmQKA3eBHb8M5TlsdmeqmH76xm/ig==
+"@lidofinance/github-summary-reporter@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@lidofinance/github-summary-reporter/-/github-summary-reporter-1.0.0.tgz#12351a4bb3be8f2f189620e41fe579e5f98c2548"
+  integrity sha512-i+OKGONoS8CH9SGAVlz/zmB/VLddldaCE9f8UH7KA5pzVtDQ++8LCHxac1HKwguqPzF5dllq3pTuXkbIH+spiw==
 
 "@lidofinance/lido-csm-sdk@3.0.0":
   version "3.0.0"
