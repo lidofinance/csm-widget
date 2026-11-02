@@ -4,6 +4,7 @@ import { PATH } from 'consts/urls';
 import { LocalLink } from 'shared/navigate';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import { StageIconLimit } from 'shared/transaction-modal/tx-stages-basic/icons';
+import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
 
 type Props = {
   title: string;
@@ -13,8 +14,12 @@ type Props = {
 // The tx already succeeded; only the server-side members init failed. The
 // title is flow-specific ("Node Operator created — …" / "IDVTC type claimed —
 // …"), the recovery options are the same.
-export const TxStageMembersInitFailed: FC<Props> = ({ title, onRetry }) => (
+export const TxStageMembersInitFailed: FC<Props> & ClosableOnLedgerStage = ({
+  title,
+  onRetry,
+}) => (
   <TransactionModalContent
+    status="error"
     icon={<StageIconLimit />}
     title={title}
     description="Cluster members were not initialized from your approved application. You can retry now or do it later on the Cluster members page."
@@ -28,3 +33,5 @@ export const TxStageMembersInitFailed: FC<Props> = ({ title, onRetry }) => (
     }
   />
 );
+
+TxStageMembersInitFailed.isClosableOnLedger = true;

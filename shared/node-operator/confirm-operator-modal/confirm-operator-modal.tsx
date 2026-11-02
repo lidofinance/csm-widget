@@ -5,6 +5,7 @@ import type { ModalComponentType } from 'providers/modal-provider';
 import { Stack } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import { DescriptorId } from '../descriptor/descriptor-id';
+import { ConfirmOperatorModalApp } from './confirm-operator-modal-app';
 
 type ConfirmOperatorModalProps = ConfirmModalProps & {
   nodeOperator: NodeOperatorShortInfo;
@@ -12,7 +13,18 @@ type ConfirmOperatorModalProps = ConfirmModalProps & {
 
 export const ConfirmOperatorModal: ModalComponentType<
   ConfirmOperatorModalProps
-> = ({ nodeOperator, onConfirm, onReject, ...props }) => {
+> = ({ ui, nodeOperator, onConfirm, onReject, ...props }) => {
+  if (ui === 'app') {
+    return (
+      <ConfirmOperatorModalApp
+        open={props.open}
+        nodeOperator={nodeOperator}
+        onConfirm={onConfirm}
+        onReject={onReject}
+      />
+    );
+  }
+
   return (
     <Modal {...props} center onClose={onReject}>
       <Stack direction="column" gap="xxl" data-testid="confirmOperatorModal">

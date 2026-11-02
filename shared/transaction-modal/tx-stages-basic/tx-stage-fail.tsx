@@ -1,5 +1,7 @@
 import { FC, ReactNode, useCallback, useState } from 'react';
 import { Loader } from '@lidofinance/lido-ui';
+import { Button } from '@lidofinance/lido-app-ui';
+import { useFormUi } from 'shared/hook-form/form-ui';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import { useModalRetry } from 'shared/transaction-modal/transaction-modal';
 import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
@@ -19,6 +21,7 @@ export const TxStageFail: FC<TxStageFailProps> & ClosableOnLedgerStage = ({
   title = 'Transaction Failed',
   error,
 }) => {
+  const ui = useFormUi();
   const onRetry = useModalRetry();
   const [isLoading, setLoading] = useState(false);
   const handleRetry = useCallback(() => {
@@ -28,17 +31,28 @@ export const TxStageFail: FC<TxStageFailProps> & ClosableOnLedgerStage = ({
 
   const meta = ERROR_META[code];
   const showAction = meta.retryable && !!onRetry;
+  const actionLabel = meta.actionLabel ?? 'Retry';
 
   return (
     <TransactionModalContent
+      status="error"
       title={title}
       icon={<StageIconFail />}
       description={error ?? meta.message}
+      footer={
+        ui === 'app' &&
+        showAction && (
+          <Button variant="outline" loading={isLoading} onClick={handleRetry}>
+            {actionLabel}
+          </Button>
+        )
+      }
       footerHint={
+        ui === 'legacy' &&
         showAction &&
         (!isLoading ? (
           <RetryButtonStyled onClick={handleRetry}>
-            {meta.actionLabel ?? 'Retry'}
+            {actionLabel}
           </RetryButtonStyled>
         ) : (
           <LoaderWrapper>

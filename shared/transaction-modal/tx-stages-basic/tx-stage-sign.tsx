@@ -9,6 +9,7 @@ type TxStageSignProps = {
 export const TxStageSign = ({ title, description }: TxStageSignProps) => {
   return (
     <TransactionModalContent
+      status="loading"
       icon={<StageIconSign />}
       title={title}
       description={description}

@@ -6,6 +6,7 @@ import { StageIconSuccess } from './icons';
 export const TxStageSuccessMultisig: FC & ClosableOnLedgerStage = () => {
   return (
     <TransactionModalContent
+      status="success"
       icon={<StageIconSuccess />}
       title="Success"
       description="Your transaction has been successfully created in the multisig wallet and awaits approval from other participants"

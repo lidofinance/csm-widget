@@ -4,6 +4,7 @@ import { PATH } from 'consts/urls';
 import { LocalLink } from 'shared/navigate';
 import { TransactionModalContent } from 'shared/transaction-modal/transaction-modal-content';
 import { StageIconLimit } from 'shared/transaction-modal/tx-stages-basic/icons';
+import type { ClosableOnLedgerStage } from 'shared/transaction-modal/is-closable-on-ledger';
 import { Stack } from 'shared/components';
 
 type Props = {
@@ -11,11 +12,12 @@ type Props = {
   onRetry: () => void;
 };
 
-export const TxStageDkgUploadFailed: FC<Props> = ({
+export const TxStageDkgUploadFailed: FC<Props> & ClosableOnLedgerStage = ({
   nodeOperatorId,
   onRetry,
 }) => (
   <TransactionModalContent
+    status="error"
     icon={<StageIconLimit />}
     title="Node Operator created — file upload failed"
     description={
@@ -39,3 +41,5 @@ export const TxStageDkgUploadFailed: FC<Props> = ({
     }
   />
 );
+
+TxStageDkgUploadFailed.isClosableOnLedger = true;

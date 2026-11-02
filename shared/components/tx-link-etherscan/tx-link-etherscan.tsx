@@ -1,8 +1,10 @@
+import { IconLink, TextLink } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useDappStatus } from 'modules/web3';
 import { FC, ReactNode } from 'react';
+import { useFormUi } from 'shared/hook-form/form-ui';
+import { getEtherscanTxLink, trackMatomoEvent } from 'utils';
 import { MatomoLink } from '../matomo-link/matomo-link';
-import { getEtherscanTxLink } from 'utils';
 
 type TxLinkEtherscanProps = {
   text?: ReactNode;
@@ -14,12 +16,30 @@ export const TxLinkEtherscan: FC<TxLinkEtherscanProps> = ({
   text = 'View on Etherscan',
 }) => {
   const { chainId } = useDappStatus();
+  const ui = useFormUi();
 
   if (!txHash) return null;
 
+  const href = getEtherscanTxLink(chainId, txHash);
+
+  if (ui === 'app') {
+    return (
+      <TextLink
+        external
+        href={href}
+        icon={<IconLink />}
+        onClick={() =>
+          trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink)
+        }
+      >
+        {text}
+      </TextLink>
+    );
+  }
+
   return (
     <MatomoLink
-      href={getEtherscanTxLink(chainId, txHash)}
+      href={href}
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.etherscanTxLink}
       title="View on etherscan"
     >

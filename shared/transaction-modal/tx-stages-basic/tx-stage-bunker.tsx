@@ -12,6 +12,7 @@ type TxStageBunkerProps = {
 export const TxStageBunker = ({ onClick, onClose }: TxStageBunkerProps) => {
   return (
     <TransactionModalContent
+      status="warning"
       icon={<StageIconDialog />}
       title="Attention!"
       description="Lido protocol is in “Bunker mode”, the withdrawal requests are slowed down, still request withdrawal?"

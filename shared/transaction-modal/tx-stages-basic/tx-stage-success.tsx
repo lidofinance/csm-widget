@@ -22,6 +22,7 @@ export const TxStageSuccess: FC<TxStageSuccessProps> &
 }) => {
   return (
     <TransactionModalContent
+      status="success"
       icon={<StageIconSuccess />}
       title={title}
       description={description}

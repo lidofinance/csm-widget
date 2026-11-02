@@ -15,6 +15,7 @@ export const TxStagePending = ({
 }: TxStagePendingProps) => {
   return (
     <TransactionModalContent
+      status="loading"
       icon={<StageIconLoader />}
       title={title}
       description={description || 'Awaiting block confirmation'}

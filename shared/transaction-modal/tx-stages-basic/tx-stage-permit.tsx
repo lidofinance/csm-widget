@@ -4,6 +4,7 @@ import { StageIconSign } from './icons';
 export const TxStagePermit = () => {
   return (
     <TransactionModalContent
+      status="loading"
       icon={<StageIconSign />}
       title="Please sign the message"
       description="Processing your request"

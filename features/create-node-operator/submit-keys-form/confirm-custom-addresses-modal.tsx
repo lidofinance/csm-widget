@@ -5,6 +5,7 @@ import { Address, OwnerChip, Stack, StepIndicator } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import styled from 'styled-components';
 import invariant from 'tiny-invariant';
+import { ConfirmCustomAddressesModalApp } from './confirm-custom-addresses-modal-app';
 
 type Props = {
   rewardsAddress?: string;
@@ -13,6 +14,15 @@ type Props = {
 };
 
 export const ConfirmCustomAddressesModal: ModalComponentType<
+  ConfirmModalProps & Props
+> = ({ ui, ...props }) =>
+  ui === 'app' ? (
+    <ConfirmCustomAddressesModalApp {...props} />
+  ) : (
+    <ConfirmCustomAddressesModalLegacy {...props} />
+  );
+
+const ConfirmCustomAddressesModalLegacy: ModalComponentType<
   ConfirmModalProps & Props
 > = ({
   rewardsAddress,
