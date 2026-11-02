@@ -13,6 +13,7 @@ import {
   useFormData,
 } from 'shared/hook-form/form-controller';
 import { useInvalidate } from 'shared/hooks';
+import { CuratedOperatorCreatedProvider } from './curated-operator-created-context';
 import { type CuratedOperatorFormNetworkData } from './types';
 
 const useCuratedOperatorFormNetworkData: NetworkData<
@@ -60,7 +61,9 @@ export const CuratedOperatorDataProvider: FC<PropsWithChildren> = ({
 
   return (
     <FormDataContext.Provider value={networkData}>
-      {children}
+      <CuratedOperatorCreatedProvider>
+        {children}
+      </CuratedOperatorCreatedProvider>
     </FormDataContext.Provider>
   );
 };

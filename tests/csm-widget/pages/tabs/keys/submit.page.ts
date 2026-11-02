@@ -71,11 +71,6 @@ export class SubmitPage {
     });
   }
 
-  // Legacy radio label, still used on the create form until it migrates
-  getBondTokenElement(tokenSymbol: TokenSymbol) {
-    return this.formBlock.locator(`label:has([value="${tokenSymbol}"])`);
-  }
-
   async selectBondToken(tokenSymbol: TokenSymbol) {
     await test.step(`Select "${tokenSymbol}" bond token`, async () => {
       await this.formBlock.getByTestId('tokenSelectTrigger').click();

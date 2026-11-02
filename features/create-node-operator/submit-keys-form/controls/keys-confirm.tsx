@@ -1,48 +1,31 @@
-import { Text } from '@lidofinance/lido-ui';
-import { MODULE_METADATA } from 'consts/module';
-import { FC } from 'react';
-import { Stack } from 'shared/components';
-import { CheckboxHookForm } from 'shared/hook-form/controls';
-import { useDepositDataValid } from 'shared/hook-form/deposit-data';
-import { useSubmitKeysFormData } from '../context';
+import { getKeysConfirmItems } from 'features/add-keys/add-keys/add-keys-state';
 import { SHARE_LIMIT_STATUS } from 'modules/web3';
+import { FC } from 'react';
+import { useDepositDataValid } from 'shared/hook-form/deposit-data';
+import { CheckboxField } from 'shared/hook-form/fields';
+import { useSubmitKeysFormData } from '../context';
+import { ConfirmItemStyle, ConfirmTextStyle } from './styles';
 
 export const KeysConfirm: FC = () => {
-  const { shareLimitStatus, targetModule } = useSubmitKeysFormData(true);
-  const name = MODULE_METADATA[targetModule].variantName;
+  const { shareLimitStatus } = useSubmitKeysFormData();
   const isDepositDataValid = useDepositDataValid();
+  const items = getKeysConfirmItems({
+    approaching: shareLimitStatus === SHARE_LIMIT_STATUS.APPROACHING,
+    reached: shareLimitStatus === SHARE_LIMIT_STATUS.REACHED,
+  });
 
   return (
-    <Stack align="start">
-      <CheckboxHookForm
-        fieldName="confirmKeysReady"
-        disabled={!isDepositDataValid}
-      />
-      <Text size="xxs" color="secondary" as="div">
-        I confirm that:
-        <ul>
-          <li>
-            My nodes are synced, running, and ready for the validator activation
-          </li>
-          {shareLimitStatus === SHARE_LIMIT_STATUS.APPROACHING && (
-            <li>
-              I understand that the deposit time for my keys can be months or
-              longer because {name} is approaching its stake share limit
-            </li>
-          )}
-          {shareLimitStatus === SHARE_LIMIT_STATUS.REACHED && (
-            <li>
-              I understand that my newly uploaded keys are very unlikely to
-              receive deposits in the near future because {name} has reached its
-              stake share limit
-            </li>
-          )}
-          <li>
-            I understand that deleting keys from the deposit queue will incur a
-            removal fee
-          </li>
-        </ul>
-      </Text>
-    </Stack>
+    <CheckboxField
+      name="confirmKeysReady"
+      disabled={!isDepositDataValid}
+      label={
+        <ConfirmTextStyle>
+          <span>I confirm that:</span>
+          {items.map((item) => (
+            <ConfirmItemStyle key={item}>{item}</ConfirmItemStyle>
+          ))}
+        </ConfirmTextStyle>
+      }
+    />
   );
 };

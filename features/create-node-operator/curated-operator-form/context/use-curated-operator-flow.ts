@@ -1,16 +1,18 @@
 import { MODULE_NAME, getNodeOperatorRoles } from '@lidofinance/lido-csm-sdk';
-import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/create-node-operator/banner-operator-custom-addresses';
 import { useSmSDK, useAppendOperator } from 'modules/web3';
+import { useModalActions } from 'providers/modal-provider';
 import { useCallback } from 'react';
 import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { useNavigate } from 'shared/navigate';
+import { TransactionModal } from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { useTxModalStagesCuratedOperator } from '../hooks/use-tx-modal-stages-curated-operator';
 import { useCuratedOperatorFormData } from './curated-operator-data-provider';
+import { buildCuratedOperatorCreated } from './curated-operator-created';
+import { useCuratedOperatorCreated } from './curated-operator-created-context';
 import {
   CuratedOperatorFormInputType,
   CuratedOperatorFormNetworkData,
@@ -27,7 +29,8 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
   const sdk = useSmSDK(MODULE_NAME.CM);
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
-  const n = useNavigate();
+  const { setCreated } = useCuratedOperatorCreated();
+  const { closeModal } = useModalActions();
   const buildCallback = useTxModalStagesCuratedOperator();
 
   return useCallback(
@@ -58,23 +61,40 @@ export const useCuratedOperatorFlowResolver = (): FlowResolver<
             callback: buildCallback(input, data),
           });
 
-          if (result) {
-            const roles = getNodeOperatorRoles(result, data.address);
-            if (roles.length > 0) {
-              // Leave the page before appending, see use-submit-keys-flow
-              await n(PATH.HOME);
-              appendNO({ ...result, module: MODULE_NAME.CM });
-            } else {
-              setOperatorCustomAddresses({
-                nodeOperatorId: result.nodeOperatorId,
-                module: MODULE_NAME.CM,
-              });
-            }
+          // Without a result the modal already ended on its own success stage
+          if (!result) return;
+
+          const roles = getNodeOperatorRoles(result, data.address);
+          setCreated(
+            buildCuratedOperatorCreated({
+              address: data.address,
+              nodeOperatorId: result.nodeOperatorId,
+              roles,
+              availableGatesCount: data.availableGates.length,
+            }),
+          );
+
+          if (roles.length > 0) {
+            appendNO({ ...result, module: MODULE_NAME.CM });
+          } else {
+            setOperatorCustomAddresses({
+              nodeOperatorId: result.nodeOperatorId,
+              module: MODULE_NAME.CM,
+            });
           }
+
+          closeModal(TransactionModal);
         },
       };
     },
-    [sdk, appendNO, setOperatorCustomAddresses, n, buildCallback],
+    [
+      sdk,
+      appendNO,
+      setOperatorCustomAddresses,
+      setCreated,
+      closeModal,
+      buildCallback,
+    ],
   );
 };
 

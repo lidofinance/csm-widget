@@ -3,8 +3,11 @@ import {
   MODULE_NAME,
   OPERATOR_TYPE,
 } from '@lidofinance/lido-csm-sdk';
-import { PATH } from 'consts';
 import { useOperatorCustomAddresses } from 'features/create-node-operator/banner-operator-custom-addresses';
+import {
+  getCreateSuccess,
+  useCreateSuccess,
+} from 'features/create-node-operator/create-success';
 import { useDkgInFlowUpload } from 'features/idvtc/dkg/hooks/use-dkg-in-flow-upload';
 import { TxStageDkgUploadFailed } from 'features/idvtc/dkg/tx-stages/tx-stage-dkg-upload-failed';
 import { useMembersInFlowInit } from 'features/idvtc/members/hooks/use-members-in-flow-init';
@@ -14,20 +17,24 @@ import { keepsManageRole } from 'features/idvtc/members/utils/keeps-manage-role'
 import { useSurveyInFlowAuth } from 'features/idvtc/shared/use-survey-in-flow-auth';
 import { operatorKey } from 'modules/surveys-sdk';
 import { useAppendOperator, useSmSDK } from 'modules/web3';
+import { useModalActions } from 'providers/modal-provider';
 import { useCallback } from 'react';
 import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { useNavigate } from 'shared/navigate';
-import { handleTxError, useTransitStage } from 'shared/transaction-modal';
+import {
+  handleTxError,
+  TransactionModal,
+  useTransitStage,
+} from 'shared/transaction-modal';
 import invariant from 'tiny-invariant';
 import { classifyErrorCode, ErrorCode } from 'utils/get-error-code';
 import {
   trackMatomoRawError,
   trackMatomoSurveySigninDenied,
 } from 'utils/track-matomo-event';
-import { renderCreateSuccess } from '../hooks/create-success-stage';
+import { type PostStep, runPostSteps } from '../hooks/run-post-steps';
 import { useConfirmCustomAddressesModal } from '../hooks/use-confirm-modal';
 import { useTxModalStagesSubmitKeys } from '../hooks/use-tx-modal-stages-submit-keys';
 import { useSubmitKeysFormData } from './submit-keys-data-provider';
@@ -46,13 +53,18 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
   const csmSdk = useSmSDK(MODULE_NAME.CSM);
   const appendNO = useAppendOperator();
   const [, setOperatorCustomAddresses] = useOperatorCustomAddresses();
-  const n = useNavigate();
+  const { setCreated } = useCreateSuccess();
+  const { closeModal } = useModalActions();
   const confirmCustomAddresses = useConfirmCustomAddressesModal();
   const buildCallback = useTxModalStagesSubmitKeys();
   const surveyAuth = useSurveyInFlowAuth();
   const { ensureAuth, uploadStaged } = useDkgInFlowUpload(surveyAuth);
   const { checkBindable, initStaged } = useMembersInFlowInit(surveyAuth);
   const transitStage = useTransitStage();
+  const closeTxModal = useCallback(
+    () => closeModal(TransactionModal),
+    [closeModal],
+  );
 
   return useCallback(
     (input, data) => {
@@ -151,71 +163,76 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
             return sdk.permissionlessGate.addNodeOperator(params);
           };
 
-          const { result } = await addNodeOperator();
+          const { result, hash } = await addNodeOperator();
+          // The tx callback already left the modal on its terminal stage (multisig or undecoded receipt)
+          if (!result) return;
 
-          if (result && (dkgFiles.length > 0 || willInitMembers)) {
+          const postSteps: PostStep[] = [];
+
+          if (dkgFiles.length > 0 || willInitMembers) {
             const op = operatorKey(data.targetModule, result.nodeOperatorId);
-            const keys = depositData.map((k) => k.pubkey);
-
-            const runInit = async (): Promise<void> => {
-              invariant(op, 'operator key required for members init');
-              try {
-                await initStaged(op);
-                renderCreateSuccess(transitStage, result, data, keys);
-              } catch (error) {
-                trackMatomoRawError('members_init', error);
-                console.warn('[members] in-flow init failed', error);
-                transitStage(
-                  <TxStageMembersInitFailed
-                    title="Node Operator created — cluster members not initialized"
-                    onRetry={() => void runInit()}
-                  />,
-                );
-              }
-            };
-
-            const runUpload = async (): Promise<void> => {
-              invariant(op, 'operator key required for DKG upload');
-              try {
-                await uploadStaged(op, dkgFiles);
-              } catch (error) {
-                trackMatomoRawError('dkg_upload_create', error);
-                transitStage(
-                  <TxStageDkgUploadFailed
-                    nodeOperatorId={result.nodeOperatorId}
-                    onRetry={() => void runUpload()}
-                  />,
-                );
-                return;
-              }
-              if (willInitMembers) {
-                await runInit();
-              } else {
-                renderCreateSuccess(transitStage, result, data, keys);
-              }
-            };
+            invariant(op, 'operator key required for post-create steps');
 
             if (dkgFiles.length > 0) {
-              await runUpload();
-            } else {
-              await runInit();
+              postSteps.push({
+                run: () => uploadStaged(op, dkgFiles),
+                onFail: (error, retry) => {
+                  trackMatomoRawError('dkg_upload_create', error);
+                  transitStage(
+                    <TxStageDkgUploadFailed
+                      nodeOperatorId={result.nodeOperatorId}
+                      onRetry={retry}
+                    />,
+                  );
+                },
+              });
             }
-          }
-
-          if (result) {
-            // Leave the page before appending: the flipped CAN_CREATE_* gate
-            // would otherwise push /create and cancel this navigation.
-            await n(PATH.HOME);
-            const roles = getNodeOperatorRoles(result, data.address);
-            if (roles.length > 0) {
-              appendNO({ ...result, module: data.targetModule });
-            } else {
-              setOperatorCustomAddresses({
-                nodeOperatorId: result.nodeOperatorId,
-                module: data.targetModule,
+            if (willInitMembers) {
+              postSteps.push({
+                run: () => initStaged(op),
+                onFail: (error, retry) => {
+                  trackMatomoRawError('members_init', error);
+                  console.warn('[members] in-flow init failed', error);
+                  transitStage(
+                    <TxStageMembersInitFailed
+                      title="Node Operator created — cluster members not initialized"
+                      onRetry={retry}
+                    />,
+                  );
+                },
               });
             }
           }
+
+          const postStepsDone = await runPostSteps(postSteps, closeTxModal);
+
+          const operator = {
+            nodeOperatorId: result.nodeOperatorId,
+            module: data.targetModule,
+          };
+          const roles = getNodeOperatorRoles(result, data.address);
+
+          setCreated(
+            getCreateSuccess({
+              address: data.address,
+              operator,
+              type: data.type,
+              roles,
+              keys: depositData.map((key) => key.pubkey),
+              bondAmount: amount,
+              bondToken: token,
+              txHash: hash,
+            }),
+          );
+
+          if (roles.length > 0) {
+            appendNO({ ...result, module: data.targetModule });
+          } else {
+            setOperatorCustomAddresses(operator);
+          }
+
+          // A failed post-step keeps its retry stage open over the success screen
+          if (postStepsDone) closeTxModal();
         },
       };
     },
@@ -224,7 +241,8 @@ export const useSubmitKeysFlowResolver = (): FlowResolver<
       csmSdk,
       appendNO,
       setOperatorCustomAddresses,
-      n,
+      setCreated,
+      closeTxModal,
       confirmCustomAddresses,
       buildCallback,
       surveyAuth,

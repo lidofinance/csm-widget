@@ -3,14 +3,18 @@ import {
   OPERATOR_TYPE,
   OPERATOR_TYPE_INFO,
 } from '@lidofinance/lido-csm-sdk';
-import { InlineLoader, Text } from '@lidofinance/lido-ui';
+import { Skeleton } from '@lidofinance/lido-app-ui';
 import { OPERATOR_TYPE_METADATA } from 'consts';
 import { useCurveParameters } from 'modules/web3';
 import { FC } from 'react';
-import { Stack } from 'shared/components';
 import { useParameters } from 'shared/components/parameters-list/parameters';
 import { useOperatorTypeCurve } from 'shared/hooks';
-import { ParameterRowStyle } from './styles';
+import {
+  ParameterGroupStyle,
+  ParameterRowStyle,
+  ParametersStyle,
+  ParameterTitleStyle,
+} from './styles';
 
 export const Parameters: FC<{ type: OPERATOR_TYPE }> = ({ type }) => {
   const metadata = OPERATOR_TYPE_METADATA[type];
@@ -22,46 +26,32 @@ export const Parameters: FC<{ type: OPERATOR_TYPE }> = ({ type }) => {
   );
 
   return (
-    <Stack direction="column" gap="sm">
-      {PARAMETERS.map(({ title: paramTitle, renderRows }) => (
-        <Stack direction="column" key={paramTitle} gap="xs">
-          <Text size="xxs" weight={700}>
-            {paramTitle}:
-          </Text>
+    <ParametersStyle>
+      {PARAMETERS.map(({ title, renderRows }) => (
+        <ParameterGroupStyle key={title}>
+          <ParameterTitleStyle>{title}:</ParameterTitleStyle>
           {parameters ? (
             renderRows?.(parameters).map(({ label, value }) => (
               <ParameterRowStyle key={label}>
-                <Text size="xxs" color="secondary">
-                  {label}
-                </Text>
-                <Text size="xxs" weight={700}>
-                  {value}
-                </Text>
+                <span>{label}</span>
+                <span>{value}</span>
               </ParameterRowStyle>
             ))
           ) : (
-            <InlineLoader />
+            <Skeleton variant="text" />
           )}
-        </Stack>
+        </ParameterGroupStyle>
       ))}
       {metadata.capitalMultiplier && (
-        <ParameterRowStyle>
-          <Text size="xxs" weight={700}>
-            Capital multiplier
-          </Text>
-          <Text size="xxs" weight={700}>
-            {metadata.capitalMultiplier}
-          </Text>
+        <ParameterRowStyle $strong>
+          <span>Capital multiplier</span>
+          <span>{metadata.capitalMultiplier}</span>
         </ParameterRowStyle>
       )}
-      <ParameterRowStyle>
-        <Text size="xxs" weight={700}>
-          Withdrawal credential type
-        </Text>
-        <Text size="xxs" weight={700}>
-          {wcType}
-        </Text>
+      <ParameterRowStyle $strong>
+        <span>Withdrawal credential type</span>
+        <span>{wcType}</span>
       </ParameterRowStyle>
-    </Stack>
+    </ParametersStyle>
   );
 };

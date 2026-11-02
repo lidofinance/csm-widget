@@ -1,7 +1,7 @@
 import { REF_MAPPING } from 'consts/ref-mapping';
 import { FC, useMemo } from 'react';
 import { useWatch } from 'react-hook-form';
-import { AddressInputHookForm } from 'shared/hook-form/controls';
+import { AddressField } from 'shared/hook-form/fields';
 import { compareLowercase } from 'utils';
 import { SubmitKeysFormInputType } from '../context';
 
@@ -20,8 +20,8 @@ export const ReferrerInput: FC = () => {
   if (!referrer) return null;
 
   return (
-    <AddressInputHookForm
-      fieldName="referrer"
+    <AddressField
+      name="referrer"
       label="Referrer address"
       addressName={refName}
       disabled

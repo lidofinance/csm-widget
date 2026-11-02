@@ -1,4 +1,4 @@
-import { Locator, Page, test } from '@playwright/test';
+import { expect, Locator, Page, test } from '@playwright/test';
 import { BasePage } from '../../../../shared/pages/base.page';
 
 export class CreateOperatorStep2Page extends BasePage {
@@ -7,6 +7,7 @@ export class CreateOperatorStep2Page extends BasePage {
   stepDescription: Locator;
   backButton: Locator;
   continueButton: Locator;
+  tooltip: Locator;
 
   managerAddressInput: Locator;
   managerAddressContainer: Locator;
@@ -24,13 +25,16 @@ export class CreateOperatorStep2Page extends BasePage {
   constructor(
     page: Page,
     public form: Locator,
+    public stepHeader: Locator,
   ) {
     super(page);
-    this.stepTrackText = this.form.getByTestId('stepTrackText');
-    this.stepTitle = this.form.getByTestId('stepTitle');
-    this.stepDescription = this.form.getByTestId('stepDescription');
+    this.stepTrackText = this.stepHeader.getByTestId('stepTrackText');
+    this.stepTitle = this.stepHeader.getByTestId('stepTitle');
+    this.stepDescription = this.stepHeader.getByTestId('stepDescription');
     this.backButton = this.form.getByRole('button', { name: 'Back' });
     this.continueButton = this.form.getByRole('button', { name: 'Continue' });
+    // app-ui tooltips portal to document.body, outside the lido-ui modal root
+    this.tooltip = this.page.getByRole('tooltip');
 
     this.managerAddressInput = this.form.locator(
       'input[name="managerAddress"]',
@@ -44,8 +48,10 @@ export class CreateOperatorStep2Page extends BasePage {
       'button',
       { name: 'Connected address' },
     );
-    this.managerAddressTooltipIcon =
-      this.managerAddressContainer.getByTestId('iconTooltip');
+    this.managerAddressTooltipIcon = this.managerAddressContainer.getByRole(
+      'img',
+      { name: 'More info' },
+    );
     this.managerAddressOwnerChip =
       this.managerAddressContainer.getByTestId('ownerChip');
 
@@ -59,8 +65,16 @@ export class CreateOperatorStep2Page extends BasePage {
       'button',
       { name: 'Connected address' },
     );
-    this.rewardAddressTooltipIcon =
-      this.rewardAddressContainer.getByTestId('iconTooltip');
+    this.rewardAddressTooltipIcon = this.rewardAddressContainer.getByRole(
+      'img',
+      { name: 'More info' },
+    );
+  }
+
+  async hoverTooltip(icon: Locator) {
+    await icon.hover();
+    await expect(this.tooltip).toBeVisible();
+    return (await this.tooltip.textContent()) ?? '';
   }
 
   async fillForm(managerAddress: string, rewardAddress: string) {

@@ -60,25 +60,31 @@ test.describe(
         await test.step('Verify 0x01 card', async () => {
           await expect(cards.csm01Card).toBeVisible();
           await expect(cards.csm01Card).toContainText(CSM01.short);
-          await expect(cards.csm01Card).toContainText(CSM01.name);
-          await expect(cards.getCardButton('0x01')).toContainText('Join now');
+          await expect(cards.csm01Card).toContainText(
+            'The simplest way to start validating in CSM',
+          );
+          await expect(cards.getCardButton('0x01')).toContainText(
+            `Select ${CSM01.short}`,
+          );
         });
 
         await test.step('Verify ICS card', async () => {
           await expect(cards.icsCard).toBeVisible();
           await expect(cards.icsCard).toContainText(ICS.short);
-          await expect(cards.icsCard).toContainText(ICS.name);
-          await expect(cards.getCardButton('ics')).toContainText(
-            `Apply for ${ICS.short}`,
+          await expect(cards.icsCard).toContainText(
+            'Get verified and unlock better parameters',
           );
+          await expect(cards.getCardButton('ics')).toContainText('Learn more');
         });
 
         await test.step('Verify IDVTC card', async () => {
           await expect(cards.idvtcCard).toBeVisible();
           await expect(cards.idvtcCard).toContainText(IDVTC.short);
-          await expect(cards.idvtcCard).toContainText(IDVTC.name);
+          await expect(cards.idvtcCard).toContainText(
+            'Join a verified cluster with 3 other solo stakers',
+          );
           await expect(cards.getCardButton('idvtc')).toContainText(
-            `Apply for ${IDVTC.short}`,
+            'Learn more',
           );
         });
       },

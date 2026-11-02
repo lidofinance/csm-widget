@@ -1,12 +1,11 @@
+import { Accordion, Body } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { Text } from '@lidofinance/lido-ui';
 import { MODULE_METADATA } from 'consts/module';
 import { getExternalLinks } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { useOtherModule } from 'modules/web3';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
-import { StyledAccordion } from './styles';
 
 const REPLACEMENTS: Record<string, string> = {
   'curated-onchain-v1': 'Lido Curated v1',
@@ -20,15 +19,11 @@ export const OtherModuleBanner: FC<{ module: MODULE_NAME }> = ({ module }) => {
   if (!moduleName) return null;
 
   return (
-    <StyledAccordion
-      defaultExpanded={true}
-      summary={
-        <Text size="sm" weight={700}>
-          You have a Node Operator in the {moduleName} module
-        </Text>
-      }
+    <Accordion
+      defaultExpanded
+      title={`You have a Node Operator in the ${moduleName} module`}
     >
-      <Text size="xxs">
+      <Body as="div">
         To become a Node Operator in {MODULE_METADATA[module].shortTitle},
         continue here.
         <br />
@@ -41,7 +36,7 @@ export const OtherModuleBanner: FC<{ module: MODULE_NAME }> = ({ module }) => {
         >
           operators.lido.fi
         </MatomoLink>
-      </Text>
-    </StyledAccordion>
+      </Body>
+    </Accordion>
   );
 };

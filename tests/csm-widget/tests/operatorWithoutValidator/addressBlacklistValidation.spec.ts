@@ -40,10 +40,7 @@ test.describe(
         const keys = keysGeneratorService.generateKeys();
 
         await test.step('Submit keys with extended manager permissions', async () => {
-          const bondTokenElement = keysPage.submitPage.getBondTokenElement(
-            TokenSymbol.ETH,
-          );
-          await bondTokenElement.click();
+          await submitPage.selectBondToken(TokenSymbol.ETH);
           await submitPage.fillKeys(keys);
           await submitPage.page.waitForTimeout(LOW_TIMEOUT);
           await submitPage.confirmKeysReady.click();

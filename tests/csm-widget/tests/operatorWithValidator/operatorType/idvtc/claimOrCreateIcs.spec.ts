@@ -59,10 +59,10 @@ test.describe(
             );
 
             await widgetService.walletPage.confirmTx();
-            await widgetService.page.waitForSelector(
-              'text=Node Operator has been created',
-              { timeout: STAGE_WAIT_TIMEOUT },
-            );
+            await widgetService.keysPage.createSuccessScreen.waitForVisible();
+            await expect(widgetService.operatorType.txModal.modal).toBeHidden({
+              timeout: STAGE_WAIT_TIMEOUT,
+            });
           });
         });
 
@@ -137,38 +137,29 @@ test.describe(
       qase(510, 'Should offer a switch to the new operator on success'),
       async ({ widgetService, keysGeneratorService }) => {
         const form = widgetService.keysPage.createNodeOperatorForm;
-        const txModal = widgetService.operatorType.txModal;
+        const successScreen = widgetService.keysPage.createSuccessScreen;
         const keys = keysGeneratorService.generateKeys(1);
         const idvtcOperatorId = await widgetService.extractNodeOperatorId();
 
         await test.step('Create a new ICS operator on the create page', async () => {
           await widgetService.keysPage.goto('ics');
-          await form.getBondTokenElement(TokenSymbol.ETH).click();
+          await form.selectBondToken(TokenSymbol.ETH);
           await form.fillKeys(keys);
           await form.confirmKeysReady.click();
           await form.submitKeysButton.click();
           await widgetService.walletPage.confirmTx();
-          await widgetService.page.waitForSelector(
-            'text=Node Operator has been created',
-            { timeout: STAGE_WAIT_TIMEOUT },
-          );
+          await successScreen.waitForVisible();
         });
 
-        const description = await txModal.description.innerText();
-        const idMatch = description.match(/Node Operator ID is (\d+)/);
-        expect(
-          idMatch,
-          `success description must name the new operator, got: ${description}`,
-        ).not.toBeNull();
-        const icsOperatorId = Number(idMatch?.[1]);
+        const icsOperatorId = await successScreen.getOperatorId();
 
         await test.step('The created operator is a new one', async () => {
           expect(icsOperatorId).not.toBe(idvtcOperatorId);
         });
 
         await test.step('Success screen offers a switch to it', async () => {
-          await expect(txModal.switchToOperatorBtn).toHaveText(
-            `Switch to Node Operator #${icsOperatorId}`,
+          await expect(successScreen.switchToOperatorBtn).toHaveText(
+            'Switch to this NO',
           );
         });
 
@@ -189,20 +180,17 @@ test.describe(
 
         await test.step('Create a new ICS operator on the create page', async () => {
           await widgetService.keysPage.goto('ics');
-          await form.getBondTokenElement(TokenSymbol.ETH).click();
+          await form.selectBondToken(TokenSymbol.ETH);
           await form.fillKeys(keys);
           await expect(form.amountInput).toHaveValue('1.5');
           await form.confirmKeysReady.click();
           await form.submitKeysButton.click();
           await widgetService.walletPage.confirmTx();
-          await widgetService.page.waitForSelector(
-            'text=Node Operator has been created',
-            { timeout: STAGE_WAIT_TIMEOUT },
-          );
+          await widgetService.keysPage.createSuccessScreen.waitForVisible();
         });
 
         await test.step('Switch to the created ICS operator', async () => {
-          await widgetService.operatorType.txModal.switchToOperatorBtn.click();
+          await widgetService.keysPage.createSuccessScreen.switchToOperatorBtn.click();
         });
 
         await test.step('Header switch popup lists the other operator', async () => {

@@ -149,9 +149,7 @@ export class WidgetService {
     await this.walletPage.confirmTx();
 
     if (isNewOperator) {
-      await this.page.waitForSelector(`text=Node Operator has been created`, {
-        timeout: STAGE_WAIT_TIMEOUT,
-      });
+      await this.keysPage.createSuccessScreen.waitForVisible();
     } else {
       await this.page.waitForSelector(
         `text=Uploading operation was successful.`,

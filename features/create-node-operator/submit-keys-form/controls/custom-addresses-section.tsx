@@ -1,21 +1,21 @@
+import { MessageBox, SectionTitle, Stack } from '@lidofinance/lido-app-ui';
+import { EXTENDED_MODE_LINK } from 'consts/external-links';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
-import { FormTitle, MatomoLink, WarningBlock } from 'shared/components';
+import { MatomoLink } from 'shared/components';
+import { DisclosureField } from 'shared/hook-form/fields';
 import { ManagerAddressInput } from './manager-address-input';
 import { RewardsAddressInput } from './rewards-address-input';
 import { RewardsAddressTypeSelect } from './rewards-address-type-select';
-import { OptionalSectionHookForm } from 'shared/hook-form/controls';
-import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
-import { EXTENDED_MODE_LINK } from 'consts/external-links';
 
-export const CustomAddressesSection: FC = () => {
-  return (
-    <OptionalSectionHookForm
-      fieldName="specifyCustomAddresses"
-      titles={['Specify custom addresses', 'Do not specify custom addresses']}
-      dependentFields={['rewardsAddress', 'managerAddress']}
-    >
-      <FormTitle>Specify custom addresses</FormTitle>
-      <WarningBlock>
+export const CustomAddressesSection: FC = () => (
+  <DisclosureField
+    name="specifyCustomAddresses"
+    label="Specify custom addresses"
+    dependentFields={['rewardsAddress', 'managerAddress']}
+  >
+    <Stack direction="column" gap={16} align="stretch">
+      <MessageBox variant="warning">
         Setting custom addresses for the Node Operator is{' '}
         <b>at your own risk</b>. In the case that an incorrect or incompatible
         address is specified, it may be possible that you permanently lose
@@ -29,11 +29,11 @@ export const CustomAddressesSection: FC = () => {
           detailed description of this feature
         </MatomoLink>{' '}
         before you proceed with setting the custom addresses.
-      </WarningBlock>
+      </MessageBox>
       <RewardsAddressInput />
       <ManagerAddressInput />
-      <FormTitle>Select the Manager Address permissions type</FormTitle>
-      <WarningBlock>
+      <SectionTitle title="Select the Manager Address permissions type" />
+      <MessageBox variant="warning">
         This permissions option can only be set once during Node Operator
         creation.
         <br />
@@ -48,8 +48,8 @@ export const CustomAddressesSection: FC = () => {
           detailed explanation of the options
         </MatomoLink>{' '}
         to understand which option works best for your purposes.
-      </WarningBlock>
+      </MessageBox>
       <RewardsAddressTypeSelect />
-    </OptionalSectionHookForm>
-  );
-};
+    </Stack>
+  </DisclosureField>
+);
