@@ -1,8 +1,9 @@
 import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { STRATEGY_CONSTANT } from 'consts';
 import invariant from 'tiny-invariant';
 import { SmSDK, useLidoSDK, useTargetSmSDK } from '../web3-provider';
+import { getImpliedVersionSupport, getSmVersionKey } from './sm-version-query';
 
 export const fetchSmStatus = async (sdk: SmSDK) => {
   const [status, registration] = await Promise.all([
@@ -33,13 +34,12 @@ export const useSmStatus = (module?: MODULE_NAME) => {
 /** No module → supported only if every deployed module is. */
 export const useSmVersionSupported = (module?: MODULE_NAME) => {
   const { sm } = useLidoSDK();
-  const target = module ? [sm.get(module)] : [...sm.modules.values()];
+  const queryClient = useQueryClient();
+  const all = [...sm.modules.values()];
+  const target = module ? [sm.get(module)] : all;
 
   return useQuery({
-    queryKey: [
-      'sm-version',
-      { modules: target.map((s) => s?.core.moduleName) },
-    ],
+    queryKey: getSmVersionKey(target.map((s) => s?.core.moduleName)),
     ...STRATEGY_CONSTANT,
     queryFn: async () => {
       const results = await Promise.all(
@@ -50,5 +50,11 @@ export const useSmVersionSupported = (module?: MODULE_NAME) => {
       );
       return results.every(Boolean);
     },
+    // the first operator flips module undefined → X; without this GateSupported splashes and unmounts the page
+    placeholderData: () =>
+      getImpliedVersionSupport(
+        queryClient,
+        all.map((s) => s.core.moduleName),
+      ),
   });
 };
