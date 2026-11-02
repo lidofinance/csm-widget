@@ -1,5 +1,4 @@
-import { IconPlus } from '@lidofinance/lido-app-ui';
-import { PATH } from 'consts';
+import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import {
   OperatorRef,
   useOperatorCurveId,
@@ -14,67 +13,41 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { useCanCreateNodeOperator, useDisplayOperatorType } from 'shared/hooks';
-import { useNavigate } from 'shared/navigate';
 import {
   formatGroupLabel,
-  getOperatorName,
   isSameOperator,
   OperatorAvatar,
+  CaptionStyle,
+  CreateSection,
   OperatorRolesTag,
+  OperatorRow,
   OperatorTypeTag,
+  useCreateRows,
   useOperatorTitle,
   useOperatorTypeModalTrigger,
   useSwitchOperator,
 } from 'shared/node-operator';
 import {
   BodyStyle,
-  CaptionStyle,
-  CreateButtonStyle,
   HeaderStyle,
   HeaderTagsStyle,
   HeaderTextStyle,
-  NameStyle,
   PopupStyle,
-  RowStyle,
   SubLineStyle,
-  TagsStyle,
   TitleStyle,
   TypeTagButtonStyle,
 } from './styles';
+
+const CREATE_EVENTS = {
+  cm: MATOMO_CLICK_EVENTS_TYPES.switchOperatorCreateCm,
+  csm: MATOMO_CLICK_EVENTS_TYPES.switchOperatorCreateCsm,
+};
 
 type SwitchPopupProps = {
   onClose: () => void;
   anchorRef: RefObject<HTMLElement | null>;
   active: ModuleNodeOperator;
   list: ModuleNodeOperator[];
-};
-
-type OperatorItemProps = {
-  operator: ModuleNodeOperator;
-  onSelect: (operator: OperatorRef) => void;
-};
-
-const OperatorItem: FC<OperatorItemProps> = ({ operator, onSelect }) => {
-  const name = getOperatorName(operator);
-  const type = useDisplayOperatorType(operator);
-
-  return (
-    <RowStyle
-      type="button"
-      onClick={() => onSelect(operator)}
-      data-testid="switchModalOperatorRow"
-    >
-      <NameStyle>
-        <OperatorAvatar operator={operator} size={24} />
-        <span data-testid="switchModalOperatorName">{name}</span>
-      </NameStyle>
-      <TagsStyle>
-        {type && <OperatorTypeTag type={type} tooltip />}
-        <OperatorRolesTag operator={operator} tooltip />
-      </TagsStyle>
-    </RowStyle>
-  );
 };
 
 type ActiveHeaderProps = {
@@ -149,9 +122,8 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
   active,
   list,
 }) => {
-  const { canCreate } = useCanCreateNodeOperator();
+  const createRows = useCreateRows();
   const switchOperator = useSwitchOperator();
-  const navigate = useNavigate();
   const maxHeight = useMaxHeight(anchorRef);
   const others = useMemo(
     () => list.filter((item) => !isSameOperator(item, active)),
@@ -165,11 +137,6 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
     },
     [switchOperator, onClose],
   );
-
-  const handleCreate = useCallback(() => {
-    onClose();
-    void navigate(PATH.CREATE);
-  }, [onClose, navigate]);
 
   return (
     <PopupStyle
@@ -186,31 +153,30 @@ export const SwitchPopup: FC<SwitchPopupProps> = ({
       data-testid="switchOperatorPopup"
     >
       <ActiveHeader operator={active} onClose={onClose} />
-      {(others.length > 0 || canCreate) && (
+      {(others.length > 0 || createRows.hasRows) && (
         <BodyStyle>
           {others.length > 0 && (
-            <>
-              <CaptionStyle>Other operators</CaptionStyle>
+            <div>
+              <CaptionStyle $size="compact">Other operators</CaptionStyle>
               {others.map((operator) => (
-                <OperatorItem
+                <OperatorRow
                   key={`${operator.module}:${operator.nodeOperatorId}`}
                   operator={operator}
+                  size="compact"
                   onSelect={handleSwitch}
+                  data-testid="switchModalOperatorRow"
+                  data-name-testid="switchModalOperatorName"
                 />
               ))}
-            </>
+            </div>
           )}
-          {canCreate && (
-            <CreateButtonStyle
-              variant="ghost"
-              size="small"
-              iconLeft={<IconPlus />}
-              onClick={handleCreate}
-              data-testid="switchPopupCreateButton"
-            >
-              Create new operator
-            </CreateButtonStyle>
-          )}
+          <CreateSection
+            size="compact"
+            rows={createRows}
+            onCreate={onClose}
+            events={CREATE_EVENTS}
+            testIdPrefix="switchPopupCreate"
+          />
         </BodyStyle>
       )}
     </PopupStyle>

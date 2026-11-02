@@ -2,8 +2,9 @@ import { Logo, SidebarGroup, SidebarItem } from '@lidofinance/lido-app-ui';
 import { WIDGET_TITLE } from 'consts';
 import { PATH } from 'consts/urls';
 import {
+  useAvailableOperators,
+  useDappStatus,
   useModule,
-  useNodeOperator,
   useSmVersionSupported,
 } from 'modules/web3';
 import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
@@ -25,7 +26,8 @@ const OperatorNavigation: FC = () => {
   const isLoading = useInitialLoading();
   const { module } = useModule();
   const { data: isSupported } = useSmVersionSupported(module);
-  const { nodeOperator, selectionDismissed } = useNodeOperator();
+  const { isSupportedChain } = useDappStatus();
+  const { data: list } = useAvailableOperators();
   const routes = useNavItems();
   const pathname = useRouterPath();
 
@@ -33,7 +35,7 @@ const OperatorNavigation: FC = () => {
   const showItems = !isLoading && !isUpgrading;
   // operator queries against an upgrading module may stay pending through retries; don't hold the footer on them
   const showFooter =
-    (!!nodeOperator || selectionDismissed) && (isUpgrading || !isLoading);
+    isSupportedChain && !!list?.length && (isUpgrading || !isLoading);
 
   return (
     <SidebarStyle

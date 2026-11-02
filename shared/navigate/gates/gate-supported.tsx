@@ -5,7 +5,7 @@ import {
   useSmVersionSupported,
 } from 'modules/web3';
 import { FC, PropsWithChildren, ReactNode } from 'react';
-import { SplashPage, UnsupportedPage } from '../inner-pages';
+import { LoadingPage, UnsupportedPage } from '../inner-pages';
 
 type Props = {
   fallback?: ReactNode;
@@ -13,7 +13,7 @@ type Props = {
 };
 
 export const GateSupported: FC<PropsWithChildren<Props>> = ({
-  fallback = <SplashPage />,
+  fallback = <LoadingPage />,
   unsupported = <UnsupportedPage />,
   children,
 }) => {

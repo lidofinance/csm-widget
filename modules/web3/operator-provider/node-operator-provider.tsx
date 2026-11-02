@@ -5,9 +5,13 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useState,
 } from 'react';
+import { useConnectionEffect } from 'wagmi';
 import invariant from 'tiny-invariant';
+import { useDappStatus } from '../hooks';
 import { useRegisterForgetCachedOperator } from './forget-cached-operator';
 import { useActiveNodeOperator } from './use-active-node-operator';
 import { useAvailableOperators } from './use-available-operators';
@@ -18,8 +22,7 @@ export type NodeOperatorContextValue = {
   nodeOperator: ModuleNodeOperator | undefined;
   activeModule: MODULE_NAME | undefined;
   needsSelection: boolean;
-  /** Selection is pending but postponed (e.g. user went to create a new operator) */
-  selectionDismissed: boolean;
+  isDiscovering: boolean;
   dismissSelection: () => void;
   requestSelection: () => void;
   switchNodeOperator: (operator: OperatorRef) => void;
@@ -59,15 +62,30 @@ export const useNodeOperatorId = <
 
 export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
   useRegisterForgetCachedOperator();
-  const { data: list, isPending } = useAvailableOperators();
+  const { data: list, isPending, isPlaceholderData } = useAvailableOperators();
   const {
     nodeOperator: active,
     setActive,
     needsSelection,
-    selectionDismissed,
+    hasCachedPick,
     dismissSelection,
     requestSelection,
   } = useActiveNodeOperator(list);
+  const { isAccountActive } = useDappStatus();
+  const [isBooting, setBooting] = useState(true);
+
+  useConnectionEffect({
+    onConnect: useCallback(({ isReconnected }: { isReconnected: boolean }) => {
+      if (!isReconnected) setBooting(false);
+    }, []),
+  });
+
+  useEffect(() => {
+    if (isAccountActive && !isPending && !isPlaceholderData) setBooting(false);
+  }, [isAccountActive, isPending, isPlaceholderData]);
+
+  const isDiscovering =
+    !isBooting && isAccountActive && isPending && !hasCachedPick;
 
   const switchNodeOperator = useCallback(
     ({ nodeOperatorId, module }: OperatorRef) => {
@@ -81,14 +99,12 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
   );
 
   const value = useMemo(
-    // needsSelection folds into isPending so GateLoaded keeps a SplashPage under the modal
-    // instead of flashing the welcome page and redirecting via NOT_NODE_OPERATOR
     () => ({
-      isPending: isPending || needsSelection,
+      isPending,
       nodeOperator: active,
       activeModule: active?.module,
       needsSelection,
-      selectionDismissed,
+      isDiscovering,
       dismissSelection,
       requestSelection,
       switchNodeOperator,
@@ -97,7 +113,7 @@ export const NodeOperatorProvider: FC<PropsWithChildren> = ({ children }) => {
       active,
       isPending,
       needsSelection,
-      selectionDismissed,
+      isDiscovering,
       dismissSelection,
       requestSelection,
       switchNodeOperator,

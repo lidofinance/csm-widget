@@ -93,7 +93,7 @@ export const MockDepositQueueProvider: FC<
   const mockNodeOperatorContextValue: NodeOperatorContextValue = {
     isPending: false,
     needsSelection: false,
-    selectionDismissed: false,
+    isDiscovering: false,
     dismissSelection: () => {},
     requestSelection: () => {},
     nodeOperator: {

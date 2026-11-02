@@ -1,4 +1,4 @@
-import { Button, Popover } from '@lidofinance/lido-app-ui';
+import { Popover } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
 export const TriggerStyle = styled.button`
@@ -125,54 +125,11 @@ export const TypeTagButtonStyle = styled.button`
   }
 `;
 
-export const CreateButtonStyle = styled(Button)`
-  && {
-    width: 100%;
-  }
-
-  && > span[aria-hidden] {
-    width: 20px;
-    height: 20px;
-  }
-`;
-
 export const BodyStyle = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
   width: 100%;
-  padding-top: 16px;
+  padding: 16px 0;
   border-top: 1px solid var(--lido-app-ui-color-border-default);
-`;
-
-export const CaptionStyle = styled.span`
-  padding: 8px 12px;
-  color: var(--lido-app-ui-color-text-secondary);
-  font-size: 12px;
-  line-height: 20px;
-  font-weight: var(--lido-app-ui-font-weight-bold);
-  text-transform: uppercase;
-`;
-
-export const RowStyle = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  width: 100%;
-  height: 48px;
-  padding: 12px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  font: inherit;
-  color: var(--lido-app-ui-color-text-default);
-  text-align: left;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover,
-  &:focus-visible {
-    background: var(--lido-app-ui-color-background-surface-hover);
-  }
 `;

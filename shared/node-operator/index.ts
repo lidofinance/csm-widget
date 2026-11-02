@@ -14,3 +14,4 @@ export * from './operator-name';
 export * from './operator-roles-tag';
 export * from './operator-type-tag';
 export * from './use-operator-title';
+export * from './operator-rows';

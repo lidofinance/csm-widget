@@ -45,7 +45,7 @@ const MockOperatorProvider: FC<
     () => ({
       isPending: false,
       needsSelection: false,
-      selectionDismissed: false,
+      isDiscovering: false,
       dismissSelection: () => {},
       requestSelection: () => {},
       nodeOperator: {

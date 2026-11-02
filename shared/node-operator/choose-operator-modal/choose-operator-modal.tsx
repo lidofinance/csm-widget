@@ -1,25 +1,47 @@
 import { Modal } from '@lidofinance/lido-app-ui';
+import { Loader } from '@lidofinance/lido-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts';
 import { useAvailableOperators, useNodeOperator } from 'modules/web3';
 import type { ModalComponentType } from 'providers/modal-provider';
 import { useCallback } from 'react';
-import { useDisconnectWallet } from 'shared/wallet';
-import { trackMatomoEvent } from 'utils';
-import { CreateSection } from './create-rows';
-import { OperatorRow } from './operator-row';
-import { CaptionStyle, ContentStyle, SectionStyle } from './styles';
+import {
+  CaptionStyle,
+  CreateSection,
+  OperatorRow,
+  SectionStyle,
+  useCreateRows,
+} from '../operator-rows';
+import { ContentStyle, LoadingStyle } from './styles';
+
+const CREATE_EVENTS = {
+  cm: MATOMO_CLICK_EVENTS_TYPES.chooseOperatorCreateCm,
+  csm: MATOMO_CLICK_EVENTS_TYPES.chooseOperatorCreateCsm,
+};
 
 export const ChooseOperatorModal: ModalComponentType = ({ onClose }) => {
-  const disconnect = useDisconnectWallet();
-  const { dismissSelection, switchNodeOperator } = useNodeOperator();
+  const { dismissSelection, switchNodeOperator, isDiscovering } =
+    useNodeOperator();
   const { data: list } = useAvailableOperators();
+  const createRows = useCreateRows();
 
-  // mandatory selection: the cross/ESC/backdrop close is the only escape, so it disconnects
   const handleClose = useCallback(() => {
-    trackMatomoEvent(MATOMO_CLICK_EVENTS_TYPES.disconnectWallet);
-    disconnect();
+    dismissSelection();
     onClose?.();
-  }, [disconnect, onClose]);
+  }, [dismissSelection, onClose]);
+
+  if (isDiscovering) {
+    return (
+      <Modal
+        withOverlay
+        title="Choose a Node Operator"
+        data-testid="selectOperatorModal"
+      >
+        <LoadingStyle>
+          <Loader size="large" data-testid="selectOperatorModalLoader" />
+        </LoadingStyle>
+      </Modal>
+    );
+  }
 
   return (
     <Modal
@@ -31,16 +53,25 @@ export const ChooseOperatorModal: ModalComponentType = ({ onClose }) => {
     >
       <ContentStyle>
         <SectionStyle>
-          <CaptionStyle>Your Node Operators</CaptionStyle>
+          <CaptionStyle $size="regular">Your Node Operators</CaptionStyle>
           {list?.map((item) => (
             <OperatorRow
               key={`${String(item.nodeOperatorId)}-${item.module}`}
               operator={item}
+              size="regular"
               onSelect={switchNodeOperator}
+              data-testid="selectModalOperatorRow"
+              data-name-testid="selectModalOperatorName"
             />
           ))}
         </SectionStyle>
-        <CreateSection onCreate={dismissSelection} />
+        <CreateSection
+          size="regular"
+          rows={createRows}
+          onCreate={dismissSelection}
+          events={CREATE_EVENTS}
+          testIdPrefix="selectModalCreate"
+        />
       </ContentStyle>
     </Modal>
   );

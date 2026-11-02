@@ -12,14 +12,15 @@ import curated2Group from 'assets/icons/module-menu/curated2-group.svg';
 
 export type ModuleMenuIconProps = {
   variant: 'curated2' | 'csm2';
+  size?: 60 | 40;
 };
 
-const BoxStyle = styled.span`
+const BoxStyle = styled.span<{ $size: number }>`
   position: relative;
   display: block;
   flex-shrink: 0;
-  width: 60px;
-  height: 60px;
+  width: ${({ $size }) => $size}px;
+  height: ${({ $size }) => $size}px;
   overflow: hidden;
 `;
 
@@ -56,8 +57,11 @@ const CSM2_VECTORS = [
   { src: csm2V6, inset: '27.29% 52.86% 48.63% 31.19%' },
 ];
 
-export const ModuleMenuIcon: FC<ModuleMenuIconProps> = ({ variant }) => (
-  <BoxStyle aria-hidden>
+export const ModuleMenuIcon: FC<ModuleMenuIconProps> = ({
+  variant,
+  size = 60,
+}) => (
+  <BoxStyle $size={size} aria-hidden>
     {variant === 'curated2' ? (
       <Layer src={curated2Group} inset="15% 22.5% 13.86% 22.5%" />
     ) : (

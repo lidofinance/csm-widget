@@ -2,7 +2,6 @@ import { IconChevronsUpDown } from '@lidofinance/lido-app-ui';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import {
   useAvailableOperators,
-  useDappStatus,
   useNodeOperator,
   useOperatorCurveId,
 } from 'modules/web3';
@@ -19,7 +18,6 @@ import { SwitchPopup } from './switch-popup';
 import { ChevronStyle, NameStyle, TagsStyle, TriggerStyle } from './styles';
 
 export const OperatorSwitcher: FC = () => {
-  const { isSupportedChain } = useDappStatus();
   const { nodeOperator, requestSelection } = useNodeOperator();
   const { data: list } = useAvailableOperators();
   const { data: curve } = useOperatorCurveId(nodeOperator);
@@ -37,7 +35,7 @@ export const OperatorSwitcher: FC = () => {
     setOpen((value) => !value);
   }, [nodeOperator, requestSelection]);
 
-  if (!isSupportedChain || !list || list.length === 0) return null;
+  if (!list) return null;
 
   return (
     <>

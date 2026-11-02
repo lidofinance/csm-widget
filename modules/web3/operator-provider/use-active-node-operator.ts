@@ -58,7 +58,7 @@ export const useActiveNodeOperator = (list?: ModuleNodeOperator[]) => {
     nodeOperator: resolved,
     setActive,
     needsSelection,
-    selectionDismissed: rawNeedsSelection && dismissed,
+    hasCachedPick: !!cachedRef,
     dismissSelection,
     requestSelection,
   } as const;

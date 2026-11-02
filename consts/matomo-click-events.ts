@@ -103,6 +103,8 @@ export const enum MATOMO_CLICK_EVENTS_TYPES {
   myOperatorsCreate = 'myOperatorsCreate',
   chooseOperatorCreateCsm = 'chooseOperatorCreateCsm',
   chooseOperatorCreateCm = 'chooseOperatorCreateCm',
+  switchOperatorCreateCsm = 'switchOperatorCreateCsm',
+  switchOperatorCreateCm = 'switchOperatorCreateCm',
   myOperatorsSuggestion = 'myOperatorsSuggestion',
   // Rewards History
   rewardsHistoryExport = 'rewardsHistoryExport',
@@ -500,6 +502,14 @@ export const MATOMO_CLICK_EVENTS: Record<
   [MATOMO_CLICK_EVENTS_TYPES.chooseOperatorCreateCm]: createEvent(
     'Push «New CM Operator» on Choose a Node Operator modal',
     'choose_operator_create_cm',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.switchOperatorCreateCsm]: createEvent(
+    'Push «New CSM Operator» on operator switcher popup',
+    'switch_operator_create_csm',
+  ),
+  [MATOMO_CLICK_EVENTS_TYPES.switchOperatorCreateCm]: createEvent(
+    'Push «New CM Operator» on operator switcher popup',
+    'switch_operator_create_cm',
   ),
   [MATOMO_CLICK_EVENTS_TYPES.myOperatorsSuggestion]: createEvent(
     'Follow suggestion from My operators',
