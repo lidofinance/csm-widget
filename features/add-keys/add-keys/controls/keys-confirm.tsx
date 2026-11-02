@@ -6,8 +6,8 @@ import {
 import { FC } from 'react';
 import { useDepositDataValid } from 'shared/hook-form/deposit-data';
 import { CheckboxField } from 'shared/hook-form/fields';
-import { getKeysConfirmItems, KEYS_CONFIRM_CM } from '../add-keys-state';
-import { ConfirmLineStyle } from '../styles';
+import { KEYS_CONFIRM_CM } from '../add-keys-state';
+import { KeysConfirmLines } from './keys-confirm-lines';
 
 const ConfirmText: FC = () => {
   const { isCsmFamily } = useModule();
@@ -15,18 +15,11 @@ const ConfirmText: FC = () => {
 
   if (!isCsmFamily) return <>{KEYS_CONFIRM_CM}</>;
 
-  const items = getKeysConfirmItems({
-    approaching: status === SHARE_LIMIT_STATUS.APPROACHING,
-    reached: status === SHARE_LIMIT_STATUS.REACHED,
-  });
-
   return (
-    <>
-      I confirm that:
-      {items.map((item) => (
-        <ConfirmLineStyle key={item}>{item}</ConfirmLineStyle>
-      ))}
-    </>
+    <KeysConfirmLines
+      approaching={status === SHARE_LIMIT_STATUS.APPROACHING}
+      reached={status === SHARE_LIMIT_STATUS.REACHED}
+    />
   );
 };
 

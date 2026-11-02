@@ -5,6 +5,7 @@ import { PATH } from 'consts/urls';
 import type { CreateSuccess } from 'features/create-node-operator/create-success/create-success';
 import { FC } from 'react';
 import { MatomoLink } from 'shared/components';
+import { getBeaconchainDashboardLink } from 'shared/hooks/beaconchain-dashboard-link';
 import { LocalLink } from 'shared/navigate';
 import {
   useNeedsOperatorSwitch,
@@ -14,8 +15,6 @@ import { WhatsNextStyle } from './styles';
 
 type WhatsNextProps = { created: CreateSuccess };
 
-const DASHBOARD_KEYS_LIMIT = 20;
-
 export const WhatsNext: FC<WhatsNextProps> = ({ created }) => {
   const { hasRole, keys = [] } = created;
   const { beaconchain } = getExternalLinks();
@@ -23,9 +22,7 @@ export const WhatsNext: FC<WhatsNextProps> = ({ created }) => {
   const switchOperator = useSwitchOperator();
   const dashboardLink =
     beaconchain && keys.length > 0
-      ? `${beaconchain}/dashboard?validators=${keys
-          .slice(0, DASHBOARD_KEYS_LIMIT)
-          .join(',')}`
+      ? getBeaconchainDashboardLink(beaconchain, keys)
       : null;
 
   return (

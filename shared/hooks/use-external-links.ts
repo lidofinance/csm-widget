@@ -6,11 +6,10 @@ import {
   useSmSDK,
 } from 'modules/web3';
 import { mainnet } from 'viem/chains';
+import { getBeaconchainDashboardLink } from './beaconchain-dashboard-link';
 import { useChainName } from './use-chain-name';
 import { useExternalLinks } from './use-csm-constants';
 import { useSortedKeys } from './use-sorted-keys';
-
-const DASHBOARD_KEYS_LIMIT = 20;
 
 export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
   const nodeOperatorId = useNodeOperatorId();
@@ -20,13 +19,10 @@ export const useBeaconchainDashboardLink = (directKeys?: string[]) => {
 
   if (!beaconchain) return null;
 
-  const keysToShow = (
-    sortedKeys.length > 0 ? sortedKeys.map(({ pubkey }) => pubkey) : directKeys
-  )
-    ?.slice(0, DASHBOARD_KEYS_LIMIT)
-    .join(',');
-
-  return `${beaconchain}/dashboard?validators=${keysToShow ?? ''}`;
+  return getBeaconchainDashboardLink(
+    beaconchain,
+    sortedKeys.length > 0 ? sortedKeys.map(({ pubkey }) => pubkey) : directKeys,
+  );
 };
 
 export const useBeaconchainEntityLink = () => {
