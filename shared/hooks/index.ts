@@ -1,4 +1,5 @@
 export * from './use-ens-resolution';
+export * from './use-ens-input';
 export * from './use-api-address-validation';
 export * from './use-awaiter';
 export * from './use-can-claim-ics';

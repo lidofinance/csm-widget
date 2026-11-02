@@ -1,6 +1,6 @@
 import { Address, Identicon, Loader } from '@lidofinance/lido-ui';
-import { ChangeEvent, forwardRef, useCallback, useEffect, useRef } from 'react';
-import { useEnsResolution } from 'shared/hooks/use-ens-resolution';
+import { forwardRef } from 'react';
+import { useEnsInput } from 'shared/hooks/use-ens-input';
 import { InputDecoratorLocked } from '../input-amount/input-decorator-locked';
 import { AddressChip, IdenticonSlot, StyledInput } from './styles';
 import { InputAddressProps } from './types';
@@ -24,47 +24,8 @@ export const InputAddress = forwardRef<
     },
     ref,
   ) => {
-    const {
-      inputValue,
-      address,
-      ensName,
-      isEns,
-      isLoading,
-      handleChange,
-      resolution,
-    } = useEnsResolution();
-
-    // Track what we emitted to parent to distinguish echoes from external changes
-    const initializedRef = useRef(false);
-    const emittedRef = useRef('');
-
-    // Emit on every resolution pass (skip mount). Unresolvable text is emitted
-    // raw so resolvers can tell "invalid" from "empty".
-    useEffect(() => {
-      const emitValue = resolution.value ?? resolution.input;
-      emittedRef.current = emitValue;
-      if (!initializedRef.current) {
-        initializedRef.current = true;
-        return;
-      }
-      onChange?.(emitValue);
-    }, [resolution, onChange]);
-
-    // Sync from parent value prop (programmatic fills only)
-    useEffect(() => {
-      if (value === emittedRef.current) return;
-      if (value !== undefined && value !== inputValue) {
-        handleChange(value);
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [value]);
-
-    const onInputChange = useCallback(
-      (e: ChangeEvent<HTMLInputElement>) => {
-        handleChange(e.currentTarget.value);
-      },
-      [handleChange],
-    );
+    const { inputValue, address, ensName, isEns, isLoading, onInputChange } =
+      useEnsInput({ value, onChange });
 
     return (
       <StyledInput
