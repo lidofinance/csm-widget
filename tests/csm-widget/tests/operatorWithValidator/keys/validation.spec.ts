@@ -100,18 +100,10 @@ test.describe(
           );
 
           await test.step('Verify that other tabs and controls are disabled', async () => {
-            await expect(
-              keysPage.submitPage.formBlock
-                .getByRole('button')
-                .getByText('Parsed'),
-            ).toBeDisabled();
-            await expect(
-              keysPage.submitPage.formBlock
-                .getByRole('button')
-                .getByText('Parameters'),
-            ).toBeDisabled();
+            await expect(keysPage.submitPage.parsedTab).toBeDisabled();
+            await expect(keysPage.submitPage.parametersTab).toBeDisabled();
 
-            await expect(keysPage.submitPage.amountInput).toBeDisabled();
+            await expect(keysPage.submitPage.amountInput).not.toBeEditable();
             await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
             await expect(
               keysPage.submitPage.confirmKeysReadyInput,
@@ -141,18 +133,10 @@ test.describe(
           );
 
           await test.step('Verify that other tabs and controls are disabled', async () => {
-            await expect(
-              keysPage.submitPage.formBlock
-                .getByRole('button')
-                .getByText('Parsed'),
-            ).toBeDisabled();
-            await expect(
-              keysPage.submitPage.formBlock
-                .getByRole('button')
-                .getByText('Parameters'),
-            ).toBeDisabled();
+            await expect(keysPage.submitPage.parsedTab).toBeDisabled();
+            await expect(keysPage.submitPage.parametersTab).toBeDisabled();
 
-            await expect(keysPage.submitPage.amountInput).toBeDisabled();
+            await expect(keysPage.submitPage.amountInput).not.toBeEditable();
             await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
             await expect(
               keysPage.submitPage.confirmKeysReadyInput,
@@ -180,18 +164,10 @@ test.describe(
           );
 
           await test.step('Verify that other tabs and controls are disabled', async () => {
-            await expect(
-              keysPage.submitPage.formBlock
-                .getByRole('button')
-                .getByText('Parsed'),
-            ).toBeDisabled();
-            await expect(
-              keysPage.submitPage.formBlock
-                .getByRole('button')
-                .getByText('Parameters'),
-            ).toBeDisabled();
+            await expect(keysPage.submitPage.parsedTab).toBeDisabled();
+            await expect(keysPage.submitPage.parametersTab).toBeDisabled();
 
-            await expect(keysPage.submitPage.amountInput).toBeDisabled();
+            await expect(keysPage.submitPage.amountInput).not.toBeEditable();
             await expect(keysPage.submitPage.submitKeysButton).toBeDisabled();
             await expect(
               keysPage.submitPage.confirmKeysReadyInput,

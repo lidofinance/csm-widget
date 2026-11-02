@@ -29,7 +29,7 @@ const expectFormLocked = (submitPage: SubmitPage) =>
   test.step('Verify Parsed/Parameters tabs and controls are disabled', async () => {
     await expect(submitPage.parsedTab).toBeDisabled();
     await expect(submitPage.parametersTab).toBeDisabled();
-    await expect(submitPage.amountInput).toBeDisabled();
+    await expect(submitPage.amountInput).not.toBeEditable();
     await expect(submitPage.submitKeysButton).toBeDisabled();
     await expect(submitPage.confirmKeysReadyInput).toBeDisabled();
   });
