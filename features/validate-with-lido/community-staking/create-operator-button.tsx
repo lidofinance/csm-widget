@@ -22,7 +22,7 @@ const ConnectButton: FC = () => {
       disabled={disabled}
       data-testid={TEST_ID}
     >
-      Create a Node Operator
+      Join CSM
     </Button>
   );
 };

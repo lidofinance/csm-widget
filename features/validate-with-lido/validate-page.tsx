@@ -1,14 +1,21 @@
 import { Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { useDappStatus } from 'modules/web3';
+import {
+  useAvailableOperators,
+  useDappStatus,
+  useNodeOperator,
+} from 'modules/web3';
 import { Layout } from 'shared/layout';
 import { BannerOperatorCustomAddresses } from 'features/create-node-operator/banner-operator-custom-addresses';
-import { ConnectedHero, DisconnectedHero } from './hero';
+import { ConnectedHero, DisconnectedHero, SelectOperatorHero } from './hero';
 import { InvitesRedirect } from './invites-redirect';
 import { ModulesSection } from './modules/modules-section';
 
 export const ValidatePage: FC = () => {
   const { isAccountActive: isConnected } = useDappStatus();
+  const { nodeOperator } = useNodeOperator();
+  const { data: list } = useAvailableOperators();
+  const needsChoice = !!list?.length && !nodeOperator;
 
   return (
     <Layout
@@ -21,7 +28,7 @@ export const ValidatePage: FC = () => {
           <>
             <InvitesRedirect />
             <BannerOperatorCustomAddresses />
-            <ConnectedHero />
+            {needsChoice ? <SelectOperatorHero /> : <ConnectedHero />}
           </>
         ) : (
           <DisconnectedHero />

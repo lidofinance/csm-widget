@@ -7,11 +7,13 @@ import { ExternalCtaButton, InternalButtonLink } from './button-links';
 type CsmJoinButtonsProps = {
   size: 'small' | 'big';
   joinTestId?: string;
+  joinLabel?: string;
 };
 
 export const CsmJoinButtons: FC<CsmJoinButtonsProps> = ({
   size,
   joinTestId,
+  joinLabel = 'Join CSM',
 }) => (
   <>
     <InternalButtonLink
@@ -21,7 +23,7 @@ export const CsmJoinButtons: FC<CsmJoinButtonsProps> = ({
       matomoEvent={MATOMO_CLICK_EVENTS_TYPES.validateJoinCsm}
       data-testid={joinTestId}
     >
-      Join CSM
+      {joinLabel}
     </InternalButtonLink>
     <ExternalCtaButton
       href={LIDO_OPERATOR_PORTAL_BASE}

@@ -1,27 +1,29 @@
-import { Stack, Typography } from '@lidofinance/lido-app-ui';
+import { Stack } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { CsmJoinButtons, PromoCard, SecondaryText } from '../components';
+import { CsmJoinButtons } from '../components';
+import { HeroCard, HeroText } from './hero-card';
 
 export const ConnectedHero: FC = () => (
-  <PromoCard $radius="xl">
-    <Stack direction="column" gap={24}>
-      <Stack direction="column" gap={8}>
-        <Typography variant="h1" as="h2">
-          You don’t have any operators yet
-        </Typography>
-        <div>
-          <SecondaryText variant="bodyLarge">
-            Your connected wallet isn’t managing any Node Operators yet. Get
-            started by joining one of Lido’s staking modules.
-          </SecondaryText>
-          <SecondaryText variant="bodyLarge">
-            Community Staking Module is the easiest way to begin.
-          </SecondaryText>
-        </div>
-      </Stack>
+  <HeroCard
+    variant="fill"
+    title="Become a Node Operator"
+    text={
+      <HeroText>
+        You don’t have any Node Operators yet. Start running validators easily
+        through Lido&apos;s staking modules. We highly recommend the Community
+        Staking Module (CSM) — it is permissionless, requires no whitelist, has
+        a low bond requirement, and is the perfect starting point for solo
+        stakers.
+      </HeroText>
+    }
+    actions={
       <Stack direction="row" gap={12} wrap>
-        <CsmJoinButtons size="big" joinTestId="heroJoinCsmBtn" />
+        <CsmJoinButtons
+          size="big"
+          joinLabel="Get Started with CSM"
+          joinTestId="heroJoinCsmBtn"
+        />
       </Stack>
-    </Stack>
-  </PromoCard>
+    }
+  />
 );

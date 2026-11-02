@@ -5,11 +5,10 @@ import {
   Stack,
   Typography,
 } from '@lidofinance/lido-app-ui';
-import { MODULE_NAME } from '@lidofinance/lido-csm-sdk';
+import { CSM_NODE_SETUP_LINK } from 'consts/external-links';
 import { MATOMO_CLICK_EVENTS_TYPES } from 'consts/matomo-click-events';
 import { FC } from 'react';
 import styled from 'styled-components';
-import { useExternalLinks } from 'shared/hooks';
 import { trackMatomoEvent } from 'utils';
 import allnodes from 'assets/partners/simple-staking/allnodes.svg';
 import beaconchain from 'assets/partners/simple-staking/beaconchain.svg';
@@ -165,15 +164,13 @@ const BlockView: FC<{ block: Block }> = ({ block }) => (
 );
 
 export const SimpleStakingCard: FC = () => {
-  const { landing } = useExternalLinks(MODULE_NAME.CSM);
-
   return (
     <PromoCard>
       <Stack direction="column" gap={24} align="stretch">
         <Header>
           <H3>Simple Staking with CSM</H3>
           <DetailsLink
-            href={landing}
+            href={CSM_NODE_SETUP_LINK}
             target="_blank"
             rel="noopener noreferrer"
             onClick={() =>

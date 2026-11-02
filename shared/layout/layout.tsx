@@ -11,13 +11,18 @@ import { FC, PropsWithChildren, ReactNode, useContext, useEffect } from 'react';
 
 import { NodeOperatorContext } from 'modules/web3/operator-provider/node-operator-provider';
 import { AlertContainer } from 'shared/alerts';
-import { LegalDisclaimer, TestEnvBanner } from 'shared/components';
+import {
+  LegalDisclaimer,
+  PageDisclaimerProvider,
+  PageDisclaimers,
+  TestEnvBanner,
+} from 'shared/components';
 import { trackMatomoPageEvent } from 'utils';
 import { Footer } from './footer';
 import { Crumb, Crumbs, useCrumbs } from './crumbs';
 import { Header } from './header';
 import { Navigation } from './navigation';
-import { MainStyled, Subtitle } from './styles';
+import { DisclaimersStyled, MainStyled, Subtitle } from './styles';
 
 type Props = {
   title?: ReactNode;
@@ -49,32 +54,43 @@ export const Layout: FC<PropsWithChildren<Props>> = ({
   }, [pageName]);
 
   return (
-    <LibLayout>
-      <SkipLink />
-      <TestEnvBanner />
-      <SidebarLayout>
-        <Navigation />
-        <SidebarInset>
-          <Header dummy={mode} crumbs={crumbs} />
-          <MainStyled>
-            {!mode && !fullwidth && <AlertContainer />}
-            <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
-              <AppStack direction="column" gap={24} align="stretch">
-                <Hidden above="md" data-testid="pageTitle">
-                  <Crumbs crumbs={crumbs} />
-                </Hidden>
-                {mainPrefix}
-                {subtitle && (
-                  <Subtitle data-testid="pageSubtitle">{subtitle}</Subtitle>
+    <PageDisclaimerProvider>
+      <LibLayout>
+        <SkipLink />
+        <TestEnvBanner />
+        <SidebarLayout>
+          <Navigation />
+          <SidebarInset>
+            <Header dummy={mode} crumbs={crumbs} />
+            <MainStyled>
+              {!mode && !fullwidth && <AlertContainer />}
+              <PageContent variant={fullwidth || wide ? 'default' : 'narrow'}>
+                <AppStack direction="column" gap={24} align="stretch">
+                  <Hidden above="md" data-testid="pageTitle">
+                    <Crumbs crumbs={crumbs} />
+                  </Hidden>
+                  {mainPrefix}
+                  {subtitle && (
+                    <Subtitle data-testid="pageSubtitle">{subtitle}</Subtitle>
+                  )}
+                  {children}
+                </AppStack>
+                {!mode && (
+                  <DisclaimersStyled
+                    direction="column"
+                    gap={12}
+                    align="stretch"
+                  >
+                    <PageDisclaimers />
+                    <LegalDisclaimer />
+                  </DisclaimersStyled>
                 )}
-                {children}
-              </AppStack>
-              {!mode && <LegalDisclaimer />}
-            </PageContent>
-          </MainStyled>
-          <Footer dummy={mode} />
-        </SidebarInset>
-      </SidebarLayout>
-    </LibLayout>
+              </PageContent>
+            </MainStyled>
+            <Footer dummy={mode} />
+          </SidebarInset>
+        </SidebarLayout>
+      </LibLayout>
+    </PageDisclaimerProvider>
   );
 };

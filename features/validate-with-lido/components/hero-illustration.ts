@@ -31,6 +31,7 @@ export const HeroIllustrationSlot = styled.div<FluidProps>`
 
 export const HeroIllustration = styled(Illustration)<FluidProps>`
   flex: none;
+  margin: -20px;
 
   @media (max-width: 899px) {
     && {

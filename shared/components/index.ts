@@ -64,3 +64,4 @@ export * from './issues-chip';
 export * from './toggle';
 export { AppShellLoader } from './app-shell-loader/app-shell-loader';
 export * from './error-boundary';
+export * from './page-disclaimers';

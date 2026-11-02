@@ -13,6 +13,8 @@ export const EXTENDED_MODE_LINK =
 export const UNBONDED_VALIDATORS_LINK =
   'https://docs.lido.fi/run-on-lido/csm/troubleshooting/unbonded-validators';
 export const CSM_DOCS_LINK = 'https://docs.lido.fi/run-on-lido/csm/';
+export const CSM_NODE_SETUP_LINK =
+  'https://docs.lido.fi/run-on-lido/csm/node-setup/';
 export const MEV_STEALING_LINK =
   'https://docs.lido.fi/run-on-lido/csm/troubleshooting/mev-stealing';
 export const PERFORMANCE_TIPS_LINK =

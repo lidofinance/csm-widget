@@ -2,6 +2,7 @@ import { Divider, H3, Stack, Typography } from '@lidofinance/lido-app-ui';
 import { MODULE_NAME, OPERATOR_TYPE } from '@lidofinance/lido-csm-sdk';
 import { FC, Fragment } from 'react';
 import styled from 'styled-components';
+import { DisclaimerMark } from 'shared/components';
 import { useModuleOpen } from 'shared/hooks/can-create/use-module-open';
 import badge0x01 from 'assets/illustrations/operator-type/0x01.svg';
 import badge0x02 from 'assets/illustrations/operator-type/0x02.svg';
@@ -97,7 +98,7 @@ const OptionRow: FC<OptionRowProps> = ({ option, apr }) => (
           stat={apr}
           format={(value) => (
             <Typography variant="bodyLarge" weight="semibold">
-              {value}%*
+              {value}%<DisclaimerMark id="apr" />
             </Typography>
           )}
         />

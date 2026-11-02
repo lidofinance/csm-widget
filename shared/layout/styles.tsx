@@ -1,4 +1,4 @@
-import { Main, Typography } from '@lidofinance/lido-app-ui';
+import { Main, Stack, Typography } from '@lidofinance/lido-app-ui';
 import styled from 'styled-components';
 
 export const MainStyled = styled(Main)`
@@ -16,4 +16,9 @@ export const Subtitle = styled(Typography).attrs({
   &:empty {
     display: none;
   }
+`;
+
+// app-ui Disclaimer pins itself via `margin-top: auto`, which only works on a direct PageContent child, so the wrapper carries it
+export const DisclaimersStyled = styled(Stack)`
+  margin-top: auto;
 `;
