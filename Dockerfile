@@ -1,4 +1,5 @@
-FROM node:24-alpine AS node-base
+ARG ALPINE_VERSION=3.24
+FROM node:24-alpine${ALPINE_VERSION} AS node-base
 
 # dependencies for the build
 FROM node-base AS deps
@@ -38,6 +39,11 @@ RUN if [ -n "$BUILD_COMMIT" ]; then \
 
 # runtime image
 FROM node-base AS runner
+
+# runtime is plain node; bundled npm/yarn/corepack deps are frequent scanner findings
+RUN rm -rf /usr/local/lib/node_modules/npm /usr/local/lib/node_modules/corepack \
+      /usr/local/bin/npm /usr/local/bin/npx /usr/local/bin/corepack \
+      /opt/yarn-v* /usr/local/bin/yarn /usr/local/bin/yarnpkg
 
 ARG BASE_PATH=""
 ARG DEFAULT_CHAIN="1"
