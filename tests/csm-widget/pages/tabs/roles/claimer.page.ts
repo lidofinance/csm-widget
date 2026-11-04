@@ -3,10 +3,9 @@ import { BasePage } from '../../../../shared/pages/base.page';
 
 export class ClaimerPage extends BasePage {
   form: Locator;
-  backButton: Locator;
+  settingsCrumb: Locator;
 
   // Info section
-  currentClaimerSection: Locator;
   currentClaimerTitle: Locator;
   currentClaimerTooltipIcon: Locator;
   unsetButton: Locator;
@@ -23,12 +22,10 @@ export class ClaimerPage extends BasePage {
   constructor(page: Page) {
     super(page);
     this.form = this.page.getByTestId('claimerForm');
-    this.backButton = this.form.getByRole('link', {
-      name: 'Back',
-      exact: true,
-    });
+    this.settingsCrumb = this.page
+      .getByRole('navigation', { name: 'Breadcrumb' })
+      .getByRole('link', { name: 'Settings', exact: true });
 
-    this.currentClaimerSection = this.form.getByTestId('claimerSectionTitle');
     this.currentClaimerTitle = this.form.getByTestId('currentClaimerInfo');
     this.currentClaimerTooltipIcon =
       this.currentClaimerTitle.getByTestId('iconTooltip');

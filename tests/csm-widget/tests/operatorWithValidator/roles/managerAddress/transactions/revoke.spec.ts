@@ -4,7 +4,7 @@ import { EPIC, suite } from 'tests/csm-widget/consts/qase.const';
 import { LOW_TIMEOUT, STAGE_WAIT_TIMEOUT } from 'tests/shared/consts/timeouts';
 import { qase } from 'playwright-qase-reporter/playwright';
 import { generateAddress } from 'tests/shared/helpers/accountData';
-import { trimAddress } from '@lidofinance/address';
+import { trimHex } from 'tests/shared/helpers/trimHex';
 import { mnemonicToAccount } from 'viem/accounts';
 import { PRESETS } from 'tests/csm-widget/config/walletSetup';
 
@@ -60,7 +60,7 @@ test.describe(
             await expect(txModal.description).toContainText('Address stays');
 
             await expect(txModal.description).toContainText(
-              trimAddress(currentAddress, 6),
+              trimHex(currentAddress, 6),
             );
             await expect(txModal.footerHint).toHaveText(
               'Confirm this transaction in your wallet',
@@ -101,7 +101,7 @@ test.describe(
 
           await expect(txModal.description).toContainText('Address stays');
           await expect(txModal.description).toContainText(
-            trimAddress(currentAddress, 6),
+            trimHex(currentAddress, 6),
           );
           await expect(txModal.footerHint).toContainText('View on Etherscan');
         });

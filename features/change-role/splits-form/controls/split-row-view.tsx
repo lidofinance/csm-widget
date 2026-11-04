@@ -1,76 +1,23 @@
-import { ButtonIcon, Input, LockSmall } from '@lidofinance/lido-ui';
+import { Input } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
-import { InputAddress, InputPercent } from 'shared/components';
-import styled from 'styled-components';
-import { Address } from 'viem';
-import { AddressColumn, RowStyle, ShareColumn } from './styles';
+import { formatPercentInput } from 'shared/hook-form/fields/percent-input';
+import { ShareRowStyle } from '../styles';
 
-type SplitRowProps = {
-  title: string;
-  address: Address;
+type ShareRowViewProps = {
+  label: string;
+  value: string;
   share: bigint;
-  locked?: boolean;
+  'data-testid'?: string;
 };
 
-export const SplitRowView: FC<SplitRowProps> = ({
-  title,
-  address,
+export const ShareRowView: FC<ShareRowViewProps> = ({
+  label,
+  value,
   share,
-  locked,
-}) => {
-  return (
-    <RowStyle>
-      <AddressColumn>
-        <InputAddress disabled simple label={title} value={address} fullwidth />
-      </AddressColumn>
-      <ShareColumn>
-        <InputPercent disabled label="Share, %" value={share} fullwidth />
-      </ShareColumn>
-      {locked && (
-        <ButtonIcon
-          color="secondary"
-          disabled
-          icon={<LockSmall />}
-          variant="text"
-          size="xs"
-        />
-      )}
-    </RowStyle>
-  );
-};
-
-type BondRowProps = {
-  title: string;
-  description: string;
-  share: bigint;
-};
-
-export const BondRowView: FC<BondRowProps> = ({
-  title,
-  description,
-  share,
-}) => {
-  return (
-    <RowStyle data-testid="splitsBondRow">
-      <AddressColumn>
-        <InputStyled disabled label={title} value={description} fullwidth />
-      </AddressColumn>
-      <ShareColumn>
-        <InputPercent disabled label="Share, %" value={share} fullwidth />
-      </ShareColumn>
-    </RowStyle>
-  );
-};
-
-const InputStyled = styled(Input)`
-  & span span {
-    transform: translateY(-10px);
-    font-weight: 700;
-    color: var(--lido-color-text);
-  }
-  & input {
-    font-size: ${({ theme }) => theme.fontSizesMap.xxs}px;
-    line-height: 1.668;
-    top: 11px;
-  }
-`;
+  'data-testid': dataTestId,
+}) => (
+  <ShareRowStyle data-testid={dataTestId}>
+    <Input readOnly label={label} value={value} />
+    <Input readOnly label="Share, %" value={formatPercentInput(share)} />
+  </ShareRowStyle>
+);

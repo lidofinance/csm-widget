@@ -1,7 +1,6 @@
 import { type NodeOperatorShortInfo, ROLES } from '@lidofinance/lido-csm-sdk';
-import { Text } from '@lidofinance/lido-ui';
 import { ROLES_METADATA } from 'consts/roles';
-import { Address as AddressComponent, Stack } from 'shared/components';
+import { buildAcceptInviteStages } from 'features/accept-invite/accept-invite-form/hooks/use-tx-modal-stages-accept-invite';
 import { type ChangeRoleMode, useChangeRoleMode } from 'shared/hooks';
 import {
   AfterAddressProposed,
@@ -11,7 +10,7 @@ import {
   useTxStages,
 } from 'shared/transaction-modal';
 import { zeroAddress } from 'viem';
-import { buildAcceptInviteStages } from 'features/accept-invite/accept-invite-form/hooks/use-tx-modal-stages-accept-invite';
+import { TxAddressDescription } from '../../shared/tx-address-description';
 import {
   ChangeRoleFormInputType,
   ChangeRoleFormNetworkData,
@@ -24,80 +23,54 @@ const getTexts = (
 ) => {
   const address =
     input.intent === 'revoke' ? zeroAddress : (input.address ?? zeroAddress);
+  const roleTitle = ROLES_METADATA[data.role].capitalizedTitle;
 
-  return mode === 'managerReset' || mode === 'rewardsChange'
-    ? {
-        sign: {
-          title: `You are changing ${ROLES_METADATA[data.role].capitalizedTitle} Address`,
-          description: (
-            <Stack gap="xs" direction="column" as="span">
-              New {ROLES_METADATA[data.role].capitalizedTitle} Address is
-              <Text size="xxs">
-                <AddressComponent address={address} showIcon />
-              </Text>
-            </Stack>
-          ),
-        },
-        success: {
-          title: `${ROLES_METADATA[data.role].capitalizedTitle} Address has been changed`,
-          description: (
-            <Stack gap="xs" direction="column" as="span">
-              New {ROLES_METADATA[data.role].capitalizedTitle} Address is
-              <Text size="xxs">
-                <AddressComponent address={address} showIcon />
-              </Text>
-            </Stack>
-          ),
-        },
-      }
-    : input.intent === 'revoke'
-      ? {
-          sign: {
-            title: `You are canceling request for ${ROLES_METADATA[data.role].capitalizedTitle} Address change`,
-            description: (
-              <Stack gap="xs" direction="column" as="span">
-                Address stays
-                <Text size="xxs">
-                  <AddressComponent address={data.currentAddress} showIcon />
-                </Text>
-              </Stack>
-            ),
-          },
-          success: {
-            title: `Proposed request for ${ROLES_METADATA[data.role].capitalizedTitle} Address has been canceled`,
-            description: (
-              <Stack gap="xs" direction="column" as="span">
-                Address stays
-                <Text size="xxs">
-                  <AddressComponent address={data.currentAddress} showIcon />
-                </Text>
-              </Stack>
-            ),
-          },
-        }
-      : {
-          sign: {
-            title: `You are proposing ${ROLES_METADATA[data.role].capitalizedTitle} Address change`,
-            description: (
-              <Stack gap="xs" direction="column" as="span">
-                Proposed address
-                <Text size="xxs">
-                  <AddressComponent address={address} showIcon />
-                </Text>
-              </Stack>
-            ),
-          },
-          success: {
-            title: `New ${ROLES_METADATA[data.role].capitalizedTitle} Address has been proposed`,
-            description: (
-              <>
-                <br />
-                <br />
-                <AfterAddressProposed address={address} />
-              </>
-            ),
-          },
-        };
+  if (mode === 'managerReset' || mode === 'rewardsChange') {
+    const description = (
+      <TxAddressDescription
+        label={`New ${roleTitle} Address is`}
+        address={address}
+      />
+    );
+
+    return {
+      sign: { title: `You are changing ${roleTitle} Address`, description },
+      success: { title: `${roleTitle} Address has been changed`, description },
+    };
+  }
+
+  if (input.intent === 'revoke') {
+    const description = (
+      <TxAddressDescription
+        label="Address stays"
+        address={data.currentAddress}
+      />
+    );
+
+    return {
+      sign: {
+        title: `You are canceling request for ${roleTitle} Address change`,
+        description,
+      },
+      success: {
+        title: `Proposed request for ${roleTitle} Address has been canceled`,
+        description,
+      },
+    };
+  }
+
+  return {
+    sign: {
+      title: `You are proposing ${roleTitle} Address change`,
+      description: (
+        <TxAddressDescription label="Proposed address" address={address} />
+      ),
+    },
+    success: {
+      title: `New ${roleTitle} Address has been proposed`,
+      description: <AfterAddressProposed address={address} />,
+    },
+  };
 };
 
 export const useTxModalStagesChangeRole = (role: ROLES) => {

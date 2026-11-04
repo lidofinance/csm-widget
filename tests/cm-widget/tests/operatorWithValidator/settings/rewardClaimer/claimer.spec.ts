@@ -25,17 +25,6 @@ test.describe(
       async ({ widgetService }) => {
         const { claimerPage } = widgetService.settingsPage;
 
-        await test.step('"Back" button is visible', async () => {
-          await expect(claimerPage.backButton).toBeVisible();
-        });
-
-        await test.step('"Rewards claimer" section title is visible', async () => {
-          await expect(claimerPage.currentClaimerSection).toBeVisible();
-          await expect(claimerPage.currentClaimerSection).toHaveText(
-            'Rewards claimer',
-          );
-        });
-
         await test.step('"Current Rewards claimer" row is visible with "Not set" value', async () => {
           await expect(claimerPage.currentClaimerTitle).toBeVisible();
           await expect(claimerPage.currentClaimerTitle).toContainText(
@@ -82,11 +71,11 @@ test.describe(
     );
 
     test(
-      qase(207, 'Should navigate back to Settings on "Back" button click'),
+      qase(207, 'Should navigate back to Settings from breadcrumbs'),
       async ({ widgetService }) => {
         const { claimerPage } = widgetService.settingsPage;
 
-        await claimerPage.backButton.click();
+        await claimerPage.settingsCrumb.click();
         await expect(widgetService.page).toHaveURL(/\/settings/);
         await expect(
           widgetService.page.getByTestId('pageSwitcher'),

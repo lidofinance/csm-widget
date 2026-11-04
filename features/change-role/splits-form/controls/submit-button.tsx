@@ -1,36 +1,30 @@
 import { FC, useCallback } from 'react';
-import { SubmitButtonHookForm } from 'shared/hook-form/controls';
-import {
-  splitsEqual,
-  SplitsFormInputType,
-  useSplitsFormData,
-} from '../context';
-import { Button } from '@lidofinance/lido-ui';
 import { useFormContext, useWatch } from 'react-hook-form';
+import { SubmitButton } from 'shared/form-page';
+import { SplitsFormInputType, useSplitsFormData } from '../context';
+import { getSplitsSubmitLabel, splitsEqual } from '../splits-state';
+import { CtaStackStyle, FullWidthButtonStyle } from '../styles';
 
-export const SubmitButton: FC = () => {
+export const SplitsCtas: FC = () => {
   const { currentFeeSplits } = useSplitsFormData(true);
-  const { reset } = useFormContext();
+  const { reset } = useFormContext<SplitsFormInputType>();
 
   const feeSplits = useWatch<SplitsFormInputType, 'feeSplits'>({
     name: 'feeSplits',
   });
-
-  const isUnchanged = splitsEqual(feeSplits ?? [], currentFeeSplits);
 
   const handleCancel = useCallback(() => {
     reset();
   }, [reset]);
 
   return (
-    <>
-      <SubmitButtonHookForm disabled={isUnchanged}>
-        {currentFeeSplits.length > 0 ? 'Apply changes' : 'Save splits'}
-      </SubmitButtonHookForm>
-
-      <Button variant="outlined" fullwidth onClick={handleCancel}>
+    <CtaStackStyle>
+      <SubmitButton disabled={splitsEqual(feeSplits ?? [], currentFeeSplits)}>
+        {getSplitsSubmitLabel(currentFeeSplits.length > 0)}
+      </SubmitButton>
+      <FullWidthButtonStyle variant="outline" onClick={handleCancel}>
         Cancel
-      </Button>
-    </>
+      </FullWidthButtonStyle>
+    </CtaStackStyle>
   );
 };

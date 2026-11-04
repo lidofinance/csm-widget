@@ -1,9 +1,14 @@
 import { Button, Modal, Text } from '@lidofinance/lido-ui';
 
-import type { ModalComponentType } from 'providers/modal-provider';
+import type { ModalComponentType, ModalProps } from 'providers/modal-provider';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { Stack } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
+import {
+  getConfirmChangeRoleStepCopy,
+  getConfirmChangeRoleSteps,
+} from './change-role-state';
+import { ConfirmChangeRoleModalApp } from './confirm-change-role-modal-app';
 
 type Props = {
   showRewards: boolean;
@@ -11,10 +16,10 @@ type Props = {
   showRepropose: boolean;
 };
 
-type Step = 'rewards' | 'repropose';
+type ConfirmChangeRoleModalProps = ConfirmModalProps & Props;
 
-export const ConfirmChangeRoleModal: ModalComponentType<
-  ConfirmModalProps & Props
+const ConfirmChangeRoleModalLegacy: FC<
+  ModalProps<Omit<ConfirmChangeRoleModalProps, 'ui'>>
 > = ({
   showRewards,
   isProposal,
@@ -24,16 +29,13 @@ export const ConfirmChangeRoleModal: ModalComponentType<
   ...props
 }) => {
   const steps = useMemo(
-    () =>
-      [showRewards && 'rewards', showRepropose && 'repropose'].filter(
-        Boolean,
-      ) as Step[],
+    () => getConfirmChangeRoleSteps({ showRewards, showRepropose }),
     [showRewards, showRepropose],
   );
 
   const [index, setIndex] = useState(0);
-  const current = steps[index];
   const isLast = index >= steps.length - 1;
+  const copy = getConfirmChangeRoleStepCopy(steps[index], isProposal);
 
   const onContinue = useCallback(() => {
     if (isLast) onConfirm();
@@ -43,20 +45,22 @@ export const ConfirmChangeRoleModal: ModalComponentType<
   return (
     <Modal {...props} center onClose={onReject}>
       <Stack direction="column" gap="xxl">
-        {current === 'rewards' ? (
-          <RewardsStep isProposal={isProposal} />
-        ) : (
-          <ReproposeStep />
-        )}
+        <Stack direction="column" gap="sm">
+          <Text as="h5" size="sm" weight={700}>
+            {copy.title}
+          </Text>
+          <Text size="xs" color="secondary">
+            {copy.body}
+          </Text>
+        </Stack>
 
         <Stack direction="column" gap="sm">
           <Button fullwidth onClick={onContinue}>
             Continue
           </Button>
-          {current === 'rewards' && isProposal && (
+          {copy.hint && (
             <Text size="xxs" color="secondary">
-              The change doesn’t apply immediately. To complete the address
-              change, the owner of the new address must confirm the change.
+              {copy.hint}
             </Text>
           )}
         </Stack>
@@ -65,30 +69,21 @@ export const ConfirmChangeRoleModal: ModalComponentType<
   );
 };
 
-const RewardsStep: FC<{ isProposal: boolean }> = ({ isProposal }) => (
-  <Stack direction="column" gap="sm">
-    <Text as="h5" size="sm" weight={700}>
-      {isProposal
-        ? 'All rewards will be claimable to the proposed address'
-        : 'All rewards will be claimable to the new address'}
-    </Text>
-    <Text size="xs" color="secondary">
-      After changing the Rewards Address, all rewards and excess bond
-      accumulated on the bond balance can be claimed to the new Rewards Address.
-      In the event of validator withdrawal, the whole bond is also returned to
-      the new address.
-    </Text>
-  </Stack>
-);
+export const ConfirmChangeRoleModal: ModalComponentType<
+  ConfirmChangeRoleModalProps
+> = ({ ui, ...props }) => {
+  if (ui === 'app') {
+    return (
+      <ConfirmChangeRoleModalApp
+        open={props.open}
+        showRewards={props.showRewards}
+        isProposal={props.isProposal}
+        showRepropose={props.showRepropose}
+        onConfirm={props.onConfirm}
+        onReject={props.onReject}
+      />
+    );
+  }
 
-const ReproposeStep: FC = () => (
-  <Stack direction="column" gap="sm">
-    <Text as="h5" size="sm" weight={700}>
-      Only most recent proposed address change is valid
-    </Text>
-    <Text size="xs" color="secondary">
-      When you propose a new address for change - the previous change proposal
-      is voided
-    </Text>
-  </Stack>
-);
+  return <ConfirmChangeRoleModalLegacy {...props} />;
+};

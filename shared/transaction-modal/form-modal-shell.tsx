@@ -27,6 +27,7 @@ export type FormModalShellProps = {
   subtitle?: ReactNode;
   children?: ReactNode;
   'data-testid'?: string;
+  'aria-labelledby'?: string;
 };
 
 export const FormModalShell: FC<FormModalShellProps> = ({

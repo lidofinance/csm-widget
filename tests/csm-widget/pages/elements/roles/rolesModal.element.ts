@@ -8,12 +8,12 @@ export class RolesModal {
   paragraphs: Locator;
 
   constructor(private page: Page) {
-    this.modal = this.page.locator('#lido-ui-modal-root [role="dialog"]');
-    this.closeButton = this.modal.locator('button[type="button"]').first();
+    this.modal = this.page.getByTestId('confirmChangeRoleModal');
+    this.closeButton = this.modal.getByRole('button', { name: 'Close' });
     this.continueButton = this.modal.getByRole('button', {
       name: 'Continue',
     });
-    this.headings = this.modal.locator('h5');
-    this.paragraphs = this.modal.locator('p');
+    this.headings = this.modal.getByTestId('changeRoleModalTitle');
+    this.paragraphs = this.modal.getByTestId('changeRoleModalText');
   }
 }

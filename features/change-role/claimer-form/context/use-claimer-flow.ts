@@ -4,7 +4,7 @@ import {
   type Executable,
   type FlowResolver,
 } from 'shared/hook-form/form-controller';
-import { zeroAddress } from 'viem';
+import { getClaimerAddress } from '../claimer-state';
 import { useTxModalStagesClaimer } from '../hooks/use-tx-modal-stages-claimer';
 import { useClaimerFormData } from './claimer-data-provider';
 import { ClaimerFormInputType, ClaimerFormNetworkData } from './types';
@@ -26,18 +26,12 @@ export const useClaimerFlowResolver = (): FlowResolver<
 
       return {
         action: 'set-claimer' as const,
-        submit: () => {
-          const claimerAddress =
-            input.intent === 'unset'
-              ? zeroAddress
-              : (input.address ?? zeroAddress);
-
-          return sdk.roles.setCustomRewardsClaimer({
+        submit: () =>
+          sdk.roles.setCustomRewardsClaimer({
             nodeOperatorId: data.nodeOperatorId,
-            claimerAddress,
+            claimerAddress: getClaimerAddress(input),
             callback: buildCallback(input, data),
-          });
-        },
+          }),
       };
     },
     [sdk, buildCallback],

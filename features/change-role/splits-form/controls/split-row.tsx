@@ -1,12 +1,17 @@
-import { ButtonIcon, Close, Text } from '@lidofinance/lido-ui';
+import { IconButton, IconCross } from '@lidofinance/lido-app-ui';
 import { FC } from 'react';
 import { useFormContext, useFormState } from 'react-hook-form';
 import {
-  AddressInputHookForm,
-  PercentInputHookForm,
-} from 'shared/hook-form/controls';
+  AddressField,
+  FieldError,
+  PercentField,
+} from 'shared/hook-form/fields';
 import { SplitsFormInputType } from '../context/types';
-import { AddressColumn, RowStyle, ShareColumn } from './styles';
+import {
+  EditShareRowStyle,
+  RemoveButtonCellStyle,
+  SectionStyle,
+} from '../styles';
 
 type SplitRowProps = {
   index: number;
@@ -36,41 +41,30 @@ export const SplitRow: FC<SplitRowProps> = ({ index, onRemove }) => {
   const errorMessage = recipientError?.message || shareError?.message;
 
   return (
-    <div>
-      <RowStyle>
-        <AddressColumn>
-          <AddressInputHookForm
-            fieldName={`feeSplits.${index}.recipient`}
-            label={`Additional address #${index + 1}`}
-            error={!!recipientError}
-            simple
-          />
-        </AddressColumn>
-        <ShareColumn>
-          <PercentInputHookForm
-            fieldName={`feeSplits.${index}.share`}
-            label="Share, %"
-            placeholder="0.00"
-            onChange={() => {
-              clearErrors(`feeSplits.${index}.share`);
-            }}
-            error={!!shareError}
-          />
-        </ShareColumn>
-        <ButtonIcon
-          icon={<Close />}
-          variant="ghost"
-          color="secondary"
-          size="xs"
-          onClick={() => onRemove(index)}
-          aria-label="Remove"
+    <SectionStyle>
+      <EditShareRowStyle>
+        <AddressField
+          name={`feeSplits.${index}.recipient`}
+          label={`Additional address #${index + 1}`}
+          simple
+          error={!!recipientError}
         />
-      </RowStyle>
-      {errorMessage && (
-        <Text size="xxs" color="error">
-          {errorMessage}
-        </Text>
-      )}
-    </div>
+        <PercentField
+          name={`feeSplits.${index}.share`}
+          label="Share, %"
+          error={!!shareError}
+          onChange={() => clearErrors(`feeSplits.${index}.share`)}
+        />
+        <RemoveButtonCellStyle>
+          <IconButton
+            variant="ghost"
+            icon={<IconCross />}
+            aria-label="Remove"
+            onClick={() => onRemove(index)}
+          />
+        </RemoveButtonCellStyle>
+      </EditShareRowStyle>
+      <FieldError>{errorMessage}</FieldError>
+    </SectionStyle>
   );
 };

@@ -1,28 +1,25 @@
-import { PATH } from 'consts/urls';
+import { useFaq } from 'faq';
 import { FC, memo } from 'react';
-import { BackButton, FormBlock } from 'shared/components';
-import { Form } from 'shared/hook-form/form-controller';
+import { Faq } from 'shared/components';
+import { FormPage, FormReady } from 'shared/form-page';
+import { AppFormUi } from 'shared/hook-form/form-ui';
 import { SplitsDataProvider, SplitsFormProvider } from './context';
-import { EditInfo } from './controls/edit-info';
-import { EditSplits } from './controls/edit-splits';
-import { SubmitButton } from './controls/submit-button';
-import { SplitsFormLoader } from './splits-form-loader';
+import { SplitsFormGate } from './splits-form-gate';
 
 export const SplitsForm: FC = memo(() => {
+  const faq = useFaq('ROLES');
+
   return (
-    <SplitsDataProvider>
-      <FormBlock data-testid="splitsForm">
-        <BackButton href={PATH.SETTINGS} />
+    <AppFormUi>
+      <SplitsDataProvider>
         <SplitsFormProvider>
-          <SplitsFormLoader>
-            <Form>
-              <EditInfo />
-              <EditSplits />
-              <SubmitButton />
-            </Form>
-          </SplitsFormLoader>
+          <FormPage faq={<Faq items={faq} />}>
+            <FormReady>
+              <SplitsFormGate />
+            </FormReady>
+          </FormPage>
         </SplitsFormProvider>
-      </FormBlock>
-    </SplitsDataProvider>
+      </SplitsDataProvider>
+    </AppFormUi>
   );
 });

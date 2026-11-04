@@ -57,7 +57,8 @@ export const VALIDATION_MESSAGES = {
   // Fee splits
   noChangesAdditionalAddresses:
     'No changes were made to the additional addresses',
-  exceededTotalShare: "You've exceeded 100% of the total share",
+  exceededTotalShare:
+    'You’ve exceeded 100% of the total share. To add a new address to the splitter, please adjust the shares.',
   duplicateAddress: 'Duplicate address',
 
   // Claim type

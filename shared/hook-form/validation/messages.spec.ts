@@ -28,7 +28,6 @@ describe('VALIDATION_MESSAGES static strings', () => {
       'notSameAsCurrentAddress',
       'notSameAsProposedAddress',
       'noChangesAdditionalAddresses',
-      'exceededTotalShare',
       'duplicateAddress',
       'noKeysSelected',
       'proofNotProvided',
@@ -54,6 +53,12 @@ describe('VALIDATION_MESSAGES static strings', () => {
       const msg = VALIDATION_MESSAGES[key];
       expect(msg.endsWith('.')).toBe(false);
     }
+  });
+
+  it('two-sentence messages keep the trailing dot', () => {
+    expect(VALIDATION_MESSAGES.exceededTotalShare).toBe(
+      'You’ve exceeded 100% of the total share. To add a new address to the splitter, please adjust the shares.',
+    );
   });
 });
 

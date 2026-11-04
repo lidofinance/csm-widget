@@ -6,6 +6,7 @@ import { Address as AddressComponent, Stack } from 'shared/components';
 import { ConfirmModalProps } from 'shared/hooks';
 import styled from 'styled-components';
 import { formatPercent } from 'utils';
+import { ConfirmSplitsModalApp } from './confirm-splits-modal-app';
 
 type ConfirmSplitsModalProps = ConfirmModalProps & {
   feeSplits: FeeSplit[];
@@ -37,7 +38,18 @@ const ShareCell = styled.div`
 
 export const ConfirmSplitsModal: ModalComponentType<
   ConfirmSplitsModalProps
-> = ({ onConfirm, onReject, feeSplits, ...props }) => {
+> = ({ ui, onConfirm, onReject, feeSplits, ...props }) => {
+  if (ui === 'app') {
+    return (
+      <ConfirmSplitsModalApp
+        open={props.open}
+        feeSplits={feeSplits}
+        onConfirm={onConfirm}
+        onReject={onReject}
+      />
+    );
+  }
+
   const isRemoving = feeSplits.length === 0;
 
   return (

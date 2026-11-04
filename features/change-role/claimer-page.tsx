@@ -1,7 +1,5 @@
 import { PATH } from 'consts/urls';
-import { useFaq } from 'faq';
 import { FC } from 'react';
-import { Faq } from 'shared/components';
 import { useWeb3Key } from 'shared/hooks';
 import { Layout } from 'shared/layout';
 import { SettingsPageSwitcher } from 'shared/navigate';
@@ -22,7 +20,6 @@ export const ClaimerPage: FC = () => {
     >
       <SettingsPageSwitcher />
       <ClaimerForm key={key} />
-      <Faq items={useFaq('ROLES')} />
     </Layout>
   );
 };

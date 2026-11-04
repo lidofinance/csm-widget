@@ -1,14 +1,18 @@
+import { Button, IconPlus, SectionTitle } from '@lidofinance/lido-app-ui';
 import { MAX_FEE_SPLITS_COUNT } from '@lidofinance/lido-csm-sdk';
-import { ButtonIcon, Plus, Text } from '@lidofinance/lido-ui';
 import { FC, useCallback } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { Stack } from 'shared/components';
-import styled from 'styled-components';
+import { FormCard } from 'shared/form-page';
+import { FieldError } from 'shared/hook-form/fields';
 import { SplitsFormInputType } from '../context';
+import { SecondaryTextStyle, SectionStyle } from '../styles';
+import { BondRow } from './bond-row';
+import { EditInfo } from './edit-info';
 import { SplitRow } from './split-row';
+import { SplitsCtas } from './submit-button';
 
 export const EditSplits: FC = () => {
-  const { control } = useFormContext<SplitsFormInputType>();
+  const { control, formState } = useFormContext<SplitsFormInputType>();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'feeSplits',
@@ -18,7 +22,6 @@ export const EditSplits: FC = () => {
     append({ recipient: undefined, share: undefined });
   }, [append]);
 
-  const { formState } = useFormContext<SplitsFormInputType>();
   const splitsError = formState.errors.feeSplits;
   const rootError =
     splitsError && 'root' in splitsError
@@ -28,36 +31,41 @@ export const EditSplits: FC = () => {
         : undefined;
 
   return (
-    <Stack direction="column" gap="sm">
-      <Text size="xs" weight={700}>
-        Additional addresses
-      </Text>
+    <>
+      <EditInfo />
+      <FormCard>
+        <SectionStyle>
+          <BondRow />
+          <SecondaryTextStyle variant="description" forwardedAs="p">
+            This share decreases as you allocate shares to the addresses below
+          </SecondaryTextStyle>
+        </SectionStyle>
 
-      {fields.map((field, index) => (
-        <SplitRow key={field.id} index={index} onRemove={remove} />
-      ))}
+        <SectionStyle>
+          <SectionTitle
+            title="Additional addresses"
+            action={
+              fields.length < MAX_FEE_SPLITS_COUNT ? (
+                <Button
+                  variant="outline"
+                  size="small"
+                  iconLeft={<IconPlus />}
+                  onClick={handleAdd}
+                  data-testid="addSplitButton"
+                >
+                  Add new address
+                </Button>
+              ) : undefined
+            }
+          />
+          {fields.map((field, index) => (
+            <SplitRow key={field.id} index={index} onRemove={remove} />
+          ))}
+          <FieldError>{rootError?.message}</FieldError>
+        </SectionStyle>
 
-      {rootError?.message && (
-        <Text size="xxs" color="error">
-          {rootError.message}
-        </Text>
-      )}
-
-      {fields.length < MAX_FEE_SPLITS_COUNT && (
-        <ButtonStyled
-          icon={<Plus />}
-          variant="text"
-          size="xs"
-          onClick={handleAdd}
-          data-testid="addSplitButton"
-        >
-          Add new address
-        </ButtonStyled>
-      )}
-    </Stack>
+        <SplitsCtas />
+      </FormCard>
+    </>
   );
 };
-
-const ButtonStyled = styled(ButtonIcon)`
-  width: fit-content;
-`;
